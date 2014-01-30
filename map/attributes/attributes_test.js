@@ -1,5 +1,5 @@
 /*jshint undef:false,unused:false*/
-(function () {
+steal("can/map/attributes", "can/model", "can/util/fixture", "can/test", function() {
 	module('can/map/attributes');
 	test('literal converters and serializes', function () {
 		can.Map('Task1', {
@@ -307,12 +307,12 @@
 	});
 	test('Default converters and boolean fix (#247)', function () {
 		var MyObserve = can.Map({
-			attributes: {
-				enabled: 'boolean',
-				time: 'date',
-				age: 'number'
-			}
-		}, {}),
+				attributes: {
+					enabled: 'boolean',
+					time: 'date',
+					age: 'number'
+				}
+			}, {}),
 			obs = new MyObserve({
 				enabled: 'false',
 				time: 1358980553275,
@@ -685,4 +685,4 @@
 				start();
 			});
 	});
-}());
+});

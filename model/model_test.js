@@ -8,7 +8,7 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global Company: true */
-(function () {
+steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function() {
 	module('can/model', {
 		setup: function () {}
 	});
@@ -209,8 +209,8 @@
 			}
 		}, {});
 		var person = new Person({
-			name: 'Justin'
-		}),
+				name: 'Justin'
+			}),
 			personD = person.save();
 		stop();
 		personD.then(function (person) {
@@ -236,9 +236,9 @@
 			}
 		}, {});
 		var person = new Person({
-			name: 'Justin',
-			id: 5
-		}),
+				name: 'Justin',
+				id: 5
+			}),
 			personD = person.save();
 		stop();
 		personD.then(function (person) {
@@ -263,9 +263,9 @@
 			}
 		}, {});
 		var person = new Person({
-			name: 'Justin',
-			id: 5
-		}),
+				name: 'Justin',
+				id: 5
+			}),
 			personD = person.destroy();
 		stop();
 		personD.then(function (person) {
@@ -306,39 +306,39 @@
 		equal(results[1].name, 'Brian', 'Second name right');
 	});
 	/*
-test("async setters", function(){
+	 test("async setters", function(){
 
 
-	can.Model("Test.AsyncModel",{
-		setName : function(newVal, success, error){
+	 can.Model("Test.AsyncModel",{
+	 setName : function(newVal, success, error){
 
 
-			setTimeout(function(){
-				success(newVal)
-			}, 100)
-		}
-	});
+	 setTimeout(function(){
+	 success(newVal)
+	 }, 100)
+	 }
+	 });
 
-	var model = new Test.AsyncModel({
-		name : "justin"
-	});
-	equal(model.name, "justin","property set right away")
+	 var model = new Test.AsyncModel({
+	 name : "justin"
+	 });
+	 equal(model.name, "justin","property set right away")
 
-	//makes model think it is no longer new
-	model.id = 1;
+	 //makes model think it is no longer new
+	 model.id = 1;
 
-	var count = 0;
+	 var count = 0;
 
-	model.bind('name', function(ev, newName){
-		equal(newName, "Brian",'new name');
-		equal(++count, 1, "called once");
-		ok(new Date() - now > 0, "time passed")
-		start();
-	})
-	var now = new Date();
-	model.attr('name',"Brian");
-	stop();
-})*/
+	 model.bind('name', function(ev, newName){
+	 equal(newName, "Brian",'new name');
+	 equal(++count, 1, "called once");
+	 ok(new Date() - now > 0, "time passed")
+	 start();
+	 })
+	 var now = new Date();
+	 model.attr('name',"Brian");
+	 stop();
+	 })*/
 	test('binding', 2, function () {
 		can.Model('Person');
 		var inst = new Person({
@@ -413,21 +413,21 @@ test("async setters", function(){
 		});
 	});
 	/*
-test("Empty uses fixtures", function(){
-	ok(false, "Figure out")
-	return;
-	can.Model("Test.Things");
-	$.fixture.make("thing", 10, function(i){
-		return {
-			id: i
-		}
-	});
-	stop();
-	Test.Thing.findAll({}, function(things){
-		start();
-		equal(things.length, 10,"got 10 things")
-	})
-});*/
+	 test("Empty uses fixtures", function(){
+	 ok(false, "Figure out")
+	 return;
+	 can.Model("Test.Things");
+	 $.fixture.make("thing", 10, function(i){
+	 return {
+	 id: i
+	 }
+	 });
+	 stop();
+	 Test.Thing.findAll({}, function(things){
+	 start();
+	 equal(things.length, 10,"got 10 things")
+	 })
+	 });*/
 	test('Model events', function () {
 		expect(12);
 		var order = 0;
@@ -650,8 +650,8 @@ test("Empty uses fixtures", function(){
 		});
 		stop();
 		can.when(Guy.findOne({
-			id: 1
-		}), Guy.findAll())
+				id: 1
+			}), Guy.findAll())
 			.then(function (guyRes, guysRes2) {
 				equal(guyRes.id, 1, 'got a guy id 1 back');
 				equal(guysRes2[0].id, 1, 'got guys w/ id 1 back');
@@ -697,7 +697,7 @@ test("Empty uses fixtures", function(){
 		});
 	});
 	/** /
-test("store instance update removed fields", function(){
+	 test("store instance update removed fields", function(){
 	var Guy, updateCount, remove;
 
 	Guy = can.Model.extend({
@@ -731,7 +731,7 @@ test("store instance update removed fields", function(){
 	})
 
 })
-/**/
+	 /**/
 	test('templated destroy', function () {
 		var MyModel = can.Model.extend({
 			destroy: '/destroyplace/{id}'
@@ -907,13 +907,13 @@ test("store instance update removed fields", function(){
 			}
 		}, {});
 		var people = new Person.List([
-			new Person({
-				id: 1
-			}),
-			new Person({
-				id: 2
-			})
-		]),
+				new Person({
+					id: 1
+				}),
+				new Person({
+					id: 2
+				})
+			]),
 			orgs = new Organisation.List([
 				new Organisation({
 					id: 1
@@ -1037,12 +1037,12 @@ test("store instance update removed fields", function(){
 	});
 	test('.model on create and update (#301)', function () {
 		var MyModel = can.Model.extend({
-			create: 'POST /todo',
-			update: 'PUT /todo',
-			model: function (data) {
-				return can.Model.model.call(this, data.item);
-			}
-		}, {}),
+				create: 'POST /todo',
+				update: 'PUT /todo',
+				model: function (data) {
+					return can.Model.model.call(this, data.item);
+				}
+			}, {}),
 			id = 0,
 			updateTime;
 		can.fixture('POST /todo', function (original, respondWith, settings) {
@@ -1079,8 +1079,8 @@ test("store instance update removed fields", function(){
 				}, '.model works for update');
 			});
 		var instance = new MyModel({
-			name: 'Dishes'
-		}),
+				name: 'Dishes'
+			}),
 			saveD = instance.save();
 		stop();
 		saveD.then(function () {
@@ -1220,4 +1220,4 @@ test("store instance update removed fields", function(){
 			t.unbind('name', handler);
 		});
 	});
-}());
+});

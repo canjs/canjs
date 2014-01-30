@@ -1,4 +1,8 @@
 steal('can/util', 'can/control/modifier', function (can) {
+	if(!window.jQuery) {
+		return;
+	}
+
 	module('can/control/modifier');
 	test('nested selectors', function () {
 		var paw, tail;

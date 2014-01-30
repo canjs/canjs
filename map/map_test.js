@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-(function (undefined) {
+steal("can/map", "can/compute", "can/test", function(undefined) {
 
 	module('can/map')
 
@@ -185,4 +185,4 @@
 		equal(test.attr('my.newCount'), 1, 'falsey (1) value accessed correctly');
 	});
 
-})();
+});

@@ -34,56 +34,35 @@
                 };
 
                 steal.config(config);
-            }).then("can/util/fixture", "can/component",
-                "can/construct", "can/map", "can/list", "can/observe",
-                "can/compute", "can/model", "can/view",
-                "can/view/ejs", "can/control", "can/route",
-                "can/control/route", "can/view/mustache",
-                "can/route/pushstate", "can/model/queue",
-                "can/construct/super", "can/construct/proxy",
-                "can/map/delegate", "can/map/setter",
-                "can/map/attributes", "can/map/validations",
-                "can/map/backup", "can/map/list", "can/map/sort",
-                "can/control/plugin", "can/view/modifiers",
-                "can/util/object", "can/util/fixture",
-                "can/view/bindings", "can/view/live",
-                "can/view/scope", "can/util/string")
-                .then("can/test").then(
-                "can/component/component_test.js")
-                .then("can/construct/construct_test.js")
-                .then("can/map/map_test.js")
-                .then("can/list/list_test.js")
-                .then("can/observe/observe_test.js")
-                .then("can/compute/compute_test.js")
-                .then("can/model/model_test.js")
-                .then("can/view/view_test.js")
-                .then("can/view/ejs/ejs_test.js")
-                .then("can/control/control_test.js")
-                .then("can/route/route_test.js")
-                .then("can/control/route/route_test.js")
-                .then("can/view/mustache/mustache_test.js")
-                .then("can/route/pushstate/pushstate_test.js")
-                .then("can/model/queue/queue_test.js")
-                .then("can/construct/super/super_test.js")
-                .then("can/construct/proxy/proxy_test.js")
-                .then("can/map/delegate/delegate_test.js")
-                .then("can/map/setter/setter_test.js")
-                .then("can/map/attributes/attributes_test.js")
-                .then("can/map/validations/validations_test.js")
-                .then("can/map/backup/backup_test.js")
-                .then("can/map/list/list_test.js")
-                .then("can/map/sort/sort_test.js")
-                .then("can/control/plugin/plugin_test.js")
-                .then("can/view/modifiers/modifiers_test.js")
-                .then("can/util/object/object_test.js")
-                .then("can/util/fixture/fixture_test.js")
-                .then("can/view/bindings/bindings_test.js")
-                .then("can/view/live/live_test.js")
-                .then("can/view/scope/scope_test.js")
-                .then("can/util/string/string_test.js", function() {
-                    can.dev.logLevel = 3;
-                    QUnit.start();
-                });
+            }, "can/component/component_test.js",
+            "can/construct/construct_test.js", "can/map/map_test.js",
+            "can/list/list_test.js", "can/observe/observe_test.js",
+            "can/compute/compute_test.js", "can/model/model_test.js",
+            "can/view/view_test.js", "can/view/ejs/ejs_test.js",
+            "can/control/control_test.js", "can/route/route_test.js",
+            "can/control/route/route_test.js",
+            "can/view/mustache/mustache_test.js",
+            "can/route/pushstate/pushstate_test.js",
+            "can/model/queue/queue_test.js",
+            "can/construct/super/super_test.js",
+            "can/construct/proxy/proxy_test.js",
+            "can/map/delegate/delegate_test.js",
+            "can/map/setter/setter_test.js",
+            "can/map/attributes/attributes_test.js",
+            "can/map/validations/validations_test.js",
+            "can/map/backup/backup_test.js",
+            "can/map/list/list_test.js", "can/map/sort/sort_test.js",
+            "can/control/plugin/plugin_test.js",
+            "can/view/modifiers/modifiers_test.js",
+            "can/util/object/object_test.js",
+            "can/util/fixture/fixture_test.js",
+            "can/view/bindings/bindings_test.js",
+            "can/view/live/live_test.js",
+            "can/view/scope/scope_test.js",
+            "can/util/string/string_test.js", function() {
+                can.dev.logLevel = 3;
+                QUnit.start();
+            });
         </script>
     </body>
 

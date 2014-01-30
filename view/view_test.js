@@ -1,4 +1,4 @@
-(function () {
+steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test", "can/util/fixture", function() {
 	var Scanner = can.view.Scanner;
 	module('can/view', {
 		setup: function () {
@@ -64,10 +64,10 @@
 				'message': 'helloworld'
 			}, function (text) {
 				/*
-				var lap2 = new Date() - first,
-					lap1 = first - startT;
-				ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
-				*/
+				 var lap2 = new Date() - first,
+				 lap1 = first - startT;
+				 ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
+				 */
 				start();
 			});
 		});
@@ -242,18 +242,18 @@
 	});
 	test('Select live bound options don\'t contain __!!__', function () {
 		var domainList = new can.List([{
-			id: 1,
-			name: 'example.com'
-		}, {
-			id: 2,
-			name: 'google.com'
-		}, {
-			id: 3,
-			name: 'yahoo.com'
-		}, {
-			id: 4,
-			name: 'microsoft.com'
-		}]),
+				id: 1,
+				name: 'example.com'
+			}, {
+				id: 2,
+				name: 'google.com'
+			}, {
+				id: 3,
+				name: 'yahoo.com'
+			}, {
+				id: 4,
+				name: 'microsoft.com'
+			}]),
 			frag = can.view(can.test.path('view/test/select.ejs'), {
 				domainList: domainList
 			}),
@@ -537,12 +537,12 @@
 		var withId = can.view.mustache('test-485', template);
 		var withoutId = can.view.mustache(template);
 		ok(withoutId({
-				message: 'Without id'
-			})
+			message: 'Without id'
+		})
 			.nodeType === 11, 'View without id returned document fragment');
 		ok(withId({
-				message: 'With id'
-			})
+			message: 'With id'
+		})
 			.nodeType === 11, 'View with id returned document fragment');
 	});
 	test('create a template before the custom element works with slash and colon', function () {
@@ -597,7 +597,7 @@
 			test('template files relative to requirejs baseUrl (#647)', function () {
 				var oldBaseUrl = window.requirejs.s.contexts._.config.baseUrl;
 				window.require.config({
-					baseUrl: '/view/test/'
+					baseUrl: oldBaseUrl + '/view/test/'
 				});
 				ok(can.isFunction(can.view('template')));
 				window.require.config({
@@ -606,4 +606,4 @@
 			});
 		}
 	}
-}());
+});

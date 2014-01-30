@@ -17,9 +17,7 @@
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal( "can/map")
-		.then("can/map/delegate")
-		.then("can/test", "can/map/delegate/delegate_test.js", function() {
+	steal("can/map/delegate/delegate_test.js", function() {
 		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>

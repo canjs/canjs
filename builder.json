@@ -139,13 +139,13 @@
 			"name": "can.Control.plugin",
 			"type": "plugin",
 			"description": "Registers a jQuery plugin function for Controls",
-			"configurations": ["jquery"]
+			"configurations": ["jquery", "jquery-2"]
 		},
 		"can/view/modifiers": {
 			"name": "can.view.modifiers",
 			"type": "plugin",
 			"description": "Use jQuery modifiers to render views",
-			"configurations": ["jquery"]
+			"configurations": ["jquery", "jquery-2"]
 		},
 		"can/util/object": {
 			"name": "can.Object",

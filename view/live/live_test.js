@@ -1,4 +1,4 @@
-(function () {
+steal("can/view/live", "can/observe", "can/test", function(){
 	module('can/view/live');
 	test('html', function () {
 		var div = document.createElement('div'),
@@ -186,4 +186,4 @@
 			start();
 		}, 100);
 	});
-}());
+});

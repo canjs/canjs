@@ -1,7 +1,7 @@
 /* global Person: true */
 /* global User: true */
 /* global Hero: true */
-(function () {
+steal('can/util','can/model', 'can/model/queue', 'can/util/fixture','can/map/attributes', "can/test", function() {
 	module('can/model/queue', {
 		setup: function () {}
 	});
@@ -25,8 +25,8 @@
 			}
 		}, {});
 		var person = new Person({
-			name: 'Justin'
-		}),
+				name: 'Justin'
+			}),
 			personD = person.save();
 		person.attr('name', 'Brian');
 		stop();
@@ -169,4 +169,4 @@
 		new MyModel()
 			.save();
 	});
-}());
+});

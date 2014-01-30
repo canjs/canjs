@@ -18,7 +18,7 @@
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 
-	steal("can/observe").then("can/map/validations", "can/test", "can/map/validations/validations_test.js", function() {
+	steal("can/map/validations/validations_test.js", function() {
 		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>

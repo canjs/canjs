@@ -1,4 +1,4 @@
-(function (undefined) {
+steal("can/util", "can/list", "can/test", function() {
 	module('can/list');
 	test('list attr changes length', function () {
 		var l = new can.List([
@@ -11,11 +11,11 @@
 	});
 	test('list splice', function () {
 		var l = new can.List([
-			0,
-			1,
-			2,
-			3
-		]),
+				0,
+				1,
+				2,
+				3
+			]),
 			first = true;
 		l.bind('change', function (ev, attr, how, newVals, oldVals) {
 			equal(attr, '1');
@@ -128,10 +128,10 @@
 	});
 	test('Array accessor methods', 11, function () {
 		var l = new can.List([
-			'a',
-			'b',
-			'c'
-		]),
+				'a',
+				'b',
+				'c'
+			]),
 			sliced = l.slice(2),
 			joined = l.join(' | '),
 			concatenated = l.concat([
@@ -166,4 +166,4 @@
 		l.splice(0, 1);
 		ok(!l.attr(0), 'all props are removed');
 	});
-}());
+});

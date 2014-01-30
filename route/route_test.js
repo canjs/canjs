@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-(function () {
+steal("can/route", "can/test", function() {
 	module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -298,13 +298,13 @@
 		}, "bad deparam");
 
 		equal(can.route.param({
-				search: "can.Control"
-			}),
+			search: "can.Control"
+		}),
 			"search/can.Control", "bad param");
 
 		equal(can.route.param({
-				who: "can.Control"
-			}),
+			who: "can.Control"
+		}),
 			"can.Control");
 	})
 
@@ -316,9 +316,9 @@
 		can.route(":type/:id");
 
 		equal(can.route.param({
-				type: "foo",
-				id: "bar"
-			}),
+			type: "foo",
+			id: "bar"
+		}),
 			"foo/bar");
 	})
 
@@ -670,4 +670,4 @@
 		can.route.attr('foo', 'bar');
 	})
 
-})();
+});

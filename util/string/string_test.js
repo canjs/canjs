@@ -1,4 +1,4 @@
-(function () {
+steal('can/util/string', function () {
 	module('can/util/string');
 	test('can.sub', function () {
 		equal(can.sub('a{b}', {
@@ -389,4 +389,4 @@
 		text = can.hyphenate('dataNode');
 		equal(text, 'data-node');
 	});
-}());
+});

@@ -1,4 +1,4 @@
-(function (undefined) {
+steal('can/construct', function() {
 	/* global Foo, Car, Bar */
 	module('can/construct', {
 		setup: function () {
@@ -128,4 +128,4 @@
 		new Foo()
 			.dude(true);
 	});
-}());
+});

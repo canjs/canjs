@@ -1,4 +1,4 @@
-(function () {
+steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function() {
 	// this only applied to jQuery libs
 	if (!window.jQuery) {
 		return;
@@ -21,11 +21,11 @@
 		}, 100);
 	});
 	/*test("non-HTML content in hookups", function(){
-  $("#qunit-test-area").html("<textarea></textarea>");
-  can.render.hookup(function(){});
-  $("#qunit-test-area textarea").val("asdf");
-  equal($("#qunit-test-area textarea").val(), "asdf");
-});*/
+	 $("#qunit-test-area").html("<textarea></textarea>");
+	 can.render.hookup(function(){});
+	 $("#qunit-test-area textarea").val("asdf");
+	 equal($("#qunit-test-area textarea").val(), "asdf");
+	 });*/
 	test('html takes promise', function () {
 		var d = new can.Deferred();
 		can.$('#qunit-test-area')
@@ -67,4 +67,4 @@
 		can.$('#qunit-test-area')
 			.html('');
 	});
-}());
+});

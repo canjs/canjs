@@ -1,5 +1,5 @@
 /*global Recipe*/
-(function () {
+steal("can/map/backup", "can/model", "can/test", function() {
 	module('can/map/backup', {
 		setup: function () {
 			can.Map.extend('Recipe');
@@ -89,4 +89,4 @@
 		map.restore();
 		ok(!map.attr('foo'), 'there is no foo property');
 	});
-}());
+});
