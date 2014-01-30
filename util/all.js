@@ -18,4 +18,4 @@ steal(
 	'can/util/fixture',
 	'can/view/modifiers',
 	'can/view/mustache',
-	'can/util/func.js')
+	'can/util/func.js');

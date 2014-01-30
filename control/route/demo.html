@@ -96,7 +96,7 @@
 			},
 			setStatus = function(method, data) {
 				$('.status .action').html('&quot;' + method + '&quot;');
-				$('.status .data').html(can.toJSON(data));
+				$('.status .data').html(JSON.stringify(data));
 			}
 
 		var Router = can.Control({

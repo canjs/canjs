@@ -55,7 +55,6 @@
 		<script type='text/javascript'>
             steal(
             	'can/route', 
-            	'can/util/json.js',
             	'jquerypp/dom/form_params',
             	function() {
                 
@@ -79,12 +78,12 @@
                 
                 $(window).bind('hashchange', function() {
                     $('#hash_update_target').append( ++hash_cnt + ": Hash: <span class=\"green\">" + window.location.hash )
-                                            .append( "</span> Route data: " + can.toJSON( can.route.data._data ) + "<br />" );
+                                            .append( "</span> Route data: " + JSON.stringify( can.route.data._data ) + "<br />" );
                 });
 
                 can.route.bind('change', function(ev, attr, how, newVal, oldVal){
                     $('#data_update_target').append( ++data_cnt + ": <span class=\"green\">" + showChange(attr, how, newVal, oldVal) )
-                                            .append( "</span> Route data: " + can.toJSON( can.route.data._data ) + "<br />" );
+                                            .append( "</span> Route data: " + JSON.stringify( can.route.data._data ) + "<br />" );
                 });
 
                 showChange = function(attr, how, newVal, oldVal){
