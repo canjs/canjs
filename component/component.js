@@ -111,13 +111,12 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 						return;
 					}
 					// ignore attr regexps
-					for(var regAttr in can.view.Scanner.regExpAttributes) {
-						if(can.view.Scanner.regExpAttributes[regAttr].match.test(node.nodeName)) {
+					for (var regAttr in can.view.Scanner.regExpAttributes) {
+						if (can.view.Scanner.regExpAttributes[regAttr].match.test(node.nodeName)) {
 							return;
 						}
 					}
-					
-					
+
 					// Cross-bind the value in the scope to this 
 					// component's scope
 					var computeData = hookupOptions.scope.computeData(value, {
