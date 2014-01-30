@@ -107,8 +107,14 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 					var name = can.camelize(node.nodeName.toLowerCase()),
 						value = node.value;
 					// ignore attributes already in ScopeMappings
-					if (component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name)) {
+					if (component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name) || can.view.Scanner.attributes[node.nodeName]) {
 						return;
+					}
+					// ignore attr regexps
+					for (var regAttr in can.view.Scanner.regExpAttributes) {
+						if (can.view.Scanner.regExpAttributes[regAttr].match.test(node.nodeName)) {
+							return;
+						}
 					}
 
 					// Cross-bind the value in the scope to this 

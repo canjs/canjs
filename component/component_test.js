@@ -723,4 +723,28 @@
 		equal(scope.attr('dataViewId'), undefined);
 		equal(scope.attr('notdataviewid'), 'dvi-success');
 	});
+
+	test("Component can-click method should be not called while component's init", function () {
+
+		var called = false;
+
+		can.Component.extend({
+			tag: "child-tag"
+		});
+
+		can.Component.extend({
+			tag: "parent-tag",
+			template: '<child-tag can-click="method"></child-tag>',
+			scope: {
+				method: function () {
+					called = true;
+				}
+			}
+		});
+
+		can.view.mustache('<parent-tag></parent-tag>')();
+
+		equal(called, false);
+	});
+
 }());
