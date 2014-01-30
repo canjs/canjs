@@ -246,7 +246,7 @@
 				where: "there"
 			};
 			// adding the / should not be necessary.  can.route.deparam removes / if the root starts with /
-			res = "/"+can.route.param(data);
+			res = "/" + can.route.param(data);
 			obj = can.route.deparam(res);
 			delete obj.route;
 			deepEqual(data, obj);
@@ -533,14 +533,14 @@
 				stop();
 				window.routeTestReady = function (iCanRoute, loc, hist, win) {
 					var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
-					var stateTest = -1;
+					var stateTest = -1,
+						message;
 
 					function nextStateTest() {
 						stateTest++;
 						win.can.route.attr("page", "start");
 
 						setTimeout(function () {
-							var message, link;
 							if (stateTest === 0) {
 								message = "can.route.attr";
 								win.can.route.attr("page", "test");
@@ -549,7 +549,7 @@
 								win.history.pushState(null, null, root + "test/");
 							} else if (stateTest === 2) {
 								message = "link click";
-								link = win.document.createElement("a");
+								var link = win.document.createElement("a");
 								link.href = root + "test/";
 								link.innerText = "asdf";
 								win.document.body.appendChild(link);
@@ -581,12 +581,13 @@
 					win.can.route.ready();
 					nextStateTest();
 				}
+
 				var iframe = document.createElement("iframe");
 				iframe.src = can.test.path("route/pushstate/testing.html");
 				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
 
-			test("routed links must descend from pushstate root (#652)", function () {
+			test("routed links must descend from pushstate root (#652)", 2, function () {
 				var tests = [
 					// ["root", "link href", { route: "result" }]
 					["/app/", "/app/something/test/", {
@@ -594,12 +595,29 @@
 						sub: "test",
 						route: ":section/:sub/"
 					}],
-					["/app/", "/test/", {}]
+					["/app/", "/route/pushstate/", {}]
 				],
 					iframe,
 					test;
 
 				window.routeTestReady = function (iCanRoute, loc, hist, win) {
+					var change,
+						timeout,
+						teardown = function () {
+							if (iframe) {
+								iframe.onload = null;
+							}
+							if (win.can && win.can.route) {
+								win.can.route.unbind("change", change);
+							}
+							clearTimeout(timeout);
+							setTimeout(function () {
+								can.remove(can.$(iframe));
+								start();
+								runTest();
+							}, 0);
+						};
+
 					// Setup route
 					win.can.route(":section/");
 					win.can.route(":section/:sub/");
@@ -609,44 +627,47 @@
 					// Add link
 					var link = win.document.createElement("a");
 					link.href = link.innerHTML = test[1];
-					win.can.bind.call(link, 'click', function () {
-						win.location = this.href;
+					win.can.bind.call(link, 'click', function (ev) {
+						var href = this.href;
+						setTimeout(function () {
+							if (win.MooTools || ev.defaultPrevented === false || (ev.isDefaultPrevented && !ev.isDefaultPrevented())) {
+								win.location = href;
+							}
+						}, 100);
 					});
 					win.document.body.appendChild(link);
 
 					// Listen for page change
 					iframe.onload = function () {
-						start();
-						deepEqual({}, can.extend({}, test[2]));
-						runTest();
+						deepEqual({}, can.extend({}, test[2]), 'page change');
+						teardown();
 					};
 
 					// Listen for route change
-					var change;
 					win.can.route.bind("change", change = function () {
-						start();
-						win.can.route.unbind("change", change);
-						deepEqual(can.extend({}, win.can.route.attr()), can.extend({}, test[2]));
-						runTest();
+						deepEqual(can.extend({}, win.can.route.attr()), can.extend({}, test[2]), 'route change');
+						teardown();
 					});
 
+					// Fallback
+					timeout = setTimeout(function () {
+						ok(false, 'timed out');
+						teardown();
+					}, 3000);
+
 					win.can.trigger(win.can.$(link), 'click');
+					if (link.click) {
+						link.click();
+					}
 				};
 
 				function runTest() {
-					test = tests.pop();
+					test = tests.splice(0, 1)[0];
 					if (test) {
 						stop();
-						if (iframe) {
-							can.remove(can.$(iframe));
-						}
 						iframe = document.createElement("iframe");
 						can.$("#qunit-test-area")[0].appendChild(iframe);
 						iframe.src = can.test.path("route/pushstate/testing.html");
-					} else {
-						if (iframe) {
-							can.remove(can.$(iframe));
-						}
 					}
 				}
 
