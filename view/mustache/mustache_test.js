@@ -2467,6 +2467,22 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		 equal(img.src, url, 'Image should have src URL');*/
 	});
 
+	test("live binding in a truthy section", function () {
+		var template = can.view.mustache('<img src="http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png" {{#width}}width="{{.}}"{{/width}} />'),
+			data = new can.Map({
+				width: '100'
+			});
+
+		var frag = template(data),
+			img = frag.childNodes[0];
+
+		equal(img.getAttribute("width"), "100", "initial width is correct");
+
+		data.attr("width", "300")
+		equal(img.getAttribute('width'), "300", "updated width is correct");
+
+	});
+
 	test("backtracks in mustache (#163)", function () {
 
 		var template = can.view.mustache(
