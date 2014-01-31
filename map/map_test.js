@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/map", "can/compute", "can/test", function(undefined) {
+steal("can/map", "can/compute", "can/test", function (undefined) {
 
 	module('can/map')
 

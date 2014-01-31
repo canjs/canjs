@@ -1,4 +1,4 @@
-steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
+steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () {
 	module('can/observe map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.Map({
@@ -45,11 +45,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('list splice', function () {
 		var l = new can.List([
-				0,
-				1,
-				2,
-				3
-			]),
+			0,
+			1,
+			2,
+			3
+		]),
 			first = true;
 		l.bind('change', function (ev, attr, how, newVals, oldVals) {
 			equal(attr, '1');
@@ -95,14 +95,14 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('changing an object unbinds', function () {
 		var state = new can.Map({
-				category: 5,
-				productType: 4,
-				properties: {
-					brand: [],
-					model: [],
-					price: []
-				}
-			}),
+			category: 5,
+			productType: 4,
+			properties: {
+				brand: [],
+				model: [],
+				price: []
+			}
+		}),
 			count = 0;
 		var brand = state.attr('properties.brand');
 		state.bind('change', function (ev, attr, how, val, old) {
@@ -289,8 +289,8 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	test('attr deep array ', function () {
 		var state = new can.Map({});
 		var arr = [{
-				foo: 'bar'
-			}],
+			foo: 'bar'
+		}],
 			thing = {
 				arr: arr
 			};
@@ -312,17 +312,17 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 				}
 			]
 		}, compare = {
-			foo: {
-				bar: 'car'
-			},
-			arr: [
-				1,
-				2,
-				3, {
-					four: '5'
-				}
-			]
-		};
+				foo: {
+					bar: 'car'
+				},
+				arr: [
+					1,
+					2,
+					3, {
+						four: '5'
+					}
+				]
+			};
 		var res = new can.Map(first)
 			.attr();
 		deepEqual(res, compare, 'test');
@@ -438,10 +438,10 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('Array accessor methods', 11, function () {
 		var l = new can.List([
-				'a',
-				'b',
-				'c'
-			]),
+			'a',
+			'b',
+			'c'
+		]),
 			sliced = l.slice(2),
 			joined = l.join(' | '),
 			concatenated = l.concat([
@@ -548,11 +548,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('startBatch and stopBatch and changed event', 5, function () {
 		var ob = new can.Map({
-				name: {
-					first: 'Brian'
-				},
-				age: 29
-			}),
+			name: {
+				first: 'Brian'
+			},
+			age: 29
+		}),
 			bothSet = false,
 			changeCallCount = 0,
 			changedCalled = false;
@@ -575,11 +575,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('startBatch callback', 4, function () {
 		var ob = new can.Map({
-				game: {
-					name: 'Legend of Zelda'
-				},
-				hearts: 15
-			}),
+			game: {
+				name: 'Legend of Zelda'
+			},
+			hearts: 15
+		}),
 			callbackCalled = false;
 		ob.bind('change', function () {
 			equal(callbackCalled, false, 'startBatch callback not called yet');
@@ -595,10 +595,10 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('nested map attr', function () {
 		var person1 = new can.Map({
-				name: {
-					first: 'Josh'
-				}
-			}),
+			name: {
+				first: 'Josh'
+			}
+		}),
 			person2 = new can.Map({
 				name: {
 					first: 'Justin',
@@ -618,19 +618,19 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('Nested array conversion (#172)', 4, function () {
 		var original = [
-				[
-					1,
-					2
-				],
-				[
-					3,
-					4
-				],
-				[
-					5,
-					6
-				]
+			[
+				1,
+				2
 			],
+			[
+				3,
+				4
+			],
+			[
+				5,
+				6
+			]
+		],
 			list = new can.List(original);
 		equal(list.length, 3, 'list length is correct');
 		deepEqual(list.serialize(), original, 'Lists are the same');
@@ -655,10 +655,10 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('can.List.prototype.replace (#194)', 7, function () {
 		var list = new can.List([
-				'a',
-				'b',
-				'c'
-			]),
+			'a',
+			'b',
+			'c'
+		]),
 			replaceList = [
 				'd',
 				'e',
@@ -747,10 +747,10 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('IE8 error on list setup with List (#226)', function () {
 		var list = new can.List([
-				'first',
-				'second',
-				'third'
-			]),
+			'first',
+			'second',
+			'third'
+		]),
 			otherList = new can.List(list);
 		deepEqual(list.attr(), otherList.attr(), 'Lists are the same');
 	});
@@ -803,9 +803,9 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 		equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
 		deepEqual(ob.attr('other')
 			.serialize(), {
-			test: 'value',
-			stuff: 'thinger'
-		}, 'Object set properly');
+				test: 'value',
+				stuff: 'thinger'
+			}, 'Object set properly');
 	});
 	test('cycle binding', function () {
 		var first = new can.Map(),
@@ -980,9 +980,9 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('only one update on a start and end transaction', function () {
 		var person = new can.Map({
-				first: 'Justin',
-				last: 'Meyer'
-			}),
+			first: 'Justin',
+			last: 'Meyer'
+		}),
 			age = can.compute(5);
 		var func = function (newVal, oldVal) {
 			return person.attr('first') + ' ' + person.attr('last') + age() + Math.random();
@@ -1022,8 +1022,8 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 	});
 	test('compute only updates once when a list\'s contents are replaced', function () {
 		var list = new can.List([{
-				name: 'Justin'
-			}]),
+			name: 'Justin'
+		}]),
 			computedCount = 0;
 		var compute = can.compute(function () {
 			computedCount++;

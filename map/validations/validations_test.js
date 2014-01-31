@@ -1,5 +1,5 @@
 /*global Person,Task*/
-steal("can/map/validations", "can/compute", "can/test", function() {
+steal("can/map/validations", "can/compute", "can/test", function () {
 	module('can/map/validations', {
 		setup: function () {
 			can.Map.extend('Person', {}, {});
@@ -12,8 +12,8 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 			return !(this.date instanceof Date);
 		});
 		var task = new Person({
-				age: 'bad'
-			}),
+			age: 'bad'
+		}),
 			errors = task.errors();
 		ok(errors, 'There are errors');
 		equal(errors.age.length, 1, 'there is one error');
@@ -31,8 +31,8 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 	test('validatesFormatOf', function () {
 		Person.validateFormatOf('thing', /\d-\d/);
 		ok(!new Person({
-			thing: '1-2'
-		})
+				thing: '1-2'
+			})
 			.errors(), 'no errors');
 		var errors = new Person({
 			thing: 'foobar'
@@ -51,13 +51,13 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 			.errors();
 		equal(errors2.otherThing[0], 'not a digit', 'can supply a custom message');
 		ok(!new Person({
-			thing: '1-2',
-			otherThing: null
-		})
+				thing: '1-2',
+				otherThing: null
+			})
 			.errors(), 'can handle null');
 		ok(!new Person({
-			thing: '1-2'
-		})
+				thing: '1-2'
+			})
 			.errors(), 'can handle undefiend');
 	});
 	test('validatesInclusionOf', function () {
@@ -67,8 +67,8 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 			'maybe'
 		]);
 		ok(!new Person({
-			thing: 'yes'
-		})
+				thing: 'yes'
+			})
 			.errors(), 'no errors');
 		var errors = new Person({
 			thing: 'foobar'
@@ -96,9 +96,9 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 		Person.validateLengthOf('nullValue', 0, 5);
 		Person.validateLengthOf('thing', 2, 5);
 		ok(!new Person({
-			thing: 'yes',
-			nullValue: null
-		})
+				thing: 'yes',
+				nullValue: null
+			})
 			.errors(), 'no errors');
 		var errors = new Person({
 			thing: 'foobar'
@@ -219,9 +219,9 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 		Person.validateRangeOf('nullValue', 0, 5);
 		Person.validateRangeOf('undefinedValue', 0, 5);
 		ok(!new Person({
-			thing: 4,
-			nullValue: null
-		})
+				thing: 4,
+				nullValue: null
+			})
 			.errors(), 'no errors');
 		var errors = new Person({
 			thing: 6
@@ -331,8 +331,8 @@ steal("can/map/validations", "can/compute", "can/test", function() {
 			return !(this.date instanceof Date);
 		});
 		var task = new Person({
-				age: 20
-			}),
+			age: 20
+		}),
 			errors = can.compute(function () {
 				return task.errors();
 			});

@@ -230,8 +230,8 @@ steal("can/control", function () {
 			}
 		});
 		var item1 = bindable({
-				id: 1
-			}),
+			id: 1
+		}),
 			item2 = bindable({
 				id: 2
 			}),
@@ -278,11 +278,11 @@ steal("can/control", function () {
 	});
 	test('Multiple calls to destroy', 2, function () {
 		var Control = can.Control({
-				destroy: function () {
-					ok(true);
-					can.Control.prototype.destroy.call(this);
-				}
-			}),
+			destroy: function () {
+				ok(true);
+				can.Control.prototype.destroy.call(this);
+			}
+		}),
 			div = document.createElement('div'),
 			c = new Control(div);
 		c.destroy();
