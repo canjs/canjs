@@ -127,6 +127,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			data.isListening = !can.isEmptyObject(observing);
 			return data;
 		};
+	var isObserve = function (obj) {
+		return obj instanceof can.Map || obj && obj.__get;
+	};
 	// if no one is listening ... we can not calculate every time
 	can.compute = function (getterSetter, context, eventName) {
 		if (getterSetter && getterSetter.isComputed) {
@@ -391,5 +394,95 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			return !!res;
 		});
 	};
+
+	can.compute.read = function (parent, reads, options) {
+		options = options || {};
+		// `cur` is the current value.
+		var cur = parent,
+			type,
+			// `prev` is the object we are reading from.
+			prev,
+			// `foundObs` did we find an observable.
+			foundObs;
+		for (var i = 0, readLength = reads.length; i < readLength; i++) {
+			// Update what we are reading from.
+			prev = cur;
+			// Read from the compute. We can't read a property yet.
+			if (prev && prev.isComputed) {
+				if (options.foundObservable) {
+					options.foundObservable(prev, i);
+				}
+				prev = prev();
+			}
+			// Look to read a property from something.
+			if (isObserve(prev)) {
+				if (!foundObs && options.foundObservable) {
+					options.foundObservable(prev, i);
+				}
+				foundObs = 1;
+				// is it a method on the prototype?
+				if (typeof prev[reads[i]] === 'function' && prev.constructor.prototype[reads[i]] === prev[reads[i]]) {
+					// call that method
+					if (options.returnObserveMethods) {
+						cur = cur[reads[i]];
+					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+						cur = prev[reads[i]];
+					} else {
+						cur = prev[reads[i]].apply(prev, options.args || []);
+					}
+				} else {
+					// use attr to get that value
+					cur = cur.attr(reads[i]);
+				}
+			} else {
+				// just do the dot operator
+				cur = prev[reads[i]];
+			}
+			// If it's a compute, get the compute's value
+			// unless we are at the end of the 
+			if (cur && cur.isComputed && (!options.isArgument && i < readLength - 1)) {
+				if (!foundObs && options.foundObservable) {
+					options.foundObservable(prev, i + 1);
+				}
+				cur = cur();
+			}
+			type = typeof cur;
+			// if there are properties left to read, and we don't have an object, early exit
+			if (i < reads.length - 1 && (cur === null || type !== 'function' && type !== 'object')) {
+				if (options.earlyExit) {
+					options.earlyExit(prev, i, cur);
+				}
+				// return undefined so we know this isn't the right value
+				return {
+					value: undefined,
+					parent: prev
+				};
+			}
+		}
+		// handle an ending function
+		if (typeof cur === 'function') {
+			if (options.isArgument) {
+				if (!cur.isComputed && options.proxyMethods !== false) {
+					cur = can.proxy(cur, prev);
+				}
+			} else {
+				if (cur.isComputed && !foundObs && options.foundObservable) {
+					options.foundObservable(cur, i);
+				}
+				cur = cur.call(prev);
+			}
+		}
+		// if we don't have a value, exit early.
+		if (cur === undefined) {
+			if (options.earlyExit) {
+				options.earlyExit(prev, i - 1);
+			}
+		}
+		return {
+			value: cur,
+			parent: prev
+		};
+	};
+
 	return can.compute;
 });
