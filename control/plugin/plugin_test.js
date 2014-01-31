@@ -1,5 +1,5 @@
-steal("can/control/plugin", function() {
-	if(!window.jQuery) {
+steal("can/control/plugin", function () {
+	if (!window.jQuery) {
 		return;
 	}
 

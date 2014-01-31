@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true*/
 /*global Mustache*/
-steal("can/model", "can/view/mustache", "can/test", function() {
+steal("can/model", "can/view/mustache", "can/test", function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
@@ -84,8 +84,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 						}
 
 						deepEqual(new can.Mustache({
-							text: t.template
-						})
+								text: t.template
+							})
 							.render(t.data), expected);
 					});
 				});
@@ -256,8 +256,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -273,8 +273,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -303,8 +303,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -339,12 +339,12 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		};
 
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), t.expected);
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render({}), t.expected2);
 	});
 
@@ -365,8 +365,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -379,12 +379,12 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		};
 
 		deepEqual(new can.Mustache({
-			text: t.template1
-		})
+				text: t.template1
+			})
 			.render({}), t.expected);
 		deepEqual(new can.Mustache({
-			text: t.template2
-		})
+				text: t.template2
+			})
 			.render({}), t.expected);
 	});
 
@@ -462,8 +462,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		}
 
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), t.expected);
 	});
 
@@ -486,8 +486,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		}
 
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), t.expected);
 	});
 
@@ -505,16 +505,16 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 
 		t.data.missing = null;
 		expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -530,8 +530,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -550,8 +550,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 
 		var div = document.createElement('div');
@@ -574,8 +574,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -727,7 +727,7 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	test('multiple function hookups in a tag', function () {
 
 		var text = "<span {{(el)-> can.data(can.$(el),'foo','bar')}}" +
-				" {{(el)-> can.data(can.$(el),'baz','qux')}}>lorem ipsum</span>",
+			" {{(el)-> can.data(can.$(el),'baz','qux')}}>lorem ipsum</span>",
 			compiled = new can.Mustache({
 				text: text
 			})
@@ -970,8 +970,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	test('live binding and removeAttr', function () {
 
 		var text = '{{ #obs.show }}' +
-				'<p {{ obs.attributes }} class="{{ obs.className }}"><span>{{ obs.message }}</span></p>' +
-				'{{ /obs.show }}',
+			'<p {{ obs.attributes }} class="{{ obs.className }}"><span>{{ obs.message }}</span></p>' +
+			'{{ /obs.show }}',
 
 			obs = new can.Map({
 				show: true,
@@ -1122,8 +1122,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	test("hookup and live binding", function () {
 
 		var text = "<div class='{{ task.completed }}' {{ (el)-> can.data(can.$(el),'task',task) }}>" +
-				"{{ task.name }}" +
-				"</div>",
+			"{{ task.name }}" +
+			"</div>",
 			task = new can.Map({
 				completed: false,
 				className: 'someTask',
@@ -1155,11 +1155,11 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 	test('multiple curly braces in a block', function () {
 		var text = '{{^obs.items}}' +
-				'<li>No items</li>' +
-				'{{/obs.items}}' +
-				'{{#obs.items}}' +
-				'<li>{{name}}</li>' +
-				'{{/obs.items}}',
+			'<li>No items</li>' +
+			'{{/obs.items}}' +
+			'{{#obs.items}}' +
+			'<li>{{name}}</li>' +
+			'{{/obs.items}}',
 
 			obs = new can.Map({
 				items: []
@@ -1527,8 +1527,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		can.view.mustache("textarea-test", "<textarea>Before{{ obs.middle }}After</textarea>");
 
 		var obs = new can.Map({
-				middle: "yes"
-			}),
+			middle: "yes"
+		}),
 			div = document.createElement('div');
 
 		div.appendChild(can.view("textarea-test", {
@@ -1675,10 +1675,10 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	//Issue 233
 	test("multiple tbodies in table hookup", function () {
 		var text = "<table>" +
-				"{{#people}}" +
-				"<tbody><tr><td>{{name}}</td></tr></tbody>" +
-				"{{/people}}" +
-				"</table>",
+			"{{#people}}" +
+			"<tbody><tr><td>{{name}}</td></tr></tbody>" +
+			"{{/people}}" +
+			"</table>",
 			people = new can.List([{
 				name: "Steve"
 			}, {
@@ -2012,15 +2012,15 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 	test("HTML comment with helper", function () {
 		var text = ["<ul>",
-				"{{#todos}}",
-				"<li {{data 'todo'}}>",
-				"<!-- html comment #1 -->",
-				"{{name}}",
-				"<!-- html comment #2 -->",
-				"</li>",
-				"{{/todos}}",
-				"</ul>"
-			],
+			"{{#todos}}",
+			"<li {{data 'todo'}}>",
+			"<!-- html comment #1 -->",
+			"{{name}}",
+			"<!-- html comment #2 -->",
+			"</li>",
+			"{{/todos}}",
+			"</ul>"
+		],
 			Todos = new can.List([{
 				id: 1,
 				name: "Dishes"
@@ -2063,9 +2063,9 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 	test("correctness of data-view-id and only in tag opening", function () {
 		var text = ["<textarea><select>{{#items}}",
-				"<option{{data 'item'}}>{{title}}</option>",
-				"{{/items}}</select></textarea>"
-			],
+			"<option{{data 'item'}}>{{title}}</option>",
+			"{{/items}}</select></textarea>"
+		],
 			items = [{
 				id: 1,
 				title: "One"
@@ -2087,8 +2087,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 	test("Empty strings in arrays within Observes that are iterated should return blank strings", function () {
 		var data = new can.Map({
-				colors: ["", 'red', 'green', 'blue']
-			}),
+			colors: ["", 'red', 'green', 'blue']
+		}),
 			compiled = new can.Mustache({
 				text: "<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>"
 			})
@@ -2198,8 +2198,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
 		deepEqual(new can.Mustache({
-			text: t.template
-		})
+				text: t.template
+			})
 			.render(t.data), expected);
 	});
 
@@ -2343,8 +2343,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 	test("Object references can escape periods for key names containing periods", function () {
 		var template = can.view.mustache("{{#foo.bar}}" +
-				"{{some\\\\.key\\\\.name}} {{some\\\\.other\\\\.key.with\\\\.more}}" +
-				"{{/foo.bar}}"),
+			"{{some\\\\.key\\\\.name}} {{some\\\\.other\\\\.key.with\\\\.more}}" +
+			"{{/foo.bar}}"),
 			data = {
 				foo: {
 					bar: [{
@@ -2471,10 +2471,10 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 		var template = can.view.mustache(
 			"{{#grid.rows}}" +
-				"{{#grid.cols}}" +
-				"<div>{{columnData ../. .}}</div>" +
-				"{{/grid.cols}}" +
-				"{{/grid.rows}}");
+			"{{#grid.cols}}" +
+			"<div>{{columnData ../. .}}</div>" +
+			"{{/grid.cols}}" +
+			"{{/grid.rows}}");
 
 		var grid = new can.Map({
 			rows: [{
@@ -2943,8 +2943,8 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 		var tmp = can.view.mustache(
 			"<ul>{{#if showing}}" +
-				"{{#each items}}<li>item</li>{{/items}}" +
-				"{{/if}}</ul>")
+			"{{#each items}}<li>item</li>{{/items}}" +
+			"{{/if}}</ul>")
 
 		var items = new can.List([1, 2, 3]);
 		var showing = can.compute(true);
@@ -3104,12 +3104,12 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	test("directly nested live sections unbind without needing the element to be removed", function () {
 		var template = can.view.mustache(
 			"<div>" +
-				"{{#items}}" +
-				"<p>first</p>" +
-				"{{#visible}}<label>foo</label>{{/visible}}" +
-				"<p>second</p>" +
-				"{{/items}}" +
-				"</div>");
+			"{{#items}}" +
+			"<p>first</p>" +
+			"{{#visible}}<label>foo</label>{{/visible}}" +
+			"<p>second</p>" +
+			"{{/items}}" +
+			"</div>");
 
 		var data = new can.Map({
 			items: [{
@@ -3279,7 +3279,7 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 			print_prop: function () {
 				return can.map(
 					can.makeArray(arguments)
-						.slice(0, arguments.length - 1), function (arg) {
+					.slice(0, arguments.length - 1), function (arg) {
 						while (arg && arg.isComputed) {
 							arg = arg();
 						}
@@ -3369,7 +3369,7 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 	test('can.compute should live bind when the value is changed to a Construct (#638)', function () {
 		var renderer = can.view.mustache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
 			div = document.createElement('div'),
-		// can.compute(null) will pass
+			// can.compute(null) will pass
 			counter = can.compute(),
 			data = {
 				counter: counter
@@ -3406,16 +3406,16 @@ steal("can/model", "can/view/mustache", "can/test", function() {
 
 		var itemsTemplate = can.view.mustache(
 			"<div>" +
-				"{{#each items}}" +
-				"{{>itempartial}}" +
-				"{{/each}}" +
-				"</div>")
+			"{{#each items}}" +
+			"{{>itempartial}}" +
+			"{{/each}}" +
+			"</div>")
 
 		var items = new can.List([{}, {}])
 
 		var frag = itemsTemplate({
-				items: items
-			}),
+			items: items
+		}),
 			div = frag.childNodes[0],
 			labels = div.getElementsByTagName("label");
 

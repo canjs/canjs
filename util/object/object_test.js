@@ -116,14 +116,14 @@ steal('can/util/object', function () {
 			id: 1,
 			name: 'thinger'
 		}, searchText = {
-			searchText: 'foo'
-		}, compare = {
-			searchText: function (items, paramsText, itemr, params) {
-				equal(item, itemr);
-				equal(searchText, params);
-				return true;
-			}
-		};
+				searchText: 'foo'
+			}, compare = {
+				searchText: function (items, paramsText, itemr, params) {
+					equal(item, itemr);
+					equal(searchText, params);
+					return true;
+				}
+			};
 		ok(can.Object.subset(item, searchText, compare), 'searchText');
 	});
 });

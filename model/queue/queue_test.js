@@ -1,7 +1,7 @@
 /* global Person: true */
 /* global User: true */
 /* global Hero: true */
-steal('can/util','can/model', 'can/model/queue', 'can/util/fixture','can/map/attributes', "can/test", function() {
+steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/map/attributes', "can/test", function () {
 	module('can/model/queue', {
 		setup: function () {}
 	});
@@ -25,8 +25,8 @@ steal('can/util','can/model', 'can/model/queue', 'can/util/fixture','can/map/att
 			}
 		}, {});
 		var person = new Person({
-				name: 'Justin'
-			}),
+			name: 'Justin'
+		}),
 			personD = person.save();
 		person.attr('name', 'Brian');
 		stop();

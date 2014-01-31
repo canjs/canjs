@@ -1,4 +1,4 @@
-steal("can/map/delegate", "can/test", function() {
+steal("can/map/delegate", "can/test", function () {
 	module('can/map/delegate');
 	var matches = can.Map.prototype.delegate.matches;
 	test('matches', function () {
@@ -158,12 +158,12 @@ steal("can/map/delegate", "can/test", function() {
 		var f1 = function () {
 			state.undelegate('type', 'add', f2);
 		}, f2 = function () {
-			ok(false, 'I am removed, how am I called');
-		}, f3 = function () {
-			state.undelegate('type', 'add', f1);
-		}, f4 = function () {
-			ok(true, 'f4 called');
-		};
+				ok(false, 'I am removed, how am I called');
+			}, f3 = function () {
+				state.undelegate('type', 'add', f1);
+			}, f4 = function () {
+				ok(true, 'f4 called');
+			};
 		state.delegate('type', 'set', f1);
 		state.delegate('type', 'set', f2);
 		state.delegate('type', 'set', f3);

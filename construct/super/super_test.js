@@ -1,4 +1,4 @@
-steal("can/construct/super", function() {
+steal("can/construct/super", function () {
 	module('can/construct/super');
 	test('prototype super', function () {
 		var A = can.Construct({
