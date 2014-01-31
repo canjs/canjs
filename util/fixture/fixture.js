@@ -18,84 +18,84 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 	};
 
 	var updateSettings = function (settings, originalOptions) {
-			if (!can.fixture.on) {
-				return;
+		if (!can.fixture.on) {
+			return;
+		}
+
+		//simple wrapper for logging
+		var log = function () {
+			//!dev-remove-start
+			can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
+				.join(' '));
+			//!dev-remove-end
+		};
+
+		// We always need the type which can also be called method, default to GET
+		settings.type = settings.type || settings.method || 'GET';
+
+		// add the fixture option if programmed in
+		var data = overwrite(settings);
+
+		// if we don't have a fixture, do nothing
+		if (!settings.fixture) {
+			if (window.location.protocol === "file:") {
+				log("ajax request to " + settings.url + ", no fixture found");
+			}
+			return;
+		}
+
+		//if referencing something else, update the fixture option
+		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
+			settings.fixture = can.fixture[settings.fixture];
+		}
+
+		// if a string, we just point to the right url
+		if (typeof settings.fixture === "string") {
+			var url = settings.fixture;
+
+			if (/^\/\//.test(url)) {
+				// this lets us use rootUrl w/o having steal...
+				url = getUrl(settings.fixture.substr(2));
 			}
 
-			//simple wrapper for logging
-			var log = function () {
-				//!dev-remove-start
-				can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
-					.join(' '));
-				//!dev-remove-end
-			};
-
-			// We always need the type which can also be called method, default to GET
-			settings.type = settings.type || settings.method || 'GET';
-
-			// add the fixture option if programmed in
-			var data = overwrite(settings);
-
-			// if we don't have a fixture, do nothing
-			if (!settings.fixture) {
-				if (window.location.protocol === "file:") {
-					log("ajax request to " + settings.url + ", no fixture found");
-				}
-				return;
+			if (data) {
+				// Template static fixture URLs
+				url = can.sub(url, data);
 			}
 
-			//if referencing something else, update the fixture option
-			if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
-				settings.fixture = can.fixture[settings.fixture];
+			delete settings.fixture;
+
+			//!dev-remove-start
+			log("looking for fixture in " + url);
+			//!dev-remove-end
+
+			settings.url = url;
+			settings.data = null;
+			settings.type = "GET";
+			if (!settings.error) {
+				settings.error = function (xhr, error, message) {
+					throw "fixtures.js Error " + error + " " + message;
+				};
+			}
+		} else {
+			//!dev-remove-start
+			log("using a dynamic fixture for " + settings.type + " " + settings.url);
+			//!dev-remove-end
+
+			//it's a function ... add the fixture datatype so our fixture transport handles it
+			// TODO: make everything go here for timing and other fun stuff
+			// add to settings data from fixture ...
+			if (settings.dataTypes) {
+				settings.dataTypes.splice(0, 0, "fixture");
 			}
 
-			// if a string, we just point to the right url
-			if (typeof settings.fixture === "string") {
-				var url = settings.fixture;
-
-				if (/^\/\//.test(url)) {
-					// this lets us use rootUrl w/o having steal...
-					url = getUrl(settings.fixture.substr(2));
-				}
-
-				if (data) {
-					// Template static fixture URLs
-					url = can.sub(url, data);
-				}
-
-				delete settings.fixture;
-
-				//!dev-remove-start
-				log("looking for fixture in " + url);
-				//!dev-remove-end
-
-				settings.url = url;
-				settings.data = null;
-				settings.type = "GET";
-				if (!settings.error) {
-					settings.error = function (xhr, error, message) {
-						throw "fixtures.js Error " + error + " " + message;
-					};
-				}
-			} else {
-				//!dev-remove-start
-				log("using a dynamic fixture for " + settings.type + " " + settings.url);
-				//!dev-remove-end
-
-				//it's a function ... add the fixture datatype so our fixture transport handles it
-				// TODO: make everything go here for timing and other fun stuff
-				// add to settings data from fixture ...
-				if (settings.dataTypes) {
-					settings.dataTypes.splice(0, 0, "fixture");
-				}
-
-				if (data && originalOptions) {
-					can.extend(originalOptions.data, data);
-				}
+			if (data && originalOptions) {
+				can.extend(originalOptions.data, data);
 			}
-		},
-	// A helper function that takes what's called with response
-	// and moves some common args around to make it easier to call
+		}
+	},
+		// A helper function that takes what's called with response
+		// and moves some common args around to make it easier to call
 		extractResponse = function (status, statusText, responses, headers) {
 			// if we get response(RESPONSES, HEADERS)
 			if (typeof status !== "number") {
@@ -115,8 +115,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 			return [status, statusText, extractResponses(this, responses), headers];
 		},
-	// If we get data instead of responses,
-	// make sure we provide a response type that matches the first datatype (typically json)
+		// If we get data instead of responses,
+		// make sure we provide a response type that matches the first datatype (typically json)
 		extractResponses = function (settings, responses) {
 			var next = settings.dataTypes ? settings.dataTypes[0] : (settings.dataType || 'json');
 			if (!responses || !responses[next]) {
@@ -147,11 +147,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					timeout = setTimeout(function () {
 						// if the user wants to call success on their own, we allow it ...
 						var success = function () {
-								if (stopped === false) {
-									callback.apply(null, extractResponse.apply(s, arguments));
-								}
-							},
-						// get the result form the fixture
+							if (stopped === false) {
+								callback.apply(null, extractResponse.apply(s, arguments));
+							}
+						},
+							// get the result form the fixture
 							result = s.fixture(original, success, headers, s);
 						if (result !== undefined) {
 							// make sure the result has the right dataType
@@ -189,17 +189,17 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				timeout = setTimeout(function () {
 					// if the user wants to call success on their own, we allow it ...
 					var success = function () {
-							var response = extractResponse.apply(settings, arguments),
-								status = response[0];
+						var response = extractResponse.apply(settings, arguments),
+							status = response[0];
 
-							if ((status >= 200 && status < 300 || status === 304) && stopped === false) {
-								d.resolve(response[2][settings.dataType]);
-							} else {
-								// TODO probably resolve better
-								d.reject(d, 'error', response[1]);
-							}
-						},
-					// get the result form the fixture
+						if ((status >= 200 && status < 300 || status === 304) && stopped === false) {
+							d.resolve(response[2][settings.dataType]);
+						} else {
+							// TODO probably resolve better
+							d.reject(d, 'error', response[1]);
+						}
+					},
+						// get the result form the fixture
 						result = settings.fixture(settings, success, settings.headers, settings);
 					if (result !== undefined) {
 						d.resolve(result);
@@ -215,7 +215,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 	// a list of 'overwrite' settings object
 	var overwrites = [],
-	// returns the index of an overwrite function
+		// returns the index of an overwrite function
 		find = function (settings, exact) {
 			for (var i = 0; i < overwrites.length; i++) {
 				if ($fixture._similar(settings, overwrites[i], exact)) {
@@ -224,7 +224,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 			return -1;
 		},
-	// overwrites the settings fixture if an overwrite matches
+		// overwrites the settings fixture if an overwrite matches
 		overwrite = function (settings) {
 			var index = find(settings);
 			if (index > -1) {
@@ -233,7 +233,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 
 		},
-	// Makes an attempt to guess where the id is at in the url and returns it.
+		// Makes an attempt to guess where the id is at in the url and returns it.
 		getId = function (settings) {
 			var id = settings.data.id;
 
@@ -508,37 +508,37 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					can.each((request.data.order || [])
 						.slice(0)
 						.reverse(), function (name) {
-						var split = name.split(" ");
-						retArr = retArr.sort(function (a, b) {
-							if (split[1].toUpperCase() !== "ASC") {
-								if (a[split[0]] < b[split[0]]) {
-									return 1;
-								} else if (a[split[0]] === b[split[0]]) {
-									return 0;
+							var split = name.split(" ");
+							retArr = retArr.sort(function (a, b) {
+								if (split[1].toUpperCase() !== "ASC") {
+									if (a[split[0]] < b[split[0]]) {
+										return 1;
+									} else if (a[split[0]] === b[split[0]]) {
+										return 0;
+									} else {
+										return -1;
+									}
 								} else {
-									return -1;
+									if (a[split[0]] < b[split[0]]) {
+										return -1;
+									} else if (a[split[0]] === b[split[0]]) {
+										return 0;
+									} else {
+										return 1;
+									}
 								}
-							} else {
-								if (a[split[0]] < b[split[0]]) {
-									return -1;
-								} else if (a[split[0]] === b[split[0]]) {
-									return 0;
-								} else {
-									return 1;
-								}
-							}
+							});
 						});
-					});
 
 					//group is just like a sort
 					can.each((request.data.group || [])
 						.slice(0)
 						.reverse(), function (name) {
-						var split = name.split(" ");
-						retArr = retArr.sort(function (a, b) {
-							return a[split[0]] > b[split[0]];
+							var split = name.split(" ");
+							retArr = retArr.sort(function (a, b) {
+								return a[split[0]] > b[split[0]];
+							});
 						});
-					});
 
 					var offset = parseInt(request.data.offset, 10) || 0,
 						limit = parseInt(request.data.limit, 10) || (items.length - offset),

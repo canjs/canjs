@@ -1,4 +1,4 @@
-steal("can/component", function(){
+steal("can/component", function () {
 	module('can/component', {
 		setup: function () {
 			can.remove(can.$('#qunit-test-area>*'));

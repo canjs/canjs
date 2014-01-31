@@ -1,4 +1,4 @@
-steal("can/model", "can/view/ejs", "can/test", function() {
+steal("can/model", "can/view/ejs", "can/test", function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
 			this.animals = [
@@ -187,9 +187,9 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	test('list helper', function () {
 		var text = '<% list(todos, function(todo){ %><div><%= todo.name %></div><% }) %>';
 		var todos = new can.List([{
-				id: 1,
-				name: 'Dishes'
-			}]),
+			id: 1,
+			name: 'Dishes'
+		}]),
 			compiled = new can.EJS({
 				text: text
 			})
@@ -951,8 +951,8 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	test('live binding textarea', function () {
 		can.view.ejs('textarea-test', '<textarea>Before<%= obs.attr(\'middle\') %>After</textarea>');
 		var obs = new can.Map({
-				middle: 'yes'
-			}),
+			middle: 'yes'
+		}),
 			div = document.createElement('div');
 		var node = can.view('textarea-test', {
 			obs: obs
@@ -1033,9 +1033,9 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	test('empty element hooks work correctly', function () {
 		var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %>></div>' + '<div <%= function(e){ e.innerHTML = "2 Will not show"; } %>></div>' + '3 Will not show';
 		var compiled = new can.EJS({
-				text: text
-			})
-				.render(),
+			text: text
+		})
+			.render(),
 			div = document.createElement('div');
 		div.appendChild(can.view.frag(compiled));
 		equal(div.childNodes.length, 3, 'all three elements present');
@@ -1132,8 +1132,8 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 			rating: 8.5
 		});
 		var res = can.view.render(can.test.path('view/ejs/test/table_test.ejs'), {
-				games: games
-			}),
+			games: games
+		}),
 			div = document.createElement('div');
 		div.appendChild(can.view.frag(res));
 		ok(!/@@!!@@/.test(div.innerHTML), 'no placeholders');
@@ -1222,16 +1222,16 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('HTML comment with element callback', function () {
 		var text = [
-				'<ul>',
-				'<% todos.each(function(todo) { %>',
-				'<li<%= (el) -> can.data(can.$(el),\'todo\',todo) %>>',
-				'<!-- html comment #1 -->',
-				'<%= todo.name %>',
-				'<!-- html comment #2 -->',
-				'</li>',
-				'<% }) %>',
-				'</ul>'
-			],
+			'<ul>',
+			'<% todos.each(function(todo) { %>',
+			'<li<%= (el) -> can.data(can.$(el),\'todo\',todo) %>>',
+			'<!-- html comment #1 -->',
+			'<%= todo.name %>',
+			'<!-- html comment #2 -->',
+			'</li>',
+			'<% }) %>',
+			'</ul>'
+		],
 			Todos = new can.List([{
 				id: 1,
 				name: 'Dishes'
@@ -1272,15 +1272,15 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 		can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>');
 		can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>');
 		var todos = [
-				new can.Map({
-					id: 1,
-					name: 'Dishes'
-				}),
-				new can.Map({
-					id: 2,
-					name: 'Forks'
-				})
-			],
+			new can.Map({
+				id: 1,
+				name: 'Dishes'
+			}),
+			new can.Map({
+				id: 2,
+				name: 'Forks'
+			})
+		],
 			data = {
 				todos: new can.List(todos)
 			}, arr = {
@@ -1307,10 +1307,10 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('correctness of data-view-id and only in tag opening', function () {
 		var text = [
-				'<textarea><select><% can.each(this.items, function(item) { %>',
-				'<option<%= (el) -> el.data(\'item\', item) %>><%= item.title %></option>',
-				'<% }) %></select></textarea>'
-			],
+			'<textarea><select><% can.each(this.items, function(item) { %>',
+			'<option<%= (el) -> el.data(\'item\', item) %>><%= item.title %></option>',
+			'<% }) %></select></textarea>'
+		],
 			items = [{
 				id: 1,
 				title: 'One'
@@ -1329,9 +1329,9 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('return blocks within element tags', function () {
 		var animals = new can.List([
-				'sloth',
-				'bear'
-			]),
+			'sloth',
+			'bear'
+		]),
 			template = '<ul>' + '<%==lister(animals, function(animal){%>' + '<li><%=animal %></li>' + '<%})%>' + '</ul>';
 		var renderer = can.view.ejs(template);
 		var div = document.createElement('div');
@@ -1347,9 +1347,9 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('Each does not redraw items', function () {
 		var animals = new can.List([
-				'sloth',
-				'bear'
-			]),
+			'sloth',
+			'bear'
+		]),
 			template = '<div>my<b>favorite</b>animals:' + '<%==each(animals, function(animal){%>' + '<label>Animal=</label> <span><%=animal %></span>' + '<%})%>' + '!</div>';
 		var renderer = can.view.ejs(template);
 		var div = document.createElement('div');
@@ -1366,9 +1366,9 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('Each works with no elements', function () {
 		var animals = new can.List([
-				'sloth',
-				'bear'
-			]),
+			'sloth',
+			'bear'
+		]),
 			template = '<%==each(animals, function(animal){%>' + '<%=animal %> ' + '<%})%>';
 		var renderer = can.view.ejs(template);
 		var div = document.createElement('div');
@@ -1381,10 +1381,10 @@ steal("can/model", "can/view/ejs", "can/test", function() {
 	});
 	test('Each does not redraw items (normal array)', function () {
 		var animals = [
-				'sloth',
-				'bear',
-				'turtle'
-			],
+			'sloth',
+			'bear',
+			'turtle'
+		],
 			template = '<div>my<b>favorite</b>animals:' + '<%each(animals, function(animal){%>' + '<label>Animal=</label> <span><%=animal %></span>' + '<%})%>' + '!</div>';
 		var renderer = can.view.ejs(template);
 		var div = document.createElement('div');

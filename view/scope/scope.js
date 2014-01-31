@@ -177,12 +177,19 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			 *     curScope.attr("length") //-> 2
 			 */
 			attr: function (key) {
-				return this.read(key, {
-					isArgument: true,
-					returnObserveMethods: true,
-					proxyMethods: false
-				})
-					.value;
+				// reads for whatever called before attr.  It's possible
+				// that this.read clears them.  We want to restore them.
+				var previousReads = can.__clearReading && can.__clearReading(),
+					res = this.read(key, {
+						isArgument: true,
+						returnObserveMethods: true,
+						proxyMethods: false
+					})
+						.value;
+				if (can.__setReading) {
+					can.__setReading(previousReads);
+				}
+				return res;
 			},
 			/**
 			 * @function can.view.Scope.prototype.add

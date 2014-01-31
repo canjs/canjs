@@ -1,4 +1,4 @@
-steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function() {
+steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 	// this only applied to jQuery libs
 	if (!window.jQuery) {
 		return;

@@ -1,4 +1,4 @@
-steal('can/util/fixture', function() {
+steal('can/util/fixture', function () {
 	module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();
@@ -161,8 +161,8 @@ steal('can/util/fixture', function() {
 		ok(num >= 0 && num < 5, 'gets a number');
 		stop();
 		var zero, three, between, next = function () {
-			start();
-		};
+				start();
+			};
 		// make sure rand can be everything we need
 		setTimeout(function timer() {
 			var res = rand([1, 2, 3]);
@@ -297,11 +297,11 @@ steal('can/util/fixture', function() {
 	 */
 	test('can.fixture.store with can.Model', function () {
 		var store = can.fixture.store(100, function (i) {
-				return {
-					id: i,
-					name: 'Object ' + i
-				};
-			}),
+			return {
+				id: i,
+				name: 'Object ' + i
+			};
+		}),
 			Model = can.Model({
 				findAll: 'GET /models',
 				findOne: 'GET /models/{id}',

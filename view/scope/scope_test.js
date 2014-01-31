@@ -1,4 +1,4 @@
-steal("can/view/scope", "can/route", "can/test", function(){
+steal("can/view/scope", "can/route", "can/test", function () {
 	module('can/view/scope');
 	/*	test("basics",function(){
 
@@ -101,8 +101,8 @@ steal("can/view/scope", "can/route", "can/test", function(){
 	});
 	test('backtrack path (#163)', function () {
 		var row = new can.Map({
-				first: 'Justin'
-			}),
+			first: 'Justin'
+		}),
 			col = {
 				format: 'str'
 			}, base = new can.view.Scope(row),
@@ -322,8 +322,8 @@ steal("can/view/scope", "can/route", "can/test", function(){
 			proto_prop: 'thud'
 		});
 		var data = new can.Foo({
-				own_prop: 'quux'
-			}),
+			own_prop: 'quux'
+		}),
 			scope = new can.view.Scope(data);
 		equal(scope.computeData('constructor.static_prop')
 			.compute(), 'baz', 'static prop');

@@ -202,7 +202,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 				if (unbind) {
 					unbind();
 				}
-				return ((escape === 2 || !escape) ?
+				return ((withinTemplatedSectionWithinAnElement || escape === 2 || !escape) ?
 					contentText :
 					contentEscape)(value, status === 0 && tag);
 			}

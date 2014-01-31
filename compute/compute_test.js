@@ -1,4 +1,4 @@
-steal("can/compute", "can/test", function() {
+steal("can/compute", "can/test", function () {
 	module('can/compute');
 	test('single value compute', function () {
 		var num = can.compute(1);

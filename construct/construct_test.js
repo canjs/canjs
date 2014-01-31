@@ -1,4 +1,4 @@
-steal('can/construct', function() {
+steal('can/construct', function () {
 	/* global Foo, Car, Bar */
 	module('can/construct', {
 		setup: function () {

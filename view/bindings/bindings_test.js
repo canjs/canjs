@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", function(){
+steal("can/view/bindings", "can/map", "can/test", function () {
 	module('can/view/bindings', {
 		setup: function () {
 			document.getElementById('qunit-test-area')
@@ -125,8 +125,8 @@ steal("can/view/bindings", "can/map", "can/test", function(){
 	});
 	test('checkboxes with can-value bind properly (#628)', function () {
 		var data = new can.Map({
-				completed: true
-			}),
+			completed: true
+		}),
 			frag = can.view.mustache('<input type="checkbox" can-value="completed"/>')(data);
 		can.append(can.$('#qunit-test-area'), frag);
 		var input = can.$('#qunit-test-area')[0].getElementsByTagName('input')[0];

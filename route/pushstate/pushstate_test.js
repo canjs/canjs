@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal('can/route/pushstate', "can/test", function(){
+steal('can/route/pushstate', "can/test", function () {
 
 	if (window.history && history.pushState) {
 
@@ -304,13 +304,13 @@ steal('can/route/pushstate', "can/test", function(){
 			}, "bad deparam");
 
 			equal(can.route.param({
-				search: "can.Control"
-			}),
+					search: "can.Control"
+				}),
 				"search/can.Control", "bad param");
 
 			equal(can.route.param({
-				who: "can.Control"
-			}),
+					who: "can.Control"
+				}),
 				"can.Control");
 		})
 
@@ -322,9 +322,9 @@ steal('can/route/pushstate', "can/test", function(){
 			can.route(":type/:id");
 
 			equal(can.route.param({
-				type: "foo",
-				id: "bar"
-			}),
+					type: "foo",
+					id: "bar"
+				}),
 				"foo/bar");
 		})
 
@@ -589,14 +589,14 @@ steal('can/route/pushstate', "can/test", function(){
 
 			test("routed links must descend from pushstate root (#652)", 2, function () {
 				var tests = [
-						// ["root", "link href", { route: "result" }]
-						["/app/", "/app/something/test/", {
-							section: "something",
-							sub: "test",
-							route: ":section/:sub/"
-						}],
-						["/app/", "/route/pushstate/", {}]
-					],
+					// ["root", "link href", { route: "result" }]
+					["/app/", "/app/something/test/", {
+						section: "something",
+						sub: "test",
+						route: ":section/:sub/"
+					}],
+					["/app/", "/route/pushstate/", {}]
+				],
 					iframe,
 					test;
 

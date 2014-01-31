@@ -1,4 +1,4 @@
-steal("can/construct/proxy", "can/control", function() {
+steal("can/construct/proxy", "can/control", function () {
 	/* global Car */
 	var isSteal = typeof steal !== 'undefined';
 	module('can/construct/proxy');

@@ -1,5 +1,5 @@
 steal('can/util', 'can/control/modifier', function (can) {
-	if(!window.jQuery) {
+	if (!window.jQuery) {
 		return;
 	}
 

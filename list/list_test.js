@@ -1,4 +1,4 @@
-steal("can/util", "can/list", "can/test", function() {
+steal("can/util", "can/list", "can/test", function () {
 	module('can/list');
 	test('list attr changes length', function () {
 		var l = new can.List([
@@ -11,11 +11,11 @@ steal("can/util", "can/list", "can/test", function() {
 	});
 	test('list splice', function () {
 		var l = new can.List([
-				0,
-				1,
-				2,
-				3
-			]),
+			0,
+			1,
+			2,
+			3
+		]),
 			first = true;
 		l.bind('change', function (ev, attr, how, newVals, oldVals) {
 			equal(attr, '1');
@@ -128,10 +128,10 @@ steal("can/util", "can/list", "can/test", function() {
 	});
 	test('Array accessor methods', 11, function () {
 		var l = new can.List([
-				'a',
-				'b',
-				'c'
-			]),
+			'a',
+			'b',
+			'c'
+		]),
 			sliced = l.slice(2),
 			joined = l.join(' | '),
 			concatenated = l.concat([

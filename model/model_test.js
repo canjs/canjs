@@ -8,7 +8,7 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global Company: true */
-steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function() {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
 	module('can/model', {
 		setup: function () {}
 	});
@@ -209,8 +209,8 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 			}
 		}, {});
 		var person = new Person({
-				name: 'Justin'
-			}),
+			name: 'Justin'
+		}),
 			personD = person.save();
 		stop();
 		personD.then(function (person) {
@@ -236,9 +236,9 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 			}
 		}, {});
 		var person = new Person({
-				name: 'Justin',
-				id: 5
-			}),
+			name: 'Justin',
+			id: 5
+		}),
 			personD = person.save();
 		stop();
 		personD.then(function (person) {
@@ -263,9 +263,9 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 			}
 		}, {});
 		var person = new Person({
-				name: 'Justin',
-				id: 5
-			}),
+			name: 'Justin',
+			id: 5
+		}),
 			personD = person.destroy();
 		stop();
 		personD.then(function (person) {
@@ -650,8 +650,8 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 		});
 		stop();
 		can.when(Guy.findOne({
-				id: 1
-			}), Guy.findAll())
+			id: 1
+		}), Guy.findAll())
 			.then(function (guyRes, guysRes2) {
 				equal(guyRes.id, 1, 'got a guy id 1 back');
 				equal(guysRes2[0].id, 1, 'got guys w/ id 1 back');
@@ -907,13 +907,13 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 			}
 		}, {});
 		var people = new Person.List([
-				new Person({
-					id: 1
-				}),
-				new Person({
-					id: 2
-				})
-			]),
+			new Person({
+				id: 1
+			}),
+			new Person({
+				id: 2
+			})
+		]),
 			orgs = new Organisation.List([
 				new Organisation({
 					id: 1
@@ -1037,12 +1037,12 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 	});
 	test('.model on create and update (#301)', function () {
 		var MyModel = can.Model.extend({
-				create: 'POST /todo',
-				update: 'PUT /todo',
-				model: function (data) {
-					return can.Model.model.call(this, data.item);
-				}
-			}, {}),
+			create: 'POST /todo',
+			update: 'PUT /todo',
+			model: function (data) {
+				return can.Model.model.call(this, data.item);
+			}
+		}, {}),
 			id = 0,
 			updateTime;
 		can.fixture('POST /todo', function (original, respondWith, settings) {
@@ -1079,8 +1079,8 @@ steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function
 				}, '.model works for update');
 			});
 		var instance = new MyModel({
-				name: 'Dishes'
-			}),
+			name: 'Dishes'
+		}),
 			saveD = instance.save();
 		stop();
 		saveD.then(function () {
