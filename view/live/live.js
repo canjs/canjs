@@ -57,6 +57,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 	/**
 	 * @property {Object} can.view.live
 	 * @parent can.view.static
+	 * @release 2.0.4
 	 *
 	 * Setup live-binding to a compute manually.
 	 *
@@ -71,6 +72,48 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 	 *
 	 */
 	var live = {
+		/**
+		 * @function can.view.live.list
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 *
+		 * Live binds a compute's [can.List] incrementally.
+		 *
+		 *
+		 * @param {HTMLElement} el An html element to replace with the live-section.
+		 *
+		 * @param {can.compute|can.List} list A [can.List] or [can.compute] whose value is a [can.List].
+		 *
+		 * @param {function(this:*,*,index):String} render(index, index) A function that when called with
+		 * the incremental item to render and the index of the item in the list.
+		 *
+		 * @param {Object} context The `this` the `render` function will be called with.
+		 *
+		 * @param {HTMLElement} [parentNode] An overwritable parentNode if `el`'s parent is
+		 * a documentFragment.
+		 *
+		 * ## Use
+		 *
+		 * `can.view.live.list` is used to setup incremental live-binding.
+		 *
+		 *     // a compute that change's it's list
+		 *     var todos = can.compute(function(){
+		 *       return new Todo.List({page: can.route.attr("page")})
+		 *     })
+		 *
+		 *     var placeholder = document.createTextNode(" ")
+		 *     $("ul#todos").append(placeholder)
+		 *
+		 *
+		 *
+		 *     can.view.live.list(
+		 *       placeholder,
+		 *       todos,
+		 *       function(todo, index){
+		 *         return "<li>"+todo.attr("name")+"</li>"
+		 *       })
+		 *
+		 */
 		list: function (el, compute, render, context, parentNode) {
 			// A nodeList of all elements this live-list manages.
 			// This is here so that if this live list is within another section
@@ -192,6 +235,36 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			// run the list setup
 			updateList({}, can.isFunction(compute) ? compute() : compute);
 		},
+		/**
+		 * @function can.view.live.html
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 *
+		 * Live binds a compute's value to a collection of elements.
+		 *
+		 *
+		 * @param {HTMLElement} el An html element to replace with the live-section.
+		 *
+		 * @param {can.compute} compute A [can.compute] whose value is HTML.
+		 *
+		 * @param {HTMLElement} [parentNode] An overwritable parentNode if `el`'s parent is
+		 * a documentFragment.
+		 *
+		 * ## Use
+		 *
+		 * `can.view.live.html` is used to setup incremental live-binding.
+		 *
+		 *     // a compute that change's it's list
+		 *     var greeting = can.compute(function(){
+		 *       return "Welcome <i>"+me.attr("name")+"</i>"
+		 *     });
+		 *
+		 *     var placeholder = document.createTextNode(" ");
+		 *     $("#greeting").append(placeholder);
+		 *
+		 *     can.view.live.html( placeholder,  greeting );
+		 *
+		 */
 		html: function (el, compute, parentNode) {
 			var data;
 			parentNode = elements.getParentNode(el, parentNode);
@@ -204,6 +277,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 				}
 				data.teardownCheck(nodes[0].parentNode);
 			});
+
 			var nodes = [el],
 				makeAndPut = function (val) {
 					var frag = can.view.fragment('' + val),
@@ -218,6 +292,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			nodeLists.register(nodes, data.teardownCheck);
 			makeAndPut(compute());
 		},
+		/**
+		 * @function can.view.live.replace
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 *
+		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
+		 * correct.
+		 *
+		 * @param {Array.<HTMLElement>} nodes An array of elements.  There should typically be one element.
+		 * @param {String|HTMLElement|DocumentFragment} val The content that should replace
+		 * `nodes`.  If a string is passed, it will be [can.view.hookup hookedup].
+		 *
+		 * @param {function} [teardown] A callback if these elements are torn down.
+		 */
 		replace: function (nodes, val, teardown) {
 			var oldNodes = nodes.slice(0),
 				frag;
@@ -239,6 +327,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			elements.replace(oldNodes, frag);
 			return nodes;
 		},
+		/**
+		 * @function can.view.live.text
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 *
+		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
+		 * correct.
+		 */
 		text: function (el, compute, parentNode) {
 			var parent = elements.getParentNode(el, parentNode);
 			// setup listening right away so we don't have to re-calculate value
@@ -339,6 +435,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			hook = hooks[attributeName];
 			// Insert the value in parts.
 			goodParts.splice(1, 0, compute());
+
 			// Set the attribute.
 			elements.setAttr(el, attributeName, goodParts.join(''));
 		},

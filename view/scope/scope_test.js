@@ -315,6 +315,7 @@
 		});
 		compute('compute value');
 	});
+
 	test('Can read static properties on constructors (#634)', function () {
 		can.Map.extend('can.Foo', {
 			static_prop: 'baz'
@@ -328,4 +329,20 @@
 		equal(scope.computeData('constructor.static_prop')
 			.compute(), 'baz', 'static prop');
 	});
+
+	test("Can read static properties on constructors (#634)", function () {
+		can.Map.extend("can.Foo", {
+			static_prop: "baz"
+		}, {
+			proto_prop: "thud"
+		});
+		var data = new can.Foo({
+			own_prop: "quux"
+		}),
+			scope = new can.view.Scope(data);
+
+		equal(scope.computeData("constructor.static_prop")
+			.compute(), "baz", "static prop");
+	});
+
 }());

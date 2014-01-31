@@ -2180,6 +2180,40 @@ test("helpers", function() {
 		equal(div.innerHTML, 'No ducks!', 'The function evaluated should evaluate false');
 	});
 
+	test("avoid global helpers", function () {
+		var noglobals = can.view.mustache("{{sometext person.name}}");
+
+		var div = document.createElement('div'),
+			div2 = document.createElement('div');
+
+		var person = new can.Map({
+			name: "Brian"
+		});
+		var result = noglobals({
+			person: person
+		}, {
+			sometext: function (name) {
+				return "Mr. " + name()
+			}
+		});
+
+		var result2 = noglobals({
+			person: person
+		}, {
+			sometext: function (name) {
+				return name() + " rules"
+			}
+		});
+
+		div.appendChild(result);
+		div2.appendChild(result2);
+
+		person.attr("name", "Ajax")
+
+		equal(div.innerHTML, "Mr. Ajax");
+		equal(div2.innerHTML, "Ajax rules");
+	});
+
 	test("Helpers always have priority (#258)", function () {
 		can.Mustache.registerHelper('callMe', function (arg) {
 			return arg + ' called me!';

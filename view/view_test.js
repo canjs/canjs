@@ -1,20 +1,22 @@
 (function () {
-	var Scanner = can.view.Scanner;
-	module('can/view', {
+
+	module("can/view", {
 		setup: function () {
-			this.scannerAttributes = Scanner.attributes;
-			this.scannerRegExpAttributes = Scanner.regExpAttributes;
-			this.scannerTags = Scanner.tags;
-			Scanner.attributes = {};
-			Scanner.regExpAttributes = {};
-			Scanner.tags = can.extend({}, Scanner.tags);
+			this.scannerAttributes = can.view.attr.attributes;
+			this.scannerRegExpAttributes = can.view.attr.regExpAttributes;
+			this.scannerTags = can.view.tag.tags;
+			can.view.attr.attributes = {};
+			can.view.attr.regExpAttributes = {};
+			can.view.tag.tags = can.extend({}, can.view.tag.tags);
 		},
 		teardown: function () {
-			Scanner.attributes = this.scannerAttributes;
-			Scanner.regExpAttributes = this.scannerRegExpAttributes;
-			Scanner.tags = this.scannerTags;
+			can.view.attr.attributes = this.scannerAttributes;
+			can.view.attr.regExpAttributes = this.scannerRegExpAttributes;
+			can.view.tag.tags = this.scannerTags;
+
 		}
 	});
+
 	test('helpers work', function () {
 		var expected = '<h3>helloworld</h3><div>foo</div>';
 		can.each([
@@ -31,11 +33,13 @@
 			equal(can.trim(actual), expected, 'Text rendered');
 		});
 	});
+
 	test('buildFragment works right', function () {
 		can.append(can.$('#qunit-test-area'), can.view(can.test.path('view/test//plugin.ejs'), {}));
 		ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
 		can.remove(can.$('#something'));
 	});
+
 	test('async templates, and caching work', function () {
 		stop();
 		var i = 0;
@@ -50,6 +54,7 @@
 		i++;
 		equal(i, 1, 'Ajax is not synchronous');
 	});
+
 	test('caching works', function () {
 		// this basically does a large ajax request and makes sure
 		// that the second time is always faster
@@ -72,10 +77,12 @@
 			});
 		});
 	});
+
 	test('hookup', function () {
 		can.view(can.test.path('view/test//hookup.ejs'), {});
 		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
 	});
+
 	test('inline templates other than \'tmpl\' like ejs', function () {
 		var script = document.createElement('script');
 		script.setAttribute('type', 'test/ejs');
@@ -89,6 +96,7 @@
 		}));
 		equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, 'Henry');
 	});
+
 	//canjs issue #31
 	test('render inline templates with a #', function () {
 		var script = document.createElement('script');
@@ -338,69 +346,104 @@
 		obs.attr('class', 'class="do=not=truncate=me"');
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
-	test('basic scanner custom tags', function () {
-		can.view.Scanner.tag('panel', function (el, options) {
-			ok(options.options.attr('helpers.myhelper')(), 'got a helper');
-			equal(options.scope.attr('foo'), 'bar', 'got scope and can read from it');
-			equal(options.subtemplate(options.scope.add({
-				message: 'hi'
-			}), options.options), '<p>sub says hi</p>');
+
+	test("basic scanner custom tags", function () {
+
+		can.view.tag("panel", function (el, tagData) {
+
+			ok(tagData.options.attr('helpers.myhelper')(), "got a helper");
+			equal(tagData.scope.attr('foo'), "bar", "got scope and can read from it");
+			equal(tagData.subtemplate(tagData.scope.add({
+				message: "hi"
+			}), tagData.options), "<p>sub says hi</p>");
+
 		});
-		var template = can.view.mustache('<panel title=\'foo\'><p>sub says {{message}}</p></panel>');
+
+		var template = can.view.mustache("<panel title='foo'><p>sub says {{message}}</p></panel>");
+
 		template({
-			foo: 'bar'
+			foo: "bar"
 		}, {
 			myhelper: function () {
 				return true;
 			}
 		});
+
 	});
-	test('custom tags without subtemplate', function () {
-		can.view.Scanner.tag('empty-tag', function (el, options) {
-			ok(!options.subtemplate, 'There is no subtemplate');
+
+	test("custom tags without subtemplate", function () {
+		can.view.tag("empty-tag", function (el, tagData) {
+
+			ok(!tagData.subtemplate, "There is no subtemplate");
+
 		});
-		var template = can.view.mustache('<empty-tag title=\'foo\'></empty-tag>');
+
+		var template = can.view.mustache("<empty-tag title='foo'></empty-tag>");
+
 		template({
-			foo: 'bar'
+			foo: "bar"
 		});
 	});
-	test('sub hookup', function () {
-		var tabs = document.createElement('tabs');
+
+	test("sub hookup", function () {
+		var tabs = document.createElement("tabs");
+
 		document.body.appendChild(tabs);
-		var panel = document.createElement('panel');
+
+		var panel = document.createElement("panel");
+
 		document.body.appendChild(panel);
-		can.view.Scanner.tag('tabs', function (el, hookupOptions) {
-			var frag = can.view.frag(hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options));
-			var div = document.createElement('div');
+
+		can.view.tag("tabs", function (el, tagData) {
+			var frag = can.view.frag(tagData.subtemplate(tagData.scope, tagData.options));
+
+			var div = document.createElement("div");
 			div.appendChild(frag);
-			var panels = div.getElementsByTagName('panel');
-			equal(panels.length, 1, 'there is one panel');
-			equal(panels[0].nodeName.toUpperCase(), 'PANEL');
-			equal(panels[0].getAttribute('title'), 'Fruits', 'attribute left correctly');
-			equal(panels[0].innerHTML, 'oranges, apples', 'innerHTML');
+			var panels = div.getElementsByTagName("panel");
+			equal(panels.length, 1, "there is one panel");
+			equal(panels[0].nodeName.toUpperCase(), "PANEL");
+			equal(panels[0].getAttribute("title"), "Fruits", "attribute left correctly");
+			equal(panels[0].innerHTML, "oranges, apples", "innerHTML");
+
 		});
-		can.view.Scanner.tag('panel', function (el, hookupOptions) {
-			ok(hookupOptions.scope, 'got scope');
-			return hookupOptions.scope;
+
+		can.view.tag("panel", function (el, tagData) {
+			ok(tagData.scope, "got scope");
+			return tagData.scope;
+
 		});
-		var template = can.view.mustache('<tabs>' + '{{#each foodTypes}}' + '<panel title=\'{{title}}\'>{{content}}</panel>' + '{{/each}}' + '</tabs>');
+
+		var template = can.view.mustache("<tabs>" +
+			"{{#each foodTypes}}" +
+			"<panel title='{{title}}'>{{content}}</panel>" +
+			"{{/each}}" +
+			"</tabs>");
+
 		var foodTypes = new can.List([{
-			title: 'Fruits',
-			content: 'oranges, apples'
-		}]);
+				title: "Fruits",
+				content: "oranges, apples"
+			} //,
+			//{title: "Breads", content: "pasta, cereal"},
+			//{title: "Sweets", content: "ice cream, candy"}
+		]);
+
 		template({
 			foodTypes: foodTypes
 		});
+
 	});
-	test('sub hookup passes helpers', function () {
-		can.view.Scanner.tag('tabs', function (el, hookupOptions) {
-			var optionsScope = hookupOptions.options.add({
+
+	test("sub hookup passes helpers", function () {
+
+		can.view.tag("tabs", function (el, tagData) {
+
+			var optionsScope = tagData.options.add({
 				tabsHelper: function () {
-					return 'TabsHelper';
+					return "TabsHelper";
 				}
 			});
-			var frag = can.view.frag(hookupOptions.subtemplate(hookupOptions.scope, optionsScope));
-			var div = document.createElement('div');
+			var frag = can.view.frag(tagData.subtemplate(tagData.scope, optionsScope));
+			var div = document.createElement("div");
 			div.appendChild(frag);
 			var panels = div.getElementsByTagName('panel');
 			equal(panels.length, 1, 'there is one panel');
@@ -408,29 +451,45 @@
 			equal(panels[0].getAttribute('title'), 'Fruits', 'attribute left correctly');
 			equal(panels[0].innerHTML, 'TabsHelperoranges, apples', 'innerHTML');
 		});
-		can.view.Scanner.tag('panel', function (el, hookupOptions) {
-			ok(hookupOptions.scope, 'got scope');
-			return hookupOptions.scope;
+
+		can.view.tag("panel", function (el, tagData) {
+			ok(tagData.scope, "got scope");
+			return tagData.scope;
+
 		});
-		var template = can.view.mustache('<tabs>' + '{{#each foodTypes}}' + '<panel title=\'{{title}}\'>{{tabsHelper}}{{content}}</panel>' + '{{/each}}' + '</tabs>');
+
+		var template = can.view.mustache("<tabs>" +
+			"{{#each foodTypes}}" +
+			"<panel title='{{title}}'>{{tabsHelper}}{{content}}</panel>" +
+			"{{/each}}" +
+			"</tabs>");
+
 		var foodTypes = new can.List([{
-			title: 'Fruits',
-			content: 'oranges, apples'
-		}]);
+				title: "Fruits",
+				content: "oranges, apples"
+			} //,
+			//{title: "Breads", content: "pasta, cereal"},
+			//{title: "Sweets", content: "ice cream, candy"}
+		]);
+
 		template({
 			foodTypes: foodTypes
 		});
 	});
+
 	test('attribute matching', function () {
 		var item = 0;
-		can.view.Scanner.attribute('on-click', function (data, el) {
-			ok(true, 'attribute called');
-			equal(data.attr, 'on-click', 'attr is on click');
-			equal(el.nodeName.toLowerCase(), 'p', 'got a paragraph');
-			var cur = data.scope.attr('.');
-			equal(foodTypes[item], cur, 'can get the current scope');
-			var attr = el.getAttribute('on-click');
-			equal(data.scope.attr(attr), doSomething, 'can call a parent\'s function');
+
+		can.view.attr("on-click", function (el, attrData) {
+
+			ok(true, "attribute called");
+			equal(attrData.attributeName, "on-click", "attr is on click");
+			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
+			var cur = attrData.scope.attr(".");
+			equal(foodTypes[item], cur, "can get the current scope");
+			var attr = el.getAttribute("on-click");
+
+			equal(attrData.scope.attr(attr), doSomething, "can call a parent's function");
 			item++;
 		});
 		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
@@ -450,16 +509,23 @@
 			doSomething: doSomething
 		});
 	});
+
 	test('regex attribute matching', function () {
 		var item = 0;
-		can.view.Scanner.attribute(/on-[\w\.]+/, function (data, el) {
-			ok(true, 'attribute called');
-			equal(data.attr, 'on-click', 'attr is on click');
-			equal(el.nodeName.toLowerCase(), 'p', 'got a paragraph');
-			var cur = data.scope.attr('.');
-			equal(foodTypes[item], cur, 'can get the current scope');
-			var attr = el.getAttribute('on-click');
-			equal(data.scope.attr(attr), doSomething, 'can call a parent\'s function');
+
+		can.view.attr(/on-[\w\.]+/, function (el, attrData) {
+
+			ok(true, "attribute called");
+			equal(attrData.attributeName, "on-click", "attr is on click");
+			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
+			var cur = attrData.scope.attr(".");
+
+			equal(foodTypes[item], cur, "can get the current scope");
+
+			var attr = el.getAttribute("on-click");
+
+			equal(attrData.scope.attr(attr), doSomething, "can call a parent's function");
+
 			item++;
 		});
 		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
@@ -479,13 +545,14 @@
 			doSomething: doSomething
 		});
 	});
+
 	test('content element', function () {
 		var template = can.view.mustache('{{#foo}}<content></content>{{/foo}}');
 		var context = new can.Map({
 			foo: 'bar'
 		});
 		var frag = template(context, {
-			_tags: {
+			tags: {
 				content: function (el, options) {
 					equal(el.nodeName.toLowerCase(), 'content', 'got an element');
 					equal(options.scope.attr('.'), 'bar', 'got the context of content');
@@ -501,20 +568,24 @@
 		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content');
 		equal(frag.childNodes[0].innerHTML, 'updated', 'content is updated');
 	});
-	test('content element inside tbody', function () {
-		var template = can.view.mustache('<table><tbody><content></content></tbody></table>');
+
+	test("content element inside tbody", function () {
+
+		var template = can.view.mustache("<table><tbody><content></content></tbody></table>");
+
 		var context = new can.Map({
-			foo: 'bar'
+			foo: "bar"
 		});
 		template(context, {
-			_tags: {
+			tags: {
 				content: function (el, options) {
-					equal(el.parentNode.nodeName.toLowerCase(), 'tbody', 'got an element in a tbody');
-					equal(options.scope.attr('.'), context, 'got the context of content');
+					equal(el.parentNode.nodeName.toLowerCase(), "tbody", "got an element in a tbody");
+					equal(options.scope.attr('.'), context, "got the context of content");
 				}
 			}
 		});
 	});
+
 	test('extensionless views, enforcing engine (#193)', 1, function () {
 		var path = can.test.path('view/test/extensionless');
 		// Because we don't have an extension and if we are using Steal we will get
@@ -532,6 +603,7 @@
 		div.appendChild(frag);
 		equal(div.getElementsByTagName('h3')[0].innerHTML, 'Hi test', 'Got expected test from extensionless template');
 	});
+
 	test('can.view[engine] always returns fragment renderers (#485)', 2, function () {
 		var template = '<h1>{{message}}</h1>';
 		var withId = can.view.mustache('test-485', template);
@@ -551,15 +623,19 @@
 			window.html5.elements += ' ignore-this';
 			window.html5.shivDocument();
 		}
-		can.view.mustache('theid', '<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>');
-		can.view.Scanner.tag('unique-name', function (el, hookupOptions) {
-			ok(true, 'unique-name called!');
+
+		can.view.mustache("theid", "<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
+
+		can.view.tag("unique-name", function (el, tagData) {
+			ok(true, "unique-name called!");
 		});
-		can.view.Scanner.tag('can:something', function (el, hookupOptions) {
-			ok(true, 'can:something called!');
+
+		can.view.tag("can:something", function (el, tagData) {
+			ok(true, "can:something called!");
 		});
 		can.view('theid', {});
 	});
+
 	test('loaded live element test', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
@@ -570,6 +646,7 @@
 		t();
 		ok(true);
 	});
+
 	test('content within non-component tags gets rendered with context', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
@@ -582,6 +659,7 @@
 		});
 		equal(frag.childNodes[0].childNodes[0].innerHTML, 'Josh M', 'correctly retrieved scope data');
 	});
+
 	test('empty non-component tags', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
@@ -592,6 +670,7 @@
 		tmp();
 		ok(true, 'no error');
 	});
+
 	if (window.require) {
 		if (window.require.config && window.require.toUrl) {
 			test('template files relative to requirejs baseUrl (#647)', function () {
