@@ -8,8 +8,6 @@ web applications that provides a lightweight inheritance system, observable
 objects and values, and a powerful MVC core with live-bound templates, among other
 resources. 
 
-For CanJS 1.1 documentation, use [1-1.canjs.com](http://1-1.canjs.com).
-
 If you are just starting with CanJS, you may want to try our [getting started guide](../guides/Tutorial.html).
 
 CanJS is composed of modules on the left. The following are typically distributed as part of the core
