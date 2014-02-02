@@ -1,4 +1,4 @@
-(function (undefined) {
+steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () {
 	module('can/observe map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.Map({
@@ -1278,4 +1278,20 @@
 		});
 		l.push('c');
 	});
-}());
+
+	test("nested computes", function () {
+
+		var data = new can.Map({});
+		var compute = data.compute('summary.button');
+		compute.bind('change', function () {
+			ok(true, "compute changed");
+		});
+
+		data.attr({
+			summary: {
+				button: 'hey'
+			}
+		}, true);
+	});
+
+});

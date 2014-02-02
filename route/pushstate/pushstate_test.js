@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-(function () {
+steal('can/route/pushstate', "can/test", function () {
 
 	if (window.history && history.pushState) {
 
@@ -756,4 +756,4 @@
 
 	}
 
-})();
+});

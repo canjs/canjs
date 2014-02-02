@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true*/
 /*global Mustache*/
-(function () {
+steal("can/model", "can/view/mustache", "can/test", function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
@@ -145,43 +145,43 @@
 	});
 
 	/*test("Variable partials", function(){
-	var template = "{{#items}}<span>{{>partial}}</span>{{/items}}";
-	var data = { items: [{}], partial: "test_template.mustache" }
+	 var template = "{{#items}}<span>{{>partial}}</span>{{/items}}";
+	 var data = { items: [{}], partial: "test_template.mustache" }
 
-	var frag = new can.Mustache({ text: template }).render(data);
-	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-});*/
+	 var frag = new can.Mustache({ text: template }).render(data);
+	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 });*/
 
 	/*
-// FIX THIS
-test('Helpers sections not returning values', function(){
-	Mustache.registerHelper('filter', function(attr,options){
-		return true;
-	});
+	 // FIX THIS
+	 test('Helpers sections not returning values', function(){
+	 Mustache.registerHelper('filter', function(attr,options){
+	 return true;
+	 });
 
-	var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
-	var frag = new can.Mustache({ text: template }).render({ });;
-	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	deepEqual(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
+	 var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
+	 var frag = new can.Mustache({ text: template }).render({ });;
+	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
 
-});
+	 });
 
-// FIX THIS
-test('Helpers with obvservables in them', function(){
-	Mustache.registerHelper('filter', function(attr,options){
-		return options.fn(attr === "poo");
-	});
+	 // FIX THIS
+	 test('Helpers with obvservables in them', function(){
+	 Mustache.registerHelper('filter', function(attr,options){
+	 return options.fn(attr === "poo");
+	 });
 
-	var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
-	var obsvr = new can.Map({ filter: 'moo' });
-	var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
-	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
+	 var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
+	 var obsvr = new can.Map({ filter: 'moo' });
+	 var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
+	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
 
-	obsvr.attr('filter', 'poo')
-	deepEqual(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
-});
-*/
+	 obsvr.attr('filter', 'poo')
+	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
+	 });
+	 */
 
 	test('Tokens returning 0 where they should diplay the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
@@ -699,21 +699,21 @@ test('Helpers with obvservables in them', function(){
 	});
 
 	/*
-not really applicable...but could update to work oince complete
-test("returning blocks", function(){
-	var somethingHelper = function(cb){
-		return cb([1,2,3,4])
-	}
+	 not really applicable...but could update to work oince complete
+	 test("returning blocks", function(){
+	 var somethingHelper = function(cb){
+	 return cb([1,2,3,4])
+	 }
 
-	var res = can.view.
-		render("//can/view/mustache/test_template.mustache",{
-			something: somethingHelper,
-			items: ['a','b']
-		});
-	// make sure expected values are in res
-	ok(/\s4\s/.test(res), "first block called" );
-	equal(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
-}); */
+	 var res = can.view.
+	 render("//can/view/mustache/test_template.mustache",{
+	 something: somethingHelper,
+	 items: ['a','b']
+	 });
+	 // make sure expected values are in res
+	 ok(/\s4\s/.test(res), "first block called" );
+	 equal(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
+	 }); */
 
 	test("easy hookup", function () {
 		var div = document.createElement('div');
@@ -743,29 +743,29 @@ test("returning blocks", function(){
 	})
 
 	/*
-needs andy's helper logic
-test("helpers", function() {
-	can.Mustache.Helpers.prototype.simpleHelper = function()
-	{
-		return 'Simple';
-	}
+	 needs andy's helper logic
+	 test("helpers", function() {
+	 can.Mustache.Helpers.prototype.simpleHelper = function()
+	 {
+	 return 'Simple';
+	 }
 
-	can.Mustache.Helpers.prototype.elementHelper = function()
-	{
-		return function(el) {
-			el.innerHTML = 'Simple';
-		}
-	}
+	 can.Mustache.Helpers.prototype.elementHelper = function()
+	 {
+	 return function(el) {
+	 el.innerHTML = 'Simple';
+	 }
+	 }
 
-	var text = "<div>{{ simpleHelper() }}</div>";
-	var compiled = new can.Mustache({text: text}).render() ;
-	equal(compiled, "<div>Simple</div>");
+	 var text = "<div>{{ simpleHelper() }}</div>";
+	 var compiled = new can.Mustache({text: text}).render() ;
+	 equal(compiled, "<div>Simple</div>");
 
-	text = "<div id=\"hookup\" {{ elementHelper() }}></div>";
-	compiled = new can.Mustache({text: text}).render() ;
-	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
-	equal(can.$('#hookup')[0].innerHTML, "Simple");
-}); */
+	 text = "<div id=\"hookup\" {{ elementHelper() }}></div>";
+	 compiled = new can.Mustache({text: text}).render() ;
+	 can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+	 equal(can.$('#hookup')[0].innerHTML, "Simple");
+	 }); */
 
 	test("attribute single unescaped, html single unescaped", function () {
 
@@ -811,8 +811,8 @@ test("helpers", function() {
 		qta.appendChild(frag);
 
 		/*qta.addEventListener("foo", function(){
-		ok(false, "event handler called")
-	},false)*/
+		 ok(false, "event handler called")
+		 },false)*/
 
 		// destroyed events should not bubble
 		addEventListener(qta.getElementsByTagName("option")[0], "foo", function (ev) {
@@ -2483,22 +2483,38 @@ test("helpers", function() {
 		equal(img.src, url, "images src is correct");
 
 		/*var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
-		url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
-		data = new can.Map({
-	        user: 'Tina Fey',
-	        messages: 0
-	    }),
-			div = document.createElement('div');
+		 url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
+		 data = new can.Map({
+		 user: 'Tina Fey',
+		 messages: 0
+		 }),
+		 div = document.createElement('div');
 
-	div.appendChild(renderer(data));
+		 div.appendChild(renderer(data));
 
-	var img = div.getElementsByTagName('img')[0];
-	equal(img.src, "", 'Image should not have src');
+		 var img = div.getElementsByTagName('img')[0];
+		 equal(img.src, "", 'Image should not have src');
 
-	data.attr('messages', 5);
-	data.attr('image', url);
-	notEqual(img.src, "", 'Image should have src');
-	equal(img.src, url, 'Image should have src URL');*/
+		 data.attr('messages', 5);
+		 data.attr('image', url);
+		 notEqual(img.src, "", 'Image should have src');
+		 equal(img.src, url, 'Image should have src URL');*/
+	});
+
+	test("live binding in a truthy section", function () {
+		var template = can.view.mustache('<img src="http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png" {{#width}}width="{{.}}"{{/width}} />'),
+			data = new can.Map({
+				width: '100'
+			});
+
+		var frag = template(data),
+			img = frag.childNodes[0];
+
+		equal(img.getAttribute("width"), "100", "initial width is correct");
+
+		data.attr("width", "300")
+		equal(img.getAttribute('width'), "300", "updated width is correct");
+
 	});
 
 	test("backtracks in mustache (#163)", function () {
@@ -3477,4 +3493,4 @@ test("helpers", function() {
 	}
 	//!dev-remove-end
 
-})();
+});

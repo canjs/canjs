@@ -1,5 +1,5 @@
 /*global Person,Task*/
-(function () {
+steal("can/map/validations", "can/compute", "can/test", function () {
 	module('can/map/validations', {
 		setup: function () {
 			can.Map.extend('Person', {}, {});
@@ -343,4 +343,4 @@
 		task.attr('age', 'bad');
 		task.attr('age', 'still bad');
 	});
-}());
+});

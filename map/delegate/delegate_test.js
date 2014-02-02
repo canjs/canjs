@@ -1,4 +1,4 @@
-(function () {
+steal("can/map/delegate", "can/test", function () {
 	module('can/map/delegate');
 	var matches = can.Map.prototype.delegate.matches;
 	test('matches', function () {
@@ -209,4 +209,4 @@
 			baw: ''
 		});
 	});
-}());
+});

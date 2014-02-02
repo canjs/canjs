@@ -1,4 +1,4 @@
-(function (undefined) {
+steal("can/util", "can/list", "can/test", function () {
 	module('can/list');
 	test('list attr changes length', function () {
 		var l = new can.List([
@@ -166,4 +166,4 @@
 		l.splice(0, 1);
 		ok(!l.attr(0), 'all props are removed');
 	});
-}());
+});

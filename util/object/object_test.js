@@ -1,4 +1,4 @@
-(function () {
+steal('can/util/object', function () {
 	module('can/util/object');
 	test('same', function () {
 		ok(can.Object.same({
@@ -126,4 +126,4 @@
 			};
 		ok(can.Object.subset(item, searchText, compare), 'searchText');
 	});
-}());
+});

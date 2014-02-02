@@ -8,7 +8,7 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global Company: true */
-(function () {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
 	module('can/model', {
 		setup: function () {}
 	});
@@ -306,39 +306,39 @@
 		equal(results[1].name, 'Brian', 'Second name right');
 	});
 	/*
-test("async setters", function(){
+	 test("async setters", function(){
 
 
-	can.Model("Test.AsyncModel",{
-		setName : function(newVal, success, error){
+	 can.Model("Test.AsyncModel",{
+	 setName : function(newVal, success, error){
 
 
-			setTimeout(function(){
-				success(newVal)
-			}, 100)
-		}
-	});
+	 setTimeout(function(){
+	 success(newVal)
+	 }, 100)
+	 }
+	 });
 
-	var model = new Test.AsyncModel({
-		name : "justin"
-	});
-	equal(model.name, "justin","property set right away")
+	 var model = new Test.AsyncModel({
+	 name : "justin"
+	 });
+	 equal(model.name, "justin","property set right away")
 
-	//makes model think it is no longer new
-	model.id = 1;
+	 //makes model think it is no longer new
+	 model.id = 1;
 
-	var count = 0;
+	 var count = 0;
 
-	model.bind('name', function(ev, newName){
-		equal(newName, "Brian",'new name');
-		equal(++count, 1, "called once");
-		ok(new Date() - now > 0, "time passed")
-		start();
-	})
-	var now = new Date();
-	model.attr('name',"Brian");
-	stop();
-})*/
+	 model.bind('name', function(ev, newName){
+	 equal(newName, "Brian",'new name');
+	 equal(++count, 1, "called once");
+	 ok(new Date() - now > 0, "time passed")
+	 start();
+	 })
+	 var now = new Date();
+	 model.attr('name',"Brian");
+	 stop();
+	 })*/
 	test('binding', 2, function () {
 		can.Model('Person');
 		var inst = new Person({
@@ -413,21 +413,21 @@ test("async setters", function(){
 		});
 	});
 	/*
-test("Empty uses fixtures", function(){
-	ok(false, "Figure out")
-	return;
-	can.Model("Test.Things");
-	$.fixture.make("thing", 10, function(i){
-		return {
-			id: i
-		}
-	});
-	stop();
-	Test.Thing.findAll({}, function(things){
-		start();
-		equal(things.length, 10,"got 10 things")
-	})
-});*/
+	 test("Empty uses fixtures", function(){
+	 ok(false, "Figure out")
+	 return;
+	 can.Model("Test.Things");
+	 $.fixture.make("thing", 10, function(i){
+	 return {
+	 id: i
+	 }
+	 });
+	 stop();
+	 Test.Thing.findAll({}, function(things){
+	 start();
+	 equal(things.length, 10,"got 10 things")
+	 })
+	 });*/
 	test('Model events', function () {
 		expect(12);
 		var order = 0;
@@ -696,8 +696,8 @@ test("Empty uses fixtures", function(){
 			equal(Guy.store[1].nested.count, 1, 'nested.count is 1');
 		});
 	});
-	/** /
-test("store instance update removed fields", function(){
+	/*
+	 test("store instance update removed fields", function(){
 	var Guy, updateCount, remove;
 
 	Guy = can.Model.extend({
@@ -731,7 +731,7 @@ test("store instance update removed fields", function(){
 	})
 
 })
-/**/
+	 */
 	test('templated destroy', function () {
 		var MyModel = can.Model.extend({
 			destroy: '/destroyplace/{id}'
@@ -1448,4 +1448,4 @@ test("store instance update removed fields", function(){
 
 	});
 
-})();
+});

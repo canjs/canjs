@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-(function () {
+steal("can/control", function () {
 	/*global WeirdBind*/
 	module('can/control');
 	var isOpera = /Opera/.test(navigator.userAgent),
@@ -309,4 +309,4 @@
 			can.dev.log = oldlog;
 		});
 	}
-}());
+});

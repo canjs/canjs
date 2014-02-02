@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-(function () {
+steal("can/route", "can/test", function () {
 	module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -670,4 +670,4 @@
 		can.route.attr('foo', 'bar');
 	})
 
-})();
+});

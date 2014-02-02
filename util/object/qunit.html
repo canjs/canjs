@@ -1,17 +1,25 @@
+<!DOCTYPE HTML>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
-        <title>object QUnit Test</title>
-		<script type='text/javascript' src='../../../steal/steal.js?can/util/object/object_test.js'></script>
-    </head>
-    <body>
+<head>
+	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
+</head>
+<body>
+<h1 id="qunit-header">can.List Test Suite</h1>
 
-        <h1 id="qunit-header">object Test Suite</h1>
-    	<h2 id="qunit-banner"></h2>
-    	<div id="qunit-testrunner-toolbar"></div>
-    	<h2 id="qunit-userAgent"></h2>
-		<div id="test-content"></div>
-        <ol id="qunit-tests"></ol>
-		<div id="qunit-test-area"></div>
-    </body>
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-test-area"></div>
+
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+<script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
+<script type="text/javascript">
+	QUnit.config.autostart = false;
+	steal('can/util/object/object_test.js', function() {
+		QUnit.start();
+	});
+</script>
+</body>
 </html>

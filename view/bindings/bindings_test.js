@@ -1,6 +1,5 @@
-(function () {
-
-	module("can/view/bindings", {
+steal("can/view/bindings", "can/map", "can/test", function () {
+	module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-test-area")
 				.innerHTML = "";
@@ -392,4 +391,4 @@
 
 	});
 
-})();
+});

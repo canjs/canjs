@@ -17,11 +17,7 @@
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal(function() {
-		steal.config({
-			root: '../../'
-		});
-	}, "can/map", "can/view/ejs", "can/view/modifiers").then("can/test", "can/view/modifiers/modifiers_test.js", function() {
+	steal("can/view/modifiers/modifiers_test.js", function() {
 		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>

@@ -1,9 +1,9 @@
-(function () {
+steal('can/util/fixture', function () {
 	module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();
-		can.fixture('GET something', '//util/fixture/fixtures/test.json');
-		can.fixture('POST something', '//util/fixture/fixtures/test.json');
+		can.fixture('GET something', can.test.path('util/fixture/fixtures/test.json'));
+		can.fixture('POST something', can.test.path('util/fixture/fixtures/test.json'));
 		can.ajax({
 			url: 'something',
 			dataType: 'json'
@@ -23,7 +23,7 @@
 	});
 	test('templated static fixtures', function () {
 		stop();
-		can.fixture('GET some/{id}', '//util/fixture/fixtures/stuff.{id}.json');
+		can.fixture('GET some/{id}', can.test.path('util/fixture/fixtures/stuff.{id}.json'));
 		can.ajax({
 			url: 'some/3',
 			dataType: 'json'
@@ -53,14 +53,14 @@
 	test('fixture function', 3, function () {
 		stop();
 		var url = can.test.path('util/fixture/fixtures/foo.json');
-		can.fixture(url, '//util/fixture/fixtures/foobar.json');
+		can.fixture(url, can.test.path('util/fixture/fixtures/foobar.json'));
 		can.ajax({
 			url: url,
 			dataType: 'json'
 		})
 			.done(function (data) {
 				equal(data.sweet, 'ner', 'url passed works');
-				can.fixture(url, '//util/fixture/fixtures/test.json');
+				can.fixture(url, can.test.path('util/fixture/fixtures/test.json'));
 				can.ajax({
 					url: url,
 					dataType: 'json'
@@ -292,9 +292,9 @@
 			});
 	});
 	/*
-removed test, makes phantom js build fail. does not fail browser tests. Opened issue #408 to track, for milestone 1.2
-//TODO re-enable test and determine why it fails in phantom but not in real browser. https://github.com/bitovi/canjs/issues/408
-*/
+	 removed test, makes phantom js build fail. does not fail browser tests. Opened issue #408 to track, for milestone 1.2
+	 //TODO re-enable test and determine why it fails in phantom but not in real browser. https://github.com/bitovi/canjs/issues/408
+	 */
 	test('can.fixture.store with can.Model', function () {
 		var store = can.fixture.store(100, function (i) {
 			return {
@@ -433,4 +433,4 @@ removed test, makes phantom js build fail. does not fail browser tests. Opened i
 			equal(responseData.id, 2, 'the third id is 2');
 		});
 	});
-}());
+});

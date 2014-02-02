@@ -1,4 +1,4 @@
-(function () {
+steal("can/map/list", function () {
 	module('can/map/list');
 	test('filter', 8, function () {
 		var original = new can.List([{
@@ -102,4 +102,4 @@
 		original.shift();
 		equal(mapped.length, 3, 'Item got removed');
 	});
-}());
+});

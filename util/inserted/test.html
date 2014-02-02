@@ -18,7 +18,7 @@
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 	steal("can/util").then("can/test", "can/util/inserted/inserted_test.js", function() {
-		can.dev.logLevel = 3; QUnit.start();
+		can.dev.logLevel = 3; can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>

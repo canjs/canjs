@@ -1052,7 +1052,20 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				if (can.isFunction(this.constructor.prototype[prop])) {
 					return can.compute(this[prop], this);
 				} else {
-					return can.compute(this, prop);
+					var reads = prop.split("."),
+						last = reads.length - 1,
+						options = {
+							args: []
+						};
+					return can.compute(function (newVal) {
+						if (arguments.length) {
+							can.compute.read(this, reads.slice(0, last))
+								.value.attr(reads[last], newVal);
+						} else {
+							return can.compute.read(this, reads, options)
+								.value;
+						}
+					}, this);
 				}
 
 			}

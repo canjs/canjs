@@ -1,7 +1,7 @@
 /* global Person: true */
 /* global User: true */
 /* global Hero: true */
-(function () {
+steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/map/attributes', "can/test", function () {
 	module('can/model/queue', {
 		setup: function () {}
 	});
@@ -169,4 +169,4 @@
 		new MyModel()
 			.save();
 	});
-}());
+});

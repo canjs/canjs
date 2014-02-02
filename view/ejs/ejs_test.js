@@ -1,4 +1,4 @@
-(function () {
+steal("can/model", "can/view/ejs", "can/test", function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
 			this.animals = [
@@ -523,28 +523,28 @@
 		equal(child.innerHTML, 'New Name', 'has new name');
 	});
 	/*
-test('multiple curly braces in a block', function() {
-	var text =  '<% if(!obs.attr("items").length) { %>' +
-				'<li>No items</li>' +
-				'<% } else { each(obs.items, function(item) { %>' +
-						'<li><%= item.attr("name") %></li>' +
-				'<% }) }%>',
+	 test('multiple curly braces in a block', function() {
+	 var text =  '<% if(!obs.attr("items").length) { %>' +
+	 '<li>No items</li>' +
+	 '<% } else { each(obs.items, function(item) { %>' +
+	 '<li><%= item.attr("name") %></li>' +
+	 '<% }) }%>',
 
-	obs = new can.Map({
-		items: []
-	}),
+	 obs = new can.Map({
+	 items: []
+	 }),
 
-	compiled = new can.EJS({ text: text }).render({ obs: obs });
+	 compiled = new can.EJS({ text: text }).render({ obs: obs });
 
-	var ul = document.createElement('ul');
-	ul.appendChild(can.view.frag(compiled));
+	 var ul = document.createElement('ul');
+	 ul.appendChild(can.view.frag(compiled));
 
-	equal(ul.innerHTML, '<li>No items</li>', 'initial observable state');
+	 equal(ul.innerHTML, '<li>No items</li>', 'initial observable state');
 
-	obs.attr('items', [{ name: 'foo' }]);
-	equal(u.innerHTML, '<li>foo</li>', 'updated observable');
-});
-*/
+	 obs.attr('items', [{ name: 'foo' }]);
+	 equal(u.innerHTML, '<li>foo</li>', 'updated observable');
+	 });
+	 */
 	test('unescape bindings change', function () {
 		var l = new can.List([{
 			complete: true
@@ -825,7 +825,7 @@ test('multiple curly braces in a block', function() {
 	//
 	/*test("memory safe without parentElement of blocks", function(){
 
-})*/
+	 })*/
 	test('trailing text', function () {
 		can.view.ejs('count', 'There are <%= this.attr(\'length\') %> todos');
 		var div = document.createElement('div');
@@ -1505,33 +1505,33 @@ test('multiple curly braces in a block', function() {
 	// Issue #242
 	// This won't be fixed as it would require a full JS parser
 	/*
-test("Variables declared in shared EJS blocks shouldn't get lost", function() {
-	var template = can.view.ejs(
-		"<%" +
-			"var bestTeam = teams[0];" +
-			"can.each(teams, function(team) { %>" +
-				"<div><%== team.name %></div>" +
-			"<% }) %>" +
-		"<div class='best'><%== bestTeam.name %>!</div>"),
-		data = {
-			teams: new can.List([
-				{ name: "Packers", rank: 1 },
-				{ name: "Bears", rank: 2 },
-				{ name: "Vikings", rank: 3 },
-				{ name: "Lions", rank: 4 },
-			])
-		},
-		div = document.createElement('div');
+	 test("Variables declared in shared EJS blocks shouldn't get lost", function() {
+	 var template = can.view.ejs(
+	 "<%" +
+	 "var bestTeam = teams[0];" +
+	 "can.each(teams, function(team) { %>" +
+	 "<div><%== team.name %></div>" +
+	 "<% }) %>" +
+	 "<div class='best'><%== bestTeam.name %>!</div>"),
+	 data = {
+	 teams: new can.List([
+	 { name: "Packers", rank: 1 },
+	 { name: "Bears", rank: 2 },
+	 { name: "Vikings", rank: 3 },
+	 { name: "Lions", rank: 4 },
+	 ])
+	 },
+	 div = document.createElement('div');
 
-		try {
-			div.appendChild(template(data));
-		} catch (ex) { }
-		var children = div.getElementsByTagName('div');
-		equal( children.length, 5, "Rendered all teams and the best team");
-		equal( children[1].innerHTML, "Bears", "Lost again");
-		equal( children[4].innerHTML, "Packers!", "#1 team");
-});
-*/
+	 try {
+	 div.appendChild(template(data));
+	 } catch (ex) { }
+	 var children = div.getElementsByTagName('div');
+	 equal( children.length, 5, "Rendered all teams and the best team");
+	 equal( children[1].innerHTML, "Bears", "Lost again");
+	 equal( children[4].innerHTML, "Packers!", "#1 team");
+	 });
+	 */
 	//Issue 267
 	test('Access .length with nested dot notation', function () {
 		var template = '<span id="nested"><%= this.attr("list.length") %></span>' + '<span id="unnested"><%= this.list.attr("length") %></span>',
@@ -1605,4 +1605,4 @@ test("Variables declared in shared EJS blocks shouldn't get lost", function() {
 			equal(game._bindings, 0, 'No bindings left');
 		}, 50);
 	});
-}());
+});

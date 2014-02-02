@@ -336,6 +336,34 @@ module.exports = function (grunt) {
 
 		},
 
+		pluginifyTests: {
+			options: {
+				builder: builderJSON,
+				steal: {
+					map: {
+						'*': {
+							'jquery/jquery.js' : 'lib/jquery/jquery.js',
+							'can/': ''
+						}
+					},
+					shim: {
+						'jquery': {
+							'exports': 'jQuery'
+						}
+					}
+				},
+				shim: {
+					'jquery/jquery.js': 'jQuery'
+				}
+			},
+			latest: {
+				options: { to: 'test/pluginified/latest.js' }
+			},
+			legacy: {
+				options: { to: 'test/pluginified/<%= pkg.version %>.js' }
+			}
+		},
+		publish: {}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
@@ -353,7 +381,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
+	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
 };

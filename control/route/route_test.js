@@ -1,6 +1,6 @@
 /* jshint asi:true*/
 /*global Router*/
-(function () {
+steal("can/control/route", function () {
 
 	module("can/control/route", {
 		setup: function () {
@@ -120,4 +120,4 @@
 		stop();
 	})
 
-})();
+});

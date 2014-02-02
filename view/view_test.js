@@ -1,6 +1,6 @@
-(function () {
-
-	module("can/view", {
+steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test", "can/util/fixture", function () {
+	
+	module('can/view', {
 		setup: function () {
 			this.scannerAttributes = can.view.attr.attributes;
 			this.scannerRegExpAttributes = can.view.attr.regExpAttributes;
@@ -69,10 +69,10 @@
 				'message': 'helloworld'
 			}, function (text) {
 				/*
-				var lap2 = new Date() - first,
-					lap1 = first - startT;
-				ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
-				*/
+				 var lap2 = new Date() - first,
+				 lap1 = first - startT;
+				 ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
+				 */
 				start();
 			});
 		});
@@ -676,7 +676,7 @@
 			test('template files relative to requirejs baseUrl (#647)', function () {
 				var oldBaseUrl = window.requirejs.s.contexts._.config.baseUrl;
 				window.require.config({
-					baseUrl: '/view/test/'
+					baseUrl: oldBaseUrl + '/view/test/'
 				});
 				ok(can.isFunction(can.view('template')));
 				window.require.config({
@@ -685,4 +685,4 @@
 			});
 		}
 	}
-}());
+});

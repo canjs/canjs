@@ -9,3 +9,4 @@ docs*
 *.DS_Store
 .idea
 bower_components/
+test/pluginified/latest.js
