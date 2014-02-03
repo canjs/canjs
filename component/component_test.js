@@ -360,8 +360,10 @@ steal("can/component", function () {
 		var gridScope = can.scope('#qunit-test-area grid');
 		equal(gridScope.attr('waiting'), true, 'waiting is true');
 		stop();
-		gridScope.bind('waiting', function handler() {
-			gridScope.unbind('waiting', handler);
+		
+
+		var waitingHandler = function() {
+			gridScope.unbind('waiting', waitingHandler);
 			setTimeout(function () {
 				var tds = can.$('#qunit-test-area td');
 				equal(tds.length, 2, 'there are 2 tds');
@@ -375,7 +377,9 @@ steal("can/component", function () {
 				});
 				scope.attr('set', 1);
 			}, 10);
-		});
+		};
+		
+		gridScope.bind('waiting', waitingHandler);
 	});
 	test('nextprev', function () {
 		can.Component.extend({
