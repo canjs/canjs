@@ -6,6 +6,7 @@
 @inherits can.Construct
 @description widget factory with declarative event binding.
 @group can.Control.plugins plugins
+@link ../docco/control.html docco
 
 @description Create organized, memory-leak free, rapidly performing,
 stateful controls with declarative event binding. Use `can.Control` to create UI 

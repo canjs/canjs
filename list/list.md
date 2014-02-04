@@ -5,7 +5,7 @@
 @parent canjs
 @release 2.0
 @group can.List.plugins plugins
-
+@link ../docco/list.html docco
 
 Use for observable array-like objects.
 
