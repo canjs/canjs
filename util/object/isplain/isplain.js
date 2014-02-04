@@ -1,7 +1,9 @@
 steal('can/util/can.js', function (can) {
 	var core_hasOwn = Object.prototype.hasOwnProperty,
 		isWindow = function (obj) {
-			return obj !== null && obj === obj.window;
+			// In IE8 window.window !== window.window, so we allow == here.
+			/*jshint eqeqeq:false*/
+			return obj !== null && obj == obj.window;
 		}, isPlainObject = function (obj) {
 			// Must be an Object.
 			// Because of IE, we also have to check the presence of the constructor property.

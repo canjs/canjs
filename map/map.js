@@ -708,7 +708,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					current = this.__get(prop);
 
 				// If we have an `object` and remaining parts.
-				if (Map.helpers.canMakeObserve(current) && parts.length) {
+				if ( parts.length && Map.helpers.canMakeObserve(current) ) {
 					// That `object` should set it (this might need to call attr).
 					current._set(parts, value);
 				} else if (!parts.length) {
