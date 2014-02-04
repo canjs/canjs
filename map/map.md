@@ -4,6 +4,7 @@
 @group can.Map.plugins plugins
 @test can/map/test.html
 @plugin can/map
+@link ../docco/map.html docco
 
 @description Create observable objects.
 

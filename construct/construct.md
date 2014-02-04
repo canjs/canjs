@@ -3,6 +3,7 @@
 @test can/construct/test.html
 @parent canjs
 @group can.Construct.plugins plugins
+@link ../docco/construct.html docco
 
 @description 
 

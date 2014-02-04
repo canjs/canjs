@@ -1,28 +1,42 @@
 steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can) {
-
+	// ## Helpers
+	// Attribute names to ignore for setting scope values.
 	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i;
 	/**
 	 * @add can.Component
 	 */
 	var Component = can.Component = can.Construct.extend(
+		
+		// ## Static
 		/**
 		 * @static
 		 */
+		
 		{
+			// ### setup
+			// 
+			// When a component is extended, this sets up the component's internal constructor
+			// functions and templates for later fast initialization.
 			setup: function () {
 				can.Construct.setup.apply(this, arguments);
 
+				// Run the following only in constructors that extend can.Component.
 				if (can.Component) {
 					var self = this;
+					
+					// Define a control using the `events` prototype property.
 					this.Control = can.Control.extend({
+						// Change lookup to first look in the scope.
 						_lookup: function (options) {
 							return [options.scope, options, window];
 						}
-					}, can.extend({
+					},
+					// Extend `events` with a setup method that listens to changes in `scope` and
+					// rebinds all templated event handlers.
+					can.extend({
 						setup: function (el, options) {
 							var res = can.Control.prototype.setup.call(this, el, options);
 							this.scope = options.scope;
-							// call on() whenever scope changes
 							var self = this;
 							this.on(this.scope, "change", function handler() {
 								self.on();
@@ -31,38 +45,31 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 							return res;
 						}
 					}, this.prototype.events));
-
-					var attributeScopeMappings = {},
-						scope = this.prototype.scope,
-						applyAttributeScopeMappings = function (scope) {
-							can.each(scope, function (val, prop) {
-								if (val === "@") {
-									attributeScopeMappings[prop] = prop;
-								}
-							});
-						};
-					// go through scope and get attribute ones
-					applyAttributeScopeMappings(scope);
-					// also go through the defaults to grab attribute mappings
-					// if this is going through a can.Map constructor
-					if (typeof scope === "function" && scope.defaults && new scope() instanceof can.Map) {
-						applyAttributeScopeMappings(scope.defaults);
-					}
-					this.attributeScopeMappings = attributeScopeMappings;
-
-					// If scope is an object,
+					
+					// Look to convert `scope` to a Map constructor function.
 					if (!this.prototype.scope || typeof this.prototype.scope === "object") {
-						// use that object as the prototype of an extend Map constructor function.
+						// If scope is an object, use that object as the prototype of an extended 
+						// Map constructor function.
 						// A new instance of that Map constructor function will be created and
-						// set as this.scope.
+						// set a the constructor instance's scope.
 						this.Map = can.Map.extend(this.prototype.scope || {});
 					}
-					// If scope is a can.Map constructor function, 
 					else if (this.prototype.scope.prototype instanceof can.Map) {
-						// just use that.
+						// If scope is a can.Map constructor function, just use that.
 						this.Map = this.prototype.scope;
 					}
+					
+					// Look for default `@` values. If a `@` is found, these
+					// attributes string values will be set and 2-way bound on the
+					// component instance's scope.
+					this.attributeScopeMappings = {};
+					can.each(this.Map ? this.Map.defaults : {}, function (val, prop) {
+						if (val === "@") {
+							self.attributeScopeMappings[prop] = prop;
+						}
+					});
 
+					// Convert the template into a renderer function.
 					if (this.prototype.template) {
 						if (typeof this.prototype.template === "function") {
 							var temp = this.prototype.template;
@@ -74,6 +81,7 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 						}
 					}
 
+					// Register this component to be created when its `tag` is found.
 					can.view.Scanner.tag(this.prototype.tag, function (el, options) {
 						new self(el, options);
 					});
@@ -81,9 +89,12 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 
 			}
 		}, {
+			// ## Prototype
 			/**
 			 * @prototype
 			 */
+			// ### setup
+			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, hookupOptions) {
 				// Setup values passed to component
 				var initalScopeData = {},
