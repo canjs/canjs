@@ -48,7 +48,7 @@ steal('can/util', function (can) {
 				}
 			}
 		},
-		attrReg: /([^\s]+)[\s]*=[\s]*/,
+		attrReg: /([^\s=]+)[\s]*=[\s]*/,
 		// elements whos default value we should set
 		defaultValue: ["input", "textarea"],
 		// a map of parent element to child elements
