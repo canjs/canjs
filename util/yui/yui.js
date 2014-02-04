@@ -15,7 +15,8 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 	var leaveRe = /mouse(enter|leave)/,
 		_fix = function (_, p) {
 			return 'mouse' + (p === 'enter' ? 'over' : 'out');
-		}, realTrigger, realTriggerHandler = function (n, e, evdata) {
+		}, realTrigger, 
+		realTriggerHandler = function (n, e, evdata) {
 			var node = Y.Node(n),
 				handlers = can.Y.Event.getListeners(node._yuid, e);
 			if (handlers) {
@@ -61,6 +62,10 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 					}
 				}, a);
 				realTriggerHandler(n, e, evdata);
+				if(e === "inserted" || e === "removed") { 
+					return;
+				}
+				
 				// handle bubbling of custom events, unless the event was stopped.
 				while (!stop && n !== document && n.parentNode) {
 					n = n.parentNode;
