@@ -360,7 +360,7 @@ module.exports = function (grunt) {
 				options: { to: 'test/pluginified/latest.js' }
 			},
 			legacy: {
-				options: { to: 'test/pluginified/<%= pkg.version %>.js' }
+				options: { to: 'test/pluginified/<%= pkg.version %>.test.js' }
 			}
 		},
 		publish: {}
