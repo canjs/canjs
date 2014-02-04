@@ -2,6 +2,7 @@
 @parent canjs
 @download can/model
 @test can/model/test.html
+@link ../docco/model.html docco
 
 @signature `can.Model([name,] staticProperties, instanceProperties)`
 Create a can.Model constructor. (See [can.Construct] for more details on this syntax.)

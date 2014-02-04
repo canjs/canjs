@@ -3,6 +3,7 @@
 @download can/map
 @test can/map/qunit.html
 @parent canjs
+@link ../docco/list.html docco
 
 Use for observable array-like objects.
 

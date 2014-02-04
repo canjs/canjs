@@ -1,5 +1,6 @@
 @function can.compute
 @parent canjs
+@link ../docco/compute.html docco
 
 @description Create an observable value.
 
