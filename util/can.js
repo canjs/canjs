@@ -28,7 +28,7 @@ steal(function () {
 		return d;
 	};
 
-	//!dev-remove-start
+	//!steal-remove-start
 	can.dev = {
 		logLevel: 0,
 		/**
@@ -77,7 +77,7 @@ steal(function () {
 			}
 		}
 	};
-	//!dev-remove-end
+	//!steal-remove-end
 
 	return can;
 });

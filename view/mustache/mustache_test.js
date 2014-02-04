@@ -3442,7 +3442,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		equal(labels.length, 1, "first label removed")
 	})
 
-	//!dev-remove-start
+	//!steal-remove-start
 	if (can.dev) {
 		test("Logging: Custom tag does not have a registered handler", function () {
 			if (window.html5) {
@@ -3461,6 +3461,6 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			can.dev.warn = oldlog;
 		});
 	}
-	//!dev-remove-end
+	//!steal-remove-end
 
 });

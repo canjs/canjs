@@ -210,11 +210,11 @@ steal('can/view', './elements', function (can, elements) {
 			var scope = hookupOptions.scope,
 				res = tagCallback ? tagCallback(el, hookupOptions) : scope;
 
-			//!dev-remove-start
+			//!steal-remove-start
 			if (!tagCallback) {
 				can.dev.warn('can/view/scanner.js: No custom element found for ' + tagName);
 			}
-			//!dev-remove-end
+			//!steal-remove-end
 
 			// If the tagCallback gave us something to render with, and there is content within that element
 			// render it!
