@@ -30,7 +30,7 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 						_lookup: function (options) {
 							return [options.scope, options, window];
 						}
-					}, 
+					},
 					// Extend `events` with a setup method that listens to changes in `scope` and
 					// rebinds all templated event handlers.
 					can.extend({
