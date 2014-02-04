@@ -44,7 +44,6 @@ steal('jquery', 'can/view', function ($, can) {
 				} else {
 					// if there is a deferred, wait until it is done before calling modify
 					result.done(function (res) {
-						console.log("modified", res.childNodes[0])
 						modify.call(self, [res], old);
 					});
 					return this;

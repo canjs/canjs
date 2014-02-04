@@ -58,7 +58,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					if (isfn(n[ev])) {
 						n[ev](evdata);
 					}
-					if(e === "inserted" || e === "removed") { 
+					if(e === "inserted" || e === "removed") {
 						return;
 					}
 					// handle bubbling of custom events, unless the event was stopped.

@@ -15,7 +15,7 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 			.html(can.test.path('view/test/deferred.ejs'), foo);
 	
 		var templateLoaded = new can.Deferred(),
-			id = can.view.toId( can.test.path('view/test/deferred.ejs') );	
+			id = can.view.toId( can.test.path('view/test/deferred.ejs') );
 			
 		setTimeout(function () {
 			foo.resolve({

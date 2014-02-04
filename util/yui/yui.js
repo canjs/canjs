@@ -15,7 +15,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 	var leaveRe = /mouse(enter|leave)/,
 		_fix = function (_, p) {
 			return 'mouse' + (p === 'enter' ? 'over' : 'out');
-		}, realTrigger, 
+		}, realTrigger,
 		realTriggerHandler = function (n, e, evdata) {
 			var node = Y.Node(n),
 				handlers = can.Y.Event.getListeners(node._yuid, e),
@@ -29,7 +29,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 							handle.evt.fire(evdata);
 						});
 					}else {
-						throw "can not fire event"
+						throw "can not fire event";
 					}
 				}
 			}
@@ -63,7 +63,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 				if(e === "inserted" || e === "removed") {
 					evObj.cancelBubble = true;
 				}
-				mix(evObj, a);
+				can.extend(evObj, a);
 				n.fireEvent(ev, evObj);
 				
 			} catch (er) {
@@ -81,7 +81,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 					}
 				}, a);
 				realTriggerHandler(n, e, evdata);
-				if(e === "inserted" || e === "removed") { 
+				if(e === "inserted" || e === "removed") {
 					return;
 				}
 				
