@@ -1,4 +1,4 @@
-steal('can/util', 'can/map', 'can/util/string/deparam', function (can) {
+steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can) {
 
 	// ## route.js
 	// `can.route`

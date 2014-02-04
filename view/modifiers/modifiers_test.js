@@ -35,7 +35,6 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 
 		can.when(foo, templateLoaded).then(function(foo){
 			setTimeout(function(){
-				console.log("checking")
 				equal(can.$('#qunit-test-area')
 					.html(), 'FOO', 'worked!');
 				start();

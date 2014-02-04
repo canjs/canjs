@@ -2468,7 +2468,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	});
 
 	test("live binding in a truthy section", function () {
-		var template = can.view.mustache('<img src="http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png" {{#width}}width="{{.}}"{{/width}} />'),
+		var template = can.view.mustache('<div {{#width}}width="{{.}}"{{/width}}></div>'),
 			data = new can.Map({
 				width: '100'
 			});

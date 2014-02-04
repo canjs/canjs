@@ -142,7 +142,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				// `list` - (optional) The observable list constructor
 				hookupBubble: function (child, prop, parent, Ob, List) {
 					Ob = Ob || Map;
-					List = List || Map.List;
+					List = List || can.List;
 
 					// If it's an `array` make a list, otherwise a child.
 					if (child instanceof Map) {
