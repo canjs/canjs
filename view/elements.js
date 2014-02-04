@@ -35,7 +35,7 @@ steal('can/util', function (can) {
 		// 3.0 TODO: remove
 		attrMap: can.attr.map,
 		// matches the attrName of a regexp
-		attrReg: /([^\s]+)[\s]*=[\s]*/,
+		attrReg: /([^\s=]+)[\s]*=[\s]*/,
 		// 3.0 TODO: remove
 		defaultValue: can.attr.defaultValue,
 		// a map of parent element to child elements

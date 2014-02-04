@@ -474,9 +474,9 @@ steal("can/component", function () {
 		equal(gridScope.attr("waiting"), true, "waiting is true");
 		stop();
 
-		gridScope.bind("waiting", function waitingHandler() {
+		var waitingHandler = function() {
+			gridScope.unbind('waiting', waitingHandler);
 
-			gridScope.unbind("waiting", waitingHandler);
 			setTimeout(function () {
 				var tds = can.$("#qunit-test-area td");
 				equal(tds.length, 2, "there are 2 tds");
@@ -493,9 +493,9 @@ steal("can/component", function () {
 				scope.attr("set", 1);
 
 			}, 10);
-
-		});
-
+		};
+		
+		gridScope.bind('waiting', waitingHandler);
 	});
 
 	test("nextprev", function () {

@@ -335,16 +335,19 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 		bar.resolve('Bar done');
 	});
 	test('Using \'=\' in attribute does not truncate the value', function () {
-		var template = can.view.ejs('<div id=\'equalTest\' <%= this.attr(\'class\') %>></div>'),
+		var template = can.view.ejs('<img id=\'equalTest\' <%= this.attr(\'class\') %> src="<%= this.attr(\'src\') %>">'),
 			obs = new can.Map({
-				'class': 'class="someClass"'
+				'class': 'class="someClass"',
+				'src': 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png'
 			}),
 			frag = template(obs),
-			div;
+			img;
 		can.append(can.$('#qunit-test-area'), frag);
-		div = document.getElementById('equalTest');
+		img = document.getElementById('equalTest');
 		obs.attr('class', 'class="do=not=truncate=me"');
-		equal(div.className, 'do=not=truncate=me', 'class is right');
+		obs.attr('src', 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200');
+		equal(img.className, 'do=not=truncate=me', 'class is right');
+		equal(img.src, 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200', 'attribute is right');
 	});
 
 	test("basic scanner custom tags", function () {

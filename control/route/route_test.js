@@ -84,40 +84,44 @@ steal("can/control/route", function () {
 
 	})
 
-	test("be friendly to '/'-prefixed routes for pushstate (#612)", 1, function () {
+	if (window.history && history.pushState) {
 
-		window.routeTestReady = function (iCanRoute, loc, hist, win) {
-			win.can.route(":section/:type");
-			win.can.route.ready();
-
-			var Tester = win.can.Control.extend({
-				"/:section/:type route": function (params) {
-					equal(params.type, "videos");
-				}
-			});
-			var tester = new Tester(win.document.body);
-
-			var link = win.document.createElement("a");
-			link.href = link.innerHTML = "/content/videos";
-			win.document.body.appendChild(link);
-
-			var change;
-			win.can.route.bind('change', change = function () {
-				win.can.route.unbind('change', change);
-				setTimeout(function () {
-					start();
-					iframe.parentNode.removeChild(iframe);
-				}, 0);
-			});
-
-			win.can.trigger(win.can.$(link), 'click');
-			tester.destroy();
-		};
-
-		var iframe = document.createElement("iframe");
-		iframe.src = can.test.path("control/route/pushstate.html");
-		can.$("#qunit-test-area")[0].appendChild(iframe);
-		stop();
-	})
+		test("be friendly to '/'-prefixed routes for pushstate (#612)", 1, function () {
+	
+			window.routeTestReady = function (iCanRoute, loc, hist, win) {
+				win.can.route(":section/:type");
+				win.can.route.ready();
+	
+				var Tester = win.can.Control.extend({
+					"/:section/:type route": function (params) {
+						equal(params.type, "videos");
+					}
+				});
+				var tester = new Tester(win.document.body);
+	
+				var link = win.document.createElement("a");
+				link.href = link.innerHTML = "/content/videos";
+				win.document.body.appendChild(link);
+	
+				var change;
+				win.can.route.bind('change', change = function () {
+					win.can.route.unbind('change', change);
+					setTimeout(function () {
+						start();
+						iframe.parentNode.removeChild(iframe);
+					}, 0);
+				});
+	
+				win.can.trigger(win.can.$(link), 'click');
+				tester.destroy();
+			};
+	
+			var iframe = document.createElement("iframe");
+			iframe.src = can.test.path("control/route/pushstate.html");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+			stop();
+		})
+	
+	}
 
 });

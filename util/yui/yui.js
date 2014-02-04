@@ -422,70 +422,86 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 
 		// `realTrigger` taken from `dojo`.
 		var leaveRe = /mouse(enter|leave)/,
-			_fix = function (_, p) {
-				return "mouse" + (p === "enter" ? "over" : "out");
-			},
-			realTrigger = (function () {
-				if (document.createEvent) {
-					return function (n, e, a) {
-						// the same branch
-						var ev = document.createEvent("HTMLEvents");
-						e = e.replace(leaveRe, _fix);
-						ev.initEvent(e, true, true);
-						if (a) {
-							can.extend(ev, a);
-						}
-						n.dispatchEvent(ev);
-					};
-				} else {
-					return function (n, e, a) {
-						// the janktastic branch
-						var ev = "on" + e,
-							stop = false;
-						try {
-							// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-							// createEvent path above, and also fails on _some_ native-named events.
-							// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-							// // if the event is one of those listed in our NodeList list
-							// // in lowercase form but is mixed case, throw to avoid
-							// // fireEvent. /me sighs. http://gist.github.com/315318
-							// throw("janktastic");
-							// }
-							n.fireEvent(ev, a);
-						} catch (er) {
-							// a lame duck to work with. we're probably a 'custom event'
-							var evdata = can.extend({
-								type: e,
-								target: n,
-								faux: true,
-								// HACK: [needs] added support for customStopper to _base/event.js
-								// some tests will fail until del._stopPropagation has support.
-								_stopper: function () {
-									stop = this.cancelBubble;
-								}
-							}, a);
-							realTriggerHandler(n, e, evdata);
-
-							// handle bubbling of custom events, unless the event was stopped.
-							while (!stop && n !== document && n.parentNode) {
-								n = n.parentNode;
-								realTriggerHandler(n, e, evdata);
-								//can.isFunction(n[ev]) && n[ev](evdata);
-							}
-						}
-					};
-				}
-
-			})(),
-			realTriggerHandler = function (n, e, evdata) {
-				var node = Y.Node(n),
-					handlers = can.Y.Event.getListeners(node._yuid, e);
-				if (handlers) {
-					for (var i = 0; i < handlers.length; i++) {
+		_fix = function (_, p) {
+			return 'mouse' + (p === 'enter' ? 'over' : 'out');
+		}, realTrigger,
+		realTriggerHandler = function (n, e, evdata) {
+			var node = Y.Node(n),
+				handlers = can.Y.Event.getListeners(node._yuid, e),
+				i;
+			if (handlers) {
+				for (i = 0; i < handlers.length; i++) {
+					if(handlers[i].fire ) {
 						handlers[i].fire(evdata);
+					} else if(handlers[i].handles) {
+						can.each(handlers[i].handles, function(handle){
+							handle.evt.fire(evdata);
+						});
+					}else {
+						throw "can not fire event";
 					}
 				}
-			};
+			}
+		};
+	if (document.createEvent) {
+		realTrigger = function (n, e, a) {
+			// the same branch
+			var ev = document.createEvent('HTMLEvents');
+			e = e.replace(leaveRe, _fix);
+			ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
+			if (a) {
+				can.extend(ev, a);
+			}
+			n.dispatchEvent(ev);
+		};
+	} else {
+		realTrigger = function (n, e, a) {
+			// the janktastic branch
+			var ev = 'on' + e,
+				stop = false;
+			try {
+				// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+				// createEvent path above, and also fails on _some_ native-named events.
+				// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+				// // if the event is one of those listed in our NodeList list
+				// // in lowercase form but is mixed case, throw to avoid
+				// // fireEvent. /me sighs. http://gist.github.com/315318
+				// throw("janktastic");
+				// }
+				var evObj = document.createEventObject();
+				if(e === "inserted" || e === "removed") {
+					evObj.cancelBubble = true;
+				}
+				can.extend(evObj, a);
+				n.fireEvent(ev, evObj);
+				
+			} catch (er) {
+				
+				// a lame duck to work with. we're probably a 'custom event'
+				var evdata = can.extend({
+					type: e,
+					target: n,
+					faux: true,
+					_stopper: function () {
+						stop = this.cancelBubble;
+					},
+					stopPropagation: function(){
+						stop = this.cancelBubble;
+					}
+				}, a);
+				realTriggerHandler(n, e, evdata);
+				if(e === "inserted" || e === "removed") {
+					return;
+				}
+				
+				// handle bubbling of custom events, unless the event was stopped.
+				while (!stop && n !== document && n.parentNode) {
+					n = n.parentNode;
+					realTriggerHandler(n, e, evdata); //can.isFunction(n[ev]) && n[ev](evdata);
+				}
+			}
+		};
+	}
 
 		// setup attributes event
 		can.attr = attr;
