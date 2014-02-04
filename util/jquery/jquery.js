@@ -1,11 +1,13 @@
 steal('jquery', 'can/util/can.js', 'can/util/array/each.js', 'can/util/inserted', 'can/util/event.js', function ($, can) {
 	var isBindableElement = function (node) {
-		return node.nodeName && (node.nodeType === 1 || node.nodeType === 9) || node === window;
+		// In IE8 window.window !== window.window, so we allow == here.
+		/*jshint eqeqeq:false*/
+		return ( node.nodeName && (node.nodeType === 1 || node.nodeType === 9) )|| node == window;
 	};
 	// _jQuery node list._
 	$.extend(can, $, {
 		trigger: function (obj, event, args) {
-			if (obj.nodeName || obj === window) {
+			if (isBindableElement( obj ) ) {
 				$.event.trigger(event, args, obj, true);
 			} else if (obj.trigger) {
 				obj.trigger(event, args);

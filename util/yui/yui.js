@@ -15,12 +15,22 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 	var leaveRe = /mouse(enter|leave)/,
 		_fix = function (_, p) {
 			return 'mouse' + (p === 'enter' ? 'over' : 'out');
-		}, realTrigger, realTriggerHandler = function (n, e, evdata) {
+		}, realTrigger,
+		realTriggerHandler = function (n, e, evdata) {
 			var node = Y.Node(n),
-				handlers = can.Y.Event.getListeners(node._yuid, e);
+				handlers = can.Y.Event.getListeners(node._yuid, e),
+				i;
 			if (handlers) {
-				for (var i = 0; i < handlers.length; i++) {
-					handlers[i].fire(evdata);
+				for (i = 0; i < handlers.length; i++) {
+					if(handlers[i].fire ) {
+						handlers[i].fire(evdata);
+					} else if(handlers[i].handles) {
+						can.each(handlers[i].handles, function(handle){
+							handle.evt.fire(evdata);
+						});
+					}else {
+						throw "can not fire event";
+					}
 				}
 			}
 		};
@@ -29,7 +39,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 			// the same branch
 			var ev = document.createEvent('HTMLEvents');
 			e = e.replace(leaveRe, _fix);
-			ev.initEvent(e, true, true);
+			ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
 			if (a) {
 				can.extend(ev, a);
 			}
@@ -49,8 +59,15 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 				// // fireEvent. /me sighs. http://gist.github.com/315318
 				// throw("janktastic");
 				// }
-				n.fireEvent(ev, a);
+				var evObj = document.createEventObject();
+				if(e === "inserted" || e === "removed") {
+					evObj.cancelBubble = true;
+				}
+				can.extend(evObj, a);
+				n.fireEvent(ev, evObj);
+				
 			} catch (er) {
+				
 				// a lame duck to work with. we're probably a 'custom event'
 				var evdata = can.extend({
 					type: e,
@@ -58,9 +75,16 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 					faux: true,
 					_stopper: function () {
 						stop = this.cancelBubble;
+					},
+					stopPropagation: function(){
+						stop = this.cancelBubble;
 					}
 				}, a);
 				realTriggerHandler(n, e, evdata);
+				if(e === "inserted" || e === "removed") {
+					return;
+				}
+				
 				// handle bubbling of custom events, unless the event was stopped.
 				while (!stop && n !== document && n.parentNode) {
 					n = n.parentNode;

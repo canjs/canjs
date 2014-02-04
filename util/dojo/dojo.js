@@ -38,6 +38,9 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					//						throw("janktastic");
 					//					}
 					var evObj = document.createEventObject();
+					if(e === "inserted" || e === "removed") {
+						evObj.cancelBubble = true;
+					}
 					mix(evObj, a);
 					n.fireEvent(ev, evObj);
 				} catch (er) {
@@ -54,6 +57,9 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					}, a);
 					if (isfn(n[ev])) {
 						n[ev](evdata);
+					}
+					if(e === "inserted" || e === "removed") {
+						return;
 					}
 					// handle bubbling of custom events, unless the event was stopped.
 					while (!stop && n !== d.doc && n.parentNode) {
@@ -489,8 +495,17 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		return store;
 	}
 	var cleanData = function (elems) {
-		can.trigger(new dojo.NodeList(elems), 'removed', [], false);
-		for (var i = 0, elem;
+		// get all normal nodes
+		var nodes = [];
+		
+		for(var i = 0, len = elems.length; i < len; i++ ) {
+			if(elems[i].nodeType === 1) {
+				nodes.push(elems[i]);
+			}
+		}
+		can.trigger(new dojo.NodeList(nodes), 'removed', [], false);
+		i = 0;
+		for (var elem;
 			(elem = elems[i]) !== undefined; i++) {
 			var id = elem[exp];
 			delete data[id];

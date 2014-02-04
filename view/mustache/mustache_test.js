@@ -2468,7 +2468,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	});
 
 	test("live binding in a truthy section", function () {
-		var template = can.view.mustache('<img src="http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png" {{#width}}width="{{.}}"{{/width}} />'),
+		var template = can.view.mustache('<div {{#width}}width="{{.}}"{{/width}}></div>'),
 			data = new can.Map({
 				width: '100'
 			});
@@ -3445,14 +3445,18 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	//!dev-remove-start
 	if (can.dev) {
 		test("Logging: Custom tag does not have a registered handler", function () {
+			if (window.html5) {
+				window.html5.elements += ' my-custom';
+				window.html5.shivDocument();
+			}
+			
 			var oldlog = can.dev.warn;
-
 			can.dev.warn = function (text) {
-				equal(text, 'can/view/scanner.js: No custom element found for my-tag',
+				equal(text, 'can/view/scanner.js: No custom element found for my-custom',
 					'Got expected message logged.')
 			}
 
-			can.view.mustache('<my-tag></my-tag>')();
+			can.view.mustache('<my-custom></my-custom>')();
 
 			can.dev.warn = oldlog;
 		});
