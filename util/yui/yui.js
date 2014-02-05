@@ -100,7 +100,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 				i = deep + 1,
 				arg;
 			for (; arg = arguments[i]; i++) {
-				Y.mix(target, arg, true, null, null, !! deep);
+				Y.mix(target, arg, true, null, null, !!deep);
 			}
 			return target;
 		};
@@ -183,7 +183,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 				can.trigger(this, 'removed', [], false);
 				var elems = node.getElementsByTagName('*');
 				for (var i = 0, elem;
-					(elem = elems[i]) !== undefined; i++) {
+						 (elem = elems[i]) !== undefined; i++) {
 					can.trigger(elem, 'removed', [], false);
 				}
 			}
@@ -251,10 +251,10 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
 		// so we can lookup it's `remove` object.
 		var yuiEventId = 0,
-			// Takes a node list, goes through each node
-			// and adds events data that has a map of events to
-			// `callbackId` to `remove` object.  It looks like
-			// `{click: {5: {remove: fn}}}`.
+		// Takes a node list, goes through each node
+		// and adds events data that has a map of events to
+		// `callbackId` to `remove` object.  It looks like
+		// `{click: {5: {remove: fn}}}`.
 			addBinding = function (nodelist, selector, ev, cb) {
 				if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
 					nodelist.each(function (node) {
@@ -286,8 +286,8 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
 				}
 			},
-			// Removes a binding on a `nodelist` by finding
-			// the remove object within the object's data.
+		// Removes a binding on a `nodelist` by finding
+		// the remove object within the object's data.
 			removeBinding = function (nodelist, selector, ev, cb) {
 				if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
 					nodelist.each(function (node) {
@@ -302,7 +302,8 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 							if (can.isEmptyObject(handlers)) {
 								delete events[ev];
 							}
-							if (can.isEmptyObject(events)) {}
+							if (can.isEmptyObject(events)) {
+							}
 						}
 					});
 				} else {
@@ -314,7 +315,8 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 					if (can.isEmptyObject(handlers)) {
 						delete events[ev];
 					}
-					if (can.isEmptyObject(events)) {}
+					if (can.isEmptyObject(events)) {
+					}
 				}
 			};
 		can.bind = function (ev, cb) {
@@ -422,86 +424,86 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 
 		// `realTrigger` taken from `dojo`.
 		var leaveRe = /mouse(enter|leave)/,
-		_fix = function (_, p) {
-			return 'mouse' + (p === 'enter' ? 'over' : 'out');
-		}, realTrigger,
-		realTriggerHandler = function (n, e, evdata) {
-			var node = Y.Node(n),
-				handlers = can.Y.Event.getListeners(node._yuid, e),
-				i;
-			if (handlers) {
-				for (i = 0; i < handlers.length; i++) {
-					if(handlers[i].fire ) {
-						handlers[i].fire(evdata);
-					} else if(handlers[i].handles) {
-						can.each(handlers[i].handles, function(handle){
-							handle.evt.fire(evdata);
-						});
-					}else {
-						throw "can not fire event";
+			_fix = function (_, p) {
+				return 'mouse' + (p === 'enter' ? 'over' : 'out');
+			}, realTrigger,
+			realTriggerHandler = function (n, e, evdata) {
+				var node = Y.Node(n),
+					handlers = can.Y.Event.getListeners(node._yuid, e),
+					i;
+				if (handlers) {
+					for (i = 0; i < handlers.length; i++) {
+						if (handlers[i].fire) {
+							handlers[i].fire(evdata);
+						} else if (handlers[i].handles) {
+							can.each(handlers[i].handles, function (handle) {
+								handle.evt.fire(evdata);
+							});
+						} else {
+							throw "can not fire event";
+						}
 					}
 				}
-			}
-		};
-	if (document.createEvent) {
-		realTrigger = function (n, e, a) {
-			// the same branch
-			var ev = document.createEvent('HTMLEvents');
-			e = e.replace(leaveRe, _fix);
-			ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
-			if (a) {
-				can.extend(ev, a);
-			}
-			n.dispatchEvent(ev);
-		};
-	} else {
-		realTrigger = function (n, e, a) {
-			// the janktastic branch
-			var ev = 'on' + e,
-				stop = false;
-			try {
-				// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-				// createEvent path above, and also fails on _some_ native-named events.
-				// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-				// // if the event is one of those listed in our NodeList list
-				// // in lowercase form but is mixed case, throw to avoid
-				// // fireEvent. /me sighs. http://gist.github.com/315318
-				// throw("janktastic");
-				// }
-				var evObj = document.createEventObject();
-				if(e === "inserted" || e === "removed") {
-					evObj.cancelBubble = true;
+			};
+		if (document.createEvent) {
+			realTrigger = function (n, e, a) {
+				// the same branch
+				var ev = document.createEvent('HTMLEvents');
+				e = e.replace(leaveRe, _fix);
+				ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
+				if (a) {
+					can.extend(ev, a);
 				}
-				can.extend(evObj, a);
-				n.fireEvent(ev, evObj);
-				
-			} catch (er) {
-				
-				// a lame duck to work with. we're probably a 'custom event'
-				var evdata = can.extend({
-					type: e,
-					target: n,
-					faux: true,
-					_stopper: function () {
-						stop = this.cancelBubble;
-					},
-					stopPropagation: function(){
-						stop = this.cancelBubble;
+				n.dispatchEvent(ev);
+			};
+		} else {
+			realTrigger = function (n, e, a) {
+				// the janktastic branch
+				var ev = 'on' + e,
+					stop = false;
+				try {
+					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+					// createEvent path above, and also fails on _some_ native-named events.
+					// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+					// // if the event is one of those listed in our NodeList list
+					// // in lowercase form but is mixed case, throw to avoid
+					// // fireEvent. /me sighs. http://gist.github.com/315318
+					// throw("janktastic");
+					// }
+					var evObj = document.createEventObject();
+					if (e === "inserted" || e === "removed") {
+						evObj.cancelBubble = true;
 					}
-				}, a);
-				realTriggerHandler(n, e, evdata);
-				if(e === "inserted" || e === "removed") {
-					return;
+					can.extend(evObj, a);
+					n.fireEvent(ev, evObj);
+
+				} catch (er) {
+
+					// a lame duck to work with. we're probably a 'custom event'
+					var evdata = can.extend({
+						type: e,
+						target: n,
+						faux: true,
+						_stopper: function () {
+							stop = this.cancelBubble;
+						},
+						stopPropagation: function () {
+							stop = this.cancelBubble;
+						}
+					}, a);
+					realTriggerHandler(n, e, evdata);
+					if (e === "inserted" || e === "removed") {
+						return;
+					}
+
+					// handle bubbling of custom events, unless the event was stopped.
+					while (!stop && n !== document && n.parentNode) {
+						n = n.parentNode;
+						realTriggerHandler(n, e, evdata); //can.isFunction(n[ev]) && n[ev](evdata);
+					}
 				}
-				
-				// handle bubbling of custom events, unless the event was stopped.
-				while (!stop && n !== document && n.parentNode) {
-					n = n.parentNode;
-					realTriggerHandler(n, e, evdata); //can.isFunction(n[ev]) && n[ev](evdata);
-				}
-			}
-		};
-	}
+			};
+		}
 
 		// setup attributes event
 		can.attr = attr;
