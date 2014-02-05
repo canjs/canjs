@@ -24,10 +24,10 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 		//simple wrapper for logging
 		var log = function () {
-			//!dev-remove-start
+			//!steal-remove-start
 			can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
 				.join(' '));
-			//!dev-remove-end
+			//!steal-remove-end
 		};
 
 		// We always need the type which can also be called method, default to GET
@@ -65,9 +65,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 			delete settings.fixture;
 
-			//!dev-remove-start
+			//!steal-remove-start
 			log("looking for fixture in " + url);
-			//!dev-remove-end
+			//!steal-remove-end
 
 			settings.url = url;
 			settings.data = null;
@@ -78,9 +78,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				};
 			}
 		} else {
-			//!dev-remove-start
+			//!steal-remove-start
 			log("using a dynamic fixture for " + settings.type + " " + settings.url);
-			//!dev-remove-end
+			//!steal-remove-end
 
 			//it's a function ... add the fixture datatype so our fixture transport handles it
 			// TODO: make everything go here for timing and other fun stuff
