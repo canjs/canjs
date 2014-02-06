@@ -89,7 +89,7 @@ by adding a [template](../docs/can.Component.prototype.template.html) property:
 This replaces any source content with the component's template.  The result
 of rendering `template` looks like:
 
-@demo guides_source/components/template-0.html
+@demo can/guides/components/template-0.html
 
 Notice that "todos-editor element" is removed.
 
@@ -102,7 +102,7 @@ To render the source content within the template, add a `<content/>` tag like:
 
 This results in:
 
-@demo guides_source/components/template-1.html
+@demo can/guides/components/template-1.html
 
 If no source content is provided between the custom tags, you can specify default
 content to use within the `<content></content>` tags like:
@@ -119,7 +119,7 @@ If the source template is changed to:
 
 This results in:
 
-@demo guides_source/components/template-2.html
+@demo can/guides/components/template-2.html
 
 You can also specify the template as a [can.view.renderer](../docs/can.view.renderer.html) like:
 
@@ -179,7 +179,7 @@ with [template bindings](../docs/can.view.bindings.html) like:
 
 Check it out here:
 
-@demo guides_source/components/scope-0.html
+@demo can/guides/components/scope-0.html
 
 When bindings are used like this, the scope function is called back with
 the element's context, the element, and the event.
@@ -205,7 +205,7 @@ Scope functions can also be called for their value. For example:
       }
     })
 
-@demo guides_source/components/scope-1.html
+@demo can/guides/components/scope-1.html
 
 ### Scope as a can.Map constructor function
 
@@ -270,7 +270,7 @@ Notice the `can-value` attribute on the input element. This sets up a two-way bi
 between the todo's name and the input element.  This lets you change the 
 todo's name.
  
-@demo guides_source/components/scope-2.html
+@demo can/guides/components/scope-2.html
 
 Sometimes, you want to specify attribute values that are not looked up in the 
 scope.  For example, you might want to give `todos-editor` placeholder text as follows:
@@ -299,7 +299,7 @@ simply use the attribute's value.
 
 If you remove the input's text, a placeholder will show up:
 
-@demo guides_source/components/scope-3.html
+@demo can/guides/components/scope-3.html
 
 
 ## Helpers
@@ -338,7 +338,7 @@ helper that is used to set the className on a todo's `<li>` element:
 Notice that `options.context` is used to retrieve the todo because
 `this` within `todoClass` is the scope.
 
-@demo guides_source/components/helpers-0.html
+@demo can/guides/components/helpers-0.html
 
 
 ## Events
@@ -397,4 +397,4 @@ Finally, to put this all together, we render a template like:
     </todos-app>
 
 
-@demo guides_source/components/demo.html
+@demo can/guides/components/demo.html
