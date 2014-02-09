@@ -293,7 +293,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 						if(newVal !== value) {
 							oldUpdater(newVal, value);
 						}
-					}
+					};
 					get = options.get || get;
 					set = options.set || set;
 					on = options.on || on;
