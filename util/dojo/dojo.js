@@ -12,67 +12,67 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 			// the function accepts node (not string|node), "on"-less event name,
 			// and an object of args to mix into the event. 
 			var realTrigger;
-			
-		if (d.doc.createEvent) {
-			realTrigger = function (n, e, a) {
-				// the sane branch
-				var ev = d.doc.createEvent('HTMLEvents');
-				e = e.replace(leaveRe, _fix);
-				// removed / inserted events should not bubble
-				ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
-				if (a) {
-					mix(ev, a);
-				}
-				n.dispatchEvent(ev);
-			};
-		} else {
-			realTrigger = function (n, e, a) {
-				// the janktastic branch
-				var ev = 'on' + e,
-					stop = false;
-				try {
-					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-					//	createEvent path above, and also fails on _some_ native-named events. 
-					//					if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-					//						// if the event is one of those listed in our NodeList list
-					//						// in lowercase form but is mixed case, throw to avoid
-					//						// fireEvent. /me sighs. http://gist.github.com/315318
-					//						throw("janktastic");
-					//					}
-					var evObj = document.createEventObject();
-					if(e === "inserted" || e === "removed") {
-						evObj.cancelBubble = true;
+
+			if (d.doc.createEvent) {
+				realTrigger = function (n, e, a) {
+					// the sane branch
+					var ev = d.doc.createEvent('HTMLEvents');
+					e = e.replace(leaveRe, _fix);
+					// removed / inserted events should not bubble
+					ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
+					if (a) {
+						mix(ev, a);
 					}
-					mix(evObj, a);
-					n.fireEvent(ev, evObj);
-				} catch (er) {
-					// a lame duck to work with. we're probably a 'custom event'
-					var evdata = mix({
-						type: e,
-						target: n,
-						faux: true,
-						// HACK: [needs] added support for customStopper to _base/event.js
-						// some tests will fail until del._stopPropagation has support.
-						_stopper: function () {
-							stop = this.cancelBubble;
+					n.dispatchEvent(ev);
+				};
+			} else {
+				realTrigger = function (n, e, a) {
+					// the janktastic branch
+					var ev = 'on' + e,
+						stop = false;
+					try {
+						// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+						//	createEvent path above, and also fails on _some_ native-named events.
+						//					if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+						//						// if the event is one of those listed in our NodeList list
+						//						// in lowercase form but is mixed case, throw to avoid
+						//						// fireEvent. /me sighs. http://gist.github.com/315318
+						//						throw("janktastic");
+						//					}
+						var evObj = document.createEventObject();
+						if (e === "inserted" || e === "removed") {
+							evObj.cancelBubble = true;
 						}
-					}, a);
-					if (isfn(n[ev])) {
-						n[ev](evdata);
-					}
-					if(e === "inserted" || e === "removed") {
-						return;
-					}
-					// handle bubbling of custom events, unless the event was stopped.
-					while (!stop && n !== d.doc && n.parentNode) {
-						n = n.parentNode;
+						mix(evObj, a);
+						n.fireEvent(ev, evObj);
+					} catch (er) {
+						// a lame duck to work with. we're probably a 'custom event'
+						var evdata = mix({
+							type: e,
+							target: n,
+							faux: true,
+							// HACK: [needs] added support for customStopper to _base/event.js
+							// some tests will fail until del._stopPropagation has support.
+							_stopper: function () {
+								stop = this.cancelBubble;
+							}
+						}, a);
 						if (isfn(n[ev])) {
 							n[ev](evdata);
 						}
+						if (e === "inserted" || e === "removed") {
+							return;
+						}
+						// handle bubbling of custom events, unless the event was stopped.
+						while (!stop && n !== d.doc && n.parentNode) {
+							n = n.parentNode;
+							if (isfn(n[ev])) {
+								n[ev](evdata);
+							}
+						}
 					}
-				}
-			};
-		}
+				};
+			}
 			d._trigger = function (node, event, extraArgs) {
 				if (typeof event !== 'string') {
 					extraArgs = event;
@@ -274,10 +274,10 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 		// The id of the `function` to be bound, used as an expando on the `function`
 		// so we can lookup it's `remove` object.
 		var dojoId = 0,
-			// Takes a node list, goes through each node
-			// and adds events data that has a map of events to 
-			// callbackId to `remove` object.  It looks like
-			// `{click: {5: {remove: fn}}}`. 
+		// Takes a node list, goes through each node
+		// and adds events data that has a map of events to
+		// callbackId to `remove` object.  It looks like
+		// `{click: {5: {remove: fn}}}`.
 			dojoAddBinding = function (nodelist, ev, cb) {
 				nodelist.forEach(function (node) {
 					// Converting a raw select node to a node list
@@ -298,8 +298,8 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 					events[ev][cb.__bindingsIds] = node.on(ev, cb)[0];
 				});
 			},
-			// Removes a binding on a `nodelist` by finding
-			// the remove object within the object's data.
+		// Removes a binding on a `nodelist` by finding
+		// the remove object within the object's data.
 			dojoRemoveBinding = function (nodelist, ev, cb) {
 				nodelist.forEach(function (node) {
 					var currentNode = new dojo.NodeList(node),
@@ -419,7 +419,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 		};
 		can.ajax = function (options) {
 			var type = can.capitalize((options.type || 'get')
-				.toLowerCase()),
+					.toLowerCase()),
 				method = dojo['xhr' + type];
 			var success = options.success,
 				error = options.error,
@@ -496,18 +496,19 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 			}
 			return store;
 		}
+
 		var cleanData = function (elems) {
 			var nodes = [];
-		
-			for(var i = 0, len = elems.length; i < len; i++ ) {
-				if(elems[i].nodeType === 1) {
+
+			for (var i = 0, len = elems.length; i < len; i++) {
+				if (elems[i].nodeType === 1) {
 					nodes.push(elems[i]);
 				}
 			}
 			can.trigger(new dojo.NodeList(nodes), 'removed', [], false);
 			i = 0;
 			for (var elem;
-				(elem = elems[i]) !== undefined; i++) {
+					 (elem = elems[i]) !== undefined; i++) {
 				var id = elem[exp];
 				delete data[id];
 			}

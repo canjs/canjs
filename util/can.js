@@ -32,7 +32,6 @@ steal(function () {
 	can.__reading = function () {};
 
 	//!steal-remove-start
-
 	can.dev = {
 		logLevel: 0,
 		/**
