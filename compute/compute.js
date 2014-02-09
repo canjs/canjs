@@ -1,55 +1,117 @@
 steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
-	// a stack of observables
+	// # can.compute
+	
+	// ## Reading Helpers
+	//
+	// The following methods are used to call a function and know which observable events 
+	// to listen to for changes. This is done by having every observable 
+	// method that reads a value "broadcast" the corresponding 
+	// event by calling `can.__reading(obserable, event)`. 
+	// 
+	// ### Observed
+	//
+	// An "Observed" is an array of observable objects and events that
+	// need to be listened to to know when to check a function for updates.
+	// It looks like `[{obs: map, event: "first"}, {obs: map, event: "last"}]`.
+	// 
+	// ### State
+	// 
+	// `can.__read` can call a function that ends up calling `can.__read` again.  For example,
+	// a compute can read another compute.
+	// To make sure we know each compute's "Observed" values, maintain a stack of
+	// each `__read` call's Observed valeus.
 	var stack = [],
-		// the current compute's array of observed objects
-		currentObserved,
-		k = function () {};
+		// A pointer to the current executing `can.__read` call's "Observed".
+		currentObserved;
 
-	can.__reading = function (obj, attr) {
-		// Add the observe and attr that was read
-		// to `observed`
-		if (currentObserved) {
-			currentObserved.push({
-				obj: obj,
-				attr: attr + ""
-			});
-		}
+	// Calls a function given a context and returns
+	// the return value of the function and the observable properties and events
+	// that were read. Example: `{value: 100, observed: Observed}`
+	can.__read = function (func, self) {
 
-	};
-	can.__clearReading = function () {
-		if (currentObserved) {
-			return currentObserved.splice(0, currentObserved.length);
-		}
-	};
-	can.__setReading = function (o) {
-		if (currentObserved) {
-			[].splice.apply(currentObserved, [0, currentObserved.length].concat(o));
-		}
-	};
-
-	// returns the
-	// - observes and attr methods are called by func
-	// - the value returned by func
-	// ex: `{value: 100, observed: [{obs: o, attr: "completed"}]}`
-	var getValueAndObserved = function (func, self) {
-
+		// If we are already within another read, save its observed for later.
 		if (currentObserved) {
 			stack.push(currentObserved);
 		}
 
-		var observed = (currentObserved = []),
+		// Update currentObserved to a new list of Observed values.
+		var observed = (currentObserved = {}),
 			// Call the "wrapping" function to get the value. `observed`
-			// will have the observe/attribute pairs that were read.
+			// will have the observe/events pairs.
 			value = func.call(self);
 
-		// Set back so we are no longer reading.
+		// Set back to the old `can.__read`'s observeds.
 		currentObserved = stack.pop();
 		return {
 			value: value,
 			observed: observed
 		};
+	};
+
+	// When an observable value is read, it should call `can.__reading` to 
+	// indicate which object and event should be listened to.
+	can.__reading = function (obj, event) {
+		// Add the observe and attr that was read
+		// to `observed`
+		if (currentObserved) {
+			currentObserved[obj._cid + '|' + event] = {
+				obj: obj,
+				event: event + ""
+			};
+		}
+
+	};
+	// Clears and returns the current observables.
+	can.__clearReading = function () {
+		if (currentObserved) {
+			var ret = currentObserved;
+			currentObserved = {};
+			return ret;
+		}
+	};
+	// Specifies reading values.
+	can.__setReading = function (o) {
+		if (currentObserved) {
+			can.simpleExtend( currentObserved, o )
+			//[].splice.apply(currentObserved, [0, currentObserved.length].concat(o));
+		}
+	};
+
+	// Calls a function, and using it's "Observed", sets up bindings to call
+	// `onchanged` when those events are triggered.
+	// - func - the function to call.
+	// - context - the `this` of the function.
+	// - oldObserved - An object that contains what has been bound to
+	// - onchanged - what to call when any change has happened
+	var getValueAndBind = function (func, context, oldObserved, onchanged, matched) {
+		// Call the function, get the value and the observeds.
+		var info = can.__read(func, context),
+			// What needs to beound to.
+			newObserveSet = info.observed,
+			// A flag that is used to figure out if we are already observing on an event.
+			obEv;
+		
+		for( var name in newObserveSet ) {
+			if( oldObserved[name] ) {
+				delete oldObserved[name];
+			} else {
+				obEv = newObserveSet[name];
+				obEv.obj.bind(obEv.event, onchanged);
+			}
+		}
+
+		// Iterate through oldObserved, looking for observe/attributes
+		// that are no longer being bound and unbind them
+		for (var name in oldObserved) {
+			obEv = oldObserved[name];
+			obEv.obj.unbind(obEv.event, onchanged);	
+		}
+		
+		return info;
 	},
+
+
 		// Calls `callback(newVal, oldVal)` everytime an observed property
 		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
 		// Also returns an object that can teardown all event handlers.
@@ -64,7 +126,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					teardown: function () {
 						for (var name in observing) {
 							var ob = observing[name];
-							ob.observe.obj.unbind(ob.observe.attr, onchanged);
+							ob.obj.unbind(ob.event, onchanged);
 							delete observing[name];
 						}
 					}
@@ -80,7 +142,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// store the old value
 					var oldValue = data.value,
 						// get the new value
-						newvalue = getValueAndBind();
+						info = getValueAndBind(getterSetter, context, observing, onchanged, matched = !matched);
+						newvalue = info.value,
+						observing = info.observed;
+						
 					// update the value reference (in case someone reads)
 					data.value = newvalue;
 					// if a change happened
@@ -92,47 +157,18 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			};
 			// gets the value returned by `getterSetter` and also binds to any attributes
 			// read by the call
-			var getValueAndBind = function () {
-				var info = getValueAndObserved(getterSetter, context),
-					newObserveSet = info.observed;
-				var value = info.value,
-					ob;
-				matched = !matched;
-				// go through every attribute read by this observe
-				for (var i = 0, len = newObserveSet.length; i < len; i++) {
-					ob = newObserveSet[i];
-					// if the observe/attribute pair is being observed
-					if (observing[ob.obj._cid + '|' + ob.attr]) {
-						// mark at as observed
-						observing[ob.obj._cid + '|' + ob.attr].matched = matched;
-					} else {
-						// otherwise, set the observe/attribute on oldObserved, marking it as being observed
-						observing[ob.obj._cid + '|' + ob.attr] = {
-							matched: matched,
-							observe: ob
-						};
-						ob.obj.bind(ob.attr, onchanged);
-					}
-				}
-				// Iterate through oldObserved, looking for observe/attributes
-				// that are no longer being bound and unbind them
-				for (var name in observing) {
-					ob = observing[name];
-					if (ob.matched !== matched) {
-						ob.observe.obj.unbind(ob.observe.attr, onchanged);
-						delete observing[name];
-					}
-				}
-				return value;
-			};
+			
 			// set the initial value
-			data.value = getValueAndBind();
+			var info = getValueAndBind(getterSetter, context, observing, onchanged, matched = !matched);
+			observing = info.observed;
+			data.value = info.value;
 			data.isListening = !can.isEmptyObject(observing);
 			return data;
 		};
 	var isObserve = function (obj) {
 		return obj instanceof can.Map || obj && obj.__get;
-	};
+	},
+		k = function () {};
 	// if no one is listening ... we can not calculate every time
 	can.compute = function (getterSetter, context, eventName) {
 		if (getterSetter && getterSetter.isComputed) {
@@ -270,10 +306,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 						update(get(), value);
 					};
 					can.bind.call(getterSetter, eventName || propertyName, handler);
-					// use getValueAndObserved because
+					// use can.__read because
 					// we should not be indicating that some parent
 					// reads this property if it happens to be binding on it
-					value = getValueAndObserved(get)
+					value = can.__read(get)
 						.value;
 				};
 				off = function () {
