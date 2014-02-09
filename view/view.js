@@ -511,9 +511,9 @@ steal('can/util', function (can) {
 	var checkText = function (text, url) {
 		if (!text.length) {
 
-			//!dev-remove-start
+			//!steal-remove-start
 			can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
-			//!dev-remove-end
+			//!steal-remove-end
 
 			throw "can.view: No template or empty template:" + url;
 		}
@@ -629,7 +629,7 @@ steal('can/util', function (can) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved;
 		};
 
-	//!dev-remove-start
+	//!steal-remove-start
 	if (window.steal) {
 		steal.type("view js", function (options, success, error) {
 			var type = $view.types["." + options.type],
@@ -644,13 +644,13 @@ steal('can/util', function (can) {
 			success();
 		});
 	}
-	//!dev-remove-end
+	//!steal-remove-end
 
 	can.extend($view, {
 		register: function (info) {
 			this.types['.' + info.suffix] = info;
 
-			//!dev-remove-start
+			//!steal-remove-start
 			if (window.steal) {
 				steal.type(info.suffix + " view js", function (options, success, error) {
 					var type = $view.types["." + options.type],
@@ -659,7 +659,7 @@ steal('can/util', function (can) {
 					success();
 				});
 			}
-			//!dev-remove-end
+			//!steal-remove-end
 
 			$view[info.suffix] = function (id, text) {
 				if (!text) {

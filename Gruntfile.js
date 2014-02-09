@@ -79,6 +79,33 @@ module.exports = function (grunt) {
 				builder: builderJSON,
 				root: '../..',
 				out: 'test/amd/'
+			},
+			compatibility: {
+				template: 'test/templates/__configuration__-compat.html.ejs',
+				builder: builderJSON,
+				root: '../../',
+				out: 'test/compatibility/',
+				transform: {
+					module: function (definition) {
+						if (!definition.isDefault) {
+							return definition.name.toLowerCase();
+						}
+						return null;
+					},
+
+					test: function (definition, key) {
+						var name = key.substr(key.lastIndexOf('/') + 1);
+						var path = key.replace('can/', '') + '/';
+						return path + name + '_test.js';
+					},
+
+					options: function (config) {
+						return {
+							pluginified: ['2.0.5'],
+							dist: 'can.' + config
+						};
+					}
+				}
 			}
 		},
 		builder: {
@@ -194,6 +221,18 @@ module.exports = function (grunt) {
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
 						'http://localhost:8000/test/dist/yui.html'
+					]
+				}
+			},
+			compatibility: {
+				options: {
+					urls: [
+						'http://localhost:8000/test/compatibility/jquery.html',
+						'http://localhost:8000/test/compatibility/jquery-2.html',
+						'http://localhost:8000/test/compatibility/dojo.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/compatibility/mootools.html',
+						'http://localhost:8000/test/compatibility/yui.html'
 					]
 				}
 			},
@@ -320,7 +359,7 @@ module.exports = function (grunt) {
 					exclude : /bower_components\|dist\|docs\|guides\|lib\|node_modules\|src\|examples\|dojo\-\|demos/
 				},
 				files: {
-					'plato/src': '<%= docco.dev.src %>',
+					'plato/src': '<%= docco.dev.src %>'
 				}
 			},
 			tests : {
@@ -330,7 +369,7 @@ module.exports = function (grunt) {
 					exclude : /node_modules/
 				},
 				files: {
-					'plato/tests': '**/*_test.js',
+					'plato/tests': '**/*_test.js'
 				}
 			}
 
@@ -360,10 +399,9 @@ module.exports = function (grunt) {
 				options: { to: 'test/pluginified/latest.js' }
 			},
 			legacy: {
-				options: { to: 'test/pluginified/<%= pkg.version %>.js' }
+				options: { to: 'test/pluginified/<%= pkg.version %>.test.js' }
 			}
-		},
-		publish: {}
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
@@ -381,6 +419,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
+	grunt.registerTask('test:compatibility', ['connect', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
 

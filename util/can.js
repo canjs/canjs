@@ -31,7 +31,8 @@ steal(function () {
 	// this is here in case can.compute hasn't loaded
 	can.__reading = function () {};
 
-	//!dev-remove-start
+	//!steal-remove-start
+
 	can.dev = {
 		logLevel: 0,
 		/**
@@ -80,7 +81,7 @@ steal(function () {
 			}
 		}
 	};
-	//!dev-remove-end
+	//!steal-remove-end
 
 	return can;
 });

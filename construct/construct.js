@@ -318,11 +318,11 @@ steal('can/util/string', function (can) {
 				_fullName = can.underscore(fullName.replace(/\./g, "_"));
 				_shortName = can.underscore(shortName);
 
-				//!dev-remove-start
+				//!steal-remove-start
 				if (current[shortName]) {
 					can.dev.warn("can/construct/construct.js: There's already something called " + fullName);
 				}
-				//!dev-remove-end
+				//!steal-remove-end
 
 				current[shortName] = Constructor;
 			}

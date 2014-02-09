@@ -157,11 +157,11 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 						throw new Error('Could not get any raw data while converting using .models');
 					}
 
-					//!dev-remove-start
+					//!steal-remove-start
 					if (!raw.length) {
 						can.dev.warn("model.js models has no data.");
 					}
-					//!dev-remove-end
+					//!steal-remove-end
 
 					if (res.length) {
 						res.splice(0);
@@ -1735,9 +1735,9 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// but there should be a better way.
 			can.trigger(this, "change", funcName);
 
-			//!dev-remove-start
+			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
-			//!dev-remove-end
+			//!steal-remove-end
 
 			// Call event on the instance's Class
 			can.trigger(constructor, funcName, this);

@@ -140,9 +140,9 @@ steal('can/util', 'can/construct', function (can) {
 					// value from the options or the window
 					var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
 					if (!convertedName) {
-						//!dev-remove-start
+						//!steal-remove-start
 						can.dev.log('can/control/control.js: No property found for handling ' + methodName);
-						//!dev-remove-end
+						//!steal-remove-end
 						return null;
 					}
 					// If a `{}` template resolves to an object, `convertedName` will be
@@ -809,9 +809,9 @@ steal('can/util', 'can/construct', function (can) {
 			destroy: function () {
 				//Control already destroyed
 				if (this.element === null) {
-					//!dev-remove-start
+					//!steal-remove-start
 					can.dev.warn("can/control/control.js: Control already destroyed");
-					//!dev-remove-end
+					//!steal-remove-end
 					return;
 				}
 				var Class = this.constructor,
