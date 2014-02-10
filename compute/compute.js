@@ -36,7 +36,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	can.__read = function (func, self) {
 
 		// Add an object that `can.__read` will write to.
-		stack.push({})
+		stack.push({});
 
 		var value = func.call(self);
 
@@ -86,10 +86,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// What needs to beound to.
 			newObserveSet = info.observed,
 			// A flag that is used to figure out if we are already observing on an event.
-			obEv;
+			obEv,
+			name;
 		
 		// Go through what needs to be observed.
-		for( var name in newObserveSet ) {
+		for( name in newObserveSet ) {
 			
 			if( oldObserved[name] ) {
 				// If name has already been observed, remove from
@@ -104,48 +105,46 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 		// Iterate through oldObserved, looking for observe/attributes
 		// that are no longer being bound and unbind them.
-		for (var name in oldObserved) {
+		for ( name in oldObserved) {
 			obEv = oldObserved[name];
-			obEv.obj.unbind(obEv.event, onchanged);	
+			obEv.obj.unbind(obEv.event, onchanged);
 		}
 		
 		return info;
 	};
 	
+	var updateOnChange = function(compute, newValue, oldValue){
+		if (newValue !== oldValue) {
+			can.batch.trigger(compute, 'change', [
+				newValue,
+				oldValue
+			]);
+		}
+	};
 	
 	
 	var setupComputeHandlers = function(compute, func, context, setCachedValue) {
 		
-		var bound = false,
-			readInfo,
+		var readInfo,
 			onchanged,
 			batchNum;
 		
 		return {
 			on: function(updater){
-				bound = true;
-				// 
 				if(!onchanged) {
 					onchanged = function(ev){
-						if(!bound){
-							return false;
-						}
-						if (ev.batchNum === undefined || ev.batchNum !== batchNum) {
+						if (compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 							// store the old value
-							var oldValue = readInfo.value,
-								newValue;
+							var oldValue = readInfo.value;
 								
 							// get the new value
 							readInfo = getValueAndBind(func, context, readInfo.observed, onchanged);
-							newvalue = readInfo.value;
 
-							// if a change happened
-							if (newvalue !== oldValue) {
-								updater(newvalue, oldValue);
-							}
+							updater(readInfo.value, oldValue);
+						
 							batchNum = batchNum = ev.batchNum;
 						}
-					}
+					};
 				}
 				
 				readInfo = getValueAndBind(func, context, {}, onchanged);
@@ -155,14 +154,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				compute.hasDependencies = !can.isEmptyObject(readInfo.observed);
 			},
 			off: function(updater){
-				bound = false;
 				for (var name in readInfo.observed) {
 					var ob = readInfo.observed[name];
 					ob.obj.unbind(ob.event, onchanged);
 				}
 			}
-		}
-	}
+		};
+	};
 
 	var isObserve = function (obj) {
 		return obj instanceof can.Map || obj && obj.__get;
@@ -173,10 +171,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		if (getterSetter && getterSetter.isComputed) {
 			return getterSetter;
 		}
-		// stores the result of computeBinder
-		var computedData,
-			// the computed object
-			computed,
+		// the computed object
+		var computed,
 			// The following functions are overwritten depending on how compute() is called
 			// a method to setup listening
 			on = k,
@@ -192,17 +188,14 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			set = function (newVal) {
 				value = newVal;
 			},
+			setCached = set,
 			// this compute can be a dependency of other computes
 			canReadForChangeEvent = true,
 			// save for clone
 			args = can.makeArray(arguments),
 			updater = function (newValue, oldValue) {
-				value = newValue;
-				// might need a way to look up new and oldVal
-				can.batch.trigger(computed, 'change', [
-					newValue,
-					oldValue
-				]);
+				setCached(newValue);
+				updateOnChange(computed, newValue,oldValue);
 			},
 			// the form of the arguments
 			form;
@@ -226,12 +219,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					value = setVal;
 				}
 				// fire the change
-				if (old !== value) {
-					can.batch.trigger(computed, 'change', [
-						value,
-						old
-					]);
-				}
+				updateOnChange(computed, value, old);
 				return value;
 			} else {
 				// Another compute wants to bind to this compute
@@ -259,11 +247,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			get = getterSetter;
 			canReadForChangeEvent = eventName === false ? false : true;
 			
-			var handlers = setupComputeHandlers(computed, getterSetter, context || this, function(newValue){
-				value = newValue;
-			});
+			var handlers = setupComputeHandlers(computed, getterSetter, context || this, setCached);
 			on = handlers.on;
 			off = handlers.off;
+			
 		} else if (context) {
 			if (typeof context === 'string') {
 				// `can.compute(obj, "propertyName", [eventName])`
@@ -316,9 +303,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 						
 					updater = function(){
 						var newVal = get.call(context);
-						if(newVal !== value) {
-							oldUpdater(newVal, value);
-						}
+						oldUpdater(newVal, value);
 					};
 					get = options.get || get;
 					set = options.set || set;
