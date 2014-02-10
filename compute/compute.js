@@ -11,41 +11,38 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// 
 	// ### Observed
 	//
-	// An "Observed" is an array of observable objects and events that
+	// An "Observed" is an Object of observable objects and events that
 	// need to be listened to to know when to check a function for updates.
-	// It looks like `[{obs: map, event: "first"}, {obs: map, event: "last"}]`.
+	// It looks like 
+	//
+	//     { 
+	//       "map1|first": {obs: map, event: "first"},
+	//       "map1|last" : {obs: map, event: "last"}
+	//     }
 	// 
+	// Each pair is mapped so no duplicates will be listed. 
+	//
 	// ### State
 	// 
 	// `can.__read` can call a function that ends up calling `can.__read` again.  For example,
 	// a compute can read another compute.
 	// To make sure we know each compute's "Observed" values, maintain a stack of
 	// each `__read` call's Observed valeus.
-	var stack = [],
-		// A pointer to the current executing `can.__read` call's "Observed".
-		currentObserved;
+	var stack = [];
 
 	// Calls a function given a context and returns
 	// the return value of the function and the observable properties and events
 	// that were read. Example: `{value: 100, observed: Observed}`
 	can.__read = function (func, self) {
 
-		// If we are already within another read, save its observed for later.
-		if (currentObserved) {
-			stack.push(currentObserved);
-		}
+		// Add an object that `can.__read` will write to.
+		stack.push({})
 
-		// Update currentObserved to a new list of Observed values.
-		var observed = (currentObserved = {}),
-			// Call the "wrapping" function to get the value. `observed`
-			// will have the observe/events pairs.
-			value = func.call(self);
+		var value = func.call(self);
 
-		// Set back to the old `can.__read`'s observeds.
-		currentObserved = stack.pop();
 		return {
 			value: value,
-			observed: observed
+			observed: stack.pop()
 		};
 	};
 
@@ -54,8 +51,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	can.__reading = function (obj, event) {
 		// Add the observe and attr that was read
 		// to `observed`
-		if (currentObserved) {
-			currentObserved[obj._cid + '|' + event] = {
+		if (stack.length) {
+			stack[stack.length-1][obj._cid + '|' + event] = {
 				obj: obj,
 				event: event + ""
 			};
@@ -64,17 +61,16 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	};
 	// Clears and returns the current observables.
 	can.__clearReading = function () {
-		if (currentObserved) {
-			var ret = currentObserved;
-			currentObserved = {};
+		if (stack.length) {
+			var ret = stack[stack.length-1];
+			stack[stack.length-1] = {};
 			return ret;
 		}
 	};
 	// Specifies reading values.
 	can.__setReading = function (o) {
-		if (currentObserved) {
-			can.simpleExtend( currentObserved, o )
-			//[].splice.apply(currentObserved, [0, currentObserved.length].concat(o));
+		if (stack.length) {
+			stack[stack.length-1] = o;
 		}
 	};
 
@@ -84,7 +80,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// - context - the `this` of the function.
 	// - oldObserved - An object that contains what has been bound to
 	// - onchanged - what to call when any change has happened
-	var getValueAndBind = function (func, context, oldObserved, onchanged, matched) {
+	var getValueAndBind = function (func, context, oldObserved, onchanged) {
 		// Call the function, get the value and the observeds.
 		var info = can.__read(func, context),
 			// What needs to beound to.
@@ -92,24 +88,81 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// A flag that is used to figure out if we are already observing on an event.
 			obEv;
 		
+		// Go through what needs to be observed.
 		for( var name in newObserveSet ) {
+			
 			if( oldObserved[name] ) {
+				// If name has already been observed, remove from
+				// `oldObserved` to prevent event from being unbound later.
 				delete oldObserved[name];
 			} else {
+				// If this has not been observed, listen to it.
 				obEv = newObserveSet[name];
 				obEv.obj.bind(obEv.event, onchanged);
 			}
 		}
 
 		// Iterate through oldObserved, looking for observe/attributes
-		// that are no longer being bound and unbind them
+		// that are no longer being bound and unbind them.
 		for (var name in oldObserved) {
 			obEv = oldObserved[name];
 			obEv.obj.unbind(obEv.event, onchanged);	
 		}
 		
 		return info;
-	},
+	};
+	
+	
+	
+	var setupComputeHandlers = function(compute, func, context, setCachedValue) {
+		
+		var bound = false,
+			readInfo,
+			onchanged,
+			batchNum;
+		
+		return {
+			on: function(updater){
+				bound = true;
+				// 
+				if(!onchanged) {
+					onchanged = function(ev){
+						if(!bound){
+							return false;
+						}
+						if (ev.batchNum === undefined || ev.batchNum !== batchNum) {
+							// store the old value
+							var oldValue = readInfo.value,
+								newValue;
+								
+							// get the new value
+							readInfo = getValueAndBind(func, context, readInfo.observed, onchanged);
+							newvalue = readInfo.value;
+
+							// if a change happened
+							if (newvalue !== oldValue) {
+								updater(newvalue, oldValue);
+							}
+							batchNum = batchNum = ev.batchNum;
+						}
+					}
+				}
+				
+				readInfo = getValueAndBind(func, context, {}, onchanged);
+				
+				setCachedValue(readInfo.value);
+				
+				compute.hasDependencies = !can.isEmptyObject(readInfo.observed);
+			},
+			off: function(updater){
+				bound = false;
+				for (var name in readInfo.observed) {
+					var ob = readInfo.observed[name];
+					ob.obj.unbind(ob.event, onchanged);
+				}
+			}
+		}
+	}
 
 
 		// Calls `callback(newVal, oldVal)` everytime an observed property
@@ -118,8 +171,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		computeBinder = function (getterSetter, context, callback, computeState) {
 			// track what we are observing
 			var observing = {},
-				// a flag indicating if this observe/attr pair is already bound
-				matched = true,
 				// the data to return
 				data = {
 					value: undefined,
@@ -142,7 +193,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// store the old value
 					var oldValue = data.value,
 						// get the new value
-						info = getValueAndBind(getterSetter, context, observing, onchanged, matched = !matched);
+						info = getValueAndBind(getterSetter, context, observing, onchanged);
 						newvalue = info.value,
 						observing = info.observed;
 						
@@ -159,7 +210,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// read by the call
 			
 			// set the initial value
-			var info = getValueAndBind(getterSetter, context, observing, onchanged, matched = !matched);
+			var info = getValueAndBind(getterSetter, context, observing, onchanged);
 			observing = info.observed;
 			data.value = info.value;
 			data.isListening = !can.isEmptyObject(observing);
@@ -178,14 +229,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		var computedData,
 			// the computed object
 			computed,
-			// an object that keeps track if the computed is bound
-			// onchanged needs to know this. It's possible a change happens and results in
-			// something that unbinds the compute, it needs to not to try to recalculate who it
-			// is listening to
-			computeState = {
-				bound: false,
-				hasDependencies: false
-			},
 			// The following functions are overwritten depending on how compute() is called
 			// a method to setup listening
 			on = k,
@@ -244,19 +287,19 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				return value;
 			} else {
 				// Another compute wants to bind to this compute
-				if (currentObserved && canReadForChangeEvent) {
+				if (stack.length && canReadForChangeEvent) {
 
 					// Tell the compute to listen to change on this computed
 					can.__reading(computed, 'change');
 					// We are going to bind on this compute.
 					// If we are not bound, we should bind so that
 					// we don't have to re-read to get the value of this compute.
-					if (!computeState.bound) {
+					if (!computed.bound) {
 						can.compute.temporarilyBind(computed);
 					}
 				}
 				// if we are bound, use the cached value
-				if (computeState.bound) {
+				if (computed.bound) {
 					return value;
 				} else {
 					return get.call(context);
@@ -267,17 +310,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			set = getterSetter;
 			get = getterSetter;
 			canReadForChangeEvent = eventName === false ? false : true;
-			computed.hasDependencies = false;
-			on = function (update) {
-				computedData = computeBinder(getterSetter, context || this, update, computeState);
-				computed.hasDependencies = computedData.isListening;
-				value = computedData.value;
-			};
-			off = function () {
-				if (computedData) {
-					computedData.teardown();
-				}
-			};
+			
+			var handlers = setupComputeHandlers(computed, getterSetter, context || this, function(newValue){
+				value = newValue;
+			});
+			on = handlers.on;
+			off = handlers.off;
 		} else if (context) {
 			if (typeof context === 'string') {
 				// `can.compute(obj, "propertyName", [eventName])`
@@ -353,7 +391,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			 */
 			isComputed: true,
 			_bindsetup: function () {
-				computeState.bound = true;
+				this.bound = true;
 				// setup live-binding
 				// while binding, this does not count as a read
 				var oldReading = can.__clearReading();
@@ -362,7 +400,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			},
 			_bindteardown: function () {
 				off.call(this, updater);
-				computeState.bound = false;
+				this.bound = false;
 			},
 			/**
 			 * @function can.computed.bind compute.bind
