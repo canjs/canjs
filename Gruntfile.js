@@ -419,7 +419,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test:compatibility', ['connect', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
 

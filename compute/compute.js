@@ -414,15 +414,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			return !!res;
 		});
 	};
-	
-	// TODO: Remove in 3.0
-	can.compute.binder = function(getterSetter, context, callback, computeState) {
-		var compute = can.compute(getterSetter, context);
-		
-		compute.bind("change", function(ev, newVal, oldVal){
-			callback(newVal, oldVal);
-		});
-	};
 
 	can.compute.read = function (parent, reads, options) {
 		options = options || {};
