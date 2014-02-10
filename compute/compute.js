@@ -164,58 +164,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 	}
 
-
-		// Calls `callback(newVal, oldVal)` everytime an observed property
-		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
-		// Also returns an object that can teardown all event handlers.
-		computeBinder = function (getterSetter, context, callback, computeState) {
-			// track what we are observing
-			var observing = {},
-				// the data to return
-				data = {
-					value: undefined,
-					teardown: function () {
-						for (var name in observing) {
-							var ob = observing[name];
-							ob.obj.unbind(ob.event, onchanged);
-							delete observing[name];
-						}
-					}
-				}, batchNum;
-			// when a property value is changed
-			var onchanged = function (ev) {
-				// If the compute is no longer bound (because the same change event led to an unbind)
-				// then do not call getValueAndBind, or we will leak bindings.
-				if (computeState && !computeState.bound) {
-					return;
-				}
-				if (ev.batchNum === undefined || ev.batchNum !== batchNum) {
-					// store the old value
-					var oldValue = data.value,
-						// get the new value
-						info = getValueAndBind(getterSetter, context, observing, onchanged);
-						newvalue = info.value,
-						observing = info.observed;
-						
-					// update the value reference (in case someone reads)
-					data.value = newvalue;
-					// if a change happened
-					if (newvalue !== oldValue) {
-						callback(newvalue, oldValue);
-					}
-					batchNum = batchNum = ev.batchNum;
-				}
-			};
-			// gets the value returned by `getterSetter` and also binds to any attributes
-			// read by the call
-			
-			// set the initial value
-			var info = getValueAndBind(getterSetter, context, observing, onchanged);
-			observing = info.observed;
-			data.value = info.value;
-			data.isListening = !can.isEmptyObject(observing);
-			return data;
-		};
 	var isObserve = function (obj) {
 		return obj instanceof can.Map || obj && obj.__get;
 	},
@@ -469,7 +417,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 		computes.push(compute);
 	};
-	can.compute.binder = computeBinder;
+	
 	can.compute.truthy = function (compute) {
 		return can.compute(function () {
 			var res = compute();
