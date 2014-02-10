@@ -285,7 +285,15 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				} else {
 					// `can.compute(initialValue,{get:, set:, on:, off:})`
 					value = getterSetter;
-					var options = context;
+					var options = context,
+						oldUpdater = updater;
+						
+					updater = function(){
+						var newVal = get.call(context);
+						if(newVal !== value) {
+							oldUpdater(newVal, value);
+						}
+					};
 					get = options.get || get;
 					set = options.set || set;
 					on = options.on || on;

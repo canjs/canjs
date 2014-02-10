@@ -101,4 +101,46 @@ steal("can/compute", "can/test", function () {
 		cloned('-');
 		equal(cloned(), '.-');
 	});
+	
+	test('compute updated method uses get and old value (#732)', function () {
+		expect(9);
+		var input = {
+			value: 1
+		};
+		var value = can.compute('', {
+			get: function () {
+				return input.value;
+			},
+			set: function (newVal) {
+				input.value = newVal;
+			},
+			on: function (update) {
+				input.onchange = update;
+			},
+			off: function () {
+				delete input.onchange;
+			}
+		});
+		equal(value(), 1, 'original value');
+		ok(!input.onchange, 'nothing bound');
+		value(2);
+		equal(value(), 2, 'updated value');
+		equal(input.value, 2, 'updated input.value');
+		
+		
+		
+		value.bind('change', function (ev, newVal, oldVal) {
+			equal(newVal, 3, 'newVal');
+			equal(oldVal, 2, 'oldVal');
+			value.unbind('change', this.Constructor);
+		});
+		ok(input.onchange, 'binding to onchange');
+		
+		
+		input.value = 3;
+		input.onchange({});
+		
+		ok(!input.onchange, 'removed binding');
+		equal(value(), 3);
+	});
 });
