@@ -250,6 +250,7 @@ module.exports = function (grunt) {
 			},
 			individuals: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/component/test.html',
 						'http://localhost:8000/compute/test.html',
@@ -420,6 +421,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
 	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
 

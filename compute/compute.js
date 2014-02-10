@@ -122,9 +122,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 	};
 	
-	
-	
-	
 	var setupComputeHandlers = function(compute, func, context, setCachedValue) {
 		
 		var readInfo,
@@ -414,7 +411,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			return !!res;
 		});
 	};
-
+	// {map: new can.Map({first: "Justin"})}, ["map","first"]
 	can.compute.read = function (parent, reads, options) {
 		options = options || {};
 		// `cur` is the current value.
