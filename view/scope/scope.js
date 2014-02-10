@@ -89,7 +89,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			attr: function (key) {
 				// reads for whatever called before attr.  It's possible
 				// that this.read clears them.  We want to restore them.
-				var previousReads = can.__clearReading && can.__clearReading(),
+				var previousReads = can.__clearReading(),
 					res = this.read(key, {
 						isArgument: true,
 						returnObserveMethods: true,
@@ -327,7 +327,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 									defaultPropertyDepth = nameIndex;
 									defaultScope = scope;
 									// Clear and save readings so next attempt does not use these readings
-									defaultComputeReadings = can.__clearReading && can.__clearReading();
+									defaultComputeReadings = can.__clearReading();
 								}
 							}
 						}, options));

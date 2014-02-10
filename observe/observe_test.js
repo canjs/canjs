@@ -965,11 +965,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			first: 'Justin',
 			last: 'Meyer'
 		});
-		var func = function () {
+		var func = can.compute(function () {
 			return person.attr('first') + ' ' + person.attr('last') + Math.random();
-		};
+		});
 		var callbacks = 0;
-		can.compute.binder(func, window, function (newVal, oldVal) {
+		func.bind("change", function (ev, newVal, oldVal) {
 			callbacks++;
 		});
 		person.attr({
@@ -984,11 +984,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			last: 'Meyer'
 		}),
 			age = can.compute(5);
-		var func = function (newVal, oldVal) {
+		var func = can.compute(function (newVal, oldVal) {
 			return person.attr('first') + ' ' + person.attr('last') + age() + Math.random();
-		};
+		});
 		var callbacks = 0;
-		can.compute.binder(func, window, function (newVal, oldVal) {
+		func.bind("change",function (ev, newVal, oldVal) {
 			callbacks++;
 		});
 		can.batch.start();
