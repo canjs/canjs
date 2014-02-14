@@ -59,6 +59,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			init: function (context, parent) {
 				this._context = context;
 				this._parent = parent;
+				this.__cache = {};
 			},
 			/**
 			 * @function can.view.Scope.prototype.attr

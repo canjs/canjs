@@ -38,7 +38,7 @@ tabs ul { display: inline-block; }
   <p><button can-click="addVegies">Add Vegetables</button></p>
   <tabs>
     {{#each foodTypes}}
-      <panel title='title'>{{content}}</panel>
+      <panel title='{{title}}'>{{content}}</panel>
     {{/each}}
   </tabs>
 </script>
@@ -111,7 +111,8 @@ can.Component.extend({
 	template: "{{#if active}}<content></content>{{/if}}",
 	tag:"panel",
 	scope: {
-		active: false
+		active: false,
+		title: "@"
 	},
 	events: {
 		inserted: function(){
@@ -128,6 +129,7 @@ var foodTypes= new can.List([
 	{title: "Breads", content: "pasta, cereal"},
 	{title: "Sweets", content: "ice cream, candy"}
 ])
+window.foodTypes = foodTypes;
 
 $("#out").html( can.view("app",{
 	foodTypes: foodTypes,

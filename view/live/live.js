@@ -280,7 +280,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 
 			var nodes = [el],
 				makeAndPut = function (val) {
-					var frag = can.view.fragment('' + val),
+					var frag = can.view.fragment(can.view.toStr( val)),
 						oldNodes = can.makeArray(nodes);
 					// We need to mark each node as belonging to the node list.
 					nodeLists.update(nodes, frag.childNodes);
@@ -342,14 +342,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 				// Sometimes this is 'unknown' in IE and will throw an exception if it is
 				/* jshint ignore:start */
 				if (typeof node.nodeValue !== 'unknown') {
-					node.nodeValue = '' + newVal;
+					node.nodeValue = can.view.toStr(newVal);
 				}
 				/* jshint ignore:end */
 				// TODO: remove in 2.1
 				data.teardownCheck(node.parentNode);
 			}),
 				// The text node that will be updated
-				node = document.createTextNode(compute());
+				node = document.createTextNode(can.view.toStr(compute()));
 			// Replace the placeholder with the live node and do the nodeLists thing.
 			// Add that node to nodeList so we can remove it when the parent element is removed from the page
 			data.nodeList = live.replace([el], node, data.teardownCheck);

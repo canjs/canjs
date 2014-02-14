@@ -114,6 +114,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	};
 	
 	var updateOnChange = function(compute, newValue, oldValue){
+		//console.log("update",compute._cid, newValue, oldValue)
 		if (newValue !== oldValue) {
 			can.batch.trigger(compute, 'change', [
 				newValue,
@@ -167,6 +168,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		k = function () {};
 	// if no one is listening ... we can not calculate every time
 	can.compute = function (getterSetter, context, eventName) {
+		
 		if (getterSetter && getterSetter.isComputed) {
 			return getterSetter;
 		}
@@ -188,8 +190,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				value = newVal;
 			},
 			setCached = set,
-			// this compute can be a dependency of other computes
-			canReadForChangeEvent = true,
 			// save for clone
 			args = can.makeArray(arguments),
 			updater = function (newValue, oldValue) {
@@ -222,7 +222,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				return value;
 			} else {
 				// Another compute wants to bind to this compute
-				if (stack.length && canReadForChangeEvent) {
+				if (stack.length && computed.canReadForChangeEvent !== false) {
 
 					// Tell the compute to listen to change on this computed
 					can.__reading(computed, 'change');
@@ -244,7 +244,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		if (typeof getterSetter === 'function') {
 			set = getterSetter;
 			get = getterSetter;
-			canReadForChangeEvent = eventName === false ? false : true;
+			computed.canReadForChangeEvent = eventName === false ? false : true;
 			
 			var handlers = setupComputeHandlers(computed, getterSetter, context || this, setCached);
 			on = handlers.on;
