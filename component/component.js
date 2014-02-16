@@ -433,26 +433,62 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		}
 	});
 
-	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
-	// the scope object
-	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
-	if (can.$.fn) {
-		can.$.fn.scope = function (attr) {
-			// If `attr` is passed to the `scope` plugin return the value of that 
-			// attribute on the `scope` object, otherwise return the whole scope
-			var scope = this.data("scope");
-			if(!scope) {
-				scope = new can.Map();
-				this.data("scope", scope);
-			}
-			
-			if (attr) {
-				return scope.attr(attr);
-			} else {
+	/**
+	 * @description Read and write a component element's scope.
+	 *
+	 * @function can.scope
+	 * @parent can.util
+	 * @signature `can.scope(el[, attr[, value]])`
+	 * @param {HTMLElement|NodeList} el can.Component element to get scope of.
+	 * @param {String} [attr] Attribute name to access.
+	 * @param {*} [val] Value to write to the scope attribute.
+	 *
+	 * @return {*} If only one argument, returns the scope itself. If two
+	 * arguments are given, returns the attribute value. If three arguments
+	 * are given, returns the element itself after assigning the value (for
+	 * chaining).
+	 *
+	 * @body
+	 *
+	 * `can.scope` can be used to directly access a [can.Component]'s
+	 * scope. Depending on how it's called, it can be used to get the
+	 * entire scope object, read a specific property from it, or write a
+	 * property. The property read and write features can be seen as a
+	 * shorthand for code such as `$("my-thing").scope().attr("foo", val);`
+	 *
+	 * If using jQuery, this function is accessible as a jQuery plugin,
+	 * with one fewer argument to the call. For example,
+	 * `$("my-element").scope("name", "Whatnot");`
+	 *
+	 */
+		// Define the `can.scope` function that can be used to retrieve the
+		// `scope` from the element
+	can.scope = function (el, attr, val) {
+		el = can.$(el);
+		var scope = can.data(el, "scope");
+		switch (arguments.length) {
+			case 0:
+			case 1:
 				return scope;
-			}
+			case 2:
+				return scope.attr(attr);
+			default:
+				scope.attr(attr, val);
+				return el;
+		}
+	};
+
+	var $ = window.jQuery || window.Zepto;
+
+	// If there is a `$` object and it has the `fn` object, create the
+	// `scope` plugin that returns the scope object.
+	if (typeof $ !== 'undefined') {
+		$.fn.scope = function () {
+			// Just use `can.scope` as the base for this function instead
+			// of repeating ourselves.
+			return can.scope.apply(can, [this].concat(can.makeArray(arguments)));
 		};
 	}
-
+	
 	return Component;
 });

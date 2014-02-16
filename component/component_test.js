@@ -618,8 +618,31 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			.length, 1, "there is an h1");
 	});
 
-	test("setting passed variables - two way binding", function () {
+	test("can.scope utility", function() {
+		can.Component({
+			tag: "my-taggy-tag",
+			template: "<h1>hello</h1>",
+			scope: {
+				foo: "bar"
+			}
+		});
+		can.append(can.$("#qunit-fixture"),
+				   can.view.mustache("<my-taggy-tag id='x'></my-taggy-tag>")());
+		var el = can.$("my-taggy-tag");
+		equal(can.scope(el), can.data(el, "scope"), "one argument grabs the scope object");
+		equal(can.scope(el, "foo"), "bar", "two arguments fetches a value");
+		can.scope(el, "foo", "baz");
+		equal(can.scope(el, "foo"), "baz", "Three arguments sets the value");
+		if (window.$ && $.fn) {
+			el = $("my-taggy-tag");
+			equal(el.scope(), can.data(el, "scope"), "jQuery helper grabs the scope object");
+			equal(el.scope("foo"), "baz", "jQuery helper with one argument fetches a property");
+			equal(el.scope("foo", "bar").get(0), el.get(0), "jQuery helper returns the element");
+			equal(el.scope("foo"), "bar", "jQuery helper with two arguments sets the property");
+		}
+	});
 
+	test('setting passed variables - two way binding', function () {
 		can.Component({
 			tag: "my-toggler",
 			template: "{{#if visible}}<content/>{{/if}}",
