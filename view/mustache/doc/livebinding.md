@@ -16,7 +16,7 @@ In this example, we have a simple user welcome screen.
 		{{#if messages}}
 			You have {{messages}} new messages.
 		{{else}}
-			You no messages.
+			You have no messages.
 		{{/messages}}
 	</p>
 
@@ -26,25 +26,25 @@ In this example, we have a simple user welcome screen.
 	});
 
 	var template = can.view("#template", data);
-
+	
 The template evaluates the `messages` and adds the hooks for live binding automatically.
 Since we have no message it will render:
 
 	<h1>Welcome Tina Fey!</h1>
-	<p>You no messages.</p>
+	<p>You have no messages.</p>
 
 Now say we have a request that updates
 the `messages` attribute to have `5` messages.  We 
 call the [attr](can.Map.prototype.attr) method on the [can.Map](can.Map) to update
 the attribute to the new value.
 
-	data.attr('message', 5)
+	data.attr('messages', 5)
 
 
 After [can.Map] receives this update, it will automatically
 update the paragraph tag to reflect the new value.
 
-	<p>You have 5 new message.</p>
+	<p>You have 5 new messages.</p>
 
 
 For more information visit the [can.Map] documentation.
