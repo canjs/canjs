@@ -175,7 +175,7 @@ window.attr = attr;
 					var last = mustache.lastIndex = 0;
 					var res = mustache.exec(value);
 					while(res) {
-						var chars = value.substr(
+						var chars = value.substring(
 							last, 
 							mustache.lastIndex - res[0].length );
 						handler.attrValue(chars);

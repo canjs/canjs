@@ -6,9 +6,8 @@ steal("can/view/target", function(target){
 	test("basics", function(){
 		
 		// "<h1 class='foo {{#selected}}selected{{/selected}}' ><span>Hello {{message}}!</span></h1>"
-		var classCallback = function( attrName ){
+		var classCallback = function( ){
 			equal(this.nodeName.toLowerCase(), "h1", "class on the right element");
-			equal(attrName, "class", "got class attribute");
 			this.className = "selected";
 		},
 			attributesCallback = function(){

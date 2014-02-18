@@ -29,7 +29,6 @@ steal("can/util", function(can){
 		};
 		
 		if(nodeType === "object") {
-			console.log(node.tag)
 			el = document.createElement(node.tag);
 			
 			
@@ -38,8 +37,7 @@ steal("can/util", function(can){
 					var value = node.attrs[attrName];
 					if(typeof value === "function"){
 						getCallback().callbacks.push({
-							callback:  value,
-							args: [attrName]
+							callback:  value
 						})
 					} else  {
 						el.setAttribute(attrName, value);
@@ -71,7 +69,7 @@ steal("can/util", function(can){
 		return el;
 	}
 	
-	var hydratePath = function(el, pathData){
+	var hydratePath = function(el, pathData, args){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
@@ -82,11 +80,11 @@ steal("can/util", function(can){
 		
 		for(i = 0, len = callbacks.length; i < len; i++) {
 			callbackData = callbacks[i]
-			callbackData.callback.apply(el, callbackData.args || [] );
+			callbackData.callback.apply(el, args );
 		}
 		if(paths && paths.length){
 			for(i=0, len = paths.length; i< len; i++) {
-				hydratePath(el,paths[i])
+				hydratePath(el,paths[i], args)
 			}
 		}
 	}
@@ -98,9 +96,10 @@ steal("can/util", function(can){
 			paths: paths,
 			clone: frag,
 			hydrate: function(){
-				var cloned = this.clone.cloneNode();
+				var cloned = this.clone.cloneNode(),
+					args = can.makeArray(arguments);
 				for(var i=0, len = paths.length; i< len; i++) {
-					hydratePath(cloned,paths[i])
+					hydratePath(cloned,paths[i], args)
 				};
 				return cloned;
 			}

@@ -137,13 +137,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 						var itemIndex = can.compute(key + index),
 							// get its string content
 							itemHTML = render.call(context, item, itemIndex),
+							gotText = typeof itemHTML === "string",
 							// and convert it into elements.
-							itemFrag = can.view.fragment(itemHTML);
+							itemFrag = gotText ? can.view.fragment(itemHTML) : itemHTML;
 						// Add those elements to the mappings.
 						newNodeLists.push(nodeLists.register(can.makeArray(itemFrag.childNodes), undefined, masterNodeList));
 						// Hookup the fragment (which sets up child live-bindings) and
 						// add it to the collection of all added elements.
-						frag.appendChild(can.view.hookup(itemFrag));
+						frag.appendChild(gotText ? can.view.hookup(itemFrag) : itemFrag);
 						newIndicies.push(itemIndex);
 					});
 					// Check if we are adding items at the end
@@ -280,11 +281,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 
 			var nodes = [el],
 				makeAndPut = function (val) {
-					var frag = can.view.fragment('' + val),
+					var isString = typeof val === "string",
+						frag = isString ? can.view.fragment('' + val) : val,
 						oldNodes = can.makeArray(nodes);
 					// We need to mark each node as belonging to the node list.
 					nodeLists.update(nodes, frag.childNodes);
-					frag = can.view.hookup(frag, parentNode);
+					if(isString){
+						frag = can.view.hookup(frag, parentNode);
+					}
 					elements.replace(oldNodes, frag);
 				};
 			data.nodeList = nodes;
@@ -444,6 +448,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 				elements.setAttr(el, attributeName, getValue(newVal));
 			});
 			elements.setAttr(el, attributeName, getValue(compute()));
+		},
+		simpleAttribute: function(el, attributeName, compute){
+			console.log("simpleAttribute", attributeName)
+			listen(el, compute, function (ev, newVal) {
+				console.log("setting",ev.batchNum, attributeName, newVal)
+				elements.setAttr(el, attributeName, newVal);
+			});
+			elements.setAttr(el, attributeName, compute());
 		}
 	};
 	var newLine = /(\r|\n)+/g;
