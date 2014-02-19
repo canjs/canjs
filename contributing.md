@@ -11,9 +11,9 @@
 
 2.) Clone it with:
 	
-@codestart	
-> git clone git@github.com:<your username>/canjs
-@codeend
+```
+git clone git@github.com:<your username>/canjs
+```
 
 ## Developing
 
@@ -52,16 +52,16 @@ When contributing, include tests with new features or bug fixes in a feature bra
 
 Move into the directory of your cloned repository and create a new feature branch.
 
-@codestart
-> cd canjs
-> git checkout -b html5-fix
-@codeend
+```
+cd canjs
+git checkout -b html5-fix
+```
 
 Once your happy with your changes, push to the feature branch.
 
-@codestart
-> git push origin html5-fix
-@codeend
+```
+git push origin html5-fix
+```
 
 Now you'll need to submit a Pull Request. Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click the 'New Pull Request' button. Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
 
@@ -84,15 +84,21 @@ Search for previous tickets, if there is one add to that one rather than creatin
 
 ## Documentation
 
-If your pull request affects the public API, make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory. In order to view your changes in documentation you will need to run [CanJS.com](http://canjs.com) locally. Doing so is simple, just run the following code in the command line.
+If your pull request affects the public API, make relevant changes to the documentation.
+Documentation is found either inline or in markdown files in the respective directory.
+In order to view your changes in documentation you will need to run [CanJS.com](http://canjs.com) locally and regenerate the docs.
+Note that you will need to modify the `can` folder in the `canjs.com` clone to point at your local clone of CanJS. This can be
+accomplished by replacing the `can` folder in your `canjs.com` clone with a symlink, ie `mv can can.submodule && ln -s <local path to canjs> can`.
 
-@codestart
-> git clone git@github.com:bitovi/canjs.com.git
-> cd canjs.com
-> git submodule update --init --recursive
-> npm install
-> grunt
-@codeend
+```
+    git clone git@github.com:bitovi/canjs.com.git
+    cd canjs.com
+    git checkout gh-pages
+    git submodule update --init --recursive
+    npm install
+    grunt
+    ./js scripts/doc.js
+```
 
 Once the documentation is finished rendering, all the HTML files will be located in the `docs` folder. Open the documentation file you made changes to and make sure everything rendered correctly.
 
@@ -100,7 +106,7 @@ Once the documentation is finished rendering, all the HTML files will be located
 
 Its important that all tests pass before sending a pull request. TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally. To run tests locally you need [NodeJS](http://nodejs.org/) installed and run
 
-> npm install
+npm install
 
 Then open `~/can/test/test.html` in a web browser to run all tests for all libraries.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
 
@@ -116,28 +122,22 @@ CanJS supports the following browsers:
 
 To make a build (standalone and AMD version) and run tests from the command line you will need [NodeJS](http://nodejs.com) and [Grunt](http://gruntjs.com) (`npm install grunt-cli -g`) installed. Then, in the CanJS repository folder run:
 
-@codestart
-> npm install
-@codeend
+    npm install
 
 Then you can run:
 
-@codestart
-> grunt build
-@codeend
+    grunt build
 
 It puts the downloads in `can/dist`.
 
 You can also run the tests from the command line by executing:
 
-@codestart
-> grunt test
-@codeend
+    grunt test
 
 ## Style Guide
 
 ### Linting
-Grunt provides a JSHint task to verify some basic, practical soundness of the codebase. The options are preset.
+Grunt provides a `quality` task to verify some basic, practical soundness of the codebase. The options are preset.
 
 ### Spacing
 Indentation with tabs, not spaces.
@@ -183,6 +183,7 @@ If the statement is a truthey or falsey, use implied operators.  Falseys are whe
 
 For example:
 
+```
 	// Bad
 	if(bar === false){ ... }
 
@@ -192,6 +193,7 @@ For example:
 	// Good
 	var foo = [];
 	if(!foo.length){ ... }
+```
 
 ###  Quotes
 
@@ -207,14 +209,18 @@ Strings that require inner quoting must use double outside and single inside.
 
 Single line comments go OVER the line they refer to:
 
+```
 	// We need an explicit "bar", because later in the code foo is checked.
 	var foo = "bar";
+```
 
 For long comments, use:
 
+```
 	/* myFn
 	 * Four score and seven—pause—minutes ago...
  	 */
+```
  	
 ## List of heroes
 
