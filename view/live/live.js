@@ -53,7 +53,33 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			return (newVal || '')
 				.replace(/['"]/g, '')
 				.split('=');
-		}, splice = [].splice;
+		}, 
+		splice = [].splice,
+		isNode = function(obj){
+			return obj && obj.nodeType;
+		},
+		addTextNodeIfNoChildren = function(frag){
+			if(!frag.childNodes.length) {
+				frag.appendChild(document.createTextNode(""))
+			}
+		},
+		toFragment = function(item){
+			if(!item || typeof item === "string"){
+				return can.view.fragment( can.view.toStr(item) )
+			} else if(item.nodeType === 11) {
+				return item;
+			} else if(typeof item.nodeType === "number") {
+				var frag = document.createDocumentFragment();
+				frag.appendChild(item);
+				return frag;
+			} else if(can.isArray(item)) {
+				var frag = document.createDocumentFragment();
+				can.each(item, function(item){
+					frag.appendChild( toFragment(item) );
+				});
+				return frag;
+			}
+		};
 	/**
 	 * @property {Object} can.view.live
 	 * @parent can.view.static
@@ -236,6 +262,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			// run the list setup
 			updateList({}, can.isFunction(compute) ? compute() : compute);
 		},
+		toFragment: toFragment,
 		/**
 		 * @function can.view.live.html
 		 * @parent can.view.live
@@ -281,9 +308,12 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 
 			var nodes = [el],
 				makeAndPut = function (val) {
-					var isString = typeof val === "string",
-						frag = isString ? can.view.fragment('' + val) : val,
+					var isString = !isNode(val),
+						frag = toFragment(val),
 						oldNodes = can.makeArray(nodes);
+					
+					// Add a placeholder textNode if necessary.
+					addTextNodeIfNoChildren(frag);
 					// We need to mark each node as belonging to the node list.
 					nodeLists.update(nodes, frag.childNodes);
 					if(isString){
@@ -312,16 +342,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 		 */
 		replace: function (nodes, val, teardown) {
 			var oldNodes = nodes.slice(0),
-				frag;
+				frag = toFragment(val);
 			nodeLists.register(nodes, teardown);
-			if (typeof val === 'string') {
-				frag = can.view.fragment(val);
-			} else if (val.nodeType !== 11) {
-				frag = document.createDocumentFragment();
-				frag.appendChild(val);
-			} else {
-				frag = val;
-			}
+			
 			// We need to mark each node as belonging to the node list.
 			nodeLists.update(nodes, frag.childNodes);
 			if (typeof val === 'string') {
@@ -346,17 +369,24 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 				// Sometimes this is 'unknown' in IE and will throw an exception if it is
 				/* jshint ignore:start */
 				if (typeof node.nodeValue !== 'unknown') {
-					node.nodeValue = '' + newVal;
+					node.nodeValue = can.view.toStr(newVal);
 				}
 				/* jshint ignore:end */
 				// TODO: remove in 2.1
 				data.teardownCheck(node.parentNode);
 			}),
 				// The text node that will be updated
-				node = document.createTextNode(compute());
+				node = document.createTextNode(can.view.toStr(compute()));
 			// Replace the placeholder with the live node and do the nodeLists thing.
 			// Add that node to nodeList so we can remove it when the parent element is removed from the page
 			data.nodeList = live.replace([el], node, data.teardownCheck);
+		},
+		setAttributes: function(el, newVal) {
+			var parts = getAttributeParts(newVal),
+				newAttrName = parts.shift();
+			if (newAttrName) {
+				elements.setAttr(el, newAttrName, parts.join('='));
+			}
 		},
 		/**
 		 * @function can.view.live.text
@@ -450,9 +480,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', fun
 			elements.setAttr(el, attributeName, getValue(compute()));
 		},
 		simpleAttribute: function(el, attributeName, compute){
-			console.log("simpleAttribute", attributeName)
 			listen(el, compute, function (ev, newVal) {
-				console.log("setting",ev.batchNum, attributeName, newVal)
 				elements.setAttr(el, attributeName, newVal);
 			});
 			elements.setAttr(el, attributeName, compute());

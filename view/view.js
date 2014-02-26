@@ -80,7 +80,9 @@ steal('can/util', function (can) {
 				})
 				.join('_');
 		},
-
+		toStr: function(txt){
+			return txt == null ? "" : ""+txt;
+		},
 		hookup: function (fragment, parentNode) {
 			var hookupEls = [],
 				id,

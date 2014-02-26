@@ -15,13 +15,14 @@ steal("can/view", function(){
 		quote2quote = "'((?:\\\\.|[^'])*)'",
 		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
 		  "(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
-		stash = "\\{\\{([^\}]*)\\}\\}";
+		matchStash = "\\{\\{[^\}]*\\}\\}\\}?",
+		stash = "\\{\\{([^\}]*)\\}\\}\\}?";
 	
 	var startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
 	           "(" +
-	               "(?:\\s+"+
+	               "(?:\\s*"+
 	                   "(?:(?:"+attributeNames+attributeEqAndValue+")|"+
-	                   "(?:"+stash+")+)"+
+	                   "(?:"+matchStash+")+)"+
 	                ")*"+
 	            ")\\s*(\\/?)>"),
 		endTag = new RegExp("^<\\/(["+alphaNumericHU+"]+)[^>]*>"),
@@ -33,8 +34,6 @@ steal("can/view", function(){
 								")?)|(?:"+stash+")","g"),
 		mustache = new RegExp(stash,"g"),
 		txtBreak = /<|\{\{/;
-
-window.attr = attr;
 
 	// Empty Elements - HTML 5
 	var empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed");
@@ -112,7 +111,7 @@ window.attr = attr;
 					var text = index < 0 ? html : html.substring(0, index);
 					html = index < 0 ? "" : html.substring(index);
 
-					if (handler.chars)
+					if (handler.chars && text)
 						handler.chars(text);
 				}
 
@@ -178,7 +177,7 @@ window.attr = attr;
 						var chars = value.substring(
 							last, 
 							mustache.lastIndex - res[0].length );
-						handler.attrValue(chars);
+						chars.length && handler.attrValue(chars);
 						handler.special(res[1]);
 						last = mustache.lastIndex;
 						res = mustache.exec(value);
@@ -224,6 +223,7 @@ window.attr = attr;
 				handler.special(inside);
 			}
 		}
+		handler.done();
 	};
 
 	return HTMLParser;

@@ -76,7 +76,7 @@
 					}
 				});
 			
-			for(var i =0; i < 1; i++) {
+			for(var i =0; i < 100; i++) {
 				boxes.push( new Box({ number: i }) );
 			}
 			
@@ -90,12 +90,12 @@
 			$("#start").click(function(){
 				setTimeout(function(){
 					count++
-					console.log("TICK")
+					//console.log("TICK")
 					for(var n = 0 ; n < boxes.length; n++) {
 	            		boxes[n].tick();
 	            	}
 	            	
-	            	if(count < 2) {
+	            	if(count < 200) {
 	            		setTimeout(arguments.callee, 0);
 	            	} else {
 	            		count = 0;

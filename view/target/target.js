@@ -29,37 +29,46 @@ steal("can/util", function(can){
 		};
 		
 		if(nodeType === "object") {
-			el = document.createElement(node.tag);
+			if( node.tag ) {
+				el = document.createElement(node.tag);
 			
-			
-			if(node.attrs) {
-				for(var attrName in node.attrs) {
-					var value = node.attrs[attrName];
-					if(typeof value === "function"){
-						getCallback().callbacks.push({
-							callback:  value
-						})
-					} else  {
-						el.setAttribute(attrName, value);
-					}  
+				if(node.attrs) {
+					for(var attrName in node.attrs) {
+						var value = node.attrs[attrName];
+						if(typeof value === "function"){
+							getCallback().callbacks.push({
+								callback:  value
+							})
+						} else  {
+							el.setAttribute(attrName, value);
+						}  
+					}
 				}
-			}
-			if(node.attributes) {
-				for(var i = 0, len = node.attributes.length; i < len; i++ ) {
-					if(typeof node.attributes[i] === "function") {
+				if(node.attributes) {
+					for(var i = 0, len = node.attributes.length; i < len; i++ ) {
 						getCallback().callbacks.push({callback: node.attributes[i]})
 					}
 				}
-			}
-			if(node.children && node.children.length) {
-				// add paths
-				if(callback) {
-					p = callback.paths = []
-				} else {
-					p = paths;
+				if(node.children && node.children.length) {
+					// add paths
+					if(callback) {
+						p = callback.paths = []
+					} else {
+						p = paths;
+					}
+					el.appendChild( processNodes(node.children, p, loc) );
 				}
-				el.appendChild( processNodes(node.children, p, loc) );
+			} else if(node.comment) {
+				el = document.createComment(node.comment);
+				
+				if(node.callbacks) {
+					for(var i = 0, len = node.attributes.length; i < len; i++ ) {
+						getCallback().callbacks.push({callback: node.callbacks[i]});
+					}
+				}
 			}
+			
+			
 		} else if(nodeType === "string"){
 			el = document.createTextNode(node);
 		} else if(nodeType === "function") {
@@ -96,9 +105,9 @@ steal("can/util", function(can){
 			paths: paths,
 			clone: frag,
 			hydrate: function(){
-				var cloned = this.clone.cloneNode(),
+				var cloned = this.clone.cloneNode(true),
 					args = can.makeArray(arguments);
-				for(var i=0, len = paths.length; i< len; i++) {
+				for(var i = paths.length - 1; i >=0 ; i--) {
 					hydratePath(cloned,paths[i], args)
 				};
 				return cloned;

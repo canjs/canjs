@@ -564,8 +564,7 @@ steal('can/view', './elements', function (can, elements) {
 							if (typeof content === 'object') {
 
 								if (content.startTxt && content.end && specialAttribute) {
-
-									buff.push(insert_cmd, content.content, '());');
+									buff.push(insert_cmd, "can.view.toStr( ",content.content, '() ) );');
 
 								} else {
 

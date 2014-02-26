@@ -1,7 +1,7 @@
 steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",function(parser, target, live, Scope){
 	
 	var argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
-		literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,
+		literalNumberStringBooleanRegExp = /^(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(?:(.+?)=(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(.+))))$/,
 		isLookup = function (obj) {
 			return obj && typeof obj.get === "string";
 		},
@@ -16,6 +16,14 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				return renderer(updatedScope, updatedOptions || options);
 			};
 		},
+		// Decodes &amp; to & because we always set TextNode content.
+		decodeHTML = (function(){
+			var el = document.createElement('div');
+			return function(html){
+			  el.innerHTML = html;
+			  return el.childNodes.length === 0 ? "" : el.childNodes[0].nodeValue;
+			};
+		})(),
 		isArrayLike = function (obj) {
 			return obj && obj.splice && typeof obj.length === 'number';
 		},
@@ -23,6 +31,22 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			return obj instanceof can.Map || (obj && !! obj._get);
 		},
 		emptyHandler = function(){},
+		last = function(arr){
+			return arr[arr.length -1]
+		},
+		updateLast =  function(arr, value){
+			return (arr[arr.length - 1] = value);
+		},
+		jsonParse = function(str){
+			if(window.JSON) {
+				return JSON.parse(str);
+			} else {
+				return eval("("+str+")");
+			}
+		},
+		removeQuotes = function(str){
+			return str.substr(1, str.length -2);
+		},
 		getStashArgsAndHash = function(text){
 			var args = [],
 				hashes = {},
@@ -32,14 +56,20 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				var m;
 				// Check for special helper arguments (string/number/boolean/hashes).
 				if (i && (m = arg.match(literalNumberStringBooleanRegExp))) {
-					// Found a native type like string/number/boolean.
-					if (m[2]) {
-						args.push(m[0]);
+					
+					// Found a native string.
+					if(m[1]) {
+						args.push(removeQuotes(m[1]));
+					} else if (m[2]) {
+						// Found a native type like null, number, or undefined
+						args.push(jsonParse(m[2]));
 					}
 					// Found a hash object.
 					else {
 						// Addd to the hash object.
-						hashes[m[4]] =  (m[6] ? m[6] : {get: m[5]});
+						hashes[m[3]] =  (m[6] ?  {get: m[6]} : (
+							m[4] ? removeQuotes(m[4]) : jsonParse(m[5])
+						));
 					}
 				}
 				// Otherwise output a normal interpolation reference.
@@ -48,7 +78,9 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				}
 				i++;
 			});
+			
 			return {
+				name: args.shift(),
 				args: args,
 				hash: hashes
 			};
@@ -56,21 +88,26 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		stashValueProcessor = function(mode, text){
 			var arged = getStashArgsAndHash(text),
 				evaluator;
-			return function processor(scope, options, truthyRenderer){
-				if(!evaluator) {
-					evaluator = process( scope, options, mode, arged.args, arged.hash, truthyRenderer )
-				}
-				return evaluator();
+			return function processor(scope, options, truthyRenderer, falseyRenderer){
+				// TODO: FIGURE OUT A FASTER WAY!
+				//if(!evaluator) {
+					evaluator = process( scope, options, mode, arged, truthyRenderer, falseyRenderer)
+				//}
+				var res = evaluator();
+				return res == null ? "" : ""+res;
 			}
 		},
 		// Given some mustache mode, text, and state, returns a function that 
+		// mode = "#"
+		// text = "each todos"
+		// state = {tag: "ul"}
 		stashProcessor = function(mode, text, state){
 			// lets find out what 
 			var arged = getStashArgsAndHash(text);
 			
 			
-			return function processor(scope, options, truthyRenderer){
-				var result = process( scope, options, mode, arged.args, arged.hash, truthyRenderer );
+			return function processor(scope, options, truthyRenderer, falseyRenderer){
+				var result = process( scope, options, mode, arged, truthyRenderer, falseyRenderer );
 				
 				var compute = can.compute(result, this, false);
 				compute.bind("change", emptyHandler);
@@ -79,16 +116,31 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				if(typeof value === "function") {
 					value(this)
 				} else if( compute.hasDependencies ) {
+					
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
-					} else {
+					} 
+					else if( state.tag )  {
+						live.attributes( this, compute );
+					}
+					else if(state.text){
+						live.text(this, compute, this.parentNode);
+					} 
+					else {
 						live.html(this, compute, this.parentNode);
 					}
 				} else {
+					
 					if(state.attr) {
 						can.attr.set(this, state.attr, value);
-						
-					} else {
+					} 
+					else if(state.tag) {
+						live.setAttributes(this, value)
+					} 
+					else if(state.text && typeof value === "string") {
+						this.nodeValue = value;
+					} 
+					else if( value ){
 						live.replace([this], value)
 					}
 				}
@@ -140,7 +192,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				return compute;
 			}
 		},
-		process = function (scope, options, mode, argLookups, hashLookups, renderer) {
+		process = function (scope, options, mode, arged, truthyRenderer, falseyRenderer) {
 
 			// here we are going to cache the lookup values so future calls are much faster
 			var args = [],
@@ -151,9 +203,11 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				hash = {},
 				context = scope.attr("."),
 				getHelper = true,
-				helper,
-				name = argLookups.shift();
-
+				name = arged.name,
+				argLookups = arged.args,
+				hashLookups = arged.hash,
+				helper;
+				
 			// convert lookup values to actual values in name, arguments, and hash
 			for(var i = 0, len = argLookups.length; i < len; i++) {
 				var arg = argLookups[i];
@@ -180,12 +234,18 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				// into issues like {{text}} / {text: 'with'}
 				getHelper = (get === name);
 			}
-			
-			// overwrite fn and inverse to always convert to scopes
-			if(renderer) {
-				helperOptions.fn = makeConvertToScopes(renderer, scope, options);
+			if(mode === "^") {
+				var temp = truthyRenderer;
+				truthyRenderer = falseyRenderer;
+				falseyRenderer = temp;
 			}
-			
+			// overwrite fn and inverse to always convert to scopes
+			if(truthyRenderer) {
+				helperOptions.fn = makeConvertToScopes(truthyRenderer, scope, options);
+			}
+			if(falseyRenderer) {
+				helperOptions.inverse = makeConvertToScopes(falseyRenderer, scope, options);
+			}
 			//helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
 
 			// Check for a registered helper or a helper-like function.
@@ -208,7 +268,12 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				};
 
 			}
-
+			/*if( !mode && !args.length && name && name.isComputed ) {
+				//if(!scopeAndOptions.special) {
+				//	name.canReadForChangeEvent = false;
+				//}
+				return name;
+			}*/
 			return function () {
 
 				var value;
@@ -217,72 +282,71 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				} else {
 					value = name;
 				}
-				// An array of arguments to check for truthyness when evaluating sections.
-				var validArgs = args.length ? args : [value],
-					// Whether the arguments meet the condition of the section.
-					valid = true,
-					result = [],
-					i, argIsObserve, arg;
-				// Validate the arguments based on the section mode.
-				if (mode) {
-					for (i = 0; i < validArgs.length; i++) {
-						arg = validArgs[i];
-						argIsObserve = typeof arg !== 'undefined' && isObserveLike(arg);
-						// Array-like objects are falsey if their length = 0.
-						if (isArrayLike(arg)) {
-							// Use .attr to trigger binding on empty lists returned from function
-							if (mode === '#') {
-								valid = valid && !! (argIsObserve ? arg.attr('length') : arg.length);
-							} else if (mode === '^') {
-								valid = valid && !(argIsObserve ? arg.attr('length') : arg.length);
-							}
-						}
-						// Otherwise just check if it is truthy or not.
-						else {
-							valid = mode === '#' ? valid && !! arg : mode === '^' ? valid && !arg : valid;
-						}
-					}
-				}
-
-				// Otherwise interpolate like normal.
-				if (valid) {
-
-					if (mode === "#") {
-						if (isArrayLike(value)) {
-							var isObserveList = isObserveLike(value);
-
-							// Add the reference to the list in the contexts.
+				if (mode === "#" || mode === "^") {
+					if (isArrayLike(value) ) {
+						var isObserveList = isObserveLike(value),
+							frag = document.createDocumentFragment();
+						if(isObserveList ? value.attr("length") : value.length) {
 							for (i = 0; i < value.length; i++) {
-								result.push(helperOptions.fn(
-									isObserveList ? value.attr('' + i) : value[i]));
+								append(frag, helperOptions.fn( isObserveList ? value.attr('' + i) : value[i], options) );
 							}
-							return result.join('');
+							return frag;
+						} else {
+							return helperOptions.inverse(scope, options);
 						}
-						// Normal case.
-						else {
-							return helperOptions.fn(value || {}) || '';
-						}
-					} else if (mode === "^") {
-						return helperOptions.inverse(value || {}) || '';
-					} else {
-						return '' + (value != null ? value : '');
+						// Add the reference to the list in the contexts.
+						
+						
 					}
+					// Normal case.
+					else {
+						return value ? helperOptions.fn(value || scope, options) : helperOptions.inverse(scope, options);
+					}
+				} else {
+					return '' + (value != null ? value : '');
 				}
-
-				return '';
 			};
+		},
+		append = function(frag, content){
+			content && frag.appendChild(typeof content === "string" ? document.createTextNode(content) : content);
+		},
+		makePartialRenderer = function(partialName){
+			partialName = can.trim(partialName);
+			return function(scope, options){
+				var partial = options.attr("partials." + partialName),
+					res;
+				if (partial) {
+					res = partial.render ? partial.render(scope, options) :
+						partial(scope, options);
+				} else {
+					res = can.view.render(partialName, scope /*, options*/ );
+				}
+				
+				live.replace([this], res)
+			}
+			
 		};
+		
 	
 	
 	Section = function(process){
+		this.data = "targetData";
 		this.targetData = [];
 		this.stack = [];
 		var self = this;
 		this.targetCallback = function(scope, options){
-			process.call(this, scope, options, can.proxy(self.compiled.hydrate, self.compiled));
+			process.call(this, 
+				scope, 
+				options, 
+				can.proxy(self.compiled.hydrate, self.compiled),
+				self.inverseCompiled && can.proxy(self.inverseCompiled.hydrate, self.inverseCompiled)  ) ;
 		};
 	};
 	can.extend(Section.prototype,{
+		inverse: function(){
+			this.inverseData = [];
+			this.data = "inverseData"
+		},
 		push: function(data){
 			this.add(data);
 			this.stack.push(data);
@@ -291,16 +355,50 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			this.stack.pop();
 		},
 		add: function(data){
+			if(typeof data === "string"){
+				data = decodeHTML(data);
+			}
+			
+			
 			if(this.stack.length) {
 				this.stack[this.stack.length-1].children.push(data)
 			} else {
-				this.targetData.push(data);
+				this[this.data].push(data);
 			}
 		},
 		compile: function(){
 			this.compiled = target(this.targetData);
+			if(this.inverseData) {
+				this.inverseCompiled = target(this.inverseData);
+				delete this.inverseData;
+			}
 			delete this.targetData;
 			delete this.stack;
+		},
+		children: function(){
+			if(this.stack.length) {
+				return this.stack[this.stack.length-1].children
+			} else {
+				return this[this.data];
+			}
+		},
+		updateLast: function(handler){
+			var children = this.children();
+			var lastChild = last(children);
+			if(typeof lastChild === "string"){
+				updateLast(children, handler( lastChild ) );			
+			} else {
+				throw "problem"
+			}
+		},
+		cleanLast: function(regExp, replacement){
+			var children = this.children();
+			var lastChild = last(children);
+			if(typeof lastChild === "string"){
+				updateLast(children, lastChild.replace(regExp,replacement)  );			
+			} else {
+				throw "problem"
+			}
 		}
 	});
 	
@@ -312,14 +410,14 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			this.last().addChars(chars)
 		},
 		addStash: function(mode, stash, state){
-			if( !mode ) {
+			if( !mode || mode === "{") {
 				this.last().addStash(mode, stash, state)
 			} else if(mode === "#") {
 				var truthySection = new TextSubSection();
 				
 				this.last()
 					.addStash(mode, stash, state)
-					.subSection("truthy", truthSection);
+					.subSection("truthy", truthySection);
 
 				
 				this.stack.push(truthySection);
@@ -333,19 +431,18 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				this.stack.push(falseySection);
 			}
 		},
+		subSectionDepth: function(){
+			return this.stack.length - 1;
+		},
 		last: function(){
 			return this.stack[this.stack.length - 1];
 		},
 		compile: function(state){
 			
-			console.log("compiling", state.attr)
 			var renderer = this.stack[0].compile(),
 				compute;
 			
 			return function(scope, options){
-				
-				console.log("getting compute", scope.attr(".").attr());
-				
 				
 				var compute = can.compute(function(){
 					return renderer(scope, options)
@@ -357,12 +454,16 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				if( compute.hasDependencies ) {
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
-					} 
+					} else {
+						live.attributes( this, compute );
+					}
 					compute.unbind("change", emptyHandler);
 				} else {
 					if(state.attr) {
 						can.attr.set(this, state.attr, value);
-					} 
+					} else {
+						live.setAttributes(this, value);
+					}
 				}
 			}
 		}
@@ -418,6 +519,29 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	});
 	
+	
+	// {{{}}}
+	
+	
+	var getModeAndText = function(text, state){
+		var text = can.trim(text),
+			mode = text[0];
+
+		if( "#/{&^>!".indexOf(mode) >= 0 ) {
+			text = can.trim( text.substr(1) );
+		} else {
+			mode = null;
+		}
+		// triple braces do nothing within a tag
+		if(mode === "{" && state.node) {
+			mode = null;
+		}
+		return {
+			mode: mode,
+			text: text
+		};
+	}
+	
 	var stash = can.stash = function(template){
 		var section = new Section();
 		var stack = [],
@@ -434,13 +558,28 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		var state = {
 			node: null,
 			attr: null,
-			section: null
+			section: null,
+			// True if the previous chars ended the previous line.
+			endLine: false,
+			// True if the previous character started the previous line.
+			startLine: false,
+			lastSpecial: false,
+			// True if the last token was a special
+			lastComment: false,
+			// True while we are on the first line.
+			firstLine: true,
+			// If text should be inserted and HTML escaped
+			text: false
 		},
 			copyState = function(){
 				return {
-					tag: state.node && state.node.name,
-					attr: state.attr && state.attr.name
+					tag: state.node && state.node.tag,
+					attr: state.attr && state.attr.name,
+					text: state.text
 				}
+			},
+			clearLines = function(){
+				state.lastSpecial = state.text = state.firstLine = state.lastComment = state.startLine = state.endLine = false;
 			}
 		
 		parser(template,{
@@ -449,6 +588,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 					tag: tagName,
 					children: []
 				};
+				clearLines();
 			},
 			end: function(tagName, unary){
 				if(unary){
@@ -457,46 +597,138 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 					section.push(state.node);
 				}
 				state.node =null;
+				clearLines();
 			},
 			close: function( tag ) {
 				section.pop();
+				clearLines();
 			},
 			attrStart: function(attrName){
-				state.attr = {
-					name: attrName,
-					value: ""
-				};
-			},
-			attrEnd: function(){
-				if(!state.node.attrs) {
-					state.node.attrs = {};
+				if(state.node.section) {
+					state.node.section.addChars(attrName+"=\"")
+				} else {
+					state.attr = {
+						name: attrName,
+						value: ""
+					};
 				}
 				
-				state.node.attrs[state.attr.name] = 
-					state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
-						
-				state.attr = null;
+				
+				
+				clearLines();
+			},
+			attrEnd: function(){
+				if(state.node.section) {
+					state.node.section.addChars("\"");
+				} else {
+					if(!state.node.attrs) {
+						state.node.attrs = {};
+					}
+					
+					state.node.attrs[state.attr.name] = 
+						state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
+							
+					state.attr = null;
+				}
+				
+				
+				
+				clearLines();
 			},
 			attrValue: function(value){
-				if(state.attr.section) {
-					state.attr.section.addChars(value);
+				if(state.node.section) {
+					state.node.section.addChars(value)
 				} else {
-					state.attr.value += value;
+					if(state.attr.section) {
+						state.attr.section.addChars(value);
+					} else {
+						state.attr.value += value;
+					}
 				}
+				
+
+				clearLines();
 			},
 			chars: function( text ) {
-				section.add(text);
+				// If the last thing was a comment, and the thing
+				// before that ended the line.
+				if(state.lastComment ) {
+					// Remove its newLine.
+					/*section.cleanLast(/\r?\n?[\s]*$/,"");
+					
+					// If we are starting another line right away, truncate that.
+					var returnCharacterLength = (text[0] === "\n" && 1) || (text.substr(0,2) === "\r\n"  && 2)
+					if(returnCharacterLength) {
+						state.removeIfLast = returnCharacterLength;
+						text = text.substr(returnCharacterLength);
+					}*/
+					section.updateLast(function(lastChars){
+						if(state.firstLine && !/[^\s\n\r]/.test(lastChars)) {
+							return lastChars.replace(/[\s]*$/,"") + text.replace(/^\r?\n?[\s]*/,"")
+						} else {
+							return lastChars + text;
+						}
+						;
+					});
+				} else {
+					if(state.firstLine && /^\n.+/.test(text) ) {
+						text = text.substr(1);
+					}
+					section.add(text);
+				}
+				
+				
+				state.startLine =  text[0] === "\n";
+				// if this is the first line and only has spaces, treat like an end line
+				state.endLine = !state.lastComment && (
+						( state.firstLine && /^[\s]+$/.test(text) )|| /\n[\s]*$/.test(text) );
+				// still on first line if only spaces are found (or ! anything other than space)
+				state.firstLine = state.firstLine && !/[^\s]/.test(text);
+				state.lastComment = false;
 			},
 			special: function( text ){
 				
-				var first = text[0];
-				if(first == "#" || first == "/") {
-					text = text.substr(1);
-				} else {
-					first = null;
+				// If the previous char ended the line,
+				// remove the line break.
+				if(state.endLine) {
+					section.cleanLast(/(\r?\n)[\s]*$/,"");
 				}
 				
-				if(state.attr) {
+				
+				var firstAndText = getModeAndText(text, state),
+					first = firstAndText.mode,
+					text = firstAndText.text;
+				
+				
+				if(text === "else") {
+					section.inverse();
+					return;
+				}
+				
+				if(first === "!") {
+					
+					
+					var firstLine = state.firstLine;
+					var endLine = state.endLine;
+					clearLines();
+					state.firstLine = firstLine;
+					state.endLine = endLine;
+					state.lastSpecial = state.lastComment = true;
+					return;
+				}
+
+				if(state.node && state.node.section) {
+					
+					state.node.section.addStash(first, text , copyState());
+					
+					if(state.node.section.subSectionDepth() === 0){
+						state.node.attributes.push( state.node.section.compile(copyState()) );
+						delete state.node.section;
+					}
+					
+				}
+				// `{{}}` in an attribute like `class="{{}}"`
+				else if(state.attr) {
 					
 					if(!state.attr.section) {
 						state.attr.section = new TextSection();
@@ -504,42 +736,65 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 							state.attr.section.addChars(state.attr.value)
 						}
 					}
-					state.attr.section.addStash(first, text, copyState())
+					state.attr.section.addStash(first, text , copyState())
+					
+				} 
+				// `{{}}` in a tag like `<div {{}}>`
+				else if(state.node) {
+					
+					if(!state.node.attributes) {
+						state.node.attributes = [];
+					}
+					if(!first) {
+						state.node.attributes.push( stashProcessor( null,text, copyState() ) );
+					} else if( first === "#" ) {
+						if(!state.node.section) {
+							state.node.section = new TextSection();
+						}
+						state.node.section.addStash(first, text , copyState())
+					} else {
+						throw first+" is currently not supported within a tag."
+					}
+					
 					
 					
 				} else {
-					
-					if(first === "#" ) {
-					
-						if( state.attr ) {
-							
-							// state.attr.value = 
-							
-						} else if( state.tag ) {
-							
-							
-						} else {
-							startSection(stashProcessor("#",text, copyState()  ));
-						}
+					if(first === ">") {
 						
-						// section
+						section.add(makePartialRenderer(text));
 						
+					}else if(first === "{" || first === "&") {
+						section.add(stashProcessor(null,text, copyState() ));
+					} else if(first === "#" || first === "^") {
+					
+						startSection(stashProcessor(first,text, copyState()  ));
 						
 					} else if( first === "/") {
 						
 						endSection();
 						
 					} else {
-						
-						section.add(function(scope, options){
-							live.text(this, scope.compute(text), this.parentNode);
-						});
+						state.text = true;
+						section.add(stashProcessor(null,text, copyState() ));
 					}
 				}
-				
+				// Maintain firstLine state
+				var firstLine = state.firstLine;
+				clearLines();
+				state.lastSpecial = true;
+				state.firstLine = firstLine;
+				//state.lastComment = true;
 			},
 			comment: function( text ) {
 				// create comment node
+				section.add({
+					comment: text
+				})
+			},
+			done: function(){
+				if(state.lastComment && state.endLine ) {
+					section.cleanLast(/(\r?\n)[\s]*$/,"");
+				}
 			}
 		});
 		
@@ -569,7 +824,78 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	});
 	
-	var helpers = {};
+	var resolve = function (value) {
+		if (isObserveLike(value) && isArrayLike(value) && value.attr('length')) {
+			return value;
+		} else if (can.isFunction(value)) {
+			return value();
+		} else {
+			return value;
+		}
+	};
+	
+	var helpers = {
+		"each": function(items, options){
+			return function(el){
+				var cb = function (item, index) {
+							
+							return options.fn(options.scope.add({
+									"@index": index
+								}).add(item));
+								
+						};
+				live.list(el, items, cb, options.context, el.parentNode);
+			}
+		},
+		'if': function (expr, options) {
+			var value;
+			// if it's a function, wrap its value in a compute
+			// that will only change values from true to false
+			if (can.isFunction(expr)) {
+				value = can.compute.truthy(expr)();
+			} else {
+				value = !! resolve(expr);
+			}
+
+			if (value) {
+				return options.fn(options.scope || this);
+			} else {
+				return options.inverse(options.scope || this);
+			}
+		},
+		'unless': function (expr, options) {
+			if (!resolve(expr)) {
+				return options.fn(options.scope || this);
+			}
+		},
+		'with': function (expr, options) {
+			var ctx = expr;
+			expr = resolve(expr);
+			if ( !! expr) {
+				return options.fn(ctx);
+			}
+		},
+		'log': function (expr, options) {
+			if (console !== undefined) {
+				if (!options) {
+					console.log(expr.context);
+				} else {
+					console.log(expr, options.context);
+				}
+			}
+		},
+		data: function(attr){
+			// options will either be the second or third argument.
+			// Get the argument before that.
+			var data = arguments.length == 2 ? this : arguments[1];
+			
+			
+			return function(el){
+				
+				can.data( can.$(el), attr, data || this.context );
+			}
+		}
+	};
 	can.stash.registerHelper = function(name, callback){
 		helpers[name] = callback;
 	}
@@ -583,19 +909,20 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	}
 	
-	can.stash.registerHelper("each", function(items, options){
-		return function(el){
-			var cb = function (item, index) {
-						
-						return options.fn(options.scope.add({
-								"@index": index
-							}).add(item));
-							
-					};
-			live.list(el, items, cb, options.context, el.parentNode);
-		}
-	})
 	
+	
+	can.view.register({
+		suffix: "stash",
+
+		contentType: "x-stash-template",
+
+		// Returns a `function` that renders the view.
+
+		renderer: function (id, text) {
+			return stash(text);
+		}
+	});
+	can.view.ext = ".stash";
 	
 	return can.stash;
 	

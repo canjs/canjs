@@ -60,10 +60,14 @@
 			"{{/each}}");
 			
 			
-			var boxes = [],
+			var boxes = new can.List(),
+				boxesToAdd = [],
 				Box = can.Map.extend({
 					count: 0,
 					content: 0,
+					left: 0,
+					top: 0,
+					color: 0,
 					tick: function(){
 						var count = this.attr("count")+1
 						this.attr({
@@ -76,9 +80,13 @@
 					}
 				});
 			
-			for(var i =0; i < 100; i++) {
+			for(var i =0; i < 200; i++) {
 				boxes.push( new Box({ number: i }) );
+				boxesToAdd.push( new Box({ number: i }) );
 			}
+			
+			
+			
 			
 			var frag = template({boxes: boxes});
 			var div = document.createElement("div")
@@ -87,22 +95,13 @@
 		
 			var count = 0;
 		
-			$("#start").click(function(){
-				setTimeout(function(){
-					count++
-					for(var n = 0 ; n < boxes.length; n++) {
-	            		boxes[n].tick();
-	            	}
-	            	
-	            	if(count < 0) {
-	            		setTimeout(arguments.callee, 0);
-	            	} else {
-	            		count = 0;
-	            	}
-	            	
-				},0)
-			})
 		
+			$("#start").click(function(){
+				var start = new Date();
+				boxes.push.apply(boxes, boxesToAdd);
+        		console.log(new Date - start)
+	     
+			})
 			
             	
             

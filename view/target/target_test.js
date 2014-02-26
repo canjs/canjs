@@ -37,8 +37,6 @@ steal("can/view/target", function(target){
 			}]
 		}]);
 		
-		
-		
 		equal( data.clone.childNodes.length, 1, "there is one child");
 		
 		var h1 = data.clone.childNodes[0]
@@ -47,14 +45,11 @@ steal("can/view/target", function(target){
 		
 		equal( h1.childNodes.length, 1, "the h1 has span");
 		
-		
-		
-		
 		deepEqual( data.paths, 
 			[{
 				path: [0],
 				callbacks: [
-					{ callback: classCallback, args: ["class"] },
+					{ callback: classCallback },
 					{ callback: attributesCallback }
 				],
 				paths: [{
@@ -71,5 +66,32 @@ steal("can/view/target", function(target){
 		equal(newH1.className, "selected", "got selected class name");
 		equal(newH1.innerHTML.toLowerCase(), "<span>hello world!</span>")
 		
+	});
+	
+	
+	test("replacing items", function(){
+		var data = target([
+			function(){
+				this.parentNode.insertBefore(document.createTextNode("inserted"), this.nextSibling)
+			}, 
+			"hi",
+			function(){
+				equal(this.previousSibling.nodeValue, "hi", "previous is as expected")
+			}]);
+			
+		data.hydrate()
+	});
+	
+	test("comments", function(){
+		
+		var data = target([
+			{ tag: "h1" },
+			{comment: "foo bar"}
+		]);
+		var node = data.clone.childNodes[1]
+		equal(node.nodeValue, "foo bar", "node value is right")
+		equal(node.nodeType, 8, "node is a comment");
+		
 	})
+	
 })
