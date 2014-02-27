@@ -198,7 +198,7 @@ steal("can/view", function(){
 	HTMLParser.parseAttrs = function(rest, handler){
 		
 		
-			rest.replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
+			(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
 				if(special) {
 					handler.special(special);
 					
