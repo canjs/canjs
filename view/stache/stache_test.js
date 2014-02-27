@@ -1,7 +1,7 @@
-steal("can/view/stash","can/test", function(stash){
+steal("can/view/stache","can/test", function(stache){
 	
 	
-	module("can/view/stash",{
+	module("can/view/stache",{
 		setup: function(){
 			this.animals = ['sloth', 'bear', 'monkey']
 		}
@@ -12,7 +12,7 @@ steal("can/view/stash","can/test", function(stash){
 	
 	var getText = function(template, data, options){
 		var div = document.createElement("div");
-		div.appendChild( stash(template)(data) );
+		div.appendChild( stache(template)(data) );
 		return div.innerHTML;
 	},
 		getAttr = function (el, attrName) {
@@ -25,7 +25,7 @@ steal("can/view/stash","can/test", function(stash){
 	
 	test("html to html", function(){
 		
-		var stashed = stash("<h1 class='foo'><span>Hello World!</span></h1>")
+		var stashed = stache("<h1 class='foo'><span>Hello World!</span></h1>")
 		
 		
 		var frag = stashed();
@@ -35,7 +35,7 @@ steal("can/view/stash","can/test", function(stash){
 	
 	test("basic replacement", function(){
 		
-		var stashed = stash("<h1 class='foo'><span>Hello {{message}}!</span></h1>")
+		var stashed = stache("<h1 class='foo'><span>Hello {{message}}!</span></h1>")
 		
 		
 		var frag = stashed({
@@ -48,13 +48,13 @@ steal("can/view/stash","can/test", function(stash){
 	test("a section helper", function(){
 		
 		
-		stash.registerHelper("helper", function(options){
+		stache.registerHelper("helper", function(options){
 			
 			return options.fn({message: "World"})
 			
 		})
 		
-		var stashed = stash("<h1 class='foo'>{{#helper}}<span>Hello {{message}}!</span>{{/helper}}</h1>")
+		var stashed = stache("<h1 class='foo'>{{#helper}}<span>Hello {{message}}!</span>{{/helper}}</h1>")
 		
 		
 		var frag = stashed({});
@@ -63,7 +63,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 	
 	test("attribute sections", function(){
-		var stashed = stash("<h1 style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>Hi</h1>");
+		var stashed = stache("<h1 style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>Hi</h1>");
 		
 		var frag = stashed({
 			top: 1,
@@ -77,14 +77,14 @@ steal("can/view/stash","can/test", function(stash){
 	});
 	
 	test("attributes sections", function(){
-		var template = stash("<div {{attributes}}/>");
+		var template = stache("<div {{attributes}}/>");
 		var frag = template({
 			attributes: "foo='bar'"
 		});
 		
 		equal(frag.childNodes[0].getAttribute('foo'), "bar", "set attribute");
 		
-		template = stash("<div {{#truthy}}foo='{{baz}}'{{/truthy}}/>")
+		template = stache("<div {{#truthy}}foo='{{baz}}'{{/truthy}}/>")
 		
 		frag = template({
 			truthy: true,
@@ -131,7 +131,7 @@ steal("can/view/stash","can/test", function(stash){
 			}));
 		}
 		
-		var stashed = stash("{{#each boxes}}"+
+		var stashed = stache("{{#each boxes}}"+
 				"<div class='box-view'>"+
 					"<div class='box' id='box-{{number}}'  style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>"+
 						"{{content}}"+
@@ -159,7 +159,7 @@ steal("can/view/stash","can/test", function(stash){
 			'Standalone Without Newline': '!'
 		},
 		interpolation: {
-			// stash can't leave standalone special characters alone, yet it will still work with HTML elements
+			// stache can't leave standalone special characters alone, yet it will still work with HTML elements
 			'Triple Mustache' : "These characters should not be HTML escaped: &amp; \" &lt; &gt;\n",
 			'Ampersand' : "These characters should not be HTML escaped: &amp; \" &lt; &gt;\n",
 		},
@@ -190,7 +190,7 @@ steal("can/view/stash","can/test", function(stash){
 			.done(function (data) {
 				can.each(data.tests, function (t) {
 					test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
-						// stash does not escape double quotes, mustache expects &quot;.
+						// stache does not escape double quotes, mustache expects &quot;.
 						// can uses \n for new lines, mustache expects \r\n.
 						var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '"')
 							//.replace(/\r\n/g, '\n');
@@ -214,7 +214,7 @@ steal("can/view/stash","can/test", function(stash){
 						if (t.data.lambda && t.data.lambda.js) {
 							t.data.lambda = eval('(' + t.data.lambda.js + ')');
 						}
-						var res = can.stash(t.template)(t.data);
+						var res = can.stache(t.template)(t.data);
 						var div = document.createElement("div");
 						div.appendChild(res);
 						
@@ -233,7 +233,7 @@ steal("can/view/stash","can/test", function(stash){
 	
 	test('Tokens returning 0 where they should diplay the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
-		var frag = stash( template )({
+		var frag = stache( template )({
 				completed: 0
 			});
 		can.append(can.$('#qunit-test-area'), frag);
@@ -253,7 +253,7 @@ steal("can/view/stash","can/test", function(stash){
 		};
 
 		// check hidden there
-		var frag = stash( template ) ({
+		var frag = stache( template ) ({
 				todos: todos
 			});
 		can.append(can.$('#qunit-test-area'), frag);
@@ -271,7 +271,7 @@ steal("can/view/stash","can/test", function(stash){
 			name: "<strong>Mrs Peters</strong>"
 		});
 
-		var tpl = stash( template );
+		var tpl = stache( template );
 
 		can.append(can.$('#qunit-test-area'), tpl(teacher));
 
@@ -313,13 +313,13 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("Handlebars helpers", function () {
-		stash.registerHelper('hello', function (options) {
+		stache.registerHelper('hello', function (options) {
 			return 'Should not hit this';
 		});
-		stash.registerHelper('there', function (options) {
+		stache.registerHelper('there', function (options) {
 			return 'there';
 		});
-		stash.registerHelper('bark', function (obj, str, number, options) {
+		stache.registerHelper('bark', function (obj, str, number, options) {
 			var hash = options.hash || {};
 			return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
 				'then the ' + hash.obj + ' ' + hash.action + ' ' +
@@ -341,7 +341,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("Handlebars advanced helpers (from docs)", function () {
-		stash.registerHelper('exercise', function (group, action, num, options) {
+		stache.registerHelper('exercise', function (group, action, num, options) {
 			if (group && group.length > 0 && action && num > 0) {
 				return options.fn({
 					group: group,
@@ -370,7 +370,7 @@ steal("can/view/stash","can/test", function(stash){
 			}
 		};
 
-		var template = stash(t.template)
+		var template = stache(t.template)
 		var frag = template(t.data);
 		
 		var div = document.createElement("div");
@@ -413,9 +413,9 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("No arguments passed to helper", function () {
-		var template = stash("{{noargHelper}}")
+		var template = stache("{{noargHelper}}")
 		
-		stash.registerHelper("noargHelper", function () {
+		stache.registerHelper("noargHelper", function () {
 			return "foo"
 		})
 		var div1 = document.createElement('div');
@@ -429,7 +429,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("No arguments passed to helper with list", function () {
-		var template = stash("{{#items}}{{noargHelper}}{{/items}}");
+		var template = stache("{{#items}}{{noargHelper}}{{/items}}");
 		var div = document.createElement('div');
 
 		div.appendChild(template({
@@ -449,8 +449,8 @@ steal("can/view/stash","can/test", function(stash){
 		var template;
 		var div = document.createElement('div');
 
-		template = stash("<table><thead><tr>{{#data}}{{>" +
-			can.test.path('view/stash/partial.stash') + "}}{{/data}}</tr></thead></table>")
+		template = stache("<table><thead><tr>{{#data}}{{>" +
+			can.test.path('view/stache/partial.stache') + "}}{{/data}}</tr></thead></table>")
 
 		var dom = template({
 			data: new can.Map({
@@ -564,7 +564,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 		
-		div.appendChild(stash(t.template)(t.data2));
+		div.appendChild(stache(t.template)(t.data2));
 		
 		deepEqual(div.innerHTML, expected, 'Using Observe.List');
 		t.data2.names.push('What');
@@ -618,7 +618,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("multi line elements", function () {
 		var text = "<div\n class=\"{{myClass}}\" />",
-			result = stash(text)({myClass: 'a'});
+			result = stache(text)({myClass: 'a'});
 		
 		equal(result.childNodes[0].className, "a", "class name is right");
 	})
@@ -628,7 +628,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 		
-		div.appendChild( stash(text)({
+		div.appendChild( stache(text)({
 			tags: "foo < bar < car > zar > poo",
 			quotes: "I use 'quote' fingers & &amp;ersands \"a lot\"",
 			number: 123
@@ -644,7 +644,7 @@ steal("can/view/stash","can/test", function(stash){
 		var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
 
 		var div = document.createElement('div');
-		div.appendChild( stash(text)({
+		div.appendChild( stache(text)({
 				tags: "<strong>foo</strong><strong>bar</strong>",
 				quotes: 'I use \'quote\' fingers "a lot"'
 		}) );
@@ -665,7 +665,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 
-		div.appendChild(stash(text)({
+		div.appendChild(stache(text)({
 			task: task
 		}));
 
@@ -692,7 +692,7 @@ steal("can/view/stash","can/test", function(stash){
 		
 		div = document.createElement('div');
 
-		div.appendChild( stash(text)({todos: todos}) );
+		div.appendChild( stache(text)({todos: todos}) );
 		
 		equal(div.getElementsByTagName('option')
 			.length, 1, '1 item in list')
@@ -725,7 +725,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 
-		div.appendChild( stash(text)({
+		div.appendChild( stache(text)({
 				obs: obs
 			}) );
 
@@ -761,7 +761,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 
-		div.appendChild(stash(text)({
+		div.appendChild(stache(text)({
 				obs: obs
 			}));
 
@@ -797,7 +797,7 @@ steal("can/view/stash","can/test", function(stash){
 
 			div = document.createElement('div');
 
-		div.appendChild(stash(text)({
+		div.appendChild(stache(text)({
 					obs: obs
 				}));
 
@@ -857,7 +857,7 @@ steal("can/view/stash","can/test", function(stash){
 				baz: 'some=\'property\''
 			}),
 
-			compiled = stash(text)({obs: obs})
+			compiled = stache(text)({obs: obs})
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -887,7 +887,7 @@ steal("can/view/stash","can/test", function(stash){
 				foo: 'data-bar="john doe\'s bar"'
 			}),
 
-			compiled = stash(text)({obs: obs})
+			compiled = stache(text)({obs: obs})
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -909,7 +909,7 @@ steal("can/view/stash","can/test", function(stash){
 			foo: 'foo'
 		});
 
-		var compiled = stash(text)({
+		var compiled = stache(text)({
 				obs: obs
 			});
 
@@ -928,7 +928,7 @@ steal("can/view/stash","can/test", function(stash){
 				className: 'someTask',
 				name: 'My Name'
 			}),
-			compiled = stash(text)({
+			compiled = stache(text)({
 					task: task
 				}),
 			div = document.createElement('div');
@@ -961,7 +961,7 @@ steal("can/view/stash","can/test", function(stash){
 				items: []
 			}),
 
-			compiled = stash(text)({obs: obs})
+			compiled = stache(text)({obs: obs})
 
 		var ul = document.createElement('ul');
 		ul.appendChild(compiled);
@@ -995,7 +995,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var text = '<div>{{ completed }}</div>',
 
-			compiled = stash(text)({
+			compiled = stache(text)({
 					completed: completed
 				});
 
@@ -1044,7 +1044,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var text = '<div>{{{ completed }}}</div>',
 
-			compiled = stash(text)({
+			compiled = stache(text)({
 					completed: completed
 				});
 
@@ -1086,7 +1086,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var text = '<div {{{ completed }}}></div>',
 
-			compiled = stash(text)({
+			compiled = stache(text)({
 					completed: completed
 				});
 
@@ -1128,7 +1128,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var text = '<div items="{{{ completed }}}"></div>',
 
-			compiled = stash(text)({
+			compiled = stache(text)({
 					completed: completed
 				});
 
@@ -1156,7 +1156,7 @@ steal("can/view/stash","can/test", function(stash){
 			val: 'foo="bar"'
 		})
 
-		var compiled = stash(text)({
+		var compiled = stache(text)({
 				obs: obs
 			});
 
@@ -1183,7 +1183,7 @@ steal("can/view/stash","can/test", function(stash){
 			}
 		})
 
-		var compiled = stash(text)({
+		var compiled = stache(text)({
 				obs: obs
 			});
 
@@ -1207,7 +1207,7 @@ steal("can/view/stash","can/test", function(stash){
 		var obs = new can.Map({
 			content: "<td>Justin</td>"
 		})
-		var compiled = stash(text)({
+		var compiled = stache(text)({
 				obs: obs
 			});
 		var div = document.createElement('div');
@@ -1231,7 +1231,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var div = document.createElement('div');
 
-		var template = stash('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
+		var template = stache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
 
 		div.appendChild(template({
 			items: items
@@ -1248,7 +1248,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("list nested in observe live bindings", function () {
-		var template = stash("<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
+		var template = stache("<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
 		var data = new can.Map({
 			items: [{
 				name: "Brian"
@@ -1269,7 +1269,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("trailing text", function () {
-		var template = stash("There are {{ length }} todos")
+		var template = stache("There are {{ length }} todos")
 		var div = document.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
 		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -1294,7 +1294,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("live binding textarea", function () {
-		var template = stash("<textarea>Before{{ obs.middle }}After</textarea>");
+		var template = stache("<textarea>Before{{ obs.middle }}After</textarea>");
 
 		var obs = new can.Map({
 			middle: "yes"
@@ -1314,7 +1314,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("reading a property from a parent object when the current context is an observe", function () {
-		var template = stash("{{#foos}}<span>{{bar}}</span>{{/foos}}")
+		var template = stache("{{#foos}}<span>{{bar}}</span>{{/foos}}")
 		var data = {
 			foos: new can.List([{
 				name: "hi"
@@ -1335,12 +1335,12 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("helper parameters don't convert functions", function () {
-		stash.registerHelper('helperWithFn', function (fn) {
+		stache.registerHelper('helperWithFn', function (fn) {
 			ok(can.isFunction(fn), 'Parameter is a function');
 			equal(fn(), 'Hit me!', 'Got the expected function');
 		});
 
-		var renderer = stash('{{helperWithFn test}}');
+		var renderer = stache('{{helperWithFn test}}');
 		renderer({
 			test: function () {
 				return 'Hit me!';
@@ -1349,12 +1349,12 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("computes as helper parameters don't get converted", function () {
-		stash.registerHelper('computeTest', function (no) {
+		stache.registerHelper('computeTest', function (no) {
 			equal(no(), 5, 'Got computed calue');
 			ok(no.isComputed, 'no is still a compute')
 		});
 
-		var renderer = stash('{{computeTest test}}');
+		var renderer = stache('{{computeTest test}}');
 		renderer({
 			test: can.compute(5)
 		});
@@ -1369,7 +1369,7 @@ steal("can/view/stash","can/test", function(stash){
 			"with": "wit{{#with test}}<span>{{3}}</span>{{/with}}"
 		};
 
-		var template = stash("There are {{ length }} todos")
+		var template = stache("There are {{ length }} todos")
 		var div = document.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
 		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -1377,7 +1377,7 @@ steal("can/view/stash","can/test", function(stash){
 		var renderer, result, data, actual, span;
 
 		for (result in staches) {
-			renderer = stash(staches[result]);
+			renderer = stache(staches[result]);
 			data = ["e", "a", "c", "h"];
 			div = document.createElement("div");
 			actual = renderer({
@@ -1401,7 +1401,7 @@ steal("can/view/stash","can/test", function(stash){
 		};
 
 		for (result in inv_staches) {
-			renderer = stash(inv_staches[result]);
+			renderer = stache(inv_staches[result]);
 			data = null;
 			div = document.createElement("div");
 			actual = renderer({
@@ -1427,7 +1427,7 @@ steal("can/view/stash","can/test", function(stash){
 			}, {
 				name: "Doug"
 			}]),
-			compiled = stash(text)({
+			compiled = stache(text)({
 					people: people
 				});
 
@@ -1438,7 +1438,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 	test("Observe with array attributes", function () {
-		var renderer = stash('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
+		var renderer = stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
 		var div = document.createElement('div');
 		var data = new can.Map({
 			todos: ['Line #1', 'Line #2', 'Line #3'],
@@ -1458,7 +1458,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("Observe list returned from the function", function () {
-		var renderer = stash('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
+		var renderer = stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
 		var div = document.createElement('div');
 		var todos = new can.List();
 		var data = {
@@ -1478,11 +1478,11 @@ steal("can/view/stash","can/test", function(stash){
 	// https://github.com/bitovi/canjs/issues/228
 	test("Contexts within helpers not always resolved correctly", function () {
 		
-		stash.registerHelper("bad_context", function (context, options) {
+		stache.registerHelper("bad_context", function (context, options) {
 			return ["<span>"+this.text+"</span> should not be ",options.fn(context)];
 		});
 
-		var renderer = stash('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
+		var renderer = stache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
 			data = {
 				next_level: {
 					text: "bar",
@@ -1503,7 +1503,7 @@ steal("can/view/stash","can/test", function(stash){
 	test("Contexts are not always passed to partials properly", function () {
 		can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
 
-		var renderer = stash('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
+		var renderer = stache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
 			data = {
 				first_level: {
 					second_level: "bar"
@@ -1530,7 +1530,7 @@ steal("can/view/stash","can/test", function(stash){
 			})
 		}
 		
-		stash.registerHelper("to_upper", function (fn, options) {
+		stache.registerHelper("to_upper", function (fn, options) {
 			if (!fn.fn) {
 				return typeof fn === "function" ? fn()
 					.toString()
@@ -1546,7 +1546,7 @@ steal("can/view/stash","can/test", function(stash){
 			}
 		});
 
-		var renderer = stash('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
+		var renderer = stache('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
 			data = {
 				next_level: {
 					text: function () {
@@ -1566,8 +1566,8 @@ steal("can/view/stash","can/test", function(stash){
 
 	// https://github.com/bitovi/canjs/issues/153
 	test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function () {
-		var renderer = stash('{{ #todos }}{{ name }}{{ /todos }}'),
-			renderer2 = stash('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
+		var renderer = stache('{{ #todos }}{{ name }}{{ /todos }}'),
+			renderer2 = stache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
 			todos = [{
 				id: 1,
 				name: 'Dishes'
@@ -1612,7 +1612,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("objects with a 'key' or 'index' property should work in helpers", function () {
-		var renderer = stash('{{ #obj }}{{ show_name }}{{ /obj }}'),
+		var renderer = stache('{{ #obj }}{{ show_name }}{{ /obj }}'),
 			div = document.createElement('div');
 
 		div.appendChild(renderer({
@@ -1661,13 +1661,13 @@ steal("can/view/stash","can/test", function(stash){
 			el.value = value() || "";
 		}
 		var val;
-		stash.registerHelper('value', function (value) {
+		stache.registerHelper('value', function (value) {
 			return function (el) {
 				val = new Value(el, value);
 			}
 		});
 
-		var renderer = stash('<input {{value user.name}}/>');
+		var renderer = stache('<input {{value user.name}}/>');
 
 		var div = document.createElement('div'),
 			u = new can.Map({
@@ -1694,7 +1694,7 @@ steal("can/view/stash","can/test", function(stash){
 		val.teardown();
 
 		// name is undefined
-		renderer = stash('<input {{value user.name}}/>');
+		renderer = stache('<input {{value user.name}}/>');
 		div = document.createElement('div');
 		u = new can.Map({});
 		div.appendChild(renderer({
@@ -1714,7 +1714,7 @@ steal("can/view/stash","can/test", function(stash){
 		val.teardown();
 
 		// name is null
-		renderer = stash('<input {{value user.name}}/>');
+		renderer = stache('<input {{value user.name}}/>');
 		div = document.createElement('div');
 		u = new can.Map({
 			name: null
@@ -1738,8 +1738,8 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("can pass in partials", function () {
-		var hello = can.view(can.test.path('view/stash/hello.stash'));
-		var fancyName = can.view(can.test.path('view/stash/fancy_name.stash'));
+		var hello = can.view(can.test.path('view/stache/hello.stache'));
+		var fancyName = can.view(can.test.path('view/stache/fancy_name.stache'));
 		var result = hello({
 			name: "World"
 		}, {
@@ -1754,7 +1754,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("can pass in helpers", function () {
-		var helpers = stash("<p>Hello {{cap name}}</p>");
+		var helpers = stache("<p>Hello {{cap name}}</p>");
 		var result = helpers({
 			name: "world"
 		}, {
@@ -1783,7 +1783,7 @@ steal("can/view/stash","can/test", function(stash){
 				id: 1,
 				name: "Dishes"
 			}]),
-			compiled = stash(text.join("\n"))({
+			compiled = stache(text.join("\n"))({
 					todos: todos
 				}),
 			div = document.createElement("div"),
@@ -1820,7 +1820,7 @@ steal("can/view/stash","can/test", function(stash){
 		var data = new can.Map({
 			colors: ["", 'red', 'green', 'blue']
 		}),
-			compiled = stash("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
+			compiled = stache("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
 			div = document.createElement('div');
 
 		div.appendChild(compiled);
@@ -1828,7 +1828,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("Null properties do not throw errors", function () {
-		var renderer = stash("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
+		var renderer = stache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
 			div = document.createElement('div'),
 			div2 = document.createElement('div'),
 			frag, frag2;
@@ -1862,9 +1862,9 @@ steal("can/view/stash","can/test", function(stash){
 			can.view.registerView(name, partials[name])
 		}
 
-		var renderer = stash("{{#bar}}{{> #nested_data}}{{/bar}}"),
-			renderer2 = stash("{{#bar}}{{> #nested_data2}}{{/bar}}"),
-			renderer3 = stash("{{#bar}}{{> #nested_data3}}{{/bar}}"),
+		var renderer = stache("{{#bar}}{{> #nested_data}}{{/bar}}"),
+			renderer2 = stache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
+			renderer3 = stache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
 			div = document.createElement('div'),
 			data = new can.Map({
 				foo: "bar",
@@ -1890,7 +1890,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	// Issue #333
 	test("Functions passed to default helpers should be evaluated", function () {
-		var renderer = stash("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
+		var renderer = stache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
 			div = document.createElement('div'),
 			data = new can.Map({
 				ducks: "",
@@ -1909,7 +1909,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("avoid global helpers", function () {
-		var noglobals = stash("{{sometext person.name}}");
+		var noglobals = stache("{{sometext person.name}}");
 
 		var div = document.createElement('div'),
 			div2 = document.createElement('div');
@@ -1943,7 +1943,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("Helpers always have priority (#258)", function () {
-		stash.registerHelper('callMe', function (arg) {
+		stache.registerHelper('callMe', function (arg) {
 			return arg + ' called me!';
 		});
 
@@ -2000,7 +2000,7 @@ steal("can/view/stash","can/test", function(stash){
 	test("Each does not redraw items", function () {
 
 		var animals = new can.List(['sloth', 'bear']),
-			renderer = stash("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+			renderer = stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 		var div = document.createElement('div')
 
@@ -2026,7 +2026,7 @@ steal("can/view/stash","can/test", function(stash){
 	test("Each works with the empty list", function () {
 
 		var animals = new can.List([]),
-			renderer = stash("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+			renderer = stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 		var div = document.createElement('div')
 
@@ -2059,7 +2059,7 @@ steal("can/view/stash","can/test", function(stash){
 				"{{/if}}" +
 				"!</div>";
 
-		var renderer = stash(template)
+		var renderer = stache(template)
 
 		var div = document.createElement('div');
 
@@ -2081,14 +2081,14 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("a compute gets passed to a plugin", function () {
 
-		stash.registerHelper('iamhungryforcomputes', function (value) {
+		stache.registerHelper('iamhungryforcomputes', function (value) {
 			ok(value.isComputed, "value is a compute")
 			return function (el) {
 
 			}
 		});
 
-		var renderer = stash('<input {{iamhungryforcomputes userName}}/>');
+		var renderer = stache('<input {{iamhungryforcomputes userName}}/>');
 
 		var div = document.createElement('div'),
 			u = new can.Map({
@@ -2102,7 +2102,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 	// CHANGED FROM MUSTACHE
 	test("Object references can escape periods for key names containing periods", function () {
-		var template = stash("{{#foo.bar}}" +
+		var template = stache("{{#foo.bar}}" +
 			"{{some\\.key\\.name}} {{some\\.other\\.key.with\\.more}}" +
 			"{{/foo.bar}}"),
 			data = {
@@ -2123,7 +2123,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("Computes should be resolved prior to accessing attributes", function () {
-		var template = stash("{{list.length}}"),
+		var template = stache("{{list.length}}"),
 			data = {
 				list: can.compute(new can.List())
 			};
@@ -2135,10 +2135,10 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("Helpers can be passed . or this for the active context", function () {
-		stash.registerHelper('rsvp', function (attendee, event) {
+		stache.registerHelper('rsvp', function (attendee, event) {
 			return attendee.name + ' is attending ' + event.name;
 		});
-		var template = stash("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
+		var template = stache("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
 			data = {
 				attendee: {
 					name: 'Justin'
@@ -2162,7 +2162,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		var callCount = 0;
 
-		stash.registerHelper("foo", function (text) {
+		stache.registerHelper("foo", function (text) {
 			callCount++;
 			equal(callCount, 1, "call count is only ever one")
 			return "result";
@@ -2172,7 +2172,7 @@ steal("can/view/stash","can/test", function(stash){
 			quux: false
 		});
 
-		var template = stash("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
+		var template = stache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
 
 		template(obs);
 
@@ -2182,18 +2182,18 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("helpers between tags (#469)", function () {
 
-		stash.registerHelper("items", function () {
+		stache.registerHelper("items", function () {
 			return function (textNode) {
 				equal(textNode.nodeType, 3, "right nodeType")
 			}
 		});
 
-		var template = stash("<ul>{{items}}</ul>");
+		var template = stache("<ul>{{items}}</ul>");
 		template();
 	})
 
 	test("hiding image srcs (#157)", function () {
-		var template = stash('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
+		var template = stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
 			data = new can.Map({
 				image: null
 			}),
@@ -2208,7 +2208,7 @@ steal("can/view/stash","can/test", function(stash){
 		notEqual(img.src, "", 'Image should have src')
 		equal(img.src, url, "images src is correct");
 
-		/*var renderer = stash('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
+		/*var renderer = stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
 		 url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
 		 data = new can.Map({
 		 user: 'Tina Fey',
@@ -2228,7 +2228,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("live binding in a truthy section", function () {
-		var template = stash('<div {{#width}}width="{{.}}"{{/width}}></div>'),
+		var template = stache('<div {{#width}}width="{{.}}"{{/width}}></div>'),
 			data = new can.Map({
 				width: '100'
 			});
@@ -2245,7 +2245,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("backtracks in mustache (#163)", function () {
 
-		var template = stash(
+		var template = stache(
 			"{{#grid.rows}}" +
 			"{{#grid.cols}}" +
 			"<div>{{columnData ../. .}}</div>" +
@@ -2288,7 +2288,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("support null and undefined as an argument", function () {
 
-		var template = stash("{{aHelper null undefined}}")
+		var template = stache("{{aHelper null undefined}}")
 
 		template({}, {
 			aHelper: function (arg1, arg2) {
@@ -2299,10 +2299,10 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("passing can.List to helper (#438)", function () {
-		var renderer = stash('<ul><li {{helper438 observeList}}>observeList broken</li>' +
+		var renderer = stache('<ul><li {{helper438 observeList}}>observeList broken</li>' +
 			'<li {{helper438 array}}>plain arrays work</li></ul>')
 
-		stash.registerHelper('helper438', function (classnames) {
+		stache.registerHelper('helper438', function (classnames) {
 			return function (el) {
 				el.innerHTML = 'Helper called';
 			};
@@ -2331,7 +2331,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("hiding image srcs (#494)", function () {
-		var template = stash('<img src="{{image}}"/>'),
+		var template = stache('<img src="{{image}}"/>'),
 			data = new can.Map({
 				image: ""
 			}),
@@ -2348,7 +2348,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("hiding image srcs with complex content (#494)", function () {
-		var template = stash('<img src="{{#image}}http://{{domain}}/{{loc}}.png{{/image}}"/>'),
+		var template = stache('<img src="{{#image}}http://{{domain}}/{{loc}}.png{{/image}}"/>'),
 			data = new can.Map({}),
 			imgData = {
 				domain: "canjs.us",
@@ -2369,7 +2369,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("style property is live-bindable in IE (#494)", 4, function () {
 
-		var template = stash('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+		var template = stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
 
 		var dims = new can.Map({
 			width: 5,
@@ -2390,7 +2390,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("empty lists update", 2, function () {
-		var template = stash('<p>{{#list}}{{.}}{{/list}}</p>');
+		var template = stache('<p>{{#list}}{{.}}{{/list}}</p>');
 		var map = new can.Map({
 			list: ['something']
 		});
@@ -2406,7 +2406,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("attributes in truthy section", function () {
-		var template = stash('<p {{#attribute}}data-test="{{attribute}}"{{/attribute}}></p>');
+		var template = stache('<p {{#attribute}}data-test="{{attribute}}"{{/attribute}}></p>');
 		var data1 = {
 			attribute: "test-value"
 		};
@@ -2427,7 +2427,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("live bound attributes with no '='", function () {
-		var template = stash('<input type="radio" {{#selected}}checked{{/selected}}>');
+		var template = stache('<input type="radio" {{#selected}}checked{{/selected}}>');
 		var data = new can.Map({
 			selected: false
 		});
@@ -2443,7 +2443,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("outputting array of attributes", function () {
-		var template = stash('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
+		var template = stache('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
 		var data = {
 			attribute: [{
 				"name": "data-test1",
@@ -2466,7 +2466,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("incremental updating of #each within an if", function () {
-		var template = stash('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
+		var template = stache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
 
 		var items = new can.List([{}, {}]);
 		var div = document.createElement('div');
@@ -2482,15 +2482,15 @@ steal("can/view/stash","can/test", function(stash){
 
 	});
 
-	test("stash.safeString", function () {
+	test("stache.safeString", function () {
 		var text = "Google",
 			url = "http://google.com/",
-			templateEscape = stash('{{link "' + text + '" "' + url + '"}}'),
-			templateUnescape = stash('{{{link "' + text + '" "' + url + '"}}}');
+			templateEscape = stache('{{link "' + text + '" "' + url + '"}}'),
+			templateUnescape = stache('{{{link "' + text + '" "' + url + '"}}}');
 		
-		stash.registerHelper('link', function (text, url) {
+		stache.registerHelper('link', function (text, url) {
 			var link = '<a href="' + url + '">' + text + '</a>';
-			return stash.safeString(link);
+			return stache.safeString(link);
 		});
 
 		var div = document.createElement('div');
@@ -2512,7 +2512,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("changing the list works with each", function () {
-		var template = stash("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
+		var template = stache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
 
 		var map = new can.Map({
 			list: ["foo"]
@@ -2530,7 +2530,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("nested properties binding (#525)", function () {
-		var template = stash("<label>{{name.first}}</label>");
+		var template = stache("<label>{{name.first}}</label>");
 
 		var me = new can.Map()
 
@@ -2558,7 +2558,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("Rendering indicies of an array with @index", function () {
-		var template = stash("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 		var list = [0, 1, 2, 3];
 
 		var lis = template({
@@ -2573,7 +2573,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 		var list = new can.List(['a', 'b', 'c']);
-		var template = stash("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
 		var lis = template({
 			list: list
@@ -2614,7 +2614,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test('Rendering keys of an object with #each and @key', function () {
-		var template = stash("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+		var template = stache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 		var obj = {
 			foo: 'string',
 			bar: 1,
@@ -2634,8 +2634,8 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test('Live bound iteration of keys of a can.Map with #each and @key', function () {
-		// delete stash._helpers.foo;
-		var template = stash("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+		// delete stache._helpers.foo;
+		var template = stache("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 		var map = new can.Map({
 			foo: 'string',
 			bar: 1,
@@ -2669,7 +2669,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test('Make sure data passed into template does not call helper by mistake', function () {
-		var template = stash("<h1>{{text}}</h1>");
+		var template = stache("<h1>{{text}}</h1>");
 		var data = {
 			text: 'with'
 		};
@@ -2681,7 +2681,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("no memory leaks with #each (#545)", function () {
-		var tmp = stash("<ul>{{#each children}}<li></li>{{/each}}</ul>");
+		var tmp = stache("<ul>{{#each children}}<li></li>{{/each}}</ul>");
 
 		var data = new can.Map({
 			children: [{
@@ -2711,7 +2711,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("each directly within live html section", function () {
 
-		var tmp = stash(
+		var tmp = stache(
 			"<ul>{{#if showing}}" +
 			"{{#each items}}<li>item</li>{{/items}}" +
 			"{{/if}}</ul>")
@@ -2739,7 +2739,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("mustache loops with 0 (#568)", function () {
 
-		var tmp = stash("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
+		var tmp = stache("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
 
 		var data = {
 			array: [0, null]
@@ -2754,7 +2754,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test('@index is correctly calculated when there are identical elements in the array', function () {
 		var data = new can.List(['foo', 'bar', 'baz', 'qux', 'foo']);
-		var tmp = stash('{{#each data}}{{@index}} {{/each}}');
+		var tmp = stache('{{#each data}}{{@index}} {{/each}}');
 
 		var div = document.createElement('div')
 
@@ -2768,7 +2768,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("if helper within className (#592)", function () {
 
-		var tmp = stash('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
+		var tmp = stache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
 		var data = new can.Map({
 			state: "ready"
 		})
@@ -2776,7 +2776,7 @@ steal("can/view/stash","can/test", function(stash){
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
 
-		tmp = stash('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
+		tmp = stache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
 		data = new can.Map({
 			state: "ready"
 		})
@@ -2795,14 +2795,14 @@ steal("can/view/stash","can/test", function(stash){
 			var div = document.createElement('div');
 
 			can.append(can.$('#qunit-test-area'), div);
-			can.append(can.$(div), stash(content)());
+			can.append(can.$(div), stache(content)());
 			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 		});
 	});
 
 	test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item (#613)", function () {
 		var list = new can.List(['a', 'b', 'c']);
-		var template = stash("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
 		var lis = template({
 			list: list
@@ -2817,19 +2817,19 @@ steal("can/view/stash","can/test", function(stash){
 		equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
 	});
 
-	test("stash.safestring works on live binding (#606)", function () {
+	test("stache.safestring works on live binding (#606)", function () {
 
 		var num = can.compute(1)
 
-		stash.registerHelper("safeHelper", function () {
+		stache.registerHelper("safeHelper", function () {
 
-			return stash.safeString(
+			return stache.safeString(
 				"<p>" + num() + "</p>"
 			)
 
 		});
 
-		var template = stash("<div>{{safeHelper}}</div>")
+		var template = stache("<div>{{safeHelper}}</div>")
 
 		var frag = template();
 		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "p", "got a p element");
@@ -2838,7 +2838,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("directly nested subitems and each (#605)", function () {
 
-		var template = stash("<div>" +
+		var template = stache("<div>" +
 
 			"{{#item}}" +
 			"<p>This is the item:</p>" +
@@ -2872,7 +2872,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test("directly nested live sections unbind without needing the element to be removed", function () {
-		var template = stash(
+		var template = stache(
 			"<div>" +
 			"{{#items}}" +
 			"<p>first</p>" +
@@ -2908,7 +2908,7 @@ steal("can/view/stash","can/test", function(stash){
 	})
 
 	test("direct live section", function () {
-		var template = stash("{{#if visible}}<label/>{{/if}}");
+		var template = stache("{{#if visible}}<label/>{{/if}}");
 
 		var data = new can.Map({
 			visible: true
@@ -2928,7 +2928,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test('Rendering keys of an object with #each and @key in a Component', function () {
 
-		var template = stash("<ul>" +
+		var template = stache("<ul>" +
 			"{{#each data}}" +
 			"<li>{{@key}} : {{.}}</li>" +
 			"{{/data}}" +
@@ -2953,7 +2953,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("{{each}} does not error with undefined list (#602)", function () {
 		var text = '<div>{{#each data}}{{name}}{{/each}}</div>'
-		var renderer = stash('<div>{{#each data}}{{name}}{{/each}}</div>');
+		var renderer = stache('<div>{{#each data}}{{name}}{{/each}}</div>');
 
 		equal(getText(text,{}), '<div></div>', 'Empty text rendered');
 		equal(getText(text,{
@@ -2971,7 +2971,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test('{{#each}} helper works reliably with nested sections (#604)', function () {
-		var renderer = stash('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
+		var renderer = stache('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
 			'{{else}}<ul>{{#each list2}}<li>{{name}}</li>{{/each}}</ul>{{/if}}');
 		var data = new can.Map({
 			first: true,
@@ -3012,7 +3012,7 @@ steal("can/view/stash","can/test", function(stash){
 			div = document.createElement("div"),
 			title = "Alpha&Beta";
 
-		div.appendChild(stash(html)(new can.Map({
+		div.appendChild(stache(html)(new can.Map({
 			test: title
 		})));
 
@@ -3041,7 +3041,7 @@ steal("can/view/stash","can/test", function(stash){
 					<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
 					<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
 					<span>{{print_hash prop=proto_prop}}</span><br/>',
-			renderer = stash(template),
+			renderer = stache(template),
 			data = new can.Foo({
 				own_prop: "quux"
 			}),
@@ -3097,7 +3097,7 @@ steal("can/view/stash","can/test", function(stash){
 
 	test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
 		
-		var renderer = stash('    {{description}}: \
+		var renderer = stache('    {{description}}: \
     <ul> \
     {{#each list}} \
         <li>{{name}}</li> \
@@ -3143,7 +3143,7 @@ steal("can/view/stash","can/test", function(stash){
 	});
 
 	test('can.compute should live bind when the value is changed to a Construct (#638)', function () {
-		var renderer = stash('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+		var renderer = stache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
 			div = document.createElement('div'),
 			// can.compute(null) will pass
 			counter = can.compute(),
@@ -3178,9 +3178,9 @@ steal("can/view/stash","can/test", function(stash){
 
 		document.body.appendChild(script)
 
-		//stash("itempartial","<label></label>")
+		//stache("itempartial","<label></label>")
 
-		var itemsTemplate = stash(
+		var itemsTemplate = stache(
 			"<div>" +
 			"{{#each items}}" +
 			"{{>itempartial}}" +

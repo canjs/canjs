@@ -162,7 +162,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			// If key is called as a helper,
 			if (isHelper) {
 				// try to find a registered helper.
-				if (stash.getHelper(key, options)) {
+				if (stache.getHelper(key, options)) {
 					return key;
 				}
 				// Support helper-like functions as anonymous helpers.
@@ -187,7 +187,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			var initialValue = computeData.initialValue;
 
 			// Use helper over the found value if the found value isn't in the current context
-			if ((initialValue === undefined) && stash.getHelper(key, options)) {
+			if ((initialValue === undefined) && stache.getHelper(key, options)) {
 				return key;
 			}
 
@@ -255,7 +255,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			//helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
 
 			// Check for a registered helper or a helper-like function.
-			if (helper = (getHelper && (typeof name === "string" && stash.getHelper(name, options)) || (can.isFunction(name) && !name.isComputed && {
+			if (helper = (getHelper && (typeof name === "string" && stache.getHelper(name, options)) || (can.isFunction(name) && !name.isComputed && {
 				fn: name
 			}))) {
 				// Add additional data to be used by helper functions
@@ -427,14 +427,14 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		addChars: function(chars){
 			this.last().addChars(chars)
 		},
-		addStash: function(mode, stash, state){
+		addStash: function(mode, stache, state){
 			if( !mode || mode === "{") {
-				this.last().addStash(mode, stash, state)
+				this.last().addStash(mode, stache, state)
 			} else if(mode === "#") {
 				var truthySection = new TextSubSection();
 				
 				this.last()
-					.addStash(mode, stash, state)
+					.addStash(mode, stache, state)
 					.subSection("truthy", truthySection);
 
 				
@@ -495,10 +495,10 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		addChars: function(chars){
 			this.values.push(chars)
 		},
-		addStash: function(mode, stash, state){
+		addStash: function(mode, stache, state){
 			this.values.push({
 				mode: mode,
-				stash: stash,
+				stache: stache,
 				state: state
 			});
 			return this;
@@ -520,7 +520,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 						return function(scope, options){
 							return process.call(this, scope, options, truthy, falsey)
 						}
-					})( stashValueProcessor(value.mode, value.stash, value.state),
+					})( stashValueProcessor(value.mode, value.stache, value.state),
 					    value.truthy && value.truthy.compile(), 
 					    value.falsey && value.falsey.compile());
 				}
@@ -560,7 +560,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		};
 	}
 	
-	var stash = can.stash = function(template){
+	var stache = can.stache = function(template){
 		var section = new Section();
 		var stack = [],
 			startSection = function(process){
@@ -955,10 +955,10 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	};
 	
-	can.stash.registerHelper = function(name, callback){
+	can.stache.registerHelper = function(name, callback){
 		helpers[name] = callback;
 	}
-	can.stash.getHelper = function(name, options){
+	can.stache.getHelper = function(name, options){
 		var helper = options.attr("helpers." + name);
 		if(!helper) {
 			helper = helpers[name];
@@ -968,7 +968,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	}
 	
-	stash.safeString = function(text){
+	stache.safeString = function(text){
 		return {
 				toString: function () {
 					return text;
@@ -977,18 +977,18 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 	}
 	
 	can.view.register({
-		suffix: "stash",
+		suffix: "stache",
 
-		contentType: "x-stash-template",
+		contentType: "x-stache-template",
 
 		// Returns a `function` that renders the view.
 
 		renderer: function (id, text) {
-			return stash(text);
+			return stache(text);
 		}
 	});
-	can.view.ext = ".stash";
+	can.view.ext = ".stache";
 	
-	return can.stash;
+	return can.stache;
 	
 })
