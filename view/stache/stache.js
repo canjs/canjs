@@ -558,9 +558,54 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			mode: mode,
 			text: text
 		};
+	};
+	
+	var cleanLineEndings = function(template){
+		var stack = [];
+		
+		return template.replace( /(?:(?:^|(\r?)\n)(\s*)(\{\{([^\}]*)\}\}\}?)([^\S\n\r]*)($|\r?\n))|(\{\{([^\}]*)\}\}\}?)/g, 
+			function(whole, returnChar, spaceBefore, special,innerSpecial, spaceAfter,ending, spaceLessSpecial, spaceLessInnerSpecial, startLocation){
+			
+			
+			
+			var modeAndText = getModeAndText(innerSpecial || spaceLessInnerSpecial,{}),
+				endingSectionType;
+			
+			if(modeAndText.mode == "#") {
+				stack.push("#")
+			} else if(modeAndText.mode === "^"){
+				stack.push("^")
+			} else if(modeAndText.mode === "/"){
+				endingSectionType = stack.pop();
+			}
+			if(spaceLessSpecial || modeAndText.mode === ">" || modeAndText.mode === "{") {
+				return whole;
+			} if( modeAndText.mode === "^" || modeAndText.mode === "#" || modeAndText.mode === "!" || endingSectionType) {
+				
+				return special+
+					
+					(
+						// If this was not first line and there was a \n, 
+						startLocation != 0 && ending.length
+						// keep the \n;
+						? returnChar+"\n" : 
+						// otherwise, remove it.
+						"");
+			} else {
+				return spaceBefore+special+spaceAfter+(spaceBefore.length || startLocation != 0 ? returnChar+"\n" : "");
+			}
+			
+		})
 	}
 	
+	"| This Is\n {{^boolean}}\n|\n {{/boolean}}\n| A Line\n"
+	"| This Is \n| \n| A Line\n";
+	"| This Is\n|\n| A Line\n"
 	var stache = can.stache = function(template){
+		
+		
+		template = cleanLineEndings(template);
+		
 		var section = new Section();
 		var stack = [],
 			startSection = function(process){
@@ -670,31 +715,8 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			chars: function( text ) {
 				// If the last thing was a comment, and the thing
 				// before that ended the line.
-				if(state.lastComment ) {
-					// Remove its newLine.
-					/*section.cleanLast(/\r?\n?[\s]*$/,"");
-					
-					// If we are starting another line right away, truncate that.
-					var returnCharacterLength = (text[0] === "\n" && 1) || (text.substr(0,2) === "\r\n"  && 2)
-					if(returnCharacterLength) {
-						state.removeIfLast = returnCharacterLength;
-						text = text.substr(returnCharacterLength);
-					}*/
-					section.updateLast(function(lastChars){
-						if(state.firstLine && !/[^\s\n\r]/.test(lastChars)) {
-							return lastChars.replace(/[\s]*$/,"") + text.replace(/^\r?\n?[\s]*/,"")
-						} else {
-							return lastChars + text;
-						}
-						;
-					});
-				} else {
-					if(state.firstLine && /^\n.+/.test(text) ) {
-						text = text.substr(1);
-					}
-					section.add(text);
-				}
 				
+				section.add(text)
 				
 				state.startLine =  text[0] === "\n";
 				// if this is the first line and only has spaces, treat like an end line
@@ -709,7 +731,8 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				// If the previous char ended the line,
 				// remove the line break.
 				if(state.endLine) {
-					section.cleanLast(/(\r?\n)[\s]*$/,"");
+					console.log("clearing last line", text)
+					//section.cleanLast(/(\r?\n)[\s]*$/,"");
 				}
 				
 				

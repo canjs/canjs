@@ -156,7 +156,9 @@ steal("can/view/stache","can/test", function(stache){
 	
 	var override = {
 		comments: {
-			'Standalone Without Newline': '!'
+			'Standalone Without Newline': '!',
+			// \r\n isn't possible within some browsers
+			'Standalone Line Endings': "|\n|"
 		},
 		interpolation: {
 			// stache can't leave standalone special characters alone, yet it will still work with HTML elements
@@ -168,9 +170,9 @@ steal("can/view/stache","can/test", function(stache){
 			'Standalone Without Newline': '^\n/'
 		},
 		partials: {
-			'Standalone Line Endings': '|\n>\n|',
-			'Standalone Without Newline': '>\n  >\n>',
-			'Standalone Without Previous Line': '  >\n>\n>',
+			'Standalone Line Endings': '|\n&gt;\n|',
+			'Standalone Without Newline': '&gt;\n  &gt;\n&gt;',
+			'Standalone Without Previous Line': '  &gt;\n&gt;\n&gt;',
 			'Standalone Indentation': '\\\n |\n<\n->\n|\n\n/\n',
 			'Inline Indentation': "  |  &gt;\n&gt;\n"
 		},
@@ -201,7 +203,10 @@ steal("can/view/stache","can/test", function(stache){
 								.replace(/\}>/g, '}]');
 							expected = expected.replace(/</g, '[')
 								.replace(/>/g, ']');
+						} else if(spec === 'partials'){
+							expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
 						}
+						
 
 						// register the partials in the spec
 						if (t.partials) {
@@ -218,7 +223,7 @@ steal("can/view/stache","can/test", function(stache){
 						var div = document.createElement("div");
 						div.appendChild(res);
 						
-						
+						console.log("a=",div.innerHTML,"e=", expected)
 						deepEqual(div.innerHTML, expected);
 					});
 				});
@@ -3202,7 +3207,28 @@ steal("can/view/stache","can/test", function(stache){
 		equal(labels.length, 1, "first label removed")
 	});
 	
-	
+	test("#each with #if directly nested (#750)", function(){
+		var template = stache("<ul>{{#each list}} {{#if visible}}<li>{{name}}</li>{{/if}} {{/each}}</ul>");
+		var data = new can.Map({
+		    list: [{
+		        name: 'first',
+		        visible: true
+		    }, {
+		        name: 'second',
+		        visible: false
+		    }, {
+		        name: 'third',
+		        visible: true
+		    }]
+		});
+		
+		var frag = template(data);
+		
+		data.attr('list').pop();
+		
+		equal(frag.childNodes[0].getElementsByTagName('li').length, 1, "only first should be visible")
+		
+	})
 	
 	
 	
