@@ -38,7 +38,9 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			return (arr[arr.length - 1] = value);
 		},
 		jsonParse = function(str){
-			if(window.JSON) {
+			if(str === "undefined") {
+				return undefined;
+			} else if(window.JSON) {
 				return JSON.parse(str);
 			} else {
 				return eval("("+str+")");
@@ -91,7 +93,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			return function processor(scope, options, truthyRenderer, falseyRenderer){
 				// TODO: FIGURE OUT A FASTER WAY!
 				//if(!evaluator) {
-					evaluator = process( scope, options, mode, arged, truthyRenderer, falseyRenderer)
+					evaluator = process( scope, options, mode, arged, truthyRenderer, falseyRenderer, true)
 				//}
 				var res = evaluator();
 				return res == null ? "" : ""+res;
@@ -107,14 +109,18 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			
 			
 			return function processor(scope, options, truthyRenderer, falseyRenderer){
-				var result = process( scope, options, mode, arged, truthyRenderer, falseyRenderer );
+				
+				var result = process( scope, options, mode, arged, truthyRenderer, falseyRenderer, state.tag );
 				
 				var compute = can.compute(result, this, false);
 				compute.bind("change", emptyHandler);
 				var value = compute();
 				
 				if(typeof value === "function") {
+					// make sure this does not read anything.
+					var old = can.__clearReading();
 					value(this)
+					can.__setReading(old);
 				} else if( compute.hasDependencies ) {
 					
 					if(state.attr) {
@@ -123,7 +129,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 					else if( state.tag )  {
 						live.attributes( this, compute );
 					}
-					else if(state.text){
+					else if(state.text && typeof value !== "object"){
 						live.text(this, compute, this.parentNode);
 					} 
 					else {
@@ -192,7 +198,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 				return compute;
 			}
 		},
-		process = function (scope, options, mode, arged, truthyRenderer, falseyRenderer) {
+		process = function (scope, options, mode, arged, truthyRenderer, falseyRenderer, stringOnly) {
 
 			// here we are going to cache the lookup values so future calls are much faster
 			var args = [],
@@ -287,10 +293,8 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 						var isObserveList = isObserveLike(value),
 							frag = document.createDocumentFragment();
 						if(isObserveList ? value.attr("length") : value.length) {
-							for (i = 0; i < value.length; i++) {
-								append(frag, helperOptions.fn( isObserveList ? value.attr('' + i) : value[i], options) );
-							}
-							return frag;
+							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
+								(value, isObserveList, helperOptions, options);
 						} else {
 							return helperOptions.inverse(scope, options);
 						}
@@ -306,6 +310,20 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 					return '' + (value != null ? value : '');
 				}
 			};
+		},
+		getItemsFragContent = function(items, isObserveList, helperOptions, options){
+			var frag = document.createDocumentFragment();
+			for (var i = 0, len = items.length; i < len; i++) {
+				append(frag, helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options) );
+			}
+			return frag;
+		},
+		getItemsStringContent = function(items, isObserveList, helperOptions, options){
+			var txt = "";
+			for (var i = 0, len = items.length; i < len; i++) {
+				txt += helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options);
+			}
+			return txt;
 		},
 		append = function(frag, content){
 			content && frag.appendChild(typeof content === "string" ? document.createTextNode(content) : content);
@@ -619,7 +637,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			},
 			attrEnd: function(){
 				if(state.node.section) {
-					state.node.section.addChars("\"");
+					state.node.section.addChars("\" ");
 				} else {
 					if(!state.node.attrs) {
 						state.node.attrs = {};
@@ -836,16 +854,56 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 	
 	var helpers = {
 		"each": function(items, options){
-			return function(el){
-				var cb = function (item, index) {
-							
-							return options.fn(options.scope.add({
-									"@index": index
-								}).add(item));
+			var resolved = resolve(items),
+				result = [],
+				keys,
+				key,
+				i;
+			
+			if( resolved instanceof can.List || (items && items.isComputed && resolved === undefined)) {
+				return function(el){
+					var cb = function (item, index) {
 								
-						};
-				live.list(el, items, cb, options.context, el.parentNode);
+						return options.fn(options.scope.add({
+								"@index": index
+							}).add(item));
+							
+					};
+					live.list(el, items, cb, options.context, el.parentNode);
+				};
 			}
+			
+			var expr = resolved;
+
+			if ( !! expr && isArrayLike(expr)) {
+				for (i = 0; i < expr.length; i++) {
+					result.push(options.fn(options.scope.add({
+							"@index": i
+						})
+						.add(expr[i])));
+				}
+			} else if (isObserveLike(expr)) {
+				keys = can.Map.keys(expr);
+				// listen to keys changing so we can livebind lists of attributes.
+
+				for (i = 0; i < keys.length; i++) {
+					key = keys[i];
+					result.push(options.fn(options.scope.add({
+							"@key": key
+						})
+						.add(expr[key])));
+				}
+			} else if (expr instanceof Object) {
+				for (key in expr) {
+					result.push(options.fn(options.scope.add({
+							"@key": key
+						})
+						.add(expr[key])));
+				}
+				
+			}
+			return result;
+			
 		},
 		'if': function (expr, options) {
 			var value;
@@ -896,6 +954,7 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 			}
 		}
 	};
+	
 	can.stash.registerHelper = function(name, callback){
 		helpers[name] = callback;
 	}
@@ -909,7 +968,13 @@ steal("can/view/parser","can/view/target", "can/view/live","can/view/scope",func
 		}
 	}
 	
-	
+	stash.safeString = function(text){
+		return {
+				toString: function () {
+					return text;
+				}
+			};
+	}
 	
 	can.view.register({
 		suffix: "stash",

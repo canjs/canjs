@@ -21,17 +21,20 @@ steal("can/view", function(){
 	var startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
 	           "(" +
 	               "(?:\\s*"+
-	                   "(?:(?:"+attributeNames+attributeEqAndValue+")|"+
+	                   "(?:(?:"+
+	                   		"(?:"+attributeNames+")?"+
+	                   		attributeEqAndValue+")|"+
 	                   "(?:"+matchStash+")+)"+
 	                ")*"+
 	            ")\\s*(\\/?)>"),
 		endTag = new RegExp("^<\\/(["+alphaNumericHU+"]+)[^>]*>"),
-		attr = new RegExp("(?:("+attributeNames+")"+
+		attr = new RegExp("(?:"+
+					"(?:("+attributeNames+")|"+stash+")"+
 								"(?:"+spaceEQspace+
 									"(?:"+
 										"(?:"+dblQuote2dblQuote+")|(?:"+quote2quote+")|([^>\\s]+)"+
 									")"+
-								")?)|(?:"+stash+")","g"),
+								")?)","g"),
 		mustache = new RegExp(stash,"g"),
 		txtBreak = /<|\{\{/;
 
@@ -156,41 +159,8 @@ steal("can/view", function(){
 				stack.push(tagName);
 			}
 			// find attribute or special
-			
+			HTMLParser.parseAttrs(rest, handler)
 
-			
-			var attrs = [];
-
-			rest.replace(attr, function (match, name) {
-				if(arguments[5]) {
-					handler.special(arguments[5])
-				} else {
-					var value = arguments[2] ? arguments[2] :
-						arguments[3] ? arguments[3] :
-						arguments[4] ? arguments[4] :
-						fillAttrs[name] ? name : "";
-					handler.attrStart(name);
-					
-					var last = mustache.lastIndex = 0;
-					var res = mustache.exec(value);
-					while(res) {
-						var chars = value.substring(
-							last, 
-							mustache.lastIndex - res[0].length );
-						chars.length && handler.attrValue(chars);
-						handler.special(res[1]);
-						last = mustache.lastIndex;
-						res = mustache.exec(value);
-					}
-					var chars = value.substr(
-							last, 
-							value.length );
-					if(chars) {
-						handler.attrValue(chars);
-					}
-					handler.attrEnd(name);
-				}
-			});
 
 			handler.end(tagName,unary);
 			
@@ -225,6 +195,46 @@ steal("can/view", function(){
 		}
 		handler.done();
 	};
+	HTMLParser.parseAttrs = function(rest, handler){
+		
+		
+			rest.replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
+				if(special) {
+					handler.special(special);
+					
+				}
+				if(name || dblQuote || singleQuote || val) {
+					var value = arguments[3] ? arguments[3] :
+						arguments[4] ? arguments[4] :
+						arguments[5] ? arguments[5] :
+						fillAttrs[name.toLowerCase()] ? name : "";
+					handler.attrStart(name);
+					
+					var last = mustache.lastIndex = 0;
+					var res = mustache.exec(value);
+					while(res) {
+						var chars = value.substring(
+							last, 
+							mustache.lastIndex - res[0].length );
+						chars.length && handler.attrValue(chars);
+						handler.special(res[1]);
+						last = mustache.lastIndex;
+						res = mustache.exec(value);
+					}
+					var chars = value.substr(
+							last, 
+							value.length );
+					if(chars) {
+						handler.attrValue(chars);
+					}
+					handler.attrEnd(name);
+				}
+
+				
+			});
+		
+		
+	}
 
 	return HTMLParser;
 	

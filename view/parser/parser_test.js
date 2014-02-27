@@ -88,6 +88,34 @@ steal("can/view/parser", function(parser){
 		
 	})
 	
-
+	test("special with a custom attribute", function(){
+		
+		parser('<div {{#attribute}} {{name}}="{{value}}" {{/attribute}}></div>',makeChecks([
+			["start", ["div", false]],
+			["special", ["#attribute"]],
+			["special", ["name"]],
+			["attrStart", [""]],
+			["special", ["value"]],
+			["attrEnd", [""]],		//10
+			["special",["/attribute"]],
+			["end", ["div", false]],
+			["close",["div"]],
+			["done",[]]
+		]))
+		
+		
+	});
+	
+	test("single attribute value", function(){
+		
+		parser('<input DISABLED/>',makeChecks([
+			["start", ["input", true]],
+			["attrStart", ["DISABLED"]],
+			["attrValue", ["DISABLED"]],
+			["attrEnd", ["DISABLED"]],	
+			["end", ["input", true]],
+			["done",[]]
+		]))
+	})
 	
 })
