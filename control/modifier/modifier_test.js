@@ -1,4 +1,4 @@
-steal('can/util', 'can/control/modifier', function (can) {
+steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 	if (!window.jQuery) {
 		return;
 	}
@@ -109,5 +109,43 @@ steal('can/util', 'can/control/modifier', function (can) {
 				start();
 			}, 40);
 		}, 40);
+	});
+
+	test('Modifiers should work with objects that don\'t implement delegate (#754)', function() {
+		stop();
+		var some_event_fired = false,
+				some_event_debounce_fired = false;
+
+		// Create event-dispatching class
+		var some_object = {
+			bind: can.bind,
+			unbind: can.unbind,
+			dispatch: can.dispatch
+		};
+
+		// Create control listening for object events
+		var SomeControl = can.Control({
+			setObject: function(object) {
+				this.options.object = object;
+				this.on();
+			},
+			"{object} some_event": function() {
+				some_event_fired = true;
+			},
+			"{object} some_event:debounce(50)": function() {
+				some_event_debounce_fired = true;
+			}
+		});
+
+		var some_control = new SomeControl(document.body);
+		some_control.setObject(some_object);
+
+		// Fire the event
+		some_object.dispatch("some_event");
+		equal(some_event_fired, true, "Basic event handler fired");
+		setTimeout(function() {
+			equal(some_event_debounce_fired, true, "Debounced event handler fired");
+			start();
+		}, 250);
 	});
 });
