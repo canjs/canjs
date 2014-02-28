@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'can/util/array/each.js', 'can/util/inserted', 'can/util/event.js', function ($, can) {
+steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "can/util/inserted", "can/util/event.js", function ($, can, attr) {
 	var isBindableElement = function (node) {
 		// In IE8 window.window !== window.window, so we allow == here.
 		/*jshint eqeqeq:false*/
@@ -87,7 +87,8 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', 'can/util/inserted'
 			return function () {
 				return fn.apply(context, arguments);
 			};
-		}
+		},
+		attr: attr
 	});
 	// Wrap binding functions.
 	/*$.each(['bind','unbind','undelegate','delegate'],function(i,func){
@@ -137,23 +138,95 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', 'can/util/inserted'
 		}
 		return oldDomManip.apply(this, arguments);
 	};
-	$(document.createElement('div'))
-		.append(document.createElement('div'));
-	$.fn.domManip = cbIndex === 2 ? function (args, table, callback) {
-		return oldDomManip.call(this, args, table, function (elem) {
-			var elems = elem.nodeType === 11 ? can.makeArray(elem.childNodes) : null;
-			var ret = callback.apply(this, arguments);
-			can.inserted(elems ? elems : [elem]);
-			return ret;
+	$(document.createElement("div"))
+		.append(document.createElement("div"));
+
+	$.fn.domManip = (cbIndex === 2 ?
+		function (args, table, callback) {
+			return oldDomManip.call(this, args, table, function (elem) {
+				var elems;
+				if (elem.nodeType === 11) {
+					elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			});
+		} :
+		function (args, callback) {
+			return oldDomManip.call(this, args, function (elem) {
+				var elems;
+				if (elem.nodeType === 11) {
+					elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			});
 		});
-	} : function (args, callback) {
-		return oldDomManip.call(this, args, function (elem) {
-			var elems = elem.nodeType === 11 ? can.makeArray(elem.childNodes) : null;
-			var ret = callback.apply(this, arguments);
-			can.inserted(elems ? elems : [elem]);
-			return ret;
-		});
-	};
+
+	if (!can.attr.MutationObserver) {
+		// handle via calls to attr
+		var oldAttr = $.attr;
+		$.attr = function (el, attrName) {
+			var oldValue, newValue;
+			if (arguments.length >= 3) {
+				oldValue = oldAttr.call(this, el, attrName);
+			}
+			var res = oldAttr.apply(this, arguments);
+			if (arguments.length >= 3) {
+				newValue = oldAttr.call(this, el, attrName);
+			}
+			if (newValue !== oldValue) {
+				can.attr.trigger(el, attrName, oldValue);
+			}
+			return res;
+		};
+		var oldRemove = $.removeAttr;
+		$.removeAttr = function (el, attrName) {
+			var oldValue = oldAttr.call(this, el, attrName),
+				res = oldRemove.apply(this, arguments);
+
+			if (oldValue != null) {
+				can.attr.trigger(el, attrName, oldValue);
+			}
+			return res;
+		};
+		$.event.special.attributes = {
+			setup: function () {
+				can.data(can.$(this), "canHasAttributesBindings", true);
+			},
+			teardown: function () {
+				$.removeData(this, "canHasAttributesBindings");
+			}
+		};
+	} else {
+		// setup a special events
+		$.event.special.attributes = {
+			setup: function () {
+				var self = this;
+				var observer = new can.attr.MutationObserver(function (mutations) {
+					mutations.forEach(function (mutation) {
+						var copy = can.simpleExtend({}, mutation);
+						can.trigger(self, copy, []);
+					});
+
+				});
+				observer.observe(this, {
+					attributes: true,
+					attributeOldValue: true
+				});
+				can.data(can.$(this), "canAttributesObserver", observer);
+			},
+			teardown: function () {
+				can.data(can.$(this), "canAttributesObserver")
+					.disconnect();
+				$.removeData(this, "canAttributesObserver");
+
+			}
+		};
+	}
+
 	$.event.special.inserted = {};
 	$.event.special.removed = {};
 	return can;

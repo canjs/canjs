@@ -180,6 +180,12 @@
 			"type": "core",
 			"isDefault": true,
 			"hidden": true
+		},
+		"can/util/attr": {
+			"name": "can.util.attr",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
 		}
 	},
 	"types": {

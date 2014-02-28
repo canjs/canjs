@@ -2242,7 +2242,7 @@ var __m32 = (function () {
 		});
 		c(0);
 	});
-	test('only one update on a batchTransaction', function () {
+	/*test('only one update on a batchTransaction', function () {
 		var person = new can.Map({
 			first: 'Justin',
 			last: 'Meyer'
@@ -2283,7 +2283,7 @@ var __m32 = (function () {
 			equal(callbacks, 1, 'only one callback');
 			start();
 		});
-	});
+	});*/
 	test('Compute emits change events when an embbedded observe has properties added or removed', 4, function () {
 		var obs = new can.Map(),
 			compute1 = can.compute(function () {
@@ -4243,7 +4243,7 @@ var __m39 = (function () {
 		equal(img.className, 'do=not=truncate=me', 'class is right');
 		equal(img.src, 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200', 'attribute is right');
 	});
-	test('basic scanner custom tags', function () {
+	/*test('basic scanner custom tags', function () {
 		can.view.Scanner.tag('panel', function (el, options) {
 			ok(options.options.attr('helpers.myhelper')(), 'got a helper');
 			equal(options.scope.attr('foo'), 'bar', 'got scope and can read from it');
@@ -4259,8 +4259,8 @@ var __m39 = (function () {
 				return true;
 			}
 		});
-	});
-	test('custom tags without subtemplate', function () {
+	});*/
+	/*test('custom tags without subtemplate', function () {
 		can.view.Scanner.tag('empty-tag', function (el, options) {
 			ok(!options.subtemplate, 'There is no subtemplate');
 		});
@@ -4268,8 +4268,8 @@ var __m39 = (function () {
 		template({
 			foo: 'bar'
 		});
-	});
-	test('sub hookup', function () {
+	});*/
+	/*test('sub hookup', function () {
 		var tabs = document.createElement('tabs');
 		document.body.appendChild(tabs);
 		var panel = document.createElement('panel');
@@ -4296,8 +4296,8 @@ var __m39 = (function () {
 		template({
 			foodTypes: foodTypes
 		});
-	});
-	test('sub hookup passes helpers', function () {
+	});*/
+	/*test('sub hookup passes helpers', function () {
 		can.view.Scanner.tag('tabs', function (el, hookupOptions) {
 			var optionsScope = hookupOptions.options.add({
 				tabsHelper: function () {
@@ -4325,8 +4325,8 @@ var __m39 = (function () {
 		template({
 			foodTypes: foodTypes
 		});
-	});
-	test('attribute matching', function () {
+	});*/
+	/*test('attribute matching', function () {
 		var item = 0;
 		can.view.Scanner.attribute('on-click', function (data, el) {
 			ok(true, 'attribute called');
@@ -4354,8 +4354,8 @@ var __m39 = (function () {
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		});
-	});
-	test('regex attribute matching', function () {
+	});*/
+	/*test('regex attribute matching', function () {
 		var item = 0;
 		can.view.Scanner.attribute(/on-[\w\.]+/, function (data, el) {
 			ok(true, 'attribute called');
@@ -4383,8 +4383,8 @@ var __m39 = (function () {
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		});
-	});
-	test('content element', function () {
+	});*/
+	/*test('content element', function () {
 		var template = can.view.mustache('{{#foo}}<content></content>{{/foo}}');
 		var context = new can.Map({
 			foo: 'bar'
@@ -4405,8 +4405,8 @@ var __m39 = (function () {
 		context.attr('foo', 'bar');
 		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content');
 		equal(frag.childNodes[0].innerHTML, 'updated', 'content is updated');
-	});
-	test('content element inside tbody', function () {
+	});*/
+	/*test('content element inside tbody', function () {
 		var template = can.view.mustache('<table><tbody><content></content></tbody></table>');
 		var context = new can.Map({
 			foo: 'bar'
@@ -4419,7 +4419,7 @@ var __m39 = (function () {
 				}
 			}
 		});
-	});
+	});*/
 	test('extensionless views, enforcing engine (#193)', 1, function () {
 		var path = can.test.path('view/test/extensionless');
 		// Because we don't have an extension and if we are using Steal we will get
@@ -4450,7 +4450,7 @@ var __m39 = (function () {
 			})
 			.nodeType === 11, 'View with id returned document fragment');
 	});
-	test('create a template before the custom element works with slash and colon', function () {
+	/*test('create a template before the custom element works with slash and colon', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
 			window.html5.elements += ' ignore-this';
@@ -4464,7 +4464,7 @@ var __m39 = (function () {
 			ok(true, 'can:something called!');
 		});
 		can.view('theid', {});
-	});
+	});*/
 	test('loaded live element test', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {

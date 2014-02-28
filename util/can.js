@@ -28,6 +28,9 @@ steal(function () {
 		return d;
 	};
 
+	// this is here in case can.compute hasn't loaded
+	can.__reading = function () {};
+
 	//!steal-remove-start
 	can.dev = {
 		logLevel: 0,
