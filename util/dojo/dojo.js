@@ -388,18 +388,29 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/util/event.js', 'can/util
 			}
 		};
 		can.delegate = function (selector, ev, cb) {
-			if (this.on || this.nodeType) {
+			if (!selector) {
+				// Dojo fails with no selector
+				can.bind.call(this, ev, cb);
+			} else if (this.on || this.nodeType) {
 				dojoAddBinding(new dojo.NodeList(this), selector + ':' + ev, cb);
 			} else if (this.delegate) {
 				this.delegate(selector, ev, cb);
+			} else {
+				// make it bind-able ...
+				can.bind.call(this, ev, cb);
 			}
 			return this;
 		};
 		can.undelegate = function (selector, ev, cb) {
-			if (this.on || this.nodeType) {
+			if (!selector) {
+				// Dojo fails with no selector
+				can.unbind.call(this, ev, cb);
+			} else if (this.on || this.nodeType) {
 				dojoRemoveBinding(new dojo.NodeList(this), selector + ':' + ev, cb);
 			} else if (this.undelegate) {
 				this.undelegate(selector, ev, cb);
+			} else {
+				can.unbind.call(this, ev, cb);
 			}
 			return this;
 		};

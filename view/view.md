@@ -24,9 +24,9 @@ a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFra
         
     document.getElementById('contacts').appendChild(frag)
 
-@param {String|Object} idOrUrl The URL of a template or the id of a template embedded in a script tag or an object containing a `url` property for the URL to load and an `engine` property for the view engine (`mustache` or `ejs`) if it can't be infered from the file extensions or script tag type.
-@param {Object} data Data to render the template with.
-@param {Object.<String, function>+} helpers An object of named local helper functions.
+@param {String|Object} idOrUrl The URL of a template or the id of a template embedded in a script tag or an object containing a `url` property for the URL to load and an `engine` property for the view engine (`mustache` or `ejs`) if it can't be infered from the file extensions or script tag type.  
+@param {Object} data Data to render the template with.  
+@param {Object.<String, function>+} helpers An object of named local helper functions.  
 @return {documentFragment} The rendered result of the template converted to 
 html elements within a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment].
 
@@ -109,6 +109,8 @@ matches the type of template:
 
     document.getElementById('recipes')
       .appendChild( can.view('templates/recipes.ejs', recipeData ) )
+
+Note: If you are using [RequireJS](http://requirejs.org/), the URL will be relative to its [`baseUrl`](http://requirejs.org/docs/api.html#config-baseUrl).
 
 ### Creating templates from strings
 
