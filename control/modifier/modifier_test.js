@@ -1,8 +1,4 @@
 steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
-	if (!window.jQuery) {
-		return;
-	}
-
 	module('can/control/modifier');
 	test('nested selectors', function () {
 		var paw, tail;
@@ -14,13 +10,11 @@ steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 				tail++;
 			}
 		});
-		$('#test-content')
-			.html('<div class=\'cat\'><div class=\'paw\'></div><div class=\'tail\'></div></div>');
-		new controllerClass($('#test-content'));
+		can.$('#qunit-test-area')[0].innerHTML = '<div class=\'cat\'><div class=\'paw\'></div><div class=\'tail\'></div></div>';
+		new controllerClass(can.$('#qunit-test-area'));
 		paw = 0;
 		tail = 0;
-		$('.tail')
-			.trigger('click');
+		can.trigger(can.$('.tail'), 'click');
 		equal(tail, 1);
 		equal(paw, 0);
 	});
@@ -46,34 +40,26 @@ steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 				run3++;
 			}
 		});
-		$('#test-content')
-			.html('<div id="foo"><span>Test</span></div><div id="bar"></div>');
+		can.$('#qunit-test-area')[0].innerHTML = '<div id="foo"><span>Test</span></div><div id="bar"></div>';
 		/**/
 		var controller1 = new controllerClass('#foo', {
-			binder: $(document.body)
+			binder: can.$(document.body)
 		}),
 			run = 0,
 			run2 = 0,
 			run3 = 0,
 			fooToTheBar;
 		new controllerClass('#bar', {
-			binder: $(document.body)
+			binder: can.$(document.body)
 		});
 		// Do a bunch of clicks!
-		$('#foo')
-			.trigger('click');
-		$('#foo span')
-			.trigger('click');
-		$('#bar')
-			.trigger('click');
-		$('#foo')
-			.trigger('click');
-		$('#bar')
-			.trigger('click');
-		$('#foo')
-			.trigger('click');
-		$('#bar')
-			.trigger('click');
+		can.trigger(can.$('#foo'), 'click');
+		can.trigger(can.$('#foo span'), 'click');
+		can.trigger(can.$('#bar'), 'click');
+		can.trigger(can.$('#foo'), 'click');
+		can.trigger(can.$('#bar'), 'click');
+		can.trigger(can.$('#foo'), 'click');
+		can.trigger(can.$('#bar'), 'click');
 		// Make sure foo is still undefined (should be > 30ms before its defined)
 		ok(!fooToTheBar, '`fooToTheBar` is undefined.');
 		ok('bar' in controller1, 'Method name gets aliased correctly');
@@ -87,25 +73,17 @@ steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 			equal(run, 2, '`run` is 2');
 			equal(run2, 1, '`run2` is 1');
 			// Do a bunch more clicks!
-			$('#foo')
-				.trigger('click');
-			$('#bar')
-				.trigger('click');
-			$('#foo')
-				.trigger('click');
-			$('#bar')
-				.trigger('click');
-			$('#foo')
-				.trigger('click');
-			$('#bar')
-				.trigger('click');
-			$(document.body)
-				.trigger('click');
+			can.trigger(can.$('#foo'), 'click');
+			can.trigger(can.$('#bar'), 'click');
+			can.trigger(can.$('#foo'), 'click');
+			can.trigger(can.$('#bar'), 'click');
+			can.trigger(can.$('#foo'), 'click');
+			can.trigger(can.$('#bar'), 'click');
+			can.trigger(can.$(document.body), 'click');
 			setTimeout(function () {
 				equal(run3, 1, '`run3` is 1');
 				equal(run, 4, '`run` is 4');
-				$('#foo')
-					.remove();
+				can.remove(can.$('#foo'));
 				start();
 			}, 40);
 		}, 40);
