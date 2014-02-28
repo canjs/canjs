@@ -136,11 +136,11 @@
 		var some_object = {
 			bind: function() {
 				bind_fallback_fired = true;
-				return can.bind.apply(this, arguments);
+				return can.addEvent.apply(this, arguments);
 			},
 			unbind: function() {
 				unbind_fallback_fired = true;
-				return can.unbind.apply(this, arguments);
+				return can.removeEvent.apply(this, arguments);
 			},
 			dispatch: can.dispatch
 		};
