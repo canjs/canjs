@@ -194,7 +194,10 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js', 'can/util/fragment.js'
 			this.delegate(selector, ev, cb);
 		} else if (this.addEvent) {
 			this.addEvent(ev + ':relay(' + selector + ')', cb);
-		} else {}
+		} else {
+			// make it bind-able ...
+			can.bind.call(this, ev, cb);
+		}
 		return this;
 	};
 	can.undelegate = function (selector, ev, cb) {
@@ -202,7 +205,9 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js', 'can/util/fragment.js'
 			this.undelegate(selector, ev, cb);
 		} else if (this.removeEvent) {
 			this.removeEvent(ev + ':relay(' + selector + ')', cb);
-		} else {}
+		} else {
+			can.unbind.call(this, ev, cb);
+		}
 		return this;
 	};
 	var optionsMap = {

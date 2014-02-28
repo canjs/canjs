@@ -442,6 +442,9 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 			addBinding(can.$(this), selector, ev, cb);
 		} else if (this.delegate) {
 			this.delegate(selector, ev, cb);
+		} else {
+			// make it bind-able ...
+			can.bind.call(this, ev, cb);
 		}
 		return this;
 	};
@@ -450,6 +453,8 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', 'can/util/fragment.js', 'ca
 			removeBinding(can.$(this), selector, ev, cb);
 		} else if (this.undelegate) {
 			this.undelegate(selector, ev, cb);
+		} else {
+			can.unbind.call(this, ev, cb);
 		}
 		return this;
 	};
