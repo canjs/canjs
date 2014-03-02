@@ -1,5 +1,5 @@
 /* jshint maxdepth:7*/
-steal('can/view', './elements', function (can, elements) {
+steal('can/view', './elements', "can/view/callbacks",function (can, elements, elementCallbacks) {
 
 	/**
 	 * Helper(s)
@@ -379,15 +379,9 @@ steal('can/view', './elements', function (can, elements) {
 								// Otherwise we are creating a quote.
 								// TODO: does this handle `\`?
 								var attr = getAttrName();
-								if (VIEWATTR.attributes[attr]) {
+								if (elementCallbacks.attr(attr)) {
 									specialStates.attributeHookups.push(attr);
-								} else {
-									can.each(VIEWATTR.regExpAttributes, function (attrMatcher) {
-										if (attrMatcher.match.test(attr)) {
-											specialStates.attributeHookups.push(attr);
-										}
-									});
-								}
+								} 
 
 								if (specialAttribute) {
 
@@ -465,7 +459,7 @@ steal('can/view', './elements', function (can, elements) {
 
 								}
 
-								if (tagName !== "!--" && (VIEWTAG.tags[tagName] || automaticCustomElementCharacters.test(tagName))) {
+								if (tagName !== "!--" && (elementCallbacks.tag.tags[tagName] || automaticCustomElementCharacters.test(tagName))) {
 									// if the content tag is inside something it doesn't belong ...
 									if (tagName === "content" && elements.tagMap[top(tagNames)]) {
 										// convert it to an element that will work
@@ -656,30 +650,7 @@ steal('can/view', './elements', function (can, elements) {
 	};
 
 	// can.view.attr
-	var VIEWATTR = can.view.attr = function (attributeName, attrHandler) {
-		if (typeof attributeName === "string") {
-			VIEWATTR.attributes[attributeName] = attrHandler;
-		} else {
-			VIEWATTR.regExpAttributes[attributeName] = {
-				match: attributeName,
-				handler: attrHandler
-			};
-		}
-	};
-
-	VIEWATTR.attributes = {};
-	VIEWATTR.regExpAttributes = {};
-
-	var VIEWTAG = can.view.tag = function (tagName, tagHandler) {
-		// if we have html5shive ... re-generate
-		if (window.html5) {
-			window.html5.elements += " " + tagName;
-			window.html5.shivDocument();
-		}
-
-		VIEWTAG.tags[tagName.toLowerCase()] = tagHandler;
-	};
-	VIEWTAG.tags = {};
+	
 	// This is called when there is a special tag
 	can.view.pending = function (viewData) {
 		// we need to call any live hookups
@@ -699,7 +670,7 @@ steal('can/view', './elements', function (can, elements) {
 						proxyMethods: false
 					})
 						.value,
-					tagCallback = helperTagCallback || VIEWTAG.tags[tagName];
+					tagCallback = helperTagCallback || elementCallbacks.tag.tags[tagName];
 
 				// If this was an element like <foo-bar> that doesn't have a component, just render its content
 				var scope = viewData.scope,
@@ -726,15 +697,8 @@ steal('can/view', './elements', function (can, elements) {
 
 			can.each(viewData && viewData.attrs || [], function (attributeName) {
 				viewData.attributeName = attributeName;
-				if (VIEWATTR.attributes[attributeName]) {
-					VIEWATTR.attributes[attributeName](el, viewData);
-				} else {
-					can.each(VIEWATTR.regExpAttributes, function (attrMatcher) {
-						if (attrMatcher.match.test(attributeName)) {
-							attrMatcher.handler(el, viewData);
-						}
-					});
-				}
+				var callback = elementCallbacks.attr(attributeName);
+				callback && callback(el, viewData);
 			});
 
 		});

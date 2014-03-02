@@ -1,4 +1,4 @@
-steal("can/view/stache","can/test", function(stache){
+steal("can/view/stache", "can/view","can/test",function(stache, view){
 	
 	
 	module("can/view/stache",{
@@ -223,19 +223,13 @@ steal("can/view/stache","can/test", function(stache){
 						var div = document.createElement("div");
 						div.appendChild(res);
 						
-						console.log("a=",div.innerHTML,"e=", expected)
 						deepEqual(div.innerHTML, expected);
 					});
 				});
 			});
 	});
 	
-	
-	/*
-	
-	
-	
-	
+
 	test('Tokens returning 0 where they should diplay the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
 		var frag = stache( template )({
@@ -331,8 +325,8 @@ steal("can/view/stache","can/test", function(stache){
 				hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 		});
 		var t = {
-			template: "{{hello}} {{there}}!\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
-			expected: "Hello there!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
+			template: "{{hello}} {{there}}! {{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
+			expected: "Hello there! The dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
 			data: {
 				name: 'dog',
 				hello: 'Hello'
@@ -455,7 +449,7 @@ steal("can/view/stache","can/test", function(stache){
 		var div = document.createElement('div');
 
 		template = stache("<table><thead><tr>{{#data}}{{>" +
-			can.test.path('view/stache/partial.stache') + "}}{{/data}}</tr></thead></table>")
+			can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
 
 		var dom = template({
 			data: new can.Map({
@@ -852,7 +846,6 @@ steal("can/view/stache","can/test", function(stache){
 
 	});
 
-	*/
 
 	test('hookup within a tag', function () {
 		var text = '<div {{ obs.foo }} ' + '{{ obs.baz }}>lorem ipsum</div>',
@@ -1291,7 +1284,7 @@ steal("can/view/stache","can/test", function(stache){
 		}])
 
 		var div = document.createElement('div');
-		div.appendChild(can.view(can.test.path('view/mustache/test/recursive.mustache'), {
+		div.appendChild(can.view(can.test.path('view/stache/test/recursive.stache'), {
 			items: data
 		}));
 		ok(/class="?leaf"?/.test(div.innerHTML), "we have a leaf")
@@ -1608,7 +1601,7 @@ steal("can/view/stache","can/test", function(stache){
 
 		div.appendChild(renderer(liveData));
 		equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-		console.log("updated!")
+		
 		liveData.todos.push({
 			id: 3,
 			name: 'Knives'
@@ -1743,8 +1736,8 @@ steal("can/view/stache","can/test", function(stache){
 	});
 
 	test("can pass in partials", function () {
-		var hello = can.view(can.test.path('view/stache/hello.stache'));
-		var fancyName = can.view(can.test.path('view/stache/fancy_name.stache'));
+		var hello = can.view(can.test.path('view/stache/test/hello.stache'));
+		var fancyName = can.view(can.test.path('view/stache/test/fancy_name.stache'));
 		var result = hello({
 			name: "World"
 		}, {
@@ -1967,40 +1960,40 @@ steal("can/view/stache","can/test", function(stache){
 		deepEqual( getText( t.template, t.data), expected);
 	});
 
-	if (typeof steal !== 'undefined') {
-		test("avoid global helpers", function () {
-			stop();
-			steal('view/mustache/test/noglobals.mustache', function (noglobals) {
-				var div = document.createElement('div'),
-					div2 = document.createElement('div');
-				var person = new can.Map({
-					name: "Brian"
-				});
-				var result = noglobals({
-					person: person
-				}, {
-					sometext: function (name) {
-						return "Mr. " + name()
-					}
-				});
-				var result2 = noglobals({
-					person: person
-				}, {
-					sometext: function (name) {
-						return name() + " rules"
-					}
-				});
-				div.appendChild(result);
-				div2.appendChild(result2);
+	
+	test("avoid global helpers", function () {
 
-				person.attr("name", "Ajax")
+		var noglobals = stache("{{sometext person.name}}");
 
-				equal(div.innerHTML, "Mr. Ajax");
-				equal(div2.innerHTML, "Ajax rules");
-				start();
-			});
+		var div = document.createElement('div'),
+			div2 = document.createElement('div');
+		var person = new can.Map({
+			name: "Brian"
 		});
-	}
+		var result = noglobals({
+			person: person
+		}, {
+			sometext: function (name) {
+				return "Mr. " + name()
+			}
+		});
+		var result2 = noglobals({
+			person: person
+		}, {
+			sometext: function (name) {
+				return name() + " rules"
+			}
+		});
+		div.appendChild(result);
+		div2.appendChild(result2);
+
+		person.attr("name", "Ajax")
+
+		equal(div.innerHTML, "Mr. Ajax");
+		equal(div2.innerHTML, "Ajax rules");
+		
+	});
+	
 
 	test("Each does not redraw items", function () {
 
@@ -2078,7 +2071,7 @@ steal("can/view/stache","can/test", function(stache){
 
 		equal(div.getElementsByTagName('span')
 			.length, 1, "There is 1 sloth");
-		console.log("POPING")
+			
 		animals.pop();
 
 		equal(div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!");
@@ -3228,8 +3221,42 @@ steal("can/view/stache","can/test", function(stache){
 		
 		equal(frag.childNodes[0].getElementsByTagName('li').length, 1, "only first should be visible")
 		
+	});
+	
+	test("can.view.tag", function(){
+		
+		expect(4);
+		
+		can.view.tag("stache-tag", function(el, tagData){
+			ok(tagData.scope instanceof can.view.Scope, "got scope");
+			ok(tagData.options instanceof can.view.Scope, "got options");
+			equal(typeof tagData.subtemplate, "function", "got subtemplate");
+			var frag = tagData.subtemplate(tagData.scope.add({last: "Meyer"}), tagData.options);
+			
+			equal( frag.childNodes[0].innerHTML, "Justin Meyer", "rendered right");
+		});
+		
+		var template = stache("<stache-tag><span>{{first}} {{last}}</span></stache-tag>")
+		
+		template({first: "Justin"});
+		
 	})
 	
-	
+	test("can.view.attr", function(){
+		
+		expect(3);
+		
+		can.view.attr("stache-attr", function(el, attrData){
+			ok(attrData.scope instanceof can.view.Scope, "got scope");
+			ok(attrData.options instanceof can.view.Scope, "got options");
+			equal(attrData.attributeName, "stache-attr", "got attribute name");
+			
+		});
+		
+		var template = stache("<div stache-attr='foo'></div>")
+		
+		template({});
+		
+	})
 	
 })
