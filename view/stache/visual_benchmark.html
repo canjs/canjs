@@ -54,55 +54,57 @@
 			"{{#each boxes}}"+
 				"<div class='box-view'>"+
 					"<div class='box' id='box-{{number}}'  style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>"+
-						//"{{content}}"+
+						"{{content}}"+
 					"</div>"+
 				"</div>"+
 			"{{/each}}");
 			
 			
-			var boxes = [],
-				Box = can.Map.extend({
-					count: 0,
-					content: 0,
-					tick: function(){
-						var count = this.attr("count")+1
-						this.attr({
-							count: count,
-							left: Math.cos(count / 10) * 10,
-							top: Math.sin(count / 10) * 10,
-							color: count % 255,
-							content: count
-						})
-					}
-				});
-			
-			for(var i =0; i < 100; i++) {
-				boxes.push( new Box({ number: i }) );
-			}
-			
-			var frag = template({boxes: boxes});
-			var div = document.createElement("div")
-			document.body.appendChild(div)
-			div.appendChild(frag)
+		var boxes = [],
+			Box = can.Map.extend({
+				count: 0,
+				content: 0,
+				tick: function(){
+					var count = this.attr("count")+1
+					this.attr({
+						count: count,
+						left: Math.cos(count / 10) * 10,
+						top: Math.sin(count / 10) * 10,
+						color: count % 255,
+						content: count
+					})
+				}
+			});
 		
-			var count = 0;
+		for(var i =0; i < 100; i++) {
+			boxes.push( new Box({ number: i }) );
+		}
 		
-			$("#start").click(function(){
-				setTimeout(function(){
-					count++
-					//console.log("TICK")
-					for(var n = 0 ; n < boxes.length; n++) {
-	            		boxes[n].tick();
-	            	}
-	            	
-	            	if(count < 200) {
-	            		setTimeout(arguments.callee, 0);
-	            	} else {
-	            		count = 0;
-	            	}
-	            	
-				},0)
-			})
+		var frag = template({boxes: boxes});
+		var div = document.createElement("div")
+		document.body.appendChild(div)
+		div.appendChild(frag)
+	
+		var count = 0;
+		
+	
+		$("#start").click(function(){
+			var start = new Date();
+			setTimeout(function(){
+				count++
+				for(var n = 0 ; n < boxes.length; n++) {
+            		boxes[n].tick();
+            	}
+            	
+            	if(count < 100) {
+            		setTimeout(arguments.callee, 0);
+            	} else {
+            		console.log("100 spinning boxes spinning 100 times", new Date - start)
+            		count = 0;
+            	}
+            	
+			},0)
+		})
 		
 			
             	

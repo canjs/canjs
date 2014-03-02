@@ -98,7 +98,8 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 	can.dispatch = function (event, args) {
-		if (!this.__bindEvents) {
+		var events = this.__bindEvents
+		if (!events) {
 			return;
 		}
 		if (typeof event === 'string') {
@@ -107,13 +108,11 @@ steal('can/util/can.js', function (can) {
 			};
 		}
 		var eventName = event.type,
-			handlers = (this.__bindEvents[eventName] || [])
-				.slice(0),
+			handlers = (events[eventName] || []).slice(0),
 			ev;
 		args = [event].concat(args || []);
 		for (var i = 0, len = handlers.length; i < len; i++) {
-			ev = handlers[i];
-			ev.handler.apply(this, args);
+			handlers[i].handler.apply(this, args);
 		}
 	};
 	return can;

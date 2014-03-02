@@ -154,6 +154,12 @@ steal("can/util",
 				};
 
 			}
+			
+			if( !mode && !args.length && name && name.isComputed ) {
+				return function(){
+					return name()
+				}
+			}
 			return function () {
 
 				var value;
@@ -266,10 +272,16 @@ steal("can/util",
 			
 		},
 		makeStringBranchRenderer: function(mode, text){
-			var arged = getStashArgsAndHash(text);
+			var arged = getStashArgsAndHash(text),
+				modeAndText = mode+text;
+			
 			return function processor(scope, options, truthyRenderer, falseyRenderer){
 				// TODO: We should be able to cache the evaluators
-				var evaluator = process( scope, options, mode, arged, truthyRenderer, falseyRenderer, true)
+				//if(!evaluator) {
+				var evaluator = scope.__cache[modeAndText];
+				if(!evaluator) {
+					evaluator = scope.__cache[modeAndText] = process( scope, options, mode, arged, truthyRenderer, falseyRenderer, true)
+				}
 				var res = evaluator();
 				return res == null ? "" : ""+res;
 			}

@@ -56,6 +56,11 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 		}
 	});
 	
+	var passTruthyFalsey = function(process, truthy, falsey){
+		return function(scope, options){
+			return process.call(this, scope, options, truthy, falsey)
+		};
+	};
 	
 	var TextSection = function(){
 		this.values = [];
@@ -71,18 +76,16 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 		compile: function(){
 			var values = this.values,
 				len = values.length;
+				
 			for(var i = 0 ; i < len; i++) {
 				var value = this.values[i];
 				if(typeof value === "object") {
-					values[i] = (function(process, truthy, falsey){
-						return function(scope, options){
-							return process.call(this, scope, options, truthy, falsey)
-						}
-					})( value.process,
+					values[i] = passTruthyFalsey( value.process,
 					    value.truthy && value.truthy.compile(), 
 					    value.falsey && value.falsey.compile());
 				}
 			}
+			
 			return function(scope, options){
 				var txt = "",
 					value;

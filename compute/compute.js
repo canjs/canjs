@@ -30,7 +30,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// each `__read` call's Observed valeus.
 	var stack = [];
 
-	can.__readStack = stack;
 	// Calls a function given a context and returns
 	// the return value of the function and the observable properties and events
 	// that were read. Example: `{value: 100, observed: Observed}`
@@ -500,7 +499,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			value: cur,
 			parent: prev
 		};
-
 	};
 
 	return can.compute;
