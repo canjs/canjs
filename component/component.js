@@ -1,8 +1,7 @@
-steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can) {
+steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks) {
 	// ## Helpers
 	// Attribute names to ignore for setting scope values.
-	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i,
-		viewAttr = can.view.attr;
+	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i;
 	/**
 	 * @add can.Component
 	 */
@@ -119,14 +118,8 @@ steal("can/util", "can/control", "can/observe", "can/view/mustache", "can/view/b
 					var name = can.camelize(node.nodeName.toLowerCase()),
 						value = node.value;
 					// ignore attributes already in ScopeMappings
-					if (component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name) || viewAttr.attributes[node.nodeName]) {
+					if (component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name) || viewCallbacks.attr(node.nodeName)) {
 						return;
-					}
-
-					for (var attrNames in viewAttr.regExpAttributes) {
-						if (viewAttr.regExpAttributes[attrNames].match.test(node.nodeName)) {
-							return;
-						}
 					}
 
 					// Cross-bind the value in the scope to this 

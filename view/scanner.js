@@ -1,5 +1,5 @@
 /* jshint maxdepth:7*/
-steal('can/view', './elements', "can/view/callbacks",function (can, elements, elementCallbacks) {
+steal('can/view', './elements', "can/view/callbacks",function (can, elements, viewCallbacks) {
 
 	/**
 	 * Helper(s)
@@ -379,7 +379,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, el
 								// Otherwise we are creating a quote.
 								// TODO: does this handle `\`?
 								var attr = getAttrName();
-								if (elementCallbacks.attr(attr)) {
+								if (viewCallbacks.attr(attr)) {
 									specialStates.attributeHookups.push(attr);
 								} 
 
@@ -459,7 +459,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, el
 
 								}
 
-								if (tagName !== "!--" && (elementCallbacks.tag.tags[tagName] || automaticCustomElementCharacters.test(tagName))) {
+								if (tagName !== "!--" && (viewCallbacks.tag(tagName) )) {
 									// if the content tag is inside something it doesn't belong ...
 									if (tagName === "content" && elements.tagMap[top(tagNames)]) {
 										// convert it to an element that will work
@@ -663,41 +663,12 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, el
 			});
 
 			if (viewData.tagName) {
-
-				var tagName = viewData.tagName,
-					helperTagCallback = viewData.options.read('tags.' + tagName, {
-						isArgument: true,
-						proxyMethods: false
-					})
-						.value,
-					tagCallback = helperTagCallback || elementCallbacks.tag.tags[tagName];
-
-				// If this was an element like <foo-bar> that doesn't have a component, just render its content
-				var scope = viewData.scope,
-					res = tagCallback ? tagCallback(el, viewData) : scope;
-
-				//!steal-remove-start
-				if (!tagCallback) {
-					can.dev.warn('can/view/scanner.js: No custom element found for ' + tagName);
-				}
-				//!steal-remove-end
-
-				// If the tagCallback gave us something to render with, and there is content within that element
-				// render it!
-				if (res && viewData.subtemplate) {
-
-					if (scope !== res) {
-						scope = scope.add(res);
-					}
-					var frag = can.view.frag(viewData.subtemplate(scope, viewData.options));
-					can.appendChild(el, frag);
-				}
-
+				viewCallbacks.tagHandler(el, viewData.tagName, viewData);
 			}
 
 			can.each(viewData && viewData.attrs || [], function (attributeName) {
 				viewData.attributeName = attributeName;
-				var callback = elementCallbacks.attr(attributeName);
+				var callback = viewCallbacks.attr(attributeName);
 				callback && callback(el, viewData);
 			});
 

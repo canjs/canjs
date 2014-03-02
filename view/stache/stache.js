@@ -6,7 +6,7 @@ steal(
 	"./mustache_core.js",
 	"./mustache_helpers.js",
 	"can/view/callbacks",
-	function(parser, target,  HTMLSection, TextSection, mustacheCore, mustacheHelpers, elementCallback ){
+	function(parser, target,  HTMLSection, TextSection, mustacheCore, mustacheHelpers, viewCallbacks ){
 	
 	
 	var stache = can.stache = function(template){
@@ -99,7 +99,7 @@ steal(
 					section.push(state.node);
 				}
 				
-				if( elementCallback.tag(tagName) ) {
+				if( viewCallbacks.tag(tagName) ) {
 					section.startSubSection();
 				}
 				
@@ -107,7 +107,7 @@ steal(
 			},
 			close: function( tagName ) {
 				
-				if( elementCallback.tag(tagName) ) {
+				if( viewCallbacks.tag(tagName) ) {
 					
 					var renderer = section.endSubSection();
 				}
@@ -118,7 +118,7 @@ steal(
 						oldNode.attributes = [];
 					}
 					oldNode.attributes.push(function(scope, options){
-						elementCallback.tagHandler(this,tagName, {
+						viewCallbacks.tagHandler(this,tagName, {
 							scope: scope,
 							options: options,
 							subtemplate: renderer
@@ -150,7 +150,7 @@ steal(
 					state.node.attrs[state.attr.name] = 
 						state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
 					
-					var attrCallback = elementCallback.attr(attrName);
+					var attrCallback = viewCallbacks.attr(attrName);
 					if(attrCallback) {
 						if( !state.node.attributes ) {
 							state.node.attributes = [];

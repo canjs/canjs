@@ -1397,12 +1397,12 @@ steal('can/util',
 				};
 
 			}
-			if( !mode && !args.length && can.isFunction(name) && name.isComputed ) {
+			/*if( !mode && !args.length && can.isFunction(name) && name.isComputed ) {
 				if(!scopeAndOptions.special) {
 					name.canReadForChangeEvent = false;
 				}
 				return name;
-			}
+			}*/
 			return function () {
 				//{{#foo.bar zed ted}}
 				var value;

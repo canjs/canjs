@@ -392,7 +392,9 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(div.firstChild.innerHTML, 'c', 'updated render text');
 	});
 	test('live binding and removeAttr', function () {
-		var text = '<% if(obs.attr("show")) { %>' + '<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + '<% } %>',
+		var text = '<% if(obs.attr("show")) { %>' + 
+				'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
+			'<% } %>',
 			obs = new can.Map({
 				show: true,
 				className: 'myMessage',
@@ -407,8 +409,10 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 				}),
 			div = document.createElement('div');
 		div.appendChild(can.view.frag(compiled));
+		
 		var p = div.getElementsByTagName('p')[0],
 			span = p.getElementsByTagName('span')[0];
+		
 		equal(p.getAttribute('some'), 'myText', 'initial render attr');
 		equal(getAttr(p, 'class'), 'myMessage', 'initial render class');
 		equal(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
@@ -421,7 +425,9 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		obs.attr('attributes', 'some="newText"');
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 		obs.removeAttr('message');
-		equal(span.innerHTML, 'undefined', 'text node value is undefined');
+		
+		equal(span.innerHTML, '', 'text node value is empty');
+		
 		obs.attr('message', 'Warp drive, Mr. Sulu');
 		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 		obs.removeAttr('show');

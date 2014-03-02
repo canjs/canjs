@@ -1,19 +1,46 @@
-steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test", "can/util/fixture", function () {
+steal("can/view/callbacks",
+	"can/view", 
+	"can/view/ejs", 
+	"can/view/mustache", 
+	"can/observe", 
+	"can/test", 
+	"can/util/fixture", function (viewCallbacks) {
 	
+	var restoreInfo = [];
+	
+	var copy = function(source){
+		if(can.isArray(source)) {
+			var copy = source.splice(0);
+		} else {
+			var copy = can.extend({}, source);
+		}
+		
+		restoreInfo.push({source: source, copy: copy});
+	}
+	
+	var restore = function(){
+		can.each(restoreInfo, function(data){
+			if(can.isArray(data.source) ) {
+				
+				data.source.splice(0, data.source.length);
+				data.source.push.apply(data.source, data.copy)
+			} else {
+				for( prop in data.source) {
+					delete data.source[prop]
+				}
+				can.extend(data.source, data.copy);
+			}
+			
+		})
+	}
 	module('can/view', {
 		setup: function () {
-			this.scannerAttributes = can.view.attr.attributes;
-			this.scannerRegExpAttributes = can.view.attr.regExpAttributes;
-			this.scannerTags = can.view.tag.tags;
-			can.view.attr.attributes = {};
-			can.view.attr.regExpAttributes = {};
-			can.view.tag.tags = can.extend({}, can.view.tag.tags);
+			copy(viewCallbacks._attributes);
+			copy(viewCallbacks._regExpAttributes);
+			copy(viewCallbacks._tags);
 		},
 		teardown: function () {
-			can.view.attr.attributes = this.scannerAttributes;
-			can.view.attr.regExpAttributes = this.scannerRegExpAttributes;
-			can.view.tag.tags = this.scannerTags;
-
+			restore();
 		}
 	});
 
@@ -266,10 +293,12 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 				domainList: domainList
 			}),
 			div = document.createElement('div');
+			
 		div.appendChild(frag);
+		
 		can.append(can.$('#qunit-test-area'), div);
+		
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
-		can.view.nodeLists.unregister(domainList); //equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 	});
 	test('Live binding on number inputs', function () {
 		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
@@ -521,6 +550,7 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 			ok(true, "attribute called");
 			equal(attrData.attributeName, "on-click", "attr is on click");
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
+			
 			var cur = attrData.scope.attr(".");
 
 			equal(foodTypes[item], cur, "can get the current scope");
@@ -531,7 +561,9 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 
 			item++;
 		});
+		
 		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
+		
 		var foodTypes = new can.List([{
 			title: 'Fruits',
 			content: 'oranges, apples'
@@ -542,7 +574,9 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 			title: 'Sweets',
 			content: 'ice cream, candy'
 		}]);
+		
 		var doSomething = function () {};
+		
 		template({
 			foodTypes: foodTypes,
 			doSomething: doSomething
@@ -563,8 +597,10 @@ steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test"
 				}
 			}
 		});
-		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content');
+		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content', "found content element");
+		
 		equal(frag.childNodes[0].innerHTML, 'updated', 'content is updated');
+		
 		context.removeAttr('foo');
 		equal(frag.childNodes[0].nodeType, 3, 'only a text element remains');
 		context.attr('foo', 'bar');

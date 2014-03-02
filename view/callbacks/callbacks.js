@@ -30,6 +30,8 @@ steal("can/util", "can/view",function(can){
 	var attributes = {};
 	var regExpAttributes = [];
 
+	var automaticCustomElementCharacters = /[-\:]/
+
 	var tag = can.view.tag = function (tagName, tagHandler) {
 		if(tagHandler) {
 			// if we have html5shive ... re-generate
@@ -40,13 +42,21 @@ steal("can/util", "can/view",function(can){
 	
 			tags[tagName.toLowerCase()] = tagHandler;
 		} else {
-			return tags[tagName.toLowerCase()];
+			var cb = tags[tagName.toLowerCase()];
+			if(!cb && automaticCustomElementCharacters.test(tagName)) {
+				// empty callback for things that look like special tags
+				cb = function(){};
+			}
+			return cb;
 		}
 		
 	};
 	var tags = {};
 	
 	return {
+		_tags: tags,
+		_attributes: attributes,
+		_regExpAttributes: regExpAttributes,
 		tag: tag,
 		attr: attr,
 		// handles calling back a tag callback
@@ -76,7 +86,7 @@ steal("can/util", "can/view",function(can){
 					scope = scope.add(res);
 				}
 				var result = tagData.subtemplate(scope, tagData.options);
-				var frag = typeof result === "string" ? can.view.frag() : result;
+				var frag = typeof result === "string" ? can.view.frag(result) : result;
 				can.appendChild(el, frag);
 			}
 		}
