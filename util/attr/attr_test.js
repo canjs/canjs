@@ -1,5 +1,4 @@
-(function () {
-
+steal('can/util/attr', function () {
 	module("can/util/attr");
 
 	test("attributes event", function () {
@@ -159,4 +158,4 @@
 		});
 	}
 
-})();
+});

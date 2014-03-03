@@ -126,4 +126,37 @@
 		ok(true, 'did not error');
 		can.undelegate.call(document, 'body', 'click', handler);
 	});
+
+	test('Delegate/undelegate should fallback to using bind/unbind (#754)', function() {
+		var bind_fallback_fired = false,
+				unbind_fallback_fired = false,
+				handler_fired = false;
+
+		// Create event-dispatching class
+		var some_object = {
+			bind: function() {
+				bind_fallback_fired = true;
+				return can.addEvent.apply(this, arguments);
+			},
+			unbind: function() {
+				unbind_fallback_fired = true;
+				return can.removeEvent.apply(this, arguments);
+			},
+			dispatch: can.dispatch
+		};
+
+		var handler = function() {
+			handler_fired = true;
+		};
+
+		// Delegate and fire the event
+		can.delegate.call(some_object, '', 'some_event', handler);
+		some_object.dispatch("some_event");
+		can.undelegate.call(some_object, '', 'some_event', handler);
+		
+		// Fire the event
+		equal(bind_fallback_fired, true, "Bind fallback fired");
+		equal(handler_fired, true, "Delegated handler fired");
+		equal(unbind_fallback_fired, true, "Unbind fallback fired");
+	});
 }());

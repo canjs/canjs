@@ -68,6 +68,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 					.delegate(selector, ev, cb);
 			} else {
 				// make it bind-able ...
+				can.bind.call(this, ev, cb);
 			}
 			return this;
 		},
@@ -78,8 +79,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 				$(this)
 					.undelegate(selector, ev, cb);
 			} else {
-				// make it bind-able ...
-
+				can.unbind.call(this, ev, cb);
 			}
 			return this;
 		},
