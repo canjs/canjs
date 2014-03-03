@@ -183,9 +183,9 @@ steal(
 			special: function( text ){
 				
 				
-				var firstAndText = mustacheCore.getModeAndText(text, state),
+				var firstAndText = mustacheCore.splitModeFromExpression(text, state),
 					first = firstAndText.mode,
-					text = firstAndText.text;
+					text = firstAndText.expression;
 				
 				
 				if(text === "else") {

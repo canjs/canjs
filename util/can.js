@@ -5,6 +5,9 @@ steal(function () {
 		window.can = can;
 	}
 
+	// An empty function useful for where you need a dummy callback.
+	can.k = function(){};
+
 	can.isDeferred = function (obj) {
 		var isFunction = this.isFunction;
 		// Returns `true` if something looks like a deferred.
