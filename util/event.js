@@ -3,8 +3,8 @@ steal('can/util/can.js', function (can) {
 	// ---------
 	// _Basic event wrapper._
 	can.addEvent = function (event, fn) {
-    var allEvents = this.__bindEvents || (this.__bindEvents = {}),
-      eventList = allEvents[event] || (allEvents[event] = []);
+		var allEvents = this.__bindEvents || (this.__bindEvents = {}),
+			eventList = allEvents[event] || (allEvents[event] = []);
 		eventList.push({
 			handler: fn,
 			name: event
@@ -81,7 +81,7 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 	can.removeEvent = function (event, fn) {
-		if (!this.hasOwnProperty("__bindEvents") || !this.__bindEvents.hasOwnProperty(event)) {
+		if (!this.__bindEvents) {
 			return this;
 		}
 		var events = this.__bindEvents[event] || [],
@@ -110,7 +110,7 @@ steal('can/util/can.js', function (can) {
 		args = [event].concat(args || []);
 		allHandlers = this.__bindEvents;
 		do {
-			handlers = (allHandlers && allHandlers.hasOwnProperty(eventName) ? allHandlers[eventName] : [])
+			handlers = (allHandlers && allHandlers[eventName] || [])
 				.slice(0);
 			for (var i = 0, len = handlers.length; i < len; i++) {
 				ev = handlers[i];
