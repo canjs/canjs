@@ -948,6 +948,10 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				// Add ajax converters.
 				can.Model._reqs = 0;
 				this._url = this._shortName + '/{' + this.id + '}';
+				this.__bindEvents = {};
+				if(base.__bindEvents) {
+					this.__bindEvents.__base = base.__bindEvents;
+				}
 			},
 			_ajax: ajaxMaker,
 			_makeRequest: makeRequest,

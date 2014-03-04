@@ -3,8 +3,8 @@ steal('can/util/can.js', function (can) {
 	// ---------
 	// _Basic event wrapper._
 	can.addEvent = function (event, fn) {
-		var allEvents = this.__bindEvents || (this.__bindEvents = {}),
-			eventList = allEvents[event] || (allEvents[event] = []);
+    var allEvents = this.__bindEvents || (this.__bindEvents = {}),
+      eventList = allEvents[event] || (allEvents[event] = []);
 		eventList.push({
 			handler: fn,
 			name: event
@@ -81,7 +81,7 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 	can.removeEvent = function (event, fn) {
-		if (!this.__bindEvents) {
+		if (!this.hasOwnProperty("__bindEvents") || !this.__bindEvents.hasOwnProperty(event)) {
 			return this;
 		}
 		var events = this.__bindEvents[event] || [],
@@ -106,15 +106,18 @@ steal('can/util/can.js', function (can) {
 				type: event
 			};
 		}
-		var eventName = event.type,
-			handlers = (this.__bindEvents[eventName] || [])
-				.slice(0),
-			ev;
+		var eventName = event.type, allHandlers, handlers, ev;
 		args = [event].concat(args || []);
-		for (var i = 0, len = handlers.length; i < len; i++) {
-			ev = handlers[i];
-			ev.handler.apply(this, args);
-		}
+		allHandlers = this.__bindEvents;
+		do {
+			handlers = (allHandlers && allHandlers.hasOwnProperty(eventName) ? allHandlers[eventName] : [])
+				.slice(0);
+			for (var i = 0, len = handlers.length; i < len; i++) {
+				ev = handlers[i];
+				ev.handler.apply(this, args);
+			}
+			allHandlers = allHandlers.__base; // is there an inheritance chain to go up?
+		} while(allHandlers);
 	};
 	return can;
 });
