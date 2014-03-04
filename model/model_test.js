@@ -1252,6 +1252,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 
 		can.trigger(Parent, 'updated');
 		can.trigger(Child1, 'updated');
+		can.trigger(Child2, 'foo'); //jslint ;_;
 		equal(parentTriggers, 2, "parent triggers");
 		equal(child1Triggers, 1, "child 1 triggers");
 		equal(child2Triggers, 0, "child 2 triggers");
