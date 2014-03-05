@@ -158,7 +158,9 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			handler = specialData.handler;
 			event = specialData.event;
 		}
-
+		if(window.CANEVENT){
+			console.log("binding", event)
+		}
 		can.bind.call(el, event, handler);
 	});
 

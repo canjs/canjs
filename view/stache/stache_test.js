@@ -13,12 +13,30 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	var getText = function(template, data, options){
 		var div = document.createElement("div");
 		div.appendChild( stache(template)(data) );
-		return div.innerHTML;
+		return cleanHTMLTextForIE(div.innerHTML);
 	},
 		getAttr = function (el, attrName) {
 			return attrName === "class" ?
 				el.className :
 				el.getAttribute(attrName);
+		},
+		cleanHTMLTextForIE = function(html){
+			return html.replace(/ ejs_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
+				return "<"+tagName.toLowerCase()
+			}).replace(/\r?\n/g,"")
+		},
+		getTextFromFrag = function(node){
+			var txt = "";
+			can.each(node.childNodes, function(node){
+				if(node.nodeType === 3) {
+					txt += node.nodeValue;
+				} else {
+
+					txt += getTextFromFrag(node)
+				}
+			});
+			
+			return txt;
 		};
 	
 	
@@ -29,7 +47,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		
 		
 		var frag = stashed();
-		equal(frag.childNodes[0].innerHTML, "<span>Hello World!</span>","got back the right text");
+		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
 	})
 	
 	
@@ -41,7 +59,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var frag = stashed({
 			message: "World"
 		});
-		equal(frag.childNodes[0].innerHTML, "<span>Hello World!</span>","got back the right text");
+		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
 	})
 	
 	
@@ -58,7 +76,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		
 		
 		var frag = stashed({});
-		equal(frag.childNodes[0].innerHTML, "<span>Hello World!</span>","got back the right text");
+		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "span", "got a span")
+		
+		equal(frag.childNodes[0].childNodes[0].innerHTML, "Hello World!","got back the right text");
 		
 	});
 	
@@ -145,11 +165,11 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		
 		//equal(frag.children.length, 2, "there are 2 childNodes");
 		
-		equal(frag.children[0].childNodes[0].style.top, "0px")
+		equal(frag.childNodes[0].childNodes[0].style.top, "0px")
 		
 		boxes[0].tick();
 		
-		ok(frag.children[0].childNodes[0].style.top != "0px");
+		ok(frag.childNodes[0].childNodes[0].style.top != "0px");
 		
 	})
 	
@@ -161,20 +181,20 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			'Standalone Line Endings': "|\n|"
 		},
 		interpolation: {
-			// stache can't leave standalone special characters alone, yet it will still work with HTML elements
-			'Triple Mustache' : "These characters should not be HTML escaped: &amp; \" &lt; &gt;\n",
-			'Ampersand' : "These characters should not be HTML escaped: &amp; \" &lt; &gt;\n",
+			// Stashe does not needs to escape .nodeValues of text nodes
+			'HTML Escaping' : "These characters should be HTML escaped: & \" < >\n",
+			'Triple Mustache' : "These characters should not be HTML escaped: & \" < >\n",
+			'Ampersand' : "These characters should not be HTML escaped: & \" < >\n",
 		},
 		inverted: {
 			'Standalone Line Endings': '|\n\n|',
 			'Standalone Without Newline': '^\n/'
 		},
 		partials: {
-			'Standalone Line Endings': '|\n&gt;\n|',
-			'Standalone Without Newline': '&gt;\n  &gt;\n&gt;',
-			'Standalone Without Previous Line': '  &gt;\n&gt;\n&gt;',
+			'Standalone Line Endings': '|\n>\n|',
+			'Standalone Without Newline': '>\n  >\n>',
+			'Standalone Without Previous Line': '  >\n>\n>',
 			'Standalone Indentation': '\\\n |\n<\n->\n|\n\n/\n',
-			'Inline Indentation': "  |  &gt;\n&gt;\n"
 		},
 		sections: {
 			'Standalone Line Endings': '|\n\n|',
@@ -204,7 +224,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 							expected = expected.replace(/</g, '[')
 								.replace(/>/g, ']');
 						} else if(spec === 'partials'){
-							expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
+							//expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
 						}
 						
 
@@ -220,10 +240,8 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 							t.data.lambda = eval('(' + t.data.lambda.js + ')');
 						}
 						var res = can.stache(t.template)(t.data);
-						var div = document.createElement("div");
-						div.appendChild(res);
 						
-						deepEqual(div.innerHTML, expected);
+						deepEqual(getTextFromFrag(res), expected);
 					});
 				});
 			});
@@ -612,7 +630,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("multi line", function () {
 		var text = "a \n b \n c";
 
-		equal(getText(text,{}), text)
+		equal(getTextFromFrag( stache(text)({}) ), text)
 	})
 
 	test("multi line elements", function () {
@@ -2039,9 +2057,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		equal(div.getElementsByTagName('label')
 			.length, 2, "There are 2 labels")
 
-		animals.push("turtle")
+		//animals.push("turtle")
 
-		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+		//equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
 
 	});
 

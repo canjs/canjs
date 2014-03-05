@@ -208,7 +208,7 @@ steal("can/view", function(){
 						arguments[4] ? arguments[4] :
 						arguments[5] ? arguments[5] :
 						fillAttrs[name.toLowerCase()] ? name : "";
-					handler.attrStart(name);
+					handler.attrStart(name || "");
 					
 					var last = mustache.lastIndex = 0;
 					var res = mustache.exec(value);
@@ -227,7 +227,7 @@ steal("can/view", function(){
 					if(chars) {
 						handler.attrValue(chars);
 					}
-					handler.attrEnd(name);
+					handler.attrEnd(name || "");
 				}
 
 				

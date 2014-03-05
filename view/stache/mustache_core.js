@@ -8,7 +8,18 @@ steal("can/util",
 	"./utils",
 	"./mustache_helpers",
 	"can/view/live",
-	"can/view/scope",function(can, utils, mustacheHelpers, live, Scope ){
+	"can/view/elements.js",
+	"can/view/scope",function(can, utils, mustacheHelpers, live, elements, Scope ){
+	
+	
+	// ## Types
+	
+	// A lookup is an object that is used to identify a lookup in the scope.
+	/**
+	 * @hide
+	 * @typedef {{get: String}} can.Mustache.Lookup
+	 * @option {String} get A value in the scope to look up.
+	 */
 	
 
 	// ## Helpers
@@ -90,6 +101,8 @@ steal("can/util",
 				return renderer(newScope, newOptions || parentOptions);
 			};
 		};
+	
+
 	
 	var core = {
 		// ## mustacheCore.expressionData
@@ -228,7 +241,7 @@ steal("can/util",
 					}
 
 					// If it doesn't look like a helper and there is no value, check helpers
-					// anyway.
+					// anyway. This is for when foo is a helper in `{{foo}}`.
 					if( !isHelper && initialValue === undefined ) {
 						helper = mustacheHelpers.getHelper(get, options);
 					} 
@@ -361,7 +374,8 @@ steal("can/util",
 			
 			// A branching renderer takes truthy and falsey renderer.
 			return function branchRenderer(scope, options, truthyRenderer, falseyRenderer){
-				// Check the scope's cache if the evaluator already exists.
+				// TODO: What happens if same mode/expresion, but different sub-sections?
+				// Check the scope's cache if the evaluator already exists for performance.
 				var evaluator = scope.__cache[fullExpression];
 				if(!evaluator) {
 					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, true)
@@ -421,7 +435,7 @@ steal("can/util",
 					// have been read and then setting them back which overwrites any `can.__reading` calls
 					// performed in value.
 					var old = can.__clearReading();
-					value(this)
+					value(this);
 					can.__setReading(old);
 					
 				} 
@@ -455,7 +469,7 @@ steal("can/util",
 						this.nodeValue = value;
 					} 
 					else if( value ){
-						live.replace([this], value)
+						elements.replace([this], elements.toFragment(value))
 					}
 				}
 				// Unbind the compute. 
@@ -512,6 +526,10 @@ steal("can/util",
 					spaceLessExpression, 
 					matchIndex){
 				
+				// IE 8 will provide undefined
+				spaceAfter = (spaceAfter || "");
+				returnBefore = (returnBefore || "");
+				spaceBefore = (spaceBefore || "");
 				
 				var modeAndExpression = splitModeFromExpression(expression || spaceLessExpression,{});
 				
@@ -569,4 +587,7 @@ steal("can/util",
 	
 	
 	return core;
-})
+});
+
+
+

@@ -10,7 +10,7 @@ steal("can/view/callbacks",
 	
 	var copy = function(source){
 		if(can.isArray(source)) {
-			var copy = source.splice(0);
+			var copy = source.slice(0);
 		} else {
 			var copy = can.extend({}, source);
 		}

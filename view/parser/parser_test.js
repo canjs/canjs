@@ -116,6 +116,15 @@ steal("can/view/parser", function(parser){
 			["end", ["input", true]],
 			["done",[]]
 		]))
+	});
+	
+	test("trailing linebreaks in IE", function(){
+		parser("12345{{!\n  This is a\n  multi-line comment...\n}}67890\n",makeChecks([
+			["chars", ["12345"]],
+			["special", ["!\n  This is a\n  multi-line comment...\n"]],
+			["chars", ["67890\n"]],
+			["done",[]]
+		]))
 	})
 	
 })

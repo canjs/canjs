@@ -657,6 +657,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 				});
 
 		ok(result.indexOf("<img\n class=\"a\"") !== -1, "Multi-line elements render correctly.");
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	})
 
 	test("escapedContent", function () {
@@ -677,6 +680,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123);
 		equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
 		equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;");
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	})
 
 	test("unescapedContent", function () {
@@ -696,6 +701,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		equal(div.getElementsByTagName('div')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
 		equal(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
 		equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escaped no matter what");
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	/*
@@ -739,6 +746,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 		equal(can.data(can.$(span), 'foo'), 'bar', "first hookup");
 		equal(can.data(can.$(span), 'baz'), 'qux', "second hookup");
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 
 	})
 
@@ -794,7 +803,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 		task.attr('completed', true);
 
-		equal(div.getElementsByTagName('div')[0].className, "complete", "class changed to complete")
+		equal(div.getElementsByTagName('div')[0].className, "complete", "class changed to complete");
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test("event binding / triggering on options", function () {
@@ -883,7 +894,10 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 		Todos.splice(0, 2);
 		equal(div.getElementsByTagName('option')
-			.length, 0, '0 items in list')
+			.length, 0, '0 items in list');
+			
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test('multiple hookups in a single attribute', function () {
@@ -925,6 +939,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		obs.nest.attr('what', 'g');
 
 		equal(getAttr(innerDiv, 'class'), "afcg", 'nested observe');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test('adding and removing multiple html content within a single element', function () {
@@ -965,6 +982,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		});
 
 		equal(div.childNodes[0].innerHTML, 'c', 'updated values');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test('live binding and removeAttr', function () {
@@ -1034,6 +1054,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		equal(p.getAttribute("some"), "newText", 'value in block statement updated attr');
 		equal(getAttr(p, "class"), "newClass", 'value in block statement updated class');
 		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 
 	});
 
@@ -1071,6 +1094,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		obs.attr('baz', '');
 		equal(getAttr(anchor, 'class'), "", 'anchor class blank');
 		equal(anchor.getAttribute('some'), undefined, 'attribute "some" is undefined');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test('single escaped tag, removeAttr', function () {
@@ -1098,6 +1124,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 		obs.attr('foo', 'data-bar="baz"');
 		equal(anchor.getAttribute('data-bar'), 'baz');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test('html comments', function () {
@@ -1117,6 +1146,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		var div = document.createElement('div');
 		div.appendChild(can.view.frag(compiled));
 		equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	})
 
 	test("hookup and live binding", function () {
@@ -1149,7 +1181,10 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		});
 
 		ok(child.className.indexOf("true") !== -1, "is complete")
-		equal(child.innerHTML, "New Name", "has new name")
+		equal(child.innerHTML, "New Name", "has new name");
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 
 	})
 
@@ -1828,22 +1863,22 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			div = document.createElement('div');
 
 		div.appendChild(renderer2(plainData));
-
+		
 		equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 		equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
 
-		div.innerHTML = '';
+		div = document.createElement('div')
 		div.appendChild(renderer2(liveData));
-
+		
 		equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
 		equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
-
-		div.innerHTML = '';
+		
+		div = document.createElement('div');
 
 		div.appendChild(renderer(plainData));
 		equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
 
-		div.innerHTML = '';
+		div = document.createElement('div');
 
 		div.appendChild(renderer(liveData));
 		equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
@@ -2083,6 +2118,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 				"<option data-view-id='[0-9]+'>Two</option></select></textarea>$";
 
 		ok(compiled.search(expected) === 0, "Rendered output is as expected");
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test("Empty strings in arrays within Observes that are iterated should return blank strings", function () {
@@ -2623,6 +2661,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		data.attr("image", url);
 		notEqual(img.src, "", 'Image should have src');
 		equal(img.src, url, "images src is correct");
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test("hiding image srcs with complex content (#494)", function () {
@@ -2646,6 +2687,9 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		data.attr("image", imgData);
 		notEqual(img.src, "", 'Image should have src');
 		equal(img.src, url, "images src is correct");
+		
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 
 	test("style property is live-bindable in IE (#494)", 4, function () {

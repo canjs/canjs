@@ -45,6 +45,8 @@ steal("can/view/target", function(target){
 		
 		equal( h1.childNodes.length, 1, "the h1 has span");
 		
+		equal( h1.childNodes[0].childNodes.length, 3, "the span has 3 children")
+		
 		deepEqual( data.paths, 
 			[{
 				path: [0],
@@ -55,7 +57,7 @@ steal("can/view/target", function(target){
 				paths: [{
 					path: [0,1],
 					callbacks: [
-						{callback: textNodeCallback }
+						{callback: target.keepsTextNodes ? textNodeCallback : data.paths[0].paths[0].callbacks[0].callback }
 					]
 				}]
 			}] );
