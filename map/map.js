@@ -28,13 +28,6 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			//can.trigger(parent, args[0], args);
 		});
 	};
-	var attrParts = function (attr, keepKey) {
-		if (keepKey) {
-			return [attr];
-		}
-		return can.isArray(attr) ? attr : ("" + attr)
-			.split(".");
-	};
 	var makeBindSetup = function (wildcard) {
 		return function () {
 			var parent = this;
@@ -102,6 +95,14 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			off: can.unbindAndTeardown,
 			id: "id",
 			helpers: {
+				attrParts: function (attr, keepKey) {
+					if (keepKey) {
+						return [attr];
+					}
+					return can.isArray(attr) ? attr : ("" + attr)
+						.split(".");
+				},
+
 				addToMap: function (obj, instance) {
 					var teardown;
 					if (!madeMap) {
@@ -134,9 +135,9 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						}
 					});
 				},
-				// Listens to changes on `child` and "bubbles" the event up.  
-				// `child` - The object to listen for changes on.  
-				// `prop` - The property name is at on.  
+				// Listens to changes on `child` and "bubbles" the event up.
+				// `child` - The object to listen for changes on.
+				// `prop` - The property name is at on.
 				// `parent` - The parent object of prop.
 				// `ob` - (optional) The Map object constructor
 				// `list` - (optional) The observable list constructor
@@ -157,6 +158,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					} else {
 						child = getMapFromObject(child) || new Ob(child);
 					}
+
 					// only listen if something is listening to you
 					if (parent._bindings) {
 						// Listen to all changes and `batchTrigger` upwards.
@@ -165,9 +167,9 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 
 					return child;
 				},
-				// A helper used to serialize an `Map` or `Map.List`.  
-				// `map` - The observable.  
-				// `how` - To serialize with `attr` or `serialize`.  
+				// A helper used to serialize an `Map` or `Map.List`.
+				// `map` - The observable.
+				// `how` - To serialize with `attr` or `serialize`.
 				// `where` - To put properties, in an `{}` or `[]`.
 				serialize: function (map, how, where) {
 					// Go through each property.
@@ -631,7 +633,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				// Info if this is List or not
 				var isList = can.List && this instanceof can.List,
 					// Convert the `attr` into parts (if nested).
-					parts = attrParts(attr),
+					parts = can.Map.helpers.attrParts(attr),
 					// The actual property to remove.
 					prop = parts.shift(),
 					// The current value.
@@ -669,7 +671,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				}
 
 				// break up the attr (`"foo.bar"`) into `["foo","bar"]`
-				var parts = attrParts(attr),
+				var parts = can.Map.helpers.attrParts(attr),
 					// get the value of the first attr name (`"foo"`)
 					current = this.__get(parts.shift());
 				// if there are other attributes to read
@@ -701,7 +703,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			// `value` - The raw value to set.
 			_set: function (attr, value, keepKey) {
 				// Convert `attr` to attr parts (if it isn't already).
-				var parts = attrParts(attr, keepKey),
+				var parts = can.Map.helpers.attrParts(attr, keepKey),
 					// The immediate prop we are setting.
 					prop = parts.shift(),
 					// The current value.
