@@ -140,7 +140,7 @@ Changes the following rendered template:
 
     var template = can.view.mustache("<hello-world message='greeting'/>");
     template({
-      message: "Salutations"
+      greeting: "Salutations"
     })
 
 Into:

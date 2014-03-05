@@ -20,7 +20,7 @@ instance is initialized with values specified by the component's attributes.
     })
 
 Prototype properties that have values of `"@"` are not looked up in the current scope, instead
-the matching attribute values are used.  For example:
+the literal string value of the relevant attribute is used.  For example:
 
     can.Component.extend({
       tag: "my-tag",
@@ -209,9 +209,8 @@ will update to:
 
 ### Using attribute values
 
-If you want the value of the attribute instead of the attribute's value looked up in
-the parent scope, you can tell can.Compute to use the value of the attribute by adding 
-properties with values of "@".  For example:
+If you want the literal string value of the attribute instead of the attribute's value looked up in
+the parent scope, you can set scope properties to have values of "@".  For example:
 
     can.Component.extend({
       tag: "my-tag",
