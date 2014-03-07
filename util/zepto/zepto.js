@@ -119,6 +119,15 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 		// Alias on/off to bind/unbind respectively
 		can.on = can.bind;
 		can.off = can.unbind;
+		can.once = function(ev, cb) {
+			var self = this,
+				once = function() {
+					can.unbind.call(self, once);
+					return cb.apply(this, arguments);
+				};
+			can.bind.call(this, ev, once);
+			return this;
+		};
 
 		can.delegate = function (selector, ev, cb) {
 			if (!selector) {

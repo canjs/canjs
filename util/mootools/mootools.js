@@ -147,6 +147,15 @@ steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/util/event.js', 'can/
 		// Alias on/off to bind/unbind respectively
 		can.on = can.bind;
 		can.off = can.unbind;
+		can.once = function(ev, cb) {
+			var self = this,
+				once = function() {
+					can.unbind.call(self, once);
+					return cb.apply(this, arguments);
+				};
+			can.bind.call(this, ev, once);
+			return this;
+		};
 		can.trigger = function (item, event, args, bubble) {
 			// Defaults to `true`.
 			bubble = bubble === undefined ? true : bubble;
