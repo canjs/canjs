@@ -61,8 +61,11 @@ steal('can/util', 'can/map', function (can) {
 		 */
 		hookup: function (map, path) {
 			if(!map) {
+				// Hook everything up, clear references
+				this.references = {};
 				helpers.visitMaps(this._data, can.proxy(this.hookup, this));
 			} else {
+				// Add a reference and hook up bubbling
 				var pathName = helpers.pathString(path);
 				this._references[pathName] = map;
 				can.Map.helpers.hookupBubble(map, pathName, this._map);
@@ -82,9 +85,30 @@ steal('can/util', 'can/map', function (can) {
 				// Teardown all references
 				can.each(this._references, can.proxy(this.unhookup, this));
 			} else {
-				// Teardown the child reference with our root
+				// Unhookup the child from our root map
 				can.Map.helpers.unhookup([child], this._map);
 			}
+
+			return this;
+		},
+
+		/**
+		 * Returns the closest Map for the given path and the remaining path.
+		 *
+		 * @param {String|Array} path The path to search
+		 */
+		closest: function(path) {
+			var currentPath = helpers.getPath(path);
+			var prop = currentPath.shift();
+			var current = this._data[prop];
+			while(prop && !(current instanceof can.Map)) {
+				prop = currentPath.shift();
+				current = current[prop];
+			}
+			return {
+				map: current,
+				remaining: currentPath
+			};
 		},
 
 		/**
@@ -98,6 +122,13 @@ steal('can/util', 'can/map', function (can) {
 			var refs = this._references;
 			var parent = this.getParent(path);
 			var lastProperty = path[path.length - 1];
+			var value = parent instanceof can.Map ? parent.attr(lastProperty) : parent[lastProperty];
+
+			// In an array we have to hookup everything again so go up one more in our path
+			// to remove all references
+			if(can.isArray(parent)) {
+				path.pop();
+			}
 
 			for (var prop in refs) {
 				// If a reference is within that path, remove listeners and delete it from
@@ -111,9 +142,22 @@ steal('can/util', 'can/map', function (can) {
 			// Now delete the actual properties. Use removeAttr if the parent is a map
 			if (parent instanceof can.Map) {
 				parent.removeAttr(lastProperty);
+			} else if(can.isArray(parent)) {
+				// Splice if the parent is an array
+				parent.splice(lastProperty, 1);
+				// Re-initialize reference mappings for the entire array
+				helpers.visitMaps(parent, can.proxy(this.hookup, this), path);
 			} else {
+				// Just delete it otherwise
 				delete parent[lastProperty];
 			}
+
+			return {
+				path: path,
+				value: value,
+				parent: parent,
+				prop: lastProperty
+			};
 		},
 
 		/**
@@ -147,13 +191,17 @@ steal('can/util', 'can/map', function (can) {
 
 				// If we have a map, use its .attr and return it
 				if (current instanceof can.Map) {
-					return current.attr(helpers.pathString(currentPath));
+					return current._get(helpers.pathString(currentPath));
 				}
 
 				prop = currentPath.shift();
 			}
 
 			return current;
+		},
+
+		insert: function(path, converter) {
+
 		},
 
 		/**
@@ -192,6 +240,8 @@ steal('can/util', 'can/map', function (can) {
 			} else {
 				parent[prop] = converted;
 			}
+
+			return converted;
 		}
 	});
 
