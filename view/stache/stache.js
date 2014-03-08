@@ -9,7 +9,7 @@ steal(
 	function(parser, target,  HTMLSection, TextSection, mustacheCore, mustacheHelpers, viewCallbacks ){
 	
 	
-	var stache = can.stache = function(template){
+	function stache(template){
 		
 		// Remove line breaks according to mustache's specs.
 		template = mustacheCore.cleanLineEndings(template);
@@ -106,10 +106,10 @@ steal(
 				state.node =null;
 			},
 			close: function( tagName ) {
-				
+				var renderer;
 				if( viewCallbacks.tag(tagName) ) {
 					
-					var renderer = section.endSubSection();
+					renderer = section.endSubSection();
 				}
 				
 				var oldNode = section.pop();
@@ -130,7 +130,7 @@ steal(
 			},
 			attrStart: function(attrName){
 				if(state.node.section) {
-					state.node.section.add(attrName+"=\"")
+					state.node.section.add(attrName+"=\"");
 				} else {
 					state.attr = {
 						name: attrName,
@@ -147,7 +147,7 @@ steal(
 						state.node.attrs = {};
 					}
 					
-					state.node.attrs[state.attr.name] = 
+					state.node.attrs[state.attr.name] =
 						state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
 					
 					var attrCallback = viewCallbacks.attr(attrName);
@@ -161,7 +161,7 @@ steal(
 								scope: scope,
 								options: options
 							});
-						})
+						});
 					}
 					
 					
@@ -172,34 +172,34 @@ steal(
 			attrValue: function(value){
 				var section = state.node.section || state.attr.section;
 				if(section){
-					section.add(value)
+					section.add(value);
 				} else {
 					state.attr.value += value;
 				}
 			},
 			chars: function( text ) {
-				section.add(text)
+				section.add(text);
 			},
 			special: function( text ){
 				
 				
 				var firstAndText = mustacheCore.splitModeFromExpression(text, state),
-					first = firstAndText.mode,
-					text = firstAndText.expression;
+					mode = firstAndText.mode,
+					expression = firstAndText.expression;
 				
 				
-				if(text === "else") {
+				if(expression === "else") {
 					section.inverse();
 					return;
 				}
 				
-				if(first === "!") {
+				if(mode === "!") {
 					return;
 				}
 
 				if(state.node && state.node.section) {
 					
-					makeRendererAndUpdateSection(state.node.section, first, text);
+					makeRendererAndUpdateSection(state.node.section, mode, expression);
 					
 					if(state.node.section.subSectionDepth() === 0){
 						state.node.attributes.push( state.node.section.compile(copyState()) );
@@ -213,58 +213,47 @@ steal(
 					if(!state.attr.section) {
 						state.attr.section = new TextSection();
 						if(state.attr.value) {
-							state.attr.section.add(state.attr.value)
+							state.attr.section.add(state.attr.value);
 						}
 					}
-					makeRendererAndUpdateSection(state.attr.section, first, text );
-				} 
+					makeRendererAndUpdateSection(state.attr.section, mode, expression );
+				}
 				// `{{}}` in a tag like `<div {{}}>`
 				else if(state.node) {
 					
 					if(!state.node.attributes) {
 						state.node.attributes = [];
 					}
-					if(!first) {
-						state.node.attributes.push( mustacheCore.makeLiveBindingBranchRenderer( null,text, copyState() ) );
-					} else if( first === "#" ) {
+					if(!mode) {
+						state.node.attributes.push( mustacheCore.makeLiveBindingBranchRenderer( null,expression, copyState() ) );
+					} else if( mode === "#" ) {
 						if(!state.node.section) {
 							state.node.section = new TextSection();
 						}
-						makeRendererAndUpdateSection(state.node.section, first, text );
+						makeRendererAndUpdateSection(state.node.section, mode, expression );
 					} else {
-						throw first+" is currently not supported within a tag."
+						throw mode+" is currently not supported within a tag.";
 					}
 					
 					
 					
 				} else {
-					makeRendererAndUpdateSection(section, first, text );
+					makeRendererAndUpdateSection(section, mode, expression );
 				}
 			},
 			comment: function( text ) {
 				// create comment node
 				section.add({
 					comment: text
-				})
+				});
 			},
 			done: function(){}
 		});
 
 		return section.compile();
-	};
-	
-
-	
-
-	can.extend(stache, mustacheHelpers)
-	
-	stache.safeString = function(text){
-		return {
-				toString: function () {
-					return text;
-				}
-			};
 	}
+	
+	
 	
 	can.view.register({
 		suffix: "stache",
@@ -272,13 +261,26 @@ steal(
 		contentType: "x-stache-template",
 
 		// Returns a `function` that renders the view.
-
-		renderer: function (id, text) {
+		fragRenderer: function(id, text) {
 			return stache(text);
 		}
 	});
 	can.view.ext = ".stache";
 	
-	return can.stache;
+	// At this point, can.stache has been created
+	can.extend(can.stache, mustacheHelpers);
 	
-})
+	// Copy helpers on raw stache function too so it can be used by stealing it.
+	can.extend(stache, mustacheHelpers);
+	
+	can.stache.safeString = stache.safeString = function(text){
+		return {
+				toString: function () {
+					return text;
+				}
+			};
+	};
+	
+	return stache;
+	
+});

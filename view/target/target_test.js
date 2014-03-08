@@ -1,7 +1,8 @@
+/* jshint indent:false */
 steal("can/view/target", function(target){
 	
 	
-	module("can/view/target")
+	module("can/view/target");
 	
 	test("basics", function(){
 		
@@ -15,8 +16,8 @@ steal("can/view/target", function(target){
 			},
 			textNodeCallback = function( ){
 				equal(this.nodeType, 3, "got a text node");
-				this.nodeValue = "World"
-			}
+				this.nodeValue = "World";
+			};
 		
 		
 		
@@ -39,15 +40,15 @@ steal("can/view/target", function(target){
 		
 		equal( data.clone.childNodes.length, 1, "there is one child");
 		
-		var h1 = data.clone.childNodes[0]
+		var h1 = data.clone.childNodes[0];
 		equal( h1.nodeName.toLowerCase(), "h1", "there is one h1");
 		equal( h1.id, "myh1", "the h1 has the right id");
 		
 		equal( h1.childNodes.length, 1, "the h1 has span");
 		
-		equal( h1.childNodes[0].childNodes.length, 3, "the span has 3 children")
+		equal( h1.childNodes[0].childNodes.length, 3, "the span has 3 children");
 		
-		deepEqual( data.paths, 
+		deepEqual( data.paths,
 			[{
 				path: [0],
 				callbacks: [
@@ -66,7 +67,7 @@ steal("can/view/target", function(target){
 		
 		var newH1 = result.childNodes[0];
 		equal(newH1.className, "selected", "got selected class name");
-		equal(newH1.innerHTML.toLowerCase(), "<span>hello world!</span>")
+		equal(newH1.innerHTML.toLowerCase(), "<span>hello world!</span>");
 		
 	});
 	
@@ -74,14 +75,14 @@ steal("can/view/target", function(target){
 	test("replacing items", function(){
 		var data = target([
 			function(){
-				this.parentNode.insertBefore(document.createTextNode("inserted"), this.nextSibling)
-			}, 
+				this.parentNode.insertBefore(document.createTextNode("inserted"), this.nextSibling);
+			},
 			"hi",
 			function(){
-				equal(this.previousSibling.nodeValue, "hi", "previous is as expected")
+				equal(this.previousSibling.nodeValue, "hi", "previous is as expected");
 			}]);
 			
-		data.hydrate()
+		data.hydrate();
 	});
 	
 	test("comments", function(){
@@ -90,10 +91,10 @@ steal("can/view/target", function(target){
 			{ tag: "h1" },
 			{comment: "foo bar"}
 		]);
-		var node = data.clone.childNodes[1]
-		equal(node.nodeValue, "foo bar", "node value is right")
+		var node = data.clone.childNodes[1];
+		equal(node.nodeValue, "foo bar", "node value is right");
 		equal(node.nodeType, 8, "node is a comment");
 		
-	})
+	});
 	
-})
+});

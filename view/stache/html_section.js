@@ -4,11 +4,11 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 	var decodeHTML = (function(){
 		var el = document.createElement('div');
 		return function(html){
-		  if(html.indexOf("&") == -1) {
-		  	return html.replace(/\r\n/g,"\n");
-		  }
-		  el.innerHTML = html;
-		  return el.childNodes.length === 0 ? "" : el.childNodes[0].nodeValue;
+			if(html.indexOf("&") === -1) {
+				return html.replace(/\r\n/g,"\n");
+			}
+			el.innerHTML = html;
+			return el.childNodes.length === 0 ? "" : el.childNodes[0].nodeValue;
 		};
 	})();
 	
@@ -54,12 +54,12 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			};
 		},
 		push: function(chars){
-			this.last().push(chars)
+			this.last().push(chars);
 		},
 		pop: function(){
-			return this.last().pop()
+			return this.last().pop();
 		}
-	})
+	});
 	
 	var HTMLSection = function(process){
 		this.data = "targetData";
@@ -68,9 +68,9 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		this.targetStack = [];
 		var self = this;
 		this.targetCallback = function(scope, options){
-			process.call(this, 
-				scope, 
-				options, 
+			process.call(this,
+				scope,
+				options,
 				can.proxy(self.compiled.hydrate, self.compiled),
 				self.inverseCompiled && can.proxy(self.inverseCompiled.hydrate, self.inverseCompiled)  ) ;
 		};
@@ -78,7 +78,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 	can.extend(HTMLSection.prototype,{
 		inverse: function(){
 			this.inverseData = [];
-			this.data = "inverseData"
+			this.data = "inverseData";
 		},
 		// Adds a DOM node.
 		push: function(data){
@@ -93,7 +93,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 				data = decodeHTML(data);
 			}
 			if(this.targetStack.length) {
-				this.targetStack[this.targetStack.length-1].children.push(data)
+				this.targetStack[this.targetStack.length-1].children.push(data);
 			} else {
 				this[this.data].push(data);
 			}
@@ -110,7 +110,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		},
 		children: function(){
 			if(this.targetStack.length) {
-				return this.targetStack[this.targetStack.length-1].children
+				return this.targetStack[this.targetStack.length-1].children;
 			} else {
 				return this[this.data];
 			}

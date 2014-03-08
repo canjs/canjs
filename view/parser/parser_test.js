@@ -1,7 +1,7 @@
 steal("can/view/parser", function(parser){
 	
 	
-	module("can/view/parser")
+	module("can/view/parser");
 	
 	
 	var makeChecks = function(tests){
@@ -9,13 +9,12 @@ steal("can/view/parser", function(parser){
 		var makeCheck = function(name){
 			
 			return function(){
-				console.log(name, arguments)
 				if(count >= tests.length) {
-					ok(false, "called "+name+" with "+arguments[0])
+					ok(false, "called "+name+" with "+arguments[0]);
 				} else {
 					var test = tests[count],
-						args = test[1]
-					equal(name, test[0], "test "+count+" called "+name)
+						args = test[1];
+					equal(name, test[0], "test "+count+" called "+name);
 					for(var i = 0 ; i < args.length; i++) {
 						equal(arguments[i], args[i], (i+1)+" argument is right");
 					}
@@ -23,7 +22,7 @@ steal("can/view/parser", function(parser){
 				}
 				
 				
-			}
+			};
 		};
 		
 		
@@ -38,8 +37,8 @@ steal("can/view/parser", function(parser){
 			comment: makeCheck("comment"),
 			special: makeCheck("special"),
 			done: makeCheck("done")
-		}
-	}
+		};
+	};
 	
 	
 	test("html to html", function(){
@@ -64,7 +63,7 @@ steal("can/view/parser", function(parser){
 			["chars", ["!"]],
 			["close",["h1"]],
 			["done",[]]
-		]
+		];
 		
 		
 		
@@ -84,9 +83,9 @@ steal("can/view/parser", function(parser){
 			["end", ["div", false]],
 			["close",["div"]],
 			["done",[]]
-		]))
+		]));
 		
-	})
+	});
 	
 	test("special with a custom attribute", function(){
 		
@@ -101,7 +100,7 @@ steal("can/view/parser", function(parser){
 			["end", ["div", false]],
 			["close",["div"]],
 			["done",[]]
-		]))
+		]));
 		
 		
 	});
@@ -112,10 +111,10 @@ steal("can/view/parser", function(parser){
 			["start", ["input", true]],
 			["attrStart", ["DISABLED"]],
 			["attrValue", ["DISABLED"]],
-			["attrEnd", ["DISABLED"]],	
+			["attrEnd", ["DISABLED"]],
 			["end", ["input", true]],
 			["done",[]]
-		]))
+		]));
 	});
 	
 	test("trailing linebreaks in IE", function(){
@@ -124,7 +123,7 @@ steal("can/view/parser", function(parser){
 			["special", ["!\n  This is a\n  multi-line comment...\n"]],
 			["chars", ["67890\n"]],
 			["done",[]]
-		]))
-	})
+		]));
+	});
 	
-})
+});

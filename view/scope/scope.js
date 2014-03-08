@@ -185,9 +185,9 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					args: []
 				};
 				var self = this,
-					rootObserve, 
-					rootReads, 
-					fastRead,
+					rootObserve,
+					rootReads,
+					// fastRead,
 					computeData = {
 						compute: can.compute(function (newVal) {
 							if (arguments.length) {

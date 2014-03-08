@@ -98,7 +98,7 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 	can.dispatch = function (event, args) {
-		var events = this.__bindEvents
+		var events = this.__bindEvents;
 		if (!events) {
 			return;
 		}
@@ -108,8 +108,8 @@ steal('can/util/can.js', function (can) {
 			};
 		}
 		var eventName = event.type,
-			handlers = (events[eventName] || []).slice(0),
-			ev;
+			handlers = (events[eventName] || []).slice(0);
+			
 		args = [event].concat(args || []);
 		for (var i = 0, len = handlers.length; i < len; i++) {
 			handlers[i].handler.apply(this, args);

@@ -1,12 +1,15 @@
+/* jshint maxdepth:7*/
 steal("can/view", function(){
 	
 	
 	function makeMap(str){
 		var obj = {}, items = str.split(",");
-		for ( var i = 0; i < items.length; i++ )
+		for ( var i = 0; i < items.length; i++ ) {
 			obj[ items[i] ] = true;
+		}
+			
 		return obj;
-	};
+	}
 	
 	var alphaNumericHU = "-A-Za-z0-9_",
 		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]+",
@@ -15,15 +18,14 @@ steal("can/view", function(){
 		quote2quote = "'((?:\\\\.|[^'])*)'",
 		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
 		  "(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
-		matchStash = "\\{\\{[^\}]*\\}\\}\\}?",
-		stash = "\\{\\{([^\}]*)\\}\\}\\}?";
-	
-	var startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
-	           "(" +
-	               "(?:\\s*"+
-	                   "(?:(?:"+
-	                   		"(?:"+attributeNames+")?"+
-	                   		attributeEqAndValue+")|"+
+		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
+		stash = "\\{\\{([^\\}]*)\\}\\}\\}?",
+		startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
+				"(" +
+					"(?:\\s*"+
+						"(?:(?:"+
+							"(?:"+attributeNames+")?"+
+							attributeEqAndValue+")|"+
 	                   "(?:"+matchStash+")+)"+
 	                ")*"+
 	            ")\\s*(\\/?)>"),
@@ -58,7 +60,75 @@ steal("can/view", function(){
 	var special = makeMap("script,style");
 
 	var HTMLParser = function (html, handler) {
-		var index, chars, match, stack = [], last = html, stash;
+		
+		function parseStartTag(tag, tagName, rest, unary) {
+			tagName = tagName.toLowerCase();
+
+			if (block[tagName]) {
+				while (stack.last() && inline[stack.last()]) {
+					parseEndTag("", stack.last());
+				}
+			}
+
+			if (closeSelf[tagName] && stack.last() === tagName) {
+				parseEndTag("", tagName);
+			}
+			
+			unary = empty[tagName] || !!unary;
+			
+			handler.start(tagName, unary);
+			
+			if (!unary) {
+				stack.push(tagName);
+			}
+			// find attribute or special
+			HTMLParser.parseAttrs(rest, handler);
+
+
+			handler.end(tagName,unary);
+			
+		}
+
+		function parseEndTag(tag, tagName) {
+			// If no tag name is provided, clean shop
+			var pos;
+			if (!tagName) {
+				pos = 0;
+			}
+				
+
+				// Find the closest opened tag of the same type
+			else {
+				for (pos = stack.length - 1; pos >= 0; pos--) {
+					if (stack[pos] === tagName) {
+						break;
+					}
+				}
+					
+			}
+				
+
+			if (pos >= 0) {
+				// Close all the open elements, up the stack
+				for (var i = stack.length - 1; i >= pos; i--) {
+					if (handler.close) {
+						handler.close(stack[i]);
+					}
+				}
+					
+				// Remove the open elements from the stack
+				stack.length = pos;
+			}
+		}
+		
+		function parseMustache(mustache, inside){
+			if(handler.special){
+				handler.special(inside);
+			}
+		}
+		
+		
+		var index, chars, match, stack = [], last = html;
 		stack.last = function () {
 			return this[this.length - 1];
 		};
@@ -70,18 +140,19 @@ steal("can/view", function(){
 			if (!stack.last() || !special[stack.last()]) {
 
 				// Comment
-				if (html.indexOf("<!--") == 0) {
+				if (html.indexOf("<!--") === 0) {
 					index = html.indexOf("-->");
 
 					if (index >= 0) {
-						if (handler.comment)
+						if (handler.comment) {
 							handler.comment(html.substring(4, index));
+						}
 						html = html.substring(index + 3);
 						chars = false;
 					}
 
 					// end tag
-				} else if (html.indexOf("</") == 0) {
+				} else if (html.indexOf("</") === 0) {
 					match = html.match(endTag);
 
 					if (match) {
@@ -91,7 +162,7 @@ steal("can/view", function(){
 					}
 
 					// start tag
-				} else if (html.indexOf("<") == 0) {
+				} else if (html.indexOf("<") === 0) {
 					match = html.match(startTag);
 
 					if (match) {
@@ -99,7 +170,7 @@ steal("can/view", function(){
 						match[0].replace(startTag, parseStartTag);
 						chars = false;
 					}
-				} else if (html.indexOf("{{") == 0 ) {
+				} else if (html.indexOf("{{") === 0 ) {
 					match = html.match(mustache);
 					
 					if (match) {
@@ -114,128 +185,80 @@ steal("can/view", function(){
 					var text = index < 0 ? html : html.substring(0, index);
 					html = index < 0 ? "" : html.substring(index);
 
-					if (handler.chars && text)
+					if (handler.chars && text) {
 						handler.chars(text);
+					}
 				}
 
 			} else {
 				html = html.replace(new RegExp("([\\s\\S]*?)<\/" + stack.last() + "[^>]*>"), function (all, text) {
 					text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, "$1$2");
-					if (handler.chars)
+					if (handler.chars) {
 						handler.chars(text);
-
+					}
 					return "";
 				});
 
 				parseEndTag("", stack.last());
 			}
 
-			if (html == last)
+			if (html === last) {
 				throw "Parse Error: " + html;
+			}
+				
 			last = html;
 		}
 
 		// Clean up any remaining tags
 		parseEndTag();
 
-		function parseStartTag(tag, tagName, rest, unary) {
-			tagName = tagName.toLowerCase();
-
-			if (block[tagName]) {
-				while (stack.last() && inline[stack.last()]) {
-					parseEndTag("", stack.last());
-				}
-			}
-
-			if (closeSelf[tagName] && stack.last() == tagName) {
-				parseEndTag("", tagName);
-			}
-			
-			unary = empty[tagName] || !!unary;
-			
-			handler.start(tagName, unary);
-			
-			if (!unary) {
-				stack.push(tagName);
-			}
-			// find attribute or special
-			HTMLParser.parseAttrs(rest, handler)
-
-
-			handler.end(tagName,unary);
-			
-		}
-
-		function parseEndTag(tag, tagName) {
-			// If no tag name is provided, clean shop
-			if (!tagName)
-				var pos = 0;
-
-				// Find the closest opened tag of the same type
-			else
-				for (var pos = stack.length - 1; pos >= 0; pos--)
-					if (stack[pos] == tagName)
-						break;
-
-			if (pos >= 0) {
-				// Close all the open elements, up the stack
-				for (var i = stack.length - 1; i >= pos; i--)
-					if (handler.end)
-						handler.close(stack[i]);
-
-				// Remove the open elements from the stack
-				stack.length = pos;
-			}
-		}
 		
-		function parseMustache(mustache, inside){
-			if(handler.special){
-				handler.special(inside);
-			}
-		}
 		handler.done();
 	};
 	HTMLParser.parseAttrs = function(rest, handler){
 		
 		
-			(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
-				if(special) {
-					handler.special(special);
-					
-				}
-				if(name || dblQuote || singleQuote || val) {
-					var value = arguments[3] ? arguments[3] :
-						arguments[4] ? arguments[4] :
-						arguments[5] ? arguments[5] :
-						fillAttrs[name.toLowerCase()] ? name : "";
-					handler.attrStart(name || "");
-					
-					var last = mustache.lastIndex = 0;
-					var res = mustache.exec(value);
-					while(res) {
-						var chars = value.substring(
-							last, 
-							mustache.lastIndex - res[0].length );
-						chars.length && handler.attrValue(chars);
-						handler.special(res[1]);
-						last = mustache.lastIndex;
-						res = mustache.exec(value);
-					}
-					var chars = value.substr(
-							last, 
-							value.length );
-					if(chars) {
+		(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
+			if(special) {
+				handler.special(special);
+				
+			}
+			if(name || dblQuote || singleQuote || val) {
+				var value = arguments[3] ? arguments[3] :
+					arguments[4] ? arguments[4] :
+					arguments[5] ? arguments[5] :
+					fillAttrs[name.toLowerCase()] ? name : "";
+				handler.attrStart(name || "");
+				
+				var last = mustache.lastIndex = 0,
+					res = mustache.exec(value),
+					chars;
+				while(res) {
+					chars = value.substring(
+						last,
+						mustache.lastIndex - res[0].length );
+					if( chars.length ) {
 						handler.attrValue(chars);
 					}
-					handler.attrEnd(name || "");
+					handler.special(res[1]);
+					last = mustache.lastIndex;
+					res = mustache.exec(value);
 				}
+				chars = value.substr(
+						last,
+						value.length );
+				if(chars) {
+					handler.attrValue(chars);
+				}
+				handler.attrEnd(name || "");
+			}
 
-				
-			});
+			
+		});
 		
 		
-	}
+	};
 
 	return HTMLParser;
 	
-})
+});

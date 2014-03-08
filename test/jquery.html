@@ -21,24 +21,6 @@
         <script type="text/javascript" src="../lib/steal/steal.js"></script>
         <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
         <script type="text/javascript">
-            (function(){
-            	var oldModule = window.module;
-            	module = function(name, options){
-            		options = options || {};
-            		var teardown = options.teardown || function(){};
-            		options.teardown = function(){
-            			teardown.apply(this, arguments);
-            			if(!$.isEmptyObject(can.view.hookups)) {
-            				// clear hookups b/c we are using .render;
-							can.view.hookups = {};
-            				throw "hookups!"
-            			}
-            		}
-            		return oldModule.call(this, name, options)
-            	}
-            })();
-            
-            
             if (typeof QUnit === 'undefined') {
                 document.write(unescape(
                         '%3Clink rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css" /%3E'));
@@ -64,6 +46,7 @@
             "can/list/list_test.js", "can/observe/observe_test.js",
             "can/compute/compute_test.js", "can/model/model_test.js",
             "can/view/view_test.js", "can/view/ejs/ejs_test.js",
+            "can/view/stache/stache_test.js",
             "can/control/control_test.js", "can/route/route_test.js",
             "can/control/route/route_test.js",
             "can/view/mustache/mustache_test.js",

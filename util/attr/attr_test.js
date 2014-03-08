@@ -86,8 +86,8 @@
 				setTimeout(function () {
 					start();
 				}, 20);
-
-			}
+			};
+			
 			$(div)
 				.bind("attributes", attrHandler);
 

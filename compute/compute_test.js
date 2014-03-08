@@ -147,7 +147,7 @@ steal("can/compute", "can/test", function () {
 	test("a compute updated by source changes within a batch is part of that batch", function(){
 		
 		var computeA = can.compute("a");
-		var computeB = can.compute("b")
+		var computeB = can.compute("b");
 		
 		var combined1 = can.compute(function(){
 			
@@ -163,23 +163,23 @@ steal("can/compute", "can/test", function () {
 		
 		var combo = can.compute(function(){
 			return combined1()+" "+combined2();
-		})
+		});
 		
 		var callbacks = 0;
 		combo.bind("change", function(){
-			if(callbacks == 0){
-				ok(true, "called change once")
+			if(callbacks === 0){
+				ok(true, "called change once");
 			} else {
-				ok(false, "called change multiple times")
+				ok(false, "called change multiple times");
 			}
 			callbacks++;
-		})
+		});
 		
 		can.batch.start();
 		computeA("A");
 		computeB("B");
 		can.batch.stop();
-	})
+	});
 	
 	
 });

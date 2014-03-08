@@ -74,7 +74,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 						// register the partials in the spec
 						if (t.partials) {
 							for (var name in t.partials) {
-								can.view.registerView(name, t.partials[name])
+								can.view.registerView(name, t.partials[name], ".mustache");
 							}
 						}
 
@@ -458,7 +458,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			}
 		};
 		for (var name in t.partials) {
-			can.view.registerView(name, t.partials[name])
+			can.view.registerView(name, t.partials[name], ".mustache")
 		}
 
 		deepEqual(new can.Mustache({
@@ -482,7 +482,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			}
 		};
 		for (var name in t.partials) {
-			can.view.registerView(name, t.partials[name])
+			can.view.registerView(name, t.partials[name], ".mustache")
 		}
 
 		deepEqual(new can.Mustache({
@@ -1794,7 +1794,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 	// https://github.com/bitovi/canjs/issues/227
 	test("Contexts are not always passed to partials properly", function () {
-		can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
+		can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}', ".mustache")
 
 		var renderer = can.view.mustache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
 			data = {
@@ -2019,7 +2019,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	test("can pass in partials", function () {
 		var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 		var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
-		var result = hello({
+		var result = hello.render({
 			name: "World"
 		}, {
 			partials: {
@@ -2031,8 +2031,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	});
 
 	test("can pass in helpers", function () {
-		var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
-		var result = helpers({
+		var helpers = can.view.render(can.test.path('view/mustache/test/helper.mustache'));
+		var result = helpers.render({
 			name: "world"
 		}, {
 			helpers: {
@@ -2169,7 +2169,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			'nested_data3': '{{#bar}}<span id="has_data" {{data "attr"}}></span>{{/bar}}'
 		};
 		for (var name in partials) {
-			can.view.registerView(name, partials[name])
+			can.view.registerView(name, partials[name],".mustache")
 		}
 
 		var renderer = can.view.mustache("{{#bar}}{{> #nested_data}}{{/bar}}"),

@@ -1,3 +1,4 @@
+/* jshint maxdepth:7*/
 steal("can/util", "can/view/elements.js",function(can, elements){
 	
 	var processNodes = function(nodes, paths, location){
@@ -14,15 +15,16 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			testFrag.appendChild(document.createTextNode("One"));
 			testFrag.appendChild(document.createTextNode("Two"));
 			var cloned  = testFrag.cloneNode(true);
-			return cloned.childNodes.length == 2;
+			return cloned.childNodes.length === 2;
 		})();
 	
-	var processNode = function(node, paths, location){
+	function processNode(node, paths, location){
 		var callback,
 			loc = location,
 			nodeType = typeof node,
 			el,
-			p;
+			p,
+			i , len;
 		var getCallback = function(){
 			if(!callback) {
 				callback  = {
@@ -45,21 +47,21 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 						if(typeof value === "function"){
 							getCallback().callbacks.push({
 								callback:  value
-							})
+							});
 						} else  {
 							el.setAttribute(attrName, value);
-						}  
+						}
 					}
 				}
 				if(node.attributes) {
-					for(var i = 0, len = node.attributes.length; i < len; i++ ) {
-						getCallback().callbacks.push({callback: node.attributes[i]})
+					for(i = 0, len = node.attributes.length; i < len; i++ ) {
+						getCallback().callbacks.push({callback: node.attributes[i]});
 					}
 				}
 				if(node.children && node.children.length) {
 					// add paths
 					if(callback) {
-						p = callback.paths = []
+						p = callback.paths = [];
 					} else {
 						p = paths;
 					}
@@ -69,7 +71,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 				el = document.createComment(node.comment);
 				
 				if(node.callbacks) {
-					for(var i = 0, len = node.attributes.length; i < len; i++ ) {
+					for(i = 0, len = node.attributes.length; i < len; i++ ) {
 						getCallback().callbacks.push({callback: node.callbacks[i]});
 					}
 				}
@@ -96,7 +98,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		return el;
 	}
 	
-	var hydratePath = function(el, pathData, args){
+	function hydratePath(el, pathData, args){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
@@ -108,12 +110,12 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		}
 		
 		for(i = 0, len = callbacks.length; i < len; i++) {
-			callbackData = callbacks[i]
+			callbackData = callbacks[i];
 			callbackData.callback.apply(child, args );
 		}
 		if(paths && paths.length){
 			for(i=0, len = paths.length; i< len; i++) {
-				hydratePath(child,paths[i], args)
+				hydratePath(child,paths[i], args);
 			}
 		}
 	}
@@ -128,17 +130,15 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 				var cloned = this.clone.cloneNode(true),
 					args = can.makeArray(arguments);
 				for(var i = paths.length - 1; i >=0 ; i--) {
-					hydratePath(cloned,paths[i], args)
-				};
+					hydratePath(cloned,paths[i], args);
+				}
 				return cloned;
 			}
-		}
+		};
 	}
 	makeTarget.keepsTextNodes = keepsTextNodes;
 	
 	
 	return makeTarget;
 	
-	
-	
-})
+});

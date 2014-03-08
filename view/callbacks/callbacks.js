@@ -27,10 +27,9 @@ steal("can/util", "can/view",function(can){
 		}
 	};
 
-	var attributes = {};
-	var regExpAttributes = [];
-
-	var automaticCustomElementCharacters = /[-\:]/
+	var attributes = {},
+		regExpAttributes = [],
+		automaticCustomElementCharacters = /[-\:]/;
 
 	var tag = can.view.tag = function (tagName, tagHandler) {
 		if(tagHandler) {
@@ -53,7 +52,7 @@ steal("can/util", "can/view",function(can){
 	};
 	var tags = {};
 	
-	return {
+	can.view.callbacks = {
 		_tags: tags,
 		_attributes: attributes,
 		_regExpAttributes: regExpAttributes,
@@ -90,5 +89,6 @@ steal("can/util", "can/view",function(can){
 				can.appendChild(el, frag);
 			}
 		}
-	}
-})
+	};
+	return can.view.callbacks;
+});

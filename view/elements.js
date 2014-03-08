@@ -119,35 +119,6 @@ steal('can/util', function (can) {
 		replace: function (oldElements, newFrag) {
 			elements.after(oldElements, newFrag);
 			can.remove(can.$(oldElements));
-		},
-		toFragment: function(item){
-			if(!item || typeof item === "string"){
-				var frag = can.buildFragment(item == null ? "" : ""+item, document.body);
-				// If we have an empty frag...
-				if (!frag.childNodes.length) {
-					frag.appendChild(document.createTextNode(''));
-				}
-				return frag;
-			} else if(item.nodeType === 11) {
-				return item;
-			} else if(typeof item.nodeType === "number") {
-				var frag = document.createDocumentFragment();
-				frag.appendChild(item);
-				return frag;
-			} else if(can.isArray(item)) {
-				var frag = document.createDocumentFragment();
-				can.each(item, function(item){
-					frag.appendChild( elements.toFragment(item) );
-				});
-				return frag;
-			} else {
-				var frag = can.buildFragment( ""+item, document.body);
-				// If we have an empty frag...
-				if (!frag.childNodes.length) {
-					frag.appendChild(document.createTextNode(''));
-				}
-				return frag;
-			}
 		}
 	};
 	return elements;

@@ -4,7 +4,7 @@
 // only stache uses these helpers.  Ideally, these utilities could be used
 // in other libraries implementing Mustache-like features.  
 
-steal("can/util", 
+steal("can/util",
 	"./utils",
 	"./mustache_helpers",
 	"can/view/live",
@@ -44,7 +44,9 @@ steal("can/util",
 		},
 		// Appends some content to a document fragment.  If the content is a string, it puts it in a TextNode.
 		append = function(frag, content){
-			content && frag.appendChild(typeof content === "string" ? document.createTextNode(content) : content);
+			if(content) {
+				frag.appendChild(typeof content === "string" ? document.createTextNode(content) : content);
+			}
 		},
 		// A helper for calling the truthy subsection for each item in a list and returning them in a string.
 		getItemsStringContent = function(items, isObserveList, helperOptions, options){
@@ -53,7 +55,7 @@ steal("can/util",
 				txt += helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options);
 			}
 			return txt;
-		},		
+		},
 		getKeyComputeData = function (key, scope, isArgument) {
 
 			// Get a compute (and some helper data) that represents key's value in the current scope
@@ -95,7 +97,7 @@ steal("can/util",
 				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
 					newScope = parentScope.add(newScope);
 				}
-				if (newOptions !== undefined && !(newOptions instanceof Options)) {
+				if (newOptions !== undefined && !(newOptions instanceof core.Options)) {
 					newOptions = parentOptions.add(newOptions);
 				}
 				return renderer(newScope, newOptions || parentOptions);
@@ -203,7 +205,7 @@ steal("can/util",
 				if (isLookup(exprData.hash[prop])) {
 					hash[prop] = getKeyArgValue(exprData.hash[prop].get, scope);
 				} else {
-					hash[prop] = exprData.hash[prop]
+					hash[prop] = exprData.hash[prop];
 				}
 			}
 
@@ -217,7 +219,7 @@ steal("can/util",
 					
 					// If a function is on top of the context, call that as a helper.
 					if(!helper && typeof context[name.get] === "function") {
-						helper = {fn: context[name.get]}
+						helper = {fn: context[name.get]};
 					}
 				}
 				// If a helper has not been found, either because this does not look like a helper
@@ -229,9 +231,9 @@ steal("can/util",
 					// Get info about the compute that represents this lookup.
 					// This way, we can get the initial value without "reading" the compute.
 					var computeData = getKeyComputeData(name.get, scope, false),
-						initialValue = computeData.initialValue,
 						compute = computeData.compute;
-
+						
+					initialValue = computeData.initialValue;
 					// Set name to be the compute if the compute reads observables,
 					// or the value of the value of the compute if no observables are found.
 					if(computeData.compute.hasDependencies) {
@@ -244,12 +246,12 @@ steal("can/util",
 					// anyway. This is for when foo is a helper in `{{foo}}`.
 					if( !isHelper && initialValue === undefined ) {
 						helper = mustacheHelpers.getHelper(get, options);
-					} 
+					}
 					// Otherwise, if the value is a function, we'll call that as a helper.
 					else if(typeof initialValue === "function") {
 						helper = {
 							fn: initialValue
-						}
+						};
 					}
 				}
 			}
@@ -287,15 +289,15 @@ steal("can/util",
 				// If it's computed, return a function that just reads the compute.
 				if(name && name.isComputed) {
 					return function(){
-						return name()
-					}
-				} 
+						return name();
+					};
+				}
 				// Just return name as the value
 				else {
 					
 					return function(){
 						return '' + (name != null ? name : '');
-					}
+					};
 				}
 			} else if( mode === "#" || mode === "^" ) {
 				// Setup renderers.
@@ -310,8 +312,8 @@ steal("can/util",
 					}
 					// If it's an array, render.
 					if (utils.isArrayLike(value) ) {
-						var isObserveList = utils.isObserveLike(value),
-							frag = document.createDocumentFragment();
+						var isObserveList = utils.isObserveLike(value);
+						
 						if(isObserveList ? value.attr("length") : value.length) {
 							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
 								(value, isObserveList, helperOptions, options);
@@ -323,7 +325,7 @@ steal("can/util",
 					else {
 						return value ? helperOptions.fn(value || scope, options) : helperOptions.inverse(scope, options);
 					}
-				}
+				};
 			} else {
 				// not supported!
 			}
@@ -346,14 +348,14 @@ steal("can/util",
 				if (partial) {
 					res = partial.render ? partial.render(scope, options) :
 						partial(scope, options);
-				} 
+				}
 				// Use can.view to get and render the partial.
 				else {
 					
 					res = can.view.render(partialName, scope /*, options*/ );
 				}
 				
-				live.replace([this], res)
+				live.replace([this], res);
 			};
 		},
 		// ## mustacheCore.makeStringBranchRenderer
@@ -378,12 +380,12 @@ steal("can/util",
 				// Check the scope's cache if the evaluator already exists for performance.
 				var evaluator = scope.__cache[fullExpression];
 				if(!evaluator) {
-					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, true)
+					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, true);
 				}
 				// Run the evaluator and return the result.
 				var res = evaluator();
 				return res == null ? "" : ""+res;
-			}
+			};
 		},
 		// ## mustacheCore.makeLiveBindingBranchRenderer
 		// Return a renderer function that evaluates the mustache expression and 
@@ -410,7 +412,7 @@ steal("can/util",
 				
 				// Get the evaluator. This does not need to be cached (probably) because if there
 				// an observable value, it will be handled by `can.view.live`.
-				var evaluator = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, 
+				var evaluator = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer,
 					// If this is within a tag, make sure we only get string values. 
 					state.tag );
 				
@@ -438,38 +440,38 @@ steal("can/util",
 					value(this);
 					can.__setReading(old);
 					
-				} 
+				}
 				// If the compute has observable dependencies, setup live binding.
 				else if( compute.hasDependencies ) {
 					
 					// Depending on where the template is, setup live-binding differently.
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
-					} 
+					}
 					else if( state.tag )  {
 						live.attributes( this, compute );
 					}
 					else if(state.text && typeof value !== "object"){
 						live.text(this, compute, this.parentNode);
-					} 
+					}
 					else {
 						live.html(this, compute, this.parentNode);
 					}
-				} 
+				}
 				// If the compute has no observable dependencies, just set the value on the element.
 				else {
 					
 					if(state.attr) {
 						can.attr.set(this, state.attr, value);
-					} 
+					}
 					else if(state.tag) {
-						live.setAttributes(this, value)
-					} 
+						live.setAttributes(this, value);
+					}
 					else if(state.text && typeof value === "string") {
 						this.nodeValue = value;
-					} 
+					}
 					else if( value ){
-						elements.replace([this], elements.toFragment(value))
+						elements.replace([this], can.frag(value));
 					}
 				}
 				// Unbind the compute. 
@@ -485,8 +487,8 @@ steal("can/util",
 		 * @param {Object} state The state of HTML where the expression was found.
 		 */
 		splitModeFromExpression: function(expression, state){
-			var expression = can.trim(expression),
-				mode = expression[0];
+			expression = can.trim(expression);
+			var mode = expression[0];
 	
 			if( "#/{&^>!".indexOf(mode) >= 0 ) {
 				expression = can.trim( expression.substr(1) );
@@ -513,17 +515,17 @@ steal("can/util",
 		cleanLineEndings: function(template){
 			
 			// Finds mustache tags with space around them or no space around them.
-			return template.replace( mustacheLineBreakRegExp, 
-				function(whole, 
-					returnBefore, 
-					spaceBefore, 
+			return template.replace( mustacheLineBreakRegExp,
+				function(whole,
+					returnBefore,
+					spaceBefore,
 					special,
-					expression, 
+					expression,
 					spaceAfter,
 					returnAfter,
 					// A mustache magic tag that has no space around it.
-					spaceLessSpecial, 
-					spaceLessExpression, 
+					spaceLessSpecial,
+					spaceLessExpression,
 					matchIndex){
 				
 				// IE 8 will provide undefined
@@ -536,25 +538,19 @@ steal("can/util",
 				// If it's a partial or tripple stache, leave in place.
 				if(spaceLessSpecial || ">{".indexOf( modeAndExpression.mode) >= 0) {
 					return whole;
-				} if( "^#!/".indexOf(  modeAndExpression.mode ) >= 0 ) {
+				}  else if( "^#!/".indexOf(  modeAndExpression.mode ) >= 0 ) {
 					
 					// Return the magic tag and a trailing linebreak if this did not 
 					// start a new line and there was an end line.
-					return special+
-						
-						(
-							// If this was not first line and there was a \n, 
-							matchIndex != 0 && returnAfter.length
-							// keep the \n;
-							? returnBefore+"\n" : 
-							// otherwise, remove it.
-							"");
+					return special+( matchIndex !== 0 && returnAfter.length ? returnBefore+"\n" :"");
+
+							
 				} else {
 					// There is no mode, return special with spaces around it.
-					return spaceBefore+special+spaceAfter+(spaceBefore.length || matchIndex != 0 ? returnBefore+"\n" : "");
+					return spaceBefore+special+spaceAfter+(spaceBefore.length || matchIndex !== 0 ? returnBefore+"\n" : "");
 				}
 				
-			})
+			});
 		},
 		// ## can.view.Options
 		// 
@@ -581,9 +577,7 @@ steal("can/util",
 	// core functions.
 	var makeEvaluator = core.makeEvaluator,
 		expressionData = core.expressionData,
-		splitModeFromExpression = core.splitModeFromExpression,
-		makeConvertToScopes = core.makeConvertToScopes,
-		Options = core.Options;
+		splitModeFromExpression = core.splitModeFromExpression;
 	
 	
 	return core;

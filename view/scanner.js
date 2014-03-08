@@ -72,8 +72,6 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 		top = function (stack) {
 			return stack[stack.length - 1];
 		},
-		// characters that automatically mean a custom element
-		automaticCustomElementCharacters = /[-\:]/,
 		Scanner;
 
 	/**
@@ -381,7 +379,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 								var attr = getAttrName();
 								if (viewCallbacks.attr(attr)) {
 									specialStates.attributeHookups.push(attr);
-								} 
+								}
 
 								if (specialAttribute) {
 
@@ -669,7 +667,9 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 			can.each(viewData && viewData.attrs || [], function (attributeName) {
 				viewData.attributeName = attributeName;
 				var callback = viewCallbacks.attr(attributeName);
-				callback && callback(el, viewData);
+				if(callback) {
+					callback(el, viewData);
+				}
 			});
 
 		});

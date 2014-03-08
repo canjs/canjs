@@ -234,8 +234,8 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 	// a text node that is set to the content.
 	(function(){
 		
-		var text = "<-\n>";
-		var frag = can.buildFragment(text, document);
+		var text = "<-\n>",
+			frag = can.buildFragment(text, document);
 		if(text !== frag.childNodes[0].nodeValue) {
 			
 			var oldBuildFragment  = can.buildFragment;
@@ -243,9 +243,9 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 				var res = oldBuildFragment(content, context);
 				if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
 					res.childNodes[0].nodeValue = content;
-				} 
+				}
 				return res;
-			}
+			};
 			
 		}
 		

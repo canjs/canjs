@@ -12,11 +12,11 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 		// Adds a subsection.
 		startSection: function(process){
 			var subSection = new TextSection();
-			this.last().add({process: process, truthy: subSection})
-			this.stack.push(subSection)
+			this.last().add({process: process, truthy: subSection});
+			this.stack.push(subSection);
 		},
 		endSection: function(){
-			this.stack.pop()
+			this.stack.pop();
 		},
 		inverse: function(){
 			this.pop();
@@ -26,8 +26,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 		},
 		compile: function(state){
 			
-			var renderer = this.stack[0].compile(),
-				compute;
+			var renderer = this.stack[0].compile();
 			
 			return function(scope, options){
 				
@@ -58,7 +57,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 	
 	var passTruthyFalsey = function(process, truthy, falsey){
 		return function(scope, options){
-			return process.call(this, scope, options, truthy, falsey)
+			return process.call(this, scope, options, truthy, falsey);
 		};
 	};
 	
@@ -68,7 +67,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 	
 	can.extend( TextSection.prototype, {
 		add: function(data){
-			this.values.push(data)
+			this.values.push(data);
 		},
 		last: function(){
 			return this.values[this.values.length - 1];
@@ -81,7 +80,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 				var value = this.values[i];
 				if(typeof value === "object") {
 					values[i] = passTruthyFalsey( value.process,
-					    value.truthy && value.truthy.compile(), 
+					    value.truthy && value.truthy.compile(),
 					    value.falsey && value.falsey.compile());
 				}
 			}
@@ -94,9 +93,9 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 					txt += typeof value === "string" ? value : value.call(this, scope, options);
 				}
 				return txt;
-			}
+			};
 		}
 	});
 	
 	return TextSectionBuilder;
-})
+});

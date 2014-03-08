@@ -31,7 +31,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				textNodeMap['text_' + _id] = node;
 				return 'text_' + _id;
 			}
-		}, 
+		},
 		splice = [].splice,
 		push = [].push,
 		itemsInChildListTree = function(list){
@@ -41,7 +41,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				if(item.nodeType) {
 					count++;
 				} else {
-					count += itemsInChildListTree(item)
+					count += itemsInChildListTree(item);
 				}
 			}
 			return count;
@@ -150,8 +150,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			
 			newNodes = can.makeArray(newNodes);
 		
-			var oldListLength = nodeList.length,
-				firstNode = nodeList[0];
+			var oldListLength = nodeList.length;
 			
 			// Replace oldNodeLists's contents'
 			splice.apply(nodeList, [
@@ -188,7 +187,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			if(last.nodeType) {
 				return last;
 			} else {
-				return nodeLists.last(last)
+				return nodeLists.last(last);
 			}
 		},
 		first: function(nodeList) {
@@ -220,7 +219,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			// add an id to the nodeList
 			nodeList.unregistered = unregistered;
 			
-			nodeLists.nestList(nodeList)
+			nodeLists.nestList(nodeList);
 			
 			return nodeList;
 		},
@@ -249,21 +248,19 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		 * @param {Array.<HTMLElement>} nodeList The nodelist to unregister.
 		 */
 		unregister: function (nodeList) {
-			//if (!nodeList.isUnregistered) {
-				//nodeList.isUnregistered = true;
-				
-				var nodes = nodeLists.unregisterChildren(nodeList);
-				
-				
-				// this can unbind which will call itself
-				if (nodeList.unregistered) {
-					var unregisteredCallback = nodeList.unregistered;
-					delete nodeList.unregistered
-					unregisteredCallback();
-				}
-				
-				return nodes;
-			//}
+
+			var nodes = nodeLists.unregisterChildren(nodeList);
+			
+			
+			// this can unbind which will call itself
+			if (nodeList.unregistered) {
+				var unregisteredCallback = nodeList.unregistered;
+				delete nodeList.unregistered;
+				unregisteredCallback();
+			}
+			
+			return nodes;
+			
 		},
 		nodeMap: nodeMap
 	};

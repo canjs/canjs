@@ -29,11 +29,11 @@ steal("can/util", function(){
 				return this.stack[this.stack.length - 1];
 			},
 			add: function(chars){
-				this.last().add(chars)
+				this.last().add(chars);
 			},
 			subSectionDepth: function(){
 				return this.stack.length - 1;
 			}
 		}
 	};
-})
+});

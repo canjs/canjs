@@ -1,48 +1,98 @@
 steal("can/view/callbacks",
-	"can/view", 
-	"can/view/ejs", 
-	"can/view/mustache", 
-	"can/observe", 
-	"can/test", 
-	"can/util/fixture", function (viewCallbacks) {
+	"can/view",
+	"can/view/ejs",
+	"can/view/mustache",
+	"can/view/stache",
+	"can/observe",
+	"can/test",
+	"can/util/fixture", function () {
 	
 	var restoreInfo = [];
 	
 	var copy = function(source){
-		if(can.isArray(source)) {
-			var copy = source.slice(0);
-		} else {
-			var copy = can.extend({}, source);
-		}
-		
-		restoreInfo.push({source: source, copy: copy});
-	}
+		var copied = can.isArray(source) ? source.slice(0) : can.extend({}, source);
+
+		restoreInfo.push({source: source, copy: copied});
+	};
 	
 	var restore = function(){
 		can.each(restoreInfo, function(data){
 			if(can.isArray(data.source) ) {
 				
 				data.source.splice(0, data.source.length);
-				data.source.push.apply(data.source, data.copy)
+				data.source.push.apply(data.source, data.copy);
 			} else {
-				for( prop in data.source) {
-					delete data.source[prop]
+				for(var prop in data.source) {
+					delete data.source[prop];
 				}
 				can.extend(data.source, data.copy);
 			}
 			
-		})
-	}
+		});
+	};
+	
 	module('can/view', {
 		setup: function () {
-			copy(viewCallbacks._attributes);
-			copy(viewCallbacks._regExpAttributes);
-			copy(viewCallbacks._tags);
+			copy(can.view.callbacks._attributes);
+			copy(can.view.callbacks._regExpAttributes);
+			copy(can.view.callbacks._tags);
 		},
 		teardown: function () {
 			restore();
 		}
 	});
+
+
+	test('basic loading', function(){
+		var data = {message: "hello"},
+			expected = "<h1>hello</h1>",
+			templates= {
+				"ejs" : "<h1><%= message %></h1>",
+				"mustache" : "<h1>{{message}}</h1>",
+				"stache": "<h1>{{message}}</h1>"
+			},
+			templateUrl = function(ext){
+				return can.test.path('view/test/basic_loading.' + ext);
+			};
+		can.each([
+			'ejs',
+			'mustache',
+			'stache'
+		], function (ext) {
+			
+			
+			
+			var result = can.view( templateUrl(ext), data );
+			equal(result.childNodes[0].nodeName.toLowerCase(), "h1", ext+" can.view(url,data) "+"got an h1");
+			equal(result.childNodes[0].innerHTML, "hello", ext+" can.view(url,data) "+"innerHTML");
+			
+			result = can.view( templateUrl(ext) )(data);
+			equal(result.childNodes[0].nodeName.toLowerCase(), "h1", ext+" can.view(url)(data) "+"got an h1");
+			equal(result.childNodes[0].innerHTML, "hello", ext+" can.view(url)(data) "+"innerHTML");
+			
+			result = can.view( templateUrl(ext) )(data);
+			equal(result.childNodes[0].nodeName.toLowerCase(), "h1", ext+" can.view(url)(data) "+"got an h1");
+			equal(result.childNodes[0].innerHTML, "hello", ext+" can.view(url)(data) "+"innerHTML");
+			
+			result = can[ext]( templates[ext ])(data);
+			equal(result.childNodes[0].nodeName.toLowerCase(), "h1", ext+" can."+ext+"(template)(data) "+"got an h1");
+			equal(result.childNodes[0].innerHTML, "hello", ext+" can."+ext+"(template)(data) "+"innerHTML");
+			
+			
+			if(ext !== "stache") {
+				result = can.view( templateUrl(ext) ).render( data );
+				equal(result, expected, ext+" can.view(url).renderer(data) "+"result");
+				
+				result = can[ext]( templates[ext ] ).render( data );
+				equal(result, expected, ext+" can."+ext+"(template).renderer(data) "+"result");
+			}
+			
+		});
+		
+		
+		
+	});
+
 
 	test('helpers work', function () {
 		var expected = '<h3>helloworld</h3><div>foo</div>';
@@ -87,12 +137,12 @@ steal("can/view/callbacks",
 		// that the second time is always faster
 		stop();
 		var first;
-		can.view.render(can.test.path('view/test//large.ejs'), {
+		can.view.render(can.test.path('view/test/large.ejs'), {
 			'message': 'helloworld'
 		}, function (text) {
 			first = new Date();
 			ok(text, 'we got a rendered template');
-			can.view.render(can.test.path('view/test//large.ejs'), {
+			can.view.render(can.test.path('view/test/large.ejs'), {
 				'message': 'helloworld'
 			}, function (text) {
 				/*
@@ -106,7 +156,7 @@ steal("can/view/callbacks",
 	});
 
 	test('hookup', function () {
-		can.view(can.test.path('view/test//hookup.ejs'), {});
+		can.view(can.test.path('view/test/hookup.ejs'), {});
 		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
 	});
 
@@ -148,7 +198,7 @@ steal("can/view/callbacks",
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test//deferreds.ejs'), {
+		can.view.render(can.test.path('view/test/deferreds.ejs'), {
 			foo: typeof foo.promise === 'function' ? foo.promise() : foo,
 			bar: bar
 		})
@@ -200,12 +250,12 @@ steal("can/view/callbacks",
 		var renderer = can.view('renderer_test');
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			test: 'working test'
 		}), 'This is a working test', 'Rendered');
-		renderer = can.view(can.test.path('view/test//template.ejs'));
+		renderer = can.view(can.test.path('view/test/template.ejs'));
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			message: 'Rendered!'
 		}), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
 		// raises(function() {
@@ -709,6 +759,9 @@ steal("can/view/callbacks",
 		tmp();
 		ok(true, 'no error');
 	});
+	
+	
+	
 
 	if (window.require) {
 		if (window.require.config && window.require.toUrl) {

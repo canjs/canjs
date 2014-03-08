@@ -104,11 +104,11 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 		'data': function(attr){
 			// options will either be the second or third argument.
 			// Get the argument before that.
-			var data = arguments.length == 2 ? this : arguments[1];
+			var data = arguments.length === 2 ? this : arguments[1];
 			return function(el){
 				
 				can.data( can.$(el), attr, data || this.context );
-			}
+			};
 		}
 	};
 	
@@ -125,6 +125,6 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				return {fn: helper};
 			}
 		}
-	}
+	};
 	
-})
+});

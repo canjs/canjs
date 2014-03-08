@@ -40,7 +40,6 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 				equal($('#qunit-test-area')
 					.html(), 'FOO', 'worked!');
 				start();
-				ONMODIFIER = false;
 			},10);
 			
 		});

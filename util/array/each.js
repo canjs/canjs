@@ -4,7 +4,7 @@ steal('can/util/can.js', function (can) {
 	var isArrayLike = function(obj){
 		var length = obj.length;
 		return typeof arr !== "function" &&
-			( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj )
+			( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
 	};
 	
 	can.each = function (elements, callback, context) {

@@ -398,8 +398,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(div.firstChild.innerHTML, 'c', 'updated render text');
 	});
 	test('live binding and removeAttr', function () {
-		var text = '<% if(obs.attr("show")) { %>' + 
-				'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
+		var text = '<% if(obs.attr("show")) { %>' +
+				'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' +
 			'<% } %>',
 			obs = new can.Map({
 				show: true,

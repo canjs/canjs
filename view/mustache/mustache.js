@@ -1214,8 +1214,8 @@ steal('can/util',
 									m;
 
 								// Start the content render block.
-								result.content += 'can.Mustache.txt(\n' + 
-									(cmd.specialAttribute ? SPECIAL_CONTEXT_OBJ : CONTEXT_OBJ ) + 
+								result.content += 'can.Mustache.txt(\n' +
+									(cmd.specialAttribute ? SPECIAL_CONTEXT_OBJ : CONTEXT_OBJ ) +
 									',\n' + (mode ? '"' + mode + '"' : 'null') + ',';
 
 								// Parse the helper arguments.

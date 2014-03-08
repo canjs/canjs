@@ -1,9 +1,10 @@
-steal("can/view/stache", "can/view","can/test",function(stache, view){
+/* jshint asi:true,multistr:true*/
+steal("can/view/stache", "can/view","can/test",function(){
 	
 	
 	module("can/view/stache",{
 		setup: function(){
-			this.animals = ['sloth', 'bear', 'monkey']
+			this.animals = ['sloth', 'bear', 'monkey'];
 		}
 	});
 	
@@ -12,7 +13,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	
 	var getText = function(template, data, options){
 		var div = document.createElement("div");
-		div.appendChild( stache(template)(data) );
+		div.appendChild( can.stache(template)(data) );
 		return cleanHTMLTextForIE(div.innerHTML);
 	},
 		getAttr = function (el, attrName) {
@@ -22,8 +23,8 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		},
 		cleanHTMLTextForIE = function(html){
 			return html.replace(/ ejs_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
-				return "<"+tagName.toLowerCase()
-			}).replace(/\r?\n/g,"")
+				return "<"+tagName.toLowerCase();
+			}).replace(/\r?\n/g,"");
 		},
 		getTextFromFrag = function(node){
 			var txt = "";
@@ -32,7 +33,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 					txt += node.nodeValue;
 				} else {
 
-					txt += getTextFromFrag(node)
+					txt += getTextFromFrag(node);
 				}
 			});
 			
@@ -43,53 +44,53 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	
 	test("html to html", function(){
 		
-		var stashed = stache("<h1 class='foo'><span>Hello World!</span></h1>")
+		var stashed = can.stache("<h1 class='foo'><span>Hello World!</span></h1>");
 		
 		
 		var frag = stashed();
 		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
-	})
+	});
 	
 	
 	test("basic replacement", function(){
 		
-		var stashed = stache("<h1 class='foo'><span>Hello {{message}}!</span></h1>")
+		var stashed = can.stache("<h1 class='foo'><span>Hello {{message}}!</span></h1>");
 		
 		
 		var frag = stashed({
 			message: "World"
 		});
 		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
-	})
+	});
 	
 	
 	test("a section helper", function(){
 		
 		
-		stache.registerHelper("helper", function(options){
+		can.stache.registerHelper("helper", function(options){
 			
-			return options.fn({message: "World"})
+			return options.fn({message: "World"});
 			
-		})
+		});
 		
-		var stashed = stache("<h1 class='foo'>{{#helper}}<span>Hello {{message}}!</span>{{/helper}}</h1>")
+		var stashed = can.stache("<h1 class='foo'>{{#helper}}<span>Hello {{message}}!</span>{{/helper}}</h1>");
 		
 		
 		var frag = stashed({});
-		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "span", "got a span")
+		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "span", "got a span");
 		
 		equal(frag.childNodes[0].childNodes[0].innerHTML, "Hello World!","got back the right text");
 		
 	});
 	
 	test("attribute sections", function(){
-		var stashed = stache("<h1 style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>Hi</h1>");
+		var stashed = can.stache("<h1 style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>Hi</h1>");
 		
 		var frag = stashed({
 			top: 1,
 			left: 2,
 			color: 3
-		})
+		});
 		
 		equal(frag.childNodes[0].style.top, "1px", "top works");
 		equal(frag.childNodes[0].style.left, "2px", "left works");
@@ -97,31 +98,31 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 	
 	test("attributes sections", function(){
-		var template = stache("<div {{attributes}}/>");
+		var template = can.stache("<div {{attributes}}/>");
 		var frag = template({
 			attributes: "foo='bar'"
 		});
 		
 		equal(frag.childNodes[0].getAttribute('foo'), "bar", "set attribute");
 		
-		template = stache("<div {{#truthy}}foo='{{baz}}'{{/truthy}}/>")
+		template = can.stache("<div {{#truthy}}foo='{{baz}}'{{/truthy}}/>");
 		
 		frag = template({
 			truthy: true,
 			baz: "bar"
-		})
+		});
 		
 		equal(frag.childNodes[0].getAttribute('foo'), "bar", "set attribute");
 		
 		frag = template({
 			truthy: false,
 			baz: "bar"
-		})
+		});
 		
 		equal(frag.childNodes[0].getAttribute('foo'), null, "attribute not set if not truthy");
 		
 		
-	})
+	});
 	
 	
 	test("boxes example", function(){
@@ -151,7 +152,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			}));
 		}
 		
-		var stashed = stache("{{#each boxes}}"+
+		var stashed = can.stache("{{#each boxes}}"+
 				"<div class='box-view'>"+
 					"<div class='box' id='box-{{number}}'  style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>"+
 						"{{content}}"+
@@ -161,17 +162,17 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		
 		var frag = stashed({
 			boxes: boxes
-		})
+		});
 		
 		//equal(frag.children.length, 2, "there are 2 childNodes");
 		
-		equal(frag.childNodes[0].childNodes[0].style.top, "0px")
+		equal(frag.childNodes[0].childNodes[0].style.top, "0px");
 		
 		boxes[0].tick();
 		
-		ok(frag.childNodes[0].childNodes[0].style.top != "0px");
+		ok(frag.childNodes[0].childNodes[0].style.top !== "0px");
 		
-	})
+	});
 	
 	
 	var override = {
@@ -250,12 +251,12 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test('Tokens returning 0 where they should diplay the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
-		var frag = stache( template )({
+		var frag = can.stache( template )({
 				completed: 0
 			});
 		can.append(can.$('#qunit-test-area'), frag);
 		deepEqual(can.$('#zero')[0].innerHTML, "0", 'zero shown');
-	})
+	});
 
 	test('Inverted section function returning numbers', function () {
 		var template = "<div id='completed'>{{^todos.completed}}hidden{{/todos.completed}}</div>";
@@ -270,7 +271,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		};
 
 		// check hidden there
-		var frag = stache( template ) ({
+		var frag = can.stache( template ) ({
 				todos: todos
 			});
 		can.append(can.$('#qunit-test-area'), frag);
@@ -288,7 +289,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			name: "<strong>Mrs Peters</strong>"
 		});
 
-		var tpl = stache( template );
+		var tpl = can.stache( template );
 
 		can.append(can.$('#qunit-test-area'), tpl(teacher));
 
@@ -298,7 +299,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		teacher.attr('name', '<i>Mr Scott</i>');
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
-		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
+		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
 	});
 
 	test("truthy", function () {
@@ -330,13 +331,13 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("Handlebars helpers", function () {
-		stache.registerHelper('hello', function (options) {
+		can.stache.registerHelper('hello', function (options) {
 			return 'Should not hit this';
 		});
-		stache.registerHelper('there', function (options) {
+		can.stache.registerHelper('there', function (options) {
 			return 'there';
 		});
-		stache.registerHelper('bark', function (obj, str, number, options) {
+		can.stache.registerHelper('bark', function (obj, str, number, options) {
 			var hash = options.hash || {};
 			return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
 				'then the ' + hash.obj + ' ' + hash.action + ' ' +
@@ -358,7 +359,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("Handlebars advanced helpers (from docs)", function () {
-		stache.registerHelper('exercise', function (group, action, num, options) {
+		can.stache.registerHelper('exercise', function (group, action, num, options) {
 			if (group && group.length > 0 && action && num > 0) {
 				return options.fn({
 					group: group,
@@ -387,7 +388,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			}
 		};
 
-		var template = stache(t.template)
+		var template = can.stache(t.template)
 		var frag = template(t.data);
 		
 		var div = document.createElement("div");
@@ -430,9 +431,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("No arguments passed to helper", function () {
-		var template = stache("{{noargHelper}}")
+		var template = can.stache("{{noargHelper}}")
 		
-		stache.registerHelper("noargHelper", function () {
+		can.stache.registerHelper("noargHelper", function () {
 			return "foo"
 		})
 		var div1 = document.createElement('div');
@@ -446,7 +447,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("No arguments passed to helper with list", function () {
-		var template = stache("{{#items}}{{noargHelper}}{{/items}}");
+		var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
 		var div = document.createElement('div');
 
 		div.appendChild(template({
@@ -466,7 +467,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var template;
 		var div = document.createElement('div');
 
-		template = stache("<table><thead><tr>{{#data}}{{>" +
+		template = can.stache("<table><thead><tr>{{#data}}{{>" +
 			can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
 
 		var dom = template({
@@ -581,7 +582,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 		
-		div.appendChild(stache(t.template)(t.data2));
+		div.appendChild(can.stache(t.template)(t.data2));
 		
 		deepEqual(div.innerHTML, expected, 'Using Observe.List');
 		t.data2.names.push('What');
@@ -630,12 +631,12 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("multi line", function () {
 		var text = "a \n b \n c";
 
-		equal(getTextFromFrag( stache(text)({}) ), text)
+		equal(getTextFromFrag( can.stache(text)({}) ), text)
 	})
 
 	test("multi line elements", function () {
 		var text = "<div\n class=\"{{myClass}}\" />",
-			result = stache(text)({myClass: 'a'});
+			result = can.stache(text)({myClass: 'a'});
 		
 		equal(result.childNodes[0].className, "a", "class name is right");
 	})
@@ -645,7 +646,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 		
-		div.appendChild( stache(text)({
+		div.appendChild( can.stache(text)({
 			tags: "foo < bar < car > zar > poo",
 			quotes: "I use 'quote' fingers & &amp;ersands \"a lot\"",
 			number: 123
@@ -661,9 +662,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
 
 		var div = document.createElement('div');
-		div.appendChild( stache(text)({
-				tags: "<strong>foo</strong><strong>bar</strong>",
-				quotes: 'I use \'quote\' fingers "a lot"'
+		div.appendChild( can.stache(text)({
+			tags: "<strong>foo</strong><strong>bar</strong>",
+			quotes: 'I use \'quote\' fingers "a lot"'
 		}) );
 
 		equal(div.getElementsByTagName('span')[0].firstChild.nodeType, 1,"");
@@ -682,7 +683,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 
-		div.appendChild(stache(text)({
+		div.appendChild(can.stache(text)({
 			task: task
 		}));
 
@@ -701,7 +702,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("select live binding", function () {
 		var text = "<select>{{ #todos }}<option>{{ name }}</option>{{ /todos }}</select>";
-		var todos, compiled, div;
+		var todos, div;
 		todos = new can.List([{
 			id: 1,
 			name: 'Dishes'
@@ -709,7 +710,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		
 		div = document.createElement('div');
 
-		div.appendChild( stache(text)({todos: todos}) );
+		div.appendChild( can.stache(text)({todos: todos}) );
 		
 		equal(div.getElementsByTagName('option')
 			.length, 1, '1 item in list')
@@ -742,7 +743,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 
-		div.appendChild( stache(text)({
+		div.appendChild( can.stache(text)({
 				obs: obs
 			}) );
 
@@ -765,7 +766,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test('adding and removing multiple html content within a single element', function () {
 
-		var text, obs, compiled;
+		var text, obs;
 
 		text = '<div>{{ obs.a }}{{ obs.b }}{{ obs.c }}</div>';
 
@@ -778,7 +779,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 
-		div.appendChild(stache(text)({
+		div.appendChild(can.stache(text)({
 				obs: obs
 			}));
 
@@ -814,9 +815,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 			div = document.createElement('div');
 
-		div.appendChild(stache(text)({
-					obs: obs
-				}));
+		div.appendChild(can.stache(text)({
+			obs: obs
+		}));
 
 		var p = div.getElementsByTagName('p')[0],
 			span = p.getElementsByTagName('span')[0];
@@ -873,7 +874,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				baz: 'some=\'property\''
 			}),
 
-			compiled = stache(text)({obs: obs})
+			compiled = can.stache(text)({obs: obs})
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -903,7 +904,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				foo: 'data-bar="john doe\'s bar"'
 			}),
 
-			compiled = stache(text)({obs: obs})
+			compiled = can.stache(text)({obs: obs})
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -925,9 +926,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			foo: 'foo'
 		});
 
-		var compiled = stache(text)({
-				obs: obs
-			});
+		var compiled = can.stache(text)({
+			obs: obs
+		});
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -944,9 +945,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				className: 'someTask',
 				name: 'My Name'
 			}),
-			compiled = stache(text)({
-					task: task
-				}),
+			compiled = can.stache(text)({
+				task: task
+			}),
 			div = document.createElement('div');
 
 		div.appendChild(compiled)
@@ -977,7 +978,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				items: []
 			}),
 
-			compiled = stache(text)({obs: obs})
+			compiled = can.stache(text)({obs: obs})
 
 		var ul = document.createElement('ul');
 		ul.appendChild(compiled);
@@ -1011,9 +1012,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var text = '<div>{{ completed }}</div>',
 
-			compiled = stache(text)({
-					completed: completed
-				});
+			compiled = can.stache(text)({
+				completed: completed
+			});
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -1060,9 +1061,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var text = '<div>{{{ completed }}}</div>',
 
-			compiled = stache(text)({
-					completed: completed
-				});
+			compiled = can.stache(text)({
+				completed: completed
+			});
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -1102,9 +1103,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var text = '<div {{{ completed }}}></div>',
 
-			compiled = stache(text)({
-					completed: completed
-				});
+			compiled = can.stache(text)({
+				completed: completed
+			});
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -1144,9 +1145,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var text = '<div items="{{{ completed }}}"></div>',
 
-			compiled = stache(text)({
-					completed: completed
-				});
+			compiled = can.stache(text)({
+				completed: completed
+			});
 
 		var div = document.createElement('div');
 		div.appendChild(compiled);
@@ -1172,9 +1173,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			val: 'foo="bar"'
 		})
 
-		var compiled = stache(text)({
-				obs: obs
-			});
+		var compiled = can.stache(text)({
+			obs: obs
+		});
 
 		var div = document.createElement('div');
 
@@ -1199,9 +1200,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			}
 		})
 
-		var compiled = stache(text)({
-				obs: obs
-			});
+		var compiled = can.stache(text)({
+			obs: obs
+		});
 
 		var div = document.createElement('div');
 
@@ -1223,9 +1224,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var obs = new can.Map({
 			content: "<td>Justin</td>"
 		})
-		var compiled = stache(text)({
-				obs: obs
-			});
+		var compiled = can.stache(text)({
+			obs: obs
+		});
 		var div = document.createElement('div');
 		var html = compiled;
 		div.appendChild(html);
@@ -1247,7 +1248,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var div = document.createElement('div');
 
-		var template = stache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
+		var template = can.stache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
 
 		div.appendChild(template({
 			items: items
@@ -1264,7 +1265,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("list nested in observe live bindings", function () {
-		var template = stache("<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
+		var template = can.stache("<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
 		var data = new can.Map({
 			items: [{
 				name: "Brian"
@@ -1285,7 +1286,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("trailing text", function () {
-		var template = stache("There are {{ length }} todos")
+		var template = can.stache("There are {{ length }} todos")
 		var div = document.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
 		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -1310,7 +1311,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("live binding textarea", function () {
-		var template = stache("<textarea>Before{{ obs.middle }}After</textarea>");
+		var template = can.stache("<textarea>Before{{ obs.middle }}After</textarea>");
 
 		var obs = new can.Map({
 			middle: "yes"
@@ -1330,7 +1331,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("reading a property from a parent object when the current context is an observe", function () {
-		var template = stache("{{#foos}}<span>{{bar}}</span>{{/foos}}")
+		var template = can.stache("{{#foos}}<span>{{bar}}</span>{{/foos}}")
 		var data = {
 			foos: new can.List([{
 				name: "hi"
@@ -1351,12 +1352,12 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("helper parameters don't convert functions", function () {
-		stache.registerHelper('helperWithFn', function (fn) {
+		can.stache.registerHelper('helperWithFn', function (fn) {
 			ok(can.isFunction(fn), 'Parameter is a function');
 			equal(fn(), 'Hit me!', 'Got the expected function');
 		});
 
-		var renderer = stache('{{helperWithFn test}}');
+		var renderer = can.stache('{{helperWithFn test}}');
 		renderer({
 			test: function () {
 				return 'Hit me!';
@@ -1365,12 +1366,12 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("computes as helper parameters don't get converted", function () {
-		stache.registerHelper('computeTest', function (no) {
+		can.stache.registerHelper('computeTest', function (no) {
 			equal(no(), 5, 'Got computed calue');
 			ok(no.isComputed, 'no is still a compute')
 		});
 
-		var renderer = stache('{{computeTest test}}');
+		var renderer = can.stache('{{computeTest test}}');
 		renderer({
 			test: can.compute(5)
 		});
@@ -1385,7 +1386,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			"with": "wit{{#with test}}<span>{{3}}</span>{{/with}}"
 		};
 
-		var template = stache("There are {{ length }} todos")
+		var template = can.stache("There are {{ length }} todos")
 		var div = document.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
 		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -1393,7 +1394,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var renderer, result, data, actual, span;
 
 		for (result in staches) {
-			renderer = stache(staches[result]);
+			renderer = can.stache(staches[result]);
 			data = ["e", "a", "c", "h"];
 			div = document.createElement("div");
 			actual = renderer({
@@ -1417,7 +1418,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		};
 
 		for (result in inv_staches) {
-			renderer = stache(inv_staches[result]);
+			renderer = can.stache(inv_staches[result]);
 			data = null;
 			div = document.createElement("div");
 			actual = renderer({
@@ -1443,9 +1444,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			}, {
 				name: "Doug"
 			}]),
-			compiled = stache(text)({
-					people: people
-				});
+			compiled = can.stache(text)({
+				people: people
+			});
 
 		can.append(can.$('#qunit-test-area'), compiled);
 		equal(can.$('#qunit-test-area table tbody')
@@ -1454,7 +1455,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 	test("Observe with array attributes", function () {
-		var renderer = stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
+		var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
 		var div = document.createElement('div');
 		var data = new can.Map({
 			todos: ['Line #1', 'Line #2', 'Line #3'],
@@ -1474,7 +1475,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("Observe list returned from the function", function () {
-		var renderer = stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
+		var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
 		var div = document.createElement('div');
 		var todos = new can.List();
 		var data = {
@@ -1494,11 +1495,11 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	// https://github.com/bitovi/canjs/issues/228
 	test("Contexts within helpers not always resolved correctly", function () {
 		
-		stache.registerHelper("bad_context", function (context, options) {
+		can.stache.registerHelper("bad_context", function (context, options) {
 			return ["<span>"+this.text+"</span> should not be ",options.fn(context)];
 		});
 
-		var renderer = stache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
+		var renderer = can.stache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
 			data = {
 				next_level: {
 					text: "bar",
@@ -1519,7 +1520,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("Contexts are not always passed to partials properly", function () {
 		can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
 
-		var renderer = stache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
+		var renderer = can.stache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
 			data = {
 				first_level: {
 					second_level: "bar"
@@ -1546,7 +1547,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			})
 		}
 		
-		stache.registerHelper("to_upper", function (fn, options) {
+		can.stache.registerHelper("to_upper", function (fn, options) {
 			if (!fn.fn) {
 				return typeof fn === "function" ? fn()
 					.toString()
@@ -1562,7 +1563,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			}
 		});
 
-		var renderer = stache('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
+		var renderer = can.stache('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
 			data = {
 				next_level: {
 					text: function () {
@@ -1582,8 +1583,8 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	// https://github.com/bitovi/canjs/issues/153
 	test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function () {
-		var renderer = stache('{{ #todos }}{{ name }}{{ /todos }}'),
-			renderer2 = stache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
+		var renderer = can.stache('{{ #todos }}{{ name }}{{ /todos }}'),
+			renderer2 = can.stache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
 			todos = [{
 				id: 1,
 				name: 'Dishes'
@@ -1599,7 +1600,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			},
 			div = document.createElement('div');
 
-		/*div.appendChild(renderer2(plainData));
+		div.appendChild(renderer2(plainData));
 
 		equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 		equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
@@ -1615,7 +1616,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		div.appendChild(renderer(plainData));
 		equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
 
-		div.innerHTML = '';*/
+		div.innerHTML = '';
 
 		div.appendChild(renderer(liveData));
 		equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
@@ -1628,7 +1629,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("objects with a 'key' or 'index' property should work in helpers", function () {
-		var renderer = stache('{{ #obj }}{{ show_name }}{{ /obj }}'),
+		var renderer = can.stache('{{ #obj }}{{ show_name }}{{ /obj }}'),
 			div = document.createElement('div');
 
 		div.appendChild(renderer({
@@ -1677,13 +1678,13 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			el.value = value() || "";
 		}
 		var val;
-		stache.registerHelper('value', function (value) {
+		can.stache.registerHelper('value', function (value) {
 			return function (el) {
 				val = new Value(el, value);
 			}
 		});
 
-		var renderer = stache('<input {{value user.name}}/>');
+		var renderer = can.stache('<input {{value user.name}}/>');
 
 		var div = document.createElement('div'),
 			u = new can.Map({
@@ -1710,7 +1711,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		val.teardown();
 
 		// name is undefined
-		renderer = stache('<input {{value user.name}}/>');
+		renderer = can.stache('<input {{value user.name}}/>');
 		div = document.createElement('div');
 		u = new can.Map({});
 		div.appendChild(renderer({
@@ -1730,7 +1731,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		val.teardown();
 
 		// name is null
-		renderer = stache('<input {{value user.name}}/>');
+		renderer = can.stache('<input {{value user.name}}/>');
 		div = document.createElement('div');
 		u = new can.Map({
 			name: null
@@ -1770,7 +1771,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("can pass in helpers", function () {
-		var helpers = stache("<p>Hello {{cap name}}</p>");
+		var helpers = can.stache("<p>Hello {{cap name}}</p>");
 		var result = helpers({
 			name: "world"
 		}, {
@@ -1799,9 +1800,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				id: 1,
 				name: "Dishes"
 			}]),
-			compiled = stache(text.join("\n"))({
-					todos: todos
-				}),
+			compiled = can.stache(text.join("\n"))({
+				todos: todos
+			}),
 			div = document.createElement("div"),
 			li;
 
@@ -1836,7 +1837,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		var data = new can.Map({
 			colors: ["", 'red', 'green', 'blue']
 		}),
-			compiled = stache("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
+			compiled = can.stache("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
 			div = document.createElement('div');
 
 		div.appendChild(compiled);
@@ -1844,7 +1845,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("Null properties do not throw errors", function () {
-		var renderer = stache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
+		var renderer = can.stache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
 			div = document.createElement('div'),
 			div2 = document.createElement('div'),
 			frag, frag2;
@@ -1878,9 +1879,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			can.view.registerView(name, partials[name])
 		}
 
-		var renderer = stache("{{#bar}}{{> #nested_data}}{{/bar}}"),
-			renderer2 = stache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
-			renderer3 = stache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
+		var renderer = can.stache("{{#bar}}{{> #nested_data}}{{/bar}}"),
+			renderer2 = can.stache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
+			renderer3 = can.stache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
 			div = document.createElement('div'),
 			data = new can.Map({
 				foo: "bar",
@@ -1906,7 +1907,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	// Issue #333
 	test("Functions passed to default helpers should be evaluated", function () {
-		var renderer = stache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
+		var renderer = can.stache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
 			div = document.createElement('div'),
 			data = new can.Map({
 				ducks: "",
@@ -1925,7 +1926,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("avoid global helpers", function () {
-		var noglobals = stache("{{sometext person.name}}");
+		var noglobals = can.stache("{{sometext person.name}}");
 
 		var div = document.createElement('div'),
 			div2 = document.createElement('div');
@@ -1959,7 +1960,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("Helpers always have priority (#258)", function () {
-		stache.registerHelper('callMe', function (arg) {
+		can.stache.registerHelper('callMe', function (arg) {
 			return arg + ' called me!';
 		});
 
@@ -1981,7 +1982,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	
 	test("avoid global helpers", function () {
 
-		var noglobals = stache("{{sometext person.name}}");
+		var noglobals = can.stache("{{sometext person.name}}");
 
 		var div = document.createElement('div'),
 			div2 = document.createElement('div');
@@ -2016,7 +2017,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("Each does not redraw items", function () {
 
 		var animals = new can.List(['sloth', 'bear']),
-			renderer = stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+			renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 		var div = document.createElement('div')
 
@@ -2042,7 +2043,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("Each works with the empty list", function () {
 
 		var animals = new can.List([]),
-			renderer = stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+			renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 		var div = document.createElement('div')
 
@@ -2075,7 +2076,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 				"{{/if}}" +
 				"!</div>";
 
-		var renderer = stache(template)
+		var renderer = can.stache(template)
 
 		var div = document.createElement('div');
 
@@ -2097,14 +2098,14 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("a compute gets passed to a plugin", function () {
 
-		stache.registerHelper('iamhungryforcomputes', function (value) {
+		can.stache.registerHelper('iamhungryforcomputes', function (value) {
 			ok(value.isComputed, "value is a compute")
 			return function (el) {
 
 			}
 		});
 
-		var renderer = stache('<input {{iamhungryforcomputes userName}}/>');
+		var renderer = can.stache('<input {{iamhungryforcomputes userName}}/>');
 
 		var div = document.createElement('div'),
 			u = new can.Map({
@@ -2118,7 +2119,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 	// CHANGED FROM MUSTACHE
 	test("Object references can escape periods for key names containing periods", function () {
-		var template = stache("{{#foo.bar}}" +
+		var template = can.stache("{{#foo.bar}}" +
 			"{{some\\.key\\.name}} {{some\\.other\\.key.with\\.more}}" +
 			"{{/foo.bar}}"),
 			data = {
@@ -2139,7 +2140,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("Computes should be resolved prior to accessing attributes", function () {
-		var template = stache("{{list.length}}"),
+		var template = can.stache("{{list.length}}"),
 			data = {
 				list: can.compute(new can.List())
 			};
@@ -2151,10 +2152,10 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("Helpers can be passed . or this for the active context", function () {
-		stache.registerHelper('rsvp', function (attendee, event) {
+		can.stache.registerHelper('rsvp', function (attendee, event) {
 			return attendee.name + ' is attending ' + event.name;
 		});
-		var template = stache("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
+		var template = can.stache("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
 			data = {
 				attendee: {
 					name: 'Justin'
@@ -2178,7 +2179,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		var callCount = 0;
 
-		stache.registerHelper("foo", function (text) {
+		can.stache.registerHelper("foo", function (text) {
 			callCount++;
 			equal(callCount, 1, "call count is only ever one")
 			return "result";
@@ -2188,7 +2189,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			quux: false
 		});
 
-		var template = stache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
+		var template = can.stache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
 
 		template(obs);
 
@@ -2198,18 +2199,18 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("helpers between tags (#469)", function () {
 
-		stache.registerHelper("items", function () {
+		can.stache.registerHelper("items", function () {
 			return function (textNode) {
 				equal(textNode.nodeType, 3, "right nodeType")
 			}
 		});
 
-		var template = stache("<ul>{{items}}</ul>");
+		var template = can.stache("<ul>{{items}}</ul>");
 		template();
 	})
 
 	test("hiding image srcs (#157)", function () {
-		var template = stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
+		var template = can.stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
 			data = new can.Map({
 				image: null
 			}),
@@ -2224,7 +2225,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		notEqual(img.src, "", 'Image should have src')
 		equal(img.src, url, "images src is correct");
 
-		/*var renderer = stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
+		/*var renderer = can.stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
 		 url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
 		 data = new can.Map({
 		 user: 'Tina Fey',
@@ -2244,7 +2245,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("live binding in a truthy section", function () {
-		var template = stache('<div {{#width}}width="{{.}}"{{/width}}></div>'),
+		var template = can.stache('<div {{#width}}width="{{.}}"{{/width}}></div>'),
 			data = new can.Map({
 				width: '100'
 			});
@@ -2261,7 +2262,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("backtracks in mustache (#163)", function () {
 
-		var template = stache(
+		var template = can.stache(
 			"{{#grid.rows}}" +
 			"{{#grid.cols}}" +
 			"<div>{{columnData ../. .}}</div>" +
@@ -2304,7 +2305,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("support null and undefined as an argument", function () {
 
-		var template = stache("{{aHelper null undefined}}")
+		var template = can.stache("{{aHelper null undefined}}")
 
 		template({}, {
 			aHelper: function (arg1, arg2) {
@@ -2315,10 +2316,10 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("passing can.List to helper (#438)", function () {
-		var renderer = stache('<ul><li {{helper438 observeList}}>observeList broken</li>' +
+		var renderer = can.stache('<ul><li {{helper438 observeList}}>observeList broken</li>' +
 			'<li {{helper438 array}}>plain arrays work</li></ul>')
 
-		stache.registerHelper('helper438', function (classnames) {
+		can.stache.registerHelper('helper438', function (classnames) {
 			return function (el) {
 				el.innerHTML = 'Helper called';
 			};
@@ -2347,7 +2348,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("hiding image srcs (#494)", function () {
-		var template = stache('<img src="{{image}}"/>'),
+		var template = can.stache('<img src="{{image}}"/>'),
 			data = new can.Map({
 				image: ""
 			}),
@@ -2364,7 +2365,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("hiding image srcs with complex content (#494)", function () {
-		var template = stache('<img src="{{#image}}http://{{domain}}/{{loc}}.png{{/image}}"/>'),
+		var template = can.stache('<img src="{{#image}}http://{{domain}}/{{loc}}.png{{/image}}"/>'),
 			data = new can.Map({}),
 			imgData = {
 				domain: "canjs.us",
@@ -2385,7 +2386,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("style property is live-bindable in IE (#494)", 4, function () {
 
-		var template = stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+		var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
 
 		var dims = new can.Map({
 			width: 5,
@@ -2406,7 +2407,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("empty lists update", 2, function () {
-		var template = stache('<p>{{#list}}{{.}}{{/list}}</p>');
+		var template = can.stache('<p>{{#list}}{{.}}{{/list}}</p>');
 		var map = new can.Map({
 			list: ['something']
 		});
@@ -2422,7 +2423,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("attributes in truthy section", function () {
-		var template = stache('<p {{#attribute}}data-test="{{attribute}}"{{/attribute}}></p>');
+		var template = can.stache('<p {{#attribute}}data-test="{{attribute}}"{{/attribute}}></p>');
 		var data1 = {
 			attribute: "test-value"
 		};
@@ -2443,7 +2444,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("live bound attributes with no '='", function () {
-		var template = stache('<input type="radio" {{#selected}}checked{{/selected}}>');
+		var template = can.stache('<input type="radio" {{#selected}}checked{{/selected}}>');
 		var data = new can.Map({
 			selected: false
 		});
@@ -2459,7 +2460,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("outputting array of attributes", function () {
-		var template = stache('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
+		var template = can.stache('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
 		var data = {
 			attribute: [{
 				"name": "data-test1",
@@ -2482,7 +2483,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("incremental updating of #each within an if", function () {
-		var template = stache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
+		var template = can.stache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
 
 		var items = new can.List([{}, {}]);
 		var div = document.createElement('div');
@@ -2501,19 +2502,19 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	test("stache.safeString", function () {
 		var text = "Google",
 			url = "http://google.com/",
-			templateEscape = stache('{{link "' + text + '" "' + url + '"}}'),
-			templateUnescape = stache('{{{link "' + text + '" "' + url + '"}}}');
+			templateEscape = can.stache('{{link "' + text + '" "' + url + '"}}'),
+			templateUnescape = can.stache('{{{link "' + text + '" "' + url + '"}}}');
 		
-		stache.registerHelper('link', function (text, url) {
+		can.stache.registerHelper('link', function (text, url) {
 			var link = '<a href="' + url + '">' + text + '</a>';
-			return stache.safeString(link);
+			return can.stache.safeString(link);
 		});
 
 		var div = document.createElement('div');
 		div.appendChild(templateEscape({}));
 
 		equal(div.children.length, 1, 'rendered a DOM node');
-		return;
+		
 		equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
 		equal(div.children[0].innerHTML, text, 'rendered the text properly');
 		equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
@@ -2528,7 +2529,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("changing the list works with each", function () {
-		var template = stache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
 
 		var map = new can.Map({
 			list: ["foo"]
@@ -2546,7 +2547,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("nested properties binding (#525)", function () {
-		var template = stache("<label>{{name.first}}</label>");
+		var template = can.stache("<label>{{name.first}}</label>");
 
 		var me = new can.Map()
 
@@ -2574,7 +2575,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("Rendering indicies of an array with @index", function () {
-		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 		var list = [0, 1, 2, 3];
 
 		var lis = template({
@@ -2589,7 +2590,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 		var list = new can.List(['a', 'b', 'c']);
-		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
 		var lis = template({
 			list: list
@@ -2630,7 +2631,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test('Rendering keys of an object with #each and @key', function () {
-		var template = stache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 		var obj = {
 			foo: 'string',
 			bar: 1,
@@ -2651,7 +2652,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test('Live bound iteration of keys of a can.Map with #each and @key', function () {
 		// delete stache._helpers.foo;
-		var template = stache("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 		var map = new can.Map({
 			foo: 'string',
 			bar: 1,
@@ -2685,7 +2686,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test('Make sure data passed into template does not call helper by mistake', function () {
-		var template = stache("<h1>{{text}}</h1>");
+		var template = can.stache("<h1>{{text}}</h1>");
 		var data = {
 			text: 'with'
 		};
@@ -2697,7 +2698,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("no memory leaks with #each (#545)", function () {
-		var tmp = stache("<ul>{{#each children}}<li></li>{{/each}}</ul>");
+		var tmp = can.stache("<ul>{{#each children}}<li></li>{{/each}}</ul>");
 
 		var data = new can.Map({
 			children: [{
@@ -2727,7 +2728,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("each directly within live html section", function () {
 
-		var tmp = stache(
+		var tmp = can.stache(
 			"<ul>{{#if showing}}" +
 			"{{#each items}}<li>item</li>{{/items}}" +
 			"{{/if}}</ul>")
@@ -2755,7 +2756,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("mustache loops with 0 (#568)", function () {
 
-		var tmp = stache("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
+		var tmp = can.stache("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
 
 		var data = {
 			array: [0, null]
@@ -2770,7 +2771,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test('@index is correctly calculated when there are identical elements in the array', function () {
 		var data = new can.List(['foo', 'bar', 'baz', 'qux', 'foo']);
-		var tmp = stache('{{#each data}}{{@index}} {{/each}}');
+		var tmp = can.stache('{{#each data}}{{@index}} {{/each}}');
 
 		var div = document.createElement('div')
 
@@ -2784,7 +2785,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("if helper within className (#592)", function () {
 
-		var tmp = stache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
+		var tmp = can.stache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
 		var data = new can.Map({
 			state: "ready"
 		})
@@ -2792,7 +2793,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
 
-		tmp = stache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
+		tmp = can.stache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
 		data = new can.Map({
 			state: "ready"
 		})
@@ -2811,14 +2812,14 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			var div = document.createElement('div');
 
 			can.append(can.$('#qunit-test-area'), div);
-			can.append(can.$(div), stache(content)());
+			can.append(can.$(div), can.stache(content)());
 			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 		});
 	});
 
 	test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item (#613)", function () {
 		var list = new can.List(['a', 'b', 'c']);
-		var template = stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
 		var lis = template({
 			list: list
@@ -2833,19 +2834,19 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 		equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
 	});
 
-	test("stache.safestring works on live binding (#606)", function () {
+	test("can.stache.safestring works on live binding (#606)", function () {
 
 		var num = can.compute(1)
 
-		stache.registerHelper("safeHelper", function () {
+		can.stache.registerHelper("safeHelper", function () {
 
-			return stache.safeString(
+			return can.stache.safeString(
 				"<p>" + num() + "</p>"
 			)
 
 		});
 
-		var template = stache("<div>{{safeHelper}}</div>")
+		var template = can.stache("<div>{{safeHelper}}</div>")
 
 		var frag = template();
 		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "p", "got a p element");
@@ -2854,7 +2855,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("directly nested subitems and each (#605)", function () {
 
-		var template = stache("<div>" +
+		var template = can.stache("<div>" +
 
 			"{{#item}}" +
 			"<p>This is the item:</p>" +
@@ -2888,7 +2889,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test("directly nested live sections unbind without needing the element to be removed", function () {
-		var template = stache(
+		var template = can.stache(
 			"<div>" +
 			"{{#items}}" +
 			"<p>first</p>" +
@@ -2924,7 +2925,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	})
 
 	test("direct live section", function () {
-		var template = stache("{{#if visible}}<label/>{{/if}}");
+		var template = can.stache("{{#if visible}}<label/>{{/if}}");
 
 		var data = new can.Map({
 			visible: true
@@ -2944,7 +2945,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test('Rendering keys of an object with #each and @key in a Component', function () {
 
-		var template = stache("<ul>" +
+		var template = can.stache("<ul>" +
 			"{{#each data}}" +
 			"<li>{{@key}} : {{.}}</li>" +
 			"{{/data}}" +
@@ -2969,7 +2970,6 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("{{each}} does not error with undefined list (#602)", function () {
 		var text = '<div>{{#each data}}{{name}}{{/each}}</div>'
-		var renderer = stache('<div>{{#each data}}{{name}}{{/each}}</div>');
 
 		equal(getText(text,{}), '<div></div>', 'Empty text rendered');
 		equal(getText(text,{
@@ -2987,7 +2987,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test('{{#each}} helper works reliably with nested sections (#604)', function () {
-		var renderer = stache('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
+		var renderer = can.stache('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
 			'{{else}}<ul>{{#each list2}}<li>{{name}}</li>{{/each}}</ul>{{/if}}');
 		var data = new can.Map({
 			first: true,
@@ -3028,7 +3028,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			div = document.createElement("div"),
 			title = "Alpha&Beta";
 
-		div.appendChild(stache(html)(new can.Map({
+		div.appendChild(can.stache(html)(new can.Map({
 			test: title
 		})));
 
@@ -3057,7 +3057,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 					<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
 					<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
 					<span>{{print_hash prop=proto_prop}}</span><br/>',
-			renderer = stache(template),
+			renderer = can.stache(template),
 			data = new can.Foo({
 				own_prop: "quux"
 			}),
@@ -3113,7 +3113,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 	test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
 		
-		var renderer = stache('    {{description}}: \
+		var renderer = can.stache('    {{description}}: \
     <ul> \
     {{#each list}} \
         <li>{{name}}</li> \
@@ -3159,7 +3159,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 
 	test('can.compute should live bind when the value is changed to a Construct (#638)', function () {
-		var renderer = stache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+		var renderer = can.stache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
 			div = document.createElement('div'),
 			// can.compute(null) will pass
 			counter = can.compute(),
@@ -3194,9 +3194,9 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 
 		document.body.appendChild(script)
 
-		//stache("itempartial","<label></label>")
+		//can.stache("itempartial","<label></label>")
 
-		var itemsTemplate = stache(
+		var itemsTemplate = can.stache(
 			"<div>" +
 			"{{#each items}}" +
 			"{{>itempartial}}" +
@@ -3219,19 +3219,24 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 	});
 	
 	test("#each with #if directly nested (#750)", function(){
-		var template = stache("<ul>{{#each list}} {{#if visible}}<li>{{name}}</li>{{/if}} {{/each}}</ul>");
-		var data = new can.Map({
-		    list: [{
-		        name: 'first',
-		        visible: true
-		    }, {
-		        name: 'second',
-		        visible: false
-		    }, {
-		        name: 'third',
-		        visible: true
-		    }]
-		});
+		var template = can.stache("<ul>{{#each list}} {{#if visible}}<li>{{name}}</li>{{/if}} {{/each}}</ul>");
+		var data = new can.Map(
+			{
+				list: [
+					{
+						name: 'first',
+						visible: true
+					},
+					{
+						name: 'second',
+						visible: false
+					},
+					{
+						name: 'third',
+						visible: true
+					}
+				]
+			});
 		
 		var frag = template(data);
 		
@@ -3254,7 +3259,7 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			equal( frag.childNodes[0].innerHTML, "Justin Meyer", "rendered right");
 		});
 		
-		var template = stache("<stache-tag><span>{{first}} {{last}}</span></stache-tag>")
+		var template = can.stache("<stache-tag><span>{{first}} {{last}}</span></stache-tag>")
 		
 		template({first: "Justin"});
 		
@@ -3271,10 +3276,32 @@ steal("can/view/stache", "can/view","can/test",function(stache, view){
 			
 		});
 		
-		var template = stache("<div stache-attr='foo'></div>")
+		var template = can.stache("<div stache-attr='foo'></div>")
 		
 		template({});
 		
-	})
+	});
+	
+	if(window.jQuery || window.Zepto) {
+		
+		test("helpers returning jQuery or Zepto collection", function(){
+			
+			can.stache.registerHelper("jQueryHelper", function(options){
+				var section = options.fn({first: "Justin"});
+				return $("<h1>").append( section );
+			});
+			
+			var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
+			
+			var res = template({last: "Meyer"})
+			
+			equal(res.childNodes[0].nodeName.toLowerCase(), "h1");
+			
+			equal(res.childNodes[0].innerHTML, "Justin Meyer");
+			
+		})
+	}
+	
+	
 	
 })

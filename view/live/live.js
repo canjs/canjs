@@ -61,16 +61,16 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					attrs[attr] += value;
 				},
 				attrEnd: function(){}
-			})
+			});
 			return attrs;
-		}, 
+		},
 		splice = [].splice,
 		isNode = function(obj){
 			return obj && obj.nodeType;
 		},
 		addTextNodeIfNoChildren = function(frag){
 			if(!frag.childNodes.length) {
-				frag.appendChild(document.createTextNode(""))
+				frag.appendChild(document.createTextNode(""));
 			}
 		};
 	/**
@@ -154,7 +154,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 							itemHTML = render.call(context, item, itemIndex),
 							gotText = typeof itemHTML === "string",
 							// and convert it into elements.
-							itemFrag = elements.toFragment(itemHTML);
+							itemFrag = can.frag(itemHTML);
 						// Add those elements to the mappings.
 						
 						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
@@ -225,7 +225,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						can.remove(can.$(itemsToRemove));
 					}
 					
-				}, 
+				},
 				// A text node placeholder
 				text = document.createTextNode(''),
 				// The current list.
@@ -319,7 +319,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			var nodes = [el],
 				makeAndPut = function (val) {
 					var isString = !isNode(val),
-						frag = elements.toFragment(val),
+						frag = can.frag(val),
 						oldNodes = can.makeArray(nodes);
 					
 					// Add a placeholder textNode if necessary.
@@ -354,7 +354,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 */
 		replace: function (nodes, val, teardown) {
 			var oldNodes = nodes.slice(0),
-				frag = elements.toFragment(val);
+				frag = can.frag(val);
 			nodeLists.register(nodes, teardown);
 			
 			
@@ -397,7 +397,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		setAttributes: function(el, newVal) {
 			var attrs = getAttributeParts(newVal);
 			for(var name in attrs) {
-				can.attr.set(el, name, attrs[name])
+				can.attr.set(el, name, attrs[name]);
 			}
 		},
 		/**
@@ -410,10 +410,10 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		attributes: function (el, compute, currentValue) {
 			var oldAttrs = {};
 			
-			
 			var setAttrs = function (newVal) {
-				var newAttrs = getAttributeParts(newVal);
-				for(name in newAttrs) {
+				var newAttrs = getAttributeParts(newVal),
+					name;
+				for( name in newAttrs ) {
 					var newValue = newAttrs[name],
 						oldValue = oldAttrs[name];
 					if(newValue !== oldValue) {
@@ -421,7 +421,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					}
 					delete oldAttrs[name];
 				}
-				for(name in oldAttrs) {
+				for( name in oldAttrs ) {
 					elements.removeAttr(el, name);
 				}
 				oldAttrs = newAttrs;
@@ -431,7 +431,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			});
 			// current value has been set
 			if (arguments.length >= 3) {
-				var oldAttrs = getAttributeParts(currentValue);
+				oldAttrs = getAttributeParts(currentValue);
 			} else {
 				setAttrs(compute());
 			}
