@@ -58,4 +58,21 @@ steal('can/event/propagate', 'can/test', function (event) {
 		});
 		node3.dispatch('stop');
 	});
+
+	test('Events propagate even if the original target has no listeners', 3, function() {
+		var node1 = { name: 'root' },
+			node2 = { name: 'mid', parent: node1 },
+			node3 = { name: 'child', parent: node2 };
+
+		can.extend(node1, can.event, { __propagate: 'parent' });
+		can.extend(node2, can.event, { __propagate: 'parent' });
+		can.extend(node3, can.event, { __propagate: 'parent' });
+
+		node1.bind('action', function(ev) {
+			equal(ev.target.name, 'child', 'target is node3');
+			equal(ev.currentTarget.name, 'root', 'currentTarget is node1');
+			equal(this.name, 'root', 'delegate is node1');
+		});
+		node3.dispatch('action');
+	});
 });

@@ -3,7 +3,7 @@ steal('can/event', function() {
 	// can.extend(Class.prototype, can.event, { __propagate: 'prop' })
 	var dispatch = can.dispatch;
 	can.dispatch = can.event.dispatch = function (event, args) {
-		var propagate = (this.__bindEvents && this.__propagate) || false;
+		var propagate = this.__propagate || false;
 
 		// Inject propagation into event, when applicable
 		if (propagate && typeof event.isPropagationStopped === 'undefined') {
