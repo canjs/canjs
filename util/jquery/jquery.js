@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "can/util/inserted", "can/util/event.js", function ($, can, attr) {
+steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array/each.js', "can/util/inserted", function ($, can, attr, event) {
 	var isBindableElement = function (node) {
 		// In IE8 window.window !== window.window, so we allow == here.
 		/*jshint eqeqeq:false*/
@@ -21,6 +21,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 				can.dispatch.call(obj, event, args);
 			}
 		},
+		event: can.event,
 		addEvent: can.addEvent,
 		removeEvent: can.removeEvent,
 		buildFragment: function (elems, context) {

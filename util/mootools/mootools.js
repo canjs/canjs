@@ -1,4 +1,4 @@
-steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/util/event.js', 'can/util/fragment.js', 'can/util/deferred.js',
+steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/event', 'can/util/fragment.js', 'can/util/deferred.js',
 	'can/util/array/each.js', 'can/util/object/isplain', "can/util/inserted", function (can, attr) {
 		/* jshint maxdepth:5 */
 		// mootools.js

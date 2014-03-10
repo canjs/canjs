@@ -1,6 +1,6 @@
-steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'can/util/event.js',
+steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object/isplain', 
 	'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
-	function (can, attr) {
+	function (can, attr, event) {
 		// data.js
 		// ---------
 		// _jQuery-like data methods._
@@ -60,6 +60,7 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 		$.extend(can, Zepto);
 		can.each = oldEach;
 		can.attr = attr;
+		can.event = event;
 		var arrHas = function (obj, name) {
 			return obj[0] && obj[0][name] || obj[name];
 		};
