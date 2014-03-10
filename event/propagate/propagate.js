@@ -19,6 +19,7 @@ steal('can/event', function() {
 			var stop = false;
 			event.currentTarget = this;
 			event.target = event.target || this;
+			event.descendants = event.target === event.currentTarget ? [] : [event.target];
 			event.stopPropagation = function() {
 				stop = true;
 			};
@@ -29,6 +30,7 @@ steal('can/event', function() {
 		else if (propagate) {
 			// Set the current target when propagating
 			event = can.simpleExtend({}, event);
+			event.descendants = [event.currentTarget].concat(event.descendants);
 			event.currentTarget = this;
 		}
 

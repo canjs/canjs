@@ -75,4 +75,28 @@ steal('can/event/propagate', 'can/test', function (event) {
 		});
 		node3.dispatch('action');
 	});
+
+	test('Descendants are available to verify delegation', 7, function() {
+		var node1 = { name: 'root' },
+			node2 = { name: 'mid', parent: node1 },
+			node3 = { name: 'child', parent: node2 };
+
+		can.extend(node1, can.event, { __propagate: 'parent' });
+		can.extend(node2, can.event, { __propagate: 'parent' });
+		can.extend(node3, can.event, { __propagate: 'parent' });
+
+		node1.bind('action', function(ev) {
+			equal(ev.target.name, 'custom', 'target is custom target');
+			equal(ev.currentTarget.name, 'root', 'currentTarget is node1');
+			equal(this.name, 'root', 'delegate is node1');
+			equal(ev.descendants.length, 3, 'event has 3 descendants (node2, node3, custom target)');
+			equal(ev.descendants[0].name, 'mid', 'first descendant is node2');
+			equal(ev.descendants[1].name, 'child', 'second descendant is node3');
+			equal(ev.descendants[2].name, 'custom', 'third descendant is custom target');
+		});
+		node3.dispatch({
+			type: 'action',
+			target: { name: 'custom' }
+		});
+	});
 });
