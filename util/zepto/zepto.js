@@ -1,4 +1,4 @@
-steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object/isplain', 
+steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object/isplain',
 	'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
 	function (can, attr, event) {
 		// data.js

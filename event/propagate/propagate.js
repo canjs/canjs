@@ -31,6 +31,7 @@ steal('can/event', function() {
 
 		// Call propagated events
 		if (propagate && !event.isPropagationStopped() && this[propagate]) {
+			// Call the propagated can.dispatch (otherwise it'll only propagate one level)
 			can.dispatch.call(this[propagate], event, args);
 		}
 	};
