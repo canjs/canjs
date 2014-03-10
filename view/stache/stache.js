@@ -59,6 +59,7 @@ steal(
 					
 						// Adds a renderer function and starts a section.
 						section.startSection(makeRenderer(mode,stache, copyState()  ));
+						state.inSection = true;
 						
 					} else {
 						// Adds a renderer function that only updates text.
@@ -73,13 +74,15 @@ steal(
 				attr: null,
 				section: null,
 				// If text should be inserted and HTML escaped
-				text: false
+				text: false,
+				inSection : false
 			},
 			// Copys the state object for use in renderers.
 			copyState = function(overwrites){
 				var cur = {
 					tag: state.node && state.node.tag,
-					attr: state.attr && state.attr.name
+					attr: state.attr && state.attr.name,
+					inSection: state.inSection
 				};
 				return overwrites ? can.simpleExtend(cur, overwrites) : cur;
 			};
@@ -90,7 +93,7 @@ steal(
 					tag: tagName,
 					children: []
 				};
-				
+				state.inSection = false;
 			},
 			end: function(tagName, unary){
 				if(unary){
@@ -102,7 +105,7 @@ steal(
 				if( viewCallbacks.tag(tagName) ) {
 					section.startSubSection();
 				}
-				
+				state.inSection = false;
 				state.node =null;
 			},
 			close: function( tagName ) {
@@ -125,7 +128,7 @@ steal(
 						});
 					});
 				}
-				
+				state.inSection = true;
 				
 			},
 			attrStart: function(attrName){
@@ -280,7 +283,8 @@ steal(
 				}
 			};
 	};
-	
+	can.view.parser = parser;
+	can.view.target = target;
 	return stache;
 	
 });
