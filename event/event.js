@@ -122,33 +122,13 @@ steal('can/util/can.js', function (can) {
 			};
 		}
 		var eventName = event.type,
-			propagate = this.__propagate || false,
 			handlers = (this.__bindEvents[eventName] || [])
 				.slice(0),
-			obj = this,
-			ev, stop;
+			ev;
 		args = [event].concat(args || []);
-
-		// If the event should be propagated, include a method for stopping it.
-		if (propagate && typeof event.__stop === 'undefined') {
-			if (!event.target) {
-				event.target = this;
-			}
-			event.__stop = false;
-			event.stopPropagation = function() {
-				event.__stop = true;
-			};
-		}
-
-		// Dispatch the event to objects listening
 		for (var i = 0, len = handlers.length; i < len; i++) {
 			ev = handlers[i];
 			ev.handler.apply(this, args);
-		}
-		
-		// Call propagated events
-		if (propagate && !event.__stop && obj && obj[propagate]) {
-			can.dispatch.apply(obj[propagate], args);
 		}
 	};
 
