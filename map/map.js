@@ -144,6 +144,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				hookupBubble: function (child, prop, parent, Ob, List) {
 					Ob = Ob || Map;
 					List = List || can.List;
+					prop = typeof prop === 'function' ? prop() : prop;
 
 					// If it's an `array` make a list, otherwise a child.
 					if (child instanceof Map) {
