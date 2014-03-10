@@ -1,4 +1,4 @@
-steal('can/event', 'can/util', function () {
+steal('can/event', 'can/test', function (event) {
 	module('can/event');
 	test('basics', 4, function () {
 		var obj = {
@@ -163,20 +163,11 @@ steal('can/event', 'can/util', function () {
 	test('Event propagation and delegation', 10, function() {
 		var node1 = { name: 'root' },
 			node2 = { name: 'mid', parent: node1 },
-			node3 = { name: 'child', parent: node2 },
-			events = { 
-				__propagate: 'parent',
-				bind: can.bind, 
-				unbind: can.unbind, 
-				delegate: can.delegate, 
-				undelegate: can.undelegate, 
-				dispatch: can.dispatch
-			},
-			node
+			node3 = { name: 'child', parent: node2 };
 
-		can.simpleExtend(node1, events);
-		can.simpleExtend(node2, events);
-		can.simpleExtend(node3, events);
+		can.extend(node1, can.event, { __propagate: 'parent' });
+		can.extend(node2, can.event, { __propagate: 'parent' });
+		can.extend(node3, can.event, { __propagate: 'parent' });
 
 		// Test propagation
 		node1.bind('action', function(ev) {
@@ -209,5 +200,19 @@ steal('can/event', 'can/util', function () {
 			equal(this.name, 'child', 'delegate is node1');
 		});
 		node3.dispatch('stop');
+	});
+
+	test('Once will listen to an event once, then unbind', function() {
+		var obj = {},
+			count = 0;
+
+		can.once.call(obj, 'action', function() {
+			count++;
+		});
+		can.dispatch.call(obj, 'action');
+		can.dispatch.call(obj, 'action');
+		can.dispatch.call(obj, 'action');
+
+		equal(count, 1, 'once should only fire a handler once');
 	});
 });
