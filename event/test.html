@@ -1,11 +1,11 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.14.0.css"/>
-        <title>can.util.event Test</title>
+        <title>can.event Test</title>
     </head>
     <body>
 
-        <h1 id="qunit-header">can/util/event test</h1>
+        <h1 id="qunit-header">can/event test</h1>
     	<h2 id="qunit-banner"></h2>
     	<div id="qunit-testrunner-toolbar"></div>
     	<h2 id="qunit-userAgent"></h2>
@@ -20,8 +20,7 @@
             }
 
             QUnit.config.autostart = false;
-			steal('can/util')
-				.then("can/test", 'can/util/event/event_test.js', function() {
+			steal('can/event/event_test.js', function() {
 				can.dev.logLevel = 3;
                 QUnit.start();
 			});

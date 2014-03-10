@@ -1,5 +1,5 @@
-(function () {
-	module('can/util/event');
+steal('can/event', 'can/util', function () {
+	module('can/event');
 	test('basics', 4, function () {
 		var obj = {
 			addEvent: can.addEvent,
@@ -210,4 +210,4 @@
 		});
 		node3.dispatch('stop');
 	});
-}());
+});
