@@ -101,15 +101,6 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', 'can/util/array/each.js', "c
 	// Aliases
 	can.on = can.bind;
 	can.off = can.unbind;
-	can.once = function(ev, cb) {
-		var self = this,
-			once = function() {
-				can.unbind.call(self, once);
-				return cb.apply(this, arguments);
-			};
-		can.bind.call(this, ev, once);
-		return this;
-	};
 	// Wrap modifier functions.
 	$.each([
 		'append',
