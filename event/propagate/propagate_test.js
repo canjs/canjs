@@ -1,7 +1,7 @@
 steal('can/event/propagate', 'can/test', function (event) {
 	module('can/event/propagate');
 
-	test('Propagation', 6, function() {
+	test('Propagation', 9, function() {
 		var node1 = { name: 'root' },
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
@@ -13,20 +13,23 @@ steal('can/event/propagate', 'can/test', function (event) {
 		// Test propagation
 		node1.bind('action', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');
+			equal(ev.currentTarget.name, 'root', 'currentTarget is node1');
 			equal(this.name, 'root', 'delegate is node1');
 		});
 		node2.bind('action', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');
+			equal(ev.currentTarget.name, 'mid', 'currentTarget is node2');
 			equal(this.name, 'mid', 'delegate is node2');
 		});
 		node3.bind('action', function(ev) {
 			equal(ev.target.name, 'child', 'target is node1');
+			equal(ev.currentTarget.name, 'child', 'currentTarget is node1');
 			equal(this.name, 'child', 'delegate is node1');
 		});
 		node3.dispatch('action');
 	});
 
-	test('Stop propagation', 4, function() {
+	test('Stop propagation', 6, function() {
 		var node1 = { name: 'root' },
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
@@ -39,15 +42,18 @@ steal('can/event/propagate', 'can/test', function (event) {
 		node1.bind('stop', function(ev) {
 			// This should never fire
 			notEqual(ev.target.name, 'child', 'target is node3');
+			notEqual(ev.currentTarget.name, 'root', 'currentTarget is node1');
 			notEqual(this.name, 'root', 'delegate is node1');
 		});
 		node2.bind('stop', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');
+			equal(ev.currentTarget.name, 'mid', 'currentTarget is node2');
 			equal(this.name, 'mid', 'delegate is node2');
 			ev.stopPropagation();
 		});
 		node3.bind('stop', function(ev) {
 			equal(ev.target.name, 'child', 'target is node1');
+			equal(ev.currentTarget.name, 'child', 'currentTarget is node1');
 			equal(this.name, 'child', 'delegate is node1');
 		});
 		node3.dispatch('stop');

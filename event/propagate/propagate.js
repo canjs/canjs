@@ -17,6 +17,7 @@ steal('can/event', function() {
 			// Add extra event properties
 			// This could be done with can.simpleExtend, but this avoids extra logic execution
 			var stop = false;
+			event.currentTarget = this;
 			event.target = event.target || this;
 			event.stopPropagation = function() {
 				stop = true;
@@ -24,6 +25,11 @@ steal('can/event', function() {
 			event.isPropagationStopped = function() {
 				return stop;
 			};
+		}
+		else if (propagate) {
+			// Set the current target when propagating
+			event = can.simpleExtend({}, event);
+			event.currentTarget = this;
 		}
 
 		// Call original dispatch
