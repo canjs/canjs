@@ -115,20 +115,25 @@ steal('can/util/can.js', function (can) {
 		args = [event].concat(args || []);
 
 		// If the event should be propagated, include a method for stopping it.
-		if (propagate) {
-			stop = false;
+		if (propagate && typeof event.__stop === 'undefined') {
+			if (!event.target) {
+				event.target = this;
+			}
+			event.__stop = false;
 			event.stopPropagation = function() {
-				stop = true;
+				event.__stop = true;
 			};
 		}
 
 		// Dispatch the event to objects listening
-		while (obj) {
-			for (var i = 0, len = handlers.length; i < len; i++) {
-				ev = handlers[i];
-				ev.handler.apply(this, args);
-			}
-			obj = propagate && !stop && obj && obj[propagate] ? obj[propagate] : undefined;
+		for (var i = 0, len = handlers.length; i < len; i++) {
+			ev = handlers[i];
+			ev.handler.apply(this, args);
+		}
+		
+		// Call propagated events
+		if (propagate && !event.__stop && obj && obj[propagate]) {
+			can.dispatch.apply(obj[propagate], args);
 		}
 	};
 	return can;

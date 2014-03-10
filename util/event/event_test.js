@@ -159,4 +159,55 @@
 		equal(handler_fired, true, "Delegated handler fired");
 		equal(unbind_fallback_fired, true, "Unbind fallback fired");
 	});
+
+	test('Event propagation and delegation', 10, function() {
+		var node1 = { name: 'root' },
+			node2 = { name: 'mid', parent: node1 },
+			node3 = { name: 'child', parent: node2 },
+			events = { 
+				__propagate: 'parent',
+				bind: can.bind, 
+				unbind: can.unbind, 
+				delegate: can.delegate, 
+				undelegate: can.undelegate, 
+				dispatch: can.dispatch
+			},
+			node
+
+		can.simpleExtend(node1, events);
+		can.simpleExtend(node2, events);
+		can.simpleExtend(node3, events);
+
+		// Test propagation
+		node1.bind('action', function(ev) {
+			equal(ev.target.name, 'child', 'target is node3');
+			equal(this.name, 'root', 'delegate is node1');
+		});
+		node2.bind('action', function(ev) {
+			equal(ev.target.name, 'child', 'target is node3');
+			equal(this.name, 'mid', 'delegate is node2');
+		});
+		node3.bind('action', function(ev) {
+			equal(ev.target.name, 'child', 'target is node1');
+			equal(this.name, 'child', 'delegate is node1');
+		});
+		node3.dispatch('action');
+
+		// Test stop propagation
+		node1.bind('stop', function(ev) {
+			// This should never fire
+			notEqual(ev.target.name, 'child', 'target is node3');
+			notEqual(this.name, 'root', 'delegate is node1');
+		});
+		node2.bind('stop', function(ev) {
+			equal(ev.target.name, 'child', 'target is node3');
+			equal(this.name, 'mid', 'delegate is node2');
+			ev.stopPropagation();
+		});
+		node3.bind('stop', function(ev) {
+			equal(ev.target.name, 'child', 'target is node1');
+			equal(this.name, 'child', 'delegate is node1');
+		});
+		node3.dispatch('stop');
+	});
 }());
