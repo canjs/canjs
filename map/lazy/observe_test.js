@@ -93,7 +93,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			2
 		]);
 	});
-	test('changing an object unbinds', function () {
+	test('changing an object unbinds', 4, function () {
 		var state = new can.LazyMap({
 			category: 5,
 			productType: 4,

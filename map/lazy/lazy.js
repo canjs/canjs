@@ -1,6 +1,27 @@
 steal('can/util', 'can/observe', './nested_reference', function (can) {
-	var makeObserve = function (child, parent) {
-			if (child instanceof can.Observe) {
+	var getExistingMap = function(child, parent) {
+			// Cyclical self reference
+			if(parent._original === child) {
+				return parent;
+			}
+
+			// Go through each reference to see if the original data are the same
+			// as the given child data. That means that we already created a LazyMap
+			// for that same data so we should also return that Map.
+			if(parent instanceof can.LazyMap) {
+				parent._nestedReference.each(function (current, ref) {
+					if(current._original === child) {
+						child = current;
+					}
+				});
+			}
+
+			return child;
+		},
+		makeObserve = function (child, parent) {
+			child = getExistingMap(child, parent);
+
+			if (child instanceof can.Map) {
 				// We have an `observe` already...
 				// Make sure it is not listening to this already
 				// It's only listening if it has bindings already.
@@ -16,29 +37,19 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 			}
 			return child;
 		},
-		attrParts = function (attr, keepKey) {
-			if (keepKey) {
-				return [attr];
-			}
-			// break attr path into array, return a copy if it already is an array
-			return can.isArray(attr) ? attr.slice(0) : ("" + attr).split(".");
-		},
 		isObserve = function (obj) {
 			return obj instanceof can.Map;
 		};
 
 	can.LazyMap = can.Map.extend({
 		setup: function (obj) {
+			// Store the original data
+			this._original = obj;
 			// `_data` is where we keep the properties.
 			this._data = can.extend(can.extend(true, {}, this.constructor.defaults || {}), obj);
 
-			// Make the data directly accessible (if possible)
-			can.each(this._data, can.proxy(function(value, prop) {
-				this.___set(prop, value);
-			}, this));
-
 			// The namespace this `object` uses to listen to events.
-			can.cid(this, ".map");
+			can.cid(this, ".lazyMap");
 			// Sets all `attrs`.
 			this._init = 1;
 			this._setupComputes();
@@ -52,6 +63,10 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				teardownMapping();
 			}
 
+			// Make the data directly accessible (if possible)
+			can.each(this._data, can.proxy(function(value, prop) {
+				this.___set(prop, value);
+			}, this));
 			this.bind('change', can.proxy(this._changes, this));
 
 			delete this._init;
@@ -154,8 +169,8 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 		// walks to a property on the lazy map
 		// if it finds an object, uses [] to follow properties
 		// if it finds something else, it uses __get
-		_goto: function (attr) {
-			var parts = attrParts(attr),
+		_goto: function (attr, keepKey) {
+			var parts = can.Map.helpers.attrParts(attr, keepKey).slice(0),
 				prev,
 				path = [],
 				part;
@@ -163,6 +178,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 			// are we dealing with list or map
 			var cur = this instanceof can.Observe.List ? this[parts.shift()] : this.__get();
 
+			// TODO we might also have to check for dot separated keys in each iteration
 			while (cur && !isObserve(cur) && parts.length) {
 				if (part !== undefined) {
 					path.push(part);
@@ -192,18 +208,17 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				}
 			} else if (data.value && can.Map.helpers.canMakeObserve(data.value)) {
 				// if object create LazyMap/LazyList
-				var converted;
-				if (can.isArray(data.value)) {
-					converted = new can.LazyList(data.value);
-				} else {
-					converted = new can.LazyMap(data.value);
-				}
+				var converted = makeObserve(data.value, this);
 				// ... and replace it
 				this._addChild(attr, converted, function () {
 					data.parent[data.prop] = converted;
 				});
 				return converted;
+			} else if(data.value !== undefined) {
+				// Return if we have a value
+				return data.value;
 			} else {
+				// Otherwise get it directly from this object
 				return this.__get(attr);
 			}
 		},
@@ -211,10 +226,9 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 		// `attr` - Is a string of properties or an array  of property values.
 		// `value` - The raw value to set.
 		_set: function (attr, value, keepKey) {
-			var data = this._goto(attr);
+			var data = this._goto(attr, keepKey);
 
 			if (isObserve(data.value) && data.parts.length) {
-				console.log('setting observe', data.value, data.parts + '')
 				return data.value._set(data.parts, value);
 			} else if (!data.parts.length) {
 				this.__set(attr, value, data.value, data);
@@ -285,9 +299,8 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 		 * @param {Boolean} remove true if you should remove properties that are not in props
 		 */
 		_attrs: function (props, remove) {
-
 			if (props === undefined) {
-				return serialize(this, 'attr', {});
+				return can.Map.helpers.serialize(this, 'attr', {});
 			}
 
 			props = can.extend({}, props);
@@ -301,7 +314,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 			// Update existing props
 			this.each(function (curVal, prop) {
 				newVal = props[prop];
-				data = self._goto(prop);
+				data = self._goto(prop, true);
 
 				// remove existing prop and return if there is no new prop to merge and `remove` param exists
 				if (newVal === undefined) {
