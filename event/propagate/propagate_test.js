@@ -1,6 +1,7 @@
 steal('can/event/propagate', 'can/test', function (event) {
 	module('can/event/propagate');
-	test('Event propagation and delegation', 10, function() {
+
+	test('Propagation', 6, function() {
 		var node1 = { name: 'root' },
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
@@ -23,6 +24,16 @@ steal('can/event/propagate', 'can/test', function (event) {
 			equal(this.name, 'child', 'delegate is node1');
 		});
 		node3.dispatch('action');
+	});
+
+	test('Stop propagation', 4, function() {
+		var node1 = { name: 'root' },
+			node2 = { name: 'mid', parent: node1 },
+			node3 = { name: 'child', parent: node2 };
+
+		can.extend(node1, can.event, { __propagate: 'parent' });
+		can.extend(node2, can.event, { __propagate: 'parent' });
+		can.extend(node3, can.event, { __propagate: 'parent' });
 
 		// Test stop propagation
 		node1.bind('stop', function(ev) {
