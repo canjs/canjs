@@ -150,8 +150,12 @@ steal('can/util/can.js', function (can) {
 		once: can.once,
 		bind: can.addEvent,
 		unbind: can.removeEvent,
-		delegate: can.addEvent,
-		undelegate: can.removeEvent,
+		delegate: function(selector, event, handler) {
+			can.addEvent.call(event, handler);
+		},
+		undelegate: function(selector, event, handler) {
+			can.removeEvent.call(event, handler);
+		},
 		trigger: can.dispatch,
 
 		// Normal can/event methods
