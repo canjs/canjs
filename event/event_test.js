@@ -204,15 +204,27 @@ steal('can/event', 'can/test', function (event) {
 
 	test('Once will listen to an event once, then unbind', function() {
 		var obj = {},
-			count = 0;
+			count = 0,
+			mixin = 0;
 
+		// Direct once call
 		can.once.call(obj, 'action', function() {
 			count++;
 		});
 		can.dispatch.call(obj, 'action');
 		can.dispatch.call(obj, 'action');
 		can.dispatch.call(obj, 'action');
+		equal(count, 1, 'once should only fire a handler once (direct)');
 
-		equal(count, 1, 'once should only fire a handler once');
+		// Mixin call
+		can.extend(obj, can.event);
+		obj.once('mixin', function() {
+			mixin++;
+		});
+		obj.dispatch('mixin');
+		obj.dispatch('mixin');
+		obj.dispatch('mixin');
+		equal(mixin, 1, 'once should only fire a handler once (mixin)');
+
 	});
 });

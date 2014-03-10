@@ -163,6 +163,8 @@ steal('can/util/can.js', function (can) {
 
 	can.event = {
 		// __propagate: false,
+
+		// Event method aliases
 		on: can.addEvent,
 		off: can.removeEvent,
 		once: can.once,
@@ -170,6 +172,9 @@ steal('can/util/can.js', function (can) {
 		unbind: can.removeEvent,
 		delegate: can.addEvent,
 		undelegate: can.removeEvent,
+		trigger: can.dispatch,
+
+		// Normal can/event methods
 		addEvent: can.addEvent,
 		removeEvent: can.removeEvent,
 		listenTo: can.listenTo,
