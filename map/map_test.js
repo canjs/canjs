@@ -55,6 +55,15 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		deepEqual(can.Map.keys(state), ["productType"], "one property");
 	});
 
+	test("remove attr on key with dot", function () {
+		var state = new can.Map({
+			"key.with.dots": 12,
+			productType: 4
+		});
+		state.removeAttr("key.with.dots");
+		deepEqual(can.Map.keys(state), ["productType"], "one property");
+	});
+
 	test("nested event handlers are not run by changing the parent property (#280)", function () {
 
 		var person = new can.Map({
