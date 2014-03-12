@@ -757,10 +757,10 @@ steal("can/component", function () {
 			template: '<p><content/></p>'
 		});
 		var template = can.view.mustache('<my-tag>Outter<my-tag>Inner</my-tag></my-tag>');
-		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag><1my-tag>0</my-tag></my-tag></my-tag></my-tag>');
+		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag>1<my-tag>0</my-tag></my-tag></my-tag></my-tag>');
 		can.append(can.$('#qunit-test-area'), template({}));
 		equal(can.$('#qunit-test-area p').length, 2, 'proper number of p tags');
-		can.append(can.$('#qunit-test-area'), template({}));
+		can.append(can.$('#qunit-test-area'), template2({}));
 		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
 
 	});
