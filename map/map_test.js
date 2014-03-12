@@ -60,8 +60,19 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 			"key.with.dots": 12,
 			productType: 4
 		});
+		var state2 = new can.Map({
+			"key.with.dots": 4,
+			key: {
+				with: {
+					someValue: 20
+				}
+			}
+		})
 		state.removeAttr("key.with.dots");
+		state2.removeAttr("key.with.someValue");
 		deepEqual(can.Map.keys(state), ["productType"], "one property");
+		deepEqual(can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
+		deepEqual(can.Map.keys(state2.key.with), [], "zero properties");
 	});
 
 	test("nested event handlers are not run by changing the parent property (#280)", function () {
