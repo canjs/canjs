@@ -621,8 +621,8 @@ steal("can/util", "can/map", function (can, Map) {
 			 *
 			 * ## See also
 			 *
-			 * `push` has a counterpart in [can.List.pop pop], or you may be
-			 * looking for [can.List.unshift unshift] and its counterpart [can.List.shift shift].
+			 * `push` has a counterpart in [can.List::pop pop], or you may be
+			 * looking for [can.List::unshift unshift] and its counterpart [can.List::shift shift].
 			 */
 			push: "length",
 			/**
@@ -663,8 +663,8 @@ steal("can/util", "can/map", function (can, Map) {
 			 *
 			 * ## See also
 			 *
-			 * `unshift` has a counterpart in [can.List.shift shift], or you may be
-			 * looking for [can.List.push push] and its counterpart [can.List.pop pop].
+			 * `unshift` has a counterpart in [can.List::shift shift], or you may be
+			 * looking for [can.List::push push] and its counterpart [can.List::pop pop].
 			 */
 			unshift: 0
 		},
@@ -733,8 +733,8 @@ steal("can/util", "can/map", function (can, Map) {
 			 *
 			 * ## See also
 			 *
-			 * `pop` has its counterpart in [can.List.push push], or you may be
-			 * looking for [can.List.unshift unshift] and its counterpart [can.List.shift shift].
+			 * `pop` has its counterpart in [can.List::push push], or you may be
+			 * looking for [can.List::unshift unshift] and its counterpart [can.List::shift shift].
 			 */
 			pop: "length",
 			/**
@@ -747,7 +747,7 @@ steal("can/util", "can/map", function (can, Map) {
 			 * @return {*} the element just shifted off the List, or `undefined` if the List is empty
 			 *
 			 * @body
-			 * `shift` is the opposite action from `[can.List.unshift unshift]`:
+			 * `shift` is the opposite action from `[can.List::unshift unshift]`:
 			 *
 			 * @codestart
 			 * var list = new can.List(['Alice']);
@@ -768,8 +768,8 @@ steal("can/util", "can/map", function (can, Map) {
 			 *
 			 * ## See also
 			 *
-			 * `shift` has a counterpart in [can.List.unshift unshift], or you may be
-			 * looking for [can.List.push push] and its counterpart [can.List.pop pop].
+			 * `shift` has a counterpart in [can.List::unshift unshift], or you may be
+			 * looking for [can.List::push push] and its counterpart [can.List::pop pop].
 			 */
 			shift: 0
 		},
