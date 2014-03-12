@@ -132,12 +132,12 @@ steal('can/util/can.js', function (can) {
 		}
 	};
 
-	can.once = function(event, handler) {
-		var once = function() {
-			can.unbind.call(this, event, once);
+	can.one = function(event, handler) {
+		var one = function() {
+			can.unbind.call(this, event, one);
 			return handler.apply(this, arguments);
 		};
-		can.bind.call(this, event, once);
+		can.bind.call(this, event, one);
 		return this;
 	};
 
