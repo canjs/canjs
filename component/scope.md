@@ -20,7 +20,7 @@ instance is initialized with values specified by the component's attributes.
     })
 
 Prototype properties that have values of `"@"` are not looked up in the current scope, instead
-the matching attribute values are used.  For example:
+the literal string value of the relevant attribute is used.  For example:
 
     can.Component.extend({
       tag: "my-tag",
@@ -74,12 +74,11 @@ Creates an instance of following control:
     	}
     })
 
-And calls the scope function with `attrs` like `{title: "Justin"}`.  Notice how the attribute's 
-value is looked up in `my-element`'s parent scope.
+And calls the scope function with `attrs` like `{title: "Justin"}`.
 
 @param {can.view.Scope} parentScope
 
-The scope the the custom tag was found within.  By default, any attribute's values will
+The scope the custom tag was found within.  By default, any attribute's values will
 be looked up within the current scope, but if you want to add values without needing
 the user to provide an attribute, you can set this up here.  For example:
 
@@ -90,13 +89,15 @@ the user to provide an attribute, you can set this up here.  For example:
     	}
     });
 
-@param {HTMLElement} element The element the can.Component is going to be place on. If you want 
+Notice how the attribute's value is looked up in `my-element`'s parent scope.
+
+@param {HTMLElement} element The element the can.Component is going to be placed on. If you want 
 to add custom attribute handling, you can do that here.  For example:
 
     can.Component.extend({
     	tag: "my-element",
     	scope: function(attrs, parentScope, el){
-    	  return new can.Map({title: el.getAttribte('title')});
+    	  return new can.Map({title: el.getAttribute('title')});
     	}
     });
 
@@ -109,7 +110,7 @@ to add custom attribute handling, you can do that here.  For example:
 on top of the scope and used to render the component's template.
 
 @option {Object} If a plain JavaScript object is returned, that is used as a prototype
-definition used to extend `can.Map`.  A new instance of the extended Map is creatd.
+definition used to extend `can.Map`.  A new instance of the extended Map is created.
 
 @body
 
@@ -159,8 +160,8 @@ Next, a new instance of CustomMap is created with the attribute data within `<my
 
     componentData = new CustomMap(attrs);
     
-And finally, that data is added to the `parentScope` of the component and used to 
-render the component's template and inserted into the element:
+And finally, that data is added to the `parentScope` of the component, used to 
+render the component's template, and inserted into the element:
 
     var newScope = parentScope.add(componentData),
         result = can.view.mustache("Page {{page}}.")(newScope);
@@ -208,9 +209,8 @@ will update to:
 
 ### Using attribute values
 
-If you want the value of the attribute instead of the attribute's value looked up in
-the parent scope, you can tell can.Compute to use the value of the attribute by adding 
-properties with values of "@".  For example:
+If you want the literal string value of the attribute instead of the attribute's value looked up in
+the parent scope, you can set scope properties to have values of "@".  For example:
 
     can.Component.extend({
       tag: "my-tag",
@@ -239,7 +239,7 @@ button that calls the scope's `next` method like:
       scope: {
         offset: 0,
         limit: 20,
-        next: function(){
+        next: function(context, el, ev){
           this.attr("offset", this.offset + this.limit);
         },
         page: function(){

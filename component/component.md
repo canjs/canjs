@@ -138,9 +138,9 @@ The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='gretting'/>");
+    var template = can.view.mustache("<hello-world message='greeting'/>");
     template({
-      message: "Salutations"
+      greeting: "Salutations"
     })
 
 Into:
@@ -159,7 +159,7 @@ Default values can be provided. The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='gretting'/>");
+    var template = can.view.mustache("<hello-world message='greeting'/>");
     template({})
 
 Into:
@@ -228,7 +228,7 @@ only renders friendly messages:
 
 ## Examples
 
-Checkout the following examples built with can.Component.
+Check out the following examples built with can.Component.
 
 ### Tabs
 
@@ -254,7 +254,7 @@ To add another panel, all we have to do is add data to foodTypes like:
     })
 
 The secret is that the `<panel>` element listens to when it is inserted
-and adds its data to the tabs's list of panels with:
+and adds its data to the tabs' list of panels with:
 
     this.element.parent().scope().addPanel( this.scope );    
 
@@ -264,8 +264,8 @@ The following tree combo lets people walk through a hierarchy and select locatio
 
 @demo can/component/examples/treecombo.html
 
-The secret to this widget is the scope's `breadcrumb` property that is an array
-of items we've walked through and `selectableItems` which gets the children of the
+The secret to this widget is the scope's `breadcrumb` property, which is an array
+of items the user has navigated through, and `selectableItems`, which represents the children of the
 last item in the breadcrub.  These are defined on the scope like:
 
 
@@ -285,7 +285,7 @@ last item in the breadcrub.  These are defined on the scope like:
       }
     }
 
-When the show children button is clicked, the scope's `showChildren` method is called which
+When the "+" icon is clicked next to each item, the scope's `showChildren` method is called, which
 adds that item to the breadcrumb like:
 
     showChildren: function( item, el, ev ) {
@@ -296,7 +296,7 @@ adds that item to the breadcrumb like:
 ### Paginate
 
 The following example shows 3 
-widget like components: a grid, next / prev buttons, and a page count indicator. And,
+widget-like components: a grid, next / prev buttons, and a page count indicator. And,
 it shows an application component that puts them all together.
 
 @demo can/component/examples/paginate.html
@@ -307,7 +307,7 @@ This demo uses a `Paginate` can.Map to assist with maintaining a paginated state
     ...
     });
     
-The `app` component crates an instance of the `Paginate` model
+The `app` component creates an instance of the `Paginate` model
 and a `websitesDeferred` that represents a request for the Websites
 that should be displayed.
 
@@ -333,7 +333,7 @@ that should be displayed.
       }
     }
 
-The `app` control passes paginate, paginate's values, or websitesDeferreds to
+The `app` control passes paginate, paginate's values, and websitesDeferreds to
 its sub-components:
 
     <grid deferredData='websitesDeferred'>
