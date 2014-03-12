@@ -147,7 +147,7 @@ steal('can/util/can.js', function (can) {
 		// Event method aliases
 		on: can.addEvent,
 		off: can.removeEvent,
-		once: can.once,
+		one: can.one,
 		bind: can.addEvent,
 		unbind: can.removeEvent,
 		delegate: function(selector, event, handler) {
