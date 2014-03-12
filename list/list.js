@@ -994,7 +994,7 @@ steal("can/util", "can/map", function (can, Map) {
 		 * ## Events
 		 *
 		 * A major difference between `replace` and `attr(newElements, true)` is that `replace` always emits
-		 * an_add_ event and a _remove_ event, whereas `attr` will cause _set_ events along an _add_ or _remove_
+		 * an _add_ event and a _remove_ event, whereas `attr` will cause _set_ events along with an _add_ or _remove_
 		 * event if needed. Corresponding _change_ and _length_ events will be fired as well.
 		 *
 		 * The differences in the events fired by `attr` and `replace` are demonstrated concretely by this example:

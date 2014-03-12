@@ -3,7 +3,7 @@
 @plugin can/map/validations
 @test can/map/validations/test.html
 
-The `can/map/validations` plugin provides validations on observes. Validations
+The `can/map/validations` plugin provides validations on maps. Validations
 are set on [can.Map]'s __static__ `init` function.
 
 The following validates the `birthday` attribute in Contacts:
@@ -67,7 +67,7 @@ There are several built-in validation methods so you don't have to define your o
 of attributes to run only those attributes. It returns 
 nothing if there are no errors, or an object of errors by attribute.
 
-To use validations, it's required you use the _observe/validations_ plugin.
+To use validations, it's required you use the _map/validations_ plugin.
 
 	Task = can.Map.extend({
 		init : function(){

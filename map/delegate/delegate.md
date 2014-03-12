@@ -4,7 +4,7 @@
 @test can/map/delegate/test.html
 
 The __delegate__ plugin allows you to listen to more specific event changes on 
-[can.Map Observes].  It allows you to specify:
+[can.Map Maps].  It allows you to specify:
 
  - the __attribute__ or __attributes__ - that you want to listen to and optionally the __value__ you want it to match
  - the __type__ of event (add,set,remove,change)
@@ -14,25 +14,25 @@ Listen to specific event changes with
 
 
 	// create an observable
-	var observe = new can.Map({
+	var map = new can.Map({
       name : {
         first : "Justin Meyer"
       }
     })
   	var handler;
     //listen to changes on a property
-    observe.delegate("name.first","set", 
+    map.delegate("name.first","set", 
       handler = function(ev, newVal, oldVal, prop){
       
       console.log(this)   //-> "Justin"
-      console.log(ev.currentTarget) //-> observe
+      console.log(ev.currentTarget) //-> map
       console.log(newVal) //-> "Justin"
       console.log(oldVal) //-> "Justin Meyer"
       console.log(prop)   //-> "name.first"
     });
  
     // change the property
-    observe.attr('name.first',"Justin")
+    map.attr('name.first',"Justin")
      
 ## Types of events
 
@@ -79,7 +79,7 @@ Remove events are fired after a property is removed.
 ## Wildcards - matching multiple properties
 
 Sometimes, you want to know when any property within some part 
-of an observe has changed. Delegate lets you use wildcards to 
+of an map has changed. Delegate lets you use wildcards to 
 match any property name.  The following listens for any change
 on an attribute of the params attribute:
 

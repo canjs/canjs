@@ -3,7 +3,7 @@
 @plugin can/map/setter
 @test can/map/setter/test.html
 
-`can.Map.setter(name, success(value), error(errors))` extends the Observe object 
+`can.Map.setter(name, success(value), error(errors))` extends the Map object 
 to provide convenient helper methods for setting attributes on a observable.
 
 @body
@@ -11,7 +11,7 @@ The `attr` function looks for a `setATTRNAME` function to handle setting
 the `ATTRNAME` property.
 
 By providing a function that takes the raw data and returns a form useful for JavaScript, 
-we can make our observes automatically convert data.
+we can make our maps automatically convert data.
 
 	var Contact = can.Map.extend({
 		setBirthday : function(raw){
@@ -48,12 +48,12 @@ event or the attribute(s) were not set.
 
 ## Differences From `attr`
 
-The way that return values from setters affect the value of an Observe's property is
+The way that return values from setters affect the value of an Map's property is
 different from [can.Map::attr attr]'s normal behavior. Specifically, when the 
-property's current value is an Observe or List, and an Observe or List is returned
+property's current value is an Map or List, and an Map or List is returned
 from a setter, the effect will not be to merge the values into the current value as
 if the return value was fed straight into `attr`, but to replace the value with the
-new Observe or List completely:
+new Map or List completely:
 
 @codestart
 var Contact = can.Map.extend({
@@ -64,14 +64,14 @@ var Contact = can.Map.extend({
 
 var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
 alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
-alice.info._cid; // '.observe1'
+alice.info._cid; // '.map1'
 
 alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
-alice.info._cid; // '.observe2'
+alice.info._cid; // '.map2'
 @codeend
 
-If you would rather have the new Observe or List merged into the current value, call
+If you would rather have the new Map or List merged into the current value, call
 `attr` inside the setter:
 
 @codestart
@@ -84,11 +84,11 @@ var Contact = can.Map.extend({
 
 var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
 alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
-alice.info._cid; // '.observe1'
+alice.info._cid; // '.Map1'
 
 alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
-alice.info._cid; // '.observe1'
+alice.info._cid; // '.Map1'
 @codeend
 
 ## Error Handling
