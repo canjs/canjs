@@ -138,7 +138,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 	}
 	makeTarget.keepsTextNodes = keepsTextNodes;
 	
-	
+	can.view.target = makeTarget;
+
 	return makeTarget;
-	
 });

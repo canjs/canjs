@@ -10,7 +10,9 @@ steal("can/util",
 	"can/view/live",
 	"can/view/elements.js",
 	"can/view/scope",function(can, utils, mustacheHelpers, live, elements, Scope ){
-	
+
+	live = live || can.view.live;
+	elements = elements || can.view.elements;
 	
 	// ## Types
 	

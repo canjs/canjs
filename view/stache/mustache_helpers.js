@@ -1,5 +1,5 @@
 steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
-	
+	live = live || can.view.live;
 	
 	var resolve = function (value) {
 		if (utils.isObserveLike(value) && utils.isArrayLike(value) && value.attr('length')) {

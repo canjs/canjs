@@ -1,4 +1,9 @@
 steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'can/view/parser',function (can, elements, view, nodeLists, parser) {
+
+	elements = elements || can.view.elements;
+	nodeLists = nodeLists || can.view.NodeLists;
+	parser = parser || can.view.parser;
+
 	// ## live.js
 	//
 	// The live module provides live binding for computes
@@ -512,7 +517,6 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		return regexp.test(val) ? val.substr(1, val.length - 2) : val;
 	};
 	can.view.live = live;
-	can.view.nodeLists = nodeLists;
-	can.view.elements = elements;
+
 	return live;
 });

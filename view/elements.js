@@ -121,5 +121,8 @@ steal('can/util', function (can) {
 			can.remove(can.$(oldElements));
 		}
 	};
+
+	can.view.elements = elements;
+
 	return elements;
 });

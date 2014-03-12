@@ -680,5 +680,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 		return tagData.scope;
 	});
 
+	can.view.Scanner = Scanner;
+
 	return Scanner;
 });

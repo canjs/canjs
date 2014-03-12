@@ -1,5 +1,5 @@
 steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
-	
+	live = live || can.view.live;
 	
 	var TextSectionBuilder = function(){
 		this.stack = [new TextSection()];

@@ -7,8 +7,11 @@ steal(
 	"./mustache_helpers.js",
 	"can/view/callbacks",
 	function(parser, target,  HTMLSection, TextSection, mustacheCore, mustacheHelpers, viewCallbacks ){
-	
-	
+
+	// Make sure that we can also use our modules with Stache as a plugin
+	parser = parser || can.view.parser;
+	viewCallbacks = viewCallbacks || can.view.callbacks;
+
 	function stache(template){
 		
 		// Remove line breaks according to mustache's specs.
@@ -283,8 +286,6 @@ steal(
 				}
 			};
 	};
-	can.view.parser = parser;
-	can.view.target = target;
+
 	return stache;
-	
 });

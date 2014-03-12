@@ -259,6 +259,8 @@ steal("can/view", function(){
 		
 	};
 
+	can.view.parser = HTMLParser;
+	
 	return HTMLParser;
 	
 });

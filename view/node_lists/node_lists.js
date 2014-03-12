@@ -264,5 +264,8 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		},
 		nodeMap: nodeMap
 	};
+
+	can.view.nodeLists = nodeLists;
+
 	return nodeLists;
 });
