@@ -34,8 +34,7 @@ are just like [can.List] except they have a few super-powers:
  
 ## Defining a model list
 
-When [can.Model] is 
-extended,  `can.Model.List` extended and set as that model's
+When [can.Model] is extended,  `can.Model.List` is automatically extended and set as that model's
 [can.Model.static.List List property]. Typically, a `can.Model.List` is 
 defined for you. For example:
 
