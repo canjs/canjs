@@ -106,8 +106,8 @@ on an attribute of the params attribute:
     // alerts 2
     o.attr('options.params.parentId',6);
 
-Using a single wildcard (<code>*</code>) matches single level
-properties.  Using a double wildcard (<code>**</code>) matches
+Using a single wildcard (<code>**</code>) matches single level
+properties.  Using a double wildcard (<code>***</code>) matches
 any deep property.
 
 ## Listening on multiple properties and values
