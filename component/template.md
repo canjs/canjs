@@ -52,9 +52,9 @@ __can.Component:__
       }
     })
 
-This registers a component for elements like `<my-greeting>`. It's template
-will place a `<h1>` element directly within `<my-greeting>` and put
-the original contents `<my-greeting>` within the `<h1>`. The component's
+This registers a component for elements like `<my-greeting>`. Its template
+will place an `<h1>` element directly within `<my-greeting>` and put
+the original contents of `<my-greeting>` within the `<h1>`. The component's
 [can.Component::scope scope] adds a title value.
 
 __Source template:__

@@ -3,14 +3,14 @@
 @plugin can/map/backup
 @test can/map/backup/test.html
 
-can.Map.backup is a plugin that provides a dirty bit for properties on an Observe,
-and lets you restore the original values of an Observe's properties after they are changed.
+can.Map.backup is a plugin that provides a dirty bit for properties on an Map,
+and lets you restore the original values of an Map's properties after they are changed.
 
 
 Here is an example showing how to use `[can.Map.backup.prototype.backup backup]` to save values,
 `[can.Map.backup.prototype.restore restore]` to restore them, and `[can.Map.backup.prototype.isDirty isDirty]`
 
-to check if the Observe has changed:
+to check if the Map has changed:
 
 @codestart
 var recipe = new can.Map({
