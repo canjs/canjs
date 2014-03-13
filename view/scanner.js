@@ -70,8 +70,17 @@ steal('can/view', './elements', function (can, elements) {
 			return stack[stack.length - 1];
 		},
 		// characters that automatically mean a custom element
-		automaticCustomElementCharacters = /[-\:]/,
+		automaticCustomElementCharacters = /[-\:]/,		
 		Scanner;
+
+	// Detect if sourceURL can be used without errors
+ 	// In IE, `@` symbols are part of its non-standard conditional compilation 
+ 	// support. The `@cc_on` statement activates its support while the trailing 
+ 	// `!` induces a syntax error to exlude it.
+ 	// See http://msdn.microsoft.com/en-us/library/121hztk3(v=vs.94).aspx
+	try {
+		var useSourceURL = (Function('//@cc_on!')(), true);
+	} catch(e) {}
 
 	/**
 	 * @constructor can.view.Scanner
@@ -685,9 +694,13 @@ steal('can/view', './elements', function (can, elements) {
 			var template = buff.join(''),
 				out = {
 					out: (this.text.outStart || '') + template + ' ' + finishTxt + (this.text.outEnd || '')
-				};
+				},
+				toEval = 'this.fn = (function(' + this.text.argNames + '){' + out.out + '});';
+			if(useSourceURL) {
+				toEval += '\r\n//@ sourceURL=' + name + '.js';
+			}
 			// Use `eval` instead of creating a function, because it is easier to debug.
-			myEval.call(out, 'this.fn = (function(' + this.text.argNames + '){' + out.out + '});\r\n//@ sourceURL=' + name + '.js');
+			myEval.call(out, toEval);
 			return out;
 		}
 	};
