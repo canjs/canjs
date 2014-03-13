@@ -94,7 +94,7 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 
-	can.removeEvent = function (event, fn) {
+	can.removeEvent = function (event, fn, __compare) {
 		if (!this.__bindEvents) {
 			return this;
 		}
@@ -103,7 +103,7 @@ steal('can/util/can.js', function (can) {
 			ev, isFunction = typeof fn === 'function';
 		while (i < events.length) {
 			ev = events[i];
-			if (isFunction && ev.handler === fn || !isFunction && ev.cid === fn) {
+			if (__compare ? __compare(ev, event, fn) : isFunction && ev.handler === fn || !isFunction && (ev.cid === fn || !fn)) {
 				events.splice(i, 1);
 			} else {
 				i++;

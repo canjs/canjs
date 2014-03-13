@@ -1,7 +1,7 @@
 steal('can/event', 'can/event/propagate', 'can/construct', function() {
 
 	can.event.delegate = function(selector, event, handler) {
-		var parts = selector.split(/\s+/),
+		var parts = selector && selector.split(/\s+/),
 			delegate = function(ev) {
 				// Verify descendants against the selector
 				for (var i = 0, j = 0, descendant; j < parts.length && (descendant = ev.descendants[i]); i++) {
@@ -22,21 +22,10 @@ steal('can/event', 'can/event/propagate', 'can/construct', function() {
 		return can.addEvent.call(this, event, delegate);
 	};
 
-	can.event.undelegate = function(selector, event, handler) {
-		if (!this.__bindEvents) {
-			return this;
-		}
-		var events = this.__bindEvents[event] || [],
-			i = 0,
-			ev, isFunction = typeof handler === 'function';
-		while (i < events.length) {
-			ev = events[i];
-			if (isFunction && (ev.handler === handler || (ev.handler.handler === handler && ev.handler.selector === selector)) || !isFunction && ev.cid === handler) {
-				events.splice(i, 1);
-			} else {
-				i++;
-			}
-		}
-		return this;
+	can.event.undelegate = function(selector, event, fn) {
+		var isFunction = typeof fn === 'function';
+		return can.removeEvent.call(this, event, fn, function(ev) {
+			return isFunction && (ev.handler === fn || (ev.handler.handler === fn && ev.handler.selector === selector)) || !isFunction && ev.cid === fn;
+		});
 	};
 });

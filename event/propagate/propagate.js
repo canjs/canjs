@@ -2,7 +2,7 @@ steal('can/event', function() {
 	// Adds propagation of events
 	// can.extend(Class.prototype, can.event, { __propagate: 'prop' })
 	var dispatch = can.dispatch;
-	can.dispatch = can.event.dispatch = function (event, args) {
+	can.dispatch = can.event.dispatch = can.event.trigger = function (event, args) {
 		var propagate = this.__propagate || false;
 
 		// Inject propagation into event, when applicable
