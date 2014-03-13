@@ -766,6 +766,8 @@ steal("can/view/callbacks",
 	if (window.require) {
 		if (window.require.config && window.require.toUrl) {
 			test('template files relative to requirejs baseUrl (#647)', function () {
+				can.view.ext = '.mustache';
+
 				var oldBaseUrl = window.requirejs.s.contexts._.config.baseUrl;
 				window.require.config({
 					baseUrl: oldBaseUrl + '/view/test/'

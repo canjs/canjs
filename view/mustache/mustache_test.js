@@ -4,6 +4,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
+			can.view.ext = '.mustache';
 
 			this.animals = ['sloth', 'bear', 'monkey']
 			if (!this.animals.each) {
@@ -220,6 +221,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		// now update the named attribute
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
+
+		can.remove(can.$('#qunit-test-area *'));
 	});
 
 	test("Mustache live-binding with escaping", function () {
@@ -242,6 +245,8 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
+
+		can.remove(can.$('#qunit-test-area *'));
 	});
 
 	test("Mustache truthy", function () {

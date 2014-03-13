@@ -1,6 +1,8 @@
 steal("can/model", "can/view/ejs", "can/test", function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
+			can.view.ext = '.ejs';
+
 			this.animals = [
 				'sloth',
 				'bear',
@@ -890,10 +892,10 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 	});
 	test('recursive views of previously stolen files shouldn\'t fail', function () {
 		// Using preload to bypass steal dependency (necessary for "grunt test")
-		can.view.preload('view_ejs_test_indirect1_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect1_ejs', can.EJS({
 			text: '<ul>' + '<% unordered.each(function(item) { %>' + '<li>' + '<% if(item.ol) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect2.ejs\'), { ordered: item.ol }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ul>'
 		}));
-		can.view.preload('view_ejs_test_indirect2_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect2_ejs', can.EJS({
 			text: '<ol>' + '<% ordered.each(function(item) { %>' + '<li>' + '<% if(item.ul) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect1.ejs\'), { unordered: item.ul }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ol>'
 		}));
 		var unordered = new can.Map.List([{

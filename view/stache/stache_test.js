@@ -4,6 +4,7 @@ steal("can/view/stache", "can/view","can/test",function(){
 	
 	module("can/view/stache",{
 		setup: function(){
+			can.view.ext = '.stache';
 			this.animals = ['sloth', 'bear', 'monkey'];
 		}
 	});
@@ -280,6 +281,8 @@ steal("can/view/stache", "can/view","can/test",function(){
 		// now update the named attribute
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
+
+		can.remove(can.$('#qunit-test-area *'));
 	});
 
 	test("live-binding with escaping", function () {
@@ -300,6 +303,8 @@ steal("can/view/stache", "can/view","can/test",function(){
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
+
+		can.remove(can.$('#qunit-test-area *'));
 	});
 
 	test("truthy", function () {
