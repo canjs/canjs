@@ -22,13 +22,15 @@
 			QUnit.config.autostart = false;
 			steal(
 				'can/event/event_test.js', 
-				'can/event/propagate/propagate_test.js',
-				'can/event/delegate/delegate_test.js',
-				'can/event/namespace/namespace_test.js',
 				function() {
 					can.dev.logLevel = 3;
 					QUnit.start();
 				}
+			).then(
+				'can/event/namespace/namespace_test.js'
+			).then(
+				'can/event/propagate/propagate_test.js',
+				'can/event/delegate/delegate_test.js'
 			);
 		</script>
 	</body>

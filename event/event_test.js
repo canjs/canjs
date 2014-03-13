@@ -113,7 +113,7 @@ steal('can/event', 'can/test', function (event) {
 		can.trigger(can.$(document), 'click');
 		ok(called, 'got click event');
 		ok(true, 'did not error');
-		can.unbind(document, 'click', handler);
+		can.unbind.call(document, 'click', handler);
 	});
 	test('delegate on document', function () {
 		var called = false,
