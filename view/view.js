@@ -529,7 +529,7 @@ steal('can/util', function (can) {
 		// Returns a deferred.
 		get = function (obj, async) {
 			var url = typeof obj === 'string' ? obj : obj.url,
-				suffix = obj.engine || url.match(/\.[\w\d]+$/),
+				suffix = (obj.engine && '.' + obj.engine) || url.match(/\.[\w\d]+$/),
 				type,
 				// If we are reading a script element for the content of the template,
 				// `el` will be set to that script element.
