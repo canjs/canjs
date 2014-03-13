@@ -70,14 +70,14 @@ steal('can/view', './elements', function (can, elements) {
 			return stack[stack.length - 1];
 		},
 		// characters that automatically mean a custom element
-		automaticCustomElementCharacters = /[-\:]/,		
+		automaticCustomElementCharacters = /[-\:]/,
 		Scanner;
 
 	// Detect if sourceURL can be used without errors
- 	// In IE, `@` symbols are part of its non-standard conditional compilation 
- 	// support. The `@cc_on` statement activates its support while the trailing 
- 	// `!` induces a syntax error to exlude it.
- 	// See http://msdn.microsoft.com/en-us/library/121hztk3(v=vs.94).aspx
+	// In IE, `@` symbols are part of its non-standard conditional compilation
+	// support. The `@cc_on` statement activates its support while the trailing
+	// `!` induces a syntax error to exlude it.
+	// See http://msdn.microsoft.com/en-us/library/121hztk3(v=vs.94).aspx
 	try {
 		var useSourceURL = (Function('//@cc_on!')(), true);
 	} catch(e) {}
