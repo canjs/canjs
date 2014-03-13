@@ -7,6 +7,16 @@ steal('can/util', function (can) {
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
+		// Makes a renderer function.
+		makeRenderer = function(textRenderer) {
+			var renderer = function() {
+				return $view.frag(textRenderer.apply(this, arguments));
+			};
+			renderer.render = function() {
+				return textRenderer.apply(textRenderer, arguments);
+			};
+			return renderer;
+		},
 		/**
 		 * @add can.view
 		 */
@@ -16,34 +26,15 @@ steal('can/util', function (can) {
 				callback = helpers;
 				helpers = undefined;
 			}
-
-			var pipe = function (result) {
-				return $view.frag(result);
-			},
-				// In case we got a callback, we need to convert the can.view.render
-				// result to a document fragment
-				wrapCallback = isFunction(callback) ? function (frag) {
-					callback(pipe(frag));
-				} : null,
-				// Get the result, if a renderer function is passed in, then we just use that to render the data
-				result = isFunction(view) ? view(data, helpers, wrapCallback) : $view.render(view, data, helpers, wrapCallback),
-				deferred = can.Deferred();
-
-			if (isFunction(result)) {
-				return result;
+			var result;
+			// Get the result, if a renderer function is passed in, then we just use that to render the data
+			if( isFunction(view) ) {
+				result = view(data, helpers, callback);
+			} else {
+				result = $view.renderAs("fragment",view, data, helpers, callback);
 			}
-
-			if (can.isDeferred(result)) {
-				result.then(function (result, data) {
-					deferred.resolve.call(deferred, pipe(result), data);
-				}, function () {
-					deferred.fail.apply(deferred, arguments);
-				});
-				return deferred;
-			}
-
-			// Convert it into a dom frag.
-			return pipe(result);
+			
+			return result;
 		};
 
 	can.extend($view, {
@@ -80,7 +71,9 @@ steal('can/util', function (can) {
 				})
 				.join('_');
 		},
-
+		toStr: function(txt){
+			return txt == null ? "" : ""+txt;
+		},
 		hookup: function (fragment, parentNode) {
 			var hookupEls = [],
 				id,
@@ -376,6 +369,12 @@ steal('can/util', function (can) {
 		 *
 		 */
 		render: function (view, data, helpers, callback) {
+			return can.view.renderAs("string",view, data, helpers, callback);
+		},
+		renderTo: function(format, renderer, data, helpers){
+			return (format === "string" && renderer.render ? renderer.render : renderer)(data, helpers);
+		},
+		renderAs: function (format, view, data, helpers, callback) {
 			// If helpers is a `function`, it is actually a callback.
 			if (isFunction(helpers)) {
 				callback = helpers;
@@ -417,7 +416,7 @@ steal('can/util', function (can) {
 						}
 
 						// Get the rendered result.
-						result = renderer(dataCopy, helpers);
+						result = can.view.renderTo(format, renderer, dataCopy, helpers);
 
 						// Resolve with the rendered view.
 						deferred.resolve(result, dataCopy);
@@ -451,7 +450,7 @@ steal('can/util', function (can) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function (renderer) {
-						callback(data ? renderer(data, helpers) : renderer);
+						callback(data ? can.view.renderTo(format, renderer, data, helpers) : renderer);
 					});
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -465,12 +464,12 @@ steal('can/util', function (can) {
 					// In the future, we might simply store either a deferred or the cached result.
 					if (deferred.state() === 'resolved' && deferred.__view_id) {
 						var currentRenderer = $view.cachedRenderers[deferred.__view_id];
-						return data ? currentRenderer(data, helpers) : currentRenderer;
+						return data ? can.view.renderTo(format, currentRenderer, data, helpers) : currentRenderer;
 					} else {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function (renderer) {
-							response = data ? renderer(data, helpers) : renderer;
+							response = data ? can.view.renderTo(format, renderer, data, helpers) : renderer;
 						});
 					}
 				}
@@ -478,7 +477,7 @@ steal('can/util', function (can) {
 				return response;
 			}
 		},
-
+		
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
@@ -490,20 +489,26 @@ steal('can/util', function (can) {
 		 */
 		registerView: function (id, text, type, def) {
 			// Get the renderer function.
-			var func = (type || $view.types[$view.ext])
-				.renderer(id, text);
+			var info = (typeof type === "object" ? type :  $view.types[type || $view.ext]),
+				renderer;
+			if(info.fragRenderer) {
+				renderer = info.fragRenderer(id, text);
+			} else {
+				renderer = makeRenderer( info.renderer(id, text) );
+			}
+			
 			def = def || new can.Deferred();
 
 			// Cache if we are caching.
 			if ($view.cache) {
 				$view.cached[id] = def;
 				def.__view_id = id;
-				$view.cachedRenderers[id] = func;
+				$view.cachedRenderers[id] = renderer;
 			}
 
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
-			return def.resolve(func);
+			return def.resolve(renderer);
 		}
 	});
 
@@ -524,7 +529,7 @@ steal('can/util', function (can) {
 		// Returns a deferred.
 		get = function (obj, async) {
 			var url = typeof obj === 'string' ? obj : obj.url,
-				suffix = obj.engine || url.match(/\.[\w\d]+$/),
+				suffix = (obj.engine && '.' + obj.engine) || url.match(/\.[\w\d]+$/),
 				type,
 				// If we are reading a script element for the content of the template,
 				// `el` will be set to that script element.
@@ -640,7 +645,7 @@ steal('can/util', function (can) {
 			 * return can.view.preload("ID", options.text)
 			 * })
 			 */
-			options.text = 'steal(\'' + (type.plugin || 'can/view/' + options.type) + '\',function(can){return ' + 'can.view.preload(\'' + id + '\',' + options.text + ');\n})';
+			options.text = 'steal(\'' + (type.plugin || 'can/view/' + options.type) + '\',function(can){return ' + 'can.view.preloadStringRenderer(\'' + id + '\',' + options.text + ');\n})';
 			success();
 		});
 	}
@@ -661,24 +666,31 @@ steal('can/util', function (can) {
 			}
 			//!steal-remove-end
 
-			$view[info.suffix] = function (id, text) {
+			can[info.suffix] = $view[info.suffix] = function (id, text) {
+				// If there is no text, assume id is the template text, so return a nameless renderer.
 				if (!text) {
-					// Return a nameless renderer
-					var renderer = function () {
-						return $view.frag(renderer.render.apply(this, arguments));
-					};
-					renderer.render = function () {
-						var renderer = info.renderer(null, id);
-						return renderer.apply(renderer, arguments);
-					};
-					return renderer;
+					// if the template has a fragRenderer already, just return that.
+					if(info.fragRenderer) {
+						return info.fragRenderer(null, id);
+					} else {
+						return makeRenderer(info.renderer(null, id));
+					}
+					
 				}
-
-				return $view.preload(id, info.renderer(id, text));
+				if(info.fragRenderer) {
+					return $view.preload( id, info.fragRenderer(id, text) );
+				} else {
+					return $view.preloadStringRenderer(id, info.renderer(id, text));
+				}
+				
 			};
+			
 		},
 		registerScript: function (type, id, src) {
-			return 'can.view.preload(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
+			return 'can.view.preloadStringRenderer(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
+		},
+		preloadStringRenderer: function(id, stringRenderer) {
+			return this.preload(id, makeRenderer(stringRenderer) );
 		},
 		preload: function (id, renderer) {
 			var def = $view.cached[id] = new can.Deferred()
@@ -686,17 +698,11 @@ steal('can/util', function (can) {
 					return renderer.call(data, data, helpers);
 				});
 
-			function frag() {
-				return $view.frag(renderer.apply(this, arguments));
-			}
-			// expose the renderer for mustache
-			frag.render = renderer;
-
 			// set cache references (otherwise preloaded recursive views won't recurse properly)
 			def.__view_id = id;
 			$view.cachedRenderers[id] = renderer;
 
-			return frag;
+			return renderer;
 		}
 
 	});

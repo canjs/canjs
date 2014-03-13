@@ -4067,12 +4067,12 @@ var __m39 = (function () {
 		var renderer = can.view('renderer_test');
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			test: 'working test'
 		}), 'This is a working test', 'Rendered');
 		renderer = can.view(can.test.path('view/test//template.ejs'));
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			message: 'Rendered!'
 		}), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
 		// raises(function() {
@@ -4163,7 +4163,8 @@ var __m39 = (function () {
 		div.appendChild(frag);
 		can.append(can.$('#qunit-test-area'), div);
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
-		can.view.nodeLists.unregister(domainList); //equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
+		// can.view.nodeLists.unregister(domainList);
+		// equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 	});
 	test('Live binding on number inputs', function () {
 		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
@@ -4517,6 +4518,8 @@ var __m39 = (function () {
 var __m41 = (function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
+			can.view.ext = '.ejs';
+
 			this.animals = [
 				'sloth',
 				'bear',
@@ -4937,7 +4940,7 @@ var __m41 = (function () {
 		obs.attr('attributes', 'some="newText"');
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 		obs.removeAttr('message');
-		equal(span.innerHTML, 'undefined', 'text node value is undefined');
+		equal(span.innerHTML, '', 'text node value is undefined');
 		obs.attr('message', 'Warp drive, Mr. Sulu');
 		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 		obs.removeAttr('show');
@@ -5394,10 +5397,10 @@ var __m41 = (function () {
 	});
 	test('recursive views of previously stolen files shouldn\'t fail', function () {
 		// Using preload to bypass steal dependency (necessary for "grunt test")
-		can.view.preload('view_ejs_test_indirect1_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect1_ejs', can.EJS({
 			text: '<ul>' + '<% unordered.each(function(item) { %>' + '<li>' + '<% if(item.ol) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect2.ejs\'), { ordered: item.ol }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ul>'
 		}));
-		can.view.preload('view_ejs_test_indirect2_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect2_ejs', can.EJS({
 			text: '<ol>' + '<% ordered.each(function(item) { %>' + '<li>' + '<% if(item.ul) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect1.ejs\'), { unordered: item.ul }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ol>'
 		}));
 		var unordered = new can.Map.List([{
@@ -7242,6 +7245,7 @@ var __m48 = (function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
+			can.view.ext = '.mustache';
 
 			this.animals = ['sloth', 'bear', 'monkey']
 			if (!this.animals.each) {
@@ -9222,7 +9226,7 @@ var __m48 = (function () {
 	test("can pass in partials", function () {
 		var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 		var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
-		var result = hello({
+		var result = hello.render({
 			name: "World"
 		}, {
 			partials: {
@@ -9235,7 +9239,7 @@ var __m48 = (function () {
 
 	test("can pass in helpers", function () {
 		var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
-		var result = helpers({
+		var result = helpers.render({
 			name: "world"
 		}, {
 			helpers: {

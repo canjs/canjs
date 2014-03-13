@@ -1,6 +1,8 @@
 steal("can/model", "can/view/ejs", "can/test", function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
+			can.view.ext = '.ejs';
+
 			this.animals = [
 				'sloth',
 				'bear',
@@ -87,6 +89,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 					myClass: 'a'
 				});
 		ok(result.indexOf('<img\n class="a"') !== -1, 'Multi-line elements render correctly.');
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 	test('escapedContent', function () {
 		var text = '<span><%= tags %></span><label>&amp;</label><strong><%= number %></strong><input value=\'<%= quotes %>\'/>';
@@ -104,6 +108,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123);
 		equal(div.getElementsByTagName('input')[0].value, 'I use \'quote\' fingers "a lot"');
 		equal(div.getElementsByTagName('label')[0].innerHTML, '&amp;');
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 	test('unescapedContent', function () {
 		var text = '<span><%== tags %></span><div><%= tags %></div><input value=\'<%== quotes %>\'/>';
@@ -120,6 +126,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(div.getElementsByTagName('div')[0].firstChild.nodeValue.toLowerCase(), '<strong>foo</strong><strong>bar</strong>');
 		equal(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), '<strong>foo</strong><strong>bar</strong>');
 		equal(div.getElementsByTagName('input')[0].value, 'I use \'quote\' fingers "a lot"', 'escapped no matter what');
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 	test('returning blocks', function () {
 		var somethingHelper = function (cb) {
@@ -392,7 +400,9 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(div.firstChild.innerHTML, 'c', 'updated render text');
 	});
 	test('live binding and removeAttr', function () {
-		var text = '<% if(obs.attr("show")) { %>' + '<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + '<% } %>',
+		var text = '<% if(obs.attr("show")) { %>' +
+				'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' +
+			'<% } %>',
 			obs = new can.Map({
 				show: true,
 				className: 'myMessage',
@@ -407,8 +417,10 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 				}),
 			div = document.createElement('div');
 		div.appendChild(can.view.frag(compiled));
+		
 		var p = div.getElementsByTagName('p')[0],
 			span = p.getElementsByTagName('span')[0];
+		
 		equal(p.getAttribute('some'), 'myText', 'initial render attr');
 		equal(getAttr(p, 'class'), 'myMessage', 'initial render class');
 		equal(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
@@ -421,7 +433,9 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		obs.attr('attributes', 'some="newText"');
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 		obs.removeAttr('message');
-		equal(span.innerHTML, 'undefined', 'text node value is undefined');
+		
+		equal(span.innerHTML, '', 'text node value is empty');
+		
 		obs.attr('message', 'Warp drive, Mr. Sulu');
 		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 		obs.removeAttr('show');
@@ -878,10 +892,10 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 	});
 	test('recursive views of previously stolen files shouldn\'t fail', function () {
 		// Using preload to bypass steal dependency (necessary for "grunt test")
-		can.view.preload('view_ejs_test_indirect1_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect1_ejs', can.EJS({
 			text: '<ul>' + '<% unordered.each(function(item) { %>' + '<li>' + '<% if(item.ol) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect2.ejs\'), { ordered: item.ol }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ul>'
 		}));
-		can.view.preload('view_ejs_test_indirect2_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect2_ejs', can.EJS({
 			text: '<ol>' + '<% ordered.each(function(item) { %>' + '<li>' + '<% if(item.ul) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect1.ejs\'), { unordered: item.ul }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ol>'
 		}));
 		var unordered = new can.Map.List([{
@@ -1157,6 +1171,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		equal(ths[1].innerHTML, 'Test 2', 'Second column heading correct');
 		equal(can.view.render('tableView', data)
 			.indexOf('<table><tbody><tr><td data-view-id='), 0, 'Rendered output starts' + 'as expected');
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 	// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 	test('Observe with array attributes', function () {
@@ -1289,14 +1305,14 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		div.appendChild(can.view('issue-153-no-dom', arr));
 		equal(div.getElementsByTagName('span')[0].innerHTML, 'Dishes', 'Array item rendered with DOM container');
 		equal(div.getElementsByTagName('span')[1].innerHTML, 'Forks', 'Array item rendered with DOM container');
-		div.innerHTML = '';
+		div = document.createElement('div');
 		div.appendChild(can.view('issue-153-no-dom', data));
 		equal(div.getElementsByTagName('span')[0].innerHTML, 'Dishes', 'List item rendered with DOM container');
 		equal(div.getElementsByTagName('span')[1].innerHTML, 'Forks', 'List item rendered with DOM container');
-		div.innerHTML = '';
+		div = document.createElement('div');
 		div.appendChild(can.view('issue-153-dom', arr));
 		equal(div.innerHTML, 'DishesForks', 'Array item rendered without DOM container');
-		div.innerHTML = '';
+		div = document.createElement('div');
 		div.appendChild(can.view('issue-153-dom', data));
 		equal(div.innerHTML, 'DishesForks', 'List item rendered without DOM container');
 		data.todos.push(new can.Map({
@@ -1326,6 +1342,8 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 				}),
 			expected = '^<textarea data-view-id=\'[0-9]+\'><select><option data-view-id=\'[0-9]+\'>One</option>' + '<option data-view-id=\'[0-9]+\'>Two</option></select></textarea>$';
 		ok(compiled.search(expected) === 0, 'Rendered output is as expected');
+		// clear hookups b/c we are using .render;
+		can.view.hookups = {};
 	});
 	test('return blocks within element tags', function () {
 		var animals = new can.List([

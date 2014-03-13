@@ -59,6 +59,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			init: function (context, parent) {
 				this._context = context;
 				this._parent = parent;
+				this.__cache = {};
 			},
 			/**
 			 * @function can.view.Scope.prototype.attr
@@ -184,7 +185,10 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					args: []
 				};
 				var self = this,
-					rootObserve, rootReads, computeData = {
+					rootObserve,
+					rootReads,
+					// fastRead,
+					computeData = {
 						compute: can.compute(function (newVal) {
 							if (arguments.length) {
 								// check that there's just a compute with nothing from it ...
@@ -196,6 +200,9 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 										.value.attr(rootReads[last], newVal);
 								}
 							} else {
+								/*if(fastRead){
+									return fastRead(rootObserve);
+								}*/
 								if (rootObserve) {
 									return Scope.read(rootObserve, rootReads, options)
 										.value;
@@ -206,6 +213,9 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 								rootReads = data.reads;
 								computeData.scope = data.scope;
 								computeData.initialValue = data.value;
+								/*if(rootReads && rootReads.length === 1 && rootObserve instanceof can.Map) {
+									fastRead = new Function("obs","return obs.attr(\""+rootReads[0]+"\")")
+								}*/
 								return data.value;
 							}
 						})

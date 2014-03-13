@@ -158,7 +158,6 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			handler = specialData.handler;
 			event = specialData.event;
 		}
-
 		can.bind.call(el, event, handler);
 	});
 
