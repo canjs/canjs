@@ -2,6 +2,12 @@
 @parent canjs
 @group can.EJS.tags Tags
 
+@deprecated {2.1} EJS is incompatable with [can.Component] and should
+be avioded for new projects. It will still be maintained up to 
+3.0 and potentially after. Projects using EJS should consider
+switching to [can.stache].
+
+
 @description EJS provides __live__ ERB-style client-side templates.
 
 @signature `new can.EJS(options)`

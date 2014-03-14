@@ -65,12 +65,10 @@ lifecycle events:
 
 The following example builds up a basic todos widget for listing 
 and completing todo items. Start by creating a control constructor 
-function of your own by extending can.Control:
+function of your own by extending [can.Control] and defining an instance init method.
 
     var Todos = can.Control.extend({
-      init: function( element, options ) {
-        self.element.html('todos.ejs', new Todo.List({}) )
-      }
+      init: function( element, options ) { ... }
     });
 
 ## Creating a control instance
@@ -90,34 +88,47 @@ The control's associated [can.EJS EJS] template looks like:
 
 ### `init(element, options)`
 
-[can.Control::init] is called when a new can.Control instance is created. It is called with:
+[can.Control.prototype.init] is called with the below arguments when new instances of [can.Control] are created:
 
 - __element__ - The wrapped element passed to the 
                 control. Control accepts a
                 raw HTMLElement, a CSS selector, or a NodeList. This is
-                set as __this.element__ on the control instance.
+                set as `this.element` on the control instance.
 - __options__ - The second argument passed to new Control, extended with
                 the can.Control's static __defaults__. This is set as 
-                __this.options__ on the control instance.
+                `this.options` on the control instance. Note that static is used
+                formally to indicate that _default values are shared across control instances_.
 
-and any other arguments passed to `new can.Control()`. For example:
+Any additional arguments provided to the constructor will be passed as normal. Use [can.view] to produce a document fragment
+from your template and inject it in the passed element. Note that the `todos` parameter passed to [can.view] below
+is an instance of [can.List]:
 
     var Todos = can.Control.extend({
+
+      //defaults are merged into the options arg provided to the constructor
       defaults : { view: 'todos.ejs' }
+
     }, {
       init: function( element , options ) {
+
+        //create a pointer to the control's scope
         var self = this;
+
+        //run the Todo model's .findAll() method to produce a can.List
         Todo.findAll( {}, function( todos ) {
-    		self.element.html( self.options.view, todos );
+
+            //create a document fragment with can.view
+            //and inject it into the provided element's body
+    		self.element.html( can.view(self.options.view, todos) );
         });
       }
     });
     
-    // create a Todos with default options
+    // create a Todos Control with default options
     new Todos( document.body.firstElementChild );
     
-    // overwrite the template option
-    new Todos( $( '#todos' ), { template: 'specialTodos.ejs' } );
+    // overwrite the template default
+    new Todos( '#todos', { template: 'specialTodos.ejs' } );
 
 ### `this.element`
 
@@ -141,12 +152,7 @@ Control automatically binds prototype methods that look
 like event handlers. Listen to __click__s on `<li>` elements like:
 
     var Todos = can.Control.extend({
-      init: function( element , options ) {
-        var self = this;
-        Todo.findAll( {}, function( todos ) {
-          self.element.html( self.options.template, todos );
-        });
-      },
+      init: function( element , options ) {...},
 
       'li click': function( li, event ) {
         console.log( 'You clicked', li.text() );
@@ -168,16 +174,9 @@ To destroy a todo when its `<a href="javascript://" class="destroy">` link
 is clicked:
 
     var Todos = can.Control.extend({
-      init: function( element, options ) {
-        var self = this;
-        Todo.findAll( {}, function( todos ) {
-          self.element.html( self.options.template, todos );
-        });
-      },
+      init: function( element, options ) {...},
       
-      'li click': function( li ) {
-        li.trigger( 'selected', li.model() );
-      },
+      'li click': function( li ) {...},
       
       'li .destroy click': function( el, ev ) {
         // get the li element that has todo data
@@ -276,17 +275,9 @@ taking care of removing `<li>`s after their associated models were destroyed,
 we could implement it in `Todos` like:
 
     var Todos = can.Control.extend({
-      init: function( element, options ) {
-        var self = this;
-        Todo.findAll( {}, function( todos ) {
-          self.todosList = todos;
-          self.element.html( self.options.template, todos );
-        });
-      },
+      init: function( element, options ) {...},
       
-      'li click': function( li ) {
-        li.trigger( 'selected', li.model() );
-      },
+      'li click': function( li ) {...},
       
       'li .destroy click': function( el, ev ) {
         // get the li element that has todo data

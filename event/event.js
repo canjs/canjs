@@ -1,17 +1,6 @@
 steal('can/util/can.js', function (can) {
-
 	// event.js
 	// ---------
-
-	// can.extend(Class.prototype, can.event);
-	// can.extend(Class.prototype, can.event, { __propagate: 'prop' });
-
-
-	// can.extend(Class.prototype, can.event);
-	// can.extend(Class.prototype, can.event, { __propagate: 'prop' });
-
-	// return can.event;
-
 	// _Basic event wrapper._
 	can.addEvent = function (event, fn) {
 		var allEvents = this.__bindEvents || (this.__bindEvents = {}),
@@ -113,7 +102,8 @@ steal('can/util/can.js', function (can) {
 	};
 
 	can.dispatch = function (event, args) {
-		if (!this.__bindEvents) {
+		var events = this.__bindEvents;
+		if (!events) {
 			return;
 		}
 		if (typeof event === 'string') {
@@ -122,13 +112,11 @@ steal('can/util/can.js', function (can) {
 			};
 		}
 		var eventName = event.type,
-			handlers = (this.__bindEvents[eventName] || [])
-				.slice(0),
-			ev;
+			handlers = (events[eventName] || []).slice(0);
+			
 		args = [event].concat(args || []);
 		for (var i = 0, len = handlers.length; i < len; i++) {
-			ev = handlers[i];
-			ev.handler.apply(this, args);
+			handlers[i].handler.apply(this, args);
 		}
 	};
 

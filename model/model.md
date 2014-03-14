@@ -25,7 +25,7 @@ Model adds service encapsulation to [can.Map].  Model lets you:
  - Listen to changes by the server
  - Unifying service data into the same objects
  
-## Get and modify data fron the server
+## Get and modify data from the server
 
 can.Model makes connecting to a JSON REST service 
 really easy.  The following models `todos` by

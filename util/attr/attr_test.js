@@ -1,19 +1,21 @@
-steal('can/util/attr', function () {
+steal('can/util', 'can/util/attr', function () {
 	module("can/util/attr");
 
 	test("attributes event", function () {
 
 		var div = document.createElement("div");
 
-		can.bind.call(can.$(div), "attributes", function attrHandler(ev) {
+		
+		var attrHandler1 = function(ev) {
+			
 			equal(ev.attributeName, "foo", "attribute name is correct");
 			equal(ev.target, div, "target");
 			equal(ev.oldValue, null, "oldValue");
 
 			equal(div.getAttribute(ev.attributeName), "bar");
-
-			can.unbind.call(can.$(div), "attributes", attrHandler);
-		});
+			can.unbind.call(can.$(div), "attributes", attrHandler1);
+		};
+		can.bind.call(can.$(div), "attributes", attrHandler1);
 
 		can.attr.set(div, "foo", "bar");
 
@@ -26,17 +28,16 @@ steal('can/util/attr', function () {
 
 				equal(ev.attributeName, "foo", "attribute name is correct");
 				equal(ev.target, div, "target");
-				equal(ev.oldValue, "bar", "oldValue");
+				equal(ev.oldValue, "bar", "oldValue should be 'bar'");
 
-				equal(div.getAttribute(ev.attributeName), null);
+				equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
 
 				can.unbind.call(can.$(div), "attributes", attrHandler);
 				start();
 			});
-
 			can.attr.remove(div, "foo");
 
-		}, 100);
+		}, 50);
 
 	});
 
@@ -70,24 +71,24 @@ steal('can/util/attr', function () {
 		test("zepto or jQuery - bind and unbind", function () {
 
 			var div = document.createElement("div");
+			var attrHandler = function(ev) {
+				equal(ev.attributeName, "foo", "attribute name is correct");
+				equal(ev.target, div, "target");
+				equal(ev.oldValue, null, "oldValue");
 
+				equal(div.getAttribute(ev.attributeName), "bar");
+
+				$(div)
+					.unbind("attributes", attrHandler)
+					.attr("foo", "abc");
+
+				setTimeout(function () {
+					start();
+				}, 20);
+			};
+			
 			$(div)
-				.bind("attributes", function attrHandler(ev) {
-					equal(ev.attributeName, "foo", "attribute name is correct");
-					equal(ev.target, div, "target");
-					equal(ev.oldValue, null, "oldValue");
-
-					equal(div.getAttribute(ev.attributeName), "bar");
-
-					$(div)
-						.unbind("attributes", attrHandler)
-						.attr("foo", "abc");
-
-					setTimeout(function () {
-						start();
-					}, 20);
-
-				});
+				.bind("attributes", attrHandler);
 
 			stop();
 			$(div)
