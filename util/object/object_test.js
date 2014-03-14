@@ -31,7 +31,7 @@ steal('can/util/object', function () {
 		ok(can.Object.same(
 			{foo: new Date()},
 			{foo: new Date()}
-		), 'nulls and Dates are not considered the same. (#773)');
+		), 'Date values are compared');
 	});
 	test('subsets', function () {
 		var res1 = can.Object.subsets({
