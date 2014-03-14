@@ -1,4 +1,4 @@
-steal('can/util/fixture', function () {
+steal('can/util/fixture', 'can/model', 'can/test', function () {
 	module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();
@@ -350,6 +350,26 @@ steal('can/util/fixture', function () {
 									});
 							});
 					});
+			});
+	});
+	test('can.fixture.store can use id of different type (#742)', function () {
+		var store = can.fixture.store(100, function (i) {
+				return {
+					id: i,
+					parentId: i * 2,
+					name: 'Object ' + i
+				};
+			}),
+			Model = can.Model({
+				findAll: 'GET /models'
+			}, {});
+		can.fixture('GET /models', store.findAll);
+		stop();
+		Model.findAll({ parentId: '4' })
+			.done(function (models) {
+				equal(models.length, 1, 'Got one model');
+				deepEqual(models[0].attr(), { id: 2, parentId: 4, name: 'Object 2' });
+				start();
 			});
 	});
 	test('can.fixture with response callback', 4, function () {
