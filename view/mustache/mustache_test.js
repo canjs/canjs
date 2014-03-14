@@ -3463,4 +3463,28 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	}
 	//!steal-remove-end
 
+	test('Computes returning null values work with #each (#743)', function () {
+		var people = new can.List(["Curtis","Stan", "David"]);
+		var map = new can.Map({ showPeople: false });
+		var list = can.compute(function(){
+			if( map.attr("showPeople") ) {
+				return people
+			} else {
+				return null;
+			}
+		});
+		var template = can.view.mustache("<ul>" +
+			"{{#each list}}" +
+			"<li>{{.}}</li>" +
+			"{{/each}}" +
+			"</ul>")
+		var frag = template({
+			list: list
+		});
+		var ul = frag.childNodes[0];
+
+		equal(ul.innerHTML, '', 'list is empty');
+		map.attr('showPeople', true);
+		equal(ul.innerHTML, '<li>Curtis</li><li>Stan</li><li>David</li>', 'List got updated');
+	});
 });
