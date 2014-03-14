@@ -6,7 +6,7 @@ steal('can/event', function() {
 		var propagate = this.__propagate || false;
 
 		// Inject propagation into event, when applicable
-		if (propagate && typeof event.isPropagationStopped === 'undefined') {
+		if (typeof event.isPropagationStopped === 'undefined') {
 			// Initialize the event into an object
 			if (typeof event === 'string') {
 				event = {
@@ -18,15 +18,21 @@ steal('can/event', function() {
 			// This could be done with can.simpleExtend, but this avoids extra logic execution
 			var stop = false,
 				prevent = false;
-			event.currentTarget = this;
-			event.target = event.target || this;
-			event.descendants = event.target === event.currentTarget ? [] : [event.target];
-			event.stopPropagation = function() {
-				stop = true;
-			};
-			event.isPropagationStopped = function() {
-				return stop;
-			};
+
+			// Add propagation, if applicable
+			if (propagate) {
+				event.currentTarget = this;
+				event.target = event.target || this;
+				event.descendants = event.target === event.currentTarget ? [] : [event.target];
+				event.stopPropagation = function() {
+					stop = true;
+				};
+				event.isPropagationStopped = function() {
+					return stop;
+				};
+			}
+
+			// Always add default prevention
 			event.preventDefault = function() {
 				prevent = true;
 			};
