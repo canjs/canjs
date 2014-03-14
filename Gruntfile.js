@@ -200,6 +200,9 @@ module.exports = function (grunt) {
 			}
 		},
 		qunit: {
+			options: {
+				timeout: 10000
+			},
 			steal: {
 				options: {
 					urls: [
@@ -271,7 +274,8 @@ module.exports = function (grunt) {
 						'http://localhost:8000/route/pushstate/test.html',
 						'http://localhost:8000/view/test.html',
 						'http://localhost:8000/view/ejs/test.html',
-						'http://localhost:8000/view/mustache/test.html'
+						'http://localhost:8000/view/mustache/test.html',
+						'http://localhost:8000/util/fixture/test.html'
 					]
 				}
 			}
