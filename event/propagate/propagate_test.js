@@ -59,6 +59,40 @@ steal('can/event/propagate', 'can/test', function (event) {
 		node3.dispatch('stop');
 	});
 
+	test('Prevent default', 9, function() {
+		var node1 = { name: 'root' },
+			node2 = { name: 'mid', parent: node1 },
+			node3 = { name: 'child', parent: node2 };
+
+		can.extend(node1, can.event, { __propagate: 'parent' });
+		can.extend(node2, can.event, { __propagate: 'parent' });
+		can.extend(node3, can.event, { __propagate: 'parent' });
+
+		// Test stop propagation
+		node1.bind('stop', function(ev) {
+			// This should never fire
+			notEqual(ev.target.name, 'child', 'target is node3');
+			notEqual(ev.currentTarget.name, 'root', 'currentTarget is node1');
+			notEqual(this.name, 'root', 'delegate is node1');
+		});
+		node2.bind('stop', function(ev) {
+			equal(ev.target.name, 'child', 'target is node3');
+			equal(ev.currentTarget.name, 'mid', 'currentTarget is node2');
+			equal(this.name, 'mid', 'delegate is node2');
+			ev.stopPropagation();
+			equal(ev.isDefaultPrevented(), true, 'default is prevented');
+		});
+		node3.bind('stop', function(ev) {
+			equal(ev.isDefaultPrevented(), false, 'default not prevented');
+			equal(ev.target.name, 'child', 'target is node1');
+			equal(ev.currentTarget.name, 'child', 'currentTarget is node1');
+			equal(this.name, 'child', 'delegate is node1');
+			equal(ev.isDefaultPrevented(), false, 'default not prevented');
+			ev.preventDefault();
+		});
+		node3.dispatch('stop');
+	});
+
 	test('Events propagate even if the original target has no listeners', 3, function() {
 		var node1 = { name: 'root' },
 			node2 = { name: 'mid', parent: node1 },

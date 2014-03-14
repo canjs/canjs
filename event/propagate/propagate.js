@@ -16,7 +16,8 @@ steal('can/event', function() {
 
 			// Add extra event properties
 			// This could be done with can.simpleExtend, but this avoids extra logic execution
-			var stop = false;
+			var stop = false,
+				prevent = false;
 			event.currentTarget = this;
 			event.target = event.target || this;
 			event.descendants = event.target === event.currentTarget ? [] : [event.target];
@@ -25,6 +26,12 @@ steal('can/event', function() {
 			};
 			event.isPropagationStopped = function() {
 				return stop;
+			};
+			event.preventDefault = function() {
+				prevent = true;
+			};
+			event.isDefaultPrevented = function() {
+				return prevent;
 			};
 		}
 		else if (propagate) {
