@@ -97,7 +97,7 @@ steal('can/util', function (can) {
 			return a === b;
 		}
 		if (a instanceof Date || b instanceof Date) {
-			return a === b;
+			return a.getTime() === b.getTime();
 		}
 		if (deep === -1) {
 			return aType === 'object' || a === b;

@@ -27,6 +27,11 @@ steal('can/util/object', function () {
 			{foo: null},
 			{foo: {}}
 		), 'nulls and empty objects are not considered the same. (#773)');
+
+		ok(can.Object.same(
+			{foo: new Date()},
+			{foo: new Date()}
+		), 'nulls and Dates are not considered the same. (#773)');
 	});
 	test('subsets', function () {
 		var res1 = can.Object.subsets({
