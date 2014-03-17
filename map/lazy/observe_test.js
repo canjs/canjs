@@ -1,4 +1,4 @@
-steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () {
+steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
 	module('can/map/lazy map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.LazyMap({

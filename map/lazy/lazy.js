@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe', './nested_reference', function (can) {
+steal('can/util', 'can/map', 'can/list', './nested_reference', function (can) {
 	var getExistingMap = function(child, parent) {
 			// Cyclical self reference
 			if(parent._original === child) {
@@ -7,9 +7,9 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 
 			// Go through each reference to see if the original data are the same
 			// as the given child data. That means that we already created a LazyMap
-			// for that same data so we should also return that Map.
+			// for that same data so return that same Map.
 			if(parent instanceof can.LazyMap) {
-				parent._nestedReference.each(function (current, ref) {
+				parent._nestedReference.each(function (current) {
 					if(current._original === child) {
 						child = current;
 					}
@@ -97,7 +97,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 			// remove 'old' references that are starting with `path` and do rewiring
 			this._nestedReference.removeChildren(path, function (oldChild, oldChildPath) {
 				// unhook every current child on path
-				can.Map.helpers.unhookup([oldChild], self._cid);
+				can.Map.helpers.unhookup([oldChild], self);
 
 				// if `newChild` passed bind it to every child and make references (1st step: rewiring to bottom/children)
 				if (newChild) {
@@ -155,7 +155,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 					// do not trigger if prop does not exists
 					if (data.parent[data.prop]) {
 						delete data.parent[data.prop];
-						can.Observe.triggerBatch(this, data.path.length ? data.path.join(".") + ".__keys" : "__keys");
+						can.batch.trigger(this, data.path.length ? data.path.join(".") + ".__keys" : "__keys");
 						this._triggerChange(attr, "remove", undefined, makeObserve(data.value, this));
 					}
 				}
@@ -176,7 +176,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				part;
 
 			// are we dealing with list or map
-			var cur = this instanceof can.Observe.List ? this[parts.shift()] : this.__get();
+			var cur = this instanceof can.List ? this[parts.shift()] : this.__get();
 
 			// TODO we might also have to check for dot separated keys in each iteration
 			while (cur && !isObserve(cur) && parts.length) {
@@ -233,7 +233,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 			} else if (!data.parts.length) {
 				this.__set(attr, value, data.value, data);
 			} else {
-				throw "can.LazyMap: object does note exist";
+				throw "can.LazyMap: object does not exist";
 			}
 		},
 		__set: function (prop, value, current, data, convert) {
@@ -269,7 +269,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 					// If there is no current value, let others know that
 					// the the number of keys have changed
 
-					can.Observe.triggerBatch(this, data.path.length ? data.path.join(".") + ".__keys" : "__keys", undefined);
+					can.batch.trigger(this, data.path.length ? data.path.join(".") + ".__keys" : "__keys", undefined);
 
 				}
 				// `batchTrigger` the change event.
@@ -309,7 +309,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				data,
 				newVal;
 
-			can.Observe.startBatch();
+			can.batch.start();
 
 			// Update existing props
 			this.each(function (curVal, prop) {
@@ -333,7 +333,7 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				}
 
 				// if we're dealing with models, want to call _set to let converter run
-				if (newVal instanceof can.Observe) {
+				if (newVal instanceof can.Map) {
 					self.__set(prop, newVal, curVal, data);
 					// if its an object, let attr merge
 				} else if (can.Map.helpers.canMakeObserve(curVal) && can.Map.helpers.canMakeObserve(newVal) && curVal.attr) {
@@ -354,74 +354,19 @@ steal('can/util', 'can/observe', './nested_reference', function (can) {
 				this._set(prop, newVal, true);
 			}
 
-			can.Observe.stopBatch();
+			can.batch.stop();
 			return this;
 		}
 	});
 
-
-	can.LazyList = can.Observe.List(
-		{
-			hookupBubble: function (child, prop, parent, indexHint) {
-				// If it's an `array` make a list, otherwise a child.
-				if (child instanceof can.Observe) {
-					// We have an `observe` already...
-					// Make sure it is not listening to this already
-					// It's only listening if it has bindings already.
-					if (parent._bindings) {
-						can.Map.helpers.unhookup([child], parent._cid);
-					}
-				} else if (can.isArray(child)) {
-					child = new can.LazyList(child);
-				} else {
-					child = new can.LazyMap(child);
-				}
-
-				// add reference manually
-
-				var reference = function () {
-					return "" + parent.indexOf(child);
-				};
-
-				parent._nestedReference.references.push(reference);
-
-
-				// only listen if something is listening to you
-				if (parent._bindings) {
-					// Listen to all changes and `batchTrigger` upwards.
-					can.Map.helpers.hookupBubble(child, reference, parent);
-				}
-
-
-				return child;
-			},
-			unhookup: function (items, namespace, index, parent) {
-				return can.each(items, function (item) {
-					if (item && item.unbind) {
-						item.unbind("change" + namespace);
-					}
-				});
-			}
-		}, {
-			setup: function (instances, options) {
-				this._nestedReference = new can.NestedReference(this);
-
-				// TODO: currently all items get converted to observes
-				can.Observe.List.prototype.setup.apply(this, arguments);
-			},
-			_goto: can.LazyMap.prototype._goto,
-			removeAttr: can.LazyMap.prototype.removeAttr,
-			_bindsetup: can.LazyMap.prototype._bindsetup,
-			_bindteardown: can.LazyMap.prototype._bindteardown,
-			_addChild: can.LazyMap.prototype._addChild,
-			___set: function (attr, val, data) {
-				if (data) {
-					data.parent[data.prop] = val;
-				} else {
-					return can.Observe.List.prototype.___set.apply(this, arguments);
-				}
-			}
-		});
+	can.LazyList = can.List.extend({
+		Map: can.LazyMap
+	}, {
+		setup: function() {
+			can.List.prototype.setup.apply(this, arguments);
+			this._nestedReference = new can.NestedReference(this);
+		}
+	});
 
 	return can.LazyMap;
 });
