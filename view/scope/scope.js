@@ -59,6 +59,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			init: function (context, parent) {
 				this._context = context;
 				this._parent = parent;
+				this.__cache = {};
 			},
 			/**
 			 * @function can.view.Scope.prototype.attr
@@ -79,7 +80,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			 * will be explored.
 			 *
 			 *     var list = [{name: "Justin"},{name: "Brian"}],
-			 *     justin = list[0];
+			 *         justin = list[0];
 			 *
 			 *     var curScope = new can.view.Scope(list).add(justin);
 			 *
@@ -89,16 +90,14 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			attr: function (key) {
 				// reads for whatever called before attr.  It's possible
 				// that this.read clears them.  We want to restore them.
-				var previousReads = can.__clearReading && can.__clearReading(),
+				var previousReads = can.__clearReading(),
 					res = this.read(key, {
 						isArgument: true,
 						returnObserveMethods: true,
 						proxyMethods: false
 					})
 						.value;
-				if (can.__setReading) {
-					can.__setReading(previousReads);
-				}
+				can.__setReading(previousReads);
 				return res;
 			},
 			/**
@@ -119,7 +118,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			 * parent `scope` object.
 			 *
 			 *     var list = [{name: "Justin"},{name: "Brian"}],
-			 *      justin = list[0];
+			 *         justin = list[0];
 			 *
 			 *     var curScope = new can.view.Scope(list).add(justin);
 			 *
@@ -186,7 +185,10 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					args: []
 				};
 				var self = this,
-					rootObserve, rootReads, computeData = {
+					rootObserve,
+					rootReads,
+					// fastRead,
+					computeData = {
 						compute: can.compute(function (newVal) {
 							if (arguments.length) {
 								// check that there's just a compute with nothing from it ...
@@ -198,6 +200,9 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 										.value.attr(rootReads[last], newVal);
 								}
 							} else {
+								/*if(fastRead){
+									return fastRead(rootObserve);
+								}*/
 								if (rootObserve) {
 									return Scope.read(rootObserve, rootReads, options)
 										.value;
@@ -208,11 +213,35 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 								rootReads = data.reads;
 								computeData.scope = data.scope;
 								computeData.initialValue = data.value;
+								/*if(rootReads && rootReads.length === 1 && rootObserve instanceof can.Map) {
+									fastRead = new Function("obs","return obs.attr(\""+rootReads[0]+"\")")
+								}*/
 								return data.value;
 							}
 						})
 					};
 				return computeData;
+
+			},
+			/**
+			 * @function can.view.Scope.prototype.compute
+			 *
+			 * @description Provides a get-set compute that represents a
+			 * key's value.
+			 *
+			 * @signature `scope.compute( key, [options] )`
+			 * @release 2.1
+			 *
+			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
+			 * property name that includes a dot.
+			 *
+			 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
+			 *
+			 * @return {can.compute} A compute that can get or set `key`.
+			 */
+			compute: function (key, options) {
+				return this.computeData(key, options)
+					.compute;
 			},
 			/**
 			 * @hide
@@ -235,18 +264,20 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			 * @option {*} value the found value
 			 */
 			read: function (attr, options) {
+
 				// check if we should be running this on a parent.
-				if (attr.substr(0, 3) === '../') {
+				if (attr.substr(0, 3) === "../") {
 					return this._parent.read(attr.substr(3), options);
-				} else if (attr === '..') {
+				} else if (attr === "..") {
 					return {
 						value: this._parent._context
 					};
-				} else if (attr === '.' || attr === 'this') {
+				} else if (attr === "." || attr === "this") {
 					return {
 						value: this._context
 					};
 				}
+
 				// Split the name up.
 				var names = attr.indexOf('\\.') === -1 ?
 				// Reference doesn't contain escaped periods
@@ -306,7 +337,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 									defaultPropertyDepth = nameIndex;
 									defaultScope = scope;
 									// Clear and save readings so next attempt does not use these readings
-									defaultComputeReadings = can.__clearReading && can.__clearReading();
+									defaultComputeReadings = can.__clearReading();
 								}
 							}
 						}, options));
@@ -321,18 +352,15 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 						}
 					}
 					// Prevent prior readings.
-					if (can.__clearReading) {
-						can.__clearReading();
-					}
+					can.__clearReading();
 					// Move up to the next scope.
 					scope = scope._parent;
 				}
+
 				// If there was a likely observe.
 				if (defaultObserve) {
 					// Restore reading for previous compute
-					if (can.__setReading) {
-						can.__setReading(defaultComputeReadings);
-					}
+					can.__setReading(defaultComputeReadings);
 					return {
 						scope: defaultScope,
 						rootObserve: defaultObserve,

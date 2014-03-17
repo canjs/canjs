@@ -1,4 +1,4 @@
-steal('can/util/fixture', function () {
+steal('can/util/fixture', 'can/model',function () {
 	module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();

@@ -202,6 +202,7 @@ module.exports = function (grunt) {
 		qunit: {
 			steal: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/test/jquery.html',
 						'http://localhost:8000/test/jquery-2.html',
@@ -214,6 +215,7 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',
@@ -226,6 +228,7 @@ module.exports = function (grunt) {
 			},
 			compatibility: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/test/compatibility/jquery.html',
 						'http://localhost:8000/test/compatibility/jquery-2.html',
@@ -238,6 +241,7 @@ module.exports = function (grunt) {
 			},
 			amd: {
 				options: {
+					timeout: 10000,
 					urls: [
 						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
 						'http://localhost:8000/test/amd/jquery.html',
@@ -250,6 +254,7 @@ module.exports = function (grunt) {
 			},
 			individuals: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/component/test.html',
 						'http://localhost:8000/compute/test.html',
@@ -420,7 +425,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test:compatibility', ['connect', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
 

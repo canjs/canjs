@@ -182,14 +182,10 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						// Otherwise return the value.
 						val;
 
-						if (can.__reading) {
-							can.__reading(map, name);
-						}
+						can.__reading(map, name);
 					});
 
-					if (can.__reading) {
-						can.__reading(map, '__keys');
-					}
+					can.__reading(map, '__keys');
 
 					return where;
 				},
@@ -222,9 +218,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			 */
 			keys: function (map) {
 				var keys = [];
-				if (can.__reading) {
-					can.__reading(map, '__keys');
-				}
+				can.__reading(map, '__keys');
 				for (var keyName in map._data) {
 					keys.push(keyName);
 				}
@@ -399,6 +393,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				});
 			},
 			_changes: function (ev, attr, how, newVal, oldVal) {
+				// when a change happens, forward the event
 				can.batch.trigger(this, {
 					type: attr,
 					batchNum: ev.batchNum
@@ -555,9 +550,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					return this._attrs(attr, val);
 				} else if (arguments.length === 1) { // If we are getting a value.
 					// Let people know we are reading.
-					if (can.__reading) {
-						can.__reading(this, attr);
-					}
+					can.__reading(this, attr);
 					return this._get(attr);
 				} else {
 					// Otherwise we are setting.
@@ -602,9 +595,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			 * @codeend
 			 */
 			each: function () {
-				if (can.__reading) {
-					can.__reading(this, '__keys');
-				}
+				can.__reading(this, '__keys');
 				return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)));
 			},
 			/**
@@ -978,15 +969,14 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			 * @param {Boolean} remove true if you should remove properties that are not in props
 			 */
 			_attrs: function (props, remove) {
-				var self = this,
-					newVal;
-
 				if (props === undefined) {
 					return Map.helpers.serialize(this, 'attr', {});
 				}
 
 				props = can.simpleExtend({}, props);
-
+				var prop,
+					self = this,
+					newVal;
 				can.batch.start();
 				this.each(function (curVal, prop) {
 					// you can not have a _cid property!
@@ -1021,7 +1011,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					delete props[prop];
 				});
 				// Add remaining props.
-				for (var prop in props) {
+				for (prop in props) {
 					if (prop !== "_cid") {
 						newVal = props[prop];
 						this._set(prop, newVal, true);

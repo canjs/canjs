@@ -2242,7 +2242,7 @@ var __m32 = (function () {
 		});
 		c(0);
 	});
-	test('only one update on a batchTransaction', function () {
+	/*test('only one update on a batchTransaction', function () {
 		var person = new can.Map({
 			first: 'Justin',
 			last: 'Meyer'
@@ -2283,7 +2283,7 @@ var __m32 = (function () {
 			equal(callbacks, 1, 'only one callback');
 			start();
 		});
-	});
+	});*/
 	test('Compute emits change events when an embbedded observe has properties added or removed', 4, function () {
 		var obs = new can.Map(),
 			compute1 = can.compute(function () {
@@ -4067,12 +4067,12 @@ var __m39 = (function () {
 		var renderer = can.view('renderer_test');
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			test: 'working test'
 		}), 'This is a working test', 'Rendered');
 		renderer = can.view(can.test.path('view/test//template.ejs'));
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer({
+		equal(renderer.render({
 			message: 'Rendered!'
 		}), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
 		// raises(function() {
@@ -4163,7 +4163,8 @@ var __m39 = (function () {
 		div.appendChild(frag);
 		can.append(can.$('#qunit-test-area'), div);
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
-		can.view.nodeLists.unregister(domainList); //equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
+		// can.view.nodeLists.unregister(domainList);
+		// equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 	});
 	test('Live binding on number inputs', function () {
 		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
@@ -4243,7 +4244,7 @@ var __m39 = (function () {
 		equal(img.className, 'do=not=truncate=me', 'class is right');
 		equal(img.src, 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200', 'attribute is right');
 	});
-	test('basic scanner custom tags', function () {
+	/*test('basic scanner custom tags', function () {
 		can.view.Scanner.tag('panel', function (el, options) {
 			ok(options.options.attr('helpers.myhelper')(), 'got a helper');
 			equal(options.scope.attr('foo'), 'bar', 'got scope and can read from it');
@@ -4259,8 +4260,8 @@ var __m39 = (function () {
 				return true;
 			}
 		});
-	});
-	test('custom tags without subtemplate', function () {
+	});*/
+	/*test('custom tags without subtemplate', function () {
 		can.view.Scanner.tag('empty-tag', function (el, options) {
 			ok(!options.subtemplate, 'There is no subtemplate');
 		});
@@ -4268,8 +4269,8 @@ var __m39 = (function () {
 		template({
 			foo: 'bar'
 		});
-	});
-	test('sub hookup', function () {
+	});*/
+	/*test('sub hookup', function () {
 		var tabs = document.createElement('tabs');
 		document.body.appendChild(tabs);
 		var panel = document.createElement('panel');
@@ -4296,8 +4297,8 @@ var __m39 = (function () {
 		template({
 			foodTypes: foodTypes
 		});
-	});
-	test('sub hookup passes helpers', function () {
+	});*/
+	/*test('sub hookup passes helpers', function () {
 		can.view.Scanner.tag('tabs', function (el, hookupOptions) {
 			var optionsScope = hookupOptions.options.add({
 				tabsHelper: function () {
@@ -4325,8 +4326,8 @@ var __m39 = (function () {
 		template({
 			foodTypes: foodTypes
 		});
-	});
-	test('attribute matching', function () {
+	});*/
+	/*test('attribute matching', function () {
 		var item = 0;
 		can.view.Scanner.attribute('on-click', function (data, el) {
 			ok(true, 'attribute called');
@@ -4354,8 +4355,8 @@ var __m39 = (function () {
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		});
-	});
-	test('regex attribute matching', function () {
+	});*/
+	/*test('regex attribute matching', function () {
 		var item = 0;
 		can.view.Scanner.attribute(/on-[\w\.]+/, function (data, el) {
 			ok(true, 'attribute called');
@@ -4383,8 +4384,8 @@ var __m39 = (function () {
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		});
-	});
-	test('content element', function () {
+	});*/
+	/*test('content element', function () {
 		var template = can.view.mustache('{{#foo}}<content></content>{{/foo}}');
 		var context = new can.Map({
 			foo: 'bar'
@@ -4405,8 +4406,8 @@ var __m39 = (function () {
 		context.attr('foo', 'bar');
 		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content');
 		equal(frag.childNodes[0].innerHTML, 'updated', 'content is updated');
-	});
-	test('content element inside tbody', function () {
+	});*/
+	/*test('content element inside tbody', function () {
 		var template = can.view.mustache('<table><tbody><content></content></tbody></table>');
 		var context = new can.Map({
 			foo: 'bar'
@@ -4419,7 +4420,7 @@ var __m39 = (function () {
 				}
 			}
 		});
-	});
+	});*/
 	test('extensionless views, enforcing engine (#193)', 1, function () {
 		var path = can.test.path('view/test/extensionless');
 		// Because we don't have an extension and if we are using Steal we will get
@@ -4450,7 +4451,7 @@ var __m39 = (function () {
 			})
 			.nodeType === 11, 'View with id returned document fragment');
 	});
-	test('create a template before the custom element works with slash and colon', function () {
+	/*test('create a template before the custom element works with slash and colon', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
 			window.html5.elements += ' ignore-this';
@@ -4464,7 +4465,7 @@ var __m39 = (function () {
 			ok(true, 'can:something called!');
 		});
 		can.view('theid', {});
-	});
+	});*/
 	test('loaded live element test', function () {
 		// all custom elements must be registered for IE to work
 		if (window.html5) {
@@ -4517,6 +4518,8 @@ var __m39 = (function () {
 var __m41 = (function () {
 	module('can/view/ejs, rendering', {
 		setup: function () {
+			can.view.ext = '.ejs';
+
 			this.animals = [
 				'sloth',
 				'bear',
@@ -4937,7 +4940,7 @@ var __m41 = (function () {
 		obs.attr('attributes', 'some="newText"');
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 		obs.removeAttr('message');
-		equal(span.innerHTML, 'undefined', 'text node value is undefined');
+		equal(span.innerHTML, '', 'text node value is undefined');
 		obs.attr('message', 'Warp drive, Mr. Sulu');
 		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 		obs.removeAttr('show');
@@ -5394,10 +5397,10 @@ var __m41 = (function () {
 	});
 	test('recursive views of previously stolen files shouldn\'t fail', function () {
 		// Using preload to bypass steal dependency (necessary for "grunt test")
-		can.view.preload('view_ejs_test_indirect1_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect1_ejs', can.EJS({
 			text: '<ul>' + '<% unordered.each(function(item) { %>' + '<li>' + '<% if(item.ol) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect2.ejs\'), { ordered: item.ol }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ul>'
 		}));
-		can.view.preload('view_ejs_test_indirect2_ejs', can.EJS({
+		can.view.preloadStringRenderer('view_ejs_test_indirect2_ejs', can.EJS({
 			text: '<ol>' + '<% ordered.each(function(item) { %>' + '<li>' + '<% if(item.ul) { %>' + '<%== can.view.render(can.test.path(\'view/ejs/test/indirect1.ejs\'), { unordered: item.ul }) %>' + '<% } else { %>' + '<%= item.toString() %>' + '<% } %>' + '</li>' + '<% }) %>' + '</ol>'
 		}));
 		var unordered = new can.Map.List([{
@@ -7242,6 +7245,7 @@ var __m48 = (function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
+			can.view.ext = '.mustache';
 
 			this.animals = ['sloth', 'bear', 'monkey']
 			if (!this.animals.each) {
@@ -9222,7 +9226,7 @@ var __m48 = (function () {
 	test("can pass in partials", function () {
 		var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 		var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
-		var result = hello({
+		var result = hello.render({
 			name: "World"
 		}, {
 			partials: {
@@ -9235,7 +9239,7 @@ var __m48 = (function () {
 
 	test("can pass in helpers", function () {
 		var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
-		var result = helpers({
+		var result = helpers.render({
 			name: "world"
 		}, {
 			helpers: {

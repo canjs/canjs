@@ -56,6 +56,11 @@
 			"description": "Live-binding Embedded JavaScript",
 			"type": "plugin"
 		},
+		"can/view/stache": {
+			"name": "can.stache",
+			"description": "High performance Mustache templates",
+			"type": "plugin"
+		},
 		"can/control": {
 			"name": "can.Control",
 			"description": "Declarative event bindings",
@@ -182,6 +187,12 @@
 		},
 		"can/util/string": {
 			"name": "can.util.string",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/util/attr": {
+			"name": "can.util.attr",
 			"type": "core",
 			"isDefault": true,
 			"hidden": true
