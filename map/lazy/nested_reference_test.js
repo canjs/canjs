@@ -1,7 +1,7 @@
 /* jshint asi:true */
-steal('can/map/lazy/nested_reference', function () {
+steal('can/map/lazy/nested_reference.js', function () {
 
-	module("can/observe/lazy/nested_reference");
+	module("can/map/lazy/nested_reference");
 
 	test("Basics", 3, function () {
 		var data = [

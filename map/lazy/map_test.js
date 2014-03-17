@@ -1,7 +1,7 @@
 /* jshint asi:true*/
 steal("can/map/lazy", "can/compute", "can/test", function (undefined) {
 
-	module('can/map')
+	module('can/map/lazy')
 
 	test("Basic Map", 4, function () {
 
@@ -134,7 +134,7 @@ steal("can/map/lazy", "can/compute", "can/test", function (undefined) {
 		})
 	})
 
-	test("can.LazyMap serialize triggers reading (#626)", function () {
+	test("can.Map serialize triggers reading (#626)", function () {
 		var old = can.__reading;
 
 		var attributesRead = [];
@@ -153,8 +153,9 @@ steal("can/map/lazy", "can/compute", "can/test", function (undefined) {
 			dogs: "bark"
 		});
 
+		// We need the original serialize since it can possibly be monkey patched
+		testMap.serialize = can.LazyMap.prototype.serialize;
 		testMap.serialize();
-
 
 
 		ok(can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1, "map serialization triggered __reading on all attributes");

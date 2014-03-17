@@ -1,4 +1,4 @@
-steal('can/util', 'can/map', 'can/list', './nested_reference', function (can) {
+steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can) {
 	var getExistingMap = function(child, parent) {
 			// Cyclical self reference
 			if(parent._original === child) {
