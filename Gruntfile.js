@@ -258,6 +258,7 @@ module.exports = function (grunt) {
 						'http://localhost:8000/construct/super/test.html',
 						'http://localhost:8000/control/test.html',
 						'http://localhost:8000/map/test.html',
+						'http://localhost:8000/map/lazy/test.html',
 						'http://localhost:8000/map/attributes/test.html',
 						'http://localhost:8000/map/backup/test.html',
 						// 'http://localhost:8000/map/delegate/test.html',
