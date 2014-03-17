@@ -140,7 +140,7 @@ steal("can/util", "can/map", function (can, Map) {
 					callback(data[i], i);
 				}
 			},
-			_bindsetup: Map.helpers.makeBindSetup("*"),
+			_bubbleSetup: Map.helpers.makeBindSetup("*"),
 			// Returns the serialized form of this list.
 			/**
 			 * @hide

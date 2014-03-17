@@ -158,7 +158,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						child = getMapFromObject(child) || new Ob(child);
 					}
 					// only listen if something is listening to you
-					if (parent._bindings) {
+					if (parent._bubbleBindings) {
 						// Listen to all changes and `batchTrigger` upwards.
 						bindToChildAndBubbleToParent(child, prop, parent);
 					}
@@ -382,15 +382,17 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					};
 				}
 			},
-			_bindsetup: makeBindSetup(),
-			_bindteardown: function () {
+			_bindsetup: function(){}, //makeBindSetup(),
+			_bindteardown: function(){},
+			_bubbleSetup: makeBindSetup(),
+			_bubbleTeardown: function () {
 				var self = this;
 				this._each(function (child) {
 					Map.helpers.unhookup([child], self);
 				});
 			},
 			_changes: function (ev, attr, how, newVal, oldVal) {
-				// when a change happens, forward the event
+				// when a change happens, create the named event.
 				can.batch.trigger(this, {
 					type: attr,
 					batchNum: ev.batchNum
@@ -885,6 +887,18 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 				}
+				
+				if (!this._init && eventName === "change" ||eventName.indexOf(".") >=0 ) {
+					if (!this._bubbleBindings) {
+						this._bubbleBindings = 1;
+						// setup live-binding
+						if (this._bubbleSetup) {
+							this._bubbleSetup();
+						}
+					} else {
+						this._bubbleBindings++;
+					}
+				}
 				return can.bindAndSetup.apply(this, arguments);
 
 			},
@@ -931,6 +945,19 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 				}
+				if( eventName === "change" ||eventName.indexOf(".") >=0 ) {
+					if (! this._bubbleBindings ) {
+						this._bubbleBindings = 0;
+					} else {
+						this._bubbleBindings--;
+					}
+					
+					if (!this._bubbleBindings && this._bubbleTeardown ) {
+						this._bubbleTeardown();
+					}
+				}
+
+				
 				return can.unbindAndTeardown.apply(this, arguments);
 
 			},
