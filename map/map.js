@@ -65,6 +65,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 	 */
 	//
 	var Map = can.Map = can.Construct.extend({
+			bubbleEvents: ['change'],
 			/**
 			 * @static
 			 */
@@ -887,8 +888,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 				}
-				
-				if (!this._init && eventName === "change" ||eventName.indexOf(".") >=0 ) {
+
+				if (!this._init && !!~can.inArray(eventName, this.constructor.bubbleEvents) || eventName.indexOf(".") >= 0 ) {
 					if (!this._bubbleBindings) {
 						this._bubbleBindings = 1;
 						// setup live-binding

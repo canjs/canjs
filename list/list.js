@@ -12,6 +12,10 @@ steal("can/util", "can/map", function (can, Map) {
 			splice.call(obj, 0, 1);
 			return !obj[0];
 		})();
+
+	// Make the length even lazy-bubbleable
+	Map.bubbleEvents.push('length');
+
 	/**
 	 * @add can.List
 	 */

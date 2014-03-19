@@ -2,7 +2,12 @@ steal('can/util', 'can/list', function (can) {
 	var proto = can.List.prototype,
 		_changes = proto._changes,
 		setup = proto.setup;
+
+	//Add `move` as an event that lazy-bubbles
+	can.Map.bubbleEvents.push('move');
+
 	// extend the list for sorting support
+
 	can.extend(proto, {
 		comparator: undefined,
 		sortIndexes: [],

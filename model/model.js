@@ -1747,6 +1747,9 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	// Model lists are just like `Map.List` except that when their items are 
 	// destroyed, it automatically gets removed from the list.
 	var ML = can.Model.List = can.List({
+		// Model lists need to set up their events right away so that we can listen
+		// to _changes and remove the element when it is detroyed
+		_bindsetup: can.List.prototype._bubbleSetup,
 		setup: function (params) {
 			if (can.isPlainObject(params) && !can.isArray(params)) {
 				can.List.prototype.setup.apply(this);
