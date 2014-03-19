@@ -641,7 +641,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				if (parts.length && current) {
 					return current.removeAttr(parts);
 				} else {
-					if (!!~attr.indexOf('.')) {
+					if (typeof attr === 'string' && !!~attr.indexOf('.')) {
 						prop = attr;
 					}
 					if (isList) {

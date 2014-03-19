@@ -9,6 +9,11 @@ steal("can/util", "can/list", "can/test", function () {
 		l.attr(3, 3);
 		equal(l.length, 4);
 	});
+	test('removeAttr on list', function() {
+		var l = new can.List([0, 1, 2]);
+		l.removeAttr(0);
+		equal(l.attr('length'), 2);
+	});
 	test('list splice', function () {
 		var l = new can.List([
 			0,
