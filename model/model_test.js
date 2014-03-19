@@ -1220,4 +1220,41 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			t.unbind('name', handler);
 		});
 	});
+	test('model event propagation only goes up the type tree', function () {
+		var parentTriggers = 0, child1Triggers = 0, child2Triggers = 0;
+		var Parent = can.Model.extend("Parent", {
+			init : function() {
+			  this.bind('updated', function () {
+					parentTriggers++;
+					ok(true, 'parent handler called');
+				});
+			}
+		}, {});
+		var Child1 = Parent.extend("Child1", {
+			init : function() {
+			  this.bind('updated', function () {
+					child1Triggers++;
+					if (child1Triggers === 1) {
+						ok(true, 'child 1 handler called');
+					} else {
+						ok(false, 'child 1 handler should only be called once');
+					}
+				});
+			}
+		}, {});
+		var Child2 = Parent.extend({
+			init : function() {
+			  this.bind('updated', function () {
+					ok(false, 'child 2 handler should not be called');
+				});
+			}
+		}, {});
+
+		can.trigger(Parent, 'updated');
+		can.trigger(Child1, 'updated');
+		can.trigger(Child2, 'foo'); //jslint ;_;
+		equal(parentTriggers, 2, "parent triggers");
+		equal(child1Triggers, 1, "child 1 triggers");
+		equal(child2Triggers, 0, "child 2 triggers");
+	});
 });

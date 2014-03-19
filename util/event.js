@@ -106,14 +106,17 @@ steal('can/util/can.js', function (can) {
 				type: event
 			};
 		}
-		var eventName = event.type,
-			handlers = (this.__bindEvents[eventName] || [])
-				.slice(0),
-			ev;
+		var eventName = event.type, allHandlers, handlers, ev;
 		args = [event].concat(args || []);
-		for (var i = 0, len = handlers.length; i < len; i++) {
-			ev = handlers[i];
-			ev.handler.apply(this, args);
+		allHandlers = this.__bindEvents;
+		while(allHandlers) {
+			handlers = (allHandlers && allHandlers[eventName] || [])
+				.slice(0);
+			for (var i = 0, len = handlers.length; i < len; i++) {
+				ev = handlers[i];
+				ev.handler.apply(this, args);
+			}
+			allHandlers = allHandlers.__base; // is there an inheritance chain to go up?
 		}
 	};
 	return can;
