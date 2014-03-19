@@ -550,7 +550,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
 							(param.indexOf("Id") !== -1 || param.indexOf("_id") !== -1)) {
 							while (i < retArr.length) {
-								if (request.data[param] !== retArr[i][param]) {
+								if (request.data[param] != retArr[i][param]) { // jshint eqeqeq: false
 									retArr.splice(i, 1);
 								} else {
 									i++;
@@ -652,7 +652,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				destroy: function (request) {
 					var id = getId(request);
 					for (var i = 0; i < items.length; i++) {
-						if (items[i].id === id) {
+						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
 							break;
 						}

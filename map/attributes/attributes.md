@@ -2,14 +2,14 @@
 @parent can.Map.plugins
 @plugin can/map/attributes
 @test can/map/attributes/test.html
-@download http://donejs.com/can/dist/can.observe.attributes.js
+@download http://donejs.com/can/dist/can.map.attributes.js
 @group can.Map.attributes.static static
 @group can.Map.attributes.prototype prototype
 
-can.Map.attributes is a plugin that helps convert and normalize data being set on an Observe
+can.Map.attributes is a plugin that helps convert and normalize data being set on an Map
 and allows you to specify the way complex types get serialized. The attributes plugin is most
 helpful when used with [can.Model] \(because the serialization aids in sending data to a server),
-but you can use it with any Observe you plan to make instances
+but you can use it with any Map you plan to make instances
 from.
 
 @body
@@ -25,7 +25,7 @@ this class uses.
 Together, the functions in _convert_ and _serialize_ make up the type definitions for the class.
 The attributes plugin comes with three useful predefined types: `'date'`, `'number'`, and `'boolean'`.
 
-Here is a quick example of an Observe-based class using the attributes plugin to convert and normalize
+Here is a quick example of an Map-based class using the attributes plugin to convert and normalize
 its data, and then to serialize the instance:
 
 
@@ -50,10 +50,10 @@ its data, and then to serialize the instance:
 ### Demo
 
 When a user enters a new date in the format of _YYYY-MM-DD_, the control 
-listens for changes in the input box and updates the Observable using 
+listens for changes in the input box and updates the Map using 
 the `attr` method which then converts the string into a JavaScript date object.  
 
-Additionally, the control also listens for changes on the Observable and 
+Additionally, the control also listens for changes on the Map and 
 updates the age in the page for the new birthdate of the contact.
 
 @demo can/map/attributes/attributes.html
@@ -93,7 +93,7 @@ This example builds on the previous one to demonstrate these reference types.
 The Attributes plugin provides functionality for converting data attributes from raw types and 
 serializing complex types for the server.
 
-Below is an example code of an Observe providing serialization and conversion for dates and numbers.  
+Below is an example code of an Map providing serialization and conversion for dates and numbers.  
 
 When `Contact` is initialized, the `weight` attribute is set and converted to a `number` using the
 converter we provided.  Next the `birthday` attribute is set using the `attr` method and gets converted

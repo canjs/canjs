@@ -779,4 +779,15 @@ steal("can/view/callbacks",
 			});
 		}
 	}
+	test('should not error with IE conditional compilation turned on (#679)', function(){
+		var pass = true;
+		/*@cc_on @*/
+		var template = can.view.mustache('Hello World');
+		try {
+			template({});
+		} catch(e) {
+			pass = false;
+		}
+		ok(pass);
+	});
 });

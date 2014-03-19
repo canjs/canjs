@@ -16,6 +16,17 @@ steal('can/util/object', function () {
 		}, {
 			type: 'i'
 		}), 'folder case ignored');
+
+		// Issue #773
+		ok(!can.Object.same(
+			{foo: null},
+			{foo: new Date()}
+		), 'nulls and Dates are not considered the same. (#773)');
+
+		ok(!can.Object.same(
+			{foo: null},
+			{foo: {}}
+		), 'nulls and empty objects are not considered the same. (#773)');
 	});
 	test('subsets', function () {
 		var res1 = can.Object.subsets({
