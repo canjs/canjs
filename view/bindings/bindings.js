@@ -206,7 +206,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 				this.element[0].checked = (value === trueValue);
 			} else {
-				var method = this.options.value() === this.element[0].value ? "setAttr" : "removeAttr";
+				var method = this.options.value() == this.element[0].value ? "setAttr" : "removeAttr";
 				can.view.elements[method](this.element[0], 'checked', true);
 			}
 
