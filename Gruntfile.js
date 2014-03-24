@@ -21,6 +21,9 @@ module.exports = function (grunt) {
 		ids: [ 'CanJS default build' ],
 		url: pkg.homepage
 	});
+	var amdIds = ['can'].concat(_.map(_.keys(builderJSON.configurations), function (name) {
+		return 'can/util/' + name;
+	}), _.keys(builderJSON.modules));
 	var testifyDist = {
 		template: 'test/templates/__configuration__-dist.html.ejs',
 		builder: builderJSON,
@@ -155,13 +158,19 @@ module.exports = function (grunt) {
 			},
 			all: {
 				options: {
-					ids: ['can'].concat(_.map(
-						_.keys(builderJSON.configurations), function (name) {
-							return 'can/util/' + name;
-						}), _.keys(builderJSON.modules))
+					ids: amdIds
 				},
 				files: {
 					'dist/amd/': '.'
+				}
+			},
+			dev: {
+				options: {
+					dev: true,
+					ids: amdIds
+				},
+				files: {
+					'dist/amd-dev/': '.'
 				}
 			}
 		},
