@@ -21,6 +21,32 @@ module.exports = function (grunt) {
 		ids: [ 'CanJS default build' ],
 		url: pkg.homepage
 	});
+	var testifyDist = {
+		template: 'test/templates/__configuration__-dist.html.ejs',
+		builder: builderJSON,
+		root: '../../',
+		out: 'test/dist/',
+		transform: {
+			module: function (definition) {
+				if (!definition.isDefault) {
+					return definition.name.toLowerCase();
+				}
+				return null;
+			},
+
+			test: function (definition, key) {
+				var name = key.substr(key.lastIndexOf('/') + 1);
+				var path = key.replace('can/', '') + '/';
+				return path + name + '_test.js';
+			},
+
+			options: function (config) {
+				return {
+					dist: 'can.' + config
+				};
+			}
+		}
+	};
 
 	grunt.registerTask('publish', 'Publish a a release (patch, minor, major).', function () {
 		var type = this.args[0];
@@ -48,32 +74,11 @@ module.exports = function (grunt) {
 					}
 				}
 			},
-			dist: {
-				template: 'test/templates/__configuration__-dist.html.ejs',
-				builder: builderJSON,
-				root: '../../',
-				out: 'test/dist/',
-				transform: {
-					module: function (definition) {
-						if (!definition.isDefault) {
-							return definition.name.toLowerCase();
-						}
-						return null;
-					},
-
-					test: function (definition, key) {
-						var name = key.substr(key.lastIndexOf('/') + 1);
-						var path = key.replace('can/', '') + '/';
-						return path + name + '_test.js';
-					},
-
-					options: function (config) {
-						return {
-							dist: 'can.' + config
-						};
-					}
-				}
-			},
+			dist: testifyDist,
+			dev: _.extend({}, testifyDist, {
+				template: 'test/templates/__configuration__-dev.html.ejs',
+				out: 'test/dev/'
+			}),
 			amd: {
 				template: 'test/templates/__configuration__-amd.html.ejs',
 				builder: builderJSON,
@@ -224,6 +229,18 @@ module.exports = function (grunt) {
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
 						'http://localhost:8000/test/dist/yui.html'
+					]
+				}
+			},
+			dev: {
+				options: {
+					urls: [
+						'http://localhost:8000/test/dev/dojo.html',
+						'http://localhost:8000/test/dev/jquery.html',
+						'http://localhost:8000/test/dev/jquery-2.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/dev/mootools.html',
+						'http://localhost:8000/test/dev/yui.html'
 					]
 				}
 			},
