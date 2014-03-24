@@ -1,4 +1,52 @@
 steal("can/util", "can/view/mustache", "can/control", function (can) {
+	/**
+	 * @function isContentEditable
+	 * @hide
+	 *
+	 * Determines if an element is contenteditable.
+	 *
+	 * An element is contenteditable if it contains the `contenteditable`
+	 * attribute set to either an empty string or "true".
+	 *
+	 * By default an element is also contenteditable if its immediate parent
+	 * has a truthy version of the attribute, unless the element is explicitly
+	 * set to "false".
+	 *
+	 * @param {HTMLElement} el
+	 * @return {Boolean} returns if the element is editable
+	 */
+	// Function for determining of an element is contenteditable
+	var isContentEditable = (function(){
+		// A contenteditable element has a value of an empty string or "true"
+		var values = {
+			"": true,
+			"true": true,
+			"false": false
+		};
+
+		// Tests if an element has the appropriate contenteditable attribute
+		var editable = function(el){
+			// DocumentFragments do not have a getAttribute
+			if(!el || !el.getAttribute) {
+				return;
+			}
+
+			var attr = el.getAttribute("contenteditable");
+			return values[attr];
+		};
+
+		return function (el){
+			// First check if the element is explicitly true or false
+			var val = editable(el);
+			if(typeof val === "boolean") {
+				return val;
+			} else {
+				// Otherwise, check the parent
+				return !!editable(el.parentNode);
+			}
+		};
+	})();
+
 
 	/**
 	 * @function can.view.bindings.can-value can-value
@@ -99,7 +147,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			});
 			return;
 		}
-		if (el.getAttribute("contenteditable") != null) {
+		if (isContentEditable(el)) {
 			new Content(el, {
 				value: value
 			});
