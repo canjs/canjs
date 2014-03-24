@@ -53,6 +53,12 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	 *
 	 * @demo can/view/bindings/select.html
 	 *
+	 * ## contenteditable
+	 *
+	 * Cross binds a contenteditable element with an observable value.
+	 *
+	 * @demo can/view/bindings/contenteditable.html
+	 *
 	 */
 	can.view.attr("can-value", function (el, data) {
 
@@ -89,6 +95,12 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 		}
 		if (el.nodeName.toLowerCase() === "select" && el.multiple) {
 			new Multiselect(el, {
+				value: value
+			});
+			return;
+		}
+		if (el.getAttribute("contenteditable") != null) {
+			new Content(el, {
 				value: value
 			});
 			return;
@@ -283,6 +295,20 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 					this.options.value(value);
 				}
 
+			}
+		}),
+		Content = can.Control.extend({
+			init: function () {
+				this.set();
+				this.on("blur", "setValue");
+			},
+			"{value} change": "set",
+			set: function () {
+				var val = this.options.value();
+				this.element[0].innerHTML = (typeof val === 'undefined' ? '' : val);
+			},
+			setValue: function () {
+				this.options.value(this.element[0].innerHTML);
 			}
 		});
 
