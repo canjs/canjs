@@ -61,8 +61,9 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 		scanner: new can.view.Scanner({
 			text: {
 				outStart: 'with(_VIEW) { with (_CONTEXT) {',
-				outEnd: '}}',
-				argNames: '_CONTEXT,_VIEW'
+				outEnd: "}}",
+				argNames: '_CONTEXT,_VIEW',
+				context: "this"
 			},
 			/**
 			 * @hide

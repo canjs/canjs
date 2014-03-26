@@ -1,10 +1,5 @@
 steal("can/util", "can/view/mustache", "can/control", function (can) {
 
-	// IE < 8 doesn't support .hasAttribute, so feature detect it.
-	var hasAttribute = function (el, name) {
-		return el.hasAttribute ? el.hasAttribute(name) : el.getAttribute(name) !== null;
-	};
-
 	/**
 	 * @function can.view.bindings.can-value can-value
 	 * @parent can.view.bindings
@@ -59,23 +54,24 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	 * @demo can/view/bindings/select.html
 	 *
 	 */
-	can.view.Scanner.attribute("can-value", function (data, el) {
+	can.view.attr("can-value", function (el, data) {
 
 		var attr = el.getAttribute("can-value"),
 			value = data.scope.computeData(attr, {
 				args: []
 			})
-				.compute;
+				.compute,
+			trueValue,
+			falseValue;
 
 		if (el.nodeName.toLowerCase() === "input") {
-			var trueValue, falseValue;
 			if (el.type === "checkbox") {
-				if (hasAttribute(el, "can-true-value")) {
+				if (can.attr.has(el, "can-true-value")) {
 					trueValue = data.scope.compute(el.getAttribute("can-true-value"));
 				} else {
 					trueValue = can.compute(true);
 				}
-				if (hasAttribute(el, "can-false-value")) {
+				if (can.attr.has(el, "can-false-value")) {
 					falseValue = data.scope.compute(el.getAttribute("can-false-value"));
 				} else {
 					falseValue = can.compute(false);
@@ -91,7 +87,12 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				return;
 			}
 		}
-
+		if (el.nodeName.toLowerCase() === "select" && el.multiple) {
+			new Multiselect(el, {
+				value: value
+			});
+			return;
+		}
 		new Value(el, {
 			value: value
 		});
@@ -139,10 +140,10 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	 * @demo can/view/bindings/can-event.html
 	 *
 	 */
-	can.view.Scanner.attribute(/can-[\w\.]+/, function (data, el) {
+	can.view.attr(/can-[\w\.]+/, function (el, data) {
 
-		var attributeName = data.attr,
-			event = data.attr.substr("can-".length),
+		var attributeName = data.attributeName,
+			event = attributeName.substr("can-".length),
 			handler = function (ev) {
 				var attr = el.getAttribute(attributeName),
 					scopeData = data.scope.read(attr, {
@@ -157,7 +158,6 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			handler = specialData.handler;
 			event = specialData.event;
 		}
-
 		can.bind.call(el, event, handler);
 	});
 
@@ -177,7 +177,6 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			if (!this.element) {
 				return;
 			}
-
 			var val = this.options.value();
 			this.element[0].value = (typeof val === 'undefined' ? '' : val);
 		},
@@ -186,42 +185,105 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			if (!this.element) {
 				return;
 			}
-
 			this.options.value(this.element[0].value);
 		}
-	});
+	}),
+		Checked = can.Control.extend({
+			init: function () {
+				this.isCheckebox = (this.element[0].type.toLowerCase() === "checkbox");
+				this.check();
+			},
+			"{value} change": "check",
+			"{trueValue} change": "check",
+			"{falseValue} change": "check",
+			check: function () {
+				if (this.isCheckebox) {
+					var value = this.options.value(),
+						trueValue = this.options.trueValue() || true;
 
-	var Checked = can.Control.extend({
-		init: function () {
-			this.isCheckebox = (this.element[0].type.toLowerCase() === "checkbox");
-			this.check();
-		},
-		"{value} change": "check",
-		"{trueValue} change": "check",
-		"{falseValue} change": "check",
-		check: function () {
-			if (this.isCheckebox) {
-				var value = this.options.value(),
-					trueValue = this.options.trueValue() || true;
+					this.element[0].checked = (value === trueValue);
+				} else {
+					var setOrRemove = this.options.value() === this.element[0].value ?
+						"set" : "remove";
 
-				this.element[0].checked = (value === trueValue);
-			} else {
-				var method = this.options.value() === this.element[0].value ? "setAttr" : "removeAttr";
-				can.view.elements[method](this.element[0], 'checked', true);
-			}
+					can.attr[setOrRemove](this.element[0], 'checked', true);
 
-		},
-		"change": function () {
-
-			if (this.isCheckebox) {
-				this.options.value(this.element[0].checked ? this.options.trueValue() : this.options.falseValue());
-			} else {
-				if (this.element[0].checked) {
-					this.options.value(this.element[0].value);
 				}
-			}
 
-		}
-	});
+			},
+			"change": function () {
+
+				if (this.isCheckebox) {
+					this.options.value(this.element[0].checked ? this.options.trueValue() : this.options.falseValue());
+				} else {
+					if (this.element[0].checked) {
+						this.options.value(this.element[0].value);
+					}
+				}
+
+			}
+		}),
+		Multiselect = Value.extend({
+			init: function () {
+				this.delimiter = ";";
+				this.set();
+			},
+
+			set: function () {
+
+				var newVal = this.options.value();
+
+				if (typeof newVal === 'string') {
+					//when given a string, try to extract all the options from it
+					newVal = newVal.split(this.delimiter);
+					this.isString = true;
+				} else if (newVal) {
+					//when given something else, try to make it an array and deal with it
+					newVal = can.makeArray(newVal);
+				}
+
+				//jQuery.val is required here, which will break compatibility with other libs
+				var isSelected = {};
+				can.each(newVal, function (val) {
+					isSelected[val] = true;
+				});
+
+				can.each(this.element[0].childNodes, function (option) {
+					if (option.value) {
+						option.selected = !! isSelected[option.value];
+					}
+
+				});
+
+			},
+
+			get: function () {
+				var values = [],
+					children = this.element[0].childNodes;
+
+				can.each(children, function (child) {
+					if (child.selected && child.value) {
+						values.push(child.value);
+					}
+				});
+
+				return values;
+			},
+
+			'change': function () {
+				var value = this.get(),
+					currentValue = this.options.value();
+
+				if (this.isString || typeof currentValue === "string") {
+					this.isString = true;
+					this.options.value(value.join(this.delimiter));
+				} else if (currentValue instanceof can.List) {
+					currentValue.attr(value, true);
+				} else {
+					this.options.value(value);
+				}
+
+			}
+		});
 
 });

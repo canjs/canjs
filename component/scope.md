@@ -228,6 +228,20 @@ Results in:
 
     <my-tag><h1>hello</h1></my-tag>
 
+If the tag's `title` attribute is changed, it updates the scope property 
+automatically.  This can be seen in the following example:
+
+@demo can/component/examples/accordion.html
+
+Clicking the __Change title__
+button sets a `<panel>` element's "title" attribute like:
+
+    $("#out").on("click","button", function(){
+      $("panel:first").attr("title", "Users")
+      $(this).remove();
+    });
+
+
 ## Calling methods on scope from events within the template
 
 Using html attributes like `can-EVENT=METHOD`, you can directly call a scope method 
