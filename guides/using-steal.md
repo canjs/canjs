@@ -1,40 +1,21 @@
 @page using-steal With StealJS
 @parent Using 2
-@ignore
 
-StealJS is the dependency manager that comes with [JavaScriptMVC](http://javascriptmvc.com) and that is natively used by CanJS. To use CanJS with Steal you can either directly clone the [CanJS repository](https://github.com/bitovi/canjs) or use the `steal/` folder from the CanJS download or Bower package.
+StealJS is the dependency manager that comes with [JavaScriptMVC](http://javascriptmvc.com) and that is natively used by CanJS.
+Since JavaScriptMVC comes with CanJS and Steal, the easiest way to use them together is by [downloading JavaScriptMVC](http://javascriptmvc.com/dist/javascriptmvc-3.3.zip). You can also use the `steal/` folder from the CanJS download or Bower package.
 
-The easiest way to get started up is using Bower:
+With the JavaScriptMVC download, in the main folder, you can simply run the application generator:
 
-> bower install steal canjs jquery --save
+> ./js jmvc/generate/app app
 
-Create the following `stealconfig.js` in you project root:
+In `app/app.js` you should see something like:
 
-    steal.config({
-        map: {
-            "*": {
-                "jquery/jquery.js" : "jquery",
-                "can/util/util.js": "can/util/jquery/jquery.js"
-            }
-        },
-        paths: {
-            "can": "bower_components/can/steal",
-            "jquery": "bower_components/jquery/jquery.js",
-        },
-        shim : {
-            jquery: {
-                exports: "jQuery"
-            }
-        },
-        ext: {
-            js: "js",
-            css: "css",
-            less: "steal/less/less.js",
-            coffee: "steal/coffee/coffee.js",
-            ejs: "can/view/ejs/ejs.js",
-            mustache: "can/view/mustache/mustache.js"
-        }
-    });
+    steal(
+        './app.less',
+        './models/fixtures/fixtures.js',
+    function(){
 
-Then include StealJS on your page and you are ready to load dependencies:
+    })
 
+This file will be loaded when opening `app/index.html` and you are ready to use CanJS with StealJS and make [using-production production builds].
+For more information follow up in the [JavaScriptMVC documentation](http://javascriptmvc.com/docs).

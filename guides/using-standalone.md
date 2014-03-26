@@ -2,7 +2,7 @@
 @parent Using 0
 
 The most common way of using CanJS is the core builds from the download (or download builder) included in a `<script>` tag.
-This page contains quick instructions for using CanJS that way with the different supported libraries.
+This page contains quick instructions for using CanJS with the different supported libraries.
 
 ## jQuery
 

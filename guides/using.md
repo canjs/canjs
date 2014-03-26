@@ -6,8 +6,8 @@ and the follow up chapters show how to use CanJS [using-standalone standalone], 
 
 ## The CanJS download
 
-The buttons on the [CanJS homepage](http://canjs.com) les syou either get the full download or create customized download using the
-[download builder](#secton_builder). The full download is a zipped version of [this repository](https://github.com/bitovi/canjs.com)
+The buttons on the [CanJS homepage](http://canjs.com) lets you either get the full download or create customized download using the
+[download builder](#section_Thedownloadbuilder). The full download is a zipped version of [this repository](https://github.com/bitovi/canjs.com)
 and contains:
 
 - `can.<library>.js` (e.g. `can.jquery.js`) - The core build for a supported library
@@ -18,14 +18,13 @@ and contains:
 - `amd-dev/` - CanJS AMD modules with development messages
 - `steal/` - CanJS modules using the StealJS syntax (see [using with StealJS using-steal])
 
-The [download page](http://canjs.com/download.html) also offers those downloads for older versions and pre-releases
-from the "Other Versions" dropdown.
+The [download page](http://canjs.com/download.html) also offers those downloads for older versions and pre-releases for the next version from the "Other Versions" dropdown.
 
 
 ## The download builder
 
 The [download builder](http://canjs.com/download.html) creates a single - optionally minified - JavaScript
-file (`can.custom.js`) for the library and CanJS modules (including plugins) you selected in the current version.
+file (`can.custom.js`) for the library and CanJS modules (including plugins) you selected in the currently released version.
 The advantage is that you will get a single file with only the dependencies needed. The banner at the top will
 contain a "Download from:" link so that you will be able to re-download the same configuration for newer versions.
 
@@ -58,7 +57,7 @@ To get a CanJS pre-release run:
 We also make every CanJS version available via our homepage as:
 
 - [canjs.com/releases/can.jquery.js](http://canjs.com/releases/latest/can.jquery.js) - For the latest version
-- [canjs.com/<version>/can.jquery.js](http://canjs.com/releases/2.0.0/can.jquery.js) - For a specific version
+- [canjs.com/--version--/can.jquery.js](http://canjs.com/releases/2.0.0/can.jquery.js) - For a specific version
 
 A list of all available files can be found in [this repository](https://github.com/bitovi/canjs.com).
 

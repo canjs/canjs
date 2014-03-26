@@ -30,9 +30,9 @@ In RequireJS a simple configuration looks like this:
       });
     </script>
 
-The `can/can` module is a shortcut that loads CanJS's core plugins and returns the `can` namespace:
+The `can` module is a shortcut that loads CanJS's core plugins and returns the `can` namespace:
 
-    require(['can/can'], function(can) {
+    require(['can'], function(can) {
       // Use can.Control, can.view, can.Model etc.
     });
 
@@ -67,15 +67,13 @@ With RequireJS and Zepto, it loks like this:
 
     require.config({
       paths : {
-        "can": "path/to/can/amd"
+        "can": "path/to/can/amd",
+        "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
       },
       map : {
         '*' : {
           "can/util/library" : "can/util/zepto"
         }
-      },
-      paths: {
-        "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
       }
     });
 
