@@ -1,4 +1,4 @@
-steal('can/event', function() {
+steal('can/util/can.js', 'can/event', function(can) {
 	// Adds propagation of events
 	// can.extend(Class.prototype, can.event, { __propagate: 'prop' })
 	var dispatch = can.dispatch;

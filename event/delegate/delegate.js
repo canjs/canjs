@@ -1,4 +1,4 @@
-steal('can/event', 'can/event/propagate', 'can/construct', function() {
+steal('can/util/can.js', 'can/event', 'can/event/propagate', 'can/construct', function(can) {
 
 	can.event.delegate = function(selector, event, handler) {
 		var parts = selector && selector.split(/\s+/),

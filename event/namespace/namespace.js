@@ -1,4 +1,4 @@
-steal('can/util', 'can/event', function() {
+steal('can/util/can.js', 'can/event', function(can) {
 	var addEvent = can.addEvent;
 	can.addEvent = can.event.addEvent = can.event.on = can.event.bind = function(event, fn) {
 		// Split the namespaces out
