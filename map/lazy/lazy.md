@@ -1,9 +1,9 @@
-@constructor can.LazyLazyMap
-@inherits can.LazyMap
-@parent canjs
-@test can/LazyMap/lazy/test.html
+@constructor can.LazyMap
+@inherits can.Map
+@parent can.Map.plugins
 @plugin can/map/lazy
 @release 2.1
+@test can/LazyMap/lazy/test.html
 
 @description Create observable objects that initialize on demand.
 
