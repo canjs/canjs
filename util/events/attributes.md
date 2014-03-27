@@ -36,10 +36,12 @@ Listen to an `attributes` event with [can.Control] like:
 Listen to an `attributes` event with [can.Component::events can.Component's events] object like:
 
     can.Component.extend({
-      tag: "panel"
-      "attributes": function(el, ev){
-        
-      }
+      tag: "panel",
+			events: {
+				"attributes": function(el, ev){
+					
+				}
+			}
     })
 
 

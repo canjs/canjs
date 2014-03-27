@@ -1,14 +1,17 @@
 steal("can/util/can.js", function (can) {
 
-	// # can/util/attr
-	// Contains helpers for dealing with element attributes.
+	// # can.attr
+	// Central location for attribute changing to occur, used to trigger an
+	// `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`
 
+	// Polyfill for setImmediate (only works in IE 10+)
 	var setImmediate = window.setImmediate || function (cb) {
 			return setTimeout(cb, 0);
 		},
 		attr = {
 			// Keep a reference to MutationObserver because we need to trigger
-			// events for browsers that do not support it.
+			// events for browsers that do not support it. For browsers that do support
+			// it the MutationObserver is created in can/util/jquery
 			MutationObserver: window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
 
 			/**
@@ -68,31 +71,38 @@ steal("can/util/can.js", function (can) {
 
 				var tagName = el.nodeName.toString()
 					.toLowerCase(),
+					// The property of `attr.map`
 					prop = attr.map[attrName],
 					newValue;
-				// if this is a special property call the setter
 				if (typeof prop === "function") {
+					// This is a special property call the setter
 					newValue = prop(el, val);
 				} else if (prop === true) {
+					// This is a boolean property, set to true
+					// Always set to true, setting to false is the same
+					// as removing the attribute
 					newValue = el[attrName] = true;
 
 					if (attrName === "checked" && el.type === "radio") {
 						if (can.inArray(tagName, attr.defaultValue) >= 0) {
+							// Also set it's defaultChecked value to true
 							el.defaultChecked = true;
 						}
 					}
 
 				} else if (prop) {
-					// set the value as true / false
+					// Set the value as val
 					newValue = el[prop] = val;
 					if (prop === "value" && can.inArray(tagName, attr.defaultValue) >= 0) {
 						el.defaultValue = val;
 					}
 				} else {
+					// Fallback to using `setAttribute`
 					el.setAttribute(attrName, val);
 					newValue = val;
 				}
 				if (!attr.MutationObserver && newValue !== oldValue) {
+					// Trigger the "attributes" event for this element.
 					attr.trigger(el, attrName, oldValue);
 				}
 			},
@@ -101,7 +111,7 @@ steal("can/util/can.js", function (can) {
 			trigger: function (el, attrName, oldValue) {
 				// Only trigger if someone has bound
 				if (can.data(can.$(el), "canHasAttributesBindings")) {
-					// Queue up a function to be called
+					// Queue up a function to be called asynchronously
 					return setImmediate(function () {
 						can.trigger(el, {
 							type: "attributes",
