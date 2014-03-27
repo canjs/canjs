@@ -1,7 +1,7 @@
-steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () {
-	module('can/observe map+list');
+steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
+	module('can/map/lazy map+list');
 	test('Basic Map', 9, function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			category: 5,
 			productType: 4,
 			properties: {
@@ -94,7 +94,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		]);
 	});
 	test('changing an object unbinds', 4, function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			category: 5,
 			productType: 4,
 			properties: {
@@ -116,7 +116,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		brand.push(1, 2, 3);
 	});
 	test('replacing with an object that object becomes observable', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			properties: {
 				brand: [],
 				model: [],
@@ -130,7 +130,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			.bind, 'has bind function');
 	});
 	test('attr does not blow away old observable', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			properties: {
 				brand: ['gain']
 			}
@@ -149,7 +149,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('sub observes respect attr remove parameter', function () {
 		var bindCalled = 0,
-			state = new can.Map({
+			state = new can.LazyMap({
 				monkey: {
 					tail: 'brain'
 				}
@@ -172,7 +172,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(1, bindCalled, 'remove event fired for sub map when remove param is false');
 	});
 	test('remove attr', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			properties: {
 				brand: [],
 				model: [],
@@ -192,7 +192,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(undefined, state.attr('properties'));
 	});
 	test('remove nested attr', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			properties: {
 				nested: true
 			}
@@ -206,7 +206,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(undefined, state.attr('properties.nested'));
 	});
 	test('remove item in nested array', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			array: [
 				'a',
 				'b'
@@ -221,7 +221,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(state.attr('array.length'), 1);
 	});
 	test('remove nested property in item of array', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			array: [{
 				nested: true
 			}]
@@ -247,7 +247,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(undefined, state.attr('0.nested'));
 	});
 	test('attr with an object', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			properties: {
 				foo: 'bar',
 				brand: []
@@ -283,11 +283,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 	});
 	test('empty get', function () {
-		var state = new can.Map({});
+		var state = new can.LazyMap({});
 		equal(state.attr('foo.bar'), undefined);
 	});
 	test('attr deep array ', function () {
-		var state = new can.Map({});
+		var state = new can.LazyMap({});
 		var arr = [{
 			foo: 'bar'
 		}],
@@ -323,12 +323,12 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 					}
 				]
 			};
-		var res = new can.Map(first)
+		var res = new can.LazyMap(first)
 			.attr();
 		deepEqual(res, compare, 'test');
 	});
 	test('attr sends events after it is done', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			foo: 1,
 			bar: 2
 		});
@@ -342,7 +342,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 	});
 	test('direct property access', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			foo: 1,
 			attr: 2
 		});
@@ -406,14 +406,14 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('recursive observers do not cause stack overflow', function () {
 		expect(0);
-		var a = new can.Map();
-		var b = new can.Map({
+		var a = new can.LazyMap();
+		var b = new can.LazyMap({
 			a: a
 		});
 		a.attr('b', b);
 	});
 	test('bind to specific attribute changes when an existing attribute\'s value is changed', function () {
-		var paginate = new can.Map({
+		var paginate = new can.LazyMap({
 			offset: 100,
 			limit: 100,
 			count: 2000
@@ -425,7 +425,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		paginate.attr('offset', 200);
 	});
 	test('bind to specific attribute changes when an attribute is removed', 2, function () {
-		var paginate = new can.Map({
+		var paginate = new can.LazyMap({
 			offset: 100,
 			limit: 100,
 			count: 2000
@@ -472,7 +472,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 	});
 	test('instantiating can.List of correct type', function () {
-		var Ob = can.Map({
+		var Ob = can.LazyMap({
 			getName: function () {
 				return this.attr('name');
 			}
@@ -481,7 +481,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			name: 'Tester'
 		}]);
 		equal(list.length, 1, 'List length is correct');
-		ok(list[0] instanceof can.Map, 'Initialized list item converted to can.Map');
+		ok(list[0] instanceof can.LazyMap, 'Initialized list item converted to can.LazyMap');
 		ok(list[0] instanceof Ob, 'Initialized list item converted to Ob');
 		equal(list[0].getName(), 'Tester', 'Converted to extended Map instance, could call getName()');
 		list.push({
@@ -490,7 +490,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 	});
 	test('can.List.prototype.splice converts objects (#253)', function () {
-		var Ob = can.Map({
+		var Ob = can.LazyMap({
 			getAge: function () {
 				return this.attr('age') + 10;
 			}
@@ -511,14 +511,14 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('removing an already missing attribute does not cause an event', function () {
 		expect(0);
-		var ob = new can.Map();
+		var ob = new can.LazyMap();
 		ob.bind('change', function () {
 			ok(false);
 		});
 		ob.removeAttr('foo');
 	});
 	test('Only plain objects should be converted to Observes', function () {
-		var ob = new can.Map();
+		var ob = new can.LazyMap();
 		ob.attr('date', new Date());
 		ok(ob.attr('date') instanceof Date, 'Date should not be converted');
 		var selected = can.$('body');
@@ -535,7 +535,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('bind on deep properties', function () {
 		expect(2);
-		var ob = new can.Map({
+		var ob = new can.LazyMap({
 			name: {
 				first: 'Brian'
 			}
@@ -547,7 +547,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		ob.attr('name.first', 'Justin');
 	});
 	test('startBatch and stopBatch and changed event', 5, function () {
-		var ob = new can.Map({
+		var ob = new can.LazyMap({
 			name: {
 				first: 'Brian'
 			},
@@ -574,7 +574,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		}, 1);
 	});
 	test('startBatch callback', 4, function () {
-		var ob = new can.Map({
+		var ob = new can.LazyMap({
 			game: {
 				name: 'Legend of Zelda'
 			},
@@ -594,12 +594,12 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(callbackCalled, true, 'startBatch callback called');
 	});
 	test('nested map attr', function () {
-		var person1 = new can.Map({
+		var person1 = new can.LazyMap({
 			name: {
 				first: 'Josh'
 			}
 		}),
-			person2 = new can.Map({
+			person2 = new can.LazyMap({
 				name: {
 					first: 'Justin',
 					last: 'Meyer'
@@ -716,7 +716,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		list.replace(def);
 	});
 	test('.attr method doesn\'t merge nested objects (#207)', function () {
-		var test = new can.Map({
+		var test = new can.LazyMap({
 			a: {
 				a1: 1,
 				a2: 2
@@ -776,7 +776,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	test('triggering a event while in a batch (#291)', function () {
 		expect(0);
 		stop();
-		var map = new can.Map();
+		var map = new can.LazyMap();
 		can.batch.start();
 		can.trigger(map, 'change', 'random');
 		setTimeout(function () {
@@ -785,7 +785,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		}, 10);
 	});
 	test('dot separated keys (#257, #296)', function () {
-		var ob = new can.Map({
+		var ob = new can.LazyMap({
 			'test.value': 'testing',
 			other: {
 				test: 'value'
@@ -808,8 +808,8 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			}, 'Object set properly');
 	});
 	test('cycle binding', function () {
-		var first = new can.Map(),
-			second = new can.Map();
+		var first = new can.LazyMap(),
+			second = new can.LazyMap();
 		first.attr('second', second);
 		second.attr('first', second);
 		var handler = function () {};
@@ -820,7 +820,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('Deferreds are not converted', function () {
 		var dfd = can.Deferred(),
-			ob = new can.Map({
+			ob = new can.LazyMap({
 				test: dfd
 			});
 		ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
@@ -828,7 +828,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			._cid, 'Does not have a _cid');
 	});
 	test('Setting property to undefined', function () {
-		var ob = new can.Map({
+		var ob = new can.LazyMap({
 			'foo': 'bar'
 		});
 		ob.attr('foo', undefined);
@@ -843,9 +843,9 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		list.pop();
 		equal(list.length, 0, 'list is empty');
 	});
-	module('can/observe compute');
+	module('can/map/lazy compute');
 	test('Basic Compute', function () {
-		var o = new can.Map({
+		var o = new can.LazyMap({
 			first: 'Justin',
 			last: 'Meyer'
 		});
@@ -863,7 +863,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		o.attr('first', 'Brian');
 	});
 	test('compute on prototype', function () {
-		var Person = can.Map({
+		var Person = can.LazyMap({
 			fullName: function () {
 				return this.attr('first') + ' ' + this.attr('last');
 			}
@@ -884,7 +884,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		me.attr('last', 'Shah');
 	});
 	test('setter compute', function () {
-		var project = new can.Map({
+		var project = new can.LazyMap({
 			progress: 0.5
 		});
 		var computed = can.compute(function (val) {
@@ -905,7 +905,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		computed(75);
 	});
 	test('compute a compute', function () {
-		var project = new can.Map({
+		var project = new can.LazyMap({
 			progress: 0.5
 		});
 		var percent = can.compute(function (val) {
@@ -961,7 +961,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		c(0);
 	});
 	test('only one update on a batchTransaction', function () {
-		var person = new can.Map({
+		var person = new can.LazyMap({
 			first: 'Justin',
 			last: 'Meyer'
 		});
@@ -969,7 +969,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			return person.attr('first') + ' ' + person.attr('last') + Math.random();
 		});
 		var callbacks = 0;
-		func.bind("change", function (ev, newVal, oldVal) {
+		func.bind('change', function() {
 			callbacks++;
 		});
 		person.attr({
@@ -979,7 +979,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(callbacks, 1, 'only one callback');
 	});
 	test('only one update on a start and end transaction', function () {
-		var person = new can.Map({
+		var person = new can.LazyMap({
 			first: 'Justin',
 			last: 'Meyer'
 		}),
@@ -988,7 +988,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			return person.attr('first') + ' ' + person.attr('last') + age() + Math.random();
 		});
 		var callbacks = 0;
-		func.bind("change",function (ev, newVal, oldVal) {
+		func.bind('change', function () {
 			callbacks++;
 		});
 		can.batch.start();
@@ -1003,7 +1003,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 	});
 	test('Compute emits change events when an embbedded observe has properties added or removed', 4, function () {
-		var obs = new can.Map(),
+		var obs = new can.LazyMap(),
 			compute1 = can.compute(function () {
 				var txt = obs.attr('foo');
 				obs.each(function (val) {
@@ -1039,8 +1039,8 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		}]);
 		equal(2, computedCount, 'only one compute');
 	});
-	test('Generate computes from Observes with can.Map.prototype.compute (#203)', 6, function () {
-		var obs = new can.Map({
+	test('Generate computes from Observes with can.LazyMap.prototype.compute (#203)', 6, function () {
+		var obs = new can.LazyMap({
 			test: 'testvalue'
 		});
 		var compute = obs.compute('test');
@@ -1076,7 +1076,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		searchQuery('food');
 	});
 	test('compute doesn\'t rebind and leak with 0 bindings', function () {
-		var state = new can.Map({
+		var state = new can.LazyMap({
 			foo: 'bar'
 		});
 		var computedA = 0,
@@ -1167,7 +1167,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		equal(value(), 3);
 	});
 	test('compute bound to observe', function () {
-		var me = new can.Map({
+		var me = new can.LazyMap({
 			name: 'Justin'
 		});
 		var bind = me.bind,
@@ -1198,7 +1198,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		}, 100);
 	});
 	test('binding to a compute on an observe before reading', function () {
-		var me = new can.Map({
+		var me = new can.LazyMap({
 			name: 'Justin'
 		});
 		var name = can.compute(me, 'name');
@@ -1232,7 +1232,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 	});
 	test('compute on the prototype', function () {
 		expect(4);
-		var Person = can.Map.extend({
+		var Person = can.LazyMap.extend({
 			fullName: can.compute(function (fullName) {
 				if (arguments.length) {
 					var parts = fullName.split(' ');
@@ -1281,7 +1281,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 
 	test("nested computes", function () {
 
-		var data = new can.Map({});
+		var data = new can.LazyMap({});
 		var compute = data.compute('summary.button');
 		compute.bind('change', function () {
 			ok(true, "compute changed");
