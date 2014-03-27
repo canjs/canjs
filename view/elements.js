@@ -1,4 +1,4 @@
-steal('can/util', function (can) {
+steal('can/util', 'can/view',function (can) {
 
 	/**
 	 * @property {Object} can.view.elements

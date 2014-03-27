@@ -5,6 +5,25 @@
 @body
 -->
 
+Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on IRC or email (contact@bitovi.com).  We will happily walk you throuygh setting up a the environment, creating a test, and submitting a pull request.
+
+## Reporting Bugs
+
+To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/issues).
+
+When filing a bug, it is helpful to include:
+
+- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS fiddles:
+  - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
+  - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
+  - [Dojo](http://jsfiddle.net/donejs/9x96n/)
+  - [YUI](http://jsfiddle.net/donejs/w6m73/)
+  - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
+- Breaking unit tests (optional)
+- Proposed fix solutions (optional)
+
+Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [IRC #canjs channel](http://webchat.freenode.net/?channels=canjs).
+
 ## Installing 
 
 1.) <a href="https://github.com/bitovi/canjs/fork" target="_blank">Fork Canjs on GitHub.</a>
@@ -64,23 +83,6 @@ git push origin html5-fix
 ```
 
 Now you'll need to submit a Pull Request. Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click the 'New Pull Request' button. Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
-
-## Reporting Bugs
-
-To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/issues).
-
-When filing a bug, it is helpful to include:
-
-- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS fiddles:
-  - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
-  - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
-  - [Dojo](http://jsfiddle.net/donejs/9x96n/)
-  - [YUI](http://jsfiddle.net/donejs/w6m73/)
-  - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
-- Breaking unit tests (optional)
-- Proposed fix solutions (optional)
-
-Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [IRC #canjs channel](http://webchat.freenode.net/?channels=canjs).
 
 ## Documentation
 
