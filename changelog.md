@@ -3,6 +3,34 @@
 @parent guides 5
 -->
 
+__2.0.7__ ( Mar 26 2014 )
+
+- change: [Configuration for AMD development build](https://github.com/bitovi/canjs/pull/821)
+- change: [2.0.6 dev errors](https://github.com/bitovi/canjs/issues/817)
+- change: [AMD dev build](https://github.com/bitovi/canjs/issues/809)
+
+__2.0.6__ ( Mar 14 2014 )
+
+- change: [Allow type inference for fixture parameters.](https://github.com/bitovi/canjs/pull/792)
+- change: [Updating sourceURL syntax to use # instead of @](https://github.com/bitovi/canjs/pull/789)
+- change: [Changing typeof check to a check for apply (#681)](https://github.com/bitovi/canjs/pull/787)
+- change: [Nested component tags of same type throws an error](https://github.com/bitovi/canjs/pull/780)
+- change: [#773: Fixing date compare logic in can.Object.same.](https://github.com/bitovi/canjs/pull/775)
+- change: [Enable removeAttr on Map keys with dot](https://github.com/bitovi/canjs/pull/774)
+- change: [can.Object.same: compare logic is incorrect when it comes to dates](https://github.com/bitovi/canjs/issues/773)
+- change: [scanner.js error: Using //@ to indicate sourceURL pragmas is deprecated](https://github.com/bitovi/canjs/issues/772)
+- change: [Bug in sample code on http://canjs.com/ homepage](https://github.com/bitovi/canjs/issues/749)
+- change: [#713 cleanup can.Control, fixup contributing guide](https://github.com/bitovi/canjs/pull/746)
+- change: [can.computes that return nulls can be used with #each](https://github.com/bitovi/canjs/issues/743)
+- change: [can.fixture no longer says id 1 and id &quot;1&quot; are the same](https://github.com/bitovi/canjs/issues/742)
+- change: [Fixes `updated` callback to can.compute&#39;s on/off to simply need to be called.](https://github.com/bitovi/canjs/pull/733)
+- change: [compute signature not working](https://github.com/bitovi/canjs/issues/732)
+- change: [2.0.5 idOrUrl require.toUrl() change documented](https://github.com/bitovi/canjs/pull/718)
+- change: [can.view Breaking backward compatibility in v2.0.5 amd](https://github.com/bitovi/canjs/issues/717)
+- change: [confusing example for can.Control template data passing](https://github.com/bitovi/canjs/issues/713)
+- change: [Canjs not working in default android browser.](https://github.com/bitovi/canjs/issues/681)
+- change: [sourceURL comment in Scanner.prototype.scan() cause error on IE8](https://github.com/bitovi/canjs/issues/679)
+
 __2.0.5__ ( Feb 04 2014 )
 
 - change: [fixes looking up @ and sets links to docco](https://github.com/bitovi/canjs/pull/715)

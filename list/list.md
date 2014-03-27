@@ -75,6 +75,7 @@ people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
 
 As with `can.Map`s, the real power of observable arrays comes from being able to
 react to changes in the member elements of the array. Lists emit five types of events:
+
 - the _change_ event fires on every change to a List.
 - the _set_ event is fired when an element is set.
 - the _add_ event is fired when an element is added to the List.
