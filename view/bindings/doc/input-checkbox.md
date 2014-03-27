@@ -19,4 +19,4 @@ true and false value can be specified by setting `can-true-value` and
 
 ## Use
 
-@demo can/view/bindings/input-checkbox.html
+@demo can/view/bindings/doc/input-checkbox.html

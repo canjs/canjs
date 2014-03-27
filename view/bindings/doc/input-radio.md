@@ -17,4 +17,4 @@ a [can.Map] property or a [can.compute].
 
 ## Use
 
-@demo can/view/bindings/input-radio.html
+@demo can/view/bindings/doc/input-radio.html

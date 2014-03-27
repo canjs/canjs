@@ -46,7 +46,7 @@ Could be rendered with one of the following:
     // A can.List
     { colors: new can.List() }
     
-@demo can/view/bindings/select_multiple.html
+@demo can/view/bindings/doc/select_multiple.html
 
 ## Cross binding Strings
 
@@ -59,7 +59,7 @@ string like:
 The string will be split by `";"`. The items in the split
 string are used as values to match against `<option>` tag values.
 
-@demo can/view/bindings/select_multiple_string.html
+@demo can/view/bindings/doc/select_multiple_string.html
 
 ## Cross binding undefined 
 
@@ -75,4 +75,4 @@ If the `KEY` value begins as an undefined [can.compute] like:
 
 The value of the compute will be set to an array.
 
-@demo can/view/bindings/select_multiple_undefined.html
+@demo can/view/bindings/doc/select_multiple_undefined.html
