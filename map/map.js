@@ -1,5 +1,5 @@
 // 1.69
-steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (can, bind) {
+steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batch', function (can, bind, bubble) {
 	// ## map.js  
 	// `can.Map`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -35,12 +35,12 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			return can.isArray(attr) ? attr : ("" + attr)
 				.split(".");
 		},
-		makeBindSetup = function (wildcard) {
+		makeBindSetup = function (wildcard, eventName) {
 			return function () {
 				var parent = this;
 				this._each(function (child, prop) {
 					if (child && child.bind) {
-						bindToChildAndBubbleToParent(child, wildcard || prop, parent);
+						bindToChildAndBubbleToParent(child, wildcard || prop, parent , eventName);
 					}
 				});
 			};
@@ -65,7 +65,6 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 	 */
 	//
 	var Map = can.Map = can.Construct.extend({
-			bubbleEvents: ['change'],
 			/**
 			 * @static
 			 */
@@ -94,6 +93,9 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}, {});
 				}
 
+			},
+			_bubbleRule: function(eventName) {
+				return (eventName === "change" || eventName.indexOf(".") >= 0 ) && "change";
 			},
 			_computes: [],
 			// keep so it can be overwritten
@@ -124,11 +126,13 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 					return teardown;
 				},
-
-				canMakeObserve: function (obj) {
-					return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) || (obj instanceof can.Map));
+				isObservable: function(obj){
+					return obj instanceof can.Map || (obj && obj === can.route)
 				},
-				unhookup: function (items, parent) {
+				canMakeObserve: function (obj) {
+					return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
+				},
+				/*unhookup: function (items, parent) {
 					return can.each(items, function (item) {
 						if (item && item.unbind) {
 							can.stopListening.call(parent, item, "change");
@@ -165,7 +169,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 					return child;
-				},
+				},*/
 				// A helper used to serialize an `Map` or `Map.List`.  
 				// `map` - The observable.  
 				// `how` - To serialize with `attr` or `serialize`.  
@@ -174,7 +178,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					// Go through each property.
 					map.each(function (val, name) {
 						// If the value is an `object`, and has an `attrs` or `serialize` function.
-						where[name] = Map.helpers.canMakeObserve(val) && can.isFunction(val[how]) ?
+						where[name] = Map.helpers.isObservable(val) && can.isFunction(val[how]) ?
 						// Call `attrs` or `serialize` to get the original data back.
 						val[how]() :
 						// Otherwise return the value.
@@ -385,13 +389,6 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			},
 			_bindsetup: function(){}, //makeBindSetup(),
 			_bindteardown: function(){},
-			_bubbleSetup: makeBindSetup(),
-			_bubbleTeardown: function () {
-				var self = this;
-				this._each(function (child) {
-					Map.helpers.unhookup([child], self);
-				});
-			},
 			_changes: function (ev, attr, how, newVal, oldVal) {
 				// when a change happens, create the named event.
 				can.batch.trigger(this, {
@@ -691,6 +688,25 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					return this._data;
 				}
 			},
+			// converts the value into an observable if needed
+			__type: function(value, prop){
+				// If we are getting an object.
+				if (!( value instanceof can.Map) && can.Map.helpers.canMakeObserve(value)  ) {
+					
+					var cached = getMapFromObject(value);
+					if(cached) {
+						return cached;
+					}
+					if( can.isArray(value) ) {
+						var List = this.constructor.List || can.List;
+						return new List(value)
+					} else {
+						var Map = this.constructor.Map || can.Map;
+						return new Map(value)
+					}
+				}
+				return value;
+			},
 			// Sets `attr` prop as value on this object where.
 			// `attr` - Is a string of properties or an array  of property values.
 			// `value` - The raw value to set.
@@ -703,7 +719,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					current = this.__get(prop);
 
 				// If we have an `object` and remaining parts.
-				if ( parts.length && Map.helpers.canMakeObserve(current) ) {
+				if ( parts.length && Map.helpers.isObservable(current) ) {
 					// That `object` should set it (this might need to call attr).
 					current._set(parts, value);
 				} else if (!parts.length) {
@@ -728,15 +744,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on data.
-					this.___set(prop,
-
-						// If we are getting an object.
-						Map.helpers.canMakeObserve(value) ?
-
-						// Hook it up to send event.
-						Map.helpers.hookupBubble(value, prop, this) :
-						// Value is normal.
-						value);
+					this.___set(prop, bubble.set(this, prop, value) );
 
 					if (changeType === "add") {
 						// If there is no current value, let others know that
@@ -751,7 +759,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					//can.batch.trigger(this, prop, [value, current]);
 					// If we can stop listening to our old value, do it.
 					if (current) {
-						Map.helpers.unhookup([current], this);
+						bubble.teardownFromParent(this, current);
 					}
 
 				}
@@ -888,18 +896,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 				}
-
-				if (!this._init && !!~can.inArray(eventName, this.constructor.bubbleEvents) || eventName.indexOf(".") >= 0 ) {
-					if (!this._bubbleBindings) {
-						this._bubbleBindings = 1;
-						// setup live-binding
-						if (this._bubbleSetup) {
-							this._bubbleSetup();
-						}
-					} else {
-						this._bubbleBindings++;
-					}
-				}
+				bubble.bind(this, eventName);
 				return can.bindAndSetup.apply(this, arguments);
 
 			},
@@ -946,17 +943,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 				}
-				if( eventName === "change" ||eventName.indexOf(".") >=0 ) {
-					if (! this._bubbleBindings ) {
-						this._bubbleBindings = 0;
-					} else {
-						this._bubbleBindings--;
-					}
-					
-					if (!this._bubbleBindings && this._bubbleTeardown ) {
-						this._bubbleTeardown();
-					}
-				}
+				bubble.unbind(this, eventName);
 
 				
 				return can.unbindAndTeardown.apply(this, arguments);
@@ -1026,10 +1013,10 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					}
 
 					// if we're dealing with models, want to call _set to let converter run
-					if (newVal instanceof can.Map) {
+					if ( Map.helpers.isObservable( newVal ) ) {
 						self.__set(prop, newVal, curVal);
 						// if its an object, let attr merge
-					} else if (Map.helpers.canMakeObserve(curVal) && Map.helpers.canMakeObserve(newVal) && curVal.attr) {
+					} else if (Map.helpers.isObservable(curVal) && Map.helpers.canMakeObserve(newVal) ) {
 						curVal.attr(newVal, remove);
 						// otherwise just set
 					} else if (curVal !== newVal) {

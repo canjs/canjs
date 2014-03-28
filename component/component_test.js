@@ -399,6 +399,11 @@ steal("can/component", function () {
 
 	test("deferred grid", function () {
 
+		// This test simulates a grid that reads a `deferreddata` property for 
+		// items and displays them.
+		// If `deferreddata` is a deferred, it waits for those items to resolve.
+		// The grid also has a `waiting` property that is true while the deferred is being resolved.
+
 		can.Component.extend({
 			tag: "grid",
 			scope: {
@@ -412,6 +417,7 @@ steal("can/component", function () {
 				},
 				"{scope} deferreddata": "update",
 				update: function () {
+					console.log("got deferred data");
 					var deferred = this.scope.attr('deferreddata'),
 						scope = this.scope;
 
@@ -432,11 +438,15 @@ steal("can/component", function () {
 			}
 		});
 
+		// The context object has a `set` property and a
+		// deferredData property that reads from it and returns a new deferred.
 		var SimulatedScope = can.Map.extend({
 			set: 0,
 			deferredData: function () {
+
 				var deferred = new can.Deferred();
 				var set = this.attr('set');
+				console.log("running deferredData", set)
 				if (set === 0) {
 					setTimeout(function () {
 						deferred.resolve([{
@@ -471,7 +481,9 @@ steal("can/component", function () {
 		}));
 
 		var gridScope = can.scope("#qunit-test-area grid");
-		equal(gridScope.attr("waiting"), true, "waiting is true");
+		
+		equal(gridScope.attr("waiting"), true, "The grid is initially waiting on the deferreddata to resolve");
+		
 		stop();
 
 		var waitingHandler = function() {
@@ -490,6 +502,8 @@ steal("can/component", function () {
 
 					}
 				});
+				
+				// update set to change the deferred.
 				scope.attr("set", 1);
 
 			}, 10);
@@ -832,6 +846,7 @@ steal("can/component", function () {
 			tag: "scope-rebinder",
 			events: {
 				"{name} change": function () {
+					console.log("name changed")
 					nameChanges++;
 				}
 			}
@@ -846,9 +861,14 @@ steal("can/component", function () {
 			n2 = can.compute();
 
 		scope.attr("name", n1);
+		
 		n1("updated");
+		
 		scope.attr("name", n2);
+		
 		n2("updated");
+		
+		
 		equal(nameChanges, 2);
 	});
 

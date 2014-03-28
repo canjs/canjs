@@ -4,7 +4,6 @@ steal('can/util', 'can/list', function (can) {
 		setup = proto.setup;
 
 	//Add `move` as an event that lazy-bubbles
-	can.Map.bubbleEvents.push('move');
 
 	// extend the list for sorting support
 

@@ -1,4 +1,4 @@
-steal("can/util", "can/map", function (can, Map) {
+steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 	// Helpers for `observable` lists.
 	var splice = [].splice,
@@ -12,9 +12,6 @@ steal("can/util", "can/map", function (can, Map) {
 			splice.call(obj, 0, 1);
 			return !obj[0];
 		})();
-
-	// Make the length even lazy-bubbleable
-	Map.bubbleEvents.push('length');
 
 	/**
 	 * @add can.List
@@ -258,10 +255,8 @@ steal("can/util", "can/map", function (can, Map) {
 					i;
 
 				for (i = 2; i < args.length; i++) {
-					var val = args[i];
-					if (Map.helpers.canMakeObserve(val)) {
-						args[i] = Map.helpers.hookupBubble(val, "*", this, this.constructor.Map, this.constructor);
-					}
+					args[i] = bubble.set(this, i, args[i]);
+					
 				}
 				if (howMany === undefined) {
 					howMany = args[1] = this.length - index;
@@ -277,7 +272,7 @@ steal("can/util", "can/map", function (can, Map) {
 				can.batch.start();
 				if (howMany > 0) {
 					this._triggerChange("" + index, "remove", undefined, removed);
-					Map.helpers.unhookup(removed, this);
+					bubble.removeMany(this, removed);
 				}
 				if (args.length > 2) {
 					this._triggerChange("" + index, "add", args.slice(2), removed);
@@ -688,9 +683,7 @@ steal("can/util", "can/map", function (can, Map) {
 				// Go through and convert anything to an `map` that needs to be converted.
 				while (i--) {
 					val = arguments[i];
-					args[i] = Map.helpers.canMakeObserve(val) ?
-						Map.helpers.hookupBubble(val, "*", this, this.constructor.Map, this.constructor) :
-						val;
+					args[i] = bubble.set(this, i, val);
 				}
 
 				// Call the original method.
@@ -794,8 +787,9 @@ steal("can/util", "can/map", function (can, Map) {
 				this._triggerChange("" + len, "remove", undefined, [res]);
 
 				if (res && res.unbind) {
-					can.stopListening.call(this, res, "change");
+					bubble.remove(this, res);
 				}
+				
 				return res;
 			};
 		});

@@ -39,11 +39,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							this.scope = options.scope;
 							var self = this;
 							this.on(this.scope, "change", function updateScope() {
+								console.log(arguments, self.scope._bubbleBindings)
 								self.on();
-								// Only rebind if there are no lazy binding registered yet
-								if(!self.scope._bubbleBindings) {
-									self.on(self.scope, "change", updateScope);
-								}
+								
 							});
 							return res;
 						}

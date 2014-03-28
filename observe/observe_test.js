@@ -137,13 +137,16 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 		var oldCid = state.attr('properties.brand')
 			._cid;
+			
 		state.attr({
 			properties: {
 				brand: []
 			}
 		}, true);
+		
 		deepEqual(state.attr('properties.brand')
 			._cid, oldCid, 'should be the same map, so that views bound to the old one get updates');
+			
 		equal(state.attr('properties.brand')
 			.length, 0, 'list should be empty');
 	});

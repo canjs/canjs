@@ -1729,11 +1729,8 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// Update attributes if attributes have been passed
 			stub = attrs && typeof attrs === 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
-			// triggers change event that bubble's like
-			// handler( 'change','1.destroyed' ). This is used
-			// to remove items on destroyed from Model Lists.
-			// but there should be a better way.
-			can.trigger(this, "change", funcName);
+			// Model lists will bubble this
+			can.trigger(this, funcName);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
@@ -1743,13 +1740,21 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			can.trigger(constructor, funcName, this);
 		};
 	});
+	
 
 	// Model lists are just like `Map.List` except that when their items are 
 	// destroyed, it automatically gets removed from the list.
 	var ML = can.Model.List = can.List({
-		// Model lists need to set up their events right away so that we can listen
-		// to _changes and remove the element when it is detroyed
-		_bindsetup: can.List.prototype._bubbleSetup,
+		// On change or a nested named event, setup change bubbling.
+		// On any other type of event, setup "destroyed" bubbling.
+		_bubbleRule: function(eventName) {
+			if( eventName === "change" || eventName.indexOf(".") >= 0 ) {
+				return "change";
+			} else {
+				return "destroyed";
+			}
+		}
+	},{
 		setup: function (params) {
 			if (can.isPlainObject(params) && !can.isArray(params)) {
 				can.List.prototype.setup.apply(this);
@@ -1757,10 +1762,12 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			} else {
 				can.List.prototype.setup.apply(this, arguments);
 			}
+			this._init = 1;
+			this.bind('destroyed', can.proxy(this._destroyed, this));
+			delete this._init;
 		},
-		_changes: function (ev, attr) {
-			can.List.prototype._changes.apply(this, arguments);
-			if (/\w+\.destroyed/.test(attr)) {
+		_destroyed: function (ev, attr) {
+			if (/\w+/.test(attr)) {
 				var index = this.indexOf(ev.target);
 				if (index !== -1) {
 					this.splice(index, 1);
