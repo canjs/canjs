@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", function () {
+steal("can/view/bindings", "can/map", "can/test", function (special) {
 	module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-test-area")
@@ -203,6 +203,43 @@ steal("can/view/bindings", "can/map", "can/test", function () {
 		equal(input.checked, false, 'checkbox value bound (via uncheck)');
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
+
+	test("extending special event types", function(){
+		special.esc = function (data, el, original) {
+			return {
+				event: "keyup",
+				handler: function (ev) {
+					if (ev.keyCode === 27) {
+						return original.call(this, ev);
+					}
+				}
+			};
+		}
+
+
+		var template = can.view.mustache("<input can-esc='cancel'/>");
+
+		var called = 0;
+
+		var frag = template({
+			cancel: function () {
+				called++;
+				ok(called, 1, "update called once");
+			}
+		});
+
+		var input = frag.childNodes[0];
+
+		can.trigger(input, {
+			type: "keyup",
+			keyCode: 13
+		});
+
+		can.trigger(input, {
+			type: "keyup",
+			keyCode: 27
+		});
+	})
 
 	test("can-value select single", function () {
 

@@ -304,4 +304,6 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			}
 		});
 
+	return special;
+
 });
