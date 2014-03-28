@@ -2,7 +2,8 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	// # bindings.js
 	// `can.view.bindings`: In-template event bindings and two-way bindings
 
-	// Register the can-value special attribute
+	// ## can-value
+	// Implement the `can-value` special attribute
 	// 
 	// Usage: &lt;input can-value="name" /&gt;
 	// 
@@ -69,6 +70,21 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 		});
 	});
 
+	// ## Special Event Types (can-SPECIAL)
+
+	// A special object, similar to [$.event.special](http://benalman.com/news/2010/03/jquery-special-events/), 
+	// for adding hooks for special can-SPECIAL types (not native DOM events). Right now, only can-enter is 
+	// supported, but this object might be exported so that it can be added to easily.
+	// 
+	// To implement a can-SPECIAL event type, add a property to the special object, whose value is a function 
+	// that returns the following: 
+	//		
+	//		// the real event name to bind to
+	//		event: "event-name",
+	//		handler: function (ev) {
+	//			// some logic that figures out if the original handler should be called or not, and if so...
+	//			return original.call(this, ev);
+	//		}
 	var special = {
 		enter: function (data, el, original) {
 			return {
@@ -82,7 +98,9 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 		}
 	};
 
-	// Implementing the can-EVENT syntax. This binds on a wildcard attribute name. Whenever a view is being processed 
+	// ## can-EVENT
+	// The following section contains code for implementing the can-EVENT attribute. 
+	// This binds on a wildcard attribute name. Whenever a view is being processed 
 	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler 
 	// that calls a method identified by the value of this attribute.
 	can.view.attr(/can-[\w\.]+/, function (el, data) {
@@ -106,7 +124,11 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				return scopeData.value.call(scopeData.parent, data.scope._context, can.$(this), ev);
 			};
 
+		// This code adds support for special event types, like can-enter="foo".
 		if (special[event]) {
+			// special.enter (or any special[event]) is a function that returns an object containing an event and a handler. 
+			// These are to be used for binding. For example, when a user adds a can-enter attribute, we'll bind on the 
+			// keyup event, and the handler performs special logic to determine on keyup if the enter key was pressed.
 			var specialData = special[event](data, el, handler);
 			handler = specialData.handler;
 			event = specialData.event;
@@ -117,7 +139,16 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	});
 
 
-	// a can.Control that manages the two-way bindings on most inputs.  When can-value is found as an attribute 
+	// ## Two way binding can.Controls
+	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves 
+	// two functions: 
+	// 1. Bind on the property changing (the compute we're two-way binding to) and change the input value.
+	// 2. Bind on the input changing and change the property (compute) we're two-way binding to.
+	// There is one control per input type. There could easily be more for more advanced input types, like the HTML5 type="date" input type.
+
+
+	// ### Value 
+	// A can.Control that manages the two-way bindings on most inputs.  When can-value is found as an attribute 
 	// on an input, the callback above instantiates this Value control on the input element.
 	var Value = can.Control.extend({
 		init: function () {
@@ -151,25 +182,28 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			this.options.value(this.element[0].value);
 		}
 	}),
-	// a can.Control that manages the two-way bindings on a checkbox element.  When can-value is found as an attribute 
+	// ### Checked 
+	// A can.Control that manages the two-way bindings on a checkbox element.  When can-value is found as an attribute 
 	// on a checkbox, the callback above instantiates this Checked control on the checkbox element.
 		Checked = can.Control.extend({
 			init: function () {
 				// if its not a checkbox, its a radio input
-				this.isCheckebox = (this.element[0].type.toLowerCase() === "checkbox");
+				this.isCheckbox = (this.element[0].type.toLowerCase() === "checkbox");
 				this.check();
 			},
+			// value is the compute representing the can-value for this element.  For example can-value="foo" and current 
+			// scope is someObj, value is the compute representing someObj.attr('foo')
 			"{value} change": "check",
 			"{trueValue} change": "check",
 			"{falseValue} change": "check",
 			check: function () {
-				if (this.isCheckebox) {
+				if (this.isCheckbox) {
 					var value = this.options.value(),
 						trueValue = this.options.trueValue() || true;
 
 					this.element[0].checked = (value === trueValue);
 				} 
-				// its a radio input
+				// its a radio input type
 				else {
 					var setOrRemove = this.options.value() === this.element[0].value ?
 						"set" : "remove";
@@ -179,11 +213,17 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				}
 
 			},
+			// This event is triggered by the DOM.  If a change event occurs, we must set the value of the compute (options.value).
 			"change": function () {
 
-				if (this.isCheckebox) {
+				if (this.isCheckbox) {
+					// If the checkbox is checked and the trueValue compute (if it was used) is true, set value to true.
+					// 
+					// If its not checked and the falseValue compute (if it was used) is false, set value to false.
 					this.options.value(this.element[0].checked ? this.options.trueValue() : this.options.falseValue());
-				} else {
+				} 
+				// radio input type
+				else {
 					if (this.element[0].checked) {
 						this.options.value(this.element[0].value);
 					}
@@ -191,18 +231,20 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 			}
 		}),
+		// ### Multiselect
+		// A can.Control that handles select input with the "multiple" attribute (meaning more than one can be selected at once). 
 		Multiselect = Value.extend({
 			init: function () {
 				this.delimiter = ";";
 				this.set();
 			},
-
+			// Since this control extends Value (above), the set method will be called when the value compute changes (and on init).
 			set: function () {
 
 				var newVal = this.options.value();
 
 				if (typeof newVal === 'string') {
-					//when given a string, try to extract all the options from it
+					//when given a string, try to extract all the options from it (i.e. "a;b;c;d")
 					newVal = newVal.split(this.delimiter);
 					this.isString = true;
 				} else if (newVal) {
@@ -210,21 +252,25 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 					newVal = can.makeArray(newVal);
 				}
 
-				//jQuery.val is required here, which will break compatibility with other libs
+				// make an object containing all the options passed in for convenient lookup
 				var isSelected = {};
 				can.each(newVal, function (val) {
 					isSelected[val] = true;
 				});
 
+				// go through each &lt;option/&gt; element
 				can.each(this.element[0].childNodes, function (option) {
+					// if it has a value property (meaning it is a valid option)
 					if (option.value) {
+						// set its value to true if it was in the list of vals that were set
 						option.selected = !! isSelected[option.value];
 					}
 
 				});
 
 			},
-
+			// A helper function used by the 'change' handler below. Its purpose is to return an array of selected 
+			// values, like ["foo", "bar"]
 			get: function () {
 				var values = [],
 					children = this.element[0].childNodes;
@@ -237,17 +283,21 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 				return values;
 			},
-
+			// Called when the user changes this input in any way.
 			'change': function () {
+				// get an array of the currently selected values
 				var value = this.get(),
 					currentValue = this.options.value();
 
+				// If the compute is a string, set its value to the joined version of the values array (i.e. "foo;bar")
 				if (this.isString || typeof currentValue === "string") {
 					this.isString = true;
 					this.options.value(value.join(this.delimiter));
 				} else if (currentValue instanceof can.List) {
+					// If the compute is a can.List, replace its current contents with the new array of values
 					currentValue.attr(value, true);
 				} else {
+					// Otherwise set the value to the array of values selected in the input.
 					this.options.value(value);
 				}
 
