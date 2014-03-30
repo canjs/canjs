@@ -130,7 +130,7 @@ steal('can/util', 'can/construct', function (can) {
 			 * @return {Object} null or the processor and pre-split parts.
 			 * The processor is what does the binding/subscribing.
 			 */
-			_action: function (methodName, options) {
+			_action: function (methodName, options, controlInstance ) {
 
 				// If we don't have options (a `control` instance), we'll run this 
 				// later.  
@@ -671,20 +671,22 @@ steal('can/util', 'can/construct', function (can) {
 
 					for (funcName in actions) {
 						// Only push if we have the action and no option is `undefined`
-						if (actions.hasOwnProperty(funcName) &&
-							(ready = actions[funcName] || cls._action(funcName, this.options))) {
-							bindings.push(ready.processor(ready.delegate || element,
-								ready.parts[2], ready.parts[1], funcName, this));
+						if ( actions.hasOwnProperty(funcName) ) {
+							ready = actions[funcName] || cls._action(funcName, this.options, this);
+							if( ready ) {
+								bindings.control[funcName]  = ready.processor(ready.delegate || element,
+									ready.parts[2], ready.parts[1], funcName, this);
+							}
 						}
 					}
 
 					// Setup to be destroyed...  
 					// don't bind because we don't want to remove it.
 					can.bind.call(element, "removed", destroyCB);
-					bindings.push(function (el) {
+					bindings.user.push(function (el) {
 						can.unbind.call(el, "removed", destroyCB);
 					});
-					return bindings.length;
+					return bindings.user.length;
 				}
 
 				if (typeof el === 'string') {
@@ -704,9 +706,9 @@ steal('can/util', 'can/construct', function (can) {
 					func = can.Control._shifter(this, func);
 				}
 
-				this._bindings.push(binder(el, eventName, func, selector));
+				this._bindings.user.push(binder(el, eventName, func, selector));
 
-				return this._bindings.length;
+				return this._bindings.user.length;
 			},
 			// Unbinds all event handlers on the controller.
 			/**
@@ -715,12 +717,18 @@ steal('can/util', 'can/construct', function (can) {
 			 * be calling this unless in use with [can.Control::on].
 			 */
 			off: function () {
-				var el = this.element[0];
-				each(this._bindings || [], function (value) {
-					value(el);
-				});
+				var el = this.element[0],
+					bindings = this._bindings;
+				if( bindings ) {
+					each(bindings.user || [], function (value) {
+						value(el);
+					});
+					each(bindings.control || {}, function (value) {
+						value(el);
+					});
+				}
 				// Adds bindings.
-				this._bindings = [];
+				this._bindings = {user: [], control: {}};
 			},
 			// Prepares a `control` for garbage collection
 			/**

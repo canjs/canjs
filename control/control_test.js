@@ -266,7 +266,7 @@ steal("can/control", function () {
 		can.trigger(item1, "foo");
 		can.trigger(item2, "bar");
 	});
-	test('Don\'t bind if there are undefined values in templates', function () {
+	test("Don\'t bind if there are undefined values in templates", function () {
 		can.Control.processors.proc = function () {
 			ok(false, 'This processor should never be called');
 		};
@@ -274,7 +274,7 @@ steal("can/control", function () {
 			'{noExistStuff} proc': function () {}
 		});
 		var c = new Control(document.createElement('div'));
-		equal(c._bindings.length, 1, 'There is only one binding');
+		equal(c._bindings.user.length, 1, 'There is only one binding');
 	});
 	test('Multiple calls to destroy', 2, function () {
 		var Control = can.Control({

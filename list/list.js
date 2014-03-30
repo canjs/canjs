@@ -556,7 +556,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					var curVal = this[prop],
 						newVal = items[prop];
 
-					if (Map.helpers.canMakeObserve(curVal) && Map.helpers.canMakeObserve(newVal)) {
+					if (Map.helpers.isObservable(curVal) && Map.helpers.canMakeObserve(newVal)) {
 						curVal.attr(newVal, remove);
 						//changed from a coercion to an explicit
 					} else if (curVal !== newVal) {

@@ -25,27 +25,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					var self = this;
 					
 					// Define a control using the `events` prototype property.
-					this.Control = can.Control.extend({
-						// Change lookup to first look in the scope.
-						_lookup: function (options) {
-							return [options.scope, options, window];
-						}
-					},
-					// Extend `events` with a setup method that listens to changes in `scope` and
-					// rebinds all templated event handlers.
-					can.extend({
-						setup: function (el, options) {
-							var res = can.Control.prototype.setup.call(this, el, options);
-							this.scope = options.scope;
-							var self = this;
-							this.on(this.scope, "change", function updateScope() {
-								console.log(arguments, self.scope._bubbleBindings)
-								self.on();
-								
-							});
-							return res;
-						}
-					}, this.prototype.events));
+					this.Control = ComponentControl.extend( this.prototype.events );
 					
 					// Look to convert `scope` to a Map constructor function.
 					if (!this.prototype.scope || typeof this.prototype.scope === "object") {
@@ -290,6 +270,91 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 			return can.data(el, "scope");
 		}
 	};
+	
+	
+	var paramReplacer = /\{([^\}]+)\}/g;
+	
+	var ComponentControl = can.Control.extend({
+		// Change lookup to first look in the scope.
+		_lookup: function (options) {
+			return [options.scope, options, window];
+		},
+		_action: function (methodName, options, controlInstance ) {
+
+			// If we don't have options (a `control` instance), we'll run this 
+			// later.  
+			paramReplacer.lastIndex = 0;
+			var hasObjectLookup = paramReplacer.test(methodName);
+			
+			if( !controlInstance && hasObjectLookup) {
+				return;
+			} else if(!hasObjectLookup ) {
+				return can.Control._action.apply(this, arguments);
+			} else {
+				// hasObjectLookup and controlInstance
+				var actionScope = new can.view.Scope(window).add(options).add(options.scope);
+				
+				var readyCompute = can.compute(function(){
+					
+					var delegate;
+					
+					var name = methodName.replace(paramReplacer, function(matched, key){
+						
+						var value = actionScope.attr(key);
+						
+						if(typeof value === "string") {
+							return value;
+						} else {
+							delegate = value;
+							return "";
+						}
+	
+					});
+					
+					var parts = name.split(/\s+/g),
+						event = parts.pop();
+
+					return {
+						processor: this.processors[event] || this.processors.click,
+						parts: [name, parts.join(" "), event],
+						delegate: delegate || undefined
+					};
+					
+				},this);
+				var handler = function(ev, ready){
+					bindings.control[methodName](controlInstance.element);
+					bindings.control[methodName]  = ready.processor(
+									ready.delegate || controlInstance.element,
+									ready.parts[2], ready.parts[1], methodName, this);
+				};
+				readyCompute.bind("change", handler);
+				
+				controlInstance._bindings.readyComputes[methodName] = {
+					compute: readyCompute,
+					handler: handler
+				};
+				return readyCompute();
+			}
+		}
+	},
+	// Extend `events` with a setup method that listens to changes in `scope` and
+	// rebinds all templated event handlers.
+	{
+		setup: function (el, options) {
+			this.scope = options.scope;
+			return can.Control.prototype.setup.call(this, el, options);
+		},
+		off: function(){
+			var el = this.element[0];
+			if( this._bindings ) {
+				can.each(this._bindings.readyComputes || {}, function (value) {
+					value.compute.unbind("change", value.handler);
+				});
+			}
+			can.Control.prototype.off.apply(this, arguments);
+			this._bindings.readyComputes = {};
+		}
+	});
 
 	return Component;
 });

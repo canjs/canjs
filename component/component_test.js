@@ -417,7 +417,6 @@ steal("can/component", function () {
 				},
 				"{scope} deferreddata": "update",
 				update: function () {
-					console.log("got deferred data");
 					var deferred = this.scope.attr('deferreddata'),
 						scope = this.scope;
 
@@ -446,7 +445,6 @@ steal("can/component", function () {
 
 				var deferred = new can.Deferred();
 				var set = this.attr('set');
-				console.log("running deferredData", set)
 				if (set === 0) {
 					setTimeout(function () {
 						deferred.resolve([{
@@ -846,7 +844,6 @@ steal("can/component", function () {
 			tag: "scope-rebinder",
 			events: {
 				"{name} change": function () {
-					console.log("name changed")
 					nameChanges++;
 				}
 			}
@@ -1045,5 +1042,6 @@ steal("can/component", function () {
 
 		equal(called, false);
 	});
+	
 
 });
