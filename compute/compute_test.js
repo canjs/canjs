@@ -186,10 +186,10 @@ steal("can/compute", "can/test", function () {
 			last = can.compute("Meyer"),
 			fullName = can.compute.async("", function(){
 				return first()+" "+last();
-			})
+			});
 			
-		equal(fullName(), "Justin Meyer")
-	})
+		equal(fullName(), "Justin Meyer");
+	});
 	
 	test("compute.async operate on single value", function(){
 		
@@ -212,7 +212,7 @@ steal("can/compute", "can/test", function () {
 		
 		obj.bind("change", function(){});
 		
-		deepEqual( obj(), {a: 1, b: 2}, "object has all properties" )
+		deepEqual( obj(), {a: 1, b: 2}, "object has all properties" );
 		
 		a(0);
 		
@@ -240,14 +240,14 @@ steal("can/compute", "can/test", function () {
 					setVal("b");
 				},10);
 			} else {
-				return null
+				return null;
 			}
 		});
 		
 		var changeArgs = [
-			{newVal: "a", oldVal: undefined, run: function(){ a(0) } },
-			{newVal: "b", oldVal: "a", run: function(){ b(0) }},
-			{newVal: null, oldVal: "b", run: function(){ start() }},
+			{newVal: "a", oldVal: undefined, run: function(){ a(0); } },
+			{newVal: "b", oldVal: "a", run: function(){ b(0); }},
+			{newVal: null, oldVal: "b", run: function(){ start(); }}
 		],
 			changeNum = 0;
 		
@@ -256,8 +256,8 @@ steal("can/compute", "can/test", function () {
 		
 		async.bind("change", function(ev, newVal, oldVal){
 			var data = changeArgs[changeNum++];
-			equal( newVal, data.newVal, "newVal is correct" )
-			equal( oldVal, data.oldVal, "oldVal is correct" )
+			equal( newVal, data.newVal, "newVal is correct" );
+			equal( oldVal, data.oldVal, "oldVal is correct" );
 			
 			setTimeout(data.run, 10);
 			

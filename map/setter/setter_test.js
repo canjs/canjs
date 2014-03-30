@@ -93,7 +93,7 @@ steal("can/map/setter", "can/test", function () {
 			can.dev.warnTimeout = 10;
 			can.dev.warn = function (text) {
 				ok(text, "got a message");
-				can.batch.stop(true)
+				can.batch.stop(true);
 				can.dev.warn = oldlog;
 				start();
 			};
@@ -108,7 +108,7 @@ steal("can/map/setter", "can/test", function () {
 		
 		test('setter function does not warns if setter is called back quickly (#808)', function () {
 			stop();
-			expect(1)
+			expect(1);
 			var oldlog = can.dev.warn;
 			can.dev.warnTimeout = 100;
 			can.dev.warn = function (text) {
@@ -126,10 +126,10 @@ steal("can/map/setter", "can/test", function () {
 			var map = new Mapped();
 			map.attr("foo", 1);
 			map.bind("foo", function(ev, newVal){
-				equal(newVal, "BAR", "new val set")
+				equal(newVal, "BAR", "new val set");
 				start();
 				can.dev.warn = oldlog;
-			})
+			});
 			
 		});
 		

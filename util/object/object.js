@@ -207,6 +207,7 @@ steal('can/util', function (can) {
 			return a === b;
 		},
 		similar: function(a, b) {
+			/*jshint eqeqeq:false */
 			return a == b;
 		}
 	};

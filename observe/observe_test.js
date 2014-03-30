@@ -1308,7 +1308,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 		
 		value.bind("change", function(ev, newValue){
-			equal(newValue, "Ab", "updated value")
+			equal(newValue, "Ab", "updated value");
 		});
 		items.attr(0,"A");
 	});
@@ -1326,12 +1326,12 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			return res;
 		});
 		
-		value.bind("change", function(){})
+		value.bind("change", function(){});
 		
 		items.attr("a","b");
 		
-		equal(computedCount, 2, "recalculated twice")
+		equal(computedCount, 2, "recalculated twice");
 		
-	})
+	});
 
 });

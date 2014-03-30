@@ -4,15 +4,15 @@ steal('can/util', 'can/list', function (can) {
 	var oldBubbleRule = can.List._bubbleRule;
 	can.List._bubbleRule = function(eventName, list) {
 		if(list.comparator) {
-			return "change"
+			return "change";
 		}
 		return oldBubbleRule.apply(this, arguments);
 	};
 	if(can.Model) {
 		var oldModelListBubble = can.Model.List._bubbleRule;
-		can.Model.List._bubbleRule = function(){
+		can.Model.List._bubbleRule = function(eventName, list){
 			if(list.comparator) {
-				return "change"
+				return "change";
 			}
 			return oldModelListBubble.apply(this, arguments);
 		};

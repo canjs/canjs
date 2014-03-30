@@ -464,7 +464,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			{id: 2, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
 			{id: 2, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
 			{id: 2, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
-			{id: 2, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
+			{id: 2, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"}
 		],{year: 'i'});
 		
 		
@@ -475,9 +475,9 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			equal(response.data[0].id, 1, "got the first item");
 			equal(response.data.length, 1, "only got one item");
 			start();
-		})
+		});
 		
-	})
+	});
 	
 	
 });

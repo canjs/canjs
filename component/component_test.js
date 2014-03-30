@@ -1071,7 +1071,7 @@ steal("can/component", function () {
 			tag: "window-events",
 			events: {
 				"{tempMap} prop": function(){
-					ok(true, "called templated event")
+					ok(true, "called templated event");
 				}
 			}
 		});

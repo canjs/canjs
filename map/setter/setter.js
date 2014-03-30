@@ -60,7 +60,7 @@ steal('can/util', 'can/map/attributes', 'can/util/string/classize.js',function (
 			}
 			
 		} else {
-			old.call(self, prop, value, current, success, errorCallback);	
+			old.call(self, prop, value, current, success, errorCallback);
 		}
 		
 		return this;

@@ -16,11 +16,11 @@ steal("can/map/define", "can/test", function () {
 		});
 		
 		var def = new Defined();
-		def.attr("prop","bar")
+		def.attr("prop","bar");
 		
 		equal( def.attr("prop"), "foobar", "setter works" );
 		
-		var Defined = can.Map.extend({
+		Defined = can.Map.extend({
 			define: {
 				prop: {
 					set: function(newVal, setter){
@@ -30,7 +30,7 @@ steal("can/map/define", "can/test", function () {
 			}
 		});
 		
-		var def = new Defined();
+		def = new Defined();
 		def.attr("prop","bar");
 		
 		equal( def.attr("prop"), "foobar", "setter callback works" );
@@ -42,22 +42,22 @@ steal("can/map/define", "can/test", function () {
 			define:{
 				makeId: {
 					remove: function(){
-						this.removeAttr("models")
+						this.removeAttr("models");
 					}
 				},
 				models: {
 					remove: function(){
-						this.removeAttr("modelId")
+						this.removeAttr("modelId");
 					}
 				},
 				modelId: {
 					remove: function(){
-						this.removeAttr("years")
+						this.removeAttr("years");
 					}
 				},
 				years: {
 					remove: function(){
-						this.removeAttr("year")
+						this.removeAttr("year");
 					}
 				}
 			}
@@ -84,7 +84,7 @@ steal("can/map/define", "can/test", function () {
 			ok(ev.batchNum && ev.batchNum === batchNum, "batched");
 		});
 		
-		mmy.removeAttr("makeId")
+		mmy.removeAttr("makeId");
 		
 	});
 	
@@ -94,7 +94,7 @@ steal("can/map/define", "can/test", function () {
 			define: {
 				fullName: {
 					get: function(){
-						return this.attr("first")+" "+this.attr("last")
+						return this.attr("first")+" "+this.attr("last");
 					}
 				}
 			}
@@ -102,15 +102,15 @@ steal("can/map/define", "can/test", function () {
 		
 		var p = new Person({first: "Justin", last: "Meyer"});
 		
-		equal(p.attr("fullName"),"Justin Meyer", "sync getter works")
+		equal(p.attr("fullName"),"Justin Meyer", "sync getter works");
 
 		var Adder = can.Map.extend({
 			define: {
 				more: {
 					get: function(curVal, setVal){
-						var num = this.attr("num")
+						var num = this.attr("num");
 						setTimeout(function(){
-							setVal(num+1)
+							setVal(num+1);
 						},10);
 					}
 				}
@@ -119,8 +119,8 @@ steal("can/map/define", "can/test", function () {
 		
 		var a = new Adder({num: 1}),
 			callbackVals = [
-				[2, undefined, function(){ a.attr("num",2) }],
-				[3, 2, function(){ start() }]
+				[2, undefined, function(){ a.attr("num",2); }],
+				[3, 2, function(){ start(); }]
 			],
 			callbackCount = 0;
 		
@@ -131,8 +131,8 @@ steal("can/map/define", "can/test", function () {
 			
 			equal(oldVal, vals[1], "oldVal is correct");
 			
-			setTimeout(vals[2], 10)
-		})
+			setTimeout(vals[2], 10);
+		});
 		
 		stop();
 	});
@@ -146,7 +146,7 @@ steal("can/map/define", "can/test", function () {
 				arrayWithAddedItem: {
 					type: function(value){
 						if(value && value.push) {
-							value.push("item")
+							value.push("item");
 						}
 						return value;
 					}
@@ -154,35 +154,35 @@ steal("can/map/define", "can/test", function () {
 				listWithAddedItem: {
 					type: function(value){
 						if(value && value.push) {
-							value.push("item")
+							value.push("item");
 						}
 						return value;
 					},
 					Type: can.List
 				}
 			}
-		})
+		});
 		
 		
 		var t = new Typer();
 		deepEqual( can.Map.keys(t), [], "no keys" );
 		
-		var array = []
+		var array = [];
 		t.attr("arrayWithAddedItem", array);
 		
 		deepEqual(array, ["item"], "updated array");
-		equal(t.attr("arrayWithAddedItem"), array, "leave value as array")
+		equal(t.attr("arrayWithAddedItem"), array, "leave value as array");
 		
 		t.attr("listWithAddedItem",[]);
 		
 		ok( t.attr("listWithAddedItem") instanceof can.List, "convert to can.List" );
-		equal( t.attr("listWithAddedItem").attr(0), "item", "has item in it")
+		equal( t.attr("listWithAddedItem").attr(0), "item", "has item in it");
 		
 		t.bind("change", function(ev, attr, how, newVal, oldVal){
-			equal(attr, "listWithAddedItem.1", "got a bubbling event")
+			equal(attr, "listWithAddedItem.1", "got a bubbling event");
 		});
 		
-		t.attr("listWithAddedItem").push("another item")
+		t.attr("listWithAddedItem").push("another item");
 		
 	});
 	
@@ -194,9 +194,9 @@ steal("can/map/define", "can/test", function () {
 				string: {type: 'string'},
 				number : {  type: 'number' },
 				'boolean' : {  type: 'boolean' },
-				leaveAlone : {  type: '*' },
+				leaveAlone : {  type: '*' }
 			}
-		})
+		});
 		var obj = {};
 		
 		var t = new Typer({

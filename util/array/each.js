@@ -1,3 +1,4 @@
+/* jshint maxdepth:7*/
 steal('can/util/can.js', function (can) {
 	
 	// The following is from jQuery
@@ -33,7 +34,7 @@ steal('can/util/can.js', function (can) {
 			} else if (typeof elements === "object") {
 				
 				if (can.Map && elements instanceof can.Map || elements === can.route) {
-					var keys = can.Map.keys(elements)
+					var keys = can.Map.keys(elements);
 					for(i =0, len = keys.length; i < len; i++) {
 						key = keys[i];
 						item = elements.attr(key);

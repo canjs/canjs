@@ -127,7 +127,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					return teardown;
 				},
 				isObservable: function(obj){
-					return obj instanceof can.Map || (obj && obj === can.route)
+					return obj instanceof can.Map || (obj && obj === can.route);
 				},
 				canMakeObserve: function (obj) {
 					return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
@@ -402,7 +402,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						type: "__keys",
 						batchNum: ev.batchNum
 					});
-				} 
+				}
 			},
 			_triggerChange: function (attr, how, newVal, oldVal) {
 				can.batch.trigger(this, "change", can.makeArray(arguments));
@@ -710,10 +710,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					}
 					if( can.isArray(value) ) {
 						var List = this.constructor.List || can.List;
-						return new List(value)
+						return new List(value);
 					} else {
 						var Map = this.constructor.Map || can.Map;
-						return new Map(value)
+						return new Map(value);
 					}
 				}
 				return value;

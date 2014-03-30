@@ -300,10 +300,10 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					var name = methodName.replace(paramReplacer, function(matched, key){
 						if(key === "scope") {
 							delegate = options.scope;
-							return ""
-						} 
+							return "";
+						}
 						
-						key = key.replace(/^scope\./,"")
+						key = key.replace(/^scope\./,"");
 						var value = can.compute.read(options.scope,key.split("."),{isArgument: true}).value;
 						if(value === undefined) {
 							value = can.getObject(key);
@@ -350,7 +350,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 			return can.Control.prototype.setup.call(this, el, options);
 		},
 		off: function(){
-			var el = this.element[0];
 			if( this._bindings ) {
 				can.each(this._bindings.readyComputes || {}, function (value) {
 					value.compute.unbind("change", value.handler);

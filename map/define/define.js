@@ -1,6 +1,5 @@
 steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.js',function (can) {
-	var classize = can.classize,
-		proto = can.Map.prototype,
+	var proto = can.Map.prototype,
 		oldSet = proto.__set;
 	proto.__set = function (prop, value, current, success, error) {
 		//!steal-remove-start
@@ -24,7 +23,7 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 					], true);
 				}
 				return false;
-			}, 
+			},
 			self = this;
 			
 		
@@ -62,7 +61,7 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 			}
 			
 		} else {
-			oldSet.call(self, prop, value, current, success, errorCallback);	
+			oldSet.call(self, prop, value, current, success, errorCallback);
 		}
 		
 		return this;
@@ -95,7 +94,7 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 		'string': function(val){
 			return ''+val;
 		}
-	}
+	};
 	
 	// the old type sets up bubbling
 	var oldType = proto.__type;
@@ -120,12 +119,12 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 			}
 			// If the newValue is a Map, we need to hook it up
 			if(newValue instanceof can.Map) {
-				return can.Map.helpers.hookupBubble(newValue, prop, this)
+				return can.Map.helpers.hookupBubble(newValue, prop, this);
 			} else {
 				return newValue;
 			}
 			
-		} 
+		}
 		return oldType.call(this,newValue, prop);
 	};
 	
@@ -133,7 +132,7 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 	proto._remove = function(prop, current){
 		var remove = this.define && this.define[prop] && this.define[prop].remove,
 			res;
-		if(remove ) {
+		if( remove ) {
 			can.batch.start();
 			res = remove.call(this, current);
 			
@@ -146,15 +145,15 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 				can.batch.stop();
 				return res;
 			}
-		} 
+		}
 		return oldRemove.call(this, prop, current);
 	};
 	
-	var oldSetupComputes = proto._setupComputes
+	var oldSetupComputes = proto._setupComputes;
 	proto._setupComputes = function(){
 		oldSetupComputes.apply(this, arguments);
 		for(var attr in this.define){
-			var def = this.define[attr]
+			var def = this.define[attr],
 				get = def.get;
 			if(get) {
 				this[attr] = can.compute.async(def.value, get, this);
@@ -163,6 +162,6 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 				};
 			}
 		}
-	}
+	};
 	return can.Map;
 });

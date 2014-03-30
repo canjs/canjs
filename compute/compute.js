@@ -1,3 +1,4 @@
+/* jshint maxdepth:7*/
 steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 	// # can.compute
@@ -313,8 +314,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					set = options.set || set;
 					
 					if(options.fn) {
-						var fn = get = options.fn;
-						var data;
+						var fn = options.fn,
+							data;
+						get = fn;
+						
 						if(fn.length === 0) {
 							
 							data = setupComputeHandlers(computed, fn, context, setCached);
@@ -331,7 +334,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 							};
 							data = setupComputeHandlers(computed, function(){
 								var res = fn.call(context, value, function(newVal){
-									oldUpdater(newVal, value)
+									oldUpdater(newVal, value);
 								});
 								return res !== undefined ? res : value;
 							}, context, setCached);
@@ -456,8 +459,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		return can.compute(initialValue, {
 			fn: asyncComputer,
 			context: context
-		})
-	}
+		});
+	};
 	// {map: new can.Map({first: "Justin"})}, ["map","first"]
 	can.compute.read = function (parent, reads, options) {
 		options = options || {};

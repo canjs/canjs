@@ -441,7 +441,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					}
 				},
 				methods = {},
-				types;
+				types,
+				items,
+				reset;
 				
 			if(can.isArray(count) && typeof count[0] === "string" ){
 				types = count;
@@ -457,8 +459,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			
 			
 			if(typeof count === "number") {
-				var items = [];
-				var reset = function () {
+				items = [];
+				reset = function () {
 					items = [];
 					for (var i = 0; i < (count); i++) {
 						//call back provided make
@@ -480,12 +482,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					}
 				};
 			} else {
-				var initialItems = count,
-					filter = make,
-					items,
-					reset = function(){
-						items = initialItems.slice(0);
-					};
+				filter = make;
+				var initialItems = count;
+				reset = function(){
+					items = initialItems.slice(0);
+				};
 			}
 			
 

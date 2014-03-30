@@ -18,7 +18,6 @@ steal('can/util', function(can){
 				
 			},
 			teardownChildrenFrom: function(parentMap, eventName){
-				var self = this;
 				parentMap._each(function (child) {
 					
 					bubble.teardownFromParent(parentMap, child, eventName);
@@ -31,7 +30,7 @@ steal('can/util', function(can){
 					var args = can.makeArray(arguments),
 						ev = args.shift();
 					
-					args[0] = 
+					args[0] =
 						(can.List && parent instanceof can.List ?
 							parent.indexOf(child) :
 							prop ) + (args[0] ? "."+args[0] : "");
@@ -54,10 +53,9 @@ steal('can/util', function(can){
 					can.stopListening.call(parent, child, eventName);
 				}
 			},
-			
 			bind: function(parent, eventName) {
 				if (!parent._init ) {
-					var bubbleEvent = bubble.event(parent, eventName)
+					var bubbleEvent = bubble.event(parent, eventName);
 					if(bubbleEvent) {
 						if(!parent._bubbleBindings) {
 							parent._bubbleBindings = {};
