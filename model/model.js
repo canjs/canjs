@@ -1747,12 +1747,8 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	var ML = can.Model.List = can.List({
 		// On change or a nested named event, setup change bubbling.
 		// On any other type of event, setup "destroyed" bubbling.
-		_bubbleRule: function(eventName) {
-			if( eventName === "change" || eventName.indexOf(".") >= 0 ) {
-				return "change";
-			} else {
-				return "destroyed";
-			}
+		_bubbleRule: function(eventName, list) {
+			return can.List._bubbleRule(eventName, list) || "destroyed";
 		}
 	},{
 		setup: function (params) {

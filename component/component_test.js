@@ -1064,4 +1064,25 @@ steal("can/component", function () {
 
 	});
 
+	test("Component events bind to window", function(){
+		window.tempMap = new can.Map();
+		
+		can.Component.extend({
+			tag: "window-events",
+			events: {
+				"{tempMap} prop": function(){
+					ok(true, "called templated event")
+				}
+			}
+		});
+		
+		var template = can.view.mustache('<window-events></window-events>');
+		
+		template();
+		
+		window.tempMap.attr("prop","value");
+		
+		delete window.tempMap;
+	});
+
 });

@@ -305,7 +305,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						
 						key = key.replace(/^scope\./,"")
 						var value = can.compute.read(options.scope,key.split("."),{isArgument: true}).value;
-						
+						if(value === undefined) {
+							value = can.getObject(key);
+						}
 						if(typeof value === "string") {
 							return value;
 						} else {

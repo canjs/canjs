@@ -6,7 +6,7 @@ steal('can/util', function(can){
 			// Given a binding, returns a string event name used to set up bubbline.
 			// If no binding should be done, undefined or null should be returned
 			event: function(map, eventName) {
-				return map.constructor._bubbleRule(eventName);
+				return map.constructor._bubbleRule(eventName, map);
 			},
 			childrenOf: function (parentMap, eventName) {
 	
