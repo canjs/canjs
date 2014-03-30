@@ -1296,5 +1296,42 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			}
 		}, true);
 	});
+	
+	test("can.each works with replacement of index (#815)", function(){
+		var items = new can.List(["a","b"]);
+		var value = can.compute(function(){
+			var res = "";
+			items.each(function(item){
+				res += item;
+			});
+			return res;
+		});
+		
+		value.bind("change", function(ev, newValue){
+			equal(newValue, "Ab", "updated value")
+		});
+		items.attr(0,"A");
+	});
+	
+		
+	test("When adding a property and using .each only a single update runs (#815)", function(){
+		var items = new can.Map({}),
+			computedCount = 0;
+		var value = can.compute(function(){
+			computedCount++;
+			var res = "";
+			items.each(function(item){
+				res += item;
+			});
+			return res;
+		});
+		
+		value.bind("change", function(){})
+		
+		items.attr("a","b");
+		
+		equal(computedCount, 2, "recalculated twice")
+		
+	})
 
 });

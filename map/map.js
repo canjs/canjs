@@ -79,7 +79,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					// a list of the compute properties
 					this._computes = [];
 					for (var prop in this.prototype) {
-						if (typeof this.prototype[prop] !== "function") {
+						if (prop !== "define" && typeof this.prototype[prop] !== "function") {
 							this.defaults[prop] = this.prototype[prop];
 						} else if (this.prototype[prop].isComputed) {
 							this._computes.push(prop);
@@ -379,6 +379,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			_setupComputes: function () {
 				var computes = this.constructor._computes;
 				this._computedBindings = {};
+
 				for (var i = 0, len = computes.length, prop; i < len; i++) {
 					prop = computes[i];
 					this[prop] = this[prop].clone(this);
@@ -395,6 +396,13 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					type: attr,
 					batchNum: ev.batchNum
 				}, [newVal, oldVal]);
+				
+				if(how === "remove" || how === "add") {
+					can.batch.trigger(this, {
+						type: "__keys",
+						batchNum: ev.batchNum
+					});
+				} 
 			},
 			_triggerChange: function (attr, how, newVal, oldVal) {
 				can.batch.trigger(this, "change", can.makeArray(arguments));
@@ -593,8 +601,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			 * @codeend
 			 */
 			each: function () {
-				can.__reading(this, '__keys');
-				return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)));
+				return can.each.apply(undefined, [this].concat(can.makeArray(arguments)));
 			},
 			/**
 			 * @function can.Map.prototype.removeAttr removeAttr
@@ -630,24 +637,28 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					current = isList ? this[prop] : this._data[prop];
 
 				// If we have more parts, call `removeAttr` on that part.
-				if (parts.length) {
+				if (parts.length && current) {
 					return current.removeAttr(parts);
 				} else {
-					if (isList) {
-						this.splice(prop, 1);
-					} else if (prop in this._data) {
-						// Otherwise, `delete`.
-						delete this._data[prop];
-						// Create the event.
-						if (!(prop in this.constructor.prototype)) {
-							delete this[prop];
-						}
-						// Let others know the number of keys have changed
-						can.batch.trigger(this, "__keys");
-						this._triggerChange(prop, "remove", undefined, current);
-
+					if (!!~attr.indexOf('.')) {
+						prop = attr;
 					}
+					
+					this._remove(prop, current);
 					return current;
+				}
+			},
+			_remove: function(prop, current){
+				if (prop in this._data) {
+					// Otherwise, `delete`.
+					delete this._data[prop];
+					// Create the event.
+					if (!(prop in this.constructor.prototype)) {
+						delete this[prop];
+					}
+					// Let others know the number of keys have changed
+					this._triggerChange(prop, "remove", undefined, current);
+
 				}
 			},
 			// Reads a property from the `object`.
@@ -679,7 +690,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			// returns the "real" data object itself.
 			__get: function (attr) {
 				if (attr) {
-					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
+					if (this._computedBindings[attr]) {
 						return this[attr]();
 					} else {
 						return this._data[attr];
@@ -746,13 +757,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					// Set the value on data.
 					this.___set(prop, bubble.set(this, prop, value) );
 
-					if (changeType === "add") {
-						// If there is no current value, let others know that
-						// the the number of keys have changed
-
-						can.batch.trigger(this, "__keys", undefined);
-
-					}
 					// `batchTrigger` the change event.
 					this._triggerChange(prop, changeType, value, current);
 

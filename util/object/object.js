@@ -93,7 +93,10 @@ steal('can/util', function (can) {
 			return compares(a, b, aParent, bParent);
 		}
 		compares = compares || {};
-		if (a instanceof Date) {
+		if (a === null || b === null) {
+			return a === b;
+		}
+		if (a instanceof Date || b instanceof Date) {
 			return a === b;
 		}
 		if (deep === -1) {
@@ -199,6 +202,12 @@ steal('can/util', function (can) {
 			return ('' + a)
 				.toLowerCase() === ('' + b)
 				.toLowerCase();
+		},
+		eq: function(a, b) {
+			return a === b;
+		},
+		similar: function(a, b) {
+			return a == b;
 		}
 	};
 	return can.Object;

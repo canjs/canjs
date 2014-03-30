@@ -428,10 +428,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		 *
 		 *
 		 */
-		store: function (types, count, make, filter) {
+		store: function (count, make, filter) {
 			/*jshint eqeqeq:false */
-			var items = [], // TODO: change this to a hash
-				currentId = 0,
+			
+			// the currentId to use when a new instance is created.
+			var	currentId = 0,
 				findOne = function (id) {
 					for (var i = 0; i < items.length; i++) {
 						if (id == items[i].id) {
@@ -439,15 +440,54 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						}
 					}
 				},
-				methods = {};
-
-			if (typeof types === "string") {
-				types = [types + "s", types];
-			} else if (!can.isArray(types)) {
-				filter = make;
-				make = count;
-				count = types;
+				methods = {},
+				types;
+				
+			if(can.isArray(count) && typeof count[0] === "string" ){
+				types = count;
+				count = make;
+				make= filter;
+				filter = arguments[3];
+			} else if(typeof count === "string") {
+				types = [count + "s", count];
+				count = make;
+				make= filter;
+				filter = arguments[3];
 			}
+			
+			
+			if(typeof count === "number") {
+				var items = [];
+				var reset = function () {
+					items = [];
+					for (var i = 0; i < (count); i++) {
+						//call back provided make
+						var item = make(i, items);
+	
+						if (!item.id) {
+							item.id = i;
+						}
+						currentId = Math.max(item.id + 1, currentId + 1) || items.length;
+						items.push(item);
+					}
+					if (can.isArray(types)) {
+						can.fixture["~" + types[0]] = items;
+						can.fixture["-" + types[0]] = methods.findAll;
+						can.fixture["-" + types[1]] = methods.findOne;
+						can.fixture["-" + types[1] + "Update"] = methods.update;
+						can.fixture["-" + types[1] + "Destroy"] = methods.destroy;
+						can.fixture["-" + types[1] + "Create"] = methods.create;
+					}
+				};
+			} else {
+				var initialItems = count,
+					filter = make,
+					items,
+					reset = function(){
+						items = initialItems.slice(0);
+					};
+			}
+			
 
 			// make all items
 			can.extend(methods, {
@@ -550,7 +590,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
 							(param.indexOf("Id") !== -1 || param.indexOf("_id") !== -1)) {
 							while (i < retArr.length) {
-								if (request.data[param] !== retArr[i][param]) {
+								if (request.data[param] != retArr[i][param]) { // jshint eqeqeq: false
 									retArr.splice(i, 1);
 								} else {
 									i++;
@@ -559,10 +599,19 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						}
 					}
 
-					if (filter) {
+					if ( typeof filter === "function" ) {
 						i = 0;
 						while (i < retArr.length) {
 							if (!filter(retArr[i], request)) {
+								retArr.splice(i, 1);
+							} else {
+								i++;
+							}
+						}
+					} else if( typeof filter === "object" ) {
+						i = 0;
+						while (i < retArr.length) {
+							if ( !can.Object.subset(retArr[i], request.data, filter) ) {
 								retArr.splice(i, 1);
 							} else {
 								i++;
@@ -652,7 +701,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				destroy: function (request) {
 					var id = getId(request);
 					for (var i = 0; i < items.length; i++) {
-						if (items[i].id === id) {
+						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
 							break;
 						}
@@ -697,29 +746,6 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					});
 				}
 			});
-
-			var reset = function () {
-				items = [];
-				for (var i = 0; i < (count); i++) {
-					//call back provided make
-					var item = make(i, items);
-
-					if (!item.id) {
-						item.id = i;
-					}
-					currentId = Math.max(item.id + 1, currentId + 1) || items.length;
-					items.push(item);
-				}
-				if (can.isArray(types)) {
-					can.fixture["~" + types[0]] = items;
-					can.fixture["-" + types[0]] = methods.findAll;
-					can.fixture["-" + types[1]] = methods.findOne;
-					can.fixture["-" + types[1] + "Update"] = methods.update;
-					can.fixture["-" + types[1] + "Destroy"] = methods.destroy;
-					can.fixture["-" + types[1] + "Create"] = methods.create;
-				}
-
-			};
 			reset();
 			// if we have types given add them to can.fixture
 

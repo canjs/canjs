@@ -568,7 +568,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				prop = args.shift(),
 				binding = can.route.bindings[can.route.currentBinding || can.route.defaultBinding],
 				method = binding[prop];
-			if (typeof method === "function") {
+			if (method.apply) {
 				return method.apply(binding, args);
 			} else {
 				return method;

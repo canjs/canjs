@@ -22,22 +22,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				// Run the following only in constructors that extend can.Component.
 				if (can.Component) {
-					var self = this;
+					var self = this,
+						scope = this.prototype.scope;
 					
 					// Define a control using the `events` prototype property.
 					this.Control = ComponentControl.extend( this.prototype.events );
 					
 					// Look to convert `scope` to a Map constructor function.
-					if (!this.prototype.scope || typeof this.prototype.scope === "object") {
+					if (!scope || (typeof scope === "object" && ! (scope instanceof can.Map)  ) ) {
 						// If scope is an object, use that object as the prototype of an extended 
 						// Map constructor function.
 						// A new instance of that Map constructor function will be created and
 						// set a the constructor instance's scope.
-						this.Map = can.Map.extend(this.prototype.scope || {});
+						this.Map = can.Map.extend(scope || {});
 					}
-					else if (this.prototype.scope.prototype instanceof can.Map) {
+					else if (scope.prototype instanceof can.Map) {
 						// If scope is a can.Map constructor function, just use that.
-						this.Map = this.prototype.scope;
+						this.Map = scope;
 					}
 					
 					// Look for default `@` values. If a `@` is found, these
@@ -292,15 +293,18 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				return can.Control._action.apply(this, arguments);
 			} else {
 				// hasObjectLookup and controlInstance
-				var actionScope = new can.view.Scope(window).add(options).add(options.scope);
-				
+
 				var readyCompute = can.compute(function(){
-					
 					var delegate;
 					
 					var name = methodName.replace(paramReplacer, function(matched, key){
+						if(key === "scope") {
+							delegate = options.scope;
+							return ""
+						} 
 						
-						var value = actionScope.attr(key);
+						key = key.replace(/^scope\./,"")
+						var value = can.compute.read(options.scope,key.split("."),{isArgument: true}).value;
 						
 						if(typeof value === "string") {
 							return value;
@@ -313,7 +317,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					
 					var parts = name.split(/\s+/g),
 						event = parts.pop();
-
 					return {
 						processor: this.processors[event] || this.processors.click,
 						parts: [name, parts.join(" "), event],
@@ -322,10 +325,10 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					
 				},this);
 				var handler = function(ev, ready){
-					bindings.control[methodName](controlInstance.element);
-					bindings.control[methodName]  = ready.processor(
+					controlInstance._bindings.control[methodName](controlInstance.element);
+					controlInstance._bindings.control[methodName]  = ready.processor(
 									ready.delegate || controlInstance.element,
-									ready.parts[2], ready.parts[1], methodName, this);
+									ready.parts[2], ready.parts[1], methodName, controlInstance);
 				};
 				readyCompute.bind("change", handler);
 				

@@ -97,7 +97,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 						proxyMethods: false
 					})
 						.value;
-				can.__setReading(previousReads);
+				can.__addReading(previousReads);
 				return res;
 			},
 			/**

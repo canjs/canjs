@@ -68,6 +68,7 @@ steal(function () {
 
 	//!steal-remove-start
 	can.dev = {
+		warnTimeout: 5000,
 		logLevel: 0,
 		/**
 		 * Adds a warning message to the console.

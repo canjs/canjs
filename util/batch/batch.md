@@ -2,8 +2,8 @@
 @parent can.util
 
 
-[can.batch.start `can.batch.start( batchStopHandler )`] and
-[can.batch.end  `can.batch.end( force, callStart )`] are used to specify 
+[can.batch.start `can.batch.start( batchStopHandler )`] and 
+[can.batch.end `can.batch.end( force, callStart )`] are used to specify 
 atomic operations. `start`
 prevents change events from being fired until `stop` is called.
 

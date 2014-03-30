@@ -73,6 +73,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			stack[stack.length-1] = o;
 		}
 	};
+	can.__addReading = function(o){
+		if (stack.length) {
+			can.simpleExtend(stack[stack.length-1], o);
+		}
+	};
 
 	// Calls a function, and using it's "Observed", sets up bindings to call
 	// `onchanged` when those events are triggered.
@@ -88,7 +93,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// A flag that is used to figure out if we are already observing on an event.
 			obEv,
 			name;
-		
 		// Go through what needs to be observed.
 		for( name in newObserveSet ) {
 			
@@ -122,7 +126,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			]);
 		}
 	};
-	
+	// 
 	var setupComputeHandlers = function(compute, func, context, setCachedValue) {
 		
 		var readInfo,
@@ -290,22 +294,59 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			} else {
 				// `can.compute(initialValue, setter)`
 				if (typeof context === 'function') {
+					
 					value = getterSetter;
 					set = context;
 					context = eventName;
 					form = 'setter';
+					
 				} else {
 					// `can.compute(initialValue,{get:, set:, on:, off:})`
+					
+					
 					value = getterSetter;
 					var options = context,
 						oldUpdater = updater;
 						
-					updater = function(){
-						var newVal = get.call(context);
-						oldUpdater(newVal, value);
-					};
+					context = options.context || options;
 					get = options.get || get;
 					set = options.set || set;
+					
+					if(options.fn) {
+						var fn = get = options.fn;
+						var data;
+						if(fn.length === 0) {
+							
+							data = setupComputeHandlers(computed, fn, context, setCached);
+
+						} else if(fn.length === 1){
+							data = setupComputeHandlers(computed, function(){
+								return fn.call(context, value);
+							}, context, setCached);
+						} else {
+							updater = function(newVal){
+								if(newVal !== undefined) {
+									oldUpdater(newVal, value);
+								}
+							};
+							data = setupComputeHandlers(computed, function(){
+								var res = fn.call(context, value, function(newVal){
+									oldUpdater(newVal, value)
+								});
+								return res !== undefined ? res : value;
+							}, context, setCached);
+						}
+						
+							
+						on = data.on;
+						off = data.off;
+					} else {
+						updater = function(){
+							var newVal = get.call(context);
+							oldUpdater(newVal, value);
+						};
+					}
+					
 					on = options.on || on;
 					off = options.off || off;
 				}
@@ -411,6 +452,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			return !!res;
 		});
 	};
+	can.compute.async = function(initialValue, asyncComputer, context){
+		return can.compute(initialValue, {
+			fn: asyncComputer,
+			context: context
+		})
+	}
 	// {map: new can.Map({first: "Justin"})}, ["map","first"]
 	can.compute.read = function (parent, reads, options) {
 		options = options || {};
