@@ -39,12 +39,12 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				if (can.attr.has(el, "can-true-value")) {
 					trueValue = el.getAttribute("can-true-value");
 				} else {
-					trueValue = can.compute(true);
+					trueValue = true;
 				}
 				if (can.attr.has(el, "can-false-value")) {
 					falseValue = el.getAttribute("can-false-value");
 				} else {
-					falseValue = can.compute(false);
+					falseValue = false;
 				}
 			}
 
