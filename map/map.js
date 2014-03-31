@@ -53,6 +53,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				}
 
 			},
+			_bubble: bubble,
 			_bubbleRule: function(eventName) {
 				return (eventName === "change" || eventName.indexOf(".") >= 0 ) && "change";
 			},
@@ -684,7 +685,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on data.
-					this.___set(prop, bubble.set(this, prop, value) );
+					this.___set(prop, this.constructor._bubble.set(this, prop, value) );
 
 					// `batchTrigger` the change event.
 					this._triggerChange(prop, changeType, value, current);
@@ -692,7 +693,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					//can.batch.trigger(this, prop, [value, current]);
 					// If we can stop listening to our old value, do it.
 					if (current) {
-						bubble.teardownFromParent(this, current);
+						this.constructor._bubble.teardownFromParent(this, current);
 					}
 				}
 
@@ -828,7 +829,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					}
 
 				}
-				bubble.bind(this, eventName);
+				this.constructor._bubble.bind(this, eventName);
 				return can.bindAndSetup.apply(this, arguments);
 
 			},
@@ -875,7 +876,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					}
 
 				}
-				bubble.unbind(this, eventName);
+				this.constructor._bubble.unbind(this, eventName);
 
 				
 				return can.unbindAndTeardown.apply(this, arguments);

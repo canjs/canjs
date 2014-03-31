@@ -1,50 +1,11 @@
-steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can) {
-	var getExistingMap = function(child, parent) {
-			// Cyclical self reference
-			if(parent._original === child) {
-				return parent;
-			}
-
-			// Go through each reference to see if the original data are the same
-			// as the given child data. That means that we already created a LazyMap
-			// for that same data so return that same Map.
-			if(parent instanceof can.LazyMap) {
-				parent._nestedReference.each(function (current) {
-					if(current._original === child) {
-						child = current;
-					}
-				});
-			}
-
-			return child;
-		},
-		makeObserve = function (child, parent) {
-			child = getExistingMap(child, parent);
-
-			if (child instanceof can.Map) {
-				// We have an `observe` already...
-				// Make sure it is not listening to this already
-				// It's only listening if it has bindings already.
-				if (parent._bindings) {
-					can.Map.helpers.unhookup([child], parent._cid);
-				}
-			} else if (can.isArray(child)) {
-				// else if array create LazyList
-				child = new can.LazyList(child);
-			} else if (can.Map.helpers.canMakeObserve(child)) {
-				// or try to make LazyMap
-				child = new can.LazyMap(child);
-			}
-			return child;
-		},
-		isObserve = function (obj) {
-			return obj instanceof can.Map;
-		};
-
+steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js', function (can, bubble) {
 	can.LazyMap = can.Map.extend({
+		_bubble: bubble
+	}, {
 		setup: function (obj) {
-			// Store the original data
-			this._original = obj;
+			this.constructor.Map = this.constructor;
+			this.constructor.List = can.LazyList;
+
 			// `_data` is where we keep the properties.
 			this._data = can.extend(can.extend(true, {}, this.constructor.defaults || {}), obj);
 
@@ -71,24 +32,6 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 
 			delete this._init;
 		},
-		_bindsetup: function () {
-			var parent = this;
-
-			// Bind on all nested observes in reference list.
-			this._nestedReference.each(function (child, ref) {
-				if (child && child.bind) {
-					can.Map.helpers.hookupBubble(child, ref, parent);
-				}
-			});
-		},
-		_bindteardown: function () {
-			var cid = this._cid;
-
-			// Remove bindings from all nested observes in reference list.
-			this._nestedReference.each(function (child) {
-				can.Map.helpers.unhookup([child], cid);
-			});
-		},
 
 		// todo: function should be renamed
 		_addChild: function (path, newChild, setNewChild) {
@@ -97,7 +40,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 			// remove 'old' references that are starting with `path` and do rewiring
 			this._nestedReference.removeChildren(path, function (oldChild, oldChildPath) {
 				// unhook every current child on path
-				can.Map.helpers.unhookup([oldChild], self);
+				bubble.remove(self, oldChild);
 
 				// if `newChild` passed bind it to every child and make references (1st step: rewiring to bottom/children)
 				if (newChild) {
@@ -107,16 +50,16 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 					if (path === newChildPath) {
 						//
 						oldChild._nestedReference.each(function (obj, path) {
-							newChild._nestedReference.make(path);
+							newChild._nestedReference.make(path());
 							if (self._bindings) {
-								can.Map.helpers.hookupBubble(obj, path, newChild);
+								bubble.add(this, newChild, path());
 							}
 						});
 						//
 					} else {
 						var reference = newChild._nestedReference.make(newChildPath);
 						if (self._bindings) {
-							can.Map.helpers.hookupBubble(oldChild, reference, newChild);
+							bubble.add(oldChild, newChild, reference());
 						}
 					}
 
@@ -132,7 +75,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 			if (newChild) {
 				var reference = this._nestedReference.make(path);
 				if (this._bindings) {
-					can.Map.helpers.hookupBubble(newChild, reference, this);
+					bubble.add(this, newChild, reference());
 				}
 			}
 			return newChild;
@@ -150,13 +93,13 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 				// otherwise, are we removing a property from an array
 				if (can.isArray(data.parent)) {
 					data.parent.splice(data.prop, 1);
-					this._triggerChange(attr, "remove", undefined, [makeObserve(data.value, this)]);
+					this._triggerChange(attr, "remove", undefined, [this.__type(data.value, data.prop)]);
 				} else {
 					// do not trigger if prop does not exists
 					if (data.parent[data.prop]) {
 						delete data.parent[data.prop];
 						can.batch.trigger(this, data.path.length ? data.path.join(".") + ".__keys" : "__keys");
-						this._triggerChange(attr, "remove", undefined, makeObserve(data.value, this));
+						this._triggerChange(attr, "remove", undefined, this.__type(data.value, data.prop));
 					}
 				}
 				// unhookup anything that was in here
@@ -179,7 +122,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 			var cur = this instanceof can.List ? this[parts.shift()] : this.__get();
 
 			// TODO we might also have to check for dot separated keys in each iteration
-			while (cur && !isObserve(cur) && parts.length) {
+			while (cur && !can.Map.helpers.isObservable(cur) && parts.length) {
 				if (part !== undefined) {
 					path.push(part);
 				}
@@ -200,7 +143,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 			var data = this._goto(attr);
 
 			// if it's already observe return it
-			if (isObserve(data.value)) {
+			if (can.Map.helpers.isObservable(data.value)) {
 				if (data.parts.length) {
 					return data.value._get(data.parts);
 				} else {
@@ -208,7 +151,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 				}
 			} else if (data.value && can.Map.helpers.canMakeObserve(data.value)) {
 				// if object create LazyMap/LazyList
-				var converted = makeObserve(data.value, this);
+				var converted = this.__type(data.value, data.prop);
 				// ... and replace it
 				this._addChild(attr, converted, function () {
 					data.parent[data.prop] = converted;
@@ -227,8 +170,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 		// `value` - The raw value to set.
 		_set: function (attr, value, keepKey) {
 			var data = this._goto(attr, keepKey);
-
-			if (isObserve(data.value) && data.parts.length) {
+			if (can.Map.helpers.isObservable(data.value) && data.parts.length) {
 				return data.value._set(data.parts, value);
 			} else if (!data.parts.length) {
 				this.__set(attr, value, data.value, data);
@@ -238,7 +180,6 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 		},
 		__set: function (prop, value, current, data, convert) {
 			// Otherwise, we are setting it on this `object`.
-			// TODO: Check if value is object and transform
 			// are we changing the value.
 
 			// maybe not needed at all
@@ -253,7 +194,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 				// if it is or should be a Lazy
 				if (convert && can.Map.helpers.canMakeObserve(value)) {
 					// make it a lazy
-					value = makeObserve(value, this);
+					value = this.__type(value, prop);
 					var self = this;
 					// hook up it's bindings
 					this._addChild(prop, value, function () {
@@ -322,7 +263,7 @@ steal('can/util', 'can/map', 'can/list', './nested_reference.js', function (can)
 						self.removeAttr(prop);
 					}
 					return;
-				} else if (!isObserve(curVal) && can.Map.helpers.canMakeObserve(curVal)) {
+				} else if (!can.Map.helpers.isObservable(curVal) && can.Map.helpers.canMakeObserve(curVal)) {
 					// convert curVal to observe
 					curVal = self.attr(prop);
 				}
