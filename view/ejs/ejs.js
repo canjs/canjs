@@ -34,31 +34,10 @@ function (can) {
 		};
 	// Expose EJS via the `can` object.
 	can.EJS = EJS;
-	/**
-	 * @add can.EJS
-	 * @prototype
-	 */
+
 	EJS.prototype.
 	// ## Render
 	// Render a view object with data and helpers.
-	/**
-	 * @function can.EJS.prototype.render render
-	 * @parent can.EJS.prototype
-	 * @description Render a view object with data and helpers.
-	 * @signature `ejs.render(data[, helpers])`
-	 * @param {Object} [data] The data to populate the template with.
-	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
-	 * @return {String} The template with interpolated data.
-	 *
-	 * @body
-	 * Renders an object with view helpers attached to the view.
-	 *
-	 *     var rendered = new can.EJS({text: "<h1><%= message %>"</h1>}).render({
-	 *       message: "foo"
-	 *     },{helper: function(){ ... }})
-	 *
-	 *     console.log(rendered); // "<h1>foo</h1>"
-	 */
 	render = function (object, extraHelpers) {
 		object = object || {};
 		return this.template.fn.call(object, object, new EJS.Helpers(object, extraHelpers || {}));
@@ -77,10 +56,6 @@ function (can) {
 		// * `outEnd` - Wrapper end text for view function.
 		// 
 		// * `argNames` - Arguments passed into view function.
-		/**
-		 * @hide
-		 * Singleton scanner instance for parsing templates.
-		 */
 		scanner: new can.view.Scanner({
 			text: {
 				outStart: 'with(_VIEW) { with (_CONTEXT) {',
@@ -91,12 +66,6 @@ function (can) {
 			// ### Tokens
 			// 
 			// An ordered token registry for the scanner.
-			/**
-			 * @hide
-			 * An ordered token registry for the scanner.
-			 * This needs to be ordered by priority to prevent token parsing errors.
-			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
-			 */
 			tokens: [
 				// Template
 				["templateLeft", "<%%"],
@@ -116,10 +85,6 @@ function (can) {
 			],
 			// ### Helpers
 			helpers: [
-				/**
-				 * Check if its a func like `()->`.
-				 * @param {String} content
-				 */
 				{
 					// #### name
 					// Regex to see if its a func like `()->`.
@@ -240,38 +205,7 @@ function (can) {
 		this._extras = extras;
 		extend(this, extras);
 	};
-	/**
-	 * @page can.EJS.Helpers Helpers
-	 * @parent can.EJS
-	 *
-	 * @body
-	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
-	 * views.
-	 *
-	 * The following helper converts a given string to upper case:
-	 *
-	 *	can.EJS.Helpers.prototype.toUpper = function(params)
-	 *	{
-	 *	return params.toUpperCase();
-	 *	}
-	 *
-	 * Use it like this in any EJS template:
-	 *
-	 *	<%= toUpper('javascriptmvc') %>
-	 *
-	 * To access the current DOM element return a function that takes the element as a parameter:
-	 *
-	 *	can.EJS.Helpers.prototype.upperHtml = function(params)
-	 *	{
-	 *		return function(el) {
-	 *			$(el).html(params.toUpperCase());
-	 *		}
-	 *	}
-	 *
-	 * In your EJS view you can then call the helper on an element tag:
-	 *
-	 *	<div <%= upperHtml('javascriptmvc') %>></div>
-	 */
+
 	EJS.Helpers.prototype = {
 		// TODO Deprecated!!
 		list: function (list, cb) {
