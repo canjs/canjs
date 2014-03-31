@@ -18,4 +18,4 @@ a [can.compute].
 
 The following cross bind's a `<select>` to a `person` map's `attending` property:
 
-@demo can/view/bindings/select.html
+@demo can/view/bindings/doc/select.html

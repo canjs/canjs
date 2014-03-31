@@ -1,5 +1,5 @@
 <div id='out'></div>
-<script src="../../lib/steal/steal.js"></script>
+<script src="../../../lib/steal/steal.js"></script>
 <script>
 steal("can/view/bindings",function(){
 		
@@ -16,7 +16,7 @@ loop = new HyperLoop({
 
 var template = can.view.mustache(
   "<p>Distance:\
-      <input can-value='dist'/>\
+      <input can-model='dist'/>\
   </p>\
   <p>Time:\
      {{travelTime}} hrs\
