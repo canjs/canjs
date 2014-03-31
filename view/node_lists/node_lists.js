@@ -5,7 +5,7 @@
 //  {{#if items.length}}
 //		Items:
 //		{{#items}}
-//      	<label></label>
+//          <label></label>
 //      {{/items}}
 //	{{/if}}
 //  </div>
@@ -280,7 +280,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				});
 				// if an 'unregisted' function was provided during registration
 				// then call that function
- 				if (nodeList.unregistered) {
+				if (nodeList.unregistered) {
 					nodeList.unregistered();
 				}
 				// now recursive down through the child node preforming the
