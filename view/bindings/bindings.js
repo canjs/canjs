@@ -205,7 +205,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set 
 					// the checked property based on their equality.
 					this.element[0].checked = (value === trueValue);
-				} 
+				}
 				// Its a radio input type
 				else {
 					var setOrRemove = this.options.value() === this.element[0].value ?
@@ -223,7 +223,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If 
 					// can-false-value was used and checked is false, set value to the string value of can-false-value.
 					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
-				} 
+				}
 				// Radio input type
 				else {
 					if (this.element[0].checked) {
@@ -250,7 +250,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				if (typeof newVal === 'string') {
 					newVal = newVal.split(this.delimiter);
 					this.isString = true;
-				} 
+				}
 				// When given something else, try to make it an array and deal with it
 				else if (newVal) {
 					newVal = can.makeArray(newVal);
@@ -296,11 +296,11 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				if (this.isString || typeof currentValue === "string") {
 					this.isString = true;
 					this.options.value(value.join(this.delimiter));
-				} 
+				}
 				// If the compute is a can.List, replace its current contents with the new array of values
 				else if (currentValue instanceof can.List) {
 					currentValue.attr(value, true);
-				} 
+				}
 				// Otherwise set the value to the array of values selected in the input.
 				else {
 					this.options.value(value);

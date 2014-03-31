@@ -1,11 +1,18 @@
-steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanner.js', 'can/view/render.js', function (can) {
-	// ## ejs.js
-	// `can.EJS`  
-	// _Embedded JavaScript Templates._
-	// Helper methods.
+// # can/view/ejs/ejs.js
+// 
+// `can.EJS`: Embedded JavaScript Templates
+// 
+steal('can/util',
+	'can/view',
+	'can/util/string',
+	'can/compute',
+	'can/view/scanner.js',
+	'can/view/render.js',
+function (can) {
+	// ## Helper methods
 	var extend = can.extend,
 		EJS = function (options) {
-			// Supports calling EJS without the constructor
+			// Supports calling EJS without the constructor.
 			// This returns a function that renders the template.
 			if (this.constructor !== EJS) {
 				var ejs = new EJS(options);
@@ -25,39 +32,30 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 			extend(this, options);
 			this.template = this.scanner.scan(this.text, this.name);
 		};
+	// Expose EJS via the `can` object.
 	can.EJS = EJS;
-	/**
-	 * @add can.EJS
-	 * @prototype
-	 */
+
 	EJS.prototype.
-	/**
-	 * @function can.EJS.prototype.render render
-	 * @parent can.EJS.prototype
-	 * @description Render a view object with data and helpers.
-	 * @signature `ejs.render(data[, helpers])`
-	 * @param {Object} [data] The data to populate the template with.
-	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
-	 * @return {String} The template with interpolated data.
-	 *
-	 * @body
-	 * Renders an object with view helpers attached to the view.
-	 *
-	 *     var rendered = new can.EJS({text: "<h1><%= message %>"</h1>}).render({
-	 *       message: "foo"
-	 *     },{helper: function(){ ... }})
-	 *
-	 *     console.log(rendered); // "<h1>foo</h1>"
-	 */
+	// ## Render
+	// Render a view object with data and helpers.
 	render = function (object, extraHelpers) {
 		object = object || {};
 		return this.template.fn.call(object, object, new EJS.Helpers(object, extraHelpers || {}));
 	};
 	extend(EJS.prototype, {
-		/**
-		 * @hide
-		 * Singleton scanner instance for parsing templates.
-		 */
+		// ## Scanner
+		// Singleton scanner instance for parsing templates. See [scanner.js](scanner.html)
+		// for more information.
+		// 
+		// ### Text
+		// 
+		// #### Definitions
+		// 
+		// * `outStart` - Wrapper start text for view function.
+		// 
+		// * `outEnd` - Wrapper end text for view function.
+		// 
+		// * `argNames` - Arguments passed into view function.
 		scanner: new can.view.Scanner({
 			text: {
 				outStart: 'with(_VIEW) { with (_CONTEXT) {',
@@ -65,29 +63,34 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 				argNames: '_CONTEXT,_VIEW',
 				context: "this"
 			},
-			/**
-			 * @hide
-			 * An ordered token registry for the scanner.
-			 * This needs to be ordered by priority to prevent token parsing errors.
-			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
-			 */
+			// ### Tokens
+			// 
+			// An ordered token registry for the scanner.
 			tokens: [
-				["templateLeft", "<%%"], // Template
-				["templateRight", "%>"], // Right Template
-				["returnLeft", "<%=="], // Return Unescaped
-				["escapeLeft", "<%="], // Return Escaped
-				["commentLeft", "<%#"], // Comment
-				["left", "<%"], // Run --- this is hack for now
-				["right", "%>"], // Right -> All have same FOR Mustache ...
+				// Template
+				["templateLeft", "<%%"],
+				// Right Template
+				["templateRight", "%>"],
+				// Return Unescaped
+				["returnLeft", "<%=="],
+				// Return Escaped
+				["escapeLeft", "<%="],
+				// Comment
+				["commentLeft", "<%#"],
+				// Evaluate code
+				["left", "<%"],
+				// Right -> All have same FOR Mustache ...
+				["right", "%>"],
 				["returnRight", "%>"]
 			],
+			// ### Helpers
 			helpers: [
-				/**
-				 * Check if its a func like `()->`.
-				 * @param {String} content
-				 */
 				{
+					// #### name
+					// Regex to see if its a func like `()->`.
 					name: /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+					// #### fn
+					// Evaluate rocket syntax function with correct context.
 					fn: function (content) {
 						var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 							parts = content.match(quickFunc);
@@ -96,19 +99,22 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 					}
 				}
 			],
-			/**
-			 * @hide
-			 * Transforms the EJS template to add support for shared blocks.
-			 * Essentially, this breaks up EJS tags into multiple EJS tags
-			 * if they contained unmatched brackets.
-			 *
-			 * For example, this doesn't work:
-			 *	<% if (1) { %><% if (1) { %> hi <% } } %>
-			 * ...without isolated EJS blocks:
-			 *	<% if (1) { %><% if (1) { %> hi <% } %><% } %>
-			 * The result of transforming:
-			 *	<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %>
-			 */
+			// ### transform
+			// Transforms the EJS template to add support for shared blocks.
+			// Essentially, this breaks up EJS tags into multiple EJS tags
+			// if they contained unmatched brackets.
+			// 
+			// For example, this doesn't work:
+			// 
+			// `<% if (1) { %><% if (1) { %> hi <% } } %>`
+			// 
+			// ...without isolated EJS blocks:
+			// 
+			// `<% if (1) { %><% if (1) { %> hi <% } %><% } %>`
+			// 
+			// The result of transforming:
+			// 
+			// `<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %>`
 			transform: function (source) {
 				return source.replace(/<%([\s\S]+?)%>/gm, function (whole, part) {
 					var brackets = [],
@@ -146,7 +152,8 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 						}
 						result.push(part.substring(last), '%>');
 						return result.join('');
-					} // Otherwise return the original
+					}
+					// Otherwise return the original
 					else {
 						return '<%' + part + '%>';
 					}
@@ -154,43 +161,38 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 			}
 		})
 	});
+
+	// ## Helpers
+	// By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
+	// views.
+	// 
+	// The following helper converts a given string to upper case:
+	//
+	//     can.EJS.Helpers.prototype.toUpper = function(params) {
+	//       return params.toUpperCase();
+	//     }
+
+	// Use it like this in any EJS template:
+
+	// `<%= toUpper('javascriptmvc') %>`
+
+	// To access the current DOM element return a function that takes the element as a parameter:
+
+	//     can.EJS.Helpers.prototype.upperHtml = function(params) {
+	//       return function(el) {
+	//         $(el).html(params.toUpperCase());
+	//       }
+	//     }
+
+	// In your EJS view you can then call the helper on an element tag:
+
+	// `<div <%= upperHtml('javascriptmvc') %>></div>`
 	EJS.Helpers = function (data, extras) {
 		this._data = data;
 		this._extras = extras;
 		extend(this, extras);
 	};
-	/**
-	 * @page can.EJS.Helpers Helpers
-	 * @parent can.EJS
-	 *
-	 * @body
-	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
-	 * views.
-	 *
-	 * The following helper converts a given string to upper case:
-	 *
-	 *	can.EJS.Helpers.prototype.toUpper = function(params)
-	 *	{
-	 *	return params.toUpperCase();
-	 *	}
-	 *
-	 * Use it like this in any EJS template:
-	 *
-	 *	<%= toUpper('javascriptmvc') %>
-	 *
-	 * To access the current DOM element return a function that takes the element as a parameter:
-	 *
-	 *	can.EJS.Helpers.prototype.upperHtml = function(params)
-	 *	{
-	 *		return function(el) {
-	 *			$(el).html(params.toUpperCase());
-	 *		}
-	 *	}
-	 *
-	 * In your EJS view you can then call the helper on an element tag:
-	 *
-	 *	<div <%= upperHtml('javascriptmvc') %>></div>
-	 */
+
 	EJS.Helpers.prototype = {
 		// TODO Deprecated!!
 		list: function (list, cb) {
