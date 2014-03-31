@@ -1,17 +1,21 @@
-// # bindings.js
-// `can.view.bindings`: In-template event bindings and two-way bindings
+// # can/view/bindings/bindings.js
+// 
+// This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute 
+// for in template event bindings. These are usable in any mustache template, but mainly and documented 
+// for use within can.Component.
 steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 	// ## can-value
 	// Implement the `can-value` special attribute
 	// 
-	// Usage: &lt;input can-value="name" /&gt;
+	// ### Usage
+	// 		
+	// 		<input can-value="name" />
 	// 
-	// When a view engine finds this attribute, it will call this callback
+	// When a view engine finds this attribute, it will call this callback. The value of the attribute 
+	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		// What is the value of this attribute? It should be a string representing 
-		// some value in the current scope to cross-bind to.
 		var attr = el.getAttribute("can-value"),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
@@ -23,14 +27,15 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			trueValue,
 			falseValue;
 
-		// Depending on the type of element, this attribute has different behavior
-		// 
-		// If we're an input type...
+		// Depending on the type of element, this attribute has different behavior. can.Controls are defined (further below 
+		// in this file) for each type of input. This block of code collects arguments and instantiates each can.Control. There 
+		// is one for checkboxes/radios, another for multiselect inputs, and another for everything else.
 		if (el.nodeName.toLowerCase() === "input") {
 			if (el.type === "checkbox") {
 				// If the element is a checkbox and has an attribute called "can-true-value", 
 				// set up a compute that toggles the value of the checkbox to "true" based on another attribute. 
-				// For example, &lt;input type='checkbox' can-value='foo' can-true-value='trueVal' /&gt;
+				// 
+				// 		<input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female' />
 				if (can.attr.has(el, "can-true-value")) {
 					trueValue = el.getAttribute("can-true-value");
 				} else {
@@ -124,16 +129,16 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				return scopeData.value.call(scopeData.parent, data.scope._context, can.$(this), ev);
 			};
 
-		// This code adds support for special event types, like can-enter="foo".
+		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is 
+		// a function that returns an object containing an event and a handler. These are to be used for binding. For example, 
+		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to 
+		// determine on keyup if the enter key was pressed.
 		if (special[event]) {
-			// special.enter (or any special[event]) is a function that returns an object containing an event and a handler. 
-			// These are to be used for binding. For example, when a user adds a can-enter attribute, we'll bind on the 
-			// keyup event, and the handler performs special logic to determine on keyup if the enter key was pressed.
 			var specialData = special[event](data, el, handler);
 			handler = specialData.handler;
 			event = specialData.event;
 		}
-		// bind the handler defined above to the element we're currently processing and the event name provided in this 
+		// Bind the handler defined above to the element we're currently processing and the event name provided in this 
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
 	});
@@ -152,33 +157,32 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	// on an input, the callback above instantiates this Value control on the input element.
 	var Value = can.Control.extend({
 		init: function () {
-			// handle selects by calling set after this thread so the rest of the element can finish rendering
+			// Handle selects by calling `set` after this thread so the rest of the element can finish rendering.
 			if (this.element[0].nodeName.toUpperCase() === "SELECT") {
-				// need to wait until end of turn ...
 				setTimeout(can.proxy(this.set, this), 1);
 			} else {
 				this.set();
 			}
 
 		},
-		// if the live bound data changes, call set the reflect this in the dom
+		// If the live bound data changes, call set to reflect the change in the dom.
 		"{value} change": "set",
 		set: function () {
-			//this may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
+			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
 			if (!this.element) {
 				return;
 			}
 			var val = this.options.value();
-			// set the element's value to match the attribute that was passed in
+			// Set the element's value to match the attribute that was passed in
 			this.element[0].value = (typeof val === 'undefined' ? '' : val);
 		},
-		// if the input value changes, ...
+		// If the input value changes, this will set the live bound data to reflect the change.
 		"change": function () {
-			//this may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
+			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
 			if (!this.element) {
 				return;
 			}
-			// set the value of the attribute passed in to reflect what the user typed
+			// Set the value of the attribute passed in to reflect what the user typed
 			this.options.value(this.element[0].value);
 		}
 	}),
@@ -187,23 +191,22 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	// on a checkbox, the callback above instantiates this Checked control on the checkbox element.
 		Checked = can.Control.extend({
 			init: function () {
-				// if its not a checkbox, its a radio input
+				// If its not a checkbox, its a radio input
 				this.isCheckbox = (this.element[0].type.toLowerCase() === "checkbox");
 				this.check();
 			},
-			// value is the compute representing the can-value for this element.  For example can-value="foo" and current 
+			// `value` is the compute representing the can-value for this element.  For example can-value="foo" and current 
 			// scope is someObj, value is the compute representing someObj.attr('foo')
 			"{value} change": "check",
-			"{trueValue} change": "check",
-			"{falseValue} change": "check",
 			check: function () {
 				if (this.isCheckbox) {
 					var value = this.options.value(),
 						trueValue = this.options.trueValue || true;
-
+					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set 
+					// the checked property based on their equality.
 					this.element[0].checked = (value === trueValue);
 				} 
-				// its a radio input type
+				// Its a radio input type
 				else {
 					var setOrRemove = this.options.value() === this.element[0].value ?
 						"set" : "remove";
@@ -217,12 +220,11 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			"change": function () {
 
 				if (this.isCheckbox) {
-					// If the checkbox is checked and the trueValue compute (if it was used) is true, set value to true.
-					// 
-					// If its not checked and the falseValue compute (if it was used) is false, set value to false.
+					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If 
+					// can-false-value was used and checked is false, set value to the string value of can-false-value.
 					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
 				} 
-				// radio input type
+				// Radio input type
 				else {
 					if (this.element[0].checked) {
 						this.options.value(this.element[0].value);
@@ -243,26 +245,27 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 				var newVal = this.options.value();
 
+
+				// When given a string, try to extract all the options from it (i.e. "a;b;c;d")
 				if (typeof newVal === 'string') {
-					//when given a string, try to extract all the options from it (i.e. "a;b;c;d")
 					newVal = newVal.split(this.delimiter);
 					this.isString = true;
-				} else if (newVal) {
-					//when given something else, try to make it an array and deal with it
+				} 
+				// When given something else, try to make it an array and deal with it
+				else if (newVal) {
 					newVal = can.makeArray(newVal);
 				}
 
-				// make an object containing all the options passed in for convenient lookup
+				// Make an object containing all the options passed in for convenient lookup
 				var isSelected = {};
 				can.each(newVal, function (val) {
 					isSelected[val] = true;
 				});
 
-				// go through each &lt;option/&gt; element
+				// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then 
+				// set its selected property if it was in the list of vals that were just set.
 				can.each(this.element[0].childNodes, function (option) {
-					// if it has a value property (meaning it is a valid option)
 					if (option.value) {
-						// set its value to true if it was in the list of vals that were set
 						option.selected = !! isSelected[option.value];
 					}
 
@@ -285,7 +288,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			},
 			// Called when the user changes this input in any way.
 			'change': function () {
-				// get an array of the currently selected values
+				// Get an array of the currently selected values
 				var value = this.get(),
 					currentValue = this.options.value();
 
@@ -293,11 +296,13 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				if (this.isString || typeof currentValue === "string") {
 					this.isString = true;
 					this.options.value(value.join(this.delimiter));
-				} else if (currentValue instanceof can.List) {
-					// If the compute is a can.List, replace its current contents with the new array of values
+				} 
+				// If the compute is a can.List, replace its current contents with the new array of values
+				else if (currentValue instanceof can.List) {
 					currentValue.attr(value, true);
-				} else {
-					// Otherwise set the value to the array of values selected in the input.
+				} 
+				// Otherwise set the value to the array of values selected in the input.
+				else {
 					this.options.value(value);
 				}
 
