@@ -228,7 +228,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 							deferred.resolve(response[2][settings.dataType]);
 						} else {
 							// TODO probably resolve better
-							deferred.reject(d, 'error', response[1]);
+							deferred.reject(deferred, 'error', response[1]);
 						}
 					},
 						// Get the results from the fixture.
@@ -247,9 +247,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		};
 	}
 
-	// a list of 'overwrite' settings object
+	// A list of 'overwrite' settings objects
 	var overwrites = [],
-		// returns the index of an overwrite function
+		// Finds and returns the index of an overwrite function
 		find = function (settings, exact) {
 			for (var i = 0; i < overwrites.length; i++) {
 				if ($fixture._similar(settings, overwrites[i], exact)) {
@@ -258,7 +258,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 			return -1;
 		},
-		// overwrites the settings fixture if an overwrite matches
+		// Overwrites the settings fixture if an overwrite matches
 		overwrite = function (settings) {
 			var index = find(settings);
 			if (index > -1) {
@@ -267,7 +267,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 
 		},
-		// Makes an attempt to guess where the id is at in the url and returns it.
+		// Attemps to guess where the id is in an AJAX call's URL and returns it.
 		getId = function (settings) {
 			var id = settings.data.id;
 
@@ -275,29 +275,26 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				id = settings.data;
 			}
 
-			/*
-			 Check for id in params(if query string)
-			 If this is just a string representation of an id, parse
-			 if(id === undefined && typeof settings.data === "string") {
-			 id = settings.data;
-			 }
-			 //*/
-
 			if (id === undefined) {
+				// Parses the URL looking for all digits
 				settings.url.replace(/\/(\d+)(\/|$|\.)/g, function (all, num) {
+					// Set id equal to the value
 					id = num;
 				});
 			}
 
 			if (id === undefined) {
+				// If that doesn't work Parses the URL looking for all words
 				id = settings.url.replace(/\/(\w+)(\/|$|\.)/g, function (all, num) {
+					// As long as num isn't the word "update", set id equal to the value
 					if (num !== 'update') {
 						id = num;
 					}
 				});
 			}
 
-			if (id === undefined) { // if still not set, guess a random number
+			if (id === undefined) {
+				// If id is still not set, a random number is guessed.
 				id = Math.round(Math.random() * 1000);
 			}
 
