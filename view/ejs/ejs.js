@@ -217,7 +217,7 @@ function (can) {
 	// The following helper converts a given string to upper case:
 	//
 	//     can.EJS.Helpers.prototype.toUpper = function(params) {
-	//     	return params.toUpperCase();
+	//       return params.toUpperCase();
 	//     }
 
 	// Use it like this in any EJS template:
@@ -227,9 +227,9 @@ function (can) {
 	// To access the current DOM element return a function that takes the element as a parameter:
 
 	//     can.EJS.Helpers.prototype.upperHtml = function(params) {
-	//     	return function(el) {
-	//     		$(el).html(params.toUpperCase());
-	//     	}
+	//       return function(el) {
+	//         $(el).html(params.toUpperCase());
+	//       }
 	//     }
 
 	// In your EJS view you can then call the helper on an element tag:
