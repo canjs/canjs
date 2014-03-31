@@ -1,3 +1,5 @@
+/*jshint maxdepth:6*/
+
 // # can/route/pushstate/pushstate.js
 //
 // Plugin for `can.route` which uses browser `history.pushState` support
