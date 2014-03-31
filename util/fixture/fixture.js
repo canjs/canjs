@@ -1,4 +1,12 @@
+// # can/util/fixture.js
+//
+// Intercepts AJAX requests and simulates them with either a function or a
+// file. This is used to develop independently from backend services.
+
+
 steal('can/util', 'can/util/string', 'can/util/object', function (can) {
+	// can.fixture relies on can.Object in order to work and needs to be
+	// included before can.fixture in order to use it, otherwise it'll error.
 	if (!can.Object) {
 		throw new Error('can.fixture depends on can.Object. Please include it before can.fixture.');
 	}
@@ -17,12 +25,16 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		return (can.fixture.rootUrl || '') + url;
 	};
 
+	// Manipulates the AJAX prefilter to identify whether or not we should
+	// manipulate the AJAX call to change the URL to a static file or call
+	// a function for a dynamic fixture.
 	var updateSettings = function (settings, originalOptions) {
+		// If fixtures are turned off, do nothing.
 		if (!can.fixture.on) {
 			return;
 		}
 
-		//simple wrapper for logging
+		// A simple wrapper for logging fixture.js.
 		var log = function () {
 			//!steal-remove-start
 			can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
@@ -33,10 +45,10 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		// We always need the type which can also be called method, default to GET
 		settings.type = settings.type || settings.method || 'GET';
 
-		// add the fixture option if programmed in
+		// Add the fixture option if programmed in
 		var data = overwrite(settings);
 
-		// if we don't have a fixture, do nothing
+		// If there is not a fixture for this AJAX request, do nothing.
 		if (!settings.fixture) {
 			if (window.location.protocol === "file:") {
 				log("ajax request to " + settings.url + ", no fixture found");
@@ -44,17 +56,20 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			return;
 		}
 
-		//if referencing something else, update the fixture option
+		// If the fixture already exists on can.fixture, update the fixture option
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
 			settings.fixture = can.fixture[settings.fixture];
 		}
 
-		// if a string, we just point to the right url
+		// If the fixture setting is a string, we just change the URL of the 
+		// AJAX call to the fixture URL.
 		if (typeof settings.fixture === "string") {
 			var url = settings.fixture;
 
+			// If the URL starts with //, we need to update the URL to become
+			// the full path.
 			if (/^\/\//.test(url)) {
-				// this lets us use rootUrl w/o having steal...
+				// This lets us use rootUrl w/o having steal...
 				url = getUrl(settings.fixture.substr(2));
 			}
 
@@ -69,20 +84,25 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			log("looking for fixture in " + url);
 			//!steal-remove-end
 
+			// Override the AJAX settings, changing the URL to the fixture file,
+			// removing the data, and changing the type to GET.
 			settings.url = url;
 			settings.data = null;
 			settings.type = "GET";
 			if (!settings.error) {
+				// If no error handling is provided, we provide one and throw an
+				// error.
 				settings.error = function (xhr, error, message) {
 					throw "fixtures.js Error " + error + " " + message;
 				};
 			}
+		// Otherwise, it is a function and we add the fixture data type so the
+		// fixture transport will handle it.
 		} else {
 			//!steal-remove-start
 			log("using a dynamic fixture for " + settings.type + " " + settings.url);
 			//!steal-remove-end
 
-			//it's a function ... add the fixture datatype so our fixture transport handles it
 			// TODO: make everything go here for timing and other fun stuff
 			// add to settings data from fixture ...
 			if (settings.dataTypes) {
@@ -94,6 +114,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 		}
 	},
+		// TODO: Come back here and work on these - Josh
 		// A helper function that takes what's called with response
 		// and moves some common args around to make it easier to call
 		extractResponse = function (status, statusText, responses, headers) {
@@ -127,35 +148,39 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			return responses;
 		};
 
-	//used to check urls
-	// check if jQuery
+	// Set up prefiltering and transmission handling in order to actually power
+	// can.fixture. This is handled two different ways, depending on whether or
+	// not CanJS is using jQuery or not.
+
+	// If we are using jQuery, we have access to ajaxPrefilter and ajaxTransport
 	if (can.ajaxPrefilter && can.ajaxTransport) {
 
-		// the pre-filter needs to re-route the url
+		// Add the prefilter that re-routes URLs.
 		can.ajaxPrefilter(updateSettings);
 
-		can.ajaxTransport("fixture", function (s, original) {
-			// remove the fixture from the datatype
-			s.dataTypes.shift();
+		// Create transport for fixture data type for dynamic fixtures.
+		can.ajaxTransport("fixture", function (options, originalOptions) {
+			// Remove "fixture" from the dataTypes array.
+			options.dataTypes.shift();
 
 			//we'll return the result of the next data type
 			var timeout, stopped = false;
 
 			return {
 				send: function (headers, callback) {
-					// we'll immediately wait the delay time for all fixtures
+					// Wait to send code for however long can.fixture.delay is set for.
 					timeout = setTimeout(function () {
-						// if the user wants to call success on their own, we allow it ...
+						// Allow user to provide their own success callback
 						var success = function () {
 							if (stopped === false) {
-								callback.apply(null, extractResponse.apply(s, arguments));
+								callback.apply(null, extractResponse.apply(options, arguments));
 							}
 						},
-							// get the result form the fixture
-							result = s.fixture(original, success, headers, s);
+							// Get the results from the fixture.
+							result = options.fixture(originalOptions, success, headers, options);
 						if (result !== undefined) {
-							// make sure the result has the right dataType
-							callback(200, "success", extractResponses(s, result), {});
+							// Run the callback as a 200 success and with the results with the correct dataType
+							callback(200, "success", extractResponses(options, result), {});
 						}
 					}, can.fixture.delay);
 				},
@@ -165,48 +190,57 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				}
 			};
 		});
+	// If we are not using jQuery, we don't have access to those nice ajaxPrefilter
+	// and ajaxTransport functions, so we need to monkey patch can.ajax.
 	} else {
 		var AJAX = can.ajax;
 		can.ajax = function (settings) {
+			// Call our prefiltering function with settings passed into the AJAX call.
 			updateSettings(settings, settings);
+
+			// If the call is a fixture call, we run the same type of code as we would
+			// with jQuery's ajaxTransport.
 			if (settings.fixture) {
-				var timeout, d = new can.Deferred(),
+				var timeout, 
+					deferred = new can.Deferred(),
 					stopped = false;
 
 				//TODO this should work with response
-				d.getResponseHeader = function () {};
+				deferred.getResponseHeader = function () {};
 
-				// call success and fail
-				d.then(settings.success, settings.fail);
+				// Call success and fail
+				deferred.then(settings.success, settings.fail);
 
-				// abort should stop the timeout and calling success
-				d.abort = function () {
+				// Abort should stop the timeout and calling the success callback
+				deferred.abort = function () {
 					clearTimeout(timeout);
 					stopped = true;
-					d.reject(d);
+					deferred.reject(deferred);
 				};
-				// set a timeout that simulates making a request ....
+				// Wait to simulate request for however long can.fixture.delay is set for.
 				timeout = setTimeout(function () {
-					// if the user wants to call success on their own, we allow it ...
+					// Allow user to provide their own success callback
 					var success = function () {
 						var response = extractResponse.apply(settings, arguments),
 							status = response[0];
 
 						if ((status >= 200 && status < 300 || status === 304) && stopped === false) {
-							d.resolve(response[2][settings.dataType]);
+							deferred.resolve(response[2][settings.dataType]);
 						} else {
 							// TODO probably resolve better
-							d.reject(d, 'error', response[1]);
+							deferred.reject(d, 'error', response[1]);
 						}
 					},
-						// get the result form the fixture
+						// Get the results from the fixture.
 						result = settings.fixture(settings, success, settings.headers, settings);
 					if (result !== undefined) {
-						d.resolve(result);
+						// Resolve with fixture results
+						deferred.resolve(result);
 					}
 				}, can.fixture.delay);
 
-				return d;
+				return deferred;
+			// Otherwise just run a normal can.ajax call.
 			} else {
 				return AJAX(settings);
 			}
