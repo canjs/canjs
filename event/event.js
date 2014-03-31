@@ -1,33 +1,58 @@
-steal('can/util/can.js', function (can) {
-	// # can/event
-	// `can.event`
-	
-	// Implements a basic event system that can be used with any type of object.
-	// In addition to adding basic event functionality, it also provides the `can.event` object 
-	// that can be mixed into objects and prototypes.
+// # can/event
+//
+// Implements a basic event system that can be used with any type of object.
+// In addition to adding basic event functionality, it also provides the `can.event` object 
+// that can be mixed into objects and prototypes.
+//
+// Most of the time when this is used, it will be used with the mixin:
+//
+// ```
+// var SomeClass = can.Construct("SomeClass");
+// can.extend(SomeClass.prototype, can.event);
+// ```
 
-	// ### addEvent
+steal('can/util/can.js', function (can) {
+	// ## can.event.addEvent
+	//
 	// Adds a basic event listener to an object.
+	// This consists of storing a cache of event listeners on each object,
+	// that are iterated through later when events are dispatched.
 	/**
+	 * Add a basic event listener to an object.
 	 *
+	 * @param {String} event The name of the event to listen for.
+	 * @param {Function} handler The handler that will be executed to handle the event.
+	 * @return {Object} this
 	 */
-	can.addEvent = function (event, fn) {
+	can.addEvent = function (event, handler) {
 		// Initialize event cache.
 		var allEvents = this.__bindEvents || (this.__bindEvents = {}),
 			eventList = allEvents[event] || (allEvents[event] = []);
 
 		// Add the event
 		eventList.push({
-			handler: fn,
+			handler: handler,
 			name: event
 		});
 		return this;
 	};
 
-	// ### listenTo
-	// can.listenTo works without knowing how bind works
-	// the API was heavily influenced by BackboneJS: 
-	// http://backbonejs.org/
+	// ## can.event.listenTo
+	//
+	// Listens to an event without know how bind is implemented.
+	// The primary use for this is to listen to another's objects event without 
+	// having to track the events on that object. Essentially, this is a simple 
+	// version of delegation.
+	//
+	// The API was heavily influenced by BackboneJS: http://backbonejs.org/
+	/**
+	 * Listens for an event on another object.
+	 *
+	 * @param {Object} other The object to listen for events on.
+	 * @param {String} event The name of the event to listen for.
+	 * @param {Function} handler The handler that will be executed to handle the event.
+	 * @return {Object} this
+	 */
 	can.listenTo = function (other, event, handler) {
 		// Initialize event cache
 		var idedEvents = this.__listenToEvents;
@@ -54,8 +79,17 @@ steal('can/util/can.js', function (can) {
 		can.bind.call(other, event, handler);
 	};
 
-	// ### stopListening
-	// can.stopListening stops event listeners bound with can.listenTo.
+	// ## ca.nevent.stopListening
+	// 
+	// Stops listening for events on other objects
+	/**
+	 * Stops listening for an event on another object.
+	 *
+	 * @param {Object} other The object to listen for events on.
+	 * @param {String} event The name of the event to listen for.
+	 * @param {Function} handler The handler that will be executed to handle the event.
+	 * @return {Object} this
+	 */
 	can.stopListening = function (other, event, handler) {
 		var idedEvents = this.__listenToEvents,
 			iterIdedEvents = idedEvents,
@@ -105,8 +139,20 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 
-	// ### removeEvent
+	// ## can.event.removeEvent
+	//
 	// Removes a basic event listener from an object.
+	// This removes event handlers from the cache of listened events.
+	/**
+	 * Removes a basic event listener from an object.
+	 *
+	 * @param {String} event The name of the event to listen for.
+	 * @param {Function} handler The handler that will be executed to handle the event.
+	 * @param {Function} [__validate] An extra function that can validate an event handler 
+	 *                                as a match. This is an internal parameter and only used 
+	 *                                for `can/event` plugins.
+	 * @return {Object} this
+	 */
 	can.removeEvent = function (event, fn, __validate) {
 		if (!this.__bindEvents) {
 			return this;
@@ -128,8 +174,16 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 
-	// ### can.dispatch
+	// ## can.event.dispatch
+	//
 	// Dispatches/triggers a basic event on an object.
+	/**
+	 * Dispatches/triggers a basic event on an object.
+	 *
+	 * @param {String|Object} event The event to dispatch
+	 * @param {Array} [args] Additional arguments to pass to event handlers
+	 * @return {Object} this
+	 */
 	can.dispatch = function (event, args) {
 		var events = this.__bindEvents;
 		if (!events) {
@@ -154,8 +208,16 @@ steal('can/util/can.js', function (can) {
 		}
 	};
 	
-	// ### can.one
+	// ## can.event.one
+	//
 	// Adds a basic event listener that listens to an event once and only once.
+	/**
+	 * Adds a basic event listener that listens to an event once and only once.
+	 *
+	 * @param {String} event The name of the event to listen for.
+	 * @param {Function} handler The handler that will be executed to handle the event.
+	 * @return {Object} this
+	 */
 	can.one = function(event, handler) {
 		// Unbind the listener after it has been executed
 		var one = function() {
@@ -168,7 +230,7 @@ steal('can/util/can.js', function (can) {
 		return this;
 	};
 
-	// ### can.event
+	// ## can.event
 	// Create and export the `can.event` mixin
 	can.event = {
 		// Event method aliases
