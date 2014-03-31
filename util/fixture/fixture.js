@@ -208,7 +208,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				//TODO this should work with response
 				deferred.getResponseHeader = function () {};
 
-				// Call success and fail
+				// Call success or fail after deferred resolves
 				deferred.then(settings.success, settings.fail);
 
 				// Abort should stop the timeout and calling the success callback
@@ -301,16 +301,21 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			return id;
 		};
 
+	// ## can.fixture
+	// Simulates AJAX requests.
 	var $fixture = can.fixture = function (settings, fixture) {
-		// if we provide a fixture ...
+		// If fixture is provided, set up a new fixture.
 		if (fixture !== undefined) {
 			if (typeof settings === 'string') {
-				// handle url strings
+				// Match URL if it has GET, POST, PUT, or DELETE.
 				var matches = settings.match(/(GET|POST|PUT|DELETE) (.+)/i);
+				// If not, we don't set the type, which eventually defaults to GET
 				if (!matches) {
 					settings = {
 						url: settings
 					};
+				// If it does match, we split the URL in half and create an object with
+				// each half as the url and type properties.
 				} else {
 					settings = {
 						url: matches[2],
@@ -320,7 +325,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 			}
 
-			//handle removing.  An exact match if fixture was provided, otherwise, anything similar
+			// Check if the same fixture was previously added, if so, we remove it
+			// from our array of fixture overwrites.
 			var index = find(settings, !! fixture);
 			if (index > -1) {
 				overwrites.splice(index, 1);
@@ -330,6 +336,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 			settings.fixture = fixture;
 			overwrites.push(settings);
+		// If a fixture isn't provided, we assume that settings is
+		// an array of fixtures, and we should iterate over it, and set up
+		// the new fixtures.
 		} else {
 			can.each(settings, function (fixture, url) {
 				$fixture(url, fixture);
@@ -420,11 +429,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// Simulates a can.Model.findAll to a fixture
 				findAll: function (request) {
 					request = request || {};
-					//copy array of items
+					// Copy array of items
 					var retArr = items.slice(0);
 					request.data = request.data || {};
-					//sort using order
-					//order looks like ["age ASC","gender DESC"]
+					// Sort using order
+					// Order looks like ["age ASC", "gender DESC"]
 					can.each((request.data.order || [])
 						.slice(0)
 						.reverse(), function (name) {
@@ -450,7 +459,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 							});
 						});
 
-					//group is just like a sort
+					// Group works just like a sort
 					can.each((request.data.group || [])
 						.slice(0)
 						.reverse(), function (name) {
@@ -464,10 +473,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						limit = parseInt(request.data.limit, 10) || (items.length - offset),
 						i = 0;
 
-					//filter results if someone added an attr like parentId
 					for (var param in request.data) {
 						i = 0;
-						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
+						// Filter results if someone added an attribute like parentId or parent_id
+						// but if the value of the param is null, ignore it
+						if (request.data[param] !== undefined &&
 							(param.indexOf("Id") !== -1 || param.indexOf("_id") !== -1)) {
 							while (i < retArr.length) {
 								if (request.data[param] != retArr[i][param]) { // jshint eqeqeq: false
@@ -479,6 +489,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						}
 					}
 
+					// If a filter function was provided, pass results though function
+					// to potentially filter out ones that do not match.
 					if (filter) {
 						i = 0;
 						while (i < retArr.length) {
@@ -490,7 +502,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						}
 					}
 
-					//return data spliced with limit and offset
+					// Return the data spliced with limit and offset, along with related values
+					// (e.g. count, limit, offset)
 					return {
 						"count": retArr.length,
 						"limit": request.data.limit,
@@ -512,6 +525,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					var id = getId(request);
 
 					// TODO: make it work with non-linear ids ..
+					// Retrieve
 					can.extend(findOne(id), request.data);
 					response({
 						id: getId(request)
