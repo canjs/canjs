@@ -1,9 +1,33 @@
+// # can/event/propagate
+// 
+// This is a `can/event` plugin that implements the event propagation bubbling.
+// The event will be propagated/bubbled on a per object basis for each object 
+// that implements the `propagate` property.
+//
+// ```
+// var SomeClass = can.Construct("SomeClass");
+// can.extend(SomeClass.prototype, can.event, { propagate: "parentNode" });
+// 
+// var parent = new SomeClass();
+// var child = new SomeClass();
+// child.parentNode = parent;
+//
+// // This will dispatch on both child **and** parent.
+// child.dispatch("action");
+// ```
+
 steal('can/util/can.js', 'can/event', function(can) {
-	// Adds propagation of events
-	// can.extend(Class.prototype, can.event, { __propagate: 'prop' })
+	// ## can.event.dispatch
+	//
+	// Adds propagation of events.
+	// Typically this will be integrated using `can.extend` on an object.
+	// 
+	// ```
+	// can.extend(Class.prototype, can.event, { propagate: 'prop' })
+	// ```
 	var dispatch = can.dispatch;
 	can.dispatch = can.event.dispatch = can.event.trigger = function (event, args) {
-		var propagate = this.__propagate || false;
+		var propagate = this.propagate || false;
 
 		// Inject propagation into event, when applicable
 		if (typeof event.isPropagationStopped === 'undefined') {
@@ -21,9 +45,14 @@ steal('can/util/can.js', 'can/event', function(can) {
 
 			// Add propagation, if applicable
 			if (propagate) {
+				// Current target should always be the object the event is triggering on
 				event.currentTarget = this;
+				// Target is always the original object triggering the event
 				event.target = event.target || this;
+				// Descendants is a cache of the stack of objects generating this event.
+				// This is primarily used for the `can/event/delegate` plugin.
 				event.descendants = event.target === event.currentTarget ? [] : [event.target];
+				// Allow the user to stop propagation
 				event.stopPropagation = function() {
 					stop = true;
 				};
@@ -40,6 +69,7 @@ steal('can/util/can.js', 'can/event', function(can) {
 				return prevent;
 			};
 		}
+		// If the propagated event already exists, just inject the new target
 		else if (propagate) {
 			// Set the current target when propagating
 			event = can.simpleExtend({}, event);

@@ -1,4 +1,5 @@
 steal('can/util/can.js', 'can/event', function (can) {
-	// Moved to can/event
+	// # can/util/event
+	// This imports can/event for API compatibility.
 	return can;
 });

@@ -7,9 +7,9 @@ steal('can/event/delegate', 'can/test', function (event) {
 			node3 = { name: 'child', parent: node2 },
 			fn;
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		// Verify delegate
 		node1.delegate('', 'action', fn = function(ev) {
@@ -48,8 +48,8 @@ steal('can/event/delegate', 'can/test', function (event) {
 			node3 = new DelegateClass({ name: 'child', parent: node2 }),
 			fn, fn2;
 
-		can.extend(DelegateClass.prototype, can.event, { __propagate: 'parent' });
-		can.extend(AnotherClass.prototype, can.event, { __propagate: 'parentNode' });
+		can.extend(DelegateClass.prototype, can.event, { propagate: 'parent' });
+		can.extend(AnotherClass.prototype, can.event, { propagate: 'parentNode' });
 
 		// Verify delegate
 		node1.delegate('AnotherClass DelegateClass', 'action', fn = function(ev) {

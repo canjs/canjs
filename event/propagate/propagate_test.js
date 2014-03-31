@@ -6,9 +6,9 @@ steal('can/event/propagate', 'can/test', function (event) {
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		// Test propagation
 		node1.bind('action', function(ev) {
@@ -34,9 +34,9 @@ steal('can/event/propagate', 'can/test', function (event) {
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		// Test stop propagation
 		node1.bind('stop', function(ev) {
@@ -64,9 +64,9 @@ steal('can/event/propagate', 'can/test', function (event) {
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		// Test stop propagation
 		node1.bind('stop', function(ev) {
@@ -98,9 +98,9 @@ steal('can/event/propagate', 'can/test', function (event) {
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		node1.bind('action', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');
@@ -115,9 +115,9 @@ steal('can/event/propagate', 'can/test', function (event) {
 			node2 = { name: 'mid', parent: node1 },
 			node3 = { name: 'child', parent: node2 };
 
-		can.extend(node1, can.event, { __propagate: 'parent' });
-		can.extend(node2, can.event, { __propagate: 'parent' });
-		can.extend(node3, can.event, { __propagate: 'parent' });
+		can.extend(node1, can.event, { propagate: 'parent' });
+		can.extend(node2, can.event, { propagate: 'parent' });
+		can.extend(node3, can.event, { propagate: 'parent' });
 
 		node1.bind('action', function(ev) {
 			equal(ev.target.name, 'custom', 'target is custom target');
