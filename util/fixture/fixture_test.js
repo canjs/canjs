@@ -470,12 +470,17 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 		
 		can.fixture('GET /presetStore', store.findAll);
 		stop();
-		$.get("/presetStore",{year: 2013, modelId:1}, function(response){
+		can.ajax({
+			url: "/presetStore",
+			dataType: 'json',
+			data: {year: 2013, modelId:1}
+		}).done(function(response){
 			
 			equal(response.data[0].id, 1, "got the first item");
 			equal(response.data.length, 1, "only got one item");
 			start();
 		});
+		
 		
 	});
 	
