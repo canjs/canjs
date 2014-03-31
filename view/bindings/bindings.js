@@ -1,6 +1,6 @@
+// # bindings.js
+// `can.view.bindings`: In-template event bindings and two-way bindings
 steal("can/util", "can/view/mustache", "can/control", function (can) {
-	// # bindings.js
-	// `can.view.bindings`: In-template event bindings and two-way bindings
 
 	// ## can-value
 	// Implement the `can-value` special attribute
@@ -32,12 +32,12 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				// set up a compute that toggles the value of the checkbox to "true" based on another attribute. 
 				// For example, &lt;input type='checkbox' can-value='foo' can-true-value='trueVal' /&gt;
 				if (can.attr.has(el, "can-true-value")) {
-					trueValue = data.scope.compute(el.getAttribute("can-true-value"));
+					trueValue = el.getAttribute("can-true-value");
 				} else {
 					trueValue = can.compute(true);
 				}
 				if (can.attr.has(el, "can-false-value")) {
-					falseValue = data.scope.compute(el.getAttribute("can-false-value"));
+					falseValue = el.getAttribute("can-false-value");
 				} else {
 					falseValue = can.compute(false);
 				}
@@ -199,7 +199,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			check: function () {
 				if (this.isCheckbox) {
 					var value = this.options.value(),
-						trueValue = this.options.trueValue() || true;
+						trueValue = this.options.trueValue || true;
 
 					this.element[0].checked = (value === trueValue);
 				} 
@@ -220,7 +220,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 					// If the checkbox is checked and the trueValue compute (if it was used) is true, set value to true.
 					// 
 					// If its not checked and the falseValue compute (if it was used) is false, set value to false.
-					this.options.value(this.element[0].checked ? this.options.trueValue() : this.options.falseValue());
+					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
 				} 
 				// radio input type
 				else {
@@ -303,7 +303,5 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 
 			}
 		});
-
-	return special;
 
 });

@@ -204,42 +204,26 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
 
-	test("extending special event types", function(){
-		special.esc = function (data, el, original) {
-			return {
-				event: "keyup",
-				handler: function (ev) {
-					if (ev.keyCode === 27) {
-						return original.call(this, ev);
-					}
-				}
-			};
-		}
+	test("checkboxes with can-true-value bind properly", function () {
+		var data = new can.Map({
+			sex: "male"
+		}),
+			frag = can.view.mustache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
+		can.append(can.$("#qunit-test-area"), frag);
 
-
-		var template = can.view.mustache("<input can-esc='cancel'/>");
-
-		var called = 0;
-
-		var frag = template({
-			cancel: function () {
-				called++;
-				ok(called, 1, "update called once");
-			}
-		});
-
-		var input = frag.childNodes[0];
-
-		can.trigger(input, {
-			type: "keyup",
-			keyCode: 13
-		});
-
-		can.trigger(input, {
-			type: "keyup",
-			keyCode: 27
-		});
-	})
+		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		data.attr('sex', 'female');
+		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
+		input.checked = true;
+		can.trigger(input, 'change');
+		equal(input.checked, true, 'checkbox value bound (via check)');
+		equal(data.attr('sex'), 'male', 'checkbox value bound (via check)');
+		input.checked = false;
+		can.trigger(input, 'change');
+		equal(input.checked, false, 'checkbox value bound (via uncheck)');
+		equal(data.attr('sex'), 'female', 'checkbox value bound (via uncheck)');
+	});
 
 	test("can-value select single", function () {
 
