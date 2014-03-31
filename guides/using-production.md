@@ -5,7 +5,7 @@ While it makes sense to use uniminified JavaScript split into separate files and
 
 ## View compilation
 
-CanJS can pre-compile [can.EJS EJS] and [can.Mustache Mustache] views into JavaScript functions contained within a single file in order to avoid additional requests for view files in production. When using CanJS [using-standalone standalone] or [using-require with AMD (RequireJS)] you can use the [can-compile](https://github.com/daffl/can-compile) Node module. Install with
+CanJS can pre-compile [EJS](/docs/can.EJS.html) and [Mustache](/docs/can.Mustache.html) views into JavaScript functions contained within a single file in order to avoid additional requests for view files in production. When using CanJS [using-standalone standalone] or [using-require with AMD (RequireJS)] you can use the [can-compile](https://github.com/daffl/can-compile) Node module. Install with
 
 > npm install can-compile -g
 
@@ -20,22 +20,21 @@ This will create `views.production.js` in the current folder containing all pre-
 You can run the [RequireJS optimizer](http://requirejs.org/docs/optimization.html) against your application but need to make sure to put
 all the configuration in a separate file, e.g. `js/app.js`:
 
-  require.config({
+    require.config({
     paths : {
       "jquery" : "http://code.jquery.com/jquery-2.0.3",
       "can": "path/to/can/amd"
     }
-  });
+    });
 
-  require(['can/control', 'can/view/mustache'], function(Control, can) {
+    require(['can/control', 'can/view/mustache'], function(Control, can) {
     // Use Mustache and Control
     var MyControl = Control.extend({
       init: function() {
         this.element.html(can.view('path/to/view.mustache', this.options));
       }
     });
-  });
-
+    });
 
 Then run `r.js` like:
 

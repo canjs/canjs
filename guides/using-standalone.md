@@ -1,4 +1,4 @@
-@page using-standalone Standalone
+@page using-standalone In a <script> tag
 @parent Using 0
 
 The most common way of using CanJS is the core builds from the download (or download builder) included in a `<script>` tag.

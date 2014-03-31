@@ -1,8 +1,19 @@
-@page Using Using CanJS
+@page Using Setting up CanJS
 @parent guides 2
 
+<!-- TODO -->
+
+Better introduction (CanJS is designed)
+If you are trying to play around with CanJS
+
+Libraries
+Downloading
+Loading
+Environment
+Examples
+
 CanJS can be used with [jQuery](http://jquery.com), [Dojo](http://dojotoolkit.org/), [Mootools](http://mootools.net/), [YUI](http://yuilibrary.com/) and [Zepto](http://zeptojs.com/). This guide outlines the different ways CanJS can be obtained
-and the follow up chapters show how to use CanJS [using-standalone standalone], [using-steal with StealJS] or [using-require with RequireJS] and tips for the [using-production use in production].
+and the follow up chapters show how to use CanJS [using-standalone in a script tag], [using-steal with StealJS] or [using-require with RequireJS] and tips for the [using-production use in production].
 
 ## The CanJS download
 
@@ -14,9 +25,9 @@ and contains:
 - `can.<library>.dev.js` - A development build logging useful messages for a supported library
 - `can.<library>.min.js` - The minified core build for a supported library
 - `can.<type>.<plugin>` - Individual builds for each official CanJS plugin
-- `amd/` - CanJS provided as AMD modules (see [using with RequireJS using-require] for usage)
+- `amd/` - CanJS provided as AMD modules (see [using-require using with RequireJS] for usage)
 - `amd-dev/` - CanJS AMD modules with development messages
-- `steal/` - CanJS modules using the StealJS syntax (see [using with StealJS using-steal])
+- `steal/` - CanJS modules using the StealJS syntax (see [using-steal using with StealJS])
 
 The [download page](http://canjs.com/download.html) also offers those downloads for older versions and pre-releases for the next version from the "Other Versions" dropdown.
 
