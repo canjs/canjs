@@ -3,47 +3,12 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 	// ## map.js  
 	// `can.Map`  
 	// _Provides the observable pattern for JavaScript Objects._  
-	//  
-	// Removes all listeners.
-	var bindToChildAndBubbleToParent = function (child, prop, parent) {
-		can.listenTo.call(parent, child, "change", function ( /* ev, attr */ ) {
-			// `batchTrigger` the type on this...
-			var args = can.makeArray(arguments),
-				ev = args.shift();
-			args[0] = (prop === "*" ? [parent.indexOf(child), args[0]] : [prop, args[0]])
-				.join(".");
-
-			// track objects dispatched on this map		
-			ev.triggeredNS = ev.triggeredNS || {};
-
-			// if it has already been dispatched exit
-			if (ev.triggeredNS[parent._cid]) {
-				return;
-			}
-
-			ev.triggeredNS[parent._cid] = true;
-			// send change event with modified attr to parent	
-			can.trigger(parent, ev, args);
-			// send modified attr event to parent
-			//can.trigger(parent, args[0], args);
-		});
-	},
-		attrParts = function (attr, keepKey) {
+	var attrParts = function (attr, keepKey) {
 			if (keepKey) {
 				return [attr];
 			}
 			return can.isArray(attr) ? attr : ("" + attr)
 				.split(".");
-		},
-		makeBindSetup = function (wildcard, eventName) {
-			return function () {
-				var parent = this;
-				this._each(function (child, prop) {
-					if (child && child.bind) {
-						bindToChildAndBubbleToParent(child, wildcard || prop, parent , eventName);
-					}
-				});
-			};
 		},
 		// A map that temporarily houses a reference 
 		// to maps that have already been made for a plain ole JS object
@@ -190,8 +155,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					can.__reading(map, '__keys');
 
 					return where;
-				},
-				makeBindSetup: makeBindSetup
+				}
 			},
 
 			// starts collecting events
@@ -388,7 +352,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					};
 				}
 			},
-			_bindsetup: function(){}, //makeBindSetup(),
+			_bindsetup: function(){},
 			_bindteardown: function(){},
 			_changes: function (ev, attr, how, newVal, oldVal) {
 				// when a change happens, create the named event.

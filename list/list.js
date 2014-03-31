@@ -144,7 +144,6 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					callback(data[i], i);
 				}
 			},
-			_bubbleSetup: Map.helpers.makeBindSetup("*"),
 			// Returns the serialized form of this list.
 			/**
 			 * @hide
