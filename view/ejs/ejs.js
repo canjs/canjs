@@ -115,19 +115,6 @@ function (can) {
 			// The result of transforming:
 			// 
 			// `<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %>`
-			/**
-			 * @hide
-			 * Transforms the EJS template to add support for shared blocks.
-			 * Essentially, this breaks up EJS tags into multiple EJS tags
-			 * if they contained unmatched brackets.
-			 *
-			 * For example, this doesn't work:
-			 *	<% if (1) { %><% if (1) { %> hi <% } } %>
-			 * ...without isolated EJS blocks:
-			 *	<% if (1) { %><% if (1) { %> hi <% } %><% } %>
-			 * The result of transforming:
-			 *	<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %>
-			 */
 			transform: function (source) {
 				return source.replace(/<%([\s\S]+?)%>/gm, function (whole, part) {
 					var brackets = [],
