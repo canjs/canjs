@@ -3,6 +3,12 @@
 @parent guides 5
 -->
 
+__2.0.7__ ( Mar 26 2014 )
+
+- change: [Configuration for AMD development build](https://github.com/bitovi/canjs/pull/821)
+- change: [2.0.6 dev errors](https://github.com/bitovi/canjs/issues/817)
+- change: [AMD dev build](https://github.com/bitovi/canjs/issues/809)
+
 __2.0.6__ ( Mar 14 2014 )
 
 - change: [Allow type inference for fixture parameters.](https://github.com/bitovi/canjs/pull/792)

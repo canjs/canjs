@@ -347,6 +347,7 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 			attrs = this.__get();
 		}
 		can.each(attrs, function (val, name) {
+			can.__reading(val, name);
 			var type, converter;
 			// If this is an observe, check that it wasn't serialized earlier in the stack.
 			if (val instanceof can.Map && can.inArray(val._cid, stack) > -1) {
@@ -368,6 +369,9 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 				val;
 			}
 		});
+
+		can.__reading(this, '__keys');
+
 		if (typeof attrs.length !== 'undefined') {
 			where.length = attrs.length;
 		}

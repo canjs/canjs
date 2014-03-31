@@ -1085,4 +1085,24 @@ steal("can/component", function () {
 		delete window.tempMap;
 	});
 
+	test('Same component tag nested', function () {
+		can.Component({
+			'tag': 'my-tag',
+			template: '<p><content/></p>'
+		});
+		//simplest case
+		var template = can.view.mustache('<my-tag>Outter<my-tag>Inner</my-tag></my-tag>');
+		//complex case
+		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag>1<my-tag>0</my-tag></my-tag></my-tag></my-tag>');
+		//edge case for new logic (same custom tag at same depth as one previously encountered)
+		var template3 = can.view.mustache('<my-tag>First</my-tag><my-tag>Second</my-tag>');
+		can.append(can.$('#qunit-test-area'), template({}));
+		equal(can.$('#qunit-test-area p').length, 2, 'proper number of p tags');
+		can.append(can.$('#qunit-test-area'), template2({}));
+		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
+		can.append(can.$('#qunit-test-area'), template3({}));
+		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
+
+	});
+
 });
