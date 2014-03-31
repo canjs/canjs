@@ -35,11 +35,16 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// rebinds all templated event handlers.
 					can.extend({
 						setup: function (el, options) {
+							// call `can.Control.prototype.setup` on the element
 							var res = can.Control.prototype.setup.call(this, el, options);
+							// set the scope to the one passed from the `options` object
 							this.scope = options.scope;
 							var self = this;
+							// rebind events on the `scope` change
 							this.on(this.scope, "change", function updateScope() {
+								// rebind events
 								self.on();
+								// manually rebind this function after this change
 								self.on(self.scope, "change", updateScope);
 							});
 							return res;
@@ -73,10 +78,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					if (this.prototype.template) {
 						if (typeof this.prototype.template === "function") {
 							var temp = this.prototype.template;
+							// if `this.prototype.template` is a function create renderer from it by
+							// wrapping it with the anonymous function that will pass it the arguments
 							this.renderer = function () {
 								return can.view.frag(temp.apply(null, arguments));
 							};
 						} else {
+							// otherwise create the render from the string
 							this.renderer = can.view.mustache(this.prototype.template);
 						}
 					}
@@ -114,7 +122,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// get the value in the scope for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
-
 					var name = can.camelize(node.nodeName.toLowerCase()),
 						value = node.value;
 					// ignore attributes already in ScopeMappings
@@ -135,13 +142,14 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						componentScope.attr(name, newVal);
 						scopePropertyUpdating = null;
 					};
-					// compute only returned if bindable
 
+					// compute only returned if bindable
 					compute.bind("change", handler);
 
 					// set the value to be added to the scope
 					initalScopeData[name] = compute();
 
+					// we don't need to listen to the compute `change` if it doesn't have any dependencies
 					if (!compute.hasDependencies) {
 						compute.unbind("change", handler);
 					} else {
@@ -154,24 +162,29 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					}
 
 				});
-
 				if (this.constructor.Map) {
+					// if `Map` property is set on the constructor use it to wrap the `initialScopeData`
 					componentScope = new this.constructor.Map(initalScopeData);
 				} else if (this.scope instanceof can.Map) {
+					// if `this.scope` is instance of `can.Map` assign it to the `componentScope`
 					componentScope = this.scope;
 				} else if (can.isFunction(this.scope)) {
-
+					// if `this.scope` is a function, call the function and 
 					var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
-					// if the function returns a can.Map, use that as the scope
+
 					if (scopeResult instanceof can.Map) {
+						// if the function returns a can.Map, use that as the scope
 						componentScope = scopeResult;
 					} else if (scopeResult.prototype instanceof can.Map) {
+						// if `scopeResult` is of a `can.Map` type, use it to wrap the `initialScopeData`
 						componentScope = new scopeResult(initalScopeData);
 					} else {
+						// otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialScopeData`
 						componentScope = new(can.Map.extend(scopeResult))(initalScopeData);
 					}
 
 				}
+				// object to hold the bind handlers so we can tear them down
 				var handlers = {};
 				// setup reverse bindings
 				can.each(twoWayBindings, function (computeData, prop) {
@@ -192,27 +205,31 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				});
 				// setup attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings)) {
-
+					// bind on the `attributes` event and update the scope
 					can.bind.call(el, "attributes", function (ev) {
+						// convert attribute name from `attribute-name` to `attributeName` 
 						var camelized = can.camelize(ev.attributeName);
 						if (component.constructor.attributeScopeMappings[camelized]) {
+							// if there is a mapping for this attribute, update the `componentScope` attribute
 							componentScope.attr(camelized, el.getAttribute(ev.attributeName));
 						}
 					});
 
 				}
 
+				// set `componentScope` to `this.scope` and set it to the element's `data` object as a `scope` property
 				this.scope = componentScope;
 				can.data(can.$(el), "scope", this.scope);
 
 				// create a real Scope object out of the scope property
 				var renderedScope = hookupOptions.scope.add(this.scope),
 
-					// setup helpers to callback with `this` as the component
 					options = {
 						helpers: {}
 					};
 
+
+				// setup helpers to callback with `this` as the component
 				can.each(this.helpers || {}, function (val, prop) {
 					if (can.isFunction(val)) {
 						options.helpers[prop] = function () {
@@ -223,6 +240,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				// create a control to listen to events
 				this._control = new this.constructor.Control(el, {
+					// pass the scope to the control so we can listen to it's changes
 					scope: this.scope
 				});
 
@@ -265,27 +283,35 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// otherwise render the contents between the 
 					frag = can.view.frag(hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : "");
 				}
+				// append resulting fragment to the element
 				can.appendChild(el, frag);
 			}
 		});
 
+	// if there is a `$` object and it has the `fn` object then create the `scope` plugin that returns
+	// the scope object
 	if (window.$ && $.fn) {
 		$.fn.scope = function (attr) {
 			if (attr) {
+				// if `attr` is passed to the `scope` plugin return the value of that attribute on the `scope` object
 				return this.data("scope")
 					.attr(attr);
 			} else {
+				// otherwise return the whole scope
 				return this.data("scope");
 			}
 		};
 	}
 
+	// define `can.scope` function that can be used to retrieve the `scope` from the element
 	can.scope = function (el, attr) {
 		el = can.$(el);
 		if (attr) {
+			// if `attr` is passed to the `can.scope` function return the value of that attribute on the `scope` object
 			return can.data(el, "scope")
 				.attr(attr);
 		} else {
+			// otherwise return the whole scope
 			return can.data(el, "scope");
 		}
 	};
