@@ -114,7 +114,6 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 		}
 	},
-		// TODO: Come back here and work on these - Josh
 		// A helper function that takes what's called with response
 		// and moves some common args around to make it easier to call
 		extractResponse = function (status, statusText, responses, headers) {
@@ -125,7 +124,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				statusText = "success";
 				status = 200;
 			}
-			// if we get response(200, RESPONSES, HEADERS)
+			// If we get response(200, RESPONSES, HEADERS)
 			if (typeof statusText !== "string") {
 				headers = responses;
 				responses = statusText;
@@ -136,8 +135,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 			return [status, statusText, extractResponses(this, responses), headers];
 		},
-		// If we get data instead of responses,
-		// make sure we provide a response type that matches the first datatype (typically json)
+		// If we get data instead of responses, make sure we provide a response 
+		// type that matches the first datatype (typically JSON)
 		extractResponses = function (settings, responses) {
 			var next = settings.dataTypes ? settings.dataTypes[0] : (settings.dataType || 'json');
 			if (!responses || !responses[next]) {
@@ -525,7 +524,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					var id = getId(request);
 
 					// TODO: make it work with non-linear ids ..
-					// Retrieve
+					// Retrieve item that matched ID, and merge request data into it.
 					can.extend(findOne(id), request.data);
 					response({
 						id: getId(request)
@@ -538,6 +537,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// Simulates a can.Model.destroy to a fixture
 				destroy: function (request) {
 					var id = getId(request);
+					// Find item with matching ID and remove it from the store.
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
@@ -557,10 +557,13 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 					can.extend(item, settings.data);
 
+					// If an ID wasn't passed into the request, we give the item
+					// a unique ID.
 					if (!item.id) {
 						item.id = currentId++;
 					}
 
+					// Push the new item into the store.
 					items.push(item);
 					response({
 						id: item.id
@@ -612,26 +615,33 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		// Creates either a random number or a random selection of variables
 		rand: function randomize(arr, min, max) {
 			if (typeof arr === 'number') {
+				// If can.fixture.rand(NUMBER, NUMBER) return a random number
+				// between these two numbers
 				if (typeof min === 'number') {
 					return arr + Math.floor(Math.random() * (min - arr));
+				// If can.fixture.rand(NUMBER) return a random number between
+				// zero and that number.
 				} else {
 					return Math.floor(Math.random() * arr);
 				}
 
 			}
 			var rand = randomize;
-			// get a random set
+			
 			if (min === undefined) {
+				// If can.fixture.rand(ARRAY), return a random number of elements
+				// from that array.
 				return rand(arr, rand(arr.length + 1));
 			}
-			// get a random selection of arr
+
+			// Get a random selection of the passed in array.
 			var res = [];
 			arr = arr.slice(0);
-			// set max
 			if (!max) {
+				// If max isn't set, set it to min
 				max = min;
 			}
-			//random max
+			// Randomize the maximum amount of elements to return
 			max = min + Math.round(rand(max - min));
 			for (var i = 0; i < max; i++) {
 				res.push(arr.splice(rand(arr.length), 1)[0]);
