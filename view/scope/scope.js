@@ -1,20 +1,52 @@
-steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compute', function (can) {
-	var escapeReg = /(\\)?\./g;
-	var escapeDotReg = /\\\./g;
-	var getNames = function (attr) {
-		var names = [],
-			last = 0;
-		attr.replace(escapeReg, function (first, second, index) {
-			if (!second) {
-				names.push(attr.slice(last, index)
-					.replace(escapeDotReg, '.'));
-				last = index + first.length;
-			}
-		});
-		names.push(attr.slice(last)
-			.replace(escapeDotReg, '.'));
-		return names;
-	};
+// # scope.js
+// `can.view.Scope`
+//
+// This allows you to define a scope and then retrieve values from that scope using a key.
+
+steal(
+    'can/util',
+    'can/construct',
+    'can/map',
+    'can/list',
+    'can/view',
+    'can/compute', function (can) {
+
+    // ## Helpers
+
+        // Regex for escaped periods
+	var escapeReg = /(\\)?\./g,
+        // Regex for double escaped periods
+        escapeDotReg = /\\\./g,
+        // **getNames**
+        // Returns array of names by splitting provided string by periods and single escaped periods.
+        // ```getNames("a.b\.c.d\\.e") //-> ['a', 'b', 'c', 'd.e']```
+        getNames = function (attr) {
+            var names   = [],
+                last    = 0;
+            // Goes through attr string and places the letters between the periods and escaped periods into the
+            // `names` array.  Double escaped periods are ignored.
+            attr.replace(escapeReg, function (first, second, index) {
+                // If period is double escaped then leave in place
+                if (!second) {
+                    names.push(
+                        attr
+                            .slice(last, index)
+                            // replaces double-escaped period with period
+                            .replace(escapeDotReg, '.')
+                    );
+                    last = index + first.length;
+                }
+            });
+            // Adds last portion of attr to names array
+            names.push(
+                    attr
+                        .slice(last)
+                        // replaces double-escaped period with period
+                        .replace(escapeDotReg, '.')
+                );
+            return names;
+        };
+
 	/**
 	 * @add can.view.Scope
 	 */
@@ -24,14 +56,12 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 		 * @static
 		 */
 		{
+            // ## Scope.read
 			// reads properties from a parent.  A much more complex version of getObject.
 			/**
-			 * @function can.view.Scope.read read
 			 * @parent can.view.Scope.static
 			 *
 			 * @signature `Scope.read(parent, reads, options)`
-			 *
-			 * Read properties from an object.
 			 *
 			 * @param {*} parent A parent object to read properties from.
 			 * @param {Array<String>} reads An array of properties to read.
@@ -57,15 +87,14 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 		 */
 		{
 			init: function (context, parent) {
-				this._context = context;
-				this._parent = parent;
-				this.__cache = {};
+				this._context   = context;
+				this._parent    = parent;
+				this.__cache    = {};
 			},
+
+            // ## Scope.prototype.attr
+            // Reads a value from the current context or parent contexts.
 			/**
-			 * @function can.view.Scope.prototype.attr
-			 *
-			 * Reads a value from the current context or parent contexts.
-			 *
 			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
 			 * property name that includes a dot.
 			 *
@@ -88,23 +117,21 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 			 *     curScope.attr("length") //-> 2
 			 */
 			attr: function (key) {
-				// reads for whatever called before attr.  It's possible
+				// Reads for whatever called before attr.  It's possible
 				// that this.read clears them.  We want to restore them.
 				var previousReads = can.__clearReading(),
 					res = this.read(key, {
 						isArgument: true,
 						returnObserveMethods: true,
 						proxyMethods: false
-					})
-						.value;
+					}).value;
 				can.__setReading(previousReads);
 				return res;
 			},
+
+            // ## Scope.prototype.add
+            // Creates a new scope with its parent set as the current scope.
 			/**
-			 * @function can.view.Scope.prototype.add
-			 *
-			 * Creates a new scope with its parent set as the current scope.
-			 *
 			 * @param {*} context The context of the new scope object.
 			 *
 			 * @return {can.view.Scope}  A scope object.
@@ -132,13 +159,11 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					return this;
 				}
 			},
+
+            // ## Scope.prototype.computeData
+            // Provides a compute that represents a key's value and other information about where the value
+            // was found.
 			/**
-			 * @function can.view.Scope.prototype.computeData
-			 *
-			 * @description Provides a compute that represents a
-			 * key's value and other information about where the value was found.
-			 *
-			 *
 			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
 			 * property name that includes a dot.
 			 *
@@ -223,12 +248,10 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 				return computeData;
 
 			},
+
+            // ## Scope.prototype.compute
+            // Provides a get-set compute that represents a key's value.
 			/**
-			 * @function can.view.Scope.prototype.compute
-			 *
-			 * @description Provides a get-set compute that represents a
-			 * key's value.
-			 *
 			 * @signature `scope.compute( key, [options] )`
 			 * @release 2.1
 			 *
@@ -243,12 +266,11 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 				return this.computeData(key, options)
 					.compute;
 			},
+
+            // ## Scope.prototype.read
+            // Read a key value from the scope and provide useful information about what was found along the way.
 			/**
 			 * @hide
-			 * @function can.view.Scope.prototype.read read
-			 *
-			 * Read a key value from the scope and provide useful information
-			 * about what was found along the way.
 			 *
 			 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot.
 			 * @param {can.view.Scope.readOptions} options that configure how this gets read.
@@ -278,19 +300,19 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					};
 				}
 
-				// Split the name up.
+				// Array of names from splitting attr string into names.  ```"a.b\.c.d\\.e" //-> ['a', 'b', 'c', 'd.e']```
 				var names = attr.indexOf('\\.') === -1 ?
-				// Reference doesn't contain escaped periods
-				attr.split('.')
-				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
-				: getNames(attr),
+                        // Reference doesn't contain escaped periods
+                        attr.split('.')
+                        // Reference contains escaped periods ```(`a.b\.c.foo` == `a["b.c"].foo)```
+                        : getNames(attr),
 					// The current context (a scope is just data and a parent scope).
 					context,
 					// The current scope.
 					scope = this,
 					// While we are looking for a value, we track the most likely place this value will be found.  
 					// This is so if there is no me.name.first, we setup a listener on me.name.
-					// The most likely canidate is the one with the most "read matches" "lowest" in the
+					// The most likely candidate is the one with the most "read matches" "lowest" in the
 					// context chain.
 					// By "read matches", we mean the most number of values along the key.
 					// By "lowest" in the context chain, we mean the closest to the current context.
@@ -314,6 +336,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 					currentObserve,
 					// Tracks the reads to get the value for a scope.
 					currentReads;
+
 				// While there is a scope/context to look in.
 				while (scope) {
 					// get the context
@@ -376,6 +399,7 @@ steal('can/util', 'can/construct', 'can/map', 'can/list', 'can/view', 'can/compu
 				}
 			}
 		});
+
 	can.view.Scope = Scope;
 	return Scope;
 });
