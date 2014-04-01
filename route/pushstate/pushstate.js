@@ -1,5 +1,3 @@
-/*jshint maxdepth:6*/
-
 // # can/route/pushstate/pushstate.js
 //
 // Plugin for `can.route` which uses browser `history.pushState` support
@@ -8,6 +6,8 @@
 // It registers itself as binding on `can.route`, intercepts `click` events
 // on `<a>` elements across document and accordingly updates `can.route` state
 // and window's pathname.
+
+/*jshint maxdepth:6*/
 
 steal('can/util', 'can/route', function (can) {
 	"use strict";
@@ -58,13 +58,15 @@ steal('can/util', 'can/route', function (can) {
 			paramsMatcher: /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/,
 			querySeparator: '?',
 
+			// ## bind
+
 			// Intercepts clicks on `<a>` elements and rewrites original `history` methods.
 			bind: function () {
 				// Intercept routable links.
 				can.delegate.call(can.$(document.documentElement), 'a', 'click', anchorClickHandler);
 
 				// Rewrites original `pushState`/`replaceState` methods on `history` and keeps pointer to original methods
-				can.each(methodsToOverride, function (method) {
+				can.each(methodsToOverwrite, function (method) {
 					originalMethods[method] = window.history[method];
 					window.history[method] = function (state, title, url) {
 						// Avoid doubled history states (with pushState).
@@ -82,15 +84,19 @@ steal('can/util', 'can/route', function (can) {
 				can.bind.call(window, 'popstate', can.route.setState);
 			},
 
+			// ## unbind
+
 			// Unbinds and restores original `history` methods
 			unbind: function () {
 				can.undelegate.call(can.$(document.documentElement), 'click', 'a', anchorClickHandler);
 
-				can.each(methodsToOverride, function (method) {
+				can.each(methodsToOverwrite, function (method) {
 					window.history[method] = originalMethods[method];
 				});
 				can.unbind.call(window, 'popstate', can.route.setState);
 			},
+
+			// ## matchingPartOfURL
 
 			// Returns matching part of url without root.
 			matchingPartOfURL: function () {
@@ -101,6 +107,8 @@ steal('can/util', 'can/route', function (can) {
 				return loc.substr(index + root.length);
 			},
 
+			// ## setURL
+
 			// Updates URL by calling `pushState`.
 			setURL: function (path) {
 				// Keeps hash if not in path.
@@ -110,6 +118,8 @@ steal('can/util', 'can/route', function (can) {
 				window.history.pushState(null, null, can.route._call("root") + path);
 			}
 		};
+
+		// ## anchorClickHandler
 
 		// Handler function for `click` events.
 		var anchorClickHandler = function (e) {
@@ -144,6 +154,9 @@ steal('can/util', 'can/route', function (can) {
 				}
 			}
 		},
+
+			// ## cleanRoot
+
 			// Always returns clean root, without domain.
 			cleanRoot = function () {
 				var domain = location.protocol + "//" + location.host,
