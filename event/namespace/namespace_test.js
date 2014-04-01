@@ -27,7 +27,7 @@ steal('can/event/namespace', 'can/test', function () {
 		equal(count, 1, 'Action unbound by namespace');
 	});
 
-	test('Eents with multiple namespaces', function() {
+	test('Events with multiple namespaces', function() {
 		var node = can.extend({ name: 'root' }, can.event),
 			count = 0;
 			fn = function(ev) {

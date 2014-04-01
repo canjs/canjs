@@ -41,9 +41,7 @@ steal('can/event/propagate', 'can/test', function (event) {
 		// Test stop propagation
 		node1.bind('stop', function(ev) {
 			// This should never fire
-			notEqual(ev.target.name, 'child', 'target is node3');
-			notEqual(ev.currentTarget.name, 'root', 'currentTarget is node1');
-			notEqual(this.name, 'root', 'delegate is node1');
+			ok(false);
 		});
 		node2.bind('stop', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');
@@ -71,9 +69,7 @@ steal('can/event/propagate', 'can/test', function (event) {
 		// Test stop propagation
 		node1.bind('stop', function(ev) {
 			// This should never fire
-			notEqual(ev.target.name, 'child', 'target is node3');
-			notEqual(ev.currentTarget.name, 'root', 'currentTarget is node1');
-			notEqual(this.name, 'root', 'delegate is node1');
+			ok(false);
 		});
 		node2.bind('stop', function(ev) {
 			equal(ev.target.name, 'child', 'target is node3');

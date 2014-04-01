@@ -117,11 +117,11 @@ steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/event', 'can/util/fra
 			// If we can bind to it...
 			if (this.bind && this.bind !== can.bind) {
 				this.bind(ev, cb);
+			} else if (this.nodeName && (this.nodeType && this.nodeType !== 11)) {
+				can.$(this)
+					.addEvent(ev, cb);
 			} else if (this.addEvent) {
 				this.addEvent(ev, cb);
-			} else if (this.nodeName && this.nodeType === 1) {
-				$(this)
-					.addEvent(ev, cb);
 			} else {
 				// Make it bind-able...
 				can.addEvent.call(this, ev, cb);
@@ -132,12 +132,11 @@ steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/event', 'can/util/fra
 			// If we can bind to it...
 			if (this.unbind && this.unbind !== can.unbind) {
 				this.unbind(ev, cb);
+			} else if (this.nodeName && (this.nodeType && this.nodeType !== 11)) {
+				can.$(this)
+					.removeEvent(ev, cb);
 			} else if (this.removeEvent) {
 				this.removeEvent(ev, cb);
-			}
-			if (this.nodeName && this.nodeType === 1) {
-				$(this)
-					.removeEvent(ev, cb);
 			} else {
 				// Make it bind-able...
 				can.removeEvent.call(this, ev, cb);

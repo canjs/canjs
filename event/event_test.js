@@ -104,28 +104,33 @@ steal('can/event', 'can/test', function (event) {
 		parent.stopListening(child, 'change');
 		ok(true, 'did not error');
 	});
-	test('bind on document', function () {
-		var called = false,
-			handler = function () {
-				called = true;
-			};
-		can.bind.call(document, 'click', handler);
-		can.trigger(can.$(document), 'click');
-		ok(called, 'got click event');
-		ok(true, 'did not error');
-		can.unbind.call(document, 'click', handler);
-	});
-	test('delegate on document', function () {
-		var called = false,
-			handler = function () {
-				called = true;
-			};
-		can.delegate.call(document, 'body', 'click', handler);
-		can.trigger(can.$(document.body), 'click');
-		ok(called, 'got click event');
-		ok(true, 'did not error');
-		can.undelegate.call(document, 'body', 'click', handler);
-	});
+
+	// Disable document tests for MooTools
+	// MooTools doesn't support dispatching events on the document
+	if (!window.MooTools) {
+		test('bind on document', function () {
+			var called = false,
+				handler = function () {
+					called = true;
+				};
+			can.bind.call(document, 'click', handler);
+			can.trigger(can.$(document), 'click');
+			ok(called, 'got click event');
+			ok(true, 'did not error');
+			can.unbind.call(document, 'click', handler);
+		});
+		test('delegate on document', function () {
+			var called = false,
+				handler = function () {
+					called = true;
+				};
+			can.delegate.call(document, 'body', 'click', handler);
+			can.trigger(can.$(document.body), 'click');
+			ok(called, 'got click event');
+			ok(true, 'did not error');
+			can.undelegate.call(document, 'body', 'click', handler);
+		});
+	}
 
 	test('Delegate/undelegate should fallback to using bind/unbind (#754)', function() {
 		var bind_fallback_fired = false,
@@ -184,5 +189,43 @@ steal('can/event', 'can/test', function (event) {
 		obj.dispatch('mixin');
 		equal(mixin, 1, 'one should only fire a handler once (mixin)');
 
+	});
+
+	test('Test events using mixin', function() {
+		var obj = {}, fn;
+		can.extend(obj, can.event);
+
+		// Verify bind/unbind/dispatch mixins
+		var bindCount = 0;
+		obj.bind('action', fn = function() {
+			++bindCount;
+		});
+		obj.dispatch('action');
+		obj.dispatch('action');
+		obj.unbind('action', fn);
+		obj.dispatch('action');
+		equal(bindCount, 2, 'action triggered twice');
+
+		// Verify one mixin
+		bindCount = 0;
+		obj.one('action', fn = function() {
+			++bindCount;
+		});
+		obj.dispatch('action');
+		obj.dispatch('action');
+		equal(bindCount, 1, 'action triggered only once, then unbound');
+
+		// Verify listenTo/stopListening
+		var other = {};
+		bindCount = 0;
+		can.extend(other, can.event);
+		obj.listenTo(other, 'action', fn = function() {
+			++bindCount;
+		});
+		other.dispatch('action');
+		other.dispatch('action');
+		obj.stopListening(other, 'action', fn);
+		other.dispatch('action');
+		equal(bindCount, 2, 'action triggered twice');
 	});
 });
