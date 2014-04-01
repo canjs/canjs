@@ -278,7 +278,7 @@ steal('can/util', 'can/construct', function (can) {
 				controls.splice(can.inArray(this, controls), 1);
 
 				// Fire an event in case we want to know if the `control` is removed.
-				can.trigger(this, "destroyed"); 
+				can.trigger(this, "destroyed");
 
 				this.element = null;
 			}
