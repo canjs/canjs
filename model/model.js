@@ -1583,8 +1583,8 @@ steal('can/util','can/observe', function( can ) {
 		_changes: function(ev, attr){
 			can.Observe.List.prototype._changes.apply(this, arguments );
 			if(/\w+\.destroyed/.test(attr)){
-				var index = this.indexOf(ev.target);
-				if (index != -1) {
+				var index;
+				while((index = this.indexOf(ev.target)) > -1) {
 					this.splice(index, 1);
 				}
 			}
