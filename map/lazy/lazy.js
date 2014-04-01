@@ -277,7 +277,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 				if (newVal instanceof can.Map) {
 					self.__set(prop, newVal, curVal, data);
 					// if its an object, let attr merge
-				} else if (can.Map.helpers.canMakeObserve(curVal) && can.Map.helpers.canMakeObserve(newVal) && curVal.attr) {
+				} else if (can.Map.helpers.isObservable(curVal) && can.Map.helpers.canMakeObserve(newVal) && curVal.attr) {
 					curVal.attr(newVal, remove);
 					// otherwise just set
 				} else if (curVal !== newVal) {
