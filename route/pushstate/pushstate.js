@@ -5,7 +5,7 @@
 // Plugin for `can.route` which uses browser `history.pushState` support
 // to update window's pathname instead of the `hash`.
 //
-// Registers itself as handler on `can.route`, intercepts `click` events
+// It registers itself as binding on `can.route`, intercepts `click` events
 // on `<a>` elements across document and accordingly updates `can.route` state
 // and window's pathname.
 
@@ -155,10 +155,10 @@ steal('can/util', 'can/route', function (can) {
 				return root;
 			},
 			// Original methods on `history` that will be overwritten
-			methodsToOverride = ['pushState', 'replaceState'],
+			methodsToOverwrite = ['pushState', 'replaceState'],
 			// A place to store pointers to original `history` methods.
 			originalMethods = {},
-			// Used to tell setURL to include the hash because we clicked on a link
+			// Used to tell setURL to include the hash because we clicked on a link.
 			includeHash = false;
 
 		// Enables plugin, by default `hashchange` binding is used.
