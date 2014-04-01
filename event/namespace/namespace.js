@@ -2,7 +2,10 @@
 // 
 // This is a `can/event` plugin that implements the namespacing for events.
 // Namespacing allows you to add listeners for a given namespace, then remove 
-// them later by just using the namespace:
+// them later by just using the namespace.
+//
+// Namespacing is **disabled** for can.Map-based classes, because Maps use
+// the same syntax as namespaces for binding to deep attributes.
 //
 // ```
 // object.bind("change.orange", function() {});
@@ -18,6 +21,12 @@ steal('can/util/can.js', 'can/event', function(can) {
 	// Adds an event listener (with namespacing support included). 
 	var addEvent = can.addEvent;
 	can.addEvent = can.event.addEvent = can.event.on = can.event.bind = function(event, fn) {
+		// Bypass namespaces for Maps
+		// Otherwise it conflicts with map attribute binding.
+		if (can.Map && this instanceof can.Map) {
+			return addEvent.call(this, event, fn);
+		}
+
 		// Split the namespaces out
 		if (event.indexOf('.') > -1) {
 			var namespaces = event.split('.');
@@ -43,6 +52,12 @@ steal('can/util/can.js', 'can/event', function(can) {
 	// Removes an event listener (with namespacing support included). 
 	var removeEvent = can.removeEvent;
 	can.removeEvent = can.event.removeEvent = can.event.off = can.event.unbind = function(event, fn, __validate) {
+		// Bypass namespaces for Maps
+		// Otherwise it conflicts with map attribute binding.
+		if (can.Map && this instanceof can.Map) {
+			return removeEvent.call(this, event, fn);
+		}
+
 		// Split the namespaces out
 		if (event && event.indexOf('.') > -1) {
 			var namespaces = event.split('.');
