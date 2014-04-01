@@ -1,3 +1,6 @@
+@hide
+**This plugin is in development and should not be included in the official documentation.**
+
 @page can.event.delegate
 @parent can.event.plugins
 @plugin can/event/delegate

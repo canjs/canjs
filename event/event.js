@@ -18,6 +18,10 @@ steal('can/util/can.js', function (can) {
 	// This consists of storing a cache of event listeners on each object,
 	// that are iterated through later when events are dispatched.
 	/**
+	 * @function can.event.addEvent
+	 * @parent can.event.static
+	 * @signature `obj.addEvent( event, handler )`
+	 *
 	 * Add a basic event listener to an object.
 	 *
 	 * @param {String} event The name of the event to listen for.
@@ -40,13 +44,18 @@ steal('can/util/can.js', function (can) {
 	// ## can.event.listenTo
 	//
 	// Listens to an event without know how bind is implemented.
-	// The primary use for this is to listen to another's objects event without 
-	// having to track the events on that object. Essentially, this is a simple 
-	// version of delegation.
+	// The primary use for this is to listen to another's objects event while 
+	// tracking events on the local object (similar to namespacing).
 	//
 	// The API was heavily influenced by BackboneJS: http://backbonejs.org/
 	/**
+	 * @function can.event.listenTo
+	 * @parent can.event.static
+	 * @signature `obj.listenTo( other, event, handler )`
+	 *
 	 * Listens for an event on another object.
+	 * This is similar to concepts like event namespacing, except that the namespace 
+	 * is the scope of the calling object.
 	 *
 	 * @param {Object} other The object to listen for events on.
 	 * @param {String} event The name of the event to listen for.
@@ -63,6 +72,8 @@ steal('can/util/can.js', function (can) {
 		// Identify the other object
 		var otherId = can.cid(other);
 		var othersEvents = idedEvents[otherId];
+		
+		// Create a local event cache
 		if (!othersEvents) {
 			othersEvents = idedEvents[otherId] = {
 				obj: other,
@@ -74,15 +85,19 @@ steal('can/util/can.js', function (can) {
 			eventsEvents = othersEvents.events[event] = [];
 		}
 
-		// Add the event
+		// Add the event, both locally and to the other object
 		eventsEvents.push(handler);
 		can.bind.call(other, event, handler);
 	};
 
-	// ## ca.nevent.stopListening
+	// ## can.event.stopListening
 	// 
 	// Stops listening for events on other objects
 	/**
+	 * @function can.event.stopListening
+	 * @parent can.event.static
+	 * @signature `obj.stopListening( other, event, handler )`
+	 *
 	 * Stops listening for an event on another object.
 	 *
 	 * @param {Object} other The object to listen for events on.
@@ -111,11 +126,15 @@ steal('can/util/can.js', function (can) {
 			var othersEvents = iterIdedEvents[cid],
 				eventsEvents;
 			other = idedEvents[cid].obj;
+
+			// Find the cache of events
 			if (!event) {
 				eventsEvents = othersEvents.events;
 			} else {
 				(eventsEvents = {})[event] = othersEvents.events[event];
 			}
+
+			// Unbind event handlers, both locally and on the other object
 			for (var eventName in eventsEvents) {
 				var handlers = eventsEvents[eventName] || [];
 				i = 0;
@@ -144,6 +163,10 @@ steal('can/util/can.js', function (can) {
 	// Removes a basic event listener from an object.
 	// This removes event handlers from the cache of listened events.
 	/**
+	 * @function can.event.removeEvent
+	 * @parent can.event.static
+	 * @signature `obj.removeEvent( event, handler )`
+	 *
 	 * Removes a basic event listener from an object.
 	 *
 	 * @param {String} event The name of the event to listen for.
@@ -178,6 +201,10 @@ steal('can/util/can.js', function (can) {
 	//
 	// Dispatches/triggers a basic event on an object.
 	/**
+	 * @function can.event.dispatch
+	 * @parent can.event.static
+	 * @signature `obj.dispatch( event, args )`
+	 *
 	 * Dispatches/triggers a basic event on an object.
 	 *
 	 * @param {String|Object} event The event to dispatch
@@ -212,6 +239,10 @@ steal('can/util/can.js', function (can) {
 	//
 	// Adds a basic event listener that listens to an event once and only once.
 	/**
+	 * @function can.event.one
+	 * @parent can.event.static
+	 * @signature `obj.one( event, handler )`
+	 *
 	 * Adds a basic event listener that listens to an event once and only once.
 	 *
 	 * @param {String} event The name of the event to listen for.
@@ -234,6 +265,14 @@ steal('can/util/can.js', function (can) {
 	// Create and export the `can.event` mixin
 	can.event = {
 		// Event method aliases
+		/**
+		 * @function can.event.on
+		 * @parent can.event.static
+		 * @signature `obj.on( event, handler )`
+		 *
+		 * Add a basic event listener to an object.
+		 * This is an alias of [can.event.addEvent addEvent].
+		 */
 		on: can.addEvent,
 		off: can.removeEvent,
 		one: can.one,

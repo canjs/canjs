@@ -3,6 +3,7 @@
 @test can/event/test.html
 @link ../docco/event.html docco
 @group can.event.plugins plugins
+@group can.event.static static
 @release 2.1
 
 @description Events
