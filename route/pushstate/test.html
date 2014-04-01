@@ -20,12 +20,10 @@
             }
 
             QUnit.config.autostart = false;
-			setTimeout(function(){
-				steal('can/route/pushstate/pushstate_test.js', function() {
-					can.dev.logLevel = 3;
-	                QUnit.start();
-				});
-			},100)
+			steal('can/route/pushstate/pushstate_test.js', function() {
+				can.dev.logLevel = 3;
+                QUnit.start();
+			});
 	    </script>
     </body>
 </html>
