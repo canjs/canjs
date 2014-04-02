@@ -871,7 +871,10 @@ steal("can/util", "can/map", function (can, Map) {
 		 * list === reversedList; // true
 		 * @codeend
 		 */
-		reverse: [].reverse,
+		reverse: function() {
+			var list = can.makeArray([].reverse.call(this));
+			this.replace(list);
+		},
 
 		/**
 		 * @function can.List.prototype.slice slice
