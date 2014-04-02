@@ -1,5 +1,6 @@
 @page can.view.bindings
 @parent canjs
+@link ../docco/bindings.html docco
 
 Provides template event bindings and two-way bindings. 
 
@@ -25,4 +26,4 @@ call a function in a [can.Mustache Mustache] [can.view.Scope scope] when an even
 Two-way bindings are documented by [can.view.bindings.can-value can-value].  This lets you
 listen to when element changes its value and automatically update an observable property.
 
-@demo can/view/bindings/hyperloop.html
+@demo can/view/bindings/doc/hyperloop.html
