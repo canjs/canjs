@@ -453,36 +453,4 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			equal(responseData.id, 2, 'the third id is 2');
 		});
 	});
-	
-	test("create a store with array and comparison object",function(){
-		
-		var store = can.fixture.store([
-			{id: 1, modelId: 1, year: 2013, name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
-			{id: 2, modelId: 1, year: 2014, name: "2014 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"},
-			{id: 2, modelId: 2, year: 2013, name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
-			{id: 2, modelId: 2, year: 2014, name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
-			{id: 2, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
-			{id: 2, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
-			{id: 2, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
-			{id: 2, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"}
-		],{year: 'i'});
-		
-		
-		can.fixture('GET /presetStore', store.findAll);
-		stop();
-		can.ajax({
-			url: "/presetStore",
-			dataType: 'json',
-			data: {year: 2013, modelId:1}
-		}).done(function(response){
-			
-			equal(response.data[0].id, 1, "got the first item");
-			equal(response.data.length, 1, "only got one item");
-			start();
-		});
-		
-		
-	});
-	
-	
 });
