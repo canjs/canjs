@@ -1455,4 +1455,24 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 
 	});
 
+	test('destroy called on multiple model references in a list (#771)', function() {
+		expect(2);
+
+		var list = new can.Model.List(),
+		Thing = can.Model.extend({
+			destroy: function() {
+				return new $.Deferred().resolve();
+			}
+		}, {});
+
+		var a = new Thing({ name: 'a' });
+		list.push(a, a);
+
+		list.bind('remove', function(ev, items, i) {
+			ok('remove event triggered');
+		});
+
+		a.destroy();
+	});
+
 });
