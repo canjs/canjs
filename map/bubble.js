@@ -2,7 +2,7 @@ steal('can/util', function(can){
 	
 	
 
-	var bubble = {
+	var bubble = can.bubble = {
 			// Given a binding, returns a string event name used to set up bubbline.
 			// If no binding should be done, undefined or null should be returned
 			event: function(map, eventName) {
