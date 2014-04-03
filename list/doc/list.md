@@ -4,7 +4,11 @@
 @test can/list/test.html
 @parent canjs
 @release 2.0
-@group can.List.plugins plugins
+
+@group can.List.prototype 0 Prototype
+@group can.List.static 1 Static
+@group can.List.plugins 2 plugins
+
 @link ../docco/list.html docco
 
 Use for observable array-like objects.
