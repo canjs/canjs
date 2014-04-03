@@ -56,7 +56,7 @@ the `attr` method which then converts the string into a JavaScript date object.
 Additionally, the control also listens for changes on the Map and 
 updates the age in the page for the new birthdate of the contact.
 
-@demo can/map/attributes/attributes.html
+@demo can/map/attributes/doc/attributes.html
 
 ### Reference types
 
@@ -229,4 +229,4 @@ The converted data will contain a list or Levels and a sword Model:
 Below is a demo that showcases associations between 2 different models to show the tasks
 for each contact and how much time they have left to complete the task(s) using converters.
 
-@demo can/map/attributes/attributes-assocations.html
+@demo can/map/attributes/doc/attributes-assocations.html

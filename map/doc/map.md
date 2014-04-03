@@ -1,7 +1,9 @@
 @constructor can.Map
 @inherits can.Construct
 @parent canjs
-@group can.Map.plugins plugins
+@group can.Map.prototype 0 Prototype
+@group can.Map.static 1 Static
+@group can.Map.plugins 2 Plugins
 @test can/map/test.html
 @plugin can/map
 @release 2.0
