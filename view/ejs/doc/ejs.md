@@ -1,9 +1,11 @@
 @constructor can.EJS
 @parent canjs
-@group can.EJS.tags Tags
+@group can.EJS.prototype 0 Prototype
+@group can.EJS.tags 1 Tags
+@link ../docco/ejs.html docco
 
 @deprecated {2.1} EJS is incompatable with [can.Component] and should
-be avioded for new projects. It will still be maintained up to 
+be avoided for new projects. It will still be maintained up to 
 3.0 and potentially after. Projects using EJS should consider
 switching to [can.stache].
 
@@ -131,7 +133,7 @@ The following demo shows an EJS template being rendered with observable data.
 It demonstrates live binding to attributes. The template and all data properties 
 are editable, so experiment!
 
-@iframe can/view/ejs/demo.html 1020
+@iframe can/view/ejs/doc/demo.html 1020
 
 ## Magic Tags
 

@@ -65,31 +65,23 @@ function (can) {
 			},
 			// ### Tokens
 			// 
-			// An ordered token registry for the scanner.
+			// An ordered token registry for the scanner. Scanner makes evaluations
+			// based on which tags are considered opening/closing as well as escaped, etc.
 			tokens: [
-				// Template
 				["templateLeft", "<%%"],
-				// Right Template
 				["templateRight", "%>"],
-				// Return Unescaped
 				["returnLeft", "<%=="],
-				// Return Escaped
 				["escapeLeft", "<%="],
-				// Comment
 				["commentLeft", "<%#"],
-				// Evaluate code
 				["left", "<%"],
-				// Right -> All have same FOR Mustache ...
 				["right", "%>"],
 				["returnRight", "%>"]
 			],
 			// ### Helpers
 			helpers: [
 				{
-					// #### name
 					// Regex to see if its a func like `()->`.
 					name: /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-					// #### fn
 					// Evaluate rocket syntax function with correct context.
 					fn: function (content) {
 						var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
@@ -163,29 +155,9 @@ function (can) {
 	});
 
 	// ## Helpers
-	// By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
-	// views.
 	// 
-	// The following helper converts a given string to upper case:
-	//
-	//     can.EJS.Helpers.prototype.toUpper = function(params) {
-	//       return params.toUpperCase();
-	//     }
-
-	// Use it like this in any EJS template:
-
-	// `<%= toUpper('javascriptmvc') %>`
-
-	// To access the current DOM element return a function that takes the element as a parameter:
-
-	//     can.EJS.Helpers.prototype.upperHtml = function(params) {
-	//       return function(el) {
-	//         $(el).html(params.toUpperCase());
-	//       }
-	//     }
-
 	// In your EJS view you can then call the helper on an element tag:
-
+	// 
 	// `<div <%= upperHtml('javascriptmvc') %>></div>`
 	EJS.Helpers = function (data, extras) {
 		this._data = data;
@@ -194,12 +166,14 @@ function (can) {
 	};
 
 	EJS.Helpers.prototype = {
-		// TODO Deprecated!!
+		// List allows for live binding a can.List easily within a template.
 		list: function (list, cb) {
 			can.each(list, function (item, i) {
 				cb(item, i, list);
 			});
 		},
+		// `each` iterates through a enumerated source(such as can.List or array)
+		// and sets up live binding when possible.
 		each: function (list, cb) {
 			// Normal arrays don't get live updated
 			if (can.isArray(list)) {
@@ -209,7 +183,7 @@ function (can) {
 			}
 		}
 	};
-	// Options for `steal`'s build.
+	// Registers options for a `steal` build.
 	can.view.register({
 		suffix: 'ejs',
 		script: function (id, src) {
