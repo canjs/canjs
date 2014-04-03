@@ -1,7 +1,7 @@
-// # scope.js
-// `can.view.Scope`
+// # can/view/scope/scope.js
 //
-// This allows you to define a scope and then retrieve values from that scope using a key.
+// This allows you to define a lookup context and parent contexts that a key's value can be retrieved from.
+// If no parent scope is provided, only the scope's context will be explored for values.
 
 steal(
     'can/util',
@@ -23,25 +23,25 @@ steal(
         getNames = function (attr) {
             var names   = [],
                 last    = 0;
-            // Goes through attr string and places the letters between the periods and escaped periods into the
+            // Goes through attr string and places the characters found between the periods and single escaped periods into the
             // `names` array.  Double escaped periods are ignored.
             attr.replace(escapeReg, function (first, second, index) {
-                // If period is double escaped then leave in place
+                /* If period is double escaped then leave in place */
                 if (!second) {
                     names.push(
                         attr
                             .slice(last, index)
-                            // replaces double-escaped period with period
+                            /* replaces double-escaped period with period */
                             .replace(escapeDotReg, '.')
                     );
                     last = index + first.length;
                 }
             });
-            // Adds last portion of attr to names array
+            /* Adds last portion of attr to names array */
             names.push(
                     attr
                         .slice(last)
-                        // replaces double-escaped period with period
+                        /* replaces double-escaped period with period */
                         .replace(escapeDotReg, '.')
                 );
             return names;
@@ -57,29 +57,8 @@ steal(
 		 */
 		{
             // ## Scope.read
-			// reads properties from a parent.  A much more complex version of getObject.
-			/**
-			 * @parent can.view.Scope.static
-			 *
-			 * @signature `Scope.read(parent, reads, options)`
-			 *
-			 * @param {*} parent A parent object to read properties from.
-			 * @param {Array<String>} reads An array of properties to read.
-			 * @param {can.view.Scope.readOptions} options Configures
-			 * how to read properties and values and register callbacks
-			 *
-			 * @return {{value: *, parent: *}} Returns an object that
-			 * provides the value and parent object.
-			 *
-			 * @option {*} value The value found by reading `reads` properties.  If
-			 * no value was found, value will be undefined.
-			 *
-			 * @option {*} parent The most immediate parent object of the value specified by `key`.
-			 *
-			 * @body
-			 *
-			 *
-			 */
+			// Scope.read was moved to can.compute.read
+			// can.compute.read reads properties from a parent.  A much more complex version of getObject.
 			read: can.compute.read
 		},
 		/**
@@ -94,28 +73,6 @@ steal(
 
             // ## Scope.prototype.attr
             // Reads a value from the current context or parent contexts.
-			/**
-			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
-			 * property name that includes a dot.
-			 *
-			 * @return {*} The found value or undefined if no value is found.
-			 *
-			 * @body
-			 *
-			 * ## Use
-			 *
-			 * `scope.attr(key)` looks up a value in the current scope's
-			 * context, if a value is not found, parent scope's context
-			 * will be explored.
-			 *
-			 *     var list = [{name: "Justin"},{name: "Brian"}],
-			 *         justin = list[0];
-			 *
-			 *     var curScope = new can.view.Scope(list).add(justin);
-			 *
-			 *     curScope.attr("name") //-> "Justin"
-			 *     curScope.attr("length") //-> 2
-			 */
 			attr: function (key) {
 				// Reads for whatever called before attr.  It's possible
 				// that this.read clears them.  We want to restore them.
@@ -130,28 +87,11 @@ steal(
 			},
 
             // ## Scope.prototype.add
-            // Creates a new scope with its parent set as the current scope.
-			/**
-			 * @param {*} context The context of the new scope object.
-			 *
-			 * @return {can.view.Scope}  A scope object.
-			 *
-			 * @body
-			 *
-			 * ## Use
-			 *
-			 * `scope.add(context)` creates a new scope object that
-			 * first looks up values in context and then in the
-			 * parent `scope` object.
-			 *
-			 *     var list = [{name: "Justin"},{name: "Brian"}],
-			 *         justin = list[0];
-			 *
-			 *     var curScope = new can.view.Scope(list).add(justin);
-			 *
-			 *     curScope.attr("name") //-> "Justin"
-			 *     curScope.attr("length") //-> 2
-			 */
+            // Creates a new scope and sets the current scope to be the parent.
+            // ```
+            // var scope = new can.view.Scope([{name:"Chris"}, {name: "Justin"}]).add({name: "Brian"});
+            // scope.attr("name") //-> "Brian"
+            // ```
 			add: function (context) {
 				if (context !== this._context) {
 					return new this.constructor(context, this);
@@ -161,50 +101,8 @@ steal(
 			},
 
             // ## Scope.prototype.computeData
-            // Provides a compute that represents a key's value and other information about where the value
-            // was found.
-			/**
-			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
-			 * property name that includes a dot.
-			 *
-			 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
-			 *
-			 * @return {{}} An object with the following values:
-			 *
-			 * @option {can.compute} compute A compute that returns the
-			 * value of `key` looked up in the scope's context or parent context. This compute can
-			 * also be written to, which will set the observable attribute or compute value at the
-			 * location represented by the key.
-			 *
-			 * @option {can.view.Scope} scope The scope the key was found within. The key might have
-			 * been found in a parent scope.
-			 *
-			 * @option {*} initialData The initial value at the key's location.
-			 *
-			 * @body
-			 *
-			 * ## Use
-			 *
-			 * `scope.computeData(key, options)` is used heavily by [can.Mustache] to get the value of
-			 * a [can.Mustache.key key] value in a template. Configure how it reads values in the
-			 * scope and what values it returns with the [can.view.Scope.readOptions options] argument.
-			 *
-			 *     var context = new Map({
-			 *       name: {first: "Curtis"}
-			 *     })
-			 *     var scope = new can.view.Scope(context)
-			 *     var computeData = scope.computeData("name.first");
-			 *
-			 *     computeData.scope === scope //-> true
-			 *     computeData.initialValue    //-> "Curtis"
-			 *     computeData.compute()       //-> "Curtis"
-			 *
-			 * The `compute` value is writable.  For example:
-			 *
-			 *     computeData.compute("Andy")
-			 *     context.attr("name.first") //-> "Andy"
-			 *
-			 */
+            // Finds the first location of the key in the scope and then provides a get-set compute that represents the key's value
+            // and other information about where the value was found.
 			computeData: function (key, options) {
 				options = options || {
 					args: []
@@ -212,79 +110,64 @@ steal(
 				var self = this,
 					rootObserve,
 					rootReads,
-					// fastRead,
 					computeData = {
+                        // computeData.compute returns a get-set compute that is tied to the first location of the provided
+                        // key in the context of the scope.
 						compute: can.compute(function (newVal) {
+                            // **Compute setter**
 							if (arguments.length) {
-								// check that there's just a compute with nothing from it ...
 								if (rootObserve.isComputed && !rootReads.length) {
 									rootObserve(newVal);
 								} else {
 									var last = rootReads.length - 1;
-									Scope.read(rootObserve, rootReads.slice(0, last))
+									can.compute.read(rootObserve, rootReads.slice(0, last))
 										.value.attr(rootReads[last], newVal);
 								}
+                            // **Compute getter**
 							} else {
-								/*if(fastRead){
-									return fastRead(rootObserve);
-								}*/
+                                // If computeData has found the value for the key in the past in an observable then go directly to
+                                // the observable (rootObserve) that the value was found in the last time and return the new value.  This
+                                // is a huge performance gain for the fact that we aren't having to check the entire scope each time.
 								if (rootObserve) {
-									return Scope.read(rootObserve, rootReads, options)
+									return can.compute.read(rootObserve, rootReads, options)
 										.value;
 								}
-								// otherwise, go get the value
+                                // If the key has not already been located in a observable then we need to search the scope for the
+                                // key.  Once we find the key then we need to return it's value and if it is found in an observable
+                                // then we need to store the observable so the next time this compute is called it can grab the value
+                                // directly from the observable.
 								var data = self.read(key, options);
 								rootObserve = data.rootObserve;
 								rootReads = data.reads;
 								computeData.scope = data.scope;
 								computeData.initialValue = data.value;
-								/*if(rootReads && rootReads.length === 1 && rootObserve instanceof can.Map) {
-									fastRead = new Function("obs","return obs.attr(\""+rootReads[0]+"\")")
-								}*/
 								return data.value;
 							}
 						})
 					};
 				return computeData;
-
 			},
 
             // ## Scope.prototype.compute
             // Provides a get-set compute that represents a key's value.
-			/**
-			 * @signature `scope.compute( key, [options] )`
-			 * @release 2.1
-			 *
-			 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
-			 * property name that includes a dot.
-			 *
-			 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
-			 *
-			 * @return {can.compute} A compute that can get or set `key`.
-			 */
 			compute: function (key, options) {
 				return this.computeData(key, options)
 					.compute;
 			},
 
             // ## Scope.prototype.read
-            // Read a key value from the scope and provide useful information about what was found along the way.
-			/**
-			 * @hide
-			 *
-			 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot.
-			 * @param {can.view.Scope.readOptions} options that configure how this gets read.
-			 *
-			 * @return {{}}
-			 *
-			 * @option {Object} parent the value's immediate parent
-			 *
-			 * @option {can.Map|can.compute} rootObserve the first observable to read from.
-			 *
-			 * @option {Array<String>} reads An array of properties that can be used to read from the rootObserve to get the value.
-			 *
-			 * @option {*} value the found value
-			 */
+            // Finds the first isntance of a key in the available scopes and returns the keys value along with the the observable the key
+            // was found in, readsData and the current scope.
+            /**
+             * @hide
+             * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot.
+             * @param {can.view.Scope.readOptions} options that configure how this gets read.
+             * @return {{}}
+             * @option {Object} parent the value's immediate parent
+             * @option {can.Map|can.compute} rootObserve the first observable to read from.
+             * @option {Array<String>} reads An array of properties that can be used to read from the rootObserve to get the value.
+             * @option {*} value the found value
+             */
 			read: function (attr, options) {
 
 				// check if we should be running this on a parent.
@@ -310,7 +193,7 @@ steal(
 					context,
 					// The current scope.
 					scope = this,
-					// While we are looking for a value, we track the most likely place this value will be found.  
+					// While we are looking for a value, we track the most likely place this value will be found.
 					// This is so if there is no me.name.first, we setup a listener on me.name.
 					// The most likely candidate is the one with the most "read matches" "lowest" in the
 					// context chain.
@@ -337,34 +220,35 @@ steal(
 					// Tracks the reads to get the value for a scope.
 					currentReads;
 
-				// While there is a scope/context to look in.
+                // Goes through each scope context provided until it finds the key (attr).  Once the key is found
+                // then it's value is returned along with an observe, the current scope and reads.
+                // While going through each scope context searching for the key, each observable found is returned and
+                // saved so that either the observable the key is found in can be returned, or in the case the key is not
+                // found in an observable the closest observable can be returned.
+
 				while (scope) {
-					// get the context
 					context = scope._context;
 					if (context !== null) {
-						// Lets try this context
-						var data = Scope.read(context, names, can.simpleExtend({
-							// Called when an observable is found.
+						var data = can.compute.read(context, names, can.simpleExtend({
+                            /* Store found observable, incase we want to set it as the rootObserve. */
 							foundObservable: function (observe, nameIndex) {
-								// Save the current observe.
 								currentObserve = observe;
 								currentReads = names.slice(nameIndex);
 							},
 							// Called when we were unable to find a value.
 							earlyExit: function (parentValue, nameIndex) {
-								// If this has more matching values,
+								/* If this has more matching values */
 								if (nameIndex > defaultPropertyDepth) {
-									// save the state.
 									defaultObserve = currentObserve;
 									defaultReads = currentReads;
 									defaultPropertyDepth = nameIndex;
 									defaultScope = scope;
-									// Clear and save readings so next attempt does not use these readings
+									/* Clear and save readings so next attempt does not use these readings */
 									defaultComputeReadings = can.__clearReading();
 								}
 							}
 						}, options));
-						// Found a matched reference.
+						// **Key was found**, return value and location data
 						if (data.value !== undefined) {
 							return {
 								scope: scope,
@@ -374,15 +258,16 @@ steal(
 							};
 						}
 					}
-					// Prevent prior readings.
+					// Prevent prior readings and then move up to the next scope.
 					can.__clearReading();
-					// Move up to the next scope.
 					scope = scope._parent;
 				}
 
-				// If there was a likely observe.
+                // **Key was not found**, return undefined for the value.  Unless an observable was
+                // found in the process of searching for the key, then return the most likely observable along with it's
+                // scope and reads.
+
 				if (defaultObserve) {
-					// Restore reading for previous compute
 					can.__setReading(defaultComputeReadings);
 					return {
 						scope: defaultScope,
@@ -391,7 +276,6 @@ steal(
 						value: undefined
 					};
 				} else {
-					// we found nothing and no observable
 					return {
 						names: names,
 						value: undefined
