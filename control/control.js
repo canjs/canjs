@@ -3,9 +3,12 @@
 // Create organized, memory-leak free, rapidly performing, stateful 
 // controls with declarative eventing binding. Used when creating UI 
 // controls with behaviors, bound to elements on the page.
+// ## helpers
 
 steal('can/util', 'can/construct', function (can) {
-	// Binds an element and returns a function that unbinds from that element.
+	// 
+	// ### bind
+	// this helper binds to one element and returns a function that unbinds from that element.
 	var bind = function (el, ev, callback) {
 
 		can.bind.call(el, ev, callback);
@@ -21,7 +24,10 @@ steal('can/util', 'can/construct', function (can) {
 		paramReplacer = /\{([^\}]+)\}/g,
 		special = can.getObject("$.event.special", [can]) || {},
 
-		// Binds an element and returns a function that unbinds.
+		// ### delegate
+		// 
+		// this helper binds to elements based on a selector and returns a 
+		// function that unbinds.
 		delegate = function (el, selector, ev, callback) {
 			can.delegate.call(el, selector, ev, callback);
 			return function () {
@@ -29,6 +35,8 @@ steal('can/util', 'can/construct', function (can) {
 			};
 		},
 
+		// ### binder
+		// 
 		// Calls bind or unbind depending if there is a selector.
 		binder = function (el, ev, callback, selector) {
 			return selector ?
@@ -42,21 +50,21 @@ steal('can/util', 'can/construct', function (can) {
 		/**
 		 * @add can.Control
 		 */
+		// ## *static functions*
 		/** 
 		 * @static
 		 */
 		{
-			// Setup pre-processes which methods are event listeners.
+			// ## can.Control.setup
+			// 
+			// This function pre-processes which methods are event listeners and which are methods of
+			// the control. It has a mechanism to allow controllers to inherit default values from super
+			// classes, like `can.Construct`, and will cache functions that are action functions (see `_isAction`)
+			// or functions with an underscored name.
 			setup: function () {
-
-				// Allow contollers to inherit "defaults" from super-classes as it is
-				// done in `can.Construct`
 				can.Construct.setup.apply(this, arguments);
 
-				// If you didn't provide a name, or are `control`, don't do anything.
 				if (can.Control) {
-
-					// Cache the underscored names, then the action functions from the prototype
 					var control = this,
 						funcName;
 
@@ -68,7 +76,10 @@ steal('can/util', 'can/construct', function (can) {
 					}
 				}
 			},
-			// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
+			// ## can.Control._shifter
+			// 
+			// Moves `this` to the first argument, wraps it with `jQuery` if it's 
+			// an element.
 			_shifter: function (context, name) {
 
 				var method = typeof name === "string" ? context[name] : name;
@@ -83,33 +94,35 @@ steal('can/util', 'can/construct', function (can) {
 				};
 			},
 
-			// Return `true` if `methodName` refers to an action.
+			// ## can.Control._isAction
+			// 
+			// Return `true` if `methodName` refers to an action. An action is a `methodName` value that
+			// is not the constructor, and is either a function or string that refers to a function, or is
+			// defined in `special`, `processors`. Detects whether `methodName` is also a valid method name.
 			_isAction: function (methodName) {
-
 				var val = this.prototype[methodName],
 					type = typeof val;
-				// if not the constructor
+
 				return (methodName !== 'constructor') &&
-				// and is a function or links to a function
 				(type === "function" || (type === "string" && isFunction(this.prototype[val]))) &&
-				// and is in special, a processor, or has a funny character
 				!! (special[methodName] || processors[methodName] || /[^\w]/.test(methodName));
 			},
-			// Takes a method name and the options passed to a control
-			// and tries to return the data necessary to pass to a processor
-			// (something that binds things).
+			// ## can.Control._action
+			// 
+			// Takes a method name and the options passed to a control and tries to return the data 
+			// necessary to pass to a processor (something that binds things).
 			// 
 			// For performance reasons, `_action` is called twice: 
 			// * It's called when the Control class is created. for templated method names (e.g., `{window} foo`), it returns null. For non-templated method names it returns the event binding data. That data is added to `this.actions`.
 			// * It is called wehn a control instance is created, but only for templated actions.
 			_action: function (methodName, options) {
 
-				// If we don't have options (a `control` instance), we'll run this 
-				// later.  
+				// If we don't have options (a `control` instance), we'll run this later. If we have
+				// options, run `can.sub` to replace the action template `{}` with values from the `options`
+				// or `window`. If a `{}` template resolves to an object, `convertedName` will be an array.
+				// In that case, the event name we want will be the last item in that array.
 				paramReplacer.lastIndex = 0;
 				if (options || !paramReplacer.test(methodName)) {
-					// If we have options, run `.sub` to replace templates `{}` with a
-					// value from the options or the window
 					var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
 					if (!convertedName) {
 						//!steal-remove-start
@@ -117,8 +130,6 @@ steal('can/util', 'can/construct', function (can) {
 						//!steal-remove-end
 						return null;
 					}
-					// If a `{}` template resolves to an object, `convertedName` will be an array
-					// Take the event name from the end of that array.
 					var arr = can.isArray(convertedName),
 						name = arr ? convertedName[1] : convertedName,
 						parts = name.split(/\s+/g),
@@ -134,21 +145,28 @@ steal('can/util', 'can/construct', function (can) {
 			_lookup: function (options) {
 				return [options, window];
 			},
+			// ## can.Control.processors
+			// 
 			// An object of `{eventName : function}` pairs that Control uses to 
-			// hook up events auto-magically.
+			// hook up events automatically.
 			processors: {},
+			// ## can.Control.defaults
 			// A object of name-value pairs that act as default values for a control instance
 			defaults: {}
 		}, {
+			// ## *prototype functions*
 			/**
 			 * @prototype
 			 */
+			// ## setup
+			// 
 			// Setup is where most of the Control's magic happens. It performs several pre-initialization steps:
 			// - Sets `this.element`
 			// - Adds the Control's name to the element's className
 			// - Saves the Control in `$.data`
 			// - Merges Options
-			// - Binds event handlers
+			// - Binds event handlers using `delegate`
+			// The final step is to return pass the element and prepareed options, to be used in `init`.
 			setup: function (element, options) {
 
 				var cls = this.constructor,
@@ -162,10 +180,10 @@ steal('can/util', 'can/construct', function (can) {
 					this.element.addClass(pluginname);
 				}
 
-				// Set up the 'controls' data on the element
+				// Set up the 'controls' data on the element. If it does not exist, initialize
+				// it to an empty array.
 				arr = can.data(this.element, 'controls');
 				if (!arr) {
-					// If it does not exist, initialize it to an empty array
 					arr = [];
 					can.data(this.element, 'controls', arr);
 				}
@@ -180,19 +198,19 @@ steal('can/util', 'can/construct', function (can) {
 				// If no `options` value is used during creation, the value in `defaults` is used instead
 				this.options = extend({}, cls.defaults, options);
 
-				// Bind all event handlers.
 				this.on();
 
-				// This gets passed into `init`.
 				return [this.element, this.options];
 			},
-			// `.on()` binds an event handler for an event to a selector under the scope of `this.element`
-			// If no options are specified, all events are rebound to their respective elements
+			// ## on
+			// 
+			// This binds an event handler for an event to a selector under the scope of `this.element`
+			// If no options are specified, all events are rebound to their respective elements. The actions,
+			// which were cached in `setup`, are used and all elements are bound using `delegate` from `this.element`.
 			on: function (el, selector, eventName, func) {
 				if (!el) {
 					this.off();
 
-					// Go through the cached list of actions and use the processor to bind
 					var cls = this.constructor,
 						bindings = this._bindings,
 						actions = cls.actions,
@@ -209,8 +227,7 @@ steal('can/util', 'can/construct', function (can) {
 						}
 					}
 
-					// Setup to be destroyed...  
-					// don't bind because we don't want to remove it.
+					// Set up the ability to `destroy` the control later.
 					can.bind.call(element, "removed", destroyCB);
 					bindings.push(function (el) {
 						can.unbind.call(el, "removed", destroyCB);
@@ -238,24 +255,25 @@ steal('can/util', 'can/construct', function (can) {
 				}
 
 				this._bindings.push(binder(el, eventName, func, selector));
-
 				return this._bindings.length;
 			},
+			// ## off
+			// 
 			// Unbinds all event handlers on the controller.
-			// This should only be called in combination with .on()
+			// This should _only_ be called in combination with .on()
 			off: function () {
 				var el = this.element[0];
 				each(this._bindings || [], function (value) {
 					value(el);
 				});
-				// Adds bindings.
 				this._bindings = [];
 			},
+			// ## destroy
+			// 
 			// Prepares a `control` for garbage collection.
 			// First checks if it has already been removed. Then, removes all the bindings, data, and 
-			// the element from the Control.
+			// the element from the Control instance.
 			destroy: function () {
-				// If the control is already destroyed, let the dev. know.
 				if (this.element === null) {
 					//!steal-remove-start
 					can.dev.warn("can/control/control.js: Control already destroyed");
@@ -269,23 +287,22 @@ steal('can/util', 'can/construct', function (can) {
 				this.off();
 
 				if (pluginName && pluginName !== 'can_control') {
-					// Remove the `className`.
 					this.element.removeClass(pluginName);
 				}
 
-				// Remove from `data`.
 				controls = can.data(this.element, "controls");
 				controls.splice(can.inArray(this, controls), 1);
 
-				// Fire an event in case we want to know if the `control` is removed.
 				can.trigger(this, "destroyed");
 
 				this.element = null;
 			}
 		});
 
-	// Processors do the binding. This basic processor binds events.
-	// Each returns a function that unbinds when called.
+	// ## Processors
+	// 
+	// Processors do the binding. This basic processor binds events. Each returns a function that unbinds 
+	// when called.
 	var processors = can.Control.processors;
 	basicProcessor = function (el, event, selector, methodName, control) {
 		return binder(el, event, can.Control._shifter(control, methodName), selector);
