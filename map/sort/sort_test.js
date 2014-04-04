@@ -71,7 +71,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 			return a.priority > b.priority ? 1 : 0;
 		});
 		equal(list[0].name, 'high');
-	})
+	});
 
 	test('list sort with containing Map attribute', 4, function () {
 		var list = new can.Map.List([
