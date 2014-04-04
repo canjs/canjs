@@ -225,7 +225,7 @@ steal('can/util/can.js', function (can) {
 	 *
 	 * @param {String|Object} event The event to dispatch
 	 * @param {Array} [args] Additional arguments to pass to event handlers
-	 * @return {Object} this
+	 * @return {Object} event The resulting event object
 	 *
 	 * @signature `can.event.dispatch.call( obj, event, args )`
 	 *
@@ -253,6 +253,8 @@ steal('can/util/can.js', function (can) {
 		for (var i = 0, len = handlers.length; i < len; i++) {
 			handlers[i].handler.apply(this, args);
 		}
+
+		return event;
 	};
 	
 	// ## can.event.one

@@ -85,6 +85,8 @@ steal('can/util/can.js', 'can/event', function(can) {
 			// Call the propagated can.dispatch (otherwise it'll only propagate one level)
 			can.dispatch.call(this[propagate], event, args);
 		}
+
+		return event;
 	};
 
 	return can.event;

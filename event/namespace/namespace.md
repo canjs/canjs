@@ -1,5 +1,4 @@
 @hide
-**This plugin is in development and should not be included in the official documentation.**
 
 @page can.event.namespace 
 @parent can.event.plugins
@@ -7,4 +6,4 @@
 @test can/event/namespace/test.html
 @download http://donejs.com/can/dist/can.event.namespace.js
 
-Hi
+**This plugin is in development and should not be included in the official documentation.**
