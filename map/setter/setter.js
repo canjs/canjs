@@ -50,8 +50,8 @@ steal('can/util', 'can/map/attributes', 'can/util/string/classize.js',function (
 				asyncTimer = setTimeout(function(){
 					can.dev.warn('can/map/setter.js: Setter ' + setName+' did not return a value or call the setter callback.');
 				},can.dev.warnTimeout);
-				can.batch.stop();
 				//!steal-remove-end
+				can.batch.stop();
 				return;
 			} else {
 				old.call(self, prop, value, current, success, errorCallback);
