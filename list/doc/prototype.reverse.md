@@ -18,8 +18,8 @@ reversedList.attr(); // ['Eve', 'Bob', 'Alice'];
 list === reversedList; // true
 @codeend
 
-## Use
-
 `reverse` calls `replace` internally and triggers corresponding `add`, `remove`, `change` and `length` events respectively.
 
-@demo can/list/doc/reverse.html
+## Demo
+
+@iframe can/list/doc/reverse.html 350
