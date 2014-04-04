@@ -1448,4 +1448,16 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 
 	});
 
+	test('extending a model also inherits model list', function() {
+		var BaseModel = can.Model.extend({});
+		BaseModel.List = can.Model.List.extend({
+			someFunc: function() {}
+		});
+
+
+		var SomeModel = BaseModel.extend({});
+		var list = new SomeModel.List([]);
+		ok(list instanceof BaseModel.List);
+	});
+
 });
