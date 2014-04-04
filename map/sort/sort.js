@@ -60,13 +60,9 @@ steal('can/util', 'can/list', function (can) {
 		return args[0] && can.isArray(args[0]) ? args[0] : can.makeArray(args);
 	};
 
-	// Takes certain methods from can.List prototype and depending on the
-	// method replaces them with a function that does the same thing, but
-	// invokes sorting afterwards.
+	// Takes certain methods from can.List prototype and depending on the method replaces them with a function that does the same thing, but invokes sorting afterwards.
 	//
-	// It also suspends triggering events on each sort-move by setting
-	// the silent flag to true while sorting and only triggers events
-	// after the list has been sorted.
+	// It also suspends triggering events on each sort-move by setting the silent flag to true while sorting and only triggers events after the list has been sorted.
 	can.each({
 		/**
 		 * @function push
