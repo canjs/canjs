@@ -111,17 +111,17 @@ steal('can/util', function(can){
 					}
 				}
 			},
-			set: function(parent, prop, value){
+			set: function(parent, prop, value, current){
 				
-				var res = parent.__type(value, prop);
-				if(can.Map.helpers.isObservable(res)) {
-					bubble.add(parent, res, prop);
+				//var res = parent.__type(value, prop);
+				if( can.Map.helpers.isObservable(value) ) {
+					bubble.add(parent, value, prop);
 				}
 				// bubble.add will remove, so only remove if we are replacing another object
-				if(can.Map.helpers.isObservable(value) && value !== res) {
-					bubble.remove(parent, value);
+				if( can.Map.helpers.isObservable(current) ) {
+					bubble.remove(parent, current);
 				}
-				return res;
+				return value;
 			}
 		};
 	

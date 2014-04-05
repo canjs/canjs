@@ -1,4 +1,39 @@
-steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.js',function (can) {
+steal('can/util','can/observe', function (can) {
+	
+	
+	can.Map.helpers.define = function(Map){
+		var define = Map.prototype.define;
+		Map.defaultGenerators = {};
+		for(prop in define) {
+			if( "value" in define[prop] ) {
+				if(typeof define[prop].value === "function") {
+					Map.defaultGenerators[prop] = define[prop].value;
+				} else {
+					Map.defaults[prop] = define[prop].value;
+				}
+			}
+			if( typeof define[prop].Value === "function" ) {
+				(function(Constructor){
+					Map.defaultGenerators[prop] = function(){
+						return new Constructor;
+					}
+				})(define[prop].Value);
+			}
+		}
+	};
+	
+	
+	var oldSetupDefaults = can.Map.prototype._setupDefaults;
+	can.Map.prototype._setupDefaults = function(){
+		var defaults = oldSetupDefaults.call(this),
+			Map = this.constructor;
+		for(var prop in Map.defaultGenerators) {
+			defaults[prop] = Map.defaultGenerators[prop].call(this);
+		}
+		return defaults;
+	};
+	
+	
 	var proto = can.Map.prototype,
 		oldSet = proto.__set;
 	proto.__set = function (prop, value, current, success, error) {
@@ -24,37 +59,50 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 				}
 				return false;
 			},
-			self = this;
+			self = this,
+			define = this.define && this.define[prop],
+			setter = define && define.set,
+			getter = define && define.get;
 			
 		
 			
 		// if we have a setter
-		if (this.define && this.define[prop] && this.define[prop].set ) {
+		if ( setter ) {
 			// call the setter, if returned value is undefined,
 			// this means the setter is async so we
 			// do not call update property and return right away
 			can.batch.start();
-			var setterCalled = false;
-			value = this.define[prop].set.call(this, value, function (value) {
-				oldSet.call(self, prop, value, current, success, errorCallback);
-				setterCalled = true;
-				//!steal-remove-start
-				clearTimeout(asyncTimer);
-				//!steal-remove-end
-			}, errorCallback);
+			var setterCalled = false,
 			
-			
-			if(value === undefined && !setterCalled) {
+				setValue = setter.call(this, value, function (value) {
+					oldSet.call(self, prop, value, current, success, errorCallback);
+					setterCalled = true;
+					//!steal-remove-start
+					clearTimeout(asyncTimer);
+					//!steal-remove-end
+				}, errorCallback);
+			if(getter) {
+				// if there's a getter we do nothing
+				can.batch.stop();
+				return;
+			}
+			// if it took a setter and returned nothing, don't set the value
+			else if(setValue === undefined && !setterCalled && setter.length >= 2) {
 				//!steal-remove-start
 				asyncTimer = setTimeout(function(){
-					can.dev.warn('can/map/setter.js: Setter ' + prop+' did not return a value or call the setter callback.');
+					can.dev.warn('can/map/setter.js: Setter "' + prop+'" did not return a value or call the setter callback.');
 				},can.dev.warnTimeout);
-				can.batch.stop();
 				//!steal-remove-end
+				can.batch.stop();
 				return;
 			} else {
 				if(!setterCalled) {
-					oldSet.call(self, prop, value, current, success, errorCallback);
+					oldSet.call(self, prop, 
+						// if no arguments, we are side-effects only
+						setter.length === 0 && setValue === undefined ? value : setValue, 
+						current, 
+						success, 
+						errorCallback);
 				}
 				can.batch.stop();
 				return this;
@@ -114,15 +162,11 @@ steal('can/util', 'can/compute','can/map/attributes', 'can/util/string/classize.
 				newValue = type.call(this, newValue, prop);
 			}
 			// If there's a Type create a new instance of it
-			if(Type) {
+			if(Type && !(newValue instanceof Type) ) {
 				newValue = new Type(newValue);
 			}
 			// If the newValue is a Map, we need to hook it up
-			if(newValue instanceof can.Map) {
-				return can.Map.helpers.hookupBubble(newValue, prop, this);
-			} else {
-				return newValue;
-			}
+			return newValue;
 			
 		}
 		return oldType.call(this,newValue, prop);

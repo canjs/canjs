@@ -37,6 +37,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					}
 					// a list of the compute properties
 					this._computes = [];
+					
 					for (var prop in this.prototype) {
 						if (prop !== "define" && typeof this.prototype[prop] !== "function") {
 							this.defaults[prop] = this.prototype[prop];
@@ -44,6 +45,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 							this._computes.push(prop);
 						}
 					}
+					this.helpers.define(this);
 				}
 				// if we inerit from can.Map, but not can.List
 				if (can.List && !(this.prototype instanceof can.List)) {
@@ -65,6 +67,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			off: can.unbindAndTeardown,
 			id: "id",
 			helpers: {
+				define: function(){},
 				attrParts: function (attr, keepKey) {
 					if (keepKey) {
 						return [attr];
@@ -208,7 +211,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				 *
 				 *     paginate.attr("offset") //-> 30
 				 */
-				var data = can.extend(can.extend(true, {}, this.constructor.defaults || {}), obj);
+				var data = can.extend(can.extend(true, {}, this._setupDefaults()), obj);
 				this.attr(data);
 
 				if (teardownMapping) {
@@ -317,6 +320,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						count: 0
 					};
 				}
+			},
+			_setupDefaults: function(){
+				return this.constructor.defaults || {};
 			},
 			_bindsetup: function(){},
 			_bindteardown: function(){},
@@ -668,7 +674,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					if (this.__convert) {
 						value = this.__convert(prop, value);
 					}
-					this.__set(prop, value, current);
+					
+					this.__set(prop, this.__type(value, prop), current);
 				} else {
 					throw "can.Map: Object does not exist";
 				}
@@ -685,7 +692,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on data.
-					this.___set(prop, this.constructor._bubble.set(this, prop, value) );
+					this.___set(prop, this.constructor._bubble.set(this, prop, value, current) );
 
 					// `batchTrigger` the change event.
 					this._triggerChange(prop, changeType, value, current);

@@ -12,9 +12,9 @@
 				{{/each}}
 			</select>
 		{{else}}
-			<select><option>Loading Makes</option></select>
+			<select disabled><option>Loading Makes</option></select>
 		{{/if}}
-		
+	
 		{{#if models}}
 			{{#if models.isResolved}}
 				<select can-value="modelId">
@@ -26,31 +26,32 @@
 					{{/each}}
 				</select>
 			{{else}}
-				<select><option>Loading Models</option></select>
+				<select disabled><option>Loading Models</option></select>
 			{{/if}}
 		{{else}}
-			<select disabled><option>Model</option></select>
+			<select disabled><option>Models</option></select>
 		{{/if}}
 		
 		{{#if years}}
 			<select can-value="year">
 				{{^year}}
-					<option>Select a Make</option>
+					<option>Select a Year</option>
 				{{/year}}
 				{{#each years}}
 					<option value="{{.}}">{{.}}</option>
 				{{/each}}
 			</select>
 		{{else}}
-			<select disabled><option>Year</option></select>
+			<select disabled><option>Years</option></select>
 		{{/if}}
 		
 		<div>
 			{{#each vehicles}}
 				<h2>{{name}}</h2>
-				<img src="{{thumb}}"/>
+				<img src="{{thumb}}" width="200px"/>
 			{{/each}}
 		</div>
+
 	</my-mmy>
 </script>
 </div>
@@ -58,9 +59,11 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../lib/steal/steal.js"></script>
+<script src="../../../../lib/steal/steal.js"></script>
 <script id="demo-source">
 steal("can","can/map/define","can/util/fixture","can/list/promise",function(){
+
+can.fixture.delay = 1200;
 
 can.fixture({
 	"/makes" : can.fixture.store([
@@ -82,7 +85,7 @@ can.fixture({
 		{id: 2, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
 		{id: 2, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
 		{id: 2, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
-	],{year: 'eqeq'}).findAll
+	],{year: 'eqeq', name: "i"}).findAll
 });
 
 var CarMake = can.Model.extend({
@@ -98,55 +101,56 @@ var Vehicle = can.Model.extend({
 
 var project = new can.Map({
 	progress: 1
-})
-
-var compute = can.compute(function(){
-	if(arguments.length) {
-		
-	}
-})
+});
 
 
 var MMYViewModel = can.Map.extend({
 	define:{
-		"*" :{
-			type: function(){
-				
-			},
-			Type: Thing
-		},
 		makes: {
-			value: new Make.List({})
+			value: new CarMake.List({})
 		},
 		makeId: {
 			type: "number",
 			remove: function(){
+				this.removeAttr("modelId");
+			},
+			set: function(){
 				this.removeAttr("modelId")
 			}
 		},
 		models: {
-			get: function(currentVal, setVal){
-				$.get("/models", {makeId: this.attr("makeId")}, function(models){
-					setVal(models)
-				})
+			get: function(){
+				var makeId = this.attr("makeId");
+				if( makeId ) {
+					return new CarModel.List({makeId: makeId});
+				}
+			}
+		},
+		model: {
+			get: function(){
+				var models = this.attr("models"),
+					modelId = this.attr("modelId");
+				if(models && models.attr('length') && modelId) {
+					var matched = models.filter(function(model){
+						return modelId == model.attr("id");
+					});
+					return matched[0];
+				}
 			}
 		},
 		modelId: {
 			type: "number",
 			remove: function(){
-				this.removeAttr("year")
+				this.removeAttr("year");
+			},
+			set: function(){
+				this.removeAttr("year");
 			}
 		},
 		years: {
 			get: function(){
-				var models = this.attr("models"),
-					modelId = this.attr("modelId");
-				if(models && modelId) {
-					var matched = models.filter(function(model){
-						return modelId == model.attr("modelId");
-					});
-					return matched && matched[0].attr("years");
-				}
+				var model = this.attr("model");
+				return model && model.attr("years");
 			}
 		},
 		year: {

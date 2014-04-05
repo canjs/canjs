@@ -22,10 +22,13 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/map/define/define_test.js", function() {
-		can.dev.logLevel = 1;
-        QUnit.start();
-	});
+	setTimeout(function(){
+		steal("can/map/define/define_test.js", function() {
+			can.dev.logLevel = 1;
+	        QUnit.start();
+		});
+	},100)
+	
 </script>
 </body>
 </html>
