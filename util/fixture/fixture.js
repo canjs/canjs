@@ -90,6 +90,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			}
 
 			if (data && originalOptions) {
+				originalOptions.data = originalOptions.data || {};
 				can.extend(originalOptions.data, data);
 			}
 		}

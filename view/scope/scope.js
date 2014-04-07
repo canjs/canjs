@@ -169,9 +169,15 @@ steal(
 				 * @option {*} value the found value
 				 */
 				read: function (attr, options) {
-
+					// check if we should only look within current scope
+					if(attr.substr(0, 2) === './') {
+						// set flag to halt lookup from walking up scope
+						this._stopLookup = true;
+						// stop lookup from checking parent scopes
+						return this.read(attr.substr(2), options);
+					}
 					// check if we should be running this on a parent.
-					if (attr.substr(0, 3) === "../") {
+					else if (attr.substr(0, 3) === "../") {
 						return this._parent.read(attr.substr(3), options);
 					} else if (attr === "..") {
 						return {
@@ -260,7 +266,13 @@ steal(
 						}
 						// Prevent prior readings and then move up to the next scope.
 						can.__clearReading();
-						scope = scope._parent;
+						if(!this._stopLookup) {
+							// Move up to the next scope.
+							scope = scope._parent;
+						}
+
+						// a flag to set if we should stop walking up scope
+						this._stopLookup = false;
 					}
 
 					// **Key was not found**, return undefined for the value.  Unless an observable was

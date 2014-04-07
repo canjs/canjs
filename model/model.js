@@ -1129,9 +1129,15 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				 *     Task.List.Map //-> Task
 				 *
 				 */
-				this.List = ML({
-					Map: this
-				}, {});
+				if(staticProps && staticProps.List) {
+					this.List = staticProps.List;
+					this.List.Map = this;
+				}
+				else {
+					this.List = base.List.extend({
+						Map: this
+					}, {});
+				}
 
 				var self = this,
 					clean = can.proxy(this._clean, self);
