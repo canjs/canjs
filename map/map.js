@@ -1,48 +1,50 @@
-// # can/map.js
-//
-// can.Map provides the observable pattern for JavaScript Objects.
+// # can/map/map.js
+// `can.Map` provides the observable pattern for JavaScript Objects.
+
+
+
+
 
 steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (can, bind) {
 
-	// ##Helpers
-	// Make parent listen to a child's change events
+	// ## Helpers
+	// Make parent listen to a child's change events.
 	var bindToChildAndBubbleToParent = function (child, prop, parent) {
 		can.listenTo.call(parent, child, "change", function ( /* ev, attr */ ) {
 			var args = can.makeArray(arguments),
 				ev = args.shift();
-			//Make attr name relative to the parent
+			//Make attr name relative to the parent.
 			args[0] = (prop === "*" ? [parent.indexOf(child), args[0]] : [prop, args[0]])
 				.join(".");
 
-			// track objects dispatched on this map
+			// Track objects dispatched on this map.
 			ev.triggeredNS = ev.triggeredNS || {};
 
-			// if it has already been dispatched; exit
+			// If it has already been dispatched; exit.
 			if (ev.triggeredNS[parent._cid]) {
 				return;
 			}
 
 			ev.triggeredNS[parent._cid] = true;
-			// send change event with modified attr to parent
+			// Send change event with modified attr to parent.
 			can.trigger(parent, ev, args);
 		});
 	};
-	// Setup child binding and event bubbling to parent
+	// Setup child binding and event bubbling to parent.
 	var makeBindSetup = function (wildcard) {
 		return function () {
 			var parent = this;
 			this._each(function (child, prop) {
-				// If child can be bound
+				// If child can be bound, setup child to parent bubbling.
 				if (child && child.bind) {
-					// Setup child to parent bubbling
 					bindToChildAndBubbleToParent(child, wildcard || prop, parent);
 				}
 			});
 		};
 	};
-	// A temporary map of Maps that have already been made from plain JS objects
+	// A temporary map of Maps that have been made from plain JS objects.
 	var madeMap = null;
-	// Clears out map of converted objects
+	// Clears out map of converted objects.
 	var teardownMap = function () {
 		for (var cid in madeMap) {
 			if (madeMap[cid].added) {
@@ -51,7 +53,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 		}
 		madeMap = null;
 	};
-	// Retrieves a Map instance from an Object
+	// Retrieves a Map instance from an Object.
 	var getMapFromObject = function (obj) {
 		return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
 	};
@@ -68,44 +70,43 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 
 				can.Construct.setup.apply(this, arguments);
 
-				// Do not run if we are defining can.Map
+				// Do not run if we are defining can.Map.
 				if (can.Map) {
 					if (!this.defaults) {
 						this.defaults = {};
 					}
-					// Builds a list of compute and non-compute properties in this Object's prototype
+					// Builds a list of compute and non-compute properties in this Object's prototype.
 					this._computes = [];
 					for (var prop in this.prototype) {
-						// Non-functions are regular defaults
+						// Non-functions are regular defaults.
 						if (typeof this.prototype[prop] !== "function") {
 							this.defaults[prop] = this.prototype[prop];
-						// functions with an isComputed property are computes
+						// Functions with an `isComputed` property are computes.
 						} else if (this.prototype[prop].isComputed) {
 							this._computes.push(prop);
 						}
 					}
 				}
 
-				// if we inerit from can.Map, but not can.List
+				// If we inherit from can.Map, but not can.List, make sure any lists are the correct type.
 				if (can.List && !(this.prototype instanceof can.List)) {
-					// Make sure any lists are the correct type
 					this.List = Map.List({
 						Map: this
 					}, {});
 				}
 
 			},
-			// List of computes on the Object's prototype
+			// List of computes on the Map's prototype.
 			_computes: [],
-			// Adds an event to this Object
+			// Adds an event to this Map.
 			bind: can.bindAndSetup,
 			on: can.bindAndSetup,
-			// Removes an event from this Object
+			// Removes an event from this Map.
 			unbind: can.unbindAndTeardown,
 			off: can.unbindAndTeardown,
 			// Name of the id field. Used in can.Model.
 			id: "id",
-			// Internal helpers
+			// ## Internal helpers
 			helpers: {
 				/**
 				 * @hide
@@ -114,8 +115,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {Boolean} keepKey whether to keep the key intact
 				 * @return {Array} attribute parts
 				 */
-				 // ## can.Map.helpers.attrParts
-				 // Parses attribute name into its parts
+				 // ### can.Map.helpers.attrParts
+				 // Parses attribute name into its parts.
 				attrParts: function (attr, keepKey) {
 					//Keep key intact
 					if (keepKey) {
@@ -132,22 +133,21 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {can.Map} instance the can.Map instance
 				 * @return {Function} function to clear out object mapping
 				 */
-				 // ## can.Map.helpers.addToMap
+				 // ### can.Map.helpers.addToMap
 				 // Tracks Map instances created from JS Objects
 				addToMap: function (obj, instance) {
 					var teardown;
-					// Setup a fresh mapping if `madeMap` is missing
+					// Setup a fresh mapping if `madeMap` is missing.
 					if (!madeMap) {
 						teardown = teardownMap;
 						madeMap = {};
 					}
-					// Record if Object has a `_cid` before adding one
+					// Record if Object has a `_cid` before adding one.
 					var hasCid = obj._cid;
 					var cid = can.cid(obj);
 
-					// Only update if there already isn't one already
+					// Only update if there already isn't one already.
 					if (!madeMap[cid]) {
-
 						madeMap[cid] = {
 							obj: obj,
 							instance: instance,
@@ -162,8 +162,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {Object} obj Object to check
 				 * @return {Boolean} whether `obj` can be made into an observable
 				 */
-				 // ## can.Map.helpers.canMakeObserve
-				 // Determines if an object can be made into an observable
+				 // ### can.Map.helpers.canMakeObserve
+				 // Determines if an object can be made into an observable.
 				canMakeObserve: function (obj) {
 					return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) || (obj instanceof can.Map));
 				},
@@ -174,8 +174,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {can.Map|can.List} parent parent observable
 				 * @return {Array}
 				 */
-				 // ## can.Map.helpers.unhookup
-				 // Removes child event bubbling from parent
+				 // ### can.Map.helpers.unhookup
+				 // Removes child event bubbling from parent.
 				unhookup: function (items, parent) {
 					return can.each(items, function (item) {
 						if (item && item.unbind) {
@@ -194,8 +194,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {Function} List the List constructor
 				 * @return {can.Map|can.List} The child Map or List
 				 */
-				 // ## can.Map.helpers.unhookup
-				 // Adds child event bubbling to parent
+				 // ### can.Map.helpers.unhookup
+				 // Adds child event bubbling to parent.
 				hookupBubble: function (child, prop, parent, Ob, List) {
 					Ob = Ob || Map;
 					List = List || can.List;
@@ -203,8 +203,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 
 					// If it's an `array` make a list, otherwise a child.
 					if (child instanceof Map) {
-						// We have a Map; make sure we are not listening to this already.
-						// It's only listening if it has bindings already.
+						// We have a Map; make sure we are not listening to this already (has bindings already).
 						if (parent._bindings) {
 							Map.helpers.unhookup([child], parent);
 						}
@@ -232,7 +231,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				 * @param {String} where Object or Array to put properties in.
 				 * @return {Object|Array} serialized Map or List data.
 				 */
-				 // ## can.Map.helpers.serialize
+				 // ### can.Map.helpers.serialize
 				 // Serializes a Map or Map.List
 				serialize: function (map, how, where) {
 					// Go through each property.
@@ -247,7 +246,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						can.__reading(map, name);
 					});
 
-					// Let others know the number of keys have changed
+					// Let others know the number of keys have changed.
 					can.__reading(map, '__keys');
 
 					return where;
@@ -262,7 +261,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			 */
 			keys: function (map) {
 				var keys = [];
-				// Let others know the number of keys have changed
+				// Let others know the number of keys have changed.
 				can.__reading(map, '__keys');
 				for (var keyName in map._data) {
 					keys.push(keyName);
@@ -287,10 +286,10 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				can.cid(this, ".map");
 				// Sets all `attrs`.
 				this._init = 1;
-				// Setup computed attributes
+				// Setup computed attributes.
 				this._setupComputes();
 				var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
-				// Setup default attribute values
+				// Setup default attribute values.
 				var data = can.extend(can.extend(true, {}, this.constructor.defaults || {}), obj);
 				this.attr(data);
 
@@ -298,11 +297,12 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					teardownMapping();
 				}
 
+				// `batchTrigger` change events.
 				this.bind('change', can.proxy(this._changes, this));
 
 				delete this._init;
 			},
-			// Sets up computed properties on a Map
+			// Sets up computed properties on a Map.
 			_setupComputes: function () {
 				var computes = this.constructor._computes;
 				this._computedBindings = {};
@@ -316,28 +316,28 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					};
 				}
 			},
-			// Setup child bindings
+			// Setup child bindings.
 			_bindsetup: makeBindSetup(),
-			// Teardown child bindings
+			// Teardown child bindings.
 			_bindteardown: function () {
 				var self = this;
 				this._each(function (child) {
 					Map.helpers.unhookup([child], self);
 				});
 			},
-			// `change`event handler
+			// `change`event handler.
 			_changes: function (ev, attr, how, newVal, oldVal) {
-				// when a change happens, forward the event
+				// When a change happens, forward the event
 				can.batch.trigger(this, {
 					type: attr,
 					batchNum: ev.batchNum
 				}, [newVal, oldVal]);
 			},
-			// Trigger a change event
+			// Trigger a change event.
 			_triggerChange: function (attr, how, newVal, oldVal) {
 				can.batch.trigger(this, "change", can.makeArray(arguments));
 			},
-			// Iterator that does not trigger live binding
+			// Iterator that does not trigger live binding.
 			_each: function (callback) {
 				var data = this.__get();
 				for (var prop in data) {
@@ -368,7 +368,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)));
 			},
 			removeAttr: function (attr) {
-				// If this is List or not
+				// If this is List.
 				var isList = can.List && this instanceof can.List,
 					// Convert the `attr` into parts (if nested).
 					parts = can.Map.helpers.attrParts(attr),
@@ -386,18 +386,18 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						prop = attr;
 					}
 					if (isList) {
-						// Use splice on a list
+						// Use splice on a list which will remove the item and trigger an event.
 						this.splice(prop, 1);
 					} else if (prop in this._data) {
-						//Otherwise delete the data from `_data`
+						// Otherwise delete the property from `_data` and the Map
+						// as long as it isn't part of the Map's prototype.
 						delete this._data[prop];
-						// Create the event.
 						if (!(prop in this.constructor.prototype)) {
 							delete this[prop];
 						}
-						// Let others know the number of keys have changed
+						// Let others know the number of keys have changed.
 						can.batch.trigger(this, "__keys");
-						// Let others now this property has been removed
+						// Let others now this property has been removed.
 						this._triggerChange(prop, "remove", undefined, current);
 
 					}
@@ -416,35 +416,33 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						return value;
 					}
 				}
-				// Otherwise we have to dig deeper into the Map to get the value
-
-				// break up the attr (`"foo.bar"`) into parts like `["foo","bar"]`
+				// Otherwise we have to dig deeper into the Map to get the value.
+				// First, break up the attr (`"foo.bar"`) into parts like `["foo","bar"]`.
 				var parts = can.Map.helpers.attrParts(attr),
-					// get the value of the first attr name (`"foo"`)
+					// Then get the value of the first attr name (`"foo"`).
 					current = this.__get(parts.shift());
-				// if there are other attributes to read
+				// If there are other attributes to read...
 				return parts.length ?
-				// and current has a value
+				// and current has a value...
 				current ?
-				// lookup the remaining attrs on current
+				// then lookup the remaining attrs on current
 				current._get(parts) :
-				// or if there's no current, return undefined
+				// or if there's no current, return undefined.
 				undefined :
-				// if there are no more parts, return current
+				// If there are no more parts, return current.
 				current;
 			},
 			// Reads a property directly if an `attr` is provided, otherwise
 			// returns the "real" data object itself.
 			__get: function (attr) {
 				if (attr) {
-					// If it is a compute return the result
+					// If property is a compute return the result, otherwise get the value directly
 					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
 						return this[attr]();
-					// Otherwise get the value directly
 					} else {
 						return this._data[attr];
 					}
-				// Return entire data object
+				// If not property is provided, return entire `_data` object
 				} else {
 					return this._data;
 				}
@@ -460,9 +458,8 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					// The current value.
 					current = this.__get(prop);
 
-				// If we have an `object` and remaining parts.
 				if ( parts.length && Map.helpers.canMakeObserve(current) ) {
-					// That `object` should set it (this might need to call attr).
+					// If we have an `object` and remaining parts that `object` should set it.
 					current._set(parts, value);
 				} else if (!parts.length) {
 					// We're in "real" set territory.
@@ -477,14 +474,14 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			},
 			__set: function (prop, value, current) {
 				// TODO: Check if value is object and transform
-				// are we changing the value.
+				// Don't do anything if the value isn't changing.
 				if (value !== current) {
 					// Check if we are adding this for the first time --
 					// if we are, we need to create an `add` event.
 					var changeType = this.__get()
 						.hasOwnProperty(prop) ? "set" : "add";
 
-					// Set the value on data.
+					// Set the value on `_data`.
 					this.___set(prop,
 
 						// If we are getting an object.
@@ -497,8 +494,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 
 					if (changeType === "add") {
 						// If there is no current value, let others know that
-						// the the number of keys have changed
-
+						// the the number of keys have changed.
 						can.batch.trigger(this, "__keys", undefined);
 
 					}
@@ -530,12 +526,11 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 			bind: function (eventName, handler) {
 				var computedBinding = this._computedBindings && this._computedBindings[eventName];
 				if (computedBinding) {
-					// If this is the first time binding to this computed property
+					// The first time we bind to this computed property we
+					// initialize `count` and `batchTrigger` the change event.
 					if (!computedBinding.count) {
-						// Initialize the count
 						computedBinding.count = 1;
 						var self = this;
-						// `batchTrigger` the change event
 						computedBinding.handler = function (ev, newVal, oldVal) {
 							can.batch.trigger(self, {
 								type: eventName,
@@ -544,23 +539,23 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						};
 						this[eventName].bind("change", computedBinding.handler);
 					} else {
-						// Increment number of things listening to this computed property
+						// Increment number of things listening to this computed property.
 						computedBinding.count++;
 					}
 
 				}
+				// The first time we bind to this Map, `_bindsetup` will
+				// be called to setup child event bubbling.
 				return can.bindAndSetup.apply(this, arguments);
-
 			},
 			unbind: function (eventName, handler) {
 				var computedBinding = this._computedBindings && this._computedBindings[eventName];
 				if (computedBinding) {
-					// If there is only one other listener
+					// If there is only one listener, we unbind the change event handler 
+					// and clean it up since no one is listening to this property any more.
 					if (computedBinding.count === 1) {
 						computedBinding.count = 0;
-						// Stop listening to the `change` event
 						this[eventName].unbind("change", computedBinding.handler);
-						// Cleanup the event handler
 						delete computedBinding.handler;
 					} else {
 						// Decrement number of things listening to this computed property
@@ -589,20 +584,19 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 					self = this,
 					newVal;
 
-				// Batch all of the change events until we are done
+				// Batch all of the change events until we are done.
 				can.batch.start();
-				// Merge current properties with the new ones
+				// Merge current properties with the new ones.
 				this.each(function (curVal, prop) {
-					// you can not have a _cid property; abort
+					// You can not have a _cid property; abort.
 					if (prop === "_cid") {
 						return;
 					}
 					newVal = props[prop];
 
-					// If we are merging
+					// If we are merging, remove the property if it has no value.
 					if (newVal === undefined) {
 						if (remove) {
-							// Remove the property if it has no value
 							self.removeAttr(prop);
 						}
 						return;
@@ -613,13 +607,13 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 						newVal = self.__convert(prop, newVal);
 					}
 
-					// if we're dealing with models, want to call _set to let converter run
+					// If we're dealing with models, we want to call _set to let converters run.
 					if (newVal instanceof can.Map) {
 						self.__set(prop, newVal, curVal);
-						// if its an object, let attr merge
+						// If its an object, let attr merge.
 					} else if (Map.helpers.canMakeObserve(curVal) && Map.helpers.canMakeObserve(newVal) && curVal.attr) {
 						curVal.attr(newVal, remove);
-						// otherwise just set
+						// Otherwise just set.
 					} else if (curVal !== newVal) {
 						self.__set(prop, newVal, curVal);
 					}
@@ -628,7 +622,7 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				});
 				// Add remaining props.
 				for (prop in props) {
-					// Ignore _cid
+					// Ignore _cid.
 					if (prop !== "_cid") {
 						newVal = props[prop];
 						this._set(prop, newVal, true);
@@ -639,12 +633,11 @@ steal('can/util', 'can/util/bind', 'can/construct', 'can/util/batch', function (
 				return this;
 			},
 			compute: function (prop) {
-				// If the property is a function
+				// If the property is a function, use it as the getter/setter
+				// otherwise, create a new compute that returns the value of a property on `this`
 				if (can.isFunction(this.constructor.prototype[prop])) {
-					// Use it as the getter/setter
 					return can.compute(this[prop], this);
 				} else {
-					// Otherwise, create a new compute that returns the value of a property on this
 					var reads = prop.split("."),
 						last = reads.length - 1,
 						options = {
