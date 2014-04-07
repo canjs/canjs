@@ -3588,4 +3588,23 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		container.attr('items').replace([]);
 		equal(div.innerHTML, '');
 	});
+
+	test("Inverse ^if should work with an else clause (#751)", function() {
+		var tmpl = "{{^if show}}" +
+			"<div>Not showing</div>" +
+			"{{else}}" +
+			"<div>Is showing</div>" +
+			"{{/if}}";
+
+		var data = new can.Map({show: false});
+		var frag = can.view.mustache(tmpl)(data);
+
+		// Should not be showing at first.
+		var node = frag.childNodes[0];
+		equal(node.innerHTML, "Not showing", "Inverse resolved to true");
+
+		// Switch show to true and should show {{else}} section
+		data.attr("show", true);
+		equal(frag.childNodes[0].innerHTML, "Is showing", "Not showing the else");
+	});
 });
