@@ -2,7 +2,7 @@
 @parent canjs
 @group can.view.static static
 @group can.view.plugins plugins
-@link ../docco/view.html docco
+@link ../docco/view/view.html docco
 
 @description Utilities for 
 loading, processing, rendering, and live-updating of templates.
