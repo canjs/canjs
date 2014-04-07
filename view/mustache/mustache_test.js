@@ -3570,4 +3570,22 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		map.attr('showPeople', true);
 		equal(ul.innerHTML, '<li>Curtis</li><li>Stan</li><li>David</li>', 'List got updated');
 	});
+
+	test('Mustache helper: if w/ each removing all content', function () {
+		var expected = '123content',
+		container = new can.Map({
+			items: [1,2,3]
+		});
+
+		var template = can.view.mustache('{{#if items.length}}{{#each items}}{{this}}{{/each}}content{{/if}}');
+		var frag = template(container);
+
+		var div = document.createElement('div');
+		div.appendChild(frag);
+
+		equal(div.innerHTML, expected);
+
+		container.attr('items').replace([]);
+		equal(div.innerHTML, '');
+	});
 });
