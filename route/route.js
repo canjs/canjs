@@ -741,6 +741,7 @@ can.route("", {
 	// hashchange event fired.  For this reason, it will not set the route data
 	// if the data is changing or the hash already matches the hash that was set.
 	setState = can.route.setState = function () {
+		debugger;
 		var hash = can.route._call("matchingPartOfURL");
 		curParams = can.route.deparam(hash);
 
