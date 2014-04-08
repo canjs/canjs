@@ -364,39 +364,39 @@ Assign a can.Map instance that acts as can.route's internal can.Map.  The purpos
 
 @param {function(attrs)} func A method, which will be called after can.route.ready is called.  It will be passed attrs, an object representing the deparameterized URL. This function should create and return a can.Map instance, which will be used as the internal can.Map for can.route.
 
+@body
+
 ## Use
 
-````
-var AppState = can.Map.extend({
-	// return an object with string friendly formats
-	serialize: function(){
-		return {
-			searchTerm: this.attr('searchTerm'),
-			flags: this.attr('flags').join(',')
+	var AppState = can.Map.extend({
+		// return an object with string friendly formats
+		serialize: function(){
+			return {
+				searchTerm: this.attr('searchTerm'),
+				flags: this.attr('flags').join(',')
+			}
+		},
+		// convert a stringified object into the javascript friendly format
+		setFlags: function(val){
+			if(val === ""){
+				return [];
+			}
+			var arr = val;
+			if(typeof val === "string"){
+				arr = val.split(',')
+			}
+			return arr;
 		}
-	},
-	// convert a stringified object into the javascript friendly format
-	setFlags: function(val){
-		if(val === ""){
-			return [];
-		}
-		var arr = val;
-		if(typeof val === "string"){
-			arr = val.split(',')
-		}
-		return arr;
-	}
-});
+	});
 
-var appState = new AppState;
+	var appState = new AppState;
 
-can.route("", {
-	searchTerm: '',
-	flags: ''
-});
+	can.route("", {
+		searchTerm: '',
+		flags: ''
+	});
 
-can.route.Map(appState);
-````
+	can.route.Map(appState);
 
 ## Loading data on application start
 
@@ -406,48 +406,46 @@ To implement this functionality, load this data, call the AppState constructor w
 
 For example:
 
-````
-var AppState = can.Map.extend({
-	init: function(locations){
-		// a can.List of {name: "Chicago", id: 3}
-		this.attr('locations', locations);
-	},
-	// return an object with string friendly formats
-	serialize: function(){
-		return {
-			locationIds: this.attr('locations').filter(function(location){
-				return this.location.attr('selected');
-			}),
-			searchTerm: this.attr('searchTerm')
-		}
-	},
-	setLocationIds: function(val){
-		if(val === ""){
-			return [];
-		}
-		var arr = val;
-		if(typeof val === "string"){
-			arr = val.split(',')
-		}
-		this.attr('locations').forEach(function(location){
-			if(arr.indexOf(location.attr('id')) !== -1){
-				location.attr('selected', true);
+	var AppState = can.Map.extend({
+		init: function(locations){
+			// a can.List of {name: "Chicago", id: 3}
+			this.attr('locations', locations);
+		},
+		// return an object with string friendly formats
+		serialize: function(){
+			return {
+				locationIds: this.attr('locations').filter(function(location){
+					return this.location.attr('selected');
+				}),
+				searchTerm: this.attr('searchTerm')
 			}
-		})
-	}
-});
+		},
+		setLocationIds: function(val){
+			if(val === ""){
+				return [];
+			}
+			var arr = val;
+			if(typeof val === "string"){
+				arr = val.split(',')
+			}
+			this.attr('locations').forEach(function(location){
+				if(arr.indexOf(location.attr('id')) !== -1){
+					location.attr('selected', true);
+				}
+			})
+		}
+	});
 
-Locations.findAll({}, function(locations){
-	var appState = new AppState(locations);
-	can.route.Map(appState);
-	can.route.ready();
-})
+	Locations.findAll({}, function(locations){
+		var appState = new AppState(locations);
+		can.route.Map(appState);
+		can.route.ready();
+	})
 
-can.route("", {
-	searchTerm: '',
-	locationIds: ''
-});
-````
+	can.route("", {
+		searchTerm: '',
+		locationIds: ''
+	});
 		*/
 		map: function(data){
 			var appState;
