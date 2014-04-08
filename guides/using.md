@@ -1,94 +1,34 @@
 @page Using Setting up CanJS
 @parent guides 2
 
-<!-- TODO -->
+CanJS is designed and packaged so that it can easily fit into your development workflow. You can use it with [jQuery](http://jquery.com), [Dojo](http://dojotoolkit.org/), [Mootools](http://mootools.net/), [YUI](http://yuilibrary.com/) and [Zepto](http://zeptojs.com/). The following pages contain guides on
 
-Better introduction (CanJS is designed)
-If you are trying to play around with CanJS
+- [using-download Download] - How to get CanJS using the [big download](using-download.html#section_TheCanJSdownload), a [customized build](using-download.html#section_Thedownloadbuilder), [Bower](using-download.html#section_Bower) or our [CDN](using-download.html#section_TheGitHubCDN)
+- [using-loading Loading] - How to load CanJS via a [script tag](using-loading.html#section_Ina_script_tag), [AMD](using-loading.html#section_AMD) (RequireJS) or [StealJS](using-loading.html#section_StealJS)
+- [using-production In Production] - Tips on how to set up CanJS in a production environment.
+- [using-examples Examples] - Some examples on how it all works combined
 
-Libraries
-Downloading
-Loading
-Environment
-Examples
+If you are looking for a quick start using our [CDN]() just create an HTML page like this:
 
-CanJS can be used with [jQuery](http://jquery.com), [Dojo](http://dojotoolkit.org/), [Mootools](http://mootools.net/), [YUI](http://yuilibrary.com/) and [Zepto](http://zeptojs.com/). This guide outlines the different ways CanJS can be obtained
-and the follow up chapters show how to use CanJS [using-standalone in a script tag], [using-steal with StealJS] or [using-require with RequireJS] and tips for the [using-production use in production].
+    <html>
+    <head>
+        <title>CanJS Test</title>
+    </head>
+    <body>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+        <script src="http://canjs.com/release/latest/can.jquery.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                // Your CanJS code here
+            });
+        </script>
+    </body>
+    </html>
 
-## The CanJS download
-
-The buttons on the [CanJS homepage](http://canjs.com) lets you either get the full download or create customized download using the
-[download builder](#section_Thedownloadbuilder). The full download is a zipped version of [this repository](https://github.com/bitovi/canjs.com)
-and contains:
-
-- `can.<library>.js` (e.g. `can.jquery.js`) - The core build for a supported library
-- `can.<library>.dev.js` - A development build logging useful messages for a supported library
-- `can.<library>.min.js` - The minified core build for a supported library
-- `can.<type>.<plugin>` - Individual builds for each official CanJS plugin
-- `amd/` - CanJS provided as AMD modules (see [using-require using with RequireJS] for usage)
-- `amd-dev/` - CanJS AMD modules with development messages
-- `steal/` - CanJS modules using the StealJS syntax (see [using-steal using with StealJS])
-
-The [download page](http://canjs.com/download.html) also offers those downloads for older versions and pre-releases for the next version from the "Other Versions" dropdown.
-
-
-## The download builder
-
-The [download builder](http://canjs.com/download.html) creates a single - optionally minified - JavaScript
-file (`can.custom.js`) for the library and CanJS modules (including plugins) you selected in the currently released version.
-The advantage is that you will get a single file with only the dependencies needed. The banner at the top will
-contain a "Download from:" link so that you will be able to re-download the same configuration for newer versions.
-
-## Bower
-
-[Bower](http://bower.io/) is a package manager to organize dependencies on front-end packages. Bower runs over Git, and is package-agnostic. The CanJS Bower package references the [same repository](https://github.com/bitovi/canjs.com)
-(and files) as the Zip download. With [NodeJS](http://nodejs.org) available Bower can easily be installed via:
-
-> npm install bower -g
-
-To install the latest CanJS release run:
-
-> bower install canjs
-
-To save the dependency in you `bower.json` configuration:
-
-> bower install canjs --save
-
-To install a different version (e.g. 1.1.8):
-
-> bower install canjs#1.1.8
-
-To get a CanJS pre-release run:
-
-> bower install canjs#minor
-
-
-## The GitHub CDN
-
-We also make every CanJS version available via our homepage as:
-
-- [canjs.com/releases/can.jquery.js](http://canjs.com/releases/latest/can.jquery.js) - For the latest version
-- [canjs.com/--version--/can.jquery.js](http://canjs.com/releases/2.0.0/can.jquery.js) - For a specific version
-
-A list of all available files can be found in [this repository](https://github.com/bitovi/canjs.com).
-
-__Note:__ We highly recommend to always reference a specific version and never `latest` directly in a production environment.
-Latest can contain backwards incompatible releases __and will break your application__.
-
-## JSFiddle
-
-To make quick demos and examples for CanJS you can use one of the following [JSFiddles](http://jsfiddle.com):
+Or fork one the [JSFiddle](http://jsfiddle.com) with your library of choice:
 
   - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
   - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
   - [Dojo](http://jsfiddle.net/donejs/9x96n/)
   - [YUI](http://jsfiddle.net/donejs/w6m73/)
   - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
-
-## IE 8 Support
-
-While CanJS does support Internet Exporer 8 out of the box, if you decide
-to use [can.Components](/docs/can.Component.html) then you will need to use the [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
-in order for your custom tags to work properly. Unfortunately, at the moment, the official HTML5 Shiv
-does not work with namespaced tag names (e.g. &lt;can:example&gt;). Thankfully, CanJS comes with a version that
-fixes this and we've already submitted a pull request so future users of HTML5 Shiv won't run into this issue.

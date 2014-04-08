@@ -1,5 +1,5 @@
-@page using-production In production
-@parent Using 3
+@page using-production In Production
+@parent Using 2
 
 While it makes sense to use uniminified JavaScript split into separate files and a CanJS debugging version (like `can.jquery.dev.js`) during development, you should concatenate and minify all your resources for use in production. If you are using CanJS [using-standalone standalone] this can be done through a build tool like [Grunt](http://gruntjs.com/) or [Gulp](http://gulpjs.com/) or tools part of your server side framework like the [Ruby on Rails asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html).
 

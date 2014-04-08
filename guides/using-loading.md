@@ -1,10 +1,13 @@
-@page using-standalone In a <script> tag
-@parent Using 0
+@page using-loading Loading
+@parent Using 1
 
-The most common way of using CanJS is the core builds from the download (or download builder) included in a `<script>` tag.
-This page contains quick instructions for using CanJS with the different supported libraries.
+There are several ways to load CanJS in your application. Most likely you will use one of the pre-built versions like `can.jquery.js` but it is also possible to load each module individually using AMD or Steal.
 
-## jQuery
+## In a `<script>` tag
+
+The most common way of using CanJS is the core builds from the download (or download builder) included in a `<script>` tag. The following section contains quick instructions how to load CanJS for each library it supports.
+
+### jQuery
 
 CanJS supports jQuery in the latest 1.X and 2.0 version. Include jQuery before your CanJS jQuery build to get started:
 
@@ -21,7 +24,7 @@ CanJS supports jQuery in the latest 1.X and 2.0 version. Include jQuery before y
     </script>
 
 
-## Zepto
+### Zepto
 
 CanJS supports Zepto 0.9+. Include a copy of Zepto along with CanJS to get started.
 
@@ -38,20 +41,7 @@ CanJS supports Zepto 0.9+. Include a copy of Zepto along with CanJS to get start
     </script>
 
 
-## Dojo
-
-CanJS supports Dojo 1.8+ using its new AMD loader in asynchronous or synchronous mode. Everything describe in the [using-require using CanJS and RequireJS] section applies to Dojo as well. An example configuration that uses the AMD files from the CanJS CDN can look like this:
-
-    require({
-        aliases:[
-            ['can/util/library', 'can/util/dojo']
-        ],
-        baseUrl : 'http://canjs.com/release/latest/amd/can.js',
-    });
-
-    require(['can/control'], function(Control) {
-      // Use Control
-    });
+### Dojo
 
 You can also use the [Dojo base download](http://dojotoolkit.org/download/) and simply include it alongside CanJS:
 
@@ -65,7 +55,7 @@ You can also use the [Dojo base download](http://dojotoolkit.org/download/) and 
       });
     </script>
 
-## Mootools
+### Mootools
 
 CanJS supports Mootools 1.4+. Include a copy of [Mootools Core](http://mootools.net/download) along with CanJS to get started.
 
@@ -85,7 +75,7 @@ Include Mootools More's Event.Pseudos module for __focus__ and __blur__ support.
     </script>
 
 
-## YUI
+### YUI
 
 CanJS supports YUI 3.4+ with both dynamically or statically loaded modules.
 CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__. The __selector-css2__ and __selector-css3__ YUI modules are optional, but necessary for IE7 and other browsers that don't support __querySelectorAll__.
@@ -169,3 +159,105 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
         });
       });
     });
+
+
+## AMD
+
+The [CanJS Download](../download.html) contains an `amd/` folder which allows you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/). Unlike many other JavaScript libraries CanJS is fully modular and loading a dependency will only include the modules actually used (for example, `can/control` will only load `can/construct` and `can/util`). The `amd-dev/` folder contains the same files but with debugging message enabled which can be very helpful during development.
+
+### Configuration
+
+The default library used with AMD modules is jQuery. CanJS will reference the `jquery` module so that name needs to point to your jQuery source and the `can` module name needs to be mapped to the `amd/` folder of the CanJS download.
+
+### RequireJS
+
+In RequireJS a simple configuration looks like this:
+
+    <script type="text/javascript" src="require.js"></script>
+    <script type="text/javascript">
+      require.config({
+        paths : {
+          "jquery" : "http://code.jquery.com/jquery-2.0.3",
+          "can": "path/to/can/amd"
+        }
+      });
+
+      require(['can/control', 'can/view/mustache'], function(Control, can) {
+        // Use Mustache and Control
+        var MyControl = Control.extend({
+          init: function() {
+            this.element.html(can.view('path/to/view.mustache', this.options));
+          }
+        });
+      });
+    </script>
+
+The `can` module is a shortcut that loads CanJS's core plugins and returns the `can` namespace:
+
+    require(['can'], function(can) {
+      // Use can.Control, can.view, can.Model etc.
+    });
+
+
+### Dojo
+
+The configuration for Dojo is similar but `can/util/library` needs to be mapped to `can/util/dojo`:
+
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js">
+    </script>
+    <script src="can.dojo.js"></script>
+    <script>
+      require({
+        aliases : [
+          ['can/util/library', 'can/util/dojo']
+        ],
+        paths : {
+          can: 'path/to/can/amd'
+        }
+      });
+
+      require(['can/control'], function(Control) {
+        // Use Control
+      });
+    </script>
+
+### Using other libraries
+
+If you would like to use another library, map the `can/util/library` module to `can/util/zepto`,
+`can/util/yui` or `can/util/mootools`.
+
+With RequireJS and Zepto, it loks like this:
+
+    require.config({
+      paths : {
+        "can": "path/to/can/amd",
+        "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
+      },
+      map : {
+        '*' : {
+          "can/util/library" : "can/util/zepto"
+        }
+      }
+    });
+
+
+## StealJS
+
+StealJS is the dependency manager that comes with [JavaScriptMVC](http://javascriptmvc.com) and that is natively used by CanJS.
+Since JavaScriptMVC comes with CanJS and Steal, the easiest way to use them together is by [downloading JavaScriptMVC](http://javascriptmvc.com/dist/javascriptmvc-3.3.zip). You can also use the `steal/` folder from the CanJS download or Bower package.
+
+With the JavaScriptMVC download, in the main folder, you can simply run the application generator:
+
+> ./js jmvc/generate/app app
+
+In `app/app.js` you should see something like:
+
+    steal(
+        './app.less',
+        './models/fixtures/fixtures.js',
+    function(){
+
+    })
+
+This file will be loaded when opening `app/index.html` and you are ready to use CanJS with StealJS and make [using-production production builds].
+For more information follow up in the [JavaScriptMVC documentation](http://javascriptmvc.com/docs).
