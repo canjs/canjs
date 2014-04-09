@@ -6,7 +6,7 @@
 @group can.stache.tags 2 Basic Tags
 @group can.stache.htags 3 Helper Tags
 @group can.stache.static 4 Methods
-@link ../docco/stache.html docco
+@link ../docco/view/stache/mustache_core.html docco
 @test can/view/stache/test/test.html
 @plugin can/view/stache
 @download http://canjs.us/release/latest/can.stache.js

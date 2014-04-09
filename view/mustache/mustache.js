@@ -1257,6 +1257,7 @@ steal('can/util',
 							}
 							switch (mode) {
 								// Truthy section
+							case '^':
 							case '#':
 								result.content += ('{fn:function(' + ARG_NAMES + '){var ___v1ew = [];');
 								break;
@@ -1287,9 +1288,6 @@ steal('can/util',
 								 */
 							case 'else':
 								result.content += 'return ___v1ew.join("");}},\n{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];';
-								break;
-							case '^':
-								result.content += '{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];';
 								break;
 
 								// Not a section, no mode
@@ -1376,6 +1374,13 @@ steal('can/util',
 			// overwrite fn and inverse to always convert to scopes
 			helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
 			helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
+
+			// if mode is ^, swap fn and inverse
+			if(mode === '^') {
+				var tmp = helperOptions.fn;
+				helperOptions.fn = helperOptions.inverse;
+				helperOptions.inverse = tmp;
+			}
 
 			// Check for a registered helper or a helper-like function.
 			if (helper = (getHelper && (typeof name === "string" && Mustache.getHelper(name, options)) || (can.isFunction(name) && !name.isComputed && {

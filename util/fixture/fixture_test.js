@@ -453,6 +453,21 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			equal(responseData.id, 2, 'the third id is 2');
 		});
 	});
+
+	test('fixture updates request.data with id', function() {
+		expect(1);
+		stop();
+
+
+		can.fixture('foo/{id}', function(request) {
+			equal(request.data.id, 5);
+			start();
+		});
+
+		can.ajax({
+			url: 'foo/5'
+		});
+	});
 	
 	test("create a store with array and comparison object",function(){
 		

@@ -880,7 +880,10 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * list === reversedList; // true
 		 * @codeend
 		 */
-		reverse: [].reverse,
+		reverse: function() {
+			var list = can.makeArray([].reverse.call(this));
+			this.replace(list);
+		},
 
 		/**
 		 * @function can.List.prototype.slice slice
