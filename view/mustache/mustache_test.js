@@ -3571,6 +3571,30 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		equal(ul.innerHTML, '<li>Curtis</li><li>Stan</li><li>David</li>', 'List got updated');
 	});
 
+	test('each with child objects (#750)', function() {
+		var list = new can.List([{
+			i: 0
+		}, {
+			i: 1
+		}, {
+			i: 2
+		}]);
+
+		var template = can.view.mustache('{{#each list}}{{i}}{{/each}}');
+
+		var frag = template({
+			list: list
+		});
+
+		var div = document.createElement('div');
+		div.appendChild(frag);
+
+		equal(div.innerHTML, '012');
+
+		list.pop();
+		equal(div.innerHTML, '01');
+	});
+
 	test('Mustache helper: if w/ each removing all content', function () {
 		var expected = '123content',
 		container = new can.Map({
