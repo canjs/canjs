@@ -550,7 +550,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					return {};
 				},
 				
-				// ## can.fixture.create
+				// ## fixtureStore.create
 				// Simulates a can.Model.create to a fixture
 				create: function (settings, response) {
 					var item = make(items.length, items);
