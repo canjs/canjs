@@ -7,7 +7,7 @@
 @test can/map/test.html
 @plugin can/map
 @release 2.0
-@link ../docco/map.html docco
+@link ../docco/map/map.html docco
 
 @description Create observable objects.
 

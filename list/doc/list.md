@@ -9,7 +9,7 @@
 @group can.List.static 1 Static
 @group can.List.plugins 2 plugins
 
-@link ../docco/list.html docco
+@link ../docco/list/list.html docco
 
 Use for observable array-like objects.
 
