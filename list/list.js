@@ -1036,6 +1036,36 @@ steal("can/util", "can/map", function (can, Map) {
 			}
 
 			return this;
+		},
+		/**
+A filter function that accepts a function, which is run on every element of the list.  If the 
+filter callback returns true, the list returned will contain this item, false and it will not.
+
+Returns a new can.List instance.
+
+	list.filter( function(el, index, list)
+	{
+		return el.attr("something") !== "poop";
+	}, this);
+
+**@param** {function()} callback A function to call with each element of the list. Returning `false` will remove the index.
+**@param** {Object} thisArg The object to use as `this` inside the callback.
+*/
+		filter: function (callback, thisArg) {
+			if(thisArg){
+				callback = can.proxy(callback, thisArg);
+			} else {
+				callback = can.proxy(callback, this);
+			}
+			var filteredList = new can.List,
+				filtered;
+			this.forEach(function(item, index, list){
+				filtered = callback(item, index, list);
+				if(filtered){
+					filteredList.push(item);
+				}
+			});
+			return filteredList;
 		}
 	});
 	can.List = Map.List = list;
