@@ -129,7 +129,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			},
 			__get: function (attr) {
 				if (attr) {
-					if (this._computedBindings[attr]) {
+					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
 						return this[attr]();
 					} else {
 						return this[attr];
