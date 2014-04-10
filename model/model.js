@@ -126,7 +126,13 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				return modelObj;
 			});
 
-			// Attach the callbacks to the piped Deferred.
+			// Hook up `abort`
+			if (jqXHR.abort) {
+				deferred.abort = function () {
+					jqXHR.abort();
+				};
+			}
+
 			deferred.then(success, error);
 			return deferred;
 		},
@@ -1809,26 +1815,23 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	], function (funcName) {
 		// Each of these is pretty much the same, except for the events they trigger.
 		can.Model.prototype[funcName] = function (attrs) {
-			var constructor = this.constructor;
+			var stub,
+				constructor = this.constructor;
 
-			// If attrs was passed and is sane, update the model with those attrs.
-			if(attrs && typeof attrs === 'object') {
-				this.attr(attrs.attr ? attrs.attr() : attrs);
-			}
+			// Update attributes if attributes have been passed
+			stub = attrs && typeof attrs === 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
-			// Trigger a change event. This event bubbles up (for example, to Lists,
-			// where the changed property becomes something like `1.destroyed`).
-			// This event is used to remove items on `destroyed` from Model Lists, but there should be a better way.
+			// triggers change event that bubble's like
+			// handler( 'change','1.destroyed' ). This is used
+			// to remove items on destroyed from Model Lists.
+			// but there should be a better way.
 			can.trigger(this, "change", funcName);
-			// Model lists will bubble this
-			can.trigger(this, funcName);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
 			//!steal-remove-end
 
-			// Trigger the appropriate event on the constructor.
-			// This lets code listen for any time a model of this type has a lifecycle event.
+			// Call event on the instance's Class
 			can.trigger(constructor, funcName, this);
 		};
 	});

@@ -412,22 +412,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			can.fixture.on = true;
 		});
 	});
-	/*
-	 test("Empty uses fixtures", function(){
-	 ok(false, "Figure out")
-	 return;
-	 can.Model("Test.Things");
-	 $.fixture.make("thing", 10, function(i){
-	 return {
-	 id: i
-	 }
-	 });
-	 stop();
-	 Test.Thing.findAll({}, function(things){
-	 start();
-	 equal(things.length, 10,"got 10 things")
-	 })
-	 });*/
+
 	test('Model events', function () {
 		expect(12);
 		var order = 0;
@@ -481,6 +466,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			});
 		item.save();
 	});
+
 	test('removeAttr test', function () {
 		can.Model('Person');
 		var person = new Person({
