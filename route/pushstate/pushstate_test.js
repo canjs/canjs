@@ -378,70 +378,48 @@ steal('can/route/pushstate', "can/test", function () {
 		});
 
 		if (window.history && history.pushState) {
-			
-			var makeTestingIframe = function(callback){
-				
-				
-				window.routeTestReady = function (iCanRoute, loc, history, win) {
-					callback({
-						route: iCanRoute,
-						location: loc,
-						history: history,
-						window: win,
-						iframe: iframe
-					}, function(){
-						iframe.onload = null;
-						can.remove(can.$(iframe));
-						delete window.routeTestReady;
-					});
-				};
-				
-				var iframe = document.createElement('iframe');
-				iframe.src = can.test.path("route/pushstate/testing.html?"+Math.random());
-				can.$("#qunit-test-area")[0].appendChild(iframe);
-				
-				
-			};
-			
-			
-			
 			test("updating the url", function () {
 				stop();
-				makeTestingIframe(function (info, done) {
-					info.route.ready()
-					info.route("/:type/:id");
-					info.route.attr({
+				window.routeTestReady = function (iCanRoute, loc) {
+					iCanRoute.ready()
+					iCanRoute("/:type/:id");
+					iCanRoute.attr({
 						type: "bar",
 						id: "5"
 					});
 
 					setTimeout(function () {
-						var after = info.location.pathname;
+						var after = loc.pathname;
 						equal(after, "/bar/5", "path is " + after);
 						start();
 
-						done();
+						can.remove(can.$(iframe))
 
 					}, 100);
-				});
-				
+				}
+				var iframe = document.createElement('iframe');
+				iframe.src = can.test.path("route/pushstate/testing.html");
+				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
 
 			test("sticky enough routes", function () {
 				stop();
-				makeTestingIframe(function (info, done) {
-					info.route("/active");
-					info.route("");
-					info.history.pushState(null, null, "/active");
+				window.routeTestReady = function (iCanRoute, loc, history) {
+					iCanRoute("/active");
+					iCanRoute("");
+					history.pushState(null, null, "/active");
 
 					setTimeout(function () {
-						var after = info.location.pathname;
+						var after = loc.pathname;
 						equal(after, "/active");
 						start();
 
-						done();
+						can.remove(can.$(iframe))
 					}, 30);
-				});
+				}
+				var iframe = document.createElement('iframe');
+				iframe.src = can.test.path("route/pushstate/testing.html?2");
+				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
 
 			test("unsticky routes", function () {
@@ -610,109 +588,14 @@ steal('can/route/pushstate', "can/test", function () {
 			});
 
 			test("routed links must descend from pushstate root (#652)", 2, function () {
-				stop();
-				
-				var setupRoutesAndRoot = function(iCanRoute, root){
-					iCanRoute(":section/");
-					iCanRoute(":section/:sub/");
-					iCanRoute.bindings.pushstate.root = root;
-					iCanRoute.ready();
-				};
-				
-				
-				var createLink = function(win, url) {
-					var link = win.document.createElement("a");
-					link.href = link.innerHTML = url;
-					win.document.body.appendChild(link);
-					return link;
-				};
-				
-				// The following makes sure a link that is not "rooted" will 
-				// behave normally and not call pushState
-				makeTestingIframe(function (info, done) {
-					setupRoutesAndRoot(info.route, "/app/");
-					var link = createLink(info.window, "/notInRoot/notInRoot/");
-					
-					info.history.pushState = function(){
-						ok(false, "pushState should not have been called");
-					};
-					var origDocument = info.window.document;
-					
-					// If the document change doesn't happen within 5 seconds, fail
-					var killSwitch = setTimeout(function(){
-						ok(false, "same window for 5 seconds");
-						clearTimeout(checkTimer);
-						done();
-						start();
-					},5000);
-					
-					// check that the window changes
-					var checkTimer,
-						check = function(){
-							if(origDocument !== info.iframe.contentWindow.document) {
-								clearTimeout(killSwitch);
-								ok(true, "We have a different window");
-								done();
-								setTimeout(next,10);
-							} else {
-								checkTimer = setTimeout(check, 10);
-							}
-						};
-					checkTimer = setTimeout(check, 10);
-					// click a link and make sure the iframe url changes
-					link.click();
-				});
-				
-				next = function(){
-					
-					makeTestingIframe(function (info, done) {
-						setupRoutesAndRoot(info.route, "/app/");
-						var link = createLink(info.window, "/app/something/test/");
-						
-						
-						var timer;
-						info.route.bind("change", function(){
-							clearTimeout(timer);
-							timer = setTimeout(function(){
-								// deepEqual doesn't like to compare objects from different contexts
-								// so we copy it
-								var obj = can.simpleExtend({}, info.route.attr());
-								
-								deepEqual(obj, {
-									section: "something",
-									sub: "test",
-									route: ":section/:sub/"
-								}, "route's data is correct");
-								
-								done();
-								start();
-							},10);
-							
-						});
-						
-						
-						
-						// click a link and make sure the iframe url changes
-						link.click();
-					});
-					
-					
-				};
-				/*var tests = [
-					{
-						root: "/app/",
-						href: "/app/something/test/",
-						data: {
-							section: "something",
-							sub: "test",
-							route: ":section/:sub/"
-						}
-					},
-					{
-						root: "/app/",
-						href: "/route/pushstate/",
-						data: {}
-					}
+				var tests = [
+					// ["root", "link href", { route: "result" }]
+					["/app/", "/app/something/test/", {
+						section: "something",
+						sub: "test",
+						route: ":section/:sub/"
+					}],
+					["/app/", "/route/pushstate/", {}]
 				],
 					iframe,
 					test;
@@ -728,7 +611,6 @@ steal('can/route/pushstate', "can/test", function () {
 								win.can.route.unbind("change", change);
 							}
 							clearTimeout(timeout);
-							
 							setTimeout(function () {
 								can.remove(can.$(iframe));
 								start();
@@ -789,7 +671,7 @@ steal('can/route/pushstate', "can/test", function () {
 					}
 				}
 
-				runTest();*/
+				runTest();
 
 			});
 

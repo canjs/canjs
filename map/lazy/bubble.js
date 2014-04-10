@@ -1,4 +1,6 @@
-steal('can/util', 'can/map/bubble.js', function(can, bubble) {
+steal('can/util', 'can/map/bubble.js', function(can) {
+	var bubble = can.bubble;
+
 	return can.extend({}, bubble, {
 		childrenOf: function (parentMap, eventName) {
 			if(parentMap._nestedReference) {

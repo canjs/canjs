@@ -892,7 +892,6 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(list1.length, 2, 'Merging using attr yields length of 2');
 	});
 	test('destroying a model impact the right list', function () {
-		
 		can.Model('Person', {
 			destroy: function (id, success) {
 				var def = isDojo ? new dojo.Deferred() : new can.Deferred();
@@ -900,15 +899,13 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 				return def;
 			}
 		}, {});
-		
-		can.Model.extend('Organisation', {
+		can.Model('Organisation', {
 			destroy: function (id, success) {
 				var def = isDojo ? new dojo.Deferred() : new can.Deferred();
 				def.resolve({});
 				return def;
 			}
 		}, {});
-		
 		var people = new Person.List([
 			new Person({
 				id: 1
@@ -925,19 +922,15 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 					id: 2
 				})
 			]);
-			
 		// you must be bound to the list to get this
 		people.bind('length', function () {});
 		orgs.bind('length', function () {});
-		
 		// set each person to have an organization
 		people[0].attr('organisation', orgs[0]);
 		people[1].attr('organisation', orgs[1]);
 		equal(people.length, 2, 'Initial Person.List has length of 2');
 		equal(orgs.length, 2, 'Initial Organisation.List has length of 2');
-		
 		orgs[0].destroy();
-		
 		equal(people.length, 2, 'After destroying orgs[0] Person.List has length of 2');
 		equal(orgs.length, 1, 'After destroying orgs[0] Organisation.List has length of 1');
 	});

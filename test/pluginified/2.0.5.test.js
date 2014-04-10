@@ -6402,7 +6402,7 @@ var __m42 = (function () {
 			'{noExistStuff} proc': function () {}
 		});
 		var c = new Control(document.createElement('div'));
-		equal(c._bindings.length, 1, 'There is only one binding');
+		equal(c._bindings.user.length, 1, 'There is only one binding');
 	});
 	test('Multiple calls to destroy', 2, function () {
 		var Control = can.Control({

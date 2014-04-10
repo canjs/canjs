@@ -3,7 +3,7 @@
 @test can/component/test.html
 @parent canjs
 @release 2.0
-@link ../docco/component.html docco
+@link ../docco/component/component.html docco
 
 
 @description Create widgets that use a template, a view-model 

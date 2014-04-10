@@ -88,6 +88,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				this.length = 0;
 				can.cid(this, ".map");
 				this._init = 1;
+				this._setupComputes();
 				instances = instances || [];
 				var teardownMapping;
 
@@ -127,7 +128,15 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 			},
 			__get: function (attr) {
-				return attr ? this[attr] : this;
+				if (attr) {
+					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
+						return this[attr]();
+					} else {
+						return this[attr];
+					}
+				} else {
+					return this;
+				}
 			},
 			___set: function (attr, val) {
 				this[attr] = val;
@@ -871,7 +880,10 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * list === reversedList; // true
 		 * @codeend
 		 */
-		reverse: [].reverse,
+		reverse: function() {
+			var list = can.makeArray([].reverse.call(this));
+			this.replace(list);
+		},
 
 		/**
 		 * @function can.List.prototype.slice slice

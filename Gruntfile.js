@@ -376,15 +376,22 @@ module.exports = function (grunt) {
 			}
 		},
 		docco: {
-			dev: {
-				src: [
-					'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
-					'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-					'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+			options: {
+				dst: 'docco/',
+				layout : 'parallel',
+				css : 'resources/docco.css'
+			},
+			docs: {
+				files : [
+					{
+						src : [
+							'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
+							'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
+							'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+						],
+						expand : true
+					}
 				],
-				options: {
-					output: 'docco/'
-				}
 			}
 		},
 		plato: {
@@ -450,7 +457,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 	grunt.loadNpmTasks('grunt-jsbeautifier');
-	grunt.loadNpmTasks('grunt-docco');
+	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
