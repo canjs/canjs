@@ -211,5 +211,6 @@ steal('can/util', function (can) {
 			return a == b;
 		}
 	};
+	compareMethods.eqeq = compareMethods.similar;
 	return can.Object;
 });

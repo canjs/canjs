@@ -266,7 +266,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					i;
 
 				for (i = 2; i < args.length; i++) {
-					args[i] = bubble.set(this, i, args[i]);
+					args[i] = bubble.set(this, i, this.__type(args[i], i) );
 					
 				}
 				if (howMany === undefined) {
@@ -694,7 +694,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				// Go through and convert anything to an `map` that needs to be converted.
 				while (i--) {
 					val = arguments[i];
-					args[i] = bubble.set(this, i, val);
+					args[i] = bubble.set(this, i, this.__type(val, i) );
 				}
 
 				// Call the original method.
@@ -1045,6 +1045,16 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			}
 
 			return this;
+		},
+		filter: function(filter){
+			var items = [],
+				self = this;
+			this.each(function(item){
+				if(filter.call(self, item)) {
+					items.push(item)
+				}
+			});
+			return new this.constructor(items);
 		}
 	});
 	can.List = Map.List = list;
