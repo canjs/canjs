@@ -1038,18 +1038,26 @@ steal("can/util", "can/map", function (can, Map) {
 			return this;
 		},
 		/**
+@function can.List.prototype.filter filter
+@description Filter the elements of a List, returning a new List instance with just filtered items.
+@signature `list.filter(filterFunc, context)`
+@param {function} filterFunc A function to call with each element of the list. Returning `false` will remove the index.
+@param {Object} context The object to use as `this` inside the callback.
+
+@body
+
 A filter function that accepts a function, which is run on every element of the list.  If the 
 filter callback returns true, the list returned will contain this item, false and it will not.
 
 Returns a new can.List instance.
+	
+	var list = new can.List([1, 2, 3])
 
-	list.filter( function(el, index, list)
+	// returns new can.List([1, 2])
+	var filtered = list.filter( function(item, index, list)
 	{
-		return el.attr("something") !== "poop";
-	}, this);
-
-**@param** {function()} callback A function to call with each element of the list. Returning `false` will remove the index.
-**@param** {Object} thisArg The object to use as `this` inside the callback.
+		return item < 3;
+	}); 
 */
 		filter: function (callback, thisArg) {
 			if(thisArg){
