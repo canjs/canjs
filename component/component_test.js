@@ -399,6 +399,11 @@ steal("can/component", function () {
 
 	test("deferred grid", function () {
 
+		// This test simulates a grid that reads a `deferreddata` property for 
+		// items and displays them.
+		// If `deferreddata` is a deferred, it waits for those items to resolve.
+		// The grid also has a `waiting` property that is true while the deferred is being resolved.
+
 		can.Component.extend({
 			tag: "grid",
 			scope: {
@@ -432,9 +437,12 @@ steal("can/component", function () {
 			}
 		});
 
+		// The context object has a `set` property and a
+		// deferredData property that reads from it and returns a new deferred.
 		var SimulatedScope = can.Map.extend({
 			set: 0,
 			deferredData: function () {
+
 				var deferred = new can.Deferred();
 				var set = this.attr('set');
 				if (set === 0) {
@@ -471,7 +479,9 @@ steal("can/component", function () {
 		}));
 
 		var gridScope = can.scope("#qunit-test-area grid");
-		equal(gridScope.attr("waiting"), true, "waiting is true");
+		
+		equal(gridScope.attr("waiting"), true, "The grid is initially waiting on the deferreddata to resolve");
+		
 		stop();
 
 		var waitingHandler = function() {
@@ -490,6 +500,8 @@ steal("can/component", function () {
 
 					}
 				});
+				
+				// update set to change the deferred.
 				scope.attr("set", 1);
 
 			}, 10);
@@ -846,9 +858,14 @@ steal("can/component", function () {
 			n2 = can.compute();
 
 		scope.attr("name", n1);
+		
 		n1("updated");
+		
 		scope.attr("name", n2);
+		
 		n2("updated");
+		
+		
 		equal(nameChanges, 2);
 	});
 
@@ -1024,6 +1041,48 @@ steal("can/component", function () {
 		can.view.mustache('<parent-tag></parent-tag>')();
 
 		equal(called, false);
+	});
+	
+
+	test('Same component tag nested', function () {
+		can.Component({
+			'tag': 'my-tag',
+			template: '<p><content/></p>'
+		});
+		//simplest case
+		var template = can.view.mustache('<my-tag>Outter<my-tag>Inner</my-tag></my-tag>');
+		//complex case
+		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag>1<my-tag>0</my-tag></my-tag></my-tag></my-tag>');
+		//edge case for new logic (same custom tag at same depth as one previously encountered)
+		var template3 = can.view.mustache('<my-tag>First</my-tag><my-tag>Second</my-tag>');
+		can.append(can.$('#qunit-test-area'), template({}));
+		equal(can.$('#qunit-test-area p').length, 2, 'proper number of p tags');
+		can.append(can.$('#qunit-test-area'), template2({}));
+		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
+		can.append(can.$('#qunit-test-area'), template3({}));
+		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
+
+	});
+
+	test("Component events bind to window", function(){
+		window.tempMap = new can.Map();
+		
+		can.Component.extend({
+			tag: "window-events",
+			events: {
+				"{tempMap} prop": function(){
+					ok(true, "called templated event");
+				}
+			}
+		});
+		
+		var template = can.view.mustache('<window-events></window-events>');
+		
+		template();
+		
+		window.tempMap.attr("prop","value");
+		
+		delete window.tempMap;
 	});
 
 	test('Same component tag nested', function () {

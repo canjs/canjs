@@ -108,7 +108,7 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 	can.Map.prototype.__convert = function (prop, value) {
 		// check if there is a
 		var Class = this.constructor,
-			oldVal = this.attr(prop),
+			oldVal = this.__get(prop),
 			type, converter;
 		if (Class.attributes) {
 			// the type of the attribute

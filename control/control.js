@@ -220,19 +220,21 @@ steal('can/util', 'can/construct', function (can) {
 
 					for (funcName in actions) {
 						// Only push if we have the action and no option is `undefined`
-						if (actions.hasOwnProperty(funcName) &&
-							(ready = actions[funcName] || cls._action(funcName, this.options))) {
-							bindings.push(ready.processor(ready.delegate || element,
-								ready.parts[2], ready.parts[1], funcName, this));
+						if ( actions.hasOwnProperty(funcName) ) {
+							ready = actions[funcName] || cls._action(funcName, this.options, this);
+							if( ready ) {
+								bindings.control[funcName]  = ready.processor(ready.delegate || element,
+									ready.parts[2], ready.parts[1], funcName, this);
+							}
 						}
 					}
 
 					// Set up the ability to `destroy` the control later.
 					can.bind.call(element, "removed", destroyCB);
-					bindings.push(function (el) {
+					bindings.user.push(function (el) {
 						can.unbind.call(el, "removed", destroyCB);
 					});
-					return bindings.length;
+					return bindings.user.length;
 				}
 
 				// if `el` is a string, use that as `selector` and re-set it to this control's element...
@@ -254,19 +256,27 @@ steal('can/util', 'can/construct', function (can) {
 					func = can.Control._shifter(this, func);
 				}
 
-				this._bindings.push(binder(el, eventName, func, selector));
-				return this._bindings.length;
+				this._bindings.user.push(binder(el, eventName, func, selector));
+
+				return this._bindings.user.length;
 			},
 			// ## off
 			// 
 			// Unbinds all event handlers on the controller.
 			// This should _only_ be called in combination with .on()
 			off: function () {
-				var el = this.element[0];
-				each(this._bindings || [], function (value) {
-					value(el);
-				});
-				this._bindings = [];
+				var el = this.element[0],
+					bindings = this._bindings;
+				if( bindings ) {
+					each(bindings.user || [], function (value) {
+						value(el);
+					});
+					each(bindings.control || {}, function (value) {
+						value(el);
+					});
+				}
+				// Adds bindings.
+				this._bindings = {user: [], control: {}};
 			},
 			// ## destroy
 			// 

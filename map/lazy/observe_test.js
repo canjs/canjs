@@ -784,7 +784,9 @@ steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
 			start();
 		}, 10);
 	});
-	test('dot separated keys (#257, #296)', function () {
+	test('dot separated keys (#257, #296)', 0, function () {
+		// Not supported by LazyMap
+		/*
 		var ob = new can.LazyMap({
 			'test.value': 'testing',
 			other: {
@@ -806,6 +808,7 @@ steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
 				test: 'value',
 				stuff: 'thinger'
 			}, 'Object set properly');
+		*/
 	});
 	test('cycle binding', function () {
 		var first = new can.LazyMap(),

@@ -1,21 +1,58 @@
-@page can.Map.setter setter
+@function can.Map.setter setter
 @parent can.Map.plugins
 @plugin can/map/setter
 @test can/map/setter/test.html
 
-`can.Map.setter(name, success(value), error(errors))` extends the Map object 
-to provide convenient helper methods for setting attributes on a observable.
+Specify setter methods on [can.Map can.Maps].
+
+@signature `setATTR: function(newValue,setValue,setErrors)`
+
+Specifies a setter method for the `ATTR` attribute.
+
+@param {String} ATTR The capitalized attribute name this setter will set. 
+
+@param {*} newValue The propsed value of the attribute specified by [can.Map::attr].
+
+@param {can.Map.setter.setValue} setValue A callback function that can specify `undefined` values
+or the value at a later time.
+
+@param {can.Map.setter.setErrors} setErrors A callback function that can specify error data if
+the proposed value is in error.
+
+@return {*} If a non-undefined value is returned, that value is set as the attribute's value. If
+undefined is returned, it's assumed that the `setValue` callback will be called.  Use `setValue` to
+set undefined values.
 
 @body
-The `attr` function looks for a `setATTRNAME` function to handle setting 
-the `ATTRNAME` property.
+
+## Use
+
+`can.Map.setter(name, setValue(value), setErrors(errors))` extends the Map object 
+to provide convenient helper methods for setting attributes on a map.
+
+The [can.Map::attr attr] function looks for a camel-case `setATTR` function to handle setting 
+the `ATTR` property. For example, the following makes sure the `birthday` attribute is 
+always a Date type.
+
+	var Contact = can.Map.extend({
+		setBirthday : function(raw){
+			if(typeof raw === 'number'){
+				return new Date( raw )
+			}else if(raw instanceof Date){
+				return raw;
+			}
+		}
+	});
+	
+	var contact = new Contact({ birthday: 1332777411799 });
+	contact.attr('birthday') //-> Date(Mon Mar 26 2012)
 
 By providing a function that takes the raw data and returns a form useful for JavaScript, 
 we can make our maps automatically convert data.
 
 	var Contact = can.Map.extend({
 		setBirthday : function(raw){
-			if(typeof raw == 'number'){
+			if(typeof raw === 'number'){
 				return new Date( raw )
 			}else if(raw instanceof Date){
 				return raw;
@@ -43,6 +80,12 @@ we can make our maps automatically convert data.
 	contact.attr('birthday') 
 		// -> Sat Mar 31 2012 00:00:00 GMT-0700 (MST)
 	
+<<<<<<< HEAD
+
+
+If the returned value is `undefined`, this means the setter is either in an async 
+event or the attribute(s) were not set. 
+=======
 If the returned value is `undefined`, this means the setter is either in an async 
 event or the attribute(s) were not set. 
 
@@ -90,6 +133,7 @@ alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
 alice.info._cid; // '.Map1'
 @codeend
+>>>>>>> minor
 
 ## Error Handling
 
@@ -118,10 +162,53 @@ when no value or a empty string is passed.
 	// set to empty string
 	school.attr("name","");
 
-	
+
+## Differences From `attr`
+
+The way that return values from setters affect the value of an Map's property is
+different from [can.Map::attr attr]'s normal behavior. Specifically, when the 
+property's current value is an Map or List, and an Map or List is returned
+from a setter, the effect will not be to merge the values into the current value as
+if the return value was fed straight into `attr`, but to replace the value with the
+new Map or List completely:
+
+    var Contact = can.Map.extend({
+    	setInfo: function(raw) {
+          return raw;
+    	}
+    });
+    
+    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+    alice.info._cid; // '.map1'
+    
+    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+    alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
+    alice.info._cid; // '.map2'
+
+If you would rather have the new Map or List merged into the current value, call
+`attr` inside the setter:
+
+    var Contact = can.Map.extend({
+    	setInfo: function(raw) {
+          this.info.attr(raw);
+          return this.info;
+    	}
+    });
+
+    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+    alice.info._cid; // '.Map1'
+    
+    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+    alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
+    alice.info._cid; // '.Map1'
+
 ## Demo
 
 The example app is a pagination widget that updates
 the offsets when the _Prev_ or _Next_ button is clicked.
 
 @demo can/map/setter/setter-paginate.html
+
+Notice the `setCount` and `setOffset` setters.

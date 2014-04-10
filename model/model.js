@@ -126,7 +126,13 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				return modelObj;
 			});
 
-			// Attach the callbacks to the piped Deferred.
+			// Hook up `abort`
+			if (jqXHR.abort) {
+				deferred.abort = function () {
+					jqXHR.abort();
+				};
+			}
+
 			deferred.then(success, error);
 			return deferred;
 		},
@@ -1809,33 +1815,39 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	], function (funcName) {
 		// Each of these is pretty much the same, except for the events they trigger.
 		can.Model.prototype[funcName] = function (attrs) {
-			var constructor = this.constructor;
+			var stub,
+				constructor = this.constructor;
 
-			// If attrs was passed and is sane, update the model with those attrs.
-			if(attrs && typeof attrs === 'object') {
-				this.attr(attrs.attr ? attrs.attr() : attrs);
-			}
+			// Update attributes if attributes have been passed
+			stub = attrs && typeof attrs === 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
-			// Trigger a change event. This event bubbles up (for example, to Lists,
-			// where the changed property becomes something like `1.destroyed`).
-			// This event is used to remove items on `destroyed` from Model Lists, but there should be a better way.
+			// triggers change event that bubble's like
+			// handler( 'change','1.destroyed' ). This is used
+			// to remove items on destroyed from Model Lists.
+			// but there should be a better way.
 			can.trigger(this, "change", funcName);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
 			//!steal-remove-end
 
-			// Trigger the appropriate event on the constructor.
-			// This lets code listen for any time a model of this type has a lifecycle event.
+			// Call event on the instance's Class
 			can.trigger(constructor, funcName, this);
 		};
 	});
+	
 
 	// # can.Model.List
 	// Model Lists are just like `Map.List`s except that when their items are
 	// destroyed, they automatically get removed from the List.
 	var ML = can.Model.List = can.List({
 		// ## can.Model.List.setup
+		// On change or a nested named event, setup change bubbling.
+		// On any other type of event, setup "destroyed" bubbling.
+		_bubbleRule: function(eventName, list) {
+			return can.List._bubbleRule(eventName, list) || "destroyed";
+		}
+	},{
 		setup: function (params) {
 			// If there was a plain object passed to the List constructor,
 			// we use those as parameters for an initial findAll.
@@ -1846,17 +1858,14 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				// Otherwise, set up the list like normal.
 				can.List.prototype.setup.apply(this, arguments);
 			}
+			this._init = 1;
+			this.bind('destroyed', can.proxy(this._destroyed, this));
+			delete this._init;
 		},
-		// ## can.Model.List._changes
-		// Because of the special behavior, we have to overwrite the default change handler.
-		_changes: function (ev, attr) {
-			can.List.prototype._changes.apply(this, arguments);
-			// On any change where an element was destroyed...
-			if (/\w+\.destroyed/.test(attr)) {
-				var index = this.indexOf(ev.target);
-				// ...check if the target was in the list...
-				if (index !== -1) {
-					// ...and remove it if it was.
+		_destroyed: function (ev, attr) {
+			if (/\w+/.test(attr)) {
+				var index;
+				while((index = this.indexOf(ev.target)) > -1) {
 					this.splice(index, 1);
 				}
 			}

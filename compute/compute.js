@@ -1,15 +1,17 @@
-	// # can.compute
-	// 
-	// `can.compute` allows creation of observable values
-	// from the result of a funciton. Any time an observable
-	// value that the function depends on changes, the
-	// function automatically updates. This enables creating
-	// observable data that relies on other sources, potentially
-	// multiple different ones. For instance, a `can.compute` is
-	// able to:
-	// - Combine a first and last name into a full name and update when either changes
-	// - Calculate the absolute value of an observable number, updating any time the observable number does
-	// - Specify complicated behavior for getting and setting a value, as well as how to handle changes
+/* jshint maxdepth:7*/
+
+// # can.compute
+// 
+// `can.compute` allows creation of observable values
+// from the result of a funciton. Any time an observable
+// value that the function depends on changes, the
+// function automatically updates. This enables creating
+// observable data that relies on other sources, potentially
+// multiple different ones. For instance, a `can.compute` is
+// able to:
+// - Combine a first and last name into a full name and update when either changes
+// - Calculate the absolute value of an observable number, updating any time the observable number does
+// - Specify complicated behavior for getting and setting a value, as well as how to handle changes
 
 steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
@@ -98,6 +100,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			stack[stack.length-1] = o;
 		}
 	};
+	can.__addReading = function(o){
+		if (stack.length) {
+			can.simpleExtend(stack[stack.length-1], o);
+		}
+	};
 
 	// ## Section Name
 
@@ -118,7 +125,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// A flag that is used to determine if an event is already being observed.
 			obEv,
 			name;
-		
 		// Go through what needs to be observed.
 		for( name in newObserveSet ) {
 			
@@ -372,29 +378,67 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			} else {
 				// `can.compute(initialValue, setter)`
 				if (typeof context === 'function') {
+					
 					value = getterSetter;
 					set = context;
 					context = eventName;
 					form = 'setter';
-				// ###Specifying an initial value and a settings object
-				//
-				// If `can.compute` is called with an [initial value and optionally a settings object](http://canjs.com/docs/can.compute.html#sig_can_compute_initialValue__settings__),
-				// a can.compute is created that can optionally specify how to read,
-				// update, and listen to changes in dependent values. This form of
-				// can.compute can be used to derive a compute that derives its
-				// value from any source
+                    // ###Specifying an initial value and a settings object
+                    //
+                    // If `can.compute` is called with an [initial value and optionally a settings object](http://canjs.com/docs/can.compute.html#sig_can_compute_initialValue__settings__),
+                    // a can.compute is created that can optionally specify how to read,
+                    // update, and listen to changes in dependent values. This form of
+                    // can.compute can be used to derive a compute that derives its
+                    // value from any source
 				} else {
 					// `can.compute(initialValue,{get:, set:, on:, off:})`
+					
+					
 					value = getterSetter;
 					var options = context,
 						oldUpdater = updater;
 						
-					updater = function(){
-						var newVal = get.call(context);
-						oldUpdater(newVal, value);
-					};
+					context = options.context || options;
 					get = options.get || get;
 					set = options.set || set;
+					
+					if(options.fn) {
+						var fn = options.fn,
+							data;
+						get = fn;
+						
+						if(fn.length === 0) {
+							
+							data = setupComputeHandlers(computed, fn, context, setCached);
+
+						} else if(fn.length === 1){
+							data = setupComputeHandlers(computed, function(){
+								return fn.call(context, value);
+							}, context, setCached);
+						} else {
+							updater = function(newVal){
+								if(newVal !== undefined) {
+									oldUpdater(newVal, value);
+								}
+							};
+							data = setupComputeHandlers(computed, function(){
+								var res = fn.call(context, value, function(newVal){
+									oldUpdater(newVal, value);
+								});
+								return res !== undefined ? res : value;
+							}, context, setCached);
+						}
+						
+							
+						on = data.on;
+						off = data.off;
+					} else {
+						updater = function(){
+							var newVal = get.call(context);
+							oldUpdater(newVal, value);
+						};
+					}
+					
 					on = options.on || on;
 					off = options.off || off;
 				}
@@ -504,6 +548,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				res = res();
 			}
 			return !!res;
+		});
+	};
+	can.compute.async = function(initialValue, asyncComputer, context){
+		return can.compute(initialValue, {
+			fn: asyncComputer,
+			context: context
 		});
 	};
 	// {map: new can.Map({first: "Justin"})}, ["map","first"]
