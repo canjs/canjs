@@ -346,117 +346,16 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 * A can.Map that represents the state of the history.
 		 */
 		data: new can.Map({}),
-		/**
-@function can.route.map map
-@parent can.route.static
-
-Assign a can.Map instance that acts as can.route's internal can.Map.  The purpose for this is to cross-bind a top level state object (Application State) to the can.route.
-
-@signature `can.route.Map(mapConstructor)`
-
-@param {can.Map} mapConstructor A can.Map constructor function.  A new can.Map instance will be created and used as the can.Map internal to can.route.
-
-@signature `can.route.Map(mapInstance)`
-
-@param {can.Map} mapInstance A can.Map instance, used as the can.Map internal to can.route.
-
-@signature `can.route.Map(func(attrs))`
-
-@param {function(attrs)} func A method, which will be called after can.route.ready is called.  It will be passed attrs, an object representing the deparameterized URL. This function should create and return a can.Map instance, which will be used as the internal can.Map for can.route.
-
-@body
-
-## Use
-
-	var AppState = can.Map.extend({
-		// return an object with string friendly formats
-		serialize: function(){
-			return {
-				searchTerm: this.attr('searchTerm'),
-				flags: this.attr('flags').join(',')
-			}
-		},
-		// convert a stringified object into the javascript friendly format
-		setFlags: function(val){
-			if(val === ""){
-				return [];
-			}
-			var arr = val;
-			if(typeof val === "string"){
-				arr = val.split(',')
-			}
-			return arr;
-		}
-	});
-
-	var appState = new AppState;
-
-	can.route("", {
-		searchTerm: '',
-		flags: ''
-	});
-
-	can.route.Map(appState);
-
-## Loading data on application start
-
-A common use case is loading some metadata related to the Application State when the application begins, which must be loaded as part of the Application State before we can start up all the components.
-
-To implement this functionality, load this data, call the AppState constructor with the data and save it in the init method, then call can.route.Map and can.route.ready to set the application init process in motion.
-
-For example:
-
-	var AppState = can.Map.extend({
-		init: function(locations){
-			// a can.List of {name: "Chicago", id: 3}
-			this.attr('locations', locations);
-		},
-		// return an object with string friendly formats
-		serialize: function(){
-			return {
-				locationIds: this.attr('locations').filter(function(location){
-					return this.location.attr('selected');
-				}),
-				searchTerm: this.attr('searchTerm')
-			}
-		},
-		setLocationIds: function(val){
-			if(val === ""){
-				return [];
-			}
-			var arr = val;
-			if(typeof val === "string"){
-				arr = val.split(',')
-			}
-			this.attr('locations').forEach(function(location){
-				if(arr.indexOf(location.attr('id')) !== -1){
-					location.attr('selected', true);
-				}
-			})
-		}
-	});
-
-	Locations.findAll({}, function(locations){
-		var appState = new AppState(locations);
-		can.route.Map(appState);
-		can.route.ready();
-	})
-
-	can.route("", {
-		searchTerm: '',
-		locationIds: ''
-	});
-		*/
 		map: function(data){
 			var appState;
 			// appState is an instance of can.Map
 			if(data instanceof can.Map){
 				appState = data;
-			} 
+			}
 			// appState is a can.Map constructor function
 			else if(data.prototype instanceof can.Map){
-				appState = new data
-			} 
+				appState = new data();
+			}
 			// appState is a function that returns a can.Map
 			else {
 				appState = data();
@@ -739,7 +638,6 @@ For example:
 	// hashchange event fired.  For this reason, it will not set the route data
 	// if the data is changing or the hash already matches the hash that was set.
 	setState = can.route.setState = function () {
-		debugger;
 		var hash = can.route._call("matchingPartOfURL");
 		curParams = can.route.deparam(hash);
 
