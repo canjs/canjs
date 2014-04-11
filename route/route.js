@@ -527,7 +527,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				// gets called with the serialized can.route data after a route has changed
 				// returns what the url has been updated to (for matching purposes)
 				setURL: function (path) {
-					location.hash = "#!" + path;
+					if(location.hash !== "#" + path) {
+						location.hash = "!" + path;
+					}
 					return path;
 				},
 				root: "#!"
