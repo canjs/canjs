@@ -573,7 +573,12 @@ steal("can/route", "can/test", function () {
 				iCanRoute.attr('path', 'foo');
 				setTimeout(function() {
 					var counter = 0;
-					equal(loc.hash, '#!foo');
+					try {
+						equal(loc.hash, '#!foo');
+					} catch(e) {
+						start();
+						throw e;
+					}
 
 					iCanRoute.bind("change", function() {
 						counter++;
@@ -581,9 +586,12 @@ steal("can/route", "can/test", function () {
 
 					loc.hash = "bar";
 					setTimeout(function() {
-						equal(loc.hash, '#bar');
-						equal(counter, 1); //sanity check -- bindings only ran once before this change.
-						start();
+						try {
+							equal(loc.hash, '#bar');
+							equal(counter, 1); //sanity check -- bindings only ran once before this change.
+						} finally {
+							start();
+						}
 					}, 100);
 				}, 100);
 			};
