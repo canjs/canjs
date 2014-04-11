@@ -1,0 +1,31 @@
+<div id='out'></div>
+<script src="../../lib/steal/steal.js"></script>
+<script>
+steal("can/view/bindings", function(){
+
+var Score = can.Map.extend({
+	difference: function(){
+		return Math.abs(this.attr('red') - this.attr('blue'));
+	}
+});
+
+window.game = new Score({
+	red: 15,
+	blue: 99
+});
+
+var template = can.view.mustache(
+	"<p>Blue team:\
+		<div contenteditable can-value='blue'></div>\
+	</p>\
+	<p>Red team:\
+		<div contenteditable can-value='red'></div>\
+	</p>\
+	<p>Difference: {{difference}} points\
+	</p>");
+
+$("#out").html(template(game));
+
+});
+</script>
+
