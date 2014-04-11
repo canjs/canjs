@@ -181,7 +181,7 @@ steal("can/util", "can/list", "can/test", function () {
 	});
 
 	test('filter', function(){
-		var l = new can.List([{id: 1, name: "John"}, {id: 2, name: "Mary"}])
+		var l = new can.List([{id: 1, name: "John"}, {id: 2, name: "Mary"}]);
 
 		var filtered = l.filter(function(item){
 			return item.name === "Mary";
@@ -189,6 +189,6 @@ steal("can/util", "can/list", "can/test", function () {
 
 		notEqual(filtered._cid, l._cid, "not same object");
 		equal(filtered.length, 1, "one item");
-		equal(filtered[0].name, "Mary", "filter works")
-	})
+		equal(filtered[0].name, "Mary", "filter works");
+	});
 });

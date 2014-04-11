@@ -1038,11 +1038,11 @@ steal("can/util", "can/map", function (can, Map) {
 			return this;
 		},
 		filter: function (callback, thisArg) {
-			var filteredList = new can.List,
+			var filteredList = new can.List(),
 				self = this,
 				filtered;
 			this.each(function(item, index, list){
-				filtered = callback.call( thisArg | self, item, index, self)
+				filtered = callback.call( thisArg | self, item, index, self);
 				if(filtered){
 					filteredList.push(item);
 				}
