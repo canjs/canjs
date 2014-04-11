@@ -39,7 +39,7 @@ explored for values.  For example:
     scope.attr("length")     //-> undefined
 
 However, if a `parent` scope is provided, key values will be
-searched in the parent's contexxt after the initial context is expored.  For example:
+searched in the parent's context after the initial context is explored.  For example:
 
     var list = [{name: "Justin"},{name: "Brian"}],
     	justin = list[0];

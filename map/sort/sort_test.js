@@ -1,5 +1,6 @@
 steal("can/map/sort", "can/test", "can/view/mustache", function () {
 	module('can/map/sort');
+
 	test('list events', 16, function () {
 		var list = new can.List([{
 			name: 'Justin'
@@ -47,6 +48,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		list.splice(0, 1);
 		list[0].attr('name', 'Zed');
 	});
+
 	test('list sort with func', 1, function () {
 		var list = new can.List([{
 			priority: 4,
@@ -70,7 +72,8 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		});
 		equal(list[0].name, 'high');
 	});
-	test('list sort with comparator function', 4, function () {
+
+	test('list sort with containing Map attribute', 4, function () {
 		var list = new can.Map.List([
 			new can.Map({
 				text: 'Bbb',
@@ -104,6 +107,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		equal(list.attr()[2].text, 'baa');
 		equal(list.attr()[3].text, 'Bbb');
 	});
+
 	test('live binding with comparator (#170)', function () {
 		var renderer = can.view.mustache('<ul>{{#items}}<li>{{text}}</li>{{/items}}</ul>'),
 			el = document.createElement('div'),

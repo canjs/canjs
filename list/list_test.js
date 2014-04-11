@@ -1,4 +1,4 @@
-steal("can/util", "can/list", "can/test", function () {
+steal("can/util", "can/list", "can/test", "can/compute", function () {
 	module('can/list');
 	test('list attr changes length', function () {
 		var l = new can.List([
@@ -165,6 +165,23 @@ steal("can/util", "can/list", "can/test", function () {
 		var l = new can.List(['a']);
 		l.splice(0, 1);
 		ok(!l.attr(0), 'all props are removed');
+	});
+
+	test('list sets up computed attributes (#790)', function() {
+		var List = can.List.extend({
+			i: can.compute(0),
+			a: 0
+		});
+
+		var l = new List([1]);
+		equal(l.attr('i'), 0);
+
+		var Map = can.Map.extend({
+			f: can.compute(0)
+		});
+
+		var m = new Map();
+		m.attr('f');
 	});
 
 	test('reverse triggers add/remove events (#851)', function() {
