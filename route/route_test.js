@@ -562,6 +562,37 @@ steal("can/route", "can/test", function () {
 			iframe.src = can.test.path("route/testing.html?1");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
+
+		test("hash doesn't update to itself with a !", function() {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+
+				iCanRoute.ready();
+				iCanRoute(":path");
+
+				iCanRoute.attr('path', 'foo');
+				setTimeout(function() {
+					var counter = 0;
+					equal(loc.hash, '#!foo');
+
+					iCanRoute.bind("change", function() {
+						counter++;
+					});
+
+					loc.hash = "bar";
+					setTimeout(function() {
+						equal(loc.hash, '#bar');
+						equal(counter, 1); //sanity check -- bindings only ran once before this change.
+						start();
+					}, 100);
+				}, 100);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?1");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
+
 	}
 
 	test("escaping periods", function () {
