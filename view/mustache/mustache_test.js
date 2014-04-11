@@ -3570,4 +3570,65 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 		map.attr('showPeople', true);
 		equal(ul.innerHTML, '<li>Curtis</li><li>Stan</li><li>David</li>', 'List got updated');
 	});
+
+	test('each with child objects (#750)', function() {
+		var list = new can.List([{
+			i: 0
+		}, {
+			i: 1
+		}, {
+			i: 2
+		}]);
+
+		var template = can.view.mustache('{{#each list}}{{i}}{{/each}}');
+
+		var frag = template({
+			list: list
+		});
+
+		var div = document.createElement('div');
+		div.appendChild(frag);
+
+		equal(div.innerHTML, '012');
+
+		list.pop();
+		equal(div.innerHTML, '01');
+	});
+
+	test('Mustache helper: if w/ each removing all content', function () {
+		var expected = '123content',
+		container = new can.Map({
+			items: [1,2,3]
+		});
+
+		var template = can.view.mustache('{{#if items.length}}{{#each items}}{{this}}{{/each}}content{{/if}}');
+		var frag = template(container);
+
+		var div = document.createElement('div');
+		div.appendChild(frag);
+
+		equal(div.innerHTML, expected);
+
+		container.attr('items').replace([]);
+		equal(div.innerHTML, '');
+	});
+
+	test("Inverse ^if should work with an else clause (#751)", function() {
+		var tmpl = "{{^if show}}" +
+			"<div>Not showing</div>" +
+			"{{else}}" +
+			"<div>Is showing</div>" +
+			"{{/if}}";
+
+		var data = new can.Map({show: false});
+		var frag = can.view.mustache(tmpl)(data);
+
+		// Should not be showing at first.
+		var node = frag.childNodes[0];
+		equal(node.innerHTML, "Not showing", "Inverse resolved to true");
+
+		// Switch show to true and should show {{else}} section
+		data.attr("show", true);
+		equal(frag.childNodes[0].innerHTML, "Is showing", "Not showing the else");
+	});
 });

@@ -105,6 +105,11 @@
 			"type": "plugin",
 			"description": "Proxy construct methods"
 		},
+		"can/map/lazy": {
+			"name": "can.Map.Lazy",
+			"type": "plugin",
+			"description": "Lazy initializing maps and lists"
+		},
 		"can/map/delegate": {
 			"name": "can.Map.delegate",
 			"type": "plugin",

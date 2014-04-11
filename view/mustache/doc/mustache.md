@@ -5,7 +5,7 @@
 @group can.Mustache.types 1 Types
 @group can.Mustache.tags 2 Basic Tags
 @group can.Mustache.htags 3 Helper Tags
-@link ../docco/mustache.html docco
+@link ../docco/view/mustache/mustache.html docco
 @test can/view/mustache/test/test.html
 @plugin can/view/mustache
 @download http://canjs.us/release/latest/can.view.mustache.js

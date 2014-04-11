@@ -1,14 +1,25 @@
+// # can/util/attr.js
+// Central location for attribute changing to occur, used to trigger an
+// `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
+
+
 steal("can/util/can.js", function (can) {
 
+	// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
+	// the triggering of `attributes` event async.
 	var setImmediate = window.setImmediate || function (cb) {
 			return setTimeout(cb, 0);
 		},
 		attr = {
+			// This property lets us know if the browser supports mutation observers.
+			// If they are supported then that will be setup in can/util/jquery and those native events will be used to inform observers of attribute changes.
+			// Otherwise this module handles triggering an `attributes` event on the element.
 			MutationObserver: window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
 
 			/**
 			 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map
 			 * @parent can.view.elements
+			 * @hide
 			 *
 			 *
 			 * A mapping of
@@ -35,6 +46,8 @@ steal("can/util/can.js", function (can) {
 				"disabled": true,
 				"readonly": true,
 				"required": true,
+				// For the `src` attribute we are using a setter function to prevent values such as an empty string or null from being set.
+				// An `img` tag attempts to fetch the `src` when it is set, so we need to prevent that from happening by removing the attribute instead.
 				src: function (el, val) {
 					if (val == null || val === "") {
 						el.removeAttribute("src");
@@ -48,11 +61,13 @@ steal("can/util/can.js", function (can) {
 					return el.style.cssText = val || "";
 				}
 			},
-			// elements whos default value we should set
+			// These are elements whos default value we should set.
 			defaultValue: ["input", "textarea"],
-			// Set an attribute on an element
+			// ## attr.set
+			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
 				var oldValue;
+				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
 				if (!attr.MutationObserver) {
 					oldValue = attr.get(el, attrName);
 				}
@@ -61,7 +76,10 @@ steal("can/util/can.js", function (can) {
 					.toLowerCase(),
 					prop = attr.map[attrName],
 					newValue;
-				// if this is a special property
+				
+				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. Then check if the property is `true`, and if so set the value to `true`, also making sure to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true because for these boolean properties, setting them to false would be the same as removing the attribute.
+				//
+				// For all other attributes use `setAttribute` to set the new value.
 				if (typeof prop === "function") {
 					newValue = prop(el, val);
 				} else if (prop === true) {
@@ -74,7 +92,6 @@ steal("can/util/can.js", function (can) {
 					}
 
 				} else if (prop) {
-					// set the value as true / false
 					newValue = el[prop] = val;
 					if (prop === "value" && can.inArray(tagName, attr.defaultValue) >= 0) {
 						el.defaultValue = val;
@@ -83,12 +100,15 @@ steal("can/util/can.js", function (can) {
 					el.setAttribute(attrName, val);
 					newValue = val;
 				}
+
+				// Now that the value has been set, for browsers without MutationObservers, check to see that value has changed and if so trigger the "attributes" event on the element.
 				if (!attr.MutationObserver && newValue !== oldValue) {
 					attr.trigger(el, attrName, oldValue);
 				}
 			},
+			// ## attr.trigger
+			// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 			trigger: function (el, attrName, oldValue) {
-				// only trigger if someone has bound
 				if (can.data(can.$(el), "canHasAttributesBindings")) {
 					return setImmediate(function () {
 						can.trigger(el, {
@@ -101,14 +121,20 @@ steal("can/util/can.js", function (can) {
 					});
 				}
 			},
-			// Gets the value of an attribute.
+			// ## attr.get
+			// Gets the value of an attribute. First checks to see if the property is a string on `attr.map` and if so returns the value from the element's property. Otherwise uses `getAttribute` to retrieve the value.
 			get: function (el, attrName) {
-				// Default to a blank string for IE7/8
-				return (attr.map[attrName] && el[attr.map[attrName]] ?
-					el[attr.map[attrName]] :
-					el.getAttribute(attrName));
+				var prop = attr.map[attrName];
+				if(typeof prop === "string" && el[prop]) {
+					return el[prop];
+				}
+				
+				return el.getAttribute(attrName);
 			},
-			// Removes the attribute.
+			// ## attr.remove
+			// Removes an attribute from an element. Works by using the `attr.map` to see if the attribute is a special type of property. If the property is a function then the fuction is called with `undefined` as the value. If the property is `true` then the attribute is set to false. If the property is a string then the attribute is set to an empty string. Otherwise `removeAttribute` is used.
+			//
+			// If the attribute previously had a value and the browser doesn't support MutationObservers we then trigger an "attributes" event.
 			remove: function (el, attrName) {
 				var oldValue;
 				if (!attr.MutationObserver) {
@@ -131,8 +157,10 @@ steal("can/util/can.js", function (can) {
 				}
 
 			},
+			// ## attr.has
+			// Checks if an element contains an attribute.
+			// For browsers that support `hasAttribute`, creates a function that calls hasAttribute, otherwise creates a function that uses `getAttribute` to check that the attribute is not null.
 			has: (function () {
-
 				var el = document.createElement('div');
 				if (el.hasAttribute) {
 					return function (el, name) {

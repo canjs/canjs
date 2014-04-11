@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", function () {
+steal("can/view/bindings", "can/map", "can/test", function (special) {
 	module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-test-area")
@@ -202,6 +202,27 @@ steal("can/view/bindings", "can/map", "can/test", function () {
 		can.trigger(input, 'change');
 		equal(input.checked, false, 'checkbox value bound (via uncheck)');
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
+	});
+
+	test("checkboxes with can-true-value bind properly", function () {
+		var data = new can.Map({
+			sex: "male"
+		}),
+			frag = can.view.mustache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
+		can.append(can.$("#qunit-test-area"), frag);
+
+		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		data.attr('sex', 'female');
+		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
+		input.checked = true;
+		can.trigger(input, 'change');
+		equal(input.checked, true, 'checkbox value bound (via check)');
+		equal(data.attr('sex'), 'male', 'checkbox value bound (via check)');
+		input.checked = false;
+		can.trigger(input, 'change');
+		equal(input.checked, false, 'checkbox value bound (via uncheck)');
+		equal(data.attr('sex'), 'female', 'checkbox value bound (via uncheck)');
 	});
 
 	test("can-value select single", function () {
