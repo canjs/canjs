@@ -166,4 +166,17 @@ steal("can/util", "can/list", "can/test", function () {
 		l.splice(0, 1);
 		ok(!l.attr(0), 'all props are removed');
 	});
+
+	test('reverse triggers add/remove events (#851)', function() {
+		expect(6);
+		var l = new can.List([1,2,3]);
+
+		l.bind('change', function() { ok(true, 'change should be called'); });
+		l.bind('set', function() { ok(false, 'set should not be called'); });
+		l.bind('add', function() { ok(true, 'add called'); });
+		l.bind('remove', function() { ok(true, 'remove called'); });
+		l.bind('length', function() { ok(true, 'length should be called'); });
+
+		l.reverse();
+	});
 });
