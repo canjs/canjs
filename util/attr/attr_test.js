@@ -1,5 +1,4 @@
 steal('can/util', 'can/util/attr', function () {
-
 	module("can/util/attr");
 
 	test("attributes event", function () {

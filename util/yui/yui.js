@@ -12,7 +12,7 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
+steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 	"can/util/fragment.js", 'can/util/array/each.js',
 	'can/util/object/isplain', 'can/util/deferred.js',
 	'../hashchange.js', "can/util/inserted", function (can, attr) {
@@ -410,6 +410,9 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 				addBinding(can.$(this), selector, ev, cb);
 			} else if (this.delegate) {
 				this.delegate(selector, ev, cb);
+			} else {
+				// make it bind-able ...
+				can.bind.call(this, ev, cb);
 			}
 			return this;
 		};
@@ -418,6 +421,8 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/util/event.js',
 				removeBinding(can.$(this), selector, ev, cb);
 			} else if (this.undelegate) {
 				this.undelegate(selector, ev, cb);
+			} else {
+				can.unbind.call(this, ev, cb);
 			}
 			return this;
 		};

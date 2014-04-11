@@ -1,6 +1,6 @@
-steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'can/util/event.js',
+steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object/isplain',
 	'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
-	function (can, attr) {
+	function (can, attr, event) {
 		// data.js
 		// ---------
 		// _jQuery-like data methods._
@@ -60,6 +60,7 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 		$.extend(can, Zepto);
 		can.each = oldEach;
 		can.attr = attr;
+		can.event = event;
 		var arrHas = function (obj, name) {
 			return obj[0] && obj[0][name] || obj[name];
 		};
@@ -93,7 +94,7 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 
 		can.bind = function (ev, cb) {
 			// If we can bind to it...
-			if (this.bind) {
+			if (this.bind && this.bind !== can.bind) {
 				this.bind(ev, cb);
 			} else if (arrHas(this, "addEventListener")) {
 				$([this])
@@ -105,7 +106,7 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 		};
 		can.unbind = function (ev, cb) {
 			// If we can bind to it...
-			if (this.unbind) {
+			if (this.unbind && this.unbind !== can.unbind) {
 				this.unbind(ev, cb);
 			} else if (arrHas(this, "addEventListener")) {
 				$([this])
@@ -121,19 +122,31 @@ steal('can/util/can.js', 'can/util/attr', 'zepto', 'can/util/object/isplain', 'c
 		can.off = can.unbind;
 
 		can.delegate = function (selector, ev, cb) {
-			if (this.delegate) {
+			if (!selector) {
+				// Zepto fails with no selector
+				can.bind.call(this, ev, cb);
+			} else if (this.delegate) {
 				this.delegate(selector, ev, cb);
-			} else {
+			} else if (arrHas(this, "addEventListener")) {
 				$([this])
 					.delegate(selector, ev, cb);
+			} else {
+				// Make it bind-able...
+				can.addEvent.call(this, ev, cb);
 			}
 		};
 		can.undelegate = function (selector, ev, cb) {
-			if (this.undelegate) {
+			if (!selector) {
+				// Zepto fails with no selector
+				can.unbind.call(this, ev, cb);
+			} else if (this.undelegate) {
 				this.undelegate(selector, ev, cb);
-			} else {
+			} else if (arrHas(this, "addEventListener")) {
 				$([this])
 					.undelegate(selector, ev, cb);
+			} else {
+				// Make it bind-able...
+				can.removeEvent.call(this, ev, cb);
 			}
 		};
 
