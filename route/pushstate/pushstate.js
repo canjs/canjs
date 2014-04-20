@@ -84,7 +84,7 @@ steal('can/util', 'can/route', function(can) {
 		
 		
         var anchorClickFix = function(e) {
-        	if(!( e.isDefaultPrevented ? e.isDefaultPrevented() : e.defaultPrevented === true )) {
+        	if(!( e.isDefaultPrevented ? e.isDefaultPrevented() : e.defaultPrevented === true )&&!this.hasAttribute('target')) {
                 // YUI calls back events triggered with this as a wrapped object
                 var node = this._node || this;
                 // Fix for ie showing blank host, but blank host means current host.
