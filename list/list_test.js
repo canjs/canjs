@@ -208,12 +208,4 @@ steal("can/util", "can/list", "can/test", "can/compute", function () {
 		equal(filtered.length, 1, "one item");
 		equal(filtered[0].name, "Mary", "filter works");
 	});
-
-	test("Nested lists", function(){
-		var MyMap = can.Map.extend({foo: function(){}});
-		var map = new MyMap();
-		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
-		ok(!(map.attr('locations') instanceof MyMap.List), 'nested list is not an instance of MyMap.List');
-		ok(!(map.attr('locations')[0] instanceof MyMap), 'nested map is not an instance of MyMap');
-	});
 });
