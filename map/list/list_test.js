@@ -102,4 +102,11 @@ steal("can/map/list", function () {
 		original.shift();
 		equal(mapped.length, 3, 'Item got removed');
 	});
+
+	test("Nested lists", function(){
+		var MyMap = can.Map.extend();
+		var map = new MyMap();
+		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
+		ok(!(map.attr('locations')[0] instanceof MyMap), 'nested lists are not created with the same constructor'); 
+	})
 });
