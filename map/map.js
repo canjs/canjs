@@ -645,7 +645,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						return cached;
 					}
 					if( can.isArray(value) ) {
-						var List = this.constructor.List || can.List;
+						var List = can.List;
 						return new List(value);
 					} else {
 						var Map = this.constructor.Map || can.Map;
