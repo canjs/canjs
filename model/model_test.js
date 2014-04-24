@@ -1438,8 +1438,8 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		var Teacher = can.Model.extend({});
 		var teacher = new Teacher();
 		teacher.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
-		ok(!(teacher.attr('locations') instanceof Teacher.List), 'nested list is not an instance of MyMap.List');
-		ok(!(teacher.attr('locations')[0] instanceof Teacher), 'nested map is not an instance of MyMap');
+		ok(!(teacher.attr('locations') instanceof Teacher.List), 'nested list is not an instance of Teacher.List');
+		ok(!(teacher.attr('locations')[0] instanceof Teacher), 'nested map is not an instance of Teacher');
 	});
 
 });
