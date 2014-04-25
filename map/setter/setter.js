@@ -5,6 +5,8 @@ steal('can/util', 'can/map/attributes', 'can/util/string/classize.js',function (
 	proto.__set = function (prop, value, current, success, error) {
 		//!steal-remove-start
 		var asyncTimer;
+		can.dev.warn("can/map/setter is a deprecated plugin and will be removed in a future release. "+
+			"can/map/define provides the same functionality in a more complete API.");
 		//!steal-remove-end
 		
 		// check if there's a setter

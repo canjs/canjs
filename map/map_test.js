@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/map", "can/compute", "can/test", function (undefined) {
+steal("can/map", "can/compute", "can/test", "can/list", function (undefined) {
 
 	module('can/map')
 
@@ -206,6 +206,14 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		equal(test.attr('my.count'), 0, 'falsey (0) value accessed correctly');
 		equal(test.attr('my.newCount'), 1, 'falsey (1) value accessed correctly');
 	});
+
+	test('stuff', function(){
+
+		var MyMap = can.Map.extend();
+		var map = new MyMap();
+		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
+		console.log(map.attr('locations')[0] instanceof MyMap); // true
+	})
 
 
 });

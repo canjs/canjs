@@ -378,4 +378,35 @@ steal("can/map/define", "can/test", function () {
 
 	});
 
+	test("serialize", function(){
+		var MyMap = can.Map.extend({
+			define: {
+				locations: {
+					serialize: false
+				},
+				locationIds: {
+					get: function(){
+						var ids = [];
+						this.attr('locations').each(function(location){
+							ids.push(location.id)
+						});
+						return ids;
+					},
+					serialize: function(locationIds){  
+						return locationIds.join(','); 
+					}
+				}
+			}
+		});
+		
+		var map = new MyMap();
+		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
+		equal(map.attr("locationIds").length, 2, "get locationIds");
+		equal(map.attr("locationIds")[0], 1, "get locationIds index 0");
+		equal(map.attr("locations")[0].id, 1, "get locations index 0");
+		var serialized = map.serialize();
+		equal(serialized.locations, undefined, "locations doesn't serialize");
+		equal(serialized.locationIds, "1,2", "locationIds serializes");
+	})
+	
 });

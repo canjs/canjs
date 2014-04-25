@@ -3,6 +3,12 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 		can.Map,
 		can.Model
 	], function (clss) {
+
+		//!steal-remove-start
+		can.dev.warn("can/map/attributes is a deprecated plugin and will be removed in a future release. "+
+			"can/map/define provides the same functionality in a more complete API.");
+		//!steal-remove-end
+
 		// in some cases model might not be defined quite yet.
 		if (clss === undefined) {
 			return;
