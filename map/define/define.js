@@ -142,15 +142,6 @@ steal('can/util', 'can/observe', function (can) {
 			return '' + val;
 		}
 	};
-
-	var serializers = {
-		'*': function (val, type) {
-			return isObject(val) && val.serialize ? val.serialize() : val;
-		},
-		'date': function (val) {
-			return val && val.getTime();
-		}
-	}
 	
 	// the old type sets up bubbling
 	var oldType = proto.__type;
@@ -235,7 +226,7 @@ steal('can/util', 'can/observe', function (can) {
 			val);
 
 			can.__reading(this, attr);
-		};
+		}
 
 		can.__reading(this, '__keys');
 

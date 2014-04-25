@@ -388,12 +388,12 @@ steal("can/map/define", "can/test", function () {
 					get: function(){
 						var ids = [];
 						this.attr('locations').each(function(location){
-							ids.push(location.id)
+							ids.push(location.id);
 						});
 						return ids;
 					},
-					serialize: function(locationIds){  
-						return locationIds.join(','); 
+					serialize: function(locationIds){
+						return locationIds.join(',');
 					}
 				}
 			}
@@ -407,6 +407,6 @@ steal("can/map/define", "can/test", function () {
 		var serialized = map.serialize();
 		equal(serialized.locations, undefined, "locations doesn't serialize");
 		equal(serialized.locationIds, "1,2", "locationIds serializes");
-	})
+	});
 	
 });
