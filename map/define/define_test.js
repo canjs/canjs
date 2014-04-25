@@ -381,6 +381,11 @@ steal("can/map/define", "can/test", function () {
 	test("serialize", function(){
 		var MyMap = can.Map.extend({
 			define: {
+				name: {
+					serialize: function(){
+						return false;
+					}
+				},
 				locations: {
 					serialize: false
 				},
@@ -407,6 +412,7 @@ steal("can/map/define", "can/test", function () {
 		var serialized = map.serialize();
 		equal(serialized.locations, undefined, "locations doesn't serialize");
 		equal(serialized.locationIds, "1,2", "locationIds serializes");
+		equal(serialized.name, undefined, "name doesn't serialize");
 	});
 	
 });

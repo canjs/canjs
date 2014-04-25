@@ -209,7 +209,8 @@ steal('can/util', 'can/observe', function (can) {
 
 	proto.serialize = function () {
 		var serialized = {},
-			serializer, val;
+			serializer, val,
+			serializedVal;
 		// Go through each property.
 		for(var attr in this.define){
 			val = this.attr(attr);
@@ -219,11 +220,18 @@ steal('can/util', 'can/observe', function (can) {
 				continue;
 			}
 			// If the value is an `object`, and has an `attrs` or `serialize` function.
-			serialized[attr] = serializer? serializer.call(this, val): (can.Map.helpers.isObservable(val) && can.isFunction(val.serialize) ?
+			serializedVal = serializer? serializer.call(this, val): (can.Map.helpers.isObservable(val) && can.isFunction(val.serialize) ?
 			// Call `attrs` or `serialize` to get the original data back.
 			val.serialize() :
 			// Otherwise return the value.
 			val);
+
+			// if the serializer method returns false, don't include this property
+			if(serializedVal === false){
+				continue;
+			}
+
+			serialized[attr] = serializedVal;
 
 			can.__reading(this, attr);
 		}

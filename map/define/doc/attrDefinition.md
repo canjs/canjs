@@ -25,7 +25,7 @@ returns a fresh copy can be provided:
       }
     }
 
-@option {function} Value Specifies a function that will be called with `new` whos result is
+@option {function} Value Specifies a function that will be called with `new` whose result is
 set as the initial value of the attribute. For example, if the default value should be a can.List:
 
     define: {
@@ -108,3 +108,15 @@ with [can.Map::removeAttr removeAttr]. The following removes a `modelId` when `m
       }
     }
 
+@option {can.Map.prototype.define.serialize} serialize A function that specifies what should happen when an attribute is serialized
+with [can.Map::serialize serialize]. The following causes the serialized form of the map to contain a locationIds property, which contains comma separated id values derived from the locations property:
+
+    define: {
+      locationIds: {
+        serialize: function(locationIds){
+            return locationIds.join(',');
+          }
+      }
+    }
+
+Setting serialize to false for any property means this property will not be part of the serialized object.

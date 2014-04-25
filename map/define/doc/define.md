@@ -2,7 +2,7 @@
 @parent can.Map.plugins
 
 Defines the
-type, initial value, and get, set, and remove behavior for attributes 
+type, initial value, get, set, remove, and serialize behavior for attributes 
 of a [can.Map].
 
 @option {Object<String,can.Map.prototype.define.attrDefinition>} A map of 
