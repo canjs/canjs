@@ -48,11 +48,13 @@ The following example converts the `count` property to a number and the `items` 
 
      define: {
        count: {type: "number"},
-       items: function(newValue){
-         if(typeof newValue === "string") {
-           return newValue.split(",")
-         } else if( can.isArray(newValue) ) {
-           return newValue;
+       items: {
+         type: function(newValue){
+           if(typeof newValue === "string") {
+             return newValue.split(",")
+           } else if( can.isArray(newValue) ) {
+             return newValue;
+           }
          }
        }
      }
