@@ -20,7 +20,7 @@ namespace :build do
       spec_name = filename.gsub('specs/','').gsub('.yml','')
       File.open(json_file, 'w') do |file|
         doc = YAML.load_file(filename)
-        file << "steal('./spec',function(){ MUSTACHE_SPECS.push({name:'"+spec_name+"', data: "+doc.merge(:__ATTN__ => note).to_json()+"});})"
+        file << "steal('./spec',function(){ window.MUSTACHE_SPECS.push({name:'"+spec_name+"', data: "+doc.merge(:__ATTN__ => note).to_json()+"});});"
       end
     end
   end

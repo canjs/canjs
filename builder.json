@@ -118,7 +118,7 @@
 		"can/map/setter": {
 			"name": "can.Map.setter",
 			"type": "plugin",
-			"description": "Use setter methods on Observes"
+			"description": "Use setter methods on can.Map"
 		},
 		"can/map/attributes": {
 			"name": "can.Map.attributes",

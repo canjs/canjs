@@ -205,7 +205,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 	};
 
 	// Add mustache specs to the test
-	can.each(MUSTACHE_SPECS, function(specData){
+	can.each(window.MUSTACHE_SPECS, function(specData){
 		var spec = specData.name;
 		can.each(specData.data.tests, function (t) {
 			test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {

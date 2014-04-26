@@ -1,5 +1,5 @@
-steal('./comments', 
-	'./interpolation', 
-	'./inverted', 
-	'./partials', 
+steal('./comments',
+	'./interpolation',
+	'./inverted',
+	'./partials',
 	'./sections', function(){});
