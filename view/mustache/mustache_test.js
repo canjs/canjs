@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true*/
 /*global Mustache*/
-steal("can/model", "can/view/mustache", "can/test", function () {
+steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs",function () {
 
 	module("can/view/mustache, rendering", {
 		setup: function () {
@@ -50,48 +50,43 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 	};
 
 	// Add mustache specs to the test
-	can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections' /*, '~lambdas'*/ ], function (spec) {
-		can.ajax({
-			url: can.test.path('view/mustache/spec/specs/' + spec + '.json'),
-			dataType: 'json',
-			async: false
-		})
-			.done(function (data) {
-				can.each(data.tests, function (t) {
-					test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
-						// can uses &#34; to escape double quotes, mustache expects &quot;.
-						// can uses \n for new lines, mustache expects \r\n.
-						var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '&#34;')
-							.replace(/\r\n/g, '\n');
+	can.each(MUSTACHE_SPECS, function(specData){
+		var spec = specData.name;
+		can.each(specData.data.tests, function (t) {
+			test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
+				// can uses &#34; to escape double quotes, mustache expects &quot;.
+				// can uses \n for new lines, mustache expects \r\n.
+				var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '&#34;')
+					.replace(/\r\n/g, '\n');
 
-						// Mustache's "Recursion" spec generates invalid HTML
-						if (spec === 'partials' && t.name === 'Recursion') {
-							t.partials.node = t.partials.node.replace(/</g, '[')
-								.replace(/\}>/g, '}]');
-							expected = expected.replace(/</g, '[')
-								.replace(/>/g, ']');
-						}
+				// Mustache's "Recursion" spec generates invalid HTML
+				if (spec === 'partials' && t.name === 'Recursion') {
+					t.partials.node = t.partials.node.replace(/</g, '[')
+						.replace(/\}>/g, '}]');
+					expected = expected.replace(/</g, '[')
+						.replace(/>/g, ']');
+				}
 
-						// register the partials in the spec
-						if (t.partials) {
-							for (var name in t.partials) {
-								can.view.registerView(name, t.partials[name], ".mustache");
-							}
-						}
+				// register the partials in the spec
+				if (t.partials) {
+					for (var name in t.partials) {
+						can.view.registerView(name, t.partials[name], ".mustache");
+					}
+				}
 
-						// register lambdas
-						if (t.data.lambda && t.data.lambda.js) {
-							t.data.lambda = eval('(' + t.data.lambda.js + ')');
-						}
+				// register lambdas
+				if (t.data.lambda && t.data.lambda.js) {
+					t.data.lambda = eval('(' + t.data.lambda.js + ')');
+				}
 
-						deepEqual(new can.Mustache({
-								text: t.template
-							})
-							.render(t.data), expected);
-					});
-				});
+				deepEqual(new can.Mustache({
+						text: t.template
+					})
+					.render(t.data), expected);
 			});
+		});
 	});
+	
 
 	var getAttr = function (el, attrName) {
 		return attrName === "class" ?
@@ -593,7 +588,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 				animals: this.animals
 			})
 		equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
-	})
+	});
 	test("render with with", function () {
 		var compiled = new can.Mustache({
 			text: this.squareBracketsNoThis,
@@ -603,7 +598,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 				animals: this.animals
 			});
 		equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
-	})
+	});
 	test("default carrot", function () {
 		var compiled = new can.Mustache({
 			text: this.angleBracketsNoThis

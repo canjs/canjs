@@ -1,5 +1,5 @@
 /* jshint asi:true,multistr:true*/
-steal("can/view/stache", "can/view","can/test",function(){
+steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",function(){
 	
 	
 	module("can/view/stache",{
@@ -205,49 +205,44 @@ steal("can/view/stache", "can/view","can/test",function(){
 	};
 
 	// Add mustache specs to the test
-	can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections' /*, '~lambdas'*/ ], function (spec) {
-		can.ajax({
-			url: can.test.path('view/mustache/spec/specs/' + spec + '.json'),
-			dataType: 'json',
-			async: false
-		})
-			.done(function (data) {
-				can.each(data.tests, function (t) {
-					test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
-						// stache does not escape double quotes, mustache expects &quot;.
-						// can uses \n for new lines, mustache expects \r\n.
-						var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '"')
-							//.replace(/\r\n/g, '\n');
+	can.each(MUSTACHE_SPECS, function(specData){
+		var spec = specData.name;
+		can.each(specData.data.tests, function (t) {
+			test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
+				// stache does not escape double quotes, mustache expects &quot;.
+				// can uses \n for new lines, mustache expects \r\n.
+				var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '"')
+					//.replace(/\r\n/g, '\n');
 
-						// Mustache's "Recursion" spec generates invalid HTML
-						if (spec === 'partials' && t.name === 'Recursion') {
-							t.partials.node = t.partials.node.replace(/</g, '[')
-								.replace(/\}>/g, '}]');
-							expected = expected.replace(/</g, '[')
-								.replace(/>/g, ']');
-						} else if(spec === 'partials'){
-							//expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
-						}
-						
+				// Mustache's "Recursion" spec generates invalid HTML
+				if (spec === 'partials' && t.name === 'Recursion') {
+					t.partials.node = t.partials.node.replace(/</g, '[')
+						.replace(/\}>/g, '}]');
+					expected = expected.replace(/</g, '[')
+						.replace(/>/g, ']');
+				} else if(spec === 'partials'){
+					//expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
+				}
+				
 
-						// register the partials in the spec
-						if (t.partials) {
-							for (var name in t.partials) {
-								can.view.registerView(name, t.partials[name])
-							}
-						}
+				// register the partials in the spec
+				if (t.partials) {
+					for (var name in t.partials) {
+						can.view.registerView(name, t.partials[name])
+					}
+				}
 
-						// register lambdas
-						if (t.data.lambda && t.data.lambda.js) {
-							t.data.lambda = eval('(' + t.data.lambda.js + ')');
-						}
-						var res = can.stache(t.template)(t.data);
-						
-						deepEqual(getTextFromFrag(res), expected);
-					});
-				});
+				// register lambdas
+				if (t.data.lambda && t.data.lambda.js) {
+					t.data.lambda = eval('(' + t.data.lambda.js + ')');
+				}
+				var res = can.stache(t.template)(t.data);
+				
+				deepEqual(getTextFromFrag(res), expected);
 			});
+		});
 	});
+
 	
 
 	test('Tokens returning 0 where they should diplay the number', function () {
@@ -3309,4 +3304,4 @@ steal("can/view/stache", "can/view","can/test",function(){
 	
 	
 	
-})
+});
