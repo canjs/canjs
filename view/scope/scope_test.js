@@ -345,21 +345,26 @@ steal("can/view/scope", "can/route", "can/test", function () {
 			.compute(), "baz", "static prop");
 	});
 
-	test('Scope lookup restricted to current scope with ./', function() {
-		var Parent = can.Map.extend({
-			foo: 0,
-			bar: 1
+	test('Scope lookup restricted to current scope with ./ (#874)', function() {
+		var current;
+		var scope = new can.view.Scope(
+				new can.Map({value: "A Value"}) 
+			).add(
+				current = new can.Map({})
+			);
+		
+		var compute = scope.computeData('./value').compute;
+		
+		equal(compute(), undefined, "no initial value");
+		
+		
+		compute.bind("change", function(ev, newVal){
+			equal(newVal, "B Value", "changed")
 		});
-
-		var Child = Parent.extend({
-			foo: 1
-		});
-
-		var child = new Child();
-		var scope = new can.view.Scope(child);
-
-		equal(scope.computeData('bar').compute(), 1);
-		equal(scope.computeData('./foo').compute(), 1);
+		
+		compute("B Value");
+		equal(current.attr("value"), "B Value", "updated");
+		
 	});
 
 });

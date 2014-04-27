@@ -3299,9 +3299,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			
 			equal(res.childNodes[0].innerHTML, "Justin Meyer");
 			
-		})
+		});
 	}
 	
-	
+	test("./ in key", function(){
+		var template = can.stache( "<div><label>{{name}}</label>{{#children}}<span>{{./name}}-{{name}}</span>{{/children}}</div>");
+		
+		var data = {
+			name: "CanJS",
+			children: [{},{name: "stache"}]
+		};
+		var res =  template(data);
+		var spans = res.childNodes[0].getElementsByTagName('span');
+		equal( spans[0].innerHTML, "-CanJS", "look in current level" );
+		equal( spans[1].innerHTML, "stache-stache", "found in current level" );
+	});
 	
 });
