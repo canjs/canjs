@@ -348,7 +348,7 @@ steal("can/view/scope", "can/route", "can/test", function () {
 	test('Scope lookup restricted to current scope with ./ (#874)', function() {
 		var current;
 		var scope = new can.view.Scope(
-				new can.Map({value: "A Value"}) 
+				new can.Map({value: "A Value"})
 			).add(
 				current = new can.Map({})
 			);
@@ -359,7 +359,7 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		
 		
 		compute.bind("change", function(ev, newVal){
-			equal(newVal, "B Value", "changed")
+			equal(newVal, "B Value", "changed");
 		});
 		
 		compute("B Value");
