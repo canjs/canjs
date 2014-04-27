@@ -233,7 +233,7 @@ steal(
 					}
 					if(!mode) {
 						state.node.attributes.push( mustacheCore.makeLiveBindingBranchRenderer( null,expression, copyState() ) );
-					} else if( mode === "#" ) {
+					} else if( mode === "#" || mode === "^" ) {
 						if(!state.node.section) {
 							state.node.section = new TextSection();
 						}
