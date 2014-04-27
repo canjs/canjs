@@ -3276,7 +3276,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			
 		});
 		
-		var template = can.stache("<div stache-attr='foo'></div>")
+		var template = can.stache("<div stache-attr='foo'></div>");
 		
 		template({});
 		
@@ -3293,7 +3293,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			
 			var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
 			
-			var res = template({last: "Meyer"})
+			var res = template({last: "Meyer"});
 			
 			equal(res.childNodes[0].nodeName.toLowerCase(), "h1");
 			
@@ -3313,6 +3313,17 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var spans = res.childNodes[0].getElementsByTagName('span');
 		equal( spans[0].innerHTML, "-CanJS", "look in current level" );
 		equal( spans[1].innerHTML, "stache-stache", "found in current level" );
+	});
+	
+	test("inverse in tag", function(){
+		var template = can.stache('<span {{^isBlack}} style="display:none"{{/if}}>Hi</span>');
+		
+		var res = template({
+			isBlack: false              
+		});
+		
+		equal(res.childNodes[0].style.display, "none", "color is not set");
+		
 	});
 	
 });
