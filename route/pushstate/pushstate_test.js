@@ -411,7 +411,7 @@ steal('can/route/pushstate', "can/test", function () {
 			};
 
 			var iframe = document.createElement('iframe');
-			iframe.src = can.test.path("route/pushstate/testing.html?" + Math.random());
+			iframe.src = can.test.path("route/pushstate/testing.html")+"?" + Math.random();
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 
 
