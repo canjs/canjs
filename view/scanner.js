@@ -660,7 +660,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 			can.each(hooks, function (fn) {
 				fn(el);
 			});
-
+			viewData.templateType = "legacy";
 			if (viewData.tagName) {
 				viewCallbacks.tagHandler(el, viewData.tagName, viewData);
 			}

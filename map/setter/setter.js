@@ -1,4 +1,15 @@
-steal('can/util', 'can/map/attributes', 'can/util/string/classize.js',function (can) {
+steal('can/util', 'can/map/attributes', function (can) {
+
+	can.classize = function (s, join) {
+		// this can be moved out ..
+		// used for getter setter
+		var parts = s.split(can.undHash),
+			i = 0;
+		for (; i < parts.length; i++) {
+			parts[i] = can.capitalize(parts[i]);
+		}
+		return parts.join(join || '');
+	};
 	var classize = can.classize,
 		proto = can.Map.prototype,
 		old = proto.__set;

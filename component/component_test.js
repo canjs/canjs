@@ -1,4 +1,5 @@
-steal("can/component", function () {
+steal("can/component", "can/view/stache", function () {
+	
 	module('can/component', {
 		setup: function () {
 			can.remove(can.$("#qunit-test-area>*"));
@@ -1102,6 +1103,67 @@ steal("can/component", function () {
 		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
 		can.append(can.$('#qunit-test-area'), template3({}));
 		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
+
+	});
+	
+	asyncTest('stache integration', function(){
+
+		can.Component.extend({
+			tag: 'my-tagged',
+			template: '{{p1}},{{p2.val}},{{p3}},{{p4}}'
+		});
+		
+		var stache = can.stache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
+		var mustache = can.mustache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
+		
+		var data = new can.Map({
+			v1: "value1",
+			v2: {val: "value2"},
+			v3: "value3",
+			value3: "value 3",
+			VALUE3: "VALUE 3"
+		});
+		
+		var stacheFrag = stache(data),
+			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
+			
+		var mustacheFrag = mustache(data),
+			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
+		
+		equal(stacheResult[0], "v1", "stache uses attribute values");
+		equal(stacheResult[1], "value2", "stache single {} cross binds value");
+		equal(stacheResult[2], "value3", "stache  {{}} cross binds attribute");
+		
+		equal(mustacheResult[0], "value1", "mustache looks up attribute values");
+		equal(mustacheResult[1], "value2", "mustache single {} cross binds value");
+		equal(mustacheResult[2], "value 3", "mustache  {{}} cross binds string value");
+		
+		data.attr("v1","VALUE1");
+		data.attr("v2",new can.Map({val: "VALUE 2"}));
+		data.attr("v3","VALUE3");
+		can.attr.set( stacheFrag.childNodes[0],"p4","value4");
+		
+		stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
+		mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
+		
+		equal(stacheResult[0], "v1", "stache uses attribute values so it should not change");
+		equal(mustacheResult[0], "VALUE1", "mustache looks up attribute values and updates immediately");
+		equal(stacheResult[1], "VALUE 2", "stache single {} cross binds value and updates immediately");
+		equal(mustacheResult[1], "VALUE 2", "mustache single {} cross binds value and updates immediately");
+		
+		equal(stacheResult[2], "value3", "stache {{}} cross binds attribute changes so it wont be updated immediately");
+		
+		setTimeout(function(){
+			
+			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
+			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
+			equal(stacheResult[2], "VALUE3", "stache  {{}} cross binds attribute");
+			equal(mustacheResult[2], "value 3", "mustache sticks with old value even though property has changed");
+			
+			equal(stacheResult[3], "value4", "stache sees new attributes");
+			
+			start();
+		},20);
 
 	});
 

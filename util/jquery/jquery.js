@@ -6,9 +6,9 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 	};
 	// _jQuery node list._
 	$.extend(can, $, {
-		trigger: function (obj, event, args) {
+		trigger: function (obj, event, args, bubbles) {
 			if (isBindableElement( obj ) ) {
-				$.event.trigger(event, args, obj, true);
+				$.event.trigger(event, args, obj, !bubbles);
 			} else if (obj.trigger) {
 				obj.trigger(event, args);
 			} else {

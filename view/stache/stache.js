@@ -127,7 +127,8 @@ steal(
 						viewCallbacks.tagHandler(this,tagName, {
 							scope: scope,
 							options: options,
-							subtemplate: renderer
+							subtemplate: renderer,
+							templateType: "stache"
 						});
 					});
 				}
