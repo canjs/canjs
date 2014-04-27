@@ -401,12 +401,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					context = options.context || options;
 					get = options.get || get;
 					set = options.set || set;
-					
+					// This is a "hack" to allow async computes.
 					if(options.fn) {
 						var fn = options.fn,
 							data;
 						get = fn;
-						
+						// Check the number of arguments the 
+						// async function takes.
 						if(fn.length === 0) {
 							
 							data = setupComputeHandlers(computed, fn, context, setCached);
@@ -425,6 +426,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 								var res = fn.call(context, value, function(newVal){
 									oldUpdater(newVal, value);
 								});
+								// If undefined is returned, don't update the value.
 								return res !== undefined ? res : value;
 							}, context, setCached);
 						}
