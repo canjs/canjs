@@ -1,0 +1,16 @@
+<html>
+	<body>
+		<script src="../../../lib/steal/steal.js"></script>
+		<script>
+			steal("can/view/stache/test/demo.stache", function(demo){
+				var message = can.compute("Hello World!");
+				$(document.body).append(demo({
+					message: message
+				}));
+				setTimeout(function(){
+					message("works")
+				},1000)
+			});
+		</script>
+	</body>
+</html>
