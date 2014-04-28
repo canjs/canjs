@@ -50,7 +50,13 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				return !!editable(el.parentNode);
 			}
 		};
-	})();
+	})(),
+		removeCurly = function(value){
+			if(value[0] === "{" && value[value.length-1] === "}") {
+				return value.substr(1, value.length - 2);
+			}
+			return value;
+		};
 
 	// ## can-value
 	// Implement the `can-value` special attribute
@@ -63,7 +69,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = el.getAttribute("can-value"),
+		var attr = removeCurly(el.getAttribute("can-value")),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
 			// data.attr('name') property.
@@ -175,7 +181,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			handler = function (ev) {
 				// The attribute value, representing the name of the method to call (i.e. can-submit="foo" foo is the 
 				// name of the method)
-				var attr = el.getAttribute(attributeName),
+				var attr = removeCurly( el.getAttribute(attributeName) ),
 					scopeData = data.scope.read(attr, {
 						returnObserveMethods: true,
 						isArgument: true
