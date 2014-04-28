@@ -315,6 +315,7 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		});
 		compute('compute value');
 	});
+
 	test('Can read static properties on constructors (#634)', function () {
 		can.Map.extend('can.Foo', {
 			static_prop: 'baz'
@@ -328,4 +329,42 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		equal(scope.computeData('constructor.static_prop')
 			.compute(), 'baz', 'static prop');
 	});
+
+	test("Can read static properties on constructors (#634)", function () {
+		can.Map.extend("can.Foo", {
+			static_prop: "baz"
+		}, {
+			proto_prop: "thud"
+		});
+		var data = new can.Foo({
+			own_prop: "quux"
+		}),
+			scope = new can.view.Scope(data);
+
+		equal(scope.computeData("constructor.static_prop")
+			.compute(), "baz", "static prop");
+	});
+
+	test('Scope lookup restricted to current scope with ./ (#874)', function() {
+		var current;
+		var scope = new can.view.Scope(
+				new can.Map({value: "A Value"})
+			).add(
+				current = new can.Map({})
+			);
+		
+		var compute = scope.computeData('./value').compute;
+		
+		equal(compute(), undefined, "no initial value");
+		
+		
+		compute.bind("change", function(ev, newVal){
+			equal(newVal, "B Value", "changed");
+		});
+		
+		compute("B Value");
+		equal(current.attr("value"), "B Value", "updated");
+		
+	});
+
 });

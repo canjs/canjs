@@ -143,4 +143,129 @@ steal("can/compute", "can/test", function () {
 		ok(!input.onchange, 'removed binding');
 		equal(value(), 3);
 	});
+	
+	test("a compute updated by source changes within a batch is part of that batch", function(){
+		
+		var computeA = can.compute("a");
+		var computeB = can.compute("b");
+		
+		var combined1 = can.compute(function(){
+			
+			return computeA()+" "+computeB();
+			
+		});
+		
+		var combined2 = can.compute(function(){
+			
+			return computeA()+" "+computeB();
+			
+		});
+		
+		var combo = can.compute(function(){
+			return combined1()+" "+combined2();
+		});
+		
+		var callbacks = 0;
+		combo.bind("change", function(){
+			if(callbacks === 0){
+				ok(true, "called change once");
+			} else {
+				ok(false, "called change multiple times");
+			}
+			callbacks++;
+		});
+		
+		can.batch.start();
+		computeA("A");
+		computeB("B");
+		can.batch.stop();
+	});
+	
+	test("compute.async can be like a normal getter", function(){
+		var first = can.compute("Justin"),
+			last = can.compute("Meyer"),
+			fullName = can.compute.async("", function(){
+				return first()+" "+last();
+			});
+			
+		equal(fullName(), "Justin Meyer");
+	});
+	
+	test("compute.async operate on single value", function(){
+		
+		var a = can.compute(1);
+		var b = can.compute(2);
+				
+		var obj = can.compute.async({}, function( curVal ){
+			if(a()) {
+				curVal.a = a();
+			} else {
+				delete curVal.a;
+			}
+			if(b()) {
+				curVal.b = b();
+			} else {
+				delete curVal.b;
+			}
+			return curVal;
+		});
+		
+		obj.bind("change", function(){});
+		
+		deepEqual( obj(), {a: 1, b: 2}, "object has all properties" );
+		
+		a(0);
+		
+		deepEqual( obj(), {b: 2}, "removed a" );
+		
+		b(0);
+		
+		deepEqual( obj(), {}, "removed b" );
+		
+	});
+	
+	test("compute.async async changing value", function(){
+		
+		var a = can.compute(1);
+		var b = can.compute(2);
+				
+		var async = can.compute.async(undefined,function( curVal, setVal ){
+			
+			if(a()) {
+				setTimeout(function(){
+					setVal("a");
+				},10);
+			} else if(b()) {
+				setTimeout(function(){
+					setVal("b");
+				},10);
+			} else {
+				return null;
+			}
+		});
+		
+		var changeArgs = [
+			{newVal: "a", oldVal: undefined, run: function(){ a(0); } },
+			{newVal: "b", oldVal: "a", run: function(){ b(0); }},
+			{newVal: null, oldVal: "b", run: function(){ start(); }}
+		],
+			changeNum = 0;
+		
+		stop();
+		
+		
+		async.bind("change", function(ev, newVal, oldVal){
+			var data = changeArgs[changeNum++];
+			equal( newVal, data.newVal, "newVal is correct" );
+			equal( oldVal, data.oldVal, "oldVal is correct" );
+			
+			setTimeout(data.run, 10);
+			
+		});
+		
+		
+		
+	});
+	
+	
 });

@@ -2,7 +2,9 @@
 @download can/component
 @test can/component/test.html
 @parent canjs
-@link ../docco/component.html docco
+@release 2.0
+@link ../docco/component/component.html docco
+
 
 @description Create widgets that use a template, a view-model 
 and custom tags.
