@@ -720,7 +720,9 @@ steal('can/util', function (can) {
 			 * return can.view.preload("ID", options.text)
 			 * })
 			 */
-			options.text = 'steal(\'' + (type.plugin || 'can/view/' + options.type) + '\',function(can){return ' + 'can.view.preloadStringRenderer(\'' + id + '\',' + options.text + ');\n})';
+			var dependency = type.plugin || 'can/view/' + options.type,
+				preload = type.fragRenderer ? "preload" : "preloadStringRenderer";
+			options.text = 'steal(\'can/view\',\'' + dependency + '\',function(can){return ' + 'can.view.'+preload+'(\'' + id + '\',' + options.text + ');\n})';
 			success();
 		});
 	}
