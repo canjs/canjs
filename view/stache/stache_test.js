@@ -3276,7 +3276,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			
 		});
 		
-		var template = can.stache("<div stache-attr='foo'></div>")
+		var template = can.stache("<div stache-attr='foo'></div>");
 		
 		template({});
 		
@@ -3293,7 +3293,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			
 			var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
 			
-			var res = template({last: "Meyer"})
+			var res = template({last: "Meyer"});
 			
 			equal(res.childNodes[0].nodeName.toLowerCase(), "h1");
 			
@@ -3315,4 +3315,35 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal( spans[1].innerHTML, "stache-stache", "found in current level" );
 	});
 	
+	test("self closing tags callback custom tag callbacks (#880)", function(){
+		
+		can.view.tag("stache-tag", function(el, tagData){
+			ok(true,"tag callback called");
+			equal(tagData.scope.attr(".").foo, "bar", "got scope");
+			ok(!tagData.subtemplate, "there is no subtemplate");
+		});
+		
+		var template = can.stache("<div><stache-tag/></div>");
+		
+		template({
+			foo: "bar"
+		});
+		
+	});
+	
+	test("empty custom tags do not have a subtemplate (#880)", function(){
+		
+		can.view.tag("stache-tag", function(el, tagData){
+			ok(true,"tag callback called");
+			equal(tagData.scope.attr(".").foo, "bar", "got scope");
+			ok(!tagData.subtemplate, "there is no subtemplate");
+		});
+		
+		var template = can.stache("<div><stache-tag></stache-tag></div>");
+		
+		template({
+			foo: "bar"
+		});
+		
+	});
 });

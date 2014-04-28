@@ -62,7 +62,6 @@ steal(
 					
 						// Adds a renderer function and starts a section.
 						section.startSection(makeRenderer(mode,stache, copyState()  ));
-						state.inSection = true;
 						
 					} else {
 						// Adds a renderer function that only updates text.
@@ -77,17 +76,21 @@ steal(
 				attr: null,
 				section: null,
 				// If text should be inserted and HTML escaped
-				text: false,
-				inSection : false
+				text: false
 			},
 			// Copys the state object for use in renderers.
 			copyState = function(overwrites){
 				var cur = {
 					tag: state.node && state.node.tag,
-					attr: state.attr && state.attr.name,
-					inSection: state.inSection
+					attr: state.attr && state.attr.name
 				};
 				return overwrites ? can.simpleExtend(cur, overwrites) : cur;
+			},
+			addAttributesCallback = function(node, callback){
+				if( !node.attributes ) {
+					node.attributes = [];
+				}
+				node.attributes.push(callback);
 			};
 		
 		parser(template,{
@@ -96,34 +99,45 @@ steal(
 					tag: tagName,
 					children: []
 				};
-				state.inSection = false;
 			},
 			end: function(tagName, unary){
+				var isCustomTag =  viewCallbacks.tag(tagName);
+				
 				if(unary){
+					// If it's a custom tag with content, we need a section renderer.
 					section.add(state.node);
+					if(isCustomTag) {
+						addAttributesCallback(state.node, function(scope, options){
+							viewCallbacks.tagHandler(this,tagName, {
+								scope: scope,
+								options: options,
+								subtemplate: null,
+								templateType: "stache"
+							});
+						});
+					}
 				} else {
 					section.push(state.node);
+					// If it's a custom tag with content, we need a section renderer.
+					if( isCustomTag ) {
+						section.startSubSection();
+					}
 				}
 				
-				if( viewCallbacks.tag(tagName) ) {
-					section.startSubSection();
-				}
-				state.inSection = false;
+				
 				state.node =null;
 			},
 			close: function( tagName ) {
-				var renderer;
-				if( viewCallbacks.tag(tagName) ) {
-					
-					renderer = section.endSubSection();
+				var isCustomTag = viewCallbacks.tag(tagName),
+					renderer;
+				
+				if( isCustomTag ) {
+					renderer = section.endSubSectionAndReturnRenderer();
 				}
 				
 				var oldNode = section.pop();
-				if( renderer ) {
-					if( !oldNode.attributes ) {
-						oldNode.attributes = [];
-					}
-					oldNode.attributes.push(function(scope, options){
+				if( isCustomTag ) {
+					addAttributesCallback(oldNode, function(scope, options){
 						viewCallbacks.tagHandler(this,tagName, {
 							scope: scope,
 							options: options,
@@ -132,7 +146,6 @@ steal(
 						});
 					});
 				}
-				state.inSection = true;
 				
 			},
 			attrStart: function(attrName){

@@ -11,7 +11,16 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			return el.childNodes.length === 0 ? "" : el.childNodes[0].nodeValue;
 		};
 	})();
-	
+	// ## HTMLSectionBuilder
+	//
+	// Contains a stack of HTMLSections.
+	// An HTMLSection is created everytime a subsection is found. For example:
+	// 
+	//     {{#if items}} {{#items}} X
+	//
+	// At the point X was being processed, their would be 2 HTMLSections in the 
+	// stack.  One for the content of `{{#if items}}` and the other for the
+	// content of `{{#items}}`
 	var HTMLSectionBuilder = function(){
 		this.stack = [new HTMLSection()];
 	};
@@ -24,9 +33,16 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			this.stack.push(newSection);
 			return newSection;
 		},
-		endSubSection: function(){
-			var htmlSection = this.endSection();
-			return can.proxy(htmlSection.compiled.hydrate, htmlSection.compiled);
+		// Ends the current section and returns a renderer.
+		// But only returns a renderer if there is a template.
+		endSubSectionAndReturnRenderer: function(){
+			if(this.last().isEmpty()) {
+				this.stack.pop();
+				return null;
+			} else {
+				var htmlSection = this.endSection();
+				return can.proxy(htmlSection.compiled.hydrate, htmlSection.compiled);
+			}
 		},
 		startSection: function( process ) {
 			var newSection = new HTMLSection(process);
@@ -114,6 +130,10 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			} else {
 				return this[this.data];
 			}
+		},
+		// Returns if a section is empty
+		isEmpty: function(){
+			return !this.targetData.length;
 		}
 	});
 	
