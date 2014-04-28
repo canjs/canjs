@@ -8,6 +8,8 @@ Converts a value passed to [can.Map::attr attr] into an appropriate value.
 @this {can.Map} the instance of the can.Map.
 @return {*} The value that should be passed to `set` or (if there is no `set` property) the value to set on the map instance.
 
+@body
+
 ## Use
 
 The `type` property specifies the type of the attribute.  The type can be specified as either a type function that returns the type coerced value or one of the following strings:

@@ -415,4 +415,18 @@ steal("can/map/define", "can/test", function () {
 		equal(serialized.name, undefined, "name doesn't serialize");
 	});
 	
-});
+
+		var Paginate = can.Map.extend({
+			define: {
+				page: {
+					set: function (newVal) {
+						this.attr('offset', (parseInt(newVal) - 1) * this.attr('limit'));
+					},
+					get: function () {
+						return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+					}
+				}
+			}
+		});
+
+		var p = new Paginate({limit: 10, offset: 20});});
