@@ -3346,4 +3346,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		});
 		
 	});
+
+	test("inverse in tag", function(){
+		var template = can.stache('<span {{^isBlack}} style="display:none"{{/if}}>Hi</span>');
+		
+		var res = template({
+			isBlack: false
+		});
+		
+		equal(res.childNodes[0].style.display, "none", "color is not set");
+		
+	});
+	
 });
