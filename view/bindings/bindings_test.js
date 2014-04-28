@@ -439,6 +439,7 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 		equal(map.attr("age"), "32", "updated from contenteditable");
 	});
 
+<<<<<<< HEAD
 	test("can-event handlers work with {} (#905)", function () {
 		expect(4);
 		var template = can.mustache("<div>" +
@@ -505,6 +506,43 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 
 		equal(map.attr("age"), "32", "updated from input");
 
+	});
+
+	test("can-value select with null or undefined value (#813)", function () {
+
+		var template = can.view.mustache(
+			"<select id='null-select' can-value='color-1'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>" +
+			"<select id='undefined-select' can-value='color-2'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>");
+
+		var map = new can.Map({
+			'color-1': null,
+			'color-2': undefined
+		});
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+
+		var nullInput = document.getElementById("null-select");
+		var nullInputOptions = nullInput.getElementsByTagName('option');
+		var undefinedInput = document.getElementById("undefined-select");
+		var undefinedInputOptions = undefinedInput.getElementsByTagName('option');
+
+		// wait for set to be called which will change the selects
+		setTimeout(function(){
+			ok(nullInputOptions[0].selected, "default (null) value set");
+			ok(undefinedInputOptions[0].selected, "default (undefined) value set");
+			start();
+		}, 1);
 	});
 
 	test('radio type conversion (#811)', function(){

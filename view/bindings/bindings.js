@@ -234,7 +234,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			}
 			var val = this.options.value();
 			// Set the element's value to match the attribute that was passed in
-			this.element[0].value = (typeof val === 'undefined' ? '' : val);
+			this.element[0].value = (val == null ? '' : val);
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
 		"change": function () {
