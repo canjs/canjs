@@ -439,5 +439,73 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 		equal(map.attr("age"), "32", "updated from contenteditable");
 	});
 
+	test("can-event handlers work with {} (#905)", function () {
+		expect(4);
+		var template = can.mustache("<div>" +
+			"{{#each foodTypes}}" +
+			"<p can-click='{doSomething}'>{{content}}</p>" +
+			"{{/each}}" +
+			"</div>");
+
+		var foodTypes = new can.List([{
+			title: "Fruits",
+			content: "oranges, apples"
+		}, {
+			title: "Breads",
+			content: "pasta, cereal"
+		}, {
+			title: "Sweets",
+			content: "ice cream, candy"
+		}]);
+		var doSomething = function (foodType, el, ev) {
+			ok(true, "doSomething called");
+			equal(el[0].nodeName.toLowerCase(), "p", "this is the element");
+			equal(ev.type, "click", "1st argument is the event");
+			equal(foodType, foodTypes[0], "2nd argument is the 1st foodType");
+
+		};
+
+		var frag = template({
+			foodTypes: foodTypes,
+			doSomething: doSomething
+		});
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+		var p0 = ta.getElementsByTagName("p")[0];
+		can.trigger(p0, "click");
+
+	});
+
+	test("can-value works with {} (#905)", function () {
+
+		var template = can.mustache("<input can-value='{age}'/>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
+
+		map.attr("age", "31");
+
+		equal(input.value, "31", "input value update correctly");
+
+		input.value = "32";
+
+		can.trigger(input, "change");
+
+		equal(map.attr("age"), "32", "updated from input");
+
+	});
+
 
 });
