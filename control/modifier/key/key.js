@@ -4,6 +4,11 @@
  * @documentjs-ignore
  */
 steal('can/control/modifier', function (Control) {
+
+	//!steal-remove-start
+	can.dev.warn("can/control/modifier/key is an undocumented and untested plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	/*
 	 * jwerty - Awesome handling of keyboard events
 	 *
