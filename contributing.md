@@ -5,7 +5,7 @@
 @body
 -->
 
-Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on IRC or email (contact@bitovi.com).  We will happily walk you throuygh setting up a the environment, creating a test, and submitting a pull request.
+Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on the [#canjs IRC channel](http://webchat.freenode.net/?channels=canjs) or email (contact@bitovi.com).  We will happily walk you through setting up a the environment, creating a test, and submitting a pull request.
 
 ## Reporting Bugs
 
@@ -22,19 +22,14 @@ When filing a bug, it is helpful to include:
 - Breaking unit tests (optional)
 - Proposed fix solutions (optional)
 
-Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [IRC #canjs channel](http://webchat.freenode.net/?channels=canjs).
+Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [#canjs IRC channel](http://webchat.freenode.net/?channels=canjs).
 
 ## Installing 
 
-1.) <a href="https://github.com/bitovi/canjs/fork" target="_blank">Fork Canjs on GitHub.</a>
+1. <a href="https://github.com/bitovi/canjs/fork" target="_blank">Fork Canjs on GitHub.</a>
+2. Clone it with: `git clone git@github.com:<your username>/canjs`
 
-2.) Clone it with:
-  
-```
-git clone git@github.com:<your username>/canjs
-```
-
-## Developing
+## Structure
 
 After installing CanJS, you’ll find a folder for each feature of CanJS: `construct`, `control`, `model`, etc.
 
@@ -57,62 +52,45 @@ The `can/test` folder contains:
 
 The `can/util` folder contains the compatibility layer for each library.
 
-To develop CanJS:
-
-1. Edit the feature’s file.
-2. Add tests to the feature’s test file.
-3. Open the feature’s test page. Make sure it passes.
-4. Open can/test/index.html in every browser to test everything.
-5. Submit a pull request!
-
-**Note:** You'll need to serve up the test files using a file server and not directly opening them. You can install a simple nodejs file server using `npm install -g http-server`. Then simply run `http-server` in the root of `~/path/to/canjs` will and navigate to [http://localhost:8080/](http://localhost:8080/).
-
 ## Contributing
 
-When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then push to the fork, and submit a pull request.
+When contributing, please include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then push to the fork, and submit a pull request. More detailed steps are as follows:
 
-Move into the directory of your cloned repository and create a new feature branch.
+1. Navigate to your clone of the CanJS repository - `cd /path/to/canjs`
+2. Create a new feature branch - `git checkout -b html5-fix`
+3. Make some changes
+4. Update tests to accomodate your changes
+5. Run tests and make sure they pass in all browsers
+6. Update documentation if necessary
+7. Push your changes to your remote branch - `git push origin html5-fix`
+8. Submit a pull request! Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click the 'New Pull Request' button. Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
 
-```
-cd canjs
-git checkout -b html5-fix
-```
+## Testing
 
-Once your happy with your changes, push to the feature branch.
+CanJS has a pretty comprehensive test suite that is constantly being added to. Each module has its own tests, that can be run by opening the `test.html` in each folder. It's important that all tests pass before sending a pull request. [TravisCI](https://travis-ci.org/bitovi/canjs) will determine if your commits pass the tests, but while you're developing you can run the QUnit tests locally.
 
-```
-git push origin html5-fix
-```
+There are 3 ways of running your tests locally, all of which will require you to have [NodeJS](http://nodejs.org/), [npm](http://npmjs.org/), [Grunt](http://gruntjs.com/) and all of the CanJS dev dependencies installed.
 
-Now you'll need to submit a Pull Request. Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click the 'New Pull Request' button. Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
+### Getting Set Up
 
-## Documentation
+1. Install NodeJS & npm - [NodeJS](http://nodejs.org/) or use `brew install nodejs`
+2. Install Grunt - `npm install grunt-cli -g`
+3. Navigate to your local clone of CanJS - `cd /path/to/canjs`
+4. Install dependencies - `npm install`
 
-If your pull request affects the public API, make relevant changes to the documentation.
-Documentation is found either inline or in markdown files in the respective directory.
-In order to view your changes in documentation you will need to run [CanJS.com](https://github.com/bitovi/canjs.com) locally and regenerate the docs.
-Note that you will need to modify the `can` folder in the `canjs.com` clone to point at your local clone of CanJS. This can be
-accomplished by replacing the `can` folder in your `canjs.com` clone with a symlink, ie `mv can can.submodule && ln -s <local path to canjs> can`.
+### Running All Tests From CLI
 
-```
-    git clone git@github.com:bitovi/canjs.com.git
-    cd canjs.com
-    git checkout gh-pages
-    git submodule update --init --recursive
-    npm install
-    grunt
-    ./js scripts/doc.js
-```
+1. Once you completed the steps above simply run `grunt test`.
 
-Once the documentation is finished rendering, all the HTML files will be located in the `docs` folder. Open the documentation file you made changes to and make sure everything rendered correctly.
+### Running All Tests In Browser
 
-## Running Tests Locally
+1. `grunt connect:server:keepalive`
+2. Open [http://localhost:8000/test/](http://localhost:8000/test/) in your browser.
 
-Its important that all tests pass before sending a pull request. TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally. To run tests locally you need [NodeJS](http://nodejs.org/) installed and run
+### Running Individual Test Files
 
-npm install
-
-Then open `~/can/test/test.html` in a web browser to run all tests for all libraries.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
+1. `grunt connect:server:keepalive`
+2. Open [http://localhost:8000/](http://localhost:8000/) in your browser and then navigate to your intended file. 
 
 CanJS supports the following browsers:
 
@@ -122,21 +100,37 @@ CanJS supports the following browsers:
 - IE 7+
 - Opera Current-1
 
+## Documentation
+
+If your changes affect the public API, please make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory. In order to view your changes in documentation you will need to run the [CanJS.com site](https://github.com/bitovi/canjs.com) locally and regenerate the docs.
+
+#### Note:
+
+> _You will need to make sure that the `can` folder in your clone of `canjs.com` points to your local copy of CanJS where you made the documentation changes. This can be
+accomplished by replacing the `can` folder in your `canjs.com` clone with a symlink, using: `mv can can.submodule && ln -s <local path to canjs> can`._
+
+    git clone git@github.com:bitovi/canjs.com.git
+    cd canjs.com
+    git checkout gh-pages
+    git submodule update --init --recursive
+    npm install
+    grunt
+    ./js scripts/doc.js
+
+Once the documentation is finished rendering, all the HTML files will be located in the `docs` folder. Open the documentation file you made changes to and make sure everything rendered correctly.
+
 ## Making a build
 
-To make a build (standalone and AMD version) and run tests from the command line you will need [NodeJS](http://nodejs.com) and [Grunt](http://gruntjs.com) (`npm install grunt-cli -g`) installed. Then, in the CanJS repository folder run:
+To make a build (standalone and AMD version) you will also need to have [[NodeJS](http://nodejs.org/), [npm](http://npmjs.org/), [Grunt](http://gruntjs.com/) and all of the CanJS dev dependencies installed.
 
-    npm install
+### Getting Set Up
 
-Then you can run:
+1. Install NodeJS & npm - [NodeJS](http://nodejs.org/) or use `brew install nodejs`
+2. Install Grunt - `npm install grunt-cli -g`
+3. Navigate to your local clone of CanJS - `cd /path/to/canjs`
+4. Install dependencies - `npm install`
 
-    grunt build
-
-It puts the downloads in `can/dist`.
-
-You can also run the tests from the command line by executing:
-
-    grunt test
+After you have completed those steps simply run `grunt build` and it will put the built files in the `can/dist` directory, making them ready for download.
 
 ## Style Guide
 
@@ -148,13 +142,13 @@ Indentation with tabs, not spaces.
 
 `if/else/for/while/try` always have braces, with the first brace on the same line.  For example:
 
-  if(foo){
+    if(foo){
 
-  }
+    }
   
 Spaces after commas.  For example:
 
-  myfn = function(foo, bar, moo){ ... }
+    myfn = function(foo, bar, moo){ ... }
 
 ### Assignments
 
@@ -162,69 +156,63 @@ Assignments should always have a semicolon after them.
 
 Assignments in a declaration should always be on their own line. Declarations that don't have an assignment should be listed together at the start of the declaration. For example:
 
-  // Bad
-  var foo = true;
-  var bar = false;
-  var a;
-  var b;
+    // Bad
+    var foo = true;
+    var bar = false;
+    var a;
+    var b;
 
-  // Good
-  var a, b,
-    foo = true,
-    bar = false;
+    // Good
+    var a, b,
+      foo = true,
+      bar = false;
 
 ### Equality
 
 Strict equality checks `===` should be used in favor of `==`. The only exception is when checking for undefined and null by way of null.
 
-  // Bad
-  if(bar == "can"){ ... }
+    // Bad
+    if(bar == "can"){ ... }
 
-  // Good
-  if(bar === "can"){ ... }
+    // Good
+    if(bar === "can"){ ... }
 
 If the statement is a truthey or falsey, use implied operators.  Falseys are when variables return `false`, `undefined`, `null`, or `0`.  Trutheys are when variables return `true`, `1`, or anything defined.
 
 For example:
 
-```
-  // Bad
-  if(bar === false){ ... }
+    // Bad
+    if(bar === false){ ... }
 
-  // Good 
-  if(bar){ ... }
+    // Good 
+    if(bar){ ... }
 
-  // Good
-  var foo = [];
-  if(!foo.length){ ... }
-```
+    // Good
+    var foo = [];
+    if(!foo.length){ ... }
 
 ###  Quotes
 
 Use double quotes.
 
-  var double = "I am wrapped in double quotes";
+    var double = "I am wrapped in double quotes";
 
 Strings that require inner quoting must use double outside and single inside.
 
-  var html = "<div id='my-id'></div>";
+    var html = "<div id='my-id'></div>";
 
 ### Comments
 
 Single line comments go OVER the line they refer to:
 
-```
-  // We need an explicit "bar", because later in the code foo is checked.
-  var foo = "bar";
-```
+    // We need an explicit "bar", because later in the code foo is checked.
+    var foo = "bar";
 
 For long comments, use:
-
-```
-  /* myFn
-   * Four score and seven—pause—minutes ago...
-   */
-```
+    
+    /* myFn
+     * Four score and seven—pause—minutes ago...
+     */
   
 ## List of heroes
 
