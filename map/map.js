@@ -509,7 +509,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						delete computedBinding.handler;
 					} else {
 						// Decrement number of things listening to this computed property
-						computedBinding.count++;
+						computedBinding.count--;
 					}
 
 				}
