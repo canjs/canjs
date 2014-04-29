@@ -92,6 +92,7 @@ steal("can/map/setter", "can/test", function () {
 			var oldlog = can.dev.warn;
 			can.dev.warnTimeout = 10;
 			can.dev.warn = function (text) {
+				debugger;	
 				ok(text, "got a message");
 				can.batch.stop(true);
 				can.dev.warn = oldlog;
@@ -106,12 +107,15 @@ steal("can/map/setter", "can/test", function () {
 			
 		});
 		
-		test('setter function does not warns if setter is called back quickly (#808)', function () {
+		test('setter function does not warn if setter is called back quickly (#808)', function () {
 			stop();
 			expect(1);
 			var oldlog = can.dev.warn;
 			can.dev.warnTimeout = 100;
+			var firstMsg = false;
 			can.dev.warn = function (text) {
+				// first warn is not the relevant message, there is a deprecation warning we need to ignore
+				if(!firstMsg) return;
 				ok(false, "got a message");
 				start();
 			};

@@ -207,13 +207,5 @@ steal("can/map", "can/compute", "can/test", "can/list", function (undefined) {
 		equal(test.attr('my.newCount'), 1, 'falsey (1) value accessed correctly');
 	});
 
-	test('stuff', function(){
-
-		var MyMap = can.Map.extend();
-		var map = new MyMap();
-		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
-		console.log(map.attr('locations')[0] instanceof MyMap); // true
-	})
-
 
 });
