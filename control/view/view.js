@@ -1,4 +1,9 @@
 steal('can/util', 'can/control', 'can/view', function (can) {
+
+	//!steal-remove-start
+	can.dev.warn("can/control/view is a deprecated plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	var URI = steal.URI || steal.File;
 	can.Control.getFolder = function () {
 		return can.underscore(this.fullName.replace(/\./g, '/'))
