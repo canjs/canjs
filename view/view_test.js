@@ -369,7 +369,6 @@ steal("can/view/callbacks",
 		var data = new can.Map({
 			loading: true
 		}),
-			expected = "Loading<table><tbody><tr></tr></tbody></table>",
 			templates = {
 				"ejs" : "<% if (state.attr('loading')) { %>Loading<% }else{ %>Loaded<% } %><table><tbody><tr></tr></tbody></table>",
 				"mustache" : "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>",
@@ -381,7 +380,7 @@ steal("can/view/callbacks",
 			'stache'
 		], function (ext) {
 
-			result = can[ext]( templates[ext])({state: data});
+			var result = can[ext]( templates[ext])({state: data});
 			equal(result.childNodes.length, 2, "can."+ext+"(template)(data) "+"proper number of nodes");
 			equal(result.childNodes[0].nodeType, 3, "can."+ext+"(template)(data) "+"got text node");
 			equal(result.childNodes[0].textContent, "Loading", "can."+ext+"(template)(data) "+"got live bound text value");
