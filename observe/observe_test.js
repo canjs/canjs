@@ -1,4 +1,4 @@
-steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () {
+steal('can/util', "can/observe", 'can/map', 'can/list', "can/test",function () {
 	module('can/observe map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.Map({
@@ -700,6 +700,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			start();
 		}, 100);
 	});
+	
 	test('replace with a deferred that resolves to an List', function () {
 		var def = new can.Deferred();
 		def.resolve(new can.List([{
@@ -712,12 +713,13 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		}, {
 			name: '2'
 		}]);
-		list.bind('change', function () {
+		list.bind('length', function () {
 			equal(list.length, 2, 'length is still 2');
 			equal(list[0].attr('name'), 'foo', 'set to foo');
 		});
 		list.replace(def);
 	});
+	
 	test('.attr method doesn\'t merge nested objects (#207)', function () {
 		var test = new can.Map({
 			a: {

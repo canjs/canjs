@@ -26,6 +26,11 @@
 			"type": "core",
 			"isDefault": true
 		},
+		"can/list/promise": {
+			"name": "can.List.promise",
+			"description": "Promises on lists",
+			"type": "plugin"
+		},
 		"can/observe": {
 			"name": "can.Observe",
 			"description": "Observables and key-value bindings",

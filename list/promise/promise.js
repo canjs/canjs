@@ -9,54 +9,35 @@ steal("can/list", function (list) {
 
 		// If there is a deferred:
 		if (can.isDeferred(data)) {
-			// - set up its setate
+			// Set up its state.  Must call this way
+			// because we are working on an array.
+			can.batch.start();
 			this.attr("state", data.state());
+			this.removeAttr("reason");
+			can.batch.stop();
+			
 			var self = this;
 			// update its state when it changes
-			data.always(function () {
+			var deferred = this._deferred = new can.Deferred();
+			
+			data.then(function(){
 				self.attr("state", data.state());
+				// The deferred methods will always return this object
+				deferred.resolve(self);
+			},function(reason){
+				can.batch.start();
+				self.attr("state", data.state());
+				self.attr("reason", reason);
+				can.batch.stop();
+				deferred.reject(reason);
 			});
-			// save the deferred for the deferred methods
-			this._deferred = data;
 		}
 		return result;
 	};
+	
 	can.each({
-		/**
-		 * @function can.List.prototype.isResolved
-		 * @parent can.List.plugins.promise
-		 *
-		 * @signature `list.isResolved()`
-		 *
-		 * @return {Boolean} `true` if the list is resolved. `false` if otherwise.
-		 *
-		 * @body
-		 *
-		 */
 		isResolved: "resolved",
-		/**
-		 * @function can.List.prototype.isPending
-		 * @parent can.List.plugins.promise
-		 *
-		 * @signature `list.isPending()`
-		 *
-		 * @return {Boolean} `true` if the list is pending. `false` if otherwise.
-		 *
-		 * @body
-		 *
-		 */
 		isPending: "pending",
-		/**
-		 * @function can.List.prototype.isRejected
-		 * @parent can.List.plugins.promise
-		 *
-		 * @signature `list.isRejected()`
-		 *
-		 * @return {Boolean} `true` if the list is rejected. `false` if otherwise.
-		 *
-		 * @body
-		 *
-		 */
 		isRejected: "rejected"
 	}, function (value, method) {
 		can.List.prototype[method] = function () {
@@ -64,42 +45,22 @@ steal("can/list", function (list) {
 		};
 	});
 
+
 	can.each([
-		/**
-		 * @function can.List.prototype.then
-		 * @parent can.List.plugins.promise
-		 *
-		 * @param {function(*)} doneFilter
-		 *
-		 * @param {function(*)} failFilter
-		 *
-		 * @return {Promise} A promise that resolves to the current list.
-		 *
-		 * @body
-		 *
-		 */
-
 		"then",
-		/**
-		 * @function can.List.prototype.done
-		 * @parent can.List.plugins.promise
-		 *
-		 * @body
-		 *
-		 */
-
 		"done",
-		/**
-		 * @function can.List.prototype.always
-		 * @parent can.List.plugins.promise
-		 *
-		 * @body
-		 *
-		 */
-
-		"always"
+		"fail",
+		"always",
+		"promise"
 	], function (name) {
 		can.List.prototype[name] = function () {
+			// it's possible a list is created manually and returned as the result
+			// of .then.  It should not break.
+			if(!this._deferred) {
+				this._deferred = new can.Deferred();
+				this._deferred.resolve(this);
+			}
+			
 			return this._deferred[name].apply(this._deferred, arguments);
 		};
 	});

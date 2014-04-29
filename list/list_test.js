@@ -1,5 +1,7 @@
-steal("can/util", "can/list", "can/test", "can/compute", function () {
+steal("can/util", "can/list", "can/test", "can/compute", function(){
+	
 	module('can/list');
+	
 	test('list attr changes length', function () {
 		var l = new can.List([
 			0,
@@ -208,4 +210,14 @@ steal("can/util", "can/list", "can/test", "can/compute", function () {
 		equal(filtered.length, 1, "one item");
 		equal(filtered[0].name, "Mary", "filter works");
 	});
+	
+	
+	test('removing expandos on lists', function(){
+		var list = new can.List(["a","b"]);
+		
+		list.removeAttr("foo");
+		
+		equal(list.length, 2);
+	});
+	
 });

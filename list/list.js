@@ -144,8 +144,14 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					this.length = (+attr + 1);
 				}
 			},
-			_remove: function(prop) {
-				this.splice(prop, 1);
+			_remove: function(prop, current) {
+				// if removing an expando property
+				if(isNaN(+prop)) {
+					delete this[prop];
+					this._triggerChange(prop, "remove", undefined, current);
+				} else {
+					this.splice(prop, 1);
+				}
 			},
 			_each: function (callback) {
 				var data = this.__get();
