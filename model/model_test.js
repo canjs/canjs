@@ -1500,13 +1500,13 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		});
 	});
 
-	test("#501 - resource definition - remove trailing slash", function() {
+	test("#501 - resource definition - remove trailing slash(es)", function() {
 		can.fixture("POST /foods", function() {
 			return [];
 		});
 
 		var FoodModel = can.Model.extend({
-			resource: "/foods/"
+			resource: "/foods//////"
 		}, {});
 
 		stop();
