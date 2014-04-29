@@ -1052,6 +1052,8 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		// - `model`: the can.Model that has the resource property
 		// - `method`: a property from the ajaxMethod object
 		createURLFromResource = function(model, name) {
+			if (!model.resource) return;
+			
 			var resource = model.resource.replace(/\/$/, "");
 			if (name === "findAll" || name === "create") {
 				return resource;
