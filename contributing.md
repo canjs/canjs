@@ -65,6 +65,8 @@ To develop CanJS:
 4. Open can/test/index.html in every browser to test everything.
 5. Submit a pull request!
 
+**Note:** You'll need to serve up the test files using a file server and not directly opening them. You can install a simple nodejs file server using `npm install -g http-server`. Then simply run `http-server` in the root of `~/path/to/canjs` will and navigate to [http://localhost:8080/](http://localhost:8080/).
+
 ## Contributing
 
 When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then push to the fork, and submit a pull request.
