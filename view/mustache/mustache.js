@@ -1504,6 +1504,10 @@ steal('can/util',
 				if (scopeAndOptions.scope && can.isFunction(context[key])) {
 					return context[key];
 				}
+
+				//!steal-remove-start
+				can.dev.warn('can/view/mustache/mustache.js: Unable to find helper "' + key + '".');
+				//!steal-remove-end
 			}
 
 			// Get a compute (and some helper data) that represents key's value in the current scope
@@ -1520,7 +1524,7 @@ steal('can/util',
 			var initialValue = computeData.initialValue;
 			  
 			//!steal-remove-start
-			if (initialValue === undefined) {
+			if (initialValue === undefined && !isHelper) {
 				can.dev.warn('can/view/mustache/mustache.js: Variable "' + key + '" not found in mustache template.');
 			}
 			//!steal-remove-end
