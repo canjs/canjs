@@ -3461,7 +3461,7 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 			can.dev.warn = oldlog;
 		});
 
-		test("Logging: Helper not found (#726)", function () {
+		test("Logging: Helper not found in mustache template(#726)", function () {
 			var oldlog = can.dev.warn,
 					message = 'can/view/mustache/mustache.js: Unable to find helper "helpme".';
 
