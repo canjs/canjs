@@ -1056,7 +1056,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		createURLFromResource = function(model, name) {
 			if (!model.resource) { return; }
 
-			var resource = model.resource.replace(/\/*$/, "");
+			var resource = model.resource.replace(/\/+$/, "");
 			if (name === "findAll" || name === "create") {
 				return resource;
 			} else {
