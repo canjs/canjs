@@ -1525,7 +1525,6 @@ steal('can/util',
 				if (scopeAndOptions.scope && can.isFunction(context[key])) {
 					return context[key];
 				}
-
 			}
 
 			// Get a compute (and some helper data) that represents key's value in the current scope
@@ -1540,6 +1539,12 @@ steal('can/util',
 
 			// computeData gives us an initial value
 			var initialValue = computeData.initialValue;
+			  
+			//!steal-remove-start
+			if (initialValue === undefined) {
+				can.dev.warn('can/view/mustache/mustache.js: Variable "' + key + '" not found in mustache template.');
+			}
+			//!steal-remove-end
 
 			// Use helper over the found value if the found value isn't in the current context
 			if ((initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && Mustache.getHelper(key, options)) {
