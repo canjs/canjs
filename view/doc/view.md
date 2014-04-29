@@ -21,13 +21,38 @@ a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFra
                 return first +" "+ last
             }
         });
-        
+
     document.getElementById('contacts').appendChild(frag)
 
-@param {String|Object} idOrUrl The URL of a template or the id of a template embedded in a script tag or an object containing a `url` property for the URL to load and an `engine` property for the view engine (`mustache` or `ejs`) if it can't be infered from the file extensions or script tag type.  
+@param {String} idOrUrl The URL of a template or the id of a template embedded in a script tag. If the `url` starts with an '#' it is assumed to be an id of a script tag.
 @param {Object} data Data to render the template with.  
 @param {Object.<String, function>+} helpers An object of named local helper functions.  
 @return {documentFragment} The rendered result of the template converted to 
+html elements within a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment].
+
+@signature `can.view( obj, data[, helpers] )`
+
+Loads a template, renders it with data and helper functions and returns
+the HTML of the template within
+a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment].
+
+    var frag = can.view({
+      url: "/contact",
+      engine: "ejs"
+    },
+    {first: "Justin", last: "Meyer"},
+    {
+        fullName: function(first, last){
+            return first +" "+ last
+        }
+    });
+
+    document.getElementById('contacts').appendChild(frag)
+
+@param {Object} obj An object containing a `url` property for the URL to load or an `id` property for the id of the embedded script tag and an `engine` property for the view engine (`mustache` or `ejs`) if it can't be infered from the file extensions or script tag type.
+@param {Object} data Data to render the template with.
+@param {Object.<String, function>+} helpers An object of named local helper functions.
+@return {documentFragment} The rendered result of the template converted to
 html elements within a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment].
 
 @signature `can.view( idOrUrl )`
@@ -36,7 +61,7 @@ Registers or loads a template and returns a [can.view.renderer renderer] functio
 render the template with `data` and `helpers`.
 
     var renderer = can.view("/contact.ejs");
-    
+
     var frag = renderer(
         {first: "Justin", last: "Meyer"},
         {
@@ -44,7 +69,7 @@ render the template with `data` and `helpers`.
                 return first +" "+ last
             }
         })
-        
+
     document.getElementById('contacts').appendChild(frag)
 
 @param {String} idOrUrl The URL of a template or the id of a template embedded in a script tag.
@@ -64,7 +89,6 @@ efficiently inserted into the DOM.
 
 This code:
 
-    
  1. Loads the template a 'mytemplate.ejs'. It might look like:
     <pre><code>&lt;h2>&lt;%= name %>&lt;/h2></pre></code>
 
@@ -94,12 +118,22 @@ For example:
       <%} %>
     </script>
 
-Render with this template like:
+Then load the template using `can.view`, providing it the script idin on of the following formats:
 
-    document.getElementById('recipes')
-      .appendChild( can.view('recipesEJS', recipeData ) )
+ 1. Without a # to load the template via AJAX if the script tag is not found:
 
-Notice we passed the id of the element we want to render.
+  <pre><code>document.getElementById('recipes')
+    .appendChild( can.view('recipesEJS', recipeData ) );</pre></code>
+
+ 2. With a # to load the template from a script tag only:
+
+   <pre><code>document.getElementById('recipes')
+    .appendChild( can.view('#recipesEJS', recipeData ) );</pre></code>
+
+ 3. In an Object to load the template from a script tag only:
+
+   <pre><code>document.getElementById('recipes')
+    .appendChild( can.view({ id: 'recipesEJS' }, recipeData ) );</pre></code>
 
 ### Loading templates from a url
 
@@ -109,6 +143,11 @@ matches the type of template:
 
     document.getElementById('recipes')
       .appendChild( can.view('templates/recipes.ejs', recipeData ) )
+
+Alternatively, you can pass an Object to `can.view` with a `url` and `engine` value like this:
+
+    document.getElementById('recipes')
+      .appendChild( can.view({ url: 'templates/recipes', engine: 'ejs'}, recipeData ) );
 
 Note: If you are using [RequireJS](http://requirejs.org/), the URL will be relative to its [`baseUrl`](http://requirejs.org/docs/api.html#config-baseUrl).
 
@@ -132,6 +171,10 @@ It is also possible to get a nameless [can.view.renderer renderer] function when
     renderer({
       message : 'Message form Mustache'
     }); // -> <strong>Message from Mustache</strong>
+
+### Forcing local lookups
+
+By default, `can.view` will attempt to resolve a template locally via script tag and then via URL. You can force `can.view` to always resolve templates locally via script tag by setting the `can.view.forceLocalLookup` flag to true.
 
 ## Supported Template Engines
 

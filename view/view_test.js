@@ -194,6 +194,82 @@ steal("can/view/callbacks",
 			equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, 'Henry');
 		}
 	});
+
+	test('loading template using id property', function(){
+
+		var script = document.createElement('script'),
+			ajaxCalled = false,
+			result;
+		script.setAttribute('type', 'text/mustache');
+		script.setAttribute('id', 'localTemplate');
+		script.text = '<h1>{{message}}</h1>';
+		document.getElementById('qunit-test-area').appendChild(script);
+
+		result = can.view({
+			id: 'localTemplate'
+		}, {message: 'hello'} );
+
+		equal(result.childNodes[0].nodeName.toLowerCase(), "h1", "got an h1");
+		equal(result.childNodes[0].innerHTML, "hello", "innerHTML");
+
+		var oldAjax = can.ajax;
+		can.ajax = function(){
+			ajaxCalled = true;
+		};
+
+		try {
+			result = can.view({
+				id: 'localTemplate2'
+			}, {message: 'Hello'} );
+		} catch(e) {}
+
+		ok(!ajaxCalled, "AJAX not used to lookup template");
+
+		can.ajax = oldAjax;
+	});
+
+	test('loading template with # should not make AJAX request', function(){
+
+		var ajaxCalled = false,
+			result;
+
+		var oldAjax = can.ajax;
+		can.ajax = function(){
+			ajaxCalled = true;
+		};
+
+		try {
+			result = can.view('#localTemplate', {message: 'Hello'} );
+		} catch(e) {}
+
+		ok(!ajaxCalled, "AJAX not used to lookup template");
+
+		can.ajax = oldAjax;
+	});
+
+	test('can.view.forceLocalLookup', function(){
+
+		var ajaxCalled = false,
+			result;
+
+		var oldAjax = can.ajax;
+		can.ajax = function(){
+			ajaxCalled = true;
+		};
+
+		can.view.forceLocalLookup = true;
+
+
+		try {
+			result = can.view('localTemplate', {message: 'Hello'} );
+		} catch(e) {}
+
+		ok(!ajaxCalled, "AJAX not used to lookup template");
+
+		can.ajax = oldAjax;
+		can.view.forceLocalLookup = false;
+	});
+
 	test('object of deferreds', function () {
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();

@@ -52,13 +52,16 @@ steal('can/util', function (can) {
 	/**
 	 * @hide
 	 * @function get
-	 * @param {String | Object} obj url string or object with url property
+	 * @param {String | Object} obj url string or object with url or id property
 	 * @param {Boolean} async If the ajax request should be asynchronous.
 	 * @returns {can.Deferred} a `view` renderer deferred.
 	 */
 	var	get = function (obj, async) {
-		var url = typeof obj === 'string' ? obj : obj.url,
+		var url = typeof obj === 'string' ? obj : obj.id ? '#' + obj.id : obj.url,
 			suffix = (obj.engine && '.' + obj.engine) || url.match(/\.[\w\d]+$/),
+			d = new can.Deferred(),
+			// Whether we should make an AJAX request to fetch the view.
+			makeAJAXRequest = !can.view.forceLocalLookup,
 			type,
 		// If we are reading a script element for the content of the template,
 		// `el` will be set to that script element.
@@ -72,6 +75,7 @@ steal('can/util', function (can) {
 		//from a script element and not current page's HTML
 		if (url.match(/^#/)) {
 			url = url.substr(1);
+			makeAJAXRequest = false;
 		}
 		// If we have an inline template, derive the suffix from the `text/???` part.
 		// This only supports `<script>` tags.
@@ -92,38 +96,35 @@ steal('can/util', function (can) {
 		// Convert to a unique and valid id.
 		id = $view.toId(url);
 
-		// If an absolute path, use `steal`/`require` to get it.
-		// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
-		if (url.match(/^\/\//)) {
-			url = url.substr(2);
-			url = !window.steal ?
-				url :
-				steal.config()
-					.root.mapJoin("" + steal.id(url));
-		}
-
-		// Localize for `require` (not almond)
-		if (window.require) {
-			if (require.toUrl) {
-				url = require.toUrl(url);
-			}
-		}
-
 		// Set the template engine type.
 		type = $view.types[suffix];
 
-		// If it is cached,
+		// If it is cached, return the cached deferred renderer.
 		if ($view.cached[id]) {
-			// Return the cached deferred renderer.
 			return $view.cached[id];
-
-			// Otherwise if we are getting this from a `<script>` element.
+			// Otherwise if we are getting this from a `<script>` element,
+			// resolve immediately with the element's `innerHTML`.
 		} else if (el) {
-			// Resolve immediately with the element's `innerHTML`.
 			return $view.registerView(id, el.innerHTML, type);
-		} else {
-			// Make an ajax request for text.
-			var d = new can.Deferred();
+			// Or make an AJAX request for the template text.
+		} else if (makeAJAXRequest) {
+			// If an absolute path, use `steal`/`require` to get it.
+			// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
+			if (url.match(/^\/\//)) {
+				url = url.substr(2);
+				url = !window.steal ?
+					url :
+					steal.config()
+						.root.mapJoin("" + steal.id(url));
+			}
+
+			// Localize for `require` (not almond)
+			if (window.require) {
+				if (require.toUrl) {
+					url = require.toUrl(url);
+				}
+			}
+
 			can.ajax({
 				async: async,
 				url: url,
@@ -138,6 +139,11 @@ steal('can/util', function (can) {
 					$view.registerView(id, text, type, d);
 				}
 			});
+			return d;
+			//Report that view text was not found
+		} else {
+			checkText('', url);
+			d.reject();
 			return d;
 		}
 	};
@@ -333,6 +339,17 @@ steal('can/util', function (can) {
 		 *
 		 */
 		cache: true,
+		/**
+		 * @property {Boolean} can.view.forceLocalLookup
+		 * @parent can.view.static
+		 * By default, views are looked up by script tag and then via AJAX. in the current page and then via AJAX.
+		 * If you'd like to restrict view lookup to script tags only, set the `forceLocalLookup` attribute to `true`.
+		 *
+		 *	//- Forces lookups from script tags
+		 *	can.view.forceLocalLookup = false;
+		 *
+		 */
+		forceLocalLookup: false,
 
 		// ##### register
 		// given an info object, register a template type
