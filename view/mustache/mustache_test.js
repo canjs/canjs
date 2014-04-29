@@ -3460,6 +3460,21 @@ steal("can/model", "can/view/mustache", "can/test", function () {
 
 			can.dev.warn = oldlog;
 		});
+
+		test("Logging: Variable not found in mustache template (#720)", function () {
+			var oldlog = can.dev.warn,
+					message = 'can/view/mustache/mustache.js: Variable "user.name" not found in mustache template.';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			}
+
+			can.view.mustache('<li>{{user.name}}</li>')({
+				user: {}
+			});
+
+			can.dev.warn = oldlog;
+		});
 	}
 	//!steal-remove-end
 
