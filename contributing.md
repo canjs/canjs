@@ -29,7 +29,7 @@ Search for previous tickets, if there is one add to that one rather than creatin
 1.) <a href="https://github.com/bitovi/canjs/fork" target="_blank">Fork Canjs on GitHub.</a>
 
 2.) Clone it with:
-	
+  
 ```
 git clone git@github.com:<your username>/canjs
 ```
@@ -90,7 +90,7 @@ Now you'll need to submit a Pull Request. Navigate to [Pull Requests](https://gi
 
 If your pull request affects the public API, make relevant changes to the documentation.
 Documentation is found either inline or in markdown files in the respective directory.
-In order to view your changes in documentation you will need to run [CanJS.com](http://canjs.com) locally and regenerate the docs.
+In order to view your changes in documentation you will need to run [CanJS.com](https://github.com/bitovi/canjs.com) locally and regenerate the docs.
 Note that you will need to modify the `can` folder in the `canjs.com` clone to point at your local clone of CanJS. This can be
 accomplished by replacing the `can` folder in your `canjs.com` clone with a symlink, ie `mv can can.submodule && ln -s <local path to canjs> can`.
 
@@ -148,13 +148,13 @@ Indentation with tabs, not spaces.
 
 `if/else/for/while/try` always have braces, with the first brace on the same line.  For example:
 
-	if(foo){
+  if(foo){
 
-	}
-	
+  }
+  
 Spaces after commas.  For example:
 
-	myfn = function(foo, bar, moo){ ... }
+  myfn = function(foo, bar, moo){ ... }
 
 ### Assignments
 
@@ -162,70 +162,70 @@ Assignments should always have a semicolon after them.
 
 Assignments in a declaration should always be on their own line. Declarations that don't have an assignment should be listed together at the start of the declaration. For example:
 
-	// Bad
-	var foo = true;
-	var bar = false;
-	var a;
-	var b;
+  // Bad
+  var foo = true;
+  var bar = false;
+  var a;
+  var b;
 
-	// Good
-	var a, b,
-		foo = true,
-		bar = false;
+  // Good
+  var a, b,
+    foo = true,
+    bar = false;
 
 ### Equality
 
 Strict equality checks `===` should be used in favor of `==`. The only exception is when checking for undefined and null by way of null.
 
-	// Bad
-	if(bar == "can"){ ... }
+  // Bad
+  if(bar == "can"){ ... }
 
-	// Good
-	if(bar === "can"){ ... }
+  // Good
+  if(bar === "can"){ ... }
 
 If the statement is a truthey or falsey, use implied operators.  Falseys are when variables return `false`, `undefined`, `null`, or `0`.  Trutheys are when variables return `true`, `1`, or anything defined.
 
 For example:
 
 ```
-	// Bad
-	if(bar === false){ ... }
+  // Bad
+  if(bar === false){ ... }
 
-	// Good 
-	if(bar){ ... }
+  // Good 
+  if(bar){ ... }
 
-	// Good
-	var foo = [];
-	if(!foo.length){ ... }
+  // Good
+  var foo = [];
+  if(!foo.length){ ... }
 ```
 
 ###  Quotes
 
 Use double quotes.
 
-	var double = "I am wrapped in double quotes";
+  var double = "I am wrapped in double quotes";
 
 Strings that require inner quoting must use double outside and single inside.
 
-	var html = "<div id='my-id'></div>";
+  var html = "<div id='my-id'></div>";
 
 ### Comments
 
 Single line comments go OVER the line they refer to:
 
 ```
-	// We need an explicit "bar", because later in the code foo is checked.
-	var foo = "bar";
+  // We need an explicit "bar", because later in the code foo is checked.
+  var foo = "bar";
 ```
 
 For long comments, use:
 
 ```
-	/* myFn
-	 * Four score and seven—pause—minutes ago...
- 	 */
+  /* myFn
+   * Four score and seven—pause—minutes ago...
+   */
 ```
- 	
+  
 ## List of heroes
 
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
