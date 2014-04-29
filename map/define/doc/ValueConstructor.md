@@ -1,4 +1,4 @@
-@function can.Map.prototype.define.Value Value
+@function can.Map.prototype.define.ValueConstructor Value
 @parent can.Map.prototype.define
 
 Provides a constructor function to be used to provide a default value for a certain property of a can.Map.  This constructor will be invoked with `new` each time a new instance of the map is created.
