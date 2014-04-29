@@ -266,5 +266,6 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank yo
 [2](https://github.com/bitovi/canjs/pull/332))
 - [Dan Connor](https://github.com/onyxrev) ([1](https://github.com/bitovi/canjs/pull/284))
 - [Jesse Baird](https://github.com/jebaird) ([1](https://github.com/bitovi/canjs/pull/319))
+- [Eric Kryski](https://github.com/ekryski) ([1](https://github.com/bitovi/canjs/pull/917))
 
 for helping us with new features, bug fixes, and getting this out the door.
