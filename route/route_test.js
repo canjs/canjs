@@ -679,8 +679,11 @@ steal("can/route", "can/test", function () {
 
 		can.route.on('change', function(){
 			equal(can.route.attr('name'), 'Brian', 'appState is bound to can.route');
+			can.route.off('change');
+			appState.removeAttr('name');
 		});
 		appState.attr('name', 'Brian');
 	});
+
 
 });
