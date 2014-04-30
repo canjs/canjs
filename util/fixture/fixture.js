@@ -582,9 +582,9 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 * @description Simulate a findOne request on a fixture.
 				 * @function can.fixture.types.Store.findOne
 				 * @parent can.fixture.types.Store
-				 * @signature `store.findOne(request, callback)`
+				 * @signature `store.findOne(request, response)`
 				 * @param {Object} request Parameters for the request.
-				 * @param {Function} callback A function to call with the retrieved item.
+				 * @param {Function} response A function to call with the retrieved item.
 				 *
 				 * @body
 				 * `store.findOne(request, response(item))` simulates a request to
@@ -599,7 +599,12 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 */
 				findOne: function (request, response) {
 					var item = findOne(getId(request));
-					response(item ? item : undefined);
+					
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
+					response(item);
 				},
 				/**
 				 * @description Simulate an update on a fixture.
@@ -659,7 +664,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id) || {}, request.data);
+					// can.extend(findOne(id) || {}, request.data);
 					return {};
 				},
 				/**
