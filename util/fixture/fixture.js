@@ -577,22 +577,48 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// ## fixtureStore.update
 				// Simulates a can.Model.update to a fixture
 				update: function (request, response) {
-					var id = getId(request);
+					var id = getId(request),
+						item = findOne(id);
+
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
 
 					// TODO: make it work with non-linear ids ..
-					// Retrieve item that matched ID, and merge request data into it.
-					can.extend(findOne(id), request.data);
+					can.extend(item, request.data);
 					response({
-						id: getId(request)
+						id: id
 					}, {
 						location: request.url || "/" + getId(request)
 					});
 				},
 
-				// ## fixtureStore.destroy
-				// Simulates a can.Model.destroy to a fixture
-				destroy: function (request) {
-					var id = getId(request);
+				/**
+				 * @description Simulate destroying a Model on a fixture.
+				 * @function can.fixture.types.Store.destroy
+				 * @parent can.fixture.types.Store
+				 * @signature `store.destroy(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call after destruction.
+				 *
+				 * @body
+				 * `store.destroy(request, response())` simulates
+				 * a request to destroy an item from the server.
+				 *
+				 * @codestart
+				 * todosStore.destroy({
+				 *   url: "/todos/5"
+				 * }, function(){});
+				 * @codeend
+				 */
+				destroy: function (request, response) {
+					var id = getId(request),
+						item = findOne(id);
+						
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
