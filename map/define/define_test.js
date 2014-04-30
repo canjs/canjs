@@ -377,5 +377,32 @@ steal("can/map/define", "can/test", function () {
 
 
 	});
+	
+	test("getter with initial value", function(){
+		
+		var compute = can.compute(1);
+		
+		var Grabber = can.Map.extend({
+			define: {
+				vals: {
+					type: "*",
+					Value: Array,
+					get: function(current, setVal){
+						if(setVal){
+							current.push( compute() );
+						}
+						return current;
+					}
+				}
+			}
+		});
+		
+		var g = new Grabber();
+		// This assertion doesn't mean much.  It's mostly testing
+		// that there were no errors.
+		equal(g.attr("vals").length,0,"zero items in array" );
+		
+	});
+	
 
 });

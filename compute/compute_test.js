@@ -267,5 +267,32 @@ steal("can/compute", "can/test", function () {
 		
 	});
 	
+	test("compute.async read without binding", function(){
+		
+		var source = can.compute(1);
+		
+		var async = can.compute.async([],function( curVal, setVal ){
+			curVal.push(source());
+			return curVal;
+		});
+		
+		ok(async(), "calling async worked");
+		
+		
+		
+	});
+	
+	test("compute.async setting does not force a read", function(){
+		expect(0);
+		var source = can.compute(1);
+		
+		var async = can.compute.async([],function( curVal, setVal ){
+			ok(false);
+			curVal.push(source());
+			return curVal;
+		});
+		
+		async([]);
+	});
 	
 });

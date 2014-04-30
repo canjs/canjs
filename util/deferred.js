@@ -83,17 +83,37 @@ steal('can/util/can.js', function (can) {
 				return this;
 			};
 		};
+	
+	var isDeferred = function(obj){
+		return obj && obj.then && obj.fail && obj.done;
+	};
+	
+	var wire = function(parentDeferred, result, setter, value){
+		if( isDeferred(result) ) {
+			result.done(can.proxy(parentDeferred.resolve, parentDeferred))
+				.fail( can.proxy(parentDeferred.reject, parentDeferred) );
+		} else {
+			setter.call(parentDeferred,result !== undefined ? result : value);
+		}
+	};
 	extend(Deferred.prototype, {
-		pipe: function (done, fail) {
-			var d = can.Deferred();
-			this.done(function () {
-				d.resolve(done.apply(this, arguments));
-			});
-			this.fail(function () {
-				if (fail) {
-					d.reject(fail.apply(this, arguments));
+		then: function (done, fail) {
+			var d = can.Deferred(),
+				resolve = d.resolve,
+				reject = d.reject;
+			this.done(function (value) {
+				if(typeof done === "function") {
+					wire(d, done.apply(this, arguments), resolve, value);
 				} else {
-					d.reject.apply(d, arguments);
+					resolve.apply(d, arguments);
+				}
+				
+			});
+			this.fail(function (value) {
+				if (typeof fail === "function") {
+					wire(d, fail.apply(this, arguments), reject, value);
+				} else {
+					reject.apply(d, arguments);
 				}
 			});
 			return d;
@@ -107,18 +127,6 @@ steal('can/util/can.js', function (can) {
 			if (args.length && args[0]) {
 				this.done(args[0])
 					.fail(args[0]);
-			}
-			return this;
-		},
-		then: function () {
-			var args = can.makeArray(arguments);
-			// Fail `function`(s)
-			if (args.length > 1 && args[1]) {
-				this.fail(args[1]);
-			}
-			// Done `function`(s)
-			if (args.length && args[0]) {
-				this.done(args[0]);
 			}
 			return this;
 		},
@@ -155,7 +163,13 @@ steal('can/util/can.js', function (can) {
 				}
 			});
 			return this;
+		},
+		promise: function(){
+			var promise = this.then();
+			promise.reject = promise.resolve = undefined;
+			return promise;
 		}
 	});
+	Deferred.prototype.pipe = Deferred.prototype.then;
 	return can;
 });

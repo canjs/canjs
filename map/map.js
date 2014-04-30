@@ -216,12 +216,13 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				can.cid(this, ".map");
 				// Sets all `attrs`.
 				this._init = 1;
-				// Setup computed attributes.
-				this._setupComputes();
+				// It's handy if we pass this to comptues, because computes can have a default value.
+				var defaultValues = this._setupDefaults();
+				this._setupComputes(defaultValues);
 				var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
 
-				// Setup default attribute values.
-				var data = can.extend(can.extend(true, {}, this._setupDefaults()), obj);
+				var data = can.extend(can.extend(true, {}, defaultValues), obj);
+
 				this.attr(data);
 
 				if (teardownMapping) {
@@ -415,8 +416,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				var parts = can.Map.helpers.attrParts(attr, keepKey),
 					// The immediate prop we are setting.
 					prop = parts.shift(),
-					// The current value.
-					current = this.__get(prop);
+					// We only need to get the current value if we are not in init.
+					current = this._init ? undefined : this.__get(prop);
 
 				if ( parts.length && Map.helpers.isObservable(current) ) {
 					// If we have an `object` and remaining parts that `object` should set it.
@@ -456,16 +457,14 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Directly sets a property on this `object`.
 			___set: function (prop, val) {
-
-				// Handle computed properties
-				if (this[prop] && this[prop].isComputed && can.isFunction(this.constructor.prototype[prop])) {
+				if ( this._computedBindings[prop] ) {
 					this[prop](val);
+				} else {
+					this._data[prop] = val;
 				}
-
-				this._data[prop] = val;
 				// Add property directly for easy writing.
 				// Check if its on the `prototype` so we don't overwrite methods like `attrs`.
-				if (!(can.isFunction(this.constructor.prototype[prop]))) {
+				if (!can.isFunction(this.constructor.prototype[prop]) && !this._computedBindings[prop] ) {
 					this[prop] = val;
 				}
 			},

@@ -193,13 +193,13 @@ steal('can/util', 'can/observe', function (can) {
 	};
 
 	var oldSetupComputes = proto._setupComputes;
-	proto._setupComputes = function () {
+	proto._setupComputes = function (defaultsValues) {
 		oldSetupComputes.apply(this, arguments);
 		for (var attr in this.define) {
 			var def = this.define[attr],
 				get = def.get;
 			if (get) {
-				this[attr] = can.compute.async(def.value, get, this);
+				this[attr] = can.compute.async(defaultsValues[attr], get, this);
 				this._computedBindings[attr] = {
 					count: 0
 				};
