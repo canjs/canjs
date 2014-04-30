@@ -3556,7 +3556,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		test("Logging: Variable not found in mustache template (#720)", function () {
 			var oldlog = can.dev.warn,
-					message = 'can/view/mustache/mustache.js: Variable "user.name" not found in mustache template.';
+					message = 'can/view/mustache/mustache.js: Unable to find key "user.name".';
 
 			can.dev.warn = function (text) {
 				equal(text, message, 'Got expected message logged.');

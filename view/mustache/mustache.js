@@ -1546,7 +1546,7 @@ steal('can/util',
 			  
 			//!steal-remove-start
 			if (initialValue === undefined && !isHelper) {
-				can.dev.warn('can/view/mustache/mustache.js: Variable "' + key + '" not found in mustache template.');
+				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 			}
 			//!steal-remove-end
 
