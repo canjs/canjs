@@ -5,6 +5,7 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 	 * Helper(s)
 	 */
 	var newLine = /(\r|\n)+/g,
+		notEndTag = /\//,
 		// Escapes characters starting with `\`.
 		clean = function (content) {
 			return content
@@ -26,8 +27,8 @@ steal('can/view', './elements', "can/view/callbacks",function (can, elements, vi
 			} else {
 				// otherwise go searching for the next two tokens like "<",TAG
 				while (i < tokens.length) {
-					if (tokens[i] === "<" && elements.reverseTagMap[tokens[i + 1]]) {
-						return elements.reverseTagMap[tokens[i + 1]];
+					if (tokens[i] === "<" && !notEndTag.test(tokens[i + 1])) {
+						return elements.reverseTagMap[tokens[i + 1]] || 'span';
 					}
 					i++;
 				}
