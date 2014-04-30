@@ -626,12 +626,17 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 *     });
 				 */
 				update: function (request, response) {
-					var id = getId(request);
+					var id = getId(request),
+						item = findOne(id);
+
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id), request.data);
+					can.extend(item, request.data);
 					response({
-						id: getId(request)
+						id: id
 					}, {
 						location: request.url || "/" + getId(request)
 					});
@@ -654,8 +659,14 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 * }, function(){});
 				 * @codeend
 				 */
-				destroy: function (request) {
-					var id = getId(request);
+				destroy: function (request, response) {
+					var id = getId(request),
+						item = findOne(id);
+						
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
