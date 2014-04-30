@@ -145,6 +145,11 @@
 			"type": "plugin",
 			"description": "Live-updating mapped and filtered observe lists"
 		},
+		"can/map/define": {
+			"name": "can.Map.define",
+			"type": "plugin",
+			"description": "Define rich attribute behavior"
+		},
 		"can/map/sort": {
 			"name": "can.List.Sort",
 			"type": "plugin",

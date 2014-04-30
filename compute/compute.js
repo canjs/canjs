@@ -400,12 +400,17 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 						
 					context = options.context || options;
 					get = options.get || get;
-					set = options.set || set;
+					set = options.set || function(){
+						return value;
+					};
 					// This is a "hack" to allow async computes.
 					if(options.fn) {
 						var fn = options.fn,
 							data;
-						get = fn;
+						// make sure get is called with the newVal, but not setter
+						get = function(){
+							return fn.call(context, value);
+						};
 						// Check the number of arguments the 
 						// async function takes.
 						if(fn.length === 0) {
