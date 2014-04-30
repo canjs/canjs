@@ -125,12 +125,12 @@ With 1 argument, `undefined` will remove the property.
 
     can.Map.keys(map) //-> []
 
-With 2 arguments, `undefined` leaves the property in place.  Its expected
+With 2 arguments, `undefined` leaves the property in place.  It is expected
 that `setValue` will be called:
 
     MyMap = can.Map.extend({
       define: {
-        prop: {set: function(newVal, setVal){}}
+        prop: {set: function(newVal, setValue){}}
       }
     })
 
@@ -140,6 +140,73 @@ that `setValue` will be called:
 
 ## Side effects
 
+A set function provides a useful hook for performing side effect logic as a certain property is being changed.
+
+For example, in the example below, Paginator can.Map includes a `page` property, which derives its value entirely from other properties (limit and offset).  If something tries to set the `page` directly, the set method will set the value of `offset`:
+
+
+    var Paginate = can.Map.extend({
+      define: {
+        page: {
+          set: function (newVal) {
+            this.attr('offset', (parseInt(newVal) - 1) * this.attr('limit'));
+          },
+          get: function () {
+            return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+          }
+        }
+      }
+    });
+
+    var p = new Paginate({limit: 10, offset: 20});
+
 ## Merging
 
+By default, if a value returned from a setter is an object, array, can.Map, or can.List, the effect will be to replace the property with the new object completely. This is not the same as calling setting a property with plain old `attr` and passing an object into a property that was already a can.Map, which will merge the new properties with the existing map.
+
+With a set method, the nested map is replaced with a new one:
+
+    Contact = can.Map.extend({
+      define: {
+        info: {
+          set: function(newVal){
+            return newVal;
+          }
+        }
+      }
+    })
+
+    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+    alice.info._cid; // '.map1'
+
+    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+    alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
+    alice.info._cid; // '.map2'
+
+If you would rather have the new Map or List merged into the current value, call
+`attr` inside the setter:
+
+
+    Contact = can.Map.extend({
+      define: {
+        info: {
+          set: function(newVal){
+            this.info.attr(newVal);
+            return this.info;
+          }
+        }
+      }
+    })
+
+    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+    alice.info._cid; // '.map1'
+
+    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+    alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
+    alice.info._cid; // '.map1'
+
 ## Batched Changes
+
+By default, calls to set methods are wrapped in a call to [can.batch.start] and [can.batch.stop], so if a set method has side effects that set more than one property, all these sets are wrapped in a single batch for better performance.

@@ -2,7 +2,7 @@
 @parent can.Map.plugins
 
 Defines the
-type, initial value, and get, set, and remove behavior for attributes 
+type, initial value, get, set, remove, and serialize behavior for attributes 
 of a [can.Map].
 
 @option {Object<String,can.Map.prototype.define.attrDefinition>} A map of 
@@ -60,6 +60,21 @@ specifies a Paginate Map:
         }
       }
     });
+
+## Overview
+
+This plugin is a replacement for the now deprecated [can.Map.attributes attributes] and [can.Map.setter setter] plugins. It intends to provide a single place to define the behavior of all the properties of a can.Map.
+
+Here is the cliffnotes version of this plugin.  To define...
+
+* The default value for a property - use [can.Map.prototype.define.value value]
+* That default value as a constructor function - use [can.Map.prototype.define.ValueConstructor Value]
+* What value is returned when a property is read - use [can.Map.prototype.define.get get]
+* Behavior when a property is set - use [can.Map.prototype.define.set set]
+* How a property is serialized when [can.Map::serialize serialize] is called on it - use [can.Map.prototype.define.serialize serialize]
+* Behavior when a property is removed - use [can.Map.prototype.define.remove remove]
+* A custom converter method or a pre-defined standard converter called whenever a property is set - use [can.Map.prototype.define.type type]
+* That custom converter method as a constructor function - use [can.Map.prototype.define.TypeConstructor Type]
 
 ## Demo
 

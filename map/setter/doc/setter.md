@@ -25,6 +25,10 @@ set undefined values.
 
 @body
 
+## Deprecation Warning
+
+The attributes plugin (and the setter plugin) has been deprecated in 2.1 in favor of the new [can.Map.prototype.define define] plugin, which provides the same functionality.
+
 ## Use
 
 `can.Map.setter(name, setValue(value), setErrors(errors))` extends the Map object 
@@ -79,13 +83,8 @@ we can make our maps automatically convert data.
 
 	contact.attr('birthday') 
 		// -> Sat Mar 31 2012 00:00:00 GMT-0700 (MST)
-	
-<<<<<<< HEAD
 
 
-If the returned value is `undefined`, this means the setter is either in an async 
-event or the attribute(s) were not set. 
-=======
 If the returned value is `undefined`, this means the setter is either in an async 
 event or the attribute(s) were not set. 
 
@@ -133,7 +132,6 @@ alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
 alice.info._cid; // '.Map1'
 @codeend
->>>>>>> minor
 
 ## Error Handling
 
@@ -161,48 +159,6 @@ when no value or a empty string is passed.
 	
 	// set to empty string
 	school.attr("name","");
-
-
-## Differences From `attr`
-
-The way that return values from setters affect the value of an Map's property is
-different from [can.Map::attr attr]'s normal behavior. Specifically, when the 
-property's current value is an Map or List, and an Map or List is returned
-from a setter, the effect will not be to merge the values into the current value as
-if the return value was fed straight into `attr`, but to replace the value with the
-new Map or List completely:
-
-    var Contact = can.Map.extend({
-    	setInfo: function(raw) {
-          return raw;
-    	}
-    });
-    
-    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
-    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
-    alice.info._cid; // '.map1'
-    
-    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
-    alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
-    alice.info._cid; // '.map2'
-
-If you would rather have the new Map or List merged into the current value, call
-`attr` inside the setter:
-
-    var Contact = can.Map.extend({
-    	setInfo: function(raw) {
-          this.info.attr(raw);
-          return this.info;
-    	}
-    });
-
-    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
-    alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
-    alice.info._cid; // '.Map1'
-    
-    alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
-    alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
-    alice.info._cid; // '.Map1'
 
 ## Demo
 
