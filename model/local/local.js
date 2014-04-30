@@ -1,4 +1,9 @@
 steal('can/model', 'jquery/lang/object', function () {
+
+	//!steal-remove-start
+	can.dev.warn("can/model/local is a deprecated plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	can.Model('can.Model.Local', {
 		compare: {},
 		identifier: function () {

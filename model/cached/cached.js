@@ -1,4 +1,9 @@
 steal('can/model', 'can/util/object', 'can/util/json.js', function () {
+
+	//!steal-remove-start
+	can.dev.warn("can/model/cached is a deprecated plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	// Base model to handle reading / writing to local storage
 	can.Model('can.Model.Cached', {
 		setup: function () {

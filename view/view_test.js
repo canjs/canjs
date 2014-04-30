@@ -364,6 +364,31 @@ steal("can/view/callbacks",
 		observe.attr('number', 5);
 		equal(input.getAttribute('value'), 5, 'update workered');
 	});
+
+	test('live binding textNodes before a table', function(){
+		var data = new can.Map({
+			loading: true
+		}),
+			templates = {
+				"ejs" : "<% if (state.attr('loading')) { %>Loading<% }else{ %>Loaded<% } %><table><tbody><tr></tr></tbody></table>",
+				"mustache" : "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>",
+				"stache": "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>"
+			};
+		can.each([
+			'ejs',
+			'mustache',
+			'stache'
+		], function (ext) {
+
+			var result = can[ext]( templates[ext])({state: data});
+			equal(result.childNodes.length, 2, "can."+ext+"(template)(data) "+"proper number of nodes");
+			equal(result.childNodes[0].nodeType, 3, "can."+ext+"(template)(data) "+"got text node");
+			equal(result.childNodes[0].textContent, "Loading", "can."+ext+"(template)(data) "+"got live bound text value");
+			equal(result.childNodes[1].innerHTML, "<tbody><tr></tr></tbody>", ext+" can."+ext+"(template)(data) "+"innerHTML");
+
+		});
+
+	});
 	test('Resetting a live-bound <textarea> changes its value to __!!__ (#223)', function () {
 		var template = can.view.ejs('<form><textarea><%= this.attr(\'test\') %></textarea></form>'),
 			frag = template(new can.Map({
