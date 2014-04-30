@@ -619,7 +619,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// If it's an anonymous function, execute as requested
 			else if (i < reads.length - 1 && type === 'function' && options.executeAnonymousFunctions && !(can.Construct && cur.prototype instanceof can.Construct)) {
 				cur = cur();
-			} 
+			}
 			// if there are properties left to read, and we don't have an object, early exit
 			if (i < reads.length - 1 && (cur === null || type !== 'function' && type !== 'object')) {
 				if (options.earlyExit) {

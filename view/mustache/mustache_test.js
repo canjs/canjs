@@ -3714,7 +3714,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		description = " (constructor by itself)";
 		equal(content[0].innerHTML, "bar", "fully dotted" + description);
-		equal(content[1].innerHTML.replace(/\<\/?span\>/g,''), "", "with attribute nested" + description);
+		equal(content[1].innerHTML.replace(/<\/?span>/g,''), "", "with attribute nested" + description);
 		equal(content[2].innerHTML, "bar", "passed as an argument to helper" + description);
 		equal(content[3].innerHTML, "bar", "passed as a hash to helper" + description);
 
