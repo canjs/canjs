@@ -16,11 +16,11 @@ namespace :build do
   task :json do
     rm(Dir['specs/*.json'], :verbose => false)
     Dir.glob('specs/*.yml').each do |filename|
-      json_file = filename.gsub('.yml', '.json')
-
+      json_file = filename.gsub('.yml', '.js')
+      spec_name = filename.gsub('specs/','').gsub('.yml','')
       File.open(json_file, 'w') do |file|
         doc = YAML.load_file(filename)
-        file << doc.merge(:__ATTN__ => note).to_json()
+        file << "steal('./spec',function(){ window.MUSTACHE_SPECS.push({name:'"+spec_name+"', data: "+doc.merge(:__ATTN__ => note).to_json()+"});});"
       end
     end
   end

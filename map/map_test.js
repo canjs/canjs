@@ -207,4 +207,25 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		equal(test.attr('my.newCount'), 1, 'falsey (1) value accessed correctly');
 	});
 
+	test("computed properties don't cause memory leaks", function () {
+		var computeMap = can.Map.extend({
+			'name': can.compute(function(){
+				return this.attr('first') + this.attr('last')
+			})
+		}),
+			handler = function(){},
+			map = new computeMap({
+				first: 'Mickey',
+				last: 'Mouse'
+			});
+		map.bind('name', handler);
+		map.bind('name', handler);
+		equal(map._computedBindings.name.count, 2, '2 handlers listening to computed property');
+		map.unbind('name', handler);
+		map.unbind('name', handler);
+		equal(map._computedBindings.name.count, 0, '0 handlers listening to computed property');
+		ok(!map._computedBindings.name.handler, 'computed property handler removed');
+	});
+
+
 });

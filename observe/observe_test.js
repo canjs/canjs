@@ -93,7 +93,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			2
 		]);
 	});
-	test('changing an object unbinds', function () {
+	test('changing an object unbinds', 4, function () {
 		var state = new can.Map({
 			category: 5,
 			productType: 4,
@@ -137,13 +137,16 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 		});
 		var oldCid = state.attr('properties.brand')
 			._cid;
+			
 		state.attr({
 			properties: {
 				brand: []
 			}
 		}, true);
+		
 		deepEqual(state.attr('properties.brand')
 			._cid, oldCid, 'should be the same map, so that views bound to the old one get updates');
+			
 		equal(state.attr('properties.brand')
 			.length, 0, 'list should be empty');
 	});
@@ -965,11 +968,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			first: 'Justin',
 			last: 'Meyer'
 		});
-		var func = function () {
+		var func = can.compute(function () {
 			return person.attr('first') + ' ' + person.attr('last') + Math.random();
-		};
+		});
 		var callbacks = 0;
-		can.compute.binder(func, window, function (newVal, oldVal) {
+		func.bind("change", function (ev, newVal, oldVal) {
 			callbacks++;
 		});
 		person.attr({
@@ -984,11 +987,11 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 			last: 'Meyer'
 		}),
 			age = can.compute(5);
-		var func = function (newVal, oldVal) {
+		var func = can.compute(function (newVal, oldVal) {
 			return person.attr('first') + ' ' + person.attr('last') + age() + Math.random();
-		};
+		});
 		var callbacks = 0;
-		can.compute.binder(func, window, function (newVal, oldVal) {
+		func.bind("change",function (ev, newVal, oldVal) {
 			callbacks++;
 		});
 		can.batch.start();
@@ -1292,6 +1295,43 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function () 
 				button: 'hey'
 			}
 		}, true);
+	});
+	
+	test("can.each works with replacement of index (#815)", function(){
+		var items = new can.List(["a","b"]);
+		var value = can.compute(function(){
+			var res = "";
+			items.each(function(item){
+				res += item;
+			});
+			return res;
+		});
+		
+		value.bind("change", function(ev, newValue){
+			equal(newValue, "Ab", "updated value");
+		});
+		items.attr(0,"A");
+	});
+	
+		
+	test("When adding a property and using .each only a single update runs (#815)", function(){
+		var items = new can.Map({}),
+			computedCount = 0;
+		var value = can.compute(function(){
+			computedCount++;
+			var res = "";
+			items.each(function(item){
+				res += item;
+			});
+			return res;
+		});
+		
+		value.bind("change", function(){});
+		
+		items.attr("a","b");
+		
+		equal(computedCount, 2, "recalculated twice");
+		
 	});
 
 });

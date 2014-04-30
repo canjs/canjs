@@ -56,6 +56,11 @@
 			"description": "Live-binding Embedded JavaScript",
 			"type": "plugin"
 		},
+		"can/view/stache": {
+			"name": "can.stache",
+			"description": "High performance Mustache templates",
+			"type": "plugin"
+		},
 		"can/control": {
 			"name": "can.Control",
 			"description": "Declarative event bindings",
@@ -100,6 +105,11 @@
 			"type": "plugin",
 			"description": "Proxy construct methods"
 		},
+		"can/map/lazy": {
+			"name": "can.Map.Lazy",
+			"type": "plugin",
+			"description": "Lazy initializing maps and lists"
+		},
 		"can/map/delegate": {
 			"name": "can.Map.delegate",
 			"type": "plugin",
@@ -108,7 +118,7 @@
 		"can/map/setter": {
 			"name": "can.Map.setter",
 			"type": "plugin",
-			"description": "Use setter methods on Observes"
+			"description": "Use setter methods on can.Map"
 		},
 		"can/map/attributes": {
 			"name": "can.Map.attributes",
@@ -177,6 +187,12 @@
 		},
 		"can/util/string": {
 			"name": "can.util.string",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/util/attr": {
+			"name": "can.util.attr",
 			"type": "core",
 			"isDefault": true,
 			"hidden": true
