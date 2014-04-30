@@ -83,8 +83,10 @@ steal("can","can/util/fixture","can/list/promise", "can/map/define",function(){
 	can.Component.extend({
 		tag: "site-app",
 		scope: {
-			type: "fun",
 			define: {
+				type: {
+					value: "fun"
+				},
 				items: {
 					Value: Site.List,
 					get: function(currentValue){
@@ -92,7 +94,7 @@ steal("can","can/util/fixture","can/list/promise", "can/map/define",function(){
 						return currentValue;
 					}
 				}
-			},
+			}
 		}
 	});
 	

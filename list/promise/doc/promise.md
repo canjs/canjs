@@ -1,4 +1,4 @@
-@page can.List.plugins.promise promise
+@function can.List.plugins.promise promise
 @parent can.List.plugins
 @release 2.1
 
