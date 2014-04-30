@@ -268,7 +268,7 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 				}
 				// Its a radio input type
 				else {
-					var setOrRemove = this.options.value() === this.element[0].value ?
+					var setOrRemove = this.options.value() == this.element[0].value ?
 						"set" : "remove";
 
 					can.attr[setOrRemove](this.element[0], 'checked', true);
