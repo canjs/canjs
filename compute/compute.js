@@ -607,6 +607,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				// just do the dot operator
 				cur = prev[reads[i]];
 			}
+			type = typeof cur;
 			// If it's a compute, get the compute's value
 			// unless we are at the end of the 
 			if (cur && cur.isComputed && (!options.isArgument && i < readLength - 1)) {
@@ -615,7 +616,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				}
 				cur = cur();
 			}
-			type = typeof cur;
+			// If it's an anonymous function, execute as requested
+			else if (i < reads.length - 1 && type === 'function' && options.executeAnonymousFunctions && !(can.Construct && cur.prototype instanceof can.Construct)) {
+				cur = cur();
+			} 
 			// if there are properties left to read, and we don't have an object, early exit
 			if (i < reads.length - 1 && (cur === null || type !== 'function' && type !== 'object')) {
 				if (options.earlyExit) {
@@ -629,7 +633,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			}
 		}
 		// handle an ending function
-		if (typeof cur === 'function') {
+		// unless it is a can.Construct-derived constructor
+		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct)) {
 			if (options.isArgument) {
 				if (!cur.isComputed && options.proxyMethods !== false) {
 					cur = can.proxy(cur, prev);

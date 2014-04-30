@@ -1351,7 +1351,7 @@ steal('can/util',
 					// get values on hash
 					for (var prop in hash) {
 						if (isLookup(hash[prop])) {
-							hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions);
+							hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions, false, true);
 						}
 					}
 				} else if (arg && isLookup(arg)) {
