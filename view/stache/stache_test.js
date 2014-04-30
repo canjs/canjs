@@ -3326,34 +3326,38 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		
 	});
 
-	test("Logging: Helper not found in stache template(#726)", function () {
-		var oldlog = can.dev.warn,
-				message = 'can/view/stache/mustache_core.js: Unable to find helper "helpme".';
+	//!steal-remove-start
+	if (can.dev) {
+		test("Logging: Helper not found in stache template(#726)", function () {
+			var oldlog = can.dev.warn,
+					message = 'can/view/stache/mustache_core.js: Unable to find helper "helpme".';
 
-		can.dev.warn = function (text) {
-			equal(text, message, 'Got expected message logged.');
-		}
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			}
 
-		can.view.stache('<li>{{helpme name}}</li>')({
-			name: 'Hulk Hogan'
+			can.view.stache('<li>{{helpme name}}</li>')({
+				name: 'Hulk Hogan'
+			});
+
+			can.dev.warn = oldlog;
 		});
 
-		can.dev.warn = oldlog;
-	});
+		test("Logging: Variable not found in stache template (#720)", function () {
+			var oldlog = can.dev.warn,
+					message = 'can/view/stache/mustache_core.js: Unable to find key "user.name".';
 
-	test("Logging: Variable not found in stache template (#720)", function () {
-		var oldlog = can.dev.warn,
-				message = 'can/view/stache/mustache_core.js: Unable to find key "user.name".';
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			}
 
-		can.dev.warn = function (text) {
-			equal(text, message, 'Got expected message logged.');
-		}
+			can.view.stache('<li>{{user.name}}</li>')({
+				user: {}
+			});
 
-		can.view.stache('<li>{{user.name}}</li>')({
-			user: {}
+			can.dev.warn = oldlog;
 		});
-
-		can.dev.warn = oldlog;
-	});
+	}
+	//!steal-remove-end
 	
 });
