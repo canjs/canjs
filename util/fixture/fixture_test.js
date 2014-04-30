@@ -291,10 +291,6 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 					});
 			});
 	});
-	/*
-	 removed test, makes phantom js build fail. does not fail browser tests. Opened issue #408 to track, for milestone 1.2
-	 //TODO re-enable test and determine why it fails in phantom but not in real browser. https://github.com/bitovi/canjs/issues/408
-	 */
 	test('can.fixture.store with can.Model', function () {
 		var store = can.fixture.store(100, function (i) {
 			return {
@@ -352,6 +348,34 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 					});
 			});
 	});
+	test('can.fixture.store returns 404 on findOne with bad id (#803)', function () {
+		var store = can.fixture.store(2, function (i) {
+			return {
+				id: i,
+				name: 'Object ' + i
+			};
+		}),
+			Model = can.Model({
+				findAll: 'GET /models',
+				findOne: 'GET /models/{id}',
+				create: 'POST /models',
+				update: 'PUT /models/{id}',
+				destroy: 'DELETE /models/{id}'
+			}, {});
+		can.fixture('GET /models', store.findAll);
+		can.fixture('GET /models/{id}', store.findOne);
+		can.fixture('POST /models', store.create);
+		can.fixture('PUT /models/{id}', store.update);
+		can.fixture('DELETE /models/{id}', store.destroy);
+		stop();
+		Model.findOne({ id: 3 })
+					.fail(function (jqXhr, status, statusText) {
+						equal(jqXhr.status, 404, 'Got correct status code');
+						equal(statusText, 'Requested resource not found', 'Got correct status message');
+						start();
+					});
+	});
+
 	test('can.fixture.store can use id of different type (#742)', function () {
 		var store = can.fixture.store(100, function (i) {
 				return {

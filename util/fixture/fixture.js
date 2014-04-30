@@ -545,11 +545,34 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 						"data": retArr.slice(offset, offset + limit)
 					};
 				},
-				// ## fixtureStore.findOne
-				// Simulates a can.Model.findOne to a fixture
+
+				/**
+				 * @description Simulate a findOne request on a fixture.
+				 * @function can.fixture.types.Store.findOne
+				 * @parent can.fixture.types.Store
+				 * @signature `store.findOne(request, response)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} response A function to call with the retrieved item.
+				 *
+				 * @body
+				 * `store.findOne(request, response(item))` simulates a request to
+				 * get a single item from the server by id.
+				 *
+				 *     todosStore.findOne({
+				 *       url: "/todos/5"
+				 *     }, function(todo){
+				 *
+				 *     });
+				 *
+				 */
 				findOne: function (request, response) {
 					var item = findOne(getId(request));
-					response(item ? item : undefined);
+					
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
+					response(item);
 				},
 				// ## fixtureStore.update
 				// Simulates a can.Model.update to a fixture
@@ -578,7 +601,6 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id) || {}, request.data);
 					return {};
 				},
 
