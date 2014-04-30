@@ -369,8 +369,8 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 		can.fixture('DELETE /models/{id}', store.destroy);
 		stop();
 		Model.findOne({ id: 3 })
-					.fail(function (jqXhr, status, statusText) {
-						equal(jqXhr.status, 404, 'Got correct status code');
+					.fail(function (data, status, statusText) {
+						equal(status, 'error', 'Got an error');
 						equal(statusText, 'Requested resource not found', 'Got correct status message');
 						start();
 					});
