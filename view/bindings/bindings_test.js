@@ -439,7 +439,6 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 		equal(map.attr("age"), "32", "updated from contenteditable");
 	});
 
-<<<<<<< HEAD
 	test("can-event handlers work with {} (#905)", function () {
 		expect(4);
 		var template = can.mustache("<div>" +
