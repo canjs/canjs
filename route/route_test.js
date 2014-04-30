@@ -683,18 +683,4 @@ steal("can/route", "can/test", function () {
 		appState.attr('name', 'Brian');
 	});
 
-	test("two way binding can.route.map with a function", function(){
-		expect(1);
-		var AppState = can.Map.extend();
-
-		can.route.map(function(){
-			var appState = new AppState({
-				foo: 'bar'
-			});
-			return appState;
-		});
-
-		equal(can.route.attr('foo'), 'bar', 'appState is bound to can.route');
-	});
-
 });

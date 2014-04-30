@@ -356,10 +356,6 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			else if(data.prototype instanceof can.Map){
 				appState = new data();
 			}
-			// appState is a function that returns a can.Map
-			else {
-				appState = data();
-			}
 			can.route.data = appState;
 		},
 		/**
