@@ -3114,11 +3114,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 	test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
 		
 		var renderer = can.stache('    {{description}}: \
-    <ul> \
-    {{#each list}} \
-        <li>{{name}}</li> \
-    {{/each}} \
-    </ul>');
+		<ul> \
+		{{#each list}} \
+				<li>{{name}}</li> \
+		{{/each}} \
+		</ul>');
 
 		var div = document.createElement('div'),
 			data1 = new can.Map({
@@ -3324,6 +3324,36 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		
 		equal(res.childNodes[0].style.display, "none", "color is not set");
 		
+	});
+
+	test("Logging: Helper not found in stache template(#726)", function () {
+		var oldlog = can.dev.warn,
+				message = 'can/view/stache/mustache_core.js: Unable to find helper "helpme".';
+
+		can.dev.warn = function (text) {
+			equal(text, message, 'Got expected message logged.');
+		}
+
+		can.view.stache('<li>{{helpme name}}</li>')({
+			name: 'Hulk Hogan'
+		});
+
+		can.dev.warn = oldlog;
+	});
+
+	test("Logging: Variable not found in stache template (#720)", function () {
+		var oldlog = can.dev.warn,
+				message = 'can/view/stache/mustache_core.js: Unable to find key "user.name".';
+
+		can.dev.warn = function (text) {
+			equal(text, message, 'Got expected message logged.');
+		}
+
+		can.view.stache('<li>{{user.name}}</li>')({
+			user: {}
+		});
+
+		can.dev.warn = oldlog;
 	});
 	
 });

@@ -223,6 +223,10 @@ steal("can/util",
 					if(!helper && typeof context[name.get] === "function") {
 						helper = {fn: context[name.get]};
 					}
+
+					//!steal-remove-start
+					can.dev.warn('can/view/stache/mustache_core.js: Unable to find helper "' + name.get + '".');
+					//!steal-remove-end
 				}
 				// If a helper has not been found, either because this does not look like a helper
 				// or because a helper was not found, get the value of name and determine 
@@ -244,6 +248,7 @@ steal("can/util",
 						name = initialValue;
 					}
 
+					// FIXME (EK): Wat? I would think this should be checked above.
 					// If it doesn't look like a helper and there is no value, check helpers
 					// anyway. This is for when foo is a helper in `{{foo}}`.
 					if( !isHelper && initialValue === undefined ) {
@@ -255,6 +260,15 @@ steal("can/util",
 							fn: initialValue
 						};
 					}
+
+					//!steal-remove-start
+					// Yes this is weird that I'm checking for !helper again but we potentially
+					// reassign it above and we don't want to log a warning if we actually
+					// found it as a helper.
+					if (!isHelper && !helper && initialValue === undefined) {
+						can.dev.warn('can/view/stache/mustache_core.js: Unable to find key "' + get + '".');
+					}
+					//!steal-remove-end
 				}
 			}
 			
