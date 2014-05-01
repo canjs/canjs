@@ -2041,7 +2041,7 @@ steal('can/util',
 			 *
 			 */
 			'log': function (expr, options) {
-				if (console !== undefined) {
+				if(typeof console !== "undefined" && console.log) {
 					if (!options) {
 						console.log(expr.context);
 					} else {
