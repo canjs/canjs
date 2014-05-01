@@ -284,7 +284,7 @@ steal("can/compute", "can/test", "can/map", function () {
 		read = can.compute.read(obj, ["next_level","thing","self"], { isArgument: true });
 		ok(read.value === foostructor, "arguments shouldn't be executed");
 
-		var fakefoo = foostructor.self = function() { return foostructor; };
+		foostructor.self = function() { return foostructor; };
 		read = can.compute.read(obj, ["next_level","thing","self","text"], { executeAnonymousFunctions: true });
 		equal(read.value, "bar", "anonymous functions in the middle of a read should be executed if requested");
 	});
