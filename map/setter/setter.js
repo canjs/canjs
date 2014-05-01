@@ -1,4 +1,4 @@
-steal('can/util', 'can/map/attributes', function (can) {
+steal('can/util', 'can/map', function (can) {
 
 	can.classize = function (s, join) {
 		// this can be moved out ..
