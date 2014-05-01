@@ -3626,4 +3626,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		data.attr("show", true);
 		equal(frag.childNodes[0].innerHTML, "Is showing", "Not showing the else");
 	});
+
+	test("Calling .fn without arguments should forward scope by default (#658)", function(){
+		var tmpl = "{{#foo}}<span>{{bar}}</span>{{/foo}}";
+		var frag = can.view.mustache(tmpl)(new can.Map({
+			bar : 'baz'
+		}), {
+			foo : function(opts){
+				return opts.fn();
+			}
+		});
+		var node = frag.childNodes[0];
+
+		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
+	})
 });

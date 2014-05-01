@@ -94,6 +94,9 @@ steal("can/util",
 		// Returns a new renderer function that makes sure any data or helpers passed
 		// to it are converted to a can.view.Scope and a can.view.Options.
 		makeRendererConvertScopes = function (renderer, parentScope, parentOptions) {
+			var rendererWithScope = function(ctx, opts){
+				return renderer(ctx || parentScope, opts);
+			}
 			return function (newScope, newOptions) {
 				// If a non-scope value is passed, add that to the parent scope.
 				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
@@ -102,7 +105,7 @@ steal("can/util",
 				if (newOptions !== undefined && !(newOptions instanceof core.Options)) {
 					newOptions = parentOptions.add(newOptions);
 				}
-				return renderer(newScope, newOptions || parentOptions);
+				return rendererWithScope(newScope, newOptions || parentOptions);
 			};
 		};
 	

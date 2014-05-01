@@ -3357,5 +3357,19 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(res.childNodes[0].style.display, "none", "color is not set");
 		
 	});
+
+	test("Calling .fn without arguments should forward scope by default (#658)", function(){
+		var tmpl = "{{#foo}}<span>{{bar}}</span>{{/foo}}";
+		var frag = can.stache(tmpl)(new can.Map({
+			bar : 'baz'
+		}), {
+			foo : function(opts){
+				return opts.fn();
+			}
+		});
+		var node = frag.childNodes[0];
+
+		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
+	})
 	
 });
