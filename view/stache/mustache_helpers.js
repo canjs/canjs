@@ -93,7 +93,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		},
 		'log': function (expr, options) {
-			if (console !== undefined) {
+			if (typeof console !== "undefined" && console.log) {
 				if (!options) {
 					console.log(expr.context);
 				} else {
