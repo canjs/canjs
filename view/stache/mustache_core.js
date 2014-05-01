@@ -96,7 +96,7 @@ steal("can/util",
 		makeRendererConvertScopes = function (renderer, parentScope, parentOptions) {
 			var rendererWithScope = function(ctx, opts){
 				return renderer(ctx || parentScope, opts);
-			}
+			};
 			return function (newScope, newOptions) {
 				// If a non-scope value is passed, add that to the parent scope.
 				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
