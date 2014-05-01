@@ -3626,4 +3626,38 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		data.attr("show", true);
 		equal(frag.childNodes[0].innerHTML, "Is showing", "Not showing the else");
 	});
+
+	test("Calling .fn without arguments should forward scope by default (#658)", function(){
+		var tmpl = "{{#foo}}<span>{{bar}}</span>{{/foo}}";
+		var frag = can.mustache(tmpl)(new can.Map({
+			bar : 'baz'
+		}), {
+			foo : function(opts){
+				return opts.fn();
+			}
+		});
+		var node = frag.childNodes[0];
+
+		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
+	})
+
+	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
+		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
+
+		var frag = can.mustache(tmpl)({ foo: 'bar' }, {
+			zero : function(opts){
+				return opts.fn(0);
+			},
+			emptyString : function(opts){
+				return opts.fn("");
+			},
+			nullVal : function(opts){
+				return opts.fn(null);
+			}
+		});
+
+		equal(frag.childNodes[0].innerText, '0', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[1].innerText, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[2].innerText, '', 'Context is set correctly for falsy values');
+	})
 });
