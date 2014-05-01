@@ -1049,7 +1049,21 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		},
 		// ## createURLFromResource
 		// For each of the names (create, update, destroy, findOne, and findAll) use the 
-		// URL provided by the `resource` property.
+		// URL provided by the `resource` property. For example:
+		// 		
+		// 		ToDo = can.Model.extend({
+		// 			resource: "/todos"
+		// 		}, {});
+		// 	
+		// 	Will create a can.Model that is identical to:
+		// 	
+		// 		ToDo = can.Model.extend({
+		// 			findAll: "GET /todos",
+		// 			findOne: "GET /todos/{id}",
+		// 			create:  "POST /todos",
+		// 			update:  "PUT /todos/{id}",
+		// 			destroy: "DELETE /todos/{id}"
+		// 		},{});
 		// 
 		// - `model`: the can.Model that has the resource property
 		// - `method`: a property from the ajaxMethod object
