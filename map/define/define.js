@@ -127,7 +127,7 @@ steal('can/util', 'can/observe', function (can) {
 			}
 		},
 		'number': function (val) {
-			return parseFloat(val);
+			return +(val);
 		},
 		'boolean': function (val) {
 			if (val === 'false' || val === '0' || !val) {
@@ -206,38 +206,46 @@ steal('can/util', 'can/observe', function (can) {
 			}
 		}
 	};
-
-	proto.serialize = function () {
-		var serialized = {},
-			serializer, val,
-			serializedVal;
+	// Overwrite the invidual property serializer b/c we will overwrite it.
+	var oldSingleSerialize = can.Map.helpers._serialize;
+	can.Map.helpers._serialize = function(map, name, val){
+		return serializeProp(map, name, val);
+	};
+	// If the map has a define serializer for the given attr, run it.
+	var serializeProp = function(map, attr, val) {
+		var serializer = map.define && map.define[attr] && map.define[attr].serialize;
+		if(serializer === undefined) {
+			return oldSingleSerialize.apply(this, arguments);
+		} else if(serializer !== false){
+			return typeof serializer === "function" ? serializer.call(this, val, attr): oldSingleSerialize.apply(this, arguments);
+		}
+	};
+	
+	// Overwrite serialize to add in any missing define serialized properties.
+	var oldSerialize = proto.serialize;
+	proto.serialize = function (property) {
+		var serialized = oldSerialize.apply(this, arguments);
+		if(property){
+			return serialized;
+		}
+		// add in properties not already serialized
+		
+		var serializer,
+			val;
 		// Go through each property.
 		for(var attr in this.define){
-			val = this.attr(attr);
-			serializer = this.define && this.define[attr] && this.define[attr].serialize;
-			// skip anything that has serialize: false
-			if(serializer === false){
-				continue;
+			// if it's not already defined
+			if(!(attr in serialized)) {
+				// check there is a serializer so we aren't doing extra work on serializer:false
+				serializer = this.define && this.define[attr] && this.define[attr].serialize;
+				if(serializer) {
+					val = serializeProp(this, attr, this.attr(attr));
+					if(val !== undefined) {
+						serialized[attr] = val;
+					}
+				}
 			}
-			// If the value is an `object`, and has an `attrs` or `serialize` function.
-			serializedVal = serializer? serializer.call(this, val): (can.Map.helpers.isObservable(val) && can.isFunction(val.serialize) ?
-			// Call `attrs` or `serialize` to get the original data back.
-			val.serialize() :
-			// Otherwise return the value.
-			val);
-
-			// if the serializer method returns false, don't include this property
-			if(serializedVal === false){
-				continue;
-			}
-
-			serialized[attr] = serializedVal;
-
-			can.__reading(this, attr);
 		}
-
-		can.__reading(this, '__keys');
-
 		return serialized;
 	};
 

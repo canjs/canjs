@@ -410,7 +410,7 @@ steal("can/map/define", "can/test", function () {
 			define: {
 				name: {
 					serialize: function(){
-						return false;
+						return;
 					}
 				},
 				locations: {
