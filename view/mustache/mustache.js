@@ -70,7 +70,7 @@ steal('can/util',
 			makeConvertToScopes = function (original, scope, options) {
 				var originalWithScope = function(ctx, opts){
 					return original(ctx || scope, opts);
-				}
+				};
 				return function (updatedScope, updatedOptions) {
 					if (updatedScope !== undefined && !(updatedScope instanceof can.view.Scope)) {
 						updatedScope = scope.add(updatedScope);
