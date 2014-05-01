@@ -112,16 +112,18 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 				Map.prototype._triggerChange.apply(this, arguments);
 				// `batchTrigger` direct add and remove events...
-				if (!~attr.indexOf('.')) {
+				var index = +attr;
+				// Make sure this is not nested and not an expando
+				if (!~attr.indexOf('.') && !isNaN(index)) {
 
 					if (how === 'add') {
-						can.batch.trigger(this, how, [newVal, +attr]);
+						can.batch.trigger(this, how, [newVal, index]);
 						can.batch.trigger(this, 'length', [this.length]);
 					} else if (how === 'remove') {
-						can.batch.trigger(this, how, [oldVal, +attr]);
+						can.batch.trigger(this, how, [oldVal, index]);
 						can.batch.trigger(this, 'length', [this.length]);
 					} else {
-						can.batch.trigger(this, how, [newVal, +attr]);
+						can.batch.trigger(this, how, [newVal, index]);
 					}
 
 				}
