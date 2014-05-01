@@ -670,4 +670,20 @@ steal("can/route", "can/test", function () {
 		can.route.attr('foo', 'bar');
 	})
 
+	test("two way binding can.route.map with can.Map instance", function(){
+		expect(1);
+		var AppState = can.Map.extend();
+		var appState = new AppState();
+
+		can.route.map(appState);
+
+		can.route.on('change', function(){
+			equal(can.route.attr('name'), 'Brian', 'appState is bound to can.route');
+			can.route.off('change');
+			appState.removeAttr('name');
+		});
+		appState.attr('name', 'Brian');
+	});
+
+
 });
