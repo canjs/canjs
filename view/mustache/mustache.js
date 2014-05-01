@@ -67,7 +67,10 @@ steal('can/util',
 				return obj && obj.splice && typeof obj.length === 'number';
 			},
 			// used to make sure .fn and .inverse are always called with a Scope like object
-			makeConvertToScopes = function (orignal, scope, options) {
+			makeConvertToScopes = function (original, scope, options) {
+				var originalWithScope = function(ctx, opts){
+					return original(ctx || scope, opts);
+				}
 				return function (updatedScope, updatedOptions) {
 					if (updatedScope !== undefined && !(updatedScope instanceof can.view.Scope)) {
 						updatedScope = scope.add(updatedScope);
@@ -75,7 +78,7 @@ steal('can/util',
 					if (updatedOptions !== undefined && !(updatedOptions instanceof can.view.Options)) {
 						updatedOptions = options.add(updatedOptions);
 					}
-					return orignal(updatedScope, updatedOptions || options);
+					return originalWithScope(updatedScope, updatedOptions || options);
 				};
 			};
 
