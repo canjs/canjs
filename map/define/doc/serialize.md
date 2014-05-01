@@ -5,20 +5,31 @@ Called when an attribute is removed.
 
 @signature `serializer( currentValue )`
 
-@return {*|false} If `false` is returned, the value is not serialized.
+@param {*} value The current value of the attribute. 
+
+@param {String} attr The name of the attribute being serialized.
+
+@return {*|undefined} If `undefined` is returned, the value is not serialized.
+
+@this {can.Map} The map instance being serialized.
 
 @body 
 
 ## Use
 
-[can.Map::serialize serialize] is useful for serializing a can.Map instance into a more JSON-friendly form.  This can be used for many reasons, including saving a can.Model instance on the server or serializing can.route's internal can.Map for display in the hash or pushstate URL.
+[can.Map::serialize serialize] is useful for serializing a can.Map instance into 
+a more JSON-friendly form.  This can be used for many reasons, including saving a 
+[can.Model] instance on the server or serializing [can.route.map]'s internal 
+can.Map for display in the hash or pushstate URL.
 
-The serialize property allows an opportunity to define how each attribute will behave when the map is serialized.  This can be useful for:
+The serialize property allows an opportunity to define how 
+each attribute will behave when the map is serialized.  This can be useful for:
 
-* serializing complex types like dates, arrays, or objects into string formats
-* causing certain properties to be ignored when serialize is called
+- serializing complex types like dates, arrays, or objects into string formats
+- causing certain properties to be ignored when serialize is called
 
-The following causes a locationIds property to be serialized into the comma separated ID values of the location property on this map:
+The following causes a locationIds property to be serialized into 
+the comma separated ID values of the location property on this map:
 
     define: {
       locationIds: {
@@ -32,13 +43,15 @@ The following causes a locationIds property to be serialized into the comma sepa
       }
     }
 
-Setting serialize to false for any property means this property will not be part of the serialized object.  For example, if the property numPages is not greater than zero, the following example won't include it in the serialized object.
+Returning `undefined` for any property means this property will not be part of the serialized 
+object.  For example, if the property numPages is not greater than zero, the following example 
+won't include it in the serialized object.
 
     define: {
       prop: {
         numPages: function( num ){
           if(num <= 0) {
-          	return false;
+          	return undefined;
           }
           return num;
         }

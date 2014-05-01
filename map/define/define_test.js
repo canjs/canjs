@@ -405,7 +405,7 @@ steal("can/map/define", "can/test", function () {
 	});
 	
 
-	test("serialize", function(){
+	test("serialize basics", function(){
 		var MyMap = can.Map.extend({
 			define: {
 				name: {
@@ -427,19 +427,35 @@ steal("can/map/define", "can/test", function () {
 					serialize: function(locationIds){
 						return locationIds.join(',');
 					}
+				},
+				bared: {
+					get: function(){
+						return this.attr("name")+"+bar";
+					},
+					serialize: true
+				},
+				ignored: {
+					get: function(){
+						return this.attr("name")+"+ignored";
+					}
 				}
 			}
 		});
 		
-		var map = new MyMap();
+		var map = new MyMap({name: "foo"});
 		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
 		equal(map.attr("locationIds").length, 2, "get locationIds");
 		equal(map.attr("locationIds")[0], 1, "get locationIds index 0");
 		equal(map.attr("locations")[0].id, 1, "get locations index 0");
+		
 		var serialized = map.serialize();
 		equal(serialized.locations, undefined, "locations doesn't serialize");
 		equal(serialized.locationIds, "1,2", "locationIds serializes");
 		equal(serialized.name, undefined, "name doesn't serialize");
+		
+		equal(serialized.bared, "foo+bar", "true adds computed props");
+		equal(serialized.ignored, undefined, "computed props are not serialized by default");
+		
 	});
 
 });
