@@ -3631,7 +3631,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var template =  can.mustache("{{#each items}}<div>{{name}}</div>{{/each}}"+
 			"{{#if items.spliced}}<strong>List was spliced</strong>{{/if}}");
 		var items = new can.List([
-		    { name: 1}
+			{ name: 1}
 		]);
 		
 		var frag = template({
