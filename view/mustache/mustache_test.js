@@ -3656,4 +3656,23 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		data.attr("show", true);
 		equal(frag.childNodes[0].innerHTML, "Is showing", "Not showing the else");
 	});
+	
+	test("Expandos (#744)", function(){
+		var template =  can.mustache("{{#each items}}<div>{{name}}</div>{{/each}}"+
+			"{{#if items.spliced}}<strong>List was spliced</strong>{{/if}}");
+		var items = new can.List([
+			{ name: 1}
+		]);
+		
+		var frag = template({
+			items: items
+		});
+		//items.splice(0,2);
+		items.attr('spliced', true);
+		// 2 because {{#each}} keeps a textnode placeholder
+		equal(frag.childNodes[2].nodeName.toLowerCase(),"strong", "worked");
+	});
+	
+	
+	
 });
