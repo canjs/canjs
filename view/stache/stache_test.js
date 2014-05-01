@@ -3404,4 +3404,25 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
 	})
+
+	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
+		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
+
+		var frag = can.stache(tmpl)({ foo: 'bar' }, {
+			zero : function(opts){
+				return opts.fn(0);
+			},
+			emptyString : function(opts){
+				return opts.fn("");
+			},
+			nullVal : function(opts){
+				return opts.fn(null);
+			}
+
+		});
+
+		equal(frag.childNodes[0].innerText, '0', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[1].innerText, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[2].innerText, '', 'Context is set correctly for falsy values');
+	})
 });
