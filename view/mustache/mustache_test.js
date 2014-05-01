@@ -3538,6 +3538,36 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 			can.dev.warn = oldlog;
 		});
+
+		test("Logging: Helper not found in mustache template(#726)", function () {
+			var oldlog = can.dev.warn,
+					message = 'can/view/mustache/mustache.js: Unable to find helper "helpme".';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			}
+
+			can.view.mustache('<li>{{helpme name}}</li>')({
+				name: 'Hulk Hogan'
+			});
+
+			can.dev.warn = oldlog;
+		});
+
+		test("Logging: Variable not found in mustache template (#720)", function () {
+			var oldlog = can.dev.warn,
+					message = 'can/view/mustache/mustache.js: Unable to find key "user.name".';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			}
+
+			can.view.mustache('<li>{{user.name}}</li>')({
+				user: {}
+			});
+
+			can.dev.warn = oldlog;
+		});
 	}
 	//!steal-remove-end
 
