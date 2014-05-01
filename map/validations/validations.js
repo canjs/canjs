@@ -1,4 +1,4 @@
-steal('can/util', 'can/map/attributes', function (can) {
+steal('can/util', 'can/map', function (can) {
 	//validations object is by property.  You can have validations that
 	//span properties, but this way we know which ones to run.
 	//  proc should return true if there's an error or the error message

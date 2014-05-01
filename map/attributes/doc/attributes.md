@@ -6,13 +6,20 @@
 @group can.Map.attributes.static static
 @group can.Map.attributes.prototype prototype
 
+@body
+
+## Deprecation Warning
+
+The attributes plugin (and the setter plugin) has been deprecated in 2.1 in favor of the new [can.Map.prototype.define define] plugin, which provides the same functionality.
+
+## Use
+
 can.Map.attributes is a plugin that helps convert and normalize data being set on an Map
 and allows you to specify the way complex types get serialized. The attributes plugin is most
 helpful when used with [can.Model] \(because the serialization aids in sending data to a server),
 but you can use it with any Map you plan to make instances
 from.
 
-@body
 There are three important static properties to give the class you want to use attributes with:
 
 - `[can.Map.attributes.static.attributes attributes]` lists the properties that will be normalized

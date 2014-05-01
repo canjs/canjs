@@ -24,6 +24,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 	var getMapFromObject = function (obj) {
 		return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
 	};
+	// A temporary map of Maps
+	var serializeMap = null;
+
 
 	/**
 	 * @add can.Map
@@ -167,21 +170,53 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// ### can.Map.helpers.serialize
 				// Serializes a Map or Map.List
 				serialize: function (map, how, where) {
+					var cid = can.cid(map),
+						firstSerialize = false;
+					if(!serializeMap) {
+						firstSerialize = true;
+						// Serialize might call .attr() so we need to keep different map 
+						serializeMap = {
+							attr: {},
+							serialize: {}
+						};
+					}
+					serializeMap[how][cid] = where;
 					// Go through each property.
 					map.each(function (val, name) {
 						// If the value is an `object`, and has an `attrs` or `serialize` function.
-						where[name] = Map.helpers.isObservable(val) && can.isFunction(val[how]) ?
-						// Call `attrs` or `serialize` to get the original data back.
-						val[how]() :
-						// Otherwise return the value.
-						val;
-
-						can.__reading(map, name);
+						var result,
+							isObservable =  Map.helpers.isObservable(val),
+							serialized = isObservable && serializeMap[how][can.cid(val)];
+						if( serialized ) {
+							result = serialized;
+						} else {
+							if(how === "serialize") {
+								result = Map.helpers._serialize(map, name, val);
+							} else {
+								result = Map.helpers._getValue(map, name, val, how);
+							}
+						}
+						// this is probably removable
+						if(result !== undefined){
+							where[name] = result;
+						}
 					});
 
 					can.__reading(map, '__keys');
-
+					if(firstSerialize) {
+						serializeMap = null;
+					}
 					return where;
+				},
+				_serialize: function(map, name, val){
+					return Map.helpers._getValue(map, name, val, "serialize");
+				},
+				_getValue: function(map, name, val, how){
+					if( Map.helpers.isObservable(val) ) {
+						return val[how]();
+					} else {
+						return val;
+					}
 				}
 			},
 			/**

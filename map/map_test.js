@@ -1,7 +1,7 @@
 /* jshint asi:true*/
-steal("can/map", "can/compute", "can/test", function (undefined) {
+steal("can/map", "can/compute", "can/test", "can/list", function(){
 
-	module('can/map')
+	module('can/map');
 
 	test("Basic Map", 4, function () {
 
@@ -11,10 +11,10 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		});
 
 		state.bind("change", function (ev, attr, how, val, old) {
-			equal(attr, "category", "correct change name")
-			equal(how, "set")
-			equal(val, 6, "correct")
-			equal(old, 5, "correct")
+			equal(attr, "category", "correct change name");
+			equal(how, "set");
+			equal(val, 6, "correct");
+			equal(old, 5, "correct");
 		});
 
 		state.attr("category", 6);
@@ -63,16 +63,16 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		var state2 = new can.Map({
 			"key.with.dots": 4,
 			key: {
-				with: {
+				"with": {
 					someValue: 20
 				}
 			}
-		})
+		});
 		state.removeAttr("key.with.dots");
 		state2.removeAttr("key.with.someValue");
 		deepEqual(can.Map.keys(state), ["productType"], "one property");
 		deepEqual(can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
-		deepEqual(can.Map.keys(state2.key.with), [], "zero properties");
+		deepEqual( can.Map.keys( state2.key["with"] ) , [], "zero properties");
 	});
 
 	test("nested event handlers are not run by changing the parent property (#280)", function () {
@@ -227,5 +227,16 @@ steal("can/map", "can/compute", "can/test", function (undefined) {
 		ok(!map._computedBindings.name.handler, 'computed property handler removed');
 	});
 
-
+	test("serializing cycles", function(){
+		var map1 = new can.Map({name: "map1"});
+		var map2 = new can.Map({name: "map2"});
+		
+		map1.attr("map2", map2);
+		map2.attr("map1", map1);
+		
+		var res = map1.serialize();
+		equal(res.name, "map1");
+		equal(res.map2.name, "map2");
+	});
+	
 });
