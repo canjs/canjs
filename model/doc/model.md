@@ -1,0 +1,2 @@
+@add can.Model
+@static

@@ -1046,6 +1046,36 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				// Make the AJAX call with the URL, data, and type indicated by the proper `ajaxMethod` above.
 				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get");
 			};
+		},
+		// ## createURLFromResource
+		// For each of the names (create, update, destroy, findOne, and findAll) use the 
+		// URL provided by the `resource` property. For example:
+		// 		
+		// 		ToDo = can.Model.extend({
+		// 			resource: "/todos"
+		// 		}, {});
+		// 	
+		// 	Will create a can.Model that is identical to:
+		// 	
+		// 		ToDo = can.Model.extend({
+		// 			findAll: "GET /todos",
+		// 			findOne: "GET /todos/{id}",
+		// 			create:  "POST /todos",
+		// 			update:  "PUT /todos/{id}",
+		// 			destroy: "DELETE /todos/{id}"
+		// 		},{});
+		// 
+		// - `model`: the can.Model that has the resource property
+		// - `method`: a property from the ajaxMethod object
+		createURLFromResource = function(model, name) {
+			if (!model.resource) { return; }
+
+			var resource = model.resource.replace(/\/+$/, "");
+			if (name === "findAll" || name === "create") {
+				return resource;
+			} else {
+				return resource + "/{" + model.id + "}";
+			}
 		};
 
 	// # can.Model
@@ -1155,7 +1185,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 					// or an object like `{url: "/endpoint", type: 'GET'}`.
 					if (!can.isFunction(self[name])) {
 						// Etiher way, `ajaxMaker` will turn it into a function for us.
-						self[name] = ajaxMaker(method, self[name]);
+						self[name] = ajaxMaker(method, self[name] ? self[name] : createURLFromResource(self, name));
 					}
 
 					// There may also be a "maker" function (like `makeFindAll`) that alters the behavior of acting upon models
