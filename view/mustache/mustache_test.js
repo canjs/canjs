@@ -3672,7 +3672,57 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		// 2 because {{#each}} keeps a textnode placeholder
 		equal(frag.childNodes[2].nodeName.toLowerCase(),"strong", "worked");
 	});
-	
-	
-	
+
+	test("can.Construct derived classes should be considered objects, not functions (#450)", 8, function() {
+		can.Mustache.registerHelper("cat", function(options) {
+			var clazz = options.hash ? options.hash.clazz : options;
+			// When using the anonymous function containing foostructor, it will need to be executed
+			return clazz.text || clazz().text;
+		});
+
+		var foostructor = can.Map({ text: "bar" }, {}),
+			obj = {
+				next_level: {
+					thing: foostructor,
+					text: "In the inner context"
+				}
+			},
+			div = document.createElement("div"),
+			description;
+		foostructor.self = foostructor;
+		window.other_text = "Window context";
+
+		for (var i = 0; i < 2; i++) {
+			if (i === 1) {
+				foostructor.self = function() { return foostructor; };
+			}
+
+			// // Fully dotted
+			div.appendChild(can.view.mustache("<div>{{next_level.thing.self.text}}</div>")(obj));
+
+			// // With attribute nested
+			div.appendChild(can.view.mustache("<div>{{#next_level.thing.self}}{{text}}{{/next_level.thing}}</div>")(obj));
+
+			// Passed as an argument to helper
+			div.appendChild(can.view.mustache("<div>{{cat next_level.thing.self}}</div>")(obj));
+
+			// Passed as a hash to helper
+			div.appendChild(can.view.mustache("<div>{{cat clazz=next_level.thing.self}}</div>")(obj));
+		}
+
+		var content = div.getElementsByTagName('div');
+
+		description = " (constructor by itself)";
+		equal(content[0].innerHTML, "bar", "fully dotted" + description);
+		equal(content[1].innerHTML.replace(/<\/?span>/g,''), "", "with attribute nested" + description);
+		equal(content[2].innerHTML, "bar", "passed as an argument to helper" + description);
+		equal(content[3].innerHTML, "bar", "passed as a hash to helper" + description);
+
+		description = " (constructor as function returning itself)";
+		equal(content[4].innerHTML, "bar", "fully dotted" + description);
+		equal(content[5].innerHTML.replace(/<\/?span>/g,''), "", "with attribute nested" + description);
+		equal(content[6].innerHTML, "bar", "passed as an argument to helper" + description);
+		equal(content[7].innerHTML, "bar", "passed as a hash to helper" + description);
+	});
+
 });
