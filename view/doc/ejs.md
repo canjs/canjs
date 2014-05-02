@@ -1,6 +1,8 @@
 @function can.view.ejs ejs
 @parent can.view.static
 
+@deprecated {2.1} Use [can.ejs] instead.
+
 @signature `can.view.ejs( [id,] template )`
 
 Register an EJS template string and create a renderer function.

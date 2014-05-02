@@ -19,12 +19,12 @@ framework:
  - [can.Map], [can.List], [can.compute] - observable objects, list, and values.
  - [can.Model] -  observes connected to a RESTful JSON interface
  - [can.view] - template loading, caching, rendering
- - [can.Mustache] - Live binding Handlebars and Mustache templates
+ - [can.mustache] - Live binding Handlebars and Mustache templates
  - [can.route] -  back button and bookmarking support
  
 The following modules are typically distributed as plugins:
 
- - [can.EJS] - live binding templates
+ - [can.ejs] - live binding templates
  - [can.Construct.proxy] - Proxy construct methods
  - [can.Construct.super] - Call super methods
  - [can.Map.delegate] - Listen to Observe attributes

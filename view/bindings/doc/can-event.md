@@ -8,7 +8,7 @@ Specify a callback function to be called on a particular event. You can create y
 @param {String} EVENT A event name like `click` or `keyup`.  If you are
 using jQuery, you can listen to jQuery special events too.
 
-@param {can.Mustache.key} key A named value in the current scope.  The value
+@param {can.mustache.key} key A named value in the current scope.  The value
 should be a function.
 
 @body
@@ -35,4 +35,4 @@ can-enter is a special event that calls its handler whenever the enter key is pr
 
 	<input type='text' can-enter='save' />
 
-The above template snippet would cause the save method (in the [can.Mustache Mustache] [can.view.Scope scope]) whenever the user hits the enter key on this input.
+The above template snippet would cause the save method (in the [can.mustache Mustache] [can.view.Scope scope]) whenever the user hits the enter key on this input.

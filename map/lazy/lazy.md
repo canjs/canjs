@@ -45,8 +45,8 @@ copy of `props` that emits events when its properties are changed with
 You can read the values of properties on a map directly, but you should
 never set them directly. You can also read property values using `attr`.
 Usually, you will want to do this when creating a `[can.compute]` or when
-live-binding properties in an [can.EJS EJS] template. (If you are using
-[can.Mustache Mustache], you don't need to use `attr`.)
+live-binding properties in an [can.ejs EJS] template. (If you are using
+[can.mustache Mustache], you don't need to use `attr`.)
 
 @codestart
 var aName = {a: 'Alexis'},

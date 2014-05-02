@@ -77,7 +77,7 @@ Create an instance of the Todos control on the `todos` element with:
 
     var todosControl = new Todos( '#todos', {} );
 
-The control's associated [can.EJS EJS] template looks like:
+The control's associated [can.ejs EJS] template looks like:
 
     <% todos.each(function( todo ) { %>
       <li <%= (el) -> el.data( 'todo', todo ) %> >

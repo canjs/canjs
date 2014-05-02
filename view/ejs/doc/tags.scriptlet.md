@@ -1,5 +1,5 @@
-@function can.EJS.tags.scriptlet <% CODE %>
-@parent can.EJS.tags 0
+@function can.ejs.tags.scriptlet <% CODE %>
+@parent can.ejs.tags 0
 
 @signature `<% CODE %>`
 

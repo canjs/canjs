@@ -1,27 +1,19 @@
-@function can.ejs
-@parent canjs
-@group can.ejs.tags 1 Tags
-@link ../docco/ejs.html docco
+@constructor can.EJS
+@group can.EJS.prototype 0 Prototype
+@hide
 
 @deprecated {2.1} EJS is incompatable with [can.Component] and should
 be avoided for new projects. It will still be maintained up to 
 3.0 and potentially after. Projects using EJS should consider
-switching to [can.stache].
+switching to [can.stache]. The EJS constructor funciton is also
+now considered an internal API so you should use [can.ejs] to create your templates.
 
 
 @description EJS provides __live__ ERB-style client-side templates.
 
-@signature `can.ejs( [id,] template )`
+@signature `new can.ejs(options)`
 
-Creates an instance of an EJS template. 
-
-@param {String} [id] If two arguments are passed, the first argument is the id of the 
-template that will be registered with [can.view].
-
-@param {String} template The content of the mustache template.
-
-@return {can.view.renderer} A function that renders the mustache template into
-a live documentFragment.
+Creates an EmbeddedJS template. Use EJS with [can.view] or [can.view.ejs].
 
 @body
 

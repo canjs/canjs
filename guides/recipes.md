@@ -193,7 +193,7 @@ __and__ as time passes, the timestamp will update to:
 
 __and__ then update to "some seconds ago" and so forth.
 
-To accomplish this, create a `prettyDate` [mustache helper](../docs/can.Mustache.helper.html) that converts
+To accomplish this, create a `prettyDate` [mustache helper](../docs/can.mustache.helper.html) that converts
 dates into a human readable format.  A helper function is called from within the template where its result
 will be displayed.  The following calls `prettyDate` with an observable value of `createdAt`.
 
@@ -202,7 +202,7 @@ will be displayed.  The following calls `prettyDate` with an observable value of
       <i>created {{prettyDate createdAt}}</i>
     </h1>
 
-To call a function from a template, [register](../docs/can.Mustache.registerHelper.html) it with `can.view`.
+To call a function from a template, [register](../docs/can.mustache.registerHelper.html) it with `can.view`.
 The third argument passed to `can.view` is an object with helper functions, so the `dateHelper` function
 can be registered as `prettyView`.
 
@@ -319,7 +319,7 @@ is instantiated:
 
 When the event handler for a `click` runs, it needs a way
 to access the object associated with the `li` that was clicked.
-With the [`data`](http://canjs.com/docs/can.Mustache.helpers.data.html) helper,
+With the [`data`](http://canjs.com/docs/can.mustache.helpers.data.html) helper,
 the element will retain a reference
 to the object it is associated with (in this case, a `person`).
 

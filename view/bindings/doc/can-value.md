@@ -10,7 +10,7 @@ key. Example:
 
     <input type='text' can-value='first.name'/>
 
-@param {can.Mustache.key} key A named value in the current scope.
+@param {can.mustache.key} key A named value in the current scope.
 
 @body
 

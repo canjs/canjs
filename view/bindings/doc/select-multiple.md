@@ -8,7 +8,7 @@ Cross bind a value to a `<select>` element with multiple selections permitted.
 
 Cross binds the selected option values with an observable value.
 
-@param {can.Mustache.key} KEY A named value in the current 
+@param {can.mustache.key} KEY A named value in the current 
 scope. `KEY`'s value is cross bound with the selected `<option>` in
 the `<select>`. `KEY`'s value should be either Array-like, a String,
 or `undefined`.

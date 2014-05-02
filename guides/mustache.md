@@ -3,7 +3,7 @@
 
 @body
 
-[Mustache](../docs/can.Mustache.html) is a logic-less templating languages
+[Mustache](../docs/can.mustache.html) is a logic-less templating languages
 [which provide live binding when used with Observes. CanJS's Mustache
 implementation supports both [normal Mustache templates](http://mustache.github.io/) 
 as well as the Handlebars extensions, allowing you to easily reuse
@@ -235,10 +235,10 @@ The contents of the &lt;div> would be `Ms. Wonderland`.
 
 ### Global helpers
 
-You can register global helpers using [can.Mustache.registerHelper](../docs/can.Mustache.registerHelper.html):
+You can register global helpers using [can.mustache.registerHelper](../docs/can.mustache.registerHelper.html):
 
 @codestart
-can.Mustache.registerHelper('i10n', function(str, options) {
+can.mustache.registerHelper('i10n', function(str, options) {
 	return (Globalize != undefined ? Globalize.localize(str) : str);
 });
 @codeend

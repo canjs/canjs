@@ -1,30 +1,23 @@
-@function can.mustache
-@parent canjs
-@release 2.1
-@group can.mustache.methods 0 Methods
-@group can.mustache.pages 1 Pages
-@group can.mustache.types 2 Types
-@group can.mustache.tags 3 Basic Tags
-@group can.mustache.htags 4 Helper Tags
-@link ../docco/view/mustache/mustache.html docco
-@test can/view/mustache/test/test.html
-@plugin can/view/mustache
-@download http://canjs.us/release/latest/can.mustache.js
+@constructor can.Mustache
+@release 1.1
+@hide
+
+@deprecated {2.1} As of 2.1, this is considered an internal API.  Use [can.mustache] to create
+templates.
 
 @description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
 when used with [can.Maps](#can_observe).
 
-@signature `can.mustache( [id,] template )`
+@signature `new can.mustache(options)`
 
-Creates an instance of a mustache template. 
+Creates an instance of a mustache template. This is typically not used directly in 
+favor of [can.view] or [can.mustache].
 
-@param {String} [id] If two arguments are passed, the first argument is the id of the 
-template that will be registered with [can.view].
+@param {{}} options An options object with the following properties:
 
-@param {String} template The content of the mustache template.
-
-@return {can.view.renderer} A function that renders the mustache template into
-a live documentFragment.
+@option {String} text The text of the mustache template.
+@option {String} [name] The name of the template used to identify it to
+debugging tools.
 
 @body
 

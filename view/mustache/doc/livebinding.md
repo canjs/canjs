@@ -1,5 +1,5 @@
-@page can.Mustache.Binding Live Binding
-@parent can.Mustache.pages 5
+@page can.mustache.Binding Live Binding
+@parent can.mustache.pages 5
 
 Live binding refers to templates which update themselves 
 as the data used in the mustache tags change.

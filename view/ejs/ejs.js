@@ -200,5 +200,8 @@ function (can) {
 			});
 		}
 	});
+	can.ejs.Helpers = EJS.Helpers;
+	
+	
 	return can;
 });

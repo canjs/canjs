@@ -4,7 +4,7 @@
 
 
 @description Create a helper lookup node 
-for [can.Mustache.key keys].  Options are where mustache helpers,
+for [can.mustache.key keys].  Options are where mustache helpers,
 partials, local tags, and other non-data objects are found.
 
 @signature `new can.view.Options(options, [parent])`
@@ -36,11 +36,11 @@ scope.
 
  - The `helpers` argument of [can.view]
  - [can.Component::helpers]
- - A [can.Mustache.sectionRenderer mustache section renderer]'s `helpers` argument.
+ - A [can.mustache.sectionRenderer mustache section renderer]'s `helpers` argument.
  
 And `can.view.Options` are provided several places:
 
- - A Mustache [can.Mustache.helperOptions helper options]'s `options` property.
+ - A Mustache [can.mustache.helperOptions helper options]'s `options` property.
  - An attribute callback's [can.view.attrData data]'s `options` property.
  - A tag callback's [can.view.tagData data]'s `options` property.
  

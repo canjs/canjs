@@ -1,12 +1,12 @@
-@function can.Mustache.helpers.partial {{>key}}
-@parent can.Mustache.tags 6
+@function can.mustache.helpers.partial {{>key}}
+@parent can.mustache.tags 6
 
 @signature `{{>key}}`
 
 Render another template within the current template.
 
-@param {can.Mustache.key} key A key that references a value within the current or parent 
-[can.Mustache.context context]. If the value is a function or [can.compute], the 
+@param {can.mustache.key} key A key that references a value within the current or parent 
+[can.mustache.context context]. If the value is a function or [can.compute], the 
 function's return value is used.
 
 If the key value is:

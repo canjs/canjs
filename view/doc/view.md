@@ -128,7 +128,7 @@ It is also possible to get a nameless [can.view.renderer renderer] function when
       message : 'Message form EJS'
     }); // -> <strong>Message from EJS</strong>
 
-    renderer = can.view.mustache('<strong>{{message}}</strong>');
+    renderer = can.mustache('<strong>{{message}}</strong>');
     renderer({
       message : 'Message form Mustache'
     }); // -> <strong>Message from Mustache</strong>
@@ -137,10 +137,10 @@ It is also possible to get a nameless [can.view.renderer renderer] function when
 
 CanJS supports the following live template languages:
 
-- [can.EJS] EmbeddedJS 
+- [can.ejs] EmbeddedJS 
   <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
 
-- [can.Mustache] Mustache 
+- [can.mustache] Mustache 
   <pre><code>&lt;h2{{message}}&lt/h2></code></pre>
 
 
@@ -152,7 +152,7 @@ To render to a string, use `can.view.render(idOrUrl, data)` like:
 
 To convert that rendered string into a live documentFragment, use [can.view.frag].
 
-To render a [can.EJS] sub-template within another template, use render like:
+To render a [can.ejs] sub-template within another template, use render like:
 
     <% $.each(recipes, function(i, recipe){ %>
       <li><%== can.view.render("/templates/recipe.ejs",{

@@ -1,6 +1,5 @@
-@function can.EJS.tags.comment <%# CODE %>
-@parent can.EJS.tags 4
-
+@function can.ejs.tags.comment <%# CODE %>
+@parent can.ejs.tags 4
 
 @signature `<%# CODE %>`
 

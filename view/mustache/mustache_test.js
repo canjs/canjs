@@ -2807,14 +2807,14 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	});
 
-	test("can.Mustache.safeString", function () {
+	test("can.mustache.safeString", function () {
 		var text = "Google",
 			url = "http://google.com/",
 			templateEscape = can.view.mustache('{{link "' + text + '" "' + url + '"}}'),
 			templateUnescape = can.view.mustache('{{{link "' + text + '" "' + url + '"}}}');
-		can.Mustache.registerHelper('link', function (text, url) {
+		can.mustache.registerHelper('link', function (text, url) {
 			var link = '<a href="' + url + '">' + text + '</a>';
-			return can.Mustache.safeString(link);
+			return can.mustache.safeString(link);
 		});
 
 		var div = document.createElement('div');
@@ -3145,9 +3145,9 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var num = can.compute(1)
 
-		can.Mustache.registerHelper("safeHelper", function () {
+		can.mustache.registerHelper("safeHelper", function () {
 
-			return can.Mustache.safeString(
+			return can.mustache.safeString(
 				"<p>" + num() + "</p>"
 			)
 

@@ -1,11 +1,13 @@
-@function can.view.mustache mustache
+@function can.mustache mustache
 @parent can.view.static
 
-@signature `can.view.mustache( [id,] template )`
+@deprecated {2.1} Use [can.mustache] instead.
+
+@signature `can.mustache( [id,] template )`
 
 Register a Mustache template string and create a renderer function.
 
-    var renderer = can.view.mustache("<h1>{{message}}</h1>");
+    var renderer = can.mustache("<h1>{{message}}</h1>");
     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
 
 @param {String} [id] An optional ID for the template.
@@ -19,7 +21,7 @@ Register a Mustache template string and create a renderer function.
 
 @body
 
-`can.view.mustache([id,] template)` registers an Mustache template string
+`can.mustache([id,] template)` registers an Mustache template string
 for a given id programatically. The following
 registers `myStache` and renders it into a documentFragment.
 
@@ -36,7 +38,7 @@ the template. Call the render function with the data
 you want to pass to the template and it returns the
 documentFragment.
 
-    var renderer = can.view.mustache('<div>{{message}}</div>');
+    var renderer = can.mustache('<div>{{message}}</div>');
     renderer({
         message : 'Mustache'
     }); // -> <div>Mustache</div>

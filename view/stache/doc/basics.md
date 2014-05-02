@@ -32,7 +32,7 @@ already has any logic applied to it. However, you can use
 [can.stache.Helpers helper tags] in addition to the basic tags which can be used for richer
 functionality where modifying the data ahead of time isn't viable.
 
-Just like [can.EJS EJS], Stache can be used for [can.stache.Binding live binding] templates. As opposed to
+Just like [can.ejs EJS], Stache can be used for [can.stache.Binding live binding] templates. As opposed to
 EJS, however, Stache will automatically inject the `attr()` calls on
 observable and compute objects to wire it up.
 

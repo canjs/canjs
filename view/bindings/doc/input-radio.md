@@ -8,7 +8,7 @@ Cross bind a value to a radio input.
 If the radio element is checked, sets the observable specified by `can-value` to match the value of 
 `value` attribute.  
 
-@param {can.Mustache.key} KEY A named value in the current scope. It should reference a
+@param {can.mustache.key} KEY A named value in the current scope. It should reference a
 a [can.Map] property or a [can.compute].
 
 @param {String} VALUE Used to set the value of `KEY` when the radio input is checked.

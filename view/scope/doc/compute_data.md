@@ -1,7 +1,7 @@
 @function can.view.Scope.computeData computeData
 @parent can.view.Scope.prototype
 
-@param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
+@param {can.mustache.key} key A dot seperated path.  Use `"\."` if you have a
 property name that includes a dot.
 
 @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
@@ -22,8 +22,8 @@ been found in a parent scope.
 
 ## Use
 
-`scope.computeData(key, options)` is used heavily by [can.Mustache] to get the value of
-a [can.Mustache.key key] value in a template. Configure how it reads values in the
+`scope.computeData(key, options)` is used heavily by [can.mustache] to get the value of
+a [can.mustache.key key] value in a template. Configure how it reads values in the
 scope and what values it returns with the [can.view.Scope.readOptions options] argument.
 
     var context = new Map({

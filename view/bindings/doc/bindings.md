@@ -13,9 +13,9 @@ binding and two-way bindings.  This plugin is included by default
 in core CanJS.
 
 Template event bindings are documented by [can.view.bindings.can-EVENT can-EVENT]. They let you 
-call a function in a [can.Mustache Mustache] [can.view.Scope scope] when an event is triggered like:
+call a function in a [can.mustache Mustache] [can.view.Scope scope] when an event is triggered like:
 
-    var template = can.view.mustache("<h1 can-click='hello'>Hi</h1>");
+    var template = can.mustache("<h1 can-click='hello'>Hi</h1>");
     var frag = template({
       hello: function(){
         console.log("Hello There!")

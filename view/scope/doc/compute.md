@@ -4,7 +4,7 @@
 @signature `scope.compute( key, [options] )`
 @release 2.1
 
-@param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a
+@param {can.mustache.key} key A dot seperated path.  Use `"\."` if you have a
 property name that includes a dot.
 
 @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.

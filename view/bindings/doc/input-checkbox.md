@@ -7,7 +7,7 @@ Cross bind a value to a checkbox.
 
 Cross binds the checked property to a true or false value.
 
-@param {can.Mustache.key} KEY A named value in the current scope.
+@param {can.mustache.key} KEY A named value in the current scope.
 
 @param {String} [TRUEVALUE] Used to set the checked value of `KEY`.
 

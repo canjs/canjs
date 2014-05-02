@@ -57,7 +57,7 @@
 			"isDefault": true
 		},
 		"can/view/ejs": {
-			"name": "can.EJS",
+			"name": "can.ejs",
 			"description": "Live-binding Embedded JavaScript",
 			"type": "plugin"
 		},
@@ -85,7 +85,7 @@
 			"isDefault": true
 		},
 		"can/view/mustache": {
-			"name": "can.Mustache",
+			"name": "can.mustache",
 			"description": "Live-binding Handlebars and Mustache views",
 			"type": "core",
 			"isDefault": true

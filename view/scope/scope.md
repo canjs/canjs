@@ -5,7 +5,7 @@
 @plugin can/view/scope
 @group can.view.Scope.types types
 
-@description Create a lookup node for [can.Mustache.key keys].
+@description Create a lookup node for [can.mustache.key keys].
 
 @signature `new can.view.Scope(context, [parent])`
 
@@ -27,7 +27,7 @@ scope.
 ## Use
 
 A `can.view.Scope` represents a lookup context and parent contexts
-that can be used to lookup a [can.Mustache.key key] value.
+that can be used to lookup a [can.mustache.key key] value.
 
 If no parent scope is provided, only the scope's context will be 
 explored for values.  For example:

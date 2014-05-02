@@ -1,5 +1,5 @@
-@function can.EJS.tags.escaped <%= CODE %>
-@parent can.EJS.tags 1
+@function can.ejs.tags.escaped <%= CODE %>
+@parent can.ejs.tags 1
 
 
 @signature `<%= CODE %>`

@@ -12,7 +12,7 @@ and custom tags.
 @signature `< TAG [ATTR-NAME=ATTR-VALUE] >`
 
 Create an instance of a component on a particular 
-tag. Currently, this only works within [can.Mustache] templates.
+tag. Currently, this only works within [can.mustache] templates.
 
 @param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
 property of the component.
@@ -23,7 +23,7 @@ component's [can.Component::scope scope].
 
 @param {String} ATTR-VALUE Specifies the value of a property passed to
 the component instance's [can.Component::scope scope]. By default `ATTR-VALUE`
-values are looked up in the [can.view.Scope can.Mustache scope]. If the string value
+values are looked up in the [can.view.Scope can.mustache scope]. If the string value
 of the `ATTR-NAME` is desired, this can be specified like: 
 
     ATTR-NAME: "@"
@@ -54,7 +54,7 @@ says "Hello There!".  To create a a instance of this component on the page,
 add `<hello-world></hello-world>` to a mustache template, render
 the template and insert the result in the page like:
 
-    var template = can.view.mustache("<hello-world></hello-world>");
+    var template = can.mustache("<hello-world></hello-world>");
     $(document.body).append( template() );
 
 Check this out here:
@@ -140,7 +140,7 @@ The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='greeting'/>");
+    var template = can.mustache("<hello-world message='greeting'/>");
     template({
       greeting: "Salutations"
     })
@@ -161,7 +161,7 @@ Default values can be provided. The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='greeting'/>");
+    var template = can.mustache("<hello-world message='greeting'/>");
     template({})
 
 Into:
@@ -181,7 +181,7 @@ default value of "@".  The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='Howdy'/>");
+    var template = can.mustache("<hello-world message='Howdy'/>");
     template({})
 
 Into:
@@ -207,7 +207,7 @@ adds "!" to the message every time `<hello-world>` is clicked:
 
 ### Helpers
 
-A component's [can.Component::helpers helpers] object provides [can.Mustache.helper mustache helper] functions
+A component's [can.Component::helpers helpers] object provides [can.mustache.helper mustache helper] functions
 that are available within the component's template.  The following component
 only renders friendly messages:
 

@@ -1,8 +1,8 @@
-@typedef {function()} can.Mustache.sectionRenderer() sectionRenderer
-@parent can.Mustache.types 
+@typedef {function()} can.mustache.sectionRenderer() sectionRenderer
+@parent can.mustache.types 
 
 @description Renders a section. These functions are usually provided as `.fn` and
-`.inverse` on a mustache helper's [can.Mustache.helperOptions options].
+`.inverse` on a mustache helper's [can.mustache.helperOptions options].
 
 @param {*|can.view.Scope} [context] Specifies the data the section is rendered 
 with.  If a [can.view.Scope] is provided, that scope is used to render the
@@ -22,21 +22,21 @@ helper scope is used to render the section.
 
 ## Use
 
-Renderer functions are provided to mustache [can.Mustache.helper helpers] on 
-the [can.Mustache.helperOptions options] argument and are used to render the
+Renderer functions are provided to mustache [can.mustache.helper helpers] on 
+the [can.mustache.helperOptions options] argument and are used to render the
 content between sections. The `context` and `helpers` option let you control
 the data and helpers used to render the section.
 
 The following example adds `{first: "Justin"}` to the lookup 
 data. Notice how the section has access to `first` and `last`.
 
-    can.Mustache.registerHelper("myhelper", function(options){
+    can.mustache.registerHelper("myhelper", function(options){
       
       return "<h1>"+options.fn({first: "Justin"})+"</h1>"
       
     })
 
-    var template = can.view.mustache(
+    var template = can.mustache(
       "{{#helper}}{{first}} {{last}}{{/helper}}");
       
     template({last: "Meyer"}) //-> <h1>Justin Meyer</h1>
@@ -44,13 +44,13 @@ data. Notice how the section has access to `first` and `last`.
 If no `context` is provided, the current context is passed.  Notice
 how the section has access to `last`:
 
-    can.Mustache.registerHelper("myhelper", function(options){
+    can.mustache.registerHelper("myhelper", function(options){
       
       return "<h1>"+options.fn()+"</h1>"
       
     })
 
-    var template = can.view.mustache(
+    var template = can.mustache(
       "{{#helper}}{{first}} {{last}}{{/helper}}");
       
     template({last: "Meyer"}) //-> <h1> Meyer</h1>
@@ -58,7 +58,7 @@ how the section has access to `last`:
 If a [can.view.Scope] is provided, it is used to render the 
 section. Notice how `last` is not available in the section:
 
-    can.Mustache.registerHelper("myhelper", function(options){
+    can.mustache.registerHelper("myhelper", function(options){
       
       return "<h1>"+
         options.fn( new can.view.Scope( {first: "Justin"}) )+
@@ -66,7 +66,7 @@ section. Notice how `last` is not available in the section:
       
     })
 
-    var template = can.view.mustache(
+    var template = can.mustache(
       "{{#helper}}{{first}} {{last}}{{/helper}}");
       
     template({last: "Meyer"}) //-> <h1>Justin </h1>

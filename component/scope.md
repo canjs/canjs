@@ -60,7 +60,7 @@ to the scope.
 @param {Object} attrs An object of values specified by the custom element's attributes. For example,
 a template rendered like:
 
-    can.view.mustache("<my-element title="name"></my-element>")({
+    can.mustache("<my-element title="name"></my-element>")({
       name: "Justin"
     })
 
@@ -135,7 +135,7 @@ component shows the current page number based off a `limit` and `offset` value:
 
 If this component HTML was inserted into the page like:
 
-    var template = can.view.mustache("<my-paginate></my-paginate>")
+    var template = can.mustache("<my-paginate></my-paginate>")
     $("body").append(template())
 
 It would result in:
@@ -164,7 +164,7 @@ And finally, that data is added to the `parentScope` of the component, used to
 render the component's template, and inserted into the element:
 
     var newScope = parentScope.add(componentData),
-        result = can.view.mustache("Page {{page}}.")(newScope);
+        result = can.mustache("Page {{page}}.")(newScope);
     $(element).html(result);
 
 ## Values passed from attributes
@@ -187,7 +187,7 @@ limit:
 
 If `<my-paginate>`'s source html is rendered like:
 
-    var template = can.view.mustache("<my-paginate offset='index' limit='size'></my-paginate>");
+    var template = can.mustache("<my-paginate offset='index' limit='size'></my-paginate>");
     
     var pageInfo = new can.Map({
       index: 0,

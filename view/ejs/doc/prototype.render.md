@@ -9,7 +9,7 @@
 @body
 Renders an object with view helpers attached to the view.
 
-    var rendered = new can.EJS({text: "<h1><%= message %>"</h1>}).render({
+    var rendered = new can.ejs({text: "<h1><%= message %>"</h1>}).render({
       message: "foo"
     },{helper: function(){ ... }})
 

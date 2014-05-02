@@ -66,7 +66,7 @@ The following makes `fullName` able to set `first` and `last`:
 
 ## Alternatives
 
-[can.Mustache] and [can.EJS] will automatically convert any function
+[can.mustache] and [can.ejs] will automatically convert any function
 read in the template to a can.compute. So, simply having a fullName
 function like:
 

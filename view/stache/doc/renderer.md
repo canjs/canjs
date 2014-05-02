@@ -1,6 +1,6 @@
 @typedef {function(Object,Object.<String, function>):documentFragment} can.view.renderer(data,helpers) renderer
 
-@description A function returned by [can.view], [can.view.ejs], [can.view.mustache] that renders a 
+@description A function returned by [can.view], [can.ejs], [can.mustache], [can.stache] that renders a 
 template into an html documentFragment.
 
 @param {Object} data An object of data used to render the template.

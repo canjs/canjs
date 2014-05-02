@@ -1,12 +1,12 @@
-@page can.EJS.Helpers Helpers
-@parent can.EJS
+@page can.ejs.Helpers Helpers
+@parent can.ejs
 
 @body
-By adding functions to can.EJS.Helpers.prototype, those functions will be available in the views.
+By adding functions to can.ejs.Helpers.prototype, those functions will be available in the views.
 
 The following helper converts a given string to upper case:
 
-    can.EJS.Helpers.prototype.toUpper = function(params) {
+    can.ejs.Helpers.prototype.toUpper = function(params) {
         return params.toUpperCase();
     }
 
@@ -16,7 +16,7 @@ Use it like this in any EJS template:
 
 To access the current DOM element return a function that takes the element as a parameter:
 
-    can.EJS.Helpers.prototype.upperHtml = function(params) {
+    can.ejs.Helpers.prototype.upperHtml = function(params) {
         return function(el) {
             $(el).html(params.toUpperCase());
         }
