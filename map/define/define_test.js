@@ -253,8 +253,7 @@ steal("can/map/define", "can/test", function () {
 		equal(t.attr("leaveAlone"), obj, "left as object");
 		t.attr({
 			'number': '15'
-		})
-		console.log(t.attr())
+		});
 		ok(t.attr("number") === 15, "converted to number");
 
 	});

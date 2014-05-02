@@ -477,7 +477,6 @@ steal("can/route", "can/test", function () {
 		test("removing things from the hash", function () {
 			stop();
 			var testarea = document.getElementById('qunit-test-area');
-			var iframe = document.createElement('iframe');
 			window.routeTestReady = function (iCanRoute, loc) {
 				iCanRoute.bind('change', function () {
 					equal(iCanRoute.attr('foo'), 'bar', 'expected value');
