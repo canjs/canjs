@@ -358,7 +358,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				} else {
 
 					// If attr does not have a `.`
-					if (!!~attr.indexOf('.')) {
+					if (typeof attr === 'string' && !!~attr.indexOf('.')) {
 						prop = attr;
 					}
 
