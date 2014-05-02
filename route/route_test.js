@@ -482,7 +482,6 @@ steal("can/route", "can/test", function () {
 					equal(iCanRoute.attr('foo'), 'bar', 'expected value');
 					iCanRoute.unbind('change');
 					iCanRoute.bind('change', function(){
-						console.log('route', iCanRoute.attr())
 						equal(iCanRoute.attr('personId'), '3', 'personId');
 						equal(iCanRoute.attr('foo'), undefined, 'unexpected value');
 						iCanRoute.unbind('change');
