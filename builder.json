@@ -207,6 +207,11 @@
 			"type": "core",
 			"isDefault": true,
 			"hidden": true
+		},
+		"can/util/domless": {
+			"name": "can.util.domless",
+			"type": "plugin",
+			"hidden": true
 		}
 	},
 	"types": {
