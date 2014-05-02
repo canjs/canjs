@@ -55,6 +55,12 @@ A basic example of an Application State for a reporting application, is shown be
 
 This object would then be passed into the can.Controls or can.Components that make up the building blocks of this application. Via can.route, the URL in the page would mirror the current state of the app.
 
+## Demo
+
+The following shows creating an appState that loads data at page load, has a virtual property 'locationIds' which serializes an array, and synchronizes the appState to can.route:
+
+@demo can/route/docs/map.html
+
 ## Using arrays and can.Lists
 
 If the Application State contains a property which is any non-primitive type, its useful to use the [can.Map.define] plugin to define how that property will serialize. `can.route` calls [can.Map.prototype.serialize] internally to turn the Application State object into URL params.
@@ -142,15 +148,6 @@ A locationIds property is defined, which is the serialized version of location. 
 					})
 				}
 			}
-		}
-		// return an object with string friendly formats
-		serialize: function(){
-			return {
-				locationIds: ,
-				searchTerm: this.attr('searchTerm')
-			}
-		},
-		setLocationIds: function(val){
 		}
 	});
 

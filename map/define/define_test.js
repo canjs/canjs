@@ -251,6 +251,10 @@ steal("can/map/define", "can/test", function () {
 		equal(t.attr("boolean"), false, "converted to boolean");
 
 		equal(t.attr("leaveAlone"), obj, "left as object");
+		t.attr({
+			'number': '15'
+		});
+		ok(t.attr("number") === 15, "converted to number");
 
 	});
 

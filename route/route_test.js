@@ -474,6 +474,35 @@ steal("can/route", "can/test", function () {
 			testarea.appendChild(iframe);
 		});
 
+		test("removing things from the hash", function () {
+			stop();
+			var testarea = document.getElementById('qunit-test-area');
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute.bind('change', function () {
+					equal(iCanRoute.attr('foo'), 'bar', 'expected value');
+					iCanRoute.unbind('change');
+					iCanRoute.bind('change', function(){
+						equal(iCanRoute.attr('personId'), '3', 'personId');
+						equal(iCanRoute.attr('foo'), undefined, 'unexpected value');
+						iCanRoute.unbind('change');
+						testarea.innerHTML = '';
+						start();
+					})
+					setTimeout(function () {
+						iframe.contentWindow.location.hash = '#!personId=3';
+					}, 100);
+
+				});
+				iCanRoute.ready()
+				setTimeout(function () {
+					iframe.contentWindow.location.hash = '#!foo=bar';
+				}, 100);
+			}
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?2");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
 		test("updating the hash", function () {
 			stop();
 			window.routeTestReady = function (iCanRoute, loc) {

@@ -217,7 +217,7 @@ steal('can/util', 'can/observe', function (can) {
 		if(serializer === undefined) {
 			return oldSingleSerialize.apply(this, arguments);
 		} else if(serializer !== false){
-			return typeof serializer === "function" ? serializer.call(this, val, attr): oldSingleSerialize.apply(this, arguments);
+			return typeof serializer === "function" ? serializer.call(map, val, attr): oldSingleSerialize.apply(this, arguments);
 		}
 	};
 	
