@@ -596,13 +596,14 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 
 					// If we're dealing with models, we want to call _set to let converters run.
 					if ( Map.helpers.isObservable( newVal ) ) {
-						self.__set(prop, newVal, curVal);
+
+						self.__set(prop, self.__type(newVal, prop), curVal);
 						// If its an object, let attr merge.
 					} else if (Map.helpers.isObservable(curVal) && Map.helpers.canMakeObserve(newVal) ) {
 						curVal.attr(newVal, remove);
 						// Otherwise just set.
 					} else if (curVal !== newVal) {
-						self.__set(prop, newVal, curVal);
+						self.__set(prop, self.__type(newVal, prop), curVal);
 					}
 
 					delete props[prop];
