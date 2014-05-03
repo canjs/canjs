@@ -43,7 +43,7 @@ steal('can/util/can.js', function (can) {
 			return [].slice.call(tmp);
 		};
 	can.buildFragment = function (html, nodes) {
-		if(html && html.nodeType == 11) {
+		if(html && html.nodeType === 11) {
 			return html;
 		}
 		var parts = fragment(html),
