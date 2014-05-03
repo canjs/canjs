@@ -2,6 +2,7 @@
 @download can/route/pushstate
 @test can/route/pushstate/test.html
 @parent can.route.plugins
+@link ../docco/route/pushstate/pushstate.html docco
 
 @description Changes [can.route] to use
 [pushstate](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history)
@@ -9,24 +10,94 @@ to change the window's [pathname](https://developer.mozilla.org/en-US/docs/Web/A
 of the [hash](https://developer.mozilla.org/en-US/docs/Web/API/URLUtils.hash).
 
 
-@option {Object} The pushstate object comprises several properties that configure the behavior of
-[can.route] to work with `history.pushstate`.
+@option {Object} The pushstate object comprises several properties that configure the behavior of [can.route] to work with `history.pushstate`.
 
 @body
 
 ## Use
 
-The pushstate plugin uses the same API as [can.route] with only one additional
-property - [can.route.bindings.pushstate.root].  `can.route.bindings.pushstate.root` specifies the part of that pathname that
-should not change. For example, if we only want to have pathnames within `app.com/contacts/`,
-we can specify a root like:
+The pushstate plugin uses the same API as [can.route]. To start using pushstate plugin all you need is to load `can/route/pushstate`, it will set itself as default binding on [can.route].
+
+You can check current binding by inspecting `can.route.currentBinding`, the default value is `"hashchange"`.
+
+### Creating and changing routes
+
+To [create](can.route.html#section_CreatingaRoute) route use `can.route(url, defaults)` like:
+
+    can.route(":page", {page: 'homepage'});
+    can.route("contacts/:username");
+	can.route("books/:genre/:author");
+	can.route.ready(); // do not forget to initialize can.route
+
+Do not forget to [initialize](can.route.ready.html) `can.route` after creating all routes, do it by calling `can.route.ready()`.
+
+List of defined routes is contained in `can.route.routes`, you can examine current `can.route` state by calling:
+
+    can.route.attr(); //-> {page: "homepage", route: ":page"}
+
+After creating routes and initializing `can.route` you can update current route by calling `can.route.attr(attr, newVal)`
+
+    can.route.attr('page', 'about');
+	can.route.attr(); //-> {page: "about", route: ":page"}
+
+	// without cleaning current can.route state
+	can.route.attr('username', 'veljko');
+	can.route.attr(); //-> {page: "about", route: ":page", username: 'veljko'}
+
+	// with cleaning current can.route state
+	can.route.attr({username: 'veljko'}, true);
+    can.route.attr(); //-> {username: "veljko", route: "contacts/:username"}
+
+To update multiple attributes at once pass hash of attributes to `can.route.attr(hashOfAttrs, true)`. Pass `true` as second argument to clean up current state.
+
+    can.route.attr({genre: 'sf', author: 'adams'}, true);
+	can.route.attr(); //-> {genre: "sf", author: "adams", route: "books/:genre/:author"}
+
+`window.location` acts as expected:
+
+	window.location.pathname; //-> "/books/sf/adams"
+	window.location.hash; //-> "", hash remains unchanged
+
+To generate urls use `can.route.url({attrs})`:
+
+    can.route.url({username: 'justinbmeyer'}) //-> '/contacts/justinbmeyer'
+
+
+### Listening changes on matched route
+
+As `can.route` is basically a [can.Map] that represents `window.location.pathname`, you can bind on it in the same way you would on any can.Map object.
+
+To listen on any changes on `can.route` use `can.route.bind('change', callback)`, the following params will be passed to callback function:
+
+	can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
+	  //-> ev:     {EventObject}
+	  //-> attr:   'username'
+	  //-> how:    'change'
+	  //-> newVal: 'veljko'
+	  //-> oldVal: undefined
+	});
+	can.route.attr({username: 'veljko'}, true);
+
+You can also bind to specific attribute on can.route:
+
+	can.route.bind('username', function(ev, newVal, oldVal) {
+	  //-> ev:     {EventObject}
+	  //-> newVal: 'nikica'
+	  //-> oldVal: 'veljko'
+	});
+	can.route.attr({username: nikica}, true);
+
+
+### Using different pathname root
+
+Pushstate plugin has one additional property, `can.route.bindings.pushstate.root`, which specifies the part of that pathname that should not change. For example, if we only want to have pathnames within `http://example.com/contacts/`, we can specify a root like:
 
     can.route.bindings.pushstate.root = "/contacts/"
-    can.route(":page\\.html");
-    can.route.url({page: "list"}) //-> "/contacts/list.html"
+    can.route(":page");
+    can.route.url({page: "list"}) //-> "/contacts/list"
+    can.route.url({foo: "bar"})   //-> "/contacts/?foo=bar"
 
-Now, all routes will start with "/contacts/". The default [can.root.route]
-is "/".
+Now, all routes will start with `"/contacts/"`, the default `can.route.bindings.pushstate.root` value is `"/"`.
 
 ### Using `can.route.pushstate.js` with the `can.Control.route` plugin
 
@@ -125,6 +196,6 @@ In an error-free route handler, all links matching the route would not result in
 
 Complications can arise if your route structure mimics the folder structure inside your app's public directory.  For example, if you have a folder structure like the one in this url for your admin app...
 
-/admin/users/list.js
+`/admin/users/list.js`
 
 ... using a route of /admin/users on the same page that uses the list.js file will require the use of a trailing slash on all routes and links.  The browser already learned that '/admin/users' is folder.  Because folders were originally denoted by a trailing slash in a url, the browser will correct the url to be '/admin/users/'.  While it is possible to add the trailing slash in routes and listen for them, any link to the page that omits the trailing slash will not trigger the route handler.
