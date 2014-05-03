@@ -1173,4 +1173,21 @@ steal("can/component", "can/view/stache", function () {
 
 	});
 
+	test("can.Construct are passed normally", function(){
+		var Constructed = can.Construct.extend({foo:"bar"},{});
+		
+		can.Component.extend({
+			tag: "con-struct"
+		});
+		
+		var stached = can.stache("<con-struct con='{Constructed}'>{{con.foo}}</con-struct>");
+		
+		var res = stached({
+			Constructed: Constructed
+		});
+		equal(res.childNodes[0].innerHTML, "bar");
+		
+		
+	});
+
 });
