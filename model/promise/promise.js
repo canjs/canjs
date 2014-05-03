@@ -14,13 +14,11 @@ steal("can/model", 'can/compute', function (Model) {
 		"promise"
 	];
 
-
 	can.Model.get = function(){
 		// Setup computes and call `findOne` to make the request.
 		var result = can.compute(),
 			state = can.compute(),
 			def = this.findOne.apply(this, arguments),
-			wrapper = {},
 			val;
 
 		// If `findOne` returned something that is not deferred,
@@ -47,7 +45,11 @@ steal("can/model", 'can/compute', function (Model) {
 			};
 		});
 
-		result.state = state();
+		// Add `state` and `reason` functions to keep API unified between
+		// the deferred object, compute, error object and returned model
+		// instance.
+		result.state = state;
+		result.reason = def.reason = can.noop;
 
 		result(def);
 		state(def.state());
@@ -60,10 +62,11 @@ steal("can/model", 'can/compute', function (Model) {
 		}, function(reason){
 			can.batch.start();
 			result({
-				reason : reason,
-				isPending : function(){ return false },
-				isResolved : function(){ return false },
-				isRejected : function(){ return true }
+				reason : can.compute(reason),
+				state : state,
+				isPending : function(){ return false; },
+				isResolved : function(){ return false; },
+				isRejected : function(){ return true; }
 			});
 			state(def.state());
 			can.batch.stop();
@@ -92,18 +95,17 @@ steal("can/model", 'can/compute', function (Model) {
 					self._def.attr({
 						state : def.state(),
 						reason : reason
-					})
-					
-				})
+					});
+				});
 
 				if(res !== def){
 					def.resolve(res);
 				}
 
 				return res;
-			}
+			};
 		});
-	}
+	};
 
 	// Add internal deferred state to the model. It is `resolved` by default
 	// because we can assume that if the instance exists, it is resolved, and
@@ -118,7 +120,7 @@ steal("can/model", 'can/compute', function (Model) {
 			state : 'resolved'
 		});
 
-		// Wrap `save` and `destroy` here to ensure that custom implmentations
+		// Wrap `save` and `destroy` here to ensure that custom implementations
 		// work correctly.
 		wrapMethods(this);
 		
@@ -127,16 +129,16 @@ steal("can/model", 'can/compute', function (Model) {
 
 	can.Model.prototype.reason = function(){
 		return this._def.attr('reason');
-	}
+	};
 
 	can.Model.prototype.state = function(){
 		return this._def.attr('state');
-	}
+	};
 
 	// Add `isResolved`, `isPending` and `isRejected` to the model prototype.
 	can.each(defStatusFns, function(value, method){
 		can.Model.prototype[method] = function(){
 			return this.state() === value;
-		}
+		};
 	});
 });
