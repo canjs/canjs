@@ -1,7 +1,7 @@
-@page can.Mustache.context Paths and Contexts
-@parent can.Mustache.pages 1
+@page can.mustache.context Paths and Contexts
+@parent can.mustache.pages 1
 
-When using [can.Mustache.Basics tags] in Mustache, the `key` in `[can.Mustache.tags.escaped {{key}}]` 
+When using [can.mustache.Basics tags] in Mustache, the `key` in `[can.mustache.tags.escaped {{key}}]` 
 references a property on the current context object. The default context always points to the data 
 object initially passed to the template.
 
@@ -21,7 +21,7 @@ be included instead. When a path is found, Mustache will look for a matching pro
 	Result:
 		Austin
 
-Additionally, the current context can be changed by using [can.Mustache.Sections sections]. Anytime a section 
+Additionally, the current context can be changed by using [can.mustache.Sections sections]. Anytime a section 
 is opened, any tags inside of it will use that object as the local context for any key lookups:
 
 	Template:

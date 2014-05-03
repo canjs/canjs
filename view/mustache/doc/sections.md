@@ -1,9 +1,9 @@
-@page can.Mustache.Sections Sections
-@parent can.Mustache.pages 2
+@page can.mustache.Sections Sections
+@parent can.mustache.pages 2
 
-Sections (`[can.Mustache.helpers.section {{#key}}]` followed by `[can.Mustache.helpers.close {{/key}}]`) have multiple uses 
+Sections (`[can.mustache.helpers.section {{#key}}]` followed by `[can.mustache.helpers.close {{/key}}]`) have multiple uses 
 depending on what type of object is passed to the section. In all cases, using a section will change 
-the current [can.Mustache.context context].
+the current [can.mustache.context context].
 
 The most basic form of section will simply render a section of code if the key referenced is considered **truthy** (has a value):
 
@@ -39,7 +39,7 @@ Whenever the key doesn't exist or the value is **falsey**, the section won't be 
 		Hello!
 
 However, this scenario can be covered through the use of an inverse section 
-(`[can.Mustache.helpers.inverse {{^key}}]` followed by `[can.Mustache.helpers.close {{/key}}]`):
+(`[can.mustache.helpers.inverse {{^key}}]` followed by `[can.mustache.helpers.close {{/key}}]`):
 
 	Template:
 		Hello!

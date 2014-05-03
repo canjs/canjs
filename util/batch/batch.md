@@ -94,7 +94,7 @@ Consider a list of items like:
 
 And a template that renders the number of selected items:
 
-    var template = can.view.mustache("{{count}}")
+    var template = can.mustache("{{count}}")
 
 	$("#itemCount").html(template({
 	  count: function(){
@@ -118,7 +118,7 @@ The following updates the DOM once per click:
 
 ## batchNum
 
-All events created within a `startBatch` / `stopBatch` share the same batchNum value. To 
+All events created within a `start` / `stop` share the same batchNum value. To 
 respond only once for a given batchNum, you can do it like:
 
     var batchNum;

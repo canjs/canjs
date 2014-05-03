@@ -1,4 +1,9 @@
 steal('can/util', 'can/model', 'can/map/elements', function (can) {
+
+	//!steal-remove-start
+	can.dev.warn("can/model/list is a deprecated plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	var getArgs = function (args) {
 		if (args[0] && can.isArray(args[0])) {
 			return args[0];

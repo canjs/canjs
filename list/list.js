@@ -1,4 +1,4 @@
-steal("can/util", "can/map", function (can, Map) {
+steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 	// Helpers for `observable` lists.
 	var splice = [].splice,
@@ -12,6 +12,7 @@ steal("can/util", "can/map", function (can, Map) {
 			splice.call(obj, 0, 1);
 			return !obj[0];
 		})();
+
 	/**
 	 * @add can.List
 	 */
@@ -87,6 +88,7 @@ steal("can/util", "can/map", function (can, Map) {
 				this.length = 0;
 				can.cid(this, ".map");
 				this._init = 1;
+				this._setupComputes();
 				instances = instances || [];
 				var teardownMapping;
 
@@ -110,28 +112,47 @@ steal("can/util", "can/map", function (can, Map) {
 
 				Map.prototype._triggerChange.apply(this, arguments);
 				// `batchTrigger` direct add and remove events...
-				if (!~attr.indexOf('.')) {
+				var index = +attr;
+				// Make sure this is not nested and not an expando
+				if (!~attr.indexOf('.') && !isNaN(index)) {
 
 					if (how === 'add') {
-						can.batch.trigger(this, how, [newVal, +attr]);
+						can.batch.trigger(this, how, [newVal, index]);
 						can.batch.trigger(this, 'length', [this.length]);
 					} else if (how === 'remove') {
-						can.batch.trigger(this, how, [oldVal, +attr]);
+						can.batch.trigger(this, how, [oldVal, index]);
 						can.batch.trigger(this, 'length', [this.length]);
 					} else {
-						can.batch.trigger(this, how, [newVal, +attr]);
+						can.batch.trigger(this, how, [newVal, index]);
 					}
 
 				}
 
 			},
 			__get: function (attr) {
-				return attr ? this[attr] : this;
+				if (attr) {
+					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
+						return this[attr]();
+					} else {
+						return this[attr];
+					}
+				} else {
+					return this;
+				}
 			},
 			___set: function (attr, val) {
 				this[attr] = val;
 				if (+attr >= this.length) {
 					this.length = (+attr + 1);
+				}
+			},
+			_remove: function(prop, current) {
+				// if removing an expando property
+				if(isNaN(+prop)) {
+					delete this[prop];
+					this._triggerChange(prop, "remove", undefined, current);
+				} else {
+					this.splice(prop, 1);
 				}
 			},
 			_each: function (callback) {
@@ -140,7 +161,6 @@ steal("can/util", "can/map", function (can, Map) {
 					callback(data[i], i);
 				}
 			},
-			_bindsetup: Map.helpers.makeBindSetup("*"),
 			// Returns the serialized form of this list.
 			/**
 			 * @hide
@@ -254,10 +274,8 @@ steal("can/util", "can/map", function (can, Map) {
 					i;
 
 				for (i = 2; i < args.length; i++) {
-					var val = args[i];
-					if (Map.helpers.canMakeObserve(val)) {
-						args[i] = Map.helpers.hookupBubble(val, "*", this, this.constructor.Map, this.constructor);
-					}
+					args[i] = bubble.set(this, i, this.__type(args[i], i) );
+					
 				}
 				if (howMany === undefined) {
 					howMany = args[1] = this.length - index;
@@ -273,7 +291,7 @@ steal("can/util", "can/map", function (can, Map) {
 				can.batch.start();
 				if (howMany > 0) {
 					this._triggerChange("" + index, "remove", undefined, removed);
-					Map.helpers.unhookup(removed, this);
+					bubble.removeMany(this, removed);
 				}
 				if (args.length > 2) {
 					this._triggerChange("" + index, "add", args.slice(2), removed);
@@ -557,7 +575,7 @@ steal("can/util", "can/map", function (can, Map) {
 					var curVal = this[prop],
 						newVal = items[prop];
 
-					if (Map.helpers.canMakeObserve(curVal) && Map.helpers.canMakeObserve(newVal)) {
+					if (Map.helpers.isObservable(curVal) && Map.helpers.canMakeObserve(newVal)) {
 						curVal.attr(newVal, remove);
 						//changed from a coercion to an explicit
 					} else if (curVal !== newVal) {
@@ -684,9 +702,7 @@ steal("can/util", "can/map", function (can, Map) {
 				// Go through and convert anything to an `map` that needs to be converted.
 				while (i--) {
 					val = arguments[i];
-					args[i] = Map.helpers.canMakeObserve(val) ?
-						Map.helpers.hookupBubble(val, "*", this, this.constructor.Map, this.constructor) :
-						val;
+					args[i] = bubble.set(this, i, this.__type(val, i) );
 				}
 
 				// Call the original method.
@@ -790,8 +806,9 @@ steal("can/util", "can/map", function (can, Map) {
 				this._triggerChange("" + len, "remove", undefined, [res]);
 
 				if (res && res.unbind) {
-					can.stopListening.call(this, res, "change");
+					bubble.remove(this, res);
 				}
+				
 				return res;
 			};
 		});
@@ -871,7 +888,10 @@ steal("can/util", "can/map", function (can, Map) {
 		 * list === reversedList; // true
 		 * @codeend
 		 */
-		reverse: [].reverse,
+		reverse: function() {
+			var list = can.makeArray([].reverse.call(this));
+			this.replace(list);
+		},
 
 		/**
 		 * @function can.List.prototype.slice slice
@@ -1033,6 +1053,18 @@ steal("can/util", "can/map", function (can, Map) {
 			}
 
 			return this;
+		},
+		filter: function (callback, thisArg) {
+			var filteredList = new can.List(),
+				self = this,
+				filtered;
+			this.each(function(item, index, list){
+				filtered = callback.call( thisArg | self, item, index, self);
+				if(filtered){
+					filteredList.push(item);
+				}
+			});
+			return filteredList;
 		}
 	});
 	can.List = Map.List = list;

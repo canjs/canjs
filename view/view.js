@@ -1,53 +1,212 @@
+// # can/view/view.js
+// -------
+// `can.view`
+// _Templating abstraction._
+// can.view loads templates based on a registered type, and given a set of data, returns a document fragment
+// from the template engine's rendering method
+//
 steal('can/util', function (can) {
-	// ## view.js
-	// `can.view`  
-	// _Templating abstraction._
 
 	var isFunction = can.isFunction,
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
-		hookupId = 1,
-		/**
-		 * @add can.view
-		 */
-		$view = can.view = can.template = function (view, data, helpers, callback) {
-			// If helpers is a `function`, it is actually a callback.
-			if (isFunction(helpers)) {
-				callback = helpers;
-				helpers = undefined;
-			}
+		hookupId = 1;
 
-			var pipe = function (result) {
-				return $view.frag(result);
-			},
-				// In case we got a callback, we need to convert the can.view.render
-				// result to a document fragment
-				wrapCallback = isFunction(callback) ? function (frag) {
-					callback(pipe(frag));
-				} : null,
-				// Get the result, if a renderer function is passed in, then we just use that to render the data
-				result = isFunction(view) ? view(data, helpers, wrapCallback) : $view.render(view, data, helpers, wrapCallback),
-				deferred = can.Deferred();
+	// internal utility methods
+	// ------------------------
 
-			if (isFunction(result)) {
-				return result;
-			}
-
-			if (can.isDeferred(result)) {
-				result.then(function (result, data) {
-					deferred.resolve.call(deferred, pipe(result), data);
-				}, function () {
-					deferred.fail.apply(deferred, arguments);
-				});
-				return deferred;
-			}
-
-			// Convert it into a dom frag.
-			return pipe(result);
+	// ##### makeRenderer
+	/**
+	 * @hide
+	 * Rendering function factory method
+	 * @param textRenderer
+	 * @returns {renderer}
+	 */
+	var makeRenderer = function(textRenderer) {
+		var renderer = function() {
+			return $view.frag(textRenderer.apply(this, arguments));
 		};
+		renderer.render = function() {
+			return textRenderer.apply(textRenderer, arguments);
+		};
+		return renderer;
+	};
 
+	// ##### checkText
+	// Makes sure there's a template, if not, have `steal` provide a warning.
+	var checkText = function (text, url) {
+		if (!text.length) {
+
+			// _removed if not used as a steal module_
+
+			//!steal-remove-start
+			can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
+			//!steal-remove-end
+
+			throw "can.view: No template or empty template:" + url;
+		}
+	};
+
+	// ##### get
+	// get a deferred renderer for provided url
+	/**
+	 * @hide
+	 * @function get
+	 * @param {String | Object} obj url string or object with url property
+	 * @param {Boolean} async If the ajax request should be asynchronous.
+	 * @returns {can.Deferred} a `view` renderer deferred.
+	 */
+	var	get = function (obj, async) {
+		var url = typeof obj === 'string' ? obj : obj.url,
+			suffix = (obj.engine && '.' + obj.engine) || url.match(/\.[\w\d]+$/),
+			type,
+		// If we are reading a script element for the content of the template,
+		// `el` will be set to that script element.
+			el,
+		// A unique identifier for the view (used for caching).
+		// This is typically derived from the element id or
+		// the url for the template.
+			id;
+
+		//If the url has a #, we assume we want to use an inline template
+		//from a script element and not current page's HTML
+		if (url.match(/^#/)) {
+			url = url.substr(1);
+		}
+		// If we have an inline template, derive the suffix from the `text/???` part.
+		// This only supports `<script>` tags.
+		if (el = document.getElementById(url)) {
+			suffix = '.' + el.type.match(/\/(x\-)?(.+)/)[2];
+		}
+
+		// If there is no suffix, add one.
+		if (!suffix && !$view.cached[url]) {
+			url += suffix = $view.ext;
+		}
+
+		// if the suffix was derived from the .match() operation, pluck out the first value
+		if (can.isArray(suffix)) {
+			suffix = suffix[0];
+		}
+
+		// Convert to a unique and valid id.
+		id = $view.toId(url);
+
+		// If an absolute path, use `steal`/`require` to get it.
+		// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
+		if (url.match(/^\/\//)) {
+			url = url.substr(2);
+			url = !window.steal ?
+				url :
+				steal.config()
+					.root.mapJoin("" + steal.id(url));
+		}
+
+		// Localize for `require` (not almond)
+		if (window.require) {
+			if (require.toUrl) {
+				url = require.toUrl(url);
+			}
+		}
+
+		// Set the template engine type.
+		type = $view.types[suffix];
+
+		// If it is cached,
+		if ($view.cached[id]) {
+			// Return the cached deferred renderer.
+			return $view.cached[id];
+
+			// Otherwise if we are getting this from a `<script>` element.
+		} else if (el) {
+			// Resolve immediately with the element's `innerHTML`.
+			return $view.registerView(id, el.innerHTML, type);
+		} else {
+			// Make an ajax request for text.
+			var d = new can.Deferred();
+			can.ajax({
+				async: async,
+				url: url,
+				dataType: 'text',
+				error: function (jqXHR) {
+					checkText('', url);
+					d.reject(jqXHR);
+				},
+				success: function (text) {
+					// Make sure we got some text back.
+					checkText(text, url);
+					$view.registerView(id, text, type, d);
+				}
+			});
+			return d;
+		}
+	};
+	// ##### getDeferreds
+	// Gets an `array` of deferreds from an `object`.
+	// This only goes one level deep.
+	/**
+	 * @hide
+	 * @param {Object|can.Deferred} data
+	 * @returns {Array} deferred objects
+	 */
+	var getDeferreds = function (data) {
+		var deferreds = [];
+
+		// pull out deferreds
+		if (can.isDeferred(data)) {
+			return [data];
+		} else {
+			for (var prop in data) {
+				if (can.isDeferred(data[prop])) {
+					deferreds.push(data[prop]);
+				}
+			}
+		}
+		return deferreds;
+	};
+
+	// ##### usefulPart
+	// Gets the useful part of a resolved deferred.
+	// When a jQuery.when is resolved, it returns an array to each argument.
+	// Reference ($.when)[https://api.jquery.com/jQuery.when/]
+	// This is for `model`s and `can.ajax` that resolve to an `array`.
+	/**
+	 * @hide
+	 * @function usefulPart
+	 * @param {Array|*} resolved
+	 * @returns {*}
+	 */
+	var usefulPart = function (resolved) {
+		return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved;
+	};
+
+	// #### can.view
+	//defines $view for internal use, can.template for backwards compatibility
+	/**
+	 * @add can.view
+	 */
+	var $view = can.view = can.template = function (view, data, helpers, callback) {
+		// If helpers is a `function`, it is actually a callback.
+		if (isFunction(helpers)) {
+			callback = helpers;
+			helpers = undefined;
+		}
+		var result;
+		// Get the result, if a renderer function is passed in, then we just use that to render the data
+		if( isFunction(view) ) {
+			result = view(data, helpers, callback);
+		} else {
+			result = $view.renderAs("fragment",view, data, helpers, callback);
+		}
+
+		return result;
+	};
+
+	// can.view methods
+	// --------------------------
 	can.extend($view, {
-		// creates a frag and hooks it up all at once
+		// ##### frag
+		// creates a fragment and hooks it up all at once
 		/**
 		 * @function can.view.frag frag
 		 * @parent can.view.static
@@ -56,10 +215,8 @@ steal('can/util', function (can) {
 			return $view.hookup($view.fragment(result), parentNode);
 		},
 
-		// simply creates a frag
-		// this is used internally to create a frag
-		// insert it
-		// then hook it up
+		// #### fragment
+		// this is used internally to create a document fragment, insert it,then hook it up
 		fragment: function (result) {
 			var frag = can.buildFragment(result, document.body);
 			// If we have an empty frag...
@@ -69,6 +226,7 @@ steal('can/util', function (can) {
 			return frag;
 		},
 
+		// ##### toId
 		// Convert a path like string into something that's ok for an `element` ID.
 		toId: function (src) {
 			return can.map(src.toString()
@@ -80,7 +238,21 @@ steal('can/util', function (can) {
 				})
 				.join('_');
 		},
+		// ##### toStr
+        // convert argument to a string
+		toStr: function(txt){
+			return txt == null ? "" : ""+txt;
+		},
 
+		// ##### hookup
+		// attach the provided `fragment` to `parentNode`
+		/**
+		 * @hide
+		 * hook up a fragment to its parent node
+		 * @param fragment
+		 * @param parentNode
+		 * @returns {*}
+		 */
 		hookup: function (fragment, parentNode) {
 			var hookupEls = [],
 				id,
@@ -106,95 +278,7 @@ steal('can/util', function (can) {
 			return fragment;
 		},
 
-		/**
-		 * @function can.view.ejs ejs
-		 * @parent can.view.static
-		 *
-		 * @signature `can.view.ejs( [id,] template )`
-		 *
-		 * Register an EJS template string and create a renderer function.
-		 *
-		 *     var renderer = can.view.ejs("<h1><%= message %></h1>");
-		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
-		 *
-		 * @param {String} [id] An optional ID to register the template.
-		 *
-		 *     can.view.ejs("greet","<h1><%= message %></h1>");
-		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
-		 *
-		 * @param {String} template An EJS template in string form.
-		 * @return {can.view.renderer} A renderer function that takes data and helpers.
-		 *
-		 *
-		 * @body
-		 * `can.view.ejs([id,] template)` registers an EJS template string
-		 * for a given id programatically. The following
-		 * registers `myViewEJS` and renders it into a documentFragment.
-		 *
-		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
-		 *
-		 *      var frag = can.view('myViewEJS', {
-		 *          message : 'Hello there!'
-		 *      });
-		 *
-		 *      frag // -> <h2>Hello there!</h2>
-		 *
-		 * To convert the template into a render function, just pass
-		 * the template. Call the render function with the data
-		 * you want to pass to the template and it returns the
-		 * documentFragment.
-		 *
-		 *      var renderer = can.view.ejs('<div><%= message %></div>');
-		 *      renderer({
-		 *          message : 'EJS'
-		 *      }); // -> <div>EJS</div>
-		 */
-		// auj
-		/**
-		 * @function can.view.mustache mustache
-		 * @parent can.view.static
-		 *
-		 * @signature `can.view.mustache( [id,] template )`
-		 *
-		 * Register a Mustache template string and create a renderer function.
-		 *
-		 *     var renderer = can.view.mustache("<h1>{{message}}</h1>");
-		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
-		 *
-		 * @param {String} [id] An optional ID for the template.
-		 *
-		 *     can.view.ejs("greet","<h1>{{message}}</h1>");
-		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
-		 *
-		 * @param {String} template A Mustache template in string form.
-		 *
-		 * @return {can.view.renderer} A renderer function that takes data and helpers.
-		 *
-		 * @body
-		 *
-		 * `can.view.mustache([id,] template)` registers an Mustache template string
-		 * for a given id programatically. The following
-		 * registers `myStache` and renders it into a documentFragment.
-		 *
-		 *      can.viewmustache('myStache', '<h2>{{message}}</h2>');
-		 *
-		 *      var frag = can.view('myStache', {
-		 *          message : 'Hello there!'
-		 *      });
-		 *
-		 *      frag // -> <h2>Hello there!</h2>
-		 *
-		 * To convert the template into a render function, just pass
-		 * the template. Call the render function with the data
-		 * you want to pass to the template and it returns the
-		 * documentFragment.
-		 *
-		 *      var renderer = can.view.mustache('<div>{{message}}</div>');
-		 *      renderer({
-		 *          message : 'Mustache'
-		 *      }); // -> <div>Mustache</div>
-		 */
-		// heir
+		// `hookups` keeps list of pending hookups, ie fragments to attach to a parent node
 		/**
 		 * @property hookups
 		 * @hide
@@ -202,6 +286,9 @@ steal('can/util', function (can) {
 		 */
 		hookups: {},
 
+		// `hook` factory method for hookup function inserted into templates
+		// hookup functions are called after the html is rendered to the page
+		// only implemented by EJS templates.
 		/**
 		 * @description Create a hookup to insert into templates.
 		 * @function can.view.hook hook
@@ -232,9 +319,9 @@ steal('can/util', function (can) {
 		 * Cached are put in this object
 		 */
 		cached: {},
-
 		cachedRenderers: {},
 
+		// cache view templates resolved via XHR on the client
 		/**
 		 * @property {Boolean} can.view.cache cache
 		 * @parent can.view.static
@@ -247,6 +334,9 @@ steal('can/util', function (can) {
 		 */
 		cache: true,
 
+		// ##### register
+		// given an info object, register a template type
+		// different templating solutions produce strings or document fragments via their renderer function
 		/**
 		 * @function can.view.register register
 		 * @parent can.view.static
@@ -285,8 +375,42 @@ steal('can/util', function (can) {
 		 */
 		register: function (info) {
 			this.types['.' + info.suffix] = info;
+
+			// _removed if not used as a steal module_
+
+			//!steal-remove-start
+			if (window.steal) {
+				steal.type(info.suffix + " view js", function (options, success, error) {
+					var type = $view.types["." + options.type],
+						id = $view.toId(options.id + '');
+					options.text = type.script(id, options.text);
+					success();
+				});
+			}
+			//!steal-remove-end
+
+			can[info.suffix] = $view[info.suffix] = function (id, text) {
+				// If there is no text, assume id is the template text, so return a nameless renderer.
+				if (!text) {
+					// if the template has a fragRenderer already, just return that.
+					if(info.fragRenderer) {
+						return info.fragRenderer(null, id);
+					} else {
+						return makeRenderer(info.renderer(null, id));
+					}
+
+				}
+				if(info.fragRenderer) {
+					return $view.preload( id, info.fragRenderer(id, text) );
+				} else {
+					return $view.preloadStringRenderer(id, info.renderer(id, text));
+				}
+
+			};
+
 		},
 
+		//registered view types
 		types: {},
 
 		/**
@@ -302,23 +426,60 @@ steal('can/util', function (can) {
 		ext: ".ejs",
 
 		/**
-		 * Returns the text that
+		 * Returns the text from a script tag
 		 * @hide
 		 * @param {Object} type
 		 * @param {Object} id
 		 * @param {Object} src
 		 */
-		registerScript: function () {},
+		registerScript: function (type, id, src) {
+			return 'can.view.preloadStringRenderer(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
+		},
 
 		/**
 		 * @hide
-		 * Called by a production script to pre-load a renderer function
+		 * Called by a production script to pre-load a fragment renderer function
 		 * into the view cache.
 		 * @param {String} id
 		 * @param {Function} renderer
 		 */
-		preload: function () {},
+		preload: function (id, renderer) {
+			var def = $view.cached[id] = new can.Deferred()
+				.resolve(function (data, helpers) {
+					return renderer.call(data, data, helpers);
+				});
 
+			// set cache references (otherwise preloaded recursive views won't recurse properly)
+			def.__view_id = id;
+			$view.cachedRenderers[id] = renderer;
+
+			return renderer;
+		},
+
+		/**
+		 * @hide
+		 * Called by a production script to pre-load a string renderer function
+		 * into the view cache.
+		 * @param id
+		 * @param stringRenderer
+		 * @returns {*}
+		 */
+		preloadStringRenderer: function(id, stringRenderer) {
+			return this.preload(id, makeRenderer(stringRenderer) );
+		},
+
+		// #### renderers
+		// ---------------
+		// can.view's primary purpose is to load templates (from strings or filesystem) and render them
+		//
+		// can.view supports two different forms of rendering systems
+		//
+		// mustache templates return a string based rendering function
+
+		// stache (or other fragment based templating systems) return a document fragment, so 'hookup' steps are not required
+		//
+		// ##### render
+		//
 		/**
 		 * @function can.view.render render
 		 * @parent can.view.static
@@ -375,7 +536,38 @@ steal('can/util', function (can) {
 		 *     renderer({hello: "world"}) // -> Document Fragment
 		 *
 		 */
+		//call `renderAs` with a hardcoded string, as view.render
+		// always operates against resolved template files or hardcoded strings
 		render: function (view, data, helpers, callback) {
+			return can.view.renderAs("string",view, data, helpers, callback);
+		},
+
+		// ##### renderTo
+		//
+		/**
+		 * @hide
+		 * @function renderTo
+		 * @param {String} format
+		 * @param {Function} renderer
+		 * @param data
+		 * @param {Object} helpers helper methods for this template
+		 * @returns {*}
+		 */
+		renderTo: function(format, renderer, data, helpers){
+			return (format === "string" && renderer.render ? renderer.render : renderer)(data, helpers);
+		},
+
+		/**
+		 * @hide
+		 *
+		 * @param format
+		 * @param view
+		 * @param data
+		 * @param helpers
+		 * @param callback
+		 * @returns {*}
+		 */
+		renderAs: function (format, view, data, helpers, callback) {
 			// If helpers is a `function`, it is actually a callback.
 			if (isFunction(helpers)) {
 				callback = helpers;
@@ -417,7 +609,7 @@ steal('can/util', function (can) {
 						}
 
 						// Get the rendered result.
-						result = renderer(dataCopy, helpers);
+						result = can.view.renderTo(format, renderer, dataCopy, helpers);
 
 						// Resolve with the rendered view.
 						deferred.resolve(result, dataCopy);
@@ -434,19 +626,15 @@ steal('can/util', function (can) {
 			} else {
 				// get is called async but in 
 				// ff will be async so we need to temporarily reset
-				if (can.__reading) {
-					reading = can.__reading;
-					can.__reading = null;
-				}
-
-				// No deferreds! Render this bad boy.
+				reading = can.__clearReading();
 
 				// If there's a `callback` function
 				async = isFunction(callback);
 				// Get the `view` type
 				deferred = get(view, async);
-				if (can.Map && reading) {
-					can.__reading = reading;
+
+				if (reading) {
+					can.__setReading(reading);
 				}
 
 				// If we are `async`...
@@ -455,7 +643,7 @@ steal('can/util', function (can) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function (renderer) {
-						callback(data ? renderer(data, helpers) : renderer);
+						callback(data ? can.view.renderTo(format, renderer, data, helpers) : renderer);
 					});
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -469,12 +657,12 @@ steal('can/util', function (can) {
 					// In the future, we might simply store either a deferred or the cached result.
 					if (deferred.state() === 'resolved' && deferred.__view_id) {
 						var currentRenderer = $view.cachedRenderers[deferred.__view_id];
-						return data ? currentRenderer(data, helpers) : currentRenderer;
+						return data ? can.view.renderTo(format, currentRenderer, data, helpers) : currentRenderer;
 					} else {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function (renderer) {
-							response = data ? renderer(data, helpers) : renderer;
+							response = data ? can.view.renderTo(format, renderer, data, helpers) : renderer;
 						});
 					}
 				}
@@ -482,7 +670,7 @@ steal('can/util', function (can) {
 				return response;
 			}
 		},
-
+		
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
@@ -494,147 +682,35 @@ steal('can/util', function (can) {
 		 */
 		registerView: function (id, text, type, def) {
 			// Get the renderer function.
-			var func = (type || $view.types[$view.ext])
-				.renderer(id, text);
+			var info = (typeof type === "object" ? type :  $view.types[type || $view.ext]),
+				renderer;
+			if(info.fragRenderer) {
+				renderer = info.fragRenderer(id, text);
+			} else {
+				renderer = makeRenderer( info.renderer(id, text) );
+			}
+			
 			def = def || new can.Deferred();
 
 			// Cache if we are caching.
 			if ($view.cache) {
 				$view.cached[id] = def;
 				def.__view_id = id;
-				$view.cachedRenderers[id] = func;
+				$view.cachedRenderers[id] = renderer;
 			}
 
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
-			return def.resolve(func);
+			return def.resolve(renderer);
 		}
 	});
 
-	// Makes sure there's a template, if not, have `steal` provide a warning.
-	var checkText = function (text, url) {
-		if (!text.length) {
-
-			//!steal-remove-start
-			can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
-			//!steal-remove-end
-
-			throw "can.view: No template or empty template:" + url;
-		}
-	},
-		// `Returns a `view` renderer deferred.  
-		// `url` - The url to the template.  
-		// `async` - If the ajax request should be asynchronous.  
-		// Returns a deferred.
-		get = function (obj, async) {
-			var url = typeof obj === 'string' ? obj : obj.url,
-				suffix = obj.engine || url.match(/\.[\w\d]+$/),
-				type,
-				// If we are reading a script element for the content of the template,
-				// `el` will be set to that script element.
-				el,
-				// A unique identifier for the view (used for caching).
-				// This is typically derived from the element id or
-				// the url for the template.
-				id;
-
-			//If the url has a #, we assume we want to use an inline template
-			//from a script element and not current page's HTML
-			if (url.match(/^#/)) {
-				url = url.substr(1);
-			}
-			// If we have an inline template, derive the suffix from the `text/???` part.
-			// This only supports `<script>` tags.
-			if (el = document.getElementById(url)) {
-				suffix = '.' + el.type.match(/\/(x\-)?(.+)/)[2];
-			}
-
-			// If there is no suffix, add one.
-			if (!suffix && !$view.cached[url]) {
-				url += suffix = $view.ext;
-			}
-
-			if (can.isArray(suffix)) {
-				suffix = suffix[0];
-			}
-
-			// Convert to a unique and valid id.
-			id = $view.toId(url);
-
-			// If an absolute path, use `steal`/`require` to get it.
-			// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
-			if (url.match(/^\/\//)) {
-				url = url.substr(2);
-				url = !window.steal ?
-					url :
-					steal.config()
-					.root.mapJoin("" + steal.id(url));
-			}
-
-			// Localize for `require` (not almond)
-			if (window.require) {
-				if (require.toUrl) {
-					url = require.toUrl(url);
-				}
-			}
-
-			// Set the template engine type.
-			type = $view.types[suffix];
-
-			// If it is cached, 
-			if ($view.cached[id]) {
-				// Return the cached deferred renderer.
-				return $view.cached[id];
-
-				// Otherwise if we are getting this from a `<script>` element.
-			} else if (el) {
-				// Resolve immediately with the element's `innerHTML`.
-				return $view.registerView(id, el.innerHTML, type);
-			} else {
-				// Make an ajax request for text.
-				var d = new can.Deferred();
-				can.ajax({
-					async: async,
-					url: url,
-					dataType: 'text',
-					error: function (jqXHR) {
-						checkText('', url);
-						d.reject(jqXHR);
-					},
-					success: function (text) {
-						// Make sure we got some text back.
-						checkText(text, url);
-						$view.registerView(id, text, type, d);
-					}
-				});
-				return d;
-			}
-		},
-		// Gets an `array` of deferreds from an `object`.
-		// This only goes one level deep.
-		getDeferreds = function (data) {
-			var deferreds = [];
-
-			// pull out deferreds
-			if (can.isDeferred(data)) {
-				return [data];
-			} else {
-				for (var prop in data) {
-					if (can.isDeferred(data[prop])) {
-						deferreds.push(data[prop]);
-					}
-				}
-			}
-			return deferreds;
-		},
-		// Gets the useful part of a resolved deferred.
-		// This is for `model`s and `can.ajax` that resolve to an `array`.
-		usefulPart = function (resolved) {
-			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved;
-		};
+	// _removed if not used as a steal module_
 
 	//!steal-remove-start
 	if (window.steal) {
+		//when being used as a steal module, add a new type for 'view' that runs
+		// `can.view.preloadStringRenderer` with the loaded string/text for the dependency.
 		steal.type("view js", function (options, success, error) {
 			var type = $view.types["." + options.type],
 				id = $view.toId(options.id);
@@ -644,66 +720,13 @@ steal('can/util', function (can) {
 			 * return can.view.preload("ID", options.text)
 			 * })
 			 */
-			options.text = 'steal(\'' + (type.plugin || 'can/view/' + options.type) + '\',function(can){return ' + 'can.view.preload(\'' + id + '\',' + options.text + ');\n})';
+			var dependency = type.plugin || 'can/view/' + options.type,
+				preload = type.fragRenderer ? "preload" : "preloadStringRenderer";
+			options.text = 'steal(\'can/view\',\'' + dependency + '\',function(can){return ' + 'can.view.'+preload+'(\'' + id + '\',' + options.text + ');\n})';
 			success();
 		});
 	}
 	//!steal-remove-end
-
-	can.extend($view, {
-		register: function (info) {
-			this.types['.' + info.suffix] = info;
-
-			//!steal-remove-start
-			if (window.steal) {
-				steal.type(info.suffix + " view js", function (options, success, error) {
-					var type = $view.types["." + options.type],
-						id = $view.toId(options.id + '');
-					options.text = type.script(id, options.text);
-					success();
-				});
-			}
-			//!steal-remove-end
-
-			$view[info.suffix] = function (id, text) {
-				if (!text) {
-					// Return a nameless renderer
-					var renderer = function () {
-						return $view.frag(renderer.render.apply(this, arguments));
-					};
-					renderer.render = function () {
-						var renderer = info.renderer(null, id);
-						return renderer.apply(renderer, arguments);
-					};
-					return renderer;
-				}
-
-				return $view.preload(id, info.renderer(id, text));
-			};
-		},
-		registerScript: function (type, id, src) {
-			return 'can.view.preload(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
-		},
-		preload: function (id, renderer) {
-			var def = $view.cached[id] = new can.Deferred()
-				.resolve(function (data, helpers) {
-					return renderer.call(data, data, helpers);
-				});
-
-			function frag() {
-				return $view.frag(renderer.apply(this, arguments));
-			}
-			// expose the renderer for mustache
-			frag.render = renderer;
-
-			// set cache references (otherwise preloaded recursive views won't recurse properly)
-			def.__view_id = id;
-			$view.cachedRenderers[id] = renderer;
-
-			return frag;
-		}
-
-	});
 
 	return can;
 });

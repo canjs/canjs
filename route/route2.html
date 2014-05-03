@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>can.Route</title>
+        <style type='text/css'>
+            body {font-family: verdana; font-size: 11px;}
+            .blue {color: #56638c; font-size: 12px}
+            .green {color: #007000;}
+            #data_update {width: 49%; float:right;}
+            #hash_update {width: 49%; float:left;}
+            #data_update_target, #hash_update_target {
+                height: 420px; overflow:scroll; border: 1px solid black;
+            }
+            .comments {height: 70px;}
+        </style>
+	</head>
+	<body>
+        <div class='clicky'>click me</div>
+		<script type='text/javascript' src='../lib/steal/steal.js'></script>
+		<script type='text/javascript'>
+            steal(
+            	'can/route', 
+            	function() {
+
+                var oldTrigger = can.trigger,
+                    batchNums = {};
+                can.trigger = function (obj, event, args) {
+                    var origArgs = arguments;
+                    if(event.type === "change" && event.batchNum){
+                        if(batchNums[event.batchNum]){
+                            clearTimeout(batchNums[event.batchNum])
+                        }
+                        batchNums[event.batchNum] = setTimeout(function(){
+                            oldTrigger.apply(this, origArgs);
+                        }, 0);
+                    } else {
+                        oldTrigger.apply(this, arguments);
+                    }
+                }
+
+                
+                can.route.ready();
+                can.route.bind('change', function(ev){
+                    console.log('change', ev.batchNum, arguments)
+                })
+                can.route.attr({
+                    a: 1,
+                    b: 2,
+                    c: 3
+                })
+                $('.clicky').on('click', function(){
+                    can.batch.start()
+                    can.route.attr('d', 4);
+                    can.route.attr('e', 5);
+                    can.batch.stop();
+                })
+            })
+		</script>
+    </body>
+</html>
