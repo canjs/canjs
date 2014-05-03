@@ -136,7 +136,7 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 
 	test("two bindings on one element call back the correct method", function () {
 		expect(2);
-		var template = can.view.mustache("<input can-blur='first' can-click='second'/>");
+		var template = can.mustache("<input can-mousemove='first' can-click='second'/>");
 
 		var callingFirst = false,
 			callingSecond = false;
@@ -152,8 +152,9 @@ steal("can/view/bindings", "can/map", "can/test", function (special) {
 		var input = frag.childNodes[0];
 
 		callingFirst = true;
+
 		can.trigger(input, {
-			type: "blur"
+			type: "mousemove"
 		});
 
 		callingFirst = false;

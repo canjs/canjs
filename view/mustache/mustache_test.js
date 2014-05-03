@@ -217,7 +217,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("Mustache live-binding with escaping", function () {
@@ -241,7 +241,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("Mustache truthy", function () {
@@ -3689,7 +3689,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var node = frag.childNodes[0];
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
-	})
+	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
 		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
@@ -3706,8 +3706,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			}
 		});
 
-		equal(frag.childNodes[0].innerText, '0', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[1].innerText, '', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[2].innerText, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
 	})
 });

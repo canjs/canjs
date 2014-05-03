@@ -277,7 +277,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("live-binding with escaping", function () {
@@ -297,9 +297,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		teacher.attr('name', '<i>Mr Scott</i>');
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
+		
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("truthy", function () {
