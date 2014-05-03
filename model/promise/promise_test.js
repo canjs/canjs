@@ -8,11 +8,10 @@ steal("can/model/promise","can/compute", "can/util/fixture", "can/test", functio
 				return {
 					id: 1,
 					name : 'retro'
-				}
+				};
 			} else {
 				response(404, "error", {message:"resource does not exist"});
 			}
-			
 		});
 
 		var User = can.Model.extend({
@@ -27,7 +26,7 @@ steal("can/model/promise","can/compute", "can/util/fixture", "can/test", functio
 		ok(user.isPending(), "User is pending");
 
 		user.then(function(data){
-			ok(user.isResolved() && user().isResolved(), 'User is resolved')
+			ok(user.isResolved() && user().isResolved(), 'User is resolved');
 			equal(data.attr('id'), 1, "User is resolved with the correct data");
 		});
 
@@ -41,17 +40,17 @@ steal("can/model/promise","can/compute", "can/util/fixture", "can/test", functio
 	test("Model is aware of it's internal deferred state", function(){
 		can.fixture("POST /users", function(req){
 			return can.extend({id: 1, isSaved : true}, req.data);
-		})
+		});
 
 		can.fixture("DELETE /users/{id}", function(req, response){
 			response(406, "error", {message:"resource can't be destroyed"});
-		})
+		});
 
 		var User = can.Model.extend({
 				create : "POST /users",
 				destroy : "DELETE /users/{id}"
 			}, {}),
-			user = new User,
+			user = new User(),
 			def;
 
 		stop();
@@ -73,8 +72,8 @@ steal("can/model/promise","can/compute", "can/util/fixture", "can/test", functio
 				ok(!user.reason(),  'Saving model clears the reason');
 				def.abort();
 				start();
-			})
-		})
+			});
+		});
 
-	})
+	});
 });
