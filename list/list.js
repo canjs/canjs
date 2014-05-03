@@ -16,7 +16,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 	/**
 	 * @add can.List
 	 */
-	var list = Map(
+	var list = Map.extend(
 		/**
 		 * @static
 		 */

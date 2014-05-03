@@ -128,4 +128,21 @@ steal('can/construct', function () {
 		new Foo()
 			.dude(true);
 	});
+	
+	//!steal-remove-start
+	if (can.dev) {
+		test('console warning if extend is not used without new (#932)', function () {
+			
+			var oldlog = can.dev.warn;
+			can.dev.warn = function (text) {
+				ok(text, "got a message");
+				can.dev.warn = oldlog;
+			};
+			var K1 = can.Construct({});
+			K1({});
+		});
+	}
+	//!steal-remove-end
+	
+	
 });
