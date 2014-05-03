@@ -23,7 +23,7 @@
 
     QUnit.config.autostart = false;
   setTimeout(function(){
-    steal("can/model/promise/promise_test.js", function() {
+    steal("can/model/promise", "can/model/model_test.js", "can/model/promise/promise_test.js", function() {
       can.dev.logLevel = 3;
           QUnit.start();
     });

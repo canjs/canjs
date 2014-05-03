@@ -17,8 +17,8 @@ steal("can/model/promise","can/compute", "can/util/fixture", "can/test", functio
 		var User = can.Model.extend({
 				findOne : "/users/{id}"
 			}, {}),
-			user = User.get({id: 1}),
-			missingUser = User.get({id: 'foo'});
+			user = User.findOne({id: 1}),
+			missingUser = User.findOne({id: 'foo'});
 
 		stop();
 		ok(!user.isResolved(), "User is not resolved");

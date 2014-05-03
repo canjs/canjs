@@ -1,4 +1,4 @@
-steal("can/model", 'can/compute', function (Model) {
+steal("can/model", 'can/compute', function () {
 
 	var defStatusFns = {
 		isResolved: "resolved",
@@ -14,65 +14,78 @@ steal("can/model", 'can/compute', function (Model) {
 		"promise"
 	];
 
-	can.Model.get = function(){
-		// Setup computes and call `findOne` to make the request.
-		var result = can.compute(),
-			state = can.compute(),
-			def = this.findOne.apply(this, arguments),
-			val;
+	var oldModelSetup = can.Model.setup;
 
-		// If `findOne` returned something that is not deferred,
-		// manually create deferred object and resolve it with the
-		// return value from the `findOne` function.
-		if(!can.isDeferred(def)){
-			val = def;
-			def = new can.Deferred();
-			def.resolve(val);
-		}
+	can.Model.setup = function(){
+		var res = oldModelSetup.apply(this, arguments);
 
-		// Create status check functions.
-		can.each(defStatusFns, function (value, method) {
-			result[method] = def[method] = function () {
-				return state() === value;
-			};
-		});
+		wrapFindOne(this);
 
-		// Proxy functions from the `result` object to the deferred object,
-		// to allow the `result` compute to behave like a deferred object.
-		can.each(defFns, function (name) {
-			result[name] = function () {
-				return def[name].apply(def, arguments);
-			};
-		});
+		return res;
+	}
 
-		// Add `state` and `reason` functions to keep API unified between
-		// the deferred object, compute, error object and returned model
-		// instance.
-		result.state = state;
-		result.reason = def.reason = can.noop;
+	var wrapFindOne = function(Model){
+		var oldFindOne = Model.findOne;
+		Model.findOne = function(){
+			// Setup computes and call `findOne` to make the request.
+			var result = can.compute(),
+				state = can.compute(),
+				def = oldFindOne.apply(this, arguments),
+				val;
 
-		result(def);
-		state(def.state());
+			// If `findOne` returned something that is not deferred,
+			// manually create deferred object and resolve it with the
+			// return value from the `findOne` function.
+			if(!can.isDeferred(def)){
+				val = def;
+				def = new can.Deferred();
+				def.resolve(val);
+			}
 
-		def.then(function(data){
-			can.batch.start();
-			result(data);
-			state(def.state());
-			can.batch.stop();
-		}, function(reason){
-			can.batch.start();
-			result({
-				reason : can.compute(reason),
-				state : state,
-				isPending : function(){ return false; },
-				isResolved : function(){ return false; },
-				isRejected : function(){ return true; }
+			// Create status check functions.
+			can.each(defStatusFns, function (value, method) {
+				result[method] = def[method] = function () {
+					return state() === value;
+				};
 			});
-			state(def.state());
-			can.batch.stop();
-		});
 
-		return result;
+			// Proxy functions from the `result` object to the deferred object,
+			// to allow the `result` compute to behave like a deferred object.
+			can.each(defFns, function (name) {
+				result[name] = function () {
+					return def[name].apply(def, arguments);
+				};
+			});
+
+			// Add `state` and `reason` functions to keep API unified between
+			// the deferred object, compute, error object and returned model
+			// instance.
+			result.state = state;
+			result.reason = def.reason = can.noop;
+
+			result(def);
+			state(def.state());
+
+			def.then(function(data){
+				can.batch.start();
+				result(data);
+				state(def.state());
+				can.batch.stop();
+			}, function(reason){
+				can.batch.start();
+				result({
+					reason : can.compute(reason),
+					state : state,
+					isPending : function(){ return false; },
+					isResolved : function(){ return false; },
+					isRejected : function(){ return true; }
+				});
+				state(def.state());
+				can.batch.stop();
+			});
+
+			return result;
+		};
 	};
 
 	var wrapMethods = function(object){

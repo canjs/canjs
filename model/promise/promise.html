@@ -76,13 +76,13 @@ steal("can","can/util/fixture","can/model/promise",function(){
     tag: "site-app",
     scope: {
       loadUser : function(){
-        this.attr('user', User.get({id: 1}));
+        this.attr('user', User.findOne({id: 1}));
       },
       loadAnotherUser : function(){
-        this.attr('user', User.get({id: 2}));
+        this.attr('user', User.findOne({id: 2}));
       },
       loadNonExistingUser : function(){
-        this.attr('user', User.get({id: 3}));
+        this.attr('user', User.findOne({id: 3}));
       }
     }
   });
