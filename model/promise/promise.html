@@ -1,0 +1,90 @@
+
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+<style>
+  body {margin: 8px;}
+</style>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+<div id="demo">
+<div id="app"></div>
+
+<script type="text/mustache" id="app-template">
+
+<site-app>  
+  <a href="javascript://" can-click="loadUser">Load Existing User</a> | 
+  <a href="javascript://" can-click="loadAnotherUser">Load Another Existing User</a> | 
+  <a href="javascript://" can-click="loadNonExistingUser">Load Non Existing User</a>
+
+  <br>
+  
+  {{#if user.isPending}}
+    Loading user...
+  {{/if}}
+
+  {{#if user.isResolved}}
+    <div>
+      Username: {{user.username}}
+      <br>
+      Email: {{user.email}}
+    </div>
+  {{/if}}
+
+  {{#if user.isRejected}}
+    We were unable to load the user because {{user.reason.responseJSON.message}}
+  {{/if}}
+
+</site-app> 
+
+</script>
+</div>
+
+
+<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
+<script>
+  
+steal("can","can/util/fixture","can/model/promise",function(){
+  
+  can.fixture("GET /users/{id}", function(request, response){
+    if(request.data.id == "1"){
+      return {
+        id: 1,
+        username : 'Retro',
+        email: 'retro@example.com'
+      };
+    } else if(request.data.id == "2") {
+      return {
+        id: 2,
+        username : 'Neektza',
+        email: 'neektza@example.com'
+      };
+    } else {
+      response(404,"error",{message:"resource does not exist"});
+    }
+  });
+  can.fixture.delay = 1500;
+  
+  User = can.Model.extend({
+    findOne: "GET /users/{id}"
+  },{});
+  
+  can.Component.extend({
+    tag: "site-app",
+    scope: {
+      loadUser : function(){
+        this.attr('user', User.get({id: 1}));
+      },
+      loadAnotherUser : function(){
+        this.attr('user', User.get({id: 2}));
+      },
+      loadNonExistingUser : function(){
+        this.attr('user', User.get({id: 3}));
+      }
+    }
+  });
+  
+  $("#app").html(  can.view("app-template",{}))
+  
+});
+  
+  
+  
+</script>
