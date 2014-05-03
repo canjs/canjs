@@ -264,9 +264,7 @@ steal("can/util",
 				//!steal-remove-start
 				if ( !helper && initialValue === undefined) {
 					if(looksLikeAHelper) {
-						//!steal-remove-start
 						can.dev.warn('can/view/stache/mustache_core.js: Unable to find helper "' + exprData.name.get + '".');
-						//!steal-remove-end
 					} else {
 						can.dev.warn('can/view/stache/mustache_core.js: Unable to find key or helper "' + exprData.name.get + '".');
 					}
