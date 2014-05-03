@@ -430,10 +430,10 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 
 
 		// `realTrigger` taken from `dojo`.
-		var leaveRe = /mouse(enter|leave)/,
+		var /*leaveRe = /mouse(enter|leave)/,
 			_fix = function (_, p) {
 				return 'mouse' + (p === 'enter' ? 'over' : 'out');
-			}, realTrigger,
+			},*/ realTrigger,
 			realTriggerHandler = function (n, e, evdata) {
 				var node = Y.Node(n),
 					handlers = can.Y.Event.getListeners(node._yuid, e),
@@ -485,18 +485,19 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 				// the same branch
 				fakeTrigger(n, e, a);
 				return;
-				var ev = document.createEvent('HTMLEvents');
+				/*var ev = document.createEvent('HTMLEvents');
 				e = e.replace(leaveRe, _fix);
 				ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
 				if (a) {
 					can.extend(ev, a);
 				}
-				n.dispatchEvent(ev);
+				n.dispatchEvent(ev);*/
 			};
 		} else {
 			realTrigger = function (n, e, a) {
 				fakeTrigger(n, e, a);
 				return;
+				/*
 				// the janktastic branch
 				var ev = 'on' + e;
 				if(e === "focus" || e === "blur") {
@@ -522,7 +523,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 				} catch (er) {
 					fakeTrigger(n,e,a);
 					
-				}
+				}*/
 			};
 		}
 

@@ -119,7 +119,7 @@ steal('can/util', 'can/util/attr', function () {
 					start();
 				}, 20);
 
-			}
+			};
 			$(div)
 				.addEvent("attributes", attrHandler);
 
