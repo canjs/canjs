@@ -1,5 +1,5 @@
-@page can.Mustache.Basics Basics
-@parent can.Mustache.pages 0
+@page can.mustache.Basics Basics
+@parent can.mustache.pages 0
 
 Mustache templates are logic-less templates with a simple syntax. The goal
 with Mustache is to keep your templates as simple as possible.
@@ -29,10 +29,10 @@ The template would render the following:
 
 In general, it's best to try to ensure that the data passed to the template
 already has any logic applied to it. However, CanJS's Mustache implementation
-provides [can.Mustache.Helpers helper tags] in addition to the basic tags which can be used for richer
+provides [can.mustache.Helpers helper tags] in addition to the basic tags which can be used for richer
 functionality where modifying the data ahead of time isn't viable.
 
-Just like [can.EJS EJS], Mustache can be used for [can.Mustache.Binding live binding] templates. As opposed to
+Just like [can.ejs EJS], Mustache can be used for [can.mustache.Binding live binding] templates. As opposed to
 EJS, however, Mustache will automatically inject the `attr()` calls on
 observable and compute objects to wire it up.
 
@@ -48,7 +48,7 @@ scope passed to the template.
 
 There are a number of basic tags that can be used to inject data into the template.
 
-`[can.Mustache.tags.escaped {{key}}]` will render the value referenced within the tag, 
+`[can.mustache.tags.escaped {{key}}]` will render the value referenced within the tag, 
 escaping any HTML:
 
 	Template:
@@ -60,7 +60,7 @@ escaping any HTML:
 	Result:
 		Austin
 
-`[can.Mustache.tags.unescaped {{{key}}}]` or `[can.Mustache.tags.unescaped2 {{&key}}]` will render the value referenced within the tag unescaped:
+`[can.mustache.tags.unescaped {{{key}}}]` or `[can.mustache.tags.unescaped2 {{&key}}]` will render the value referenced within the tag unescaped:
 
 	Template:
 		<div>{{name}}</div>
@@ -71,7 +71,7 @@ escaping any HTML:
 	Result:
 		<div><b>Austin</b></div>
 
-`[can.Mustache.helpers.section {{#key}}]` followed by `[can.Mustache.helpers.close {{/key}}]` signify a [can.Mustache.Sections section]. Sections will only render if the `key` references a value that is considered **truthy**. If the key 
+`[can.mustache.helpers.section {{#key}}]` followed by `[can.mustache.helpers.close {{/key}}]` signify a [can.mustache.Sections section]. Sections will only render if the `key` references a value that is considered **truthy**. If the key 
 is a reference to an object, it will also add a local context which can be referenced by 
 tags within the section. Sections can also be used to iterate through an array, if that was 
 the value referenced. In this example, the name will only be rendered if there is a 
@@ -92,7 +92,7 @@ person exists whom also has a name:
 	Result:
 		Austin
 
-`[can.Mustache.helpers.inverse {{^key}}]` followed by `[can.Mustache.helpers.close {{/key}}]` signify an inverse [can.Mustache.Sections section]. Inverted sections will only render if the `key` references a value that is considered **falsey**:
+`[can.mustache.helpers.inverse {{^key}}]` followed by `[can.mustache.helpers.close {{/key}}]` signify an inverse [can.mustache.Sections section]. Inverted sections will only render if the `key` references a value that is considered **falsey**:
 
 	Template:
 		{{#person}}
@@ -110,7 +110,7 @@ person exists whom also has a name:
 	Result:
 		No one.
 
-`[can.Mustache.helpers.partial {{>key}}]` renders a partial template. Partials are used to nest other templates within another template:
+`[can.mustache.helpers.partial {{>key}}]` renders a partial template. Partials are used to nest other templates within another template:
 
 	init.mustache:
 		<div>
@@ -133,7 +133,7 @@ person exists whom also has a name:
 			Hi Austin!
 		</div>
 
-`[can.Mustache.tags.comment {{!key}}]` are comment tags. Comments won't get rendered (they're similar to HTML comments):
+`[can.mustache.tags.comment {{!key}}]` are comment tags. Comments won't get rendered (they're similar to HTML comments):
 
 	Template:
 		12345{{!These are numbers}}67890

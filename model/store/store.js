@@ -1,5 +1,10 @@
 /* jshint maxdepth:5 */
 steal('can/model/list', 'can/util/object', function () {
+
+	//!steal-remove-start
+	can.dev.warn("can/model/store is a deprecated plugin and will be removed in a future release.");
+	//!steal-remove-end
+
 	var same = can.Object.same;
 	can.Construct('can.Model.Store', {
 		init: function () {

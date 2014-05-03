@@ -67,7 +67,7 @@ functionality on a `<todos-editor>` elements,
 Now, when a `<todos-editor>` element is found in a mustache template,
 an instance of the component is created on the element.
 
-    var template = can.view.mustache("Here is my "+
+    var template = can.mustache("Here is my "+
                      "<todos-editor>todos-editor element</todos-editor>")
 
     var frag = template();
@@ -114,7 +114,7 @@ content to use within the `<content></content>` tags like:
 
 If the source template is changed to:
 
-    var template = can.view.mustache("Here is my "+
+    var template = can.mustache("Here is my "+
                      "<todos-editor></todos-editor>")
 
 This results in:
@@ -123,7 +123,7 @@ This results in:
 
 You can also specify the template as a [can.view.renderer](../docs/can.view.renderer.html) like:
 
-    var template = can.view.mustache("<content>Edit </content>"+
+    var template = can.mustache("<content>Edit </content>"+
                                      "<input type='text'/>");
     
     can.Component.extend({
@@ -247,7 +247,7 @@ setting attributes on the component's element. For example,
 we might want to pass a todo to the todo editor from the source
 template.  To do this, add a `todo='mytodo'` attribute.
 
-    var template = can.view.mustache("<h1>Todo: {{mytodo.name}}</h1>"+
+    var template = can.mustache("<h1>Todo: {{mytodo.name}}</h1>"+
                      "<todos-editor todo='mytodo'></todos-editor>")
 
     var mytodo = new can.Map({name: "Do the dishes"})
@@ -275,7 +275,7 @@ todo's name.
 Sometimes, you want to specify attribute values that are not looked up in the 
 scope.  For example, you might want to give `todos-editor` placeholder text as follows:
 
-    var template = can.view.mustache(
+    var template = can.mustache(
                      "<h1>Todo: {{mytodo.name}}</h1>"+
                      "<todos-editor todo='mytodo' "+
                                     "placeholder='name'>"+

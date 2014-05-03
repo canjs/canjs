@@ -1,0 +1,19 @@
+<div id='out'></div>
+<script src="../../../lib/steal/steal.js"></script>
+<script>
+steal("can/view/bindings",function(){
+		
+var template = can.view.mustache(
+  "<p><input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female'/> Male</p>"+
+  "<p>Your Sex: {{sex}}</p>")
+		
+var person = new can.Map({
+  sex: 'male'
+})
+
+$("#out").html( template(person) );
+
+
+})
+</script>
+

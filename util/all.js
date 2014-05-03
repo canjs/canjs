@@ -6,6 +6,7 @@ steal(
 	'can/control/route',
 	'can/control/plugin',
 	'can/list',
+	'can/list/promise',
 	'can/model',
 	'can/observe',
 	'can/map/attributes',

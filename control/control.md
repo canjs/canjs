@@ -6,7 +6,7 @@
 @inherits can.Construct
 @description widget factory with declarative event binding.
 @group can.Control.plugins plugins
-@link ../docco/control.html docco
+@link ../docco/control/control.html docco
 
 @description Create organized, memory-leak free, rapidly performing,
 stateful controls with declarative event binding. Use `can.Control` to create UI 
@@ -77,7 +77,7 @@ Create an instance of the Todos control on the `todos` element with:
 
     var todosControl = new Todos( '#todos', {} );
 
-The control's associated [can.EJS EJS] template looks like:
+The control's associated [can.ejs EJS] template looks like:
 
     <% todos.each(function( todo ) { %>
       <li <%= (el) -> el.data( 'todo', todo ) %> >

@@ -3,19 +3,20 @@ steal('can/util/can.js', function (can) {
 	// ---------
 	// _DOM Fragment support._
 	var fragmentRE = /^\s*<(\w+)[^>]*>/,
+		toString = {}.toString,
 		fragment = function (html, name) {
 			if (name === undefined) {
 				name = fragmentRE.test(html) && RegExp.$1;
 			}
-			if (html && can.isFunction(html.replace)) {
+			if (html && toString.call(html.replace) === "[object Function]") {
 				// Fix "XHTML"-style tags in all browsers
 				html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, '<$1></$2>');
 			}
 			var container = document.createElement('div'),
 				temp = document.createElement('div');
 			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
-			// is called on a `tbody`. To get around this, we construct a 
-			// valid table with a `tbody` that has the `innerHTML` we want. 
+			// is called on a `tbody`. To get around this, we construct a
+			// valid table with a `tbody` that has the `innerHTML` we want.
 			// Then the container is the `firstChild` of the `tbody`.
 			// [source](http://www.ericvasilik.com/2006/07/code-karma.html).
 			if (name === 'tbody' || name === 'tfoot' || name === 'thead') {
@@ -44,10 +45,32 @@ steal('can/util/can.js', function (can) {
 	can.buildFragment = function (html, nodes) {
 		var parts = fragment(html),
 			frag = document.createDocumentFragment();
-		can.each(parts, function (part) {
-			frag.appendChild(part);
-		});
+		for(var i = 0, length = parts.length; i < length; i++) {
+			frag.appendChild(parts[i]);
+		}
 		return frag;
 	};
+
+	// ## Fix build fragment.
+	// In IE8, we can pass a fragment and it removes newlines.
+	// This checks for that and replaces can.buildFragment with something
+	// that if only a single text node is returned, returns a fragment with
+	// a text node that is set to the content.
+	(function(){
+		var text = "<-\n>",
+			frag = can.buildFragment(text, document);
+		if(text !== frag.childNodes[0].nodeValue) {
+			var oldBuildFragment = can.buildFragment;
+			can.buildFragment = function(html, nodes){
+				var res = oldBuildFragment(html, nodes);
+				if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
+					res.childNodes[0].nodeValue = html;
+				}
+				return res;
+			};
+
+		}
+	})();
+
 	return can;
 });
