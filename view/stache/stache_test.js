@@ -3377,7 +3377,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		test("Logging: Variable not found in stache template (#720)", function () {
 			var oldlog = can.dev.warn,
-					message = 'can/view/stache/mustache_core.js: Unable to find key "user.name".';
+					message = 'can/view/stache/mustache_core.js: Unable to find key or helper "user.name".';
 
 			can.dev.warn = function (text) {
 				equal(text, message, 'Got expected message logged.');
@@ -3421,8 +3421,8 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		});
 
-		equal(frag.childNodes[0].innerText, '0', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[1].innerText, '', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[2].innerText, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
+		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
 	})
 });
