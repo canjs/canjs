@@ -32,7 +32,7 @@ steal("can/model", 'can/compute', function (Model) {
 
 		// Create status check functions.
 		can.each(defStatusFns, function (value, method) {
-			result[name] = def[method] = function () {
+			result[method] = def[method] = function () {
 				return state() === value;
 			};
 		});
@@ -85,6 +85,11 @@ steal("can/model", 'can/compute', function (Model) {
 				var res = old.apply(this, arguments),
 					def = can.isDeferred(res) ? res : new can.Deferred(),
 					self = this;
+
+				can.batch.start();
+				this._def.attr('state', def.state());
+				this._def.removeAttr('reason');
+				can.batch.stop();
 
 				def.then(function(){
 					can.batch.start();
