@@ -29,12 +29,12 @@ steal("can/model", 'can/compute', function (Model) {
 		if(!can.isDeferred(def)){
 			val = def;
 			def = new can.Deferred();
-			def.resolve(res);
+			def.resolve(val);
 		}
 
 		// Create status check functions.
 		can.each(defStatusFns, function (value, method) {
-			result[name] = wrapper[method] = function () {
+			result[name] = def[method] = function () {
 				return state() === value;
 			};
 		});
@@ -42,12 +42,12 @@ steal("can/model", 'can/compute', function (Model) {
 		// Proxy functions from the `result` object to the deferred object,
 		// to allow the `result` compute to behave like a deferred object.
 		can.each(defFns, function (name) {
-			result[name] = wrapper[name] = function () {
+			result[name] = function () {
 				return def[name].apply(def, arguments);
 			};
 		});
 
-		result(wrapper);
+		result(def);
 		state(def.state());
 
 		def.then(function(data){
@@ -58,9 +58,12 @@ steal("can/model", 'can/compute', function (Model) {
 			can.batch.stop();
 		}, function(reason){
 			can.batch.start();
-			result(can.extend(wrapper, {
-				reason: reason
-			}));
+			result({
+				reason : reason,
+				isPending : function(){ return false },
+				isResolved : function(){ return false },
+				isRejected : function(){ return true }
+			});
 			state(def.state());
 			can.batch.stop();
 		});
