@@ -253,7 +253,9 @@ steal(
 										/* Clear and save readings so next attempt does not use these readings */
 										defaultComputeReadings = can.__clearReading();
 									}
-								}
+								},
+								// Execute anonymous functions found along the way
+								executeAnonymousFunctions: true
 							}, options));
 							// **Key was found**, return value and location data
 							if (data.value !== undefined) {
