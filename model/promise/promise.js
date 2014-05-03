@@ -22,7 +22,7 @@ steal("can/model", 'can/compute', function () {
 		wrapFindOne(this);
 
 		return res;
-	}
+	};
 
 	var wrapFindOne = function(Model){
 		var oldFindOne = Model.findOne;
