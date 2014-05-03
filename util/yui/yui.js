@@ -427,11 +427,13 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 			return this;
 		};
 
+
+
 		// `realTrigger` taken from `dojo`.
-		var leaveRe = /mouse(enter|leave)/,
+		var /*leaveRe = /mouse(enter|leave)/,
 			_fix = function (_, p) {
 				return 'mouse' + (p === 'enter' ? 'over' : 'out');
-			}, realTrigger,
+			},*/ realTrigger,
 			realTriggerHandler = function (n, e, evdata) {
 				var node = Y.Node(n),
 					handlers = can.Y.Event.getListeners(node._yuid, e),
@@ -449,23 +451,59 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 						}
 					}
 				}
+			},
+			fakeTrigger = function(n, e, a){
+				var stop = false;
+				// a lame duck to work with. we're probably a 'custom event'
+				var evdata = can.extend({
+					type: e,
+					target: n,
+					faux: true,
+					_stopper: function () {
+						stop = this.cancelBubble;
+					},
+					stopPropagation: function () {
+						stop = this.cancelBubble;
+					},
+					preventDefault: function(){
+						
+					}
+				}, a);
+				realTriggerHandler(n, e, evdata);
+				if (e === "inserted" || e === "removed") {
+					return;
+				}
+
+				// handle bubbling of custom events, unless the event was stopped.
+				while (!stop && n !== document && n.parentNode) {
+					n = n.parentNode;
+					realTriggerHandler(n, e, evdata); //can.isFunction(n[ev]) && n[ev](evdata);
+				}
 			};
 		if (document.createEvent) {
 			realTrigger = function (n, e, a) {
 				// the same branch
-				var ev = document.createEvent('HTMLEvents');
+				fakeTrigger(n, e, a);
+				return;
+				/*var ev = document.createEvent('HTMLEvents');
 				e = e.replace(leaveRe, _fix);
 				ev.initEvent(e, e === 'removed' || e === 'inserted' ? false : true, true);
 				if (a) {
 					can.extend(ev, a);
 				}
-				n.dispatchEvent(ev);
+				n.dispatchEvent(ev);*/
 			};
 		} else {
 			realTrigger = function (n, e, a) {
+				fakeTrigger(n, e, a);
+				return;
+				/*
 				// the janktastic branch
-				var ev = 'on' + e,
-					stop = false;
+				var ev = 'on' + e;
+				if(e === "focus" || e === "blur") {
+					fakeTrigger(n, e, a);
+				}
+				
 				try {
 					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
 					// createEvent path above, and also fails on _some_ native-named events.
@@ -483,30 +521,9 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 					n.fireEvent(ev, evObj);
 
 				} catch (er) {
-
-					// a lame duck to work with. we're probably a 'custom event'
-					var evdata = can.extend({
-						type: e,
-						target: n,
-						faux: true,
-						_stopper: function () {
-							stop = this.cancelBubble;
-						},
-						stopPropagation: function () {
-							stop = this.cancelBubble;
-						}
-					}, a);
-					realTriggerHandler(n, e, evdata);
-					if (e === "inserted" || e === "removed") {
-						return;
-					}
-
-					// handle bubbling of custom events, unless the event was stopped.
-					while (!stop && n !== document && n.parentNode) {
-						n = n.parentNode;
-						realTriggerHandler(n, e, evdata); //can.isFunction(n[ev]) && n[ev](evdata);
-					}
-				}
+					fakeTrigger(n,e,a);
+					
+				}*/
 			};
 		}
 

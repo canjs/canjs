@@ -1,5 +1,5 @@
-<!-- AUTO GENERATED - DO NOT MODIFY -->
 <!DOCTYPE HTML>
+<!-- AUTO GENERATED - DO NOT MODIFY -->
 <html>
     
     <head>
@@ -29,7 +29,8 @@
             }
 
             QUnit.config.autostart = false;
-
+			setTimeout(function(){
+				
             steal(function() {
                 var config = window.CONFIGURATION = {
                     "map": {
@@ -75,6 +76,8 @@
                 can.dev.logLevel = 3;
                 QUnit.start();
             });
+            
+            },200);
         </script>
     </body>
 

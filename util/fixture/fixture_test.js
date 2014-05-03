@@ -367,7 +367,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			};
 		}),
 			Model = can.Model({
-				findOne: 'GET /models/{id}',
+				findOne: 'GET /models/{id}'
 			}, {});
 
 		can.fixture('GET /models/{id}', store.findOne);
@@ -389,7 +389,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			};
 		}),
 			Model = can.Model({
-				update: 'POST /models/{id}',
+				update: 'POST /models/{id}'
 			}, {});
 
 		stop();
@@ -412,7 +412,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 			};
 		}),
 			Model = can.Model({
-				destroy: 'DELETE /models/{id}',
+				destroy: 'DELETE /models/{id}'
 			}, {});
 
 		stop();

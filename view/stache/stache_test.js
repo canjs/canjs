@@ -186,7 +186,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			// Stashe does not needs to escape .nodeValues of text nodes
 			'HTML Escaping' : "These characters should be HTML escaped: & \" < >\n",
 			'Triple Mustache' : "These characters should not be HTML escaped: & \" < >\n",
-			'Ampersand' : "These characters should not be HTML escaped: & \" < >\n",
+			'Ampersand' : "These characters should not be HTML escaped: & \" < >\n"
 		},
 		inverted: {
 			'Standalone Line Endings': '|\n\n|',
@@ -196,7 +196,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			'Standalone Line Endings': '|\n>\n|',
 			'Standalone Without Newline': '>\n  >\n>',
 			'Standalone Without Previous Line': '  >\n>\n>',
-			'Standalone Indentation': '\\\n |\n<\n->\n|\n\n/\n',
+			'Standalone Indentation': '\\\n |\n<\n->\n|\n\n/\n'
 		},
 		sections: {
 			'Standalone Line Endings': '|\n\n|',
@@ -277,7 +277,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("live-binding with escaping", function () {
@@ -297,9 +297,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		teacher.attr('name', '<i>Mr Scott</i>');
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
+		
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
 
-		can.remove(can.$('#qunit-test-area *'));
+		can.remove(can.$('#qunit-test-area>*'));
 	});
 
 	test("truthy", function () {
