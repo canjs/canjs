@@ -383,8 +383,8 @@ steal("can/view/callbacks",
 			var result = can[ext]( templates[ext])({state: data});
 			equal(result.childNodes.length, 2, "can."+ext+"(template)(data) "+"proper number of nodes");
 			equal(result.childNodes[0].nodeType, 3, "can."+ext+"(template)(data) "+"got text node");
-			equal(result.childNodes[0].textContent, "Loading", "can."+ext+"(template)(data) "+"got live bound text value");
-			equal(result.childNodes[1].innerHTML, "<tbody><tr></tr></tbody>", ext+" can."+ext+"(template)(data) "+"innerHTML");
+			equal(result.childNodes[0].nodeValue, "Loading", "can."+ext+"(template)(data) "+"got live bound text value");
+			equal(result.childNodes[1].nodeName.toLowerCase(), "table", ext+" can."+ext+"(template)(data) "+"innerHTML");
 
 		});
 

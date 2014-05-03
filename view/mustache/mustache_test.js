@@ -3593,7 +3593,10 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		equal(ul.innerHTML, '', 'list is empty');
 		map.attr('showPeople', true);
-		equal(ul.innerHTML, '<li>Curtis</li><li>Stan</li><li>David</li>', 'List got updated');
+		equal(ul.childNodes.length, 3, 'List got updated');
+		equal(ul.getElementsByTagName('li')[0].innerHTML, 'Curtis', 'List got updated');
+		equal(ul.getElementsByTagName('li')[1].innerHTML, 'Stan', 'List got updated');
+		equal(ul.getElementsByTagName('li')[2].innerHTML, 'David', 'List got updated');
 	});
 
 	test('each with child objects (#750)', function() {

@@ -22,8 +22,7 @@ steal('can/util', 'can/util/attr', function () {
 		stop();
 
 		setTimeout(function () {
-
-			can.bind.call(can.$(div), "attributes", function attrHandler(ev) {
+			var attrHandler = function(ev) {
 				ok(true, "removed event handler should be called");
 
 				equal(ev.attributeName, "foo", "attribute name is correct");
@@ -34,7 +33,8 @@ steal('can/util', 'can/util/attr', function () {
 
 				can.unbind.call(can.$(div), "attributes", attrHandler);
 				start();
-			});
+			};
+			can.bind.call(can.$(div), "attributes", attrHandler);
 			can.attr.remove(div, "foo");
 
 		}, 50);
@@ -102,26 +102,26 @@ steal('can/util', 'can/util/attr', function () {
 		test("Mootools - addEvent, removeEvent, and set", function () {
 
 			var div = document.createElement("div");
+			var attrHandler = function(ev) {
+				equal(ev.attributeName, "foo", "attribute name is correct");
+				equal(ev.target, div, "target");
+				equal(ev.oldValue, null, "oldValue");
 
+				equal(div.getAttribute(ev.attributeName), "bar");
+
+				$(div)
+					.removeEvent("attributes", attrHandler);
+
+				$(div)
+					.set("foo", "abc");
+
+				setTimeout(function () {
+					start();
+				}, 20);
+
+			}
 			$(div)
-				.addEvent("attributes", function attrHandler(ev) {
-					equal(ev.attributeName, "foo", "attribute name is correct");
-					equal(ev.target, div, "target");
-					equal(ev.oldValue, null, "oldValue");
-
-					equal(div.getAttribute(ev.attributeName), "bar");
-
-					$(div)
-						.removeEvent("attributes", attrHandler);
-
-					$(div)
-						.set("foo", "abc");
-
-					setTimeout(function () {
-						start();
-					}, 20);
-
-				});
+				.addEvent("attributes", attrHandler);
 
 			stop();
 			$(div)
