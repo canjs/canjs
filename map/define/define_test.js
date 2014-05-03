@@ -462,4 +462,71 @@ steal("can/map/define", "can/test", function () {
 		
 	});
 
+    test("serialize context", function(){
+        var context
+        var MyMap = can.Map.extend({
+            define: {
+                name: {
+                    serialize: function(obj){
+                        context = this
+                        return obj;
+                    }
+                }
+
+            }
+        });
+
+        var map = new MyMap();
+        map.serialize()
+        equal(context, map);
+    });
+
+    test("methods contexts", function(){
+        var contexts = {}
+        var MyMap = can.Map.extend({
+            define: {
+                name: {
+                    value: 'John Galt',
+
+                    get: function(obj){
+                        contexts['get'] = this
+                        return obj;
+                    },
+
+                    remove: function(obj){
+                        contexts['remove'] = this
+                        return obj;
+                    },
+
+                    set: function(obj){
+                        contexts['set'] = this
+                        return obj;
+                    },
+
+                    serialize: function(obj){
+                        contexts['serialize'] = this
+                        return obj;
+                    },
+
+                    type: function(val){
+                        contexts['type'] = this
+                        return val;
+                    }
+                }
+
+            }
+        });
+
+        var map = new MyMap();
+        map.serialize()
+        map.removeAttr('name')
+
+        equal(contexts['get'], map);
+        equal(contexts['remove'], map);
+        equal(contexts['set'], map);
+        equal(contexts['serialize'], map);
+        equal(contexts['type'], map);
+    });
+
+
 });
