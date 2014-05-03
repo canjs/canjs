@@ -1,11 +1,11 @@
-@property {Object.<String,can.Mustache.helper>} can.Component.prototype.helpers
+@property {Object.<String,can.mustache.helper>} can.Component.prototype.helpers
 @parent can.Component.prototype
 
 Helper functions used with the component's template.
 
-@option {Object.<String,can.Mustache.helper>}
+@option {Object.<String,can.mustache.helper>}
 
-An object of [can.Mustache] helper names and methods. The helpers are only
+An object of [can.mustache] helper names and methods. The helpers are only
 available within the component's template and source html. The helper's
 are always called back with `this` as the [can.Component::scope scope].
 

@@ -2,7 +2,7 @@
 @parent Tutorial 4
 
 @body
-[EJS](../docs/can.EJS.html) is CanJS's default template language, which provides live
+[EJS](../docs/can.ejs.html) is CanJS's default template language, which provides live
 binding when used with Observes. EJS is very easy to use; you write the HTML you
 want to be in the template, along with a few magic tags where you want dynamic
 behavior.
@@ -114,7 +114,7 @@ The most common use of `<%== %>` is to include templates in other templates:
 @codeend
 
 The other two magic tags are less commonly used and can be found in the
-[documentation for EJS](../docs/can.EJS.html).
+[documentation for EJS](../docs/can.ejs.html).
 
 ## Live binding
 

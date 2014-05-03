@@ -59,8 +59,8 @@ In fact, this code should look like:
 ### can.EJS is no longer in core
 
 can.EJS is no longer packaged in the core download by default. It has
-been replaced by can.Mustache. You
-can use the custom download builder to replace can.Mustache with 
+been replaced by can.mustache. You
+can use the custom download builder to replace can.mustache with 
 can.EJS.
 
 ### can.Observe names and locations

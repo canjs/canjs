@@ -5,7 +5,7 @@ While it makes sense to use uniminified JavaScript split into separate files and
 
 ## View compilation
 
-CanJS can pre-compile [EJS](/docs/can.EJS.html) and [Mustache](/docs/can.Mustache.html) views into JavaScript functions contained within a single file in order to avoid additional requests for view files in production. When using CanJS [using-standalone standalone] or [using-require with AMD (RequireJS)] you can use the [can-compile](https://github.com/daffl/can-compile) Node module. Install with
+CanJS can pre-compile [EJS](/docs/can.ejs.html) and [Mustache](/docs/can.mustache.html) views into JavaScript functions contained within a single file in order to avoid additional requests for view files in production. When using CanJS [using-standalone standalone] or [using-require with AMD (RequireJS)] you can use the [can-compile](https://github.com/daffl/can-compile) Node module. Install with
 
 > npm install can-compile -g
 

@@ -1,13 +1,16 @@
 @constructor can.view.Scope
 @inherits can.Construct
 @parent can.view.static
-@test can/map/test.html
+@test can/view/scope/test.html
 @plugin can/view/scope
 @group can.view.Scope.types types
 
-@description Create a lookup node for [can.Mustache.key keys].
+@description Create a lookup node for [can.mustache.key keys].
 
 @signature `new can.view.Scope(context, [parent])`
+
+@release 2.0.1
+
 
 @param {*} context A value that represents the 
 current context. This is often an object or observable and is the first
@@ -24,7 +27,7 @@ scope.
 ## Use
 
 A `can.view.Scope` represents a lookup context and parent contexts
-that can be used to lookup a [can.Mustache.key key] value.
+that can be used to lookup a [can.mustache.key key] value.
 
 If no parent scope is provided, only the scope's context will be 
 explored for values.  For example:
@@ -36,7 +39,7 @@ explored for values.  For example:
     scope.attr("length")     //-> undefined
 
 However, if a `parent` scope is provided, key values will be
-searched in the parent's contexxt after the initial context is expored.  For example:
+searched in the parent's context after the initial context is explored.  For example:
 
     var list = [{name: "Justin"},{name: "Brian"}],
     	justin = list[0];

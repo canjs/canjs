@@ -3,7 +3,7 @@
 
 @body
 
-This is the detailed documentation of the API for CanJS 2.0, a framework for building
+This is the detailed documentation of the API for CanJS 2.1, a framework for building
 web applications that provides a lightweight inheritance system, observable
 objects and values, and a powerful MVC core with live-bound templates, among other
 resources. 
@@ -19,16 +19,16 @@ framework:
  - [can.Map], [can.List], [can.compute] - observable objects, list, and values.
  - [can.Model] -  observes connected to a RESTful JSON interface
  - [can.view] - template loading, caching, rendering
- - [can.Mustache] - Live binding Handlebars and Mustache templates
+ - [can.mustache] - Live binding Handlebars and Mustache templates
  - [can.route] -  back button and bookmarking support
  
 The following modules are typically distributed as plugins:
 
- - [can.EJS] - live binding templates
+ - [can.ejs] - live binding templates
  - [can.Construct.proxy] - Proxy construct methods
  - [can.Construct.super] - Call super methods
  - [can.Map.delegate] - Listen to Observe attributes
- - [can.Map.setter] - Use setter methods on Observes
+ - [can.Map::setter] - Use setter methods on Map
  - [can.Map.attributes] - Define Observe attributes
  - [can.Map.validations] - Validate attributes
  - [can.Map.backup] - Backup and restore an Observe's state

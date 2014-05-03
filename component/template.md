@@ -5,14 +5,14 @@ Provides a template to render directly within the component's tag. The template 
 component's [can.Component::scope scope].  `<content>` elements within the template are replaced by 
 the source elements within the component's tag.
 
-@option {String} The string contents of a [can.Mustache] template.  For example:
+@option {String} The string contents of a [can.mustache] template.  For example:
 
     can.Component({
       tag: "my-tabs",
       template: "<ul>{{#panels}}<li>{{title}}</li> ..."
     })
 
-@option {can.view.renderer} A [can.view.renderer] returned by [can.view.mustache] or 
+@option {can.view.renderer} A [can.view.renderer] returned by [can.mustache] or 
 [can.view]. For example:
 
     can.Component({
