@@ -47,11 +47,12 @@ steal("can/model", 'can/compute', function (Model) {
 			};
 		});
 
+		result.state = state();
+
 		result(def);
 		state(def.state());
 
 		def.then(function(data){
-			console.log(data)
 			can.batch.start();
 			result(data);
 			state(def.state());
@@ -71,6 +72,39 @@ steal("can/model", 'can/compute', function (Model) {
 		return result;
 	};
 
+	var wrapMethods = function(object){
+		// Wrap `save` and `destroy` functions, and change deferred state
+		// based on the state of the request.
+		can.each(['save', 'destroy'], function(method){
+			var old = object[method];
+
+			object[method] = function(){
+				var res = old.apply(this, arguments),
+					def = can.isDeferred(res) ? res : new can.Deferred(),
+					self = this;
+
+				def.then(function(){
+					can.batch.start();
+					self._def.attr('state', def.state());
+					self._def.removeAttr('reason');
+					can.batch.stop();
+				}, function(reason){
+					self._def.attr({
+						state : def.state(),
+						reason : reason
+					})
+					
+				})
+
+				if(res !== def){
+					def.resolve(res);
+				}
+
+				return res;
+			}
+		});
+	}
+
 	// Add internal deferred state to the model. It is `resolved` by default
 	// because we can assume that if the instance exists, it is resolved, and
 	// there shouldn't be any difference in API based on from where does the
@@ -79,38 +113,30 @@ steal("can/model", 'can/compute', function (Model) {
 
 	can.Model.prototype.setup = function(){
 		var res = oldSetup.apply(this, arguments);
-		this._defState = can.compute('resolved');
+
+		this._def = new can.Map({
+			state : 'resolved'
+		});
+
+		// Wrap `save` and `destroy` here to ensure that custom implmentations
+		// work correctly.
+		wrapMethods(this);
+		
 		return res;
 	};
 
-	// Wrap `save` and `destroy` functions, and change deferred state
-	// based on the state of the request.
-	can.each(['save', 'destroy'], function(method){
-		var old = can.Model.prototype[method];
+	can.Model.prototype.reason = function(){
+		return this._def.attr('reason');
+	}
 
-		can.Model.prototype[method] = function(){
-			var res = old.apply(this, arguments),
-				def = can.isDeferred(res) ? res : new can.Deferred(),
-				self = this;
-
-			def.then(function(){
-				self._defState(def.state());
-			}, function(){
-				self._defState(def.state());
-			})
-
-			if(res !== def){
-				def.resolve(res);
-			}
-
-			return res;
-		}
-	});
+	can.Model.prototype.state = function(){
+		return this._def.attr('state');
+	}
 
 	// Add `isResolved`, `isPending` and `isRejected` to the model prototype.
 	can.each(defStatusFns, function(value, method){
 		can.Model.prototype[method] = function(){
-			return this._defState() === value;
+			return this.state() === value;
 		}
 	});
 });

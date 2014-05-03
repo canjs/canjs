@@ -60,9 +60,16 @@ steal("can","can/util/fixture","can/model/promise",function(){
       response(404,"error",{message:"resource does not exist"});
     }
   });
+
+  can.fixture("PUT /users/{id}", function(request, response){
+
+    response(404,"error",{message:"resource can't be saved"});
+    
+  });
   can.fixture.delay = 1500;
   
   User = can.Model.extend({
+    update : "PUT /users/{id}",
     findOne: "GET /users/{id}"
   },{});
   
