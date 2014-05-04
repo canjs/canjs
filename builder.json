@@ -125,11 +125,6 @@
 			"type": "plugin",
 			"description": "Use setter methods on can.Map"
 		},
-		"can/map/attributes": {
-			"name": "can.Map.attributes",
-			"type": "plugin",
-			"description": "Define Observe attributes"
-		},
 		"can/map/validations": {
 			"name": "can.Map.validations",
 			"type": "plugin",
