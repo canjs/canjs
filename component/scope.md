@@ -3,7 +3,12 @@
 
 Provides or describes a [can.Map] constructor function or can.Map instance that will be 
 used to retrieve values found in the component's [can.Component::template template]. The map 
-instance is initialized with values specified by the component's attributes.
+instance is initialized with values specified by the component element's attributes.
+
+@deprecated {2.1} In 2.1, [can.stache] and [can.mustache] pass values to the 
+scope differently. To pass data from the scope, you must wrap your attribute 
+value with `{}`. In 3.0, [can.mustache]
+will use [can.stache]'s method.
 
 @option {Object} A plain JavaScript object that is used to define the prototype methods and properties of 
 [can.Construct constructor function] that extends can.Map. For example:

@@ -61,7 +61,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				}
 				// If we inherit from can.Map, but not can.List, make sure any lists are the correct type.
 				if (can.List && !(this.prototype instanceof can.List)) {
-					this.List = Map.List({
+					this.List = Map.List.extend({
 						Map: this
 					}, {});
 				}

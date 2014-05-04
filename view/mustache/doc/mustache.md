@@ -1,4 +1,4 @@
-@function can.mustache
+@function can.mustache can.mustache
 @parent canjs
 @release 2.1
 @group can.mustache.methods 0 Methods

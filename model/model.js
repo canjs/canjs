@@ -1870,7 +1870,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	// # can.Model.List
 	// Model Lists are just like `Map.List`s except that when their items are
 	// destroyed, they automatically get removed from the List.
-	var ML = can.Model.List = can.List({
+	var ML = can.Model.List = can.List.extend({
 		// ## can.Model.List.setup
 		// On change or a nested named event, setup change bubbling.
 		// On any other type of event, setup "destroyed" bubbling.
