@@ -1,5 +1,5 @@
-@page can.Mustache.Helpers Helpers
-@parent can.Mustache.pages 3
+@page can.mustache.Helpers Helpers
+@parent can.mustache.pages 3
 
 # Helpers
 
@@ -7,12 +7,12 @@ Helpers are functions that can be registered and called from within templates. W
 intended to be logic-less, helpers enable the execution of logic from within a Mustache template.
 
 Mustache includes a number of built-in helpers, but custom helpers can be registered as well. 
-The majority of these built-in helpers have [can.Mustache.Basics basic tag] equivalents.
+The majority of these built-in helpers have [can.mustache.Basics basic tag] equivalents.
 
 ## Built-in Helpers
 
-The `[can.Mustache.helpers.section {{#if key}}]` helper is used for **if** statements. The **if** helper is equivalent 
-to using a `[can.Mustache.helpers.section {{#key}}]` section. If they key passed to the helper is **truthy**, the 
+The `[can.mustache.helpers.section {{#if key}}]` helper is used for **if** statements. The **if** helper is equivalent 
+to using a `[can.mustache.helpers.section {{#key}}]` section. If they key passed to the helper is **truthy**, the 
 section will be rendered.
 
 	Template: 
@@ -28,9 +28,9 @@ section will be rendered.
 	Result:
 		I have friends!
 
-When using the `[can.Mustache.helpers.if {{#if key}}]` helper, or any other helper for that matter, 
-the special `[can.Mustache.helpers.else {{else}}] helper becomes available. `{{else}}` is equivalent to 
-an [can.Mustache.helpers.inverse {{^key}}] inverse section (rendering **falsey** data), except that it 
+When using the `[can.mustache.helpers.if {{#if key}}]` helper, or any other helper for that matter, 
+the special `[can.mustache.helpers.else {{else}}] helper becomes available. `{{else}}` is equivalent to 
+an [can.mustache.helpers.inverse {{^key}}] inverse section (rendering **falsey** data), except that it 
 only uses a single tag and exists inside 
 a helper section.
 
@@ -53,8 +53,8 @@ a helper section.
 			<li>No friends.</li>
 		</ul>
 
-The `[can.Mustache.helpers.unless {{#unless key}}]` helper is equivalent to using a 
-`[can.Mustache.helpers.inverse {{^key}}]` inverse section. If they key passed to the helper is **falsey**, the 
+The `[can.mustache.helpers.unless {{#unless key}}]` helper is equivalent to using a 
+`[can.mustache.helpers.inverse {{^key}}]` inverse section. If they key passed to the helper is **falsey**, the 
 section will be rendered.
 
 	Template: 
@@ -70,8 +70,8 @@ section will be rendered.
 	Result:
 		You don't have any friends!
 
-The `[can.Mustache.helpers.each {{#each key}}]` helper is equivalent to using a 
-`[can.Mustache.helpers.section {{#key}}]` section for iterating an array. In this case, the entire array 
+The `[can.mustache.helpers.each {{#each key}}]` helper is equivalent to using a 
+`[can.mustache.helpers.section {{#key}}]` section for iterating an array. In this case, the entire array 
 will be rendered using the inner text item by item.
 
 	Template: 
@@ -95,8 +95,8 @@ will be rendered using the inner text item by item.
 			<li>Justin</li>
 		</ul>
 
-The `[can.Mustache.helpers.with {{#with key}}]` helper is equivalent to using a 
-`[can.Mustache.helpers.section {{#key}}]` section for regular objects. The helper will change 
+The `[can.mustache.helpers.with {{#with key}}]` helper is equivalent to using a 
+`[can.mustache.helpers.section {{#key}}]` section for regular objects. The helper will change 
 the current context so that all tags inside will look for keys on the local context first.
 
 	Template: 
@@ -115,13 +115,13 @@ the current context so that all tags inside will look for keys on the local cont
 		<h1>Hi Austin</h1>
 		<p>You have a new friend: Justin</p>
 
-The `[can.Mustache.helpers.elementCallback {{(el)->CODE}}]` helper is a special helper for element callbacks that 
+The `[can.mustache.helpers.elementCallback {{(el)->CODE}}]` helper is a special helper for element callbacks that 
 will pass the active DOM element within the template to a function made up of inline code. This 
 is most useful for tasks such as initializing a jQuery plugin on the new HTML.
 
 	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
 
-The `[can.Mustache.helpers.data {{data key}}]` helper is another special helper for data associations that 
+The `[can.mustache.helpers.data {{data key}}]` helper is another special helper for data associations that 
 will save the current context on the active DOM element with [can.data].
 
 	Template:
@@ -139,7 +139,7 @@ will save the current context on the active DOM element with [can.data].
 
 ## Registering Helpers
 
-You can register your own global helper with the `[can.Mustache.registerHelper registerHelper]` method, or 
+You can register your own global helper with the `[can.mustache.registerHelper registerHelper]` method, or 
 a local helper (just accessible by the template being rendered) by passing in an object containing helper functions to [can.view].
 
 Localization is a good example of a custom helper you might implement
@@ -203,9 +203,9 @@ that and the previous argument like so:
 
 __Evaluating Helpers__
 
-If you want to use a helper with a [can.Mustache.Sections section], you need to call
+If you want to use a helper with a [can.mustache.Sections section], you need to call
 `options.fn(context)` in your return statement. This will return a 
-string with the resulting evaluated [can.Mustache.Sections section].
+string with the resulting evaluated [can.mustache.Sections section].
 
 Similarly, you can call `options.inverse(context)` to evaluate the 
 template between an `{{else}}` tag and the closing tag.
@@ -228,7 +228,7 @@ __Advanced Helpers__
 Helpers can be passed normal objects, native objects like numbers and strings, 
 as well as a hash object. The hash object will be an object literal containing 
 all ending arguments using the `key=value` syntax. The hash object will be provided 
-to the helper as `options.hash`. Additionally, when using [can.Mustache.Sections section] with the helper, 
+to the helper as `options.hash`. Additionally, when using [can.mustache.Sections section] with the helper, 
 you can set a custom context by passing the object instead of `this`.
 
 	Mustache.registerHelper('exercise', function(group, action, 

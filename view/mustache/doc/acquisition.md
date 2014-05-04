@@ -1,5 +1,5 @@
-@page can.Mustache.Acquisition Template Acquisition
-@parent can.Mustache.pages 4
+@page can.mustache.Acquisition Template Acquisition
+@parent can.mustache.pages 4
 
 There are number of ways to acquire templates such as: raw text,
 URL, or script tags in the markup.
@@ -11,7 +11,7 @@ attribute containing your template and Mustache will return a
 document fragment back.  For example:
 
 	var template = "My body lies over the {{.}}";
-	var fragment = new can.Mustache({ text: template })
+	var fragment = new can.mustache({ text: template })
 					.render('water');
 	can.append(can.$(document.body), can.view.frag(fragment));
 

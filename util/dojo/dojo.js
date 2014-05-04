@@ -1,4 +1,7 @@
-steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', 'can/util/inserted', function (can) {
+steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragment.js',
+	'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', 'can/util/inserted', function (can, attr) {
+		
+	var dojo = window.dojo;
 	define('plugd/trigger', ['dojo'], function (dojo) {
 		var d = dojo;
 		var isfn = d.isFunction;
@@ -11,6 +14,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		// the function accepts node (not string|node), "on"-less event name,
 		// and an object of args to mix into the event. 
 		var realTrigger;
+
 		if (d.doc.createEvent) {
 			realTrigger = function (n, e, a) {
 				// the sane branch
@@ -30,7 +34,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					stop = false;
 				try {
 					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-					//	createEvent path above, and also fails on _some_ native-named events. 
+					//	createEvent path above, and also fails on _some_ native-named events.
 					//					if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
 					//						// if the event is one of those listed in our NodeList list
 					//						// in lowercase form but is mixed case, throw to avoid
@@ -38,7 +42,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					//						throw("janktastic");
 					//					}
 					var evObj = document.createEventObject();
-					if(e === "inserted" || e === "removed") {
+					if (e === "inserted" || e === "removed") {
 						evObj.cancelBubble = true;
 					}
 					mix(evObj, a);
@@ -58,7 +62,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					if (isfn(n[ev])) {
 						n[ev](evdata);
 					}
-					if(e === "inserted" || e === "removed") {
+					if (e === "inserted" || e === "removed") {
 						return;
 					}
 					// handle bubbling of custom events, unless the event was stopped.
@@ -272,10 +276,10 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	// The id of the `function` to be bound, used as an expando on the `function`
 	// so we can lookup it's `remove` object.
 	var dojoId = 0,
-		// Takes a node list, goes through each node
-		// and adds events data that has a map of events to 
-		// callbackId to `remove` object.  It looks like
-		// `{click: {5: {remove: fn}}}`. 
+	// Takes a node list, goes through each node
+	// and adds events data that has a map of events to
+	// callbackId to `remove` object.  It looks like
+	// `{click: {5: {remove: fn}}}`.
 		dojoAddBinding = function (nodelist, ev, cb) {
 			nodelist.forEach(function (node) {
 				// Converting a raw select node to a node list
@@ -296,8 +300,8 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0];
 			});
 		},
-		// Removes a binding on a `nodelist` by finding
-		// the remove object within the object's data.
+	// Removes a binding on a `nodelist` by finding
+	// the remove object within the object's data.
 		dojoRemoveBinding = function (nodelist, ev, cb) {
 			nodelist.forEach(function (node) {
 				var currentNode = new dojo.NodeList(node),
@@ -386,18 +390,29 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		}
 	};
 	can.delegate = function (selector, ev, cb) {
-		if (this.on || this.nodeType) {
+		if (!selector) {
+			// Dojo fails with no selector
+			can.bind.call(this, ev, cb);
+		} else if (this.on || this.nodeType) {
 			dojoAddBinding(new dojo.NodeList(this), selector + ':' + ev, cb);
 		} else if (this.delegate) {
 			this.delegate(selector, ev, cb);
+		} else {
+			// make it bind-able ...
+			can.bind.call(this, ev, cb);
 		}
 		return this;
 	};
 	can.undelegate = function (selector, ev, cb) {
-		if (this.on || this.nodeType) {
+		if (!selector) {
+			// Dojo fails with no selector
+			can.unbind.call(this, ev, cb);
+		} else if (this.on || this.nodeType) {
 			dojoRemoveBinding(new dojo.NodeList(this), selector + ':' + ev, cb);
 		} else if (this.undelegate) {
 			this.undelegate(selector, ev, cb);
+		} else {
+			can.unbind.call(this, ev, cb);
 		}
 		return this;
 	};
@@ -417,7 +432,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	};
 	can.ajax = function (options) {
 		var type = can.capitalize((options.type || 'get')
-			.toLowerCase()),
+				.toLowerCase()),
 			method = dojo['xhr' + type];
 		var success = options.success,
 			error = options.error,
@@ -452,7 +467,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		if (typeof selector === 'string') {
 			return dojo.query(selector);
 		} else {
-			return new dojo.NodeList(selector);
+			return new dojo.NodeList(selector && selector.nodeName ? [selector] : selector);
 		}
 	};
 	can.append = function (wrapped, html) {
@@ -494,19 +509,19 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		}
 		return store;
 	}
+
 	var cleanData = function (elems) {
-		// get all normal nodes
 		var nodes = [];
-		
-		for(var i = 0, len = elems.length; i < len; i++ ) {
-			if(elems[i].nodeType === 1) {
+
+		for (var i = 0, len = elems.length; i < len; i++) {
+			if (elems[i].nodeType === 1) {
 				nodes.push(elems[i]);
 			}
 		}
 		can.trigger(new dojo.NodeList(nodes), 'removed', [], false);
 		i = 0;
 		for (var elem;
-			(elem = elems[i]) !== undefined; i++) {
+				 (elem = elems[i]) !== undefined; i++) {
 			var id = elem[exp];
 			delete data[id];
 		}
@@ -515,6 +530,10 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		return value === undefined ? wrapped.length === 0 ? undefined : getData(wrapped[0], name) : wrapped.forEach(function (node) {
 			setData(node, name, value);
 		});
+	};
+	can.cleanData = function (elem, prop) {
+		var id = elem[exp];
+		delete data[id][prop];
 	};
 	// Overwrite `dojo.destroy`, `dojo.empty` and `dojo.place`.
 	dojo.empty = function (node) {
@@ -593,5 +612,67 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			return d;
 		}
 	});
+	can.attr = attr;
+	delete attr.MutationObserver;
+
+	var oldOn = dojo.NodeList.prototype.on;
+
+	dojo.NodeList.prototype.on = function (event) {
+
+		if (event === "attributes") {
+			this.forEach(function (node) {
+				var el = can.$(node);
+				can.data(el, "canHasAttributesBindings", (can.data(el, "canHasAttributesBindings") || 0) + 1);
+			});
+		}
+		var handles = oldOn.apply(this, arguments);
+
+		if (event === "attributes") {
+			var self = this;
+
+			can.each(handles, function (handle, i) {
+				var oldRemove = handle.remove;
+				handle.remove = function () {
+					var el = can.$(self[i]),
+						cur = can.data(el, "canHasAttributesBindings") || 0;
+					if (cur <= 0) {
+						can.cleanData(self[i], "canHasAttributesBindings");
+					} else {
+						can.data(el, "canHasAttributesBindings", cur - 1);
+					}
+					return oldRemove.call(this, arguments);
+				};
+			});
+		}
+		return handles;
+
+	};
+
+	var oldSetAttr = dojo.setAttr;
+	dojo.setAttr = function (node, name, value) {
+		var oldValue = dojo.getAttr(node, name);
+
+		var res = oldSetAttr.apply(this, arguments);
+
+		var newValue = dojo.getAttr(node, name);
+
+		if (newValue !== oldValue) {
+			can.attr.trigger(node, name, oldValue);
+		}
+		return res;
+	};
+
+	var oldRemoveAttr = dojo.removeAttr;
+
+	dojo.removeAttr = function (node, name) {
+		var oldValue = dojo.getAttr(node, name),
+			res = oldRemoveAttr.apply(this, arguments);
+
+		if (oldValue != null) {
+			can.attr.trigger(node, name, oldValue);
+		}
+		return res;
+	};
+
 	return can;
 });

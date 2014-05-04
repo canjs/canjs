@@ -188,7 +188,7 @@ can.view( 'todos.ejs', Todo.findAll() ).then(function( frag ) {
 
 #### Opt-in data binding
 
-Although [EJS can.EJS’s] live-binding is super fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items). EJS’s live binding is opt-in. It only turns on if you are using the `attr` method. If the following template binds to a `todo`'s `name` …
+Although [EJS can.ejs’s] live-binding is super fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items). EJS’s live binding is opt-in. It only turns on if you are using the `attr` method. If the following template binds to a `todo`'s `name` …
 
 @codestart
 &lt;li> &lt;%= todo.attr('name') %> &lt;/li>

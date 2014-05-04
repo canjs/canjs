@@ -63,6 +63,7 @@ steal("can/map/backup", "can/model", "can/test", function () {
 		recipe.restore(true);
 		ok(!recipe.isDirty(true), 'cleaned all of recipe and its associations');
 	});
+	
 	test('backup restore nested observables', function () {
 		var observe = new can.Map({
 			nested: {
@@ -72,15 +73,19 @@ steal("can/map/backup", "can/model", "can/test", function () {
 		equal(observe.attr('nested')
 			.attr('test'), 'property', 'Nested object got converted');
 		observe.backup();
+		
 		observe.attr('nested')
 			.attr('test', 'changed property');
+			
 		equal(observe.attr('nested')
 			.attr('test'), 'changed property', 'Nested property changed');
+			
 		ok(observe.isDirty(true), 'Observe is dirty');
 		observe.restore(true);
 		equal(observe.attr('nested')
 			.attr('test'), 'property', 'Nested object got restored');
 	});
+	
 	test('backup removes properties that were added (#607)', function () {
 		var map = new can.Map({});
 		map.backup();

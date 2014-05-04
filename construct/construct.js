@@ -293,6 +293,14 @@ steal('can/util/string', function (can) {
 			function Constructor() {
 				// All construction is actually done in the init method.
 				if (!initializing) {
+					//!steal-remove-start
+					if(this.constructor !== Constructor &&
+					// We are being called without `new` or we are extending.
+					arguments.length && Constructor.constructorExtends) {
+						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
+					}
+					//!steal-remove-end
+					
 					return this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
 					arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) :

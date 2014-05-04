@@ -2,7 +2,9 @@
 @download can/component
 @test can/component/test.html
 @parent canjs
-@link ../docco/component.html docco
+@release 2.0
+@link ../docco/component/component.html docco
+
 
 @description Create widgets that use a template, a view-model 
 and custom tags.
@@ -10,7 +12,7 @@ and custom tags.
 @signature `< TAG [ATTR-NAME=ATTR-VALUE] >`
 
 Create an instance of a component on a particular 
-tag. Currently, this only works within [can.Mustache] templates.
+tag in a [can.mustache] template.
 
 @param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
 property of the component.
@@ -19,13 +21,41 @@ property of the component.
 valid. Any attributes added to the element are added as properties to the
 component's [can.Component::scope scope].
 
-@param {String} ATTR-VALUE Specifies the value of a property passed to
+@param {can.mustache.key} ATTR-VALUE Specifies the value of a property passed to
 the component instance's [can.Component::scope scope]. By default `ATTR-VALUE`
-values are looked up in the [can.view.Scope can.Mustache scope]. If the string value
+values are looked up in the [can.view.Scope can.mustache scope]. If the string value
 of the `ATTR-NAME` is desired, this can be specified like: 
 
     ATTR-NAME: "@"
-    
+
+@signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
+
+Create an instance of a component on a particular 
+tag in a [can.stache] template.
+
+@release 2.1
+
+@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
+property of the component.
+
+@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
+valid. Any attributes added to the element are added as properties to the
+component's [can.Component::scope scope]. In the DOM, attribute names
+are case insensitive.  To pass a camelCase attribute to the component's scope,
+hypenate the attribute name like:
+
+    <tag attr-name="{key}"></tag>
+
+This will set `attrName` on the component's scope.
+
+@param {can.mustache.key} [KEY] Specifies the value of a property passed to
+the component instance's [can.Component::scope scope] that will be looked
+up in the [can.view.Scope can.stache scope]. 
+
+@param {can.mustache.key} [ATTR-VALUE] If the attribute value is not
+wrapped with `{}`, the string value of the attribute will be
+set on the component's scope.
+
 @body
 
 ## Use
@@ -52,7 +82,7 @@ says "Hello There!".  To create a a instance of this component on the page,
 add `<hello-world></hello-world>` to a mustache template, render
 the template and insert the result in the page like:
 
-    var template = can.view.mustache("<hello-world></hello-world>");
+    var template = can.mustache("<hello-world></hello-world>");
     $(document.body).append( template() );
 
 Check this out here:
@@ -138,7 +168,7 @@ The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='greeting'/>");
+    var template = can.mustache("<hello-world message='greeting'/>");
     template({
       greeting: "Salutations"
     })
@@ -159,7 +189,7 @@ Default values can be provided. The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='greeting'/>");
+    var template = can.mustache("<hello-world message='greeting'/>");
     template({})
 
 Into:
@@ -179,7 +209,7 @@ default value of "@".  The following component:
 
 Changes the following rendered template:
 
-    var template = can.view.mustache("<hello-world message='Howdy'/>");
+    var template = can.mustache("<hello-world message='Howdy'/>");
     template({})
 
 Into:
@@ -205,7 +235,7 @@ adds "!" to the message every time `<hello-world>` is clicked:
 
 ### Helpers
 
-A component's [can.Component::helpers helpers] object provides [can.Mustache.helper mustache helper] functions
+A component's [can.Component::helpers helpers] object provides [can.mustache.helper mustache helper] functions
 that are available within the component's template.  The following component
 only renders friendly messages:
 
@@ -225,6 +255,42 @@ only renders friendly messages:
       }
     });
 
+## Differences between components in can.mustache and can.stache
+
+A [can.mustache] template passes values from the scope to a [can.Component]
+by specifying the key of the value in the attribute directly.  For example:
+
+    can.Component.extend({
+      tag: "my-tag",
+      template: "<h1>{{greeting}}</h1>"
+    });
+    var template = can.mustache("<my-tag greeting='message'></my-tag>");
+    
+    var frag = template({
+      message: "Hi"
+    });
+    
+    frag //-> <my-tag greeting='message'><h1>Hi</h1></my-tag>
+   
+With [can.stache], you wrap the key with `{}`. For example:
+
+    can.Component.extend({
+      tag: "my-tag",
+      template: "<h1>{{greeting}}</h1>"
+    });
+    var template = can.stache("<my-tag greeting='{message}'></my-tag>");
+    
+    var frag = template({
+      message: "Hi"
+    });
+   
+    frag //-> <my-tag greeting='{message}'><h1>Hi</h1></my-tag>
+
+If the key was not wrapped, the template would render:
+
+    frag //-> <my-tag greeting='message'><h1>message</h1></my-tag>
+ 
+Because the attribute value would be passed as the value of `gretting`.
 
 ## Examples
 

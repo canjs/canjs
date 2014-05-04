@@ -219,6 +219,7 @@ module.exports = function (grunt) {
 			},
 			steal: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/test/jquery.html',
 						'http://localhost:8000/test/jquery-2.html',
@@ -231,10 +232,11 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				options: {
+					timeout: 10000,
 					urls: [
-						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',
 						'http://localhost:8000/test/dist/jquery-2.html',
+						'http://localhost:8000/test/dist/dojo.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
 						'http://localhost:8000/test/dist/yui.html'
@@ -255,6 +257,7 @@ module.exports = function (grunt) {
 			},
 			compatibility: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/test/compatibility/jquery.html',
 						'http://localhost:8000/test/compatibility/jquery-2.html',
@@ -267,6 +270,7 @@ module.exports = function (grunt) {
 			},
 			amd: {
 				options: {
+					timeout: 10000,
 					urls: [
 						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
 						'http://localhost:8000/test/amd/jquery.html',
@@ -279,6 +283,7 @@ module.exports = function (grunt) {
 			},
 			individuals: {
 				options: {
+					timeout: 10000,
 					urls: [
 						'http://localhost:8000/component/test.html',
 						'http://localhost:8000/compute/test.html',
@@ -287,6 +292,7 @@ module.exports = function (grunt) {
 						'http://localhost:8000/construct/super/test.html',
 						'http://localhost:8000/control/test.html',
 						'http://localhost:8000/map/test.html',
+						'http://localhost:8000/map/lazy/test.html',
 						'http://localhost:8000/map/attributes/test.html',
 						'http://localhost:8000/map/backup/test.html',
 						// 'http://localhost:8000/map/delegate/test.html',
@@ -370,15 +376,22 @@ module.exports = function (grunt) {
 			}
 		},
 		docco: {
-			dev: {
-				src: [
-					'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
-					'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-					'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+			options: {
+				dst: 'docco/',
+				layout : 'parallel',
+				css : 'resources/docco.css'
+			},
+			docs: {
+				files : [
+					{
+						src : [
+							'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
+							'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
+							'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+						],
+						expand : true
+					}
 				],
-				options: {
-					output: 'docco/'
-				}
 			}
 		},
 		plato: {
@@ -444,13 +457,15 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 	grunt.loadNpmTasks('grunt-jsbeautifier');
-	grunt.loadNpmTasks('grunt-docco');
+	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test:compatibility', ['connect', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
+	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
-
+	grunt.registerTask('test:steal', ['connect',  'testify','qunit:steal']);
+	grunt.registerTask('test:amd', ['connect',  'build','testify','qunit:amd']);
 };

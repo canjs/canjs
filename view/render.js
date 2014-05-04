@@ -47,7 +47,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 			}
 
 			// Finally, if all else is `false`, `toString()` it.
-			return '' + input;
+			return "" + input;
 		},
 		// Returns escaped/sanatized content for anything other than a live-binding
 		contentEscape = function (txt, tag) {
@@ -85,16 +85,6 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 				can.view.lists = old;
 				return data;
 			};
-		},
-		pending: function (data) {
-			// TODO, make this only run for the right tagName
-			var hooks = can.view.getHooks();
-			return can.view.hook(function (el) {
-				can.each(hooks, function (fn) {
-					fn(el);
-				});
-				can.view.Scanner.hookupAttributes(data, el);
-			});
 		},
 		getHooks: function () {
 			var hooks = pendingHookups.slice(0);
@@ -140,7 +130,11 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 				// should live-binding be setup
 				setupLiveBinding = false,
 				// the compute's value
-				compute, value, unbind, listData, attributeName;
+				value,
+				listData,
+				compute,
+				unbind = emptyHandler,
+				attributeName;
 
 			// Are we currently within a live section within an element like the {{name}}
 			// within `<div {{#person}}{{name}}{{/person}}/>`.
@@ -189,9 +183,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 			}
 
 			if (listData) {
-				if (unbind) {
-					unbind();
-				}
+				unbind();
 				return "<" + tag + can.view.hook(function (el, parentNode) {
 					live.list(el, listData.list, listData.renderer, self, parentNode);
 				}) + "></" + tag + ">";
@@ -199,9 +191,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 
 			// If we had no observes just return the value returned by func.
 			if (!setupLiveBinding || typeof value === "function") {
-				if (unbind) {
-					unbind();
-				}
+				unbind();
 				return ((withinTemplatedSectionWithinAnElement || escape === 2 || !escape) ?
 					contentText :
 					contentEscape)(value, status === 0 && tag);
