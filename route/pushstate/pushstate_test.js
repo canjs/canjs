@@ -563,65 +563,69 @@ steal('can/route/pushstate', "can/test", function () {
 			iframe.src = can.test.path("route/pushstate/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
-
-		test("no doubled history states (#656)", function () {
-			stop();
-			window.routeTestReady = function (iCanRoute, loc, hist, win) {
-				var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
-				var stateTest = -1,
-					message;
-
-				function nextStateTest() {
-					stateTest++;
-					win.can.route.attr("page", "start");
-
-					setTimeout(function () {
-						if (stateTest === 0) {
-							message = "can.route.attr";
-							win.can.route.attr("page", "test");
-						} else if (stateTest === 1) {
-							message = "history.pushState";
-							win.history.pushState(null, null, root + "test/");
-						} else if (stateTest === 2) {
-							message = "link click";
-							var link = win.document.createElement("a");
-							link.href = root + "test/";
-							link.innerText = "asdf";
-							win.document.body.appendChild(link);
-							win.can.trigger(win.can.$(link), "click");
-						} else {
-							start();
-							can.remove(can.$(iframe));
-							return;
-						}
-
+			
+		if(window.parent === window) {
+			// we can't call back if running in multiple frames
+			test("no doubled history states (#656)", function () {
+				stop();
+				window.routeTestReady = function (iCanRoute, loc, hist, win) {
+					var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
+					var stateTest = -1,
+						message;
+	
+					function nextStateTest() {
+						stateTest++;
+						win.can.route.attr("page", "start");
+	
 						setTimeout(function () {
-							win.history.back();
+							if (stateTest === 0) {
+								message = "can.route.attr";
+								win.can.route.attr("page", "test");
+							} else if (stateTest === 1) {
+								message = "history.pushState";
+								win.history.pushState(null, null, root + "test/");
+							} else if (stateTest === 2) {
+								message = "link click";
+								var link = win.document.createElement("a");
+								link.href = root + "test/";
+								link.innerText = "asdf";
+								win.document.body.appendChild(link);
+								win.can.trigger(win.can.$(link), "click");
+							} else {
+								start();
+								can.remove(can.$(iframe));
+								return;
+							}
+	
 							setTimeout(function () {
-								var path = win.location.pathname;
-								// strip root for deparam
-								if (path.indexOf(root) === 0) {
-									path = path.substr(root.length);
-								}
-								equal(win.can.route.deparam(path)
-									.page, "start", message + " passed");
-								nextStateTest();
+								win.history.back();
+								setTimeout(function () {
+									var path = win.location.pathname;
+									// strip root for deparam
+									if (path.indexOf(root) === 0) {
+										path = path.substr(root.length);
+									}
+									equal(win.can.route.deparam(path)
+										.page, "start", message + " passed");
+									nextStateTest();
+								}, 200);
 							}, 200);
+	
 						}, 200);
-
-					}, 200);
-				}
-
-				win.can.route.bindings.pushstate.root = root;
-				win.can.route(":page/");
-				win.can.route.ready();
-				nextStateTest();
-			};
-
-			var iframe = document.createElement("iframe");
-			iframe.src = can.test.path("route/pushstate/testing.html");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
-		});
+					}
+	
+					win.can.route.bindings.pushstate.root = root;
+					win.can.route(":page/");
+					win.can.route.ready();
+					nextStateTest();
+				};
+	
+				var iframe = document.createElement("iframe");
+				iframe.src = can.test.path("route/pushstate/testing.html");
+				can.$("#qunit-test-area")[0].appendChild(iframe);
+			});
+		
+		}
 
 		test("routed links must descend from pushstate root (#652)", 1, function () {
 

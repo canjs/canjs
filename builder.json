@@ -128,6 +128,7 @@
 		"can/map/attributes": {
 			"name": "can.Map.attributes",
 			"type": "plugin",
+			"deprecated": true,
 			"description": "Define Observe attributes"
 		},
 		"can/map/validations": {
@@ -205,6 +206,11 @@
 			"name": "can.util.attr",
 			"type": "core",
 			"isDefault": true,
+			"hidden": true
+		},
+		"can/util/domless": {
+			"name": "can.util.domless",
+			"type": "plugin",
 			"hidden": true
 		}
 	},

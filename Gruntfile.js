@@ -293,6 +293,7 @@ module.exports = function (grunt) {
 						'http://localhost:8000/control/test.html',
 						'http://localhost:8000/map/test.html',
 						'http://localhost:8000/map/lazy/test.html',
+						// 'http://localhost:8000/map/define/test.html',
 						'http://localhost:8000/map/attributes/test.html',
 						'http://localhost:8000/map/backup/test.html',
 						// 'http://localhost:8000/map/delegate/test.html',
@@ -302,6 +303,7 @@ module.exports = function (grunt) {
 						'http://localhost:8000/map/validations/test.html',
 						'http://localhost:8000/model/test.html',
 						'http://localhost:8000/observe/test.html',
+						'http://localhost:8000/list/promise/test.html',
 						// 'http://localhost:8000/route/test.html',
 						'http://localhost:8000/route/pushstate/test.html',
 						'http://localhost:8000/view/test.html',
@@ -391,7 +393,7 @@ module.exports = function (grunt) {
 						],
 						expand : true
 					}
-				],
+				]
 			}
 		},
 		plato: {
