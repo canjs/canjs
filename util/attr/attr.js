@@ -173,7 +173,7 @@ steal("can/util/can.js", function (can) {
 						};
 					}
 				} else {
-					return function(){}
+					return function() {};
 				}
 			})()
 		};

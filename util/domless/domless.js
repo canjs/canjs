@@ -4,20 +4,24 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 	function likeArray(obj) {
-		return typeof obj.length == 'number';
+		return typeof obj.length === 'number';
 	}
 
 	function flatten(array) {
-		return array.length > 0 ? Array.prototype.concat.apply([], array) : array
+		return array.length > 0 ? Array.prototype.concat.apply([], array) : array;
 	}
 
-	can.isFunction = (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function')
-		? function (value) {
-		return Object.prototype.toString.call(value) === '[object Function]';
-	}
-		: function (value) {
-		return typeof value === 'function';
-	};
+	can.isFunction = (function(){
+		if(typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function'){
+			return function (value) {
+				return Object.prototype.toString.call(value) === '[object Function]';
+			};
+		} else {
+			return function (value) {
+				return typeof value === 'function';
+			};
+		}
+	})();
 
 	can.trim = core_trim && !core_trim.call('\uFEFF\xA0') ?
 		function (text) {
@@ -31,6 +35,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	// This extend() function is ruthlessly and shamelessly stolen from
 	// jQuery 1.8.2:, lines 291-353.
 	can.extend = function () {
+		/*jshint maxdepth:6 */
 		var options, name, src, copy, copyIsArray, clone,
 			target = arguments[0] || {},
 			i = 1,
@@ -95,14 +100,21 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	};
 
 	can.map = function (elements, callback) {
-		var value, values = [],
-			i, key;
-		if (likeArray(elements)) for (i = 0; i < elements.length; i++) {
-			value = callback(elements[i], i);
-			if (value != null) values.push(value)
-		} else for (key in elements) {
-			value = callback(elements[key], key);
-			if (value != null) values.push(value)
+		var values = [],
+			putValue = function (val, index) {
+				var value = callback(val, index);
+				if (value != null) {
+					values.push(value);
+				}
+			};
+		if (likeArray(elements)) {
+			for (var i = 0, l = elements.length; i < l; i++) {
+				putValue(elements[i], i);
+			}
+		} else {
+			for (var key in elements) {
+				putValue(elements[key], key);
+			}
 		}
 		return flatten(values);
 	};
