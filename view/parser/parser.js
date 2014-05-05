@@ -1,5 +1,5 @@
 /* jshint maxdepth:7*/
-steal("can/view", function(can){
+steal("can/view", function(){
 	
 	
 	function makeMap(str){

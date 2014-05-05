@@ -13,7 +13,7 @@ steal('can/util', "can/view",function (can) {
 	 */
 	var elements = {
 		tagToContentPropMap: {
-			option: ( typeof document !=="undefined" && "textContent" in document.createElement("option") ) ? "textContent" : "innerText",
+			option: 'textContent' in document.createElement('option') ? 'textContent' : 'innerText',
 			textarea: 'value'
 		},
 		/**
