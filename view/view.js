@@ -218,6 +218,9 @@ steal('can/util', function (can) {
 		// #### fragment
 		// this is used internally to create a document fragment, insert it,then hook it up
 		fragment: function (result) {
+			if(typeof result !== "string" && result.nodeType === 11) {
+				return result;
+			}
 			var frag = can.buildFragment(result, document.body);
 			// If we have an empty frag...
 			if (!frag.childNodes.length) {
