@@ -116,7 +116,10 @@ steal('can/util',
 		 * @add can.Mustache
 		 */
 		// Put Mustache on the `can` object.
-		can.Mustache = window.Mustache = Mustache;
+		can.Mustache = Mustache;
+		if(typeof window !== "undefined") {
+			window.Mustache = Mustache;
+		}
 
 		/** 
 		 * @prototype

@@ -34,7 +34,7 @@ steal("can/util", "can/view",function(can){
 	var tag = can.view.tag = function (tagName, tagHandler) {
 		if(tagHandler) {
 			// if we have html5shive ... re-generate
-			if (window.html5) {
+			if (typeof window !== "undefined" && window.html5) {
 				window.html5.elements += " " + tagName;
 				window.html5.shivDocument();
 			}
