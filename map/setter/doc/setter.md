@@ -5,6 +5,11 @@
 
 Specify setter methods on [can.Map can.Maps].
 
+@deprecated {2.1} The setter plugin (and the attributes plugin) have been deprecated in 
+favor of the new [can.Map.prototype.define define] plugin, which provides the same 
+functionality. It will still be maintained up to 3.0 and potentially after. 
+Projects using setters should consider switching to [can.Map.prototype.define.set define setters].
+
 @signature `setATTR: function(newValue,setValue,setErrors)`
 
 Specifies a setter method for the `ATTR` attribute.
@@ -24,10 +29,6 @@ undefined is returned, it's assumed that the `setValue` callback will be called.
 set undefined values.
 
 @body
-
-## Deprecation Warning
-
-The attributes plugin (and the setter plugin) has been deprecated in 2.1 in favor of the new [can.Map.prototype.define define] plugin, which provides the same functionality.
 
 ## Use
 
