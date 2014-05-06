@@ -556,23 +556,21 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 
-	test("template with view binding breaks in stache, not in mustache", function(){
+	test("template with view binding breaks in stache, not in mustache (#966)", function(){
 		var templateString = '<a href="javascript://" can-click="select">'+
 								'{{#if thing}}\n<div />{{/if}}'+
 								'<span>{{name}}</span>'+
 							 '</a>';
-	    var mustacheRenderer = can.mustache(templateString);
-	    var stacheRenderer = can.stache(templateString);
-	    
-	    var obj = new can.Map({thing: 'stuff', name: 'Brian'})
-
-    	var div = document.createElement('div');
-
-
-    	mustacheRenderer(obj);
-	    ok(true, 'mustache worked without errors');
-    	stacheRenderer(obj);
-	    ok(true, 'stache worked without errors');
+		//var mustacheRenderer = can.mustache(templateString);
+		var stacheRenderer = can.stache(templateString);
+		
+		var obj = new can.Map({thing: 'stuff'});
+		
+		
+		//mustacheRenderer(obj);
+		//ok(true, 'mustache worked without errors');
+		stacheRenderer(obj);
+		ok(true, 'stache worked without errors');
 		
 	});
 
