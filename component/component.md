@@ -416,9 +416,7 @@ its sub-components:
 ## IE 8 Support
 
 While CanJS does support Internet Explorer 8 out of the box, if you decide
-to use can.Components then you will need to use the [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
+to use can.Component then you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
 in order for your custom tags to work properly.
 
-Unfortunately, at the moment, the official HTML5 Shiv
-does not work with namespaced tag names (e.g. `<can:example>`). Thankfully, CanJS comes with a version that
-fixes this and we've already submitted a pull request so future users of HTML5 Shiv won't run into this issue.
+For namespaced tag names (e.g. `<can:example>`) and hyphenated tag names (e.g. `<can-example>`) to work properly, you will need to use version 3.7.2 or later.
