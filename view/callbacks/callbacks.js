@@ -69,7 +69,15 @@ steal("can/util", "can/view",function(can){
 	
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content
 			var scope = tagData.scope,
-				res = tagCallback ? tagCallback(el, tagData) : scope;
+				res;
+				
+			if(tagCallback) {
+				var reads = can.__clearReading();
+				res = tagCallback(el, tagData);
+				can.__setReading(reads);
+			} else {
+				res = scope;
+			}
 	
 			//!steal-remove-start
 			if (!tagCallback) {
