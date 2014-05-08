@@ -121,7 +121,8 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					//!steal-remove-start
 					// user tried to pass something like id="{foo}", so give them a good warning
 					if(ignoreAttributesRegExp.test(name) && value[0] === "{" && value[value.length-1] === "}") {
-						can.dev.warn(name+" is not a supported attribute");
+						can.dev.warn("can/component: looks like you're trying to pass "+name+" as an attribute into a component, "+
+							"but it is not a supported attribute");
 					}
 					//!steal-remove-end
 
