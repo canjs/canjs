@@ -30,7 +30,9 @@ console.log("CONFIG RUN");
 		map: {
 			"jquery/jquery": "jquery",
 			"can/util/util": "can/util/jquery/jquery",
-			"stache": "can/view/stache/system"
+			"stache": "can/view/stache/system",
+			"ejs": "can/view/ejs/system",
+			"mustache" : "can/view/mustache/system"
 		},
 		paths: {
 			"jquery": "../../../lib/jquery.1.10.2.js",

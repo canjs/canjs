@@ -1,4 +1,4 @@
-import {stache} from 'can/view/stache/stache';
+import stache from 'can/view/stache/stache';
 
 var esc = function(string){
 	return ('' + string).replace(/["'\\\n\r\u2028\u2029]/g, function (character) {
@@ -13,7 +13,6 @@ var esc = function(string){
 export function translate(load) {
 	
 	return "define(['can/view/stache/stache'],function(stache){"+
-		"console.log(stache);\n"+
 		"return stache(\""+esc(load.source)+"\")"+
 	"})";
 	
