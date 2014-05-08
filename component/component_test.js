@@ -1190,4 +1190,31 @@ steal("can/component", "can/view/stache", function () {
 		
 	});
 
+    test("Respect string attributes with scope function (mustache)", function(){
+
+        var scope
+
+        can.Component.extend({
+            tag: "comp-scope",
+
+            scope: function(){
+                return {
+
+                    string: '@',
+                    init: function(){
+                        scope = this
+                    }
+                }
+            }
+        });
+
+        var view = can.mustache('<comp-scope string="string"></comp-scope>');
+
+        view()
+
+        equal(scope.string, "string");
+
+    });
+
+
 });
