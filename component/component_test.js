@@ -1190,4 +1190,24 @@ steal("can/component", "can/view/stache", function () {
 		
 	});
 
+	
+	//!steal-remove-start
+	if (can.dev) {
+		test("passing unsupported attributes gives a warning", function(){
+
+			var oldlog = can.dev.warn;
+			can.dev.warn = function (text) {
+				ok(text, "got a message");
+				can.dev.warn = oldlog;
+			};
+			can.Component.extend({
+				tag: 'my-thing',
+				template: 'hello'
+			});
+			var stache = can.stache("<my-thing id='{productId}'></my-tagged>");
+			stache(new can.Map({productId: 123}))
+		});
+	}
+	//!steal-remove-end
+
 });
