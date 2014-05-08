@@ -1190,7 +1190,7 @@ steal("can/component", "can/view/stache", function () {
 		
 	});
 
-	
+
 	//!steal-remove-start
 	if (can.dev) {
 		test("passing unsupported attributes gives a warning", function(){
@@ -1205,7 +1205,7 @@ steal("can/component", "can/view/stache", function () {
 				template: 'hello'
 			});
 			var stache = can.stache("<my-thing id='{productId}'></my-tagged>");
-			stache(new can.Map({productId: 123}))
+			stache(new can.Map({productId: 123}));
 		});
 	}
 	//!steal-remove-end
