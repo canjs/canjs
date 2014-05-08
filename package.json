@@ -28,7 +28,9 @@
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-jsbeautifier": "~0.2.6",
     "grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
-    "grunt-plato": "~0.2.1"
+    "grunt-plato": "~0.2.1",
+    "steal-tools": "git://github.com/bitovi/steal-tools.git#systemjs",
+    "rimraf": "2.1"
   },
   "scripts": {
     "test": "grunt test",

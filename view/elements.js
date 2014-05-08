@@ -1,6 +1,8 @@
 steal('can/util', "can/view",function (can) {
 
-	var selectsCommentNodes = (function(){
+	var doc = typeof document !== "undefined" ? document: null;
+
+	var selectsCommentNodes = doc && (function(){
 		return can.$(document.createComment('~')).length === 1;
 	})();
 
@@ -13,7 +15,7 @@ steal('can/util', "can/view",function (can) {
 	 */
 	var elements = {
 		tagToContentPropMap: {
-			option: ( typeof document !=="undefined" && "textContent" in document.createElement("option") ) ? "textContent" : "innerText",
+			option: ( doc && "textContent" in document.createElement("option") ) ? "textContent" : "innerText",
 			textarea: 'value'
 		},
 		/**

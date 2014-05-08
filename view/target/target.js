@@ -10,7 +10,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		}
 		return frag;
 	},
-		keepsTextNodes =  (function(){
+		keepsTextNodes =  typeof document !== "undefined" && (function(){
 			var testFrag = document.createDocumentFragment();
 			var div = document.createElement("div");
 			

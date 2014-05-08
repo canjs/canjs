@@ -1,7 +1,7 @@
 steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( can, target, utils, mustacheCore ) {
 
 	
-	var decodeHTML = (function(){
+	var decodeHTML = typeof document !== "undefined" && (function(){
 		var el = document.createElement('div');
 		return function(html){
 			if(html.indexOf("&") === -1) {
