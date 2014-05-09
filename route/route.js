@@ -348,13 +348,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		data: new can.Map({}),
 		map: function(data){
 			var appState;
-			// appState is an instance of can.Map
-			if(data instanceof can.Map){
-				appState = data;
-			}
 			// appState is a can.Map constructor function
-			else if(data.prototype instanceof can.Map){
+			if(data.prototype instanceof can.Map){
 				appState = new data();
+			}
+			// appState is an instance of can.Map
+			else {
+				appState = data;
 			}
 			can.route.data = appState;
 		},
