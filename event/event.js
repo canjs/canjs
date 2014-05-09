@@ -302,7 +302,7 @@ steal('can/util/can.js', function (can) {
 		 */
 		on: function() {
 			if (arguments.length === 0 && can.Control && this instanceof can.Control) {
-				can.Control.prototype.on.call(this);
+				return can.Control.prototype.on.call(this);
 			}
 			else {
 				return can.addEvent.apply(this, arguments);
@@ -324,7 +324,7 @@ steal('can/util/can.js', function (can) {
 		 */
 		off: function() {
 			if (arguments.length === 0 && can.Control && this instanceof can.Control) {
-				can.Control.prototype.off.call(this);
+				return can.Control.prototype.off.call(this);
 			}
 			else {
 				return can.removeEvent.apply(this, arguments);
