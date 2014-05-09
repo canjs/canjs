@@ -1,4 +1,4 @@
-steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/array/makeArray.js', function(can, attr) {
+steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/array/makeArray.js', function (can, attr) {
 
 	var core_trim = String.prototype.trim;
 	var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
@@ -11,8 +11,8 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 		return array.length > 0 ? Array.prototype.concat.apply([], array) : array;
 	}
 
-	can.isFunction = (function(){
-		if(typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function'){
+	can.isFunction = (function () {
+		if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
 			return function (value) {
 				return Object.prototype.toString.call(value) === '[object Function]';
 			};
@@ -26,11 +26,12 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	can.trim = core_trim && !core_trim.call('\uFEFF\xA0') ?
 		function (text) {
 			return text == null ? '' : core_trim.call(text);
-		} :
-		// Otherwise use our own trimming functionality
-		function (text) {
-			return text == null ? '' : ( text + '' ).replace(rtrim, '');
-		};
+	} :
+	// Otherwise use our own trimming functionality
+	function (text) {
+		return text == null ? '' : (text + '')
+			.replace(rtrim, '');
+	};
 
 	// This extend() function is ruthlessly and shamelessly stolen from
 	// jQuery 1.8.2:, lines 291-353.
@@ -63,11 +64,11 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 
 		for (; i < length; i++) {
 			// Only deal with non-null/undefined values
-			if ((options = arguments[ i ]) != null) {
+			if ((options = arguments[i]) != null) {
 				// Extend the base object
 				for (name in options) {
-					src = target[ name ];
-					copy = options[ name ];
+					src = target[name];
+					copy = options[name];
 
 					// Prevent never-ending loop
 					if (target === copy) {
@@ -75,7 +76,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 					}
 
 					// Recurse if we're merging plain objects or arrays
-					if (deep && copy && ( can.isPlainObject(copy) || (copyIsArray = can.isArray(copy)) )) {
+					if (deep && copy && (can.isPlainObject(copy) || (copyIsArray = can.isArray(copy)))) {
 						if (copyIsArray) {
 							copyIsArray = false;
 							clone = src && can.isArray(src) ? src : [];
@@ -85,11 +86,11 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 						}
 
 						// Never move original objects, clone them
-						target[ name ] = can.extend(deep, clone, copy);
+						target[name] = can.extend(deep, clone, copy);
 
 						// Don't bring in undefined values
 					} else if (copy !== undefined) {
-						target[ name ] = copy;
+						target[name] = copy;
 					}
 				}
 			}
@@ -117,6 +118,11 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 			}
 		}
 		return flatten(values);
+	};
+	can.proxy = function (cb, that) {
+		return function () {
+			return cb.apply(that, arguments);
+		};
 	};
 
 	can.attr = attr;

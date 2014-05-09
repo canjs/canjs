@@ -1,5 +1,3 @@
-console.log("CONFIG RUN");
-
 (function () {
 	// taking from HTML5 Shiv v3.6.2 | @afarkas @jdalton @jon_neal @rem | MIT/GPL2 Licensed
 	var supportsUnknownElements = false;
@@ -40,8 +38,7 @@ console.log("CONFIG RUN");
 		},
 		meta: {
 			jquery: {
-				exports: "jQuery",
-				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv"]
+				exports: "jQuery"
 			}
 		},
 		ext: {
