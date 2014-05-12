@@ -3426,4 +3426,18 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
 	})
+
+	test("Custom elements created with default namespace in IE8", function(){
+		// Calling can.view.tag so that this tag is shived
+		can.view.tag('my-tag', function(){});
+
+		var tmpl = "<my-tag></my-tag>";
+
+		var frag = can.stache(tmpl)({});
+		var qta = can.$('#qunit-test-area');
+		can.append(qta, frag);
+
+		equal(qta[0].innerHTML.toLowerCase(), "<my-tag></my-tag>", "Element created in default namespace");
+	});
+
 });
