@@ -1,5 +1,5 @@
 steal(
-    "can/util/library",
+	"can/util/library",
 	"can/view/parser",
 	"can/view/target",
 	"./html_section.js",
