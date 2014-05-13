@@ -3434,10 +3434,9 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var tmpl = "<my-tag></my-tag>";
 
 		var frag = can.stache(tmpl)({});
-		var qta = can.$('#qunit-test-area');
-		can.append(qta, frag);
+		can.append(can.$("#qunit-test-area"), frag);
 
-		equal(qta[0].innerHTML.toLowerCase(), "<my-tag></my-tag>", "Element created in default namespace");
+		equal(can.$("my-tag").length, 1, "Element created in default namespace");
 	});
 
 });

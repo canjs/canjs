@@ -21,7 +21,66 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			var cloned  = testFrag.cloneNode(true);
 			
 			return cloned.childNodes[0].childNodes.length === 2;
+		})(),
+		clonesWork = (function(){
+			// Since html5shiv is required to support custom elements, assume cloning
+			// works in any browser that doesn't have html5shiv
+
+			// Clone an element containing a custom tag to see if the innerHTML is what we
+			// expect it to be, or if not it probably was created outside of the document's
+			// namespace.
+			var a = document.createElement('a');
+			a.innerHTML = "<xyz></xyz>";
+			var clone = a.cloneNode(true);
+
+			return clone.innerHTML === "<xyz></xyz>";
 		})();
+
+	/**
+	 * @method cloneNode
+	 * @hide
+	 *
+	 * A custom cloneNode function to be used in browsers that properly support cloning
+	 * of custom tags (IE8 for example). Fixes it by doing some manual cloning that
+	 * uses innerHTML instead, which has been shimmed.
+	 *
+	 * @param {DocumentFragment} frag A document fragment to clone
+	 * @return {DocumentFragment} a new fragment that is a clone of the provided argument
+	 */
+	var cloneNode = clonesWork ?
+		function(el){
+			return el.cloneNode(true);
+		} :
+		function(node){
+			var copy;
+
+			if(node.nodeType === 1) {
+				copy = document.createElement(node.nodeName);
+			} else if(node.nodeType === 3){
+				copy = document.createTextNode(node.nodeValue);
+			} else if(node.nodeType === 8) {
+				copy = document.createComment(node.nodeValue);
+			} else if(node.nodeType === 11) {
+				copy = document.createDocumentFragment();
+			}
+
+			if(node.attributes) {
+				var attributes = can.makeArray(node.attributes);
+				can.each(attributes, function (node) {
+					if(node && node.specified) {
+						copy.setAttribute(node.nodeName, node.nodeValue);
+					}
+				});
+			}
+			
+			if(node.childNodes) {
+				can.each(node.childNodes, function(child){
+					copy.appendChild( cloneNode(child) );
+				});
+			}
+			
+			return copy;
+		};
 
 	function processNode(node, paths, location){
 		var callback,
@@ -132,8 +191,8 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			paths: paths,
 			clone: frag,
 			hydrate: function(){
-				var cloned = this.clone.cloneNode(true),
-					args = can.makeArray(arguments);
+				var cloned = cloneNode(this.clone);
+				var args = can.makeArray(arguments);
 				for(var i = paths.length - 1; i >=0 ; i--) {
 					hydratePath(cloned,paths[i], args);
 				}
