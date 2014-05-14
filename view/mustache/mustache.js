@@ -1702,7 +1702,7 @@ steal('can/util',
 
 			// Call into `can.view.render` passing the
 			// partial and scope.
-			return can.view.render(partial, scope /*, options*/ );
+			return can.view.render(partial, scope, options);
 		};
 
 		/**
