@@ -28,7 +28,7 @@ steal('can/util/can.js', 'can/event', function(can) {
 		}
 
 		// Split the namespaces out
-		if (event && event.indexOf('.') > -1) {
+		if (event.indexOf('.') > -1) {
 			var namespaces = event.split('.');
 			// The event name is the first item in the string
 			event = namespaces[0];

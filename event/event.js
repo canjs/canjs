@@ -300,15 +300,7 @@ steal('can/util/can.js', function (can) {
 		 *
 		 * This syntax can be used for objects that don't include the `can.event` mixin.
 		 */
-		on: function() {
-			if (arguments.length === 0 && can.Control && this instanceof can.Control) {
-				return can.Control.prototype.on.call(this);
-			}
-			else {
-				return can.addEvent.apply(this, arguments);
-			}
-		},
-
+		on: can.addEvent,
 		/**
 		 * @function can.event.off
 		 * @parent can.event.static
@@ -322,15 +314,7 @@ steal('can/util/can.js', function (can) {
 		 *
 		 * This syntax can be used for objects that don't include the `can.event` mixin.
 		 */
-		off: function() {
-			if (arguments.length === 0 && can.Control && this instanceof can.Control) {
-				return can.Control.prototype.off.call(this);
-			}
-			else {
-				return can.removeEvent.apply(this, arguments);
-			}
-		},
-
+		off: can.removeEvent,
 		/**
 		 * @function can.event.bind
 		 * @parent can.event.static
