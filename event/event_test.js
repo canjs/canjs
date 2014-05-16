@@ -1,4 +1,4 @@
-steal('can/event', 'can/test', function (event) {
+steal('can/event', "can/control", 'can/test', "can/control", function (event, Control) {
 	module('can/event');
 	test('basics', 4, function () {
 		var obj = {
@@ -227,5 +227,30 @@ steal('can/event', 'can/test', function (event) {
 		obj.stopListening(other, 'action', fn);
 		other.dispatch('action');
 		equal(bindCount, 2, 'action triggered twice');
+	});
+
+	test("When mixed in, can.Control-based classes should still retain on/off functionality (#981)", function() {
+		var clicked = false;
+		var MyControl = can.Control.extend(can.extend({}, can.event, {
+		  " click": function() {
+		  	clicked = true;
+		  }
+		}));
+
+		var div = document.createElement("div");
+		var instance = new MyControl(div, {});
+		
+		can.$(div).trigger("click");
+		equal(clicked, true, "click event handler was bound successfully via init");
+
+		clicked = false;
+		instance.off();
+		can.$(div).trigger("click");
+		equal(clicked, false, "click event handler was unbound successfully via off()");
+
+		clicked = false;
+		instance.on();
+		can.$(div).trigger("click");
+		equal(clicked, true, "click event handler was bound successfully via on()");
 	});
 });
