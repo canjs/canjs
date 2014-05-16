@@ -5,7 +5,7 @@
 		{{#if makes.isResolved}}
 			<select can-value="makeId">
 				{{^makeId}}
-					<option>Select a Make</option>
+					<option value="">Select a Make</option>
 				{{/makeId}}
 				{{#each makes}}
 					<option value="{{id}}">{{name}}</option>
@@ -19,7 +19,7 @@
 			{{#if models.isResolved}}
 				<select can-value="modelId">
 					{{^modelId}}
-						<option>Select a Model</option>
+						<option value="">Select a Model</option>
 					{{/modelId}}
 					{{#each models}}
 						<option value="{{id}}">{{name}}</option>
@@ -35,7 +35,7 @@
 		{{#if years}}
 			<select can-value="year">
 				{{^year}}
-					<option>Select a Year</option>
+					<option value="">Select a Year</option>
 				{{/year}}
 				{{#each years}}
 					<option value="{{.}}">{{.}}</option>
