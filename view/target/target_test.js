@@ -97,4 +97,25 @@ steal("can/view/target", function(target){
 		
 	});
 	
+	
+	test("paths should be run in reverse order (#966)", function(){
+		
+		var data = target([{
+			tag: "h1",
+			attributes: [function(){}],
+			children:  [
+				function(){
+					this.parentElement.insertBefore(document.createElement("div"),this.nextSibling);
+				},
+				{
+					tag: "span",
+					children: [function(){
+						equal(this.nodeType,3, "got an element");
+					}]
+				}
+			]
+		}]);
+		data.hydrate();
+	});
+	
 });

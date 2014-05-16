@@ -323,7 +323,8 @@ steal('can/util', 'can/construct', function (can) {
 		"keypress", "mousedown", "mousemove", "mouseout", "mouseover",
 		"mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
 		"focusout", "mouseenter", "mouseleave",
-		"touchstart", "touchmove", "touchcancel", "touchend", "touchleave"
+		"touchstart", "touchmove", "touchcancel", "touchend", "touchleave",
+		"inserted","removed"
 	], function (v) {
 		processors[v] = basicProcessor;
 	});

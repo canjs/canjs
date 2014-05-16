@@ -178,7 +178,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			callbackData.callback.apply(child, args );
 		}
 		if(paths && paths.length){
-			for(i=0, len = paths.length; i< len; i++) {
+			for( i= paths.length - 1 ; i >= 0; i--) {
 				hydratePath(child,paths[i], args);
 			}
 		}

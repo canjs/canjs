@@ -1190,7 +1190,6 @@ steal("can/component", "can/view/stache", function () {
 		
 	});
 
-
 	//!steal-remove-start
 	if (can.dev) {
 		test("passing unsupported attributes gives a warning", function(){
@@ -1209,5 +1208,42 @@ steal("can/component", "can/view/stache", function () {
 		});
 	}
 	//!steal-remove-end
+
+	test("stache conditionally nested components calls inserted once (#967)", function(){
+		expect(2);
+
+		can.Component.extend({
+			tag: "can-parent-stache",
+			scope: {
+				shown: true
+			},
+			template: can.stache("{{#if shown}}<can-child></can-child>{{/if}}")
+		});
+		can.Component.extend({
+			tag: "can-parent-mustache",
+			scope: {
+				shown: true
+			},
+			template: can.mustache("{{#if shown}}<can-child></can-child>{{/if}}")
+		});
+		can.Component.extend({
+			tag: "can-child",
+			events: {
+				inserted: function(){
+					this.scope.attr('bar', 'foo');
+					ok(true, "called inserted once");
+				}
+			}
+		});
+
+		var template = can.stache("<can-parent-stache></can-parent-stache>");
+
+		can.append(can.$('#qunit-test-area'), template());
+
+		var template2 = can.stache("<can-parent-mustache></can-parent-mustache>");
+
+		can.append(can.$('#qunit-test-area'), template2());
+
+	});
 
 });
