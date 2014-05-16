@@ -6,11 +6,14 @@
 @group can.Map.attributes.static static
 @group can.Map.attributes.prototype prototype
 
+
+@deprecated {2.1} The attributes plugin (and the setter plugin) have been deprecated in 
+favor of the new [can.Map.prototype.define define] plugin, which provides the same 
+functionality. It will still be maintained up to 3.0 and potentially after. 
+Projects using converters or serializers should consider switching to [can.Map.prototype.define.type define's type] 
+and [can.Map.prototype.define.serialize define's serialize].
+
 @body
-
-## Deprecation Warning
-
-The attributes plugin (and the setter plugin) has been deprecated in 2.1 in favor of the new [can.Map.prototype.define define] plugin, which provides the same functionality.
 
 ## Use
 
