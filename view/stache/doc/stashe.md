@@ -82,7 +82,7 @@ can.stache provides significantly more functionality such as:
 - [can.stache.Binding Live Binding]
 
 
-## Deferrences from can.mustache
+## Differences from can.mustache
 
 `can.stache` is largely compatable with [can.mustache].  There are three main differences:
 
