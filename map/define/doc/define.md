@@ -80,7 +80,7 @@ Here is the cliffnotes version of this plugin.  To define...
 
 The following shows picking cars by make / model / year:
 
-@demo can/map/define/doc/examples/makeModelYear.html
+@demo can/map/define/doc/examples/makemodelyear.html
 
 
 
