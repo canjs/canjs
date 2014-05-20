@@ -3439,4 +3439,25 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
 	});
 
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		},
+		frag;
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".stache")
+		}
+
+		frag = can.stache(t.template)({}, t.helpers);
+		equal(frag.childNodes[0].nodeValue, t.expected);
+	});
 });

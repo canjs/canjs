@@ -370,7 +370,7 @@ steal("can/util",
 				// Use can.view to get and render the partial.
 				else {
 					
-					res = can.view.render(partialName, scope /*, options*/ );
+					res = can.view.render(partialName, scope, options );
 				}
 				
 				live.replace([this], res);
