@@ -210,7 +210,7 @@ steal(
 				
 				
 				if(expression === "else") {
-					(state.attr && state.attr.section ? state.attr.section : section)['inverse']();
+					(state.attr && state.attr.section ? state.attr.section : section).inverse();
 					return;
 				}
 				
