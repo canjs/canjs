@@ -3766,4 +3766,27 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(content[7].innerHTML, "bar", "passed as a hash to helper" + description);
 	});
 
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		};
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".mustache")
+		}
+
+		deepEqual(new can.Mustache({
+				text: t.template
+			})
+			.render({}, t.helpers), t.expected);
+	});
+
 });
