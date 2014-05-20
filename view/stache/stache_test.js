@@ -3467,4 +3467,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var frag = can.stache(tmpl)({ noData: true });
 		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
 	});
+
+	test("{{else}} within an attribute (#974)", function(){
+		var tmpl = '<div class="{{#if color}}{{color}}{{else}}red{{/if}}"></div>',
+			data = new can.Map({
+				color: 'orange'
+			}),
+			frag = can.stache(tmpl)(data);
+
+		equal(frag.childNodes[0].getAttribute('class'), 'orange', 'if branch');
+		data.attr('color', false);
+		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
+	});
 });
