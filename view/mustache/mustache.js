@@ -1868,6 +1868,8 @@ steal('can/util',
 			'unless': function (expr, options) {
 				if (!Mustache.resolve(expr)) {
 					return options.fn(options.contexts || this);
+				} else {
+					return options.inverse(options.contexts || this);
 				}
 			},
 

@@ -3460,4 +3460,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		frag = can.stache(t.template)({}, t.helpers);
 		equal(frag.childNodes[0].nodeValue, t.expected);
 	});
+
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.stache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
 });

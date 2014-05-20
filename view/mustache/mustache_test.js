@@ -3789,4 +3789,10 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({}, t.helpers), t.expected);
 	});
 
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.mustache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
 });
