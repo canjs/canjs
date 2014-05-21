@@ -39,7 +39,8 @@
 			"can/*": "*.js",
 			"jquerypp/": "http://jquerypp.com/release/1.0.1/steal/",
 			"benchmark": "bower_components/benchmark/benchmark.js",
-			"jqueryui/jqueryui.js" :"http://code.jquery.com/ui/1.10.4/jquery-ui.js"
+			"jqueryui/jqueryui.js" :"http://code.jquery.com/ui/1.10.4/jquery-ui.js",
+			"steal/dev/dev.js": "lib/steal/dev/dev.js"
 		},
 		meta: {
 			jquery: {

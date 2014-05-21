@@ -125,13 +125,14 @@ module.exports = function (grunt) {
 				},
 				pkg: pkg,
 				builder: builderJSON,
+				config: __dirname + "/stealconfig.js",
 				steal: {
 					map: {
 						'*': {
 							'can/': ''
 						}
 					},
-					root: __dirname
+					baseURL: __dirname + "/"
 				}
 			},
 			dist: {
@@ -139,7 +140,7 @@ module.exports = function (grunt) {
 					prefix: 'can.'
 				},
 				files: {
-					'dist/': '.'
+					'dist/': 'can.js'
 				}
 			}
 		},
