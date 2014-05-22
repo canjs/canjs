@@ -200,6 +200,7 @@ steal('can/util/can.js', function (can) {
 		 * immediately.
 		 */
 		trigger: function (item, event, args) {
+			//console.log(event, item, args);
 			// Don't send events if initalizing.
 			if (!item._init) {
 				if (transactions === 0) {

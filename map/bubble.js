@@ -53,6 +53,9 @@ steal('can/util', function(can){
 					can.stopListening.call(parent, child, eventName);
 				}
 			},
+			isBubbling: function(parent, eventName){
+				return parent._bubbleBindings && parent._bubbleBindings[eventName];
+			},
 			bind: function(parent, eventName) {
 				if (!parent._init ) {
 					var bubbleEvent = bubble.event(parent, eventName);

@@ -126,29 +126,38 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			obEv,
 			name;
 		// Go through what needs to be observed.
-		for( name in newObserveSet ) {
-			
-			if( oldObserved[name] ) {
-				// After binding is set up, values
-				// in `oldObserved` will be unbound. So if a name
-				// has already be observed, remove from `oldObserved`
-				// to prevent this.
-				delete oldObserved[name];
-			} else {
-				// If current name has not been observed, listen to it.
-				obEv = newObserveSet[name];
-				obEv.obj.bind(obEv.event, onchanged);
-			}
+		bindNewSet(oldObserved, newObserveSet, onchanged);
+		unbindOldSet(oldObserved, onchanged);
+		
+		return info;
+	};
+	// This will not be optimized.
+	var bindNewSet = function(oldObserved, newObserveSet, onchanged){
+		for(var name in newObserveSet ) {
+			bindOrPreventUnbinding(oldObserved, newObserveSet, name, onchanged);
 		}
-
-		// Iterate through oldObserved, looking for observe/attributes
-		// that are no longer being bound and unbind them.
-		for ( name in oldObserved) {
+	};
+	// This will be optimized.
+	var bindOrPreventUnbinding = function(oldObserved, newObserveSet, name, onchanged){
+		if( oldObserved[name] ) {
+			// After binding is set up, values
+			// in `oldObserved` will be unbound. So if a name
+			// has already be observed, remove from `oldObserved`
+			// to prevent this.
+			delete oldObserved[name];
+		} else {
+			// If current name has not been observed, listen to it.
+			obEv = newObserveSet[name];
+			obEv.obj.bind(obEv.event, onchanged);
+		}
+	};
+	// Iterate through oldObserved, looking for observe/attributes
+	// that are no longer being bound and unbind them.
+	var unbindOldSet = function(oldObserved, onchanged){
+		for (var name in oldObserved) {
 			obEv = oldObserved[name];
 			obEv.obj.unbind(obEv.event, onchanged);
 		}
-		
-		return info;
 	};
 	
 	// ### updateOnChange
@@ -257,7 +266,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			},
 			setCached = set,
 			// Save arguments for cloning
-			args = can.makeArray(arguments),
+			args = [],
 			// updater for when value is changed
 			updater = function (newValue, oldValue, batchNum) {
 				setCached(newValue);
@@ -265,6 +274,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			},
 			// the form of the arguments
 			form;
+			
+			
+		// convert arguments to args to make V8 Happy
+		for(var i = 0, arglen = arguments.length; i< arglen; i++){
+			args[i] = arguments[i];
+		}
+		
 		computed = function (newVal) {
 			// If the computed function is called with arguments,
 			// a value should be set

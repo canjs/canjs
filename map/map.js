@@ -300,16 +300,23 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					target: ev.target
 				}, [newVal, oldVal]);
 
-				if(how === "remove" || how === "add") {
-					can.batch.trigger(this, {
-						type: "__keys",
-						batchNum: ev.batchNum
-					});
-				}
+				
 			},
 			// Trigger a change event.
 			_triggerChange: function (attr, how, newVal, oldVal) {
-				can.batch.trigger(this, "change", arguments);
+				// so this change can bubble ... a bubbling change triggers the 
+				// _changes trigger
+				if(bubble.isBubbling(this, "change")) {
+					can.batch.trigger(this, "change", [attr, how, newVal, oldVal]);
+				} else {
+					can.batch.trigger(this, attr, [newVal, oldVal]);
+				}
+				
+				if(how === "remove" || how === "add") {
+					can.batch.trigger(this, {
+						type: "__keys"
+					});
+				}
 			},
 			// Iterator that does not trigger live binding.
 			_each: function (callback) {
@@ -384,8 +391,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			// Reads a property from the `object`.
 			_get: function (attr) {
 				var value;
+				
 				// Handles the case of a key having a `.` in its name
-				if (typeof attr === 'string' && !! ~attr.indexOf('.')) {
+				// Otherwise we have to dig deeper into the Map to get the value.
+				if( typeof attr === 'string' && !! ~attr.indexOf('.') ) {
 					// Attempt to get the value
 					value = this.__get(attr);
 					// For keys with a `.` in them, value will be defined
@@ -393,12 +402,13 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						return value;
 					}
 				}
-
-				// Otherwise we have to dig deeper into the Map to get the value.
+				
 				// First, break up the attr (`"foo.bar"`) into parts like `["foo","bar"]`.
 				var parts = can.Map.helpers.attrParts(attr),
 					// Then get the value of the first attr name (`"foo"`).
 					current = this.__get(parts.shift());
+				
+				
 				// If there are other attributes to read...
 				return parts.length ?
 				// and current has a value...
@@ -475,7 +485,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				if (value !== current) {
 					// Check if we are adding this for the first time --
 					// if we are, we need to create an `add` event.
-					var changeType = this.__get()
+					var changeType = current !== undefined || this.__get()
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on `_data` and hook it up to send event.
@@ -500,7 +510,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				}
 				// Add property directly for easy writing.
 				// Check if its on the `prototype` so we don't overwrite methods like `attrs`.
-				if (!can.isFunction(this.constructor.prototype[prop]) && !this._computedBindings[prop] ) {
+				if (! typeof this.constructor.prototype[prop] === 'function' && !this._computedBindings[prop] ) {
 					this[prop] = val;
 				}
 			},
