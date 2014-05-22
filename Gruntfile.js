@@ -151,6 +151,7 @@ module.exports = function (grunt) {
 					config: __dirname + "/stealconfig.js",
 					main: "can/can",
 					map: {
+						"can/util/util": "can/util/util",
 						'can/': ''
 					},
 					baseURL: __dirname + "/"
@@ -184,7 +185,8 @@ module.exports = function (grunt) {
 					config: __dirname + "/stealconfig.js",
 					main: "can/can",
 					map: {
-						'can/*': baseName
+						"can/util/util": "can/util/util",
+						'can/*': baseName,
 					},
 					baseURL: __dirname + "/"
 				},
