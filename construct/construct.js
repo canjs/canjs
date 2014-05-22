@@ -283,7 +283,7 @@ steal('can/util/string', function (can) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				parts, current, _fullName, _shortName, name, shortName, namespace, prototype, Constructor;
+				parts, current, _fullName, _shortName, name, shortName, constructorName, namespace, prototype, Constructor;
 			// Instantiate a base class (but only create the instance,
 			// don't run the init constructor).
 			prototype = this.instance();
@@ -294,10 +294,12 @@ steal('can/util/string', function (can) {
 			if (fullName) {
 				parts = fullName.split('.');
 				shortName = parts.pop();
+				// Strip semicolons, to be on the safe side
+				constructorName = shortName.replace(/;/g, '');
 			}
 
 			// Assign a name to the constructor
-			eval('Constructor = function ' + (shortName || 'Constructor') + '() { return init.apply(this, arguments); }');
+			eval('Constructor = function ' + (constructorName || 'Constructor') + '() { return init.apply(this, arguments); }');
 
 			// The dummy class constructor.
 			function init() {
