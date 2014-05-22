@@ -302,7 +302,8 @@ steal('can/util/string', function (can) {
 			eval('Constructor = function ' + (constructorName || 'Constructor') + '() { return init.apply(this, arguments); }');
 
 			// The dummy class constructor.
-			function init() { // jshint ignore:line
+			/* jshint ignore:start */
+			function init() {
 				// All construction is actually done in the init method.
 				if (!initializing) {
 					//!steal-remove-start
@@ -320,7 +321,8 @@ steal('can/util/string', function (can) {
 					Constructor.newInstance.apply(Constructor, arguments);
 				}
 			}
-
+			/* jshint ignore:end */
+			
 			// Copy old stuff onto class (can probably be merged w/ inherit)
 			for (name in _super_class) {
 				if (_super_class.hasOwnProperty(name)) {
