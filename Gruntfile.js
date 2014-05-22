@@ -174,19 +174,22 @@ module.exports = function (grunt) {
 					ids: amdIds
 				},
 				files: {
-					'dist/amd-dev/': '.'
+					'dist/amd-dev/': 'can.js'
 				}
 			}
 		},
 		stealify: {
 			options: {
+				pkg: pkg,
+				builder: builderJSON,
+				config: __dirname + "/stealconfig.js",
 				steal: {
-					root: '../',
 					map: {
 						'*': {
 							'can/': baseName
 						}
-					}
+					},
+					baseURL: __dirname + "/"
 				},
 				banner: banner
 			},
@@ -198,7 +201,7 @@ module.exports = function (grunt) {
 						}), _.keys(builderJSON.modules))
 				},
 				files: {
-					'dist/steal/': '.'
+					'dist/steal/': 'can.js'
 				}
 			}
 		},
