@@ -1,9 +1,9 @@
 // steal-clean
 steal('can/util/string', function (can) {
 	// ## construct.js
-	// `can.Construct`  
+	// `can.Construct`
 	// _This is a modified version of
-	// [John Resig's class](http://ejohn.org/blog/simple-javascript-inheritance/).  
+	// [John Resig's class](http://ejohn.org/blog/simple-javascript-inheritance/).
 	// It provides class level inheritance and callbacks._
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
@@ -86,7 +86,7 @@ steal('can/util/string', function (can) {
 			if (inst.setup) {
 				args = inst.setup.apply(inst, arguments);
 			}
-			// Call `init` if there is an `init`  
+			// Call `init` if there is an `init`
 			// If `setup` returned `args`, use those as the arguments
 			if (inst.init) {
 				inst.init.apply(inst, args || arguments);
@@ -283,14 +283,24 @@ steal('can/util/string', function (can) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				parts, current, _fullName, _shortName, name, shortName, namespace, prototype;
+				parts, current, _fullName, _shortName, name, shortName, namespace, prototype, Constructor;
 			// Instantiate a base class (but only create the instance,
 			// don't run the init constructor).
 			prototype = this.instance();
 			// Copy the properties over onto the new prototype.
 			can.Construct._inherit(proto, _super, prototype);
+
+			// Extract name
+			if (fullName) {
+				parts = fullName.split('.');
+				shortName = parts.pop();
+			}
+
+			// Assign a name to the constructor
+			eval('Constructor = function ' + (shortName || 'Constructor') + '() { return init.apply(this, arguments); }');
+
 			// The dummy class constructor.
-			function Constructor() {
+			function init() {
 				// All construction is actually done in the init method.
 				if (!initializing) {
 					//!steal-remove-start
@@ -300,7 +310,7 @@ steal('can/util/string', function (can) {
 						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
 					}
 					//!steal-remove-end
-					
+
 					return this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
 					arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) :
@@ -308,6 +318,7 @@ steal('can/util/string', function (can) {
 					Constructor.newInstance.apply(Constructor, arguments);
 				}
 			}
+
 			// Copy old stuff onto class (can probably be merged w/ inherit)
 			for (name in _super_class) {
 				if (_super_class.hasOwnProperty(name)) {
@@ -319,8 +330,6 @@ steal('can/util/string', function (can) {
 			// Setup namespaces.
 			if (fullName) {
 
-				parts = fullName.split('.');
-				shortName = parts.pop();
 				current = can.getObject(parts.join('.'), window, true);
 				namespace = current;
 				_fullName = can.underscore(fullName.replace(/\./g, "_"));
@@ -402,7 +411,7 @@ steal('can/util/string', function (can) {
 			/**
 			 * @prototype
 			 */
-			return Constructor; //  
+			return Constructor; //
 			/**
 			 * @property {Object} can.Construct.prototype.constructor constructor
 			 * @parent can.Construct.prototype
