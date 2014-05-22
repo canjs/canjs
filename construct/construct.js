@@ -302,7 +302,7 @@ steal('can/util/string', function (can) {
 			eval('Constructor = function ' + (constructorName || 'Constructor') + '() { return init.apply(this, arguments); }');
 
 			// The dummy class constructor.
-			function init() {
+			function init() { // jshint ignore:line
 				// All construction is actually done in the init method.
 				if (!initializing) {
 					//!steal-remove-start
