@@ -5,7 +5,7 @@
 		{{#if makes.isResolved}}
 			<select can-value="makeId">
 				{{^makeId}}
-					<option>Select a Make</option>
+					<option value=''>Select a Make</option>
 				{{/makeId}}
 				{{#each makes}}
 					<option value="{{id}}">{{name}}</option>
@@ -19,7 +19,7 @@
 			{{#if models.isResolved}}
 				<select can-value="modelId">
 					{{^modelId}}
-						<option>Select a Model</option>
+						<option value=''>Select a Model</option>
 					{{/modelId}}
 					{{#each models}}
 						<option value="{{id}}">{{name}}</option>
@@ -35,7 +35,7 @@
 		{{#if years}}
 			<select can-value="year">
 				{{^year}}
-					<option>Select a Year</option>
+					<option value=''>Select a Year</option>
 				{{/year}}
 				{{#each years}}
 					<option value="{{.}}">{{.}}</option>
@@ -61,7 +61,8 @@
 </script>
 <script src="../../../../lib/steal/steal.js"></script>
 <script id="demo-source">
-steal("can","can/map/define","can/util/fixture","can/list/promise",function(){
+steal("can","can/map/define","can/util/fixture","can/list/promise",
+function(){
 
 can.fixture.delay = 1200;
 
@@ -107,7 +108,8 @@ var project = new can.Map({
 var MMYViewModel = can.Map.extend({
 	define:{
 		makes: {
-			value: new CarMake.List({})
+			value: new CarMake.List({}),
+			serialize: false
 		},
 		makeId: {
 			type: "number",
@@ -115,7 +117,7 @@ var MMYViewModel = can.Map.extend({
 				this.removeAttr("modelId");
 			},
 			set: function(){
-				this.removeAttr("modelId")
+				this.removeAttr("modelId");
 			}
 		},
 		models: {
@@ -141,6 +143,7 @@ var MMYViewModel = can.Map.extend({
 		modelId: {
 			type: "number",
 			remove: function(){
+				console.log("remove modelId");
 				this.removeAttr("year");
 			},
 			set: function(){
@@ -169,10 +172,15 @@ var MMYViewModel = can.Map.extend({
 	}
 });
 
+var mmy = new MMYViewModel();
+can.route.map(mmy);
+
+can.route.ready();
+
 can.Component.extend({
 	tag: "my-mmy",
-	scope: MMYViewModel
-})
+	scope: mmy
+});
 
 
 $("#out").html( can.view("app",{}) );

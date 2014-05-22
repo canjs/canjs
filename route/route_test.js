@@ -503,6 +503,64 @@ steal("can/route", "can/test", function () {
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
 
+		test("can.route.map: conflicting route values, hash should win", function(){
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute(":type/:id");
+				var AppState = can.Map.extend();
+				var appState = new AppState({type: "dog", id: '4'});
+
+				iCanRoute.map(appState);
+				loc.hash = "#!cat/5";
+				iCanRoute.ready();
+
+				setTimeout(function () {
+					var after = loc.href.substr(loc.href.indexOf("#"));
+					equal(after, "#!cat/5", "same URL");
+					equal(appState.attr("type"), "cat", "conflicts should be won by the URL");
+					equal(appState.attr("id"), "5", "conflicts should be won by the URL");
+					start();
+
+					can.remove(can.$(iframe))
+
+				}, 30);
+
+			}
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?11");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
+		test("can.route.map: route is initialized from URL first, then URL params are added from can.route.data", function(){
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute(":type/:id");
+				var AppState = can.Map.extend();
+				var appState = new AppState({section: 'home'});
+
+				iCanRoute.map(appState);
+				loc.hash = "#!cat/5";
+				iCanRoute.ready();
+
+				setTimeout(function () {
+					var after = loc.href.substr(loc.href.indexOf("#"));
+					equal(after, "#!cat/5&section=home", "same URL");
+					equal(appState.attr("type"), "cat", "hash populates the appState");
+					equal(appState.attr("id"), "5", "hash populates the appState");
+					equal(appState.attr("section"), "home", "appState keeps its properties");
+					ok(iCanRoute.data === appState, "can.route.data is the same as appState");
+					start();
+
+					can.remove(can.$(iframe))
+
+				}, 30);
+
+			}
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?11");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
 		test("updating the hash", function () {
 			stop();
 			window.routeTestReady = function (iCanRoute, loc) {

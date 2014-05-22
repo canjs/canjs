@@ -9,7 +9,11 @@
 @description Create widgets that use a template, a view-model 
 and custom tags.
 
-@signature `< TAG [ATTR-NAME=ATTR-VALUE] >`
+@deprecated {2.1} To pass data from the scope, you must wrap your attribute 
+value with `{}`. In 3.0, [can.mustache]
+will use [can.stache]'s method.
+
+@signature `< TAG [ATTR-NAME=KEY|ATTR-VALUE] >`
 
 Create an instance of a component on a particular 
 tag in a [can.mustache] template.
@@ -21,12 +25,16 @@ property of the component.
 valid. Any attributes added to the element are added as properties to the
 component's [can.Component::scope scope].
 
-@param {can.mustache.key} ATTR-VALUE Specifies the value of a property passed to
+@param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
 the component instance's [can.Component::scope scope]. By default `ATTR-VALUE`
 values are looked up in the [can.view.Scope can.mustache scope]. If the string value
 of the `ATTR-NAME` is desired, this can be specified like: 
 
     ATTR-NAME: "@"
+
+@param {can.mustache.key} [KEY] Specifies the value of a property passed to
+the component instance's [can.Component::scope scope] that will be looked
+up in the [can.view.Scope can.stache scope]. 
 
 @signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
 
@@ -48,11 +56,11 @@ hypenate the attribute name like:
 
 This will set `attrName` on the component's scope.
 
-@param {can.mustache.key} [KEY] Specifies the value of a property passed to
+@param {can.stache.key} [KEY] Specifies the value of a property passed to
 the component instance's [can.Component::scope scope] that will be looked
 up in the [can.view.Scope can.stache scope]. 
 
-@param {can.mustache.key} [ATTR-VALUE] If the attribute value is not
+@param {can.stache.key} [ATTR-VALUE] If the attribute value is not
 wrapped with `{}`, the string value of the attribute will be
 set on the component's scope.
 
@@ -412,3 +420,11 @@ its sub-components:
     </grid>
     <next-prev paginate='paginate'/>
     <page-count page='paginate.page' count='paginate.pageCount'/>
+
+## IE 8 Support
+
+While CanJS does support Internet Explorer 8 out of the box, if you decide
+to use can.Component then you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
+in order for your custom tags to work properly.
+
+For namespaced tag names (e.g. `<can:example>`) and hyphenated tag names (e.g. `<can-example>`) to work properly, you will need to use version 3.7.2 or later.

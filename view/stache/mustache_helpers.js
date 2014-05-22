@@ -81,9 +81,10 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		},
 		'unless': function (expr, options) {
-			if (!resolve(expr)) {
-				return options.fn(options.scope || this);
-			}
+			var fn = options.fn;
+			options.fn = options.inverse;
+			options.inverse = fn;
+			return helpers['if'].apply(this, arguments);
 		},
 		'with': function (expr, options) {
 			var ctx = expr;
