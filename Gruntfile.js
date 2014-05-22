@@ -146,13 +146,16 @@ module.exports = function (grunt) {
 		},
 		amdify: {
 			options: {
+				pkg: pkg,
+				builder: builderJSON,
+				config: __dirname + "/stealconfig.js",
 				steal: {
-					root: '../',
 					map: {
 						'*': {
-							'can/': baseName
+							'can/': ''
 						}
-					}
+					},
+					baseURL: __dirname + "/"
 				},
 				map: getAmdifyMap(baseName),
 				banner: banner
@@ -162,7 +165,7 @@ module.exports = function (grunt) {
 					ids: amdIds
 				},
 				files: {
-					'dist/amd/': '.'
+					'dist/amd/': 'can.js'
 				}
 			},
 			dev: {
