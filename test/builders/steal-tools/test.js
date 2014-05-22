@@ -1,5 +1,12 @@
 var stealTools = require('steal-tools'),
-	rmdir = require('rimraf');
+	rmdir = require('rimraf'),
+	zombieHelp = require('../zombie_help');
+
+var done = function(e){
+	if(e){
+		console.log(e, e.stack)
+	}
+};
 
 
 //it("works with css buildType", function(done){
@@ -15,16 +22,7 @@ var stealTools = require('steal-tools'),
 				config: __dirname+"/config.js",
 				main: "app"
 			}).then(function(data){
-				console.log("built");
-				//done();
-				/*open("test/build_types/prod.html", function(browser, close){
-			
-					find(browser,"STYLE_CONTENT", function(styleContent){
-						assert(styleContent.indexOf("#test-element")>=0, "have correct style info");
-						close();
-					}, close);
-					
-				}, done);*/
+				console.log("built")
 				
 			}).catch(function(e){
 				done(e);

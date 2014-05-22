@@ -1,7 +1,7 @@
 {
-  "name": "CanJS",
+  "name": "canjs",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version": "2.1.0-pre.1",
+  "version": "2.2.0-pre",
   "author": {
     "name": "Bitovi",
     "email": "contact@bitovi.com",
@@ -33,8 +33,7 @@
     "rimraf": "2.1"
   },
   "scripts": {
-    "test": "grunt test",
-    "install": "node node_modules/bower/bin/bower install"
+    "test": "grunt test"
   },
   "demos": [
     "http://canjs.us/#examples",
