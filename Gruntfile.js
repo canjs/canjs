@@ -125,12 +125,11 @@ module.exports = function (grunt) {
 				},
 				pkg: pkg,
 				builder: builderJSON,
-				config: __dirname + "/stealconfig.js",
 				steal: {
+					main: "can/can",
+					config: __dirname + "/stealconfig.js",
 					map: {
-						'*': {
-							'can/': ''
-						}
+						'can/': ''
 					},
 					baseURL: __dirname + "/"
 				}
@@ -148,12 +147,11 @@ module.exports = function (grunt) {
 			options: {
 				pkg: pkg,
 				builder: builderJSON,
-				config: __dirname + "/stealconfig.js",
 				steal: {
+					config: __dirname + "/stealconfig.js",
+					main: "can/can",
 					map: {
-						'*': {
-							'can/': ''
-						}
+						'can/': ''
 					},
 					baseURL: __dirname + "/"
 				},
@@ -182,12 +180,11 @@ module.exports = function (grunt) {
 			options: {
 				pkg: pkg,
 				builder: builderJSON,
-				config: __dirname + "/stealconfig.js",
 				steal: {
+					config: __dirname + "/stealconfig.js",
+					main: "can/can",
 					map: {
-						'*': {
-							'can/': baseName
-						}
+						'can/*': baseName
 					},
 					baseURL: __dirname + "/"
 				},
