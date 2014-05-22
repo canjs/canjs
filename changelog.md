@@ -3,6 +3,32 @@
 @parent guides 5
 -->
 
+__2.1.1__ ( May 21 2014 )
+
+- change: [404 on define example](https://github.com/bitovi/canjs/issues/999)
+- change: [Fixing define demo](https://github.com/bitovi/canjs/pull/992)
+- change: [Fixing up component and scope docs](https://github.com/bitovi/canjs/pull/991)
+- change: [Helpers are now passed into partials. Fixes #791.](https://github.com/bitovi/canjs/pull/989)
+- change: [can.mustache: {{else}} does not work for {{#unless}} block](https://github.com/bitovi/canjs/issues/988)
+- change: [Define demo broken in chrome](https://github.com/bitovi/canjs/issues/986)
+- change: [stache: Custom elements in IE8 contain a colon](https://github.com/bitovi/canjs/pull/985)
+- change: [Adding ability to mix can.event into can.Controls safely](https://github.com/bitovi/canjs/pull/982)
+- change: [Mixing in can/event conflicts with can.Control-based classes](https://github.com/bitovi/canjs/issues/981)
+- change: [added can parameter](https://github.com/bitovi/canjs/pull/980)
+- change: [adding tests for can.route.map](https://github.com/bitovi/canjs/pull/979)
+- change: [Scope docs](https://github.com/bitovi/canjs/pull/977)
+- change: [Component warn](https://github.com/bitovi/canjs/pull/976)
+- change: [add warning when component attribute is ignored](https://github.com/bitovi/canjs/issues/975)
+- change: [stache: Using {{else}} inside of an attribute](https://github.com/bitovi/canjs/issues/974)
+- change: [Misspelling in stache docs - differences from mustache](https://github.com/bitovi/canjs/pull/973)
+- change: [Upgrading html5shiv to 3.7.2](https://github.com/bitovi/canjs/pull/970)
+- change: [Stache conditionally nested components](https://github.com/bitovi/canjs/pull/968)
+- change: [Bug with conditionally nested components using stache](https://github.com/bitovi/canjs/issues/967)
+- change: [Bug with stache using view/bindings](https://github.com/bitovi/canjs/issues/966)
+- change: [Wrong context in serialize of can.map.define](https://github.com/bitovi/canjs/issues/953)
+- change: [Contributing clarification](https://github.com/bitovi/canjs/pull/917)
+- change: [can.Mustache: using local helpers inside partials](https://github.com/bitovi/canjs/issues/791)
+
 __2.1.0__ ( May 05 2014 )
 
 - change: [fixes IE8](https://github.com/bitovi/canjs/pull/963)
