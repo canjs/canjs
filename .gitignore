@@ -1,5 +1,5 @@
 .tmp*
-dist
+/dist
 *.swp
 *.orig
 util/can.*.js
@@ -8,7 +8,6 @@ standalone*
 docs*
 *.DS_Store
 .idea
-build/ci/can
-build/ci/funcunit
-build/ci/steal
-build/gh-pages
+bower_components/
+test/pluginified/latest.js
+docco

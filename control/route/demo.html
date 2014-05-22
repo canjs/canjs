@@ -87,7 +87,7 @@
 <h2>can.route</h2>
 <div id="route"></div>
 
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
 
 <script type='text/javascript'>
 	steal('can/control/route', 'can/util/demos/observer.js', function(){
@@ -96,7 +96,7 @@
 			},
 			setStatus = function(method, data) {
 				$('.status .action').html('&quot;' + method + '&quot;');
-				$('.status .data').html(can.toJSON(data));
+				$('.status .data').html(JSON.stringify(data));
 			}
 
 		var Router = can.Control({

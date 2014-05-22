@@ -1,21 +1,41 @@
-@page can.Mustache
+@function can.mustache can.mustache
 @parent canjs
-@test can/view/mustache/test/.html
+@release 2.1
+@group can.mustache.methods 0 Methods
+@group can.mustache.pages 1 Pages
+@group can.mustache.types 2 Types
+@group can.mustache.tags 3 Basic Tags
+@group can.mustache.htags 4 Helper Tags
+@link ../docco/view/mustache/mustache.html docco
+@test can/view/mustache/test/test.html
+@plugin can/view/mustache
+@download http://canjs.us/release/latest/can.mustache.js
 
-can.Mustache provides logic-less templates with live binding 
-when used with [can.Observes](#can_observe). It currently ships as a plugin:
+@description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
+when used with [can.Maps](#can_observe).
 
-[Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
-([Annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html))
+@signature `can.mustache( [id,] template )`
+
+Creates an instance of a mustache template. 
+
+@param {String} [id] If two arguments are passed, the first argument is the id of the 
+template that will be registered with [can.view].
+
+@param {String} template The content of the mustache template.
+
+@return {can.view.renderer} A function that renders the mustache template into
+a live documentFragment.
+
+@body
+
+## Use
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
-templates are compatible with can.Mustache, so you can import existing templates.
-
-## Getting Started
+templates are compatible with can.mustache.
 
 Mustache templates looks similar to normal HTML except
-they contain contain keys for inserting data into the template
-and [sections](#Sections) to enumerate and/or filter the enclosed template blocks.
+they contain keys for inserting data into the template
+and [can.mustache.Sections sections] to enumerate and/or filter the enclosed template blocks.
 
 For example, the following renders a welcome header for
 a user and displays the number of messages.
@@ -27,40 +47,40 @@ __Mustache Template__
 		<p>You have {{messages}} messages.</p>
 	</script>
 
-The Mustache sytax is the `{{  }}` magic tags above.
-
 __JavaScript__
 
-	var data = new can.Observe({
+	var data = new can.Map({
 		user: 'Tina Fey',
 		messages: 0
 	});
 
 	var template = can.view("#template", data)
-	can.$(document.body).append(template);
+	document.body.appendChild(template);
 
-__HTML__
+__HTML Result__
 
 	<h1>Welcome Tina Fey!</h1>
 	<p>You have 0 messages.</p>
 
-To update your template using live-binding:
+To update the html using live-binding, change an observable value:
 
 	data.attr('message', 5)
 
-which will re-render the paragraph tag to say:
+This updates this paragraph in the HTML Result to:
 
 	<p>You have 5 messages.</p>
 
-can.Mustache provides a lot more functionality such as:
 
-- [Context and Path Basics](#Basics)
-- [Sections](#Sections)
-- [Partials](#Partials)
-- [Acquiring Templates](#Acquisition)
-- [Helpers](#Helpers)
-- [Live Binding](#Binding)
 
-## Demos
+can.mustache provides significantly more functionality such as:
 
- - [TodoMVC](http://addyosmani.github.com/todomvc/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today. [Source Code](https://github.com/addyosmani/todomvc/tree/gh-pages/architecture-examples/canjs)
+- [can.mustache.Basics Context and Path Basics]
+- [can.mustache.Sections Sections]
+- [can.mustache.helpers.partial Partials]
+- [can.mustache.Acquisition Acquiring Templates]
+- [can.mustache.Helpers Helpers]
+- [can.mustache.Binding Live Binding]
+
+## Tags
+
+@api can.mustache.tags

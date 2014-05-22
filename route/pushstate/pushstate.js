@@ -1,88 +1,182 @@
-steal('can/util', 'can/route', function(can) {
-    "use strict";
+// # can/route/pushstate/pushstate.js
+//
+// Plugin for `can.route` which uses browser `history.pushState` support
+// to update window's pathname instead of the `hash`.
+//
+// It registers itself as binding on `can.route`, intercepts `click` events
+// on `<a>` elements across document and accordingly updates `can.route` state
+// and window's pathname.
 
-    if(window.history && history.pushState) {
+/*jshint maxdepth:6*/
 
-        var getPath = function() {
-            return location.pathname + location.search;
-        };
+steal('can/util', 'can/route', function (can) {
+	"use strict";
 
-        // popstate only fires on back/forward.
-        // To detect when someone calls push/replaceState, we need to wrap each method.
-        can.each(['pushState','replaceState'],function(method) {
-            var orig = history[method];
-            history[method] = function(state) {
-                var result = orig.apply(history, arguments);
-                can.route.history.attr('path',getPath());
-                can.route.history.attr('type',method);
-                return result;
-            };
-        });
-        // Bind to popstate for back/forward
-        can.bind.call(window, 'popstate', function() {
-            can.route.history.attr('path',getPath());
-            can.route.history.attr('type','popState');
-        });
+	// Initialize plugin only if browser supports pushstate.
+	if (window.history && history.pushState) {
 
+		// Registers itself within `can.route.bindings`.
+		can.route.bindings.pushstate = {
+			/**
+			 * @property {String} can.route.pushstate.root
+			 * @parent can.route.pushstate
+			 *
+			 * @description Configure the base url that will not be modified.
+			 *
+			 * @option {String} Represents the base url that pushstate will prepend to all
+			 * routes.  `root` defaults to: `"/"`.
+			 *
+			 * @body
+			 *
+			 * ## Use
+			 *
+			 * By default, a route like:
+			 *
+			 *     can.route(":type/:id")
+			 *
+			 * Matches urls like:
+			 *
+			 *     http://domain.com/contact/5
+			 *
+			 * But sometimes, you only want to match pages within a certain directory.  For
+			 * example, an application that is a filemanager.  You might want to
+			 * specify root and routes like:
+			 *
+			 *     can.route.pushstate.root = "/filemanager/"
+			 *     can.route("file-:fileId");
+			 *     can.route("folder-:fileId")
+			 *
+			 * Which matches urls like:
+			 *
+			 *     http://domain.com/filemanager/file-34234
+			 *
+			 */
 
-        var param = can.route.param,
-            paramsMatcher = /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/;
-        can.extend(can.route, {
-            history: new can.Observe({path:getPath()}),
-            _paramsMatcher: paramsMatcher,
-            _querySeparator: '?',
-            _setup: function() {
-                // intercept routable links
-                can.$('body').on('click', 'a', function(e) {
-                	if(!e.isDefaultPrevented()) {
-	                    // Fix for ie showing blank host, but blank host means current host.
-	                    if(!this.host) {
-	                      this.host = window.location.host;
-	                    }
-	                    // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
-	                    if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
-	                        e.preventDefault();
-	                    }
-                	}
-                });
-                can.route.history.bind('path',can.route.setState);
-            },
-            updateWith: function(pathname) {
-                var curParams = can.route.deparam(pathname);
+			// Start of `location.pathname` is the root.
+			// (Can be configured via `can.route.bindings.pushstate.root`)
+			root: "/",
+			paramsMatcher: /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/,
+			querySeparator: '?',
 
-                if(curParams.route) {
-                    can.route.attr(curParams, true);
-                    return true;
-                }
-                return false;
-            },
-            _getHash: getPath,
-            _setHash: function(serialized) {
-                var path = can.route.param(serialized, true);
-                if(path !== can.route._getHash()) {
-                    can.route.updateLocation(path);
-                }
-                return path;
-            },
-            current: function( options ) {
-                return this._getHash() === can.route.param(options);
-            },
-            /**
-             * This is a blunt hook for updating the window.location.
-             * You may prefer to use replaceState instead of pushState in some circumstances,
-             * in which case you can overwrite this method and handle the change yourself.
-             */
-            updateLocation: function(path) {
-                history.pushState(null, null, path);
-            },
-            url: function( options, merge ) {
-                if (merge) {
-                    options = can.extend({}, can.route.deparam( this._getHash()), options);
-                }
-                return can.route.param(options);
-            }
-        });
-    }
+			// ## bind
+
+			// Intercepts clicks on `<a>` elements and rewrites original `history` methods.
+			bind: function () {
+				// Intercept routable links.
+				can.delegate.call(can.$(document.documentElement), 'a', 'click', anchorClickHandler);
+
+				// Rewrites original `pushState`/`replaceState` methods on `history` and keeps pointer to original methods
+				can.each(methodsToOverwrite, function (method) {
+					originalMethods[method] = window.history[method];
+					window.history[method] = function (state, title, url) {
+						// Avoid doubled history states (with pushState).
+						var absolute = url.indexOf("http") === 0;
+						var searchHash = window.location.search + window.location.hash;
+						// If url differs from current call original histoy method and update `can.route` state.
+						if ((!absolute && url !== window.location.pathname + searchHash) || (absolute && url !== window.location.href + searchHash)) {
+							originalMethods[method].apply(window.history, arguments);
+							can.route.setState();
+						}
+					};
+				});
+
+				// Bind to `popstate` event, fires on back/forward.
+				can.bind.call(window, 'popstate', can.route.setState);
+			},
+
+			// ## unbind
+
+			// Unbinds and restores original `history` methods
+			unbind: function () {
+				can.undelegate.call(can.$(document.documentElement), 'click', 'a', anchorClickHandler);
+
+				can.each(methodsToOverwrite, function (method) {
+					window.history[method] = originalMethods[method];
+				});
+				can.unbind.call(window, 'popstate', can.route.setState);
+			},
+
+			// ## matchingPartOfURL
+
+			// Returns matching part of url without root.
+			matchingPartOfURL: function () {
+				var root = cleanRoot(),
+					loc = (location.pathname + location.search),
+					index = loc.indexOf(root);
+
+				return loc.substr(index + root.length);
+			},
+
+			// ## setURL
+
+			// Updates URL by calling `pushState`.
+			setURL: function (path) {
+				// Keeps hash if not in path.
+				if (includeHash && path.indexOf("#") === -1 && window.location.hash) {
+					path += window.location.hash;
+				}
+				window.history.pushState(null, null, can.route._call("root") + path);
+			}
+		};
+
+		// ## anchorClickHandler
+
+		// Handler function for `click` events.
+		var anchorClickHandler = function (e) {
+			if (!(e.isDefaultPrevented ? e.isDefaultPrevented() : e.defaultPrevented === true)) {
+				// YUI calls back events triggered with this as a wrapped object.
+				var node = this._node || this;
+				// Fix for IE showing blank host, but blank host means current host.
+				var linksHost = node.host || window.location.host;
+
+				// If link is within the same domain and descendant of `root`
+				if (window.location.host === linksHost) {
+					var root = can.route._call("root");
+					if (node.pathname.indexOf(root) === 0) {
+
+						// Removes root from url.
+						var url = (node.pathname + node.search).substr(root.length);
+						// If a route matches update the data.
+						var curParams = can.route.deparam(url);
+						if (curParams.hasOwnProperty('route')) {
+							// Makes it possible to have a link with a hash.
+							includeHash = true;
+							window.history.pushState(null, null, node.href);
+
+							// Test if you can preventDefault
+							// our tests can't call .click() b/c this
+							// freezes phantom.
+							if (e.preventDefault) {
+								e.preventDefault();
+							}
+						}
+					}
+				}
+			}
+		},
+
+			// ## cleanRoot
+
+			// Always returns clean root, without domain.
+			cleanRoot = function () {
+				var domain = location.protocol + "//" + location.host,
+					root = can.route._call("root"),
+					index = root.indexOf(domain);
+				if (index === 0) {
+					return can.route.root.substr(domain.length);
+				}
+				return root;
+			},
+			// Original methods on `history` that will be overwritten
+			methodsToOverwrite = ['pushState', 'replaceState'],
+			// A place to store pointers to original `history` methods.
+			originalMethods = {},
+			// Used to tell setURL to include the hash because we clicked on a link.
+			includeHash = false;
+
+		// Enables plugin, by default `hashchange` binding is used.
+		can.route.defaultBinding = "pushstate";
+	}
 
 	return can;
 });

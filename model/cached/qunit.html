@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
+    	<link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css"/>
         <title>store QUnit Test</title>
-		<script type='text/javascript' src='../../../steal/steal.js?can/model/cached/cached_test.js'></script>
+		
     </head>
     <body>
 
@@ -15,5 +14,15 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+		
+		
+		<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+		<script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+		<script type="text/javascript">
+			QUnit.config.autostart = false;
+			steal("can/model/cached").then("can/test", "can/util/fixture", "can/model/cached/cached_test.js", function() {
+				QUnit.start();
+			});
+		</script>
     </body>
 </html>

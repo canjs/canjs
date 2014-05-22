@@ -1,0 +1,82 @@
+<head>
+	<style>
+		a.active {
+			text-decoration: none;
+			cursor: default;
+			color: black;
+		}
+	</style>
+</head>
+<body>
+	
+
+<script type='text/mustache' id='ps-app-stash'>
+<div class="panel-left">
+  <h2>Modules</h2>
+  <ul>
+    {{#modules}}
+      <li>{{{linkTo .}}}</li>
+    {{/modules}}
+  </ul>
+  
+</div>
+</script>
+<script type='text/javascript' src='../../lib/steal/steal.js'></script>
+<script type='text/javascript'>
+steal("can/route/pushstate", "can/component",function(){
+	
+	can.route.root = steal.config("root")+"" ;
+	
+	
+	can.route(":module\\.html");
+	can.route(":module/:page\\.html");
+	can.route(":module/:plugin/:page\\.html");
+	
+	
+	
+	can.route.ready();
+	
+	can.Component.extend({
+		tag: "ps-app",
+		template: can.view("ps-app-stash"),
+		scope: {
+			active: null,
+			modules: ["component","construct","control","route","map"]
+		},
+		helpers: {
+			linkTo: function(module){
+				return can.route.link(module, {module: module},{
+					className: can.route.attr('module') == module ? "active" : ""
+				})
+			}
+		}
+	});
+	
+	can.Component.extend({
+		tag: "ps-plugins",
+		scope: {
+			modulePlugins : {
+				construct: ["super","proxy"],
+				route: ["pushstate"],
+				map: ["attributes","backup","setter","validations"]
+			},
+			plugins: function(){
+				var module = can.route.attr("module");
+				return this.attr("modulePlugins."+module)
+			}
+		},
+		helpers: {
+			linkTo: function(plugin){
+				return can.route.link(module, {module: module},{
+					className: can.route.attr('module') == module ? "active" : ""
+				})
+			}
+		}
+	})
+	
+	
+	$("body").append( can.view.mustache("<ps-app></ps-app>")({})  )
+	
+})
+</script>
+</body>

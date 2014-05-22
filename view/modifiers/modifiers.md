@@ -1,17 +1,17 @@
-@page can.view.modifiers
-@parent can.view
+@page can.view.modifiers jQuery modifiers
+@parent can.view.plugins
 @plugin can/view/modifiers
-@test can/view/modifiers/qunit.html
+@test can/view/modifiers/test.html
 
 The can/view/modifiers plugin extends the jQuery view modifiers
 
-* [can.prototype.jQuery.fn.after .after()]
-* [can.prototype.jQuery.fn.append .append()]
-* [can.prototype.jQuery.fn.before .before()]
-* [can.prototype.jQuery.fn.html .html()]
-* [can.prototype.jQuery.fn.prepend .prepend()]
-* [can.prototype.jQuery.fn.replaceWith .replaceWith()]
-* [can.prototype.jQuery.fn.text .text()]
+* [jQuery.fn.after .after()]
+* [jQuery.fn.append .append()]
+* [jQuery.fn.before .before()]
+* [jQuery.fn.html .html()]
+* [jQuery.fn.prepend .prepend()]
+* [jQuery.fn.replaceWith .replaceWith()]
+* [jQuery.fn.text .text()]
 
 to render a [can.view]. When rendering a view you call the view modifier the same way
 as can.view with the view name or id as the first, the data as the second and the optional

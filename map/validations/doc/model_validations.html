@@ -1,0 +1,21 @@
+<html>
+<head></head>
+<body>
+	<script src='../../lib/steal/steal.js'></script>
+	<script>
+	steal('can/map/validations','can/model',function(){
+		var Person = can.Model.extend({
+			init: function(){
+				this.validate("birthday",function(birthday){
+		    			if(birthday > new Date){
+		    				return "your birthday needs to be in the past"
+		    			}
+		    		})
+			}
+		},{});
+		var p = new Person({birthday: new Date(new Date().getTime()+1000 )});
+		console.log( p.errors() );
+	})
+	</script>
+</body>
+</html>
