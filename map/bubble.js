@@ -45,7 +45,7 @@ steal('can/util', function(can){
 		
 					ev.triggeredNS[parent._cid] = true;
 					// send change event with modified attr to parent	
-					can.trigger(parent, ev, args);
+					can.dispatch.call(parent, ev, args);
 				});
 			},
 			teardownFromParent: function (parent, child, eventName ) {

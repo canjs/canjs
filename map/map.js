@@ -296,7 +296,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// when a change happens, create the named event.
 				can.batch.trigger(this, {
 					type: attr,
-					batchNum: ev.batchNum
+					batchNum: ev.batchNum,
+					target: ev.target
 				}, [newVal, oldVal]);
 
 				if(how === "remove" || how === "add") {
@@ -308,7 +309,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Trigger a change event.
 			_triggerChange: function (attr, how, newVal, oldVal) {
-				can.batch.trigger(this, "change", can.makeArray(arguments));
+				can.batch.trigger(this, "change", arguments);
 			},
 			// Iterator that does not trigger live binding.
 			_each: function (callback) {

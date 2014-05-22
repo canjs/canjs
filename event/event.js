@@ -246,12 +246,16 @@ steal('can/util/can.js', function (can) {
 
 		// Grab event listeners
 		var eventName = event.type,
-			handlers = (events[eventName] || []).slice(0);
+			handlers = (events[eventName] || []).slice(0),
+			passed = [event];
 		
 		// Execute handlers listening for this event.
-		args = [event].concat(args || []);
+		if(args) {
+			passed.push.apply(passed, args);
+		}
+
 		for (var i = 0, len = handlers.length; i < len; i++) {
-			handlers[i].handler.apply(this, args);
+			handlers[i].handler.apply(this, passed);
 		}
 
 		return event;

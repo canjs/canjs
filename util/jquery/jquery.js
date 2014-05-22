@@ -18,6 +18,16 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 					};
 				}
 				event.target = event.target || obj;
+				if(args){
+					if( args.length && typeof args === "string") {
+						args = [args];
+					} else if(! args.length ) {
+						args = [args];
+					}
+				}
+				if(!args){
+					args = [];
+				}
 				can.dispatch.call(obj, event, args);
 			}
 		},
