@@ -103,7 +103,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						return [attr];
 					}
 					// Split key on '.'
-					return can.isArray(attr) ? attr : ("" + attr)
+					return typeof attr === "object" ? attr : ("" + attr)
 						.split(".");
 				},
 				/**
@@ -336,7 +336,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					return this._attrs(attr, val);
 				// If we are getting a value.
 				} else if (arguments.length === 1) {
-					// Let people know we are reading.
 					can.__reading(this, attr);
 					return this._get(attr);
 				} else {
@@ -390,6 +389,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Reads a property from the `object`.
 			_get: function (attr) {
+				
 				var value;
 				
 				// Handles the case of a key having a `.` in its name
@@ -510,7 +510,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				}
 				// Add property directly for easy writing.
 				// Check if its on the `prototype` so we don't overwrite methods like `attrs`.
-				if (! typeof this.constructor.prototype[prop] === 'function' && !this._computedBindings[prop] ) {
+				if ( typeof this.constructor.prototype[prop] !== 'function' && !this._computedBindings[prop] ) {
 					this[prop] = val;
 				}
 			},
