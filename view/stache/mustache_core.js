@@ -240,6 +240,12 @@ steal("can/util",
 						compute = computeData.compute;
 						
 					initialValue = computeData.initialValue;
+					if(computeData.reads && computeData.reads.length === 1 && computeData.root instanceof can.Map) {
+						console.log("fast")
+						//can.compute(computeData.root, computeData.reads[0])
+					}
+					
+					
 					// Set name to be the compute if the compute reads observables,
 					// or the value of the value of the compute if no observables are found.
 					if(computeData.compute.hasDependencies) {
@@ -309,6 +315,7 @@ steal("can/util",
 					return function(){
 						return name();
 					};
+					
 				}
 				// Just return name as the value
 				else {
@@ -396,6 +403,7 @@ steal("can/util",
 			return function branchRenderer(scope, options, truthyRenderer, falseyRenderer){
 				// TODO: What happens if same mode/expresion, but different sub-sections?
 				// Check the scope's cache if the evaluator already exists for performance.
+				//console.log("here!");
 				var evaluator = scope.__cache[fullExpression];
 				if(!evaluator) {
 					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, true);
