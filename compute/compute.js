@@ -121,10 +121,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		// Call the function, get the value as well as the observed objects and events
 		var info = can.__read(func, context),
 			// The objects-event pairs that must be bound to
-			newObserveSet = info.observed,
-			// A flag that is used to determine if an event is already being observed.
-			obEv,
-			name;
+			newObserveSet = info.observed;
 		// Go through what needs to be observed.
 		bindNewSet(oldObserved, newObserveSet, onchanged);
 		unbindOldSet(oldObserved, onchanged);
@@ -147,7 +144,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			delete oldObserved[name];
 		} else {
 			// If current name has not been observed, listen to it.
-			obEv = newObserveSet[name];
+			var obEv = newObserveSet[name];
 			obEv.obj.bind(obEv.event, onchanged);
 		}
 	};
@@ -155,7 +152,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// that are no longer being bound and unbind them.
 	var unbindOldSet = function(oldObserved, onchanged){
 		for (var name in oldObserved) {
-			obEv = oldObserved[name];
+			var obEv = oldObserved[name];
 			obEv.obj.unbind(obEv.event, onchanged);
 		}
 	};

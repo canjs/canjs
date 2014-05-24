@@ -843,7 +843,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		// 
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
-		return;
+
 		obs.removeAttr('message');
 
 		equal(span.innerHTML, '', 'text node value is empty');
@@ -2802,7 +2802,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		tmp(data);
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
-	})
+	});
 
 	test('html comments must not break mustache scanner', function () {
 		can.each([
@@ -2922,7 +2922,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 				start();
 				ok(true, "unbound visible");
 			}
-		};
+		}
 		data.attr("items.0")
 			.bind = bind;
 		data.attr("items.0")

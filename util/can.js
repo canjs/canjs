@@ -9,7 +9,6 @@ steal(function () {
 	can.k = function(){};
 
 	can.isDeferred = function (obj) {
-		var isFunction = this.isFunction;
 		// Returns `true` if something looks like a deferred.
 		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
