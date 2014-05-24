@@ -89,7 +89,7 @@ steal('can/util', 'can/model', 'can/map/backup', function (can) {
 			// error functions
 			def.then(success, error);
 			return def;
-		}, _changes = can.Model.prototype._changes,
+		}, _triggerChange = can.Model.prototype._triggerChange,
 		destroyFn = can.Model.prototype.destroy,
 		setupFn = can.Model.prototype.setup;
 	can.each([
@@ -116,12 +116,12 @@ steal('can/util', 'can/model', 'can/map/backup', function (can) {
 			setupFn.apply(this, arguments);
 			this._requestQueue = new can.List();
 		},
-		_changes: function (ev, attr, how, newVal, oldVal) {
+		_triggerChange: function (attr, how, newVal, oldVal) {
 			// record changes if there is a request running
 			if (this._changedAttrs) {
 				this._changedAttrs.push(attr);
 			}
-			_changes.apply(this, arguments);
+			_triggerChange.apply(this, arguments);
 		},
 		hasQueuedRequests: function () {
 			return this._requestQueue.attr('length') > 1;
