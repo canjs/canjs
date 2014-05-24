@@ -804,7 +804,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 	test('live binding and removeAttr', function () {
 
 		var text = '{{ #obs.show }}' +
-			'<p {{ obs.attributes }}><span></span></p>' +
+			'<p {{ obs.attributes }} class="{{ obs.className }}"><span>{{ obs.message }}</span></p>' +
 			'{{ /obs.show }}',
 
 			obs = new can.Map({
@@ -823,7 +823,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var p = div.getElementsByTagName('p')[0],
 			span = p.getElementsByTagName('span')[0];
 
-		/*equal(p.getAttribute("some"), "myText", 'initial render attr');
+		equal(p.getAttribute("some"), "myText", 'initial render attr');
 		equal(getAttr(p, "class"), "myMessage", 'initial render class');
 		equal(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
 
@@ -833,7 +833,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		obs.attr('className', 'newClass');
 
-		equal(getAttr(p, "class"), 'newClass', 'class updated');*/
+		equal(getAttr(p, "class"), 'newClass', 'class updated');
 
 		obs.removeAttr('attributes');
 

@@ -99,7 +99,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// Parses attribute name into its parts.
 				attrParts: function (attr, keepKey) {
 					//Keep key intact
-					if (keepKey) {
+					
+					if (keepKey ) {
 						return [attr];
 					}
 					// Split key on '.'
@@ -389,36 +390,26 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Reads a property from the `object`.
 			_get: function (attr) {
+				attr = ""+attr;
+				var dotIndex = attr.indexOf('.');
 				
-				var value;
 				
 				// Handles the case of a key having a `.` in its name
 				// Otherwise we have to dig deeper into the Map to get the value.
-				if( typeof attr === 'string' && !! ~attr.indexOf('.') ) {
+				if( dotIndex >= 0 ) {
 					// Attempt to get the value
-					value = this.__get(attr);
+					var value = this.__get(attr);
 					// For keys with a `.` in them, value will be defined
 					if (value !== undefined) {
 						return value;
 					}
+					var first = attr.substr(0, dotIndex),
+						second = attr.substr(dotIndex+1),
+						current = this.__get( first );
+					return current && current._get ?  current._get(second) : undefined;
+				} else {
+					return this.__get( attr );
 				}
-				
-				// First, break up the attr (`"foo.bar"`) into parts like `["foo","bar"]`.
-				var parts = can.Map.helpers.attrParts(attr),
-					// Then get the value of the first attr name (`"foo"`).
-					current = this.__get(parts.shift());
-				
-				
-				// If there are other attributes to read...
-				return parts.length ?
-				// and current has a value...
-				current ?
-				// then lookup the remaining attrs on current
-				current._get(parts) :
-				// or if there's no current, return undefined.
-				undefined :
-				// If there are no more parts, return current.
-				current;
 			},
 			// Reads a property directly if an `attr` is provided, otherwise
 			// returns the "real" data object itself.
@@ -458,25 +449,27 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			// `attr` - Is a string of properties or an array  of property values.
 			// `value` - The raw value to set.
 			_set: function (attr, value, keepKey) {
-				// Convert `attr` to attr parts (if it isn't already).
-				var parts = can.Map.helpers.attrParts(attr, keepKey),
-					// The immediate prop we are setting.
-					prop = parts.shift(),
-					// We only need to get the current value if we are not in init.
-					current = this._init ? undefined : this.__get(prop);
-
-				if ( parts.length && Map.helpers.isObservable(current) ) {
-					// If we have an `object` and remaining parts that `object` should set it.
-					current._set(parts, value);
-				} else if (!parts.length) {
-					// We're in "real" set territory.
+				attr = ""+attr;
+				var dotIndex = attr.indexOf('.'),
+					current;
+				if(!keepKey && dotIndex >= 0){
+					var first = attr.substr(0, dotIndex),
+						second = attr.substr(dotIndex+1);
+						
+					current =  this._init ? undefined : this.__get( first );
+					
+					if( Map.helpers.isObservable(current) ) {
+						current._set(second, value);
+					} else {
+						throw "can.Map: Object does not exist";
+					}
+				} else {
 					if (this.__convert) {
 						//Convert if there is a converter
-						value = this.__convert(prop, value);
+						value = this.__convert(attr, value);
 					}
-					this.__set(prop, this.__type(value, prop), current);
-				} else {
-					throw "can.Map: Object does not exist";
+					current = this._init ? undefined : this.__get( attr );
+					this.__set(attr, this.__type(value, attr), current);
 				}
 			},
 			__set: function (prop, value, current) {
