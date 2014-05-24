@@ -98,6 +98,8 @@ steal("can/util",
 				return renderer(ctx || parentScope, opts);
 			};
 			return function (newScope, newOptions) {
+				// prevent binding on fn.
+				var reads = can.__clearReading();
 				// If a non-scope value is passed, add that to the parent scope.
 				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
 					newScope = parentScope.add(newScope);
@@ -105,7 +107,9 @@ steal("can/util",
 				if (newOptions !== undefined && !(newOptions instanceof core.Options)) {
 					newOptions = parentOptions.add(newOptions);
 				}
-				return rendererWithScope(newScope, newOptions || parentOptions);
+				var result = rendererWithScope(newScope, newOptions || parentOptions);
+				can.__setReading(reads);
+				return result;
 			};
 		};
 	
@@ -241,8 +245,7 @@ steal("can/util",
 						
 					initialValue = computeData.initialValue;
 					if(computeData.reads && computeData.reads.length === 1 && computeData.root instanceof can.Map) {
-						console.log("fast")
-						//can.compute(computeData.root, computeData.reads[0])
+						compute = can.compute(computeData.root, computeData.reads[0]);
 					}
 					
 					
@@ -312,10 +315,7 @@ steal("can/util",
 			if(!mode) {
 				// If it's computed, return a function that just reads the compute.
 				if(name && name.isComputed) {
-					return function(){
-						return name();
-					};
-					
+					return name;
 				}
 				// Just return name as the value
 				else {
@@ -447,7 +447,7 @@ steal("can/util",
 				// parent expresions.  If this value changes, the parent expressions should
 				// not re-evaluate. We prevent that by making sure this compute is ignored by 
 				// everyone else.
-				var compute = can.compute(evaluator, null, false);
+				var compute = can.compute(evaluator, null, false, true);
 				
 				// Bind on the compute to set the cached value. This helps performance
 				// so live binding can read a cached value instead of re-calculating.

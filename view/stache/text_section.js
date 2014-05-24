@@ -32,7 +32,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 				
 				var compute = can.compute(function(){
 					return renderer(scope, options);
-				}, this, false);
+				}, this, false, true);
 				
 				compute.bind("change", emptyHandler);
 				var value = compute();

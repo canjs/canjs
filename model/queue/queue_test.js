@@ -8,7 +8,7 @@ steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/map/a
 	test('queued requests will not overwrite attrs', function () {
 		var delay = can.fixture.delay;
 		can.fixture.delay = 1000;
-		can.Model('Person', {
+		can.Model.extend('Person', {
 			create: function (id, attrs, success, error) {
 				return can.ajax({
 					url: '/people/' + id,
