@@ -1346,7 +1346,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test",function () {
 		
 		var count = 0;
 		map.attr= function(){
-			count++
+			count++;
 			
 			return oldAttr.apply(this, arguments);
 		};
