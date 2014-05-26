@@ -1,6 +1,6 @@
 steal('can/util', function(can){
-	
-	
+
+
 
 	var bubble = can.bubble = {
 			// Given a binding, returns a string event name used to set up bubbline.
@@ -9,19 +9,19 @@ steal('can/util', function(can){
 				return map.constructor._bubbleRule(eventName, map);
 			},
 			childrenOf: function (parentMap, eventName) {
-	
+
 				parentMap._each(function (child, prop) {
 					if (child && child.bind) {
 						bubble.toParent(child, parentMap, prop, eventName);
 					}
 				});
-				
+
 			},
 			teardownChildrenFrom: function(parentMap, eventName){
 				parentMap._each(function (child) {
-					
+
 					bubble.teardownFromParent(parentMap, child, eventName);
-					
+
 				});
 			},
 			toParent: function(child, parent, prop, eventName) {
@@ -29,22 +29,22 @@ steal('can/util', function(can){
 					// `batchTrigger` the type on this...
 					var args = can.makeArray(arguments),
 						ev = args.shift();
-					
+
 					args[0] =
 						(can.List && parent instanceof can.List ?
 							parent.indexOf(child) :
 							prop ) + (args[0] ? "."+args[0] : "");
-		
-					// track objects dispatched on this map		
+
+					// track objects dispatched on this map
 					ev.triggeredNS = ev.triggeredNS || {};
-		
+
 					// if it has already been dispatched exit
 					if (ev.triggeredNS[parent._cid]) {
 						return;
 					}
-		
+
 					ev.triggeredNS[parent._cid] = true;
-					// send change event with modified attr to parent	
+					// send change event with modified attr to parent
 					can.trigger(parent, ev, args);
 				});
 			},
@@ -67,7 +67,7 @@ steal('can/util', function(can){
 						} else {
 							parent._bubbleBindings[bubbleEvent]++;
 						}
-						
+
 					}
 				}
 			},
@@ -77,8 +77,7 @@ steal('can/util', function(can){
 					if (parent._bubbleBindings ) {
 						parent._bubbleBindings[bubbleEvent]--;
 					}
-					
-					if (! parent._bubbleBindings[bubbleEvent] ) {
+					if (parent._bubbleBindings && !parent._bubbleBindings[bubbleEvent] ) {
 						delete parent._bubbleBindings[bubbleEvent];
 						bubble.teardownChildrenFrom(parent, bubbleEvent);
 						if(can.isEmptyObject(parent._bubbleBindings)) {
@@ -112,7 +111,7 @@ steal('can/util', function(can){
 				}
 			},
 			set: function(parent, prop, value, current){
-				
+
 				//var res = parent.__type(value, prop);
 				if( can.Map.helpers.isObservable(value) ) {
 					bubble.add(parent, value, prop);
@@ -124,7 +123,7 @@ steal('can/util', function(can){
 				return value;
 			}
 		};
-	
+
 	return bubble;
-	
+
 });
