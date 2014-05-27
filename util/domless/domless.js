@@ -26,12 +26,12 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	can.trim = core_trim && !core_trim.call('\uFEFF\xA0') ?
 		function (text) {
 			return text == null ? '' : core_trim.call(text);
-	} :
-	// Otherwise use our own trimming functionality
-	function (text) {
-		return text == null ? '' : (text + '')
-			.replace(rtrim, '');
-	};
+		} :
+		// Otherwise use our own trimming functionality
+		function (text) {
+			return text == null ? '' : (text + '')
+				.replace(rtrim, '');
+		};
 
 	// This extend() function is ruthlessly and shamelessly stolen from
 	// jQuery 1.8.2:, lines 291-353.
