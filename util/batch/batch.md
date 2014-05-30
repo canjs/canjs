@@ -2,8 +2,8 @@
 @parent can.util
 
 
-[can.batch.start `can.batch.start( batchStopHandler )`] and 
-[can.batch.end `can.batch.end( force, callStart )`] are used to specify 
+[can.batch.start `can.batch.start( batchStopHandler )`] and
+[can.batch.stop `can.batch.stop( force, callStart )`] are used to specify 
 atomic operations. `start`
 prevents change events from being fired until `stop` is called.
 
@@ -12,20 +12,20 @@ The following listens to changes on a `player`:
 	var player = new can.Map({
       tvshow: "The Simpsons"
     });
-    
+
     player.bind("change",function(ev, attr, how, newVal, oldVal){
       console.log("changed", attr );
     });
-    
+
 The "change" callback handler does not get called until
-after `tvshow` is removed, `song` is added, and `stopBatch` 
+after `tvshow` is removed, `song` is added, and `stopBatch`
 is called.
-    
+
     can.batch.start();
-    
+
     player.removeAttr("tvshow");
     player.attr("song","What makes you beautiful");
-    
+
     can.batch.stop();
 
 Performance and correctness are the two most common reasons
@@ -33,16 +33,16 @@ to use batch operations.
 
 ## Correctness
 
-Sometimes, an object can be temporarily in an invalid 
-state. For example, the previous `player` should have 
-a `tvshow` or `song` property, but not both. Event listeners should 
-never be called in an intermediate state.  We can make this happen 
+Sometimes, an object can be temporarily in an invalid
+state. For example, the previous `player` should have
+a `tvshow` or `song` property, but not both. Event listeners should
+never be called in an intermediate state.  We can make this happen
 with `startBatch`, `stopBatch` and
 the [can.Map.setter `can/map/setter`] plugin as follows:
 
     // Selection constructor function inherits from Observe
     Player = can.Map({
-    
+
       // called when setting tvshow
       setTvshow: function(newVal, success){
         can.batch.start();
@@ -65,23 +65,23 @@ the [can.Map.setter `can/map/setter`] plugin as follows:
     player.bind("change", function( ev, attr, how, newVal, oldVal ){
       console.log("changed", attr, how, player.attr() );
     });
- 
+
     console.log("start")
     player.attr("tvshow","Breaking Bad");
     console.log("end")
 
-Use `startBatch` and `stopBatch` to make sure events 
-are triggered when an observe is in a valid state. 
+Use `startBatch` and `stopBatch` to make sure events
+are triggered when an observe is in a valid state.
 
 ## Performance
 
 CanJS synchronously sends events when a property changes.
-This makes certain patterns easier. For example, if you 
-are doing live-binding, and change a property, the DOM is 
+This makes certain patterns easier. For example, if you
+are doing live-binding, and change a property, the DOM is
 immediately updated.
 
-Occasionally, you may find yourself changing many properties at once. To 
-prevent live-binding from performing unnecessary updates, 
+Occasionally, you may find yourself changing many properties at once. To
+prevent live-binding from performing unnecessary updates,
 write the property updates within a `startBatch`/`stopBatch`.
 
 Consider a list of items like:
@@ -118,7 +118,7 @@ The following updates the DOM once per click:
 
 ## batchNum
 
-All events created within a `start` / `stop` share the same batchNum value. To 
+All events created within a `start` / `stop` share the same batchNum value. To
 respond only once for a given batchNum, you can do it like:
 
     var batchNum;
@@ -131,7 +131,7 @@ respond only once for a given batchNum, you can do it like:
 
 ## Automatic Batching
 
-Libraries like Angular and Ember always batch 
+Libraries like Angular and Ember always batch
 operations. Set this up with:
 
     can.batch.start();
@@ -141,4 +141,4 @@ operations. Set this up with:
     },10);
 
 This batches everything that happens within the same thread of execution
-and/or within 10 ms of each other. 
+and/or within 10 ms of each other.
