@@ -5,7 +5,9 @@
 @signature `observe.undelegate( selector, event, handler )`
 `undelegate( selector, event, handler )` removes a delegated event handler from an observe.
 
- observe.undelegate("name","set", handler )
+@codestart
+observe.undelegate('name', 'set', handler);
+@codeend
 
 @param {String} selector the attribute name of the object you want to undelegate from.
 @param {String} event the event name
