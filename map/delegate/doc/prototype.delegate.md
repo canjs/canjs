@@ -7,22 +7,23 @@
 in a child attribute from the parent. The child attribute
 does not have to exist.
 
+@codestart
+// create an observable
+var o = new can.Map({
+    foo : {
+        bar : 'Hello World'
+    }
+});
 
- // create an observable
- var observe = new can.Map({
-   foo : {
-     bar : "Hello World"
-   }
- })
+//listen to changes on a property
+o.delegate('foo.bar', 'change', function(ev, prop, how, newVal, oldVal) {
+    // foo.bar has been added, set, or removed
+    this //->
+});
 
- //listen to changes on a property
- observe.delegate("foo.bar","change", function(ev, prop, how, newVal, oldVal){
-   // foo.bar has been added, set, or removed
-   this //->
- });
-
- // change the property
- observe.attr('foo.bar',"Goodbye Cruel World")
+// change the property
+o.attr('foo.bar', 'Goodbye Cruel World');
+@codeend
 
 ## Types of events
 
@@ -32,13 +33,17 @@ __add__
 
 An add event is fired when a new property has been added.
 
- var o = new can.Control({});
- o.delegate("name","add", function(ev, value){
-   // called once
-   can.$('#name').show()
- })
- o.attr('name',"Justin")
- o.attr('name',"Brian");
+@codestart
+var o = new can.Control({});
+
+o.delegate('name', 'add', function(ev, value) {
+    // called once
+    can.$('#name').show()
+});
+
+o.attr('name', 'Justin')
+o.attr('name', 'Brian');
+@codeend
 
 Listening to add events is useful for 'setup' functionality (in this case
 showing the <code>#name</code> element.
@@ -48,23 +53,29 @@ __set__
 Set events are fired when a property takes on a new value.  set events are
 always fired after an add.
 
- o.delegate("name","set", function(ev, value){
-   // called twice
-   can.$('#name').text(value)
- })
- o.attr('name',"Justin")
- o.attr('name',"Brian");
+@codestart
+o.delegate('name', 'set', function(ev, value) {
+    // called twice
+    can.$('#name').text(value)
+});
+
+o.attr('name', 'Justin')
+o.attr('name', 'Brian');
+@codeend
 
 __remove__
 
 Remove events are fired after a property is removed.
 
- o.delegate("name","remove", function(ev){
-   // called once
-   $('#name').text(value)
- })
- o.attr('name',"Justin");
- o.removeAttr('name');
+@codestart
+o.delegate('name', 'remove', function(ev) {
+    // called once
+    $('#name').text(value)
+});
+
+o.attr('name', 'Justin');
+o.removeAttr('name');
+@codeend
 
 ## Wildcards - matching multiple properties
 
@@ -73,28 +84,31 @@ of an observe has changed. Delegate lets you use wildcards to
 match any property name.  The following listens for any change
 on an attribute of the params attribute:
 
- var o = can.Control({
-   options : {
-     limit : 100,
-     offset: 0,
-     params : {
-       parentId: 5
-     }
-   }
- })
- o.delegate('options.*','change', function(){
-   alert('1');
- })
- o.delegate('options.**','change', function(){
-   alert('2');
- })
+@codestart
+var o = can.Control({
+    options : {
+        limit : 100,
+        offset: 0,
+        params : {
+            parentId: 5
+        }
+    }
+});
 
- // alerts 1
- // alerts 2
- o.attr('options.offset',100)
+o.delegate('options.*', 'change', function() {
+    alert('1');
+});
+o.delegate('options.**', 'change', function() {
+    alert('2');
+});
 
- // alerts 2
- o.attr('options.params.parentId',6);
+// alerts 1
+// alerts 2
+o.attr('options.offset', 100);
+
+// alerts 2
+o.attr('options.params.parentId', 6);
+@codeend
 
 Using a single wildcard (<code>*</code>) matches single level
 properties.  Using a double wildcard (<code>**</code>) matches
@@ -105,29 +119,36 @@ any deep property.
 Delegate lets you listen on multiple values at once.  The following listens
 for first and last name changes:
 
- var o = new can.Map({
-   name : {first: "Justin", last: "Meyer"}
- })
+@codestart
+var o = new can.Map({
+    name : { 
+      first: 'Justin', 
+      last: 'Meyer'
+    }
+});
 
- o.bind("name.first,name.last",
-        "set",
-        function(ev,newVal,oldVal,from){
+o.bind('name.first, name.last',
+    'set',
+    function(ev, newVal, oldVal, from) {
 
- })
+});
+@codeend
 
 ## Listening when properties are a particular value
 
 Delegate lets you listen when a property is __set__ to a specific value:
 
- var o = new can.Map({
-   name : "Justin"
- })
+@codestart
+var o = new can.Map({
+    name : 'Justin'
+});
 
- o.bind("name=Brian",
-        "set",
-        function(ev,newVal,oldVal,from){
+o.bind('name=Brian',
+    'set',
+    function(ev, newVal, oldVal, from) {
 
- })
+});
+@codeend
 
 @param {String} selector The attributes you want to listen for changes in.
 
