@@ -126,12 +126,12 @@ module.exports = function (grunt) {
 				pkg: pkg,
 				builder: builderJSON,
 				steal: {
+					main: "can/can",
+					config: __dirname + "/stealconfig.js",
 					map: {
-						'*': {
-							'can/': ''
-						}
+						'can/': ''
 					},
-					root: __dirname
+					baseURL: __dirname + "/"
 				}
 			},
 			dist: {
@@ -139,19 +139,22 @@ module.exports = function (grunt) {
 					prefix: 'can.'
 				},
 				files: {
-					'dist/': '.'
+					'dist/': 'can.js'
 				}
 			}
 		},
 		amdify: {
 			options: {
+				pkg: pkg,
+				builder: builderJSON,
 				steal: {
-					root: '../',
+					config: __dirname + "/stealconfig.js",
+					main: "can/can",
 					map: {
-						'*': {
-							'can/': baseName
-						}
-					}
+						"can/util/util": "can/util/util",
+						'can/': ''
+					},
+					baseURL: __dirname + "/"
 				},
 				map: getAmdifyMap(baseName),
 				banner: banner
@@ -161,7 +164,7 @@ module.exports = function (grunt) {
 					ids: amdIds
 				},
 				files: {
-					'dist/amd/': '.'
+					'dist/amd/': 'can.js'
 				}
 			},
 			dev: {
@@ -170,19 +173,22 @@ module.exports = function (grunt) {
 					ids: amdIds
 				},
 				files: {
-					'dist/amd-dev/': '.'
+					'dist/amd-dev/': 'can.js'
 				}
 			}
 		},
 		stealify: {
 			options: {
+				pkg: pkg,
+				builder: builderJSON,
 				steal: {
-					root: '../',
+					config: __dirname + "/stealconfig.js",
+					main: "can/can",
 					map: {
-						'*': {
-							'can/': baseName
-						}
-					}
+						"can/util/util": "can/util/util",
+						'can/*': baseName,
+					},
+					baseURL: __dirname + "/"
 				},
 				banner: banner
 			},
@@ -194,7 +200,7 @@ module.exports = function (grunt) {
 						}), _.keys(builderJSON.modules))
 				},
 				files: {
-					'dist/steal/': '.'
+					'dist/steal/': 'can.js'
 				}
 			}
 		},
