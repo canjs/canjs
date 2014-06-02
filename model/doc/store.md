@@ -14,12 +14,10 @@ The model store is used to store instances of a model. It serves two purposes:
 
 From a development perspective, the store can be used as a global hash to look up model instances. Instances are stored by their id. A model's store property thus looks like this:
 
-@codestart
-{
-	"34535": {id: "34535", name: "Bob", _bindings: 3},
-	"34536": {id: "34536", name: "Mike", _bindings: 3},
-}
-@codeend
+    {
+      "34535": {id: "34535", name: "Bob", _bindings: 3},
+      "34536": {id: "34536", name: "Mike", _bindings: 3},
+    }
 
 The store is typically not used in application code, but rather is an internal feature of can.Model. However, it is possible to use it for looking up model instances or overriding the default behavior of the store to do something special.
 
@@ -31,18 +29,14 @@ The main reason to have a global store is to prevent duplicate instances from be
 
 For example, an application could retrieve and display two lists of todos in the same page. First a list of todos due tomorrow:
 
-@codestart
-Todo.findAll({due: "tomorrow"})
-@codeend
+    Todo.findAll({due: "tomorrow"})
 
 That response might look like:
 
-@codestart
-[
-	{id: 2, name: "finish writing docs", urgency: "low", due: "tomorrow", completed: false},
-	{id: 7, name: "sell my car", urgency: "high", due: "tomorrow", completed: false}
-]
-@codeend
+    [
+      {id: 2, name: "finish writing docs", urgency: "low", due: "tomorrow", completed: false},
+      {id: 7, name: "sell my car", urgency: "high", due: "tomorrow", completed: false}
+    ]
 
 Next a list of todos that are urgent:
 
@@ -52,12 +46,10 @@ Todo.findAll({priority: "high"})
 
 That response might look like:
 
-@codestart
-[
-	{id: 5, name: "take dog to the vet", urgency: "high", due: "next week", completed: false},
-	{id: 7, name: "sell my car", urgency: "high", due: "tomorrow", completed: false}
-]
-@codeend
+    [
+      {id: 5, name: "take dog to the vet", urgency: "high", due: "next week", completed: false},
+      {id: 7, name: "sell my car", urgency: "high", due: "tomorrow", completed: false}
+    ]
 
 As you can see, there is one todo that appears in both lists - sell my car. Without a can.Model.store, these would both be treated as independent model instances. 
 
