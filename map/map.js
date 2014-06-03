@@ -49,6 +49,12 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					this._computes = [];
 
 					for (var prop in this.prototype) {
+						//!steal-remove-start
+						if(prop === "define" && this.helpers.define.toString() === "function (){}") {
+							can.dev.warn("can/map/define is not included, yet there is a define property used. You may want to add this plugin.");
+						}
+						//!steal-remove-end
+
 						// Non-functions are regular defaults.
 						if (prop !== "define" && typeof this.prototype[prop] !== "function") {
 							this.defaults[prop] = this.prototype[prop];
