@@ -3,6 +3,12 @@ steal('can/util', 'can/observe', function (can) {
 
 	can.Map.helpers.define = function (Map) {
 		var define = Map.prototype.define;
+		//!steal-remove-start
+		if(Map.define){
+			can.dev.warn("The define property should be on the map's prototype properties, "+
+				"not the static properies.");
+		}
+		//!steal-remove-end
 		Map.defaultGenerators = {};
 		for (var prop in define) {
 			if ("value" in define[prop]) {
