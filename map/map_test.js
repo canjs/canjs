@@ -245,9 +245,11 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 			ok(text, "got a message");
 			can.dev.warn = oldlog;
 		};
+		/* jshint ignore:start */
 		var MapClass = can.Map.extend({
 			define: {}
 		});
+		/* jshint ignore:end */
 	})
 	
 });
