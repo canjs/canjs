@@ -18,24 +18,22 @@ with [can.Map::bind bind].
 
 The following example makes a `fullName` attribute on `Person` maps:
 
-@codestart
-var Person = can.Map.extend({
-    fullName: can.compute(function(){
-        return this.attr("first") + " " + this.attr("last")
+    var Person = can.Map.extend({
+        fullName: can.compute(function(){
+            return this.attr("first") + " " + this.attr("last")
+        })
     })
-})
 
-var me = new Person({first: "Justin", last: "Meyer"})
+    var me = new Person({first: "Justin", last: "Meyer"})
 
-me.attr("fullName") //-> "Justin Meyer"
+    me.attr("fullName") //-> "Justin Meyer"
 
-me.bind("fullName", function(ev, newValue, oldValue){
-    newValue //-> Brian Moschel
-    oldValue //-> Justin Meyer
-})
+    me.bind("fullName", function(ev, newValue, oldValue){
+        newValue //-> Brian Moschel
+        oldValue //-> Justin Meyer
+    })
 
-me.attr({first: "Brian", last: "Moschel"})
-@codeend
+    me.attr({first: "Brian", last: "Moschel"})
 
 ## Getter / Setter computes
 
@@ -44,27 +42,25 @@ used to set the compute-property's value.
 
 The following makes `fullName` able to set `first` and `last`:
 
-@codestart
-var Person = can.Map.extend({
-    fullName: can.compute(function(newValue){
-        if( arguments.length ) {
-            var parts = newValue.split(" ");
-            this.attr({
-                first: parts[0],
-                last:  parts[1]
-            });
-        } else {
-            return this.attr("first") + " " + this.attr("last");
-        }
+    var Person = can.Map.extend({
+        fullName: can.compute(function(newValue){
+            if( arguments.length ) {
+                var parts = newValue.split(" ");
+                this.attr({
+                    first: parts[0],
+                    last:  parts[1]
+                });
+            } else {
+                return this.attr("first") + " " + this.attr("last");
+            }
+        })
     })
-})
 
-var me = new Person({first: "Justin", last: "Meyer"})
+    var me = new Person({first: "Justin", last: "Meyer"})
 
-me.attr("fullName", "Brian Moschel")
-me.attr("first") //-> "Brian"
-me.attr("last")  //-> "Moschel"
-@codeend
+    me.attr("fullName", "Brian Moschel")
+    me.attr("first") //-> "Brian"
+    me.attr("last")  //-> "Moschel"
 
 
 ## Alternatives
@@ -73,22 +69,18 @@ me.attr("last")  //-> "Moschel"
 read in the template to a can.compute. So, simply having a fullName
 function like:
 
-@codestart
-var Person = can.Map.extend({
-    fullName: function(){
-        return this.attr("first") + " " + this.attr("last")
-    }
-})
-var me = new Person({first: "Justin", last: "Meyer"})
-@codeend
+    var Person = can.Map.extend({
+        fullName: function(){
+            return this.attr("first") + " " + this.attr("last")
+        }
+    })
+    var me = new Person({first: "Justin", last: "Meyer"})
 
 Will already be live-bound if read in a template like:
 
-@codestart
-{{me.fullName}}
-// or
-<%= me.attr("fullName") %>
-@codeend
+    {{me.fullName}}
+    // or
+    <%= me.attr("fullName") %>
 
 The [can.Map.setter setter] plugin can also provide similar functionality as
 Getter/Setter computes.
