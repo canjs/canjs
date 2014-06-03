@@ -624,6 +624,36 @@ steal('can/route/pushstate', "can/test", function () {
 				iframe.src = can.test.path("route/pushstate/testing.html");
 				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
+
+			test("root can include the domain", function () {
+				stop();
+				window.routeTestReady = function (iCanRoute, loc, hist, win) {
+					win.can.route.bindings.pushstate.root = steal.config('root')+'';
+					win.can.route(":module/:plugin/:page\\.html");
+					win.can.route.ready();
+					equal(win.can.route.attr('module'), 'route', 'works')
+					start();
+				};
+	
+				var iframe = document.createElement("iframe");
+				iframe.src = can.test.path("route/pushstate/testing.html");
+				can.$("#qunit-test-area")[0].appendChild(iframe);
+			});
+
+			test("URL's don't greedily match", function () {
+				stop();
+				window.routeTestReady = function (iCanRoute, loc, hist, win) {
+					win.can.route.bindings.pushstate.root = steal.config('root')+'';
+					win.can.route(":module\\.html");
+					win.can.route.ready();
+					ok(!win.can.route.attr('module'), 'there is no route match')
+					start();
+				};
+	
+				var iframe = document.createElement("iframe");
+				iframe.src = can.test.path("route/pushstate/testing.html");
+				can.$("#qunit-test-area")[0].appendChild(iframe);
+			});
 		
 		}
 

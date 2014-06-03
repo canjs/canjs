@@ -127,13 +127,15 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			test = "",
 			lastIndex = matcher.lastIndex = 0,
 			next,
-			querySeparator = can.route._call("querySeparator");
+			querySeparator = can.route._call("querySeparator"),
+			matchSlashes = can.route._call("matchSlashes");
 
 		// res will be something like [":foo","foo"]
 		while (res = matcher.exec(url)) {
 			names.push(res[1]);
 			test += removeBackslash(url.substring(lastIndex, matcher.lastIndex - res[0].length));
-			next = "\\" + (removeBackslash(url.substr(matcher.lastIndex, 1)) || querySeparator);
+			// if matchSlashes is false (the default) don't greedily match any slash in the string, assume its part of the URL
+			next = "\\" + (removeBackslash(url.substr(matcher.lastIndex, 1)) || querySeparator+(matchSlashes? "": "|/"));
 			// a name without a default value HAS to have a value
 			// a name that has a default value can be empty
 			// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
@@ -524,6 +526,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			hashchange: {
 				paramsMatcher: paramsMatcher,
 				querySeparator: "&",
+				// don't greedily match slashes in routing rules
+				matchSlashes: false,
 				bind: function () {
 					can.bind.call(window, 'hashchange', setState);
 				},
