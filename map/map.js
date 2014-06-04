@@ -47,7 +47,11 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					}
 					// Builds a list of compute and non-compute properties in this Object's prototype.
 					this._computes = [];
-
+					//!steal-remove-start
+					if(this.prototype.define && !this.helpers.define) {
+						can.dev.warn("can/map/define is not included, yet there is a define property used. You may want to add this plugin.");
+					}
+					//!steal-remove-end
 					for (var prop in this.prototype) {
 						// Non-functions are regular defaults.
 						if (prop !== "define" && typeof this.prototype[prop] !== "function") {
@@ -57,7 +61,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 							this._computes.push(prop);
 						}
 					}
-					this.helpers.define(this);
+					if(this.helpers.define) {
+						this.helpers.define(this);
+					}
 				}
 				// If we inherit from can.Map, but not can.List, make sure any lists are the correct type.
 				if (can.List && !(this.prototype instanceof can.List)) {
@@ -87,7 +93,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			helpers: {
 				// ### can.Map.helpers.define
 				// Stub function for the define plugin.
-				define: function(){},
+				define: null,
 				/**
 				 * @hide
 				 * Parses attribute name into its parts
