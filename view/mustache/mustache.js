@@ -47,6 +47,9 @@ steal('can/util',
 			isLookup = function (obj) {
 				return obj && typeof obj.get === "string";
 			},
+			// object to keep track of keys we already showed warnings about
+			// only show a warning once per key
+			missingKeys = {},
 
 			/*
 			 * Checks whether an object is like a can.Map. This takes into
@@ -1332,6 +1335,7 @@ steal('can/util',
 
 			// here we are going to cache the lookup values so future calls are much faster
 			var scope = scopeAndOptions.scope,
+				propName = name.get,
 				options = scopeAndOptions.options,
 				args = [],
 				helperOptions = {
@@ -1354,11 +1358,11 @@ steal('can/util',
 					// get values on hash
 					for (var prop in hash) {
 						if (isLookup(hash[prop])) {
-							hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions, false, true);
+							hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions, false, true, false);
 						}
 					}
 				} else if (arg && isLookup(arg)) {
-					args.push(Mustache.get(arg.get, scopeAndOptions, false, true));
+					args.push(Mustache.get(arg.get, scopeAndOptions, false, true, false));
 				} else {
 					args.push(arg);
 				}
@@ -1366,7 +1370,7 @@ steal('can/util',
 
 			if (isLookup(name)) {
 				var get = name.get;
-				name = Mustache.get(name.get, scopeAndOptions, args.length, false);
+				name = Mustache.get(name.get, scopeAndOptions, args.length, false, true);
 
 				// Base whether or not we will get a helper on whether or not the original
 				// name.get and Mustache.get resolve to the same thing. Saves us from running
@@ -1511,11 +1515,12 @@ steal('can/util',
 		 * @param {Object} context The context to use for checking for a reference if it doesn't exist in the object.
 		 * @param {Boolean} [isHelper] Whether the reference is seen as a helper.
 		 */
-		Mustache.get = function (key, scopeAndOptions, isHelper, isArgument) {
+		Mustache.get = function (key, scopeAndOptions, isHelper, isArgument, showWarning) {
 
 			// Cache a reference to the current context and options, we will use them a bunch.
 			var context = scopeAndOptions.scope.attr('.'),
-				options = scopeAndOptions.options || {};
+				options = scopeAndOptions.options || {},
+				showWarning = showWarning || false;
 
 			// If key is called as a helper,
 			if (isHelper) {
@@ -1530,7 +1535,10 @@ steal('can/util',
 				}
 
 				//!steal-remove-start
-				can.dev.warn('can/view/mustache/mustache.js: Unable to find helper "' + key + '".');
+				if(showWarning && !missingKeys[key]){
+					can.dev.warn('can/view/mustache/mustache.js: Unable to find helper "' + key + '".');
+					missingKeys[key] = true;
+				}
 				//!steal-remove-end
 			}
 
@@ -1545,16 +1553,18 @@ steal('can/util',
 			can.compute.temporarilyBind(compute);
 
 			// computeData gives us an initial value
-			var initialValue = computeData.initialValue;
+			var initialValue = computeData.initialValue,
+				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (initialValue === undefined && !isHelper) {
+			if (showWarning && initialValue === undefined && !isHelper && !helperObj && !missingKeys[key]) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
+				missingKeys[key] = true;
 			}
 			//!steal-remove-end
 
 			// Use helper over the found value if the found value isn't in the current context
-			if ((initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && Mustache.getHelper(key, options)) {
+			if ((initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && helperObj) {
 				return key;
 			}
 
