@@ -61,7 +61,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 							this._computes.push(prop);
 						}
 					}
-					this.helpers.define && this.helpers.define(this);
+					if(this.helpers.define) {
+						this.helpers.define(this);
+					}
 				}
 				// If we inherit from can.Map, but not can.List, make sure any lists are the correct type.
 				if (can.List && !(this.prototype instanceof can.List)) {
