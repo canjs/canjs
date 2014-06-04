@@ -1335,7 +1335,6 @@ steal('can/util',
 
 			// here we are going to cache the lookup values so future calls are much faster
 			var scope = scopeAndOptions.scope,
-				propName = name.get,
 				options = scopeAndOptions.options,
 				args = [],
 				helperOptions = {
@@ -1520,7 +1519,7 @@ steal('can/util',
 			// Cache a reference to the current context and options, we will use them a bunch.
 			var context = scopeAndOptions.scope.attr('.'),
 				options = scopeAndOptions.options || {},
-				showWarning = showWarning || false;
+				showWarningFlag = showWarning || false;
 
 			// If key is called as a helper,
 			if (isHelper) {
@@ -1535,7 +1534,7 @@ steal('can/util',
 				}
 
 				//!steal-remove-start
-				if(showWarning && !missingKeys[key]){
+				if(showWarningFlag && !missingKeys[key]){
 					can.dev.warn('can/view/mustache/mustache.js: Unable to find helper "' + key + '".');
 					missingKeys[key] = true;
 				}
@@ -1557,7 +1556,7 @@ steal('can/util',
 				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (showWarning && initialValue === undefined && !isHelper && !helperObj && !missingKeys[key]) {
+			if (showWarningFlag && initialValue === undefined && !isHelper && !helperObj && !missingKeys[key]) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 				missingKeys[key] = true;
 			}
