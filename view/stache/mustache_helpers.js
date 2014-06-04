@@ -28,7 +28,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 							}).add(item));
 							
 					};
-					live.list(el, items, cb, options.context, el.parentNode);
+					live.list(el, items, cb, options.context, el.parentNode, options.nodeList);
 				};
 			}
 			

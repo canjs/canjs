@@ -2881,7 +2881,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			item: {
 				subitems: ['first']
 			}
-		})
+		});
 
 		var frag = template(data),
 			div = frag.childNodes[0],
@@ -2893,7 +2893,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			.push('second');
 
 		equal(labels.length, 2, "after pushing two label");
-
+		
 		data.removeAttr('item');
 
 		equal(labels.length, 0, "after removing item no label");
@@ -3459,21 +3459,6 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		can.append(can.$("#qunit-test-area"), frag);
 
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
-	});
-
-	test("no nodeLists", function(){
-		var tmpl = can.stache("<div>{{#if person.named}}first={{person.first}},last={{person.last}}.{{/if}}</div>");
-		
-		var person = new can.Map({
-			named: true,
-			first: "Justin",
-			last: "Meyer"
-		});
-		console.log("0. RENDERING");
-		var res = tmpl({person: person});
-		console.log("2. RENDERED", res.childNodes[0].innerHTML);
-		person.attr("named",false);
-		console.log("3. UPDATED", res.childNodes[0].innerHTML);
 	});
 
 	test("Partials are passed helpers (#791)", function () {
