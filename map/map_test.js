@@ -238,18 +238,5 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 		equal(res.name, "map1");
 		equal(res.map2.name, "map2");
 	});
-
-	test("using define without adding the plugin", function(){
-		var oldlog = can.dev.warn;
-		can.dev.warn = function (text) {
-			ok(text, "got a message");
-			can.dev.warn = oldlog;
-		};
-		/* jshint ignore:start */
-		var MapClass = can.Map.extend({
-			define: {}
-		});
-		/* jshint ignore:end */
-	})
 	
 });
