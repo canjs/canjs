@@ -60,11 +60,12 @@ steal(
 						section.add( makeRenderer(null,stache, copyState() ));
 					
 					} else if(mode === "#" || mode === "^") {
-					
+						console.log("make renderer", mode);
 						// Adds a renderer function and starts a section.
 						section.startSection(makeRenderer(mode,stache, copyState()  ));
 						
 					} else {
+						console.log("make renderer", mode)
 						// Adds a renderer function that only updates text.
 						section.add( makeRenderer(null,stache, copyState({text: true}) ));
 					}

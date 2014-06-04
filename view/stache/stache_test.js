@@ -3426,7 +3426,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var node = frag.childNodes[0];
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
-	})
+	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
 		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
@@ -3447,7 +3447,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
-	})
+	});
 
 	test("Custom elements created with default namespace in IE8", function(){
 		// Calling can.view.tag so that this tag is shived
@@ -3459,6 +3459,21 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		can.append(can.$("#qunit-test-area"), frag);
 
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
+	});
+
+	test("no nodeLists", function(){
+		var tmpl = can.stache("<div>{{#if person.named}}first={{person.first}},last={{person.last}}.{{/if}}</div>");
+		
+		var person = new can.Map({
+			named: true,
+			first: "Justin",
+			last: "Meyer"
+		});
+		console.log("0. RENDERING");
+		var res = tmpl({person: person});
+		console.log("2. RENDERED", res.childNodes[0].innerHTML);
+		person.attr("named",false);
+		console.log("3. UPDATED", res.childNodes[0].innerHTML);
 	});
 
 	test("Partials are passed helpers (#791)", function () {

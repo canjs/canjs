@@ -49,6 +49,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				compute.unbind('change', change);
 				if (data.nodeList) {
 					nodeLists.unregister(data.nodeList);
+				} else if(data.sectionNode) {
+					data.sectionNode.teardown();
 				}
 			});
 		},
@@ -316,7 +318,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 *     can.view.live.html( placeholder,  greeting );
 		 *
 		 */
-		html: function (el, compute, parentNode) {
+		html: function (el, compute, parentNode, sectionNode) {
 			var data;
 			parentNode = elements.getParentNode(el, parentNode);
 			data = listen(parentNode, compute, function (ev, newVal, oldVal) {
@@ -343,13 +345,25 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						frag = can.view.hookup(frag, parentNode);
 					}
 					// We need to mark each node as belonging to the node list.
-					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					if(!sectionNode) {
+						oldNodes = nodeLists.update(nodes, frag.childNodes);
+					} else {
+						sectionNode.clearAndSave();
+						nodes.splice.apply(nodes,[0,nodes.length].concat(can.makeArray(frag.childNodes)));
+					}
 					elements.replace(oldNodes, frag);
 				};
-			data.nodeList = nodes;
+			if(sectionNode) {
+				data.sectionNode = sectionNode;
+				sectionNode.onteardown(data.teardownCheck);
+			} else {
+				data.nodeList = nodes;
+				nodeLists.register(nodes, data.teardownCheck);
+			}
+			
 			
 			// register the span so nodeLists knows the parentNodeList
-			nodeLists.register(nodes, data.teardownCheck);
+			
 			makeAndPut(compute());
 		},
 		/**
@@ -389,7 +403,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
 		 * correct.
 		 */
-		text: function (el, compute, parentNode) {
+		text: function (el, compute, parentNode, sectionNode) {
 			var parent = elements.getParentNode(el, parentNode);
 			// setup listening right away so we don't have to re-calculate value
 			var data = listen(parent, compute, function (ev, newVal, oldVal) {
@@ -401,12 +415,21 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				/* jshint ignore:end */
 				// TODO: remove in 2.1
 				data.teardownCheck(node.parentNode);
-			}),
+			});
+			
+			var node;
+			if(el.nodeType === 3 && sectionNode) {
+				node = el;
+				node.nodeValue = can.view.toStr(compute());
+				data.sectionNode = sectionNode;
+				sectionNode.onteardown(data.teardownCheck);
+			} else {
 				// The text node that will be updated
-				node = document.createTextNode(can.view.toStr(compute()));
-			// Replace the placeholder with the live node and do the nodeLists thing.
-			// Add that node to nodeList so we can remove it when the parent element is removed from the page
-			data.nodeList = live.replace([el], node, data.teardownCheck);
+				node = document.createTextNode( can.view.toStr(compute()) );
+				// Replace the placeholder with the live node and do the nodeLists thing.
+				// Add that node to nodeList so we can remove it when the parent element is removed from the page
+				data.nodeList = live.replace([el], node, data.teardownCheck);
+			}
 		},
 		setAttributes: function(el, newVal) {
 			var attrs = getAttributeParts(newVal);

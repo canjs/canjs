@@ -9,7 +9,9 @@ steal("can/util",
 	"./mustache_helpers",
 	"can/view/live",
 	"can/view/elements.js",
-	"can/view/scope",function(can, utils, mustacheHelpers, live, elements, Scope ){
+	"can/view/scope",
+	"./section_node",
+	function(can, utils, mustacheHelpers, live, elements, Scope, SectionNode ){
 
 	live = live || can.view.live;
 	elements = elements || can.view.elements;
@@ -82,20 +84,20 @@ steal("can/util",
 		},
 		// Sets .fn and .inverse on a helperOptions object and makes sure 
 		// they can reference the current scope and options.
-		convertToScopes = function(helperOptions, scope, options, truthyRenderer, falseyRenderer){
+		convertToScopes = function(helperOptions, scope, options, sectionNode, truthyRenderer, falseyRenderer){
 			// overwrite fn and inverse to always convert to scopes
 			if(truthyRenderer) {
-				helperOptions.fn = makeRendererConvertScopes(truthyRenderer, scope, options);
+				helperOptions.fn = makeRendererConvertScopes(truthyRenderer, scope, options, sectionNode);
 			}
 			if(falseyRenderer) {
-				helperOptions.inverse = makeRendererConvertScopes(falseyRenderer, scope, options);
+				helperOptions.inverse = makeRendererConvertScopes(falseyRenderer, scope, options, sectionNode);
 			}
 		},
 		// Returns a new renderer function that makes sure any data or helpers passed
 		// to it are converted to a can.view.Scope and a can.view.Options.
-		makeRendererConvertScopes = function (renderer, parentScope, parentOptions) {
+		makeRendererConvertScopes = function (renderer, parentScope, parentOptions, sectionNode) {
 			var rendererWithScope = function(ctx, opts){
-				return renderer(ctx || parentScope, opts);
+				return renderer(ctx || parentScope, opts, sectionNode);
 			};
 			return function (newScope, newOptions) {
 				// prevent binding on fn.
@@ -177,7 +179,7 @@ steal("can/util",
 		 * @param {String} [stringOnly] A flag to indicate that only strings will be returned by subsections.
 		 * @return {Function} An 'evaluator' function that evaluates the expression.
 		 */
-		makeEvaluator: function (scope, options, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
+		makeEvaluator: function (scope, options, sectionNode, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
 			// Arguments for the helper.
 			var args = [],
 				// Hash values for helper.
@@ -294,7 +296,7 @@ steal("can/util",
 			if ( helper ) {
 				
 				// Add additional data to be used by helper functions
-				convertToScopes(helperOptions, scope, options, truthyRenderer, falseyRenderer);
+				convertToScopes(helperOptions, scope, options, sectionNode, truthyRenderer, falseyRenderer);
 
 				can.extend(helperOptions, {
 					context: context,
@@ -326,7 +328,7 @@ steal("can/util",
 				}
 			} else if( mode === "#" || mode === "^" ) {
 				// Setup renderers.
-				convertToScopes(helperOptions, scope, options, truthyRenderer, falseyRenderer);
+				convertToScopes(helperOptions, scope, options, sectionNode, truthyRenderer, falseyRenderer);
 				return function(){
 					// Get the value
 					var value;
@@ -406,7 +408,7 @@ steal("can/util",
 				//console.log("here!");
 				var evaluator = scope.__cache[fullExpression];
 				if(!evaluator) {
-					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer, true);
+					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, null, mode, exprData, truthyRenderer, falseyRenderer, true);
 				}
 				// Run the evaluator and return the result.
 				var res = evaluator();
@@ -434,11 +436,20 @@ steal("can/util",
 			var exprData = expressionData(expression);
 			
 			// A branching renderer takes truthy and falsey renderer.
-			return function branchRenderer(scope, options, truthyRenderer, falseyRenderer){
+			return function branchRenderer(scope, options, parentSectionNode, truthyRenderer, falseyRenderer){
+				var sectionNode = new SectionNode();
+				
+
+				if(parentSectionNode){
+					parentSectionNode.addChild(sectionNode);
+				} else {
+					console.log("no parent of",exprData.name,exprData.args);
+				}
+				
 				
 				// Get the evaluator. This does not need to be cached (probably) because if there
 				// an observable value, it will be handled by `can.view.live`.
-				var evaluator = makeEvaluator( scope, options, mode, exprData, truthyRenderer, falseyRenderer,
+				var evaluator = makeEvaluator( scope, options, sectionNode, mode, exprData, truthyRenderer, falseyRenderer,
 					// If this is within a tag, make sure we only get string values. 
 					state.tag );
 				
@@ -478,10 +489,10 @@ steal("can/util",
 						live.attributes( this, compute );
 					}
 					else if(state.text && typeof value !== "object"){
-						live.text(this, compute, this.parentNode);
+						live.text(this, compute, this.parentNode, sectionNode);
 					}
 					else {
-						live.html(this, compute, this.parentNode);
+						live.html(this, compute, this.parentNode, sectionNode);
 					}
 				}
 				// If the compute has no observable dependencies, just set the value on the element.
