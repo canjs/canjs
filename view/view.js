@@ -393,7 +393,7 @@ steal('can/util', function (can) {
 			//!steal-remove-end
 
 			can[info.suffix] = $view[info.suffix] = function (id, text) {
-				var renderer, 
+				var renderer,
 					renderFunc;
 				// If there is no text, assume id is the template text, so return a nameless renderer.
 				if (!text) {
@@ -407,7 +407,7 @@ steal('can/util', function (can) {
 							}
 						}
 						return renderer.apply(this, arguments);
-					}
+					};
 					renderFunc.render = function() {
 						var textRenderer = info.renderer(null, id);
 						return textRenderer.apply(textRenderer, arguments);
@@ -415,7 +415,7 @@ steal('can/util', function (can) {
 					return renderFunc;
 				}
 				var registeredRenderer = function(){
-					if(!renderer){	
+					if(!renderer){
 						if(info.fragRenderer) {
 							renderer = info.fragRenderer(id, text);
 						} else {
@@ -423,7 +423,7 @@ steal('can/util', function (can) {
 						}
 					}
 					return renderer.apply(this, arguments);
-				}
+				};
 				if(info.fragRenderer) {
 					return $view.preload( id, registeredRenderer );
 				} else {
