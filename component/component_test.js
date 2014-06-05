@@ -1245,5 +1245,19 @@ steal("can/component", "can/view/stache", function () {
 		can.append(can.$('#qunit-test-area'), template2());
 
 	});
+	
+	test("hyphen-less tag names", function () {
+		var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
+		can.Component.extend({
+			tag: "foobar",
+			template: "<div><content/></div>",
+			scope: {
+				name: "Brian"
+			}
+		});
+		can.append(can.$('#qunit-test-area'), template());
+		equal(can.$('#qunit-test-area div')[0].innerHTML, "Brian");
+
+	});
 
 });

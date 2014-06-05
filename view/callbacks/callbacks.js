@@ -41,9 +41,12 @@ steal("can/util", "can/view",function(can){
 	
 			tags[tagName.toLowerCase()] = tagHandler;
 		} else {
+			debugger;
 			var cb = tags[tagName.toLowerCase()];
+			console.log(cb, automaticCustomElementCharacters.test(tagName), tagName)
 			if(!cb && automaticCustomElementCharacters.test(tagName)) {
 				// empty callback for things that look like special tags
+				console.log('here')
 				cb = function(){};
 			}
 			return cb;
