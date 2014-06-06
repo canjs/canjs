@@ -3805,4 +3805,58 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var frag = can.mustache(tmpl)({ noData: true });
 		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
 	});
+
+	test("def helper - resolve deferred", function(){
+		var tmpl = '<div>{{#def user}}' +
+						'{{#if isPending}}PENDING{{/if}}' +
+						'{{#if isResolved}}{{@data.username}}{{/if}}' +
+					'{{/def}}</div>',
+			data = {
+				user: new can.Deferred()
+			},
+			frag = can.mustache(tmpl)(data);
+
+
+		equal(frag.childNodes[0].innerHTML, 'PENDING');
+
+		data.user.resolve({username : 'retro'});
+
+		equal(frag.childNodes[0].innerHTML, 'retro');
+
+	});
+
+	test("def helper - reject deferred", function(){
+		var tmpl = '<div>{{#def user}}' +
+						'{{#if isPending}}PENDING{{/if}}' +
+						'{{#if isRejected}}{{@error.reason}}{{/if}}' +
+					'{{/def}}</div>',
+			data = {
+				user: new can.Deferred()
+			},
+			frag = can.mustache(tmpl)(data);
+
+
+		equal(frag.childNodes[0].innerHTML, 'PENDING');
+
+		data.user.reject({reason : 'no user'});
+
+		equal(frag.childNodes[0].innerHTML, 'no user');
+
+	});
+
+	test("def helper - data that is not deferred will be treated like it is", function(){
+		var tmpl = '<div>{{#def user}}' +
+						'{{#if isPending}}PENDING{{/if}}' +
+						'{{#if isResolved}}{{@data.username}}{{/if}}' +
+					'{{/def}}</div>',
+			data = {
+				user: {
+					username : 'retro'
+				}
+			},
+			frag = can.mustache(tmpl)(data);
+
+		equal(frag.childNodes[0].innerHTML, 'retro');
+
+	});
 });

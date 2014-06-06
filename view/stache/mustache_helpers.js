@@ -107,6 +107,31 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				
 				can.data( can.$(el), attr, data || this.context );
 			};
+		},
+		'def' : function(deferred, opts){
+			var resolved = can.compute(),
+				rejected = can.compute(),
+				defState = can.compute(function(){
+					var rs = resolved(),
+						rj = rejected();
+
+					return {
+						isResolved: !!rs,
+						isRejected: !!rj,
+						isPending: !(rs || rj)
+					};
+				});
+
+			if(!can.isDeferred(deferred)){
+				deferred = (new can.Deferred()).resolve(deferred);
+			}
+
+			deferred.then(resolved, rejected);
+
+			return opts.fn(opts.scope.add(defState).add({
+				"@data": resolved,
+				"@error": rejected
+			}));
 		}
 	};
 	
