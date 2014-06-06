@@ -1,3 +1,4 @@
+/* jshint undef: false */
 steal(
 	"can/util",
 	"can/view/parser",
