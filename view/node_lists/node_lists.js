@@ -217,7 +217,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				if( replacement ) {
 					list.splice( index, itemsInChildListTree(replacement), replacement );
 					rCount--;
-				} 
+				}
 				index++;
 			}
 			list.replacements = [];

@@ -285,8 +285,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				live.replace(masterNodeList, text, data.teardownCheck);
 			} else {
 				elements.replace(masterNodeList, text);
-			 	nodeLists.update(masterNodeList, [text]);
-			 	
+				nodeLists.update(masterNodeList, [text]);
+
 				nodeList.unregistered = data.teardownCheck;
 			}
 			
@@ -415,7 +415,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			});
 			// The text node that will be updated
 				
-			var node = document.createTextNode(can.view.toStr(compute()));;
+			var node = document.createTextNode(can.view.toStr(compute()));
 			if(nodeList) {
 				nodeList.unregistered = data.teardownCheck;
 				data.nodeList = nodeList;

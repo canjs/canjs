@@ -15,6 +15,8 @@ steal("can/util",
 
 	live = live || can.view.live;
 	elements = elements || can.view.elements;
+	Scope = Scope || can.view.Scope;
+	nodeLists = nodeLists || can.view.nodeLists;
 	
 	// ## Types
 	

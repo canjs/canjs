@@ -186,7 +186,7 @@ steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/event', 'can/util/fra
 					};
 				}
 				event.target = event.target || item;
-				can.dispatch.call(item, event, args);
+				can.dispatch.call(item, event, can.makeArray(args));
 			}
 		};
 		can.delegate = function (selector, ev, cb) {
