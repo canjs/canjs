@@ -556,12 +556,22 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		deepEqual(getText(t.template,t.data), expected);
+		deepEqual(getText(t.template, t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.stache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {

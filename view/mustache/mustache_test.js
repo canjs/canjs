@@ -524,7 +524,10 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
@@ -533,6 +536,13 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				text: t.template
 			})
 			.render(t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {

@@ -1866,10 +1866,7 @@ steal('can/util',
 			 *     {{/unless}}
 			 */
 			'unless': function (expr, options) {
-				var fn = options.fn;
-				options.fn = options.inverse;
-				options.inverse = fn;
-				return Mustache._helpers['if'].fn.apply(this, arguments);
+				return Mustache._helpers['if'].fn.apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 			},
 
 			// Implements the `each` built-in helper.
