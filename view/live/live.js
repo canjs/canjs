@@ -163,9 +163,15 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						newIndicies = [];
 					// For each new item,
 					can.each(items, function (item, key) {
+						
+						if(nodeList) {
+							var itemNodeList = [];
+							nodeLists.register(itemNodeList,null, true);
+						}
+						
 						var itemIndex = can.compute(key + index),
 							// get its string content
-							itemHTML = render.call(context, item, itemIndex),
+							itemHTML = render.call(context, item, itemIndex, itemNodeList),
 							gotText = typeof itemHTML === "string",
 							// and convert it into elements.
 							itemFrag = can.frag(itemHTML);
@@ -174,10 +180,14 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
 						
 						var childNodes = can.makeArray(itemFrag.childNodes);
+						if(nodeList) {
+							nodeLists.update(itemNodeList, childNodes);
+							newNodeLists.push(itemNodeList)
+						} else {
+							newNodeLists.push(nodeLists.register(childNodes));
+						}
 						
 						
-						
-						newNodeLists.push(nodeLists.register(childNodes));
 						// Hookup the fragment (which sets up child live-bindings) and
 						// add it to the collection of all added elements.
 						frag.appendChild(itemFrag);
