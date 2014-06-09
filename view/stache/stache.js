@@ -36,7 +36,7 @@ steal(
 				} else if(mode === "/") {
 					
 					section.endSection();
-					if(section instanceof HTMLSection ) {
+					if(section instanceof HTMLSectionBuilder) {
 						state.sectionElementStack.pop();
 					}
 				} else if(mode === "else") {
@@ -66,7 +66,7 @@ steal(
 						// Adds a renderer function and starts a section.
 						section.startSection(makeRenderer(mode,stache, copyState()  ));
 						// If we are a directly nested section, count how many we are within
-						if(section instanceof HTMLSection) {
+						if(section instanceof HTMLSectionBuilder) {
 							state.sectionElementStack.push("section");
 						}
 					} else {
