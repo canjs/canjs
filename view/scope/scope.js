@@ -141,6 +141,8 @@ steal(
 									rootReads = data.reads;
 									computeData.scope = data.scope;
 									computeData.initialValue = data.value;
+									computeData.reads = data.reads;
+									computeData.root = rootObserve;
 									return data.value;
 								}
 							})

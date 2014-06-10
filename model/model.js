@@ -1858,14 +1858,14 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// handler( 'change','1.destroyed' ). This is used
 			// to remove items on destroyed from Model Lists.
 			// but there should be a better way.
-			can.trigger(this, "change", funcName);
+			can.dispatch.call(this, {type:"change", target: this}, [funcName]);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
 			//!steal-remove-end
 
 			// Call event on the instance's Class
-			can.trigger(constructor, funcName, this);
+			can.dispatch.call(constructor, funcName, [this]);
 		};
 	});
 	

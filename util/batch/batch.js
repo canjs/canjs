@@ -178,7 +178,7 @@ steal('can/util/can.js', function (can) {
 					can.batch.start();
 				}
 				for(i = 0, len = items.length; i < len; i++) {
-					can.trigger.apply(can, items[i]);
+					can.dispatch.apply(items[i][0],items[i][1]);
 				}
 				for(i = 0, len = callbacks.length; i < callbacks.length; i++) {
 					callbacks[i]();
@@ -200,10 +200,11 @@ steal('can/util/can.js', function (can) {
 		 * immediately.
 		 */
 		trigger: function (item, event, args) {
+			//console.log(event, item, args);
 			// Don't send events if initalizing.
 			if (!item._init) {
 				if (transactions === 0) {
-					return can.trigger(item, event, args);
+					return can.dispatch.call(item, event, args);
 				} else {
 					event = typeof event === 'string' ? {
 						type: event
@@ -211,8 +212,7 @@ steal('can/util/can.js', function (can) {
 					event.batchNum = batchNum;
 					batchEvents.push([
 						item,
-						event,
-						args
+						[event, args]
 					]);
 				}
 			}

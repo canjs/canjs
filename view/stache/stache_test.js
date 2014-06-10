@@ -848,9 +848,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		obs.removeAttr('attributes');
 
 		equal(p.getAttribute('some'), null, 'attribute is undefined');
-
+		
 		obs.attr('attributes', 'some="newText"');
 
+		// 
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 
 		obs.removeAttr('message');
@@ -2811,7 +2812,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		tmp(data);
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
-	})
+	});
 
 	test('html comments must not break mustache scanner', function () {
 		can.each([
@@ -2880,7 +2881,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			item: {
 				subitems: ['first']
 			}
-		})
+		});
 
 		var frag = template(data),
 			div = frag.childNodes[0],
@@ -2892,7 +2893,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			.push('second');
 
 		equal(labels.length, 2, "after pushing two label");
-
+		
 		data.removeAttr('item');
 
 		equal(labels.length, 0, "after removing item no label");
@@ -2914,17 +2915,28 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 				visible: true
 			}]
 		});
-
-		function handler(eventType) {
+		var bindings = 0;
+		function bind(eventType){
+			bindings++;
+			return can.Map.prototype.bind.apply(this, arguments);
+		}
+		
+		// unbind will be called twice
+		function unbind(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
-			if (eventType === "visible") {
+			bindings--;
+			if(eventType === "visible"){
+				ok(true,"unbound visible");
+			}
+			if (bindings === 0) {
 				start();
-				ok(true, "unbound visible")
+				ok(true, "unbound visible");
 			}
 		}
-
 		data.attr("items.0")
-			.unbind = handler;
+			.bind = bind;
+		data.attr("items.0")
+			.unbind = unbind;
 
 		template(data);
 
@@ -2933,7 +2945,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		}]);
 
 		stop();
-	})
+	});
 
 	test("direct live section", function () {
 		var template = can.stache("{{#if visible}}<label/>{{/if}}");
@@ -3414,7 +3426,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var node = frag.childNodes[0];
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
-	})
+	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
 		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
@@ -3435,7 +3447,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
-	})
+	});
 
 	test("Custom elements created with default namespace in IE8", function(){
 		// Calling can.view.tag so that this tag is shived

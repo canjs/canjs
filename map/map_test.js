@@ -70,8 +70,8 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 		});
 		state.removeAttr("key.with.dots");
 		state2.removeAttr("key.with.someValue");
-		deepEqual(can.Map.keys(state), ["productType"], "one property");
-		deepEqual(can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
+		deepEqual( can.Map.keys(state), ["productType"], "one property");
+		deepEqual( can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
 		deepEqual( can.Map.keys( state2.key["with"] ) , [], "zero properties");
 	});
 

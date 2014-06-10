@@ -15,9 +15,12 @@
 
 		<script type='text/javascript'>
 			QUnit.config.autostart = false;
-			steal('can/model/queue/queue_test.js',function(){
-				QUnit.start();
-			})
+			setTimeout(function(){
+				steal('can/model/queue/queue_test.js',function(){
+					QUnit.start();
+				});
+			},300);
+			
 		</script>
 		</body>
 		</body>

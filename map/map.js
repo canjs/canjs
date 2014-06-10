@@ -99,11 +99,12 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// Parses attribute name into its parts.
 				attrParts: function (attr, keepKey) {
 					//Keep key intact
-					if (keepKey) {
+					
+					if (keepKey ) {
 						return [attr];
 					}
 					// Split key on '.'
-					return can.isArray(attr) ? attr : ("" + attr)
+					return typeof attr === "object" ? attr : ("" + attr)
 						.split(".");
 				},
 				/**
@@ -296,19 +297,27 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// when a change happens, create the named event.
 				can.batch.trigger(this, {
 					type: attr,
-					batchNum: ev.batchNum
+					batchNum: ev.batchNum,
+					target: ev.target
 				}, [newVal, oldVal]);
 
-				if(how === "remove" || how === "add") {
-					can.batch.trigger(this, {
-						type: "__keys",
-						batchNum: ev.batchNum
-					});
-				}
+				
 			},
 			// Trigger a change event.
 			_triggerChange: function (attr, how, newVal, oldVal) {
-				can.batch.trigger(this, "change", can.makeArray(arguments));
+				// so this change can bubble ... a bubbling change triggers the 
+				// _changes trigger
+				if(bubble.isBubbling(this, "change")) {
+					can.batch.trigger(this, "change", [attr, how, newVal, oldVal]);
+				} else {
+					can.batch.trigger(this, attr, [newVal, oldVal]);
+				}
+				
+				if(how === "remove" || how === "add") {
+					can.batch.trigger(this, {
+						type: "__keys"
+					});
+				}
 			},
 			// Iterator that does not trigger live binding.
 			_each: function (callback) {
@@ -328,7 +337,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					return this._attrs(attr, val);
 				// If we are getting a value.
 				} else if (arguments.length === 1) {
-					// Let people know we are reading.
 					can.__reading(this, attr);
 					return this._get(attr);
 				} else {
@@ -382,32 +390,26 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Reads a property from the `object`.
 			_get: function (attr) {
-				var value;
+				attr = ""+attr;
+				var dotIndex = attr.indexOf('.');
+				
+				
 				// Handles the case of a key having a `.` in its name
-				if (typeof attr === 'string' && !! ~attr.indexOf('.')) {
+				// Otherwise we have to dig deeper into the Map to get the value.
+				if( dotIndex >= 0 ) {
 					// Attempt to get the value
-					value = this.__get(attr);
+					var value = this.__get(attr);
 					// For keys with a `.` in them, value will be defined
 					if (value !== undefined) {
 						return value;
 					}
+					var first = attr.substr(0, dotIndex),
+						second = attr.substr(dotIndex+1),
+						current = this.__get( first );
+					return current && current._get ?  current._get(second) : undefined;
+				} else {
+					return this.__get( attr );
 				}
-
-				// Otherwise we have to dig deeper into the Map to get the value.
-				// First, break up the attr (`"foo.bar"`) into parts like `["foo","bar"]`.
-				var parts = can.Map.helpers.attrParts(attr),
-					// Then get the value of the first attr name (`"foo"`).
-					current = this.__get(parts.shift());
-				// If there are other attributes to read...
-				return parts.length ?
-				// and current has a value...
-				current ?
-				// then lookup the remaining attrs on current
-				current._get(parts) :
-				// or if there's no current, return undefined.
-				undefined :
-				// If there are no more parts, return current.
-				current;
 			},
 			// Reads a property directly if an `attr` is provided, otherwise
 			// returns the "real" data object itself.
@@ -447,25 +449,27 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			// `attr` - Is a string of properties or an array  of property values.
 			// `value` - The raw value to set.
 			_set: function (attr, value, keepKey) {
-				// Convert `attr` to attr parts (if it isn't already).
-				var parts = can.Map.helpers.attrParts(attr, keepKey),
-					// The immediate prop we are setting.
-					prop = parts.shift(),
-					// We only need to get the current value if we are not in init.
-					current = this._init ? undefined : this.__get(prop);
-
-				if ( parts.length && Map.helpers.isObservable(current) ) {
-					// If we have an `object` and remaining parts that `object` should set it.
-					current._set(parts, value);
-				} else if (!parts.length) {
-					// We're in "real" set territory.
+				attr = ""+attr;
+				var dotIndex = attr.indexOf('.'),
+					current;
+				if(!keepKey && dotIndex >= 0){
+					var first = attr.substr(0, dotIndex),
+						second = attr.substr(dotIndex+1);
+						
+					current =  this._init ? undefined : this.__get( first );
+					
+					if( Map.helpers.isObservable(current) ) {
+						current._set(second, value);
+					} else {
+						throw "can.Map: Object does not exist";
+					}
+				} else {
 					if (this.__convert) {
 						//Convert if there is a converter
-						value = this.__convert(prop, value);
+						value = this.__convert(attr, value);
 					}
-					this.__set(prop, this.__type(value, prop), current);
-				} else {
-					throw "can.Map: Object does not exist";
+					current = this._init ? undefined : this.__get( attr );
+					this.__set(attr, this.__type(value, attr), current);
 				}
 			},
 			__set: function (prop, value, current) {
@@ -474,7 +478,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				if (value !== current) {
 					// Check if we are adding this for the first time --
 					// if we are, we need to create an `add` event.
-					var changeType = this.__get()
+					var changeType = current !== undefined || this.__get()
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on `_data` and hook it up to send event.
@@ -499,7 +503,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				}
 				// Add property directly for easy writing.
 				// Check if its on the `prototype` so we don't overwrite methods like `attrs`.
-				if (!can.isFunction(this.constructor.prototype[prop]) && !this._computedBindings[prop] ) {
+				if ( typeof this.constructor.prototype[prop] !== 'function' && !this._computedBindings[prop] ) {
 					this[prop] = val;
 				}
 			},
