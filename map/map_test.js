@@ -238,5 +238,15 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 		equal(res.name, "map1");
 		equal(res.map2.name, "map2");
 	});
+
+	test("Unbinding from a map with no bindings doesn't throw an error (#1015)", function() {
+		var test = new can.Map({});
+
+		try {
+			test.unbind('change');
+		} catch(e) {
+			ok(false, 'No error should be thrown');
+		}
+	});
 	
 });
