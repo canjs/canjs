@@ -3617,4 +3617,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, "ARS", "got value");
 
 	});
+
+	test("<col> inside <table> renders correctly (#1013)", 1, function() {
+		var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+		var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+		var frag = can.stache(template)({
+			columns: new can.List([
+				{ class: 'test' }
+			])
+		});
+
+		equal(frag.childNodes[0].outerHTML, expected, '<col> nodes added in proper position');
+	});
 });
