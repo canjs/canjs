@@ -132,37 +132,42 @@ steal('can/event', "can/control", 'can/test', "can/control", function (event, Co
 		});
 	}
 
-	test('Delegate/undelegate should fallback to using bind/unbind (#754)', function() {
+	test('Delegate/undelegate should fallback to using bind/unbind (#754)', 4, function() {
 		var bind_fallback_fired = false,
 				unbind_fallback_fired = false,
 				handler_fired = false;
 
-		// Create event-dispatching class
-		var some_object = {
-			bind: function() {
-				bind_fallback_fired = true;
-				return can.addEvent.apply(this, arguments);
-			},
-			unbind: function() {
-				unbind_fallback_fired = true;
-				return can.removeEvent.apply(this, arguments);
-			},
-			dispatch: can.dispatch
+		var addEvent = can.addEvent;
+		can.addEvent = can.event.addEvent = function() {
+			bind_fallback_fired = true;
+			return addEvent.apply(this, arguments);
 		};
+		var removeEvent = can.removeEvent;
+		can.removeEvent = can.event.removeEvent = function() {
+			unbind_fallback_fired = true;
+			return removeEvent.apply(this, arguments);
+		};
+
+		// Create event-dispatching class
+		var some_object = can.extend({}, can.event);
 
 		var handler = function() {
 			handler_fired = true;
+			ok(this === some_object, "Scope is correct");
 		};
 
 		// Delegate and fire the event
-		can.delegate.call(some_object, '', 'some_event', handler);
+		can.event.delegate.call(some_object, '', 'some_event', handler);
 		some_object.dispatch("some_event");
-		can.undelegate.call(some_object, '', 'some_event', handler);
+		can.event.undelegate.call(some_object, '', 'some_event', handler);
 		
 		// Fire the event
 		equal(bind_fallback_fired, true, "Bind fallback fired");
 		equal(handler_fired, true, "Delegated handler fired");
 		equal(unbind_fallback_fired, true, "Unbind fallback fired");
+
+		can.addEvent = can.event.addEvent = addEvent;
+		can.removeEvent = can.event.removeEvent = removeEvent;
 	});
 
 	test('One will listen to an event once, then unbind', function() {
