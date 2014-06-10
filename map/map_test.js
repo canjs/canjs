@@ -240,6 +240,8 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 	});
 
 	test("Unbinding from a map with no bindings doesn't throw an error (#1015)", function() {
+		expect(0);
+
 		var test = new can.Map({});
 
 		try {
