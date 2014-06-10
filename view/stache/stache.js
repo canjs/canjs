@@ -21,7 +21,16 @@ steal(
 		
 		// The HTML section that is the root section for the entire template.
 		var section = new HTMLSectionBuilder(),
-		
+			// Tracks the state of the parser.
+			state = {
+				node: null,
+				attr: null,
+				// A stack of which node / section we are in.
+				// There is probably a better way of doing this.
+				sectionElementStack: [],
+				// If text should be inserted and HTML escaped
+				text: false
+			},
 			// This function is a catch all for taking a section and figuring out
 			// how to create a "renderer" that handles the functionality for a 
 			// given section and modify the section to use that renderer.
@@ -31,8 +40,8 @@ steal(
 				
 				if(mode === ">") {
 					// Partials use liveBindingPartialRenderers
-					section.add(mustacheCore.makeLiveBindingPartialRenderer(stache));
-					
+					section.add(mustacheCore.makeLiveBindingPartialRenderer(stache, state));
+
 				} else if(mode === "/") {
 					
 					section.endSection();
@@ -75,16 +84,6 @@ steal(
 					}
 					
 				}
-			},
-			// Tracks the state of the parser.
-			state = {
-				node: null,
-				attr: null,
-				// A stack of which node / section we are in.
-				// There is probably a better way of doing this.
-				sectionElementStack: [],
-				// If text should be inserted and HTML escaped
-				text: false
 			},
 			// Copys the state object for use in renderers.
 			copyState = function(overwrites){

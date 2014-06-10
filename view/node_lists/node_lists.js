@@ -310,7 +310,10 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				// If the node does not have a nodeType it is an array of
 				// nodes.
 				if(node.nodeType) {
-					delete nodeMap[id(node)];
+					if(!nodeList.replacements) {
+						delete nodeMap[id(node)];
+					}
+
 					nodes.push(node);
 				} else {
 					// Recursively unregister each of the child lists in 

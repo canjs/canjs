@@ -163,9 +163,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						newIndicies = [];
 					// For each new item,
 					can.each(items, function (item, key) {
-						
+						var itemNodeList = [];
+
 						if(nodeList) {
-							var itemNodeList = [];
 							nodeLists.register(itemNodeList,null, true);
 						}
 						
@@ -182,7 +182,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						var childNodes = can.makeArray(itemFrag.childNodes);
 						if(nodeList) {
 							nodeLists.update(itemNodeList, childNodes);
-							newNodeLists.push(itemNodeList)
+							newNodeLists.push(itemNodeList);
 						} else {
 							newNodeLists.push(nodeLists.register(childNodes));
 						}
@@ -296,7 +296,6 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			} else {
 				elements.replace(masterNodeList, text);
 				nodeLists.update(masterNodeList, [text]);
-
 				nodeList.unregistered = data.teardownCheck;
 			}
 			

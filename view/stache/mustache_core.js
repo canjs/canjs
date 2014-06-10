@@ -369,9 +369,10 @@ steal("can/util",
 		 * @return {function(this:HTMLElement,can.view.Scope,can.view.Options)} A renderer function 
 		 * live binds a partial.
 		 */
-		makeLiveBindingPartialRenderer: function(partialName){
+		makeLiveBindingPartialRenderer: function(partialName, state){
 			partialName = can.trim(partialName);
-			return function(scope, options){
+
+			return function(scope, options, parentSectionNodeList){
 				// Look up partials in options first.
 				var partial = options.attr("partials." + partialName),
 					res;
@@ -384,8 +385,14 @@ steal("can/util",
 					
 					res = can.view.render(partialName, scope, options );
 				}
-				
-				live.replace([this], res);
+
+				res = can.frag(res);
+
+				var nodeList = [this];
+
+				nodeLists.register(nodeList, null, state.directlyNested ? parentSectionNodeList || true :  true);
+				nodeLists.update(nodeList, res.childNodes);
+				elements.replace([this], res);
 			};
 		},
 		// ## mustacheCore.makeStringBranchRenderer
