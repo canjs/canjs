@@ -16,7 +16,7 @@
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-string-replace": "~0.2.2",
-    "grunt-contrib-qunit": "~0.2.1",
+    "grunt-contrib-qunit": "~0.5.1",
     "grunt-contrib-connect": "~0.3.0",
     "bitovi-tools": "https://github.com/bitovi/bitovi-tools/tarball/master",
     "steal": "https://github.com/bitovi/steal-build/tarball/master",

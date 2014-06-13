@@ -55,6 +55,8 @@ steal('can/util', 'can/route', function (can) {
 			// Start of `location.pathname` is the root.
 			// (Can be configured via `can.route.bindings.pushstate.root`)
 			root: "/",
+			// don't greedily match slashes in routing rules
+			matchSlashes: false,
 			paramsMatcher: /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/,
 			querySeparator: '?',
 
@@ -131,7 +133,7 @@ steal('can/util', 'can/route', function (can) {
 
 				// If link is within the same domain and descendant of `root`
 				if (window.location.host === linksHost) {
-					var root = can.route._call("root");
+					var root = cleanRoot();
 					if (node.pathname.indexOf(root) === 0) {
 
 						// Removes root from url.
@@ -163,7 +165,7 @@ steal('can/util', 'can/route', function (can) {
 					root = can.route._call("root"),
 					index = root.indexOf(domain);
 				if (index === 0) {
-					return can.route.root.substr(domain.length);
+					return root.substr(domain.length);
 				}
 				return root;
 			},
