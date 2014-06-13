@@ -3501,4 +3501,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		data.attr('color', false);
 		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
 	});
+
+	test("returns correct value for DOM attributes (#1065)", 3, function() {
+		var template = '<h2 class="{{#if shown}}foo{{/if}} test1 {{#shown}}muh{{/shown}}"></h2>' +
+			'<h3 class="{{#if shown}}bar{{/if}} test2 {{#shown}}kuh{{/shown}}"></h3>' +
+			'<h4 class="{{#if shown}}baz{{/if}} test3 {{#shown}}boom{{/shown}}"></h4>';
+
+		var frag = can.stache(template)({ shown: true });
+
+		equal(frag.childNodes[0].className, 'foo test1 muh');
+		equal(frag.childNodes[1].className, 'bar test2 kuh');
+		equal(frag.childNodes[2].className, 'baz test3 boom');
+	});
 });

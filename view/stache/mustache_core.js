@@ -406,20 +406,21 @@ steal("can/util",
 		 * @return {function(can.view.Scope,can.view.Options, can.view.renderer, can.view.renderer)} 
 		 */
 		makeStringBranchRenderer: function(mode, expression){
-			
 			var exprData = expressionData(expression),
 				// Use the full mustache expression as the cache key.
 				fullExpression = mode+expression;
-			
+
 			// A branching renderer takes truthy and falsey renderer.
 			return function branchRenderer(scope, options, truthyRenderer, falseyRenderer){
-				// TODO: What happens if same mode/expresion, but different sub-sections?
 				// Check the scope's cache if the evaluator already exists for performance.
-				//console.log("here!");
 				var evaluator = scope.__cache[fullExpression];
-				if(!evaluator) {
-					evaluator = scope.__cache[fullExpression] = makeEvaluator( scope, options, null, mode, exprData, truthyRenderer, falseyRenderer, true);
+				if(mode || !evaluator) {
+					evaluator = makeEvaluator( scope, options, null, mode, exprData, truthyRenderer, falseyRenderer, true);
+					if(!mode) {
+						scope.__cache[fullExpression] = evaluator;
+					}
 				}
+
 				// Run the evaluator and return the result.
 				var res = evaluator();
 				return res == null ? "" : ""+res;
