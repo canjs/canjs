@@ -309,7 +309,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				can.batch.trigger(this, {
 					type: attr,
 					batchNum: ev.batchNum,
-					target: ev.target
+					target: ev.target || this
 				}, [newVal, oldVal]);
 
 				
@@ -319,7 +319,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// so this change can bubble ... a bubbling change triggers the 
 				// _changes trigger
 				if(bubble.isBubbling(this, "change")) {
-					can.batch.trigger(this, "change", [attr, how, newVal, oldVal]);
+					can.batch.trigger(this, {
+						type: "change",
+						target: this
+					}, [attr, how, newVal, oldVal]);
 				} else {
 					can.batch.trigger(this, attr, [newVal, oldVal]);
 				}
