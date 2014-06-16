@@ -309,7 +309,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				can.batch.trigger(this, {
 					type: attr,
 					batchNum: ev.batchNum,
-					target: ev.target || this
+					target: ev.target
 				}, [newVal, oldVal]);
 
 				
@@ -329,7 +329,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				
 				if(how === "remove" || how === "add") {
 					can.batch.trigger(this, {
-						type: "__keys"
+						type: "__keys",
+						target: this
 					});
 				}
 			},
@@ -533,7 +534,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						computedBinding.handler = function (ev, newVal, oldVal) {
 							can.batch.trigger(self, {
 								type: eventName,
-								batchNum: ev.batchNum
+								batchNum: ev.batchNum,
+								target: self
 							}, [newVal, oldVal]);
 						};
 						this[eventName].bind("change", computedBinding.handler);
