@@ -3,6 +3,38 @@
 @parent guides 5
 -->
 
+__2.1.2__ ( Jun 16 2014 )
+
+- change: [Adds event target back for Map events](https://github.com/bitovi/canjs/pull/1091)
+- change: [Evaluate and cache text sections properly](https://github.com/bitovi/canjs/pull/1083)
+- change: [can.Map events Object missing target property](https://github.com/bitovi/canjs/issues/1082)
+- change: [Fix can.debounce and can.throttle context](https://github.com/bitovi/canjs/pull/1073)
+- change: [can.stache is returning incorrect values for DOM attributes](https://github.com/bitovi/canjs/issues/1065)
+- change: [Fixed incorrect scope for can/event&#39;s delegate and undelegate](https://github.com/bitovi/canjs/pull/1055)
+- change: [Warnings for map/define](https://github.com/bitovi/canjs/pull/1054)
+- change: [1050 component tagnames](https://github.com/bitovi/canjs/pull/1053)
+- change: [Regression in component naming](https://github.com/bitovi/canjs/issues/1050)
+- change: [Model destroyed bug](https://github.com/bitovi/canjs/pull/1049)
+- change: [Remove NodeLists from Stache](https://github.com/bitovi/canjs/pull/1048)
+- change: [#1019 Unless does not live bind](https://github.com/bitovi/canjs/pull/1045)
+- change: [Making routes not greedily consume slashes by default](https://github.com/bitovi/canjs/pull/1044)
+- change: [Map define warn](https://github.com/bitovi/canjs/pull/1041)
+- change: [calling reverse on a model list breaks its &quot;destroyed&quot; bindings](https://github.com/bitovi/canjs/issues/1040)
+- change: [can/event delegate/undelegate aren&#39;t using the correct scope](https://github.com/bitovi/canjs/issues/1039)
+- change: [Codeblocks styling in COMPUTE-ATTR](https://github.com/bitovi/canjs/pull/1036)
+- change: [nested component within an #if is not live bound](https://github.com/bitovi/canjs/pull/1025)
+- change: [{{#unless}} does not live bind](https://github.com/bitovi/canjs/issues/1019)
+- change: [#716 can.Model now warns the developer when no static properties are specified ](https://github.com/bitovi/canjs/pull/1016)
+- change: [fixes map unbind bug](https://github.com/bitovi/canjs/pull/1015)
+- change: [404 on can.view.Scope().readOptions docs](https://github.com/bitovi/canjs/issues/1014)
+- change: [Fix rendering of &lt;col&gt; inside &lt;table&gt; in templates.](https://github.com/bitovi/canjs/pull/1013)
+- change: [fix documentation for can.batch.stop](https://github.com/bitovi/canjs/pull/1012)
+- change: [can.stache performance](https://github.com/bitovi/canjs/issues/1011)
+- change: [Bug with conditionally nested components using stache](https://github.com/bitovi/canjs/issues/967)
+- change: [can.batch documentation is wrong](https://github.com/bitovi/canjs/issues/802)
+- change: [can.debounce keeps the context after being called the first time](https://github.com/bitovi/canjs/issues/782)
+- change: [Dev warning when can.Model is extended without static properties.](https://github.com/bitovi/canjs/issues/716)
+
 __2.1.1__ ( May 21 2014 )
 
 - change: [404 on define example](https://github.com/bitovi/canjs/issues/999)
