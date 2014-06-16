@@ -15,6 +15,12 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i,
 		paramReplacer = /\{([^\}]+)\}/g;
 
+	function makeComponentMethod(name) {
+		return function() {
+			return this.___component[name].apply(this, arguments);
+		};
+	}
+
 	/**
 	 * @add can.Component
 	 */
@@ -84,6 +90,15 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					can.view.tag(this.prototype.tag, function (el, options) {
 						new self(el, options);
 					});
+					var internal = ["tag", "scope", "template"];
+					this.externalMethods = {};
+
+					for (var key in this.prototype) {
+						// We do want inherited/delegated methods.
+						if (!~can.inArray(key, internal) && typeof this.prototype[key] === "function") {
+							this.externalMethods[key] = makeComponentMethod(key);
+						}
+					}
 				}
 
 			}
@@ -105,6 +120,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					componentScope,
 					frag;
 
+				can.data(can.$(el), "___component", this);
+				el.___component = this;
+				can.bind.call(el, "removed", function () {
+					// Kill potential leaks in IE
+					// See http://msdn.microsoft.com/en-us/library/bb250448(v=vs.85).aspx
+					el.___component = null;
+				});
+				
+				// Install element methods on the HTMLElement, but only if
+				// it doesn't already exist so we don't accidentally
+				// override built-in things.
+				can.each(this.constructor.externalMethods, function(method, key) {
+					if (typeof el[key] === "undefined") {
+						el[key] = method;
+					}
+				});
+				
 				// ## Scope
 
 				// Add scope prototype properties marked with an "@" to the `initialScopeData` object
@@ -234,6 +266,8 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// Set `componentScope` to `this.scope` and set it to the element's `data` object as a `scope` property
 				this.scope = componentScope;
 				can.data(can.$(el), "scope", this.scope);
+				// Put it directly on the HTMLElement, too.
+				el.scope = this.scope;
 
 				// Create a real Scope object out of the scope property
 				var renderedScope = hookupOptions.scope.add(this.scope),

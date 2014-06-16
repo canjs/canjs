@@ -1260,6 +1260,42 @@ steal("can/component", "can/view/stache", function () {
 
 	});
 
+	test("external component methods on the HTMLElement (#881)", function() {
+		can.Component.extend({
+			tag: "methods-component",
+			template: can.stache("{{callValue}}"),
+			scope: function() { return new can.Map({callValue: null}); },
+			callMeMaybe: function(val) {
+				this.scope.attr("callValue", val);
+				return "value was: "+val;
+			},
+			notAFunction: 5
+		});
+		can.append(can.$("#qunit-test-area"),
+				   can.stache("<methods-component></methods-component>"+
+							  "<methods-component></methods-component>")({}));
+
+		var components = document.getElementsByTagName("methods-component");
+		var el = components[0];
+		equal(el.innerHTML, "");
+		equal(typeof el.callMeMaybe, "function", "callMeMaybe present on the HTMLElement");
+		equal(el.callMeMaybe(10), "value was: 10",
+			  "Calling methods returns the function's value as expected.");
+		equal(el.innerHTML, "10");
+		equal(el.scope, can.data(can.$(el), "scope"), "Scope is exported directly");
+		equal(el.scope.attr("callValue"), 10);
+		equal(typeof el.notAFunction, "undefined",
+			  "Non-functions are not exported.");
+		equal(typeof el.tag, "undefined",
+			  "`tag` property is not exported.");
+		equal(typeof el.template, "undefined",
+			  "`template` property is not exported.");
+		equal(el.callMeMaybe, components[1].callMeMaybe,
+			  "Function references are shared between components.");
+		ok(el.scope !== components[1].scope,
+		   "But the scopes are still different");
+	});
+
 	test('nested component within an #if is not live bound(#1025)', function() {
 		can.Component.extend({
 			tag: 'parent-component',

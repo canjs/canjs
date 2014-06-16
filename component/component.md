@@ -79,9 +79,13 @@ with the methods and properties of how your component behaves:
         message: "Hello There!"
       },
       events: {
-        click: function(){
-        	this.scope.attr("visible", !this.scope.attr("visible") );
+        click: function() {
+            this.element[0].toggle();
         }
+      },
+      toggle: function() {
+        var scope = $(this).scope();
+        return scope.attr("visible", !scope.attr("visible"));
       }
     });
 
@@ -262,6 +266,31 @@ only renders friendly messages:
         }
       }
     });
+
+### Additional methods
+
+Any other function properties added to the `can.Component` prototype will
+be treated as methods on the `HTMLElement` instance of the component
+itself. Note that this means the actual `HTMLElement`, not the `jQuery` (or
+other library) wrapped instance.
+
+
+    can.Component.extend({
+        tag: "methods-component",
+        template: "{{callValue}}",
+        scope: {callValue: "No value yet"}
+        callMeMaybe: function(val) {
+            this.scope.attr("callValue", val);
+            return "value was: "+val;
+        }
+    });
+
+Once the component is on the page, you will be able to do:
+
+    document.getElementsByTagName("methods-component")[0].callMeMaybe("Hi!");
+
+and it should return `"Hi!"`. You should also see the contents of the
+element change.
 
 ## Differences between components in can.mustache and can.stache
 
