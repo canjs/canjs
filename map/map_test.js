@@ -250,5 +250,22 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 			ok(false, 'No error should be thrown');
 		}
 	});
-	
+
+	test("Fast dispatch event still has target and type (#1082)", 4, function() {
+		var data = new can.Map({
+			name: 'CanJS'
+		});
+
+		data.bind('change', function(ev){
+			equal(ev.type, 'change');
+			equal(ev.target, data);
+		});
+
+		data.bind('name', function(ev){
+			equal(ev.type, 'name');
+			equal(ev.target, data);
+		});
+
+		data.attr('name', 'David');
+	});
 });

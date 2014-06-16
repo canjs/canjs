@@ -319,14 +319,18 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// so this change can bubble ... a bubbling change triggers the 
 				// _changes trigger
 				if(bubble.isBubbling(this, "change")) {
-					can.batch.trigger(this, "change", [attr, how, newVal, oldVal]);
+					can.batch.trigger(this, {
+						type: "change",
+						target: this
+					}, [attr, how, newVal, oldVal]);
 				} else {
 					can.batch.trigger(this, attr, [newVal, oldVal]);
 				}
 				
 				if(how === "remove" || how === "add") {
 					can.batch.trigger(this, {
-						type: "__keys"
+						type: "__keys",
+						target: this
 					});
 				}
 			},
@@ -530,7 +534,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						computedBinding.handler = function (ev, newVal, oldVal) {
 							can.batch.trigger(self, {
 								type: eventName,
-								batchNum: ev.batchNum
+								batchNum: ev.batchNum,
+								target: self
 							}, [newVal, oldVal]);
 						};
 						this[eventName].bind("change", computedBinding.handler);
