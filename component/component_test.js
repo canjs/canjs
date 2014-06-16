@@ -1280,7 +1280,7 @@ steal("can/component", "can/view/stache", function () {
 		equal(frag.childNodes[0].innerHTML, '', 'child component is not inserted');
 		can.scope(frag.childNodes[0]).attr('shown', true);
 
-		equal(frag.childNodes[0].innerHTML, '<child-component>Hello world.</child-component>', 'child component is inserted');
+		equal(frag.childNodes[0].childNodes[0].innerHTML, 'Hello world.', 'child component is inserted');
 		can.scope(frag.childNodes[0]).attr('shown', false);
 
 		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
