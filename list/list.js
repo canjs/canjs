@@ -286,7 +286,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				// remove any items that were just added from the removed array
 				if(added.length && removed.length){
 					for (j = 0; j < removed.length; j++) {
-						if(can.inArray(added, removed[j]) !== -1) {
+						if(can.inArray(removed[j], added) >= 0) {
 							cleanRemoved.splice(j, 1);
 						}
 					}
