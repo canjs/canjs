@@ -631,7 +631,7 @@ steal('can/route/pushstate', "can/test", function () {
 				// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
 				stop();
 				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
 					info.route(":module/:plugin/:page\\.html");
 					info.route.ready();
 
@@ -647,7 +647,7 @@ steal('can/route/pushstate', "can/test", function () {
 			test("URL's don't greedily match", function () {
 				stop();
 				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
 					info.route(":module\\.html");
 					info.route.ready();
 

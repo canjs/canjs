@@ -12,12 +12,13 @@ steal('can/util', function() {
 			}
 			return path;
 		},
-		path: function (path) {
+		path: function (path, absolute) {
+			//absolute prevents require.toURL from returning a relative path
 			if (typeof steal !== 'undefined') {
 				return ""+steal.idToUri(steal.id("can/"+path).toString())  ;
 			}
 
-			if (window.require && require.toUrl && !viewCheck.test(path)) {
+			if (!absolute && window.require && require.toUrl && !viewCheck.test(path)) {
 				return require.toUrl(path);
 			}
 
