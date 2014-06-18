@@ -269,7 +269,11 @@ steal('can/util/string', function (can) {
 		 * @return {function} The constructor function.
 		 *
 		 */
-		extend: function (fullName, klass, proto) {
+		extend: function () {
+			var fullName = arguments[0],
+				klass = arguments[1],
+				proto = arguments[2];
+
 			// Figure out what was passed and normalize it.
 			if (typeof fullName !== 'string') {
 				proto = klass;

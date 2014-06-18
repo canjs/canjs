@@ -22,10 +22,13 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/construct/construct_test.js", function() {
-		can.dev.logLevel = 3;
-        QUnit.start();
-	});
+    setTimeout(function(){
+        steal("can/construct/construct_test.js", function() {
+            can.dev.logLevel = 3;
+            QUnit.start();
+        });
+    },500);
+
 </script>
 </body>
 </html>

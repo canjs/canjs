@@ -1096,7 +1096,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			setup: function (base, fullName, staticProps, protoProps) {
 				// Assume `fullName` wasn't passed. (`can.Model.extend({ ... }, { ... })`)
 				// This is pretty usual.
-				if (fullName !== "string") {
+				if (typeof fullName !== "string") {
 					protoProps = staticProps;
 					staticProps = fullName;
 				}
@@ -1228,7 +1228,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 
 					// If there was no prototype, or no `model` and no `parseModel`,
 					// we'll have to create a `parseModel`.
-					else if (!protoProps || (!protoProps[name] && !protoProps[parseName])) {
+					else if (!staticProps || (!staticProps[name] && !staticProps[parseName])) {
 						can.Construct._overwrite(self, base, parseName, parsers[parseName]());
 					}
 				});
