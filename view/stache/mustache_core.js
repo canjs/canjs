@@ -248,9 +248,9 @@ steal("can/util",
 						compute = computeData.compute;
 						
 					initialValue = computeData.initialValue;
-					// Optomize if one is reading a single property from a can.Map
-					if(computeData.reads && computeData.reads.length === 1 
-						&& computeData.root instanceof can.Map &&
+					// Optomize if reading a single property from a can.Map
+					if(computeData.reads && computeData.reads.length === 1 &&
+						computeData.root instanceof can.Map &&
 						// This isn't a method on the prototype
 						(typeof computeData.root.constructor.prototype[computeData.reads[0]] !== "function"  ) ) {
 						compute = can.compute(computeData.root, computeData.reads[0]);
