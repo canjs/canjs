@@ -7,7 +7,9 @@ steal('can/util/string', function (can) {
 	// It provides class level inheritance and callbacks._
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
-	var initializing = 0;
+	var initializing = 0,
+	// only show the warning once per page load
+		noExtendWarning = false;
 	/**
 	 * @add can.Construct
 	 */
@@ -296,8 +298,9 @@ steal('can/util/string', function (can) {
 					//!steal-remove-start
 					if(this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
-					arguments.length && Constructor.constructorExtends) {
+					arguments.length && Constructor.constructorExtends && !noExtendWarning) {
 						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
+						noExtendWarning = true;
 					}
 					//!steal-remove-end
 					
