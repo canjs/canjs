@@ -4,22 +4,21 @@ steal('can/util', function (can) {
 			var timeout;
 			return function () {
 				var args = arguments;
-				context = context || this;
 				clearTimeout(timeout);
-				timeout = setTimeout(function () {
-					fn.apply(context, args);
-				}, time);
+				timeout = setTimeout(can.proxy(function () {
+					fn.apply(this, args);
+				}, context || this), time);
 			};
 		},
 		throttle: function (fn, time, context) {
 			var run;
 			return function () {
 				var args = arguments;
-				context = context || this;
+				var ctx = context || this;
 				if (!run) {
 					run = true;
 					setTimeout(function () {
-						fn.apply(context, args);
+						fn.apply(ctx, args);
 						run = false;
 					}, time);
 				}
@@ -27,9 +26,9 @@ steal('can/util', function (can) {
 		},
 		defer: function (fn, context) {
 			var args = arguments;
-			context = context || this;
+			var ctx = context || this;
 			setTimeout(function () {
-				fn.apply(context, args);
+				fn.apply(ctx, args);
 			}, 0);
 		}
 	});

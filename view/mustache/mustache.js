@@ -1702,7 +1702,7 @@ steal('can/util',
 
 			// Call into `can.view.render` passing the
 			// partial and scope.
-			return can.view.render(partial, scope /*, options*/ );
+			return can.view.render(partial, scope, options);
 		};
 
 		/**
@@ -1866,9 +1866,7 @@ steal('can/util',
 			 *     {{/unless}}
 			 */
 			'unless': function (expr, options) {
-				if (!Mustache.resolve(expr)) {
-					return options.fn(options.contexts || this);
-				}
+				return Mustache._helpers['if'].fn.apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 			},
 
 			// Implements the `each` built-in helper.

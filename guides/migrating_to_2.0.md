@@ -19,8 +19,8 @@ These changes require code modifications to use 2.0.
 
 ### can.route.ready()
 
-It is now necessary to always call [can.route.ready](../docs/can.route.html) once 
-all routes have been set up. If you previously didn't 
+It is now necessary to always call [can.route.ready](../docs/can.route.html) once
+all routes have been set up. If you previously didn't
 use `can.route.ready()`, just add it on document ready like:
 
     $(function(){
@@ -42,7 +42,7 @@ when items are added to the list.  For example:
     var tasks = new MyTasks();
     tasks.push({});
     tasks.attr(0) instanceof Task //-> true
-    
+
 You should change the static Observe property to
 `Map` like:
 
@@ -60,12 +60,12 @@ In fact, this code should look like:
 
 can.EJS is no longer packaged in the core download by default. It has
 been replaced by can.mustache. You
-can use the custom download builder to replace can.mustache with 
+can use the custom download builder to replace can.mustache with
 can.EJS.
 
 ### can.Observe names and locations
 
-Plugins like ___can.observe.attrbibutes.js___ are now like 
+Plugins like ___can.observe.attrbibutes.js___ are now like
 ___can.map.attributes.js___.  If you are using steal or requirejs to
 load these, you will have to change paths.  In our projects we
 replaced `/observe/` with `/map/`.  
@@ -77,20 +77,20 @@ still exist.  Loading these files loads `can.Map`, `can.List` and
 
 ## Deprecated Changes
 
-These are changes that you should strongly consider making to be able to upgrade 
+These are changes that you should strongly consider making to be able to upgrade
 to 2.1 and beyond:
 
 ### can.Observe and can.Observe.List becomes can.Map and can.List
 
-In order to comply with the ECMAScript 6 terminology `can.Observe` has 
-been renamed to `can.Map` and `can.Observe.List` is now 
-called `can.List`. Backwards compatible mappings 
-to `can.Observe` and `can.Observe.List` are in place 
+In order to comply with the ECMAScript 6 terminology `can.Observe` has
+been renamed to `can.Map` and `can.Observe.List` is now
+called `can.List`. Backwards compatible mappings
+to `can.Observe` and `can.Observe.List` are in place
 but are deprecated.
 
 ### Use .extend for extending Constructs
 
-Extending `can.Construct`s without calling `.extend` is 
+Extending `can.Construct`s without calling `.extend` is
 deprecated.  For example, instead of:
 
     Todo = can.Construct(static, proto)
@@ -104,9 +104,8 @@ do:
     Task = can.Model.extend(static, proto)
 
 
-### can.Observe.startBatch and can.Observe.stopBatch becomes can.batch.start and can.batch.end
+### can.Observe.startBatch and can.Observe.stopBatch becomes can.batch.start and can.batch.stop
 
-`can.Observe.startBatch` 
-and `can.Observe.stopBatch` are now available as [can.batch.start](../docs/can.batch.start.html) 
+`can.Observe.startBatch`
+and `can.Observe.stopBatch` are now available as [can.batch.start](../docs/can.batch.start.html)
 and [can.batch.stop](../docs/can.batch.stop.html). Backwards compatible mappings are in place.
-

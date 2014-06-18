@@ -22,10 +22,15 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/observe/observe_test.js", function() {
-		can.dev.logLevel = 3;
-        QUnit.start();
-	});
+	setTimeout(function(){
+		
+		steal("can/observe/observe_test.js", function() {
+			can.dev.logLevel = 3;
+	        QUnit.start();
+		});
+		
+	},300);
+	
 </script>
 </body>
 </html>

@@ -19,7 +19,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 			this.stack.pop();
 		},
 		inverse: function(){
-			this.pop();
+			this.stack.pop();
 			var falseySection = new TextSection();
 			this.last().last().falsey = falseySection;
 			this.stack.push(falseySection);
@@ -32,7 +32,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 				
 				var compute = can.compute(function(){
 					return renderer(scope, options);
-				}, this, false);
+				}, this, false, true);
 				
 				compute.bind("change", emptyHandler);
 				var value = compute();

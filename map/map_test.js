@@ -70,8 +70,8 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 		});
 		state.removeAttr("key.with.dots");
 		state2.removeAttr("key.with.someValue");
-		deepEqual(can.Map.keys(state), ["productType"], "one property");
-		deepEqual(can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
+		deepEqual( can.Map.keys(state), ["productType"], "one property");
+		deepEqual( can.Map.keys(state2), ["key.with.dots", "key"], "two properties");
 		deepEqual( can.Map.keys( state2.key["with"] ) , [], "zero properties");
 	});
 
@@ -238,5 +238,34 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 		equal(res.name, "map1");
 		equal(res.map2.name, "map2");
 	});
-	
+
+	test("Unbinding from a map with no bindings doesn't throw an error (#1015)", function() {
+		expect(0);
+
+		var test = new can.Map({});
+
+		try {
+			test.unbind('change');
+		} catch(e) {
+			ok(false, 'No error should be thrown');
+		}
+	});
+
+	test("Fast dispatch event still has target and type (#1082)", 4, function() {
+		var data = new can.Map({
+			name: 'CanJS'
+		});
+
+		data.bind('change', function(ev){
+			equal(ev.type, 'change');
+			equal(ev.target, data);
+		});
+
+		data.bind('name', function(ev){
+			equal(ev.type, 'name');
+			equal(ev.target, data);
+		});
+
+		data.attr('name', 'David');
+	});
 });

@@ -22,10 +22,13 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/map/map_test.js", function() {
-		can.dev.logLevel = 3;
-        QUnit.start();
-	});
+	setTimeout(function(){
+		steal("can/map/map_test.js", function() {
+			can.dev.logLevel = 3;
+	        QUnit.start();
+		});
+	},400);
+	
 </script>
 </body>
 </html>

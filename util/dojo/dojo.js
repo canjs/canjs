@@ -386,7 +386,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 				};
 			}
 			event.target = event.target || item;
-			can.dispatch.call(item, event, args);
+			can.dispatch.call(item, event, can.makeArray(args));
 		}
 	};
 	can.delegate = function (selector, ev, cb) {

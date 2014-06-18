@@ -58,7 +58,7 @@ There are several built-in validation methods so you don't have to define your o
 - [can.Map.validations.static.validateFormatOf can.Map.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
 - [can.Map.validations.static.validateInclusionOf can.Map.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
 - [can.Map.validations.static.validateLengthOf can.Map.validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
-- [can.Map.validations.static.validatePresenceOf can.Map.validatePrese]<code>( attrNames, [options] )</code> Attributes are not blank.	
+- [can.Map.validations.static.validatePresenceOf can.Map.validatePresenceOf]<code>( attrNames, [options] )</code> Attributes are not blank.	
 - [can.Map.validations.static.validateRangeOf can.Map.validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
 
 ## Error Method

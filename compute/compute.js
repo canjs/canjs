@@ -121,34 +121,40 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		// Call the function, get the value as well as the observed objects and events
 		var info = can.__read(func, context),
 			// The objects-event pairs that must be bound to
-			newObserveSet = info.observed,
-			// A flag that is used to determine if an event is already being observed.
-			obEv,
-			name;
+			newObserveSet = info.observed;
 		// Go through what needs to be observed.
-		for( name in newObserveSet ) {
-			
-			if( oldObserved[name] ) {
-				// After binding is set up, values
-				// in `oldObserved` will be unbound. So if a name
-				// has already be observed, remove from `oldObserved`
-				// to prevent this.
-				delete oldObserved[name];
-			} else {
-				// If current name has not been observed, listen to it.
-				obEv = newObserveSet[name];
-				obEv.obj.bind(obEv.event, onchanged);
-			}
-		}
-
-		// Iterate through oldObserved, looking for observe/attributes
-		// that are no longer being bound and unbind them.
-		for ( name in oldObserved) {
-			obEv = oldObserved[name];
-			obEv.obj.unbind(obEv.event, onchanged);
-		}
+		bindNewSet(oldObserved, newObserveSet, onchanged);
+		unbindOldSet(oldObserved, onchanged);
 		
 		return info;
+	};
+	// This will not be optimized.
+	var bindNewSet = function(oldObserved, newObserveSet, onchanged){
+		for(var name in newObserveSet ) {
+			bindOrPreventUnbinding(oldObserved, newObserveSet, name, onchanged);
+		}
+	};
+	// This will be optimized.
+	var bindOrPreventUnbinding = function(oldObserved, newObserveSet, name, onchanged){
+		if( oldObserved[name] ) {
+			// After binding is set up, values
+			// in `oldObserved` will be unbound. So if a name
+			// has already be observed, remove from `oldObserved`
+			// to prevent this.
+			delete oldObserved[name];
+		} else {
+			// If current name has not been observed, listen to it.
+			var obEv = newObserveSet[name];
+			obEv.obj.bind(obEv.event, onchanged);
+		}
+	};
+	// Iterate through oldObserved, looking for observe/attributes
+	// that are no longer being bound and unbind them.
+	var unbindOldSet = function(oldObserved, onchanged){
+		for (var name in oldObserved) {
+			var obEv = oldObserved[name];
+			obEv.obj.unbind(obEv.event, onchanged);
+		}
 	};
 	
 	// ### updateOnChange
@@ -213,6 +219,44 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			}
 		};
 	};
+	var setupSingleBindComputeHandlers = function(compute, func, context, setCachedValue) {
+		var readInfo,
+			oldValue,
+			onchanged,
+			batchNum;
+		
+		return {
+			// Set up handler for when the compute changes
+			on: function(updater){
+				if(!onchanged) {
+					onchanged = function(ev){
+						if (compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
+							// Get the new value
+							var newValue = func.call(context);
+							// Call the updater with old and new values
+							updater(newValue, oldValue, ev.batchNum);
+							oldValue = newValue;
+							batchNum = batchNum = ev.batchNum;
+						}
+					};
+				}
+				
+				readInfo = getValueAndBind(func, context, {}, onchanged);
+				oldValue = readInfo.value;
+				
+				setCachedValue(readInfo.value);
+				
+				compute.hasDependencies = !can.isEmptyObject(readInfo.observed);
+			},
+			// Remove handler for the compute
+			off: function(updater){
+				for (var name in readInfo.observed) {
+					var ob = readInfo.observed[name];
+					ob.obj.unbind(ob.event, onchanged);
+				}
+			}
+		};
+	};
 
 	// ###isObserve
 	//
@@ -232,7 +276,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// - [Specifying an initial value and a setter function](#specifying-an-initial-value-and-a-setter)
 	// - [Specifying an initial value and how to read, update, and listen to changes](#specifying-an-initial-value-and-a-settings-object)
 	// - [Simply specifying an initial value](#specifying-only-a-value)
-	can.compute = function (getterSetter, context, eventName) {
+	can.compute = function (getterSetter, context, eventName, bindOnce) {
 	// ### Setting up
 		// Do nothing if getterSetter is already a compute
 		if (getterSetter && getterSetter.isComputed) {
@@ -257,7 +301,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			},
 			setCached = set,
 			// Save arguments for cloning
-			args = can.makeArray(arguments),
+			args = [],
 			// updater for when value is changed
 			updater = function (newValue, oldValue, batchNum) {
 				setCached(newValue);
@@ -265,6 +309,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			},
 			// the form of the arguments
 			form;
+			
+			
+		// convert arguments to args to make V8 Happy
+		for(var i = 0, arglen = arguments.length; i< arglen; i++){
+			args[i] = arguments[i];
+		}
+		
 		computed = function (newVal) {
 			// If the computed function is called with arguments,
 			// a value should be set
@@ -322,7 +373,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			get = getterSetter;
 			computed.canReadForChangeEvent = eventName === false ? false : true;
 			
-			var handlers = setupComputeHandlers(computed, getterSetter, context || this, setCached);
+			var handlers = bindOnce ?
+				setupSingleBindComputeHandlers(computed, getterSetter, context || this, setCached) :
+				setupComputeHandlers(computed, getterSetter, context || this, setCached);
 			on = handlers.on;
 			off = handlers.off;
 		
@@ -339,38 +392,47 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					isObserve = getterSetter instanceof can.Map;
 				if (isObserve) {
 					computed.hasDependencies = true;
-				}
-				// If object is observable, `attr` will be used
-				// for getting and setting.
-				get = function () {
-					if (isObserve) {
+					var handler;
+					get = function(){
 						return getterSetter.attr(propertyName);
-					} else {
-						return getterSetter[propertyName];
-					}
-				};
-				set = function (newValue) {
-					if (isObserve) {
-						getterSetter.attr(propertyName, newValue);
-					} else {
-						getterSetter[propertyName] = newValue;
-					}
-				};
-				var handler;
-				on = function (update) {
-					handler = function () {
-						update(get(), value);
 					};
-					can.bind.call(getterSetter, eventName || propertyName, handler);
-					// use can.__read because
-					// we should not be indicating that some parent
-					// reads this property if it happens to be binding on it
-					value = can.__read(get)
-						.value;
-				};
-				off = function () {
-					can.unbind.call(getterSetter, eventName || propertyName, handler);
-				};
+					set = function(newValue){
+						getterSetter.attr(propertyName, newValue);
+					};
+					on = function(update){
+						handler = function(ev, newVal,oldVal){
+							update(newVal,oldVal, ev.batchNum);
+						};
+						getterSetter.bind( eventName || propertyName, handler);
+						// Set the cached value
+						value = can.__read(get).value;
+					};
+					off = function(update){
+						getterSetter.unbind( eventName || propertyName, handler);
+					};
+				} else {
+					get = function(){
+						return getterSetter[propertyName];
+					};
+					set = function(newValue){
+						getterSetter[propertyName] = newValue;
+					};
+					
+					on = function(update){
+						handler = function () {
+							update(get(), value);
+						};
+						can.bind.call(getterSetter, eventName || propertyName, handler);
+						// use can.__read because
+						// we should not be indicating that some parent
+						// reads this property if it happens to be binding on it
+						value = can.__read(get)
+							.value;
+					};
+					off = function(update){
+						can.unbind.call(getterSetter, eventName || propertyName, handler);
+					};
+				}
 			// ###Specifying an initial value and a setter
 			//
 			// If `can.compute` is called with an [initial value and a setter function](http://canjs.com/docs/can.compute.html#sig_can_compute_initialValue_setter_newVal_oldVal__),

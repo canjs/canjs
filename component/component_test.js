@@ -1245,5 +1245,45 @@ steal("can/component", "can/view/stache", function () {
 		can.append(can.$('#qunit-test-area'), template2());
 
 	});
+	
+	test("hyphen-less tag names", function () {
+		var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
+		can.Component.extend({
+			tag: "foobar",
+			template: "<div><content/></div>",
+			scope: {
+				name: "Brian"
+			}
+		});
+		can.append(can.$('#qunit-test-area'), template());
+		equal(can.$('#qunit-test-area div')[0].innerHTML, "Brian");
+
+	});
+
+	test('nested component within an #if is not live bound(#1025)', function() {
+		can.Component.extend({
+			tag: 'parent-component',
+			template: can.stache('{{#if shown}}<child-component></child-component>{{/if}}'),
+			scope: {
+				shown: false
+			}
+		});
+
+		can.Component.extend({
+			tag: 'child-component',
+			template: can.stache('Hello world.')
+		});
+
+		var template = can.stache('<parent-component></parent-component>');
+		var frag = template({});
+
+		equal(frag.childNodes[0].innerHTML, '', 'child component is not inserted');
+		can.scope(frag.childNodes[0]).attr('shown', true);
+
+		equal(frag.childNodes[0].childNodes[0].innerHTML, 'Hello world.', 'child component is inserted');
+		can.scope(frag.childNodes[0]).attr('shown', false);
+
+		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
+	});
 
 });

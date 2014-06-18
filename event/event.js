@@ -384,7 +384,7 @@ steal('can/util/can.js', function (can) {
 		 * This syntax can be used for objects that don't include the `can.event` mixin.
 		 */
 		delegate: function(selector, event, handler) {
-			return can.addEvent.call(event, handler);
+			return can.addEvent.call(this, event, handler);
 		},
 		/**
 		 * @function can.event.undelegate
@@ -407,7 +407,7 @@ steal('can/util/can.js', function (can) {
 		 * This syntax can be used for objects that don't include the `can.event` mixin.
 		 */
 		undelegate: function(selector, event, handler) {
-			return can.removeEvent.call(event, handler);
+			return can.removeEvent.call(this, event, handler);
 		},
 		/**
 		 * @function can.event.trigger

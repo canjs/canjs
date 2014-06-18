@@ -54,7 +54,7 @@
 		var template = stache(
 			"{{#each boxes}}"+
 				"<div class='box-view'>"+
-					"<div class='box' id='box-{{number}}'  style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>"+
+					"<div class='box' id='box-{{number}}'  style='{{style}}'>"+
 						"{{content}}"+
 					"</div>"+
 				"</div>"+
@@ -63,16 +63,26 @@
 			
 		var boxes = new can.List(),
 			Box = can.Map.extend({
-				count: 0,
-				content: 0,
-				tick: function(){
-					var count = this.attr('count') + 1;
+				top: 0,
+			    left: 0,
+			    content: 0,
+			    count: 0,
+			
+			    tick: function() {
+			        var count = this.attr('count') + 1;
+			        
 			        this.attr('count', count);
 			        this.attr('top', Math.sin(count / 10) * 10);
 			        this.attr('left', Math.cos(count / 10) * 10);
 			        this.attr('color', count % 255);
 			        this.attr('content', count % 100);
-				}
+			        this.attr('style', this.computeStyle());
+			        
+			    },
+			
+			    computeStyle: function() {
+			        return 'top: ' + this.attr('top') + 'px; left: ' +  this.attr('left') +'px; background: rgb(0,0,' + this.attr('color') + ');';
+			    }
 			});
 		
 		for(var i =0; i < 100; i++) {
@@ -103,6 +113,7 @@
    			 benchmarkLoop(run);
 		});
 		
+		
 			
         window.timeout = null;
 		window.totalTime = null;
@@ -116,7 +127,7 @@
 		    if (loopCount % 20 === 0) {
 		        $('#timing').text('Performed ' + loopCount + ' iterations in ' + totalTime + ' ms (average ' + (totalTime / loopCount).toFixed(2) + ' ms per loop).');
 		    }
-		    if(loopCount < 10) {
+		    if(loopCount < 1000) {
 		    	timeout = setTimeout(function(){
 			    	benchmarkLoop(fn);
 			    },1);

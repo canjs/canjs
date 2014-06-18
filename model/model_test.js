@@ -1516,4 +1516,17 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			start();
 		});
 	});
+
+	test("model list destroy after calling replace", function(){
+		expect(2);
+		var map = new can.Model({name: "map1"});
+		var map2 = new can.Model({name: "map2"});
+		var list = new can.Model.List([map, map2]);
+		list.bind('destroyed', function(ev){
+			ok(true, 'trigger destroyed');
+		});
+		can.trigger(map, 'destroyed');
+		list.replace([map2]);
+		can.trigger(map2, 'destroyed');
+	});
 });

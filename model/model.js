@@ -1103,6 +1103,9 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				// Assume no static properties were passed. (`can.Model.extend({ ... })`)
 				// This is really unusual for a model though, since there's so much configuration.
 				if (!protoProps) {
+					//!steal-remove-start
+					can.dev.warn("can/model/model.js: can.Model extended without static properties.");
+					//!steal-remove-end
 					protoProps = staticProps;
 				}
 

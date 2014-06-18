@@ -57,23 +57,38 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		// doesn't support expando properties store the id with a
 		// reference to the text node in an internal collection then return
 		// the lookup id.
-		id = function (node) {
-			// If the browser supports expando properties or the node
-			// provided is not an HTMLTextNode, we don't need to work
-			// with the internal textNodeMap and we can place the property
-			// on the node.
-			if (canExpando || node.nodeType !== 3) {
-				// If the node already has an (internal) id, then just 
-				// return the key of the nodeMap. This would be the case
-				// in updating and unregistering a nodeList.
-				if (node[expando]) {
-					return node[expando];
-				} else {
-					// If the node isn't already referenced in the map we need
-					// to generate a lookup id and place it on the node itself.
+		id = function (node, localMap) {
+			var _textNodeMap = localMap || textNodeMap;
+			var id = readId(node,_textNodeMap);
+			if(id) {
+				return id;
+			} else {
+				// If the browser supports expando properties or the node
+				// provided is not an HTMLTextNode, we don't need to work
+				// with the internal textNodeMap and we can place the property
+				// on the node.
+				if (canExpando || node.nodeType !== 3) {
 					++_id;
 					return node[expando] = (node.nodeName ? 'element_' : 'obj_') + _id;
+				} else {
+					// If we didn't find the node, we need to register it and return
+					// the id used.
+					++_id;
+	
+					// If we didn't find the node, we need to register it and return
+					// the id used.
+					// 
+					// We have to store the node itself because of the browser's lack
+					// of support for expando properties (i.e. we can't use a look-up
+					// table and store the id on the node as a custom property).
+					_textNodeMap['text_' + _id] = node;
+					return 'text_' + _id;
 				}
+			}
+		},
+		readId = function(node,textNodeMap){
+			if (canExpando || node.nodeType !== 3) {
+				return node[expando];
 			} else {
 				// The nodeList has a specific collection for HTMLTextNodes for 
 				// (older) browsers that do not support expando properties.
@@ -82,18 +97,6 @@ steal('can/util', 'can/view/elements.js', function (can) {
 						return textNodeID;
 					}
 				}
-				// If we didn't find the node, we need to register it and return
-				// the id used.
-				++_id;
-
-				// If we didn't find the node, we need to register it and return
-				// the id used.
-				// 
-				// We have to store the node itself because of the browser's lack
-				// of support for expando properties (i.e. we can't use a look-up
-				// table and store the id on the node as a custom property).
-				textNodeMap['text_' + _id] = node;
-				return 'text_' + _id;
 			}
 		},
 		splice = [].splice,
@@ -117,6 +120,14 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				}
 			}
 			return count;
+		},
+		replacementMap = function(replacements, idMap){
+			var map = {};
+			for(var i = 0, len = replacements.length; i < len; i++){
+				var node = nodeLists.first(replacements[i]);
+				map[id(node, idMap)] = replacements[i];
+			}
+			return map;
 		};
 
 	// ## Registering & Updating
@@ -183,12 +194,34 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				0,
 				oldListLength
 			].concat(newNodes));
-			
-			nodeLists.nestList(nodeList);
+
+			if(nodeList.replacements){
+				nodeLists.nestReplacements(nodeList);
+			} else {
+				nodeLists.nestList(nodeList);
+			}
 			
 			return oldNodes;
 		},
-
+		nestReplacements: function(list){
+			var index = 0,
+				// temporary id map that is limited to this call
+				idMap = {},
+				// replacements are in reverse order in the DOM
+				rMap = replacementMap(list.replacements, idMap),
+				rCount = list.replacements.length;
+			
+			while(index < list.length && rCount) {
+				var node = list[index],
+					replacement = rMap[readId(node, idMap)];
+				if( replacement ) {
+					list.splice( index, itemsInChildListTree(replacement), replacement );
+					rCount--;
+				}
+				index++;
+			}
+			list.replacements = [];
+		},
 		// ## nodeLists.nestList
 		// If a given list does not exist in the nodeMap then create an lookup
 		// id for it in the nodeMap and assign the list to it.
@@ -248,12 +281,23 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			// If a unregistered callback has been provided assign it to the nodeList
 			// as a property to be called when the nodeList is unregistred.
 			nodeList.unregistered = unregistered;
+			nodeList.parentList = parent;
 			
-			nodeLists.nestList(nodeList);
+			if(parent === true) {
+				// this is the "top" parent in stache
+				nodeList.replacements = [];
+			} else if(parent) {
+				// TOOD: remove
+				parent.replacements.push(nodeList);
+				nodeList.replacements = [];
+			} else {
+				nodeLists.nestList(nodeList);
+			}
+			
 			
 			return nodeList;
 		},
-
+		
 		// ## nodeLists.unregisterChildren
 		// Unregister all childen within the provided list and return the 
 		// unregistred nodes.
@@ -266,7 +310,10 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				// If the node does not have a nodeType it is an array of
 				// nodes.
 				if(node.nodeType) {
-					delete nodeMap[id(node)];
+					if(!nodeList.replacements) {
+						delete nodeMap[id(node)];
+					}
+
 					nodes.push(node);
 				} else {
 					// Recursively unregister each of the child lists in 
@@ -288,7 +335,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			if (nodeList.unregistered) {
 				var unregisteredCallback = nodeList.unregistered;
 				delete nodeList.unregistered;
-				
+				delete nodeList.replacements;
 				unregisteredCallback();
 			}
 			return nodes;

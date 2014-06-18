@@ -524,7 +524,10 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
@@ -533,6 +536,13 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				text: t.template
 			})
 			.render(t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {
@@ -3766,4 +3776,33 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(content[7].innerHTML, "bar", "passed as a hash to helper" + description);
 	});
 
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		};
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".mustache")
+		}
+
+		deepEqual(new can.Mustache({
+				text: t.template
+			})
+			.render({}, t.helpers), t.expected);
+	});
+
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.mustache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
 });

@@ -556,12 +556,22 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		deepEqual(getText(t.template,t.data), expected);
+		deepEqual(getText(t.template, t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.stache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {
@@ -838,9 +848,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		obs.removeAttr('attributes');
 
 		equal(p.getAttribute('some'), null, 'attribute is undefined');
-
+		
 		obs.attr('attributes', 'some="newText"');
 
+		// 
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 
 		obs.removeAttr('message');
@@ -2801,7 +2812,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		tmp(data);
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
-	})
+	});
 
 	test('html comments must not break mustache scanner', function () {
 		can.each([
@@ -2870,7 +2881,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			item: {
 				subitems: ['first']
 			}
-		})
+		});
 
 		var frag = template(data),
 			div = frag.childNodes[0],
@@ -2882,7 +2893,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			.push('second');
 
 		equal(labels.length, 2, "after pushing two label");
-
+		
 		data.removeAttr('item');
 
 		equal(labels.length, 0, "after removing item no label");
@@ -2904,17 +2915,28 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 				visible: true
 			}]
 		});
-
-		function handler(eventType) {
+		var bindings = 0;
+		function bind(eventType){
+			bindings++;
+			return can.Map.prototype.bind.apply(this, arguments);
+		}
+		
+		// unbind will be called twice
+		function unbind(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
-			if (eventType === "visible") {
+			bindings--;
+			if(eventType === "visible"){
+				ok(true,"unbound visible");
+			}
+			if (bindings === 0) {
 				start();
-				ok(true, "unbound visible")
+				ok(true, "unbound visible");
 			}
 		}
-
 		data.attr("items.0")
-			.unbind = handler;
+			.bind = bind;
+		data.attr("items.0")
+			.unbind = unbind;
 
 		template(data);
 
@@ -2923,7 +2945,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		}]);
 
 		stop();
-	})
+	});
 
 	test("direct live section", function () {
 		var template = can.stache("{{#if visible}}<label/>{{/if}}");
@@ -3404,7 +3426,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var node = frag.childNodes[0];
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
-	})
+	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
 		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
@@ -3425,7 +3447,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
-	})
+	});
 
 	test("Custom elements created with default namespace in IE8", function(){
 		// Calling can.view.tag so that this tag is shived
@@ -3439,4 +3461,73 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
 	});
 
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		},
+		frag;
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".stache")
+		}
+
+		frag = can.stache(t.template)({}, t.helpers);
+		equal(frag.childNodes[0].nodeValue, t.expected);
+	});
+
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.stache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
+
+	test("{{else}} within an attribute (#974)", function(){
+		var tmpl = '<div class="{{#if color}}{{color}}{{else}}red{{/if}}"></div>',
+			data = new can.Map({
+				color: 'orange'
+			}),
+			frag = can.stache(tmpl)(data);
+
+		equal(frag.childNodes[0].getAttribute('class'), 'orange', 'if branch');
+		data.attr('color', false);
+		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
+	});
+
+	test("returns correct value for DOM attributes (#1065)", 3, function() {
+		var template = '<h2 class="{{#if shown}}foo{{/if}} test1 {{#shown}}muh{{/shown}}"></h2>' +
+			'<h3 class="{{#if shown}}bar{{/if}} test2 {{#shown}}kuh{{/shown}}"></h3>' +
+			'<h4 class="{{#if shown}}baz{{/if}} test3 {{#shown}}boom{{/shown}}"></h4>';
+
+		var frag = can.stache(template)({ shown: true });
+
+		equal(frag.childNodes[0].className, 'foo test1 muh');
+		equal(frag.childNodes[1].className, 'bar test2 kuh');
+		equal(frag.childNodes[2].className, 'baz test3 boom');
+	});
+	
+	test("reading observable map functions (#1094)", function(){
+		var State = can.Map.extend({
+			count: 0,
+			prettyCount: function(context, mustacheScope){
+				return ["zero","one","two","three","four",
+				"five","six","seven","eight","nine","ten"][this.attr("count")];
+			}
+		});
+		
+		var template =  can.stache("<h2>{{prettyCount}}</h2>");
+	
+		var frag = template(new State({}));
+		
+		equal(frag.childNodes[0].innerHTML, "zero", "read an observable value");
+	});
+	
 });

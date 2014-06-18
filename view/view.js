@@ -393,20 +393,41 @@ steal('can/util', function (can) {
 			//!steal-remove-end
 
 			can[info.suffix] = $view[info.suffix] = function (id, text) {
+				var renderer,
+					renderFunc;
 				// If there is no text, assume id is the template text, so return a nameless renderer.
 				if (!text) {
-					// if the template has a fragRenderer already, just return that.
-					if(info.fragRenderer) {
-						return info.fragRenderer(null, id);
-					} else {
-						return makeRenderer(info.renderer(null, id));
-					}
-
+					renderFunc = function(){
+						if(!renderer){
+							// if the template has a fragRenderer already, just return that.
+							if(info.fragRenderer) {
+								renderer = info.fragRenderer(null, id);
+							} else {
+								renderer = makeRenderer(info.renderer(null, id));
+							}
+						}
+						return renderer.apply(this, arguments);
+					};
+					renderFunc.render = function() {
+						var textRenderer = info.renderer(null, id);
+						return textRenderer.apply(textRenderer, arguments);
+					};
+					return renderFunc;
 				}
+				var registeredRenderer = function(){
+					if(!renderer){
+						if(info.fragRenderer) {
+							renderer = info.fragRenderer(id, text);
+						} else {
+							renderer = info.renderer(id, text);
+						}
+					}
+					return renderer.apply(this, arguments);
+				};
 				if(info.fragRenderer) {
-					return $view.preload( id, info.fragRenderer(id, text) );
+					return $view.preload( id, registeredRenderer );
 				} else {
-					return $view.preloadStringRenderer(id, info.renderer(id, text));
+					return $view.preloadStringRenderer(id, registeredRenderer);
 				}
 
 			};

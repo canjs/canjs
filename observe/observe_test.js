@@ -1336,4 +1336,26 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test",function () {
 		
 	});
 
+	test("compute(obs, prop) doesn't read attr", function(){
+		
+		var map = new can.Map({name: "foo"});
+		
+		var name = can.compute(map, "name");
+		
+		var oldAttr = map.attr;
+		
+		var count = 0;
+		map.attr= function(){
+			count++;
+			
+			return oldAttr.apply(this, arguments);
+		};
+		name.bind("change", function(){});
+		equal(count, 1, "attr only called once to get cached value");
+		
+		oldAttr.call(map,"name","bar");
+		
+		equal(count, 1, "attr only called once to get cached value");
+	});
+
 });
