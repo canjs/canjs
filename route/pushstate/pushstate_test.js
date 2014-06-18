@@ -626,42 +626,39 @@ steal('can/route/pushstate', "can/test", function () {
 				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
 
-			if(typeof steal !== 'undefined'){
 
-				test("root can include the domain", function () {
-					// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
-					stop();
-					makeTestingIframe(function(info, done){
-						info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
-						info.route(":module/:plugin/:page\\.html");
-						info.route.ready();
+			test("root can include the domain", function () {
+				// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
+				stop();
+				makeTestingIframe(function(info, done){
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
+					info.route(":module/:plugin/:page\\.html");
+					info.route.ready();
 
-						setTimeout(function(){
-							equal(info.route.attr('module'), 'route', 'works');
-							start();
+					setTimeout(function(){
+						equal(info.route.attr('module'), 'route', 'works');
+						start();
 
-							done();
-						}, 100);
-					});
+						done();
+					}, 100);
 				});
+			});
 
-				test("URL's don't greedily match", function () {
-					stop();
-					makeTestingIframe(function(info, done){
-						info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
-						info.route(":module\\.html");
-						info.route.ready();
+			test("URL's don't greedily match", function () {
+				stop();
+				makeTestingIframe(function(info, done){
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html").replace("route/pushstate/testing.html", "");
+					info.route(":module\\.html");
+					info.route.ready();
 
-						setTimeout(function(){
-							ok(!info.route.attr('module'), 'there is no route match');
-							start();
+					setTimeout(function(){
+						ok(!info.route.attr('module'), 'there is no route match');
+						start();
 
-							done();
-						}, 100);
-					});
+						done();
+					}, 100);
 				});
-
-			}
+			});
 
 		}
 

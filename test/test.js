@@ -20,6 +20,12 @@ steal('can/util', function() {
 			if (window.require && require.toUrl && !viewCheck.test(path)) {
 				return require.toUrl(path);
 			}
+
+			var pathIndex = window.location.href.indexOf('/test/dist')
+			if(pathIndex){
+				return window.location.href.substring(0, pathIndex + 1) + path;
+			}
+
 			return path;
 		}
 	}
