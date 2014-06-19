@@ -488,8 +488,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * - _ev_ The event object.
 			 * - _newElements_ The new elements.
-			 * If more than one element is added, _newElements_ will be an array.
-			 * Otherwise, it is simply the new element itself.
+			 * An array of zero or more elements that were added.
 			 * - _index_ Where the add or insert took place.
 			 *
 			 * Here is a concrete tour through the _add_ event handler's arguments:
@@ -516,8 +515,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * - _ev_ The event object.
 			 * - _removedElements_ The removed elements.
-			 * If more than one element was removed, _removedElements_ will be an array.
-			 * Otherwise, it is simply the element itself.
+			 * An array of zero or more elements that were removed.
 			 * - _index_ Where the removal took place.
 			 *
 			 * Here is a concrete tour through the _remove_ event handler's arguments:
