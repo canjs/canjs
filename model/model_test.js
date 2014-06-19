@@ -8,6 +8,7 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global Company: true */
+/* global My: true */
 steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
 	module('can/model', {
 		setup: function () {}
@@ -1529,4 +1530,28 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		list.replace([map2]);
 		can.trigger(map2, 'destroyed');
 	});
+
+	test("a model defined with a fullName has findAll working (#1034)", function(){
+		var List = can.List.extend();
+
+		can.Model.extend("My.Model",{
+			List: List
+		},{});
+
+		equal(List.Map, My.Model, "list's Map points to My.Model");
+
+	});
+
+	test("providing parseModels works", function(){
+		var MyModel = can.Model.extend({
+			parseModel: "modelData"
+		},{});
+
+		var data = MyModel.parseModel({modelData: {id: 1}});
+		equal(data.id,1, "correctly used parseModel");
+	});
+
+
+
+
 });
