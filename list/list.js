@@ -140,6 +140,14 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					return this;
 				}
 			},
+			__set: function (prop, value, current) {
+				if (value !== current &&
+					typeof current === 'undefined' &&
+					!this.__get().hasOwnProperty(prop)) {
+					value = [value];
+				}
+				return can.Map.prototype.__set.call(this, prop, value, current);
+			},
 			___set: function (attr, val) {
 				this[attr] = val;
 				if (+attr >= this.length) {

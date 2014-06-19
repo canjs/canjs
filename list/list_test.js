@@ -226,4 +226,19 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 		equal(list.length, 2);
 	});
 	
+	test("add event always returns an array as the value (#998)", function() {
+		var list = new can.List([]),
+			msg;
+		list.bind("add", function(ev, newElements, index) {
+			deepEqual(newElements, [4], msg);
+		});
+		msg = "works on push";
+		list.push(4);
+		list.pop();
+		msg = "works on attr()";
+		list.attr(3, 4);
+		list.pop();
+		msg = "works on replace()";
+		list.replace([4]);
+	});
 });
