@@ -70,6 +70,7 @@ steal('can/construct', function () {
 		can.Construct('Todo', {}, {});
 		ok(Foo.Bar === fb, 'returns class');
 		equal(fb.shortName, 'Bar', 'short name is right');
+		equal(fb.name, 'Bar', 'name is right');
 		equal(fb.fullName, 'Foo.Bar', 'fullName is right');
 	});
 	test('setups', function () {
@@ -128,11 +129,11 @@ steal('can/construct', function () {
 		new Foo()
 			.dude(true);
 	});
-	
+
 	//!steal-remove-start
 	if (can.dev) {
 		test('console warning if extend is not used without new (#932)', function () {
-			
+
 			var oldlog = can.dev.warn;
 			can.dev.warn = function (text) {
 				ok(text, "got a message");
@@ -143,6 +144,6 @@ steal('can/construct', function () {
 		});
 	}
 	//!steal-remove-end
-	
-	
+
+
 });
