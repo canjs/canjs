@@ -114,7 +114,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				// `batchTrigger` direct add and remove events...
 				var index = +attr;
 				// Make sure this is not nested and not an expando
-				if (!~attr.indexOf('.') && !isNaN(index)) {
+				if (!~(""+attr).indexOf('.') && !isNaN(index)) {
 
 					if (how === 'add') {
 						can.batch.trigger(this, how, [newVal, index]);
@@ -141,12 +141,21 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				}
 			},
 			__set: function (prop, value, current) {
-				if (value !== current &&
-					typeof current === 'undefined' &&
-					!this.__get().hasOwnProperty(prop)) {
-					value = [value];
+				// We want change events to notify using integers if we're
+				// setting an integer index. Note that <float> % 1 !== 0;
+				prop = isNaN(+prop) || (prop % 1) ? prop : +prop;
+
+				// Check to see if we're doing a .attr() on an out of
+				// bounds index property.
+				if (typeof prop === "number" &&
+					prop > this.length - 1) {
+					var newArr = new Array((prop + 1) - this.length);
+					newArr[newArr.length-1] = value;
+					value = newArr;
+					prop = this.length;
 				}
-				return can.Map.prototype.__set.call(this, prop, value, current);
+
+				return can.Map.prototype.__set.call(this, ""+prop, value, current);
 			},
 			___set: function (attr, val) {
 				this[attr] = val;
@@ -812,7 +821,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					// For shift and pop, we just return undefined without
 					// triggering events.
 					return undefined;
-				};
+				}
 
 				var args = getArgs(arguments),
 					len = where && this.length ? this.length - 1 : 0;
