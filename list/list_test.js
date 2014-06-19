@@ -241,4 +241,17 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 		msg = "works on replace()";
 		list.replace([4]);
 	});
+	
+	test("No events should fire if removals happened on empty arrays", function() {
+		var list = new can.List([]),
+			msg;
+		list.bind("remove", function(ev, removed, index) {
+			ok(false, msg);
+		});
+		msg = "works on pop";
+		list.pop();
+		msg = "works on shift";
+		list.shift();
+		ok(true, "No events were fired.");
+	});
 });

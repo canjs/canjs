@@ -808,6 +808,11 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		// Creates a `remove` type method
 		function (where, name) {
 			list.prototype[name] = function () {
+				if (!this.length) {
+					// For shift and pop, we just return undefined without
+					// triggering events.
+					return undefined;
+				};
 
 				var args = getArgs(arguments),
 					len = where && this.length ? this.length - 1 : 0;
