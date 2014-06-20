@@ -64,6 +64,14 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return result;
 			
 		},
+		"@index": function(offset, options) {
+			if (!options) {
+				options = offset;
+				offset = 0;
+			}
+			var index = options.scope.attr("@index");
+			return ""+((can.isFunction(index) ? index() : index) + offset);
+		},
 		'if': function (expr, options) {
 			var value;
 			// if it's a function, wrap its value in a compute

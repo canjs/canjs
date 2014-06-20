@@ -1358,7 +1358,7 @@ steal('can/util',
 						}
 					}
 				} else if (arg && isLookup(arg)) {
-					args.push(Mustache.get(arg.get, scopeAndOptions, false, true));
+					args.push(Mustache.get(arg.get, scopeAndOptions, false, true, true));
 				} else {
 					args.push(arg);
 				}
@@ -1511,7 +1511,7 @@ steal('can/util',
 		 * @param {Object} context The context to use for checking for a reference if it doesn't exist in the object.
 		 * @param {Boolean} [isHelper] Whether the reference is seen as a helper.
 		 */
-		Mustache.get = function (key, scopeAndOptions, isHelper, isArgument) {
+		Mustache.get = function (key, scopeAndOptions, isHelper, isArgument, isLookup) {
 
 			// Cache a reference to the current context and options, we will use them a bunch.
 			var context = scopeAndOptions.scope.attr('.'),
@@ -1554,7 +1554,7 @@ steal('can/util',
 			//!steal-remove-end
 
 			// Use helper over the found value if the found value isn't in the current context
-			if ((initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && Mustache.getHelper(key, options)) {
+			if (!isLookup && (initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && Mustache.getHelper(key, options)) {
 				return key;
 			}
 
@@ -2053,7 +2053,7 @@ steal('can/util',
 						console.log(expr, options.context);
 					}
 				}
-			}
+			},
 			/**
 			 * @function can.mustache.helpers.elementCallback {{(el)->CODE}}
 			 *
@@ -2116,7 +2116,14 @@ steal('can/util',
 			 *     </ul>
 			 *
 			 */
-			//
+			"@index": function(offset, options) {
+				if (!options) {
+					options = offset;
+					offset = 0;
+				}
+				var index = options.scope.attr("@index");
+				return ""+((can.isFunction(index) ? index() : index) + offset);
+			}
 			/**
 			 * @function can.mustache.helpers.key {{@key}}
 			 *
