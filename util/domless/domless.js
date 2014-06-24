@@ -12,7 +12,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	}
 
 	can.isArray = function(arr){
-		return arr instanceof arr;
+		return arr instanceof Array;
 	};
 
 	can.isFunction = (function () {
