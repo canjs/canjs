@@ -11,6 +11,10 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 		return array.length > 0 ? Array.prototype.concat.apply([], array) : array;
 	}
 
+	can.isArray = function(arr){
+		return arr instanceof arr;
+	};
+
 	can.isFunction = (function () {
 		if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
 			return function (value) {
