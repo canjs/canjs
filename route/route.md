@@ -231,4 +231,4 @@ and show a specific recipe when __id__ was set, you could do something like:
 
 If we didn't only listen to when recipe is set, then every time we chose to
 show a single recipe, we would create and show the list of recipes again which 
-would not very efficient.
+would not be very efficient.
