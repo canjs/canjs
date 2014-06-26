@@ -49,6 +49,39 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		list[0].attr('name', 'Zed');
 	});
 
+
+	test('sort() events', 14, function () {
+		var list = new can.List([{
+			name: 'Justin'
+		}, {
+			name: 'Brian'
+		}, {
+			name: 'Austin'
+		}, {
+			name: 'Mihael'
+		}]);
+		list.bind('remove', function (ev, items, oldPos) {
+			ok(true, 'remove called');
+			equal(items.length, 4, 'remove all elements');
+			equal(items[0].name, 'Justin', 'remove elements in old order');
+		});
+		list.bind('add', function (ev, items) {
+			ok(true, 'add called');
+			equal(items.length, 4, 'add items correct length');
+			equal(items[0].name, 'Austin', 'add items in sorted order (1/4)');
+			equal(items[1].name, 'Brian', 'add items in sorted order (2/4)');
+			equal(items[2].name, 'Justin', 'add items in sorted order (3/4)');
+			equal(items[3].name, 'Mihael', 'add items in sorted order (4/4)');
+			equal(list.length, 4, 'list correct length');
+			equal(list[0].name, 'Austin', 'list in sorted order (1/4)');
+			equal(list[1].name, 'Brian', 'list in sorted order (2/4)');
+			equal(list[2].name, 'Justin', 'list in sorted order (3/4)');
+			equal(list[3].name, 'Mihael', 'list in sorted order (4/4)');
+		});
+		list.comparator = 'name';
+		list.sort();
+	});
+
 	test('list sort with func', 1, function () {
 		var list = new can.List([{
 			priority: 4,
