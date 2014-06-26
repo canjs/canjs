@@ -129,13 +129,13 @@ The following example simulates services that get and update 100 todos.
       function(request, response, headers){
         // return the JSON data
         // notice that id is pulled from the url and added to data
-        response(todos[orig.data.id]);
+        response(todos[request.data.id]);
       })
 
     can.fixture("PUT /todos/{id}",
       function(request, response, headers){
         // update the todo's data
-        can.extend(todos[orig.data.id], orig.data );
+        can.extend(todos[request.data.id], request.data );
         response({});
       })
 
