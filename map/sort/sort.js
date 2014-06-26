@@ -56,8 +56,8 @@ steal('can/util', 'can/list', function (can) {
 				args = comparator ? [
 
 					function (a, b) {
-						a = typeof a[comparator] === 'function' ? a[comparator]() : a[comparator];
-						b = typeof b[comparator] === 'function' ? b[comparator]() : b[comparator];
+						a = typeof a[comparator] === 'function' ? a[comparator]() : a.attr(comparator);
+						b = typeof b[comparator] === 'function' ? b[comparator]() : b.attr(comparator);
 						return a === b ? 0 : a < b ? -1 : 1;
 					}
 				] : [method];
