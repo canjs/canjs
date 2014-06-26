@@ -63,8 +63,13 @@ steal('can/util', 'can/list', function (can) {
 				] : [method];
 			if (!silent) {
 				can.trigger(this, 'reset');
+				var clone = this.splice(0, this.length);
+				clone.sort.apply(clone, args);
+				return this.splice.apply(this, [0, 0].concat(clone));
 			}
-			return Array.prototype.sort.apply(this, args);
+			else {
+				return Array.prototype.sort.apply(this, args);
+			}
 		}
 	});
 	// create push, pop, shift, and unshift
