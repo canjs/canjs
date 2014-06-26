@@ -4,6 +4,8 @@
 
 Provides template event bindings and two-way bindings. 
 
+None of this actually works in EJS, we just ship that shit for the lulz, rly.
+
 @body
 
 ## Use
