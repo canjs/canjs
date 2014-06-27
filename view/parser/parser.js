@@ -1,43 +1,43 @@
 /* jshint maxdepth:7*/
-steal("can/view", function(can){
-	
-	
-	function makeMap(str){
+steal("can/view", function(can) {
+
+
+	function makeMap(str) {
 		var obj = {}, items = str.split(",");
-		for ( var i = 0; i < items.length; i++ ) {
-			obj[ items[i] ] = true;
+		for (var i = 0; i < items.length; i++) {
+			obj[items[i]] = true;
 		}
-			
+
 		return obj;
 	}
-	
-	var alphaNumericHU = "-A-Za-z0-9_",
-		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]+",
+
+	var alphaNumericHU = "-:A-Za-z0-9_",
+		attributeNames = "[a-zA-Z_:][" + alphaNumericHU + ":.]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",
-		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
-		  "(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
+		attributeEqAndValue = "(?:" + spaceEQspace + "(?:" +
+			"(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
 		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
 		stash = "\\{\\{([^\\}]*)\\}\\}\\}?",
-		startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
-				"(" +
-					"(?:\\s*"+
-						"(?:(?:"+
-							"(?:"+attributeNames+")?"+
-							attributeEqAndValue+")|"+
-	                   "(?:"+matchStash+")+)"+
-	                ")*"+
-	            ")\\s*(\\/?)>"),
-		endTag = new RegExp("^<\\/(["+alphaNumericHU+"]+)[^>]*>"),
-		attr = new RegExp("(?:"+
-					"(?:("+attributeNames+")|"+stash+")"+
-								"(?:"+spaceEQspace+
-									"(?:"+
-										"(?:"+dblQuote2dblQuote+")|(?:"+quote2quote+")|([^>\\s]+)"+
-									")"+
-								")?)","g"),
-		mustache = new RegExp(stash,"g"),
+		startTag = new RegExp("^<([" + alphaNumericHU + "]+)" +
+			"(" +
+			"(?:\\s*" +
+			"(?:(?:" +
+			"(?:" + attributeNames + ")?" +
+			attributeEqAndValue + ")|" +
+			"(?:" + matchStash + ")+)" +
+			")*" +
+			")\\s*(\\/?)>"),
+		endTag = new RegExp("^<\\/([" + alphaNumericHU + "]+)[^>]*>"),
+		attr = new RegExp("(?:" +
+			"(?:(" + attributeNames + ")|" + stash + ")" +
+			"(?:" + spaceEQspace +
+			"(?:" +
+			"(?:" + dblQuote2dblQuote + ")|(?:" + quote2quote + ")|([^>\\s]+)" +
+			")" +
+			")?)", "g"),
+		mustache = new RegExp(stash, "g"),
 		txtBreak = /<|\{\{/;
 
 	// Empty Elements - HTML 5
@@ -59,8 +59,8 @@ steal("can/view", function(can){
 	// Special Elements (can contain anything)
 	var special = makeMap("script,style");
 
-	var HTMLParser = function (html, handler) {
-		
+	var HTMLParser = function(html, handler) {
+
 		function parseStartTag(tag, tagName, rest, unary) {
 			tagName = tagName.toLowerCase();
 
@@ -73,11 +73,11 @@ steal("can/view", function(can){
 			if (closeSelf[tagName] && stack.last() === tagName) {
 				parseEndTag("", tagName);
 			}
-			
-			unary = empty[tagName] || !!unary;
-			
+
+			unary = empty[tagName] || !! unary;
+
 			handler.start(tagName, unary);
-			
+
 			if (!unary) {
 				stack.push(tagName);
 			}
@@ -85,8 +85,8 @@ steal("can/view", function(can){
 			HTMLParser.parseAttrs(rest, handler);
 
 
-			handler.end(tagName,unary);
-			
+			handler.end(tagName, unary);
+
 		}
 
 		function parseEndTag(tag, tagName) {
@@ -95,18 +95,18 @@ steal("can/view", function(can){
 			if (!tagName) {
 				pos = 0;
 			}
-				
 
-				// Find the closest opened tag of the same type
+
+			// Find the closest opened tag of the same type
 			else {
 				for (pos = stack.length - 1; pos >= 0; pos--) {
 					if (stack[pos] === tagName) {
 						break;
 					}
 				}
-					
+
 			}
-				
+
 
 			if (pos >= 0) {
 				// Close all the open elements, up the stack
@@ -115,21 +115,22 @@ steal("can/view", function(can){
 						handler.close(stack[i]);
 					}
 				}
-					
+
 				// Remove the open elements from the stack
 				stack.length = pos;
 			}
 		}
-		
-		function parseMustache(mustache, inside){
-			if(handler.special){
+
+		function parseMustache(mustache, inside) {
+			if (handler.special) {
 				handler.special(inside);
 			}
 		}
-		
-		
-		var index, chars, match, stack = [], last = html;
-		stack.last = function () {
+
+
+		var index, chars, match, stack = [],
+			last = html;
+		stack.last = function() {
 			return this[this.length - 1];
 		};
 
@@ -170,9 +171,9 @@ steal("can/view", function(can){
 						match[0].replace(startTag, parseStartTag);
 						chars = false;
 					}
-				} else if (html.indexOf("{{") === 0 ) {
+				} else if (html.indexOf("{{") === 0) {
 					match = html.match(mustache);
-					
+
 					if (match) {
 						html = html.substring(match[0].length);
 						match[0].replace(mustache, parseMustache);
@@ -191,7 +192,7 @@ steal("can/view", function(can){
 				}
 
 			} else {
-				html = html.replace(new RegExp("([\\s\\S]*?)<\/" + stack.last() + "[^>]*>"), function (all, text) {
+				html = html.replace(new RegExp("([\\s\\S]*?)<\/" + stack.last() + "[^>]*>"), function(all, text) {
 					text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, "$1$2");
 					if (handler.chars) {
 						handler.chars(text);
@@ -205,39 +206,39 @@ steal("can/view", function(can){
 			if (html === last) {
 				throw "Parse Error: " + html;
 			}
-				
+
 			last = html;
 		}
 
 		// Clean up any remaining tags
 		parseEndTag();
 
-		
+
 		handler.done();
 	};
-	HTMLParser.parseAttrs = function(rest, handler){
-		
-		
-		(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
-			if(special) {
+	HTMLParser.parseAttrs = function(rest, handler) {
+
+
+		(rest != null ? rest : "").replace(attr, function(text, name, special, dblQuote, singleQuote, val) {
+			if (special) {
 				handler.special(special);
-				
+
 			}
-			if(name || dblQuote || singleQuote || val) {
+			if (name || dblQuote || singleQuote || val) {
 				var value = arguments[3] ? arguments[3] :
 					arguments[4] ? arguments[4] :
 					arguments[5] ? arguments[5] :
 					fillAttrs[name.toLowerCase()] ? name : "";
 				handler.attrStart(name || "");
-				
+
 				var last = mustache.lastIndex = 0,
 					res = mustache.exec(value),
 					chars;
-				while(res) {
+				while (res) {
 					chars = value.substring(
 						last,
-						mustache.lastIndex - res[0].length );
-					if( chars.length ) {
+						mustache.lastIndex - res[0].length);
+					if (chars.length) {
 						handler.attrValue(chars);
 					}
 					handler.special(res[1]);
@@ -245,22 +246,22 @@ steal("can/view", function(can){
 					res = mustache.exec(value);
 				}
 				chars = value.substr(
-						last,
-						value.length );
-				if(chars) {
+					last,
+					value.length);
+				if (chars) {
 					handler.attrValue(chars);
 				}
 				handler.attrEnd(name || "");
 			}
 
-			
+
 		});
-		
-		
+
+
 	};
 
 	can.view.parser = HTMLParser;
-	
+
 	return HTMLParser;
-	
+
 });
