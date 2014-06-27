@@ -125,4 +125,68 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		equal(el.getElementsByTagName('li')
 			.length, 2, 'Live binding rendered second li');
 	});
+
+	test('live binding with comparator and {{#key}}', function () {
+		var renderer = can.view.mustache('<ul>{{#items}}<li>{{text}}</li>{{/items}}</ul>'),
+			el = document.createElement('div'),
+			items = new can.List([{
+				text: 'CCC'
+			}, {
+				text: 'BBB'
+			}]);
+		el.appendChild(renderer({
+			items: items
+		}));
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'CCC',
+			'Unsorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'BBB',
+			'Unsorted list, 2nd item');
+
+		items.comparator = 'text';
+		items.sort();
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'BBB',
+			'Sorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'CCC',
+			'Sorted list, 2nd item');
+
+		items.push({
+			text: 'AAA'
+		});
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'AAA',
+			'Push to sorted list, 1st item');
+		equal(el.getElementsByTagName('li').length, 3,
+			'Push to sorted list, correct length');
+	});
+
+	test('live binding with comparator and {{#each key}}', function () {
+		var renderer = can.view.mustache('<ul>{{#each items}}<li>{{text}}</li>{{/each}}</ul>'),
+			el = document.createElement('div'),
+			items = new can.List([{
+				text: 'CCC'
+			}, {
+				text: 'BBB'
+			}]);
+		el.appendChild(renderer({
+			items: items
+		}));
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'CCC',
+			'Unsorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'BBB',
+			'Unsorted list, 2nd item');
+
+		items.comparator = 'text';
+		items.sort();
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'BBB',
+			'Sorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'CCC',
+			'Sorted list, 2nd item');
+
+		items.push({
+			text: 'AAA'
+		});
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'AAA',
+			'Push to sorted list, 1st item');
+		equal(el.getElementsByTagName('li').length, 3,
+			'Push to sorted list, correct length');
+	});
 });
