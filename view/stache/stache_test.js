@@ -3513,4 +3513,9 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[1].className, 'bar test2 kuh');
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
+	 test('stache custom tag with ":" renderer', function() {
+        var renderer = can.stache('<x:widget></x:widget>'),
+            tagName = renderer().childNodes[0].nodeName.toLowerCase();
+        equal(tagName, 'x:widget');
+    });
 });
