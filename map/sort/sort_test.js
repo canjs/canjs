@@ -1,7 +1,7 @@
 steal("can/map/sort", "can/test", "can/view/mustache", function () {
 	module('can/map/sort');
 
-	test('list events', 16, function () {
+	test('list events', 12, function () {
 		var list = new can.List([{
 			name: 'Justin'
 		}, {

@@ -718,7 +718,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				// Call the original method.
 				res = orig.apply(this, args);
 
-				if (!this.comparator || args.length) {
+				if (!this.comparator && args.length) {
 
 					this._triggerChange("" + len, "add", args, undefined);
 				}
