@@ -136,8 +136,6 @@ steal('can/util', 'can/list', function (can) {
 				// args - the items added
 				// undefined - the old value
 				if (this.comparator && args.length) {
-					this.sort(null, true);
-					can.batch.trigger(this, 'reset', [args]);
 					this._triggerChange('' + len, 'add', args, undefined);
 				}
 				return res;
