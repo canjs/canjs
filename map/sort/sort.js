@@ -143,7 +143,7 @@ steal('can/util', 'can/list', function (can) {
 		});
 	//- override changes for sorting
 	proto._changes = function (ev, attr, how, newVal, oldVal) {
-		if (this.comparator && /^\d+./.test(attr)) {
+		if (this.comparator && /^\d/.test(attr)) {
 			// get the index
 			var index = +/^\d+/.exec(attr)[0],
 				// and item
