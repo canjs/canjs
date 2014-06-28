@@ -34,12 +34,11 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 			equal(items[0].name, 'Alexis');
 			equal(oldPos, 0, 'put in right spot');
 		});
-		list.bind('add', function (ev, items, newLength) {
+		list.bind('add', function (ev, items, pos) {
 			ok(true, 'add called');
 			equal(items.length, 1);
 			equal(items[0].name, 'Alexis');
-			// .push returns the new length not the current position
-			equal(newLength, 4, 'got new length');
+			equal(pos, 0, 'got sorted position');
 		});
 		list.push({
 			name: 'Alexis'
