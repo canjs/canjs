@@ -5,9 +5,9 @@
 
 Validates that the specified attributes are in the given numeric range.
 
- init : function(){
-   this.validateRangeOf(["age"],21, 130);
- }
+	init : function(){
+		this.validateRangeOf(["age"],21, 130);
+	}
 
 @param {Array<String>|String} attrNames Attribute name(s) to to validate
 @param {Number} low Minimum value (inclusive)

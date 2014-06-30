@@ -4,31 +4,31 @@
 @body
 The following example validates that a person's age is a number:
 
- Person = can.Map.extend({
-     init : function(){
-       this.validate(["age"], function(val){
-         if( typeof val === 'number' ){
-           return "must be a number"
-         }
-       })
-     }
- },{})
+	Person = can.Map.extend({
+		 init : function(){
+			 this.validate(["age"], function(val){
+				 if( typeof val === 'number' ){
+					 return "must be a number"
+				 }
+			 })
+		 }
+	},{})
 
 
 The error message can be overwritten with `options` __message__ property:
 
- Person = can.Map.extend({
-     init : function(){
-       this.validate(
-         "age",
-       {message: "must be a number"},
-       function(val){
-           if( typeof val === 'number' ){
-             return true
-           }
-       })
-   }
- },{})
+	Person = can.Map.extend({
+		 init : function(){
+			 this.validate(
+				 "age",
+			 {message: "must be a number"},
+			 function(val){
+					 if( typeof val === 'number' ){
+						 return true
+					 }
+			 })
+	 }
+	},{})
 
 @signature `observe.validate(attrNames, [options,] validateProc)`
 
