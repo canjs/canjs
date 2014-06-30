@@ -1,4 +1,4 @@
-steal("can/component", "can/view/stache", function () {
+steal("can/component", "can/view/stache" ,"can/route", function () {
 	
 	module('can/component', {
 		setup: function () {
@@ -1284,6 +1284,38 @@ steal("can/component", "can/view/stache", function () {
 		can.scope(frag.childNodes[0]).attr('shown', false);
 
 		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
+	});
+
+	test('component scope class id attrs (#1079)', function(){
+		can.Component.extend({
+			tag:'x-app',
+			template:can.stache('Hello from CanJS'),
+			init:function(){
+				can.route.map(this.scope);
+				can.route.ready();
+			},
+			scope:{
+				define:{
+					page:{
+						set:function(val){
+							return val ? val : 'home';
+						}
+					}
+				}
+			},
+			events:{
+				inserted:function(el,ev){
+					el.addClass('container');
+				}
+			}
+		});
+
+		var template=can.stache('<x-app></x-app>');
+		var frag=template({});
+
+		can.append(can.$("#qunit-test-area"),frag);
+		
+		equal(can.route.attr('class'),undefined);
 	});
 
 });
