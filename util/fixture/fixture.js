@@ -27,7 +27,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 	// manipulate the AJAX call to change the URL to a static file or call
 	// a function for a dynamic fixture.
 	var updateSettings = function (settings, originalOptions) {
-		if (!can.fixture.on) {
+		if (!can.fixture.on || settings.canfixture === false) {
 			return;
 		}
 
