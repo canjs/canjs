@@ -643,7 +643,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				if (options.foundObservable) {
 					options.foundObservable(prev, i);
 				}
-				prev = prev();
+				prev = cur = prev();
 			}
 			// Look to read a property from something.
 			if (isObserve(prev)) {
