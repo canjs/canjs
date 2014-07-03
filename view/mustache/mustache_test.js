@@ -420,6 +420,20 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		deepEqual(div.innerHTML, "foo");
 	});
 
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.Mustache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.mustache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
+	});
+
 	test("Partials and observes", function () {
 		var template;
 		var div = document.createElement('div');

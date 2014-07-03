@@ -447,6 +447,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		deepEqual(div2.innerHTML, "foo");
 	});
 
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.stache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.stache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
+	});
+
 	test("No arguments passed to helper with list", function () {
 		var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
 		var div = document.createElement('div');
