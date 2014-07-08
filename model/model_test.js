@@ -1551,7 +1551,16 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(data.id,1, "correctly used parseModel");
 	});
 
-
-
+	test("findAll not called if List constructor argument is deferred (#1074)", function() {
+		var count = 0;
+		var Foo = can.Model.extend({
+			findAll: function() {
+				count++;
+				return can.Deferred();
+			}
+		}, {});
+		new Foo.List(Foo.findAll());
+		equal(count, 1, "findAll called only once.");
+	});
 
 });
