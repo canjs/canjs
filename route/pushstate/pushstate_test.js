@@ -626,10 +626,12 @@ steal('can/route/pushstate', "can/test", function () {
 				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
 
+
 			test("root can include the domain", function () {
+				// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
 				stop();
 				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = "/";
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
 					info.route(":module/:plugin/:page\\.html");
 					info.route.ready();
 
@@ -645,7 +647,7 @@ steal('can/route/pushstate', "can/test", function () {
 			test("URL's don't greedily match", function () {
 				stop();
 				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = "/";
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
 					info.route(":module\\.html");
 					info.route.ready();
 
@@ -657,7 +659,7 @@ steal('can/route/pushstate', "can/test", function () {
 					}, 100);
 				});
 			});
-		
+
 		}
 
 		test("routed links must descend from pushstate root (#652)", 1, function () {
