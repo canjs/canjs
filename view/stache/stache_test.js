@@ -2600,6 +2600,37 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		}
 	});
 
+	test("Rendering indicies of an array with @index + offset (#1078)", function () {
+		var template = can.stache("<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		})
+			.childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i+5 + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
+	test("Passing indices into helpers as values", function () {
+		var template = can.view.stache("<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		}, {
+			test: function(index) {
+				return ""+index;
+			}
+		}).childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
 	test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 		var list = new can.List(['a', 'b', 'c']);
 		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");

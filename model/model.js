@@ -1892,7 +1892,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// we use those as parameters for an initial findAll.
 			if (can.isPlainObject(params) && !can.isArray(params)) {
 				can.List.prototype.setup.apply(this);
-				this.replace(this.constructor.Map.findAll(params));
+				this.replace(can.isDeferred(params) ? params : this.constructor.Map.findAll(params));
 			} else {
 				// Otherwise, set up the list like normal.
 				can.List.prototype.setup.apply(this, arguments);
