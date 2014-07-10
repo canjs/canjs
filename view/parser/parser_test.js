@@ -125,5 +125,17 @@ steal("can/view/parser", function(parser){
 			["done",[]]
 		]));
 	});
+
+	test("block are allowed inside anchor tags", function(){
+		parser("<a><div></div></a>", makeChecks([
+			['start', ['a', false]],
+			['end', ['a', false]],
+			['start', ['div', false]],
+			['end', ['div', false]],
+			['close', ['div']],
+			['close', ['a']],
+			['done', []]
+		]));
+	});
 	
 });
