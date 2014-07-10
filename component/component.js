@@ -98,6 +98,12 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// Setup values passed to component
 				var initalScopeData = {},
 					component = this,
+					// If a template is not provided, we fall back to
+					// dynamic scoping regardless of settings.
+					lexicalContent = ((typeof this.leakScope === "undefined" ?
+									   false :
+									   !this.leakScope) &&
+									  this.template),
 					twoWayBindings = {},
 					// what scope property is currently updating
 					scopePropertyUpdating,
@@ -236,7 +242,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				can.data(can.$(el), "scope", this.scope);
 
 				// Create a real Scope object out of the scope property
-				var renderedScope = hookupOptions.scope.add(this.scope),
+				var renderedScope = lexicalContent ?
+						this.scope :
+						hookupOptions.scope.add(this.scope),
 					options = {
 						helpers: {}
 					};
@@ -285,12 +293,20 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 							delete options.tags.content;
 
-							can.view.live.replace([el], subtemplate(
-								// This is the context of where `<content>` was found
-								// which will have the the component's context
-								rendererOptions.scope,
+							// By default, light dom scoping is
+							// dynamic. This means that any `{{foo}}`
+							// bindings inside the "light dom" content of
+							// the component will have access to the
+							// internal scope. This can be overridden to be
+							// lexical with the lexicalContent
+							// option,
+							var opts = !lexicalContent ||
+									subtemplate !== hookupOptions.subtemplate ?
+									rendererOptions :
+									hookupOptions;
 
-								rendererOptions.options));
+							can.view.live.replace([el], subtemplate(
+								opts.scope, opts.options));
 
 							// Restore the content tag so it could potentially be used again (as in lists)
 							options.tags.content = contentHookup;
