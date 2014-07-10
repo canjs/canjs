@@ -1551,6 +1551,80 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(data.id,1, "correctly used parseModel");
 	});
 
+	test('#1089 - resource definition - inheritance', function() {
+		can.fixture('GET /things/{id}', function() {
+			return { id: 0, name: 'foo' };
+		});
+
+		var Base = can.Model.extend();
+		var Thing = Base.extend({
+			resource: '/things'
+		}, {});
+
+		stop();
+		Thing.findOne({ id: 0 }, function(thing) {
+			equal(thing.name, 'foo', 'found model in inherited model');
+			start();
+		}, function(e, msg) {
+			ok(false, msg);
+			start();
+		});
+	});
+
+	test('#1089 - resource definition - CRUD overrides', function() {
+		can.fixture('GET /foos/{id}', function() {
+			return { id: 0, name: 'foo' };
+		});
+
+		can.fixture('POST /foos', function() {
+			return { id: 1 };
+		});
+
+		can.fixture('PUT /foos/{id}', function() {
+			return { id: 1, updated: true };
+		});
+
+		can.fixture('GET /bars', function() {
+			return [{}];
+		});
+
+		var Thing = can.Model.extend({
+			resource: '/foos',
+			findAll: 'GET /bars',
+			update: {
+				url: '/foos/{id}',
+				type: 'PUT'
+			},
+			create: function() {
+				return can.ajax({
+					url: '/foos',
+					type: 'POST'
+				});
+			}
+		}, {});
+
+		var alldfd = Thing.findAll(),
+		onedfd = Thing.findOne({ id: 0 }),
+		postdfd = new Thing().save();
+
+		stop();
+		can.when(alldfd, onedfd, postdfd)
+		.then(function(things, thing, newthing) {
+			equal(things.length, 1, 'findAll override called');
+			equal(thing.name, 'foo', 'resource findOne called');
+			equal(newthing.id, 1, 'post override called with function');
+
+			newthing.save(function(res) {
+				ok(res.updated, 'put override called with object');
+				start();
+			});
+		})
+		.fail(function() {
+			ok(false, 'override request failed');
+			start();
+		});
+	});
+
 	test("findAll not called if List constructor argument is deferred (#1074)", function() {
 		var count = 0;
 		var Foo = can.Model.extend({

@@ -16,7 +16,7 @@ is specified as `"resource"` and the model's [can.Model.id id] is
  - [can.Model.destroy] - `"DELETE resource/{id}"`
 
 Setting the `resource` property will not overwrite other implemented
-ajax methods.
+ajax methods, however will overwrite inherited ajax methods.
 
 @body
 
@@ -38,3 +38,19 @@ Will create a can.Model that is identical to:
 		update:  "PUT /todos/{id}",
 		destroy: "DELETE /todos/{id}"
 	},{});
+
+Inherited AJAX methods will be overwritten when using the `resource` property. For example, inheriting our Todo model:
+
+	SpecialTodo = Todo.extend({
+		resource: "/specialTodos"
+	}, {});
+
+Will create a Todo model identical to:
+
+	SpecialTodo = can.Model.extend({
+		findAll: "GET /specialTodos",
+		findOne: "GET /specialTodos/{id}",
+		create:  "POST /specialTodos",
+		update:  "PUT /specialTodos/{id}",
+		destroy: "DELETE /specialTodos/{id}"
+	}, {});
