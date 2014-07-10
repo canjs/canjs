@@ -316,5 +316,13 @@ steal("can/compute", "can/test", "can/map", function () {
 		
 		async([]);
 	});
+
+	test("compute.read works with a Map wrapped in a compute", function() {
+		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
+		var reads = ["map", "first"];
+
+		var result = can.compute.read(parent, reads);
+		equal(result.value, "Justin", "The correct value is found.");
+	});
 	
 });
