@@ -11,7 +11,7 @@ steal("can/view", function(can){
 		return obj;
 	}
 	
-	var alphaNumericHU = "-A-Za-z0-9_",
+	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
