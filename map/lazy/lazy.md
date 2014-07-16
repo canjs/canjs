@@ -7,7 +7,7 @@
 
 @description Create observable objects that initialize on demand.
 
-@signature `new can.LazyLazyMap([props])`
+@signature `new can.LazyMap([props])`
 
 Creates a new instance of can.LazyMap.
 
@@ -26,13 +26,13 @@ Observable arrays are also available with `[can.LazyList]`.
 
 `can.LazyMap` and `can.LazyList` are API compatible with [can.Map] and [can.List].
 
-## Limitations of Lazy Maps
+## Limitations of LazyMaps
 
-Although passing all original [can.Map] and [can.List] tests, `can.LayzMap` and `can.LazyList`
+Although passing all original [can.Map] and [can.List] tests, `can.LazyMap` and `can.LazyList`
 currently don't work with the [can.Map.attributes], [can.Map.setter], [can.Map.delegate], [can.Map.backup]
 and [can.Map.validations] plugins.
 
-Additionallly, if all properties of a LazyMap are being read, bound or set, initialization time can be
+Additionally, if all properties of a LazyMap are being read, bound or set, initialization time can be
 slightly higher than with [can.Map]. The best performance improvements can be seen with large nested
 object structures where only a fraction of the properties is being accessed.
 
