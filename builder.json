@@ -211,12 +211,14 @@
 		"can/view/stache/system.js": {
 			"name": "can.view.stache.system",
 			"type": "loader",
-			"isDefault": true
+			"isDefault": true,
+			"hasTest": false
 		},
 		"can/util/domless": {
 			"name": "can.util.domless",
 			"type": "loader",
-			"isDefault": true
+			"isDefault": true,
+			"hasTest": false
 		}
 	},
 	"types": {
@@ -244,10 +246,13 @@
 			"steal": {
 				"map": {
           "can/util/util": "can/util/jquery/jquery",
-          "jquery/jquery": "can/lib/jquery.1.10.2"
+					"jquery/jquery": "jquery"
+				},
+				"paths": {
+					"jquery": "lib/jquery.1.10.2.js"
 				},
 				"meta": {
-					"can/lib/jquery.1.10.2": {
+					"jquery": {
 						"format": "global"
 					}
 				}

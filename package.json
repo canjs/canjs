@@ -29,7 +29,6 @@
     "grunt-shell": "~0.5.0",
     "grunt-string-replace": "~0.2.2",
     "rimraf": "2.1",
-    "steal": "https://github.com/bitovi/steal-build/tarball/master",
     "steal-tools": "^0.2.3"
   },
   "scripts": {

@@ -2,7 +2,7 @@
 /* global User: true */
 /* global Hero: true */
 steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/map/attributes', "can/test", function () {
-	module('can/model/queue', {
+	QUnit.module('can/model/queue', {
 		setup: function () {}
 	});
 	test('queued requests will not overwrite attrs', function () {

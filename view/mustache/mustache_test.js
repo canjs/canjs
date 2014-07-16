@@ -2,7 +2,7 @@
 /*global Mustache*/
 steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs",function () {
 
-	module("can/view/mustache, rendering", {
+	QUnit.module("can/view/mustache, rendering", {
 		setup: function () {
 			can.view.ext = '.mustache';
 

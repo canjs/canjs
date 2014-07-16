@@ -2,7 +2,7 @@
 steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",function(){
 	
 	
-	module("can/view/stache",{
+	QUnit.module("can/view/stache",{
 		setup: function(){
 			can.view.ext = '.stache';
 			this.animals = ['sloth', 'bear', 'monkey'];

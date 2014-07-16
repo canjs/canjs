@@ -1,7 +1,7 @@
 /* jshint asi: false */
 steal("can/map/define", "can/test", function () {
 
-	module('can/map/define');
+	QUnit.module('can/map/define');
 
 	// remove, type, default
 	test('basics set', function () {

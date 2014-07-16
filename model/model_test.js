@@ -9,7 +9,7 @@
 /* global Organisation: true */
 /* global Company: true */
 steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
-	module('can/model', {
+	QUnit.module('can/model', {
 		setup: function () {}
 	});
 	var isDojo = typeof dojo !== 'undefined';

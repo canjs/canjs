@@ -1,5 +1,5 @@
 steal("can/compute", "can/test", "can/map", function () {
-	module('can/compute');
+	QUnit.module('can/compute');
 	test('single value compute', function () {
 		var num = can.compute(1);
 		num.bind('change', function (ev, newVal, oldVal) {

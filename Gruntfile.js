@@ -40,7 +40,8 @@ module.exports = function (grunt) {
 			test: function (definition, key) {
 				var name = key.substr(key.lastIndexOf('/') + 1);
 				var path = key.replace('can/', '') + '/';
-				return path + name + '_test.js';
+				var out = path + name + '_test.js';
+				return out;
 			},
 
 			options: function (config) {
@@ -68,14 +69,7 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				out: 'test/',
-				transform: {
-					options: function () {
-						this.steal.map = (this.steal && this.steal.map) || {};
-						this.steal.map['*'] = this.steal.map['*'] || {};
-						return this;
-					}
-				}
+				out: 'test/'
 			},
 			dist: testifyDist,
 			dev: _.extend({}, testifyDist, {
@@ -430,20 +424,16 @@ module.exports = function (grunt) {
 			options: {
 				builder: builderJSON,
 				steal: {
-					map: {
-						'*': {
-							'jquery/jquery.js' : 'lib/jquery/jquery.js',
-							'can/': ''
-						}
+					paths: {
+						"jquery/jquery": "lib/jquery/jquery.js",
+						"can/*": "*.js"
 					},
-					shim: {
-						'jquery': {
-							'exports': 'jQuery'
+					meta: {
+						"jquery": {
+							"format": "global",
+							"exports": "jQuery"
 						}
 					}
-				},
-				shim: {
-					'jquery/jquery.js': 'jQuery'
 				}
 			},
 			latest: {

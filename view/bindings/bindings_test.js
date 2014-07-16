@@ -1,5 +1,5 @@
 steal("can/view/bindings", "can/map", "can/test", function (special) {
-	module('can/view/bindings', {
+	QUnit.module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-test-area")
 				.innerHTML = "";

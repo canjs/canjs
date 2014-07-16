@@ -13,7 +13,7 @@
 	<ol id="qunit-tests"></ol>
 	<div id="qunit-test-area"></div>
 
-	<script type="text/javascript" src="../lib/steal/steal.js"></script>
+	<script type="text/javascript" src="../bower_components/steal/steal.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
 	<script type="text/javascript">
         if (typeof QUnit === 'undefined') {
@@ -23,11 +23,13 @@
 
 		QUnit.config.autostart = false;
 
-        steal(function() {
-            var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
-            steal.config(config);
-        }, "<%- tests.join('", "') %>", function() {
+				(function() {
+        var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
+        steal.config(config);
+				})();
+
+        steal("<%- tests.join('", "') %>", function() {
 			can.dev.logLevel = 3;
 			QUnit.start();
 		});
