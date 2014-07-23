@@ -1,6 +1,6 @@
 steal("can/list/promise","can/compute","can/test", function () {
 
-	Qunit.module("can/list/promise");
+	QUnit.module("can/list/promise");
 
 	test("list.isResolved", function () {
 
