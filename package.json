@@ -24,7 +24,7 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-shell": "~0.5.0",
     "grunt-release-steps": "~0.3.7",
-    "bower": "~1.2.7",
+    "bower": "~1.3.8",
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-jsbeautifier": "~0.2.6",
     "grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
