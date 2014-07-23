@@ -23,7 +23,7 @@ Model adds service encapsulation to [can.Map].  Model lets you:
 
  - Get and modify data from the server
  - Listen to changes by the server
- - Unifying service data into the same objects
+ - Keep track of all instances and prevent duplicates in the non-leaking [can.Model.store]
  
 ## Get and modify data from the server
 
@@ -140,10 +140,16 @@ __Property Changes__
     // listen for when the name property changes
     todo.bind('name', function(ev){  })
 
-__Listening with can.Control__
+__Listening with can.Control or can.Component__
 
-You should be using can.Control to listen to model changes like:
+You can use can.Control or the events property of can.Component to listen to model changes like:
 
     Todos = can.Control.extend({
       "{Todo} updated" : function(Todo, ev, todo) {...}
     })
+
+or...
+
+    events: {
+      "{Todo} updated" : function(Todo, ev, todo) {...}
+    }
