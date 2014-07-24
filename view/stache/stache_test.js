@@ -3594,4 +3594,27 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		start();
 		
 	});
+	
+	test("methods become observable (#1164)", function(){
+		
+		var TeamModel = can.Map.extend({
+
+			shortName : function() {
+				return (this.attr('nickname') && this.attr('nickname').length <= 8) ? this.attr('nickname') : this.attr('abbreviation');
+			}
+		});
+
+		var team = new TeamModel({
+			nickname : 'Arsenal London',
+			abbreviation : 'ARS'
+		});
+
+		var template = can.stache('<span>{{team.shortName}}</span>');
+		var frag = template({
+			team : team
+		});
+
+		equal(frag.childNodes[0].innerHTML, "ARS", "got value");
+
+	});
 });
