@@ -223,7 +223,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					can.bind.call(el, "attributes", function (ev) {
 						// Convert attribute name from the `attribute-name` to the `attributeName` format.
 						var camelized = can.camelize(ev.attributeName);
-						if (!twoWayBindings[camelized]) {
+						if (!twoWayBindings[camelized] && !ignoreAttributesRegExp.test(camelized) ) {
 							// If there is a mapping for this attribute, update the `componentScope` attribute
 							componentScope.attr(camelized, el.getAttribute(ev.attributeName));
 						}
