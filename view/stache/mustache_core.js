@@ -31,7 +31,7 @@ steal("can/util",
 	// ## Helpers
 	
 	// Breaks up the name and arguments of a mustache expression.
-	var argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+	var argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 		// Identifies the type of an argument or hash in a mustache expression.
 		literalNumberStringBooleanRegExp = /^(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(?:(.+?)=(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(.+))))$/,
 		// Finds mustache tags and their surrounding whitespace.

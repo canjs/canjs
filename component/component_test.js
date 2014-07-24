@@ -1,4 +1,4 @@
-steal("can/component", "can/view/stache", function () {
+steal("can/component", "can/view/stache" ,"can/route", function () {
 	
 	module('can/component', {
 		setup: function () {
@@ -1284,6 +1284,31 @@ steal("can/component", "can/view/stache", function () {
 		can.scope(frag.childNodes[0]).attr('shown', false);
 
 		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
+	});
+
+	test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function(){
+		
+		can.Component.extend({
+			tag:'x-app'
+		});
+
+		var frag=can.stache('<x-app></x-app>')({});
+		
+		var el = frag.childNodes[0];
+		var scope = can.scope(el);
+		
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-test-area"),frag);
+		
+		// update the class
+		can.addClass(can.$(el),"foo");
+		
+		stop();
+		setTimeout(function(){
+			equal(scope.attr('class'),undefined, "the scope is not updated when the class attribute changes");
+			start();
+		},20);
+		
 	});
 
 });
