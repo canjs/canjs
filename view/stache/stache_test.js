@@ -3545,7 +3545,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
 	
-	test("single property read does not infinately loop",function(){
+	test("single property read does not infinately loop (#1155)",function(){
 		stop();
 		
 		var map = new can.Map({state: false});
