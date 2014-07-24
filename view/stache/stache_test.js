@@ -3595,7 +3595,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		
 	});
 	
-	test("methods become observable", function(){
+	test("methods become observable (#1164)", function(){
 		
 		var TeamModel = can.Map.extend({
 
