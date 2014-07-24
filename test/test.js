@@ -14,7 +14,7 @@ steal('can/util', function() {
 		},
 		path: function (path) {
 			if (typeof steal !== 'undefined') {
-				return ""+steal.idToUri(steal.id("can/"+path).toString())  ;
+				return steal.joinURIs(steal.config("baseUrl"), path);
 			}
 
 			if (window.require && require.toUrl && !viewCheck.test(path)) {

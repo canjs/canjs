@@ -2278,7 +2278,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	if (typeof steal !== 'undefined') {
 		test("avoid global helpers", function () {
 			stop();
-			steal('view/mustache/test/noglobals.mustache', function (noglobals) {
+			steal('view/mustache/test/noglobals.mustache!', function (noglobals) {
 				var div = document.createElement('div'),
 					div2 = document.createElement('div');
 				var person = new can.Map({

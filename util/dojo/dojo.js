@@ -1,5 +1,5 @@
 steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragment.js',
-	'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', 'can/util/inserted', function (can, attr) {
+	'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', 'can/util/hashchange.js', 'can/util/inserted', function (can, attr) {
 		
 	var dojo = window.dojo;
 	define('plugd/trigger', ['dojo'], function (dojo) {

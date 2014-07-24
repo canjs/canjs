@@ -33,9 +33,10 @@
 
             (function() {
                 var config = window.CONFIGURATION = {
-                    "map": {
-                        "can/util/util": "can/util/zepto/zepto",
-                        "zepto/zepto": "can/bower_components/zepto/zepto"
+                    "paths": {
+                        "can/*": "*.js",
+                        "can/util/util": "util/zepto/zepto.js",
+                        "zepto/zepto": "bower_components/zepto/zepto.js"
                     }
                 };
                 steal.config(config);

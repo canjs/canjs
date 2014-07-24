@@ -27,20 +27,20 @@
 	steal.config({
 		map: {
 			"jquery/jquery": "jquery",
-			"can/util/util": "can/util/jquery/jquery",
 			"benchmark/benchmark": "benchmark"
 		},
 		paths: {
 			"jquery": "lib/jquery.1.10.2.js",
-			"mootools/mootools.js": "lib/mootools-core-1.4.5.js",
-			"dojo/dojo.js": "util/dojo/dojo-1.8.1.js",
-			"yui/yui.js": "lib/yui-3.7.3.js",
-			"zepto/zepto.js": "bower_components/zepto/zepto.js",
+			"mootools/mootools": "lib/mootools-core-1.4.5.js",
+			"dojo/dojo": "util/dojo/dojo-1.10.0.js",
+			"yui/yui": "lib/yui-3.7.3.js",
+			"zepto/zepto": "bower_components/zepto/zepto.js",
 			"can/*": "*.js",
 			"jquerypp/": "http://jquerypp.com/release/1.0.1/steal/",
 			"benchmark": "bower_components/benchmark/benchmark.js",
 			"jqueryui/jqueryui.js" :"http://code.jquery.com/ui/1.10.4/jquery-ui.js",
 			"steal/dev/dev.js": "lib/steal/dev/dev.js"
+			/*"can/util/util": "util/jquery/jquery.js"*/
 		},
 		meta: {
 			jquery: {
@@ -64,9 +64,9 @@
 			}
 		},
 		ext: {
-			ejs: "view/ejs/ejs.js",
-			mustache: "view/mustache/mustache.js",
-			stache: "view/stache/stache.js"
+			ejs: "view/ejs/system",
+			mustache: "view/mustache/system",
+			stache: "view/stache/system"
 		}
 	});
 })();

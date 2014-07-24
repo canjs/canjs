@@ -33,9 +33,10 @@
 
             (function() {
                 var config = window.CONFIGURATION = {
-                    "map": {
-                        "can/util/util": "can/util/mootools/mootools",
-                        "mootools/mootools": "can/lib/mootools-core-1.4.5"
+                    "paths": {
+                        "can/*": "*.js",
+                        "can/util/util": "util/mootools/mootools.js",
+                        "mootools/mootools": "lib/mootools-core-1.4.5.js"
                     }
                 };
                 steal.config(config);

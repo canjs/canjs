@@ -33,13 +33,15 @@
 
             (function() {
                 var config = window.CONFIGURATION = {
-                    "map": {
-                        "can/util/util": "can/util/dojo/dojo",
-                        "dojo/dojo": "can/util/dojo/dojo-1.8.1"
+                    "paths": {
+                        "can/*": "*.js",
+                        "can/util/util": "util/dojo/dojo.js",
+                        "dojo/dojo": "util/dojo/dojo-1.10.0.js"
                     },
                     "meta": {
-                        "can/util/dojo/dojo-1.8.1": {
-                            "format": "global"
+                        "dojo/dojo": {
+													"format": "global",
+													"exports": "dojo"
                         }
                     }
                 };

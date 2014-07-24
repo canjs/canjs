@@ -15,7 +15,7 @@
 steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 	"can/util/fragment.js", 'can/util/array/each.js',
 	'can/util/object/isplain', 'can/util/deferred.js',
-	'../hashchange.js', "can/util/inserted", function (can, attr) {
+	'can/util/hashchange.js', "can/util/inserted", function (can, attr, YUI) {
 
 		// lets overwrite 
 		YUI.add('can-modifications', function (Y, NAME) {

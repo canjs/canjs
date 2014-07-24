@@ -1,5 +1,5 @@
 steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
-	module('can/map/lazy map+list');
+	QUnit.module('can/map/lazy map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.LazyMap({
 			category: 5,
@@ -846,7 +846,7 @@ steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', function () {
 		list.pop();
 		equal(list.length, 0, 'list is empty');
 	});
-	module('can/map/lazy compute');
+	QUnit.module('can/map/lazy compute');
 	test('Basic Compute', function () {
 		var o = new can.LazyMap({
 			first: 'Justin',

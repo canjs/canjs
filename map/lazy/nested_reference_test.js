@@ -1,7 +1,7 @@
 /* jshint asi:true */
 steal('can/map/lazy/nested_reference.js', function () {
 
-	module("can/map/lazy/nested_reference");
+	QUnit.module("can/map/lazy/nested_reference");
 
 	test("Basics", 3, function () {
 		var data = [

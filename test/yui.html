@@ -33,9 +33,10 @@
 
             (function() {
                 var config = window.CONFIGURATION = {
-                    "map": {
-                        "can/util/util": "can/util/yui/yui",
-                        "yui/yui": "can/lib/yui-3.7.3"
+                    "paths": {
+                        "can/*": "*.js",
+                        "can/util/util": "util/yui/yui.js",
+                        "yui/yui": "lib/yui-3.7.3.js"
                     }
                 };
                 steal.config(config);
