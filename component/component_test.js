@@ -1286,36 +1286,29 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
 	});
 
-	test('component scope class id attrs (#1079)', function(){
+	test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function(){
+		
 		can.Component.extend({
-			tag:'x-app',
-			template:can.stache('Hello from CanJS'),
-			init:function(){
-				can.route.map(this.scope);
-				can.route.ready();
-			},
-			scope:{
-				define:{
-					page:{
-						set:function(val){
-							return val ? val : 'home';
-						}
-					}
-				}
-			},
-			events:{
-				inserted:function(el,ev){
-					el.addClass('container');
-				}
-			}
+			tag:'x-app'
 		});
 
-		var template=can.stache('<x-app></x-app>');
-		var frag=template({});
-
+		var frag=can.stache('<x-app></x-app>')({});
+		
+		var el = frag.childNodes[0];
+		var scope = can.scope(el);
+		
+		// element must be inserted, otherwise attributes event will not be fired
 		can.append(can.$("#qunit-test-area"),frag);
 		
-		equal(can.route.attr('class'),undefined);
+		// update the class
+		can.addClass(can.$(el),"foo");
+		
+		stop();
+		setTimeout(function(){
+			equal(scope.attr('class'),undefined, "the scope is not updated when the class attribute changes");
+			start();
+		},20);
+		
 	});
 
 });
