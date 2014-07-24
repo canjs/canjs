@@ -3561,7 +3561,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		
 		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
 		
-		var frag = template({
+		template({
 			map: map
 		});
 		source(2);
