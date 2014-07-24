@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/route", "can/compute", "can/test", function () {
+steal("can/route", "can/test", function () {
 	module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -659,7 +659,11 @@ steal("can/route", "can/compute", "can/test", function () {
 				});
 				
 				isOnTestPage.bind("change", function(ev,newVal){
-					start();
+					setTimeout(function(){
+						start();
+						can.remove(can.$(iframe));
+					},1);
+					
 				});
 				
 				equal(isOnTestPage(), false, "initially not on test page")
