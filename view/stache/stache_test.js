@@ -447,6 +447,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		deepEqual(div2.innerHTML, "foo");
 	});
 
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.stache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.stache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
+	});
+
 	test("No arguments passed to helper with list", function () {
 		var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
 		var div = document.createElement('div');
@@ -3545,14 +3559,39 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
 
-	test("renders SVG elements without parser error (#1132)", 1, function() {
+	test("single character attributes work (#1132)", 1, function() {
 		var template = '<svg width="50" height="50">' +
 			'<circle r="25" cx="25" cy="25"></circle>' +
 			'</svg>';
 		var frag = can.stache(template)({});
-		var div = document.createElement('div');
-		div.appendChild(frag);
 
-		equal(div.innerHTML, template);
+		
+		equal(frag.childNodes[0].childNodes[0].getAttribute("r"), "25");
+	});
+	
+	test("single property read does not infinately loop (#1155)",function(){
+		stop();
+		
+		var map = new can.Map({state: false});
+		var current = false;
+		var source = can.compute(1)
+		var number = can.compute(function(){
+
+			map.attr("state", current = !current);
+
+			return source();
+		});
+		number.bind("change",function(){});
+		
+		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
+		
+		template({
+			map: map
+		});
+		source(2);
+		map.attr("state", current = !current);
+		ok(true,"no error at this point");
+		start();
+		
 	});
 });

@@ -126,6 +126,33 @@ people.names.attr('b', 'Bob');   // people change: names.b, add, Bob, undefined
                               // people names.b: Bob, undefined
 @codeend
 
+## Properties with dots in their name
+
+As shown above, `attr` enables reading and setting deep properties so special care must be taken when property names include dots '`.`'. To read a property containing dots, escape each one using '`\`'. This prevents `attr` from performing a deep lookup and throwing an error when the deep property is not found.
+
+@codestart
+var person = new can.Map({
+	'first.name': 'Alice'
+});
+
+person.attr('first.name'); // throws Error
+person.attr('first\.name'); // 'Alice'
+
+@codeend
+
+When setting a property containing dots, pass an object to `attr` containing the property name and new value. Setting a property by passing a string to `attr` will attempt to set a deep property and will throw an error.
+
+@codestart
+var person = new can.Map({
+	'first.name': 'Alice'
+});
+
+person.attr('first.name', 'Bob'); // throws Error
+person.attr('first\.name', 'Bob'); // throws Error
+person.attr({'first.name': 'Bob'}); // Works
+
+@codeend
+
 ## See also
 
 For information on the events that are fired on property changes and how
