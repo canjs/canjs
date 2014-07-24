@@ -248,7 +248,14 @@ steal("can/util",
 						compute = computeData.compute;
 						
 					initialValue = computeData.initialValue;
-					if(computeData.reads && computeData.reads.length === 1 && computeData.root instanceof can.Map) {
+					// Optimize for a simple attribute read.
+					if(computeData.reads &&
+						// a single property read
+						computeData.reads.length === 1 &&
+						// on a map
+						computeData.root instanceof can.Map &&
+						// that isn't calling a function
+						!can.isFunction(computeData.root[computeData.reads[0]]) ) {
 						compute = can.compute(computeData.root, computeData.reads[0]);
 					}
 					
