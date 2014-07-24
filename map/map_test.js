@@ -268,4 +268,12 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 
 		data.attr('name', 'David');
 	});
+	
+	test("map passed to Map constructor (#1166)", function(){
+		var map = new can.Map({x: 1});
+		var res = new can.Map(map);
+		deepEqual(res.attr(), {
+			x: 1
+		}, "has the same properties");
+	});
 });
