@@ -251,6 +251,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 		 */
 		{
 			setup: function (obj) {
+				if(obj instanceof can.Map){
+					obj = obj.serialize();
+				}
+				
 				// `_data` is where we keep the properties.
 				this._data = {};
 				/**
