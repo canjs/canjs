@@ -3544,4 +3544,30 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[1].className, 'bar test2 kuh');
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
+	
+	test("single property read does not infinately loop",function(){
+		stop();
+		
+		var map = new can.Map({state: false});
+		var current = false;
+		var source = can.compute(1)
+		var number = can.compute(function(){
+
+			map.attr("state", current = !current);
+
+			return source();
+		});
+		number.bind("change",function(){});
+		
+		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
+		
+		var frag = template({
+			map: map
+		});
+		source(2);
+		map.attr("state", current = !current);
+		ok(true,"no error at this point");
+		start();
+		
+	});
 });
