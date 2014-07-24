@@ -676,6 +676,24 @@ steal("can/route", "can/test", function () {
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
 		
+		test("can.compute.read should not call can.route (#1154)", function () {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc, win) {
+				iCanRoute.attr("page","test");
+				iCanRoute.ready();
+				
+				var val = win.can.compute.read({route: iCanRoute},["route"]).value;
+				
+				setTimeout(function(){
+					equal(val,iCanRoute,"read correctly");
+					start();
+					can.remove(can.$(iframe));
+				},1);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?3");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
 	}
 
 	test("escaping periods", function () {

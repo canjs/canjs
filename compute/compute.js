@@ -698,7 +698,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 		// handle an ending function
 		// unless it is a can.Construct-derived constructor
-		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct)) {
+		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct) && !(can.route && cur === can.route)) {
 			if (options.isArgument) {
 				if (!cur.isComputed && options.proxyMethods !== false) {
 					cur = can.proxy(cur, prev);
