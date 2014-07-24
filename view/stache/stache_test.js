@@ -3544,4 +3544,15 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[1].className, 'bar test2 kuh');
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
+
+	test("renders SVG elements without parser error (#1132)", 1, function() {
+		var template = '<svg width="50" height="50">' +
+			'<circle r="25" cx="25" cy="25"></circle>' +
+			'</svg>';
+		var frag = can.stache(template)({});
+		var div = document.createElement('div');
+		div.appendChild(frag);
+
+		equal(div.innerHTML, template);
+	});
 });
