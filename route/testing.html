@@ -25,11 +25,11 @@
 	
 	steal(function(){
 		steal.config(configuration);
-	}).then('can/route', function (route) {
+	}).then('can/route','can/compute', function (route) {
 
 		// make sure it's after ready
 		setTimeout(function () {
-			window.parent.routeTestReady && window.parent.routeTestReady(route, window.location)
+			window.parent.routeTestReady && window.parent.routeTestReady(route, window.location, window)
 		}, 30)
 	})
 </script>

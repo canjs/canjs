@@ -105,10 +105,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				var serialized = can.route.data.serialize(),
 					path = can.route.param(serialized, true);
 				can.route._call("setURL", path);
-
+				// trigger a url change so its possible to live-bind on url-based changes
+				can.batch.trigger(eventsObject,"__url",[path, lastHash]);
 				lastHash = path;
 			}, 10);
-		};
+		},
+		// A dummy events object used to dispatch url change events on.
+		eventsObject = can.extend({}, can.event);
 
 	can.route = function (url, defaults) {
 		// if route ends with a / and url starts with a /, remove the leading / of the url
@@ -520,6 +523,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 *     can.route.current({ id: 5, type: 'videos' }) // -> true
 		 */
 		current: function (options) {
+			// "reads" the url so the url is live-bindable.
+			can.__reading(eventsObject,"__url")
 			return this._call("matchingPartOfURL") === can.route.param(options);
 		},
 		bindings: {
@@ -594,7 +599,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	// The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
 	// instead act on the `can.route.data` observe.
-	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get'], function (name) {
+	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get','each'], function (name) {
 		can.route[name] = function () {
 			// `delegate` and `undelegate` require
 			// the `can/map/delegate` plugin
@@ -652,6 +657,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				}
 			}
 			can.route.attr(curParams);
+			// trigger a url change so its possible to live-bind on url-based changes
+			can.batch.trigger(eventsObject,"__url",[hash, lastHash]);
 			can.batch.stop();
 		}
 	};
