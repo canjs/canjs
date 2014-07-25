@@ -23,6 +23,44 @@
 		}
 	}());
 
+	// Dojo specific hacks
+	var dojoDefine;
+	var oldInstantiate = System.instantiate;
+	System.instantiate = function(load) {
+		var loader = this;
+		if(load.name === "dojo/dojo") {
+			var oldExec = loader.__exec;
+
+			loader.__exec = function(load) {
+				var ret = oldExec.call(this, load);
+				dojoDefine = loader.global.define;
+				loader.__exec = oldExec;
+				return ret;
+			};
+		}
+
+		if(load.name === 'can/util/util') {
+			return oldInstantiate.apply(this, arguments).then(function(instantiateObj) {
+				var oldExecute = load.metadata.execute;
+				load.metadata.execute = function() {
+					debugger;
+
+					var ourDefine = loader.global.define;
+					loader.global.define = dojoDefine;
+					var ret = oldExecute.call(load);
+					loader.global.define = ourDefine;
+					load.metadata.execute = oldExecute;
+
+
+					return ret;
+				};
+
+				return instantiateObj;
+			});	
+		}
+
+		return oldInstantiate.apply(this, arguments);
+	};
 
 	steal.config({
 		map: {
@@ -32,7 +70,7 @@
 		paths: {
 			"jquery": "lib/jquery.1.10.2.js",
 			"mootools/mootools": "lib/mootools-core-1.4.5.js",
-			"dojo/dojo": "util/dojo/dojo-1.10.0.js",
+			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
 			"yui/yui": "lib/yui-3.7.3.js",
 			"zepto/zepto": "bower_components/zepto/zepto.js",
 			"can/*": "*.js",
