@@ -4,7 +4,11 @@ steal('can/util', function() {
 	can.test = {
 		fixture: function (path) {
 			if (typeof steal !== 'undefined') {
-				return steal.config('root').toString() + '/' + path;
+				if(steal.idToUri) {
+					return steal.config('root').toString() + '/' + path;
+				} else {
+					return steal.joinURIs(System.baseURL, path);
+				}
 			}
 
 			if (window.require && require.toUrl && !viewCheck.test(path)) {
@@ -14,7 +18,11 @@ steal('can/util', function() {
 		},
 		path: function (path) {
 			if (typeof steal !== 'undefined') {
-				return steal.joinURIs(steal.config("baseUrl"), path);
+				if(steal.idToUri) {
+					return ""+steal.idToUri(steal.id("can/"+path).toString());
+				} else {
+					return steal.joinURIs(System.baseURL, path);
+				}
 			}
 
 			if (window.require && require.toUrl && !viewCheck.test(path)) {
@@ -22,5 +30,5 @@ steal('can/util', function() {
 			}
 			return path;
 		}
-	}
+	};
 });

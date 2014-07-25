@@ -41,20 +41,16 @@
 
 		if(load.name === 'can/util/util') {
 			return oldInstantiate.apply(this, arguments).then(function(instantiateObj) {
-				var oldExecute = load.metadata.execute;
-				load.metadata.execute = function() {
-					debugger;
+				var oldExecute = loader.defined[load.name].execute;
 
+				loader.defined[load.name].execute = function() {
 					var ourDefine = loader.global.define;
 					loader.global.define = dojoDefine;
-					var ret = oldExecute.call(load);
+					var ret = oldExecute.apply(this, arguments);
 					loader.global.define = ourDefine;
 					load.metadata.execute = oldExecute;
-
-
 					return ret;
 				};
-
 				return instantiateObj;
 			});	
 		}
@@ -77,8 +73,8 @@
 			"jquerypp/": "http://jquerypp.com/release/1.0.1/steal/",
 			"benchmark": "bower_components/benchmark/benchmark.js",
 			"jqueryui/jqueryui.js" :"http://code.jquery.com/ui/1.10.4/jquery-ui.js",
-			"steal/dev/dev.js": "lib/steal/dev/dev.js"
-			/*"can/util/util": "util/jquery/jquery.js"*/
+			"steal/dev/dev.js": "lib/steal/dev/dev.js",
+			"can/util/util": "util/jquery/jquery.js"
 		},
 		meta: {
 			jquery: {
