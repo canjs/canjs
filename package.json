@@ -28,8 +28,7 @@
     "grunt-release-steps": "~0.3.7",
     "grunt-shell": "~0.5.0",
     "grunt-string-replace": "~0.2.2",
-    "rimraf": "2.1",
-    "steal-tools": "^0.2.3"
+    "rimraf": "2.1"
   },
   "scripts": {
     "test": "grunt test"
