@@ -1,22 +1,16 @@
 steal(function () {
 	/* global GLOBALCAN */
-	var can;
-	if (typeof window !== 'undefined') {
-		can = window.can || {};
-		if(typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
-			window.can = can;
-		}
-	} else {
-		can = {};
+	var can = window.can || {};
+	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
+		window.can = can;
 	}
 
 	// An empty function useful for where you need a dummy callback.
 	can.k = function(){};
 
 	can.isDeferred = function (obj) {
-		var isFunction = this.isFunction;
 		// Returns `true` if something looks like a deferred.
-		return obj && isFunction(obj.then) && isFunction(obj.pipe);
+		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
 
 	var cid = 0;

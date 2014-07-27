@@ -23,15 +23,14 @@
 
 		QUnit.config.autostart = false;
 
-
-				(function() {
-        var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
-        steal.config(config);
-				})();
-
-        steal("<%- tests.join('", "') %>", function() {
-			can.dev.logLevel = 3;
-			QUnit.start();
+		System['import']("@config").then(function(){
+			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
+			steal.config(config);
+		}).then(function(){
+			steal("<%- tests.join('", "') %>", function() {
+				can.dev.logLevel = 3;
+				QUnit.start();
+			});
 		});
 	</script>
 </body>

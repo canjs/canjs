@@ -84,16 +84,18 @@
 			"jqueryui/jqueryui": {
 				deps: ["jquery"]
 			},
-			"zepto/zepto.js": {
+			"zepto/zepto.": {
 				"exports": "Zepto"
 			},
-			"mootools/mootools.js" : {
+			"mootools/mootools" : {
+				format: "global",
+				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"],
+				scriptEval: true
+			},
+			"dojo/dojo": {
 				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
 			},
-			"dojo/dojo.js": {
-				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
-			},
-			"yui/yui.js": {
+			"yui/yui": {
 				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
 			}
 		},

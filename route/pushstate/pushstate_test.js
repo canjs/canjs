@@ -568,6 +568,7 @@ steal('can/route/pushstate', "can/test", function () {
 			// we can't call back if running in multiple frames
 			test("no doubled history states (#656)", function () {
 				stop();
+
 				window.routeTestReady = function (iCanRoute, loc, hist, win) {
 					var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
 					var stateTest = -1,
@@ -624,7 +625,41 @@ steal('can/route/pushstate', "can/test", function () {
 				iframe.src = can.test.path("route/pushstate/testing.html");
 				can.$("#qunit-test-area")[0].appendChild(iframe);
 			});
-		
+
+
+			test("root can include the domain", function () {
+				// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
+				stop();
+				makeTestingIframe(function(info, done){
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
+					info.route(":module/:plugin/:page\\.html");
+					info.route.ready();
+
+					setTimeout(function(){
+						equal(info.route.attr('module'), 'route', 'works');
+						start();
+
+						done();
+					}, 100);
+				});
+			});
+
+			test("URL's don't greedily match", function () {
+				stop();
+				makeTestingIframe(function(info, done){
+					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
+					info.route(":module\\.html");
+					info.route.ready();
+
+					setTimeout(function(){
+						ok(!info.route.attr('module'), 'there is no route match');
+						start();
+
+						done();
+					}, 100);
+				});
+			});
+
 		}
 
 		test("routed links must descend from pushstate root (#652)", 1, function () {

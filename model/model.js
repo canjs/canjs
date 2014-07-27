@@ -1096,13 +1096,16 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			setup: function (base, fullName, staticProps, protoProps) {
 				// Assume `fullName` wasn't passed. (`can.Model.extend({ ... }, { ... })`)
 				// This is pretty usual.
-				if (fullName !== "string") {
+				if (typeof fullName !== "string") {
 					protoProps = staticProps;
 					staticProps = fullName;
 				}
 				// Assume no static properties were passed. (`can.Model.extend({ ... })`)
 				// This is really unusual for a model though, since there's so much configuration.
 				if (!protoProps) {
+					//!steal-remove-start
+					can.dev.warn("can/model/model.js: can.Model extended without static properties.");
+					//!steal-remove-end
 					protoProps = staticProps;
 				}
 
@@ -1183,9 +1186,15 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 					// Check the configuration for this ajaxMethod.
 					// If the configuration isn't a function, it should be a string (like `"GET /endpoint"`)
 					// or an object like `{url: "/endpoint", type: 'GET'}`.
-					if (!can.isFunction(self[name])) {
-						// Etiher way, `ajaxMaker` will turn it into a function for us.
-						self[name] = ajaxMaker(method, self[name] ? self[name] : createURLFromResource(self, name));
+
+					//if we have a string(like `"GET /endpoint"`) or an object(ajaxSettings) set in the static definition(not inherited),
+					//convert it to a function.
+					if(staticProps && staticProps[name] && (typeof staticProps[name] === 'string' || typeof staticProps[name] === 'object')) {
+						self[name] = ajaxMaker(method, staticProps[name]);
+					}
+					//if we have a resource property set in the static definition
+					else if(staticProps && staticProps.resource) {
+						self[name] = ajaxMaker(method, createURLFromResource(self, name));
 					}
 
 					// There may also be a "maker" function (like `makeFindAll`) that alters the behavior of acting upon models
@@ -1225,7 +1234,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 
 					// If there was no prototype, or no `model` and no `parseModel`,
 					// we'll have to create a `parseModel`.
-					else if (!protoProps || (!protoProps[name] && !protoProps[parseName])) {
+					else if (!staticProps || (!staticProps[name] && !staticProps[parseName])) {
 						can.Construct._overwrite(self, base, parseName, parsers[parseName]());
 					}
 				});
@@ -1855,14 +1864,14 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// handler( 'change','1.destroyed' ). This is used
 			// to remove items on destroyed from Model Lists.
 			// but there should be a better way.
-			can.trigger(this, "change", funcName);
+			can.dispatch.call(this, {type:"change", target: this}, [funcName]);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
 			//!steal-remove-end
 
 			// Call event on the instance's Class
-			can.trigger(constructor, funcName, this);
+			can.dispatch.call(constructor, funcName, [this]);
 		};
 	});
 	
@@ -1883,7 +1892,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// we use those as parameters for an initial findAll.
 			if (can.isPlainObject(params) && !can.isArray(params)) {
 				can.List.prototype.setup.apply(this);
-				this.replace(this.constructor.Map.findAll(params));
+				this.replace(can.isDeferred(params) ? params : this.constructor.Map.findAll(params));
 			} else {
 				// Otherwise, set up the list like normal.
 				can.List.prototype.setup.apply(this, arguments);

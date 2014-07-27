@@ -17,6 +17,7 @@
     {{#modules}}
       <li>{{{linkTo .}}}</li>
     {{/modules}}
+    <a href='/can/foo/bar.html'>Testing</a>
   </ul>
   
 </div>
@@ -25,11 +26,10 @@
 <script type='text/javascript'>
 steal("can/route/pushstate", "can/component",function(){
 	
-	can.route.root = steal.config("root")+"" ;
+	can.route.bindings.pushstate.root = steal.config("root")+"" ;
 	
 	
 	can.route(":module\\.html");
-	can.route(":module/:page\\.html");
 	can.route(":module/:plugin/:page\\.html");
 	
 	
@@ -51,28 +51,6 @@ steal("can/route/pushstate", "can/component",function(){
 			}
 		}
 	});
-	
-	can.Component.extend({
-		tag: "ps-plugins",
-		scope: {
-			modulePlugins : {
-				construct: ["super","proxy"],
-				route: ["pushstate"],
-				map: ["attributes","backup","setter","validations"]
-			},
-			plugins: function(){
-				var module = can.route.attr("module");
-				return this.attr("modulePlugins."+module)
-			}
-		},
-		helpers: {
-			linkTo: function(plugin){
-				return can.route.link(module, {module: module},{
-					className: can.route.attr('module') == module ? "active" : ""
-				})
-			}
-		}
-	})
 	
 	
 	$("body").append( can.view.mustache("<ps-app></ps-app>")({})  )

@@ -34,7 +34,7 @@ steal("can/util", "can/view",function(can){
 	var tag = can.view.tag = function (tagName, tagHandler) {
 		if(tagHandler) {
 			// if we have html5shive ... re-generate
-			if (typeof window !== "undefined" && window.html5) {
+			if (window.html5) {
 				window.html5.elements += " " + tagName;
 				window.html5.shivDocument();
 			}
@@ -60,16 +60,20 @@ steal("can/util", "can/view",function(can){
 		attr: attr,
 		// handles calling back a tag callback
 		tagHandler: function(el, tagName, tagData){
-			var helperTagCallback = tagData.options.read('tags.' + tagName, {
-					isArgument: true,
-					proxyMethods: false
-				})
-					.value,
+			var helperTagCallback = tagData.options.attr('tags.' + tagName),
 				tagCallback = helperTagCallback || tags[tagName];
 	
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content
 			var scope = tagData.scope,
-				res = tagCallback ? tagCallback(el, tagData) : scope;
+				res;
+				
+			if(tagCallback) {
+				var reads = can.__clearReading();
+				res = tagCallback(el, tagData);
+				can.__setReading(reads);
+			} else {
+				res = scope;
+			}
 	
 			//!steal-remove-start
 			if (!tagCallback) {

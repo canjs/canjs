@@ -13,6 +13,14 @@ Create a model list with the provided model instances.
 @param {Array.<can.Model|Object>} [models] An array of [can.Model] instances
 or Objects that will be converted to the list's [can.List.Map Map type].
 
+@signature `new can.Model.List( deferred )`
+
+Create a model list with the results of `deferred`.
+
+@param {Deferred.Array.<can.Model|Object>} deferred A promise that will
+resolve to an array. Once the promise resolves, the `List` will have its
+contents replaced as if `new can.Model.List(array)` had been called.
+
 @signature `new can.Model.List( params )`
 
 Create an initially empty model list, but use the model's [can.Model.findAll findAll]

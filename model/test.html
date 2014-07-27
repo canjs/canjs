@@ -22,10 +22,13 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/model/model_test.js", function() {
-		can.dev.logLevel = 3;
-        QUnit.start();
-	});
+    setTimeout(function(){
+		steal("can/model/model_test.js", function() {
+			can.dev.logLevel = 3;
+	        QUnit.start();
+		});
+    },1000)
+
 </script>
 </body>
 </html>

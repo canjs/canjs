@@ -21,14 +21,14 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			
 			if( resolved instanceof can.List || (items && items.isComputed && resolved === undefined)) {
 				return function(el){
-					var cb = function (item, index) {
+					var cb = function (item, index, parentNodeList) {
 								
 						return options.fn(options.scope.add({
 								"@index": index
-							}).add(item));
+							}).add(item), options.options, parentNodeList);
 							
 					};
-					live.list(el, items, cb, options.context, el.parentNode);
+					live.list(el, items, cb, options.context, el.parentNode, options.nodeList);
 				};
 			}
 			
@@ -64,6 +64,14 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return result;
 			
 		},
+		"@index": function(offset, options) {
+			if (!options) {
+				options = offset;
+				offset = 0;
+			}
+			var index = options.scope.attr("@index");
+			return ""+((can.isFunction(index) ? index() : index) + offset);
+		},
 		'if': function (expr, options) {
 			var value;
 			// if it's a function, wrap its value in a compute
@@ -81,9 +89,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		},
 		'unless': function (expr, options) {
-			if (!resolve(expr)) {
-				return options.fn(options.scope || this);
-			}
+			return helpers['if'].apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 		},
 		'with': function (expr, options) {
 			var ctx = expr;

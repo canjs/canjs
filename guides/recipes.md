@@ -309,13 +309,13 @@ is instantiated:
 2. An observable `can.List` is created from `people`
 3. The list is rendered using `can.view` so when the list changes, so will the view
 
-	var people = [
-    {firstname: "John", lastname: "Doe"},
-    {firstname: "Emily", lastname: "Dickinson"},
-    {firstname: "William", lastname: "Adams"},
-    {firstname: "Stevie", lastname: "Nicks"},
-    {firstname: "Bob", lastname: "Barker"}
-	];
+		var people = [
+		    {firstname: "John", lastname: "Doe"},
+		    {firstname: "Emily", lastname: "Dickinson"},
+		    {firstname: "William", lastname: "Adams"},
+		    {firstname: "Stevie", lastname: "Nicks"},
+		    {firstname: "Bob", lastname: "Barker"}
+		];
 
 When the event handler for a `click` runs, it needs a way
 to access the object associated with the `li` that was clicked.

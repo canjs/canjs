@@ -85,7 +85,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 					};
 				}
 				event.target = event.target || obj;
-				can.dispatch.call(obj, event, args);
+				can.dispatch.call(obj, event, can.makeArray(args));
 			}
 
 		};
@@ -159,9 +159,19 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 
 		can.makeArray = function (arr) {
 			var ret = [];
+
+			if(arr == null) {
+				return [];
+			}
+
+			if(arr.length === undefined || typeof arr === 'string') {
+				return [arr];
+			}
+
 			can.each(arr, function (a, i) {
 				ret[i] = a;
 			});
+
 			return ret;
 		};
 

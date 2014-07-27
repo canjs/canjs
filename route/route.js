@@ -105,10 +105,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				var serialized = can.route.data.serialize(),
 					path = can.route.param(serialized, true);
 				can.route._call("setURL", path);
-
+				// trigger a url change so its possible to live-bind on url-based changes
+				can.batch.trigger(eventsObject,"__url",[path, lastHash]);
 				lastHash = path;
 			}, 10);
-		};
+		},
+		// A dummy events object used to dispatch url change events on.
+		eventsObject = can.extend({}, can.event);
 
 	can.route = function (url, defaults) {
 		// if route ends with a / and url starts with a /, remove the leading / of the url
@@ -127,13 +130,15 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			test = "",
 			lastIndex = matcher.lastIndex = 0,
 			next,
-			querySeparator = can.route._call("querySeparator");
+			querySeparator = can.route._call("querySeparator"),
+			matchSlashes = can.route._call("matchSlashes");
 
 		// res will be something like [":foo","foo"]
 		while (res = matcher.exec(url)) {
 			names.push(res[1]);
 			test += removeBackslash(url.substring(lastIndex, matcher.lastIndex - res[0].length));
-			next = "\\" + (removeBackslash(url.substr(matcher.lastIndex, 1)) || querySeparator);
+			// if matchSlashes is false (the default) don't greedily match any slash in the string, assume its part of the URL
+			next = "\\" + (removeBackslash(url.substr(matcher.lastIndex, 1)) || querySeparator+(matchSlashes? "": "|/"));
 			// a name without a default value HAS to have a value
 			// a name that has a default value can be empty
 			// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
@@ -348,13 +353,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		data: new can.Map({}),
 		map: function(data){
 			var appState;
-			// appState is an instance of can.Map
-			if(data instanceof can.Map){
-				appState = data;
-			}
 			// appState is a can.Map constructor function
-			else if(data.prototype instanceof can.Map){
+			if(data.prototype instanceof can.Map){
 				appState = new data();
+			}
+			// appState is an instance of can.Map
+			else {
+				appState = data;
 			}
 			can.route.data = appState;
 		},
@@ -518,12 +523,16 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 *     can.route.current({ id: 5, type: 'videos' }) // -> true
 		 */
 		current: function (options) {
+			// "reads" the url so the url is live-bindable.
+			can.__reading(eventsObject,"__url");
 			return this._call("matchingPartOfURL") === can.route.param(options);
 		},
 		bindings: {
 			hashchange: {
 				paramsMatcher: paramsMatcher,
 				querySeparator: "&",
+				// don't greedily match slashes in routing rules
+				matchSlashes: false,
 				bind: function () {
 					can.bind.call(window, 'hashchange', setState);
 				},
@@ -590,7 +599,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	// The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
 	// instead act on the `can.route.data` observe.
-	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get'], function (name) {
+	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get','each'], function (name) {
 		can.route[name] = function () {
 			// `delegate` and `undelegate` require
 			// the `can/map/delegate` plugin
@@ -648,6 +657,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				}
 			}
 			can.route.attr(curParams);
+			// trigger a url change so its possible to live-bind on url-based changes
+			can.batch.trigger(eventsObject,"__url",[hash, lastHash]);
 			can.batch.stop();
 		}
 	};

@@ -7,14 +7,14 @@ steal("can/util/can.js", function (can) {
 
 	// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 	// the triggering of `attributes` event async.
-	var setImmediate = (typeof window !== "undefined" && window.setImmediate) || function (cb) {
+	var setImmediate = window.setImmediate || function (cb) {
 			return setTimeout(cb, 0);
 		},
 		attr = {
 			// This property lets us know if the browser supports mutation observers.
 			// If they are supported then that will be setup in can/util/jquery and those native events will be used to inform observers of attribute changes.
 			// Otherwise this module handles triggering an `attributes` event on the element.
-			MutationObserver: typeof window !== "undefined" && (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver),
+			MutationObserver: window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
 
 			/**
 			 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map
@@ -161,19 +161,15 @@ steal("can/util/can.js", function (can) {
 			// Checks if an element contains an attribute.
 			// For browsers that support `hasAttribute`, creates a function that calls hasAttribute, otherwise creates a function that uses `getAttribute` to check that the attribute is not null.
 			has: (function () {
-				if(typeof document !== "undefined") {
-					var el = document.createElement('div');
-					if (el.hasAttribute) {
-						return function (el, name) {
-							return el.hasAttribute(name);
-						};
-					} else {
-						return function (el, name) {
-							return el.getAttribute(name) !== null;
-						};
-					}
+				var el = document.createElement('div');
+				if (el.hasAttribute) {
+					return function (el, name) {
+						return el.hasAttribute(name);
+					};
 				} else {
-					return function() {};
+					return function (el, name) {
+						return el.getAttribute(name) !== null;
+					};
 				}
 			})()
 		};

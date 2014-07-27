@@ -1,4 +1,4 @@
-steal("can/component", "can/view/stache", function () {
+steal("can/component", "can/view/stache" ,"can/route", function () {
 	
 	QUnit.module('can/component', {
 		setup: function () {
@@ -1187,6 +1187,127 @@ steal("can/component", "can/view/stache", function () {
 		});
 		equal(res.childNodes[0].innerHTML, "bar");
 		
+		
+	});
+
+	//!steal-remove-start
+	if (can.dev) {
+		test("passing unsupported attributes gives a warning", function(){
+
+			var oldlog = can.dev.warn;
+			can.dev.warn = function (text) {
+				ok(text, "got a message");
+				can.dev.warn = oldlog;
+			};
+			can.Component.extend({
+				tag: 'my-thing',
+				template: 'hello'
+			});
+			var stache = can.stache("<my-thing id='{productId}'></my-tagged>");
+			stache(new can.Map({productId: 123}));
+		});
+	}
+	//!steal-remove-end
+
+	test("stache conditionally nested components calls inserted once (#967)", function(){
+		expect(2);
+
+		can.Component.extend({
+			tag: "can-parent-stache",
+			scope: {
+				shown: true
+			},
+			template: can.stache("{{#if shown}}<can-child></can-child>{{/if}}")
+		});
+		can.Component.extend({
+			tag: "can-parent-mustache",
+			scope: {
+				shown: true
+			},
+			template: can.mustache("{{#if shown}}<can-child></can-child>{{/if}}")
+		});
+		can.Component.extend({
+			tag: "can-child",
+			events: {
+				inserted: function(){
+					this.scope.attr('bar', 'foo');
+					ok(true, "called inserted once");
+				}
+			}
+		});
+
+		var template = can.stache("<can-parent-stache></can-parent-stache>");
+
+		can.append(can.$('#qunit-test-area'), template());
+
+		var template2 = can.stache("<can-parent-mustache></can-parent-mustache>");
+
+		can.append(can.$('#qunit-test-area'), template2());
+
+	});
+	
+	test("hyphen-less tag names", function () {
+		var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
+		can.Component.extend({
+			tag: "foobar",
+			template: "<div><content/></div>",
+			scope: {
+				name: "Brian"
+			}
+		});
+		can.append(can.$('#qunit-test-area'), template());
+		equal(can.$('#qunit-test-area div')[0].innerHTML, "Brian");
+
+	});
+
+	test('nested component within an #if is not live bound(#1025)', function() {
+		can.Component.extend({
+			tag: 'parent-component',
+			template: can.stache('{{#if shown}}<child-component></child-component>{{/if}}'),
+			scope: {
+				shown: false
+			}
+		});
+
+		can.Component.extend({
+			tag: 'child-component',
+			template: can.stache('Hello world.')
+		});
+
+		var template = can.stache('<parent-component></parent-component>');
+		var frag = template({});
+
+		equal(frag.childNodes[0].innerHTML, '', 'child component is not inserted');
+		can.scope(frag.childNodes[0]).attr('shown', true);
+
+		equal(frag.childNodes[0].childNodes[0].innerHTML, 'Hello world.', 'child component is inserted');
+		can.scope(frag.childNodes[0]).attr('shown', false);
+
+		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
+	});
+
+	test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function(){
+		
+		can.Component.extend({
+			tag:'x-app'
+		});
+
+		var frag=can.stache('<x-app></x-app>')({});
+		
+		var el = frag.childNodes[0];
+		var scope = can.scope(el);
+		
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-test-area"),frag);
+		
+		// update the class
+		can.addClass(can.$(el),"foo");
+		
+		stop();
+		setTimeout(function(){
+			equal(scope.attr('class'),undefined, "the scope is not updated when the class attribute changes");
+			start();
+		},20);
 		
 	});
 

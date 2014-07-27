@@ -447,6 +447,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		deepEqual(div2.innerHTML, "foo");
 	});
 
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.stache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.stache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
+	});
+
 	test("No arguments passed to helper with list", function () {
 		var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
 		var div = document.createElement('div');
@@ -556,12 +570,22 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			expected: "Andy is missing!",
 			data: {
 				name: 'Andy'
-			}
+			},
+			liveData: new can.Map({
+				name: 'Andy'
+			})
 		};
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		deepEqual(getText(t.template,t.data), expected);
+		deepEqual(getText(t.template, t.data), expected);
+
+		// #1019 #unless does not live bind
+		var div = document.createElement('div');
+		div.appendChild(can.stache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, expected, '#unless condition false');
+		t.liveData.attr('missing', true);
+		deepEqual(div.innerHTML, '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {
@@ -838,9 +862,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		obs.removeAttr('attributes');
 
 		equal(p.getAttribute('some'), null, 'attribute is undefined');
-
+		
 		obs.attr('attributes', 'some="newText"');
 
+		// 
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 
 		obs.removeAttr('message');
@@ -2589,6 +2614,37 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		}
 	});
 
+	test("Rendering indicies of an array with @index + offset (#1078)", function () {
+		var template = can.stache("<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		})
+			.childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i+5 + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
+	test("Passing indices into helpers as values", function () {
+		var template = can.view.stache("<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		}, {
+			test: function(index) {
+				return ""+index;
+			}
+		}).childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
 	test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 		var list = new can.List(['a', 'b', 'c']);
 		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
@@ -2801,7 +2857,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		tmp(data);
 
 		equal(frag.childNodes[0].className, "fails animate-ready")
-	})
+	});
 
 	test('html comments must not break mustache scanner', function () {
 		can.each([
@@ -2870,7 +2926,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			item: {
 				subitems: ['first']
 			}
-		})
+		});
 
 		var frag = template(data),
 			div = frag.childNodes[0],
@@ -2882,7 +2938,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 			.push('second');
 
 		equal(labels.length, 2, "after pushing two label");
-
+		
 		data.removeAttr('item');
 
 		equal(labels.length, 0, "after removing item no label");
@@ -2904,17 +2960,28 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 				visible: true
 			}]
 		});
-
-		function handler(eventType) {
+		var bindings = 0;
+		function bind(eventType){
+			bindings++;
+			return can.Map.prototype.bind.apply(this, arguments);
+		}
+		
+		// unbind will be called twice
+		function unbind(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
-			if (eventType === "visible") {
+			bindings--;
+			if(eventType === "visible"){
+				ok(true,"unbound visible");
+			}
+			if (bindings === 0) {
 				start();
-				ok(true, "unbound visible")
+				ok(true, "unbound visible");
 			}
 		}
-
 		data.attr("items.0")
-			.unbind = handler;
+			.bind = bind;
+		data.attr("items.0")
+			.unbind = unbind;
 
 		template(data);
 
@@ -2923,7 +2990,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		}]);
 
 		stop();
-	})
+	});
 
 	test("direct live section", function () {
 		var template = can.stache("{{#if visible}}<label/>{{/if}}");
@@ -3404,7 +3471,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var node = frag.childNodes[0];
 
 		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
-	})
+	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
 		var tmpl = "{{#zero}}<span>{{ . }}</span>{{/zero}}{{#emptyString}}<span>{{ . }}</span>{{/emptyString}}{{#nullVal}}<span>{{ . }}</span>{{/nullVal}}";
@@ -3425,5 +3492,129 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
 		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
-	})
+	});
+
+	test("Custom elements created with default namespace in IE8", function(){
+		// Calling can.view.tag so that this tag is shived
+		can.view.tag('my-tag', function(){});
+
+		var tmpl = "<my-tag></my-tag>";
+
+		var frag = can.stache(tmpl)({});
+		can.append(can.$("#qunit-test-area"), frag);
+
+		equal(can.$("my-tag").length, 1, "Element created in default namespace");
+	});
+
+	test("Partials are passed helpers (#791)", function () {
+		var t = {
+			template: "{{>partial}}",
+			expected: "foo",
+			partials: {
+				partial: '{{ help }}'
+			},
+			helpers: {
+				'help': function(){
+					return 'foo';
+				}
+			}
+		},
+		frag;
+		for (var name in t.partials) {
+			can.view.registerView(name, t.partials[name], ".stache")
+		}
+
+		frag = can.stache(t.template)({}, t.helpers);
+		equal(frag.childNodes[0].nodeValue, t.expected);
+	});
+
+	test("{{else}} with {{#unless}} (#988)", function(){
+		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
+
+		var frag = can.stache(tmpl)({ noData: true });
+		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
+
+	test("{{else}} within an attribute (#974)", function(){
+		var tmpl = '<div class="{{#if color}}{{color}}{{else}}red{{/if}}"></div>',
+			data = new can.Map({
+				color: 'orange'
+			}),
+			frag = can.stache(tmpl)(data);
+
+		equal(frag.childNodes[0].getAttribute('class'), 'orange', 'if branch');
+		data.attr('color', false);
+		equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
+	});
+
+	test("returns correct value for DOM attributes (#1065)", 3, function() {
+		var template = '<h2 class="{{#if shown}}foo{{/if}} test1 {{#shown}}muh{{/shown}}"></h2>' +
+			'<h3 class="{{#if shown}}bar{{/if}} test2 {{#shown}}kuh{{/shown}}"></h3>' +
+			'<h4 class="{{#if shown}}baz{{/if}} test3 {{#shown}}boom{{/shown}}"></h4>';
+
+		var frag = can.stache(template)({ shown: true });
+
+		equal(frag.childNodes[0].className, 'foo test1 muh');
+		equal(frag.childNodes[1].className, 'bar test2 kuh');
+		equal(frag.childNodes[2].className, 'baz test3 boom');
+	});
+
+	test("single character attributes work (#1132)", 1, function() {
+		var template = '<svg width="50" height="50">' +
+			'<circle r="25" cx="25" cy="25"></circle>' +
+			'</svg>';
+		var frag = can.stache(template)({});
+
+		
+		equal(frag.childNodes[0].childNodes[0].getAttribute("r"), "25");
+	});
+	
+	test("single property read does not infinately loop (#1155)",function(){
+		stop();
+		
+		var map = new can.Map({state: false});
+		var current = false;
+		var source = can.compute(1)
+		var number = can.compute(function(){
+
+			map.attr("state", current = !current);
+
+			return source();
+		});
+		number.bind("change",function(){});
+		
+		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
+		
+		template({
+			map: map
+		});
+		source(2);
+		map.attr("state", current = !current);
+		ok(true,"no error at this point");
+		start();
+		
+	});
+	
+	test("methods become observable (#1164)", function(){
+		
+		var TeamModel = can.Map.extend({
+
+			shortName : function() {
+				return (this.attr('nickname') && this.attr('nickname').length <= 8) ? this.attr('nickname') : this.attr('abbreviation');
+			}
+		});
+
+		var team = new TeamModel({
+			nickname : 'Arsenal London',
+			abbreviation : 'ARS'
+		});
+
+		var template = can.stache('<span>{{team.shortName}}</span>');
+		var frag = template({
+			team : team
+		});
+
+		equal(frag.childNodes[0].innerHTML, "ARS", "got value");
+
+	});
 });

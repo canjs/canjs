@@ -47,6 +47,8 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		startSection: function( process ) {
 			var newSection = new HTMLSection(process);
 			this.last().add(newSection.targetCallback);
+			// adding a section within a section ...
+			// the stack has section ...
 			this.stack.push(newSection);
 		},
 		endSection: function(){
@@ -83,10 +85,11 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		// A record of what targetData element we are within.
 		this.targetStack = [];
 		var self = this;
-		this.targetCallback = function(scope, options){
+		this.targetCallback = function(scope, options, sectionNode){
 			process.call(this,
 				scope,
 				options,
+				sectionNode,
 				can.proxy(self.compiled.hydrate, self.compiled),
 				self.inverseCompiled && can.proxy(self.inverseCompiled.hydrate, self.inverseCompiled)  ) ;
 		};

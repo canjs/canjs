@@ -144,5 +144,14 @@ steal('can/construct', function () {
 	}
 	//!steal-remove-end
 	
-	
+	test("setup called with original arguments", function(){
+		var o1 = {
+			setup: function(base, arg1, arg2){
+				equal(o1, arg1, "first argument is correct");
+				equal(o2, arg2, "second argument is correct");
+			}
+		};
+		var o2 = {};
+		can.Construct.extend(o1,o2);
+	});
 });

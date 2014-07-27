@@ -503,6 +503,64 @@ steal("can/route", "can/test", function () {
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
 
+		test("can.route.map: conflicting route values, hash should win", function(){
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute(":type/:id");
+				var AppState = can.Map.extend();
+				var appState = new AppState({type: "dog", id: '4'});
+
+				iCanRoute.map(appState);
+				loc.hash = "#!cat/5";
+				iCanRoute.ready();
+
+				setTimeout(function () {
+					var after = loc.href.substr(loc.href.indexOf("#"));
+					equal(after, "#!cat/5", "same URL");
+					equal(appState.attr("type"), "cat", "conflicts should be won by the URL");
+					equal(appState.attr("id"), "5", "conflicts should be won by the URL");
+					start();
+
+					can.remove(can.$(iframe))
+
+				}, 30);
+
+			}
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?11");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
+		test("can.route.map: route is initialized from URL first, then URL params are added from can.route.data", function(){
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute(":type/:id");
+				var AppState = can.Map.extend();
+				var appState = new AppState({section: 'home'});
+
+				iCanRoute.map(appState);
+				loc.hash = "#!cat/5";
+				iCanRoute.ready();
+
+				setTimeout(function () {
+					var after = loc.href.substr(loc.href.indexOf("#"));
+					equal(after, "#!cat/5&section=home", "same URL");
+					equal(appState.attr("type"), "cat", "hash populates the appState");
+					equal(appState.attr("id"), "5", "hash populates the appState");
+					equal(appState.attr("section"), "home", "appState keeps its properties");
+					ok(iCanRoute.data === appState, "can.route.data is the same as appState");
+					start();
+
+					can.remove(can.$(iframe))
+
+				}, 30);
+
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?11");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+
 		test("updating the hash", function () {
 			stop();
 			window.routeTestReady = function (iCanRoute, loc) {
@@ -521,7 +579,7 @@ steal("can/route", "can/test", function () {
 					can.remove(can.$(iframe))
 
 				}, 30);
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -543,7 +601,7 @@ steal("can/route", "can/test", function () {
 					can.remove(can.$(iframe))
 
 				}, 30);
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?2");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -582,13 +640,58 @@ steal("can/route", "can/test", function () {
 							setTimeout(innerTimer, 30)
 						}
 
-					}, 100)
+					}, 100);
 
-				}, 100)
+				}, 100);
 
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?1");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+		
+		test("can.route.current is live-bindable (#1156)", function () {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc, win) {
+				iCanRoute.ready();
+				var isOnTestPage = win.can.compute(function(){
+					return iCanRoute.current({page: "test"});
+				});
+				
+				isOnTestPage.bind("change", function(ev,newVal){
+					setTimeout(function(){
+						start();
+						can.remove(can.$(iframe));
+					},1);
+					
+				});
+				
+				equal(isOnTestPage(), false, "initially not on test page")
+				setTimeout(function(){
+					iCanRoute.attr("page","test");
+				},20);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?2");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+		
+		test("can.compute.read should not call can.route (#1154)", function () {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc, win) {
+				iCanRoute.attr("page","test");
+				iCanRoute.ready();
+				
+				var val = win.can.compute.read({route: iCanRoute},["route"]).value;
+				
+				setTimeout(function(){
+					equal(val,iCanRoute,"read correctly");
+					start();
+					can.remove(can.$(iframe));
+				},1);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?3");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
 	}
@@ -610,7 +713,7 @@ steal("can/route", "can/test", function () {
 			page: "can.Control"
 		}), "can.Control.html");
 
-	})
+	});
 
 	if (typeof require === 'undefined') {
 
@@ -697,7 +800,7 @@ steal("can/route", "can/test", function () {
 		});
 
 		can.route.attr('foo', 'bar');
-	})
+	});
 
 	test("two way binding can.route.map with can.Map instance", function(){
 		expect(1);
