@@ -28,28 +28,30 @@
 	var oldInstantiate = System.instantiate;
 	System.instantiate = function(load) {
 		var loader = this;
-		if(load.name === "dojo/dojo") {
-			var oldExec = loader.__exec;
-
-			loader.__exec = function(load) {
-				var ret = oldExec.call(this, load);
-				dojoDefine = loader.global.define;
-				loader.__exec = oldExec;
-				return ret;
-			};
-		}
-
-		if(load.name === 'can/util/util') {
+		if(load.name === 'can/util/util' || load.name === "dojo/dojo") {
 			return oldInstantiate.apply(this, arguments).then(function(instantiateObj) {
-				var oldExecute = loader.defined[load.name].execute;
 
+				var oldExecute = loader.defined[load.name].execute;
 				loader.defined[load.name].execute = function() {
-					var ourDefine = loader.global.define;
-					loader.global.define = dojoDefine;
-					var ret = oldExecute.apply(this, arguments);
-					loader.global.define = ourDefine;
-					load.metadata.execute = oldExecute;
-					return ret;
+
+					if( load.name === "dojo/dojo" ) {
+						
+						var oldExec = loader.__exec;
+						loader.__exec = function(){
+							var ret = oldExec.apply(this, arguments);
+							dojoDefine = loader.global.define;
+							loader.__exec = oldExec;
+							return ret;
+						};
+						
+						return  oldExecute.apply(this, arguments);;
+					} else if(load.name === 'can/util/util') {
+						var ourDefine = loader.global.define;
+						loader.global.define = dojoDefine;
+						var ret = oldExecute.apply(this, arguments);
+						loader.global.define = ourDefine;
+						return ret;
+					}
 				};
 				return instantiateObj;
 			});	
@@ -96,7 +98,9 @@
 				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
 			},
 			"yui/yui": {
-				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
+				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"],
+				format: "global",
+				scriptEval: true
 			}
 		},
 		ext: {

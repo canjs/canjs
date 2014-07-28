@@ -221,12 +221,12 @@ module.exports = function (grunt) {
 				options: {
 					timeout: 10000,
 					urls: [
-						//'http://localhost:8000/test/jquery.html',
-						//'http://localhost:8000/test/jquery-2.html',
-						//'http://localhost:8000/test/dojo.html',
+						'http://localhost:8000/test/jquery.html',
+						'http://localhost:8000/test/jquery-2.html',
+						'http://localhost:8000/test/dojo.html',
 						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html'
-						//'http://localhost:8000/test/yui.html'
+						'http://localhost:8000/test/mootools.html',
+						'http://localhost:8000/test/yui.html'
 					]
 				}
 			},
@@ -464,6 +464,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
 	grunt.registerTask('default', ['build']);
-	grunt.registerTask('test:steal', ['connect','qunit:steal']);
+	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
 	grunt.registerTask('test:amd', ['connect',  'build','testify','qunit:amd']);
 };
