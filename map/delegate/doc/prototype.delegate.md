@@ -7,7 +7,7 @@
 in a child attribute from the parent. The child attribute
 does not have to exist.
 
-@codestart
+```
 // create an observable
 var o = new can.Map({
     foo : {
@@ -23,7 +23,7 @@ o.delegate('foo.bar', 'change', function(ev, prop, how, newVal, oldVal) {
 
 // change the property
 o.attr('foo.bar', 'Goodbye Cruel World');
-@codeend
+```
 
 ## Types of events
 
@@ -33,7 +33,7 @@ __add__
 
 An add event is fired when a new property has been added.
 
-@codestart
+```
 var o = new can.Control({});
 
 o.delegate('name', 'add', function(ev, value) {
@@ -43,7 +43,7 @@ o.delegate('name', 'add', function(ev, value) {
 
 o.attr('name', 'Justin')
 o.attr('name', 'Brian');
-@codeend
+```
 
 Listening to add events is useful for 'setup' functionality (in this case
 showing the <code>#name</code> element.
@@ -53,7 +53,7 @@ __set__
 Set events are fired when a property takes on a new value.  set events are
 always fired after an add.
 
-@codestart
+```
 o.delegate('name', 'set', function(ev, value) {
     // called twice
     can.$('#name').text(value)
@@ -61,13 +61,13 @@ o.delegate('name', 'set', function(ev, value) {
 
 o.attr('name', 'Justin')
 o.attr('name', 'Brian');
-@codeend
+```
 
 __remove__
 
 Remove events are fired after a property is removed.
 
-@codestart
+```
 o.delegate('name', 'remove', function(ev) {
     // called once
     $('#name').text(value)
@@ -75,7 +75,7 @@ o.delegate('name', 'remove', function(ev) {
 
 o.attr('name', 'Justin');
 o.removeAttr('name');
-@codeend
+```
 
 ## Wildcards - matching multiple properties
 
@@ -84,7 +84,7 @@ of an observe has changed. Delegate lets you use wildcards to
 match any property name.  The following listens for any change
 on an attribute of the params attribute:
 
-@codestart
+```
 var o = can.Control({
     options : {
         limit : 100,
@@ -108,7 +108,7 @@ o.attr('options.offset', 100);
 
 // alerts 2
 o.attr('options.params.parentId', 6);
-@codeend
+```
 
 Using a single wildcard (<code>*</code>) matches single level
 properties.  Using a double wildcard (<code>**</code>) matches
@@ -119,7 +119,7 @@ any deep property.
 Delegate lets you listen on multiple values at once.  The following listens
 for first and last name changes:
 
-@codestart
+```
 var o = new can.Map({
     name : { 
       first: 'Justin', 
@@ -132,13 +132,13 @@ o.bind('name.first, name.last',
     function(ev, newVal, oldVal, from) {
 
 });
-@codeend
+```
 
 ## Listening when properties are a particular value
 
 Delegate lets you listen when a property is __set__ to a specific value:
 
-@codestart
+```
 var o = new can.Map({
     name : 'Justin'
 });
@@ -148,19 +148,19 @@ o.bind('name=Brian',
     function(ev, newVal, oldVal, from) {
 
 });
-@codeend
+```
 
 @param {String} selector The attributes you want to listen for changes in.
 
 Selector should be the property or
 property names of the element you are searching.  Examples:
 
- "name" - listens to the "name" property changing
- "name, address" - listens to "name" or "address" changing
- "name address" - listens to "name" or "address" changing
- "address.*" - listens to property directly in address
- "address.**" - listens to any property change in address
- "foo=bar" - listens when foo is "bar"
+- "name" - listens to the "name" property changing
+- "name, address" - listens to "name" or "address" changing
+- "name address" - listens to "name" or "address" changing
+- "address.*" - listens to property directly in address
+- "address.**" - listens to any property change in address
+- "foo=bar" - listens when foo is "bar"
 
 @param {String} event The event name.  One of ("set","add","remove","change")
 @param {Function} handler(ev,newVal,oldVal,prop) The callback handler
