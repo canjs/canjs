@@ -473,6 +473,23 @@ steal("can/route", "can/test", function () {
 			iframe.src = can.test.path("route/testing.html?1");
 			testarea.appendChild(iframe);
 		});
+		
+		test("initial route fires twice", function () {
+			stop();
+			expect(1);
+			var testarea = document.getElementById('qunit-test-area');
+			window.routeTestReady = function (iCanRoute, loc) {
+				iCanRoute("", {})
+				iCanRoute.bind('change', function(){
+					ok(true, 'change triggered once')
+					start();
+				});
+				iCanRoute.ready();
+			}
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?5");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
 
 		test("removing things from the hash", function () {
 			stop();
