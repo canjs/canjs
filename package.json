@@ -33,7 +33,9 @@
     "grunt-release-steps": "~0.3.7",
     "grunt-shell": "~0.5.0",
     "grunt-string-replace": "~0.2.2",
-    "rimraf": "2.1"
+    "rimraf": "2.1",
+    "lodash": "2.4.1",
+    "steal-tools-builder": "git://github.com/bitovi/steal-tools-builder.git#master"
   },
   "scripts": {
     "test": "grunt test"

@@ -95,7 +95,8 @@
 				scriptEval: true
 			},
 			"dojo/dojo": {
-				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"]
+				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"],
+				format: "global"
 			},
 			"yui/yui": {
 				deps: supportsUnknownElements ? undefined : ["can/lib/html5shiv.js"],
