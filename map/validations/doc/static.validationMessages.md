@@ -20,4 +20,4 @@ be lost once steal loads it later.
 
 ## Example
 
-    can.Map.validationMessages.format = "is invalid dummy!"
+	can.Map.validationMessages.format = "is invalid dummy!"
