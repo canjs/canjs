@@ -1,5 +1,6 @@
+/*[global-shim]*/
 (function (exports, global){
-	var origDefine = window.define;
+	var origDefine = global.define;
 
 	var get = function(name){
 		var parts = name.split("."),
@@ -45,34 +46,11 @@
 		}
 	};
 })({},window)
-/*can/test/test*/
-define('can/test/test', ['can/util/util'], function () {
-    var viewCheck = /(\.mustache|\.stache|\.ejs|extensionless)$/;
-    can.test = {
-        fixture: function (path) {
-            if (typeof steal !== 'undefined') {
-                return steal.config('root').toString() + '/' + path;
-            }
-            if (window.require && require.toUrl && !viewCheck.test(path)) {
-                return require.toUrl(path);
-            }
-            return path;
-        },
-        path: function (path) {
-            if (typeof steal !== 'undefined') {
-                return '' + steal.idToUri(steal.id('can/' + path).toString());
-            }
-            if (window.require && require.toUrl && !viewCheck.test(path)) {
-                return require.toUrl(path);
-            }
-            return path;
-        }
-    };
-});
 /*can/component/component_test*/
 define('can/component/component_test', [
     'can/component/component',
-    'can/view/stache/stache'
+    'can/view/stache/stache',
+    'can/route/route'
 ], function () {
     QUnit.module('can/component', {
         setup: function () {
@@ -902,6 +880,73 @@ define('can/component/component_test', [
         var res = stached({ Constructed: Constructed });
         equal(res.childNodes[0].innerHTML, 'bar');
     });
+    test('stache conditionally nested components calls inserted once (#967)', function () {
+        expect(2);
+        can.Component.extend({
+            tag: 'can-parent-stache',
+            scope: { shown: true },
+            template: can.stache('{{#if shown}}<can-child></can-child>{{/if}}')
+        });
+        can.Component.extend({
+            tag: 'can-parent-mustache',
+            scope: { shown: true },
+            template: can.mustache('{{#if shown}}<can-child></can-child>{{/if}}')
+        });
+        can.Component.extend({
+            tag: 'can-child',
+            events: {
+                inserted: function () {
+                    this.scope.attr('bar', 'foo');
+                    ok(true, 'called inserted once');
+                }
+            }
+        });
+        var template = can.stache('<can-parent-stache></can-parent-stache>');
+        can.append(can.$('#qunit-test-area'), template());
+        var template2 = can.stache('<can-parent-mustache></can-parent-mustache>');
+        can.append(can.$('#qunit-test-area'), template2());
+    });
+    test('hyphen-less tag names', function () {
+        var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
+        can.Component.extend({
+            tag: 'foobar',
+            template: '<div><content/></div>',
+            scope: { name: 'Brian' }
+        });
+        can.append(can.$('#qunit-test-area'), template());
+        equal(can.$('#qunit-test-area div')[0].innerHTML, 'Brian');
+    });
+    test('nested component within an #if is not live bound(#1025)', function () {
+        can.Component.extend({
+            tag: 'parent-component',
+            template: can.stache('{{#if shown}}<child-component></child-component>{{/if}}'),
+            scope: { shown: false }
+        });
+        can.Component.extend({
+            tag: 'child-component',
+            template: can.stache('Hello world.')
+        });
+        var template = can.stache('<parent-component></parent-component>');
+        var frag = template({});
+        equal(frag.childNodes[0].innerHTML, '', 'child component is not inserted');
+        can.scope(frag.childNodes[0]).attr('shown', true);
+        equal(frag.childNodes[0].childNodes[0].innerHTML, 'Hello world.', 'child component is inserted');
+        can.scope(frag.childNodes[0]).attr('shown', false);
+        equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
+    });
+    test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function () {
+        can.Component.extend({ tag: 'x-app' });
+        var frag = can.stache('<x-app></x-app>')({});
+        var el = frag.childNodes[0];
+        var scope = can.scope(el);
+        can.append(can.$('#qunit-test-area'), frag);
+        can.addClass(can.$(el), 'foo');
+        stop();
+        setTimeout(function () {
+            equal(scope.attr('class'), undefined, 'the scope is not updated when the class attribute changes');
+            start();
+        }, 20);
+    });
 });
 /*can/construct/construct_test*/
 define('can/construct/construct_test', ['can/construct/construct'], function () {
@@ -1025,17 +1070,52 @@ define('can/construct/construct_test', ['can/construct/construct'], function () 
         });
         new Foo().dude(true);
     });
-    if (can.dev) {
-        test('console warning if extend is not used without new (#932)', function () {
-            var oldlog = can.dev.warn;
-            can.dev.warn = function (text) {
-                ok(text, 'got a message');
-                can.dev.warn = oldlog;
+    test('setup called with original arguments', function () {
+        var o1 = {
+                setup: function (base, arg1, arg2) {
+                    equal(o1, arg1, 'first argument is correct');
+                    equal(o2, arg2, 'second argument is correct');
+                }
             };
-            var K1 = can.Construct({});
-            K1({});
-        });
-    }
+        var o2 = {};
+        can.Construct.extend(o1, o2);
+    });
+});
+/*can/test/test*/
+define('can/test/test', ['can/util/util'], function () {
+    var viewCheck = /(\.mustache|\.stache|\.ejs|extensionless)$/;
+    can.test = {
+        fixture: function (path) {
+            if (typeof steal !== 'undefined') {
+                if (steal.idToUri) {
+                    return steal.config('root').toString() + '/' + path;
+                } else {
+                    return steal.joinURIs(System.baseURL, path);
+                }
+            }
+            if (window.require && require.toUrl && !viewCheck.test(path)) {
+                return require.toUrl(path);
+            }
+            return path;
+        },
+        path: function (path, absolute) {
+            if (typeof steal !== 'undefined') {
+                if (steal.idToUri) {
+                    return '' + steal.idToUri(steal.id('can/' + path).toString());
+                } else {
+                    return steal.joinURIs(System.baseURL, path);
+                }
+            }
+            if (!absolute && window.require && require.toUrl && !viewCheck.test(path)) {
+                return require.toUrl(path);
+            }
+            var pathIndex = window.location.href.indexOf('/test/');
+            if (pathIndex) {
+                return window.location.href.substring(0, pathIndex + 1) + path;
+            }
+            return path;
+        }
+    };
 });
 /*can/map/map_test*/
 define('can/map/map_test', [
@@ -1211,6 +1291,32 @@ define('can/map/map_test', [
         var res = map1.serialize();
         equal(res.name, 'map1');
         equal(res.map2.name, 'map2');
+    });
+    test('Unbinding from a map with no bindings doesn\'t throw an error (#1015)', function () {
+        expect(0);
+        var test = new can.Map({});
+        try {
+            test.unbind('change');
+        } catch (e) {
+            ok(false, 'No error should be thrown');
+        }
+    });
+    test('Fast dispatch event still has target and type (#1082)', 4, function () {
+        var data = new can.Map({ name: 'CanJS' });
+        data.bind('change', function (ev) {
+            equal(ev.type, 'change');
+            equal(ev.target, data);
+        });
+        data.bind('name', function (ev) {
+            equal(ev.type, 'name');
+            equal(ev.target, data);
+        });
+        data.attr('name', 'David');
+    });
+    test('map passed to Map constructor (#1166)', function () {
+        var map = new can.Map({ x: 1 });
+        var res = new can.Map(map);
+        deepEqual(res.attr(), { x: 1 }, 'has the same properties');
     });
 });
 /*can/list/list_test*/
@@ -2784,6 +2890,21 @@ define('can/observe/observe_test', [
         items.attr('a', 'b');
         equal(computedCount, 2, 'recalculated twice');
     });
+    test('compute(obs, prop) doesn\'t read attr', function () {
+        var map = new can.Map({ name: 'foo' });
+        var name = can.compute(map, 'name');
+        var oldAttr = map.attr;
+        var count = 0;
+        map.attr = function () {
+            count++;
+            return oldAttr.apply(this, arguments);
+        };
+        name.bind('change', function () {
+        });
+        equal(count, 1, 'attr only called once to get cached value');
+        oldAttr.call(map, 'name', 'bar');
+        equal(count, 1, 'attr only called once to get cached value');
+    });
 });
 /*can/compute/compute_test*/
 define('can/compute/compute_test', [
@@ -3077,6 +3198,15 @@ define('can/compute/compute_test', [
                 return curVal;
             });
         async([]);
+    });
+    test('compute.read works with a Map wrapped in a compute', function () {
+        var parent = can.compute(new can.Map({ map: { first: 'Justin' } }));
+        var reads = [
+                'map',
+                'first'
+            ];
+        var result = can.compute.read(parent, reads);
+        equal(result.value, 'Justin', 'The correct value is found.');
     });
 });
 /*can/model/model_test*/
@@ -4265,6 +4395,108 @@ define('can/model/model_test', [
             equal(food.name, 'steak', 'removed trailing \'/\' and created the correct model');
             start();
         });
+    });
+    test('model list destroy after calling replace', function () {
+        expect(2);
+        var map = new can.Model({ name: 'map1' });
+        var map2 = new can.Model({ name: 'map2' });
+        var list = new can.Model.List([
+                map,
+                map2
+            ]);
+        list.bind('destroyed', function (ev) {
+            ok(true, 'trigger destroyed');
+        });
+        can.trigger(map, 'destroyed');
+        list.replace([map2]);
+        can.trigger(map2, 'destroyed');
+    });
+    test('a model defined with a fullName has findAll working (#1034)', function () {
+        var List = can.List.extend();
+        can.Model.extend('My.Model', { List: List }, {});
+        equal(List.Map, My.Model, 'list\'s Map points to My.Model');
+    });
+    test('providing parseModels works', function () {
+        var MyModel = can.Model.extend({ parseModel: 'modelData' }, {});
+        var data = MyModel.parseModel({ modelData: { id: 1 } });
+        equal(data.id, 1, 'correctly used parseModel');
+    });
+    test('#1089 - resource definition - inheritance', function () {
+        can.fixture('GET /things/{id}', function () {
+            return {
+                id: 0,
+                name: 'foo'
+            };
+        });
+        var Base = can.Model.extend();
+        var Thing = Base.extend({ resource: '/things' }, {});
+        stop();
+        Thing.findOne({ id: 0 }, function (thing) {
+            equal(thing.name, 'foo', 'found model in inherited model');
+            start();
+        }, function (e, msg) {
+            ok(false, msg);
+            start();
+        });
+    });
+    test('#1089 - resource definition - CRUD overrides', function () {
+        can.fixture('GET /foos/{id}', function () {
+            return {
+                id: 0,
+                name: 'foo'
+            };
+        });
+        can.fixture('POST /foos', function () {
+            return { id: 1 };
+        });
+        can.fixture('PUT /foos/{id}', function () {
+            return {
+                id: 1,
+                updated: true
+            };
+        });
+        can.fixture('GET /bars', function () {
+            return [{}];
+        });
+        var Thing = can.Model.extend({
+                resource: '/foos',
+                findAll: 'GET /bars',
+                update: {
+                    url: '/foos/{id}',
+                    type: 'PUT'
+                },
+                create: function () {
+                    return can.ajax({
+                        url: '/foos',
+                        type: 'POST'
+                    });
+                }
+            }, {});
+        var alldfd = Thing.findAll(), onedfd = Thing.findOne({ id: 0 }), postdfd = new Thing().save();
+        stop();
+        can.when(alldfd, onedfd, postdfd).then(function (things, thing, newthing) {
+            equal(things.length, 1, 'findAll override called');
+            equal(thing.name, 'foo', 'resource findOne called');
+            equal(newthing.id, 1, 'post override called with function');
+            newthing.save(function (res) {
+                ok(res.updated, 'put override called with object');
+                start();
+            });
+        }).fail(function () {
+            ok(false, 'override request failed');
+            start();
+        });
+    });
+    test('findAll not called if List constructor argument is deferred (#1074)', function () {
+        var count = 0;
+        var Foo = can.Model.extend({
+                findAll: function () {
+                    count++;
+                    return can.Deferred();
+                }
+            }, {});
+        new Foo.List(Foo.findAll());
+        equal(count, 1, 'findAll called only once.');
     });
 });
 /*can/view/view_test*/
@@ -6019,6 +6251,828 @@ define('can/view/ejs/ejs_test', [
         }, 50);
     });
 });
+/*can/view/mustache/spec/specs/spec*/
+define('can/view/mustache/spec/specs/spec', [], function () {
+    return window.MUSTACHE_SPECS = [];
+});
+/*can/view/mustache/spec/specs/comments*/
+define('can/view/mustache/spec/specs/comments', ['can/view/mustache/spec/specs/spec'], function () {
+    window.MUSTACHE_SPECS.push({
+        name: 'comments',
+        data: {
+            'overview': 'Comment tags represent content that should never appear in the resulting\noutput.\n\nThe tag\'s content may contain any substring (including newlines) EXCEPT the\nclosing delimiter.\n\nComment tags SHOULD be treated as standalone when appropriate.\n',
+            'tests': [
+                {
+                    'name': 'Inline',
+                    'desc': 'Comment blocks should be removed from the template.',
+                    'data': {},
+                    'template': '12345{{! Comment Block! }}67890',
+                    'expected': '1234567890'
+                },
+                {
+                    'name': 'Multiline',
+                    'desc': 'Multiline comments should be permitted.',
+                    'data': {},
+                    'template': '12345{{!\n  This is a\n  multi-line comment...\n}}67890\n',
+                    'expected': '1234567890\n'
+                },
+                {
+                    'name': 'Standalone',
+                    'desc': 'All standalone comment lines should be removed.',
+                    'data': {},
+                    'template': 'Begin.\n{{! Comment Block! }}\nEnd.\n',
+                    'expected': 'Begin.\nEnd.\n'
+                },
+                {
+                    'name': 'Indented Standalone',
+                    'desc': 'All standalone comment lines should be removed.',
+                    'data': {},
+                    'template': 'Begin.\n  {{! Indented Comment Block! }}\nEnd.\n',
+                    'expected': 'Begin.\nEnd.\n'
+                },
+                {
+                    'name': 'Standalone Line Endings',
+                    'desc': '"\\r\\n" should be considered a newline for standalone tags.',
+                    'data': {},
+                    'template': '|\r\n{{! Standalone Comment }}\r\n|',
+                    'expected': '|\r\n|'
+                },
+                {
+                    'name': 'Standalone Without Previous Line',
+                    'desc': 'Standalone tags should not require a newline to precede them.',
+                    'data': {},
+                    'template': '  {{! I\'m Still Standalone }}\n!',
+                    'expected': '!'
+                },
+                {
+                    'name': 'Standalone Without Newline',
+                    'desc': 'Standalone tags should not require a newline to follow them.',
+                    'data': {},
+                    'template': '!\n  {{! I\'m Still Standalone }}',
+                    'expected': '!\n'
+                },
+                {
+                    'name': 'Multiline Standalone',
+                    'desc': 'All standalone comment lines should be removed.',
+                    'data': {},
+                    'template': 'Begin.\n{{!\nSomething\'s going on here...\n}}\nEnd.\n',
+                    'expected': 'Begin.\nEnd.\n'
+                },
+                {
+                    'name': 'Indented Multiline Standalone',
+                    'desc': 'All standalone comment lines should be removed.',
+                    'data': {},
+                    'template': 'Begin.\n  {{!\n    Something\'s going on here...\n  }}\nEnd.\n',
+                    'expected': 'Begin.\nEnd.\n'
+                },
+                {
+                    'name': 'Indented Inline',
+                    'desc': 'Inline comments should not strip whitespace',
+                    'data': {},
+                    'template': '  12 {{! 34 }}\n',
+                    'expected': '  12 \n'
+                },
+                {
+                    'name': 'Surrounding Whitespace',
+                    'desc': 'Comment removal should preserve surrounding whitespace.',
+                    'data': {},
+                    'template': '12345 {{! Comment Block! }} 67890',
+                    'expected': '12345  67890'
+                }
+            ],
+            '__ATTN__': 'Do not edit this file; changes belong in the appropriate YAML file.'
+        }
+    });
+});
+/*can/view/mustache/spec/specs/interpolation*/
+define('can/view/mustache/spec/specs/interpolation', ['can/view/mustache/spec/specs/spec'], function () {
+    window.MUSTACHE_SPECS.push({
+        name: 'interpolation',
+        data: {
+            'overview': 'Interpolation tags are used to integrate dynamic content into the template.\n\nThe tag\'s content MUST be a non-whitespace character sequence NOT containing\nthe current closing delimiter.\n\nThis tag\'s content names the data to replace\xA0the tag.  A single period (`.`)\nindicates that the item currently sitting atop the context stack should be\nused; otherwise, name resolution is as follows:\n  1) Split the name on periods; the first part is the name to resolve, any\n  remaining parts should be retained.\n  2) Walk the context stack from top to bottom, finding the first context\n  that is a) a hash containing the name as a key OR b) an object responding\n  to a method with the given name.\n  3) If the context is a hash, the data is the value associated with the\n  name.\n  4) If the context is an object, the data is the value returned by the\n  method with the given name.\n  5) If any name parts were retained in step 1, each should be resolved\n  against a context stack containing only the result from the former\n  resolution.  If any part fails resolution, the result should be considered\n  falsey, and should interpolate as the empty string.\nData should be coerced into a string (and escaped, if appropriate) before\ninterpolation.\n\nThe Interpolation tags MUST NOT be treated as standalone.\n',
+            'tests': [
+                {
+                    'name': 'No Interpolation',
+                    'desc': 'Mustache-free templates should render as-is.',
+                    'data': {},
+                    'template': 'Hello from {Mustache}!\n',
+                    'expected': 'Hello from {Mustache}!\n'
+                },
+                {
+                    'name': 'Basic Interpolation',
+                    'desc': 'Unadorned tags should interpolate content into the template.',
+                    'data': { 'subject': 'world' },
+                    'template': 'Hello, {{subject}}!\n',
+                    'expected': 'Hello, world!\n'
+                },
+                {
+                    'name': 'HTML Escaping',
+                    'desc': 'Basic interpolation should be HTML escaped.',
+                    'data': { 'forbidden': '& " < >' },
+                    'template': 'These characters should be HTML escaped: {{forbidden}}\n',
+                    'expected': 'These characters should be HTML escaped: &amp; &quot; &lt; &gt;\n'
+                },
+                {
+                    'name': 'Triple Mustache',
+                    'desc': 'Triple mustaches should interpolate without HTML escaping.',
+                    'data': { 'forbidden': '& " < >' },
+                    'template': 'These characters should not be HTML escaped: {{{forbidden}}}\n',
+                    'expected': 'These characters should not be HTML escaped: & " < >\n'
+                },
+                {
+                    'name': 'Ampersand',
+                    'desc': 'Ampersand should interpolate without HTML escaping.',
+                    'data': { 'forbidden': '& " < >' },
+                    'template': 'These characters should not be HTML escaped: {{&forbidden}}\n',
+                    'expected': 'These characters should not be HTML escaped: & " < >\n'
+                },
+                {
+                    'name': 'Basic Integer Interpolation',
+                    'desc': 'Integers should interpolate seamlessly.',
+                    'data': { 'mph': 85 },
+                    'template': '"{{mph}} miles an hour!"',
+                    'expected': '"85 miles an hour!"'
+                },
+                {
+                    'name': 'Triple Mustache Integer Interpolation',
+                    'desc': 'Integers should interpolate seamlessly.',
+                    'data': { 'mph': 85 },
+                    'template': '"{{{mph}}} miles an hour!"',
+                    'expected': '"85 miles an hour!"'
+                },
+                {
+                    'name': 'Ampersand Integer Interpolation',
+                    'desc': 'Integers should interpolate seamlessly.',
+                    'data': { 'mph': 85 },
+                    'template': '"{{&mph}} miles an hour!"',
+                    'expected': '"85 miles an hour!"'
+                },
+                {
+                    'name': 'Basic Decimal Interpolation',
+                    'desc': 'Decimals should interpolate seamlessly with proper significance.',
+                    'data': { 'power': 1.21 },
+                    'template': '"{{power}} jiggawatts!"',
+                    'expected': '"1.21 jiggawatts!"'
+                },
+                {
+                    'name': 'Triple Mustache Decimal Interpolation',
+                    'desc': 'Decimals should interpolate seamlessly with proper significance.',
+                    'data': { 'power': 1.21 },
+                    'template': '"{{{power}}} jiggawatts!"',
+                    'expected': '"1.21 jiggawatts!"'
+                },
+                {
+                    'name': 'Ampersand Decimal Interpolation',
+                    'desc': 'Decimals should interpolate seamlessly with proper significance.',
+                    'data': { 'power': 1.21 },
+                    'template': '"{{&power}} jiggawatts!"',
+                    'expected': '"1.21 jiggawatts!"'
+                },
+                {
+                    'name': 'Basic Context Miss Interpolation',
+                    'desc': 'Failed context lookups should default to empty strings.',
+                    'data': {},
+                    'template': 'I ({{cannot}}) be seen!',
+                    'expected': 'I () be seen!'
+                },
+                {
+                    'name': 'Triple Mustache Context Miss Interpolation',
+                    'desc': 'Failed context lookups should default to empty strings.',
+                    'data': {},
+                    'template': 'I ({{{cannot}}}) be seen!',
+                    'expected': 'I () be seen!'
+                },
+                {
+                    'name': 'Ampersand Context Miss Interpolation',
+                    'desc': 'Failed context lookups should default to empty strings.',
+                    'data': {},
+                    'template': 'I ({{&cannot}}) be seen!',
+                    'expected': 'I () be seen!'
+                },
+                {
+                    'name': 'Dotted Names - Basic Interpolation',
+                    'desc': 'Dotted names should be considered a form of shorthand for sections.',
+                    'data': { 'person': { 'name': 'Joe' } },
+                    'template': '"{{person.name}}" == "{{#person}}{{name}}{{/person}}"',
+                    'expected': '"Joe" == "Joe"'
+                },
+                {
+                    'name': 'Dotted Names - Triple Mustache Interpolation',
+                    'desc': 'Dotted names should be considered a form of shorthand for sections.',
+                    'data': { 'person': { 'name': 'Joe' } },
+                    'template': '"{{{person.name}}}" == "{{#person}}{{{name}}}{{/person}}"',
+                    'expected': '"Joe" == "Joe"'
+                },
+                {
+                    'name': 'Dotted Names - Ampersand Interpolation',
+                    'desc': 'Dotted names should be considered a form of shorthand for sections.',
+                    'data': { 'person': { 'name': 'Joe' } },
+                    'template': '"{{&person.name}}" == "{{#person}}{{&name}}{{/person}}"',
+                    'expected': '"Joe" == "Joe"'
+                },
+                {
+                    'name': 'Dotted Names - Arbitrary Depth',
+                    'desc': 'Dotted names should be functional to any level of nesting.',
+                    'data': { 'a': { 'b': { 'c': { 'd': { 'e': { 'name': 'Phil' } } } } } },
+                    'template': '"{{a.b.c.d.e.name}}" == "Phil"',
+                    'expected': '"Phil" == "Phil"'
+                },
+                {
+                    'name': 'Dotted Names - Broken Chains',
+                    'desc': 'Any falsey value prior to the last part of the name should yield \'\'.',
+                    'data': { 'a': {} },
+                    'template': '"{{a.b.c}}" == ""',
+                    'expected': '"" == ""'
+                },
+                {
+                    'name': 'Dotted Names - Broken Chain Resolution',
+                    'desc': 'Each part of a dotted name should resolve only against its parent.',
+                    'data': {
+                        'a': { 'b': {} },
+                        'c': { 'name': 'Jim' }
+                    },
+                    'template': '"{{a.b.c.name}}" == ""',
+                    'expected': '"" == ""'
+                },
+                {
+                    'name': 'Dotted Names - Initial Resolution',
+                    'desc': 'The first part of a dotted name should resolve as any other name.',
+                    'data': {
+                        'a': { 'b': { 'c': { 'd': { 'e': { 'name': 'Phil' } } } } },
+                        'b': { 'c': { 'd': { 'e': { 'name': 'Wrong' } } } }
+                    },
+                    'template': '"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"',
+                    'expected': '"Phil" == "Phil"'
+                },
+                {
+                    'name': 'Interpolation - Surrounding Whitespace',
+                    'desc': 'Interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '| {{string}} |',
+                    'expected': '| --- |'
+                },
+                {
+                    'name': 'Triple Mustache - Surrounding Whitespace',
+                    'desc': 'Interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '| {{{string}}} |',
+                    'expected': '| --- |'
+                },
+                {
+                    'name': 'Ampersand - Surrounding Whitespace',
+                    'desc': 'Interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '| {{&string}} |',
+                    'expected': '| --- |'
+                },
+                {
+                    'name': 'Interpolation - Standalone',
+                    'desc': 'Standalone interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '  {{string}}\n',
+                    'expected': '  ---\n'
+                },
+                {
+                    'name': 'Triple Mustache - Standalone',
+                    'desc': 'Standalone interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '  {{{string}}}\n',
+                    'expected': '  ---\n'
+                },
+                {
+                    'name': 'Ampersand - Standalone',
+                    'desc': 'Standalone interpolation should not alter surrounding whitespace.',
+                    'data': { 'string': '---' },
+                    'template': '  {{&string}}\n',
+                    'expected': '  ---\n'
+                },
+                {
+                    'name': 'Interpolation With Padding',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'string': '---' },
+                    'template': '|{{ string }}|',
+                    'expected': '|---|'
+                },
+                {
+                    'name': 'Triple Mustache With Padding',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'string': '---' },
+                    'template': '|{{{ string }}}|',
+                    'expected': '|---|'
+                },
+                {
+                    'name': 'Ampersand With Padding',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'string': '---' },
+                    'template': '|{{& string }}|',
+                    'expected': '|---|'
+                }
+            ],
+            '__ATTN__': 'Do not edit this file; changes belong in the appropriate YAML file.'
+        }
+    });
+});
+/*can/view/mustache/spec/specs/inverted*/
+define('can/view/mustache/spec/specs/inverted', ['can/view/mustache/spec/specs/spec'], function () {
+    window.MUSTACHE_SPECS.push({
+        name: 'inverted',
+        data: {
+            'overview': 'Inverted Section tags and End Section tags are used in combination to wrap a\nsection of the template.\n\nThese tags\' content MUST be a non-whitespace character sequence NOT\ncontaining the current closing delimiter; each Inverted Section tag MUST be\nfollowed by an End Section tag with the same content within the same\nsection.\n\nThis tag\'s content names the data to replace\xA0the tag.  Name resolution is as\nfollows:\n  1) Split the name on periods; the first part is the name to resolve, any\n  remaining parts should be retained.\n  2) Walk the context stack from top to bottom, finding the first context\n  that is a) a hash containing the name as a key OR b) an object responding\n  to a method with the given name.\n  3) If the context is a hash, the data is the value associated with the\n  name.\n  4) If the context is an object and the method with the given name has an\n  arity of 1, the method SHOULD be called with a String containing the\n  unprocessed contents of the sections; the data is the value returned.\n  5) Otherwise, the data is the value returned by calling the method with\n  the given name.\n  6) If any name parts were retained in step 1, each should be resolved\n  against a context stack containing only the result from the former\n  resolution.  If any part fails resolution, the result should be considered\n  falsey, and should interpolate as the empty string.\nIf the data is not of a list type, it is coerced into a list as follows: if\nthe data is truthy (e.g. `!!data == true`), use a single-element list\ncontaining the data, otherwise use an empty list.\n\nThis section MUST NOT be rendered unless the data list is empty.\n\nInverted Section and End Section tags SHOULD be treated as standalone when\nappropriate.\n',
+            'tests': [
+                {
+                    'name': 'Falsey',
+                    'desc': 'Falsey sections should have their contents rendered.',
+                    'data': { 'boolean': false },
+                    'template': '"{{^boolean}}This should be rendered.{{/boolean}}"',
+                    'expected': '"This should be rendered."'
+                },
+                {
+                    'name': 'Truthy',
+                    'desc': 'Truthy sections should have their contents omitted.',
+                    'data': { 'boolean': true },
+                    'template': '"{{^boolean}}This should not be rendered.{{/boolean}}"',
+                    'expected': '""'
+                },
+                {
+                    'name': 'Context',
+                    'desc': 'Objects and hashes should behave like truthy values.',
+                    'data': { 'context': { 'name': 'Joe' } },
+                    'template': '"{{^context}}Hi {{name}}.{{/context}}"',
+                    'expected': '""'
+                },
+                {
+                    'name': 'List',
+                    'desc': 'Lists should behave like truthy values.',
+                    'data': {
+                        'list': [
+                            { 'n': 1 },
+                            { 'n': 2 },
+                            { 'n': 3 }
+                        ]
+                    },
+                    'template': '"{{^list}}{{n}}{{/list}}"',
+                    'expected': '""'
+                },
+                {
+                    'name': 'Empty List',
+                    'desc': 'Empty lists should behave like falsey values.',
+                    'data': { 'list': [] },
+                    'template': '"{{^list}}Yay lists!{{/list}}"',
+                    'expected': '"Yay lists!"'
+                },
+                {
+                    'name': 'Doubled',
+                    'desc': 'Multiple inverted sections per template should be permitted.',
+                    'data': {
+                        'bool': false,
+                        'two': 'second'
+                    },
+                    'template': '{{^bool}}\n* first\n{{/bool}}\n* {{two}}\n{{^bool}}\n* third\n{{/bool}}\n',
+                    'expected': '* first\n* second\n* third\n'
+                },
+                {
+                    'name': 'Nested (Falsey)',
+                    'desc': 'Nested falsey sections should have their contents rendered.',
+                    'data': { 'bool': false },
+                    'template': '| A {{^bool}}B {{^bool}}C{{/bool}} D{{/bool}} E |',
+                    'expected': '| A B C D E |'
+                },
+                {
+                    'name': 'Nested (Truthy)',
+                    'desc': 'Nested truthy sections should be omitted.',
+                    'data': { 'bool': true },
+                    'template': '| A {{^bool}}B {{^bool}}C{{/bool}} D{{/bool}} E |',
+                    'expected': '| A  E |'
+                },
+                {
+                    'name': 'Context Misses',
+                    'desc': 'Failed context lookups should be considered falsey.',
+                    'data': {},
+                    'template': '[{{^missing}}Cannot find key \'missing\'!{{/missing}}]',
+                    'expected': '[Cannot find key \'missing\'!]'
+                },
+                {
+                    'name': 'Dotted Names - Truthy',
+                    'desc': 'Dotted names should be valid for Inverted Section tags.',
+                    'data': { 'a': { 'b': { 'c': true } } },
+                    'template': '"{{^a.b.c}}Not Here{{/a.b.c}}" == ""',
+                    'expected': '"" == ""'
+                },
+                {
+                    'name': 'Dotted Names - Falsey',
+                    'desc': 'Dotted names should be valid for Inverted Section tags.',
+                    'data': { 'a': { 'b': { 'c': false } } },
+                    'template': '"{{^a.b.c}}Not Here{{/a.b.c}}" == "Not Here"',
+                    'expected': '"Not Here" == "Not Here"'
+                },
+                {
+                    'name': 'Dotted Names - Broken Chains',
+                    'desc': 'Dotted names that cannot be resolved should be considered falsey.',
+                    'data': { 'a': {} },
+                    'template': '"{{^a.b.c}}Not Here{{/a.b.c}}" == "Not Here"',
+                    'expected': '"Not Here" == "Not Here"'
+                },
+                {
+                    'name': 'Surrounding Whitespace',
+                    'desc': 'Inverted sections should not alter surrounding whitespace.',
+                    'data': { 'boolean': false },
+                    'template': ' | {{^boolean}}\t|\t{{/boolean}} | \n',
+                    'expected': ' | \t|\t | \n'
+                },
+                {
+                    'name': 'Internal Whitespace',
+                    'desc': 'Inverted should not alter internal whitespace.',
+                    'data': { 'boolean': false },
+                    'template': ' | {{^boolean}} {{! Important Whitespace }}\n {{/boolean}} | \n',
+                    'expected': ' |  \n  | \n'
+                },
+                {
+                    'name': 'Indented Inline Sections',
+                    'desc': 'Single-line sections should not alter surrounding whitespace.',
+                    'data': { 'boolean': false },
+                    'template': ' {{^boolean}}NO{{/boolean}}\n {{^boolean}}WAY{{/boolean}}\n',
+                    'expected': ' NO\n WAY\n'
+                },
+                {
+                    'name': 'Standalone Lines',
+                    'desc': 'Standalone lines should be removed from the template.',
+                    'data': { 'boolean': false },
+                    'template': '| This Is\n{{^boolean}}\n|\n{{/boolean}}\n| A Line\n',
+                    'expected': '| This Is\n|\n| A Line\n'
+                },
+                {
+                    'name': 'Standalone Indented Lines',
+                    'desc': 'Standalone indented lines should be removed from the template.',
+                    'data': { 'boolean': false },
+                    'template': '| This Is\n  {{^boolean}}\n|\n  {{/boolean}}\n| A Line\n',
+                    'expected': '| This Is\n|\n| A Line\n'
+                },
+                {
+                    'name': 'Standalone Line Endings',
+                    'desc': '"\\r\\n" should be considered a newline for standalone tags.',
+                    'data': { 'boolean': false },
+                    'template': '|\r\n{{^boolean}}\r\n{{/boolean}}\r\n|',
+                    'expected': '|\r\n|'
+                },
+                {
+                    'name': 'Standalone Without Previous Line',
+                    'desc': 'Standalone tags should not require a newline to precede them.',
+                    'data': { 'boolean': false },
+                    'template': '  {{^boolean}}\n^{{/boolean}}\n/',
+                    'expected': '^\n/'
+                },
+                {
+                    'name': 'Standalone Without Newline',
+                    'desc': 'Standalone tags should not require a newline to follow them.',
+                    'data': { 'boolean': false },
+                    'template': '^{{^boolean}}\n/\n  {{/boolean}}',
+                    'expected': '^\n/\n'
+                },
+                {
+                    'name': 'Padding',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'boolean': false },
+                    'template': '|{{^ boolean }}={{/ boolean }}|',
+                    'expected': '|=|'
+                }
+            ],
+            '__ATTN__': 'Do not edit this file; changes belong in the appropriate YAML file.'
+        }
+    });
+});
+/*can/view/mustache/spec/specs/partials*/
+define('can/view/mustache/spec/specs/partials', ['can/view/mustache/spec/specs/spec'], function () {
+    window.MUSTACHE_SPECS.push({
+        name: 'partials',
+        data: {
+            'overview': 'Partial tags are used to expand an external template into the current\ntemplate.\n\nThe tag\'s content MUST be a non-whitespace character sequence NOT containing\nthe current closing delimiter.\n\nThis tag\'s content names the partial to inject.  Set Delimiter tags MUST NOT\naffect the parsing of a partial.  The partial MUST be rendered against the\ncontext stack local to the tag.\n\nPartial tags SHOULD be treated as standalone when appropriate.  If this tag\nis used standalone, any whitespace preceding the tag should treated as\nindentation, and prepended to each line of the partial before rendering.\n',
+            'tests': [
+                {
+                    'name': 'Basic Behavior',
+                    'desc': 'The greater-than operator should expand to the named partial.',
+                    'data': {},
+                    'template': '"{{>text}}"',
+                    'partials': { 'text': 'from partial' },
+                    'expected': '"from partial"'
+                },
+                {
+                    'name': 'Context',
+                    'desc': 'The greater-than operator should operate within the current context.',
+                    'data': { 'text': 'content' },
+                    'template': '"{{>partial}}"',
+                    'partials': { 'partial': '*{{text}}*' },
+                    'expected': '"*content*"'
+                },
+                {
+                    'name': 'Recursion',
+                    'desc': 'The greater-than operator should properly recurse.',
+                    'data': {
+                        'content': 'X',
+                        'nodes': [{
+                                'content': 'Y',
+                                'nodes': []
+                            }]
+                    },
+                    'template': '{{>node}}',
+                    'partials': { 'node': '{{content}}<{{#nodes}}{{>node}}{{/nodes}}>' },
+                    'expected': 'X<Y<>>'
+                },
+                {
+                    'name': 'Surrounding Whitespace',
+                    'desc': 'The greater-than operator should not alter surrounding whitespace.',
+                    'data': {},
+                    'template': '| {{>partial}} |',
+                    'partials': { 'partial': '\t|\t' },
+                    'expected': '| \t|\t |'
+                },
+                {
+                    'name': 'Inline Indentation',
+                    'desc': 'Whitespace should be left untouched.',
+                    'data': { 'data': '|' },
+                    'template': '  {{data}}  {{> partial}}\n',
+                    'partials': { 'partial': '>\n>' },
+                    'expected': '  |  >\n>\n'
+                },
+                {
+                    'name': 'Standalone Line Endings',
+                    'desc': '"\\r\\n" should be considered a newline for standalone tags.',
+                    'data': {},
+                    'template': '|\r\n{{>partial}}\r\n|',
+                    'partials': { 'partial': '>' },
+                    'expected': '|\r\n>|'
+                },
+                {
+                    'name': 'Standalone Without Previous Line',
+                    'desc': 'Standalone tags should not require a newline to precede them.',
+                    'data': {},
+                    'template': '  {{>partial}}\n>',
+                    'partials': { 'partial': '>\n>' },
+                    'expected': '  >\n  >>'
+                },
+                {
+                    'name': 'Standalone Without Newline',
+                    'desc': 'Standalone tags should not require a newline to follow them.',
+                    'data': {},
+                    'template': '>\n  {{>partial}}',
+                    'partials': { 'partial': '>\n>' },
+                    'expected': '>\n  >\n  >'
+                },
+                {
+                    'name': 'Standalone Indentation',
+                    'desc': 'Each line of the partial should be indented before rendering.',
+                    'data': { 'content': '<\n->' },
+                    'template': '\\\n {{>partial}}\n/\n',
+                    'partials': { 'partial': '|\n{{{content}}}\n|\n' },
+                    'expected': '\\\n |\n <\n->\n |\n/\n'
+                },
+                {
+                    'name': 'Padding Whitespace',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'boolean': true },
+                    'template': '|{{> partial }}|',
+                    'partials': { 'partial': '[]' },
+                    'expected': '|[]|'
+                }
+            ],
+            '__ATTN__': 'Do not edit this file; changes belong in the appropriate YAML file.'
+        }
+    });
+});
+/*can/view/mustache/spec/specs/sections*/
+define('can/view/mustache/spec/specs/sections', ['can/view/mustache/spec/specs/spec'], function () {
+    window.MUSTACHE_SPECS.push({
+        name: 'sections',
+        data: {
+            'overview': 'Section tags and End Section tags are used in combination to wrap a section\nof the template for iteration\n\nThese tags\' content MUST be a non-whitespace character sequence NOT\ncontaining the current closing delimiter; each Section tag MUST be followed\nby an End Section tag with the same content within the same section.\n\nThis tag\'s content names the data to replace\xA0the tag.  Name resolution is as\nfollows:\n  1) Split the name on periods; the first part is the name to resolve, any\n  remaining parts should be retained.\n  2) Walk the context stack from top to bottom, finding the first context\n  that is a) a hash containing the name as a key OR b) an object responding\n  to a method with the given name.\n  3) If the context is a hash, the data is the value associated with the\n  name.\n  4) If the context is an object and the method with the given name has an\n  arity of 1, the method SHOULD be called with a String containing the\n  unprocessed contents of the sections; the data is the value returned.\n  5) Otherwise, the data is the value returned by calling the method with\n  the given name.\n  6) If any name parts were retained in step 1, each should be resolved\n  against a context stack containing only the result from the former\n  resolution.  If any part fails resolution, the result should be considered\n  falsey, and should interpolate as the empty string.\nIf the data is not of a list type, it is coerced into a list as follows: if\nthe data is truthy (e.g. `!!data == true`), use a single-element list\ncontaining the data, otherwise use an empty list.\n\nFor each element in the data list, the element MUST be pushed onto the\ncontext stack, the section MUST be rendered, and the element MUST be popped\noff the context stack.\n\nSection and End Section tags SHOULD be treated as standalone when\nappropriate.\n',
+            'tests': [
+                {
+                    'name': 'Truthy',
+                    'desc': 'Truthy sections should have their contents rendered.',
+                    'data': { 'boolean': true },
+                    'template': '"{{#boolean}}This should be rendered.{{/boolean}}"',
+                    'expected': '"This should be rendered."'
+                },
+                {
+                    'name': 'Falsey',
+                    'desc': 'Falsey sections should have their contents omitted.',
+                    'data': { 'boolean': false },
+                    'template': '"{{#boolean}}This should not be rendered.{{/boolean}}"',
+                    'expected': '""'
+                },
+                {
+                    'name': 'Context',
+                    'desc': 'Objects and hashes should be pushed onto the context stack.',
+                    'data': { 'context': { 'name': 'Joe' } },
+                    'template': '"{{#context}}Hi {{name}}.{{/context}}"',
+                    'expected': '"Hi Joe."'
+                },
+                {
+                    'name': 'Deeply Nested Contexts',
+                    'desc': 'All elements on the context stack should be accessible.',
+                    'data': {
+                        'a': { 'one': 1 },
+                        'b': { 'two': 2 },
+                        'c': { 'three': 3 },
+                        'd': { 'four': 4 },
+                        'e': { 'five': 5 }
+                    },
+                    'template': '{{#a}}\n{{one}}\n{{#b}}\n{{one}}{{two}}{{one}}\n{{#c}}\n{{one}}{{two}}{{three}}{{two}}{{one}}\n{{#d}}\n{{one}}{{two}}{{three}}{{four}}{{three}}{{two}}{{one}}\n{{#e}}\n{{one}}{{two}}{{three}}{{four}}{{five}}{{four}}{{three}}{{two}}{{one}}\n{{/e}}\n{{one}}{{two}}{{three}}{{four}}{{three}}{{two}}{{one}}\n{{/d}}\n{{one}}{{two}}{{three}}{{two}}{{one}}\n{{/c}}\n{{one}}{{two}}{{one}}\n{{/b}}\n{{one}}\n{{/a}}\n',
+                    'expected': '1\n121\n12321\n1234321\n123454321\n1234321\n12321\n121\n1\n'
+                },
+                {
+                    'name': 'List',
+                    'desc': 'Lists should be iterated; list items should visit the context stack.',
+                    'data': {
+                        'list': [
+                            { 'item': 1 },
+                            { 'item': 2 },
+                            { 'item': 3 }
+                        ]
+                    },
+                    'template': '"{{#list}}{{item}}{{/list}}"',
+                    'expected': '"123"'
+                },
+                {
+                    'name': 'Empty List',
+                    'desc': 'Empty lists should behave like falsey values.',
+                    'data': { 'list': [] },
+                    'template': '"{{#list}}Yay lists!{{/list}}"',
+                    'expected': '""'
+                },
+                {
+                    'name': 'Doubled',
+                    'desc': 'Multiple sections per template should be permitted.',
+                    'data': {
+                        'bool': true,
+                        'two': 'second'
+                    },
+                    'template': '{{#bool}}\n* first\n{{/bool}}\n* {{two}}\n{{#bool}}\n* third\n{{/bool}}\n',
+                    'expected': '* first\n* second\n* third\n'
+                },
+                {
+                    'name': 'Nested (Truthy)',
+                    'desc': 'Nested truthy sections should have their contents rendered.',
+                    'data': { 'bool': true },
+                    'template': '| A {{#bool}}B {{#bool}}C{{/bool}} D{{/bool}} E |',
+                    'expected': '| A B C D E |'
+                },
+                {
+                    'name': 'Nested (Falsey)',
+                    'desc': 'Nested falsey sections should be omitted.',
+                    'data': { 'bool': false },
+                    'template': '| A {{#bool}}B {{#bool}}C{{/bool}} D{{/bool}} E |',
+                    'expected': '| A  E |'
+                },
+                {
+                    'name': 'Context Misses',
+                    'desc': 'Failed context lookups should be considered falsey.',
+                    'data': {},
+                    'template': '[{{#missing}}Found key \'missing\'!{{/missing}}]',
+                    'expected': '[]'
+                },
+                {
+                    'name': 'Implicit Iterator - String',
+                    'desc': 'Implicit iterators should directly interpolate strings.',
+                    'data': {
+                        'list': [
+                            'a',
+                            'b',
+                            'c',
+                            'd',
+                            'e'
+                        ]
+                    },
+                    'template': '"{{#list}}({{.}}){{/list}}"',
+                    'expected': '"(a)(b)(c)(d)(e)"'
+                },
+                {
+                    'name': 'Implicit Iterator - Integer',
+                    'desc': 'Implicit iterators should cast integers to strings and interpolate.',
+                    'data': {
+                        'list': [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5
+                        ]
+                    },
+                    'template': '"{{#list}}({{.}}){{/list}}"',
+                    'expected': '"(1)(2)(3)(4)(5)"'
+                },
+                {
+                    'name': 'Implicit Iterator - Decimal',
+                    'desc': 'Implicit iterators should cast decimals to strings and interpolate.',
+                    'data': {
+                        'list': [
+                            1.1,
+                            2.2,
+                            3.3,
+                            4.4,
+                            5.5
+                        ]
+                    },
+                    'template': '"{{#list}}({{.}}){{/list}}"',
+                    'expected': '"(1.1)(2.2)(3.3)(4.4)(5.5)"'
+                },
+                {
+                    'name': 'Dotted Names - Truthy',
+                    'desc': 'Dotted names should be valid for Section tags.',
+                    'data': { 'a': { 'b': { 'c': true } } },
+                    'template': '"{{#a.b.c}}Here{{/a.b.c}}" == "Here"',
+                    'expected': '"Here" == "Here"'
+                },
+                {
+                    'name': 'Dotted Names - Falsey',
+                    'desc': 'Dotted names should be valid for Section tags.',
+                    'data': { 'a': { 'b': { 'c': false } } },
+                    'template': '"{{#a.b.c}}Here{{/a.b.c}}" == ""',
+                    'expected': '"" == ""'
+                },
+                {
+                    'name': 'Dotted Names - Broken Chains',
+                    'desc': 'Dotted names that cannot be resolved should be considered falsey.',
+                    'data': { 'a': {} },
+                    'template': '"{{#a.b.c}}Here{{/a.b.c}}" == ""',
+                    'expected': '"" == ""'
+                },
+                {
+                    'name': 'Surrounding Whitespace',
+                    'desc': 'Sections should not alter surrounding whitespace.',
+                    'data': { 'boolean': true },
+                    'template': ' | {{#boolean}}\t|\t{{/boolean}} | \n',
+                    'expected': ' | \t|\t | \n'
+                },
+                {
+                    'name': 'Internal Whitespace',
+                    'desc': 'Sections should not alter internal whitespace.',
+                    'data': { 'boolean': true },
+                    'template': ' | {{#boolean}} {{! Important Whitespace }}\n {{/boolean}} | \n',
+                    'expected': ' |  \n  | \n'
+                },
+                {
+                    'name': 'Indented Inline Sections',
+                    'desc': 'Single-line sections should not alter surrounding whitespace.',
+                    'data': { 'boolean': true },
+                    'template': ' {{#boolean}}YES{{/boolean}}\n {{#boolean}}GOOD{{/boolean}}\n',
+                    'expected': ' YES\n GOOD\n'
+                },
+                {
+                    'name': 'Standalone Lines',
+                    'desc': 'Standalone lines should be removed from the template.',
+                    'data': { 'boolean': true },
+                    'template': '| This Is\n{{#boolean}}\n|\n{{/boolean}}\n| A Line\n',
+                    'expected': '| This Is\n|\n| A Line\n'
+                },
+                {
+                    'name': 'Indented Standalone Lines',
+                    'desc': 'Indented standalone lines should be removed from the template.',
+                    'data': { 'boolean': true },
+                    'template': '| This Is\n  {{#boolean}}\n|\n  {{/boolean}}\n| A Line\n',
+                    'expected': '| This Is\n|\n| A Line\n'
+                },
+                {
+                    'name': 'Standalone Line Endings',
+                    'desc': '"\\r\\n" should be considered a newline for standalone tags.',
+                    'data': { 'boolean': true },
+                    'template': '|\r\n{{#boolean}}\r\n{{/boolean}}\r\n|',
+                    'expected': '|\r\n|'
+                },
+                {
+                    'name': 'Standalone Without Previous Line',
+                    'desc': 'Standalone tags should not require a newline to precede them.',
+                    'data': { 'boolean': true },
+                    'template': '  {{#boolean}}\n#{{/boolean}}\n/',
+                    'expected': '#\n/'
+                },
+                {
+                    'name': 'Standalone Without Newline',
+                    'desc': 'Standalone tags should not require a newline to follow them.',
+                    'data': { 'boolean': true },
+                    'template': '#{{#boolean}}\n/\n  {{/boolean}}',
+                    'expected': '#\n/\n'
+                },
+                {
+                    'name': 'Padding',
+                    'desc': 'Superfluous in-tag whitespace should be ignored.',
+                    'data': { 'boolean': true },
+                    'template': '|{{# boolean }}={{/ boolean }}|',
+                    'expected': '|=|'
+                }
+            ],
+            '__ATTN__': 'Do not edit this file; changes belong in the appropriate YAML file.'
+        }
+    });
+});
+/*can/view/mustache/spec/specs/specs*/
+define('can/view/mustache/spec/specs/specs', [
+    'can/view/mustache/spec/specs/comments',
+    'can/view/mustache/spec/specs/interpolation',
+    'can/view/mustache/spec/specs/inverted',
+    'can/view/mustache/spec/specs/partials',
+    'can/view/mustache/spec/specs/sections'
+], function () {
+});
 /*can/view/stache/stache_test*/
 define('can/view/stache/stache_test', [
     'can/view/stache/stache',
@@ -6323,6 +7377,15 @@ define('can/view/stache/stache_test', [
         deepEqual(div1.innerHTML, 'foo');
         deepEqual(div2.innerHTML, 'foo');
     });
+    test('String literals passed to helper should work (#1143)', 1, function () {
+        can.stache.registerHelper('concatStrings', function (arg1, arg2) {
+            return arg1 + arg2;
+        });
+        can.view.stache('testStringArgs', '{{concatStrings "==" "word"}}');
+        var div = document.createElement('div');
+        div.appendChild(can.view('testStringArgs', {}));
+        equal(div.innerHTML, '==word');
+    });
     test('No arguments passed to helper with list', function () {
         var template = can.stache('{{#items}}{{noargHelper}}{{/items}}');
         var div = document.createElement('div');
@@ -6398,10 +7461,16 @@ define('can/view/stache/stache_test', [
         var t = {
                 template: '{{#unless missing}}Andy is missing!{{/unless}}',
                 expected: 'Andy is missing!',
-                data: { name: 'Andy' }
+                data: { name: 'Andy' },
+                liveData: new can.Map({ name: 'Andy' })
             };
         var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
         deepEqual(getText(t.template, t.data), expected);
+        var div = document.createElement('div');
+        div.appendChild(can.stache(t.template)(t.liveData));
+        deepEqual(div.innerHTML, expected, '#unless condition false');
+        t.liveData.attr('missing', true);
+        deepEqual(div.innerHTML, '', '#unless condition true');
     });
     test('Handlebars helper: each', function () {
         var t = {
@@ -7684,6 +8753,36 @@ define('can/view/stache/stache_test', [
             equal(lis[i].innerHTML, i + ' ' + i, 'rendered index and value are correct');
         }
     });
+    test('Rendering indicies of an array with @index + offset (#1078)', function () {
+        var template = can.stache('<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>');
+        var list = [
+                0,
+                1,
+                2,
+                3
+            ];
+        var lis = template({ list: list }).childNodes[0].getElementsByTagName('li');
+        for (var i = 0; i < lis.length; i++) {
+            equal(lis[i].innerHTML, i + 5 + ' ' + i, 'rendered index and value are correct');
+        }
+    });
+    test('Passing indices into helpers as values', function () {
+        var template = can.view.stache('<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>');
+        var list = [
+                0,
+                1,
+                2,
+                3
+            ];
+        var lis = template({ list: list }, {
+                test: function (index) {
+                    return '' + index;
+                }
+            }).childNodes[0].getElementsByTagName('li');
+        for (var i = 0; i < lis.length; i++) {
+            equal(lis[i].innerHTML, i + ' ' + i, 'rendered index and value are correct');
+        }
+    });
     test('Rendering live bound indicies with #each, @index and a simple can.List', function () {
         var list = new can.List([
                 'a',
@@ -7874,14 +8973,24 @@ define('can/view/stache/stache_test', [
     test('directly nested live sections unbind without needing the element to be removed', function () {
         var template = can.stache('<div>' + '{{#items}}' + '<p>first</p>' + '{{#visible}}<label>foo</label>{{/visible}}' + '<p>second</p>' + '{{/items}}' + '</div>');
         var data = new can.Map({ items: [{ visible: true }] });
-        function handler(eventType) {
+        var bindings = 0;
+        function bind(eventType) {
+            bindings++;
+            return can.Map.prototype.bind.apply(this, arguments);
+        }
+        function unbind(eventType) {
             can.Map.prototype.unbind.apply(this, arguments);
+            bindings--;
             if (eventType === 'visible') {
+                ok(true, 'unbound visible');
+            }
+            if (bindings === 0) {
                 start();
                 ok(true, 'unbound visible');
             }
         }
-        data.attr('items.0').unbind = handler;
+        data.attr('items.0').bind = bind;
+        data.attr('items.0').unbind = unbind;
         template(data);
         data.attr('items', [{ visible: true }]);
         stop();
@@ -8132,24 +9241,6 @@ define('can/view/stache/stache_test', [
         var res = template({ isBlack: false });
         equal(res.childNodes[0].style.display, 'none', 'color is not set');
     });
-    if (can.dev) {
-        test('Logging: Helper not found in stache template(#726)', function () {
-            var oldlog = can.dev.warn, message = 'can/view/stache/mustache_core.js: Unable to find helper "helpme".';
-            can.dev.warn = function (text) {
-                equal(text, message, 'Got expected message logged.');
-            };
-            can.view.stache('<li>{{helpme name}}</li>')({ name: 'Hulk Hogan' });
-            can.dev.warn = oldlog;
-        });
-        test('Logging: Variable not found in stache template (#720)', function () {
-            var oldlog = can.dev.warn, message = 'can/view/stache/mustache_core.js: Unable to find key or helper "user.name".';
-            can.dev.warn = function (text) {
-                equal(text, message, 'Got expected message logged.');
-            };
-            can.view.stache('<li>{{user.name}}</li>')({ user: {} });
-            can.dev.warn = oldlog;
-        });
-    }
     test('Calling .fn without arguments should forward scope by default (#658)', function () {
         var tmpl = '{{#foo}}<span>{{bar}}</span>{{/foo}}';
         var frag = can.stache(tmpl)(new can.Map({ bar: 'baz' }), {
@@ -8176,6 +9267,86 @@ define('can/view/stache/stache_test', [
         equal(frag.childNodes[0].innerHTML, '0', 'Context is set correctly for falsy values');
         equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
         equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
+    });
+    test('Custom elements created with default namespace in IE8', function () {
+        can.view.tag('my-tag', function () {
+        });
+        var tmpl = '<my-tag></my-tag>';
+        var frag = can.stache(tmpl)({});
+        can.append(can.$('#qunit-test-area'), frag);
+        equal(can.$('my-tag').length, 1, 'Element created in default namespace');
+    });
+    test('Partials are passed helpers (#791)', function () {
+        var t = {
+                template: '{{>partial}}',
+                expected: 'foo',
+                partials: { partial: '{{ help }}' },
+                helpers: {
+                    'help': function () {
+                        return 'foo';
+                    }
+                }
+            }, frag;
+        for (var name in t.partials) {
+            can.view.registerView(name, t.partials[name], '.stache');
+        }
+        frag = can.stache(t.template)({}, t.helpers);
+        equal(frag.childNodes[0].nodeValue, t.expected);
+    });
+    test('{{else}} with {{#unless}} (#988)', function () {
+        var tmpl = '<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>';
+        var frag = can.stache(tmpl)({ noData: true });
+        equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+    });
+    test('{{else}} within an attribute (#974)', function () {
+        var tmpl = '<div class="{{#if color}}{{color}}{{else}}red{{/if}}"></div>', data = new can.Map({ color: 'orange' }), frag = can.stache(tmpl)(data);
+        equal(frag.childNodes[0].getAttribute('class'), 'orange', 'if branch');
+        data.attr('color', false);
+        equal(frag.childNodes[0].getAttribute('class'), 'red', 'else branch');
+    });
+    test('returns correct value for DOM attributes (#1065)', 3, function () {
+        var template = '<h2 class="{{#if shown}}foo{{/if}} test1 {{#shown}}muh{{/shown}}"></h2>' + '<h3 class="{{#if shown}}bar{{/if}} test2 {{#shown}}kuh{{/shown}}"></h3>' + '<h4 class="{{#if shown}}baz{{/if}} test3 {{#shown}}boom{{/shown}}"></h4>';
+        var frag = can.stache(template)({ shown: true });
+        equal(frag.childNodes[0].className, 'foo test1 muh');
+        equal(frag.childNodes[1].className, 'bar test2 kuh');
+        equal(frag.childNodes[2].className, 'baz test3 boom');
+    });
+    test('single character attributes work (#1132)', 1, function () {
+        var template = '<svg width="50" height="50">' + '<circle r="25" cx="25" cy="25"></circle>' + '</svg>';
+        var frag = can.stache(template)({});
+        equal(frag.childNodes[0].childNodes[0].getAttribute('r'), '25');
+    });
+    test('single property read does not infinately loop (#1155)', function () {
+        stop();
+        var map = new can.Map({ state: false });
+        var current = false;
+        var source = can.compute(1);
+        var number = can.compute(function () {
+                map.attr('state', current = !current);
+                return source();
+            });
+        number.bind('change', function () {
+        });
+        var template = can.stache('<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>');
+        template({ map: map });
+        source(2);
+        map.attr('state', current = !current);
+        ok(true, 'no error at this point');
+        start();
+    });
+    test('methods become observable (#1164)', function () {
+        var TeamModel = can.Map.extend({
+                shortName: function () {
+                    return this.attr('nickname') && this.attr('nickname').length <= 8 ? this.attr('nickname') : this.attr('abbreviation');
+                }
+            });
+        var team = new TeamModel({
+                nickname: 'Arsenal London',
+                abbreviation: 'ARS'
+            });
+        var template = can.stache('<span>{{team.shortName}}</span>');
+        var frag = template({ team: team });
+        equal(frag.childNodes[0].innerHTML, 'ARS', 'got value');
     });
 });
 /*can/control/control_test*/
@@ -8827,6 +9998,55 @@ define('can/route/route_test', [
             iframe.src = can.test.path('route/testing.html?2');
             can.$('#qunit-test-area')[0].appendChild(iframe);
         });
+        test('can.route.map: conflicting route values, hash should win', function () {
+            stop();
+            window.routeTestReady = function (iCanRoute, loc) {
+                iCanRoute(':type/:id');
+                var AppState = can.Map.extend();
+                var appState = new AppState({
+                        type: 'dog',
+                        id: '4'
+                    });
+                iCanRoute.map(appState);
+                loc.hash = '#!cat/5';
+                iCanRoute.ready();
+                setTimeout(function () {
+                    var after = loc.href.substr(loc.href.indexOf('#'));
+                    equal(after, '#!cat/5', 'same URL');
+                    equal(appState.attr('type'), 'cat', 'conflicts should be won by the URL');
+                    equal(appState.attr('id'), '5', 'conflicts should be won by the URL');
+                    start();
+                    can.remove(can.$(iframe));
+                }, 30);
+            };
+            var iframe = document.createElement('iframe');
+            iframe.src = can.test.path('route/testing.html?11');
+            can.$('#qunit-test-area')[0].appendChild(iframe);
+        });
+        test('can.route.map: route is initialized from URL first, then URL params are added from can.route.data', function () {
+            stop();
+            window.routeTestReady = function (iCanRoute, loc) {
+                iCanRoute(':type/:id');
+                var AppState = can.Map.extend();
+                var appState = new AppState({ section: 'home' });
+                iCanRoute.map(appState);
+                loc.hash = '#!cat/5';
+                iCanRoute.ready();
+                setTimeout(function () {
+                    var after = loc.href.substr(loc.href.indexOf('#'));
+                    equal(after, '#!cat/5&section=home', 'same URL');
+                    equal(appState.attr('type'), 'cat', 'hash populates the appState');
+                    equal(appState.attr('id'), '5', 'hash populates the appState');
+                    equal(appState.attr('section'), 'home', 'appState keeps its properties');
+                    ok(iCanRoute.data === appState, 'can.route.data is the same as appState');
+                    start();
+                    can.remove(can.$(iframe));
+                }, 30);
+            };
+            var iframe = document.createElement('iframe');
+            iframe.src = can.test.path('route/testing.html?11');
+            can.$('#qunit-test-area')[0].appendChild(iframe);
+        });
         test('updating the hash', function () {
             stop();
             window.routeTestReady = function (iCanRoute, loc) {
@@ -8897,6 +10117,44 @@ define('can/route/route_test', [
             };
             var iframe = document.createElement('iframe');
             iframe.src = can.test.path('route/testing.html?1');
+            can.$('#qunit-test-area')[0].appendChild(iframe);
+        });
+        test('can.route.current is live-bindable (#1156)', function () {
+            stop();
+            window.routeTestReady = function (iCanRoute, loc, win) {
+                iCanRoute.ready();
+                var isOnTestPage = win.can.compute(function () {
+                        return iCanRoute.current({ page: 'test' });
+                    });
+                isOnTestPage.bind('change', function (ev, newVal) {
+                    setTimeout(function () {
+                        start();
+                        can.remove(can.$(iframe));
+                    }, 1);
+                });
+                equal(isOnTestPage(), false, 'initially not on test page');
+                setTimeout(function () {
+                    iCanRoute.attr('page', 'test');
+                }, 20);
+            };
+            var iframe = document.createElement('iframe');
+            iframe.src = can.test.path('route/testing.html?2');
+            can.$('#qunit-test-area')[0].appendChild(iframe);
+        });
+        test('can.compute.read should not call can.route (#1154)', function () {
+            stop();
+            window.routeTestReady = function (iCanRoute, loc, win) {
+                iCanRoute.attr('page', 'test');
+                iCanRoute.ready();
+                var val = win.can.compute.read({ route: iCanRoute }, ['route']).value;
+                setTimeout(function () {
+                    equal(val, iCanRoute, 'read correctly');
+                    start();
+                    can.remove(can.$(iframe));
+                }, 1);
+            };
+            var iframe = document.createElement('iframe');
+            iframe.src = can.test.path('route/testing.html?3');
             can.$('#qunit-test-area')[0].appendChild(iframe);
         });
     }
@@ -9006,7 +10264,10 @@ define('can/route/route_test', [
     });
 });
 /*can/control/route/route_test*/
-define('can/control/route/route_test', ['can/control/route/route'], function () {
+define('can/control/route/route_test', [
+    'can/control/route/route',
+    'can/test/test'
+], function () {
     QUnit.module('can/control/route', {
         setup: function () {
             stop();
@@ -9340,6 +10601,15 @@ define('can/view/mustache/mustache_test', [
         }));
         deepEqual(div.innerHTML, 'foo');
     });
+    test('String literals passed to helper should work (#1143)', 1, function () {
+        can.Mustache.registerHelper('concatStrings', function (arg1, arg2) {
+            return arg1 + arg2;
+        });
+        can.view.mustache('testStringArgs', '{{concatStrings "==" "word"}}');
+        var div = document.createElement('div');
+        div.appendChild(can.view('testStringArgs', {}));
+        equal(div.innerHTML, '==word');
+    });
     test('Partials and observes', function () {
         var template;
         var div = document.createElement('div');
@@ -9405,10 +10675,16 @@ define('can/view/mustache/mustache_test', [
         var t = {
                 template: '{{#unless missing}}Andy is missing!{{/unless}}',
                 expected: 'Andy is missing!',
-                data: { name: 'Andy' }
+                data: { name: 'Andy' },
+                liveData: new can.Map({ name: 'Andy' })
             };
         var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
         deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
+        var div = document.createElement('div');
+        div.appendChild(can.view.mustache(t.template)(t.liveData));
+        deepEqual(div.innerHTML, expected, '#unless condition false');
+        t.liveData.attr('missing', true);
+        deepEqual(div.innerHTML, '', '#unless condition true');
     });
     test('Handlebars helper: each', function () {
         var t = {
@@ -10438,7 +11714,7 @@ define('can/view/mustache/mustache_test', [
     if (typeof steal !== 'undefined') {
         test('avoid global helpers', function () {
             stop();
-            steal('view/mustache/test/noglobals.mustache', function (noglobals) {
+            steal('view/mustache/test/noglobals.mustache!', function (noglobals) {
                 var div = document.createElement('div'), div2 = document.createElement('div');
                 var person = new can.Map({ name: 'Brian' });
                 var result = noglobals({ person: person }, {
@@ -10814,6 +12090,36 @@ define('can/view/mustache/mustache_test', [
             equal(lis[i].innerHTML, i + ' ' + i, 'rendered index and value are correct');
         }
     });
+    test('Rendering indicies of an array with @index + offset (#1078)', function () {
+        var template = can.view.mustache('<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>');
+        var list = [
+                0,
+                1,
+                2,
+                3
+            ];
+        var lis = template({ list: list }).childNodes[0].getElementsByTagName('li');
+        for (var i = 0; i < lis.length; i++) {
+            equal(lis[i].innerHTML, i + 5 + ' ' + i, 'rendered index and value are correct');
+        }
+    });
+    test('Passing indices into helpers as values', function () {
+        var template = can.view.mustache('<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>');
+        var list = [
+                0,
+                1,
+                2,
+                3
+            ];
+        var lis = template({ list: list }, {
+                test: function (index) {
+                    return '' + index;
+                }
+            }).childNodes[0].getElementsByTagName('li');
+        for (var i = 0; i < lis.length; i++) {
+            equal(lis[i].innerHTML, i + ' ' + i, 'rendered index and value are correct');
+        }
+    });
     test('Rendering live bound indicies with #each, @index and a simple can.List', function () {
         var list = new can.List([
                 'a',
@@ -11171,36 +12477,6 @@ define('can/view/mustache/mustache_test', [
         items.shift();
         equal(labels.length, 1, 'first label removed');
     });
-    if (can.dev) {
-        test('Logging: Custom tag does not have a registered handler', function () {
-            if (window.html5) {
-                window.html5.elements += ' my-custom';
-                window.html5.shivDocument();
-            }
-            var oldlog = can.dev.warn;
-            can.dev.warn = function (text) {
-                equal(text, 'can/view/scanner.js: No custom element found for my-custom', 'Got expected message logged.');
-            };
-            can.view.mustache('<my-custom></my-custom>')();
-            can.dev.warn = oldlog;
-        });
-        test('Logging: Helper not found in mustache template(#726)', function () {
-            var oldlog = can.dev.warn, message = 'can/view/mustache/mustache.js: Unable to find helper "helpme".';
-            can.dev.warn = function (text) {
-                equal(text, message, 'Got expected message logged.');
-            };
-            can.view.mustache('<li>{{helpme name}}</li>')({ name: 'Hulk Hogan' });
-            can.dev.warn = oldlog;
-        });
-        test('Logging: Variable not found in mustache template (#720)', function () {
-            var oldlog = can.dev.warn, message = 'can/view/mustache/mustache.js: Unable to find key "user.name".';
-            can.dev.warn = function (text) {
-                equal(text, message, 'Got expected message logged.');
-            };
-            can.view.mustache('<li>{{user.name}}</li>')({ user: {} });
-            can.dev.warn = oldlog;
-        });
-    }
     test('Computes returning null values work with #each (#743)', function () {
         var people = new can.List([
                 'Curtis',
@@ -11333,6 +12609,27 @@ define('can/view/mustache/mustache_test', [
         equal(content[5].innerHTML.replace(/<\/?span>/gi, ''), '', 'with attribute nested' + description);
         equal(content[6].innerHTML, 'bar', 'passed as an argument to helper' + description);
         equal(content[7].innerHTML, 'bar', 'passed as a hash to helper' + description);
+    });
+    test('Partials are passed helpers (#791)', function () {
+        var t = {
+                template: '{{>partial}}',
+                expected: 'foo',
+                partials: { partial: '{{ help }}' },
+                helpers: {
+                    'help': function () {
+                        return 'foo';
+                    }
+                }
+            };
+        for (var name in t.partials) {
+            can.view.registerView(name, t.partials[name], '.mustache');
+        }
+        deepEqual(new can.Mustache({ text: t.template }).render({}, t.helpers), t.expected);
+    });
+    test('{{else}} with {{#unless}} (#988)', function () {
+        var tmpl = '<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>';
+        var frag = can.mustache(tmpl)({ noData: true });
+        equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
     });
 });
 /*can/route/pushstate/pushstate_test*/
@@ -11796,6 +13093,32 @@ define('can/route/pushstate/pushstate_test', [
                 iframe.src = can.test.path('route/pushstate/testing.html');
                 can.$('#qunit-test-area')[0].appendChild(iframe);
             });
+            test('root can include the domain', function () {
+                stop();
+                makeTestingIframe(function (info, done) {
+                    info.route.bindings.pushstate.root = can.test.path('route/pushstate/testing.html', true).replace('route/pushstate/testing.html', '');
+                    info.route(':module/:plugin/:page\\.html');
+                    info.route.ready();
+                    setTimeout(function () {
+                        equal(info.route.attr('module'), 'route', 'works');
+                        start();
+                        done();
+                    }, 100);
+                });
+            });
+            test('URL\'s don\'t greedily match', function () {
+                stop();
+                makeTestingIframe(function (info, done) {
+                    info.route.bindings.pushstate.root = can.test.path('route/pushstate/testing.html', true).replace('route/pushstate/testing.html', '');
+                    info.route(':module\\.html');
+                    info.route.ready();
+                    setTimeout(function () {
+                        ok(!info.route.attr('module'), 'there is no route match');
+                        start();
+                        done();
+                    }, 100);
+                });
+            });
         }
         test('routed links must descend from pushstate root (#652)', 1, function () {
             stop();
@@ -11924,7 +13247,7 @@ define('can/model/queue/queue_test', [
     test('queued requests will not overwrite attrs', function () {
         var delay = can.fixture.delay;
         can.fixture.delay = 1000;
-        can.Model('Person', {
+        can.Model.extend('Person', {
             create: function (id, attrs, success, error) {
                 return can.ajax({
                     url: '/people/' + id,
@@ -12172,7 +13495,7 @@ define('can/construct/proxy/proxy_test', [
 });
 /*can/map/lazy/nested_reference_test*/
 define('can/map/lazy/nested_reference_test', ['can/map/lazy/nested_reference'], function () {
-    module('can/map/lazy/nested_reference');
+    QUnit.module('can/map/lazy/nested_reference');
     test('Basics', 3, function () {
         var data = [
                 {
@@ -12268,7 +13591,7 @@ define('can/map/lazy/map_test', [
     'can/compute/compute',
     'can/test/test'
 ], function (undefined) {
-    module('can/map/lazy');
+    QUnit.module('can/map/lazy');
     test('Basic Map', 4, function () {
         var state = new can.LazyMap({
                 category: 5,
@@ -12388,7 +13711,7 @@ define('can/map/lazy/observe_test', [
     'can/map/lazy/lazy',
     'can/test/test'
 ], function () {
-    module('can/map/lazy map+list');
+    QUnit.module('can/map/lazy map+list');
     test('Basic Map', 9, function () {
         var state = new can.LazyMap({
                 category: 5,
@@ -13112,7 +14435,7 @@ define('can/map/lazy/observe_test', [
         list.pop();
         equal(list.length, 0, 'list is empty');
     });
-    module('can/map/lazy compute');
+    QUnit.module('can/map/lazy compute');
     test('Basic Compute', function () {
         var o = new can.LazyMap({
                 first: 'Justin',
@@ -13960,53 +15283,6 @@ define('can/map/setter/setter_test', [
         });
         map.attr('foo', 'bar');
     });
-    if (can.dev) {
-        test('setter function warns if a timeout did not happen (#808)', function () {
-            stop();
-            var oldlog = can.dev.warn;
-            can.dev.warnTimeout = 10;
-            can.dev.warn = function (text) {
-                ok(text, 'got a message');
-                can.batch.stop(true);
-                can.dev.warn = oldlog;
-                start();
-            };
-            var Mapped = can.Map.extend({
-                    setFoo: function (newValue) {
-                    }
-                });
-            var map = new Mapped();
-            map.attr('foo', 1);
-        });
-        test('setter function does not warn if setter is called back quickly (#808)', function () {
-            stop();
-            expect(1);
-            var oldlog = can.dev.warn;
-            can.dev.warnTimeout = 100;
-            var firstMsg = false;
-            can.dev.warn = function (text) {
-                if (!firstMsg) {
-                    return;
-                }
-                ok(false, 'got a message');
-                start();
-            };
-            var Mapped = can.Map.extend({
-                    setFoo: function (newValue, setter) {
-                        setTimeout(function () {
-                            setter('BAR');
-                        }, 10);
-                    }
-                });
-            var map = new Mapped();
-            map.attr('foo', 1);
-            map.bind('foo', function (ev, newVal) {
-                equal(newVal, 'BAR', 'new val set');
-                start();
-                can.dev.warn = oldlog;
-            });
-        });
-    }
 });
 /*can/map/attributes/attributes_test*/
 define('can/map/attributes/attributes_test', [
@@ -16379,7 +17655,8 @@ define('can/util/fixture/fixture_test', [
 define('can/view/bindings/bindings_test', [
     'can/view/bindings/bindings',
     'can/map/map',
-    'can/test/test'
+    'can/test/test',
+    'can/view/stache/stache'
 ], function (special) {
     QUnit.module('can/view/bindings', {
         setup: function () {
@@ -16722,6 +17999,13 @@ define('can/view/bindings/bindings_test', [
         can.append(can.$('#qunit-test-area'), frag);
         var input = can.$('#qunit-test-area')[0].getElementsByTagName('input')[0];
         ok(input.checked, 'checkbox value bound');
+    });
+    test('template with view binding breaks in stache, not in mustache (#966)', function () {
+        var templateString = '<a href="javascript://" can-click="select">' + '{{#if thing}}\n<div />{{/if}}' + '<span>{{name}}</span>' + '</a>';
+        var stacheRenderer = can.stache(templateString);
+        var obj = new can.Map({ thing: 'stuff' });
+        stacheRenderer(obj);
+        ok(true, 'stache worked without errors');
     });
 });
 /*can/view/live/live_test*/

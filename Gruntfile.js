@@ -12,6 +12,7 @@ var getAmdifyMap = function (baseName) {
 };
 
 module.exports = function (grunt) {
+	
 	var _ = grunt.util._;
 	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
@@ -107,94 +108,6 @@ module.exports = function (grunt) {
 							dist: 'can.' + config
 						};
 					}
-				}
-			}
-		},
-		builder: {
-			options: {
-				url: 'http://canjs.com',
-				dev: true,
-				pluginify: {
-					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
-				},
-				pkg: pkg,
-				builder: builderJSON,
-				steal: {
-					main: "can/can",
-					config: __dirname + "/stealconfig.js",
-					map: {
-						'can/': ''
-					},
-					baseURL: __dirname + "/"
-				}
-			},
-			dist: {
-				options: {
-					prefix: 'can.'
-				},
-				files: {
-					'dist/': 'can.js'
-				}
-			}
-		},
-		amdify: {
-			options: {
-				pkg: pkg,
-				builder: builderJSON,
-				steal: {
-					config: __dirname + "/stealconfig.js",
-					main: "can/can",
-					map: {
-						"can/util/util": "can/util/util",
-						'can/': ''
-					},
-					baseURL: __dirname + "/"
-				},
-				map: getAmdifyMap(baseName),
-				banner: banner
-			},
-			all: {
-				options: {
-					ids: amdIds
-				},
-				files: {
-					'dist/amd/': 'can.js'
-				}
-			},
-			dev: {
-				options: {
-					dev: true,
-					ids: amdIds
-				},
-				files: {
-					'dist/amd-dev/': 'can.js'
-				}
-			}
-		},
-		stealify: {
-			options: {
-				pkg: pkg,
-				builder: builderJSON,
-				steal: {
-					config: __dirname + "/stealconfig.js",
-					main: "can/can",
-					map: {
-						"can/util/util": "can/util/util",
-						'can/*': baseName,
-					},
-					baseURL: __dirname + "/"
-				},
-				banner: banner
-			},
-			all: {
-				options: {
-					ids: ['can'].concat(_.map(
-						_.keys(builderJSON.configurations), function (name) {
-							return 'can/util/' + name;
-						}), _.keys(builderJSON.modules))
-				},
-				files: {
-					'dist/steal/': 'can.js'
 				}
 			}
 		},
@@ -328,6 +241,7 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		// Removes the dist folder
 		clean: {
 			build: ['dist/']
 		},
@@ -418,33 +332,10 @@ module.exports = function (grunt) {
 				}
 			}
 
-		},
-
-		pluginifyTests: {
-			options: {
-				builder: builderJSON,
-				steal: {
-					paths: {
-						"jquery/jquery": "lib/jquery/jquery.js",
-						"can/*": "*.js"
-					},
-					meta: {
-						"jquery": {
-							"format": "global",
-							"exports": "jQuery"
-						}
-					}
-				}
-			},
-			latest: {
-				options: { to: 'test/pluginified/latest.js' }
-			},
-			legacy: {
-				options: { to: 'test/pluginified/<%= pkg.version %>.test.js' }
-			}
 		}
 	});
 
+	
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -457,13 +348,17 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
+	require("./tasks/build-dist")(grunt);
 
-	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
-	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit:compatibility']);
-	grunt.registerTask('test:individuals', ['connect', 'qunit:individuals']);
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'pluginifyTests:latest', 'qunit']);
+
 	grunt.registerTask('default', ['build']);
+	
+	grunt.registerTask('build', ['clean:build', 'build-dist', 'string-replace:version']);
+	
+	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'qunit:compatibility']);
+	// <%= pkg.version %>
+	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
+	
 	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
 	grunt.registerTask('test:amd', ['connect',  'build','testify','qunit:amd']);
 };

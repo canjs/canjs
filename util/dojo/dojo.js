@@ -7,7 +7,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 	function (can, attr) {
 
 	var dojo = window.dojo;
-	define('plugd/trigger', ['dojo'], function (dojo) {
+	define('plugd/trigger', ['dojo/main'], function () {
 		var d = dojo;
 		var isfn = d.isFunction;
 		var leaveRe = /mouse(enter|leave)/;
@@ -195,7 +195,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 	//  
 	// These are pre-loaded by `steal` -> no callback.
 	require([
-		'dojo',
+		'dojo/main',
 		'dojo/query',
 		'plugd/trigger',
 		'dojo/NodeList-dom'
