@@ -95,4 +95,4 @@ Use [can.Map::bind bind] to listen to error messages:
 Click a person's name to update their birthday.  If you put the date
 in the future, say the year 2525, it will report back an error.
 
-@demo can/map/validations/validations.html
+@demo can/map/validations/doc/validations.html

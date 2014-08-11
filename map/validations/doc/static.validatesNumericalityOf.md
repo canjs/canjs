@@ -5,8 +5,8 @@
 
 Validates that the specified attributes is a valid Number.
 
- init : function(){
-   this.validatesNumericalityOf(["age"]);
- }
+	init : function(){
+		this.validatesNumericalityOf(["age"]);
+	}
 
 @param {Array|String} attrNames Attribute name(s) to to validate
