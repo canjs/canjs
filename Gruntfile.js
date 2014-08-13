@@ -227,20 +227,6 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		uglify: {
-			options: {
-				banner: banner
-			},
-			all: {
-				files: {
-					'dist/can.jquery.min.js': 'dist/can.jquery.js',
-					'dist/can.zepto.min.js': 'dist/can.zepto.js',
-					'dist/can.mootools.min.js': 'dist/can.mootools.js',
-					'dist/can.dojo.min.js': 'dist/can.dojo.js',
-					'dist/can.yui.min.js': 'dist/can.yui.js'
-				}
-			}
-		},
 		// Removes the dist folder
 		clean: {
 			build: ['dist/']
@@ -332,13 +318,17 @@ module.exports = function (grunt) {
 				}
 			}
 
+		},
+		stealPluginify: require("./build/config_stealPluginify")(),
+		meta: {
+			defaults: require("./build/config_meta_defaults")(),
+			modules: require("./build/config_meta_modules")
 		}
 	});
 
 	
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -348,17 +338,26 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
-	require("./tasks/build-dist")(grunt);
+	grunt.loadNpmTasks('steal-tools');
 
 
 	grunt.registerTask('default', ['build']);
 	
-	grunt.registerTask('build', ['clean:build', 'build-dist', 'string-replace:version']);
+	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
+	grunt.registerTask('build:amd',[
+		'clean:build',
+		'stealPluginify:amd',
+		'stealPluginify:amd-util-jquery',
+		'stealPluginify:amd-util-dojo',
+		'stealPluginify:amd-util-yui',
+		'stealPluginify:amd-util-zepto',
+		'stealPluginify:amd-util-mootools',
+		'string-replace:version']);
 	
 	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'qunit:compatibility']);
 	// <%= pkg.version %>
 	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
 	
 	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
-	grunt.registerTask('test:amd', ['connect',  'build','testify','qunit:amd']);
+	grunt.registerTask('test:amd', ['connect',  'build:amd','testify','qunit:amd']);
 };
