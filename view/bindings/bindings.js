@@ -186,7 +186,10 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 						returnObserveMethods: true,
 						isArgument: true
 					});
-				return scopeData.value.call(scopeData.parent, data.scope._context, can.$(this), ev);
+				// To pass the arguments: (context, el, ev, param1, param2, ...)
+				var args = [data.scope._context, can.$(this)];
+				args.push.apply(args, can.makeArray(arguments));
+				return scopeData.value.apply(scopeData.parent, args);
 			};
 
 		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is 
