@@ -23,6 +23,10 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			return cloned.childNodes[0].childNodes.length === 2;
 		})(),
 		clonesWork = (function(){
+			if(typeof document === "undefined") {
+				return false;
+			}
+
 			// Since html5shiv is required to support custom elements, assume cloning
 			// works in any browser that doesn't have html5shiv
 

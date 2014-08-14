@@ -96,7 +96,7 @@ steal('can/util', function (can) {
 		// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
 		if (url.match(/^\/\//)) {
 			url = url.substr(2);
-			url = !window.steal ?
+			url = ( typeof window === "undefined" || ! window.steal ) ?
 				url :
 				steal.config()
 					.root.mapJoin("" + steal.id(url));
