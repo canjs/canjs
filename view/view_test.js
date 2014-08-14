@@ -31,7 +31,7 @@ steal("can/view/callbacks",
 		});
 	};
 	
-	module('can/view', {
+	QUnit.module('can/view', {
 		setup: function () {
 			copy(can.view.callbacks._attributes);
 			copy(can.view.callbacks._regExpAttributes);

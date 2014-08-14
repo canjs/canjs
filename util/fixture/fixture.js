@@ -12,6 +12,16 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
 	var getUrl = function (url) {
 		if (typeof steal !== 'undefined') {
+			// New steal
+			// TODO The correct way to make this work with new Steal is to change getUrl
+			// to return a deferred and have the other code accept a deferred.
+			if(steal.joinURIs) {
+				var base = steal.config("baseUrl");
+				var joined = steal.joinURIs(base, url);
+				return joined;
+			}
+
+			// Legacy steal
 			if (can.isFunction(steal.config)) {
 				return steal.config()
 					.root.mapJoin(url)

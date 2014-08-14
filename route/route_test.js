@@ -1,6 +1,6 @@
 /* jshint asi:true*/
 steal("can/route", "can/test", function () {
-	module("can/route", {
+	QUnit.module("can/route", {
 		setup: function () {
 			can.route._teardown();
 			can.route.defaultBinding = "hashchange";
@@ -555,7 +555,7 @@ steal("can/route", "can/test", function () {
 
 				}, 30);
 
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?11");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -579,7 +579,7 @@ steal("can/route", "can/test", function () {
 					can.remove(can.$(iframe))
 
 				}, 30);
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -601,7 +601,7 @@ steal("can/route", "can/test", function () {
 					can.remove(can.$(iframe))
 
 				}, 30);
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?2");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -640,13 +640,58 @@ steal("can/route", "can/test", function () {
 							setTimeout(innerTimer, 30)
 						}
 
-					}, 100)
+					}, 100);
 
-				}, 100)
+				}, 100);
 
-			}
+			};
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?1");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+		
+		test("can.route.current is live-bindable (#1156)", function () {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc, win) {
+				iCanRoute.ready();
+				var isOnTestPage = win.can.compute(function(){
+					return iCanRoute.current({page: "test"});
+				});
+				
+				isOnTestPage.bind("change", function(ev,newVal){
+					setTimeout(function(){
+						start();
+						can.remove(can.$(iframe));
+					},1);
+					
+				});
+				
+				equal(isOnTestPage(), false, "initially not on test page")
+				setTimeout(function(){
+					iCanRoute.attr("page","test");
+				},20);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?2");
+			can.$("#qunit-test-area")[0].appendChild(iframe);
+		});
+		
+		test("can.compute.read should not call can.route (#1154)", function () {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc, win) {
+				iCanRoute.attr("page","test");
+				iCanRoute.ready();
+				
+				var val = win.can.compute.read({route: iCanRoute},["route"]).value;
+				
+				setTimeout(function(){
+					equal(val,iCanRoute,"read correctly");
+					start();
+					can.remove(can.$(iframe));
+				},1);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?3");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
 	}
@@ -668,7 +713,7 @@ steal("can/route", "can/test", function () {
 			page: "can.Control"
 		}), "can.Control.html");
 
-	})
+	});
 
 	if (typeof require === 'undefined') {
 
@@ -755,7 +800,7 @@ steal("can/route", "can/test", function () {
 		});
 
 		can.route.attr('foo', 'bar');
-	})
+	});
 
 	test("two way binding can.route.map with can.Map instance", function(){
 		expect(1);

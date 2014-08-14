@@ -1,4 +1,6 @@
 steal('jquery', 'can/util', 'can/view', function ($, can) {
+	$ = $ || window.$;
+
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback,

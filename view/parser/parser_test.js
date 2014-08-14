@@ -125,5 +125,17 @@ steal("can/view/parser", function(parser){
 			["done",[]]
 		]));
 	});
+
+	test("supports single character attributes (#1132)", function(){
+		parser('<circle r="25"></circle>', makeChecks([
+			["start", ["circle", false]],
+			["attrStart", ["r"]],
+			["attrValue", ["25"]],
+			["attrEnd", ["r"]],
+			["end", ["circle", false]],
+			["close", ["circle"]],
+			["done", []]
+		]));
+	});
 	
 });

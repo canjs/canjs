@@ -34,7 +34,7 @@ steal('can/util',
 			ARG_NAMES = SCOPE + ",options",
 
 			// matches arguments inside a {{ }}
-			argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+			argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 
 			// matches a literal number, string, null or regexp
 			literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,

@@ -1,6 +1,6 @@
 steal('can/construct', function () {
 	/* global Foo, Car, Bar */
-	module('can/construct', {
+	QUnit.module('can/construct', {
 		setup: function () {
 			var Animal = this.Animal = can.Construct({
 				count: 0,
