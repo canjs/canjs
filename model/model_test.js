@@ -247,6 +247,33 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			equal(person.thing, 'er', 'we got updated');
 		});
 	});
+	test('create deferred', function () {
+		can.Model('Person', {
+			create: function (attrs, success, error) {
+				return can.ajax({
+					url: '/people/',
+					data: attrs,
+					type: 'post',
+					dataType: 'json',
+					fixture: function () {
+						return {
+							thing: 'er'
+						};
+					},
+					success: success
+				});
+			}
+		}, {});
+		var personD = Person.create({
+			id: 5
+		});
+		stop();
+		personD.then(function (person) {
+			start();
+			ok(person instanceof Person, 'result is instance of model');
+			equal(person.thing, 'er', 'we got created');
+		});
+	});
 	test('destroy deferred', function () {
 		can.Model('Person', {
 			destroy: function (id, success, error) {
