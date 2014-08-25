@@ -505,12 +505,12 @@ steal("can/route", "can/test", function () {
 				iCanRoute.bind('change', function () {
 					
 					equal(iCanRoute.attr('foo'), 'bar', 'expected value');
-					iCanRoute.unbind('change', arguments.callee);
+					iCanRoute.unbind('change');
 					iCanRoute.bind('change', function(){
 						
 						equal(iCanRoute.attr('personId'), '3', 'personId');
 						equal(iCanRoute.attr('foo'), undefined, 'unexpected value');
-						iCanRoute.unbind('change', arguments.callee);
+						iCanRoute.unbind('change');
 						
 						teardownRouteTest();
 					});
@@ -623,7 +623,7 @@ steal("can/route", "can/test", function () {
 		});
 
 		test("unsticky routes", function () {
-			var iframe = setupRouteTest(function (iframe, iCanRoute, loc) {
+			setupRouteTest(function (iframe, iCanRoute, loc) {
 				iCanRoute.ready();
 				iCanRoute(":type");
 				iCanRoute(":type/:id");
