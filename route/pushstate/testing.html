@@ -22,7 +22,7 @@
 		}
 	};
 	
-	var configuration = clone(window.parent.CONFIGURATION);
+	var configuration = clone(window.parent.CONFIGURATION||{});
 	// TODO pretty hacky. For some reason the original configuration object
 	// gets changed by Steal
 	configuration.shim = {
