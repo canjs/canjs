@@ -1,3 +1,4 @@
+/* global global: false */
 steal(function () {
 	/* global GLOBALCAN */
 	var glbl = typeof window !== "undefined" ? window : global;
