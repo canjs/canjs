@@ -1,9 +1,12 @@
 steal(function () {
 	/* global GLOBALCAN */
-	var can = window.can || {};
+	var glbl = typeof window !== "undefined" ? window : global;
+	
+	var can = glbl.can || {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
 		window.can = can;
 	}
+	can.global = glbl;
 
 	// An empty function useful for where you need a dummy callback.
 	can.k = function(){};
