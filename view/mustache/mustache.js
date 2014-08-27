@@ -116,7 +116,7 @@ steal('can/util',
 		 * @add can.MustacheConstructor
 		 */
 		// Put Mustache on the `can` object.
-		can.Mustache = window.Mustache = Mustache;
+		can.Mustache = can.global.Mustache = Mustache;
 
 		/** 
 		 * @prototype
