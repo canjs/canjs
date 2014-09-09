@@ -325,7 +325,7 @@ steal("can/compute", "can/test", "can/map", function () {
 		equal(result.value, "Justin", "The correct value is found.");
 	});
 
-    test("can.compute placed on a can.Map shoud not be readonly", function(){
+    test("can.compute placed on a can.Map should not be readonly", function(){
 
         var MockViewModel = can.Map.extend({
             saveFailed: can.compute(false),
