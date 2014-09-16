@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+	<head>
+		<title>can.Compute Test Suite</title>
+		<link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet">
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+
+		<script src="../bower_components/qunit/qunit/qunit.js"></script>
+		<script src="../lib/steal/steal.js?can/compute/proto_compute.js"></script>
+		<script type="text/javascript">
+			QUnit.config.autostart = false;
+			steal('can/compute/proto_test.js', function() {
+				can.dev.logLevel = 3;
+				QUnit.start();
+			});
+		</script>
+	</body>
+</html>
