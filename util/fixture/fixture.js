@@ -13,9 +13,14 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 	var getUrl = function (url) {
 		if (typeof steal !== 'undefined') {
 			if (can.isFunction(steal.config)) {
-				return steal.config()
-					.root.mapJoin(url)
-					.toString();
+				if (steal.System) {
+					return steal.joinURIs(steal.config('baseURL'), url);
+				}
+				else {
+					return steal.config()
+						.root.mapJoin(url)
+						.toString();
+				}
 			}
 			return steal.root.join(url)
 				.toString();
