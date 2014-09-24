@@ -4,6 +4,7 @@ steal('can/util',
 	'can/view/scanner.js',
 	'can/compute',
 	'can/view/render.js',
+	'can/view/bindings',
 	function (can) {
 
 		// # mustache.js
