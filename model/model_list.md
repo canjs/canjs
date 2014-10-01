@@ -49,7 +49,7 @@ defined for you. For example:
     Task = can.Model.extend({
       findAll: "/tasks"
     },{})
-    Task.List instanceof can.Model.List //-> true
+    new Task.List instanceof can.Model.List //-> true
 
 This List type is returned by [can.Model.findAll findAll]:
 
