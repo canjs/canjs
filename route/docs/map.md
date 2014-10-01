@@ -3,9 +3,9 @@
 
 Assign a can.Map instance that acts as can.route's internal can.Map.  The purpose for this is to cross-bind a top level state object (Application State) to the can.route.
 
-@signature `can.route.map(mapConstructor)`
+@signature `can.route.map(MapConstructor)`
 
-@param {can.Map} mapConstructor A can.Map constructor function.  A new can.Map instance will be created and used as the can.Map internal to can.route.
+@param {can.Map} MapConstructor A can.Map constructor function.  A new can.Map instance will be created and used as the can.Map internal to can.route.
 
 @signature `can.route.map(mapInstance)`
 
@@ -63,7 +63,7 @@ The following shows creating an appState that loads data at page load, has a vir
 
 ## Using arrays and can.Lists
 
-If the Application State contains a property which is any non-primitive type, its useful to use the [can.Map.define] plugin to define how that property will serialize. `can.route` calls [can.Map.prototype.serialize] internally to turn the Application State object into URL params.
+If the Application State contains a property which is any non-primitive type, its useful to use the [can.Map.prototype.define define] plugin to define how that property will serialize. `can.route` calls [can.Map.prototype.serialize serialize] internally to turn the Application State object into URL params.
 
 The following example shows a flags property, which is an array of string-based flags:
 
@@ -117,14 +117,16 @@ A locationIds property is defined, which is the serialized version of location. 
 				// don't serialize this property at all in the route
 				serialize: false
 			},
-			// virtual property that contains a comma separated list of ids based on locations that are selected
+			// virtual property that contains a comma separated list of ids
+			// based on locations that are selected
 			locationIds: {
 
 				// comma separated list of ids
 				serialize: function(){
-					var selected = this.attr('locations').filter(function(location){
-						return location.attr('selected');
-					});
+					var selected = this.attr('locations').filter(
+						function(location){
+							return location.attr('selected');
+						});
 					var ids = [];
 					selected.each(function(item){
 						ids.push(item.attr('id'));
@@ -151,7 +153,8 @@ A locationIds property is defined, which is the serialized version of location. 
 		}
 	});
 
-	// initialize and call map first, so anything binding to can.route will work correctly
+	// initialize and call map first, so anything binding to can.route
+	// will work correctly
 	var appState = new AppState();
 	can.route.map(appState);
 
