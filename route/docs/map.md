@@ -13,17 +13,15 @@ Assign a can.Map instance that acts as can.route's internal can.Map.  The purpos
 
 @body
 
-## Use
+## Background
 
 One of the biggest challenges in a complex application is getting all the different parts of the app to talk to each other simply, cleanly, and reliably. 
 
-An elegant way to solve this problem is using the [Observer Pattern](http://en.wikipedia.org/wiki/Observer_pattern). A single object, which can be called Application State, holds the high level state of the application.
+An elegant way to solve this problem is using the [Observer Pattern](http://en.wikipedia.org/wiki/Observer_pattern). A single object, which can be called [Application State](https://www.youtube.com/watch?v=LrzK4exG5Ss), holds the high level state of the application.
 
-Here is a [video](https://www.youtube.com/watch?v=LrzK4exG5Ss) explaining how this pattern can be used in an application.
+## Use
 
-CanJS recommends using an Application State object in your application. There are benefits to making this state object mirror the routing in your application. `can.route` already contains an internal can.Map instance, which is serialized into the hash (or pushstate URLs). 
-
-`can.route.map` provides an easy to way make your Application State object cross-bound to `can.route`.
+`can.route.map` provides an easy to way make your Application State object cross-bound to `can.route`, using an internal can.Map instance, which is serialized into the hash (or pushstate URLs).
 
 	var appState = new can.Map({
         petType: "dog",
@@ -32,19 +30,9 @@ CanJS recommends using an Application State object in your application. There ar
 
 	can.route.map(appState);
 
-The Application State object, which is cross-bound to the can.route via `can.route.map` and represents the overall state of the application, has several obvious uses:
-
-* It is passed into the various components and used to communicate their own internal state.
-* It provides deep linking and back button support. As the URL changes, Application State changes cause changes in application components.
-* It provides the ability to "save" the current state of the page, by serializing the Application State object and saving it on the backend, then restoring with that object to load this saved state.
-
 ## When to call it
 
-Its important to call `can.route.map` at the very start of your application's lifecycle, before any calls to `can.route.bind`. This is because `can.route.map` creates a new internal `can.Map`, replacing the default one, so this order is important to ensure you're binding to the correct Map.
-
-## Basic Example
-
-A basic example of an Application State for a reporting application, is shown below:
+Call `can.route.map` at the  start of the application lifecycle, before any calls to `can.route.bind`. This is because `can.route.map` creates a new internal `can.Map`, replacing the default `can.Map` instance, so binding has to occur on this new object.
 
 	var appState = new can.Map({
         graphType: "line",
@@ -52,8 +40,6 @@ A basic example of an Application State for a reporting application, is shown be
     });
 
 	can.route.map(appState);
-
-This object would then be passed into the can.Controls or can.Components that make up the building blocks of this application. Via can.route, the URL in the page would mirror the current state of the app.
 
 ## Demo
 
@@ -94,22 +80,11 @@ The following example shows a flags property, which is an array of string-based 
 
 	can.route.map(appState);
 
-## Loading data on application start
+## Complete example
 
-Applications commonly require loading some metadata on page load, which must be loaded as part of the Application State before the components can be initialized.
+The following example shows loading some metadata on page load, which must be loaded as part of the Application State before the components can be initialized
 
-To implement this functionality:
-
-1. Define a `can.Map` constructor
-1. Instantiate it
-1. Call `can.route.map` with this object
-1. Load the data
-1. When the data is ready, add it to the appState object
-1. Call `can.route.ready`, to initialize can.route and begin firing event handlers bound to can.route
-
-The following example shows a locations property, which contains a list of location `can.Map`'s loaded at page load. As users select a location, its selected property is toggled.
-
-A locationIds property is defined, which is the serialized version of location. A setter is defined on locationIds, which will translate changes in locationIds back to the true source of the data in locations.
+It also shows an example of a "virtual" property on the AppState, locationIds, which is the serialized version of a non-serializeable can.List, locations.  A setter is defined on locationIds, which will translate changes in locationIds back to the locations can.List.
 
 	var AppState = can.Map.extend({
 		define: {
@@ -168,3 +143,11 @@ A locationIds property is defined, which is the serialized version of location. 
 		// call ready after the appState is fully initialized
 		can.route.ready();
 	})
+
+## Why
+
+The Application State object, which is cross-bound to the can.route via `can.route.map` and represents the overall state of the application, has several obvious uses:
+
+* It is passed into the various components and used to communicate their own internal state.
+* It provides deep linking and back button support. As the URL changes, Application State changes cause changes in application components.
+* It provides the ability to "save" the current state of the page, by serializing the Application State object and saving it on the backend, then restoring with that object to load this saved state.
