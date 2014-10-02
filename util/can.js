@@ -84,7 +84,7 @@ steal(function () {
 			var ll = this.logLevel;
 			if (ll < 2) {
 				Array.prototype.unshift.call(arguments, 'WARN:');
-				if (window.console && console.warn) {
+				if (typeof window !== undefined && window.console && console.warn) {
 					this._logger("warn", Array.prototype.slice.call(arguments));
 				} else if (window.console && console.log) {
 					this._logger("log", Array.prototype.slice.call(arguments));

@@ -319,6 +319,11 @@ module.exports = function (grunt) {
 			}
 
 		},
+		simplemocha: {
+			builders: {
+				src: ["test/builders/steal-tools/test.js"]
+			}
+		},
 		stealPluginify: require("./build/config_stealPluginify")(),
 		meta: {
 			defaults: require("./build/config_meta_defaults")(),
@@ -339,6 +344,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
 	grunt.loadNpmTasks('steal-tools');
+	grunt.loadNpmTasks('grunt-simple-mocha');
 
 
 	grunt.registerTask('default', ['build']);
@@ -356,7 +362,7 @@ module.exports = function (grunt) {
 	
 	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'qunit:compatibility']);
 	// <%= pkg.version %>
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
+	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit', 'simplemocha']);
 	
 	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
 	grunt.registerTask('test:amd', ['connect',  'build:amd','testify','qunit:amd']);
