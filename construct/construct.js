@@ -287,14 +287,40 @@ steal('can/util/string', function (can) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
+				Constructor, parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
 			// Instantiate a base class (but only create the instance,
 			// don't run the init constructor).
 			prototype = this.instance();
 			// Copy the properties over onto the new prototype.
 			can.Construct._inherit(proto, _super, prototype);
+
+			if(fullName) {
+				parts = fullName.split('.');
+				shortName = parts.pop();
+			}
+			//!steal-remove-start
+			/* jshint ignore:start */
+			// In dev builds we want constructor.name to be the same as shortName.
+			// The only way to do that right now is using eval. jshint does not like
+			// this at all so we hide it
+
+			// Strip semicolons
+			var constructorName = shortName ? shortName.replace(/;/g, '') : 'Constructor';
+
+			// Assign a name to the constructor
+			eval('Constructor = function ' + constructorName + '() { return init.apply(this, arguments); }');
+			/* jshint ignore:end */
+			//!steal-remove-end
+
+			// Make sure Constructor is still defined when the constructor name
+			// code is removed.
+			if(typeof constructorName === 'undefined') {
+				Constructor = function() {
+					return init.apply(this, arguments);
+				};
+			}
 			// The dummy class constructor.
-			function Constructor() {
+			function init() {
 				// All construction is actually done in the init method.
 				if (!initializing) {
 					//!steal-remove-start
@@ -323,8 +349,6 @@ steal('can/util/string', function (can) {
 			// Setup namespaces.
 			if (fullName) {
 
-				parts = fullName.split('.');
-				shortName = parts.pop();
 				current = can.getObject(parts.join('.'), window, true);
 				namespace = current;
 				_fullName = can.underscore(fullName.replace(/\./g, "_"));
