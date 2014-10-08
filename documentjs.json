@@ -10,8 +10,7 @@
 			"glob": {
 				"pattern": "{guides/*.md,*.md}"
 			},
-			"parent": "guides",
-			"devBuild": true
+			"parent": "guides"
 		}
 	}
 }
