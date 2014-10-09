@@ -37,6 +37,7 @@
     "steal-tools": "git://github.com/bitovi/steal-tools.git#master"
   },
   "scripts": {
+    "install": "bower install",
     "test": "grunt test"
   },
   "demos": [
