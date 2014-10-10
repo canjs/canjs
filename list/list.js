@@ -206,6 +206,105 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 */
 			//
 			/**
+			 * @function can.List.prototype.sort sort
+			 * @description Sorts elements of a List in place and returns the array.
+			 * 
+			 * @signature `list.sort()`
+			 * Sorts in ascending order according to each element's string value.
+			 * @return {Array} An array with all List elements sorted.
+			 * 
+			 * @signature `list.sort(sortFunction)`
+			 * Sorts according to `sortFunction`.
+			 * @param {Function} sortFunction A function to call with each element of the List.
+			 * @return {Array} An array with all List elements sorted.
+			 * 
+			 * @signature `list.sort(comparator)`
+			 * Sorts in ascending order according to the `comparator` key.
+			 * @param {Function} sortFunction A function to call with each element of the List.
+			 * @return {Array} An array with all List elements sorted.
+			 * 
+			 * @body
+			 * 
+			 * This example demonstrates how to use `sortFunction` sort in descending order:
+			 * @codestart
+			 * var list = new can.List([
+			 *     { deep:{ value:2 } },
+			 *     { deep:{ value:1 } },
+			 *     { deep:{ value:3 } },
+			 *     { deep:{ value:0 } }
+			 * ]);
+			 * 
+			 * list.sort(function(a, b) {
+			 *     a = a.deep.value;
+			 *     b = b.deep.value;
+			 *     return a === b ? 0 : a > b ? -1 : 1;
+			 * });
+			 * // produces:
+			 * // [{ deep:{ value:3 } },
+			 * //  { deep:{ value:2 } },
+			 * //  { deep:{ value:1 } },
+			 * //  { deep:{ value:0 } }]
+			 * @codeend
+			 * 
+			 * This example demonstrates how to use `comparator`:
+			 * @codestart
+			 * var list = new can.List([
+			 *     { deep:{ value:2 } },
+			 *     { deep:{ value:1 } },
+			 *     { deep:{ value:3 } },
+			 *     { deep:{ value:0 } }
+			 * ]);
+			 * 
+			 * list.sort("deep.value");
+			 * // produces:
+			 * // [{ deep:{ value:0 } },
+			 * //  { deep:{ value:1 } },
+			 * //  { deep:{ value:2 } },
+			 * //  { deep:{ value:3 } }]
+			 * @codeend
+			 */
+			sort: function (customSortOrComparator, silent) {
+				var args;
+				var comparator;
+				var customSort;
+				var oldVal,newVal;
+				
+				if (typeof customSortOrComparator === 'function') {
+					customSort = customSortOrComparator;
+				}
+				else if (typeof customSortOrComparator === 'string') {
+					comparator = customSortOrComparator;
+				}
+				
+				if (comparator) {
+					args = [function (a, b) {
+						a = a.attr(comparator);
+						b = b.attr(comparator);
+						if (typeof a === 'function') { a = a(); }
+						if (typeof b === 'function') { b = b(); }
+						return a === b ? 0 : a < b ? -1 : 1;
+					}];
+				} else if (customSort) {
+					args = [customSort];
+				}
+				else {
+					args = [];
+				}
+				
+				oldVal = this.slice(0);
+				newVal = Array.prototype.sort.apply(this, args);
+				
+				if (!silent) {
+					// Only for user's listeners -- won't remove elements
+					can.trigger(this, 'reset');
+				}
+				
+				this._triggerChange('0', 'remove', undefined, oldVal);
+				this._triggerChange('0', 'add', newVal, oldVal);
+				
+				return newVal;
+			},
+			/**
 			 * @function can.List.prototype.splice splice
 			 * @description Insert and remove elements from a List.
 			 * @signature `list.splice(index[, howMany[, ...newElements]])`

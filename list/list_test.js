@@ -1,4 +1,4 @@
-steal("can/util", "can/list", "can/test", "can/compute", function(){
+steal("can/util", "can/list", "can/test", "can/compute", "can/view/mustache", function(){
 	
 	module('can/list');
 	
@@ -224,6 +224,45 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 		list.removeAttr("foo");
 		
 		equal(list.length, 2);
+	});
+	
+	test('sort', function() {
+		var list = new can.List([2,1,3,0]);
+		var frag = can.view.mustache('<div>{{#list}}{{.}},{{/list}}</div>')({ list:list });
+		frag = frag.querySelector('div');
+		
+		deepEqual( list.serialize(), [2,1,3,0], 'Found starting value' );
+		equal( frag.innerHTML, '2,1,3,0,', 'Found starting value (live binding)' );
+		
+		list.sort();
+		deepEqual( list.serialize(), [0,1,2,3], 'Found sorted value' );
+		equal( frag.innerHTML, '0,1,2,3,', 'Found sorted value (live binding)' );
+	});
+	
+	test('sort with sortFunction and comparator', function() {
+		var list = new can.List([
+			{ deep:{ value:2 } },
+			{ deep:{ value:1 } },
+			{ deep:{ value:3 } },
+			{ deep:{ value:0 } }
+		]);
+		var frag = can.view.mustache('<div>{{#list}}{{deep.value}},{{/list}}</div>')({ list:list });
+		frag = frag.querySelector('div');
+		
+		deepEqual( list.serialize(), [{deep:{value:2}},{deep:{value:1}},{deep:{value:3}},{deep:{value:0}}], 'Found starting value' );
+		equal( frag.innerHTML, '2,1,3,0,', 'Found starting value (live binding)' );
+		
+		list.sort(function(a, b) {
+			a = a.deep.value;
+			b = b.deep.value;
+			return a === b ? 0 : a > b ? -1 : 1;
+		});
+		deepEqual( list.serialize(), [{deep:{value:3}},{deep:{value:2}},{deep:{value:1}},{deep:{value:0}}], 'Found sortFunction value' );
+		equal( frag.innerHTML, '3,2,1,0,', 'Found sortFunction value (live binding)' );
+		
+		list.sort('deep.value');
+		deepEqual( list.serialize(), [{deep:{value:0}},{deep:{value:1}},{deep:{value:2}},{deep:{value:3}}], 'Found comparator value' );
+		equal( frag.innerHTML, '0,1,2,3,', 'Found comparator value (live binding)' );
 	});
 	
 });
