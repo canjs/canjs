@@ -1,5 +1,5 @@
-steal("can/map/sort", "can/test", "can/view/mustache", function () {
-	module('can/map/sort');
+steal("can/map/autosort", "can/test", "can/view/mustache", function () {
+	module('can/map/autosort');
 
 	test('list events', 16, function () {
 		var list = new can.List([{
@@ -12,7 +12,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 			name: 'Mihael'
 		}]);
 		list.comparator = 'name';
-		list.sort();
+		list.autosort();
 		// events on a list
 		// - move - item from one position to another
 		//          due to changes in elements that change the sort order
@@ -49,7 +49,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		list[0].attr('name', 'Zed');
 	});
 
-	test('list sort with func', 1, function () {
+	test('list autosort with func', 1, function () {
 		var list = new can.List([{
 			priority: 4,
 			name: 'low'
@@ -63,7 +63,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 			priority: 3,
 			name: 'mid'
 		}]);
-		list.sort(function (a, b) {
+		list.autosort(function (a, b) {
 			// Sort functions always need to return the -1/0/1 integers
 			if (a.priority < b.priority) {
 				return -1;
@@ -73,7 +73,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 		equal(list[0].name, 'high');
 	});
 
-	test('list sort with containing Map attribute', 4, function () {
+	test('list autosort with containing Map attribute', 4, function () {
 		var list = new can.Map.List([
 			new can.Map({
 				text: 'Bbb',
@@ -101,7 +101,7 @@ steal("can/map/sort", "can/test", "can/view/mustache", function () {
 			})
 		]);
 		list.comparator = 'func';
-		list.sort();
+		list.autosort();
 		equal(list.attr()[0].text, 'Aaa');
 		equal(list.attr()[1].text, 'abb');
 		equal(list.attr()[2].text, 'baa');

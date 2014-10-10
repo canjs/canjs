@@ -151,8 +151,8 @@
 			"type": "plugin",
 			"description": "Define rich attribute behavior"
 		},
-		"can/map/sort": {
-			"name": "can.List.Sort",
+		"can/map/autosort": {
+			"name": "can.List.autosort",
 			"type": "plugin",
 			"description": "Sort observable lists"
 		},

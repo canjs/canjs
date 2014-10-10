@@ -1,9 +1,9 @@
-@page can.List.prototype.sort
+@page can.List.prototype.autosort
 @parent can.List.prototype
-@plugin can/map/sort
-@test can/map/sort/test.html
+@plugin can/map/autosort
+@test can/map/autosort/test.html
 
-`list.sort(sortfunc)`
+`list.autosort(sortfunc)`
 
 Sorts the instances in the list.
 
@@ -14,4 +14,4 @@ Sorts the instances in the list.
 		{ name: 'Mihael' }])
 		
 	list.comparator = 'name';
-	list.sort(); //- sorts the list by the name attribute
+	list.autosort(); //- sorts the list by the name attribute

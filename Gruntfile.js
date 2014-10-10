@@ -299,7 +299,7 @@ module.exports = function (grunt) {
 						// 'http://localhost:8000/map/delegate/test.html',
 						'http://localhost:8000/map/list/test.html',
 						'http://localhost:8000/map/setter/test.html',
-						'http://localhost:8000/map/sort/test.html',
+						'http://localhost:8000/map/autosort/test.html',
 						'http://localhost:8000/map/validations/test.html',
 						'http://localhost:8000/model/test.html',
 						'http://localhost:8000/observe/test.html',

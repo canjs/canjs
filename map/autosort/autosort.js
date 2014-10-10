@@ -51,7 +51,7 @@ steal('can/util', 'can/list', function (can) {
 		/**
 		 * @hide
 		 */
-		sort: function (method, silent) {
+		autosort: function (method, silent) {
 			var comparator = this.comparator,
 				args = comparator ? [
 
@@ -131,7 +131,7 @@ steal('can/util', 'can/list', function (can) {
 				// args - the items added
 				// undefined - the old value
 				if (this.comparator && args.length) {
-					this.sort(null, true);
+					this.autosort(null, true);
 					can.batch.trigger(this, 'reset', [args]);
 					this._triggerChange('' + len, 'add', args, undefined);
 				}
@@ -173,7 +173,7 @@ steal('can/util', 'can/list', function (can) {
 	proto.setup = function (instances, options) {
 		setup.apply(this, arguments);
 		if (this.comparator) {
-			this.sort();
+			this.autosort();
 		}
 	};
 	return can.Map;
