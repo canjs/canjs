@@ -220,7 +220,14 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * 
 			 * @signature `list.sort(comparator)`
 			 * Sorts in ascending order according to the `comparator` key.
-			 * @param {Function} sortFunction A function to call with each element of the List.
+			 * @param {String} comparator A key to sort the List accordingly.
+			 * @return {Array} An array with all List elements sorted.
+			 * 
+			 * @signature `list.sort(config)`
+			 * Customize sort order and define multiple comparator keys.
+			 * `comparators` - Index `0` is the main comparator. Any following indexes, if defined, are used in cases where sorted values are identical.
+			 * `order` - Possible values are `"ascending"` and `"descending"`.
+			 * @param {Object} config A configuration object for custom sorting.
 			 * @return {Array} An array with all List elements sorted.
 			 * 
 			 * @body
@@ -262,42 +269,101 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * //  { deep:{ value:2 } },
 			 * //  { deep:{ value:3 } }]
 			 * @codeend
+			 * 
+			 * This example demonstrates how to use `config`:
+			 * @codestart
+			 * var list = new can.List([
+			 *     { deep:{ label:"Hi",    value:1 } },
+			 *     { deep:{ label:"Yo",    value:2 } },
+			 *     { deep:{ label:"Hey",   value:2 } },
+			 *     { deep:{ label:"Hello", value:1 } }
+			 * ]);
+			 * 
+			 * list.sort({
+			 *     comparators: ["deep.value", "deep.label"],
+			 *     order: "descending"
+			 * });
+			 * // produces:
+			 * // [{ deep:{ label:"Yo",    value:2 } },
+			 * //  { deep:{ label:"Hey",   value:2 } },
+			 * //  { deep:{ label:"Hi",    value:1 } },
+			 * //  { deep:{ label:"Hello", value:1 } }]
+			 * @codeend
+			 * 
+			 * This example demonstrates how to use the `"sort"` event to avoid complications with any of your `"add"` and `"remove"` event listeners:
+			 * @codestart
+			 * var sorting = false;
+			 * 
+			 * list.bind("add", function(ev, items, index) {
+			 *     // Do not perform regular action when sort is updating the DOM
+			 *     if (!sorting) {
+			 *         doSomething();
+			 *     } else {
+			 *         // Items re-added to DOM at end of sort, unflag `sorting`
+			 *         sorting = false;
+			 *     }
+			 * });
+			 * 
+			 * list.bind("remove", function(ev, items, index) {
+			 *     // Do not perform regular action when sort is updating the DOM
+			 *     if (!sorting) doSomethingElse();
+			 * });
+			 * 
+			 * list.bind("sort", function(ev, items, index) {
+			 *     // This event is called before both `"remove"` and `"add"`
+			 *     sorting = true;
+			 * });
+			 * @codeend
 			 */
-			sort: function (customSortOrComparator, silent) {
-				var args;
-				var comparator;
-				var customSort;
-				var oldVal,newVal;
+			sort: function (input) {
+				var args,newVal,oldVal;
+				var config = {
+					comparators: [],
+					order: 'ascending',
+					sortFunction: function(a, b) {
+						for (var i=0, len=config.comparators.length; i<len; i++) {
+							var aa = a.attr( config.comparators[i] );
+							var bb = b.attr( config.comparators[i] );
+							
+							if (typeof aa === 'function') { aa = aa(); }
+							if (typeof bb === 'function') { bb = bb(); }
+							
+							if (aa === bb) {
+								if (i < len-1) { continue; }
+								return 0;
+							}
+							
+							switch (config.order) {
+								case 'ascending':
+									return aa < bb ? -1 : 1;
+								case 'descending':
+									return aa > bb ? -1 : 1;
+							}
+						}
+					}
+				};
 				
-				if (typeof customSortOrComparator === 'function') {
-					customSort = customSortOrComparator;
-				}
-				else if (typeof customSortOrComparator === 'string') {
-					comparator = customSortOrComparator;
-				}
-				
-				if (comparator) {
-					args = [function (a, b) {
-						a = a.attr(comparator);
-						b = b.attr(comparator);
-						if (typeof a === 'function') { a = a(); }
-						if (typeof b === 'function') { b = b(); }
-						return a === b ? 0 : a < b ? -1 : 1;
-					}];
-				} else if (customSort) {
-					args = [customSort];
-				}
-				else {
-					args = [];
+				switch (typeof input) {
+					case 'function':
+						args = [input];
+						break;
+					case 'object':
+						can.extend(config, input);
+						args = [config.sortFunction];
+						break;
+					case 'string':
+						config.comparators.push(input);
+						args = [config.sortFunction];
+						break;
+					default:
+						args = [];
 				}
 				
-				oldVal = this.slice(0);
+				oldVal = this.slice();
 				newVal = Array.prototype.sort.apply(this, args);
 				
-				if (!silent) {
-					// Only for user's listeners -- won't remove elements
-					can.trigger(this, 'reset');
-				}
+				// Only for user's listeners -- won't touch DOM
+				can.trigger(this, 'sort');
 				
 				this._triggerChange('0', 'remove', undefined, oldVal);
 				this._triggerChange('0', 'add', newVal, oldVal);

@@ -265,4 +265,30 @@ steal("can/util", "can/list", "can/test", "can/compute", "can/view/mustache", fu
 		equal( frag.innerHTML, '0,1,2,3,', 'Found comparator value (live binding)' );
 	});
 	
+	test('sort with config', function() {
+		var list = new can.List([
+			{ deep:{ label:"Hi",    value:1 } },
+			{ deep:{ label:"Yo",    value:2 } },
+			{ deep:{ label:"Hey",   value:2 } },
+			{ deep:{ label:"Hello", value:1 } }
+		]);
+		var frag = can.view.mustache('<div>{{#list}}{{deep.label}}[{{deep.value}}],{{/list}}</div>')({ list:list });
+		frag = frag.querySelector('div');
+		
+		list.sort({
+			comparators: ["deep.value", "deep.label"],
+			order: "descending"
+		});
+		
+		var expected = [
+			{ deep:{ label:"Yo",    value:2 } },
+			{ deep:{ label:"Hey",   value:2 } },
+			{ deep:{ label:"Hi",    value:1 } },
+			{ deep:{ label:"Hello", value:1 } }
+		];
+		
+		deepEqual( list.serialize(), expected, 'Found config value' );
+		equal( frag.innerHTML, 'Yo[2],Hey[2],Hi[1],Hello[1],', 'Found config value (live binding)' );
+	});
+	
 });
