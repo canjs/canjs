@@ -12,7 +12,7 @@ Retrieve a single instance from the server.
 the retrieved resource as a can.Model.
 @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
 XmlHttpRequest object.
-@return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
+@return {can.Deferred} A deferred that resolves to a [can.Model] instance of the retrieved model
 
 @signature `can.Model.findOne: findOneData( params ) -> deferred`
 
