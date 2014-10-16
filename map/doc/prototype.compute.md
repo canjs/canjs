@@ -12,18 +12,17 @@
 `compute` is a convenience method for making computes from properties
 of Observes. More information about computes can be found under [can.compute].
 
-@codestart
-var map = new can.Map({a: 'Alexis'});
-var name = map.compute('a');
-name.bind('change', function(ev, nevVal, oldVal) {
- console.log('a changed from ' + oldVal + 'to' + newName + '.');
-});
 
-name(); // 'Alexis'
+    var map = new can.Map({a: 'Alexis'});
+    var name = map.compute('a');
+    name.bind('change', function(ev, nevVal, oldVal) {
+        console.log('a changed from ' + oldVal + 'to' + newName + '.');
+    });
 
-map.attr('a', 'Adam'); // 'a changed from Alexis to Adam.'
-name(); // 'Adam'
+    name(); // 'Alexis'
 
-name('Alice'); // 'a changed from Adam to Alice.'
-name(); // 'Alice'
-@codeend
+    map.attr('a', 'Adam'); // 'a changed from Alexis to Adam.'
+    name(); // 'Adam'
+
+    name('Alice'); // 'a changed from Adam to Alice.'
+    name(); // 'Alice'
