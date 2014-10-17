@@ -273,14 +273,21 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				var args = can.makeArray(arguments),
 					added =[],
 					i, len;
+
+				// converting the arguments to the right type
 				for (i = 2, len = args.length; i < len; i++) {
 					args[i] = this.__type(args[i], i);
 					added.push(args[i]);
 				}
+
+				// default howMany if not provided
 				if (howMany === undefined) {
 					howMany = args[1] = this.length - index;
 				}
+
 				var removed = splice.apply(this, args);
+
+				// delete properties for browsers who's splice sucks (old ie)
 				if (!spliceRemovesProps) {
 					for (i = this.length; i < removed.length + this.length; i++) {
 						delete this[i];
@@ -289,10 +296,12 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 				can.batch.start();
 				if (howMany > 0) {
+					// tears down bubbling
 					bubble.removeMany(this, removed);
 					this._triggerChange("" + index, "remove", undefined, removed);
 				}
 				if (args.length > 2) {
+					// make added items bubble to this list
 					for (i = 0, len = added.length; i < len; i++) {
 						bubble.set(this, i, added[i]);
 					}
