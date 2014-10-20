@@ -12,6 +12,13 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 	};
 	
 	var helpers = {
+		"debug": function(str, options){
+			if (typeof(str) == 'function'){
+			        return JSON.stringify(str().attr());
+			} else {
+				return str;
+			}
+		}),
 		"each": function(items, options){
 			var resolved = resolve(items),
 				result = [],
