@@ -1,12 +1,5 @@
 steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js', function (can, bubble) {
 
-	// A map that temporarily houses a reference
-	// to maps that have already been made for a plain ole JS object
-	var madeMap = null;
-	var getMapFromObject = function (obj) {
-		return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
-	};
-
 	can.LazyMap = can.Map.extend({
 		_bubble: bubble
 	}, {
@@ -121,11 +114,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		__type: function(value, prop){
 			// If we are getting an object.
 			if (!( value instanceof can.LazyMap) && can.Map.helpers.canMakeObserve(value)  ) {
-				
-				var cached = getMapFromObject(value);
-				if(cached) {
-					return cached;
-				}
+
 				if( can.isArray(value) ) {
 					var List = can.LazyList;
 					return new List(value);
