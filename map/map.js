@@ -267,8 +267,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				can.cid(this, ".map");
 				// Sets all `attrs`.
 				this._init = 1;
-				// It's handy if we pass this to comptues, because computes can have a default value.
-				var defaultValues = this._setupDefaults();
+				this._computedBindings = {};
+
+				// It's handy if we pass this to computes, because computes can have a default value.
+				var defaultValues = this._setupDefaults(obj);
 				this._setupComputes(defaultValues);
 				var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
 
@@ -288,7 +290,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			// Sets up computed properties on a Map.
 			_setupComputes: function () {
 				var computes = this.constructor._computes;
-				this._computedBindings = {};
 
 				for (var i = 0, len = computes.length, prop; i < len; i++) {
 					prop = computes[i];

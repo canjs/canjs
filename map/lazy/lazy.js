@@ -21,6 +21,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			can.cid(this, ".lazyMap");
 			// Sets all `attrs`.
 			this._init = 1;
+			this._computedBindings = {};
 			this._setupComputes();
 			var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
 
