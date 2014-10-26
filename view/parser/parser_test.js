@@ -139,7 +139,7 @@ steal("can/view/parser", function(parser){
 	});
 
 	test('accept custom tag with colon ":" #1108', function(){
-    parser('<x:widget/>', makeChecks([
+		parser('<x:widget/>', makeChecks([
 			["start", ["x:widget",true]],
 			["end", ["x:widget", true]],
 			["done", []]
