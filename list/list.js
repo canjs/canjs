@@ -212,7 +212,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @param {Number} index where to start removing or inserting elements
 			 *
 			 * @param {Number} [howMany] the number of elements to remove
-			 * If _howMany_ is not provided, `splice` will all elements from `index` to the end of the List.
+			 * If _howMany_ is not provided, `splice` will remove all elements from `index` to the end of the List.
 			 *
 			 * @param {*} newElements elements to insert into the List
 			 *
