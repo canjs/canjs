@@ -15,7 +15,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			this.constructor.List = can.LazyList;
 
 			// `_data` is where we keep the properties.
-			this._data = can.extend(can.extend(true, {}, this.constructor.defaults || {}), obj);
+			this._data = can.extend(can.extend(true, {}, this._getDefaults()), obj);
 
 			// The namespace this `object` uses to listen to events.
 			can.cid(this, ".lazyMap");
@@ -121,7 +121,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		__type: function(value, prop){
 			// If we are getting an object.
 			if (!( value instanceof can.LazyMap) && can.Map.helpers.canMakeObserve(value)  ) {
-				
+
 				var cached = getMapFromObject(value);
 				if(cached) {
 					return cached;

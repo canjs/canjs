@@ -29,9 +29,9 @@ steal('can/util', 'can/observe', function (can) {
 	};
 
 
-	var oldSetupDefaults = can.Map.prototype._setupDefaults;
-	can.Map.prototype._setupDefaults = function () {
-		var defaults = oldSetupDefaults.call(this),
+	var oldGetDefaults = can.Map.prototype._getDefaults;
+	can.Map.prototype._getDefaults = function () {
+		var defaults = oldGetDefaults.call(this),
 			Map = this.constructor;
 		for (var prop in Map.defaultGenerators) {
 			defaults[prop] = Map.defaultGenerators[prop].call(this);
@@ -148,7 +148,7 @@ steal('can/util', 'can/observe', function (can) {
 			return '' + val;
 		}
 	};
-	
+
 	// the old type sets up bubbling
 	var oldType = proto.__type;
 	proto.__type = function (value, prop) {
@@ -226,7 +226,7 @@ steal('can/util', 'can/observe', function (can) {
 			return typeof serializer === "function" ? serializer.call(map, val, attr): oldSingleSerialize.apply(this, arguments);
 		}
 	};
-	
+
 	// Overwrite serialize to add in any missing define serialized properties.
 	var oldSerialize = proto.serialize;
 	proto.serialize = function (property) {
@@ -235,7 +235,7 @@ steal('can/util', 'can/observe', function (can) {
 			return serialized;
 		}
 		// add in properties not already serialized
-		
+
 		var serializer,
 			val;
 		// Go through each property.
