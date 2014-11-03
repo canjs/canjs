@@ -1854,11 +1854,12 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	], function (funcName) {
 		// Each of these is pretty much the same, except for the events they trigger.
 		can.Model.prototype[funcName] = function (attrs) {
-			var stub,
-				constructor = this.constructor;
+			var constructor = this.constructor;
 
 			// Update attributes if attributes have been passed
-			stub = attrs && typeof attrs === 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
+			if(attrs && typeof attrs === 'object') {
+				this.attr(attrs.attr ? attrs.attr() : attrs);
+			}
 
 			// triggers change event that bubble's like
 			// handler( 'change','1.destroyed' ). This is used
