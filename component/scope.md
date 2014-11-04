@@ -1,7 +1,7 @@
 @property {Object|can.Map|function} can.Component.prototype.scope
 @parent can.Component.prototype
 
-Provides or describes a [can.Map] constructor function or can.Map instance that will be 
+Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
 used to retrieve values found in the component's [can.Component::template template]. The map 
 instance is initialized with values specified by the component element's attributes.
 
@@ -10,8 +10,8 @@ scope differently. To pass data from the scope, you must wrap your attribute
 value with `{}`. In 3.0, [can.mustache]
 will use [can.stache]'s syntax.
 
-@option {Object} A plain JavaScript object that is used to define the prototype methods and properties of 
-[can.Construct constructor function] that extends can.Map. For example:
+@option {Object} A plain JavaScript object that is used to define the prototype methods and properties of
+[can.Construct constructor function] that extends [can.Map]. For example:
 
     can.Component.extend({
       tag: "my-paginate",
@@ -24,7 +24,7 @@ will use [can.stache]'s syntax.
       }
     })
 
-Prototype properties that have values of `"@"` are not looked up in the current scope, instead
+Prototype properties that have values of `@` are not looked up in the current scope, instead
 the literal string value of the relevant attribute is used (like pass by value instead of pass by reference).  For example:
 
     can.Component.extend({
@@ -43,8 +43,8 @@ Results in:
 
     <my-tag><h1>hello</h1></my-tag>
 
-@option {can.Map} A can.Map constructor function will be used to create an instance of the observable
-can.Map placed at the head of the template's scope.  For example:
+@option {can.Map} A `can.Map` constructor function will be used to create an instance of the observable
+`can.Map` placed at the head of the template's scope.  For example:
 
     var Paginate = can.Map.extend({
       offset: 0,
@@ -96,7 +96,7 @@ the user to provide an attribute, you can set this up here.  For example:
 
 Notice how the attribute's value is looked up in `my-element`'s parent scope.
 
-@param {HTMLElement} element The element the can.Component is going to be placed on. If you want 
+@param {HTMLElement} element The element the [can.Component] is going to be placed on. If you want
 to add custom attribute handling, you can do that here.  For example:
 
     can.Component.extend({
@@ -157,7 +157,7 @@ This is because the provided scope object is used to extend a can.Map like:
       }
     })
 
-Any primitives found on a can.Map's prototype (ex: `offset: 0`) are used as 
+Any primitives found on a `can.Map`'s prototype (ex: `offset: 0`) are used as
 default values.
 
 Next, a new instance of CustomMap is created with the attribute data within `<my-paginate>`
@@ -175,22 +175,22 @@ render the component's template, and inserted into the element:
 ## Values passed from attributes
 
 Values can be "passed" into the scope of a component, similar to passing arguments into a function. By default, 
-custom tag attributes (other than "class" and "id") are looked up
+custom tag attributes (other than `class` and `id`) are looked up
 in the parent scope and set as observable values on the [can.Map] instance. 
 
 Values passed in this way are passed similar to function arguments that are "pass by reference" because they are crossbound to 
 the property in the parent scope. Changes in the parent scope property that is passed in trigger changes in this component's scope 
 property, and likewise, changes in the component's scope property trigger a change in the parent scope property.
 
-As mentioned in the deprecation warning above, using can.stache, values are passed into components like this:
+As mentioned in the deprecation warning above, using [can.stache], values are passed into components like this:
 
     <my-paginate offset='{index}' limit='{size}'></my-paginate>
 
-But using can.mustache, values are passed like this:
+But using [can.mustache], values are passed like this:
 
-    my-paginate offset='index' limit='size'></my-paginate>
+    <my-paginate offset='index' limit='size'></my-paginate>
 
-The rest of the examples in this section show can.mustache syntax (which will change to match can.stach in 3.0). 
+The rest of the examples in this section show `can.mustache` syntax (which will change to match can.stache in 3.0).
 
 Note that using double brackets would instead render the string version of the value, and pass by value rather than by reference:
 
@@ -199,8 +199,7 @@ Note that using double brackets would instead render the string version of the v
 The above would create an offset and limit property on the component that are initialized to whatever index and size are, NOT cross-bind 
 the offset and limit properties to the index and size.
 
-The following component requires an offset and 
-limit:
+The following component requires an `offset` and `limit`:
 
     can.Component.extend({
       tag: "my-paginate",
@@ -229,8 +228,7 @@ index like:
 
     pageInfo.attr("index",20)
 
-... the component's offset value will change and it's template
-will update to:
+... the component's offset value will change and its template will update to:
 
     <my-paginate>Page 1</my-paginate>
 
@@ -239,16 +237,16 @@ will update to:
 You can also pass a literal string value of the attribute instead of the attribute's value looked up in
 the parent scope (similar to pass by value). 
 
-To do this in can.stache, simply pass any value not wrapped in single brackets, and the scope property will 
+To do this in [can.stache], simply pass any value not wrapped in single brackets, and the scope property will
 be initialized to this string value:
 
     <my-tag title="hello"></my-tag>
 
-The above will create a title property in the component's scope, which has a string "hello".  If instead hello was wrapped with 
-brackets like "{hello}", a hello property would be looked up in the parent's scope.
+The above will create a title property in the component's scope, which has a string `hello`.  If instead hello was wrapped with
+brackets like `{hello}`, a hello property would be looked up in the parent's scope.
 
-To do this in can.mustache, pass a value like in can.stache, and set the corresponding scope property in the component 
-to a value of "@".  For example:
+To do this in [can.mustache], pass a value like in `can.stache`, and set the corresponding scope property in the component
+to `@`.  For example:
 
     can.Component.extend({
       tag: "my-tag",
@@ -266,17 +264,16 @@ Results in:
 
     <my-tag><h1>hello</h1></my-tag>
 
-can.mustache syntax (requiring the "@") will change to can.stache in 3.0 (not requiring the "@").
+In 3.0, `can.mustache` syntax (requiring `@`) will change to `can.stache`'s' (not requiring `@`).
 
 If the tag's `title` attribute is changed, it updates the scope property 
 automatically.  This can be seen in the following example:
 
 @demo can/component/examples/accordion.html
 
-Clicking the __Change title__
-button sets a `<panel>` element's "title" attribute like:
+Clicking the __Change title__ button sets a `<panel>` element's "title" attribute like:
 
-    $("#out").on("click","button", function(){
+    $("#out").on("click", "button", function(){
       $("panel:first").attr("title", "Users")
       $(this).remove();
     });
@@ -284,7 +281,7 @@ button sets a `<panel>` element's "title" attribute like:
 
 ## Calling methods on scope from events within the template
 
-Using html attributes like `can-EVENT=METHOD`, you can directly call a scope method 
+Using html attributes like `can-EVENT-METHOD`, you can directly call a scope method
 from a template. For example, we can make `<my-paginate>` elements include a next
 button that calls the scope's `next` method like:
 
