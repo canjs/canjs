@@ -3867,4 +3867,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
 		});
 	}
+
+	test('getHelper returns null when no helper found', function() {
+		ok( !Mustache.getHelper('myHelper') );
+	});
+
+	test("getHelper 'options' parameter should be optional", function(){
+		Mustache.registerHelper('myHelper', function() {
+			return true;
+		});
+
+		ok( Mustache.getHelper('myHelper').name === 'myHelper' );
+		ok( typeof Mustache.getHelper('myHelper').fn === 'function' );
+		ok( Mustache.getHelper('myHelper').fn() );
+	});
 });
