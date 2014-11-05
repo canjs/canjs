@@ -1655,7 +1655,10 @@ steal('can/util',
 		 * Returns a helper given the name.
 		 */
 		Mustache.getHelper = function (name, options) {
-			var helper = options.attr("helpers." + name);
+			var helper;
+			if (options) {
+				helper = options.attr("helpers." + name);
+			}
 			return helper ? {
 				fn: helper
 			} : this._helpers[name];
