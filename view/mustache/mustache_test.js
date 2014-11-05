@@ -3623,6 +3623,23 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 			can.dev.warn = oldlog;
 		});
+
+		test("Logging: Don't show a warning on helpers (#1257)", 1, function () {
+			var oldlog = can.dev.warn;
+
+			can.dev.warn = function (text) {
+				ok(false, 'Log warning not called for helper');
+			}
+
+			can.mustache.registerHelper('myHelper', function() {
+				return 'Hi!';
+			});
+
+			var frag = can.view.mustache('<li>{{myHelper}}</li>')({});
+			equal(frag.textContent, 'Hi!');
+
+			can.dev.warn = oldlog;
+		});
 	}
 	//!steal-remove-end
 
