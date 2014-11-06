@@ -541,7 +541,7 @@ steal("can/util",
 		 */
 		splitModeFromExpression: function(expression, state){
 			expression = can.trim(expression);
-			var mode = expression[0];
+			var mode = expression.charAt(0);
 	
 			if( "#/{&^>!".indexOf(mode) >= 0 ) {
 				expression = can.trim( expression.substr(1) );
