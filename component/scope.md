@@ -7,8 +7,8 @@ instance is initialized with values specified by the component element's attribu
 
 @deprecated {2.1} In 2.1, [can.stache] and [can.mustache] pass values to the 
 scope differently. To pass data from the scope, you must wrap your attribute 
-value with `{}`. In 3.0, [can.mustache]
-will use [can.stache]'s syntax.
+value with `{}`. In 3.0, `can.mustache`
+will use `can.stache`'s syntax.
 
 @option {Object} A plain JavaScript object that is used to define the prototype methods and properties of
 [can.Construct constructor function] that extends [can.Map]. For example:
@@ -24,7 +24,7 @@ will use [can.stache]'s syntax.
       }
     })
 
-Prototype properties that have values of `@` are not looked up in the current scope, instead
+Prototype properties that have values of `"@"` are not looked up in the current scope, instead
 the literal string value of the relevant attribute is used (like pass by value instead of pass by reference).  For example:
 
     can.Component.extend({
@@ -264,14 +264,14 @@ Results in:
 
     <my-tag><h1>hello</h1></my-tag>
 
-In 3.0, `can.mustache` syntax (requiring `@`) will change to `can.stache`'s' (not requiring `@`).
+In 3.0, `can.mustache` syntax (requiring `"@"`) will change to `can.stache`'s (not requiring `"@"`).
 
 If the tag's `title` attribute is changed, it updates the scope property 
 automatically.  This can be seen in the following example:
 
 @demo can/component/examples/accordion.html
 
-Clicking the __Change title__ button sets a `<panel>` element's "title" attribute like:
+Clicking the __Change title__ button sets a `<panel>` element's `title` attribute like:
 
     $("#out").on("click", "button", function(){
       $("panel:first").attr("title", "Users")
