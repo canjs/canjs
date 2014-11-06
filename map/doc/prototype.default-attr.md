@@ -13,20 +13,21 @@ be set as the `DEFAULT-ATTR` attribute's value.
 When extending [can.Map], if a prototype property is not a function,
 it is used as a default value on instances of the extended Map.  For example:
 
+```
+var Paginate = can.Map.extend({
+    limit: 20,
+    offset: 0,
+    next: function(){
+        this.attr("offset", this.attr("offset")+this.attr("limit"))
+    }
+});
 
-    var Paginate = can.Map.extend({
-        limit: 20,
-        offset: 0,
-        next: function(){
-            this.attr("offset", this.attr("offset")+this.attr("limit"))
-        }
-    });
-    
-    var paginate = new Paginate({limit: 30});
+var paginate = new Paginate({limit: 30});
 
-    paginate.attr("offset") //-> 0
-    paginate.attr("limit")  //-> 30
-    
-    paginate.next();
-    
-    paginate.attr("offset") //-> 30
+paginate.attr("offset") //-> 0
+paginate.attr("limit")  //-> 30
+
+paginate.next();
+
+paginate.attr("offset") //-> 30
+```
