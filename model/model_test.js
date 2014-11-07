@@ -1637,4 +1637,29 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(count, 1, "findAll called only once.");
 	});
 
+	test("static methods do not get overwritten with resource property set (#1309)", function() {
+		var Base = can.Model.extend({
+			resource: '/path',
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findAll'
+				});
+				return dfd;
+			}
+		}, {});
+
+		stop();
+
+		Base.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			deepEqual(model.attr(), {
+				text: 'Base findAll'
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+	});
+
 });
