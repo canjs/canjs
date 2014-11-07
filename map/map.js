@@ -59,7 +59,14 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					//!steal-remove-end
 					for (var prop in this.prototype) {
 						// Non-functions are regular defaults.
-						if (prop !== "define" && typeof this.prototype[prop] !== "function") {
+						if (
+							prop !== "define" &&
+							prop !== "constructor" &&
+							(
+								typeof this.prototype[prop] !== "function" ||
+								this.prototype[prop].prototype instanceof can.Construct
+							)
+						) {
 							this.defaults[prop] = this.prototype[prop];
 						// Functions with an `isComputed` property are computes.
 						} else if (this.prototype[prop].isComputed) {
@@ -110,7 +117,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				// Parses attribute name into its parts.
 				attrParts: function (attr, keepKey) {
 					//Keep key intact
-					
+
 					if (keepKey ) {
 						return [attr];
 					}
@@ -186,7 +193,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						firstSerialize = false;
 					if(!serializeMap) {
 						firstSerialize = true;
-						// Serialize might call .attr() so we need to keep different map 
+						// Serialize might call .attr() so we need to keep different map
 						serializeMap = {
 							attr: {},
 							serialize: {}
@@ -254,7 +261,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				if(obj instanceof can.Map){
 					obj = obj.serialize();
 				}
-				
+
 				// `_data` is where we keep the properties.
 				this._data = {};
 				/**
@@ -316,11 +323,11 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					target: ev.target
 				}, [newVal, oldVal]);
 
-				
+
 			},
 			// Trigger a change event.
 			_triggerChange: function (attr, how, newVal, oldVal) {
-				// so this change can bubble ... a bubbling change triggers the 
+				// so this change can bubble ... a bubbling change triggers the
 				// _changes trigger
 				if(bubble.isBubbling(this, "change")) {
 					can.batch.trigger(this, {
@@ -330,7 +337,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				} else {
 					can.batch.trigger(this, attr, [newVal, oldVal]);
 				}
-				
+
 				if(how === "remove" || how === "add") {
 					can.batch.trigger(this, {
 						type: "__keys",
@@ -411,8 +418,8 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			_get: function (attr) {
 				attr = ""+attr;
 				var dotIndex = attr.indexOf('.');
-				
-				
+
+
 				// Handles the case of a key having a `.` in its name
 				// Otherwise we have to dig deeper into the Map to get the value.
 				if( dotIndex >= 0 ) {
@@ -474,9 +481,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 				if(!keepKey && dotIndex >= 0){
 					var first = attr.substr(0, dotIndex),
 						second = attr.substr(dotIndex+1);
-						
+
 					current =  this._init ? undefined : this.__get( first );
-					
+
 					if( Map.helpers.isObservable(current) ) {
 						current._set(second, value);
 					} else {
