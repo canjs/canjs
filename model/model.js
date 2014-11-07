@@ -1192,8 +1192,8 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 					if(staticProps && staticProps[name] && (typeof staticProps[name] === 'string' || typeof staticProps[name] === 'object')) {
 						self[name] = ajaxMaker(method, staticProps[name]);
 					}
-					//if we have a resource property set in the static definition
-					else if(staticProps && staticProps.resource) {
+					//if we have a resource property set in the static definition, but check if function exists already
+					else if(staticProps && staticProps.resource && !can.isFunction(staticProps[name])) {
 						self[name] = ajaxMaker(method, createURLFromResource(self, name));
 					}
 
