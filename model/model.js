@@ -1,13 +1,11 @@
 steal('can/util', 'can/map', 'can/list', function (can) {
 
 	// ## model.js
+	// (Don't steal this file directly in your code.)
 
 	// ## pipe
 	// `pipe` lets you pipe the results of a successful deferred
 	// through a function before resolving the deferred.
-	/**
-	 * @add can.Model
-	 */
 	var pipe = function (def, thisArg, func) {
 		// The piped result will be available through a new Deferred.
 		var d = new can.Deferred();
@@ -136,125 +134,135 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			return deferred;
 		},
 
-		initializers = {
+		converters = {
 			// ## models
-			// Returns a function that, when handed a list of objects, makes them into models and returns a model list of them.
-			// `prop` is the property on `instancesRawData` that has the array of objects in it (if it's not `data`).
-			models: function (prop) {
-				return function (instancesRawData, oldList) {
-					// Increment reqs counter so new instances will be added to the store.
-					// (This is cleaned up at the end of the method.)
-					can.Model._reqs++;
+			// The default function for converting into a list of models. Needs to be stored separate
+			// because we will reference it in models static `setup`, too.
+			models: function (instancesRawData, oldList, xhr) {
+				// Increment reqs counter so new instances will be added to the store.
+				// (This is cleaned up at the end of the method.)
+				can.Model._reqs++;
 
-					// If there is no data, we can't really do anything with it.
-					if (!instancesRawData) {
-						return;
-					}
+				// If there is no data, we can't really do anything with it.
+				if (!instancesRawData) {
+					return;
+				}
 
-					// If the "raw" data is already a List, it's not raw.
-					if (instancesRawData instanceof this.List) {
-						return instancesRawData;
-					}
+				// If the "raw" data is already a List, it's not raw.
+				if (instancesRawData instanceof this.List) {
+					return instancesRawData;
+				}
 
-					var self = this,
-						// `tmp` will hold the models before we push them onto `modelList`.
-						tmp = [],
-						// `ML` (see way below) is just `can.Model.List`.
-						ListClass = self.List || ML,
-						modelList = oldList instanceof can.List ? oldList : new ListClass(),
+				var self = this,
+					// `tmp` will hold the models before we push them onto `modelList`.
+					tmp = [],
+					// `ML` (see way below) is just `can.Model.List`.
+					ListClass = self.List || ML,
+					modelList = oldList instanceof can.List ? oldList : new ListClass(),
 
-						// Check if we were handed an Array or a model list.
-						rawDataIsArray = can.isArray(instancesRawData),
-						rawDataIsList = instancesRawData instanceof ML,
+					// Check if we were handed an Array or a model list.
+					rawDataIsList = instancesRawData instanceof ML,
 
-						// Get the "plain" objects from the models from the list/array.
-						raw = rawDataIsArray ? instancesRawData : (
-							rawDataIsList ? instancesRawData.serialize() : can.getObject(prop || "data", instancesRawData)
-						);
+					// Get the "plain" objects from the models from the list/array.
+					raw = rawDataIsList ? instancesRawData.serialize() : instancesRawData;
 
-					if (typeof raw === 'undefined') {
-						throw new Error('Could not get any raw data while converting using .models');
-					}
+				raw = self.parseModels(raw, xhr);
 
-					//!steal-remove-start
-					if (!raw.length) {
-						can.dev.warn("model.js models has no data.");
-					}
-					//!steal-remove-end
+				if(raw.data) {
+					instancesRawData = raw;
+					raw = raw.data;
+				}
 
-					// If there was anything left in the list we were given, get rid of it.
-					if (modelList.length) {
-						modelList.splice(0);
-					}
+				if (typeof raw === 'undefined') {
+					throw new Error('Could not get any raw data while converting using .models');
+				}
 
-					// If we pushed these directly onto the list, it would cause a change event for each model.
-					// So, we push them onto `tmp` first and then push everything at once, causing one atomic change event that contains all the models at once.
-					can.each(raw, function (rawPart) {
-						tmp.push(self.model(rawPart));
+				//!steal-remove-start
+				if (!raw.length) {
+					can.dev.warn("model.js models has no data.");
+				}
+				//!steal-remove-end
+
+				// If there was anything left in the list we were given, get rid of it.
+				if (modelList.length) {
+					modelList.splice(0);
+				}
+
+				// If we pushed these directly onto the list, it would cause a change event for each model.
+				// So, we push them onto `tmp` first and then push everything at once, causing one atomic change event that contains all the models at once.
+				can.each(raw, function (rawPart) {
+					tmp.push(self.model(rawPart, xhr));
+				});
+				modelList.push.apply(modelList, tmp);
+
+				// If there was other stuff on `instancesRawData`, let's transfer that onto `modelList` too.
+				if (!can.isArray(instancesRawData)) {
+					can.each(instancesRawData, function (val, prop) {
+						if (prop !== 'data') {
+							modelList.attr(prop, val);
+						}
 					});
-					modelList.push.apply(modelList, tmp);
-
-					// If there was other stuff on `instancesRawData`, let's transfer that onto `modelList` too.
-					if (!rawDataIsArray) {
-						can.each(instancesRawData, function (val, prop) {
-							if (prop !== 'data') {
-								modelList.attr(prop, val);
-							}
-						});
-					}
-					// Clean up the store on the next turn of the event loop. (`this` is a model constructor.)
-					setTimeout(can.proxy(this._clean, this), 1);
-					return modelList;
-				};
+				}
+				// Clean up the store on the next turn of the event loop. (`this` is a model constructor.)
+				setTimeout(can.proxy(this._clean, this), 1);
+				return modelList;
 			},
 			// ## model
-			// Returns a function that, when handed a plain object, turns it into a model.
-			// `prop` is the property on `attributes` that has the properties for the model in it.
-			model: function (prop) {
-				return function (attributes) {
-					// If there're no properties, there can be no model.
-					if (!attributes) {
-						return;
-					}
-					// If this object knows how to serialize, parse, or access itself, we'll use that instead.
-					if (typeof attributes.serialize === 'function') {
-						attributes = attributes.serialize();
-					}
-					if (this.parseModel) {
-						attributes = this.parseModel.apply(this, arguments);
-					} else if (prop) {
-						attributes = can.getObject(prop || "data", attributes);
-					}
+			// A function that, when handed a plain object, turns it into a model.
+			model: function (attributes, oldModel, xhr) {
+				// If there're no properties, there can be no model.
+				if (!attributes) {
+					return;
+				}
 
-					var id = attributes[this.id],
-						// 0 is a valid ID.
-						model = (id || id === 0) && this.store[id] ?
-							// If this model is in the store already, just update it.
-							this.store[id].attr(attributes, this.removeAttr || false) :
-							// Otherwise, we need a new model.
-							new this(attributes);
+				// If this object knows how to serialize, parse, or access itself, we'll use that instead.
+				if (typeof attributes.serialize === 'function') {
+					attributes = attributes.serialize();
+				} else {
+					attributes = this.parseModel(attributes, xhr);
+				}
 
-					return model;
-				};
+				var id = attributes[this.id];
+				// Models from the store always have priority
+				// 0 is a valid ID.
+				if((id || id === 0) && this.store[id]) {
+					oldModel = this.store[id];
+				}
+
+				var model = oldModel && can.isFunction(oldModel.attr) ?
+						// If this model is in the store already, just update it.
+						oldModel.attr(attributes, this.removeAttr || false) :
+						// Otherwise, we need a new model.
+						new this(attributes);
+
+				return model;
 			}
 		},
 
-		/**
-		 * @static
-		 */
-		//
-		parserMaker = function (prop) {
-			return function (attributes) {
-				return prop ? can.getObject(prop || "data", attributes) : attributes;
-			};
-		},
-
-		// ## parsers
+		// ## makeParser
 		// This object describes how to take the data from an AJAX request and prepare it for `models` and `model`.
 		// These functions are meant to be overwritten (if necessary) in an extended model constructor.
-		parsers = {
-			parseModel: parserMaker,
-			parseModels: parserMaker
+		makeParser = {
+			parseModel: function (prop) {
+				return function (attributes) {
+					return prop ? can.getObject(prop, attributes) : attributes;
+				};
+			},
+			parseModels: function (prop) {
+				return function (attributes) {
+					if(can.isArray(attributes)) {
+						return attributes;
+					}
+
+					prop = prop || 'data';
+
+					var result = can.getObject(prop, attributes);
+					if(!can.isArray(result)) {
+						throw new Error('Could not get any raw data while converting using .models');
+					}
+					return result;
+				};
+			}
 		},
 
 		// ## ajaxMethods
@@ -264,7 +272,6 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		// - `url`: Which property on the model contains the default URL for this method.
 		// - `type`: The default HTTP request method.
 		// - `data`: A method that takes the arguments from `makeRequest` (see above) and returns a data object for use in the AJAX call.
-
 		ajaxMethods = {
 			create: {
 				url: "_shortName",
@@ -389,8 +396,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				if(staticProps && staticProps.List) {
 					this.List = staticProps.List;
 					this.List.Map = this;
-				}
-				else {
+				} else {
 					this.List = base.List.extend({
 						Map: this
 					}, {});
@@ -438,31 +444,34 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 					}
 				});
 
-				// Set up the methods that will set up `models` and `model`.
-				can.each(initializers, function (makeInitializer, name) {
+				var hasCustomConverter = {};
+
+				// Set up `models` and `model`.
+				can.each(converters, function(converter, name) {
 					var parseName = "parse" + can.capitalize(name),
-						dataProperty = self[name];
+						dataProperty = (staticProps && staticProps[name]) || self[name];
 
-					// If there was a different property to find the model's data in than `data`,
-					// make `parseModel` and `parseModels` functions that look that up instead.
-					if (typeof dataProperty === "string") {
-						can.Construct._overwrite(self, base, parseName, parsers[parseName](dataProperty));
-						can.Construct._overwrite(self, base, name, makeInitializer(dataProperty));
-					}
-
-					// If there was no prototype, or no `model` and no `parseModel`,
-					// we'll have to create a `parseModel`.
-					else if (!staticProps || (!staticProps[name] && !staticProps[parseName])) {
-						can.Construct._overwrite(self, base, parseName, parsers[parseName]());
+					// For legacy e.g. models: 'someProperty' we set the `parseModel(s)` property
+					// to the given string and set .model(s) to the original converter
+					if(typeof dataProperty === 'string') {
+						self[parseName] = dataProperty;
+						can.Construct._overwrite(self, base, name, converter);
+					} else if((staticProps && staticProps[name])) {
+						hasCustomConverter[parseName] = true;
 					}
 				});
 
-				// With the overridden parse methods, set up `models` and `model`.
-				can.each(parsers, function (makeParser, name) {
-					// If there was a different property to find the model's data in than `data`,
-					// make `model` and `models` functions that look that up instead.
-					if (typeof self[name] === "string") {
-						can.Construct._overwrite(self, base, name, makeParser(self[name]));
+				// Sets up parseModel(s)
+				can.each(makeParser, function(maker, parseName) {
+					var prop = (staticProps && staticProps[parseName]) || self[parseName];
+					// e.g. parseModels: 'someProperty' make a default parseModel(s)
+					if(typeof prop === 'string') {
+						can.Construct._overwrite(self, base, parseName, maker(prop));
+					} else if( (!staticProps || !can.isFunction(staticProps[parseName])) && !self[parseName] ) {
+						var madeParser = maker();
+						madeParser.useModelConverter = hasCustomConverter[parseName];
+						// Add a default parseModel(s) if there is none
+						can.Construct._overwrite(self, base, parseName, madeParser);
 					}
 				});
 
@@ -491,13 +500,10 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				}
 				return arguments[0];
 			},
-			models: initializers.models("data"),
-			model: initializers.model()
+			models: converters.models,
+			model: converters.model
 		},
 
-		/**
-		 * @prototype
-		 */
 		{
 			// ## can.Model#setup
 			setup: function (attrs) {
@@ -564,24 +570,18 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	// Returns a function that knows how to prepare data from `findAll` or `findOne` calls.
 	// `name` should be either `model` or `models`.
 	var makeGetterHandler = function (name) {
-		var parseName = "parse" + can.capitalize(name);
-		return function (data) {
-			// If there's a `parse...` function, use its output.
-			if (this[parseName]) {
-				data = this[parseName].apply(this, arguments);
-			}
-			// Run our maybe-parsed data through `model` or `models`.
-			return this[name](data);
+		return function (data, readyState, xhr) {
+			return this[name](data, null, xhr);
 		};
 	},
-		// Handle data returned from `create`, `update`, and `destroy` calls.
-		createUpdateDestroyHandler = function (data) {
-			if (this.parseModel) {
-				return this.parseModel.apply(this, arguments);
-			} else {
-				return this.model(data);
-			}
-		};
+	// Handle data returned from `create`, `update`, and `destroy` calls.
+	createUpdateDestroyHandler = function (data) {
+		if(this.parseModel.useModelConverter) {
+			return this.model(data);
+		}
+
+		return this.parseModel(data);
+	};
 
 	var responseHandlers = {
 		makeFindAll: makeGetterHandler("models"),
@@ -609,38 +609,18 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 	// ## can.Model.created, can.Model.updated, and can.Model.destroyed
 	// Livecycle methods for models.
 	can.each([
-		/**
-		 * @function can.Model.prototype.created created
-		 * @hide
-		 * Called by save after a new instance is created.  Publishes 'created'.
-		 * @param {Object} attrs
-		 */
 		"created",
-		/**
-		 * @function can.Model.prototype.updated updated
-		 * @hide
-		 * Called by save after an instance is updated.  Publishes 'updated'.
-		 * @param {Object} attrs
-		 */
 		"updated",
-		/**
-		 * @function can.Model.prototype.destroyed destroyed
-		 * @hide
-		 * Called after an instance is destroyed.
-		 *   - Publishes "shortName.destroyed".
-		 *   - Triggers a "destroyed" event on this model.
-		 *   - Removes the model from the global list if its used.
-		 *
-		 */
 		"destroyed"
 	], function (funcName) {
 		// Each of these is pretty much the same, except for the events they trigger.
 		can.Model.prototype[funcName] = function (attrs) {
-			var constructor = this.constructor;
+			var self = this,
+				constructor = self.constructor;
 
 			// Update attributes if attributes have been passed
 			if(attrs && typeof attrs === 'object') {
-				this.attr(attrs.attr ? attrs.attr() : attrs);
+				this.attr(can.isFunction(attrs.attr) ? attrs.attr() : attrs);
 			}
 
 			// triggers change event that bubble's like
