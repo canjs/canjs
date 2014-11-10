@@ -12,6 +12,10 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
 	var getUrl = function (url) {
 		if (typeof steal !== 'undefined') {
+			// Huck for steal based on Systemjs
+			if (steal.System) {
+				return steal.joinURIs(steal.config('baseURL'), url)
+			}
 			if (can.isFunction(steal.config)) {
 				return steal.config()
 					.root.mapJoin(url)
