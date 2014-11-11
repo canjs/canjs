@@ -581,7 +581,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 		});
 
 		stop();
-		can.ajax({ 
+		can.ajax({
 			url: "/thinger/mabobs",
 			method: "GET",
 			canfixture: false,
