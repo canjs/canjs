@@ -88,6 +88,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				this.length = 0;
 				can.cid(this, ".map");
 				this._init = 1;
+				this._computedBindings = {};
 				this._setupComputes();
 				instances = instances || [];
 				var teardownMapping;
