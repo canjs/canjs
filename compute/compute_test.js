@@ -324,5 +324,29 @@ steal("can/compute", "can/test", "can/map", function () {
 		var result = can.compute.read(parent, reads);
 		equal(result.value, "Justin", "The correct value is found.");
 	});
+
+    test("can.compute placed on a can.Map should not be readonly", function(){
+
+        var MockViewModel = can.Map.extend({
+            saveFailed: can.compute(false),
+            doSave: function(){
+                // Pretend that the save failed.
+                this.saveFailed(true);
+            }
+        });
+
+        var mockVMInstance = new MockViewModel();
+        // We expect that the inital value of the compute will be false.
+        // And we are correct.
+        equal(mockVMInstance.saveFailed(), false);
+
+        // We save and it doesnt' work.
+        mockVMInstance.doSave();
+
+        // We expect that the compute which manages the failed state
+        // would be true now. But we're wrong.
+        equal(mockVMInstance.saveFailed(), true);
+
+    });
 	
 });
