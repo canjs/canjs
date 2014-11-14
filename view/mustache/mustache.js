@@ -1545,10 +1545,11 @@ steal('can/util',
 			can.compute.temporarilyBind(compute);
 
 			// computeData gives us an initial value
-			var initialValue = computeData.initialValue;
+			var initialValue = computeData.initialValue,
+				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (initialValue === undefined && !isHelper) {
+			if (initialValue === undefined && !isHelper && !helperObj) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 			}
 			//!steal-remove-end
