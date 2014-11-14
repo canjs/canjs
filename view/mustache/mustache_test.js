@@ -3886,7 +3886,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	}
 
 	test('getHelper returns null when no helper found', function() {
-		ok( !Mustache.getHelper('myHelper') );
+		ok( !Mustache.getHelper('__dummyHelper') );
 	});
 
 	test("getHelper 'options' parameter should be optional", function(){
