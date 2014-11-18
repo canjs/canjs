@@ -175,7 +175,7 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 
 		testMap.serialize();
 
-		
+
 
 		ok(can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1, "map serialization triggered __reading on all attributes");
 		ok(readingTriggeredForKeys, "map serialization triggered __reading for __keys");
@@ -230,10 +230,10 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 	test("serializing cycles", function(){
 		var map1 = new can.Map({name: "map1"});
 		var map2 = new can.Map({name: "map2"});
-		
+
 		map1.attr("map2", map2);
 		map2.attr("map1", map1);
-		
+
 		var res = map1.serialize();
 		equal(res.name, "map1");
 		equal(res.map2.name, "map2");
@@ -268,12 +268,24 @@ steal("can/map", "can/compute", "can/test", "can/list", function(){
 
 		data.attr('name', 'David');
 	});
-	
+
 	test("map passed to Map constructor (#1166)", function(){
 		var map = new can.Map({x: 1});
 		var res = new can.Map(map);
 		deepEqual(res.attr(), {
 			x: 1
 		}, "has the same properties");
+	});
+
+	test("constructor passed to scope is threated as a property (#1261)", function(){
+		var Constructor = can.Construct.extend({});
+
+		var Map = can.Map.extend({
+		  Todo: Constructor
+		});
+
+		var m = new Map();
+
+		equal(m.attr("Todo"), Constructor);
 	});
 });
