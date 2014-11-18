@@ -68,7 +68,7 @@ set on the component's scope.
 
 ## Use
 
-To create a [can.Component], you must first [can.Component.extend extend] `can.Component`
+To create a `can.Component`, you must first [can.Component.extend extend] `can.Component`
 with the methods and properties of how your component behaves:
 
     can.Component.extend({
@@ -114,7 +114,7 @@ you'll render a template with many custom tags like:
 
 ### Extending can.Component
 
-Use [can.Component.extend] to create a [can.Component] constructor function
+Use [can.Component.extend] to create a `can.Component` constructor function
 that will automatically get initialized whenever the component's tag is 
 found.
 
@@ -265,7 +265,7 @@ only renders friendly messages:
 
 ## Differences between components in can.mustache and can.stache
 
-A [can.mustache] template passes values from the scope to a [can.Component]
+A [can.mustache] template passes values from the scope to a `can.Component`
 by specifying the key of the value in the attribute directly.  For example:
 
     can.Component.extend({
@@ -302,7 +302,7 @@ Because the attribute value would be passed as the value of `greeting`.
 
 ## Examples
 
-Check out the following examples built with [can.Component].
+Check out the following examples built with `can.Component`.
 
 ### Tabs
 
@@ -424,7 +424,7 @@ its sub-components:
 ## IE 8 Support
 
 While CanJS does support Internet Explorer 8 out of the box, if you decide
-to use [can.Component] then you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
+to use `can.Component` then you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
 in order for your custom tags to work properly.
 
 For namespaced tag names (e.g. `<can:example>`) and hyphenated tag names (e.g. `<can-example>`) to work properly, you will need to use version 3.7.2 or later.
