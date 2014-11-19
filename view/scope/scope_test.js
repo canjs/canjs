@@ -367,4 +367,15 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		
 	});
 
+	test("Compute set prior to being read", function(){
+		var scope = new can.view.Scope({
+			name: "Matthew"
+		});
+		var compute = scope.computeData("name").compute;
+
+		compute("Wilbur");
+
+		equal(compute(), "Wilbur", "Value updated");
+	});
+
 });
