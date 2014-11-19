@@ -108,8 +108,8 @@ steal(
 						args: []
 					};
 					var self = this,
-						rootObserve,
-						rootReads,
+						rootObserve = can.compute(),
+						rootReads = [],
 						computeData = {
 							// computeData.compute returns a get-set compute that is tied to the first location of the provided
 							// key in the context of the scope.
