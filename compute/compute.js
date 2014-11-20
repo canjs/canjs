@@ -658,7 +658,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// call that method
 					if (options.returnObserveMethods) {
 						cur = cur[reads[i]];
-					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+					} else if ( (reads[i] === 'constructor' && prev instanceof can.Construct) ||
+						(prev[reads[i]].prototype instanceof can.Construct)) {
 						cur = prev[reads[i]];
 					} else {
 						cur = prev[reads[i]].apply(prev, options.args || []);

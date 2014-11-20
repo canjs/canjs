@@ -324,5 +324,13 @@ steal("can/compute", "can/test", "can/map", function () {
 		var result = can.compute.read(parent, reads);
 		equal(result.value, "Justin", "The correct value is found.");
 	});
-	
+
+	test("compute.read returns constructor functions instead of executing them (#1332)", function() {
+		var Todo = can.Map.extend({});
+		var parent = can.compute(new can.Map({map: { Test: Todo }}));
+		var reads = ["map", "Test"];
+
+		var result = can.compute.read(parent, reads);
+		equal(result.value, Todo, 'Got the same Todo');
+	});
 });
