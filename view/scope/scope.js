@@ -73,7 +73,7 @@ steal(
 
 				// ## Scope.prototype.attr
 				// Reads a value from the current context or parent contexts.
-				attr: function (key) {
+				attr: function (key, value) {
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
 					var previousReads = can.__clearReading(),
@@ -81,9 +81,29 @@ steal(
 							isArgument: true,
 							returnObserveMethods: true,
 							proxyMethods: false
-						}).value;
+						});
+
+					// Allow setting a value on the context
+					if(arguments.length === 2) {
+						var lastIndex = key.lastIndexOf('.'),
+							// Either get the paren of a key or the current context object with `.`
+							readKey = lastIndex !== -1 ? key.substring(0, lastIndex) : '.',
+							obj = this.read(readKey, {
+								isArgument: true,
+								returnObserveMethods: true,
+								proxyMethods: false
+							}).value;
+
+						if(lastIndex !== -1) {
+							// Get the last part of the key which is what we want to set
+							key = key.substring(lastIndex + 1, key.length);
+						}
+
+						can.compute.set(obj, key, value);
+					}
+
 					can.__setReading(previousReads);
-					return res;
+					return res.value;
 				},
 
 				// ## Scope.prototype.add
@@ -116,12 +136,13 @@ steal(
 							compute: can.compute(function (newVal) {
 								// **Compute setter**
 								if (arguments.length) {
-									if (rootObserve.isComputed && !rootReads.length) {
+									if(rootObserve.isComputed) {
 										rootObserve(newVal);
-									} else {
+									} else if(rootReads.length) {
 										var last = rootReads.length - 1;
-										can.compute.read(rootObserve, rootReads.slice(0, last))
-											.value.attr(rootReads[last], newVal);
+										var obj = rootReads.length ? can.compute.read(rootObserve, rootReads.slice(0, last)).value
+											: rootObserve;
+										can.compute.set(obj, rootReads[last], newVal);
 									}
 									// **Compute getter**
 								} else {
