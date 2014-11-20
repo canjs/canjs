@@ -366,5 +366,16 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		equal(current.attr("value"), "B Value", "updated");
 		
 	});
+	
+	test('reading properties on undefined (#1314)', function(){
+		
+		var scope = new can.view.Scope(undefined);
+		
+		var compute = scope.compute("property");
+		
+		equal(compute(), undefined, "got back undefined");
+		
+	});
+	
 
 });

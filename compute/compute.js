@@ -669,7 +669,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				}
 			} else {
 				// just do the dot operator
-				cur = prev[reads[i]];
+				if(cur == null) {
+					cur = undefined;
+				} else {
+					cur = prev[reads[i]];
+				}
+				
 			}
 			type = typeof cur;
 			// If it's a compute, get the compute's value
