@@ -815,4 +815,22 @@ steal("can/view/callbacks",
 		}
 		ok(pass);
 	});
+	test('renderer passed with Deferred gets executed (#1139)', 1, function() {
+		// See http://jsfiddle.net/a35ZH/1/
+		var template = can.view.mustache('<h1>Value is {{value}}!</h1>');
+		var def = can.Deferred();
+
+		stop();
+
+		setTimeout(function() {
+			def.resolve({
+				value: 'Test'
+			});
+		}, 50);
+
+		can.view(template, def, function (frag) {
+			equal(frag.textContent, 'Value is Test!');
+			start();
+		});
+	});
 });

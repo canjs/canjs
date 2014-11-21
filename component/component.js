@@ -420,8 +420,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
 	// the scope object
-	if (window.$ && $.fn) {
-		$.fn.scope = function (attr) {
+	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
+	if (window.jQuery && jQuery.fn) {
+		jQuery.fn.scope = function (attr) {
 			// If `attr` is passed to the `scope` plugin return the value of that 
 			// attribute on the `scope` object, otherwise return the whole scope
 			if (attr) {

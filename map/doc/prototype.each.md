@@ -16,22 +16,21 @@ the loop will stop.
 @return {can.Map} this Map, for chaining
 
 @body
-@codestart
-var names = [];
-new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'}).each(function(value, key) {
- names.push(value);
-});
 
-names; // ['Alice', 'Bob', 'Eve']
+    var names = [];
+    new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'}).each(function(value, key) {
+        names.push(value);
+    });
 
-names = [];
-new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'}).each(function(value, key) {
- names.push(value);
- if(key === 'b') {
-     return false;
- }
-});
+    names; // ['Alice', 'Bob', 'Eve']
 
-names; // ['Alice', 'Bob']
+    names = [];
+    new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'}).each(function(value, key) {
+        names.push(value);
+        if(key === 'b') {
+            return false;
+        }
+    });
 
-@codeend
+    names; // ['Alice', 'Bob']
+    

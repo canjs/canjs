@@ -3617,4 +3617,29 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].innerHTML, "ARS", "got value");
 
 	});
+
+	test("<col> inside <table> renders correctly (#1013)", 1, function() {
+		var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+		var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+		var frag = can.stache(template)({
+			columns: new can.List([
+				{ class: 'test' }
+			])
+		});
+
+		equal(frag.childNodes[0].outerHTML, expected, '<col> nodes added in proper position');
+	});
+
+	test('splicing negative indices works (#1038)', function() {
+		// http://jsfiddle.net/ZrWVQ/2/
+		var template = '{{#each list}}<p>{{.}}</p>{{/each}}';
+		var list = new can.List(['a', 'b', 'c', 'd']);
+		var frag = can.stache(template)({
+			list: list
+		});
+		var children = frag.childNodes.length;
+
+		list.splice(-1);
+		equal(frag.childNodes.length, children - 1, 'Child node removed');
+	});
 });

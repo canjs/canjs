@@ -62,7 +62,6 @@ The following makes `fullName` able to set `first` and `last`:
     me.attr("first") //-> "Brian"
     me.attr("last")  //-> "Moschel"
 
-
 ## Alternatives
 
 [can.mustache] and [can.ejs] will automatically convert any function

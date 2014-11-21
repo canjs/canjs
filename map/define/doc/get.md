@@ -37,6 +37,7 @@ p.attr("fullName"); // "Justin Meyer"
 
 Below is another example of using get to create a dependent "virtual" property. This map has a locations property, which is a can.List containing location objects. Another property called locationIds is required, which is just an array of ids from each of the locations in the real location list. The value of locationIds is tied to locations, so a getter is useful. A user could bind to 'locationIds' and its event handler would be triggered if new locations were added, causing a change in the locationIds array.
 
+@codestart
 var Store = can.Map.extend({
 	define: {
 		locationIds: {
@@ -50,3 +51,4 @@ var Store = can.Map.extend({
 		}
 	}
 });
+@codeend
