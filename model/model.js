@@ -1,5 +1,5 @@
 steal('can/util', 'can/map', 'can/list', function (can) {
-
+	/** @add can.Model **/
 	// ## model.js
 	// (Don't steal this file directly in your code.)
 
@@ -363,6 +363,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 
 	// # can.Model
 	// A can.Map that connects to a RESTful interface.
+	/** @static */
 	can.Model = can.Map.extend({
 			// `fullName` identifies the model type in debugging.
 			fullName: "can.Model",
@@ -503,7 +504,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			models: converters.models,
 			model: converters.model
 		},
-
+		/** @prototype */
 		{
 			// ## can.Model#setup
 			setup: function (attrs) {
