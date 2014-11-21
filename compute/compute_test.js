@@ -333,4 +333,29 @@ steal("can/compute", "can/test", "can/map", function () {
 		var result = can.compute.read(parent, reads);
 		equal(result.value, Todo, 'Got the same Todo');
 	});
+	
+	test("compute.set with different values", 4, function() {
+		var comp = can.compute("David");
+		var parent = {
+			name: "David",
+			comp: comp
+		};
+		var map = new can.Map({
+			name: "David"
+		});
+
+		map.bind('change', function(ev, attr, how, value) {
+			equal(value, "Brian", "Got change event on map");
+		});
+		
+		can.compute.set(parent, "name", "Matthew");
+		equal(parent.name, "Matthew", "Name set");
+
+		can.compute.set(parent, "comp", "Justin");
+		equal(comp(), "Justin", "Name updated");
+
+		can.compute.set(map, "name", "Brian");
+		equal(map.attr("name"), "Brian", "Name updated in map");
+	});
+	
 });
