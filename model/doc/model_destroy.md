@@ -1,4 +1,5 @@
 @function can.Model.prototype.destroy destroy
+@parent can.Model.prototype
 @description Destroy a Model on the server.
 @signature `model.destroy([success[, error]])`
 @param {function} [success] A callback to call on successful destruction. The callback recieves

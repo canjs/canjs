@@ -1,4 +1,5 @@
 @function can.Model.prototype.unbind unbind
+@parent can.Model.prototype
 @description Stop listening to events on this Model.
 @signature `model.unbind(eventName[, handler])`
 @param {String} eventName The event to unbind from.

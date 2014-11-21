@@ -1,4 +1,5 @@
 @function can.Model.prototype.save save
+@parent can.Model.prototype
 @description Save a model back to the server.
 @signature `model.save([success[, error]])`
 @param {function} [success] A callback to call on successful save. The callback recieves

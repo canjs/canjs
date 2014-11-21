@@ -1,5 +1,6 @@
 @description Listen to events on this Model.
 @function can.Model.prototype.bind bind
+@parent can.Model.prototype
 @signature `model.bind(eventName, handler)`
 @param {String} eventName The event to bind to.
 @param {function} handler The function to call when the
