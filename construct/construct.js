@@ -31,7 +31,7 @@ steal('can/util/string', function (can) {
 			addTo = addTo || newProps;
 
 			for (var name in newProps) {
-					can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+				can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
 			}
 		};
 
@@ -336,7 +336,7 @@ steal('can/util/string', function (can) {
 						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
 					}
 					//!steal-remove-end
-					
+
 					return this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
 					arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) :

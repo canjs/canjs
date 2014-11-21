@@ -164,6 +164,10 @@ steal('can/construct', function () {
 
 				set name(value) {
 					this._name = value;
+				},
+
+				get name() {
+					return this._name;
 				}
 			});
 
@@ -171,7 +175,7 @@ steal('can/construct', function () {
 			test.base = 2;
 			equal(test.age, 42, 'Getter called properly');
 			test.name = 'David';
-			equal(test._name, 'David', 'Setter ran');
+			equal(test.name, 'David', 'Setter ran');
 		});
 	}
 });

@@ -26,6 +26,8 @@ steal('can/util', 'can/construct', function (can, Construct) {
 			can.each(getset, function (method) {
 				if(isFunction(_super[method]) && isFunction(descriptor[method])) {
 					descriptor[method] = getSuper(_super, method, descriptor[method]);
+				} else if(!isFunction(descriptor[method])) {
+					descriptor[method] = _super[method];
 				}
 			});
 		}

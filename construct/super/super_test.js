@@ -72,6 +72,8 @@ steal("can/construct/super", function () {
 	 }
 	 })*/
 
+	// To avoid JSHint complaining about the missing getter
+	/* jshint ignore:start */
 	if(Object.getOwnPropertyDescriptor) {
 		test("_super supports getters and setters", function () {
 			var Person = can.Construct.extend({
@@ -81,6 +83,10 @@ steal("can/construct/super", function () {
 
 				set name(value) {
 					this._name = value;
+				},
+
+				get name() {
+					return this._name;
 				}
 			});
 
@@ -98,7 +104,8 @@ steal("can/construct/super", function () {
 			test.base = 2;
 			equal(test.age, 50, 'Getter and _super works');
 			test.name = 'David';
-			equal(test._name, 'David_super', 'Setter ran');
+			equal(test.name, 'David_super', 'Setter ran');
 		});
 	}
+	/* jshint ignore:end */
 });
