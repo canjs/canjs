@@ -13,7 +13,7 @@ are always called back with `this` as the [can.Component::scope scope].
 
 ## Use
 
-can.Component's helper object lets you provide helper functions that are localized to
+[can.Component]'s helper object lets you provide helper functions that are localized to
 the component's [can.Component::template template].  The following example
 uses an `isSelected` helper to render content for selected items. Click
 one of the following libraries to toggle them within the `selected` array. 

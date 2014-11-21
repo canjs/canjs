@@ -30,7 +30,7 @@ the [http://www.w3.org/TR/shadow-dom/ W3C Shadow DOM proposal]. It represents th
 of a custom element, while being able to reposition the user provided __source__ elements
 with the `<content>` tag.
 
-There are three things to understand about a `can.Component`'s template:
+There are three things to understand about a [can.Component]'s template:
 
  - It is inserted into the component's tag.
  - It is rendered with access to the component instance's scope.
@@ -40,7 +40,7 @@ The following example demonstrates all three features:
 
 @demo can/component/examples/my_greeting_full.html
 
-The following explains how each part works.
+The following explains how each part works:
 
 __can.Component:__
 
@@ -67,7 +67,7 @@ __Source template:__
 
 The source template is the template that 
 uses `<my-greeting>`.  In the demo, this is defined within a `<script>` 
-tag.  
+tag.
 
 Notice:
 
@@ -101,7 +101,7 @@ The following sections break this down more.
 
 ## Template insertion
 
-The mustache template specified by template is rendered directly withing the custom tag.  
+The [can.mustache] template specified by template is rendered directly withing the custom tag.
 
 For example the following component:
 

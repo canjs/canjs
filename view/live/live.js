@@ -229,7 +229,11 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					if (!duringTeardown && data.teardownCheck(text.parentNode)) {
 						return;
 					}
-					var removedMappings = masterNodeList.splice(index+1, items.length),
+					if(index < 0) {
+						index = indexMap.length + index;
+					}
+
+					var removedMappings = masterNodeList.splice(index + 1, items.length),
 						itemsToRemove = [];
 					can.each(removedMappings, function (nodeList) {
 						

@@ -19,14 +19,14 @@ dfd.fail(function(bar) {
 	console.log('Rejected!');
 });
 // Add a callback that fires whether the
-// Deferred is resolve or rejected.
+// Deferred is resolved or rejected.
 dfd.always(function(obj) {
 	console.log('Apathetic!');
 });
 
 var dfd2 = new can.Deferred();
 // Add done and fail callbacks:
-dfd2.then(functon(foo) {
+dfd2.then(function(foo) {
 	console.log('Also resolved.');
 }, function(bar) {
 	console.log('Also rejected.');
