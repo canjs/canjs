@@ -9,4 +9,6 @@
 on the server. This is essentially if the [can.Model.id]
 property is null or undefined.
 
-   new Recipe({id: 1}).isNew() //-> false
+```
+new Recipe({id: 1}).isNew() //-> false
+```

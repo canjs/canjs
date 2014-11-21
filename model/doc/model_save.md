@@ -20,18 +20,20 @@ an [can.Model.id id] property, it calls [can.Model.create]
 with the instance's properties.  It also [can.trigger triggers]
 a "created" event on the instance and the model.
 
-   // create a model instance
-   var todo = new Todo({name: "dishes"});
+```
+// create a model instance
+var todo = new Todo({name: "dishes"});
 
-   // listen when the instance is created
-   todo.bind("created", function(ev){
-     this //-> todo
-   });
+// listen when the instance is created
+todo.bind("created", function(ev){
+ this //-> todo
+});
 
-   // save it on the server
-   todo.save(function(todo){
-     console.log("todo", todo, "created");
-   });
+// save it on the server
+todo.save(function(todo){
+ console.log("todo", todo, "created");
+});
+```
 
 ## Using `save` to update an instance.
 
@@ -44,21 +46,22 @@ Instances with an
 __id__ are typically retrieved with [can.Model.findAll] or
 [can.Model.findOne].
 
+```
+// get a created model instance
+Todo.findOne({id: 5},function(todo){
 
-   // get a created model instance
-   Todo.findOne({id: 5},function(todo){
+ // listen when the instance is updated
+ todo.bind("updated", function(ev){
+   this //-> todo
+ })
 
-     // listen when the instance is updated
-     todo.bind("updated", function(ev){
-       this //-> todo
-     })
+ // update the instance's property
+ todo.attr("complete", true)
 
-     // update the instance's property
-     todo.attr("complete", true)
+ // save it on the server
+ todo.save(function(todo){
+   console.log("todo", todo, "updated")
+ });
 
-     // save it on the server
-     todo.save(function(todo){
-       console.log("todo", todo, "updated")
-     });
-
-   });
+});
+```

@@ -39,24 +39,30 @@ overwriting `can.Model.parseModels` is the best way to normalize it.
 By default, [can.Model.models] expects data to be an array of name-value pair
 objects like:
 
-   [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+```
+[{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+```
 
 It can also take an object with additional data about the array like:
 
-   {
-     count: 15000 //how many total items there might be
-     data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
-   }
+```
+{
+ count: 15000 //how many total items there might be
+ data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
+}
+```
 
 In this case, models will return a [can.Model.List] of instances found in
 data, but with additional properties as expandos on the list:
 
-   var tasks = Task.models({
-     count : 1500,
-     data : [{id: 1, name: 'dishes'}, ...]
-   })
-   tasks.attr("name") // -> 'dishes'
-   tasks.count // -> 1500
+```
+var tasks = Task.models({
+ count : 1500,
+ data : [{id: 1, name: 'dishes'}, ...]
+})
+tasks.attr("name") // -> 'dishes'
+tasks.count // -> 1500
+```
 
 If your data does not look like one of these formats, overwrite `parseModels`.
 
@@ -64,21 +70,27 @@ If your data does not look like one of these formats, overwrite `parseModels`.
 
 If your service returns data like:
 
-   {thingsToDo: [{name: "dishes", id: 5}]}
+```
+{ thingsToDo: [{name: "dishes", id: 5}] }
+```
 
 You will want to overwrite `parseModels` to pass the models what it expects like:
 
-   Task = can.Model.extend({
-     parseModels: function(data){
-       return data.thingsToDo;
-     }
-   },{});
+```
+Task = can.Model.extend({
+ parseModels: function(data){
+   return data.thingsToDo;
+ }
+},{});
+```
 
 You could also do this like:
 
-   Task = can.Model.extend({
-     parseModels: "thingsToDo"
-   },{});
+```
+Task = can.Model.extend({
+ parseModels: "thingsToDo"
+},{});
+```
 
 `can.Model.models` passes each instance's data to `can.Model.model` to
 create the individual instances.

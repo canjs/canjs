@@ -24,32 +24,40 @@ instance from the server.
 
 You can implement destroy with a string like:
 
-   Recipe = can.Model.extend({
-     destroy : "/recipe/{id}"
-   },{})
+```
+Recipe = can.Model.extend({
+ destroy : "/recipe/{id}"
+},{})
+```
 
 And use [can.Model::destroy] to destroy it like:
 
-   Recipe.findOne({id: 1}, function(recipe){
-        recipe.destroy();
-   });
+```
+Recipe.findOne({id: 1}, function(recipe){
+    recipe.destroy();
+});
+```
 
 This sends a `DELETE` request to `/thing/destroy/1`.
 
 If your server does not support `DELETE` you can override it like:
 
-   Recipe = can.Model.extend({
-     destroy : "POST /recipe/destroy/{id}"
-   },{})
+```
+Recipe = can.Model.extend({
+ destroy : "POST /recipe/destroy/{id}"
+},{})
+```
 
 ## Implement with a function
 
 Implement destroy with a function like:
 
-   Recipe = can.Model.extend({
-     destroy : function(id){
-       return $.post("/recipe/destroy/"+id,{});
-     }
-   },{})
+```
+Recipe = can.Model.extend({
+ destroy : function(id){
+   return $.post("/recipe/destroy/"+id,{});
+ }
+},{})
+```
 
 Destroy just needs to return a deferred that resolves.

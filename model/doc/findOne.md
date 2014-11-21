@@ -20,9 +20,11 @@ Implements `findOne` with a [can.Model.findOneData function]. This function
 is passed to [can.Model.makeFindOne makeFindOne] to create the external
 `findOne` method.
 
-   findOne: function(params){
-     return $.get("/task/"+params.id)
-   }
+```
+findOne: function(params){
+ return $.get("/task/"+params.id)
+}
+```
 
 @param {can.Model.findOneData} findOneData A function that accepts parameters
 specifying an instance to retreive and returns a [can.Deferred]
@@ -32,7 +34,9 @@ that resolves to that instance.
 
 Implements `findOne` with a HTTP method and url to retrieve an instance's data.
 
-   findOne: "GET /tasks/{id}"
+```
+findOne: "GET /tasks/{id}"
+```
 
 If `findOne` is implemented with a string, this gets converted to
 a [can.Model.makeFindOne makeFindOne function]
@@ -66,11 +70,13 @@ instance from the server.
 
 Use `findOne` like:
 
-   Recipe.findOne({id: 57}, function(recipe){
-    recipe.attr('name') //-> "Ice Water"
-   }, function( xhr ){
-    // called if an error
-   }) //-> Deferred
+```
+Recipe.findOne({id: 57}, function(recipe){
+recipe.attr('name') //-> "Ice Water"
+}, function( xhr ){
+// called if an error
+}) //-> Deferred
+```
 
 Before you can use `findOne`, you must implement it.
 
@@ -78,29 +84,37 @@ Before you can use `findOne`, you must implement it.
 
 Implement findAll with a url like:
 
-   Recipe = can.Model.extend({
-     findOne : "/recipes/{id}.json"
-   },{});
+```
+Recipe = can.Model.extend({
+ findOne : "/recipes/{id}.json"
+},{});
+``
 
 If `findOne` is called like:
 
-   Recipe.findOne({id: 57});
+```
+Recipe.findOne({id: 57});
+```
 
 The server should return data that looks like:
 
-   {"id" : 57, "name": "Ice Water"}
+```
+{"id" : 57, "name": "Ice Water"}
+```
 
 ## Implement with an Object
 
 Implement `findOne` with an object that specifies the parameters to
 `can.ajax` (jQuery.ajax) like:
 
-   Recipe = can.Model.extend({
-     findOne : {
-       url: "/recipes/{id}.xml",
-       dataType: "xml"
-     }
-   },{})
+```
+Recipe = can.Model.extend({
+ findOne : {
+   url: "/recipes/{id}.xml",
+   dataType: "xml"
+ }
+},{})
+```
 
 ## Implement with a Function
 
@@ -109,11 +123,13 @@ the instance retrieved from the server and it should return a
 deferred that resolves to the model data.  Also notice that you now need to
 build the URL manually. For example:
 
-   Recipe = can.Model.extend({
-     findOne : function(params){
-       return $.ajax({
-         url: '/recipes/' + params.id,
-         type: 'get',
-         dataType: 'json'})
-     }
-   },{})
+```
+Recipe = can.Model.extend({
+ findOne : function(params){
+   return $.ajax({
+     url: '/recipes/' + params.id,
+     type: 'get',
+     dataType: 'json'})
+ }
+},{})
+```
