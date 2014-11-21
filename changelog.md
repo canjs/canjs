@@ -3,6 +3,36 @@
 @parent guides 5
 -->
 
+__2.1.4__ ( Nov 21 2014 )
+
+- change: [Make can.Construct work with getter / setters (and super plugin)](https://github.com/bitovi/canjs/issues/1337)
+- change: [Update compute.read to also return constructor functions](https://github.com/bitovi/canjs/pull/1332)
+- change: [property for which no validations are defined throws an exception](https://github.com/bitovi/canjs/pull/1323)
+- change: [Reading from undefined values in scope. ](https://github.com/bitovi/canjs/issues/1314)
+- change: [Fixed function overwrite](https://github.com/bitovi/canjs/pull/1309)
+- change: [Using attrData.scope.compute as a setter throws an error if the getter hasn&#39;t been called](https://github.com/bitovi/canjs/issues/1304)
+- change: [Setting computes created with computeData will throw if set first](https://github.com/bitovi/canjs/issues/1297)
+- change: [Fix IE7 character access](https://github.com/bitovi/canjs/pull/1289)
+- change: [$.fn.scope undefined when using CommonJS](https://github.com/bitovi/canjs/issues/1288)
+- change: [Cannot read properties of can.Map inside a property&#39;s value method](https://github.com/bitovi/canjs/issues/1284)
+- change: [Removed madeMap and getMapFromObject from LazyMap since it&#39;s unused](https://github.com/bitovi/canjs/pull/1281)
+- change: [Dispatch correct arguments with can.List:splice if inserting and removing the same elements. ](https://github.com/bitovi/canjs/issues/1277)
+- change: [Inconsistent results when extending parsed can.Models](https://github.com/bitovi/canjs/issues/1272)
+- change: [scope objects with constructor function properties are treated as methods](https://github.com/bitovi/canjs/issues/1261)
+- change: [Mustache warning on helpers](https://github.com/bitovi/canjs/issues/1257)
+- change: [Extending a Model overwrites parseModels()](https://github.com/bitovi/canjs/issues/1246)
+- change: [Unused variable in can.Model](https://github.com/bitovi/canjs/issues/1242)
+- change: [Fixed Mustache getHelper() so that it doesn&#39;t need second argument](https://github.com/bitovi/canjs/pull/1178)
+- change: [can.route.map docs](https://github.com/bitovi/canjs/issues/1152)
+- change: [can.camelize and can.hyphenate not documented](https://github.com/bitovi/canjs/issues/1147)
+- change: [Issue: can.view(function, deferred, callback) does not work](https://github.com/bitovi/canjs/issues/1139)
+- change: [can.stache dosent render custom tags with Colon  &quot;:&quot;](https://github.com/bitovi/canjs/issues/1108)
+- change: [Documenting what new Model.List() does with no args passed](https://github.com/bitovi/canjs/pull/1100)
+- change: [Bug: can.List.splice(-1) causes JS exception inside binding framework](https://github.com/bitovi/canjs/issues/1038)
+- change: [can.Map code block cleanup and fix failure to render.](https://github.com/bitovi/canjs/pull/1033)
+- change: [can.view.preload breaks can.view.attr](https://github.com/bitovi/canjs/issues/1032)
+- change: [Fix rendering of &lt;col&gt; inside &lt;table&gt; in templates.](https://github.com/bitovi/canjs/pull/1013)
+
 __2.1.3__ ( Aug 25 2014 )
 
 - change: [IE 8+10 fixes](https://github.com/bitovi/canjs/pull/1212)
