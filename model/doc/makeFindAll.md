@@ -1,4 +1,4 @@
-@function  w
+@function  can.Model.makeFindAll makeFindAll
 @parent can.Model.static
 
 @signature `can.Model.makeFindAll: function(findAllData) -> findAll`
