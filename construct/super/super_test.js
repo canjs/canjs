@@ -71,4 +71,34 @@ steal("can/construct/super", function () {
 	 ok(false, "Failed to call super in init with error: " + e)
 	 }
 	 })*/
+
+	if(Object.getOwnPropertyDescriptor) {
+		test("_super supports getters and setters", function () {
+			var Person = can.Construct.extend({
+				get age() {
+					return 42;
+				},
+
+				set name(value) {
+					this._name = value;
+				}
+			});
+
+			var OtherPerson = Person.extend({
+				get age() {
+					return this._super() + 8;
+				},
+
+				set name(value) {
+					this._super(value + '_super');
+				}
+			});
+
+			var test = new OtherPerson();
+			test.base = 2;
+			equal(test.age, 50, 'Getter and _super works');
+			test.name = 'David';
+			equal(test._name, 'David_super', 'Setter ran');
+		});
+	}
 });
