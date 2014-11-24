@@ -1,0 +1,16 @@
+{
+	"sites": {
+		"docs": {
+			"glob": {
+				"ignore": ["guides/*.md", "{node_modules,bower_components}/**/*"]
+			},
+			"parent" : "canjs"
+		},
+		"guides": {
+			"glob": {
+				"pattern": "{guides/*.md,*.md}"
+			},
+			"parent": "guides"
+		}
+	}
+}

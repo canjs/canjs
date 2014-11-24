@@ -1,4 +1,4 @@
-@constructor can.EJS
+@constructor can.EJS-constructor can.EJS
 @group can.EJS.prototype 0 Prototype
 @hide
 

@@ -21,12 +21,12 @@ of your application to map the changes to the object.
 The first event that is fired is the _change_ event. The _change_ event is useful
 if you want to react to all changes on an Map.
 
-@codestart
-var o = new can.Map({});
-o.bind('change', function(ev, attr, how, newVal, oldVal) {
- console.log('Something changed.');
-});
-@codeend
+
+    var o = new can.Map({});
+    o.bind('change', function(ev, attr, how, newVal, oldVal) {
+        console.log('Something changed.');
+    });
+
 
 The parameters of the event handler for the _change_ event are:
 
@@ -38,20 +38,20 @@ The parameters of the event handler for the _change_ event are:
 
 Here is a concrete tour through the _change_ event handler's arguments:
 
-@codestart
-var o = new can.Map({});
-o.bind('change', function(ev, attr, how, newVal, oldVal) {
- console.log(ev + ', ' + attr + ', ' + how + ', ' + newVal + ', ' + oldVal);
-});
 
-o.attr('a', 'Alexis'); // [object Object], a, add, Alexis, undefined
-o.attr('a', 'Adam');   // [object Object], a, set, Adam, Alexis
-o.attr({
- 'a': 'Alice',      // [object Object], a, set, Alice, Adam
- 'b': 'Bob'         // [object Object], b, add, Bob, undefined
-});
-o.removeAttr('a');     // [object Object], a, remove, undefined, Alice
-@codeend
+    var o = new can.Map({});
+    o.bind('change', function(ev, attr, how, newVal, oldVal) {
+        console.log(ev + ', ' + attr + ', ' + how + ', ' + newVal + ', ' + oldVal);
+    });
+
+    o.attr('a', 'Alexis'); // [object Object], a, add, Alexis, undefined
+    o.attr('a', 'Adam');   // [object Object], a, set, Adam, Alexis
+    o.attr({
+        'a': 'Alice',      // [object Object], a, set, Alice, Adam
+        'b': 'Bob'         // [object Object], b, add, Bob, undefined
+    });
+    o.removeAttr('a');     // [object Object], a, remove, undefined, Alice
+
 
 (See also `[can.Map::removeAttr removeAttr]`, which removes properties).
 
@@ -60,12 +60,12 @@ o.removeAttr('a');     // [object Object], a, remove, undefined, Alice
 The second event that is fired is an event whose type is the same as the changed
 property's name. This event is useful for noticing changes to a specific property.
 
-@codestart
-var o = new can.Map({});
-o.bind('a', function(ev, newVal, oldVal) {
- console.log('The value of a changed.');
-});
-@codeend
+
+    var o = new can.Map({});
+    o.bind('a', function(ev, newVal, oldVal) {
+        console.log('The value of a changed.');
+    });
+
 
 The parameters of the event handler for the _property name_ event are:
 
@@ -75,20 +75,20 @@ The parameters of the event handler for the _property name_ event are:
 
 Here is a concrete tour through the _property name_ event handler's arguments:
 
-@codestart
-var o = new can.Map({});
-o.bind('a', function(ev, newVal, oldVal) {
- console.log(ev + ', ' + newVal + ', ' + oldVal);
-});
 
-o.attr('a', 'Alexis'); // [object Object], Alexis, undefined
-o.attr('a', 'Adam');   // [object Object], Adam, Alexis
-o.attr({
- 'a': 'Alice',      // [object Object], Alice, Adam
- 'b': 'Bob'
-});
-o.removeAttr('a');     // [object Object], undefined, Alice
-@codeend
+    var o = new can.Map({});
+    o.bind('a', function(ev, newVal, oldVal) {
+        console.log(ev + ', ' + newVal + ', ' + oldVal);
+    });
+
+    o.attr('a', 'Alexis'); // [object Object], Alexis, undefined
+    o.attr('a', 'Adam');   // [object Object], Adam, Alexis
+    o.attr({
+        'a': 'Alice',      // [object Object], Alice, Adam
+        'b': 'Bob'
+    });
+    o.removeAttr('a');     // [object Object], undefined, Alice
+
 
 ## See also
 

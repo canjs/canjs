@@ -1311,4 +1311,31 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		
 	});
 
+	test('scope objects with Constructor functions as properties do not get converted (#1261)', 1, function(){
+		stop();
+
+		var Test = can.Map.extend({
+			test: 'Yeah'
+		});
+
+		can.Component.extend({
+			tag:'my-app',
+			scope: {
+				MyConstruct: Test
+			},
+			events: {
+				'{MyConstruct} something': function() {
+					ok(true, 'Event got triggered');
+					start();
+				}
+			}
+		});
+
+		var frag = can.stache('<my-app></my-app>')();
+
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-test-area"),frag);
+
+		can.trigger(Test, 'something');
+	});
 });

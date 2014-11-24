@@ -1546,10 +1546,11 @@ steal('can/util',
 			can.compute.temporarilyBind(compute);
 
 			// computeData gives us an initial value
-			var initialValue = computeData.initialValue;
+			var initialValue = computeData.initialValue,
+				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (initialValue === undefined && !isHelper) {
+			if (initialValue === undefined && !isHelper && !helperObj) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 			}
 			//!steal-remove-end
@@ -1656,7 +1657,10 @@ steal('can/util',
 		 * Returns a helper given the name.
 		 */
 		Mustache.getHelper = function (name, options) {
-			var helper = options.attr("helpers." + name);
+			var helper;
+			if (options) {
+				helper = options.attr("helpers." + name);
+			}
 			return helper ? {
 				fn: helper
 			} : this._helpers[name];

@@ -48,13 +48,17 @@ model instance on the server.
 The easiest way to implement create is to give it the url
 to post data to:
 
-   var Recipe = can.Model.extend({
-     create: "/recipes"
-   },{})
+```
+var Recipe = can.Model.extend({
+ create: "/recipes"
+},{})
+```
 
 This lets you create a recipe like:
 
-   new Recipe({name: "hot dog"}).save();
+```
+new Recipe({name: "hot dog"}).save();
+```
 
 
 ## Implement with a Function
@@ -69,15 +73,19 @@ For example, the following code makes a request
 to `POST /recipes.json {'name': 'hot+dog'}` and gets back
 something that looks like:
 
-   {
-     "id": 5,
-     "createdAt": 2234234329
-   }
+```
+{
+ "id": 5,
+ "createdAt": 2234234329
+}
+```
 
 The code looks like:
 
-   can.Model.extend("Recipe", {
-     create : function( attrs ){
-       return $.post("/recipes.json",attrs, undefined ,"json");
-     }
-   },{})
+```
+can.Model.extend("Recipe", {
+ create : function( attrs ){
+   return $.post("/recipes.json",attrs, undefined ,"json");
+ }
+},{})
+```
