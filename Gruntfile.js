@@ -126,107 +126,6 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		qunit: {
-			options: {
-				timeout: 10000
-			},
-			steal: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/jquery.html',
-						'http://localhost:8000/test/jquery-2.html',
-						'http://localhost:8000/test/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
-					]
-				}
-			},
-			dist: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/dist/jquery.html',
-						'http://localhost:8000/test/dist/jquery-2.html',
-						'http://localhost:8000/test/dist/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/dist/mootools.html',
-						'http://localhost:8000/test/dist/yui.html'
-					]
-				}
-			},
-			dev: {
-				options: {
-					urls: [
-						'http://localhost:8000/test/dev/dojo.html',
-						'http://localhost:8000/test/dev/jquery.html',
-						'http://localhost:8000/test/dev/jquery-2.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/dev/mootools.html',
-						'http://localhost:8000/test/dev/yui.html'
-					]
-				}
-			},
-			compatibility: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/compatibility/jquery.html',
-						'http://localhost:8000/test/compatibility/jquery-2.html',
-						'http://localhost:8000/test/compatibility/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/compatibility/mootools.html',
-						'http://localhost:8000/test/compatibility/yui.html'
-					]
-				}
-			},
-			amd: {
-				options: {
-					timeout: 10000,
-					urls: [
-						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
-						'http://localhost:8000/test/amd/jquery.html',
-						'http://localhost:8000/test/amd/jquery-2.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/amd/mootools.html',
-						'http://localhost:8000/test/amd/yui.html'
-					]
-				}
-			},
-			individuals: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/component/test.html',
-						'http://localhost:8000/compute/test.html',
-						'http://localhost:8000/construct/test.html',
-						'http://localhost:8000/construct/proxy/test.html',
-						'http://localhost:8000/construct/super/test.html',
-						'http://localhost:8000/control/test.html',
-						'http://localhost:8000/map/test.html',
-						'http://localhost:8000/map/lazy/test.html',
-						// 'http://localhost:8000/map/define/test.html',
-						'http://localhost:8000/map/attributes/test.html',
-						'http://localhost:8000/map/backup/test.html',
-						// 'http://localhost:8000/map/delegate/test.html',
-						'http://localhost:8000/map/list/test.html',
-						'http://localhost:8000/map/setter/test.html',
-						'http://localhost:8000/map/sort/test.html',
-						'http://localhost:8000/map/validations/test.html',
-						'http://localhost:8000/model/test.html',
-						'http://localhost:8000/observe/test.html',
-						'http://localhost:8000/list/promise/test.html',
-						// 'http://localhost:8000/route/test.html',
-						'http://localhost:8000/route/pushstate/test.html',
-						'http://localhost:8000/view/test.html',
-						'http://localhost:8000/view/ejs/test.html',
-						'http://localhost:8000/view/mustache/test.html',
-						'http://localhost:8000/util/fixture/test.html'
-					]
-				}
-			}
-		},
 		// Removes the dist folder
 		clean: {
 			build: ['dist/']
@@ -328,12 +227,53 @@ module.exports = function (grunt) {
 		meta: {
 			defaults: require("./build/config_meta_defaults")(),
 			modules: require("./build/config_meta_modules")
+		},
+		testee: {
+			options: {
+				timeout: 10000,
+				reporter: 'Min'
+			},
+			steal: [
+				'test/*.html',
+				'!test/demos_and_tests.html',
+				'!test/performance-loading.html',
+				'!test/index.html'
+			],
+			amd: [ 'test/amd/*.html', '!test/amd/dojo.html' ],
+			compatibility: [ 'test/compatibility/*.html' ],
+			dev: [ 'test/dev/*.html' ],
+			dist: [ 'test/dist/*.html' ],
+			individuals: [
+				'component/test.html',
+				'compute/test.html',
+				'construct/test.html',
+				'construct/proxy/test.html',
+				'construct/super/test.html',
+				'control/test.html',
+				'map/test.html',
+				'map/lazy/test.html',
+				'map/define/test.html',
+				'map/attributes/test.html',
+				'map/backup/test.html',
+				'map/list/test.html',
+				'map/setter/test.html',
+				'map/sort/test.html',
+				'map/validations/test.html',
+				'model/test.html',
+				'observe/test.html',
+				'list/promise/test.html',
+				'route/test.html',
+				'route/pushstate/test.html',
+				'view/test.html',
+				'view/ejs/test.html',
+				'view/mustache/test.html',
+				'util/fixture/test.html'
+			]
 		}
 	});
 
 	
 	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -345,7 +285,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-plato');
 	grunt.loadNpmTasks('steal-tools');
 	grunt.loadNpmTasks('grunt-simple-mocha');
-
+	grunt.loadNpmTasks('testee');
 
 	grunt.registerTask('default', ['build']);
 	
@@ -358,12 +298,11 @@ module.exports = function (grunt) {
 		'stealPluginify:amd-util-yui',
 		'stealPluginify:amd-util-zepto',
 		'stealPluginify:amd-util-mootools',
-		'string-replace:version']);
+		'string-replace:version'
+	]);
 	
-	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'qunit:compatibility']);
-	// <%= pkg.version %>
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit', 'simplemocha']);
-	
-	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
-	grunt.registerTask('test:amd', ['connect',  'build:amd','testify','qunit:amd']);
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
+	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
+	grunt.registerTask('test:steal', ['testee:steal']);
+	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
 };
