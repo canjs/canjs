@@ -11,22 +11,21 @@
 `unbind` unbinds event handlers previously bound with [can.Map.prototype.bind|`bind`].
 If no _handler_ is passed, all handlers for the given event type will be unbound.
 
-@codestart
-var i = 0,
- increaseBy2 = function() { i += 2; },
- increaseBy3 = function() { i += 3; },
- o = new can.Map();
 
-o.bind('change', increaseBy2);
-o.bind('change', increaseBy3);
-o.attr('a', 'Alice');
-i; // 5
+    var i = 0,
+        increaseBy2 = function() { i += 2; },
+        increaseBy3 = function() { i += 3; },
+        o = new can.Map();
 
-o.unbind('change', increaseBy2);
-o.attr('b', 'Bob');
-i; // 8
+    o.bind('change', increaseBy2);
+    o.bind('change', increaseBy3);
+    o.attr('a', 'Alice');
+    i; // 5
 
-o.unbind('change');
-o.attr('e', 'Eve');
-i; // 8
-@codeend
+    o.unbind('change', increaseBy2);
+    o.attr('b', 'Bob');
+    i; // 8
+
+    o.unbind('change');
+    o.attr('e', 'Eve');
+    i; // 8

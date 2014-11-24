@@ -15,9 +15,11 @@ created, destroyed, or updated.
 __created__, __updated__, __destroyed__ events on all
 instances of the model.
 
-   Task.bind("created", function(ev, createdTask){
-    this //-> Task
-     createdTask.attr("name") //-> "Dishes"
-   })
+```
+Task.bind("created", function(ev, createdTask){
+this //-> Task
+ createdTask.attr("name") //-> "Dishes"
+})
 
-   new Task({name: "Dishes"}).save();
+new Task({name: "Dishes"}).save();
+```

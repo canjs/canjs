@@ -26,14 +26,16 @@ that instance will be merged with the item's data and returneds
 
 For example
 
-   Task = can.Model.extend({},{})
+```
+Task = can.Model.extend({},{})
 
-   var t1 = new Task({id: 1, name: "dishes"})
+var t1 = new Task({id: 1, name: "dishes"})
 
-   // Binding on a model puts it in the store
-   t1.bind("change", function(){})
+// Binding on a model puts it in the store
+t1.bind("change", function(){})
 
-   var task = Task.model({id: 1, name : "dishes", complete : false})
+var task = Task.model({id: 1, name : "dishes", complete : false})
 
-   t1 === task //-> true
-   t1.attr("complete")  //-> false
+t1 === task //-> true
+t1.attr("complete")  //-> false
+```

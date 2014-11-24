@@ -33,7 +33,7 @@ to the compute is.
     age() //-> 30
     age(31) //-> fires a "change" event
 
-@param {{get: function, set: function, on: function, off: function}} [settings]
+@param {computeSettings} [settings]
 
 Configures all behaviors of the [can.computed compute]. The following cross
 binds an input element to a compute:
@@ -54,21 +54,6 @@ binds an input element to a compute:
 		}
 	})
 
-@option {function} get A function that retrieves and returns the current value
-of the compute.
-
-@option {function(*,*):*} set(newVal,oldVal)
-
-A function that is called when a compute is called with an argument. The function is passed
-the first argumented passed to [can.computed compute] and the current value. If
-`set` returns a value, it is used to compare to the current value of the compute. Otherwise,
-`get` is called to get the current value of the compute and that value is used
-to determine if the compute has changed values.
-
-@option {function(function)} on(updated) Called to setup binding to dependency events. Call updated
-when the computes value needs to be updated.
-
-@option {function(function)} off Called to teardown binding.
 
 @return {can.computed} The new compute.
 

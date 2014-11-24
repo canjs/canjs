@@ -658,7 +658,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// call that method
 					if (options.returnObserveMethods) {
 						cur = cur[reads[i]];
-					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+					} else if ( (reads[i] === 'constructor' && prev instanceof can.Construct) ||
+						(prev[reads[i]].prototype instanceof can.Construct)) {
 						cur = prev[reads[i]];
 					} else {
 						cur = prev[reads[i]].apply(prev, options.args || []);
@@ -669,7 +670,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				}
 			} else {
 				// just do the dot operator
-				cur = prev[reads[i]];
+				if(cur == null) {
+					cur = undefined;
+				} else {
+					cur = prev[reads[i]];
+				}
+				
 			}
 			type = typeof cur;
 			// If it's a compute, get the compute's value
@@ -720,6 +726,20 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			value: cur,
 			parent: prev
 		};
+	};
+
+	can.compute.set = function(parent, key, value) {
+		if(isObserve(parent)) {
+			return parent.attr(key, value);
+		}
+
+		if(parent[key] && parent[key].isComputed) {
+			return parent[key](value);
+		}
+
+		if(typeof parent === 'object') {
+			parent[key] = value;
+		}
 	};
 
 	return can.compute;

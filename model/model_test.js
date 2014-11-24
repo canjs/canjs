@@ -1050,6 +1050,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			};
 		});
 		stop();
+
 		MyModel.bind('created', function (ev, created) {
 			start();
 			deepEqual(created.attr(), {
@@ -1637,4 +1638,80 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(count, 1, "findAll called only once.");
 	});
 
+	test("static methods do not get overwritten with resource property set (#1309)", function() {
+		var Base = can.Model.extend({
+			resource: '/path',
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findAll'
+				});
+				return dfd;
+			}
+		}, {});
+
+		stop();
+
+		Base.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			deepEqual(model.attr(), {
+				text: 'Base findAll'
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+	});
+
+	test("parseModels does not get overwritten if already implemented in base class (#1246, #1272)", 5, function() {
+		var Base = can.Model.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findOne'
+				});
+				return dfd;
+			},
+			parseModel: function(attributes) {
+				deepEqual(attributes, {
+					text: 'Base findOne'
+				}, 'parseModel called');
+				attributes.parsed = true;
+				return attributes;
+			}
+		}, {});
+		var Extended = Base.extend({}, {});
+
+		stop();
+
+		Extended.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			ok(model instanceof Extended);
+			deepEqual(model.attr(), {
+				text: 'Base findOne',
+				parsed: true
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+
+		var Third = Extended.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					nested: {
+						text: 'Third findOne'
+					}
+				});
+				return dfd;
+			},
+
+			parseModel: 'nested'
+		}, {});
+
+		Third.findOne({}).then(function(model) {
+			equal(model.attr('text'), 'Third findOne', 'correct findOne used');
+		});
+	});
 });
