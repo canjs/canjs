@@ -56,11 +56,31 @@ describe("Building steal projects", function(){
 							assert.equal(m.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
 							assert.equal(m.mustache.childNodes[0].textContent, "Mustache Hi", "Mustache generated correctly");
 							assert.equal(m.stache.childNodes[0].textContent, "Stache Hi", "Stache generated correctly");
-							done();
+							close();
 						}, close);
 					}, done);
 				}).catch(done);
 			});
+	});
+
+	it.only("works with bundles", function(done){
+		rmdir(__dirname + "bundle/dist", function(error){
+			if(error) return done(error);
+
+			stealTools.build({
+				config: __dirname + "/bundle/config.js",
+				main: "main"
+			}, {
+				minify: false
+			}).then(function(){
+				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
+					find(browser, "MODULE", function(m){
+						assert(typeof m, "object", "Correctly returned the module");
+						close();
+					}, close);
+				}, done);
+			}).catch(done);
+		});
 	});
 
 });
