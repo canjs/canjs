@@ -63,7 +63,7 @@ describe("Building steal projects", function(){
 			});
 	});
 
-	it.only("works with bundles", function(done){
+	it("works with bundles", function(done){
 		rmdir(__dirname + "bundle/dist", function(error){
 			if(error) return done(error);
 
@@ -71,11 +71,13 @@ describe("Building steal projects", function(){
 				config: __dirname + "/bundle/config.js",
 				main: "main"
 			}, {
+				quiet: true,
 				minify: false
 			}).then(function(){
 				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
 					find(browser, "MODULE", function(m){
 						assert(typeof m, "object", "Correctly returned the module");
+						assert.equal(m.html, "Main", "Rendered the div correctly");
 						close();
 					}, close);
 				}, done);

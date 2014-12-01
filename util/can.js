@@ -3,7 +3,7 @@ steal(function () {
 	/* global GLOBALCAN */
 	var glbl = typeof window !== "undefined" ? window : global;
 	
-	var can = glbl.can || {};
+	var can = {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
 		glbl.can = can;
 	}
