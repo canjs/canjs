@@ -20,7 +20,6 @@
         document.write(unescape('%3Clink rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css" /%3E'));
         document.write(unescape('%3Cscript type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js" %3E%3C/script%3E'));
     }
-	setTimeout(function(){
 		QUnit.config.autostart = false;
 		setTimeout(function(){
 			steal("can/map/define/define_test.js", function() {
@@ -28,8 +27,6 @@
 		        QUnit.start();
 			});
 		},100);
-		
-	},10);
     
 	
 </script>
