@@ -12,3 +12,4 @@ bower_components/
 test/pluginified/latest.js
 docco
 test/builders/steal-tools/dist/
+test/builders/steal-tools/bundle/dist/
