@@ -32,7 +32,7 @@
   },
   "scripts": {
     "test": "grunt test",
-    "install": "node node_modules/bower/bin/bower install"
+    "install": "bower install"
   },
   "demos": [
     "http://canjs.us/#examples",
