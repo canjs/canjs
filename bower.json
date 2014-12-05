@@ -1,8 +1,8 @@
 {
-  "name": "can",
+  "name": "canjs",
   "repo": "bitovi/canjs",
   "description": "Can do JavaScript MVC",
-	"version": "2.0.7",
+  "version": "2.2.0",
   "main": "can.js",
   "keywords": [
     "mvc",
@@ -23,6 +23,10 @@
       "can/can": "can",
       "jquery/jquery": "jquery"
     },
+    "paths": {
+      "can": "bower_components/canjs/can.js",
+      "can/*": "bower_components/canjs/*.js"
+		},
     "ext": {
       "ejs": "can/view/ejs/system",
       "mustache": "can/view/mustache/system",
