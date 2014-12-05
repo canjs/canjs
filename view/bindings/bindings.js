@@ -3,7 +3,7 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute 
 // for in template event bindings. These are usable in any mustache template, but mainly and documented 
 // for use within can.Component.
-steal("can/util", "can/view/callbacks", "can/control", function (can) {
+steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", function (can, mustacheCore) {
 	/**
 	 * @function isContentEditable
 	 * @hide
@@ -176,26 +176,84 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			// 
 			// For example, can-submit binds on the submit event.
 			event = attributeName.substr("can-".length),
-			// This is the method that the event will initially trigger. It will look up the method by the string name 
+			// This is the method that the event will initially trigger. It will look up the method by the string name
 			// passed in the attribute and call it.
 			handler = function (ev) {
-				// The attribute value, representing the name of the method to call (i.e. can-submit="foo" foo is the 
-				// name of the method)
 				var attrVal = el.getAttribute(attributeName);
-				// if the attribute is not present currently, don't run the event handler, but don't unbind,  
-				// since it might just be temporarily hidden
-				if(!attrVal){
-					return false;
+				if (!attrVal) { return; }
+				// mustacheCore.expressionData will read the attribute
+				// value and parse it identically to how mustache helpers
+				// get parsed.
+				var attrInfo = mustacheCore.expressionData(removeCurly(attrVal));
+
+				// We grab the first item and treat it as a method that
+				// we'll call.
+				var scopeData = data.scope.read(attrInfo.name.get, {
+					returnObserveMethods: true,
+					isArgument: true
+				});
+
+				// We break out early if the first argument isn't available
+				// anywhere.
+				if (!scopeData.value) {
+					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + attrInfo.name.get, {
+						element: el,
+						scope: data.scope
+					});
+					return null;
 				}
 
-				var attr = removeCurly( attrVal ),
-					scopeData = data.scope.read(attr, {
-						returnObserveMethods: true,
-						isArgument: true
+				var args = [];
+				var $el = can.$(this);
+				var localScope = data.scope.add({
+					"@element": $el,
+					"@event": ev,
+					"@scope": typeof $el.scope === "function" && $el.scope(),
+					"@context": data.scope._context
+				});
+
+				// .expressionData() gives us a hash object representing
+				// any expressions inside the definition that look like
+				// foo=bar. If there's no hash keys, we'll omit this hash
+				// from our method arguments.
+				if (!can.isEmptyObject(attrInfo.hash)) {
+					var hash = {};
+					can.each(attrInfo.hash, function(val, key) {
+						if (val && val.hasOwnProperty("get")) {
+							var s = !val.get.indexOf("@") ? localScope : data.scope;
+							hash[key] = s.read(val.get, {
+								isArgument: true
+							}).value;
+						} else {
+							hash[key] = val;
+						}
 					});
-				// To pass the arguments: (context, el, ev, param1, param2, ...)
-				var args = [data.scope._context, can.$(this)];
-				args.push.apply(args, can.makeArray(arguments));
+					args.unshift(hash);
+				}
+
+				// We go through each non-hash expression argument and
+				// prepend it to our argument list.
+				if (attrInfo.args.length) {
+					var arg;
+					for (var i = attrInfo.args.length-1; i >= 0; i--) {
+						arg = attrInfo.args[i];
+						if (arg && arg.hasOwnProperty("get")) {
+							var s = !arg.get.indexOf("@") ? localScope : data.scope;
+							args.unshift(s.read(arg.get, {
+								isArgument: true
+							}).value);
+						} else {
+							args.unshift(arg);
+						}
+					}
+				}
+				// If no arguments are provided, the method will simply
+				// receive the legacy arguments.
+				if (!args.length) {
+					// The arguments array includes extra args passed in to
+					// the event.
+					args = [data.scope._context, $el].concat(can.makeArray(arguments));
+				}
 				return scopeData.value.apply(scopeData.parent, args);
 			};
 
