@@ -1,9 +1,9 @@
 {
-  "name": "CanJS",
+  "name": "canjs",
   "repo": "bitovi/canjs",
   "description": "Can do JavaScript MVC",
-	"version": "2.0.7",
-  "main": "can.jquery.js",
+  "version": "2.2.0",
+  "main": "can.js",
   "keywords": [
     "mvc",
     "component",
@@ -17,5 +17,25 @@
     "requirejs": "~2.1.10",
     "steal": "git://github.com/bitovi/steal#738455bbf1eaf28b14ed6c22cb2ae9ade7248c05",
     "dojo" : "1.8.6"
+  },
+  "system": {
+    "map": {
+      "can/can": "can",
+      "jquery/jquery": "jquery"
+    },
+    "paths": {
+      "can": "bower_components/canjs/can.js",
+      "can/*": "bower_components/canjs/*.js"
+		},
+    "ext": {
+      "ejs": "can/view/ejs/system",
+      "mustache": "can/view/mustache/system",
+      "stache": "can/view/stache/system"
+    },
+    "buildConfig": {
+      "map": {
+        "can/util/util" : "can/util/domless/domless"
+      }
+    }
   }
 }
