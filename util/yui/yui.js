@@ -12,12 +12,12 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
+steal('can/util/can.js', "can/util/attr", 'can/util/extend.js', 'yui', 'can/event',
 	"can/util/fragment.js", 'can/util/array/each.js',
 	'can/util/object/isplain', 'can/util/deferred.js',
-	'can/util/hashchange.js', "can/util/inserted", function (can, attr, YUI) {
+	'can/util/hashchange.js', "can/util/inserted", function (can, attr, extend, YUI) {
 		YUI = YUI || window.YUI;
-		// lets overwrite 
+		// lets overwrite
 		YUI.add('can-modifications', function (Y, NAME) {
 			var addHTML = Y.DOM.addHTML;
 
@@ -94,7 +94,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
 		// Map object helpers.
-		can.extend = function (first) {
+		/*can.extend = function (first) {
 			var deep = first === true ? 1 : 0,
 				target = arguments[deep],
 				i = deep + 1,
@@ -103,7 +103,8 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 				Y.mix(target, arg, true, null, null, !!deep);
 			}
 			return target;
-		};
+		};*/
+		can.extend = extend;
 		can.param = function (object) {
 			return Y.QueryString.stringify(object, {
 				arrayKey: true
@@ -467,7 +468,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 						stop = this.cancelBubble;
 					},
 					preventDefault: function(){
-						
+
 					}
 				}, a);
 				realTriggerHandler(n, e, evdata);
@@ -504,7 +505,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 				if(e === "focus" || e === "blur") {
 					fakeTrigger(n, e, a);
 				}
-				
+
 				try {
 					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
 					// createEvent path above, and also fails on _some_ native-named events.
@@ -523,7 +524,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 
 				} catch (er) {
 					fakeTrigger(n,e,a);
-					
+
 				}*/
 			};
 		}

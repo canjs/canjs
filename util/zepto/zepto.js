@@ -1,6 +1,6 @@
-steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object/isplain',
+steal('can/util/can.js', 'can/util/attr', 'can/event', 'can/util/extend.js', 'zepto', 'can/util/object/isplain',
 	'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
-	function (can, attr, event) {
+	function (can, attr, event, extend) {
 		// data.js
 		// ---------
 		// _jQuery-like data methods._
@@ -269,14 +269,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 		};
 
 		// Make extend handle `true` for deep.
-		can.extend = function (first) {
-			if (first === true) {
-				var args = can.makeArray(arguments);
-				args.shift();
-				return $.extend.apply($, args);
-			}
-			return $.extend.apply($, arguments);
-		};
+		can.extend = extend;
 
 		can.get = function (wrapped, index) {
 			return wrapped[index];
