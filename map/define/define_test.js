@@ -229,6 +229,7 @@ steal("can/map/define", "can/test", function () {
 				string: {type: 'string'},
 				number: {  type: 'number' },
 				'boolean': {  type: 'boolean' },
+				htmlbool: {  type: 'htmlbool' },
 				leaveAlone: {  type: '*' }
 			}
 		});
@@ -239,6 +240,7 @@ steal("can/map/define", "can/test", function () {
 			string: 5,
 			number: '5',
 			'boolean': 'false',
+			htmlbool: "",
 			leaveAlone: obj
 		});
 
@@ -249,6 +251,8 @@ steal("can/map/define", "can/test", function () {
 		equal(t.attr("number"), 5, "converted to number");
 
 		equal(t.attr("boolean"), false, "converted to boolean");
+
+		equal(t.attr("htmlbool"), true, "converted to htmlbool");
 
 		equal(t.attr("leaveAlone"), obj, "left as object");
 		t.attr({
