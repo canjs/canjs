@@ -211,13 +211,14 @@
 		"can/view/stache/system": {
 			"name": "can.view.stache.system",
 			"type": "loader",
-			"isDefault": true,
+			"type": "plugin",
+			"hidden": true,
 			"hasTest": false
 		},
 		"can/util/domless/domless": {
 			"name": "can.util.domless",
-			"type": "loader",
-			"isDefault": true,
+			"type": "plugin",
+			"hidden": true,
 			"hasTest": false
 		}
 	},
