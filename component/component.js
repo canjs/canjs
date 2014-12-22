@@ -1,12 +1,12 @@
 // # can/component/component.js
-// 
-// This implements the `can.Component` which allows you to create widgets 
+//
+// This implements the `can.Component` which allows you to create widgets
 // that use a template, a view-model and custom tags.
-// 
+//
 // `can.Component` implements most of it's functionality in the `can.Component.setup`
 // and the `can.Component.prototype.setup` functions.
-// 
-// `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup` 
+//
+// `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup`
 // to hookup the component.
 
 steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks) {
@@ -19,42 +19,50 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	 * @add can.Component
 	 */
 	var Component = can.Component = can.Construct.extend(
-		
+
 		// ## Static
 		/**
 		 * @static
 		 */
-		
+
 		{
 			// ### setup
-			// 
+			//
 			// When a component is extended, this sets up the component's internal constructor
 			// functions and templates for later fast initialization.
 			setup: function () {
 				can.Construct.setup.apply(this, arguments);
 
-				// When `can.Component.setup` function is ran for the first time, `can.Component` doesn't exist yet 
-				// which ensures that the following code is ran only in constructors that extend `can.Component`. 
+				// When `can.Component.setup` function is ran for the first time, `can.Component` doesn't exist yet
+				// which ensures that the following code is ran only in constructors that extend `can.Component`.
 				if (can.Component) {
 					var self = this,
-						scope = this.prototype.scope;
-					
+						scope = this.prototype.scope,
+						base = arguments[0];
+
+					// Extend this component's helpers off its base's helpers.
+					this.prototype.helpers = can.extend({}, base.prototype.helpers, this.prototype.helpers);
+
 					// Define a control using the `events` prototype property.
-					this.Control = ComponentControl.extend( this.prototype.events );
-					
+					// If this component extends another component, extend the events off the base.
+					this.prototype.events = can.extend({}, base.prototype.events, this.prototype.events);
+					this.Control = (base.Control || ComponentControl).extend( this.prototype.events );
+
 					// Look to convert `scope` to a Map constructor function.
 					if (!scope || (typeof scope === "object" && ! (scope instanceof can.Map)  ) ) {
-						// If scope is an object, use that object as the prototype of an extended 
-						// Map constructor function.
+						// If scope is an object, use that object as the prototype of an extended
+						// Map constructor function. If this component extends another component, we'll
+						// extend this Map off of the base Map.
 						// A new instance of that Map constructor function will be created and
 						// set a the constructor instance's scope.
-						this.Map = can.Map.extend(scope || {});
+						this.prototype.scope = scope = can.extend(true, {}, base.prototype.scope, scope);
+						this.Map = (base.Map || can.Map).extend(scope || {});
 					}
 					else if (scope.prototype instanceof can.Map) {
 						// If scope is a can.Map constructor function, just use that.
 						this.Map = scope;
 					}
-					
+
 					// Look for default `@` values. If a `@` is found, these
 					// attributes string values will be set and 2-way bound on the
 					// component instance's scope.
@@ -111,7 +119,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				can.each(this.constructor.attributeScopeMappings, function (val, prop) {
 					initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
 				});
-				
+
 				// Get the value in the scope for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
@@ -140,7 +148,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							return;
 						}
 					}
-					// Cross-bind the value in the scope to this 
+					// Cross-bind the value in the scope to this
 					// component's scope
 					var computeData = hookupOptions.scope.computeData(value, {
 						args: []
@@ -159,7 +167,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 					// Set the value to be added to the scope
 					initalScopeData[name] = compute();
-					
+
 					// We don't need to listen to the compute `change` if it doesn't have any dependencies
 					if (!compute.hasDependencies) {
 						compute.unbind("change", handler);
@@ -180,7 +188,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// If `this.scope` is instance of `can.Map` assign it to the `componentScope`
 					componentScope = this.scope;
 				} else if (can.isFunction(this.scope)) {
-					// If `this.scope` is a function, call the function and 
+					// If `this.scope` is a function, call the function and
 					var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
 
 					if (scopeResult instanceof can.Map) {
@@ -280,7 +288,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 							// `rendererOptions.options` is a scope of helpers where `<content>` was found, so
 							// the right helpers should already be available.
-							// However, `_tags.content` is going to point to this current content callback.  We need to 
+							// However, `_tags.content` is going to point to this current content callback.  We need to
 							// remove that so it will walk up the chain
 
 							delete options.tags.content;
@@ -299,13 +307,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// Render the component's template
 					frag = this.constructor.renderer(renderedScope, hookupOptions.options.add(options));
 				} else {
-					// Otherwise render the contents between the 
+					// Otherwise render the contents between the
 					if(hookupOptions.templateType === "legacy") {
 						frag = can.view.frag(hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : "");
 					} else {
 						frag = hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : document.createDocumentFragment();
 					}
-					
+
 				}
 				// Append the resulting document fragment to the element
 				can.appendChild(el, frag);
@@ -324,7 +332,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 			hasObjectLookup = paramReplacer.test(methodName);
 
-			// If we don't have options (a `control` instance), we'll run this 
+			// If we don't have options (a `control` instance), we'll run this
 			// later.
 			if( !controlInstance && hasObjectLookup) {
 				return;
@@ -335,7 +343,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				readyCompute = can.compute(function(){
 					var delegate;
-					
+
 					// Set the delegate target and get the name of the event we're listening to.
 					var name = methodName.replace(paramReplacer, function(matched, key){
 						var value;
@@ -345,7 +353,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							delegate = options.scope;
 							return "";
 						}
-						
+
 						// Remove `scope.` from the start of the key and read the value from the `scope`.
 						key = key.replace(/^scope\./,"");
 						value = can.compute.read(options.scope, key.split("."), {isArgument: true}).value;
@@ -362,9 +370,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							delegate = value;
 							return "";
 						}
-	
+
 					});
-					
+
 					// Get the name of the `event` we're listening to.
 					var parts = name.split(/\s+/g),
 						event = parts.pop();
@@ -375,7 +383,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						parts: [name, parts.join(" "), event],
 						delegate: delegate || undefined
 					};
-					
+
 				}, this);
 
 				// Create a handler function that we'll use to handle the `change` event on the `readyCompute`.
@@ -387,7 +395,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				};
 
 				readyCompute.bind("change", handler);
-				
+
 				controlInstance._bindings.readyComputes[methodName] = {
 					compute: readyCompute,
 					handler: handler
@@ -418,12 +426,12 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		}
 	});
 
-	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
+	// If there is a `jQuery` object and it has the `fn` object, create the `scope` plugin that returns
 	// the scope object
-	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
+// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
 	if (window.jQuery && jQuery.fn) {
 		jQuery.fn.scope = function (attr) {
-			// If `attr` is passed to the `scope` plugin return the value of that 
+			// If `attr` is passed to the `scope` plugin return the value of that
 			// attribute on the `scope` object, otherwise return the whole scope
 			if (attr) {
 				return this.data("scope")

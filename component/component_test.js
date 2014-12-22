@@ -1,5 +1,5 @@
 steal("can/component", "can/view/stache" ,"can/route", function () {
-	
+
 	QUnit.module('can/component', {
 		setup: function () {
 			can.remove(can.$("#qunit-test-area>*"));
@@ -51,7 +51,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 	test("basic tabs", function () {
 
-		// new Tabs() .. 
+		// new Tabs() ..
 		can.Component.extend({
 			tag: "tabs",
 			template: "<ul>" +
@@ -400,7 +400,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 	test("deferred grid", function () {
 
-		// This test simulates a grid that reads a `deferreddata` property for 
+		// This test simulates a grid that reads a `deferreddata` property for
 		// items and displays them.
 		// If `deferreddata` is a deferred, it waits for those items to resolve.
 		// The grid also has a `waiting` property that is true while the deferred is being resolved.
@@ -480,9 +480,9 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		}));
 
 		var gridScope = can.scope("#qunit-test-area grid");
-		
+
 		equal(gridScope.attr("waiting"), true, "The grid is initially waiting on the deferreddata to resolve");
-		
+
 		stop();
 
 		var waitingHandler = function() {
@@ -501,13 +501,13 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 					}
 				});
-				
+
 				// update set to change the deferred.
 				scope.attr("set", 1);
 
 			}, 10);
 		};
-		
+
 		gridScope.bind('waiting', waitingHandler);
 	});
 
@@ -859,14 +859,14 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			n2 = can.compute();
 
 		scope.attr("name", n1);
-		
+
 		n1("updated");
-		
+
 		scope.attr("name", n2);
-		
+
 		n2("updated");
-		
-		
+
+
 		equal(nameChanges, 2);
 	});
 
@@ -1043,7 +1043,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		equal(called, false);
 	});
-	
+
 
 	test('Same component tag nested', function () {
 		can.Component({
@@ -1067,7 +1067,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 	test("Component events bind to window", function(){
 		window.tempMap = new can.Map();
-		
+
 		can.Component.extend({
 			tag: "window-events",
 			events: {
@@ -1076,20 +1076,20 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 				}
 			}
 		});
-		
+
 		var template = can.view.mustache('<window-events></window-events>');
-		
+
 		template();
-		
+
 		window.tempMap.attr("prop","value");
-		
+
 		// IE 6-8 throws an error when deleting globals created via assignment:
 		// http://perfectionkills.com/understanding-delete/#ie_bugs
 		window.tempMap = undefined;
 		try{
 			delete window.tempMap;
 		} catch(e) {}
-		
+
 	});
 
 	test('Same component tag nested', function () {
@@ -1111,17 +1111,17 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
 
 	});
-	
+
 	asyncTest('stache integration', function(){
 
 		can.Component.extend({
 			tag: 'my-tagged',
 			template: '{{p1}},{{p2.val}},{{p3}},{{p4}}'
 		});
-		
+
 		var stache = can.stache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
 		var mustache = can.mustache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
-		
+
 		var data = new can.Map({
 			v1: "value1",
 			v2: {val: "value2"},
@@ -1129,45 +1129,45 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			value3: "value 3",
 			VALUE3: "VALUE 3"
 		});
-		
+
 		var stacheFrag = stache(data),
 			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
-			
+
 		var mustacheFrag = mustache(data),
 			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
-		
+
 		equal(stacheResult[0], "v1", "stache uses attribute values");
 		equal(stacheResult[1], "value2", "stache single {} cross binds value");
 		equal(stacheResult[2], "value3", "stache  {{}} cross binds attribute");
-		
+
 		equal(mustacheResult[0], "value1", "mustache looks up attribute values");
 		equal(mustacheResult[1], "value2", "mustache single {} cross binds value");
 		equal(mustacheResult[2], "value 3", "mustache  {{}} cross binds string value");
-		
+
 		data.attr("v1","VALUE1");
 		data.attr("v2",new can.Map({val: "VALUE 2"}));
 		data.attr("v3","VALUE3");
 		can.attr.set( stacheFrag.childNodes[0],"p4","value4");
-		
+
 		stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
 		mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
-		
+
 		equal(stacheResult[0], "v1", "stache uses attribute values so it should not change");
 		equal(mustacheResult[0], "VALUE1", "mustache looks up attribute values and updates immediately");
 		equal(stacheResult[1], "VALUE 2", "stache single {} cross binds value and updates immediately");
 		equal(mustacheResult[1], "VALUE 2", "mustache single {} cross binds value and updates immediately");
-		
+
 		equal(stacheResult[2], "value3", "stache {{}} cross binds attribute changes so it wont be updated immediately");
-		
+
 		setTimeout(function(){
-			
+
 			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
 			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
 			equal(stacheResult[2], "VALUE3", "stache  {{}} cross binds attribute");
 			equal(mustacheResult[2], "value 3", "mustache sticks with old value even though property has changed");
-			
+
 			equal(stacheResult[3], "value4", "stache sees new attributes");
-			
+
 			start();
 		},20);
 
@@ -1175,19 +1175,19 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 	test("can.Construct are passed normally", function(){
 		var Constructed = can.Construct.extend({foo:"bar"},{});
-		
+
 		can.Component.extend({
 			tag: "con-struct"
 		});
-		
+
 		var stached = can.stache("<con-struct con='{Constructed}'>{{con.foo}}</con-struct>");
-		
+
 		var res = stached({
 			Constructed: Constructed
 		});
 		equal(res.childNodes[0].innerHTML, "bar");
-		
-		
+
+
 	});
 
 	//!steal-remove-start
@@ -1245,7 +1245,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		can.append(can.$('#qunit-test-area'), template2());
 
 	});
-	
+
 	test("hyphen-less tag names", function () {
 		var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
 		can.Component.extend({
@@ -1287,28 +1287,164 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 	});
 
 	test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function(){
-		
+
 		can.Component.extend({
 			tag:'x-app'
 		});
 
 		var frag=can.stache('<x-app></x-app>')({});
-		
+
 		var el = frag.childNodes[0];
 		var scope = can.scope(el);
-		
+
 		// element must be inserted, otherwise attributes event will not be fired
 		can.append(can.$("#qunit-test-area"),frag);
-		
+
 		// update the class
 		can.addClass(can.$(el),"foo");
-		
+
 		stop();
 		setTimeout(function(){
 			equal(scope.attr('class'),undefined, "the scope is not updated when the class attribute changes");
 			start();
 		},20);
-		
+
+	});
+
+	test('extending components extends scope correctly (#1295)', function() {
+		var Parent = can.Component.extend({
+			tag: 'x-parent',
+			template: '{{scalarShouldStay}} {{scalarShouldOverwrite}} ' +
+								'{{objShouldStay.prop1}} ' +
+								'{{objShouldChange.stay}} {{objShouldChange.overwrite}}',
+			scope: {
+				scalarShouldStay: 'old',
+				scalarShouldOverwrite: 'before',
+
+				objShouldStay: {
+					prop1: 'one'
+				},
+				objShouldChange: {
+					stay: 'old',
+					overwrite: 'before'
+				}
+			}
+		});
+
+		var Child = Parent.extend({
+			tag: 'x-child',
+			template: '{{scalarShouldStay}} {{scalarShouldOverwrite}} {{scalarShouldAdd}} ' +
+								'{{objShouldStay.prop1}} ' +
+								'{{objShouldChange.stay}} {{objShouldChange.overwrite}} {{objShouldChange.add}} ' +
+								'{{objShouldAdd.prop2}}',
+			scope: {
+				scalarShouldOverwrite: 'after',
+				scalarShouldAdd: 'new',
+
+				objShouldChange: {
+					overwrite: 'after',
+					add: 'new'
+				},
+				objShouldAdd: {
+					prop2: 'two'
+				}
+			}
+		});
+
+		var scope = Child.prototype.scope;
+		equal(scope.scalarShouldStay, 'old', 'Old scalars stay.');
+		equal(scope.scalarShouldOverwrite, 'after', 'Overwritten scalars get overwritten.');
+		equal(scope.scalarShouldAdd, 'new', 'New scalars get added.');
+
+		equal(scope.objShouldStay.prop1, 'one', 'Old objects stick around.');
+
+		equal(scope.objShouldChange.stay, 'old', 'Objects get deeply extended.');
+		equal(scope.objShouldChange.overwrite, 'after', 'Objects get deeply extended.');
+		equal(scope.objShouldChange.add, 'new', 'Objects get deeply extended.');
+
+		equal(scope.objShouldAdd.prop2, 'two', 'New objects get added.');
+
+		var template = can.view.mustache('<x-parent></x-parent><x-child></x-child>');
+		equal(
+			template().childNodes[0].innerHTML,
+			'old before one old before',
+			'Overwriting scope fills in parent template correctly.'
+		);
+		equal(
+			template().childNodes[1].innerHTML,
+			'old after new one old after new two',
+			'Overwriting scope fills in child template correctly.'
+		);
+	});
+
+	test('extending components extends helpers correctly (#1295)', function() {
+		var shouldStay = function() { return 'stay'; },
+				shouldChangeFrom = function() { return 'old'; },
+				shouldChangeTo = function() { return 'new'; },
+				shouldAdd = function() { return 'add'; };
+
+		var Parent = can.Component.extend({
+			tag: 'x-parent',
+			template: '{{shouldStay}} {{shouldChange}}',
+			helpers: {
+				shouldStay: shouldStay,
+				shouldChange: shouldChangeFrom
+			}
+		});
+
+		var Child = Parent.extend({
+			tag: 'x-child',
+			template: '{{shouldStay}} {{shouldChange}} {{shouldAdd}}',
+			helpers: {
+				shouldChange: shouldChangeTo,
+				shouldAdd: shouldAdd
+			}
+		});
+
+		var helpers = Child.prototype.helpers;
+		equal(helpers.shouldStay, shouldStay, 'Old helpers stay.');
+		equal(helpers.shouldChange, shouldChangeTo, 'Overwritten helpers get overwritten.');
+		equal(helpers.shouldAdd, shouldAdd, 'New helpers get added.');
+
+		var template = can.view.mustache('<x-parent></x-parent><x-child></x-child>');
+		equal(
+			template().childNodes[0].innerHTML,
+			'stay old',
+			'Overwriting helpers fills in templates correctly on parent component.'
+		);
+		equal(
+			template().childNodes[1].innerHTML,
+			'stay new add',
+			'Overwriting helpers fills in templates correctly on child component.'
+		);
+	});
+
+	test('extending components extends events correctly (#1295)', function() {
+		var shouldStay = function() { /* stay */ },
+				shouldChangeFrom = function() { /* old */ },
+				shouldChangeTo = function() { /* new */ },
+				shouldAdd = function() { /* add */ };
+
+		var Parent = can.Component.extend({
+			tag: 'x-parent',
+			events: {
+				' stay': shouldStay,
+				' change': shouldChangeFrom
+			}
+		});
+
+		var Child = Parent.extend({
+			tag: 'x-child',
+			events: {
+				' change': shouldChangeTo,
+				' add': shouldAdd
+			}
+		});
+
+		var events = Child.prototype.events;
+		equal(events[' stay'], shouldStay, 'Old events stay.');
+		equal(events[' change'], shouldChangeTo, 'Overwritten events get overwritten.');
+		equal(events[' add'], shouldAdd, 'New events get added.');
 	});
 
 	test('scope objects with Constructor functions as properties do not get converted (#1261)', 1, function(){

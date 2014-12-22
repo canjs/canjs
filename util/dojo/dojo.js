@@ -1,10 +1,10 @@
-steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragment.js',
+steal('can/util/can.js', 'can/util/attr', 'can/util/extend.js', 'dojo', 'can/event', 'can/util/fragment.js',
 	'can/util/array/each.js',
 	'can/util/object/isplain',
 	'can/util/deferred.js',
 	'can/util/hashchange.js',
 	'can/util/inserted',
-	function (can, attr) {
+	function (can, attr, extend) {
 
 	var dojo = window.dojo;
 	define('plugd/trigger', ['dojo/main'], function () {
@@ -17,7 +17,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 		var mix = d._mixin;
 		// the guts of the node triggering logic:
 		// the function accepts node (not string|node), "on"-less event name,
-		// and an object of args to mix into the event. 
+		// and an object of args to mix into the event.
 		var realTrigger;
 
 		if (d.doc.createEvent) {
@@ -94,12 +94,12 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			realTrigger(n, ev, extraArgs);
 		};
 		d.trigger = function (obj, event, extraArgs) {
-			// summary: 
-			//		Trigger some event. It can be either a Dom Event, Custom Event, 
-			//		or direct function call. 
+			// summary:
+			//		Trigger some event. It can be either a Dom Event, Custom Event,
+			//		or direct function call.
 			//
 			// description:
-			//		Trigger some event. It can be either a Dom Event, Custom Event, 
+			//		Trigger some event. It can be either a Dom Event, Custom Event,
 			//		or direct function call. NOTE: This function does not trigger
 			//		default behavior, only triggers bound event listeneres. eg:
 			//		one cannot trigger("anchorNode", "onclick") and expect the browser
@@ -110,7 +110,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			//		If an Object, fire the `event` in the scope of this object,
 			//		similar to calling dojo.hitch(obj, event)(). The return value
 			//		in this case is returned from `dojo.trigger`
-			//	 
+			//
 			// event: String|Function
 			//		The name of the event to trigger. can be any DOM level 2 event
 			//		and can be in either form: "onclick" or "click" for instance.
@@ -118,7 +118,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			//		a string version of a member function, just like `dojo.hitch`.
 			//
 			// extraArgs: Object?
-			//		An object to mix into the `event` object passed to any bound 
+			//		An object to mix into the `event` object passed to any bound
 			//		listeners. Be careful not to override important members, like
 			//		`type`, or `preventDefault`. It will likely error.
 			//
@@ -126,7 +126,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			//		as all arguments beyond the `event` are curried onto the triggered
 			//		function.
 			//
-			// example: 
+			// example:
 			//	|	dojo.connect(node, "onclick", function(e){ /* stuff */ });
 			//	|	// later:
 			//	|	dojo.trigger(node, "onclick");
@@ -143,7 +143,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			//	|	// fire an anonymous function:
 			//	|	dojo.trigger(d.global, function(){ /* stuff */ });
 			//
-			// example: 
+			// example:
 			//	|	// fire and anonymous function in the scope of obj
 			//	|	dojo.trigger(obj, function(){ this == obj; });
 			//
@@ -159,7 +159,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			//
 			// returns: Anything
 			//		Will not return anything in the Dom event case, but will return whatever
-			//		return value is received from the triggered event. 
+			//		return value is received from the triggered event.
 			return isfn(obj) || isfn(event) || isfn(obj[event]) ? d.hitch.apply(d, arguments)() : d._trigger.apply(d, arguments);
 		};
 		d.NodeList.prototype.trigger = d.NodeList._adaptAsForEach(d._trigger);
@@ -169,7 +169,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 				trigger: function (ev, data) {
 					// summary:
 					//		Fire some some event originating from this node.
-					//		Only available if both the `dojo.trigger` and `dojo.node` plugin 
+					//		Only available if both the `dojo.trigger` and `dojo.node` plugin
 					//		are enabled. Allows chaining as all `dojo._Node` methods do.
 					//
 					// ev: String
@@ -192,7 +192,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 	// dojo.js
 	// ---------
 	// _dojo node list._
-	//  
+	//
 	// These are pre-loaded by `steal` -> no callback.
 	require([
 		'dojo/main',
@@ -220,14 +220,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 		return dojo.map(can.makeArray(arr || []), fn);
 	};
 	// Map object helpers.
-	can.extend = function (first) {
-		if (first === true) {
-			var args = can.makeArray(arguments);
-			args.shift();
-			return dojo.mixin.apply(dojo, args);
-		}
-		return dojo.mixin.apply(dojo, arguments);
-	};
+	can.extend = extend;
 	can.isEmptyObject = function (object) {
 		var prop;
 		for (prop in object) {
