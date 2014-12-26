@@ -12,7 +12,7 @@ rich web applications easy. Use it because it’s:
 - Library-er
 
 ### Demos and Docs
-Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
+Go to [http://canjs.com/](http://canjs.com/) for docs, downloads, tests, demos, and more.
 
 ### Support / Contributing
 Before you make an issue, please read our [Contributing](contributing.md) guide.
