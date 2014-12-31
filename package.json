@@ -14,7 +14,7 @@
     "github": "https://github.com/bitovi/canjs"
   },
   "peerDependencies": {
-    "jquery": "2.X"
+    "jquery": ">1.9.0"
   },
   "devDependencies": {
     "bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#steal-tools",
