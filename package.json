@@ -52,7 +52,7 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "main": "main"
+  "main": "main",
   "system": {
     "map": {
       "can/can": "can",
