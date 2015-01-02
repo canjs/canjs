@@ -88,7 +88,8 @@ Implement findAll with a url like:
 Recipe = can.Model.extend({
  findOne : "/recipes/{id}.json"
 },{});
-``
+```
+
 
 If `findOne` is called like:
 

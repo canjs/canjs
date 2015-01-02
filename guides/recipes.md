@@ -110,7 +110,7 @@ To show a list of data within a mustache template, use the `#each` operator.
     {{#each people}}
 	  <li>
 	    {{lastname}}, {{firstname}}
-	  <li>
+	  </li>
     {{/each}}
     </ul>
 
