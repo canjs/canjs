@@ -19,7 +19,9 @@ steal(
 	function stache(template){
 		
 		// Remove line breaks according to mustache's specs.
-		template = mustacheCore.cleanLineEndings(template);
+		if(typeof template === "string") {
+			template = mustacheCore.cleanLineEndings(template);
+		}
 		
 		// The HTML section that is the root section for the entire template.
 		var section = new HTMLSectionBuilder(),

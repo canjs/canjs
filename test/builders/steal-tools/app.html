@@ -17,4 +17,18 @@
 	<script src='../../../bower_components/steal/steal.js' 
 	        data-config='config.js'
 	        data-main='app'></script>
+	<script>
+		System.import("@config").then(function(){
+			System.import("app").then(function(){
+				
+				test("stache", function(){
+					var div = document.createElement('div');
+					div.appendChild(MODULE.stache);
+					QUnit.equal( div.getElementsByTagName("h1")[0].innerHTML, "Stache Hi", "matches" );
+				});
+				
+				QUnit.start();
+			});
+		});
+	</script>
 </body>

@@ -1,4 +1,4 @@
-steal("can/view/stache", function(stache){
+steal("can/view/stache", "can/view/stache/mustache_core.js",function(stache, mustacheCore){
 
 	var escMap = {
 		'\n': "\\n",
@@ -19,10 +19,48 @@ steal("can/view/stache", function(stache){
 	};
 
 	function translate(load) {
+		var template = mustacheCore.cleanLineEndings(load.source);
+		var imports = [],
+			inImport = false,
+			inFrom = false;
+		
+		var intermediate = can.view.parser(template, {
+			start:     function( tagName, unary ){
+				if(tagName === "can-import") {
+					inImport = true;
+				}
+			},
+			end:       function( tagName, unary ){
+				if(tagName === "can-import") {
+					inImport = false;
+				}
+			},
+			attrStart: function( attrName ){
+				if(attrName === "from") {
+					inFrom = true;
+				}
+			},
+			attrEnd:   function( attrName ){
+				if(attrName === "from") {
+					inFrom = false;
+				}
+			},
+			attrValue: function( value ){
+				if(inFrom && inImport) {
+					imports.push(value);
+				}
+			},
+			chars:     function( value ){},
+			comment:   function( value ){},
+			special:   function( value ){},
+			done:      function( ){}
+	    }, true);
 
-		return "define(['can/view/stache/stache'],function(stache){" +
-			"return stache(\"" + esc(load.source) + "\")" +
-			"})";
+	    imports.unshift('can/view/stache/stache');
+	    
+		return "define("+JSON.stringify(imports)+",function(stache){" +
+			"return stache(" + JSON.stringify(intermediate) + ")" +
+		"})";
 
 	}
 

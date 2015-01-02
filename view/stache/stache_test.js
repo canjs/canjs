@@ -3642,4 +3642,15 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		list.splice(-1);
 		equal(frag.childNodes.length, children - 1, 'Child node removed');
 	});
+	
+	test('stache can accept an intermediate (#1387)', function(){
+		var template = "<div class='{{className}}'>{{message}}</div>";
+		var intermediate = can.view.parser(template,{}, true);
+		
+		var renderer = can.stache(intermediate);
+		var frag = renderer({className: "foo", message: "bar"});
+		equal(frag.childNodes[0].className, "foo", "correct class name");
+		equal(frag.childNodes[0].innerHTML, "bar", "correct innerHTMl");
+	});
+	
 });
