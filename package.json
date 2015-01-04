@@ -35,7 +35,8 @@
     "grunt-string-replace": "~0.2.2",
     "lodash": "2.4.1",
     "rimraf": "2.1",
-  	"steal-tools": "^0.5.0",
+    "steal": "bitovi/steal#npm",
+  	"steal-tools": "bitovi/steal#npm",
     "testee": "^0.1.3",
     "zombie": "~2.0.8"
   },
@@ -52,16 +53,12 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "main": "can.js",
+  "main": "can",
   "system": {
     "map": {
       "can/can": "can",
       "jquery/jquery": "jquery"
     },
-    "paths": {
-      "can": "bower_components/canjs/can.js",
-      "can/*": "bower_components/canjs/*.js"
-	},
     "ext": {
       "ejs": "can/view/ejs/system",
       "mustache": "can/view/mustache/system",
@@ -71,6 +68,29 @@
       "map": {
         "can/util/util" : "can/util/domless/domless"
       }
+    },
+    "npmIgnore": {
+	  "grunt-docco2": true,
+	  "testee": true,
+	  "zombie": true,
+	  "bitovi-tools": true,
+	  "steal": true,
+	  "bower": true,
+	  "steal-tools": true,
+	  "connect": true,
+	  "grunt": true,
+	  "grunt-cli": true,
+	  "grunt-contrib-clean": true,
+	  "grunt-contrib-connect": true,
+	  "grunt-contrib-jshint": true,
+	  "grunt-contrib-uglify": true,
+	  "grunt-jsbeautifier": true,
+	  "grunt-plato": true,
+	  "grunt-release-steps": true,
+	  "grunt-shell": true,
+	  "grunt-simple-mocha": true,
+	  "grunt-string-replace": true
+	  
     }
   }
 }
