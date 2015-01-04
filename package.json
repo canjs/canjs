@@ -89,7 +89,9 @@
 	  "grunt-release-steps": true,
 	  "grunt-shell": true,
 	  "grunt-simple-mocha": true,
-	  "grunt-string-replace": true
+	  "grunt-string-replace": true,
+	  "rimraf": true,
+	  "lodash": true
 	  
     }
   }
