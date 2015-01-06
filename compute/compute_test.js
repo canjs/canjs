@@ -357,5 +357,18 @@ steal("can/compute", "can/test", "can/map", function () {
 		can.compute.set(map, "name", "Brian");
 		equal(map.attr("name"), "Brian", "Name updated in map");
 	});
-	
+	test('nested computes trigger outer compute change', function() {
+		expect(1);
+		var inside;
+		var outside = can.compute(function(){
+			inside = can.compute();
+			return inside()
+		})
+
+		outside.bind('change', function(ev, newVal){
+			ok(true, 'outer change triggered')
+		});
+
+		inside(4)
+	})
 });
