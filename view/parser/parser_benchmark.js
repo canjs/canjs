@@ -1,17 +1,17 @@
 steal('can/util','can/view/parser', 'can/test/benchmarks.js', 'can/test',function (can, parser, benchmarks) {
-	
+	/* jshint ignore:start */
 
 	can.ajax({
-			async: false,
-			url: can.test.path("view/parser/benchmark.stache"),
-			dataType: 'text',
-			success: function (data) {
-				// Make sure we got some text back.
-				window._ParserBenchmarkText = data;
-			}
+		async: false,
+		url: can.test.path("view/parser/benchmark.stache"),
+		dataType: 'text',
+		success: function (data) {
+			// Make sure we got some text back.
+			window._ParserBenchmarkText = data;
+		}
 	});
 	var handles = {
-    	start:     function( tagName, unary ){},
+		start:     function( tagName, unary ){},
 		end:       function( tagName, unary ){},
 		close:     function( tagName ){},
 		attrStart: function( attrName ){},
@@ -25,12 +25,11 @@ steal('can/util','can/view/parser', 'can/test/benchmarks.js', 'can/test',functio
 	
 	var intermediate = can.view.parser(window._ParserBenchmarkText,handles);
 	
-	/* jshint ignore:start */
 	benchmarks.add(
 		"can/view/stache/parser Updating elements",
 		function () {
 			var handles = {
-		    	start:     function( tagName, unary ){},
+				start:     function( tagName, unary ){},
 				end:       function( tagName, unary ){},
 				close:     function( tagName ){},
 				attrStart: function( attrName ){},

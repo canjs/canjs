@@ -82,8 +82,9 @@ steal("can/view", function(can){
 			can.each(tokenTypes, function(name){
 				var callback = handler[name] || fn;
 				handler[name] = function(){
-					callback.apply(this, arguments);
-					intermediate.push({tokenType: name, args: can.makeArray(arguments)});
+					if( callback.apply(this, arguments) !== false ) {
+						intermediate.push({tokenType: name, args: can.makeArray(arguments)});
+					}
 				};
 			});
 		}

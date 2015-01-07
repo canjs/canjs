@@ -439,18 +439,5 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		};
 	}
 
-	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
-	can.scope = function (el, attr) {
-		el = can.$(el);
-		// If `attr` is passed to the `can.scope` function return the value of that
-		// attribute on the `scope` object otherwise return the whole scope
-		if (attr) {
-			return can.data(el, "scope")
-				.attr(attr);
-		} else {
-			return can.data(el, "scope");
-		}
-	};
-
 	return Component;
 });

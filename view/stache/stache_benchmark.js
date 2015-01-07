@@ -1,14 +1,14 @@
 steal('can/util','can/view/stache', 'can/test/benchmarks.js', 'can/test',function (can, stache, benchmarks) {
 	
-
+	/* jshint ignore:start */
 	can.ajax({
-			async: false,
-			url: can.test.path("view/parser/benchmark.stache"),
-			dataType: 'text',
-			success: function (data) {
-				// Make sure we got some text back.
-				window._ParserBenchmarkText = data;
-			}
+		async: false,
+		url: can.test.path("view/parser/benchmark.stache"),
+		dataType: 'text',
+		success: function (data) {
+			// Make sure we got some text back.
+			window._ParserBenchmarkText = data;
+		}
 	});
 	var handles = {
     	start:     function( tagName, unary ){},
@@ -25,7 +25,7 @@ steal('can/util','can/view/stache', 'can/test/benchmarks.js', 'can/test',functio
 	
 	var intermediate = can.view.parser(window._ParserBenchmarkText,handles);
 	
-	/* jshint ignore:start */
+	
 	benchmarks.add(
 		"can/view/stache compile template from string",
 		function () {

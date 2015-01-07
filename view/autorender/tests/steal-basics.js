@@ -1,0 +1,10 @@
+steal("can/component", "can/util",function(Component, can){
+	return Component.extend({
+		tag: "my-component",
+		// call can.stache b/c it should be imported auto-magically
+		template: can.stache("{{message}}"),
+		scope: {
+			message: "Hello World"
+		}
+	});
+});
