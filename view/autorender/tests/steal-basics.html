@@ -13,6 +13,7 @@
 			if(window.QUnit) {
 				QUnit.equal( $("body my-component").length, 1,"only one my-component" );
 				QUnit.equal( $("body my-component").html(), "Hello World","template rendered" );
+				QUnit.equal( $("body my-component")[0].className, "inserted","template rendered" );
 				removeMyself();
 			} else {
 				console.log( $("body my-component").length );

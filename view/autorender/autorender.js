@@ -21,16 +21,16 @@ steal("can/util",function(can){
 	}
 	function insertAfter(ref, element) {
 		if(ref.nextSibling){
-			ref.parentNode.insertBefore(element, ref.nextSibling);
+			can.insertBefore(ref.parentNode, element, ref.nextSibling);
 		} else {
-			ref.parentNode.appendChild(element);
+			can.appendChild(ref.parentNode, element);
 		}
 	}
 	
 	function render(renderer, scope, el) {
 		var frag = renderer(scope);
 		if( isIn(el,"head") ) {
-			document.body.appendChild(frag);
+			can.appendChild(document.body, frag);
 		} else if(el.nodeName.toLowerCase() === "script") {
 			insertAfter(el, frag);
 		} else {

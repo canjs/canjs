@@ -5,6 +5,11 @@ steal("can/component", "can/util",function(Component, can){
 		template: can.stache("{{message}}"),
 		scope: {
 			message: "Hello World"
+		},
+		events: {
+			"inserted": function(){
+				this.element[0].className = "inserted";
+			}
 		}
 	});
 });
