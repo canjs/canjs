@@ -1,15 +1,7 @@
 /*global __dirname */
 var path = require('path');
 // Returns mappings for AMDify
-var getAmdifyMap = function (baseName) {
-	var amdifyMap = {};
-
-	amdifyMap[baseName + 'util'] = 'can/util/library';
-	amdifyMap[baseName] = 'can/';
-	amdifyMap['can/can'] = 'can';
-
-	return amdifyMap;
-};
+var isTravis = process.env.CI === 'true';
 
 module.exports = function (grunt) {
 	
@@ -231,7 +223,8 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				reporter: 'Min'
+				// On Travis we want less output
+				reporter: isTravis ? 'Min' : 'Dot'
 			},
 			steal: [
 				'test/*.html',
