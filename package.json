@@ -59,6 +59,9 @@
       "can/can": "can",
       "jquery/jquery": "jquery"
     },
+    "meta": {
+      "jquery": {"format": "global", "exports": "jQuery"}
+    },
     "ext": {
       "ejs": "can/view/ejs/system",
       "mustache": "can/view/mustache/system",
