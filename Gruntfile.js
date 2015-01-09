@@ -1,7 +1,7 @@
 /*global __dirname */
 var path = require('path');
 // Returns mappings for AMDify
-var isTravis = process.env.CI === 'true';
+var isCI = process.env.CI === 'true';
 
 module.exports = function (grunt) {
 	
@@ -224,7 +224,7 @@ module.exports = function (grunt) {
 			options: {
 				timeout: 10000,
 				// On Travis we want less output
-				reporter: isTravis ? 'Min' : 'Dot'
+				reporter: 'Spec', // isCI ? 'Min' : 'Spec'
 			},
 			steal: [
 				'test/*.html',
