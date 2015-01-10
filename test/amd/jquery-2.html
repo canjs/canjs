@@ -39,24 +39,35 @@
                     }
                 });
 
-            require(['can/util/fixture'].concat(["can/component",
-                        "can/construct", "can/map", "can/list",
-                        "can/list/promise", "can/observe",
-                        "can/compute", "can/model", "can/view",
-                        "can/view/ejs", "can/view/stache",
-                        "can/control", "can/route",
-                        "can/control/route", "can/view/mustache",
-                        "can/route/pushstate", "can/model/queue",
-                        "can/construct/super", "can/construct/proxy",
-                        "can/map/lazy", "can/map/delegate",
-                        "can/map/setter", "can/map/attributes",
-                        "can/map/validations", "can/map/backup",
-                        "can/map/list", "can/map/define",
-                        "can/map/sort", "can/control/plugin",
-                        "can/view/modifiers", "can/util/object",
-                        "can/util/fixture", "can/view/bindings",
-                        "can/view/live", "can/view/scope",
-                        "can/util/string", "can/util/attr"
+            require(['can/util/fixture'].concat([
+                        "can/component/component",
+                        "can/construct/construct", "can/map/map",
+                        "can/list/list", "can/list/promise/promise",
+                        "can/observe/observe", "can/compute/compute",
+                        "can/model/model", "can/view/view",
+                        "can/view/ejs/ejs", "can/view/stache/stache",
+                        "can/control/control", "can/route/route",
+                        "can/control/route/route",
+                        "can/view/mustache/mustache",
+                        "can/route/pushstate/pushstate",
+                        "can/model/queue/queue",
+                        "can/construct/super/super",
+                        "can/construct/proxy/proxy",
+                        "can/map/lazy/lazy",
+                        "can/map/delegate/delegate",
+                        "can/map/setter/setter",
+                        "can/map/attributes/attributes",
+                        "can/map/validations/validations",
+                        "can/map/backup/backup", "can/map/list/list",
+                        "can/map/define/define", "can/map/sort/sort",
+                        "can/control/plugin/plugin",
+                        "can/view/modifiers/modifiers",
+                        "can/util/object/object",
+                        "can/util/fixture/fixture",
+                        "can/view/bindings/bindings",
+                        "can/view/live/live", "can/view/scope/scope",
+                        "can/util/string/string",
+                        "can/util/attr/attr"
                     ]), function() {
                     require(["test/pluginified/latest"], function() {
                         QUnit.start();
