@@ -100,7 +100,7 @@ module.exports = function(){
 		"standalone & steal - plugins, jquery core, and jquery steal": {
 			system: {
 				config: config,
-				main: allModuleNames
+				main: allModuleNames.concat(['can/can'])
 			},
 			options : {
 				// verbose: true
@@ -143,6 +143,33 @@ module.exports = function(){
 						return path.join(__dirname,"..",name);
 					},
 					format: "steal",
+					ignore: ["jquery/jquery","jquery"],
+					minify: false
+				},
+				"cjs" : {
+					graphs: allModuleNames.concat(['can/can']),
+					normalize: function(depName, depLoad, curName, curLoad ){
+						// if its not in node_modules
+						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
+							// provide its name relative
+							var moduleName = path.relative(path.dirname(curLoad.address), depLoad.address);
+							if(moduleName[0] !== ".") {
+								moduleName = "./"+moduleName
+							}
+							return moduleName;
+						}
+						return depName;
+					},
+					dest: function(moduleName){
+						var name;
+						if(moduleName === "can/util/util"){
+							name = "dist/cjs/util/jquery/jquery.js";
+						} else {
+							name = "dist/cjs/"+moduleName.replace("can/","")+".js";
+						}
+						return path.join(__dirname,"..",name);
+					},
+					format: "cjs",
 					ignore: ["jquery/jquery","jquery"],
 					minify: false
 				}

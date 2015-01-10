@@ -66,7 +66,7 @@
 			"benchmark/benchmark": "benchmark"
 		},
 		paths: {
-			"jquery": "lib/jquery.1.10.2.js",
+			"jquery": "node_modules/jquery/dist/jquery.js",
 			"mootools/mootools": "lib/mootools-core-1.4.5.js",
 			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
 			"yui/yui": "lib/yui-3.7.3.js",

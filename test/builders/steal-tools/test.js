@@ -78,6 +78,7 @@ describe("Building steal projects", function(){
 				quiet: true,
 				minify: false
 			}).then(function(){
+				
 				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
 					find(browser, "MODULE", function(m){
 						assert(typeof m, "object", "Correctly returned the module");

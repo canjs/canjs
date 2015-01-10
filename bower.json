@@ -16,7 +16,7 @@
     "benchmark": "~1.0.0",
     "requirejs": "~2.1.10",
     "dojo" : "1.8.6",
-    "steal": "git://github.com/bitovi/steal#5ff0ba88f2f2a958236476149703fcb02797a17b"
+    "steal": "git://github.com/bitovi/steal#eeac5d602e4587b775588175275dc021b585fee2"
   },
   "system": {
     "map": {

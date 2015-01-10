@@ -212,7 +212,7 @@ module.exports = function (grunt) {
 		},
 		simplemocha: {
 			builders: {
-				src: ["test/builders/steal-tools/test.js"]
+				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
 			}
 		},
 		stealPluginify: require("./build/config_stealPluginify")(),
@@ -264,7 +264,16 @@ module.exports = function (grunt) {
 			]
 		}
 	});
-
+	grunt.registerTask('browserify-package', function(){
+		var browser = {};
+		require('./build/config_meta_modules').forEach(function(mod){
+			browser[mod.moduleName.replace("can/","./")] = mod.moduleName.replace("can/","./dist/cjs/");
+		});
+		
+		var cloned = _.clone(pkg, true);
+		cloned.browser = browser;
+		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
+	});
 	
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -282,7 +291,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['build']);
 	
-	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
+	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version','browserify-package']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'stealPluginify:amd',
