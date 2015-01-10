@@ -1,12 +1,9 @@
 /*global __dirname */
 var path = require('path');
-// Returns mappings for AMDify
-var isTravis = process.env.CI === 'true';
 
 module.exports = function (grunt) {
 	
 	var _ = grunt.util._;
-	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
 	var banner = _.template(builderJSON.banner, {
@@ -14,9 +11,6 @@ module.exports = function (grunt) {
 		ids: [ 'CanJS default build' ],
 		url: pkg.homepage
 	});
-	var amdIds = ['can'].concat(_.map(_.keys(builderJSON.configurations), function (name) {
-		return 'can/util/' + name;
-	}), _.keys(builderJSON.modules));
 	var testifyDist = {
 		template: 'test/templates/__configuration__-dist.html.ejs',
 		builder: builderJSON,
@@ -224,7 +218,7 @@ module.exports = function (grunt) {
 			options: {
 				timeout: 10000,
 				// On Travis we want less output
-				reporter: isTravis ? 'Min' : 'Dot'
+				reporter: 'Dot'
 			},
 			steal: [
 				'test/*.html',
@@ -291,7 +285,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['build']);
 	
-	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version','browserify-package']);
+	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'stealPluginify:amd',
