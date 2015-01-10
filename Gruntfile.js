@@ -294,7 +294,7 @@ module.exports = function (grunt) {
 		'string-replace:version'
 	]);
 	
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'testee']);
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
