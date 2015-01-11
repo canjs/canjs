@@ -1,14 +1,13 @@
-steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (special) {
+steal("can/view/bindings", "can/map", "can/test", "can/view/stache", "steal-qunit", function () {
 	QUnit.module('can/view/bindings', {
 		setup: function () {
-			document.getElementById("qunit-test-area")
-				.innerHTML = "";
+			document.getElementById("qunit-fixture").innerHTML = "";
 		}
 	});
 
 	test("can-event handlers", function () {
 		expect(4);
-		var template = can.view.mustache("<div>" +
+		var template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<p can-click='doSomething'>{{content}}</p>" +
 			"{{/each}}" +
@@ -37,7 +36,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			doSomething: doSomething
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 		var p0 = ta.getElementsByTagName("p")[0];
 		can.trigger(p0, "click");
@@ -46,13 +45,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value input text", function () {
 
-		var template = can.view.mustache("<input can-value='age'/>");
+		var template = can.view.stache("<input can-value='age'/>");
 
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var input = ta.getElementsByTagName("input")[0];
@@ -76,7 +75,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value input radio", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<input type='radio' can-value='color' value='red'/> Red<br/>" +
 			"<input type='radio' can-value='color' value='green'/> Green<br/>");
 
@@ -86,7 +85,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("input");
@@ -109,7 +108,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-enter", function () {
-		var template = can.view.mustache("<input can-enter='update'/>");
+		var template = can.view.stache("<input can-enter='update'/>");
 
 		var called = 0;
 
@@ -136,7 +135,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("two bindings on one element call back the correct method", function () {
 		expect(2);
-		var template = can.mustache("<input can-mousemove='first' can-click='second'/>");
+		var template = can.stache("<input can-mousemove='first' can-click='second'/>");
 
 		var callingFirst = false,
 			callingSecond = false;
@@ -167,13 +166,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	asyncTest("can-value select remove from DOM", function () {
 		expect(1);
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color'>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
 			"</select>"),
 			frag = template(),
-			ta = document.getElementById("qunit-test-area");
+			ta = document.getElementById("qunit-fixture");
 
 		ta.appendChild(frag);
 		can.remove(can.$("select", ta));
@@ -188,7 +187,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			completed: true
 		}),
-			frag = can.view.mustache('<input type="checkbox" can-value="completed"/>')(data);
+			frag = can.view.stache('<input type="checkbox" can-value="completed"/>')(data);
 		can.append(can.$("#qunit-fixture"), frag);
 
 		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
@@ -209,7 +208,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			sex: "male"
 		}),
-			frag = can.view.mustache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
+			frag = can.view.stache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
 		can.append(can.$("#qunit-fixture"), frag);
 
 		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
@@ -228,7 +227,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value select single", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color'>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -240,7 +239,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("select");
@@ -271,7 +270,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-value select multiple with values seperated by a ;", function () {
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -284,7 +283,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("select"),
@@ -318,7 +317,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-value select multiple with values cross bound to an array", function () {
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='colors' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -329,7 +328,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var select = ta.getElementsByTagName("select")[0],
@@ -367,7 +366,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value multiple select with a can.List", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='colors' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -380,7 +379,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			colors: list
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var select = ta.getElementsByTagName("select")[0],
@@ -414,12 +413,12 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-value contenteditable", function () {
-		var template = can.view.mustache("<div id='cdiv' contenteditable can-value='age'></div>");
+		var template = can.view.stache("<div id='cdiv' contenteditable can-value='age'></div>");
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var div = document.getElementById("cdiv");
@@ -442,7 +441,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-event handlers work with {} (#905)", function () {
 		expect(4);
-		var template = can.mustache("<div>" +
+		var template = can.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<p can-click='{doSomething}'>{{content}}</p>" +
 			"{{/each}}" +
@@ -471,7 +470,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			doSomething: doSomething
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 		var p0 = ta.getElementsByTagName("p")[0];
 		can.trigger(p0, "click");
@@ -480,13 +479,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value works with {} (#905)", function () {
 
-		var template = can.mustache("<input can-value='{age}'/>");
+		var template = can.stache("<input can-value='{age}'/>");
 
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var input = ta.getElementsByTagName("input")[0];
@@ -510,7 +509,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value select with null or undefined value (#813)", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select id='null-select' can-value='color-1'>" +
 				"<option value=''>Choose</option>" +
 				"<option value='red'>Red</option>" +
@@ -529,7 +528,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		stop();
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var nullInput = document.getElementById("null-select");
@@ -549,7 +548,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			id: 1
 		}),
-			frag = can.view.mustache('<input type="radio" can-value="id" value="1"/>')(data);
+			frag = can.view.stache('<input type="radio" can-value="id" value="1"/>')(data);
 		can.append(can.$('#qunit-fixture'), frag);
 		var input = can.$('#qunit-fixture')[0].getElementsByTagName('input')[0];
 		ok(input.checked, 'checkbox value bound');
@@ -561,7 +560,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 								'{{#if thing}}\n<div />{{/if}}'+
 								'<span>{{name}}</span>'+
 							 '</a>';
-		//var mustacheRenderer = can.mustache(templateString);
+		//var mustacheRenderer = can.stache(templateString);
 		var stacheRenderer = can.stache(templateString);
 		
 		var obj = new can.Map({thing: 'stuff'});

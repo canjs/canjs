@@ -231,30 +231,7 @@ module.exports = function (grunt) {
 			dev: [ 'test/dev/*.html' ],
 			dist: [ 'test/dist/*.html' ],
 			individuals: [
-				'src/component/test.html',
-				'src/compute/test.html',
-				'src/construct/test.html',
-				'src/construct/proxy/test.html',
-				'src/construct/super/test.html',
-				'src/control/test.html',
-				'src/map/test.html',
-				'src/map/lazy/test.html',
-				'src/map/define/test.html',
-				'src/map/attributes/test.html',
-				'src/map/backup/test.html',
-				'src/map/list/test.html',
-				'src/map/setter/test.html',
-				'src/map/sort/test.html',
-				'src/map/validations/test.html',
-				'src/model/test.html',
-				'src/observe/test.html',
-				'src/list/promise/test.html',
-				'src/route/test.html',
-				'src/route/pushstate/test.html',
-				'src/view/test.html',
-				'src/view/ejs/test.html',
-				'src/view/mustache/test.html',
-				'src/util/test.html'
+				'src/**/test.html'
 			]
 		}
 	});
