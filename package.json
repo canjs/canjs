@@ -1,76 +1,106 @@
 {
-  "name": "can",
-  "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version": "2.2.0-pre",
-  "author": {
-    "name": "Bitovi",
-    "email": "contact@bitovi.com",
-    "web": "http://bitovi.com/"
-  },
-  "homepage": "http://canjs.us/",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:bitovi/canjs.git",
-    "github": "https://github.com/bitovi/canjs"
-  },
-  "peerDependencies": {
-    "jquery": ">1.9.0"
-  },
-  "devDependencies": {
-    "bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#steal-tools",
-    "bower": "~1.3.8",
-    "connect": "^2.14.4",
-    "grunt": "~0.4.0",
-    "grunt-cli": "~0.1.7",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-connect": "~0.3.0",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-uglify": "~0.2.1",
-    "grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
-    "grunt-jsbeautifier": "~0.2.6",
-    "grunt-plato": "~0.2.1",
-    "grunt-release-steps": "~0.3.7",
-    "grunt-shell": "~0.5.0",
-    "grunt-simple-mocha": "^0.4.0",
-    "grunt-string-replace": "~0.2.2",
-    "lodash": "2.4.1",
-    "rimraf": "2.1",
-  	"steal-tools": "^0.5.0",
-    "testee": "^0.1.3",
-    "zombie": "~2.0.8"
-  },
-  "scripts": {
-    "test": "grunt test"
-  },
-  "demos": [
-    "http://canjs.us/#examples",
-    "http://canjs.us/recipes"
-  ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/mit-license.php"
-    }
-  ],
-  "main": "can.js",
-  "system": {
-    "map": {
-      "can/can": "can",
-      "jquery/jquery": "jquery"
-    },
-    "paths": {
-      "can": "bower_components/canjs/can.js",
-      "can/*": "bower_components/canjs/*.js"
+	"name": "can",
+	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
+	"version": "2.2.0-pre",
+	"author": {
+		"name": "Bitovi",
+		"email": "contact@bitovi.com",
+		"web": "http://bitovi.com/"
 	},
-    "ext": {
-      "ejs": "can/view/ejs/system",
-      "mustache": "can/view/mustache/system",
-      "stache": "can/view/stache/system"
-    },
-    "buildConfig": {
-      "map": {
-        "can/util/util" : "can/util/domless/domless"
-      }
-    }
-  }
+	"homepage": "http://canjs.us/",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:bitovi/canjs.git",
+		"github": "https://github.com/bitovi/canjs"
+	},
+	"peerDependencies": {
+		"jquery": ">1.9.0"
+	},
+	"devDependencies": {
+		"bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#steal-tools",
+		"bower": "~1.3.8",
+		"browserify": "~8.1.0",
+		"connect": "^2.14.4",
+		"grunt": "~0.4.0",
+		"grunt-cli": "~0.1.7",
+		"grunt-contrib-clean": "~0.5.0",
+		"grunt-contrib-connect": "~0.3.0",
+		"grunt-contrib-jshint": "~0.8.0",
+		"grunt-contrib-uglify": "~0.2.1",
+		"grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
+		"grunt-jsbeautifier": "~0.2.6",
+		"grunt-plato": "~0.2.1",
+		"grunt-release-steps": "~0.3.7",
+		"grunt-shell": "~0.5.0",
+		"grunt-simple-mocha": "^0.4.0",
+		"grunt-string-replace": "~0.2.2",
+		"lodash": "2.4.1",
+		"rimraf": "2.1",
+		"steal": "bitovi/steal#npm",
+		"steal-tools": "bitovi/steal-tools#npm",
+		"testee": "^0.1.3",
+		"zombie": "~2.0.8"
+	},
+	"scripts": {
+		"test": "grunt test"
+	},
+	"demos": [
+		"http://canjs.us/#examples",
+		"http://canjs.us/recipes"
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/mit-license.php"
+		}
+	],
+	"main": "dist/cjs/can.js",
+	"system": {
+		"main": "can",
+		"map": {
+			"can/can": "can",
+			"jquery/jquery": "jquery"
+		},
+		"meta": {
+			"jquery": {
+				"format": "global",
+				"exports": "jQuery"
+			}
+		},
+		"ext": {
+			"ejs": "can/view/ejs/system",
+			"mustache": "can/view/mustache/system",
+			"stache": "can/view/stache/system"
+		},
+		"buildConfig": {
+			"map": {
+				"can/util/util": "can/util/domless/domless"
+			}
+		},
+		"npmIgnore": {
+			"grunt-docco2": true,
+			"testee": true,
+			"zombie": true,
+			"bitovi-tools": true,
+			"steal": true,
+			"bower": true,
+			"steal-tools": true,
+			"connect": true,
+			"grunt": true,
+			"grunt-cli": true,
+			"grunt-contrib-clean": true,
+			"grunt-contrib-connect": true,
+			"grunt-contrib-jshint": true,
+			"grunt-contrib-uglify": true,
+			"grunt-jsbeautifier": true,
+			"grunt-plato": true,
+			"grunt-release-steps": true,
+			"grunt-shell": true,
+			"grunt-simple-mocha": true,
+			"grunt-string-replace": true,
+			"rimraf": true,
+			"lodash": true,
+			"browserify": true
+		}
+	}
 }

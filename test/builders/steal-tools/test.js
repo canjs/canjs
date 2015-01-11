@@ -55,7 +55,11 @@ describe("Building steal projects", function(){
 						find(browser, "MODULE", function(m){
 							assert.equal(m.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
 							assert.equal(m.mustache.childNodes[0].textContent, "Mustache Hi", "Mustache generated correctly");
-							assert.equal(m.stache.childNodes[0].textContent, "Stache Hi", "Stache generated correctly");
+							
+							var div = browser.document.createElement('div');
+							div.appendChild(m.stache);
+							
+							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache Hi", "Stache generated correctly");
 							close();
 						}, close);
 					}, done);
@@ -74,6 +78,7 @@ describe("Building steal projects", function(){
 				quiet: true,
 				minify: false
 			}).then(function(){
+				
 				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
 					find(browser, "MODULE", function(m){
 						assert(typeof m, "object", "Correctly returned the module");

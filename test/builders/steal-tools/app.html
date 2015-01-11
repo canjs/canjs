@@ -14,7 +14,21 @@
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"></ol>
 	<div id="qunit-test-area"></div>
-	<script src='../../../bower_components/steal/steal.js' 
-	        data-config='config.js'
-	        data-main='app'></script>
+	<script src='../../../node_modules/steal/steal.js'
+	        data-config="config.js"
+	        data-main="app"></script>
+	<script>
+		System.import("config.js").then(function(){
+			System.import("app").then(function(){
+				
+				test("stache", function(){
+					var div = document.createElement('div');
+					div.appendChild(MODULE.stache);
+					QUnit.equal( div.getElementsByTagName("h1")[0].innerHTML, "Stache Hi", "matches" );
+				});
+				
+				QUnit.start();
+			});
+		});
+	</script>
 </body>

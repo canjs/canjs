@@ -1,12 +1,9 @@
 /*global __dirname */
 var path = require('path');
-// Returns mappings for AMDify
-var isTravis = process.env.CI === 'true';
 
 module.exports = function (grunt) {
 	
 	var _ = grunt.util._;
-	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
 	var banner = _.template(builderJSON.banner, {
@@ -14,9 +11,6 @@ module.exports = function (grunt) {
 		ids: [ 'CanJS default build' ],
 		url: pkg.homepage
 	});
-	var amdIds = ['can'].concat(_.map(_.keys(builderJSON.configurations), function (name) {
-		return 'can/util/' + name;
-	}), _.keys(builderJSON.modules));
 	var testifyDist = {
 		template: 'test/templates/__configuration__-dist.html.ejs',
 		builder: builderJSON,
@@ -212,7 +206,7 @@ module.exports = function (grunt) {
 		},
 		simplemocha: {
 			builders: {
-				src: ["test/builders/steal-tools/test.js"]
+				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
 			}
 		},
 		stealPluginify: require("./build/config_stealPluginify")(),
@@ -224,7 +218,7 @@ module.exports = function (grunt) {
 			options: {
 				timeout: 10000,
 				// On Travis we want less output
-				reporter: isTravis ? 'Min' : 'Dot'
+				reporter: 'Dot'
 			},
 			steal: [
 				'test/*.html',
@@ -264,7 +258,16 @@ module.exports = function (grunt) {
 			]
 		}
 	});
-
+	grunt.registerTask('browserify-package', function(){
+		var browser = {};
+		require('./build/config_meta_modules').forEach(function(mod){
+			browser[mod.moduleName.replace("can/","./")] = mod.moduleName.replace("can/","./dist/cjs/");
+		});
+		
+		var cloned = _.clone(pkg, true);
+		cloned.browser = browser;
+		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
+	});
 	
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-clean');

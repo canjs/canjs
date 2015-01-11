@@ -1,1 +1,2 @@
-<h1>Stache {{message}}</h1> 
+<can-import from="helpers"/>
+<h1>{{templateName}} {{message}}</h1>

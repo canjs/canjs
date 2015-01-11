@@ -425,27 +425,19 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		jQuery.fn.scope = function (attr) {
 			// If `attr` is passed to the `scope` plugin return the value of that 
 			// attribute on the `scope` object, otherwise return the whole scope
+			var scope = this.data("scope");
+			if(!scope) {
+				scope = new can.Map();
+				this.data("scope", scope);
+			}
+			
 			if (attr) {
-				return this.data("scope")
-					.attr(attr);
+				return scope.attr(attr);
 			} else {
-				return this.data("scope");
+				return scope;
 			}
 		};
 	}
-
-	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
-	can.scope = function (el, attr) {
-		el = can.$(el);
-		// If `attr` is passed to the `can.scope` function return the value of that
-		// attribute on the `scope` object otherwise return the whole scope
-		if (attr) {
-			return can.data(el, "scope")
-				.attr(attr);
-		} else {
-			return can.data(el, "scope");
-		}
-	};
 
 	return Component;
 });

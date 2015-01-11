@@ -199,6 +199,11 @@ var mods = {
 		"isDefault": true,
 		"hidden": true
 	},
+	"can/view/autorender/autorender": {
+		"name": "can.autorender",
+		"type": "plugin",
+		"description": "Automatically render templates found in the document"
+	},
 	"can/util/attr/attr": {
 		"name": "can.util.attr",
 		"type": "core",
