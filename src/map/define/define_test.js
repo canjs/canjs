@@ -1,5 +1,5 @@
 /* jshint asi: false */
-steal("can/map/define", "can/test", function () {
+steal("can/map/define", "can/test", "steal-qunit", function () {
 
 	QUnit.module('can/map/define');
 

@@ -1,4 +1,4 @@
-steal('can/event/delegate', 'can/test', function (event) {
+steal('can/event/delegate', 'can/test', 'steal-qunit', function (event) {
 	module('can/event/delegate');
 
 	test('Delegate/undelegate are bound and unbound properly', 9, function() {

@@ -1,4 +1,4 @@
-steal("can/construct/super", function () {
+steal("can/construct/super", "steal-qunit", function () {
 	QUnit.module('can/construct/super');
 	test('prototype super', function () {
 		var A = can.Construct({

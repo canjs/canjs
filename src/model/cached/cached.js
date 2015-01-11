@@ -1,4 +1,4 @@
-steal('can/model', 'can/util/object', 'can/util/json.js', function () {
+steal('can/model', 'can/util/object', function () {
 
 	//!steal-remove-start
 	can.dev.warn("can/model/cached is a deprecated plugin and will be removed in a future release.");

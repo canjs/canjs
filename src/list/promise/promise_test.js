@@ -1,4 +1,4 @@
-steal("can/list/promise","can/compute","can/test", function () {
+steal("can/list/promise", "can/compute", "can/test", "steal-qunit", function () {
 
 	QUnit.module("can/list/promise");
 

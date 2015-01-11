@@ -1,4 +1,4 @@
-steal("can/view/parser", function(parser){
+steal("can/view/parser", "steal-qunit", function(parser){
 	
 	
 	module("can/view/parser");

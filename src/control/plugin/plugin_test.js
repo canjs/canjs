@@ -1,4 +1,4 @@
-steal("can/control/plugin", function () {
+steal("can/control/plugin", "steal-qunit", function () {
 	if (!window.jQuery) {
 		return;
 	}
@@ -24,7 +24,7 @@ steal("can/control/plugin", function () {
 		});
 		var ta = can.$('<div/>')
 			.addClass('existing_class')
-			.appendTo($('#qunit-test-area'));
+			.appendTo($('#qunit-fixture'));
 		ta.my_plugin({
 			testop: 'testing'
 		});
@@ -44,7 +44,7 @@ steal("can/control/plugin", function () {
 		expect(3);
 		can.Control('My.TestPlugin', {});
 		var ta = can.$('<div/>')
-			.appendTo($('#qunit-test-area'));
+			.appendTo($('#qunit-fixture'));
 		ok(ta.my_test_plugin, 'Converting Control name to plugin name worked');
 		ta.my_test_plugin();
 		equal(ta.controls()
@@ -57,7 +57,7 @@ steal("can/control/plugin", function () {
 		}, {});
 		var ta = can.$('<div/>')
 			.addClass('existing_class')
-			.appendTo($('#qunit-test-area'));
+			.appendTo($('#qunit-fixture'));
 		ta.updateTest();
 		// Init
 		ta.updateTest({
@@ -78,7 +78,7 @@ steal("can/control/plugin", function () {
 			}
 		});
 		var ta = can.$('<div/>')
-			.appendTo($('#qunit-test-area'));
+			.appendTo($('#qunit-fixture'));
 		ta.callTest();
 		ok(ta.callTest('setName', 'Tester') instanceof jQuery, 'Got jQuery element as return value');
 		equal(ta.callTest('returnTest'), 'Hi Tester', 'Got correct return value');
@@ -91,7 +91,7 @@ steal("can/control/plugin", function () {
 			pluginName: 'otherTest'
 		}, {});
 		var ta = can.$('<div/>')
-			.appendTo($('#qunit-test-area'));
+			.appendTo($('#qunit-fixture'));
 		ta.someTest();
 		ta.otherTest();
 		var control = ta.control('someTest');

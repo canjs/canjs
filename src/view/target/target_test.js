@@ -1,5 +1,5 @@
 /* jshint indent:false */
-steal("can/view/target", function(target){
+steal("can/view/target", "steal-qunit", function(target){
 	
 	
 	module("can/view/target");

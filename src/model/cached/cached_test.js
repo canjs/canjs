@@ -1,4 +1,4 @@
-(function () {
+steal('can/model/cached', 'steal-qunit', function () {
 	var Task;
 	module('can/model/cached');
 	test('findAll', function () {
@@ -152,4 +152,4 @@
 			});
 		});
 	});
-}());
+});

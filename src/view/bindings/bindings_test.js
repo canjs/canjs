@@ -189,9 +189,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			completed: true
 		}),
 			frag = can.view.mustache('<input type="checkbox" can-value="completed"/>')(data);
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
-		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
 		data.attr('completed', false);
 		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
@@ -210,9 +210,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			sex: "male"
 		}),
 			frag = can.view.mustache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
-		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, true, 'checkbox value bound (via attr check)');
 		data.attr('sex', 'female');
 		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
@@ -550,8 +550,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			id: 1
 		}),
 			frag = can.view.mustache('<input type="radio" can-value="id" value="1"/>')(data);
-		can.append(can.$('#qunit-test-area'), frag);
-		var input = can.$('#qunit-test-area')[0].getElementsByTagName('input')[0];
+		can.append(can.$('#qunit-fixture'), frag);
+		var input = can.$('#qunit-fixture')[0].getElementsByTagName('input')[0];
 		ok(input.checked, 'checkbox value bound');
 	});
 

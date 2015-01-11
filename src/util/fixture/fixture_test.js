@@ -1,9 +1,9 @@
-steal('can/util/fixture', 'can/model', 'can/test', function () {
-	QUnit.module('can/util/fixture');
+steal('can/util/fixture', 'can/model', 'can/test', 'steal-qunit', function () {
+	QUnit.module('can/src/util/fixture');
 	test('static fixtures', function () {
 		stop();
-		can.fixture('GET something', can.test.path('util/fixture/fixtures/test.json'));
-		can.fixture('POST something', can.test.path('util/fixture/fixtures/test.json'));
+		can.fixture('GET something', can.test.path('src/util/fixture/fixtures/test.json'));
+		can.fixture('POST something', can.test.path('src/util/fixture/fixtures/test.json'));
 		can.ajax({
 			url: 'something',
 			dataType: 'json'
@@ -23,7 +23,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 	});
 	test('templated static fixtures', function () {
 		stop();
-		can.fixture('GET some/{id}', can.test.path('util/fixture/fixtures/stuff.{id}.json'));
+		can.fixture('GET some/{id}', can.test.path('src/util/fixture/fixtures/stuff.{id}.json'));
 		can.ajax({
 			url: 'some/3',
 			dataType: 'json'
@@ -52,15 +52,15 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 	});
 	test('fixture function', 3, function () {
 		stop();
-		var url = can.test.path('util/fixture/fixtures/foo.json');
-		can.fixture(url, can.test.path('util/fixture/fixtures/foobar.json'));
+		var url = can.test.path('src/util/fixture/fixtures/foo.json');
+		can.fixture(url, can.test.path('src/util/fixture/fixtures/foobar.json'));
 		can.ajax({
 			url: url,
 			dataType: 'json'
 		})
 			.done(function (data) {
 				equal(data.sweet, 'ner', 'url passed works');
-				can.fixture(url, can.test.path('util/fixture/fixtures/test.json'));
+				can.fixture(url, can.test.path('src/util/fixture/fixtures/test.json'));
 				can.ajax({
 					url: url,
 					dataType: 'json'
@@ -84,7 +84,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 		test('fixtures with converters', function () {
 			stop();
 			can.ajax({
-				url: can.test.path('util/fixture/fixtures/foobar.json'),
+				url: can.test.path('src/util/fixture/fixtures/foobar.json'),
 				dataType: 'json fooBar',
 				converters: {
 					'json fooBar': function (data) {
@@ -264,7 +264,7 @@ steal('can/util/fixture', 'can/model', 'can/test', function () {
 	});
 
 	test('replacing and removing a fixture', function () {
-		var url = can.test.path('util/fixture/fixtures/remove.json');
+		var url = can.test.path('src/util/fixture/fixtures/remove.json');
 		can.fixture('GET ' + url, function () {
 			return {
 				weird: 'ness!'

@@ -1,5 +1,5 @@
 /*global School*/
-steal("can/map/setter", "can/test", function () {
+steal("can/map/setter", "can/test", "steal-qunit", function () {
 	QUnit.module('can/map/setter');
 	test('setter testing works', function () {
 		var Contact = can.Map({

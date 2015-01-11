@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/map/lazy", "can/compute", "can/test", function (undefined) {
+steal("can/map/lazy", "can/compute", "can/test", "steal-qunit", function (undefined) {
 
 	QUnit.module('can/map/lazy')
 

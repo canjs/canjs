@@ -9,7 +9,7 @@
 /* global Organisation: true */
 /* global Company: true */
 /* global My: true */
-steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-qunit", function () {
 	QUnit.module('can/model', {
 		setup: function () {}
 	});
@@ -37,7 +37,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 				return can.ajax({
 					url: '/people',
 					data: params,
-					fixture: can.test.fixture('model/test/people.json'),
+					fixture: can.test.fixture('src/model/test/people.json'),
 					dataType: 'json'
 				})
 					.pipe(function (data) {
@@ -171,7 +171,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 					return can.ajax({
 						url: '/people/5',
 						data: params,
-						fixture: can.test.fixture('model/test/person.json'),
+						fixture: can.test.fixture('src/model/test/person.json'),
 						dataType: 'json'
 					})
 						.pipe(function (data) {
@@ -181,7 +181,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			}, {});
 		} else {
 			can.Model('Person', {
-				findOne: can.test.fixture('model/test/person.json')
+				findOne: can.test.fixture('src/model/test/person.json')
 			}, {});
 		}
 		stop();
@@ -355,10 +355,10 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		//turn off fixtures
 		can.fixture.on = false;
 		var School = can.Model.extend('Jquery.Model.Models.School', {
-			findAll: can.test.path('model/test/{type}.json'),
-			findOne: can.test.path('model/test/{id}.json'),
-			create: 'GET ' + can.test.path('model/test/create.json'),
-			update: 'GET ' + can.test.path('model/test/update{id}.json')
+			findAll: can.test.path('src/model/test/{type}.json'),
+			findOne: can.test.path('src/model/test/{id}.json'),
+			create: 'GET ' + can.test.path('src/model/test/create.json'),
+			update: 'GET ' + can.test.path('src/model/test/update{id}.json')
 		}, {});
 		stop();
 		School.findAll({
@@ -403,7 +403,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 	test('findAll string', function () {
 		can.fixture.on = false;
 		can.Model('Test.Thing', {
-			findAll: can.test.path('model/test/findAll.json') + ''
+			findAll: can.test.path('src/model/test/findAll.json') + ''
 		}, {});
 		stop();
 		Test.Thing.findAll({}, function (things) {

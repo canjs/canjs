@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true*/
 /*global Mustache*/
-steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs",function () {
+steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs", "steal-qunit", function () {
 
 	QUnit.module("can/view/mustache, rendering", {
 		setup: function () {
@@ -111,7 +111,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			text: template
 		})
 			.render(obsvr);
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
 
 		// Multi-item hookup
@@ -123,7 +123,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				list: obsvrList
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(listFrag));
 
 		deepEqual(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
 
@@ -145,7 +145,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	 var data = { items: [{}], partial: "test_template.mustache" }
 
 	 var frag = new can.Mustache({ text: template }).render(data);
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 });*/
 
 	/*
@@ -157,7 +157,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	 var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
 	 var frag = new can.Mustache({ text: template }).render({ });;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
 
 	 });
@@ -171,7 +171,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	 var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
 	 var obsvr = new can.Map({ filter: 'moo' });
 	 var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
 
 	 obsvr.attr('filter', 'poo')
@@ -187,7 +187,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				completed: 0
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.$('#zero')[0].innerHTML, "0", 'zero shown');
 	})
 
@@ -210,14 +210,14 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				todos: todos
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
 
 		// now update the named attribute
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("Mustache live-binding with escaping", function () {
@@ -231,7 +231,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			text: template
 		});
 
-		can.append(can.$('#qunit-test-area'), can.view.frag(tpl.render(teacher)));
+		can.append(can.$('#qunit-fixture'), can.view.frag(tpl.render(teacher)));
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
@@ -241,7 +241,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("Mustache truthy", function () {
@@ -371,7 +371,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	});
 
 	test("Absolute partials", function () {
-		var test_template = can.test.path('view/mustache/test/test_template.mustache');
+		var test_template = can.test.path('src/view/mustache/test/test_template.mustache');
 		var t = {
 			template1: "{{> " + test_template + "}}",
 			template2: "{{> " + test_template + "}}",
@@ -439,7 +439,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var div = document.createElement('div');
 
 		template = can.view.mustache("table", "<table><thead><tr>{{#data}}{{{>" +
-			can.test.path('view/mustache/test/partial.mustache') + "}}}{{/data}}</tr></thead></table>")
+			can.test.path('src/view/mustache/test/partial.mustache') + "}}}{{/data}}</tr></thead></table>")
 
 		var dom = can.view("table", {
 			data: new can.Map({
@@ -748,7 +748,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	test("easy hookup", function () {
 		var div = document.createElement('div');
-		div.appendChild(can.view(can.test.path("view/mustache/test/easyhookup.mustache"), {
+		div.appendChild(can.view(can.test.path("src/view/mustache/test/easyhookup.mustache"), {
 			text: "yes"
 		}))
 
@@ -796,7 +796,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	 text = "<div id=\"hookup\" {{ elementHelper() }}></div>";
 	 compiled = new can.Mustache({text: text}).render() ;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(compiled));
 	 equal(can.$('#hookup')[0].innerHTML, "Simple");
 	 }); */
 
@@ -841,7 +841,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			}
 		};
 		var frag = can.buildFragment("<select><option>a</option></select>", [document]);
-		var qta = document.getElementById('qunit-test-area');
+		var qta = document.getElementById('qunit-fixture');
 		qta.innerHTML = "";
 		qta.appendChild(frag);
 
@@ -1575,7 +1575,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		}])
 
 		var div = document.createElement('div');
-		div.appendChild(can.view(can.test.path('view/mustache/test/recursive.mustache'), {
+		div.appendChild(can.view(can.test.path('src/view/mustache/test/recursive.mustache'), {
 			items: data
 		}));
 		ok(/class="?leaf"?/.test(div.innerHTML), "we have a leaf")
@@ -1750,8 +1750,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 					people: people
 				});
 
-		can.append(can.$('#qunit-test-area'), can.view.frag(compiled));
-		equal(can.$('#qunit-test-area table tbody')
+		can.append(can.$('#qunit-fixture'), can.view.frag(compiled));
+		equal(can.$('#qunit-fixture table tbody')
 			.length, 2, "two tbodies");
 	})
 
@@ -2041,8 +2041,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	});
 
 	test("can pass in partials", function () {
-		var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
-		var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
+		var hello = can.view(can.test.path('src/view/mustache/test/hello.mustache'));
+		var fancyName = can.view(can.test.path('src/view/mustache/test/fancy_name.mustache'));
 		var result = hello.render({
 			name: "World"
 		}, {
@@ -2055,7 +2055,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	});
 
 	test("can pass in helpers", function () {
-		var helpers = can.view.render(can.test.path('view/mustache/test/helper.mustache'));
+		var helpers = can.view.render(can.test.path('src/view/mustache/test/helper.mustache'));
 		var result = helpers.render({
 			name: "world"
 		}, {
@@ -3073,7 +3073,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		});
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp(data));
 
 		stop();
@@ -3137,7 +3137,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp({
 			data: data
 		}));
@@ -3173,7 +3173,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		], function (content) {
 			var div = document.createElement('div');
 
-			can.append(can.$('#qunit-test-area'), div);
+			can.append(can.$('#qunit-fixture'), div);
 			can.append(can.$(div), can.view.mustache(content)());
 			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 		});

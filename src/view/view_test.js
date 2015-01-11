@@ -5,7 +5,9 @@ steal("can/view/callbacks",
 	"can/view/stache",
 	"can/observe",
 	"can/test",
-	"can/util/fixture", function () {
+	"can/util/fixture",
+	"steal-qunit",
+	function () {
 	
 	var restoreInfo = [];
 	
@@ -52,7 +54,7 @@ steal("can/view/callbacks",
 				"stache": "<h1>{{message}}</h1>"
 			},
 			templateUrl = function(ext){
-				return can.test.path('view/test/basic_loading.' + ext);
+				return can.test.path('src/view/test/basic_loading.' + ext);
 			};
 		can.each([
 			'ejs',
@@ -100,7 +102,7 @@ steal("can/view/callbacks",
 			'ejs',
 			'mustache'
 		], function (ext) {
-			var actual = can.view.render(can.test.path('view/test/helpers.' + ext), {
+			var actual = can.view.render(can.test.path('src/view/test/helpers.' + ext), {
 				'message': 'helloworld'
 			}, {
 				helper: function () {
@@ -112,7 +114,7 @@ steal("can/view/callbacks",
 	});
 
 	test('buildFragment works right', function () {
-		can.append(can.$('#qunit-test-area'), can.view(can.test.path('view/test//plugin.ejs'), {}));
+		can.append(can.$('#qunit-fixture'), can.view(can.test.path('src/view/test//plugin.ejs'), {}));
 		ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
 		can.remove(can.$('#something'));
 	});
@@ -120,7 +122,7 @@ steal("can/view/callbacks",
 	test('async templates, and caching work', function () {
 		stop();
 		var i = 0;
-		can.view.render(can.test.path('view/test//temp.ejs'), {
+		can.view.render(can.test.path('src/view/test//temp.ejs'), {
 			'message': 'helloworld'
 		}, function (text) {
 			ok(/helloworld\s*/.test(text), 'we got a rendered template');
@@ -137,12 +139,12 @@ steal("can/view/callbacks",
 		// that the second time is always faster
 		stop();
 		var first;
-		can.view.render(can.test.path('view/test/large.ejs'), {
+		can.view.render(can.test.path('src/view/test/large.ejs'), {
 			'message': 'helloworld'
 		}, function (text) {
 			first = new Date();
 			ok(text, 'we got a rendered template');
-			can.view.render(can.test.path('view/test/large.ejs'), {
+			can.view.render(can.test.path('src/view/test/large.ejs'), {
 				'message': 'helloworld'
 			}, function (text) {
 				/*
@@ -156,7 +158,7 @@ steal("can/view/callbacks",
 	});
 
 	test('hookup', function () {
-		can.view(can.test.path('view/test/hookup.ejs'), {});
+		can.view(can.test.path('src/view/test/hookup.ejs'), {});
 		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
 	});
 
@@ -165,7 +167,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'test/ejs');
 		script.setAttribute('id', 'test_ejs');
 		script.text = '<span id="new_name"><%= name %></span>';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('test_ejs', {
@@ -180,7 +182,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'test/ejs');
 		script.setAttribute('id', 'test_ejs');
 		script.text = '<span id="new_name"><%= name %></span>';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('#test_ejs', {
@@ -198,7 +200,7 @@ steal("can/view/callbacks",
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test/deferreds.ejs'), {
+		can.view.render(can.test.path('src/view/test/deferreds.ejs'), {
 			foo: typeof foo.promise === 'function' ? foo.promise() : foo,
 			bar: bar
 		})
@@ -214,7 +216,7 @@ steal("can/view/callbacks",
 	test('deferred', function () {
 		var foo = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test//deferred.ejs'), foo)
+		can.view.render(can.test.path('src/view/test//deferred.ejs'), foo)
 			.then(function (result) {
 				equal(result, 'FOO');
 				start();
@@ -230,7 +232,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'text/x-ejs');
 		script.setAttribute('id', 'hyphenEjs');
 		script.text = '\nHyphen\n';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('hyphenEjs', {}));
@@ -253,7 +255,7 @@ steal("can/view/callbacks",
 		equal(renderer.render({
 			test: 'working test'
 		}), 'This is a working test', 'Rendered');
-		renderer = can.view(can.test.path('view/test/template.ejs'));
+		renderer = can.view(can.test.path('src/view/test/template.ejs'));
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer.render({
 			message: 'Rendered!'
@@ -294,7 +296,7 @@ steal("can/view/callbacks",
 		};
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view(can.test.path('view/test//deferred.ejs'), original)
+		can.view(can.test.path('src/view/test//deferred.ejs'), original)
 			.then(function (result, data) {
 				ok(data, 'Data exists');
 				equal(data.foo, 'FOO', 'Foo is resolved');
@@ -339,14 +341,14 @@ steal("can/view/callbacks",
 			id: 4,
 			name: 'microsoft.com'
 		}]),
-			frag = can.view(can.test.path('view/test/select.ejs'), {
+			frag = can.view(can.test.path('src/view/test/select.ejs'), {
 				domainList: domainList
 			}),
 			div = document.createElement('div');
 			
 		div.appendChild(frag);
 		
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
 	});
@@ -358,7 +360,7 @@ steal("can/view/callbacks",
 		var frag = template({
 			state: observe
 		});
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		var input = document.getElementById('candy');
 		equal(input.getAttribute('value'), 2, 'render workered');
 		observe.attr('number', 5);
@@ -395,8 +397,8 @@ steal("can/view/callbacks",
 				test: 'testing'
 			})),
 			form, textarea;
-		can.append(can.$('#qunit-test-area'), frag);
-		form = document.getElementById('qunit-test-area')
+		can.append(can.$('#qunit-fixture'), frag);
+		form = document.getElementById('qunit-fixture')
 			.getElementsByTagName('form')[0];
 		textarea = form.children[0];
 		equal(textarea.value, 'testing', 'Textarea value set');
@@ -408,7 +410,7 @@ steal("can/view/callbacks",
 	test('Deferred fails (#276)', function () {
 		var foo = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test/deferred.ejs'), foo)
+		can.view.render(can.test.path('src/view/test/deferred.ejs'), foo)
 			.fail(function (error) {
 				equal(error.message, 'Deferred error');
 				start();
@@ -423,7 +425,7 @@ steal("can/view/callbacks",
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test//deferreds.ejs'), {
+		can.view.render(can.test.path('src/view/test//deferreds.ejs'), {
 			foo: typeof foo.promise === 'function' ? foo.promise() : foo,
 			bar: bar
 		})
@@ -446,7 +448,7 @@ steal("can/view/callbacks",
 			}),
 			frag = template(obs),
 			img;
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		img = document.getElementById('equalTest');
 		obs.attr('class', 'class="do=not=truncate=me"');
 		obs.attr('src', 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200');
@@ -701,9 +703,9 @@ steal("can/view/callbacks",
 	});
 
 	test('extensionless views, enforcing engine (#193)', 1, function () {
-		var path = can.test.path('view/test/extensionless');
+		var path = can.test.path('src/view/test/extensionless');
 		// Because we don't have an extension and if we are using Steal we will get
-		// view/test/extensionless/extensionless.js which we need to fix in this case
+		// src/view/test/extensionless/extensionless.js which we need to fix in this case
 		if (path.indexOf('.js', this.length - 3) !== -1) {
 			path = path.substring(0, path.lastIndexOf('/'));
 		}
@@ -795,7 +797,7 @@ steal("can/view/callbacks",
 
 				var oldBaseUrl = window.requirejs.s.contexts._.config.baseUrl;
 				window.require.config({
-					baseUrl: oldBaseUrl + '/view/test/'
+					baseUrl: oldBaseUrl + '/src/view/test/'
 				});
 				ok(can.isFunction(can.view('template')));
 				window.require.config({

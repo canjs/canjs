@@ -1,4 +1,4 @@
-steal("can/test", function () {
+steal("can/test", "steal-qunit", function () {
 	
 	var makeIframe = function(src){
 		var iframe = document.createElement('iframe');
@@ -14,7 +14,7 @@ steal("can/test", function () {
 	QUnit.module("can/view/autorender");
 	if(window.steal) {
 		asyncTest("the basics are able to work for steal", function(){
-			makeIframe(  can.test.path("view/autorender/tests/steal-basics.html?"+Math.random()) );
+			makeIframe(  can.test.path("src/view/autorender/tests/steal-basics.html?"+Math.random()) );
 			
 		});
 	}

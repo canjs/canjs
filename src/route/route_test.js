@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/route", "can/test", function () {
+steal("can/route", "can/test", "steal-qunit", function () {
 	QUnit.module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -447,13 +447,13 @@ steal("can/route", "can/test", function () {
 			route: ":foo-:bar"
 		});
 
-		window.location.hash = "qunit-header";
+		window.location.hash = "qunit-fixture";
 		window.location.hash = "";
 	});
 	var teardownRouteTest;
 	var setupRouteTest = function(callback){
 		
-		var testarea = document.getElementById('qunit-test-area');
+		var testarea = document.getElementById('qunit-fixture');
 		var iframe = document.createElement('iframe');
 		stop();
 		window.routeTestReady = function(){
@@ -461,7 +461,7 @@ steal("can/route", "can/test", function () {
 			args.unshift(iframe);
 			callback.apply(null, args);
 		};
-		iframe.src = can.test.path("route/testing.html?"+Math.random());
+		iframe.src = can.test.path("src/route/testing.html?"+Math.random());
 		testarea.appendChild(iframe);
 		teardownRouteTest = function(){
 			setTimeout(function(){

@@ -1,4 +1,4 @@
-steal('can/util/function', 'can/test', function () {
+steal('can/util/function', 'can/test', 'steal-qunit', function () {
 	module('can/util/function');
 
 	var ctx1 = { name: 'David' };
