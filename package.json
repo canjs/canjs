@@ -77,6 +77,9 @@
 				"can/util/util": "can/util/domless/domless"
 			}
 		},
+		"directories": {
+		  "lib": "src"
+		},
 		"npmIgnore": {
 			"grunt-docco2": true,
 			"testee": true,
