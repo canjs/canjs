@@ -23,6 +23,38 @@
 
     QUnit.config.autostart = false;
 	steal("can/construct/super/super_test.js", function() {
+		test("_super supports getters and setters", function () {
+			var Person = can.Construct.extend({
+				get age() {
+					return 42;
+				},
+
+				set name(value) {
+					this._name = value;
+				},
+
+				get name() {
+					return this._name;
+				}
+			});
+
+			var OtherPerson = Person.extend({
+				get age() {
+					return this._super() + 8;
+				},
+
+				set name(value) {
+					this._super(value + '_super');
+				}
+			});
+
+			var test = new OtherPerson();
+			test.base = 2;
+			equal(test.age, 50, 'Getter and _super works');
+			test.name = 'David';
+			equal(test.name, 'David_super', 'Setter ran');
+		});
+
 		can.dev.logLevel = 3;
         QUnit.start();
 	});

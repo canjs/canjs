@@ -3873,15 +3873,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	// of creating a string from a document fragment.
 	if(can.$('<col>').length) {
 		test("<col> inside <table> renders correctly (#1013)", 1, function () {
-			var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
 			var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
 			var frag = can.mustache(template)({
 				columns: new can.List([
-					{ class: 'test' }
+					{ 'class': 'test' }
 				])
 			});
 
-			equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+			// Only node in IE is <table>, text in other browsers
+			var index = frag.childNodes.length === 2 ? 1 : 0;
+			var tagName = frag.childNodes[index].childNodes[0].childNodes[0].tagName.toLowerCase();
+
+			equal(tagName, 'col', '<col> nodes added in proper position');
 		});
 	}
 
