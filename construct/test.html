@@ -24,6 +24,28 @@
     QUnit.config.autostart = false;
     setTimeout(function(){
         steal("can/construct/construct_test.js", function() {
+			test("support getters and setters", function () {
+				var Person = can.Construct.extend({
+					get age() {
+						return this.base + 40;
+					},
+
+					set name(value) {
+						this._name = value;
+					},
+
+					get name() {
+						return this._name;
+					}
+				});
+
+				var test = new Person();
+				test.base = 2;
+				equal(test.age, 42, 'Getter called properly');
+				test.name = 'David';
+				equal(test.name, 'David', 'Setter ran');
+			});
+
             can.dev.logLevel = 3;
             QUnit.start();
         });

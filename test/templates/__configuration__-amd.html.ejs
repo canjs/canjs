@@ -3,7 +3,7 @@
 <head>
 	<title><%= configuration.description %> Test Suite</title>
 	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
-    <script type="text/javascript" src="../../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../../lib/html5shiv.js"></script>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -18,7 +18,7 @@
 <script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
-    <%
+	<%
         var moduleName = function(file) { return file.substring(0, file.lastIndexOf('.')); }
         var configName = configuration.description.split(' ')[0].toLowerCase();
         var config = {
@@ -33,17 +33,17 @@
                 }
             }
         };
-		if(! config.paths[configName] ) {
-		  config.paths[configName] = moduleName(configuration.library);
-		}
+        if(! config.paths[configName] ) {
+          config.paths[configName] = moduleName(configuration.library);
+        }
         
     %>
 
 	QUnit.config.autostart = false;
 	require.config(<%- JSON.stringify(config) %>);
 
-	require(['can/util/fixture'].concat(<%- JSON.stringify(modules) %>), function() {
-		require(["test/pluginified/latest"], function(){
+	require(['can/util/fixture'].concat(<%- JSON.stringify(modules) %>), function () {
+		require(["test/pluginified/latest"], function () {
 			QUnit.start();
 		});
 	});
