@@ -3,9 +3,11 @@
 var _ = require('lodash'),
 	path = require("path");
 var modules = require('./config_meta_modules'),
-	allModuleNames = _.map(modules,"moduleName"),
+	allModuleNames = _.map(modules,function(mod){
+		return mod.moduleName.replace("can/","");
+	}),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
-	config = path.join(__dirname,"..","stealconfig.js");
+	config = path.join(__dirname,"..","package.json!npm");
 
 
 
@@ -76,7 +78,7 @@ var makeAmdUtil = function(lib){
 
 module.exports = function(){
 	return {
-		"tests": {
+		/*"tests": {
 			system: {
 				main: modules.filter(function(mod){
 					return mod.hasTest !== false;
@@ -96,17 +98,17 @@ module.exports = function(){
 					minify: false
 				}
 			}
-		},
+		},*/
 		"standalone & steal - plugins, jquery core, and jquery steal": {
 			system: {
 				config: config,
-				main: allModuleNames.concat(['can/can'])
+				main: allModuleNames.concat(['can'])
 			},
 			options : {
-				// verbose: true
+				//verbose: true
 			},
 			"outputs": {
-				"all-plugins": {
+				/*"all-plugins": {
 					eachModule: [{type: "plugin"}],
 					ignore: [{type: "core"}],
 					dest: function(moduleName, moduleData){
@@ -145,9 +147,9 @@ module.exports = function(){
 					format: "steal",
 					ignore: ["jquery/jquery","jquery"],
 					minify: false
-				},
+				},*/
 				"cjs" : {
-					graphs: allModuleNames.concat(['can/can']),
+					graphs: allModuleNames.concat(['can']),
 					normalize: function(depName, depLoad, curName, curLoad ){
 						// if its not in node_modules
 						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
@@ -161,8 +163,9 @@ module.exports = function(){
 						return depName;
 					},
 					dest: function(moduleName){
+						console.log("dest", moduleName);
 						var name;
-						if(moduleName === "can/util/util"){
+						if(moduleName === "util/util"){
 							name = "dist/cjs/util/jquery/jquery.js";
 						} else {
 							name = "dist/cjs/"+moduleName.replace("can/","")+".js";
@@ -170,11 +173,13 @@ module.exports = function(){
 						return path.join(__dirname,"..",name);
 					},
 					format: "cjs",
-					ignore: ["jquery/jquery","jquery"],
+					ignore: function(mn){
+						console.log(mn);
+					},
 					minify: false
 				}
 			}
-		},
+		}/*,
 		"standalone & steal - core & utils - dojo": makeStandaloneAndStealUtil("dojo"),
 		"standalone & steal - core & utils - yui": makeStandaloneAndStealUtil("yui"),
 		"standalone & steal - core & utils - zepto": makeStandaloneAndStealUtil("zepto"),
@@ -206,6 +211,6 @@ module.exports = function(){
 		"amd-util-dojo": makeAmdUtil("dojo"),
 		"amd-util-yui": makeAmdUtil("yui"),
 		"amd-util-zepto": makeAmdUtil("zepto"),
-		"amd-util-mootools": makeAmdUtil("mootools")
+		"amd-util-mootools": makeAmdUtil("mootools")*/
 	};
 };
