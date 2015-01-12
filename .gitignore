@@ -14,3 +14,17 @@ docco
 test/builders/steal-tools/dist/
 test/builders/steal-tools/bundle/dist/
 test/builders/browserify/out.js
+component/
+compute/
+construct/
+control/
+event/
+list/
+map/
+model/
+observe/
+route/
+test/
+util/
+view/
+can.js
