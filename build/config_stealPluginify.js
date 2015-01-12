@@ -104,7 +104,8 @@ module.exports = function(){
 				}
 			}
 		},
-		"standalone & steal - plugins, jquery core, and jquery steal": {
+		// standalone & steal - plugins, jquery core, and jquery steal
+		"cjs-jquery": {
 			system: {
 				config: config,
 				main: allModuleNames.concat(['can'])
@@ -155,6 +156,7 @@ module.exports = function(){
 				},
 				"cjs" : {
 					graphs: allModuleNames.concat(['can']),
+					useNormalizedDependencies: false,
 					normalize: function(depName, depLoad, curName, curLoad ){
 						// if its not in node_modules
 						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
@@ -164,11 +166,13 @@ module.exports = function(){
 								moduleName = "./"+moduleName
 							}
 							return moduleName;
+						} 
+						if(depName === "jquery/jquery") {
+							return "jquery"
 						}
 						return depName;
 					},
 					dest: function(moduleName){
-						console.log("dest", moduleName);
 						var name;
 						
 						name = moduleName.replace("can/","")+".js";

@@ -34,7 +34,7 @@
 		},
 		paths: {
 			"jquery": "../../../lib/jquery.1.10.2.js",
-			"can/*": "../../../*.js"
+			"can/*": "../../../src/*.js"
 		},
 		meta: {
 			jquery: {

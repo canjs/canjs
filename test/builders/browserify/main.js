@@ -1,4 +1,4 @@
-var can = require("../../../dist/cjs/can.js");
+var can = require("../../../can.js");
 
 can.Component.extend({
 	tag: "hello-world",
