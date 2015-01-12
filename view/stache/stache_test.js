@@ -3017,7 +3017,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			"{{#each data}}" +
 			"<li>{{@key}} : {{.}}</li>" +
 			"{{/data}}" +
-			"</ul>")
+			"</ul>");
 
 		var map = new can.Map({
 			data: {
@@ -3025,14 +3025,14 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				things: false,
 				other: 'things'
 			}
-		})
+		});
 
 		var frag = template(map);
 
 		var lis = frag.childNodes[0].getElementsByTagName("li");
-		equal(lis.length, 3, "there are 3 properties of map's data property")
+		equal(lis.length, 3, "there are 3 properties of map's data property");
 
-		equal("some : test", lis[0].innerHTML)
+		equal(lis[0].innerHTML, "some : test");
 
 	});
 
@@ -3675,4 +3675,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(div.innerHTML, "<div>goodbye World</div>", "Partial updates when attr is updated");
 
 	});
+	
+	test("#each with null or undefined and then a list", function(){
+		var template = can.stache("<ul>{{#each items}}<li>{{name}}</li>{{/each}}");
+		var data = new can.Map({items: null});
+		var frag = template(data);
+		
+		var div = document.createElement("div");
+		div.appendChild(frag);
+		
+		
+		data.attr("items", [{name: "foo"}]);
+		
+		equal(div.getElementsByTagName("li").length, 1, "li added");
+	});
+	
+	
 });

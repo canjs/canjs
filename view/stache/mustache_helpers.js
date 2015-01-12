@@ -19,7 +19,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				key,
 				i;
 			
-			if( resolved instanceof can.List || (items && items.isComputed && resolved === undefined)) {
+			if( resolved instanceof can.List ) {
 				return function(el){
 					var cb = function (item, index, parentNodeList) {
 								
