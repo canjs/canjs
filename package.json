@@ -60,13 +60,24 @@
     "main": "can",
     "map": {
       "can/can": "can",
-      "jquery/jquery": "jquery"
+      "jquery/jquery": "jquery",
+      "steal-qunit/steal-qunit": "steal-qunit"
+    },
+    "paths": {
+      "mootools/mootools": "lib/mootools-core-1.4.5.js",
+      "dojo/dojo": "src/util/dojo/dojo-1.8.1.js",
+      "yui/yui": "lib/yui-3.7.3.js",
+      "zepto/zepto": "bower_components/zepto/zepto.js"
     },
     "meta": {
       "jquery": {
         "format": "global",
         "exports": "jQuery"
-      }
+      },
+      "dojo/dojo": {"format": "global"},
+      "yui/yui": {"format": "global", "scriptEval": true},
+      "mootools/mootools": {"format": "global", "scriptEval": true},
+      "zepto/zepto": {"format": "global", "exports": "Zepto"}
     },
     "ext": {
       "ejs": "can/view/ejs/system",

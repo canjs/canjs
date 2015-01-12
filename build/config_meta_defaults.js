@@ -1,15 +1,20 @@
 var reverseNormalize = function(name){
-	if(name === "can/util/library") {
+	if(name === "util/library") {
 		return "can/util/library";
 	}
 	if(name === "dojo" || name === "dojo/dojo") {
 		return "dojo/main";
 	}
+	
+	if(name === "can") {
+		return "can";
+	}
 	var parts = name.split("/");
 	if(parts.length > 1) {
 		parts.splice(parts.length-2,1);
-	}
-	return parts.join("/");
+	} 
+	return "can/"+parts.join("/");
+	
 };
 var path = require("path");
 

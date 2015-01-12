@@ -114,7 +114,8 @@ module.exports = function (grunt) {
 		},
 		// Removes the dist folder
 		clean: {
-			build: ['dist/']
+			build: ['dist/'],
+			"cjs-build": ['component/','compute/','construct','control/','event/','list/','map/','model/','observe/','route/','util/','view/']
 		},
 		'string-replace': {
 			version: {
@@ -262,7 +263,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['build']);
 	
-	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
+	grunt.registerTask('build', ['clean', 'stealPluginify', 'string-replace:version']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'stealPluginify:amd',

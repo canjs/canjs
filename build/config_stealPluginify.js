@@ -4,7 +4,7 @@ var _ = require('lodash'),
 	path = require("path");
 var modules = require('./config_meta_modules'),
 	allModuleNames = _.map(modules,function(mod){
-		return mod.moduleName.replace("can/","");
+		return mod.moduleName;
 	}),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
 	config = path.join(__dirname,"..","package.json!npm");
@@ -18,7 +18,7 @@ var makeStandaloneAndStealUtil = function(lib){
 			config: config,
 			main: coreModules,
 			paths: {
-				"can/util/util": libUtilName
+				"util/util": "src/"+libUtilName
 			}
 		},
 		options : {
@@ -26,13 +26,13 @@ var makeStandaloneAndStealUtil = function(lib){
 		},
 		outputs: {
 			"steal +ignorelibs": {
-				graphs: ["can/util/util"],
+				graphs: ["util/util"],
 				dest: function(moduleName){
 					var name;
 					if(moduleName === "can/util/util"){
-						name = "dist/steal/"+libUtilName;
+						name = "dist/steal/can/"+libUtilName;
 					} else {
-						name = "dist/steal/"+moduleName+".js";
+						name = "dist/steal/can/"+moduleName+".js";
 					}
 					return path.join(__dirname,"..",name);
 				},
@@ -55,7 +55,7 @@ var makeStandaloneAndStealUtil = function(lib){
 var pkg = require('../package.json');
 
 var makeAmdUtil = function(lib){
-	var moduleName = "can/util/"+lib+"/"+lib;
+	var moduleName = "util/"+lib+"/"+lib;
 	return {
 		system: {
 			config: config,
@@ -78,7 +78,7 @@ var makeAmdUtil = function(lib){
 
 module.exports = function(){
 	return {
-		/*"tests": {
+		"tests": {
 			system: {
 				main: modules.filter(function(mod){
 					return mod.hasTest !== false;
@@ -92,13 +92,18 @@ module.exports = function(){
 			},
 			"outputs" : {
 				"all tests": {
-					ignore: allModuleNames,
+					// all test modules
+					ignore: allModuleNames.concat([function(moduleName, load){
+						if(load.address.indexOf("node_modules") >=0 ) {
+							return true;
+						}
+					}]),
 					format: "global",
 					dest: path.join(__dirname,"..","test/pluginified/latest.js"),
 					minify: false
 				}
 			}
-		},*/
+		},
 		"standalone & steal - plugins, jquery core, and jquery steal": {
 			system: {
 				config: config,
@@ -108,7 +113,7 @@ module.exports = function(){
 				//verbose: true
 			},
 			"outputs": {
-				/*"all-plugins": {
+				"all-plugins": {
 					eachModule: [{type: "plugin"}],
 					ignore: [{type: "core"}],
 					dest: function(moduleName, moduleData){
@@ -137,17 +142,17 @@ module.exports = function(){
 					graphs: allModuleNames,
 					dest: function(moduleName){
 						var name;
-						if(moduleName === "can/util/util"){
+						if(moduleName === "util/util"){
 							name = "dist/steal/can/util/jquery/jquery.js";
 						} else {
-							name = "dist/steal/"+moduleName+".js";
+							name = "dist/steal/can/"+moduleName+".js";
 						}
 						return path.join(__dirname,"..",name);
 					},
 					format: "steal",
 					ignore: ["jquery/jquery","jquery"],
 					minify: false
-				},*/
+				},
 				"cjs" : {
 					graphs: allModuleNames.concat(['can']),
 					normalize: function(depName, depLoad, curName, curLoad ){
@@ -179,7 +184,7 @@ module.exports = function(){
 					minify: false
 				}
 			}
-		}/*,
+		},
 		"standalone & steal - core & utils - dojo": makeStandaloneAndStealUtil("dojo"),
 		"standalone & steal - core & utils - yui": makeStandaloneAndStealUtil("yui"),
 		"standalone & steal - core & utils - zepto": makeStandaloneAndStealUtil("zepto"),
@@ -187,12 +192,12 @@ module.exports = function(){
 		"amd": {
 			system: {
 				config: config,
-				main: allModuleNames,
+				main: allModuleNames.concat(["can"]),
 				map: {
-					"can/util/util" : "can/util/library"
+					"util/util" : "util/library"
 				},
 				paths: {
-					"can/util/library": "util/jquery/jquery.js"
+					"util/library": "src/util/jquery/jquery.js"
 				}
 			},
 			options : {
@@ -200,10 +205,10 @@ module.exports = function(){
 			},
 			"outputs": {
 				"amd-dev +amddev": {
-					graphs: allModuleNames
+					graphs: allModuleNames.concat(["can"])
 				},
 				"amd +amd": {
-					graphs: allModuleNames
+					graphs: allModuleNames.concat(["can"])
 				}
 			}
 		},
@@ -211,6 +216,6 @@ module.exports = function(){
 		"amd-util-dojo": makeAmdUtil("dojo"),
 		"amd-util-yui": makeAmdUtil("yui"),
 		"amd-util-zepto": makeAmdUtil("zepto"),
-		"amd-util-mootools": makeAmdUtil("mootools")*/
+		"amd-util-mootools": makeAmdUtil("mootools")
 	};
 };

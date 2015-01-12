@@ -222,7 +222,7 @@ var modules = [];
 
 for(var moduleName in mods) {
 	var mod = mods[moduleName];
-	mod.moduleName = moduleName;
+	mod.moduleName = moduleName.replace("can/","");
 	modules.push(mod);
 }
 
