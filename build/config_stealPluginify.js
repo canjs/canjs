@@ -165,16 +165,16 @@ module.exports = function(){
 					dest: function(moduleName){
 						console.log("dest", moduleName);
 						var name;
-						if(moduleName === "util/util"){
-							name = "dist/cjs/util/jquery/jquery.js";
-						} else {
-							name = "dist/cjs/"+moduleName.replace("can/","")+".js";
-						}
+						
+						name = moduleName.replace("can/","")+".js";
+						
 						return path.join(__dirname,"..",name);
 					},
 					format: "cjs",
-					ignore: function(mn){
-						console.log(mn);
+					ignore: function(modelName, load){
+						if(load.address.indexOf("/node_modules/") >=0) {
+							return true;
+						}
 					},
 					minify: false
 				}
