@@ -1,4 +1,9 @@
-var reverseNormalize = function(name){
+var reverseNormalize = function(name, load, baseName, baseLoad){
+
+	if(load.address.indexOf("node_modules") >=0) {
+		return name.replace(/@.*/,"");
+	}
+		
 	if(name === "util/library") {
 		return "can/util/library";
 	}
@@ -7,7 +12,7 @@ var reverseNormalize = function(name){
 	}
 	
 	if(name === "can") {
-		return "can";
+		return name;
 	}
 	var parts = name.split("/");
 	if(parts.length > 1) {
@@ -24,8 +29,8 @@ module.exports = function(){
 			format: "amd",
 			useNormalizedDependencies: true,
 			normalize: reverseNormalize,
-			dest: function(moduleName){
-				return path.join(__dirname,"..","dist/amd-dev/"+reverseNormalize(moduleName)+".js");
+			dest: function(moduleName, moduleData, load){
+				return path.join(__dirname,"..","dist/amd-dev/"+reverseNormalize(moduleName, load)+".js");
 			},
 			removeDevelopmentCode: false
 		},
@@ -33,8 +38,8 @@ module.exports = function(){
 			format: "amd",
 			useNormalizedDependencies: true,
 			normalize: reverseNormalize,
-			dest: function(moduleName){
-				return path.join(__dirname,"..","dist/amd/"+reverseNormalize(moduleName)+".js");
+			dest: function(moduleName, moduleData, load){
+				return path.join(__dirname,"..","dist/amd/"+reverseNormalize(moduleName, load)+".js");
 			}
 		},
 		"dev": {
@@ -48,7 +53,11 @@ module.exports = function(){
 			"jquery","jquery/jquery",
 			"mootools/mootools","mootools",
 			"zepto","zepto/zepto",
-			"yui","yui/yui"]
+			"yui","yui/yui"].concat([function(moduleName, load){
+				if(load.address.indexOf("node_modules") >= 0) {
+					return true;
+				}
+			}])
 		}
 	};
 };
