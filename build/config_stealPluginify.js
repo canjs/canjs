@@ -120,12 +120,24 @@ module.exports = function(){
 					dest: function(moduleName, moduleData){
 						return path.join(__dirname,"..","dist",moduleData.name.toLowerCase()+".js");
 					},
+					normalize: function(name, depLoad, curName){
+						if( depLoad.address.indexOf("node_modules") >= 0 ) {
+							return name;
+						}
+						return "can/"+name;
+					},
 					transpile: "global",
 					minify: false
 				},
 				"jquery-core +ignorelibs" : {
-					modules: [{type: "core"}],
+					modules: [{type: "core"}].concat(['can']),
 					dest: path.join(__dirname,"..","dist/can.jquery.js"),
+					normalize: function(name, depLoad, curName){
+						if( depLoad.address.indexOf("node_modules") >= 0 ) {
+							return name;
+						}
+						return "can/"+name;
+					},
 					minify: false
 				},
 				"jquery-core-dev +ignorelibs" : {
