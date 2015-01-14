@@ -1,5 +1,5 @@
 {
-  "name": "can",
+  "name": "canjs",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
   "version": "2.2.0-alpha.0",
   "author": {
@@ -57,6 +57,7 @@
   ],
   "main": "dist/cjs/can.js",
   "system": {
+    "name": "can",
     "main": "can",
     "map": {
       "can/can": "can",
