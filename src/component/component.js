@@ -422,7 +422,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	// the scope object
 	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
 	if (can.$.fn) {
-		can.$.scope = function (attr) {
+		can.$.fn.scope = function (attr) {
 			// If `attr` is passed to the `scope` plugin return the value of that 
 			// attribute on the `scope` object, otherwise return the whole scope
 			var scope = this.data("scope");
