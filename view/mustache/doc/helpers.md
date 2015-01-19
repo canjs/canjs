@@ -115,6 +115,28 @@ the current context so that all tags inside will look for keys on the local cont
 		<h1>Hi Austin</h1>
 		<p>You have a new friend: Justin</p>
 
+When using the `[can.mustache.helpers.is {{#is key1 key2}}]` helper you can simply compare
+key1 and key2. If the result of comparsion is **truthy**, the section will be rendered.
+
+	Template: 
+		<ul>
+			{{#is name 'Alex'}}
+				</li>Your name is {{name}}</li>
+			{{else}}
+				<li>Your name is not Alex!</li>
+			{{/if}}
+		</ul>
+
+	Data: 
+		{
+			name: 'John'
+		}
+
+	Result:
+		<ul>
+			<li>Your name is not Alex!</li>
+		</ul>
+
 The `[can.mustache.helpers.elementCallback {{(el)->CODE}}]` helper is a special helper for element callbacks that 
 will pass the active DOM element within the template to a function made up of inline code. This 
 is most useful for tasks such as initializing a jQuery plugin on the new HTML.

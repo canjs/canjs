@@ -1844,6 +1844,50 @@ steal('can/util',
 					return options.inverse(options.contexts || this);
 				}
 			},
+			/**
+			* @function can.stache.helpers.is {{#is key key}}
+			* @parent can.stache.htags 12
+			*
+			* @signature `{{#is key1 key2}}BLOCK{{/is}}`
+			*
+			* Renders the `BLOCK` template within the current template.
+			*
+			* @param {can.stache.key} keys A key that references a value within the current or parent
+			* context. If the value is a function or can.compute, the function's return value is used.
+			*
+			* @param {can.stache} BLOCK A stache template.
+			*
+			* @return {String} If the key's value is truthy, the `BLOCK` is rendered with the
+			* current context and its value is returned; otherwise, an empty string.
+			*
+			* @param {can.stache} BLOCK A template that is rendered
+			* if the result of comparsion `key1` and `key2` value is truthy.
+			*
+			* @body
+			*
+			* The `is` helper compares key1 and key2 and renders the blocks accordingly.
+			*
+			* 	{{#is key1 key2}}
+			* 		// truthy
+			* 	{{else}}
+			* 		// falsey
+			* 	{{/is}}
+			*/
+			'is': function (key1, key2, options) {
+				if (can.isFunction(key1)) {
+					key1 = key1();
+				}
+
+				if (can.isFunction(key2)) {
+					key2 = key2();
+				}
+
+				if (key1 === key2) {
+					return options.fn(this);
+				} else {
+					return options.inverse(this);
+				}
+			},
 			// Implements the `unless` built-in helper.
 			/**
 			 * @function can.mustache.helpers.unless {{#unless key}}

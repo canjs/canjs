@@ -88,6 +88,21 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				return options.inverse(options.scope || this);
 			}
 		},
+		'is': function (key1, key2, options) {
+			if (can.isFunction(key1)) {
+				key1 = key1();
+			}
+
+			if (can.isFunction(key2)) {
+				key2 = key2();
+			}
+
+			if (key1 === key2) {
+				return options.fn(this);
+			} else {
+				return options.inverse(this);
+			}
+		},
 		'unless': function (expr, options) {
 			return helpers['if'].apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 		},
