@@ -564,6 +564,34 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		deepEqual(getText(t.template,t.data), expected);
 	});
 
+	test("Handlebars helper: is/else", function () {
+		var expected;
+		var t = {
+            template: '{{#is ducks tenDucks "10"}}10 ducks{{else}}Not 10 ducks{{/is}}',
+            expected: "10 ducks",
+            data: {
+                ducks: '10',
+                tenDucks: function (){ return '10'}
+            },
+            liveData: new can.Map({
+                ducks: '10',
+                tenDucks: function() {
+                    return '10'
+                }
+            })
+		};
+
+		expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+		deepEqual(getText(t.template,t.data), expected);
+
+        deepEqual(getText(t.template,t.liveData), expected);
+
+        t.data.ducks = 5;
+
+        deepEqual(getText(t.template,t.data), 'Not 10 ducks');
+
+	});
+
 	test("Handlebars helper: unless", function () {
 		var t = {
 			template: "{{#unless missing}}Andy is missing!{{/unless}}",

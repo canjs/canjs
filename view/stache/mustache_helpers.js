@@ -88,6 +88,38 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				return options.inverse(options.scope || this);
 			}
 		},
+        'is': function () {
+            var options = arguments[arguments.length - 1];
+            var values = [];
+
+            delete(arguments[arguments.length - 1]);
+
+            for (i in arguments) {
+                var expr = arguments[i]
+                if (can.isFunction(expr)) {
+                    values[i] = can.compute(expr)();
+                    if (can.isFunction(values[i])) {
+                        values[i] = values[i]();
+                    }
+                } else {
+                    values[i] = resolve(expr);
+                }
+            }
+
+            var allValuesSame = function(arr) {
+                for (var i = 1; i < arr.length; i++) {
+                    if (arr[i] !== arr[0])
+                        return false;
+                }
+                return true;
+            }
+
+            if (allValuesSame(values)) {
+                return options.fn(options.scope || this);
+            } else {
+                return options.inverse(options.scope || this);
+            }
+        },
 		'unless': function (expr, options) {
 			return helpers['if'].apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
 		},

@@ -1844,6 +1844,67 @@ steal('can/util',
 					return options.inverse(options.contexts || this);
 				}
 			},
+			/**
+			* @function can.stache.helpers.is {{#is expr1 expr2 expr3}}
+			* @parent can.stache.htags 12
+			*
+			* @signature `{{#is expr1 expr2}}BLOCK{{/is}}`
+			*
+			* Renders the `BLOCK` template within the current template.
+			*
+			* @param {can.stache.key} [args] A key that references a value within the current or parent
+			* context. If the value is a function or can.compute, the function's return value is used.
+			*
+			* @param {can.stache} BLOCK A stache template.
+			*
+			* @return {String} If the key's value is truthy, the `BLOCK` is rendered with the
+			* current context and its value is returned; otherwise, an empty string.
+			*
+			* @param {can.stache} BLOCK A template that is rendered
+			* if the result of comparsion `expr1` and `expr2` value is truthy.
+			*
+			* @body
+			*
+			* The `is` helper compares expr1 and expr2 and renders the blocks accordingly.
+			*
+			* 	{{#is expr1 expr2}}
+			* 		// truthy
+			* 	{{else}}
+			* 		// falsey
+			* 	{{/is}}
+			*/
+            'is': function () {
+                var options = arguments[arguments.length - 1];
+                var values = [];
+
+                delete(arguments[arguments.length - 1]);
+
+                for (i in arguments) {
+                    var expr = arguments[i]
+                    if (can.isFunction(expr)) {
+                        values[i] = can.compute(expr)();
+                        if (can.isFunction(values[i])) {
+                            values[i] = values[i]();
+                        }
+                    } else {
+                        values[i] = Mustache.resolve(expr);
+                    }
+                }
+
+                var allValuesSame = function(arr) {
+                    for (var i = 1; i < arr.length; i++) {
+                        if (arr[i] !== arr[0])
+                            return false;
+                    }
+                    return true;
+                }
+
+                if (allValuesSame(values)) {
+                    return options.fn(options.contexts || this);
+                } else {
+                    return options.inverse(options.contexts || this);
+                }
+            },
 			// Implements the `unless` built-in helper.
 			/**
 			 * @function can.mustache.helpers.unless {{#unless key}}
