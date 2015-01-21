@@ -1900,7 +1900,6 @@ steal('can/util',
                 }
 
                 if (allValuesSame(values)) {
-                    console.log('values same')
                     return options.fn(options.contexts || this);
                 } else {
                     return options.inverse(options.contexts || this);
