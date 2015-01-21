@@ -548,10 +548,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var t = {
 			template: "{{#if name}}{{name}}{{/if}}{{#if missing}} is missing!{{/if}}",
 			expected: "Andy",
-			data: new can.Map({
+			data: {
 				name: 'Andy',
 				missing: undefined
-			})
+			}
 		};
 
 		expected = t.expected.replace(/&quot;/g, '&#34;')
