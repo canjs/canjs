@@ -115,8 +115,8 @@ the current context so that all tags inside will look for keys on the local cont
 		<h1>Hi Austin</h1>
 		<p>You have a new friend: Justin</p>
 
-When using the `[can.mustache.helpers.is {{#is key1 key2}}]` helper you can simply compare
-key1 and key2. If the result of comparsion is **truthy**, the section will be rendered.
+When using the `[can.mustache.helpers.is {{#is expr1 expr2}}]` helper you can simply compare 
+results of passed arguments. If the result of comparsion is **truthy**, the section will be rendered.
 
 	Template: 
 		<ul>

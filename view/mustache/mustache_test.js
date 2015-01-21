@@ -533,31 +533,38 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	});
 
 	test("Handlebars helper: is/else", function () {
-		var expected;
-		var t = {
-			template: '{{#is name "Andy"}}{{name}}{{else}}{{missing}}{{/is}}',
-			expected: "Andy",
-			data: {
-				name: 'Andy',
-				missing: undefined
-			}
-		};
+        var expected;
 
-		expected = t.expected.replace(/&quot;/g, '&#34;')
-		.replace(/\r\n/g, '\n');
-		deepEqual(new can.Mustache({
-			text: t.template
-		})
-				  .render(t.data), expected);
+        var t = {
+            template: '{{#is "10" "10" ducks getDucks}}10 ducks{{else}}Not 10 ducks{{/is}}',
+            expected: "10 ducks",
+            data: {
+                ducks: '10',
+                getDucks: function(){return '10'}
+            },
+            liveData: new can.Map({
+                ducks: '10',
+                getDucks: function(){return '10'}
+            })
+        };
 
-		t.data.missing = null;
-		expected = t.expected.replace(/&quot;/g, '&#34;')
-		.replace(/\r\n/g, '\n');
-		deepEqual(new can.Mustache({
-			text: t.template
-		})
-				  .render(t.data), expected);
-	});
+        var div = document.createElement('div');
+
+        div.appendChild(can.view.mustache(t.template)(t.data));
+        deepEqual(div.innerHTML, t.expected);
+        div.innerHTML = "";
+
+        div.appendChild(can.view.mustache(t.template)(t.liveData));
+        deepEqual(div.innerHTML, t.expected);
+        div.innerHTML = "";
+
+        t.data.ducks = 5;
+
+        div.appendChild(can.view.mustache(t.template)(t.data));
+        deepEqual(div.innerHTML, 'Not 10 ducks');
+        div.innerHTML = "";
+    });
+
 
 	test("Handlebars helper: unless", function () {
 		var t = {

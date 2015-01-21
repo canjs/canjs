@@ -548,10 +548,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var t = {
 			template: "{{#if name}}{{name}}{{/if}}{{#if missing}} is missing!{{/if}}",
 			expected: "Andy",
-			data: {
+			data: new can.Map({
 				name: 'Andy',
 				missing: undefined
-			}
+			})
 		};
 
 		expected = t.expected.replace(/&quot;/g, '&#34;')
@@ -567,22 +567,29 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 	test("Handlebars helper: is/else", function () {
 		var expected;
 		var t = {
-			template: '{{#is name "Andy"}}{{name}}{{else}}{{missing}}{{/is}}',
-			expected: "Andy",
-			data: {
-				name: 'Andy',
-				missing: undefined
-			}
+            template: '{{#is ducks tenDucks "10"}}10 ducks{{else}}Not 10 ducks{{/is}}',
+            expected: "10 ducks",
+            data: {
+                ducks: '10',
+                tenDucks: function (){ return '10'}
+            },
+            liveData: new can.Map({
+                ducks: '10',
+                tenDucks: function() {
+                    return '10'
+                }
+            })
 		};
 
-		expected = t.expected.replace(/&quot;/g, '&#34;')
-		.replace(/\r\n/g, '\n');
+		expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 		deepEqual(getText(t.template,t.data), expected);
 
-		t.data.missing = null;
-		expected = t.expected.replace(/&quot;/g, '&#34;')
-		.replace(/\r\n/g, '\n');
-		deepEqual(getText(t.template,t.data), expected);
+        deepEqual(getText(t.template,t.liveData), expected);
+
+        t.data.ducks = 5;
+
+        deepEqual(getText(t.template,t.data), 'Not 10 ducks');
+
 	});
 
 	test("Handlebars helper: unless", function () {
