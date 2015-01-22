@@ -100,7 +100,7 @@ steal('can/util', function (can) {
 			return a === b;
 		}
 		if (deep === -1) {
-			return aType === 'object' || a === b;
+			return (aType === 'object' && a !== null) || a === b;
 		}
 		if (aType !== typeof b || aArray !== isArray(b)) {
 			return false;
