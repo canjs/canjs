@@ -1,7 +1,7 @@
 /**
  * @add can.event.special
  */
-steal('jquery', 'can/util').then(function($, can) {
+steal('jquery', 'can/util', function ($, can) {
 	/**
 	 * @property {Event} destroyed
 	 * @parent specialevents
@@ -23,16 +23,17 @@ steal('jquery', 'can/util').then(function($, can) {
 	 * @codeend
 	 *
 	 * <h2>Quick Demo</h2>
-	 * @demo jquery/event/destroyed/destroyed.html 
+	 * @demo jquery/event/destroyed/destroyed.html
 	 * <h2>More Involved Demo</h2>
-	 * @demo jquery/event/destroyed/destroyed_menu.html 
+	 * @demo jquery/event/destroyed/destroyed_menu.html
 	 */
 
 	var oldClean = $.cleanData;
 
-	can.cleanData = function( elems ) {
-		can.each( elems, function( elem ) {
-			can.$(elem).triggerHandler("destroyed");
+	can.cleanData = function (elems) {
+		can.each(elems, function (elem) {
+			can.$(elem)
+				.triggerHandler("removed");
 		});
 		oldClean(elems);
 	};

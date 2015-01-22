@@ -1,123 +1,96 @@
-module("jquery/model/associations",{
-	setup: function() {
-		
-		$.Model("MyTest.Person", {
-			serialize: function() {
-				return "My name is " + this.name;
+var MyTest;
+module('jquery/model/associations', {
+	setup: function () {
+		$.Model('MyTest.Person', {
+			serialize: function () {
+				return 'My name is ' + this.name;
 			}
 		});
-		$.Model("MyTest.Loan");
-		$.Model("MyTest.Issue");
-		
-		$.Model("MyTest.Customer",
-		{
-			attributes : {
-				person : "MyTest.Person.model",
-				loans : "MyTest.Loan.models",
-				issues : "MyTest.Issue.models"
+		$.Model('MyTest.Loan');
+		$.Model('MyTest.Issue');
+		$.Model('MyTest.Customer', {
+			attributes: {
+				person: 'MyTest.Person.model',
+				loans: 'MyTest.Loan.models',
+				issues: 'MyTest.Issue.models'
 			},
-			
-			update : function(id, attrs){
+			update: function (id, attrs) {
 				return $.ajax({
-					url : "/people/"+id,
-					data : attrs,
-					type : 'post',
-					dataType : "json",
-					fixture: function(){
+					url: '/people/' + id,
+					data: attrs,
+					type: 'post',
+					dataType: 'json',
+					fixture: function () {
 						return [{
-							// moving despite saving?
 							loansAttr: attrs.loans,
 							personAttr: attrs.person
-						}]
+						}];
 					}
-				})
-			}			
-		},
-		{});
+				});
+			}
+		}, {});
 	}
 });
-
-test("associations work", function(){
+test('associations work', function () {
 	var c = new MyTest.Customer({
 		id: 5,
-		person : {
+		person: {
 			id: 1,
-			name: "Justin"
+			name: 'Justin'
 		},
-		issues : [],
-		loans : [
-			{
-				amount : 1000,
-				id: 2
-			},
-			{
-				amount : 19999,
-				id: 3
-			}
-		]
-	})
-	equal(c.person.name, "Justin", "association present");
-	equal(c.person.Class, MyTest.Person, "belongs to association typed");
-	
+		issues: [],
+		loans: [{
+			amount: 1000,
+			id: 2
+		}, {
+			amount: 19999,
+			id: 3
+		}]
+	});
+	equal(c.person.name, 'Justin', 'association present');
+	equal(c.person.Class, MyTest.Person, 'belongs to association typed');
 	equal(c.issues.length, 0);
-	
 	equal(c.loans.length, 2);
-	
 	equal(c.loans[0].Class, MyTest.Loan);
 });
-
-test("Model association serialize on save", function(){
+test('Model association serialize on save', function () {
 	var c = new MyTest.Customer({
 		id: 5,
-		person : {
+		person: {
 			id: 1,
-			name: "thecountofzero"
+			name: 'thecountofzero'
 		},
-		issues : [],
-		loans : []
+		issues: [],
+		loans: []
 	}),
-	cSave = c.save();
-	
+		cSave = c.save();
 	stop();
-	cSave.then(function(customer){
-		start()
-		equal(customer.personAttr, "My name is thecountofzero", "serialization works");
-		
+	cSave.then(function (customer) {
+		start();
+		equal(customer.personAttr, 'My name is thecountofzero', 'serialization works');
 	});
-	
 });
-
-test("Model.List association serialize on save", function(){
+test('Model.List association serialize on save', function () {
 	var c = new MyTest.Customer({
 		id: 5,
-		person : {
+		person: {
 			id: 1,
-			name: "thecountofzero"
+			name: 'thecountofzero'
 		},
-		issues : [],
-		loans : [
-			{
-				amount : 1000,
-				id: 2
-			},
-			{
-				amount : 19999,
-				id: 3
-			}
-		]
+		issues: [],
+		loans: [{
+			amount: 1000,
+			id: 2
+		}, {
+			amount: 19999,
+			id: 3
+		}]
 	}),
-	cSave = c.save();
-	
+		cSave = c.save();
 	stop();
-	cSave.then(function(customer){
-		start()
-		ok(true, "called back")
-		equal(customer.loansAttr.constructor, can.Observe.List, "we get an observe list back")
-		/*ok(customer.loansAttr._namespace === undefined, "_namespace does not exist");
-		ok(customer.loansAttr._data === undefined, "_data does not exist");
-		ok(customer.loansAttr._use_call === undefined, "_use_call does not exist");
-		ok(customer.loansAttr._changed === undefined, "_changed does not exist");*/
-		
+	cSave.then(function (customer) {
+		start();
+		ok(true, 'called back');
+		equal(customer.loansAttr.constructor, can.List, 'we get an observe list back');
 	});
-	
 });

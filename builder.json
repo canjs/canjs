@@ -2,19 +2,43 @@
 	"filename": "can.custom.js",
 	"banner": "/*!\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %><% if(typeof url !== \"undefined\") { %>\n * Includes: <%= ids %>\n * Download from: <%= url %>\n<% } %> */\n",
 	"modules": {
+		"can/component": {
+			"name": "can.Component",
+			"description": "Custom elements and widgets",
+			"type": "core",
+			"isDefault": true
+		},
 		"can/construct": {
 			"name": "can.Construct",
 			"description": "Inheritable constructor functions",
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe": {
-			"name": "can.Observe",
-			"description": "Observable key-value bindings",
+		"can/map": {
+			"name": "can.Map",
+			"description": "Observables and key-value bindings",
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe/compute": {
+		"can/list": {
+			"name": "can.List",
+			"description": "Observables lists",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/list/promise": {
+			"name": "can.List.promise",
+			"description": "Promises on lists",
+			"type": "plugin"
+		},
+		"can/observe": {
+			"name": "can.Observe",
+			"description": "Observables and key-value bindings",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/compute": {
 			"name": "can.compute",
 			"description": "can.compute lets you make observable values",
 			"type": "core",
@@ -33,10 +57,14 @@
 			"isDefault": true
 		},
 		"can/view/ejs": {
-			"name": "can.EJS",
+			"name": "can.ejs",
 			"description": "Live-binding Embedded JavaScript",
-			"type": "core",
-			"isDefault": true
+			"type": "plugin"
+		},
+		"can/view/stache": {
+			"name": "can.stache",
+			"description": "High performance Mustache templates",
+			"type": "plugin"
 		},
 		"can/control": {
 			"name": "can.Control",
@@ -57,9 +85,15 @@
 			"isDefault": true
 		},
 		"can/view/mustache": {
-			"name": "can.Mustache",
-			"type": "plugin",
-			"description": "Live-binding Handlebars and Mustache views"
+			"name": "can.mustache",
+			"description": "Live-binding Handlebars and Mustache views",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/route/pushstate": {
+			"name": "can.route.pushstate",
+			"description": "can.route with pushstate",
+			"type": "plugin"
 		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
@@ -76,57 +110,103 @@
 			"type": "plugin",
 			"description": "Proxy construct methods"
 		},
-		"can/observe/delegate": {
-			"name": "can.Observe.delegate",
+		"can/map/lazy": {
+			"name": "can.Map.Lazy",
+			"type": "plugin",
+			"description": "Lazy initializing maps and lists"
+		},
+		"can/map/delegate": {
+			"name": "can.Map.delegate",
 			"type": "plugin",
 			"description": "Listen to Observe attributes"
 		},
-		"can/observe/setter": {
-			"name": "can.Observe.setter",
+		"can/map/setter": {
+			"name": "can.Map.setter",
 			"type": "plugin",
-			"description": "Use setter methods on Observes"
+			"description": "Use setter methods on can.Map"
 		},
-		"can/observe/attributes": {
-			"name": "can.Observe.attributes",
+		"can/map/attributes": {
+			"name": "can.Map.attributes",
 			"type": "plugin",
+			"deprecated": true,
 			"description": "Define Observe attributes"
 		},
-		"can/observe/validations": {
-			"name": "can.Observe.validations",
+		"can/map/validations": {
+			"name": "can.Map.validations",
 			"type": "plugin",
 			"description": "Validate Observe attributes"
 		},
-		"can/observe/backup": {
-			"name": "can.Observe.backup",
+		"can/map/backup": {
+			"name": "can.Map.backup",
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"
+		},
+		"can/map/list": {
+			"name": "can.Map.List",
+			"type": "plugin",
+			"description": "Live-updating mapped and filtered observe lists"
+		},
+		"can/map/define": {
+			"name": "can.Map.define",
+			"type": "plugin",
+			"description": "Define rich attribute behavior"
+		},
+		"can/map/sort": {
+			"name": "can.List.Sort",
+			"type": "plugin",
+			"description": "Sort observable lists"
 		},
 		"can/control/plugin": {
 			"name": "can.Control.plugin",
 			"type": "plugin",
 			"description": "Registers a jQuery plugin function for Controls",
-			"configurations": ["jquery"]
+			"configurations": ["jquery", "jquery-2"]
 		},
 		"can/view/modifiers": {
 			"name": "can.view.modifiers",
 			"type": "plugin",
 			"description": "Use jQuery modifiers to render views",
-			"configurations": ["jquery"]
+			"configurations": ["jquery", "jquery-2"]
 		},
 		"can/util/object": {
 			"name": "can.Object",
 			"type": "plugin",
 			"description": "Helper methods for object comparison"
 		},
-		"can/util/string": {
-			"name": "can.util.string",
-			"type": "plugin",
-			"description": "Helper methods for strings"
-		},
 		"can/util/fixture": {
 			"name": "can.fixture",
 			"type": "plugin",
 			"description": "Intercepts an AJAX request and simulates the response with a file or function"
+		},
+		"can/view/bindings": {
+			"name": "can.view.bindings",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/view/live": {
+			"name": "can.view.live",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/view/scope": {
+			"name": "can.view.Scope",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/util/string": {
+			"name": "can.util.string",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
+		},
+		"can/util/attr": {
+			"name": "can.util.attr",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
 		}
 	},
 	"types": {
@@ -135,9 +215,10 @@
 	},
 	"pluginify": {
 		"shim": {
-			"can/lib/jquery.1.9.1.js": "jQuery",
-			"can/lib/zepto.1.0rc1.js": "Zepto",
-			"can/lib/mootools-core-1.4.3.js": "{}",
+			"can/lib/jquery.2.0.3.js": "jQuery",
+			"can/lib/jquery.1.10.2.js": "jQuery",
+			"can/bower_components/zepto/zepto.js": "Zepto",
+			"can/lib/mootools-core-1.4.5.js": "{}",
 			"can/util/dojo/dojo-1.8.1.js": "{}",
 			"can/lib/yui-3.7.3.js": "YUI"
 		},
@@ -149,46 +230,49 @@
 		"jquery": {
 			"description": "jQuery",
 			"isDefault": true,
-			"library": "lib/jquery.1.9.1.js",
+			"library": "lib/jquery.1.10.2.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/jquery/jquery.js",
-						"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
+						"jquery/jquery.js": "can/lib/jquery.1.10.2.js"
 					}
-				},
-				"shim": {
-					"jquery/jquery.js": {
-						"exports": "jQuery"
+				}
+			}
+		},
+		"jquery-2": {
+			"description": "jQuery (2.x)",
+			"hidden": true,
+			"library": "lib/jquery.2.0.3.js",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/jquery/jquery.js",
+						"jquery/jquery.js": "can/lib/jquery.2.0.3.js"
 					}
 				}
 			}
 		},
 		"zepto": {
 			"description": "Zepto",
-			"library": "lib/zepto.1.0rc1.js",
+			"library": "bower_components/zepto/zepto.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/zepto/zepto.js",
-						"zepto/zepto.js": "can/lib/zepto.1.0rc1.js"
-					}
-				},
-				"shim": {
-					"zepto/zepto.js": {
-						"exports": "Zepto"
+						"zepto/zepto.js": "can/bower_components/zepto/zepto.js"
 					}
 				}
 			}
 		},
 		"mootools": {
 			"description": "Mootools",
-			"library": "lib/mootools-core-1.4.3.js",
+			"library": "lib/mootools-core-1.4.5.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/mootools/mootools.js",
-						"mootools/mootools.js": "can/lib/mootools-core-1.4.3.js"
+						"mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
 					}
 				}
 			}

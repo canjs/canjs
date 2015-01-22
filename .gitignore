@@ -1,5 +1,5 @@
 .tmp*
-dist
+/dist
 *.swp
 *.orig
 util/can.*.js
@@ -8,3 +8,6 @@ standalone*
 docs*
 *.DS_Store
 .idea
+bower_components/
+test/pluginified/latest.js
+docco

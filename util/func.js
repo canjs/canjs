@@ -13,7 +13,7 @@
 Convert any value to a Deferred:
 
     function convertDeferred(dfd) {
-	    return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
+        return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
     }
 */
 //
@@ -219,7 +219,7 @@ on an object for a given event.  It works on:
 - Objects
 - Objects with bind / unbind methods
 
-The idea is that bind can be used on anything that produces events
+The idea is that `can.bind` can be used on anything that produces events
 and it will figure out the appropriate way to
 bind to it.  Typically, `can.bind` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
@@ -244,6 +244,45 @@ __Binding to an HTMLElement__
 */
 //
 /**
+@description Listen for events on an object.
+@function can.on
+@parent can.util
+@signature `can.on.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to execute when the event occurs.
+@return {Object} The __target__.
+
+@body
+`can.on(eventName, handler)` is an alias for [can.bind `can.bind(eventName, handler)`]
+and binds a callback handler on an object for a given event.  It works on:
+
+- HTML elements and the window
+- Objects
+- Objects with bind / unbind methods
+
+The idea is that `can.on` can be used on anything that produces events
+and it will figure out the appropriate way to bind to it. 
+
+
+__Binding to an object__
+
+    var obj = {};
+    can.on.call(obj,"something", function(ev, arg1, arg){
+        arg1 // 1
+        arg2 // 2
+    })
+    can.trigger(obj,"something",[1,2])
+
+__Binding to an HTMLElement__
+
+    var el = document.getElementById('foo')
+    can.on.call(el, "click", function(ev){
+        this // el
+    });
+*/
+//
+/**
 @description Stop listening for events on an object.
 @function can.unbind
 @parent can.util
@@ -261,7 +300,7 @@ from an object for a given event.  It works on:
 - Objects
 - Objects with bind / unbind methods
 
-The idea is that unbind can be used on anything that produces events
+The idea is that `can.unbind` can be used on anything that produces events
 and it will figure out the appropriate way to
 unbind to it.  Typically, `can.unbind` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
@@ -287,6 +326,52 @@ __Binding/unbinding to an HTMLElement__
     };
     can.bind.call(el, "click", handler)
     can.unbind.call(el, "click", handler)
+*/
+//
+/**
+@description Stop listening for events on an object.
+@function can.off
+@parent can.util
+@signature `can.off.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to unbind.
+@return {Object} The __target__.
+
+@body
+`can.off(eventName, handler)` is an alias for [can.unbind `can.unbind(eventName, handler)`]
+and unbinds a callback handler from an object for a given event.  It works on:
+
+- HTML elements and the window
+- Objects
+- Objects with bind / unbind methods
+
+The idea is that `can.unbind` can be used on anything that produces events
+and it will figure out the appropriate way to
+unbind to it.  Typically, `can.off` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.on` to listen to events independent of the underlying library.
+
+__Binding/unbinding to an object__
+
+    var obj = {},
+    handler = function(ev, arg1, arg) {
+        arg1 // 1
+        arg2 // 2
+    };2
+    can.on.call(obj,"something", handler)
+    can.trigger(obj,"something",[1,2])
+    can.off.call(obj,"something", handler)
+
+__Binding/unbinding to an HTMLElement__
+
+
+    var el = document.getElementById('foo'),
+    handler = function(ev){
+        this // el
+    };
+    can.on.call(el, "click", handler)
+    can.off.call(el, "click", handler)
 */
 //
 /**
@@ -575,8 +660,8 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /*
-* @prototype
-*/
+ * @prototype
+ */
 //
 /**
 @description Add callbacks to a Deferred.
@@ -756,12 +841,36 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.capitalize
 @parent can.util
 @description Capitalize the first letter of a string.
-
-    can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
-
 @signature `can.capitalize(str)`
 @param {String} str The string to capitalize.
 @return {String} The string with the first letter capitalized.
+
+@body
+    can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
+*/
+//
+/**
+@function can.camelize
+@parent can.util
+@description Capitalize the first letter after each hyphen in a string.
+@signature `can.camelize(str)`
+@param {String} str The string to camelize.
+@return {String} The string with the first letter after each hyphen capitalized.
+
+@body
+    can.camelize('hello-world'); //-> Returns: 'helloWorld'
+*/
+//
+/**
+@function can.hyphenate
+@parent can.util
+@description Adds a hyphen before each uppercase letter and converts the entire string to lower case.
+@signature `can.hyphenate(str)`
+@param {String} str The string to hyphenate.
+@return {String} The lowercase string with hyphens added before each letter that was uppercase in the source string.
+
+@body
+    can.hyphenate('helloWorld'); //-> Returns: 'hello-world'
 */
 //
 /**
@@ -785,7 +894,6 @@ function(s) for the success or failure state of both asynchronous and synchronou
     can.sub("foo {bar}", {bar: "far"}) //-> "foo far"
 */
 //
-
 /**
 @function can.underscore
 @parent can.util
@@ -802,7 +910,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
     can.underscore("OneTwo") //-> "one_two"
     can.underscore("OneTwo threeFour") //-> "one_two three_four"
-*/ 
+*/
 //
 /**
 @function can.esc
@@ -835,58 +943,58 @@ Gets an object from a string.  It can also modify objects on the 'object path' b
     Foo = {Bar: {Zar: {"Ted"}}}
     can.getObject("Foo.Bar.Zar") //-> "Ted"
 */
-var a = function() {};
+//
 /**
  * @typedef {{}} can.NodeList NodeList
  * @inherits From-Your-Base-Library
- *  
- * A "NodeList" is __Library Specific__ implementation of 
+ *
+ * A "NodeList" is __Library Specific__ implementation of
  * an array of DOM elements. [can.$] returns a "NodeList"
  * and [can.Control::element] is a "NodeList".
- * 
- * The following details the "NodeList" object used 
+ *
+ * The following details the "NodeList" object used
  * by each library.
- * 
+ *
  * ## jQuery `jQuery( HTMLElement )`
- * 
+ *
  * A [http://api.jquery.com/jQuery/ jQuery-wrapped] list of elements.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
+ *
  * ## Zepto `Zepto( HTMLElement )`
- * 
+ *
  * A Zepto-wrapped list of elements.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
+ *
  * ## Dojo `new dojo.NodeList( HTMLElement )`
- * 
+ *
  * Dojo's [http://dojotoolkit.org/reference-guide/1.9/dojo/NodeList.html dojo.NodeList] constructor function.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
- * 
+ *
+ *
  * ## Mootools `$$( HTMLElement )`
- * 
+ *
  * The Mootools [Elements object](http://mootools.net/docs/core/Element/Element#Elements).
- * 
+ *
  *     nodeList.empty().appendText("Hello World")
- * 
+ *
  * ## YUI
- * 
+ *
  * YUI's [NodeList](http://yuilibrary.com/yui/docs/node/).
- * 
+ *
  *     nodeList.set('text',"Hello World")
  */
 //
 /**
  * @typedef {String} CSSSelectorString
- * 
+ *
  * A [http://www.w3.org/TR/CSS2/selector.html CSS Selector] in a string like: `"#content .title"`.
  */
 //
 /**
  * @typedef {String} HttpMethod
- * 
+ *
  * One of: `GET`, `POST`, `PUT`, or `DELETE`.
  */

@@ -1,16 +1,15 @@
-@typedef {{fn:function,inverse:function,hash:Object}} can.Mustache.helperOptions helperOptions
-@parent can.Mustache.types 
+@typedef {{fn:can.mustache.sectionRenderer,inverse:can.mustache.sectionRenderer,hash:Object}} can.mustache.helperOptions helperOptions
+@parent can.mustache.types 
 
-@description The options argument passed to a [can.Mustache.helper helper function].
+@description The options argument passed to a [can.mustache.helper helper function].
 
-@option {function(*)} [fn(context)] Provided if a 
-[can.Mustache.helpers.sectionHelper section helper] is called.  Call `fn` to
+@option {can.mustache.sectionRenderer} [fn] Provided if a 
+[can.mustache.helpers.sectionHelper section helper] is called.  Call `fn` to
 render the BLOCK with the specified `context`.
 
-
-@option {function(*)} [inverse(context)] Provided if a 
-[can.Mustache.helpers.sectionHelper section helper] is called 
-with [can.Mustache.helpers.else {{else}}].  Call `inverse` to
+@option {can.mustache.sectionRenderer} [inverse] Provided if a 
+[can.mustache.helpers.sectionHelper section helper] is called 
+with [can.mustache.helpers.else {{else}}].  Call `inverse` to
 render the INVERSE with the specified `context`.
 
 @option {Object.<String,*|String|Number>} hash An object containing all of the final 
@@ -24,19 +23,59 @@ arguments listed as `name=value` pairs for the helper.
 		position: "top"
 	}
 
-@option {Array} contexts An array containing the context lookup stack for the current helper.
+@option {*} context The current context the mustache helper is called within.
 
-	{{#section}}
-		{{#someObj}}
-			{{#panels}}
-				{{helper}}
-			{{/panels}}
-		{{/someObj}}
-	{{/section}}
+    
+    
+    var temp = can.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.mustache.registerHelper("helper", function(options){
+    
+      options.context === data.person //-> true
+      
+    })
+    
+    
+    temp(data);
+    
+    
 
-	options.contexts = [
-		<root_scope>,
-		<context_lookup>.section,
-		<context_lookup>.someObj,
-		panel
-	]
+@option {can.view.Scope} scope An object that represents the current context and all parent 
+contexts.  It can be used to look up [can.mustache.key key] values in the current scope.
+
+    var temp = can.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.mustache.registerHelper("helper", function(options){
+    
+      options.scope.attr("first")   //-> "Justin"
+      options.scope.attr("person")  //-> data.person
+      
+    })
+    
+    
+    temp(data);
+
+@option {can.view.Options} options An object that represents the local mustache helpers.  It can be used to look 
+up [can.mustache.key key] values
+
+    var temp = can.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.mustache.registerHelper("helper", function(options){
+    
+      options.options.attr("helpers.specialHelper")   //-> function(){ ... }
+      
+    })
+    
+    
+    temp(data, {
+      specialHelper: function(){ ... }
+    });

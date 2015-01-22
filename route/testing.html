@@ -7,13 +7,22 @@
 <p>This is a dummy page to use<br/> for testing route goodness</p>
 <script type='text/javascript' src='../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-	var configuration = {};
-	for(var key in window.parent.CONFIGURATION) {
-		if(window.parent.CONFIGURATION.hasOwnProperty(key)) {
-			configuration[key] = window.parent.CONFIGURATION[key];
+	var clone = function(obj){
+		
+		if(obj && typeof obj === "object") {
+			var cln = {};
+			for(var key in obj) {
+				if(obj.hasOwnProperty(key)) {
+					cln[key] = clone(obj[key]);
+				}
+			}
+			return cln;
+		} else {
+			return obj;
 		}
-	}
-	configuration.paths = configuration.paths || {};
+	};
+	
+	var configuration = clone(window.parent.CONFIGURATION||{});
 	// TODO pretty hacky. For some reason the original configuration object
 	// gets changed by Steal
 	configuration.shim = {
@@ -21,16 +30,29 @@
 			"exports": "jQuery"
 		}
 	};
-	configuration.root = configuration.root+"../../";
 
-	steal.config(configuration);
-	steal('can/route', function (route) {
-
-		// make sure it's after ready
-		setTimeout(function () {
-			window.parent.routeTestReady(route, window.location)
-		}, 30)
-	})
+	setTimeout(function(){
+		steal(function(){
+			
+			steal.config(configuration);
+			
+			setTimeout(function(){
+				
+				steal('can/route','can/compute', function (route) {
+					
+					if(route === undefined) {
+						debugger;
+					}
+					// make sure it's after ready
+					setTimeout(function () {
+						
+						window.parent.routeTestReady && 
+							window.parent.routeTestReady(route, window.location, window);
+					}, 10);
+				});
+			},10);
+		});
+	},20);
 </script>
 
 </body>

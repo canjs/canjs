@@ -1,0 +1,17 @@
+<div id="app"></div>
+<script src="../../lib/steal/steal.js"></script>
+<script>
+steal("can",function(){
+	
+  can.Component.extend({
+    tag: "todos-editor",
+    template: "<content/><input type='text'/>"
+  });
+
+  var template = can.view.mustache("Here is my "+
+                     "<todos-editor>todos-editor</todos-editor>")
+
+  $("#app").html( template() );
+    
+})
+</script>
