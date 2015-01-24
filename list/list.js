@@ -316,14 +316,14 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @codeend
 			 */
 			sort: function (input) {
-				var args,newVal,oldVal;
+				var aa,args,bb,i,len,newVal,oldVal;
 				var config = {
 					comparators: [],
 					order: 'ascending',
 					sortFunction: function(a, b) {
-						for (var i=0, len=config.comparators.length; i<len; i++) {
-							var aa = a.attr( config.comparators[i] );
-							var bb = b.attr( config.comparators[i] );
+						for (i=0; i<len; i++) {
+							aa = a.attr( config.comparators[i] );
+							bb = b.attr( config.comparators[i] );
 							
 							if (typeof aa === 'function') { aa = aa(); }
 							if (typeof bb === 'function') { bb = bb(); }
@@ -358,6 +358,8 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					default:
 						args = [];
 				}
+				
+				len = config.comparators.length;
 				
 				oldVal = this.slice();
 				newVal = Array.prototype.sort.apply(this, args);
