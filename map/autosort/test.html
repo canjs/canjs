@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.14.0.css"/>
 </head>
 <body>
-<h1 id="qunit-header">can.Map sort Test Suite</h1>
+<h1 id="qunit-header">can.Map autosort Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -22,7 +22,7 @@
     }
 
     QUnit.config.autostart = false;
-	steal("can/map/sort/sort_test.js", function() {
+	steal("can/map/autosort/autosort_test.js", function() {
 		can.dev.logLevel = 3;
         QUnit.start();
 	});
