@@ -9,7 +9,12 @@ var modules = require('./config_meta_modules'),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
 	config = path.join(__dirname,"..","package.json!npm");
 
-
+var canNormalize = function(name, depLoad, curName){
+	if( depLoad.address.indexOf("node_modules") >= 0 ) {
+		return name;
+	}
+	return "can/"+name;
+};
 
 var makeStandaloneAndStealUtil = function(lib){
 	var libUtilName = "util/"+lib+"/"+lib+".js";
@@ -120,35 +125,27 @@ module.exports = function(){
 					dest: function(moduleName, moduleData){
 						return path.join(__dirname,"..","dist",moduleData.name.toLowerCase()+".js");
 					},
-					normalize: function(name, depLoad, curName){
-						if( depLoad.address.indexOf("node_modules") >= 0 ) {
-							return name;
-						}
-						return "can/"+name;
-					},
+					normalize: canNormalize,
 					transpile: "global",
 					minify: false
 				},
 				"jquery-core +ignorelibs" : {
 					modules: [{type: "core"}].concat(['can']),
 					dest: path.join(__dirname,"..","dist/can.jquery.js"),
-					normalize: function(name, depLoad, curName){
-						if( depLoad.address.indexOf("node_modules") >= 0 ) {
-							return name;
-						}
-						return "can/"+name;
-					},
+					normalize: canNormalize,
 					minify: false
 				},
 				"jquery-core-dev +ignorelibs" : {
 					modules: [{type: "core"}],
 					dest: path.join(__dirname,"..","dist/can.jquery.dev.js"),
+					normalize: canNormalize,
 					keepDevelopmentCode: true,
 					minify: false
 				},
 				"jquery-core-min +ignorelibs": {
 					modules: [{type: "core"}],
 					dest: path.join(__dirname,"..","dist/can.jquery.min.js"),
+					normalize: canNormalize,
 					minify: true
 				},
 				"steal": {
