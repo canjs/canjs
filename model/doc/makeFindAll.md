@@ -26,7 +26,7 @@ Returns function that implements the external API of `findAll`.
 `makeFindAll` can be used to implement base models that perform special
 behavior. `makeFindAll` is passed a [can.Model.findAllData findAllData] function that retrieves raw
 data. It should return a function that when called, uses
-the findAllData function to get the raw data, convert them to model instances with
+the findAllData function to get the raw data and manually convert it to model instances with
 [can.Model.models models].
 
 ## Caching
