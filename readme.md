@@ -1,6 +1,4 @@
-# CanJS
-
-[![CanJS](http://bitovi.com/img/os-canjs-logo.png)](http://canjs.com/)
+## [![CanJS](http://bitovi.com/img/os-canjs-logo.png)](http://canjs.com/)
  
 [![Build Status](https://travis-ci.org/bitovi/canjs.png?branch=master)](https://travis-ci.org/bitovi/canjs)
 
