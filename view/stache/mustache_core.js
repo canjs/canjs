@@ -318,7 +318,16 @@ steal("can/util",
 				args.push(helperOptions);
 				// Call the helper.
 				return function () {
-					return helper.fn.apply(context, args) || '';
+					var realArgs = [];
+					can.each(args, function(val, i) {
+						if (i <= args.length) {
+							while (val.isComputed) {
+								val = val();
+							}
+							realArgs.push(val);
+						}
+					});
+					return helper.fn.apply(context, realArgs) || '';
 				};
 
 			}
