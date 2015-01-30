@@ -7,14 +7,11 @@
 		"email": "contact@bitovi.com",
 		"web": "http://bitovi.com/"
 	},
-	"homepage": "http://canjs.us/",
+	"homepage": "http://canjs.com/",
 	"repository": {
 		"type": "git",
 		"url": "git@github.com:bitovi/canjs.git",
 		"github": "https://github.com/bitovi/canjs"
-	},
-	"peerDependencies": {
-		"jquery": ">1.9.0"
 	},
 	"devDependencies": {
 		"bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#steal-tools",
@@ -34,6 +31,7 @@
 		"grunt-shell": "~0.5.0",
 		"grunt-simple-mocha": "^0.4.0",
 		"grunt-string-replace": "~0.2.2",
+		"jquery": "~1.11.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
 		"steal": "bitovi/steal#npm",
