@@ -1,6 +1,6 @@
 steal("can/component", "can/view/stache" ,"can/route", function () {
 	
-	module('can/component', {
+	QUnit.module('can/component', {
 		setup: function () {
 			can.remove(can.$("#qunit-test-area>*"));
 		}

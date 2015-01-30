@@ -4,6 +4,7 @@ steal('can/util',
 	'can/view/scanner.js',
 	'can/compute',
 	'can/view/render.js',
+	'can/view/bindings',
 	function (can) {
 
 		// # mustache.js
@@ -116,7 +117,7 @@ steal('can/util',
 		 * @add can.MustacheConstructor
 		 */
 		// Put Mustache on the `can` object.
-		can.Mustache = window.Mustache = Mustache;
+		can.Mustache = can.global.Mustache = Mustache;
 
 		/** 
 		 * @prototype

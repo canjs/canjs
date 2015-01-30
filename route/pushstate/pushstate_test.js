@@ -18,7 +18,7 @@ steal('can/route/pushstate', "can/test", function () {
 
 	if (window.history && history.pushState) {
 
-		module("can/route/pushstate", {
+		QUnit.module("can/route/pushstate", {
 			setup: function () {
 				can.route._teardown();
 				can.route.defaultBinding = "pushstate";
