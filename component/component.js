@@ -211,12 +211,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					};
 					componentScope.bind(prop, handlers[prop]);
 				});
-				// Teardown reverse bindings when the element is removed
-				can.bind.call(el, "removed", function () {
-					can.each(handlers, function (handler, prop) {
-						componentScope.unbind(prop, handlers[prop]);
-					});
-				});
 				// Setup the attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || hookupOptions.templateType !== "legacy") {
 					// Bind on the `attributes` event and update the scope.
@@ -253,6 +247,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					}
 				});
 
+				// Teardown reverse bindings when the element is removed
+				var tearDownBindings = function(){
+					can.each(handlers, function (handler, prop) {
+						componentScope.unbind(prop, handlers[prop]);
+					});
+				}
+
 				// ## `events` control
 
 				// Create a control to listen to events
@@ -260,6 +261,20 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// Pass the scope to the control so we can listen to it's changes from the controller.
 					scope: this.scope
 				});
+
+				// If control has a 'destroy' event, unbind the properties after its called #1415
+				if(this._control && this._control.destroy){
+					var oldDestroy = this._control.destroy;
+					this._control.destroy = function(){
+						oldDestroy.apply(this, arguments);
+						tearDownBindings();
+					}
+					this._control.on();
+				} else {
+					can.bind.call(el, "removed", function () {
+						tearDownBindings();
+					});
+				}
 
 				// ## Rendering
 
