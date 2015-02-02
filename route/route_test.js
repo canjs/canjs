@@ -692,6 +692,40 @@ steal("can/route", "can/test", function () {
 				},1);
 			});
 		});
+		
+		test("routes should deep clean", function() {
+			expect(2);
+			setupRouteTest(function (iframe, iCanRoute, loc) {
+				iCanRoute.ready();
+				var hash1 = can.route.url({
+					panelA: {
+						name: "fruit",
+						id: 15,
+						show: true
+					}
+				});
+				var hash2 = can.route.url({
+					panelA: {
+						name: "fruit",
+						id: 20,
+						read: false
+					}
+				});
+
+
+				loc.hash = hash1;
+
+				loc.hash = hash2;
+
+				setTimeout(function() {
+					equal(iCanRoute.attr("panelA.id"), 20, "id should change");
+					equal(iCanRoute.attr("panelA.show"), undefined, "show should be removed");
+					
+					teardownRouteTest();
+				}, 30);
+
+			});
+		});
 	}
 
 	test("escaping periods", function () {
