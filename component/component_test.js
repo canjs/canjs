@@ -1364,5 +1364,5 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		can.remove(can.$("#qunit-test-area>*"));
 
 		ok(state.attr('product') == null, 'product was removed');
-	})
+	});
 });

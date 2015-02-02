@@ -252,7 +252,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					can.each(handlers, function (handler, prop) {
 						componentScope.unbind(prop, handlers[prop]);
 					});
-				}
+				};
 
 				// ## `events` control
 
@@ -268,7 +268,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					this._control.destroy = function(){
 						oldDestroy.apply(this, arguments);
 						tearDownBindings();
-					}
+					};
 					this._control.on();
 				} else {
 					can.bind.call(el, "removed", function () {
