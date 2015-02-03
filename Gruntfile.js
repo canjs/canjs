@@ -152,9 +152,9 @@ module.exports = function (grunt) {
 				jshintrc: true
 			},
 			lib: [
-				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
-				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-				'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
+				'src/component/**/*.js', 'src/compute/**/*.js', 'src/construct/**/*.js', 'src/control/**/*.js', 'src/list/**/*.js',
+				'src/map/**/*.js', 'src/model/**/*.js', 'src/observe/**/*.js','src/route/**/*.js', 'src/util/**/*.js','src/view/**/*.js',
+				'!src/util/dojo/dojo-1.8.1.js', '!src/util/dojo/nodelist-traverse.js'
 			]
 		},
 		jsbeautifier: {
@@ -210,10 +210,12 @@ module.exports = function (grunt) {
 				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
 			}
 		},
-		stealPluginify: require("./build/config_stealPluginify")(),
+		"steal-export": require("./build/config_stealPluginify")(),
 		meta: {
-			defaults: require("./build/config_meta_defaults")(),
-			modules: require("./build/config_meta_modules")
+			steal: {
+				modules: require("./build/config_meta_modules"),
+				"export-helpers": require("./build/config_meta_defaults")()
+			}
 		},
 		testee: {
 			options: {
@@ -263,15 +265,15 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['build']);
 	
-	grunt.registerTask('build', ['clean', 'stealPluginify', 'string-replace:version']);
+	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
-		'stealPluginify:amd',
-		'stealPluginify:amd-util-jquery',
-		'stealPluginify:amd-util-dojo',
-		'stealPluginify:amd-util-yui',
-		'stealPluginify:amd-util-zepto',
-		'stealPluginify:amd-util-mootools',
+		'steal-export:amd',
+		'steal-export:amd-util-jquery',
+		'steal-export:amd-util-dojo',
+		'steal-export:amd-util-yui',
+		'steal-export:amd-util-zepto',
+		'steal-export:amd-util-mootools',
 		'string-replace:version'
 	]);
 	
