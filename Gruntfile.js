@@ -220,7 +220,7 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				// On Travis we want less output
+				browsers: ['firefox'],
 				reporter: 'Dot'
 			},
 			steal: [
