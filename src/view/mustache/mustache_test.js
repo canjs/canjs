@@ -3871,18 +3871,22 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	// It seems like non-jQuery libraries do not recognize <col> elements in fragments which is what we
 	// are feature-detecting here. This works in Stache because it generates the DOM elements instead
 	// of creating a string from a document fragment.
-	if(can.$('<col>').length) {
-		test("<col> inside <table> renders correctly (#1013)", 1, function () {
-			var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
-			var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
-			var frag = can.mustache(template)({
-				columns: new can.List([
-					{ class: 'test' }
-				])
-			});
+	try {
+		if(can.$('<col>').length) {
+			test("<col> inside <table> renders correctly (#1013)", 1, function () {
+				var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+				var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+				var frag = can.mustache(template)({
+					columns: new can.List([
+						{ class: 'test' }
+					])
+				});
 
-			equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
-		});
+				equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+			});
+		}
+	} catch(e) {
+		// DOJO throws an error
 	}
 
 	test('getHelper returns null when no helper found', function() {

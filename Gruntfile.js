@@ -114,6 +114,7 @@ module.exports = function (grunt) {
 		},
 		// Removes the dist folder
 		clean: {
+			test: ['test/pluginified/latest.js'],
 			build: ['dist/'],
 			"cjs-build": ['component/','compute/','construct','control/','event/','list/','map/','model/','observe/','route/','util/','view/']
 		},
@@ -220,7 +221,7 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				browsers: ['firefox'],
+				browsers: [ 'firefox' ],
 				reporter: 'Dot'
 			},
 			steal: [
@@ -229,7 +230,7 @@ module.exports = function (grunt) {
 				'!test/performance-loading.html',
 				'!test/index.html'
 			],
-			amd: [ 'test/amd/*.html', '!test/amd/dojo.html' ],
+			amd: [ 'test/amd/*.html' ],
 			compatibility: [ 'test/compatibility/*.html' ],
 			dev: [ 'test/dev/*.html' ],
 			dist: [ 'test/dist/*.html' ],

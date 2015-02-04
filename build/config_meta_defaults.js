@@ -1,12 +1,19 @@
 var reverseNormalize = function(name, load, baseName, baseLoad){
+	if(name === 'mootools/mootools' || name === 'yui/yui' || name === 'zepto/zepto') {
+		return name.split('/')[0];
+	}
 
-	if(load.address.indexOf("node_modules") >=0) {
+	if(load.address.indexOf("node_modules") >= 0 ||
+			load.address.indexOf("bower_components") >= 0 ||
+			load.address.indexOf("lib/") >= 0) {
 		return name.replace(/@.*/,"");
 	}
-		
+
+
 	if(name === "util/library") {
 		return "can/util/library";
 	}
+
 	if(name === "dojo" || name === "dojo/dojo") {
 		return "dojo/main";
 	}
@@ -14,6 +21,7 @@ var reverseNormalize = function(name, load, baseName, baseLoad){
 	if(name === "can") {
 		return name;
 	}
+
 	var parts = name.split("/");
 	if(parts.length > 1) {
 		parts.splice(parts.length-2,1);

@@ -85,13 +85,11 @@ module.exports = function(){
 	return {
 		"tests": {
 			system: {
-				main: ["can/construct/construct_test"]
-				/*
-				modules.filter(function(mod){
+				main: modules.filter(function(mod){
 					return mod.hasTest !== false;
 				}).map(function(mod){
 					return mod.moduleName+"_test";
-				})*/,
+				}),
 				config: config
 			},
 			options : {
