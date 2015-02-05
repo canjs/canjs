@@ -2,7 +2,7 @@
 var path = require('path');
 
 module.exports = function (grunt) {
-	
+
 	var _ = grunt.util._;
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
@@ -231,7 +231,7 @@ module.exports = function (grunt) {
 				'!test/index.html'
 			],
 			amd: [ 'test/amd/*.html' ],
-			compatibility: [ 'test/compatibility/*.html' ],
+			// compatibility: [ 'test/compatibility/*.html' ],
 			dev: [ 'test/dev/*.html' ],
 			dist: [ 'test/dist/*.html' ],
 			individuals: [
@@ -244,12 +244,12 @@ module.exports = function (grunt) {
 		require('./build/config_meta_modules').forEach(function(mod){
 			browser[mod.moduleName.replace("can/","./")] = mod.moduleName.replace("can/","./dist/cjs/");
 		});
-		
+
 		var cloned = _.clone(pkg, true);
 		cloned.browser = browser;
 		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -265,7 +265,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('testee');
 
 	grunt.registerTask('default', ['build']);
-	
+
 	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
@@ -277,7 +277,7 @@ module.exports = function (grunt) {
 		'steal-export:amd-util-mootools',
 		'string-replace:version'
 	]);
-	
+
 	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);

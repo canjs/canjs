@@ -38,7 +38,7 @@
     "rimraf": "2.1",
     "steal": "0.6.0-pre.0",
     "steal-qunit": "0.0.2",
-    "steal-tools": "git://github.com/bitovi/steal-tools.git#output-modules",
+    "steal-tools": "^0.6.0-pre.3",
     "testee": "^0.1.3",
     "zombie": "~2.0.8"
   },
@@ -75,10 +75,21 @@
         "format": "global",
         "exports": "jQuery"
       },
-      "dojo/dojo": {"format": "global"},
-      "yui/yui": {"format": "global", "scriptEval": true},
-      "mootools/mootools": {"format": "global", "scriptEval": true},
-      "zepto/zepto": {"format": "global", "exports": "Zepto"}
+      "dojo/dojo": {
+        "format": "global"
+      },
+      "yui/yui": {
+        "format": "global",
+        "scriptEval": true
+      },
+      "mootools/mootools": {
+        "format": "global",
+        "scriptEval": true
+      },
+      "zepto/zepto": {
+        "format": "global",
+        "exports": "Zepto"
+      }
     },
     "ext": {
       "ejs": "can/view/ejs/system",
