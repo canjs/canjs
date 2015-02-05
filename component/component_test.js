@@ -1338,4 +1338,31 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		can.trigger(Test, 'something');
 	});
+
+	test('removing bound scope properties on destroy #1415', function(){
+		var state = new can.Map({
+			product: {
+				id: 1,
+				name: "Tom"
+			}
+		});
+
+		can.Component.extend({
+			tag: 'destroyable-component',
+			events: {
+				destroy: function(){
+					this.scope.attr('product', null);
+				}
+			}
+		});
+
+		var frag = can.stache('<destroyable-component product="{product}"></destroyable-component>')(state);
+
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-test-area"),frag);
+
+		can.remove(can.$("#qunit-test-area>*"));
+
+		ok(state.attr('product') == null, 'product was removed');
+	});
 });
