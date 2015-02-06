@@ -299,7 +299,8 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 		Multiselect = Value.extend({
 			init: function () {
 				this.delimiter = ";";
-				this.set();
+				// Call `set` after this thread so the rest of the element can finish rendering.
+				setTimeout(can.proxy(this.set, this), 1);
 			},
 			// Since this control extends Value (above), the set method will be called when the value compute changes (and on init).
 			set: function () {
