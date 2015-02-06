@@ -282,6 +282,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			color: "red"
 		});
 
+		stop();
 		var frag = template(map);
 
 		var ta = document.getElementById("qunit-test-area");
@@ -290,31 +291,35 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var inputs = ta.getElementsByTagName("select"),
 			options = inputs[0].getElementsByTagName('option');
 
-		equal(inputs[0].value, 'red', "default value set");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function() {
+			equal(inputs[0].value, 'red', "default value set");
 
-		map.attr("color", "green");
-		equal(inputs[0].value, 'green', "alternate value set");
+			map.attr("color", "green");
+			equal(inputs[0].value, 'green', "alternate value set");
 
-		options[0].selected = true;
+			options[0].selected = true;
 
-		equal(map.attr("color"), "green", "not yet updated from input");
-		can.trigger(inputs[0], "change");
-		equal(map.attr("color"), "red;green", "updated from input");
+			equal(map.attr("color"), "green", "not yet updated from input");
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "red;green", "updated from input");
 
-		map.removeAttr("color");
-		equal(inputs[0].value, '', "attribute removed from map");
+			map.removeAttr("color");
+			equal(inputs[0].value, '', "attribute removed from map");
 
-		options[1].selected = true;
-		can.trigger(inputs[0], "change");
-		equal(map.attr("color"), "green", "updated from input");
+			options[1].selected = true;
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "green", "updated from input");
 
-		map.attr("color", "red;green");
+			map.attr("color", "red;green");
 
-		ok(options[0].selected, 'red option selected from map');
-		ok(options[1].selected, 'green option selected from map');
-		ok(!options[2].selected, 'ultraviolet option NOT selected from map');
+			ok(options[0].selected, 'red option selected from map');
+			ok(options[1].selected, 'green option selected from map');
+			ok(!options[2].selected, 'ultraviolet option NOT selected from map');
 
-		can.remove(can.$(inputs));
+			can.remove(can.$(inputs));
+			start();
+		}, 1);
 	});
 
 	test("can-value select multiple with values cross bound to an array", function () {
@@ -327,6 +332,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var map = new can.Map({});
 
+		stop();
 		var frag = template(map);
 
 		var ta = document.getElementById("qunit-test-area");
@@ -335,34 +341,39 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var select = ta.getElementsByTagName("select")[0],
 			options = select.getElementsByTagName('option');
 
-		// Test updating the DOM changes observable values
-		options[0].selected = true;
-		can.trigger(select, "change");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			// Test updating the DOM changes observable values
+			options[0].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["red"], "A can.List property is set even if none existed");
+			deepEqual(map.attr("colors")
+				.attr(), ["red"], "A can.List property is set even if none existed");
 
-		options[1].selected = true;
-		can.trigger(select, "change");
+			options[1].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["red", "green"], "Adds items to the list");
+			deepEqual(map.attr("colors")
+				.attr(), ["red", "green"], "Adds items to the list");
 
-		options[0].selected = false;
-		can.trigger(select, "change");
+			options[0].selected = false;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["green"], "Removes items from the list");
+			deepEqual(map.attr("colors")
+				.attr(), ["green"], "Removes items from the list");
 
-		// Test changing observable values changes the DOM
+			// Test changing observable values changes the DOM
 
-		map.attr("colors")
-			.push("ultraviolet");
-		options[0].selected = false;
-		options[1].selected = true;
-		options[2].selected = true;
+			map.attr("colors")
+				.push("ultraviolet");
+			options[0].selected = false;
+			options[1].selected = true;
+			options[2].selected = true;
 
-		can.remove(can.$(select));
+			can.remove(can.$(select));
+
+			start();
+		}, 1);
 	});
 
 	test("can-value multiple select with a can.List", function () {
@@ -376,6 +387,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var list = new can.List();
 
+		stop();
 		var frag = template({
 			colors: list
 		});
@@ -386,31 +398,34 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var select = ta.getElementsByTagName("select")[0],
 			options = select.getElementsByTagName('option');
 
-		// Test updating the DOM changes observable values
-		options[0].selected = true;
-		can.trigger(select, "change");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			// Test updating the DOM changes observable values
+			options[0].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["red"], "A can.List property is set even if none existed");
+			deepEqual(list.attr(), ["red"], "A can.List property is set even if none existed");
 
-		options[1].selected = true;
-		can.trigger(select, "change");
+			options[1].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["red", "green"], "Adds items to the list");
+			deepEqual(list.attr(), ["red", "green"], "Adds items to the list");
 
-		options[0].selected = false;
-		can.trigger(select, "change");
+			options[0].selected = false;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["green"], "Removes items from the list");
+			deepEqual(list.attr(), ["green"], "Removes items from the list");
 
-		// Test changing observable values changes the DOM
+			// Test changing observable values changes the DOM
 
-		list.push("ultraviolet");
-		options[0].selected = false;
-		options[1].selected = true;
-		options[2].selected = true;
+			list.push("ultraviolet");
+			options[0].selected = false;
+			options[1].selected = true;
+			options[2].selected = true;
 
-		can.remove(can.$(select));
-
+			can.remove(can.$(select));
+			start();
+		}, 1);
 	});
 
 	test("can-value contenteditable", function () {
