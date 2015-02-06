@@ -23,7 +23,7 @@ var makeStandaloneAndStealUtil = function(lib){
 			config: config,
 			main: coreModules,
 			paths: {
-				"util/util": "src/"+libUtilName
+				"util/util": ""+libUtilName
 			}
 		},
 		options : {
@@ -186,7 +186,7 @@ module.exports = function(){
 						
 						name = moduleName.replace("can/","")+".js";
 						
-						return path.join(__dirname,"..",name);
+						return path.join(__dirname,"..", "dist", "cjs", name);
 					},
 					format: "cjs",
 					ignore: function(modelName, load){
@@ -210,7 +210,7 @@ module.exports = function(){
 					"util/util" : "util/library"
 				},
 				paths: {
-					"util/library": "src/util/jquery/jquery.js"
+					"util/library": "util/jquery/jquery.js"
 				}
 			},
 			options : {

@@ -115,8 +115,7 @@ module.exports = function (grunt) {
 		// Removes the dist folder
 		clean: {
 			test: ['test/pluginified/latest.js'],
-			build: ['dist/'],
-			"cjs-build": ['component/','compute/','construct','control/','event/','list/','map/','model/','observe/','route/','util/','view/']
+			build: ['dist/']
 		},
 		'string-replace': {
 			version: {
@@ -153,9 +152,9 @@ module.exports = function (grunt) {
 				jshintrc: true
 			},
 			lib: [
-				'src/component/**/*.js', 'src/compute/**/*.js', 'src/construct/**/*.js', 'src/control/**/*.js', 'src/list/**/*.js',
-				'src/map/**/*.js', 'src/model/**/*.js', 'src/observe/**/*.js','src/route/**/*.js', 'src/util/**/*.js','src/view/**/*.js',
-				'!src/util/dojo/dojo-1.8.1.js', '!src/util/dojo/nodelist-traverse.js'
+				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
+				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
+				'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
 			]
 		},
 		jsbeautifier: {
@@ -231,12 +230,10 @@ module.exports = function (grunt) {
 				'!test/index.html'
 			],
 			amd: [ 'test/amd/*.html' ],
-			// compatibility: [ 'test/compatibility/*.html' ],
+			compatibility: [ 'test/compatibility/*.html' ],
 			dev: [ 'test/dev/*.html' ],
 			dist: [ 'test/dist/*.html' ],
-			individuals: [
-				'src/**/test.html'
-			]
+			individuals: [ '**/test.html', '!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});
 	grunt.registerTask('browserify-package', function(){
