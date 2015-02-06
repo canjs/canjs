@@ -575,4 +575,37 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 
+	test("can-value select multiple applies initial value, when options rendered from array (#1414)", function () {
+		var template = can.view.mustache(
+			"<select can-value='colors' multiple>" +
+			"{{#each allColors}}<option value='{{value}}'>{{label}}</option>{{/each}}" +
+			"</select>");
+
+		var map = new can.Map({
+			colors: ["red", "green"],
+			allColors: [
+				{ value: "red", label: "Red"},
+				{ value: "green", label: "Green"},
+				{ value: "blue", label: "Blue"}
+			]
+		});
+
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+
+		var select = ta.getElementsByTagName("select")[0],
+			options = select.getElementsByTagName("option");
+
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			ok(options[0].selected, "red should be set initially");
+			ok(options[1].selected, "green should be set initially");
+			ok(!options[2].selected, "blue should not be set initially");
+			start();
+		}, 1);
+
+	});
 });
