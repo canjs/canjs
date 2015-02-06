@@ -37,35 +37,35 @@ steal("can/compute", "can/test", "can/map", function () {
 			start();
 		}, 50);
 	});
-	// test('inner computes values are not bound to', function () {
-	// 	var num = can.compute(1),
-	// 		numBind = num._computeInstance.bind,
-	// 		numUnbind = num._computeInstance.unbind;
-	// 	var bindCount = 0;
-	// 	num._computeInstance.bind = function () {
-	// 		bindCount++;
-	// 		return numBind.apply(this, arguments);
-	// 	};
-	// 	num._computeInstance.unbind = function () {
-	// 		bindCount--;
-	// 		return numUnbind.apply(this, arguments);
-	// 	};
-	// 	var outer = can.compute(function () {
-	// 		var inner = can.compute(function () {
-	// 			return num() + 1;
-	// 		});
-	// 		return 2 * inner();
-	// 	});
+	test('inner computes values are not bound to', function () {
+		var num = new can.Compute(1),
+			numBind = num.bind,
+			numUnbind = num.unbind;
+		var bindCount = 0;
+		num.bind = function () {
+			bindCount++;
+			return numBind.apply(this, arguments);
+		};
+		num.unbind = function () {
+			bindCount--;
+			return numUnbind.apply(this, arguments);
+		};
+		var outer = new can.Compute(function () {
+			var inner = new can.Compute(function () {
+				return num.get() + 1;
+			});
+			return 2 * inner.get();
+		});
 
-	// 	var handler = function () {};
-	// 	outer.bind('change', handler);
-	// 	// We do a timeout because we temporarily bind on num so that we can use its cached value.
-	// 	stop();
-	// 	setTimeout(function () {
-	// 		equal(bindCount, 1, 'compute only bound to once');
-	// 		start();
-	// 	}, 50);
-	// });
+		var handler = function () {};
+		outer.bind('change', handler);
+		// We do a timeout because we temporarily bind on num so that we can use its cached value.
+		stop();
+		setTimeout(function () {
+			equal(bindCount, 1, 'compute only bound to once');
+			start();
+		}, 50);
+	});
 	test('can.compute.truthy', function () {
 		var result = 0;
 		var num = can.compute(3);

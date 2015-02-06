@@ -235,7 +235,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 	createAsyncAltUpdater = function(context, oldUpdater) {
 		return function() {
-			oldUpdater(context.get(), context.value);
+			oldUpdater(context._get(), context.value);
 		}
 	},
 
@@ -306,6 +306,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				// this._context = context.context || context;
 
 				this.updater = contextUpdater(this);
+				var oldUpdater = this.updater;
+				var self = this;
 				// can.simpleExtend(this, context.context || context);
 
 				this._set = context.set || this._set;
@@ -322,17 +324,15 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					if(fn.length === 0) {
 						data = setupComputeHandlers(this, fn, context);
 					} else if(fn.length === 1) {
-						var self = this;
 						data = setupComputeHandlers(this, function() {
 							//TODO: holding onto a reference...good/bad?
 							return fn.call(context, self.value);
 						}, context);
 					} else {
-						var oldUpdater = this.updater;
 						this.updater = asyncUpdater(this, oldUpdater);
 						data = setupComputeHandlers(this, function() {
-							var res = fn.call(context, this.value, function(newVal) {
-								oldUpdater(newVal, this.value);
+							var res = fn.call(context, self.value, function(newVal) {
+								oldUpdater(newVal, self.value);
 							});
 							// If undefined is returned, don't update the value.
 							return res !== undefined ? res : this.value;
@@ -342,8 +342,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					this.on = data.on;
 					this.off = data.off;
 				} else {
-					//TODO: This condition is wrong as it overrides this.updater for context objects, non-async
-					// this.updater = createAsyncAltUpdater(this, this.updater);
+					this.updater = createAsyncAltUpdater(this, oldUpdater);
 				}
 
 				this.on = context.on ? context.on : this.on;
@@ -499,6 +498,107 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			setTimeout(unbindComputes, 10);
 		}
 		computes.push(compute);
+	};
+
+	can.Compute.async = function(initialValue, asyncComputer, context){
+		return new can.Compute(initialValue, {
+			fn: asyncComputer,
+			context: context
+		});
+	};
+
+	can.Compute.read = function (parent, reads, options) {
+		options = options || {};
+		// `cur` is the current value.
+		var cur = parent,
+			type,
+			// `prev` is the object we are reading from.
+			prev,
+			// `foundObs` did we find an observable.
+			foundObs;
+		for (var i = 0, readLength = reads.length; i < readLength; i++) {
+			// Update what we are reading from.
+			prev = cur;
+			// Read from the compute. We can't read a property yet.
+			if (prev && prev.isComputed) {
+				if (options.foundObservable) {
+					options.foundObservable(prev, i);
+				}
+				prev = cur = prev instanceof can.Compute ? prev.get() : prev();
+			}
+			// Look to read a property from something.
+			if (isObserve(prev)) {
+				if (!foundObs && options.foundObservable) {
+					options.foundObservable(prev, i);
+				}
+				foundObs = 1;
+				// is it a method on the prototype?
+				if (typeof prev[reads[i]] === 'function' && prev.constructor.prototype[reads[i]] === prev[reads[i]]) {
+					// call that method
+					if (options.returnObserveMethods) {
+						cur = cur[reads[i]];
+					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+						cur = prev[reads[i]];
+					} else {
+						cur = prev[reads[i]].apply(prev, options.args || []);
+					}
+				} else {
+					// use attr to get that value
+					cur = cur.attr(reads[i]);
+				}
+			} else {
+				// just do the dot operator
+				cur = prev[reads[i]];
+			}
+			type = typeof cur;
+			// If it's a compute, get the compute's value
+			// unless we are at the end of the 
+			if (cur && cur.isComputed && (!options.isArgument && i < readLength - 1)) {
+				if (!foundObs && options.foundObservable) {
+					options.foundObservable(prev, i + 1);
+				}
+				cur = cur();
+			}
+			// If it's an anonymous function, execute as requested
+			else if (i < reads.length - 1 && type === 'function' && options.executeAnonymousFunctions && !(can.Construct && cur.prototype instanceof can.Construct)) {
+				cur = cur();
+			}
+			// if there are properties left to read, and we don't have an object, early exit
+			if (i < reads.length - 1 && (cur === null || type !== 'function' && type !== 'object')) {
+				if (options.earlyExit) {
+					options.earlyExit(prev, i, cur);
+				}
+				// return undefined so we know this isn't the right value
+				return {
+					value: undefined,
+					parent: prev
+				};
+			}
+		}
+		// handle an ending function
+		// unless it is a can.Construct-derived constructor
+		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct) && !(can.route && cur === can.route)) {
+			if (options.isArgument) {
+				if (!cur.isComputed && options.proxyMethods !== false) {
+					cur = can.proxy(cur, prev);
+				}
+			} else {
+				if (cur.isComputed && !foundObs && options.foundObservable) {
+					options.foundObservable(cur, i);
+				}
+				cur = cur.call(prev);
+			}
+		}
+		// if we don't have a value, exit early.
+		if (cur === undefined) {
+			if (options.earlyExit) {
+				options.earlyExit(prev, i - 1);
+			}
+		}
+		return {
+			value: cur,
+			parent: prev
+		};
 	};
 
 	return can.Compute;
