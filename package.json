@@ -101,30 +101,30 @@
         "can/util/util": "can/util/domless/domless"
       }
     },
-    "npmIgnore": {
-      "grunt-docco2": true,
-      "testee": true,
-      "zombie": true,
-      "bitovi-tools": true,
-      "steal": true,
-      "bower": true,
-      "steal-tools": true,
-      "connect": true,
-      "grunt": true,
-      "grunt-cli": true,
-      "grunt-contrib-clean": true,
-      "grunt-contrib-connect": true,
-      "grunt-contrib-jshint": true,
-      "grunt-contrib-uglify": true,
-      "grunt-jsbeautifier": true,
-      "grunt-plato": true,
-      "grunt-release-steps": true,
-      "grunt-shell": true,
-      "grunt-simple-mocha": true,
-      "grunt-string-replace": true,
-      "rimraf": true,
-      "lodash": true,
-      "browserify": true
-    }
+    "npmIgnore": [
+      "grunt-docco2",
+      "testee",
+      "zombie",
+      "bitovi-tools",
+      "steal",
+      "bower",
+      "steal-tools",
+      "connect",
+      "grunt",
+      "grunt-cli",
+      "grunt-contrib-clean",
+      "grunt-contrib-connect",
+      "grunt-contrib-jshint",
+      "grunt-contrib-uglify",
+      "grunt-jsbeautifier",
+      "grunt-plato",
+      "grunt-release-steps",
+      "grunt-shell",
+      "grunt-simple-mocha",
+      "grunt-string-replace",
+      "rimraf",
+      "lodash",
+      "browserify"
+    ]
   }
 }
