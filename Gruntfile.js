@@ -230,9 +230,9 @@ module.exports = function (grunt) {
 				'!test/index.html'
 			],
 			amd: [ 'test/amd/*.html' ],
-			compatibility: [ 'test/compatibility/*.html' ],
+			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
+			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
 			dev: [ 'test/dev/*.html' ],
-			dist: [ 'test/dist/*.html' ],
 			individuals: [ '**/test.html', '!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});

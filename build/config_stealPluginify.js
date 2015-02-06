@@ -46,13 +46,16 @@ var makeStandaloneAndStealUtil = function(lib){
 		}
 	};
 	configuration.outputs[lib+"-core +ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".js"),
+		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-dev +dev+ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".dev.js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".dev.js"),
+		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-min +min+ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".min.js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".min.js"),
+		normalize: canNormalize
 	};
 	return configuration;
 };
