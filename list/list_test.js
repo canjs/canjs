@@ -242,4 +242,42 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 	  deepEqual(result, ["a", "b"]);
 	});
 	
+	test("add event always returns an array as the value (#998)", function() {
+		var list = new can.List([]),
+			msg;
+		list.bind("add", function(ev, newElements, index) {
+			deepEqual(newElements, [4], msg);
+		});
+		msg = "works on push";
+		list.push(4);
+		list.pop();
+		msg = "works on attr()";
+		list.attr(0, 4);
+		list.pop();
+		msg = "works on replace()";
+		list.replace([4]);
+	});
+	
+	test("Setting with .attr() out of bounds of length triggers add event with leading undefineds", function() {
+		var list = new can.List([1]);
+		list.bind("add", function(ev, newElements, index) {
+			deepEqual(newElements, [undefined, undefined, 4],
+					  "Leading undefineds are included");
+			equal(index, 1, "Index takes into account the leading undefineds from a .attr()");
+		});
+		list.attr(3, 4);
+	});
+
+	test("No events should fire if removals happened on empty arrays", function() {
+		var list = new can.List([]),
+			msg;
+		list.bind("remove", function(ev, removed, index) {
+			ok(false, msg);
+		});
+		msg = "works on pop";
+		list.pop();
+		msg = "works on shift";
+		list.shift();
+		ok(true, "No events were fired.");
+	});
 });
