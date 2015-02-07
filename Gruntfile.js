@@ -237,11 +237,10 @@ module.exports = function (grunt) {
 		}
 	});
 	grunt.registerTask('browserify-package', function(){
-		var browser = {};
+		var browser = {"./can": "./dist/cjs/can"};
 		require('./build/config_meta_modules').forEach(function(mod){
-			browser[mod.moduleName.replace("can/","./")] = mod.moduleName.replace("can/","./dist/cjs/");
+			browser["./"+mod.moduleName] = "./dist/cjs/"+mod.moduleName;
 		});
-
 		var cloned = _.clone(pkg, true);
 		cloned.browser = browser;
 		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
@@ -263,7 +262,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['build']);
 
-	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version']);
+	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version', 'browserify-package']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'steal-export:amd',
