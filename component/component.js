@@ -96,7 +96,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, hookupOptions) {
 				// Setup values passed to component
-				var initalScopeData = {},
+				var initialScopeData = {},
 					component = this,
 					twoWayBindings = {},
 					// what scope property is currently updating
@@ -109,7 +109,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				// Add scope prototype properties marked with an "@" to the `initialScopeData` object
 				can.each(this.constructor.attributeScopeMappings, function (val, prop) {
-					initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
+					initialScopeData[prop] = el.getAttribute(can.hyphenate(val));
 				});
 				
 				// Get the value in the scope for each attribute
@@ -136,7 +136,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					} else {
 						// Legacy template types will crossbind "foo=bar"
 						if(hookupOptions.templateType !== "legacy") {
-							initalScopeData[name] = value;
+							initialScopeData[name] = value;
 							return;
 						}
 					}
@@ -158,7 +158,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					compute.bind("change", handler);
 
 					// Set the value to be added to the scope
-					initalScopeData[name] = compute();
+					initialScopeData[name] = compute();
 					
 					// We don't need to listen to the compute `change` if it doesn't have any dependencies
 					if (!compute.hasDependencies) {
@@ -175,23 +175,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				});
 				if (this.constructor.Map) {
 					// If `Map` property is set on the constructor use it to wrap the `initialScopeData`
-					componentScope = new this.constructor.Map(initalScopeData);
+					componentScope = new this.constructor.Map(initialScopeData);
 				} else if (this.scope instanceof can.Map) {
 					// If `this.scope` is instance of `can.Map` assign it to the `componentScope`
 					componentScope = this.scope;
 				} else if (can.isFunction(this.scope)) {
 					// If `this.scope` is a function, call the function and 
-					var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
+					var scopeResult = this.scope(initialScopeData, hookupOptions.scope, el);
 
 					if (scopeResult instanceof can.Map) {
 						// If the function returns a can.Map, use that as the scope
 						componentScope = scopeResult;
 					} else if (scopeResult.prototype instanceof can.Map) {
 						// If `scopeResult` is of a `can.Map` type, use it to wrap the `initialScopeData`
-						componentScope = new scopeResult(initalScopeData);
+						componentScope = new scopeResult(initialScopeData);
 					} else {
 						// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialScopeData`
-						componentScope = new(can.Map.extend(scopeResult))(initalScopeData);
+						componentScope = new(can.Map.extend(scopeResult))(initialScopeData);
 					}
 
 				}
@@ -223,7 +223,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					can.bind.call(el, "attributes", function (ev) {
 						// Convert attribute name from the `attribute-name` to the `attributeName` format.
 						var camelized = can.camelize(ev.attributeName);
-						if (!twoWayBindings[camelized]) {
+						if (!twoWayBindings[camelized] && !ignoreAttributesRegExp.test(camelized) ) {
 							// If there is a mapping for this attribute, update the `componentScope` attribute
 							componentScope.attr(camelized, el.getAttribute(ev.attributeName));
 						}
@@ -420,8 +420,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
 	// the scope object
-	if (window.$ && $.fn) {
-		$.fn.scope = function (attr) {
+	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
+	if (window.jQuery && jQuery.fn) {
+		jQuery.fn.scope = function (attr) {
 			// If `attr` is passed to the `scope` plugin return the value of that 
 			// attribute on the `scope` object, otherwise return the whole scope
 			if (attr) {

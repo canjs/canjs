@@ -13,11 +13,13 @@ that was passed to `bind`.
 `unbind(eventType, handler)` removes a listener
 attached with [can.Model.bind].
 
-   var handler = function(ev, createdTask){
+```
+var handler = function(ev, createdTask){
 
-   }
-   Task.bind("created", handler)
-   Task.unbind("created", handler)
+}
+Task.bind("created", handler)
+Task.unbind("created", handler)
+```
 
 You have to pass the same function to `unbind` that you
 passed to `bind`.

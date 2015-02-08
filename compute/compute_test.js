@@ -316,5 +316,46 @@ steal("can/compute", "can/test", "can/map", function () {
 		
 		async([]);
 	});
+
+	test("compute.read works with a Map wrapped in a compute", function() {
+		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
+		var reads = ["map", "first"];
+
+		var result = can.compute.read(parent, reads);
+		equal(result.value, "Justin", "The correct value is found.");
+	});
+
+	test("compute.read returns constructor functions instead of executing them (#1332)", function() {
+		var Todo = can.Map.extend({});
+		var parent = can.compute(new can.Map({map: { Test: Todo }}));
+		var reads = ["map", "Test"];
+
+		var result = can.compute.read(parent, reads);
+		equal(result.value, Todo, 'Got the same Todo');
+	});
+	
+	test("compute.set with different values", 4, function() {
+		var comp = can.compute("David");
+		var parent = {
+			name: "David",
+			comp: comp
+		};
+		var map = new can.Map({
+			name: "David"
+		});
+
+		map.bind('change', function(ev, attr, how, value) {
+			equal(value, "Brian", "Got change event on map");
+		});
+		
+		can.compute.set(parent, "name", "Matthew");
+		equal(parent.name, "Matthew", "Name set");
+
+		can.compute.set(parent, "comp", "Justin");
+		equal(comp(), "Justin", "Name updated");
+
+		can.compute.set(map, "name", "Brian");
+		equal(map.attr("name"), "Brian", "Name updated in map");
+	});
 	
 });

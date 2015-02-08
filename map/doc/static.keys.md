@@ -10,12 +10,11 @@
 @body
 `keys` iterates over an map to get an array of its keys.
 
-@codestart
-var people = new can.Map({
- a: 'Alice',
- b: 'Bob',
- e: 'Eve'
-});
 
-can.Map.keys(people); // ['a', 'b', 'e']
-@codeend
+    var people = new can.Map({
+        a: 'Alice',
+        b: 'Bob',
+        e: 'Eve'
+    });
+
+    can.Map.keys(people); // ['a', 'b', 'e']

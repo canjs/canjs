@@ -125,5 +125,24 @@ steal("can/view/parser", function(parser){
 			["done",[]]
 		]));
 	});
-	
+
+	test("supports single character attributes (#1132)", function(){
+		parser('<circle r="25"></circle>', makeChecks([
+			["start", ["circle", false]],
+			["attrStart", ["r"]],
+			["attrValue", ["25"]],
+			["attrEnd", ["r"]],
+			["end", ["circle", false]],
+			["close", ["circle"]],
+			["done", []]
+		]));
+	});
+
+	test('accept custom tag with colon ":" #1108', function(){
+		parser('<x:widget/>', makeChecks([
+			["start", ["x:widget",true]],
+			["end", ["x:widget", true]],
+			["done", []]
+		]));
+	});
 });

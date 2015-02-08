@@ -182,12 +182,14 @@ even outside of the control itself.
     // create the route
     can.route("#!content/:type")
 
-    // the route has changed
-    "{can.route} change": function(ev, attr, how, newVal, oldVal) {
-        if (attr === "type") {
-            // the route has a type
+    can.Control({
+        // the route has changed
+        "{can.route} change": function(ev, attr, how, newVal, oldVal) {
+            if (attr === "type") {
+                // the route has a type
+            }
         }
-    }
+    });
 
 ### Creating and binding routes with `can.Control.route`
 
@@ -197,18 +199,20 @@ to both create routes and bind to `can.route` at the same time. Instead of creat
 several routes to handle changes to __type__ and __id__, write something like this
 in a control:
 
-    // the route is empty
-    "route": function(data) {
+    can.Control({
+        // the route is empty
+        "route": function(data) {
 
-    },
-    // the route has a type
-    ":type route": function(data) {
+        },
+        // the route has a type
+        ":type route": function(data) {
 
-    }, 
-    // the route has a type and id
-    ":type/:id route": function(data) {
-
-    }
+        }, 
+        // the route has a type and id
+        ":type/:id route": function(data) {
+    
+        }
+    });
 
 
 ### Getting more specific with the `can.Map.delegate` plugin
@@ -221,14 +225,16 @@ listen to change, set, add, and remove on `can.route`.
 If you wanted to, say, show a list of recipes when  __type__ was set to recipe
 and show a specific recipe when __id__ was set, you could do something like:
 
-    "{can.route} type=recipe set": 
-            function( ev, prop, how, newVal, oldVal ) {
-        // show list of recipes
-    },
-    "recipe/:id": function(data) {
-        // show a single recipe
-    }
+    can.Control({
+        "{can.route} type=recipe set": 
+                function( ev, prop, how, newVal, oldVal ) {
+            // show list of recipes
+        },
+        "recipe/:id": function(data) {
+            // show a single recipe
+        }
+    });
 
 If we didn't only listen to when recipe is set, then every time we chose to
 show a single recipe, we would create and show the list of recipes again which 
-would not very efficient.
+would not be very efficient.

@@ -6,9 +6,9 @@
 Validates whether the values of the specified attributes are available in a particular
 array.
 
- init : function(){
-   this.validateInclusionOf(["salutation"],["Mr.","Mrs.","Dr."])
- }
+	init : function(){
+		this.validateInclusionOf(["salutation"],["Mr.","Mrs.","Dr."])
+	}
 
 @param {Array<String>|String} attrNames Attribute name(s) to to validate
 @param {Array} inArray Array of options to test for inclusion

@@ -225,5 +225,21 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 		
 		equal(list.length, 2);
 	});
+
+	test('No Add Events if List Splice adds the same items that it is removing. (#1277, #1399)', function() {
+		var list = new can.List(["a","b"]);
+
+		list.bind('add', function() {
+			ok(false, 'Add callback should not be called.');
+		});
+
+		list.bind('remove', function() {
+			ok(false, 'Remove callback should not be called.');
+		});
+
+	  var result = list.splice(0, 2, "a", "b");
+
+	  deepEqual(result, ["a", "b"]);
+	});
 	
 });

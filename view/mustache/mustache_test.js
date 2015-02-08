@@ -420,6 +420,20 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		deepEqual(div.innerHTML, "foo");
 	});
 
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.Mustache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.mustache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
+	});
+
 	test("Partials and observes", function () {
 		var template;
 		var div = document.createElement('div');
@@ -2904,6 +2918,37 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		}
 	});
 
+	test("Rendering indicies of an array with @index + offset (#1078)", function () {
+		var template = can.view.mustache("<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		})
+			.childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i+5 + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
+	test("Passing indices into helpers as values", function () {
+		var template = can.view.mustache("<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>");
+		var list = [0, 1, 2, 3];
+
+		var lis = template({
+			list: list
+		}, {
+			test: function(index) {
+				return ""+index;
+			}
+		}).childNodes[0].getElementsByTagName('li');
+
+		for (var i = 0; i < lis.length; i++) {
+			equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+		}
+	});
+
 	test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 		var list = new can.List(['a', 'b', 'c']);
 		var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
@@ -3578,6 +3623,23 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 			can.dev.warn = oldlog;
 		});
+
+		test("Logging: Don't show a warning on helpers (#1257)", 1, function () {
+			var oldlog = can.dev.warn;
+
+			can.dev.warn = function (text) {
+				ok(false, 'Log warning not called for helper');
+			}
+
+			can.mustache.registerHelper('myHelper', function() {
+				return 'Hi!';
+			});
+
+			var frag = can.view.mustache('<li>{{myHelper}}</li>')({});
+			equal(frag.textContent, 'Hi!');
+
+			can.dev.warn = oldlog;
+		});
 	}
 	//!steal-remove-end
 
@@ -3804,5 +3866,36 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var frag = can.mustache(tmpl)({ noData: true });
 		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
+	});
+
+	// It seems like non-jQuery libraries do not recognize <col> elements in fragments which is what we
+	// are feature-detecting here. This works in Stache because it generates the DOM elements instead
+	// of creating a string from a document fragment.
+	if(can.$('<col>').length) {
+		test("<col> inside <table> renders correctly (#1013)", 1, function () {
+			var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+			var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+			var frag = can.mustache(template)({
+				columns: new can.List([
+					{ class: 'test' }
+				])
+			});
+
+			equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+		});
+	}
+
+	test('getHelper returns null when no helper found', function() {
+		ok( !Mustache.getHelper('__dummyHelper') );
+	});
+
+	test("getHelper 'options' parameter should be optional", function(){
+		Mustache.registerHelper('myHelper', function() {
+			return true;
+		});
+
+		ok( Mustache.getHelper('myHelper').name === 'myHelper' );
+		ok( typeof Mustache.getHelper('myHelper').fn === 'function' );
+		ok( Mustache.getHelper('myHelper').fn() );
 	});
 });

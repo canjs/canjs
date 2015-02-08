@@ -232,7 +232,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					onchanged = function(ev){
 						if (compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 							// Get the new value
+							var reads = can.__clearReading();
 							var newValue = func.call(context);
+							can.__setReading(reads);
 							// Call the updater with old and new values
 							updater(newValue, oldValue, ev.batchNum);
 							oldValue = newValue;
@@ -643,7 +645,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				if (options.foundObservable) {
 					options.foundObservable(prev, i);
 				}
-				prev = prev();
+				prev = cur = prev();
 			}
 			// Look to read a property from something.
 			if (isObserve(prev)) {
@@ -656,7 +658,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// call that method
 					if (options.returnObserveMethods) {
 						cur = cur[reads[i]];
-					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+					} else if ( (reads[i] === 'constructor' && prev instanceof can.Construct) ||
+						(prev[reads[i]].prototype instanceof can.Construct)) {
 						cur = prev[reads[i]];
 					} else {
 						cur = prev[reads[i]].apply(prev, options.args || []);
@@ -667,7 +670,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				}
 			} else {
 				// just do the dot operator
-				cur = prev[reads[i]];
+				if(cur == null) {
+					cur = undefined;
+				} else {
+					cur = prev[reads[i]];
+				}
+				
 			}
 			type = typeof cur;
 			// If it's a compute, get the compute's value
@@ -696,7 +704,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 		// handle an ending function
 		// unless it is a can.Construct-derived constructor
-		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct)) {
+		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct) && !(can.route && cur === can.route)) {
 			if (options.isArgument) {
 				if (!cur.isComputed && options.proxyMethods !== false) {
 					cur = can.proxy(cur, prev);
@@ -718,6 +726,20 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			value: cur,
 			parent: prev
 		};
+	};
+
+	can.compute.set = function(parent, key, value) {
+		if(isObserve(parent)) {
+			return parent.attr(key, value);
+		}
+
+		if(parent[key] && parent[key].isComputed) {
+			return parent[key](value);
+		}
+
+		if(typeof parent === 'object') {
+			parent[key] = value;
+		}
 	};
 
 	return can.compute;

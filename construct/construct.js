@@ -8,6 +8,33 @@ steal('can/util/string', function (can) {
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
 	var initializing = 0;
+	var getDescriptor = function(newProps, name) {
+			var descriptor = Object.getOwnPropertyDescriptor(newProps, name);
+			if(descriptor && (descriptor.get || descriptor.set)) {
+				return descriptor;
+			}
+			return null;
+		},
+		inheritGetterSetter = function(newProps, oldProps, addTo) {
+			addTo = addTo || newProps;
+			var descriptor;
+
+			for (var name in newProps) {
+				if( (descriptor = getDescriptor(newProps, name)) ) {
+					this._defineProperty(addTo, oldProps, name, descriptor);
+				} else {
+					can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+				}
+			}
+		},
+		simpleInherit = function (newProps, oldProps, addTo) {
+			addTo = addTo || newProps;
+
+			for (var name in newProps) {
+				can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+			}
+		};
+
 	/**
 	 * @add can.Construct
 	 */
@@ -97,9 +124,14 @@ steal('can/util/string', function (can) {
 		// `newProps` - New properties to add.
 		// `oldProps` - Where the old properties might be (used with `super`).
 		// `addTo` - What we are adding to.
-		_inherit: function (newProps, oldProps, addTo) {
-			can.extend(addTo || newProps, newProps || {});
+		_inherit: Object.getOwnPropertyDescriptor ? inheritGetterSetter : simpleInherit,
+
+		// Adds a `defineProperty` with the given name and descriptor
+		// Will only ever be called if ES5 is supported
+		_defineProperty: function(what, oldProps, propName, descriptor) {
+			Object.defineProperty(what, propName, descriptor);
 		},
+
 		// used for overwriting a single property.
 		// this should be used for patching other objects
 		// the super plugin overwrites this
@@ -269,7 +301,11 @@ steal('can/util/string', function (can) {
 		 * @return {function} The constructor function.
 		 *
 		 */
-		extend: function (fullName, klass, proto) {
+		extend: function (name, staticProperties, instanceProperties) {
+			var fullName = name,
+				klass = staticProperties,
+				proto = instanceProperties;
+
 			// Figure out what was passed and normalize it.
 			if (typeof fullName !== 'string') {
 				proto = klass;
@@ -283,7 +319,7 @@ steal('can/util/string', function (can) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				parts, current, _fullName, _shortName, name, shortName, namespace, prototype;
+				parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
 			// Instantiate a base class (but only create the instance,
 			// don't run the init constructor).
 			prototype = this.instance();
@@ -300,7 +336,7 @@ steal('can/util/string', function (can) {
 						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
 					}
 					//!steal-remove-end
-					
+
 					return this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
 					arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) :
@@ -309,9 +345,9 @@ steal('can/util/string', function (can) {
 				}
 			}
 			// Copy old stuff onto class (can probably be merged w/ inherit)
-			for (name in _super_class) {
-				if (_super_class.hasOwnProperty(name)) {
-					Constructor[name] = _super_class[name];
+			for (propName in _super_class) {
+				if (_super_class.hasOwnProperty(propName)) {
+					Constructor[propName] = _super_class[propName];
 				}
 			}
 			// Copy new static properties on class.

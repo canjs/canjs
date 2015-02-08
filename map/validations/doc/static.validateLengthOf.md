@@ -5,9 +5,9 @@
 
 Validates that the specified attributes' lengths are in the given range.
 
- init : function(){
-   this.validateInclusionOf(["suffix"],3,5)
- }
+	init : function(){
+		this.validateLengthOf(["suffix"],3,5)
+	}
 
 @param {Array<String>|String} attrNames Attribute name(s) to to validate
 @param {Number} min Minimum length (inclusive)

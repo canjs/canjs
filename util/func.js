@@ -637,8 +637,17 @@ otherwise a Deferred that resolves to __deferred__.
 `can.when(deferred)` provides the ability to execute callback function(s)
 typically based on a Deferred or AJAX object.
 
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+for [jQuery.when](http://api.jquery.com/jquery.when/);
+
     can.when( can.ajax('api/farm/animals') ).then(function(animals){
         alert(animals); //-> alerts the ajax response
+    });
+
+You can also use this to wait for the results of multiple deferreds.
+    
+    can.when( can.ajax('api/farm/animals'), can.ajax('api/farm/beacons') ).then(function(animals, beacons){
+        // perform some logic using both the animals and beacons data
     });
 
 You can also use this for regular JavaScript objects.
@@ -841,12 +850,36 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.capitalize
 @parent can.util
 @description Capitalize the first letter of a string.
-
-    can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
-
 @signature `can.capitalize(str)`
 @param {String} str The string to capitalize.
 @return {String} The string with the first letter capitalized.
+
+@body
+    can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
+*/
+//
+/**
+@function can.camelize
+@parent can.util
+@description Capitalize the first letter after each hyphen in a string.
+@signature `can.camelize(str)`
+@param {String} str The string to camelize.
+@return {String} The string with the first letter after each hyphen capitalized.
+
+@body
+    can.camelize('hello-world'); //-> Returns: 'helloWorld'
+*/
+//
+/**
+@function can.hyphenate
+@parent can.util
+@description Adds a hyphen before each uppercase letter and converts the entire string to lower case.
+@signature `can.hyphenate(str)`
+@param {String} str The string to hyphenate.
+@return {String} The lowercase string with hyphens added before each letter that was uppercase in the source string.
+
+@body
+    can.hyphenate('helloWorld'); //-> Returns: 'hello-world'
 */
 //
 /**

@@ -160,11 +160,11 @@ steal('can/util', 'can/map', function (can) {
 							errors[attr].push(res);
 						}
 					});
-				}, validations = this.constructor.validations,
+				}, validations = this.constructor.validations || {},
 				isTest = attrs && attrs.length === 1 && arguments.length === 2;
 			// go through each attribute or validation and
 			// add any errors
-			can.each(attrs || validations || {}, function (funcs, attr) {
+			can.each(attrs || validations, function (funcs, attr) {
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr === 'number') {

@@ -8,6 +8,7 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global Company: true */
+/* global My: true */
 steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
 	module('can/model', {
 		setup: function () {}
@@ -1049,6 +1050,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			};
 		});
 		stop();
+
 		MyModel.bind('created', function (ev, created) {
 			start();
 			deepEqual(created.attr(), {
@@ -1528,5 +1530,188 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		can.trigger(map, 'destroyed');
 		list.replace([map2]);
 		can.trigger(map2, 'destroyed');
+	});
+
+	test("a model defined with a fullName has findAll working (#1034)", function(){
+		var List = can.List.extend();
+
+		can.Model.extend("My.Model",{
+			List: List
+		},{});
+
+		equal(List.Map, My.Model, "list's Map points to My.Model");
+
+	});
+
+	test("providing parseModels works", function(){
+		var MyModel = can.Model.extend({
+			parseModel: "modelData"
+		},{});
+
+		var data = MyModel.parseModel({modelData: {id: 1}});
+		equal(data.id,1, "correctly used parseModel");
+	});
+
+	test('#1089 - resource definition - inheritance', function() {
+		can.fixture('GET /things/{id}', function() {
+			return { id: 0, name: 'foo' };
+		});
+
+		var Base = can.Model.extend();
+		var Thing = Base.extend({
+			resource: '/things'
+		}, {});
+
+		stop();
+		Thing.findOne({ id: 0 }, function(thing) {
+			equal(thing.name, 'foo', 'found model in inherited model');
+			start();
+		}, function(e, msg) {
+			ok(false, msg);
+			start();
+		});
+	});
+
+	test('#1089 - resource definition - CRUD overrides', function() {
+		can.fixture('GET /foos/{id}', function() {
+			return { id: 0, name: 'foo' };
+		});
+
+		can.fixture('POST /foos', function() {
+			return { id: 1 };
+		});
+
+		can.fixture('PUT /foos/{id}', function() {
+			return { id: 1, updated: true };
+		});
+
+		can.fixture('GET /bars', function() {
+			return [{}];
+		});
+
+		var Thing = can.Model.extend({
+			resource: '/foos',
+			findAll: 'GET /bars',
+			update: {
+				url: '/foos/{id}',
+				type: 'PUT'
+			},
+			create: function() {
+				return can.ajax({
+					url: '/foos',
+					type: 'POST'
+				});
+			}
+		}, {});
+
+		var alldfd = Thing.findAll(),
+		onedfd = Thing.findOne({ id: 0 }),
+		postdfd = new Thing().save();
+
+		stop();
+		can.when(alldfd, onedfd, postdfd)
+		.then(function(things, thing, newthing) {
+			equal(things.length, 1, 'findAll override called');
+			equal(thing.name, 'foo', 'resource findOne called');
+			equal(newthing.id, 1, 'post override called with function');
+
+			newthing.save(function(res) {
+				ok(res.updated, 'put override called with object');
+				start();
+			});
+		})
+		.fail(function() {
+			ok(false, 'override request failed');
+			start();
+		});
+	});
+
+	test("findAll not called if List constructor argument is deferred (#1074)", function() {
+		var count = 0;
+		var Foo = can.Model.extend({
+			findAll: function() {
+				count++;
+				return can.Deferred();
+			}
+		}, {});
+		new Foo.List(Foo.findAll());
+		equal(count, 1, "findAll called only once.");
+	});
+
+	test("static methods do not get overwritten with resource property set (#1309)", function() {
+		var Base = can.Model.extend({
+			resource: '/path',
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findAll'
+				});
+				return dfd;
+			}
+		}, {});
+
+		stop();
+
+		Base.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			deepEqual(model.attr(), {
+				text: 'Base findAll'
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+	});
+
+	test("parseModels does not get overwritten if already implemented in base class (#1246, #1272)", 5, function() {
+		var Base = can.Model.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findOne'
+				});
+				return dfd;
+			},
+			parseModel: function(attributes) {
+				deepEqual(attributes, {
+					text: 'Base findOne'
+				}, 'parseModel called');
+				attributes.parsed = true;
+				return attributes;
+			}
+		}, {});
+		var Extended = Base.extend({}, {});
+
+		stop();
+
+		Extended.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			ok(model instanceof Extended);
+			deepEqual(model.attr(), {
+				text: 'Base findOne',
+				parsed: true
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+
+		var Third = Extended.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					nested: {
+						text: 'Third findOne'
+					}
+				});
+				return dfd;
+			},
+
+			parseModel: 'nested'
+		}, {});
+
+		Third.findOne({}).then(function(model) {
+			equal(model.attr('text'), 'Third findOne', 'correct findOne used');
+		});
 	});
 });
