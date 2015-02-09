@@ -2,7 +2,7 @@
 /*global Router*/
 steal("can/control/route",  "can/test",function () {
 
-	module("can/control/route", {
+	QUnit.module("can/control/route", {
 		setup: function () {
 			stop();
 			can.route.routes = {};

@@ -2,7 +2,7 @@
 steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",function(){
 	
 	
-	module("can/view/stache",{
+	QUnit.module("can/view/stache",{
 		setup: function(){
 			can.view.ext = '.stache';
 			this.animals = ['sloth', 'bear', 'monkey'];
@@ -3619,15 +3619,18 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 	});
 
 	test("<col> inside <table> renders correctly (#1013)", 1, function() {
-		var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
 		var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
 		var frag = can.stache(template)({
 			columns: new can.List([
-				{ class: 'test' }
+				{ 'class': 'test' }
 			])
 		});
 
-		equal(frag.childNodes[0].outerHTML, expected, '<col> nodes added in proper position');
+		// Only node in IE is <table>, text in other browsers
+		var index = frag.childNodes.length === 2 ? 1 : 0;
+		var tagName = frag.childNodes[index].childNodes[0].childNodes[0].tagName.toLowerCase();
+
+		equal(tagName, 'col', '<col> nodes added in proper position');
 	});
 
 	test('splicing negative indices works (#1038)', function() {
@@ -3642,4 +3645,15 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		list.splice(-1);
 		equal(frag.childNodes.length, children - 1, 'Child node removed');
 	});
+	
+	test('stache can accept an intermediate (#1387)', function(){
+		var template = "<div class='{{className}}'>{{message}}</div>";
+		var intermediate = can.view.parser(template,{}, true);
+		
+		var renderer = can.stache(intermediate);
+		var frag = renderer({className: "foo", message: "bar"});
+		equal(frag.childNodes[0].className, "foo", "correct class name");
+		equal(frag.childNodes[0].innerHTML, "bar", "correct innerHTMl");
+	});
+	
 });

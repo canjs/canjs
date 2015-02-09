@@ -2,7 +2,7 @@
 	"sites": {
 		"docs": {
 			"glob": {
-				"ignore": ["guides/*.md", "{node_modules,bower_components}/**/*"]
+				"ignore": ["guides/*.md", "{node_modules,bower_components}/**/*", "lib/**/*"]
 			},
 			"parent" : "canjs"
 		},
