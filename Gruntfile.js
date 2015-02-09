@@ -232,7 +232,7 @@ module.exports = function (grunt) {
 			amd: [ 'test/amd/*.html' ],
 			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
 			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
-			dev: [ 'test/dev/*.html' ],
+			dev: [ 'test/dev/*.html', '!test/dev/dojo.html' ],
 			individuals: [ '**/test.html', '!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});
@@ -274,7 +274,8 @@ module.exports = function (grunt) {
 		'string-replace:version'
 	]);
 
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha',
+		'testee:steal', 'testee:amd', 'testee:dist', 'testee:compatibility', 'testee:dev' ]);
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
