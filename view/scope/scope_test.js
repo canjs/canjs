@@ -1,5 +1,5 @@
 steal("can/view/scope", "can/route", "can/test", function () {
-	module('can/view/scope');
+	QUnit.module('can/view/scope');
 	/*	test("basics",function(){
 
 	 var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 
@@ -365,6 +365,50 @@ steal("can/view/scope", "can/route", "can/test", function () {
 		compute("B Value");
 		equal(current.attr("value"), "B Value", "updated");
 		
+	});
+	
+	test('reading properties on undefined (#1314)', function(){
+		
+		var scope = new can.view.Scope(undefined);
+		
+		var compute = scope.compute("property");
+		
+		equal(compute(), undefined, "got back undefined");
+		
+	});
+	
+
+	test("Scope attributes can be set (#1297, #1304)", function(){
+		var comp = can.compute('Test');
+		var map = new can.Map({
+			other: {
+				name: "Justin"
+			}
+		});
+		var scope = new can.view.Scope({
+			name: "Matthew",
+			other: {
+				person: {
+					name: "David"
+				},
+				comp: comp
+			}
+		});
+
+		scope.attr("name", "Wilbur");
+		equal(scope.attr("name"), "Wilbur", "Value updated");
+
+		scope.attr("other.person.name", "Dave");
+		equal(scope.attr("other.person.name"), "Dave", "Value updated");
+
+		scope.attr("other.comp", "Changed");
+		equal(comp(), "Changed", "Compute updated");
+
+		scope = new can.view.Scope(map);
+		scope.attr("other.name", "Brian");
+
+		equal(scope.attr("other.name"), "Brian", "Value updated");
+		equal(map.attr("other.name"), "Brian", "Name update in map");
 	});
 
 });

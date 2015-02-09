@@ -2,7 +2,7 @@
 steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",function(){
 	
 	
-	module("can/view/stache",{
+	QUnit.module("can/view/stache",{
 		setup: function(){
 			can.view.ext = '.stache';
 			this.animals = ['sloth', 'bear', 'monkey'];
@@ -445,6 +445,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		deepEqual(div1.innerHTML, "foo");
 		deepEqual(div2.innerHTML, "foo");
+	});
+
+	test("String literals passed to helper should work (#1143)", 1, function() {
+		can.stache.registerHelper("concatStrings", function(arg1, arg2) {
+			return arg1 + arg2;
+		});
+
+		// Test with '=' because the regexp to find arguments uses that char
+		// to delimit a keyword-arg name from its value.
+		can.view.stache('testStringArgs', '{{concatStrings "==" "word"}}');
+		var div = document.createElement('div');
+		div.appendChild(can.view('testStringArgs', {}));
+
+		equal(div.innerHTML, '==word');
 	});
 
 	test("No arguments passed to helper with list", function () {
@@ -3544,4 +3558,102 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[1].className, 'bar test2 kuh');
 		equal(frag.childNodes[2].className, 'baz test3 boom');
 	});
+
+	test("single character attributes work (#1132)", 1, function() {
+		var template = '<svg width="50" height="50">' +
+			'<circle r="25" cx="25" cy="25"></circle>' +
+			'</svg>';
+		var frag = can.stache(template)({});
+
+		
+		equal(frag.childNodes[0].childNodes[0].getAttribute("r"), "25");
+	});
+	
+	test("single property read does not infinately loop (#1155)",function(){
+		stop();
+		
+		var map = new can.Map({state: false});
+		var current = false;
+		var source = can.compute(1)
+		var number = can.compute(function(){
+
+			map.attr("state", current = !current);
+
+			return source();
+		});
+		number.bind("change",function(){});
+		
+		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
+		
+		template({
+			map: map
+		});
+		source(2);
+		map.attr("state", current = !current);
+		ok(true,"no error at this point");
+		start();
+		
+	});
+	
+	test("methods become observable (#1164)", function(){
+		
+		var TeamModel = can.Map.extend({
+
+			shortName : function() {
+				return (this.attr('nickname') && this.attr('nickname').length <= 8) ? this.attr('nickname') : this.attr('abbreviation');
+			}
+		});
+
+		var team = new TeamModel({
+			nickname : 'Arsenal London',
+			abbreviation : 'ARS'
+		});
+
+		var template = can.stache('<span>{{team.shortName}}</span>');
+		var frag = template({
+			team : team
+		});
+
+		equal(frag.childNodes[0].innerHTML, "ARS", "got value");
+
+	});
+
+	test("<col> inside <table> renders correctly (#1013)", 1, function() {
+		var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+		var frag = can.stache(template)({
+			columns: new can.List([
+				{ 'class': 'test' }
+			])
+		});
+
+		// Only node in IE is <table>, text in other browsers
+		var index = frag.childNodes.length === 2 ? 1 : 0;
+		var tagName = frag.childNodes[index].childNodes[0].childNodes[0].tagName.toLowerCase();
+
+		equal(tagName, 'col', '<col> nodes added in proper position');
+	});
+
+	test('splicing negative indices works (#1038)', function() {
+		// http://jsfiddle.net/ZrWVQ/2/
+		var template = '{{#each list}}<p>{{.}}</p>{{/each}}';
+		var list = new can.List(['a', 'b', 'c', 'd']);
+		var frag = can.stache(template)({
+			list: list
+		});
+		var children = frag.childNodes.length;
+
+		list.splice(-1);
+		equal(frag.childNodes.length, children - 1, 'Child node removed');
+	});
+	
+	test('stache can accept an intermediate (#1387)', function(){
+		var template = "<div class='{{className}}'>{{message}}</div>";
+		var intermediate = can.view.parser(template,{}, true);
+		
+		var renderer = can.stache(intermediate);
+		var frag = renderer({className: "foo", message: "bar"});
+		equal(frag.childNodes[0].className, "foo", "correct class name");
+		equal(frag.childNodes[0].innerHTML, "bar", "correct innerHTMl");
+	});
+	
 });

@@ -213,6 +213,32 @@ For long comments, use:
     /* myFn
      * Four score and seven—pause—minutes ago...
      */
+    
+### Documentation
+
+The documentation for the different modules should be clear and consistent. Explanations should be concise, and examples of code should be included where appropriate. In terms of format and style, here are a few suggestions to keep the documentation consistent within a module and across all parts of CanJS:
+
+#### When referencing another part of CanJS, make sure to link the first reference in a section.
+
+For instance, when documenting `can.Component.scope`, the first reference to `can.Component`, `can.route`, or any other part of CanJS should be enclosed in square brackets, so that links to those docs are generated. Linking each occurrence isn't necessary, but all the other references should at least be surrounded by "grave accents" or tickmarks.
+
+	This is an example of linking to [can.Component] from another page. If you reference
+	`can.Component` later in this section, you don't have to link to it. All subsequent
+	references to `can.Component` have grave accents or tickmarks surrounding them.
+	
+	### New Section
+	
+	Another section referencing [can.Component] starts this trend again...
+
+**Note**: The one exception to this is on the module page. When documenting `can.Component` itself, only use the tickmarks, as linking to `can.Component` would just link to the page you are currently modifying.
+
+#### Enclose string literals in tickmarks as they should appear in code
+
+If the developer should type `"@"`, use the tickmarks to make this clear. This avoids the ambiguity of whether the apostrophes or quote marks are part of the text that should be typed. This also applies to any references to variable/key names (e.g., `scope` versus "scope" or **scope**).
+
+#### Include a clear description of your example code
+
+For a developer that's new to CanJS, the description of the example is likely more important than the example itself. Make sure there is a clear description of what the code should accomplish. This includes using all the techniques above. A good description should answer the question, "could you explain what this example code is doing?"
   
 ## List of heroes
 

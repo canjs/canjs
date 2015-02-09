@@ -18,7 +18,7 @@ steal("can/util", function(){
 				return str.substr(1, str.length -2);
 			} else if(str === "undefined") {
 				return undefined;
-			} else if(window.JSON) {
+			} else if(can.global.JSON) {
 				return JSON.parse(str);
 			} else {
 				return eval("("+str+")");

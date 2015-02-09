@@ -3,11 +3,11 @@
 @signature `observe.errors(attrs, newVal)`
 @param {Array<String>|String} [attrs] An optional list of attributes to get errors for:
 
- task.errors(['dueDate','name']);
+	task.errors(['dueDate','name']);
 
 Or it can take a single attr name like:
 
- task.errors('dueDate')
+	task.errors('dueDate')
 
 @param {Object} [newVal] An optional new value to test setting
 on the observe.  If `newVal` is provided,
@@ -15,7 +15,7 @@ it returns the errors on the observe if `newVal` was set.
 
 @return {Object<String, Array<String>>} an object of attributeName : [errors] like:
 
- task.errors() // -> {dueDate: ["can't be empty"]}
+ 	task.errors() // -> {dueDate: ["can't be empty"]}
 
 or `null` if there are no errors.
 
@@ -30,13 +30,13 @@ of errors by attribute.
 To use validations, it's suggested you use the
 observe/validations plugin.
 
- Task = can.Map.extend({
-   init : function(){
-     this.validatePresenceOf("dueDate")
-   }
- },{});
+	Task = can.Map.extend({
+		init : function(){
+			this.validatePresenceOf("dueDate")
+		}
+	},{});
 
- var task = new Task(),
-     errors = task.errors()
+	var task = new Task(),
+		 errors = task.errors()
 
- errors.dueDate[0] //-> "can't be empty"
+	errors.dueDate[0] //-> "can't be empty"

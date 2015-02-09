@@ -1,6 +1,6 @@
 /*global Person,Task*/
 steal("can/map/validations", "can/compute", "can/test", function () {
-	module('can/map/validations', {
+	QUnit.module('can/map/validations', {
 		setup: function () {
 			can.Map.extend('Person', {}, {});
 		}
@@ -342,5 +342,9 @@ steal("can/map/validations", "can/compute", "can/test", function () {
 		});
 		task.attr('age', 'bad');
 		task.attr('age', 'still bad');
+	});
+	test('Validate undefined property', function () {
+		new can.Map().errors( "foo" );
+		ok(true, "does not throw" );
 	});
 });

@@ -1,6 +1,6 @@
 steal("can/util", "can/list", "can/test", "can/compute", function(){
 	
-	module('can/list');
+	QUnit.module('can/list');
 	
 	test('list attr changes length', function () {
 		var l = new can.List([
@@ -224,6 +224,14 @@ steal("can/util", "can/list", "can/test", "can/compute", function(){
 		list.removeAttr("foo");
 		
 		equal(list.length, 2);
+	});
+
+	test('Dispatch correct arguments with can.List:splice if inserting and removing the same elements.(#1277)', function(){
+		var list = new can.List(["a","b"]);
+		list.bind("remove", function(ev, items, index){
+		  equal(items.length, 2);
+		});
+		list.splice(0,2,"a","b");
 	});
 	
 });

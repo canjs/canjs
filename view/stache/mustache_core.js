@@ -31,7 +31,7 @@ steal("can/util",
 	// ## Helpers
 	
 	// Breaks up the name and arguments of a mustache expression.
-	var argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+	var argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 		// Identifies the type of an argument or hash in a mustache expression.
 		literalNumberStringBooleanRegExp = /^(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(?:(.+?)=(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(.+))))$/,
 		// Finds mustache tags and their surrounding whitespace.
@@ -248,7 +248,14 @@ steal("can/util",
 						compute = computeData.compute;
 						
 					initialValue = computeData.initialValue;
-					if(computeData.reads && computeData.reads.length === 1 && computeData.root instanceof can.Map) {
+					// Optimize for a simple attribute read.
+					if(computeData.reads &&
+						// a single property read
+						computeData.reads.length === 1 &&
+						// on a map
+						computeData.root instanceof can.Map &&
+						// that isn't calling a function
+						!can.isFunction(computeData.root[computeData.reads[0]]) ) {
 						compute = can.compute(computeData.root, computeData.reads[0]);
 					}
 					
@@ -534,7 +541,7 @@ steal("can/util",
 		 */
 		splitModeFromExpression: function(expression, state){
 			expression = can.trim(expression);
-			var mode = expression[0];
+			var mode = expression.charAt(0);
 	
 			if( "#/{&^>!".indexOf(mode) >= 0 ) {
 				expression = can.trim( expression.substr(1) );

@@ -1,5 +1,6 @@
 steal("can/construct/super", function () {
-	module('can/construct/super');
+
+	QUnit.module('can/construct/super');
 	test('prototype super', function () {
 		var A = can.Construct({
 			init: function (arg) {
@@ -53,22 +54,5 @@ steal("can/construct/super", function () {
 		Child.findAll({});
 		start();
 	});
-	/* Not sure I want to fix this yet.
-	 test("Super in derived when parent doesn't have init", function(){
-	 can.Construct("Parent",{
-	 });
 
-	 Parent("Derived",{
-	 init : function(){
-	 this._super();
-	 }
-	 });
-
-	 try {
-	 new Derived();
-	 ok(true, "can call super in init safely")
-	 } catch (e) {
-	 ok(false, "Failed to call super in init with error: " + e)
-	 }
-	 })*/
 });

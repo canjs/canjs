@@ -1,4 +1,6 @@
 steal('jquery', 'can/util', 'can/control', function ($, can) {
+	$ = $ || window.$;
+
 	//used to determine if a control instance is one of controllers
 	//controllers can be strings or classes
 	var i, isAControllerOf = function (instance, controllers) {

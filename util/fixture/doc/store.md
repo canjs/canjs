@@ -6,13 +6,10 @@
 
 @param {Number} count The number of items to create.
 
-@param {Function} make A function that will return the JavaScript object. The
-make function is called back with the id and the current array of items.
+@param {Function} make A function that will return the JavaScript object. The make function is called back with the id and the current array of items.
 
-@param {Function} [filter] A function used to further filter results. Used for to simulate
-server params like searchText or startDate.
-The function should return true if the item passes the filter,
-false otherwise. For example:
+@param {Function} [filter] A function used to further filter results. Used for to simulate server params like searchText or startDate.
+The function should return true if the item passes the filter, false otherwise. For example:
 
 
     function(item, settings){
@@ -21,6 +18,14 @@ false otherwise. For example:
             return regex.test(item.name);
         }
     }
+
+@return {can.fixture.Store} A generator object providing fixture functions for *findAll*, *findOne*, *create*, *update* and *destroy*.
+
+@signature `can.fixture.store(items[, comparator])`
+
+@param {Array} items An array of JavaScript objects that represent data from response.
+
+@param {Object} [comparator] An object that specifies how to compare properties. Check [can.Object.same] for more details.
 
 @return {can.fixture.Store} A generator object providing fixture functions for *findAll*, *findOne*, *create*, *update* and *destroy*.
 
@@ -73,7 +78,43 @@ These fixtures, combined with a [can.Model] that connects to these services like
 ... allows you to simulate requests for all of owner 5's todos like:
 
     Todo.findAll({ownerId: 5}, function(todos){
-    
+
     })
 
+## Example with items and comparator
 
+The following creates a store with three items:
+
+    can.fixture({
+	    "/team": can.fixture.store([
+            {id: 1, name: "Veljko", age: 30, city: "Zagreb"},
+            {id: 2, name: "Nikica", age: 29, city: "Travnik"},
+            {id: 3, name: "Mihael", age: 29, city: "Zagreb"}
+        ], {name: "i", city: null}).findAll
+    });
+
+    var Team = can.Model.extend({
+        findAll : 'GET /team'
+		// other endpoints ...
+    }, {});
+
+Comparator defines following rules: `name` attribute is compared case-insensitively, `city` attribute is ignored while other attributes are compared by default.
+
+    Team.findAll({}, function(data) {
+        // all three objects are returned
+    });
+
+    Team.findAll({age: 29}, function(data) {
+        // [{id: 2, name: "Nikica", age: 29, city: "Travnik"},
+        //  {id: 3, name: "Mihael", age: 29, city: "Zagreb"}]
+    });
+
+    Team.findAll({age: 29, name: 'veljko'}, function(data) {
+        // name check is case-insensitive!
+        // [{id: 1, name: "Veljko", age: 30, city: "Zagreb"}]
+    });
+
+    Team.findAll({age: 30, city: 'Chicago'}, function(data) {
+        // city attribute is ignored
+        // [{id: 1, name: "Veljko", age: 30, city: "Zagreb"}]
+    });

@@ -26,17 +26,19 @@ that instance will be merged with the item's data and inserted in the list.
 
 For example
 
-   Task = can.Model.extend({},{})
+```
+Task = can.Model.extend({},{})
 
-   var t1 = new Task({id: 1, name: "dishes"});
+var t1 = new Task({id: 1, name: "dishes"});
 
-   // Binding on a model puts it in the store.
-   t1.bind("change", function(){})
+// Binding on a model puts it in the store.
+t1.bind("change", function(){})
 
-   var tasks = Task.models([
-     {id: 1, name : "dishes", complete : false},
-     {id: 2, name: "laundry", complete: true}
-   ])
+var tasks = Task.models([
+ {id: 1, name : "dishes", complete : false},
+ {id: 2, name: "laundry", complete: true}
+])
 
-   t1 === tasks.attr(0) //-> true
-   t1.attr("complete")  //-> false
+t1 === tasks.attr(0) //-> true
+t1.attr("complete")  //-> false
+```

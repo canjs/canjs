@@ -65,7 +65,7 @@
     <page-count page='paginate.page' count='paginate.pageCount'></page-count>
   </app>
 </script>
-<script src="../../lib/steal/steal.js"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'> 
 steal("can/util", "can/component", "can/map/setter", "can/util/fixture",
   "can/model", function (can) {
@@ -84,12 +84,12 @@ var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++"
 	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}];
 	          
 can.fixture("/websites", function (request) {
-  var start = request.data.offset || 0
-  end = start + (request.data.limit || websites.length);
+  var start = request.data.offset || 0,
+      end = start + (request.data.limit || websites.length);
   return {
     count: websites.length,
     data: websites.slice(start, end)
-  }
+  };
 });
 
 var Paginate = can.Map.extend({
@@ -100,14 +100,14 @@ var Paginate = can.Map.extend({
     this.attr('offset', this.offset + this.limit);
   },
   prev: function () {
-    this.attr('offset', this.offset - this.limit)
+    this.attr('offset', this.offset - this.limit);
   },
   setOffset: function (newOffset) {
     return newOffset < 0 ?
       0 :
       Math.min(newOffset, !isNaN(this.count - 1) ?
         this.count - 1 :
-        Infinity)
+        Infinity);
   },
   setCount: function (newCount, success, error) {
     return newCount < 0 ? 0 : newCount;
@@ -123,7 +123,7 @@ var Paginate = can.Map.extend({
     if (newVal === undefined) {
       return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
     } else {
-      this.attr('offset', (parseInt(newVal) - 1) * this.attr('limit'));
+      this.attr('offset', (parseInt(newVal, 10) - 1) * this.attr('limit'));
     }
   },
   pageCount: function () {
@@ -148,7 +148,7 @@ can.Component.extend({
           self = this;
 
         websitesDeferred.then(function (websites) {
-          self.attr('paginate.count', websites.count)
+          self.attr('paginate.count', websites.count);
         });
 
         return websitesDeferred;
@@ -166,7 +166,7 @@ can.Component.extend({
   template: "<table><tbody><content></content></tbody></table>",
   events: {
     init: function () {
-      this.update()
+      this.update();
     },
     "{scope} deferreddata": "update",
     update: function () {
@@ -175,12 +175,12 @@ can.Component.extend({
         el = this.element;
       if (can.isDeferred(deferred)) {
         this.scope.attr("waiting", true);
-        this.element.find('tbody').css('opacity', 0.5)
+        this.element.find('tbody').css('opacity', 0.5);
         deferred.then(function (items) {
-          scope.attr('items').replace(items)
+          scope.attr('items').replace(items);
         });
       } else {
-        scope.attr('items').attr(deferred, true)
+        scope.attr('items').attr(deferred, true);
       }
     },
     "{items} change": function () {
@@ -197,12 +197,12 @@ can.Component.extend({
       'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" can-click="paginate.prev">Prev</a>' + 
     '<a href="javascript://"' + 
       'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" can-click="paginate.next">Next</a>'
-})
+});
 
 can.Component.extend({
   tag: "page-count",
   template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
-})
+});
 
 $("#out").html(can.view("appMustache", {}))
 

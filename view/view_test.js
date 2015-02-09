@@ -31,7 +31,7 @@ steal("can/view/callbacks",
 		});
 	};
 	
-	module('can/view', {
+	QUnit.module('can/view', {
 		setup: function () {
 			copy(can.view.callbacks._attributes);
 			copy(can.view.callbacks._regExpAttributes);
@@ -814,5 +814,23 @@ steal("can/view/callbacks",
 			pass = false;
 		}
 		ok(pass);
+	});
+	test('renderer passed with Deferred gets executed (#1139)', 1, function() {
+		// See http://jsfiddle.net/a35ZH/1/
+		var template = can.view.mustache('<h1>Value is {{value}}!</h1>');
+		var def = can.Deferred();
+
+		stop();
+
+		setTimeout(function() {
+			def.resolve({
+				value: 'Test'
+			});
+		}, 50);
+
+		can.view(template, def, function (frag) {
+			equal(frag.childNodes[0].innerHTML, 'Value is Test!');
+			start();
+		});
 	});
 });

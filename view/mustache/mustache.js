@@ -4,6 +4,7 @@ steal('can/util',
 	'can/view/scanner.js',
 	'can/compute',
 	'can/view/render.js',
+	'can/view/bindings',
 	function (can) {
 
 		// # mustache.js
@@ -34,7 +35,7 @@ steal('can/util',
 			ARG_NAMES = SCOPE + ",options",
 
 			// matches arguments inside a {{ }}
-			argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+			argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 
 			// matches a literal number, string, null or regexp
 			literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,
@@ -116,7 +117,7 @@ steal('can/util',
 		 * @add can.MustacheConstructor
 		 */
 		// Put Mustache on the `can` object.
-		can.Mustache = window.Mustache = Mustache;
+		can.Mustache = can.global.Mustache = Mustache;
 
 		/** 
 		 * @prototype
@@ -1545,10 +1546,11 @@ steal('can/util',
 			can.compute.temporarilyBind(compute);
 
 			// computeData gives us an initial value
-			var initialValue = computeData.initialValue;
+			var initialValue = computeData.initialValue,
+				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (initialValue === undefined && !isHelper) {
+			if (initialValue === undefined && !isHelper && !helperObj) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 			}
 			//!steal-remove-end
@@ -1655,7 +1657,10 @@ steal('can/util',
 		 * Returns a helper given the name.
 		 */
 		Mustache.getHelper = function (name, options) {
-			var helper = options.attr("helpers." + name);
+			var helper;
+			if (options) {
+				helper = options.attr("helpers." + name);
+			}
 			return helper ? {
 				fn: helper
 			} : this._helpers[name];
