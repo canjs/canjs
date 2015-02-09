@@ -1,5 +1,17 @@
 /*global __dirname */
 var path = require('path');
+var getTestTasks = function() {
+	var suite = process.env.TEST_SUITE;
+	var testTasks = ['testee'];
+	if(suite === 'loaders') {
+		testTasks = ['testee:steal', 'testee:amd'];
+	} else if(suite === 'dists') {
+		testTasks = [ 'testee:dist', 'testee:dev', 'testee:compatibility' ];
+	} else if(suite === 'individuals') {
+		testTasks = ['testee:individuals'];
+	}
+	return testTasks;
+};
 
 module.exports = function (grunt) {
 
@@ -220,7 +232,6 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				browsers: [ 'firefox' ],
 				reporter: 'Dot'
 			},
 			steal: [
@@ -232,8 +243,9 @@ module.exports = function (grunt) {
 			amd: [ 'test/amd/*.html' ],
 			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
 			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
-			dev: [ 'test/dev/*.html' ],
-			individuals: [ '**/test.html', '!bower_components/**/test.html', '!node_modules/**/test.html' ]
+			dev: [ 'test/dev/*.html', '!test/dev/dojo.html' ],
+			individuals: [ '**/test.html', '!view/autorender/test.html',
+				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});
 	grunt.registerTask('browserify-package', function(){
@@ -274,7 +286,9 @@ module.exports = function (grunt) {
 		'string-replace:version'
 	]);
 
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
+
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha']
+		.concat(getTestTasks()));
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
