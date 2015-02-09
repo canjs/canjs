@@ -601,5 +601,15 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		};
 	};
 
+	can.Compute.truthy = function(compute) {
+		return new can.Compute(function() {
+			var res = compute.get();
+			if(typeof res === 'function') {
+				res = res.get();
+			}
+			return !!res;
+		});
+	};
+
 	return can.Compute;
 });

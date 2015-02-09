@@ -52,8 +52,24 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 		compute.unbind = can.proxy(internalCompute.unbind, internalCompute);
 		compute.isComputed = can.proxy(internalCompute.isComputed, internalCompute);
 		compute.clone = function(ctx) {
-			return can.compute(getterSetter, ctx, eventName, bindOnce);
+			var clone = internalCompute.clone(ctx);
+
+			var c = function(val) {
+				if(arguments.length) {
+					return clone.set(val);
+				}
+
+				return clone.get();
+			};
+
+			c.bind = can.proxy(clone.bind, clone);
+			c.unbind = can.proxy(clone.unbind, clone);
+			c.isComputed = can.proxy(clone.isComputed, clone);
+
+			return c;
 		};
+
+		compute._internalCompute = internalCompute;
 
 		return compute;
 	};
