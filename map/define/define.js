@@ -212,6 +212,11 @@ steal('can/util', 'can/observe', function (can) {
 			return newValue;
 
 		}
+		// If we pass in a object with define
+		else if(can.isPlainObject(newValue) && newValue.define) {
+			newValue = can.Map.extend(newValue);
+			newValue = new newValue();
+		}
 		return oldType.call(this, newValue, prop);
 	};
 

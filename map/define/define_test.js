@@ -590,4 +590,56 @@ steal("can/map/define", "can/test", function () {
 			prefix + 'Define plugin style generated default property definition');
 	});
 
+	test("nested define", function() {
+		var nailedIt = 'Nailed it';
+		var Example = can.Map.extend({ }, {
+		  define: {
+		    name: {
+		      value: nailedIt
+		    }
+		  }
+		});
+
+		var NestedMap = can.Map.extend({ }, {
+		  define: {
+		    isEnabled: {
+		      value: true
+		    },
+		    test: {
+		      Value: Example
+		    },
+		    examples: {
+		      value: {
+		        define: {
+		          one: {
+		            Value: Example
+		          },
+		          two: {
+		            value: {
+		              define: {
+		                deep: {
+		                  Value: Example
+		                }
+		              }
+		            }
+		          }
+		        }
+		      }
+		    }
+		  }
+		});
+
+		var nested = new NestedMap();
+
+		// values are correct
+		equal(nested.attr('test.name'), nailedIt);
+		equal(nested.attr('examples.one.name'), nailedIt);
+		equal(nested.attr('examples.two.deep.name'), nailedIt);
+
+		// objects are correctly instanced
+		ok(nested.attr('test') instanceof Example);
+		ok(nested.attr('examples.one') instanceof Example);
+		ok(nested.attr('examples.two.deep') instanceof Example);
+	});
+
 });
