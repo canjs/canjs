@@ -242,8 +242,15 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			if (!this.element) {
 				return;
 			}
+			var el = this.element[0];
+			
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(this.element[0].value);
+			var newVal = this.options.value(el.value);
+			
+			// If the newVal isn't the same as the input, set it's value
+			if(el.value !== newVal) {
+				el.value = newVal;
+			}
 		}
 	}),
 	// ### Checked 

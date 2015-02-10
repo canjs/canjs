@@ -574,5 +574,34 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		
 	});
 
+	test("can-value compute rejects new value (#887)", function() {
+		var template = can.view.mustache("<input can-value='age'/>");
+
+		// Compute only accepts numbers
+		var compute = can.compute(30, function(newVal, oldVal) {
+			if(isNaN(+newVal)) {
+				return oldVal;
+			} else {
+				return +newVal;
+			}
+		});
+
+		var frag = template({
+			age: compute
+		});
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+
+		// Set to non-number
+		input.value = "30f";
+		can.trigger(input, "change");
+
+		equal(compute(), 30, "Still the old value");
+		equal(input.value, "30", "Text input has also not changed");
+	});
+
 
 });
