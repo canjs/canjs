@@ -275,7 +275,7 @@ module.exports = function (grunt) {
 	]);
 
 	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha',
-		'testee:steal', 'testee:amd', 'testee:dist' ]);
+		'testee:steal', 'testee:amd', 'testee:compatibility', 'testee:dist' ]);
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
