@@ -382,7 +382,7 @@ steal('can/util', function (can) {
 			// _removed if not used as a steal module_
 
 			//!steal-remove-start
-			if (window.steal) {
+			if ( typeof window !== "undefined" && window.steal && steal.type ) {
 				steal.type(info.suffix + " view js", function (options, success, error) {
 					var type = $view.types["." + options.type],
 						id = $view.toId(options.id + '');
@@ -732,7 +732,7 @@ steal('can/util', function (can) {
 	// _removed if not used as a steal module_
 
 	//!steal-remove-start
-	if (window.steal) {
+	if ( typeof window !== "undefined" && window.steal && steal.type) {
 		//when being used as a steal module, add a new type for 'view' that runs
 		// `can.view.preloadStringRenderer` with the loaded string/text for the dependency.
 		steal.type("view js", function (options, success, error) {

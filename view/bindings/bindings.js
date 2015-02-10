@@ -3,7 +3,7 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute 
 // for in template event bindings. These are usable in any mustache template, but mainly and documented 
 // for use within can.Component.
-steal("can/util", "can/view/mustache", "can/control", function (can) {
+steal("can/util", "can/view/callbacks", "can/control", function (can) {
 	/**
 	 * @function isContentEditable
 	 * @hide
@@ -242,8 +242,16 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			if (!this.element) {
 				return;
 			}
+			var el = this.element[0];
+			
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(this.element[0].value);
+			this.options.value(el.value);
+			var newVal = this.options.value();
+			
+			// If the newVal isn't the same as the input, set it's value
+			if(el.value !== newVal) {
+				el.value = newVal;
+			}
 		}
 	}),
 	// ### Checked 

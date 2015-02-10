@@ -1,6 +1,6 @@
 steal("can/util", "can/list", "can/test", "can/compute", function(){
 	
-	module('can/list');
+	QUnit.module('can/list');
 	
 	test('list attr changes length', function () {
 		var l = new can.List([

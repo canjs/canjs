@@ -13,7 +13,7 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
 
-<script type="text/javascript" src="../lib/steal/steal.js"></script>
+<script type="text/javascript" src="../node_modules/steal/steal.js" main="@empty"></script>
 <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
 <script type="text/javascript">
     if (typeof QUnit === 'undefined') {
@@ -24,6 +24,28 @@
     QUnit.config.autostart = false;
     setTimeout(function(){
         steal("can/construct/construct_test.js", function() {
+			test("support getters and setters", function () {
+				var Person = can.Construct.extend({
+					get age() {
+						return this.base + 40;
+					},
+
+					set name(value) {
+						this._name = value;
+					},
+
+					get name() {
+						return this._name;
+					}
+				});
+
+				var test = new Person();
+				test.base = 2;
+				equal(test.age, 42, 'Getter called properly');
+				test.name = 'David';
+				equal(test.name, 'David', 'Setter ran');
+			});
+
             can.dev.logLevel = 3;
             QUnit.start();
         });

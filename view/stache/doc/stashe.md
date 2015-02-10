@@ -6,6 +6,7 @@
 @group can.stache.types 2 Types
 @group can.stache.tags 3 Basic Tags
 @group can.stache.htags 4 Helper Tags
+@group can.stache.plugins 5 Plugins
 
 
 @link ../docco/view/stache/mustache_core.html docco

@@ -1,0 +1,2 @@
+<can-import from="helpers"/>
+<h1>{{templateName}} {{message}}</h1>

@@ -145,4 +145,35 @@ steal("can/view/parser", function(parser){
 			["done", []]
 		]));
 	});
+	
+	
+	test('output json', function(){
+		var tests = [
+			["start", ["h1", false]],
+			["attrStart", ["id"]],
+			["attrValue", ["foo"]],
+			["attrEnd", ["id"]],
+			["special", ["#if"]],
+			["special", ["."]],			//5
+			["special", ["/if"]],
+			["attrStart", ["class"]],
+			["attrValue", ["a"]],
+			["special", ["foo"]],
+			["attrEnd", ["class"]],		//10
+			["end", ["h1", false]],
+			["chars", ["Hello "]],
+			["special", ["message"]],
+			["chars", ["!"]],
+			["close",["h1"]],
+			["done",[]]
+		];
+		
+		var intermediate = parser("<h1 id='foo' {{#if}}{{.}}{{/if}} class='a{{foo}}'>Hello {{message}}!</h1>",makeChecks(tests), true);
+		
+	
+		
+		parser(intermediate, makeChecks(tests) );
+	});
+	
+	
 });

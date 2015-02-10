@@ -1,5 +1,5 @@
 steal('can/util', 'can/util/attr', function () {
-	module("can/util/attr");
+	QUnit.module("can/util/attr");
 
 	test("attributes event", function () {
 
