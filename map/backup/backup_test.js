@@ -1,6 +1,6 @@
 /*global Recipe*/
 steal("can/map/backup", "can/model", "can/test", function () {
-	module('can/map/backup', {
+	QUnit.module('can/map/backup', {
 		setup: function () {
 			can.Map.extend('Recipe');
 		}
@@ -93,5 +93,26 @@ steal("can/map/backup", "can/model", "can/test", function () {
 		ok(map.isDirty(), 'the map with an additional property is dirty');
 		map.restore();
 		ok(!map.attr('foo'), 'there is no foo property');
+	});
+
+	test('isDirty wrapped in a compute should trigger changes #1417', function() {
+		expect(2);
+		var recipe = new Recipe({
+			name: 'bread'
+		});
+
+		recipe.backup();
+
+		var c = can.compute(function() {
+			return recipe.isDirty();
+		});
+
+		ok(!c(), 'isDirty is false');
+
+		c.bind('change', function() {
+			ok(c(), 'isDirty is true and a change has occurred');
+		});
+
+		recipe.attr('name', 'cheese');
 	});
 });

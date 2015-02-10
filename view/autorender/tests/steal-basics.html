@@ -1,0 +1,33 @@
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script type='text/stache' id='basics' can-autorender>
+	<can-import from="can/view/autorender/tests/steal-basics"/>
+	<my-component></my-component>
+</script>
+<script src='../../../node_modules/steal/steal.js' main='can/view/autorender/'></script>
+<script>
+	steal('can/view/autorender',function(ready){
+		ready(function(){
+			if(window.QUnit) {
+				QUnit.equal( $("body my-component").length, 1,"only one my-component" );
+				QUnit.equal( $("body my-component").html(), "Hello World","template rendered" );
+				QUnit.equal( $("body my-component")[0].className, "inserted","template rendered" );
+				removeMyself();
+			} else {
+				console.log( $("body my-component").length );
+				console.log( $("body my-component").html() );
+			}
+			
+		}, function(error){
+			if(window.QUnit) {
+				
+				QUnit.ok( false, "error in autoload");
+				removeMyself();
+			} else {
+				console.log("error in autoload", error)
+			}
+		});
+	});
+</script>

@@ -5,7 +5,7 @@
 </head>
 <body>
 <p>This is a dummy page to use<br/> for testing route goodness</p>
-<script type='text/javascript' src='../../lib/steal/steal.js'></script>
+<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'>
 	var configuration = {};
 	for(var key in window.parent.CONFIGURATION) {
@@ -21,11 +21,8 @@
 		}
 	};
 	
-
-	
-	steal(function(){
-		steal.config(configuration);
-	}).then('can/route/pushstate', 'can/control/route', function () {
+	steal.config(configuration);
+	steal('can/route/pushstate', 'can/control/route', function () {
 
 		// make sure it's after ready
 		setTimeout(function () {

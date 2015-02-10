@@ -1,17 +1,17 @@
-<table id="websites"></table>
-
-<script id="sites" type="text/mustache">
+<script id="sites" type="text/mustache" can-autoload>
+  <table id="websites">
   {{#websites}}
     <tr>
       <td width='40%'>{{name}}</td>
 	  <td width='70%'>{{url}}</td>
 	</tr>
   {{/websites}}
+  </table>
 </script>
-<script src="../../../steal/steal.js"></script>
+<script src="../../node_modules/steal/steal.js"></script>
 <script type='text/javascript'>
-steal("can/util", "can/component", "can/map/setter", "can/util/fixture",
-	 "can/model", function (can) {
+steal("can/util", "can/component", "can/util/fixture",
+	 "can/model", "can/view/autoload",function (can) {
 
 
 var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++",url:"http://jquerypp.com"},
@@ -21,14 +21,15 @@ var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++"
 	          {id:9,name:"Dojo",url:"http://dojo.com"},{id: 10,name:"YUI",url:"http://yui.com"},
 	          {id:11,name:"DoneJS",url:"http://donejs.com"},{id: 12,name:"Mindjet Connect",url:"http://connect.mindjet.com"},
 	          {id:13,name:"JSFiddle",url:"http://jsfiddle.net"},{id: 14,name:"Zepto",url:"http://zepto.com"},
-	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}]
+	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}];
+	          
 can.fixture("/websites", function (request) {
-  var start = request.data.offset || 0
+  var start = request.data.offset || 0;
   end = start + (request.data.limit || websites.length);
   return {
     count: websites.length,
     data: websites.slice(start, end)
-  }
+  };
 });
 	 	
 var Website = can.Model.extend({
@@ -52,22 +53,14 @@ var websitesCompute = can.compute(function(){
 	var param = {
 		limit: paginate.attr('limit'),
 		offset: paginate.attr('offset')
-	}
+	};
 	return new Website.List(param);
 });
 
-$("#websites").html( can.view("sites",{
+$("#sites").scope().attr({
   websites: websitesCompute
-}));
+});
 
 
-
-
-
-
-
-
-
-
-})
+});
 </script>

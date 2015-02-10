@@ -90,6 +90,7 @@ Recipe = can.Model.extend({
 },{});
 ```
 
+
 If `findOne` is called like:
 
 ```

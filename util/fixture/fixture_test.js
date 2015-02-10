@@ -1,5 +1,5 @@
 steal('can/util/fixture', 'can/model', 'can/test', function () {
-	module('can/util/fixture');
+	QUnit.module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();
 		can.fixture('GET something', can.test.path('util/fixture/fixtures/test.json'));

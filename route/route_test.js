@@ -1,6 +1,6 @@
 /* jshint asi:true*/
 steal("can/route", "can/test", function () {
-	module("can/route", {
+	QUnit.module("can/route", {
 		setup: function () {
 			can.route._teardown();
 			can.route.defaultBinding = "hashchange";
