@@ -43,7 +43,7 @@
 		"zombie": "~2.0.8"
 	},
 	"scripts": {
-		"test": "grunt test"
+		"test": "DEBUG=testee:runner grunt test"
 	},
 	"demos": [
 		"http://canjs.us/#examples",
