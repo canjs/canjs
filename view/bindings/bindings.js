@@ -245,7 +245,7 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			var el = this.element[0];
 			
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(el.value)
+			this.options.value(el.value);
 			var newVal = this.options.value();
 			
 			// If the newVal isn't the same as the input, set it's value
