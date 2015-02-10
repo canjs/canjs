@@ -652,7 +652,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		if (!changingData || hash !== lastHash) {
 			can.batch.start();
 			for(var attr in oldParams){
-				if(!curParams[attr]){
+				if(curParams[attr] === undefined){
 					can.route.removeAttr(attr);
 				}
 			}
