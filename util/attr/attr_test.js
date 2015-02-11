@@ -65,6 +65,25 @@ steal('can/util', 'can/util/attr', function () {
 		compute("bar");
 
 	});
+	
+	
+	/*test("attr.set CHECKED attribute works", function(){
+		
+		var input = document.createElement("input");
+		input.type = "checkbox";
+		
+		document.getElementById("qunit-fixture").appendChild(input);
+		
+		can.attr.set(input, "CHECKED");
+		equal(input.checked, true);
+		
+		input.checked = false;
+		
+		can.attr.set(input, "CHECKED");
+		
+		equal(input.checked, true);
+	});*/
+	
 
 	if (window.jQuery || window.Zepto) {
 
