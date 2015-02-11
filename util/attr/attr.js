@@ -40,8 +40,8 @@ steal("can/util/can.js", function (can) {
 			map: {
 				"class": "className",
 				"value": "value",
-				"innerText": "innerText",
-				"textContent": "textContent",
+				"innertext": "innerText",
+				"textcontent": "textContent",
 				"checked": true,
 				"disabled": true,
 				"readonly": true,
@@ -66,6 +66,7 @@ steal("can/util/can.js", function (can) {
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
+				attrName = attrName.toLowerCase();
 				var oldValue;
 				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
 				if (!attr.MutationObserver) {
@@ -110,6 +111,7 @@ steal("can/util/can.js", function (can) {
 			// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 			trigger: function (el, attrName, oldValue) {
 				if (can.data(can.$(el), "canHasAttributesBindings")) {
+					attrName = attrName.toLowerCase();
 					return setImmediate(function () {
 						can.trigger(el, {
 							type: "attributes",
@@ -124,6 +126,7 @@ steal("can/util/can.js", function (can) {
 			// ## attr.get
 			// Gets the value of an attribute. First checks to see if the property is a string on `attr.map` and if so returns the value from the element's property. Otherwise uses `getAttribute` to retrieve the value.
 			get: function (el, attrName) {
+				attrName = attrName.toLowerCase();
 				var prop = attr.map[attrName];
 				if(typeof prop === "string" && el[prop]) {
 					return el[prop];
@@ -136,6 +139,7 @@ steal("can/util/can.js", function (can) {
 			//
 			// If the attribute previously had a value and the browser doesn't support MutationObservers we then trigger an "attributes" event.
 			remove: function (el, attrName) {
+				attrName = attrName.toLowerCase();
 				var oldValue;
 				if (!attr.MutationObserver) {
 					oldValue = attr.get(el, attrName);
