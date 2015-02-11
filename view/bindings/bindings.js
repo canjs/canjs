@@ -181,7 +181,14 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			handler = function (ev) {
 				// The attribute value, representing the name of the method to call (i.e. can-submit="foo" foo is the 
 				// name of the method)
-				var attr = removeCurly( el.getAttribute(attributeName) ),
+				var attrVal = el.getAttribute(attributeName);
+				// if the attribute is not present currently, don't run the event handler, but don't unbind,  
+				// since it might just be temporarily hidden
+				if(!attrVal){
+					return false;
+				}
+
+				var attr = removeCurly( attrVal ),
 					scopeData = data.scope.read(attr, {
 						returnObserveMethods: true,
 						isArgument: true
