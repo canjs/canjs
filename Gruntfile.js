@@ -1,5 +1,17 @@
 /*global __dirname */
 var path = require('path');
+var getTestTasks = function() {
+	var suite = process.env.TEST_SUITE;
+	var testTasks = ['testee'];
+	if(suite === 'loaders') {
+		testTasks = ['testee:steal', 'testee:amd'];
+	} else if(suite === 'dists') {
+		testTasks = [ 'testee:'];
+	} else if(suite === 'individuals') {
+		testTasks = ['testee:individuals'];
+	}
+	return testTasks;
+};
 
 module.exports = function (grunt) {
 
@@ -274,8 +286,10 @@ module.exports = function (grunt) {
 		'string-replace:version'
 	]);
 
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha',
-		'testee:steal', 'testee:amd', 'testee:compatibility', 'testee:dist' ]);
+
+
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha']
+		.concat(getTestTasks()));
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
