@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", "can/view/stache", "steal-qunit", function () {
+steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view/stache", "steal-qunit", function () {
 	QUnit.module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-fixture").innerHTML = "";
