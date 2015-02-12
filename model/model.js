@@ -550,7 +550,10 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// ## can.Model#bind and can.Model#unbind
 			// These aren't actually implemented here, but their setup needs to be changed to account for the store.
 			_bindsetup: function () {
-				this.constructor.store[this.__get(this.constructor.id)] = this;
+				var modelInstance = this.__get(this.constructor.id);
+				if (modelInstance != null) {
+					this.constructor.store[modelInstance ] = this;
+				}
 				return can.Map.prototype._bindsetup.apply(this, arguments);
 			},
 			_bindteardown: function () {
