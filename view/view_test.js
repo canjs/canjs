@@ -831,7 +831,7 @@ steal("can/view/callbacks",
 		}, 50);
 
 		can.view(template, def, function (frag) {
-			equal(frag.textContent, 'Value is Test!');
+			equal(frag.childNodes[0].innerHTML, 'Value is Test!');
 			start();
 		});
 	});

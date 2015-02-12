@@ -10,7 +10,7 @@ steal('can/model', 'can/util/object', function () {
 			can.Model.setup.apply(this, arguments);
 			// setup data
 			if (typeof window.localStorage !== 'undefined') {
-				this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
+				this._cached = JSON.parse(window.localStorage.getItem(this.cachedKey())) || {};
 			} else {
 				this._cached = {};
 			}

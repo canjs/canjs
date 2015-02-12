@@ -1,4 +1,4 @@
-steal('can/util/object', 'steal-qunit', function () {
+steal('can/util/object', './isplain/isplain_test.js', 'steal-qunit', function () {
 	QUnit.module('can/util/object');
 	test('same', function () {
 		ok(can.Object.same({

@@ -8,6 +8,15 @@ steal('can/util/string', function (can) {
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
 	var initializing = 0;
+
+	var canGetDescriptor;
+	try {
+		Object.getOwnPropertyDescriptor({});
+		canGetDescriptor = true;
+	} catch(e) {
+		canGetDescriptor = false;
+	}
+
 	var getDescriptor = function(newProps, name) {
 			var descriptor = Object.getOwnPropertyDescriptor(newProps, name);
 			if(descriptor && (descriptor.get || descriptor.set)) {
@@ -124,7 +133,7 @@ steal('can/util/string', function (can) {
 		// `newProps` - New properties to add.
 		// `oldProps` - Where the old properties might be (used with `super`).
 		// `addTo` - What we are adding to.
-		_inherit: Object.getOwnPropertyDescriptor ? inheritGetterSetter : simpleInherit,
+		_inherit: canGetDescriptor ? inheritGetterSetter : simpleInherit,
 
 		// Adds a `defineProperty` with the given name and descriptor
 		// Will only ever be called if ES5 is supported

@@ -154,28 +154,4 @@ steal('can/construct', 'steal-qunit', function () {
 		var o2 = {};
 		can.Construct.extend(o1,o2);
 	});
-
-	if(Object.getOwnPropertyDescriptor) {
-		test("support getters and setters", function () {
-			var Person = can.Construct.extend({
-				get age() {
-					return this.base + 40;
-				},
-
-				set name(value) {
-					this._name = value;
-				},
-
-				get name() {
-					return this._name;
-				}
-			});
-
-			var test = new Person();
-			test.base = 2;
-			equal(test.age, 42, 'Getter called properly');
-			test.name = 'David';
-			equal(test.name, 'David', 'Setter ran');
-		});
-	}
 });

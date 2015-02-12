@@ -126,6 +126,19 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		]));
 	});
 
+
+	test("block are allowed inside anchor tags", function(){
+		parser("<a><div></div></a>", makeChecks([
+			['start', ['a', false]],
+			['end', ['a', false]],
+			['start', ['div', false]],
+			['end', ['div', false]],
+			['close', ['div']],
+			['close', ['a']],
+			['done', []]
+		]));
+	});
+
 	test("supports single character attributes (#1132)", function(){
 		parser('<circle r="25"></circle>', makeChecks([
 			["start", ["circle", false]],
