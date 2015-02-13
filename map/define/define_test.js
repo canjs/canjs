@@ -408,6 +408,32 @@ steal("can/map/define", "can/test", function () {
 
 	});
 
+	test("async getter should work even if unbound (#1416)", function(){
+		var GreeterVM = can.Map({
+			define: {
+				username: {
+					get: function(val, resolve) {
+						setTimeout(function(){
+							resolve("guest");
+						}, 1);
+					}
+				},
+				greeting: {
+					get: function() {
+						return "Hello " + this.attr("username");
+					}
+				}
+			}
+		});
+
+		stop();
+		var greeter = new GreeterVM();
+		equal(greeter.attr("greeting"), "Hello undefined");
+		setTimeout(function(){
+			equal(greeter.attr("greeting"), "Hello guest");
+			start();
+		}, 5);
+	});
 
 	test("serialize basics", function(){
 		var MyMap = can.Map.extend({
