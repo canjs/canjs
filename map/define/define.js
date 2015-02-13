@@ -1,5 +1,12 @@
 steal('can/util', 'can/observe', function (can) {
 
+	var getPropDefineBehavior = function(behavior, prop, define) {
+		var propBehavior;
+		if(define) {
+			propBehavior = define[prop] ? define[prop] : define["*"];
+			return propBehavior && propBehavior[behavior];
+		}
+	};
 
 	can.Map.helpers.define = function (Map) {
 		var define = Map.prototype.define;
@@ -104,9 +111,8 @@ steal('can/util', 'can/observe', function (can) {
 				return false;
 			},
 			self = this,
-			define = this.define && this.define[prop],
-			setter = define && define.set,
-			getter = define && define.get;
+			setter = getPropDefineBehavior("set", prop, this.define),
+			getter = getPropDefineBehavior("get", prop, this.define);
 
 
 		// if we have a setter
@@ -190,9 +196,8 @@ steal('can/util', 'can/observe', function (can) {
 	// the old type sets up bubbling
 	var oldType = proto.__type;
 	proto.__type = function (value, prop) {
-		var def = this.define && this.define[prop],
-			type = def && def.type,
-			Type = def && def.Type,
+		var type = getPropDefineBehavior("type", prop, this.define),
+			Type = getPropDefineBehavior("Type", prop, this.define),
 			newValue = value;
 
 		if (typeof type === "string") {
@@ -217,7 +222,7 @@ steal('can/util', 'can/observe', function (can) {
 
 	var oldRemove = proto._remove;
 	proto._remove = function (prop, current) {
-		var remove = this.define && this.define[prop] && this.define[prop].remove,
+		var remove = getPropDefineBehavior("remove", prop, this.define),
 			res;
 		if (remove) {
 			can.batch.start();
@@ -257,7 +262,7 @@ steal('can/util', 'can/observe', function (can) {
 	};
 	// If the map has a define serializer for the given attr, run it.
 	var serializeProp = function(map, attr, val) {
-		var serializer = map.define && map.define[attr] && map.define[attr].serialize;
+		var serializer = attr === "*" ? false : getPropDefineBehavior("serialize", attr, map.define);
 		if(serializer === undefined) {
 			return oldSingleSerialize.apply(this, arguments);
 		} else if(serializer !== false){

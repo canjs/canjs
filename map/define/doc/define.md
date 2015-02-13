@@ -61,6 +61,40 @@ specifies a Paginate Map:
       }
     });
 
+## Default behaviors
+
+The [can.Map::define can.Map.define] plugin not only allows you to define 
+individual attribute behaviors on a [can.Map], but you can also define default
+behaviors that would apply to any unspecified attribute. This is particularly
+helpful for when you need a particular behavior to apply to every attribute on
+a [can.Map] but won't be certain of what every attribute will be.
+
+The following example is a [can.Map] that is tied to [can.route] where only 
+specified attributes that are serialized will be updated in the location hash:
+
+    var State = can.Map.extend({
+      define: {
+        foo: {
+          serialize: true
+        },
+        '*': {
+          serialize: false
+        }
+      }
+    });
+
+    var state = new State();
+
+    // tie State map to the route
+    can.route.map(state);
+    can.route.ready();
+
+    state.attr('foo', 'bar');
+    state.attr('bar', 'baz');
+
+    window.location.hash; // -> #!foo=bar
+
+
 ## Overview
 
 This plugin is a replacement for the now deprecated [can.Map.attributes attributes] and [can.Map.setter setter] plugins. It intends to provide a single place to define the behavior of all the properties of a can.Map.
