@@ -290,12 +290,26 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			splice: function (index, howMany) {
 				var args = can.makeArray(arguments),
 					added =[],
-					i, len;
+					i, len, listIndex,
+					allSame = args.length > 2;
+
+				index = index || 0;
 
 				// converting the arguments to the right type
-				for (i = 2, len = args.length; i < len; i++) {
-					args[i] = this.__type(args[i], i);
-					added.push(args[i]);
+				for (i = 0, len = args.length-2; i < len; i++) {
+					listIndex = i + 2;
+					args[listIndex] = this.__type(args[listIndex], listIndex);
+					added.push(args[listIndex]);
+
+					// Now lets check if anything will change
+					if(this[i+index] !== args[listIndex]) {
+						allSame = false;
+					}
+				}
+
+				// if nothing has changed, then return
+				if(allSame) {
+					return added;
 				}
 
 				// default howMany if not provided
@@ -921,7 +935,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @codeend
 		 */
 		reverse: function() {
-			var list = can.makeArray([].reverse.call(this));
+			var list = [].reverse.call(can.makeArray(this));
 			this.replace(list);
 		},
 

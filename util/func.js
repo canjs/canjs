@@ -637,8 +637,17 @@ otherwise a Deferred that resolves to __deferred__.
 `can.when(deferred)` provides the ability to execute callback function(s)
 typically based on a Deferred or AJAX object.
 
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+for [jQuery.when](http://api.jquery.com/jquery.when/);
+
     can.when( can.ajax('api/farm/animals') ).then(function(animals){
         alert(animals); //-> alerts the ajax response
+    });
+
+You can also use this to wait for the results of multiple deferreds.
+    
+    can.when( can.ajax('api/farm/animals'), can.ajax('api/farm/beacons') ).then(function(animals, beacons){
+        // perform some logic using both the animals and beacons data
     });
 
 You can also use this for regular JavaScript objects.

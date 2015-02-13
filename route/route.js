@@ -646,6 +646,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		var hash = can.route._call("matchingPartOfURL");
 		var oldParams = curParams;
 		curParams = can.route.deparam(hash);
+
 		// if the hash data is currently changing, or
 		// the hash is what we set it to anyway, do NOT change the hash
 		if (!changingData || hash !== lastHash) {
@@ -661,7 +662,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	var recursiveClean = function(old, cur, data){
 		for(var attr in old){
-			if(!cur[attr]){
+			if(cur[attr] === undefined){
 				data.removeAttr(attr);
 			}
 			else if(Object.prototype.toString.call(old[attr]) === "[object Object]") {
