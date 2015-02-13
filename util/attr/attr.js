@@ -8,8 +8,8 @@ steal("can/util/can.js", function (can) {
 	// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 	// the triggering of `attributes` event async.
 	var setImmediate = can.global.setImmediate || function (cb) {
-			return setTimeout(cb, 0);
-		},
+				return setTimeout(cb, 0);
+			},
 		attr = {
 			// This property lets us know if the browser supports mutation observers.
 			// If they are supported then that will be setup in can/util/jquery and those native events will be used to inform observers of attribute changes.
@@ -40,8 +40,8 @@ steal("can/util/can.js", function (can) {
 			map: {
 				"class": "className",
 				"value": "value",
-				"innerText": "innerText",
-				"textContent": "textContent",
+				"innertext": "innerText",
+				"textcontent": "textContent",
 				"checked": true,
 				"disabled": true,
 				"readonly": true,
@@ -66,6 +66,7 @@ steal("can/util/can.js", function (can) {
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
+				attrName = attrName.toLowerCase();
 				var oldValue;
 				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
 				if (!attr.MutationObserver) {
@@ -73,10 +74,10 @@ steal("can/util/can.js", function (can) {
 				}
 
 				var tagName = el.nodeName.toString()
-					.toLowerCase(),
+						.toLowerCase(),
 					prop = attr.map[attrName],
 					newValue;
-				
+
 				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. Then check if the property is `true`, and if so set the value to `true`, also making sure to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true because for these boolean properties, setting them to false would be the same as removing the attribute.
 				//
 				// For all other attributes use `setAttribute` to set the new value.
@@ -110,6 +111,7 @@ steal("can/util/can.js", function (can) {
 			// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 			trigger: function (el, attrName, oldValue) {
 				if (can.data(can.$(el), "canHasAttributesBindings")) {
+					attrName = attrName.toLowerCase();
 					return setImmediate(function () {
 						can.trigger(el, {
 							type: "attributes",
@@ -124,11 +126,12 @@ steal("can/util/can.js", function (can) {
 			// ## attr.get
 			// Gets the value of an attribute. First checks to see if the property is a string on `attr.map` and if so returns the value from the element's property. Otherwise uses `getAttribute` to retrieve the value.
 			get: function (el, attrName) {
+				attrName = attrName.toLowerCase();
 				var prop = attr.map[attrName];
 				if(typeof prop === "string" && el[prop]) {
 					return el[prop];
 				}
-				
+
 				return el.getAttribute(attrName);
 			},
 			// ## attr.remove
@@ -136,6 +139,7 @@ steal("can/util/can.js", function (can) {
 			//
 			// If the attribute previously had a value and the browser doesn't support MutationObservers we then trigger an "attributes" event.
 			remove: function (el, attrName) {
+				attrName = attrName.toLowerCase();
 				var oldValue;
 				if (!attr.MutationObserver) {
 					oldValue = attr.get(el, attrName);
