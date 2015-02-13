@@ -2,7 +2,7 @@
 /*global Mustache*/
 steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs",function () {
 
-	module("can/view/mustache, rendering", {
+	QUnit.module("can/view/mustache, rendering", {
 		setup: function () {
 			can.view.ext = '.mustache';
 
@@ -2302,7 +2302,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	if (typeof steal !== 'undefined') {
 		test("avoid global helpers", function () {
 			stop();
-			steal('view/mustache/test/noglobals.mustache', function (noglobals) {
+			steal('view/mustache/test/noglobals.mustache!', function (noglobals) {
 				var div = document.createElement('div'),
 					div2 = document.createElement('div');
 				var person = new can.Map({
@@ -3873,15 +3873,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	// of creating a string from a document fragment.
 	if(can.$('<col>').length) {
 		test("<col> inside <table> renders correctly (#1013)", 1, function () {
-			var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
 			var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
 			var frag = can.mustache(template)({
 				columns: new can.List([
-					{ class: 'test' }
+					{ 'class': 'test' }
 				])
 			});
 
-			equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+			// Only node in IE is <table>, text in other browsers
+			var index = frag.childNodes.length === 2 ? 1 : 0;
+			var tagName = frag.childNodes[index].childNodes[0].childNodes[0].tagName.toLowerCase();
+
+			equal(tagName, 'col', '<col> nodes added in proper position');
 		});
 	}
 
@@ -3898,4 +3901,21 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		ok( typeof Mustache.getHelper('myHelper').fn === 'function' );
 		ok( Mustache.getHelper('myHelper').fn() );
 	});
+
+	test("Passing Partial set in options (#1388 and #1389).", function () {
+		var data = new can.Map({
+			name: "World",
+			greeting: "hello"
+		});
+
+		can.view.registerView("hello", "hello {{name}}", ".mustache");
+
+		var template = can.view.mustache("<div>{{>greeting}}</div>")(data);
+
+		var div = document.createElement("div");
+		div.appendChild(template);
+		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+
+	});
+
 });

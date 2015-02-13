@@ -31,7 +31,7 @@ steal("can/view/callbacks",
 		});
 	};
 	
-	module('can/view', {
+	QUnit.module('can/view', {
 		setup: function () {
 			copy(can.view.callbacks._attributes);
 			copy(can.view.callbacks._regExpAttributes);
@@ -829,7 +829,7 @@ steal("can/view/callbacks",
 		}, 50);
 
 		can.view(template, def, function (frag) {
-			equal(frag.textContent, 'Value is Test!');
+			equal(frag.childNodes[0].innerHTML, 'Value is Test!');
 			start();
 		});
 	});

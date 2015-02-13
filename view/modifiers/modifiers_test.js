@@ -3,7 +3,7 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 	if (!window.jQuery) {
 		return;
 	}
-	module('can/view/modifiers');
+	QUnit.module('can/view/modifiers');
 	
 	test('modifier with a deferred', function () {
 	

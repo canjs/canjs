@@ -4,6 +4,7 @@ steal('can/util',
 	'can/view/scanner.js',
 	'can/compute',
 	'can/view/render.js',
+	'can/view/bindings',
 	function (can) {
 
 		// # mustache.js
@@ -116,7 +117,7 @@ steal('can/util',
 		 * @add can.MustacheConstructor
 		 */
 		// Put Mustache on the `can` object.
-		can.Mustache = window.Mustache = Mustache;
+		can.Mustache = can.global.Mustache = Mustache;
 
 		/** 
 		 * @prototype
@@ -1698,8 +1699,9 @@ steal('can/util',
 			if (!can.view.cached[partial]) {
 				// we don't want to bind to changes so clear and restore reading
 				var reads = can.__clearReading();
-				if (scope.attr('partial')) {
-					partial = scope.attr('partial');
+				var scopePartialName = scope.attr(partial);
+				if (scopePartialName) {
+					partial = scopePartialName;
 				}
 				can.__setReading(reads);
 			}

@@ -1,5 +1,5 @@
 steal("can/model", "can/view/ejs", "can/test", function () {
-	module('can/view/ejs, rendering', {
+	QUnit.module('can/view/ejs, rendering', {
 		setup: function () {
 			can.view.ext = '.ejs';
 

@@ -1,5 +1,5 @@
 steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (special) {
-	module('can/view/bindings', {
+	QUnit.module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-test-area")
 				.innerHTML = "";
@@ -561,18 +561,87 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 								'{{#if thing}}\n<div />{{/if}}'+
 								'<span>{{name}}</span>'+
 							 '</a>';
-		//var mustacheRenderer = can.mustache(templateString);
 		var stacheRenderer = can.stache(templateString);
 		
 		var obj = new can.Map({thing: 'stuff'});
 		
 		
-		//mustacheRenderer(obj);
-		//ok(true, 'mustache worked without errors');
 		stacheRenderer(obj);
 		ok(true, 'stache worked without errors');
 		
 	});
 
+	test("can-event throws an error when inside #if block (#1182)", function(){
+		var flag = can.compute(false),
+			clickHandlerCount = 0;
+		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+			flag: flag,
+			foo: function () {
+				clickHandlerCount++;
+			}
+		});
+		var trig = function(){
+			var div = can.$('#qunit-test-area')[0].getElementsByTagName('div')[0];
+			can.trigger(div, {
+				type: "click"
+			});
+		};
+		can.append(can.$('#qunit-test-area'), frag);
+		trig();
+		equal(clickHandlerCount, 0, "click handler not called");
+	});
+
+	test("can-EVENT removed in live bindings doesn't unbind (#1112)", function(){
+		var flag = can.compute(true),
+			clickHandlerCount = 0;
+		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+			flag: flag,
+			foo: function () {
+				clickHandlerCount++;
+			}
+		});
+		var trig = function(){
+			var div = can.$('#qunit-test-area')[0].getElementsByTagName('div')[0];
+			can.trigger(div, {
+				type: "click"
+			});
+		};
+		can.append(can.$('#qunit-test-area'), frag);
+		trig();
+		flag(false);
+		trig();
+		flag(true);
+		trig();
+		equal(clickHandlerCount, 2, "click handler called twice");
+	});
+
+	test("can-value compute rejects new value (#887)", function() {
+		var template = can.view.mustache("<input can-value='age'/>");
+
+		// Compute only accepts numbers
+		var compute = can.compute(30, function(newVal, oldVal) {
+			if(isNaN(+newVal)) {
+				return oldVal;
+			} else {
+				return +newVal;
+			}
+		});
+
+		var frag = template({
+			age: compute
+		});
+
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+
+		// Set to non-number
+		input.value = "30f";
+		can.trigger(input, "change");
+
+		equal(compute(), 30, "Still the old value");
+		equal(input.value, "30", "Text input has also not changed");
+	});
 
 });

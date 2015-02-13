@@ -3,7 +3,7 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute 
 // for in template event bindings. These are usable in any mustache template, but mainly and documented 
 // for use within can.Component.
-steal("can/util", "can/view/mustache", "can/control", function (can) {
+steal("can/util", "can/view/callbacks", "can/control", function (can) {
 	/**
 	 * @function isContentEditable
 	 * @hide
@@ -181,7 +181,14 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			handler = function (ev) {
 				// The attribute value, representing the name of the method to call (i.e. can-submit="foo" foo is the 
 				// name of the method)
-				var attr = removeCurly( el.getAttribute(attributeName) ),
+				var attrVal = el.getAttribute(attributeName);
+				// if the attribute is not present currently, don't run the event handler, but don't unbind,  
+				// since it might just be temporarily hidden
+				if(!attrVal){
+					return false;
+				}
+
+				var attr = removeCurly( attrVal ),
 					scopeData = data.scope.read(attr, {
 						returnObserveMethods: true,
 						isArgument: true
@@ -237,13 +244,22 @@ steal("can/util", "can/view/mustache", "can/control", function (can) {
 			this.element[0].value = (val == null ? '' : val);
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
+			// If the input value changes, this will set the live bound data to reflect the change.
 		"change": function () {
 			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
 			if (!this.element) {
 				return;
 			}
+			var el = this.element[0];
+
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(this.element[0].value);
+			this.options.value(el.value);
+			var newVal = this.options.value();
+
+			// If the newVal isn't the same as the input, set it's value
+			if(el.value !== newVal) {
+				el.value = newVal;
+			}
 		}
 	}),
 	// ### Checked 

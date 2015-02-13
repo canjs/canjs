@@ -1,6 +1,6 @@
 /*jshint undef:false,unused:false*/
 steal("can/map/attributes", "can/model", "can/util/fixture", "can/test", function () {
-	module('can/map/attributes');
+	QUnit.module('can/map/attributes');
 	test('literal converters and serializes', function () {
 		can.Map('Task1', {
 			attributes: {
