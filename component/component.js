@@ -211,12 +211,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					};
 					componentScope.bind(prop, handlers[prop]);
 				});
-				// Teardown reverse bindings when the element is removed
-				can.bind.call(el, "removed", function () {
-					can.each(handlers, function (handler, prop) {
-						componentScope.unbind(prop, handlers[prop]);
-					});
-				});
 				// Setup the attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || hookupOptions.templateType !== "legacy") {
 					// Bind on the `attributes` event and update the scope.
@@ -253,6 +247,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					}
 				});
 
+				// Teardown reverse bindings when the element is removed
+				var tearDownBindings = function(){
+					can.each(handlers, function (handler, prop) {
+						componentScope.unbind(prop, handlers[prop]);
+					});
+				};
+
 				// ## `events` control
 
 				// Create a control to listen to events
@@ -260,6 +261,20 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// Pass the scope to the control so we can listen to it's changes from the controller.
 					scope: this.scope
 				});
+
+				// If control has a 'destroy' event, unbind the properties after its called #1415
+				if(this._control && this._control.destroy){
+					var oldDestroy = this._control.destroy;
+					this._control.destroy = function(){
+						oldDestroy.apply(this, arguments);
+						tearDownBindings();
+					};
+					this._control.on();
+				} else {
+					can.bind.call(el, "removed", function () {
+						tearDownBindings();
+					});
+				}
 
 				// ## Rendering
 
@@ -421,31 +436,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
 	// the scope object
 	// Issue#1288 - Changed from `$` to `jQuery` mainly when using jQuery as a CommonJS module (Browserify-shim).
-	if (window.jQuery && jQuery.fn) {
-		jQuery.fn.scope = function (attr) {
+	if (can.$.fn) {
+		can.$.fn.scope = function (attr) {
 			// If `attr` is passed to the `scope` plugin return the value of that 
 			// attribute on the `scope` object, otherwise return the whole scope
+			var scope = this.data("scope");
+			if(!scope) {
+				scope = new can.Map();
+				this.data("scope", scope);
+			}
+			
 			if (attr) {
-				return this.data("scope")
-					.attr(attr);
+				return scope.attr(attr);
 			} else {
-				return this.data("scope");
+				return scope;
 			}
 		};
 	}
-
-	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
-	can.scope = function (el, attr) {
-		el = can.$(el);
-		// If `attr` is passed to the `can.scope` function return the value of that
-		// attribute on the `scope` object otherwise return the whole scope
-		if (attr) {
-			return can.data(el, "scope")
-				.attr(attr);
-		} else {
-			return can.data(el, "scope");
-		}
-	};
 
 	return Component;
 });

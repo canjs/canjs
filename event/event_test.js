@@ -1,4 +1,4 @@
-steal('can/event', "can/control", 'can/test', "can/control", function (event, Control) {
+steal('can/event', "can/control", 'can/test', "can/control", "steal-qunit", function (event, Control) {
 	module('can/event');
 	test('basics', 4, function () {
 		var obj = {

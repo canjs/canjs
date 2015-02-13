@@ -1,5 +1,5 @@
-steal("can/view/live", "can/observe", "can/test", function () {
-	module('can/view/live');
+steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
+	QUnit.module('can/view/live');
 	test('html', function () {
 		var div = document.createElement('div'),
 			span = document.createElement('span');
@@ -177,7 +177,7 @@ steal("can/view/live", "can/observe", "can/test", function () {
 				return 'foo';
 			});
 		div.appendChild(span);
-		can.$('#qunit-test-area')[0].appendChild(div);
+		can.$('#qunit-fixture')[0].appendChild(div);
 		can.view.live.text(span, text, div);
 		can.remove(el);
 		stop();

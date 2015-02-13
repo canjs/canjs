@@ -1,8 +1,14 @@
+"format steal";
 steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragment.js',
-	'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', 'can/util/inserted', function (can, attr) {
-		
-	var dojo = window.dojo;
-	define('plugd/trigger', ['dojo'], function (dojo) {
+	'can/util/array/each.js',
+	'can/util/object/isplain',
+	'can/util/deferred.js',
+	'can/util/hashchange.js',
+	'can/util/inserted',
+	function (can, attr, djo) {
+
+	var dojo = djo || window.dojo;
+	define('plugd/trigger', ['dojo/main'], function () {
 		var d = dojo;
 		var isfn = d.isFunction;
 		var leaveRe = /mouse(enter|leave)/;
@@ -190,7 +196,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 	//  
 	// These are pre-loaded by `steal` -> no callback.
 	require([
-		'dojo',
+		'dojo/main',
 		'dojo/query',
 		'plugd/trigger',
 		'dojo/NodeList-dom'

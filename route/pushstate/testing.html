@@ -5,7 +5,7 @@
 </head>
 <body>
 <p>This is a dummy page to use<br/> for testing route goodness</p>
-<script type='text/javascript' src='../../lib/steal/steal.js'></script>
+<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'>
 	var clone = function(obj){
 		
@@ -33,9 +33,8 @@
 	
 
 	
-	steal(function(){
-		steal.config(configuration);
-	}).then('can/route/pushstate', function () {
+	steal.config(configuration);
+	steal('can/route/pushstate', function () {
 
 		// make sure it's after ready
 		setTimeout(function () {

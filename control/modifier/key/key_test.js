@@ -1,5 +1,5 @@
-steal('can/control/modifier/key', function (Control) {
-	module('can/control/modifier/key');
+steal('can/control/modifier/key', 'steal-qunit', function () {
+	QUnit.module('can/control/modifier/key');
 	test('key down triggered', 1, function () {
 		var Tester = can.Control({
 			'keydown': function () {},

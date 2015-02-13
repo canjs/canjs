@@ -14,7 +14,7 @@
 		{{else}}
 			<select disabled><option>Loading Makes</option></select>
 		{{/if}}
-	
+
 		{{#if models}}
 			{{#if models.isResolved}}
 				<select can-value="modelId">
@@ -31,7 +31,7 @@
 		{{else}}
 			<select disabled><option>Models</option></select>
 		{{/if}}
-		
+
 		{{#if years}}
 			<select can-value="year">
 				{{^year}}
@@ -44,7 +44,7 @@
 		{{else}}
 			<select disabled><option>Years</option></select>
 		{{/if}}
-		
+
 		<div>
 			{{#each vehicles}}
 				<h2>{{name}}</h2>
@@ -59,7 +59,7 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../../lib/steal/steal.js"></script>
+<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
 <script id="demo-source">
 steal("can","can/map/define","can/util/fixture","can/list/promise",
 function(){
@@ -80,12 +80,12 @@ can.fixture({
 	"/vehicles": can.fixture.store([
 		{id: 1, modelId: 1, year: 2013, name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
 		{id: 2, modelId: 1, year: 2014, name: "2014 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"},
-		{id: 2, modelId: 2, year: 2013, name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
-		{id: 2, modelId: 2, year: 2014, name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
-		{id: 2, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
-		{id: 2, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
-		{id: 2, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
-		{id: 2, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
+		{id: 3, modelId: 2, year: 2013, name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
+		{id: 4, modelId: 2, year: 2014, name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
+		{id: 5, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
+		{id: 6, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+		{id: 7, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+		{id: 8, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
 	],{year: 'eqeq', name: "i"}).findAll
 });
 
@@ -163,10 +163,10 @@ var MMYViewModel = can.Map.extend({
 			get: function(){
 				var year = this.attr("year"),
 					modelId = this.attr("modelId");
-					
+
 				if( modelId !== undefined && year) {
 					return new Vehicle.List({modelId: modelId, year: year});
-				} 
+				}
 			}
 		}
 	}
@@ -187,4 +187,3 @@ $("#out").html( can.view("app",{}) );
 
 });
 </script>
-

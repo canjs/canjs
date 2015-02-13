@@ -1,5 +1,5 @@
-steal("can/view/scope", "can/route", "can/test", function () {
-	module('can/view/scope');
+steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
+	QUnit.module('can/view/scope');
 	/*	test("basics",function(){
 
 	 var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 

@@ -1,5 +1,5 @@
-steal('can/util', "can/observe", 'can/map', 'can/list', "can/test",function () {
-	module('can/observe map+list');
+steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", "steal-qunit", function () {
+	QUnit.module('can/observe map+list');
 	test('Basic Map', 9, function () {
 		var state = new can.Map({
 			category: 5,
@@ -848,7 +848,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test",function () {
 		list.pop();
 		equal(list.length, 0, 'list is empty');
 	});
-	module('can/observe compute');
+	QUnit.module('can/observe compute');
 	test('Basic Compute', function () {
 		var o = new can.Map({
 			first: 'Justin',

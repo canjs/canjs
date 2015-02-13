@@ -1,7 +1,7 @@
 /* jshint asi:true*/
-steal("can/control", function () {
+steal("can/control", "steal-qunit", function () {
 	/*global WeirdBind*/
-	module('can/control');
+	QUnit.module('can/control');
 	var isOpera = /Opera/.test(navigator.userAgent),
 		isDojo = typeof dojo !== 'undefined';
 	// bug in opera/dojo with on/trigger, so skip
@@ -30,7 +30,7 @@ steal("can/control", function () {
 					ok(cb, 'called with a callback');
 				}
 			};
-			can.append(can.$('#qunit-test-area'), '<div id=\'things\'>div<span>span</span></div>');
+			can.append(can.$('#qunit-fixture'), '<div id=\'things\'>div<span>span</span></div>');
 			var things = new Things('#things', {
 				foo: foo
 			});
@@ -47,7 +47,7 @@ steal("can/control", function () {
 	}
 	test('data', function () {
 		var Things = can.Control({});
-		can.append(can.$('#qunit-test-area'), '<div id=\'things\'>div<span>span</span></div>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'things\'>div<span>span</span></div>');
 		new Things('#things', {});
 		new Things('#things', {});
 		equal(can.data(can.$('#things'), 'controls')
@@ -64,11 +64,11 @@ steal("can/control", function () {
 				}
 			});
 			var a = $('<div id=\'crazy\'></div>')
-				.appendTo($('#qunit-test-area'));
+				.appendTo($('#qunit-fixture'));
 			new WeirdBind(a);
 			a.trigger('crazyEvent');
 			ok(called, 'heard the trigger');
-			$('#qunit-test-area')
+			$('#qunit-fixture')
 				.html('');
 		});
 	}
@@ -86,7 +86,7 @@ steal("can/control", function () {
 				}
 			}),
 			a;
-		can.append(can.$('#qunit-test-area'), '<div id=\'crazy\'></div>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'crazy\'></div>');
 		a = can.$('#crazy');
 		new WeirderBind(a, {
 			parameterized: 'sillyEvent'
@@ -102,14 +102,14 @@ steal("can/control", function () {
 					called = true;
 				}
 			});
-		can.append(can.$('#qunit-test-area'), '<div id=\'weird\'>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'weird\'>');
 		new WindowBind('#weird');
 		can.trigger(can.$(window), 'resize');
 		ok(called, 'got window resize event');
 		can.remove(can.$('#weird'));
 	});
 	// there is a bug in opera with dojo with on/trigger, so skip that case
-	// can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	// can.append( can.$("#qunit-fixture"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 	// dojo.query("#els span").on("a:click", function(){
 	// console.log('HOOLLLLER')
 	// });
@@ -136,9 +136,9 @@ steal("can/control", function () {
 					}
 				}),
 				div = document.createElement('div');
-			can.append(can.$('#qunit-test-area'), div);
+			can.append(can.$('#qunit-fixture'), div);
 			var rb = new Tester(div);
-			can.append(can.$('#qunit-test-area'), '<div id=\'els\'><span id=\'elspan\'><a href=\'javascript://\' id=\'elsa\'>click me</a></span></div>');
+			can.append(can.$('#qunit-fixture'), '<div id=\'els\'><span id=\'elspan\'><a href=\'javascript://\' id=\'elsa\'>click me</a></span></div>');
 			var els = can.$('#els');
 			var dt = new DelegateTest(els);
 			dt.on(can.$('#els span'), 'a', 'click', function () {
@@ -160,7 +160,7 @@ steal("can/control", function () {
 				}
 			}),
 			Child = Parent({});
-		can.append(can.$('#qunit-test-area'), '<div id=\'els\'><span id=\'elspan\'><a href=\'#\' id=\'elsa\'>click me</a></span></div>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'els\'><span id=\'elspan\'><a href=\'#\' id=\'elsa\'>click me</a></span></div>');
 		var els = can.$('#els');
 		new Child(els);
 		can.trigger(can.$('#els'), 'click');
@@ -178,14 +178,14 @@ steal("can/control", function () {
 				ok(true, 'called');
 			}
 		});
-		can.append(can.$('#qunit-test-area'), '<div id=\'els\'><span id=\'elspan\'><a href=\'#\' id=\'elsa\'>click me</a></span></div>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'els\'><span id=\'elspan\'><a href=\'#\' id=\'elsa\'>click me</a></span></div>');
 		var els = can.$('#els');
 		new Dot(els);
 		can.trigger(can.$('#els'), 'foo');
 		can.remove(els);
 	});
 	test('custom events with hyphens work', 1, function () {
-		can.append(can.$('#qunit-test-area'), '<div id=\'customEvent\'><span></span></div>');
+		can.append(can.$('#qunit-fixture'), '<div id=\'customEvent\'><span></span></div>');
 		var FooBar = can.Control({
 			'span custom-event': function () {
 				ok(true, 'Custom event was fired.');

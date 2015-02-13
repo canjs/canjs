@@ -14,6 +14,7 @@
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
+<div id="qunit-fixture"></div>
 
 <script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
@@ -24,26 +25,29 @@
         var config = {
             baseUrl: root,
             paths : {
-              can: "dist/amd/can"
-             },
+              can: "dist/amd/can",
+              "dojo": "bower_components/dojo"
+            },
             map : {
                 '*' : {
                     "can/util/library" : "can/util/" + configName
                 }
-            },
-            shim: {
-                "test/pluginified/latest": ['can/util/fixture'].concat(modules)
             }
         };
 
-        config.paths[configName] = moduleName(configuration.library);
+		if(! config.paths[configName] ) {
+		  config.paths[configName] = moduleName(configuration.library);
+		}
+
     %>
 
 	QUnit.config.autostart = false;
 	require.config(<%- JSON.stringify(config) %>);
 
-	require(["test/pluginified/latest"], function() {
-		QUnit.start();
+	require(['can/util/fixture'].concat(<%- JSON.stringify(modules) %>), function() {
+		require(["test/pluginified/latest"], function(){
+			QUnit.start();
+		});
 	});
 </script>
 </body>

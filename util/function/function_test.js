@@ -1,5 +1,5 @@
-steal('can/util/function', 'can/test', function () {
-	module('can/util/function');
+steal('can/util/function', 'can/test', 'steal-qunit', function () {
+	QUnit.module('can/util/function');
 
 	var ctx1 = { name: 'David' };
 	var ctx2 = { name: 'Justin' };

@@ -1,7 +1,7 @@
 /* jshint asi: false */
-steal("can/map/define", "can/test", function () {
+steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
-	module('can/map/define');
+	QUnit.module('can/map/define');
 
 	// remove, type, default
 	test('basics set', function () {
@@ -588,6 +588,98 @@ steal("can/map/define", "can/test", function () {
 			prefix + 'Define plugin style default property definition');
 		equal(n.attr('lastNumber'), 9,
 			prefix + 'Define plugin style generated default property definition');
+	});
+
+	test('default behaviors with "*" work for attributes', function() {
+		expect(8);
+		var DefaultMap = can.Map.extend({
+			define: {
+				someNumber: {
+					value: '5'
+				},
+				'*': {
+					type: 'number',
+					serialize: function(value) {
+						return '' + value;
+					},
+					set: function(newVal) {
+						ok(true, 'set called');
+						return newVal;
+					},
+					remove: function(currentVal) {
+						ok(true, 'remove called');
+						return false;
+					}
+				}
+			}
+		});
+
+		var map = new DefaultMap(),
+			serializedMap;
+
+		equal(map.attr('someNumber'), 5, 'value of someNumber should be converted to a number');
+		map.attr('number', '10'); // Custom set should be called
+		equal(map.attr('number'), 10, 'value of number should be converted to a number');
+		map.removeAttr('number'); // Custom removed should be called
+		equal(map.attr('number'), 10, 'number should not be removed');
+
+		serializedMap = map.serialize();
+
+		equal(serializedMap.number, '10', 'number serialized as string');
+		equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
+		equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
+	});
+
+	test("nested define", function() {
+		var nailedIt = 'Nailed it';
+		var Example = can.Map.extend({ }, {
+		  define: {
+		    name: {
+		      value: nailedIt
+		    }
+		  }
+		});
+
+		var NestedMap = can.Map.extend({ }, {
+		  define: {
+		    isEnabled: {
+		      value: true
+		    },
+		    test: {
+		      Value: Example
+		    },
+		    examples: {
+		      value: {
+		        define: {
+		          one: {
+		            Value: Example
+		          },
+		          two: {
+		            value: {
+		              define: {
+		                deep: {
+		                  Value: Example
+		                }
+		              }
+		            }
+		          }
+		        }
+		      }
+		    }
+		  }
+		});
+
+		var nested = new NestedMap();
+
+		// values are correct
+		equal(nested.attr('test.name'), nailedIt);
+		equal(nested.attr('examples.one.name'), nailedIt);
+		equal(nested.attr('examples.two.deep.name'), nailedIt);
+
+		// objects are correctly instanced
+		ok(nested.attr('test') instanceof Example);
+		ok(nested.attr('examples.one') instanceof Example);
+		ok(nested.attr('examples.two.deep') instanceof Example);
 	});
 
 });

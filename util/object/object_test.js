@@ -1,5 +1,5 @@
-steal('can/util/object', function () {
-	module('can/util/object');
+steal('can/util/object', './isplain/isplain_test.js', 'steal-qunit', function () {
+	QUnit.module('can/util/object');
 	test('same', function () {
 		ok(can.Object.same({
 			type: 'FOLDER'

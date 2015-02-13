@@ -21,6 +21,7 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
+        <div id="qunit-fixture"></div>
         <script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
         <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
@@ -29,40 +30,37 @@
                     "baseUrl": "../..",
                     "paths": {
                         "can": "dist/amd/can",
-                        "dojo": "util/dojo/dojo-1.8.1"
+                        "dojo": "bower_components/dojo"
                     },
                     "map": {
                         "*": {
                             "can/util/library": "can/util/dojo"
                         }
-                    },
-                    "shim": {
-                        "test/pluginified/latest": [
-                            "can/util/fixture", "can/component",
-                            "can/construct", "can/map", "can/list",
-                            "can/list/promise", "can/observe",
-                            "can/compute", "can/model", "can/view",
-                            "can/view/ejs", "can/view/stache",
-                            "can/control", "can/route",
-                            "can/control/route", "can/view/mustache",
-                            "can/route/pushstate", "can/model/queue",
-                            "can/construct/super",
-                            "can/construct/proxy", "can/map/lazy",
-                            "can/map/delegate", "can/map/setter",
-                            "can/map/attributes",
-                            "can/map/validations", "can/map/backup",
-                            "can/map/list", "can/map/define",
-                            "can/map/sort", "can/util/object",
-                            "can/util/fixture", "can/view/bindings",
-                            "can/view/live", "can/view/scope",
-                            "can/util/string", "can/util/attr"
-                        ]
                     }
                 });
 
-            require(["test/pluginified/latest"], function() {
-                QUnit.start();
-            });
+            require(['can/util/fixture'].concat(["can/component",
+                        "can/construct", "can/map", "can/list",
+                        "can/list/promise", "can/observe",
+                        "can/compute", "can/model", "can/view",
+                        "can/view/ejs", "can/view/stache",
+                        "can/control", "can/route",
+                        "can/control/route", "can/view/mustache",
+                        "can/route/pushstate", "can/model/queue",
+                        "can/construct/super", "can/construct/proxy",
+                        "can/map/lazy", "can/map/delegate",
+                        "can/map/setter", "can/map/attributes",
+                        "can/map/validations", "can/map/backup",
+                        "can/map/list", "can/map/define",
+                        "can/map/sort", "can/util/object",
+                        "can/util/fixture", "can/view/bindings",
+                        "can/view/live", "can/view/scope",
+                        "can/util/string", "can/util/attr"
+                    ]), function() {
+                    require(["test/pluginified/latest"], function() {
+                        QUnit.start();
+                    });
+                });
         </script>
     </body>
 

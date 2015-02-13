@@ -1,47 +1,24 @@
-<!DOCTYPE HTML>
-<!-- AUTO GENERATED - DO NOT MODIFY -->
-<html>
-    
-    <head>
-        <title>jQuery Test Suite</title>
-        <script type="text/javascript" src="../lib/html5shiv.js"></script>
-        <link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.14.0.css" />
-    </head>
-    
-    <body>
-        	<h1 id="qunit-header">jQuery Test Suite</h1>
-
-        	<h2 id="qunit-banner"></h2>
-
-        <div id="qunit-testrunner-toolbar"></div>
-        	<h2 id="qunit-userAgent"></h2>
-
-        <ol id="qunit-tests"></ol>
-        <div id="qunit-test-area"></div>
-        <script type="text/javascript" src="../lib/steal/steal.js"></script>
-        <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.14.0.js"></script>
-        <script type="text/javascript">
-            if (typeof QUnit === 'undefined') {
-                document.write(unescape(
-                        '%3Clink rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css" /%3E'));
-                document.write(unescape(
-                        '%3Cscript type="text/javascript" src="../bower_components/qunit/qunit/qunit.js" %3E%3C/script%3E'));
+<title>CanJS jQuery tests</title>
+<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script type="text/javascript">
+    System['import']("package.json!npm").then(function() {
+        var config = window.CONFIGURATION = {
+            "map": {
+                "jquery/jquery": "jquery"
+            },
+            "paths": {
+                "can/util/util": "util/jquery/jquery.js",
+                "jquery": "lib/jquery.1.10.2.js"
+            },
+            "meta": {
+                "jquery": {
+                    "format": "global"
+                }
             }
-
-            QUnit.config.autostart = false;
-
-            steal(function() {
-                var config = window.CONFIGURATION = {
-                    "map": {
-                        "*": {
-                            "can/util/util.js": "can/util/jquery/jquery.js",
-                            "jquery/jquery.js": "can/lib/jquery.1.10.2.js"
-                        }
-                    }
-                };
-
-                steal.config(config);
-            }, "can/component/component_test.js",
+        };
+        steal.config(config);
+    }).then(function() {
+        steal("can/component/component_test.js",
             "can/construct/construct_test.js", "can/map/map_test.js",
             "can/list/list_test.js",
             "can/list/promise/promise_test.js",
@@ -75,9 +52,7 @@
             "can/util/string/string_test.js",
             "can/util/attr/attr_test.js", function() {
                 can.dev.logLevel = 3;
-                QUnit.start();
             });
-        </script>
-    </body>
-
-</html>
+    });
+</script>
+<div id="qunit-fixture"></div>

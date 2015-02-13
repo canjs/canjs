@@ -14,7 +14,7 @@
                     var loc = window.location.toString();
                     var location = loc.substring(0, loc.lastIndexOf(
                             '/') + 1);
-                    baseTag.href = location + baseTag.href;
+                    baseTag.href = location + '../../';
                 })();
             </script>
         <![endif]-->
@@ -35,6 +35,7 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
+        <div id="qunit-fixture"></div>
         <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;

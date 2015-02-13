@@ -9,8 +9,8 @@
 /* global Organisation: true */
 /* global Company: true */
 /* global My: true */
-steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
-	module('can/model', {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-qunit", function () {
+	QUnit.module('can/model', {
 		setup: function () {}
 	});
 	var isDojo = typeof dojo !== 'undefined';
@@ -1714,4 +1714,39 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			equal(model.attr('text'), 'Third findOne', 'correct findOne used');
 		});
 	});
+
+	test("Models with no id (undefined or null) are not placed in store (#1358)", function(){
+		var MyStandardModel = can.Model.extend({});
+		var MyCustomModel = can.Model.extend({id:"ID"}, {});
+
+		var myID = null;
+		var instanceNull = new MyStandardModel ({id:myID});
+		var instanceUndefined = new MyStandardModel ({});
+		var instanceCustom = new MyCustomModel({ID:myID});
+
+
+		instanceNull.bind('change', function(){});
+		instanceUndefined.bind('change', function(){});
+		instanceCustom.bind('change', function(){});
+
+
+		ok(typeof MyStandardModel.store[instanceNull.id] === "undefined", "Model should not be added to store when id is null");
+		ok(typeof MyStandardModel.store[instanceUndefined.id] === "undefined", "Model should not be added to store when id is undefined");
+		ok(typeof MyCustomModel.store[instanceCustom[instanceCustom.constructor.id]] === "undefined", "Model should not be added to store when id is null");
+
+	});
+
+	test("Models should be removed from store when instance.removeAttr('id') is called", function(){
+		var Task = can.Model.extend({},{});
+		var t1 = new Task({id: 1, name: "MyTask"});
+
+		t1.bind('change', function(){});
+		ok(Task.store[t1.id].name === "MyTask", "Model should be in store");
+
+		t1.removeAttr("id");
+		ok(typeof Task.store[t1.id] === "undefined", "Model should be removed from store when `id` is removed");
+
+	});
+
 });
+

@@ -1,8 +1,8 @@
 /* jshint asi:true*/
 /*global Router*/
-steal("can/control/route",  "can/test",function () {
+steal("can/control/route", "can/test", "steal-qunit", function () {
 
-	module("can/control/route", {
+	QUnit.module("can/control/route", {
 		setup: function () {
 			stop();
 			can.route.routes = {};
@@ -118,7 +118,7 @@ steal("can/control/route",  "can/test",function () {
 	
 			var iframe = document.createElement("iframe");
 			iframe.src = can.test.path("control/route/pushstate.html");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
+			can.$("#qunit-fixture")[0].appendChild(iframe);
 			stop();
 		})
 	

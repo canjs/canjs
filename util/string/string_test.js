@@ -1,5 +1,5 @@
-steal('can/util/string', function () {
-	module('can/util/string');
+steal('can/util/string', './deparam/deparam_test.js', 'steal-qunit', function () {
+	QUnit.module('can/util/string');
 	test('can.sub', function () {
 		equal(can.sub('a{b}', {
 			b: 'c'

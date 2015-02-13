@@ -1,8 +1,8 @@
-steal("can/component", "can/view/stache" ,"can/route", function () {
+steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
 	
-	module('can/component', {
+	QUnit.module('can/component', {
 		setup: function () {
-			can.remove(can.$("#qunit-test-area>*"));
+			can.remove(can.$("#qunit-fixture>*"));
 		}
 	});
 
@@ -136,11 +136,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			content: "ice cream, candy"
 		}]);
 
-		can.append(can.$("#qunit-test-area"), template({
+		can.append(can.$("#qunit-fixture"), template({
 			foodTypes: foodTypes
 		}));
 
-		var testArea = can.$("#qunit-test-area")[0],
+		var testArea = can.$("#qunit-fixture")[0],
 			lis = testArea.getElementsByTagName("li");
 		equal(lis.length, 3, "three lis added");
 
@@ -186,7 +186,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		equal(panels[0].innerHTML, "", "the second content is removed");
 		equal(panels[1].innerHTML, "ice cream, candy", "the second content is shown");
 
-		can.remove(can.$("#qunit-test-area>*"));
+		can.remove(can.$("#qunit-fixture>*"));
 	});
 
 	test("treecombo", function () {
@@ -271,7 +271,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var base = new can.Map({});
 
-		can.append(can.$("#qunit-test-area"), template(base));
+		can.append(can.$("#qunit-fixture"), template(base));
 
 		var items = [{
 			id: 1,
@@ -344,10 +344,10 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			var itemsList = base.attr('locations');
 
 			// check that the DOM is right
-			var treecombo = can.$("#qunit-test-area treecombo")[0],
-				breadcrumb = can.$("#qunit-test-area .breadcrumb")[0],
+			var treecombo = can.$("#qunit-fixture treecombo")[0],
+				breadcrumb = can.$("#qunit-fixture .breadcrumb")[0],
 				breadcrumbLIs = breadcrumb.getElementsByTagName('li'),
-				options = can.$("#qunit-test-area .options")[0],
+				options = can.$("#qunit-fixture .options")[0],
 				optionsLis = options.getElementsByTagName('li');
 
 			equal(breadcrumbLIs.length, 1, "Only the default title is shown");
@@ -475,11 +475,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			"{{/each}}" +
 			"</grid>");
 
-		can.append(can.$("#qunit-test-area"), template({
+		can.append(can.$("#qunit-fixture"), template({
 			scope: scope
 		}));
 
-		var gridScope = can.scope("#qunit-test-area grid");
+		var gridScope = can.scope("#qunit-fixture grid");
 		
 		equal(gridScope.attr("waiting"), true, "The grid is initially waiting on the deferreddata to resolve");
 		
@@ -489,7 +489,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			gridScope.unbind('waiting', waitingHandler);
 
 			setTimeout(function () {
-				var tds = can.$("#qunit-test-area td");
+				var tds = can.$("#qunit-fixture td");
 				equal(tds.length, 2, "there are 2 tds");
 
 				gridScope.bind("waiting", function (ev, newVal) {
@@ -532,10 +532,10 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			paginator: paginator
 		});
 
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
-		var prev = can.$("#qunit-test-area .prev")[0],
-			next = can.$("#qunit-test-area .next")[0];
+		var prev = can.$("#qunit-fixture .prev")[0],
+			next = can.$("#qunit-fixture .next")[0];
 
 		ok(!/enabled/.test(prev.className), "prev is not enabled");
 		ok(/enabled/.test(next.className), "next is  enabled");
@@ -559,11 +559,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.view.mustache("<page-count page='paginator.page'></page-count>");
 
-		can.append(can.$("#qunit-test-area"), template(new can.Map({
+		can.append(can.$("#qunit-fixture"), template(new can.Map({
 			paginator: paginator
 		})));
 
-		var spans = can.$("#qunit-test-area span");
+		var spans = can.$("#qunit-fixture span");
 		equal(spans[0].innerHTML, "1");
 		paginator.next();
 		equal(spans[0].innerHTML, "2");
@@ -590,11 +590,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.view.mustache("  <hello-world></hello-world>  ");
 
-		can.append(can.$("#qunit-test-area"), template({}));
+		can.append(can.$("#qunit-fixture"), template({}));
 
-		can.trigger(can.$("#qunit-test-area hello-world"), "click");
+		can.trigger(can.$("#qunit-fixture hello-world"), "click");
 
-		equal(can.$("#qunit-test-area hello-world")[0].innerHTML, "Hello There!");
+		equal(can.$("#qunit-fixture hello-world")[0].innerHTML, "Hello There!");
 
 	});
 
@@ -610,11 +610,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.view.mustache("<my-greeting><span>{{site}} - {{title}}</span></my-greeting>");
 
-		can.append(can.$("#qunit-test-area"), template({
+		can.append(can.$("#qunit-fixture"), template({
 			site: "CanJS"
 		}));
 
-		equal(can.$("#qunit-test-area span")
+		equal(can.$("#qunit-fixture span")
 			.length, 1, "there is an h1");
 	});
 
@@ -651,9 +651,9 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			'</my-toggler>' +
 			'</my-app>');
 
-		can.append(can.$("#qunit-test-area"), template({}));
+		can.append(can.$("#qunit-fixture"), template({}));
 
-		var testArea = can.$("#qunit-test-area")[0],
+		var testArea = can.$("#qunit-fixture")[0],
 			buttons = testArea.getElementsByTagName("button");
 
 		equal(buttons.length, 1, "there is one button");
@@ -686,9 +686,9 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.view.mustache('<my-text value="value1"></my-text><my-text value="value2"></my-text>');
 
-		can.append(can.$('#qunit-test-area'), template({}));
+		can.append(can.$('#qunit-fixture'), template({}));
 
-		var testArea = can.$("#qunit-test-area")[0],
+		var testArea = can.$("#qunit-fixture")[0],
 			myTexts = testArea.getElementsByTagName("my-text");
 
 		equal(myTexts[0].children[0].innerHTML, 'value1');
@@ -711,9 +711,9 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.view.mustache('<hyphen camel-case="value1"></hyphen>');
 
-		can.append(can.$('#qunit-test-area'), template({}));
+		can.append(can.$('#qunit-fixture'), template({}));
 
-		var testArea = can.$("#qunit-test-area")[0],
+		var testArea = can.$("#qunit-fixture")[0],
 			hyphen = testArea.getElementsByTagName("hyphen");
 
 		equal(hyphen[0].children[0].innerHTML, 'value1');
@@ -930,7 +930,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var frag = can.view.mustache("<parent-tag></parent-tag>")({});
 
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
 		equal(inited, 1);
 		equal(inserted, 1);
@@ -950,7 +950,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({
 			title: "hello"
 		});
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
 		equal(can.scope(can.$("panel")[0])
 			.attr("title"), "Libraries");
@@ -974,7 +974,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var attrFun = frag.childNodes[0];
 
-		can.$("#qunit-test-area")[0].appendChild(attrFun);
+		can.$("#qunit-fixture")[0].appendChild(attrFun);
 
 		equal(attrFun.childNodes[0].innerHTML, "Justin Meyer");
 
@@ -1009,7 +1009,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 			"<stay-classy id='an-id' notid='idFromData'" +
 			" class='a-class' notclass='classFromData'" +
 			" notdataviewid='dviFromData'></stay-classy>")(data);
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
 		var scope = can.scope(can.$("stay-classy")[0]);
 
@@ -1056,12 +1056,12 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag>1<my-tag>0</my-tag></my-tag></my-tag></my-tag>');
 		//edge case for new logic (same custom tag at same depth as one previously encountered)
 		var template3 = can.view.mustache('<my-tag>First</my-tag><my-tag>Second</my-tag>');
-		can.append(can.$('#qunit-test-area'), template({}));
-		equal(can.$('#qunit-test-area p').length, 2, 'proper number of p tags');
-		can.append(can.$('#qunit-test-area'), template2({}));
-		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
-		can.append(can.$('#qunit-test-area'), template3({}));
-		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template({}));
+		equal(can.$('#qunit-fixture p').length, 2, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template2({}));
+		equal(can.$('#qunit-fixture p').length, 6, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template3({}));
+		equal(can.$('#qunit-fixture p').length, 8, 'proper number of p tags');
 
 	});
 
@@ -1103,12 +1103,12 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		var template2 = can.view.mustache('<my-tag>3<my-tag>2<my-tag>1<my-tag>0</my-tag></my-tag></my-tag></my-tag>');
 		//edge case for new logic (same custom tag at same depth as one previously encountered)
 		var template3 = can.view.mustache('<my-tag>First</my-tag><my-tag>Second</my-tag>');
-		can.append(can.$('#qunit-test-area'), template({}));
-		equal(can.$('#qunit-test-area p').length, 2, 'proper number of p tags');
-		can.append(can.$('#qunit-test-area'), template2({}));
-		equal(can.$('#qunit-test-area p').length, 6, 'proper number of p tags');
-		can.append(can.$('#qunit-test-area'), template3({}));
-		equal(can.$('#qunit-test-area p').length, 8, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template({}));
+		equal(can.$('#qunit-fixture p').length, 2, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template2({}));
+		equal(can.$('#qunit-fixture p').length, 6, 'proper number of p tags');
+		can.append(can.$('#qunit-fixture'), template3({}));
+		equal(can.$('#qunit-fixture p').length, 8, 'proper number of p tags');
 
 	});
 	
@@ -1238,11 +1238,11 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 
 		var template = can.stache("<can-parent-stache></can-parent-stache>");
 
-		can.append(can.$('#qunit-test-area'), template());
+		can.append(can.$('#qunit-fixture'), template());
 
 		var template2 = can.stache("<can-parent-mustache></can-parent-mustache>");
 
-		can.append(can.$('#qunit-test-area'), template2());
+		can.append(can.$('#qunit-fixture'), template2());
 
 	});
 	
@@ -1255,8 +1255,8 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 				name: "Brian"
 			}
 		});
-		can.append(can.$('#qunit-test-area'), template());
-		equal(can.$('#qunit-test-area div')[0].innerHTML, "Brian");
+		can.append(can.$('#qunit-fixture'), template());
+		equal(can.$('#qunit-fixture div')[0].innerHTML, "Brian");
 
 	});
 
@@ -1298,7 +1298,7 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		var scope = can.scope(el);
 		
 		// element must be inserted, otherwise attributes event will not be fired
-		can.append(can.$("#qunit-test-area"),frag);
+		can.append(can.$("#qunit-fixture"),frag);
 		
 		// update the class
 		can.addClass(can.$(el),"foo");
@@ -1334,8 +1334,35 @@ steal("can/component", "can/view/stache" ,"can/route", function () {
 		var frag = can.stache('<my-app></my-app>')();
 
 		// element must be inserted, otherwise attributes event will not be fired
-		can.append(can.$("#qunit-test-area"),frag);
+		can.append(can.$("#qunit-fixture"),frag);
 
 		can.trigger(Test, 'something');
+	});
+
+	test('removing bound scope properties on destroy #1415', function(){
+		var state = new can.Map({
+			product: {
+				id: 1,
+				name: "Tom"
+			}
+		});
+
+		can.Component.extend({
+			tag: 'destroyable-component',
+			events: {
+				destroy: function(){
+					this.scope.attr('product', null);
+				}
+			}
+		});
+
+		var frag = can.stache('<destroyable-component product="{product}"></destroyable-component>')(state);
+
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-fixture"),frag);
+
+		can.remove(can.$("#qunit-fixture>*"));
+
+		ok(state.attr('product') == null, 'product was removed');
 	});
 });

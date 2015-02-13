@@ -1,4 +1,4 @@
-steal('can/event/propagate', 'can/test', function (event) {
+steal('can/event/propagate', 'can/test', 'steal-qunit', function (event) {
 	module('can/event/propagate');
 
 	test('Propagation', 9, function() {
