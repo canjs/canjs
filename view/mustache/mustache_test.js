@@ -3902,4 +3902,21 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		ok( typeof Mustache.getHelper('myHelper').fn === 'function' );
 		ok( Mustache.getHelper('myHelper').fn() );
 	});
+
+	test("Passing Partial set in options (#1388 and #1389).", function () {
+		var data = new can.Map({
+			name: "World",
+			greeting: "hello"
+		});
+
+		can.view.registerView("hello", "hello {{name}}", ".mustache");
+
+		var template = can.view.mustache("<div>{{>greeting}}</div>")(data);
+
+		var div = document.createElement("div");
+		div.appendChild(template);
+		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+
+	});
+
 });

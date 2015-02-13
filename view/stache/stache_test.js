@@ -3655,5 +3655,24 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(frag.childNodes[0].className, "foo", "correct class name");
 		equal(frag.childNodes[0].innerHTML, "bar", "correct innerHTMl");
 	});
-	
+
+	test("Passing Partial set in options (#1388 and #1389). Support live binding of partial", function () {
+		var data = new can.Map({
+			name: "World",
+			greeting: "hello"
+		});
+
+		can.view.registerView("hello", "hello {{name}}", ".stache");
+		can.view.registerView("goodbye", "goodbye {{name}}", ".stache");
+
+		var template = can.stache("<div>{{>greeting}}</div>")(data);
+
+		var div = document.createElement("div");
+		div.appendChild(template);
+		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+
+		data.attr("greeting", "goodbye");
+		equal(div.innerHTML, "<div>goodbye World</div>", "Partial updates when attr is updated");
+
+	});
 });

@@ -244,13 +244,22 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			this.element[0].value = (val == null ? '' : val);
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
+			// If the input value changes, this will set the live bound data to reflect the change.
 		"change": function () {
 			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
 			if (!this.element) {
 				return;
 			}
+			var el = this.element[0];
+
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(this.element[0].value);
+			this.options.value(el.value);
+			var newVal = this.options.value();
+
+			// If the newVal isn't the same as the input, set it's value
+			if(el.value !== newVal) {
+				el.value = newVal;
+			}
 		}
 	}),
 	// ### Checked 

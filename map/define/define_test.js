@@ -1,5 +1,5 @@
 /* jshint asi: false */
-steal("can/map/define", "can/test", "steal-qunit", function () {
+steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	QUnit.module('can/map/define');
 
@@ -588,6 +588,46 @@ steal("can/map/define", "can/test", "steal-qunit", function () {
 			prefix + 'Define plugin style default property definition');
 		equal(n.attr('lastNumber'), 9,
 			prefix + 'Define plugin style generated default property definition');
+	});
+
+	test('default behaviors with "*" work for attributes', function() {
+		expect(8);
+		var DefaultMap = can.Map.extend({
+			define: {
+				someNumber: {
+					value: '5'
+				},
+				'*': {
+					type: 'number',
+					serialize: function(value) {
+						return '' + value;
+					},
+					set: function(newVal) {
+						ok(true, 'set called');
+						return newVal;
+					},
+					remove: function(currentVal) {
+						ok(true, 'remove called');
+						return false;
+					}
+				}
+			}
+		});
+
+		var map = new DefaultMap(),
+			serializedMap;
+
+		equal(map.attr('someNumber'), 5, 'value of someNumber should be converted to a number');
+		map.attr('number', '10'); // Custom set should be called
+		equal(map.attr('number'), 10, 'value of number should be converted to a number');
+		map.removeAttr('number'); // Custom removed should be called
+		equal(map.attr('number'), 10, 'number should not be removed');
+
+		serializedMap = map.serialize();
+
+		equal(serializedMap.number, '10', 'number serialized as string');
+		equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
+		equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
 	});
 
 });
