@@ -510,7 +510,7 @@ steal("can/route", "can/test", "steal-qunit", function () {
 			}
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/testing.html?5");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
+			can.$("#qunit-fixture")[0].appendChild(iframe);
 		});
 
 		test("removing things from the hash", function () {
