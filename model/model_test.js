@@ -1748,5 +1748,19 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 
 	});
 
+
+	test("Models should be removed from store when id is changed", function(){
+		var Task = can.Model.extend({},{});
+		var t1 = new Task({id: 1, name: "MyTask"});
+
+		t1.bind('change', function(){});
+		ok(Task.store[1].name === "MyTask", "Model with id 1 should be in store");
+
+		t1.attr("id", 5);
+		ok(Task.store[1].name === "MyTask", "Model is 5 should be in store");
+		ok(typeof Task.store[1] === "undefined", "Model with id 1 should be removed from store");
+	});
+
+
 });
 
