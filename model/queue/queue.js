@@ -104,7 +104,7 @@ steal('can/util', 'can/model', 'can/map/backup', function (can) {
 				// Create backup of last good known state returned
 				// from the server. This allows users to restore it
 				// if API returns error
-				this._backupStore = attrs;
+				this._backupStore(attrs);
 				attrs = cleanAttrs(this._changedAttrs || [], attrs);
 			}
 			// call the original function with the cleaned up attributes

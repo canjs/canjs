@@ -1,4 +1,4 @@
-steal('./deparam', function (can) {
+steal('./deparam', function () {
 	module('can/util/string/deparam');
 	/** /
 test("Basic deparam",function(){

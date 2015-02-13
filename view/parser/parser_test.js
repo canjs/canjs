@@ -1,4 +1,4 @@
-steal("can/view/parser", function(parser){
+steal("can/view/parser", "steal-qunit", function(parser){
 	
 	
 	module("can/view/parser");
@@ -123,6 +123,19 @@ steal("can/view/parser", function(parser){
 			["special", ["!\n  This is a\n  multi-line comment...\n"]],
 			["chars", ["67890\n"]],
 			["done",[]]
+		]));
+	});
+
+
+	test("block are allowed inside anchor tags", function(){
+		parser("<a><div></div></a>", makeChecks([
+			['start', ['a', false]],
+			['end', ['a', false]],
+			['start', ['div', false]],
+			['end', ['div', false]],
+			['close', ['div']],
+			['close', ['a']],
+			['done', []]
 		]));
 	});
 

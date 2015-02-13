@@ -162,9 +162,7 @@ For example, in the example below, Paginator can.Map includes a `page` property,
 
 ## Merging
 
-By default, if a value returned from a setter is an object, array, can.Map, or can.List, the effect will be to replace the property with the new object completely. This is not the same as calling setting a property with plain old `attr` and passing an object into a property that was already a can.Map, which will merge the new properties with the existing map.
-
-With a set method, the nested map is replaced with a new one:
+By default, if a value returned from a setter is an object, array, can.Map, or can.List, the effect will be to replace the property with the new object completely. 
 
     Contact = can.Map.extend({
       define: {
@@ -184,7 +182,15 @@ With a set method, the nested map is replaced with a new one:
     alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
     alice.info._cid; // '.map2'
 
-If you would rather have the new Map or List merged into the current value, call
+By contrast, if you access a property of a Map using `.attr`, then change it by calling `.attr` on it directly, the new properties will be merged with the existing nested Map, not replaced.
+
+    var contact = new can.Map({
+      'info' : {'breath' : 'smells like roses'}
+    });
+    var newInfo = {'teeth' : 'shiny and clean'};
+    contact.attr('info').attr(newInfo); // info is now a merged object
+
+If you would rather have the new Map or List merged into the current value, not replaced, call
 `attr` inside the setter:
 
 

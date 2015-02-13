@@ -1,4 +1,4 @@
-steal('can/util/fixture', 'can/model', 'can/test', function () {
+steal('can/util/fixture', 'can/model', 'can/test', 'steal-qunit', function () {
 	QUnit.module('can/util/fixture');
 	test('static fixtures', function () {
 		stop();

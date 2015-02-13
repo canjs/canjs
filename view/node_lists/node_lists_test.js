@@ -1,4 +1,4 @@
-steal('can/view/node_lists', 'can/view/elements.js', function (nodeLists, elements) {
+steal('can/view/node_lists', 'can/view/elements.js', 'steal-qunit', function (nodeLists, elements) {
 
 	module('can/view/live/node_lists');
 

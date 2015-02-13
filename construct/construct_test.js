@@ -1,4 +1,4 @@
-steal('can/construct', function () {
+steal('can/construct', 'steal-qunit', function () {
 	/* global Foo, Car, Bar */
 	QUnit.module('can/construct', {
 		setup: function () {

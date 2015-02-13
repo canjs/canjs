@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/map", "can/compute", "can/test", "can/list", function(){
+steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(){
 
 	QUnit.module('can/map');
 

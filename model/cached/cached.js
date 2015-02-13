@@ -1,4 +1,4 @@
-steal('can/model', 'can/util/object', 'can/util/json.js', function () {
+steal('can/model', 'can/util/object', function () {
 
 	//!steal-remove-start
 	can.dev.warn("can/model/cached is a deprecated plugin and will be removed in a future release.");
@@ -10,7 +10,7 @@ steal('can/model', 'can/util/object', 'can/util/json.js', function () {
 			can.Model.setup.apply(this, arguments);
 			// setup data
 			if (typeof window.localStorage !== 'undefined') {
-				this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
+				this._cached = JSON.parse(window.localStorage.getItem(this.cachedKey())) || {};
 			} else {
 				this._cached = {};
 			}

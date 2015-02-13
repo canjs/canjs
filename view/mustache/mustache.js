@@ -1699,8 +1699,9 @@ steal('can/util',
 			if (!can.view.cached[partial]) {
 				// we don't want to bind to changes so clear and restore reading
 				var reads = can.__clearReading();
-				if (scope.attr('partial')) {
-					partial = scope.attr('partial');
+				var scopePartialName = scope.attr(partial);
+				if (scopePartialName) {
+					partial = scopePartialName;
 				}
 				can.__setReading(reads);
 			}

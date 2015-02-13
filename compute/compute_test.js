@@ -1,4 +1,4 @@
-steal("can/compute", "can/test", "can/map", function () {
+steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 	QUnit.module('can/compute');
 	test('single value compute', function () {
 		var num = can.compute(1);

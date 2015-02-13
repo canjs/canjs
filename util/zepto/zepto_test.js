@@ -36,7 +36,7 @@ steal('zepto', function ($) {
 		})
 
 		test("removed", 1, function () {
-			can.$("#qunit-test-area")
+			can.$("#qunit-fixture")
 				.append("<div id='foo'>foo</div>")
 			can.$('#foo')
 				.bind('removed', function () {
@@ -48,7 +48,7 @@ steal('zepto', function ($) {
 		})
 
 		test("$.fn.remove/empty is extended, not replaced (#651)", function () {
-			can.$("#qunit-test-area")
+			can.$("#qunit-fixture")
 				.append("<div id='zepto-remove'>foo</div>");
 
 			var foo = can.$('#zepto-remove')
@@ -56,10 +56,10 @@ steal('zepto', function ($) {
 			equal(foo[0].__remove, 1);
 			equal( !! foo[0].parentNode, false);
 
-			can.$("#qunit-test-area")
+			can.$("#qunit-fixture")
 				.empty();
-			equal(can.$("#qunit-test-area")[0].innerHTML, '');
-			equal(can.$("#qunit-test-area")[0].__empty, 1);
+			equal(can.$("#qunit-fixture")[0].innerHTML, '');
+			equal(can.$("#qunit-fixture")[0].__empty, 1);
 		});
 
 	})

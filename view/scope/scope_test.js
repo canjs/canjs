@@ -1,4 +1,4 @@
-steal("can/view/scope", "can/route", "can/test", function () {
+steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 	QUnit.module('can/view/scope');
 	/*	test("basics",function(){
 

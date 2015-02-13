@@ -1,5 +1,5 @@
 /* jshint asi:true,multistr:true*/
-steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",function(){
+steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(){
 	
 	
 	QUnit.module("can/view/stache",{
@@ -250,7 +250,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var frag = can.stache( template )({
 				completed: 0
 			});
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		deepEqual(can.$('#zero')[0].innerHTML, "0", 'zero shown');
 	});
 
@@ -270,14 +270,14 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var frag = can.stache( template ) ({
 				todos: todos
 			});
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		deepEqual(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
 
 		// now update the named attribute
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("live-binding with escaping", function () {
@@ -289,7 +289,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		var tpl = can.stache( template );
 
-		can.append(can.$('#qunit-test-area'), tpl(teacher));
+		can.append(can.$('#qunit-fixture'), tpl(teacher));
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
@@ -300,7 +300,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("truthy", function () {
@@ -1474,8 +1474,8 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 				people: people
 			});
 
-		can.append(can.$('#qunit-test-area'), compiled);
-		equal(can.$('#qunit-test-area table tbody')
+		can.append(can.$('#qunit-fixture'), compiled);
+		equal(can.$('#qunit-fixture table tbody')
 			.length, 2, "two tbodies");
 	})
 
@@ -2768,7 +2768,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		});
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp(data));
 
 		stop();
@@ -2832,7 +2832,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp({
 			data: data
 		}));
@@ -2868,7 +2868,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		], function (content) {
 			var div = document.createElement('div');
 
-			can.append(can.$('#qunit-test-area'), div);
+			can.append(can.$('#qunit-fixture'), div);
 			can.append(can.$(div), can.stache(content)());
 			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 		});
@@ -3501,7 +3501,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		var tmpl = "<my-tag></my-tag>";
 
 		var frag = can.stache(tmpl)({});
-		can.append(can.$("#qunit-test-area"), frag);
+		can.append(can.$("#qunit-fixture"), frag);
 
 		equal(can.$("my-tag").length, 1, "Element created in default namespace");
 	});
@@ -3655,5 +3655,24 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs",fu
 		equal(frag.childNodes[0].className, "foo", "correct class name");
 		equal(frag.childNodes[0].innerHTML, "bar", "correct innerHTMl");
 	});
-	
+
+	test("Passing Partial set in options (#1388 and #1389). Support live binding of partial", function () {
+		var data = new can.Map({
+			name: "World",
+			greeting: "hello"
+		});
+
+		can.view.registerView("hello", "hello {{name}}", ".stache");
+		can.view.registerView("goodbye", "goodbye {{name}}", ".stache");
+
+		var template = can.stache("<div>{{>greeting}}</div>")(data);
+
+		var div = document.createElement("div");
+		div.appendChild(template);
+		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+
+		data.attr("greeting", "goodbye");
+		equal(div.innerHTML, "<div>goodbye World</div>", "Partial updates when attr is updated");
+
+	});
 });
