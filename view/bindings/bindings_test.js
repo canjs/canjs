@@ -631,7 +631,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view
 			age: compute
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var input = ta.getElementsByTagName("input")[0];
