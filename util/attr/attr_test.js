@@ -5,9 +5,9 @@ steal('can/util', 'can/util/attr', function () {
 
 		var div = document.createElement("div");
 
-		
+
 		var attrHandler1 = function(ev) {
-			
+
 			equal(ev.attributeName, "foo", "attribute name is correct");
 			equal(ev.target, div, "target");
 			equal(ev.oldValue, null, "oldValue");
@@ -66,6 +66,24 @@ steal('can/util', 'can/util/attr', function () {
 
 	});
 
+	test("attr.set CHECKED attribute works", function(){
+
+		var input = document.createElement("input");
+		input.type = "checkbox";
+
+		document.getElementById("qunit-test-area").appendChild(input);
+
+		can.attr.set(input, "CHECKED");
+		equal(input.checked, true);
+
+		input.checked = false;
+
+		can.attr.set(input, "CHECKED");
+
+		equal(input.checked, true);
+		can.remove(can.$("#qunit-test-area>*"));
+	});
+
 	if (window.jQuery || window.Zepto) {
 
 		test("zepto or jQuery - bind and unbind", function () {
@@ -86,7 +104,7 @@ steal('can/util', 'can/util/attr', function () {
 					start();
 				}, 20);
 			};
-			
+
 			$(div)
 				.bind("attributes", attrHandler);
 
