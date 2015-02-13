@@ -404,7 +404,7 @@ steal("can/map/define", "can/test", function () {
 		var g = new Grabber();
 		// This assertion doesn't mean much.  It's mostly testing
 		// that there were no errors.
-		equal(g.attr("vals").length,0,"zero items in array" );
+		equal(g.attr("vals").length,1,"one item in array" );
 
 	});
 
