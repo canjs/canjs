@@ -36,13 +36,6 @@ module.exports = function (grunt) {
 				return null;
 			},
 
-			test: function (definition, key) {
-				var name = key.substr(key.lastIndexOf('/') + 1);
-				var path = key.replace('can/', '') + '/';
-				var out = path + name + '_test.js';
-				return out;
-			},
-
 			options: function (config) {
 				return {
 					dist: 'can.' + config
@@ -68,7 +61,12 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				out: 'test/'
+				out: 'test/',
+				transform: {
+					test: function(definition, key) {
+						return key + '_test.js';
+					}
+				}
 			},
 			dist: testifyDist,
 			dev: _.extend({}, testifyDist, {
@@ -79,7 +77,14 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__-amd.html.ejs',
 				builder: builderJSON,
 				root: '../..',
-				out: 'test/amd/'
+				out: 'test/amd/',
+				transform: {
+					module: function(definition, name) {
+						var path = name.split('/');
+						path.pop();
+						return path.join('/');
+					}
+				}
 			},
 			compatibility: {
 				template: 'test/templates/__configuration__-compat.html.ejs',
@@ -92,12 +97,6 @@ module.exports = function (grunt) {
 							return definition.name.toLowerCase();
 						}
 						return null;
-					},
-
-					test: function (definition, key) {
-						var name = key.substr(key.lastIndexOf('/') + 1);
-						var path = key.replace('can/', '') + '/';
-						return path + name + '_test.js';
 					},
 
 					options: function (config) {
