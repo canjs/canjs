@@ -1,4 +1,4 @@
-steal("can/model", "can/view/ejs", "can/test", function () {
+steal("can/model", "can/view/ejs", "can/test", "steal-qunit", function () {
 	QUnit.module('can/view/ejs, rendering', {
 		setup: function () {
 			can.view.ext = '.ejs';
@@ -189,7 +189,7 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 			text: text
 		})
 			.render();
-		can.append(can.$('#qunit-test-area'), can.view.frag(compiled));
+		can.append(can.$('#qunit-fixture'), can.view.frag(compiled));
 		equal(can.$('#hookup')[0].innerHTML, 'Simple');
 	});
 	test('list helper', function () {
@@ -247,7 +247,7 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 	});
 	test('event binding / triggering on things other than options', 1, function () {
 		var frag = can.buildFragment('<ul><li>a</li></ul>', [document]);
-		var qta = document.getElementById('qunit-test-area');
+		var qta = document.getElementById('qunit-fixture');
 		qta.innerHTML = '';
 		qta.appendChild(frag);
 		// destroyed events should not bubble
@@ -763,7 +763,7 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 			.render({
 				obs: obs
 			});
-		var div = document.getElementById('qunit-test-area');
+		var div = document.getElementById('qunit-fixture');
 		div.appendChild(can.view.frag(compiled));
 		var input = div.getElementsByTagName('input')[0];
 		can.trigger(input, 'click');
@@ -877,17 +877,17 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {
 			unordered: unordered
 		}));
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(div);
-		var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
+		var el = can.$('#qunit-fixture ul > li > ol > li > ul > li > ol > li')[0];
 		ok( !! el && can.trim(el.innerHTML) === '1', 'Uncached indirectly recursive EJS working.');
 		can.view.cache = true;
 		div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {
 			unordered: unordered
 		}));
-		el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
+		el = can.$('#qunit-fixture ul + ul > li > ol > li > ul > li > ol > li')[0];
 		ok( !! el && can.trim(el.innerHTML) === '1', 'Cached indirectly recursive EJS working.');
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.removeChild(div);
 	});
 	test('recursive views of previously stolen files shouldn\'t fail', function () {
@@ -914,17 +914,17 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 		div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {
 			unordered: unordered
 		}));
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(div);
-		var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
+		var el = can.$('#qunit-fixture ul > li > ol > li > ul > li > ol > li')[0];
 		ok( !! el && can.trim(el.innerHTML) === '1', 'Uncached indirectly recursive EJS working.');
 		can.view.cache = true;
 		div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {
 			unordered: unordered
 		}));
-		el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
+		el = can.$('#qunit-fixture ul + ul > li > ol > li > ul > li > ol > li')[0];
 		ok( !! el && can.trim(el.innerHTML) === '1', 'Cached indirectly recursive EJS working.');
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.removeChild(div);
 	});
 	test('live binding select', function () {
@@ -1010,9 +1010,9 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 				.render({
 					items: items
 				}),
-			div = can.$('#qunit-test-area')[0];
+			div = can.$('#qunit-fixture')[0];
 		div.innerHTML = '';
-		can.append(can.$('#qunit-test-area'), can.view.frag(compiled));
+		can.append(can.$('#qunit-fixture'), can.view.frag(compiled));
 		ok(div.getElementsByTagName('label')[0], 'label exists');
 		items[0].attr('html', '<p>hi</p>');
 		equal(div.getElementsByTagName('label')
@@ -1423,7 +1423,7 @@ steal("can/model", "can/view/ejs", "can/test", function () {
 			template = '<div>Animals:' + '<% if( animals.attr(\'length\') ){ %>~' + '<% animals.each(function(animal){%>' + '<span><%=animal %></span>' + '<%})%>' + '<% } else { %>' + 'No animals' + '<% } %>' + '!</div>';
 		var renderer = can.view.ejs(template);
 		var div = document.createElement('div');
-		// $("#qunit-test-area").html(div);
+		// $("#qunit-fixture").html(div);
 		var frag = renderer({
 			animals: animals
 		});

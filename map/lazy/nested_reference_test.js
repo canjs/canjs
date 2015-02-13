@@ -1,5 +1,5 @@
 /* jshint asi:true */
-steal('can/map/lazy/nested_reference.js', function () {
+steal('can/map/lazy/nested_reference.js', 'steal-qunit', function () {
 
 	QUnit.module("can/map/lazy/nested_reference");
 

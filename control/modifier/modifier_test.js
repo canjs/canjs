@@ -1,4 +1,4 @@
-steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
+steal('can/util', 'can/control/modifier', 'can/util/event.js', 'steal-qunit', function (can) {
 	module('can/control/modifier');
 	test('nested selectors', function () {
 		var paw, tail;
@@ -10,8 +10,8 @@ steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 				tail++;
 			}
 		});
-		can.$('#qunit-test-area')[0].innerHTML = '<div class=\'cat\'><div class=\'paw\'></div><div class=\'tail\'></div></div>';
-		new controllerClass(can.$('#qunit-test-area'));
+		can.$('#qunit-fixture')[0].innerHTML = '<div class=\'cat\'><div class=\'paw\'></div><div class=\'tail\'></div></div>';
+		new controllerClass(can.$('#qunit-fixture'));
 		paw = 0;
 		tail = 0;
 		can.trigger(can.$('.tail'), 'click');
@@ -40,7 +40,7 @@ steal('can/util', 'can/control/modifier', 'can/util/event.js', function (can) {
 				run3++;
 			}
 		});
-		can.$('#qunit-test-area')[0].innerHTML = '<div id="foo"><span>Test</span></div><div id="bar"></div>';
+		can.$('#qunit-fixture')[0].innerHTML = '<div id="foo"><span>Test</span></div><div id="bar"></div>';
 		/**/
 		var controller1 = new controllerClass('#foo', {
 			binder: can.$(document.body)

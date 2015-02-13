@@ -1,4 +1,4 @@
-steal("can/construct/proxy", "can/control", function () {
+steal("can/construct/proxy", "can/control", "steal-qunit", function () {
 	/* global Car */
 	var isSteal = typeof steal !== 'undefined';
 	QUnit.module('can/construct/proxy');

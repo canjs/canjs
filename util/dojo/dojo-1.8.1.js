@@ -3759,7 +3759,7 @@ require({
 		'dojo/_base/Deferred': function () {
 			define([
 				'./kernel',
-				'../Deferred',
+				'../deferred',
 				'../promise/Promise',
 				'../errors/CancelError',
 				'../has',
@@ -11639,7 +11639,7 @@ require({
 				'exports',
 				'../errors/RequestError',
 				'../errors/CancelError',
-				'../Deferred',
+				'../deferred',
 				'../io-query',
 				'../_base/array',
 				'../_base/lang'

@@ -9,7 +9,7 @@
 /* global Organisation: true */
 /* global Company: true */
 /* global My: true */
-steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-qunit", function () {
 	QUnit.module('can/model', {
 		setup: function () {}
 	});

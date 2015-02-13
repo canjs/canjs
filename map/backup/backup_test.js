@@ -1,5 +1,5 @@
 /*global Recipe*/
-steal("can/map/backup", "can/model", "can/test", function () {
+steal("can/map/backup", "can/model", "can/test", "steal-qunit", function () {
 	QUnit.module('can/map/backup', {
 		setup: function () {
 			can.Map.extend('Recipe');

@@ -1,12 +1,13 @@
+"format steal";
 steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragment.js',
 	'can/util/array/each.js',
 	'can/util/object/isplain',
 	'can/util/deferred.js',
 	'can/util/hashchange.js',
 	'can/util/inserted',
-	function (can, attr) {
+	function (can, attr, djo) {
 
-	var dojo = window.dojo;
+	var dojo = djo || window.dojo;
 	define('plugd/trigger', ['dojo/main'], function () {
 		var d = dojo;
 		var isfn = d.isFunction;

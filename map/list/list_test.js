@@ -1,4 +1,4 @@
-steal("can/map/list", function () {
+steal("can/map/list", "steal-qunit", function () {
 	QUnit.module('can/map/list');
 	test('filter', 8, function () {
 		var original = new can.List([{

@@ -1,4 +1,4 @@
-steal("can/map/sort", "can/test", "can/view/mustache", function () {
+steal("can/map/sort", "can/test", "can/view/mustache", "steal-qunit", function () {
 	QUnit.module('can/map/sort');
 
 	test('list events', 16, function () {

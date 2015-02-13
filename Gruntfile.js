@@ -1,8 +1,20 @@
 /*global __dirname */
 var path = require('path');
+var getTestTasks = function() {
+	var suite = process.env.TEST_SUITE;
+	var testTasks = ['testee'];
+	if(suite === 'loaders') {
+		testTasks = ['testee:steal', 'testee:amd'];
+	} else if(suite === 'dists') {
+		testTasks = [ 'testee:dist', 'testee:dev', 'testee:compatibility' ];
+	} else if(suite === 'individuals') {
+		testTasks = ['testee:individuals'];
+	}
+	return testTasks;
+};
 
 module.exports = function (grunt) {
-	
+
 	var _ = grunt.util._;
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
@@ -22,13 +34,6 @@ module.exports = function (grunt) {
 					return definition.name.toLowerCase();
 				}
 				return null;
-			},
-
-			test: function (definition, key) {
-				var name = key.substr(key.lastIndexOf('/') + 1);
-				var path = key.replace('can/', '') + '/';
-				var out = path + name + '_test.js';
-				return out;
 			},
 
 			options: function (config) {
@@ -56,7 +61,12 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				out: 'test/'
+				out: 'test/',
+				transform: {
+					test: function(definition, key) {
+						return key + '_test.js';
+					}
+				}
 			},
 			dist: testifyDist,
 			dev: _.extend({}, testifyDist, {
@@ -67,7 +77,14 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__-amd.html.ejs',
 				builder: builderJSON,
 				root: '../..',
-				out: 'test/amd/'
+				out: 'test/amd/',
+				transform: {
+					module: function(definition, name) {
+						var path = name.split('/');
+						path.pop();
+						return path.join('/');
+					}
+				}
 			},
 			compatibility: {
 				template: 'test/templates/__configuration__-compat.html.ejs',
@@ -80,12 +97,6 @@ module.exports = function (grunt) {
 							return definition.name.toLowerCase();
 						}
 						return null;
-					},
-
-					test: function (definition, key) {
-						var name = key.substr(key.lastIndexOf('/') + 1);
-						var path = key.replace('can/', '') + '/';
-						return path + name + '_test.js';
 					},
 
 					options: function (config) {
@@ -114,6 +125,7 @@ module.exports = function (grunt) {
 		},
 		// Removes the dist folder
 		clean: {
+			test: ['test/pluginified/latest.js'],
 			build: ['dist/']
 		},
 		'string-replace': {
@@ -209,15 +221,16 @@ module.exports = function (grunt) {
 				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
 			}
 		},
-		stealPluginify: require("./build/config_stealPluginify")(),
+		"steal-export": require("./build/config_stealPluginify")(),
 		meta: {
-			defaults: require("./build/config_meta_defaults")(),
-			modules: require("./build/config_meta_modules")
+			steal: {
+				modules: require("./build/config_meta_modules"),
+				"export-helpers": require("./build/config_meta_defaults")()
+			}
 		},
 		testee: {
 			options: {
 				timeout: 10000,
-				// On Travis we want less output
 				reporter: 'Dot'
 			},
 			steal: [
@@ -226,49 +239,24 @@ module.exports = function (grunt) {
 				'!test/performance-loading.html',
 				'!test/index.html'
 			],
-			amd: [ 'test/amd/*.html', '!test/amd/dojo.html' ],
-			compatibility: [ 'test/compatibility/*.html' ],
-			dev: [ 'test/dev/*.html' ],
-			dist: [ 'test/dist/*.html' ],
-			individuals: [
-				'component/test.html',
-				'compute/test.html',
-				'construct/test.html',
-				'construct/proxy/test.html',
-				'construct/super/test.html',
-				'control/test.html',
-				'map/test.html',
-				'map/lazy/test.html',
-				'map/define/test.html',
-				'map/attributes/test.html',
-				'map/backup/test.html',
-				'map/list/test.html',
-				'map/setter/test.html',
-				'map/sort/test.html',
-				'map/validations/test.html',
-				'model/test.html',
-				'observe/test.html',
-				'list/promise/test.html',
-				'route/test.html',
-				'route/pushstate/test.html',
-				'view/test.html',
-				'view/ejs/test.html',
-				'view/mustache/test.html',
-				'util/fixture/test.html'
-			]
+			amd: [ 'test/amd/*.html' ],
+			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
+			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
+			dev: [ 'test/dev/*.html', '!test/dev/dojo.html' ],
+			individuals: [ '**/test.html', '!view/autorender/test.html',
+				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});
 	grunt.registerTask('browserify-package', function(){
-		var browser = {};
+		var browser = {"./can": "./dist/cjs/can"};
 		require('./build/config_meta_modules').forEach(function(mod){
-			browser[mod.moduleName.replace("can/","./")] = mod.moduleName.replace("can/","./dist/cjs/");
+			browser["./"+mod.moduleName] = "./dist/cjs/"+mod.moduleName;
 		});
-		
 		var cloned = _.clone(pkg, true);
 		cloned.browser = browser;
 		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -284,20 +272,22 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('testee');
 
 	grunt.registerTask('default', ['build']);
-	
-	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
+
+	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version', 'browserify-package']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
-		'stealPluginify:amd',
-		'stealPluginify:amd-util-jquery',
-		'stealPluginify:amd-util-dojo',
-		'stealPluginify:amd-util-yui',
-		'stealPluginify:amd-util-zepto',
-		'stealPluginify:amd-util-mootools',
+		'steal-export:amd',
+		'steal-export:amd-util-jquery',
+		'steal-export:amd-util-dojo',
+		'steal-export:amd-util-yui',
+		'steal-export:amd-util-zepto',
+		'steal-export:amd-util-mootools',
 		'string-replace:version'
 	]);
-	
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha', 'testee']);
+
+
+	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha']
+		.concat(getTestTasks()));
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);

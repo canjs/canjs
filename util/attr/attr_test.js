@@ -1,4 +1,4 @@
-steal('can/util', 'can/util/attr', function () {
+steal('can/util', 'can/view/mustache', 'can/util/attr', 'steal-qunit', function () {
 	QUnit.module("can/util/attr");
 
 	test("attributes event", function () {

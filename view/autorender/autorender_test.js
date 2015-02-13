@@ -1,4 +1,4 @@
-steal("can/test", function () {
+steal("can/test", "steal-qunit", function () {
 	
 	var makeIframe = function(src){
 		var iframe = document.createElement('iframe');

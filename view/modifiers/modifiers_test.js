@@ -1,4 +1,4 @@
-steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
+steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", "steal-qunit", function () {
 	// this only applied to jQuery libs
 	if (!window.jQuery) {
 		return;
@@ -7,13 +7,13 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 	
 	test('modifier with a deferred', function () {
 	
-		$('#qunit-test-area')
+		$('#qunit-fixture')
 			.html('');
 			
 		stop();
 		var foo = can.Deferred();
 		
-		$('#qunit-test-area')
+		$('#qunit-fixture')
 			.html(can.test.path('view/test/deferred.ejs'), foo);
 	
 		var templateLoaded = new can.Deferred(),
@@ -37,7 +37,7 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 
 		can.when(foo, templateLoaded).then(function(foo){
 			setTimeout(function(){
-				equal($('#qunit-test-area')
+				equal($('#qunit-fixture')
 					.html(), 'FOO', 'worked!');
 				start();
 			},10);
@@ -47,18 +47,18 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 	});
 	
 	/*test("non-HTML content in hookups", function(){
-	 $("#qunit-test-area").html("<textarea></textarea>");
+	 $("#qunit-fixture").html("<textarea></textarea>");
 	 can.render.hookup(function(){});
-	 $("#qunit-test-area textarea").val("asdf");
-	 equal($("#qunit-test-area textarea").val(), "asdf");
+	 $("#qunit-fixture textarea").val("asdf");
+	 equal($("#qunit-fixture textarea").val(), "asdf");
 	 });*/
 	test('html takes promise', function () {
 		var d = new can.Deferred();
-		can.$('#qunit-test-area')
+		can.$('#qunit-fixture')
 			.html(d);
 		stop();
 		d.done(function () {
-			equal(can.$('#qunit-test-area')
+			equal(can.$('#qunit-fixture')
 				.html(), 'Hello World', 'deferred is working');
 			start();
 		});
@@ -70,27 +70,27 @@ steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function () {
 		var frag = can.view(can.test.path('view/test/hookupvalcall.ejs'), {});
 		var div = document.createElement('div');
 		div.appendChild(frag);
-		equal(div.getElementsByTagName('div')[0].getElementsByTagName('h3')[0].innerHTML, 'in div', 'Rendered withing other template');
+		equal(div.getElementsByTagName('div')[0].getElementsByTagName('h3')[0].innerHTML, 'in div', 'Rendered within other template');
 	});
 	test('jQuery.fn.hookup', function () {
-		can.$('#qunit-test-area')
+		can.$('#qunit-fixture')
 			.html('');
 		var els = $(can.view.render(can.test.path('view/test/hookup.ejs'), {}))
 			.hookup();
-		can.$('#qunit-test-area')
+		can.$('#qunit-fixture')
 			.html(els);
 		//makes sure no error happens
-		equal(can.$('#qunit-test-area')[0].getElementsByTagName('div')[0].id, 'dummy', 'Element hooked up');
+		equal(can.$('#qunit-fixture')[0].getElementsByTagName('div')[0].id, 'dummy', 'Element hooked up');
 	});
 	test('hookups don\'t break script execution (issue #130)', function () {
 		// this simulates a pending hookup (hasn't been run yet)
 		can.view.hook(function () {});
 		// this simulates HTML with script tags being loaded (probably legacy code)
-		can.$('#qunit-test-area')
-			.html('<script>can.$(\'#qunit-test-area\').html(\'OK\')</script>');
-		equal(can.$('#qunit-test-area')
+		can.$('#qunit-fixture')
+			.html('<script>can.$(\'#qunit-fixture\').html(\'OK\')</script>');
+		equal(can.$('#qunit-fixture')
 			.html(), 'OK');
-		can.$('#qunit-test-area')
+		can.$('#qunit-fixture')
 			.html('');
 			
 		// clear hookups we check that;

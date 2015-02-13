@@ -1,4 +1,4 @@
-steal('can/event/namespace', 'can/test', function () {
+steal('can/event/namespace', 'can/test', 'steal-qunit', function () {
 	module('can/event/namespace');
 
 	test('Event with namespaces', function() {

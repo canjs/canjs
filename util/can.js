@@ -88,7 +88,7 @@ steal(function () {
 	can["import"] = function(moduleName) {
 		var deferred = new can.Deferred();
 		
-		if(typeof window.System) {
+		if(typeof window.System === "object") {
 			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
 		} else if(window.require && window.require.amd){
