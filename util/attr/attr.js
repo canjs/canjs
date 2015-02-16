@@ -73,8 +73,7 @@ steal("can/util/can.js", function (can) {
 					oldValue = attr.get(el, attrName);
 				}
 
-				var tagName = el.nodeName.toString()
-						.toLowerCase(),
+				var tagName = el.nodeName.toString().toLowerCase(),
 					prop = attr.map[attrName],
 					newValue;
 
@@ -93,7 +92,10 @@ steal("can/util/can.js", function (can) {
 					}
 
 				} else if (prop) {
-					newValue = el[prop] = val;
+					newValue = val;
+					if (el[prop] !== val) {
+						el[prop] = val;
+					}
 					if (prop === "value" && can.inArray(tagName, attr.defaultValue) >= 0) {
 						el.defaultValue = val;
 					}
