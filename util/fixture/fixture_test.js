@@ -571,6 +571,27 @@ steal('can/util/fixture', 'can/model', 'can/test', 'steal-qunit', function () {
 		});
 		
 	});
+
+	test("fixture: false flag circumvents can.fixture", function() {
+
+		can.fixture("GET /thinger/mabobs", function (settings) {
+			return {
+				thingers: "mabobs"
+			};
+		});
+
+		stop();
+		can.ajax({
+			url: "/thinger/mabobs",
+			method: "GET",
+			fixture: false,
+			error: function() {
+				ok(true, 'AJAX errors out as expected');
+				start();
+			}
+		});
+
+	});
 	
 	
 });
