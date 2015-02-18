@@ -9,7 +9,7 @@
 @description Create widgets that use a template, a view-model 
 and custom tags.
 
-@deprecated {2.1} To pass data from the scope, you must wrap your attribute 
+@warning {2.1} To pass data from the scope, you must wrap your attribute
 value with `{}`. In 3.0, [can.mustache]
 will use [can.stache]'s method.
 
