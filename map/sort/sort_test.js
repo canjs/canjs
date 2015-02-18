@@ -1,7 +1,7 @@
 steal("can/map/sort", "can/test", "can/view/mustache", "steal-qunit", function () {
 	QUnit.module('can/map/sort');
 
-	test('list events', 16, function () {
+	test('list events', 12, function () {
 		var list = new can.List([{
 			name: 'Justin'
 		}, {
@@ -34,12 +34,11 @@ steal("can/map/sort", "can/test", "can/view/mustache", "steal-qunit", function (
 			equal(items[0].name, 'Alexis');
 			equal(oldPos, 0, 'put in right spot');
 		});
-		list.bind('add', function (ev, items, newLength) {
+		list.bind('add', function (ev, items, pos) {
 			ok(true, 'add called');
 			equal(items.length, 1);
 			equal(items[0].name, 'Alexis');
-			// .push returns the new length not the current position
-			equal(newLength, 4, 'got new length');
+			equal(pos, 0, 'got sorted position');
 		});
 		list.push({
 			name: 'Alexis'
@@ -47,6 +46,39 @@ steal("can/map/sort", "can/test", "can/view/mustache", "steal-qunit", function (
 		// now lets remove alexis ...
 		list.splice(0, 1);
 		list[0].attr('name', 'Zed');
+	});
+
+
+	test('sort() events', 14, function () {
+		var list = new can.List([{
+			name: 'Justin'
+		}, {
+			name: 'Brian'
+		}, {
+			name: 'Austin'
+		}, {
+			name: 'Mihael'
+		}]);
+		list.bind('remove', function (ev, items, oldPos) {
+			ok(true, 'remove called');
+			equal(items.length, 4, 'remove all elements');
+			equal(items[0].name, 'Justin', 'remove elements in old order');
+		});
+		list.bind('add', function (ev, items) {
+			ok(true, 'add called');
+			equal(items.length, 4, 'add items correct length');
+			equal(items[0].name, 'Austin', 'add items in sorted order (1/4)');
+			equal(items[1].name, 'Brian', 'add items in sorted order (2/4)');
+			equal(items[2].name, 'Justin', 'add items in sorted order (3/4)');
+			equal(items[3].name, 'Mihael', 'add items in sorted order (4/4)');
+			equal(list.length, 4, 'list correct length');
+			equal(list[0].name, 'Austin', 'list in sorted order (1/4)');
+			equal(list[1].name, 'Brian', 'list in sorted order (2/4)');
+			equal(list[2].name, 'Justin', 'list in sorted order (3/4)');
+			equal(list[3].name, 'Mihael', 'list in sorted order (4/4)');
+		});
+		list.comparator = 'name';
+		list.sort();
 	});
 
 	test('list sort with func', 1, function () {
@@ -124,5 +156,69 @@ steal("can/map/sort", "can/test", "can/view/mustache", "steal-qunit", function (
 		});
 		equal(el.getElementsByTagName('li')
 			.length, 2, 'Live binding rendered second li');
+	});
+
+	test('live binding with comparator and {{#key}}', function () {
+		var renderer = can.view.mustache('<ul>{{#items}}<li>{{text}}</li>{{/items}}</ul>'),
+			el = document.createElement('div'),
+			items = new can.List([{
+				text: 'CCC'
+			}, {
+				text: 'BBB'
+			}]);
+		el.appendChild(renderer({
+			items: items
+		}));
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'CCC',
+			'Unsorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'BBB',
+			'Unsorted list, 2nd item');
+
+		items.comparator = 'text';
+		items.sort();
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'BBB',
+			'Sorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'CCC',
+			'Sorted list, 2nd item');
+
+		items.push({
+			text: 'AAA'
+		});
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'AAA',
+			'Push to sorted list, 1st item');
+		equal(el.getElementsByTagName('li').length, 3,
+			'Push to sorted list, correct length');
+	});
+
+	test('live binding with comparator and {{#each key}}', function () {
+		var renderer = can.view.mustache('<ul>{{#each items}}<li>{{text}}</li>{{/each}}</ul>'),
+			el = document.createElement('div'),
+			items = new can.List([{
+				text: 'CCC'
+			}, {
+				text: 'BBB'
+			}]);
+		el.appendChild(renderer({
+			items: items
+		}));
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'CCC',
+			'Unsorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'BBB',
+			'Unsorted list, 2nd item');
+
+		items.comparator = 'text';
+		items.sort();
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'BBB',
+			'Sorted list, 1st item');
+		equal(el.getElementsByTagName('li')[1].innerHTML, 'CCC',
+			'Sorted list, 2nd item');
+
+		items.push({
+			text: 'AAA'
+		});
+		equal(el.getElementsByTagName('li')[0].innerHTML, 'AAA',
+			'Push to sorted list, 1st item');
+		equal(el.getElementsByTagName('li').length, 3,
+			'Push to sorted list, correct length');
 	});
 });

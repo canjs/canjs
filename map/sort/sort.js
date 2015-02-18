@@ -1,4 +1,4 @@
-steal('can/util', 'can/list', function (can) {
+steal('can/util', 'can/list', 'can/map/bubble.js', function (can) {
 
 	// Change bubble rule to bubble on change if their is a comparator
 	var oldBubbleRule = can.List._bubbleRule;
@@ -56,15 +56,20 @@ steal('can/util', 'can/list', function (can) {
 				args = comparator ? [
 
 					function (a, b) {
-						a = typeof a[comparator] === 'function' ? a[comparator]() : a[comparator];
-						b = typeof b[comparator] === 'function' ? b[comparator]() : b[comparator];
+						a = typeof a[comparator] === 'function' ? a[comparator]() : a.attr(comparator);
+						b = typeof b[comparator] === 'function' ? b[comparator]() : b.attr(comparator);
 						return a === b ? 0 : a < b ? -1 : 1;
 					}
 				] : [method];
 			if (!silent) {
 				can.trigger(this, 'reset');
+				var clone = this.splice(0, this.length);
+				clone.sort.apply(clone, args);
+				return this.splice.apply(this, [0, 0].concat(clone));
 			}
-			return Array.prototype.sort.apply(this, args);
+			else {
+				return Array.prototype.sort.apply(this, args);
+			}
 		}
 	});
 	// create push, pop, shift, and unshift
@@ -119,28 +124,27 @@ steal('can/util', 'can/list', function (can) {
 			var proto = can.List.prototype,
 				old = proto[name];
 			proto[name] = function () {
-				// get the items being added
-				var args = getArgs(arguments),
-					// where we are going to add items
-					len = where ? this.length : 0;
-				// call the original method
-				var res = old.apply(this, arguments);
-				// cause the change where the args are:
-				// len - where the additions happened
-				// add - items added
-				// args - the items added
-				// undefined - the old value
-				if (this.comparator && args.length) {
-					this.sort(null, true);
-					can.batch.trigger(this, 'reset', [args]);
-					this._triggerChange('' + len, 'add', args, undefined);
+				if (this.comparator && arguments.length) {
+					// get the items being added
+					var args = getArgs(arguments);
+					var i = args.length;
+					while (i--) {
+						// Go through and convert anything to an `map` that needs to be converted.
+						var val = can.bubble.set(this, i, this.__type(args[i], i) );
+						// Insert this item at its sorted position.
+						var sortedIndex = this.sortedIndex(val);
+						this.splice(sortedIndex, 0, val);
+					}
+					return this;
+				} else {
+					// call the original method
+					return old.apply(this, arguments);
 				}
-				return res;
 			};
 		});
 	//- override changes for sorting
 	proto._changes = function (ev, attr, how, newVal, oldVal) {
-		if (this.comparator && /^\d+./.test(attr)) {
+		if (this.comparator && /^\d/.test(attr)) {
 			// get the index
 			var index = +/^\d+/.exec(attr)[0],
 				// and item
