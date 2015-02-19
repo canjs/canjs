@@ -56,7 +56,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view
 				}
 			});
 
-			var ta = document.getElementById("qunit-test-area");
+			var ta = document.getElementById("qunit-fixture");
 			ta.appendChild(frag);
 			var p0 = ta.getElementsByTagName("p")[0];
 			can.trigger(p0, "myevent", ["myarg1", "myarg2"]);
