@@ -20,7 +20,7 @@ steal("can/test", "steal-qunit", function () {
 
 	if(window.requirejs) {
 		asyncTest("the basics are able to work for requirejs", function(){
-			makeIframe(can.test.path("view/autorender/tests/steal-basics.html?"+Math.random()));
+			makeIframe(can.test.path("view/autorender/tests/requirejs-basics.html?"+Math.random()));
 		});
 	}
 
