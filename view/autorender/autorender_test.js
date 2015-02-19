@@ -15,7 +15,12 @@ steal("can/test", "steal-qunit", function () {
 	if(window.steal) {
 		asyncTest("the basics are able to work for steal", function(){
 			makeIframe(  can.test.path("view/autorender/tests/steal-basics.html?"+Math.random()) );
-			
+		});
+	}
+
+	if(window.requirejs) {
+		asyncTest("the basics are able to work for requirejs", function(){
+			makeIframe(can.test.path("view/autorender/tests/requirejs-basics.html?"+Math.random()));
 		});
 	}
 
