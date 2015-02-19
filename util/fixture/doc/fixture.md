@@ -175,6 +175,23 @@ You can also set [can.fixture.on] to false:
 
     can.fixture.on = false;
 
+## Bypassing Fixtures
+
+While there are few cases where you would need to, it is possible to bypass a
+fixture completely, without turning off fixtures globally. This is done by passing
+`fixture: false` to your AJAX settings. This will prevent `can.fixture` from
+trapping your request, and actually send it to the server.
+
+    // add a fixture
+    can.fixture('POST /foo', '//fixtures/foo.json');
+
+    // Send AJAX call to server, even if fixtures are on
+    can.ajax({
+        type: 'POST',
+        url: '/foo',
+        fixture: false
+    });
+
 ## can.fixture.store
 
 [can.fixture.store] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use

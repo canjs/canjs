@@ -18,6 +18,9 @@ The `type` property specifies the type of the attribute.  The type can be specif
  - `"date"` - Converts the value to a date or `null if the date can not be converted.
  - `"number"` - Passes the value through `parseFloat`.
  - `"boolean"` - Converts falsey, `"false"` or `"0"` to `false` and everything else to true.
+ - `"htmlbool"` - Like `boolean`, but also converts empty strings to
+   `true`. Used, for example, when input is from component attributes like
+   `<can-tabs reverse/>`
  - `"*"` - Prevents the default type coersion of converting Objects to [can.Map]s and Arrays to [can.List]s.
 
 ### Basic Example

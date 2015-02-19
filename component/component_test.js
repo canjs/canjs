@@ -189,6 +189,55 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.remove(can.$("#qunit-fixture>*"));
 	});
 
+	test("lexical scoping", function() {
+		can.Component.extend({
+			tag: "hello-world",
+			leakScope: false,
+			template: can.view.mustache("{{greeting}} <content>World</content>{{exclamation}}"),
+			scope: {greeting: "Hello"}
+		});
+		var template = can.view.mustache("<hello-world>{{greeting}}</hello-world>");
+		can.append(can.$("#qunit-fixture"), template({
+			greeting: "World",
+			exclamation: "!"
+		}));
+		var hello = can.$("#qunit-fixture hello-world");
+		equal(hello[0].innerHTML.trim(), "Hello World");
+		can.remove(can.$("#qunit-fixture > *"));
+
+		can.Component.extend({
+			tag: "hello-world-no-template",
+			leakScope: false,
+			scope: {greeting: "Hello"}
+		});
+		template = can.view.mustache("<hello-world-no-template>{{greeting}}</hello-world-no-template>");
+		can.append(can.$("#qunit-fixture"), template({
+			greeting: "World",
+			exclamation: "!"
+		}));
+		hello = can.$("#qunit-fixture hello-world-no-template");
+		equal(hello[0].innerHTML.trim(), "Hello",
+			  "If no template is provided to can.Component, treat <content> bindings as dynamic.");
+		can.remove(can.$("#qunit-fixture > *"));
+	});
+
+	test("dynamic scoping", function() {
+		can.Component.extend({
+			tag: "hello-world",
+			leakScope: true,
+			template: can.view.mustache("{{greeting}} <content>World</content>{{exclamation}}"),
+			scope: {greeting: "Hello"}
+		});
+		var template = can.view.mustache("<hello-world>{{greeting}}</hello-world>");
+		can.append(can.$("#qunit-fixture"), template({
+			greeting: "World",
+			exclamation: "!"
+		}));
+		var hello = can.$("#qunit-fixture hello-world");
+		equal(hello[0].innerHTML.trim(), "Hello Hello!");
+		can.remove(can.$("#qunit-fixture > *"));
+	});
+
 	test("treecombo", function () {
 
 		can.Component.extend({
@@ -751,10 +800,11 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component.extend({
 			tag: 'my-scope',
+			template: "{{name}}}",
 			scope: me
 		});
 
-		var template = can.view.mustache('<my-scope>{{name}}</my-scope>');
+		var template = can.view.mustache('<my-scope></my-scope>');
 		equal(template()
 			.childNodes[0].innerHTML, "Justin");
 
@@ -1200,10 +1250,11 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		var Constructed = can.Construct.extend({foo:"bar"},{});
 		
 		can.Component.extend({
-			tag: "con-struct"
+			tag: "con-struct",
+			template: "{{con.foo}}"
 		});
 		
-		var stached = can.stache("<con-struct con='{Constructed}'>{{con.foo}}</con-struct>");
+		var stached = can.stache("<con-struct con='{Constructed}'></con-struct>");
 		
 		var res = stached({
 			Constructed: Constructed
@@ -1270,10 +1321,10 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 	});
 	
 	test("hyphen-less tag names", function () {
-		var template = can.view.mustache('<span></span><foobar>{{name}}</foobar>');
+		var template = can.view.mustache('<span></span><foobar></foobar>');
 		can.Component.extend({
 			tag: "foobar",
-			template: "<div><content/></div>",
+			template: "<div>{{name}}</div>",
 			scope: {
 				name: "Brian"
 			}
