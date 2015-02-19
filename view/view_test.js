@@ -835,4 +835,28 @@ steal("can/view/callbacks",
 			start();
 		});
 	});
+
+	test('live lists are rendered properly when batch updated (#680)', function () {
+		var div1 = document.createElement('div'),
+			div2 = document.createElement('div'),
+			template = "{{#if items.length}}<ul>{{#each items}}<li>{{.}}</li>{{/each}}</ul>{{/if}}",
+			stacheTempl = can.stache(template),
+			mustacheTempl = can.mustache(template);
+
+		var data = {
+			items: new can.List()
+		};
+
+		div1.appendChild(stacheTempl(data));
+		div2.appendChild(mustacheTempl(data));
+
+		can.batch.start();
+		for (var i=1; i<=3; i++) {
+			data.items.push(i);
+		}
+		can.batch.stop();
+
+		equal(div1.innerText, "123", "Batched lists rendered properly with stache.");
+		equal(div2.innerText, "123", "Batched lists rendered properly with mustache.");
+	});
 });

@@ -148,15 +148,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 *
 		 */
 		list: function (el, compute, render, context, parentNode, nodeList) {
-			
+			//var setupBatchNum = can.batch.batchNum;
+
 			// A nodeList of all elements this live-list manages.
 			// This is here so that if this live list is within another section
 			// that section is able to remove the items in this list.
 			var masterNodeList = nodeList || [el],
 				// A mapping of items to their indicies'
 				indexMap = [],
+				// Capture current batchNum
+				setupBatchNum = can.batch.batchNum,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
+					// if the event's batchNum equals setupBatchNum then we're in the middle of a batch job.
+					if (ev.batchNum && ev.batchNum === setupBatchNum) {return;}
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newNodeLists = [],
