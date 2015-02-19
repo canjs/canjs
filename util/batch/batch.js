@@ -173,6 +173,8 @@ steal('can/util/can.js', function (can) {
 					i, len;
 				batchEvents = [];
 				stopCallbacks = [];
+				// Capture current batchNum so it can be check in live bindings
+				can.batch.batchNum = batchNum;
 				batchNum++;
 				if (callStart) {
 					can.batch.start();
@@ -183,6 +185,7 @@ steal('can/util/can.js', function (can) {
 				for(i = 0, len = callbacks.length; i < callbacks.length; i++) {
 					callbacks[i]();
 				}
+				can.batch.batchNum = undefined;
 			}
 		},
 		/**
