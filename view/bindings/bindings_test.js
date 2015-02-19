@@ -43,6 +43,27 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view
 
 	});
 
+	if (window.jQuery) {
+		test("can-event passes extra args to handler", function () {
+			expect(3);
+			var template = can.view.mustache("<p can-myevent='handleMyEvent'>{{content}}</p>");
+
+			var frag = template({
+				handleMyEvent: function(context, el, event, arg1, arg2) {
+					ok(true, "handleMyEvent called");
+					equal(arg1, "myarg1", "3rd argument is the extra event args");
+					equal(arg2, "myarg2", "4rd argument is the extra event args");
+				}
+			});
+
+			var ta = document.getElementById("qunit-test-area");
+			ta.appendChild(frag);
+			var p0 = ta.getElementsByTagName("p")[0];
+			can.trigger(p0, "myevent", ["myarg1", "myarg2"]);
+
+		});
+	}
+
 	test("can-value input text", function () {
 
 		var template = can.view.stache("<input can-value='age'/>");
