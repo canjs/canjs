@@ -252,7 +252,40 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					if(!fullTeardown) {
 						can.remove(can.$(itemsToRemove));
 					}
-					
+
+				},
+				move = function (ev, item, newIndex, currentIndex) {
+					// The position of elements is always after the initial text
+					// placeholder node
+					newIndex = newIndex + 1;
+					currentIndex = currentIndex + 1;
+
+					var referenceItem = masterNodeList[newIndex][0];
+					var movedItem = masterNodeList[currentIndex][0];
+					var parentNode = referenceItem.parentNode;
+
+					// If we're moving forward in the list, we want to be placed before
+					// the item AFTER the target index since removing the item from
+					// the currentIndex drops the referenceItem's index. If there is no
+					// nextSibling, insertBefore acts like appendChild.
+					if (currentIndex < newIndex) {
+						referenceItem = referenceItem.nextSibling;
+					}
+
+					// Move the DOM nodes into the proper location
+					parentNode.insertBefore(movedItem, referenceItem);
+
+					// Now, do the same for the masterNodeList. We need to keep it
+					// in sync with the DOM.
+
+					// Save a reference to the "node" in that we're manually moving
+					var temp = masterNodeList[currentIndex];
+
+					// Remove the movedItem from the masterNodeList
+					[].splice.apply(masterNodeList, [currentIndex, 1]);
+
+					// Move the movedItem to the correct index in the masterNodeList
+					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
 				},
 				// A text node placeholder
 				text = document.createTextNode(''),
@@ -279,7 +312,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
-							.bind('remove', remove);
+							.bind('remove', remove)
+							.bind('move', move);
 					}
 					add({}, list, 0);
 				};
