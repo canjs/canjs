@@ -62,10 +62,14 @@ steal("can/util",function(can){
 			var text = el.innerHTML || el.text,
 				typeAttr = el.getAttribute("type"),
 				typeInfo = typeAttr.match( typeMatch ),
-				type = typeInfo && typeInfo[1];
+				type = typeInfo && typeInfo[1],
+				typeModule = "can/view/" + type;
+
+			if(!(window.define && window.define.amd)) {
+				typeModule += "/" + type;
+			}
 			
-			
-			promises.push( can["import"]("can/view/"+type+"/"+type).then(function(engine){
+			promises.push( can["import"](typeModule).then(function(engine){
 				
 				engine = can[type] || engine;
 				if(engine.async) {
@@ -96,7 +100,7 @@ steal("can/util",function(can){
 	}
 	var promise = deferred.promise();
 	can.autorender = function(success, error){
-		promise.then(success, error);
+		return promise.then(success, error);
 	};
 	return can.autorender;
 });

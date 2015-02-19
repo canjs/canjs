@@ -91,7 +91,7 @@ steal(function () {
 		if(typeof window.System === "object") {
 			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
-		} else if(window.require && window.require.amd){
+		} else if(window.define && window.define.amd){
 			
 			window.require([moduleName], function(value){
 				deferred.resolve(value);
