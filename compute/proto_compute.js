@@ -87,18 +87,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		}
 	};
 
-	var setupComputeHandlersOnChanged = function(ev) {
-		if (this.bound && (ev.batchNum === undefined || ev.batchNum !== this.batchNum) ) {
-			// Keep the old value
-			var oldValue = this.readInfo.value;
-			// Get the new value
-			this.readInfo = getValueAndBind(this._getterSetter, this._context, this.readInfo.observed, this.onchanged);
-			// Call the updater with old and new values
-			this.updater(this.readInfo.value, oldValue, ev.batchNum);
-			this.batchNum = ev.batchNum;
-		}
-	};
-
 	var setupComputeHandlersOn = function() {
 		this.readInfo = getValueAndBind(this._getterSetter, this._context, {}, this.onchanged);
 
@@ -198,28 +186,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	// use a function to do nothing (which may be overwritten)
 	k = function () {};
 
-	var observeSet = function(newValue) {
-		this._getterSetter.attr(this._context, newValue);
-	},
-
-	observeGet = function() {
-		this._getterSetter.attr(this._context);
-	},
-
-	observeOn = function(update) {
-		this._handler = function(ev, newVal,oldVal) {
-			update(newVal, oldVal, ev.batchNum);
-		};
-		this._getterSetter.bind(this._eventName || this._context, handler);
-		// Set the cached value
-		value = can.__read(this._get()).value;
-	},
-
-	observeOff = function() {
-		return this._getterSetter.unbind(this._eventName || this._context, this._handler);
-	},
-
-	updater = function(newVal, oldVal, batchNum) {
+	var updater = function(newVal, oldVal, batchNum) {
 		this.setCached(newVal);
 		updateOnChange(this, newVal, oldVal, batchNum);
 	},
@@ -254,110 +221,33 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	};
 
 	can.Compute = function(getterSetter, context, eventName, bindOnce) {
-		this.args = [];
+		var args = [];
 
-		this._getterSetter = getterSetter;
-		this._context = context;
-		this._eventName = eventName;
-		this._bindOnce = bindOnce;
+		for(var i = 0, arglen = arguments.length; i < arglen; i++) {
+			args[i] = arguments[i];
+		}
 
-		var contextType = typeof this._context;
+		var contextType = typeof args[1];
 
-		if (typeof this._getterSetter === 'function') {
-			this._mode = 'getterSetterFn';
-			this._set = getterSetter;
-			this._get = getterSetter;
-			this.canReadForChangeEvent = eventName === false ? false : true;
-
-			var handlers;
-			if(bindOnce) {
-				handlers = setupSingleBindComputeHandlers(this, getterSetter, context || this);
-				this.on = handlers.on;
-				this.off = handlers.off;
-			}
-			else {
-				this.onchanged = can.proxy(setupComputeHandlersOnChanged, this);
-				this.on = setupComputeHandlersOn;
-				this.off = setupComputeHandlersOff;
-			}
-		} else if (this._context) {
+		if (typeof args[0] === 'function') {
+			this._setupGetterSetterFn(args[0], args[1], args[2], args[3]);
+		} else if (args[1]) {
 			if (contextType === 'string') {
-				var isObserve = getterSetter instanceof can.Map;
-				this._mode = isObserve ? 'contextStringDeps' : 'contextString';
-				this._get = observeGet;
-
-				if(isObserve) {
-					this.hasDependencies = true;
-					this._set = observeSet;
-					this.on = observeOn;
-					this.off = observeOff;
-				}
+				// `can.compute(object, propertyName[, eventName])`
+				this._setupContextString(args[0], args[1], args[2]);
 			} else if(contextType === 'function') {
 				// `can.compute(initialValue, setter)`
-				this._mode = 'contextFn';
-				this.value = getterSetter;
-				this._set = context;
-				// this._context = eventName;
-				can.simpleExtend(this, eventName);
+				this._setupContextFunction(args[0], args[1], args[2]);
 			} else {
-				this._mode = 'context';
-				this.value = getterSetter;
-				//TODO: separate this
-				// this._context = context.context || context;
-
-				this.updater = contextUpdater(this);
-				var oldUpdater = this.updater;
-				var self = this;
-				// can.simpleExtend(this, context.context || context);
-
-				this._set = context.set || this._set;
-				this._get = context.get || this._get;
-
-				// This is a "hack" to allow async computes.
-				if(context.fn) {
-					var fn = context.fn,
-						data;
-					// make sure get is called with the newVal, but not setter
-					this.get = asyncGet(fn, this);
-					// Check the number of arguments the 
-					// async function takes.
-					if(fn.length === 0) {
-						data = setupComputeHandlers(this, fn, context);
-					} else if(fn.length === 1) {
-						data = setupComputeHandlers(this, function() {
-							//TODO: holding onto a reference...good/bad?
-							return fn.call(context, self.value);
-						}, context);
-					} else {
-						this.updater = asyncUpdater(this, oldUpdater);
-						data = setupComputeHandlers(this, function() {
-							var res = fn.call(context, self.value, function(newVal) {
-								oldUpdater(newVal, self.value);
-							});
-							// If undefined is returned, don't update the value.
-							return res !== undefined ? res : this.value;
-						}, context);
-					}
-
-					this.on = data.on;
-					this.off = data.off;
-				} else {
-					this.updater = createAsyncAltUpdater(this, oldUpdater);
-				}
-
-				this.on = context.on ? context.on : this.on;
-				this.off = context.off ? context.off : this.off;
+				//`new can.Compute(initialValue, {})`
+				this._setupContextSettings(args[0], args[1]);
 			}
 		} else {
 			// `can.compute(initialValue)`
-			this.value = getterSetter;
-			//TODO: this._context should probably be optional
-			// this._context = this;
+			this._setupInitialValue(args[0]);
 		}
 
-		for(var i = 0, arglen = arguments.length; i < arglen; i++) {
-			this.args[i] = arguments[i];
-		}
+		this._args = args;
 
 		this.isComputed = true;
 		can.cid(this, 'compute');
@@ -370,14 +260,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// Set up live-binding
 			// While binding, this should not count as a read
 			var oldReading = can.__clearReading();
-			//TODO: on to _on
-			this.on(this.updater);
+			this._on(this.updater);
 			// Restore "Observed" for reading
 			can.__setReading(oldReading);
 		},
 
 		_bindteardown: function () {
-			this.off(this.updater);
+			this._off(this.updater);
 			this.bound = false;
 		},
 
@@ -385,25 +274,21 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		unbind: can.unbindAndTeardown,
 
 		clone: function(context) {
-			if(context) {
-				//TODO: arguments are backwards from original compute...check this
-				if(this._mode === 'getterSetterFn') {
-					this.args[1] = context;
-				} else {
-					this.args[2] = context;
-				}
+			if(context && typeof this._args[0] === 'function') {
+				this._args[1] = context;
+			} else if(context) {
+				this._args[2] = context;
 			}
 
-			//TODO: A better way to write this
-			return new can.Compute(this.args[0], this.args[1], this.args[2], this.args[3]);
+			return new can.Compute(this._args[0], this._args[1], this._args[2], this._args[3]);
 		},
 
-		on: k,
-		off: k,
+		_on: k,
+		_off: k,
 
 		get: function() {
 			// Another compute may bind to this `computed`
-			if(stack.length && this.canReadForChangeEvent !== false) {
+			if(stack.length && this._canReadForChangeEvent !== false) {
 
 				// Tell the compute to listen to change on this computed
 				// Use `can.__reading` to allow other compute to listen
@@ -479,6 +364,118 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 		toFunction: function() {
 			return can.proxy(this._computeFn, this);
+		},
+
+		_setupGetterSetterFn: function(getterSetter, context, eventName, bindOnce) {
+			this._set = can.proxy(getterSetter, context);
+			this._get = can.proxy(getterSetter, context);
+			this._canReadForChangeEvent = eventName === false ? false : true;
+
+			this._getterSetter = getterSetter;
+			this._context = context;
+
+			var handlers;
+			if(bindOnce) {
+				handlers = setupSingleBindComputeHandlers(this, getterSetter, context || this);
+				this._on = handlers.on;
+				this._off = handlers.off;
+			}
+			else {
+				var self = this;
+				this.onchanged = function(ev) {
+					if (self.bound && (ev.batchNum === undefined || ev.batchNum !== self.batchNum)) {
+						// Keep the old value
+						var oldValue = self.readInfo.value;
+						// Get the new value
+						self.readInfo = getValueAndBind(getterSetter, context, self.readInfo.observed, self.onchanged);
+						// Call the updater with old and new values
+						self.updater(self.readInfo.value, oldValue, ev.batchNum);
+						self.batchNum = ev.batchNum;
+					}
+				};
+				this._on = setupComputeHandlersOn;
+				this._off = setupComputeHandlersOff;
+			}
+		},
+
+		_setupContextString: function(target, propertyName, eventName) {
+			var isObserve = target instanceof can.Map,
+			handler,
+			get = target.attr(propertyName);
+
+			if(isObserve) {
+				this.hasDependencies = true;
+				this._set = function(val) {
+					target.attr(propertyName, val)
+				};
+				this._on = function(update) {
+					handler = function(ev, newVal,oldVal) {
+						update(newVal, oldVal, ev.batchNum);
+					};
+
+					target.bind(eventName || propertyName, handler);
+					// Set the cached value
+					value = can.__read(get, propertyName).value;
+				};
+				this._off = function() {
+					return target.unbind(eventName || propertyName, handler);
+				}
+			}
+		},
+
+		_setupContextFunction: function(initialValue, setter, eventName) {
+			this.value = initialValue;
+			this._set = setter;
+			can.simpleExtend(this, eventName);
+		},
+
+		_setupContextSettings: function(initialValue, settings) {
+			this.value = initialValue;
+
+			this.updater = contextUpdater(this);
+			var oldUpdater = this.updater,
+			self = this;
+
+			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
+			this._get = settings.get ? can.proxy(settings.get, settings) : this._get;
+
+			// This is a "hack" to allow async computes.
+			if(settings.fn) {
+				var fn = settings.fn,
+					data;
+				// make sure get is called with the newVal, but not setter
+				this.get = asyncGet(fn, this);
+				// Check the number of arguments the 
+				// async function takes.
+				if(fn.length === 0) {
+					data = setupComputeHandlers(this, fn, settings);
+				} else if(fn.length === 1) {
+					data = setupComputeHandlers(this, function() {
+						return fn.call(settings, self.value);
+					}, settings);
+				} else {
+					this.updater = asyncUpdater(this, oldUpdater);
+					data = setupComputeHandlers(this, function() {
+						var res = fn.call(settings, self.value, function(newVal) {
+							oldUpdater(newVal, self.value);
+						});
+						// If undefined is returned, don't update the value.
+						return res !== undefined ? res : this.value;
+					}, settings);
+				}
+
+				this._on = data.on;
+				this._off = data.off;
+			} else {
+				this.updater = createAsyncAltUpdater(this, oldUpdater);
+			}
+
+			this._on = settings.on ? settings.on : this._on;
+			this._off = settings.off ? settings.off : this._off;
+		},
+
+		_setupInitialValue: function(initialValue) {
+			this.value = initialValue;
 		}
 	});
 

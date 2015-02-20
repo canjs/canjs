@@ -14,11 +14,11 @@ steal("can/compute", "can/test", "can/map", function () {
 			numUnbind = num.unbind;
 		var bindCount = 0;
 
-		num._internalCompute.bind = function () {
+		num.computeInstance.bind = function () {
 			bindCount++;
 			return numBind.apply(this, arguments);
 		};
-		num._internalCompute.unbind = function () {
+		num.computeInstance.unbind = function () {
 			bindCount--;
 			return numUnbind.apply(this, arguments);
 		};
