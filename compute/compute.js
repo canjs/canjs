@@ -52,7 +52,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 		compute.unbind = can.proxy(internalCompute.unbind, internalCompute);
 		compute.isComputed = can.proxy(internalCompute.isComputed, internalCompute);
 		compute.clone = function(ctx) {
-			//TODO: check _mode
+			if(typeof getterSetter === 'function') {
+				context = ctx;
+			}
+
 			return can.compute(getterSetter, context, ctx, bindOnce);
 		};
 
@@ -60,6 +63,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 
 		return compute;
 	};
+	// Instead of calculating whether anything is listening every time,
+	// use a function to do nothing (which may be overwritten)
+	var k = function () {};
 	// A list of temporarily bound computes
 	var computes, unbindComputes = function () {
 			for (var i = 0, len = computes.length; i < len; i++) {
