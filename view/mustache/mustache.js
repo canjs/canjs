@@ -1846,6 +1846,58 @@ steal('can/util',
 					return options.inverse(options.contexts || this);
 				}
 			},
+			/**
+			* @function can.stache.helpers.is {{#is expr1 expr2 expr3}}
+			* @parent can.stache.htags 12
+			*
+			* @signature `{{#is expr1 expr2}}BLOCK{{/is}}`
+			*
+			* Renders the `BLOCK` template within the current template.
+			*
+			* @param {can.stache.expression} [expr...] An expression or key that references a
+			* value within the current or parent
+			*
+			* @param {can.stache} BLOCK A template that is rendered
+			* if the result of comparsion `expr1` and `expr2` value is truthy.
+			*
+			* @return {DocumentFragment} If the key's value is truthy, the `BLOCK` is rendered with the
+			* current context and its value is returned; otherwise, an empty string.
+			*
+			* @body
+			*
+			* The `is` helper compares expr1 and expr2 and renders the blocks accordingly.
+			*
+			*	{{#is expr1 expr2}}
+			*		// truthy
+			*	{{else}}
+			*		// falsey
+			*	{{/is}}
+			*/
+			'is': function() {
+				var lastValue, curValue,
+					options = arguments[arguments.length - 1];
+
+				if (arguments.length - 2 <= 0) {
+					return options.inverse();
+				}
+
+				for (var i = 0; i < arguments.length - 1; i++) {
+					curValue = Mustache.resolve(arguments[i]);
+					curValue = can.isFunction(curValue) ? curValue() : curValue;
+
+					if (i > 0) {
+						if (curValue !== lastValue) {
+							return options.inverse();
+						}
+					}
+					lastValue = curValue;
+				}
+
+				return options.fn();
+			},
+			'eq': function() {
+				return Mustache._helpers.is.fn.apply(this, arguments);
+			},
 			// Implements the `unless` built-in helper.
 			/**
 			 * @function can.mustache.helpers.unless {{#unless key}}

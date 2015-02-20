@@ -532,6 +532,42 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render(t.data), expected);
 	});
 
+	test("Handlebars helper: is/else (with 'eq' alias)", function() {
+
+		var t = {
+			template: '{{#eq "10" "10" ducks getDucks}}10 ducks{{else}}Not 10 ducks{{/eq}}',
+			expected: "10 ducks",
+			data: {
+				ducks: '10',
+				getDucks: function() {
+					return '10'
+				}
+			},
+			liveData: new can.Map({
+				ducks: '10',
+				getDucks: function() {
+					return '10'
+				}
+			})
+		};
+
+		var div = document.createElement('div');
+
+		div.appendChild(can.view.mustache(t.template)(t.data));
+		deepEqual(div.innerHTML, t.expected);
+
+		div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, t.expected);
+
+		t.data.ducks = 5;
+
+		div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.data));
+		deepEqual(div.innerHTML, 'Not 10 ducks');
+	});
+
+
 	test("Handlebars helper: unless", function () {
 		var t = {
 			template: "{{#unless missing}}Andy is missing!{{/unless}}",
