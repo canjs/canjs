@@ -391,20 +391,27 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 
 			var nodes = nodeList || [el],
 				makeAndPut = function (val) {
-					var isString = !isNode(val),
-						frag = can.frag(val),
+					var isFunction = typeof val === "function",
+						aNode = isNode(val),
+						frag = can.frag(isFunction ? "" : val),
 						oldNodes = can.makeArray(nodes);
 					
 					// Add a placeholder textNode if necessary.
 					addTextNodeIfNoChildren(frag);
 					
-					if(isString){
+					if(!aNode && !isFunction){
 						frag = can.view.hookup(frag, parentNode);
 					}
+					
 					// We need to mark each node as belonging to the node list.
 					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					if(isFunction) {
+						val(frag.childNodes[0]);
+					}
 					elements.replace(oldNodes, frag);
+					
 				};
+				
 			data.nodeList = nodes;
 			
 			// register the span so nodeLists knows the parentNodeList
