@@ -191,21 +191,16 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		updateOnChange(this, newVal, oldVal, batchNum);
 	},
 
-	asyncAltUpdater = function() {
-		var newVal = this.get();
-		this._asyncUpdater(newVal, this._oldVal);
-	},
-
 	createAsyncAltUpdater = function(context, oldUpdater) {
 		return function() {
 			oldUpdater(context._get(), context.value);
-		}
+		};
 	},
 
 	asyncGet = function(fn, context) {
 		return function() {
 			return fn.call(context, context.value);
-		}
+		};
 	},
 
 	asyncUpdater = function(context, oldUpdater) {
@@ -213,7 +208,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			if(newVal !== undefined) {
 				oldUpdater(newVal, context.value);
 			}
-		}
+		};
 	};
 
 	can.Compute = function(getterSetter, context, eventName, bindOnce) {
@@ -247,7 +242,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 		this.isComputed = true;
 		can.cid(this, 'compute');
-	}
+	};
 
 	can.simpleExtend(can.Compute.prototype, {
 		//TODO: verify "this" is the instance of a compute
@@ -397,7 +392,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					return target.attr(propertyName);
 				};
 				this._set = function(val) {
-					target.attr(propertyName, val)
+					target.attr(propertyName, val);
 				};
 				this._on = function(update) {
 					handler = function(ev, newVal,oldVal) {
@@ -410,7 +405,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				};
 				this._off = function() {
 					return target.unbind(eventName || propertyName, handler);
-				}
+				};
 			} else {
 				this._get = can.proxy(this._get, target);
 				this._set = can.proxy(this._set, target);
@@ -475,10 +470,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 	// A list of temporarily bound computes
 	var computes, unbindComputes = function () {
-			for (var i = 0, len = computes.length; i < len; i++) {
-				computes[i].unbind('change', k);
-			}
-			computes = null;
+		for (var i = 0, len = computes.length; i < len; i++) {
+			computes[i].unbind('change', k);
+		}
+		computes = null;
 	};
 
 	// Binds computes for a moment to retain their value and prevent caching
