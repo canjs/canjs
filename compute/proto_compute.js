@@ -305,8 +305,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			if (this.bound) {
 				return this.value;
 			} else {
-				//TODO: do we need to pass context?
-				// return this._get.call(this._context);
 				return this._get();
 			}
 		},
@@ -320,21 +318,15 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			var old = this.value;
 			// Setter may return the value if setter
 			// is for a value maintained exclusively by this compute.
-			// TODO:
-			// var setVal = this._set.call(this._context, newVal, old);
 			var setVal = this._set(newVal, old);
 			// If the computed function has dependencies,
 			// return the current value
 			if (this.hasDependencies) {
-				//TODO:
-				// return this._get.call(this._context);
 				return this._get();
 			}
 			// Setting may not fire a change event, in which case
 			// the value must be read
 			if (setVal === undefined) {
-				//TODO:
-				// this.value = this._get.call(this._context);
 				this.value = this._get();
 			} else {
 				this.value = setVal;
@@ -401,12 +393,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		_setupContextString: function(target, propertyName, eventName) {
 			var isObserve = target instanceof can.Map,
 			handler;
-			this._get = function() {
-				return target.attr(propertyName);
-			};
 
 			if(isObserve) {
 				this.hasDependencies = true;
+				this._get = function() {
+					return target.attr(propertyName);
+				};
 				this._set = function(val) {
 					target.attr(propertyName, val)
 				};
@@ -422,6 +414,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				this._off = function() {
 					return target.unbind(eventName || propertyName, handler);
 				}
+			} else {
+				this._get = can.proxy(this._get, target);
+				this._set = can.proxy(this._set, target);
 			}
 		},
 
