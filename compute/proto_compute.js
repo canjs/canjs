@@ -197,9 +197,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		};
 	},
 
-	asyncGet = function(fn, context) {
+	asyncGet = function(fn, context, val) {
 		return function() {
-			return fn.call(context, context.value);
+			return fn.call(context, val);
 		};
 	},
 
@@ -432,12 +432,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			if(settings.fn) {
 				var fn = settings.fn,
 					data;
+
 				// make sure get is called with the newVal, but not setter
-				this.get = asyncGet(fn, this);
+				this.get = asyncGet(fn, settings.context, this.value);
 				// Check the number of arguments the 
 				// async function takes.
 				if(fn.length === 0) {
-					data = setupComputeHandlers(this, fn, settings);
+					data = setupComputeHandlers(this, fn, settings.context);
 				} else if(fn.length === 1) {
 					data = setupComputeHandlers(this, function() {
 						return fn.call(settings, self.value);
