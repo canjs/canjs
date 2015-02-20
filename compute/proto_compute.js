@@ -400,8 +400,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 		_setupContextString: function(target, propertyName, eventName) {
 			var isObserve = target instanceof can.Map,
-			handler,
-			get = target.attr(propertyName);
+			handler;
+			this._get = function() {
+				return target.attr(propertyName);
+			};
 
 			if(isObserve) {
 				this.hasDependencies = true;
@@ -415,7 +417,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 
 					target.bind(eventName || propertyName, handler);
 					// Set the cached value
-					value = can.__read(get, propertyName).value;
+					this.value = can.__read(this._get).value;
 				};
 				this._off = function() {
 					return target.unbind(eventName || propertyName, handler);
