@@ -191,10 +191,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		updateOnChange(this, newVal, oldVal, batchNum);
 	},
 
-	contextUpdater = function(context) {
-		return can.proxy(updater, context);
-	},
-
 	asyncAltUpdater = function() {
 		var newVal = this.get();
 		this._asyncUpdater(newVal, this._oldVal);
@@ -393,6 +389,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		_setupContextString: function(target, propertyName, eventName) {
 			var isObserve = target instanceof can.Map,
 			handler;
+			this.updater = can.proxy(this.updater, this);
 
 			if(isObserve) {
 				this.hasDependencies = true;
@@ -429,7 +426,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		_setupContextSettings: function(initialValue, settings) {
 			this.value = initialValue;
 
-			this.updater = contextUpdater(this);
+			this.updater = can.proxy(this.updater, this);
 			var oldUpdater = this.updater,
 			self = this;
 
