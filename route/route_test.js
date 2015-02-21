@@ -742,6 +742,45 @@ steal("can/route", "can/test", "steal-qunit", function () {
 
 			});
 		});
+
+		test("hash doesn't update to itself with a !", function() {
+			stop();
+			window.routeTestReady = function (iCanRoute, loc) {
+
+				iCanRoute.ready();
+				iCanRoute(":path");
+
+				iCanRoute.attr('path', 'foo');
+				setTimeout(function() {
+					var counter = 0;
+					try {
+						equal(loc.hash, '#!foo');
+					} catch(e) {
+						start();
+						throw e;
+					}
+
+					iCanRoute.bind("change", function() {
+						counter++;
+					});
+
+					loc.hash = "bar";
+					setTimeout(function() {
+						try {
+							equal(loc.hash, '#bar');
+							equal(counter, 1); //sanity check -- bindings only ran once before this change.
+						} finally {
+							start();
+						}
+					}, 100);
+				}, 100);
+			};
+			var iframe = document.createElement('iframe');
+			iframe.src = can.test.path("route/testing.html?1");
+			can.$("#qunit-fixture")[0].appendChild(iframe);
+		});
+
+
 	}
 
 	test("escaping periods", function () {
