@@ -112,12 +112,21 @@ steal('can/util', 'can/route', function (can) {
 			// ## setURL
 
 			// Updates URL by calling `pushState`.
-			setURL: function (path) {
+			setURL: function (path, changed) {
+				var method = "pushState";
 				// Keeps hash if not in path.
 				if (includeHash && path.indexOf("#") === -1 && window.location.hash) {
 					path += window.location.hash;
 				}
-				window.history.pushState(null, null, can.route._call("root") + path);
+				if(replaceStateAttrs.length > 0) {
+					for(var i = 0, l = changed.length; i < l; i++) {
+						if(can.inArray(changed[i], replaceStateAttrs) !== -1) {
+							method = "replaceState";
+							break;
+						}
+					}
+				}
+				window.history[method](null, null, can.route._call("root") + path);
 			}
 		};
 
@@ -174,10 +183,29 @@ steal('can/util', 'can/route', function (can) {
 			// A place to store pointers to original `history` methods.
 			originalMethods = {},
 			// Used to tell setURL to include the hash because we clicked on a link.
-			includeHash = false;
+			includeHash = false,
+			// Attributes that will cause replaceState to be called
+			replaceStateAttrs = [];
 
 		// Enables plugin, by default `hashchange` binding is used.
 		can.route.defaultBinding = "pushstate";
+
+		can.extend(can.route, {
+			replaceStateOn: function() {
+				var attrs = can.makeArray(arguments);
+				replaceStateAttrs = replaceStateAttrs.concat(attrs);
+			},
+			replaceStateOff: function() {
+				var attrs = can.makeArray(arguments),
+					index;
+				// Loop in reverse so earlier indices are not mangled by splice
+				for(var i = attrs.length - 1; i >= 0; i--) {
+					if( (index = can.inArray(attrs[i], replaceStateAttrs)) !== -1) {
+						replaceStateAttrs.splice(index, 1);
+					}
+				}
+			}
+		});
 	}
 
 	return can;
