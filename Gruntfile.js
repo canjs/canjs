@@ -240,7 +240,7 @@ module.exports = function (grunt) {
 				'!test/index.html'
 			],
 			amd: [ 'test/amd/*.html' ],
-			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
+			dist: [ 'test/dist/*.html' ],
 			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
 			dev: [ 'test/dev/*.html', '!test/dev/dojo.html' ],
 			individuals: [ '**/test.html', '!view/autorender/test.html',
