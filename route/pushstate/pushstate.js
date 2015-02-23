@@ -119,11 +119,18 @@ steal('can/util', 'can/route', function (can) {
 					path += window.location.hash;
 				}
 				if(replaceStateAttrs.length > 0) {
+					var toRemove = [];
 					for(var i = 0, l = changed.length; i < l; i++) {
 						if(can.inArray(changed[i], replaceStateAttrs) !== -1) {
 							method = "replaceState";
-							break;
 						}
+						if(can.inArray(changed[i], replaceStateAttrs.once) !== -1) {
+							toRemove.push(changed[i]);
+						}
+					}
+					if(toRemove.length > 0) {
+						removeAttrs(replaceStateAttrs, toRemove);
+						removeAttrs(replaceStateAttrs.once, toRemove);
 					}
 				}
 				window.history[method](null, null, can.route._call("root") + path);
@@ -178,6 +185,14 @@ steal('can/util', 'can/route', function (can) {
 				}
 				return root;
 			},
+			removeAttrs = function(arr, attrs) {
+				var index;
+				for(var i = attrs.length - 1; i >= 0; i--) {
+					if( (index = can.inArray(attrs[i], arr)) !== -1) {
+						arr.splice(index, 1);
+					}
+				}
+			},
 			// Original methods on `history` that will be overwritten
 			methodsToOverwrite = ['pushState', 'replaceState'],
 			// A place to store pointers to original `history` methods.
@@ -193,17 +208,18 @@ steal('can/util', 'can/route', function (can) {
 		can.extend(can.route, {
 			replaceStateOn: function() {
 				var attrs = can.makeArray(arguments);
-				replaceStateAttrs = replaceStateAttrs.concat(attrs);
+				Array.prototype.push.apply(replaceStateAttrs, attrs);
+			},
+			replaceStateOnce: function() {
+				var attrs = can.makeArray(arguments);
+				replaceStateAttrs.once = can.makeArray(replaceStateAttrs.once);
+
+				Array.prototype.push.apply(replaceStateAttrs.once, attrs);
+				can.route.replaceStateOn.apply(this, arguments);
 			},
 			replaceStateOff: function() {
-				var attrs = can.makeArray(arguments),
-					index;
-				// Loop in reverse so earlier indices are not mangled by splice
-				for(var i = attrs.length - 1; i >= 0; i--) {
-					if( (index = can.inArray(attrs[i], replaceStateAttrs)) !== -1) {
-						replaceStateAttrs.splice(index, 1);
-					}
-				}
+				var attrs = can.makeArray(arguments);
+				removeAttrs(replaceStateAttrs, attrs);
 			}
 		});
 	}

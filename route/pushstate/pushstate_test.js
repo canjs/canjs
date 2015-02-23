@@ -799,6 +799,39 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 				});
 			});
 
+			test("replaceStateOnce makes changes to an attribute use replaceState only once (#1137)", function() {
+				stop();
+				var replaceCalls = 0,
+					pushCalls = 0;
+
+				makeTestingIframe(function(info, done){
+					info.history.pushState = function () {
+						pushCalls++;
+					};
+
+					info.history.replaceState = function () {
+						replaceCalls++;
+					};
+
+					info.route.replaceStateOnce("ignoreme", "metoo");
+
+					info.route.ready();
+					info.route.attr('ignoreme', 'yes');
+
+					setTimeout(function(){
+						info.route.attr('ignoreme', 'no');
+
+						setTimeout(function(){
+							equal(replaceCalls, 1);
+							equal(pushCalls, 1);
+							start();
+							done();
+						}, 30);
+
+					}, 30);
+				});
+			});
+
 			test("replaceStateOff makes changes to an attribute use pushState again (#1137)", function(){
 				stop();
 
