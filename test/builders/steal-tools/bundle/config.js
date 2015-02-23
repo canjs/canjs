@@ -33,7 +33,7 @@
 			"mustache" : "can/view/mustache/system"
 		},
 		paths: {
-			"jquery": "../../../../lib/jquery.1.10.2.js",
+			"jquery": "../../../../node_modules/jquery/dist/jquery.js",
 			"can/*": "../../../../*.js"
 		},
 		meta: {

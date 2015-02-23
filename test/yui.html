@@ -3,10 +3,8 @@
 <script type="text/javascript">
     System['import']("package.json!npm").then(function() {
         var config = window.CONFIGURATION = {
-            "paths": {
-                "can/*": "*.js",
-                "can/util/util": "util/yui/yui.js",
-                "yui/yui": "lib/yui-3.7.3.js"
+            "map": {
+                "util/util": "util/yui/yui"
             }
         };
         steal.config(config);
