@@ -3,10 +3,8 @@
 <script type="text/javascript">
     System['import']("package.json!npm").then(function() {
         var config = window.CONFIGURATION = {
-            "paths": {
-                "can/*": "*.js",
-                "can/util/util": "util/zepto/zepto.js",
-                "zepto/zepto": "bower_components/zepto/zepto.js"
+            "map": {
+                "util/util": "util/zepto/zepto"
             }
         };
         steal.config(config);

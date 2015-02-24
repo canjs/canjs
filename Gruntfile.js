@@ -165,7 +165,7 @@ module.exports = function (grunt) {
 			lib: [
 				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
 				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-				'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
+				'!util/yui/yui-3.7.3.js', '!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
 			]
 		},
 		jsbeautifier: {
@@ -231,18 +231,19 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				reporter: 'Dot'
+				reporter: 'Spec'
 			},
 			steal: [
 				'test/*.html',
 				'!test/demos_and_tests.html',
 				'!test/performance-loading.html',
-				'!test/index.html'
+				'!test/index.html',
+				'!test/dojo.html'
 			],
 			amd: [ 'test/amd/*.html' ],
-			dist: [ 'test/dist/*.html', '!test/dist/dojo.html' ],
-			compatibility: [ 'test/compatibility/*.html', '!test/compatibility/dojo.html' ],
-			dev: [ 'test/dev/*.html', '!test/dev/dojo.html' ],
+			dist: [ 'test/dist/*.html' ],
+			compatibility: [ 'test/compatibility/*.html' ],
+			dev: [ 'test/dev/*.html' ],
 			individuals: [ '**/test.html', '!view/autorender/test.html',
 				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}

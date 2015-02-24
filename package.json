@@ -34,7 +34,7 @@
 		"grunt-shell": "~0.5.0",
 		"grunt-simple-mocha": "^0.4.0",
 		"grunt-string-replace": "~0.2.2",
-		"jquery": ">=1.9.0 <3.0.0",
+		"jquery": "^1.11.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
 		"steal": "0.6.0-pre.0",
@@ -66,9 +66,9 @@
 			"steal-qunit/steal-qunit": "steal-qunit"
 		},
 		"paths": {
-			"mootools/mootools": "lib/mootools-core-1.4.5.js",
 			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
-			"yui/yui": "lib/yui-3.7.3.js",
+			"yui/yui": "util/yui/yui-3.7.3.js",
+			"mootools/mootools": "bower_components/mootools/dist/mootools-core.js",
 			"zepto/zepto": "bower_components/zepto/zepto.js"
 		},
 		"meta": {

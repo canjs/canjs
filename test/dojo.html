@@ -3,15 +3,8 @@
 <script type="text/javascript">
     System['import']("package.json!npm").then(function() {
         var config = window.CONFIGURATION = {
-            "paths": {
-                "can/*": "*.js",
-                "can/util/util": "util/dojo/dojo.js",
-                "dojo/dojo": "util/dojo/dojo-1.8.1.js"
-            },
-            "meta": {
-                "dojo/dojo": {
-                    "format": "global"
-                }
+            "map": {
+                "util/util": "util/dojo/dojo"
             }
         };
         steal.config(config);

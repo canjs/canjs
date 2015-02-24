@@ -3,16 +3,8 @@
 <script type="text/javascript">
     System['import']("package.json!npm").then(function() {
         var config = window.CONFIGURATION = {
-            "map": {
-                "jquery/jquery": "can/lib/jquery.2.0.3"
-            },
             "paths": {
-                "can/util/util": "util/jquery/jquery.js"
-            },
-            "meta": {
-                "can/lib/jquery.2.0.3": {
-                    "format": "global"
-                }
+                "jquery/jquery": "bower_components/jquery/dist/jquery.js"
             }
         };
         steal.config(config);

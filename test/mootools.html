@@ -3,10 +3,8 @@
 <script type="text/javascript">
     System['import']("package.json!npm").then(function() {
         var config = window.CONFIGURATION = {
-            "paths": {
-                "can/*": "*.js",
-                "can/util/util": "util/mootools/mootools.js",
-                "mootools/mootools": "lib/mootools-core-1.4.5.js"
+            "map": {
+                "util/util": "util/mootools/mootools"
             }
         };
         steal.config(config);
