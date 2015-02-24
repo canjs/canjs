@@ -1,5 +1,6 @@
 {
 	"name": "can",
+	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
 	"version": "2.2.0-alpha.10",
 	"author": {
@@ -22,6 +23,7 @@
 		"browserify": "~8.1.0",
 		"connect": "^2.14.4",
 		"grunt": "~0.4.0",
+		"grunt-banner": "^0.3.1",
 		"grunt-cli": "~0.1.7",
 		"grunt-contrib-clean": "~0.5.0",
 		"grunt-contrib-connect": "~0.3.0",

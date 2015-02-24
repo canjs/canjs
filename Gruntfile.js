@@ -4,7 +4,7 @@ var getTestTasks = function() {
 	var suite = process.env.TEST_SUITE;
 	var testTasks = ['testee'];
 	if(suite === 'loaders') {
-		testTasks = ['testee:steal', 'testee:amd'];
+		testTasks = ['simplemocha', 'testee:steal', 'testee:amd'];
 	} else if(suite === 'dists') {
 		testTasks = [ 'testee:dist', 'testee:dev', 'testee:compatibility' ];
 	} else if(suite === 'individuals') {
@@ -18,11 +18,6 @@ module.exports = function (grunt) {
 	var _ = grunt.util._;
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
-	var banner = _.template(builderJSON.banner, {
-		pkg: pkg,
-		ids: [ 'CanJS default build' ],
-		url: pkg.homepage
-	});
 	var testifyDist = {
 		template: 'test/templates/__configuration__-dist.html.ejs',
 		builder: builderJSON,
@@ -228,6 +223,21 @@ module.exports = function (grunt) {
 				"export-helpers": require("./build/config_meta_defaults")()
 			}
 		},
+		usebanner: {
+			taskName: {
+				options: {
+					position: 'top',
+					banner: _.template(builderJSON.banner, {
+						pkg: pkg,
+						ids: [ 'CanJS default build' ]
+					}),
+					linebreak: true
+				},
+				files: {
+					src: [ 'dist/**/*.js' ]
+				}
+			}
+		},
 		testee: {
 			options: {
 				timeout: 10000,
@@ -268,13 +278,15 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
+	grunt.loadNpmTasks('grunt-banner');
 	grunt.loadNpmTasks('steal-tools');
 	grunt.loadNpmTasks('grunt-simple-mocha');
 	grunt.loadNpmTasks('testee');
 
 	grunt.registerTask('default', ['build']);
 
-	grunt.registerTask('build', ['clean', 'steal-export', 'string-replace:version', 'browserify-package']);
+	grunt.registerTask('build', ['clean', 'steal-export',
+		'string-replace:version', 'browserify-package', 'usebanner']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'steal-export:amd',
@@ -287,8 +299,7 @@ module.exports = function (grunt) {
 	]);
 
 
-	grunt.registerTask('test', ['jshint', 'build', 'testify', 'simplemocha']
-		.concat(getTestTasks()));
+	grunt.registerTask('test', ['jshint', 'build', 'testify'].concat(getTestTasks()));
 	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
 	grunt.registerTask('test:steal', ['testee:steal']);
 	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
