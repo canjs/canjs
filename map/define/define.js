@@ -43,9 +43,9 @@ steal('can/util', 'can/observe', function (can) {
 			Map = this.constructor,
 			originalGet = this._get;
 
-		// Overwrite this._get with a version that commits defaults to
-		// this.attr() as needed. Because calling this.attr() for each individual
-		// default would be expensive.
+		// Temporarily overwrite this._get with a version that commits defaults to
+		// this.attr() as they are used in other generated defaults. Because
+		// calling this.attr() for each individual default would be expensive.
 		this._get = function (originalProp) {
 
 			// If a this.attr() was called using dot syntax (e.g number.0),
@@ -63,7 +63,7 @@ steal('can/util', 'can/observe', function (can) {
 				// other defaultGenerators.
 				this.attr(prop, defaults[prop]);
 
-				// Make not so that we don't commit this property again.
+				// Make note so that we don't commit this property again.
 				propsCommittedToAttr[prop] = true;
 			}
 
@@ -86,7 +86,7 @@ steal('can/util', 'can/observe', function (can) {
 
 
 	var proto = can.Map.prototype,
-		oldSet = proto.__set;
+		__set = proto.__set;
 	proto.__set = function (prop, value, current, success, error) {
 		//!steal-remove-start
 		var asyncTimer;
@@ -124,7 +124,7 @@ steal('can/util', 'can/observe', function (can) {
 			var setterCalled = false,
 
 				setValue = setter.call(this, value, function (value) {
-					oldSet.call(self, prop, value, current, success, errorCallback);
+					__set.call(self, prop, value, current, success, errorCallback);
 					setterCalled = true;
 					//!steal-remove-start
 					clearTimeout(asyncTimer);
@@ -146,7 +146,7 @@ steal('can/util', 'can/observe', function (can) {
 				return;
 			} else {
 				if (!setterCalled) {
-					oldSet.call(self, prop,
+					__set.call(self, prop,
 						// if no arguments, we are side-effects only
 						setter.length === 0 && setValue === undefined ? value : setValue,
 						current,
@@ -158,10 +158,30 @@ steal('can/util', 'can/observe', function (can) {
 			}
 
 		} else {
-			oldSet.call(self, prop, value, current, success, errorCallback);
+			__set.call(self, prop, value, current, success, errorCallback);
 		}
 
 		return this;
+	};
+
+	var ___set = proto.___set;
+	proto.___set = function (prop, val) {
+		var type = getPropDefineBehavior("type", prop, this.define);
+
+		// If this property's "type" is not "compute", set the value as always
+		if (type !== 'compute' || ! val.isComputed) {
+			return ___set.apply(this, arguments);
+		}
+
+		// If this property's "type" is "compute", treat the compute like
+		// a can.Map does on setup
+		//   1) Save the compute so that it can be written to in the original
+		//      ___set
+		this[prop] = val;
+		//   2) Track the number of uses
+		this._trackCompute(prop);
+
+		return ___set.call(this, prop, val());
 	};
 
 	var converters = {
@@ -197,9 +217,34 @@ steal('can/util', 'can/observe', function (can) {
 		},
 		'string': function (val) {
 			return '' + val;
+		},
+		'compute': function (val, prop) {
+
+			// If the value is a compute, don't do any convertion
+			if (val.isComputed) {
+				return val;
+
+			// If a function was passed, return a compute that uses
+			// that function and set `this` as the context
+			} else if (can.isFunction(val)) {
+				return can.compute(val, this);
+
+			// If a value was passed that isn't a compute or a function...
+			} else if (! val.isComputed) {
+
+				// ...and the current value IS a compute, don't convert the
+				// value. It will be passed to the compute later in ___set
+				if (this[prop] && this[prop].isComputed) {
+					return val;
+
+				// Convert the value to a compute
+				} else {
+					return can.compute(val);
+				}
+			}
 		}
 	};
-	
+
 	// the old type sets up bubbling
 	var oldType = proto.__type;
 	proto.__type = function (value, prop) {

@@ -21,6 +21,10 @@ The `type` property specifies the type of the attribute.  The type can be specif
  - `"htmlbool"` - Like `boolean`, but also converts empty strings to
    `true`. Used, for example, when input is from component attributes like
    `<can-tabs reverse/>`
+ - `"compute"` - Converts the value to a compute initially. Subsequent calls to
+   `can.Map.prototype.attr` will set/get the `can.compute`'s value as opposed
+   to explicitly overwriting the properties value. If a `can.compute` is passed
+   to `can.Map.prototype.attr` it will replace the property's current `can.compute`.
  - `"*"` - Prevents the default type coersion of converting Objects to [can.Map]s and Arrays to [can.List]s.
 
 ### Basic Example

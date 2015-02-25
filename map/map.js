@@ -300,14 +300,22 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 
 				for (var i = 0, len = computes.length, prop; i < len; i++) {
 					prop = computes[i];
-					// Make the context of the compute the current Map
-					this[prop] = this[prop].clone(this);
-					// Keep track of computed properties
-					this._computedBindings[prop] = {
-						count: 0
-					};
+					// Make the context of the compute the current Map, if it's
+					// already a defined property of this Map
+					if (this[prop]) {
+						this[prop] = this[prop].clone(this);
+					}
+					this._trackCompute(prop);
 				}
 			},
+
+			_trackCompute: function (prop) {
+				// Keep track of computed properties
+				this._computedBindings[prop] = {
+					count: 0
+				};
+			},
+
 			_setupDefaults: function(){
 				return this.constructor.defaults || {};
 			},
