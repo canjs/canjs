@@ -241,7 +241,7 @@ module.exports = function (grunt) {
 		testee: {
 			options: {
 				timeout: 10000,
-				reporter: 'Spec'
+				reporter: 'Dot'
 			},
 			steal: [
 				'test/*.html',

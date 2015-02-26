@@ -572,6 +572,59 @@ steal('can/util/fixture', 'can/model', 'can/test', 'steal-qunit', function () {
 		
 	});
 
+	test("store with objects allows .create, .update and .destroy (#1471)", 6, function(){
+
+		var store = can.fixture.store([
+			{id: 1, modelId: 1, year: 2013, name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
+			{id: 2, modelId: 1, year: 2014, name: "2014 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"},
+			{id: 3, modelId: 2, year: 2013, name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
+			{id: 4, modelId: 2, year: 2014, name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
+			{id: 5, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
+			{id: 6, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+			{id: 7, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/201204/01-2013-nissan-altima-ny.jpg"},
+			{id: 8, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"}
+		]);
+
+
+		can.fixture('GET /cars', store.findAll);
+		can.fixture('POST /cars', store.create);
+		can.fixture('PUT /cars/{id}', store.update);
+		can.fixture('DELETE /cars/{id}', store.destroy);
+
+		var Car = can.Model.extend({
+			resource: '/cars'
+		}, {});
+
+		stop();
+		Car.findAll().then(function(cars) {
+			equal(cars.length, 8, 'Got all cars');
+			return cars[1].destroy();
+		}).then(function() {
+			return Car.findAll();
+		}).then(function(cars) {
+			equal(cars.length, 7, 'One car less');
+			equal(cars.attr('1.name'), '2013 Focus', 'Car actually deleted');
+		}).then(function() {
+			var altima = new Car({
+				modelId: 3,
+				year: 2015,
+				name: "2015 Altima"
+			});
+
+			return altima.save();
+		}).then(function(saved) {
+			ok(typeof saved.id !== 'undefined');
+			saved.attr('name', '2015 Nissan Altima');
+			return saved.save();
+		}).then(function(updated) {
+			equal(updated.attr('name'), '2015 Nissan Altima');
+			return Car.findAll();
+		}).then(function (cars) {
+			equal(cars.length, 8, 'New car created');
+			start();
+		});
+	});
+
 	test("fixture: false flag circumvents can.fixture", function() {
 
 		can.fixture("GET /thinger/mabobs", function (settings) {
