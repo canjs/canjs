@@ -648,7 +648,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// ## fixtureStore.create
 				// Simulates a can.Model.create to a fixture
 				create: function (settings, response) {
-					var item = make(items.length, items);
+					var item = typeof make === 'function' ? make(items.length, items) : {};
 
 					can.extend(item, settings.data);
 
