@@ -284,7 +284,7 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 						trueValue = this.options.trueValue || true;
 					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set 
 					// the checked property based on their equality.
-					this.element[0].checked = (value === trueValue);
+					this.element[0].checked = (value == trueValue);
 				}
 				// Its a radio input type
 				else {

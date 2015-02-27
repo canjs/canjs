@@ -713,4 +713,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view
 		}, 1);
 
 	});
+
+	test('can-value with truthy and falsy values binds to checkbox (#1478)', function() {
+		var data = new can.Map({
+				completed: 1
+			}),
+			frag = can.view.stache('<input type="checkbox" can-value="completed"/>')(data);
+		can.append(can.$("#qunit-fixture"), frag);
+
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
+		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		data.attr('completed', 0);
+		equal(input.checked, false, 'checkbox value bound (via attr check)');
+	});
 });
