@@ -195,6 +195,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				// We break out early if the first argument isn't available
 				// anywhere.
+				
+				//!steal-remove-start
 				if (!scopeData.value) {
 					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + attrInfo.name.get, {
 						element: el,
@@ -202,13 +204,14 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					});
 					return null;
 				}
+				//!steal-remove-end
 
 				var args = [];
 				var $el = can.$(this);
 				var localScope = data.scope.add({
 					"@element": $el,
 					"@event": ev,
-					"@scope": typeof $el.scope === "function" && $el.scope(),
+					"@scope": can.scope($el[0]),
 					"@context": data.scope._context
 				});
 
