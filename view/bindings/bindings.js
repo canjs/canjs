@@ -69,7 +69,7 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = removeCurly(el.getAttribute("can-value")),
+		var attr = can.trim(removeCurly(el.getAttribute("can-value"))),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
 			// data.attr('name') property.
