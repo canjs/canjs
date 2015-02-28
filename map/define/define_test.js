@@ -225,15 +225,17 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		var Typer = can.Map.extend({
 			define: {
-				date: {  type: 'date' },
-				string: {type: 'string'},
-				number: {  type: 'number' },
-				'boolean': {  type: 'boolean' },
-				htmlbool: {  type: 'htmlbool' },
-				leaveAlone: {  type: '*' }
+				date: { type: 'date' },
+				string: { type: 'string' },
+				number: { type: 'number' },
+				'boolean': { type: 'boolean' },
+				htmlbool: { type: 'htmlbool' },
+				leaveAlone: { type: '*' },
+				computed: { type: 'compute' }
 			}
 		});
 		var obj = {};
+		var computedVal = can.compute(0);
 
 		var t = new Typer({
 			date: 1395896701516,
@@ -241,7 +243,8 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			number: '5',
 			'boolean': 'false',
 			htmlbool: "",
-			leaveAlone: obj
+			leaveAlone: obj,
+			computed: computedVal
 		});
 
 		ok(t.attr("date") instanceof Date, "converted to date");
@@ -255,10 +258,17 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(t.attr("htmlbool"), true, "converted to htmlbool");
 
 		equal(t.attr("leaveAlone"), obj, "left as object");
+
+		equal(t.attr("computed"), 0, "computed value returned");
+
 		t.attr({
-			'number': '15'
+			'number': '15',
+			computed: 1
 		});
-		ok(t.attr("number") === 15, "converted to number");
+
+		equal(t.attr("number"), 15, "converted to number");
+		equal(t.computed, computedVal, 'saved to map as a compute');
+		equal(t.attr("computed"), 1, "compute updated via attr");
 
 	});
 
@@ -684,6 +694,295 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		ok(nested.attr('test') instanceof Example);
 		ok(nested.attr('examples.one') instanceof Example);
 		ok(nested.attr('examples.two.deep') instanceof Example);
+	});
+
+	test('setting a value of a property with type "compute" triggers change events', function () {
+
+		var handler;
+		var message = 'The change event passed the correct {prop} when set with {method}';
+		var createChangeHandler = function (expectedOldVal, expectedNewVal, method) {
+			return function (ev, newVal, oldVal) {
+				var subs = { prop: 'newVal', method: method };
+				equal(newVal, expectedNewVal, can.sub(message, subs));
+				subs.prop = 'oldVal';
+				equal(oldVal, expectedOldVal, can.sub(message, subs));
+			};
+		};
+
+		var count = 0;
+
+		var ComputableMap = can.Map.extend({
+			define: {
+				computed: {
+					type: 'compute',
+				}
+			},
+			alsoComputed: can.compute(function (newVal) {
+				if (newVal) {
+					count = newVal;
+					return;
+				}
+
+				return count;
+			})
+		});
+
+		var computed = can.compute(0);
+
+		var m1 = new ComputableMap({
+			computed: computed
+		});
+
+		equal(m1.attr('computed'), 0, 'm1 is 1');
+
+		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
+		m1.bind('alsoComputed', handler);
+		m1.attr('alsoComputed', 1);
+		m1.unbind('alsoComputed', handler);
+
+		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
+		m1.bind('computed', handler);
+		m1.attr('computed', 1);
+		m1.unbind('computed', handler);
+
+		handler = createChangeHandler(1, 2, "computed()");
+		m1.bind('computed', handler);
+		computed(2);
+		m1.unbind('computed', handler);
+	});
+
+	test('type: "compute"; playground', function () {
+		var ToggleMap = can.Map.extend({
+			define: {
+				computable: {
+					type: 'compute'
+				}
+			}
+		});
+
+		var globalToggle = can.compute(false);
+		var otherToggle = can.compute(true);
+
+		var toggleMap1 = new ToggleMap({
+			computable: globalToggle
+		});
+
+		var toggleMap2 = new ToggleMap({
+			computable: globalToggle
+		});
+
+		var toggleMap3 = new ToggleMap({
+			computable: false // Converted to can.compute
+		});
+
+		equal(toggleMap1.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap1.attr('computable'), false, 'value read from compute');
+		equal(toggleMap2.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap2.attr('computable'), false, 'value read from compute');
+		equal(toggleMap3.computable.isComputed, true, '`false` converted to compute');
+		equal(toggleMap3.attr('computable'), false, 'value read from compute');
+
+		// Update a reference to the compute
+		toggleMap1.attr('computable', true);
+
+		equal(toggleMap1.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap1.attr('computable'), true, 'value read from compute');
+		equal(toggleMap2.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap2.attr('computable'), true, 'value read from compute');
+		equal(toggleMap3.computable.isComputed, true, '`false` converted to compute');
+		equal(toggleMap3.attr('computable'), false, 'value read from compute');
+
+		// Update a reference to the compute
+		toggleMap2.attr('computable', false);
+
+		equal(toggleMap1.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap1.attr('computable'), false, 'value read from compute');
+		equal(toggleMap2.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap2.attr('computable'), false, 'value read from compute');
+		equal(toggleMap3.computable.isComputed, true, '`false` converted to compute');
+		equal(toggleMap3.attr('computable'), false, 'value read from compute');
+
+		// Update a reference to the compute
+		globalToggle(true);
+
+		equal(toggleMap1.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap1.attr('computable'), true, 'value read from compute');
+		equal(toggleMap2.computable, globalToggle, 'globalToggle saved to map');
+		equal(toggleMap2.attr('computable'), true, 'value read from compute');
+		equal(toggleMap3.computable.isComputed, true, '`false` converted to compute');
+		equal(toggleMap3.attr('computable'), false, 'value read from compute');
+
+		// Replace the compute
+		toggleMap1.attr('computable', otherToggle);
+		toggleMap2.attr('computable', otherToggle);
+
+		equal(toggleMap1.computable, otherToggle, 'otherToggle saved to map');
+		equal(toggleMap1.attr('computable'), true, 'value read from compute');
+		equal(toggleMap2.computable, otherToggle, 'otherToggle saved to map');
+		equal(toggleMap2.attr('computable'), true, 'value read from compute');
+		equal(toggleMap3.computable.isComputed, true, '`false` converted to compute');
+		equal(toggleMap3.attr('computable'), false, 'value read from compute');
+
+
+	});
+
+	test('type: "compute" (number|string|object -> compute)', function () {
+		var Map = can.Map.extend({
+			define: {
+				computed: {
+					type: 'compute'
+				}
+			}
+		});
+
+		// Test that numbers get converted to can.compute's
+		var m = new Map();
+
+		m.attr('computed', 12);
+
+		equal(m.computed.isComputed, true, 'the number was converted to a compute');
+		equal(m.attr('computed'), 12,
+			'the computed property evaluates to the correct number');
+
+		m.attr('computed', 59);
+
+		equal(m.attr('computed'), 59,
+			'the computed property was updated and evaluates to the correct number');
+
+		// Test that strings get converted to can.compute's
+		m = new Map();
+
+		m.attr('computed', 'abc');
+
+		equal(m.computed.isComputed, true, 'the number was converted to a compute');
+		equal(m.attr('computed'), 'abc',
+			'the computed property evaluates to the correct number');
+
+		m.attr('computed', 'def');
+
+		equal(m.attr('computed'), 'def',
+			'the computed property was updated and evaluates to the correct number');
+
+		// Test that ojbects get converted to can.compute's
+		m = new Map();
+		var obj = { foo: 'bar' };
+
+		m.attr('computed', obj);
+
+		equal(m.computed.isComputed, true, 'the object was converted to a compute');
+		equal(m.attr('computed'), obj,
+			'the computed property evaluates to the correct object');
+
+		var otherObj = { boo: 'hoo' };
+		m.attr('computed', otherObj);
+
+		equal(m.attr('computed'), otherObj,
+			'the computed property was updated and evaluates to the correct object');
+	});
+
+	test('type: "compute" (function -> compute)', function () {
+		var Map = can.Map.extend({
+			define: {
+				siblingProperty: {
+					value: 47
+				},
+				computed: {
+					type: 'compute'
+				}
+			}
+		});
+
+		// Test that function values get converted to can.compute's
+		var m = new Map();
+		var placeholder = 12;
+
+		m.attr('computed', function (newVal) {
+			if (newVal) {
+				placeholder = newVal;
+			}
+			return placeholder;
+		});
+
+		equal(m.computed.isComputed, true,
+			'the function was converted to a compute');
+		equal(m.attr('computed'), 12,
+			'the computed property evaluates to the correct number');
+
+		m.attr('computed', 59);
+
+		equal(m.attr('computed'), 59,
+			'the computed property was updated and evaluates to the correct number');
+
+
+		// Test that the existing compute can be replaced by a function
+		// that will be converted to a new compute
+		var anotherPlaceholder = 102;
+
+		m.attr('computed', function (newVal) {
+			if (newVal) {
+				anotherPlaceholder = newVal;
+			}
+
+			return anotherPlaceholder;
+		});
+
+		equal(m.computed.isComputed, true,
+			'the function was converted to a compute');
+		equal(m.attr('computed'), 102,
+			'the computed property evaluates to the correct number');
+
+		m.attr('computed', 12);
+
+		equal(m.attr('computed'), 12,
+			'the computed property was updated and evaluates to the correct number');
+
+
+		// Test that the compute has access to its sibling properties
+		// on the can.Map
+		m.attr('computed', function () {
+			return this.attr('siblingProperty') * 2;
+		});
+
+		equal(m.computed.isComputed, true,
+			'the function was converted to a compute');
+		equal(m.attr('computed'), 94,
+			'the computed property evaluates to the correct value');
+
+		m.attr('computed', 12);
+
+		equal(m.attr('computed'), 94, 'the compute ignores sets');
+
+	});
+
+	test('type: "compute" (compute -> compute)', function () {
+		var Map = can.Map.extend({
+			define: {
+				computed: {
+					type: 'compute'
+				}
+			}
+		});
+
+		// Test that a can.compute does not get converted
+		var m = new Map();
+		var compute = new can.compute(12);
+
+		m.attr('computed', compute);
+
+		equal(m.computed.isComputed, true, 'the property value is still a compute');
+		equal(m.computed, compute, 'the property value is the same compute');
+		equal(m.attr('computed'), 12,
+			'the computed property evaluates to the correct number');
+
+		// Test that the existing compute can be replaced by another compute
+		var replacementCompute = new can.compute(59);
+
+		m.attr('computed', replacementCompute);
+
+		equal(m.computed.isComputed, true, 'the property value is still a compute');
+		equal(m.computed, replacementCompute, 'the property value is the same compute');
+		equal(m.attr('computed'), 59,
+			'the computed property evaluates to the correct number');
 	});
 
 });
