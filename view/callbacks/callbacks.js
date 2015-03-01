@@ -33,6 +33,11 @@ steal("can/util", "can/view",function(can){
 
 	var tag = can.view.tag = function (tagName, tagHandler) {
 		if(tagHandler) {
+			//!steal-remove-start
+			if (typeof tags[tagName.toLowerCase()] !== 'undefined') {
+				can.dev.warn("Custom tag: " + tagName.toLowerCase() + "is already defined");
+			}
+			//!steal-remove-end
 			// if we have html5shive ... re-generate
 			if (can.global.html5) {
 				can.global.html5.elements += " " + tagName;

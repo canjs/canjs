@@ -8,6 +8,42 @@ steal('can/util/string', function (can) {
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
 	var initializing = 0;
+
+	var canGetDescriptor;
+	try {
+		Object.getOwnPropertyDescriptor({});
+		canGetDescriptor = true;
+	} catch(e) {
+		canGetDescriptor = false;
+	}
+
+	var getDescriptor = function(newProps, name) {
+			var descriptor = Object.getOwnPropertyDescriptor(newProps, name);
+			if(descriptor && (descriptor.get || descriptor.set)) {
+				return descriptor;
+			}
+			return null;
+		},
+		inheritGetterSetter = function(newProps, oldProps, addTo) {
+			addTo = addTo || newProps;
+			var descriptor;
+
+			for (var name in newProps) {
+				if( (descriptor = getDescriptor(newProps, name)) ) {
+					this._defineProperty(addTo, oldProps, name, descriptor);
+				} else {
+					can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+				}
+			}
+		},
+		simpleInherit = function (newProps, oldProps, addTo) {
+			addTo = addTo || newProps;
+
+			for (var name in newProps) {
+				can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+			}
+		};
+
 	/**
 	 * @add can.Construct
 	 */
@@ -97,9 +133,14 @@ steal('can/util/string', function (can) {
 		// `newProps` - New properties to add.
 		// `oldProps` - Where the old properties might be (used with `super`).
 		// `addTo` - What we are adding to.
-		_inherit: function (newProps, oldProps, addTo) {
-			can.extend(addTo || newProps, newProps || {});
+		_inherit: canGetDescriptor ? inheritGetterSetter : simpleInherit,
+
+		// Adds a `defineProperty` with the given name and descriptor
+		// Will only ever be called if ES5 is supported
+		_defineProperty: function(what, oldProps, propName, descriptor) {
+			Object.defineProperty(what, propName, descriptor);
 		},
+
 		// used for overwriting a single property.
 		// this should be used for patching other objects
 		// the super plugin overwrites this
@@ -287,14 +328,40 @@ steal('can/util/string', function (can) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
+				Constructor, parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
 			// Instantiate a base class (but only create the instance,
 			// don't run the init constructor).
 			prototype = this.instance();
 			// Copy the properties over onto the new prototype.
 			can.Construct._inherit(proto, _super, prototype);
+
+			if(fullName) {
+				parts = fullName.split('.');
+				shortName = parts.pop();
+			}
+			//!steal-remove-start
+			/* jshint ignore:start */
+			// In dev builds we want constructor.name to be the same as shortName.
+			// The only way to do that right now is using eval. jshint does not like
+			// this at all so we hide it
+
+			// Strip semicolons
+			var constructorName = shortName ? shortName.replace(/;/g, '') : 'Constructor';
+
+			// Assign a name to the constructor
+			eval('Constructor = function ' + constructorName + '() { return init.apply(this, arguments); }');
+			/* jshint ignore:end */
+			//!steal-remove-end
+
+			// Make sure Constructor is still defined when the constructor name
+			// code is removed.
+			if(typeof constructorName === 'undefined') {
+				Constructor = function() {
+					return init.apply(this, arguments);
+				};
+			}
 			// The dummy class constructor.
-			function Constructor() {
+			function init() {
 				// All construction is actually done in the init method.
 				if (!initializing) {
 					//!steal-remove-start
@@ -304,7 +371,7 @@ steal('can/util/string', function (can) {
 						can.dev.warn('can/construct/construct.js: extending a can.Construct without calling extend');
 					}
 					//!steal-remove-end
-					
+
 					return this.constructor !== Constructor &&
 					// We are being called without `new` or we are extending.
 					arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) :
@@ -323,8 +390,6 @@ steal('can/util/string', function (can) {
 			// Setup namespaces.
 			if (fullName) {
 
-				parts = fullName.split('.');
-				shortName = parts.pop();
 				current = can.getObject(parts.join('.'), window, true);
 				namespace = current;
 				_fullName = can.underscore(fullName.replace(/\./g, "_"));

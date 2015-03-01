@@ -1,4 +1,4 @@
-steal("can/compute", "can/test", "can/map", function () {
+steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 	QUnit.module('can/compute');
 	test('single value compute', function () {
 		var num = can.compute(1);
@@ -328,7 +328,51 @@ steal("can/compute", "can/test", "can/map", function () {
 		equal(result.value, "Justin", "The correct value is found.");
 	});
 
+		test('compute.read works with a Map wrapped in a compute', function() {
+		var parent = new can.Compute(new can.Map({map: {first: 'Justin' }}));
+		var reads = ['map', 'first'];
+
+		var result = can.Compute.read(parent, reads);
+		equal(result.value, 'Justin', 'The correct value is found.');
+	});
+
+	test("compute.read returns constructor functions instead of executing them (#1332)", function() {
+		var Todo = can.Map.extend({});
+		var parent = can.compute(new can.Map({map: { Test: Todo }}));
+		var reads = ["map", "Test"];
+
+		var result = can.compute.read(parent, reads);
+		equal(result.value, Todo, 'Got the same Todo');
+	});
+	
+	test("compute.set with different values", 4, function() {
+		var comp = can.compute("David");
+		var parent = {
+			name: "David",
+			comp: comp
+		};
+		var map = new can.Map({
+			name: "David"
+		});
+
+		map.bind('change', function(ev, attr, how, value) {
+			equal(value, "Brian", "Got change event on map");
+		});
+		
+		can.compute.set(parent, "name", "Matthew");
+		equal(parent.name, "Matthew", "Name set");
+
+		can.compute.set(parent, "comp", "Justin");
+		equal(comp(), "Justin", "Name updated");
+
+		can.compute.set(map, "name", "Brian");
+		equal(map.attr("name"), "Brian", "Name updated in map");
+	});
+
+
+	// ========================================
 	QUnit.module('can/Compute');
+	
 	test('single value compute', function () {
 		expect(2);
 		var num = new can.Compute(1);
@@ -638,12 +682,6 @@ steal("can/compute", "can/test", "can/map", function () {
 		async.set([]);
 	});
 
-	test('compute.read works with a Map wrapped in a compute', function() {
-		var parent = new can.Compute(new can.Map({map: {first: 'Justin' }}));
-		var reads = ['map', 'first'];
 
-		var result = can.Compute.read(parent, reads);
-		equal(result.value, 'Justin', 'The correct value is found.');
-	});
-
+	
 });

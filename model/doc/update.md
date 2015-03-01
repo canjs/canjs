@@ -22,36 +22,46 @@ update a model instance on the server.
 
 The easist way to implement update is to just give it the url to `PUT` data to:
 
-   Recipe = can.Model.extend({
-     update: "/recipes/{id}"
-   },{});
+```
+Recipe = can.Model.extend({
+ update: "/recipes/{id}"
+},{});
+```
 
 This lets you update a recipe like:
 
-   Recipe.findOne({id: 1}, function(recipe){
-     recipe.attr('name','salad');
-     recipe.save();
-   })
+```
+Recipe.findOne({id: 1}, function(recipe){
+ recipe.attr('name','salad');
+ recipe.save();
+})
+```
 
 This will make an XHR request like:
 
-   PUT /recipes/1
-   name=salad
+```
+PUT /recipes/1
+name=salad
+```
 
 If your server doesn't use PUT, you can change it to post like:
 
-   Recipe = can.Model.extend({
-     update: "POST /recipes/{id}"
-   },{});
+```
+Recipe = can.Model.extend({
+ update: "POST /recipes/{id}"
+},{});
+```
 
 The server should send back an object with any new attributes the model
 should have.  For example if your server updates the "updatedAt" property, it
 should send back something like:
 
-   // PUT /recipes/4 {name: "Food"} ->
-   {
-     updatedAt : "10-20-2011"
-   }
+```
+// PUT /recipes/4 {name: "Food"} ->
+{
+ updatedAt : "10-20-2011"
+}
+```
 
 ## Implement with a Function
 
@@ -64,14 +74,18 @@ For example, the following code makes a request
 to '/recipes/5.json?name=hot+dog' and gets back
 something that looks like:
 
-   {
-     updatedAt: "10-20-2011"
-   }
+```
+{
+ updatedAt: "10-20-2011"
+}
+```
 
 The code looks like:
 
-   Recipe = can.Model.extend({
-     update : function(id, attrs ) {
-       return $.post("/recipes/"+id+".json",attrs, null,"json");
-     }
-   },{});
+```
+Recipe = can.Model.extend({
+ update : function(id, attrs ) {
+   return $.post("/recipes/"+id+".json",attrs, null,"json");
+ }
+},{});
+```

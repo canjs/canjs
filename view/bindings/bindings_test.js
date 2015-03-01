@@ -1,14 +1,13 @@
-steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (special) {
+steal("can/view/bindings", "can/map", "can/test", "can/view/mustache", "can/view/stache", "steal-qunit", function () {
 	QUnit.module('can/view/bindings', {
 		setup: function () {
-			document.getElementById("qunit-test-area")
-				.innerHTML = "";
+			document.getElementById("qunit-fixture").innerHTML = "";
 		}
 	});
 
 	test("can-event handlers", function () {
 		expect(4);
-		var template = can.view.mustache("<div>" +
+		var template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<p can-click='doSomething'>{{content}}</p>" +
 			"{{/each}}" +
@@ -37,22 +36,73 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			doSomething: doSomething
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 		var p0 = ta.getElementsByTagName("p")[0];
 		can.trigger(p0, "click");
 
 	});
 
+	if (window.jQuery) {
+		test("can-event passes extra args to handler", function () {
+			expect(3);
+			var template = can.view.mustache("<p can-myevent='handleMyEvent'>{{content}}</p>");
+
+			var frag = template({
+				handleMyEvent: function(context, el, event, arg1, arg2) {
+					ok(true, "handleMyEvent called");
+					equal(arg1, "myarg1", "3rd argument is the extra event args");
+					equal(arg2, "myarg2", "4rd argument is the extra event args");
+				}
+			});
+
+			var ta = document.getElementById("qunit-fixture");
+			ta.appendChild(frag);
+			var p0 = ta.getElementsByTagName("p")[0];
+			can.trigger(p0, "myevent", ["myarg1", "myarg2"]);
+
+		});
+	}
+
 	test("can-value input text", function () {
 
-		var template = can.view.mustache("<input can-value='age'/>");
+		var template = can.view.stache("<input can-value='age'/>");
 
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
+
+		map.attr("age", "31");
+
+		equal(input.value, "31", "input value update correctly");
+
+		input.value = "32";
+
+		can.trigger(input, "change");
+
+		equal(map.attr("age"), "32", "updated from input");
+
+	});
+
+	test("can-value with spaces (#1477)", function () {
+
+		var template = can.view.stache("<input can-value='{ age }'/>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var input = ta.getElementsByTagName("input")[0];
@@ -76,7 +126,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value input radio", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<input type='radio' can-value='color' value='red'/> Red<br/>" +
 			"<input type='radio' can-value='color' value='green'/> Green<br/>");
 
@@ -86,7 +136,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("input");
@@ -109,7 +159,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-enter", function () {
-		var template = can.view.mustache("<input can-enter='update'/>");
+		var template = can.view.stache("<input can-enter='update'/>");
 
 		var called = 0;
 
@@ -136,7 +186,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("two bindings on one element call back the correct method", function () {
 		expect(2);
-		var template = can.mustache("<input can-mousemove='first' can-click='second'/>");
+		var template = can.stache("<input can-mousemove='first' can-click='second'/>");
 
 		var callingFirst = false,
 			callingSecond = false;
@@ -167,13 +217,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	asyncTest("can-value select remove from DOM", function () {
 		expect(1);
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color'>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
 			"</select>"),
 			frag = template(),
-			ta = document.getElementById("qunit-test-area");
+			ta = document.getElementById("qunit-fixture");
 
 		ta.appendChild(frag);
 		can.remove(can.$("select", ta));
@@ -188,10 +238,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			completed: true
 		}),
-			frag = can.view.mustache('<input type="checkbox" can-value="completed"/>')(data);
-		can.append(can.$("#qunit-test-area"), frag);
+			frag = can.view.stache('<input type="checkbox" can-value="completed"/>')(data);
+		can.append(can.$("#qunit-fixture"), frag);
 
-		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
 		data.attr('completed', false);
 		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
@@ -209,10 +259,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			sex: "male"
 		}),
-			frag = can.view.mustache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
-		can.append(can.$("#qunit-test-area"), frag);
+			frag = can.view.stache('<input type="checkbox" can-value="sex" can-true-value="male" can-false-value="female"/>')(data);
+		can.append(can.$("#qunit-fixture"), frag);
 
-		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, true, 'checkbox value bound (via attr check)');
 		data.attr('sex', 'female');
 		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
@@ -228,7 +278,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value select single", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color'>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -240,7 +290,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("select");
@@ -271,7 +321,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 	});
 
 	test("can-value select multiple with values seperated by a ;", function () {
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='color' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -282,43 +332,48 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			color: "red"
 		});
 
+		stop();
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var inputs = ta.getElementsByTagName("select"),
 			options = inputs[0].getElementsByTagName('option');
 
-		equal(inputs[0].value, 'red', "default value set");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function() {
+			equal(inputs[0].value, 'red', "default value set");
 
-		map.attr("color", "green");
-		equal(inputs[0].value, 'green', "alternate value set");
+			map.attr("color", "green");
+			equal(inputs[0].value, 'green', "alternate value set");
 
-		options[0].selected = true;
+			options[0].selected = true;
 
-		equal(map.attr("color"), "green", "not yet updated from input");
-		can.trigger(inputs[0], "change");
-		equal(map.attr("color"), "red;green", "updated from input");
+			equal(map.attr("color"), "green", "not yet updated from input");
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "red;green", "updated from input");
 
-		map.removeAttr("color");
-		equal(inputs[0].value, '', "attribute removed from map");
+			map.removeAttr("color");
+			equal(inputs[0].value, '', "attribute removed from map");
 
-		options[1].selected = true;
-		can.trigger(inputs[0], "change");
-		equal(map.attr("color"), "green", "updated from input");
+			options[1].selected = true;
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "green", "updated from input");
 
-		map.attr("color", "red;green");
+			map.attr("color", "red;green");
 
-		ok(options[0].selected, 'red option selected from map');
-		ok(options[1].selected, 'green option selected from map');
-		ok(!options[2].selected, 'ultraviolet option NOT selected from map');
+			ok(options[0].selected, 'red option selected from map');
+			ok(options[1].selected, 'green option selected from map');
+			ok(!options[2].selected, 'ultraviolet option NOT selected from map');
 
-		can.remove(can.$(inputs));
+			can.remove(can.$(inputs));
+			start();
+		}, 1);
 	});
 
 	test("can-value select multiple with values cross bound to an array", function () {
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='colors' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -327,47 +382,53 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var map = new can.Map({});
 
+		stop();
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var select = ta.getElementsByTagName("select")[0],
 			options = select.getElementsByTagName('option');
 
-		// Test updating the DOM changes observable values
-		options[0].selected = true;
-		can.trigger(select, "change");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			// Test updating the DOM changes observable values
+			options[0].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["red"], "A can.List property is set even if none existed");
+			deepEqual(map.attr("colors")
+				.attr(), ["red"], "A can.List property is set even if none existed");
 
-		options[1].selected = true;
-		can.trigger(select, "change");
+			options[1].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["red", "green"], "Adds items to the list");
+			deepEqual(map.attr("colors")
+				.attr(), ["red", "green"], "Adds items to the list");
 
-		options[0].selected = false;
-		can.trigger(select, "change");
+			options[0].selected = false;
+			can.trigger(select, "change");
 
-		deepEqual(map.attr("colors")
-			.attr(), ["green"], "Removes items from the list");
+			deepEqual(map.attr("colors")
+				.attr(), ["green"], "Removes items from the list");
 
-		// Test changing observable values changes the DOM
+			// Test changing observable values changes the DOM
 
-		map.attr("colors")
-			.push("ultraviolet");
-		options[0].selected = false;
-		options[1].selected = true;
-		options[2].selected = true;
+			map.attr("colors")
+				.push("ultraviolet");
+			options[0].selected = false;
+			options[1].selected = true;
+			options[2].selected = true;
 
-		can.remove(can.$(select));
+			can.remove(can.$(select));
+
+			start();
+		}, 1);
 	});
 
 	test("can-value multiple select with a can.List", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='colors' multiple>" +
 			"<option value='red'>Red</option>" +
 			"<option value='green'>Green</option>" +
@@ -376,50 +437,54 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 		var list = new can.List();
 
+		stop();
 		var frag = template({
 			colors: list
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var select = ta.getElementsByTagName("select")[0],
 			options = select.getElementsByTagName('option');
 
-		// Test updating the DOM changes observable values
-		options[0].selected = true;
-		can.trigger(select, "change");
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			// Test updating the DOM changes observable values
+			options[0].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["red"], "A can.List property is set even if none existed");
+			deepEqual(list.attr(), ["red"], "A can.List property is set even if none existed");
 
-		options[1].selected = true;
-		can.trigger(select, "change");
+			options[1].selected = true;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["red", "green"], "Adds items to the list");
+			deepEqual(list.attr(), ["red", "green"], "Adds items to the list");
 
-		options[0].selected = false;
-		can.trigger(select, "change");
+			options[0].selected = false;
+			can.trigger(select, "change");
 
-		deepEqual(list.attr(), ["green"], "Removes items from the list");
+			deepEqual(list.attr(), ["green"], "Removes items from the list");
 
-		// Test changing observable values changes the DOM
+			// Test changing observable values changes the DOM
 
-		list.push("ultraviolet");
-		options[0].selected = false;
-		options[1].selected = true;
-		options[2].selected = true;
+			list.push("ultraviolet");
+			options[0].selected = false;
+			options[1].selected = true;
+			options[2].selected = true;
 
-		can.remove(can.$(select));
-
+			can.remove(can.$(select));
+			start();
+		}, 1);
 	});
 
 	test("can-value contenteditable", function () {
-		var template = can.view.mustache("<div id='cdiv' contenteditable can-value='age'></div>");
+		var template = can.view.stache("<div id='cdiv' contenteditable can-value='age'></div>");
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var div = document.getElementById("cdiv");
@@ -442,7 +507,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-event handlers work with {} (#905)", function () {
 		expect(4);
-		var template = can.mustache("<div>" +
+		var template = can.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<p can-click='{doSomething}'>{{content}}</p>" +
 			"{{/each}}" +
@@ -471,7 +536,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 			doSomething: doSomething
 		});
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 		var p0 = ta.getElementsByTagName("p")[0];
 		can.trigger(p0, "click");
@@ -480,13 +545,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value works with {} (#905)", function () {
 
-		var template = can.mustache("<input can-value='{age}'/>");
+		var template = can.stache("<input can-value='{age}'/>");
 
 		var map = new can.Map();
 
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var input = ta.getElementsByTagName("input")[0];
@@ -510,7 +575,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 
 	test("can-value select with null or undefined value (#813)", function () {
 
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select id='null-select' can-value='color-1'>" +
 				"<option value=''>Choose</option>" +
 				"<option value='red'>Red</option>" +
@@ -529,7 +594,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		stop();
 		var frag = template(map);
 
-		var ta = document.getElementById("qunit-test-area");
+		var ta = document.getElementById("qunit-fixture");
 		ta.appendChild(frag);
 
 		var nullInput = document.getElementById("null-select");
@@ -549,9 +614,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var data = new can.Map({
 			id: 1
 		}),
-			frag = can.view.mustache('<input type="radio" can-value="id" value="1"/>')(data);
-		can.append(can.$('#qunit-test-area'), frag);
-		var input = can.$('#qunit-test-area')[0].getElementsByTagName('input')[0];
+			frag = can.view.stache('<input type="radio" can-value="id" value="1"/>')(data);
+		can.append(can.$('#qunit-fixture'), frag);
+		var input = can.$('#qunit-fixture')[0].getElementsByTagName('input')[0];
 		ok(input.checked, 'checkbox value bound');
 	});
 
@@ -567,12 +632,128 @@ steal("can/view/bindings", "can/map", "can/test", "can/view/stache", function (s
 		var obj = new can.Map({thing: 'stuff'});
 		
 		
-		//mustacheRenderer(obj);
-		//ok(true, 'mustache worked without errors');
 		stacheRenderer(obj);
 		ok(true, 'stache worked without errors');
 		
 	});
 
+	test("can-event throws an error when inside #if block (#1182)", function(){
+		var flag = can.compute(false),
+			clickHandlerCount = 0;
+		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+			flag: flag,
+			foo: function () {
+				clickHandlerCount++;
+			}
+		});
+		var trig = function(){
+			var div = can.$('#qunit-fixture')[0].getElementsByTagName('div')[0];
+			can.trigger(div, {
+				type: "click"
+			});
+		};
+		can.append(can.$('#qunit-fixture'), frag);
+		trig();
+		equal(clickHandlerCount, 0, "click handler not called");
+	});
 
+	test("can-EVENT removed in live bindings doesn't unbind (#1112)", function(){
+		var flag = can.compute(true),
+			clickHandlerCount = 0;
+		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+			flag: flag,
+			foo: function () {
+				clickHandlerCount++;
+			}
+		});
+		var trig = function(){
+			var div = can.$('#qunit-fixture')[0].getElementsByTagName('div')[0];
+			can.trigger(div, {
+				type: "click"
+			});
+		};
+		can.append(can.$('#qunit-fixture'), frag);
+		trig();
+		flag(false);
+		trig();
+		flag(true);
+		trig();
+		equal(clickHandlerCount, 2, "click handler called twice");
+	});
+
+	test("can-value compute rejects new value (#887)", function() {
+		var template = can.view.mustache("<input can-value='age'/>");
+
+		// Compute only accepts numbers
+		var compute = can.compute(30, function(newVal, oldVal) {
+			if(isNaN(+newVal)) {
+				return oldVal;
+			} else {
+				return +newVal;
+			}
+		});
+
+		var frag = template({
+			age: compute
+		});
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+
+		// Set to non-number
+		input.value = "30f";
+		can.trigger(input, "change");
+
+		equal(compute(), 30, "Still the old value");
+		equal(input.value, "30", "Text input has also not changed");
+	});
+
+	test("can-value select multiple applies initial value, when options rendered from array (#1414)", function () {
+		var template = can.view.mustache(
+			"<select can-value='colors' multiple>" +
+			"{{#each allColors}}<option value='{{value}}'>{{label}}</option>{{/each}}" +
+			"</select>");
+
+		var map = new can.Map({
+			colors: ["red", "green"],
+			allColors: [
+				{ value: "red", label: "Red"},
+				{ value: "green", label: "Green"},
+				{ value: "blue", label: "Blue"}
+			]
+		});
+
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var select = ta.getElementsByTagName("select")[0],
+			options = select.getElementsByTagName("option");
+
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function(){
+			ok(options[0].selected, "red should be set initially");
+			ok(options[1].selected, "green should be set initially");
+			ok(!options[2].selected, "blue should not be set initially");
+			start();
+		}, 1);
+
+	});
+
+	test('can-value with truthy and falsy values binds to checkbox (#1478)', function() {
+		var data = new can.Map({
+				completed: 1
+			}),
+			frag = can.view.stache('<input type="checkbox" can-value="completed"/>')(data);
+		can.append(can.$("#qunit-fixture"), frag);
+
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
+		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		data.attr('completed', 0);
+		equal(input.checked, false, 'checkbox value bound (via attr check)');
+	});
 });

@@ -88,6 +88,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				this.length = 0;
 				can.cid(this, ".map");
 				this._init = 1;
+				this._computedBindings = {};
 				this._setupComputes();
 				instances = instances || [];
 				var teardownMapping;
@@ -114,7 +115,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				// `batchTrigger` direct add and remove events...
 				var index = +attr;
 				// Make sure this is not nested and not an expando
-				if (!~attr.indexOf('.') && !isNaN(index)) {
+				if (!~(""+attr).indexOf('.') && !isNaN(index)) {
 
 					if (how === 'add') {
 						can.batch.trigger(this, how, [newVal, index]);
@@ -139,6 +140,23 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				} else {
 					return this;
 				}
+			},
+			__set: function (prop, value, current) {
+				// We want change events to notify using integers if we're
+				// setting an integer index. Note that <float> % 1 !== 0;
+				prop = isNaN(+prop) || (prop % 1) ? prop : +prop;
+
+				// Check to see if we're doing a .attr() on an out of
+				// bounds index property.
+				if (typeof prop === "number" &&
+					prop > this.length - 1) {
+					var newArr = new Array((prop + 1) - this.length);
+					newArr[newArr.length-1] = value;
+					value = newArr;
+					prop = this.length;
+				}
+
+				return can.Map.prototype.__set.call(this, ""+prop, value, current);
 			},
 			___set: function (attr, val) {
 				this[attr] = val;
@@ -212,7 +230,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @param {Number} index where to start removing or inserting elements
 			 *
 			 * @param {Number} [howMany] the number of elements to remove
-			 * If _howMany_ is not provided, `splice` will all elements from `index` to the end of the List.
+			 * If _howMany_ is not provided, `splice` will remove all elements from `index` to the end of the List.
 			 *
 			 * @param {*} newElements elements to insert into the List
 			 *
@@ -272,26 +290,36 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			splice: function (index, howMany) {
 				var args = can.makeArray(arguments),
 					added =[],
-					i, j;
-				for (i = 2; i < args.length; i++) {
-					args[i] = bubble.set(this, i, this.__type(args[i], i) );
-					added.push(args[i]);
-				}
-				if (howMany === undefined) {
-					howMany = args[1] = this.length - index;
-				}
-				var removed = splice.apply(this, args),
-					cleanRemoved = removed;
+					i, len, listIndex,
+					allSame = args.length > 2;
 
-				// remove any items that were just added from the removed array
-				if(added.length && removed.length){
-					for (j = 0; j < removed.length; j++) {
-						if(can.inArray(removed[j], added) >= 0) {
-							cleanRemoved.splice(j, 1);
-						}
+				index = index || 0;
+
+				// converting the arguments to the right type
+				for (i = 0, len = args.length-2; i < len; i++) {
+					listIndex = i + 2;
+					args[listIndex] = this.__type(args[listIndex], listIndex);
+					added.push(args[listIndex]);
+
+					// Now lets check if anything will change
+					if(this[i+index] !== args[listIndex]) {
+						allSame = false;
 					}
 				}
 
+				// if nothing has changed, then return
+				if(allSame) {
+					return added;
+				}
+
+				// default howMany if not provided
+				if (howMany === undefined) {
+					howMany = args[1] = this.length - index;
+				}
+
+				var removed = splice.apply(this, args);
+
+				// delete properties for browsers who's splice sucks (old ie)
 				if (!spliceRemovesProps) {
 					for (i = this.length; i < removed.length + this.length; i++) {
 						delete this[i];
@@ -300,11 +328,16 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 				can.batch.start();
 				if (howMany > 0) {
-					this._triggerChange("" + index, "remove", undefined, removed);
+					// tears down bubbling
 					bubble.removeMany(this, removed);
+					this._triggerChange("" + index, "remove", undefined, removed);
 				}
 				if (args.length > 2) {
-					this._triggerChange("" + index, "add", args.slice(2), removed);
+					// make added items bubble to this list
+					for (i = 0, len = added.length; i < len; i++) {
+						bubble.set(this, i, added[i]);
+					}
+					this._triggerChange("" + index, "add", added, removed);
 				}
 				can.batch.stop();
 				return removed;
@@ -488,8 +521,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * - _ev_ The event object.
 			 * - _newElements_ The new elements.
-			 * If more than one element is added, _newElements_ will be an array.
-			 * Otherwise, it is simply the new element itself.
+			 * An array of zero or more elements that were added.
 			 * - _index_ Where the add or insert took place.
 			 *
 			 * Here is a concrete tour through the _add_ event handler's arguments:
@@ -516,8 +548,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * - _ev_ The event object.
 			 * - _removedElements_ The removed elements.
-			 * If more than one element was removed, _removedElements_ will be an array.
-			 * Otherwise, it is simply the element itself.
+			 * An array of zero or more elements that were removed.
 			 * - _index_ Where the removal took place.
 			 *
 			 * Here is a concrete tour through the _remove_ event handler's arguments:
@@ -802,6 +833,11 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		// Creates a `remove` type method
 		function (where, name) {
 			list.prototype[name] = function () {
+				if (!this.length) {
+					// For shift and pop, we just return undefined without
+					// triggering events.
+					return undefined;
+				}
 
 				var args = getArgs(arguments),
 					len = where && this.length ? this.length - 1 : 0;
@@ -899,7 +935,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @codeend
 		 */
 		reverse: function() {
-			var list = can.makeArray([].reverse.call(this));
+			var list = [].reverse.call(can.makeArray(this));
 			this.replace(list);
 		},
 

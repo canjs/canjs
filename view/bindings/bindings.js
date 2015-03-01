@@ -69,7 +69,7 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = removeCurly(el.getAttribute("can-value")),
+		var attr = can.trim(removeCurly(el.getAttribute("can-value"))),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
 			// data.attr('name') property.
@@ -181,12 +181,22 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			handler = function (ev) {
 				// The attribute value, representing the name of the method to call (i.e. can-submit="foo" foo is the 
 				// name of the method)
-				var attr = removeCurly( el.getAttribute(attributeName) ),
+				var attrVal = el.getAttribute(attributeName);
+				// if the attribute is not present currently, don't run the event handler, but don't unbind,  
+				// since it might just be temporarily hidden
+				if(!attrVal){
+					return false;
+				}
+
+				var attr = removeCurly( attrVal ),
 					scopeData = data.scope.read(attr, {
 						returnObserveMethods: true,
 						isArgument: true
 					});
-				return scopeData.value.call(scopeData.parent, data.scope._context, can.$(this), ev);
+				// To pass the arguments: (context, el, ev, param1, param2, ...)
+				var args = [data.scope._context, can.$(this)];
+				args.push.apply(args, can.makeArray(arguments));
+				return scopeData.value.apply(scopeData.parent, args);
 			};
 
 		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is 
@@ -237,13 +247,22 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 			this.element[0].value = (val == null ? '' : val);
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
+			// If the input value changes, this will set the live bound data to reflect the change.
 		"change": function () {
 			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
 			if (!this.element) {
 				return;
 			}
+			var el = this.element[0];
+
 			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(this.element[0].value);
+			this.options.value(el.value);
+			var newVal = this.options.value();
+
+			// If the newVal isn't the same as the input, set it's value
+			if(el.value !== newVal) {
+				el.value = newVal;
+			}
 		}
 	}),
 	// ### Checked 
@@ -265,7 +284,7 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 						trueValue = this.options.trueValue || true;
 					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set 
 					// the checked property based on their equality.
-					this.element[0].checked = (value === trueValue);
+					this.element[0].checked = (value == trueValue);
 				}
 				// Its a radio input type
 				else {
@@ -299,7 +318,8 @@ steal("can/util", "can/view/callbacks", "can/control", function (can) {
 		Multiselect = Value.extend({
 			init: function () {
 				this.delimiter = ";";
-				this.set();
+				// Call `set` after this thread so the rest of the element can finish rendering.
+				setTimeout(can.proxy(this.set, this), 1);
 			},
 			// Since this control extends Value (above), the set method will be called when the value compute changes (and on init).
 			set: function () {

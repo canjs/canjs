@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal('can/route/pushstate', "can/test", function () {
+steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 
 
 	function eventFire(el, etype) {
@@ -392,358 +392,361 @@ steal('can/route/pushstate', "can/test", function () {
 			equal(res, "bar/" + encodeURIComponent("\/"))
 		});
 
+		// Start steal-only
+		if (typeof steal !== 'undefined') {
 
-		var makeTestingIframe = function (callback) {
+			var makeTestingIframe = function (callback) {
+	
+	
+				window.routeTestReady = function (iCanRoute, loc, history, win) {
+					callback({
+						route: iCanRoute,
+						location: loc,
+						history: history,
+						window: win,
+						iframe: iframe
+					}, function () {
+						iframe.onload = null;
+						can.remove(can.$(iframe));
+						delete window.routeTestReady;
+					});
+				};
+	
+				var iframe = document.createElement('iframe');
+				iframe.src = can.test.path("route/pushstate/testing.html")+"?" + Math.random();
+				can.$("#qunit-fixture")[0].appendChild(iframe);
 
 
-			window.routeTestReady = function (iCanRoute, loc, history, win) {
-				callback({
-					route: iCanRoute,
-					location: loc,
-					history: history,
-					window: win,
-					iframe: iframe
-				}, function () {
-					iframe.onload = null;
-					can.remove(can.$(iframe));
-					delete window.routeTestReady;
-				});
 			};
 
-			var iframe = document.createElement('iframe');
-			iframe.src = can.test.path("route/pushstate/testing.html")+"?" + Math.random();
-			can.$("#qunit-test-area")[0].appendChild(iframe);
-
-
-		};
-
-
-		test("updating the url", function () {
-			stop();
-			makeTestingIframe(function (info, done) {
-				info.route.ready()
-				info.route("/:type/:id");
-				info.route.attr({
-					type: "bar",
-					id: "5"
-				});
-
-				setTimeout(function () {
-					var after = info.location.pathname;
-					equal(after, "/bar/5", "path is " + after);
-					start();
-
-					done();
-
-				}, 100);
-			});
-
-		});
-
-		test("sticky enough routes", function () {
-			stop();
-			makeTestingIframe(function (info, done) {
-				info.route("/active");
-				info.route("");
-				info.history.pushState(null, null, "/active");
-
-				setTimeout(function () {
-					var after = info.location.pathname;
-					equal(after, "/active");
-					start();
-
-					done();
-				}, 30);
-			});
-		});
-
-		test("unsticky routes", function () {
-
-			stop();
-			window.routeTestReady = function (iCanRoute, loc, iframeHistory) {
-				// check if we can even test this
-				iframeHistory.pushState(null, null, "/bar/" + encodeURIComponent("\/"));
-				setTimeout(function timer() {
-
-					if ("/bar/" + encodeURIComponent("\/") === loc.pathname) {
-						runTest();
-
-					} else if (loc.pathname.indexOf("/bar/") >= 0) {
-						//  encoding doesn't actually work
-						ok(true, "can't test!");
-						can.remove(can.$(iframe))
-						start()
-					} else {
-						setTimeout(timer, 30)
-					}
-				}, 30);
-				var runTest = function () {
-					iCanRoute.ready();
-					iCanRoute("/:type");
-					iCanRoute("/:type/:id");
-					iCanRoute.attr({
-						type: "bar"
+			test("updating the url", function () {
+				stop();
+				makeTestingIframe(function (info, done) {
+					info.route.ready()
+					info.route("/:type/:id");
+					info.route.attr({
+						type: "bar",
+						id: "5"
 					});
 
 					setTimeout(function () {
-						var after = loc.pathname;
-						equal(after, "/bar", "only type is set");
+						var after = info.location.pathname;
+						equal(after, "/bar/5", "path is " + after);
+						start();
+
+						done();
+
+					}, 100);
+				});
+
+			});
+
+			test("sticky enough routes", function () {
+				stop();
+				makeTestingIframe(function (info, done) {
+					info.route("/active");
+					info.route("");
+					info.history.pushState(null, null, "/active");
+
+					setTimeout(function () {
+						var after = info.location.pathname;
+						equal(after, "/active");
+						start();
+
+						done();
+					}, 30);
+				});
+			});
+
+			test("unsticky routes", function () {
+
+				stop();
+				window.routeTestReady = function (iCanRoute, loc, iframeHistory) {
+					// check if we can even test this
+					iframeHistory.pushState(null, null, "/bar/" + encodeURIComponent("\/"));
+					setTimeout(function timer() {
+
+						if ("/bar/" + encodeURIComponent("\/") === loc.pathname) {
+							runTest();
+
+						} else if (loc.pathname.indexOf("/bar/") >= 0) {
+							//  encoding doesn't actually work
+							ok(true, "can't test!");
+							can.remove(can.$(iframe))
+							start()
+						} else {
+							setTimeout(timer, 30)
+						}
+					}, 30);
+					var runTest = function () {
+						iCanRoute.ready();
+						iCanRoute("/:type");
+						iCanRoute("/:type/:id");
 						iCanRoute.attr({
-							type: "bar",
-							id: "\/"
+							type: "bar"
 						});
 
-						// check for 1 second
-						var time = new Date()
-						setTimeout(function innerTimer() {
+						setTimeout(function () {
 							var after = loc.pathname;
+							equal(after, "/bar", "only type is set");
+							iCanRoute.attr({
+								type: "bar",
+								id: "\/"
+							});
 
-							if (after === "/bar/" + encodeURIComponent("\/")) {
-								equal(after, "/bar/" + encodeURIComponent("\/"), "should go to type/id");
-								can.remove(can.$(iframe))
-								start();
-							} else if (new Date() - time > 2000) {
-								ok(false, "hash is " + after);
-								can.remove(can.$(iframe))
-							} else {
-								setTimeout(innerTimer, 30)
-							}
+							// check for 1 second
+							var time = new Date()
+							setTimeout(function innerTimer() {
+								var after = loc.pathname;
+
+								if (after === "/bar/" + encodeURIComponent("\/")) {
+									equal(after, "/bar/" + encodeURIComponent("\/"), "should go to type/id");
+									can.remove(can.$(iframe))
+									start();
+								} else if (new Date() - time > 2000) {
+									ok(false, "hash is " + after);
+									can.remove(can.$(iframe))
+								} else {
+									setTimeout(innerTimer, 30)
+								}
+
+							}, 30);
 
 						}, 30);
+					};
 
-					}, 30);
 				};
+				var iframe = document.createElement('iframe');
+				iframe.src = can.test.path("route/pushstate/testing.html?1");
+				can.$("#qunit-fixture")[0].appendChild(iframe);
+			});
 
-			};
-			var iframe = document.createElement('iframe');
-			iframe.src = can.test.path("route/pushstate/testing.html?1");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
-		});
+			test("clicked hashes work (#259)", function () {
 
-		test("clicked hashes work (#259)", function () {
-
-			stop();
-			window.routeTestReady = function (iCanRoute, loc, hist, win) {
-
-				iCanRoute(win.location.pathname, {
-					page: "index"
-				});
-
-				iCanRoute(":type/:id");
-				iCanRoute.ready();
-
-				window.win = win;
-				var link = win.document.createElement("a");
-				link.href = "/articles/17#references";
-				link.innerHTML = "Click Me"
-
-				win.document.body.appendChild(link);
-
-				win.can.trigger(win.can.$(link), "click")
-
-				//link.click()
-
-				setTimeout(function () {
-
-					deepEqual(can.extend({}, iCanRoute.attr()), {
-						type: "articles",
-						id: "17",
-						route: ":type/:id"
-					}, "articles are right")
-
-					equal(win.location.hash, "#references", "includes hash");
-
-					start();
-
-					can.remove(can.$(iframe))
-
-				}, 100);
-			};
-			var iframe = document.createElement('iframe');
-			iframe.src = can.test.path("route/pushstate/testing.html");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
-		});
-			
-		if(window.parent === window) {
-			// we can't call back if running in multiple frames
-			test("no doubled history states (#656)", function () {
 				stop();
-
 				window.routeTestReady = function (iCanRoute, loc, hist, win) {
-					var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
-					var stateTest = -1,
-						message;
-	
-					function nextStateTest() {
-						stateTest++;
-						win.can.route.attr("page", "start");
-	
-						setTimeout(function () {
-							if (stateTest === 0) {
-								message = "can.route.attr";
-								win.can.route.attr("page", "test");
-							} else if (stateTest === 1) {
-								message = "history.pushState";
-								win.history.pushState(null, null, root + "test/");
-							} else if (stateTest === 2) {
-								message = "link click";
-								var link = win.document.createElement("a");
-								link.href = root + "test/";
-								link.innerText = "asdf";
-								win.document.body.appendChild(link);
-								win.can.trigger(win.can.$(link), "click");
-							} else {
-								start();
-								can.remove(can.$(iframe));
-								return;
-							}
-	
-							setTimeout(function () {
-								win.history.back();
-								setTimeout(function () {
-									var path = win.location.pathname;
-									// strip root for deparam
-									if (path.indexOf(root) === 0) {
-										path = path.substr(root.length);
-									}
-									equal(win.can.route.deparam(path)
-										.page, "start", message + " passed");
-									nextStateTest();
-								}, 200);
-							}, 200);
-	
-						}, 200);
-					}
-	
-					win.can.route.bindings.pushstate.root = root;
-					win.can.route(":page/");
-					win.can.route.ready();
-					nextStateTest();
-				};
-	
-				var iframe = document.createElement("iframe");
-				iframe.src = can.test.path("route/pushstate/testing.html");
-				can.$("#qunit-test-area")[0].appendChild(iframe);
-			});
 
-
-			test("root can include the domain", function () {
-				// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
-				stop();
-				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
-					info.route(":module/:plugin/:page\\.html");
-					info.route.ready();
-
-					setTimeout(function(){
-						equal(info.route.attr('module'), 'route', 'works');
-						start();
-
-						done();
-					}, 100);
-				});
-			});
-
-			test("URL's don't greedily match", function () {
-				stop();
-				makeTestingIframe(function(info, done){
-					info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
-					info.route(":module\\.html");
-					info.route.ready();
-
-					setTimeout(function(){
-						ok(!info.route.attr('module'), 'there is no route match');
-						start();
-
-						done();
-					}, 100);
-				});
-			});
-
-		}
-
-		test("routed links must descend from pushstate root (#652)", 1, function () {
-
-
-			stop();
-
-			var setupRoutesAndRoot = function (iCanRoute, root) {
-				iCanRoute(":section/");
-				iCanRoute(":section/:sub/");
-				iCanRoute.bindings.pushstate.root = root;
-				iCanRoute.ready();
-			};
-
-
-			var createLink = function (win, url) {
-				var link = win.document.createElement("a");
-				link.href = link.innerHTML = url;
-				win.document.body.appendChild(link);
-				return link;
-			};
-
-			// The following makes sure a link that is not "rooted" will
-			// behave normally and not call pushState
-			makeTestingIframe(function (info, done) {
-				setupRoutesAndRoot(info.route, "/app/");
-				var link = createLink(info.window, "/route/pushstate/empty.html"); // a link to somewhere outside app
-
-				var clickKiller = function(ev) {
-					if(ev.preventDefault) {
-						ev.preventDefault();
-					}
-					return false;
-				};
-				// kill the click b/c phantom doesn't like it.
-				can.bind.call(info.window.document,"click",clickKiller);
-				
-				info.history.pushState = function () {
-					ok(false, "pushState should not have been called");
-				};
-
-				// click a link and make sure the iframe url changes
-				eventFire(link, "click")
-
-				done();
-				setTimeout(next, 10);
-			});
-
-			var next = function () {
-				makeTestingIframe(function (info, done) {
-
-					var timer;
-					info.route.bind("change", function () {
-						clearTimeout(timer);
-						timer = setTimeout(function () {
-							// deepEqual doesn't like to compare objects from different contexts
-							// so we copy it
-							var obj = can.simpleExtend({}, info.route.attr());
-
-							deepEqual(obj, {
-								section: "something",
-								sub: "test",
-								route: ":section/:sub/"
-							}, "route's data is correct");
-
-							done();
-							start();
-						}, 10);
-
+					iCanRoute(win.location.pathname, {
+						page: "index"
 					});
 
-					setupRoutesAndRoot(info.route, "/app/");
-					var link = createLink(info.window, "/app/something/test/");
+					iCanRoute(":type/:id");
+					iCanRoute.ready();
 
+					window.win = win;
+					var link = win.document.createElement("a");
+					link.href = "/articles/17#references";
+					link.innerHTML = "Click Me"
 
-					eventFire(link, "click")
-					// click a link and make sure the iframe url changes
+					win.document.body.appendChild(link);
 
+					win.can.trigger(win.can.$(link), "click")
+
+					//link.click()
+
+					setTimeout(function () {
+
+						deepEqual(can.extend({}, iCanRoute.attr()), {
+							type: "articles",
+							id: "17",
+							route: ":type/:id"
+						}, "articles are right")
+
+						equal(win.location.hash, "#references", "includes hash");
+
+						start();
+
+						can.remove(can.$(iframe))
+
+					}, 100);
+				};
+				var iframe = document.createElement('iframe');
+				iframe.src = can.test.path("route/pushstate/testing.html");
+				can.$("#qunit-fixture")[0].appendChild(iframe);
+			});
+
+			if(window.parent === window) {
+				// we can't call back if running in multiple frames
+				test("no doubled history states (#656)", function () {
+					stop();
+
+					window.routeTestReady = function (iCanRoute, loc, hist, win) {
+						var root = loc.pathname.substr(0, loc.pathname.lastIndexOf("/") + 1);
+						var stateTest = -1,
+							message;
+
+						function nextStateTest() {
+							stateTest++;
+							win.can.route.attr("page", "start");
+
+							setTimeout(function () {
+								if (stateTest === 0) {
+									message = "can.route.attr";
+									win.can.route.attr("page", "test");
+								} else if (stateTest === 1) {
+									message = "history.pushState";
+									win.history.pushState(null, null, root + "test/");
+								} else if (stateTest === 2) {
+									message = "link click";
+									var link = win.document.createElement("a");
+									link.href = root + "test/";
+									link.innerText = "asdf";
+									win.document.body.appendChild(link);
+									win.can.trigger(win.can.$(link), "click");
+								} else {
+									start();
+									can.remove(can.$(iframe));
+									return;
+								}
+
+								setTimeout(function () {
+									win.history.back();
+									setTimeout(function () {
+										var path = win.location.pathname;
+										// strip root for deparam
+										if (path.indexOf(root) === 0) {
+											path = path.substr(root.length);
+										}
+										equal(win.can.route.deparam(path)
+											.page, "start", message + " passed");
+										nextStateTest();
+									}, 200);
+								}, 200);
+
+							}, 200);
+						}
+
+						win.can.route.bindings.pushstate.root = root;
+						win.can.route(":page/");
+						win.can.route.ready();
+						nextStateTest();
+					};
+
+					var iframe = document.createElement("iframe");
+					iframe.src = can.test.path("route/pushstate/testing.html");
+					can.$("#qunit-fixture")[0].appendChild(iframe);
 				});
 
 
-			};
+				test("root can include the domain", function () {
+					// Allows bindings.pushstate.root to handle the full domain instead of just the pathname
+					stop();
+					makeTestingIframe(function(info, done){
+						info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
+						info.route(":module/:plugin/:page\\.html");
+						info.route.ready();
 
-		});
+						setTimeout(function(){
+							equal(info.route.attr('module'), 'route', 'works');
+							start();
+
+							done();
+						}, 100);
+					});
+				});
+
+				test("URL's don't greedily match", function () {
+					stop();
+					makeTestingIframe(function(info, done){
+						info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
+						info.route(":module\\.html");
+						info.route.ready();
+	
+						setTimeout(function(){
+							ok(!info.route.attr('module'), 'there is no route match');
+							start();
+	
+							done();
+						}, 100);
+					});
+				});
+	
+			}
+	
+			test("routed links must descend from pushstate root (#652)", 1, function () {
+	
+	
+				stop();
+	
+				var setupRoutesAndRoot = function (iCanRoute, root) {
+					iCanRoute(":section/");
+					iCanRoute(":section/:sub/");
+					iCanRoute.bindings.pushstate.root = root;
+					iCanRoute.ready();
+				};
+	
+	
+				var createLink = function (win, url) {
+					var link = win.document.createElement("a");
+					link.href = link.innerHTML = url;
+					win.document.body.appendChild(link);
+					return link;
+				};
+	
+				// The following makes sure a link that is not "rooted" will
+				// behave normally and not call pushState
+				makeTestingIframe(function (info, done) {
+					setupRoutesAndRoot(info.route, "/app/");
+					var link = createLink(info.window, "/route/pushstate/empty.html"); // a link to somewhere outside app
+	
+					var clickKiller = function(ev) {
+						if(ev.preventDefault) {
+							ev.preventDefault();
+						}
+						return false;
+					};
+					// kill the click b/c phantom doesn't like it.
+					can.bind.call(info.window.document,"click",clickKiller);
+					
+					info.history.pushState = function () {
+						ok(false, "pushState should not have been called");
+					};
+	
+					// click a link and make sure the iframe url changes
+					eventFire(link, "click")
+	
+					done();
+					setTimeout(next, 10);
+				});
+	
+				var next = function () {
+					makeTestingIframe(function (info, done) {
+	
+						var timer;
+						info.route.bind("change", function () {
+							clearTimeout(timer);
+							timer = setTimeout(function () {
+								// deepEqual doesn't like to compare objects from different contexts
+								// so we copy it
+								var obj = can.simpleExtend({}, info.route.attr());
+	
+								deepEqual(obj, {
+									section: "something",
+									sub: "test",
+									route: ":section/:sub/"
+								}, "route's data is correct");
+	
+								done();
+								start();
+							}, 10);
+	
+						});
+	
+						setupRoutesAndRoot(info.route, "/app/");
+						var link = createLink(info.window, "/app/something/test/");
+	
+	
+						eventFire(link, "click")
+						// click a link and make sure the iframe url changes
+	
+					});
+	
+	
+				};
+	
+			});
+			
+		} // end steal-only
 
 		test("empty default is matched even if last", function () {
 

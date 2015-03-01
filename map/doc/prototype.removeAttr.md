@@ -10,12 +10,12 @@
 @body
 `removeAttr` removes a property by name from an Map.
 
-@codestart
-var people = new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'});
 
-people.removeAttr('b'); // 'Bob'
-people.attr();          // {a: 'Alice', e: 'Eve'}
-@codeend
+    var people = new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'});
+
+    people.removeAttr('b'); // 'Bob'
+    people.attr();          // {a: 'Alice', e: 'Eve'}
+
 
 Removing an attribute will cause a _change_ event to fire with `'remove'`
 passed as the _how_ parameter and `undefined` passed as the _newVal_ to

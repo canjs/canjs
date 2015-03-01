@@ -1,30 +1,23 @@
 /*global __dirname */
 var path = require('path');
-// Returns mappings for AMDify
-var getAmdifyMap = function (baseName) {
-	var amdifyMap = {};
-
-	amdifyMap[baseName + 'util'] = 'can/util/library';
-	amdifyMap[baseName] = 'can/';
-	amdifyMap['can/can'] = 'can';
-
-	return amdifyMap;
+var getTestTasks = function() {
+	var suite = process.env.TEST_SUITE;
+	var testTasks = ['testee'];
+	if(suite === 'loaders') {
+		testTasks = ['simplemocha', 'testee:steal', 'testee:amd'];
+	} else if(suite === 'dists') {
+		testTasks = [ 'testee:dist', 'testee:dev', 'testee:compatibility' ];
+	} else if(suite === 'individuals') {
+		testTasks = ['testee:individuals'];
+	}
+	return testTasks;
 };
 
 module.exports = function (grunt) {
-	
+
 	var _ = grunt.util._;
-	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
-	var banner = _.template(builderJSON.banner, {
-		pkg: pkg,
-		ids: [ 'CanJS default build' ],
-		url: pkg.homepage
-	});
-	var amdIds = ['can'].concat(_.map(_.keys(builderJSON.configurations), function (name) {
-		return 'can/util/' + name;
-	}), _.keys(builderJSON.modules));
 	var testifyDist = {
 		template: 'test/templates/__configuration__-dist.html.ejs',
 		builder: builderJSON,
@@ -36,13 +29,6 @@ module.exports = function (grunt) {
 					return definition.name.toLowerCase();
 				}
 				return null;
-			},
-
-			test: function (definition, key) {
-				var name = key.substr(key.lastIndexOf('/') + 1);
-				var path = key.replace('can/', '') + '/';
-				var out = path + name + '_test.js';
-				return out;
 			},
 
 			options: function (config) {
@@ -70,7 +56,12 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				out: 'test/'
+				out: 'test/',
+				transform: {
+					test: function(definition, key) {
+						return key + '_test.js';
+					}
+				}
 			},
 			dist: testifyDist,
 			dev: _.extend({}, testifyDist, {
@@ -81,7 +72,14 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__-amd.html.ejs',
 				builder: builderJSON,
 				root: '../..',
-				out: 'test/amd/'
+				out: 'test/amd/',
+				transform: {
+					module: function(definition, name) {
+						var path = name.split('/');
+						path.pop();
+						return path.join('/');
+					}
+				}
 			},
 			compatibility: {
 				template: 'test/templates/__configuration__-compat.html.ejs',
@@ -94,12 +92,6 @@ module.exports = function (grunt) {
 							return definition.name.toLowerCase();
 						}
 						return null;
-					},
-
-					test: function (definition, key) {
-						var name = key.substr(key.lastIndexOf('/') + 1);
-						var path = key.replace('can/', '') + '/';
-						return path + name + '_test.js';
 					},
 
 					options: function (config) {
@@ -126,109 +118,9 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		qunit: {
-			options: {
-				timeout: 10000
-			},
-			steal: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/jquery.html',
-						'http://localhost:8000/test/jquery-2.html',
-						'http://localhost:8000/test/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
-					]
-				}
-			},
-			dist: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/dist/jquery.html',
-						'http://localhost:8000/test/dist/jquery-2.html',
-						'http://localhost:8000/test/dist/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/dist/mootools.html',
-						'http://localhost:8000/test/dist/yui.html'
-					]
-				}
-			},
-			dev: {
-				options: {
-					urls: [
-						'http://localhost:8000/test/dev/dojo.html',
-						'http://localhost:8000/test/dev/jquery.html',
-						'http://localhost:8000/test/dev/jquery-2.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/dev/mootools.html',
-						'http://localhost:8000/test/dev/yui.html'
-					]
-				}
-			},
-			compatibility: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/test/compatibility/jquery.html',
-						'http://localhost:8000/test/compatibility/jquery-2.html',
-						'http://localhost:8000/test/compatibility/dojo.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/compatibility/mootools.html',
-						'http://localhost:8000/test/compatibility/yui.html'
-					]
-				}
-			},
-			amd: {
-				options: {
-					timeout: 10000,
-					urls: [
-						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
-						'http://localhost:8000/test/amd/jquery.html',
-						'http://localhost:8000/test/amd/jquery-2.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/amd/mootools.html',
-						'http://localhost:8000/test/amd/yui.html'
-					]
-				}
-			},
-			individuals: {
-				options: {
-					timeout: 10000,
-					urls: [
-						'http://localhost:8000/component/test.html',
-						'http://localhost:8000/compute/test.html',
-						'http://localhost:8000/construct/test.html',
-						'http://localhost:8000/construct/proxy/test.html',
-						'http://localhost:8000/construct/super/test.html',
-						'http://localhost:8000/control/test.html',
-						'http://localhost:8000/map/test.html',
-						'http://localhost:8000/map/lazy/test.html',
-						// 'http://localhost:8000/map/define/test.html',
-						'http://localhost:8000/map/attributes/test.html',
-						'http://localhost:8000/map/backup/test.html',
-						// 'http://localhost:8000/map/delegate/test.html',
-						'http://localhost:8000/map/list/test.html',
-						'http://localhost:8000/map/setter/test.html',
-						'http://localhost:8000/map/sort/test.html',
-						'http://localhost:8000/map/validations/test.html',
-						'http://localhost:8000/model/test.html',
-						'http://localhost:8000/observe/test.html',
-						'http://localhost:8000/list/promise/test.html',
-						// 'http://localhost:8000/route/test.html',
-						'http://localhost:8000/route/pushstate/test.html',
-						'http://localhost:8000/view/test.html',
-						'http://localhost:8000/view/ejs/test.html',
-						'http://localhost:8000/view/mustache/test.html',
-						'http://localhost:8000/util/fixture/test.html'
-					]
-				}
-			}
-		},
 		// Removes the dist folder
 		clean: {
+			test: ['test/pluginified/latest.js'],
 			build: ['dist/']
 		},
 		'string-replace': {
@@ -268,7 +160,7 @@ module.exports = function (grunt) {
 			lib: [
 				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
 				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-				'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
+				'!util/yui/yui-3.7.3.js', '!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
 			]
 		},
 		jsbeautifier: {
@@ -319,16 +211,64 @@ module.exports = function (grunt) {
 			}
 
 		},
-		stealPluginify: require("./build/config_stealPluginify")(),
+		simplemocha: {
+			builders: {
+				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
+			}
+		},
+		"steal-export": require("./build/config_stealPluginify")(),
 		meta: {
-			defaults: require("./build/config_meta_defaults")(),
-			modules: require("./build/config_meta_modules")
+			steal: {
+				modules: require("./build/config_meta_modules"),
+				"export-helpers": require("./build/config_meta_defaults")()
+			}
+		},
+		usebanner: {
+			taskName: {
+				options: {
+					position: 'top',
+					banner: _.template(builderJSON.banner, {
+						pkg: pkg,
+						ids: [ 'CanJS default build' ]
+					}),
+					linebreak: true
+				},
+				files: {
+					src: [ 'dist/**/*.js' ]
+				}
+			}
+		},
+		testee: {
+			options: {
+				timeout: 10000,
+				reporter: 'Dot'
+			},
+			steal: [
+				'test/*.html',
+				'!test/demos_and_tests.html',
+				'!test/performance-loading.html',
+				'!test/index.html',
+				'!test/dojo.html'
+			],
+			amd: [ 'test/amd/*.html' ],
+			dist: [ 'test/dist/*.html' ],
+			compatibility: [ 'test/compatibility/*.html' ],
+			dev: [ 'test/dev/*.html' ],
+			individuals: [ '**/test.html', '!view/autorender/test.html',
+				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
 		}
 	});
+	grunt.registerTask('browserify-package', function(){
+		var browser = {"./can": "./dist/cjs/can"};
+		require('./build/config_meta_modules').forEach(function(mod){
+			browser["./"+mod.moduleName] = "./dist/cjs/"+mod.moduleName;
+		});
+		var cloned = _.clone(pkg, true);
+		cloned.browser = browser;
+		grunt.file.write("package.json", JSON.stringify(cloned, null, "\t"));
+	});
 
-	
 	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -338,26 +278,29 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-jsbeautifier');
 	grunt.loadNpmTasks('grunt-docco2');
 	grunt.loadNpmTasks('grunt-plato');
+	grunt.loadNpmTasks('grunt-banner');
 	grunt.loadNpmTasks('steal-tools');
-
+	grunt.loadNpmTasks('grunt-simple-mocha');
+	grunt.loadNpmTasks('testee');
 
 	grunt.registerTask('default', ['build']);
-	
-	grunt.registerTask('build', ['clean:build', 'stealPluginify', 'string-replace:version']);
+
+	grunt.registerTask('build', ['clean', 'steal-export',
+		'string-replace:version', 'browserify-package', 'usebanner']);
 	grunt.registerTask('build:amd',[
 		'clean:build',
-		'stealPluginify:amd',
-		'stealPluginify:amd-util-jquery',
-		'stealPluginify:amd-util-dojo',
-		'stealPluginify:amd-util-yui',
-		'stealPluginify:amd-util-zepto',
-		'stealPluginify:amd-util-mootools',
-		'string-replace:version']);
-	
-	grunt.registerTask('test:compatibility', ['connect', 'build', 'testify', 'qunit:compatibility']);
-	// <%= pkg.version %>
-	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
-	
-	grunt.registerTask('test:steal', ['connect', 'qunit:steal']);
-	grunt.registerTask('test:amd', ['connect',  'build:amd','testify','qunit:amd']);
+		'steal-export:amd',
+		'steal-export:amd-util-jquery',
+		'steal-export:amd-util-dojo',
+		'steal-export:amd-util-yui',
+		'steal-export:amd-util-zepto',
+		'steal-export:amd-util-mootools',
+		'string-replace:version'
+	]);
+
+
+	grunt.registerTask('test', ['jshint', 'build', 'testify'].concat(getTestTasks()));
+	grunt.registerTask('test:compatibility', ['build', 'testify', 'testee:compatibility']);
+	grunt.registerTask('test:steal', ['testee:steal']);
+	grunt.registerTask('test:amd', ['build:amd', 'testify', 'testee:amd']);
 };

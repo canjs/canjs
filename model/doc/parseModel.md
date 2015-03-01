@@ -39,7 +39,9 @@ overwriting `can.Model.parseModel` is the best way to normalize it.
 By default, [can.Model.model] expects data to be a name-value pair
 object like:
 
-   {id: 1, name : "dishes"}
+```
+{id: 1, name : "dishes"}
+```
 
 If your data does not look like this, you probably want to overwrite `parseModel`.
 
@@ -47,18 +49,24 @@ If your data does not look like this, you probably want to overwrite `parseModel
 
 If your service returns data like:
 
-   { thingsToDo: {name: "dishes", id: 5} }
+```
+{ thingsToDo: {name: "dishes", id: 5} }
+```
 
 You will want to overwrite `parseModel` to pass the model what it expects like:
 
-   Task = can.Model.extend({
-     parseModel: function(data){
-       return data.thingsToDo;
-     }
-   },{});
+```
+Task = can.Model.extend({
+ parseModel: function(data){
+   return data.thingsToDo;
+ }
+},{});
+```
 
 You could also do this like:
 
-   Task = can.Model.extend({
-     parseModel: "thingsToDo"
-   },{});
+```
+Task = can.Model.extend({
+ parseModel: "thingsToDo"
+},{});
+```

@@ -1,5 +1,12 @@
 steal('can/util', 'can/observe', function (can) {
 
+	var getPropDefineBehavior = function(behavior, prop, define) {
+		var propBehavior;
+		if(define) {
+			propBehavior = define[prop] ? define[prop] : define["*"];
+			return propBehavior && propBehavior[behavior];
+		}
+	};
 
 	can.Map.helpers.define = function (Map) {
 		var define = Map.prototype.define;
@@ -30,12 +37,50 @@ steal('can/util', 'can/observe', function (can) {
 
 
 	var oldSetupDefaults = can.Map.prototype._setupDefaults;
-	can.Map.prototype._setupDefaults = function () {
+	can.Map.prototype._setupDefaults = function (obj) {
 		var defaults = oldSetupDefaults.call(this),
-			Map = this.constructor;
+			propsCommittedToAttr = {},
+			Map = this.constructor,
+			originalGet = this._get;
+
+		// Overwrite this._get with a version that commits defaults to
+		// this.attr() as needed. Because calling this.attr() for each individual
+		// default would be expensive.
+		this._get = function (originalProp) {
+
+			// If a this.attr() was called using dot syntax (e.g number.0),
+			// disregard everything after the "." until we call the
+			// original this._get().
+			prop = (originalProp.indexOf('.') !== -1 ?
+				originalProp.substr(0, originalProp.indexOf('.')) :
+				prop);
+
+			// If this property has a default and we haven't yet committed it to
+			// this.attr()
+			if ((prop in defaults) && ! (prop in propsCommittedToAttr)) {
+
+				// Commit the property's default so that it can be read in
+				// other defaultGenerators.
+				this.attr(prop, defaults[prop]);
+
+				// Make not so that we don't commit this property again.
+				propsCommittedToAttr[prop] = true;
+			}
+
+			return originalGet.apply(this, arguments);
+		};
+
 		for (var prop in Map.defaultGenerators) {
-			defaults[prop] = Map.defaultGenerators[prop].call(this);
+			// Only call the prop's value method if the property wasn't provided
+			// during instantiation.
+			if (! obj || ! (prop in obj)) {
+				defaults[prop] = Map.defaultGenerators[prop].call(this);
+			}
 		}
+
+		// Replace original this.attr
+		this._get = originalGet;
+
 		return defaults;
 	};
 
@@ -66,9 +111,8 @@ steal('can/util', 'can/observe', function (can) {
 				return false;
 			},
 			self = this,
-			define = this.define && this.define[prop],
-			setter = define && define.set,
-			getter = define && define.get;
+			setter = getPropDefineBehavior("set", prop, this.define),
+			getter = getPropDefineBehavior("get", prop, this.define);
 
 
 		// if we have a setter
@@ -141,6 +185,13 @@ steal('can/util', 'can/observe', function (can) {
 			}
 			return true;
 		},
+		/**
+		 * Implements HTML-style boolean logic for attribute strings, where
+		 * any string, including "", is truthy.
+		 */
+		'htmlbool': function(val) {
+			return typeof val === "string" || !!val;
+		},
 		'*': function (val) {
 			return val;
 		},
@@ -152,9 +203,8 @@ steal('can/util', 'can/observe', function (can) {
 	// the old type sets up bubbling
 	var oldType = proto.__type;
 	proto.__type = function (value, prop) {
-		var def = this.define && this.define[prop],
-			type = def && def.type,
-			Type = def && def.Type,
+		var type = getPropDefineBehavior("type", prop, this.define),
+			Type = getPropDefineBehavior("Type", prop, this.define),
 			newValue = value;
 
 		if (typeof type === "string") {
@@ -174,12 +224,17 @@ steal('can/util', 'can/observe', function (can) {
 			return newValue;
 
 		}
+		// If we pass in a object with define
+		else if(can.isPlainObject(newValue) && newValue.define) {
+			newValue = can.Map.extend(newValue);
+			newValue = new newValue();
+		}
 		return oldType.call(this, newValue, prop);
 	};
 
 	var oldRemove = proto._remove;
 	proto._remove = function (prop, current) {
-		var remove = this.define && this.define[prop] && this.define[prop].remove,
+		var remove = getPropDefineBehavior("remove", prop, this.define),
 			res;
 		if (remove) {
 			can.batch.start();
@@ -219,7 +274,7 @@ steal('can/util', 'can/observe', function (can) {
 	};
 	// If the map has a define serializer for the given attr, run it.
 	var serializeProp = function(map, attr, val) {
-		var serializer = map.define && map.define[attr] && map.define[attr].serialize;
+		var serializer = attr === "*" ? false : getPropDefineBehavior("serialize", attr, map.define);
 		if(serializer === undefined) {
 			return oldSingleSerialize.apply(this, arguments);
 		} else if(serializer !== false){

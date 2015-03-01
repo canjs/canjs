@@ -1,0 +1,40 @@
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script type='text/stache' id='basics' can-autorender>
+	<can-import from="./requirejs-basics"/>
+	<my-component></my-component>
+</script>
+<script src='../../../bower_components/requirejs/require.js'></script>
+<script>
+	require.config({
+		paths: {
+			"can": "../../../dist/amd/can",
+			"jquery": "../../../node_modules/jquery/dist/jquery.js"
+		},
+	});
+
+	require(['can/view/autorender'],function(ready){
+		ready(function(){
+			if(window.QUnit) {
+				QUnit.equal( $("body my-component").length, 1,"only one my-component" );
+				QUnit.equal( $("body my-component").html(), "Hello World","template rendered" );
+				QUnit.equal( $("body my-component")[0].className, "inserted","template rendered" );
+				removeMyself();
+			} else {
+				console.log( $("body my-component").length );
+				console.log( $("body my-component").html() );
+			}
+			
+		}, function(error){
+			if(window.QUnit) {
+				
+				QUnit.ok( false, "error in autoload");
+				removeMyself();
+			} else {
+				console.log("error in autoload", error)
+			}
+		});
+	});
+</script>

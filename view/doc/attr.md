@@ -147,3 +147,15 @@ unbind the event handler when the element is [can.events.removed removed] from t
     });
 
 @demo can/view/doc/fade_in_when.html
+
+## When to call
+
+`can.view.attr` must be called before a template is processed. When [using `can.view` to create a renderer function](http://canjs.com/docs/can.view.html#sig_can_view_idOrUrl_), `can.view.attr` must be called before the template is loaded, not simply before it is rendered.
+
+		//Call can.view.attr first
+		can.view.attr('tooltip', tooltipFunction);
+		//Preload a template for rendering
+		var renderer = can.view('app-template');
+		//No calls to can.view.attr after this will be used by `renderer`
+
+

@@ -1,4 +1,5 @@
 @function can.Model.prototype.unbind unbind
+@parent can.Model.prototype
 @description Stop listening to events on this Model.
 @signature `model.unbind(eventName[, handler])`
 @param {String} eventName The event to unbind from.
@@ -11,11 +12,13 @@ for the given event.
 `unbind(eventName, handler)` removes a listener
 attached with [can.Model::bind].
 
-   var handler = function(ev, createdTask){
+```
+var handler = function(ev, createdTask){
 
-   }
-   task.bind("created", handler)
-   task.unbind("created", handler)
+}
+task.bind("created", handler)
+task.unbind("created", handler)
+```
 
 You have to pass the same function to `unbind` that you
 passed to `bind`.

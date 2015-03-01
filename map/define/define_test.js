@@ -1,5 +1,5 @@
 /* jshint asi: false */
-steal("can/map/define", "can/test", function () {
+steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	QUnit.module('can/map/define');
 
@@ -229,6 +229,7 @@ steal("can/map/define", "can/test", function () {
 				string: {type: 'string'},
 				number: {  type: 'number' },
 				'boolean': {  type: 'boolean' },
+				htmlbool: {  type: 'htmlbool' },
 				leaveAlone: {  type: '*' }
 			}
 		});
@@ -239,6 +240,7 @@ steal("can/map/define", "can/test", function () {
 			string: 5,
 			number: '5',
 			'boolean': 'false',
+			htmlbool: "",
 			leaveAlone: obj
 		});
 
@@ -249,6 +251,8 @@ steal("can/map/define", "can/test", function () {
 		equal(t.attr("number"), 5, "converted to number");
 
 		equal(t.attr("boolean"), false, "converted to boolean");
+
+		equal(t.attr("htmlbool"), true, "converted to htmlbool");
 
 		equal(t.attr("leaveAlone"), obj, "left as object");
 		t.attr({
@@ -381,11 +385,11 @@ steal("can/map/define", "can/test", function () {
 
 
 	});
-	
+
 	test("getter with initial value", function(){
-		
+
 		var compute = can.compute(1);
-		
+
 		var Grabber = can.Map.extend({
 			define: {
 				vals: {
@@ -400,14 +404,14 @@ steal("can/map/define", "can/test", function () {
 				}
 			}
 		});
-		
+
 		var g = new Grabber();
 		// This assertion doesn't mean much.  It's mostly testing
 		// that there were no errors.
 		equal(g.attr("vals").length,0,"zero items in array" );
-		
+
 	});
-	
+
 
 	test("serialize basics", function(){
 		var MyMap = can.Map.extend({
@@ -445,21 +449,21 @@ steal("can/map/define", "can/test", function () {
 				}
 			}
 		});
-		
+
 		var map = new MyMap({name: "foo"});
 		map.attr("locations", [{id: 1, name: "Chicago"}, {id: 2, name: "LA"}]);
 		equal(map.attr("locationIds").length, 2, "get locationIds");
 		equal(map.attr("locationIds")[0], 1, "get locationIds index 0");
 		equal(map.attr("locations")[0].id, 1, "get locations index 0");
-		
+
 		var serialized = map.serialize();
 		equal(serialized.locations, undefined, "locations doesn't serialize");
 		equal(serialized.locationIds, "1,2", "locationIds serializes");
 		equal(serialized.name, undefined, "name doesn't serialize");
-		
+
 		equal(serialized.bared, "foo+bar", "true adds computed props");
 		equal(serialized.ignored, undefined, "computed props are not serialized by default");
-		
+
 	});
 
 	test("serialize context", function(){
@@ -476,10 +480,10 @@ steal("can/map/define", "can/test", function () {
 			serialize: function(){
 				serializeContext = this;
 				can.Map.prototype.serialize.apply(this, arguments);
-				
+
 			}
 		});
-		
+
 		var map = new MyMap();
 		map.serialize();
 		equal(context, map);
@@ -492,40 +496,40 @@ steal("can/map/define", "can/test", function () {
 			define: {
 				name: {
 					value: 'John Galt',
-					
+
 					get: function(obj){
 						contexts.get = this;
 						return obj;
 					},
-					
+
 					remove: function(obj){
 						contexts.remove = this;
 						return obj;
 					},
-					
+
 					set: function(obj){
 						contexts.set = this;
 						return obj;
 					},
-					
+
 					serialize: function(obj){
 						contexts.serialize = this;
 						return obj;
 					},
-					
+
 					type: function(val){
 						contexts.type = this;
 						return val;
 					}
 				}
-			
+
 			}
 		});
-		
+
 		var map = new MyMap();
 		map.serialize();
 		map.removeAttr('name');
-		
+
 		equal(contexts.get, map);
 		equal(contexts.remove, map);
 		equal(contexts.set, map);
@@ -533,5 +537,153 @@ steal("can/map/define", "can/test", function () {
 		equal(contexts.type, map);
 	});
 
+	test("value generator is not called if default passed", function () {
+		var TestMap = can.Map.extend({
+			define: {
+				foo: {
+					value: function () {
+						throw '"foo"\'s value method should not be called.';
+					}
+				}
+			}
+		});
+
+		var tm = new TestMap({ foo: 'baz' });
+
+		equal(tm.attr('foo'), 'baz');
+	});
+
+	test("value generator can read other properties", function () {
+		var NumbersMap = can.Map.extend({
+			numbers: [1, 2, 3],
+			define: {
+				definedNumbers: {
+					value: [4, 5, 6]
+				},
+				generatedNumbers: {
+					value: function () {
+						return new can.List([7, 8, 9]);
+					}
+				},
+				firstNumber: {
+					value: function () {
+						return this.attr('numbers.0');
+					}
+				},
+				middleNumber: {
+					value: function () {
+						return this.attr('definedNumbers.1');
+					}
+				},
+				lastNumber: {
+					value: function () {
+						return this.attr('generatedNumbers.2');
+					}
+				}
+			}
+		});
+
+		var n = NumbersMap();
+		var prefix = 'was able to read dependent value from ';
+
+		equal(n.attr('firstNumber'), 1,
+			prefix + 'traditional can.Map style property definition');
+		equal(n.attr('middleNumber'), 5,
+			prefix + 'Define plugin style default property definition');
+		equal(n.attr('lastNumber'), 9,
+			prefix + 'Define plugin style generated default property definition');
+	});
+
+	test('default behaviors with "*" work for attributes', function() {
+		expect(8);
+		var DefaultMap = can.Map.extend({
+			define: {
+				someNumber: {
+					value: '5'
+				},
+				'*': {
+					type: 'number',
+					serialize: function(value) {
+						return '' + value;
+					},
+					set: function(newVal) {
+						ok(true, 'set called');
+						return newVal;
+					},
+					remove: function(currentVal) {
+						ok(true, 'remove called');
+						return false;
+					}
+				}
+			}
+		});
+
+		var map = new DefaultMap(),
+			serializedMap;
+
+		equal(map.attr('someNumber'), 5, 'value of someNumber should be converted to a number');
+		map.attr('number', '10'); // Custom set should be called
+		equal(map.attr('number'), 10, 'value of number should be converted to a number');
+		map.removeAttr('number'); // Custom removed should be called
+		equal(map.attr('number'), 10, 'number should not be removed');
+
+		serializedMap = map.serialize();
+
+		equal(serializedMap.number, '10', 'number serialized as string');
+		equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
+		equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
+	});
+
+	test("nested define", function() {
+		var nailedIt = 'Nailed it';
+		var Example = can.Map.extend({ }, {
+		  define: {
+		    name: {
+		      value: nailedIt
+		    }
+		  }
+		});
+
+		var NestedMap = can.Map.extend({ }, {
+		  define: {
+		    isEnabled: {
+		      value: true
+		    },
+		    test: {
+		      Value: Example
+		    },
+		    examples: {
+		      value: {
+		        define: {
+		          one: {
+		            Value: Example
+		          },
+		          two: {
+		            value: {
+		              define: {
+		                deep: {
+		                  Value: Example
+		                }
+		              }
+		            }
+		          }
+		        }
+		      }
+		    }
+		  }
+		});
+
+		var nested = new NestedMap();
+
+		// values are correct
+		equal(nested.attr('test.name'), nailedIt);
+		equal(nested.attr('examples.one.name'), nailedIt);
+		equal(nested.attr('examples.two.deep.name'), nailedIt);
+
+		// objects are correctly instanced
+		ok(nested.attr('test') instanceof Example);
+		ok(nested.attr('examples.one') instanceof Example);
+		ok(nested.attr('examples.two.deep') instanceof Example);
+	});
 
 });

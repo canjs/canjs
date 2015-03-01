@@ -1,4 +1,4 @@
-steal("can/util", "can/test", function () {
+steal("can/util", "can/test", "steal-qunit", function () {
 	QUnit.module('can/list/lazy');
 	test('list attr changes length', function () {
 		var l = new can.LazyList([

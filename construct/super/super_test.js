@@ -1,4 +1,4 @@
-steal("can/construct/super", function () {
+steal("can/construct/super", "steal-qunit", function () {
 	QUnit.module('can/construct/super');
 	test('prototype super', function () {
 		var A = can.Construct({
@@ -53,22 +53,41 @@ steal("can/construct/super", function () {
 		Child.findAll({});
 		start();
 	});
-	/* Not sure I want to fix this yet.
-	 test("Super in derived when parent doesn't have init", function(){
-	 can.Construct("Parent",{
-	 });
 
-	 Parent("Derived",{
-	 init : function(){
-	 this._super();
-	 }
-	 });
+	// To avoid JSHint complaining about the missing getter
+	/* jshint ignore:start */
+	if(Object.getOwnPropertyDescriptor) {
+		test("_super supports getters and setters", function () {
+			var Person = can.Construct.extend({
+				get age() {
+					return 42;
+				},
 
-	 try {
-	 new Derived();
-	 ok(true, "can call super in init safely")
-	 } catch (e) {
-	 ok(false, "Failed to call super in init with error: " + e)
-	 }
-	 })*/
+				set name(value) {
+					this._name = value;
+				},
+
+				get name() {
+					return this._name;
+				}
+			});
+
+			var OtherPerson = Person.extend({
+				get age() {
+					return this._super() + 8;
+				},
+
+				set name(value) {
+					this._super(value + '_super');
+				}
+			});
+
+			var test = new OtherPerson();
+			test.base = 2;
+			equal(test.age, 50, 'Getter and _super works');
+			test.name = 'David';
+			equal(test.name, 'David_super', 'Setter ran');
+		});
+	}
+	/* jshint ignore:end */
 });

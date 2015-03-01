@@ -5,7 +5,9 @@ steal("can/view/callbacks",
 	"can/view/stache",
 	"can/observe",
 	"can/test",
-	"can/util/fixture", function () {
+	"can/util/fixture",
+	"steal-qunit",
+	function () {
 	
 	var restoreInfo = [];
 	
@@ -112,7 +114,7 @@ steal("can/view/callbacks",
 	});
 
 	test('buildFragment works right', function () {
-		can.append(can.$('#qunit-test-area'), can.view(can.test.path('view/test//plugin.ejs'), {}));
+		can.append(can.$('#qunit-fixture'), can.view(can.test.path('view/test//plugin.ejs'), {}));
 		ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
 		can.remove(can.$('#something'));
 	});
@@ -165,7 +167,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'test/ejs');
 		script.setAttribute('id', 'test_ejs');
 		script.text = '<span id="new_name"><%= name %></span>';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('test_ejs', {
@@ -180,7 +182,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'test/ejs');
 		script.setAttribute('id', 'test_ejs');
 		script.text = '<span id="new_name"><%= name %></span>';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('#test_ejs', {
@@ -230,7 +232,7 @@ steal("can/view/callbacks",
 		script.setAttribute('type', 'text/x-ejs');
 		script.setAttribute('id', 'hyphenEjs');
 		script.text = '\nHyphen\n';
-		document.getElementById('qunit-test-area')
+		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
 		div.appendChild(can.view('hyphenEjs', {}));
@@ -346,7 +348,7 @@ steal("can/view/callbacks",
 			
 		div.appendChild(frag);
 		
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
 	});
@@ -358,7 +360,7 @@ steal("can/view/callbacks",
 		var frag = template({
 			state: observe
 		});
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		var input = document.getElementById('candy');
 		equal(input.getAttribute('value'), 2, 'render workered');
 		observe.attr('number', 5);
@@ -395,8 +397,8 @@ steal("can/view/callbacks",
 				test: 'testing'
 			})),
 			form, textarea;
-		can.append(can.$('#qunit-test-area'), frag);
-		form = document.getElementById('qunit-test-area')
+		can.append(can.$('#qunit-fixture'), frag);
+		form = document.getElementById('qunit-fixture')
 			.getElementsByTagName('form')[0];
 		textarea = form.children[0];
 		equal(textarea.value, 'testing', 'Textarea value set');
@@ -446,7 +448,7 @@ steal("can/view/callbacks",
 			}),
 			frag = template(obs),
 			img;
-		can.append(can.$('#qunit-test-area'), frag);
+		can.append(can.$('#qunit-fixture'), frag);
 		img = document.getElementById('equalTest');
 		obs.attr('class', 'class="do=not=truncate=me"');
 		obs.attr('src', 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png?wid=100&wid=200');
@@ -814,5 +816,47 @@ steal("can/view/callbacks",
 			pass = false;
 		}
 		ok(pass);
+	});
+	test('renderer passed with Deferred gets executed (#1139)', 1, function() {
+		// See http://jsfiddle.net/a35ZH/1/
+		var template = can.view.mustache('<h1>Value is {{value}}!</h1>');
+		var def = can.Deferred();
+
+		stop();
+
+		setTimeout(function() {
+			def.resolve({
+				value: 'Test'
+			});
+		}, 50);
+
+		can.view(template, def, function (frag) {
+			equal(frag.childNodes[0].innerHTML, 'Value is Test!');
+			start();
+		});
+	});
+
+	test('live lists are rendered properly when batch updated (#680)', function () {
+		var div1 = document.createElement('div'),
+			div2 = document.createElement('div'),
+			template = "{{#if items.length}}<ul>{{#each items}}<li>{{.}}</li>{{/each}}</ul>{{/if}}",
+			stacheTempl = can.stache(template),
+			mustacheTempl = can.mustache(template);
+
+		var data = {
+			items: new can.List()
+		};
+
+		div1.appendChild(stacheTempl(data));
+		div2.appendChild(mustacheTempl(data));
+
+		can.batch.start();
+		for (var i=1; i<=3; i++) {
+			data.items.push(i);
+		}
+		can.batch.stop();
+
+		equal(div1.innerText, "123", "Batched lists rendered properly with stache.");
+		equal(div2.innerText, "123", "Batched lists rendered properly with mustache.");
 	});
 });

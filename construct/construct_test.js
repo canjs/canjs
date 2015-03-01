@@ -1,4 +1,4 @@
-steal('can/construct', function () {
+steal('can/construct', 'steal-qunit', function () {
 	/* global Foo, Car, Bar */
 	QUnit.module('can/construct', {
 		setup: function () {
@@ -70,6 +70,12 @@ steal('can/construct', function () {
 		can.Construct('Todo', {}, {});
 		ok(Foo.Bar === fb, 'returns class');
 		equal(fb.shortName, 'Bar', 'short name is right');
+		//!steal-remove-start
+		if (can.dev) {
+			equal(fb.name, 'Bar', 'short name is right');
+		}
+		//!steal-remove-end
+
 		equal(fb.fullName, 'Foo.Bar', 'fullName is right');
 	});
 	test('setups', function () {

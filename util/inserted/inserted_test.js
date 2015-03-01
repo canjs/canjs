@@ -1,4 +1,4 @@
-(function () {
+steal('can/util/inserted', 'steal-qunit', function () {
 	module('can/util/inserted');
 	if (window.jQuery) {
 		test('jquery', function () {
@@ -6,8 +6,8 @@
 			el.bind('inserted', function () {
 				ok(true, 'inserted called');
 			});
-			$('#qunit-test-area')
+			$('#qunit-fixture')
 				.append(el);
 		});
 	}
-}());
+});

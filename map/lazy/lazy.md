@@ -7,7 +7,7 @@
 
 @description Create observable objects that initialize on demand.
 
-@signature `new can.LazyLazyMap([props])`
+@signature `new can.LazyMap([props])`
 
 Creates a new instance of can.LazyMap.
 
@@ -20,12 +20,12 @@ Just like `can.Map`, `can.LazyMap` provides a way to listen for and keep track o
 
 This on demand initialization of nested data can yield big performance improvements when using large datasets that are deeply nested data where only a fraction of the properties are accessed or bound to.
 
-## Limitations of Lazy Maps
+## Limitations of LazyMaps
 
 Although passing all original [can.Map] and [can.List] tests, `can.LayzMap` and `can.LazyList` do not work with the [can.Map.attributes], [can.Map.setter], [can.Map.delegate], [can.Map.backup]
 and [can.Map.validations] plugins.
 
-Additionallly, If all properties of a LazyMap or LazyList are being read, bound or set, initialization time can be slightly higher than using a Map or List.
+Additionally, If all properties of a LazyMap or LazyList are being read, bound or set, initialization time can be slightly higher than using a Map or List.
 
 ## Working with LazyMaps
 
@@ -33,7 +33,7 @@ Additionallly, If all properties of a LazyMap or LazyList are being read, bound 
 
 To create a LazyMap, use `new can.LazyMap([props])`. Properties should be read or set using `[can.Map.prototype.attr attr]`, never directly.
 
-@codestart
+```
 // chores is just a normal Array initially
 var lazyPerson = new can.LazyMap({
   name: 'Bob',
@@ -41,8 +41,7 @@ var lazyPerson = new can.LazyMap({
 });
 
 lazyPerson.attr('chores') // Now chores is a can.List
-
-@codeend
+```
 
 ## See Also
 

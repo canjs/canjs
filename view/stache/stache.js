@@ -7,9 +7,10 @@ steal(
 	"./text_section.js",
 	"./mustache_core.js",
 	"./mustache_helpers.js",
+	"./intermediate_and_imports.js",
 	"can/view/callbacks",
 	"can/view/bindings",
-	function(can, parser, target,  HTMLSectionBuilder, TextSectionBuilder, mustacheCore, mustacheHelpers, viewCallbacks ){
+	function(can, parser, target,  HTMLSectionBuilder, TextSectionBuilder, mustacheCore, mustacheHelpers, getIntermediateAndImports, viewCallbacks ){
 
 
 	// Make sure that we can also use our modules with Stache as a plugin
@@ -19,7 +20,9 @@ steal(
 	function stache(template){
 		
 		// Remove line breaks according to mustache's specs.
-		template = mustacheCore.cleanLineEndings(template);
+		if(typeof template === "string") {
+			template = mustacheCore.cleanLineEndings(template);
+		}
 		
 		// The HTML section that is the root section for the entire template.
 		var section = new HTMLSectionBuilder(),
@@ -329,6 +332,15 @@ steal(
 					return text;
 				}
 			};
+	};
+	can.stache.async = function(source){
+		var iAi = getIntermediateAndImports(source);
+		var importPromises = can.map( iAi.imports, function(moduleName){
+			return can["import"](moduleName);
+		});
+		return can.when.apply(can, importPromises ).then(function(){
+			return stache(iAi.intermediate);
+		});
 	};
 
 	return stache;

@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true*/
 /*global Mustache*/
-steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs",function () {
+steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/specs", "steal-qunit", function () {
 
 	QUnit.module("can/view/mustache, rendering", {
 		setup: function () {
@@ -111,7 +111,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			text: template
 		})
 			.render(obsvr);
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
 
 		// Multi-item hookup
@@ -123,7 +123,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				list: obsvrList
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(listFrag));
 
 		deepEqual(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
 
@@ -145,7 +145,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	 var data = { items: [{}], partial: "test_template.mustache" }
 
 	 var frag = new can.Mustache({ text: template }).render(data);
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 });*/
 
 	/*
@@ -157,7 +157,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	 var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
 	 var frag = new can.Mustache({ text: template }).render({ });;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
 
 	 });
@@ -171,7 +171,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	 var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
 	 var obsvr = new can.Map({ filter: 'moo' });
 	 var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(frag));
 	 deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
 
 	 obsvr.attr('filter', 'poo')
@@ -187,7 +187,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				completed: 0
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.$('#zero')[0].innerHTML, "0", 'zero shown');
 	})
 
@@ -210,14 +210,14 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render({
 				todos: todos
 			});
-		can.append(can.$('#qunit-test-area'), can.view.frag(frag));
+		can.append(can.$('#qunit-fixture'), can.view.frag(frag));
 		deepEqual(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
 
 		// now update the named attribute
 		obsvr.attr('named', true);
 		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("Mustache live-binding with escaping", function () {
@@ -231,7 +231,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			text: template
 		});
 
-		can.append(can.$('#qunit-test-area'), can.view.frag(tpl.render(teacher)));
+		can.append(can.$('#qunit-fixture'), can.view.frag(tpl.render(teacher)));
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
@@ -241,7 +241,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
 
-		can.remove(can.$('#qunit-test-area>*'));
+		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("Mustache truthy", function () {
@@ -532,6 +532,42 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			.render(t.data), expected);
 	});
 
+	test("Handlebars helper: is/else (with 'eq' alias)", function() {
+
+		var t = {
+			template: '{{#eq "10" "10" ducks getDucks}}10 ducks{{else}}Not 10 ducks{{/eq}}',
+			expected: "10 ducks",
+			data: {
+				ducks: '10',
+				getDucks: function() {
+					return '10'
+				}
+			},
+			liveData: new can.Map({
+				ducks: '10',
+				getDucks: function() {
+					return '10'
+				}
+			})
+		};
+
+		var div = document.createElement('div');
+
+		div.appendChild(can.view.mustache(t.template)(t.data));
+		deepEqual(div.innerHTML, t.expected);
+
+		div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.liveData));
+		deepEqual(div.innerHTML, t.expected);
+
+		t.data.ducks = 5;
+
+		div = document.createElement('div');
+		div.appendChild(can.view.mustache(t.template)(t.data));
+		deepEqual(div.innerHTML, 'Not 10 ducks');
+	});
+
+
 	test("Handlebars helper: unless", function () {
 		var t = {
 			template: "{{#unless missing}}Andy is missing!{{/unless}}",
@@ -796,7 +832,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	 text = "<div id=\"hookup\" {{ elementHelper() }}></div>";
 	 compiled = new can.Mustache({text: text}).render() ;
-	 can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+	 can.append( can.$('#qunit-fixture'), can.view.frag(compiled));
 	 equal(can.$('#hookup')[0].innerHTML, "Simple");
 	 }); */
 
@@ -841,7 +877,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			}
 		};
 		var frag = can.buildFragment("<select><option>a</option></select>", [document]);
-		var qta = document.getElementById('qunit-test-area');
+		var qta = document.getElementById('qunit-fixture');
 		qta.innerHTML = "";
 		qta.appendChild(frag);
 
@@ -1750,8 +1786,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 					people: people
 				});
 
-		can.append(can.$('#qunit-test-area'), can.view.frag(compiled));
-		equal(can.$('#qunit-test-area table tbody')
+		can.append(can.$('#qunit-fixture'), can.view.frag(compiled));
+		equal(can.$('#qunit-fixture table tbody')
 			.length, 2, "two tbodies");
 	})
 
@@ -3073,7 +3109,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		});
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp(data));
 
 		stop();
@@ -3137,7 +3173,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var div = document.createElement('div')
 
-		can.append(can.$('#qunit-test-area'), div);
+		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp({
 			data: data
 		}));
@@ -3173,7 +3209,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		], function (content) {
 			var div = document.createElement('div');
 
-			can.append(can.$('#qunit-test-area'), div);
+			can.append(can.$('#qunit-fixture'), div);
 			can.append(can.$(div), can.view.mustache(content)());
 			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 		});
@@ -3623,6 +3659,23 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 			can.dev.warn = oldlog;
 		});
+
+		test("Logging: Don't show a warning on helpers (#1257)", 1, function () {
+			var oldlog = can.dev.warn;
+
+			can.dev.warn = function (text) {
+				ok(false, 'Log warning not called for helper');
+			}
+
+			can.mustache.registerHelper('myHelper', function() {
+				return 'Hi!';
+			});
+
+			var frag = can.view.mustache('<li>{{myHelper}}</li>')({});
+			equal(frag.textContent, 'Hi!');
+
+			can.dev.warn = oldlog;
+		});
 	}
 	//!steal-remove-end
 
@@ -3850,4 +3903,56 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		var frag = can.mustache(tmpl)({ noData: true });
 		equal(frag.childNodes[0].innerHTML, 'no data', 'else with unless worked');
 	});
+
+	// It seems like non-jQuery libraries do not recognize <col> elements in fragments which is what we
+	// are feature-detecting here. This works in Stache because it generates the DOM elements instead
+	// of creating a string from a document fragment.
+	try {
+		if(can.$('<col>').length) {
+			test("<col> inside <table> renders correctly (#1013)", 1, function () {
+				var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
+				var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
+				var frag = can.mustache(template)({
+					columns: new can.List([
+						{ class: 'test' }
+					])
+				});
+
+				equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+			});
+		}
+	} catch(e) {
+		// DOJO throws an error
+	}
+
+	test('getHelper returns null when no helper found', function() {
+		ok( !Mustache.getHelper('__dummyHelper') );
+	});
+
+	test("getHelper 'options' parameter should be optional", function(){
+		Mustache.registerHelper('myHelper', function() {
+			return true;
+		});
+
+		ok( Mustache.getHelper('myHelper').name === 'myHelper' );
+		ok( typeof Mustache.getHelper('myHelper').fn === 'function' );
+		ok( Mustache.getHelper('myHelper').fn() );
+	});
+
+	test("Passing Partial set in options (#1388 and #1389).", function () {
+		var data = new can.Map({
+			name: "World",
+			greeting: "hello"
+		});
+
+		can.view.registerView("hello", "hello {{name}}", ".mustache");
+
+		var template = can.view.mustache("<div>{{>greeting}}</div>")(data);
+
+		var div = document.createElement("div");
+		div.appendChild(template);
+		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+
+	});
+
 });

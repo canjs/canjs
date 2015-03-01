@@ -3,7 +3,7 @@
 <head>
 	<title><%= configuration.description %> Test Suite</title>
 	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
-    <script type="text/javascript" src="../../lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../../bower_components/html5shiv/dist/html5shiv.js"></script>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -14,6 +14,7 @@
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
+<div id="qunit-fixture"></div>
 
 <script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
@@ -33,10 +34,11 @@
                 }
             }
         };
+
 		if(! config.paths[configName] ) {
 		  config.paths[configName] = moduleName(configuration.library);
 		}
-        
+
     %>
 
 	QUnit.config.autostart = false;

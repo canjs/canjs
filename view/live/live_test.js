@@ -1,4 +1,4 @@
-steal("can/view/live", "can/observe", "can/test", function () {
+steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 	QUnit.module('can/view/live');
 	test('html', function () {
 		var div = document.createElement('div'),
@@ -177,7 +177,7 @@ steal("can/view/live", "can/observe", "can/test", function () {
 				return 'foo';
 			});
 		div.appendChild(span);
-		can.$('#qunit-test-area')[0].appendChild(div);
+		can.$('#qunit-fixture')[0].appendChild(div);
 		can.view.live.text(span, text, div);
 		can.remove(el);
 		stop();
@@ -186,4 +186,38 @@ steal("can/view/live", "can/observe", "can/test", function () {
 			start();
 		}, 100);
 	});
+	
+	test('html live binding handles getting a function from a compute',5, function(){
+		var handler = function(el){
+			ok(true, "called handler");
+			equal(el.nodeType, 3, "got a placeholder");
+		};
+		
+		var div = document.createElement('div'),
+			placeholder = document.createTextNode('');
+		div.appendChild(placeholder);
+		
+		var count = can.compute(0);
+		var html = can.compute(function(){
+			if(count() === 0) {
+				return "<h1>Hello World</h1>";
+			} else {
+				return handler;
+			}
+		});
+		
+		
+		can.view.live.html(placeholder, html, div);
+		
+		equal(div.getElementsByTagName("h1").length, 1, "got h1");
+		count(1);
+		equal(div.getElementsByTagName("h1").length, 0, "got h1");
+		count(0);
+		equal(div.getElementsByTagName("h1").length, 1, "got h1");
+		
+		
+	});
+	
+	
+	
 });

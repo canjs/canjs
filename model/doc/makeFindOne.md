@@ -26,46 +26,50 @@ Returns function that implements the external API of `findOne`.
 `makeFindOne` can be used to implement base models that perform special
 behavior. `makeFindOne` is passed a [can.Model.findOneData findOneData] function that retrieves raw
 data. It should return a function that when called, uses
-the findOneData function to get the raw data, convert them to model instances with
-[can.Model.models models].
+the findOneData function to get the raw data and convert it to a model instance with
+[can.Model.model model].
 
 ## Caching
 
 The following uses `makeFindOne` to create a base `CachedModel`:
 
-   CachedModel = can.Model.extend({
-     makeFindOne: function(findOneData){
-       // A place to store requests
-       var cachedRequests = {};
+```js
+CachedModel = can.Model.extend({
+ makeFindOne: function(findOneData){
+   // A place to store requests
+   var cachedRequests = {};
 
-       return function(params, success, error){
-         // is this not cached?
-         if(! cachedRequests[JSON.stringify(params)] ) {
-           var self = this;
-           // make the request for data, save deferred
-           cachedRequests[JSON.stringify(params)] =
-             findOneData(params).then(function(data){
-               // convert the raw data into instances
-               return self.model(data)
-             })
-         }
-         // get the saved request
-         var def = cachedRequests[JSON.stringify(params)]
-         // hookup success and error
-         def.then(success,error)
-         return def;
-       }
+   return function(params, success, error){
+     // is this not cached?
+     if(! cachedRequests[JSON.stringify(params)] ) {
+       var self = this;
+       // make the request for data, save deferred
+       cachedRequests[JSON.stringify(params)] =
+         findOneData(params).then(function(data){
+           // convert the raw data into instances
+           return self.model(data)
+         })
      }
-   },{})
+     // get the saved request
+     var def = cachedRequests[JSON.stringify(params)]
+     // hookup success and error
+     def.then(success,error)
+     return def;
+   }
+ }
+},{})
+```
 
 The following Todo model will never request the same todo twice:
 
-   Todo = CachedModel({
-     findOne: "/todos/{id}"
-   },{})
+```js
+Todo = CachedModel({
+ findOne: "/todos/{id}"
+},{})
 
-   // widget 1
-   Todo.findOne({id: 5})
+// widget 1
+Todo.findOne({id: 5})
 
-   // widget 2
-   Todo.findOne({id: 5})
+// widget 2
+Todo.findOne({id: 5})
+```

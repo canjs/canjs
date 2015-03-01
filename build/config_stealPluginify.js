@@ -3,11 +3,18 @@
 var _ = require('lodash'),
 	path = require("path");
 var modules = require('./config_meta_modules'),
-	allModuleNames = _.map(modules,"moduleName"),
+	allModuleNames = _.map(modules,function(mod){
+		return mod.moduleName;
+	}),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
-	config = path.join(__dirname,"..","stealconfig.js");
+	config = path.join(__dirname,"..","package.json!npm");
 
-
+var canNormalize = function(name, depLoad, curName){
+	if( depLoad.address.indexOf("node_modules") >= 0 ) {
+		return name;
+	}
+	return "can/"+name;
+};
 
 var makeStandaloneAndStealUtil = function(lib){
 	var libUtilName = "util/"+lib+"/"+lib+".js";
@@ -16,7 +23,7 @@ var makeStandaloneAndStealUtil = function(lib){
 			config: config,
 			main: coreModules,
 			paths: {
-				"can/util/util": libUtilName
+				"util/util": ""+libUtilName
 			}
 		},
 		options : {
@@ -24,13 +31,13 @@ var makeStandaloneAndStealUtil = function(lib){
 		},
 		outputs: {
 			"steal +ignorelibs": {
-				graphs: ["can/util/util"],
+				graphs: ["util/util"],
 				dest: function(moduleName){
 					var name;
 					if(moduleName === "can/util/util"){
-						name = "dist/steal/"+libUtilName;
+						name = "dist/steal/can/"+libUtilName;
 					} else {
-						name = "dist/steal/"+moduleName+".js";
+						name = "dist/steal/can/"+moduleName+".js";
 					}
 					return path.join(__dirname,"..",name);
 				},
@@ -39,13 +46,16 @@ var makeStandaloneAndStealUtil = function(lib){
 		}
 	};
 	configuration.outputs[lib+"-core +ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".js"),
+		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-dev +dev+ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".dev.js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".dev.js"),
+		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-min +min+ignorelibs"] = {
-		dest: path.join(__dirname,"..","dist/can."+lib+".min.js")
+		dest: path.join(__dirname,"..","dist/can."+lib+".min.js"),
+		normalize: canNormalize
 	};
 	return configuration;
 };
@@ -53,7 +63,7 @@ var makeStandaloneAndStealUtil = function(lib){
 var pkg = require('../package.json');
 
 var makeAmdUtil = function(lib){
-	var moduleName = "can/util/"+lib+"/"+lib;
+	var moduleName = "util/"+lib+"/"+lib;
 	return {
 		system: {
 			config: config,
@@ -86,24 +96,30 @@ module.exports = function(){
 				config: config
 			},
 			options : {
-				// verbose: true
+				verbose: true
 			},
 			"outputs" : {
 				"all tests": {
-					ignore: allModuleNames,
+					// all test modules
+					ignore: allModuleNames.concat([function(moduleName, load){
+						if(load.address.indexOf("node_modules") >=0 ) {
+							return true;
+						}
+					}]),
 					format: "global",
 					dest: path.join(__dirname,"..","test/pluginified/latest.js"),
 					minify: false
 				}
 			}
 		},
-		"standalone & steal - plugins, jquery core, and jquery steal": {
+		// standalone & steal - plugins, jquery core, and jquery steal
+		"cjs-jquery": {
 			system: {
 				config: config,
-				main: allModuleNames
+				main: allModuleNames.concat(['can'])
 			},
 			options : {
-				// verbose: true
+				//verbose: true
 			},
 			"outputs": {
 				"all-plugins": {
@@ -112,38 +128,75 @@ module.exports = function(){
 					dest: function(moduleName, moduleData){
 						return path.join(__dirname,"..","dist",moduleData.name.toLowerCase()+".js");
 					},
+					normalize: canNormalize,
 					transpile: "global",
 					minify: false
 				},
 				"jquery-core +ignorelibs" : {
-					modules: [{type: "core"}],
+					modules: [{type: "core"}].concat(['can']),
 					dest: path.join(__dirname,"..","dist/can.jquery.js"),
+					normalize: canNormalize,
 					minify: false
 				},
 				"jquery-core-dev +ignorelibs" : {
 					modules: [{type: "core"}],
 					dest: path.join(__dirname,"..","dist/can.jquery.dev.js"),
+					normalize: canNormalize,
 					keepDevelopmentCode: true,
 					minify: false
 				},
 				"jquery-core-min +ignorelibs": {
 					modules: [{type: "core"}],
 					dest: path.join(__dirname,"..","dist/can.jquery.min.js"),
+					normalize: canNormalize,
 					minify: true
 				},
 				"steal": {
 					graphs: allModuleNames,
 					dest: function(moduleName){
 						var name;
-						if(moduleName === "can/util/util"){
+						if(moduleName === "util/util"){
 							name = "dist/steal/can/util/jquery/jquery.js";
 						} else {
-							name = "dist/steal/"+moduleName+".js";
+							name = "dist/steal/can/"+moduleName+".js";
 						}
 						return path.join(__dirname,"..",name);
 					},
 					format: "steal",
 					ignore: ["jquery/jquery","jquery"],
+					minify: false
+				},
+				"cjs" : {
+					graphs: allModuleNames.concat(['can']),
+					useNormalizedDependencies: false,
+					normalize: function(depName, depLoad, curName, curLoad ){
+						// if its not in node_modules
+						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
+							// provide its name relative
+							var moduleName = path.relative(path.dirname(curLoad.address), depLoad.address);
+							if(moduleName[0] !== ".") {
+								moduleName = "./"+moduleName
+							}
+							return moduleName;
+						} 
+						if(depName === "jquery/jquery") {
+							return "jquery"
+						}
+						return depName;
+					},
+					dest: function(moduleName){
+						var name;
+						
+						name = moduleName.replace("can/","")+".js";
+						
+						return path.join(__dirname,"..", "dist", "cjs", name);
+					},
+					format: "cjs",
+					ignore: function(modelName, load){
+						if(load.address.indexOf("/node_modules/") >=0) {
+							return true;
+						}
+					},
 					minify: false
 				}
 			}
@@ -155,12 +208,12 @@ module.exports = function(){
 		"amd": {
 			system: {
 				config: config,
-				main: allModuleNames,
+				main: allModuleNames.concat(["can"]),
 				map: {
-					"can/util/util" : "can/util/library"
+					"util/util" : "util/library"
 				},
 				paths: {
-					"can/util/library": "util/jquery/jquery.js"
+					"util/library": "util/jquery/jquery.js"
 				}
 			},
 			options : {
@@ -168,10 +221,10 @@ module.exports = function(){
 			},
 			"outputs": {
 				"amd-dev +amddev": {
-					graphs: allModuleNames
+					graphs: allModuleNames.concat(["can"])
 				},
 				"amd +amd": {
-					graphs: allModuleNames
+					graphs: allModuleNames.concat(["can"])
 				}
 			}
 		},

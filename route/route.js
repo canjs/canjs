@@ -548,7 +548,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				// gets called with the serialized can.route data after a route has changed
 				// returns what the url has been updated to (for matching purposes)
 				setURL: function (path) {
-					location.hash = "#!" + path;
+					if(location.hash !== "#" + path) {
+						location.hash = "!" + path;
+					}
 					return path;
 				},
 				root: "#!"
@@ -651,15 +653,23 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// the hash is what we set it to anyway, do NOT change the hash
 		if (!changingData || hash !== lastHash) {
 			can.batch.start();
-			for(var attr in oldParams){
-				if(!curParams[attr]){
-					can.route.removeAttr(attr);
-				}
-			}
+			recursiveClean(oldParams, curParams, can.route.data);
+
 			can.route.attr(curParams);
 			// trigger a url change so its possible to live-bind on url-based changes
 			can.batch.trigger(eventsObject,"__url",[hash, lastHash]);
 			can.batch.stop();
+		}
+	};
+
+	var recursiveClean = function(old, cur, data){
+		for(var attr in old){
+			if(cur[attr] === undefined){
+				data.removeAttr(attr);
+			}
+			else if(Object.prototype.toString.call(old[attr]) === "[object Object]") {
+				recursiveClean( old[attr], cur[attr], data.attr(attr) );
+			}
 		}
 	};
 

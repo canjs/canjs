@@ -9,7 +9,7 @@
 /* global Organisation: true */
 /* global Company: true */
 /* global My: true */
-steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", function () {
+steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-qunit", function () {
 	QUnit.module('can/model', {
 		setup: function () {}
 	});
@@ -1050,6 +1050,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 			};
 		});
 		stop();
+
 		MyModel.bind('created', function (ev, created) {
 			start();
 			deepEqual(created.attr(), {
@@ -1637,4 +1638,115 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", functio
 		equal(count, 1, "findAll called only once.");
 	});
 
+	test("static methods do not get overwritten with resource property set (#1309)", function() {
+		var Base = can.Model.extend({
+			resource: '/path',
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findAll'
+				});
+				return dfd;
+			}
+		}, {});
+
+		stop();
+
+		Base.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			deepEqual(model.attr(), {
+				text: 'Base findAll'
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+	});
+
+	test("parseModels does not get overwritten if already implemented in base class (#1246, #1272)", 5, function() {
+		var Base = can.Model.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					text: 'Base findOne'
+				});
+				return dfd;
+			},
+			parseModel: function(attributes) {
+				deepEqual(attributes, {
+					text: 'Base findOne'
+				}, 'parseModel called');
+				attributes.parsed = true;
+				return attributes;
+			}
+		}, {});
+		var Extended = Base.extend({}, {});
+
+		stop();
+
+		Extended.findOne({}).then(function(model) {
+			ok(model instanceof Base);
+			ok(model instanceof Extended);
+			deepEqual(model.attr(), {
+				text: 'Base findOne',
+				parsed: true
+			});
+			start();
+		}, function() {
+			ok(false, 'Failed handler should not be called.');
+		});
+
+		var Third = Extended.extend({
+			findOne: function() {
+				var dfd = can.Deferred();
+				dfd.resolve({
+					nested: {
+						text: 'Third findOne'
+					}
+				});
+				return dfd;
+			},
+
+			parseModel: 'nested'
+		}, {});
+
+		Third.findOne({}).then(function(model) {
+			equal(model.attr('text'), 'Third findOne', 'correct findOne used');
+		});
+	});
+
+	test("Models with no id (undefined or null) are not placed in store (#1358)", function(){
+		var MyStandardModel = can.Model.extend({});
+		var MyCustomModel = can.Model.extend({id:"ID"}, {});
+
+		var myID = null;
+		var instanceNull = new MyStandardModel ({id:myID});
+		var instanceUndefined = new MyStandardModel ({});
+		var instanceCustom = new MyCustomModel({ID:myID});
+
+
+		instanceNull.bind('change', function(){});
+		instanceUndefined.bind('change', function(){});
+		instanceCustom.bind('change', function(){});
+
+
+		ok(typeof MyStandardModel.store[instanceNull.id] === "undefined", "Model should not be added to store when id is null");
+		ok(typeof MyStandardModel.store[instanceUndefined.id] === "undefined", "Model should not be added to store when id is undefined");
+		ok(typeof MyCustomModel.store[instanceCustom[instanceCustom.constructor.id]] === "undefined", "Model should not be added to store when id is null");
+
+	});
+
+	test("Models should be removed from store when instance.removeAttr('id') is called", function(){
+		var Task = can.Model.extend({},{});
+		var t1 = new Task({id: 1, name: "MyTask"});
+
+		t1.bind('change', function(){});
+		ok(Task.store[t1.id].name === "MyTask", "Model should be in store");
+
+		t1.removeAttr("id");
+		ok(typeof Task.store[t1.id] === "undefined", "Model should be removed from store when `id` is removed");
+
+	});
+
 });
+

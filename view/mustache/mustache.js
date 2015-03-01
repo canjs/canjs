@@ -1546,10 +1546,11 @@ steal('can/util',
 			can.compute.temporarilyBind(compute);
 
 			// computeData gives us an initial value
-			var initialValue = computeData.initialValue;
+			var initialValue = computeData.initialValue,
+				helperObj = Mustache.getHelper(key, options);
 			  
 			//!steal-remove-start
-			if (initialValue === undefined && !isHelper) {
+			if (initialValue === undefined && !isHelper && !helperObj) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
 			}
 			//!steal-remove-end
@@ -1656,7 +1657,10 @@ steal('can/util',
 		 * Returns a helper given the name.
 		 */
 		Mustache.getHelper = function (name, options) {
-			var helper = options.attr("helpers." + name);
+			var helper;
+			if (options) {
+				helper = options.attr("helpers." + name);
+			}
 			return helper ? {
 				fn: helper
 			} : this._helpers[name];
@@ -1695,8 +1699,9 @@ steal('can/util',
 			if (!can.view.cached[partial]) {
 				// we don't want to bind to changes so clear and restore reading
 				var reads = can.__clearReading();
-				if (scope.attr('partial')) {
-					partial = scope.attr('partial');
+				var scopePartialName = scope.attr(partial);
+				if (scopePartialName) {
+					partial = scopePartialName;
 				}
 				can.__setReading(reads);
 			}
@@ -1840,6 +1845,58 @@ steal('can/util',
 				} else {
 					return options.inverse(options.contexts || this);
 				}
+			},
+			/**
+			* @function can.stache.helpers.is {{#is expr1 expr2 expr3}}
+			* @parent can.stache.htags 12
+			*
+			* @signature `{{#is expr1 expr2}}BLOCK{{/is}}`
+			*
+			* Renders the `BLOCK` template within the current template.
+			*
+			* @param {can.stache.expression} [expr...] An expression or key that references a
+			* value within the current or parent
+			*
+			* @param {can.stache} BLOCK A template that is rendered
+			* if the result of comparsion `expr1` and `expr2` value is truthy.
+			*
+			* @return {DocumentFragment} If the key's value is truthy, the `BLOCK` is rendered with the
+			* current context and its value is returned; otherwise, an empty string.
+			*
+			* @body
+			*
+			* The `is` helper compares expr1 and expr2 and renders the blocks accordingly.
+			*
+			*	{{#is expr1 expr2}}
+			*		// truthy
+			*	{{else}}
+			*		// falsey
+			*	{{/is}}
+			*/
+			'is': function() {
+				var lastValue, curValue,
+					options = arguments[arguments.length - 1];
+
+				if (arguments.length - 2 <= 0) {
+					return options.inverse();
+				}
+
+				for (var i = 0; i < arguments.length - 1; i++) {
+					curValue = Mustache.resolve(arguments[i]);
+					curValue = can.isFunction(curValue) ? curValue() : curValue;
+
+					if (i > 0) {
+						if (curValue !== lastValue) {
+							return options.inverse();
+						}
+					}
+					lastValue = curValue;
+				}
+
+				return options.fn();
+			},
+			'eq': function() {
+				return Mustache._helpers.is.fn.apply(this, arguments);
 			},
 			// Implements the `unless` built-in helper.
 			/**

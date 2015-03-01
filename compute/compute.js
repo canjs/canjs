@@ -100,8 +100,23 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 		});
 	};
 
-	// {map: new can.Map({first: "Justin"})}, ["map","first"]
+
 	can.compute.read = can.Compute.read;
+
+
+	can.compute.set = function(parent, key, value) {
+		if(isObserve(parent)) {
+			return parent.attr(key, value);
+		}
+
+		if(parent[key] && parent[key].isComputed) {
+			return parent[key](value);
+		}
+
+		if(typeof parent === 'object') {
+			parent[key] = value;
+		}
+	};
 
 	return can.compute;
 });

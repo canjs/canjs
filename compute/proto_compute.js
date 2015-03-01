@@ -434,7 +434,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					data;
 
 				// make sure get is called with the newVal, but not setter
-				this.get = asyncGet(fn, settings.context, this.value);
+				this._get = asyncGet(fn, settings.context, this.value);
 				// Check the number of arguments the 
 				// async function takes.
 				if(fn.length === 0) {
@@ -526,7 +526,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					// call that method
 					if (options.returnObserveMethods) {
 						cur = cur[reads[i]];
-					} else if (reads[i] === 'constructor' && prev instanceof can.Construct) {
+					} else if ( (reads[i] === 'constructor' && prev instanceof can.Construct) ||
+						(prev[reads[i]].prototype instanceof can.Construct)) {
 						cur = prev[reads[i]];
 					} else {
 						cur = prev[reads[i]].apply(prev, options.args || []);
@@ -537,7 +538,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				}
 			} else {
 				// just do the dot operator
-				cur = prev[reads[i]];
+				if(cur == null) {
+					cur = undefined;
+				} else {
+					cur = prev[reads[i]];
+				}
+				
 			}
 			type = typeof cur;
 			// If it's a compute, get the compute's value
@@ -589,7 +595,6 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			parent: prev
 		};
 	};
-
 	can.Compute.truthy = function(compute) {
 		return new can.Compute(function() {
 			var res = compute.get();

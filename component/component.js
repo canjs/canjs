@@ -96,8 +96,14 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, hookupOptions) {
 				// Setup values passed to component
-				var initalScopeData = {},
+				var initialScopeData = {},
 					component = this,
+					// If a template is not provided, we fall back to
+					// dynamic scoping regardless of settings.
+					lexicalContent = ((typeof this.leakScope === "undefined" ?
+									   false :
+									   !this.leakScope) &&
+									  this.template),
 					twoWayBindings = {},
 					// what scope property is currently updating
 					scopePropertyUpdating,
@@ -109,7 +115,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				// Add scope prototype properties marked with an "@" to the `initialScopeData` object
 				can.each(this.constructor.attributeScopeMappings, function (val, prop) {
-					initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
+					initialScopeData[prop] = el.getAttribute(can.hyphenate(val));
 				});
 				
 				// Get the value in the scope for each attribute
@@ -136,7 +142,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					} else {
 						// Legacy template types will crossbind "foo=bar"
 						if(hookupOptions.templateType !== "legacy") {
-							initalScopeData[name] = value;
+							initialScopeData[name] = value;
 							return;
 						}
 					}
@@ -158,7 +164,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					compute.bind("change", handler);
 
 					// Set the value to be added to the scope
-					initalScopeData[name] = compute();
+					initialScopeData[name] = compute();
 					
 					// We don't need to listen to the compute `change` if it doesn't have any dependencies
 					if (!compute.hasDependencies) {
@@ -175,23 +181,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				});
 				if (this.constructor.Map) {
 					// If `Map` property is set on the constructor use it to wrap the `initialScopeData`
-					componentScope = new this.constructor.Map(initalScopeData);
+					componentScope = new this.constructor.Map(initialScopeData);
 				} else if (this.scope instanceof can.Map) {
 					// If `this.scope` is instance of `can.Map` assign it to the `componentScope`
 					componentScope = this.scope;
 				} else if (can.isFunction(this.scope)) {
 					// If `this.scope` is a function, call the function and 
-					var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
+					var scopeResult = this.scope(initialScopeData, hookupOptions.scope, el);
 
 					if (scopeResult instanceof can.Map) {
 						// If the function returns a can.Map, use that as the scope
 						componentScope = scopeResult;
 					} else if (scopeResult.prototype instanceof can.Map) {
 						// If `scopeResult` is of a `can.Map` type, use it to wrap the `initialScopeData`
-						componentScope = new scopeResult(initalScopeData);
+						componentScope = new scopeResult(initialScopeData);
 					} else {
 						// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialScopeData`
-						componentScope = new(can.Map.extend(scopeResult))(initalScopeData);
+						componentScope = new(can.Map.extend(scopeResult))(initialScopeData);
 					}
 
 				}
@@ -210,12 +216,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						}
 					};
 					componentScope.bind(prop, handlers[prop]);
-				});
-				// Teardown reverse bindings when the element is removed
-				can.bind.call(el, "removed", function () {
-					can.each(handlers, function (handler, prop) {
-						componentScope.unbind(prop, handlers[prop]);
-					});
 				});
 				// Setup the attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || hookupOptions.templateType !== "legacy") {
@@ -236,7 +236,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				can.data(can.$(el), "scope", this.scope);
 
 				// Create a real Scope object out of the scope property
-				var renderedScope = hookupOptions.scope.add(this.scope),
+				var renderedScope = lexicalContent ?
+						this.scope :
+						hookupOptions.scope.add(this.scope),
 					options = {
 						helpers: {}
 					};
@@ -253,6 +255,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					}
 				});
 
+				// Teardown reverse bindings when the element is removed
+				var tearDownBindings = function(){
+					can.each(handlers, function (handler, prop) {
+						componentScope.unbind(prop, handlers[prop]);
+					});
+				};
+
 				// ## `events` control
 
 				// Create a control to listen to events
@@ -260,6 +269,20 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					// Pass the scope to the control so we can listen to it's changes from the controller.
 					scope: this.scope
 				});
+
+				// If control has a 'destroy' event, unbind the properties after its called #1415
+				if(this._control && this._control.destroy){
+					var oldDestroy = this._control.destroy;
+					this._control.destroy = function(){
+						oldDestroy.apply(this, arguments);
+						tearDownBindings();
+					};
+					this._control.on();
+				} else {
+					can.bind.call(el, "removed", function () {
+						tearDownBindings();
+					});
+				}
 
 				// ## Rendering
 
@@ -285,12 +308,20 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 							delete options.tags.content;
 
-							can.view.live.replace([el], subtemplate(
-								// This is the context of where `<content>` was found
-								// which will have the the component's context
-								rendererOptions.scope,
+							// By default, light dom scoping is
+							// dynamic. This means that any `{{foo}}`
+							// bindings inside the "light dom" content of
+							// the component will have access to the
+							// internal scope. This can be overridden to be
+							// lexical with the lexicalContent
+							// option,
+							var opts = !lexicalContent ||
+									subtemplate !== hookupOptions.subtemplate ?
+									rendererOptions :
+									hookupOptions;
 
-								rendererOptions.options));
+							can.view.live.replace([el], subtemplate(
+								opts.scope, opts.options));
 
 							// Restore the content tag so it could potentially be used again (as in lists)
 							options.tags.content = contentHookup;
@@ -418,33 +449,62 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		}
 	});
 
-	// If there is a `$` object and it has the `fn` object, create the `scope` plugin that returns
-	// the scope object
-	if (window.$ && $.fn) {
-		$.fn.scope = function (attr) {
-			// If `attr` is passed to the `scope` plugin return the value of that 
-			// attribute on the `scope` object, otherwise return the whole scope
-			if (attr) {
-				return this.data("scope")
-					.attr(attr);
-			} else {
-				return this.data("scope");
-			}
-		};
-	}
-
-	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
-	can.scope = function (el, attr) {
+	/**
+	 * @description Read and write a component element's scope.
+	 *
+	 * @function can.scope
+	 * @parent can.util
+	 * @signature `can.scope(el[, attr[, value]])`
+	 * @param {HTMLElement|NodeList} el can.Component element to get scope of.
+	 * @param {String} [attr] Attribute name to access.
+	 * @param {*} [val] Value to write to the scope attribute.
+	 *
+	 * @return {*} If only one argument, returns the scope itself. If two
+	 * arguments are given, returns the attribute value. If three arguments
+	 * are given, returns the element itself after assigning the value (for
+	 * chaining).
+	 *
+	 * @body
+	 *
+	 * `can.scope` can be used to directly access a [can.Component]'s
+	 * scope. Depending on how it's called, it can be used to get the
+	 * entire scope object, read a specific property from it, or write a
+	 * property. The property read and write features can be seen as a
+	 * shorthand for code such as `$("my-thing").scope().attr("foo", val);`
+	 *
+	 * If using jQuery, this function is accessible as a jQuery plugin,
+	 * with one fewer argument to the call. For example,
+	 * `$("my-element").scope("name", "Whatnot");`
+	 *
+	 */
+		// Define the `can.scope` function that can be used to retrieve the
+		// `scope` from the element
+	can.scope = function (el, attr, val) {
 		el = can.$(el);
-		// If `attr` is passed to the `can.scope` function return the value of that
-		// attribute on the `scope` object otherwise return the whole scope
-		if (attr) {
-			return can.data(el, "scope")
-				.attr(attr);
-		} else {
-			return can.data(el, "scope");
+		var scope = can.data(el, "scope");
+		switch (arguments.length) {
+			case 0:
+			case 1:
+				return scope;
+			case 2:
+				return scope.attr(attr);
+			default:
+				scope.attr(attr, val);
+				return el;
 		}
 	};
 
+	var $ = window.jQuery || window.Zepto;
+
+	// If there is a `$` object and it has the `fn` object, create the
+	// `scope` plugin that returns the scope object.
+	if (typeof $ !== 'undefined') {
+		$.fn.scope = function () {
+			// Just use `can.scope` as the base for this function instead
+			// of repeating ourselves.
+			return can.scope.apply(can, [this].concat(can.makeArray(arguments)));
+		};
+	}
+	
 	return Component;
 });

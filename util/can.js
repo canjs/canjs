@@ -3,7 +3,7 @@ steal(function () {
 	/* global GLOBALCAN */
 	var glbl = typeof window !== "undefined" ? window : global;
 	
-	var can = glbl.can || {};
+	var can = {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
 		glbl.can = can;
 	}
@@ -66,6 +66,53 @@ steal(function () {
 		}
 	};
 	
+	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
+	can.scope = function (el, attr) {
+		el = can.$(el);
+		// if scope doesn't exist, create it
+		var scope = can.data(el, "scope");
+		if(!scope) {
+			scope = can.Map ? new can.Map() : {};
+			can.data(el, "scope", scope);
+		}
+		
+		// If `attr` is passed to the `can.scope` function return the value of that
+		// attribute on the `scope` object otherwise return the whole scope
+		if (attr) {
+			return scope.attr(attr);
+		} else {
+			return scope;
+		}
+	};
+	
+	can["import"] = function(moduleName) {
+		var deferred = new can.Deferred();
+		
+		if(typeof window.System === "object") {
+			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
+				can.proxy(deferred.reject, deferred));
+		} else if(window.define && window.define.amd){
+			
+			window.require([moduleName], function(value){
+				deferred.resolve(value);
+			});
+			
+		} else if(window.steal) {
+			
+			steal.steal(moduleName, function(value){
+				deferred.resolve(value);
+			});
+			
+		} else if(window.require){
+			deferred.resolve(window.require(moduleName));
+		} else {
+			// ideally this will use can.getObject
+			deferred.resolve();
+		}
+		
+		return deferred.promise();
+	};
+	
 	// this is here in case can.compute hasn't loaded
 	can.__reading = function () {};
 
@@ -84,7 +131,7 @@ steal(function () {
 			var ll = this.logLevel;
 			if (ll < 2) {
 				Array.prototype.unshift.call(arguments, 'WARN:');
-				if (window.console && console.warn) {
+				if (typeof window !== undefined && window.console && console.warn) {
 					this._logger("warn", Array.prototype.slice.call(arguments));
 				} else if (window.console && console.log) {
 					this._logger("log", Array.prototype.slice.call(arguments));

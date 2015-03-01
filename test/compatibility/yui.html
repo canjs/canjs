@@ -14,12 +14,12 @@
                     var loc = window.location.toString();
                     var location = loc.substring(0, loc.lastIndexOf(
                             '/') + 1);
-                    baseTag.href = location + baseTag.href;
+                    baseTag.href = location + '../../';
                 })();
             </script>
         <![endif]-->
         <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css" />
-        <script type="text/javascript" src="lib/html5shiv.js"></script>
+        <script type="text/javascript" src="../../bower_components/html5shiv/dist/html5shiv.js"></script>
     </head>
     
     <body>
@@ -35,11 +35,12 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
+        <div id="qunit-fixture"></div>
         <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
         </script>
-        <script type="text/javascript" src="lib/yui-3.7.3.js"></script>
+        <script type="text/javascript" src="util/yui/yui-3.7.3.js"></script>
         <script type="text/javascript" src="dist/can.yui.min.js"></script>
         <script type="text/javascript" src="dist/can.list.promise.js"></script>
         <script type="text/javascript" src="dist/can.ejs.js"></script>

@@ -148,15 +148,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 *
 		 */
 		list: function (el, compute, render, context, parentNode, nodeList) {
-			
+			//var setupBatchNum = can.batch.batchNum;
+
 			// A nodeList of all elements this live-list manages.
 			// This is here so that if this live list is within another section
 			// that section is able to remove the items in this list.
 			var masterNodeList = nodeList || [el],
 				// A mapping of items to their indicies'
 				indexMap = [],
+				// Capture current batchNum
+				setupBatchNum = can.batch.batchNum,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
+					// if the event's batchNum equals setupBatchNum then we're in the middle of a batch job.
+					if (ev.batchNum && ev.batchNum === setupBatchNum) {return;}
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newNodeLists = [],
@@ -229,7 +234,11 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					if (!duringTeardown && data.teardownCheck(text.parentNode)) {
 						return;
 					}
-					var removedMappings = masterNodeList.splice(index+1, items.length),
+					if(index < 0) {
+						index = indexMap.length + index;
+					}
+
+					var removedMappings = masterNodeList.splice(index + 1, items.length),
 						itemsToRemove = [];
 					can.each(removedMappings, function (nodeList) {
 						
@@ -248,7 +257,40 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					if(!fullTeardown) {
 						can.remove(can.$(itemsToRemove));
 					}
-					
+
+				},
+				move = function (ev, item, newIndex, currentIndex) {
+					// The position of elements is always after the initial text
+					// placeholder node
+					newIndex = newIndex + 1;
+					currentIndex = currentIndex + 1;
+
+					var referenceItem = masterNodeList[newIndex][0];
+					var movedItem = masterNodeList[currentIndex][0];
+					var parentNode = referenceItem.parentNode;
+
+					// If we're moving forward in the list, we want to be placed before
+					// the item AFTER the target index since removing the item from
+					// the currentIndex drops the referenceItem's index. If there is no
+					// nextSibling, insertBefore acts like appendChild.
+					if (currentIndex < newIndex) {
+						referenceItem = referenceItem.nextSibling;
+					}
+
+					// Move the DOM nodes into the proper location
+					parentNode.insertBefore(movedItem, referenceItem);
+
+					// Now, do the same for the masterNodeList. We need to keep it
+					// in sync with the DOM.
+
+					// Save a reference to the "node" in that we're manually moving
+					var temp = masterNodeList[currentIndex];
+
+					// Remove the movedItem from the masterNodeList
+					[].splice.apply(masterNodeList, [currentIndex, 1]);
+
+					// Move the movedItem to the correct index in the masterNodeList
+					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
 				},
 				// A text node placeholder
 				text = document.createTextNode(''),
@@ -275,7 +317,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
-							.bind('remove', remove);
+							.bind('remove', remove)
+							.bind('move', move);
 					}
 					add({}, list, 0);
 				};
@@ -348,20 +391,27 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 
 			var nodes = nodeList || [el],
 				makeAndPut = function (val) {
-					var isString = !isNode(val),
-						frag = can.frag(val),
+					var isFunction = typeof val === "function",
+						aNode = isNode(val),
+						frag = can.frag(isFunction ? "" : val),
 						oldNodes = can.makeArray(nodes);
 					
 					// Add a placeholder textNode if necessary.
 					addTextNodeIfNoChildren(frag);
 					
-					if(isString){
+					if(!aNode && !isFunction){
 						frag = can.view.hookup(frag, parentNode);
 					}
+					
 					// We need to mark each node as belonging to the node list.
 					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					if(isFunction) {
+						val(frag.childNodes[0]);
+					}
 					elements.replace(oldNodes, frag);
+					
 				};
+				
 			data.nodeList = nodes;
 			
 			// register the span so nodeLists knows the parentNodeList

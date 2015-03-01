@@ -47,29 +47,29 @@ Usually, you will want to do this when creating a `[can.compute]` or when
 live-binding properties in an [can.ejs EJS] template. (If you are using
 [can.mustache Mustache], you don't need to use `attr`.)
 
-@codestart
-var aName = {a: 'Alexis'},
-    map = new can.Map(aName);
 
-// Observes are copies of data:
-aName === map; // false
+    var aName = {a: 'Alexis'},
+        map = new can.Map(aName);
 
-// reading from an Observe:
-map.attr();    // {a: 'Alexis'}
-map.a;         // 'Alexis'
-map.attr('a'); // 'Alexis'
+    // Observes are copies of data:
+    aName === map; // false
 
-// setting an Observe's property:
-map.attr('a', 'Alice');
-map.a; // Alice
+    // reading from an Observe:
+    map.attr();    // {a: 'Alexis'}
+    map.a;         // 'Alexis'
+    map.attr('a'); // 'Alexis'
 
-// removing an Observe's property;
-map.removeAttr('a');
-map.attr(); // {}
+    // setting an Observe's property:
+    map.attr('a', 'Alice');
+    map.a; // Alice
 
-// Don't do this!
-map.a = 'Adam'; // wrong!
-@codeend
+    // removing an Observe's property;
+    map.removeAttr('a');
+    map.attr(); // {}
+
+    // Don't do this!
+    map.a = 'Adam'; // wrong!
+
 
 Find out more about manipulating properties of Observes under
 [can.Map.prototype.attr attr] and [can.Map.prototype.removeAttr removeAttr].
@@ -84,52 +84,51 @@ properties are changed that you can bind to.
 - the _change_ event fires on every change to an Observe.
 - an event named after the property name fires on every change to that property.
 
-@codestart
-var o = new can.Map({});
-o.bind('change', function(ev, attr, how, newVal, oldVal) {
-    console.log('Something on o changed.');
-});
-o.bind('a', function(ev, newVal, oldVal) {
-    console.log('a was changed.');
-});
 
-o.attr('a', 'Alexis'); // 'Something on o changed.'
-                       // 'a was changed.'
-o.attr({
-    'a': 'Alice',      // 'Something on o changed.' (for a's change)
-    'b': 'Bob'         // 'Something on o changed.' (for b's change)
-});                    // 'a was changed.'
+    var o = new can.Map({});
+    o.bind('change', function(ev, attr, how, newVal, oldVal) {
+        console.log('Something on o changed.');
+    });
+    o.bind('a', function(ev, newVal, oldVal) {
+        console.log('a was changed.');
+    });
 
-o.removeAttr('a');     // 'Something on o changed.'
-                       // 'a was changed.'
-@codeend
+    o.attr('a', 'Alexis'); // 'Something on o changed.'
+                           // 'a was changed.'
+    o.attr({
+        'a': 'Alice',      // 'Something on o changed.' (for a's change)
+        'b': 'Bob'         // 'Something on o changed.' (for b's change)
+    });                    // 'a was changed.'
+
+    o.removeAttr('a');     // 'Something on o changed.'
+                           // 'a was changed.'
+
 
 For more detail on how to use these events, see [can.Map.prototype.bind bind] and
 [can.Map.prototype.unbind unbind]. There is also a plugin called [can.Map.delegate]
 that makes binding to specific types of events easier:
 
-@codestart
-var o = new can.Map({});
-o.delegate('a', 'add', function(ev, newVal, oldVal) {
-    console.log('a was added.');
-});
-o.delegate('a', 'set', function(ev, newVal, oldVal) {
-    console.log('a was set.');
-});
-o.delegate('a', 'remove', function(ev, newVal, oldVal) {
-    console.log('a was removed.');
-});
-o.delegate('a', 'change', function(ev, newVal, oldVal) {
-    console.log('a was changed.');
-});
 
-o.attr('a', 'Alexis'); // 'a was added.'
+    var o = new can.Map({});
+    o.delegate('a', 'add', function(ev, newVal, oldVal) {
+        console.log('a was added.');
+    });
+    o.delegate('a', 'set', function(ev, newVal, oldVal) {
+        console.log('a was set.');
+    });
+    o.delegate('a', 'remove', function(ev, newVal, oldVal) {
+        console.log('a was removed.');
+    });
+    o.delegate('a', 'change', function(ev, newVal, oldVal) {
+        console.log('a was changed.');
+    });
+
+    o.attr('a', 'Alexis'); // 'a was added.'
+                           // 'a was changed.'
+
+    o.attr('a', 'Alice'); // 'a was set.'
+                          // 'a was changed.'
+
+    o.removeAttr('a'); // 'a was removed.'
                        // 'a was changed.'
 
-o.attr('a', 'Alice'); // 'a was set.'
-                      // 'a was changed.'
-
-
-o.removeAttr('a'); // 'a was removed.'
-                   // 'a was changed.'
-@codeend
