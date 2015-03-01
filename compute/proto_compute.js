@@ -445,8 +445,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 					}, settings);
 				} else {
 					this.updater = asyncUpdater(this, oldUpdater);
+					
 					data = setupComputeHandlers(this, function() {
-						var res = fn.call(settings, self.value, function(newVal) {
+						
+						var res = fn.call(settings.context, self.value, function(newVal) {
 							oldUpdater(newVal, self.value);
 						});
 						// If undefined is returned, don't update the value.
