@@ -179,7 +179,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 				withinTemplatedSectionWithinAnElement = false;
 
 				// If we should setup live-binding.
-				setupLiveBinding = compute.hasDependencies;
+				setupLiveBinding = compute.computeInstance.hasDependencies;
 			}
 
 			if (listData) {

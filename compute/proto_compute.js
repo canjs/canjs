@@ -156,7 +156,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 							var newValue = func.call(context);
 							can.__setReading(reads);
 							// Call the updater with old and new values
-							updater(newValue, oldValue, ev.batchNum);
+							updater.call(compute, newValue, oldValue, ev.batchNum);
 							oldValue = newValue;
 							batchNum = batchNum = ev.batchNum;
 						}
@@ -328,7 +328,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		},
 
 		_set: function(newVal) {
-			this.value = newVal;
+			return this.value = newVal;
 		},
 
 		setCached: function(newVal) {
@@ -603,6 +603,20 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			}
 			return !!res;
 		});
+	};
+	
+	can.Compute.set = function(parent, key, value) {
+		if(isObserve(parent)) {
+			return parent.attr(key, value);
+		}
+
+		if(parent[key] && parent[key].isComputed) {
+			return parent[key](value);
+		}
+
+		if(typeof parent === 'object') {
+			parent[key] = value;
+		}
 	};
 
 	return can.Compute;

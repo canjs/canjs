@@ -1561,7 +1561,7 @@ steal('can/util',
 			}
 
 			// If there are no dependencies, just return the value.
-			if (!compute.hasDependencies) {
+			if (!compute.computeInstance.hasDependencies) {
 				return initialValue;
 			} else {
 				return compute;
