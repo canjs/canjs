@@ -231,7 +231,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				this._setupContextFunction(args[0], args[1], args[2]);
 			} else {
 				//`new can.Compute(initialValue, {})`
-				this._setupContextSettings(args[0], args[1]);
+				if(args[1] && args[1].fn) {
+					this._setupAsyncCompute(args[0], args[1]);
+				} else {
+					this._setupContextSettings(args[0], args[1]);
+				}
+
 			}
 		} else {
 			// `can.compute(initialValue)`
@@ -419,53 +424,58 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		},
 
 		_setupContextSettings: function(initialValue, settings) {
+			
 			this.value = initialValue;
-
-			this.updater = can.proxy(this.updater, this);
-			var oldUpdater = this.updater,
-			self = this;
-
+			var oldUpdater = can.proxy(this.updater, this);
+			
 			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
 			this._get = settings.get ? can.proxy(settings.get, settings) : this._get;
 
 			// This is a "hack" to allow async computes.
-			if(settings.fn) {
-				var fn = settings.fn,
-					data;
-
-				// make sure get is called with the newVal, but not setter
-				this._get = asyncGet(fn, settings.context, this.value);
-				// Check the number of arguments the 
-				// async function takes.
-				if(fn.length === 0) {
-					data = setupComputeHandlers(this, fn, settings.context);
-				} else if(fn.length === 1) {
-					data = setupComputeHandlers(this, function() {
-						return fn.call(settings, self.value);
-					}, settings);
-				} else {
-					this.updater = asyncUpdater(this, oldUpdater);
-					
-					data = setupComputeHandlers(this, function() {
-						
-						var res = fn.call(settings.context, self.value, function(newVal) {
-							oldUpdater(newVal, self.value);
-						});
-						// If undefined is returned, don't update the value.
-						return res !== undefined ? res : this.value;
-					}, settings);
-				}
-
-				this._on = data.on;
-				this._off = data.off;
-			} else {
-				this.updater = createAsyncAltUpdater(this, oldUpdater);
-			}
-
+			this.updater = createAsyncAltUpdater(this, oldUpdater);
+			
 			this._on = settings.on ? settings.on : this._on;
 			this._off = settings.off ? settings.off : this._off;
 		},
+		_setupAsyncCompute: function(initialValue, settings){
+			
+			this.value = initialValue;
+			
+			var oldUpdater = can.proxy(this.updater, this),
+				self = this,
+				fn = settings.fn,
+				data;
+			
+			this.updater = oldUpdater;
+			
+			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
 
+			// make sure get is called with the newVal, but not setter
+			this._get = asyncGet(fn, settings.context, this.value);
+			// Check the number of arguments the 
+			// async function takes.
+			if(fn.length === 0) {
+				data = setupComputeHandlers(this, fn, settings.context);
+			} else if(fn.length === 1) {
+				data = setupComputeHandlers(this, function() {
+					return fn.call(settings, self.value);
+				}, settings);
+			} else {
+				this.updater = asyncUpdater(this, oldUpdater);
+				
+				data = setupComputeHandlers(this, function() {
+					
+					var res = fn.call(settings.context, self.value, function(newVal) {
+						oldUpdater(newVal, self.value);
+					});
+					// If undefined is returned, don't update the value.
+					return res !== undefined ? res : this.value;
+				}, settings);
+			}
+
+			this._on = data.on;
+			this._off = data.off;
+		},
 		_setupInitialValue: function(initialValue) {
 			this.value = initialValue;
 		}
