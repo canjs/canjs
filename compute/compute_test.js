@@ -684,4 +684,27 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 
 	
+	test("setting compute.async with a observable dependency gets a new value and can re-compute", 3, function(){
+		// this is needed for define with a set and get.
+		var compute = can.compute(1);
+		var add;
+		
+		var async = can.compute.async(1, function(curVal){
+			add = curVal;
+			return compute()+add;
+		});
+		
+		
+		equal( async(), 2, "can read unbound");
+		
+		async.bind("change", function(ev, newVal, oldVal){
+			console.log("change", newVal, oldVal);
+		});
+		
+		
+		async(2);
+		
+		equal( async(), 3, "can read unbound");
+	});
+	
 });

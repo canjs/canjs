@@ -1,6 +1,7 @@
 /* jshint asi: false */
 steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
-
+	
+	
 	QUnit.module('can/map/define');
 
 	// remove, type, default
@@ -685,5 +686,176 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		ok(nested.attr('examples.one') instanceof Example);
 		ok(nested.attr('examples.two.deep') instanceof Example);
 	});
+
+	test('When set is called, always re-eval getter', function(){
+		var SetGet = can.Map.extend({
+			define: {
+				value: {
+					set: function(){
+						
+					},
+					get: function(){
+						
+					}
+				}
+			}
+		});
+	});
+	
+	
+
+	test('Can make an attr alias a compute (#1470)', 8, function(){
+		var computeValue = can.compute(1);
+		var GetMap = can.Map.extend({
+			define: {
+				value: {
+					set: function(value){
+						console.log("set-",typeof value, value && value.isComputed ? value() : value);
+						if(value && value.isComputed) {
+							this.__valueCompute = value;
+							
+						} else if(this.__valueCompute){
+							this.__valueCompute(value);
+						}
+						return value;
+					},
+					get: function(value){
+						console.log("get-",typeof value, value && value.isComputed ? value() : value);
+						return this.__valueCompute? this.__valueCompute() : value;
+					}
+				}
+			}
+		});
+		
+		var getMap = new GetMap();
+		
+		console.log("set computeValue(1)");
+		
+		getMap.attr("value", computeValue);
+		
+		equal(getMap.attr("value"), 1);
+
+		var bindCallbacks = 0;
+		
+		getMap.bind("value", function(ev, newVal, oldVal){
+			debugger;
+			console.log("value changed", newVal, oldVal);
+			switch(bindCallbacks) {
+				case 0:
+					equal(newVal, 2, "bind called with new val");
+					equal(oldVal, 1, "bind called with old val");
+					break;
+				case 1:
+					equal(newVal, 3, "bind called with new val");
+					equal(oldVal, 2, "bind called with old val");
+					break;
+				case 2:
+					equal(newVal, 4, "bind called with new val");
+					equal(oldVal, 3, "bind called with old val");
+					break;
+			}
+			
+			
+			bindCallbacks++;
+		});
+		
+		console.log("set computeValue to 2");
+		computeValue(2);
+		
+		console.log("set value to 3");
+		getMap.attr("value", 3);
+		
+		equal(getMap.attr("value"), 3, "read value is 3");
+		
+		var newComputeValue = can.compute(4);
+		
+		console.log("set newComputeValue(4)");
+		getMap.attr("value", newComputeValue);
+		
+	});
+
+	/*test('setting a value of a property with type "compute" triggers change events', function () {
+
+		var handler;
+		var message = 'The change event passed the correct {prop} when set with {method}';
+		
+		var createChangeHandler = function (expectedOldVal, expectedNewVal, method) {
+			return function (ev, newVal, oldVal) {
+				var subs = { prop: 'newVal', method: method };
+				equal(newVal, expectedNewVal, can.sub(message, subs));
+				subs.prop = 'oldVal';
+				equal(oldVal, expectedOldVal, can.sub(message, subs));
+			};
+		};
+
+		var count = 0;
+
+		var ComputableMap = can.Map.extend({
+			define: {
+				computed: {
+					type: 'compute',
+				}
+			},
+			alsoComputed: can.compute(function (newVal) {
+				if (newVal) {
+					count = newVal;
+					return;
+				}
+
+				return count;
+			})
+		});
+
+		var computed = can.compute(0);
+
+		var m1 = new ComputableMap({
+			computed: computed
+		});
+
+		equal(m1.attr('computed'), 0, 'm1 is 1');
+
+		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
+		
+		m1.bind('alsoComputed', handler);
+		m1.attr('alsoComputed', 1);
+		m1.unbind('alsoComputed', handler);
+
+		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
+		m1.bind('computed', handler);
+		m1.attr('computed', 1);
+		m1.unbind('computed', handler);
+
+		handler = createChangeHandler(1, 2, "computed()");
+		m1.bind('computed', handler);
+		computed(2);
+		m1.unbind('computed', handler);
+	});
+
+	test('replacing the compute on a property with type "compute"', function () {
+		var compute1 = can.compute(0);
+		var compute2 = can.compute(1);
+
+		var ComputableMap = can.Map.extend({
+			define: {
+				computable: {
+					type: 'compute'
+				}
+			}
+		});
+
+		var m = new ComputableMap();
+
+		m.attr('computable', compute1);
+
+		equal(m.computable, compute1, 'compute1 saved to map');
+
+		equal(m.attr('computable'), 0, 'compute1 readable via .attr()');
+
+		m.attr('computable', compute2);
+
+		equal(m.computable, compute2, 'compute2 saved to map');
+
+		equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
+	});*/
 
 });
