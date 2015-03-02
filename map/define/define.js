@@ -124,14 +124,24 @@ steal('can/util', 'can/observe', function (can) {
 			var setterCalled = false,
 
 				setValue = setter.call(this, value, function (value) {
-					oldSet.call(self, prop, value, current, success, errorCallback);
+					if(getter) {
+						self[prop](value);
+					} else {
+						oldSet.call(self, prop, value, current, success, errorCallback);
+					}
+					
 					setterCalled = true;
 					//!steal-remove-start
 					clearTimeout(asyncTimer);
 					//!steal-remove-end
-				}, errorCallback);
+				}, errorCallback, getter ? this[prop].computeInstance.lastSetValue.get() : current);
 			if (getter) {
-				// if there's a getter we do nothing
+				// if there's a getter we don't call old set
+				// instead we call the getter's compute with the new value
+				if(setValue !== undefined && !setterCalled && setter.length >= 2) {
+					this[prop](setValue);
+				}
+				
 				can.batch.stop();
 				return;
 			}

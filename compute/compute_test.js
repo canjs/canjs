@@ -307,18 +307,6 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 	});
 	
-	test("compute.async setting does not force a read", function(){
-		expect(0);
-		var source = can.compute(1);
-		
-		var async = can.compute.async([],function( curVal, setVal ){
-			ok(false);
-			curVal.push(source());
-			return curVal;
-		});
-		
-		async([]);
-	});
 
 	test("compute.read works with a Map wrapped in a compute", function() {
 		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
@@ -669,22 +657,40 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		ok(async.get(), 'calling async worked');
 	});
 
-	test('compute.async setting does not force a read', function() {
-		expect(0);
-		var source = new can.Compute(1);
+	test('Compute.async set uses last set or initial value', function() {
 
-		var async = can.Compute.async([],function( curVal, setVal ) {
-			ok(false);
-			curVal.push(source.get());
-			return curVal;
+		var add = new can.Compute(1);
+
+		var fnCount = 0;
+
+		var async = can.Compute.async(10,function( curVal ) {
+			switch(fnCount++) {
+				case 0:
+					equal(curVal, 10); break;
+				case 1:
+					equal(curVal, 20); break;
+				case 2:
+					equal(curVal, 20, "on bind"); break;
+				case 3:
+					equal(curVal, 30, "on bind"); break;
+			}
+			return curVal+add.get();
 		});
 
-		async.set([]);
+		equal(async.get(), 11, "initial value");
+		
+		async.set(20);
+		
+		async.bind("change", function(){});
+		
+		async.set(20);
+		
+		async.set(30);
 	});
 
 
 	
-	test("setting compute.async with a observable dependency gets a new value and can re-compute", 3, function(){
+	test("setting compute.async with a observable dependency gets a new value and can re-compute", 4, function(){
 		// this is needed for define with a set and get.
 		var compute = can.compute(1);
 		var add;
@@ -698,7 +704,8 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal( async(), 2, "can read unbound");
 		
 		async.bind("change", function(ev, newVal, oldVal){
-			console.log("change", newVal, oldVal);
+			equal(newVal, 3, "change new val");
+			equal(oldVal, 2, "change old val");
 		});
 		
 		

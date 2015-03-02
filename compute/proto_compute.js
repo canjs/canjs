@@ -197,9 +197,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		};
 	},
 
-	asyncGet = function(fn, context, val) {
+	asyncGet = function(fn, context, lastSetValue) {
 		return function() {
-			return fn.call(context, val);
+			return fn.call(context, lastSetValue.get());
 		};
 	},
 
@@ -315,9 +315,18 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			// Setter may return the value if setter
 			// is for a value maintained exclusively by this compute.
 			var setVal = this._set(newVal, old);
+			
+
+			
 			// If the computed function has dependencies,
 			// return the current value
 			if (this.hasDependencies) {
+				// If set can update the value,
+				// just return the updated value.
+				if(this._setUpdates) {
+					return this.value;
+				}
+				
 				return this._get();
 			}
 			// Setting may not fire a change event, in which case
@@ -448,24 +457,37 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			
 			this.updater = oldUpdater;
 			
-			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
+			var lastSetValue = new can.Compute(initialValue);
+			// expose this compute so it can be read
+			this.lastSetValue = lastSetValue;
+			this._setUpdates = true;
+			this._set = function(newVal){
+				// this is the value passed to the fn
+				lastSetValue.set(newVal);
+			};
 
 			// make sure get is called with the newVal, but not setter
-			this._get = asyncGet(fn, settings.context, this.value);
+			this._get = asyncGet(fn, settings.context, lastSetValue);
 			// Check the number of arguments the 
 			// async function takes.
 			if(fn.length === 0) {
+				// if it takes no arguments, it is calculated from other things.
 				data = setupComputeHandlers(this, fn, settings.context);
 			} else if(fn.length === 1) {
+				// If it has a single argument, pass it the current value
+				// or the value from define.set.
 				data = setupComputeHandlers(this, function() {
-					return fn.call(settings, self.value);
+					return fn.call(settings, lastSetValue.get() );
 				}, settings);
 			} else {
+				// The updater function passed to on so that if called with
+				// a single, non undefined value, works.
 				this.updater = asyncUpdater(this, oldUpdater);
 				
+				// Finally, pass the function so it can decide the final value.
 				data = setupComputeHandlers(this, function() {
-					
-					var res = fn.call(settings.context, self.value, function(newVal) {
+					// Call fn, and get new value
+					var res = fn.call(settings.context, lastSetValue.get(), function(newVal) {
 						oldUpdater(newVal, self.value);
 					});
 					// If undefined is returned, don't update the value.

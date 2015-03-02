@@ -687,49 +687,29 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		ok(nested.attr('examples.two.deep') instanceof Example);
 	});
 
-	test('When set is called, always re-eval getter', function(){
-		var SetGet = can.Map.extend({
-			define: {
-				value: {
-					set: function(){
-						
-					},
-					get: function(){
-						
-					}
-				}
-			}
-		});
-	});
-	
-	
-
-	test('Can make an attr alias a compute (#1470)', 8, function(){
+	test('Can make an attr alias a compute (#1470)', 9, function(){
 		var computeValue = can.compute(1);
 		var GetMap = can.Map.extend({
 			define: {
 				value: {
-					set: function(value){
-						console.log("set-",typeof value, value && value.isComputed ? value() : value);
-						if(value && value.isComputed) {
-							this.__valueCompute = value;
-							
-						} else if(this.__valueCompute){
-							this.__valueCompute(value);
+					set: function(newValue, setVal, setErr, oldValue){
+						if(newValue.isComputed) {
+							return newValue;
 						}
-						return value;
+						if(oldValue && oldValue.isComputed) {
+							oldValue(newValue);
+							return oldValue;
+						}
+						return newValue;
 					},
 					get: function(value){
-						console.log("get-",typeof value, value && value.isComputed ? value() : value);
-						return this.__valueCompute? this.__valueCompute() : value;
+						return value && value.isComputed ? value() : value;
 					}
 				}
 			}
 		});
 		
 		var getMap = new GetMap();
-		
-		console.log("set computeValue(1)");
 		
 		getMap.attr("value", computeValue);
 		
@@ -738,20 +718,19 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		var bindCallbacks = 0;
 		
 		getMap.bind("value", function(ev, newVal, oldVal){
-			debugger;
-			console.log("value changed", newVal, oldVal);
+			//debugger;
 			switch(bindCallbacks) {
 				case 0:
-					equal(newVal, 2, "bind called with new val");
-					equal(oldVal, 1, "bind called with old val");
+					equal(newVal, 2, "0 - bind called with new val");
+					equal(oldVal, 1, "0 - bind called with old val");
 					break;
 				case 1:
-					equal(newVal, 3, "bind called with new val");
-					equal(oldVal, 2, "bind called with old val");
+					equal(newVal, 3, "1 - bind called with new val");
+					equal(oldVal, 2, "1 - bind called with old val");
 					break;
 				case 2:
-					equal(newVal, 4, "bind called with new val");
-					equal(oldVal, 3, "bind called with old val");
+					equal(newVal, 4, "2 - bind called with new val");
+					equal(oldVal, 3, "2 - bind called with old val");
 					break;
 			}
 			
@@ -759,17 +738,18 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			bindCallbacks++;
 		});
 		
-		console.log("set computeValue to 2");
+		// Try updating the compute's value
 		computeValue(2);
 		
-		console.log("set value to 3");
+		// Try setting the value of the property
 		getMap.attr("value", 3);
 		
 		equal(getMap.attr("value"), 3, "read value is 3");
+		equal(computeValue(), 3, "the compute value is 3");
 		
+		// Try setting to a new comptue
 		var newComputeValue = can.compute(4);
 		
-		console.log("set newComputeValue(4)");
 		getMap.attr("value", newComputeValue);
 		
 	});
