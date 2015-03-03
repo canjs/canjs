@@ -37,7 +37,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 				compute.bind("change", emptyHandler);
 				var value = compute();
 				
-				if( compute.hasDependencies ) {
+				if( compute.computeInstance.hasDependencies ) {
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
 					} else {

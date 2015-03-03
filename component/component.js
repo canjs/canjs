@@ -167,7 +167,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					initialScopeData[name] = compute();
 					
 					// We don't need to listen to the compute `change` if it doesn't have any dependencies
-					if (!compute.hasDependencies) {
+					if (!compute.computeInstance.hasDependencies) {
 						compute.unbind("change", handler);
 					} else {
 						// Make sure we unbind (there's faster ways of doing this)

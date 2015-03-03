@@ -43,7 +43,7 @@ steal('can/util', 'can/view/mustache', 'can/util/attr', 'steal-qunit', function 
 
 	test("template attr updating", function () {
 
-		var template = can.view.mustache("<div my-attr='{{value}}'></div>"),
+		var template = can.mustache("<div my-attr='{{value}}'></div>"),
 			compute = can.compute("foo");
 
 		var div = template({

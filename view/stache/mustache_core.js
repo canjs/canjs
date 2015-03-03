@@ -78,7 +78,7 @@ steal("can/util",
 		getKeyArgValue = function(key, scope){
 			var data = getKeyComputeData(key, scope, true);
 			// If there are no dependencies, just return the value.
-			if (!data.compute.hasDependencies) {
+			if (!data.compute.computeInstance.hasDependencies) {
 				return data.initialValue;
 			} else {
 				return data.compute;
@@ -262,7 +262,7 @@ steal("can/util",
 					
 					// Set name to be the compute if the compute reads observables,
 					// or the value of the value of the compute if no observables are found.
-					if(computeData.compute.hasDependencies) {
+					if(computeData.compute.computeInstance.hasDependencies) {
 						name = compute;
 					} else {
 						name = initialValue;
@@ -510,7 +510,7 @@ steal("can/util",
 					
 				}
 				// If the compute has observable dependencies, setup live binding.
-				else if( compute.hasDependencies ) {
+				else if( compute.computeInstance.hasDependencies ) {
 					
 					// Depending on where the template is, setup live-binding differently.
 					if(state.attr) {

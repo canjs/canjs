@@ -1,5 +1,6 @@
 steal('can/util', 'can/observe', function (can) {
-
+	var define = can.define = {};
+	
 	var getPropDefineBehavior = function(behavior, prop, define) {
 		var propBehavior;
 		if(define) {
@@ -8,8 +9,9 @@ steal('can/util', 'can/observe', function (can) {
 		}
 	};
 
+	// This is called when the Map is defined
 	can.Map.helpers.define = function (Map) {
-		var define = Map.prototype.define;
+		var definitions = Map.prototype.define;
 		//!steal-remove-start
 		if(Map.define){
 			can.dev.warn("The define property should be on the map's prototype properties, "+
@@ -17,20 +19,27 @@ steal('can/util', 'can/observe', function (can) {
 		}
 		//!steal-remove-end
 		Map.defaultGenerators = {};
-		for (var prop in define) {
-			if ("value" in define[prop]) {
-				if (typeof define[prop].value === "function") {
-					Map.defaultGenerators[prop] = define[prop].value;
-				} else {
-					Map.defaults[prop] = define[prop].value;
+		for (var prop in definitions) {
+			var type = definitions[prop].type;
+			if( typeof type === "string" ) {
+				if(typeof define.types[type] === "object") {
+					delete definitions[prop].type;
+					can.extend(definitions[prop], define.types[type]);
 				}
 			}
-			if (typeof define[prop].Value === "function") {
+			if ("value" in definitions[prop]) {
+				if (typeof definitions[prop].value === "function") {
+					Map.defaultGenerators[prop] = definitions[prop].value;
+				} else {
+					Map.defaults[prop] = definitions[prop].value;
+				}
+			}
+			if (typeof definitions[prop].Value === "function") {
 				(function (Constructor) {
 					Map.defaultGenerators[prop] = function () {
 						return new Constructor();
 					};
-				})(define[prop].Value);
+				})(definitions[prop].Value);
 			}
 		}
 	};
@@ -124,14 +133,24 @@ steal('can/util', 'can/observe', function (can) {
 			var setterCalled = false,
 
 				setValue = setter.call(this, value, function (value) {
-					oldSet.call(self, prop, value, current, success, errorCallback);
+					if(getter) {
+						self[prop](value);
+					} else {
+						oldSet.call(self, prop, value, current, success, errorCallback);
+					}
+					
 					setterCalled = true;
 					//!steal-remove-start
 					clearTimeout(asyncTimer);
 					//!steal-remove-end
-				}, errorCallback);
+				}, errorCallback, getter ? this[prop].computeInstance.lastSetValue.get() : current);
 			if (getter) {
-				// if there's a getter we do nothing
+				// if there's a getter we don't call old set
+				// instead we call the getter's compute with the new value
+				if(setValue !== undefined && !setterCalled && setter.length >= 2) {
+					this[prop](setValue);
+				}
+				
 				can.batch.stop();
 				return;
 			}
@@ -164,7 +183,7 @@ steal('can/util', 'can/observe', function (can) {
 		return this;
 	};
 
-	var converters = {
+	define.types = {
 		'date': function (str) {
 			var type = typeof str;
 			if (type === 'string') {
@@ -197,6 +216,21 @@ steal('can/util', 'can/observe', function (can) {
 		},
 		'string': function (val) {
 			return '' + val;
+		},
+		'compute': {
+			set: function(newValue, setVal, setErr, oldValue){
+				if(newValue.isComputed) {
+					return newValue;
+				}
+				if(oldValue && oldValue.isComputed) {
+					oldValue(newValue);
+					return oldValue;
+				}
+				return newValue;
+			},
+			get: function(value){
+				return value && value.isComputed ? value() : value;
+			}
 		}
 	};
 	
@@ -208,7 +242,7 @@ steal('can/util', 'can/observe', function (can) {
 			newValue = value;
 
 		if (typeof type === "string") {
-			type = converters[type];
+			type = define.types[type];
 		}
 
 		if (type || Type) {
@@ -310,5 +344,5 @@ steal('can/util', 'can/observe', function (can) {
 		return serialized;
 	};
 
-	return can.Map;
+	return can.define;
 });
