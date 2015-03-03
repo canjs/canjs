@@ -754,7 +754,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		
 	});
 
-	/*test('setting a value of a property with type "compute" triggers change events', function () {
+	test('setting a value of a property with type "compute" triggers change events', function () {
 
 		var handler;
 		var message = 'The change event passed the correct {prop} when set with {method}';
@@ -768,22 +768,12 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			};
 		};
 
-		var count = 0;
-
 		var ComputableMap = can.Map.extend({
 			define: {
 				computed: {
 					type: 'compute',
 				}
-			},
-			alsoComputed: can.compute(function (newVal) {
-				if (newVal) {
-					count = newVal;
-					return;
-				}
-
-				return count;
-			})
+			}
 		});
 
 		var computed = can.compute(0);
@@ -796,9 +786,6 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
 		
-		m1.bind('alsoComputed', handler);
-		m1.attr('alsoComputed', 1);
-		m1.unbind('alsoComputed', handler);
 
 		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
 		m1.bind('computed', handler);
@@ -827,15 +814,13 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		m.attr('computable', compute1);
 
-		equal(m.computable, compute1, 'compute1 saved to map');
 
 		equal(m.attr('computable'), 0, 'compute1 readable via .attr()');
 
 		m.attr('computable', compute2);
 
-		equal(m.computable, compute2, 'compute2 saved to map');
 
 		equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
-	});*/
+	});
 
 });

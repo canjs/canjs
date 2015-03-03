@@ -316,7 +316,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal(result.value, "Justin", "The correct value is found.");
 	});
 
-		test('compute.read works with a Map wrapped in a compute', function() {
+	test('compute.read works with a Map wrapped in a compute', function() {
 		var parent = new can.Compute(new can.Map({map: {first: 'Justin' }}));
 		var reads = ['map', 'first'];
 
@@ -666,13 +666,17 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var async = can.Compute.async(10,function( curVal ) {
 			switch(fnCount++) {
 				case 0:
-					equal(curVal, 10); break;
+					equal(curVal, 10);
+					break;
 				case 1:
-					equal(curVal, 20); break;
+					equal(curVal, 20);
+					break;
 				case 2:
-					equal(curVal, 20, "on bind"); break;
+					equal(curVal, 20, "on bind");
+					break;
 				case 3:
-					equal(curVal, 30, "on bind"); break;
+					equal(curVal, 30, "on bind");
+					break;
 			}
 			return curVal+add.get();
 		});

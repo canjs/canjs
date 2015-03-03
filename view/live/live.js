@@ -544,7 +544,6 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		attributePlaceholder: '__!!__',
 		attributeReplace: /__!!__/g,
 		attribute: function (el, attributeName, compute) {
-			console.log("attribute");
 			listen(el, compute, function (ev, newVal) {
 				elements.setAttr(el, attributeName, hook.render());
 			});
