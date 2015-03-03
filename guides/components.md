@@ -121,7 +121,7 @@ This results in:
 
 @demo can/guides/components/template-2.html
 
-You can also specify the template as a [can.view.renderer](../docs/can.view.renderer.html) like:
+You can also specify the template as a [can.view.renderer] like:
 
     var template = can.mustache("<content>Edit </content>"+
                                      "<input type='text'/>");
