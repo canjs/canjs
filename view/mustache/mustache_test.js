@@ -3914,7 +3914,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
 				var frag = can.mustache(template)({
 					columns: new can.List([
-						{ class: 'test' }
+						{ 'class': 'test' }
 					])
 				});
 
