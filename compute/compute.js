@@ -51,7 +51,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 
 		compute.bind = can.proxy(internalCompute.bind, internalCompute);
 		compute.unbind = can.proxy(internalCompute.unbind, internalCompute);
-		compute.isComputed = can.proxy(internalCompute.isComputed, internalCompute);
+		compute.isComputed = internalCompute.isComputed;
 		compute.clone = function(ctx) {
 			if(typeof getterSetter === 'function') {
 				context = ctx;
