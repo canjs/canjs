@@ -164,6 +164,22 @@ steal('can/util', 'can/observe', function (can) {
 		return this;
 	};
 
+	var oldGet = proto.__get;
+	proto.__get = function (attr) {
+		if (attr) {
+			// If it's an async getter and unbound, bind to it so that we don't
+			// raise an error within the compute. See #1416.
+			var computedBindings = this._computedBindings;
+			var def = this.define;
+			var isAsyncGetter = (def && def[attr] && def[attr].get && def[attr].get.length === 2);
+			if (isAsyncGetter && !computedBindings[attr].count) {
+				this[attr].bind('change', function() {});
+				computedBindings[attr].count += 1;
+			}
+		}
+		return oldGet.call(this, attr);
+	};
+
 	var converters = {
 		'date': function (str) {
 			var type = typeof str;

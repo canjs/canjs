@@ -408,10 +408,36 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		var g = new Grabber();
 		// This assertion doesn't mean much.  It's mostly testing
 		// that there were no errors.
-		equal(g.attr("vals").length,0,"zero items in array" );
+		equal(g.attr("vals").length,1,"one item in array" );
 
 	});
 
+	test("async getter should work even if unbound (#1416)", function(){
+		var GreeterVM = can.Map({
+			define: {
+				username: {
+					get: function(val, resolve) {
+						setTimeout(function(){
+							resolve("guest");
+						}, 1);
+					}
+				},
+				greeting: {
+					get: function() {
+						return "Hello " + this.attr("username");
+					}
+				}
+			}
+		});
+
+		stop();
+		var greeter = new GreeterVM();
+		equal(greeter.attr("greeting"), "Hello undefined");
+		setTimeout(function(){
+			equal(greeter.attr("greeting"), "Hello guest");
+			start();
+		}, 5);
+	});
 
 	test("serialize basics", function(){
 		var MyMap = can.Map.extend({
