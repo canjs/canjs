@@ -173,7 +173,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// the attribute name is the function to call
 		var attributeName = data.attributeName,
 			// The event type to bind on is deteremined by whatever is after can-
-			// 
+			//
 			// For example, can-submit binds on the submit event.
 			event = attributeName.substr("can-".length),
 			// This is the method that the event will initially trigger. It will look up the method by the string name
@@ -196,7 +196,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				// We break out early if the first argument isn't available
 				// anywhere.
-				
+
 				//!steal-remove-start
 				if (!scopeData.value) {
 					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + attrInfo.name.get, {
@@ -261,16 +261,16 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				return scopeData.value.apply(scopeData.parent, args);
 			};
 
-		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is 
-		// a function that returns an object containing an event and a handler. These are to be used for binding. For example, 
-		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to 
+		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is
+		// a function that returns an object containing an event and a handler. These are to be used for binding. For example,
+		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to
 		// determine on keyup if the enter key was pressed.
 		if (special[event]) {
 			var specialData = special[event](data, el, handler);
 			handler = specialData.handler;
 			event = specialData.event;
 		}
-		// Bind the handler defined above to the element we're currently processing and the event name provided in this 
+		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
 	});

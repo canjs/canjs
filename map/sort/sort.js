@@ -83,7 +83,7 @@ steal('can/util', 'can/list', function (can) {
 			// If the comparator is a string use that value to get
 			// property on the item. If the comparator is a method,
 			// it'll be used elsewhere.
-			if (comparator && typeof comparator === 'string') {
+			if (item && comparator && typeof comparator === 'string') {
 				item = typeof item[comparator] === 'function' ?
 					item[comparator]() :
 					item.attr(comparator);

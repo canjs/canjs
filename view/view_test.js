@@ -856,7 +856,7 @@ steal("can/view/callbacks",
 		}
 		can.batch.stop();
 
-		equal(div1.innerText, "123", "Batched lists rendered properly with stache.");
-		equal(div2.innerText, "123", "Batched lists rendered properly with mustache.");
+		equal(div1.innerText.replace(/\r\n/g, ''), "123", "Batched lists rendered properly with stache.");
+		equal(div2.innerText.replace(/\r\n/g, ''), "123", "Batched lists rendered properly with mustache.");
 	});
 });

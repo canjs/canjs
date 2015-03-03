@@ -3699,10 +3699,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		var div = document.createElement("div");
 		div.appendChild(template);
-		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+		equal(div.childNodes[0].innerHTML, "hello World", "partial retreived and rendered");
 
 		data.attr("greeting", "goodbye");
-		equal(div.innerHTML, "<div>goodbye World</div>", "Partial updates when attr is updated");
+		equal(div.childNodes[0].innerHTML, "goodbye World", "Partial updates when attr is updated");
 
 	});
 	

@@ -202,7 +202,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			exclamation: "!"
 		}));
 		var hello = can.$("#qunit-fixture hello-world");
-		equal(hello[0].innerHTML.trim(), "Hello World");
+		equal(can.trim(hello[0].innerHTML), "Hello World");
 		can.remove(can.$("#qunit-fixture > *"));
 
 		can.Component.extend({
@@ -216,7 +216,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			exclamation: "!"
 		}));
 		hello = can.$("#qunit-fixture hello-world-no-template");
-		equal(hello[0].innerHTML.trim(), "Hello",
+		equal(can.trim(hello[0].innerHTML), "Hello",
 			  "If no template is provided to can.Component, treat <content> bindings as dynamic.");
 		can.remove(can.$("#qunit-fixture > *"));
 	});
@@ -234,7 +234,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			exclamation: "!"
 		}));
 		var hello = can.$("#qunit-fixture hello-world");
-		equal(hello[0].innerHTML.trim(), "Hello Hello!");
+		equal(can.trim(hello[0].innerHTML), "Hello Hello!");
 		can.remove(can.$("#qunit-fixture > *"));
 	});
 
