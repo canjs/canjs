@@ -16,12 +16,20 @@ should be a function.
 ## Use
 
 By adding `can-EVENT='KEY'` to an element, the function pointed to
-by `KEY` is bound to the element's `EVENT` event. The function
-is called back with:
+by `KEY` is bound to the element's `EVENT` event. The function can be
+passed any number of arguments from the surrounding scope, or `name=value`
+attributes for named arguments. Direct arguments will be provided to the
+handler in the order they were given, except `name=value` arguments, which
+will all be given as part of a `hash` argument inserted after all direct
+arguments.
 
- - `context` - the context of the element
- - `element` - the element that was bound
- - `event` - the event that was triggered
+The last 3 arguments to the callback will always be the current template
+context, followed by the element, then the event object.
+
+There are also two special variables available within handlers:
+
+ - `@element` - the element that was bound
+ - `@event` - the event that was triggered
 
 @demo can/view/bindings/doc/can-event.html
 

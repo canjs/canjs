@@ -153,6 +153,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 			return wrapped.addClass(className);
 		};
 		can.data = function (wrapped, key, value) {
+			if(!wrapped.item(0)) { return; }
 			if (value === undefined) {
 				return wrapped.item(0)
 					.getData(key);
