@@ -591,7 +591,8 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		makeFindAll: makeGetterHandler("models"),
 		makeFindOne: makeGetterHandler("model"),
 		makeCreate: createUpdateDestroyHandler,
-		makeUpdate: createUpdateDestroyHandler
+		makeUpdate: createUpdateDestroyHandler,
+		makeDestroy: createUpdateDestroyHandler
 	};
 
 	// Go through the response handlers and make the actual "make" methods.
