@@ -14,7 +14,7 @@
 
 @param {*} context A value that represents the 
 current context. This is often an object or observable and is the first
-place 
+place a `key` is looked up.
 
 @param {can.view.Scope} [parent] The parent scope. If a `key` value
 is not found in the current scope, it will then look in the parent
@@ -50,7 +50,7 @@ searched in the parent's context after the initial context is explored.  For exa
     curScope.attr("name") //-> "Justin"
     curScope.attr("length") //-> 2
 
-Use [can.view.Scope.prototype.add add] to easily create a new scope from a parent scope like:
+Use [can.view.Scope::add add] to easily create a new scope from a parent scope like:
 
 
     var list = [{name: "Justin"},{name: "Brian"}],
