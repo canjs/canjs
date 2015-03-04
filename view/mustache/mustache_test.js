@@ -3955,4 +3955,26 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	});
 
+
+	if(Object.keys) {
+		test('Mustache memory leak (#1393)', function() {
+			for(var prop in can.view.nodeLists.nodeMap) {
+				delete can.view.nodeLists.nodeMap[prop];
+			}
+
+			var studentsTemplate = can.mustache(
+				'<div>{{#each students}}abc{{/each}}</div>'
+			);
+			var students = new can.List(['first', 'second']);
+			var frag = studentsTemplate({
+				students: students
+			});
+
+			can.append(can.$('#qunit-fixture'), frag);
+
+			equal(Object.keys(can.view.nodeLists.nodeMap).length, 3, 'Three items added');
+			can.remove(can.$('#qunit-fixture > *'));
+			equal(Object.keys(can.view.nodeLists.nodeMap).length, 0, 'All nodes have been removed from nodeMap');
+		});
+	}
 });

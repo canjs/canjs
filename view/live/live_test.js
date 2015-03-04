@@ -169,7 +169,10 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		equal(spans.length, 3, 'there are 3 spans');
 	});
 	test('text binding is memory safe (#666)', function () {
-		can.view.nodeLists.nodeMap = {};
+		for(var prop in can.view.nodeLists.nodeMap) {
+			delete can.view.nodeLists.nodeMap[prop];
+		}
+
 		var div = document.createElement('div'),
 			span = document.createElement('span'),
 			el = can.$(div),

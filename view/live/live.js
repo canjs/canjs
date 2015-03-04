@@ -256,6 +256,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					// don't remove elements during teardown.  Something else will probably be doing that.
 					if(!fullTeardown) {
 						can.remove(can.$(itemsToRemove));
+					} else {
+						nodeLists.unregister(masterNodeList);
 					}
 
 				},
