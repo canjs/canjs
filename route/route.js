@@ -91,6 +91,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		lastHash,
 		// Are data changes pending that haven't yet updated the hash
 		changingData,
+		// List of attributes that have changed since last update
+		changedAttrs = [],
 		// If the `can.route.data` changes, update the hash.
 		// Using `.serialize()` retrieves the raw data contained in the `observable`.
 		// This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
@@ -98,16 +100,19 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		onRouteDataChange = function (ev, attr, how, newval) {
 			// indicate that data is changing
 			changingData = 1;
+			// collect attributes that are changing
+			changedAttrs.push(attr);
 			clearTimeout(timer);
 			timer = setTimeout(function () {
 				// indicate that the hash is set to look like the data
 				changingData = 0;
 				var serialized = can.route.data.serialize(),
 					path = can.route.param(serialized, true);
-				can.route._call("setURL", path);
+				can.route._call("setURL", path, changedAttrs);
 				// trigger a url change so its possible to live-bind on url-based changes
 				can.batch.trigger(eventsObject,"__url",[path, lastHash]);
 				lastHash = path;
+				changedAttrs = [];
 			}, 10);
 		},
 		// A dummy events object used to dispatch url change events on.

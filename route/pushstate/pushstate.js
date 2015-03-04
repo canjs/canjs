@@ -112,12 +112,28 @@ steal('can/util', 'can/route', function (can) {
 			// ## setURL
 
 			// Updates URL by calling `pushState`.
-			setURL: function (path) {
+			setURL: function (path, changed) {
+				var method = "pushState";
 				// Keeps hash if not in path.
 				if (includeHash && path.indexOf("#") === -1 && window.location.hash) {
 					path += window.location.hash;
 				}
-				window.history.pushState(null, null, can.route._call("root") + path);
+				if(replaceStateAttrs.length > 0) {
+					var toRemove = [];
+					for(var i = 0, l = changed.length; i < l; i++) {
+						if(can.inArray(changed[i], replaceStateAttrs) !== -1) {
+							method = "replaceState";
+						}
+						if(can.inArray(changed[i], replaceStateAttrs.once) !== -1) {
+							toRemove.push(changed[i]);
+						}
+					}
+					if(toRemove.length > 0) {
+						removeAttrs(replaceStateAttrs, toRemove);
+						removeAttrs(replaceStateAttrs.once, toRemove);
+					}
+				}
+				window.history[method](null, null, can.route._call("root") + path);
 			}
 		};
 
@@ -169,15 +185,43 @@ steal('can/util', 'can/route', function (can) {
 				}
 				return root;
 			},
+			removeAttrs = function(arr, attrs) {
+				var index;
+				for(var i = attrs.length - 1; i >= 0; i--) {
+					if( (index = can.inArray(attrs[i], arr)) !== -1) {
+						arr.splice(index, 1);
+					}
+				}
+			},
 			// Original methods on `history` that will be overwritten
 			methodsToOverwrite = ['pushState', 'replaceState'],
 			// A place to store pointers to original `history` methods.
 			originalMethods = {},
 			// Used to tell setURL to include the hash because we clicked on a link.
-			includeHash = false;
+			includeHash = false,
+			// Attributes that will cause replaceState to be called
+			replaceStateAttrs = [];
 
 		// Enables plugin, by default `hashchange` binding is used.
 		can.route.defaultBinding = "pushstate";
+
+		can.extend(can.route, {
+			replaceStateOn: function() {
+				var attrs = can.makeArray(arguments);
+				Array.prototype.push.apply(replaceStateAttrs, attrs);
+			},
+			replaceStateOnce: function() {
+				var attrs = can.makeArray(arguments);
+				replaceStateAttrs.once = can.makeArray(replaceStateAttrs.once);
+
+				Array.prototype.push.apply(replaceStateAttrs.once, attrs);
+				can.route.replaceStateOn.apply(this, arguments);
+			},
+			replaceStateOff: function() {
+				var attrs = can.makeArray(arguments);
+				removeAttrs(replaceStateAttrs, attrs);
+			}
+		});
 	}
 
 	return can;

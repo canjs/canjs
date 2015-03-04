@@ -745,6 +745,117 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 				};
 	
 			});
+
+			test("replaceStateOn makes changes to an attribute use replaceSate (#1137)", function() {
+				stop();
+
+				makeTestingIframe(function(info, done){
+					info.history.pushState = function () {
+						ok(false, "pushState should not have been called");
+					};
+
+					info.history.replaceState = function () {
+						ok(true, "replaceState called");
+					};
+
+					info.route.replaceStateOn("ignoreme");
+
+					info.route.ready();
+					info.route.attr('ignoreme', 'yes');
+
+					setTimeout(function(){
+						start();
+						done();
+					}, 30);
+				});
+			});
+
+			test("replaceStateOn makes changes to multiple attributes use replaceState (#1137)", function() {
+				stop();
+
+				makeTestingIframe(function(info, done){
+					info.history.pushState = function () {
+						ok(false, "pushState should not have been called");
+					};
+
+					info.history.replaceState = function () {
+						ok(true, "replaceState called");
+					};
+
+					info.route.replaceStateOn("ignoreme", "metoo");
+
+					info.route.ready();
+					info.route.attr('ignoreme', 'yes');
+
+					setTimeout(function(){
+						info.route.attr('metoo', 'yes');
+
+						setTimeout(function(){
+							start();
+							done();
+						}, 30);
+
+					}, 30);
+				});
+			});
+
+			test("replaceStateOnce makes changes to an attribute use replaceState only once (#1137)", function() {
+				stop();
+				var replaceCalls = 0,
+					pushCalls = 0;
+
+				makeTestingIframe(function(info, done){
+					info.history.pushState = function () {
+						pushCalls++;
+					};
+
+					info.history.replaceState = function () {
+						replaceCalls++;
+					};
+
+					info.route.replaceStateOnce("ignoreme", "metoo");
+
+					info.route.ready();
+					info.route.attr('ignoreme', 'yes');
+
+					setTimeout(function(){
+						info.route.attr('ignoreme', 'no');
+
+						setTimeout(function(){
+							equal(replaceCalls, 1);
+							equal(pushCalls, 1);
+							start();
+							done();
+						}, 30);
+
+					}, 30);
+				});
+			});
+
+			test("replaceStateOff makes changes to an attribute use pushState again (#1137)", function(){
+				stop();
+
+				makeTestingIframe(function(info, done){
+					info.history.pushState = function () {
+						ok(true, "pushState called");
+					};
+
+					info.history.replaceState = function () {
+						ok(false, "replaceState should not be called called");
+					};
+
+					info.route.replaceStateOn("ignoreme");
+					info.route.replaceStateOff("ignoreme");
+
+					info.route.ready();
+					info.route.attr('ignoreme', 'yes');
+
+					setTimeout(function(){
+						start();
+						done();
+					}, 30);
+				});
+			});
 			
 		} // end steal-only
 
