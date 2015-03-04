@@ -5,7 +5,7 @@
 
 Returns the external `findOne` method given the implemented [can.Model.findOneData findOneData] function.
 
-@params {can.Model.findOneData}
+@param {can.Model.findOneData} findOneData
 
 [can.Model.findOne] is implemented with a `String`, [can.AjaxSettings ajax settings object], or
 [can.Model.findOneData findOneData] function. If it is implemented as
