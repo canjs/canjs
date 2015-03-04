@@ -5,7 +5,7 @@
 
 Returns the external `findAll` method given the implemented [can.Model.findAllData findAllData] function.
 
-@params {can.Model.findAllData}
+@param {can.Model.findAllData} findAllData
 
 [can.Model.findAll] is implemented with a `String`, [can.AjaxSettings ajax settings object], or
 [can.Model.findAllData findAllData] function. If it is implemented as
