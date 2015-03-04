@@ -19,5 +19,25 @@ will be explored.
 
     var curScope = new can.view.Scope(list).add(justin);
 
-    curScope.attr("name") //-> "Justin"
-    curScope.attr("length") //-> 2
+    curScope.attr("name"); //-> "Justin"
+    curScope.attr("length"); //-> 2
+
+Prefixing a key with `"./"` prevents any parent scope look ups.
+Prefixing a key with one or more `"../"` shifts the lookup path
+that many levels up.
+
+    var list = [{name: "Justin"},{name: "Brian"}];
+    list.name = "Programmers";
+    list.surname = "CanJS";
+
+    var justin = list[0];
+    var brian = list[1];
+    var curScope = new can.view.Scope(list).add(justin).add(brian);
+
+    curScope.attr("name"); //-> "Brian"
+    curScope.attr("surname"); //-> "CanJS"
+    curScope.attr("./surname"); //-> undefined
+    curScope.attr("../name"); //-> "Justin"
+    curScope.attr("../surname"); //-> "CanJS"
+    curScope.attr(".././surname"); //-> "undefined"
+    curScope.attr("../../name"); //-> "Programmers"
