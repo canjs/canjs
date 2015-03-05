@@ -190,7 +190,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				// we'll call.
 				var scopeData = data.scope.read(attrInfo.name.get, {
 					returnObserveMethods: true,
-					isArgument: true
+					isArgument: true,
+					executeAnonymousFunctions: true
 				});
 
 				// We break out early if the first argument isn't available
