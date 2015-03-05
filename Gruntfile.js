@@ -261,7 +261,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('browserify-package', function(){
 		var browser = {"./can": "./dist/cjs/can"};
 		require('./build/config_meta_modules').forEach(function(mod){
-			browser["./"+mod.moduleName] = "./dist/cjs/"+mod.moduleName;
+			var moduleName = mod.moduleName.replace("can/", "");
+			browser["./"+moduleName] = "./dist/cjs/"+moduleName;
 		});
 		var cloned = _.clone(pkg, true);
 		cloned.browser = browser;

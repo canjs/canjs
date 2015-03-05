@@ -1,9 +1,12 @@
 // This file returns the stealPluginify config values
 
 var _ = require('lodash'),
-	path = require("path");
-var modules = require('./config_meta_modules'),
-	allModuleNames = _.map(modules,function(mod){
+	path = require("path"),
+	npmUtils = require("steal/ext/npm-utils"),
+	isNpm = npmUtils.moduleName.isNpm;
+var modules = require('./config_meta_modules');
+
+var	allModuleNames = _.map(modules,function(mod){
 		return mod.moduleName;
 	}),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
@@ -11,9 +14,18 @@ var modules = require('./config_meta_modules'),
 
 var canNormalize = function(name, depLoad, curName){
 	if( depLoad.address.indexOf("node_modules") >= 0 ) {
-		return name;
+		return denpm(name);
 	}
-	return "can/"+name;
+	return "can/"+denpm(name);
+};
+
+var npmify = function(moduleName){
+	var parsed = {
+		packageName: pkg.name,
+		modulePath: moduleName,
+		version: pkg.version
+	};
+	return npmUtils.moduleName.create(parsed);
 };
 
 var makeStandaloneAndStealUtil = function(lib){
@@ -23,7 +35,7 @@ var makeStandaloneAndStealUtil = function(lib){
 			config: config,
 			main: coreModules,
 			paths: {
-				"util/util": ""+libUtilName
+				"can/util/util": libUtilName
 			}
 		},
 		options : {
@@ -31,10 +43,11 @@ var makeStandaloneAndStealUtil = function(lib){
 		},
 		outputs: {
 			"steal +ignorelibs": {
-				graphs: ["util/util"],
+				graphs: ["can/util/util"],
 				dest: function(moduleName){
+					moduleName = denpm(moduleName);
 					var name;
-					if(moduleName === "can/util/util"){
+					if(moduleName === "util/util"){
 						name = "dist/steal/can/"+libUtilName;
 					} else {
 						name = "dist/steal/can/"+moduleName+".js";
@@ -46,14 +59,17 @@ var makeStandaloneAndStealUtil = function(lib){
 		}
 	};
 	configuration.outputs[lib+"-core +ignorelibs"] = {
+		modules: coreModules,
 		dest: path.join(__dirname,"..","dist/can."+lib+".js"),
 		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-dev +dev+ignorelibs"] = {
+		modules: coreModules,
 		dest: path.join(__dirname,"..","dist/can."+lib+".dev.js"),
 		normalize: canNormalize
 	};
 	configuration.outputs[lib+"-core-min +min+ignorelibs"] = {
+		modules: coreModules,
 		dest: path.join(__dirname,"..","dist/can."+lib+".min.js"),
 		normalize: canNormalize
 	};
@@ -63,7 +79,7 @@ var makeStandaloneAndStealUtil = function(lib){
 var pkg = require('../package.json');
 
 var makeAmdUtil = function(lib){
-	var moduleName = "util/"+lib+"/"+lib;
+	var moduleName = "can/util/"+lib+"/"+lib;
 	return {
 		system: {
 			config: config,
@@ -83,23 +99,37 @@ var makeAmdUtil = function(lib){
 	};
 };
 
+// A mapping of module names to objects from builder.json
+var modulesMap = _.indexBy(modules, "moduleName");
+
+// Function to remove the npmness from moduleNames
+var denpm = function(moduleName){
+	if(isNpm(moduleName)) {
+		return moduleName.substr(moduleName.indexOf("#") + 1);
+	}
+	return moduleName;
+};
+
+var testModules = modules.filter(function(mod){
+	return mod.hasTest !== false;
+}).map(function(mod){
+	var name = mod.moduleName.replace("can/", "")+"_test";
+	return name;
+});
 
 module.exports = function(){
 	return {
 		"tests": {
 			system: {
-				main: modules.filter(function(mod){
-					return mod.hasTest !== false;
-				}).map(function(mod){
-					return mod.moduleName+"_test";
-				}),
+				main: testModules,
 				config: config
 			},
 			options : {
-				verbose: true
+				//verbose: true
 			},
 			"outputs" : {
 				"all tests": {
+					modules: testModules,
 					// all test modules
 					ignore: allModuleNames.concat([function(moduleName, load){
 						if(load.address.indexOf("node_modules") >=0 ) {
@@ -108,7 +138,8 @@ module.exports = function(){
 					}]),
 					format: "global",
 					dest: path.join(__dirname,"..","test/pluginified/latest.js"),
-					minify: false
+					minify: false,
+					normalize: canNormalize
 				}
 			}
 		},
@@ -126,7 +157,14 @@ module.exports = function(){
 					eachModule: [{type: "plugin"}],
 					ignore: [{type: "core"}],
 					dest: function(moduleName, moduleData){
+						if(isNpm(moduleName)) {
+							moduleName = "can/" + moduleName.substr(moduleName.indexOf("#") + 1);
+							moduleData = modulesMap[moduleName];
+						}
+
 						return path.join(__dirname,"..","dist",moduleData.name.toLowerCase()+".js");
+
+						//return path.join(__dirname,"..","dist",moduleData.name.toLowerCase()+".js");
 					},
 					normalize: canNormalize,
 					transpile: "global",
@@ -155,6 +193,7 @@ module.exports = function(){
 					graphs: allModuleNames,
 					dest: function(moduleName){
 						var name;
+						moduleName = denpm(moduleName);
 						if(moduleName === "util/util"){
 							name = "dist/steal/can/util/jquery/jquery.js";
 						} else {
@@ -170,6 +209,7 @@ module.exports = function(){
 					graphs: allModuleNames.concat(['can']),
 					useNormalizedDependencies: false,
 					normalize: function(depName, depLoad, curName, curLoad ){
+
 						// if its not in node_modules
 						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
 							// provide its name relative
@@ -186,6 +226,10 @@ module.exports = function(){
 					},
 					dest: function(moduleName){
 						var name;
+
+						if(isNpm(moduleName)) {
+							moduleName = moduleName.substr(moduleName.lastIndexOf("#")+1);
+						}
 						
 						name = moduleName.replace("can/","")+".js";
 						
@@ -210,10 +254,10 @@ module.exports = function(){
 				config: config,
 				main: allModuleNames.concat(["can"]),
 				map: {
-					"util/util" : "util/library"
+					"can/util/util" : "can/util/library"
 				},
 				paths: {
-					"util/library": "util/jquery/jquery.js"
+					"can/util/library": "util/jquery/jquery.js"
 				}
 			},
 			options : {

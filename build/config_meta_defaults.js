@@ -1,4 +1,20 @@
+var isNpm = require("steal/ext/npm-utils").moduleName.isNpm;
+
+// Function to remove the npmness from moduleNames
+var denpm = function(moduleName){
+	if(isNpm(moduleName)) {
+		return moduleName.substr(moduleName.indexOf("#") + 1);
+	}
+	return moduleName;
+};
+
 var reverseNormalize = function(name, load, baseName, baseLoad){
+	name = denpm(name);
+
+	if(name === "dist/jquery") {
+		return "jquery";
+	}
+
 	if(name === 'mootools/mootools' || name === 'yui/yui' || name === 'zepto/zepto') {
 		return name.split('/')[0];
 	}

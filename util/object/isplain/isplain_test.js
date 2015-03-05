@@ -1,4 +1,4 @@
-steal('./isplain', 'steal-qunit', function() {
+steal('can/util/object/isplain', 'steal-qunit', function() {
 	QUnit.asyncTest('isPlainObject', function () {
 		expect(15);
 		var iframe;
