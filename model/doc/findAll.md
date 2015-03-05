@@ -95,6 +95,9 @@ Recipe.findAll({favorite: true}, function(recipes){
 }) //-> Deferred
 ```
 
+`findAll` uses [can.Model.parseModels parseModels] to parse the returned data. `can.Model.parseModels` 
+can be overwritten to handle non-standard data formats.
+
 Before you can use `findAll`, you must implement it.
 
 ## Implement with a URL
