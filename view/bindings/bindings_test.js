@@ -789,4 +789,28 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		data.attr('completed', 0);
 		equal(input.checked, false, 'checkbox value bound (via attr check)');
 	});
+
+	test("can-EVENT can call intermediate functions before calling the final function (#1474)", function () {
+		var ta = document.getElementById("qunit-fixture");
+		var template = can.view.stache("<div class='click-me' can-click='{does.some.thing}'></div>");
+		var frag = template({
+			does: function(){
+				return {
+					some: function(){
+						return {
+							thing: function(context) {
+								ok(can.isFunction(context.does));
+								start();
+							}
+						};
+					}
+				};
+			}
+		});
+
+		stop();
+		ta.appendChild(frag);
+		var div = ta.getElementsByClassName("click-me")[0];
+		can.trigger(div, "click");
+	});
 });
