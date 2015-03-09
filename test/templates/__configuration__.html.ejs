@@ -1,13 +1,21 @@
-<title>CanJS <%= configuration.description %> tests</title>
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
-<script type="text/javascript">
-	System['import']("package.json!npm").then(function(){
-		var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
-		steal.config(config);
-	}).then(function(){
-		steal("<%- tests.join('", "') %>", function() {
-			can.dev.logLevel = 3;
-		});
-	});
-</script>
-<div id="qunit-fixture"></div>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CanJS <%= configuration.description %> tests</title>
+		<script type="text/javascript" src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+	</head>
+	<body>
+		<script src="../node_modules/steal/steal.js" main="@empty"></script>
+		<script type="text/javascript">
+			System['import']("package.json!npm").then(function(){
+				var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
+				steal.config(config);
+			}).then(function(){
+				steal("<%- tests.join('", "') %>", function() {
+					can.dev.logLevel = 3;
+				});
+			});
+		</script>
+		<div id="qunit-fixture"></div>
+	</body>
+</html>

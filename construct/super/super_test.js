@@ -53,7 +53,7 @@ steal("can/construct/super", "steal-qunit", function () {
 		Child.findAll({});
 		start();
 	});
-
+	//!steal-remove-start
 	// To avoid JSHint complaining about the missing getter
 	/* jshint ignore:start */
 	if(Object.getOwnPropertyDescriptor) {
@@ -90,4 +90,5 @@ steal("can/construct/super", "steal-qunit", function () {
 		});
 	}
 	/* jshint ignore:end */
+	//!steal-remove-end
 });

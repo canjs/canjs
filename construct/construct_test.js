@@ -71,7 +71,7 @@ steal('can/construct', 'steal-qunit', function () {
 		ok(Foo.Bar === fb, 'returns class');
 		equal(fb.shortName, 'Bar', 'short name is right');
 		//!steal-remove-start
-		if (can.dev) {
+		if (can.dev && fb.name) {
 			equal(fb.name, 'Bar', 'short name is right');
 		}
 		//!steal-remove-end

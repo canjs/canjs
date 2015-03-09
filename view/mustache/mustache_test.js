@@ -3910,15 +3910,15 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	try {
 		if(can.$('<col>').length) {
 			test("<col> inside <table> renders correctly (#1013)", 1, function () {
-				var expected = '<table><colgroup><col class="test"></colgroup><tbody></tbody></table>';
 				var template = '<table><colgroup>{{#columns}}<col class="{{class}}" />{{/columns}}</colgroup><tbody></tbody></table>';
 				var frag = can.mustache(template)({
 					columns: new can.List([
-						{ class: 'test' }
+						{ 'class': 'test' }
 					])
 				});
 
-				equal(frag.childNodes[1].outerHTML, expected, '<col> nodes added in proper position');
+				var child = frag.childNodes[1] || frag.childNodes[0];
+				ok(child.innerHTML.indexOf('<colgroup><col class="test"') === 0, '<col> nodes added in proper position');
 			});
 		}
 	} catch(e) {
@@ -3951,7 +3951,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var div = document.createElement("div");
 		div.appendChild(template);
-		equal(div.innerHTML, "<div>hello World</div>", "partial retreived and rendered");
+		equal(div.childNodes[0].innerHTML, "hello World", "partial retreived and rendered");
 
 	});
 

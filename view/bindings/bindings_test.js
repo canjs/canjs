@@ -5,76 +5,78 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		}
 	});
 
-	test("can-event handlers", function () {
-		expect(12);
-		var ta = document.getElementById("qunit-fixture");
-		var template = can.view.stache("<div>" +
+	if(typeof document.getElementsByClassName === 'function') {
+		test("can-event handlers", function () {
+			//expect(12);
+			var ta = document.getElementById("qunit-fixture");
+			var template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<p can-click='doSomething'>{{content}}</p>" +
 			"{{/each}}" +
 			"</div>");
 
-		var foodTypes = new can.List([{
-			title: "Fruits",
-			content: "oranges, apples"
-		}, {
-			title: "Breads",
-			content: "pasta, cereal"
-		}, {
-			title: "Sweets",
-			content: "ice cream, candy"
-		}]);
+			var foodTypes = new can.List([{
+				title: "Fruits",
+				content: "oranges, apples"
+			}, {
+				title: "Breads",
+				content: "pasta, cereal"
+			}, {
+				title: "Sweets",
+				content: "ice cream, candy"
+			}]);
 
-		function doSomething(foodType, el, ev) {
-			ok(true, "doSomething called");
-			equal(el[0].nodeName.toLowerCase(), "p", "this is the element");
-			equal(ev.type, "click", "1st argument is the event");
-			equal(foodType, foodTypes[0], "2nd argument is the 1st foodType");
+			function doSomething(foodType, el, ev) {
+				ok(true, "doSomething called");
+				equal(el[0].nodeName.toLowerCase(), "p", "this is the element");
+				equal(ev.type, "click", "1st argument is the event");
+				equal(foodType, foodTypes[0], "2nd argument is the 1st foodType");
 
-		}
+			}
 
-		var frag = template({
-			foodTypes: foodTypes,
-			doSomething: doSomething
-		});
+			var frag = template({
+				foodTypes: foodTypes,
+				doSomething: doSomething
+			});
 
-		ta.appendChild(frag);
-		var p0 = ta.getElementsByTagName("p")[0];
-		can.trigger(p0, "click");
+			ta.appendChild(frag);
+			var p0 = ta.getElementsByTagName("p")[0];
+			can.trigger(p0, "click");
 
 
-		var scope = new can.Map({
-			test: "testval"
-		});
-		can.Component.extend({
-			tag: "can-event-args-tester",
-			scope: scope
-		});
-		template = can.view.mustache("<div>" +
+			var scope = new can.Map({
+				test: "testval"
+			});
+			can.Component.extend({
+				tag: "can-event-args-tester",
+				scope: scope
+			});
+			template = can.view.mustache("<div>" +
 			"{{#each foodTypes}}" +
 			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @scope @scope.test . title content=content}'/>" +
 			"{{/each}}" +
 			"</div>");
-		function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
-			ok(true, "withArgs called");
-			equal(el1[0].nodeName.toLowerCase(), "can-event-args-tester", "@element is the event's DOM element");
-			equal(ev1.type, "click", "@event is the click event");
-			equal(scope, compScope, "Component scope accessible through @scope");
-			equal(testVal, scope.attr("test"), "Attributes accessible");
-			equal(context.title, foodTypes[0].title, "Context passed in");
-			equal(title, foodTypes[0].title, "Title passed in");
-			equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
-		}
+			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
+				ok(true, "withArgs called");
+				equal(el1[0].nodeName.toLowerCase(), "can-event-args-tester", "@element is the event's DOM element");
+				equal(ev1.type, "click", "@event is the click event");
+				equal(scope, compScope, "Component scope accessible through @scope");
+				equal(testVal, scope.attr("test"), "Attributes accessible");
+				equal(context.title, foodTypes[0].title, "Context passed in");
+				equal(title, foodTypes[0].title, "Title passed in");
+				equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
+			}
 
-		frag = template({
-			foodTypes: foodTypes,
-			withArgs: withArgs
+			frag = template({
+				foodTypes: foodTypes,
+				withArgs: withArgs
+			});
+			ta.innerHTML = "";
+			ta.appendChild(frag);
+			p0 = ta.getElementsByClassName("with-args")[0];
+			can.trigger(p0, "click");
 		});
-		ta.innerHTML = "";
-		ta.appendChild(frag);
-		p0 = ta.getElementsByClassName("with-args")[0];
-		can.trigger(p0, "click");
-	});
+	}
 
 	if (window.jQuery) {
 		test("can-event passes extra args to handler", function () {
@@ -792,7 +794,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	test("can-EVENT can call intermediate functions before calling the final function (#1474)", function () {
 		var ta = document.getElementById("qunit-fixture");
-		var template = can.view.stache("<div class='click-me' can-click='{does.some.thing}'></div>");
+		var template = can.view.stache("<div id='click-me' can-click='{does.some.thing}'></div>");
 		var frag = template({
 			does: function(){
 				return {
@@ -810,7 +812,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		stop();
 		ta.appendChild(frag);
-		var div = ta.getElementsByClassName("click-me")[0];
-		can.trigger(div, "click");
+		can.trigger(document.getElementById("click-me"), "click");
 	});
 });
