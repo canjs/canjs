@@ -717,5 +717,15 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		equal( async(), 3, "can read unbound");
 	});
-	
+
+	test('compute.async getter has correct when length === 1', function(){
+		var m = new can.Map();
+
+		var getterCompute = can.compute.async(false, function (singleArg) {
+			equal(this, m, 'getter has the right context');
+		}, m);
+
+		getterCompute.bind('change', can.noop);
+	});
+
 });
