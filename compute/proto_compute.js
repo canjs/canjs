@@ -477,7 +477,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				// If it has a single argument, pass it the current value
 				// or the value from define.set.
 				data = setupComputeHandlers(this, function() {
-					return fn.call(settings, lastSetValue.get() );
+					return fn.call(settings.context, lastSetValue.get() );
 				}, settings);
 			} else {
 				// The updater function passed to on so that if called with
