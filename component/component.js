@@ -482,6 +482,10 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	can.scope = function (el, attr, val) {
 		el = can.$(el);
 		var scope = can.data(el, "scope");
+		if(!scope) {
+			scope = new can.Map();
+			can.data(el, "scope", scope);
+		}
 		switch (arguments.length) {
 			case 0:
 			case 1:

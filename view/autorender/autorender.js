@@ -42,7 +42,7 @@ steal("can/util",function(can){
 		var scope = can.scope(el);
 		
 		can.each(el.attributes||[], function(attr) {
-			setAttr(el, attr, scope);
+			setAttr(el, attr.name, scope);
 		});
 		
 		can.bind.call(el, "attributes", function (ev) {
