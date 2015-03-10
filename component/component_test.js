@@ -1,5 +1,5 @@
-steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
-	
+steal("can/component", "can/view/stache" ,"can/route", "can/map/define", "steal-qunit", function () {
+
 	QUnit.module('can/component', {
 		setup: function () {
 			can.remove(can.$("#qunit-fixture>*"));
@@ -1438,5 +1438,38 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.remove(can.$("#qunit-fixture>*"));
 
 		ok(state.attr('product') == null, 'product was removed');
+	});
+
+	test('Shoretel canjs@2.2', function () {
+
+		can.Component.extend({
+			tag: "hello-world",
+			template: "{{#if isRight}}is-right{{/if}}|{{#if isLeft}}not-right{{/if}}",
+			scope: {
+				direction: '@',
+				define: {
+					isRight: {
+						get: function () {
+							console.log(this); // can.Map
+							return this.attr('direction') === 'right';
+						}
+					},
+					isLeft: {
+						get: function (singleArgument) {
+							console.log(this); // can.Compute.async
+							return this.attr('direction') === 'left';
+						}
+					}
+				}
+			}
+		});
+
+		var template = can.view.mustache('<hello-world direction="left"></hello-world>');
+
+		can.append(can.$("#qunit-fixture"), template({
+			left: can.compute(0)
+		}));
+
+		equal(can.$("#qunit-fixture hello-world")[0].innerHTML, "not-right");
 	});
 });
