@@ -213,6 +213,11 @@
 			"type": "core",
 			"isDefault": true,
 			"hidden": true
+		},
+		"can/view/autorender/autorender": {
+			"name": "can.autorender",
+			"type": "plugin",
+			"description": "Automatically render templates found in the document"
 		}
 	},
 	"types": {

@@ -168,6 +168,7 @@
 		"./view/live/live": "./dist/cjs/view/live/live",
 		"./view/scope/scope": "./dist/cjs/view/scope/scope",
 		"./util/string/string": "./dist/cjs/util/string/string",
-		"./util/attr/attr": "./dist/cjs/util/attr/attr"
+		"./util/attr/attr": "./dist/cjs/util/attr/attr",
+		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender"
 	}
 }

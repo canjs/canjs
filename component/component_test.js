@@ -691,6 +691,14 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		}
 	});
 
+	test("can.scope creates one if it doesn't exist", function(){
+		can.append(can.$("#qunit-fixture"), can.view.mustache("<div id='me'></div>")());
+		var el = can.$("#me");
+		var scope = can.scope(el);
+		ok(!!scope, "Scope created where it didn't exist.");
+		equal(scope, can.data(el, "scope"), "Scope is in the data.");
+	});
+
 	test('setting passed variables - two way binding', function () {
 		can.Component({
 			tag: "my-toggler",
