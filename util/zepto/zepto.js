@@ -59,6 +59,9 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 		// Extend what you can out of Zepto.
 		var oldPlain = can.isPlainObject;
 		$.extend(can, Zepto);
+		can.inArray = function(el, arr) {
+			return !arr ? -1 : $.inArray.apply($, arguments);
+		};
 		can.isPlainObject = oldPlain;
 		can.each = oldEach;
 		can.attr = attr;
