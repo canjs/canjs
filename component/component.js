@@ -498,11 +498,11 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 		}
 	};
 
-	var $ = window.jQuery || window.Zepto;
+	var $ = can.$;
 
-	// If there is a `$` object and it has the `fn` object, create the
+	// If `$` has an `fn` object create the
 	// `scope` plugin that returns the scope object.
-	if (typeof $ !== 'undefined') {
+	if ($.fn) {
 		$.fn.scope = function () {
 			// Just use `can.scope` as the base for this function instead
 			// of repeating ourselves.
