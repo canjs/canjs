@@ -652,7 +652,9 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		// On change or a nested named event, setup change bubbling.
 		// On any other type of event, setup "destroyed" bubbling.
 		_bubbleRule: function(eventName, list) {
-			return can.List._bubbleRule(eventName, list) || "destroyed";
+			var bubbleRules = can.List._bubbleRule(eventName, list);
+			bubbleRules.push('destroyed');
+			return bubbleRules;
 		}
 	},{
 		setup: function (params) {

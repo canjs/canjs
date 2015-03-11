@@ -3,21 +3,15 @@ steal('can/util', 'can/list', function (can) {
 	// Change bubble rule to bubble on change if their is a comparator
 	var oldBubbleRule = can.List._bubbleRule;
 	can.List._bubbleRule = function(eventName, list) {
-		if(list.comparator) {
-			return "change";
+		var oldBubble = oldBubbleRule.apply(this, arguments);
+
+		if (list.comparator && can.inArray('change', oldBubble) === -1) {
+			oldBubble.push('change');
 		}
-		return oldBubbleRule.apply(this, arguments);
+
+		return oldBubble;
 	};
-	if(can.Model) {
-		var oldModelListBubble = can.Model.List._bubbleRule;
-		can.Model.List._bubbleRule = function(eventName, list){
-			if(list.comparator) {
-				return "change";
-			}
-			return oldModelListBubble.apply(this, arguments);
-		};
-	}
-		
+
 	var proto = can.List.prototype,
 		_changes = proto._changes,
 		setup = proto.setup;
