@@ -1,4 +1,4 @@
-steal("can/map/sort", "can/test", "can/view/mustache", "can/view/stache", "steal-qunit", function () {
+steal("can/map/sort", "can/test", "can/view/mustache", "can/view/stache", "can/model", "steal-qunit", function () {
 	QUnit.module('can/map/sort');
 
 	test('List events', (4*3), function () {
@@ -376,6 +376,33 @@ steal("can/map/sort", "can/test", "can/view/mustache", "can/view/stache", "steal
 
 		});
 
+		test('Push multiple items with ' + templateEngine + ' using the ' + helperType +' helper (#1509)', function () {
+			var el = document.createElement('div');
+
+			var items = new can.List();
+			items.comparator = 'id';
+
+			// Render the template and place inside the <div>
+			el.appendChild(renderer({
+				items: items
+			}));
+
+			items.bind('add', function (ev, items) {
+				equal(items.length, 1, 'One single item was added');
+			});
+
+			items.push([
+				{ id: 4 },
+				{ id: 1 },
+				{ id: 6 }
+			]);
+
+			var liLength = el.getElementsByTagName('li').length;
+
+			equal(liLength, 3, 'The correct number of items have been rendered');
+
+		});
+
 	}
 
 	var blockHelperTemplate = '<ul>{{#items}}<li>{{id}}</li>{{/items}}';
@@ -400,6 +427,25 @@ steal("can/map/sort", "can/test", "can/view/mustache", "can/view/stache", "steal
 		};
 		list.sort();
 		equal(list[0], 9, 'Sorted the list in descending order');
+	});
+
+	test('The "destroyed" event bubbles on a sorted list', 2, function () {
+
+		var list = new can.Model.List([
+			new can.Model({ name: 'Joe' }),
+			new can.Model({ name: 'Max' }),
+			new can.Model({ name: 'Pim' })
+		]);
+
+		list.comparator = 'name';
+
+		list.bind('destroyed', function (ev) {
+			ok(true, '"destroyed" event triggered');
+		});
+
+		list.attr(0).destroy();
+
+		equal(list.attr('length'), 2, 'item removed');
 	});
 
 });

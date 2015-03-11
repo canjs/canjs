@@ -3,21 +3,15 @@ steal('can/util', 'can/list', function (can) {
 	// Change bubble rule to bubble on change if their is a comparator
 	var oldBubbleRule = can.List._bubbleRule;
 	can.List._bubbleRule = function(eventName, list) {
-		if(list.comparator) {
-			return "change";
+		var oldBubble = oldBubbleRule.apply(this, arguments);
+
+		if (list.comparator && can.inArray('change', oldBubble) === -1) {
+			oldBubble.push('change');
 		}
-		return oldBubbleRule.apply(this, arguments);
+
+		return oldBubble;
 	};
-	if(can.Model) {
-		var oldModelListBubble = can.Model.List._bubbleRule;
-		can.Model.List._bubbleRule = function(eventName, list){
-			if(list.comparator) {
-				return "change";
-			}
-			return oldModelListBubble.apply(this, arguments);
-		};
-	}
-		
+
 	var proto = can.List.prototype,
 		_changes = proto._changes,
 		setup = proto.setup;
@@ -252,10 +246,11 @@ steal('can/util', 'can/list', function (can) {
 						var newIndex = this._getInsertIndex(val);
 						Array.prototype.splice.apply(this, [newIndex, 0, val]);
 
-						can.batch.trigger(this, 'reset', [args]);
-
-						this._triggerChange('' + newIndex, 'add', args, undefined);
+						this._triggerChange('' + newIndex, 'add', [val], undefined);
 					}
+
+					can.batch.trigger(this, 'reset', [args]);
+
 					return this;
 				} else {
 					// call the original method
@@ -313,7 +308,6 @@ steal('can/util', 'can/list', function (can) {
 				this._lastBatchNum = ev.batchNum;
 				return;
 			}
-			// debugger;
 
 			// get the index
 			var currentIndex = +/^\d+/.exec(attr)[0],
