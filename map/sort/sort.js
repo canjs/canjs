@@ -252,10 +252,11 @@ steal('can/util', 'can/list', function (can) {
 						var newIndex = this._getInsertIndex(val);
 						Array.prototype.splice.apply(this, [newIndex, 0, val]);
 
-						can.batch.trigger(this, 'reset', [args]);
-
 						this._triggerChange('' + newIndex, 'add', [val], undefined);
 					}
+
+					can.batch.trigger(this, 'reset', [args]);
+
 					return this;
 				} else {
 					// call the original method
