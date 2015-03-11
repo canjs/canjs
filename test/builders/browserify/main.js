@@ -5,7 +5,14 @@ can.Component.extend({
 	template: "{{message}}",
 	scope: {
 		message: "Hello World"
+	},
+	events: {
+		init: function() {
+			// Access scope from $.fn.scope.
+			var scope = this.element.scope();
+			scope.attr("name", "Matthew");
+		}
 	}
 });
 
-window.can= can;
+window.can = can;
