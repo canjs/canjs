@@ -308,7 +308,6 @@ steal('can/util', 'can/list', function (can) {
 				this._lastBatchNum = ev.batchNum;
 				return;
 			}
-			// debugger;
 
 			// get the index
 			var currentIndex = +/^\d+/.exec(attr)[0],
