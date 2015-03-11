@@ -23,14 +23,14 @@ button {
 	cursor: pointer;
 }
 </style>
-<script src="../../lib/steal/steal.js"></script>
+<script src="../../node_modules/steal/steal.js"></script>
 <script>
-steal('can/view/stache', 'can/map/sort', 'can/view/bindings', function(){
+steal('can/view/stache', 'can/list/sort', 'can/view/bindings', function(){
 
 var template = can.view.stache(
 	'<table>' +
 		'<tr>' +
-			'{{#each rows.0.cols}}' +
+			'{{#each rows.0}}' +
 				'<th>' +
 					'<button comparator-index="{{@index}}" can-click="changeComparator">' +
 						'&#9660;' +
@@ -40,7 +40,7 @@ var template = can.view.stache(
 		'</tr>' +
 		'{{#each rows}}' +
 			'<tr>' +
-				'{{#each cols}}' +
+				'{{#each .}}' +
 					'<td style="background-color: rgb({{color}}, {{color}}, {{color}});">' +
 						'{{num}}' +
 					'</td>' +
@@ -51,29 +51,26 @@ var template = can.view.stache(
 );
 
 var rows = new can.List();
-var rowCount = 50;
-var colCount = 50;
+var rowCount = 25;
+var colCount = 25;
 rows.comparator = 'cols.0.num';
 
 for (var i = 0; i < rowCount; i++) {
 
-	var col = new can.List();
-
-	var row = {
-		cols: col
-	};
+	var row = new can.List();
 
 	for (var j = 0; j < colCount; j++) {
 
 		var randomNumber = Math.round(Math.random() * 100);
 
-		col.attr(j, new can.Map({
+		var cell = new can.Map({
 			num: randomNumber,
 			color: function () {
 				var percentage = this.attr('num') / 100;
 				return 256 - Math.round(156 * percentage);
 			}
-		}));
+		});
+		row.push(cell);
 	}
 
 	// Push into the list after the values are generated, so that the
@@ -86,7 +83,7 @@ var data = {
 	changeComparator: function (map, el) {
 		var index = el.attr('comparator-index');
 
-		rows.comparator = 'cols.' + index + '.num';
+		rows.comparator = index + '.num';
 		rows.sort();
 		can.trigger(rows, 'length', [rows.length]);
 	}
@@ -100,8 +97,8 @@ $("#out").html( template( data , {}) );
 
 setInterval(function () {
 	can.batch.start();
-	data.rows.each(function (row) {
-		row.attr('cols').each(function (td) {
+	rows.each(function (row) {
+		row.each(function (td) {
 			td.attr('num', td.attr('num')+1);
 		});
 	})
@@ -112,4 +109,3 @@ setInterval(function () {
 
 });
 </script>
-
