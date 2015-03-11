@@ -22,13 +22,13 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script id="demo-source">
 steal("can/component",function(){
 
 can.Component.extend({
 	tag: "accordion",
-	scope: {
+	viewModel: {
 		// Contains a list of all panel scopes within the
 		// tabs element.
 		panels: [],
@@ -80,7 +80,7 @@ can.Component.extend({
 		"<h2 can-click='makeActive'>{{title}}</h2>"+
 		"{{#if active}}<content></content>{{/if}}",
 	tag:"panel",
-	scope: {
+	viewModel: {
 		active: false,
 		title: "@"
 	},

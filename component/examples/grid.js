@@ -1,6 +1,6 @@
 can.Component.extend({
 	tag: 'grid',
-	scope: {
+	viewModel: {
 		items: []
 	},
 	template: '<table><tbody><content></content></tbody></table>',

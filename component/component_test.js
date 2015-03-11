@@ -60,7 +60,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				"{{/panels}}" +
 				"</ul>" +
 				"<content></content>",
-			scope: {
+			viewModel: {
 				panels: [],
 				addPanel: function (panel) {
 
@@ -194,7 +194,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			tag: "hello-world",
 			leakScope: false,
 			template: can.view.mustache("{{greeting}} <content>World</content>{{exclamation}}"),
-			scope: {greeting: "Hello"}
+			viewModel: {greeting: "Hello"}
 		});
 		var template = can.view.mustache("<hello-world>{{greeting}}</hello-world>");
 		can.append(can.$("#qunit-fixture"), template({
@@ -208,7 +208,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "hello-world-no-template",
 			leakScope: false,
-			scope: {greeting: "Hello"}
+			viewModel: {greeting: "Hello"}
 		});
 		template = can.view.mustache("<hello-world-no-template>{{greeting}}</hello-world-no-template>");
 		can.append(can.$("#qunit-fixture"), template({
@@ -226,7 +226,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			tag: "hello-world",
 			leakScope: true,
 			template: can.view.mustache("{{greeting}} <content>World</content>{{exclamation}}"),
-			scope: {greeting: "Hello"}
+			viewModel: {greeting: "Hello"}
 		});
 		var template = can.view.mustache("<hello-world>{{greeting}}</hello-world>");
 		can.append(can.$("#qunit-fixture"), template({
@@ -261,7 +261,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				"{{/selectableItems}}" +
 				"</content>" +
 				"</ul>",
-			scope: {
+			viewModel: {
 				items: [],
 				breadcrumb: [],
 				selected: [],
@@ -626,7 +626,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "hello-world",
 			template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
-			scope: {
+			viewModel: {
 				visible: false,
 				message: "Hello There!"
 			},
@@ -652,7 +652,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component({
 			"tag": "my-greeting",
 			template: "<h1><content/></h1>",
-			scope: {
+			viewModel: {
 				title: "can.Component"
 			}
 		});
@@ -671,7 +671,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component({
 			tag: "my-taggy-tag",
 			template: "<h1>hello</h1>",
-			scope: {
+			viewModel: {
 				foo: "bar"
 			}
 		});
@@ -703,7 +703,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component({
 			tag: "my-toggler",
 			template: "{{#if visible}}<content/>{{/if}}",
-			scope: {
+			viewModel: {
 				visible: true,
 				show: function () {
 					this.attr('visible', true);
@@ -716,7 +716,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component({
 			tag: "my-app",
-			scope: {
+			viewModel: {
 				visible: true,
 				show: function () {
 					this.attr('visible', true);
@@ -754,7 +754,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component({
 			tag: 'my-text',
 			template: '<p>{{valueHelper}}</p>',
-			scope: {
+			viewModel: {
 				value: '@'
 			},
 			helpers: {
@@ -778,7 +778,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 	test('access hypenated attributes via camelCase or hypenated', function () {
 		can.Component({
 			tag: 'hyphen',
-			scope: {
+			viewModel: {
 				'camelCase': '@'
 			},
 			template: '<p>{{valueHelper}}</p>',
@@ -809,7 +809,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: 'my-scope',
 			template: "{{name}}}",
-			scope: me
+			viewModel: me
 		});
 
 		var template = can.view.mustache('<my-scope></my-scope>');
@@ -824,7 +824,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "my-list",
 			template: "{{#each items}}<li><content/></li>{{/each}}",
-			scope: {
+			viewModel: {
 				items: new can.List([{
 					name: "one"
 				}, {
@@ -908,7 +908,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "my-helloworld",
 			template: "<h1>{{#if visible}}visible{{else}}invisible{{/if}}</h1>",
-			scope: HelloWorldModel
+			viewModel: HelloWorldModel
 		});
 
 		var template = can.view.mustache("<my-helloworld></my-helloworld>");
@@ -982,7 +982,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component({
 			tag: 'child-tag',
 
-			scope: {
+			viewModel: {
 				init: function () {
 					inited++;
 				}
@@ -999,7 +999,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 			template: '{{#shown}}<child-tag></child-tag>{{/shown}}',
 
-			scope: {
+			viewModel: {
 				shown: false
 			},
 			events: {
@@ -1025,7 +1025,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component.extend({
 			tag: "panel",
-			scope: PanelViewModel
+			viewModel: PanelViewModel
 		});
 
 		var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({
@@ -1042,7 +1042,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "attr-fun",
 			template: "<h1>{{fullName}}</h1>",
-			scope: {
+			viewModel: {
 				firstName: "@",
 				lastName: "@",
 				fullName: function () {
@@ -1074,7 +1074,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 	test("id, class, and dataViewId should be ignored (#694)", function () {
 		can.Component.extend({
 			tag: "stay-classy",
-			scope: {
+			viewModel: {
 				notid: "foo",
 				notclass: 5,
 				notdataviewid: {}
@@ -1113,7 +1113,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "parent-tag",
 			template: '<child-tag can-click="method"></child-tag>',
-			scope: {
+			viewModel: {
 				method: function () {
 					called = true;
 				}
@@ -1296,14 +1296,14 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component.extend({
 			tag: "can-parent-stache",
-			scope: {
+			viewModel: {
 				shown: true
 			},
 			template: can.stache("{{#if shown}}<can-child></can-child>{{/if}}")
 		});
 		can.Component.extend({
 			tag: "can-parent-mustache",
-			scope: {
+			viewModel: {
 				shown: true
 			},
 			template: can.mustache("{{#if shown}}<can-child></can-child>{{/if}}")
@@ -1333,7 +1333,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: "foobar",
 			template: "<div>{{name}}</div>",
-			scope: {
+			viewModel: {
 				name: "Brian"
 			}
 		});
@@ -1346,7 +1346,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.Component.extend({
 			tag: 'parent-component',
 			template: can.stache('{{#if shown}}<child-component></child-component>{{/if}}'),
-			scope: {
+			viewModel: {
 				shown: false
 			}
 		});
@@ -1402,7 +1402,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component.extend({
 			tag:'my-app',
-			scope: {
+			viewModel: {
 				MyConstruct: Test
 			},
 			events: {

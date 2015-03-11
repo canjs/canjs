@@ -2,7 +2,7 @@
 @parent can.Component.prototype
 
 Provides a template to render directly within the component's tag. The template is rendered with the
-component's [can.Component::scope scope].  `<content>` elements within the template are replaced by 
+component's [can.Component::viewModel viewModel].  `<content>` elements within the template are replaced by
 the source elements within the component's tag.
 
 @option {String} The string contents of a [can.mustache] template.  For example:
@@ -33,7 +33,7 @@ with the `<content>` tag.
 There are three things to understand about a [can.Component]'s template:
 
  - It is inserted into the component's tag.
- - It is rendered with access to the component instance's scope.
+ - It is rendered with access to the component instance's viewModel.
  - `<content>` tags within the template act as insertion points for the source elements.
 
 The following example demonstrates all three features:
@@ -47,7 +47,7 @@ __can.Component:__
     can.Component({
       "tag": "my-greeting",
       template: "<h1><content/></h1>",
-      scope: {
+      viewModel: {
         title: "can.Component"
       }
     })
@@ -55,7 +55,7 @@ __can.Component:__
 This registers a component for elements like `<my-greeting>`. Its template
 will place an `<h1>` element directly within `<my-greeting>` and put
 the original contents of `<my-greeting>` within the `<h1>`. The component's
-[can.Component::scope scope] adds a title value.
+[can.Component::viewModel viewModel] adds a title value.
 
 __Source template:__
 
@@ -81,7 +81,7 @@ __Source data:__
     })
 
 This is how we render the source template that uses `<my-greeting>`. Notice
-that the template is rendered with `site` in its [can.view.Scope scope].
+that the template is rendered with `site` in its [can.view.viewModel viewModel].
 
 __HTML Result:__
 
@@ -94,7 +94,7 @@ __HTML Result:__
 This is the result of the template transformations.  Notice that the
 content within the original `<my-greeting>` is placed within the `<h1>` 
 tag.  Also, notice that the original content is able to access data from
-the source data and from the component's scope.
+the source data and from the component's viewModel.
  
 The following sections break this down more.
 

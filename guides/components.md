@@ -11,7 +11,7 @@ Create a component constructor function by
 
     can.Component.extend({
       tag: "my-element",
-      scope: {
+      viewModel: {
         visible: true,
         toggle: function(){
           this.attr("visible", !this.attr("visible") )
@@ -41,8 +41,8 @@ Where:
 
  - [tag](../docs/can.Component.prototype.tag.html) - Specifies the HTML element that 
    components are created on.
- - [scope](../docs/can.Component.prototype.scope.html) - Describes a [can.Map](../docs/can.Map.html) that
-   is added to the scope used to render the component's template.
+ - [viewModel](../docs/can.Component.prototype.viewModel.html) - Describes a [can.Map](../docs/can.Map.html) that
+   is added to the viewModel used to render the component's template.
  - [template](../docs/can.Component.prototype.template.html) - A template who's content
    gets inserted within the component's element.
  - [helpers](../docs/can.Component.prototype.helpers.html) - Local mustache helpers
@@ -136,13 +136,13 @@ same [can.view.Scope scope] as the scope where the custom element is
 found within the source template. But, you can adjust the 
 scope with can.Component's scope property.
 
-## Scope 
+## ViewModel
 
-A template's [scope](../docs/can.Component.prototype.scope.html) property 
-allows you to adjust the scope used to render the component's 
+A template's [viewModel](../docs/can.Component.prototype.viewModel.html) property
+allows you to adjust the viewModel used to render the component's
 template.  If a plain JavaScript object is used, that object is used
 to extend and create an instance of [can.Map](../docs/can.Map.html) and
-add to the top to the scope used to render the template.
+add to the top to the viewModel used to render the template.
 
 For example, we can add a visible property to control if the input element
 is visible or not:
@@ -152,16 +152,16 @@ is visible or not:
       template: "<form>Editor: "+
                   "{{#if visible}}<input type='text'/>{{/if}}"+
                 "</form>",
-      scope: {
+      viewModel: {
         visible: true
       }
     })
 
-### Scope bindings
+### ViewModel bindings
 
 This isn't interesting without a way to change toggling the 
 visible property. We can tell our template to call a `toggle` method
-on the scope anytime someone clicks the form 
+on the viewModel anytime someone clicks the form
 with [template bindings](../docs/can.view.bindings.html) like:
 
     can.Component.extend({
@@ -169,7 +169,7 @@ with [template bindings](../docs/can.view.bindings.html) like:
       template: "<form can-click='toggle'>Editor: "+
                   "{{#if visible}}<input type='text'/>{{/if}}"+
                 "</form>",
-      scope: {
+      viewModel: {
         visible: true,
         toggle: function(context, el, ev){
           this.attr("visible", !this.attr("visible") )
@@ -181,19 +181,19 @@ Check it out here:
 
 @demo can/guides/components/scope-0.html
 
-When bindings are used like this, the scope function is called back with
+When bindings are used like this, the viewModel function is called back with
 the element's context, the element, and the event.
 
-### Scope value functions
+### ViewModel value functions
 
-Scope functions can also be called for their value. For example:
+viewModel functions can also be called for their value. For example:
 
     can.Component.extend({
       tag: "todos-editor",
       template: "<form can-click='toggle'>{{visibility}}: "+
                   "{{#if visible}}<input type='text'/>{{/if}}"+
                 "</form>",
-      scope: {
+      viewModel: {
         visible: true,
         toggle: function(context, el, ev){
           this.attr("visible", !this.attr("visible") )
@@ -207,10 +207,10 @@ Scope functions can also be called for their value. For example:
 
 @demo can/guides/components/scope-1.html
 
-### Scope as a can.Map constructor function
+### ViewModel as a can.Map constructor function
 
-The scope object can also be defined as a can.Map constructor function.  This
-makes it easier to test the scope object independent of the component's 
+The viewModel object can also be defined as a can.Map constructor function.  This
+makes it easier to test the viewModel object independent of the component's
 rendering.  For example:
 
     
@@ -230,7 +230,7 @@ rendering.  For example:
       template: "<form can-click='toggle'>{{visibility}}: "+
                   "{{#if visible}}<input type='text'/>{{/if}}"+
                 "</form>",
-      scope: TodosEditorState
+      viewModel: TodosEditorState
     })
 
     // TEST CODE
@@ -240,7 +240,7 @@ rendering.  For example:
     editor.toggle();
     equal( editor.visibility(), "invisible" );
     
-### Passing values to a component's scope
+### Passing values to a component's viewModel
     
 Often, you want to pass values to a component.  This is done by 
 setting attributes on the component's element. For example,
@@ -257,7 +257,7 @@ template.  To do this, add a `todo='mytodo'` attribute.
       template: "{{#if todo}}"+
                   "<input type='text' can-value='todo.name'/>"+
                 "{{/if}}",
-      scope: {}
+      viewModel: {}
     })
 
     var frag = template({
@@ -273,7 +273,7 @@ todo's name.
 @demo can/guides/components/scope-2.html
 
 Sometimes, you want to specify attribute values that are not looked up in the 
-scope.  For example, you might want to give `todos-editor` placeholder text as follows:
+viewModel.  For example, you might want to give `todos-editor` placeholder text as follows:
 
     var template = can.mustache(
                      "<h1>Todo: {{mytodo.name}}</h1>"+
@@ -282,7 +282,7 @@ scope.  For example, you might want to give `todos-editor` placeholder text as f
                     "</todos-editor>")
 
 We can modify the component to read the string placeholder value by setting
-`placeholder` in the scope to "@".  This is a special flag that indicates to 
+`placeholder` in the viewModel to "@".  This is a special flag that indicates to
 simply use the attribute's value.
 
     can.Component.extend({
@@ -292,7 +292,7 @@ simply use the attribute's value.
                          "placeholder='{{placeholder}}' "+
                          "can-value='todo.name'/>"+
                 "{{/if}}",
-      scope: {
+      viewModel: {
         placeholder: "@"
       }
     })
@@ -320,7 +320,7 @@ helper that is used to set the className on a todo's `<li>` element:
     		    "</li>"+
     		  "{{/each}}"+
     		"</ul>",
-    	scope: {
+    	viewModel: {
     		todos: new Todo.List({}),
     		select: function(todo){
     			can.route.attr("id",todo.attr("id"))
@@ -336,7 +336,7 @@ helper that is used to set the className on a todo's `<li>` element:
     });
 
 Notice that `options.context` is used to retrieve the todo because
-`this` within `todoClass` is the scope.
+`this` within `todoClass` is the viewModel.
 
 @demo can/guides/components/helpers-0.html
 
@@ -344,29 +344,29 @@ Notice that `options.context` is used to retrieve the todo because
 ## Events
 
 A component's [events](../docs/can.Component.prototype.events.html) object is 
-used to create a [can.Control] that has access to scope as 
-`this.scope`.  Use it to listen to events safely.
+used to create a [can.Control] that has access to viewModel as
+`this.viewModel`.  Use it to listen to events safely.
 
 For example, we can create a `todos-app` component that
 manages the high-level state of the application. It listens
 to changes in [can/route](../docs/can.route.html) and
-updates the scope's `todo` property. And, if 
+updates the viewModel's `todo` property. And, if
 a todo is destroyed that matches the route's `id`,
 the route's `id` is removed:
 
     can.Component.extend({
       tag: "todos-app",
-      scope: {
+      viewModel: {
         todo: null
       },
       events: {
         "{can.route} id": function(route, ev, id){
           if(id){
             Todo.findOne({id: id}, $.proxy(function(todo){
-              this.scope.attr("todo", todo)
+              this.viewModel.attr("todo", todo)
             }, this))
           } else {
-            this.scope.removeAttr("todo")
+            this.viewModel.removeAttr("todo")
           }
         },
         "{Todo} destroyed": function(Todo, ev, destroyedTodo){
@@ -378,7 +378,7 @@ the route's `id` is removed:
     })
 
 
-You can use templated event binding to listen to changes in scope 
+You can use templated event binding to listen to changes in viewModel
 objects.  Adding the following to `todo-app`'s events object
 listens to todo changes and saves the changes.
 

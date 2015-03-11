@@ -61,7 +61,7 @@ almost any JavaScript code is valid in `<% %>`, EJS is incredibly powerful.
 
 Due to constraints necessary for live binding to function, it is heavily
 encouraged to only have one line of JS code per pair of EJS tags in order to
-ensure that the correct scope is maintained.
+ensure that the correct viewModel is maintained.
 
 @codestart
 <% if(todos.attr('length') > 0) { %>

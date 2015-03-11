@@ -53,14 +53,14 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			});
 			template = can.view.mustache("<div>" +
 			"{{#each foodTypes}}" +
-			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @scope @scope.test . title content=content}'/>" +
+			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
 			"{{/each}}" +
 			"</div>");
 			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
 				ok(true, "withArgs called");
 				equal(el1[0].nodeName.toLowerCase(), "can-event-args-tester", "@element is the event's DOM element");
 				equal(ev1.type, "click", "@event is the click event");
-				equal(scope, compScope, "Component scope accessible through @scope");
+				equal(scope, compScope, "Component scope accessible through @viewModel");
 				equal(testVal, scope.attr("test"), "Attributes accessible");
 				equal(context.title, foodTypes[0].title, "Context passed in");
 				equal(title, foodTypes[0].title, "Title passed in");

@@ -1,6 +1,6 @@
 <body>
 <div id='app'></div>
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/mustache' id='app-template'>
 <todo-app>
 	<todo-list todos="listOfTodos">
@@ -30,7 +30,7 @@ steal("can/component", function() {
 		can.Component.extend({
 		tag: "todo-list",
 		template: can.view("todo-list-template"),
-		scope: {
+		viewModel: {
 			completedTodos: function(){
 				var count = 0;
 				this.attr('todos').each(function(todo){
@@ -55,7 +55,7 @@ steal("can/component", function() {
 	
 	can.Component.extend({
 		tag: "todo-app",
-		scope:{
+		viewModel:{
 			listOfTodos: new can.List([{name: "Take out trash", completed: true},
 							{name: "Mow Lawn", completed: false}])
 		}
