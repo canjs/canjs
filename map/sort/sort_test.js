@@ -376,6 +376,33 @@ steal("can/map/sort", "can/test", "can/view/mustache", "can/view/stache", "steal
 
 		});
 
+		test('Push multiple items with ' + templateEngine + ' using the ' + helperType +' helper (#1509)', function () {
+			var el = document.createElement('div');
+
+			var items = new can.List();
+			items.comparator = 'id';
+
+			// Render the template and place inside the <div>
+			el.appendChild(renderer({
+				items: items
+			}));
+
+			items.bind('add', function (ev, items) {
+				equal(items.length, 1, 'One single item was added');
+			});
+
+			items.push([
+				{ id: 4 },
+				{ id: 1 },
+				{ id: 6 }
+			]);
+
+			var liLength = el.getElementsByTagName('li').length;
+
+			equal(liLength, 3, 'The correct number of items have been rendered');
+
+		});
+
 	}
 
 	var blockHelperTemplate = '<ul>{{#items}}<li>{{id}}</li>{{/items}}';

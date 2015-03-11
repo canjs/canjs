@@ -254,7 +254,7 @@ steal('can/util', 'can/list', function (can) {
 
 						can.batch.trigger(this, 'reset', [args]);
 
-						this._triggerChange('' + newIndex, 'add', args, undefined);
+						this._triggerChange('' + newIndex, 'add', [val], undefined);
 					}
 					return this;
 				} else {
