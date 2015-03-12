@@ -5,8 +5,8 @@ steal('can/util', function(can){
 	var bubble = can.bubble = {
 			// Given a binding, returns a string event name used to set up bubbline.
 			// If no binding should be done, undefined or null should be returned
-			event: function(map, eventName) {
-				return map.constructor._bubbleRule(eventName, map);
+			event: function(map, boundEventName) {
+				return map.constructor._bubbleRule(boundEventName, map);
 			},
 			childrenOf: function (parentMap, eventName) {
 
@@ -58,11 +58,17 @@ steal('can/util', function(can){
 			},
 			bind: function(parent, eventName) {
 				if (!parent._init ) {
-					var bubbleEvent = bubble.event(parent, eventName);
-					if(bubbleEvent) {
-						if(!parent._bubbleBindings) {
-							parent._bubbleBindings = {};
-						}
+					var bubbleEvents = bubble.event(parent, eventName),
+						len = bubbleEvents.length,
+						bubbleEvent;
+
+					if(!parent._bubbleBindings) {
+						parent._bubbleBindings = {};
+					}
+
+					for (var i = 0; i < len; i++) {
+						bubbleEvent = bubbleEvents[i];
+
 						if (!parent._bubbleBindings[bubbleEvent]) {
 							parent._bubbleBindings[bubbleEvent] = 1;
 							// setup live-binding
@@ -70,16 +76,21 @@ steal('can/util', function(can){
 						} else {
 							parent._bubbleBindings[bubbleEvent]++;
 						}
-
 					}
 				}
 			},
 			unbind: function(parent, eventName) {
-				var bubbleEvent = bubble.event(parent, eventName);
-				if(bubbleEvent) {
+				var bubbleEvents = bubble.event(parent, eventName),
+					len = bubbleEvents.length,
+					bubbleEvent;
+
+				for (var i = 0; i < len; i++) {
+					bubbleEvent = bubbleEvents[i];
+
 					if (parent._bubbleBindings ) {
 						parent._bubbleBindings[bubbleEvent]--;
 					}
+
 					if (parent._bubbleBindings && !parent._bubbleBindings[bubbleEvent] ) {
 						delete parent._bubbleBindings[bubbleEvent];
 						bubble.teardownChildrenFrom(parent, bubbleEvent);

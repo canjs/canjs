@@ -1,7 +1,7 @@
 @page can.List.prototype.sort
 @parent can.List.prototype
-@plugin can/map/sort
-@test can/map/sort/test.html
+@plugin can/list/sort
+@test can/list/sort/test.html
 
 Two-way bind a [can.List]'s sort order to the DOM.
 

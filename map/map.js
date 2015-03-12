@@ -89,7 +89,9 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			_bubble: bubble,
 			// Given an eventName, determine if bubbling should be setup.
 			_bubbleRule: function(eventName) {
-				return (eventName === "change" || eventName.indexOf(".") >= 0 ) && "change";
+				return (eventName === "change" || eventName.indexOf(".") >= 0 ) ?
+					["change"] :
+					[];
 			},
 			// List of computes on the Map's prototype.
 			_computes: [],
