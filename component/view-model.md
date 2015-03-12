@@ -2,11 +2,20 @@
 @parent can.Component.prototype
 
 Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
+used to retrieve values found in the component's [can.Component::template template].
+
+@deprecated In 2.2 `scope` has been renamed to [can.Component::viewModel] to avoid confusion with [can.view.Scope]. `scope` is still available for backwards compatibility.
+
+
+@property {Object|can.Map|function} can.Component.prototype.viewModel
+@parent can.Component.prototype
+
+Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
 used to retrieve values found in the component's [can.Component::template template]. The map 
 instance is initialized with values specified by the component element's attributes.
 
-@deprecated {2.1} In 2.1, [can.stache] and [can.mustache] pass values to the 
-scope differently. To pass data from the scope, you must wrap your attribute 
+__Node:__ In 2.1, [can.stache] and [can.mustache] pass values to the
+viewModel differently. To pass data from the viewModel, you must wrap your attribute 
 value with `{}`. In 3.0, `can.mustache`
 will use `can.stache`'s syntax.
 
@@ -15,7 +24,7 @@ will use `can.stache`'s syntax.
 
     can.Component.extend({
       tag: "my-paginate",
-      scope: {
+      viewModel: {
         offset: 0,
         limit: 20,
         next: function(){
@@ -24,12 +33,12 @@ will use `can.stache`'s syntax.
       }
     })
 
-Prototype properties that have values of `"@"` are not looked up in the current scope, instead
+Prototype properties that have values of `"@"` are not looked up in the current viewModel, instead
 the literal string value of the relevant attribute is used (like pass by value instead of pass by reference).  For example:
 
     can.Component.extend({
       tag: "my-tag",
-      scope: {
+      viewModel: {
         title: "@"
       },
       template: "<h1>{{title}}</h1>"
@@ -44,7 +53,7 @@ Results in:
     <my-tag><h1>hello</h1></my-tag>
 
 @option {can.Map} A `can.Map` constructor function will be used to create an instance of the observable
-`can.Map` placed at the head of the template's scope.  For example:
+`can.Map` placed at the head of the template's viewModel.  For example:
 
     var Paginate = can.Map.extend({
       offset: 0,
@@ -55,12 +64,12 @@ Results in:
     })
     can.Component.extend({
       tag: "my-paginate",
-      scope: Paginate
+      viewModel: Paginate
     })
     
 
 @option {function} Returns the instance or constructor function of the object that will be added
-to the scope.
+to the viewModel.
 
 @param {Object} attrs An object of values specified by the custom element's attributes. For example,
 a template rendered like:
@@ -73,35 +82,35 @@ Creates an instance of following control:
 
     can.Component.extend({
     	tag: "my-element",
-    	scope: function(attrs){
+    	viewModel: function(attrs){
     	  attrs.title //-> "Justin";
     	  return new can.Map(attrs);
     	}
     })
 
-And calls the scope function with `attrs` like `{title: "Justin"}`.
+And calls the viewModel function with `attrs` like `{title: "Justin"}`.
 
-@param {can.view.Scope} parentScope
+@param {can.view.viewModel} parentviewModel
 
-The scope the custom tag was found within.  By default, any attribute's values will
-be looked up within the current scope, but if you want to add values without needing
+The viewModel the custom tag was found within.  By default, any attribute's values will
+be looked up within the current viewModel, but if you want to add values without needing
 the user to provide an attribute, you can set this up here.  For example:
 
     can.Component.extend({
     	tag: "my-element",
-    	scope: function(attrs, parentScope){
-    	  return new can.Map({title: parentScope.attr('name')});
+    	viewModel: function(attrs, parentviewModel){
+    	  return new can.Map({title: parentviewModel.attr('name')});
     	}
     });
 
-Notice how the attribute's value is looked up in `my-element`'s parent scope.
+Notice how the attribute's value is looked up in `my-element`'s parent viewModel.
 
 @param {HTMLElement} element The element the [can.Component] is going to be placed on. If you want
 to add custom attribute handling, you can do that here.  For example:
 
     can.Component.extend({
     	tag: "my-element",
-    	scope: function(attrs, parentScope, el){
+    	viewModel: function(attrs, parentviewModel, el){
     	  return new can.Map({title: el.getAttribute('title')});
     	}
     });
@@ -112,7 +121,7 @@ to add custom attribute handling, you can do that here.  For example:
  - The prototype of a `can.Map` that will be used to render the component's template.
  
 @option {can.Map} If an instance of `can.Map` is returned, that instance is placed
-on top of the scope and used to render the component's template.
+on top of the viewModel and used to render the component's template.
 
 @option {Object} If a plain JavaScript object is returned, that is used as a prototype
 definition used to extend `can.Map`.  A new instance of the extended Map is created.
@@ -121,14 +130,14 @@ definition used to extend `can.Map`.  A new instance of the extended Map is crea
 
 ## Use
 
-[can.Component]'s scope property is used to define an __object__, typically an instance
+[can.Component]'s viewModel property is used to define an __object__, typically an instance
 of a [can.Map], that will be used to render the component's 
 template. This is most easily understood with an example.  The following
 component shows the current page number based off a `limit` and `offset` value:
 
     can.Component.extend({
       tag: "my-paginate",
-      scope: {
+      viewModel: {
         offset: 0,
         limit: 20,
         page: function(){
@@ -147,7 +156,7 @@ It would result in:
 
     <my-paginate>Page 1</my-paginate>
     
-This is because the provided scope object is used to extend a can.Map like:
+This is because the provided viewModel object is used to extend a can.Map like:
 
     CustomMap = can.Map.extend({
       offset: 0,
@@ -165,22 +174,22 @@ Next, a new instance of CustomMap is created with the attribute data within `<my
 
     componentData = new CustomMap(attrs);
     
-And finally, that data is added to the `parentScope` of the component, used to 
+And finally, that data is added to the `parentviewModel` of the component, used to 
 render the component's template, and inserted into the element:
 
-    var newScope = parentScope.add(componentData),
-        result = can.mustache("Page {{page}}.")(newScope);
+    var newviewModel = parentviewModel.add(componentData),
+        result = can.mustache("Page {{page}}.")(newviewModel);
     $(element).html(result);
 
 ## Values passed from attributes
 
-Values can be "passed" into the scope of a component, similar to passing arguments into a function. By default, 
+Values can be "passed" into the viewModel of a component, similar to passing arguments into a function. By default, 
 custom tag attributes (other than `class` and `id`) are looked up
-in the parent scope and set as observable values on the [can.Map] instance. 
+in the parent viewModel and set as observable values on the [can.Map] instance. 
 
 Values passed in this way are passed similar to function arguments that are "pass by reference" because they are crossbound to 
-the property in the parent scope. Changes in the parent scope property that is passed in trigger changes in this component's scope 
-property, and likewise, changes in the component's scope property trigger a change in the parent scope property.
+the property in the parent viewModel. Changes in the parent viewModel property that is passed in trigger changes in this component's viewModel 
+property, and likewise, changes in the component's viewModel property trigger a change in the parent viewModel property.
 
 As mentioned in the deprecation warning above, using [can.stache], values are passed into components like this:
 
@@ -203,7 +212,7 @@ The following component requires an `offset` and `limit`:
 
     can.Component.extend({
       tag: "my-paginate",
-      scope: {
+      viewModel: {
         page: function(){
           return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
         }
@@ -235,22 +244,22 @@ index like:
 ### Using attribute values
 
 You can also pass a literal string value of the attribute instead of the attribute's value looked up in
-the parent scope (similar to pass by value). 
+the parent viewModel (similar to pass by value). 
 
-To do this in [can.stache], simply pass any value not wrapped in single brackets, and the scope property will
+To do this in [can.stache], simply pass any value not wrapped in single brackets, and the viewModel property will
 be initialized to this string value:
 
     <my-tag title="hello"></my-tag>
 
-The above will create a title property in the component's scope, which has a string `hello`.  If instead hello was wrapped with
-brackets like `{hello}`, a hello property would be looked up in the parent's scope.
+The above will create a title property in the component's viewModel, which has a string `hello`.  If instead hello was wrapped with
+brackets like `{hello}`, a hello property would be looked up in the parent's viewModel.
 
-To do this in [can.mustache], pass a value like in `can.stache`, and set the corresponding scope property in the component
+To do this in [can.mustache], pass a value like in `can.stache`, and set the corresponding viewModel property in the component
 to `@`.  For example:
 
     can.Component.extend({
       tag: "my-tag",
-      scope: {
+      viewModel: {
         title: "@"
       },
       template: "<h1>{{title}}</h1>"
@@ -266,7 +275,7 @@ Results in:
 
 In 3.0, `can.mustache` syntax (requiring `"@"`) will change to `can.stache`'s (not requiring `"@"`).
 
-If the tag's `title` attribute is changed, it updates the scope property 
+If the tag's `title` attribute is changed, it updates the viewModel property 
 automatically.  This can be seen in the following example:
 
 @demo can/component/examples/accordion.html
@@ -279,15 +288,15 @@ Clicking the __Change title__ button sets a `<panel>` element's `title` attribut
     });
 
 
-## Calling methods on scope from events within the template
+## Calling methods on viewModel from events within the template
 
-Using html attributes like `can-EVENT-METHOD`, you can directly call a scope method
+Using html attributes like `can-EVENT-METHOD`, you can directly call a viewModel method
 from a template. For example, we can make `<my-paginate>` elements include a next
-button that calls the scope's `next` method like:
+button that calls the viewModel's `next` method like:
 
     can.Component.extend({
       tag: "my-paginate",
-      scope: {
+      viewModel: {
         offset: 0,
         limit: 20,
         next: function(context, el, ev){
@@ -300,7 +309,7 @@ button that calls the scope's `next` method like:
       template: "Page {{page}} <button can-click='next'>Next</button>"
     })
 
-Scope methods get called back with the current context, the element that you are listening to
+viewModel methods get called back with the current context, the element that you are listening to
 and the event that triggered the callback.
 
 @demo can/component/examples/paginate_next.html

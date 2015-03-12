@@ -1,6 +1,6 @@
 <body>
 <div id='out'></div>
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 
 
 
@@ -15,7 +15,7 @@ steal("can/component", function() {
 
 	can.Component.extend({
 		tag: "name-editor",
-		scope: {
+		viewModel: {
 			firstPH: "first",
 			lastPH: "last",
 			honorific: function(){

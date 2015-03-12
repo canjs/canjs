@@ -209,10 +209,12 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				var args = [];
 				var $el = can.$(this);
+				var viewModel = can.viewModel($el[0]);
 				var localScope = data.scope.add({
 					"@element": $el,
 					"@event": ev,
-					"@scope": can.scope($el[0]),
+					"@viewModel": viewModel,
+					"@scope": viewModel,
 					"@context": data.scope._context
 				});
 

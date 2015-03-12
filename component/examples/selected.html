@@ -19,7 +19,7 @@
 </script>
 </div>
 
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script>
 	DEMO_HTML = document.getElementById("html").innerHTML;
 </script>
@@ -28,7 +28,7 @@ steal("can/component", function() {
 
   can.Component.extend({
     tag: "my-items",
-    scope: {
+    viewModel: {
       selected: [],
       toggle: function(item){
       	var selected = this.attr('selected'),

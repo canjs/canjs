@@ -1,12 +1,12 @@
 <body>
 <div id='out'></div>
-<script src="../node_modules/steal/steal.js" main="@empty"></script>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'> 
 steal("can/component", function() {
 
     can.Component.extend({
       tag: "my-paginate",
-      scope: {
+      viewModel: {
         offset: 0,
         limit: 20,
         next: function(){

@@ -15,7 +15,7 @@ three forms of observables:
 
 can.Map and can.List are often extended to create observable types. 
 [Models](../docs/can.Model.html) and [can.route](../docs/can.route.html) are
-based on can.Map, and can.Component's [scope](../docs/can.Component.prototype.scope.html) is a 
+based on can.Map, and can.Component's [viewModel](../docs/can.Component.prototype.view-model.html) is a
 can.Map, but observables are useful on their own too.
 
 To create a Map, call `new can.Map(obj)`. This will give you a map

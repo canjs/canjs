@@ -23,7 +23,7 @@ dom elements or observable objects the component listens to.
 @option {can.Component.prototype.helpers} [helpers] Specifies mustache helpers
 used to render the component's template.
 
-@option {can.Component.prototype.scope} [scope] Specifies an object
+@option {can.Component.prototype.viewModel} [viewModel] Specifies an object
 that is is used to render the component's template.
 
 @option {can.Component.prototype.tempate} [template] Specifies the template

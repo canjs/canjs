@@ -9,7 +9,7 @@
 @description Create widgets that use a template, a view-model 
 and custom tags.
 
-@warning {2.1} To pass data from the scope, you must wrap your attribute
+@warning {2.1} To pass data from the viewModel, you must wrap your attribute
 value with `{}`. In 3.0, [can.mustache]
 will use [can.stache]'s method.
 
@@ -23,18 +23,18 @@ property of the component.
 
 @param {String} ATTR-NAME An HTML attribute name. Any attribute name is
 valid. Any attributes added to the element are added as properties to the
-component's [can.Component::scope scope].
+component's [can.Component::viewModel viewModel].
 
 @param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
-the component instance's [can.Component::scope scope]. By default `ATTR-VALUE`
-values are looked up in the [can.view.Scope can.mustache scope]. If the string value
+the component instance's [can.Component::viewModel viewModel]. By default `ATTR-VALUE`
+values are looked up in the [can.view.viewModel can.mustache viewModel]. If the string value
 of the `ATTR-NAME` is desired, this can be specified like: 
 
     ATTR-NAME: "@"
 
 @param {can.mustache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::scope scope] that will be looked
-up in the [can.view.Scope can.stache scope]. 
+the component instance's [can.Component::viewModel viewModel] that will be looked
+up in the [can.view.Scope can.stache scope].
 
 @signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
 
@@ -48,21 +48,21 @@ property of the component.
 
 @param {String} ATTR-NAME An HTML attribute name. Any attribute name is
 valid. Any attributes added to the element are added as properties to the
-component's [can.Component::scope scope]. In the DOM, attribute names
-are case insensitive.  To pass a camelCase attribute to the component's scope,
+component's [can.Component::viewModel viewModel]. In the DOM, attribute names
+are case insensitive.  To pass a camelCase attribute to the component's viewModel,
 hypenate the attribute name like:
 
     <tag attr-name="{key}"></tag>
 
-This will set `attrName` on the component's scope.
+This will set `attrName` on the component's viewModel.
 
 @param {can.stache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::scope scope] that will be looked
+the component instance's [can.Component::viewModel viewModel] that will be looked
 up in the [can.view.Scope can.stache scope]. 
 
 @param {can.stache.key} [ATTR-VALUE] If the attribute value is not
 wrapped with `{}`, the string value of the attribute will be
-set on the component's scope.
+set on the component's viewModel.
 
 @body
 
@@ -74,13 +74,13 @@ with the methods and properties of how your component behaves:
     can.Component.extend({
       tag: "hello-world",
       template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
-      scope: {
+      viewModel: {
         visible: false,
         message: "Hello There!"
       },
       events: {
         click: function(){
-        	this.scope.attr("visible", !this.scope.attr("visible") );
+        	this.viewModel.attr("visible", !this.viewModel.attr("visible") );
         }
       }
     });
@@ -159,13 +159,13 @@ Changes `<hello-world>Hi There</hello-world>` into:
 
     <hello-world><h1>Hi There</h1></hello-world>
 
-### Scope
+### viewModel
 
-A component's [can.Component::scope scope] defines a can.Map that
+A component's [can.Component::viewModel viewModel] defines a can.Map that
 is used to render the component's template. The maps properties 
 are typically set by attributes on the custom element's 
-HTML. By default, every attribute's value is looked up in the parent scope
-of the custom element and added to the scope object.
+HTML. By default, every attribute's value is looked up in the parent viewModel
+of the custom element and added to the viewModel object.
 
 The following component:
 
@@ -190,7 +190,7 @@ Default values can be provided. The following component:
     can.Component.extend({
       tag: "hello-world",
       template: "<h1>{{message}}</h1>",
-      scope: {
+      viewModel: {
         message: "Hi"
       }
     });
@@ -204,13 +204,13 @@ Into:
 
     <hello-world><h1>Hi</h1></hello-world>
 
-If you want to set the string value of the attribute on scope, give scope a 
+If you want to set the string value of the attribute on viewModel, give viewModel a
 default value of "@".  The following component:
 
     can.Component.extend({
       tag: "hello-world",
       template: "<h1>{{message}}</h1>",
-      scope: {
+      viewModel: {
         message: "@"
       }
     });
@@ -235,8 +235,8 @@ adds "!" to the message every time `<hello-world>` is clicked:
       template: "<h1>{{message}}</h1>",
       events: {
         "click" : function(){
-          var currentMessage = this.scope.attr("message");
-          this.scope.attr("message", currentMessage+ "!")
+          var currentMessage = this.viewModel.attr("message");
+          this.viewModel.attr("message", currentMessage+ "!")
         }
       }
     });
@@ -265,7 +265,7 @@ only renders friendly messages:
 
 ## Differences between components in can.mustache and can.stache
 
-A [can.mustache] template passes values from the scope to a `can.Component`
+A [can.mustache] template passes values from the viewModel to a `can.Component`
 by specifying the key of the value in the attribute directly.  For example:
 
     can.Component.extend({
@@ -330,7 +330,7 @@ To add another panel, all we have to do is add data to `foodTypes` like:
 The secret is that the `<panel>` element listens to when it is inserted
 and adds its data to the tabs' list of panels with:
 
-    this.element.parent().scope().addPanel( this.scope );    
+    this.element.parent().viewModel().addPanel( this.viewModel );
 
 ### TreeCombo
 
@@ -338,9 +338,9 @@ The following tree combo lets people walk through a hierarchy and select locatio
 
 @demo can/component/examples/treecombo.html
 
-The secret to this widget is the scope's `breadcrumb` property, which is an array
+The secret to this widget is the viewModel's `breadcrumb` property, which is an array
 of items the user has navigated through, and `selectableItems`, which represents the children of the
-last item in the breadcrub.  These are defined on the scope like:
+last item in the breadcrub.  These are defined on the viewModel like:
 
 
     breadcrumb: [],
@@ -359,7 +359,7 @@ last item in the breadcrub.  These are defined on the scope like:
       }
     }
 
-When the "+" icon is clicked next to each item, the scope's `showChildren` method is called, which
+When the "+" icon is clicked next to each item, the viewModel's `showChildren` method is called, which
 adds that item to the breadcrumb like:
 
     showChildren: function( item, el, ev ) {
@@ -385,7 +385,7 @@ The `app` component creates an instance of the `Paginate` model
 and a `websitesDeferred` that represents a request for the Websites
 that should be displayed.
 
-    scope: function () {
+    viewModel: function () {
       return {
         paginate: new Paginate({
           limit: 5

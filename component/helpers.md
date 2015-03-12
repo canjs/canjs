@@ -7,7 +7,7 @@ Helper functions used with the component's template.
 
 An object of [can.mustache] helper names and methods. The helpers are only
 available within the component's template and source html. The helper's
-are always called back with `this` as the [can.Component::scope scope].
+are always called back with `this` as the [can.Component::viewModel viewModel].
 
 @body
 
