@@ -749,7 +749,6 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 		equal(combined(), true);
 
-		console.log('binding to combined');
 		combined.bind('change', function(){ });
 
 		can.batch.start();
