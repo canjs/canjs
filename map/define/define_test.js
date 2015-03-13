@@ -823,4 +823,49 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
 	});
 
+	test('dependent things', function(){
+		var MyMap = can.Map.extend({
+		  define: {
+		    fulfillmentType: {
+		      get: function() {
+		        return this.attr('ft');
+		      },
+
+		      set: function(newVal) {
+		        this.attr('ft', newVal);
+		        return newVal;
+		      }
+		    },
+
+		    propA: {
+		      get: function() {
+		        return this.attr('fulfillmentType') == 'a';
+		      }
+		    },
+
+		    propB: {
+		      get: function() {
+		        return this.attr('fulfillmentType') == 'b';
+		      }
+		    },
+		    
+		    combined: {
+		      get: function() {
+		        return this.attr('propA') || this.attr('propB');
+		      }
+		    }
+		  }
+		});
+
+		var map = new MyMap({ft: 'a'});
+
+		map.on('propA', function(){});
+		map.on('propB', function(){});
+		map.on('combined', function(){});
+
+		map.attr('fulfillmentType', 'b');
+		equal(map.attr('combined'), true);
+
+	});
+
 });
