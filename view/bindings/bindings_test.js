@@ -814,4 +814,102 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
 	});
+
+	test('input type="radio" can-value compute rejects new value (#1518)', function() {
+		var template = can.view.mustache(
+			'<input type="radio" name="siblingRadios" can-value="alwaysMaybeCompute" value="yes"/>' +
+		  '<input type="radio" name="siblingRadios" can-value="alwaysMaybeCompute" value="no"/>' +
+		  '<input type="radio" name="siblingRadios" can-value="alwaysMaybeCompute" value="maybe"/>'
+		);
+
+		// Compute rejects all values, is always false
+		var alwaysMaybeCompute = can.compute('maybe', function(newVal, oldVal) {
+			return 'maybe';
+		});
+
+		var frag = template({
+			alwaysMaybeCompute: alwaysMaybeCompute
+		});
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var firstInput = ta.getElementsByTagName("input")[0];
+		var secondInput = ta.getElementsByTagName("input")[1];
+		var thirdInput = ta.getElementsByTagName("input")[2];
+
+		// Set the first radio to "true"
+		firstInput.checked = true;
+		can.trigger(firstInput, "change");
+
+		equal(alwaysMaybeCompute(), 'maybe', "Change not applied");
+		equal(firstInput.checked, false, "First input not checked");
+		equal(secondInput.checked, false, "Second input not checked");
+		equal(thirdInput.checked, true, "Third input checked");
+	});
+
+
+	test('input type="checkbox" can-value compute rejects new value (#1518)', function() {
+		var template = can.view.mustache('<input type="checkbox" can-value="alwaysFalseCompute" />');
+
+		// Compute rejects all values, is always false
+		var alwaysFalseCompute = can.compute(false, function(newVal, oldVal) {
+			return false;
+		});
+
+		var frag = template({
+			alwaysFalseCompute: alwaysFalseCompute
+		});
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+
+		// Set the <input> to "true"
+		input.checked = true;
+		can.trigger(input, "change");
+
+		equal(alwaysFalseCompute(), false, "Change not applied");
+		equal(input.checked, false, "Input reflects actual value");
+	});
+
+	test('<select> can-value compute rejects new value (#1518)', function() {
+		var template = can.view.mustache(
+			'<select can-value="alwaysMaybeCompute">' +
+				'<option value="-1"></option>' +
+				'<option value="yes">Yes</option>' +
+				'<option value="no">No</option>' +
+				'<option value="maybe">Maybe</option>' +
+			'</select>'
+		);
+
+		// Compute rejects all values, is always false
+		var alwaysMaybeCompute = can.compute('maybe', function(newVal, oldVal) {
+			return 'maybe';
+		});
+
+		var frag = template({
+			alwaysMaybeCompute: alwaysMaybeCompute
+		});
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var select = ta.getElementsByTagName("select")[0];
+		var options = select.options;
+
+		can.trigger(select, "change");
+		equal(options[3].selected, true, 'The default value is correct');
+
+		options[2].selected = true;
+		can.trigger(select, "change");
+
+		equal(alwaysMaybeCompute(), 'maybe', "Change not applied");
+		equal(options[0].selected, false, "First option not checked");
+		equal(options[1].selected, false, "Second option not checked");
+		equal(options[2].selected, false, "Third option not checked");
+		equal(options[3].selected, true, "Fourth option checked");
+	});
+
 });
