@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.2.0-alpha.10",
+	"version": "2.2.0",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -159,7 +159,7 @@
 		"./map/backup/backup": "./dist/cjs/map/backup/backup",
 		"./map/list/list": "./dist/cjs/map/list/list",
 		"./map/define/define": "./dist/cjs/map/define/define",
-		"./map/sort/sort": "./dist/cjs/map/sort/sort",
+		"./list/sort/sort": "./dist/cjs/list/sort/sort",
 		"./control/plugin/plugin": "./dist/cjs/control/plugin/plugin",
 		"./view/modifiers/modifiers": "./dist/cjs/view/modifiers/modifiers",
 		"./util/object/object": "./dist/cjs/util/object/object",
