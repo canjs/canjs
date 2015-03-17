@@ -1447,4 +1447,25 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		ok(state.attr('product') == null, 'product was removed');
 	});
+
+	test('changing viewModel property rebinds {scope.<...>} events (#1529)', 2, function(){
+		can.Component.extend({
+			tag: 'rebind-viewmodel',
+			events: {
+				inserted: function(){
+					this.viewModel.attr('item', {});
+				},
+				'{scope.item} change': function() {
+					ok(true, 'Change event on scope');
+				},
+				'{viewModel.item} change': function() {
+					ok(true, 'Change event on viewModel');
+				}
+			}
+		});
+
+		can.append(can.$("#qunit-fixture"), can.stache('<rebind-viewmodel></rebind-viewmodel>')());
+		can.viewModel(can.$("#qunit-fixture rebind-viewmodel")).attr('item.name', 'CDN');
+
+	});
 });
