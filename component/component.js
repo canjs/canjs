@@ -380,7 +380,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						}
 						
 						// Remove `scope.` from the start of the key and read the value from the `viewModel`.
-						key = key.replace(/^scope|^viewModel\./,"");
+						key = key.replace(/^(scope|^viewModel)\./,"");
 						value = can.compute.read(options.scope, key.split("."), {isArgument: true}).value;
 
 						// If `value` is undefined use `can.getObject` to get the value.
