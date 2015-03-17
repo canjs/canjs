@@ -827,17 +827,17 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		var MyMap = can.Map.extend({
 		  define: {
 		    list: {
-		    	value: function(){
-		    		return new can.List();
-		    	}
+		      value: function(){
+		        return new can.List();
+		      }
 		    },
 		    hasList: {
-		    	value: true,
-		    	get: function(val){
-		          var list = this.attr('list');
-		          var length = list.attr('length');
-		          return length >= 1;
-		    	}
+		      value: true,
+		      get: function(val){
+		        var list = this.attr('list');
+		        var length = list.attr('length');
+		        return length >= 1;
+		      }
 		    }
 		  }
 		});

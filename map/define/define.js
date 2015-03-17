@@ -92,7 +92,6 @@ steal('can/util', 'can/observe', function (can) {
 
 		// sort defaults to the original order
 		var sortedDefaults = {},
-			prop,
 			definitions = Map.prototype.define;
 		for (prop in definitions) {
 			sortedDefaults[prop] = defaults[prop];
