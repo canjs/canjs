@@ -435,6 +435,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	{
 		setup: function (el, options) {
 			this.scope = options.scope;
+			this.viewModel = options.viewModel;
 			return can.Control.prototype.setup.call(this, el, options);
 		},
 		off: function(){
