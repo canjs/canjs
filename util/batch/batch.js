@@ -6,7 +6,10 @@ steal('can/util/can.js', function (can) {
 		transactions = 0,
 		// an array of events within a transaction
 		batchEvents = [],
-		stopCallbacks = [];
+		stopCallbacks = [],
+		// an array of the currently dispatching batch events ... here so we can add things to the end of it (1519).
+		currentBatchEvents = null;
+		
 	can.batch = {
 		/**
 		 * @function can.batch.start
@@ -168,8 +171,9 @@ steal('can/util/can.js', function (can) {
 				transactions--;
 			}
 			if (transactions === 0) {
-				var items = batchEvents.slice(0),
-					callbacks = stopCallbacks.slice(0),
+				currentBatchEvents = batchEvents.slice(0);
+				
+				var	callbacks = stopCallbacks.slice(0),
 					i, len;
 				batchEvents = [];
 				stopCallbacks = [];
@@ -179,9 +183,11 @@ steal('can/util/can.js', function (can) {
 				if (callStart) {
 					can.batch.start();
 				}
-				for(i = 0, len = items.length; i < len; i++) {
-					can.dispatch.apply(items[i][0],items[i][1]);
+				for(i = 0; i < currentBatchEvents.length; i++) {
+					can.dispatch.apply(currentBatchEvents[i][0],currentBatchEvents[i][1]);
 				}
+				currentBatchEvents = null;
+				
 				for(i = 0, len = callbacks.length; i < callbacks.length; i++) {
 					callbacks[i]();
 				}
@@ -205,12 +211,22 @@ steal('can/util/can.js', function (can) {
 		trigger: function (item, event, args) {
 			// Don't send events if initalizing.
 			if (!item._init) {
+				event = typeof event === 'string' ? {
+					type: event
+				} : event;
 				if (transactions === 0) {
-					return can.dispatch.call(item, event, args);
+					if( event.batchNum === can.batch.batchNum && currentBatchEvents) {
+						
+						currentBatchEvents.push([
+							item,
+							[event, args]
+						]);
+						
+					} else {
+						return can.dispatch.call( item, event, args );
+					}
+					
 				} else {
-					event = typeof event === 'string' ? {
-						type: event
-					} : event;
 					event.batchNum = batchNum;
 					batchEvents.push([
 						item,
