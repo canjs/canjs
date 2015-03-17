@@ -90,7 +90,20 @@ steal('can/util', 'can/observe', function (can) {
 		// Replace original this.attr
 		this._get = originalGet;
 
-		return defaults;
+		// sort defaults to the original order
+		var sortedDefaults = {},
+			prop,
+			definitions = Map.prototype.define;
+		for (prop in definitions) {
+			sortedDefaults[prop] = defaults[prop];
+		}
+		for(prop in defaults){
+			if(!sortedDefaults[prop]) {
+				sortedDefaults[prop] = defaults[prop];
+			}
+		}
+
+		return sortedDefaults;
 	};
 
 
