@@ -26,13 +26,19 @@ steal('can/util', function (can) {
 		}
 		return this;
 	};
-	can.unbindAndTeardown = function (ev, handler) {
+	can.unbindAndTeardown = function (event, handler) {
+
+		var handlers = this.__bindEvents[event] || [];
+		var handlerCount = handlers.length;
+
 		// Remove the event handler
 		can.removeEvent.apply(this, arguments);
 		if (this._bindings === null) {
 			this._bindings = 0;
 		} else {
-			this._bindings--;
+			// Subtract the difference in the number of handlers bound to this
+			// event before/after removeEvent
+			this._bindings = this._bindings - (handlerCount - handlers.length);
 		}
 		// If there are no longer any bindings and
 		// there is a bindteardown method, call it.
