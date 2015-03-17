@@ -60,7 +60,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				"{{/panels}}" +
 				"</ul>" +
 				"<content></content>",
-			viewModel: {
+			scope: {
 				panels: [],
 				addPanel: function (panel) {
 
@@ -93,8 +93,8 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 					panel.attr("active", true);
 
 				},
-				// this is scope, not mustache
-				// consider removing scope as arg
+				// this is viewModel, not mustache
+				// consider removing viewModel as arg
 				isActive: function (panel) {
 					return this.attr('active') === panel;
 				}
@@ -410,12 +410,12 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			equal(optionsLis[0].className, "active", "toggling something not selected adds active");
 
 			ok(optionsLis[0].getElementsByTagName('input')[0].checked, "toggling something not selected checks checkbox");
-			equal(can.scope(treecombo, "selected")
+			equal(can.viewModel(treecombo, "selected")
 				.length, 1, "there is one selected item");
-			equal(can.scope(treecombo, "selected.0"), itemsList.attr("0"), "the midwest is in selected");
+			equal(can.viewModel(treecombo, "selected.0"), itemsList.attr("0"), "the midwest is in selected");
 
 			// adjust the state and everything should update
-			can.scope(treecombo, "selected")
+			can.viewModel(treecombo, "selected")
 				.pop();
 			equal(optionsLis[0].className, "", "toggling something not selected adds active");
 
@@ -456,7 +456,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 		can.Component.extend({
 			tag: "grid",
-			scope: {
+			viewModel: {
 				items: [],
 				waiting: true
 			},
@@ -465,24 +465,24 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				init: function () {
 					this.update();
 				},
-				"{scope} deferreddata": "update",
+				"{viewModel} deferreddata": "update",
 				update: function () {
-					var deferred = this.scope.attr('deferreddata'),
-						scope = this.scope;
+					var deferred = this.viewModel.attr('deferreddata'),
+						viewModel = this.viewModel;
 
 					if (can.isDeferred(deferred)) {
-						this.scope.attr("waiting", true);
+						this.viewModel.attr("waiting", true);
 						deferred.then(function (items) {
-							scope.attr('items')
+							viewModel.attr('items')
 								.attr(items, true);
 						});
 					} else {
-						scope.attr('items')
+						viewModel.attr('items')
 							.attr(deferred, true);
 					}
 				},
 				"{items} change": function () {
-					this.scope.attr("waiting", false);
+					this.viewModel.attr("waiting", false);
 				}
 			}
 		});
@@ -513,9 +513,9 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				return deferred;
 			}
 		});
-		var scope = new SimulatedScope();
+		var viewModel = new SimulatedScope();
 
-		var template = can.view.mustache("<grid deferreddata='scope.deferredData'>" +
+		var template = can.view.mustache("<grid deferreddata='viewModel.deferredData'>" +
 			"{{#each items}}" +
 			"<tr>" +
 			"<td width='40%'>{{first}}</td>" +
@@ -525,10 +525,10 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			"</grid>");
 
 		can.append(can.$("#qunit-fixture"), template({
-			scope: scope
+			viewModel: viewModel
 		}));
 
-		var gridScope = can.scope("#qunit-fixture grid");
+		var gridScope = can.viewModel("#qunit-fixture grid");
 		
 		equal(gridScope.attr("waiting"), true, "The grid is initially waiting on the deferreddata to resolve");
 		
@@ -552,7 +552,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				});
 				
 				// update set to change the deferred.
-				scope.attr("set", 1);
+				viewModel.attr("set", 1);
 
 			}, 10);
 		};
@@ -632,7 +632,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			},
 			events: {
 				click: function () {
-					this.scope.attr("visible", true);
+					this.viewModel.attr("visible", true);
 				}
 			}
 		});
@@ -667,7 +667,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			.length, 1, "there is an h1");
 	});
 
-	test("can.scope utility", function() {
+	test("can.viewModel utility", function() {
 		can.Component({
 			tag: "my-taggy-tag",
 			template: "<h1>hello</h1>",
@@ -678,25 +678,32 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.append(can.$("#qunit-fixture"),
 				   can.view.mustache("<my-taggy-tag id='x'></my-taggy-tag>")());
 		var el = can.$("my-taggy-tag");
-		equal(can.scope(el), can.data(el, "scope"), "one argument grabs the scope object");
-		equal(can.scope(el, "foo"), "bar", "two arguments fetches a value");
-		can.scope(el, "foo", "baz");
-		equal(can.scope(el, "foo"), "baz", "Three arguments sets the value");
+		equal(can.viewModel(el), can.data(el, "scope"), "one argument grabs the viewModel object");
+		equal(can.viewModel(el, "foo"), "bar", "two arguments fetches a value");
+		can.viewModel(el, "foo", "baz");
+		equal(can.viewModel(el, "foo"), "baz", "Three arguments sets the value");
 		if (window.$ && $.fn) {
 			el = $("my-taggy-tag");
-			equal(el.scope(), can.data(el, "scope"), "jQuery helper grabs the scope object");
-			equal(el.scope("foo"), "baz", "jQuery helper with one argument fetches a property");
-			equal(el.scope("foo", "bar").get(0), el.get(0), "jQuery helper returns the element");
-			equal(el.scope("foo"), "bar", "jQuery helper with two arguments sets the property");
+			equal(el.viewModel(), can.data(el, "scope"), "jQuery helper grabs the viewModel object");
+			equal(el.viewModel("foo"), "baz", "jQuery helper with one argument fetches a property");
+			equal(el.viewModel("foo", "bar").get(0), el.get(0), "jQuery helper returns the element");
+			equal(el.viewModel("foo"), "bar", "jQuery helper with two arguments sets the property");
 		}
 	});
 
-	test("can.scope creates one if it doesn't exist", function(){
+	test("can.viewModel backwards compatible with can.scope", function() {
+		equal(can.viewModel, can.scope, "can helper");
+		if (window.$ && $.fn) {
+			equal($.scope, $.viewModel, "jQuery helper");
+		}
+	});
+
+	test("can.viewModel creates one if it doesn't exist", function(){
 		can.append(can.$("#qunit-fixture"), can.view.mustache("<div id='me'></div>")());
 		var el = can.$("#me");
-		var scope = can.scope(el);
-		ok(!!scope, "Scope created where it didn't exist.");
-		equal(scope, can.data(el, "scope"), "Scope is in the data.");
+		var viewModel = can.viewModel(el);
+		ok(!!viewModel, "viewModel created where it didn't exist.");
+		equal(viewModel, can.data(el, "scope"), "viewModel is in the data.");
 	});
 
 	test('setting passed variables - two way binding', function () {
@@ -800,19 +807,19 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 
 	});
 
-	test("a map as scope", function () {
+	test("a map as viewModel", function () {
 
 		var me = new can.Map({
 			name: "Justin"
 		});
 
 		can.Component.extend({
-			tag: 'my-scope',
+			tag: 'my-viewmodel',
 			template: "{{name}}}",
 			viewModel: me
 		});
 
-		var template = can.view.mustache('<my-scope></my-scope>');
+		var template = can.view.mustache('<my-viewmodel></my-viewmodel>');
 		equal(template()
 			.childNodes[0].innerHTML, "Justin");
 
@@ -918,12 +925,12 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		equal(frag.childNodes[0].childNodes[0].innerHTML, "visible");
 	});
 
-	test("scope not rebound correctly (#550)", function () {
+	test("viewModel not rebound correctly (#550)", function () {
 
 		var nameChanges = 0;
 
 		can.Component.extend({
-			tag: "scope-rebinder",
+			tag: "viewmodel-rebinder",
 			events: {
 				"{name} change": function () {
 					nameChanges++;
@@ -931,19 +938,19 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			}
 		});
 
-		var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
+		var template = can.view.mustache("<viewmodel-rebinder></viewmodel-rebinder>");
 
 		var frag = template();
-		var scope = can.scope(can.$(frag.childNodes[0]));
+		var viewModel = can.viewModel(can.$(frag.childNodes[0]));
 
 		var n1 = can.compute(),
 			n2 = can.compute();
 
-		scope.attr("name", n1);
+		viewModel.attr("name", n1);
 		
 		n1("updated");
 		
-		scope.attr("name", n2);
+		viewModel.attr("name", n2);
 		
 		n2("updated");
 		
@@ -1004,7 +1011,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			},
 			events: {
 				' inserted': function () {
-					this.scope.attr('shown', true);
+					this.viewModel.attr('shown', true);
 				}
 			}
 		});
@@ -1033,7 +1040,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		});
 		can.append(can.$("#qunit-fixture"), frag);
 
-		equal(can.scope(can.$("panel")[0])
+		equal(can.viewModel(can.$("panel")[0])
 			.attr("title"), "Libraries");
 	});
 
@@ -1092,14 +1099,14 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			" notdataviewid='dviFromData'></stay-classy>")(data);
 		can.append(can.$("#qunit-fixture"), frag);
 
-		var scope = can.scope(can.$("stay-classy")[0]);
+		var viewModel = can.viewModel(can.$("stay-classy")[0]);
 
-		equal(scope.attr("id"), undefined);
-		equal(scope.attr("notid"), "id-success");
-		equal(scope.attr("class"), undefined);
-		equal(scope.attr("notclass"), "class-success");
-		equal(scope.attr("dataViewId"), undefined);
-		equal(scope.attr("notdataviewid"), "dvi-success");
+		equal(viewModel.attr("id"), undefined);
+		equal(viewModel.attr("notid"), "id-success");
+		equal(viewModel.attr("class"), undefined);
+		equal(viewModel.attr("notclass"), "class-success");
+		equal(viewModel.attr("dataViewId"), undefined);
+		equal(viewModel.attr("notdataviewid"), "dvi-success");
 	});
 
 	test("Component can-click method should be not called while component's init", function () {
@@ -1312,7 +1319,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			tag: "can-child",
 			events: {
 				inserted: function(){
-					this.scope.attr('bar', 'foo');
+					this.viewModel.attr('bar', 'foo');
 					ok(true, "called inserted once");
 				}
 			}
@@ -1360,15 +1367,15 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		var frag = template({});
 
 		equal(frag.childNodes[0].innerHTML, '', 'child component is not inserted');
-		can.scope(frag.childNodes[0]).attr('shown', true);
+		can.viewModel(frag.childNodes[0]).attr('shown', true);
 
 		equal(frag.childNodes[0].childNodes[0].innerHTML, 'Hello world.', 'child component is inserted');
-		can.scope(frag.childNodes[0]).attr('shown', false);
+		can.viewModel(frag.childNodes[0]).attr('shown', false);
 
 		equal(frag.childNodes[0].innerHTML, '', 'child component is removed');
 	});
 
-	test('component does not update scope on id, class, and data-view-id attribute changes (#1079)', function(){
+	test('component does not update viewModel on id, class, and data-view-id attribute changes (#1079)', function(){
 		
 		can.Component.extend({
 			tag:'x-app'
@@ -1377,7 +1384,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		var frag=can.stache('<x-app></x-app>')({});
 		
 		var el = frag.childNodes[0];
-		var scope = can.scope(el);
+		var viewModel = can.viewModel(el);
 		
 		// element must be inserted, otherwise attributes event will not be fired
 		can.append(can.$("#qunit-fixture"),frag);
@@ -1387,13 +1394,13 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		
 		stop();
 		setTimeout(function(){
-			equal(scope.attr('class'),undefined, "the scope is not updated when the class attribute changes");
+			equal(viewModel.attr('class'),undefined, "the viewModel is not updated when the class attribute changes");
 			start();
 		},20);
 		
 	});
 
-	test('scope objects with Constructor functions as properties do not get converted (#1261)', 1, function(){
+	test('viewModel objects with Constructor functions as properties do not get converted (#1261)', 1, function(){
 		stop();
 
 		var Test = can.Map.extend({
@@ -1421,7 +1428,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.trigger(Test, 'something');
 	});
 
-	test('removing bound scope properties on destroy #1415', function(){
+	test('removing bound viewModel properties on destroy #1415', function(){
 		var state = new can.Map({
 			product: {
 				id: 1,
@@ -1433,7 +1440,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			tag: 'destroyable-component',
 			events: {
 				destroy: function(){
-					this.scope.attr('product', null);
+					this.viewModel.attr('product', null);
 				}
 			}
 		});
