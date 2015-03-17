@@ -463,7 +463,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			this._setUpdates = true;
 			this._set = function(newVal){
 				// this is the value passed to the fn
-				lastSetValue.set(newVal);
+				return lastSetValue.set(newVal);
 			};
 
 			// make sure get is called with the newVal, but not setter

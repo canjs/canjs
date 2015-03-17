@@ -672,10 +672,10 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 					equal(curVal, 20);
 					break;
 				case 2:
-					equal(curVal, 20, "on bind");
+					equal(curVal, 30, "on bind");
 					break;
 				case 3:
-					equal(curVal, 30, "on bind");
+					equal(curVal, 40, "on bind");
 					break;
 			}
 			return curVal+add.get();
@@ -687,9 +687,9 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		async.bind("change", function(){});
 		
-		async.set(20);
-		
 		async.set(30);
+		
+		async.set(40);
 	});
 
 

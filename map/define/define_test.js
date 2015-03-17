@@ -823,4 +823,26 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
 	});
 
+	test('value and get (#1521)', function(){
+		var MyMap = can.Map.extend({
+		  define: {
+		    list: {
+		      value: function(){
+		        return new can.List(['test']);
+		      }
+		    },
+		    size: {
+		      value: 1,
+		      get: function(val){
+		        var list = this.attr('list');
+		        var length = list.attr('length');
+		        return val + length;
+		      }
+		    }
+		  }
+		});
+
+		var map = new MyMap();
+		equal(map.attr('size'), 2);
+	});
 });
