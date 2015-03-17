@@ -288,4 +288,20 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 
 		equal(m.attr("Todo"), Constructor);
 	});
+
+	test('_bindings count maintained after calling .off() on undefined property (#1490) ', function () {
+
+		var map = new can.Map({
+			test: 1
+		});
+
+		map.on('test', can.noop);
+
+		equal(map._bindings, 1, 'The number of bindings is correct');
+
+		map.off('undefined_property');
+
+		equal(map._bindings, 1, 'The number of bindings is still correct');
+	})
+
 });
