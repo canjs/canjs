@@ -304,4 +304,18 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 		equal(map._bindings, 1, 'The number of bindings is still correct');
 	})
 
+	test('_bindings count maintained after calling .off() with handler', function(){
+		var map = new can.Map({
+			test: 1
+		});
+
+		map.on('test', can.noop);
+		map.on('test', function(){});
+
+		equal(map._bindings, 2, 'The number of bindings is correct');
+
+		map.off('test', can.noop);
+		equal(map._bindings, 1, 'The number of bindings is still correct');
+	});
+
 });
