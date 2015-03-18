@@ -115,7 +115,7 @@ content to use within the `<content></content>` tags like:
 If the source template is changed to:
 
     var template = can.mustache("Here is my "+
-                     "<todos-editor></todos-editor>")
+                     "<todos-editor>todos-editor</todos-editor>")
 
 This results in:
 
