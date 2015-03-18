@@ -127,7 +127,7 @@ If the key was not wrapped, the template would render:
 
     frag //-> <my-tag greeting='message'><h1>message</h1></my-tag>
  
-Because the attribute value would be passed as the value of `gretting`.
+Because the attribute value would be passed as the value of `greeting`.
  
 ### Section renderers return documentFragments
 
@@ -142,7 +142,7 @@ the following would wrap the `.fn` section in an `<h1>` tag:
     var template = can.mustache("{{#wrapH1}}Hi There!{{/#wrapH1}}");
     template() //-> <h1>Hi There</h1>
 
-`can.stache`s [can.stache.sectionRenderer section renderers] return documentFragments when sections
+`can.stache`'s [can.stache.sectionRenderer section renderers] return documentFragments when sections
 are not contained within an html element. This means the result of the previous helper would be:
 
     <h1>[object DocumentFragment]</h1>
