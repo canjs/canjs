@@ -49,6 +49,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		// Go through what needs to be observed.
 		bindNewSet(oldObserved, newObserveSet, onchanged);
 		unbindOldSet(oldObserved, onchanged);
+		// set ready only after all events that might be caused by a change
+		can.bind.call(info,"ready", function(){
+			info.ready = true;
+		});
+		can.batch.trigger(info,"ready");
 		
 		return info;
 	};
@@ -112,7 +117,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 				var self = this;
 				if(!onchanged) {
 					onchanged = function(ev){
-						if (compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
+						if (readInfo.ready && compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 							// Keep the old value
 							var oldValue = readInfo.value;
 							// Get the new value
@@ -150,7 +155,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			on: function(updater){
 				if(!onchanged) {
 					onchanged = function(ev){
-						if (compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
+						if (readInfo.ready && compute.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 							// Get the new value
 							var reads = can.__clearReading();
 							var newValue = func.call(context);
@@ -380,7 +385,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 			else {
 				var self = this;
 				this.onchanged = function(ev) {
-					if (self.bound && (ev.batchNum === undefined || ev.batchNum !== self.batchNum)) {
+					if (self.bound && self.readInfo.ready && (ev.batchNum === undefined || ev.batchNum !== self.batchNum)) {
 						// Keep the old value
 						var oldValue = self.readInfo.value;
 						// Get the new value
