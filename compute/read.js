@@ -107,10 +107,10 @@ steal("can/util", function(can){
 		test: function(value, i, reads, options){
 			var type = typeof value;
 			// i = reads.length if this is the last iteration of the read for-loop.
-			return i < reads.length  && 
-				type === 'function' && 
+			return i < reads.length  &&
+				type === 'function' &&
 				options.executeAnonymousFunctions &&
-				 !(can.Construct && value.prototype instanceof can.Construct);
+				!(can.Construct && value.prototype instanceof can.Construct);
 		},
 		read: function(value){
 			return value();
@@ -146,7 +146,9 @@ steal("can/util", function(can){
 		},
 		// read a promise
 		{
-			test: can.isPromise,
+			test: function(value){
+				return can.isPromise(value);
+			},
 			read: function(value, prop, index, options, state){
 				if (!state.foundObservable && options.foundObservable) {
 					options.foundObservable(value, index);
@@ -154,7 +156,7 @@ steal("can/util", function(can){
 				}
 				var observeData = value.__observeData;
 				if(!value.__observeData) {
-					var observeData = value.__observeData = {
+					observeData = value.__observeData = {
 						isPending: true,
 						state: "pending",
 						isResolved: false,
@@ -175,7 +177,7 @@ steal("can/util", function(can){
 						observeData.state = "rejected";
 						observeData.dispatch("state",["rejected","pending"]);
 					});
-				} 
+				}
 				can.__reading(observeData,"state");
 				return observeData[prop];
 			}
