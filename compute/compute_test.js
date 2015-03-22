@@ -758,5 +758,33 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal(combined(), true);
 	
 	});
+	
+	test("can.Compute.read can read a promise (#179)", function(){
+		
+		var def = new can.Deferred();
+		var map = new can.Map();
+		
+		var c = can.compute(function(){
+			return can.Compute.read({map: map},["map","data","value"]).value;
+		});
+		
+		var calls = 0;
+		c.bind("change", function(ev, newVal, oldVal){
+			calls++;
+			equal(calls, 1, "only one call");
+			equal(newVal, "Something", "new value");
+			equal(oldVal, undefined, "oldVal");
+			start();
+		});
+		
+		map.attr("data", def);
+		
+		setTimeout(function(){
+			def.resolve("Something");
+		},2);
+		
+		stop();
+		
+	});
 
 });
