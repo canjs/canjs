@@ -1,4 +1,4 @@
-@page Tutorial Up and running with CanJS
+@page Tutorial Up & Running with CanJS
 @parent guides 1
 
 @body

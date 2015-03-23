@@ -1,4 +1,4 @@
-@page Building Building the Sample App with Node, Gulp, and Browserify
+@page Building Building the Sample App
 @parent Tutorial 12
 
 @body

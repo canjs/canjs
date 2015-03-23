@@ -1,4 +1,4 @@
-@page State Application State, and Basic Routing
+@page State App State & Basic Routing
 @parent Tutorial 8
 
 @body
