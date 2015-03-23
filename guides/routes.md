@@ -40,37 +40,37 @@ attributes to serialize. Open up app.js, and edit the Application State object
 as follows:
 
 ```
-    var ApplicationState = can.Map.extend({
-        define: {
-            restaurant: {
-                value: {},
-                set: function (restaurant) {
-                    if (restaurant.restaurantId) {
-                        var that = this;
-                        RestaurantMenusModel.findOne({id: restaurant.restaurantId},
-                            function success(selectedMenus) {
-                                that.attr('menus', {
-                                    collection: selectedMenus.menus,
-                                    restaurantName: restaurant.name
-                                });
-                            },
-                            function error(xhr) {
-                                alert(xhr.message);
-                            });
-                    }
-                    return restaurant;
-                }
-            },
-            menus: {
-                value: null,
-                serialize: false
-            },
-            confirmation: {
-                value: {},
-                serialize: false
-            }
-        }
-    });
+var ApplicationState = can.Map.extend({
+	define: {
+		restaurant: {
+			value: {},
+			set: function (restaurant) {
+				if (restaurant.restaurantId) {
+					var that = this;
+					RestaurantMenusModel.findOne({id: restaurant.restaurantId},
+						function success(selectedMenus) {
+							that.attr('menus', {
+								collection: selectedMenus.menus,
+								restaurantName: restaurant.name
+							});
+						},
+						function error(xhr) {
+							alert(xhr.message);
+						});
+				}
+				return restaurant;
+			}
+		},
+		menus: {
+			value: null,
+			serialize: false
+		},
+		confirmation: {
+			value: {},
+			serialize: false
+		}
+	}
+});
 ```
 
 Go back out to the app, refresh it, and load a restaurant menu again (Select a
@@ -82,7 +82,9 @@ now look something like this:
 Much cleaner, but now it's missing information we might want. Add the
 following code before the call to can.route.ready():
 
-	can.route('/:restaurant');
+```
+can.route('/:restaurant');
+```
 
 This line tells can.route to match any route going to the restaurant, and
 format it so that it is a forward slash followed by the serialized value. Add
@@ -90,12 +92,12 @@ a serialize property to the restaurant attribute of the Application State
 object as follows:
 
 ```
-    restaurant: {
-       ...
-       serialize: function () {
-           return this.attr('restaurant.name');
-       }
-    }
+restaurant: {
+   ...
+   serialize: function () {
+	   return this.attr('restaurant.name');
+   }
+}
 ```
 
 Now, when you select a restaurant and click the Place Order buton, you should
@@ -108,91 +110,91 @@ in the correct restaurant name into the hash. Open up site_models.js, and edit
 the RestaurantModel, as follows:
 
 ```
-	var RestaurantModel = can.Model.extend({
-            findAll: "GET /restaurants",
-            findOne: 'GET /restaurant/{name}'
-        },
-        {});
+var RestaurantModel = can.Model.extend({
+		findAll: "GET /restaurants",
+		findOne: 'GET /restaurant/{name}'
+	},
+	{});
 ```
 
 Next, add the following code to Fixtures.js:
 
 ```
-	can.fixture("GET /restaurant/{name}", function requestHandler(request) {
+can.fixture("GET /restaurant/{name}", function requestHandler(request) {
 
-        var restaurantMap = {
-            "Spago": {
-                "name": "Spago",
-                "location": "USA",
-                "cuisine": "Modern",
-                "owner": "Wolfgang Puck",
-                "restaurantId": 1
-            },
-            "El_Bulli": {
-                "name": "El Bulli",
-                "location": "Spain",
-                "cuisine": "Modern",
-                "owner": "Ferran Adria",
-                "restaurantId": 2
-            },
-            "The_French_Laundry": {
-                "name": "The French Laundry",
-                "location": "USA",
-                "cuisine": "French Traditional",
-                "owner": "Thomas Keller",
-                "restaurantId": 3
-            }
-        };
+	var restaurantMap = {
+		"Spago": {
+			"name": "Spago",
+			"location": "USA",
+			"cuisine": "Modern",
+			"owner": "Wolfgang Puck",
+			"restaurantId": 1
+		},
+		"El_Bulli": {
+			"name": "El Bulli",
+			"location": "Spain",
+			"cuisine": "Modern",
+			"owner": "Ferran Adria",
+			"restaurantId": 2
+		},
+		"The_French_Laundry": {
+			"name": "The French Laundry",
+			"location": "USA",
+			"cuisine": "French Traditional",
+			"owner": "Thomas Keller",
+			"restaurantId": 3
+		}
+	};
 
-        return restaurantMap[request.data.name];
+	return restaurantMap[request.data.name];
 
-    });
+});
 ```
 
 Finally, update the Application State object in app.js, as follows:
 
 ```
-	function getRestaurantMenu(restaurant, that) {
-        that.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-    }
+function getRestaurantMenu(restaurant, that) {
+	that.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+}
 
-    function setAppToDefaultState() {
-        this.attr('menus', null);
-    }
+function setAppToDefaultState() {
+	this.attr('menus', null);
+}
 
-    function showSelectedRestaurantMenus(restaurant, that) {
-        this.attr('restaurantName', restaurant);
-        RestaurantModel.findOne({name: restaurant},
-            function success(restaurantModel) {
-                getRestaurantMenu(restaurantModel, that);
-                return restaurantModel;
-            },
-            function error(xhr) {
-                alert(xhr.message);
-                return null;
-            })
-    }
+function showSelectedRestaurantMenus(restaurant, that) {
+	this.attr('restaurantName', restaurant);
+	RestaurantModel.findOne({name: restaurant},
+		function success(restaurantModel) {
+			getRestaurantMenu(restaurantModel, that);
+			return restaurantModel;
+		},
+		function error(xhr) {
+			alert(xhr.message);
+			return null;
+		})
+}
 
-        var ApplicationState = can.Map.extend({
-            define: {
-                restaurant: {
-                    ...
-                    set: function (restaurant) {
-                    var that = this;
+var ApplicationState = can.Map.extend({
+	define: {
+		restaurant: {
+			...
+			set: function (restaurant) {
+			var that = this;
 
-                    if (!restaurant) return restaurant;
+			if (!restaurant) return restaurant;
 
-                    if(typeof restaurant === 'string'){
-                        return showSelectedRestaurantMenus.call(this, restaurant, that);
-                    }
-                    else if (restaurant.restaurantId) {
-                        getRestaurantMenu(restaurant, that);
-                        return restaurant;
-                    }
+			if(typeof restaurant === 'string'){
+				return showSelectedRestaurantMenus.call(this, restaurant, that);
+			}
+			else if (restaurant.restaurantId) {
+				getRestaurantMenu(restaurant, that);
+				return restaurant;
+			}
 
-                }
-                },
-                ...
+		}
+		},
+		...
 ```
 
 Note, that we've refactored the call to RestaurantMenusModel out into its own
@@ -204,21 +206,21 @@ add functionality to our Site Menu. Open up the "site_menu.stache" file in
 your site_menu components folder. Edit it, as follows:
 
 ```
-	{{#menuData.menuText}}
-        <ul class="nav">
-            <li><a class="visible-xs text-center" data-toggle="offcanvas" href="#">
+{{#menuData.menuText}}
+	<ul class="nav">
+		<li><a class="visible-xs text-center" data-toggle="offcanvas" href="#">
 
-        ...
+	...
 
-        <!--Begin update -->
-        <ul id="lg-menu" class="nav hidden-xs">
-            <li class="active">{{&HomeLink}}</li>
-        </ul>
-        <!--End update -->
+	<!--Begin update -->
+	<ul id="lg-menu" class="nav hidden-xs">
+		<li class="active">{{&HomeLink}}</li>
+	</ul>
+	<!--End update -->
 
-        ...
+	...
 
-    {{/menuData.menuText}}
+{{/menuData.menuText}}
 ```
 
 The "&amp;" character in the data key tells Stache to include the unescaped
@@ -228,26 +230,26 @@ need to use this.
 Open up site_menu_component.js, and add the following method to the can.Component:
 
 ```
-	can.Component.extend({
-        tag: "menu",
-        template: can.view('components/site_menu/site_menu.stache'),
-        scope: SiteMenuViewModel,
-        events: {
-            inserted: function () {
-                var siteMenuViewModel = this.scope;
-                SiteMenuModel.findOne({},
-                    function success(menu) {
-                        siteMenuViewModel.attr('menuData', menu);
-                        //--> Add this line
-                        siteMenuViewModel.attr('menuData.menuText.HomeLink',
-                            can.route.link( '<i class="glyphicon glyphicon-cutlery"></i> Restaurants', {restaurant: null}, false ));
-                    },
-                    function error(xhr) {
-                        alert(xhr.error.message);
-                    });
-            }
-        }
-    });
+can.Component.extend({
+	tag: "menu",
+	template: can.view('components/site_menu/site_menu.stache'),
+	scope: SiteMenuViewModel,
+	events: {
+		inserted: function () {
+			var siteMenuViewModel = this.scope;
+			SiteMenuModel.findOne({},
+				function success(menu) {
+					siteMenuViewModel.attr('menuData', menu);
+					//--> Add this line
+					siteMenuViewModel.attr('menuData.menuText.HomeLink',
+						can.route.link( '<i class="glyphicon glyphicon-cutlery"></i> Restaurants', {restaurant: null}, false ));
+				},
+				function error(xhr) {
+					alert(xhr.error.message);
+				});
+		}
+	}
+});
 ```
 
 Here, we add a can route link to the view template, using can.route.link. You
@@ -257,36 +259,36 @@ Finally, update your app.js, adding code that will respond to the application
 state change. Append the following below the "getRestaurantMenu" function:
 
 ```
-        function setAppToDefaultState() {
-            this.attr('menus', null);
-        }
+function setAppToDefaultState() {
+	this.attr('menus', null);
+}
 ```
 
 Update the restaurant attribute `set` function on your ApplicationState:
 
 ```
-    set: function (restaurant) {
-        var that = this;
+set: function (restaurant) {
+	var that = this;
 
-        if (!restaurant) return restaurant;
+	if (!restaurant) return restaurant;
 
-        if(typeof restaurant === 'string'){
+	if(typeof restaurant === 'string'){
 
-			//--> Add this conditional code
-            if(restaurant === 'null'){
-                setAppToDefaultState.call(this);
-                return null;
-            }
+		//--> Add this conditional code
+		if(restaurant === 'null'){
+			setAppToDefaultState.call(this);
+			return null;
+		}
 
-            return showSelectedRestaurantMenus.call(this, restaurant, that);
+		return showSelectedRestaurantMenus.call(this, restaurant, that);
 
-        }
-        else if (restaurant.restaurantId) {
-            getRestaurantMenu(restaurant, that);
-            return restaurant;
-        }
+	}
+	else if (restaurant.restaurantId) {
+		getRestaurantMenu(restaurant, that);
+		return restaurant;
+	}
 
-    }
+}
 ```
 
 Now, open up your application in the browser (refresh, if you haven't). Select

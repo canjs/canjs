@@ -54,26 +54,28 @@ file called "index.html" in the app folder.
 
 It should look like this:
 
-    <!DOCTYPE html>
-    <html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title></title>
-        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
-    </head>
-    <body>
+```
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
+</head>
+<body>
 
-    <!-- CanJS application root -->
-    <div id="can-app">
-    </div>
+<!-- CanJS application root -->
+<div id="can-app">
+</div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-    <script src="libs/can.custom.js"></script>
-    <script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
-	<script src="app.js"></script>
-    </body>
-    </html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/can.custom.js"></script>
+<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
+```
 
 At the bottom of the page, just before the body tag, are all of the script
 tags. We're using the jQuery edition of CanJS, so the first script tag
@@ -95,11 +97,13 @@ The first script we need to create is the script that will bootstrap our
 application. Create a file in the app folder called "app.js". Edit the
 file as follows:
 
-    $(function () {
+```
+$(function () {
 
-    	$('# can-app').html('The Requisite "Hello World" Message');
+	$('# can-app').html('The Requisite "Hello World" Message');
 
-	});
+});
+```
 
 If you open up your application in a browser, you should see:
 

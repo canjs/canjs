@@ -24,15 +24,16 @@ We'll use a can.Model to provide data for our restaurant list.
 In the models folder, create a file called "site_models.js". Add the
 following code:
 
-	/**
-     * Restaurants Model
-     */
-	var RestaurantModel = can.Model.extend({
-        findAll: "GET /restaurants"
-    },
-    //Include second, blank parameter object to set instanceProperties
-    {});
-
+```
+/**
+ * Restaurants Model
+ */
+var RestaurantModel = can.Model.extend({
+	findAll: "GET /restaurants"
+},
+//Include second, blank parameter object to set instanceProperties
+{});
+```
 
 Because it is a can.Construct, can.Model.extend can take up to three parameters:
 
@@ -101,34 +102,36 @@ Let's create a fixture that will respond to our requests for menu item data.
 Create another file in the models folder called "fixtures.js". Add the
 following code to that file:
 
-	/**
-     * Restaurants Model Fixture
-     */
-    can.fixture("GET /restaurants", function requestHandler() {
-        return [
-            {
-                "name": "Spago",
-                "location": "USA",
-                "cuisine": "Modern",
-                "owner": "Wolfgang Puck",
-                "restaurantId": 1
-            },
-            {
-                "name": "El Bulli",
-                "location": "Spain",
-                "cuisine": "Modern",
-                "owner": "Ferran Adria",
-                "restaurantId": 2
-            },
-            {
-                "name": "The French Laundry",
-                "location": "USA",
-                "cuisine": "French Traditional",
-                "owner": "Thomas Keller",
-                "restaurantId": 3
-            }
-        ];
-    });
+```
+/**
+ * Restaurants Model Fixture
+ */
+can.fixture("GET /restaurants", function requestHandler() {
+	return [
+		{
+			"name": "Spago",
+			"location": "USA",
+			"cuisine": "Modern",
+			"owner": "Wolfgang Puck",
+			"restaurantId": 1
+		},
+		{
+			"name": "El Bulli",
+			"location": "Spain",
+			"cuisine": "Modern",
+			"owner": "Ferran Adria",
+			"restaurantId": 2
+		},
+		{
+			"name": "The French Laundry",
+			"location": "USA",
+			"cuisine": "French Traditional",
+			"owner": "Thomas Keller",
+			"restaurantId": 3
+		}
+	];
+});
+```
 
 The first argument to can.fixture, "GET /restaurants", tells CanJS to
 intercept any GET requests to the resource "/restaurants". The second argument
@@ -147,32 +150,36 @@ restaurant_list_component.js, and edit the RestaurantListViewModel as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
-    var RestaurantListViewModel = can.Map.extend({
-        restaurants: new RestaurantModel.List({}),
-        currentRestaurant: undefined,
-        restaurantSelected: function (viewModel, select) {
-            var restaurant = select.find('option:checked').data('restaurant');
-            var currentRestaurant = 'currentRestaurant';
-            this.attr(currentRestaurant, restaurant);
-        }
-    });
+var RestaurantListViewModel = can.Map.extend({
+	restaurants: new RestaurantModel.List({}),
+	currentRestaurant: undefined,
+	restaurantSelected: function (viewModel, select) {
+		var restaurant = select.find('option:checked').data('restaurant');
+		var currentRestaurant = 'currentRestaurant';
+		this.attr(currentRestaurant, restaurant);
+	}
+});
 ```
 
 Note that there are a few ways to call a findAll method on a can.Model. The
 first way is to call the method explicitly. Using the RestaurantModel as an
 example, that would look like this:
 
-	RestaurantModel.findAll({//paramsObject},
-		function success(returnedObject){
-			//
-		},
-		function error(errorObject){
-			//
-		});
+```
+RestaurantModel.findAll({//paramsObject},
+	function success(returnedObject){
+		//
+	},
+	function error(errorObject){
+		//
+	});
+```
 
 In the code above, however, we called the findAll method indirectly:
 
-	restaurants: new RestaurantModel.List({}),
+```
+restaurants: new RestaurantModel.List({}),
+```
 
 This is a special feature of the can.Model.List constructor. When can.Model is
 extended, can.Model.List is automatically extended, as well. It is set as the
@@ -187,15 +194,15 @@ We'll look at the can.Model's findOne method later on, when we create our Menu
 Component. Finally, let's add the scripts we created to our index.html file:
 
 ```
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-    <script src="libs/can.custom.js"></script>
-    <script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
-    <!--Begin add-->
-    <script src="models/fixtures.js"></script>
-    <script src="models/site_models.js"></script>
-    <!--End add-->
-    <script src="components/restaurant_list/restaurant_list_component.js"></script>
-    <script src="app.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/can.custom.js"></script>
+<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+<!--Begin add-->
+<script src="models/fixtures.js"></script>
+<script src="models/site_models.js"></script>
+<!--End add-->
+<script src="components/restaurant_list/restaurant_list_component.js"></script>
+<script src="app.js"></script>
 ```
 
 Let's go back to our app now, and see what happens! If everything went
