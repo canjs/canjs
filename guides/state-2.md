@@ -15,34 +15,34 @@ The Application State object we created in the last chapter was a can.Map.
 Here it is, again, below:
 
 ```
-	  var ApplicationState = can.Map.extend({
-        	define: {
-            	restaurant: {
-                value: {},
-                set: function (restaurant) {
-                    if (restaurant.restaurantId) {
-                        var that = this;
-                        RestaurantMenusModel.findOne({id: restaurant.restaurantId},
-                            function success(selectedMenus) {
-                                that.attr('menus', {
-                                    collection: selectedMenus.menus,
-                                    restaurantName: restaurant.name
-                                });
-                            },
-                            function error(xhr) {
-                                alert(xhr.message);
-                            });
-                    }
-                    return restaurant;
-                },
-            	menus: {
-                	value: null
-            	},
-            	confirmation: {
-                	value: {}
-            	}
-        	}
-    	});
+var ApplicationState = can.Map.extend({
+	define: {
+		restaurant: {
+		value: {},
+		set: function (restaurant) {
+			if (restaurant.restaurantId) {
+				var that = this;
+				RestaurantMenusModel.findOne({id: restaurant.restaurantId},
+					function success(selectedMenus) {
+						that.attr('menus', {
+							collection: selectedMenus.menus,
+							restaurantName: restaurant.name
+						});
+					},
+					function error(xhr) {
+						alert(xhr.message);
+					});
+			}
+			return restaurant;
+		},
+		menus: {
+			value: null
+		},
+		confirmation: {
+			value: {}
+		}
+	}
+});
 ```
 
 As mentioned in the last chapter, we've done something different with our
@@ -98,17 +98,17 @@ returned, the behavior depends on the number of arguments the setter
 *declares*, as below:
 
 ```
-	//If the setter does not specify the newValue argument,
-	//the attribute value is set to whatever was passed to attr.
-	set: function() { ... }
+//If the setter does not specify the newValue argument,
+//the attribute value is set to whatever was passed to attr.
+set: function() { ... }
 
-	//If the setter specifies the newValue argument only,
-	//the attribute value will be removed
-	set: function(newValue) { ... }
+//If the setter specifies the newValue argument only,
+//the attribute value will be removed
+set: function(newValue) { ... }
 
-	//If the setter specifies both newValue and setValue, the value of
-	//the property will not be updated until setValue is called
-	set: function(newValue, setValue) { ... }
+//If the setter specifies both newValue and setValue, the value of
+//the property will not be updated until setValue is called
+set: function(newValue, setValue) { ... }
 ```
 
 ### type

@@ -26,32 +26,32 @@ our can.Map in a new way---using the define plugin, which we'll discuss more
 below:
 
 ```
-	$(function () {
+$(function () {
 
-       var ApplicationState = can.Map.extend({
-        	define: {
-            	restaurant: {
-                	value: {}
-            	},
-            	menus: {
-                	value: null
-            	},
-            	confirmation: {
-                	value: {}
-            	}
-        	}
-    	});
+   var ApplicationState = can.Map.extend({
+		define: {
+			restaurant: {
+				value: {}
+			},
+			menus: {
+				value: null
+			},
+			confirmation: {
+				value: {}
+			}
+		}
+	});
 
-        var appState = new ApplicationState();
+	var appState = new ApplicationState();
 
-        //Bind the application state to the root of the application
-        $('#can-app').html(can.view('base_template.stache', appState));
+	//Bind the application state to the root of the application
+	$('#can-app').html(can.view('base_template.stache', appState));
 
-    	can.route.map(appState);
+	can.route.map(appState);
 
-    	can.route.ready();
+	can.route.ready();
 
-    });
+});
 ```
 
 ## Routing Before we dive into the details of the Application State object,
@@ -84,10 +84,10 @@ Let's take a moment, now, to see how that works.
 Add the following line of code to app.js:
 
 ```
-	can.route.ready();
+can.route.ready();
 
-	//-->Add this line, below the line above:
-    appState.attr('restaurant', 'Spago');
+//-->Add this line, below the line above:
+appState.attr('restaurant', 'Spago');
 ```
 
 Now, refresh your app in the browser. The URL bar should look something like
@@ -105,15 +105,15 @@ change, we'll need to make a slight adjustment to our Application State
 object. Modify the restaurant property as follows:
 
 ```
-	restaurant: {
-        value: {},
-        set: function(newValue){
-           if(typeof newValue === 'string'){
-               alert(newValue);
-           }
-           return newValue;
-        }
-    },
+restaurant: {
+	value: {},
+	set: function(newValue){
+	   if(typeof newValue === 'string'){
+		   alert(newValue);
+	   }
+	   return newValue;
+	}
+},
 ```
 
 Refresh your app in the browser. The first thing you should notice is that you
@@ -139,12 +139,12 @@ base_template.stache.
 Open up base_template.stache, and edit it as follows:
 
 ```
-	<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
-    {{#if menus}}
-        <order-form menus="{menus}" confirmation="{confirmation}"></order-form>
-    {{else}}
-        <restaurant-list restaurant="{restaurant}"></restaurant-list>
-    {{/if}}
+<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
+{{#if menus}}
+	<order-form menus="{menus}" confirmation="{confirmation}"></order-form>
+{{else}}
+	<restaurant-list restaurant="{restaurant}"></restaurant-list>
+{{/if}}
 ```
 
 In the code above, we passed the "menus" and "restaurant" attributes to our
@@ -162,41 +162,41 @@ Let's update our components to communicate with our Application State.
 Open up the restaurant_list_component.js file, and edit it as follows;
 
 ```
-	var RestaurantListViewModel = can.Map.extend({
-        define: {
-            currentRestaurant: {
-                value: {}
-            },
-            currentRestaurantIndex: {
-                value: {},
-                type: 'number',
-                set: function(newValue){
-                    if(!isNaN(newValue)){
-                        this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
-                    }
-                    return newValue;
-                }
-            }
-        },
-        init: function () {
-            this.attr('restaurants', new RestaurantModel.List({}));
-            this.attr('visible', true);
-            this.attr('selected', {});
-        },
-        showMenu: function () {
-            //Sets the restaurant value on the parent scope (AppState)
-            this.attr('restaurant', this.attr('currentRestaurant'));
-        }
+var RestaurantListViewModel = can.Map.extend({
+	define: {
+		currentRestaurant: {
+			value: {}
+		},
+		currentRestaurantIndex: {
+			value: {},
+			type: 'number',
+			set: function(newValue){
+				if(!isNaN(newValue)){
+					this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
+				}
+				return newValue;
+			}
+		}
+	},
+	init: function () {
+		this.attr('restaurants', new RestaurantModel.List({}));
+		this.attr('visible', true);
+		this.attr('selected', {});
+	},
+	showMenu: function () {
+		//Sets the restaurant value on the parent scope (AppState)
+		this.attr('restaurant', this.attr('currentRestaurant'));
+	}
 
-    });
+});
 
-    can.Component.extend({
+can.Component.extend({
 
-        tag: 'restaurant-list',
-        template: can.view('components/restaurant_list/restaurant_list.stache'),
-        scope: RestaurantListViewModel
+	tag: 'restaurant-list',
+	template: can.view('components/restaurant_list/restaurant_list.stache'),
+	scope: RestaurantListViewModel
 
-    });
+});
 ```
 
 Note the showMenu function. From this function we update the "restaurant"
@@ -209,7 +209,7 @@ Next, open up restaurant_list.stache, and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
-	 <button id="PlaceAnOrder" can-click="showMenu">Place an Order from {{name}}</button>
+ <button id="PlaceAnOrder" can-click="showMenu">Place an Order from {{name}}</button>
 ```
 
 We've removed the DOM code from our View Model, and are now working directly
@@ -218,16 +218,16 @@ changes. In the same file (restaurant_list.stache), update the select dropdown
 in the template as follows ():
 
 ```
-    {{#visible}}
-        <label for="RestaurantList">Select a Restaurant:</label>
-        <select id="RestaurantList" can-value="currentRestaurant">
-            <option value="-1"></option>
-            {{#each restaurants}}
-                <option value="{{@index}}">{{name}}</option>
-            {{/each}}
-        </select>
+{{#visible}}
+	<label for="RestaurantList">Select a Restaurant:</label>
+	<select id="RestaurantList" can-value="currentRestaurant">
+		<option value="-1"></option>
+		{{#each restaurants}}
+			<option value="{{@index}}">{{name}}</option>
+		{{/each}}
+	</select>
 
-        ...
+	...
 ```
 
 What we've done above is to make a connection between the index of the select
@@ -245,8 +245,8 @@ the place order button. You should see something like the following:
 Finally, let's remove the code in the app.js that set the restaurant to "Spago" by default:
 
 ```
-	//-->Remove this line:
-    appState.attr('restaurant', 'Spago');
+//-->Remove this line:
+appState.attr('restaurant', 'Spago');
 ```
 
 Now that we can see the connection between the component, and the Application
@@ -254,18 +254,18 @@ State, let's make the code a little more useful. Update your Application State
 object, as follows:
 
 ```
-	        define: {
-            restaurant: {
-                value: {},
-                set: function (restaurant) {
-                    if (restaurant.restaurantId) {
-                        this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-                        this.attr('restaurantName', restaurant.name);
-                    }
-                    return restaurant;
-                }
-            },,
-            ...
+define: {
+restaurant: {
+	value: {},
+	set: function (restaurant) {
+		if (restaurant.restaurantId) {
+			this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+			this.attr('restaurantName', restaurant.name);
+		}
+		return restaurant;
+	}
+},,
+...
 ```
 
 This will be a very common pattern in your applications. This setter is our
@@ -277,26 +277,26 @@ To make the OrderForm component show, and the RestaurantList component hide,
 we use conditional stache tags in base_template.stache, as below:
 
 ```
-	{{#if menus}}
-        <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
-    {{else}}
-        <restaurant-list restaurant="{restaurant}"></restaurant-list>
-    {{/if}}
+{{#if menus}}
+	<order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
+{{else}}
+	<restaurant-list restaurant="{restaurant}"></restaurant-list>
+{{/if}}
 ```
 
 Finally, open order_form_component.js, and edit it as follows:
 
 ```
-	var OrderFormViewModel = can.Map.extend({
-        init: function () {
-            this.attr('delivery', {});
-            this.attr('order', {});
-            this.attr('issues', {});
-            //--> Remove the hard-coded reference to "Spago"
-            //    This is now passed in from the Application State
-            this.attr('menus', new RestaurantMenusModel.List({id: 1}));
-        },
-        ...
+var OrderFormViewModel = can.Map.extend({
+	init: function () {
+		this.attr('delivery', {});
+		this.attr('order', {});
+		this.attr('issues', {});
+		//--> Remove the hard-coded reference to "Spago"
+		//    This is now passed in from the Application State
+		this.attr('menus', new RestaurantMenusModel.List({id: 1}));
+	},
+	...
 ```
 
 When the Application State's menus attribute has a value, the order form is
