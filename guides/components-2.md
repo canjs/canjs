@@ -17,7 +17,8 @@
 Now that we know how to create a basic can.Component, let's look at making the
 Component a bit more useable. Let's build out the can.Component's template.
 
-## Stache Templates As mentioned previously, we're using Stache templates in
+## Stache Templates
+As mentioned previously, we're using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
 included the can.stache plugin [^can.stache]. The CanJS docs tell us that,
 "Stache templates look similar to normal HTML, except they contain *keys* for
@@ -71,7 +72,8 @@ Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
 and [Handlebar](http://handlebarsjs.com/) template formats. For more
 information on the details of these formats, see the respective websites.
 
-### Keys The keys in the Stache template are the text portions bounded by curly
+### Keys
+The keys in the Stache template are the text portions bounded by curly
 braces, e.g., {{*my-text*}}.
 
 You may have noticed a special key in the option tag. It looked like this:
@@ -85,7 +87,8 @@ assign it using jQuery's [$.data()](http://api.jquery.com/data/) method. In
 the example above, we're assigning individual restaurant objects to the option
 tag, as we [enumerate](# stache-enumeration) the collection of restaurants.
 
-### Enumeration <a name="stache-enumeration"></a> Enumerating means that you
+### Enumeration <a name="stache-enumeration"></a>
+Enumerating means that you
 can loop through the contents of an iterable item. We've done this above for
 the options in our select dropdown. The {{# each _ _ _}} ... {{/each}} tag set
 is used to enumerate over an enumerable collection, such as an array. In the
@@ -93,12 +96,14 @@ example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
 from data keys inside the `# each` scope without dot notation.
 
-### Filtering Filtering allows you to display selective data. Given an array of
+### Filtering
+Filtering allows you to display selective data. Given an array of
 people, for example, you can display all of the people whose first names begin
 with the letter "A". We won't explore filtering right now, as that's a more
 advanced feature.
 
-### Sections Finally, sections are execution blocks. They define an object
+### Sections
+Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
 typing you are required to do, and reduces the possibility for error as well.
@@ -111,7 +116,8 @@ hadn't used a Section, for example, we would have had to write
 {{MenuText.Restaurants}} for our key. Because we used a section, however, we
 only have to write {{Restaurants}}, and Stache does the rest for us.
 
-### Conditional Logic Stache templates have a limited capacity for conditional
+### Conditional Logic
+Stache templates have a limited capacity for conditional
 logic. You can use {{# if _ _ _}} ... {{/if}} tags to conditinally display
 contents. This becomes very useful when you want to show or hide a component,
 for example.
@@ -171,7 +177,8 @@ element in our template as follows:
 
 And, then add the appropriate event handler to our scope.
 
-## Getting and Setting Scope Properties Now that you know how to handle events
+## Getting and Setting Scope Properties
+Now that you know how to handle events
 in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` method off of
 the `this` keyword. Let's look at an example.
@@ -216,7 +223,8 @@ we set currentRestaurant to a valid value, the scope, which is an observable
 can.Map, broadcasts this change, and the template refreshes automatically,
 rendering the current restaurant section.
 
-## View Models It's considered a best practice to keep your can.Components
+## View Models
+It's considered a best practice to keep your can.Components
 thin. This helps maintain readability, and maintainability. To accomplish, you
 extract your scope from the can.Component into a can.Map.
 

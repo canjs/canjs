@@ -201,7 +201,8 @@ Note, that we've refactored the call to RestaurantMenusModel out into its own
 function. Now, when you change the value of the restaurant in the URL, the
 menu changes as well.
 
-## Creating Anchor Tags with can.route.link The last thing we need to do is
+## Creating Anchor Tags with can.route.link
+The last thing we need to do is
 add functionality to our Site Menu. Open up the "site_menu.stache" file in
 your site_menu components folder. Edit it, as follows:
 

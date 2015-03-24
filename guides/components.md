@@ -39,7 +39,8 @@ few methods we'll encounter frequently in other objects:
 
 We'll look at the extend method first.
 
-### The extend method can.Construct's `extend` method is used to create
+### The extend method
+can.Construct's `extend` method is used to create
 "constructor functions". Constructor functions create instances of objects.
 The extend method can take up to three arguments:
 
@@ -68,7 +69,8 @@ can.Construct.extend({
 
 This pattern will apply to all objects in CanJS that have an extend method.
 
-### The init method The `init` method is called whenever a new instance of a
+### The init method
+The `init` method is called whenever a new instance of a
 can.Construct is created. Init is where the bulk of your initialization code
 should go. Inside of the init function, the `this` keyword will refer to the
 new instance, and `this` will contains the arguments passed to the
@@ -192,7 +194,8 @@ The can.Component we created above had three properties.
 - template, and
 - scope
 
-#### The "tag" Property The can.Component's `tag` property associates that
+#### The "tag" Property
+The can.Component's `tag` property associates that
 can.Component with a specific, custom HTML tag:
 
 ![](../can/guides/images/2_first_component/ComponentTagLinkDiagram.png)
@@ -203,14 +206,16 @@ template are inserted as the HTML contents of the custom tag:
 
 ![](../can/guides/images/2_first_component/ComponentTagRenderedHTML.png)
 
-#### Template The `template` property of the can.Component contains the string
+#### Template
+The `template` property of the can.Component contains the string
 value of the can.Component's template. Note that the template property just
 contains a string value. You can inline the template, if it is small. However,
 the recommended way of working with templates, to maintain separation of
 concerns, is to keep them in their own files and load them using can.view, as
 we have done here.
 
-#### Scope The `scope` object is the can.Component's view model. The view
+#### Scope
+The `scope` object is the can.Component's view model. The view
 model is an abstraction of the view that exposes public properties and
 functions. Any property or method defined on the scope object is available
 from the can.Component's template as either a Stache data key, or a function.
@@ -219,7 +224,8 @@ referenced it as a Stache data key in our template.
 
 ![](../can/guides/images/2_first_component/ComponentScopeTemplateLink.png)
 
-##### can.Map &amp; can.List The scope is a special type of object, called a
+##### can.Map &amp; can.List
+The scope is a special type of object, called a
 "can.Map". can.Map objects are observable. Observable objects provide a way
 for you to listen for and keep track of changes to them. What this means, in
 this instance, is that if you make a change to your scope, those changes will

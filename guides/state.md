@@ -17,7 +17,8 @@ As mentioned in the [introduction](Tutorial.html), CanJS uses an Application
 State object to manage the state of your application. The application state
 object is bound to two things:
 
-1. The application's base template 2. The application's routing
+1. The application's base template
+2. The application's routing
 
 Let's create an Application State object, and see how this works. Open up your
 app.js, and update it, as below. Note that the Application State object is a
@@ -54,7 +55,8 @@ $(function () {
 });
 ```
 
-## Routing Before we dive into the details of the Application State object,
+## Routing
+Before we dive into the details of the Application State object,
 let's quickly discuss routing. According to the docs, routing in CanJS allows
 us to "manage browser history and client state by synchronizing the
 window.location.hash with a can.Map." In other words, we can use routing to

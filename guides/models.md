@@ -82,7 +82,7 @@ var modelInstance = new MyModel();
 modelInstance.destroy(); // Reference a method defined on the prototype
 ```
 
-##The Data for Our Model
+## The Data for Our Model
 
 We're not going to connect to a server to retrieve our data; however, we're
 going to code our model as if we were. How can this possibly work? CanJS
@@ -143,7 +143,7 @@ return data that doesn't match the expected return type of the findXxx
 methods, don't fret. There are ways to manage this, which we'll work with
 later on.
 
-##Connecting the Model to the Component
+## Connecting the Model to the Component
 
 It's time to connect all of this together in our view model. Open up
 restaurant_list_component.js, and edit the RestaurantListViewModel as follows,

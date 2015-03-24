@@ -130,7 +130,8 @@ can.Component.extend({
 });
 ```
 
-## Saving and updating a model Let's look at a few items in the code above.
+## Saving and updating a model
+Let's look at a few items in the code above.
 Notice that we're creating a new instance of a model (MenuOrderModel) in the
 createOrder function. Unlike data access methods, which are called statically
 off of the prototype, the save, update, and delete methods are called off of a
@@ -143,7 +144,8 @@ telephone number fields to the "delivery" object in the order_form.stache view
 template. Now, all we need to do to get the values of those fields is
 reference them off of the View Model's delivery property.
 
-### Moving from DOM to the model When we created the RestaurantListComponent,
+### Moving from DOM to the model
+When we created the RestaurantListComponent,
 we used the {{data '...'}} Stache key, and jQuery to obtain a reference to the
 restaurant object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
