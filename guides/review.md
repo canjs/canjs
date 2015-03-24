@@ -139,4 +139,4 @@ Finally, add the script tag for the SiteMenuComponent to the index.html file:
 
 If you go out to your application, and refresh it, you should see the following:
 
-![](images/6_reinforcing_concepts/MenuComponentAdded.png)
+![](../can/guides/images/6_reinforcing_concepts/MenuComponentAdded.png)

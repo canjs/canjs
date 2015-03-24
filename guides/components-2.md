@@ -145,17 +145,17 @@ Open up restaurant_list_component.js, and modify the scope as follows:
 In that modification, we added properties that map to all of the data keys and
 event handlers we defined in our Stache template.
 
-![](images/3_first_continued/MapOfScopeToTemplate.png)
+![](../can/guides/images/3_first_continued/MapOfScopeToTemplate.png)
 
 Go back out to the application in your browser, and refresh the page. You
 should see something like this:
 
-![](images/3_first_continued/SelectARestaurant.png)
+![](../can/guides/images/3_first_continued/SelectARestaurant.png)
 
 When you select an option from the dropdown, and the select's change event is
 fired, you should see:
 
-![](images/3_first_continued/SelectARestaurantChangeEvent.png)
+![](../can/guides/images/3_first_continued/SelectARestaurantChangeEvent.png)
 
 You can place as many event handlers as you need on an element. If we wanted
 to add a mousedown event handler, all we would have to do is edit the select
@@ -197,12 +197,12 @@ things.
 First, when you select a restaurant from the list, you should see an alert
 box, as follows:
 
-![](images/3_first_continued/GetterSetterAlertBox.png)
+![](../can/guides/images/3_first_continued/GetterSetterAlertBox.png)
 
 Next, you'll notice that when you select a restaurant from the list, the
 following appears below your restaurant select element.
 
-![](images/3_first_continued/RestaurantDetailsFirstDisplay.png)
+![](../can/guides/images/3_first_continued/RestaurantDetailsFirstDisplay.png)
 
 We set up the display of the current restaurant section earlier in the
 template. The default value for currentRestaurant, when the

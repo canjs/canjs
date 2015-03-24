@@ -23,7 +23,7 @@ jQuery, and that's what we'll be working with here.
 The right side of the page lists all of the plugins. From the list of plugins,
 select the following:
 
-![CanJS plugins to select](images/setup/DownloadOptions.png)
+![CanJS plugins to select](../can/guides/images/setup/DownloadOptions.png)
 
 At the bottom of the page, click the download button. You'll be promoted to
 download a file called "can.custom.js". Save that file to your local machine.

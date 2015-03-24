@@ -33,7 +33,7 @@ Open up your application, select a restaurant from the drop down list, and
 click, the "Place an Order from ____" button. You should see something similar
 to the following in your URL bar:
 
-![](images/9_routes_and_serialization/NastyUrlBar.png)
+![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
 
 That's not pretty, and not very useful. We don't want the confirmation or menu
 attributes to serialize. Open up app.js, and edit the Application State object
@@ -77,7 +77,7 @@ Go back out to the app, refresh it, and load a restaurant menu again (Select a
 restaurant, and click the "Place Order from_ _ _" button). Your URL bar should
 now look something like this:
 
-![](images/9_routes_and_serialization/CleanUrlBar.png)
+![](../can/guides/images/9_routes_and_serialization/CleanUrlBar.png)
 
 Much cleaner, but now it's missing information we might want. Add the
 following code before the call to can.route.ready():
@@ -103,7 +103,7 @@ restaurant: {
 Now, when you select a restaurant and click the Place Order buton, you should
 see the following in the URL bar:
 
-![](images/9_routes_and_serialization/FormattedRouteUrlBar.png)
+![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
 
 Finally, let's update the setter so that we can change restaurants by typing
 in the correct restaurant name into the hash. Open up site_models.js, and edit

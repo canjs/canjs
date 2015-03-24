@@ -298,7 +298,7 @@ Now, edit your index.html file to load the order_form_component.js file:
 
 Go out to your app in the browser, and reload your page. You should see the following:
 
-![](images/5_model_validation/OrderMenuComponentFirstLoad.png)
+![](../can/guides/images/5_model_validation/OrderMenuComponentFirstLoad.png)
 
 One thing you might immediately notice is that both the Restaurant List
 component, and the Order Component are both showing on the page. Don't worry

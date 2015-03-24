@@ -169,7 +169,7 @@ and bind that view to your component's scope.
 Let's look at an image that describes how all of this works, to make it
 clearer:
 
-![](images/2_first_component/ComponentLoadCycle.png)
+![](../can/guides/images/2_first_component/ComponentLoadCycle.png)
 
 ### Basic Anatomy of a can.Component
 The can.Component we created above had three properties.
@@ -181,13 +181,13 @@ The can.Component we created above had three properties.
 #### The "tag" Property The can.Component's `tag` property associates that
 can.Component with a specific, custom HTML tag:
 
-![](images/2_first_component/ComponentTagLinkDiagram.png)
+![](../can/guides/images/2_first_component/ComponentTagLinkDiagram.png)
 
 As mentioned above, when the template containing the can.Component's tag is
 parsed, the can.Component is instantiated, and the contents of its rendered
 template are inserted as the HTML contents of the custom tag:
 
-![](images/2_first_component/ComponentTagRenderedHTML.png)
+![](../can/guides/images/2_first_component/ComponentTagRenderedHTML.png)
 
 #### Template The `template` property of the can.Component contains the string
 value of the can.Component's template. Note that the template property just
@@ -203,7 +203,7 @@ from the can.Component's template as either a Stache data key, or a function.
 In our example above, we created the property "currentRestaurant", and then
 referenced it as a Stache data key in our template.
 
-![](images/2_first_component/ComponentScopeTemplateLink.png)
+![](../can/guides/images/2_first_component/ComponentScopeTemplateLink.png)
 
 ##### can.Map &amp; can.List The scope is a special type of object, called a
 "can.Map". can.Map objects are observable. Observable objects provide a way

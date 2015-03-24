@@ -93,7 +93,7 @@ appState.attr('restaurant', 'Spago');
 Now, refresh your app in the browser. The URL bar should look something like
 this:
 
-![](images/7_application_state_routing/DefaultRouteExample_1.png)
+![](../can/guides/images/7_application_state_routing/DefaultRouteExample_1.png)
 
 Note that, after we initialized our routes, updating the value of our
 Application State's restaurant property caused the route to update, as well.
@@ -122,11 +122,11 @@ function above, we're controlling what happens when the Application State's
 restaurant property is set. More on that later. Click OK on the alert, go to
 the browser's URL bar, change the URL as follows:
 
-![](images/7_application_state_routing/DefaultRouteExample_2.png)
+![](../can/guides/images/7_application_state_routing/DefaultRouteExample_2.png)
 
 Once you submit that URL, you should see an alert box that reads:
 
-![](images/7_application_state_routing/DefaultRouteChangeAlert.png)
+![](../can/guides/images/7_application_state_routing/DefaultRouteChangeAlert.png)
 
 ## Application Binding
 
@@ -155,7 +155,7 @@ attributes will automatically be included in the scope of the components*.
 Below is a diagram detailing how the connections work for connecting the
 restaurant property of the Application State to the Restaurant List component:
 
-![](images/7_application_state_routing/AppStateBindingMap.png)
+![](../can/guides/images/7_application_state_routing/AppStateBindingMap.png)
 
 Let's update our components to communicate with our Application State.
 
@@ -235,12 +235,12 @@ dropdown, and the index of the restaurants list in the can.Component's scope.
 Whenever the currentRestaurantIndex is updated, its `set` function is called.
 In its `set` function, it updates the currentRestaurant property.
 
-![](images/7_application_state_routing/SelectMapping.png)
+![](../can/guides/images/7_application_state_routing/SelectMapping.png)
 
 Now, refresh your application, select a restaurant from the list, and click
 the place order button. You should see something like the following:
 
-![](images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
+![](../can/guides/images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
 
 Finally, let's remove the code in the app.js that set the restaurant to "Spago" by default:
 
@@ -304,4 +304,4 @@ displayed. Otherwise, the restaurant list is displayed. To see this in action,
 select a restaurant from the list, and click the "Place an Order from ____"
 button. You should see something like this:
 
-![](images/7_application_state_routing/OrderFormDisplayed.png)
+![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)

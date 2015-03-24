@@ -208,8 +208,8 @@ Component. Finally, let's add the scripts we created to our index.html file:
 Let's go back to our app now, and see what happens! If everything went
 according to plan, you should see something like this:
 
-![](images/4_models/FinalRestaurantComponentNoSelect.png)
+![](../can/guides/images/4_models/FinalRestaurantComponentNoSelect.png)
 
 And, when you select a restaurant from the list, you should see:
 
-![](images/4_models/FinalRestaurantComponentSelect.png)
+![](../can/guides/images/4_models/FinalRestaurantComponentSelect.png)
