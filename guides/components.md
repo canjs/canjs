@@ -12,7 +12,7 @@
  	- Auto Instantiation
  	- Anatomy of a can.Component
 
-> Get the code for: [chapter 2](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_2)
+> Get the code for: [chapter 2](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_2)
 
 
 - - -

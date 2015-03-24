@@ -10,7 +10,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-> Get the code for: [chapter 3](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_3)
+> Get the code for: [chapter 3](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_3)
 
 - - -
 

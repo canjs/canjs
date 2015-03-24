@@ -7,7 +7,7 @@
 **In this Chapter**
  - Create the Site Menu can.Component
 
-> Get the code for: [chapter 6](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_6)
+> Get the code for: [chapter 6](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_6)
 
 - - -
 

@@ -10,7 +10,7 @@
  - Base View Template
  - Application Bootstrap
 
-> Get the code for: [chapter 1](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_1)
+> Get the code for: [chapter 1](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_1)
 
 - - -
 

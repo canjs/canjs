@@ -9,7 +9,7 @@
  - can.fixture
  - Connecting can.Models with can.Components
 
-> Get the code for: [chapter 4](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_4)
+> Get the code for: [chapter 4](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_4)
 
 - - -
 

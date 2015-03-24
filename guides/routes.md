@@ -11,7 +11,7 @@
  - Serialization
  - Creating Anchor Tags with can.route.link
 
-> Get the code for: [chapter 9](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_9) - (*This is the completed application*).
+> Get the code for: [chapter 9](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_9) - (*This is the completed application*).
 
 - - -
 

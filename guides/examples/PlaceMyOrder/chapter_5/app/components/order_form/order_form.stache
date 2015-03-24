@@ -1,0 +1,36 @@
+<h1>{{restaurantName}}</h1>
+
+{{#each menus}}
+
+    <h3>{{menuName}}</h3>
+
+    {{#each items}}
+        <label>
+            <input type="checkbox" can-value="selected"> {{name}}, ${{price}}
+        </label>
+    {{/each}}
+
+{{/each}}
+
+{{#delivery}}
+
+    <div id="CustomerDetails">
+        <label>Name:
+            <input type="text" can-value="name" id="name"/>
+
+            <div class="warning">{{issues.name}}</div>
+        </label>
+
+        <label>Address:
+            <input type="text" can-value="address" id="address"/>
+
+            <div class="warning">{{issues.address}}</div>
+        </label>
+
+        <label>Telephone:
+            <input type="tel" can-value="telephone" id="telephone"/>
+        </label></div>
+
+{{/delivery}}
+
+<button can-click="placeOrder">Place My Order!</button>
