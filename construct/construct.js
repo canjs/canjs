@@ -57,15 +57,18 @@ steal('can/util/string', function (can) {
 	 */
 	can.extend(can.Construct, {
 		/**
-		 * @property {Boolean} can.Construct.constructorExtends constructorExtends
+		 * @property {Boolean} can.Construct.constructorExtends
 		 * @parent can.Construct.static
 		 *
-		 * @description
-		 *
-		 * Toggles the behavior of a constructor function called
-		 * without `new` to extend the constructor function or
+		 * @description Toggles the behavior of a constructor function called
+		 * without the `new` keyword to extend the constructor function or
 		 * create a new instance.
-		 *
+		 * @codestart
+		 *	var animal = Animal();
+		 *  // vs
+		 * 	var animal = new Animal();
+		 * @codeend
+		 * 
 		 * @body
 		 *
 		 * If `constructorExtends` is:
@@ -73,8 +76,6 @@ steal('can/util/string', function (can) {
 		 *  - `true` - the constructor extends
 		 *  - `false` - a new instance of the constructor is created
 		 *
-		 * For 1.1, `constructorExtends` defaults to true. For
-		 * 1.2, `constructorExtends` will default to false.
 		 */
 		constructorExtends: true,
 		/**
@@ -308,7 +309,10 @@ steal('can/util/string', function (can) {
 		 * are used for initialization.
 		 *
 		 * @return {function} The constructor function.
-		 *
+		 * 
+		 * @body
+		 * ## Example
+		 * <a class="jsbin-embed" href="http://jsbin.com/nobomu/6/embed?js,console">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
 		 */
 		extend: function (name, staticProperties, instanceProperties) {
 			var fullName = name,
