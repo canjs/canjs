@@ -41,7 +41,7 @@
 		"rimraf": "2.1",
 		"steal": "~0.7.1",
 		"steal-qunit": "0.0.2",
-		"steal-tools": "~0.7.1",
+		"steal-tools": "git://github.com/stealjs/steal-tools.git#global-define",
 		"testee": "^0.1.3",
 		"zombie": "~2.0.8"
 	},
