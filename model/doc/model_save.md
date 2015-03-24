@@ -2,7 +2,7 @@
 @parent can.Model.prototype
 @description Save a model back to the server.
 @signature `model.save([success[, error]])`
-@param {function} [success] A callback to call on successful save. The callback recieves
+@param {function} [success] A callback to call on successful save. The callback receives
 the can.Model after saving.
 @param {function} [error] A callback to call when an error occurs. The callback receives the
 XmlHttpRequest object.
