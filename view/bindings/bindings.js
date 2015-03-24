@@ -102,10 +102,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 
 			if (el.type === "checkbox" || el.type === "radio") {
+
+				// Configure this compute trigger change events even when its dependent
+				// compute triggers a change event after having not changed. This
+				// is so that each radio instance can synchronize itself with the
+				// *actual* set value after user interaction.
+				value.computeInstance._triggerOnSameValue = true;
+
 				// For checkboxes and radio buttons, create a Checked can.Control around the input.  Pass in 
 				// the compute representing the can-value and can-true-value and can-false-value properties (if 
 				// they were used).
 				new Checked(el, {
+					abstractValue: data.scope._context[attr],
 					value: value,
 					trueValue: trueValue,
 					falseValue: falseValue
@@ -362,16 +370,42 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			},
 			// This event is triggered by the DOM.  If a change event occurs, we must set the value of the compute (options.value).
 			"change": function () {
+				var el = this.element[0],
+					resultingValue,
+					setValue;
 
 				if (this.isCheckbox) {
+					setValue = el.checked ?
+						this.options.trueValue :
+						this.options.falseValue;
+
 					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If 
 					// can-false-value was used and checked is false, set value to the string value of can-false-value.
-					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
+					this.options.value(setValue);
+
+					resultingValue = this.options.value();
+
+					if (setValue !== resultingValue) {
+						this.check();
+					}
 				}
 				// Radio input type
 				else {
-					if (this.element[0].checked) {
-						this.options.value(this.element[0].value);
+					if (el.checked) {
+						setValue = el.value;
+
+						this.options.value(setValue);
+
+						resultingValue = this.options.value();
+
+						if (setValue !== resultingValue) {
+							// The value didn't stick, so trigger a change on the
+							// abstract compute (the compute all of these radio inputs) are
+							// bound to so that every radio input can determine whether
+							// or not it should be "checked".
+							var abstractCompute = this.options.abstractValue.computeInstance;
+							can.batch.trigger(abstractCompute, 'change');
+						}
 					}
 				}
 

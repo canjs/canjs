@@ -84,7 +84,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', funct
 
 	var updateOnChange = function(compute, newValue, oldValue, batchNum){
 		// Only trigger event when value has changed
-		if (newValue !== oldValue) {
+		if (newValue !== oldValue || compute._triggerOnSameValue) {
 			can.batch.trigger(compute, batchNum ? {type: "change", batchNum: batchNum} : 'change', [
 				newValue,
 				oldValue
