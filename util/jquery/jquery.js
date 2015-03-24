@@ -4,7 +4,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 		/*jshint eqeqeq:false*/
 		return ( node.nodeName && (node.nodeType === 1 || node.nodeType === 9) )|| node == window;
 	};
-	$ = $ || window.$;
+	$ = $ || window.$ || window.jQuery;
 	// _jQuery node list._
 	$.extend(can, $, {
 		trigger: function (obj, event, args, bubbles) {
