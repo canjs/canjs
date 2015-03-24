@@ -15,10 +15,8 @@
 - - -
 
 The first step in putting together a CanJS app is sketching out the various
-states of your application, as you understand them at the moment[^requirements],
+states of your application, as you understand them at the moment,
 and any supporting elements you might need.
-
-[^requirements]: Requirements are always subject to change!
 
 We’ll be building a small application called "PlaceMyOrder". PlaceMyOrder is a
 website that lets you select from available restaurants in your area, view their

@@ -20,14 +20,11 @@ Component a bit more useable. Let's build out the can.Component's template.
 ## Stache Templates
 As mentioned previously, we're using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
-included the can.stache plugin [^can.stache]. The CanJS docs tell us that,
+included the can.stache plugin. The CanJS docs tell us that,
 "Stache templates look similar to normal HTML, except they contain *keys* for
 inserting data into the template, and *Sections* to *enumerate and/or filter*
 the enclosed template blocks." They can also contain limited *conditional
 logic* to show or hide content.
-
-[^can.stache]: In future releases of CanJS, 3.0 and above, the can.stache 
-plugin will be included in the core CanJS library.
 
 There are five aspects of Stache templates, mentioned above, that we'll review:
 

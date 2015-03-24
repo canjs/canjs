@@ -108,10 +108,8 @@ and it will contain two files:
         - PlaceMyOrderProduction.min.js
 
 There will be contents in both of these files---the output of the Browserify
-task---but they will be effectively blank[^blank].
-
-[^blank]: They won't actually be blank. They'll contain what looks like
-[^garbled JavaScript; but they won't contain any usable code.
+task---but they will contain what looks like garbled JavaScript, not anything
+that looks like usable code.
 
 To alter the code from the sample application to make use of Gulp and
 Browserify, update each of the component.js files, wrap the contents in an

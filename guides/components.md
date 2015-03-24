@@ -25,12 +25,8 @@ can.Construct. can.Construct provides a way to easily use the power of
 prototypal inheritance without worrying about hooking up all the particulars
 yourself.
 
-Without going into exhaustive detail[^ConstructDetail], can.Construct contains a
-few methods we'll encounter frequently in other objects:
-
-[^ConstructDetail]: If you want to go into exhaustive detail on can.Construct,
-[^you can consult the [CanJS
-[^docs](http://canjs.com/docs/can.Construct.prototype.init.html).
+Without going into [exhaustive detail](http://canjs.com/docs/can.Construct.prototype.init.html),
+can.Construct contains a few methods we'll encounter frequently in other objects:
 
 - Prototype
 	- init
