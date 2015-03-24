@@ -8,7 +8,7 @@
  - Application Overview
  - Page Chrome
  - Base View Template
- - Applicaiton Bootstrap
+ - Application Bootstrap
 
 > Get the code for: [chapter 1](https://github.com/joe-crick/UpAndRunningWithCanJS/tree/master/PlaceMyOrder/chapter_1)
 
