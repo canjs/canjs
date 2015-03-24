@@ -1,5 +1,5 @@
 @page Setup Setup
-@parent Tutorial 1
+@parent Tutorial 2
 
 @body
 

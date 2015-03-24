@@ -1,5 +1,5 @@
-@page Tutorial Up & Running with CanJS
-@parent guides 1
+@page Tutorial Getting Started
+@parent guides 3
 
 @body
 
