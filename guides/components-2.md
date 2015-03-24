@@ -42,29 +42,29 @@ Edit it, as follows:
 
 
 ```
-	<label for="RestaurantList">Select a Restaurant:</label>
-    <select id="RestaurantList">
-        <option value="-1"></option>
-        {{# each restaurants}}
-            <option {{data 'restaurant'}}>{{name}}</option>
-        {{/each}}
-    </select>
+<label for="RestaurantList">Select a Restaurant:</label>
+<select id="RestaurantList">
+	<option value="-1"></option>
+	{{# each restaurants}}
+		<option {{data 'restaurant'}}>{{name}}</option>
+	{{/each}}
+</select>
 
-    {{# if currentRestaurant}}
-        {{# currentRestaurant}}
-            <div id="current-restaurant">
+{{# if currentRestaurant}}
+	{{# currentRestaurant}}
+		<div id="current-restaurant">
 
-                <h3 id="restaurant-name">{{name}}</h3>
-                <ul id="restaurant-details">
-                    <li>Location: {{location}}</li>
-                    <li>Cuisine: {{cuisine}}</li>
-                    <li>Owner: {{owner}}</li>
-                </ul>
-            </div>
+			<h3 id="restaurant-name">{{name}}</h3>
+			<ul id="restaurant-details">
+				<li>Location: {{location}}</li>
+				<li>Cuisine: {{cuisine}}</li>
+				<li>Owner: {{owner}}</li>
+			</ul>
+		</div>
 
-            <button id="place-order">Place an Order from {{name}}</button>
-        {{/currentRestaurant}}
-    {{/if}}
+		<button id="place-order">Place an Order from {{name}}</button>
+	{{/currentRestaurant}}
+{{/if}}
 ```
 
 Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
@@ -77,7 +77,7 @@ braces, e.g., {{*my-text*}}.
 You may have noticed a special key in the option tag. It looked like this:
 
 ```
-	<option {{data 'restaurant'}}>{{name}}</option>
+<option {{data 'restaurant'}}>{{name}}</option>
 ```
 
 This is a data key. In brief, the data key allows you to access the data you
@@ -126,7 +126,9 @@ Let's work with an example. You can add event handling to any element in the
 template by adding an attribute with the event name prefixed by "can-". Going
 back to the restaurant_list.stache file, edit the select tag, as follows:
 
-	<select id="RestaurantList" can-change="restaurantSelected">
+```
+<select id="RestaurantList" can-change="restaurantSelected">
+```
 
 We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
@@ -134,13 +136,15 @@ scope.
 
 Open up restaurant_list_component.js, and modify the scope as follows:
 
-    scope: {
-        restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
-        currentRestaurant: undefined,
-        restaurantSelected: function(){
-            alert("You've selected a restaurant");
-        }
-    }
+```
+scope: {
+	restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
+	currentRestaurant: undefined,
+	restaurantSelected: function(){
+		alert("You've selected a restaurant");
+	}
+}
+```
 
 In that modification, we added properties that map to all of the data keys and
 event handlers we defined in our Stache template.
@@ -162,7 +166,7 @@ to add a mousedown event handler, all we would have to do is edit the select
 element in our template as follows:
 
 ```
-	<select id="RestaurantList" can-change="restaurantSelected" can-mousedown="handleMouseDown">
+<select id="RestaurantList" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
 And, then add the appropriate event handler to our scope.
@@ -176,12 +180,12 @@ Open up restaurant_list_component.js, and modify the scope's
 restaurantSelected property as follows:
 
 ```
-	restaurantSelected: function(viewModel, select){
-      var selectedRestaurant = select.find('option:checked').data('restaurant');
-      var currentRestaurant = 'currentRestaurant';
-      this.attr(currentRestaurant, selectedRestaurant);
-      alert(this.attr(currentRestaurant).name);
-  }
+restaurantSelected: function(viewModel, select){
+  var selectedRestaurant = select.find('option:checked').data('restaurant');
+  var currentRestaurant = 'currentRestaurant';
+  this.attr(currentRestaurant, selectedRestaurant);
+  alert(this.attr(currentRestaurant).name);
+}
 ```
 
 The first line of the function uses the jQuery `$.data()` method we referred
@@ -218,26 +222,28 @@ extract your scope from the can.Component into a can.Map.
 
 Open up restaurant_list_component.js, and add the following code:
 
-	var RestaurantListViewModel = can.Map.extend({
-        restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
-        currentRestaurant: undefined,
-        restaurantSelected: function (viewModel, select) {
-            var restaurant = select.find('option:checked').data('restaurant');
-            var currentRestaurant = 'currentRestaurant';
-            this.attr(currentRestaurant, restaurant);
-        }
-	});
-
+```
+var RestaurantListViewModel = can.Map.extend({
+	restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
+	currentRestaurant: undefined,
+	restaurantSelected: function (viewModel, select) {
+		var restaurant = select.find('option:checked').data('restaurant');
+		var currentRestaurant = 'currentRestaurant';
+		this.attr(currentRestaurant, restaurant);
+	}
+});
+```
 
 Now, assign the can.Map we created to the scope of the Restaurant List
 can.Component, as follows:
 
-	can.Component.extend({
-    	tag: 'restaurant-list',
-    	template: can.view('components/restaurant_list/restaurant_list.stache'),
-    	scope: RestaurantListViewModel
-	});
-
+```
+can.Component.extend({
+	tag: 'restaurant-list',
+	template: can.view('components/restaurant_list/restaurant_list.stache'),
+	scope: RestaurantListViewModel
+});
+```
 
 If you go back out to your application, and refresh the page, it should all
 look and work the same (though, we removed the alert). What we've done, by

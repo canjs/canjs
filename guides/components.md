@@ -58,11 +58,13 @@ staticProperties, and the third its instanceProperties.
 In the example below, I only want to pass in staticProperties. Therefore, I
 must call the method as follows:
 
-	can.Construct.extend({
-    	//Static properties here
-    },
-  	//Blank object as second parameter
-  	{});
+```
+can.Construct.extend({
+	//Static properties here
+},
+//Blank object as second parameter
+{});
+```
 
 This pattern will apply to all objects in CanJS that have an extend method.
 
@@ -73,14 +75,16 @@ new instance, and `this` will contains the arguments passed to the
 constructor. A common thing to do in init is save the arguments passed into
 the constructor. An example is below:
 
-    var Person = can.Construct.extend({
-        init: function(first, last) {
-        	this.first = first;
-        	this.last = last;
-    	}
-    });
+```
+var Person = can.Construct.extend({
+	init: function(first, last) {
+		this.first = first;
+		this.last = last;
+	}
+});
 
-    var actor = new Person("Abe", "Vigoda");
+var actor = new Person("Abe", "Vigoda");
+```
 
 ## First can.Component <a name="first-component"></a>
 If you recall from the introduction, a can.Component is like a self-contained, 
@@ -105,48 +109,58 @@ Inside that, create the following files:
 
 Put the following code inside restaurant_list_component.js:
 
-	/**
-     * @namespace RestaurantListComponent
-     */
-    can.Component.extend({
+```
+/**
+ * @namespace RestaurantListComponent
+ */
+can.Component.extend({
 
-        tag: 'restaurant-list',
-        template: can.view('components/restaurant_list/restaurant_list.stache'),
-        scope: {
-                currentRestaurant: 'Hello Restaurant Customer'
-        }
+	tag: 'restaurant-list',
+	template: can.view('components/restaurant_list/restaurant_list.stache'),
+	scope: {
+			currentRestaurant: 'Hello Restaurant Customer'
+	}
 
-    });
+});
+```
 
 Add the following code to restaurant_list.stache:
 
-	<h1>{{currentRestaurant}}</h1>
+```
+<h1>{{currentRestaurant}}</h1>
+```
 
 Add the code below to the /app/base_template.stache file:
 
-	<restaurant-list></restaurant-list>
+```
+<restaurant-list></restaurant-list>
+```
 
 Next, open up your app.js file, and edit it as follows:
 
-	$(function () {
+```
+$(function () {
 
-        $('# can-app').html(can.view('base_template.stache', {}));
+	$('# can-app').html(can.view('base_template.stache', {}));
 
-    });
+});
+```
 
-For the moment, if you don't know what can.view does, don't worry. We'll 
+For the moment, if you don't know what can.view does, don't worry. We'll
 go over it in detail soon.
 
 Finally, we need to add a reference to restaurant_list_component.js in the 
 index.html file, as follows:
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-	<script src="libs/can.custom.js"></script>
-    <script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
-      <!--Begin add-->
-      <script src="components/restaurant_list/restaurant_list_component.js"></script>
-      <!--End add-->
-    <script src="app.js"></script>
+```
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/can.custom.js"></script>
+<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+  <!--Begin add-->
+  <script src="components/restaurant_list/restaurant_list_component.js"></script>
+  <!--End add-->
+<script src="app.js"></script>
+```
 
 Now, go back out to your app in the browser, and refresh it. You should 
 see it printing: "Hello Restaurant Customer".
@@ -222,12 +236,11 @@ The attr method can be used to either get or set a property on a can.Map.
 an example:
 
 ```
-   //Get the first property off of the name property off of person
-   myCanMapInstance.attr('person.name.first');
+//Get the first property off of the name property off of person
+myCanMapInstance.attr('person.name.first');
 
-   //Set the last property of the person's name property
-   myCanMapInstance.attr('person.name.last', 'Bach');
-
+//Set the last property of the person's name property
+myCanMapInstance.attr('person.name.last', 'Bach');
 ```
 
 Observable arrays are also available with can.List, which is based on can.Map.

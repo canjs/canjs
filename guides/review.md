@@ -20,49 +20,55 @@ method of can.Model.
 In your models folder, open fixtures.js. Add the following code to register a
 new can.fixture:
 
-	can.fixture("GET /site_menu", function requestHandler() {
-       return {
-           menuText: {
-               "PageTitle": "PlaceMyOrder.com",
-               "FoodAtFingertips": "Food at your Fingertips",
-               "Restaurants": "Restaurants",
-               "Cuisines": "Cuisines"
-           }
-       };
-    });
+```
+can.fixture("GET /site_menu", function requestHandler() {
+   return {
+	   menuText: {
+		   "PageTitle": "PlaceMyOrder.com",
+		   "FoodAtFingertips": "Food at your Fingertips",
+		   "Restaurants": "Restaurants",
+		   "Cuisines": "Cuisines"
+	   }
+   };
+});
+```
 
 Open up site_models.js, and add a new can.Model:
 
-    var SiteMenuModel = can.Model.extend({
-            findOne: "GET /site_menu"
-    });
+```
+var SiteMenuModel = can.Model.extend({
+		findOne: "GET /site_menu"
+});
+```
 
 In your components folder, create a new folder called "site_menu". In that
 folder, file called site_menu_component.js, and add the following code:
 
-	var SiteMenuViewModel = can.Map.extend({
-        init: function () {
-            this.attr('menuData', {});
-        }
-    });
+```
+var SiteMenuViewModel = can.Map.extend({
+	init: function () {
+		this.attr('menuData', {});
+	}
+});
 
-    can.Component.extend({
-        tag: "menu",
-        template: can.view('components/site_menu/site_menu.stache'),
-        scope: MenuViewModel,
-        events: {
-            inserted: function () {
-                var siteMenuViewModel = this.scope;
-                SiteMenuModel.findOne({},
-                    function success(menu) {
-                        siteMenuViewModel.attr('menuData', menu);
-                    },
-                    function error(xhr) {
-                        alert(xhr.error.message);
-                    });
-            }
-        }
-    });
+can.Component.extend({
+	tag: "menu",
+	template: can.view('components/site_menu/site_menu.stache'),
+	scope: MenuViewModel,
+	events: {
+		inserted: function () {
+			var siteMenuViewModel = this.scope;
+			SiteMenuModel.findOne({},
+				function success(menu) {
+					siteMenuViewModel.attr('menuData', menu);
+				},
+				function error(xhr) {
+					alert(xhr.error.message);
+				});
+		}
+	}
+});
+```
 
 We've included a new attribute on the definition of our can.Component, above:
 The "events" attribute. The events attribute allows you to define listeners
@@ -124,17 +130,17 @@ Open up /app/base_template.stache, and add the following line to the top of
 the file:
 
 ```
-	<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas"></menu>
+<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas"></menu>
 ```
 
 Finally, add the script tag for the SiteMenuComponent to the index.html file:
 
 ```
-  <script src="models/site_models.js"></script>
-  <!--Begin add-->
-  <script src="components/site_menu/site_menu_component.js"></script>
-  <!--End add-->
-  <script src="components/order_form/order_form_component.js"></script>
+<script src="models/site_models.js"></script>
+<!--Begin add-->
+<script src="components/site_menu/site_menu_component.js"></script>
+<!--End add-->
+<script src="components/order_form/order_form_component.js"></script>
 ```
 
 If you go out to your application, and refresh it, you should see the following:
