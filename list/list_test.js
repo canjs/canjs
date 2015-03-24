@@ -280,4 +280,12 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		list.shift();
 		ok(true, "No events were fired.");
 	});
+
+	test('setting an index out of bounds does not create an array', function() {
+		expect(1);
+		var l = new can.List();
+
+		l.attr('1', 'foo');
+		equal(l.attr('1'), 'foo');
+	});
 });

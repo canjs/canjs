@@ -152,8 +152,8 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 					prop > this.length - 1) {
 					var newArr = new Array((prop + 1) - this.length);
 					newArr[newArr.length-1] = value;
-					value = newArr;
-					prop = this.length;
+					this.push.apply(this, newArr);
+					return newArr;
 				}
 
 				return can.Map.prototype.__set.call(this, ""+prop, value, current);
