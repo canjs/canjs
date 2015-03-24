@@ -75,7 +75,7 @@ together using the Application State and Routing to compose your application.
 One of the things that sets CanJS apart from other frameworks is its use
 of an Application State. An Application State is an observable object that,
 as its name implies, contains the state of your application. Where other
-application frameworks model their applications with routes, controllers, &c.,
+application frameworks model their applications with routes, controllers, etc.,
 CanJS takes a more unified, semantic approach. It encapsulates the state
 of your application in an object. This is a pretty powerful approach to
 writing applications---freeing developers from many of the constraints of a

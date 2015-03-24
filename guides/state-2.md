@@ -133,7 +133,7 @@ Sets the default value for instances of the can.Map. If the default
 value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
 object. This is because JavaScript passes primitives  by value, and all other
-values (objects, arrays, &c.) by reference.
+values (objects, arrays, etc.) by reference.
 
 As with type, above, there are two ways to define the value property: "Value",
 or "value". "Value", Uppercase, provides a constructor function, ensuring that

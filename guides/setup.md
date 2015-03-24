@@ -17,7 +17,7 @@ download the specific parts of CanJS you need for your application.
 The custom download page loads with all the elements in the core CanJS library
 already selected. We want all of those in our build, so leave them checked.
 CanJS relies on an external core library for some of its functionality. There
-are several options available (jQuery, Dojo, YUI, &c.). The default option is
+are several options available (jQuery, Dojo, YUI, etc.). The default option is
 jQuery, and that's what we'll be working with here.
 
 The right side of the page lists all of the plugins. From the list of plugins,
