@@ -12,9 +12,12 @@ steal(function () {
 	// An empty function useful for where you need a dummy callback.
 	can.k = function(){};
 
-	can.isDeferred = function (obj) {
+	can.isDeferred = can.isPromise = function (obj) {
 		// Returns `true` if something looks like a deferred.
 		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
+	};
+	can.isMapLike = function(obj){
+		return can.Map && (obj instanceof can.Map || obj && obj.__get);
 	};
 
 	var cid = 0;

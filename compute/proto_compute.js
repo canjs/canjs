@@ -1,4 +1,4 @@
-steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
+steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', function (can, bind, read) {
 	var stack = [];
 
 	can.__read = function (func, self) {
@@ -179,12 +179,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		};
 	};
 
-	var isObserve = function (obj) {
-		return obj instanceof can.Map || obj && obj.__get;
-	},
+
 	// Instead of calculating whether anything is listening every time,
 	// use a function to do nothing (which may be overwritten)
-	k = function () {};
+	var k = function () {};
 
 	var updater = function(newVal, oldVal, batchNum) {
 		this.setCached(newVal);
@@ -532,105 +530,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 		});
 	};
 
-	can.Compute.read = function (parent, reads, options) {
-		options = options || {};
-		// `cur` is the current value.
-		var cur = parent,
-			type,
-			// `prev` is the object we are reading from.
-			prev,
-			// `foundObs` did we find an observable.
-			foundObs;
-		for (var i = 0, readLength = reads.length; i < readLength; i++) {
-			// Update what we are reading from.
-			prev = cur;
-			// Read from the compute. We can't read a property yet.
-			if (prev && prev.isComputed) {
-				if (options.foundObservable) {
-					options.foundObservable(prev, i);
-				}
-				prev = cur = prev instanceof can.Compute ? prev.get() : prev();
-			}
-			// Look to read a property from something.
-			if (isObserve(prev)) {
-				if (!foundObs && options.foundObservable) {
-					options.foundObservable(prev, i);
-				}
-				foundObs = 1;
-				// is it a method on the prototype?
-				if (typeof prev[reads[i]] === 'function' && prev.constructor.prototype[reads[i]] === prev[reads[i]]) {
-					// call that method
-					if (options.returnObserveMethods) {
-						cur = cur[reads[i]];
-					} else if ( (reads[i] === 'constructor' && prev instanceof can.Construct) ||
-						(prev[reads[i]].prototype instanceof can.Construct)) {
-						cur = prev[reads[i]];
-					} else {
-						cur = prev[reads[i]].apply(prev, options.args || []);
-					}
-				} else {
-					// use attr to get that value
-					cur = cur.attr(reads[i]);
-				}
-			} else {
-				// just do the dot operator
-				if(cur == null) {
-					cur = undefined;
-				} else {
-					cur = prev[reads[i]];
-				}
-				
-			}
-			type = typeof cur;
-			// If it's a compute, get the compute's value
-			// unless we are at the end of the 
-			if (cur && cur.isComputed && (!options.isArgument && i < readLength - 1)) {
-				if (!foundObs && options.foundObservable) {
-					options.foundObservable(prev, i + 1);
-				}
-				cur = cur();
-			}
-			// If it's an anonymous function, execute as requested
-			else if (i < reads.length - 1 && type === 'function' && options.executeAnonymousFunctions && !(can.Construct && cur.prototype instanceof can.Construct)) {
-				cur = cur();
-			}
-			// if there are properties left to read, and we don't have an object, early exit
-			if (i < reads.length - 1 && (cur === null || type !== 'function' && type !== 'object')) {
-				if (options.earlyExit) {
-					options.earlyExit(prev, i, cur);
-				}
-				// return undefined so we know this isn't the right value
-				return {
-					value: undefined,
-					parent: prev
-				};
-			}
-		}
-		// handle an ending function
-		// unless it is a can.Construct-derived constructor
-		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct) && !(can.route && cur === can.route)) {
-			if (options.isArgument) {
-				if (!cur.isComputed && options.proxyMethods !== false) {
-					cur = can.proxy(cur, prev);
-				}
-			} else {
-				if (cur.isComputed && !foundObs && options.foundObservable) {
-					options.foundObservable(cur, i);
-				}
-				cur = cur.call(prev);
-			}
-		}
-		// if we don't have a value, exit early.
-		if (cur === undefined) {
-			if (options.earlyExit) {
-				options.earlyExit(prev, i - 1);
-			}
-		}
-		return {
-			value: cur,
-			parent: prev
-		};
-	};
+	can.Compute.read = read;
+	
 	can.Compute.truthy = function(compute) {
 		return new can.Compute(function() {
 			var res = compute.get();
@@ -642,7 +543,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch', function (can, bind) {
 	};
 	
 	can.Compute.set = function(parent, key, value) {
-		if(isObserve(parent)) {
+		if(can.isMapLike(parent)) {
 			return parent.attr(key, value);
 		}
 
