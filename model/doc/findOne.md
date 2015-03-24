@@ -8,7 +8,7 @@
 Retrieve a single instance from the server.
 
 @param {Object} params Values to filter the request or results with.
-@param {function(can.Model)} [success(model)] A callback to call on successful retrieval. The callback recieves
+@param {function(can.Model)} [success(model)] A callback to call on successful retrieval. The callback receives
 the retrieved resource as a can.Model.
 @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
 XmlHttpRequest object.
