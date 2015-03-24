@@ -9,7 +9,7 @@ CanJS with a build tool, we recommend adding another folder under your root
 named "build".
 
 To install Node, visit the Node website, and follow the install instructions
-given there: [NodeJs](http://nodejs.org/).
+given there: [NodeJS](http://nodejs.org/).
 
 If you need instructions on installing Gulp, Mark Goodyear has put together an
 excellent guide. You can read it here: [Getting Started with
@@ -81,7 +81,7 @@ comments below for details on the commands):
 
 We're not going to go into a detailed analysis of the gulpfile, or Gulp. The
 goal, here, is to get you up and running. If you want more information, you
-can visit the Gulp site at [www.gulpjs.com](www.gulpjs.com)
+can visit the [Gulp site](http://gulpjs.com).
 
 At this point, you should be able to run a successful build. Open up your Node
 terminal, making sure you run it from your build folder, and type "gulp". The

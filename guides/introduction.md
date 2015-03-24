@@ -85,7 +85,7 @@ DOM-centric paradigm to think more directly about the application itself.
 For many JS MV* frameworks, routing divides an application into logical views
 and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
-Rather, it has to do with [Application State](#app-state). In brief,
+Rather, it has to do with [Application State](State.html). In brief,
 CanJS maintains a reciprocal relationship between an application's route,
 and its state. In other words, if you change the state of an application,
 your route will change. If you change your route, your application's state
