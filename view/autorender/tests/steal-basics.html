@@ -16,7 +16,7 @@
 <script>
 	steal('can', 'can/view/autorender',function(can, ready){
 		ready(function() {
-			isReady($("body my-component"), can.scope('my-component'));
+			isReady($("body my-component"), can.viewModel('my-component'));
 		}, hasError);
 	});
 </script>

@@ -1,4 +1,4 @@
-<script id="sites" type="text/mustache" can-autoload>
+<script id="sites" type="text/mustache" can-autorender>
   <table id="websites">
   {{#websites}}
     <tr>
@@ -11,7 +11,7 @@
 <script src="../../node_modules/steal/steal.js"></script>
 <script type='text/javascript'>
 steal("can/util", "can/component", "can/util/fixture",
-	 "can/model", "can/view/autoload",function (can) {
+	 "can/model", "can/view/autorender",function (can) {
 
 
 var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++",url:"http://jquerypp.com"},

@@ -235,6 +235,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// Set `componentScope` to `this.viewModel` and set it to the element's `data` object as a `viewModel` property
 				this.scope = this.viewModel = componentScope;
 				can.data(can.$(el), "scope", this.scope);
+				can.data(can.$(el), "viewModel", this.scope);
 
 				// Create a real Scope object out of the viewModel property
 				var renderedScope = lexicalContent ?
@@ -482,24 +483,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 	 */
 		// Define the `can.viewModel` function that can be used to retrieve the
 		// `viewModel` from the element
-	can.scope = can.viewModel = function (el, attr, val) {
-		el = can.$(el);
-		var scope = can.data(el, "scope");
-		if(!scope) {
-			scope = new can.Map();
-			can.data(el, "scope", scope);
-		}
-		switch (arguments.length) {
-			case 0:
-			case 1:
-				return scope;
-			case 2:
-				return scope.attr(attr);
-			default:
-				scope.attr(attr, val);
-				return el;
-		}
-	};
+	
 
 	var $ = can.$;
 

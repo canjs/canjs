@@ -51,7 +51,7 @@ can.Component.extend({
 	tag: "tabs",
 	template: 	
 		"<ul>"+
-			// Create an LI for each item in the panel's scope object
+			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
     			"<li {{#isActive}}class='active'{{/isActive}} "+
     			    "can-click='makeActive'>"+
@@ -65,7 +65,7 @@ can.Component.extend({
 		// tabs element.
 		panels: [],
 		// When a `<panel>` element is inserted into the document,
-		// it calls this method to add the panel's scope to the
+		// it calls this method to add the panel's viewModel to the
 		// panels array.
 		addPanel: function(panel){
 			// If this is the first panel, activate it.
@@ -75,7 +75,7 @@ can.Component.extend({
 			this.attr("panels").push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
-		// it calls this method to remove the panel's scope from
+		// it calls this method to remove the panel's viewModel from
 		// the panels array.
 		removePanel: function(panel){
 			var panels = this.attr("panels");
@@ -95,12 +95,12 @@ can.Component.extend({
 			this.attr("active",panel);
 			this.attr("panels").each(function(panel){
 				panel.attr("active", false)
-			})
+			});
 			panel.attr("active",true);
 			
 		},
-		// this is scope, not mustache
-		// consider removing scope as arg
+		// this is viewModel, not mustache
+		// consider removing viewModel as arg
 		isActive: function( panel ) {
 			return this.attr('active') == panel
 		}
@@ -116,19 +116,19 @@ can.Component.extend({
 	},
 	events: {
 		inserted: function(){
-			this.element.parent().scope().addPanel( this.scope );
+			this.element.parent().viewModel().addPanel( this.viewModel );
 		},
 		removed: function(){
-			this.element.parent().scope().removePanel( this.scope );
+			this.element.parent().viewModel().removePanel( this.viewModel );
 		}
 	}
-})
+});
 
 var foodTypes= new can.List([
 	{title: "Fruits", content: "oranges, apples"},
 	{title: "Breads", content: "pasta, cereal"},
 	{title: "Sweets", content: "ice cream, candy"}
-])
+]);
 window.foodTypes = foodTypes;
 
 $("#out").html( can.view("app",{
@@ -139,9 +139,9 @@ $("#out").html( can.view("app",{
 			content: "Carrots, peas, kale"
 		})
 	}
-}))
+}));
 
 
-})
+});
 </script>
 
