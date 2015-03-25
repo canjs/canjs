@@ -758,7 +758,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.fail fail
 @parent can.Deferred.prototype
 @signature `deferred.fail(failCallbacks)`
-@param {Function} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
+@param {Function|Array} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
 
 @body
 `deferred.fail(failCallbacks)` adds one or more functions to be called when the Deferred object is rejected.
