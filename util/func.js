@@ -477,20 +477,21 @@ for simulating events. Such as the following:
 @parent can.util
 @signature `can.ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
-The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {can.Deferred} A can.Deferred that resolves to the data.
+The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
+@return {can.Deferred} A [can.Deferred](http://canjs.com/docs/can.Deferred.html) that resolves to the data.
 
 @body
-`can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request
-similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
+`can.ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
+similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax]. The example below
+makes use of (can.frag)[http://canjs.com/docs/can.frag.html].
 
-
-    can.ajax({
-        url: 'ajax/farm/animals',
-        success: function(animals) {
-            can.$('.farm').html(animals);
-        }
-    });
+	can.ajax({
+		url: 'http://canjs.com/docs/can.ajax.html',
+		success: function(document) {
+			var frag = can.frag(document);
+			return frag.querySelector(".heading h1").innerText; //-> can.ajax
+		}
+	});
 */
 //
 /**
