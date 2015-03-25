@@ -59,7 +59,7 @@ Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul
 
 Finally, you'll need to download the supporting libraries. They are:
 
- - [jQuery](http://jquery.com/download/)
+ - [jQuery 2.x](http://jquery.com/download/)
  - [can.fixture](http://canjs.com/release/2.1.4/can.fixture.js)
 
 Once you've downloaded these files, copy them to the *libs* directory in your application folder.
