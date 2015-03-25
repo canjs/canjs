@@ -540,11 +540,13 @@ The following lists how the NodeList is created by each library:
 
 @body
 `can.append( wrappedNodeList, html )` inserts content to the end of each wrapped node list item(s) passed.
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+for [.append](http://api.jquery.com/append/).
 
     // Before
     <div id="demo" />
 
-    can.append( can.$('#demo'), 'Demos are fun!' );
+    can.append(can.$('#demo'), 'Demos are fun!');
 
     // After
     <div id="demo">Demos are fun!</div>
