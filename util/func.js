@@ -742,7 +742,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.done done
 @parent can.Deferred.prototype
 @signature `deferred.done(doneCallbacks)`
-@param {Function} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
+@param {Function|Array} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
 
 @body
 `deferred.done(doneCallbacks)` adds one or more functions to be called when the Deferred object is resolved.
