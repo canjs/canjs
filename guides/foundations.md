@@ -34,6 +34,8 @@ And a few supporting objects:
 2. Menu Items
 3. Restaurant List
 
+The following pseudo UML diagram outlines the elements that comprise up our application:
+
 ![](../can/guides/images/1_application_foundations/AppStateDiagram.png)
 
 Now that our basic environment has been setup, and we have an outline of
@@ -47,8 +49,10 @@ will involve setting up our foundations:
 Let's dive in to the good stuff, and start working with the app! Create a
 file called "index.html" in the app folder.
 
-- app
-    - index.html
+```
+|--app
+	|--index.html
+```
 
 It should look like this:
 
@@ -67,9 +71,9 @@ It should look like this:
 <div id="can-app">
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/jquery.js"></script>
 <script src="libs/can.custom.js"></script>
-<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+<script src="libs/can.fixture.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
@@ -79,11 +83,9 @@ At the bottom of the page, just before the body tag, are all of the script
 tags. We're using the jQuery edition of CanJS, so the first script tag
 loaded must be jQuery. Following jQuery, we load can.custom.js.
 
-In the last chapter, we mentioned including can.fixture.js. We do that in
-the script tag just below can.custom.js, downloading it from the CDN. In a
-normal project, once you connect to the actual REST services, you would
-remove can.fixture.js. In addition, to simplify things, we're using Bootstrap
-for our CSS; however Bootstrap is not required to use CanJS.
+In the last chapter, we mentioned including can.fixture.js. In a
+normal project, once you connected to the actual REST services, you would
+remove can.fixture.js. In addition, to simplify things, we're using the Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
 
 #### Base Template
 Create a file in the app folder called "base_template.stache". We'll edit the

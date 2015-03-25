@@ -18,7 +18,7 @@ The custom download page loads with all the elements in the core CanJS library
 already selected. We want all of those in our build, so leave them checked.
 CanJS relies on an external core library for some of its functionality. There
 are several options available (jQuery, Dojo, YUI, etc.). The default option is
-jQuery, and that's what we'll be working with here.
+jQuery; and that's what we'll be working with here.
 
 The right side of the page lists all of the plugins. From the list of plugins,
 select the following:
@@ -44,13 +44,22 @@ folders. When building a CanJS app, because our application will be built using
 components, we use a component-based folder structure. Off of a root folder
 called "PlaceMyOrder", create the following subfolders:
 
-- PlaceMyOrder
-	- app
-		- components
-		- models
-		- site_css
-		- libs
+```
+| PlaceMyOrder
+    |--app
+        |--components
+        |--libs
+        |--models
+        |--site_css
+```
 
 Copy the CSS file that accompanies this guide into your CSS folder. We won't be
 covering any of the CSS here. Next, copy the can.custom.js file you downloaded
 in the previous step into the "libs" folder.
+
+Finally, you'll need to download the supporting libraries. They are:
+
+ - [jQuery](http://jquery.com/download/)
+ - [can.fixture](http://canjs.com/release/2.1.4/can.fixture.js)
+
+Once you've downloaded these files, copy them to the *libs* directory in your application folder.

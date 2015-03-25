@@ -24,10 +24,10 @@ Every CanJS application contains:
 ### Models
 Models manage the data of an application. A model notifies the elements
 associated with it when its state has changed. In CanJS this is the can.Model
-object. can.Model handles all of your CRUD operations (Create, Read, Update,
-and Delete). They can also provide validation for your data, as well---serving
-as a single source for handling your data acquisition, and managing its
-integrity.
+object. can.Model makes it almost effortless to handle all of your CRUD
+operations (Create, Read, Update, and Delete). They can also provide
+validation for your data, as well---serving as a single source for handling
+your data acquisition, and managing its integrity.
 
 ### Views
 Views request information from the model, and use the data it provides to
