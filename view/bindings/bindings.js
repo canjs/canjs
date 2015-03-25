@@ -214,7 +214,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					"@element": $el,
 					"@event": ev,
 					"@viewModel": viewModel,
-					"@scope": viewModel,
+					"@scope": data.scope,
 					"@context": data.scope._context
 				});
 

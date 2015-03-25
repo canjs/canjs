@@ -1,20 +1,20 @@
 <div id='out'></div>
-<script src="../../../../../steal/steal.js"></script>
+<script src="../../../node_modules/steal/steal.js"></script>
 <script>
 steal("can/view/bindings",function(){
 		
-var template = can.view.mustache(
-  "<div><button can-click='up'>&uarr;</button></div>"+
+var template = can.mustache(
+  "<div><button can-click='{up}'>&uarr;</button></div>"+
   "<div><input "+
                "can-enter='update' "+
                "can-blur='update' "+
                "value='{{age}}'/></div>"+
-  "<div><button can-click='down'>&darr;</button></div>"+
-  "<p>The age {{age}}</p>")
+  "<div><button can-click='{down}'>&darr;</button></div>"+
+  "<p>The age {{age}}</p>");
 
 var age = can.compute(31, function(newVal){
   return +newVal
-})
+});
 
 var data = {
   age: age,
@@ -33,6 +33,6 @@ var data = {
 
 $("#out").html( template( data ) );
 
-})
+});
 </script>
 
