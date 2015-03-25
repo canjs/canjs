@@ -1,0 +1,10 @@
+zip -r ch-1_canjs-getting-started.zip chapter_1/app/
+zip -r ch-2_canjs-getting-started.zip chapter_2/app/
+zip -r ch-3_canjs-getting-started.zip chapter_3/app/
+zip -r ch-4_canjs-getting-started.zip chapter_4/app/
+zip -r ch-5_canjs-getting-started.zip chapter_5/app/
+zip -r ch-6_canjs-getting-started.zip chapter_6/app/
+zip -r ch-7_canjs-getting-started.zip chapter_7/app/
+zip -r ch-8_canjs-getting-started.zip chapter_8/app/
+zip -r ch-9_canjs-getting-started.zip chapter_9/app/
+

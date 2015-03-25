@@ -7,7 +7,7 @@
 **In this Chapter**
  - Create the Site Menu can.Component
 
-> Get the code for: [chapter 6](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_6)
+> Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -54,7 +54,7 @@ var SiteMenuViewModel = can.Map.extend({
 can.Component.extend({
 	tag: "menu",
 	template: can.view('components/site_menu/site_menu.stache'),
-	scope: MenuViewModel,
+	scope: SiteMenuViewModel,
 	events: {
 		inserted: function () {
 			var siteMenuViewModel = this.scope;
@@ -71,7 +71,7 @@ can.Component.extend({
 ```
 
 We've included a new attribute on the definition of our can.Component, above:
-The "events" attribute. The events attribute allows you to define listeners
+the "events" attribute. The events attribute allows you to define listeners
 for events on your can.Component. These events can be DOM events, such as
 "click", events in the lifecycle of the can.Component, or properties on the
 component's scope. References to the scope from the events attribute are
@@ -82,11 +82,12 @@ can.Component lifecycle event that fires when the component has been inserted
 into the DOM.
 
 Similar to the can.Model findAll method, the findOne method takes a parameters
-object as its first argument. Optionally, you can pass in two call-back
-functions, the first being the success function, the second being the error
+object as its first argument. Optionally, you can pass in two callback
+functions: the first being the success function and the second being the error
 function. The success function receives the object returned by the findOne
 call as the first parameter in its method signature. The error function
-receives the XmlHttpRequest object as the first parameter in its method
+receives the [XMLHttpRequest object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
+as the first parameter in its method
 signature. If the findOne operation is successful, the success method will be
 called. Otherwise, the error method is called.
 
@@ -146,3 +147,9 @@ Finally, add the script tag for the SiteMenuComponent to the index.html file:
 If you go out to your application, and refresh it, you should see the following:
 
 ![](../can/guides/images/6_reinforcing_concepts/MenuComponentAdded.png)
+
+- - -
+
+<span class="pull-left">[< Sending Data to a Service](Models2.html)</span>
+
+<span class="pull-right">[App State & Basic Routing >](State.html)</span>

@@ -10,12 +10,12 @@
  - Getting and Setting Scope Properties
  - View Models
 
-> Get the code for: [chapter 3](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_3)
+> Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
 
 - - -
 
 Now that we know how to create a basic can.Component, let's look at making the
-Component a bit more useable. Let's build out the can.Component's template.
+Component a bit more usable. Let's build out the can.Component's template.
 
 ## Stache Templates
 As mentioned previously, we're using Stache templates in
@@ -28,11 +28,11 @@ logic* to show or hide content.
 
 There are five aspects of Stache templates, mentioned above, that we'll review:
 
-- keys,
-- sections,
-- enumerate,
-- filter, and
-- conditional logic
+- [keys](#keys),
+- [sections](#sections),
+- [enumeration](#enumeration),
+- [filter](#filter), and
+- [conditional logic](#conditionallogic)
 
 It will be easiest for us to look at these with an example, so let's create 
 one. Open up your */components/restaurant_list/restaurant_list.stache* file. 
@@ -69,7 +69,7 @@ Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
 and [Handlebar](http://handlebarsjs.com/) template formats. For more
 information on the details of these formats, see the respective websites.
 
-### Keys
+### Keys <a name="keys"></a>
 The keys in the Stache template are the text portions bounded by curly
 braces, e.g., {{*my-text*}}.
 
@@ -82,9 +82,9 @@ You may have noticed a special key in the option tag. It looked like this:
 This is a data key. In brief, the data key allows you to access the data you
 assign it using jQuery's [$.data()](http://api.jquery.com/data/) method. In
 the example above, we're assigning individual restaurant objects to the option
-tag, as we [enumerate](# stache-enumeration) the collection of restaurants.
+tag, as we [enumerate](#enumeration) the collection of restaurants.
 
-### Enumeration <a name="stache-enumeration"></a>
+### Enumeration <a name="enumeration"></a>
 Enumerating means that you
 can loop through the contents of an iterable item. We've done this above for
 the options in our select dropdown. The {{# each _ _ _}} ... {{/each}} tag set
@@ -93,13 +93,13 @@ example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
 from data keys inside the `# each` scope without dot notation.
 
-### Filtering
+### Filtering <a name="filtering"></a>
 Filtering allows you to display selective data. Given an array of
 people, for example, you can display all of the people whose first names begin
 with the letter "A". We won't explore filtering right now, as that's a more
 advanced feature.
 
-### Sections
+### Sections <a name="sections"></a>
 Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
@@ -113,9 +113,9 @@ hadn't used a Section, for example, we would have had to write
 {{MenuText.Restaurants}} for our key. Because we used a section, however, we
 only have to write {{Restaurants}}, and Stache does the rest for us.
 
-### Conditional Logic
+### Conditional Logic <a name="conditionallogic"></a>
 Stache templates have a limited capacity for conditional
-logic. You can use {{# if _ _ _}} ... {{/if}} tags to conditinally display
+logic. You can use {{# if _ _ _}} ... {{/if}} tags to conditionally display
 contents. This becomes very useful when you want to show or hide a component,
 for example.
 
@@ -123,7 +123,8 @@ for example.
 
 Event handling is defined in two places:
 
-1. The view template 2. The can.Component scope
+1. The view template
+2. The can.Component scope
 
 Let's work with an example. You can add event handling to any element in the
 template by adding an attribute with the event name prefixed by "can-". Going
@@ -225,7 +226,8 @@ It's considered a best practice to keep your can.Components
 thin. This helps maintain readability, and maintainability. To accomplish, you
 extract your scope from the can.Component into a can.Map.
 
-Open up restaurant_list_component.js, and add the following code:
+Open up restaurant_list_component.js, and add the following code to the top of
+the file:
 
 ```
 var RestaurantListViewModel = can.Map.extend({
@@ -256,3 +258,9 @@ separating out the view model, is make the code easier to read and maintain.
 
 In the next chapter, we'll learn about working with more realistic data by
 adding REST service interaction with can.Model.
+
+- - -
+
+<span class="pull-left">[< Getting to Know Components](Components.html)</span>
+
+<span class="pull-right">[Models (& Fixtures) >](Models.html)</span>

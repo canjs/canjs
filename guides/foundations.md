@@ -10,12 +10,13 @@
  - Base View Template
  - Application Bootstrap
 
-> Get the code for: [chapter 1](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_1)
+> Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
 
 - - -
 
 The first step in putting together a CanJS app is sketching out the various
-states of your application, as you understand them at the moment,
+states of your application, as you understand them at the moment
+(requirements are always subject to change!),
 and any supporting elements you might need.
 
 We’ll be building a small application called "PlaceMyOrder". PlaceMyOrder is a
@@ -100,7 +101,7 @@ file as follows:
 ```
 $(function () {
 
-	$('# can-app').html('The Requisite "Hello World" Message');
+	$('#can-app').html('The Requisite "Hello World" Message');
 
 });
 ```
@@ -115,3 +116,9 @@ We're just using jQuery to set the HTML contents of a DOM element.
 So, how do we get the application to actually *do something*? Building apps
 with CanJS centers around building can.Components, read on to the next
 chapter to learn more.
+
+- - -
+
+<span class="pull-left">[< Getting Started](Tutorial.html)</span>
+
+<span class="pull-right">[Setup >](Setup.html)</span>

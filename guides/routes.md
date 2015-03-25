@@ -3,15 +3,13 @@
 
 @body
 
-# Routing Continued:
-
 - - -
 **In this Chapter**
  - Route Formatting
  - Serialization
  - Creating Anchor Tags with can.route.link
 
-> Get the code for: [chapter 9](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_9) - (*This is the completed application*).
+> Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 
 - - -
 
@@ -38,73 +36,7 @@ to the following in your URL bar:
 That's not pretty, and not very useful. We don't want the confirmation or menu
 attributes to serialize. It's easy to change this behavior. Open up app.js, and edit the Application State object as follows:
 
-```
-var ApplicationState = can.Map.extend({
-	define: {
-		restaurant: {
-			value: {},
-			set: function (restaurant) {
-				if (restaurant.restaurantId) {
-					var that = this;
-					RestaurantMenusModel.findOne({id: restaurant.restaurantId},
-						function success(selectedMenus) {
-							that.attr('menus', {
-								collection: selectedMenus.menus,
-								restaurantName: restaurant.name
-							});
-						},
-						function error(xhr) {
-							alert(xhr.message);
-						});
-				}
-				return restaurant;
-			}
-		},
-		menus: {
-			value: null,
-			serialize: false
-		},
-		confirmation: {
-			value: {},
-			serialize: false
-		}
-	}
-});
-```
-
-Go back out to the app, refresh it, and load a restaurant menu again (Select a
-restaurant, and click the "Place Order from_ _ _" button). Your URL bar should
-now look something like this:
-
-![](../can/guides/images/9_routes_and_serialization/CleanUrlBar.png)
-
-Much cleaner, but now it's missing information we might want. Add the
-following code before the call to can.route.ready():
-
-```
-can.route('/:restaurant');
-```
-
-This line tells can.route to match any route going to the restaurant, and
-format it so that it is a forward slash followed by the serialized value. Add
-a serialize property to the restaurant attribute of the Application State
-object as follows:
-
-```
-restaurant: {
-   ...
-   serialize: function () {
-	   return this.attr('restaurant.name');
-   }
-}
-```
-
-Now, when you select a restaurant and click the Place Order buton, you should
-see the following in the URL bar:
-
-![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
-
-Finally, let's update the setter so that we can change restaurants by typing
+First, let's update the setter so that we can change restaurants by typing
 in the correct restaurant name into the hash. Open up site_models.js, and edit
 the RestaurantModel, as follows:
 
@@ -116,7 +48,7 @@ var RestaurantModel = can.Model.extend({
 	{});
 ```
 
-Next, add the following code to Fixtures.js:
+Next, add the following code to fixtures.js:
 
 ```
 can.fixture("GET /restaurant/{name}", function requestHandler(request) {
@@ -150,15 +82,74 @@ can.fixture("GET /restaurant/{name}", function requestHandler(request) {
 });
 ```
 
+Open up app.js, and edit the Application State object
+as follows:
+
+```
+var ApplicationState = can.Map.extend({
+	define: {
+		restaurant: {
+			value: {},
+			set: function (restaurant) {
+				if (restaurant.restaurantId) {
+					var that = this;
+					RestaurantModel.findOne({name: restaurant.name},
+						function success(selectedMenus) {
+							that.attr('menus', {
+								collection: selectedMenus.menus,
+								restaurantName: restaurant.name
+							});
+						},
+						function error(xhr) {
+							alert(xhr.message);
+						});
+				}
+				return restaurant;
+			}
+		},
+		menus: {
+			value: null,
+			serialize: false
+		},
+		confirmation: {
+			value: {},
+			serialize: false
+		}
+	}
+});
+```
+
+Add the
+following code before the call to can.route.ready():
+
+```
+can.route('/:restaurant');
+```
+
+This line tells can.route to match any route going to the restaurant, and
+format it so that it is a forward slash followed by the serialized value. Add
+a serialize property to the restaurant attribute of the Application State
+object as follows:
+
+```
+restaurant: {
+   ...
+   serialize: function () {
+	   return this.attr('restaurant.name');
+   }
+}
+```
+
+Now, when you select a restaurant and click the Place Order buton, you should
+see the following in the URL bar:
+
+![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
+
 Finally, update the Application State object in app.js, as follows:
 
 ```
 function getRestaurantMenu(restaurant, that) {
 	that.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-}
-
-function setAppToDefaultState() {
-	this.attr('menus', null);
 }
 
 function showSelectedRestaurantMenus(restaurant, that) {
@@ -177,21 +168,24 @@ function showSelectedRestaurantMenus(restaurant, that) {
 var ApplicationState = can.Map.extend({
 	define: {
 		restaurant: {
-			...
+			value: {},
 			set: function (restaurant) {
-			var that = this;
+				var that = this;
 
-			if (!restaurant) return restaurant;
+				if (!restaurant) return restaurant;
 
-			if(typeof restaurant === 'string'){
-				return showSelectedRestaurantMenus.call(this, restaurant, that);
+				if(typeof restaurant === 'string'){
+					return showSelectedRestaurantMenus.call(this, restaurant, that);
+				}
+				else if (restaurant.restaurantId) {
+					getRestaurantMenu(restaurant, that);
+					return restaurant;
+				}
+
+			},
+			serialize: function () {
+				return this.attr('restaurant.name');
 			}
-			else if (restaurant.restaurantId) {
-				getRestaurantMenu(restaurant, that);
-				return restaurant;
-			}
-
-		}
 		},
 		...
 ```
@@ -223,7 +217,7 @@ your site_menu components folder. Edit it, as follows:
 {{/menuData.menuText}}
 ```
 
-The `&amp;` character in the data key tells Stache to include the unescaped
+The &amp; character in the data key tells Stache to include the unescaped
 value of the content it receives. We'll be generating an anchor tag, so we
 need to use this.
 
@@ -296,3 +290,9 @@ a restaurant from the list, then click the Place Order button. Once a menu
 displays, click on the Restaurants link. The menu will disappear, and the
 application will be returned to the default state, where you select a
 restaurant form the list.
+
+- - -
+
+<span class="pull-left">[< The Define Plugin](Define.html)</span>
+
+<span class="pull-right">[Recap >](Recap.html)</span>

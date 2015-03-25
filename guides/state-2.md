@@ -48,7 +48,7 @@ var ApplicationState = can.Map.extend({
 As mentioned in the last chapter, we've done something different with our
 Application State than we've done with the other can.Maps in the past. We've
 made use of can.Map's define plugin (i.e., the "define" attribute of the
-extend method's parameter)---something we included as part of our CanJS custom
+extend method's parameter)—something we included as part of our CanJS custom
 download. In fact, if you noticed, we used the define plugin as well in the
 Restaurant List component.
 
@@ -56,14 +56,14 @@ The define plugin allows you to finely control the the behavior of the
 attributes on a can.Map. For any property you declare in the define plugin,
 you can control its:
 
-- get
-- set
-- type
-- value
-- remove, and
-- serialization
+- [serialization](#serialization)
+- [get](#get)
+- [set](#set)
+- [type](#type)
+- [value](#value), and
+- [remove](#remove)
 
-### serialization
+### serialization <a name="serialization"></a>
 The first property we'll talk about is serialization. The
 serialize property defines how the attribute will behave when the map is
 serialized. This can be useful for serializing complex types like dates,
@@ -73,13 +73,13 @@ function for any property means this property will not be part of the
 serialized object. Serialization is tied directly to routing. We'll see how
 this works when we continue our discussion of routing in the next chapter.
 
-### get
+### get <a name="get"></a>
 A get function defines what happens when a value is read on a can.Map.
 It is typically used to provide properties that derive their value from other
 properties of the map. This is often useful when you are dealing with routing
 for creating aliases. We'll see an example of how this is accomplished below.
 
-### set
+### set <a name="set"></a>
 A set function defines what happens when a value is set on a can.Map.
 It is typically used to update other attributes on the can.Map as a side
 effect, or coerce the set value into specific format. For example, we might
@@ -111,7 +111,7 @@ set: function(newValue) { ... }
 set: function(newValue, setValue) { ... }
 ```
 
-### type
+### type <a name="type"></a>
 The type property converts a value passed to an attr setter function
 into a specific value type. The type can be specified as either a type
 function, or one of the following strings:
@@ -125,10 +125,10 @@ function, or one of the following strings:
 There are two ways to define the type property:  "Type", or "type". "Type",
 Uppercase, defines a constructor that will be invoked any time the property is
 set. Any data passed into the setter will be passed as arguments for the
-constructor. "type", lowercase, is set on the prototype of the object---i.e.,
+constructor. "type", lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
 
-### value
+### value <a name="value"></a>
 Sets the default value for instances of the can.Map. If the default
 value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
@@ -138,8 +138,14 @@ values (objects, arrays, etc.) by reference.
 As with type, above, there are two ways to define the value property: "Value",
 or "value". "Value", Uppercase, provides a constructor function, ensuring that
 a copy of the value is made for each instance. "value", lowercase, is set on
-the prototype of the object---i.e., it is not instance specific.
+the prototype of the object—i.e., it is not instance specific.
 
-### remove
+### remove <a name="remove"></a>
 Called when an attribute is removed. Can be used, for example, for
 removal validation.
+
+- - -
+
+<span class="pull-left">[< App State & Basic Routing](State.html)</span>
+
+<span class="pull-right">[Route Formatting & Serialization >](Routes.html)</span>

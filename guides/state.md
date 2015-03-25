@@ -9,7 +9,7 @@
  - Basic Routing
  - Binding the Application State Object to the Application and Routes
 
-> Get the code for: [chapter 7](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_8)
+> Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -22,8 +22,8 @@ object is bound to two things:
 
 Since you already know about creating can.Maps, creating an ApplicationState, which is a can.Map, will be easy. Let's see how this works. Open up your
 app.js, and update it, as below. Note that the Application State object is a
-can.Map---i.e., it is observable. You should also notice that we're creating
-our can.Map in a new way---using the define plugin, which we'll discuss more
+can.Map—i.e., it is observable. You should also notice that we're creating
+our can.Map in a new way—using the define plugin, which we'll discuss more
 below:
 
 ```
@@ -188,6 +188,7 @@ var RestaurantListViewModel = can.Map.extend({
 	showMenu: function () {
 		//Sets the restaurant value on the parent scope (AppState)
 		this.attr('restaurant', this.attr('currentRestaurant'));
+		alert(this.attr('currentRestaurant.name'));
 	}
 
 });
@@ -205,24 +206,25 @@ Note the showMenu function. From this function we update the "restaurant"
 value that was passed in to the can.Component's custom HTML tag. Additionally,
 we've added a `define` attribute. The define attribute is used to control the
 behavior of attributes on a can.Component. We'll go into detail on `define` in
-the next chapter.
+the [next chapter](Define.html).
 
 Next, open up restaurant_list.stache, and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
- <button id="PlaceAnOrder" can-click="showMenu">Place an Order from {{name}}</button>
+<button id="place-order" can-click="showMenu">Place an Order from {{name}}</button>
 ```
 
 We've removed the DOM code from our View Model, and are now working directly
-with the application, so we need to update our view template to reflect these
+with the application. In addition, we added code that would show and hide the content
+of the can.Component to our ViewModel. We need to update our view template to reflect these
 changes. In the same file (restaurant_list.stache), update the select dropdown
-in the template as follows ():
+in the template as follows:
 
 ```
 {{#visible}}
 	<label for="RestaurantList">Select a Restaurant:</label>
-	<select id="RestaurantList" can-value="currentRestaurant">
+	<select id="RestaurantList" can-value="currentRestaurantIndex">
 		<option value="-1"></option>
 		{{#each restaurants}}
 			<option value="{{@index}}">{{name}}</option>
@@ -230,6 +232,8 @@ in the template as follows ():
 	</select>
 
 	...
+
+{{/visible}}
 ```
 
 What we've done above is to make a connection between the index of the select
@@ -257,17 +261,17 @@ object, as follows:
 
 ```
 define: {
-restaurant: {
-	value: {},
-	set: function (restaurant) {
-		if (restaurant.restaurantId) {
-			this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-			this.attr('restaurantName', restaurant.name);
+	restaurant: {
+		value: {},
+		set: function (restaurant) {
+			if (restaurant.restaurantId) {
+				this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+				this.attr('restaurantName', restaurant.name);
+			}
+			return restaurant;
 		}
-		return restaurant;
-	}
-},,
-...
+	},
+}
 ```
 
 This will be a very common pattern in your applications. This setter is our
@@ -286,7 +290,7 @@ we use conditional stache tags in base_template.stache, as below:
 {{/if}}
 ```
 
-Finally, open order_form_component.js, and edit it as follows:
+Finally, open order_form_component.js and replace its contents with the code below:
 
 ```
 var OrderFormViewModel = can.Map.extend({
@@ -307,3 +311,9 @@ select a restaurant from the list, and click the "Place an Order from ____"
 button. You should see something like this:
 
 ![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)
+
+- - -
+
+<span class="pull-left">[< Creating the Menu Component](Review.html)</span>
+
+<span class="pull-right">[The Define Plugin >](Define.html)</span>

@@ -17,6 +17,16 @@ Nice work! Together, we've covered:
 - Using can.route to make custom routes.
 
 Those are all the pieces you need to start building applications with CanJS
-today. If you're interested in more advanced topics, like using CanJS with
+today.
+
+<!--
+If you're interested in more advanced topics, like using CanJS with
 Dependency Management utilities like StealJS, Require, or Browserify, see the
 [appendices](#appendices) for more information.
+-->
+
+- - -
+
+<span class="pull-left">[< Route Formatting & Serialization](Routes.html)</span>
+
+<span class="pull-right">[Building the Sample App >](Building.html)</span>

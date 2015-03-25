@@ -63,3 +63,9 @@ Finally, you'll need to download the supporting libraries. They are:
  - [can.fixture](http://canjs.com/release/2.1.4/can.fixture.js)
 
 Once you've downloaded these files, copy them to the *libs* directory in your application folder.
+
+- - -
+
+<span class="pull-left">[< Application Foundations](Foundations.html)</span>
+
+<span class="pull-right">[Getting to Know Components >](Components.html)</span>

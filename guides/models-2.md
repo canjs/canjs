@@ -9,7 +9,7 @@
  - Moving Closer to MVVM
  - Working with Non-standard Data Formats
 
-> Get the code for: [chapter 5](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_5)
+> Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -41,26 +41,26 @@ Add the following to order_form.stache:
 
 {{/each}}
 
-{{# each delivery}}
+{{#delivery}}
 
-	<div id="CustomerDetails">
-		<label>Name:
-			<input type="text" can-value="name" id="name"/>
+    <div id="CustomerDetails">
+        <label>Name:
+            <input type="text" can-value="name" id="name"/>
 
-			<div class="warning">{{issues.name}}</div>
-		</label>
+            <div class="warning">{{issues.name}}</div>
+        </label>
 
-		<label>Address:
-			<input type="text" can-value="address" id="address"/>
+        <label>Address:
+            <input type="text" can-value="address" id="address"/>
 
-			<div class="warning">{{issues.address}}</div>
-		</label>
+            <div class="warning">{{issues.address}}</div>
+        </label>
 
-		<label>Telephone:
-			<input type="tel" can-value="telephone" id="telephone"/>
-		</label></div>
+        <label>Telephone:
+            <input type="tel" can-value="telephone" id="telephone"/>
+        </label></div>
 
-{{/each}}
+{{/delivery}}
 
 <button can-click="placeOrder">Place My Order!</button>
 ```
@@ -251,7 +251,7 @@ can.fixture("GET /menus/{id}", function requestHandler(request) {
 });
 ```
 
-In site_models.js, add the following model:
+In site_models.js, add the following two models:
 
 ```
 /**
@@ -263,10 +263,19 @@ var RestaurantMenusModel = can.Model.extend({
 	parseModels: "menus"
 },
 {});
+
+/**
+ * Menu Order Model
+ * @type {void|*}
+ */
+var MenuOrderModel = can.Model.extend({
+	create: 'POST /order'
+},
+{});
 ```
 
 There's a few things to notice in the code above. First, the fixture that we
-defined returned a non-standard data format---non standard for CanJS. The
+defined returned a non-standard data format—non standard for CanJS. The
 can.Model.findAll method expects an array from the service it calls. Our
 fixture, however, is returning an object that contains an array. Normally, if
 the findAll method received this data, it would throw an error. In this case,
@@ -311,3 +320,9 @@ display when we set up our Application State and Routing.
 
 In the next chapter, we'll talk about connecting all of our components
 together using the Application State, Routing, and can.Map's define plugin.
+
+- - -
+
+<span class="pull-left">[< Models (& Fixtures)](Models.html)</span>
+
+<span class="pull-right">[Creating the Menu Component >](Review.html)</span>
