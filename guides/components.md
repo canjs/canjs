@@ -151,9 +151,9 @@ Finally, we need to add a reference to restaurant_list_component.js in the
 index.html file, as follows:
 
 ```
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/jquery.js"></script>
 <script src="libs/can.custom.js"></script>
-<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+<script src="libs/can.fixture.js"></script>
   <!--Begin add-->
   <script src="components/restaurant_list/restaurant_list_component.js"></script>
   <!--End add-->
