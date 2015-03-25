@@ -42,7 +42,7 @@ can.custom.js file into its appropriate folder in the app.
 A lot of frameworks recommend a structure that has separate JS, CSS, and HTML
 folders. When building a CanJS app, because our application will be built using
 components, we use a component-based folder structure. Off of a root folder
-called "PlaceMyOrder", create the following subfolders:
+called *PlaceMyOrder*, create the following subfolders:
 
 - PlaceMyOrder
 	- app
@@ -51,6 +51,7 @@ called "PlaceMyOrder", create the following subfolders:
 		- site_css
 		- libs
 
-Copy the CSS file that accompanies this guide into your CSS folder. We won't be
-covering any of the CSS here. Next, copy the can.custom.js file you downloaded
-in the previous step into the "libs" folder.
+Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a>
+that accompanies this guide into your the *site_css* folder. We won't be covering any of
+the CSS here. Next, copy the *can.custom.js* file you downloaded in the previous
+step into the *libs* folder.
