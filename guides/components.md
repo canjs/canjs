@@ -250,6 +250,6 @@ Observable arrays are also available with can.List, which is based on can.Map.
 
 - - -
 
-<span class="pull-left">[< Setup](Setup.html)</span>
+<span class="pull-left">[< Application Foundations](Foundations.html)</span>
 
 <span class="pull-right">[More on Components >](Components2.html)</span>

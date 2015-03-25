@@ -1,5 +1,5 @@
 @page Setup Setup
-@parent Tutorial 2
+@parent Tutorial 1
 
 @body
 
@@ -66,6 +66,6 @@ Once you've downloaded these files, copy them to the *libs* directory in your ap
 
 - - -
 
-<span class="pull-left">[< Application Foundations](Foundations.html)</span>
+<span class="pull-left">[< Getting Started](Tutorial.html)</span>
 
-<span class="pull-right">[Getting to Know Components >](Components.html)</span>
+<span class="pull-right">[Application Foundations >](Foundations.html)</span>

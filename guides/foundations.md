@@ -119,6 +119,6 @@ chapter to learn more.
 
 - - -
 
-<span class="pull-left">[< Getting Started](Tutorial.html)</span>
+<span class="pull-left">[< Setup](Setup.html)</span>
 
-<span class="pull-right">[Setup >](Setup.html)</span>
+<span class="pull-right">[Getting to Know Components >](Components.html)</span>
