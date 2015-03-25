@@ -60,7 +60,7 @@ Edit it, as follows:
 			</ul>
 		</div>
 
-		<button id="place-order">Place an Order from {{name}}</button>
+		<button id="place-order">Place My Order!</button>
 	{{/currentRestaurant}}
 {{/if}}
 ```

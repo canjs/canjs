@@ -212,7 +212,7 @@ Next, open up restaurant_list.stache, and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
-<button id="place-order" can-click="showMenu">Place an Order from {{name}}</button>
+<button id="place-order" can-click="showMenu">Place My Order!</button>
 ```
 
 We've removed the DOM code from our View Model, and are now working directly
@@ -307,7 +307,7 @@ var OrderFormViewModel = can.Map.extend({
 
 When the Application State's menus attribute has a value, the order form is
 displayed. Otherwise, the restaurant list is displayed. To see this in action,
-select a restaurant from the list, and click the "Place an Order from ____"
+select a restaurant from the list, and click the “Place My Order!”
 button. You should see something like this:
 
 ![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)
