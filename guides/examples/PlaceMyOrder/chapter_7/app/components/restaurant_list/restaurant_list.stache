@@ -20,7 +20,7 @@
                 </ul>
             </div>
 
-            <button id="place-order" can-click="showMenu">Place an Order from {{name}}</button>
+            <button id="place-order" can-click="showMenu">Place My Order!</button>
         {{/currentRestaurant}}
     {{/if}}
 {{/visible}}

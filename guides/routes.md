@@ -28,7 +28,7 @@ serialized? This is where the serialize attribute of a property declared by
 the define plugin comes into play.
 
 Open up your application, select a restaurant from the drop down list, and
-click, the "Place an Order from ____" button. You should see something similar
+click, the “Place My Order!” button. You should see something similar
 to the following in your URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
