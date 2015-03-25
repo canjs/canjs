@@ -812,14 +812,16 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Function} [failCallback] A function called when the Deferred is rejected.
 
 @body
-`deferred.then( doneCallback, failCallback )` adds handler(s) to be called when the Deferred object to be called after its resolved.
+`deferred.then(doneCallback, failCallback)` adds handler(s) to be called when the Deferred object to be called after its resolved.
 
-    var def = can.Deferred();
-    def.then(function(){
-        //- Called when the deferred is resolved.
-    }, function(){
-        //- Called when the deferred fails.
-    })
+	var def = can.Deferred();
+	def.then(function(success) {
+		console.log(success);
+	}, function(reason) {
+		console.error(reason); //-> "Oh no! So sad."
+	});
+
+	def.reject("Oh no! So sad.");
 */
 //
 /**
