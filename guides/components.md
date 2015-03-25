@@ -93,17 +93,19 @@ encapsulated, they should each contain their own:
 - JS
 - CSS
 
-This is why we created a components folder for our app---instead of, say, a 
-JS folder. Each component we develop will be in a folder that contains all 
-the files that support that component. This makes components portable, 
-enabling you to reuse them across projects. It also isolates them, making 
+This is why we created a components folder for our app---instead of, say, a
+JS folder. Each component we develop will be in a folder that contains all
+the files that support that component. This makes components portable,
+enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
-In the components folder, create a subfolder called "restaurant_list". 
-Inside that, create the following files:
+In the components folder, create a subfolder called *restaurant_list*, along with the following files:
 
-- restaurant_list_component.js
-- restaurant_list.stache
+```
+| restaurant_list
+	|--restaurant_list_component.js
+    |--restaurant_list.stache
+```
 
 Put the following code inside restaurant_list_component.js:
 
