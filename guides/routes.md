@@ -36,8 +36,7 @@ to the following in your URL bar:
 ![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
 
 That's not pretty, and not very useful. We don't want the confirmation or menu
-attributes to serialize. Open up app.js, and edit the Application State object
-as follows:
+attributes to serialize. It's easy to change this behavior. Open up app.js, and edit the Application State object as follows:
 
 ```
 var ApplicationState = can.Map.extend({
@@ -203,7 +202,7 @@ menu changes as well.
 
 ## Creating Anchor Tags with can.route.link
 The last thing we need to do is
-add functionality to our Site Menu. Open up the "site_menu.stache" file in
+add functionality to our Site Menu. Open up the *site_menu.stache* file in
 your site_menu components folder. Edit it, as follows:
 
 ```
@@ -224,7 +223,7 @@ your site_menu components folder. Edit it, as follows:
 {{/menuData.menuText}}
 ```
 
-The "&amp;" character in the data key tells Stache to include the unescaped
+The `&amp;` character in the data key tells Stache to include the unescaped
 value of the content it receives. We'll be generating an anchor tag, so we
 need to use this.
 

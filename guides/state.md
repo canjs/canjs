@@ -20,7 +20,7 @@ object is bound to two things:
 1. The application's base template
 2. The application's routing
 
-Let's create an Application State object, and see how this works. Open up your
+Since you already know about creating can.Maps, creating an ApplicationState, which is a can.Map, should be easy. Let's see how this works. Open up your
 app.js, and update it, as below. Note that the Application State object is a
 can.Map---i.e., it is observable. You should also notice that we're creating
 our can.Map in a new way---using the define plugin, which we'll discuss more
