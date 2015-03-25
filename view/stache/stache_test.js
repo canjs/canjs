@@ -3720,5 +3720,58 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(div.getElementsByTagName("li").length, 1, "li added");
 	});
 	
+	test("promises work (#179)", function(){
+		
+		var template = can.stache(
+			"{{#if promise.isPending}}<span class='pending'></span>{{/if}}"+
+			"{{#if promise.isRejected}}<span class='rejected'>{{promise.reason.message}}</span>{{/if}}"+
+			"{{#if promise.isResolved}}<span class='resolved'>{{promise.value.message}}</span>{{/if}}");
+		
+		var def = new can.Deferred();
+		var data = {
+			promise: def.promise()
+		};
+		
+		var frag = template(data);
+		var div = document.createElement("div");
+		div.appendChild(frag);
+		
+		var spans = div.getElementsByTagName("span");
+		
+		equal(spans.length, 1);
+		equal(spans[0].className, "pending");
+		
+		stop();
+		
+		def.resolve({message: "Hi there"});
+		
+		// better than timeouts would be using can-inserted, but we don't have can/view/bindings
+		setTimeout(function(){
+			equal(spans.length, 1);
+			equal(spans[0].className, "resolved");
+			equal(spans[0].innerHTML, "Hi there");
+			
+			
+			var def = new can.Deferred();
+			var data = {
+				promise: def.promise()
+			};
+			var frag = template(data);
+			var div = document.createElement("div");
+			div.appendChild(frag);
+			spans = div.getElementsByTagName("span");
+			
+			def.reject({message: "BORKED"});
+			
+			setTimeout(function(){
+				equal(spans.length, 1);
+				equal(spans[0].className, "rejected");
+				equal(spans[0].innerHTML, "BORKED");
+				
+				start();
+			}, 30);
+		},30);
+		
+	});
 	
 });

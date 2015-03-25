@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -18,7 +18,7 @@
 		"jquery": ">=1.9.0 <3.0.0"
 	},
 	"devDependencies": {
-		"bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#steal-tools",
+		"bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#master",
 		"bower": "~1.3.8",
 		"browserify": "~8.1.0",
 		"connect": "^2.14.4",

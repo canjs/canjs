@@ -302,6 +302,28 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 		map.off('undefined_property');
 
 		equal(map._bindings, 1, 'The number of bindings is still correct');
-	})
+	});
 
+	test('Creating map in compute dispatches all events properly', function() {
+		expect(2);
+
+		var source = can.compute(0);
+
+		var c = can.compute(function() {
+			var map = new can.Map();
+			source();
+			map.bind("foo", function(){
+				ok(true);
+			});
+			map.attr({foo: "bar"}); //DISPATCH
+
+			return map;
+		});
+
+		c.bind("change",function(){});
+
+		can.batch.start();
+		source(1);
+		can.batch.stop();
+	});
 });

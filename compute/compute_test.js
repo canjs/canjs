@@ -727,10 +727,11 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 		getterCompute.bind('change', can.noop);
 	});
-	
+
 	test("bug with nested computes and batch ordering (#1519)", function(){
 	
 		var ft = can.compute('a');
+		var other = can.compute(3);
 		
 		var propA = can.compute(function(){
 			return ft() ==='a';
@@ -743,7 +744,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var combined = can.compute(function(){
 			var valA = propA(),
 				valB = propB();
-	
+
 			return valA || valB;
 		});
 		
@@ -751,12 +752,46 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		combined.bind('change', function(){ });
 		
+		ft.bind('change', function() {
+			can.batch.start();
+			other(2);
+			can.batch.stop();
+		});
+
 		can.batch.start();
 		ft('b');
 		can.batch.stop();
-		
+
 		equal(combined(), true);
+		equal(other(), 2);
+	});
 	
+	test("can.Compute.read can read a promise (#179)", function(){
+		
+		var def = new can.Deferred();
+		var map = new can.Map();
+		
+		var c = can.compute(function(){
+			return can.Compute.read({map: map},["map","data","value"]).value;
+		});
+		
+		var calls = 0;
+		c.bind("change", function(ev, newVal, oldVal){
+			calls++;
+			equal(calls, 1, "only one call");
+			equal(newVal, "Something", "new value");
+			equal(oldVal, undefined, "oldVal");
+			start();
+		});
+		
+		map.attr("data", def);
+		
+		setTimeout(function(){
+			def.resolve("Something");
+		},2);
+		
+		stop();
+		
 	});
 
 });
