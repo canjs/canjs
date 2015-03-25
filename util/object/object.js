@@ -170,7 +170,7 @@ steal('can/util', function (can) {
 	/**
 	 * @function can.Object.subset
 	 * @parent can.util
-	 * @description Compares if subset is a subset of set. Returns true if an object is a set of another set
+	 * @description Returns true if an Object is a subset of another Object
 	 * @codestart
 	 * can.Object.subset({}, {foo: "bar"} ) //-> true
 	 * @codeend
