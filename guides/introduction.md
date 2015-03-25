@@ -98,3 +98,16 @@ specific route.
 If this doesn't make sense right now, don't worry. As we develop our
 application together, you'll see, more and more, how this works, and just
 how powerful this aspect of CanJS is.
+
+## Using the Getting Started Guide
+Each chapter in the Getting Started Guide is prefaced with an overview of the topics covered in that chapter. The overview section also contains a link where you can download a zip file containing the code relevant to that chapter, as follows:
+
+- - - -
+**In this Chapter**
+ - Topic 1
+ - Topic 2
+ - Connecting can.Models with can.Components
+
+> Get the code for: [chapter X]()
+
+- - -
