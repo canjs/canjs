@@ -151,7 +151,7 @@ When we created the RestaurantListComponent,
 we used the {{data '...'}} Stache key, and jQuery to obtain a reference to the
 restaurant object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
-directly in our application. We want CanJS to do that for us, so we can focus
+directly in our application. We want CanJS to take care of that for us, so we can focus
 on the application itself. In the createOrder function, instead of getting our
 data from the DOM, we get it from our scope.
 
@@ -273,14 +273,14 @@ the findAll method received this data, it would throw an error. In this case,
 it does not. This is because we included the `parseModels` attribute on the
 MenuOrderModel.
 
-parseModels is used to convert the raw response of a findAll request into an
+`parseModels` is used to convert the raw response of a findAll request into an
 object or Array that the model you're defining can use. As you can see, this
 method can be particularly useful if you're consuming data from a service that
-doesn't fit the format expected by findAll.
+doesn't fit the format expected by `findAll`.
 
 ## Wiring it all up
 
-Edit base_template.stache, and add in the custom HTML tag for the
+We can wire all this up easily in a few steps. Edit base_template.stache, and add in the custom HTML tag for the
 order_form component:
 
 ```
