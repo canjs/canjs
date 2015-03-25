@@ -112,4 +112,6 @@ Each chapter in the Getting Started Guide is prefaced with an overview of the to
 
 - - -
 
+- - -
+
 <span class="pull-right">[Application Foundations >](Foundations.html)</span>

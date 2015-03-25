@@ -291,6 +291,8 @@ displays, click on the Restaurants link. The menu will disappear, and the
 application will be returned to the default state, where you select a
 restaurant form the list.
 
+- - -
+
 <span class="pull-left">[< The Define Plugin](Define.html)</span>
 
 <span class="pull-right">[Recap >](Recap.html)</span>

@@ -214,6 +214,8 @@ And, when you select a restaurant from the list, you should see:
 
 ![](../can/guides/images/4_models/FinalRestaurantComponentSelect.png)
 
+- - -
+
 <span class="pull-left">[< More on Components](Components2.html)</span>
 
 <span class="pull-right">[Sending Data to a Service >](Models2.html)</span>

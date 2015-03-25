@@ -148,6 +148,8 @@ If you go out to your application, and refresh it, you should see the following:
 
 ![](../can/guides/images/6_reinforcing_concepts/MenuComponentAdded.png)
 
+- - -
+
 <span class="pull-left">[< Sending Data to a Service](Models2.html)</span>
 
 <span class="pull-right">[App State & Basic Routing >](State.html)</span>

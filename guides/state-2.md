@@ -144,6 +144,8 @@ the prototype of the object—i.e., it is not instance specific.
 Called when an attribute is removed. Can be used, for example, for
 removal validation.
 
+- - -
+
 <span class="pull-left">[< App State & Basic Routing](State.html)</span>
 
 <span class="pull-right">[Route Formatting & Serialization >](Routes.html)</span>

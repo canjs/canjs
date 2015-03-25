@@ -117,6 +117,8 @@ So, how do we get the application to actually *do something*? Building apps
 with CanJS centers around building can.Components, read on to the next
 chapter to learn more.
 
+- - -
+
 <span class="pull-left">[< Getting Started](Tutorial.html)</span>
 
 <span class="pull-right">[Setup >](Setup.html)</span>

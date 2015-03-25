@@ -321,6 +321,8 @@ display when we set up our Application State and Routing.
 In the next chapter, we'll talk about connecting all of our components
 together using the Application State, Routing, and can.Map's define plugin.
 
+- - -
+
 <span class="pull-left">[< Models (& Fixtures)](Models.html)</span>
 
 <span class="pull-right">[Creating the Menu Component >](Review.html)</span>

@@ -312,6 +312,8 @@ button. You should see something like this:
 
 ![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)
 
+- - -
+
 <span class="pull-left">[< Creating the Menu Component](Review.html)</span>
 
 <span class="pull-right">[The Define Plugin >](Define.html)</span>
