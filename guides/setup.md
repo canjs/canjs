@@ -46,14 +46,14 @@ components, we use a component-based folder structure. This structure makes it e
 
 Off of a root folder called *PlaceMyOrder*, create the following subfolders:
 
-```
+<pre>
 | PlaceMyOrder
     |--app
         |--components
         |--libs
         |--models
         |--site_css
-```
+</pre>
 
 Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a> that accompanies this guide into your *site_css* folder. We won't be covering any of the CSS here. Next, copy the *can.custom.js* file you downloaded in the previous step into the *libs* folder.
 
