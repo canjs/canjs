@@ -425,16 +425,21 @@ The idea is that undelegate can be used on anything that produces delegate event
 and it will figure out the appropriate way to
 bind to it.  Typically, `can.undelegate` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
-`can.undelegate` to listen to events independent of the underlying library.
+`can.undelegate` to stop listening to events independent of the underlying library.
 
 __Delegate/undelegate binding to an HTMLElement__
 
-    var el = document.getElementById('foo'),
-    handler = function(ev){
-        this // el
+	// Assuming an HTML body like the following:
+	// <div id="parent">
+    //     <div class="child">Hello</div>
+    // </div>
+
+    var el = document.getElementById('parent');
+    var handler = function(ev) {
+    	return this; //-> el
     };
-    can.delegate.call(el, ".selector", "click", handler)
-    can.undelegate.call(el, ".selector", "click", handler)
+    can.delegate.call(el, ".child", "click", handler);
+    can.undelegate.call(el, ".child", "click", handler);
 */
 //
 /**
