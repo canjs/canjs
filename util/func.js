@@ -851,10 +851,11 @@ function(s) for the success or failure state of both asynchronous and synchronou
 `deferred.reject(args)` rejects the Deferred object and calls the fail callbacks with the given arguments.
 
 	var def = can.Deferred();
-	def.fail(function(reason) {
-   		console.log("Failed because... " + reason); //-> "Failed because... Meh." 
+
+	def.done(function(reason) {
+	  console.log("Success! " + reason); //-> Success! Woohoo!
 	});
-	def.reject("Meh.");
+	def.resolve("Woohoo!");
 */
 //
 /**
