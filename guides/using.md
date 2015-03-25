@@ -16,7 +16,7 @@ If you are looking for a quick start using our [CDN]() just create an HTML page 
 	<title>CanJS Test</title>
 </head>
 <body>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+	<script src="libs/jquery.js"></script>
 	<script src="http://canjs.com/release/latest/can.jquery.js"></script>
 	<script type="text/javascript">
 		$(function() {

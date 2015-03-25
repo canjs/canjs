@@ -1,6 +1,4 @@
-can.custom.js
-can.fixture.js
-jquery.js/*!
+/*!
  * CanJS - 2.1.4
  * http://canjs.us/
  * Copyright (c) 2015 Bitovi

@@ -63,7 +63,7 @@ It should look like this:
 <head lang="en">
 	<meta charset="UTF-8">
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
 </head>
 <body>

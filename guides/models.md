@@ -194,9 +194,9 @@ We'll look at the can.Model's findOne method later on, when we create our Menu
 Component. Finally, let's add the scripts we created to our index.html file:
 
 ```
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+<script src="libs/jquery.js"></script>
 <script src="libs/can.custom.js"></script>
-<script src="//canjs.com/release/2.1.4/can.fixture.js"></script>
+<script src="libs/can.fixture.js"></script>
 <!--Begin add-->
 <script src="models/fixtures.js"></script>
 <script src="models/site_models.js"></script>
