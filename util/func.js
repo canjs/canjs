@@ -728,13 +728,22 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @parent can.Deferred.prototype
 @signature `deferred.rejectWith(context[, arguments])`
 @param {Object} context Context passed to the `failCallbacks` as the `this` object.
-@param {Object} [arguments] Array of arguments that are passed to the `failCallbacks`.
+@param {Array} [arguments] Array of arguments that are passed to the `failCallback(s)`.
 
 @body
 `deferred.rejectWith(context, arguments)` rejects a Deferred and calls the `failCallbacks` with the given arguments.
 
-    var def = can.Deferred();
-    def.rejectWith(this, { error: "Animals are gone." })
+	var def = can.Deferred();
+	def.fail(function(error) {
+		this.logError(error);
+	});
+
+	var context = {
+		logError: function(error) {
+			console.error(error);
+		}
+	};
+	def.rejectWith(context, ["Oh no!"]);
 */
 //
 /**
