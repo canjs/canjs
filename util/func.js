@@ -774,13 +774,13 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.always always
 @parent can.Deferred.prototype
 @signature `deferred.always(alwaysCallbacks)`
-@param {Function} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
+@param {Function|Array} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
 
 @body
-`deferred.always( alwaysCallbacks )` adds one or more functions to be called when the Deferred object is either resolved or rejected.
+`deferred.always(alwaysCallbacks)` adds one or more functions to be called when the Deferred object is either resolved or rejected.
 
     var def = can.Deferred();
-    def.always( function(){
+    def.always(function(){
         //- Called whether the handler fails or is success.
     });
 */
