@@ -23,19 +23,11 @@ Every CanJS application contains:
 
 ### Models <a name="models"></a>
 Models manage the data of an application. A model notifies the elements
-<<<<<<< HEAD
-associated with it when its state has changed. In CanJS this is the can.Model
+associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
 object. can.Model makes it almost effortless to handle all of your CRUD
 operations (Create, Read, Update, and Delete). They can also provide
-validation for your data, as well---serving as a single source for handling
+validation for your data, as well—serving as a single source for handling
 your data acquisition, and managing its integrity.
-=======
-associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
-object. can.Model handles all of your CRUD operations (Create, Read, Update,
-and Delete). They can also provide validation for your data, as well—serving
-as a single source for handling your data acquisition, and managing its
-integrity.
->>>>>>> Fix code samples and various other things in Getting Started guide
 
 ### Views <a name="views"></a>
 Views request information from the model, and use the data it provides to
