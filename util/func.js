@@ -713,13 +713,22 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @parent can.Deferred.prototype
 @signature `deferred.resolveWith(context[, arguments])`
 @param {Object} context Context passed to the `doneCallbacks` as the `this` object.
-@param {Object} [arguments] Array of arguments that are passed to the `doneCallbacks`.
+@param {Array} [arguments] Array of arguments that are passed to the `doneCallbacks`.
 
 @body
 `deferred.resolveWith(context, arguments)` resolves a Deferred and calls the `doneCallbacks` with the given arguments.
 
-    var def = can.Deferred();
-    def.resolveWith(this, { animals: [ 'cows', 'monkey', 'panda' ] })
+	var def = can.Deferred();
+	def.done(function(success) {
+		this.logSuccess(success); //-> "Can rocks!"
+	});
+
+	var context = {
+		logSuccess: function(sucess) {
+			console.log(sucess);
+		}
+	};
+	def.resolveWith(context, ["Can rocks!"]);
 */
 //
 /**
