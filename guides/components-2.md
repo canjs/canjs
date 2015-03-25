@@ -35,7 +35,7 @@ There are five aspects of Stache templates, mentioned above, that we'll review:
 - conditional logic
 
 It will be easiest for us to look at these with an example, so let's create 
-one. Open up your /components/restaurant_list/restaurant_list.stache file. 
+one. Open up your */components/restaurant_list/restaurant_list.stache* file. 
 Edit it, as follows:
 
 
