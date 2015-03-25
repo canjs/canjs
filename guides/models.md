@@ -13,10 +13,10 @@
 
 - - -
 
-The next item we're going to go over is can.Model. Models make interacting
+The next item we're going to go over is [can.Model](../docs/can.Model.html). Models make interacting
 with JSON REST services *really easy*. They do this by encapsulating most of
-the code required to connect to a service, and managing the data the service
-returns. Additionally, can.Model extends can.Map, meaning that the objects
+the code required to connect to a service and managing the data the service
+returns. Additionally, can.Model extends [can.Map](../docs/can.Map.html), meaning that the objects
 returned have all of the features of a can.Map, such as being observable.
 
 We'll use a can.Model to provide data for our restaurant list.
@@ -35,7 +35,7 @@ var RestaurantModel = can.Model.extend({
 {});
 ```
 
-Because it is a can.Construct, can.Model.extend can take up to three parameters:
+Because it is a [can.Construct](../docs/can.Construct.html), can.Model.extend can take up to three parameters:
 
 1. name
 2. staticProperties
@@ -55,13 +55,13 @@ The `find___` methods are available directly off of the object definition (i.e.,
 they are static). The `create`, `update`, and `destroy` methods are available off of
 specific instances of a can.Model. We'll see how to use these below.
 
-**Reminder: The number of parameters you pass in to an extend method is
-**important. If you pass in a single parameter object, the extend method will
-**use that to set the instanceProperties. If you pass in two parameter
-**objects, the *first* object passed in will be used to set the
-***staticProperties*. The second parameter will be used to set the
-***instanceProperties*. Here, we only want to set the staticProperties, so we
-**must pass in a second, blank object.
+**Reminder**: The number of parameters you pass in to an extend method is
+important. If you pass in a single parameter object, the extend method will
+use that to set the instanceProperties. If you pass in two parameter
+objects, the *first* object passed in will be used to set the
+*staticProperties*. The second parameter will be used to set the
+*instanceProperties*. Here, we only want to set the staticProperties, so we
+must pass in a second, blank object.
 
 A few examples illustrate this, below:
 
@@ -76,7 +76,7 @@ var MyModel = can.Model.extend({
  }
 });
 
-MyModel.findAll(); // Reference a method defined on the contructor
+MyModel.findAll(); // Reference a method defined on the constructor
 
 var modelInstance = new MyModel();
 modelInstance.destroy(); // Reference a method defined on the prototype
@@ -89,7 +89,7 @@ going to code our model as if we were. How can this possibly work? CanJS
 provides a handy utility, can.fixture, that we can use to easily mimic the
 functionality of connecting to a server. As the CanJS docs say, "can.fixture
 intercepts an AJAX request and simulates the response with a file or a
-function. You can use [can.fixutre] to develop JavaScript independently of
+function. You can use can.fixture to develop JavaScript independently of
 backend services."
 
 can.fixture is not included with the base CanJS package. It's a good practice
@@ -139,7 +139,7 @@ is a function that returns the data we want to get when the application makes
 a service call. Because we're simulating a findAll method, we need to return
 an array. The findAll method expects an array. By default, if it does not
 receive one, it will throw an error. If you need to connect to services that
-return data that doesn't match the expected return type of the findXxx
+return data that doesn't match the expected return type of the `find___`
 methods, don't fret. There are ways to manage this, which we'll work with
 later on.
 
@@ -213,3 +213,7 @@ according to plan, you should see something like this:
 And, when you select a restaurant from the list, you should see:
 
 ![](../can/guides/images/4_models/FinalRestaurantComponentSelect.png)
+
+<span class="pull-left">[< More on Components](Components2.html)</span>
+
+<span class="pull-right">[Sending Data to a Service >](Models2.html)</span>

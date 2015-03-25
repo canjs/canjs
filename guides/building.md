@@ -107,8 +107,8 @@ and it will contain two files:
         - PlaceMyOrder.js
         - PlaceMyOrderProduction.min.js
 
-There will be contents in both of these files---the output of the Browserify
-task---but they will contain what looks like garbled JavaScript, not anything
+There will be contents in both of these files—the output of the Browserify
+task—but they will contain what looks like garbled JavaScript, not anything
 that looks like usable code.
 
 To alter the code from the sample application to make use of Gulp and

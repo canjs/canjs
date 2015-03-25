@@ -15,31 +15,39 @@ a small e-commerce app with CanJS.
 ## The Basics
 Every CanJS application contains:
 
-- Models,
-- Views,
-- Components,
-- Application State, and
-- Routing
+- [Models](#models),
+- [Views](#views),
+- [Components](#components),
+- [Application State](#appstate), and
+- [Routing](#routing)
 
-### Models
+### Models <a name="models"></a>
 Models manage the data of an application. A model notifies the elements
+<<<<<<< HEAD
 associated with it when its state has changed. In CanJS this is the can.Model
 object. can.Model makes it almost effortless to handle all of your CRUD
 operations (Create, Read, Update, and Delete). They can also provide
 validation for your data, as well---serving as a single source for handling
 your data acquisition, and managing its integrity.
+=======
+associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
+object. can.Model handles all of your CRUD operations (Create, Read, Update,
+and Delete). They can also provide validation for your data, as well—serving
+as a single source for handling your data acquisition, and managing its
+integrity.
+>>>>>>> Fix code samples and various other things in Getting Started guide
 
-### Views
+### Views <a name="views"></a>
 Views request information from the model, and use the data it provides to
-generate visual output that's meaningful to a user---in our case HTML. In
+generate visual output that's meaningful to a user—in our case HTML. In
 CanJS, views are created using:
 
 1. View Templates,
-2. The can.view object
+2. The [can.view](../docs/can.view.html) object
 
 The view template can be plain HTML, or it can utilize a template library
 to provide it with more functionality. Most of the time, your views will work
-with a template library. CanJs supports several JS template libraries,
+with a template library. CanJS supports several JS template libraries,
 including:
 
 - Stache
@@ -61,27 +69,27 @@ objects.
 
 > The secret to building large applications is to never build large applications.
 
-### Components
-A can.Component is kind of like a mini web application. A can.Component
-contains the CSS, JavaScript, and HTML it needs---all wrapped up in a single,
+### Components <a name="components"></a>
+A [can.Component](../docs/can.Component.html) is kind of like a mini web application. A can.Component
+contains the CSS, JavaScript, and HTML it needs—all wrapped up in a single,
 functional unit. This makes can.Components portable, reusable, and
 encapsulated. can.Components are easy to test, and easy to use. Building an
-application with them is kind of like building with Legos&trade;. As we say
-at Bitovi, "The secret to building large applications is to never build large
-applications". Rather, you build the components you need, and link them
+application with them is kind of like building with Lego&trade;. As we say
+at [Bitovi](http://bitovi.com/), “The secret to building large applications is to never build large
+applications.” Rather, you build the components you need, and link them
 together using the Application State and Routing to compose your application.
 
-### Application State
+### Application State <a name="appstate"></a>
 One of the things that sets CanJS apart from other frameworks is its use
 of an Application State. An Application State is an observable object that,
 as its name implies, contains the state of your application. Where other
 application frameworks model their applications with routes, controllers, etc.,
 CanJS takes a more unified, semantic approach. It encapsulates the state
 of your application in an object. This is a pretty powerful approach to
-writing applications---freeing developers from many of the constraints of a
+writing applications—freeing developers from many of the constraints of a
 DOM-centric paradigm to think more directly about the application itself.
 
-### Routing
+### Routing <a name="routing"></a>
 For many JS MV* frameworks, routing divides an application into logical views
 and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
@@ -111,3 +119,5 @@ Each chapter in the Getting Started Guide is prefaced with an overview of the to
 > Get the code for: [chapter X]()
 
 - - -
+
+<span class="pull-right">[Application Foundations >](Foundations.html)</span>

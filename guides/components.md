@@ -20,12 +20,12 @@
 ## Constructors in CanJS
 
 Before we work with any of the objects in CanJS, it will be helpful for us if we
-understand can.Construct. Most of the objects in CanJS are derived from
+understand [can.Construct](../docs/can.Construct.html). Most of the objects in CanJS are derived from
 can.Construct. can.Construct provides a way to easily use the power of
 prototypal inheritance without worrying about hooking up all the particulars
 yourself.
 
-Without going into [exhaustive detail](http://canjs.com/docs/can.Construct.prototype.init.html),
+Without going into [exhaustive detail](../docs/can.Construct.prototype.init.html),
 can.Construct contains a few methods we'll encounter frequently in other objects:
 
 - Prototype
@@ -69,7 +69,7 @@ This pattern will apply to all objects in CanJS that have an extend method.
 The `init` method is called whenever a new instance of a
 can.Construct is created. Init is where the bulk of your initialization code
 should go. Inside of the init function, the `this` keyword will refer to the
-new instance, and `this` will contains the arguments passed to the
+new instance, and `this` will contain the arguments passed to the
 constructor. A common thing to do in init is save the arguments passed into
 the constructor. An example is below:
 
@@ -86,14 +86,14 @@ var actor = new Person("Abe", "Vigoda");
 
 ## First can.Component <a name="first-component"></a>
 If you recall from the introduction, a can.Component is like a self-contained, 
-mini web application---i.e., it's encapsulated. Because can.Components are 
+mini web application—i.e., it's encapsulated. Because can.Components are
 encapsulated, they should each contain their own:
 
 - View template (.stache file)
 - JS
 - CSS
 
-This is why we created a components folder for our app---instead of, say, a
+This is why we created a components folder for our app—instead of, say, a
 JS folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
@@ -141,7 +141,7 @@ Next, open up your app.js file, and edit it as follows:
 ```
 $(function () {
 
-	$('# can-app').html(can.view('base_template.stache', {}));
+	$('#can-app').html(can.view('base_template.stache', {}));
 
 });
 ```
@@ -168,7 +168,7 @@ see it printing: "Hello Restaurant Customer".
 ### Auto Instantiation
 
 If you recall from the discussion above regarding can.Construct, whenever you
-declare an object using can.Construct it must be instantiated. Normally, you
+declare an object using can.Construct, it must be instantiated. Normally, you
 would either directly instantiate objects using the `new` keyword, or pass the
 constructor to an object that would create instances of it. *can.Component is
 an exception*.
@@ -188,11 +188,11 @@ clearer:
 ### Basic Anatomy of a can.Component
 The can.Component we created above had three properties.
 
-- tag,
-- template, and
-- scope
+- [tag](#tag),
+- [template](#template), and
+- [scope](#scope)
 
-#### The "tag" Property
+#### The "tag" Property <a name="tag"></a>
 The can.Component's `tag` property associates that
 can.Component with a specific, custom HTML tag:
 
@@ -204,7 +204,7 @@ template are inserted as the HTML contents of the custom tag:
 
 ![](../can/guides/images/2_first_component/ComponentTagRenderedHTML.png)
 
-#### Template
+#### Template <a name="template"></a>
 The `template` property of the can.Component contains the string
 value of the can.Component's template. Note that the template property just
 contains a string value. You can inline the template, if it is small. However,
@@ -212,7 +212,7 @@ the recommended way of working with templates, to maintain separation of
 concerns, is to keep them in their own files and load them using can.view, as
 we have done here.
 
-#### Scope
+#### Scope <a name="scope"></a>
 The `scope` object is the can.Component's view model. The view
 model is an abstraction of the view that exposes public properties and
 functions. Any property or method defined on the scope object is available
@@ -222,7 +222,7 @@ referenced it as a Stache data key in our template.
 
 ![](../can/guides/images/2_first_component/ComponentScopeTemplateLink.png)
 
-##### can.Map &amp; can.List
+### can.Map &amp; can.List
 The scope is a special type of object, called a
 "can.Map". can.Map objects are observable. Observable objects provide a way
 for you to listen for and keep track of changes to them. What this means, in
@@ -236,7 +236,7 @@ important. In order to broadcast the associated events when you change a
 property on a can.Map, you must use the attr method when setting a value.
 
 The attr method can be used to either get or set a property on a can.Map.
-`attr` works with deep properties---i.e., properties within properties. Here's
+`attr` works with deep properties—i.e., properties within properties. Here's
 an example:
 
 ```
@@ -248,3 +248,7 @@ myCanMapInstance.attr('person.name.last', 'Bach');
 ```
 
 Observable arrays are also available with can.List, which is based on can.Map.
+
+<span class="pull-left">[< Setup](Setup.html)</span>
+
+<span class="pull-right">[More on Components >](Components2.html)</span>
