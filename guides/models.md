@@ -51,8 +51,8 @@ properties are:
 4. update
 5. destroy
 
-The findXxx methods are available directly off of the object definition (i.e.,
-they are static). The create, update, and destroy methods are available off of
+The `find___` methods are available directly off of the object definition (i.e.,
+they are static). The `create`, `update`, and `destroy` methods are available off of
 specific instances of a can.Model. We'll see how to use these below.
 
 **Reminder: The number of parameters you pass in to an extend method is
@@ -86,7 +86,7 @@ modelInstance.destroy(); // Reference a method defined on the prototype
 
 We're not going to connect to a server to retrieve our data; however, we're
 going to code our model as if we were. How can this possibly work? CanJS
-provides a handy utility, can.fixture, that we can use to mimic the
+provides a handy utility, can.fixture, that we can use to easily mimic the
 functionality of connecting to a server. As the CanJS docs say, "can.fixture
 intercepts an AJAX request and simulates the response with a file or a
 function. You can use [can.fixutre] to develop JavaScript independently of
@@ -145,8 +145,8 @@ later on.
 
 ## Connecting the Model to the Component
 
-It's time to connect all of this together in our view model. Open up
-restaurant_list_component.js, and edit the RestaurantListViewModel as follows,
+It's time to connect all of this together in our view model. Simply open up
+restaurant_list_component.js. Edit the RestaurantListViewModel as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
