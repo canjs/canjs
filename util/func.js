@@ -839,10 +839,13 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Object} [argument] The argument to call the `failCallback` with.
 
 @body
-`deferred.reject( args )` rejects the Deferred object and calls the fail callbacks with the given arguments.
+`deferred.reject(args)` rejects the Deferred object and calls the fail callbacks with the given arguments.
 
-    var def = can.Deferred();
-    def.reject({ error: 'Thats not an animal.' })
+	var def = can.Deferred();
+	def.fail(function(reason) {
+   		console.log("Failed because... " + reason); //-> "Failed because... Meh." 
+	});
+	def.reject("Meh.");
 */
 //
 /**
