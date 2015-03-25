@@ -259,6 +259,8 @@ separating out the view model, is make the code easier to read and maintain.
 In the next chapter, we'll learn about working with more realistic data by
 adding REST service interaction with can.Model.
 
+- - -
+
 <span class="pull-left">[< Getting to Know Components](Components.html)</span>
 
 <span class="pull-right">[Models (& Fixtures) >](Models.html)</span>

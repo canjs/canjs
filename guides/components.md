@@ -249,6 +249,8 @@ myCanMapInstance.attr('person.name.last', 'Bach');
 
 Observable arrays are also available with can.List, which is based on can.Map.
 
+- - -
+
 <span class="pull-left">[< Setup](Setup.html)</span>
 
 <span class="pull-right">[More on Components >](Components2.html)</span>
