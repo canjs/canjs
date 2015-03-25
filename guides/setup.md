@@ -11,7 +11,7 @@
 
 To begin, we'll make sure we have everything we need to make our application.
 The first thing to do is get CanJS. The easiest way to get CanJS is to use
-the [custom downloader](http://canjs.com/download.html), which allows you to
+the the custom download page, which allows you to
 download the specific parts of CanJS you need for your application.
 
 The custom download page loads with all the elements in the core CanJS library
@@ -27,6 +27,8 @@ select the following:
 
 At the bottom of the page, click the download button. You'll be promoted to
 download a file called "can.custom.js". Save that file to your local machine.
+
+You can access the custom download page here: [Custom downloader](http://canjs.com/download.html)
 
 There is one additional file we need, which we won't download. This file is
 special. You normally wouldn't want it to be a part of your final application,
