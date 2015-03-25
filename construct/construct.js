@@ -60,14 +60,16 @@ steal('can/util/string', function (can) {
 		 * @property {Boolean} can.Construct.constructorExtends
 		 * @parent can.Construct.static
 		 *
-		 * @description Toggles the behavior of a constructor function called
+		 * @description
+		 * Toggles the behavior of a constructor function called
 		 * without the `new` keyword to extend the constructor function or
 		 * create a new instance.
-		 * @codestart
-		 *	var animal = Animal();
-		 *  // vs
-		 * 	var animal = new Animal();
-		 * @codeend
+		 *
+		 * ```
+		 * var animal = Animal();
+		 * // vs
+		 * var animal = new Animal();
+		 * ```
 		 * 
 		 * @body
 		 *
@@ -76,6 +78,48 @@ steal('can/util/string', function (can) {
 		 *  - `true` - the constructor extends
 		 *  - `false` - a new instance of the constructor is created
 		 *
+		 * This property defaults to false.
+		 *
+		 * Example of constructExtends is true:
+		 * ```
+		 * var Animal = can.Construct.extend({
+		 *   constructorExtends: true // the constructor extends
+		 * },{
+		 *   sayHi: function() {
+		 *     console.log("hai!");
+		 *   }
+		 * });
+		 *
+		 * var Pony = Animal({
+		 *   gallop: function () {
+		 *      console.log("Galloping!!");
+		 *   }
+		 * }); // Pony is now a constructor function extended from Animal
+		 * 
+		 * var frank = new Animal(); // frank is a new instance of Animal
+		 *
+		 * var gertrude = new Pony(); // gertrude is a new instance of Pony
+		 * gertrude.sayHi(); // "hai!" - sayHi is "inherited" from Animal
+		 * gertrude.gallop(); // "Galloping!!" - gallop is unique to instances of Pony
+		 *```
+		 * 
+		 * The default behavior is shown in the example below:
+		 * ```
+		 * var Animal = can.Construct.extend({
+		 *   constructorExtends: false // the constructor does NOT extend
+		 * },{
+		 *   sayHi: function() {
+		 *     console.log("hai!");
+		 *   }
+		 * });
+		 *
+		 * var pony = Animal(); // pony is a new instance of Animal
+		 * var frank = new Animal(); // frank is a new instance of Animal
+		 *
+		 * pony.sayHi() // "hai!"
+		 * frank.sayHi() // "hai!"
+		 *```
+		 * By default to extend a constructor, you must use [can.Construct.extend extend].
 		 */
 		constructorExtends: true,
 		/**
@@ -102,7 +146,7 @@ steal('can/util/string', function (can) {
 		 * The following creates a `Person` Construct and then creates a new instance of Person,
 		 * using `apply` on newInstance to pass arbitrary parameters.
 		 *
-		 * @codestart
+		 * ```
 		 * var Person = can.Construct.extend({
 		 *   init : function(first, middle, last) {
 		 *     this.first = first;
@@ -112,8 +156,9 @@ steal('can/util/string', function (can) {
 		 * });
 		 *
 		 * var args = ["Justin","Barry","Meyer"],
-		 *     justin = new Person.newInstance.apply(null, args);
-		 * @codeend
+		 *     justin = Person.newInstance.apply(null, args);
+		 * ```
+		 *
 		 */
 		newInstance: function () {
 			// Get a raw instance object (`init` is not called).
@@ -256,7 +301,7 @@ steal('can/util/string', function (can) {
 		 * Extends `can.Construct`, or constructor functions derived from `can.Construct`,
 		 * to create a new constructor function. Example:
 		 *
-		 *     Animal = can.Construct.extend({
+		 *     var Animal = can.Construct.extend({
 		 *       sayHi: function(){
 		 *         console.log("hi")
 		 *       }
@@ -279,13 +324,15 @@ steal('can/util/string', function (can) {
 		 * @param {Object} [staticProperties] Properties that are added the constructor
 		 * function directly. For example:
 		 *
-		 *     Animal = can.Construct.extend({
-		 *       findAll: function(){
-		 *         return can.ajax({url: "/animals"})
-		 *       }
-		 *     },{});
+		 * ```
+		 * var Animal = can.Construct.extend({
+		 *   findAll: function(){
+		 *     return can.ajax({url: "/animals"})
+		 *   }
+		 * },{}); // need to pass an empty instanceProperties object
 		 *
-		 *     Animal.findAll().then(function(json){ ... })
+		 * Animal.findAll().then(function(json){ ... })
+		 * ```
 		 *
 		 * The [can.Construct.setup static setup] method can be used to
 		 * specify inheritable behavior when a Constructor function is created.
@@ -294,25 +341,93 @@ steal('can/util/string', function (can) {
 		 * instances made with the constructor. These properties are added to the
 		 * constructor's `prototype` object. Example:
 		 *
-		 *     Animal = can.Construct.extend({
-		 *       init: function(name){
+		 *     var Animal = can.Construct.extend({
+		 *		  findAll: function() {
+		 *			return can.ajax({url: "/animals"});
+		 *		  }
+		 * 		},{
+		 *       init: function(name) {
 		 *         this.name = name;
 		 *       },
-		 *       sayHi: function(){
-		 *         console.log(this.name,"says hi")
+		 *       sayHi: function() {
+		 *         console.log(this.name," says hai!");
 		 *       }
 		 *     })
-		 *     var animal = new Animal()
-		 *     animal.sayHi();
+		 *     var pony = new Animal("Gertrude");
+		 *     pony.sayHi(); // "Gertrude says hai!"
 		 *
 		 * The [can.Construct::init init] and [can.Construct::setup setup] properties
 		 * are used for initialization.
 		 *
 		 * @return {function} The constructor function.
-		 * 
+		 * ```
+		 *	var Animal = can.Construct.extend(...);
+		 *	var pony = new Animal(); // Animal is a constructor function
+		 * ```
 		 * @body
-		 * ## Example
-		 * <a class="jsbin-embed" href="http://jsbin.com/nobomu/6/embed?js,console">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
+		 * ## Inheritance
+		 * Creating "subclasses" with `can.Construct` is simple. All you need to do is call the base constructor
+		 * with the new function's static and instance properties. For example, we want our `Snake` to
+		 * be an `Animal`, but there are some differences:
+		 * 
+		 * 
+		 *     var Snake = Animal.extend({
+		 *         legs: 0
+		 *     }, {
+		 *         init: function() {
+		 *             Animal.prototype.init.call(this, 'ssssss');
+		 *         },
+		 *         slither: function() {
+		 *             console.log('slithering...');
+		 *         }
+		 *     });
+		 *     
+		 *     var baslisk = new Snake();
+		 *     baslisk.speak();   // "ssssss"
+		 *     baslisk.slither(); // "slithering..."
+		 *     baslisk instanceof Snake;  // true
+		 *     baslisk instanceof Animal; // true
+		 * 
+		 * 
+		 * ## Static properties and inheritance
+		 * 
+		 * If you pass all three arguments to can.Construct, the second one will be attached directy to the
+		 * constructor, allowing you to imitate static properties and functions. You can access these
+		 * properties through the `[can.Construct::constructor this.constructor]` property.
+		 * 
+		 * Static properties can get overridden through inheritance just like instance properties. In the example below,
+		 * we override both the legs static property as well as the the init function for each instance:
+		 * 
+		 * ```
+		 * var Animal = can.Construct.extend({
+		 *     legs: 4
+		 * }, {
+		 *     init: function(sound) {
+		 *         this.sound = sound;
+		 *     },
+		 *     speak: function() {
+		 *         console.log(this.sound);
+		 *     }
+		 * });
+		 * 
+		 * var Snake = Animal.extend({
+		 *     legs: 0
+		 * }, {
+		 *     init: function() {
+		 *         this.sound = 'ssssss';
+		 *     },
+		 *     slither: function() {
+		 *         console.log('slithering...');
+		 *     }
+		 * });
+		 * 
+		 * Animal.legs; // 4
+		 * Snake.legs; // 0
+		 * var dog = new Animal('woof');
+		 * var blackMamba = new Snake();
+		 * dog.speak(); // 'woof'
+		 * blackMamba.speak(); // 'ssssss'
+		 * ```
 		 */
 		extend: function (name, staticProperties, instanceProperties) {
 			var fullName = name,
@@ -483,12 +598,13 @@ steal('can/util/string', function (can) {
 			 * A reference to the constructor function that created the instance. This allows you to access
 			 * the constructor's static properties from an instance.
 			 *
+			 * @body
 			 * ## Example
 			 *
 			 * This can.Construct has a static counter that counts how many instances have been created:
 			 *
-			 * @codestart
-			 * can.Construct.extend("Counter", {
+			 * ```
+			 * var Counter = can.Construct.extend({
 			 *     count: 0
 			 * }, {
 			 *     init: function() {
@@ -496,9 +612,10 @@ steal('can/util/string', function (can) {
 			 *     }
 			 * });
 			 *
-			 * new Counter();
-			 * Counter.count; // 1
-			 * @codeend
+			 * var childCounter = new Counter();
+			 * console.log(childCounter.constructor.count); // 1
+			 * console.log(Counter.count); // 1
+			 * ```
 			 */
 		}
 	});
@@ -569,6 +686,7 @@ steal('can/util/string', function (can) {
 	 *     });
 	 *
 	 */
+	 }
 	can.Construct.prototype.setup = function () {};
 	/**
 	 * @function can.Construct.prototype.init init
