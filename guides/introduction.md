@@ -102,7 +102,7 @@ how powerful this aspect of CanJS is.
 ## Using the Getting Started Guide
 Each chapter in the Getting Started Guide is prefaced with an overview of the topics covered in that chapter. The overview section also contains a link where you can download a zip file containing the code relevant to that chapter, as follows:
 
-- - - -
+- - -
 **In this Chapter**
  - Topic 1
  - Topic 2
