@@ -31,7 +31,7 @@ There are five aspects of Stache templates, mentioned above, that we'll review:
 - [keys](#keys),
 - [sections](#sections),
 - [enumeration](#enumeration),
-- [filter](#filter), and
+- [filtering](#filtering), and
 - [conditional logic](#conditionallogic)
 
 It will be easiest for us to look at these with an example, so let's create 
