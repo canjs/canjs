@@ -399,10 +399,15 @@ CanJS; however, if you are making libraries or extensions, use
 
 __Delegate binding to an HTMLElement__
 
-    var el = document.getElementById('foo')
-    can.delegate.call(el, ".selector", "click", function(ev){
-        this // el
-    })
+	// Assuming an HTML body like the following:
+	// <div id="parent">
+    //     <div class="child">Hello</div>
+    // </div>
+
+    var el = document.getElementById('parent');
+    can.delegate.call(el, ".child", "click", function(ev) {
+        return this; //-> el
+    });
 */
 //
 /**
