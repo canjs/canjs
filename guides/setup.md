@@ -41,10 +41,10 @@ can.custom.js file into its appropriate folder in the app.
 
 ## Folder Structure
 
-A lot of frameworks recommend a structure that has separate JS, CSS, and HTML
-folders. When building a CanJS app, because our application will be built using
-components, we use a component-based folder structure. Off of a root folder
-called *PlaceMyOrder*, create the following subfolders:
+When building a CanJS app, because our application will be built using
+components, we use a component-based folder structure. This structure makes it easier to both manage the contents of the component---and port the component, should you want to use it in another application.
+
+Off of a root folder called *PlaceMyOrder*, create the following subfolders:
 
 ```
 | PlaceMyOrder
