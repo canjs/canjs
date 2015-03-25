@@ -110,12 +110,5 @@ Each chapter in the Getting Started Guide is prefaced with an overview of the to
 
 > Get the code for: [chapter X]()
 
-<<<<<<< HEAD
-- - -
-=======
-- - -
 
 - - -
-
-<span class="pull-right">[Application Foundations >](Foundations.html)</span>
->>>>>>> 537ea3821366c0551d7284a1c838f06dd396ae00
