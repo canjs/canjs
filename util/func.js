@@ -652,8 +652,8 @@ You can also use this to wait for the results of multiple deferreds.
 
 You can also use this for regular JavaScript objects.
 
-    $.when( { animals: [ 'cat' ] } ).done(function(animals){
-        alert(animals[0]); //-> alerts 'cat'
+    $.when({ animals: [ 'cat' ] }).done(function(value){
+        alert(value.animals[0]); //-> alerts 'cat'
     });
 */
 //
