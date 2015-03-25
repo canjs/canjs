@@ -9,7 +9,7 @@
  - Serialization
  - Creating Anchor Tags with can.route.link
 
-> Get the code for: [chapter 9](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_9) - (*This is the completed application*).
+> Get the code for: [chapter 9](https://github.com/bitovi/canjs/tree/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip) - (*This is the completed application*).
 
 - - -
 

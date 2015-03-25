@@ -9,7 +9,7 @@
  - Moving Closer to MVVM
  - Working with Non-standard Data Formats
 
-> Get the code for: [chapter 5](https://github.com/bitovi/canjs/tree/master/guides/examples/PlaceMyOrder/chapter_5)
+> Get the code for: [chapter 5](https://github.com/bitovi/canjs/tree/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip)
 
 - - -
 
