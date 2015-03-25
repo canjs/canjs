@@ -7,7 +7,7 @@
 **In this Chapter**
  - Create the Site Menu can.Component
 
-> Get the code for: [chapter 6](https://github.com/bitovi/canjs/tree/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip)
+> Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
 
 - - -
 

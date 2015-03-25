@@ -9,7 +9,7 @@
  - Basic Routing
  - Binding the Application State Object to the Application and Routes
 
-> Get the code for: [chapter 7](https://github.com/bitovi/canjs/tree/guides-overhaul/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip)
+> Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip?raw=true)
 
 - - -
 

@@ -10,7 +10,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-> Get the code for: [chapter 3](https://github.com/bitovi/canjs/tree/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip)
+> Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
 
 - - -
 
