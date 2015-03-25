@@ -215,7 +215,7 @@ steal('can/util/string', function (can) {
 		 *       setup: function(Construct, fullName, staticProps, protoProps){
 		 *         this.childGroups = [];
 		 *         if(Construct !== can.Construct){
-		 *           this.childGroups(Construct)
+		 *           this.childGroups.push(Construct)
 		 *         }
 		 *         Construct.setup.apply(this, arguments)
 		 *       }
