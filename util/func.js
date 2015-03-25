@@ -735,7 +735,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
 	var def = can.Deferred();
 	def.fail(function(error) {
-		this.logError(error);
+		this.logError(error); //-> "Oh no!"
 	});
 
 	var context = {
