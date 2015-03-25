@@ -28,5 +28,3 @@ Dependency Management utilities like StealJS, Require, or Browserify, see the
 - - -
 
 <span class="pull-left">[< Route Formatting & Serialization](Routes.html)</span>
-
-<span class="pull-right">[Building the Sample App >](Building.html)</span>
