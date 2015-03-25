@@ -42,7 +42,7 @@ var SiteMenuModel = can.Model.extend({
 ```
 
 In your components folder, create a new folder called "site_menu". In that
-folder, file called site_menu_component.js, and add the following code:
+folder, create a file called site_menu_component.js and add the following code:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
