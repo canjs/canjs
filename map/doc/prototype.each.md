@@ -1,7 +1,7 @@
 @function can.Map.prototype.each each
 @parent can.Map.prototype 5
 
-@description Call a function on each property of an Map.
+@description Call a function on each property of a Map.
 
 @signature `map.each( callback(item, propName ) )`
 

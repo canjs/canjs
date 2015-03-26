@@ -647,14 +647,14 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @description Add elements to the end of a list.
 			 * @signature `list.push(...elements)`
 			 *
-			 * `push` adds elements onto the end of a List.]
+			 * `push` adds elements onto the end of a List.
 			 *
 			 * @param {*} elements the elements to add to the List
 			 *
 			 * @return {Number} the new length of the List
 			 *
 			 * @body
-			 * `push` is fairly straightforward:
+			 * `push` adds elements onto the end of a List here is an example:
 			 *
 			 * @codestart
 			 * var list = new can.List(['Alice']);

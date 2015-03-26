@@ -1,7 +1,7 @@
 @function can.Map.prototype.attr attr
 @parent can.Map.prototype 2
 
-@description Get or set properties on an Map.
+@description Get or set properties on a Map.
 
 @signature `map.attr()`
 

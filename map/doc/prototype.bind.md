@@ -1,7 +1,7 @@
 @function can.Map.prototype.bind bind
 @parent can.Map.prototype 3
 
-@description Bind event handlers to an Map.
+@description Bind event handlers to a Map.
 
 @signature `map.bind(eventType, handler)`
 
@@ -19,7 +19,7 @@ of your application to map the changes to the object.
 ## The _change_ event
 
 The first event that is fired is the _change_ event. The _change_ event is useful
-if you want to react to all changes on an Map.
+if you want to react to all changes on a Map.
 
 
     var o = new can.Map({});
