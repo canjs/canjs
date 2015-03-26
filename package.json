@@ -169,6 +169,11 @@
 		"./view/scope/scope": "./dist/cjs/view/scope/scope",
 		"./util/string/string": "./dist/cjs/util/string/string",
 		"./util/attr/attr": "./dist/cjs/util/attr/attr",
-		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender"
+		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender",
+		"./util/domless/domless": "./dist/cjs/util/domless/domless",
+		"./view/stache/system": "./dist/cjs/view/stache/system",
+		"./view/mustache/system": "./dist/cjs/view/mustache/system",
+		"./view/ejs/system": "./dist/cjs/view/ejs/system",
+		"./util/event": "./dist/cjs/util/event"
 	}
 }

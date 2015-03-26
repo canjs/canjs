@@ -218,6 +218,36 @@
 			"name": "can.autorender",
 			"type": "plugin",
 			"description": "Automatically render templates found in the document"
+		},
+		"can/util/domless/domless": {
+			"name": "can.util.domless",
+			"type": "plugin",
+			"isDefault": false,
+			"hasTest": false
+		},
+		"can/view/stache/system": {
+			"name": "can.view.stache.system",
+			"type": "plugin",
+			"description": "Steal plugin for loading Stache templates",
+			"hasTest": false
+		},
+		"can/view/mustache/system": {
+			"name": "can.view.mustache.system",
+			"type": "plugin",
+			"description": "Steal plugin for loading Mustache templates",
+			"hasTest": false
+		},
+		"can/view/ejs/system": {
+			"name": "can.view.ejs.system",
+			"type": "plugin",
+			"description": "Steal plugin for loading EJS templates",
+			"hasTest": false
+		},
+		"can/util/event": {
+			"name": "can.util.event",
+			"type": "core",
+			"hidden": true,
+			"hasTest": false
 		}
 	},
 	"types": {
@@ -231,7 +261,7 @@
 			"library": "node_modules/jquery/dist/jquery.js",
 			"steal": {
 				"paths": {
-					"can/util/util": "util/jquery/jquery.js"
+					
 				}
 			}
 		},

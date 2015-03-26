@@ -194,11 +194,7 @@ module.exports = function(){
 					dest: function(moduleName){
 						var name;
 						moduleName = denpm(moduleName);
-						if(moduleName === "util/util"){
-							name = "dist/steal/can/util/jquery/jquery.js";
-						} else {
-							name = "dist/steal/can/"+moduleName+".js";
-						}
+						name = "dist/steal/can/"+moduleName+".js";
 						return path.join(__dirname,"..",name);
 					},
 					format: "steal",
