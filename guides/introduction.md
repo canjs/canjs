@@ -109,7 +109,7 @@ Each chapter in the Getting Started Guide is prefaced with an overview of the to
  - Topic 2
  - Connecting can.Models with can.Components
 
-Get the code for: [chapter X]()
+Get the code for: <a href="javscript://">chapter X</a>
 
 - - -
 
