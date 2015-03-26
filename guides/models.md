@@ -55,8 +55,8 @@ properties are:
 5. destroy
 
 The `find___` methods are available directly off of the object definition (i.e.,
-they are static). The `create`, `update`, and `destroy` methods are available off of
-specific instances of a can.Model. We'll see how to use these below.
+they are static). The `create`, `update`, and `destroy` methods are available
+off of specific instances of a can.Model. We'll see how to use these below.
 
 **Reminder**: The number of parameters you pass in to an extend method is
 important. If you pass in a single parameter object, the extend method will
@@ -184,7 +184,12 @@ In the code above, however, we called the findAll method indirectly:
 restaurants: new RestaurantModel.List({}),
 ```
 
-This is a special feature of the can.Model.List constructor. If you create a new instance of a can.Model.List, and you pass the constructor a plain JavaScript object, that List's constructor parameter will be passed to the can.Model's findAll method. The `findAll` method will run, and the list will be populated with the results of the `findAll` method, as below:
+This is a special feature of the can.Model.List constructor. If you create a
+new instance of a can.Model.List, and you pass the constructor a plain
+JavaScript object, that List's constructor parameter will be passed to the
+can.Model's findAll method. The `findAll` method will run, and the list will
+be populated with the results of the `findAll` method, as below:
+
 
 ![](../can/guides/images/4_models/New.Model.List.png)
 

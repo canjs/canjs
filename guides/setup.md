@@ -45,7 +45,9 @@ In the next step, we'll set up the application's folder structure, and move the
 ## Folder Structure
 
 When building a CanJS app, because our application will be built using
-components, we use a component-based folder structure. This structure makes it easier to both manage the contents of the component---and port the component, should you want to use it in another application.
+components, we use a component-based folder structure. This structure makes it
+easier to both manage the contents of the component---and port the component,
+should you want to use it in another application.
 
 Off of a root folder called *PlaceMyOrder*, create the following subfolders:
 
@@ -58,14 +60,18 @@ Off of a root folder called *PlaceMyOrder*, create the following subfolders:
         └── site_css
 </pre>
 
-Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a> that accompanies this guide into your *site_css* folder. We won't be covering any of the CSS here. Next, copy the *can.custom.js* file you downloaded in the previous step into the *libs* folder.
+Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a>
+that accompanies this guide into your *site_css* folder. We won't be covering
+any of the CSS here. Next, copy the *can.custom.js* file you downloaded in
+the previous step into the *libs* folder.
 
 Finally, you'll need to download the supporting libraries. They are:
 
- - <a href="http://jquery.com/download/" target="_blank">jQuery 2.x</a>
- - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
+- <a href="http://jquery.com/download/" target="_blank">jQuery 2.x</a>
+- <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
-Once you've downloaded these files, rename the jQuery file to *jquery.js* and copy both files to the *libs* directory in your application folder.
+Once you've downloaded these files, rename the jQuery file to *jquery.js* and
+copy both files to the *libs* directory in your application folder.
 
 - - -
 
