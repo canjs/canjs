@@ -22,17 +22,10 @@ the code required to connect to a service and managing the data the service
 returns. Additionally, can.Model extends [can.Map](../docs/can.Map.html), meaning that the objects
 returned have all of the features of a can.Map, such as being observable.
 
-- [findAll](../docs/can.Model.findAll.html), which describes how to get a group of
-items.
-- [findOne](../docs/can.Model.findOne.html), which describes how to get a specific
-item.
-- [create](../docs/can.Model.create.html), which describes how to save a new item.
-- [update](../docs/can.Model.update.html), which describes how to update an
-existing item.
-- [destroy](../docs/can.Model.destroy.html), which describes how to delete an item.
+We'll use a can.Model to provide data for our restaurant list.
 
-When accessing a straightforward RESTful API, creating a Model class and an
-instance of that Model class might be as simple as this:
+In the models folder, create a file called *site_models.js*. Add the
+following code:
 
 ```
 var Todo = can.Model({
@@ -75,14 +68,61 @@ var MyModel = can.Model.extend({
 This will make a `GET` request to `/todos`, which should return JSON that looks
 similar to:
 
+MyModel.findAll(); // Reference a method defined on the constructor
+
+var modelInstance = new MyModel();
+modelInstance.destroy(); // Reference a method defined on the prototype
 ```
-{
-	"data": [
-		{"id":1, "description":"Do the dishes."},
-		{"id":2, "description":"Mow the lawn."},
-		{"id":3, "description":"Finish the laundry."}
-	]
-}
+
+## The Data for Our Model
+
+We're not going to connect to a server to retrieve our data; however, we're
+going to code our model as if we were. How can this possibly work? CanJS
+provides a handy utility, can.fixture, that we can use to easily mimic the
+functionality of connecting to a server. As the CanJS docs say, "can.fixture
+intercepts an AJAX request and simulates the response with a file or a
+function. You can use can.fixture to develop JavaScript independently of
+backend services."
+
+can.fixture is not included with the base CanJS package. It's a good practice
+to keep it separate from your production CanJS library, which is why we
+downloaded it from its CDN in a separate script tag, rather than including it
+with our custom download. *If you use can.fixture during development, remember
+to remove it once you are connecting to your REST services*.
+
+Let's create a fixture that will respond to our requests for menu item data.
+Create another file in the models folder called *fixtures.js*. Add the
+following code to that file:
+
+```
+/**
+ * Restaurants Model Fixture
+ */
+can.fixture("GET /restaurants", function requestHandler() {
+	return [
+		{
+			"name": "Spago",
+			"location": "USA",
+			"cuisine": "Modern",
+			"owner": "Wolfgang Puck",
+			"restaurantId": 1
+		},
+		{
+			"name": "El Bulli",
+			"location": "Spain",
+			"cuisine": "Modern",
+			"owner": "Ferran Adria",
+			"restaurantId": 2
+		},
+		{
+			"name": "The French Laundry",
+			"location": "USA",
+			"cuisine": "French Traditional",
+			"owner": "Thomas Keller",
+			"restaurantId": 3
+		}
+	];
+});
 ```
 
 `findAll` will also accept an array from the service, but [you probably should not be returning an array from a JSON service](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx).
@@ -99,8 +139,14 @@ It's time to connect all of this together in our view model. Simply open up
 updating the restaurants property to receive data from the model we created:
 
 ```
-Todo.findOne({id: 1}, function(todo) {
-	// todo is an instance of Todo
+var RestaurantListViewModel = can.Map.extend({
+  restaurants: new RestaurantModel.List({}),
+  currentRestaurant: undefined,
+  restaurantSelected: function (viewModel, select) {
+    var restaurant = select.find('option:checked').data('restaurant');
+    var currentRestaurant = 'currentRestaurant';
+    this.attr(currentRestaurant, restaurant);
+  }
 });
 ```
 
