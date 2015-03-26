@@ -50,7 +50,10 @@ arguments.
 If no `argKey`s or `hashKey`s are provided, the methodKey will be called with the
 `@content`, `@element` and `@event` as arguments.
 
-@demo can/view/bindings/doc/can-event.html
+The following uses `can-click={items.splice @index 1}` to remove a
+item from `items` when that item is clicked on.
+
+@demo can/view/bindings/doc/can-event-args.html
 
 ## Special Event Types
 
@@ -64,7 +67,7 @@ similar to [$.special](http://benalman.com/news/2010/03/jquery-special-events/).
 can-enter is a special event that calls its handler whenever the enter 
 key is pressed while focused on the current element. For example: 
 
-	<input type='text' can-enter='save' />
+	<input type='text' can-enter='{save}' />
 
 The above template snippet would cause the save method 
 (in the [can.mustache Mustache] [can.view.Scope scope]) whenever 
