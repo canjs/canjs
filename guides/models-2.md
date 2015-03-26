@@ -6,7 +6,7 @@
 
 <div class="getting-started">
 
-- - - -
+- - -
 **In this Chapter**
  - Saving and Updating a can.Model
  - Moving Closer to MVVM
@@ -33,11 +33,11 @@ Add the following to order_form.stache:
 ```
 <h1>{{restaurantName}}</h1>
 
-{{# each menus}}
+{{#each menus}}
 
 	<h3>{{menuName}}</h3>
 
-	{{# each items}}
+	{{#each items}}
 		<label>
 			<input type="checkbox" can-value="selected"> {{name}}, ${{price}}
 		</label>
@@ -76,7 +76,7 @@ In the template above, we're binding the values:
 - telephone
 
 to the "delivery" object of the View Model. We do that using both the delivery
-section, defined by {{# each delivery}} ... {{/each}}, and the `can-value`
+section, defined by {{#each delivery}} ... {{/each}}, and the `can-value`
 attribute. `can-value` is a can.view attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
@@ -84,6 +84,7 @@ Add the following to order_form_component.js:
 
 ```
 var OrderFormViewModel = can.Map.extend({
+	//Initialize the properties of the ViewModel
 	init: function () {
 		this.attr('delivery', {});
 		this.attr('order', {});
@@ -92,6 +93,7 @@ var OrderFormViewModel = can.Map.extend({
 		this.attr('menus', new RestaurantMenusModel.List({id: 1}));
 	},
 	createOrder: function (menuItems) {
+    	//Add all selected menu items to the menuItems collection
 		this.attr('menus').each(function (itemSet) {
 			itemSet.attr('items').each(function (item) {
 				if (item.attr('selected')) {
@@ -99,7 +101,7 @@ var OrderFormViewModel = can.Map.extend({
 				}
 			});
 		});
-
+		//Return an object containing the Menu Order
 		return new MenuOrderModel({
 			delivery: this.attr('details'),
 			menuItems: menuItems
@@ -112,12 +114,14 @@ var OrderFormViewModel = can.Map.extend({
 
 		order = this.createOrder.call(this, menuItems);
 
+        //Check for errors
 		if (errorCheck) {
 			this.attr('issues', errors);
 			return;
 		}
 		var that = this;
 
+		//Submit the order
 		order.save(
 			function success() {
 				that.attr('confirmation', 'Your Order has been Placed');
@@ -125,6 +129,7 @@ var OrderFormViewModel = can.Map.extend({
 				alert(xhr.message);
 			});
 
+		//Set the current order to the order submitted
 		this.attr('order', order);
 	}
 });
@@ -180,6 +185,7 @@ Staying in fixtures.js, append the following to the bottom of the file:
  */
 can.fixture("GET /menus/{id}", function requestHandler(request) {
 
+	//Adjust id to account for zero-based index
 	var id = parseInt(request.data.id, 10) - 1;
 
 	var menuList = [
@@ -279,14 +285,14 @@ var MenuOrderModel = can.Model.extend({
 ```
 
 There's a few things to notice in the code above. First, the fixture that we
-defined returned a non-standard data format—non standard for CanJS. The
+defined returned a non-standard data format. That is, it is non-standard for CanJS. The
 can.Model.findAll method expects an array from the service it calls. Our
 fixture, however, is returning an object that contains an array. Normally, if
 the findAll method received this data, it would throw an error. In this case,
 it does not. This is because we included the `parseModels` attribute on the
 MenuOrderModel.
 
-`parseModels` is used to convert the raw response of a findAll request into an
+`parseModels` is used to convert the raw response of a `findAll` request into an
 object or Array that the model you're defining can use. As you can see, this
 method can be particularly useful if you're consuming data from a service that
 doesn't fit the format expected by `findAll`.
@@ -318,7 +324,7 @@ Go out to your app in the browser, and reload your page. You should see the foll
 ![](../can/guides/images/5_model_validation/OrderMenuComponentFirstLoad.png)
 
 One thing you might immediately notice is that both the Restaurant List
-component, and the Order Component are both showing on the page. Don't worry
+component, and the Order Component are showing on the page. Don't worry
 about that for the moment. We'll deal with controlling which Components
 display when we set up our Application State and Routing.
 
