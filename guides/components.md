@@ -103,9 +103,9 @@ them easier to test and maintain.
 In the components folder, create a subfolder called *restaurant_list*, along with the following files:
 
 <pre>
-| restaurant_list
-	|--restaurant_list_component.js
-    |--restaurant_list.stache
+└── restaurant_list
+    ├── restaurant_list_component.js
+    └── restaurant_list.stache
 </pre>
 
 Put the following code inside restaurant_list_component.js:

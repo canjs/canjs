@@ -54,8 +54,8 @@ Let's dive in to the good stuff, and start working with the app! Create a
 file called "index.html" in the app folder.
 
 <pre>
-| app
-	|--index.html
+└── app
+    └── index.html
 </pre>
 
 It should look like this:

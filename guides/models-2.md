@@ -22,10 +22,10 @@ people can select items.
 Create a sub folder under components called *order_form*, and add the following files:
 
 <pre>
-| components
-	|--order_form
-    	|--order_form.stache
-		|--order_form_component.js
+└── components
+    └── order-form
+        ├── order_form.stache
+        └── order_form_component.js
 </pre>
 
 Add the following to order_form.stache:
