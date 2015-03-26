@@ -1,14 +1,24 @@
-@page Models Models & Retrieving Data
-@parent Tutorial 2
+@page Models Models (& Fixtures)
+@parent Tutorial 5
+@disableTableOfContents
 
 @body
 
-Models are special Observes that connect to RESTful services. They come with a
-set of methods designed to make it easy to manage changes remotely. To create
-a Model class, call `can.Model` and supply it with specific static properties
-that tell it how to interact with the server, along with any prototype
-properties or helper methods the Model may need. The important static
-properties are:
+- - - -
+**In this Chapter**
+ - can.Model
+ - can.fixture
+ - Connecting can.Models with can.Components
+
+Get the code for: [chapter 4](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-4_canjs-getting-started.zip?raw=true)
+
+- - -
+
+The next item we're going to go over is [can.Model](../docs/can.Model.html). Models make interacting
+with JSON REST services *really easy*. They do this by encapsulating most of
+the code required to connect to a service and managing the data the service
+returns. Additionally, can.Model extends [can.Map](../docs/can.Map.html), meaning that the objects
+returned have all of the features of a can.Map, such as being observable.
 
 - [findAll](../docs/can.Model.findAll.html), which describes how to get a group of
 items.
@@ -183,16 +193,6 @@ Todo.bind('created', function(ev, created) {
 });
 ```
 
-## Model Lists
-Model Lists (provided by `can.Model.List`) are Lists whose items are Models.
-When one of a Model List's elements are destroyed, that element is removed from
-the list.
+<span class="pull-left">&lsaquo; [More on Components](Components2.html)</span>
 
-```
-Todo.findAll({}, function(todos) {
-	todos.length; // 5
-	todos[0].destroy(function() {
-		todos.length; // 4
-	}
-});
-```
+<span class="pull-right">[Sending Data to a Service](Models2.html) &rsaquo;</span>
