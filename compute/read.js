@@ -6,7 +6,7 @@ steal("can/util", function(can){
 	// there are things that you need to evaluate when you get them back as a property read
 	// for example a compute or a function you might need to call to get the next value to 
 	// actually check
-
+	// - isArgument - should be renamed to something like "dontReadLastPropertyValue"
 	var read = function (parent, reads, options) {
 		options = options || {};
 		var state = {
@@ -19,10 +19,10 @@ steal("can/util", function(can){
 			// `prev` is the object we are reading from.
 			prev,
 			// `foundObs` did we find an observable.
-			foundObs,
 			readLength = reads.length,
 			i = 0;
-		
+
+
 		while( i < readLength ) {
 			prev = cur;
 			// try to read the property
@@ -35,7 +35,7 @@ steal("can/util", function(can){
 			}
 			i = i+1;
 			// read the value if it is a compute or function
-			cur = readValue(cur, i, reads, options, state);
+			cur = readValue(cur, i, reads, options, state, prev);
 			type = typeof cur;
 			// early exit if need be
 			if (i < reads.length && (cur === null || type !== 'function' && type !== 'object')) {
@@ -50,22 +50,6 @@ steal("can/util", function(can){
 			}
 			
 		}
-		
-		
-		// handle an ending function
-		// unless it is a can.Construct-derived constructor
-		if (typeof cur === 'function' && !(can.Construct && cur.prototype instanceof can.Construct) && !(can.route && cur === can.route)) {
-			if (options.isArgument) {
-				if (!cur.isComputed && options.proxyMethods !== false) {
-					cur = can.proxy(cur, prev);
-				}
-			} else {
-				if (cur.isComputed && !foundObs && options.foundObservable) {
-					options.foundObservable(cur, i);
-				}
-				cur = cur.call(prev);
-			}
-		}
 		// if we don't have a value, exit early.
 		if (cur === undefined) {
 			if (options.earlyExit) {
@@ -78,10 +62,10 @@ steal("can/util", function(can){
 		};
 	};
 	
-	var readValue = function(value, index, reads, options, state){
+	var readValue = function(value, index, reads, options, state, prev){
 		for(var i =0, len = read.valueReaders.length; i < len; i++){
 			if( read.valueReaders[i].test(value, index, reads, options) ) {
-				value = read.valueReaders[i].read(value, index, reads, options, state);
+				value = read.valueReaders[i].read(value, index, reads, options, state, prev);
 			}
 		}
 		return value;
@@ -91,11 +75,16 @@ steal("can/util", function(can){
 	// ideally they would keep calling until 
 	// none of these passed
 	read.valueReaders = [{
+		name: "compute",
 		// compute value reader
 		test: function(value, i, reads, options){
-			return value && value.isComputed && (!options.isArgument && i < reads.length );
+			return value && value.isComputed;
 		},
 		read: function(value, i, reads, options, state){
+			if(options.isArgument && i === reads.length ) {
+				return value;
+			}
+			
 			if (!state.foundObservable && options.foundObservable) {
 				options.foundObservable(value, i);
 				state.foundObservable = true;
@@ -103,17 +92,21 @@ steal("can/util", function(can){
 			return value instanceof can.Compute ? value.get() : value();
 		}
 	},{
+		name: "function",
 		// if this is a function before the last read and its not a constructor function
 		test: function(value, i, reads, options){
 			var type = typeof value;
 			// i = reads.length if this is the last iteration of the read for-loop.
-			return i < reads.length  &&
-				type === 'function' &&
-				options.executeAnonymousFunctions &&
-				!(can.Construct && value.prototype instanceof can.Construct);
+			return type === 'function' && !value.isComputed &&
+				(options.executeAnonymousFunctions || (options.isArgument && i === reads.length) ) &&
+				!(can.Construct && value.prototype instanceof can.Construct) &&
+				!(can.route && value === can.route);
 		},
-		read: function(value){
-			return value();
+		read: function(value, i, reads, options, state, prev){
+			if (options.isArgument && i === reads.length) {
+				return options.proxyMethods !== false ? can.proxy(value, prev) : value;
+			}
+			return value.call(prev);
 		}
 	}];
 	
@@ -121,6 +114,7 @@ steal("can/util", function(can){
 	read.propertyReaders = [
 		// read a can.Map or can.route
 		{
+			name: "map",
 			test: can.isMapLike,
 			read: function(value, prop, index, options, state){
 				if (!state.foundObservable && options.foundObservable) {
@@ -146,6 +140,7 @@ steal("can/util", function(can){
 		},
 		// read a promise
 		{
+			name: "promise",
 			test: function(value){
 				return can.isPromise(value);
 			},
@@ -185,6 +180,7 @@ steal("can/util", function(can){
 		
 		// read a normal object
 		{
+			name: "object",
 			// this is the default
 			test: function(){return true;},
 			read: function(value, prop){
@@ -196,6 +192,27 @@ steal("can/util", function(can){
 			}
 		}
 	];
+	
+	// This should be able to set a property similar to how read works.
+	read.write = function(parent, key, value, options) {
+		options = options || {};
+		if(can.isMapLike(parent)) {
+			// HACK! ... check if the attr is a comptue, if it is, set it.
+			if(!options.isArgument && parent._data && parent._data[key] && parent._data[key].isComputed) {
+				return parent._data[key](value);
+			} else {
+				return parent.attr(key, value);
+			}
+		}
+
+		if(parent[key] && parent[key].isComputed) {
+			return parent[key](value);
+		}
+
+		if(typeof parent === 'object') {
+			parent[key] = value;
+		}
+	};
 	
 	
 	return read;
