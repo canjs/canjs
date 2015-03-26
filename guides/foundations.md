@@ -1,5 +1,6 @@
 @page Foundations Application Foundations
 @parent Tutorial 2
+@disableTableOfContents
 
 @body
 
@@ -10,7 +11,7 @@
  - Base View Template
  - Application Bootstrap
 
-> Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -119,6 +120,6 @@ chapter to learn more.
 
 - - -
 
-<span class="pull-left">[< Setup](Setup.html)</span>
+<span class="pull-left">&lsaquo; [Setup](Setup.html)</span>
 
-<span class="pull-right">[Getting to Know Components >](Components.html)</span>
+<span class="pull-right">[Getting to Know Components](Components.html) &rsaquo;</span>

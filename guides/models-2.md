@@ -1,5 +1,6 @@
 @page Models2 Sending Data to a Service
 @parent Tutorial 6
+@disableTableOfContents
 
 @body
 
@@ -9,7 +10,7 @@
  - Moving Closer to MVVM
  - Working with Non-standard Data Formats
 
-> Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -324,6 +325,6 @@ together using the Application State, Routing, and can.Map's define plugin.
 
 - - -
 
-<span class="pull-left">[< Models (& Fixtures)](Models.html)</span>
+<span class="pull-left">&lsaquo; [Models (& Fixtures)](Models.html)</span>
 
-<span class="pull-right">[Creating the Menu Component >](Review.html)</span>
+<span class="pull-right">[Creating the Menu Component](Review.html) &rsaquo;</span>

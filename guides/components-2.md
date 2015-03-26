@@ -1,5 +1,6 @@
 @page Components2 More on Components
 @parent Tutorial 4
+@disableTableOfContents
 
 @body
 
@@ -10,7 +11,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-> Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -261,6 +262,6 @@ adding REST service interaction with can.Model.
 
 - - -
 
-<span class="pull-left">[< Getting to Know Components](Components.html)</span>
+<span class="pull-left">&lsaquo; [Getting to Know Components](Components.html)</span>
 
-<span class="pull-right">[Models (& Fixtures) >](Models.html)</span>
+<span class="pull-right">[Models (& Fixtures)](Models.html) &rsaquo;</span>

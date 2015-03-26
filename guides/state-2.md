@@ -1,5 +1,6 @@
 @page Define The Define Plugin
 @parent Tutorial 9
+@disableTableOfContents
 
 @body
 
@@ -7,7 +8,7 @@
 **In this Chapter**
  - The Define Plugin
 
-> *There is no code to download for this chapter*
+*There is no code to download for this chapter*
 
 - - -
 
@@ -146,6 +147,6 @@ removal validation.
 
 - - -
 
-<span class="pull-left">[< App State & Basic Routing](State.html)</span>
+<span class="pull-left">&lsaquo; [App State & Basic Routing](State.html)</span>
 
-<span class="pull-right">[Route Formatting & Serialization >](Routes.html)</span>
+<span class="pull-right">[Route Formatting & Serialization](Routes.html) &rsaquo;</span>

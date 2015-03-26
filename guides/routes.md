@@ -1,5 +1,6 @@
 @page Routes Route Formatting & Serialization
 @parent Tutorial 10
+@disableTableOfContents
 
 @body
 
@@ -9,7 +10,7 @@
  - Serialization
  - Creating Anchor Tags with can.route.link
 
-> Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
+Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 
 - - -
 
@@ -293,6 +294,6 @@ restaurant form the list.
 
 - - -
 
-<span class="pull-left">[< The Define Plugin](Define.html)</span>
+<span class="pull-left">&lsaquo; [The Define Plugin](Define.html)</span>
 
-<span class="pull-right">[Recap >](Recap.html)</span>
+<span class="pull-right">[Recap](Recap.html) &rsaquo;</span>

@@ -1,5 +1,6 @@
 @page Setup Setup
 @parent Tutorial 1
+@disableTableOfContents
 
 @body
 
@@ -66,6 +67,6 @@ Once you've downloaded these files, rename the jQuery file to `jquery.js` and co
 
 - - -
 
-<span class="pull-left">[< Getting Started](Tutorial.html)</span>
+<span class="pull-left">&lsaquo; [Getting Started](Tutorial.html)</span>
 
-<span class="pull-right">[Application Foundations >](Foundations.html)</span>
+<span class="pull-right">[Application Foundations](Foundations.html) &rsaquo;</span>

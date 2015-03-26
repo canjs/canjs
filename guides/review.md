@@ -1,5 +1,6 @@
 @page Review Creating the Menu Component
 @parent Tutorial 7
+@disableTableOfContents
 
 @body
 
@@ -7,7 +8,7 @@
 **In this Chapter**
  - Create the Site Menu can.Component
 
-> Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -150,6 +151,6 @@ If you go out to your application, and refresh it, you should see the following:
 
 - - -
 
-<span class="pull-left">[< Sending Data to a Service](Models2.html)</span>
+<span class="pull-left">&lsaquo; [Sending Data to a Service](Models2.html)</span>
 
-<span class="pull-right">[App State & Basic Routing >](State.html)</span>
+<span class="pull-right">[App State & Basic Routing](State.html) &rsaquo;</span>

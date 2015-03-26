@@ -1,5 +1,6 @@
 @page Models Models (& Fixtures)
 @parent Tutorial 5
+@disableTableOfContents
 
 @body
 
@@ -9,7 +10,7 @@
  - can.fixture
  - Connecting can.Models with can.Components
 
-> Get the code for: [chapter 4](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-4_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 4](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-4_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -216,6 +217,6 @@ And, when you select a restaurant from the list, you should see:
 
 - - -
 
-<span class="pull-left">[< More on Components](Components2.html)</span>
+<span class="pull-left">&lsaquo; [More on Components](Components2.html)</span>
 
-<span class="pull-right">[Sending Data to a Service >](Models2.html)</span>
+<span class="pull-right">[Sending Data to a Service](Models2.html) &rsaquo;</span>
