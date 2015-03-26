@@ -28,7 +28,7 @@ select the following:
 At the bottom of the page, click the download button. You'll be promoted to
 download a file called *can.custom.js*. Save that file to your local machine.
 
-You can access the custom download page here: [Custom downloader](http://canjs.com/download.html)
+You can access the custom download page here: <a href="http://canjs.com/download.html" target="_blank">Custom downloader</a>
 
 There is one additional file we need, which we won't download. This file is
 special. You normally wouldn't want it to be a part of your final application,
@@ -59,8 +59,8 @@ Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul
 
 Finally, you'll need to download the supporting libraries. They are:
 
- - [jQuery 2.x](http://jquery.com/download/)
- - [can.fixture](http:libs/can.fixture.js)
+ - <a href="http://jquery.com/download/" target="_blank">jQuery 2.x</a>
+ - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
 Once you've downloaded these files, rename the jQuery file to `jquery.js` and copy both files to the *libs* directory in your application folder.
 

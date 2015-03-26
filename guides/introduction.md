@@ -5,7 +5,7 @@
 
 *Better Apps, Faster*
 
-CanJS is a lightweight, modern JavaScript [MVVM](https://en.wikipedia.org/wiki/Model_View_ViewModel)
+CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki/Model_View_ViewModel" target="_blank">MVVM</a>
 framework that's fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. To see just
 how simple it is to get an application up and running using CanJS, we'll
