@@ -20,7 +20,7 @@ and help you solidify your understanding of CanJS. We'll also cover some
 additional functionality from the objects we already know, such as the findOne
 method of can.Model.
 
-In your models folder, open fixtures.js. Add the following code to register a
+In your models folder, open *fixtures.js*. Add the following code to register a
 new can.fixture:
 
 ```
@@ -36,7 +36,7 @@ can.fixture("GET /site_menu", function requestHandler() {
 });
 ```
 
-Open up site_models.js, and add a new can.Model:
+Open up *site_models.js*, and add a new can.Model:
 
 ```
 var SiteMenuModel = can.Model.extend({
@@ -45,7 +45,7 @@ var SiteMenuModel = can.Model.extend({
 ```
 
 In your components folder, create a new folder called "site_menu". In that
-folder, create a file called site_menu_component.js and add the following code:
+folder, create a file called *site_menu_component.js* and add the following code:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
@@ -103,7 +103,7 @@ implicit method for calling can.Model.findOne. You must use the method
 described above.
 
 Let's connect all of this to a view template. Staying in the menu folder,
-create a template file called "site_menu.stache", as follows:
+create a template file called *site_menu.stache*, as follows:
 
 ```
   {{#menuData.menuText}}
@@ -130,7 +130,7 @@ create a template file called "site_menu.stache", as follows:
   {{/menuData.menuText}}
 ```
 
-Open up /app/base_template.stache, and add the following line to the top of
+Open up */app/base_template.stache*, and add the following line to the top of
 the file:
 
 ```

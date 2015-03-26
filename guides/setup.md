@@ -36,8 +36,8 @@ You can access the custom download page here: <a href="http://canjs.com/download
 There is one additional file we need, which we won't download. This file is
 special. You normally wouldn't want it to be a part of your final application,
 but it can be very helpful during development. The file is *can.fixture.js*.
-`can.fixture` allows you to simulate RESTful services. We'll cover how to include
-`can.fixture` in the next chapter.
+`can.fixture` allows you to simulate RESTful services. We'll cover how to
+include `can.fixture` in the next chapter.
 
 In the next step, we'll set up the application's folder structure, and move the
 *can.custom.js* file into its appropriate folder in the app.
@@ -65,7 +65,7 @@ Finally, you'll need to download the supporting libraries. They are:
  - <a href="http://jquery.com/download/" target="_blank">jQuery 2.x</a>
  - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
-Once you've downloaded these files, rename the jQuery file to `jquery.js` and copy both files to the *libs* directory in your application folder.
+Once you've downloaded these files, rename the jQuery file to *jquery.js* and copy both files to the *libs* directory in your application folder.
 
 - - -
 

@@ -24,7 +24,7 @@ returned have all of the features of a can.Map, such as being observable.
 
 We'll use a can.Model to provide data for our restaurant list.
 
-In the models folder, create a file called "site_models.js". Add the
+In the models folder, create a file called *site_models.js*. Add the
 following code:
 
 ```
@@ -102,7 +102,7 @@ with our custom download. *If you use can.fixture during development, remember
 to remove it once you are connecting to your REST services*.
 
 Let's create a fixture that will respond to our requests for menu item data.
-Create another file in the models folder called "fixtures.js". Add the
+Create another file in the models folder called *fixtures.js*. Add the
 following code to that file:
 
 ```
@@ -154,13 +154,13 @@ updating the restaurants property to receive data from the model we created:
 
 ```
 var RestaurantListViewModel = can.Map.extend({
-	restaurants: new RestaurantModel.List({}),
-	currentRestaurant: undefined,
-	restaurantSelected: function (viewModel, select) {
-		var restaurant = select.find('option:checked').data('restaurant');
-		var currentRestaurant = 'currentRestaurant';
-		this.attr(currentRestaurant, restaurant);
-	}
+  restaurants: new RestaurantModel.List({}),
+  currentRestaurant: undefined,
+  restaurantSelected: function (viewModel, select) {
+    var restaurant = select.find('option:checked').data('restaurant');
+    var currentRestaurant = 'currentRestaurant';
+    this.attr(currentRestaurant, restaurant);
+  }
 });
 ```
 

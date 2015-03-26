@@ -37,10 +37,10 @@ to the following in your URL bar:
 ![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
 
 That's not pretty, and not very useful. We don't want the confirmation or menu
-attributes to serialize. It's easy to change this behavior. Open up app.js, and edit the Application State object as follows:
+attributes to serialize. It's easy to change this behavior. Open up *app.js*, and edit the Application State object as follows:
 
 First, let's update the setter so that we can change restaurants by typing
-in the correct restaurant name into the hash. Open up site_models.js, and edit
+in the correct restaurant name into the hash. Open up *site_models.js*, and edit
 the RestaurantModel, as follows:
 
 ```
@@ -51,7 +51,7 @@ var RestaurantModel = can.Model.extend({
 	{});
 ```
 
-Next, add the following code to fixtures.js:
+Next, add the following code to *fixtures.js*:
 
 ```
 can.fixture("GET /restaurant/{name}", function requestHandler(request) {
@@ -85,7 +85,7 @@ can.fixture("GET /restaurant/{name}", function requestHandler(request) {
 });
 ```
 
-Open up app.js, and edit the Application State object
+Open up *app.js*, and edit the Application State object
 as follows:
 
 ```
@@ -148,7 +148,7 @@ see the following in the URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
 
-Finally, update the Application State object in app.js, as follows:
+Finally, update the Application State object in *app.js*, as follows:
 
 ```
 function getRestaurantMenu(restaurant, that) {
@@ -224,7 +224,7 @@ The &amp; character in the data key tells Stache to include the unescaped
 value of the content it receives. We'll be generating an anchor tag, so we
 need to use this.
 
-Open up site_menu_component.js, and add the following method to the can.Component:
+Open up *site_menu_component.js*, and add the following method to the can.Component:
 
 ```
 can.Component.extend({
@@ -252,7 +252,7 @@ can.Component.extend({
 Here, we add a can route link to the view template, using can.route.link. You
 should always use can.route.link when adding anchor tags to your application.
 
-Finally, update your app.js, adding code that will respond to the application
+Finally, update your *app.js*, adding code that will respond to the application
 state change. Append the following below the "getRestaurantMenu" function:
 
 ```
