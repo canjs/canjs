@@ -814,4 +814,28 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
 	});
+	
+	test("by default can-EVENT calls with values, not computes", function(){
+		stop();
+		var ta = document.getElementById("qunit-fixture");
+		var template = can.stache("<div id='click-me' can-click='{map.method one map.two map.three}'></div>");
+		
+		var one = can.compute(1);
+		var three = can.compute(3);
+		var MyMap = can.Map.extend({
+			method: function(ONE, two, three){
+				equal(ONE, 1);
+				equal(two, 2);
+				equal(three, 3);
+				start();
+			}
+		});
+		
+		var map = new MyMap({"two": 2, "three": three});
+		
+		var frag = template({one: one, map: map});
+		ta.appendChild(frag);
+		can.trigger(document.getElementById("click-me"), "click");
+		
+	});
 });

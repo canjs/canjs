@@ -12,5 +12,4 @@ docco
 test/
 build/
 guides/
-resources/
-lib/
+!dist/

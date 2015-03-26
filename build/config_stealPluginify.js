@@ -190,7 +190,7 @@ module.exports = function(){
 					minify: true
 				},
 				"steal": {
-					graphs: allModuleNames,
+					graphs: allModuleNames.concat(["can"]),
 					dest: function(moduleName){
 						var name;
 						moduleName = denpm(moduleName);
