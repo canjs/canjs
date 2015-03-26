@@ -61,10 +61,14 @@ and `destroy` on Models to create, update, and delete them.
 Here's how you call `findAll` on our Todo class above:
 
 ```
-Todo.findAll({}, function(todos) {
-	// todos is a can.Model.List of Todo Models.
-}, function(xhr) {
-	// handle errors
+var MyModel = can.Model.extend({
+ // Static method
+ findAll: function () {
+ }
+}, {
+ // Instance method
+ destroy: function () {
+ }
 });
 ```
 
@@ -90,12 +94,9 @@ second parameter. If there was an error, `findAll` will call the error
 callback in its third parameter and pass it the XmlHttpRequest object used to
 make the call.
 
-`findAll` returns a [can.Deferred](../docs/can.Deferred.html) that will resolve to a Model
-List of items if the call succeeds and rejects to the XmlHttpRequest object if
-there is an error.
-
-`can.Model.findOne` works similarly to `findAll`, except that it retrieves a
-single Model from a service:
+It's time to connect all of this together in our view model. Simply open up
+*restaurant_list_component.js*. Edit the RestaurantListViewModel as follows,
+updating the restaurants property to receive data from the model we created:
 
 ```
 Todo.findOne({id: 1}, function(todo) {
@@ -138,22 +139,12 @@ shopping.save(function(saved) {
 });
 ```
 
-In the code above, the first time `shopping.save()` is called, can.Model will
-make a `POST` request to `/todos` with a request body of `description=Go
-grocery shopping.`. When the response comes back, it should have an __id__
-(say, 5) and that __id__ property will be reflected in `todo`.
+This is a special feature of the can.Model.List constructor. If you create a new instance of a can.Model.List, and you pass the constructor a plain JavaScript object, that List's constructor parameter will be passed to the can.Model's findAll method. The `findAll` method will run, and the list will be populated with the results of the `findAll` method, as below:
 
-The second time `saved.save()` is called, `saved` has an __id__, so can.Model
-will make a `PUT` request to `/todos/5` with a request body of
-`description=Remember the milk.`.
+![](../can/guides/images/4_models/New.Model.List.png)
 
-### Deleting items
-
-When you need to delete a Model's counterpart on the server, just call `destroy`
-on the Model, passing it success and error handlers just like `save`, except
-that the success handler will be passed the Model that has been deleted.
-`destroy` also retuns a Deferred, which resolves to the deleted Model and
-rejects to the XmlHttpRequest object.
+We'll look at the can.Model's `findOne` method later on, when we create our Menu
+Component. Finally, let's add the scripts we created to our index.html file:
 
 ```
 var cats = new Todo({description: "Feed the cats."});
