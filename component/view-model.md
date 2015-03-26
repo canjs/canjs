@@ -1,23 +1,18 @@
-@property {Object|can.Map|function} can.Component.prototype.scope
-@parent can.Component.prototype
-
-Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
-used to retrieve values found in the component's [can.Component::template template].
-
-@deprecated In 2.2 `scope` has been renamed to [can.Component::viewModel] to avoid confusion with [can.view.Scope]. `scope` is still available for backwards compatibility.
-
-
 @property {Object|can.Map|function} can.Component.prototype.viewModel
 @parent can.Component.prototype
+
+@description
 
 Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
 used to retrieve values found in the component's [can.Component::template template]. The map 
 instance is initialized with values specified by the component element's attributes.
 
-__Node:__ In 2.1, [can.stache] and [can.mustache] pass values to the
+__Note:__ In 2.1, [can.stache] and [can.mustache] pass values to the
 viewModel differently. To pass data from the viewModel, you must wrap your attribute 
 value with `{}`. In 3.0, `can.mustache`
 will use `can.stache`'s syntax.
+
+
 
 @option {Object} A plain JavaScript object that is used to define the prototype methods and properties of
 [can.Construct constructor function] that extends [can.Map]. For example:

@@ -70,21 +70,23 @@ steal(function () {
 	};
 	
 	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
-	can.scope = function (el, attr) {
+	can.scope = can.viewModel = function (el, attr, val) {
 		el = can.$(el);
-		// if scope doesn't exist, create it
-		var scope = can.data(el, "scope");
+		var scope = can.data(el, "scope") || can.data(el, "viewModel");
 		if(!scope) {
-			scope = can.Map ? new can.Map() : {};
+			scope = new can.Map();
 			can.data(el, "scope", scope);
+			can.data(el, "viewModel", scope);
 		}
-		
-		// If `attr` is passed to the `can.scope` function return the value of that
-		// attribute on the `scope` object otherwise return the whole scope
-		if (attr) {
-			return scope.attr(attr);
-		} else {
-			return scope;
+		switch (arguments.length) {
+			case 0:
+			case 1:
+				return scope;
+			case 2:
+				return scope.attr(attr);
+			default:
+				scope.attr(attr, val);
+				return el;
 		}
 	};
 	

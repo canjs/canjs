@@ -12,7 +12,7 @@ steal("can/component", function() {
     },
     events: {
       click: function(){
-        this.scope.attr("visible", !this.scope.attr("visible") );
+        this.viewModel.attr("visible", !this.viewModel.attr("visible") );
       }
     }
   });

@@ -43,8 +43,8 @@ For example, you might have a page like:
     // Wait until everything has rendered.
     can.autorender(function(){
       
-      // Update the scope the template was rendred with:
-      $("#main").scope().attr("message","Rendered!");
+      // Update the viewModel the template was rendred with:
+      $("#main").viewModel().attr("message","Rendered!");
       
     })
   </script>
@@ -133,7 +133,7 @@ Becomes:
 
 The template is rendered with a [can.Map] made from the attributes of the 
 template source element.  That `map` is available on the 
-template source element via [can.scope].  You can 
+template source element via [can.viewModel].  You can 
 change the map at any time:
 
 ```
@@ -142,14 +142,14 @@ change the map at any time:
     {{message}}!
   </script>
   <script>
-    var scope = can.scope(document.getElementById("main"));
-    scope.attr("message","Hello There!");
+    var viewModel = can.viewModel(document.getElementById("main"));
+    viewModel.attr("message","Hello There!");
   </script>
 </body>
 ```
 
 You can change attributes on the element and it will update the 
-scope too:
+viewModel too:
 
 ```
 <body>
@@ -198,7 +198,7 @@ For demo pages that require a little custom setup:
   </script>
   <script>
     steal('can','jquery','can/view/autorender', function(can, $){
-      $("my-component").scope().attr("message", "Hi");
+      $("my-component").viewModel().attr("message", "Hi");
     });
   </script>
 </body>

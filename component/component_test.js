@@ -60,7 +60,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 				"{{/panels}}" +
 				"</ul>" +
 				"<content></content>",
-			scope: {
+			viewModel: {
 				panels: [],
 				addPanel: function (panel) {
 
@@ -104,21 +104,21 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 			// make sure <content/> works
 			template: "{{#if active}}<content></content>{{/if}}",
 			tag: "panel",
-			scope: {
+			viewModel: {
 				active: false,
 				title: "@"
 			},
 			events: {
 				" inserted": function () {
-					can.scope(this.element[0].parentNode)
-						.addPanel(this.scope);
+					can.viewModel(this.element[0].parentNode)
+						.addPanel(this.viewModel);
 				},
 				" removed": function () {
-					if (!can.scope(this.element[0].parentNode)) {
+					if (!can.viewModel(this.element[0].parentNode)) {
 						console.log("bruke");
 					}
-					can.scope(this.element[0].parentNode)
-						.removePanel(this.scope);
+					can.viewModel(this.element[0].parentNode)
+						.removePanel(this.viewModel);
 				}
 			}
 		});
@@ -678,13 +678,13 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.append(can.$("#qunit-fixture"),
 				   can.view.mustache("<my-taggy-tag id='x'></my-taggy-tag>")());
 		var el = can.$("my-taggy-tag");
-		equal(can.viewModel(el), can.data(el, "scope"), "one argument grabs the viewModel object");
+		equal(can.viewModel(el), can.data(el, "viewModel"), "one argument grabs the viewModel object");
 		equal(can.viewModel(el, "foo"), "bar", "two arguments fetches a value");
 		can.viewModel(el, "foo", "baz");
 		equal(can.viewModel(el, "foo"), "baz", "Three arguments sets the value");
 		if (window.$ && $.fn) {
 			el = $("my-taggy-tag");
-			equal(el.viewModel(), can.data(el, "scope"), "jQuery helper grabs the viewModel object");
+			equal(el.viewModel(), can.data(el, "viewModel"), "jQuery helper grabs the viewModel object");
 			equal(el.viewModel("foo"), "baz", "jQuery helper with one argument fetches a property");
 			equal(el.viewModel("foo", "bar").get(0), el.get(0), "jQuery helper returns the element");
 			equal(el.viewModel("foo"), "bar", "jQuery helper with two arguments sets the property");
@@ -703,7 +703,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		var el = can.$("#me");
 		var viewModel = can.viewModel(el);
 		ok(!!viewModel, "viewModel created where it didn't exist.");
-		equal(viewModel, can.data(el, "scope"), "viewModel is in the data.");
+		equal(viewModel, can.data(el, "viewModel"), "viewModel is in the data.");
 	});
 
 	test('setting passed variables - two way binding', function () {
@@ -1455,7 +1455,7 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		ok(state.attr('product') == null, 'product was removed');
 	});
 
-	test('changing viewModel property rebinds {scope.<...>} events (#1529)', 2, function(){
+	test('changing viewModel property rebinds {viewModel.<...>} events (#1529)', 2, function(){
 		can.Component.extend({
 			tag: 'rebind-viewmodel',
 			events: {

@@ -19,10 +19,10 @@ steal("can/component", function() {
       template: "Page <span>1</span> <button class='next'>Next</button>",
       events: {
       	".next click": function(){
-      	  this.scope.next();	
+      	  this.viewModel.next();	
        },
        "{scope} offset": function(){
-       	  this.element.find("span").text( this.scope.page() )
+       	  this.element.find("span").text( this.viewModel.page() )
        }
       }
     })
