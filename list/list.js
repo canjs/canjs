@@ -764,24 +764,22 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @description Remove an element from the end of a List.
 			 * @signature `list.pop()`
 			 *
-			 * `push` removes an element from the end of a List.
+			 * `pop` removes an element from the end of a List.
 			 *
 			 * @return {*} the element just popped off the List, or `undefined` if the List was empty
 			 *
 			 * @body
 			 * `pop` is the opposite action from `[can.List.push push]`:
 			 *
-			 * @codestart
-			 * var list = new can.List(['Alice']);
-			 *
-			 * list.push('Bob', 'Eve');
+			 * ```
+			 * var list = new can.List(['Alice', 'Bob', 'Eve']);
 			 * list.attr(); // ['Alice', 'Bob', 'Eve']
 			 *
 			 * list.pop(); // 'Eve'
 			 * list.pop(); // 'Bob'
 			 * list.pop(); // 'Alice'
 			 * list.pop(); // undefined
-			 * @codeend
+			 * ```
 			 *
 			 * ## Events
 			 *
