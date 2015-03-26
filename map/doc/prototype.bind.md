@@ -1,7 +1,7 @@
 @function can.Map.prototype.bind bind
 @parent can.Map.prototype 3
 
-@description Bind event handlers to an Map.
+@description Bind event handlers to a Map.
 
 @signature `map.bind(eventType, handler)`
 
@@ -19,7 +19,7 @@ of your application to map the changes to the object.
 ## The _change_ event
 
 The first event that is fired is the _change_ event. The _change_ event is useful
-if you want to react to all changes on an Map.
+if you want to react to all changes on a Map.
 
 
     var o = new can.Map({});
@@ -34,7 +34,7 @@ The parameters of the event handler for the _change_ event are:
 - _attr_ Which property changed.
 - _how_ Whether the property was added, removed, or set. Possible values are `'add'`, `'remove'`, or `'set'`.
 - _newVal_ The value of the property after the change. `newVal` will be `undefined` if the property was removed.
-- _oldVal_ Thishe value of the property before the change. `oldVal` will be `undefined` if the property was added.
+- _oldVal_ This is the value of the property before the change. `oldVal` will be `undefined` if the property was added.
 
 Here is a concrete tour through the _change_ event handler's arguments:
 

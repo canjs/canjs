@@ -1,27 +1,27 @@
 @function can.Map.prototype.attr attr
 @parent can.Map.prototype 2
 
-@description Get or set properties on an Map.
+@description Get or set properties on a Map.
 
 @signature `map.attr()`
 
 Gets a collection of all the properties in this `can.Map`.
 
-@return {Object<String, } an object with all the properties in this `can.Map`.
+@return {Object} an object with all the properties in this `can.Map`.
 
 @signature `map.attr(key)`
 
 Reads a property from this `can.Map`.
 
 @param {String} key the property to read
-@return { the value assigned to _key_.
+@return {*} the value assigned to _key_.
 
 @signature `map.attr(key, value)`
 
 Assigns _value_ to a property on this `can.Map` called _key_.
 
 @param {String} key the property to set
-@param { the value to assign to _key_.
+@param {*} the value to assign to _key_.
 @return {can.Map} this Map, for chaining
 
 @signature `map.attr(obj[, removeOthers])`
@@ -29,7 +29,7 @@ Assigns _value_ to a property on this `can.Map` called _key_.
 Assigns each value in _obj_ to a property on this `can.Map` named after the
 corresponding key in _obj_, effectively merging _obj_ into the Map.
 
-@param {Object<String, } obj a collection of key-value pairs to set.
+@param {Object} obj a collection of key-value pairs to set.
 If any properties already exist on the `can.Map`, they will be overwritten.
 
 @param {bool} [removeOthers=false] whether to remove keys not present in _obj_.

@@ -1,14 +1,14 @@
 @function can.Map.prototype.removeAttr removeAttr
 @parent can.Map.prototype 6
 
-@description Remove a property from an Map.
+@description Remove a property from a Map.
 
 @signature `map.removeAttr(attrName)`
 @param {String} attrName the name of the property to remove
 @return {*} the value of the property that was removed
 
 @body
-`removeAttr` removes a property by name from an Map.
+`removeAttr` removes a property by name from a Map.
 
 
     var people = new can.Map({a: 'Alice', b: 'Bob', e: 'Eve'});
