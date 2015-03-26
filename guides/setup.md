@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - -
 **In this Chapter**
  - Configuring and Downloading CanJS
@@ -70,3 +72,5 @@ Once you've downloaded these files, rename the jQuery file to `jquery.js` and co
 <span class="pull-left">&lsaquo; [Getting Started](Tutorial.html)</span>
 
 <span class="pull-right">[Application Foundations](Foundations.html) &rsaquo;</span>
+
+</div>

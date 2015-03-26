@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - -
 **In this Chapter**
  - Route Formatting
@@ -297,3 +299,5 @@ restaurant form the list.
 <span class="pull-left">&lsaquo; [The Define Plugin](Define.html)</span>
 
 <span class="pull-right">[Recap](Recap.html) &rsaquo;</span>
+
+</div>

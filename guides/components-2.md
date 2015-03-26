@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - - -
 **In this Chapter**
  - Stache Templates
@@ -265,3 +267,5 @@ adding REST service interaction with can.Model.
 <span class="pull-left">&lsaquo; [Getting to Know Components](Components.html)</span>
 
 <span class="pull-right">[Models (& Fixtures)](Models.html) &rsaquo;</span>
+
+</div>

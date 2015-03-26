@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - -
 **In this Chapter**
  - Application Overview
@@ -123,3 +125,5 @@ chapter to learn more.
 <span class="pull-left">&lsaquo; [Setup](Setup.html)</span>
 
 <span class="pull-right">[Getting to Know Components](Components.html) &rsaquo;</span>
+
+</div>

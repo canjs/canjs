@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - - -
 **In this Chapter**
  - Create the Site Menu can.Component
@@ -154,3 +156,5 @@ If you go out to your application, and refresh it, you should see the following:
 <span class="pull-left">&lsaquo; [Sending Data to a Service](Models2.html)</span>
 
 <span class="pull-right">[App State & Basic Routing](State.html) &rsaquo;</span>
+
+</div>

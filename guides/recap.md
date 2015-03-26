@@ -3,6 +3,8 @@
 
 @body
 
+<div class="getting-started">
+
 We've come a long way since we started developing our first CanJS application.
 Nice work! Together, we've covered:
 
@@ -28,3 +30,5 @@ Dependency Management utilities like StealJS, Require, or Browserify, see the
 - - -
 
 <span class="pull-left">&lsaquo; [Route Formatting & Serialization](Routes.html)</span>
+
+</div>

@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - -
 **In this Chapter**
  - Application State
@@ -320,3 +322,5 @@ button. You should see something like this:
 <span class="pull-left">&lsaquo; [Creating the Menu Component](Review.html)</span>
 
 <span class="pull-right">[The Define Plugin](Define.html) &rsaquo;</span>
+
+</div>
