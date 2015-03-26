@@ -113,6 +113,6 @@ Get the code for: [chapter X]()
 
 - - -
 
-<span class="pull-right">[Setup](Setup.html) &rsaquo;</span>
+<span class="pull-right">[Setup &rsaquo;](Setup.html)</span>
 
 </div>

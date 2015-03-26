@@ -333,8 +333,7 @@ together using the Application State, Routing, and can.Map's define plugin.
 
 - - -
 
-<span class="pull-left">&lsaquo; [Models (& Fixtures)](Models.html)</span>
-
-<span class="pull-right">[Creating the Menu Component](Review.html) &rsaquo;</span>
+<span class="pull-left">[&lsaquo; Models (& Fixtures)](Models.html)</span>
+<span class="pull-right">[Creating the Menu Component &rsaquo;](Review.html)</span>
 
 </div>

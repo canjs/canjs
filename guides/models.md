@@ -214,8 +214,7 @@ And, when you select a restaurant from the list, you should see:
 
 - - -
 
-<span class="pull-left">&lsaquo; [More on Components](Components2.html)</span>
-
-<span class="pull-right">[Sending Data to a Service](Models2.html) &rsaquo;</span>
+<span class="pull-left">[&lsaquo; More on Components](Components2.html)</span>
+<span class="pull-right">[Sending Data to a Service &rsaquo;](Models2.html)</span>
 
 </div>

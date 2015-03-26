@@ -13,10 +13,9 @@
  - Binding the Application State Object to the Application and Routes
 
 Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
-
 - - -
 
-As mentioned in the introduction, CanJS uses an Application
+As mentioned in the [introduction](Tutorial.html), CanJS uses an Application
 State object to manage the state of your application. The application state
 object is bound to two things:
 
@@ -319,8 +318,7 @@ button. You should see something like this:
 
 - - -
 
-<span class="pull-left">&lsaquo; [Creating the Menu Component](Review.html)</span>
-
-<span class="pull-right">[The Define Plugin](Define.html) &rsaquo;</span>
+<span class="pull-left">[&lsaquo; Creating the Menu Component](Review.html)</span>
+<span class="pull-right">[The Define Plugin &rsaquo;](Define.html)</span>
 
 </div>
