@@ -13,7 +13,6 @@
  - Creating Anchor Tags with can.route.link
 
 Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
-
 - - -
 
 As mentioned earlier, each property you define on an Application State will
