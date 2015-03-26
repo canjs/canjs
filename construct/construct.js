@@ -156,7 +156,7 @@ steal('can/util/string', function (can) {
 		 * });
 		 *
 		 * var args = ["Justin","Barry","Meyer"],
-		 *     justin = Person.newInstance.apply(null, args);
+		 *     justin = new Person.newInstance.apply(null, args);
 		 * ```
 		 *
 		 */
@@ -234,27 +234,6 @@ steal('can/util/string', function (can) {
 		 * set to inherit from its base constructor. It is useful for setting up
 		 * additional inheritance work.
 		 * Do not confuse this with the prototype `[can.Construct::setup]` method.
-		 *
-		 * ## Setup Extends Defaults
-		 *
-		 * Setup deeply extends the static `defaults` property of the base constructor with
-		 * properties of the inheriting constructor.  For example:
-		 *
-		 * @codestart
-		 * Parent = can.Construct.extend({
-		 *   defaults : {
-		 *     parentProp: 'foo'
-		 *   }
-		 * },{})
-		 *
-		 * Child = Parent.extend({
-		 *   defaults : {
-		 *     childProp : 'bar'
-		 *   }
-		 * },{}
-		 *
-		 * Child.defaults // {parentProp: 'foo', 'childProp': 'bar'}
-		 * @codeend
 		 *
 		 * ## Example
 		 *
