@@ -148,7 +148,7 @@ removal validation.
 
 - - -
 
-<span class="pull-left">[&lsaquo; App State & Basic Routing](State.html)</span>
-<span class="pull-right">[Route Formatting & Serialization &rsaquo;](Routes.html)</span>
+<span class="pull-left">[&lsaquo; App State & Basic Routing](AppState.html)</span>
+<span class="pull-right">[Route Formatting & Serialization &rsaquo;](Routing.html)</span>
 
 </div>

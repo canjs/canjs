@@ -1,4 +1,4 @@
-@page Tutorial Getting Started
+@page Tutorial Getting Started Tutorial
 @parent guides 3
 @disableTableOfContents
 

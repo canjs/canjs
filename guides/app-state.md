@@ -1,4 +1,4 @@
-@page State App State & Basic Routing
+@page AppState App State & Basic Routing
 @parent Tutorial 8
 @disableTableOfContents
 
@@ -314,7 +314,7 @@ button. You should see something like this:
 
 - - -
 
-<span class="pull-left">[&lsaquo; Creating the Menu Component](Review.html)</span>
+<span class="pull-left">[&lsaquo; Creating the Menu Component](CreatingTheMenuComponent.html)</span>
 <span class="pull-right">[The Define Plugin &rsaquo;](Define.html)</span>
 
 </div>

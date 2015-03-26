@@ -1,4 +1,4 @@
-@page Review Creating the Menu Component
+@page CreatingTheMenuComponent Creating the Menu Component
 @parent Tutorial 7
 @disableTableOfContents
 
@@ -153,7 +153,7 @@ If you go out to your application, and refresh it, you should see the following:
 
 - - -
 
-<span class="pull-left">[&lsaquo; Sending Data to a Service](Models2.html)</span>
-<span class="pull-right">[App State & Basic Routing &rsaquo;](State.html)</span>
+<span class="pull-left">[&lsaquo; Sending Data to a Service](SendingDataToAService.html)</span>
+<span class="pull-right">[App State & Basic Routing &rsaquo;](AppState.html)</span>
 
 </div>

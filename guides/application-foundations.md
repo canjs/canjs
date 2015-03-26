@@ -1,4 +1,4 @@
-@page Foundations Application Foundations
+@page ApplicationFoundations Application Foundations
 @parent Tutorial 2
 @disableTableOfContents
 

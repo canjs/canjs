@@ -1,4 +1,4 @@
-@page Components2 More on Components
+@page MoreOnComponents More on Components
 @parent Tutorial 4
 @disableTableOfContents
 

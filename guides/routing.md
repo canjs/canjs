@@ -1,4 +1,4 @@
-@page Routes Route Formatting & Serialization
+@page Routing Route Formatting & Serialization
 @parent Tutorial 10
 @disableTableOfContents
 

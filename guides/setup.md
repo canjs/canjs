@@ -76,6 +76,6 @@ copy both files to the *libs* directory in your application folder.
 - - -
 
 <span class="pull-left">[&lsaquo; Getting Started](Tutorial.html)</span>
-<span class="pull-right">[Application Foundations &rsaquo;](Foundations.html)</span>
+<span class="pull-right">[Application Foundations &rsaquo;](ApplicationFoundations.html)</span>
 
 </div>

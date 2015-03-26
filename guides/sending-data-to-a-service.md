@@ -1,4 +1,4 @@
-@page Models2 Sending Data to a Service
+@page SendingDataToAService Sending Data to a Service
 @parent Tutorial 6
 @disableTableOfContents
 
@@ -325,6 +325,6 @@ together using the Application State, Routing, and can.Map's define plugin.
 - - -
 
 <span class="pull-left">[&lsaquo; Models (& Fixtures)](Models.html)</span>
-<span class="pull-right">[Creating the Menu Component &rsaquo;](Review.html)</span>
+<span class="pull-right">[Creating the Menu Component &rsaquo;](CreatingTheMenuComponent.html)</span>
 
 </div>
