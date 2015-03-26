@@ -1,3 +1,4 @@
+"format steal";
 steal("can/view/mustache", function(can){
 
 	function translate(load) {
