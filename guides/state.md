@@ -9,7 +9,7 @@
  - Basic Routing
  - Binding the Application State Object to the Application and Routes
 
-> Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip?raw=true)
+> Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -218,7 +218,7 @@ showMenu function we've defined, as follows:
 We've removed the DOM code from our View Model, and are now working directly
 with the application. In addition, we added code that would show and hide the content
 of the can.Component to our ViewModel. We need to update our view template to reflect these
-changes. In the same file (restaurant_list.stache), update the select dropdown
+changes. In the same file (*restaurant_list.stache*), update the select dropdown
 in the template as follows:
 
 ```
@@ -231,7 +231,13 @@ in the template as follows:
 		{{/each}}
 	</select>
 
-	...
+	{{#if currentRestaurant}}
+        {{#currentRestaurant}}
+	
+			<!-- Code removed for brevity -->
+	 
+		{{/currentRestaurant}}
+    {{/if}}
 
 {{/visible}}
 ```
