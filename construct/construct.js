@@ -143,10 +143,12 @@ steal('can/util/string', function (can) {
 		 *
 		 * ## Example
 		 *
-		 * The following creates a `Person` Construct and then creates a new instance of Person,
-		 * using `apply` on newInstance to pass arbitrary parameters.
+		 * The following creates a `Person` Construct and overrides `newInstance` to cache all 
+		 * instances of Person to prevent duplication. If the properties of a new Person match an existing one it
+		 * will return a reference to the previously created object, otherwise it returns a new object entirely.
 		 *
 		 * ```
+		 * // define and create the Person constructor
 		 * var Person = can.Construct.extend({
 		 *   init : function(first, middle, last) {
 		 *     this.first = first;
@@ -154,9 +156,34 @@ steal('can/util/string', function (can) {
 		 *     this.last = last;
 		 *   }
 		 * });
+		 * 
+		 * // store a reference to the original newInstance function
+		 * var _newInstance = Person.newInstance;
 		 *
-		 * var args = ["Justin","Barry","Meyer"],
-		 *     justin = new Person.newInstance.apply(null, args);
+		 * // override Person's newInstance function
+		 * Person.newInstance = function() {
+		 * // if cache does not exist make it an new object
+		 * this.__cache = this.__cache || {};
+		 * // id is a stingified version of the passed arguments
+		 * var id = JSON.stringify(arguments);
+		 *
+		 * // look in the cache to see if the object already exists
+		 * var cachedInst = this.__cache[id];
+		 * if(cachedInst) {
+		 * 		return cachedInst;
+		 * }
+		 *
+		 * //otherwise call the original newInstance function and return a new instance of Person.
+		 * var newInst = _newInstance.apply(this, arguments);
+		 * this.__cache[id] = newInst;
+		 * return newInst;
+		 * }
+		 * 
+		 * // create two instances with the same arguments
+		 * var justin = new Person('Justin', 'Barry', 'Meyer'),
+		 *		brian = new Person('Justin', 'Barry', 'Meyer');
+		 * 
+		 * console.log(justin === brian); // true - both are references to the same instance
 		 * ```
 		 *
 		 */
