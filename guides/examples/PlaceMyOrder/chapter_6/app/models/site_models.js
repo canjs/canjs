@@ -29,4 +29,5 @@ var MenuOrderModel = can.Model.extend({
  */
 var SiteMenuModel = can.Model.extend({
     findOne: "GET /site_menu"
-});
+},
+    {});
