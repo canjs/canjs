@@ -38,7 +38,7 @@ Open up site_models.js, and add a new can.Model:
 ```
 var SiteMenuModel = can.Model.extend({
 		findOne: "GET /site_menu"
-});
+}, {});
 ```
 
 In your components folder, create a new folder called "site_menu". In that
