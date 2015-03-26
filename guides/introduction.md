@@ -25,9 +25,7 @@ Every CanJS application contains:
 Models manage the data of an application. A model notifies the elements
 associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
 object. can.Model makes it almost effortless to handle all of your CRUD
-operations (Create, Read, Update, and Delete). They can also provide
-validation for your data, as well—serving as a single source for handling
-your data acquisition, and managing its integrity.
+operations (Create, Read, Update, and Delete).
 
 ### Views <a name="views"></a>
 Views request information from the model, and use the data it provides to
@@ -62,12 +60,12 @@ objects.
 > The secret to building large applications is to never build large applications.
 
 ### Components <a name="components"></a>
-A [can.Component](../docs/can.Component.html) is kind of like a mini web application. A can.Component
+A can.Component is kind of like a mini web application. A can.Component
 contains the CSS, JavaScript, and HTML it needs—all wrapped up in a single,
 functional unit. This makes can.Components portable, reusable, and
 encapsulated. can.Components are easy to test, and easy to use. Building an
 application with them is kind of like building with Lego&trade;. As we say
-at [Bitovi](http://bitovi.com/), “The secret to building large applications is to never build large
+at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need, and link them
 together using the Application State and Routing to compose your application.
 
@@ -85,7 +83,7 @@ DOM-centric paradigm to think more directly about the application itself.
 For many JS MV* frameworks, routing divides an application into logical views
 and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
-Rather, it has to do with [Application State](State.html). In brief,
+Rather, it has to do with Application State. In brief,
 CanJS maintains a reciprocal relationship between an application's route,
 and its state. In other words, if you change the state of an application,
 your route will change. If you change your route, your application's state
