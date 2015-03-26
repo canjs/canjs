@@ -28,15 +28,14 @@ In the models folder, create a file called *site_models.js*. Add the
 following code:
 
 ```
-var Todo = can.Model({
-	findAll: 'GET /todos',
-	findOne: 'GET /todos/{id}',
-	create:  'POST /todos',
-	update:  'PUT /todos/{id}',
-	destroy: 'DELETE /todos/{id}'
-}, {});
-
-var dishesTask = new Todo({description: 'Do the dishes.'});
+/**
+ * Restaurants Model
+ */
+var RestaurantModel = can.Model.extend({
+  findAll: "GET /restaurants"
+}, {
+  // Include second, blank parameter object to set instanceProperties
+});
 ```
 
 Because Models are Observes, don't forget to set all your properties using `attr`.
@@ -55,13 +54,13 @@ Here's how you call `findAll` on our Todo class above:
 
 ```
 var MyModel = can.Model.extend({
- // Static method
- findAll: function () {
- }
+  findAll: function () {
+    // Static method
+  }
 }, {
- // Instance method
- destroy: function () {
- }
+  destroy: function () {
+    // Instance method
+  }
 });
 ```
 
@@ -99,29 +98,29 @@ following code to that file:
  * Restaurants Model Fixture
  */
 can.fixture("GET /restaurants", function requestHandler() {
-	return [
-		{
-			"name": "Spago",
-			"location": "USA",
-			"cuisine": "Modern",
-			"owner": "Wolfgang Puck",
-			"restaurantId": 1
-		},
-		{
-			"name": "El Bulli",
-			"location": "Spain",
-			"cuisine": "Modern",
-			"owner": "Ferran Adria",
-			"restaurantId": 2
-		},
-		{
-			"name": "The French Laundry",
-			"location": "USA",
-			"cuisine": "French Traditional",
-			"owner": "Thomas Keller",
-			"restaurantId": 3
-		}
-	];
+  return [
+    {
+      "name": "Spago",
+      "location": "USA",
+      "cuisine": "Modern",
+      "owner": "Wolfgang Puck",
+      "restaurantId": 1
+    },
+    {
+      "name": "El Bulli",
+      "location": "Spain",
+      "cuisine": "Modern",
+      "owner": "Ferran Adria",
+      "restaurantId": 2
+    },
+    {
+      "name": "The French Laundry",
+      "location": "USA",
+      "cuisine": "French Traditional",
+      "owner": "Thomas Keller",
+      "restaurantId": 3
+    }
+  ];
 });
 ```
 
@@ -154,10 +153,13 @@ This makes a `GET` request to `/todos/1`, which should return JSON that looks
 similar to:
 
 ```
-{
-	"id":1,
-	"description":"Do the dishes"
-}
+RestaurantModel.findAll({ /* paramsObject */ },
+  function success(returnedObject){
+    // ...
+  },
+  function error(errorObject){
+    // ...
+  });
 ```
 
 `findOne` returns a Deferred that resolves to the Todo if the call succeeds and
