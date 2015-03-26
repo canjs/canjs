@@ -1,38 +1,5 @@
 steal('can/util', function (can) {
 	var isArray = can.isArray;
-	/**
-	 * @hide
-	 * @page can.Object can.Object
-	 * @parent can.util
-	 *
-	 * @body
-	 * Object contains several helper methods that
-	 * help compare objects.
-	 *
-	 * ## same
-	 *
-	 * Returns true if two objects are similar.
-	 *
-	 *     can.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
-	 *
-	 * ## subset
-	 *
-	 * Returns true if an object is a set of another set.
-	 *
-	 *     can.Object.subset({}, {foo: "bar"} ) //-> true
-	 *
-	 * ## subsets
-	 *
-	 * Returns the subsets of an object
-	 *
-	 *     can.Object.subsets({userId: 20},
-	 *                      [
-	 *                       {userId: 20, limit: 30},
-	 *                       {userId: 5},
-	 *                       {}
-	 *                      ])
-	 *              //->    [{userId: 20, limit: 30}]
-	 */
 	can.Object = {};
 	/**
 	 * @function can.Object.same
@@ -52,7 +19,7 @@ steal('can/util', function (can) {
 	 * This function does not work with objects that create circular references.
 	 *
 	 * ## Examples
-	 * @codestart
+	 * ```
 	 * can.Object.same({name: "Justin"}, {name: "JUSTIN"}) //-> false
 	 *
 	 * // ignore the name property
@@ -78,7 +45,7 @@ steal('can/util', function (can) {
 	 *     }
 	 *     return a === b;
 	 * }})      //-> true
-	 * @codeend
+	 * ```
 	 */
 	var same = can.Object.same = function (a, b, compares, aParent, bParent, deep) {
 		var aType = typeof a,
@@ -142,18 +109,19 @@ steal('can/util', function (can) {
 	 * @function can.Object.subsets
 	 * @parent can.util
 	 * @description Returns the sets in 'sets' that are a subset of checkSet
-	 * @codestart
-	 * can.Object.subsets({userId: 20},
-	 * [
-	 *	{userId: 20, limit: 30},
-	 *	{userId: 5},
-	 *	{}
-	 * ]) //-> [{userId: 20, limit: 30}]
-	 * @codeend
 	 * @signature `can.Object.subsets(checkSet, sets, compares)`
 	 * @param {Object} checkSet
 	 * @param {Object} sets
 	 * @param {Object} compares
+	 * @body
+	 * ## Example
+	 * ```
+	 * can.Object.subsets({userId: 20}, [
+	 *     {userId: 20, limit: 30},
+	 *     {userId: 5},
+	 *     {}
+	 * ]); //-> [{userId: 20, limit: 30}]
+	 * ```
 	 */
 	can.Object.subsets = function (checkSet, sets, compares) {
 		var len = sets.length,
@@ -171,14 +139,16 @@ steal('can/util', function (can) {
 	 * @function can.Object.subset
 	 * @parent can.util
 	 * @description Returns true if an Object is a subset of another Object
-	 * @codestart
-	 * can.Object.subset({}, {foo: "bar"} ) //-> true
-	 * @codeend
 	 * @signature `can.Object.subset(subset, set, compares)`
 	 * @param {Object} subset
 	 * @param {Object} set
 	 * @param {Object} compares
 	 * @returns {Boolean} Whether or not subset is a subset of set
+	 * @body
+	 * ## Example
+	 * ```
+	 * can.Object.subset({}, {foo: "bar"} ) //-> true
+	 * ```
 	 */
 	can.Object.subset = function (subset, set, compares) {
 		// go through set {type: 'folder'} and make sure every property
