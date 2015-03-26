@@ -16,7 +16,7 @@ Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overha
 
 - - -
 
-As mentioned in the [introduction](Tutorial.html), CanJS uses an Application
+As mentioned in the introduction, CanJS uses an Application
 State object to manage the state of your application. The application state
 object is bound to two things:
 
