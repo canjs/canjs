@@ -1,0 +1,5 @@
+<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas"></menu>
+<restaurant-list></restaurant-list>
+<!--Begin add-->
+<order-form></order-form>
+<!--End add-->

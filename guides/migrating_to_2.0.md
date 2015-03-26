@@ -23,10 +23,11 @@ It is now necessary to always call [can.route.ready](../docs/can.route.html) onc
 all routes have been set up. If you previously didn't
 use `can.route.ready()`, just add it on document ready like:
 
-    $(function(){
-      can.route.ready()
-    })
-
+```
+$(function(){
+  can.route.ready()
+})
+```
 
 ### can.Observe.List.Observe is now can.Observe.List.Map
 
@@ -35,26 +36,32 @@ provide a static `Observe` property on lists to
 specify what type of Observe instance should be created
 when items are added to the list.  For example:
 
-    MyTasks = can.Observe.List({
-      Observe: Task
-    },{})
+```
+MyTasks = can.Observe.List({
+  Observe: Task
+},{})
 
-    var tasks = new MyTasks();
-    tasks.push({});
-    tasks.attr(0) instanceof Task //-> true
+var tasks = new MyTasks();
+tasks.push({});
+tasks.attr(0) instanceof Task //-> true
+```
 
 You should change the static Observe property to
 `Map` like:
 
-    MyTasks = can.Observe.List({
-      Map: Task
-    },{})
+```
+MyTasks = can.Observe.List({
+  Map: Task
+},{})
+```
 
 In fact, this code should look like:
 
-    MyTasks = can.List.extend({
-      Map: Task
-    })
+```
+MyTasks = can.List.extend({
+  Map: Task
+})
+```
 
 ### can.EJS is no longer in core
 
@@ -93,16 +100,19 @@ but are deprecated.
 Extending `can.Construct`s without calling `.extend` is
 deprecated.  For example, instead of:
 
-    Todo = can.Construct(static, proto)
-    MyWidget = can.Control(static, proto)
-    Task = can.Model(static, proto)
+```
+Todo = can.Construct(static, proto)
+MyWidget = can.Control(static, proto)
+Task = can.Model(static, proto)
+```
 
 do:
 
-    Todo = can.Construct.extend(static, proto)
-    MyWidget = can.Control.extend(static, proto)
-    Task = can.Model.extend(static, proto)
-
+```
+Todo = can.Construct.extend(static, proto)
+MyWidget = can.Control.extend(static, proto)
+Task = can.Model.extend(static, proto)
+```
 
 ### can.Observe.startBatch and can.Observe.stopBatch becomes can.batch.start and can.batch.stop
 

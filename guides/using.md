@@ -10,20 +10,22 @@ CanJS is designed and packaged so that it can easily fit into your development w
 
 If you are looking for a quick start using our [CDN]() just create an HTML page like this:
 
-    <html>
-    <head>
-        <title>CanJS Test</title>
-    </head>
-    <body>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
-        <script src="http://canjs.com/release/latest/can.jquery.js"></script>
-        <script type="text/javascript">
-            $(function() {
-                // Your CanJS code here
-            });
-        </script>
-    </body>
-    </html>
+```
+<html>
+<head>
+	<title>CanJS Test</title>
+</head>
+<body>
+	<script src="libs/jquery.js"></script>
+	<script src="http://canjs.com/release/latest/can.jquery.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			// Your CanJS code here
+		});
+	</script>
+</body>
+</html>
+```
 
 Or fork one the [JSFiddle](http://jsfiddle.com) with your library of choice:
 

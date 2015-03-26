@@ -1,0 +1,6 @@
+<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
+{{#if menus}}
+    <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
+{{else}}
+    <restaurant-list restaurant="{restaurant}"></restaurant-list>
+{{/if}}
