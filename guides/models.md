@@ -70,12 +70,12 @@ A few examples illustrate this, below:
 
 ```
 var MyModel = can.Model.extend({
- findAll: function () {
  // Static method
+ findAll: function () {
  }
 }, {
- destroy: function () {
  // Instance method
+ destroy: function () {
  }
 });
 
@@ -149,7 +149,7 @@ later on.
 ## Connecting the Model to the Component
 
 It's time to connect all of this together in our view model. Simply open up
-restaurant_list_component.js. Edit the RestaurantListViewModel as follows,
+*restaurant_list_component.js*. Edit the RestaurantListViewModel as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
@@ -184,16 +184,11 @@ In the code above, however, we called the findAll method indirectly:
 restaurants: new RestaurantModel.List({}),
 ```
 
-This is a special feature of the can.Model.List constructor. When can.Model is
-extended, can.Model.List is automatically extended, as well. It is set as the
-model's List property. If a can.Model.List is instantiated, and you pass in a
-plain JavaScript object for its construction parameter, that parameter is used
-as the parameter for the Model's findAll method. At first, this will return an
-empty list; however, the can.Model's findAll method will then be called, and
-the list will be populated with the results of that call automatically, once
-the findAll method receives its results.
+This is a special feature of the can.Model.List constructor. If you create a new instance of a can.Model.List, and you pass the constructor a plain JavaScript object, that List's constructor parameter will be passed to the can.Model's findAll method. The `findAll` method will run, and the list will be populated with the results of the `findAll` method, as below:
 
-We'll look at the can.Model's findOne method later on, when we create our Menu
+![](../can/guides/images/4_models/New.Model.List.png)
+
+We'll look at the can.Model's `findOne` method later on, when we create our Menu
 Component. Finally, let's add the scripts we created to our index.html file:
 
 ```

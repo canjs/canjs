@@ -46,13 +46,13 @@ Edit it, as follows:
 <label for="RestaurantList">Select a Restaurant:</label>
 <select id="RestaurantList">
 	<option value="-1"></option>
-	{{# each restaurants}}
+	{{#each restaurants}}
 		<option {{data 'restaurant'}}>{{name}}</option>
 	{{/each}}
 </select>
 
-{{# if currentRestaurant}}
-	{{# currentRestaurant}}
+{{#if currentRestaurant}}
+	{{#currentRestaurant}}
 		<div id="current-restaurant">
 
 			<h3 id="restaurant-name">{{name}}</h3>
