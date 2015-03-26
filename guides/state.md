@@ -138,15 +138,10 @@ Application State to our components. We do that by passing Application State
 attributes to the components through their custom HTML tags in
 base_template.stache.
 
-Open up base_template.stache, and edit it as follows:
+Open up base_template.stache, and add the following attributes to the menu tag:
 
 ```
 <menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
-{{#if menus}}
-	<order-form menus="{menus}" confirmation="{confirmation}"></order-form>
-{{else}}
-	<restaurant-list restaurant="{restaurant}"></restaurant-list>
-{{/if}}
 ```
 
 In the code above, we passed the "menus" and "restaurant" attributes to our
@@ -254,7 +249,7 @@ the place order button. You should see something like the following:
 
 ![](../can/guides/images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
 
-Finally, let's remove the code in the app.js that set the restaurant to "Spago" by default:
+Next, let's remove the code in the app.js that set the restaurant to "Spago" by default:
 
 ```
 //-->Remove this line:
@@ -289,14 +284,15 @@ To make the OrderForm component show, and the RestaurantList component hide,
 we use conditional stache tags in base_template.stache, as below:
 
 ```
+<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
 {{#if menus}}
-	<order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
+    <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
 {{else}}
-	<restaurant-list restaurant="{restaurant}"></restaurant-list>
+    <restaurant-list restaurant="{restaurant}"></restaurant-list>
 {{/if}}
 ```
 
-Finally, open order_form_component.js and replace its contents with the code below:
+Finally, open order_form_component.js and remove the code that set the restaurant to "Spago" 
 
 ```
 var OrderFormViewModel = can.Map.extend({
@@ -304,8 +300,8 @@ var OrderFormViewModel = can.Map.extend({
 		this.attr('delivery', {});
 		this.attr('order', {});
 		this.attr('issues', {});
-		//--> Remove the hard-coded reference to "Spago"
-		//    This is now passed in from the Application State
+		//--> Remove the hard-coded reference to "Spago" which is now passed in from the Application State
+		//this.attr('restaurantName', 'Spago');
 		this.attr('menus', new RestaurantMenusModel.List({id: 1}));
 	},
 	...
