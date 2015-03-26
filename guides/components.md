@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - - -
 **In this Chapter**
  - Constructors in CanJS
@@ -253,3 +255,5 @@ Observable arrays are also available with can.List, which is based on can.Map.
 <span class="pull-left">&lsaquo; [Application Foundations](Foundations.html)</span>
 
 <span class="pull-right">[More on Components](Components2.html) &rsaquo;</span>
+
+</div>

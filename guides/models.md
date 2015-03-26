@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 - - - -
 **In this Chapter**
  - can.Model
@@ -196,3 +198,5 @@ Todo.bind('created', function(ev, created) {
 <span class="pull-left">&lsaquo; [More on Components](Components2.html)</span>
 
 <span class="pull-right">[Sending Data to a Service](Models2.html) &rsaquo;</span>
+
+</div>
