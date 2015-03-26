@@ -248,6 +248,12 @@
 			"type": "core",
 			"hidden": true,
 			"hasTest": false
+		},
+		"can/map/sort/sort": {
+			"name": "can.map.sort",
+			"type": "plugin",
+			"hidden": true,
+			"hasTest": false
 		}
 	},
 	"types": {

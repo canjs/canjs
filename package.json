@@ -174,6 +174,7 @@
 		"./view/stache/system": "./dist/cjs/view/stache/system",
 		"./view/mustache/system": "./dist/cjs/view/mustache/system",
 		"./view/ejs/system": "./dist/cjs/view/ejs/system",
-		"./util/event": "./dist/cjs/util/event"
+		"./util/event": "./dist/cjs/util/event",
+		"./map/sort/sort": "./dist/cjs/map/sort/sort"
 	}
 }
