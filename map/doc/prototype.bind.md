@@ -34,7 +34,7 @@ The parameters of the event handler for the _change_ event are:
 - _attr_ Which property changed.
 - _how_ Whether the property was added, removed, or set. Possible values are `'add'`, `'remove'`, or `'set'`.
 - _newVal_ The value of the property after the change. `newVal` will be `undefined` if the property was removed.
-- _oldVal_ Thishe value of the property before the change. `oldVal` will be `undefined` if the property was added.
+- _oldVal_ This is the value of the property before the change. `oldVal` will be `undefined` if the property was added.
 
 Here is a concrete tour through the _change_ event handler's arguments:
 

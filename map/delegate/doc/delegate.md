@@ -38,7 +38,7 @@ Listen to specific event changes with
 
 Delegate lets you listen to add, set, remove, and change events on property.
 
-__add__
+### add
 
 An add event is fired when a new property has been added.
 
@@ -53,7 +53,7 @@ An add event is fired when a new property has been added.
 Listening to add events is useful for 'setup' functionality (in this case
 showing the <code>#name</code> element.
 
-__set__
+### set
 
 Set events are fired when a property takes on a new value.  set events are
 always fired after an add.
@@ -65,7 +65,7 @@ always fired after an add.
     o.attr('name',"Justin")
     o.attr('name',"Brian");
 
-__remove__
+### remove
 
 Remove events are fired after a property is removed.
 
@@ -106,8 +106,8 @@ on an attribute of the params attribute:
     // alerts 2
     o.attr('options.params.parentId',6);
 
-Using a single wildcard (<code>**</code>) matches single level
-properties.  Using a double wildcard (<code>***</code>) matches
+Using a single wildcard (`*`) matches single level
+properties.  Using a double wildcard (`**`) matches
 any deep property.
 
 ## Listening on multiple properties and values

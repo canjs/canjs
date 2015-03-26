@@ -1,7 +1,7 @@
 @function can.Map.keys keys
 @parent can.Map.static 0
 
-@description Iterate over the keys of a Map.
+@description Returns an array of the map's keys.
 
 @signature `can.Map.keys(map)`
 @param {can.Map} map the `can.Map` to get the keys from
