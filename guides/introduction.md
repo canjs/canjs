@@ -4,6 +4,8 @@
 
 @body
 
+<div class="getting-started">
+
 *Better Apps, Faster*
 
 CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki/Model_View_ViewModel" target="_blank">MVVM</a>
