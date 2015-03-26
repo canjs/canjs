@@ -60,26 +60,25 @@ file called "index.html" in the app folder.
 
 It should look like this:
 
-```
+```html
 <!DOCTYPE html>
 <html>
-<head lang="en">
-	<meta charset="UTF-8">
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
-	<link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
-</head>
-<body>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
+  </head>
+  <body>
 
-<!-- CanJS application root -->
-<div id="can-app">
-</div>
+    <!-- CanJS application root -->
+    <div id="can-app"></div>
 
-<script src="libs/jquery.js"></script>
-<script src="libs/can.custom.js"></script>
-<script src="libs/can.fixture.js"></script>
-<script src="app.js"></script>
-</body>
+    <script src="libs/jquery.js"></script>
+    <script src="libs/can.custom.js"></script>
+    <script src="libs/can.fixture.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
 ```
 
@@ -104,9 +103,7 @@ file as follows:
 
 ```
 $(function () {
-
-	$('#can-app').html('The Requisite "Hello World" Message');
-
+  $('#can-app').html('The Requisite "Hello World" Message');
 });
 ```
 

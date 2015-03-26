@@ -8,9 +8,9 @@
 
 - - -
 **In this Chapter**
- - Saving and Updating a can.Model
- - Moving Closer to MVVM
- - Working with Non-standard Data Formats
+  - Saving and Updating a can.Model
+  - Moving Closer to MVVM
+  - Working with Non-standard Data Formats
 
 Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
 
@@ -81,60 +81,55 @@ Add the following to *order_form_component.js*:
 
 ```
 var OrderFormViewModel = can.Map.extend({
-	//Initialize the properties of the ViewModel
-	init: function () {
-		this.attr('delivery', {});
-		this.attr('order', {});
-		this.attr('issues', {});
-		this.attr('restaurantName', 'Spago');
-		this.attr('menus', new RestaurantMenusModel.List({id: 1}));
-	},
-	createOrder: function (menuItems) {
-    	//Add all selected menu items to the menuItems collection
-		this.attr('menus').each(function (itemSet) {
-			itemSet.attr('items').each(function (item) {
-				if (item.attr('selected')) {
-					menuItems.push(item);
-				}
-			});
-		});
-		//Return an object containing the Menu Order
-		return new MenuOrderModel({
-			delivery: this.attr('details'),
-			menuItems: menuItems
-		});
-	},
-	placeOrder: function () {
+  init: function () {
+    this.attr('delivery', {});
+    this.attr('order', {});
+    this.attr('issues', {});
+    this.attr('restaurantName', 'Spago');
+    this.attr('menus', new RestaurantMenusModel.List({id: 1}));
+  },
+  createOrder: function (menuItems) {
+    this.attr('menus').each(function (itemSet) {
+      itemSet.attr('items').each(function (item) {
+        if (item.attr('selected')) {
+          menuItems.push(item);
+        }
+      });
+    });
 
-		var menuItems = [];
-		var order, errorCheck, errors = {};
+    return new MenuOrderModel({
+      delivery: this.attr('details'),
+      menuItems: menuItems
+    });
+  },
+  placeOrder: function () {
 
-		order = this.createOrder.call(this, menuItems);
+    var menuItems = [];
+    var order, errorCheck, errors = {};
 
-        //Check for errors
-		if (errorCheck) {
-			this.attr('issues', errors);
-			return;
-		}
-		var that = this;
+    order = this.createOrder.call(this, menuItems);
 
-		//Submit the order
-		order.save(
-			function success() {
-				that.attr('confirmation', 'Your Order has been Placed');
-			}, function error(xhr) {
-				alert(xhr.message);
-			});
+    if (errorCheck) {
+      this.attr('issues', errors);
+      return;
+    }
+    var that = this;
 
-		//Set the current order to the order submitted
-		this.attr('order', order);
-	}
+    order.save(
+      function success() {
+        that.attr('confirmation', 'Your Order has been Placed');
+      }, function error(xhr) {
+        alert(xhr.message);
+      });
+
+    this.attr('order', order);
+  }
 });
 
 can.Component.extend({
-	tag: "order-form",
-	template: can.view('components/order_form/order_form.stache'),
-	scope: OrderFormViewModel
+  tag: "order-form",
+  template: can.view('components/order_form/order_form.stache'),
+  scope: OrderFormViewModel
 });
 ```
 
@@ -169,7 +164,7 @@ Open up *fixtures.js* (in the models folder), and add the following fixture:
  * Order Fixture
  */
 can.fixture('POST /order', function requestHandler(){
-	return true;
+  return true;
 });
 ```
 
@@ -182,79 +177,78 @@ Staying in *fixtures.js*, append the following to the bottom of the file:
  */
 can.fixture("GET /menus/{id}", function requestHandler(request) {
 
-	//Adjust id to account for zero-based index
-	var id = parseInt(request.data.id, 10) - 1;
+  var id = parseInt(request.data.id, 10) - 1;
 
-	var menuList = [
-		{
-			//Spago
-			"menus": [
-				{
-					"menuName": "Lunch",
-					"items": [
-						{name: "Spinach Fennel Watercress Ravioli", price: 35.99, id: 32},
-						{name: "Herring in Lavender Dill Reduction", price: 45.99, id: 33},
-						{name: "Garlic Fries", price: 15.99, id: 34}
-					]
-				},
-				{
-					"menuName": "Dinner",
-					"items": [
-						{name: "Crab Pancakes with Sorrel Syrup", price: 35.99, id: 22},
-						{name: "Chicken with Tomato Carrot Chutney Sauce", price: 45.99, id: 23},
-						{name: "Onion Fries", price: 15.99, id: 24}
-					]
-				}
-			]
+  var menuList = [
+    {
+      // Spago
+      "menus": [
+        {
+          "menuName": "Lunch",
+          "items": [
+            {name: "Spinach Fennel Watercress Ravioli", price: 35.99, id: 32},
+            {name: "Herring in Lavender Dill Reduction", price: 45.99, id: 33},
+            {name: "Garlic Fries", price: 15.99, id: 34}
+          ]
+        },
+        {
+          "menuName": "Dinner",
+          "items": [
+            {name: "Crab Pancakes with Sorrel Syrup", price: 35.99, id: 22},
+            {name: "Chicken with Tomato Carrot Chutney Sauce", price: 45.99, id: 23},
+            {name: "Onion Fries", price: 15.99, id: 24}
+          ]
+        }
+      ]
 
-		},
-		{
-			//El Bulli
-			"menus": [
-				{
-					"menuName": "Lunch",
-					"items": [
-						{name: "Spherified Calf Brains and Lemon Rind Risotto", price: 35.99, id: 32},
-						{name: "Sweet Bread Bon Bons", price: 45.99, id: 33},
-						{name: "JoJos", price: 15.99, id: 34}
-					]
-				},
-				{
-					"menuName": "Dinner",
-					"items": [
-						{name: "Goose Liver Arugula Foam with Kale Crackers", price: 35.99, id: 22},
-						{name: "Monkey Toenails", price: 45.99, id: 23},
-						{name: "Tater Tots", price: 15.99, id: 24}
-					]
-				}
-			]
+    },
+    {
+      // El Bulli
+      "menus": [
+        {
+          "menuName": "Lunch",
+          "items": [
+            {name: "Spherified Calf Brains and Lemon Rind Risotto", price: 35.99, id: 32},
+            {name: "Sweet Bread Bon Bons", price: 45.99, id: 33},
+            {name: "JoJos", price: 15.99, id: 34}
+          ]
+        },
+        {
+          "menuName": "Dinner",
+          "items": [
+            {name: "Goose Liver Arugula Foam with Kale Crackers", price: 35.99, id: 22},
+            {name: "Monkey Toenails", price: 45.99, id: 23},
+            {name: "Tater Tots", price: 15.99, id: 24}
+          ]
+        }
+      ]
 
-		},
-		{
-			//The French Kitchen
-			"menus": [
-				{
-					"menuName": "Lunch",
-					"items": [
-						{name: "Croque Monsieur", price: 35.99, id: 32},
-						{name: "Pain Au Chocolat", price: 45.99, id: 33},
-						{name: "Potato Latkes", price: 15.99, id: 34}
-					]
-				},
-				{
-					"menuName": "Dinner",
-					"items": [
-						{name: "Chateau Briande", price: 35.99, id: 22},
-						{name: "Veal Almandine", price: 45.99, id: 23},
-						{name: "Hashbrowns", price: 15.99, id: 24}
-					]
-				}
-			]
+    },
+    {
+      // The French Kitchen
+      "menus": [
+        {
+          "menuName": "Lunch",
+          "items": [
+            {name: "Croque Monsieur", price: 35.99, id: 32},
+            {name: "Pain Au Chocolat", price: 45.99, id: 33},
+            {name: "Potato Latkes", price: 15.99, id: 34}
+          ]
+        },
+        {
+          "menuName": "Dinner",
+          "items": [
+            {name: "Chateau Briande", price: 35.99, id: 22},
+            {name: "Veal Almandine", price: 45.99, id: 23},
+            {name: "Hashbrowns", price: 15.99, id: 24}
+          ]
+        }
+      ]
 
-		}
-	];
+    }
+  ];
 
-	return menuList[id];
+  return menuList[id];
 });
 ```
 
@@ -266,8 +260,8 @@ In *site_models.js*, add the following two models:
  * @type {void|*}
  */
 var RestaurantMenusModel = can.Model.extend({
-	findAll: "GET /menus/{id}",
-	parseModels: "menus"
+  findAll: "GET /menus/{id}",
+  parseModels: "menus"
 },
 {});
 
@@ -276,7 +270,7 @@ var RestaurantMenusModel = can.Model.extend({
  * @type {void|*}
  */
 var MenuOrderModel = can.Model.extend({
-	create: 'POST /order'
+  create: 'POST /order'
 },
 {});
 ```

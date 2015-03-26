@@ -45,26 +45,26 @@ Edit it, as follows:
 ```
 <label for="RestaurantList">Select a Restaurant:</label>
 <select id="RestaurantList">
-	<option value="-1"></option>
-	{{#each restaurants}}
-		<option {{data 'restaurant'}}>{{name}}</option>
-	{{/each}}
+  <option value="-1"></option>
+  {{#each restaurants}}
+    <option {{data 'restaurant'}}>{{name}}</option>
+  {{/each}}
 </select>
 
 {{#if currentRestaurant}}
-	{{#currentRestaurant}}
-		<div id="current-restaurant">
+  {{#currentRestaurant}}
+    <div id="current-restaurant">
 
-			<h3 id="restaurant-name">{{name}}</h3>
-			<ul id="restaurant-details">
-				<li>Location: {{location}}</li>
-				<li>Cuisine: {{cuisine}}</li>
-				<li>Owner: {{owner}}</li>
-			</ul>
-		</div>
+      <h3 id="restaurant-name">{{name}}</h3>
+      <ul id="restaurant-details">
+        <li>Location: {{location}}</li>
+        <li>Cuisine: {{cuisine}}</li>
+        <li>Owner: {{owner}}</li>
+      </ul>
+    </div>
 
-		<button id="place-order">Place My Order!</button>
-	{{/currentRestaurant}}
+    <button id="place-order">Place My Order!</button>
+  {{/currentRestaurant}}
 {{/if}}
 ```
 
@@ -145,11 +145,11 @@ Open up *restaurant_list_component.js*, and modify the scope as follows:
 
 ```
 scope: {
-	restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
-	currentRestaurant: undefined,
-	restaurantSelected: function(){
-		alert("You've selected a restaurant");
-	}
+  restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
+  currentRestaurant: undefined,
+  restaurantSelected: function(){
+    alert("You've selected a restaurant");
+  }
 }
 ```
 
@@ -234,13 +234,13 @@ the file:
 
 ```
 var RestaurantListViewModel = can.Map.extend({
-	restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
-	currentRestaurant: undefined,
-	restaurantSelected: function (viewModel, select) {
-		var restaurant = select.find('option:checked').data('restaurant');
-		var currentRestaurant = 'currentRestaurant';
-		this.attr(currentRestaurant, restaurant);
-	}
+  restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
+  currentRestaurant: undefined,
+  restaurantSelected: function (viewModel, select) {
+    var restaurant = select.find('option:checked').data('restaurant');
+    var currentRestaurant = 'currentRestaurant';
+    this.attr(currentRestaurant, restaurant);
+  }
 });
 ```
 
@@ -249,9 +249,9 @@ can.Component, as follows:
 
 ```
 can.Component.extend({
-	tag: 'restaurant-list',
-	template: can.view('components/restaurant_list/restaurant_list.stache'),
-	scope: RestaurantListViewModel
+  tag: 'restaurant-list',
+  template: can.view('components/restaurant_list/restaurant_list.stache'),
+  scope: RestaurantListViewModel
 });
 ```
 

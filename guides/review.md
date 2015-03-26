@@ -25,14 +25,14 @@ new can.fixture:
 
 ```
 can.fixture("GET /site_menu", function requestHandler() {
-   return {
-	   menuText: {
-		   "PageTitle": "PlaceMyOrder.com",
-		   "FoodAtFingertips": "Food at your Fingertips",
-		   "Restaurants": "Restaurants",
-		   "Cuisines": "Cuisines"
-	   }
-   };
+  return {
+    menuText: {
+      "PageTitle": "PlaceMyOrder.com",
+      "FoodAtFingertips": "Food at your Fingertips",
+      "Restaurants": "Restaurants",
+      "Cuisines": "Cuisines"
+    }
+  };
 });
 ```
 
@@ -40,8 +40,8 @@ Open up *site_models.js*, and add a new can.Model:
 
 ```
 var SiteMenuModel = can.Model.extend({
-		findOne: "GET /site_menu"
-}, {});
+  findOne: "GET /site_menu"
+});
 ```
 
 In your components folder, create a new folder called "site_menu". In that
@@ -49,27 +49,27 @@ folder, create a file called *site_menu_component.js* and add the following code
 
 ```
 var SiteMenuViewModel = can.Map.extend({
-	init: function () {
-		this.attr('menuData', {});
-	}
+  init: function () {
+    this.attr('menuData', {});
+  }
 });
 
 can.Component.extend({
-	tag: "menu",
-	template: can.view('components/site_menu/site_menu.stache'),
-	scope: SiteMenuViewModel,
-	events: {
-		inserted: function () {
-			var siteMenuViewModel = this.scope;
-			SiteMenuModel.findOne({},
-				function success(menu) {
-					siteMenuViewModel.attr('menuData', menu);
-				},
-				function error(xhr) {
-					alert(xhr.error.message);
-				});
-		}
-	}
+  tag: "menu",
+  template: can.view('components/site_menu/site_menu.stache'),
+  scope: SiteMenuViewModel,
+  events: {
+    inserted: function () {
+      var siteMenuViewModel = this.scope;
+      SiteMenuModel.findOne({},
+        function success(menu) {
+          siteMenuViewModel.attr('menuData', menu);
+        },
+        function error(xhr) {
+          alert(xhr.error.message);
+        });
+    }
+  }
 });
 ```
 
@@ -106,28 +106,28 @@ Let's connect all of this to a view template. Staying in the menu folder,
 create a template file called *site_menu.stache*, as follows:
 
 ```
-  {{#menuData.menuText}}
-  <ul class="nav">
-      <li><a class="visible-xs text-center" data-toggle="offcanvas" href="#"><i
-              class="glyphicon glyphicon-chevron-right"></i></a></li>
-  </ul>
-  <ul id="sidebar-footer" class="list-unstyled hidden-xs">
-      <li can-click="clickedAlert">
-          <a href="#!home"><h4>{{PageTitle}}</h4>
-              <i class="glyphicon glyphicon-heart-empty"></i>{{FoodAtFingertips}}</a>
-      </li>
-  </ul>
+{{#menuData.menuText}}
+<ul class="nav">
+    <li><a class="visible-xs text-center" data-toggle="offcanvas" href="#"><i
+            class="glyphicon glyphicon-chevron-right"></i></a></li>
+</ul>
+<ul id="sidebar-footer" class="list-unstyled hidden-xs">
+    <li can-click="clickedAlert">
+        <a href="#!home"><h4>{{PageTitle}}</h4>
+            <i class="glyphicon glyphicon-heart-empty"></i>{{FoodAtFingertips}}</a>
+    </li>
+</ul>
 
-  <ul id="lg-menu" class="nav hidden-xs">
-      <li class="active"><a can-click="goHome" href="#"><i class="glyphicon glyphicon-cutlery"></i> {{Restaurants}}</a></li>
-  </ul>
+<ul id="lg-menu" class="nav hidden-xs">
+    <li class="active"><a can-click="goHome" href="#"><i class="glyphicon glyphicon-cutlery"></i> {{Restaurants}}</a></li>
+</ul>
 
 
-  <!-- tiny only nav-->
-  <ul id="xs-menu" class="nav visible-xs">
-      <li><a class="text-center" href="#!restaurants"><i class="glyphicon glyphicon-cutlery"></i></a></li>
-  </ul>
-  {{/menuData.menuText}}
+<!-- tiny only nav-->
+<ul id="xs-menu" class="nav visible-xs">
+    <li><a class="text-center" href="#!restaurants"><i class="glyphicon glyphicon-cutlery"></i></a></li>
+</ul>
+{{/menuData.menuText}}
 ```
 
 Open up */app/base_template.stache*, and add the following line to the top of

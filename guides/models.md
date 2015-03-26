@@ -32,10 +32,10 @@ following code:
  * Restaurants Model
  */
 var RestaurantModel = can.Model.extend({
-	findAll: "GET /restaurants"
-},
-//Include second, blank parameter object to set instanceProperties
-{});
+  findAll: "GET /restaurants"
+}, {
+  // Include second, blank parameter object to set instanceProperties
+});
 ```
 
 Because it is a [can.Construct](../docs/can.Construct.html), can.Model.extend can take up to three parameters:
@@ -70,13 +70,13 @@ A few examples illustrate this, below:
 
 ```
 var MyModel = can.Model.extend({
- // Static method
- findAll: function () {
- }
+  findAll: function () {
+    // Static method
+  }
 }, {
- // Instance method
- destroy: function () {
- }
+  destroy: function () {
+    // Instance method
+  }
 });
 
 MyModel.findAll(); // Reference a method defined on the constructor
@@ -110,29 +110,29 @@ following code to that file:
  * Restaurants Model Fixture
  */
 can.fixture("GET /restaurants", function requestHandler() {
-	return [
-		{
-			"name": "Spago",
-			"location": "USA",
-			"cuisine": "Modern",
-			"owner": "Wolfgang Puck",
-			"restaurantId": 1
-		},
-		{
-			"name": "El Bulli",
-			"location": "Spain",
-			"cuisine": "Modern",
-			"owner": "Ferran Adria",
-			"restaurantId": 2
-		},
-		{
-			"name": "The French Laundry",
-			"location": "USA",
-			"cuisine": "French Traditional",
-			"owner": "Thomas Keller",
-			"restaurantId": 3
-		}
-	];
+  return [
+    {
+      "name": "Spago",
+      "location": "USA",
+      "cuisine": "Modern",
+      "owner": "Wolfgang Puck",
+      "restaurantId": 1
+    },
+    {
+      "name": "El Bulli",
+      "location": "Spain",
+      "cuisine": "Modern",
+      "owner": "Ferran Adria",
+      "restaurantId": 2
+    },
+    {
+      "name": "The French Laundry",
+      "location": "USA",
+      "cuisine": "French Traditional",
+      "owner": "Thomas Keller",
+      "restaurantId": 3
+    }
+  ];
 });
 ```
 
@@ -169,13 +169,13 @@ first way is to call the method explicitly. Using the RestaurantModel as an
 example, that would look like this:
 
 ```
-RestaurantModel.findAll({//paramsObject},
-	function success(returnedObject){
-		//
-	},
-	function error(errorObject){
-		//
-	});
+RestaurantModel.findAll({ /* paramsObject */ },
+  function success(returnedObject){
+    // ...
+  },
+  function error(errorObject){
+    // ...
+  });
 ```
 
 In the code above, however, we called the findAll method indirectly:

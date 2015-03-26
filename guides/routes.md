@@ -45,10 +45,10 @@ the RestaurantModel, as follows:
 
 ```
 var RestaurantModel = can.Model.extend({
-		findAll: "GET /restaurants",
-		findOne: 'GET /restaurant/{name}'
-	},
-	{});
+  findAll: "GET /restaurants",
+  findOne: 'GET /restaurant/{name}'
+},
+{});
 ```
 
 Next, add the following code to *fixtures.js*:
@@ -56,31 +56,31 @@ Next, add the following code to *fixtures.js*:
 ```
 can.fixture("GET /restaurant/{name}", function requestHandler(request) {
 
-	var restaurantMap = {
-		"Spago": {
-			"name": "Spago",
-			"location": "USA",
-			"cuisine": "Modern",
-			"owner": "Wolfgang Puck",
-			"restaurantId": 1
-		},
-		"El_Bulli": {
-			"name": "El Bulli",
-			"location": "Spain",
-			"cuisine": "Modern",
-			"owner": "Ferran Adria",
-			"restaurantId": 2
-		},
-		"The_French_Laundry": {
-			"name": "The French Laundry",
-			"location": "USA",
-			"cuisine": "French Traditional",
-			"owner": "Thomas Keller",
-			"restaurantId": 3
-		}
-	};
+  var restaurantMap = {
+    "Spago": {
+      "name": "Spago",
+      "location": "USA",
+      "cuisine": "Modern",
+      "owner": "Wolfgang Puck",
+      "restaurantId": 1
+    },
+    "El_Bulli": {
+      "name": "El Bulli",
+      "location": "Spain",
+      "cuisine": "Modern",
+      "owner": "Ferran Adria",
+      "restaurantId": 2
+    },
+    "The_French_Laundry": {
+      "name": "The French Laundry",
+      "location": "USA",
+      "cuisine": "French Traditional",
+      "owner": "Thomas Keller",
+      "restaurantId": 3
+    }
+  };
 
-	return restaurantMap[request.data.name];
+  return restaurantMap[request.data.name];
 
 });
 ```
@@ -90,35 +90,35 @@ as follows:
 
 ```
 var ApplicationState = can.Map.extend({
-	define: {
-		restaurant: {
-			value: {},
-			set: function (restaurant) {
-				if (restaurant.restaurantId) {
-					var that = this;
-					RestaurantModel.findOne({name: restaurant.name},
-						function success(selectedMenus) {
-							that.attr('menus', {
-								collection: selectedMenus.menus,
-								restaurantName: restaurant.name
-							});
-						},
-						function error(xhr) {
-							alert(xhr.message);
-						});
-				}
-				return restaurant;
-			}
-		},
-		menus: {
-			value: null,
-			serialize: false
-		},
-		confirmation: {
-			value: {},
-			serialize: false
-		}
-	}
+  define: {
+    restaurant: {
+      value: {},
+      set: function (restaurant) {
+        if (restaurant.restaurantId) {
+          var that = this;
+          RestaurantModel.findOne({name: restaurant.name},
+            function success(selectedMenus) {
+              that.attr('menus', {
+                collection: selectedMenus.menus,
+                restaurantName: restaurant.name
+              });
+            },
+            function error(xhr) {
+              alert(xhr.message);
+            });
+        }
+        return restaurant;
+      }
+    },
+    menus: {
+      value: null,
+      serialize: false
+    },
+    confirmation: {
+      value: {},
+      serialize: false
+    }
+  }
 });
 ```
 
@@ -138,7 +138,7 @@ object as follows:
 restaurant: {
    ...
    serialize: function () {
-	   return this.attr('restaurant.name');
+     return this.attr('restaurant.name');
    }
 }
 ```
@@ -152,45 +152,49 @@ Finally, update the Application State object in *app.js*, as follows:
 
 ```
 function getRestaurantMenu(restaurant, that) {
-	that.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+  that.attr('menus', new RestaurantMenusModel.List({
+    id: restaurant.restaurantId
+  }));
 }
 
 function showSelectedRestaurantMenus(restaurant, that) {
-	this.attr('restaurantName', restaurant);
-	RestaurantModel.findOne({name: restaurant},
-		function success(restaurantModel) {
-			getRestaurantMenu(restaurantModel, that);
-			return restaurantModel;
-		},
-		function error(xhr) {
-			alert(xhr.message);
-			return null;
-		})
+  this.attr('restaurantName', restaurant);
+  RestaurantModel.findOne({
+    name: restaurant
+  }, function success(restaurantModel) {
+      getRestaurantMenu(restaurantModel, that);
+      return restaurantModel;
+    },
+    function error(xhr) {
+      alert(xhr.message);
+      return null;
+    });
 }
 
 var ApplicationState = can.Map.extend({
-	define: {
-		restaurant: {
-			value: {},
-			set: function (restaurant) {
-				var that = this;
+  define: {
+    restaurant: {
+      value: {},
+      set: function (restaurant) {
+        var that = this;
 
-				if (!restaurant) return restaurant;
+        if (!restaurant) return restaurant;
 
-				if(typeof restaurant === 'string'){
-					return showSelectedRestaurantMenus.call(this, restaurant, that);
-				}
-				else if (restaurant.restaurantId) {
-					getRestaurantMenu(restaurant, that);
-					return restaurant;
-				}
+        if (typeof restaurant === 'string'){
+          return showSelectedRestaurantMenus.call(this, restaurant, that);
+        } else if (restaurant.restaurantId) {
+          getRestaurantMenu(restaurant, that);
+          return restaurant;
+        }
 
-			},
-			serialize: function () {
-				return this.attr('restaurant.name');
-			}
-		},
-		...
+      },
+      serialize: function () {
+        return this.attr('restaurant.name');
+      }
+    }
+    // [Code removed for brevity]
+  }
+});
 ```
 
 Note, that we've refactored the call to RestaurantMenusModel out into its own
@@ -204,18 +208,19 @@ your site_menu components folder. Edit it, as follows:
 
 ```
 {{#menuData.menuText}}
-	<ul class="nav">
-		<li><a class="visible-xs text-center" data-toggle="offcanvas" href="#">
+  <ul class="nav">
+    <li>
+      <a class="visible-xs text-center" data-toggle="offcanvas" href="#">
 
-	...
+  ...
 
-	<!--Begin update -->
-	<ul id="lg-menu" class="nav hidden-xs">
-		<li class="active">{{&HomeLink}}</li>
-	</ul>
-	<!--End update -->
+  <!--Begin update -->
+  <ul id="lg-menu" class="nav hidden-xs">
+    <li class="active">{{&HomeLink}}</li>
+  </ul>
+  <!--End update -->
 
-	...
+  ...
 
 {{/menuData.menuText}}
 ```
@@ -228,24 +233,28 @@ Open up *site_menu_component.js*, and add the following method to the can.Compon
 
 ```
 can.Component.extend({
-	tag: "menu",
-	template: can.view('components/site_menu/site_menu.stache'),
-	scope: SiteMenuViewModel,
-	events: {
-		inserted: function () {
-			var siteMenuViewModel = this.scope;
-			SiteMenuModel.findOne({},
-				function success(menu) {
-					siteMenuViewModel.attr('menuData', menu);
-					//--> Add this line
-					siteMenuViewModel.attr('menuData.menuText.HomeLink',
-						can.route.link( '<i class="glyphicon glyphicon-cutlery"></i> Restaurants', {restaurant: null}, false ));
-				},
-				function error(xhr) {
-					alert(xhr.error.message);
-				});
-		}
-	}
+  tag: "menu",
+  template: can.view('components/site_menu/site_menu.stache'),
+  scope: SiteMenuViewModel,
+  events: {
+    inserted: function () {
+      var siteMenuViewModel = this.scope;
+
+      SiteMenuModel.findOne({},
+        function success(menu) {
+          siteMenuViewModel.attr('menuData', menu);
+          //--> Add this line
+          siteMenuViewModel.attr('menuData.menuText.HomeLink',
+            can.route.link('<i class="glyphicon glyphicon-cutlery"></i> Restaurants', {
+              restaurant: null
+            }, false ));
+        },
+        function error(xhr) {
+          alert(xhr.error.message);
+        }
+      );
+    }
+  }
 });
 ```
 
@@ -257,7 +266,7 @@ state change. Append the following below the "getRestaurantMenu" function:
 
 ```
 function setAppToDefaultState() {
-	this.attr('menus', null);
+  this.attr('menus', null);
 }
 ```
 
@@ -265,25 +274,24 @@ Update the restaurant attribute `set` function on your ApplicationState:
 
 ```
 set: function (restaurant) {
-	var that = this;
+  var that = this;
 
-	if (!restaurant) return restaurant;
+  if (!restaurant) return restaurant;
 
-	if(typeof restaurant === 'string'){
+  if(typeof restaurant === 'string'){
 
-		//--> Add this conditional code
-		if(restaurant === 'null'){
-			setAppToDefaultState.call(this);
-			return null;
-		}
+    //--> Add this conditional code
+    if(restaurant === 'null'){
+      setAppToDefaultState.call(this);
+      return null;
+    }
 
-		return showSelectedRestaurantMenus.call(this, restaurant, that);
+    return showSelectedRestaurantMenus.call(this, restaurant, that);
 
-	}
-	else if (restaurant.restaurantId) {
-		getRestaurantMenu(restaurant, that);
-		return restaurant;
-	}
+  } else if (restaurant.restaurantId) {
+    getRestaurantMenu(restaurant, that);
+    return restaurant;
+  }
 
 }
 ```

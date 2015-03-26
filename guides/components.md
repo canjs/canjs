@@ -9,11 +9,11 @@
 - - - -
 **In this Chapter**
  - Constructors in CanJS
- 	- The `extend` method
- 	- The `init` method
+  - The `extend` method
+  - The `init` method
  - First can.Component
- 	- Auto Instantiation
- 	- Anatomy of a can.Component
+  - Auto Instantiation
+  - Anatomy of a can.Component
 
 Get the code for: [chapter 2](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-2_canjs-getting-started.zip?raw=true)
 
@@ -30,9 +30,9 @@ yourself.
 Without going into exhaustive detail, can.Construct contains a few methods we'll encounter frequently in other objects:
 
 - Prototype
-	- init
+  - init
 - Static
-	- extend
+  - extend
 
 We'll look at the extend method first.
 
@@ -58,10 +58,10 @@ must call the method as follows:
 
 ```
 can.Construct.extend({
-	//Static properties here
-},
-//Blank object as second parameter
-{});
+  // Static properties here
+}, {
+  // Blank object as second parameter
+});
 ```
 
 This pattern will apply to all objects in CanJS that have an extend method.
@@ -76,10 +76,10 @@ the constructor. An example is below:
 
 ```
 var Person = can.Construct.extend({
-	init: function(first, last) {
-		this.first = first;
-		this.last = last;
-	}
+  init: function(first, last) {
+    this.first = first;
+    this.last = last;
+  }
 });
 
 var actor = new Person("Abe", "Vigoda");
@@ -116,11 +116,11 @@ Put the following code inside *restaurant_list_component.js*:
  */
 can.Component.extend({
 
-	tag: 'restaurant-list',
-	template: can.view('components/restaurant_list/restaurant_list.stache'),
-	scope: {
-			currentRestaurant: 'Hello Restaurant Customer'
-	}
+  tag: 'restaurant-list',
+  template: can.view('components/restaurant_list/restaurant_list.stache'),
+  scope: {
+    currentRestaurant: 'Hello Restaurant Customer'
+  }
 
 });
 ```
@@ -141,9 +141,7 @@ Next, open up your *app.js* file, and edit it as follows:
 
 ```
 $(function () {
-
-	$('#can-app').html(can.view('base_template.stache', {}));
-
+  $('#can-app').html(can.view('base_template.stache', {}));
 });
 ```
 
@@ -157,9 +155,9 @@ index.html file, as follows:
 <script src="libs/jquery.js"></script>
 <script src="libs/can.custom.js"></script>
 <script src="libs/can.fixture.js"></script>
-  <!--Begin add-->
-  <script src="components/restaurant_list/restaurant_list_component.js"></script>
-  <!--End add-->
+<!--Begin add-->
+<script src="components/restaurant_list/restaurant_list_component.js"></script>
+<!--End add-->
 <script src="app.js"></script>
 ```
 
@@ -241,10 +239,10 @@ The attr method can be used to either get or set a property on a can.Map.
 an example:
 
 ```
-//Get the first property off of the name property off of person
+// Get the first property off of the name property off of person
 myCanMapInstance.attr('person.name.first');
 
-//Set the last property of the person's name property
+// Set the last property of the person's name property
 myCanMapInstance.attr('person.name.last', 'Bach');
 ```
 

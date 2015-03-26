@@ -33,27 +33,27 @@ below:
 $(function () {
 
    var ApplicationState = can.Map.extend({
-		define: {
-			restaurant: {
-				value: {}
-			},
-			menus: {
-				value: null
-			},
-			confirmation: {
-				value: {}
-			}
-		}
-	});
+    define: {
+      restaurant: {
+        value: {}
+      },
+      menus: {
+        value: null
+      },
+      confirmation: {
+        value: {}
+      }
+    }
+  });
 
-	var appState = new ApplicationState();
+  var appState = new ApplicationState();
 
-	//Bind the application state to the root of the application
-	$('#can-app').html(can.view('base_template.stache', appState));
+  // Bind the application state to the root of the application
+  $('#can-app').html(can.view('base_template.stache', appState));
 
-	can.route.map(appState);
+  can.route.map(appState);
 
-	can.route.ready();
+  can.route.ready();
 
 });
 ```
@@ -73,7 +73,7 @@ In our application, we setup routing by:
 - defining the properties of our Application State object,
 - binding that object to the route with a call to can.route.map, and
 - calling can.route.ready(), which sets up two-way binding between the 
-	browser's window.location.hash and the can.route's internal can.Map.
+  browser's window.location.hash and the can.route's internal can.Map.
 
 Unless we specify otherwise, which we'll see how to do below, *each property
 we define on our Application State will map to a potential route*. In the
@@ -91,7 +91,7 @@ Add the following line of code to *app.js*:
 ```
 can.route.ready();
 
-//-->Add this line, below the line above:
+//--> Add this line, below the line above:
 appState.attr('restaurant', 'Spago');
 ```
 
@@ -111,13 +111,13 @@ object. Modify the restaurant property as follows:
 
 ```
 restaurant: {
-	value: {},
-	set: function(newValue){
-	   if(typeof newValue === 'string'){
-		   alert(newValue);
-	   }
-	   return newValue;
-	}
+  value: {},
+  set: function(newValue){
+    if (typeof newValue === 'string'){
+      alert(newValue);
+    }
+    return newValue;
+  }
 },
 ```
 
@@ -164,40 +164,38 @@ Open up the *restaurant_list_component.js* file, and edit it as follows;
 
 ```
 var RestaurantListViewModel = can.Map.extend({
-	define: {
-		currentRestaurant: {
-			value: {}
-		},
-		currentRestaurantIndex: {
-			value: {},
-			type: 'number',
-			set: function(newValue){
-				if(!isNaN(newValue)){
-					this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
-				}
-				return newValue;
-			}
-		}
-	},
-	init: function () {
-		this.attr('restaurants', new RestaurantModel.List({}));
-		this.attr('visible', true);
-		this.attr('selected', {});
-	},
-	showMenu: function () {
-		//Sets the restaurant value on the parent scope (AppState)
-		this.attr('restaurant', this.attr('currentRestaurant'));
-		alert(this.attr('currentRestaurant.name'));
-	}
+  define: {
+    currentRestaurant: {
+      value: {}
+    },
+    currentRestaurantIndex: {
+      value: {},
+      type: 'number',
+      set: function(newValue){
+        if(!isNaN(newValue)){
+          this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
+        }
+        return newValue;
+      }
+    }
+  },
+  init: function () {
+    this.attr('restaurants', new RestaurantModel.List({}));
+    this.attr('visible', true);
+    this.attr('selected', {});
+  },
+  showMenu: function () {
+    // Sets the restaurant value on the parent scope (AppState)
+    this.attr('restaurant', this.attr('currentRestaurant'));
+    alert(this.attr('currentRestaurant.name'));
+  }
 
 });
 
 can.Component.extend({
-
-	tag: 'restaurant-list',
-	template: can.view('components/restaurant_list/restaurant_list.stache'),
-	scope: RestaurantListViewModel
-
+  tag: 'restaurant-list',
+  template: can.view('components/restaurant_list/restaurant_list.stache'),
+  scope: RestaurantListViewModel
 });
 ```
 
@@ -222,22 +220,19 @@ in the template as follows:
 
 ```
 {{#visible}}
-	<label for="RestaurantList">Select a Restaurant:</label>
-	<select id="RestaurantList" can-value="currentRestaurantIndex">
-		<option value="-1"></option>
-		{{#each restaurants}}
-			<option value="{{@index}}">{{name}}</option>
-		{{/each}}
-	</select>
+  <label for="RestaurantList">Select a Restaurant:</label>
+  <select id="RestaurantList" can-value="currentRestaurantIndex">
+    <option value="-1"></option>
+    {{#each restaurants}}
+      <option value="{{@index}}">{{name}}</option>
+    {{/each}}
+  </select>
 
-	{{#if currentRestaurant}}
-        {{#currentRestaurant}}
-	
-			<!-- Code removed for brevity -->
-	 
-		{{/currentRestaurant}}
-    {{/if}}
-
+  {{#if currentRestaurant}}
+    {{#currentRestaurant}}
+      <!-- Code removed for brevity -->
+    {{/currentRestaurant}}
+  {{/if}}
 {{/visible}}
 ```
 
@@ -256,7 +251,7 @@ the place order button. You should see something like the following:
 Next, let's remove the code in the *app.js* that set the restaurant to "Spago" by default:
 
 ```
-//-->Remove this line:
+//--> Remove this line:
 appState.attr('restaurant', 'Spago');
 ```
 
@@ -266,16 +261,16 @@ object, as follows:
 
 ```
 define: {
-	restaurant: {
-		value: {},
-		set: function (restaurant) {
-			if (restaurant.restaurantId) {
-				this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-				this.attr('restaurantName', restaurant.name);
-			}
-			return restaurant;
-		}
-	},
+  restaurant: {
+    value: {},
+    set: function (restaurant) {
+      if (restaurant.restaurantId) {
+        this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+        this.attr('restaurantName', restaurant.name);
+      }
+      return restaurant;
+    }
+  },
 }
 ```
 
@@ -290,9 +285,9 @@ we use conditional stache tags in *base_template.stache*, as below:
 ```
 <menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
 {{#if menus}}
-    <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
+  <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
 {{else}}
-    <restaurant-list restaurant="{restaurant}"></restaurant-list>
+  <restaurant-list restaurant="{restaurant}"></restaurant-list>
 {{/if}}
 ```
 
@@ -300,15 +295,14 @@ Finally, open *order_form_component.js* and remove the code that set the restaur
 
 ```
 var OrderFormViewModel = can.Map.extend({
-	init: function () {
-		this.attr('delivery', {});
-		this.attr('order', {});
-		this.attr('issues', {});
-		//--> Remove the hard-coded reference to "Spago" which is now passed in from the Application State
-		//this.attr('restaurantName', 'Spago');
-		this.attr('menus', new RestaurantMenusModel.List({id: 1}));
-	},
-	...
+  init: function () {
+    this.attr('delivery', {});
+    this.attr('order', {});
+    this.attr('issues', {});
+    //--> Remove the hard-coded reference to "Spago" which is now passed in from the Application State
+    this.attr('menus', new RestaurantMenusModel.List({id: 1}));
+  },
+  ...
 ```
 
 When the Application State's menus attribute has a value, the order form is
