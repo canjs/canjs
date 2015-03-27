@@ -29,17 +29,6 @@ $(function () {
             menus: {
                 value: null,
                 serialize: false
-            },
-            confirmation: {
-                value: {},
-                set: function (confirmation) {
-                    if (typeof confirmation === 'string') {
-                        alert(confirmation);
-                        this.attr('menus', null);
-                    }
-                    return confirmation;
-                },
-                serialize: false
             }
         },
         getRestaurantMenu: function(restaurant) {

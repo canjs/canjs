@@ -22,15 +22,38 @@ var OrderFormViewModel = can.Map.extend({
         var menuItems = [];
         var order;
 
-        order = this.createOrder.call(this, menuItems);
-
-        var that = this;
+        order = this.createOrder(menuItems);
 
         order.save(
             function() {
-                that.attr('confirmation', 'Your Order has been Placed');
+
+                var total = 0;
+                var message = can.sub('Your order has been placed!\n\n' +
+                    'Delivered to:\n' +
+                    '    Name: {name}\n' +
+                    '    Address: {address}\n' +
+                    '    Phone Number: {phone}\n\n' +
+                    'Items:\n', {
+                        name: order.attr('delivery.name'),
+                        address: order.attr('delivery.address'),
+                        phone: order.attr('delivery.telephone')
+                });
+
+                order.attr('menuItems').each(function (item) {
+                    message += can.sub('    {name} - {price}\n', {
+                        name: item.attr('name'),
+                        price: item.attr('price')
+                    });
+
+                    total += item.attr('price');
+                });
+
+                message += '\nTotal: $' + total;
+
+                alert(message);
+
             }, function(xhr) {
-                alert(xhr.message);
+                alert('Error:', xhr.message);
             });
 
         this.attr('order', order);
