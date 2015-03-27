@@ -1,7 +1,32 @@
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:700}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+html {
+    height: 100%;
+    border-left: 350px solid #165489;
+}
+
+button {
+    font-size: 100%;
+    padding: .25 1em;
+    color: #444;
+    color: rgba(0,0,0,.8);
+    border: 1px solid #999;
+    border: 0 rgba(0,0,0,0);
+    background-color: #E6E6E6;
+    text-decoration: none;
+    border-radius: 2px;
+}
+
+#can-app {
+    position: relative;
+    left: -350px;
+}
+
 menu {
     float: left;
-    width: 250px;
+    width: 330px;
     margin: 0;
+    padding: 20px 0 0 20px;
 }
 
 menu ul {
@@ -9,7 +34,86 @@ menu ul {
     padding: 0;
 }
 
+menu li {
+    list-style: none;
+}
+
+menu li.logo {
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+
+menu h1 {
+    margin: 0;
+}
+
+menu a {
+    text-decoration: none;
+    color: #fff;
+}
+
 restaurant-list {
     display: block;
+}
+
+restaurant-list header {
+    position: absolute;
+    top: 0;
+    left: 350px;
+    right: -350px;
+    height: 100px;
+    padding-right: 20px;
+    line-height: 100px;
+    background-color: #c5c3c3;
+    text-align: right;
+}
+
+restaurant-list section {
+    position: absolute;
+    top: 100px;
+    left: 350px;
+    right: -350px;
+    padding: 20px;
+}
+
+restaurant-list section li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+order-form {
+    position: absolute;
+    top: 0px;
+    left: 350px;
+    right: -350px;
+    padding: 20px;
+    border-top: 100px solid #c5c3c3;
+}
+
+order-form label {
     float: left;
+    clear: left;
+    line-height: 1.5em;
+}
+
+order-form h3 {
+    clear: left;
+    padding-top: 20px;
+}
+
+order-form .customer-details label {
+    position: relative;
+}
+
+order-form .customer-details label input {
+    position: absolute;
+    top: 0;
+    left: 150px;
+}
+
+order-form .customer-details button {
+    float: left;
+    margin-top: 20px;
+    clear: left;
 }

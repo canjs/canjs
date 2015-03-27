@@ -1,6 +1,6 @@
 {{#menuData.menuText}}
     <ul>
-        <li>
+        <li class="logo">
             <h1>
                 <a href="{{homeUrl}}">
                     {{PageTitle}}
