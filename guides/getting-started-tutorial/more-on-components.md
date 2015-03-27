@@ -236,7 +236,7 @@ It's considered a best practice to keep your can.Components
 thin. This helps maintain readability and maintainability. To accomplish this,
 you extract your scope from the can.Component into a can.Map.
 
-Open up `restaurant_list`, and add the following code to the top of
+Open up `restaurant_list.js`, and add the following code to the top of
 the file:
 
 ```
