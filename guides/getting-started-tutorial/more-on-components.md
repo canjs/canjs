@@ -17,7 +17,7 @@ Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overha
 
 - - -
 
-Now that we know how to create a basic can.Component, let's look at making the
+Now that we know how to create a basic [can.Component](../docs/can.Component.html), let's look at making the
 them a bit more usable. Let's build out the can.Component's template.
 
 ## Stache Templates
@@ -39,7 +39,7 @@ There are five aspects of Stache templates, mentioned above, that we'll review:
 
 It will be easiest for us to look at these with an example, so let's create 
 one. Open up your `components/restaurant_list/restaurant_list.stache` file.
-Edit it, as follows:
+Edit it as follows:
 
 
 ```
@@ -118,7 +118,7 @@ Because the scope of the {{#each}} block is `restaurants`, we can reference the 
 Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
-typing you are required to do, and reduces the possibility for error as well.
+typing you are required to do and reduces the possibility for error as well.
 The example above contains a Section, the "currentRestaurant" section. Sections begin
 with {{#...}} and end with {{/...}}.
 
@@ -134,7 +134,7 @@ Stache templates have a limited capacity for conditional logic. They provide sim
 {{/if}}
 ```
 
-If you need to use more complex logic in your application, can.Components provide [helpers](../docs/can.Component.prototype.helpers.html).
+If you need to use more complex logic in your application, can.Component provides [helpers](../docs/can.Component.prototype.helpers.html).
 
 ## Event Handling
 
@@ -144,8 +144,9 @@ To add an event handler, we have to make changes in two places:
 2. The can.Component scope
 
 Let's work with an example. You can add event handling to any element in the
-template by adding an attribute with the event name prefixed by "can-" (this event name can be any standard DOM event). Going
-back to the `restaurant_list.stache` file, edit the select tag, as follows:
+template by adding an attribute with the event name prefixed by "can-" (this event name can be
+[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)). Going
+back to the `restaurant_list.stache` file, edit the select tag as follows:
 
 ```html
 <select class="form-control" can-change="restaurantSelected">
@@ -155,7 +156,7 @@ We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
 scope, which acts as the event handler.
 
-Open up `restaurant_list.js`, and modify the scope as follows:
+Open up `restaurant_list.js` and modify the scope as follows:
 
 ```
 scope: {
@@ -172,12 +173,12 @@ event handlers we defined in our Stache template.
 
 ![](../can/guides/images/3_first_continued/MapOfScopeToTemplate.png)
 
-Go back out to the application in your browser, and refresh the page. You
+Go back out to the application in your browser and refresh the page. You
 should see something like this:
 
 ![](../can/guides/images/3_first_continued/SelectARestaurant.png)
 
-When you select an option from the dropdown, and the select's change event is
+When you select an option from the dropdown and the select's change event is
 fired, you should see:
 
 ![](../can/guides/images/3_first_continued/SelectARestaurantChangeEvent.png)
@@ -198,9 +199,9 @@ in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` function off of
 the scope object, in this case `this` is bound to the scope, because we're within a method of the scope. Let's look at an example.
 
-Open up `restaurant_list`, and modify the scope's `restaurantSelected` property as follows:
+Open up `restaurant_list.js` and modify the scope's `restaurantSelected` property as follows:
 
->>>Note: Drop second line of code below entirely, and explain why we can access directly off of VM.
+>>>Note: Drop second line of code below entirely and explain why we can access directly off of VM.
 
 ```
 restaurantSelected: function(viewModel, select) {
@@ -214,14 +215,14 @@ The first line of the function uses the jQuery `$.data()` function we referred
 to earlier to get a reference to the selected restaurant object. The third
 line sets the currentRestaurant property of the scope to reference the
 selectedRestaurant. The last line gets a reference to the currentRestaurant
-property of the scope, and accesses the "name" property of the restaurant
+property of the scope and accesses the `name` property of the restaurant
 object it references.
 
-Go out to the web application, and refresh your page; you'll notice a few
+Go out to the web application and refresh your page; you'll notice a few
 things.
 
 First, when you select a restaurant from the list, you should see an alert
-box, as follows:
+box like this:
 
 ![](../can/guides/images/3_first_continued/GetterSetterAlertBox.png)
 
@@ -235,7 +236,7 @@ template. The default value for currentRestaurant, when the
 RestaurantListComponent is first loaded is 'undefined'. Setting the value to
 'undefined' causes the Stache template to remove it from the DOM. As soon as
 we set currentRestaurant to a valid value, the scope, which is an observable
-can.Map, broadcasts this change, and the template refreshes automatically,
+can.Map, broadcasts this change and the template refreshes automatically,
 rendering the current restaurant section.
 
 ## View Models
@@ -243,7 +244,7 @@ It's considered a best practice to keep your can.Components
 thin. This helps maintain readability and maintainability. To accomplish this,
 you extract your scope from the can.Component into a can.Map.
 
-Open up `restaurant_list.js`, and add the following code to the top of
+Open up `restaurant_list.js` and add the following code to the top of
 the file:
 
 ```
@@ -258,7 +259,7 @@ var RestaurantListViewModel = can.Map.extend({
 ```
 
 Now, assign the can.Map we created to the scope of the Restaurant List
-can.Component, as follows:
+can.Component as follows:
 
 ```
 can.Component.extend({
@@ -268,7 +269,7 @@ can.Component.extend({
 });
 ```
 
-If you go back out to your application, and refresh the page, it should all
+If you go back out to your application and refresh the page, it should all
 look and work the same (though, we removed the alert). What we've done, by
 separating out the view model, is make the code easier to read and maintain.
 
