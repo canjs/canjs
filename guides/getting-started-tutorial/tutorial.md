@@ -56,9 +56,9 @@ how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
 Template libraries require a rendering engine, and CanJS provides that for
-you with the can.view object. A can.view contains
+you with the `can.view` object. A can.view contains
 utilities "for the loading, processing, rendering, and live-updating of
-templates". In addition, can.view is used to bind views to observable
+templates". In addition, `can.view` is used to bind views to observable
 objects.
 
 <a name="components"></a>
@@ -84,9 +84,7 @@ writing applications—freeing developers from many of the constraints of a
 DOM-centric paradigm to think more directly about the application itself.
 
 <a name="routing"></a>
-### Routing 
-For many JavaScript MV* frameworks, routing divides an application into logical 
-views and binds those view to Controllers. *This is not how things work in
+### Routing For many JavaScript MV* frameworks, routing divides an application into logical views and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
 Rather, it has to do with Application State. In brief,
 CanJS maintains a reciprocal relationship between an application's route,

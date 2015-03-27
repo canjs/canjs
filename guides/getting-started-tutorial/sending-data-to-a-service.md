@@ -159,7 +159,7 @@ property. If you recall, we bound the values of the `name`, `address`, and
 template. Now, all we need to do to get the values of those fields is
 reference them off of the View Model's `delivery` property.
 
-To provide fixture support for saving our `can.Model`, open up `models/fixtures.js` and add the following fixture:
+To provide fixture support for saving our `can.Model`, open up `fixtures.js` and add the following fixture:
 
 ```
 /**
@@ -288,8 +288,20 @@ var MenuOrderModel = can.Model.extend({
 
 There's a few things to notice in the code above. First, the fixture that we
 defined returned a non-standard data format. That is, it is non-standard for CanJS. The
-`can.Model.findAll` function expects an array from the service it calls. Our
-fixture, however, is returning an object that contains an array. Normally, if
+`can.Model.findAll` function expects an array from the service it calls. An example of the
+ expected type of data is below:
+
+```
+[ {data: 1}, {data: 2}, {data: 3} ];
+```
+
+Our fixture, however, is returning an *object* that *contains* an array. Our response will look like this:
+
+ ```
+ { "myArray": [ {menu: ...}, {menu: ...} ] }
+ ```
+
+ Normally, if
 the `findAll` function received this data, it would throw an error. In this case,
 it does not. This is because we included the `parseModels` attribute on the
 MenuOrderModel.
