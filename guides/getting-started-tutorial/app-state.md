@@ -22,9 +22,9 @@ object is bound to two things:
 1. The application's base template
 2. The application's routing
 
-Since you already know about creating can.Maps, creating an ApplicationState,
+Since you already know about creating instances of `can.Map`, creating an Application State object,
 which is a `can.Map`, will be easy. Let's see how this works. Open up your
-`app`, and update it, as below. Note that the Application State object is a
+`app`, and update it, as shown below. Note that the Application State object is a
 `can.Map`—i.e., it is observable. You should also notice that we're creating
 our `can.Map` in a new way—using the define plugin, which we'll discuss more
 below:
@@ -60,7 +60,7 @@ $(function () {
 
 ## Routing
 Before we dive into the details of the Application State object,
-let's quickly discuss routing. According to the docs, routing in CanJS allows
+let's quickly discuss routing. According to [the docs](../docs/can.route.html), routing in CanJS allows
 us to "manage browser history and client state by synchronizing the
 window.location.hash with a can.Map." In other words, we can use routing to
 reflect the state of our application, or set the state of our application. One
@@ -72,7 +72,7 @@ In our application, we setup routing by:
 
 - defining the properties of our Application State object,
 - binding that object to the route with a call to can.route.map, and
-- calling can.route.ready(), which sets up two-way binding between the 
+- calling can.route.ready(), which sets up two-way binding between the
   browser's window.location.hash and the can.route's internal can.Map.
 
 Unless we specify otherwise, which we'll see how to do below, *each property
@@ -101,8 +101,8 @@ this:
 ![](../can/guides/images/7_application_state_routing/DefaultRouteExample_1.png)
 
 Note that, after we initialized our routes, updating the value of our
-Application State's restaurant property caused the route to update, as well.
-The value of the restaurant and menus properties were serialized, and appended
+Application State's restaurant property caused the route to update as well.
+The value of the restaurant and menus properties were serialized and appended
 to the window.location.hash.
 
 Let's see what happens if we adjust the value of the hash. To monitor this
@@ -141,7 +141,7 @@ Application State to our components. We do that by passing Application State
 attributes to the components through their custom HTML tags in
 `base_template.stache`.
 
-Open up `base_template.stache`, and add the following attributes to the menu
+Open up `base_template.stache` and add the following attributes to the menu
 tag:
 
 ```
@@ -160,7 +160,7 @@ restaurant property of the Application State to the Restaurant List component:
 
 Let's update our components to communicate with our Application State.
 
-Open up the `restaurant_list` file, and edit it as follows;
+Open up the `restaurant_list` file and edit it as follows;
 
 ```
 var RestaurantListViewModel = can.Map.extend({
@@ -212,7 +212,7 @@ we've added a `define` attribute. The define attribute is used to control the
 behavior of attributes on a can.Component. We'll go into detail on `define` in
 the [next chapter](Define.html).
 
-Next, open up `restaurant_list.stache`, and link the PlaceOrder button with the
+Next, open up `restaurant_list.stache` and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
@@ -221,7 +221,7 @@ showMenu function we've defined, as follows:
 </button>
 ```
 
-We've removed the DOM code from our View Model, and are now working directly
+We've removed the DOM code from our View Model and are now working directly
 with the application. In addition, we added code that would show and hide the content
 of the can.Component to our ViewModel. We need to update our view template to reflect these
 changes. In the same file (`restaurant_list.stache`), update the select dropdown
@@ -248,13 +248,13 @@ in the template as follows:
 ```
 
 What we've done above is to make a connection between the index of the select
-dropdown, and the index of the restaurants list in the can.Component's scope.
+dropdown and the index of the restaurants list in the can.Component's scope.
 Whenever the currentRestaurantIndex is updated, its `set` function is called.
 In its `set` function, it updates the currentRestaurant property.
 
 ![](../can/guides/images/7_application_state_routing/SelectMapping.png)
 
-Now, refresh your application, select a restaurant from the list, and click
+Now, refresh your application, select a restaurant from the list, then click
 the place order button. You should see something like the following:
 
 ![](../can/guides/images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
@@ -266,7 +266,7 @@ Next, let's remove the code in the `app` that set the restaurant to "Spago" by d
 appState.attr('restaurant', 'Spago');
 ```
 
-Now that we can see the connection between the component, and the Application
+Now that we can see the connection between the component and the Application
 State, let's make the code a little more useful. Update your Application State
 object, as follows:
 
@@ -290,8 +290,8 @@ event handler. Any time a restaurant is selected (i.e., the Application
 State's restaurant property is updated), we obtain its menus from our service,
 and then update the Application State's menus attribute.
 
-To make the OrderForm component show, and the RestaurantList component hide,
-we use conditional stache tags in `base_template.stache`, as below:
+To make the OrderForm component show and the RestaurantList component hide,
+we use conditional stache tags in `base_template.stache`, as shown below:
 
 ```
 <menu menus="{menus}" restaurant="{restaurant}"></menu>
@@ -314,7 +314,7 @@ var OrderFormViewModel = can.Map.extend({
 
 When the Application State's menus attribute has a value, the order form is
 displayed. Otherwise, the restaurant list is displayed. To see this in action,
-select a restaurant from the list, and click the “Place My Order!”
+select a restaurant from the list and click the “Place My Order!”
 button. You should see something like this:
 
 ![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)
