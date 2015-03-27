@@ -172,7 +172,7 @@ can.Map objects listen for changes made using their `attr` function. This is
 important. In order to broadcast the associated events when you change a
 property on a can.Map, you must use the attr function when setting a value.
 
-The attr function can be used to either get or set a property on a can.Map.
+The attr function can be used to either get or set a property on a `can.Map`.
 `attr` works with deep properties—i.e., properties within properties. Here's
 an example:
 
