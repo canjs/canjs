@@ -17,7 +17,7 @@ The Application State object we created in the last chapter was a `can.Map`.
 Here it is, again, below:
 
 ```
-var ApplicationState = can.Map.extend({
+var AppState = can.Map.extend({
   define: {
     restaurant: {
       value: {},
@@ -53,7 +53,7 @@ var ApplicationState = can.Map.extend({
 As mentioned in the last chapter, we've done something different with our
 Application State than we’ve done with the other instances of `can.Map` in the past. We’ve
 made use of `can.Map`'s `define` plugin (i.e., the `define` attribute of the
-`extend` method's parameter)—something we included as part of our CanJS custom
+`extend` method's parameter) — something we included as part of our CanJS custom
 download. In fact, if you noticed, we used the `define` plugin in the
 Restaurant List component as well.
 
@@ -68,7 +68,8 @@ you can control its:
 - [value](#value), and
 - [remove](#remove)
 
-### serialization <a name="serialization"></a>
+<a name="serialization"></a>
+### serialization 
 The first property we'll talk about is serialization. The
 serialize property defines how the attribute will behave when the map is
 serialized. This can be useful for serializing complex types like dates,
@@ -78,13 +79,15 @@ function for any property means this property will not be part of the
 serialized object. Serialization is tied directly to routing. We'll see how
 this works when we continue our discussion of routing in the [next chapter](Routing.html).
 
-### get <a name="get"></a>
+<a name="get"></a>
+### get 
 A `get` function defines what happens when a value is read on a `can.Map`.
 It is typically used to provide properties that derive their value from other
 properties of the map. This is often useful when you are dealing with routing
 for creating aliases. We'll see an example of how this is accomplished below.
 
-### set <a name="set"></a>
+<a name="set"></a>
+### set 
 A `set` function defines what happens when a value is set on a `can.Map`.
 It is typically used to update other attributes on the `can.Map` as a side
 effect, or coerce the set value into specific format. For example, we might
@@ -116,7 +119,8 @@ set: function(newValue) { ... }
 set: function(newValue, setValue) { ... }
 ```
 
-### type <a name="type"></a>
+<a name="type"></a>
+### type 
 The `type` property converts a value passed to an `attr` setter function
 into a specific value type. The type can be specified as either a type
 function, or one of the following strings:
@@ -133,7 +137,8 @@ set. Any data passed into the setter will be passed as arguments for the
 constructor. `type`, lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
 
-### value <a name="value"></a>
+<a name="value"></a>
+### value 
 Sets the default value for instances of the `can.Map`. If the default
 value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
@@ -145,7 +150,8 @@ or `value`. `Value`, uppercase, provides a constructor function, ensuring that
 a copy of the value is made for each instance. `value`, lowercase, is set on
 the prototype of the object—i.e., it is not instance specific.
 
-### remove <a name="remove"></a>
+<a name="remove"></a>
+### remove 
 Called when an attribute is removed. Can be used, for example, for
 removal validation.
 

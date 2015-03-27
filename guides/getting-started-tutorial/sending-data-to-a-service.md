@@ -23,7 +23,7 @@ Create a sub folder under components called `order_form` and add the following f
 
 <pre>
 └── components
-    └── order-form
+    └── order_form
         ├── order_form.stache
         └── order_form.js
 </pre>
@@ -343,9 +343,9 @@ Go out to your app in the browser and reload your page. You should see the follo
 ![](../can/guides/images/5_model_validation/OrderMenuComponentFirstLoad.png)
 
 One thing you might immediately notice is that both the Restaurant List
-component and the Order Component are showing on the page. Don't worry
-about that for the moment. We'll deal with controlling which Components
-display when we set up our [Application State and Routing](AppState.html).
+component and the Order Component are showing on the page. It might not look the
+prettiest, but don't worry about that for the moment. We'll deal with controlling
+which Components display when we set up our [Application State and Routing](AppState.html).
 
 In the [next chapter](CreatingTheMenuComponent.html), we'll talk about connecting all of our components
 together using the Application State, Routing, and `can.Map`'s define plugin.
