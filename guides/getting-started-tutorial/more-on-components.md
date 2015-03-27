@@ -188,10 +188,11 @@ And, then add the appropriate event handler to our scope. NOTE: Adding event han
 Now that you know how to handle events
 in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` function off of
-the `this` keyword. Let's look at an example.
+the scope object, in this case `this` is bound to the scope, because we're within a method of the scope. Let's look at an example.
 
-Open up `restaurant_list`, and modify the scope's
-restaurantSelected property as follows:
+Open up `restaurant_list`, and modify the scope's `restaurantSelected` property as follows:
+
+>>>Note: Drop second line of code below entirely, and explain why we can access directly off of VM.
 
 ```
 restaurantSelected: function(viewModel, select){
