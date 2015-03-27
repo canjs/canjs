@@ -84,11 +84,11 @@ It should look like this:
 
 At the bottom of the page, just before the body tag, are all of the script
 tags. We're using the jQuery edition of CanJS, so the first script tag
-loaded must be jQuery. Following jQuery, we load *can.custom.js*.
+loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 
-In the last chapter, we mentioned including *can.fixture.js*. In a
+In the last chapter, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
-remove *can.fixture.js*. In addition, to simplify things, we're using the
+remove `can.fixture.js`. In addition, to simplify things, we're using the
 Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
 
 #### Base Template

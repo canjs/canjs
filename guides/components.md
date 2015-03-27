@@ -100,7 +100,7 @@ the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
-In the components folder, create a subfolder called *restaurant_list*, along with the following files:
+In the components folder, create a subfolder called `restaurant_list`, along with the following files:
 
 <pre>
 └── restaurant_list
@@ -131,7 +131,7 @@ Add the following code to `restaurant_list.stache`:
 <h1>{{currentRestaurant}}</h1>
 ```
 
-Add the code below to the */app/base_template.stache* file:
+Add the code below to the `app/base_template.stache` file:
 
 ```
 <restaurant-list></restaurant-list>

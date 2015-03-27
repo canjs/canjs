@@ -130,7 +130,7 @@ create a template file called `site_menu.stache`, as follows:
 {{/menuData.menuText}}
 ```
 
-Open up */app/base_template.stache*, and add the following line to the top of
+Open up `app/base_template.stache`, and add the following line to the top of
 the file:
 
 ```
