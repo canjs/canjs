@@ -43,7 +43,7 @@ but it can be very helpful during development. The file is `can.fixture.js`.
 [can.fixture](../docs/can.fixture.html) allows you to simulate RESTful services. We'll cover how to
 include `can.fixture` in the next chapter.
 
-In the next step, we'll set up the application's folder structure, and move the
+In the next step, we'll set up the application's folder structure and move the
 `can.custom.js` file into its appropriate folder in the app.
 
 ## Folder Structure
