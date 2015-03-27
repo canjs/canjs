@@ -89,24 +89,24 @@ the example above, we're assigning individual restaurant objects to the option
 tag, as we [enumerate](#enumeration) the collection of restaurants.
 
 <a name="enumeration"></a>
-### Enumeration 
+### Enumeration
 Enumerating means that you
 can loop through the contents of an iterable item. We've done this above for
 the options in our select dropdown. The {{#each _ _ _}} ... {{/each}} tag set
 is used to enumerate over an enumerable collection, such as an array. In the
 example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
-from data keys inside the `# each` scope without dot notation.
+from data keys inside the `#each` scope without dot notation.
 
 <a name="filtering"></a>
-### Filtering 
+### Filtering
 Filtering allows you to display selective data. Given an array of
 people, for example, you can display all of the people whose first names begin
 with the letter "A". We won't explore filtering right now, as that's a more
 advanced feature.
 
 <a name="sections"></a>
-### Sections 
+### Sections
 Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
@@ -121,7 +121,7 @@ notation. If we hadn't used a Section, for example, we would have had to write
 only have to write {{Restaurants}}, and Stache does the rest for us.
 
 <a name="conditionallogic"></a>
-### Conditional Logic 
+### Conditional Logic
 Stache templates have a limited capacity for conditional
 logic. You can use {{#if _ _ _}} ... {{/if}} tags to conditionally display
 contents. This becomes very useful when you want to show or hide a component,
