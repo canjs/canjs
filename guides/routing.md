@@ -228,7 +228,7 @@ The &amp; character in the data key tells Stache to include the unescaped
 value of the content it receives. We'll be generating an anchor tag, so we
 need to use this.
 
-Open up *site_menu_component.js*, and add the following method to the can.Component:
+Open up *site_menu.js*, and add the following function to the can.Component:
 
 ```
 can.Component.extend({

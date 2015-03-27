@@ -25,7 +25,7 @@ Create a sub folder under components called *order_form*, and add the following 
 └── components
     └── order-form
         ├── order_form.stache
-        └── order_form_component.js
+        └── order_form.js
 </pre>
 
 Add the following to *order_form.stache*:
@@ -77,7 +77,7 @@ section, defined by {{#each delivery}} ... {{/each}}, and the `can-value`
 attribute. `can-value` is a can.view attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
-Add the following to *order_form_component.js*:
+Add the following to *order_form.js*:
 
 ```
 var OrderFormViewModel = can.Map.extend({
@@ -136,8 +136,8 @@ can.Component.extend({
 ## Saving and updating a model
 Let's look at a few items in the code above.
 Notice that we're creating a new instance of a model (MenuOrderModel) in the
-createOrder function. Unlike data access methods, which are called statically
-off of the prototype, the save, update, and delete methods are called off of a
+createOrder function. Unlike data access functions, which are called statically
+off of the prototype, the save, update, and delete functions are called off of a
 specific instance of a model. So, if we want to create a new order, we will
 need to work with an instance of the MenuOrderModel.
 
@@ -277,15 +277,15 @@ var MenuOrderModel = can.Model.extend({
 
 There's a few things to notice in the code above. First, the fixture that we
 defined returned a non-standard data format. That is, it is non-standard for CanJS. The
-can.Model.findAll method expects an array from the service it calls. Our
+can.Model.findAll function expects an array from the service it calls. Our
 fixture, however, is returning an object that contains an array. Normally, if
-the findAll method received this data, it would throw an error. In this case,
+the findAll function received this data, it would throw an error. In this case,
 it does not. This is because we included the `parseModels` attribute on the
 MenuOrderModel.
 
 `parseModels` is used to convert the raw response of a `findAll` request into an
 object or Array that the model you're defining can use. As you can see, this
-method can be particularly useful if you're consuming data from a service that
+function can be particularly useful if you're consuming data from a service that
 doesn't fit the format expected by `findAll`.
 
 ## Wiring it all up
@@ -300,14 +300,14 @@ order_form component:
 <!--End add-->
 ```
 
-Now, edit your index.html file to load the *order_form_component.js* file:
+Now, edit your index.html file to load the *order_form.js* file:
 
 ```
 <script src="models/site_models.js"></script>
 <!--Begin add-->
-<script src="components/order_form/order_form_component.js"></script>
+<script src="components/order_form/order_form.js"></script>
 <!--End add-->
-<script src="components/restaurant_list/restaurant_list_component.js"></script>
+<script src="components/restaurant_list/restaurant_list.js"></script>
 ```
 
 Go out to your app in the browser, and reload your page. You should see the following:

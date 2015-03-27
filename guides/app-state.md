@@ -160,7 +160,7 @@ restaurant property of the Application State to the Restaurant List component:
 
 Let's update our components to communicate with our Application State.
 
-Open up the *restaurant_list_component.js* file, and edit it as follows;
+Open up the *restaurant_list.js* file, and edit it as follows;
 
 ```
 var RestaurantListViewModel = can.Map.extend({
@@ -291,7 +291,7 @@ we use conditional stache tags in *base_template.stache*, as below:
 {{/if}}
 ```
 
-Finally, open *order_form_component.js* and remove the code that set the restaurant to "Spago"
+Finally, open *order_form.js* and remove the code that set the restaurant to "Spago"
 
 ```
 var OrderFormViewModel = can.Map.extend({

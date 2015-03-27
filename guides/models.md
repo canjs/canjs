@@ -49,12 +49,13 @@ and `destroy` on Models to create, update, and delete them.
 
 ### Retrieving items from a server
 
-The `find___` methods are available directly off of the object definition (i.e.,
-they are static). The `create`, `update`, and `destroy` methods are available
-off of specific instances of a can.Model. We'll see how to use these below.
+The `find___`, `create`, `update`, and `destroy functions are available directly 
+off of the object definition (i.e., they are static). The `destroy` function is  
+available off of specific instances of a can.Model. We'll see how to 
+use these below.
 
-**Reminder**: The number of parameters you pass in to an extend method is
-important. If you pass in a single parameter object, the extend method will
+**Reminder**: The number of parameters you pass in to an extend function is
+important. If you pass in a single parameter object, the extend function will
 use that to set the instanceProperties. If you pass in two parameter
 objects, the *first* object passed in will be used to set the
 *staticProperties*. The second parameter will be used to set the
@@ -66,11 +67,11 @@ A few examples illustrate this, below:
 ```
 var MyModel = can.Model.extend({
   findAll: function () {
-    // Static method
+    // Static function
   }
 }, {
   destroy: function () {
-    // Instance method
+    // Instance function
   }
 });
 ```
@@ -78,10 +79,10 @@ var MyModel = can.Model.extend({
 This will make a `GET` request to `/todos`, which should return JSON that looks
 similar to:
 
-MyModel.findAll(); // Reference a method defined on the constructor
+MyModel.findAll(); // Reference a function defined on the constructor
 
 var modelInstance = new MyModel();
-modelInstance.destroy(); // Reference a method defined on the prototype
+modelInstance.destroy(); // Reference a function defined on the prototype
 ```
 
 ## The Data for Our Model
@@ -96,9 +97,9 @@ backend services."
 
 can.fixture is not included with the base CanJS package. It's a good practice
 to keep it separate from your production CanJS library, which is why we
-downloaded it from its CDN in a separate script tag, rather than including it
+downloaded and used it a separate script tag, rather than including it
 with our custom download. *If you use can.fixture during development, remember
-to remove it once you are connecting to your REST services*.
+to remove it once you need to connect to your REST services*.
 
 Let's create a fixture that will respond to our requests for menu item data.
 Create another file in the models folder called *fixtures.js*. Add the
@@ -108,7 +109,7 @@ following code to that file:
 /**
  * Restaurants Model Fixture
  */
-can.fixture("GET /restaurants", function requestHandler() {
+can.fixture("GET /restaurants", function() {
   return [
     {
       "name": "Spago",
@@ -135,7 +136,15 @@ can.fixture("GET /restaurants", function requestHandler() {
 });
 ```
 
-`findAll` will also accept an array from the service, but [you probably should not be returning an array from a JSON service](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx).
+The first argument to can.fixture, "GET /restaurants", tells CanJS to
+intercept any GET requests to the resource "/restaurants". The second argument
+is a function that returns the data we want to get when the application makes
+a service call. Because we're simulating a findAll function, we need to return
+an array. The findAll function expects an array. By default, if it does not
+receive one, it will throw an error. If you need to connect to services that
+return data that doesn't match the expected return type of the `find___`
+functions, don't fret. There are ways to manage this, which we'll work with
+later on.
 
 When the service has returned, `findAll` will massage the data into Model
 instances and put them in a can.Model.List (which is like a can.Observe.List
@@ -145,7 +154,7 @@ callback in its third parameter and pass it the XmlHttpRequest object used to
 make the call.
 
 It's time to connect all of this together in our view model. Simply open up
-*restaurant_list_component.js*. Edit the RestaurantListViewModel as follows,
+*restaurant_list.js*. Edit the RestaurantListViewModel as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
@@ -160,34 +169,21 @@ var RestaurantListViewModel = can.Map.extend({
 });
 ```
 
-This makes a `GET` request to `/todos/1`, which should return JSON that looks
-similar to:
+Note that there are a few ways to call a findAll function on a can.Model. The
+first way is to call the function explicitly. Using the RestaurantModel as an
+example, that would look like this:
 
 ```
 RestaurantModel.findAll({ /* paramsObject */ },
-  function success(returnedObject){
+  function(returnedObject){
     // ...
   },
-  function error(errorObject){
+  function(errorObject){
     // ...
   });
 ```
 
-`findOne` returns a Deferred that resolves to the Todo if the call succeeds and
-rejects to the XmlHttpRequest object if there is an error.
-
-### Modifying items
-
-You can call [save](../docs/can.Model.prototype.save.html) on a Model instance to save it
-back to the server. If the Model has an __id__, it will be updated using the
-function specified under `update`. Otherwise, can.Model assumes the Model is new
-and creates the item on the server using the function in `create`.
-
-Either way, the success callback in the first parameter will be called on a
-successful save with the updated Model; if an error occurs, the error callback
-in the second parameter will be called with the XmlHttpRequest object. Like
-`findAll`, `save` returns a Deferred that resolves to the updated Model on
-success and rejects to the XmlHttpRequest object on failure.
+In the code above, however, we called the findAll function indirectly:
 
 ```
 var shopping = new Todo({description: "Go grocery shopping."});
@@ -201,22 +197,25 @@ shopping.save(function(saved) {
 This is a special feature of the can.Model.List constructor. If you create a
 new instance of a can.Model.List, and you pass the constructor a plain
 JavaScript object, that List's constructor parameter will be passed to the
-can.Model's findAll method. The `findAll` method will run, and the list will
-be populated with the results of the `findAll` method, as below:
+can.Model's findAll function. The `findAll` function will run, and the list will
+be populated with the results of the `findAll` function, as below:
 
 
 ![](../can/guides/images/4_models/New.Model.List.png)
 
-We'll look at the can.Model's `findOne` method later on, when we create our Menu
+We'll look at the can.Model's `findOne` function later on, when we create our Menu
 Component. Finally, let's add the scripts we created to our index.html file:
 
 ```
-var cats = new Todo({description: "Feed the cats."});
-cats.save(function(saved) {
-	saved.destroy(function(destroyed) {
-		// destroyed is the Todo that was destroyed
-	});
-});
+<script src="libs/jquery.js"></script>
+<script src="libs/can.custom.js"></script>
+<script src="libs/can.fixture.js"></script>
+<!--Begin add-->
+<script src="models/fixtures.js"></script>
+<script src="models/site_models.js"></script>
+<!--End add-->
+<script src="components/restaurant_list/restaurant_list.js"></script>
+<script src="app.js"></script>
 ```
 
 When `destroy` is called in the above code, can.Model makes a `DELETE` request
