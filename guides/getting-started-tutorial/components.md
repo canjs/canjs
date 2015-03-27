@@ -29,7 +29,7 @@ encapsulated, they should each contain their own:
 - JavaScript file
 - CSS file
 
-This is why we created a components folder for our app — instead of, say, a
+This is why we created a `components` folder for our app — instead of, say, a
 `js` folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
