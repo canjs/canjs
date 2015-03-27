@@ -36,7 +36,7 @@ You can access the custom download page here: <a href="../download.html" target=
 There is one additional file we need, which we won't download, yet. This file is
 special. You normally wouldn't want it to be a part of your final application,
 but it can be very helpful during development. The file is `can.fixture.js`.
-`can.fixture` allows you to simulate RESTful services. We'll cover how to
+[can.fixture](../docs/can.fixture.html) allows you to simulate RESTful services. We'll cover how to
 include `can.fixture` in the next chapter.
 
 In the next step, we'll set up the application's folder structure, and move the

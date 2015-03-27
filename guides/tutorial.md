@@ -56,15 +56,15 @@ how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
 Template libraries require a rendering engine, and CanJS provides that for
-you with the can.view object. To quote the CanJS docs: A can.view contains
+you with the can.view object. A can.view contains
 utilities "for the loading, processing, rendering, and live-updating of
 templates". In addition, can.view is used to bind views to observable
 objects.
 
 <a name="components"></a>
-### Components 
-A [can.Component](../docs/can.Component.html) is kind of like a mini web application. 
-A can.Component contains the JavaScript and HTML it needs &emdash; all wrapped up in a single,
+### Components
+A [can.Component](../docs/can.Component.html) is kind of like a mini web application.
+A can.Component contains the JavaScript and HTML it needs &mdash; all wrapped up in a single,
 functional unit. This makes can.Components portable, reusable, and
 encapsulated. can.Components are easy to test, and easy to use. Building an
 application with them is kind of like building with Lego&trade;. As we say
