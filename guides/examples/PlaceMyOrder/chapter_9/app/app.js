@@ -29,6 +29,10 @@ $(function() {
             menus: {
                 value: null,
                 serialize: false
+            },
+            confirmation: {
+                value: null,
+                serialize: false
             }
         },
         getRestaurantMenu: function(restaurant) {

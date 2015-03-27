@@ -18,30 +18,34 @@ Here it is, again, below:
 
 ```
 var ApplicationState = can.Map.extend({
+
   define: {
     restaurant: {
-    value: {},
-    set: function (restaurant) {
-      if (restaurant.restaurantId) {
+      value: {},
+      serialize: function() {
+        return this.attr('restaurant.name');
+      },
+      set: function(restaurant) {
         var that = this;
-        RestaurantMenusModel.findOne({id: restaurant.restaurantId},
-          function success(selectedMenus) {
-            that.attr('menus', {
-              collection: selectedMenus.menus,
-              restaurantName: restaurant.name
+
+        if (restaurant.restaurantId) {
+          RestaurantMenusModel.findOne({id: restaurant.restaurantId}).done(function(selectedMenus) {
+              that.attr('menus', {
+                collection: selectedMenus.menus,
+                restaurantName: restaurant.name
+              });
+            }).fail(function(xhr) {
+              alert(xhr.message);
             });
-          },
-          function error(xhr) {
-            alert(xhr.message);
-          });
+        }
+        return restaurant;
       }
-      return restaurant;
     },
     menus: {
-      value: null
+        value: null
     },
     confirmation: {
-      value: {}
+        value: {}
     }
   }
 });
