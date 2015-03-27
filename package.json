@@ -127,7 +127,8 @@
 			"grunt-string-replace",
 			"rimraf",
 			"lodash",
-			"browserify"
+			"browserify",
+			"grunt-banner"
 		]
 	},
 	"browser": {
