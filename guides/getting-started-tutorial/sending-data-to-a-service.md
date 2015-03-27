@@ -19,7 +19,7 @@ Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overha
 To illustrate sending data to a service, let's create an order menu from which
 people can select items.
 
-Create a sub folder under components called `order_form`, and add the following files:
+Create a sub folder under components called `order_form` and add the following files:
 
 <pre>
 └── components
@@ -161,7 +161,7 @@ reference them off of the View Model's `delivery` property.
 
 ### Moving from DOM to the model
 When we created the RestaurantListComponent,
-we used the {{data '...'}} Stache key, and jQuery to obtain a reference to the
+we used the {{data '...'}} Stache key and jQuery to obtain a reference to the
 `restaurant` object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
 directly in our application. We want CanJS to take care of that for us, so we can focus
@@ -169,7 +169,7 @@ on the application itself. In the `createOrder` function, instead of getting our
 data from the DOM, we get it from our scope.
 
 ### Save fixture
-Open up `fixtures.js` (in the models folder), and add the following fixture:
+Open up `fixtures.js` (in the models folder) and add the following fixture:
 
 ```
 /**
@@ -302,7 +302,7 @@ doesn't fit the format expected by `findAll`.
 
 ## Wiring it all up
 
-We can wire all this up easily in a few steps. Edit `base_template.stache`, and add in the custom HTML tag for the
+We can wire all this up easily in a few steps. Edit `base_template.stache` and add in the custom HTML tag for the
 order_form component:
 
 ```
@@ -322,16 +322,16 @@ Now, edit your `index.html` file to load the `order_form.js` file:
 <script src="components/restaurant_list/restaurant_list.js"></script>
 ```
 
-Go out to your app in the browser, and reload your page. You should see the following:
+Go out to your app in the browser and reload your page. You should see the following:
 
 ![](../can/guides/images/5_model_validation/OrderMenuComponentFirstLoad.png)
 
 One thing you might immediately notice is that both the Restaurant List
-component, and the Order Component are showing on the page. Don't worry
+component and the Order Component are showing on the page. Don't worry
 about that for the moment. We'll deal with controlling which Components
-display when we set up our Application State and Routing.
+display when we set up our [Application State and Routing](AppState.html).
 
-In the next chapter, we'll talk about connecting all of our components
+In the [next chapter](CreatingTheMenuComponent.html), we'll talk about connecting all of our components
 together using the Application State, Routing, and `can.Map`'s define plugin.
 
 - - -
