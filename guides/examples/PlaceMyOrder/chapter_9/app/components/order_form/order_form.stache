@@ -12,19 +12,21 @@
 
 <h3>Customer Details</h3>
 
-{{#delivery}}
-    <label>
-        Name:
-        <input type="text" can-value="name" />
-    </label>
-    <label>
-        Address:
-        <input type="text" can-value="address" />
-    </label>
-    <label>
-        Telephone:
-        <input type="tel" can-value="telephone" />
-    </label>
-{{/delivery}}
+<div class="customer-details">
+    {{#delivery}}
+        <label>
+            Name:
+            <input type="text" can-value="name" />
+        </label>
+        <label>
+            Address:
+            <input type="text" can-value="address" />
+        </label>
+        <label>
+            Telephone:
+            <input type="tel" can-value="telephone" />
+        </label>
+    {{/delivery}}
 
-<button can-click="placeOrder">Place My Order!</button>
+    <button can-click="placeOrder">Place My Order!</button>
+</div>
