@@ -53,7 +53,7 @@ var RestaurantModel = can.Model.extend({
 Next, add the following code to `fixtures`:
 
 ```
-can.fixture("GET /restaurant/{name}", function requestHandler(request) {
+can.fixture('GET /restaurant/{name}', function(request) {
 
   var restaurantMap = {
     'Spago': {
@@ -137,8 +137,20 @@ object as follows:
 restaurant: {
    ...
    serialize: function () {
-     return this.attr('restaurant.name');
+     var name = this.attr('restaurant.name');
+     return name ? name.replace(/\s/ig, '_') : name;
    }
+}
+```
+
+We also want to make sure that no other properties show up in the URL bar. In
+order to achieve this, all we need to do is set the serialize property of menus
+to `false`.
+
+```
+menus: {
+  ...
+  serialize: false
 }
 ```
 
@@ -150,48 +162,53 @@ see the following in the URL bar:
 Finally, update the Application State object in `app`, as follows:
 
 ```
-function getRestaurantMenu(restaurant, that) {
-  that.attr('menus', new RestaurantMenusModel.List({
-    id: restaurant.restaurantId
-  }));
-}
-
-function showSelectedRestaurantMenus(restaurant, that) {
-  this.attr('restaurantName', restaurant);
-  RestaurantModel.findOne({
-    name: restaurant
-  }, function success(restaurantModel) {
-      getRestaurantMenu(restaurantModel, that);
-      return restaurantModel;
-    },
-    function error(xhr) {
-      alert(xhr.message);
-      return null;
-    });
-}
-
-var ApplicationState = can.Map.extend({
+var AppState = can.Map.extend({
   define: {
     restaurant: {
       value: {},
-      set: function (restaurant) {
-        var that = this;
+      serialize: function() {
+        var name = this.attr('restaurant.name');
+        return name ? name.replace(/\s/ig, '_') : name;
+      },
+      set: function(restaurant) {
+        if(!restaurant) return restaurant;
 
-        if (!restaurant) return restaurant;
+        if(typeof restaurant === 'string') {
 
-        if (typeof restaurant === 'string'){
-          return showSelectedRestaurantMenus.call(this, restaurant, that);
-        } else if (restaurant.restaurantId) {
-          getRestaurantMenu(restaurant, that);
+          if(restaurant === 'null') {
+            this.setAppToDefaultState();
+            return null;
+          }
+
+          return this.showSelectedRestaurantMenus(restaurant);
+        }
+        else if(restaurant.restaurantId) {
+          this.getRestaurantMenu(restaurant);
           return restaurant;
         }
-
-      },
-      serialize: function () {
-        return this.attr('restaurant.name');
       }
+    },
+    menus: {
+        value: null,
+        serialize: false
     }
-    // [Code removed for brevity]
+  },
+  getRestaurantMenu: function(restaurant) {
+    this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+  },
+  showSelectedRestaurantMenus: function(restaurantName) {
+    var that = this;
+    this.attr('restaurantName', restaurantName);
+    RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
+      that.getRestaurantMenu(restaurantModel);
+      return restaurantModel;
+    }).fail(function(xhr) {
+      alert(xhr.message);
+      return null;
+    });
+  },
+  setAppToDefaultState: function() {
+    this.attr('menus', null);
   }
 });
 ```
@@ -200,71 +217,79 @@ Note, that we've refactored the call to RestaurantMenusModel out into its own
 function. Now, when you change the value of the restaurant in the URL, the
 menu changes as well.
 
-## Creating Anchor Tags with can.route.link
+## Creating Anchor Tags with helpers and can.route.url
 The last thing we need to do is
 add functionality to our Site Menu. Open up the `site_menu.stache` file in
 your site_menu components folder. Edit it, as follows:
 
 ```
 {{#menuData.menuText}}
-  <ul class="nav">
+  <ul>
+    <li class="logo">
+      <h1>
+        <a href="{{homeUrl}}">
+          {{PageTitle}}
+        </a>
+      </h1>
+      <a href="{{homeUrl}}">
+        <i>{{FoodAtFingertips}}</i>
+      </a>
+    </li>
     <li>
-      <a class="visible-xs text-center" data-toggle="offcanvas" href="#">
-
-  ...
-
-  <!--Begin update -->
-  <ul id="lg-menu" class="nav hidden-xs">
-    <li class="active">{{&HomeLink}}</li>
+      <h2>
+        <a href="{{homeUrl}}">
+          {{Restaurants}}
+        </a>
+      </h2>
+    </li>
   </ul>
-  <!--End update -->
-
-  ...
-
 {{/menuData.menuText}}
+
 ```
 
-The &amp; character in the data key tells Stache to include the unescaped
-value of the content it receives. We'll be generating an anchor tag, so we
-need to use this.
+Generally, we want to avoid adding HTML by way of our can.Component code. It
+makes changing your views more difficult and removed the abstraction between the
+view and view model. We'll be generating the URL in a helper function and keeping
+the DOM in the view where it belongs.
 
 Open up `site_menu`, and add the following function to the can.Component:
 
 ```
+var SiteMenuViewModel = can.Map.extend({
+  menuData: {}
+});
+
 can.Component.extend({
   tag: 'menu',
   template: can.view('components/site_menu/site_menu.stache'),
   scope: SiteMenuViewModel,
+  helpers: {
+    homeUrl: function() {
+      return can.route.url({restaurant: null}, false);
+    }
+  },
   events: {
-    inserted: function () {
+    inserted: function() {
       var siteMenuViewModel = this.scope;
-
-      SiteMenuModel.findOne({},
-        function success(menu) {
-          siteMenuViewModel.attr('menuData', menu);
-          //--> Add this line
-          siteMenuViewModel.attr('menuData.menuText.HomeLink',
-            can.route.link('<i class="glyphicon glyphicon-cutlery"></i> Restaurants', {
-              restaurant: null
-            }, false ));
-        },
-        function error(xhr) {
-          alert(xhr.error.message);
-        }
-      );
+      SiteMenuModel.findOne({}).done(function(menu) {
+        siteMenuViewModel.attr('menuData', menu);
+      }).fail(function(xhr) {
+        alert(xhr.error.message);
+      });
     }
   }
 });
-```
 
-Here, we add a can route link to the view template, using can.route.link. You
-should always use can.route.link when adding anchor tags to your application.
+```
+Here, we create a can.route URL to place into the view template, using 
+can.route.url. You should always use can.route.url when generating routable
+URLs in your application.
 
 Finally, update your `app.js`, adding code that will respond to the application
 state change. Append the following below the "getRestaurantMenu" function:
 
 ```
-function setAppToDefaultState() {
+setAppToDefaultState: function() {
   this.attr('menus', null);
 }
 ```
@@ -272,26 +297,22 @@ function setAppToDefaultState() {
 Update the restaurant attribute `set` function on your ApplicationState:
 
 ```
-set: function (restaurant) {
-  var that = this;
+set: function(restaurant) {
+  if(!restaurant) return restaurant;
 
-  if (!restaurant) return restaurant;
+  if(typeof restaurant === 'string') {
 
-  if(typeof restaurant === 'string'){
-
-    //--> Add this conditional code
-    if(restaurant === 'null'){
-      setAppToDefaultState.call(this);
+    if(restaurant === 'null') {
+      this.setAppToDefaultState();
       return null;
     }
 
-    return showSelectedRestaurantMenus.call(this, restaurant, that);
-
-  } else if (restaurant.restaurantId) {
-    getRestaurantMenu(restaurant, that);
+    return this.showSelectedRestaurantMenus(restaurant);
+  }
+  else if(restaurant.restaurantId) {
+    this.getRestaurantMenu(restaurant);
     return restaurant;
   }
-
 }
 ```
 

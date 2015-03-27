@@ -37,15 +37,13 @@ $(function() {
         showSelectedRestaurantMenus: function(restaurantName) {
             var that = this;
             this.attr('restaurantName', restaurantName);
-            RestaurantModel.findOne({name: restaurantName},
-                function(restaurantModel) {
-                    that.getRestaurantMenu(restaurantModel);
-                    return restaurantModel;
-                },
-                function(xhr) {
-                    alert(xhr.message);
-                    return null;
-                })
+            RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
+                that.getRestaurantMenu(restaurantModel);
+                return restaurantModel;
+            }).fail(function(xhr) {
+                alert(xhr.message);
+                return null;
+            });
         },
         setAppToDefaultState: function() {
             this.attr('menus', null);
