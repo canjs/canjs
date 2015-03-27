@@ -148,18 +148,20 @@ can.Component.extend({
 ## Saving and updating a model
 Let's look at a few items in the code above.
 Notice that we're creating a new instance of a model (MenuOrderModel) in the
-`createOrder` function. Unlike data access functions (like findAll, findOne), which are called statically
-off of the prototype, the `save`, `update`, and `delete` functions are called off of a
-specific instance of a model. So, if we want to create a new order, we will
-need to work with an instance of the MenuOrderModel.
+`createOrder` function. Unlike data access functions (like findAll, findOne),
+which are called statically off of the prototype, the `save`, `update`, and
+`delete` functions are called off of a specific instance of a model. So, if
+we want to create a new order, we will need to work with an instance of the
+MenuOrderModel.
 
 We assign the value of this.attr('delivery') to the MenuOrderModel's `delivery`
 property. If you recall, we bound the values of the `name`, `address`, and
-`telephone` number fields to the `delivery` object in the `order_form.stache` view
-template. Now, all we need to do to get the values of those fields is
+`telephone` number fields to the `delivery` object in the `order_form.stache`
+view template. Now, all we need to do to get the values of those fields is
 reference them off of the View Model's `delivery` property.
 
-To provide fixture support for saving our `can.Model`, open up `fixtures.js` and add the following fixture:
+To provide fixture support for saving our `can.Model`, open up `fixtures.js`
+and add the following fixture:
 
 ```
 /**
@@ -175,9 +177,13 @@ When we created the RestaurantListComponent,
 we used the {{data '...'}} Stache key and jQuery to obtain a reference to the
 `restaurant` object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
-directly in our application. We want CanJS to take care of that for us, so we can focus
-on the application itself. In the `createOrder` function, instead of getting our
-data from the DOM, we get it from our scope.
+directly in our application. We want CanJS to take care of that for us, so we
+can focus on the application itself. In the `createOrder` function, instead of
+getting our data from the DOM, we get it from our scope.
+
+While this is a handy way to associate data with DOM elements, CanJS provides
+a better alternative for binding the viewModel to the state. We'll cover that
+in a later chapter.
 
 ## Non-standard Data Sources
 Staying in `fixtures.js`, append the following to the bottom of the file:
