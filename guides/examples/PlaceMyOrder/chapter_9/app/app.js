@@ -1,26 +1,5 @@
 $(function () {
 
-    function getRestaurantMenu(restaurant, that) {
-        that.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-    }
-
-    function setAppToDefaultState() {
-        this.attr('menus', null);
-    }
-
-    function showSelectedRestaurantMenus(restaurant, that) {
-        this.attr('restaurantName', restaurant);
-        RestaurantModel.findOne({name: restaurant},
-            function success(restaurantModel) {
-                getRestaurantMenu(restaurantModel, that);
-                return restaurantModel;
-            },
-            function error(xhr) {
-                alert(xhr.message);
-                return null;
-            })
-    }
-
     var ApplicationState = can.Map.extend({
         define: {
             restaurant: {
@@ -30,25 +9,21 @@ $(function () {
                     return name ? name.replace(/\s/ig, '_') : name;
                 },
                 set: function (restaurant) {
-                    var that = this;
+                    if(!restaurant) return restaurant;
 
-                    if (!restaurant) return restaurant;
+                    if(typeof restaurant === 'string') {
 
-                    if(typeof restaurant === 'string'){
-
-                        if(restaurant === 'null'){
-                            setAppToDefaultState.call(this);
+                        if(restaurant === 'null') {
+                            this.setAppToDefaultState();
                             return null;
                         }
 
-                        return showSelectedRestaurantMenus.call(this, restaurant, that);
-
+                        return this.showSelectedRestaurantMenus(restaurant);
                     }
-                    else if (restaurant.restaurantId) {
-                        getRestaurantMenu(restaurant, that);
+                    else if(restaurant.restaurantId) {
+                        this.getRestaurantMenu(restaurant);
                         return restaurant;
                     }
-
                 }
             },
             menus: {
@@ -66,6 +41,25 @@ $(function () {
                 },
                 serialize: false
             }
+        },
+        getRestaurantMenu: function(restaurant) {
+            this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+        },
+        showSelectedRestaurantMenus: function(restaurantName) {
+            var that = this;
+            this.attr('restaurantName', restaurantName);
+            RestaurantModel.findOne({name: restaurantName},
+                function (restaurantModel) {
+                    that.getRestaurantMenu(restaurantModel);
+                    return restaurantModel;
+                },
+                function (xhr) {
+                    alert(xhr.message);
+                    return null;
+                })
+        },
+        setAppToDefaultState: function() {
+            this.attr('menus', null);
         }
     });
 

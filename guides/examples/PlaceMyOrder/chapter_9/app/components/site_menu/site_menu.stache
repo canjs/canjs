@@ -2,16 +2,18 @@
     <ul>
         <li>
             <h1>
-                <a href="#!home">
+                <a href="{{homeUrl}}">
                     {{PageTitle}}
                 </a>
             </h1>
-            <a href="#!home">
+            <a href="{{homeUrl}}">
                 {{FoodAtFingertips}}
             </a>
         </li>
         <li>
-            {{&HomeLink}}
+            <a href="{{homeUrl}}">
+                {{Restaurants}}
+            </a>
         </li>
     </ul>
 {{/menuData.menuText}}

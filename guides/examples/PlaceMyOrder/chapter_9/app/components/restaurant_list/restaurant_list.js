@@ -15,12 +15,19 @@ var RestaurantListViewModel = can.Map.extend({
                 }
                 return newValue;
             }
+        },
+        visible: {
+            value: true,
+            type: 'boolean'
+        },
+        selected: {
+            value: {}
+        },
+        restaurants: {
+            value: function() {
+                return new RestaurantModel.List({})
+            }
         }
-    },
-    init: function () {
-        this.attr('restaurants', new RestaurantModel.List({}));
-        this.attr('visible', true);
-        this.attr('selected', {});
     },
     showMenu: function () {
         //Sets the restaurant value on the parent scope (AppState)

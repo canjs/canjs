@@ -3,7 +3,7 @@
  * @type {void|*}
  */
 var RestaurantModel = can.Model.extend({
-        findAll: "GET /restaurants",
+        findAll: 'GET /restaurants',
         findOne: 'GET /restaurant/{name}'
     },
     {});
@@ -13,8 +13,8 @@ var RestaurantModel = can.Model.extend({
  * @type {void|*}
  */
 var RestaurantMenusModel = can.Model.extend({
-        findAll: "GET /menus/{id}",
-        parseModels: "menus"
+        findAll: 'GET /menus/{id}',
+        parseModels: 'menus'
     },
     {});
 
@@ -32,6 +32,6 @@ var MenuOrderModel = can.Model.extend({
  * @type {void|*}
  */
 var SiteMenuModel = can.Model.extend({
-    findOne: "GET /site_menu"
-},
+        findOne: 'GET /site_menu'
+    },
     {});

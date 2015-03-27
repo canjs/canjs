@@ -1,24 +1,24 @@
 var SiteMenuViewModel = can.Map.extend({
-    init: function () {
-        this.attr('menuData', {});
-        this.attr('homeLink', "");
-    }
+    menuData: {}
 });
 
 can.Component.extend({
-    tag: "menu",
+    tag: 'menu',
     template: can.view('components/site_menu/site_menu.stache'),
     scope: SiteMenuViewModel,
+    helpers: {
+        homeUrl: function() {
+            return can.route.url({restaurant: null}, false);
+        }
+    },
     events: {
         inserted: function () {
             var siteMenuViewModel = this.scope;
             SiteMenuModel.findOne({},
-                function success(menu) {
+                function(menu) {
                     siteMenuViewModel.attr('menuData', menu);
-                    siteMenuViewModel.attr('menuData.menuText.HomeLink',
-                        can.route.link( 'Restaurants', {restaurant: null}, false ));
                 },
-                function error(xhr) {
+                function(xhr) {
                     alert(xhr.error.message);
                 });
         }
