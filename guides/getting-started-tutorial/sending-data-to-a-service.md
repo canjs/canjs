@@ -28,7 +28,7 @@ Create a sub folder under components called *order_form*, and add the following 
         └── order_form.js
 </pre>
 
-Add the following to *order_form.stache*:
+Add the following to `order_form.stache`:
 
 ```
 <h1>{{restaurantName}}</h1>
@@ -76,7 +76,7 @@ section, defined by {{#each delivery}} ... {{/each}}, and the `can-value`
 attribute. `can-value` is a can.view attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
-Add the following to *order_form.js*:
+Add the following to `order_form.js`:
 
 ```
 var OrderFormViewModel = can.Map.extend({

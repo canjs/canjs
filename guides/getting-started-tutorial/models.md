@@ -218,13 +218,12 @@ This is a special feature of the `can.Model.List` constructor. If you create a
 new instance of a `can.Model.List`, and you pass the constructor a plain
 JavaScript object, that List's constructor parameter will be passed to the
 `can.Model`'s `findAll` function. The `findAll` function will run, and the list will
-be populated with the results of the `findAll` function, as below:
+be populated with the results of the `findAll` function, as below [1](#ModelList):
 
 
 ![](../can/guides/images/4_models/New.Model.List.png)
 
-We'll look at the `can.Model`'s `findOne` function later on, when we create our Menu
-Component. Finally, let's add the scripts we created to our `index.html` file:
+Finally, let's add the scripts we created to our `index.html` file:
 
 ```
 <script src="libs/jquery.js"></script>
@@ -250,24 +249,11 @@ Observe. In addition to those events, Models emit three new kinds of events:
 - _updated_, when an instance is updated on the server.
 - _destroyed_, when an instance is destroyed on the server.
 
-For example, here is how you listen for an instance being created on the server:
+<a name="ModelList">
+**1**: At first, the Model.List({}) will be empty; however, the can.Model's findAll method will then be called, and the list will be populated with the results of that call, once the findAll method completes asynchronously. Because this list was data bound in the template, these results will automatically update in the template
+</a>
 
-```
-var mop = new Todo({description: 'Mop the floor.'});
-mop.bind('created', function(ev, created) {
-	// created is the created Todo
-});
-mop.save();
-```
-
-You can also bind directly onto the Model class to listen for any time __any__
-instance is created, updated, or destroyed:
-
-```
-Todo.bind('created', function(ev, created) {
-	// created is the created Todo
-});
-```
+- - -
 
 <span class="pull-left">[&lsaquo; More on Components](MoreOnComponents.html)</span>
 <span class="pull-right">[Sending Data to a Service &rsaquo;](SendingDataToAService.html)</span>
