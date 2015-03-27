@@ -1,7 +1,7 @@
 <h1>{{restaurantName}}</h1>
 
 {{#each menus}}
-    <h3>{{menuName}}</h3>
+    <h1>{{menuName}}</h1>
 
     {{#each items}}
         <label>
