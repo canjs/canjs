@@ -9,33 +9,6 @@
 @description Create widgets that use a template, a view-model 
 and custom tags.
 
-@warning {2.1} To pass data from the viewModel, you must wrap your attribute
-value with `{}`. In 3.0, [can.mustache]
-will use [can.stache]'s method.
-
-@signature `< TAG [ATTR-NAME=KEY|ATTR-VALUE] >`
-
-Create an instance of a component on a particular 
-tag in a [can.mustache] template.
-
-@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
-property of the component.
-
-@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
-valid. Any attributes added to the element are added as properties to the
-component's [can.Component::viewModel viewModel].
-
-@param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel]. By default `ATTR-VALUE`
-values are looked up in the [can.view.viewModel can.mustache viewModel]. If the string value
-of the `ATTR-NAME` is desired, this can be specified like: 
-
-    ATTR-NAME: "@"
-
-@param {can.mustache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel] that will be looked
-up in the [can.view.Scope can.stache scope].
-
 @signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
 
 Create an instance of a component on a particular 
@@ -63,6 +36,31 @@ up in the [can.view.Scope can.stache scope].
 @param {can.stache.key} [ATTR-VALUE] If the attribute value is not
 wrapped with `{}`, the string value of the attribute will be
 set on the component's viewModel.
+
+@signature `< TAG [ATTR-NAME=KEY|ATTR-VALUE] >`
+
+Create an instance of a component on a particular 
+tag in a [can.mustache] template.
+
+@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
+property of the component.
+
+@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
+valid. Any attributes added to the element are added as properties to the
+component's [can.Component::viewModel viewModel].
+
+@param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
+the component instance's [can.Component::viewModel viewModel]. By default `ATTR-VALUE`
+values are looked up in the [can.view.viewModel can.mustache viewModel]. If the string value
+of the `ATTR-NAME` is desired, this can be specified like: 
+
+    ATTR-NAME: "@"
+
+@param {can.mustache.key} [KEY] Specifies the value of a property passed to
+the component instance's [can.Component::viewModel viewModel] that will be looked
+up in the [can.view.Scope can.stache scope].
+
+
 
 @body
 

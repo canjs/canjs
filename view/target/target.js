@@ -37,7 +37,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		})();
 
 	/**
-	 * @method cloneNode
+	 * @function cloneNode
 	 * @hide
 	 *
 	 * A custom cloneNode function to be used in browsers that properly support cloning
