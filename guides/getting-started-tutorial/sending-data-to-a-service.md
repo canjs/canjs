@@ -43,27 +43,26 @@ Add the following to *order_form.stache*:
   {{/each}}
 {{/each}}
 
-{{#delivery}}
-  <div id="CustomerDetails">
-    <label>Name:
-      <input type="text" can-value="name" id="name"/>
+<h3>Customer Details</h3>
 
-      <div class="warning">{{issues.name}}</div>
+<div class="customer-details">
+  {{#delivery}}
+    <label>
+      Name:
+      <input type="text" can-value="name" />
     </label>
-
-    <label>Address:
-      <input type="text" can-value="address" id="address"/>
-
-      <div class="warning">{{issues.address}}</div>
+    <label>
+      Address:
+      <input type="text" can-value="address" />
     </label>
-
-    <label>Telephone:
-      <input type="tel" can-value="telephone" id="telephone"/>
+    <label>
+      Telephone:
+      <input type="tel" can-value="telephone" />
     </label>
-  </div>
-{{/delivery}}
+  {{/delivery}}
 
-<button can-click="placeOrder">Place My Order!</button>
+  <button can-click="placeOrder">Place My Order!</button>
+</div>
 ```
 
 In the template above, we're binding the values:
@@ -81,16 +80,12 @@ Add the following to *order_form.js*:
 
 ```
 var OrderFormViewModel = can.Map.extend({
-  init: function () {
-    this.attr('delivery', {});
-    this.attr('order', {});
-    this.attr('issues', {});
-    this.attr('restaurantName', 'Spago');
-    this.attr('menus', new RestaurantMenusModel.List({id: 1}));
-  },
-  createOrder: function (menuItems) {
-    this.attr('menus').each(function (itemSet) {
-      itemSet.attr('items').each(function (item) {
+  delivery: {},
+  order: {},
+
+  createOrder: function(menuItems) {
+    this.attr('menus').each(function(itemSet) {
+      itemSet.attr('items').each(function(item) {
         if (item.attr('selected')) {
           menuItems.push(item);
         }
@@ -98,28 +93,45 @@ var OrderFormViewModel = can.Map.extend({
     });
 
     return new MenuOrderModel({
-      delivery: this.attr('details'),
+      delivery: this.attr('delivery'),
       menuItems: menuItems
     });
   },
-  placeOrder: function () {
-
+  placeOrder: function() {
     var menuItems = [];
-    var order, errorCheck, errors = {};
+    var order;
 
-    order = this.createOrder.call(this, menuItems);
-
-    if (errorCheck) {
-      this.attr('issues', errors);
-      return;
-    }
-    var that = this;
+    order = this.createOrder(menuItems);
 
     order.save(
-      function success() {
-        that.attr('confirmation', 'Your Order has been Placed');
-      }, function error(xhr) {
-        alert(xhr.message);
+      function() {
+        var total = 0;
+        var message = can.sub('Your order has been placed!\n\n' +
+          'Delivered to:\n' +
+          '    Name: {name}\n' +
+          '    Address: {address}\n' +
+          '    Phone Number: {phone}\n\n' +
+          'Items:\n', {
+            name: order.attr('delivery.name'),
+            address: order.attr('delivery.address'),
+            phone: order.attr('delivery.telephone')
+        });
+
+        order.attr('menuItems').each(function(item) {
+          message += can.sub('    {name} - {price}\n', {
+            name: item.attr('name'),
+            price: item.attr('price')
+          });
+
+          total += item.attr('price');
+        });
+
+        message += '\nTotal: $' + total;
+
+        alert(message);
+
+      }, function(xhr) {
+        alert('Error:', xhr.message);
       });
 
     this.attr('order', order);
@@ -127,7 +139,7 @@ var OrderFormViewModel = can.Map.extend({
 });
 
 can.Component.extend({
-  tag: "order-form",
+  tag: 'order-form',
   template: can.view('components/order_form/order_form.stache'),
   scope: OrderFormViewModel
 });
@@ -163,7 +175,7 @@ Open up *fixtures.js* (in the models folder), and add the following fixture:
 /**
  * Order Fixture
  */
-can.fixture('POST /order', function requestHandler(){
+can.fixture('POST /order', function() {
   return true;
 });
 ```
@@ -175,7 +187,7 @@ Staying in *fixtures.js*, append the following to the bottom of the file:
 /**
  * Restaurant Menus Fixture
  */
-can.fixture('GET /menus/{id}', function requestHandler(request) {
+can.fixture('GET /menus/{id}', function(request) {
 
   var id = parseInt(request.data.id, 10) - 1;
 
@@ -184,7 +196,7 @@ can.fixture('GET /menus/{id}', function requestHandler(request) {
       // Spago
       'menus': [
         {
-          'menuName": 'Lunch',
+          'menuName': 'Lunch',
           'items': [
             {name: 'Spinach Fennel Watercress Ravioli', price: 35.99, id: 32},
             {name: 'Herring in Lavender Dill Reduction', price: 45.99, id: 33},
@@ -206,7 +218,7 @@ can.fixture('GET /menus/{id}', function requestHandler(request) {
       // El Bulli
       'menus': [
         {
-          'menuName": 'Lunch',
+          'menuName': 'Lunch',
           'items': [
             {name: 'Spherified Calf Brains and Lemon Rind Risotto', price: 35.99, id: 32},
             {name: 'Sweet Bread Bon Bons', price: 45.99, id: 33},
