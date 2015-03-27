@@ -2255,15 +2255,15 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 	test("helpers between tags (#469)", function () {
 
-		can.stache.registerHelper("items", function () {
+		can.stache.registerHelper("itemsHelper", function () {
 			return function (textNode) {
 				equal(textNode.nodeType, 3, "right nodeType")
-			}
+			};
 		});
 
-		var template = can.stache("<ul>{{items}}</ul>");
+		var template = can.stache("<ul>{{itemsHelper}}</ul>");
 		template();
-	})
+	});
 
 	test("hiding image srcs (#157)", function () {
 		var template = can.stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),

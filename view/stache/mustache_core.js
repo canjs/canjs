@@ -361,8 +361,7 @@ steal("can/util",
 					};
 				});
 				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
-				return function(){
-					console.log("reading",exprData);
+				return function(){					
 					var data = valueAndLength.get();
 					// Get the value
 					var value = data.value;
