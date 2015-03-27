@@ -108,7 +108,7 @@ In the components folder, create a subfolder called *restaurant_list*, along wit
     └── restaurant_list.stache
 </pre>
 
-Put the following code inside *restaurant_list.js*:
+Put the following code inside `restaurant_list`:
 
 ```
 /**
@@ -125,7 +125,7 @@ can.Component.extend({
 });
 ```
 
-Add the following code to *restaurant_list.stache*:
+Add the following code to `restaurant_list.stache`:
 
 ```
 <h1>{{currentRestaurant}}</h1>
@@ -137,7 +137,7 @@ Add the code below to the */app/base_template.stache* file:
 <restaurant-list></restaurant-list>
 ```
 
-Next, open up your *app.js* file, and edit it as follows:
+Next, open up your `app` file, and edit it as follows:
 
 ```
 $(function () {
@@ -148,7 +148,7 @@ $(function () {
 For the moment, if you don't know what can.view does, don't worry. We'll
 go over it in detail soon.
 
-Finally, we need to add a reference to *restaurant_list.js* in the
+Finally, we need to add a reference to `restaurant_list` in the
 index.html file, as follows:
 
 ```
@@ -174,7 +174,7 @@ an exception*.
 
 All we have to do is declare the can.Component using its `extend` function.
 Once you declare your can.Component, you've registered your component with the
-system. When CanJS parses the *base_template.stache* file, and encounters the
+system. When CanJS parses the `base_template.stache` file, and encounters the
 restaurant-list tag, it will automatically instantiate the can.Component
 associated with it, generate the Component's view inside of its custom tag,
 and bind that view to your component's scope.
