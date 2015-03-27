@@ -23,8 +23,7 @@ var ApplicationState = can.Map.extend({
     restaurant: {
       value: {},
       serialize: function() {
-        var name = this.attr('restaurant.name');
-        return name ? name.replace(/\s/ig, '_') : name;
+        return this.attr('restaurant.name');
       },
       set: function(restaurant) {
         var that = this;
