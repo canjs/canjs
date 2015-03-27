@@ -15,9 +15,9 @@
 Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 - - -
 
-As mentioned earlier, each property you define on an Application State will
+As mentioned earlier, each property you define on an [Application State](AppState.html) object will
 serialize to a route by default when you bind that Application State with
-can.route, using can.route.map(). In our current Application State, that means
+[can.route](../docs/can.route.html), using can.route.map(). In our current Application State, that means
 we will have default routes for:
 
 - restaurant
@@ -29,18 +29,19 @@ to a route? What if you want to change the way the value of the attribute is
 serialized? This is where the serialize attribute of a property declared by
 the define plugin comes into play.
 
-Open up your application, select a restaurant from the drop down list, and
-click, the “Place My Order!” button. You should see something similar
+Open up your application, select a restaurant from the drop down list, then
+click the “Place My Order!” button. You should see something similar
 to the following in your URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
 
-That's not pretty, and not very useful. We don't want the confirmation or menu
-attributes to serialize. It's easy to change this behavior. Open up `app`, and edit the Application State object as follows:
+That's not pretty and not very useful. We don't want the confirmation or menu
+attributes to serialize. It's easy to change this behavior. Open up `app` and
+edit the Application State object as follows:
 
 First, let's update the setter so that we can change restaurants by typing
-in the correct restaurant name into the hash. Open up `site_models`, and edit
-the RestaurantModel, as follows:
+in the correct restaurant name into the hash. Open up `site_models` and edit
+the RestaurantModel as follows:
 
 ```
 var RestaurantModel = can.Model.extend({
@@ -84,7 +85,7 @@ can.fixture('GET /restaurant/{name}', function(request) {
 });
 ```
 
-Open up `app`, and edit the Application State object
+Open up `app` and edit the Application State object
 as follows:
 
 ```
@@ -122,7 +123,7 @@ following code before the call to can.route.ready():
 can.route('/:restaurant');
 ```
 
-This line tells can.route to match any route going to the restaurant, and
+This line tells can.route to match any route going to the restaurant and
 format it so that it is a forward slash followed by the serialized value. Add
 a serialize property to the restaurant attribute of the Application State
 object as follows:
@@ -148,12 +149,12 @@ menus: {
 }
 ```
 
-Now, when you select a restaurant and click the Place Order buton, you should
+Now, when you select a restaurant and click the Place Order button, you should
 see the following in the URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
 
-Finally, update the Application State object in `app`, as follows:
+Finally, update the Application State object in `app` as follows:
 
 ```
 var AppState = can.Map.extend({
@@ -214,7 +215,7 @@ menu changes as well.
 ## Creating Anchor Tags with helpers and can.route.url
 The last thing we need to do is
 add functionality to our Site Menu. Open up the `site_menu.stache` file in
-your site_menu components folder. Edit it, as follows:
+your site_menu components folder. Edit it as follows:
 
 ```
 {{#menuData.menuText}}
@@ -246,7 +247,7 @@ makes changing your views more difficult and removed the abstraction between the
 view and view model. We'll be generating the URL in a helper function and keeping
 the DOM in the view where it belongs.
 
-Open up `site_menu`, and add the following function to the can.Component:
+Open up `site_menu` and add the following function to the can.Component:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
@@ -312,7 +313,7 @@ set: function(restaurant) {
 
 Now, open up your application in the browser (refresh, if you haven't). Select
 a restaurant from the list, then click the Place Order button. Once a menu
-displays, click on the Restaurants link. The menu will disappear, and the
+displays, click on the Restaurants link. The menu will disappear and the
 application will be returned to the default state, where you select a
 restaurant form the list.
 
