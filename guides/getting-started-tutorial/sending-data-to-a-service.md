@@ -71,7 +71,7 @@ In the template above, we're binding the values:
 - address
 - telephone
 
-to the "delivery" object of the View Model. We do that using both the delivery
+to the `delivery` object of the View Model. We do that using both the `delivery`
 section, defined by {{#delivery}} ... {{/delivery}}, and the `can-value`
 attribute. `can-value` is a `can.view` attribute that establishes two-way
 binding between an element in a template and its associated View Model.
@@ -148,24 +148,24 @@ can.Component.extend({
 ## Saving and updating a model
 Let's look at a few items in the code above.
 Notice that we're creating a new instance of a model (MenuOrderModel) in the
-createOrder function. Unlike data access functions, which are called statically
-off of the prototype, the save, update, and delete functions are called off of a
+`createOrder` function. Unlike data access functions, which are called statically
+off of the prototype, the `save`, `update`, and `delete` functions are called off of a
 specific instance of a model. So, if we want to create a new order, we will
 need to work with an instance of the MenuOrderModel.
 
-We assign the value of this.attr('details') to the MenuOrderModel's delivery
-property. If you recall, we bound the values of the name, address, and
-telephone number fields to the "delivery" object in the `order_form.stache` view
+We assign the value of this.attr('details') to the MenuOrderModel's `delivery`
+property. If you recall, we bound the values of the `name`, `address`, and
+`telephone` number fields to the `delivery` object in the `order_form.stache` view
 template. Now, all we need to do to get the values of those fields is
-reference them off of the View Model's delivery property.
+reference them off of the View Model's `delivery` property.
 
 ### Moving from DOM to the model
 When we created the RestaurantListComponent,
 we used the {{data '...'}} Stache key, and jQuery to obtain a reference to the
-restaurant object associated with the choice the user selected in the
+`restaurant` object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
 directly in our application. We want CanJS to take care of that for us, so we can focus
-on the application itself. In the createOrder function, instead of getting our
+on the application itself. In the `createOrder` function, instead of getting our
 data from the DOM, we get it from our scope.
 
 ### Save fixture
