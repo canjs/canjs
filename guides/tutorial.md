@@ -73,7 +73,7 @@ applications.” Rather, you build the components you need, and link them
 together using the Application State and Routing to compose your application.
 
 <a name="appstate"></a>
-### Application State 
+### Application State
 One of the things that sets CanJS apart from other frameworks is its use
 of an Application State. An Application State is an observable object that,
 as its name implies, contains the state of your application. Where other
