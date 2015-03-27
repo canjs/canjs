@@ -29,18 +29,18 @@ select the following:
 ![CanJS plugins to select](../can/guides/images/setup/DownloadOptions.png)
 
 At the bottom of the page, click the download button. You'll be prompted to
-download a file called *can.custom.js*. Save that file to your local machine.
+download a file called `can.custom.js`. Save that file to your local machine.
 
 You can access the custom download page here: <a href="../download.html" target="_blank">Custom downloader</a>
 
 There is one additional file we need, which we won't download, yet. This file is
 special. You normally wouldn't want it to be a part of your final application,
-but it can be very helpful during development. The file is *can.fixture.js*.
+but it can be very helpful during development. The file is `can.fixture.js`.
 `can.fixture` allows you to simulate RESTful services. We'll cover how to
 include `can.fixture` in the next chapter.
 
 In the next step, we'll set up the application's folder structure, and move the
-*can.custom.js* file into its appropriate folder in the app.
+`can.custom.js` file into its appropriate folder in the app.
 
 ## Folder Structure
 
@@ -49,7 +49,7 @@ components, we use a component-based folder structure. This structure makes it
 easier to both manage the contents of the component---and port the component,
 should you want to use it in another application.
 
-Off of a root folder called *PlaceMyOrder*, create the following subfolders:
+Off of a root folder called `PlaceMyOrder`, create the following subfolders:
 
 <pre>
 └── PlaceMyOrder
@@ -61,9 +61,9 @@ Off of a root folder called *PlaceMyOrder*, create the following subfolders:
 </pre>
 
 Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a>
-that accompanies this guide into your *site_css* folder. We won't be covering
-any of the CSS here. Next, copy the *can.custom.js* file you downloaded in
-the previous step into the *libs* folder.
+that accompanies this guide into your `site_css` folder. We won't be covering
+any of the CSS here. Next, copy the `can.custom.js` file you downloaded in
+the previous step into the `libs` folder.
 
 Finally, you'll need to download the supporting libraries. They are:
 
@@ -71,7 +71,7 @@ Finally, you'll need to download the supporting libraries. They are:
 - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
 Once you've downloaded these files, rename the jQuery file to `jquery.js` and
-copy both files to the *libs* directory in your application folder.
+copy both files to the `ibs` directory in your application folder.
 
 - - -
 
