@@ -14,13 +14,11 @@ can.Component.extend({
     events: {
         inserted: function() {
             var siteMenuViewModel = this.scope;
-            SiteMenuModel.findOne({},
-                function(menu) {
-                    siteMenuViewModel.attr('menuData', menu);
-                },
-                function(xhr) {
-                    alert(xhr.error.message);
-                });
+            SiteMenuModel.findOne({}).done(function(menu) {
+                siteMenuViewModel.attr('menuData', menu);
+            }).fail(function(xhr) {
+                alert(xhr.error.message);
+            });
         }
     }
 });
