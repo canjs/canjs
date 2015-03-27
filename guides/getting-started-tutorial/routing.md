@@ -15,16 +15,16 @@
 Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 - - -
 
-As mentioned earlier, each property you define on an [Application State](AppState.html) object will
-serialize to a route by default when you bind that Application State with
-[can.route](../docs/can.route.html), using `can.route.map()`. In our current Application State, that means
-we will have default routes for:
+As mentioned earlier, each property you define on an [AppState](AppState.html) object will
+serialize to a route by default when you bind that AppState object with
+[can.route](../docs/can.route.html), using `can.route.map()`. In our current AppState, 
+that means we will have default routes for:
 
 - restaurant
 - menus, and
 - confirmation
 
-What if we don't want one of our Application State's properties to serialize
+What if we don't want one of our AppState's properties to serialize
 to a route? What if you want to change the way the value of the attribute is
 serialized? This is where the `serialize` attribute of a property declared by
 the `define` plugin comes into play.
@@ -37,7 +37,7 @@ to the following in your URL bar:
 
 That's not pretty, and not very useful. We don't want the `confirmation` or `menu`
 attributes to serialize. It's easy to change this behavior. Open up `app.js` and
-edit the Application State object as follows:
+edit the AppState object as follows:
 
 First, let's update the setter so that we can change restaurants by typing
 in the correct restaurant name into the hash. Open up `site_models` and edit
@@ -85,7 +85,7 @@ can.fixture('GET /restaurant/{name}', function(request) {
 });
 ```
 
-Open up `app` and edit the Application State object
+Open up `app.js` and edit the AppState object
 as follows:
 
 ```
@@ -124,7 +124,7 @@ can.route('/:restaurant');
 
 This line tells `can.route` to match any route going to the restaurant and
 format it so that it is a forward slash followed by the serialized value. Add
-a `serialize` property to the `restaurant` attribute of the Application State
+a `serialize` property to the `restaurant` attribute of the AppState
 object as follows:
 
 ```
@@ -152,7 +152,7 @@ see the following in the URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
 
-Finally, update the Application State object in `app.js` as follows:
+Finally, update the AppState object in `app.js` as follows:
 
 ```
 var AppState = can.Map.extend({
@@ -276,8 +276,8 @@ Here we create a routable URL to place into the view template, using
 `can.route.url`. You should always use `can.route.url` when generating routable
 URLs in your application.
 
-Finally, update your `app.js`, adding code that will respond to the application
-state change. Append the following below the `getRestaurantMenu` function:
+Finally, update your `app.js`, adding code that will respond to AppState 
+changes. Append the following below the `getRestaurantMenu` function:
 
 ```
 setAppToDefaultState: function() {
@@ -285,7 +285,7 @@ setAppToDefaultState: function() {
 }
 ```
 
-Update the restaurant attribute `set` function on your ApplicationState:
+Update the restaurant attribute `set` function on your AppState object:
 
 ```
 set: function(restaurant) {

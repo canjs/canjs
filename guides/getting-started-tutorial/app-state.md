@@ -8,23 +8,23 @@
 
 - - -
 **In this Chapter**
- - Application State
+ - AppState
  - Basic Routing
- - Binding the Application State Object to the Application and Routes
+ - Binding the AppState Object to the Application and Routes
 
 Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
 - - -
 
-As mentioned in the [introduction](Tutorial.html), CanJS uses an Application
-State object to manage the state of your application. The application state
-object is bound to two things:
+As mentioned in the [introduction](Tutorial.html), CanJS uses an AppState
+object to manage the state of your application. The AppState object is bound to 
+two things:
 
 1. The application's base template
 2. The application's routing
 
-Since you already know about creating instances of `can.Map`, creating an Application State object,
+Since you already know about creating instances of `can.Map`, creating an AppState object,
 which is a `can.Map`, will be easy. Let's see how this works. Open up your
-`app.js` file, and update it as shown below. Note that the Application State object is a
+`app.js` file, and update it as shown below. Note that the AppState object is a
 `can.Map`—i.e., it is observable. You should also notice that we're creating
 our `can.Map` in a new way—using the define plugin, which we'll discuss more
 below:
@@ -59,7 +59,7 @@ $(function () {
 ```
 
 ## Routing
-Before we dive into the details of the Application State object,
+Before we dive into the details of the AppState object,
 let's quickly discuss routing. Routing in CanJS allows
 us to manage browser history and client state by synchronizing the
 window.location.hash with a `can.Map`. In other words, we can use routing to
@@ -70,14 +70,14 @@ as we proceed.
 
 In our application, we setup routing by:
 
-- defining the properties of our Application State object,
+- defining the properties of our AppState object,
 - binding that object to the route with a call to `can.route.map`, and
 - calling `can.route.ready()`, which sets up two-way binding between the
   browser's window.location.hash and the `can.route`'s internal `can.Map`.
 
 Unless we specify otherwise, which we'll see how to do below, *each property
-we define on our Application State will map to a potential route*. In the
-Application State we've defined, we will, by default, have the following
+we define on our  AppState will map to a potential route*. In the
+AppState we've defined, we will, by default, have the following
 *potential* routes:
 
 - restaurant
@@ -101,13 +101,13 @@ this:
 ![](../can/guides/images/7_application_state_routing/DefaultRouteExample_1.png)
 
 Note that, after we initialized our routes, updating the value of our
-Application State's restaurant property caused the route to update as well.
+AppState's restaurant property caused the route to update as well.
 The value of the restaurant and menus properties were serialized and appended
 to the window.location.hash.
 
 Let's see what happens if we adjust the value of the hash. To monitor this
-change, we'll need to make a slight adjustment to our Application State
-object. Modify the restaurant property as follows:
+change, we'll need to make a slight adjustment to our AppState object. Modify 
+the restaurant property as follows:
 
 ```
 restaurant: {
@@ -123,7 +123,7 @@ restaurant: {
 
 Refresh your app in the browser. The first thing you should notice is that you
 get an alert box (or two) with the word "Spago" in it. By adding the set
-function above, we're controlling what happens when the Application State's
+function above, we're controlling what happens when the AppState's
 restaurant property is set. More on that later. Click OK on the alert, go to
 the browser's URL bar, change the URL as follows:
 
@@ -135,9 +135,9 @@ Once you submit that URL, you should see an alert box that reads:
 
 ## Application Binding
 
-It was mentioned earlier that we bound our Application State to the
+It was mentioned earlier that we bound our AppState to the
 application's `base_template.stache`. This is the key to connecting the
-Application State to our components. We do that by passing Application State
+AppState to our components. We do that by passing AppState
 attributes to the components through their custom HTML tags in
 `base_template.stache`.
 
@@ -155,11 +155,11 @@ and the `restaurant` attribute to the Restaurant List component. *These
 attributes will automatically be included in the scope of the components*.
 
 Below is a diagram detailing how the connections work for connecting the
-restaurant property of the Application State to the Restaurant List component:
+restaurant property of the AppState to the Restaurant List component:
 
 ![](../can/guides/images/7_application_state_routing/AppStateBindingMap.png)
 
-Let's update our components to communicate with our Application State.
+Let's update our components to communicate with our AppState.
 
 Open up the `restaurant_list` file and edit it as follows;
 
@@ -270,9 +270,8 @@ Next, let's remove the code in `app.js` that sets the restaurant to "Spago" by d
 appState.attr('restaurant', 'Spago');
 ```
 
-Now that we can see the connection between the component and the Application
-State, let's make the code a little more useful. Update your Application State
-object, as follows:
+Now that we can see the connection between the component and the AppState,
+let's make the code a little more useful. Update your AppState object, as follows:
 
 ```
 define: {
@@ -291,9 +290,9 @@ define: {
 ```
 
 This will be a very common pattern in your applications. This setter is our
-event handler. Any time a restaurant is selected (i.e., the Application
-State's restaurant property is updated), we obtain its menus from our service,
-and then update the Application State's menus attribute.
+event handler. Any time a restaurant is selected (i.e., the AppState's 
+restaurant property is updated), we obtain its menus from our service,
+and then update the AppState's menus attribute.
 
 To make the OrderForm component show and the RestaurantList component hide,
 we use conditional stache tags in `base_template.stache`, as shown below:
@@ -307,7 +306,7 @@ we use conditional stache tags in `base_template.stache`, as shown below:
 {{/if}}
 ```
 
-When the Application State's `menus` attribute has a value, the order form is
+When the AppState's `menus` attribute has a value, the order form is
 displayed. Otherwise, the restaurant list is displayed. To see this in action,
 select a restaurant from the list and click the "Place My Order!"
 button. You should see something like this:
