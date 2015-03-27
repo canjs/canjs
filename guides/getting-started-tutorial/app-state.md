@@ -60,9 +60,9 @@ $(function () {
 
 ## Routing
 Before we dive into the details of the Application State object,
-let's quickly discuss routing. According to [the docs](../docs/can.route.html), routing in CanJS allows
-us to "manage browser history and client state by synchronizing the
-window.location.hash with a can.Map." In other words, we can use routing to
+let's quickly discuss routing. Routing in CanJS allows
+us to manage browser history and client state by synchronizing the
+window.location.hash with a `can.Map`. In other words, we can use routing to
 reflect the state of our application, or set the state of our application. One
 of the things that makes routing powerful is that it records the state of the
 application in the browser's history. We'll see some specific examples of this
@@ -71,9 +71,9 @@ as we proceed.
 In our application, we setup routing by:
 
 - defining the properties of our Application State object,
-- binding that object to the route with a call to can.route.map, and
-- calling can.route.ready(), which sets up two-way binding between the
-  browser's window.location.hash and the can.route's internal can.Map.
+- binding that object to the route with a call to `can.route.map`, and
+- calling `can.route.ready()`, which sets up two-way binding between the
+  browser's window.location.hash and the `can.route`'s internal `can.Map`.
 
 Unless we specify otherwise, which we'll see how to do below, *each property
 we define on our Application State will map to a potential route*. In the
@@ -148,9 +148,9 @@ tag:
 <menu menus="{menus}" restaurant="{restaurant}"></menu>
 ```
 
-In the code above, we passed the "menus" and "restaurant" attributes to our
-Site Menu component, "menus" and "confirmation" to the Order Form components,
-and the "restaurant" attribute to the Restaurant List component. *These
+In the code above, we passed the `menus` and `restaurant` attributes to our
+Site Menu component, `menus` and `confirmation` to the Order Form components,
+and the `restaurant` attribute to the Restaurant List component. *These
 attributes will automatically be included in the scope of the components*.
 
 Below is a diagram detailing how the connections work for connecting the
@@ -206,14 +206,14 @@ can.Component.extend({
 });
 ```
 
-Note the showMenu function. From this function we update the "restaurant"
-value that was passed in to the can.Component's custom HTML tag. Additionally,
-we've added a `define` attribute. The define attribute is used to control the
-behavior of attributes on a can.Component. We'll go into detail on `define` in
+Note the `showMenu` function. From this function we update the `restaurant`
+value that was passed in to the `can.Component`'s custom HTML tag. Additionally,
+we've added a `define` attribute. The `define` attribute is used to control the
+behavior of attributes on a `can.Component`. We'll go into detail on `define` in
 the [next chapter](Define.html).
 
 Next, open up `restaurant_list.stache` and link the PlaceOrder button with the
-showMenu function we've defined, as follows:
+`showMenu` function we've defined, as follows:
 
 ```
 <button can-click="showMenu">
@@ -221,9 +221,9 @@ showMenu function we've defined, as follows:
 </button>
 ```
 
-We've removed the DOM code from our View Model and are now working directly
+We've removed the DOM code from our View Model, and are now working directly
 with the application. In addition, we added code that would show and hide the content
-of the can.Component to our ViewModel. We need to update our view template to reflect these
+of the `can.Component` to our ViewModel. We need to update our view template to reflect these
 changes. In the same file (`restaurant_list.stache`), update the select dropdown
 in the template as follows:
 
@@ -248,9 +248,9 @@ in the template as follows:
 ```
 
 What we've done above is to make a connection between the index of the select
-dropdown and the index of the restaurants list in the can.Component's scope.
-Whenever the currentRestaurantIndex is updated, its `set` function is called.
-In its `set` function, it updates the currentRestaurant property.
+dropdown and the index of the restaurants list in the `can.Component`'s scope.
+Whenever the `currentRestaurantIndex` is updated, its `set` function is called.
+In its `set` function, it updates the `currentRestaurant` property.
 
 ![](../can/guides/images/7_application_state_routing/SelectMapping.png)
 
@@ -303,7 +303,7 @@ we use conditional stache tags in `base_template.stache`, as shown below:
 ```
 
 Finally, open `order_form` and remove the code that set the restaurant to "Spago"
-and that set "menus" to Spago's.
+and that set `menus` to Spago's.
 
 ```
 var OrderFormViewModel = can.Map.extend({
@@ -312,9 +312,9 @@ var OrderFormViewModel = can.Map.extend({
   ...
 ```
 
-When the Application State's menus attribute has a value, the order form is
+When the Application State's `menus` attribute has a value, the order form is
 displayed. Otherwise, the restaurant list is displayed. To see this in action,
-select a restaurant from the list and click the “Place My Order!”
+select a restaurant from the list and click the "Place My Order!"
 button. You should see something like this:
 
 ![](../can/guides/images/7_application_state_routing/OrderFormDisplayed.png)

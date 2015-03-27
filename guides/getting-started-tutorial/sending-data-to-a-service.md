@@ -72,7 +72,7 @@ In the template above, we're binding the values:
 - telephone
 
 to the "delivery" object of the View Model. We do that using both the delivery
-section, defined by {{#each delivery}} ... {{/each}}, and the `can-value`
+section, defined by {{#delivery}} ... {{/delivery}}, and the `can-value`
 attribute. `can-value` is a `can.view` attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
