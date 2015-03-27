@@ -346,10 +346,11 @@ steal("can/util",
 						value = name;
 					}
 					var len,
-						arrayLike = utils.isArrayLike(value);
+						arrayLike = utils.isArrayLike(value),
+						isObserveList;
 					if ( arrayLike ) {
-						var isObserveList = utils.isObserveLike(value);
-						len = isObserveList ? value.attr("length") : value.length
+						isObserveList = utils.isObserveLike(value);
+						len = isObserveList ? value.attr("length") : value.length;
 					}
 					return {
 						
@@ -360,8 +361,7 @@ steal("can/util",
 					};
 				});
 				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
-				return function(){
-					console.log("reading",exprData);
+				return function(){					
 					var data = valueAndLength.get();
 					// Get the value
 					var value = data.value;
