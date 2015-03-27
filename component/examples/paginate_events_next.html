@@ -19,7 +19,7 @@ steal("can/component", function() {
       template: "Page {{page}} <button class='next'>Next</button>",
       events: {
       	".next click": function(){
-      	  this.scope.next();	
+      	  this.viewModel.next();	
         }
       }
     })

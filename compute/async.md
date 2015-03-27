@@ -9,7 +9,7 @@ Create a compute that can set its value after the computed function has been cal
 
 @param {*} The initial value of the compute.
 
-@param {can.compute.asyncComputer} computed(currentValue, setValue) A function 
+@param {can.compute.asyncComputer} computed A function 
 that returns the current value of the compute and can optionally later call 
 its `setValue` callback to update the value.
 

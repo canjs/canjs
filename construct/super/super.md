@@ -18,12 +18,12 @@ With this plugin, functions that are inheriting from base functions
 are provided with a specialized `this._super` reference to the base
 function from which they inherit.
 
-This is especially useful for calling base classes' `[can.Construct::init init]` and `[can.Construct::setup ssetup]`, but it can be used in any inheriting function.
+This is especially useful for calling base classes' `[can.Construct::init init]` and `[can.Construct::setup setup]`, but it can be used in any inheriting function.
 
 The `Person` and `Programmer` examples from `[can.Construct::init init]` demonstrate `_super`'s use.
 Here's how those classes look without can.Construct.super:
 
-@codestart
+```
 var Person = can.Construct.extend({
     init: function(first, last) {
         this.first = first;
@@ -44,11 +44,11 @@ var Programmer = Person.extend({
             " and I write " + this.language + ".";
     }
 });
-@codeend
+```
 
 And here's how `Programmer` works using `_super`:
 
-@codestart
+```
 var Programmer = Person.extend({
     init: function(first, last, language) {
         // call base's init
@@ -62,11 +62,11 @@ var Programmer = Person.extend({
             " and I write " + this.language + ".";
     }
 });
-@codeend
+```
 
 If you want to pass an array of arguments (or an arguments object) to `_super`, use [apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
 
-@codestart
+```
 var Programmer = Person.extend({
     init: function(first, last, language) {
         // call base's init
@@ -80,7 +80,7 @@ var Programmer = Person.extend({
             " and I write " + this.language + ".";
     }
 });
-@codeend
+```
 
 ## `_super` on constructors
 
@@ -89,7 +89,7 @@ can use it in static functions.
 
 Here is a base class that has a method that squares numbers and an inherited class that has a method that cubes numbers:
 
-@codestart
+```
 var Squarer = can.Construct.extend({
     raise: function(n) {
         return n*n;
@@ -101,4 +101,4 @@ var Cuber = Squarer.extend({
         return n * this._super(n);
     }
 }, {});
-@codeend
+```

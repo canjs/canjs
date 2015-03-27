@@ -11,7 +11,7 @@ render.
 
 The template:
 
-    <p>{{countTo number}}{{num}}{{/countTo}}</p>
+    <p>{{#countTo number}}{{num}}{{/countTo}}</p>
 
 Rendered with:
 

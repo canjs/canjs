@@ -2,7 +2,7 @@
 @parent can.Model.prototype
 @description Destroy a Model on the server.
 @signature `model.destroy([success[, error]])`
-@param {function} [success] A callback to call on successful destruction. The callback recieves
+@param {function} [success] A callback to call on successful destruction. The callback receives
 the can.Model as it was just prior to destruction.
 @param {function} [error] A callback to call when an error occurs. The callback receives the
 XmlHttpRequest object.

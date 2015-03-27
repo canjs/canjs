@@ -2,7 +2,7 @@
 @parent can.Model.prototype
 @description Save a model back to the server.
 @signature `model.save([success[, error]])`
-@param {function} [success] A callback to call on successful save. The callback recieves
+@param {function} [success] A callback to call on successful save. The callback receives
 the can.Model after saving.
 @param {function} [error] A callback to call when an error occurs. The callback receives the
 XmlHttpRequest object.
@@ -39,7 +39,7 @@ todo.save(function(todo){
 ## Using `save` to update an instance.
 
 If save is called on an instance that has
-an [can.Model.id id] property, it calls [can.Model.create]
+an [can.Model.id id] property, it calls [can.Model.update]
 with the instance's properties.  When the save is complete,
 it triggers an "updated" event on the instance and the instance's model.
 

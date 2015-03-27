@@ -168,23 +168,23 @@ can.Component.extend({
     init: function () {
       this.update();
     },
-    "{scope} deferreddata": "update",
+    "{viewModel} deferreddata": "update",
     update: function () {
-      var deferred = this.scope.attr('deferreddata'),
-        scope = this.scope,
+      var deferred = this.viewModel.attr('deferreddata'),
+        viewModel = this.viewModel,
         el = this.element;
       if (can.isDeferred(deferred)) {
-        this.scope.attr("waiting", true);
+        this.viewModel.attr("waiting", true);
         this.element.find('tbody').css('opacity', 0.5);
         deferred.then(function (items) {
-          scope.attr('items').replace(items);
+          viewModel.attr('items').replace(items);
         });
       } else {
-        scope.attr('items').attr(deferred, true);
+        viewModel.attr('items').attr(deferred, true);
       }
     },
     "{items} change": function () {
-      this.scope.attr("waiting", false);
+      this.viewModel.attr("waiting", false);
       this.element.find('tbody').css('opacity', 1);
     }
   }

@@ -338,20 +338,39 @@ steal("can/util",
 				}
 			} else if( mode === "#" || mode === "^" ) {
 				// Setup renderers.
-				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
-				return function(){
-					// Get the value
+				var valueAndLength = new can.Compute(function(){
 					var value;
 					if (can.isFunction(name) && name.isComputed) {
 						value = name();
 					} else {
 						value = name;
 					}
-					// If it's an array, render.
-					if (utils.isArrayLike(value) ) {
-						var isObserveList = utils.isObserveLike(value);
+					var len,
+						arrayLike = utils.isArrayLike(value),
+						isObserveList;
+					if ( arrayLike ) {
+						isObserveList = utils.isObserveLike(value);
+						len = isObserveList ? value.attr("length") : value.length;
+					}
+					return {
 						
-						if(isObserveList ? value.attr("length") : value.length) {
+						value: value,
+						length: len,
+						isObserveList: isObserveList,
+						isArrayLike: arrayLike
+					};
+				});
+				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
+				return function(){
+					var data = valueAndLength.get();
+					// Get the value
+					var value = data.value;
+
+					// If it's an array, render.
+					if (data.isArrayLike ) {
+						var isObserveList = data.isObserveList;
+						
+						if(data.length) {
 							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
 								(value, isObserveList, helperOptions, options);
 						} else {

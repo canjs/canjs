@@ -2255,15 +2255,15 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 	test("helpers between tags (#469)", function () {
 
-		can.stache.registerHelper("items", function () {
+		can.stache.registerHelper("itemsHelper", function () {
 			return function (textNode) {
 				equal(textNode.nodeType, 3, "right nodeType")
-			}
+			};
 		});
 
-		var template = can.stache("<ul>{{items}}</ul>");
+		var template = can.stache("<ul>{{itemsHelper}}</ul>");
 		template();
-	})
+	});
 
 	test("hiding image srcs (#157)", function () {
 		var template = can.stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
@@ -3771,6 +3771,21 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				start();
 			}, 30);
 		},30);
+		
+	});
+	
+	test("{#list} works right (#1551)", function(){
+		var data = new can.Map({});
+		var template = can.stache("<div>{{#items}}<span/>{{/items}}</div>");
+		var frag = template(data);
+		
+		data.attr("items",new can.List());
+		
+		data.attr("items").push("foo");
+		
+		var spans = frag.childNodes[0].getElementsByTagName("span");
+		
+		equal(spans.length,1, "one span");
 		
 	});
 	

@@ -74,7 +74,7 @@ is passed an array-like object, it will return `false`.
 @signature `can.each(collection, callback)`
 @param {Object} collection The object to iterate through.
 @param {Function} callback A function to call for each item in __collection__.
-__callback__ will recieve the item's value first and its key second.
+__callback__ will receive the item's value first and its key second.
 
 @body
 `can.each(collection, callback)` iterates through an array or object like
@@ -399,10 +399,15 @@ CanJS; however, if you are making libraries or extensions, use
 
 __Delegate binding to an HTMLElement__
 
-    var el = document.getElementById('foo')
-    can.delegate.call(el, ".selector", "click", function(ev){
-        this // el
-    })
+	// Assuming an HTML body like the following:
+	// <div id="parent">
+    //     <div class="child">Hello</div>
+    // </div>
+
+    var el = document.getElementById('parent');
+    can.delegate.call(el, ".child", "click", function(ev) {
+        return this; //-> el
+    });
 */
 //
 /**
@@ -425,16 +430,21 @@ The idea is that undelegate can be used on anything that produces delegate event
 and it will figure out the appropriate way to
 bind to it.  Typically, `can.undelegate` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
-`can.undelegate` to listen to events independent of the underlying library.
+`can.undelegate` to stop listening to events independent of the underlying library.
 
 __Delegate/undelegate binding to an HTMLElement__
 
-    var el = document.getElementById('foo'),
-    handler = function(ev){
-        this // el
+	// Assuming an HTML body like the following:
+	// <div id="parent">
+    //     <div class="child">Hello</div>
+    // </div>
+
+    var el = document.getElementById('parent');
+    var handler = function(ev) {
+        return this; //-> el
     };
-    can.delegate.call(el, ".selector", "click", handler)
-    can.undelegate.call(el, ".selector", "click", handler)
+    can.delegate.call(el, ".child", "click", handler);
+    can.undelegate.call(el, ".child", "click", handler);
 */
 //
 /**
@@ -467,20 +477,21 @@ for simulating events. Such as the following:
 @parent can.util
 @signature `can.ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
-The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {can.Deferred} A can.Deferred that resolves to the data.
+The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
+@return {can.Deferred} A [can.Deferred](http://canjs.com/docs/can.Deferred.html) that resolves to the data.
 
 @body
-`can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request
-similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
+`can.ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
+similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax]. The example below
+makes use of (can.frag)[http://canjs.com/docs/can.frag.html].
 
-
-    can.ajax({
-        url: 'ajax/farm/animals',
-        success: function(animals) {
-            can.$('.farm').html(animals);
-        }
-    });
+	can.ajax({
+		url: 'http://canjs.com/docs/can.ajax.html',
+		success: function(document) {
+			var frag = can.frag(document);
+			return frag.querySelector(".heading h1").innerText; //-> can.ajax
+		}
+	});
 */
 //
 /**
@@ -529,11 +540,13 @@ The following lists how the NodeList is created by each library:
 
 @body
 `can.append( wrappedNodeList, html )` inserts content to the end of each wrapped node list item(s) passed.
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+for [.append](http://api.jquery.com/append/).
 
     // Before
     <div id="demo" />
 
-    can.append( can.$('#demo'), 'Demos are fun!' );
+    can.append(can.$('#demo'), 'Demos are fun!');
 
     // After
     <div id="demo">Demos are fun!</div>
@@ -652,8 +665,8 @@ You can also use this to wait for the results of multiple deferreds.
 
 You can also use this for regular JavaScript objects.
 
-    $.when( { animals: [ 'cat' ] } ).done(function(animals){
-        alert(animals[0]); //-> alerts 'cat'
+    $.when({ animals: [ 'cat' ] }).done(function(value){
+        alert(value.animals[0]); //-> alerts 'cat'
     });
 */
 //
@@ -700,13 +713,22 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @parent can.Deferred.prototype
 @signature `deferred.resolveWith(context[, arguments])`
 @param {Object} context Context passed to the `doneCallbacks` as the `this` object.
-@param {Object} [arguments] Array of arguments that are passed to the `doneCallbacks`.
+@param {Array} [arguments] Array of arguments that are passed to the `doneCallbacks`.
 
 @body
 `deferred.resolveWith(context, arguments)` resolves a Deferred and calls the `doneCallbacks` with the given arguments.
 
-    var def = can.Deferred();
-    def.resolveWith(this, { animals: [ 'cows', 'monkey', 'panda' ] })
+	var def = can.Deferred();
+	def.done(function(success) {
+		this.logSuccess(success); //-> "Can rocks!"
+	});
+
+	var context = {
+		logSuccess: function(sucess) {
+			console.log(sucess);
+		}
+	};
+	def.resolveWith(context, ["Can rocks!"]);
 */
 //
 /**
@@ -715,13 +737,22 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @parent can.Deferred.prototype
 @signature `deferred.rejectWith(context[, arguments])`
 @param {Object} context Context passed to the `failCallbacks` as the `this` object.
-@param {Object} [arguments] Array of arguments that are passed to the `failCallbacks`.
+@param {Array} [arguments] Array of arguments that are passed to the `failCallback(s)`.
 
 @body
 `deferred.rejectWith(context, arguments)` rejects a Deferred and calls the `failCallbacks` with the given arguments.
 
-    var def = can.Deferred();
-    def.rejectWith(this, { error: "Animals are gone." })
+	var def = can.Deferred();
+	def.fail(function(error) {
+		this.logError(error); //-> "Oh no!"
+	});
+
+	var context = {
+		logError: function(error) {
+			console.error(error);
+		}
+	};
+	def.rejectWith(context, ["Oh no!"]);
 */
 //
 /**
@@ -729,7 +760,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.done done
 @parent can.Deferred.prototype
 @signature `deferred.done(doneCallbacks)`
-@param {Function} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
+@param {Function|Array} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
 
 @body
 `deferred.done(doneCallbacks)` adds one or more functions to be called when the Deferred object is resolved.
@@ -745,7 +776,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.fail fail
 @parent can.Deferred.prototype
 @signature `deferred.fail(failCallbacks)`
-@param {Function} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
+@param {Function|Array} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
 
 @body
 `deferred.fail(failCallbacks)` adds one or more functions to be called when the Deferred object is rejected.
@@ -761,13 +792,13 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.Deferred.prototype.always always
 @parent can.Deferred.prototype
 @signature `deferred.always(alwaysCallbacks)`
-@param {Function} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
+@param {Function|Array} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
 
 @body
-`deferred.always( alwaysCallbacks )` adds one or more functions to be called when the Deferred object is either resolved or rejected.
+`deferred.always(alwaysCallbacks)` adds one or more functions to be called when the Deferred object is either resolved or rejected.
 
     var def = can.Deferred();
-    def.always( function(){
+    def.always(function(){
         //- Called whether the handler fails or is success.
     });
 */
@@ -781,14 +812,16 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Function} [failCallback] A function called when the Deferred is rejected.
 
 @body
-`deferred.then( doneCallback, failCallback )` adds handler(s) to be called when the Deferred object to be called after its resolved.
+`deferred.then(doneCallback, failCallback)` adds handler(s) to be called when the Deferred object to be called after its resolved.
 
-    var def = can.Deferred();
-    def.then(function(){
-        //- Called when the deferred is resolved.
-    }, function(){
-        //- Called when the deferred fails.
-    })
+	var def = can.Deferred();
+	def.then(function(success) {
+		console.log(success);
+	}, function(reason) {
+		console.error(reason); //-> "Oh no! So sad."
+	});
+
+	def.reject("Oh no! So sad.");
 */
 //
 /**
@@ -826,10 +859,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Object} [argument] The argument to call the `failCallback` with.
 
 @body
-`deferred.reject( args )` rejects the Deferred object and calls the fail callbacks with the given arguments.
+`deferred.reject(args)` rejects the Deferred object and calls the fail callbacks with the given arguments.
 
-    var def = can.Deferred();
-    def.reject({ error: 'Thats not an animal.' })
+	var def = can.Deferred();
+
+	def.done(function(reason) {
+	  console.log("Success! " + reason); //-> Success! Woohoo!
+	});
+	def.resolve("Woohoo!");
 */
 //
 /**
