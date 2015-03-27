@@ -153,7 +153,7 @@ scope: {
   restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
   currentRestaurant: undefined,
   restaurantSelected: function(){
-    alert("You've selected a restaurant");
+    alert('You\'ve selected a restaurant');
   }
 }
 ```
