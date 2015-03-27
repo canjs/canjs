@@ -74,7 +74,7 @@ is passed an array-like object, it will return `false`.
 @signature `can.each(collection, callback)`
 @param {Object} collection The object to iterate through.
 @param {Function} callback A function to call for each item in __collection__.
-__callback__ will recieve the item's value first and its key second.
+__callback__ will receive the item's value first and its key second.
 
 @body
 `can.each(collection, callback)` iterates through an array or object like
