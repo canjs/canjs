@@ -43,7 +43,7 @@ In the components folder, create a subfolder called `restaurant_list`, along wit
     └── restaurant_list.stache
 </pre>
 
-Put the following code inside `restaurant_list`:
+Let's dive in to the good stuff, and start working with the app! Put the following code inside `restaurant_list`:
 
 ```
 /**
