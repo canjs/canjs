@@ -16,7 +16,7 @@ can.Component.extend({
                 function success(menu) {
                     siteMenuViewModel.attr('menuData', menu);
                     siteMenuViewModel.attr('menuData.menuText.HomeLink',
-                        can.route.link( '<i class="glyphicon glyphicon-cutlery"></i>  Restaurants', {restaurant: null}, false ));
+                        can.route.link( 'Restaurants', {restaurant: null}, false ));
                 },
                 function error(xhr) {
                     alert(xhr.error.message);

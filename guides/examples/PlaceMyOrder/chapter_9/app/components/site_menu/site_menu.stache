@@ -1,22 +1,17 @@
 {{#menuData.menuText}}
-    <ul class="nav">
-        <li><a class="visible-xs text-center" data-toggle="offcanvas" href="#"><i
-                class="glyphicon glyphicon-chevron-right"></i></a></li>
-    </ul>
-    <ul id="sidebar-footer" class="list-unstyled hidden-xs">
-        <li can-click="clickedAlert">
-            <a href="#!home"><h4>{{PageTitle}}</h4>
-                <i class="glyphicon glyphicon-heart-empty"></i>{{FoodAtFingertips}}</a>
+    <ul>
+        <li>
+            <h4>
+                <a href="#!home">
+                    {{PageTitle}}
+                </a>
+            </h4>
+            <a href="#!home">
+                {{FoodAtFingertips}}
+            </a>
         </li>
-    </ul>
-
-    <!--Begin update -->
-    <ul id="lg-menu" class="nav hidden-xs">
-        <li class="active">{{&HomeLink}}</li>
-    </ul>
-    <!--End update -->
-
-    <ul id="xs-menu" class="nav visible-xs">
-        <li><a class="text-center" href="#!restaurants"><i class="glyphicon glyphicon-cutlery"></i></a></li>
+        <li>
+            {{&HomeLink}}
+        </li>
     </ul>
 {{/menuData.menuText}}
