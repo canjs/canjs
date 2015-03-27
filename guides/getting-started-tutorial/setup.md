@@ -75,16 +75,11 @@ Finally, you'll need to download the supporting libraries. They are:
 - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
 Once you've downloaded these files, rename the jQuery file to `jquery.js` and
-copy both files to the `ibs` directory in your application folder.
-
-Now that our basic environment has been setup, let's start working with actual code. This step will involve setting up our foundations:
-
-- Page Chrome (`index.html`)
-- Bootstrapping (`app.js`)
+copy both files to the `libs` directory in your application folder.
 
 ## index.html <a name="index-file"></a>
-Let's dive in to the good stuff, and start working with the app! Create a
-file called "index.html" in the app folder.
+Create a
+file called "index.html" in the `app` folder.
 
 <pre>
 └── app
@@ -125,13 +120,13 @@ remove `can.fixture.js`. In addition, to simplify things, we're using the
 Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
 
 ### Base Template
-Create a file in the app folder called `base_template.stache`. We'll edit the
+Create a file in the `app` folder called `base_template.stache`. We'll edit the
 contents of that file as we build out our application. For now, you can
 leave it blank.
 
 ## Application Bootstrap
 The first script we need to create is the script that will bootstrap our
-application. Create a file in the app folder called `app.js`. Edit the
+application. Create a file in the `app` folder called `app.js`. Edit the
 file as follows:
 
 ```
@@ -148,7 +143,7 @@ At this point, we haven't done much. We aren't using CanJS at all yet.
 We're just using jQuery to set the HTML contents of a DOM element.
 
 So, how do we get the application to actually *do something*? Building apps
-with CanJS centers around building can.Components, read on to the next
+with CanJS centers around building can.Components. Read on to the next
 chapter to learn more.
 
 - - -
