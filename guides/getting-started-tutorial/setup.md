@@ -94,7 +94,6 @@ It should look like this:
   <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
   </head>
   <body>
@@ -116,8 +115,8 @@ loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 
 In the last chapter, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
-remove `can.fixture.js`. In addition, to simplify things, we're using the
-Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
+remove `can.fixture.js`. In addition, to simplify things, we're provided a CSS
+file for you with all the styled needed for this example.
 
 ### Base Template
 Create a file in the `app` folder called `base_template.stache`. We'll edit the
