@@ -1,3 +1,4 @@
+"format steal";
 steal("can/view/stache", "can/view/stache/intermediate_and_imports.js",function(stache, getIntermediateAndImports){
 
 	function translate(load) {

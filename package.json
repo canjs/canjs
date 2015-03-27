@@ -18,7 +18,7 @@
 		"jquery": ">=1.9.0 <3.0.0"
 	},
 	"devDependencies": {
-		"bitovi-tools": "git://github.com/bitovi/bitovi-tools.git#master",
+		"bitovi-tools": "^0.1.1",
 		"bower": "~1.3.8",
 		"browserify": "~8.1.0",
 		"connect": "^2.14.4",
@@ -169,6 +169,12 @@
 		"./view/scope/scope": "./dist/cjs/view/scope/scope",
 		"./util/string/string": "./dist/cjs/util/string/string",
 		"./util/attr/attr": "./dist/cjs/util/attr/attr",
-		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender"
+		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender",
+		"./util/domless/domless": "./dist/cjs/util/domless/domless",
+		"./view/stache/system": "./dist/cjs/view/stache/system",
+		"./view/mustache/system": "./dist/cjs/view/mustache/system",
+		"./view/ejs/system": "./dist/cjs/view/ejs/system",
+		"./util/event": "./dist/cjs/util/event",
+		"./map/sort/sort": "./dist/cjs/map/sort/sort"
 	}
 }
