@@ -24,7 +24,7 @@ returned have all of the features of a can.Map, such as being observable.
 
 We'll use a can.Model to provide data for our restaurant list.
 
-In the models folder, create a file called `site_models.js`. Add the
+In the `models` folder, create a file called `site_models.js` and add the
 following code:
 
 ```
@@ -34,20 +34,25 @@ following code:
 var RestaurantModel = can.Model.extend({
   findAll: 'GET /restaurants'
 }, {
-  // Include second, blank parameter object to set instanceProperties
+  // Include second, empty parameter object to set instanceProperties
 });
 ```
 
-Because Models are Observes, don't forget to set all your properties using `attr`.
+Because it is a [can.Construct](../docs/can.Construct.html), can.Model.extend can take up to three parameters:
 
-## Talking to the server
+1. name
+2. staticProperties
+3. instanceProperties
 
-By supplying the `findAll`, `findOne`, `create`, `update`, and `destroy`
-properties, you show a Model class how to communicate with the server. You can
-call `findAll` and `findOne` on the Model class to retrieve Models and `save`
-and `destroy` on Models to create, update, and delete them.
+A can.Model's staticProperties parameter has several reserved properties you
+can add that simplify accessing data from a JSON REST service. These
+properties are:
 
-### Retrieving items from a server
+1. findAll
+2. findOne
+3. create
+4. update
+5. destroy
 
 The `find___`, `create`, `update`, and `destroy` functions are available directly
 off of the object definition (i.e., they are static). The `destroy` function is
@@ -60,7 +65,7 @@ use that to set the instanceProperties. If you pass in two parameter
 objects, the *first* object passed in will be used to set the
 *staticProperties*. The second parameter will be used to set the
 *instanceProperties*. Here, we only want to set the staticProperties, so we
-must pass in a second, blank object.
+must pass in a second, empty object.
 
 A few examples illustrate this, below:
 
@@ -74,10 +79,6 @@ var MyModel = can.Model.extend({
     // Instance function
   }
 });
-```
-
-This will make a `GET` request to `/todos`, which should return JSON that looks
-similar to:
 
 MyModel.findAll(); // Reference a function defined on the constructor
 
@@ -146,15 +147,10 @@ return data that doesn't match the expected return type of the `find___`
 functions, don't fret. There are ways to manage this, which we'll work with
 later on.
 
-When the service has returned, `findAll` will massage the data into Model
-instances and put them in a can.Model.List (which is like a can.Observe.List
-for Models). The resulting List will be passed to the success callback in its
-second parameter. If there was an error, `findAll` will call the error
-callback in its third parameter and pass it the XmlHttpRequest object used to
-make the call.
+## Connecting the Model to the Component
 
 It's time to connect all of this together in our view model. Simply open up
-`restaurant_list.js`. Edit the RestaurantListViewModel as follows,
+`restaurant_list.js`. Edit the `RestaurantListViewModel` as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
@@ -169,7 +165,7 @@ var RestaurantListViewModel = can.Map.extend({
 ```
 
 Note that there are a few ways to call a `findAll` function on a `can.Model`. The
-first way is to call the function explicitly. Using the RestaurantModel as an
+first way is to call the function explicitly. Using the `RestaurantModel` as an
 example, that would look like this:
 
 ```
@@ -186,7 +182,6 @@ We also have the ability to use the Deferred method, which allows us to chain
 callback functions off of each other. You can read more about this from the
 [jQuery API](https://api.jquery.com/category/deferred-object/). Using this
 method, we could write our `findAll` like this:
-
 
 ```
 RestaurantModel.findAll({ /* paramsObject */ })
@@ -206,19 +201,14 @@ as it more explicitly states which callback function is which.
 In the code above, however, we called the `findAll` function indirectly:
 
 ```
-var shopping = new Todo({description: "Go grocery shopping."});
-shopping.save(function(saved) {
-	// saved is the saved Todo
-	saved.attr('description', 'Remember the milk.');
-	saved.save();
-});
+restaurants: new RestaurantModel.List({}),
 ```
 
 This is a special feature of the `can.Model.List` constructor. If you create a
-new instance of a `can.Model.List`, and you pass the constructor a plain
+new instance of a `can.Model.List` and you pass the constructor a plain
 JavaScript object, that List's constructor parameter will be passed to the
-`can.Model`'s `findAll` function. The `findAll` function will run, and the list will
-be populated with the results of the `findAll` function, as below [1](#ModelList):
+`can.Model`'s `findAll` function. The `findAll` function will run and the list will
+be populated with the results of the `findAll` function, as shown below <sup id="ModelListReference">[1](#ModelList)</sup>:
 
 
 ![](../can/guides/images/4_models/New.Model.List.png)
@@ -237,21 +227,21 @@ Finally, let's add the scripts we created to our `index.html` file:
 <script src="app.js"></script>
 ```
 
-When `destroy` is called in the above code, can.Model makes a `DELETE` request
-to `/todos/6`.
+Let's go back to our app now and see what happens! If everything went
+according to plan, you should see something like this:
 
-## Listening to events
+![](../can/guides/images/4_models/FinalRestaurantComponentNoSelect.png)
 
-Because Models are Observes, you can bind to the same events as on any other
-Observe. In addition to those events, Models emit three new kinds of events:
+And, when you select a restaurant from the list, you should see:
 
-- _created_, when an instance is created on the server.
-- _updated_, when an instance is updated on the server.
-- _destroyed_, when an instance is destroyed on the server.
+![](../can/guides/images/4_models/FinalRestaurantComponentSelect.png)
 
-<a name="ModelList">
-**1**: At first, the Model.List({}) will be empty; however, the can.Model's findAll method will then be called, and the list will be populated with the results of that call, once the findAll method completes asynchronously. Because this list was data bound in the template, these results will automatically update in the template
-</a>
+<a name="ModelList"></a>
+**1**: At first, the Model.List({}) will be empty; however, the can.Model's
+findAll method will then be called and the list will be populated with the
+results of that call, once the findAll method completes asynchronously.
+Because this list was data bound in the template, these results will
+automatically update in the template. <a href="#ModelListReference">↩</a>
 
 - - -
 
