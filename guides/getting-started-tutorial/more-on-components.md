@@ -111,7 +111,8 @@ from data keys inside the `#each` scope without dot notation. In the example abo
 {{/each}}
 ```
 
-Because the scope of the {{#each}} block is `restaurants`, we can reference the `name` property of `restaurants` directly&mdash;i.e, we don't need to write {{restaurants.name}}, we can just write {{name}}.
+Because the scope of the {{#each}} block is `restaurants`, we can reference the `name` property of
+`restaurants` directly&mdash;i.e, we don't need to write {{restaurants.name}}, we can just write {{name}}.
 
 <a name="sections"></a>
 ### Sections
@@ -134,7 +135,8 @@ Stache templates have a limited capacity for conditional logic. They provide sim
 {{/if}}
 ```
 
-If you need to use more complex logic in your application, can.Component provides [helpers](../docs/can.Component.prototype.helpers.html).
+If you need to use more complex logic in your application, can.Component provides
+[helpers](../docs/can.Component.prototype.helpers.html).
 
 ## Event Handling
 
@@ -191,13 +193,17 @@ element in our template as follows:
 <select class="form-control" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
-And, then add the appropriate event handler to our scope. NOTE: Adding event handlers in this way directly binds the events to the element. This can impact performance in situations where you have many elements to bind events to. For more performant event binding, you can use the can.Component's [events property](../docs/can.Component.prototype.events.html).
+And, then add the appropriate event handler to our scope. NOTE: Adding event handlers in this way
+directly binds the events to the element. This can impact performance in situations where you have many
+elements to bind events to. For more performant event binding, you can use the can.Component's
+[events property](../docs/can.Component.prototype.events.html).
 
 ## Getting and Setting Scope Properties
 Now that you know how to handle events
 in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` function off of
-the scope object, in this case `this` is bound to the scope, because we're within a method of the scope. Let's look at an example.
+the scope object, in this case `this` is bound to the scope, because we're within a method of the scope.
+Let's look at an example.
 
 Open up `restaurant_list.js` and modify the scope's `restaurantSelected` property as follows:
 

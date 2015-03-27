@@ -84,7 +84,8 @@ writing applications—freeing developers from many of the constraints of a
 DOM-centric paradigm to think more directly about the application itself.
 
 <a name="routing"></a>
-### Routing For many JavaScript MV* frameworks, routing divides an application into logical views and binds those view to Controllers. *This is not how things work in
+### Routing For many JavaScript MV* frameworks, routing divides an application into
+logical views and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
 Rather, it has to do with Application State. In brief,
 CanJS maintains a reciprocal relationship between an application's route,
@@ -101,7 +102,9 @@ application together, you'll see, more and more, how this works, and just
 how powerful this aspect of CanJS can be.
 
 ## Using the Getting Started Guide
-Each chapter in the Getting Started Guide is prefaced with an overview of the topics covered in that chapter. The overview section also contains a link where you can download a zip file containing the code relevant to that chapter, as follows:
+Each chapter in the Getting Started Guide is prefaced with an overview of the
+topics covered in that chapter. The overview section also contains a link where
+you can download a zip file containing the code relevant to that chapter, as follows:
 
 - - -
 **In this Chapter**
