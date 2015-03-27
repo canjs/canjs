@@ -12,7 +12,7 @@ can.Component.extend({
         }
     },
     events: {
-        inserted: function () {
+        inserted: function() {
             var siteMenuViewModel = this.scope;
             SiteMenuModel.findOne({},
                 function(menu) {
