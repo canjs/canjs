@@ -64,7 +64,7 @@ objects.
 <a name="components"></a>
 ### Components
 A [can.Component](../docs/can.Component.html) is kind of like a mini web application.
-A can.Component contains the JavaScript and HTML it needs &mdash; all wrapped up in a single,
+A can.Component contains the JavaScript and HTML it needs&mdash;all wrapped up in a single,
 functional unit. This makes can.Components portable, reusable, and
 encapsulated. can.Components are easy to test, and easy to use. Building an
 application with them is kind of like building with Lego&trade;. As we say
