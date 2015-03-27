@@ -103,23 +103,23 @@ create a template file called `site_menu.stache`, as follows:
 
 ```
 {{#menuData.menuText}}
-    <ul>
-        <li class="logo">
-            <h1>
-                <a href="#">
-                    {{PageTitle}}
-                </a>
-            </h1>
-            <a href="#">
-                {{FoodAtFingertips}}
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                {{Restaurants}}
-            </a>
-        </li>
-    </ul>
+<ul>
+  <li class="logo">
+    <h1>
+      <a href="#">
+        {{PageTitle}}
+      </a>
+    </h1>
+    <a href="#">
+      {{FoodAtFingertips}}
+    </a>
+  </li>
+  <li>
+    <a href="#">
+      {{Restaurants}}
+    </a>
+  </li>
+</ul>
 {{/menuData.menuText}}
 ```
 
