@@ -18,7 +18,7 @@ We should know enough at this point to successfully create our Menu component.
 Going through the steps will be a good review of what we've covered so far,
 and help you solidify your understanding of CanJS. We'll also cover some
 additional functionality from the objects we already know, such as the findOne
-method of can.Model.
+function of can.Model.
 
 In your models folder, open *fixtures.js*. Add the following code to register a
 new can.fixture:
@@ -45,7 +45,7 @@ var SiteMenuModel = can.Model.extend({
 ```
 
 In your components folder, create a new folder called "site_menu". In that
-folder, create a file called *site_menu_component.js* and add the following code:
+folder, create a file called *site_menu.js* and add the following code:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
@@ -84,22 +84,22 @@ In the code above, we listened for the "inserted" event. This is a
 can.Component lifecycle event that fires when the component has been inserted
 into the DOM.
 
-Similar to the can.Model findAll method, the findOne method takes a parameters
+Similar to the can.Model findAll function, the findOne function takes a parameters
 object as its first argument. Optionally, you can pass in two callback
 functions: the first being the success function and the second being the error
 function. The success function receives the object returned by the findOne
-call as the first parameter in its method signature. The error function
+call as the first parameter in its function signature. The error function
 receives the [XMLHttpRequest object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
-as the first parameter in its method
-signature. If the findOne operation is successful, the success method will be
-called. Otherwise, the error method is called.
+as the first parameter in its function
+signature. If the findOne operation is successful, the success function will be
+called. Otherwise, the error function is called.
 
 In the example above, we create an observable can.Map object. We create an
 instance of that object, and assign it to the can.Component's scope. Because
 the can.Map object is observable, when we later update it's menuData property,
 the update is broadcast to the system, and the menu can.Component is refreshed
-with the menu data returned from the findOne method. There is currently no
-implicit method for calling can.Model.findOne. You must use the method
+with the menu data returned from the findOne function. There is currently no
+implicit function for calling can.Model.findOne. You must use the function
 described above.
 
 Let's connect all of this to a view template. Staying in the menu folder,
@@ -142,9 +142,9 @@ Finally, add the script tag for the SiteMenuComponent to the index.html file:
 ```
 <script src="models/site_models.js"></script>
 <!--Begin add-->
-<script src="components/site_menu/site_menu_component.js"></script>
+<script src="components/site_menu/site_menu.js"></script>
 <!--End add-->
-<script src="components/order_form/order_form_component.js"></script>
+<script src="components/order_form/order_form.js"></script>
 ```
 
 If you go out to your application, and refresh it, you should see the following:

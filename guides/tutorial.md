@@ -24,13 +24,15 @@ Every CanJS application contains:
 - [Application State](#appstate), and
 - [Routing](#routing)
 
-### Models <a name="models"></a>
+<a name="models"></a>
+### Models
 Models manage the data of an application. A model notifies the elements
 associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
 object. can.Model makes it almost effortless to handle all of your CRUD
-operations (Create, Read, Update, and Delete).
+(Create, Read, Update, and Delete) operations.
 
-### Views <a name="views"></a>
+<a name="views"></a>
+### Views 
 Views request information from the model, and use the data it provides to
 generate visual output that's meaningful to a user—in our case HTML. In
 CanJS, views are created using:
@@ -45,7 +47,6 @@ including:
 
 - Stache
 - Mustache
-- EJS
 
 While you can use any of the above template types, the preferred type
 is "Stache". It provides the most clarity to your code, and is the easiest
@@ -54,17 +55,16 @@ library. This means you must explicitly add it to your application. We'll see
 how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
-Template libraries require a rendering engine, and CanJS provides that to
+Template libraries require a rendering engine, and CanJS provides that for
 you with the can.view object. To quote the CanJS docs: A can.view contains
-utilities "for loading, processing, rendering, and live-updating of
+utilities "for the loading, processing, rendering, and live-updating of
 templates". In addition, can.view is used to bind views to observable
 objects.
 
-> The secret to building large applications is to never build large applications.
-
-### Components <a name="components"></a>
-A can.Component is kind of like a mini web application. A can.Component
-contains the CSS, JavaScript, and HTML it needs—all wrapped up in a single,
+<a name="components"></a>
+### Components 
+A [can.Component](../docs/can.Component.html) is kind of like a mini web application. 
+A can.Component contains the JavaScript and HTML it needs &emdash; all wrapped up in a single,
 functional unit. This makes can.Components portable, reusable, and
 encapsulated. can.Components are easy to test, and easy to use. Building an
 application with them is kind of like building with Lego&trade;. As we say
@@ -72,19 +72,21 @@ at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need, and link them
 together using the Application State and Routing to compose your application.
 
-### Application State <a name="appstate"></a>
+<a name="appstate"></a>
+### Application State 
 One of the things that sets CanJS apart from other frameworks is its use
 of an Application State. An Application State is an observable object that,
 as its name implies, contains the state of your application. Where other
 application frameworks model their applications with routes, controllers, etc.,
 CanJS takes a more unified, semantic approach. It encapsulates the state
-of your application in an object. This is a pretty powerful approach to
+of your application into an object. This is a pretty powerful approach to
 writing applications—freeing developers from many of the constraints of a
 DOM-centric paradigm to think more directly about the application itself.
 
-### Routing <a name="routing"></a>
-For many JS MV* frameworks, routing divides an application into logical views
-and binds those view to Controllers. *This is not how things work in
+<a name="routing"></a>
+### Routing 
+For many JavaScript MV* frameworks, routing divides an application into logical 
+views and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
 Rather, it has to do with Application State. In brief,
 CanJS maintains a reciprocal relationship between an application's route,
@@ -92,13 +94,13 @@ and its state. In other words, if you change the state of an application,
 your route will change. If you change your route, your application's state
 will change.
 
-If you think about this, it's pretty powerful. For example, you can recreate
+This is a very powerful programming paradigm. For example, you can recreate
 a specific state in your application from any point, just by accessing a
 specific route.
 
 If this doesn't make sense right now, don't worry. As we develop our
-application together, you'll see, more and more, how this works, and just
-how powerful this aspect of CanJS is.
+application together, you'll see, more and more, how this works, and just 
+how powerful this aspect of CanJS can be.
 
 ## Using the Getting Started Guide
 Each chapter in the Getting Started Guide is prefaced with an overview of the topics covered in that chapter. The overview section also contains a link where you can download a zip file containing the code relevant to that chapter, as follows:

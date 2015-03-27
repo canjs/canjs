@@ -18,7 +18,7 @@ Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overha
 - - -
 
 Now that we know how to create a basic can.Component, let's look at making the
-Component a bit more usable. Let's build out the can.Component's template.
+them a bit more usable. Let's build out the can.Component's template.
 
 ## Stache Templates
 As mentioned previously, we're using Stache templates in
@@ -72,7 +72,8 @@ Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
 and [Handlebar](http://handlebarsjs.com/) template formats. For more
 information on the details of these formats, see the respective websites.
 
-### Keys <a name="keys"></a>
+<a name="keys"></a>
+### Keys
 The keys in the Stache template are the text portions bounded by curly
 braces, e.g., {{*my-text*}}.
 
@@ -83,42 +84,46 @@ You may have noticed a special key in the option tag. It looked like this:
 ```
 
 This is a data key. In brief, the data key allows you to access the data you
-assign it using jQuery's [$.data()](http://api.jquery.com/data/) method. In
+assign it using jQuery's [$.data()](http://api.jquery.com/data/) function. In
 the example above, we're assigning individual restaurant objects to the option
 tag, as we [enumerate](#enumeration) the collection of restaurants.
 
-### Enumeration <a name="enumeration"></a>
+<a name="enumeration"></a>
+### Enumeration 
 Enumerating means that you
 can loop through the contents of an iterable item. We've done this above for
-the options in our select dropdown. The {{# each _ _ _}} ... {{/each}} tag set
+the options in our select dropdown. The {{#each _ _ _}} ... {{/each}} tag set
 is used to enumerate over an enumerable collection, such as an array. In the
 example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
 from data keys inside the `# each` scope without dot notation.
 
-### Filtering <a name="filtering"></a>
+<a name="filtering"></a>
+### Filtering 
 Filtering allows you to display selective data. Given an array of
 people, for example, you can display all of the people whose first names begin
 with the letter "A". We won't explore filtering right now, as that's a more
 advanced feature.
 
-### Sections <a name="sections"></a>
+<a name="sections"></a>
+### Sections 
 Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
 typing you are required to do, and reduces the possibility for error as well.
 The example above contains a Section, the "MenuText" section. Sections begin
-with {{# ...}} and end with {{/...}}.
+with {{#...}} and end with {{/...}}.
 
-The Section key should map to an object. All of the keys contained in the
-Section object can be referenced without having to use dot notation. If we
-hadn't used a Section, for example, we would have had to write
+The Section key should map to either an object or an array. All of the keys 
+contained in the Section object can be referenced without having to use dot
+notation. If we hadn't used a Section, for example, we would have had to write
 {{MenuText.Restaurants}} for our key. Because we used a section, however, we
 only have to write {{Restaurants}}, and Stache does the rest for us.
 
-### Conditional Logic <a name="conditionallogic"></a>
+<a name="conditionallogic"></a>
+### Conditional Logic 
 Stache templates have a limited capacity for conditional
-logic. You can use {{# if _ _ _}} ... {{/if}} tags to conditionally display
+logic. You can use {{#if _ _ _}} ... {{/if}} tags to conditionally display
 contents. This becomes very useful when you want to show or hide a component,
 for example.
 
@@ -141,7 +146,7 @@ We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
 scope.
 
-Open up *restaurant_list_component.js*, and modify the scope as follows:
+Open up *restaurant_list.js*, and modify the scope as follows:
 
 ```
 scope: {
@@ -181,10 +186,10 @@ And, then add the appropriate event handler to our scope.
 ## Getting and Setting Scope Properties
 Now that you know how to handle events
 in your code, it's important to understand how to get and set the properties
-of the scope. Getting and setting are done through the `attr` method off of
+of the scope. Getting and setting are done through the `attr` function off of
 the `this` keyword. Let's look at an example.
 
-Open up *restaurant_list_component.js*, and modify the scope's
+Open up *restaurant_list.js*, and modify the scope's
 restaurantSelected property as follows:
 
 ```
@@ -196,7 +201,7 @@ restaurantSelected: function(viewModel, select){
 }
 ```
 
-The first line of the function uses the jQuery `$.data()` method we referred
+The first line of the function uses the jQuery `$.data()` function we referred
 to earlier to get a reference to the selected restaurant object. The third
 line sets the currentRestaurant property of the scope to reference the
 selectedRestaurant. The last line gets a reference to the currentRestaurant
@@ -226,10 +231,10 @@ rendering the current restaurant section.
 
 ## View Models
 It's considered a best practice to keep your can.Components
-thin. This helps maintain readability, and maintainability. To accomplish, you
-extract your scope from the can.Component into a can.Map.
+thin. This helps maintain readability and maintainability. To accomplish this,
+you extract your scope from the can.Component into a can.Map.
 
-Open up *restaurant_list_component.js*, and add the following code to the top of
+Open up *restaurant_list.js*, and add the following code to the top of
 the file:
 
 ```

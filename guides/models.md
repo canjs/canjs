@@ -54,12 +54,13 @@ properties are:
 4. update
 5. destroy
 
-The `find___` methods are available directly off of the object definition (i.e.,
-they are static). The `create`, `update`, and `destroy` methods are available
-off of specific instances of a can.Model. We'll see how to use these below.
+The `find___`, `create`, `update`, and `destroy functions are available directly 
+off of the object definition (i.e., they are static). The `destroy` function is  
+available off of specific instances of a can.Model. We'll see how to 
+use these below.
 
-**Reminder**: The number of parameters you pass in to an extend method is
-important. If you pass in a single parameter object, the extend method will
+**Reminder**: The number of parameters you pass in to an extend function is
+important. If you pass in a single parameter object, the extend function will
 use that to set the instanceProperties. If you pass in two parameter
 objects, the *first* object passed in will be used to set the
 *staticProperties*. The second parameter will be used to set the
@@ -71,18 +72,18 @@ A few examples illustrate this, below:
 ```
 var MyModel = can.Model.extend({
   findAll: function () {
-    // Static method
+    // Static function
   }
 }, {
   destroy: function () {
-    // Instance method
+    // Instance function
   }
 });
 
-MyModel.findAll(); // Reference a method defined on the constructor
+MyModel.findAll(); // Reference a function defined on the constructor
 
 var modelInstance = new MyModel();
-modelInstance.destroy(); // Reference a method defined on the prototype
+modelInstance.destroy(); // Reference a function defined on the prototype
 ```
 
 ## The Data for Our Model
@@ -97,9 +98,9 @@ backend services."
 
 can.fixture is not included with the base CanJS package. It's a good practice
 to keep it separate from your production CanJS library, which is why we
-downloaded it from its CDN in a separate script tag, rather than including it
+downloaded and used it a separate script tag, rather than including it
 with our custom download. *If you use can.fixture during development, remember
-to remove it once you are connecting to your REST services*.
+to remove it once you need to connect to your REST services*.
 
 Let's create a fixture that will respond to our requests for menu item data.
 Create another file in the models folder called *fixtures.js*. Add the
@@ -109,7 +110,7 @@ following code to that file:
 /**
  * Restaurants Model Fixture
  */
-can.fixture("GET /restaurants", function requestHandler() {
+can.fixture("GET /restaurants", function() {
   return [
     {
       "name": "Spago",
@@ -139,17 +140,17 @@ can.fixture("GET /restaurants", function requestHandler() {
 The first argument to can.fixture, "GET /restaurants", tells CanJS to
 intercept any GET requests to the resource "/restaurants". The second argument
 is a function that returns the data we want to get when the application makes
-a service call. Because we're simulating a findAll method, we need to return
-an array. The findAll method expects an array. By default, if it does not
+a service call. Because we're simulating a findAll function, we need to return
+an array. The findAll function expects an array. By default, if it does not
 receive one, it will throw an error. If you need to connect to services that
 return data that doesn't match the expected return type of the `find___`
-methods, don't fret. There are ways to manage this, which we'll work with
+functions, don't fret. There are ways to manage this, which we'll work with
 later on.
 
 ## Connecting the Model to the Component
 
 It's time to connect all of this together in our view model. Simply open up
-*restaurant_list_component.js*. Edit the RestaurantListViewModel as follows,
+*restaurant_list.js*. Edit the RestaurantListViewModel as follows,
 updating the restaurants property to receive data from the model we created:
 
 ```
@@ -164,21 +165,21 @@ var RestaurantListViewModel = can.Map.extend({
 });
 ```
 
-Note that there are a few ways to call a findAll method on a can.Model. The
-first way is to call the method explicitly. Using the RestaurantModel as an
+Note that there are a few ways to call a findAll function on a can.Model. The
+first way is to call the function explicitly. Using the RestaurantModel as an
 example, that would look like this:
 
 ```
 RestaurantModel.findAll({ /* paramsObject */ },
-  function success(returnedObject){
+  function(returnedObject){
     // ...
   },
-  function error(errorObject){
+  function(errorObject){
     // ...
   });
 ```
 
-In the code above, however, we called the findAll method indirectly:
+In the code above, however, we called the findAll function indirectly:
 
 ```
 restaurants: new RestaurantModel.List({}),
@@ -187,13 +188,13 @@ restaurants: new RestaurantModel.List({}),
 This is a special feature of the can.Model.List constructor. If you create a
 new instance of a can.Model.List, and you pass the constructor a plain
 JavaScript object, that List's constructor parameter will be passed to the
-can.Model's findAll method. The `findAll` method will run, and the list will
-be populated with the results of the `findAll` method, as below:
+can.Model's findAll function. The `findAll` function will run, and the list will
+be populated with the results of the `findAll` function, as below:
 
 
 ![](../can/guides/images/4_models/New.Model.List.png)
 
-We'll look at the can.Model's `findOne` method later on, when we create our Menu
+We'll look at the can.Model's `findOne` function later on, when we create our Menu
 Component. Finally, let's add the scripts we created to our index.html file:
 
 ```
@@ -204,7 +205,7 @@ Component. Finally, let's add the scripts we created to our index.html file:
 <script src="models/fixtures.js"></script>
 <script src="models/site_models.js"></script>
 <!--End add-->
-<script src="components/restaurant_list/restaurant_list_component.js"></script>
+<script src="components/restaurant_list/restaurant_list.js"></script>
 <script src="app.js"></script>
 ```
 

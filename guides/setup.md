@@ -28,12 +28,12 @@ select the following:
 
 ![CanJS plugins to select](../can/guides/images/setup/DownloadOptions.png)
 
-At the bottom of the page, click the download button. You'll be promoted to
+At the bottom of the page, click the download button. You'll be prompted to
 download a file called *can.custom.js*. Save that file to your local machine.
 
-You can access the custom download page here: <a href="http://canjs.com/download.html" target="_blank">Custom downloader</a>
+You can access the custom download page here: <a href="../download.html" target="_blank">Custom downloader</a>
 
-There is one additional file we need, which we won't download. This file is
+There is one additional file we need, which we won't download, yet. This file is
 special. You normally wouldn't want it to be a part of your final application,
 but it can be very helpful during development. The file is *can.fixture.js*.
 `can.fixture` allows you to simulate RESTful services. We'll cover how to
