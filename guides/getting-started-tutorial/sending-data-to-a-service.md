@@ -345,10 +345,10 @@ Go out to your app in the browser and reload your page. You should see the follo
 One thing you might immediately notice is that both the Restaurant List
 component and the Order Component are showing on the page. It might not look the
 prettiest, but don't worry about that for the moment. We'll deal with controlling
-which Components display when we set up our [Application State and Routing](AppState.html).
+which Components display when we set up our [AppState and Routing](AppState.html).
 
 In the [next chapter](CreatingTheMenuComponent.html), we'll talk about connecting all of our components
-together using the Application State, Routing, and `can.Map`'s define plugin.
+together using the AppState, Routing, and `can.Map`'s define plugin.
 
 - - -
 

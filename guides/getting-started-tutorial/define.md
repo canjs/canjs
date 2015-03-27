@@ -13,7 +13,7 @@
 *There is no code to download for this chapter*
 - - -
 
-The Application State object we created in the last chapter was a `can.Map`.
+The AppState object we created in the last chapter was a `can.Map`.
 Here it is, again, below:
 
 ```
@@ -51,7 +51,7 @@ var AppState = can.Map.extend({
 ```
 
 As mentioned in the last chapter, we've done something different with our
-Application State than we’ve done with the other instances of `can.Map` in the past. We’ve
+AppState than we’ve done with the other instances of `can.Map` in the past. We’ve
 made use of `can.Map`'s `define` plugin (i.e., the `define` attribute of the
 `extend` method's parameter) — something we included as part of our CanJS custom
 download. In fact, if you noticed, we used the `define` plugin in the
@@ -91,7 +91,7 @@ for creating aliases. We'll see an example of how this is accomplished below.
 A `set` function defines what happens when a value is set on a `can.Map`.
 It is typically used to update other attributes on the `can.Map` as a side
 effect, or coerce the set value into specific format. For example, we might
-want to update the `menu` attribute of the Application State we defined above
+want to update the `menu` attribute of the AppState we defined above
 when the `restaurant` attribute is updated.
 
 The setter function can take two optional arguments:

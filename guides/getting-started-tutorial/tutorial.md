@@ -75,19 +75,20 @@ together using the Application State and Routing to compose your application.
 <a name="appstate"></a>
 ### Application State
 One of the things that sets CanJS apart from other frameworks is its use
-of an Application State. An Application State is an observable object that,
-as its name implies, contains the state of your application. Where other
-application frameworks model their applications with routes, controllers, etc.,
-CanJS takes a more unified, semantic approach. It encapsulates the state
-of your application into an object. This is a pretty powerful approach to
-writing applications—freeing developers from many of the constraints of a
-DOM-centric paradigm to think more directly about the application itself.
+of an Application State. An Application State object, or AppState object for short,
+is an observable object that, as its name implies, contains the state of 
+your application. Where other application frameworks model their applications 
+with routes, controllers, etc., CanJS takes a more unified, semantic approach. 
+It encapsulates the state of your application into an object. This is a 
+very powerful approach to writing applications—freeing developers from 
+many of the constraints of a DOM-centric paradigm to think more directly 
+about the application itself.
 
 <a name="routing"></a>
 ### Routing For many JavaScript MV* frameworks, routing divides an application into
 logical views and binds those view to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
-Rather, it has to do with Application State. In brief,
+Rather, it has to do with AppState. In brief,
 CanJS maintains a reciprocal relationship between an application's route,
 and its state. In other words, if you change the state of an application,
 your route will change. If you change your route, your application's state
