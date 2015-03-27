@@ -222,11 +222,9 @@ steal('can/util', 'can/list', function () {
 			 */
 			unshift: 0
 		},
-		/**
-		 * adds a method where
-		 * @param where items in the array should be added
-		 * @param name method name
-		 */
+		// adds a method where
+		// @param where items in the array should be added
+		// @param name method name
 		function (where, name) {
 			var proto = can.List.prototype,
 				old = proto[name];

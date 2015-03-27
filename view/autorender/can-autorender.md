@@ -4,7 +4,7 @@
 Mark a script or other element as a template that should be 
 rendered automatically.
 
-@signature `<script can-autorender type='text/TYPE'>CONTENT</script>`
+@signature `<script can-autorender type='text/TYPE'>CONTENT< /script>`
 
 Renders the content of the script tag with a specified content.
 

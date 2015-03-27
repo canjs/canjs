@@ -78,7 +78,7 @@ steal('can/util', 'can/map', 'can/list', 'can/compute', function (can) {
 			});
 			return mapped;
 		}
-		/** TODO
+		/* TODO
 		,
 
 		every : function() {
