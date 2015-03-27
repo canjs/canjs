@@ -22,14 +22,10 @@ var OrderFormViewModel = can.Map.extend({
     placeOrder: function () {
 
         var menuItems = [];
-        var order, errorCheck, errors = {};
+        var order;
 
         order = this.createOrder.call(this, menuItems);
 
-        if (errorCheck) {
-            this.attr('issues', errors);
-            return;
-        }
         var that = this;
 
         order.save(

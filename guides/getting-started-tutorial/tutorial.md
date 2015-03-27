@@ -49,7 +49,7 @@ including:
 - Mustache
 
 While you can use any of the above template types, the preferred type
-is "Stache". It provides the most clarity to your code, and is the easiest
+is [Stache](../docs/can.stache.html). It provides the most clarity to your code, and is the easiest
 of the three options to use. At this time, Stache is supplied as a supporting
 library. This means you must explicitly add it to your application. We'll see
 how to do that when we set up our application in the next chapter. In future
@@ -111,7 +111,7 @@ Each chapter in the Getting Started Guide is prefaced with an overview of the to
  - Topic 2
  - Connecting can.Models with can.Components
 
-Get the code for: <a href="javscript://">chapter X</a>
+Get the code for: <a href="javscript://">chapter [*chapter number*]</a>
 
 - - -
 
