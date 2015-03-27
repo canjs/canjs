@@ -46,7 +46,7 @@ In the next step, we'll set up the application's folder structure, and move the
 
 When building a CanJS app, because our application will be built using
 components, we use a component-based folder structure. This structure makes it
-easier to both manage the contents of the component---and port the component,
+easier to both manage the contents of the component&mdash;and port the component,
 should you want to use it in another application.
 
 Off of a root folder called `PlaceMyOrder`, create the following subfolders:
