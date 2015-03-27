@@ -24,7 +24,7 @@ object is bound to two things:
 
 Since you already know about creating can.Maps, creating an ApplicationState,
 which is a `can.Map`, will be easy. Let's see how this works. Open up your
-*app.js*, and update it, as below. Note that the Application State object is a
+`app`, and update it, as below. Note that the Application State object is a
 `can.Map`—i.e., it is observable. You should also notice that we're creating
 our `can.Map` in a new way—using the define plugin, which we'll discuss more
 below:
@@ -86,7 +86,7 @@ Application State we've defined, we will, by default, have the following
 
 Let's take a moment, now, to see how that works.
 
-Add the following line of code to *app.js*:
+Add the following line of code to `app`:
 
 ```
 can.route.ready();
@@ -136,12 +136,12 @@ Once you submit that URL, you should see an alert box that reads:
 ## Application Binding
 
 It was mentioned earlier that we bound our Application State to the
-application's *base_template.stache*. This is the key to connecting the
+application's `base_template.stache`. This is the key to connecting the
 Application State to our components. We do that by passing Application State
 attributes to the components through their custom HTML tags in
-*base_template.stache*.
+`base_template.stache`.
 
-Open up *base_template.stache*, and add the following attributes to the menu
+Open up `base_template.stache`, and add the following attributes to the menu
 tag:
 
 ```
@@ -160,7 +160,7 @@ restaurant property of the Application State to the Restaurant List component:
 
 Let's update our components to communicate with our Application State.
 
-Open up the *restaurant_list.js* file, and edit it as follows;
+Open up the `restaurant_list` file, and edit it as follows;
 
 ```
 var RestaurantListViewModel = can.Map.extend({
@@ -205,7 +205,7 @@ we've added a `define` attribute. The define attribute is used to control the
 behavior of attributes on a can.Component. We'll go into detail on `define` in
 the [next chapter](Define.html).
 
-Next, open up *restaurant_list.stache*, and link the PlaceOrder button with the
+Next, open up `restaurant_list.stache`, and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
@@ -215,7 +215,7 @@ showMenu function we've defined, as follows:
 We've removed the DOM code from our View Model, and are now working directly
 with the application. In addition, we added code that would show and hide the content
 of the can.Component to our ViewModel. We need to update our view template to reflect these
-changes. In the same file (*restaurant_list.stache*), update the select dropdown
+changes. In the same file (`restaurant_list.stache`), update the select dropdown
 in the template as follows:
 
 ```
@@ -248,7 +248,7 @@ the place order button. You should see something like the following:
 
 ![](../can/guides/images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
 
-Next, let's remove the code in the *app.js* that set the restaurant to "Spago" by default:
+Next, let's remove the code in the `app` that set the restaurant to "Spago" by default:
 
 ```
 //--> Remove this line:
@@ -280,7 +280,7 @@ State's restaurant property is updated), we obtain its menus from our service,
 and then update the Application State's menus attribute.
 
 To make the OrderForm component show, and the RestaurantList component hide,
-we use conditional stache tags in *base_template.stache*, as below:
+we use conditional stache tags in `base_template.stache`, as below:
 
 ```
 <menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
@@ -291,7 +291,7 @@ we use conditional stache tags in *base_template.stache*, as below:
 {{/if}}
 ```
 
-Finally, open *order_form.js* and remove the code that set the restaurant to "Spago"
+Finally, open `order_form` and remove the code that set the restaurant to "Spago"
 
 ```
 var OrderFormViewModel = can.Map.extend({

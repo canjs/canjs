@@ -46,8 +46,8 @@ Now that our basic environment has been setup, and we have an outline of
 what we're going to build, let's start working with actual code. This step
 will involve setting up our foundations:
 
-- Page Chrome (*index.html*)
-- Bootstrapping (*app.js*)
+- Page Chrome (`index.html`)
+- Bootstrapping (`app.js`)
 
 ### index.html <a name="index-file"></a>
 Let's dive in to the good stuff, and start working with the app! Create a
@@ -92,13 +92,13 @@ remove *can.fixture.js*. In addition, to simplify things, we're using the
 Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
 
 #### Base Template
-Create a file in the app folder called *base_template.stache*. We'll edit the
+Create a file in the app folder called `base_template.stache`. We'll edit the
 contents of that file as we build out our application. For now, you can
 leave it blank.
 
 #### Application Bootstrap
 The first script we need to create is the script that will bootstrap our
-application. Create a file in the app folder called *app.js*. Edit the
+application. Create a file in the app folder called `app.js`. Edit the
 file as follows:
 
 ```

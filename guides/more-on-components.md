@@ -136,7 +136,7 @@ Event handling is defined in two places:
 
 Let's work with an example. You can add event handling to any element in the
 template by adding an attribute with the event name prefixed by "can-". Going
-back to the *restaurant_list.stache* file, edit the select tag, as follows:
+back to the `restaurant_list.stache` file, edit the select tag, as follows:
 
 ```
 <select id="RestaurantList" can-change="restaurantSelected">
@@ -146,7 +146,7 @@ We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
 scope.
 
-Open up *restaurant_list.js*, and modify the scope as follows:
+Open up `restaurant_list`, and modify the scope as follows:
 
 ```
 scope: {
@@ -189,7 +189,7 @@ in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` function off of
 the `this` keyword. Let's look at an example.
 
-Open up *restaurant_list.js*, and modify the scope's
+Open up `restaurant_list`, and modify the scope's
 restaurantSelected property as follows:
 
 ```
@@ -234,7 +234,7 @@ It's considered a best practice to keep your can.Components
 thin. This helps maintain readability and maintainability. To accomplish this,
 you extract your scope from the can.Component into a can.Map.
 
-Open up *restaurant_list.js*, and add the following code to the top of
+Open up `restaurant_list`, and add the following code to the top of
 the file:
 
 ```

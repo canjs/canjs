@@ -70,7 +70,7 @@ Finally, you'll need to download the supporting libraries. They are:
 - <a href="http://jquery.com/download/" target="_blank">jQuery 2.x</a>
 - <a href="http://canjs.com/release/2.1.4/can.fixture.js" target="_blank">can.fixture</a>
 
-Once you've downloaded these files, rename the jQuery file to *jquery.js* and
+Once you've downloaded these files, rename the jQuery file to `jquery.js` and
 copy both files to the *libs* directory in your application folder.
 
 - - -
