@@ -43,28 +43,36 @@ Edit it, as follows:
 
 
 ```
-<label for="RestaurantList">Select a Restaurant:</label>
-<select id="RestaurantList">
-  <option value="-1"></option>
-  {{#each restaurants}}
-    <option {{data 'restaurant'}}>{{name}}</option>
-  {{/each}}
-</select>
+<header>
+  <label>Select a Restaurant:</label>
+
+  <select class="form-control" can-change="restaurantSelected">
+    <option value="-1"></option>
+    {{#each restaurants}}
+      <option {{data 'restaurant'}}>{{name}}</option>
+    {{/each}}
+  </select>
+</header>
 
 {{#currentRestaurant}}
-<div id="current-restaurant">
-
-  <h3 id="restaurant-name">{{name}}</h3>
-  <ul id="restaurant-details">
-	<li>Location: {{location}}</li>
-	<li>Cuisine: {{cuisine}}</li>
-	<li>Owner: {{owner}}</li>
-  </ul>
-</div>
-
-<button id="place-order">Place My Order!</button>
+  <section>
+    <h3>{{name}}</h3>
+    <ul>
+      <li>
+        <b>Location:</b> {{location}}
+      </li>
+      <li>
+        <b>Cuisine:</b> {{cuisine}}
+      </li>
+      <li>
+        <b>Owner:</b> {{owner}}
+      </li>
+    </ul>
+    <button>
+      View Order Form
+    </button>
+  </section>
 {{/currentRestaurant}}
-
 ```
 
 Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
@@ -98,9 +106,9 @@ below, the properties of the objects we are enumerating over are accessible
 from data keys inside the `#each` scope without dot notation. In the example above, we saw:
 
 ```html
-  {{#each restaurants}}
-    <option {{data 'restaurant'}}>{{name}}</option>
-  {{/each}}
+{{#each restaurants}}
+  <option {{data 'restaurant'}}>{{name}}</option>
+{{/each}}
 ```
 
 Because the scope of the {{#each}} block is `restaurants`, we can reference the `name` property of `restaurants` directly&mdash;i.e, we don't need to write {{restaurants.name}}, we can just write {{name}}.
@@ -140,20 +148,20 @@ template by adding an attribute with the event name prefixed by "can-" (this eve
 back to the `restaurant_list.stache` file, edit the select tag, as follows:
 
 ```html
-<select id="RestaurantList" can-change="restaurantSelected">
+<select class="form-control" can-change="restaurantSelected">
 ```
 
 We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
 scope, which acts as the event handler.
 
-Open up `restaurant_list`, and modify the scope as follows:
+Open up `restaurant_list.js`, and modify the scope as follows:
 
 ```
 scope: {
   restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
   currentRestaurant: undefined,
-  restaurantSelected: function(){
+  restaurantSelected: function() {
     alert('You\'ve selected a restaurant');
   }
 }
@@ -179,7 +187,7 @@ to add a mousedown event handler, all we would have to do is edit the select
 element in our template as follows:
 
 ```
-<select id="RestaurantList" can-change="restaurantSelected" can-mousedown="handleMouseDown">
+<select class="form-control" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
 And, then add the appropriate event handler to our scope. NOTE: Adding event handlers in this way directly binds the events to the element. This can impact performance in situations where you have many elements to bind events to. For more performant event binding, you can use the can.Component's [events property](../docs/can.Component.prototype.events.html).
@@ -195,11 +203,10 @@ Open up `restaurant_list`, and modify the scope's `restaurantSelected` property 
 >>>Note: Drop second line of code below entirely, and explain why we can access directly off of VM.
 
 ```
-restaurantSelected: function(viewModel, select){
-  var selectedRestaurant = select.find('option:checked').data('restaurant');
-  var currentRestaurant = 'currentRestaurant';
-  this.attr(currentRestaurant, selectedRestaurant);
-  alert(this.attr(currentRestaurant).name);
+restaurantSelected: function(viewModel, select) {
+  var selectedRestaurant = select.find('option:selected').data('restaurant');
+  this.attr('currentRestaurant', selectedRestaurant);
+  alert(this.attr('currentRestaurant').name);
 }
 ```
 
@@ -244,9 +251,8 @@ var RestaurantListViewModel = can.Map.extend({
   restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
   currentRestaurant: undefined,
   restaurantSelected: function (viewModel, select) {
-    var restaurant = select.find('option:checked').data('restaurant');
-    var currentRestaurant = 'currentRestaurant';
-    this.attr(currentRestaurant, restaurant);
+    var restaurant = select.find('option:selected').data('restaurant');
+    this.attr('currentRestaurant', restaurant);
   }
 });
 ```
