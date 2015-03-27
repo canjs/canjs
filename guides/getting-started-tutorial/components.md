@@ -19,71 +19,6 @@ Get the code for: [chapter 2](https://github.com/bitovi/canjs/blob/guides-overha
 
 - - -
 
-## Constructors in CanJS
-
-Before we work with any of the objects in CanJS, it will be helpful for us to
-understand [can.Construct](../docs/can.Construct.html). Most of the objects in CanJS are derived from
-can.Construct. can.Construct provides a way to easily use the power of
-prototypal inheritance without worrying about hooking up all the particulars
-yourself.
-
-Without going into exhaustive detail, can.Construct contains a few functions we'll encounter frequently in other objects:
-
-- Prototype
-  - init
-- Static
-  - extend
-
-We'll look at the extend function first.
-
-### The extend function
-can.Construct's `extend` function is used to create
-"constructor functions". Constructor functions create instances of objects.
-The extend function can take up to three arguments:
-
-1. name: string
-2. staticProperties: object
-3. instanceProperties: object
-
-The extend function behaves differently depending on the number of arguments you
-pass it. The name and staticProperties arugments are optional. For example, if
-you pass it one argument, it will be use the value you pass it to set its
-instanceProperties. If you pass it two arguments, it uses the first to set its
-staticProperties, and the second to set its instanceProperties. Finally, if
-you pass in all three arguments, the first will set its name, the second its
-staticProperties, and the third its instanceProperties.
-
-In the example below, we only want to pass in staticProperties. Therefore, we
-must call the function as follows:
-
-```
-can.Construct.extend({
-  // Static properties here
-}, {
-  // Blank object as second parameter
-});
-```
-
-This pattern will apply to all objects in CanJS that have an extend function.
-
-### The init function
-The `init` function is called whenever a new instance of a
-can.Construct is created. Init is where the bulk of your initialization code
-should go. Inside of the init function, the `this` keyword will refer to the
-new instance, and `this` will contain the instance properties you pass to the
-constructor. A common thing to do in init is save the arguments passed into
-the constructor. An example is below:
-
-```
-var Person = can.Construct.extend({
-  init: function(first, last) {
-    this.first = first;
-    this.last = last;
-  }
-});
-
-var actor = new Person('Abe', 'Vigoda');
-```
 
 ## First can.Component <a name="first-component"></a>
 If you recall from the introduction, a can.Component is like a self-contained,
@@ -173,8 +108,7 @@ constructor to an object that would create instances of it. *can.Component is
 an exception*.
 
 All we have to do is declare the can.Component using its `extend` function.
-Once you declare your can.Component, you've registered your component with the
-system. When CanJS parses the `base_template.stache` file, and encounters the
+Once you declare your can.Component, you've registered your component with CanJS. When CanJS parses the `base_template.stache` file, and encounters the
 restaurant-list tag, it will automatically instantiate the can.Component
 associated with it, generate the Component's view inside of its custom tag,
 and bind that view to your component's scope.
