@@ -209,13 +209,12 @@ This is a special feature of the `can.Model.List` constructor. If you create a
 new instance of a `can.Model.List`, and you pass the constructor a plain
 JavaScript object, that List's constructor parameter will be passed to the
 `can.Model`'s `findAll` function. The `findAll` function will run, and the list will
-be populated with the results of the `findAll` function, as below:
+be populated with the results of the `findAll` function, as below [1](#ModelList):
 
 
 ![](../can/guides/images/4_models/New.Model.List.png)
 
-We'll look at the `can.Model`'s `findOne` function later on, when we create our Menu
-Component. Finally, let's add the scripts we created to our `index.html` file:
+Finally, let's add the scripts we created to our `index.html` file:
 
 ```
 <script src="libs/jquery.js"></script>
@@ -237,6 +236,10 @@ according to plan, you should see something like this:
 And, when you select a restaurant from the list, you should see:
 
 ![](../can/guides/images/4_models/FinalRestaurantComponentSelect.png)
+
+<a name="ModelList">
+**1**: At first, the Model.List({}) will be empty; however, the can.Model's findAll method will then be called, and the list will be populated with the results of that call, once the findAll method completes asynchronously. Because this list was data bound in the template, these results will automatically update in the template
+</a>
 
 - - -
 
