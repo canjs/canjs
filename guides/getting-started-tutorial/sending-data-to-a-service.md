@@ -159,17 +159,7 @@ property. If you recall, we bound the values of the `name`, `address`, and
 template. Now, all we need to do to get the values of those fields is
 reference them off of the View Model's `delivery` property.
 
-### Moving from DOM to the model
-When we created the RestaurantListComponent,
-we used the {{data '...'}} Stache key and jQuery to obtain a reference to the
-`restaurant` object associated with the choice the user selected in the
-restaurants dropdown. We almost never want to be interacting with the DOM
-directly in our application. We want CanJS to take care of that for us, so we can focus
-on the application itself. In the `createOrder` function, instead of getting our
-data from the DOM, we get it from our scope.
-
-### Save fixture
-Open up `fixtures.js` (in the models folder) and add the following fixture:
+To provide fixture support for saving our `can.Model`, open up `models/fixtures.js` and add the following fixture:
 
 ```
 /**
@@ -179,6 +169,15 @@ can.fixture('POST /order', function() {
   return true;
 });
 ```
+
+### Moving from DOM to the model
+When we created the RestaurantListComponent,
+we used the {{data '...'}} Stache key and jQuery to obtain a reference to the
+`restaurant` object associated with the choice the user selected in the
+restaurants dropdown. We almost never want to be interacting with the DOM
+directly in our application. We want CanJS to take care of that for us, so we can focus
+on the application itself. In the `createOrder` function, instead of getting our
+data from the DOM, we get it from our scope.
 
 ## Non-standard Data Sources
 Staying in `fixtures.js`, append the following to the bottom of the file:
