@@ -40,8 +40,10 @@ The following pseudo UML diagram outlines the elements that comprise up our appl
 ## Constructors in CanJS
 
 Before we work with any of the objects in CanJS, it will be helpful for us to
-understand [can.Construct](../docs/can.Construct.html). We won't be working with can.Construct directly. However, many of the objects in CanJS are derived from
-can.Construct. Understanding it, therefore, will make it easier for you to understand the concepts we're going to cover.
+understand [can.Construct](../docs/can.Construct.html). We won't be working with can.Construct
+directly. However, many of the objects in CanJS are derived from
+can.Construct. Understanding it, therefore, will make it easier for you to understand the
+concepts we're going to cover.
 
 can.Construct provides a way to easily use the power of prototypal
 inheritance without worrying about hooking up all the particulars
