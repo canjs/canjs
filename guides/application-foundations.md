@@ -9,12 +9,7 @@
 - - -
 **In this Chapter**
  - Application Overview
- - Page Chrome
- - Base View Template
- - Application Bootstrap
-
-Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
-
+ - Understanding can.Construct
 - - -
 
 The first step in putting together a CanJS app is sketching out the various
@@ -42,81 +37,72 @@ The following pseudo UML diagram outlines the elements that comprise up our appl
 
 ![](../can/guides/images/1_application_foundations/AppStateDiagram.png)
 
-Now that our basic environment has been setup, and we have an outline of
-what we're going to build, let's start working with actual code. This step
-will involve setting up our foundations:
+## Constructors in CanJS
 
-- Page Chrome (`index.html`)
-- Bootstrapping (`app.js`)
+Before we work with any of the objects in CanJS, it will be helpful for us to
+understand [can.Construct](../docs/can.Construct.html). We won't be working with can.Construct directly. However, many of the objects in CanJS are derived from
+can.Construct. Understanding it, therefore, will make it easier for you to understand the concepts we're going to cover.
 
-### index.html <a name="index-file"></a>
-Let's dive in to the good stuff, and start working with the app! Create a
-file called "index.html" in the app folder.
+can.Construct provides a way to easily use the power of prototypal
+inheritance without worrying about hooking up all the particulars
+yourself. Without going into exhaustive detail, can.Construct contains
+a few functions we'll encounter frequently in other objects:
 
-<pre>
-└── app
-    └── index.html
-</pre>
+- Prototype
+  - init
+- Static
+  - extend
 
-It should look like this:
+We'll look at the extend function first.
 
-```html
-<!DOCTYPE html>
-<html>
-  <head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="site_css/place_my_order.css"/>
-  </head>
-  <body>
+### The extend function
+can.Construct's `extend` function is used to create
+"constructor functions". Constructor functions create instances of objects.
+The extend function can take up to three arguments:
 
-    <!-- CanJS application root -->
-    <div id="can-app"></div>
+1. name: string
+2. staticProperties: object
+3. instanceProperties: object
 
-    <script src="libs/jquery.js"></script>
-    <script src="libs/can.custom.js"></script>
-    <script src="libs/can.fixture.js"></script>
-    <script src="app.js"></script>
-  </body>
-</html>
-```
+The extend function behaves differently depending on the number of arguments you
+pass it. The name and staticProperties arugments are optional. For example, if
+you pass it one argument, it will be use the value you pass it to set its
+instanceProperties. If you pass it two arguments, it uses the first to set its
+staticProperties, and the second to set its instanceProperties. Finally, if
+you pass in all three arguments, the first will set its name, the second its
+staticProperties, and the third its instanceProperties.
 
-At the bottom of the page, just before the body tag, are all of the script
-tags. We're using the jQuery edition of CanJS, so the first script tag
-loaded must be jQuery. Following jQuery, we load `can.custom.js`.
-
-In the last chapter, we mentioned including `can.fixture.js`. In a
-normal project, once you connected to the actual REST services, you would
-remove `can.fixture.js`. In addition, to simplify things, we're using the
-Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
-
-#### Base Template
-Create a file in the app folder called `base_template.stache`. We'll edit the
-contents of that file as we build out our application. For now, you can
-leave it blank.
-
-#### Application Bootstrap
-The first script we need to create is the script that will bootstrap our
-application. Create a file in the app folder called `app.js`. Edit the
-file as follows:
+In the example below, we only want to pass in staticProperties. Therefore, we
+must call the function as follows:
 
 ```
-$(function () {
-  $('#can-app').html('The Requisite "Hello World" Message');
+can.Construct.extend({
+  // Static properties here
+}, {
+  // Blank object as second parameter
 });
 ```
 
-If you open up your application in a browser, you should see:
+This pattern will apply to all objects in CanJS that have an extend function.
 
-> The Requisite "Hello World" Message
+### The init function
+The `init` function is called whenever a new instance of a
+can.Construct is created. Init is where the bulk of your initialization code
+should go. Inside of the init function, the `this` keyword will refer to the
+new instance, and `this` will contain the instance properties you pass to the
+constructor. A common thing to do in init is save the arguments passed into
+the constructor. An example is below:
 
-At this point, we haven't done much. We aren't using CanJS at all yet.
-We're just using jQuery to set the HTML contents of a DOM element.
+```
+var Person = can.Construct.extend({
+  init: function(first, last) {
+    this.first = first;
+    this.last = last;
+  }
+});
 
-So, how do we get the application to actually *do something*? Building apps
-with CanJS centers around building can.Components, read on to the next
-chapter to learn more.
+var actor = new Person('Abe', 'Vigoda');
+```
 
 - - -
 
@@ -124,3 +110,4 @@ chapter to learn more.
 <span class="pull-right">[Getting to Know Components &rsaquo;](Components.html)</span>
 
 </div>
+
