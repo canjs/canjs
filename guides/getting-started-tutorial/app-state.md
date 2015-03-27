@@ -24,7 +24,7 @@ object is bound to two things:
 
 Since you already know about creating instances of `can.Map`, creating an Application State object,
 which is a `can.Map`, will be easy. Let's see how this works. Open up your
-`app`, and update it, as shown below. Note that the Application State object is a
+`app.js` file, and update it as shown below. Note that the Application State object is a
 `can.Map`—i.e., it is observable. You should also notice that we're creating
 our `can.Map` in a new way—using the define plugin, which we'll discuss more
 below:
@@ -86,7 +86,7 @@ Application State we've defined, we will, by default, have the following
 
 Let's take a moment, now, to see how that works.
 
-Add the following line of code to `app`:
+Add the following line of code to `app.js`:
 
 ```
 can.route.ready();
@@ -141,11 +141,12 @@ Application State to our components. We do that by passing Application State
 attributes to the components through their custom HTML tags in
 `base_template.stache`.
 
-Open up `base_template.stache` and add the following attributes to the menu
-tag:
+Open up `base_template.stache` and make the following changes:
 
 ```
 <menu menus="{menus}" restaurant="{restaurant}"></menu>
+<order-form menus="{menus}" confirmation="{confirmation}"></order-form>
+<restaurant-list restaurant="{restaurant}"></restaurant-list>
 ```
 
 In the code above, we passed the `menus` and `restaurant` attributes to our
@@ -174,6 +175,9 @@ var RestaurantListViewModel = can.Map.extend({
       set: function(newValue) {
         if(!isNaN(newValue)) {
           this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
+        }
+        else {
+          this.removeAttr('currentRestaurant');
         }
         return newValue;
       }
@@ -259,7 +263,7 @@ the place order button. You should see something like the following:
 
 ![](../can/guides/images/7_application_state_routing/FirstComponentToAppStateCommunication.png)
 
-Next, let's remove the code in the `app` that set the restaurant to "Spago" by default:
+Next, let's remove the code in `app.js` that sets the restaurant to "Spago" by default:
 
 ```
 //--> Remove this line:
@@ -282,6 +286,7 @@ define: {
       return restaurant;
     }
   },
+  ...
 }
 ```
 
@@ -300,16 +305,6 @@ we use conditional stache tags in `base_template.stache`, as shown below:
 {{else}}
   <restaurant-list restaurant="{restaurant}"></restaurant-list>
 {{/if}}
-```
-
-Finally, open `order_form` and remove the code that set the restaurant to "Spago"
-and that set `menus` to Spago's.
-
-```
-var OrderFormViewModel = can.Map.extend({
-  delivery: {},
-  order: {},
-  ...
 ```
 
 When the Application State's `menus` attribute has a value, the order form is

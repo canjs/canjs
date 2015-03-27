@@ -24,6 +24,9 @@ In your models folder, open `fixtures.js` and add the following code to register
 new can.fixture:
 
 ```
+/**
+ * Site Menu Fixture
+ */
 can.fixture('GET /site_menu', function() {
   return {
     menuText: {
@@ -39,9 +42,14 @@ can.fixture('GET /site_menu', function() {
 Open up `site_models` and add a new can.Model:
 
 ```
+/**
+ * Site Menu Model
+ * @type {void|*}
+ */
 var SiteMenuModel = can.Model.extend({
   findOne: 'GET /site_menu'
-});
+},
+{});
 ```
 
 In your components folder, create a new folder called `site_menu`. In that

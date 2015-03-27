@@ -26,7 +26,7 @@ As mentioned previously, we're using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
 included the can.stache plugin. The CanJS docs tell us that,
 "Stache templates look similar to normal HTML, except they contain *keys* for
-inserting data into the template, and *Sections* to *enumerate and/or filter*
+inserting data into the template and *Sections* to *enumerate and/or filter*
 the enclosed template blocks." They can also contain limited *conditional
 logic* to show or hide content.
 
@@ -47,7 +47,7 @@ Edit it as follows:
 <header>
   <label>Select a Restaurant:</label>
 
-  <select class="form-control" can-change="restaurantSelected">
+  <select class="form-control">
     <option value="-1"></option>
     {{#each restaurants}}
       <option {{data 'restaurant'}}>{{name}}</option>

@@ -29,7 +29,7 @@ encapsulated, they should each contain their own:
 - JavaScript file
 - CSS file
 
-This is why we created a components folder for our app—instead of, say, a
+This is why we created a components folder for our app — instead of, say, a
 `js` folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
@@ -83,7 +83,7 @@ $(function () {
 For the moment, if you don't know what can.view does, don't worry. We'll
 go over it in detail soon.
 
-Finally, we need to add a reference to `restaurant_list` in the
+Finally, we need to add a reference to `restaurant_list.js` in the
 index.html file, as follows:
 
 ```

@@ -10,7 +10,7 @@
 **In this Chapter**
  - Route Formatting
  - Serialization
- - Creating Anchor Tags with `can.route.link`
+ - Creating Anchor Tags with helpers and can.route.url
 
 Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 - - -
@@ -36,7 +36,7 @@ to the following in your URL bar:
 ![](../can/guides/images/9_routes_and_serialization/NastyUrlBar.png)
 
 That's not pretty, and not very useful. We don't want the `confirmation` or `menu`
-attributes to serialize. It's easy to change this behavior. Open up `app` and
+attributes to serialize. It's easy to change this behavior. Open up `app.js` and
 edit the Application State object as follows:
 
 First, let's update the setter so that we can change restaurants by typing
@@ -89,7 +89,7 @@ Open up `app` and edit the Application State object
 as follows:
 
 ```
-var ApplicationState = can.Map.extend({
+var AppState = can.Map.extend({
   define: {
     restaurant: {
       value: {},
@@ -109,8 +109,7 @@ var ApplicationState = can.Map.extend({
       }
     },
     menus: {
-      value: null,
-      serialize: false
+      value: null
     }
   }
 });
@@ -238,7 +237,6 @@ your `site_menu components` folder. Edit it as follows:
     </li>
   </ul>
 {{/menuData.menuText}}
-
 ```
 
 Generally, we want to avoid adding HTML by way of our `can.Component` code. It
@@ -273,9 +271,8 @@ can.Component.extend({
     }
   }
 });
-
 ```
-Here, we create a `can.route` URL to place into the view template, using 
+Here we create a routable URL to place into the view template, using 
 `can.route.url`. You should always use `can.route.url` when generating routable
 URLs in your application.
 
@@ -310,11 +307,11 @@ set: function(restaurant) {
 }
 ```
 
-Now, open up your application in the browser (refresh, if you haven't). Select
-a restaurant from the list, then click the "Place Order" button. Once a menu
-displays, click on the Restaurants link. The menu will disappear and the
-application will be returned to the default state, where you select a
-restaurant form the list.
+Now, open up your application in the browser (refresh, if oyu haven't). Select
+a restaurant from the list, then click the "View Order Form" button. Once a menu
+displays, select some items, fill out the customer details, and click the "Place 
+My Order" button. A dialog will pop up with your order details that you have 
+chosen.
 
 - - -
 
