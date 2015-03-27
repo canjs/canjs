@@ -39,7 +39,7 @@ todo.save(function(todo){
 ## Using `save` to update an instance.
 
 If save is called on an instance that has
-an [can.Model.id id] property, it calls [can.Model.create]
+an [can.Model.id id] property, it calls [can.Model.update]
 with the instance's properties.  When the save is complete,
 it triggers an "updated" event on the instance and the instance's model.
 

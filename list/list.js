@@ -577,7 +577,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * - _length_ The current length of the list.
 			 * If events were batched when the _length_ event was triggered, _length_
 			 * will have the length of the list when `stopBatch` was called. Because
-			 * of this, you may recieve multiple _length_ events with the same
+			 * of this, you may receive multiple _length_ events with the same
 			 * _length_ parameter.
 			 *
 			 * Here is a concrete tour through the _length_ event handler's arguments:

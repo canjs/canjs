@@ -170,7 +170,7 @@ steal('can/util/string', function (can) {
 		 * // look in the cache to see if the object already exists
 		 * var cachedInst = this.__cache[id];
 		 * if(cachedInst) {
-		 * 		return cachedInst;
+		 *     return cachedInst;
 		 * }
 		 *
 		 * //otherwise call the original newInstance function and return a new instance of Person.
@@ -351,7 +351,7 @@ steal('can/util/string', function (can) {
 		 *		  findAll: function() {
 		 *			return can.ajax({url: "/animals"});
 		 *		  }
-		 * 		},{
+		 *     },{
 		 *       init: function(name) {
 		 *         this.name = name;
 		 *       },
@@ -692,7 +692,6 @@ steal('can/util/string', function (can) {
 	 *     });
 	 *
 	 */
-	 }
 	can.Construct.prototype.setup = function () {};
 	/**
 	 * @function can.Construct.prototype.init init
