@@ -1,14 +1,14 @@
-$(function () {
+$(function() {
 
     var AppState = can.Map.extend({
         define: {
             restaurant: {
                 value: {},
-                serialize: function () {
+                serialize: function() {
                     var name = this.attr('restaurant.name');
                     return name ? name.replace(/\s/ig, '_') : name;
                 },
-                set: function (restaurant) {
+                set: function(restaurant) {
                     if(!restaurant) return restaurant;
 
                     if(typeof restaurant === 'string') {
@@ -38,11 +38,11 @@ $(function () {
             var that = this;
             this.attr('restaurantName', restaurantName);
             RestaurantModel.findOne({name: restaurantName},
-                function (restaurantModel) {
+                function(restaurantModel) {
                     that.getRestaurantMenu(restaurantModel);
                     return restaurantModel;
                 },
-                function (xhr) {
+                function(xhr) {
                     alert(xhr.message);
                     return null;
                 })

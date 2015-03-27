@@ -3,9 +3,9 @@ var OrderFormViewModel = can.Map.extend({
     delivery: {},
     order: {},
 
-    createOrder: function (menuItems) {
-        this.attr('menus').each(function (itemSet) {
-            itemSet.attr('items').each(function (item) {
+    createOrder: function(menuItems) {
+        this.attr('menus').each(function(itemSet) {
+            itemSet.attr('items').each(function(item) {
                 if (item.attr('selected')) {
                     menuItems.push(item);
                 }
@@ -17,7 +17,7 @@ var OrderFormViewModel = can.Map.extend({
             menuItems: menuItems
         });
     },
-    placeOrder: function () {
+    placeOrder: function() {
 
         var menuItems = [];
         var order;
@@ -39,7 +39,7 @@ var OrderFormViewModel = can.Map.extend({
                         phone: order.attr('delivery.telephone')
                 });
 
-                order.attr('menuItems').each(function (item) {
+                order.attr('menuItems').each(function(item) {
                     message += can.sub('    {name} - {price}\n', {
                         name: item.attr('name'),
                         price: item.attr('price')

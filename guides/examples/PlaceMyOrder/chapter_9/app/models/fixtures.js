@@ -1,7 +1,7 @@
 /**
  * Restaurants Model Fixture
  */
-can.fixture('GET /restaurants', function requestHandler() {
+can.fixture('GET /restaurants', function() {
     return [
         {
             'name': 'Spago',
@@ -27,7 +27,7 @@ can.fixture('GET /restaurants', function requestHandler() {
     ];
 });
 
-can.fixture('GET /restaurant/{name}', function requestHandler(request) {
+can.fixture('GET /restaurant/{name}', function(request) {
 
     var restaurantMap = {
         'Spago': {
@@ -60,14 +60,14 @@ can.fixture('GET /restaurant/{name}', function requestHandler(request) {
 /**
  * Order Fixture
  */
-can.fixture('POST /order', function requestHandler(){
+can.fixture('POST /order', function() {
     return true;
 });
 
 /**
  * Restaurant Menus Fixture
  */
-can.fixture('GET /menus/{id}', function requestHandler(request) {
+can.fixture('GET /menus/{id}', function(request) {
 
     var id = parseInt(request.data.id, 10) - 1;
 
@@ -146,7 +146,7 @@ can.fixture('GET /menus/{id}', function requestHandler(request) {
 /**
  * Site Menu Fixture
  */
-can.fixture('GET /site_menu', function requestHandler() {
+can.fixture('GET /site_menu', function() {
     return {
         menuText: {
             'PageTitle': 'Placemyorder.com',

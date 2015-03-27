@@ -9,8 +9,8 @@ var RestaurantListViewModel = can.Map.extend({
         currentRestaurantIndex: {
             value: {},
             type: 'number',
-            set: function(newValue){
-                if(!isNaN(newValue)){
+            set: function(newValue) {
+                if(!isNaN(newValue)) {
                     this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
                 }
                 return newValue;
@@ -29,7 +29,7 @@ var RestaurantListViewModel = can.Map.extend({
             }
         }
     },
-    showMenu: function () {
+    showMenu: function() {
         //Sets the restaurant value on the parent scope (AppState)
         this.attr('restaurant', this.attr('currentRestaurant'));
     }
