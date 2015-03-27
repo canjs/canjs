@@ -25,12 +25,12 @@ If you recall from the introduction, a can.Component is like a self-contained,
 mini web application—i.e., it's encapsulated. Because can.Components are
 encapsulated, they should each contain their own:
 
-- View template (.stache file)
-- JS
-- CSS
+- View template file (.stache file)
+- JavaScript file
+- CSS file
 
-This is why we created a components folder for our app—instead of, say, a
-JS folder. Each component we develop will be in a folder that contains all
+This is why we created a components folder for our app &emdash; instead of, say, a
+"js" folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
