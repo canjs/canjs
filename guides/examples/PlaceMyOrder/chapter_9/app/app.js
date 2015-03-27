@@ -1,6 +1,6 @@
 $(function () {
 
-    var ApplicationState = can.Map.extend({
+    var AppState = can.Map.extend({
         define: {
             restaurant: {
                 value: {},
@@ -63,7 +63,7 @@ $(function () {
         }
     });
 
-    var appState = new ApplicationState();
+    var appState = new AppState();
 
     //Bind the application state to the root of the application
     $('#can-app').html(can.view('base_template.stache', appState));
