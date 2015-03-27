@@ -24,7 +24,7 @@ In your models folder, open `fixtures`. Add the following code to register a
 new can.fixture:
 
 ```
-can.fixture('GET /site_menu', function requestHandler() {
+can.fixture('GET /site_menu', function() {
   return {
     menuText: {
       'PageTitle': 'PlaceMyOrder.com',
@@ -49,9 +49,7 @@ folder, create a file called `site_menu` and add the following code:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
-  init: function () {
-    this.attr('menuData', {});
-  }
+  menuData: {}
 });
 
 can.Component.extend({
@@ -61,13 +59,11 @@ can.Component.extend({
   events: {
     inserted: function () {
       var siteMenuViewModel = this.scope;
-      SiteMenuModel.findOne({},
-        function(menu) {
-          siteMenuViewModel.attr('menuData', menu);
-        },
-        function(xhr) {
-          alert(xhr.error.message);
-        });
+      SiteMenuModel.findOne({}).done(function(menu) {
+        siteMenuViewModel.attr('menuData', menu);
+      }).fail(function(xhr) {
+        alert(xhr.error.message);
+      });
     }
   }
 });
@@ -107,26 +103,23 @@ create a template file called `site_menu.stache`, as follows:
 
 ```
 {{#menuData.menuText}}
-<ul class="nav">
-    <li><a class="visible-xs text-center" data-toggle="offcanvas" href="#"><i
-            class="glyphicon glyphicon-chevron-right"></i></a></li>
-</ul>
-<ul id="sidebar-footer" class="list-unstyled hidden-xs">
-    <li can-click="clickedAlert">
-        <a href="#!home"><h4>{{PageTitle}}</h4>
-            <i class="glyphicon glyphicon-heart-empty"></i>{{FoodAtFingertips}}</a>
-    </li>
-</ul>
-
-<ul id="lg-menu" class="nav hidden-xs">
-    <li class="active"><a can-click="goHome" href="#"><i class="glyphicon glyphicon-cutlery"></i> {{Restaurants}}</a></li>
-</ul>
-
-
-<!-- tiny only nav-->
-<ul id="xs-menu" class="nav visible-xs">
-    <li><a class="text-center" href="#!restaurants"><i class="glyphicon glyphicon-cutlery"></i></a></li>
-</ul>
+    <ul>
+        <li class="logo">
+            <h1>
+                <a href="#">
+                    {{PageTitle}}
+                </a>
+            </h1>
+            <a href="#">
+                {{FoodAtFingertips}}
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                {{Restaurants}}
+            </a>
+        </li>
+    </ul>
 {{/menuData.menuText}}
 ```
 
@@ -134,7 +127,7 @@ Open up `app/base_template.stache`, and add the following line to the top of
 the file:
 
 ```
-<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas"></menu>
+<menu></menu>
 ```
 
 Finally, add the script tag for the SiteMenuComponent to the index.html file:
