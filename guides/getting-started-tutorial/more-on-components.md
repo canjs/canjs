@@ -17,8 +17,9 @@ Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overha
 
 - - -
 
-Now that we know how to create a basic [can.Component](../docs/can.Component.html), let's look at making the
-them a bit more usable. Let's build out the can.Component's template.
+Now that we know how to create a basic [can.Component](../docs/can.Component.html),
+let's look at making the them a bit more usable. Let's build out the
+can.Component's template.
 
 ## Stache Templates
 As mentioned previously, we're using Stache templates in
@@ -37,7 +38,7 @@ There are five aspects of Stache templates, mentioned above, that we'll review:
 - [filtering](#filtering), and
 - [conditional logic](#conditionallogic)
 
-It will be easiest for us to look at these with an example, so let's create 
+It will be easiest for us to look at these with an example, so let's create
 one. Open up your `components/restaurant_list/restaurant_list.stache` file.
 Edit it as follows:
 
@@ -103,7 +104,8 @@ the options in our select dropdown. The {{#each _ _ _}} ... {{/each}} tag set
 is used to enumerate over an enumerable collection, such as an array. In the
 example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
-from data keys inside the `#each` scope without dot notation. In the example above, we saw:
+from data keys inside the `#each` scope without dot notation. In the example
+above, we saw:
 
 ```html
 {{#each restaurants}}
@@ -111,8 +113,9 @@ from data keys inside the `#each` scope without dot notation. In the example abo
 {{/each}}
 ```
 
-Because the scope of the {{#each}} block is `restaurants`, we can reference the `name` property of
-`restaurants` directly&mdash;i.e, we don't need to write {{restaurants.name}}, we can just write {{name}}.
+Because the scope of the {{#each}} block is `restaurants`, we can reference
+the `name` property of `restaurants` directly&mdash;i.e, we don't need to
+write {{restaurants.name}}, we can just write {{name}}.
 
 <a name="sections"></a>
 ### Sections
@@ -120,14 +123,15 @@ Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
 typing you are required to do and reduces the possibility for error as well.
-The example above contains a Section, the "currentRestaurant" section. Sections begin
-with {{#...}} and end with {{/...}}.
+The example above contains a Section, the "currentRestaurant" section. Sections
+begin with {{#...}} and end with {{/...}}.
 
 The Section key should map to either an object or an array.
 
 <a name="conditionallogic"></a>
 ### Conditional Logic
-Stache templates have a limited capacity for conditional logic. They provide simple if/else statements, for example:
+Stache templates have a limited capacity for conditional logic. They provide
+simple if/else statements, for example:
 
 ```html
 {{#if truthy}}
@@ -135,8 +139,8 @@ Stache templates have a limited capacity for conditional logic. They provide sim
 {{/if}}
 ```
 
-If you need to use more complex logic in your application, can.Component provides
-[helpers](../docs/can.Component.prototype.helpers.html).
+If you need to use more complex logic in your application, can.Component
+provides [helpers](../docs/can.Component.prototype.helpers.html).
 
 ## Event Handling
 
@@ -146,9 +150,10 @@ To add an event handler, we have to make changes in two places:
 2. The can.Component scope
 
 Let's work with an example. You can add event handling to any element in the
-template by adding an attribute with the event name prefixed by "can-" (this event name can be
-[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)). Going
-back to the `restaurant_list.stache` file, edit the select tag as follows:
+template by adding an attribute with the event name prefixed by "can-" (this
+event name can be [any standard DOM event](https://developer.mozilla.org/en-
+US/docs/Web/Events)). Going back to the `restaurant_list.stache` file, edit
+the select tag as follows:
 
 ```html
 <select class="form-control" can-change="restaurantSelected">
@@ -193,21 +198,21 @@ element in our template as follows:
 <select class="form-control" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
-And, then add the appropriate event handler to our scope. NOTE: Adding event handlers in this way
-directly binds the events to the element. This can impact performance in situations where you have many
-elements to bind events to. For more performant event binding, you can use the can.Component's
-[events property](../docs/can.Component.prototype.events.html).
+And, then add the appropriate event handler to our scope. NOTE: Adding event
+handlers in this way directly binds the events to the element. This can impact
+performance in situations where you have many elements to bind events to. For
+more performant event binding, you can use the can.Component's [events
+property](../docs/can.Component.prototype.events.html).
 
 ## Getting and Setting Scope Properties
 Now that you know how to handle events
 in your code, it's important to understand how to get and set the properties
 of the scope. Getting and setting are done through the `attr` function off of
-the scope object, in this case `this` is bound to the scope, because we're within a method of the scope.
-Let's look at an example.
+the scope object, in this case `this` is bound to the scope, because we're
+within a method of the scope. Let's look at an example.
 
-Open up `restaurant_list.js` and modify the scope's `restaurantSelected` property as follows:
-
->>>Note: Drop second line of code below entirely and explain why we can access directly off of VM.
+Open up `restaurant_list.js` and modify the scope's `restaurantSelected`
+property as follows:
 
 ```
 restaurantSelected: function(viewModel, select) {
