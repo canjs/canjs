@@ -32,7 +32,7 @@ below:
 ```
 $(function () {
 
-   var ApplicationState = can.Map.extend({
+   var AppState = can.Map.extend({
     define: {
       restaurant: {
         value: {}
@@ -46,7 +46,7 @@ $(function () {
     }
   });
 
-  var appState = new ApplicationState();
+  var appState = new AppState();
 
   // Bind the application state to the root of the application
   $('#can-app').html(can.view('base_template.stache', appState));
@@ -112,8 +112,8 @@ object. Modify the restaurant property as follows:
 ```
 restaurant: {
   value: {},
-  set: function(newValue){
-    if (typeof newValue === 'string'){
+  set: function(newValue) {
+    if (typeof newValue === 'string') {
       alert(newValue);
     }
     return newValue;
@@ -145,7 +145,7 @@ Open up `base_template.stache`, and add the following attributes to the menu
 tag:
 
 ```
-<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
+<menu menus="{menus}" restaurant="{restaurant}"></menu>
 ```
 
 In the code above, we passed the "menus" and "restaurant" attributes to our
@@ -171,18 +171,25 @@ var RestaurantListViewModel = can.Map.extend({
     currentRestaurantIndex: {
       value: {},
       type: 'number',
-      set: function(newValue){
-        if(!isNaN(newValue)){
+      set: function(newValue) {
+        if(!isNaN(newValue)) {
           this.attr('currentRestaurant', this.attr('restaurants')[newValue]);
         }
         return newValue;
       }
+    },
+    visible: {
+      value: true,
+      type: 'boolean'
+    },
+    selected: {
+      value: {}
+    },
+    restaurants: {
+      value: function() {
+        return new RestaurantModel.List({})
+      }
     }
-  },
-  init: function () {
-    this.attr('restaurants', new RestaurantModel.List({}));
-    this.attr('visible', true);
-    this.attr('selected', {});
   },
   showMenu: function () {
     // Sets the restaurant value on the parent scope (AppState)
@@ -209,7 +216,9 @@ Next, open up `restaurant_list.stache`, and link the PlaceOrder button with the
 showMenu function we've defined, as follows:
 
 ```
-<button id="place-order" can-click="showMenu">Place My Order!</button>
+<button can-click="showMenu">
+  View Order Form
+</button>
 ```
 
 We've removed the DOM code from our View Model, and are now working directly
@@ -219,21 +228,23 @@ changes. In the same file (`restaurant_list.stache`), update the select dropdown
 in the template as follows:
 
 ```
-{{#visible}}
-  <label for="RestaurantList">Select a Restaurant:</label>
-  <select id="RestaurantList" can-value="currentRestaurantIndex">
-    <option value="-1"></option>
-    {{#each restaurants}}
-      <option value="{{@index}}">{{name}}</option>
-    {{/each}}
-  </select>
+{{#if visible}}
+  <header>
+    <label>Select a Restaurant:</label>
 
-  {{#if currentRestaurant}}
-    {{#currentRestaurant}}
-      <!-- Code removed for brevity -->
-    {{/currentRestaurant}}
-  {{/if}}
-{{/visible}}
+    <select class="form-control" can-value="currentRestaurantIndex">
+      <option value="-1"></option>
+      {{#each restaurants}}
+        <option value="{{@index}}">{{name}}</option>
+      {{/each}}
+    </select>
+  </header>
+
+  {{#currentRestaurant}}
+  <!-- Code removed for brevity -->
+  {{/currentRestaurant}}
+{{/if}}
+
 ```
 
 What we've done above is to make a connection between the index of the select
@@ -283,25 +294,21 @@ To make the OrderForm component show, and the RestaurantList component hide,
 we use conditional stache tags in `base_template.stache`, as below:
 
 ```
-<menu id="sidebar" class="column col-sm-2 col-xs-1 sidebar-offcanvas" menus="{menus}" restaurant="{restaurant}"></menu>
+<menu menus="{menus}" restaurant="{restaurant}"></menu>
 {{#if menus}}
-  <order-form menus="{menus}" restaurantName="{restaurantName}" confirmation="{confirmation}"></order-form>
+  <order-form menus="{menus}" restaurant-name="{restaurant.name}"></order-form>
 {{else}}
   <restaurant-list restaurant="{restaurant}"></restaurant-list>
 {{/if}}
 ```
 
 Finally, open `order_form` and remove the code that set the restaurant to "Spago"
+and that set "menus" to Spago's.
 
 ```
 var OrderFormViewModel = can.Map.extend({
-  init: function () {
-    this.attr('delivery', {});
-    this.attr('order', {});
-    this.attr('issues', {});
-    //--> Remove the hard-coded reference to "Spago" which is now passed in from the Application State
-    this.attr('menus', new RestaurantMenusModel.List({id: 1}));
-  },
+  delivery: {},
+  order: {},
   ...
 ```
 
