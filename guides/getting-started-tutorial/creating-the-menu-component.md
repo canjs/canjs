@@ -15,12 +15,12 @@ Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overha
 - - -
 
 We should know enough at this point to successfully create our Menu component.
-Going through the steps will be a good review of what we've covered so far,
+Going through the steps will be a good review of what we've covered so far
 and help you solidify your understanding of CanJS. We'll also cover some
 additional functionality from the objects we already know, such as the findOne
 function of can.Model.
 
-In your models folder, open `fixtures`. Add the following code to register a
+In your models folder, open `fixtures.js` and add the following code to register a
 new can.fixture:
 
 ```
@@ -36,7 +36,7 @@ can.fixture('GET /site_menu', function() {
 });
 ```
 
-Open up `site_models`, and add a new can.Model:
+Open up `site_models` and add a new can.Model:
 
 ```
 var SiteMenuModel = can.Model.extend({
@@ -44,8 +44,8 @@ var SiteMenuModel = can.Model.extend({
 });
 ```
 
-In your components folder, create a new folder called "site_menu". In that
-folder, create a file called `site_menu` and add the following code:
+In your components folder, create a new folder called `site_menu`. In that
+folder, create a file called `site_menu.js` and add the following code:
 
 ```
 var SiteMenuViewModel = can.Map.extend({
@@ -91,9 +91,9 @@ signature. If the findOne operation is successful, the success function will be
 called. Otherwise, the error function is called.
 
 In the example above, we create an observable can.Map object. We create an
-instance of that object, and assign it to the can.Component's scope. Because
+instance of that object and assign it to the can.Component's scope. Because
 the can.Map object is observable, when we later update it's menuData property,
-the update is broadcast to the system, and the menu can.Component is refreshed
+the update is broadcast to the system and the menu can.Component is refreshed
 with the menu data returned from the findOne function. There is currently no
 implicit function for calling can.Model.findOne. You must use the function
 described above.
@@ -123,7 +123,7 @@ create a template file called `site_menu.stache`, as follows:
 {{/menuData.menuText}}
 ```
 
-Open up `app/base_template.stache`, and add the following line to the top of
+Open up `app/base_template.stache` and add the following line to the top of
 the file:
 
 ```
