@@ -3,7 +3,8 @@
 		"docs": {
 			"glob": {
 				"ignore": [
-					"guides/*.md", 
+					"guides/*.md",
+				  	"guides/**/*.md"
 					"{node_modules,bower_components}/**/*", 
 					"lib/**/*",
 					"test/**/*",
@@ -15,7 +16,7 @@
 		},
 		"guides": {
 			"glob": {
-				"pattern": "{guides/*.md,*.md}"
+				"pattern": "{guides/*.md,guides/**/*.md,*.md}"
 			},
 			"parent": "guides"
 		}
