@@ -36,7 +36,7 @@ array.  When the deferred resolves, its values will be added to the list.
 `can.List` is used to observe changes to an Array.  `can.List` extends `[can.Map]`, so all the 
 ways that you're used to working with Maps also work here.
 
-Use [can.Map::attr attr] to read and write properties of a list:
+Use [can.List::attr attr] to read and write properties of a list:
 
     var hobbies = new can.List(["JS","Party Rocking"])
     hobbies.attr(0)        //-> "JS"

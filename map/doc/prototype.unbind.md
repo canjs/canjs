@@ -1,14 +1,14 @@
 @function can.Map.prototype.unbind unbind
 @parent can.Map.prototype 8
 
-@description Unbind event handlers from an Map.
+@description Unbind event handlers from a Map.
 
 @signature `map.unbind(eventType[, handler])`
 @param {String} eventType the type of event to unbind, exactly as passed to `bind`
 @param {Function} [handler] the handler to unbind
 
 @body
-`unbind` unbinds event handlers previously bound with [can.Map.prototype.bind|`bind`].
+`unbind` unbinds event handlers previously bound with [can.Map.prototype.bind bind].
 If no _handler_ is passed, all handlers for the given event type will be unbound.
 
 

@@ -22,7 +22,7 @@ This on demand initialization of nested data can yield big performance improveme
 
 ## Limitations of LazyMaps
 
-Although passing all original [can.Map] and [can.List] tests, `can.LayzMap` and `can.LazyList` do not work with the [can.Map.attributes], [can.Map.setter], [can.Map.delegate], [can.Map.backup]
+Although passing all original [can.Map] and [can.List] tests, `can.LazyMap` and `can.LazyList` do not work with the [can.Map.attributes], [can.Map.setter], [can.Map.delegate], [can.Map.backup]
 and [can.Map.validations] plugins.
 
 Additionally, If all properties of a LazyMap or LazyList are being read, bound or set, initialization time can be slightly higher than using a Map or List.
