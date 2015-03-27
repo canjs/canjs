@@ -118,29 +118,34 @@ The Section key should map to either an object or an array.
 
 <a name="conditionallogic"></a>
 ### Conditional Logic
-Stache templates have a limited capacity for conditional
-logic. You can use {{#if _ _ _}} ... {{/if}} tags to conditionally display
-contents. This becomes very useful when you want to show or hide a component,
-for example.
+Stache templates have a limited capacity for conditional logic. They provide simple if/else statements, for example:
+
+```html
+{{#if truthy}}
+ <!--My code goes here-->
+{{/if}}
+```
+
+If you need to use more complex logic in your application, can.Components provide [helpers](../docs/can.Component.prototype.helpers.html).
 
 ## Event Handling
 
-Event handling is defined in two places:
+To add an event handler, we have to make changes in two places:
 
 1. The view template
 2. The can.Component scope
 
 Let's work with an example. You can add event handling to any element in the
-template by adding an attribute with the event name prefixed by "can-". Going
+template by adding an attribute with the event name prefixed by "can-" (this event name can be any standard DOM event). Going
 back to the `restaurant_list.stache` file, edit the select tag, as follows:
 
-```
+```html
 <select id="RestaurantList" can-change="restaurantSelected">
 ```
 
 We added an onChange event by adding the `can-change` attribute to the select
 tag. The value of that attribute maps to a property on the can.Component's
-scope.
+scope, which acts as the event handler.
 
 Open up `restaurant_list`, and modify the scope as follows:
 
@@ -177,7 +182,7 @@ element in our template as follows:
 <select id="RestaurantList" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
-And, then add the appropriate event handler to our scope.
+And, then add the appropriate event handler to our scope. NOTE: Adding event handlers in this way directly binds the events to the element. This can impact performance in situations where you have many elements to bind events to. For more performant event binding, you can use the can.Component's [events property](../docs/can.Component.prototype.events.html).
 
 ## Getting and Setting Scope Properties
 Now that you know how to handle events
