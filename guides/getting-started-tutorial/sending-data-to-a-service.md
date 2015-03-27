@@ -288,8 +288,7 @@ var MenuOrderModel = can.Model.extend({
 
 There's a few things to notice in the code above. First, the fixture that we
 defined returned a non-standard data format. That is, it is non-standard for CanJS. The
-`can.Model.findAll` function expects an array from the service it calls. An example of the
- expected type of data is below:
+`can.Model.findAll` function expects an array from the service it calls&mdash;for example:
 
 ```
 [ {data: 1}, {data: 2}, {data: 3} ];
