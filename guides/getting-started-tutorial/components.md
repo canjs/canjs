@@ -161,18 +161,18 @@ referenced it as a Stache data key in our template.
 
 ### can.Map &amp; can.List
 The scope is a special type of object, called a
-[can.Map](../docs/can.Map.html). can.Map objects are observable. Observable objects provide a way
+[can.Map](../docs/can.Map.html). `can.Map` objects are observable. Observable objects provide a way
 for you to listen for and keep track of changes to them. What this means, in
 this instance, is that if you make a change to your scope, those changes will
 be reflected automatically in your view. If you've cross-bound the values
 between your scope and your view, changes to your view will also be reflected
 in your scope. We'll see how this works in the next chapter.
 
-can.Map objects listen for changes made using their `attr` function. This is
+`can.Map` objects listen for changes made using their `attr` function. This is
 important. In order to broadcast the associated events when you change a
-property on a can.Map, you must use the attr function when setting a value.
+property on a `can.Map`, you must use the `attr` function when setting a value.
 
-The attr function can be used to either get or set a property on a `can.Map`.
+The `attr` function can be used to either get or set a property on a `can.Map`.
 `attr` works with deep properties&mdash;i.e., properties within properties. Here's
 an example:
 
@@ -184,7 +184,7 @@ myCanMapInstance.attr('person.name.first');
 myCanMapInstance.attr('person.name.last', 'Bach');
 ```
 
-Observable arrays are also available with can.List, which is based on can.Map.
+Observable arrays are also available with [can.List](can.List.html), which is based on can.Map.
 
 - - -
 
