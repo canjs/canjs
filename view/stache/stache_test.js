@@ -3774,4 +3774,19 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		
 	});
 	
+	test("{#list} works right (#1551)", function(){
+		var data = new can.Map({});
+		var template = can.stache("<div>{{#items}}<span/>{{/items}}</div>");
+		var frag = template(data);
+		
+		data.attr("items",new can.List());
+		
+		data.attr("items").push("foo");
+		
+		var spans = frag.childNodes[0].getElementsByTagName("span");
+		
+		equal(spans.length,1, "one span");
+		
+	});
+	
 });
