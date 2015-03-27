@@ -184,7 +184,7 @@ myCanMapInstance.attr('person.name.first');
 myCanMapInstance.attr('person.name.last', 'Bach');
 ```
 
-Observable arrays are also available with [can.List](can.List.html), which is based on can.Map.
+Observable arrays are also available with [can.List](can.List.html), which is based on `can.Map`.
 
 - - -
 
