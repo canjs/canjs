@@ -51,21 +51,20 @@ Edit it, as follows:
   {{/each}}
 </select>
 
-{{#if currentRestaurant}}
-  {{#currentRestaurant}}
-    <div id="current-restaurant">
+{{#currentRestaurant}}
+<div id="current-restaurant">
 
-      <h3 id="restaurant-name">{{name}}</h3>
-      <ul id="restaurant-details">
-        <li>Location: {{location}}</li>
-        <li>Cuisine: {{cuisine}}</li>
-        <li>Owner: {{owner}}</li>
-      </ul>
-    </div>
+  <h3 id="restaurant-name">{{name}}</h3>
+  <ul id="restaurant-details">
+	<li>Location: {{location}}</li>
+	<li>Cuisine: {{cuisine}}</li>
+	<li>Owner: {{owner}}</li>
+  </ul>
+</div>
 
-    <button id="place-order">Place My Order!</button>
-  {{/currentRestaurant}}
-{{/if}}
+<button id="place-order">Place My Order!</button>
+{{/currentRestaurant}}
+
 ```
 
 Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
@@ -112,14 +111,10 @@ Finally, sections are execution blocks. They define an object
 context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
 typing you are required to do, and reduces the possibility for error as well.
-The example above contains a Section, the "MenuText" section. Sections begin
+The example above contains a Section, the "currentRestaurant" section. Sections begin
 with {{#...}} and end with {{/...}}.
 
-The Section key should map to either an object or an array. All of the keys 
-contained in the Section object can be referenced without having to use dot
-notation. If we hadn't used a Section, for example, we would have had to write
-{{MenuText.Restaurants}} for our key. Because we used a section, however, we
-only have to write {{Restaurants}}, and Stache does the rest for us.
+The Section key should map to either an object or an array.
 
 <a name="conditionallogic"></a>
 ### Conditional Logic
