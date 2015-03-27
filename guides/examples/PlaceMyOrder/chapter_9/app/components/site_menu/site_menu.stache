@@ -1,11 +1,11 @@
 {{#menuData.menuText}}
     <ul>
         <li>
-            <h4>
+            <h1>
                 <a href="#!home">
                     {{PageTitle}}
                 </a>
-            </h4>
+            </h1>
             <a href="#!home">
                 {{FoodAtFingertips}}
             </a>
