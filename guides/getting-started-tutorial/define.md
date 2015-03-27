@@ -13,12 +13,11 @@
 *There is no code to download for this chapter*
 - - -
 
-The Application State object we created in the last chapter was a can.Map.
+The Application State object we created in the last chapter was a [can.Map](../docs/can.Map.html).
 Here it is, again, below:
 
 ```
 var ApplicationState = can.Map.extend({
-
   define: {
     restaurant: {
       value: {},
@@ -52,11 +51,11 @@ var ApplicationState = can.Map.extend({
 ```
 
 As mentioned in the last chapter, we've done something different with our
-Application State than we've done with the other can.Maps in the past. We've
+Application State than we’ve done with the other instances of can.Map in the past. We’ve
 made use of can.Map's define plugin (i.e., the "define" attribute of the
 extend method's parameter)—something we included as part of our CanJS custom
-download. In fact, if you noticed, we used the define plugin as well in the
-Restaurant List component.
+download. In fact, if you noticed, we used the define plugin in the
+Restaurant List component as well.
 
 The define plugin allows you to finely control the the behavior of the
 attributes on a can.Map. For any property you declare in the define plugin,
@@ -77,7 +76,7 @@ arrays, or objects into string formats. You can also control whether or not a
 given property can be serialized. Returning "undefined" from a serialization
 function for any property means this property will not be part of the
 serialized object. Serialization is tied directly to routing. We'll see how
-this works when we continue our discussion of routing in the next chapter.
+this works when we continue our discussion of routing in the [next chapter](Routing.html).
 
 ### get <a name="get"></a>
 A get function defines what happens when a value is read on a can.Map.
@@ -94,8 +93,8 @@ when the restaurant attribute is updated.
 
 The setter function can take two optional arguments:
 
-- newVal: The type function coerced value the user intends to set on the can.Map
-- setVal: A callback that can set the value of the property asynchronously.
+- `newVal`: The type function coerced value the user intends to set on the can.Map
+- `setVal`: A callback that can set the value of the property asynchronously.
 
 When using a setter function, the final value of the attribute is determined
 by the value the setter function returns. If the function returns a value,
@@ -122,16 +121,16 @@ The type property converts a value passed to an attr setter function
 into a specific value type. The type can be specified as either a type
 function, or one of the following strings:
 
-- "string" - Converts the value to a string.
-- "date" - Converts the value to a date or `null if the date can not be converted.
-- "number" - Passes the value through parseFloat.
-- "boolean" - Converts "falsey", "false" or "0" to false and everything else to true.
-- "*" - Prevents the default coercion of Objects to can.Maps and Arrays to can.Lists.
+- `string` - Converts the value to a string.
+- `date` - Converts the value to a date or `null if the date can not be converted.
+- `number` - Passes the value through parseFloat.
+- `boolean` - Converts "falsey", "false" or "0" to false and everything else to true.
+- `*` - Prevents the default coercion of Objects to can.Maps and Arrays to can.Lists.
 
-There are two ways to define the type property:  "Type", or "type". "Type",
-Uppercase, defines a constructor that will be invoked any time the property is
+There are two ways to define the type property: `Type`, or `type`. `Type`,
+uppercase, defines a constructor that will be invoked any time the property is
 set. Any data passed into the setter will be passed as arguments for the
-constructor. "type", lowercase, is set on the prototype of the object—i.e.,
+constructor. `type`, lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
 
 ### value <a name="value"></a>
@@ -141,9 +140,9 @@ value of a function, so that all instances of the map don't point to the same
 object. This is because JavaScript passes primitives  by value, and all other
 values (objects, arrays, etc.) by reference.
 
-As with type, above, there are two ways to define the value property: "Value",
-or "value". "Value", Uppercase, provides a constructor function, ensuring that
-a copy of the value is made for each instance. "value", lowercase, is set on
+As with type, above, there are two ways to define the value property: `Value`,
+or `value`. `Value`, uppercase, provides a constructor function, ensuring that
+a copy of the value is made for each instance. `value`, lowercase, is set on
 the prototype of the object—i.e., it is not instance specific.
 
 ### remove <a name="remove"></a>
