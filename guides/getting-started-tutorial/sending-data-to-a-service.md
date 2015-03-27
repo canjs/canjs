@@ -19,7 +19,7 @@ Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overha
 To illustrate sending data to a service, let's create an order menu from which
 people can select items.
 
-Create a sub folder under components called *order_form*, and add the following files:
+Create a sub folder under components called `order_form`, and add the following files:
 
 <pre>
 └── components
@@ -73,7 +73,7 @@ In the template above, we're binding the values:
 
 to the "delivery" object of the View Model. We do that using both the delivery
 section, defined by {{#each delivery}} ... {{/each}}, and the `can-value`
-attribute. `can-value` is a can.view attribute that establishes two-way
+attribute. `can-value` is a `can.view` attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
 Add the following to `order_form.js`:
@@ -155,7 +155,7 @@ need to work with an instance of the MenuOrderModel.
 
 We assign the value of this.attr('details') to the MenuOrderModel's delivery
 property. If you recall, we bound the values of the name, address, and
-telephone number fields to the "delivery" object in the *order_form.stache* view
+telephone number fields to the "delivery" object in the `order_form.stache` view
 template. Now, all we need to do to get the values of those fields is
 reference them off of the View Model's delivery property.
 
@@ -169,7 +169,7 @@ on the application itself. In the createOrder function, instead of getting our
 data from the DOM, we get it from our scope.
 
 ### Save fixture
-Open up *fixtures.js* (in the models folder), and add the following fixture:
+Open up `fixtures.js` (in the models folder), and add the following fixture:
 
 ```
 /**
@@ -181,7 +181,7 @@ can.fixture('POST /order', function() {
 ```
 
 ## Non-standard Data Sources
-Staying in *fixtures.js*, append the following to the bottom of the file:
+Staying in `fixtures.js`, append the following to the bottom of the file:
 
 ```
 /**
@@ -264,7 +264,7 @@ can.fixture('GET /menus/{id}', function(request) {
 });
 ```
 
-In *site_models.js*, add the following two models:
+In `site_models.js`, add the following two models:
 
 ```
 /**
@@ -289,9 +289,9 @@ var MenuOrderModel = can.Model.extend({
 
 There's a few things to notice in the code above. First, the fixture that we
 defined returned a non-standard data format. That is, it is non-standard for CanJS. The
-can.Model.findAll function expects an array from the service it calls. Our
+`can.Model.findAll` function expects an array from the service it calls. Our
 fixture, however, is returning an object that contains an array. Normally, if
-the findAll function received this data, it would throw an error. In this case,
+the `findAll` function received this data, it would throw an error. In this case,
 it does not. This is because we included the `parseModels` attribute on the
 MenuOrderModel.
 
@@ -302,7 +302,7 @@ doesn't fit the format expected by `findAll`.
 
 ## Wiring it all up
 
-We can wire all this up easily in a few steps. Edit *base_template.stache*, and add in the custom HTML tag for the
+We can wire all this up easily in a few steps. Edit `base_template.stache`, and add in the custom HTML tag for the
 order_form component:
 
 ```
@@ -312,7 +312,7 @@ order_form component:
 <!--End add-->
 ```
 
-Now, edit your index.html file to load the *order_form.js* file:
+Now, edit your `index.html` file to load the `order_form.js` file:
 
 ```
 <script src="models/site_models.js"></script>
@@ -332,7 +332,7 @@ about that for the moment. We'll deal with controlling which Components
 display when we set up our Application State and Routing.
 
 In the next chapter, we'll talk about connecting all of our components
-together using the Application State, Routing, and can.Map's define plugin.
+together using the Application State, Routing, and `can.Map`'s define plugin.
 
 - - -
 
