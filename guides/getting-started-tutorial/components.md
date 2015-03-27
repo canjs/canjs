@@ -161,7 +161,7 @@ referenced it as a Stache data key in our template.
 
 ### can.Map &amp; can.List
 The scope is a special type of object, called a
-[can.Map])../docs/can.Map.html). can.Map objects are observable. Observable objects provide a way
+[can.Map](../docs/can.Map.html). can.Map objects are observable. Observable objects provide a way
 for you to listen for and keep track of changes to them. What this means, in
 this instance, is that if you make a change to your scope, those changes will
 be reflected automatically in your view. If you've cross-bound the values
