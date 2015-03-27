@@ -24,11 +24,12 @@ framework:
  
 The following modules are typically distributed as plugins:
 
- - [can.ejs] - live binding templates
+ - [can.Map::define] - control the behavior of attributes on a can.Map
+ - [can.stache] - live binding templates
  - [can.Construct.proxy] - Proxy construct methods
  - [can.Construct.super] - Call super methods
  - [can.Map.delegate] - Listen to Observe attributes
- - [can.Map::setter] - Use setter methods on Map
+ - [can.Map.setter] - Use setter methods on Map
  - [can.Map.attributes] - Define Observe attributes
  - [can.Map.validations] - Validate attributes
  - [can.Map.backup] - Backup and restore an Observe's state
