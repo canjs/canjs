@@ -60,19 +60,19 @@ can.Construct's `extend` function is used to create
 "constructor functions". Constructor functions create instances of objects.
 The extend function can take up to three arguments:
 
-1. name: string
-2. staticProperties: object
-3. instanceProperties: object
+1. `name`: string
+2. `staticProperties`: object
+3. `instanceProperties`: object
 
-The extend function behaves differently depending on the number of arguments you
-pass it. The name and staticProperties arugments are optional. For example, if
+The `extend` function behaves differently depending on the number of arguments you
+pass it. The `name` and `staticProperties` arguments are optional. For example, if
 you pass it one argument, it will be use the value you pass it to set its
-instanceProperties. If you pass it two arguments, it uses the first to set its
-staticProperties, and the second to set its instanceProperties. Finally, if
+`instanceProperties`. If you pass it two arguments, it uses the first to set its
+`staticProperties` and the second to set its `instanceProperties`. Finally, if
 you pass in all three arguments, the first will set its name, the second its
-staticProperties, and the third its instanceProperties.
+`staticProperties`, and the third its `instanceProperties`.
 
-In the example below, we only want to pass in staticProperties. Therefore, we
+In the example below, we only want to pass in `staticProperties`. Therefore, we
 must call the function as follows:
 
 ```
@@ -89,7 +89,7 @@ This pattern will apply to all objects in CanJS that have an extend function.
 The `init` function is called whenever a new instance of a
 can.Construct is created. Init is where the bulk of your initialization code
 should go. Inside of the init function, the `this` keyword will refer to the
-new instance, and `this` will contain the instance properties you pass to the
+new instance and `this` will contain the instance properties you pass to the
 constructor. A common thing to do in init is save the arguments passed into
 the constructor. An example is below:
 
