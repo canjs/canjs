@@ -21,7 +21,7 @@ Get the code for: [chapter 2](https://github.com/bitovi/canjs/blob/guides-overha
 
 
 ## First can.Component <a name="first-component"></a>
-If you recall from the introduction, a can.Component is like a self-contained, 
+If you recall from the introduction, a [can.Component](../docs/can.Component.html) is like a self-contained,
 mini web application—i.e., it's encapsulated. Because can.Components are
 encapsulated, they should each contain their own:
 
@@ -29,8 +29,8 @@ encapsulated, they should each contain their own:
 - JavaScript file
 - CSS file
 
-This is why we created a components folder for our app &emdash; instead of, say, a
-"js" folder. Each component we develop will be in a folder that contains all
+This is why we created a components folder for our app—instead of, say, a
+`js` folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
@@ -43,7 +43,7 @@ In the components folder, create a subfolder called `restaurant_list`, along wit
     └── restaurant_list.stache
 </pre>
 
-Let's dive in to the good stuff, and start working with the app! Put the following code inside `restaurant_list`:
+Let's dive in to the good stuff, and start working with the app! Put the following code inside `restaurant_list.js`:
 
 ```
 /**
@@ -72,7 +72,7 @@ Add the code below to the `app/base_template.stache` file:
 <restaurant-list></restaurant-list>
 ```
 
-Next, open up your `app` file, and edit it as follows:
+Next, open up your `app.js` file, and edit it as follows:
 
 ```
 $(function () {
@@ -96,7 +96,7 @@ index.html file, as follows:
 <script src="app.js"></script>
 ```
 
-Now, go back out to your app in the browser, and refresh it. You should 
+Now, go back out to your app in the browser and refresh it. You should
 see it printing: "Hello Restaurant Customer".
 
 ### Auto Instantiation
@@ -108,7 +108,8 @@ constructor to an object that would create instances of it. *can.Component is
 an exception*.
 
 All we have to do is declare the can.Component using its `extend` function.
-Once you declare your can.Component, you've registered your component with CanJS. When CanJS parses the `base_template.stache` file, and encounters the
+Once you declare your can.Component, you've registered your component with CanJS.
+When CanJS parses the `base_template.stache` file and encounters the
 restaurant-list tag, it will automatically instantiate the can.Component
 associated with it, generate the Component's view inside of its custom tag,
 and bind that view to your component's scope.
@@ -133,7 +134,7 @@ can.Component with a specific, custom HTML tag:
 ![](../can/guides/images/2_first_component/ComponentTagLinkDiagram.png)
 
 As mentioned above, when the template containing the can.Component's tag is
-parsed, the can.Component is instantiated, and the contents of its rendered
+parsed, the can.Component is instantiated and the contents of its rendered
 template are inserted as the HTML contents of the custom tag:
 
 ![](../can/guides/images/2_first_component/ComponentTagRenderedHTML.png)
@@ -153,7 +154,7 @@ The `scope` object is the can.Component's view model. The view
 model is an abstraction of the view that exposes public properties and
 functions. Any property or function defined on the scope object is available
 from the can.Component's template as either a Stache data key, or a function.
-In our example above, we created the property "currentRestaurant", and then
+In our example above, we created the property `currentRestaurant` and then
 referenced it as a Stache data key in our template.
 
 ![](../can/guides/images/2_first_component/ComponentScopeTemplateLink.png)
