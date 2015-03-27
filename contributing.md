@@ -104,20 +104,7 @@ CanJS supports the following browsers:
 
 If your changes affect the public API, please make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory. In order to view your changes in documentation you will need to run the [CanJS.com site](https://github.com/bitovi/canjs.com) locally and regenerate the docs.
 
-#### Note:
-
-> _You will need to make sure that the `can` folder in your clone of `canjs.com` points to your local copy of CanJS where you made the documentation changes. This can be
-accomplished by replacing the `can` folder in your `canjs.com` clone with a symlink, using: `mv can can.submodule && ln -s <local path to canjs> can`._
-
-    git clone git@github.com:bitovi/canjs.com.git
-    cd canjs.com
-    git checkout gh-pages
-    git submodule update --init --recursive
-    npm install
-    grunt
-    ./js scripts/doc.js
-
-Once the documentation is finished rendering, all the HTML files will be located in the `docs` folder. Open the documentation file you made changes to and make sure everything rendered correctly.
+Follow the instructions on [CanJS.com gh-pages branch](https://github.com/bitovi/canjs.com/tree/gh-pages#setup) to generate documentation from your local copy of canjs.
 
 ## Making a build
 
