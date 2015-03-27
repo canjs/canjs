@@ -44,7 +44,7 @@ the RestaurantModel, as follows:
 
 ```
 var RestaurantModel = can.Model.extend({
-  findAll: "GET /restaurants",
+  findAll: 'GET /restaurants',
   findOne: 'GET /restaurant/{name}'
 },
 {});
@@ -92,17 +92,15 @@ var ApplicationState = can.Map.extend({
   define: {
     restaurant: {
       value: {},
-      set: function (restaurant) {
+      set: function(restaurant) {
+        var that = this;
         if (restaurant.restaurantId) {
-          var that = this;
-          RestaurantModel.findOne({name: restaurant.name},
-            function success(selectedMenus) {
+          RestaurantModel.findOne({name: restaurant.name}).done(function(selectedMenus) {
               that.attr('menus', {
                 collection: selectedMenus.menus,
                 restaurantName: restaurant.name
               });
-            },
-            function error(xhr) {
+            }).fail(function(xhr) {
               alert(xhr.message);
             });
         }
@@ -111,10 +109,6 @@ var ApplicationState = can.Map.extend({
     },
     menus: {
       value: null,
-      serialize: false
-    },
-    confirmation: {
-      value: {},
       serialize: false
     }
   }
