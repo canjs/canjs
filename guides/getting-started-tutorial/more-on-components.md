@@ -96,14 +96,15 @@ the options in our select dropdown. The {{#each _ _ _}} ... {{/each}} tag set
 is used to enumerate over an enumerable collection, such as an array. In the
 example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
-from data keys inside the `#each` scope without dot notation.
+from data keys inside the `#each` scope without dot notation. In the example above, we saw:
 
-<a name="filtering"></a>
-### Filtering
-Filtering allows you to display selective data. Given an array of
-people, for example, you can display all of the people whose first names begin
-with the letter "A". We won't explore filtering right now, as that's a more
-advanced feature.
+```html
+  {{#each restaurants}}
+    <option {{data 'restaurant'}}>{{name}}</option>
+  {{/each}}
+```
+
+Because the scope of the {{#each}} block is `restaurants`, we can reference the `name` property of `restaurants` directly&mdash;i.e, we don't need to write {{restaurants.name}}, we can just write {{name}}.
 
 <a name="sections"></a>
 ### Sections
