@@ -24,7 +24,7 @@ returned have all of the features of a can.Map, such as being observable.
 
 We'll use a can.Model to provide data for our restaurant list.
 
-In the models folder, create a file called `site_models`. Add the
+In the models folder, create a file called `site_models.js`. Add the
 following code:
 
 ```
@@ -49,9 +49,9 @@ and `destroy` on Models to create, update, and delete them.
 
 ### Retrieving items from a server
 
-The `find___`, `create`, `update`, and `destroy` functions are available directly 
-off of the object definition (i.e., they are static). The `destroy` function is  
-available off of specific instances of a can.Model. We'll see how to 
+The `find___`, `create`, `update`, and `destroy` functions are available directly
+off of the object definition (i.e., they are static). The `destroy` function is
+available off of specific instances of a can.Model. We'll see how to
 use these below.
 
 **Reminder**: The number of parameters you pass in to an extend function is
