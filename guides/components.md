@@ -82,7 +82,7 @@ var Person = can.Construct.extend({
   }
 });
 
-var actor = new Person("Abe", "Vigoda");
+var actor = new Person('Abe', 'Vigoda');
 ```
 
 ## First can.Component <a name="first-component"></a>

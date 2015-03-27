@@ -175,28 +175,28 @@ Staying in *fixtures.js*, append the following to the bottom of the file:
 /**
  * Restaurant Menus Fixture
  */
-can.fixture("GET /menus/{id}", function requestHandler(request) {
+can.fixture('GET /menus/{id}', function requestHandler(request) {
 
   var id = parseInt(request.data.id, 10) - 1;
 
   var menuList = [
     {
       // Spago
-      "menus": [
+      'menus': [
         {
-          "menuName": "Lunch",
-          "items": [
-            {name: "Spinach Fennel Watercress Ravioli", price: 35.99, id: 32},
-            {name: "Herring in Lavender Dill Reduction", price: 45.99, id: 33},
-            {name: "Garlic Fries", price: 15.99, id: 34}
+          'menuName": 'Lunch',
+          'items': [
+            {name: 'Spinach Fennel Watercress Ravioli', price: 35.99, id: 32},
+            {name: 'Herring in Lavender Dill Reduction', price: 45.99, id: 33},
+            {name: 'Garlic Fries', price: 15.99, id: 34}
           ]
         },
         {
-          "menuName": "Dinner",
-          "items": [
-            {name: "Crab Pancakes with Sorrel Syrup", price: 35.99, id: 22},
-            {name: "Chicken with Tomato Carrot Chutney Sauce", price: 45.99, id: 23},
-            {name: "Onion Fries", price: 15.99, id: 24}
+          'menuName': 'Dinner',
+          'items': [
+            {name: 'Crab Pancakes with Sorrel Syrup', price: 35.99, id: 22},
+            {name: 'Chicken with Tomato Carrot Chutney Sauce', price: 45.99, id: 23},
+            {name: 'Onion Fries', price: 15.99, id: 24}
           ]
         }
       ]
@@ -204,21 +204,21 @@ can.fixture("GET /menus/{id}", function requestHandler(request) {
     },
     {
       // El Bulli
-      "menus": [
+      'menus': [
         {
-          "menuName": "Lunch",
-          "items": [
-            {name: "Spherified Calf Brains and Lemon Rind Risotto", price: 35.99, id: 32},
-            {name: "Sweet Bread Bon Bons", price: 45.99, id: 33},
-            {name: "JoJos", price: 15.99, id: 34}
+          'menuName": 'Lunch',
+          'items': [
+            {name: 'Spherified Calf Brains and Lemon Rind Risotto', price: 35.99, id: 32},
+            {name: 'Sweet Bread Bon Bons', price: 45.99, id: 33},
+            {name: 'JoJos', price: 15.99, id: 34}
           ]
         },
         {
-          "menuName": "Dinner",
-          "items": [
-            {name: "Goose Liver Arugula Foam with Kale Crackers", price: 35.99, id: 22},
-            {name: "Monkey Toenails", price: 45.99, id: 23},
-            {name: "Tater Tots", price: 15.99, id: 24}
+          'menuName': 'Dinner',
+          'items': [
+            {name: 'Goose Liver Arugula Foam with Kale Crackers', price: 35.99, id: 22},
+            {name: 'Monkey Toenails', price: 45.99, id: 23},
+            {name: 'Tater Tots', price: 15.99, id: 24}
           ]
         }
       ]
@@ -226,21 +226,21 @@ can.fixture("GET /menus/{id}", function requestHandler(request) {
     },
     {
       // The French Kitchen
-      "menus": [
+      'menus': [
         {
-          "menuName": "Lunch",
-          "items": [
-            {name: "Croque Monsieur", price: 35.99, id: 32},
-            {name: "Pain Au Chocolat", price: 45.99, id: 33},
-            {name: "Potato Latkes", price: 15.99, id: 34}
+          'menuName': 'Lunch',
+          'items': [
+            {name: 'Croque Monsieur', price: 35.99, id: 32},
+            {name: 'Pain Au Chocolat', price: 45.99, id: 33},
+            {name: 'Potato Latkes', price: 15.99, id: 34}
           ]
         },
         {
-          "menuName": "Dinner",
-          "items": [
-            {name: "Chateau Briande", price: 35.99, id: 22},
-            {name: "Veal Almandine", price: 45.99, id: 23},
-            {name: "Hashbrowns", price: 15.99, id: 24}
+          'menuName': 'Dinner',
+          'items': [
+            {name: 'Chateau Briande', price: 35.99, id: 22},
+            {name: 'Veal Almandine', price: 45.99, id: 23},
+            {name: 'Hashbrowns', price: 15.99, id: 24}
           ]
         }
       ]
@@ -260,8 +260,8 @@ In *site_models.js*, add the following two models:
  * @type {void|*}
  */
 var RestaurantMenusModel = can.Model.extend({
-  findAll: "GET /menus/{id}",
-  parseModels: "menus"
+  findAll: 'GET /menus/{id}',
+  parseModels: 'menus'
 },
 {});
 

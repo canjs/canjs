@@ -24,13 +24,13 @@ In your models folder, open *fixtures.js*. Add the following code to register a
 new can.fixture:
 
 ```
-can.fixture("GET /site_menu", function requestHandler() {
+can.fixture('GET /site_menu', function requestHandler() {
   return {
     menuText: {
-      "PageTitle": "PlaceMyOrder.com",
-      "FoodAtFingertips": "Food at your Fingertips",
-      "Restaurants": "Restaurants",
-      "Cuisines": "Cuisines"
+      'PageTitle': 'PlaceMyOrder.com',
+      'FoodAtFingertips': 'Food at your Fingertips',
+      'Restaurants': 'Restaurants',
+      'Cuisines': 'Cuisines'
     }
   };
 });
@@ -40,7 +40,7 @@ Open up *site_models.js*, and add a new can.Model:
 
 ```
 var SiteMenuModel = can.Model.extend({
-  findOne: "GET /site_menu"
+  findOne: 'GET /site_menu'
 });
 ```
 
@@ -55,17 +55,17 @@ var SiteMenuViewModel = can.Map.extend({
 });
 
 can.Component.extend({
-  tag: "menu",
+  tag: 'menu',
   template: can.view('components/site_menu/site_menu.stache'),
   scope: SiteMenuViewModel,
   events: {
     inserted: function () {
       var siteMenuViewModel = this.scope;
       SiteMenuModel.findOne({},
-        function success(menu) {
+        function(menu) {
           siteMenuViewModel.attr('menuData', menu);
         },
-        function error(xhr) {
+        function(xhr) {
           alert(xhr.error.message);
         });
     }
