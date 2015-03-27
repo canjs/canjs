@@ -13,7 +13,7 @@
 *There is no code to download for this chapter*
 - - -
 
-The Application State object we created in the last chapter was a [can.Map](../docs/can.Map.html).
+The Application State object we created in the last chapter was a `can.Map`.
 Here it is, again, below:
 
 ```
@@ -51,14 +51,14 @@ var ApplicationState = can.Map.extend({
 ```
 
 As mentioned in the last chapter, we've done something different with our
-Application State than we’ve done with the other instances of can.Map in the past. We’ve
-made use of can.Map's define plugin (i.e., the "define" attribute of the
-extend method's parameter)—something we included as part of our CanJS custom
-download. In fact, if you noticed, we used the define plugin in the
+Application State than we’ve done with the other instances of `can.Map` in the past. We’ve
+made use of `can.Map`'s `define` plugin (i.e., the `define` attribute of the
+`extend` method's parameter)—something we included as part of our CanJS custom
+download. In fact, if you noticed, we used the `define` plugin in the
 Restaurant List component as well.
 
-The define plugin allows you to finely control the the behavior of the
-attributes on a can.Map. For any property you declare in the define plugin,
+The `define` plugin allows you to finely control the the behavior of the
+attributes on a can.Map. For any property you declare in the `define` plugin,
 you can control its:
 
 - [serialization](#serialization)
@@ -79,17 +79,17 @@ serialized object. Serialization is tied directly to routing. We'll see how
 this works when we continue our discussion of routing in the [next chapter](Routing.html).
 
 ### get <a name="get"></a>
-A get function defines what happens when a value is read on a can.Map.
+A `get` function defines what happens when a value is read on a `can.Map`.
 It is typically used to provide properties that derive their value from other
 properties of the map. This is often useful when you are dealing with routing
 for creating aliases. We'll see an example of how this is accomplished below.
 
 ### set <a name="set"></a>
-A set function defines what happens when a value is set on a can.Map.
-It is typically used to update other attributes on the can.Map as a side
+A `set` function defines what happens when a value is set on a `can.Map`.
+It is typically used to update other attributes on the `can.Map` as a side
 effect, or coerce the set value into specific format. For example, we might
-want to update the menu attribute of the Application State we defined above
-when the restaurant attribute is updated.
+want to update the `menu` attribute of the Application State we defined above
+when the `restaurant` attribute is updated.
 
 The setter function can take two optional arguments:
 
@@ -117,7 +117,7 @@ set: function(newValue, setValue) { ... }
 ```
 
 ### type <a name="type"></a>
-The type property converts a value passed to an attr setter function
+The `type` property converts a value passed to an `attr` setter function
 into a specific value type. The type can be specified as either a type
 function, or one of the following strings:
 
@@ -127,20 +127,20 @@ function, or one of the following strings:
 - `boolean` - Converts "falsey", "false" or "0" to false and everything else to true.
 - `*` - Prevents the default coercion of Objects to can.Maps and Arrays to can.Lists.
 
-There are two ways to define the type property: `Type`, or `type`. `Type`,
+There are two ways to define the `type` property: `Type`, or `type`. `Type`,
 uppercase, defines a constructor that will be invoked any time the property is
 set. Any data passed into the setter will be passed as arguments for the
 constructor. `type`, lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
 
 ### value <a name="value"></a>
-Sets the default value for instances of the can.Map. If the default
+Sets the default value for instances of the `can.Map`. If the default
 value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
-object. This is because JavaScript passes primitives  by value, and all other
+object. This is because JavaScript passes primitives by value, and all other
 values (objects, arrays, etc.) by reference.
 
-As with type, above, there are two ways to define the value property: `Value`,
+As with `type`, above, there are two ways to define the `value` property: `Value`,
 or `value`. `Value`, uppercase, provides a constructor function, ensuring that
 a copy of the value is made for each instance. `value`, lowercase, is set on
 the prototype of the object—i.e., it is not instance specific.

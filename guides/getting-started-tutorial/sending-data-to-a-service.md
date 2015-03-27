@@ -148,12 +148,12 @@ can.Component.extend({
 ## Saving and updating a model
 Let's look at a few items in the code above.
 Notice that we're creating a new instance of a model (MenuOrderModel) in the
-`createOrder` function. Unlike data access functions, which are called statically
+`createOrder` function. Unlike data access functions (like findAll, findOne), which are called statically
 off of the prototype, the `save`, `update`, and `delete` functions are called off of a
 specific instance of a model. So, if we want to create a new order, we will
 need to work with an instance of the MenuOrderModel.
 
-We assign the value of this.attr('details') to the MenuOrderModel's `delivery`
+We assign the value of this.attr('delivery') to the MenuOrderModel's `delivery`
 property. If you recall, we bound the values of the `name`, `address`, and
 `telephone` number fields to the `delivery` object in the `order_form.stache` view
 template. Now, all we need to do to get the values of those fields is
