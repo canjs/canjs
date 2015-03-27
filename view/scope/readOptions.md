@@ -18,8 +18,8 @@ the `readIndex` where the observable was found.
 
 @option {function(can.compute|can.Map,Number)} [earlyExit(observe, readIndex)] Is called if a value is not found.
 
-@option {Boolean} [isArgument] If true, and the last value is a function or compute, returns that 
-function instead of calling it. 
+@option {Boolean} [isArgument] If true, this does not try to evaluate the last value if it is a function or 
+a compute. 
 
     MyMap = can.Map.extend({method: function(){}});
     res = Scope.read( new MyMap(), 

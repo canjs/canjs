@@ -77,29 +77,26 @@ steal(
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
 					var previousReads = can.__clearReading(),
-						res = this.read(key, {
+						options = {
 							isArgument: true,
 							returnObserveMethods: true,
 							proxyMethods: false
-						});
+						},
+						res = this.read(key, options);
 
 					// Allow setting a value on the context
 					if(arguments.length === 2) {
 						var lastIndex = key.lastIndexOf('.'),
 							// Either get the paren of a key or the current context object with `.`
 							readKey = lastIndex !== -1 ? key.substring(0, lastIndex) : '.',
-							obj = this.read(readKey, {
-								isArgument: true,
-								returnObserveMethods: true,
-								proxyMethods: false
-							}).value;
+							obj = this.read(readKey, options).value;
 
 						if(lastIndex !== -1) {
 							// Get the last part of the key which is what we want to set
 							key = key.substring(lastIndex + 1, key.length);
 						}
 
-						can.compute.set(obj, key, value);
+						can.compute.set(obj, key, value, options);
 					}
 
 					can.__setReading(previousReads);
@@ -142,7 +139,7 @@ steal(
 										var last = rootReads.length - 1;
 										var obj = rootReads.length ? can.compute.read(rootObserve, rootReads.slice(0, last)).value
 											: rootObserve;
-										can.compute.set(obj, rootReads[last], newVal);
+										can.compute.set(obj, rootReads[last], newVal, options);
 									}
 									// **Compute getter**
 								} else {

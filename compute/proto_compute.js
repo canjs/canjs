@@ -536,6 +536,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', funct
 	};
 
 	can.Compute.read = read;
+	can.Compute.set = read.write;
 	
 	can.Compute.truthy = function(compute) {
 		return new can.Compute(function() {
@@ -545,20 +546,6 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', funct
 			}
 			return !!res;
 		});
-	};
-	
-	can.Compute.set = function(parent, key, value) {
-		if(can.isMapLike(parent)) {
-			return parent.attr(key, value);
-		}
-
-		if(parent[key] && parent[key].isComputed) {
-			return parent[key](value);
-		}
-
-		if(typeof parent === 'object') {
-			parent[key] = value;
-		}
 	};
 
 	return can.Compute;

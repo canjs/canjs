@@ -147,7 +147,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							return;
 						}
 					}
-					// Cross-bind the value in the viewModel to this
+					// Cross-bind the value in the scope to this
 					// component's viewModel
 					var computeData = hookupOptions.scope.computeData(value, {
 						args: []
