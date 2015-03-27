@@ -54,7 +54,7 @@ properties are:
 4. update
 5. destroy
 
-The `find___`, `create`, `update`, and `destroy functions are available directly 
+The `find___`, `create`, `update`, and `destroy` functions are available directly 
 off of the object definition (i.e., they are static). The `destroy` function is  
 available off of specific instances of a can.Model. We'll see how to 
 use these below.
@@ -158,9 +158,8 @@ var RestaurantListViewModel = can.Map.extend({
   restaurants: new RestaurantModel.List({}),
   currentRestaurant: undefined,
   restaurantSelected: function (viewModel, select) {
-    var restaurant = select.find('option:checked').data('restaurant');
-    var currentRestaurant = 'currentRestaurant';
-    this.attr(currentRestaurant, restaurant);
+    var restaurant = select.find('option:selected').data('restaurant');
+    this.attr('currentRestaurant', restaurant);
   }
 });
 ```
@@ -178,6 +177,27 @@ RestaurantModel.findAll({ /* paramsObject */ },
     // ...
   });
 ```
+
+We also have the ability to use the Deferred method, whihc allows us to chain
+callback functions off of eachother. You can read more about this from the
+[jQuery API](https://api.jquery.com/category/deferred-object/). Using this
+method, we could write our `findAll` like this:
+
+
+```
+RestaurantModel.findAll({ /* paramsObject */ })
+  /* When the API call succeeds, .done() is called */
+  .done(function(returnedObject) {
+    // ...
+  })
+  /* When the API call errors, .fails() is called */
+  .fail(function(errorObject) {
+    // ...
+  });
+```
+
+Both are acceptable, but throughout the guide we will use the Deferred method
+as it more explicitly states which callback function is which.
 
 In the code above, however, we called the findAll function indirectly:
 
