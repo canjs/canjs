@@ -43,12 +43,12 @@ The extend method can take up to three arguments:
 3. instanceProperties: object
 
 The extend method behaves differently depending on the number of arguments you
-pass it. The name and staticProperties arugments are optional. For example, if
+pass it. The name and staticProperties arguments are optional. For example, if
 you pass it one argument, it will be use the value you pass it to set its
-instanceProperties. If you pass it two arguments, it use the first to set its
+instanceProperties. If you pass it two arguments, it uses the first to set its
 staticProperties, and the second to set its instanceProperties. Finally, if
-you pass in all three arguments, the first will set its name, the second in
-staticProperties, and the third its instanceProperties.
+you pass in all three arguments, the first will set its name, the second sets its
+staticProperties, and the third becomes its instanceProperties.
 
 In the example below, I only want to pass in staticProperties. Therefore, I
 must call the method as follows:
@@ -91,13 +91,14 @@ encapsulated, they should each contain their own:
 - JS
 - CSS
 
-This is why we created a components folder for our app—instead of, say, a
+This is why we created a components folder for our app — instead of, say, a
 JS folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
-In the components folder, create a subfolder called *restaurant_list*, along with the following files:
+In the components folder, create a subfolder called *restaurant_list*, along 
+Twith the following files:
 
 <pre>
 | restaurant_list
