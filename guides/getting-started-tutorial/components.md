@@ -19,10 +19,10 @@ Get the code for: [chapter 2](https://github.com/bitovi/canjs/blob/guides-overha
 
 - - -
 
-
-## First can.Component <a name="first-component"></a>
+<a name="first-component"></a>
+## First can.Component
 If you recall from the introduction, a [can.Component](../docs/can.Component.html) is like a self-contained,
-mini web application—i.e., it's encapsulated. Because `can.Component`s are
+mini web application—i.e., it's encapsulated. Because `can.Component`'s are
 encapsulated, they should each contain their own:
 
 - View template file (.stache file)
@@ -46,17 +46,12 @@ In the components folder, create a subfolder called `restaurant_list`, along wit
 Let's dive in to the good stuff, and start working with the app! Put the following code inside `restaurant_list.js`:
 
 ```
-/**
- * @namespace RestaurantListComponent
- */
 can.Component.extend({
-
   tag: 'restaurant-list',
   template: can.view('components/restaurant_list/restaurant_list.stache'),
   scope: {
     currentRestaurant: 'Hello Restaurant Customer'
   }
-
 });
 ```
 
@@ -110,7 +105,7 @@ an exception*.
 All we have to do is declare the `can.Component` using its `extend` function.
 Once you declare your `can.Component`, you've registered your component with CanJS.
 When CanJS parses the `base_template.stache` file and encounters the
-`restaurant-list` tag, it will automatically instantiate the `can.Component`
+`<restaurant-list>` tag, it will automatically instantiate the `can.Component`
 associated with it, generate the Component's view inside of its custom tag,
 and bind that view to your component's scope.
 
@@ -120,6 +115,7 @@ clearer:
 ![](../can/guides/images/2_first_component/ComponentLoadCycle.png)
 
 ### Basic Anatomy of a can.Component
+
 The `can.Component` we created above had three properties.
 
 - [tag](#tag),
@@ -145,7 +141,7 @@ The `template` property of the `can.Component` contains the string
 value of the `can.Component`'s template. Note that the template property just
 contains a string value. You can inline the template, if it is small. However,
 the recommended way of working with templates, to maintain separation of
-concerns, is to keep them in their own files and load them using can.view, as
+concerns, is to keep them in their own files and load them using `can.view`, as
 we have done here.
 
 <a name="scope"></a>

@@ -15,19 +15,19 @@
 Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
 - - -
 
-As mentioned in the [introduction](Tutorial.html), CanJS uses an AppState
-object to manage the state of your application. The AppState object is bound to 
-two things:
+As mentioned in the [introduction](Tutorial.html), CanJS suggests using a global
+AppState object to manage the state of your application. The AppState object
+is bound to two things:
 
 1. The application's base template
 2. The application's routing
 
-Since you already know about creating instances of `can.Map`, creating an AppState object,
-which is a `can.Map`, will be easy. Let's see how this works. Open up your
-`app.js` file, and update it as shown below. Note that the AppState object is a
-`can.Map`—i.e., it is observable. You should also notice that we're creating
-our `can.Map` in a new way—using the define plugin, which we'll discuss more
-below:
+Since you already know about creating instances of `can.Map`, creating an
+AppState object, which is a `can.Map`, will be easy. Let's see how this works.
+Open up your `app.js` file, and update it as shown below. Note that the
+AppState object is a `can.Map`—i.e., it is observable. You should also notice
+that we're creating our `can.Map` in a new way—using the define plugin, which
+we'll discuss more below:
 
 ```
 $(function () {
@@ -62,7 +62,7 @@ $(function () {
 Before we dive into the details of the AppState object,
 let's quickly discuss routing. Routing in CanJS allows
 us to manage browser history and client state by synchronizing the
-window.location.hash with a `can.Map`. In other words, we can use routing to
+`window.location.hash` with a `can.Map`. In other words, we can use routing to
 reflect the state of our application, or set the state of our application. One
 of the things that makes routing powerful is that it records the state of the
 application in the browser's history. We'll see some specific examples of this
@@ -73,7 +73,7 @@ In our application, we setup routing by:
 - defining the properties of our AppState object,
 - binding that object to the route with a call to `can.route.map`, and
 - calling `can.route.ready()`, which sets up two-way binding between the
-  browser's window.location.hash and the `can.route`'s internal `can.Map`.
+  browser's `window.location.hash` and the `can.route`'s internal `can.Map`.
 
 Unless we specify otherwise, which we'll see how to do below, *each property
 we define on our  AppState will map to a potential route*. In the
@@ -103,7 +103,7 @@ this:
 Note that, after we initialized our routes, updating the value of our
 AppState's restaurant property caused the route to update as well.
 The value of the restaurant and menus properties were serialized and appended
-to the window.location.hash.
+to the `window.location.hash`.
 
 Let's see what happens if we adjust the value of the hash. To monitor this
 change, we'll need to make a slight adjustment to our AppState object. Modify 
@@ -144,7 +144,7 @@ attributes to the components through their custom HTML tags in
 Open up `base_template.stache` and make the following changes:
 
 ```
-<menu menus="{menus}" restaurant="{restaurant}"></menu>
+<site-menu menus="{menus}" restaurant="{restaurant}"></site-menu>
 <order-form menus="{menus}" confirmation="{confirmation}"></order-form>
 <restaurant-list restaurant="{restaurant}"></restaurant-list>
 ```
@@ -253,8 +253,8 @@ in the template as follows:
 
 What we've done above is to make a connection between the index of the select
 dropdown and the index of the restaurants list in the `can.Component`'s scope.
-Whenever the `currentRestaurantIndex` is updated, its `set` function is called.
-In its `set` function, it updates the `currentRestaurant` property.
+Whenever the `currentRestaurantIndex` is updated, its `set` function is called,
+which updates the `currentRestaurant` property.
 
 ![](../can/guides/images/7_application_state_routing/SelectMapping.png)
 
@@ -290,15 +290,15 @@ define: {
 ```
 
 This will be a very common pattern in your applications. This setter is our
-event handler. Any time a restaurant is selected (i.e., the AppState's 
+event handler. Any time a restaurant is selected (i.e., the AppState's
 restaurant property is updated), we obtain its menus from our service,
 and then update the AppState's menus attribute.
 
-To make the OrderForm component show and the RestaurantList component hide,
-we use conditional stache tags in `base_template.stache`, as shown below:
+To make the `<order-form>` component show and the `<restaurant-list>` component
+hide, we use conditional stache tags in `base_template.stache`, as shown below:
 
 ```
-<menu menus="{menus}" restaurant="{restaurant}"></menu>
+<site-menu menus="{menus}" restaurant="{restaurant}"></site-menu>
 {{#if menus}}
   <order-form menus="{menus}" restaurant-name="{restaurant.name}"></order-form>
 {{else}}

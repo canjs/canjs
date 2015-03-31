@@ -9,7 +9,7 @@
 - - -
 **In this Chapter**
  - Application Overview
- - Understanding can.Construct
+ - Understanding `can.Construct`
 - - -
 
 The first step in putting together a CanJS app is sketching out the various
@@ -40,14 +40,14 @@ The following pseudo UML diagram outlines the elements that comprise up our appl
 ## Constructors in CanJS
 
 Before we work with any of the objects in CanJS, it will be helpful for us to
-understand [can.Construct](../docs/can.Construct.html). We won't be working with can.Construct
-directly. However, many of the objects in CanJS are derived from
-can.Construct. Understanding it, therefore, will make it easier for you to understand the
+understand [can.Construct](../docs/can.Construct.html). We won't be working
+with `can.Construct` directly. However, many of the objects in CanJS are derived from
+`can.Construct`. Understanding it, therefore, will make it easier for you to understand the
 concepts we're going to cover.
 
-can.Construct provides a way to easily use the power of prototypal
+`can.Construct` provides a way to easily use the power of prototypal
 inheritance without worrying about hooking up all the particulars
-yourself. Without going into exhaustive detail, can.Construct contains
+yourself. Without going into exhaustive detail, `can.Construct` contains
 a few functions we'll encounter frequently in other objects:
 
 - Prototype
@@ -58,7 +58,7 @@ a few functions we'll encounter frequently in other objects:
 We'll look at the extend function first.
 
 ### The extend function
-can.Construct's `extend` function is used to create
+`can.Construct`'s `extend` function is used to create
 "constructor functions". Constructor functions create instances of objects.
 The extend function can take up to three arguments:
 
@@ -74,8 +74,9 @@ you pass it one argument, it will be use the value you pass it to set its
 you pass in all three arguments, the first will set its name, the second its
 `staticProperties`, and the third its `instanceProperties`.
 
-In the example below, we only want to pass in `staticProperties`. Therefore, we
-must call the function as follows:
+This pattern will apply to all objects in CanJS that have an extend function.
+For example, if we only want to set `staticProperties` we must call the
+function as follows:
 
 ```
 can.Construct.extend({
@@ -85,11 +86,9 @@ can.Construct.extend({
 });
 ```
 
-This pattern will apply to all objects in CanJS that have an extend function.
-
 ### The init function
 The `init` function is called whenever a new instance of a
-can.Construct is created. Init is where the bulk of your initialization code
+`can.Construct` is created. Init is where the bulk of your initialization code
 should go. Inside of the init function, the `this` keyword will refer to the
 new instance and `this` will contain the instance properties you pass to the
 constructor. A common thing to do in init is save the arguments passed into

@@ -8,7 +8,7 @@
 
 - - - -
 **In this Chapter**
- - Create the Site Menu can.Component
+ - Create the Site Menu `can.Component`
 
 Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
 
@@ -24,9 +24,6 @@ In your models folder, open `fixtures.js` and add the following code to register
 new can.fixture:
 
 ```
-/**
- * Site Menu Fixture
- */
 can.fixture('GET /site_menu', function() {
   return {
     menuText: {
@@ -42,14 +39,9 @@ can.fixture('GET /site_menu', function() {
 Open up `site_models` and add a new can.Model:
 
 ```
-/**
- * Site Menu Model
- * @type {void|*}
- */
 var SiteMenuModel = can.Model.extend({
   findOne: 'GET /site_menu'
-},
-{});
+}, {});
 ```
 
 In your components folder, create a new folder called `site_menu`. In that
@@ -61,7 +53,7 @@ var SiteMenuViewModel = can.Map.extend({
 });
 
 can.Component.extend({
-  tag: 'menu',
+  tag: 'site-menu',
   template: can.view('components/site_menu/site_menu.stache'),
   scope: SiteMenuViewModel,
   events: {
@@ -77,36 +69,36 @@ can.Component.extend({
 });
 ```
 
-We've included a new attribute on the definition of our can.Component, above:
+We've included a new attribute on the definition of our `can.Component`, above:
 the "events" attribute. The events attribute allows you to define listeners
-for events on your can.Component. These events can be DOM events, such as
-"click", events in the lifecycle of the can.Component, or properties on the
+for events on your `can.Component`. These events can be DOM events, such as
+"click", events in the lifecycle of the `can.Component`, or properties on the
 component's scope. References to the scope from the events attribute are
 obtained from the `this` keyword, as follows: `this.scope`.
 
 In the code above, we listened for the "inserted" event. This is a
-can.Component lifecycle event that fires when the component has been inserted
+`can.Component` lifecycle event that fires when the component has been inserted
 into the DOM.
 
-Similar to the can.Model findAll function, the findOne function takes a parameters
+Similar to `can.Model.findAll`, `findOne` takes a parameters
 object as its first argument. Optionally, you can pass in two callback
 functions: the first being the success function and the second being the error
-function. The success function receives the object returned by the findOne
-call as the first parameter in its function signature. The error function
+function. The success function receives the object returned by the `findOne`
+call as the first parameter in its call signature. The error function
 receives the [XMLHttpRequest object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
-as the first parameter in its function
-signature. If the findOne operation is successful, the success function will be
-called. Otherwise, the error function is called.
+as the first parameter in its call signature. If the `findOne` operation is
+successful, the success function will be called. Otherwise, the error function
+is called.
 
-In the example above, we create an observable can.Map object. We create an
-instance of that object and assign it to the can.Component's scope. Because
-the can.Map object is observable, when we later update it's menuData property,
-the update is broadcast to the system and the menu can.Component is refreshed
+In the example above, we create an observable `can.Map` object. We create an
+instance of that object and assign it to the `can.Component`'s scope. Because
+the `can.Map` object is observable, when we later update it's menuData property,
+the update is broadcast to the system and the menu `can.Component` is refreshed
 with the menu data returned from the findOne function. There is currently no
-implicit function for calling can.Model.findOne. You must use the function
+implicit function for calling `can.Model.findOne`. You must use the function
 described above.
 
-Let's connect all of this to a view template. Staying in the menu folder,
+Let's connect all of this to a view template. Staying in the `site_menu` folder,
 create a template file called `site_menu.stache`, as follows:
 
 ```

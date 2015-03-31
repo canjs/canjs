@@ -116,7 +116,7 @@ loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 In the last chapter, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
 remove `can.fixture.js`. In addition, to simplify things, we're provided a CSS
-file for you with all the styled needed for this example.
+file for you with all the styles needed for this example.
 
 ### Base Template
 Create a file in the `app` folder called `base_template.stache`. We'll edit the
@@ -142,7 +142,7 @@ At this point, we haven't done much. We aren't using CanJS at all yet.
 We're just using jQuery to set the HTML contents of a DOM element.
 
 So, how do we get the application to actually *do something*? Building apps
-with CanJS centers around building can.Components. Read on to the next
+with CanJS centers around building `can.Component`'s. Read on to the next
 chapter to learn more.
 
 - - -

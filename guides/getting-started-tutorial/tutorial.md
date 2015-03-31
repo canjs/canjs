@@ -28,7 +28,7 @@ Every CanJS application contains:
 ### Models
 Models manage the data of an application. A model notifies the elements
 associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
-object. can.Model makes it almost effortless to handle all of your CRUD
+object. `can.Model` makes it almost effortless to handle all of your CRUD
 (Create, Read, Update, and Delete) operations.
 
 <a name="views"></a>
@@ -50,13 +50,13 @@ including:
 
 While you can use any of the above template types, the preferred type
 is [Stache](../docs/can.stache.html). It provides the most clarity to your code, and is the easiest
-of the three options to use. At this time, Stache is supplied as a supporting
+of the two options to use. At this time, Stache is supplied as a supporting
 library. This means you must explicitly add it to your application. We'll see
 how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
 Template libraries require a rendering engine, and CanJS provides that for
-you with the `can.view` object. A can.view contains
+you with the `can.view` object. A `can.view` contains
 utilities "for the loading, processing, rendering, and live-updating of
 templates". In addition, `can.view` is used to bind views to observable
 objects.
@@ -64,9 +64,9 @@ objects.
 <a name="components"></a>
 ### Components
 A [can.Component](../docs/can.Component.html) is kind of like a mini web application.
-A can.Component contains the JavaScript and HTML it needs&mdash;all wrapped up in a single,
-functional unit. This makes can.Components portable, reusable, and
-encapsulated. can.Components are easy to test, and easy to use. Building an
+A `can.Component` contains the JavaScript and HTML it needs&mdash;all wrapped up in a single,
+functional unit. This makes `can.Component`'s portable, reusable, and
+encapsulated. `can.Component`'s are easy to test, and easy to use. Building an
 application with them is kind of like building with Lego&trade;. As we say
 at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need, and link them
@@ -111,7 +111,7 @@ you can download a zip file containing the code relevant to that chapter, as fol
 **In this Chapter**
  - Topic 1
  - Topic 2
- - Connecting can.Models with can.Components
+ - Connecting `can.Model`'s with `can.Component`'s
 
 Get the code for: <a href="javscript://">chapter [*chapter number*]</a>
 
