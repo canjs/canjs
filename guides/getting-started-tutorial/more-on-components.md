@@ -19,12 +19,12 @@ Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overha
 
 Now that we know how to create a basic [can.Component](../docs/can.Component.html),
 let's look at making the them a bit more usable. Let's build out the
-can.Component's template.
+`can.Component`'s template.
 
 ## Stache Templates
 As mentioned previously, we're using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
-included the can.stache plugin. The CanJS docs tell us that,
+included the `can.stache` plugin. The CanJS docs tell us that,
 "Stache templates look similar to normal HTML, except they contain *keys* for
 inserting data into the template and *Sections* to *enumerate and/or filter*
 the enclosed template blocks." They can also contain limited *conditional
@@ -83,7 +83,7 @@ information on the details of these formats, see the respective websites.
 <a name="keys"></a>
 ### Keys
 The keys in the Stache template are the text portions bounded by curly
-braces, e.g., {{*my-text*}}.
+braces, e.g., `{{my-text}}`.
 
 You may have noticed a special key in the option tag. It looked like this:
 
@@ -100,7 +100,7 @@ tag, as we [enumerate](#enumeration) the collection of restaurants.
 ### Enumeration
 Enumerating means that you
 can loop through the contents of an iterable item. We've done this above for
-the options in our select dropdown. The {{#each _ _ _}} ... {{/each}} tag set
+the options in our select dropdown. The `{{#each key}} ... {{/each}}` tag set
 is used to enumerate over an enumerable collection, such as an array. In the
 example above, we are enumerating over an array of objects. As with Sections,
 below, the properties of the objects we are enumerating over are accessible
@@ -113,9 +113,9 @@ above, we saw:
 {{/each}}
 ```
 
-Because the scope of the {{#each}} block is `restaurants`, we can reference
+Because the scope of the `{{#each}}` block is `restaurants`, we can reference
 the `name` property of `restaurants` directly&mdash;i.e, we don't need to
-write {{restaurants.name}}, we can just write {{name}}.
+write `{{restaurants.name}}`, we can just write `{{name}}`.
 
 <a name="sections"></a>
 ### Sections
@@ -124,7 +124,7 @@ context within which we can access an object's properties without having to
 use dot notation. Including a Section in a template reduces the amount of
 typing you are required to do and reduces the possibility for error as well.
 The example above contains a Section, the "currentRestaurant" section. Sections
-begin with {{#...}} and end with {{/...}}.
+begin with `{{#...}}` and end with `{{/...}}`.
 
 The Section key should map to either an object or an array.
 
@@ -133,13 +133,13 @@ The Section key should map to either an object or an array.
 Stache templates have a limited capacity for conditional logic. They provide
 simple if/else statements, for example:
 
-```html
+```
 {{#if truthy}}
- <!--My code goes here-->
+  <!--My code goes here-->
 {{/if}}
 ```
 
-If you need to use more complex logic in your application, can.Component
+If you need to use more complex logic in your application, `can.Component`
 provides [helpers](../docs/can.Component.prototype.helpers.html).
 
 ## Event Handling
@@ -147,10 +147,10 @@ provides [helpers](../docs/can.Component.prototype.helpers.html).
 To add an event handler, we have to make changes in two places:
 
 1. The view template
-2. The can.Component scope
+2. The `can.Component` scope
 
 Let's work with an example. You can add event handling to any element in the
-template by adding an attribute with the event name prefixed by "can-" (this
+template by adding an attribute with the event name prefixed by `can-` (this
 event name can be [any standard DOM event](https://developer.mozilla.org/en-
 US/docs/Web/Events)). Going back to the `restaurant_list.stache` file, edit
 the select tag as follows:
@@ -159,9 +159,9 @@ the select tag as follows:
 <select class="form-control" can-change="restaurantSelected">
 ```
 
-We added an onChange event by adding the `can-change` attribute to the select
-tag. The value of that attribute maps to a property on the can.Component's
-scope, which acts as the event handler.
+A `change` event handler was created by adding the `can-change` attribute to
+the select tag. The value of that attribute maps to a property on the
+`can.Component`'s scope, which acts as the event handler.
 
 Open up `restaurant_list.js` and modify the scope as follows:
 
@@ -201,7 +201,7 @@ element in our template as follows:
 And, then add the appropriate event handler to our scope. NOTE: Adding event
 handlers in this way directly binds the events to the element. This can impact
 performance in situations where you have many elements to bind events to. For
-more performant event binding, you can use the can.Component's [events
+more performant event binding, you can use the `can.Component`'s [events
 property](../docs/can.Component.prototype.events.html).
 
 ## Getting and Setting Scope Properties
@@ -247,13 +247,13 @@ template. The default value for currentRestaurant, when the
 RestaurantListComponent is first loaded is 'undefined'. Setting the value to
 'undefined' causes the Stache template to remove it from the DOM. As soon as
 we set currentRestaurant to a valid value, the scope, which is an observable
-can.Map, broadcasts this change and the template refreshes automatically,
+`can.Map`, broadcasts this change and the template refreshes automatically,
 rendering the current restaurant section.
 
 ## View Models
-It's considered a best practice to keep your can.Components
+It's considered a best practice to keep your `can.Components`
 thin. This helps maintain readability and maintainability. To accomplish this,
-you extract your scope from the can.Component into a can.Map.
+you extract your scope from the `can.Component` into a `can.Map`.
 
 Open up `restaurant_list.js` and add the following code to the top of
 the file:
@@ -269,8 +269,8 @@ var RestaurantListViewModel = can.Map.extend({
 });
 ```
 
-Now, assign the can.Map we created to the scope of the Restaurant List
-can.Component as follows:
+Now, assign the `can.Map` we created to the scope of the Restaurant List
+`can.Component` as follows:
 
 ```
 can.Component.extend({
@@ -285,7 +285,7 @@ look and work the same (though, we removed the alert). What we've done, by
 separating out the view model, is make the code easier to read and maintain.
 
 In the next chapter, we'll learn about working with more realistic data by
-adding REST service interaction with can.Model.
+adding REST service interaction with `can.Model`.
 
 - - -
 

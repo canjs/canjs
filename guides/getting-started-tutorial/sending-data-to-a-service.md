@@ -65,15 +65,15 @@ Add the following to `order_form.stache`:
 </div>
 ```
 
-In the template above, we're binding the values:
+In the template above, we're binding the properties:
 
-- name
-- address
-- telephone
+- `name`
+- `address`
+- `telephone`
 
 to the `delivery` object of the View Model. We do that using both the `delivery`
-section, defined by {{#delivery}} ... {{/delivery}}, and the `can-value`
-attribute. `can-value` is a `can.view` attribute that establishes two-way
+section, defined by `{{#delivery}} ... {{/delivery}}`, and the `can-value`
+attribute. `can-value` is a `can.view.attr` attribute that establishes two-way
 binding between an element in a template and its associated View Model.
 
 Add the following to `order_form.js`:
@@ -147,14 +147,14 @@ can.Component.extend({
 
 ## Saving and updating a model
 Let's look at a few items in the code above.
-Notice that we're creating a new instance of a model (MenuOrderModel) in the
-`createOrder` function. Unlike data access functions (like findAll, findOne),
+Notice that we're creating a new instance of a model (`MenuOrderModel`) in the
+`createOrder` function. Unlike data access functions (like `findAll`, `findOne`),
 which are called statically off of the prototype, the `save`, `update`, and
 `delete` functions are called off of a specific instance of a model. So, if
 we want to create a new order, we will need to work with an instance of the
-MenuOrderModel.
+`MenuOrderModel`.
 
-We assign the value of this.attr('delivery') to the MenuOrderModel's `delivery`
+We assign the value of `this.attr('delivery')` to the `MenuOrderModel`'s `delivery`
 property. If you recall, we bound the values of the `name`, `address`, and
 `telephone` number fields to the `delivery` object in the `order_form.stache`
 view template. Now, all we need to do to get the values of those fields is
@@ -164,9 +164,6 @@ To provide fixture support for saving our `can.Model`, open up `fixtures.js`
 and add the following fixture:
 
 ```
-/**
- * Order Fixture
- */
 can.fixture('POST /order', function() {
   return true;
 });
@@ -174,24 +171,21 @@ can.fixture('POST /order', function() {
 
 ### Moving from DOM to the model
 When we created the RestaurantListComponent,
-we used the {{data '...'}} Stache key and jQuery to obtain a reference to the
+we used the `{{data '...'}}` Stache key and jQuery to obtain a reference to the
 `restaurant` object associated with the choice the user selected in the
 restaurants dropdown. We almost never want to be interacting with the DOM
 directly in our application. We want CanJS to take care of that for us, so we
 can focus on the application itself. In the `createOrder` function, instead of
 getting our data from the DOM, we get it from our scope.
 
-While this is a handy way to associate data with DOM elements, CanJS provides
-a better alternative for binding the viewModel to the state. We'll cover that
-in a later chapter.
+While this is a handy way to get data using a reference to a DOM element, CanJS
+provides a better alternative for binding the viewModel to the state. We'll
+cover that in a later chapter.
 
 ## Non-standard Data Sources
 Staying in `fixtures.js`, append the following to the bottom of the file:
 
 ```
-/**
- * Restaurant Menus Fixture
- */
 can.fixture('GET /menus/{id}', function(request) {
 
   var id = parseInt(request.data.id, 10) - 1;
@@ -272,44 +266,43 @@ can.fixture('GET /menus/{id}', function(request) {
 In `site_models.js`, add the following two models:
 
 ```
-/**
- * RestaurantMenusModel
- * @type {void|*}
- */
 var RestaurantMenusModel = can.Model.extend({
   findAll: 'GET /menus/{id}',
   parseModels: 'menus'
-},
-{});
+}, {});
 
-/**
- * Menu Order Model
- * @type {void|*}
- */
 var MenuOrderModel = can.Model.extend({
   create: 'POST /order'
-},
-{});
+}, {});
 ```
 
 There's a few things to notice in the code above. First, the fixture that we
-defined returned a non-standard data format. That is, it is non-standard for CanJS. The
-`can.Model.findAll` function expects an array from the service it calls&mdash;for example:
+defined returned a non-standard data format. That is, it is non-standard for
+CanJS. The `can.Model.findAll` function expects an array from the service it
+calls&mdash;for example:
 
 ```
-[ {data: 1}, {data: 2}, {data: 3} ];
+[
+  { menuName: 'Lunch', items: [/*...*/] },
+  { menuName: 'Dinner', items: [/*...*/] }
+];
 ```
 
-Our fixture, however, is returning an *object* that *contains* an array. Our response will look like this:
+Our fixture, however, is returning an *object* that *contains* an array.
+Our response will look like this:
 
- ```
- { "myArray": [ {menu: ...}, {menu: ...} ] }
- ```
+```
+{
+  "menus": [
+    { menuName: 'Lunch', items: [/*...*/] },
+    { menuName: 'Dinner', items: [/*...*/] }
+  ]
+}
+```
 
- Normally, if
-the `findAll` function received this data, it would throw an error. In this case,
-it does not. This is because we included the `parseModels` attribute on the
-MenuOrderModel.
+Normally, if the `findAll` function received this data, it would throw an
+error. In this case, it does not. This is because we included the
+`parseModels` attribute on the `MenuOrderModel`.
 
 `parseModels` is used to convert the raw response of a `findAll` request into an
 object or Array that the model you're defining can use. As you can see, this

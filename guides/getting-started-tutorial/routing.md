@@ -10,7 +10,7 @@
 **In this Chapter**
  - Route Formatting
  - Serialization
- - Creating Anchor Tags with helpers and can.route.url
+ - Creating Anchor Tags with helpers and `can.route.url`
 
 Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true) - (*This is the completed application*).
 - - -
@@ -41,14 +41,13 @@ edit the AppState object as follows:
 
 First, let's update the setter so that we can change restaurants by typing
 in the correct restaurant name into the hash. Open up `site_models` and edit
-the RestaurantModel as follows:
+the `RestaurantModel` as follows:
 
 ```
 var RestaurantModel = can.Model.extend({
   findAll: 'GET /restaurants',
   findOne: 'GET /restaurant/{name}'
-},
-{});
+}, {});
 ```
 
 Next, add the following code to `fixtures.js`:
@@ -81,7 +80,6 @@ can.fixture('GET /restaurant/{name}', function(request) {
   };
 
   return restaurantMap[request.data.name];
-
 });
 ```
 
@@ -93,30 +91,52 @@ var AppState = can.Map.extend({
   define: {
     restaurant: {
       value: {},
-      set: function(restaurant) {
-        var that = this;
-        if (restaurant.restaurantId) {
-          RestaurantModel.findOne({name: restaurant.name}).done(function(selectedMenus) {
-              that.attr('menus', {
-                collection: selectedMenus.menus,
-                restaurantName: restaurant.name
-              });
-            }).fail(function(xhr) {
-              alert(xhr.message);
-            });
+      serialize: function() {
+        var name = this.attr('restaurant.name');
+        return name ? name.replace(/\s/ig, '_') : name;
+      },
+      set: function(restaurant, setValue) {
+        var self = this;
+
+        if(!restaurant) return restaurant;
+
+        if(typeof restaurant === 'string') {
+
+          if(restaurant === 'null') {
+            this.setAppToDefaultState();
+            return null;
+          }
+
+          return RestaurantModel.findOne({name: restaurant}).done(function(restaurantModel) {
+            self.getRestaurantMenu(restaurantModel);
+            setValue(restaurantModel);
+            return restaurantModel;
+          }).fail(function(xhr) {
+            alert(xhr.message);
+            return null;
+          });
         }
-        return restaurant;
+        else if(restaurant.restaurantId) {
+          this.getRestaurantMenu(restaurant);
+          return restaurant;
+        }
       }
     },
     menus: {
-      value: null
+      value: null,
+      serialize: false
     }
+  },
+  getRestaurantMenu: function(restaurant) {
+    this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+  },
+  setAppToDefaultState: function() {
+    this.attr('menus', null);
   }
 });
 ```
 
-Add the
-following code before the call to `can.route.ready()`:
+Add the following code before the call to `can.route.ready()`:
 
 ```
 can.route('/:restaurant');
@@ -129,25 +149,26 @@ object as follows:
 
 ```
 restaurant: {
-   ...
-   serialize: function () {
-     var name = this.attr('restaurant.name');
-     return name ? name.replace(/\s/ig, '_') : name;
-   }
+  // ...
+  serialize: function () {
+    var name = this.attr('restaurant.name');
+    return name ? name.replace(/\s/ig, '_') : name;
+  }
 }
 ```
 
 We also want to make sure that no other properties show up in the URL bar. In
-order to achieve this, all we need to do is set the `serialize` property of menus to `false`.
+order to achieve this, all we need to do is set the `serialize` property of
+`menus` to `false`.
 
 ```
 menus: {
-  ...
+  // ...
   serialize: false
 }
 ```
 
-Now, when you select a restaurant and click the Place Order button, you should
+Now, when you select a restaurant and click the "View Order Form" button, you should
 see the following in the URL bar:
 
 ![](../can/guides/images/9_routes_and_serialization/FormattedRouteUrlBar.png)
@@ -163,7 +184,8 @@ var AppState = can.Map.extend({
         var name = this.attr('restaurant.name');
         return name ? name.replace(/\s/ig, '_') : name;
       },
-      set: function(restaurant) {
+      set: function(restaurant, setValue) {
+
         if(!restaurant) return restaurant;
 
         if(typeof restaurant === 'string') {
@@ -173,7 +195,10 @@ var AppState = can.Map.extend({
             return null;
           }
 
-          return this.showSelectedRestaurantMenus(restaurant);
+          this.showSelectedRestaurantMenus(restaurant)
+            .then(function (restaurant) {
+              setValue(restaurant)
+            });
         }
         else if(restaurant.restaurantId) {
           this.getRestaurantMenu(restaurant);
@@ -182,18 +207,18 @@ var AppState = can.Map.extend({
       }
     },
     menus: {
-        value: null,
-        serialize: false
+      value: null,
+      serialize: false
     }
   },
   getRestaurantMenu: function(restaurant) {
     this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
   },
   showSelectedRestaurantMenus: function(restaurantName) {
-    var that = this;
-    this.attr('restaurantName', restaurantName);
-    RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
-      that.getRestaurantMenu(restaurantModel);
+    var self = this;
+
+    return RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
+      self.getRestaurantMenu(restaurantModel);
       return restaurantModel;
     }).fail(function(xhr) {
       alert(xhr.message);
@@ -206,11 +231,11 @@ var AppState = can.Map.extend({
 });
 ```
 
-Note, that we've refactored the call to RestaurantMenusModel out into its own
+Note, that we've refactored the call to `RestaurantMenusModel` out into its own
 function. Now, when you change the value of the restaurant in the URL, the
 menu changes as well.
 
-## Creating Anchor Tags with helpers and can.route.url
+## Creating Anchor Tags with helpers and `can.route.url`
 The last thing we need to do is
 add functionality to our Site Menu. Open up the `site_menu.stache` file in
 your `site_menu components` folder. Edit it as follows:
@@ -272,42 +297,11 @@ can.Component.extend({
   }
 });
 ```
-Here we create a routable URL to place into the view template, using 
+Here we create a routable URL to place into the view template, using
 `can.route.url`. You should always use `can.route.url` when generating routable
 URLs in your application.
 
-Finally, update your `app.js`, adding code that will respond to AppState 
-changes. Append the following below the `getRestaurantMenu` function:
-
-```
-setAppToDefaultState: function() {
-  this.attr('menus', null);
-}
-```
-
-Update the restaurant attribute `set` function on your AppState object:
-
-```
-set: function(restaurant) {
-  if(!restaurant) return restaurant;
-
-  if(typeof restaurant === 'string') {
-
-    if(restaurant === 'null') {
-      this.setAppToDefaultState();
-      return null;
-    }
-
-    return this.showSelectedRestaurantMenus(restaurant);
-  }
-  else if(restaurant.restaurantId) {
-    this.getRestaurantMenu(restaurant);
-    return restaurant;
-  }
-}
-```
-
-Now, open up your application in the browser (refresh, if oyu haven't). Select
+Now, open up your application in the browser (refresh, if you haven't). Select
 a restaurant from the list, then click the "View Order Form" button. Once a menu
 displays, select some items, fill out the customer details, and click the "Place 
 My Order" button. A dialog will pop up with your order details that you have 
