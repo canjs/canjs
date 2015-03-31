@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.2.2__ ( Mar 31 2015 )
+
+- [makes can-EVENT arguments values instead of computes and functions](https://github.com/bitovi/canjs/pull/1556)
+- [Fixes section helper with lists](https://github.com/bitovi/canjs/pull/1553)
+- [View model docs cleanup](https://github.com/bitovi/canjs/pull/1552)
+- [can.stache and lists {{#data.items}} ](https://github.com/bitovi/canjs/issues/1551)
+
+
 __2.2.1__ ( Mar 24 2015 )
 
 - [List.prototype.__set should not assume to create an array for indices out of bounds](https://github.com/bitovi/canjs/issues/1548)
