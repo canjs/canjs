@@ -1,32 +1,27 @@
 <h1>{{restaurantName}}</h1>
-
 {{#each menus}}
-    <h3>{{menuName}}</h3>
-
-    {{#each items}}
-        <label>
-            <input type="checkbox" can-value="selected"> {{name}}, ${{price}}
-        </label>
-    {{/each}}
+  <h3>{{menuName}}</h3>
+  {{#each items}}
+    <label>
+      <input type="checkbox" can-value="selected"> {{name}}, ${{price}}
+    </label>
+  {{/each}}
 {{/each}}
-
 <h3>Customer Details</h3>
-
 <div class="customer-details">
-    {{#delivery}}
-        <label>
-            Name:
-            <input type="text" can-value="name" />
-        </label>
-        <label>
-            Address:
-            <input type="text" can-value="address" />
-        </label>
-        <label>
-            Telephone:
-            <input type="tel" can-value="telephone" />
-        </label>
-    {{/delivery}}
-
-    <button can-click="placeOrder">Place My Order!</button>
+  {{#delivery}}
+    <label>
+      Name:
+      <input type="text" can-value="name" />
+    </label>
+    <label>
+      Address:
+      <input type="text" can-value="address" />
+    </label>
+    <label>
+      Telephone:
+      <input type="tel" can-value="telephone" />
+    </label>
+  {{/delivery}}
+  <button can-click="placeOrder">Place My Order!</button>
 </div>

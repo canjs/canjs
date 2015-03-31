@@ -22,32 +22,32 @@ button {
     left: -350px;
 }
 
-menu {
+site-menu {
     float: left;
     width: 330px;
     margin: 0;
     padding: 20px 0 0 20px;
 }
 
-menu ul {
+site-menu ul {
     margin: 0;
     padding: 0;
 }
 
-menu li {
+site-menu li {
     list-style: none;
 }
 
-menu li.logo {
+site-menu li.logo {
     margin-bottom: 50px;
     font-weight: bold;
 }
 
-menu h1 {
+site-menu h1 {
     margin: 0;
 }
 
-menu a {
+site-menu a {
     text-decoration: none;
     color: #fff;
 }
@@ -66,6 +66,7 @@ restaurant-list header {
     line-height: 100px;
     background-color: #c5c3c3;
     text-align: right;
+    z-index: 2;
 }
 
 restaurant-list section {

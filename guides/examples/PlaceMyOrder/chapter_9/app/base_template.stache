@@ -1,8 +1,6 @@
-<menu menus="{menus}" restaurant="{restaurant}"></menu>
-
+<site-menu menus="{menus}" restaurant="{restaurant}"></site-menu>
 {{#if menus}}
-    <order-form menus="{menus}" restaurant-name="{restaurant.name}"></order-form>
+  <order-form menus="{menus}" restaurant-name="{restaurant.name}"></order-form>
 {{else}}
-    <restaurant-list restaurant="{restaurant}"></restaurant-list>
+  <restaurant-list restaurant="{restaurant}"></restaurant-list>
 {{/if}}
-

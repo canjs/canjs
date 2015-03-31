@@ -1,32 +1,28 @@
-{{#if visible}}
-    <header>
-        <label>Select a Restaurant:</label>
-
-        <select class="form-control" can-value="currentRestaurantIndex">
-            <option value="-1"></option>
-            {{#each restaurants}}
-                <option value="{{@index}}">{{name}}</option>
-            {{/each}}
-        </select>
-    </header>
-
-    {{#currentRestaurant}}
-        <section>
-            <h3>{{name}}</h3>
-            <ul>
-                <li>
-                    <b>Location:</b> {{location}}
-                </li>
-                <li>
-                    <b>Cuisine:</b> {{cuisine}}
-                </li>
-                <li>
-                    <b>Owner:</b> {{owner}}
-                </li>
-            </ul>
-            <button can-click="showMenu">
-                View Order Form
-            </button>
-        </section>
-    {{/currentRestaurant}}
-{{/if}}
+<header>
+  <label>Select a Restaurant:</label>
+  <select class="form-control" can-value="currentRestaurantIndex">
+    <option value="-1"></option>
+    {{#each restaurants}}
+      <option value="{{@index}}">{{name}}</option>
+    {{/each}}
+  </select>
+</header>
+{{#currentRestaurant}}
+  <section>
+    <h3>{{name}}</h3>
+    <ul>
+      <li>
+        <b>Location:</b> {{location}}
+      </li>
+      <li>
+        <b>Cuisine:</b> {{cuisine}}
+      </li>
+      <li>
+        <b>Owner:</b> {{owner}}
+      </li>
+    </ul>
+    <button can-click="showMenu">
+      View Order Form
+    </button>
+  </section>
+{{/currentRestaurant}}

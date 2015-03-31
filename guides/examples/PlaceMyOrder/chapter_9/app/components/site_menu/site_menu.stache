@@ -1,19 +1,21 @@
 {{#menuData.menuText}}
-    <ul>
-        <li class="logo">
-            <h1>
-                <a href="{{homeUrl}}">
-                    {{PageTitle}}
-                </a>
-            </h1>
-            <a href="{{homeUrl}}">
-                {{FoodAtFingertips}}
-            </a>
-        </li>
-        <li>
-            <a href="{{homeUrl}}">
-                {{Restaurants}}
-            </a>
-        </li>
-    </ul>
+  <ul>
+    <li class="logo">
+      <h1>
+        <a href="{{homeUrl}}">
+          {{PageTitle}}
+        </a>
+      </h1>
+      <a href="{{homeUrl}}">
+        <i>{{FoodAtFingertips}}</i>
+      </a>
+    </li>
+    <li>
+      <h2>
+        <a href="{{homeUrl}}">
+          {{Restaurants}}
+        </a>
+      </h2>
+    </li>
+  </ul>
 {{/menuData.menuText}}

@@ -1,58 +1,58 @@
 $(function() {
 
-    var AppState = can.Map.extend({
-        define: {
-            restaurant: {
-                value: {},
-                serialize: function() {
-                    var name = this.attr('restaurant.name');
-                    return name ? name.replace(/\s/ig, '_') : name;
-                },
-                set: function(restaurant) {
-                    if(!restaurant) return restaurant;
+var AppState = can.Map.extend({
+  define: {
+    restaurant: {
+      value: {},
+      serialize: function() {
+        var name = this.attr('restaurant.name');
+        return name ? name.replace(/\s/ig, '_') : name;
+      },
+      set: function(restaurant, setValue) {
 
-                    if(typeof restaurant === 'string') {
+        if(!restaurant) return restaurant;
 
-                        if(restaurant === 'null') {
-                            this.setAppToDefaultState();
-                            return null;
-                        }
+        if(typeof restaurant === 'string') {
 
-                        return this.showSelectedRestaurantMenus(restaurant);
-                    }
-                    else if(restaurant.restaurantId) {
-                        this.getRestaurantMenu(restaurant);
-                        return restaurant;
-                    }
-                }
-            },
-            menus: {
-                value: null,
-                serialize: false
-            },
-            confirmation: {
-                value: null,
-                serialize: false
-            }
-        },
-        getRestaurantMenu: function(restaurant) {
-            this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
-        },
-        showSelectedRestaurantMenus: function(restaurantName) {
-            var that = this;
-            this.attr('restaurantName', restaurantName);
-            RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
-                that.getRestaurantMenu(restaurantModel);
-                return restaurantModel;
-            }).fail(function(xhr) {
-                alert(xhr.message);
-                return null;
+          if(restaurant === 'null') {
+            this.setAppToDefaultState();
+            return null;
+          }
+
+          this.showSelectedRestaurantMenus(restaurant)
+            .then(function (restaurant) {
+              setValue(restaurant)
             });
-        },
-        setAppToDefaultState: function() {
-            this.attr('menus', null);
         }
+        else if(restaurant.restaurantId) {
+          this.getRestaurantMenu(restaurant);
+          return restaurant;
+        }
+      }
+    },
+    menus: {
+        value: null,
+        serialize: false
+    }
+  },
+  getRestaurantMenu: function(restaurant) {
+    this.attr('menus', new RestaurantMenusModel.List({id: restaurant.restaurantId}));
+  },
+  showSelectedRestaurantMenus: function(restaurantName) {
+    var self = this;
+
+    return RestaurantModel.findOne({name: restaurantName}).done(function(restaurantModel) {
+      self.getRestaurantMenu(restaurantModel);
+      return restaurantModel;
+    }).fail(function(xhr) {
+      alert(xhr.message);
+      return null;
     });
+  },
+  setAppToDefaultState: function() {
+    this.attr('menus', null);
+  }
+});
 
     var appState = new AppState();
 
