@@ -155,8 +155,11 @@ steal("can/util", function(can){
 						isPending: true,
 						state: "pending",
 						isResolved: false,
-						isRejected: false
+						isRejected: false,
+						value: undefined,
+						reason: undefined
 					};
+					can.cid(observeData);
 					// proto based would be faster
 					can.simpleExtend(observeData, can.event);
 					value.then(function(value){
@@ -174,7 +177,7 @@ steal("can/util", function(can){
 					});
 				}
 				can.__reading(observeData,"state");
-				return observeData[prop];
+				return prop in observeData ? observeData[prop] : value[prop];
 			}
 		},
 		

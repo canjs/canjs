@@ -3789,4 +3789,44 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		
 	});
 	
+	test("promises are not rebound (#1572)", function(){
+		stop();
+		var d = new can.Deferred();
+		
+		var compute = can.compute(d);
+		
+		var template = can.stache("<div>{{#if promise.isPending}}<span/>{{/if}}</div>");
+		var frag = template({
+			promise: compute
+		});
+		var div = frag.childNodes[0],
+			spans = div.getElementsByTagName("span");
+		
+		var d2 = new can.Deferred();
+		compute(d2);
+		
+		setTimeout(function(){
+			d2.resolve("foo");
+			
+			setTimeout(function(){
+				equal(spans.length, 0, "there should be no spans");
+				start();
+			},30);
+		},10);
+		
+	});
+	
+	test("reading alternate values on promises (#1572)", function(){
+		var promise = new can.Deferred();
+		promise.myAltProp = "AltValue";
+		
+		var template = can.stache("<div>{{d.myAltProp}}</div>");
+		
+		var frag = template({d: promise});
+		
+		equal(frag.childNodes[0].innerHTML, "AltValue", "read value");
+		
+	});
+	
+	
 });
