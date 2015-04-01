@@ -514,7 +514,10 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					this.___set(prop, this.constructor._bubble.set(this, prop, value, current) );
 
 					// `batchTrigger` the change event.
-					this._triggerChange(prop, changeType, value, current);
+					if(!this._computedBindings[prop]) {
+						this._triggerChange(prop, changeType, value, current);
+					}
+					
 
 					// If we can stop listening to our old value, do it.
 					if (current) {
