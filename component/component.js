@@ -106,8 +106,8 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 									  this.template),
 					twoWayBindings = {},
 					scope = this.scope || this.viewModel,
-					// what viewModel property is currently updating
-					scopePropertyUpdating,
+					// tracks which viewModel property is currently updating
+					viewModelPropertyUpdates = {},
 					// the object added to the viewModel
 					componentScope,
 					frag;
@@ -156,9 +156,17 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 					// bind on this, check it's value, if it has dependencies
 					var handler = function (ev, newVal) {
-						scopePropertyUpdating = name;
+						// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
+						viewModelPropertyUpdates[name] = (viewModelPropertyUpdates[name] || 0 )+1;
+						var handler = function(){
+							--viewModelPropertyUpdates[name];
+							can.unbind.call(viewModelPropertyUpdates,"ready", handler);
+						};
+						can.bind.call(viewModelPropertyUpdates,"ready", handler);
+						
+						
 						componentScope.attr(name, newVal);
-						scopePropertyUpdating = null;
+						can.batch.trigger(viewModelPropertyUpdates,"ready");
 					};
 
 					// Compute only returned if bindable
@@ -211,8 +219,9 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				can.each(twoWayBindings, function (computeData, prop) {
 					handlers[prop] = function (ev, newVal) {
 						// Check that this property is not being changed because
-						// it's source value just changed
-						if (scopePropertyUpdating !== prop) {
+						// it's scope value just changed
+						if (!viewModelPropertyUpdates[prop]) {
+							//console.log("updating view.scope ",prop,"from",  componentScope._cid);
 							computeData.compute(newVal);
 						}
 					};

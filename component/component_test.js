@@ -1,4 +1,4 @@
-steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
+steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
 	
 	QUnit.module('can/component', {
 		setup: function () {
@@ -1474,5 +1474,43 @@ steal("can/component", "can/view/stache" ,"can/route", "steal-qunit", function (
 		can.append(can.$("#qunit-fixture"), can.stache('<rebind-viewmodel></rebind-viewmodel>')());
 		can.viewModel(can.$("#qunit-fixture rebind-viewmodel")).attr('item.name', 'CDN');
 
+	});
+
+
+
+	test('Component two way binding loop (#1579)', function() {
+		var changeCount = 0;
+		
+		can.Component.extend({
+			tag: 'product-swatch-color'
+		});
+
+
+		can.Component.extend({
+			tag: 'product-swatch',
+			template: can.stache('<product-swatch-color variations="{variations}"></product-swatch-color>'),
+			viewModel: can.Map.extend({
+				define: {
+					variations: {
+						set: function(variations) {
+							if(changeCount > 500) {
+								return;
+							}
+							changeCount++;
+							return new can.List(variations.attr());
+						}
+					}
+				}
+			})
+		});
+
+		can.append( can.$("#qunit-fixture"), can.stache('<product-swatch></product-swatch>')() );
+		
+		can.batch.start();
+		can.viewModel( can.$("#qunit-fixture product-swatch") ).attr('variations', new can.List());
+		can.batch.stop();
+		
+		
+		ok(changeCount < 500, "more than 500 events");
 	});
 });
