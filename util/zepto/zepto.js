@@ -283,7 +283,7 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 		};
 
 		// setup inserted calls
-		can.each(['after', 'prepend', 'before', 'append', 'html'], function (name) {
+		can.each(['after', 'prepend', 'before', 'append'], function (name) {
 			var original = Zepto.fn[name];
 			Zepto.fn[name] = function () {
 				var elems,
@@ -296,6 +296,8 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 					}
 					if (args[0].nodeType === 11) {
 						elems = can.makeArray(args[0].childNodes);
+					} else if(args[0] instanceof Zepto.fn.constructor) {
+						elems = can.makeArray(args[0]);
 					} else {
 						elems = [args[0]];
 					}
