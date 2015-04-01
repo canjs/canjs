@@ -408,9 +408,9 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 	var blockHelperTemplate = '<ul>{{#items}}<li>{{id}}</li>{{/items}}';
 	var eachHelperTemplate = '<ul>{{#each items}}<li>{{id}}</li>{{/each}}';
 
-	renderedTests('Mustache', '{{#block}}', can.view.mustache(blockHelperTemplate));
+	renderedTests('Mustache', '{{#block}}', can.mustache(blockHelperTemplate));
 	renderedTests('Stache', '{{#block}}', can.stache(blockHelperTemplate));
-	renderedTests('Mustache', '{{#each}}', can.view.mustache(eachHelperTemplate));
+	renderedTests('Mustache', '{{#each}}', can.mustache(eachHelperTemplate));
 	renderedTests('Stache', '{{#each}}', can.stache(eachHelperTemplate));
 
 
@@ -446,6 +446,31 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		list.attr(0).destroy();
 
 		equal(list.attr('length'), 2, 'item removed');
+	});
+	
+	test("sorting works with #each (#1566)", function(){
+		
+		var heroes = new can.List([ { id: 1, name: 'Superman'}, { id: 2, name: 'Batman'} ]);
+		
+		heroes.attr('comparator', 'name');
+		heroes.sort();
+		
+		var template = can.stache("<ul>\n{{#each heroes}}\n<li>{{id}}-{{name}}</li>\n{{/each}}</ul>");
+		
+		var frag = template({
+			heroes: heroes
+		});
+		
+		var lis = frag.childNodes[0].getElementsByTagName("li");
+		
+		equal(lis[0].innerHTML, "2-Batman");
+		equal(lis[1].innerHTML, "1-Superman");
+		
+		heroes.attr('comparator', 'id');
+		heroes.sort();
+		
+		equal(lis[0].innerHTML, "1-Superman");
+		equal(lis[1].innerHTML, "2-Batman");
 	});
 
 });
