@@ -450,10 +450,8 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 	
 	test("sorting works with #each (#1566)", function(){
 		
-		var heroes = new can.List([
-		    { id: 1, name: 'Superman'},
-		    { id: 2, name: 'Batman'}
-		]);
+		var heroes = new can.List([ { id: 1, name: 'Superman'}, { id: 2, name: 'Batman'} ]);
+		
 		heroes.attr('comparator', 'name');
 		heroes.sort();
 		
