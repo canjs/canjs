@@ -110,7 +110,7 @@ To show a list of data within a mustache template, use the `#each` operator.
     {{#each people}}
 	  <li>
 	    {{lastname}}, {{firstname}}
-	  </li>
+	  <li>
     {{/each}}
     </ul>
 
@@ -390,10 +390,10 @@ appears in a template.
 	can.Component.extend({
 	    tag: 'people',
 
-The `viewModel` object on a `Component` contains the component's state, data,
+The `scope` object on a `Component` contains the component's state, data,
 and behavior. Here, it specifies how to `remove` a person from the list:
 
-	    viewModel: {
+	    scope: {
 	        people: people,
 	        remove: function( person ) {
 	            var people = this.attr("people");
@@ -407,10 +407,10 @@ The template for the component itself is passed via the `template`
 property. This can either be an external file or a string.
 Each `li` uses `can-click`, [which declares an event binding.](http://canjs.com/docs/can.view.bindings.can-EVENT.html)
 Here, `remove` inside the component's
-viewModel will be called with the relevant `people` object
+scope will be called with the relevant `people` object
 as an argument.
 
-	viewModel: {
+	scope: {
 	    template: '<ul>' +
 	                '{{#each people}}' +
 	                '<li can-click="remove">' +
@@ -446,7 +446,7 @@ This is one of the most useful features of components.
 ### Tabs Widget Behavior
 
 Before implementing the component itself, we'll
-define an observable *view model*--the `viewModel` object
+define an observable *view model*--the `scope` object
 of the UI element. This makes the code modular and easier
 to manage (and also allows for unit testing).
 
@@ -512,13 +512,13 @@ For this component, our template should look something like this:
 	</tabs>
 
 A designer can create a `tabs` component with `panel` components inside it.
-The `template` object on the tabs component's viewModel needs to be able to render
+The `template` object on the tabs component's scope needs to be able to render
 the content that is inside of the `<tabs>` tag. To do this, we simply use the
 `<content>` tag, which will render everything within the component's tags:
 
 	can.Component.extend({
 		tag: "tabs",
-		viewModel: TabsViewModel,
+		scope: TabsViewModel,
 		template: "<ul>\
 					{{#each panels}}\
 						<li can-click='activate'>{{title}}</li>\
@@ -532,20 +532,20 @@ as components. The tabs template contains the logic for whether
 the panel is visible (`visible` is controlled by the tabs
 component's `activate` method).
 
-Each panel's `viewModel` contains a title, which should be
+Each panel's `scope` contains a title, which should be
 taken from the `title` attribute in the `<panel>` tag.
 If you want to set the string value of a Component's
-attribute as a `viewModel` variable, use  `@'`.
+attribute as a `scope` variable, use  `@'`.
 
 	can.Component.extend({
 	tag: "panel",
 	template: "{{#if visible}}<content />{{/if}}",
-	viewModel: {
+	scope: {
 		title: "@"
 	},
 	...
 
-In addition to the `viewModel` property, a component has an
+In addition to the `scope` property, a component has an
 [`events` property](http://canjs.com/docs/can.Component.prototype.events.html).
 This `events` property uses a `can.Control` instantiated inside
 the component to handle events.
@@ -553,16 +553,16 @@ the component to handle events.
 Since we defined behavior for adding panels on the parent
 `tabs` component, we should use this method whenever a `panel`
 is inserted into the page (and an `inserted` event is triggered).
-To add the panel to the `tabs` component's view model, we call the
-`addPanel` method by accessing the parent view model with `this.element.parent().viewModel()`:
+To add the panel to the `tabs` component's scope, we call the
+`addPanel` method by accessing the parent scope with `this.element.parent().scope()`:
 
 	...
 		events: {
 			inserted: function() {
-				this.element.parent().viewModel().addPanel( this.viewModel )
+				this.element.parent().scope().addPanel( this.scope )
 			},
 			removed: function() {
-				this.element.parent().viewModel().addPanel( this.viewModel )
+				this.element.parent().scope().addPanel( this.scope )
 			}
 		}
 	});
@@ -607,14 +607,14 @@ from `can.Model` to fetch the messages and create new ones:
 	    create : 'POST ' + myServerUrl + '/messages'
 	},{});
 
-In a chat component's viewModel, we will use the `Message` model to
+In a chat component's scope, we will use the `Message` model to
 save new messages and observe changes to the Model.
 [`new Message.List({})`](http://canjs.com/docs/can.Model.List.html#sig_newcan_Model_List__models__) is a shortcut to perform
 the [`findAll`](http://canjs.com/docs/can.Model.findAll.html) operation on a `can.Model` and
 return a `can.List`.
 
 	...
-		viewModel: {
+		scope: {
 				messages: new Message.List({}),
 				newMessage: ""
 	...
@@ -625,7 +625,7 @@ Since this chat application uses a `<form>` for sending messages, we'll use
 
 There's one more helper used in the template: [`can-value`](http://canjs.com/docs/can.view.bindings.can-value.html).
 This automatically two-way binds the value of an input field to an observable
-property on the `viewModel` of the component (in this case, `newMessage`).
+property on the `scope` of the component (in this case, `newMessage`).
 
 	can.Component.extend({
 	  tag: 'chat',
@@ -650,7 +650,7 @@ the Component's `newMessage` attribute when a user submits the form.
 
 To save the new message to the server, call `save()`.
 
-    submitMessage: function(context, el, ev){
+    submitMessage: function(scope, el, ev){
         ev.preventDefault();
         new Message({body: this.attr("newMessage")}).save();
         this.attr("newMessage", "");
@@ -661,7 +661,7 @@ must be updated.
 
     events: {
         '{Message} created': function(construct, ev, message){
-            this.viewModel.attr('messages').push(message);
+            this.scope.attr('messages').push(message);
         }
     }
 
@@ -670,7 +670,7 @@ or from another user. In the next section, we demonstrate how to use
 [socket.io](http://socket.io/) to update the `Message` model with messages
 from other users in real time. Binding to the `created` event for **all**
 messages allows us to create a single entry point that pushes new messages
-to the `viewModel`, [regardless of where those messages are from.](http://canjs.com/docs/can.Model.html#section_Listentochangesindata)
+to the `scope`, [regardless of where those messages are from.](http://canjs.com/docs/can.Model.html#section_Listentochangesindata)
 
 When the chat Component is loaded, messages are loaded from the server
 using `can.Model` and `new Message.List({})`.  When a new message is
