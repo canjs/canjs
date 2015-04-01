@@ -1,4 +1,4 @@
-steal("can", "./product", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (can, product) {
+steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
 	
 	QUnit.module('can/component', {
 		setup: function () {
@@ -1478,104 +1478,39 @@ steal("can", "./product", "can/map/define", "can/component", "can/view/stache" ,
 
 
 
-	test('Map component loop', function() {
+	test('Component two way binding loop (#1579)', function() {
+		var changeCount = 0;
+		
 		can.Component.extend({
-			tag: 'product-swatch-color',
-			template: can.stache(''),
-			events: {
-				inserted: function(color) {
-					var scope = this.scope;
-					scope.attr('selected', scope.attr('colors.0'));
-				}
-			}
+			tag: 'product-swatch-color'
 		});
 
-		var changeCount = 0;
 
 		can.Component.extend({
 			tag: 'product-swatch',
-			template: can.stache('<product-swatch-color colors="{colors}" selected="{color}" variations="{variations}"></product-swatch-color>'),
-			scope: can.Map.extend({
+			template: can.stache('<product-swatch-color variations="{variations}"></product-swatch-color>'),
+			viewModel: can.Map.extend({
 				define: {
-					product: {
-						set: function(product) {
-							this.attr('variations', product.attr('variations'));
-							return product;
-						}
-					},
 					variations: {
 						set: function(variations) {
-							if(changeCount > 100) {
-								debugger;
+							if(changeCount > 500) {
+								return;
 							}
-							return new can.Model.List(variations.attr());
-						}
-					},
-					colors: {
-						value: ['black']
-					},
-					variationTypes: {
-						value: ['colors']
-					}
-				},
-
-				updateSelection: function(property) {
-					var variationTypes = this.attr('variationTypes');
-					var pluralized = property + 's';
-
-					if(variationTypes.indexOf(pluralized) !== -1) {
-						this.attr('selected', this.attr('variations.0'));
-					}
-				}
-			}),
-			events: {
-				'click': function(el, evt) {
-					evt.stopPropagation();
-				},
-
-				'{scope} change': function(cls, ev, prop) {
-					if(changeCount > 100) {
-						debugger;
-					}
-					changeCount++;
-					this.scope.updateSelection(prop);
-				}
-			}
-		});
-
-		can.Component.extend({
-			tag: 'product-page',
-			template: can.stache('{{#product}}' +
-			'<product-swatch product="{selectedProduct}" ' +
-			'selections="{availableVariations}"' +
-			' selected="{selectedVariation}"></product-swatch>' +
-			'{{/product}}'),
-			scope: can.Map.extend({
-				define: {
-					selectedVariation: {
-						value: null
-					},
-
-					selectedProduct: {
-						get: function() {
-							var variation = this.attr('selectedVariation');
-							var product;
-							if(variation) {
-								var variationProduct = variation.attr('product');
-								product = new can.Model(variationProduct ? variationProduct.attr() : {});
-							} else {
-								product = this.attr('product');
-							}
-
-							return product;
+							changeCount++;
+							return new can.List(variations.attr());
 						}
 					}
 				}
 			})
 		});
 
-		$('body').append(can.stache('<product-page product="{product}"></product-page>')({
-			product: product
-		}));
+		can.append( can.$("#qunit-fixture"), can.stache('<product-swatch></product-swatch>')() );
+		
+		can.batch.start();
+		can.viewModel( can.$("#qunit-fixture product-swatch") ).attr('variations', new can.List());
+		can.batch.stop();
+		
+		
+		ok(changeCount < 500, "more than 500 events");
 	});
 });
