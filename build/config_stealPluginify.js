@@ -251,19 +251,16 @@ module.exports = function(){
 				main: allModuleNames.concat(["can"]),
 				map: {
 					"can/util/util" : "can/util/library"
-				},
-				paths: {
-					"can/util/library": "util/jquery/jquery.js"
 				}
 			},
 			options : {
 				quiet: true
 			},
 			"outputs": {
-				"amd-dev +amddev": {
+				"amd-dev +amddev+ignorelibs": {
 					graphs: allModuleNames.concat(["can"])
 				},
-				"amd +amd": {
+				"amd +amd+ignorelibs": {
 					graphs: allModuleNames.concat(["can"])
 				}
 			}
