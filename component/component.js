@@ -162,7 +162,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 							--viewModelPropertyUpdates[name];
 							can.unbind.call(viewModelPropertyUpdates,"ready", handler);
 						};
-						can.bind.call(viewModelPropertyUpdates,"ready", handler);
+						can.bind.call({},"ready", handler);
 						
 						
 						componentScope.attr(name, newVal);
