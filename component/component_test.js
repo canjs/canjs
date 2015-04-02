@@ -1514,7 +1514,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		ok(changeCount < 500, "more than 500 events");
 	});
 
-	test('DOM trees not releasing when referencing can.Map inside can.Map in template', function() {
+	test('DOM trees not releasing when referencing can.Map inside can.Map in template (#1593)', function() {
 		var baseTemplate = '{{#if show}}<layout></layout>{{/if}}',
 			layoutTemplate = '{{#if state.inner}}<internal></internal>{{/if}}',
 			showLayout = can.compute(true),
