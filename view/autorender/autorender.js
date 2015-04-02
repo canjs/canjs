@@ -65,7 +65,7 @@ steal("can/util",function(can){
 				type = typeInfo && typeInfo[1],
 				typeModule = "can/view/" + type;
 
-			if(!(window.define && window.define.amd)) {
+			if(window.System || !(window.define && window.define.amd)) {
 				typeModule += "/" + type;
 			}
 			
