@@ -849,4 +849,40 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			equal(map.attr('size'), 2);
 		});
 	}
+	
+	
+	test("One event on getters (#1585)", function(){
+
+		var AppState = can.Map.extend({
+			define: {
+				person: {
+					get: function(lastSetValue, setAttrValue) {
+						if (lastSetValue) {
+							return lastSetValue;
+						} else if (this.attr("personId")) {
+							setAttrValue( new can.Map({name: "Jose", id: 5}) );
+						} else {
+							return null;
+						}
+					}
+				}
+			}
+		});
+		
+		var appState = new AppState();
+		var personEvents = 0;
+		appState.bind("person", function(ev, person) {
+			personEvents++;
+		});
+		
+		appState.attr("personId", 5);
+		
+
+		appState.attr("person", new can.Map({
+			name: "Julia"
+		}));
+
+			
+		equal(personEvents,2);
+	});
 });
