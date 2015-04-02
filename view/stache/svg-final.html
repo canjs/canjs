@@ -2,9 +2,7 @@
 <html>
 <head></head>
 <body>
-<svg height="100" width="100">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-</svg>
+
 <div id='out1'></div>
 <script type='text/stache' id='svg-example-1'>
 	<svg height="120" width="400">
@@ -16,7 +14,7 @@
 	  {{/showRect}}
 	</svg>
 </script>
-<script type="text/javascript" src="../node_modules/steal/steal.js" main="@empty"></script>
+<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type="text/javascript">
 	
 	steal("can/view/stache", function(stache){
@@ -37,6 +35,7 @@
 			radius(rad);
 			if(rad === 1 || rad === 40) {
 				dir = dir * -1;
+				console.log("toggle!")
 				showRect(!showRect());
 			} 
 			window.requestAnimationFrame(arguments.callee);
@@ -44,7 +43,7 @@
 		
 		$("#out1").append(frag);
 		
-		var svgNS = "http://www.w3.org/2000/svg";
+		/*var svgNS = "http://www.w3.org/2000/svg";
 		var svg = document.createElementNS(svgNS, "svg");
 		var myCircle = document.createElementNS(svgNS,"circle");
 		myCircle.setAttributeNS(null,"id","mycircle");
@@ -56,7 +55,7 @@
 		myCircle.setAttributeNS(null,"stroke-width","3");
 	    
 	    svg.appendChild(myCircle);
-	    document.body.appendChild(svg);
+	    document.body.appendChild(svg);*/
 	});
 	
 	
