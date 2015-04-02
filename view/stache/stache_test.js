@@ -3828,6 +3828,27 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		
 	});
 	
+	test("don't setup live binding for raw data with seciton helper", function () {
+		expect(0);
+		var template = can.stache("<ul>{{#animals}}" +
+			"<li></li>" +
+			"{{/animals}}</ul>");
+
+		var oldBind = can.bind;
+		can.bind = function(ev){
+			if(ev === "removed") {
+				ok(false, "listening to element removed b/c you are live binding");
+			}
+			oldBind.apply(this, arguments);
+		};
+
+		template({
+			animals: this.animals
+		});
+		
+		can.bind = oldBind;
+	});
+	
 		// the define test doesn't include the stache plugin and 
 	// the stache test doesn't include define plugin, so have to put this here
 	test('#1590 #each with surrounding block and setter', function(){
