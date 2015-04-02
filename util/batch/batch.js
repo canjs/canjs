@@ -236,6 +236,18 @@ steal('can/util/can.js', function (can) {
 					]);
 				}
 			}
+		},
+		afterPreviousEvents: function(handler){
+			if(currentBatchEvents) {
+				var obj = {};
+				can.bind.call(obj,"ready", handler);
+				currentBatchEvents.push([
+					obj,
+					[{type: "ready"}, []]
+				]);
+			} else {
+				handler();
+			}
 		}
 	};
 });

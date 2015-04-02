@@ -1513,4 +1513,5 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		
 		ok(changeCount < 500, "more than 500 events");
 	});
+
 });

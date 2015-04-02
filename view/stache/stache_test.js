@@ -3828,5 +3828,30 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		
 	});
 	
+		// the define test doesn't include the stache plugin and 
+	// the stache test doesn't include define plugin, so have to put this here
+	test('#1590 #each with surrounding block and setter', function(){
+		// the problem here ... is that a batch is happening
+		// the replace is going to happen after
+		// we need to know when to respond
+		var product = can.compute();
+		var people = can.compute(function(){
+			var newList = new can.List();
+			newList.replace(['Brian']);
+			return newList;
+		});
+		var frag = can.stache('<div>{{#if product}}<div>{{#each people}}<span/>{{/each}}</div>{{/if}}</div>')({
+			people: people,
+			product: product
+		});
+		
+		can.batch.start();
+		product(1);
+		can.batch.stop();
+		
+		equal(frag.childNodes[0].getElementsByTagName('span').length, 1, "no duplicates");
+
+	});
+	
 	
 });

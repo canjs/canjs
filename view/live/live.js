@@ -148,20 +148,19 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 *
 		 */
 		list: function (el, compute, render, context, parentNode, nodeList) {
-			//var setupBatchNum = can.batch.batchNum;
-
 			// A nodeList of all elements this live-list manages.
 			// This is here so that if this live list is within another section
 			// that section is able to remove the items in this list.
 			var masterNodeList = nodeList || [el],
 				// A mapping of items to their indicies'
 				indexMap = [],
-				// Capture current batchNum
-				setupBatchNum = can.batch.batchNum,
+				// True once all previous events have been fired
+				afterPreviousEvents = false,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
-					// if the event's batchNum equals setupBatchNum then we're in the middle of a batch job.
-					if (ev.batchNum && ev.batchNum === setupBatchNum) {return;}
+					if (!afterPreviousEvents) {
+						return;
+					}
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newNodeLists = [],
@@ -228,6 +227,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				},
 				// Called when items are removed or when the bindings are torn down.
 				remove = function (ev, items, index, duringTeardown, fullTeardown) {
+					if (!afterPreviousEvents) {
+						return;
+					}
 					// If this is because an element was removed, we should
 					// check to make sure the live elements are still in the page.
 					// If we did this during a teardown, it would cause an infinite loop.
@@ -262,6 +264,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 
 				},
 				move = function (ev, item, newIndex, currentIndex) {
+					if (!afterPreviousEvents) {
+						return;
+					}
 					// The position of elements is always after the initial text
 					// placeholder node
 					newIndex = newIndex + 1;
@@ -322,13 +327,21 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					teardownList();
 					// make an empty list if the compute returns null or undefined
 					list = newList || [];
+					
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
 							.bind('remove', remove)
 							.bind('move', move);
 					}
+					// temporarily allow add method.
+					afterPreviousEvents = true;
 					add({}, list, 0);
+					afterPreviousEvents = false;
+					
+					can.batch.afterPreviousEvents(function(){
+						afterPreviousEvents = true;
+					});
 				};
 			parentNode = elements.getParentNode(el, parentNode);
 			// Setup binding and teardown to add and remove events
