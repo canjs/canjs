@@ -1513,4 +1513,37 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		
 		ok(changeCount < 500, "more than 500 events");
 	});
+
+	test('each with surrounding block and setter', function(){
+		var VM = can.Model.extend({
+			define: {
+				groups: {
+			    	get: function(list) {
+			          var newList = new can.List();
+			          newList.replace(['Brian', 'Ajax']);
+			          return newList;
+			        }
+			    }
+			}
+		});
+		can.Component.extend({
+			tag: 'product-test',
+			viewModel: VM,
+			template: can.stache("{{#each groups}}{{.}}{{/each}}")
+		});
+		var Map = can.Map.extend({
+			define: {
+				product: {
+					set: function(val){
+						return val;
+					}
+				}
+			}
+		});
+		var map = new Map();
+		can.append( can.$("#qunit-fixture"), can.stache('{{#product}}<product-test></product-test>{{/product}}')(map) );
+		map.attr('product', "stuff");
+		equal(can.$("#qunit-fixture")[0].innerHTML, "<product-test>BrianAjax</product-test>", "no duplicates");
+
+	});
 });
