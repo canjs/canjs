@@ -1516,7 +1516,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 
 	// the define test doesn't include the stache plugin and 
 	// the stache test doesn't include define plugin, so have to put this here
-	test('#each with surrounding block and setter', function(){
+	test('#1590 #each with surrounding block and setter', function(){
 		var Map = can.Map.extend({
 			define: {
 				product: {
