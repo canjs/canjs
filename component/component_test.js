@@ -1514,29 +1514,4 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		ok(changeCount < 500, "more than 500 events");
 	});
 
-	// the define test doesn't include the stache plugin and 
-	// the stache test doesn't include define plugin, so have to put this here
-	test('#1590 #each with surrounding block and setter', function(){
-		var Map = can.Map.extend({
-			define: {
-				product: {
-					set: function(val){
-						return val;
-					}
-				},
-				people: {
-			    	get: function(list) {
-			          var newList = new can.List();
-			          newList.replace(['Brian']);
-			          return newList;
-			        }
-			    }
-			}
-		});
-		var map = new Map();
-		can.append( can.$("#qunit-fixture"), can.stache('{{#product}}{{#each people}}{{.}}{{/people}}{{/product}}')(map) );
-		map.attr('product', "stuff");
-		equal(can.$("#qunit-fixture")[0].innerHTML, "Brian", "no duplicates");
-
-	});
 });
