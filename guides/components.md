@@ -98,7 +98,7 @@ enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
 In the components folder, create a subfolder called *restaurant_list*, along 
-Twith the following files:
+with the following files:
 
 <pre>
 | restaurant_list
