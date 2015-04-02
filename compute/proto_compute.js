@@ -49,11 +49,10 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', funct
 		// Go through what needs to be observed.
 		bindNewSet(oldObserved, newObserveSet, onchanged);
 		unbindOldSet(oldObserved, onchanged);
-		// set ready only after all events that might be caused by a change
-		can.bind.call(info,"ready", function(){
+		// set ready after all previous events have fired
+		can.batch.afterPreviousEvents(function(){
 			info.ready = true;
 		});
-		can.batch.trigger(info,"ready");
 		
 		return info;
 	};

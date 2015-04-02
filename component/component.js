@@ -158,15 +158,11 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					var handler = function (ev, newVal) {
 						// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
 						viewModelPropertyUpdates[name] = (viewModelPropertyUpdates[name] || 0 )+1;
-						var handler = function(){
-							--viewModelPropertyUpdates[name];
-							can.unbind.call(viewModelPropertyUpdates,"ready", handler);
-						};
-						can.bind.call({},"ready", handler);
-						
 						
 						componentScope.attr(name, newVal);
-						can.batch.trigger(viewModelPropertyUpdates,"ready");
+						can.batch.afterPreviousEvents(function(){
+							--viewModelPropertyUpdates[name];
+						});
 					};
 
 					// Compute only returned if bindable
