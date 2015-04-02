@@ -17,6 +17,13 @@ steal(
 	parser = parser || can.view.parser;
 	viewCallbacks = viewCallbacks || can.view.callbacks;
 
+	var svgNamespace = "http://www.w3.org/2000/svg";
+	var namespaces = {
+		"svg": svgNamespace,
+		// this allows a partial to start with g.
+		"g": svgNamespace
+	};
+
 	function stache(template){
 		
 		// Remove line breaks according to mustache's specs.
@@ -34,7 +41,9 @@ steal(
 				// There is probably a better way of doing this.
 				sectionElementStack: [],
 				// If text should be inserted and HTML escaped
-				text: false
+				text: false,
+				// which namespace we are in
+				namespaceStack: []
 			},
 			// This function is a catch all for taking a section and figuring out
 			// how to create a "renderer" that handles the functionality for a 
@@ -108,9 +117,16 @@ steal(
 		
 		parser(template,{
 			start: function(tagName, unary){
+				var matchedNamespace = namespaces[tagName];
+				
+				if (matchedNamespace && !unary ) {
+					state.namespaceStack.push(matchedNamespace);
+				}
+				
 				state.node = {
 					tag: tagName,
-					children: []
+					children: [],
+					namespace: matchedNamespace || can.last(state.namespaceStack)
 				};
 			},
 			end: function(tagName, unary){
@@ -145,6 +161,12 @@ steal(
 				
 			},
 			close: function( tagName ) {
+				var matchedNamespace = namespaces[tagName];
+				
+				if (matchedNamespace  ) {
+					state.namespaceStack.pop();
+				}
+				
 				var isCustomTag = viewCallbacks.tag(tagName),
 					renderer;
 				

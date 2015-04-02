@@ -34,7 +34,8 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			var clone = a.cloneNode(true);
 
 			return clone.innerHTML === "<xyz></xyz>";
-		})();
+		})(),
+		namespacesWork = typeof document !== "undefined" && !!document.createElementNS;
 
 	/**
 	 * @function cloneNode
@@ -103,8 +104,12 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		
 		if(nodeType === "object") {
 			if( node.tag ) {
-				el = document.createElement(node.tag);
-			
+				if(namespacesWork && node.namespace) {
+					el = document.createElementNS(node.namespace, node.tag);
+				} else {
+					el = document.createElement(node.tag);
+				}
+				
 				if(node.attrs) {
 					for(var attrName in node.attrs) {
 						var value = node.attrs[attrName];
