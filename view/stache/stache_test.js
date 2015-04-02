@@ -3827,6 +3827,30 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(frag.childNodes[0].innerHTML, "AltValue", "read value");
 		
 	});
+
+	test('#each with surrounding block and setter', function(){
+		var Map = can.Map.extend({
+			define: {
+				product: {
+					set: function(val){
+						return val;
+					}
+				},
+				people: {
+			    	get: function(list) {
+			          var newList = new can.List();
+			          newList.replace(['Brian']);
+			          return newList;
+			        }
+			    }
+			}
+		});
+		var map = new Map();
+		can.append( can.$("#qunit-fixture"), can.stache('{{#product}}{{#each people}}{{.}}{{/people}}{{/product}}')(map) );
+		map.attr('product', "stuff");
+		equal(can.$("#qunit-fixture")[0].innerHTML, "Brian", "no duplicates");
+
+	});
 	
 	
 });

@@ -1514,6 +1514,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		ok(changeCount < 500, "more than 500 events");
 	});
 
+	// define test doesn't include the stache plugin and stache test doesn't include define plugin, so have to put this here
 	test('#each with surrounding block and setter', function(){
 		var Map = can.Map.extend({
 			define: {
