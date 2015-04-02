@@ -1559,7 +1559,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		showLayout(false);
 		state.removeAttr('inner');
 
-		equal(removeCount, 2, 'internal removed once');
+		equal(removeCount, 2, 'internal removed twice');
 
 	});
 
