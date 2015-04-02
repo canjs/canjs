@@ -24,7 +24,7 @@ var open = function(url, callback, done){
 	var server = connect().use(connect.static(path.join(__dirname,"../../.."))).listen(8081);
 	var browser = Browser.create();
 	browser.visit("http://localhost:8081/"+url)
-		.then(function(){
+		.then(function(e){
 			callback(browser, function(err){
 				server.close();
 				done(err);
@@ -33,6 +33,7 @@ var open = function(url, callback, done){
 			server.close();
 			done(e)
 		});
+	return browser;
 };
 
 describe("Building steal projects", function(){
@@ -89,5 +90,32 @@ describe("Building steal projects", function(){
 			}).catch(done);
 		});
 	});
+
+	it("works bundled with autorender", function(done){
+		rmdir(__dirname + "bundle/dist", function(error){
+			if(error) return done(error);
+
+			stealTools.build({
+				config: __dirname + "/config.js",
+				main: "app"
+			}, {
+				quiet: true,
+				minify: false,
+				bundleSteal: true
+			}).then(function(){
+				
+				var browser = open("test/builders/steal-tools/prod-bundled.html", function(browser, close){
+					// If we got here it worked.
+					close();
+				}, done);
+				browser.on("response", function(req, resp){
+					if(resp.statusCode === 404) {
+						done(new Error("Tried to load " + resp.url));
+					}
+				});
+			}).catch(done);
+		});
+	});
+
 
 });
