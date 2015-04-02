@@ -42,7 +42,7 @@ var makeStandaloneAndStealUtil = function(lib){
 			//verbose: true
 		},
 		outputs: {
-			"steal +ignorelibs": {
+			"steal +ignorelibs +dev": {
 				graphs: ["can/util/util"],
 				dest: function(moduleName){
 					moduleName = denpm(moduleName);
