@@ -1,5 +1,5 @@
 @page Why Why CanJS?
-@parent guides 1
+@parent guides 3
 
 @body
 <h2 id="Flexible">Flexible</h2>

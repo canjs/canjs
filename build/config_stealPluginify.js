@@ -189,7 +189,7 @@ module.exports = function(){
 					normalize: canNormalize,
 					minify: true
 				},
-				"steal": {
+				"steal +dev": {
 					graphs: allModuleNames.concat(["can"]),
 					dest: function(moduleName){
 						var name;

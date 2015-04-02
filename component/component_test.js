@@ -1,4 +1,4 @@
-steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (can, product) {
+steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
 	
 	QUnit.module('can/component', {
 		setup: function () {
