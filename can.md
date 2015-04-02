@@ -3,7 +3,7 @@
 
 @body
 
-This is the detailed documentation of the API for CanJS 2.1, a framework for building
+This is the detailed documentation of the API for CanJS 2.2, a framework for building
 web applications that provides a lightweight inheritance system, observable
 objects and values, and a powerful MVC core with live-bound templates, among other
 resources. 
