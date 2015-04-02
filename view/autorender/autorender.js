@@ -90,14 +90,13 @@ steal("can/util",function(can){
 			can.proxy(deferred.reject, deferred)
 		);
 	}
-	
-	
-	
-	if(document.body){
+
+	if (document.readyState === 'complete') {
 		autoload();
 	} else {
-		can.bind.call(document,"DOMContentLoaded", autoload);
+		can.bind.call(window, 'load', autoload);
 	}
+
 	var promise = deferred.promise();
 	can.autorender = function(success, error){
 		return promise.then(success, error);
