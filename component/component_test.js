@@ -1514,4 +1514,53 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		ok(changeCount < 500, "more than 500 events");
 	});
 
+	test('DOM trees not releasing when referencing can.Map inside can.Map in template', function() {
+		var baseTemplate = '{{#if show}}<layout></layout>{{/if}}',
+			layoutTemplate = '{{#if state.inner}}<internal></internal>{{/if}}',
+			showLayout = can.compute(true),
+			state = new can.Map({
+				inner: {
+					foo: 'bar'
+				}
+			});
+
+		var removeCount = 0;
+
+		can.Component.extend({
+			tag: 'internal',
+			events: {
+				removed: function() {
+					removeCount++;
+				}
+			}
+		});
+
+		can.Component.extend({
+			tag: 'layout',
+			template: can.stache(layoutTemplate)
+		});
+
+		can.append( can.$("#qunit-fixture"), can.stache(baseTemplate)({
+			show: showLayout,
+			state: state
+		}) );
+
+		showLayout(false);
+		state.removeAttr('inner');
+
+		equal(removeCount, 1, 'internal removed once');
+
+
+		showLayout(true);
+		state.attr('inner', {
+			foo: 'bar'
+		});
+
+		showLayout(false);
+		state.removeAttr('inner');
+
+		equal(removeCount, 2, 'internal removed once');
+
+	});
+
 });
