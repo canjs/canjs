@@ -148,6 +148,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		 *
 		 */
 		list: function (el, compute, render, context, parentNode, nodeList) {
+			
 			//var setupBatchNum = can.batch.batchNum;
 
 			// A nodeList of all elements this live-list manages.
@@ -281,7 +282,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						referenceElement = nodeLists.first(referenceNodeList);
 					}
 					
-					var parentNode = referenceElement.parentNode;
+					var parentNode = masterNodeList[0].parentNode;
 
 
 					// Move the DOM nodes into the proper location
