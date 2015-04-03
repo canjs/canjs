@@ -1,6 +1,28 @@
 steal('can/util', 'can/list', function () {
 
-	// Change bubble rule to bubble on change if their is a comparator
+	// BUBBLE RULE
+	// 1. list.bind("change") -> bubbling
+	//    list.unbind("change") -> no bubbling
+	
+	// 2. list.attr("comparator","id") -> nothing
+	//    list.bind("length") -> bubbling
+	//    list.removeAttr("comparator") -> nothing
+	
+	// 3. list.bind("change") -> bubbling
+	//    list.attr("comparator","id") -> bubbling
+	//    list.unbind("change") -> no bubbling
+	
+
+
+	// 4. list.bind("length") -> nothing 
+	//    list.attr("comparator","id") -> bubbling
+	//    list.removeAttr("comparator") -> nothing
+	
+	// 5. list.bind("length") -> nothing 
+	//    list.attr("comparator","id") -> bubbling
+	//    list.unbind("length") -> nothing
+
+	// Change bubble rule to bubble on change if there is a comparator.
 	var oldBubbleRule = can.List._bubbleRule;
 	can.List._bubbleRule = function(eventName, list) {
 		var oldBubble = oldBubbleRule.apply(this, arguments);
@@ -14,15 +36,50 @@ steal('can/util', 'can/list', function () {
 
 	var proto = can.List.prototype,
 		_changes = proto._changes,
-		setup = proto.setup;
+		setup = proto.setup,
+		unbind = proto.unbind;
 
 	//Add `move` as an event that lazy-bubbles
 
 	// extend the list for sorting support
 
 	can.extend(proto, {
-		comparator: undefined,
-
+		setup: function (instances, options) {
+			setup.apply(this, arguments);
+			this._comparatorBound = false;
+			this._init = 1;
+			this.bind('comparator', can.proxy(this._comparatorUpdated, this));
+			delete this._init;
+			
+			if (this.comparator) {
+				this.sort();
+			}
+		},
+		_comparatorUpdated: function(ev, newValue){
+			if( newValue || newValue === 0 ) {
+				this.sort();
+				
+				if(this._bindings > 0 && ! this._comparatorBound) {
+					this.bind("change", this._comparatorBound = function(){});
+				}
+			} else if(this._comparatorBound){
+				unbind.call(this, "change", this._comparatorBound);
+				this._comparatorBound = false;
+				
+			}
+			
+			// if anyone is listening to this object
+		},
+		unbind: function(ev, handler){
+			var res = unbind.apply(this, arguments);
+			
+			if(this._comparatorBound && this._bindings === 1) {
+				unbind.call(this,"change", this._comparatorBound);
+				this._comparatorBound = false;
+			}
+			
+			return res;
+		},
 		_comparator: function (a, b) {
 			var comparator = this.comparator;
 
@@ -33,7 +90,42 @@ steal('can/util', 'can/list', function () {
 
 			return a === b ? 0 : a < b ? -1 : 1;
 		},
+		_changes: function (ev, attr, how, newVal, oldVal) {
 
+			// If a comparator is defined and the change was to a
+			// list item, consider moving the item.
+			if (this.comparator && /^\d+/.test(attr)) {
+	
+				if (ev.batchNum && ev.batchNum !== this._lastBatchNum) {
+					this.sort();
+					this._lastBatchNum = ev.batchNum;
+					return;
+				}
+	
+				// get the index
+				var currentIndex = +/^\d+/.exec(attr)[0],
+					// and item
+					item = this[currentIndex];
+	
+				if (typeof item !== 'undefined') {
+	
+					// Determine where this item should reside as a result
+					// of the change
+					var newIndex = this._getInsertIndex(item, currentIndex);
+	
+					if (newIndex !== currentIndex) {
+						this._swapItems(currentIndex, newIndex);
+	
+						// Trigger length change so that {{#block}} helper can re-render
+						can.trigger(this, 'length', [
+							this.length
+						]);
+					}
+	
+				}
+			}
+			_changes.apply(this, arguments);
+		},
 		/**
 		 * @hide
 		 */
@@ -177,7 +269,7 @@ steal('can/util', 'can/list', function () {
 				]);
 			}
 		}
-
+		
 	});
 	// create push, unshift
 	// converts to an array of arguments
@@ -294,49 +386,6 @@ steal('can/util', 'can/list', function () {
 		};
 	})();
 
-	//- override changes for sorting
-	proto._changes = function (ev, attr, how, newVal, oldVal) {
 
-		// If a comparator is defined and the change was to a
-		// list item, consider moving the item.
-		if (this.comparator && /^\d+/.test(attr)) {
-
-			if (ev.batchNum && ev.batchNum !== this._lastBatchNum) {
-				this.sort();
-				this._lastBatchNum = ev.batchNum;
-				return;
-			}
-
-			// get the index
-			var currentIndex = +/^\d+/.exec(attr)[0],
-				// and item
-				item = this[currentIndex];
-
-			if (typeof item !== 'undefined') {
-
-				// Determine where this item should reside as a result
-				// of the change
-				var newIndex = this._getInsertIndex(item, currentIndex);
-
-				if (newIndex !== currentIndex) {
-					this._swapItems(currentIndex, newIndex);
-
-					// Trigger length change so that {{#block}} helper can re-render
-					can.trigger(this, 'length', [
-						this.length
-					]);
-				}
-
-			}
-		}
-		_changes.apply(this, arguments);
-	};
-	//- override setup for sorting
-	proto.setup = function (instances, options) {
-		setup.apply(this, arguments);
-		if (this.comparator) {
-			this.sort();
-		}
-	};
 	return can.Map;
 });

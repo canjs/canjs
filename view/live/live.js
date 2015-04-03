@@ -286,7 +286,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						referenceElement = nodeLists.first(referenceNodeList);
 					}
 					
-					var parentNode = referenceElement.parentNode;
+					var parentNode = masterNodeList[0].parentNode;
 
 
 					// Move the DOM nodes into the proper location
