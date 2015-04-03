@@ -104,7 +104,7 @@ steal(
 				var cur = {
 					tag: state.node && state.node.tag,
 					attr: state.attr && state.attr.name,
-					directlyNested: state.sectionElementStack[state.sectionElementStack.length - 1] === "section"
+					directlyNested: state.sectionElementStack.length ? state.sectionElementStack[state.sectionElementStack.length - 1] === "section" : true
 				};
 				return overwrites ? can.simpleExtend(cur, overwrites) : cur;
 			},

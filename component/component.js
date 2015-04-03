@@ -110,7 +110,14 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					viewModelPropertyUpdates = {},
 					// the object added to the viewModel
 					componentScope,
-					frag;
+					frag,
+					// an array of teardown stuff that should happen when the element is removed
+					teardownFunctions = [],
+					callTeardownFunctions = function(){
+						for(var i = 0, len = teardownFunctions.length ; i < len; i++) {
+							teardownFunctions[i]();
+						}
+					};
 
 				// ## Scope
 
@@ -176,7 +183,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						compute.unbind("change", handler);
 					} else {
 						// Make sure we unbind (there's faster ways of doing this)
-						can.bind.call(el, "removed", function () {
+						teardownFunctions.push(function () {
 							compute.unbind("change", handler);
 						});
 						// Setup the two-way binding
@@ -252,7 +259,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 
 				// ## Helpers
 
-
 				// Setup helpers to callback with `this` as the component
 				can.each(this.helpers || {}, function (val, prop) {
 					if (can.isFunction(val)) {
@@ -261,13 +267,14 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						};
 					}
 				});
-
+				
+				
 				// Teardown reverse bindings when the element is removed
-				var tearDownBindings = function(){
+				teardownFunctions.push(function(){
 					can.each(handlers, function (handler, prop) {
 						componentScope.unbind(prop, handlers[prop]);
 					});
-				};
+				});
 
 				// ## `events` control
 
@@ -283,16 +290,22 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					var oldDestroy = this._control.destroy;
 					this._control.destroy = function(){
 						oldDestroy.apply(this, arguments);
-						tearDownBindings();
+						callTeardownFunctions();
 					};
 					this._control.on();
 				} else {
 					can.bind.call(el, "removed", function () {
-						tearDownBindings();
+						callTeardownFunctions();
 					});
 				}
 
 				// ## Rendering
+
+				// Keep a nodeList so we can kill any directly nested nodeLists within this component
+				var nodeList = can.view.nodeLists.register([], undefined, true);
+				teardownFunctions.push(function(){
+					can.view.nodeLists.unregister(nodeList);
+				});
 
 				// If this component has a template (that we've already converted to a renderer)
 				if (this.constructor.renderer) {
@@ -336,18 +349,24 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						}
 					};
 					// Render the component's template
-					frag = this.constructor.renderer(renderedScope, hookupOptions.options.add(options));
+					frag = this.constructor.renderer(renderedScope, hookupOptions.options.add(options), nodeList);
 				} else {
 					// Otherwise render the contents between the 
 					if(hookupOptions.templateType === "legacy") {
 						frag = can.view.frag(hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : "");
 					} else {
-						frag = hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : document.createDocumentFragment();
+						// we need to be the parent ... or we need to 
+						frag = hookupOptions.subtemplate ?
+							hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options), nodeList) :
+							document.createDocumentFragment();
 					}
 					
 				}
 				// Append the resulting document fragment to the element
 				can.appendChild(el, frag);
+				
+				// update the nodeList with the new children so the mapping gets applied
+				can.view.nodeLists.update(nodeList, el.childNodes);
 			}
 		});
 

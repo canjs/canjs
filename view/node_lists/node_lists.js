@@ -203,6 +203,10 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			
 			return oldNodes;
 		},
+		// Goes through each node in the list. [el1, el2, el3, ...]
+		// Ginds the nodeList for that node in repacements.  el1's nodeList might look like [el1, [el2]].
+		// Replaces that element and any other elements in the node list with the 
+		// nodelist itself. resulting in [ [el1, [el2]], el3, ...]
 		nestReplacements: function(list){
 			var index = 0,
 				// temporary id map that is limited to this call

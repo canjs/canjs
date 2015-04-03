@@ -3849,6 +3849,38 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		can.bind = oldBind;
 	});
 	
+	test("possible to teardown immediate nodeList (#1593)", function(){
+		expect(3);
+		var map = new can.Map({show: true});
+		var oldBind = map.bind,
+			oldUnbind = map.unbind;
+			
+		map.bind = function(){
+			ok(true, "bound");
+			return oldBind.apply(this, arguments);
+		};
+		map.unbind = function(){
+			ok(true, "unbound");
+			return oldUnbind.apply(this, arguments);
+		};
+		
+		var template = can.stache("{{#if show}}<span/>TEXT{{/if}}");
+		var nodeList = can.view.nodeLists.register([], undefined, true);
+		var frag = template(map,{},nodeList);
+		can.view.nodeLists.update(nodeList, frag.childNodes);
+		
+		equal(nodeList.length, 1, "our nodeList has the nodeList of #if show");
+		
+		can.view.nodeLists.unregister(nodeList);
+		
+		// has to be async b/c of the temporary bind for performance
+		stop();
+		setTimeout(function(){
+			start();
+		},10);
+		
+	});
+	
 		// the define test doesn't include the stache plugin and 
 	// the stache test doesn't include define plugin, so have to put this here
 	test('#1590 #each with surrounding block and setter', function(){
