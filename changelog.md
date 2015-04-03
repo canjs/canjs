@@ -3,6 +3,11 @@
 @parent guides 5
 -->
 
+__2.2.4__ ( Apr 03 2015 )
+
+- [This makes list update sorting when comparator changes.](https://github.com/bitovi/canjs/pull/1604)
+
+
 __2.2.3__ ( Apr 03 2015 )
 
 - [Fix AMD build, bring back can/util/library and can/util/can](https://github.com/bitovi/canjs/pull/1600)
