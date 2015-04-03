@@ -24,7 +24,7 @@ The following key values are also supported:
  - `@scope` - The current [can.view.Scope].
 
 If no `argKey`s or `hashKey`s are provided, the methodKey will be called with the
-`@content`, `@element` and `@event` as arguments.
+`@context`, `@element` and `@event` as arguments.
 
 @param {String} hashName A property name 
 that gets added to the `hash` argument.  The hash argument is the
