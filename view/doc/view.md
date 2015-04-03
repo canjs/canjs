@@ -169,7 +169,7 @@ JS download.
 
 However, some people might not be using StealJS or want to 
 delay loading templates until necessary. If you have the need, 
-you can provide a callback paramter like:
+you can provide a callback parameter like:
 
     can.view('recipes',recipeData, function(frag){
       document.getElementById('recipes')
