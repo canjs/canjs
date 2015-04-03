@@ -61,14 +61,14 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		compile: function(){
 			var compiled = this.stack.pop().compile();
 			
-			return function(scope, options){
+			return function(scope, options, nodeList){
 				if ( !(scope instanceof can.view.Scope) ) {
 					scope = new can.view.Scope(scope || {});
 				}
 				if ( !(options instanceof mustacheCore.Options) ) {
 					options = new mustacheCore.Options(options || {});
 				}
-				return compiled.hydrate(scope, options);
+				return compiled.hydrate(scope, options, nodeList);
 			};
 		},
 		push: function(chars){

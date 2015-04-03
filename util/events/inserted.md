@@ -37,10 +37,11 @@ Call a method when an element is inserted within a template like:
 Listen to an `inserted` event with [can.Component::events can.Component's events] object like:
 
     can.Component.extend({
-      tag: "panel"
-      "inserted": function(el, ev){
+      tag: "panel",
+      events:{
+        "inserted": function(el, ev){
         
-      }
+        }
     })
 
 To create an `inserted` event, you must use the base-library [can.$ NodeList]'s DOM modifier methods.

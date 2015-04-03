@@ -36,6 +36,10 @@ steal(function () {
 		}
 		return d;
 	};
+	
+	can.last = function(arr){
+		return arr && arr[arr.length - 1];
+	};
 
 
 	can.frag = function(item){
@@ -93,7 +97,7 @@ steal(function () {
 	can["import"] = function(moduleName) {
 		var deferred = new can.Deferred();
 		
-		if(typeof window.System === "object") {
+		if(typeof window.System === "object" && can.isFunction(window.System["import"])) {
 			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
 		} else if(window.define && window.define.amd){

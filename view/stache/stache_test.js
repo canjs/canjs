@@ -667,7 +667,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			"{{/animals}}</ul>";
 		var compiled = getText(text,{
 			animals: this.animals
-		})
+		});
 		equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 	});
 
@@ -679,7 +679,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		var compiled = getText(text,{
 			animals: this.animals
-		})
+		});
 		equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
 	});
 
@@ -687,14 +687,14 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		var text = "a \n b \n c";
 
 		equal(getTextFromFrag( can.stache(text)({}) ), text)
-	})
+	});
 
 	test("multi line elements", function () {
 		var text = "<div\n class=\"{{myClass}}\" />",
 			result = can.stache(text)({myClass: 'a'});
 		
 		equal(result.childNodes[0].className, "a", "class name is right");
-	})
+	});
 
 	test("escapedContent", function () {
 		var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
@@ -711,7 +711,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123);
 		equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
 		equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;", "text-based html entities work fine");
-	})
+	});
 
 	test("unescapedContent", function () {
 		var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
@@ -3828,5 +3828,94 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		
 	});
 	
+	test("don't setup live binding for raw data with seciton helper", function () {
+		expect(0);
+		var template = can.stache("<ul>{{#animals}}" +
+			"<li></li>" +
+			"{{/animals}}</ul>");
+
+		var oldBind = can.bind;
+		can.bind = function(ev){
+			if(ev === "removed") {
+				ok(false, "listening to element removed b/c you are live binding");
+			}
+			oldBind.apply(this, arguments);
+		};
+
+		template({
+			animals: this.animals
+		});
+		
+		can.bind = oldBind;
+	});
 	
+	test("possible to teardown immediate nodeList (#1593)", function(){
+		expect(3);
+		var map = new can.Map({show: true});
+		var oldBind = map.bind,
+			oldUnbind = map.unbind;
+			
+		map.bind = function(){
+			ok(true, "bound");
+			return oldBind.apply(this, arguments);
+		};
+		map.unbind = function(){
+			ok(true, "unbound");
+			return oldUnbind.apply(this, arguments);
+		};
+		
+		var template = can.stache("{{#if show}}<span/>TEXT{{/if}}");
+		var nodeList = can.view.nodeLists.register([], undefined, true);
+		var frag = template(map,{},nodeList);
+		can.view.nodeLists.update(nodeList, frag.childNodes);
+		
+		equal(nodeList.length, 1, "our nodeList has the nodeList of #if show");
+		
+		can.view.nodeLists.unregister(nodeList);
+		
+		// has to be async b/c of the temporary bind for performance
+		stop();
+		setTimeout(function(){
+			start();
+		},10);
+		
+	});
+	
+		// the define test doesn't include the stache plugin and 
+	// the stache test doesn't include define plugin, so have to put this here
+	test('#1590 #each with surrounding block and setter', function(){
+		// the problem here ... is that a batch is happening
+		// the replace is going to happen after
+		// we need to know when to respond
+		var product = can.compute();
+		var people = can.compute(function(){
+			var newList = new can.List();
+			newList.replace(['Brian']);
+			return newList;
+		});
+		var frag = can.stache('<div>{{#if product}}<div>{{#each people}}<span/>{{/each}}</div>{{/if}}</div>')({
+			people: people,
+			product: product
+		});
+		
+		can.batch.start();
+		product(1);
+		can.batch.stop();
+		
+		equal(frag.childNodes[0].getElementsByTagName('span').length, 1, "no duplicates");
+
+	});
+
+	if(document.createElementNS) {
+		test("svg elements for (#1327)", function(){
+			var template = can.stache('<svg height="120" width="400">'+
+				'<circle cx="50" cy="50" r="{{radius}}" stroke="black" stroke-width="3" fill="blue" />'+
+				'</svg>');
+			var frag = template({
+				radius: 6
+			});
+			
+			equal(frag.childNodes[0].namespaceURI, "http://www.w3.org/2000/svg", "svg namespace");
+		});
+	}
 });
