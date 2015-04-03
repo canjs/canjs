@@ -1515,19 +1515,16 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 	});
 
 	test('DOM trees not releasing when referencing can.Map inside can.Map in template (#1593)', function() {
-		var baseTemplate = '{{#if show}}<layout></layout>{{/if}}',
-			layoutTemplate = '{{#if state.inner}}<internal></internal>{{/if}}',
-			showLayout = can.compute(true),
+		var baseTemplate = can.stache('{{#if show}}<my-outside></my-outside>{{/if}}'),
+			show = can.compute(true),
 			state = new can.Map({
-				inner: {
-					foo: 'bar'
-				}
+				inner: 1
 			});
 
 		var removeCount = 0;
 
 		can.Component.extend({
-			tag: 'internal',
+			tag: 'my-inside',
 			events: {
 				removed: function() {
 					removeCount++;
@@ -1536,27 +1533,23 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 		});
 
 		can.Component.extend({
-			tag: 'layout',
-			template: can.stache(layoutTemplate)
+			tag: 'my-outside',
+			template: can.stache('{{#if state.inner}}<my-inside></my-inside>{{/if}}')
 		});
 
-		can.append( can.$("#qunit-fixture"), can.stache(baseTemplate)({
-			show: showLayout,
+		can.append( can.$("#qunit-fixture"), baseTemplate({
+			show: show,
 			state: state
 		}) );
-
-		showLayout(false);
+		
+		show(false);
 		state.removeAttr('inner');
 
 		equal(removeCount, 1, 'internal removed once');
 
+		show(true);
+		state.attr('inner', 2);
 
-		showLayout(true);
-		state.attr('inner', {
-			foo: 'bar'
-		});
-
-		showLayout(false);
 		state.removeAttr('inner');
 
 		equal(removeCount, 2, 'internal removed twice');
