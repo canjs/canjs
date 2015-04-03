@@ -3,6 +3,27 @@
 @parent guides 5
 -->
 
+__2.2.3__ ( Apr 03 2015 )
+
+- [Fix AMD build, bring back can/util/library and can/util/can](https://github.com/bitovi/canjs/pull/1600)
+- [Stache sets up live-binding with plainJS objects and the section helper](https://github.com/bitovi/canjs/issues/1598)
+- [Autorender denormalizes typeModule in Steal production mode](https://github.com/bitovi/canjs/issues/1595)
+- [DOM appears to be held in memory in certain conditions with components rather than be destroyed](https://github.com/bitovi/canjs/issues/1593)
+- [#each causing duplicates](https://github.com/bitovi/canjs/issues/1589)
+- [Individual ready counters.](https://github.com/bitovi/canjs/pull/1588)
+- [Do not dispatch events during a set to a compute backed property.](https://github.com/bitovi/canjs/pull/1587)
+- [define getters throw two events](https://github.com/bitovi/canjs/issues/1585)
+- [autoload does not work with standalone build](https://github.com/bitovi/canjs/issues/1582)
+- [Prevents updating scope due to scope changes, avoiding an infinite loop problem.](https://github.com/bitovi/canjs/pull/1580)
+- [Batched Changes can create cycles in components two way bindings](https://github.com/bitovi/canjs/issues/1579)
+- [steal specific handling has been removed in 2.2.2 dists](https://github.com/bitovi/canjs/issues/1577)
+- [Makes sure promise observe data has a cid and the promise can be read from](https://github.com/bitovi/canjs/pull/1573)
+- [New promises are not rebound and can not read alternate properties on promises](https://github.com/bitovi/canjs/issues/1572)
+- [List#sort does not cause {{#each key}} to update](https://github.com/bitovi/canjs/issues/1566)
+- [component fire inserted event twice with zepto](https://github.com/bitovi/canjs/issues/1564)
+- [svg element inside stache template is not rendred correctly](https://github.com/bitovi/canjs/issues/1327)
+
+
 __2.2.2__ ( Mar 31 2015 )
 
 - [makes can-EVENT arguments values instead of computes and functions](https://github.com/bitovi/canjs/pull/1556)
