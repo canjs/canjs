@@ -100,14 +100,14 @@ is made easy with event handling in can.Control. Let's say that our view
 template looks like this:
 
 ```
-&lt;script type="text/ejs" id="todoList">
+<script type="text/ejs" id="todoList">
 <% this.each(function(todo) { %>
-&lt;li <%= (el) -> el.data('todo', todo) %>>
+<li <%= (el) -> el.data('todo', todo) %>>
 	<%= todo.attr('description'); %>
-	&lt;a class="destroy">X&lt;/a>
-&lt;/li>
+	<a class="destroy">X</a>
+</li>
 <% }) %>
-&lt;/script>
+</script>
 ```
 
 We should put an event listener on our Todos Control to remove a Todo when its

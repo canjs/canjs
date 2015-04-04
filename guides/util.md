@@ -16,7 +16,7 @@ can.trim(' foo '); // 'foo'
 
 `can.esc` escapes HTML code.
 ```
-can.esc('&lt;foo>&lt;bar>'); // '&amp;lt;foo&amp;gt;&amp;&amp;lt;bar&amp;gt;'
+can.esc('<foo><bar>'); // '&lt;foo&gt;&lt;bar&gt;'
 ```
 
 `can.getObject` looks up an object by path.

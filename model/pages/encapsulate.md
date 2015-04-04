@@ -178,7 +178,7 @@ If we wanted to make a list of contacts, we could do it like:
 Contact.findAll({},function(contacts){
   var html = [];
   for(var i =0; i < contacts.length; i++){
-    html.push('&lt;li>'+contacts[i].name + '&lt;/li>')
+    html.push('<li>'+contacts[i].name + '</li>')
   }
   $('#contacts').html( html.join('') );
 });

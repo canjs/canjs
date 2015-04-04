@@ -1,5 +1,5 @@
 @page Mustache Mustache
-@parent Tutorial 5
+@parent Tutorial 4
 
 @body
 
@@ -17,11 +17,11 @@ but can be enhanced through the use of helpers.
 Here's an example of a template that might render a list of Todos:
 
 ```
-&lt;script type="text/mustache" id="todosList">
+<script type="text/mustache" id="todosList">
 {{#todos}}
-&lt;li>{{description}}&lt;/li>
+<li>{{description}}</li>
 {{/todos}}
-&lt;/script>
+</script>
 ```
 
 You can use `can.view` to render the template:
@@ -90,7 +90,7 @@ will render:
 
 ```
 {{#enemies}}
-&lt;li>{{.}}&lt;/li>
+<li>{{.}}</li>
 {{/enemies}}
 ```
 
@@ -105,36 +105,36 @@ once.
 This template:
 
 ```
-&lt;h1>{{#name}}{{.}}{{/name}}&lt;/h1>
-&lt;ul>
+<h1>{{#name}}{{.}}{{/name}}</h1>
+<ul>
 	{{#friends}}
-	&lt;li>{{.}}&lt;/li>
+	<li>{{.}}</li>
 	{{/friends}}
-&lt;/ul>
+</ul>
 ```
 
 will render like this:
 
 ```
-&lt;h1>Alice Liddell&lt;/h1>
-&lt;ul>
-	&lt;li>Bob&lt;/li>
-	&lt;li>Eve&lt;/li>
-&lt;/ul>
+<h1>Alice Liddell</h1>
+<ul>
+	<li>Bob</li>
+	<li>Eve</li>
+</ul>
 ```
 
 You can also make inverted sections that render if the variable referenced in the
 opening tag is falsey:
 
 ```
-&lt;ul>
+<ul>
 	{{#friends}}
-	&lt;li>{{.}}&lt;/li>
+	<li>{{.}}</li>
 	{{/friends}}
 	{{^friends}}
-	&lt;li>You have no friends.&lt;/li>
+	<li>You have no friends.</li>
 	{{/friends}}
-&lt;/ul>
+</ul>
 ```
 
 ### Context
@@ -202,20 +202,20 @@ var fragment = can.view('todosList', {todos: todos}, {
 This might be used in a template like this:
 
 ```
-&lt;script type="text/mustache" id="todosList">
+<script type="text/mustache" id="todosList">
 {{#todos}}
-&lt;li>{{uppercase description}}&lt;/li>
+<li>{{uppercase description}}</li>
 {{/todos}}
-&lt;/script>
+</script>
 ```
 
 If a property of an observe is passed to a helper function, the helper will
 become a [can.compute](../docs/can.compute.html). As an example, if you had this template:
 
 ```
-&lt;script type="text/mustache" id="prefixedName">
-&lt;div>{{addMs lastName}}&lt;/div>
-&lt;/script>
+<script type="text/mustache" id="prefixedName">
+<div>{{addMs lastName}}</div>
+</script>
 ```
 
 And you ran this code:
@@ -231,7 +231,7 @@ document.getElementById('name')
 name.attr({firstName: 'Allison', lastName: 'Wonderland'});
 ```
 
-The contents of the &lt;div> would be `Ms. Wonderland`.
+The contents of the <div> would be `Ms. Wonderland`.
 
 ### Global helpers
 
@@ -252,9 +252,9 @@ helper.
 For example, this template:
 
 ```
-&lt;script type="text/mustache" id="nameDiv">
-&lt;div id="person" {{data 'name'}}>{{firstName}} {{lastName}}&lt;/div>
-&lt;/script>
+<script type="text/mustache" id="nameDiv">
+<div id="person" {{data 'name'}}>{{firstName}} {{lastName}}</div>
+</script>
 ```
 
 lets you do this in code:
@@ -278,24 +278,24 @@ ID inside `{{> }}`.
 
 With these templates:
 ```
-&lt;script type="text/mustache" id="names">
-&lt;ul>
+<script type="text/mustache" id="names">
+<ul>
 {{#names}}
 	{{>user}}
 {{/names}}
-&lt;/ul>
-&lt;/script>
-&lt;script type="text/mustache" id="user">
-&lt;li>{{firstName}} {{lastName}}&lt;/li>
-&lt;/script>
+</ul>
+</script>
+<script type="text/mustache" id="user">
+<li>{{firstName}} {{lastName}}</li>
+</script>
 ```
 
 the expanded template at render time would look similar to:
 
 ```
-&lt;ul>
+<ul>
 {{#names}}
-	&lt;li>{{firstName}} {{lastName}}&lt;/li>
+	<li>{{firstName}} {{lastName}}</li>
 {{/names}}
-&lt;/ul>
+</ul>
 ```

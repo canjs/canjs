@@ -5,8 +5,7 @@
 
 [can.view](../docs/can.view.html) loads and renders templates with the data
 you provide, and returns a documentFragment with the populated template.
-can.view supports many templating languages, but [EJS EJS] and [Mustache
-Mustache] allow you to live bind to Observes within templates. Live binding
+[Stache](../docs/can.stache.html) and [Mustache](../docs/can.mustache.html) allow you to live bind to Observes within templates. Live binding
 will dynamically update your template in the DOM automatically whenever the
 properties within Observes change.
 
@@ -21,11 +20,11 @@ In order to register a template with can.view, create a script tag on the page
 with an ID, a `type` attribute that matches the templating language, and the
 content of the template inside:
 ```
-&lt;script type="text/ejs" id="todoList">
-<% can.each(this, function(val, key) { %>
-	&lt;li><%= val.attr('description') %>&lt;/li>
-<% }); %>
-&lt;/script>
+<script type="text/mustache" id="todoList">
+{{#each .}}
+	<li>{{description}}</li>
+{{/each}}
+</script>
 ```
 
 Then load the template using the script tag's ID and pass the template data:
@@ -37,9 +36,10 @@ Todo.findAll({}, function(todos) {
 
 Or you can load a template without registering it first (or including it on the
 page) by giving the URL to `can.view`:
+
 ```
 Todo.findAll({}, function(todos) {
-	$('#nav').html(can.view('todos/todos.ejs', todos))
+	$('#nav').html(can.view('todos/todos.mustache', todos))
 });
 ```
 
@@ -62,13 +62,3 @@ can.view('todos.ejs', {
 });
 ```
 
-## Rendering to string
-
-To render to a string instead of a documentFragment, use `can.view.render`. This
-is mainly used to nest templates inside of other templates:
-
-```
-<% can.each(todos, function(todo, key) { %>
-	&lt;li><%== can.view.render('todos.ejs', todo); %>&lt;/li>
-<% }) %>
-```

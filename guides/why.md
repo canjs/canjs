@@ -72,7 +72,7 @@ var Tooltip = can.Control.extend({
 })
 
 // create a Tooltip
-var tooltipElement = $( '&lt;div>INFO&lt;/div>' ).appendTo( el )
+var tooltipElement = $( '<div>INFO</div>' ).appendTo( el )
 var tooltipInstance = new Tooltip( tooltipElement );
 ```
 
@@ -94,18 +94,18 @@ can.view( 'todosList.ejs', {
 `todosList.ejs` might look like:
 
 ```
-&lt;h2>Due Today&lt;/h2>
-&lt;% list( todaysTodos, function( todo ) { %>
-  &lt;li &lt;%= (el) -> el.data( 'todo', todo ) %>>
-    &lt;%= todo.attr( 'name' ) %>
-  &lt;/li>
-&lt;% } ) %>
-&lt;h2>Critical Todos</h2>
-&lt;% list( criticalTodos, function( todo ) { %>
-  &lt;li <%= (el) -> el.data( 'todo', todo ) %>>
-    &lt;%= todo.attr( 'name' ) %>
-  &lt;/li>
-&lt;% } ) %>
+<h2>Due Today</h2>
+<% list( todaysTodos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
+  </li>
+<% } ) %>
+<h2>Critical Todos</h2>
+<% list( criticalTodos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
+  </li>
+<% } ) %>
 ```
 
 If the result for of `Todo.findAll( { due: 'today' } )` and `Todo.findAll( { type: 'critical' } )` both share a todo instance like:
@@ -191,13 +191,13 @@ can.view( 'todos.ejs', Todo.findAll() ).then(function( frag ) {
 Although [EJS can.ejs’s] live-binding is super fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items). EJS’s live binding is opt-in. It only turns on if you are using the `attr` method. If the following template binds to a `todo`'s `name` …
 
 ```
-&lt;li> &lt;%= todo.attr('name') %> &lt;/li>
+<li> <%= todo.attr('name') %> </li>
 ```
 
 … the following doesn’t setup live-binding and renders much faster …
 
 ```
-&lt;li> &lt;%= todo.name %> &lt;/li>
+<li> <%= todo.name %> </li>
 ```
 
 

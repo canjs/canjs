@@ -1731,20 +1731,20 @@ steal('can/util',
 		 *   text = can.esc(text);
 		 *   url  = can.esc(url);
 		 *
-		 *   var result = '&lt;a href="' + url + '"&gt;' + text + '&lt;/a&gt;';
+		 *   var result = '<a href="' + url + '">' + text + '</a>';
 		 *   return can.mustache.safeString(result);
 		 * });
 		 * ```
 		 *
 		 * Rendering:
 		 * ```
-		 * &lt;div&gt;{{link "Google", "http://google.com"}}&lt;/div&gt;
+		 * <div>{{link "Google", "http://google.com"}}</div>
 		 * ```
 		 *
 		 * Results in:
 		 *
 		 * ```
-		 * &lt;div&gt;&lt;a href="http://google.com"&gt;Google&lt;/a&gt;&lt;/div&gt;
+		 * <div><a href="http://google.com">Google</a></div>
 		 * ```
 		 *
 		 * As an anchor tag whereas if we would have just returned the result rather than a

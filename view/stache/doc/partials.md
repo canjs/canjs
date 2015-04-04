@@ -39,7 +39,7 @@ For example, this template and partial:
 __base.mustache__
 
 ```
-&lt;h2>Names&lt;/h2>
+<h2>Names</h2>
 {{#names}}
 	{{>user.stache}}
 {{/names}}
@@ -48,15 +48,15 @@ __base.mustache__
 __user.mustache__
 
 ```
-&lt;strong>{{name}}&lt;/strong>
+<strong>{{name}}</strong>
 ```
 
 The resulting expanded template at render time would look like:
 
 ```
-&lt;h2>Names&lt;/h2>
+<h2>Names</h2>
 {{#names}}
-	&lt;strong>{{name}}&lt;/strong>
+	<strong>{{name}}</strong>
 {{/names}}
 ```
 
@@ -69,17 +69,17 @@ Partials can reference a file path and file name in the template.
 The following template uses a relative path (relative to the current page):
 
 ```
-&lt;script id="template" type="text/stache">
+<script id="template" type="text/stache">
 	{{>views/test_template.stache}}
-&lt;/script>
+</script>
 ```
 
 The following template uses an absolute path (rooted to steal's root directory):
 
 ```
-&lt;script id="template" type="text/stache">
+<script id="template" type="text/stache">
 	{{>//myapp/accordion/views/test_template.stache}}
-&lt;/script>
+</script>
 ```
 
 __Referencing by ID__
@@ -88,15 +88,15 @@ Partials can reference templates that exist in script tags on the page by
 referencing the `id` of the partial in the template.  For example:
 
 ```
-&lt;script id="mytemplate" type="text/stache">
+<script id="mytemplate" type="text/stache">
 	{{>mypartial}}
-&lt;/script>
+</script>
 ```
 
 ```
-&lt;script id="mypartial" type="text/stache">
+<script id="mypartial" type="text/stache">
    	I am a partial.
-&lt;/script>
+</script>
 ```
 
 ```
@@ -137,9 +137,9 @@ can.$(document.body).append(template);
 then reference the partial in the template just like:
 
 ```
-&lt;ul>
+<ul>
 {{#items}}
-	&lt;li>{{>itemsTemplate}}&lt;/li>
+	<li>{{>itemsTemplate}}</li>
 {{/items}}
-&lt;/ul>
+</ul>
 ```
