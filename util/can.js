@@ -131,9 +131,9 @@ steal(function () {
 		logLevel: 0,
 		/**
 		 * Adds a warning message to the console.
-		 * @codestart
+		 * ```
 		 * can.dev.warn("something evil");
-		 * @codeend
+		 * ```
 		 * @param {String} out the message
 		 */
 		warn: function (out) {
@@ -151,9 +151,9 @@ steal(function () {
 		},
 		/**
 		 * Adds a message to the console.
-		 * @codestart
+		 * ```
 		 * can.dev.log("hi");
-		 * @codeend
+		 * ```
 		 * @param {String} out the message
 		 */
 		log: function (out) {

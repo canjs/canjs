@@ -16,22 +16,22 @@ but can be enhanced through the use of helpers.
 
 Here's an example of a template that might render a list of Todos:
 
-@codestart
+```
 &lt;script type="text/mustache" id="todosList">
 {{#todos}}
 &lt;li>{{description}}&lt;/li>
 {{/todos}}
 &lt;/script>
-@codeend
+```
 
 You can use `can.view` to render the template:
 
-@codestart
+```
 Todo.findAll({}, function(todos) {
 	document.getElementById('list')
 		.appendChild(can.view('todoList', {todos: todos}));
 });
-@codeend
+```
 
 ## Magic tags
 
@@ -50,21 +50,21 @@ context.
 
 This template:
 
-@codestart
+```
 Name: {{name}}
-@codeend
+```
 
 given this data:
 
-@codestart
+```
 {name: 'Alice'}
-@codeend
+```
 
 will render the following:
 
-@codestart
+```
 Name: Alice
-@codeend
+```
 
 ### Sections
 
@@ -75,28 +75,28 @@ inside them to that of the variable referenced in the opening tag.
 For the following examples, we will assume the template is being populated with
 this set of data:
 
-@codestart
+```
 {
 	name: 'Alice Liddell',
 	nickname: '',
 	friends: ['Bob', 'Eve'],
 	enemies: []
 }
-@codeend
+```
 
 If the variable is `undefined`, `null`, `false`, `''`, or `[]`, it is considered
 a falsey value and the section is not rendered at all. Neither of these sections
 will render:
 
-@codestart
+```
 {{#enemies}}
 &lt;li>{{.}}&lt;/li>
 {{/enemies}}
-@codeend
+```
 
-@codestart
+```
 {{#nickname}}{{.}}{{/nickname}}
-@codeend
+```
 
 If the variable is a non-empty array, the section will be rendered once for each
 element in the array. If it is truthy but not an array, the section is rendered
@@ -104,29 +104,29 @@ once.
 
 This template:
 
-@codestart
+```
 &lt;h1>{{#name}}{{.}}{{/name}}&lt;/h1>
 &lt;ul>
 	{{#friends}}
 	&lt;li>{{.}}&lt;/li>
 	{{/friends}}
 &lt;/ul>
-@codeend
+```
 
 will render like this:
 
-@codestart
+```
 &lt;h1>Alice Liddell&lt;/h1>
 &lt;ul>
 	&lt;li>Bob&lt;/li>
 	&lt;li>Eve&lt;/li>
 &lt;/ul>
-@codeend
+```
 
 You can also make inverted sections that render if the variable referenced in the
 opening tag is falsey:
 
-@codestart
+```
 &lt;ul>
 	{{#friends}}
 	&lt;li>{{.}}&lt;/li>
@@ -135,7 +135,7 @@ opening tag is falsey:
 	&lt;li>You have no friends.&lt;/li>
 	{{/friends}}
 &lt;/ul>
-@codeend
+```
 
 ### Context
 
@@ -151,31 +151,31 @@ variable or runs out of parent contexts.
 
 For example, with this data:
 
-@codestart
+```
 {
 	brothers: [{name: 'Bob'}, {name: 'David'}],
 	sisters: [{name: 'Alice'}, {name: 'Eve'}]
 }
-@codeend
+```
 
 and this template:
 
-@codestart
+```
 {{#brothers}}
 	{{#sisters}}
 		{{name}}
 	{{/sisters}}
 {{/brothers}}
-@codeend
+```
 
 the rendered result will be:
 
-@codestart
+```
 Alice
 Eve
 Alice
 Eve
-@codeend
+```
 
 Since there is no `sisters` variable in the context of the elements of the `brothers`
 array, Mustache jumps up to the parent context and resolves `sisters` there.
@@ -191,36 +191,36 @@ To use a helper that is local to the template you're rendering, pass it as the
 third argument to `can.view` in an object where the key is the name of the helper
 and the value is the helper function:
 
-@codestart
+```
 var fragment = can.view('todosList', {todos: todos}, {
 	uppercase: function(str) {
 		return str.toUppercase();
 	}
 });
-@codeend
+```
 
 This might be used in a template like this:
 
-@codestart
+```
 &lt;script type="text/mustache" id="todosList">
 {{#todos}}
 &lt;li>{{uppercase description}}&lt;/li>
 {{/todos}}
 &lt;/script>
-@codeend
+```
 
 If a property of an observe is passed to a helper function, the helper will
 become a [can.compute](../docs/can.compute.html). As an example, if you had this template:
 
-@codestart
+```
 &lt;script type="text/mustache" id="prefixedName">
 &lt;div>{{addMs lastName}}&lt;/div>
 &lt;/script>
-@codeend
+```
 
 And you ran this code:
 
-@codestart
+```
 var name = new can.Observe({firstName: 'Alice', lastName: 'Liddell'});
 document.getElementById('name')
 	.appendChild(can.view('prefixedName', name, {
@@ -229,7 +229,7 @@ document.getElementById('name')
 		}
 	}));
 name.attr({firstName: 'Allison', lastName: 'Wonderland'});
-@codeend
+```
 
 The contents of the &lt;div> would be `Ms. Wonderland`.
 
@@ -237,11 +237,11 @@ The contents of the &lt;div> would be `Ms. Wonderland`.
 
 You can register global helpers using [can.mustache.registerHelper](../docs/can.mustache.registerHelper.html):
 
-@codestart
+```
 can.mustache.registerHelper('i10n', function(str, options) {
 	return (Globalize != undefined ? Globalize.localize(str) : str);
 });
-@codeend
+```
 
 ### Data helpers
 
@@ -251,15 +251,15 @@ helper.
 
 For example, this template:
 
-@codestart
+```
 &lt;script type="text/mustache" id="nameDiv">
 &lt;div id="person" {{data 'name'}}>{{firstName}} {{lastName}}&lt;/div>
 &lt;/script>
-@codeend
+```
 
 lets you do this in code:
 
-@codestart
+```
 document.body.appendChild(can.view('nameDiv', {
 	firstName: 'Alice',
 	lastName: 'Liddell'
@@ -267,7 +267,7 @@ document.body.appendChild(can.view('nameDiv', {
 
 var obj = can.data(document.getElementById('person'), 'name');
 obj; // { firstName: 'Alice', lastName: 'Liddell'}
-@codeend
+```
 
 ## Partials
 
@@ -277,7 +277,7 @@ should be careful to avoid infinite loops. To include a partial, put its URL or
 ID inside `{{> }}`.
 
 With these templates:
-@codestart
+```
 &lt;script type="text/mustache" id="names">
 &lt;ul>
 {{#names}}
@@ -288,14 +288,14 @@ With these templates:
 &lt;script type="text/mustache" id="user">
 &lt;li>{{firstName}} {{lastName}}&lt;/li>
 &lt;/script>
-@codeend
+```
 
 the expanded template at render time would look similar to:
 
-@codestart
+```
 &lt;ul>
 {{#names}}
 	&lt;li>{{firstName}} {{lastName}}&lt;/li>
 {{/names}}
 &lt;/ul>
-@codeend
+```

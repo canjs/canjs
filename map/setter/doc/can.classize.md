@@ -12,8 +12,8 @@ them back together. This method is useful for
 taking HTML class names and getting the original
 Control name from them.
 
-@codestart
+```
 can.classize('my_control_name'); // 'MyControlName'
-@codeend
+```
 @param {String} str The string to transform.
 @return {String} The string as a class name.

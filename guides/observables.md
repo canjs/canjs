@@ -23,35 +23,35 @@ with the same properties and values as _obj_. To create a List, call `new
 can.List(array)`. This will give you a List with the same elements as
 _array_.
 
-@codestart
+```
 var pagination = new can.Map({page: 1, perPage: 25, count: 1388});
 pagination.attr('perPage'); // 25
 
 var hobbies = new can.List(['programming', 'bball', 'party rocking']);
 hobbies.attr(2); // 'partying'
-@codeend
+```
 
 ## Manipulating properties
 
 The [attr](../docs/can.Map.prototype.attr.html) method is
 used to read and write a property or properties from a Map or List.
 
-@codestart
+```
 pagination.attr('perPage');     // 25
 pagination.attr('perPage', 50);
 pagination.attr('perPage');     // 50
 
 pagination.attr({page: 10, lastVisited: 1});
 pagination.attr(); // {page: 10, perPage: 50, count: 1388, lastVisited: 1}
-@codeend
+```
 
 Properties can be removed from Observes with `removeAttr`, which is equivalent
 to the `delete` keyword:
 
-@codestart
+```
 pagination.removeAttr('count');
 pagination.attr(); // {page: 10, perPage: 50, lastVisited: 1}
-@codeend
+```
 
 ## Listening to events
 
@@ -60,7 +60,7 @@ events: A _change_ event and an event with the same name as the property that
 was changed. You can listen for these events by using
 [bind](../docs/can.Map.prototype.bind.html):
 
-@codestart
+```
 paginate.bind('change', function(event, attr, how, newVal, oldVal) {
 	attr;   // 'perPage'
 	how;    // 'set'
@@ -73,12 +73,12 @@ paginate.bind('perPage', function(event, newVal, oldVal) {
 });
 
 paginate.attr('perPage', 30);
-@codeend
+```
 
 You can similarly stop listening to these events by using
 [unbind](../docs/can.Map.prototype.unbind.html):
 
-@codestart
+```
 var timesChanged = 0,
 	changeHandler = function() { timesChanged++; },
 	obs = new can.Map({value: 10});
@@ -90,13 +90,13 @@ timesChanged; // 1
 obs.unbind('change', changeHandler);
 obs.attr('value', 30);
 timesChanged; // 1
-@codeend
+```
 
 ## Iterating though a Map
 
 If you want to iterate through the properties on a Map, use `each`:
 
-@codestart
+```
 paginate.each(function(val, key) {
 	console.log(key + ': ' + val);
 });
@@ -105,7 +105,7 @@ paginate.each(function(val, key) {
 // page: 10
 // perPage: 30
 // lastVisited: 1
-@codeend
+```
 
 ## Extending a Map
 
@@ -169,7 +169,7 @@ that can be read, set, and listened to just like a Map.
 A simple static Compute contains a single value, and is created by calling
 `can.compute(value)`. This value can be read, set, and listened to:
 
-@codestart
+```
 // create a Compute
 var age = can.compute(25),
 	previousAge = 0;
@@ -187,7 +187,7 @@ age(26);
 
 age();       // 26
 previousAge; // 25
-@codeend
+```
 
 ### Composite Computes
 
@@ -196,7 +196,7 @@ from other observable properties. This type of compute is created by calling
 `can.compute(getterFunction)`. When the observable properties that the compute is
 derived from change, the value of the compute changes:
 
-@codestart
+```
 var name = new can.Map({
 	first: 'Alice',
 	last: 'Liddell'
@@ -221,7 +221,7 @@ name.attr({
 
 fullname();   // 'Allison Wonderland'
 previousName; // 'Alice Liddell'
-@codeend
+```
 
 Since the value of the Compute is cached any time a derived value is
 changed, reading the value is fast.
@@ -232,7 +232,7 @@ Computes are also useful for creating links to properties within Observes. One
 of the most frequent examples of this is when converting from one unit to
 another.
 
-@codestart
+```
 // progress ranges from 0 to 1.
 var project = new can.Map({ progress: 0.3 });
 var progressPercentage = can.compute(function(newVal) {
@@ -251,4 +251,4 @@ percentage();     // 30
 percentage(75);
 // ...updates project.progress!
 project.attr('progress'); // .75
-@codeend
+```

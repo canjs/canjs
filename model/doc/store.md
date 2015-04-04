@@ -40,9 +40,9 @@ That response might look like:
 
 Next a list of todos that are urgent:
 
-@codestart
+```
 Todo.findAll({priority: "high"})
-@codeend
+```
 
 That response might look like:
 

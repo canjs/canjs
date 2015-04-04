@@ -12,7 +12,7 @@ Here is an example showing how to use `[can.Map.backup.prototype.backup backup]`
 
 to check if the Map has changed:
 
-@codestart
+```
 var recipe = new can.Map({
   title: 'Pancake Mix',
   yields: '3 batches',
@@ -41,4 +41,4 @@ recipe.isDirty(); // true
 
 recipe.restore();
 recipe.title;     // 'Pancake Mix'
-@codeend
+```

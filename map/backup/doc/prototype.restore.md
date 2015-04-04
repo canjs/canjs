@@ -16,7 +16,7 @@ will re-add properties that have been removed.
 @param {bool} [deep=false] whether to restore properties in nested Observes
 @return {can.Map} The Observe, for chaining.
 
-@codestart
+```
 var recipe = new can.Map({
 title: 'Pancake Mix',
 yields: '3 batches',
@@ -49,7 +49,7 @@ recipe.restore();
 recipe.attr('ingredients.0.quantity'); // '7 cups'
 recipe.restore(true);
 recipe.attr('ingredients.0.quantity'); // '6 cups'
-@codeend
+```
 
 ## Events
 When `restore` sets values or re-adds properties, the same events will be fired (including

@@ -98,7 +98,7 @@ from a setter, the effect will not be to merge the values into the current value
 if the return value was fed straight into `attr`, but to replace the value with the
 new Map or List completely:
 
-@codestart
+```
 var Contact = can.Map.extend({
 	setInfo: function(raw) {
       return raw;
@@ -112,12 +112,12 @@ alice.info._cid; // '.map1'
 alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
 alice.info._cid; // '.map2'
-@codeend
+```
 
 If you would rather have the new Map or List merged into the current value, call
 `attr` inside the setter:
 
-@codestart
+```
 var Contact = can.Map.extend({
 	setInfo: function(raw) {
       this.info.attr(raw);
@@ -132,7 +132,7 @@ alice.info._cid; // '.Map1'
 alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
 alice.info._cid; // '.Map1'
-@codeend
+```
 
 ## Error Handling
 

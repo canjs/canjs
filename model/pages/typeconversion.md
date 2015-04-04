@@ -32,7 +32,7 @@ an attribute and provide a function to convert that type.
 
 The following sets the birthday attribute to "date" and provides a date conversion function:
 
-@codestart
+```
 $.Model("Contact",
 {
   attributes : { 
@@ -55,7 +55,7 @@ $.Model("Contact",
 {
   // No prototype properties necessary
 })
-@codeend
+```
 
 @demo jquery/model/demo-convert.html
 
@@ -67,7 +67,7 @@ By default every attribute will be passed through the 'default' serialization me
 
 You can set the serialization methods similar to the convert methods:
 
-@codestart
+```
 $.Model("Contact",
 {
   attributes : { 
@@ -83,6 +83,6 @@ $.Model("Contact",
 {
   // No prototype properties necessary
 })
-@codeend
+```
 
 This code will format the 'birthday' attribute as '2011-11-24' before it will be sent to the server.

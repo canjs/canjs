@@ -620,11 +620,11 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 * `store.destroy(request, response())` simulates
 				 * a request to destroy an item from the server.
 				 *
-				 * @codestart
+				 * ```
 				 * todosStore.destroy({
 				 *   url: "/todos/5"
 				 * }, function(){});
-				 * @codeend
+				 * ```
 				 */
 				destroy: function (request, response) {
 					var id = getId(request),

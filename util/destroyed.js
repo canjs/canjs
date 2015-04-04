@@ -16,11 +16,11 @@ steal('jquery', 'can/util', function ($, can) {
 	 * </p>
 	 *
 	 * <h2>Quick Example</h2>
-	 * @codestart
+	 * ```
 	 * can.$(".foo").bind("destroyed", function(){
 	 *    //clean up code
 	 * })
-	 * @codeend
+	 * ```
 	 *
 	 * <h2>Quick Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed.html

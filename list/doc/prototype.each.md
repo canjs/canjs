@@ -16,7 +16,7 @@ the loop will stop.
 @return {can.List} this List, for chaining
 
 @body
-@codestart
+```
 var i = 0;
 new can.Map([1, 10, 100]).each(function(element, index) {
     i += element;
@@ -33,4 +33,4 @@ new can.Map([1, 10, 100]).each(function(element, index) {
 });
 
 i; // 11
-@codeend
+```

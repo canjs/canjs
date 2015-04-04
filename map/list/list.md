@@ -15,7 +15,7 @@ The `can.Map.List` plugin adds support for live-updating mapped and filtered obs
 
 Generates a new filtered list that live-updates itself to contain the filtered items of the original list.
 
-@codestart
+```
 var list = new can.List([
 	{ name: 'Justin' },
 	{ name: 'Brian' },
@@ -26,7 +26,7 @@ var list = new can.List([
 var filtered = list.filter(function(element, index, list) {
 	return item.attr("name").match(/n/i);
 });
-@codeend
+```
 
 @param {function(element,index,list)} callback A filtering function that will determine whether an element is filtered or not.
 @return {can.List} A live-updating filtered list.
@@ -36,7 +36,7 @@ var filtered = list.filter(function(element, index, list) {
 
 Generates a new mapped list that live-updates itself to contain the mapped items of the original list.
 
-@codestart
+```
 var list = new can.List([
 	{ name: 'Justin' },
 	{ name: 'Brian' },
@@ -47,7 +47,7 @@ var list = new can.List([
 var filtered = list.filter(function(element, index, list) {
 	return item.attr("name");
 });
-@codeend
+```
 
 
 @param {function(element,index,list)} callback A mapping function that will determine each element's mapped value.

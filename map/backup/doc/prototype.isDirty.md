@@ -14,7 +14,7 @@ If the Observe has never been backed up, `isDirty` returns `undefined`.
 @param {bool} [deep=false] whether to check nested Observes
 @return {bool} Whether the Observe has changed since the last time it was [can.Map.backup.prototype.backup backed up].
 
-@codestart
+```
 var recipe = new can.Map({
 title: 'Pancake Mix',
 yields: '3 batches',
@@ -51,4 +51,4 @@ recipe.isDirty(true); // true
 recipe.backup();
 recipe.isDirty();     // false
 recipe.isDirty(true); // false
-@codeend
+```

@@ -203,7 +203,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @return {can.List} this List, for chaining
 			 *
 			 * @body
-			 * @codestart
+			 * ```
 			 * var i = 0;
 			 * new can.Map([1, 10, 100]).each(function(element, index) {
 			 *     i += element;
@@ -220,7 +220,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * });
 			 *
 			 * i; // 11
-			 * @codeend
+			 * ```
 			 */
 			//
 			/**
@@ -241,13 +241,13 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * This example demonstrates how to do surgery on a list of numbers:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List([0, 1, 2, 3]);
 			 *
 			 * // starting at index 2, remove one element and insert 'Alice' and 'Bob':
 			 * list.splice(2, 1, 'Alice', 'Bob');
 			 * list.attr(); // [0, 1, 'Alice', 'Bob', 3]
-			 * @codeend
+			 * ```
 			 *
 			 * ## Events
 			 *
@@ -261,7 +261,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * This slightly-modified version of the above example should help
 			 * make it clear how `splice` causes events to be emitted:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List(['a', 'b', 'c', 'd']);
 			 * list.bind('change', function(ev, attr, how, newVals, oldVals) {
 			 *     console.log('change: ' + attr + ', ' + how + ', ' + newVals + ', ' + oldVals);
@@ -283,7 +283,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *                                    // change: 2, 'add', ['Alice', 'Bob'], ['c']
 			 *                                    // add: ['Alice', 'Bob'], 2
 			 *                                    // length: 5, ['a', 'b', 'Alice', 'Bob', 'd']
-			 * @codeend
+			 * ```
 			 *
 			 * More information about binding to these events can be found under [can.List.attr attr].
 			 */
@@ -415,7 +415,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * `attr` can also set and read deep properties. All you have to do is specify
 			 * the property name as you normally would if you weren't using `attr`.
 			 *
-			 * @codestart
+			 * ```
 			 * var people = new can.List([{name: 'Alex'}, {name: 'Bob'}]);
 			 *
 			 * // set a property:
@@ -427,7 +427,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * // get all properties:
 			 * people.attr(); // [{name: 'Alice'}, {name: 'Bob'}]
-			 * @codeend
+			 * ```
 			 *
 			 * The discussion of deep properties under `[can.Map.prototype.attr]` may also
 			 * be enlightening.
@@ -447,12 +447,12 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * The first event that is fired is the _change_ event. The _change_ event is useful
 			 * if you want to react to all changes on an List.
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List([]);
 			 * list.bind('change', function(ev, index, how, newVal, oldVal) {
 			 *     console.log('Something changed.');
 			 * });
-			 * @codeend
+			 * ```
 			 *
 			 * The parameters of the event handler for the _change_ event are:
 			 *
@@ -469,7 +469,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * Here is a concrete tour through the _change_ event handler's arguments:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List();
 			 * list.bind('change', function(ev, index, how, newVal, oldVal) {
 			 *     console.log(ev + ', ' + index + ', ' + how + ', ' + newVal + ', ' + oldVal);
@@ -481,7 +481,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.attr(['Alice', 'Bob']);   // [object Object], 0, set, Alice, Adam
 			 *                                // [object Object], 1, set, Bob, Bill
 			 * list.removeAttr(1);            // [object Object], 1, remove, undefined, Bob
-			 * @codeend
+			 * ```
 			 *
 			 * ### The _set_ event
 			 *
@@ -498,7 +498,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * Here is a concrete tour through the _set_ event handler's arguments:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List();
 			 * list.bind('set', function(ev, newVal, index) {
 			 *     console.log(newVal + ', ' + index);
@@ -510,7 +510,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.attr(['Alice', 'Bob']);   // Alice, 0
 			 *                                // Bob, 1
 			 * list.removeAttr(1);
-			 * @codeend
+			 * ```
 			 *
 			 * ### The _add_ event
 			 *
@@ -526,7 +526,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * Here is a concrete tour through the _add_ event handler's arguments:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List();
 			 * list.bind('add', function(ev, newElements, index) {
 			 *     console.log(newElements + ', ' + index);
@@ -538,7 +538,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.attr(['Alice', 'Bob']);
 			 *
 			 * list.removeAttr(1);
-			 * @codeend
+			 * ```
 			 *
 			 * ### The _remove_ event
 			 *
@@ -553,7 +553,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * Here is a concrete tour through the _remove_ event handler's arguments:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List();
 			 * list.bind('remove', function(ev, removedElements, index) {
 			 *     console.log(removedElements + ', ' + index);
@@ -565,7 +565,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.attr(['Alice', 'Bob']);
 			 *
 			 * list.removeAttr(1);            // Bob, 1
-			 * @codeend
+			 * ```
 			 *
 			 * ### The _length_ event
 			 *
@@ -582,7 +582,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 *
 			 * Here is a concrete tour through the _length_ event handler's arguments:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List();
 			 * list.bind('length', function(ev, length) {
 			 *     console.log(length);
@@ -594,7 +594,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.attr(['Alice', 'Bob']);
 			 *
 			 * list.removeAttr(1);            // 2
-			 * @codeend
+			 * ```
 			 */
 			_attrs: function (items, remove) {
 				if (items === undefined) {
@@ -656,23 +656,23 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @body
 			 * `push` adds elements onto the end of a List here is an example:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List(['Alice']);
 			 *
 			 * list.push('Bob', 'Eve');
 			 * list.attr(); // ['Alice', 'Bob', 'Eve']
-			 * @codeend
+			 * ```
 			 *
 			 * If you have an array you want to concatenate to the end
 			 * of the List, you can use `apply`:
 			 *
-			 * @codestart
+			 * ```
 			 * var names = ['Bob', 'Eve'],
 			 *     list = new can.List(['Alice']);
 			 *
 			 * list.push.apply(list, names);
 			 * list.attr(); // ['Alice', 'Bob', 'Eve']
-			 * @codeend
+			 * ```
 			 *
 			 * ## Events
 			 *
@@ -698,23 +698,23 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @body
 			 * `unshift` adds elements to the front of the list in bulk in the order specified:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List(['Alice']);
 			 *
 			 * list.unshift('Bob', 'Eve');
 			 * list.attr(); // ['Bob', 'Eve', 'Alice']
-			 * @codeend
+			 * ```
 			 *
 			 * If you have an array you want to concatenate to the beginning
 			 * of the List, you can use `apply`:
 			 *
-			 * @codestart
+			 * ```
 			 * var names = ['Bob', 'Eve'],
 			 *     list = new can.List(['Alice']);
 			 *
 			 * list.push.apply(list, names);
 			 * list.attr(); // ['Bob', 'Eve', 'Alice']
-			 * @codeend
+			 * ```
 			 *
 			 * ## Events
 			 *
@@ -804,7 +804,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * @body
 			 * `shift` is the opposite action from `[can.List::unshift unshift]`:
 			 *
-			 * @codestart
+			 * ```
 			 * var list = new can.List(['Alice']);
 			 *
 			 * list.unshift('Bob', 'Eve');
@@ -814,7 +814,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 			 * list.shift(); // 'Eve'
 			 * list.shift(); // 'Alice'
 			 * list.shift(); // undefined
-			 * @codeend
+			 * ```
 			 *
 			 * ## Events
 			 *
@@ -870,19 +870,19 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @return {Number} the position of the item in the List, or -1 if the item is not found.
 		 *
 		 * @body
-		 * @codestart
+		 * ```
 		 * var list = new can.List(['Alice', 'Bob', 'Eve']);
 		 * list.indexOf('Alice');   // 0
 		 * list.indexOf('Charlie'); // -1
-		 * @codeend
+		 * ```
 		 *
 		 * It is trivial to make a `contains`-type function using `indexOf`:
 		 *
-		 * @codestart
+		 * ```
 		 * function(list, item) {
 		 *     return list.indexOf(item) >= 0;
 		 * }
-		 * @codeend
+		 * ```
 		 */
 		indexOf: function (item, fromIndex) {
 			this.attr('length');
@@ -902,13 +902,13 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @return {String} the joined string
 		 *
 		 * @body
-		 * @codestart
+		 * ```
 		 * var list = new can.List(['Alice', 'Bob', 'Eve']);
 		 * list.join(', '); // 'Alice, Bob, Eve'
 		 *
 		 * var beatles = new can.List(['John', 'Paul', 'Ringo', 'George']);
 		 * beatles.join('&'); // 'John&Paul&Ringo&George'
-		 * @codeend
+		 * ```
 		 */
 		join: function () {
 			return [].join.apply(this.attr(), arguments);
@@ -924,13 +924,13 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @return {can.List} the List, for chaining
 		 *
 		 * @body
-		 * @codestart
+		 * ```
 		 * var list = new can.List(['Alice', 'Bob', 'Eve']);
 		 * var reversedList = list.reverse();
 		 *
 		 * reversedList.attr(); // ['Eve', 'Bob', 'Alice'];
 		 * list === reversedList; // true
-		 * @codeend
+		 * ```
 		 */
 		reverse: function() {
 			var list = [].reverse.call(can.makeArray(this));
@@ -952,21 +952,21 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @return {can.List} a new `can.List` with the extracted elements
 		 *
 		 * @body
-		 * @codestart
+		 * ```
 		 * var list = new can.List(['Alice', 'Bob', 'Charlie', 'Daniel', 'Eve']);
 		 * var newList = list.slice(1, 4);
 		 * newList.attr(); // ['Bob', 'Charlie', 'Daniel']
-		 * @codeend
+		 * ```
 		 *
 		 * `slice` is the simplest way to copy a List:
 		 *
-		 * @codestart
+		 * ```
 		 * var list = new can.List(['Alice', 'Bob', 'Eve']);
 		 * var copy = list.slice();
 		 *
 		 * copy.attr();   // ['Alice', 'Bob', 'Eve']
 		 * list === copy; // false
-		 * @codeend
+		 * ```
 		 */
 		slice: function () {
 			var temp = Array.prototype.slice.apply(this, arguments);
@@ -984,7 +984,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @body
 		 * `concat` makes a new List with the elements of the List followed by the elements of the parameters.
 		 *
-		 * @codestart
+		 * ```
 		 * var list = new can.List();
 		 * var newList = list.concat(
 		 *     'Alice',
@@ -993,7 +993,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 *     {f: 'Francis'}
 		 * );
 		 * newList.attr(); // ['Alice', 'Bob', 'Charlie', 'Daniel', 'Eve', {f: 'Francis'}]
-		 * @codeend
+		 * ```
 		 */
 		concat: function () {
 			var args = [];
@@ -1015,13 +1015,13 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * @body
 		 * `forEach` calls a callback for each element in the List.
 		 *
-		 * @codestart
+		 * ```
 		 * var list = new can.List([1, 2, 3]);
 		 * list.forEach(function(element, index, list) {
 		 *     list.attr(index, element * element);
 		 * });
 		 * list.attr(); // [1, 4, 9]
-		 * @codeend
+		 * ```
 		 */
 		forEach: function (cb, thisarg) {
 			return can.each(this, cb, thisarg || this);
@@ -1041,7 +1041,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * `replace` is especially useful when `can.List`s are live-bound into `[can.Control]`s,
 		 * and you intend to populate them with the results of a `[can.Model]` call:
 		 *
-		 * @codestart
+		 * ```
 		 * can.Control({
 		 *     init: function() {
 		 *         this.list = new Todo.List();
@@ -1051,7 +1051,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 *         this.list.replace(Todo.findAll());
 		 *     }
 		 * });
-		 * @codeend
+		 * ```
 		 *
 		 * Learn more about [can.Model.List making Lists of models].
 		 *
@@ -1062,7 +1062,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 * event if needed. Corresponding _change_ and _length_ events will be fired as well.
 		 *
 		 * The differences in the events fired by `attr` and `replace` are demonstrated concretely by this example:
-		 * @codestart
+		 * ```
 		 * var attrList = new can.List(['Alexis', 'Bill']);
 		 * attrList.bind('change', function(ev, index, how, newVals, oldVals) {
 		 *     console.log(index + ', ' + how + ', ' + newVals + ', ' + oldVals);
@@ -1087,7 +1087,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 		 *                                               // 1, add, ['Bob', 'Eve'], undefined
 		 * replaceList.replace(['Alice', 'Bob', 'Eve']); // 0, remove, undefined, Amber
 		 *                                               // 0, add, ['Alice', 'Bob', 'Eve'], Amber
-		 * @codeend
+		 * ```
 		 */
 		replace: function (newList) {
 			if (can.isDeferred(newList)) {

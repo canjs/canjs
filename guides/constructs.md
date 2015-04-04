@@ -61,7 +61,7 @@ constructor.
 
 This helps make our Todo configurable:
 
-@codestart
+```
 var Todo = can.Construct.extend({
   init: function(owner) {
     this.owner = owner;
@@ -73,12 +73,12 @@ var Todo = can.Construct.extend({
 
 var t = new Todo("me");
 t.owner; // 'me'
-@codeend
+```
 
 If you're extending a Construct, you probably want to make sure you call the
 base's `init` method inside the child's `init`:
 
-@codestart
+```
 var PrivateTodo = can.Construct.extend({
   init: function(owner, isShared) {
     can.Construct.prototype.init.apply(this, arguments);
@@ -88,6 +88,6 @@ var PrivateTodo = can.Construct.extend({
     return this.owner === "me" || this.isShared;
   }
 });
-@codeend
+```
 
 If you find yourself using inheritence a lot, checkout can.Construct's [super plugin](../docs/can.Construct.super.html).

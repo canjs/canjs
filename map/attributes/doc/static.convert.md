@@ -72,7 +72,7 @@ observable object will break.
 If you would rather have the new Observe or List merged into the current value, call
 `attr` directly on the property instead of on the Observe:
 
-@codestart
+```
 var Contact = can.Map.extend({
 attributes: {
  info: 'info'
@@ -95,14 +95,14 @@ alice.info._cid; // '.observe2'
 alice.info.attr({email: 'alice@wonderland.com', phone: '000-000-0000'});
 alice.attr(); // {name: 'Allison Wonderland', email: 'alice@wonderland.com', 'phone': '000-000-0000'}
 alice.info._cid; // '.observe2'
-@codeend
+```
 
 ## Assocations and Convert
 
 If you have assocations defined within your model(s), you can use convert to automatically
 call serialize on those models.
 
-@codestart
+```
 var Contact = can.Model.extend({
 attributes : {
  tasks: Task
@@ -123,4 +123,4 @@ tasks: [ new Task({
 
 contact.serialize();
 //-> { tasks: [ { due: 1333219754627 } ] }
-@codeend
+```

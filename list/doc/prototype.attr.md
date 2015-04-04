@@ -68,7 +68,7 @@ If _replaceCompletely_ is `true` and _elements_ is shorter than the List, the ex
 
 `attr` can also set and read deep properties. All you have to do is specify the property name as you normally would if you weren't using `attr`.
 
-@codestart
+```
 var people = new can.List([{name: 'Alex'}, {name: 'Bob'}]);
 
 // set a property:
@@ -80,7 +80,7 @@ people[0].attr('name'); // 'Alice'
 
 // get all properties:
 people.attr(); // [{name: 'Alice'}, {name: 'Bob'}]
-@codeend
+```
 
 The discussion of deep properties under `[can.Map.prototype.attr]` may also be enlightening.
 
@@ -99,12 +99,12 @@ The discussion of deep properties under `[can.Map.prototype.attr]` may also be e
 The first event that is fired is the _change_ event. The _change_ event is useful
 if you want to react to all changes on an List.
 
-@codestart
+```
 var list = new can.List([]);
 list.bind('change', function(ev, index, how, newVal, oldVal) {
     console.log('Something changed.');
 });
-@codeend
+```
 
 The parameters of the event handler for the _change_ event are:
 
@@ -121,7 +121,7 @@ were removed, and `undefined` if elements were added.
 
 Here is a concrete tour through the _change_ event handler's arguments:
 
-@codestart
+```
 var list = new can.List();
 list.bind('change', function(ev, index, how, newVal, oldVal) {
     console.log(ev + ', ' + index + ', ' + how + ', ' + newVal + ', ' + oldVal);
@@ -133,7 +133,7 @@ list.attr(0, 'Adam');          // [object Object], 0, set, Adam, Alexis
 list.attr(['Alice', 'Bob']);   // [object Object], 0, set, Alice, Adam
                                // [object Object], 1, set, Bob, Bill
 list.removeAttr(1);            // [object Object], 1, remove, undefined, Bob
-@codeend
+```
 
 ### The _set_ event
 
@@ -147,7 +147,7 @@ The parameters of the event handler for the _set_ event are:
 
 Here is a concrete tour through the _set_ event handler's arguments:
 
-@codestart
+```
 var list = new can.List();
 list.bind('set', function(ev, newVal, index) {
     console.log(newVal + ', ' + index);
@@ -159,7 +159,7 @@ list.attr(0, 'Adam');          // Adam, 0
 list.attr(['Alice', 'Bob']);   // Alice, 0
                                // Bob, 1
 list.removeAttr(1);
-@codeend
+```
 
 ### The _add_ event
 
@@ -175,7 +175,7 @@ The parameters of the event handler for the _add_ event are:
 
 Here is a concrete tour through the _add_ event handler's arguments:
 
-@codestart
+```
 var list = new can.List();
 list.bind('add', function(ev, newElements, index) {
     console.log(newElements + ', ' + index);
@@ -187,7 +187,7 @@ list.attr(0, 'Adam');
 list.attr(['Alice', 'Bob']);
 
 list.removeAttr(1);
-@codeend
+```
 
 ### The _remove_ event
 
@@ -202,7 +202,7 @@ The parameters of the event handler for the _remove_ event are:
 
 Here is a concrete tour through the _remove_ event handler's arguments:
 
-@codestart
+```
 var list = new can.List();
 list.bind('remove', function(ev, removedElements, index) {
     console.log(removedElements + ', ' + index);
@@ -214,7 +214,7 @@ list.attr(0, 'Adam');
 list.attr(['Alice', 'Bob']);
 
 list.removeAttr(1);            // Bob, 1
-@codeend
+```
 
 ### The _length_ event
 
@@ -228,7 +228,7 @@ The parameters of the event handler for the _length_ event are:
 
 Here is a concrete tour through the _length_ event handler's arguments:
 
-@codestart
+```
 var list = new can.List();
 list.bind('length', function(ev, length) {
     console.log(length);
@@ -240,4 +240,4 @@ list.attr(0, 'Adam');
 list.attr(['Alice', 'Bob']);
 
 list.removeAttr(1);            // 2
-@codeend
+```

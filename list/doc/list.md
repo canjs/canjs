@@ -52,7 +52,7 @@ of a List directly. Always use `attr` to set the elements of a List, or use [can
 
 Here is a tour through the forms of `can.List`'s `attr` that parallels the one found under [can.Map.prototype.attr attr]:
 
-@codestart
+```
 var people = new can.List(['Alex', 'Bill']);
 
 // set an element:
@@ -73,7 +73,7 @@ people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
 // merge the elements:
 people.attr(['Alice', 'Bob', 'Eve']);
 people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
-@codeend
+```
 
 ## Listening to changes
 
@@ -88,7 +88,7 @@ react to changes in the member elements of the array. Lists emit five types of e
 
 This example presents a brief concrete survey of the times these events are fired:
 
-@codestart
+```
 var list = new can.List(['Alice', 'Bob', 'Eve']);
 
 list.bind('change', function() { console.log('An element changed.'); });
@@ -116,6 +116,6 @@ list.attr(['Adam', 'Bill']); // 'An element changed.'
 list.pop(); // 'An element changed.'
             // 'An element was removed.'
             // 'The length of the list was changed.'
-@codeend
+```
 
 More information about binding to these events can be found under [can.List::attr attr].

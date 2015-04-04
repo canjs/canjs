@@ -24,7 +24,7 @@ Adds event functionality to `YourClass` objects. This can also be applied to nor
 
 The easiest way to add events to your classes and objects is by mixing `can.event` into your object or prototype.
 
-@codestart
+```
 var SomeClass = can.Construct("SomeClass", {
 	init: function() {
 		this.value = 0;
@@ -35,11 +35,11 @@ var SomeClass = can.Construct("SomeClass", {
 	}
 });
 can.extend(SomeClass.prototype, can.event);
-@codeend
+```
 
 Now that `can.event` is included in the prototype, we can add/remove/dispatch events on the object instances.
 
-@codestart
+```
 var instance = new SomeClass();
 instance.on("change", function(ev, value) {
 	alert("The instance changed to " + value);
@@ -47,13 +47,13 @@ instance.on("change", function(ev, value) {
 
 // This will dispatch the "change" event and show the alert
 instance.increment();
-@codeend
+```
 
 ## Using without mixing in
 
 The same event functionality from `can.event` can be used, even if the given object doesn't include `can.event`. Every method within `can.event` supports being called with an alternate scope.
 
-@codestart
+```
 var obj = {};
 
 can.event.on.call(obj, "change", function() {
@@ -62,4 +62,4 @@ can.event.on.call(obj, "change", function() {
 
 // This will dispatch the "change" event and show the alert
 can.event.dispatch.call(obj, "change");
-@codeend
+```

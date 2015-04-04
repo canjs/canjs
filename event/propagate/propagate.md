@@ -20,7 +20,7 @@ The extra object, `{ propagate: "parent" }`, is used to define which object prop
 
 In order to add propagation to an object or prototype, mix it into the object using `can.extend` along with whatever property should be considered the propagation property.
 
-@codestart
+```
 var SomeClass = can.Construct("SomeClass", {
 	init: function() {
 		this.value = 0;
@@ -31,11 +31,11 @@ var SomeClass = can.Construct("SomeClass", {
 	}
 });
 can.extend(SomeClass.prototype, can.event, { propagate: "parent" });
-@codeend
+```
 
 Now that propagation has been added, events will be dispatched up the tree for as long as a valid propagate property exists.
 
-@codestart
+```
 var instance = new SomeClass();
 var root = new SomeClass();
 
@@ -46,13 +46,13 @@ root.on("parent", function(ev, obj, parent) {
 // This triggers the "parent" event on instance
 // The "parent" event then propagates and triggers on root as well!
 instance.setParent(root);
-@codeend
+```
 
 ## Stopping propagation
 
 When using the propagate plugin, `stopPropagation()` and `isPropagationStopped()` methods will be added to the event object. These methods can be used to prevent the event from propagating further up the tree.
 
-@codestart
+```
 SomeClass.prototype.setParent = function(obj) {
 	this.parent = obj;
 	var event = this.dispatch("parent", [this, obj]);
@@ -72,13 +72,13 @@ root.on("parent", function(ev, obj, parent) {
 // This will execute the instance listener, but not the
 // root listener, because propagation has been stopped.
 instance.setParent(root);
-@codeend
+```
 
 ## Preventing default functionality
 
 When using the propagate plugin, `preventDefault()` and `isDefaultPrevented()` methods will be added to the event object. An object might implement some logic that will be executed after an event is dispatched. In the case that this logic should be optional dependent on the event handlers, default prevention can be used.
 
-@codestart
+```
 SomeClass.prototype.setParent = function(obj) {
 	this.parent = obj;
 	var event = this.dispatch("parent", [this, obj]);
@@ -94,4 +94,4 @@ instance.on("parent", function(ev, obj, parent) {
 	// Don't let the default functionality execute
 	ev.preventDefault();
 });
-@codeend
+```

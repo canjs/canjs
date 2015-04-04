@@ -216,7 +216,7 @@ the compute function is called with a value.  For example:
 
 The following is a similar example that shows converting feet into meters and back:
 
-@codestart
+```
 var wall = new can.Map({
     material: 'brick',
     length: 10 // in feet
@@ -237,14 +237,14 @@ wallLengthInMeters(5);
 wallLengthInMeters(); // 5
 // ...the original Observe changes too.
 wall.length;          // 16.4042
-@codeend
+```
 
 ## Events
 
 When a compute's value is changed, it emits a _change_ event. You can listen for this change
 event by using `[can.computed.bind bind]` to bind an event handler to the compute:
 
-@codestart
+```
 var tally = can.compute(0);
 tally.bind('change', function(ev, newVal, oldVal) {
     console.log('The tally is now at ' + newVal + '.');
@@ -252,7 +252,7 @@ tally.bind('change', function(ev, newVal, oldVal) {
 
 tally(tally() + 5); // The log reads:
                     // 'The tally is now at 5.'
-@codeend
+```
 
 ## Using computes to build Controls
 
@@ -260,7 +260,7 @@ It's a piece of cake to build a `[can.Control]` off of the value of a compute. A
 are observable, it means that the view of that Control will update itself whenever the value
 of the compute updates. Here's a simple slider that works off of a compute:
 
-@codestart
+```
 var project = new Observe({
     name: 'A Very Important Project',
     percentDone: .35
@@ -284,7 +284,7 @@ SimpleSlider = can.Control.extend({ }, {
 });
 
 new SimpleSlider('#slider', {percentDone: project.compute('percentDone')});
-@codeend
+```
 
 Now that's some delicious cake. More information on Controls can be found under `[can.Control]`.
 There is also a full explanation of can.Map's `[can.Map.prototype.compute compute]`,

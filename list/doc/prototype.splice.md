@@ -18,13 +18,13 @@
 
  This example demonstrates how to do surgery on a list of numbers:
 
-@codestart
+```
  var list = new can.List([0, 1, 2, 3]);
 
  // starting at index 2, remove one element and insert 'Alice' and 'Bob':
  list.splice(2, 1, 'Alice', 'Bob');
  list.attr(); // [0, 1, 'Alice', 'Bob', 3]
-@codeend
+```
 
  ## Events
 
@@ -38,7 +38,7 @@
  This slightly-modified version of the above example should help
  make it clear how `splice` causes events to be emitted:
 
-@codestart
+```
  var list = new can.List(['a', 'b', 'c', 'd']);
  list.bind('change', function(ev, attr, how, newVals, oldVals) {
      console.log('change: ' + attr + ', ' + how + ', ' + newVals + ', ' + oldVals);
@@ -60,6 +60,6 @@
                                     // change: 2, 'add', ['Alice', 'Bob'], ['c']
                                     // add: ['Alice', 'Bob'], 2
                                     // length: 5, ['a', 'b', 'Alice', 'Bob', 'd']
-@codeend
+```
 
  More information about binding to these events can be found under [can.List.attr attr].

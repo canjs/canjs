@@ -16,7 +16,7 @@ values can be restored with [can.Map.backup.prototype.restore restore].
 
 ## Example
 
-@codestart
+```
 var recipe = new can.Map({
 title: 'Pancake Mix',
 yields: '3 batches',
@@ -44,4 +44,4 @@ recipe.title;     // 'Flapjack Mix'
 
 recipe.restore();
 recipe.title;     // 'Pancake Mix'
-@codeend
+```

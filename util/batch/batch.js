@@ -29,7 +29,7 @@ steal('can/util/can.js', function (can) {
 		 * In this example, you can see how the _first_ and _change_ events are not fired (and their handlers
 		 * are not called) until `can.batch.stop` is called.
 		 *
-		 * @codestart
+		 * ```
 		 * var person = new can.Map({
 		 *     first: 'Alexis',
 		 *     last: 'Abril'
@@ -50,11 +50,11 @@ steal('can/util/can.js', function (can) {
 		 * // Still in the batch.
 		 * // First name changed.
 		 * // Something changed.
-		 * @codeend
+		 * ```
 		 *
 		 * You can also pass a callback to `can.batch.start` which will be called after all the events have
 		 * been fired:
-		 * @codestart
+		 * ```
 		 * can.batch.start(function() {
 		 *     console.log('The batch is over.');
 		 * });
@@ -67,7 +67,7 @@ steal('can/util/can.js', function (can) {
 		 * // First name changed.
 		 * // Something changed.
 		 * // The batch is over.
-		 * @codeend
+		 * ```
 		 *
 		 * ## Calling `can.batch.start` multiple times
 		 *
@@ -78,7 +78,7 @@ steal('can/util/can.js', function (can) {
 		 * Here is an example that demonstrates how events are affected by calling
 		 * `can.batch.start` multiple times.
 		 *
-		 * @codestart
+		 * ```
 		 * var addPeople = function(observable) {
 		 *     can.batch.start();
 		 *     observable.attr('a', 'Alice');
@@ -107,7 +107,7 @@ steal('can/util/can.js', function (can) {
 		 * // The list changed.
 		 * // The list changed.
 		 * // The list changed.
-		 * @codeend
+		 * ```
 		 */
 		start: function (batchStopHandler) {
 			transactions++;
@@ -133,7 +133,7 @@ steal('can/util/can.js', function (can) {
 		 * See `[can.batch.start]` for examples of `can.batch.start` and `can.batch.stop` in normal use.
 		 *
 		 * In this example, the batch is forceably ended in the `addPeople` function.
-		 * @codestart
+		 * ```
 		 * var addPeople = function(observable) {
 		 *     can.batch.start();
 		 *     observable.attr('a', 'Alice');
@@ -162,7 +162,7 @@ steal('can/util/can.js', function (can) {
 		 * // The list changed.
 		 * // The list changed.
 		 * // Still in the batch.
-		 * @codeend
+		 * ```
 		 */
 		stop: function (force, callStart) {
 			if (force) {

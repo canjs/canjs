@@ -358,7 +358,7 @@ steal('can/util', function (can) {
 		 *
 		 * ## Example
 		 *
-		 * @codestart
+		 * ```
 		 * can.View.register({
 		 *	suffix : "tmpl",
 		 *  plugin : "jquery/view/tmpl",
@@ -374,7 +374,7 @@ steal('can/util', function (can) {
 		 *			").call(jQuery, jQuery, data); }";
 		 *	}
 		 * })
-		 * @codeend
+		 * ```
 		 */
 		register: function (info) {
 			this.types['.' + info.suffix] = info;

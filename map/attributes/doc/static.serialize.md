@@ -13,7 +13,7 @@ or it will call the "serialize" method if the property holds an object with the 
 
 For example, to serialize all dates to ISO format:
 
-@codestart
+```
 var Contact = can.Map.extend({
 attributes : {
  birthday : 'date'
@@ -29,4 +29,4 @@ var contact = new Contact({
 birthday: new Date("Oct 25, 1973")
 }).serialize();
 //-> { "birthday" : "1973-10-25T05:00:00.000Z" }
-@codeend
+```

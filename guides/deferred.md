@@ -6,7 +6,7 @@ Deferreds in CanJS are explained in greater detail in the [API](../docs/can.Defe
 Below is a quick tour through can.Deferred, which should look familiar to you
 if you have experience with the Deferred pattern.
 
-@codestart
+```
 // Create a new Deferred:
 var dfd = new can.Deferred();
 
@@ -43,4 +43,4 @@ dfd.resolve('foo');
 
 // Reject a Deferred (and call all its fail callbacks):
 dfd.reject('bar');
-@codeend
+```
