@@ -4,7 +4,7 @@
 @description Allow reading the outer scope values from a component's template and
 a component's viewModel values in the user content.
 
-@option {Boolean}  `false` only allows reading:
+@option {Boolean}  `false` limits reading to:
  
 - the component's viewModel from the the component's template, and
 - the outer scope values from the user content.
