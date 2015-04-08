@@ -14,6 +14,9 @@
 		"url": "git@github.com:bitovi/canjs.git",
 		"github": "https://github.com/bitovi/canjs"
 	},
+	"dependencies": {
+		"can-simple-dom": "canjs/can-simple-dom#master"
+	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"
 	},
@@ -65,6 +68,7 @@
 		"map": {
 			"can/can": "can",
 			"jquery/jquery": "jquery",
+			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"steal-qunit/steal-qunit": "steal-qunit"
 		},
 		"paths": {

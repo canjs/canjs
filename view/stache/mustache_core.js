@@ -42,7 +42,7 @@ steal("can/util",
 		},
 		// A helper for calling the truthy subsection for each item in a list and putting them in a document Fragment.
 		getItemsFragContent = function(items, isObserveList, helperOptions, options){
-			var frag = document.createDocumentFragment();
+			var frag = (can.document || can.global.document).createDocumentFragment();
 			for (var i = 0, len = items.length; i < len; i++) {
 				append(frag, helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options) );
 			}
@@ -51,7 +51,7 @@ steal("can/util",
 		// Appends some content to a document fragment.  If the content is a string, it puts it in a TextNode.
 		append = function(frag, content){
 			if(content) {
-				frag.appendChild(typeof content === "string" ? document.createTextNode(content) : content);
+				frag.appendChild(typeof content === "string" ? frag.ownerDocument.createTextNode(content) : content);
 			}
 		},
 		// A helper for calling the truthy subsection for each item in a list and returning them in a string.
@@ -411,7 +411,6 @@ steal("can/util",
 
 						res = can.view.render(localPartialName, scope, options );
 					}
-
 					return can.frag(res);
 
 				});

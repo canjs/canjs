@@ -1,5 +1,5 @@
 /* jshint indent:false */
-steal("can/view/target", "steal-qunit", function(target){
+steal("can/view/target","can-simple-dom", "steal-qunit", function(target, simpleDom){
 	
 	
 	module("can/view/target");
@@ -121,12 +121,14 @@ steal("can/view/target", "steal-qunit", function(target){
 	test("renderToVirtualDOM", function(){
 		can.noDOM = true;
 		
+		var simpleDocument = new simpleDom.Document();
+		
 		// <h1>{{#if foo}}<span></span>{{/if}}foo</h1>
 		var innerData = target([
 			{
 				tag: "span"
 			}
-		]);
+		], simpleDocument);
 		
 		
 		var outerData = target([
@@ -140,13 +142,13 @@ steal("can/view/target", "steal-qunit", function(target){
 					"foo"
 				]
 			}
-		]);
+		], simpleDocument);
 		
 		var out = outerData.hydrate({foo: true});
 		
-		equal(out.firstChild.nodeName, "h1");
+		equal(out.firstChild.nodeName, "H1");
 		
-		equal(out.firstChild.firstChild.nodeName, "span");
+		equal(out.firstChild.firstChild.nodeName, "SPAN");
 		equal(out.firstChild.lastChild.nodeValue, "foo");
 		
 		

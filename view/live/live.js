@@ -39,6 +39,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		bind(data);
 		return data;
 	},
+		getChildNodes = function(node){
+			var childNodes = node.childNodes;
+			if("length" in childNodes) {
+				return childNodes;
+			} else {
+				var cur = node.firstChild;
+				var nodes = [];
+				while(cur) {
+					nodes.push(cur);
+					cur = cur.nextSibling;
+				}
+				return nodes;
+			}
+		},
 		// #### listen
 		// Calls setup, but presets bind and unbind to
 		// operate on a compute
@@ -74,7 +88,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			return obj && obj.nodeType;
 		},
 		addTextNodeIfNoChildren = function(frag){
-			if(!frag.childNodes.length) {
+			if(!frag.firstChild) {
 				frag.appendChild(document.createTextNode(""));
 			}
 		};
@@ -183,7 +197,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						
 						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
 						
-						var childNodes = can.makeArray(itemFrag.childNodes);
+						var childNodes = can.makeArray(getChildNodes(itemFrag));
 						if(nodeList) {
 							nodeLists.update(itemNodeList, childNodes);
 							newNodeLists.push(itemNodeList);
@@ -425,9 +439,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					}
 					
 					// We need to mark each node as belonging to the node list.
-					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					oldNodes = nodeLists.update(nodes, getChildNodes(frag));
 					if(isFunction) {
-						val(frag.childNodes[0]);
+						val(frag.firstChild);
 					}
 					elements.replace(oldNodes, frag);
 					
@@ -468,7 +482,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				frag = can.view.hookup(frag, nodes[0].parentNode);
 			}
 			// We need to mark each node as belonging to the node list.
-			nodeLists.update(nodes, frag.childNodes);
+			nodeLists.update(nodes, getChildNodes(frag));
 			elements.replace(oldNodes, frag);
 			return nodes;
 		},

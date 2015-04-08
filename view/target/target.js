@@ -184,11 +184,10 @@ steal("can/util", "can/view/elements.js","can/view/vdom",function(can, elements,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
 			callbackData,
-			child = el,
-			callChildNodes = typeof child.childNodes === "function";
+			child = el;
 		
 		for(var i = 0, len = path.length; i < len; i++) {
-			child = callChildNodes ?  child.childNodes(path[i]) : child.childNodes[path[i]];
+			child = child.childNodes.item(path[i]);
 		}
 		
 		for(i = 0, len = callbacks.length; i < len; i++) {
@@ -202,9 +201,9 @@ steal("can/util", "can/view/elements.js","can/view/vdom",function(can, elements,
 		}
 	}
 
-	function makeTarget(nodes){
+	function makeTarget(nodes, doc){
 		var paths = [];
-		var frag = processNodes(nodes, paths, [], can.noDOM ? vdom : document);
+		var frag = processNodes(nodes, paths, [], doc || can.global.document);
 		return {
 			paths: paths,
 			clone: frag,

@@ -189,4 +189,21 @@ steal("can/view/parser", "steal-qunit", function(parser){
 	});
 	
 	
+	test('less than outside of an element', function(){
+		var tests = [
+			["start", ["h1", false]],
+			["end", ["h1", false]],
+			["chars", [" < "]],
+			["close",["h1"]],
+			["done",[]]
+		];
+		
+		var intermediate = parser("<h1> < </h1>",makeChecks(tests), true);
+		
+	
+		
+		parser(intermediate, makeChecks(tests) );
+	});
+	
+	
 });

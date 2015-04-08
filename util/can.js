@@ -42,10 +42,11 @@ steal(function () {
 	};
 
 
-	can.frag = function(item){
+	can.frag = function(item, doc){
+		var document = doc || can.document || can.global.document;
 		var frag;
 		if(!item || typeof item === "string"){
-			frag = can.buildFragment(item == null ? "" : ""+item, document.body);
+			frag = can.buildFragment(item == null ? "" : ""+item, document);
 			// If we have an empty frag...
 			if (!frag.childNodes.length) {
 				frag.appendChild(document.createTextNode(''));

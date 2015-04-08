@@ -58,7 +58,7 @@ steal("can/util/can.js", function (can) {
 					}
 				},
 				style: function (el, val) {
-					return el.style.cssText = val || "";
+					return el.style ? el.style.cssText = val || "" : el.setAttribute("style", val);
 				}
 			},
 			// These are elements whos default value we should set.
