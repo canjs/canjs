@@ -118,4 +118,40 @@ steal("can/view/target", "steal-qunit", function(target){
 		data.hydrate();
 	});
 	
+	test("renderToVirtualDOM", function(){
+		can.noDOM = true;
+		
+		// <h1>{{#if foo}}<span></span>{{/if}}foo</h1>
+		var innerData = target([
+			{
+				tag: "span"
+			}
+		]);
+		
+		
+		var outerData = target([
+			{
+				tag: "h1",
+				children: [
+					function(data){
+						this.parentNode.insertBefore(innerData.hydrate(data), this);
+						this.parentNode.removeChild(this);
+					},
+					"foo"
+				]
+			}
+		]);
+		
+		var out = outerData.hydrate({foo: true});
+		
+		equal(out.firstChild.nodeName, "h1");
+		
+		equal(out.firstChild.firstChild.nodeName, "span");
+		equal(out.firstChild.lastChild.nodeValue, "foo");
+		
+		
+	});
+	
+	
+	
 });
