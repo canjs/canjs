@@ -5,7 +5,7 @@ steal("can/view/parser","can-simple-dom", "can/util",function(canParser, simpleD
 	
 	
 	can.buildFragment = function(text, context){
-		if(context.childNodes) {
+		if(context && ((context.ownerDocument || context )!= can.global.document)) {
 			
 			var parser = new simpleDOM.HTMLParser(function(string){
 				
