@@ -765,6 +765,53 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal(combined(), true);
 		equal(other(), 2);
 	});
+
+	test("another bug with nested computes and batch ordering (#1519)", function(){
+
+		var ft = can.compute('a');
+
+		var propA = can.compute(function(){
+			return ft() === 'a';
+		});
+
+		var propB = can.compute(function(){
+			return ft() === 'b';
+		});
+
+		var propC = can.compute(function(){
+			return ft().indexOf('a') !== -1;
+		});
+
+		var propD = can.compute(function(){
+			return ft().indexOf('c') !== -1;
+		});
+
+		var combinedA = can.compute(function(){
+			var valC = propC();
+			var valD = propD();
+
+			return valC && valD;
+		});
+
+		
+		var combinedB = can.compute(function(){
+			var valA = propA();
+			var valB = propB();
+			var valCombinedA = combinedA();
+
+			return valA || valB || valCombinedA;
+		});
+
+		equal(combinedB(), true);
+
+		combinedB.bind('change', function(){ });
+
+		can.batch.start();
+		ft('ac');
+		can.batch.stop();
+
+		equal(combinedB(), true);
+	});
 	
 	test("can.Compute.read can read a promise (#179)", function(){
 		
