@@ -120,7 +120,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		compile: function(){
 			this.compiled = target(this.targetData, can.document || can.global.document);
 			if(this.inverseData) {
-				this.inverseCompiled = target(this.inverseData);
+				this.inverseCompiled = target(this.inverseData, can.document || can.global.document);
 				delete this.inverseData;
 			}
 			delete this.targetData;

@@ -65,7 +65,7 @@ steal(function () {
 			});
 			return frag;
 		} else {
-			frag = can.buildFragment( ""+item, document.body);
+			frag = can.buildFragment( ""+item, document);
 			// If we have an empty frag...
 			if (!frag.childNodes.length) {
 				frag.appendChild(document.createTextNode(''));

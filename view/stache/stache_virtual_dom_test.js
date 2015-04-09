@@ -8,7 +8,36 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 	var innerHTML = function(node){
 		return serializer.serialize(node.firstChild);
 	};
-
+	var getValue = function(node){
+		// textareas are cross bound to their internal innerHTML
+		if(node.nodeName.toLowerCase() === "textarea") {
+			return innerHTML(node);
+		} else {
+			return node.value;
+		}
+	};
+	var getChildNodes = function(node){
+		var childNodes = node.childNodes;
+		if("length" in childNodes) {
+			return childNodes;
+		} else {
+			var cur = node.firstChild;
+			var nodes = [];
+			while(cur) {
+				nodes.push(cur);
+				cur = cur.nextSibling;
+			}
+			return nodes;
+		}
+	};
+	var empty = function(node){
+		var last = node.lastChild;
+		while(last) {
+			node.removeChild(last);
+			last = node.lastChild;
+		}
+		return;
+	};
 
 	QUnit.module("can/view/stache",{
 		setup: function(){
@@ -25,7 +54,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 	// HELPERS
 	
 	var getText = function(template, data, options){
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild( can.stache(template)(data) );
 		return cleanHTMLTextForIE( innerHTML(div) );
 	},
@@ -281,12 +310,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = can.stache( template ) ({
 				todos: todos
 			});
-		can.append(can.$('#qunit-fixture'), frag);
-		deepEqual(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
+			
+		deepEqual(frag.firstChild.firstChild.nodeValue, "hidden", 'hidden shown');
 
 		// now update the named attribute
 		obsvr.attr('named', true);
-		deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
+		
+		deepEqual(frag.firstChild.firstChild.nodeValue, "", 'hidden gone');
 
 		can.remove(can.$('#qunit-fixture>*'));
 	});
@@ -300,18 +330,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var tpl = can.stache( template );
 
-		can.append(can.$('#qunit-fixture'), tpl(teacher));
+		var frag = tpl(teacher);
 
-		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
-		deepEqual(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
+		deepEqual(innerHTML(frag.firstChild), "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
+		deepEqual(innerHTML(frag.lastChild.firstChild), "Mrs Peters");
 
 		teacher.attr('name', '<i>Mr Scott</i>');
 
-		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
+		deepEqual(innerHTML(frag.firstChild), "&lt;i&gt;Mr Scott&lt;/i&gt;");
 		
-		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
+		deepEqual(innerHTML(frag.lastChild.firstChild), "Mr Scott");
 
-		can.remove(can.$('#qunit-fixture>*'));
 	});
 
 	test("truthy", function () {
@@ -325,6 +354,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
+			
 		deepEqual( getText( t.template , t.data), expected);
 	});
 
@@ -403,10 +433,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var template = can.stache(t.template)
 		var frag = template(t.data);
 		
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild(frag);
 
-		equal(div.innerHTML, t.expected);
+		equal(innerHTML( div ), t.expected);
 		
 		equal(getText(t.template, {}), t.expected2);
 	});
@@ -448,14 +478,14 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		can.stache.registerHelper("noargHelper", function () {
 			return "foo"
 		})
-		var div1 = document.createElement('div');
-		var div2 = document.createElement('div');
+		var div1 = simpleDocument.createElement('div');
+		var div2 = simpleDocument.createElement('div');
 
 		div1.appendChild(template( {}));
 		div2.appendChild(template( new can.Map()));
 
-		deepEqual(div1.innerHTML, "foo");
-		deepEqual(div2.innerHTML, "foo");
+		deepEqual(innerHTML(div1), "foo");
+		deepEqual(innerHTML(div2), "foo");
 	});
 
 	test("String literals passed to helper should work (#1143)", 1, function() {
@@ -466,15 +496,15 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		// Test with '=' because the regexp to find arguments uses that char
 		// to delimit a keyword-arg name from its value.
 		can.stache('testStringArgs', '{{concatStrings "==" "word"}}');
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(can.view('testStringArgs', {}));
 
-		equal(div.innerHTML, '==word');
+		equal(innerHTML(div), '==word');
 	});
 
 	test("No arguments passed to helper with list", function () {
 		var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(template({
 			items: new can.List([{
@@ -486,12 +516,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}
 		}));
 
-		deepEqual(div.innerHTML, "foo");
+		deepEqual(innerHTML(div), "foo");
 	});
 
 	test("Partials and observes", function () {
 		var template;
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		template = can.stache("<table><thead><tr>{{#data}}{{>" +
 			can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
@@ -505,8 +535,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var ths = div.getElementsByTagName('th');
 
 		equal(ths.length, 2, 'Got two table headings');
-		equal(ths[0].innerHTML, 'hi', 'First column heading correct');
-		equal(ths[1].innerHTML, 'there', 'Second column heading correct');
+		equal(innerHTML(ths[0]), 'hi', 'First column heading correct');
+		equal(innerHTML(ths[1]), 'there', 'Second column heading correct');
 	});
 
 	test("Deeply nested partials", function () {
@@ -622,11 +652,11 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		deepEqual(getText(t.template, t.data), expected);
 
 		// #1019 #unless does not live bind
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(can.stache(t.template)(t.liveData));
-		deepEqual(div.innerHTML, expected, '#unless condition false');
+		deepEqual( innerHTML(div), expected, '#unless condition false');
 		t.liveData.attr('missing', true);
-		deepEqual(div.innerHTML, '', '#unless condition true');
+		deepEqual( innerHTML(div), '', '#unless condition true');
 	});
 
 	test("Handlebars helper: each", function () {
@@ -646,11 +676,11 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		
 		deepEqual( getText(t.template,t.data) , expected);
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		
 		div.appendChild(can.stache(t.template)(t.data2));
 		
-		deepEqual(div.innerHTML, expected, 'Using Observe.List');
+		deepEqual( innerHTML(div), expected, 'Using Observe.List');
 		t.data2.names.push('What');
 	});
 
@@ -710,7 +740,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 	test("escapedContent", function () {
 		var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		
 		div.appendChild( can.stache(text)({
 			tags: "foo < bar < car > zar > poo",
@@ -721,21 +751,21 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo");
 		equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123);
 		equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
-		equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;", "text-based html entities work fine");
+		equal( innerHTML(div.getElementsByTagName('label')[0]), "&amp;", "text-based html entities work fine");
 	});
 
 	test("unescapedContent", function () {
 		var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild( can.stache(text)({
 			tags: "<strong>foo</strong><strong>bar</strong>",
 			quotes: 'I use \'quote\' fingers "a lot"'
 		}) );
 
 		equal(div.getElementsByTagName('span')[0].firstChild.nodeType, 1,"");
-		equal(div.getElementsByTagName('div')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
-		equal(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
+		equal( innerHTML(div.getElementsByTagName('div')[0]).toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
+		equal( innerHTML(div.getElementsByTagName('span')[0]).toLowerCase(), "<strong>foo</strong><strong>bar</strong>");
 		equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escaped no matter what");
 	});
 
@@ -747,18 +777,18 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			name: 'dishes'
 		});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(can.stache(text)({
 			task: task
 		}));
 
-		equal(div.getElementsByTagName('div')[0].innerHTML, "dishes", "html correctly dishes")
+		equal( innerHTML(div.getElementsByTagName('div')[0]), "dishes", "html correctly dishes")
 		equal(div.getElementsByTagName('div')[0].className, "", "class empty")
 
 		task.attr('name', 'lawn')
 
-		equal(div.getElementsByTagName('div')[0].innerHTML, "lawn", "html correctly lawn")
+		equal( innerHTML(div.getElementsByTagName('div')[0]), "lawn", "html correctly lawn")
 		equal(div.getElementsByTagName('div')[0].className, "", "class empty")
 
 		task.attr('completed', true);
@@ -774,7 +804,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			name: 'Dishes'
 		}]);
 		
-		div = document.createElement('div');
+		div = simpleDocument.createElement('div');
 
 		div.appendChild( can.stache(text)({todos: todos}) );
 		
@@ -807,7 +837,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild( can.stache(text)({
 				obs: obs
@@ -843,13 +873,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(can.stache(text)({
 				obs: obs
 			}));
 
-		equal(div.firstChild.innerHTML, 'abc', 'initial render');
+		equal( innerHTML(div.firstChild), 'abc', 'initial render');
 
 		obs.attr({
 			a: '',
@@ -857,13 +887,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			c: ''
 		});
 
-		equal(div.firstChild.innerHTML, '', 'updated values');
+		equal(innerHTML(div.firstChild), '', 'updated values');
 
 		obs.attr({
 			c: 'c'
 		});
 
-		equal(div.firstChild.innerHTML, 'c', 'updated values');
+		equal( innerHTML(div.firstChild), 'c', 'updated values');
 	});
 
 	test('live binding and removeAttr', function () {
@@ -879,7 +909,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				message: 'Live long and prosper'
 			}),
 
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(can.stache(text)({
 			obs: obs
@@ -890,7 +920,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(p.getAttribute("some"), "myText", 'initial render attr');
 		equal(getAttr(p, "class"), "myMessage", 'initial render class');
-		equal(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
+		equal( innerHTML(span), 'Live long and prosper', 'initial render innerHTML');
 
 		obs.removeAttr('className');
 
@@ -911,15 +941,15 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		obs.removeAttr('message');
 
-		equal(span.innerHTML, '', 'text node value is empty');
+		equal(innerHTML(span), '', 'text node value is empty');
 
 		obs.attr('message', 'Warp drive, Mr. Sulu');
 
-		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
+		equal(innerHTML(span), 'Warp drive, Mr. Sulu', 'text node updated');
 
 		obs.removeAttr('show');
 
-		equal(div.innerHTML, '', 'value in block statement is undefined');
+		equal( innerHTML(div), '', 'value in block statement is undefined');
 
 		obs.attr('show', true);
 
@@ -928,7 +958,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(p.getAttribute("some"), "newText", 'value in block statement updated attr');
 		equal(getAttr(p, "class"), "newClass", 'value in block statement updated class');
-		equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
+		equal( innerHTML(span), 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
 
 	});
 
@@ -943,7 +973,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 			compiled = can.stache(text)({obs: obs})
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 		var anchor = div.getElementsByTagName('div')[0];
 
@@ -973,7 +1003,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 			compiled = can.stache(text)({obs: obs})
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 		var anchor = div.getElementsByTagName('div')[0];
 
@@ -997,10 +1027,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			obs: obs
 		});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
-		equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
-	})
+		equal( innerHTML(div.getElementsByTagName('div')[0]), 'foo', 'Element as expected');
+	});
 
 	test("hookup and live binding", function () {
 
@@ -1015,13 +1045,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			compiled = can.stache(text)({
 				task: task
 			}),
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(compiled)
 		var child = div.getElementsByTagName('div')[0];
 		ok(child.className.indexOf("false") > -1, "is incomplete")
 		ok( !! can.data(can.$(child), 'task'), "has data")
-		equal(child.innerHTML, "My Name", "has name")
+		equal(innerHTML(child), "My Name", "has name")
 
 		task.attr({
 			completed: true,
@@ -1029,9 +1059,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 		ok(child.className.indexOf("true") !== -1, "is complete")
-		equal(child.innerHTML, "New Name", "has new name")
+		equal(innerHTML(child), "New Name", "has new name")
 
-	})
+	});
 
 	test('multiple curly braces in a block', function () {
 		var text = '{{^obs.items}}' +
@@ -1047,15 +1077,15 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 			compiled = can.stache(text)({obs: obs})
 
-		var ul = document.createElement('ul');
+		var ul = simpleDocument.createElement('ul');
 		ul.appendChild(compiled);
 
-		equal(ul.getElementsByTagName('li')[0].innerHTML, 'No items', 'initial observable state');
+		equal( innerHTML(ul.getElementsByTagName('li')[0]), 'No items', 'initial observable state');
 		
 		obs.attr('items', [{
 			name: 'foo'
 		}]);
-		equal(ul.getElementsByTagName('li')[0].innerHTML, 'foo', 'updated observable');
+		equal( innerHTML(ul.getElementsByTagName('li')[0]), 'foo', 'updated observable');
 	});
 
 	test("unescape bindings change", function () {
@@ -1083,28 +1113,28 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				completed: completed
 			});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 
 		var child = div.getElementsByTagName('div')[0];
-		equal(child.innerHTML, "2", "at first there are 2 true bindings");
+		equal( innerHTML(child), "2", "at first there are 2 true bindings");
 		var item = new can.Map({
 			complete: true,
 			id: "THIS ONE"
-		})
+		});
 		l.push(item);
 
-		equal(child.innerHTML, "3", "now there are 3 complete");
+		equal(innerHTML(child), "3", "now there are 3 complete");
 
 		item.attr('complete', false);
 
-		equal(child.innerHTML, "2", "now there are 2 complete");
+		equal(innerHTML(child), "2", "now there are 2 complete");
 
 		l.pop();
 
 		item.attr('complete', true);
 
-		equal(child.innerHTML, "2", "there are still 2 complete");
+		equal(innerHTML(child), "2", "there are still 2 complete");
 	});
 
 	test("escape bindings change", function () {
@@ -1132,21 +1162,21 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				completed: completed
 			});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 
 		var child = div.getElementsByTagName('div')[0];
-		equal(child.innerHTML, "2", "at first there are 2 true bindings");
+		equal(innerHTML(child), "2", "at first there are 2 true bindings");
 		var item = new can.Map({
 			complete: true
 		})
 		l.push(item);
 
-		equal(child.innerHTML, "3", "now there are 3 complete");
+		equal(innerHTML(child), "3", "now there are 3 complete");
 
 		item.attr('complete', false);
 
-		equal(child.innerHTML, "2", "now there are 2 complete");
+		equal(innerHTML(child), "2", "now there are 2 complete");
 	});
 
 	test("tag bindings change", function () {
@@ -1174,7 +1204,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				completed: completed
 			});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 
 		var child = div.getElementsByTagName('div')[0];
@@ -1216,7 +1246,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				completed: completed
 			});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(compiled);
 
 		var child = div.getElementsByTagName('div')[0];
@@ -1244,7 +1274,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			obs: obs
 		});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(compiled);
 
@@ -1271,17 +1301,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			obs: obs
 		});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(compiled);
 
 		div = div.getElementsByTagName('div')[0];
 
-		equal(div.innerHTML, "Justin")
+		equal(innerHTML(div), "Justin")
 
 		obs.attr('name.first', "Brian")
 
-		equal(div.innerHTML, "Brian")
+		equal(innerHTML(div), "Brian")
 
 	});
 
@@ -1294,7 +1324,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var compiled = can.stache(text)({
 			obs: obs
 		});
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		var html = compiled;
 		div.appendChild(html);
 
@@ -1313,7 +1343,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			id: 0
 		}]);
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		var template = can.stache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
 
@@ -1340,24 +1370,24 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				name: "Fara"
 			}]
 		});
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template({
 			data: data
 		}));
 		data.items.push(new can.Map({
 			name: "Scott"
 		}))
-		ok(/Brian/.test(div.innerHTML), "added first name")
-		ok(/Fara/.test(div.innerHTML), "added 2nd name")
-		ok(/Scott/.test(div.innerHTML), "added name after push")
+		ok(/Brian/.test(innerHTML(div)), "added first name")
+		ok(/Fara/.test(innerHTML(div)), "added 2nd name")
+		ok(/Scott/.test(innerHTML(div)), "added name after push")
 	});
 
 	test("trailing text", function () {
 		var template = can.stache("There are {{ length }} todos")
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
-		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
-	})
+		ok(/There are 2 todos/.test(innerHTML(div)), "got all text");
+	});
 
 	test("recursive views", function () {
 
@@ -1369,13 +1399,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}]
 		}])
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(can.view(can.test.path('view/stache/test/recursive.stache'), {
 			items: data
 		}));
-		ok(/class="?leaf"?/.test(div.innerHTML), "we have a leaf")
+		ok(/class="?leaf"?/.test(innerHTML(div)), "we have a leaf")
 
-	})
+	});
 
 	test("live binding textarea", function () {
 		var template = can.stache("<textarea>Before{{ obs.middle }}After</textarea>");
@@ -1383,19 +1413,20 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var obs = new can.Map({
 			middle: "yes"
 		}),
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(template({
 			obs: obs
-		}))
-		var textarea = div.firstChild
+		}));
+		var textarea = div.firstChild;
 
-		equal(textarea.value, "BeforeyesAfter");
+		equal(getValue(textarea), "BeforeyesAfter");
 
-		obs.attr("middle", "Middle")
-		equal(textarea.value, "BeforeMiddleAfter")
+		obs.attr("middle", "Middle");
+		
+		equal(getValue(textarea), "BeforeMiddleAfter");
 
-	})
+	});
 
 	test("reading a property from a parent object when the current context is an observe", function () {
 		var template = can.stache("{{#foos}}<span>{{bar}}</span>{{/foos}}")
@@ -1406,17 +1437,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				name: 'bye'
 			}]),
 			bar: "Hello World"
-		}
+		};
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		var res = template(data);
 		div.appendChild(res);
 		var spans = div.getElementsByTagName('span');
 
 		equal(spans.length, 2, 'Got two <span> elements');
-		equal(spans[0].innerHTML, 'Hello World', 'First span Hello World');
-		equal(spans[1].innerHTML, 'Hello World', 'Second span Hello World');
-	})
+		equal(innerHTML(spans[0]), 'Hello World', 'First span Hello World');
+		equal(innerHTML(spans[1]), 'Hello World', 'Second span Hello World');
+	});
 
 	test("helper parameters don't convert functions", function () {
 		can.stache.registerHelper('helperWithFn', function (fn) {
@@ -1442,7 +1473,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		renderer({
 			test: can.compute(5)
 		});
-	})
+	});
 
 	test("computes are supported in default helpers", function () {
 
@@ -1453,26 +1484,27 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			"with": "wit{{#with test}}<span>{{3}}</span>{{/with}}"
 		};
 
-		var template = can.stache("There are {{ length }} todos")
-		var div = document.createElement('div');
+		var template = can.stache("There are {{ length }} todos");
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template(new can.List([{}, {}])));
-		ok(/There are 2 todos/.test(div.innerHTML), "got all text")
+		ok(/There are 2 todos/.test(innerHTML(div)), "got all text");
 
 		var renderer, result, data, actual, span;
 
 		for (result in staches) {
 			renderer = can.stache(staches[result]);
 			data = ["e", "a", "c", "h"];
-			div = document.createElement("div");
+			div = simpleDocument.createElement("div");
 			actual = renderer({
 				test: can.compute(data)
 			});
 			div.appendChild(actual);
 			span = div.getElementsByTagName("span")[0];
 			if (span && span.firstChild) {
-				div.replaceChild(span.firstChild, span);
+				div.insertBefore(span.firstChild, span);
+				div.removeChild(span);
 			}
-			actual = div.innerHTML;
+			actual = innerHTML(div);
 
 			equal(actual, result, "can.compute resolved for helper " + result);
 		}
@@ -1487,12 +1519,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		for (result in inv_staches) {
 			renderer = can.stache(inv_staches[result]);
 			data = null;
-			div = document.createElement("div");
+			div = simpleDocument.createElement("div");
 			actual = renderer({
 				test: can.compute(data)
 			});
 			div.appendChild(actual);
-			actual = div.innerHTML;
+			actual = innerHTML(div);
 
 			equal(actual, result, "can.compute resolved for helper " + result);
 		}
@@ -1514,16 +1546,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			compiled = can.stache(text)({
 				people: people
 			});
-
-		can.append(can.$('#qunit-fixture'), compiled);
-		equal(can.$('#qunit-fixture table tbody')
-			.length, 2, "two tbodies");
-	})
+		equal( compiled.firstChild.getElementsByTagName("tbody").length, 2, "two tbodies");
+	});
 
 	// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 	test("Observe with array attributes", function () {
 		var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		var data = new can.Map({
 			todos: ['Line #1', 'Line #2', 'Line #3'],
 			message: 'Hello',
@@ -1531,19 +1560,19 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 		div.appendChild(renderer(data));
 
-		equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2', 'Check initial array');
-		equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello', 'Check initial message');
+		equal(innerHTML(div.getElementsByTagName('li')[1]), 'Line #2', 'Check initial array');
+		equal(innerHTML(div.getElementsByTagName('div')[0]), 'Hello', 'Check initial message');
 
 		data.attr('todos.1', 'Line #2 changed');
 		data.attr('message', 'Hello again');
 
-		equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2 changed', 'Check updated array');
-		equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
-	})
+		equal(innerHTML(div.getElementsByTagName('li')[1]), 'Line #2 changed', 'Check updated array');
+		equal(innerHTML(div.getElementsByTagName('div')[0]), 'Hello again', 'Check updated message');
+	});
 
 	test("Observe list returned from the function", function () {
 		var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		var todos = new can.List();
 		var data = {
 			todos: function () {
@@ -1556,7 +1585,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(div.getElementsByTagName('li')
 			.length, 1, 'Todo is successfuly created');
-		equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
+		equal(innerHTML(div.getElementsByTagName('li')[0]), 'Todo #1', 'Pushing to the list works');
 	});
 
 	// https://github.com/bitovi/canjs/issues/228
@@ -1574,13 +1603,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				},
 				text: "foo"
 			},
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer(data));
 		
-		equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
-		equal(div.getElementsByTagName('span')[1].innerHTML, "bar", 'Incorrect text in helper inner template');
-		equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
+		equal(innerHTML(div.getElementsByTagName('span')[0]), "foo", 'Incorrect context passed to helper');
+		equal(innerHTML(div.getElementsByTagName('span')[1]), "bar", 'Incorrect text in helper inner template');
+		equal(innerHTML(div.getElementsByTagName('span')[2]), "In the inner context", 'Incorrect other_text in helper inner template');
 	});
 
 	// https://github.com/bitovi/canjs/issues/227
@@ -1594,25 +1623,27 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				},
 				other_first_level: "foo"
 			},
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer(data));
-		equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
-		equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
+		equal(innerHTML(div.getElementsByTagName('span')[0]), "foo", 'Incorrect context passed to helper');
+		equal(innerHTML(div.getElementsByTagName('span')[1]), "foo", 'Incorrect text in helper inner template');
 	});
 
 	// https://github.com/bitovi/canjs/issues/231
 	test("Functions and helpers should be passed the same context", function () {
 		
 		var textNodes = function(el, cb) {
-			can.each(el.childNodes, function(el){
-				if(el.nodeType === 3) {
-					cb(el)
+			var cur = el.firstChild;
+			while(cur){
+				if(cur.nodeType === 3) {
+					cb(cur)
 				} else if(el.nodeType === 1) {
-					textNodes(el, cb)
+					textNodes(cur, cb)
 				}
-			})
-		}
+				cur = cur.nextSibling;
+			}
+		};
 		
 		can.stache.registerHelper("to_upper", function (fn, options) {
 			if (!fn.fn) {
@@ -1625,7 +1656,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				var frag = fn.fn(this);
 				textNodes(frag, function(el){
 					el.nodeValue = el.nodeValue.toUpperCase();
-				})
+				});
 				return frag;
 			}
 		});
@@ -1639,13 +1670,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 					other_text: "In the inner context"
 				}
 			},
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 			
 		window.other_text = 'Window context';
 
 		div.appendChild(renderer(data));
-		//equal(div.getElementsByTagName('span')[0].innerHTML, data.next_level.other_text.toUpperCase(), 'correct context passed to function');
-		equal(div.getElementsByTagName('span')[0].innerHTML, data.next_level.other_text.toUpperCase(), 'correct context passed to helper');
+		
+		equal(innerHTML(div.getElementsByTagName('span')[0]), data.next_level.other_text.toUpperCase(), 'correct context passed to helper');
 	});
 
 	// https://github.com/bitovi/canjs/issues/153
@@ -1665,39 +1696,39 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			plainData = {
 				todos: todos
 			},
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer2(plainData));
 
-		equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
-		equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
+		equal(innerHTML(div.getElementsByTagName('span')[0]), "Dishes", 'Array item rendered with DOM container');
+		equal(innerHTML(div.getElementsByTagName('span')[1]), "Forks", 'Array item rendered with DOM container');
 
 		div.innerHTML = '';
 		div.appendChild(renderer2(liveData));
 
-		equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
-		equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
+		equal(innerHTML(div.getElementsByTagName('span')[0]), "Dishes", 'List item rendered with DOM container');
+		equal(innerHTML(div.getElementsByTagName('span')[1]), "Forks", 'List item rendered with DOM container');
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer(plainData));
-		equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+		equal(innerHTML(div), "DishesForks", 'Array item rendered without DOM container');
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer(liveData));
-		equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
+		equal(innerHTML(div), "DishesForks", 'List item rendered without DOM container');
 		
 		liveData.todos.push({
 			id: 3,
 			name: 'Knives'
 		});
-		equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
+		equal(innerHTML(div), "DishesForksKnives", 'New list item rendered without DOM container');
 	});
 
 	test("objects with a 'key' or 'index' property should work in helpers", function () {
 		var renderer = can.stache('{{ #obj }}{{ show_name }}{{ /obj }}'),
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer({
 			obj: {
@@ -1710,9 +1741,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				return this.name;
 			}
 		}));
-		equal(div.innerHTML, "Forks", 'item name rendered');
+		equal(innerHTML(div), "Forks", 'item name rendered');
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer({
 			obj: {
@@ -1725,7 +1756,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				return this.name;
 			}
 		}));
-		equal(div.innerHTML, "Forks", 'item name rendered');
+		equal(innerHTML(div), "Forks", 'item name rendered');
 	});
 
 	test("2 way binding helpers", function () {
@@ -1753,7 +1784,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var renderer = can.stache('<input {{value user.name}}/>');
 
-		var div = document.createElement('div'),
+		var div = simpleDocument.createElement('div'),
 			u = new can.Map({
 				name: "Justin"
 			});
@@ -1779,7 +1810,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		// name is undefined
 		renderer = can.stache('<input {{value user.name}}/>');
-		div = document.createElement('div');
+		div = simpleDocument.createElement('div');
 		u = new can.Map({});
 		div.appendChild(renderer({
 			user: u
@@ -1799,7 +1830,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		// name is null
 		renderer = can.stache('<input {{value user.name}}/>');
-		div = document.createElement('div');
+		div = simpleDocument.createElement('div');
 		u = new can.Map({
 			name: null
 		});
@@ -1834,7 +1865,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		
 		
 		
-		ok(/World/.test(result.firstChild.innerHTML), "Hello World worked");
+		ok(/World/.test(innerHTML(result.firstChild)), "Hello World worked");
 	});
 
 	test("can pass in helpers", function () {
@@ -1849,7 +1880,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}
 		});
 
-		ok(/World/.test(result.firstChild.innerHTML), "Hello World worked");
+		ok(/World/.test(innerHTML(result.firstChild)), "Hello World worked");
 	});
 
 	test("HTML comment with helper", function () {
@@ -1870,15 +1901,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			compiled = can.stache(text.join("\n"))({
 				todos: todos
 			}),
-			div = document.createElement("div"),
+			div = simpleDocument.createElement("div"),
 			li;
 
 		var comments = function (el) {
 			var count = 0;
-			for (var i = 0; i < el.childNodes.length; i++) {
-				if (el.childNodes[i].nodeType === 8) {
+			var cur = el.firstChild;
+			while(cur) {
+				if (cur.nodeType === 8) {
 					++count;
 				}
+				cur = cur.nextSibling;
 			}
 			return count;
 		};
@@ -1892,11 +1925,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			id: 2,
 			name: "Laundry"
 		});
+		
+		li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+		
 		equal(li.length, 2, "2 items in list");
 		equal(comments(li[0]), 2, "2 comments in item #1");
 		equal(comments(li[1]), 2, "2 comments in item #2");
 
 		todos.splice(0, 2);
+		
+		li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+		
 		equal(li.length, 0, "0 items in list");
 	});
 
@@ -1905,22 +1944,22 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			colors: ["", 'red', 'green', 'blue']
 		}),
 			compiled = can.stache("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(compiled);
-		equal(div.getElementsByTagName('option')[0].innerHTML, "", "Blank string should return blank");
+		equal(innerHTML(div.getElementsByTagName('option')[0]), "", "Blank string should return blank");
 	});
 
 	test("Null properties do not throw errors", function () {
 		var renderer = can.stache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
-			div = document.createElement('div'),
-			div2 = document.createElement('div'),
+			div = simpleDocument.createElement('div'),
+			div2 = simpleDocument.createElement('div'),
 			frag, frag2;
 
 		try {
 			frag = renderer(new can.Map({
 				foo: null
-			}))
+			}));
 		} catch (e) {
 			ok(false, "rendering with null threw an error");
 		}
@@ -1928,11 +1967,11 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			foo: {
 				bar: "baz"
 			}
-		}))
+		}));
 		div.appendChild(frag);
 		div2.appendChild(frag2);
-		equal(div.innerHTML, "Foo bar does not exist");
-		equal(div2.innerHTML, "Foo bar exists");
+		equal(innerHTML(div), "Foo bar does not exist");
+		equal(innerHTML(div2), "Foo bar exists");
 	});
 
 	// Issue #288
@@ -1949,24 +1988,25 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var renderer = can.stache("{{#bar}}{{> #nested_data}}{{/bar}}"),
 			renderer2 = can.stache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
 			renderer3 = can.stache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
-			div = document.createElement('div'),
+			div = simpleDocument.createElement('div'),
 			data = new can.Map({
 				foo: "bar",
 				bar: new can.Map({})
 			}),
 			span;
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
+		
 		div.appendChild(renderer(data));
 		span = can.$(div.getElementsByTagName('span')[0]);
 		strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 1 should have correct data');
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
 		div.appendChild(renderer2(data));
 		span = can.$(div.getElementsByTagName('span')[0]);
 		strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 2 should have correct data');
 
-		div.innerHTML = '';
+		div = simpleDocument.createElement('div');
 		div.appendChild(renderer3(data));
 		span = can.$(div.getElementsByTagName('span')[0]);
 		strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
@@ -1975,7 +2015,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 	// Issue #333
 	test("Functions passed to default helpers should be evaluated", function () {
 		var renderer = can.stache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
-			div = document.createElement('div'),
+			div = simpleDocument.createElement('div'),
 			data = new can.Map({
 				ducks: "",
 				hasDucks: function () {
@@ -1986,17 +2026,16 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var span;
 
-		div.innerHTML = '';
 		div.appendChild(renderer(data));
 		span = can.$(div.getElementsByTagName('span')[0]);
-		equal(div.innerHTML, 'No ducks!', 'The function evaluated should evaluate false');
+		equal(innerHTML(div), 'No ducks!', 'The function evaluated should evaluate false');
 	});
 
 	test("avoid global helpers", function () {
 		var noglobals = can.stache("{{sometext person.name}}");
 
-		var div = document.createElement('div'),
-			div2 = document.createElement('div');
+		var div = simpleDocument.createElement('div'),
+			div2 = simpleDocument.createElement('div');
 
 		var person = new can.Map({
 			name: "Brian"
@@ -2022,8 +2061,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		person.attr("name", "Ajax")
 
-		equal(div.innerHTML, "Mr. Ajax");
-		equal(div2.innerHTML, "Ajax rules");
+		equal(innerHTML(div), "Mr. Ajax");
+		equal(innerHTML(div2), "Ajax rules");
 	});
 
 	test("Helpers always have priority (#258)", function () {
@@ -2051,8 +2090,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var noglobals = can.stache("{{sometext person.name}}");
 
-		var div = document.createElement('div'),
-			div2 = document.createElement('div');
+		var div = simpleDocument.createElement('div'),
+			div2 = simpleDocument.createElement('div');
 		var person = new can.Map({
 			name: "Brian"
 		});
@@ -2075,8 +2114,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		person.attr("name", "Ajax")
 
-		equal(div.innerHTML, "Mr. Ajax");
-		equal(div2.innerHTML, "Ajax rules");
+		equal(innerHTML(div), "Mr. Ajax");
+		equal(innerHTML(div2), "Ajax rules");
 		
 	});
 	
@@ -2086,7 +2125,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var animals = new can.List(['sloth', 'bear']),
 			renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
-		var div = document.createElement('div')
+		var div = simpleDocument.createElement('div')
 
 		var frag = renderer({
 			animals: animals
@@ -2103,7 +2142,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
 
-		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+		equal(innerHTML(div.getElementsByTagName('span')[2]), "turtle", "turtle added");
 
 	});
 
@@ -2112,7 +2151,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var animals = new can.List([]),
 			renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
-		var div = document.createElement('div')
+		var div = simpleDocument.createElement('div')
 
 		var frag = renderer({
 			animals: animals
@@ -2143,24 +2182,21 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				"{{/if}}" +
 				"!</div>";
 
-		var renderer = can.stache(template)
+		var renderer = can.stache(template);
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		var frag = renderer({
 			animals: animals
 		});
-		div.appendChild(frag)
-
-		//equal(div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!", "no animals shown");
-		//animals.push('sloth');
+		div.appendChild(frag);
 
 		equal(div.getElementsByTagName('span')
 			.length, 1, "There is 1 sloth");
 			
 		animals.pop();
 
-		equal(div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!");
+		equal(innerHTML(div.getElementsByTagName('div')[0]), "Animals:No animals!");
 	});
 
 	test("a compute gets passed to a plugin", function () {
@@ -2174,7 +2210,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var renderer = can.stache('<input {{iamhungryforcomputes userName}}/>');
 
-		var div = document.createElement('div'),
+		var div = simpleDocument.createElement('div'),
 			u = new can.Map({
 				name: "Justin"
 			});
@@ -2200,10 +2236,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				}
 			};
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template(data))
 
-		equal(div.innerHTML, "100 values");
+		equal(innerHTML(div), "100 values");
 	})
 
 	test("Computes should be resolved prior to accessing attributes", function () {
@@ -2212,10 +2248,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				list: can.compute(new can.List())
 			};
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template(data))
 
-		equal(div.innerHTML, "0");
+		equal(innerHTML(div), "0");
 	})
 
 	test("Helpers can be passed . or this for the active context", function () {
@@ -2234,12 +2270,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				}]
 			};
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template(data));
 		var children = div.getElementsByTagName('div');
 
-		equal(children[0].innerHTML, 'Justin is attending Reception');
-		equal(children[1].innerHTML, 'Justin is attending Wedding');
+		equal(innerHTML(children[0]), 'Justin is attending Reception');
+		equal(innerHTML(children[1]), 'Justin is attending Wedding');
 	});
 
 	test("helpers only called once (#477)", function () {
@@ -2286,29 +2322,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = template(data),
 			img = frag.firstChild;
 
-		equal(img.src, "", "there is no src");
+		equal(img.getAttribute("src"), null, "there is no src");
 
-		data.attr("image", url)
-		notEqual(img.src, "", 'Image should have src')
-		equal(img.src, url, "images src is correct");
+		data.attr("image", url);
+		notEqual(img.getAttribute("src"), null, 'Image should have src');
+		equal(img.getAttribute("src"), url, "images src is correct");
 
-		/*var renderer = can.stache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
-		 url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
-		 data = new can.Map({
-		 user: 'Tina Fey',
-		 messages: 0
-		 }),
-		 div = document.createElement('div');
-
-		 div.appendChild(renderer(data));
-
-		 var img = div.getElementsByTagName('img')[0];
-		 equal(img.src, "", 'Image should not have src');
-
-		 data.attr('messages', 5);
-		 data.attr('image', url);
-		 notEqual(img.src, "", 'Image should have src');
-		 equal(img.src, url, 'Image should have src URL');*/
 	});
 
 	test("live binding in a truthy section", function () {
@@ -2322,7 +2341,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(img.getAttribute("width"), "100", "initial width is correct");
 
-		data.attr("width", "300")
+		data.attr("width", "300");
 		equal(img.getAttribute('width'), "300", "updated width is correct");
 
 	});
@@ -2349,26 +2368,26 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}, {
 				prop: "last"
 			}]
-		})
+		});
 
 		var frag = template({
 			grid: grid
 		}, {
 			columnData: function (row, col) {
-				return row.attr(col.attr("prop"))
+				return row.attr(col.attr("prop"));
 			}
 		});
 
-		var divs = frag.childNodes;
+		var divs = getChildNodes(frag);
 		equal(divs.length, 4, "there are 4 divs");
 
 		var vals = can.map(divs, function (div) {
-			return div.innerHTML
+			return innerHTML(div);
 		});
 
 		deepEqual(vals, ["Justin", "Meyer", "Brian", "Moschel"], "div values are the same");
 
-	})
+	});
 
 	test("support null and undefined as an argument", function () {
 
@@ -2384,11 +2403,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 	test("passing can.List to helper (#438)", function () {
 		var renderer = can.stache('<ul><li {{helper438 observeList}}>observeList broken</li>' +
-			'<li {{helper438 array}}>plain arrays work</li></ul>')
+			'<li {{helper438 array}}>plain arrays work</li></ul>');
 
 		can.stache.registerHelper('helper438', function (classnames) {
 			return function (el) {
-				el.innerHTML = 'Helper called';
+				empty(el);
+				el.appendChild(el.ownerDocument.createTextNode("Helper called"));
 			};
 		});
 
@@ -2404,14 +2424,14 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				test: 'second'
 			}]
 		});
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(frag);
 
-		var ul = div.children[0];
+		var ul = div.firstChild;
 
-		equal(ul.children[0].innerHTML, 'Helper called', 'Helper called');
-		equal(ul.children[1].innerHTML, 'Helper called', 'Helper called');
+		equal(innerHTML( ul.childNodes.item(0)), 'Helper called', 'Helper called');
+		equal(innerHTML(  ul.childNodes.item(1)), 'Helper called', 'Helper called');
 	});
 
 	test("hiding image srcs (#494)", function () {
@@ -2424,11 +2444,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = template(data),
 			img = frag.firstChild;
 
-		equal(img.src, "", "there is no src");
+		equal(img.getAttribute("src"), null, "there is no src");
 
 		data.attr("image", url);
-		notEqual(img.src, "", 'Image should have src');
-		equal(img.src, url, "images src is correct");
+		
+		notEqual(img.getAttribute("src"), "", 'Image should have src');
+		equal(img.getAttribute("src"), url, "images src is correct");
 	});
 
 	test("hiding image srcs with complex content (#494)", function () {
@@ -2444,34 +2465,38 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = template(data),
 			img = frag.firstChild;
 
-		equal(img.src, "", "there is no src");
+		equal(img.getAttribute("src"), null, "there is no src");
 
 		data.attr("image", imgData);
-		notEqual(img.src, "", 'Image should have src');
-		equal(img.src, url, "images src is correct");
+		notEqual(img.getAttribute("src"), "", 'Image should have src');
+		equal(img.getAttribute("src"), url, "images src is correct");
 	});
 
-	test("style property is live-bindable in IE (#494)", 4, function () {
+	if(simpleDocument.body.style) {
+		test("style property is live-bindable in IE (#494)", 4, function () {
 
-		var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
-
-		var dims = new can.Map({
-			width: 5,
-			color: 'red'
+			var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+	
+			var dims = new can.Map({
+				width: 5,
+				color: 'red'
+			});
+	
+			var div = template(dims)
+				.firstChild
+	
+			equal(div.style.width, "5px");
+			equal(div.style.backgroundColor, "red");
+	
+			dims.attr("width", 10);
+			dims.attr('color', 'blue');
+	
+			equal(div.style.width, "10px");
+			equal(div.style.backgroundColor, "blue");
 		});
+	}
 
-		var div = template(dims)
-			.firstChild
 
-		equal(div.style.width, "5px");
-		equal(div.style.backgroundColor, "red");
-
-		dims.attr("width", 10);
-		dims.attr('color', 'blue');
-
-		equal(div.style.width, "10px");
-		equal(div.style.backgroundColor, "blue");
-	});
 
 	test("empty lists update", 2, function () {
 		var template = can.stache('<p>{{#list}}{{.}}{{/list}}</p>');
@@ -2480,13 +2505,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 		var frag = template(map);
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(frag);
 
-		equal(div.children[0].innerHTML, 'something', 'initial list content set');
+		equal(innerHTML( div.childNodes.item(0)), 'something', 'initial list content set');
 		map.attr('list', ['one', 'two']);
-		equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
+		equal(innerHTML( div.childNodes.item(0)), 'onetwo', 'updated list content set');
 	});
 
 	test("attributes in truthy section", function () {
@@ -2495,7 +2520,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			attribute: "test-value"
 		};
 		var frag1 = template(data1);
-		var div1 = document.createElement('div');
+		var div1 = simpleDocument.createElement('div');
 
 		div1.appendChild(frag1);
 		equal(div1.children[0].getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
@@ -2504,7 +2529,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			attribute: "test value"
 		};
 		var frag2 = template(data2);
-		var div2 = document.createElement('div');
+		var div2 = simpleDocument.createElement('div');
 
 		div2.appendChild(frag2);
 		equal(div2.children[0].getAttribute('data-test'), 'test value', 'whitespace in attribute value');
@@ -2516,7 +2541,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			selected: false
 		});
 		var frag = template(data);
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(frag);
 		data.attr('selected', true);
@@ -2541,7 +2566,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}]
 		};
 		var frag = template(data);
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 
 		div.appendChild(frag);
 		equal(div.children[0].getAttribute('data-test1'), 'value1', 'first value');
@@ -2553,7 +2578,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var template = can.stache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
 
 		var items = new can.List([{}, {}]);
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(template({
 			items: items
 		}));
@@ -2577,7 +2602,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			return can.stache.safeString(link);
 		});
 
-		var div = document.createElement('div');
+		var div = simpleDocument.createElement('div');
 		div.appendChild(templateEscape({}));
 
 		equal(div.children.length, 1, 'rendered a DOM node');
@@ -2586,7 +2611,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		equal(div.children[0].innerHTML, text, 'rendered the text properly');
 		equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
 
-		div = document.createElement('div');
+		div = simpleDocument.createElement('div');
 		div.appendChild(templateUnescape({}));
 
 		equal(div.children.length, 1, 'rendered a DOM node');
@@ -2807,22 +2832,21 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				name: 'A3'
 			}]
 		});
-		var div = document.createElement('div')
+		var div = simpleDocument.createElement('div');
 
-		can.append(can.$('#qunit-fixture'), div);
 		can.append(can.$(div), tmp(data));
 
 		stop();
 		setTimeout(function () {
 
-			can.remove(can.$(div));
+			can.remove(can.$(div.firstChild));
 
 			equal(data._bindings, 0, "there are no bindings")
 
-			start()
-		}, 50)
+			start();
+		}, 50);
 
-	})
+	});
 
 	test("each directly within live html section", function () {
 
@@ -2865,21 +2889,20 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		equal(frag.firstChild.getElementsByTagName("li")[0].innerHTML, "0")
 		equal(frag.firstChild.getElementsByTagName("li")[1].innerHTML, "")
 
-	})
+	});
 
 	test('@index is correctly calculated when there are identical elements in the array', function () {
 		var data = new can.List(['foo', 'bar', 'baz', 'qux', 'foo']);
 		var tmp = can.stache('{{#each data}}{{@index}} {{/each}}');
 
-		var div = document.createElement('div')
-
-		can.append(can.$('#qunit-fixture'), div);
-		can.append(can.$(div), tmp({
+		var div = simpleDocument.createElement('div');
+		var frag = tmp({
 			data: data
-		}));
+		});
+		div.appendChild(frag)
 
-		equal(div.innerHTML, '0 1 2 3 4 ');
-	})
+		equal(innerHTML(div), '0 1 2 3 4 ');
+	});
 
 	test("if helper within className (#592)", function () {
 
@@ -2907,7 +2930,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			'text<!--comment -->',
 			'text<!--comment-->'
 		], function (content) {
-			var div = document.createElement('div');
+			var div = simpleDocument.createElement('div');
 
 			can.append(can.$('#qunit-fixture'), div);
 			can.append(can.$(div), can.stache(content)());
@@ -3040,7 +3063,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			visible: true
 		})
 
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild(template(data));
 
 		equal(div.getElementsByTagName("label")
@@ -3111,7 +3134,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				name: "Bar"
 			}]
 		});
-		var div = document.createElement('div'),
+		var div = simpleDocument.createElement('div'),
 			lis = div.getElementsByTagName("li");
 
 		div.appendChild(renderer(data));
@@ -3134,7 +3157,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 	test("Block bodies are properly escaped inside attributes", function () {
 		var html = "<div title='{{#test}}{{.}}{{{.}}}{{/test}}'></div>",
-			div = document.createElement("div"),
+			div = simpleDocument.createElement("div"),
 			title = "Alpha&Beta";
 
 		div.appendChild(can.stache(html)(new can.Map({
@@ -3170,7 +3193,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			data = new can.Foo({
 				own_prop: "quux"
 			}),
-			div = document.createElement('div');
+			div = simpleDocument.createElement('div');
 
 		div.appendChild(renderer(data, {
 			print_prop: function () {
@@ -3229,7 +3252,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		{{/each}} \
 		</ul>');
 
-		var div = document.createElement('div'),
+		var div = simpleDocument.createElement('div'),
 			data1 = new can.Map({
 				description: 'Each without list'
 			}),
@@ -3269,7 +3292,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 	test('can.compute should live bind when the value is changed to a Construct (#638)', function () {
 		var renderer = can.stache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
-			div = document.createElement('div'),
+			div = simpleDocument.createElement('div'),
 			// can.compute(null) will pass
 			counter = can.compute(),
 			data = {
@@ -3296,7 +3319,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		// add template as script
 
-		var script = document.createElement("script");
+		var script = simpleDocument.createElement("script");
 		script.type = "text/mustache";
 		script.id = "itempartial";
 		script.text = "<label></label>"
@@ -3708,7 +3731,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var template = can.stache("<div>{{>greeting}}</div>")(data);
 
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild(template);
 		equal(div.firstChild.innerHTML, "hello World", "partial retreived and rendered");
 
@@ -3722,7 +3745,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var data = new can.Map({items: null});
 		var frag = template(data);
 		
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild(frag);
 		
 		
@@ -3744,7 +3767,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		};
 		
 		var frag = template(data);
-		var div = document.createElement("div");
+		var div = simpleDocument.createElement("div");
 		div.appendChild(frag);
 		
 		var spans = div.getElementsByTagName("span");
@@ -3768,7 +3791,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				promise: def.promise()
 			};
 			var frag = template(data);
-			var div = document.createElement("div");
+			var div = simpleDocument.createElement("div");
 			div.appendChild(frag);
 			spans = div.getElementsByTagName("span");
 			
@@ -3917,7 +3940,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 	});
 
-	if(document.createElementNS) {
+	if(simpleDocument.createElementNS) {
 		test("svg elements for (#1327)", function(){
 			var template = can.stache('<svg height="120" width="400">'+
 				'<circle cx="50" cy="50" r="{{radius}}" stroke="black" stroke-width="3" fill="blue" />'+

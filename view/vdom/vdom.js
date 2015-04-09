@@ -14,14 +14,14 @@ steal("can/view/parser","can-simple-dom", "can/util",function(canParser, simpleD
 					currentAttr;
 				canParser(string, {
 			    	start: function( tagName, unary ){
-			    		current = { type: "StartTag", attributes: {} };
+			    		current = { type: "StartTag", attributes: {}, tagName: tagName };
 			    	},
 					end: function( tagName, unary ){
 						tokens.push(current);
 						current = undefined;
 					},
 					close:     function( tagName ){
-						tokens.push({type: "EndTag"});
+						tokens.push({type: "EndTag", tagName: tagName});
 					},
 					attrStart: function( attrName ){
 						currentTag.attributes[attrName] = "";

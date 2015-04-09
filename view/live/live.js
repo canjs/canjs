@@ -89,7 +89,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		},
 		addTextNodeIfNoChildren = function(frag){
 			if(!frag.firstChild) {
-				frag.appendChild(document.createTextNode(""));
+				frag.appendChild(frag.ownerDocument.createTextNode(""));
 			}
 		};
 	/**
@@ -176,7 +176,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						return;
 					}
 					// Collect new html and mappings
-					var frag = document.createDocumentFragment(),
+					var frag = text.ownerDocument.createDocumentFragment(),
 						newNodeLists = [],
 						newIndicies = [];
 					// For each new item,
@@ -319,7 +319,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
 				},
 				// A text node placeholder
-				text = document.createTextNode(''),
+				text = el.ownerDocument.createTextNode(''),
 				// The current list.
 				list,
 				// Called when the list is replaced with a new list or the binding is torn-down.
@@ -509,7 +509,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			});
 			// The text node that will be updated
 				
-			var node = document.createTextNode(can.view.toStr(compute()));
+			var node = el.ownerDocument.createTextNode(can.view.toStr(compute()));
 			if(nodeList) {
 				nodeList.unregistered = data.teardownCheck;
 				data.nodeList = nodeList;
