@@ -16,6 +16,20 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			return node.value;
 		}
 	};
+	var getChildNodeLength = function(node){
+		var childNodes = node.childNodes;
+		if("length" in childNodes) {
+			return childNodes.length;
+		} else {
+			var count = 0;
+			var cur = node.firstChild;
+			while(cur) {
+				count++;
+				cur = cur.nextSibling;
+			}
+			return count;
+		}
+	};
 	var getChildNodes = function(node){
 		var childNodes = node.childNodes;
 		if("length" in childNodes) {
@@ -133,7 +147,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			left: 2,
 			color: 3
 		});
-		
+
 		equal(frag.firstChild.style.top, "1px", "top works");
 		equal(frag.firstChild.style.left, "2px", "left works");
 		equal(frag.firstChild.style.backgroundColor.replace(/\s/g,""), "rgb(0,0,3)", "color works");
@@ -430,7 +444,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}
 		};
 
-		var template = can.stache(t.template)
+		var template = can.stache(t.template);
 		var frag = template(t.data);
 		
 		var div = simpleDocument.createElement("div");
@@ -2523,7 +2537,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var div1 = simpleDocument.createElement('div');
 
 		div1.appendChild(frag1);
-		equal(div1.children[0].getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
+		equal(div1.childNodes.item(0).getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
 
 		var data2 = {
 			attribute: "test value"
@@ -2532,7 +2546,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var div2 = simpleDocument.createElement('div');
 
 		div2.appendChild(frag2);
-		equal(div2.children[0].getAttribute('data-test'), 'test value', 'whitespace in attribute value');
+		equal(div2.childNodes.item(0).getAttribute('data-test'), 'test value', 'whitespace in attribute value');
 	});
 
 	test("live bound attributes with no '='", function () {
@@ -2545,10 +2559,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		div.appendChild(frag);
 		data.attr('selected', true);
-		equal(div.children[0].checked, true, 'hyphenated attribute value');
+		equal(div.childNodes.item(0).checked, true, 'hyphenated attribute value');
 
 		data.attr("selected", false)
-		equal(div.children[0].checked, false, 'hyphenated attribute value');
+		equal(div.childNodes.item(0).checked, false, 'hyphenated attribute value');
 	});
 
 	test("outputting array of attributes", function () {
@@ -2569,9 +2583,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var div = simpleDocument.createElement('div');
 
 		div.appendChild(frag);
-		equal(div.children[0].getAttribute('data-test1'), 'value1', 'first value');
-		equal(div.children[0].getAttribute('data-test2'), 'value2', 'second value');
-		equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
+		equal(div.childNodes.item(0).getAttribute('data-test1'), 'value1', 'first value');
+		equal(div.childNodes.item(0).getAttribute('data-test2'), 'value2', 'second value');
+		equal(div.childNodes.item(0).getAttribute('data-test3'), 'value3', 'third value');
 	});
 
 	test("incremental updating of #each within an if", function () {
@@ -2603,21 +2617,24 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 		var div = simpleDocument.createElement('div');
-		div.appendChild(templateEscape({}));
+		var frag = templateEscape({});
+		debugger;
+		div.appendChild(frag);
 
-		equal(div.children.length, 1, 'rendered a DOM node');
-		
-		equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
-		equal(div.children[0].innerHTML, text, 'rendered the text properly');
-		equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
+		equal(getChildNodeLength(div), 1, 'rendered a DOM node');
+		equal(div.childNodes.item(0).nodeName, 'A', 'rendered an anchor tag');
+		debugger;
+		equal(innerHTML(div.childNodes.item(0)), text, 'rendered the text properly');
+		var node = div.childNodes.item(0);
+		equal(div.childNodes.item(0).getAttribute('href'), url, 'rendered the href properly');
 
 		div = simpleDocument.createElement('div');
 		div.appendChild(templateUnescape({}));
 
-		equal(div.children.length, 1, 'rendered a DOM node');
-		equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
-		equal(div.children[0].innerHTML, text, 'rendered the text properly');
-		equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
+		equal(getChildNodeLength(div), 1, 'rendered a DOM node');
+		equal(div.childNodes.item(0).nodeName, 'A', 'rendered an anchor tag');
+		equal(innerHTML(div.childNodes.item(0)), text, 'rendered the text properly');
+		equal(div.childNodes.item(0).getAttribute('href'), url, 'rendered the href properly');
 	});
 
 	test("changing the list works with each", function () {
@@ -2627,33 +2644,33 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			list: ["foo"]
 		});
 
-		var lis = template(map)
-			.firstChild.getElementsByTagName('li');
+		var tpl = template(map).firstChild;
+		var lis = tpl.getElementsByTagName('li');
 
-		equal(lis.length, 1, "one li")
+		equal(tpl.getElementsByTagName('li').length, 1, "one li");
 
 		map.attr("list", new can.List(["bar", "car"]));
 
-		equal(lis.length, 2, "two lis")
+		equal(tpl.getElementsByTagName('li').length, 2, "two lis");
 
 	});
 
 	test("nested properties binding (#525)", function () {
 		var template = can.stache("<label>{{name.first}}</label>");
 
-		var me = new can.Map()
+		var me = new can.Map();
 
 		var label = template(me)
 			.firstChild;
 		me.attr("name", {
 			first: "Justin"
 		});
-		equal(label.innerHTML, "Justin", "set name object");
+		equal(innerHTML(label), "Justin", "set name object");
 
 		me.attr("name", {
 			first: "Brian"
 		});
-		equal(label.innerHTML, "Brian", "merged name object");
+		equal(innerHTML(label), "Brian", "merged name object");
 
 		me.removeAttr("name");
 		me.attr({
@@ -2662,9 +2679,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			}
 		});
 
-		equal(label.innerHTML, "Payal", "works after parent removed");
+		equal(innerHTML(label), "Payal", "works after parent removed");
 
-	})
+	});
 
 	test("Rendering indicies of an array with @index", function () {
 		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
@@ -2676,7 +2693,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			.firstChild.getElementsByTagName('li');
 
 		for (var i = 0; i < lis.length; i++) {
-			equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+			equal(innerHTML(lis[i]), (i + ' ' + i), 'rendered index and value are correct');
 		}
 	});
 
@@ -2690,7 +2707,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			.firstChild.getElementsByTagName('li');
 
 		for (var i = 0; i < lis.length; i++) {
-			equal(lis[i].innerHTML, (i+5 + ' ' + i), 'rendered index and value are correct');
+			equal(innerHTML(lis[i]), (i+5 + ' ' + i), 'rendered index and value are correct');
 		}
 	});
 
@@ -2707,7 +2724,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		}).firstChild.getElementsByTagName('li');
 
 		for (var i = 0; i < lis.length; i++) {
-			equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+			equal(innerHTML(lis[i]), (i + ' ' + i), 'rendered index and value are correct');
 		}
 	});
 
@@ -2715,42 +2732,46 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var list = new can.List(['a', 'b', 'c']);
 		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
-		var lis = template({
+		var tpl = template({
 			list: list
-		})
-			.firstChild.getElementsByTagName('li');
+		}).firstChild;
+		//.getElementsByTagName('li');
 
+		var lis = tpl.getElementsByTagName('li');
 		equal(lis.length, 3, "three lis");
 
-		equal(lis[0].innerHTML, '0 a', "first index and value are correct");
-		equal(lis[1].innerHTML, '1 b', "second index and value are correct");
-		equal(lis[2].innerHTML, '2 c', "third index and value are correct");
+		equal(innerHTML(lis[0]), '0 a', "first index and value are correct");
+		equal(innerHTML(lis[1]), '1 b', "second index and value are correct");
+		equal(innerHTML(lis[2]), '2 c', "third index and value are correct");
 
 		// add a few more items
 		list.push('d', 'e');
 
+		lis = tpl.getElementsByTagName('li');
 		equal(lis.length, 5, "five lis");
 
-		equal(lis[3].innerHTML, '3 d', "fourth index and value are correct");
-		equal(lis[4].innerHTML, '4 e', "fifth index and value are correct");
+		equal(innerHTML(lis[3]), '3 d', "fourth index and value are correct");
+		equal(innerHTML(lis[4]), '4 e', "fifth index and value are correct");
 
 		// splice off a few items and add some more
 		list.splice(0, 2, 'z', 'y');
 
+		lis = tpl.getElementsByTagName('li');
 		equal(lis.length, 5, "five lis");
-		equal(lis[0].innerHTML, '0 z', "first item updated");
-		equal(lis[1].innerHTML, '1 y', "second item udpated");
-		equal(lis[2].innerHTML, '2 c', "third item the same");
-		equal(lis[3].innerHTML, '3 d', "fourth item the same");
-		equal(lis[4].innerHTML, '4 e', "fifth item the same");
+		equal(innerHTML(lis[0]), '0 z', "first item updated");
+		equal(innerHTML(lis[1]), '1 y', "second item udpated");
+		equal(innerHTML(lis[2]), '2 c', "third item the same");
+		equal(innerHTML(lis[3]), '3 d', "fourth item the same");
+		equal(innerHTML(lis[4]), '4 e', "fifth item the same");
 
 		// splice off from the middle
 		list.splice(2, 2);
 
+		lis = tpl.getElementsByTagName('li');
 		equal(lis.length, 3, "three lis");
-		equal(lis[0].innerHTML, '0 z', "first item the same");
-		equal(lis[1].innerHTML, '1 y', "second item the same");
-		equal(lis[2].innerHTML, '2 e', "fifth item now the 3rd item");
+		equal(innerHTML(lis[0]), '0 z', "first item the same");
+		equal(innerHTML(lis[1]), '1 y', "second item the same");
+		equal(innerHTML(lis[2]), '2 e', "fifth item now the 3rd item");
 	});
 
 	test('Rendering keys of an object with #each and @key', function () {
@@ -2768,9 +2789,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		equal(lis.length, 3, "three lis");
 
-		equal(lis[0].innerHTML, 'foo string', "first key value pair rendered");
-		equal(lis[1].innerHTML, 'bar 1', "second key value pair rendered");
-		equal(lis[2].innerHTML, 'baz false', "third key value pair rendered");
+		equal(innerHTML(lis[0]), 'foo string', "first key value pair rendered");
+		equal(innerHTML(lis[1]), 'bar 1', "second key value pair rendered");
+		equal(innerHTML(lis[2]), 'baz false', "third key value pair rendered");
 	});
 
 	test('Live bound iteration of keys of a can.Map with #each and @key', function () {
@@ -2782,30 +2803,32 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			baz: false
 		});
 
-		var lis = template({
+		var tpl = template({
 			map: map
-		})
-			.firstChild.getElementsByTagName('li');
+		});
+		var lis = tpl.firstChild.getElementsByTagName('li');
 
 		equal(lis.length, 3, "three lis");
 
-		equal(lis[0].innerHTML, 'foo string', "first key value pair rendered");
-		equal(lis[1].innerHTML, 'bar 1', "second key value pair rendered");
-		equal(lis[2].innerHTML, 'baz false', "third key value pair rendered");
+		equal(innerHTML(lis[0]), 'foo string', "first key value pair rendered");
+		equal(innerHTML(lis[1]), 'bar 1', "second key value pair rendered");
+		equal(innerHTML(lis[2]), 'baz false', "third key value pair rendered");
 
 		map.attr('qux', true);
 
+		lis = tpl.firstChild.getElementsByTagName('li');
 		equal(lis.length, 4, "four lis");
 
-		equal(lis[3].innerHTML, 'qux true', "fourth key value pair rendered");
+		equal(innerHTML(lis[3]), 'qux true', "fourth key value pair rendered");
 
 		map.removeAttr('foo');
 
+		lis = tpl.firstChild.getElementsByTagName('li');
 		equal(lis.length, 3, "three lis");
 
-		equal(lis[0].innerHTML, 'bar 1', "new first key value pair rendered");
-		equal(lis[1].innerHTML, 'baz false', "new second key value pair rendered");
-		equal(lis[2].innerHTML, 'qux true', "new third key value pair rendered");
+		equal(innerHTML(lis[0]), 'bar 1', "new first key value pair rendered");
+		equal(innerHTML(lis[1]), 'baz false', "new second key value pair rendered");
+		equal(innerHTML(lis[2]), 'qux true', "new third key value pair rendered");
 	});
 
 	test('Make sure data passed into template does not call helper by mistake', function () {
@@ -2817,7 +2840,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var h1 = template(data)
 			.firstChild;
 
-		equal(h1.innerHTML, "with");
+		equal(innerHTML(h1), "with");
 	});
 
 	test("no memory leaks with #each (#545)", function () {
@@ -2834,14 +2857,14 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 		var div = simpleDocument.createElement('div');
 
-		can.append(can.$(div), tmp(data));
+		div.appendChild(tmp(data));
 
 		stop();
 		setTimeout(function () {
 
 			can.remove(can.$(div.firstChild));
 
-			equal(data._bindings, 0, "there are no bindings")
+			equal(data._bindings, 0, "there are no bindings");
 
 			start();
 		}, 50);
@@ -2853,7 +2876,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var tmp = can.stache(
 			"<ul>{{#if showing}}" +
 			"{{#each items}}<li>item</li>{{/items}}" +
-			"{{/if}}</ul>")
+			"{{/if}}</ul>");
 
 		var items = new can.List([1, 2, 3]);
 		var showing = can.compute(true);
@@ -2884,10 +2907,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			array: [0, null]
 		};
 
-		var frag = tmp(data)
+		var frag = tmp(data);
 
-		equal(frag.firstChild.getElementsByTagName("li")[0].innerHTML, "0")
-		equal(frag.firstChild.getElementsByTagName("li")[1].innerHTML, "")
+		equal(innerHTML(frag.firstChild.getElementsByTagName("li")[0]), "0");
+		equal(innerHTML(frag.firstChild.getElementsByTagName("li")[1]), "");
 
 	});
 
@@ -2899,7 +2922,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = tmp({
 			data: data
 		});
-		div.appendChild(frag)
+		div.appendChild(frag);
 
 		equal(innerHTML(div), '0 1 2 3 4 ');
 	});
@@ -2912,7 +2935,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		})
 		var frag = tmp(data);
 
-		equal(frag.firstChild.className, "fails animate-ready")
+		equal(frag.firstChild.className, "fails animate-ready");
 
 		tmp = can.stache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
 		data = new can.Map({
@@ -2931,10 +2954,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			'text<!--comment-->'
 		], function (content) {
 			var div = simpleDocument.createElement('div');
-
-			can.append(can.$('#qunit-fixture'), div);
-			can.append(can.$(div), can.stache(content)());
-			equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
+			div.appendChild(can.stache(content)());
+			equal(innerHTML(div), content, 'Content did not change: "' + content + '"');
 		});
 	});
 
@@ -2942,17 +2963,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var list = new can.List(['a', 'b', 'c']);
 		var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 
-		var lis = template({
+		var tpl = template({
 			list: list
-		})
-			.firstChild.getElementsByTagName('li');
+		});
 
 		// remove first item
 		list.shift();
+		var lis = tpl.firstChild.getElementsByTagName('li');
 		equal(lis.length, 2, "two lis");
 
-		equal(lis[0].innerHTML, '0 b', "second item now the 1st item");
-		equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
+		equal(innerHTML(lis[0]), '0 b', "second item now the 1st item");
+		equal(innerHTML(lis[1]), '1 c', "third item now the 2nd item");
 	});
 
 	test("can.stache.safestring works on live binding (#606)", function () {
@@ -3001,10 +3022,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		data.attr('item.subitems')
 			.push('second');
 
+		labels = div.getElementsByTagName("label");
 		equal(labels.length, 2, "after pushing two label");
 		
 		data.removeAttr('item');
 
+		labels = div.getElementsByTagName("label");
 		equal(labels.length, 0, "after removing item no label");
 
 	});
@@ -3096,7 +3119,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var lis = frag.firstChild.getElementsByTagName("li");
 		equal(lis.length, 3, "there are 3 properties of map's data property");
 
-		equal(lis[0].innerHTML, "some : test");
+		equal(innerHTML(lis[0]), "some : test");
 
 	});
 
@@ -3141,15 +3164,16 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		deepEqual(
 			can.map(lis, function (li) {
-				return li.innerHTML
+				return innerHTML(li)
 			}), ["Something", "Else"],
 			'Expected HTML with first set');
 
 		data.attr('first', false);
 
+		lis = div.getElementsByTagName("li");
 		deepEqual(
 			can.map(lis, function (li) {
-				return li.innerHTML
+				return innerHTML(li)
 			}), ["Foo", "Bar"],
 			'Expected HTML with first false set');
 
@@ -3225,22 +3249,22 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			i = 0;
 
 		// Straight access
-		equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
-		equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
-		equal(spans[i++].innerHTML, '', 'Expected ""');
-		equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+		equal(innerHTML(spans[i++]), 'quux', 'Expected "quux"');
+		equal(innerHTML(spans[i++]), 'baz', 'Expected "baz"');
+		equal(innerHTML(spans[i++]), '', 'Expected ""');
+		equal(innerHTML(spans[i++]), 'thud', 'Expected "thud"');
 
 		// Helper argument
-		equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
-		equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
-		equal(spans[i++].innerHTML, '', 'Expected ""');
-		equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+		equal(innerHTML(spans[i++]), 'quux', 'Expected "quux"');
+		equal(innerHTML(spans[i++]), 'baz', 'Expected "baz"');
+		equal(innerHTML(spans[i++]), '', 'Expected ""');
+		equal(innerHTML(spans[i++]), 'thud', 'Expected "thud"');
 
 		// Helper hash argument
-		equal(spans[i++].innerHTML, 'prop=quux', 'Expected "prop=quux"');
-		equal(spans[i++].innerHTML, 'prop=baz', 'Expected "prop=baz"');
-		equal(spans[i++].innerHTML, 'prop=', 'Expected "prop="');
-		equal(spans[i++].innerHTML, 'prop=thud', 'Expected "prop=thud"');
+		equal(innerHTML(spans[i++]), 'prop=quux', 'Expected "prop=quux"');
+		equal(innerHTML(spans[i++]), 'prop=baz', 'Expected "prop=baz"');
+		equal(innerHTML(spans[i++]), 'prop=', 'Expected "prop="');
+		equal(innerHTML(spans[i++]), 'prop=thud', 'Expected "prop=thud"');
 	});
 
 	test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
@@ -3285,8 +3309,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 				
 			equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')
 				.length, 1);
-			equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0].innerHTML, 'first');
-			equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')[0].innerHTML, 'first');
+			equal(innerHTML(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0]), 'first');
+			equal(innerHTML(div.getElementsByTagName('ul')[1].getElementsByTagName('li')[0]), 'first');
 		}, 250);
 	});
 
@@ -3311,7 +3335,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			});
 			equal(div.getElementsByTagName('span')
 				.length, 1);
-			equal(div.getElementsByTagName('span')[0].innerHTML, '1');
+			equal(innerHTML(div.getElementsByTagName('span')[0]), '1');
 		}, 10);
 	});
 
@@ -3322,9 +3346,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var script = simpleDocument.createElement("script");
 		script.type = "text/mustache";
 		script.id = "itempartial";
-		script.text = "<label></label>"
+		script.text = "<label></label>";
 
-		document.body.appendChild(script)
+		document.body.appendChild(script);
 
 		//can.stache("itempartial","<label></label>")
 
@@ -3333,9 +3357,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			"{{#each items}}" +
 			"{{>itempartial}}" +
 			"{{/each}}" +
-			"</div>")
+			"</div>");
 
-		var items = new can.List([{}, {}])
+		var items = new can.List([{}, {}]);
 
 		var frag = itemsTemplate({
 			items: items
@@ -3343,10 +3367,11 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			div = frag.firstChild,
 			labels = div.getElementsByTagName("label");
 
-		equal(labels.length, 2, "two labels")
+		equal(labels.length, 2, "two labels");
 
 		items.shift();
 
+		labels = div.getElementsByTagName("label");
 		equal(labels.length, 1, "first label removed")
 	});
 	
@@ -3388,14 +3413,14 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			equal(typeof tagData.subtemplate, "function", "got subtemplate");
 			var frag = tagData.subtemplate(tagData.scope.add({last: "Meyer"}), tagData.options);
 			
-			equal( frag.firstChild.innerHTML, "Justin Meyer", "rendered right");
+			equal( innerHTML(frag.firstChild), "Justin Meyer", "rendered right");
 		});
 		
 		var template = can.stache("<stache-tag><span>{{first}} {{last}}</span></stache-tag>")
 		
 		template({first: "Justin"});
 		
-	})
+	});
 	
 	test("can.view.attr", function(){
 		
@@ -3429,7 +3454,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			
 			equal(res.firstChild.nodeName.toLowerCase(), "h1");
 			
-			equal(res.firstChild.innerHTML, "Justin Meyer");
+			equal(innerHTML(res.firstChild), "Justin Meyer");
 			
 		});
 	}
@@ -3443,8 +3468,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		};
 		var res =  template(data);
 		var spans = res.firstChild.getElementsByTagName('span');
-		equal( spans[0].innerHTML, "-CanJS", "look in current level" );
-		equal( spans[1].innerHTML, "stache-stache", "found in current level" );
+		equal( innerHTML(spans[0]), "-CanJS", "look in current level" );
+		equal( innerHTML(spans[1]), "stache-stache", "found in current level" );
 	});
 	
 	test("self closing tags callback custom tag callbacks (#880)", function(){
@@ -3534,7 +3559,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 		var node = frag.firstChild;
 
-		equal(node.innerHTML, 'baz', 'Context is forwarded correctly');
+		equal(innerHTML(node), 'baz', 'Context is forwarded correctly');
 	});
 
 	test("Calling .fn with falsy value as the context will render correctly (#658)", function(){
@@ -3553,9 +3578,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		});
 
-		equal(frag.firstChild.innerHTML, '0', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[1].innerHTML, '', 'Context is set correctly for falsy values');
-		equal(frag.childNodes[2].innerHTML, '', 'Context is set correctly for falsy values');
+		equal(innerHTML(frag.firstChild), '0', 'Context is set correctly for falsy values');
+		equal(innerHTML(frag.childNodes.item(1)), '', 'Context is set correctly for falsy values');
+		equal(innerHTML(frag.childNodes.item(2)), '', 'Context is set correctly for falsy values');
 	});
 
 	test("Custom elements created with default namespace in IE8", function(){
@@ -3596,7 +3621,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var tmpl = "<div>{{#unless noData}}data{{else}}no data{{/unless}}</div>";
 
 		var frag = can.stache(tmpl)({ noData: true });
-		equal(frag.firstChild.innerHTML, 'no data', 'else with unless worked');
+		equal(innerHTML(frag.firstChild), 'no data', 'else with unless worked');
 	});
 
 	test("{{else}} within an attribute (#974)", function(){
@@ -3619,8 +3644,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = can.stache(template)({ shown: true });
 
 		equal(frag.firstChild.className, 'foo test1 muh');
-		equal(frag.childNodes[1].className, 'bar test2 kuh');
-		equal(frag.childNodes[2].className, 'baz test3 boom');
+		equal(frag.childNodes.item(1).className, 'bar test2 kuh');
+		equal(frag.childNodes.item(2).className, 'baz test3 boom');
 	});
 
 	test("single character attributes work (#1132)", 1, function() {
@@ -3633,12 +3658,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		equal(frag.firstChild.firstChild.getAttribute("r"), "25");
 	});
 	
-	test("single property read does not infinately loop (#1155)",function(){
+	test("single property read does not infinitely loop (#1155)",function(){
 		stop();
 		
 		var map = new can.Map({state: false});
 		var current = false;
-		var source = can.compute(1)
+		var source = can.compute(1);
 		var number = can.compute(function(){
 
 			map.attr("state", current = !current);
@@ -3678,7 +3703,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			team : team
 		});
 
-		equal(frag.firstChild.innerHTML, "ARS", "got value");
+		equal(innerHTML(frag.firstChild), "ARS", "got value");
 
 	});
 
@@ -3691,8 +3716,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		});
 
 		// Only node in IE is <table>, text in other browsers
-		var index = frag.childNodes.length === 2 ? 1 : 0;
-		var tagName = frag.childNodes[index].firstChild.firstChild.tagName.toLowerCase();
+		var index = getChildNodeLength(frag) === 2 ? 1 : 0;
+		var tagName = frag.childNodes.item(index).firstChild.firstChild.tagName.toLowerCase();
 
 		equal(tagName, 'col', '<col> nodes added in proper position');
 	});
@@ -3704,10 +3729,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var frag = can.stache(template)({
 			list: list
 		});
-		var children = frag.childNodes.length;
+		var children = getChildNodeLength(frag);
 
 		list.splice(-1);
-		equal(frag.childNodes.length, children - 1, 'Child node removed');
+		equal(getChildNodeLength(frag), children - 1, 'Child node removed');
 	});
 	
 	test('stache can accept an intermediate (#1387)', function(){
@@ -3717,7 +3742,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		var renderer = can.stache(intermediate);
 		var frag = renderer({className: "foo", message: "bar"});
 		equal(frag.firstChild.className, "foo", "correct class name");
-		equal(frag.firstChild.innerHTML, "bar", "correct innerHTMl");
+		equal(innerHTML(frag.firstChild), "bar", "correct innerHTMl");
 	});
 
 	test("Passing Partial set in options (#1388 and #1389). Support live binding of partial", function () {
@@ -3733,10 +3758,10 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var div = simpleDocument.createElement("div");
 		div.appendChild(template);
-		equal(div.firstChild.innerHTML, "hello World", "partial retreived and rendered");
+		equal(innerHTML(div.firstChild), "hello World", "partial retreived and rendered");
 
 		data.attr("greeting", "goodbye");
-		equal(div.firstChild.innerHTML, "goodbye World", "Partial updates when attr is updated");
+		equal(innerHTML(div.firstChild), "goodbye World", "Partial updates when attr is updated");
 
 	});
 	
@@ -3783,7 +3808,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		setTimeout(function(){
 			equal(spans.length, 1);
 			equal(spans[0].className, "resolved");
-			equal(spans[0].innerHTML, "Hi there");
+			equal(innerHTML(spans[0]), "Hi there");
 			
 			
 			var def = new can.Deferred();
@@ -3800,7 +3825,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 			setTimeout(function(){
 				equal(spans.length, 1);
 				equal(spans[0].className, "rejected");
-				equal(spans[0].innerHTML, "BORKED");
+				equal(innerHTML(spans[0]), "BORKED");
 				
 				start();
 			}, 30);
@@ -3858,7 +3883,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		
 		var frag = template({d: promise});
 		
-		equal(frag.firstChild.innerHTML, "AltValue", "read value");
+		equal(innerHTML(frag.firstChild), "AltValue", "read value");
 		
 	});
 	
