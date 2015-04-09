@@ -541,7 +541,7 @@ steal("can/util",
 						this.nodeValue = value;
 					}
 					else if( value ){
-						elements.replace([this], can.frag(value));
+						elements.replace([this], can.frag(value, this.ownerDocument));
 					}
 				}
 				// Unbind the compute. 

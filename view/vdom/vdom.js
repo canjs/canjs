@@ -14,7 +14,7 @@ steal("can/view/parser","can-simple-dom", "can/util",function(canParser, simpleD
 					currentAttr;
 				canParser(string, {
 			    	start: function( tagName, unary ){
-			    		currentTag = { type: "StartTag", attributes: {}, tagName: tagName };
+			    		currentTag = { type: "StartTag", attributes: [], tagName: tagName };
 			    	},
 					end: function( tagName, unary ){
 						tokens.push(currentTag);
@@ -24,12 +24,12 @@ steal("can/view/parser","can-simple-dom", "can/util",function(canParser, simpleD
 						tokens.push({type: "EndTag", tagName: tagName});
 					},
 					attrStart: function( attrName ){
-						currentTag.attributes[attrName] = "";
-						currentAttr = attrName;
+						currentAttr = [attrName, ''];
+						currentTag.attributes.push(currentAttr);
 					},
 					attrEnd:   function( attrName ){},
 					attrValue: function( value ){
-						currentTag.attributes[currentAttr] += value;
+						currentAttr[1] += value;
 					},
 					chars:     function( value ){
 						tokens.push({type:"Chars", chars: value});

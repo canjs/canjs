@@ -298,13 +298,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 	
 
-	test('Tokens returning 0 where they should diplay the number', function () {
+	test('Tokens returning 0 where they should display the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
 		var frag = can.stache( template )({
 				completed: 0
 			});
-		
-		
+
 		equal( frag.firstChild.firstChild.nodeValue, "0", 'zero shown' );
 	});
 
@@ -2618,16 +2617,14 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
 		var div = simpleDocument.createElement('div');
 		var frag = templateEscape({});
-		debugger;
 		div.appendChild(frag);
 
 		equal(getChildNodeLength(div), 1, 'rendered a DOM node');
 		equal(div.childNodes.item(0).nodeName, 'A', 'rendered an anchor tag');
-		debugger;
 		equal(innerHTML(div.childNodes.item(0)), text, 'rendered the text properly');
 		var node = div.childNodes.item(0);
 		equal(div.childNodes.item(0).getAttribute('href'), url, 'rendered the href properly');
-
+		debugger;
 		div = simpleDocument.createElement('div');
 		div.appendChild(templateUnescape({}));
 
@@ -2759,7 +2756,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		lis = tpl.getElementsByTagName('li');
 		equal(lis.length, 5, "five lis");
 		equal(innerHTML(lis[0]), '0 z', "first item updated");
-		equal(innerHTML(lis[1]), '1 y', "second item udpated");
+		equal(innerHTML(lis[1]), '1 y', "second item updated");
 		equal(innerHTML(lis[2]), '2 c', "third item the same");
 		equal(innerHTML(lis[3]), '3 d', "fourth item the same");
 		equal(innerHTML(lis[4]), '4 e', "fifth item the same");
@@ -3583,17 +3580,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 		equal(innerHTML(frag.childNodes.item(2)), '', 'Context is set correctly for falsy values');
 	});
 
-	test("Custom elements created with default namespace in IE8", function(){
-		// Calling can.view.tag so that this tag is shived
-		can.view.tag('my-tag', function(){});
-
-		var tmpl = "<my-tag></my-tag>";
-
-		var frag = can.stache(tmpl)({});
-		can.append(can.$("#qunit-fixture"), frag);
-
-		equal(can.$("my-tag").length, 1, "Element created in default namespace");
-	});
+//	test("Custom elements created with default namespace in IE8", function(){
+//		// Calling can.view.tag so that this tag is shived
+//		can.view.tag('my-tag', function(){});
+//
+//		var tmpl = "<my-tag></my-tag>";
+//
+//		var frag = can.stache(tmpl)({});
+//		can.append(can.$("#qunit-fixture"), frag);
+//
+//		equal(can.$("my-tag").length, 1, "Element created in default namespace");
+//	});
 
 	test("Partials are passed helpers (#791)", function () {
 		var t = {
