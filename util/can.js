@@ -41,6 +41,24 @@ steal(function () {
 		return arr && arr[arr.length - 1];
 	};
 
+	can.isDOM = function(el) {
+		return (el.ownerDocument ||  el) === can.global.document; 
+	};
+	
+	can.childNodes = function(node) {
+		var childNodes = node.childNodes;
+		if("length" in childNodes) {
+			return childNodes;
+		} else {
+			var cur = node.firstChild;
+			var nodes = [];
+			while(cur) {
+				nodes.push(cur);
+				cur = cur.nextSibling;
+			}
+			return nodes;
+		}
+	};
 
 	can.frag = function(item, doc){
 		var document = doc || can.document || can.global.document;
