@@ -362,7 +362,6 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					}
 					
 				}
-				
 				// Append the resulting document fragment to the element
 				can.appendChild(el, frag);
 				
