@@ -637,18 +637,18 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	test('models properly serialize with default behaviors', function() {
 		var DefaultMap = can.Map.extend({
-		    define: {
-		        name: {
-		            value: 'Alex'            
-		        },
-		        shirt: {
-		        	value: 'blue',
-		        	serialize: true
-		        },
-		        '*': {
-		            serialize: false
-		        }
-		    }
+			define: {
+				name: {
+					value: 'Alex'
+				},
+				shirt: {
+					value: 'blue',
+					serialize: true
+				},
+				'*': {
+					serialize: false
+				}
+			}
 		});
 		var map = new DefaultMap({age: 10, name: 'John'}),
 			serializedMap = map.serialize();
@@ -656,7 +656,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(serializedMap.age, undefined, 'age doesn\'t exist');
 		equal(serializedMap.name, undefined, 'name doesn\'t exist');
 		equal(serializedMap.shirt, 'blue', 'shirt exists');
-	})
+	});
 
 	test("nested define", function() {
 		var nailedIt = 'Nailed it';

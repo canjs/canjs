@@ -9,7 +9,7 @@ steal('can/util', 'can/observe', function (can) {
 			defaultProp = define['*'];
 
 			if(prop && prop[behavior] !== undefined) {
-				return prop[behavior]
+				return prop[behavior];
 			}
 			else if(defaultProp && defaultProp[behavior] !== undefined) {
 				return defaultProp[behavior];
