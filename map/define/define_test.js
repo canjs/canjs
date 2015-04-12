@@ -596,7 +596,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 	});
 
 	test('default behaviors with "*" work for attributes', function() {
-		expect(8);
+		expect(9);
 		var DefaultMap = can.Map.extend({
 			define: {
 				someNumber: {
@@ -634,6 +634,29 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
 		equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
 	});
+
+	test('models properly serialize with default behaviors', function() {
+		var DefaultMap = can.Map.extend({
+		    define: {
+		        name: {
+		            value: 'Alex'            
+		        },
+		        shirt: {
+		        	value: 'blue',
+		        	serialize: true
+		        },
+		        '*': {
+		            serialize: false
+		        }
+		    }
+		});
+		var map = new DefaultMap({age: 10, name: 'John'}),
+			serializedMap = map.serialize();
+
+		equal(serializedMap.age, undefined, 'age doesn\'t exist');
+		equal(serializedMap.name, undefined, 'name doesn\'t exist');
+		equal(serializedMap.shirt, 'blue', 'shirt exists');
+	})
 
 	test("nested define", function() {
 		var nailedIt = 'Nailed it';
