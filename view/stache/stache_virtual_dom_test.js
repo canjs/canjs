@@ -1,79 +1,88 @@
 /* jshint asi:true,multistr:true*/
 steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(simpleDom){
-    
+    var browserDoc = window.document;
     var simpleDocument = new simpleDom.Document();
     
-    makeTest('can/component vdom', simpleDocument);
-	//makeTest('can/view/stache dom', window.document);
+    makeTest('can/view/stache vdom', simpleDocument);
+	makeTest('can/view/stache dom', browserDoc);
     
     
     var serializer = new simpleDom.HTMLSerializer(simpleDom.voidMap);
 
-    var innerHTML = function(node){
-        return serializer.serialize(node.firstChild);
-    };
-    var getValue = function(node){
-        // textareas are cross bound to their internal innerHTML
-        if(node.nodeName.toLowerCase() === "textarea") {
-            return innerHTML(node);
-        } else {
-            return node.value;
-        }
-    };
-    var getChildNodes = function(node){
-        var childNodes = node.childNodes;
-        if("length" in childNodes) {
-            return childNodes;
-        } else {
-            var cur = node.firstChild;
-            var nodes = [];
-            while(cur) {
-                nodes.push(cur);
-                cur = cur.nextSibling;
-            }
-            return nodes;
-        }
-    };
-    var empty = function(node){
-        var last = node.lastChild;
-        while(last) {
-            node.removeChild(last);
-            last = node.lastChild;
-        }
-    };
+
 
     // HELPERS
     
-    var getText = function(template, data, options){
-        var div = simpleDocument.createElement("div");
-        div.appendChild( can.stache(template)(data) );
-        return cleanHTMLTextForIE( innerHTML(div) );
-    },
-    getAttr = function (el, attrName) {
-        return attrName === "class" ?
-            el.className :
-            el.getAttribute(attrName);
-    },
-    cleanHTMLTextForIE = function(html){
-        return html.replace(/ ejs_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
-            return "<"+tagName.toLowerCase();
-        }).replace(/\r?\n/g,"");
-    },
-    getTextFromFrag = function(node){
-        var txt = "";
-        var node = node.firstChild;
-        while(node) {
-            if(node.nodeType === 3) {
-                txt += node.nodeValue;
-            } else {
-                txt += getTextFromFrag(node);
-            }
-            node = node.nextSibling;
-        }
-        return txt;
-    };
+
 
     function makeTest(name, doc) {
+	    var isNormalDOM = doc === window.document;
+	    
+	    var innerHTML = function(node){
+	        return "innerHTML" in node ? 
+				node.innerHTML : 
+				serializer.serialize(node.firstChild);
+	    };
+	    var getValue = function(node){
+	        // textareas are cross bound to their internal innerHTML
+	        if(node.nodeName.toLowerCase() === "textarea") {
+	            return innerHTML(node);
+	        } else {
+	            return node.value;
+	        }
+	    };
+	    var getChildNodes = function(node){
+	        var childNodes = node.childNodes;
+	        if("length" in childNodes) {
+	            return childNodes;
+	        } else {
+	            var cur = node.firstChild;
+	            var nodes = [];
+	            while(cur) {
+	                nodes.push(cur);
+	                cur = cur.nextSibling;
+	            }
+	            return nodes;
+	        }
+	    };
+	    var empty = function(node){
+	        var last = node.lastChild;
+	        while(last) {
+	            node.removeChild(last);
+	            last = node.lastChild;
+	        }
+	    };
+		
+	    var getText = function(template, data, options){
+	        var div = doc.createElement("div");
+	        div.appendChild( can.stache(template)(data) );
+	        return cleanHTMLTextForIE( innerHTML(div) );
+	    },
+	    getAttr = function (el, attrName) {
+	        return attrName === "class" ?
+	            el.className :
+	            el.getAttribute(attrName);
+	    },
+	    cleanHTMLTextForIE = function(html){
+	        return html.replace(/ ejs_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
+	            return "<"+tagName.toLowerCase();
+	        }).replace(/\r?\n/g,"");
+	    },
+	    getTextFromFrag = function(node){
+	        var txt = "";
+	        var node = node.firstChild;
+	        while(node) {
+	            if(node.nodeType === 3) {
+	                txt += node.nodeValue;
+	            } else {
+	                txt += getTextFromFrag(node);
+	            }
+	            node = node.nextSibling;
+	        }
+	        return txt;
+	    };
+    	
+    	
         var oldDoc;
         QUnit.module(name ,{
             setup: function(){
@@ -479,24 +488,27 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
             deepEqual( getText(t.template, t.data), expected);
         });
         
-        test("Absolute partials", function () {
-            var test_template = can.test.path('view/mustache/test/test_template.mustache');
-            var t = {
-                template1: "{{> " + test_template + "}}",
-                template2: "{{> " + test_template + "}}",
-                expected: "Partials Rock"
-            };
-        
-            deepEqual(getText(t.template1, {}), t.expected);
-            deepEqual(getText(t.template2, {}), t.expected);
-        });
+        if(doc == window.document) {
+	        	 test("Absolute partials", function () {
+	            var test_template = can.test.path('view/mustache/test/test_template.mustache');
+	            var t = {
+	                template1: "{{> " + test_template + "}}",
+	                template2: "{{> " + test_template + "}}",
+	                expected: "Partials Rock"
+	            };
+	        
+	            deepEqual(getText(t.template1, {}), t.expected);
+	            deepEqual(getText(t.template2, {}), t.expected);
+	        });
+        }
+       
         
         test("No arguments passed to helper", function () {
             var template = can.stache("{{noargHelper}}");
         
             can.stache.registerHelper("noargHelper", function () {
                 return "foo"
-            })
+            });
             var div1 = doc.createElement('div');
             var div2 = doc.createElement('div');
         
@@ -537,26 +549,28 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
         
             deepEqual(innerHTML(div), "foo");
         });
-        
-        test("Partials and observes", function () {
-            var template;
-            var div = doc.createElement('div');
-        
-            template = can.stache("<table><thead><tr>{{#data}}{{>" +
-                can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
-        
-            var dom = template({
-                data: new can.Map({
-                    list: ["hi", "there"]
-                })
-            });
-            div.appendChild(dom);
-            var ths = div.getElementsByTagName('th');
-        
-            equal(ths.length, 2, 'Got two table headings');
-            equal(innerHTML(ths[0]), 'hi', 'First column heading correct');
-            equal(innerHTML(ths[1]), 'there', 'Second column heading correct');
-        });
+        if(isNormalDOM) {
+    	        test("Partials and observes", function () {
+	            var template;
+	            var div = doc.createElement('div');
+	        
+	            template = can.stache("<table><thead><tr>{{#data}}{{>" +
+	                can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
+	        
+	            var dom = template({
+	                data: new can.Map({
+	                    list: ["hi", "there"]
+	                })
+	            });
+	            div.appendChild(dom);
+	            var ths = div.getElementsByTagName('th');
+	        
+	            equal(ths.length, 2, 'Got two table headings');
+	            equal(innerHTML(ths[0]), 'hi', 'First column heading correct');
+	            equal(innerHTML(ths[1]), 'there', 'Second column heading correct');
+	        });
+        }
+
         
         test("Deeply nested partials", function () {
             var t = {
@@ -1408,23 +1422,25 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
             ok(/There are 2 todos/.test(innerHTML(div)), "got all text");
         });
         
-        test("recursive views", function () {
-        
-            var data = new can.List([{
-                label: 'branch1',
-                children: [{
-                    id: 2,
-                    label: 'branch2'
-                }]
-            }])
-        
-            var div = doc.createElement('div');
-            div.appendChild(can.view(can.test.path('view/stache/test/recursive.stache'), {
-                items: data
-            }));
-            ok(/class="?leaf"?/.test(innerHTML(div)), "we have a leaf")
-        
-        });
+        if(isNormalDOM) {
+	        test("recursive views", function () {
+	        
+	            var data = new can.List([{
+	                label: 'branch1',
+	                children: [{
+	                    id: 2,
+	                    label: 'branch2'
+	                }]
+	            }]);
+	        
+	            var div = doc.createElement('div');
+	            div.appendChild(can.view(can.test.path('view/stache/test/recursive.stache'), {
+	                items: data
+	            }));
+	            ok(/class="?leaf"?/.test(innerHTML(div)), "we have a leaf")
+	        
+	        });
+        }
         
         test("live binding textarea", function () {
             var template = can.stache("<textarea>Before{{ obs.middle }}After</textarea>");
@@ -3518,7 +3534,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
                 isBlack: false
             });
         		
-        		//debugger;
+        		
             ok(/display:\s*none/.test( res.firstChild.getAttribute('style') ), "display none is not set");
         
         });
