@@ -2,7 +2,6 @@
 steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(simpleDom){
     
     var simpleDocument = new simpleDom.Document();
-
     var serializer = new simpleDom.HTMLSerializer(simpleDom.voidMap);
 
     var innerHTML = function(node){
@@ -70,26 +69,41 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
     };
 
     function makeTest(name, doc) {
+        var oldDoc;
         QUnit.module(name ,{
             setup: function(){
-                can.document = simpleDocument;
+                oldDoc = can.document;
+                can.document = doc;
+
+                if(doc) {
+                    this.fixture = can.document.createElement("div");
+                    doc.body.appendChild(this.fixture);
+                    this.$fixture = can.$(this.fixture);
+                } else {
+                    this.fixture = can.$('#qunit-fixture')[0];
+                    this.$fixture = can.$('#qunit-fixture');
+                }
                 can.view.ext = '.stache';
                 this.animals = ['sloth', 'bear', 'monkey'];
             },
             teardown: function(){
-                delete can.document;
+                can.document = oldDoc;
+
+                if(doc) {
+                    doc.body.removeChild(this.fixture);
+                }
             }
         });
 
         test("html to html", function(){
-        
+
             var stashed = can.stache("<h1 class='foo'><span>Hello World!</span></h1>");
-        
-        
+
+
             var frag = stashed();
             equal( innerHTML(frag.childNodes.item(0)).toLowerCase(), "<span>hello world!</span>","got back the right text");
         });
-        
+
         
         test("basic replacement", function(){
         
@@ -248,7 +262,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function () {
                     // stache does not escape double quotes, mustache expects &quot;.
                     // can uses \n for new lines, mustache expects \r\n.
-                    var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '"')
+                    var expected = (override[spec] && override[spec][t.name]) || t.expected.replace(/&quot;/g, '"');
                         //.replace(/\r\n/g, '\n');
         
                     // Mustache's "Recursion" spec generates invalid HTML
@@ -314,7 +328,6 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             deepEqual(frag.firstChild.firstChild.nodeValue, "", 'hidden gone');
         
-            can.remove(can.$('#qunit-fixture>*'));
         });
         
         test("live-binding with escaping", function () {
@@ -429,7 +442,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var template = can.stache(t.template);
             var frag = template(t.data);
         
-            var div = doc.createElement("div");
+            var div = can.document.createElement("div");
             div.appendChild(frag);
         
             equal(innerHTML( div ), t.expected);
@@ -469,13 +482,13 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         });
         
         test("No arguments passed to helper", function () {
-            var template = can.stache("{{noargHelper}}")
+            var template = can.stache("{{noargHelper}}");
         
             can.stache.registerHelper("noargHelper", function () {
                 return "foo"
             })
-            var div1 = doc.createElement('div');
-            var div2 = doc.createElement('div');
+            var div1 = can.document.createElement('div');
+            var div2 = can.document.createElement('div');
         
             div1.appendChild(template( {}));
             div2.appendChild(template( new can.Map()));
@@ -492,7 +505,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             // Test with '=' because the regexp to find arguments uses that char
             // to delimit a keyword-arg name from its value.
             can.stache('testStringArgs', '{{concatStrings "==" "word"}}');
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(can.view('testStringArgs', {}));
         
             equal(innerHTML(div), '==word');
@@ -500,7 +513,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("No arguments passed to helper with list", function () {
             var template = can.stache("{{#items}}{{noargHelper}}{{/items}}");
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(template({
                 items: new can.List([{
@@ -517,7 +530,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("Partials and observes", function () {
             var template;
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             template = can.stache("<table><thead><tr>{{#data}}{{>" +
                 can.test.path('view/stache/test/partial.stache') + "}}{{/data}}</tr></thead></table>")
@@ -648,7 +661,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             deepEqual(getText(t.template, t.data), expected);
         
             // #1019 #unless does not live bind
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(can.stache(t.template)(t.liveData));
             deepEqual( innerHTML(div), expected, '#unless condition false');
             t.liveData.attr('missing', true);
@@ -672,7 +685,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             deepEqual( getText(t.template,t.data) , expected);
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(can.stache(t.template)(t.data2));
         
@@ -736,7 +749,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         test("escapedContent", function () {
             var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild( can.stache(text)({
                 tags: "foo < bar < car > zar > poo",
@@ -753,7 +766,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         test("unescapedContent", function () {
             var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild( can.stache(text)({
                 tags: "<strong>foo</strong><strong>bar</strong>",
                 quotes: 'I use \'quote\' fingers "a lot"'
@@ -773,7 +786,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 name: 'dishes'
             });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(can.stache(text)({
                 task: task
@@ -800,7 +813,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 name: 'Dishes'
             }]);
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
         
             div.appendChild( can.stache(text)({todos: todos}) );
         
@@ -833,7 +846,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             });
         
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild( can.stache(text)({
                     obs: obs
@@ -869,7 +882,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             });
         
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(can.stache(text)({
                     obs: obs
@@ -905,7 +918,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     message: 'Live long and prosper'
                 }),
         
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(can.stache(text)({
                 obs: obs
@@ -969,7 +982,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
                 compiled = can.stache(text)({obs: obs})
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
             var anchor = div.getElementsByTagName('div')[0];
         
@@ -999,7 +1012,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
                 compiled = can.stache(text)({obs: obs})
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
             var anchor = div.getElementsByTagName('div')[0];
         
@@ -1023,7 +1036,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 obs: obs
             });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
             equal( innerHTML(div.getElementsByTagName('div')[0]), 'foo', 'Element as expected');
         });
@@ -1041,7 +1054,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 compiled = can.stache(text)({
                     task: task
                 }),
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(compiled)
             var child = div.getElementsByTagName('div')[0];
@@ -1073,7 +1086,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
                 compiled = can.stache(text)({obs: obs})
         
-            var ul = doc.createElement('ul');
+            var ul = can.document.createElement('ul');
             ul.appendChild(compiled);
         
             equal( innerHTML(ul.getElementsByTagName('li')[0]), 'No items', 'initial observable state');
@@ -1109,7 +1122,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     completed: completed
                 });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
         
             var child = div.getElementsByTagName('div')[0];
@@ -1158,7 +1171,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     completed: completed
                 });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
         
             var child = div.getElementsByTagName('div')[0];
@@ -1200,7 +1213,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     completed: completed
                 });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
         
             var child = div.getElementsByTagName('div')[0];
@@ -1242,7 +1255,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     completed: completed
                 });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(compiled);
         
             var child = div.getElementsByTagName('div')[0];
@@ -1270,7 +1283,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 obs: obs
             });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(compiled);
         
@@ -1297,7 +1310,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 obs: obs
             });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(compiled);
         
@@ -1320,7 +1333,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var compiled = can.stache(text)({
                 obs: obs
             });
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var html = compiled;
             div.appendChild(html);
         
@@ -1339,7 +1352,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 id: 0
             }]);
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             var template = can.stache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
         
@@ -1366,7 +1379,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     name: "Fara"
                 }]
             });
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template({
                 data: data
             }));
@@ -1380,7 +1393,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("trailing text", function () {
             var template = can.stache("There are {{ length }} todos")
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template(new can.List([{}, {}])));
             ok(/There are 2 todos/.test(innerHTML(div)), "got all text");
         });
@@ -1395,7 +1408,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 }]
             }])
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(can.view(can.test.path('view/stache/test/recursive.stache'), {
                 items: data
             }));
@@ -1409,7 +1422,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var obs = new can.Map({
                 middle: "yes"
             }),
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(template({
                 obs: obs
@@ -1435,7 +1448,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 bar: "Hello World"
             };
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var res = template(data);
             div.appendChild(res);
             var spans = div.getElementsByTagName('span');
@@ -1481,7 +1494,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             };
         
             var template = can.stache("There are {{ length }} todos");
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template(new can.List([{}, {}])));
             ok(/There are 2 todos/.test(innerHTML(div)), "got all text");
         
@@ -1490,7 +1503,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             for (result in staches) {
                 renderer = can.stache(staches[result]);
                 data = ["e", "a", "c", "h"];
-                div = doc.createElement("div");
+                div = can.document.createElement("div");
                 actual = renderer({
                     test: can.compute(data)
                 });
@@ -1515,7 +1528,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             for (result in inv_staches) {
                 renderer = can.stache(inv_staches[result]);
                 data = null;
-                div = doc.createElement("div");
+                div = can.document.createElement("div");
                 actual = renderer({
                     test: can.compute(data)
                 });
@@ -1548,7 +1561,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         // http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
         test("Observe with array attributes", function () {
             var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var data = new can.Map({
                 todos: ['Line #1', 'Line #2', 'Line #3'],
                 message: 'Hello',
@@ -1568,7 +1581,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("Observe list returned from the function", function () {
             var renderer = can.stache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var todos = new can.List();
             var data = {
                 todos: function () {
@@ -1599,7 +1612,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     },
                     text: "foo"
                 },
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(renderer(data));
         
@@ -1619,7 +1632,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     },
                     other_first_level: "foo"
                 },
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(renderer(data));
             equal(innerHTML(div.getElementsByTagName('span')[0]), "foo", 'Incorrect context passed to helper');
@@ -1666,7 +1679,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                         other_text: "In the inner context"
                     }
                 },
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             window.other_text = 'Window context';
         
@@ -1692,7 +1705,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 plainData = {
                     todos: todos
                 },
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(renderer2(plainData));
         
@@ -1705,12 +1718,12 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             equal(innerHTML(div.getElementsByTagName('span')[0]), "Dishes", 'List item rendered with DOM container');
             equal(innerHTML(div.getElementsByTagName('span')[1]), "Forks", 'List item rendered with DOM container');
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
         
             div.appendChild(renderer(plainData));
             equal(innerHTML(div), "DishesForks", 'Array item rendered without DOM container');
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
         
             div.appendChild(renderer(liveData));
             equal(innerHTML(div), "DishesForks", 'List item rendered without DOM container');
@@ -1724,7 +1737,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("objects with a 'key' or 'index' property should work in helpers", function () {
             var renderer = can.stache('{{ #obj }}{{ show_name }}{{ /obj }}'),
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(renderer({
                 obj: {
@@ -1739,7 +1752,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             }));
             equal(innerHTML(div), "Forks", 'item name rendered');
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
         
             div.appendChild(renderer({
                 obj: {
@@ -1780,7 +1793,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var renderer = can.stache('<input {{value user.name}}/>');
         
-            var div = doc.createElement('div'),
+            var div = can.document.createElement('div'),
                 u = new can.Map({
                     name: "Justin"
                 });
@@ -1806,7 +1819,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             // name is undefined
             renderer = can.stache('<input {{value user.name}}/>');
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
             u = new can.Map({});
             div.appendChild(renderer({
                 user: u
@@ -1826,7 +1839,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             // name is null
             renderer = can.stache('<input {{value user.name}}/>');
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
             u = new can.Map({
                 name: null
             });
@@ -1897,7 +1910,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 compiled = can.stache(text.join("\n"))({
                     todos: todos
                 }),
-                div = doc.createElement("div"),
+                div = can.document.createElement("div"),
                 li;
         
             var comments = function (el) {
@@ -1940,7 +1953,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 colors: ["", 'red', 'green', 'blue']
             }),
                 compiled = can.stache("<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>")(data),
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(compiled);
             equal(innerHTML(div.getElementsByTagName('option')[0]), "", "Blank string should return blank");
@@ -1948,8 +1961,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("Null properties do not throw errors", function () {
             var renderer = can.stache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}"),
-                div = doc.createElement('div'),
-                div2 = doc.createElement('div'),
+                div = can.document.createElement('div'),
+                div2 = can.document.createElement('div'),
                 frag, frag2;
         
             try {
@@ -1984,25 +1997,25 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var renderer = can.stache("{{#bar}}{{> #nested_data}}{{/bar}}"),
                 renderer2 = can.stache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
                 renderer3 = can.stache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
-                div = doc.createElement('div'),
+                div = can.document.createElement('div'),
                 data = new can.Map({
                     foo: "bar",
                     bar: new can.Map({})
                 }),
                 span;
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
         
             div.appendChild(renderer(data));
             span = can.$(div.getElementsByTagName('span')[0]);
             strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 1 should have correct data');
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
             div.appendChild(renderer2(data));
             span = can.$(div.getElementsByTagName('span')[0]);
             strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 2 should have correct data');
         
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
             div.appendChild(renderer3(data));
             span = can.$(div.getElementsByTagName('span')[0]);
             strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
@@ -2011,7 +2024,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         // Issue #333
         test("Functions passed to default helpers should be evaluated", function () {
             var renderer = can.stache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
-                div = doc.createElement('div'),
+                div = can.document.createElement('div'),
                 data = new can.Map({
                     ducks: "",
                     hasDucks: function () {
@@ -2030,8 +2043,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         test("avoid global helpers", function () {
             var noglobals = can.stache("{{sometext person.name}}");
         
-            var div = doc.createElement('div'),
-                div2 = doc.createElement('div');
+            var div = can.document.createElement('div'),
+                div2 = can.document.createElement('div');
         
             var person = new can.Map({
                 name: "Brian"
@@ -2086,8 +2099,8 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var noglobals = can.stache("{{sometext person.name}}");
         
-            var div = doc.createElement('div'),
-                div2 = doc.createElement('div');
+            var div = can.document.createElement('div'),
+                div2 = can.document.createElement('div');
             var person = new can.Map({
                 name: "Brian"
             });
@@ -2121,7 +2134,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var animals = new can.List(['sloth', 'bear']),
                 renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
         
-            var div = doc.createElement('div')
+            var div = can.document.createElement('div')
         
             var frag = renderer({
                 animals: animals
@@ -2147,7 +2160,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var animals = new can.List([]),
                 renderer = can.stache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
         
-            var div = doc.createElement('div')
+            var div = can.document.createElement('div')
         
             var frag = renderer({
                 animals: animals
@@ -2180,7 +2193,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var renderer = can.stache(template);
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             var frag = renderer({
                 animals: animals
@@ -2206,7 +2219,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var renderer = can.stache('<input {{iamhungryforcomputes userName}}/>');
         
-            var div = doc.createElement('div'),
+            var div = can.document.createElement('div'),
                 u = new can.Map({
                     name: "Justin"
                 });
@@ -2232,7 +2245,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     }
                 };
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template(data))
         
             equal(innerHTML(div), "100 values");
@@ -2244,7 +2257,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     list: can.compute(new can.List())
                 };
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template(data))
         
             equal(innerHTML(div), "0");
@@ -2266,7 +2279,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     }]
                 };
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template(data));
             var children = div.getElementsByTagName('div');
         
@@ -2420,7 +2433,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     test: 'second'
                 }]
             });
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(frag);
         
@@ -2468,29 +2481,29 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             equal(img.getAttribute("src"), url, "images src is correct");
         });
         
-        if(doc.body.style) {
-            test("style property is live-bindable in IE (#494)", 4, function () {
-        
-                var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
-        
-                var dims = new can.Map({
-                    width: 5,
-                    color: 'red'
-                });
-        
-                var div = template(dims)
-                    .firstChild;
-        
-                equal(div.style.width, "5px");
-                equal(div.style.backgroundColor, "red");
-        
-                dims.attr("width", 10);
-                dims.attr('color', 'blue');
-        
-                equal(div.style.width, "10px");
-                equal(div.style.backgroundColor, "blue");
-            });
-        }
+        //if(can.document.body.style) {
+        //    test("style property is live-bindable in IE (#494)", 4, function () {
+        //
+        //        var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+        //
+        //        var dims = new can.Map({
+        //            width: 5,
+        //            color: 'red'
+        //        });
+        //
+        //        var div = template(dims)
+        //            .firstChild;
+        //
+        //        equal(div.style.width, "5px");
+        //        equal(div.style.backgroundColor, "red");
+        //
+        //        dims.attr("width", 10);
+        //        dims.attr('color', 'blue');
+        //
+        //        equal(div.style.width, "10px");
+        //        equal(div.style.backgroundColor, "blue");
+        //    });
+        //}
         
         
         
@@ -2501,7 +2514,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             });
         
             var frag = template(map);
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(frag);
         
@@ -2516,7 +2529,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 attribute: "test-value"
             };
             var frag1 = template(data1);
-            var div1 = doc.createElement('div');
+            var div1 = can.document.createElement('div');
         
             div1.appendChild(frag1);
             equal(div1.childNodes.item(0).getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
@@ -2525,7 +2538,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 attribute: "test value"
             };
             var frag2 = template(data2);
-            var div2 = doc.createElement('div');
+            var div2 = can.document.createElement('div');
         
             div2.appendChild(frag2);
             equal(div2.childNodes.item(0).getAttribute('data-test'), 'test value', 'whitespace in attribute value');
@@ -2537,7 +2550,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 selected: false
             });
             var frag = template(data);
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(frag);
             data.attr('selected', true);
@@ -2562,7 +2575,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 }]
             };
             var frag = template(data);
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(frag);
             equal(div.childNodes.item(0).getAttribute('data-test1'), 'value1', 'first value');
@@ -2574,7 +2587,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var template = can.stache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
         
             var items = new can.List([{}, {}]);
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             div.appendChild(template({
                 items: items
             }));
@@ -2598,7 +2611,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 return can.stache.safeString(link);
             });
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var frag = templateEscape({});
             div.appendChild(frag);
         
@@ -2607,7 +2620,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             equal(innerHTML(div.childNodes.item(0)), text, 'rendered the text properly');
             var node = div.childNodes.item(0);
             equal(div.childNodes.item(0).getAttribute('href'), url, 'rendered the href properly');
-            div = doc.createElement('div');
+            div = can.document.createElement('div');
             div.appendChild(templateUnescape({}));
         
             equal(getChildNodes(div).length, 1, 'rendered a DOM node');
@@ -2834,7 +2847,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     name: 'A3'
                 }]
             });
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
         
             div.appendChild(tmp(data));
         
@@ -2897,7 +2910,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var data = new can.List(['foo', 'bar', 'baz', 'qux', 'foo']);
             var tmp = can.stache('{{#each data}}{{@index}} {{/each}}');
         
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var frag = tmp({
                 data: data
             });
@@ -2911,7 +2924,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var tmp = can.stache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
             var data = new can.Map({
                 state: "ready"
-            })
+            });
             var frag = tmp(data);
         
             equal(frag.firstChild.className, "fails animate-ready");
@@ -2919,7 +2932,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             tmp = can.stache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
             data = new can.Map({
                 state: "ready"
-            })
+            });
             tmp(data);
         
             equal(frag.firstChild.className, "fails animate-ready")
@@ -2932,7 +2945,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 'text<!--comment -->',
                 'text<!--comment-->'
             ], function (content) {
-                var div = doc.createElement('div');
+                var div = can.document.createElement('div');
                 div.appendChild(can.stache(content)());
                 equal(innerHTML(div), content, 'Content did not change: "' + content + '"');
             });
@@ -3063,9 +3076,9 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var data = new can.Map({
                 visible: true
-            })
+            });
         
-            var div = doc.createElement("div");
+            var div = can.document.createElement("div");
             div.appendChild(template(data));
         
             equal(div.getElementsByTagName("label")
@@ -3136,7 +3149,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     name: "Bar"
                 }]
             });
-            var div = doc.createElement('div');
+            var div = can.document.createElement('div');
             var frag = renderer(data);
             div.appendChild(frag);
         
@@ -3160,7 +3173,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test("Block bodies are properly escaped inside attributes", function () {
             var html = "<div title='{{#test}}{{.}}{{{.}}}{{/test}}'></div>",
-                div = doc.createElement("div"),
+                div = can.document.createElement("div"),
                 title = "Alpha&Beta";
         
             var frag = can.stache(html)(new can.Map({
@@ -3198,7 +3211,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                 data = new can.Foo({
                     own_prop: "quux"
                 }),
-                div = doc.createElement('div');
+                div = can.document.createElement('div');
         
             div.appendChild(renderer(data, {
                 print_prop: function () {
@@ -3257,7 +3270,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             {{/each}} \
             </ul>');
         
-            var div = doc.createElement('div'),
+            var div = can.document.createElement('div'),
                 data1 = new can.Map({
                     description: 'Each without list'
                 }),
@@ -3297,7 +3310,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         test('can.compute should live bind when the value is changed to a Construct (#638)', function () {
             var renderer = can.stache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
-                div = doc.createElement('div'),
+                div = can.document.createElement('div'),
                 // can.compute(null) will pass
                 counter = can.compute(),
                 data = {
@@ -3320,41 +3333,46 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             }, 10);
         });
         
-//        test("@index in partials loaded from script templates", function () {
-//
-//            // add template as script
-//
-//            var script = doc.createElement("script");
-//            script.type = "text/mustache";
-//            script.id = "itempartial";
-//            script.text = "<label></label>";
-//
-//            document.body.appendChild(script);
-//
-//            //can.stache("itempartial","<label></label>")
-//
-//            var itemsTemplate = can.stache(
-//                "<div>" +
-//                "{{#each items}}" +
-//                "{{>itempartial}}" +
-//                "{{/each}}" +
-//                "</div>");
-//
-//            var items = new can.List([{}, {}]);
-//
-//            var frag = itemsTemplate({
-//                items: items
-//            }),
-//                div = frag.firstChild,
-//                labels = div.getElementsByTagName("label");
-//
-//            equal(labels.length, 2, "two labels");
-//
-//            items.shift();
-//
-//            labels = div.getElementsByTagName("label");
-//            equal(labels.length, 1, "first label removed")
-//        });
+        test("@index in partials loaded from script templates", function () {
+
+            if (!(can.document instanceof simpleDom.Document)) {
+                // add template as script
+
+                var script = can.document.createElement("script");
+                script.type = "text/mustache";
+                script.id = "itempartial";
+                script.text = "<label></label>";
+
+                can.document.body.appendChild(script);
+
+                //can.stache("itempartial","<label></label>")
+
+                var itemsTemplate = can.stache(
+                    "<div>" +
+                    "{{#each items}}" +
+                    "{{>itempartial}}" +
+                    "{{/each}}" +
+                    "</div>");
+
+                var items = new can.List([{}, {}]);
+
+                var frag = itemsTemplate({
+                        items: items
+                    }),
+                    div = frag.firstChild,
+                    labels = div.getElementsByTagName("label");
+
+                equal(labels.length, 2, "two labels");
+
+                items.shift();
+
+                labels = div.getElementsByTagName("label");
+                equal(labels.length, 1, "first label removed")
+
+            } else {
+                expect(0);
+            }
+        });
         
         test("#each with #if directly nested (#750)", function(){
             var template = can.stache("<ul>{{#each list}} {{#if visible}}<li>{{name}}</li>{{/if}} {{/each}}</ul>");
@@ -3562,17 +3580,17 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             equal(innerHTML(frag.childNodes.item(2)), '', 'Context is set correctly for falsy values');
         });
         
-//        test("Custom elements created with default namespace in IE8", function(){
-//            // Calling can.view.tag so that this tag is shived
-//            can.view.tag('my-tag', function(){});
-//
-//            var tmpl = "<my-tag></my-tag>";
-//
-//            var frag = can.stache(tmpl)({});
-//            can.append(can.$("#qunit-fixture"), frag);
-//
-//            equal(can.$("my-tag").length, 1, "Element created in default namespace");
-//        });
+        test("Custom elements created with default namespace in IE8", function(){
+            // Calling can.view.tag so that this tag is shived
+            can.view.tag('my-tag', function(){});
+
+            var tmpl = "<my-tag></my-tag>";
+
+            var frag = can.stache(tmpl)({});
+            can.append(this.$fixture, frag);
+
+            equal(this.$fixture.find("my-tag").length, 1, "Element created in default namespace");
+        });
         
         test("Partials are passed helpers (#791)", function () {
             var t = {
@@ -3627,16 +3645,18 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             equal(frag.childNodes.item(2).className, 'baz test3 boom');
         });
         
-        if(doc.createElementNS) {
-            test("single character attributes work (#1132)", 1, function () {
-                var template = '<svg width="50" height="50">' +
-                    '<circle r="25" cx="25" cy="25"></circle>' +
-                    '</svg>';
-                var frag = can.stache(template)({});
-                equal(frag.firstChild.firstChild.getAttribute("r"), "25");
-            });
-        }
-        
+        test("single character attributes work (#1132)", function () {
+             if(can.document.createElementNS) {
+                  var template = '<svg width="50" height="50">' +
+                      '<circle r="25" cx="25" cy="25"></circle>' +
+                      '</svg>';
+                  var frag = can.stache(template)({});
+                  equal(frag.firstChild.firstChild.getAttribute("r"), "25");
+             } else {
+                 expect(0);
+             }
+        });
+
         test("single property read does not infinitely loop (#1155)",function(){
             stop();
         
@@ -3735,7 +3755,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
             var template = can.stache("<div>{{>greeting}}</div>")(data);
         
-            var div = doc.createElement("div");
+            var div = can.document.createElement("div");
             div.appendChild(template);
             equal(innerHTML(div.firstChild), "hello World", "partial retreived and rendered");
         
@@ -3749,7 +3769,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             var data = new can.Map({items: null});
             var frag = template(data);
         
-            var div = doc.createElement("div");
+            var div = can.document.createElement("div");
             div.appendChild(frag);
         
         
@@ -3771,7 +3791,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
             };
         
             var frag = template(data);
-            var div = doc.createElement("div");
+            var div = can.document.createElement("div");
             div.appendChild(frag);
         
             var spans = div.getElementsByTagName("span");
@@ -3795,7 +3815,7 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
                     promise: def.promise()
                 };
                 var frag = template(data);
-                var div = doc.createElement("div");
+                var div = can.document.createElement("div");
                 div.appendChild(frag);
                 spans = div.getElementsByTagName("span");
         
@@ -3944,19 +3964,19 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
         
         });
         
-        if(doc.createElementNS) {
-            test("svg elements for (#1327)", function(){
+        test("svg elements for (#1327)", function(){
+            if(can.document.createElementNS) {
                 var template = can.stache('<svg height="120" width="400">'+
-                    '<circle cx="50" cy="50" r="{{radius}}" stroke="black" stroke-width="3" fill="blue" />'+
+                '<circle cx="50" cy="50" r="{{radius}}" stroke="black" stroke-width="3" fill="blue" />'+
                     '</svg>');
                 var frag = template({
                     radius: 6
                 });
         
                 equal(frag.firstChild.namespaceURI, "http://www.w3.org/2000/svg", "svg namespace");
-            });
-        }
-        
+            }
+        });
+
         test("to virtual dom output", function(){
             can.noDOM = true;
             var template = can.stache("<h1>{{#test}}<span>{{name}}</span>{{/test}}</h1>");
@@ -3980,6 +4000,6 @@ steal("can-simple-dom", "can/view/vdom","can/view/stache", "can/view","can/test"
 
     }
 	makeTest('can/component vdom', simpleDocument);
-	makeTest('can/component dom', document);
+	makeTest('can/component dom');
 
-    });
+});
