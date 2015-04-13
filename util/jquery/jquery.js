@@ -263,7 +263,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 		
 		var text = "<-\n>",
 			frag = can.buildFragment(text, document);
-		if(text !== frag.childNodes[0].nodeValue) {
+		if(frag.firstChild && (text !== frag.firstChild.nodeValue) ) {
 			
 			var oldBuildFragment  = can.buildFragment;
 			can.buildFragment = function(content, context){

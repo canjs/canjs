@@ -119,8 +119,7 @@ steal("can/view/target","can-simple-dom", "steal-qunit", function(target, simple
 	});
 	
 	test("renderToVirtualDOM", function(){
-		can.noDOM = true;
-		
+
 		var simpleDocument = new simpleDom.Document();
 		
 		// <h1>{{#if foo}}<span></span>{{/if}}foo</h1>
@@ -150,8 +149,7 @@ steal("can/view/target","can-simple-dom", "steal-qunit", function(target, simple
 		
 		equal(out.firstChild.firstChild.nodeName, "SPAN");
 		equal(out.firstChild.lastChild.nodeValue, "foo");
-		
-		
+
 	});
 	
 	

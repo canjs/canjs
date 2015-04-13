@@ -1,5 +1,5 @@
 /* jshint maxdepth:7*/
-steal("can/util", "can/view/elements.js","can/view/vdom",function(can, elements, vdom){
+steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 	
 	// if an object or a function
 	// convert into what it should look like
@@ -25,7 +25,7 @@ steal("can/util", "can/view/elements.js","can/view/vdom",function(can, elements,
 			
 			var cloned  = testFrag.cloneNode(true);
 			
-			return cloned.childNodes[0].childNodes.length === 2;
+			return can.childNodes(cloned.firstChild).length === 2;
 		})(),
 		clonesWork = typeof document !== "undefined" && (function(){
 			// Since html5shiv is required to support custom elements, assume cloning

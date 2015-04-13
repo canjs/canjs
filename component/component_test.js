@@ -1,4 +1,4 @@
-steal("can-simple-dom", "can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (simpleDom) {
+steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (simpleDom) {
 
 	var simpleDocument = new simpleDom.Document();
 

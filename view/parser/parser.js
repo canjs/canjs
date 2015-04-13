@@ -1,13 +1,17 @@
 /* jshint maxdepth:7*/
-steal("can/view", function(can){
+steal(function(){
 	
+	var each = function(items, callback){
+		for ( var i = 0; i < items.length; i++ ) {
+			callback(items[i], i);
+		}
+	};
 	
 	function makeMap(str){
 		var obj = {}, items = str.split(",");
-		for ( var i = 0; i < items.length; i++ ) {
-			obj[ items[i] ] = true;
-		}
-			
+		each(items, function(name){
+			obj[name] = true;
+		});
 		return obj;
 	}
 	function handleIntermediate(intermediate, handler){
@@ -80,11 +84,11 @@ steal("can/view", function(can){
 		handler = handler || {};
 		if(returnIntermediate) {
 			// overwrite handlers so they add to intermediate
-			can.each(tokenTypes, function(name){
+			each(tokenTypes, function(name){
 				var callback = handler[name] || fn;
 				handler[name] = function(){
 					if( callback.apply(this, arguments) !== false ) {
-						intermediate.push({tokenType: name, args: can.makeArray(arguments)});
+						intermediate.push({tokenType: name, args: [].slice.call(arguments, 0) });
 					}
 				};
 			});
@@ -311,8 +315,6 @@ steal("can/view", function(can){
 		});
 	};
 
-	can.view.parser = HTMLParser;
-	
 	return HTMLParser;
 	
 });
