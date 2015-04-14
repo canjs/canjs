@@ -15,7 +15,8 @@ steal("can/util",
 	can.view.attr("can-href", function(el, attrData){
 
 		// foo='bar' zed=5 abc=myValue
-		var attrInfo = mustacheCore.expressionData(removeCurly(el.getAttribute("can-href")));
+		// Note: 'tmp ' is added because expressionData "Breaks up the name and arguments of a mustache expression.", but we don't use name:
+		var attrInfo = mustacheCore.expressionData('tmp ' + removeCurly(el.getAttribute("can-href")));
 		// -> {hash: {foo: 'bar', zed: 5, abc: {get: 'myValue'}}}
 
 		var routeHref = can.compute(function(){
