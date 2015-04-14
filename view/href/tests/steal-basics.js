@@ -4,6 +4,7 @@ steal("can/component", "can/util",function(Component, can){
 		template: $('#basics').html(),
 		viewModel: {
 			recipe: {
+				id: 5,
 				name: 'Cool recipe'
 			}
 		},

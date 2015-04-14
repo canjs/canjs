@@ -1,4 +1,4 @@
-steal("can/test", "steal-qunit", function () {
+steal("can/test", "steal-qunit", "can/route", function () {
 
 	var makeIframe = function(src){
 		var iframe = document.createElement('iframe');
@@ -13,9 +13,19 @@ steal("can/test", "steal-qunit", function () {
 			ok(false, error.message);
 			window.removeMyself();
 		};
-		window.isReady = function(el, scope) {
+		window.isReady = function(el, viewModel, setPrettyUrl) {
 
-			equal(el.find('a').attr('href'), "#!page=recipe&id=5", "should set href attribute");
+			equal(el.find('a').attr('href'), "#!&page=recipe&id=5", "should set unpretty href attribute");
+
+			viewModel.recipe.attr('id', 7);
+			equal(el.find('a').attr('href'), "#!&page=recipe&id=7", "should update href");
+
+			setPrettyUrl();
+			viewModel.recipe.attr('id', 8);
+			equal(el.find('a').attr('href'), "#!recipe/8", "should set pretty href");
+
+			viewModel.recipe.attr('id', 9);
+			equal(el.find('a').attr('href'), "#!recipe/9", "should update pretty href");
 
 			window.removeMyself();
 		};
