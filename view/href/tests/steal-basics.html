@@ -9,7 +9,7 @@
 	window.removeMyself = window.parent.removeMyself;
 </script>
 <script type="text/stache" id="basics">
-	<a can-href='{page="recipe" id=5}'>{{recipe.name}}</a>
+	<a can-href="{page='recipe' id=recipe.id}">{{recipe.name}}</a>
 </script>
 <script src='../../../node_modules/steal/steal.js' main='can/view/href/'></script>
 
@@ -18,7 +18,9 @@
 	steal('can', 'can/view/href', 'can/view/href/tests/steal-basics.js', function(can){
 		console.log();
 		$("body").html(can.view.mustache('<href-component>Test component</href-component>'));
-		isReady($("body href-component"), can.viewModel('href-component'));
+		isReady($("body href-component"), can.viewModel('href-component'), function(){
+			can.route(":page/:id");
+		});
 	});
 </script>
 
