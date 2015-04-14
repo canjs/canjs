@@ -63,6 +63,7 @@
 	],
 	"main": "./can",
 	"system": {
+		"configDependencies": ["system-config"],
 		"ignoreBrowser": true,
 		"main": "can",
 		"map": {
@@ -78,10 +79,6 @@
 			"zepto/zepto": "bower_components/zepto/zepto.js"
 		},
 		"meta": {
-			"jquery": {
-				"format": "global",
-				"exports": "jQuery"
-			},
 			"dojo/dojo": {
 				"format": "global"
 			},
