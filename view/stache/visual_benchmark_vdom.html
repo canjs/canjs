@@ -12,10 +12,6 @@
 		  margin-left: 10px;
 		}
 		
-		#grid {
-		  margin: 10px;
-		}
-		
 		#timing {
 		  clear: both;
 		  padding-top: 10px;
@@ -46,11 +42,10 @@
 <div id='timing'></div>
 <script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type="text/javascript">
-	
-	steal("can/view/stache", function(stache){
-		
-		
-		
+
+	steal("can/view/stache", "can-simple-dom", function(stache, simpleDom){
+		can.document = new simpleDom.Document();
+
 		var template = stache(
 			"{{#each boxes}}"+
 				"<div class='box-view'>"+
@@ -59,8 +54,7 @@
 					"</div>"+
 				"</div>"+
 			"{{/each}}");
-			
-			
+
 		var boxes = new can.List(),
 			Box = can.Map.extend({
 				top: 0,
@@ -92,19 +86,18 @@
 		}
 		
 		var frag = template({boxes: boxes});
-		var div = document.createElement("div")
-		document.body.appendChild(div)
-		div.appendChild(frag)
+		var div = can.document.createElement("div");
+		can.document.body.appendChild(div);
+		div.appendChild(frag);
 	
 		var count = 0;
 		
-	
 		var run = function(){
 			can.batch.start();
 			for(var n = 0 ; n < boxes.length; n++) {
-        		boxes[n].tick();
-        	}
-        	can.batch.stop();
+	        		boxes[n].tick();
+	        	}
+	        	can.batch.stop();
 		};
 	
 		$("#start").click(function(){
@@ -113,8 +106,6 @@
    			 benchmarkLoop(run);
 		});
 		
-		
-			
         window.timeout = null;
 		window.totalTime = null;
 		window.loopCount = null; 	

@@ -129,7 +129,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// Get the value in the viewModel for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
-					var name = can.camelize(node.nodeName.toLowerCase()),
+					var name = can.camelize(node.name.toLowerCase()),
 						value = node.value;
 
 					//!steal-remove-start
@@ -358,7 +358,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						// we need to be the parent ... or we need to 
 						frag = hookupOptions.subtemplate ?
 							hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options), nodeList) :
-							document.createDocumentFragment();
+							el.ownerDocument.createDocumentFragment();
 					}
 					
 				}
@@ -366,7 +366,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				can.appendChild(el, frag);
 				
 				// update the nodeList with the new children so the mapping gets applied
-				can.view.nodeLists.update(nodeList, el.childNodes);
+				can.view.nodeLists.update(nodeList, can.childNodes(el));
 			}
 		});
 

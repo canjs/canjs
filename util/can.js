@@ -41,11 +41,30 @@ steal(function () {
 		return arr && arr[arr.length - 1];
 	};
 
+	can.isDOM = function(el) {
+		return (el.ownerDocument ||  el) === can.global.document; 
+	};
+	
+	can.childNodes = function(node) {
+		var childNodes = node.childNodes;
+		if("length" in childNodes) {
+			return childNodes;
+		} else {
+			var cur = node.firstChild;
+			var nodes = [];
+			while(cur) {
+				nodes.push(cur);
+				cur = cur.nextSibling;
+			}
+			return nodes;
+		}
+	};
 
-	can.frag = function(item){
+	can.frag = function(item, doc){
+		var document = doc || can.document || can.global.document;
 		var frag;
 		if(!item || typeof item === "string"){
-			frag = can.buildFragment(item == null ? "" : ""+item, document.body);
+			frag = can.buildFragment(item == null ? "" : ""+item, document);
 			// If we have an empty frag...
 			if (!frag.childNodes.length) {
 				frag.appendChild(document.createTextNode(''));
@@ -64,9 +83,9 @@ steal(function () {
 			});
 			return frag;
 		} else {
-			frag = can.buildFragment( ""+item, document.body);
+			frag = can.buildFragment( ""+item, document);
 			// If we have an empty frag...
-			if (!frag.childNodes.length) {
+			if (!can.childNodes(frag).length) {
 				frag.appendChild(document.createTextNode(''));
 			}
 			return frag;

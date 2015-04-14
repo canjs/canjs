@@ -1,12 +1,17 @@
 /* jshint maxdepth:7*/
-steal("can/util", "can/view/elements.js",function(can, elements){
+steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 	
-	var processNodes = function(nodes, paths, location){
+	// if an object or a function
+	// convert into what it should look like
+	// then the modification can happen in place
+	// but it has to have more than the current node
+	// blah!
+	var processNodes = function(nodes, paths, location, document){
 		var frag = document.createDocumentFragment();
 		
 		for(var i = 0, len = nodes.length; i < len; i++) {
 			var node = nodes[i];
-			frag.appendChild( processNode(node,paths,location.concat(i)) );
+			frag.appendChild( processNode(node,paths,location.concat(i), document) );
 		}
 		return frag;
 	},
@@ -20,7 +25,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			
 			var cloned  = testFrag.cloneNode(true);
 			
-			return cloned.childNodes[0].childNodes.length === 2;
+			return can.childNodes(cloned.firstChild).length === 2;
 		})(),
 		clonesWork = typeof document !== "undefined" && (function(){
 			// Since html5shiv is required to support custom elements, assume cloning
@@ -83,7 +88,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			return copy;
 		};
 
-	function processNode(node, paths, location){
+	function processNode(node, paths, location, document){
 		var callback,
 			loc = location,
 			nodeType = typeof node,
@@ -134,7 +139,8 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 					} else {
 						p = paths;
 					}
-					el.appendChild( processNodes(node.children, p, loc) );
+					
+					el.appendChild( processNodes(node.children, p, loc, document) );
 				}
 			} else if(node.comment) {
 				el = document.createComment(node.comment);
@@ -148,19 +154,25 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			
 			
 		} else if(nodeType === "string"){
+			
 			el = document.createTextNode(node);
+			
 		} else if(nodeType === "function") {
 			
 			if(keepsTextNodes) {
 				el = document.createTextNode("");
-				getCallback().callbacks.push({callback: node});
+				getCallback().callbacks.push({
+					callback: node
+				});
 			} else {
 				el = document.createComment("~");
-				getCallback().callbacks.push({callback: function(){
-					var el = document.createTextNode("");
-					elements.replace([this], el);
-					return node.apply(el,arguments );
-				}});
+				getCallback().callbacks.push({
+					callback: function(){
+						var el = document.createTextNode("");
+						elements.replace([this], el);
+						return node.apply(el,arguments );
+					}
+				});
 			}
 			
 		}
@@ -175,7 +187,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			child = el;
 		
 		for(var i = 0, len = path.length; i < len; i++) {
-			child = child.childNodes[path[i]];
+			child = child.childNodes.item(path[i]);
 		}
 		
 		for(i = 0, len = callbacks.length; i < len; i++) {
@@ -189,9 +201,9 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		}
 	}
 
-	function makeTarget(nodes){
+	function makeTarget(nodes, doc){
 		var paths = [];
-		var frag = processNodes(nodes, paths, []);
+		var frag = processNodes(nodes, paths, [], doc || can.global.document);
 		return {
 			paths: paths,
 			clone: frag,

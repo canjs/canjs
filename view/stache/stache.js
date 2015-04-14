@@ -15,6 +15,7 @@ steal(
 
 	// Make sure that we can also use our modules with Stache as a plugin
 	parser = parser || can.view.parser;
+	can.view.parser = parser;
 	viewCallbacks = viewCallbacks || can.view.callbacks;
 
 	var svgNamespace = "http://www.w3.org/2000/svg";

@@ -14,6 +14,9 @@
 		"url": "git@github.com:bitovi/canjs.git",
 		"github": "https://github.com/bitovi/canjs"
 	},
+	"dependencies": {
+		"can-simple-dom": "0.2.2"
+	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"
 	},
@@ -60,11 +63,13 @@
 	],
 	"main": "./can",
 	"system": {
+		"configDependencies": ["system-config"],
 		"ignoreBrowser": true,
 		"main": "can",
 		"map": {
 			"can/can": "can",
 			"jquery/jquery": "jquery",
+			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"steal-qunit/steal-qunit": "steal-qunit"
 		},
 		"paths": {
@@ -74,10 +79,6 @@
 			"zepto/zepto": "bower_components/zepto/zepto.js"
 		},
 		"meta": {
-			"jquery": {
-				"format": "global",
-				"exports": "jQuery"
-			},
 			"dojo/dojo": {
 				"format": "global"
 			},

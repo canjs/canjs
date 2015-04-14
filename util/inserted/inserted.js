@@ -4,11 +4,15 @@
 
 steal('can/util/can.js', function (can) {
 	can.inserted = function (elems) {
+		if(!elems.length) {
+			return;
+		}
 		// Turn the `elems` property into an array to prevent mutations from changing the looping.
 		elems = can.makeArray(elems);
-		var inDocument = false,
+		var doc = elems[0].ownerDocument || elems[0],
+			inDocument = false,
 			// Gets the `doc` to use as a reference for finding out whether the element is in the document.
-			doc = can.$(document.contains ? document : document.body),
+			root = can.$(doc.contains ? doc : doc.body),
 			children;
 		// Go through `elems` and trigger the `inserted` event.
 		// If the first element is not in the document (a Document Fragment) it will exit the function. If it is in the document it sets the `inDocument` flag to true. This means that we only check for the first element and either exit the function or start triggering "inserted" for child elements.
@@ -16,7 +20,7 @@ steal('can/util/can.js', function (can) {
 			(elem = elems[i]) !== undefined; i++) {
 			if (!inDocument) {
 				if (elem.getElementsByTagName) {
-					if (can.has(doc, elem)
+					if (can.has(root, elem)
 						.length) {
 						inDocument = true;
 					} else {
@@ -44,7 +48,7 @@ steal('can/util/can.js', function (can) {
 	can.appendChild = function (el, child) {
 		var children;
 		if (child.nodeType === 11) {
-			children = can.makeArray(child.childNodes);
+			children = can.makeArray(can.childNodes(child));
 		} else {
 			children = [child];
 		}
