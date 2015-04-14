@@ -1,11 +1,19 @@
 steal('can/util', 'can/observe', function (can) {
 	var define = can.define = {};
 	
-	var getPropDefineBehavior = function(behavior, prop, define) {
-		var propBehavior;
+	var getPropDefineBehavior = function(behavior, attr, define) {
+		var prop, defaultProp;
+
 		if(define) {
-			propBehavior = define[prop] ? define[prop] : define["*"];
-			return propBehavior && propBehavior[behavior];
+			prop = define[attr];
+			defaultProp = define['*'];
+
+			if(prop && prop[behavior] !== undefined) {
+				return prop[behavior];
+			}
+			else if(defaultProp && defaultProp[behavior] !== undefined) {
+				return defaultProp[behavior];
+			}
 		}
 	};
 
