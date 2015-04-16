@@ -1,0 +1,62 @@
+.restaurant {
+  .border;
+  padding: @grid-gutter-width/2;
+  margin-bottom: @grid-gutter-width/2;
+  
+  h3, h2 {
+    margin-top: 0;
+  }
+  img {
+    float: left;
+    margin-right: @grid-gutter-width/2;
+    .border;
+  }
+  .address {
+    float: left;
+    width: 200px;
+  }
+  .hours-price {
+    float: left;
+    width: 200px;
+  }
+  .btn {
+    .btn-primary;
+    float: left;
+    margin: 0 auto;
+  }
+  br {
+    clear: both;
+  }
+}
+.restaurants {
+  .wrapper;
+  .restaurant {
+    .btn {
+      float: right;
+    }
+  }
+}
+.open-now {
+  .badge;
+  background-color: @brand-success;
+  color: @white; 
+}
+.closed-now {
+  .badge;
+}
+.restaurant-content {
+  .wrapper;
+    .description {
+      img {
+        float: right;
+        margin-left: @grid-gutter-width/2;
+      }
+    }
+    .order-link {
+      text-align: center;
+      .btn {
+        .btn-primary;
+        .btn-lg;
+      }
+    }
+}

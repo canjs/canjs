@@ -1,0 +1,27 @@
+.wrapper {
+  width: @screen-sm;
+  margin: 0 auto;
+}
+.page {
+  .wrapper;
+}
+.border {
+  border: 1px solid @gray-lighter;
+}
+.text-shadow(@opacity: .5) {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, @opacity);
+}
+.border-radius (@radius: @border-radius-base) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
+.black-gradient {
+  background: -moz-linear-gradient(-45deg,  rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.6) 49%, rgba(0,0,0,0) 100%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(0,0,0,0.6)), color-stop(49%,rgba(0,0,0,0.6)), color-stop(100%,rgba(0,0,0,0)));
+  background: -webkit-linear-gradient(-45deg,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 49%,rgba(0,0,0,0) 100%);
+  background: -o-linear-gradient(-45deg,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 49%,rgba(0,0,0,0) 100%);
+  background: -ms-linear-gradient(-45deg,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 49%,rgba(0,0,0,0) 100%);
+  background: linear-gradient(135deg,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 49%,rgba(0,0,0,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#00000000',GradientType=1 );
+}
