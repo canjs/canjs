@@ -1,0 +1,41 @@
+<div id='out'></div>
+<script src="./node_modules/steal/steal.js"></script>
+<script>
+steal('can/view/stache', 'can/list/sort', 'can/view/bindings', function(){
+
+	var items = [];
+
+	for (var i = 0; i < 1000; i++) {
+		items.push({
+			// Random 5 character String
+			name: Math.random().toString(36)
+				.replace(/[^a-z]+/g, '').substr(0, 5)
+		});
+	}
+
+	can.Component.extend({
+		tag: 'grandparent-component',
+		template: can.stache('' +
+			'<input type="checkbox" can-value="show" />{{#if show}}<parent-component></parent-component>{{/if}}'),
+		scope: {
+			show: false
+		}
+	});
+
+	can.Component.extend({
+		tag: 'parent-component',
+		template: can.stache('<child-component></child-component>')
+	});
+
+	can.Component.extend({
+		tag: 'child-component',
+		template: can.stache('<ul>{{#items}}<li>{{name}}</li>{{/items}}</ul>'),
+		scope: {
+			items: items
+		}
+	});
+
+	$('#out').html(can.stache('<grandparent-component></grandparent-component>'));
+
+});
+</script>

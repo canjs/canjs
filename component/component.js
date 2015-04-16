@@ -274,6 +274,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 					can.each(handlers, function (handler, prop) {
 						componentScope.unbind(prop, handlers[prop]);
 					});
+					el = null;
 				});
 
 				// ## `events` control
@@ -305,6 +306,7 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				var nodeList = can.view.nodeLists.register([], undefined, true);
 				teardownFunctions.push(function(){
 					can.view.nodeLists.unregister(nodeList);
+					nodeList = null;
 				});
 
 				// If this component has a template (that we've already converted to a renderer)
