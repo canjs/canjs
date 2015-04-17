@@ -325,7 +325,9 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				// If the node does not have a nodeType it is an array of
 				// nodes.
 				if(node.nodeType) {
-					if(!nodeList.replacements) {
+
+					if(!nodeList.replacements || (can.isArray(nodeList.replacements) &&
+							nodeList.replacements.length === 0)) {
 						delete nodeMap[id(node)];
 					}
 
