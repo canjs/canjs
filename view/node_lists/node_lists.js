@@ -326,8 +326,8 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				// nodes.
 				if(node.nodeType) {
 
-					if(!nodeList.replacements || (can.isArray(nodeList.replacements)
-							&& nodeList.replacements.length === 0)) {
+					if(!nodeList.replacements || (can.isArray(nodeList.replacements) &&
+							nodeList.replacements.length === 0)) {
 						delete nodeMap[id(node)];
 					}
 
