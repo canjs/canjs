@@ -1,3 +1,5 @@
+
+<button id='toggle'>toggle</button>
 <div id='out'></div>
 <script src="../../node_modules/steal/steal.js"></script>
 <script>
@@ -15,7 +17,7 @@ steal('can', 'can/view/stache', function(){
 
 	var viewModel = window.viewModel = new can.Map({
 		show: false
-	})
+	});
 
 	can.Component.extend({
 		tag: 'grandparent-component',
@@ -39,10 +41,11 @@ steal('can', 'can/view/stache', function(){
 
 	$('#out').html(can.stache('<grandparent-component></grandparent-component>'));
 
-	setInterval(function () {
+
+	$("#toggle").click(function(){
 		viewModel.attr('show', ! viewModel.attr('show'));
 		console.log(Object.keys(can.view.nodeLists.nodeMap).length)
-	}, 5000);
+	});
 
 
 });
