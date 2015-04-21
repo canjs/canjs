@@ -308,7 +308,7 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				}
 
 				// if nothing has changed, then return
-				if(allSame) {
+				if(allSame && this.length <= added.length) {
 					return added;
 				}
 
