@@ -1,5 +1,5 @@
 /* jshint asi:true,multistr:true*/
-steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(){
+steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","steal-qunit",function(){
 	
 	
 	QUnit.module("can/view/stache",{
@@ -3918,4 +3918,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			equal(frag.childNodes[0].namespaceURI, "http://www.w3.org/2000/svg", "svg namespace");
 		});
 	}
+
+	test('using #each when toggling between list and null', function() {
+		var state = new can.Map();
+		var frag = can.stache('{{#each deepness.rows}}<div></div>{{/each}}')(state);
+		
+		state.attr('deepness', {
+			rows: ['test']
+		});
+		state.attr('deepness', null);
+
+		equal(frag.childNodes.length, 1, "only the placeholder textnode");
+	});
 });
