@@ -1598,8 +1598,6 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 
 			can.append(can.$("#qunit-fixture"), can.stache('<grandparent-component></grandparent-component>')());
 
-			console.log(can.view.nodeLists.nodeMap);
-
 			toggle();
 			equal(Object.keys(can.view.nodeLists.nodeMap).length - size, 0,
 				'No new items added to nodeMap');
