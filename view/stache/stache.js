@@ -136,12 +136,13 @@ steal(
 					// If it's a custom tag with content, we need a section renderer.
 					section.add(state.node);
 					if(isCustomTag) {
-						addAttributesCallback(state.node, function(scope, options){
+						addAttributesCallback(state.node, function(scope, options, parentNodeList){
 							viewCallbacks.tagHandler(this,tagName, {
 								scope: scope,
 								options: options,
 								subtemplate: null,
-								templateType: "stache"
+								templateType: "stache",
+								parentNodeList: parentNodeList
 							});
 						});
 					}
@@ -176,12 +177,13 @@ steal(
 				
 				var oldNode = section.pop();
 				if( isCustomTag ) {
-					addAttributesCallback(oldNode, function(scope, options){
+					addAttributesCallback(oldNode, function(scope, options, parentNodeList){
 						viewCallbacks.tagHandler(this,tagName, {
 							scope: scope,
 							options: options,
 							subtemplate: renderer,
-							templateType: "stache"
+							templateType: "stache",
+							parentNodeList: parentNodeList
 						});
 					});
 				}
