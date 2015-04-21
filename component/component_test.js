@@ -1556,4 +1556,29 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 
 	});
 
+	test('component does not update viewModel on accessiblity attribute changes', function(){
+		
+		can.Component.extend({
+			tag:'x-app'
+		});
+
+		var frag=can.stache('<x-app></x-app>')({});
+		
+		var el = frag.childNodes[0];
+		var viewModel = can.viewModel(el);
+		
+		// element must be inserted, otherwise attributes event will not be fired
+		can.append(can.$("#qunit-fixture"),frag);
+		
+		// update the class
+		can.$(el).attr("role","foo");
+		
+		stop();
+		setTimeout(function(){
+			equal(viewModel.attr('role'),undefined, "the viewModel is not updated when the role attribute changes");
+			start();
+		},20);
+		
+	});	
+
 });
