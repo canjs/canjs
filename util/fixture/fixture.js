@@ -404,6 +404,37 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			});
 			return data;
 		},
+		// ## can.fixture.resource
+		// Create the fixture routes for default CRUD actions
+		resource: function(resource, store, opts) {
+			if (!resource || !store) {
+				return null;
+			}
+
+			opts = opts || {};
+
+			var ajaxMethods = can.extend({
+				findAll: 'GET',
+				findOne: 'GET',
+				create: 'POST',
+				update: 'PUT',
+				destroy: 'DELETE'
+			}, opts.ajaxMethods || {});
+
+			var id = opts.id || 'id',
+				createURLFromResource = function(resource, name, id) {
+					resource = resource.replace(/\/+$/, "");
+					if (name === "findAll" || name === "create") {
+						return resource;
+					} else {
+						return resource + "/{" + id + "}";
+					}
+				};
+
+			for (var method in ajaxMethods) {
+				can.fixture('' + ajaxMethods[method] + ' ' + createURLFromResource(resource, method, id), store[method]);
+			}
+		},
 		// ## can.fixture.store
 		// Make a store of objects to use when making requests against fixtures.
 		store: function (count, make, filter) {

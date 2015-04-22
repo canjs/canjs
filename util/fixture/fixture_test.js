@@ -105,6 +105,41 @@ steal('can/util/fixture', 'can/model', 'can/test', 'steal-qunit', function () {
 		});
 	}
 
+	test('can.fixture.resource', function () {
+		stop();
+		var store = can.fixture.store('thing', 1000, function (i) {
+			return {
+				id: i,
+				name: 'thing ' + i
+			};
+		}, function (item, settings) {
+			if (settings.data.searchText) {
+				var regex = new RegExp('^' + settings.data.searchText);
+				return regex.test(item.name);
+			}
+		});
+
+		can.fixture.resource('/things', store);
+
+		can.ajax({
+			url: 'things',
+			dataType: 'json',
+			data: {
+				offset: 100,
+				limit: 200,
+				order: ['name ASC'],
+				searchText: 'thing 2'
+			},
+			fixture: '-things',
+			success: function (things) {
+				equal(things.data[0].name, 'thing 29', 'first item is correct');
+				equal(things.data.length, 11, 'there are 11 items');
+				start();
+			}
+		});
+
+	});
+
 	test('can.fixture.store fixtures', function () {
 		stop();
 		can.fixture.store('thing', 1000, function (i) {
