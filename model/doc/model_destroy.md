@@ -10,7 +10,7 @@ XmlHttpRequest object.
 
 @body
 Destroys the instance by calling
-[Can.Model.destroy] with the id of the instance.
+[can.Model.destroy] with the id of the instance.
 
 ```
 recipe.destroy(success, error);
