@@ -1,5 +1,5 @@
 steal("can/test", "steal-qunit", function () {
-	
+
 	var makeIframe = function(src){
 		var iframe = document.createElement('iframe');
 		window.removeMyself = function(){
@@ -41,7 +41,7 @@ steal("can/test", "steal-qunit", function () {
 		document.body.appendChild(iframe);
 		iframe.src = src;
 	};
-		
+
 	QUnit.module("can/view/autorender");
 	if(window.steal) {
 		asyncTest("the basics are able to work for steal", function(){
@@ -54,10 +54,15 @@ steal("can/test", "steal-qunit", function () {
 		asyncTest("the basics are able to work for requirejs", function(){
 			makeBasicTestIframe(can.test.path("../../view/autorender/tests/requirejs-basics.html?"+Math.random()));
 		});
+		asyncTest("data-can-autorender to work with requirejs", function() {
+			makeIframe(can.test.path("../../view/autorender/tests/requirejs-data-attr.html?"+Math.random()));
+		});
 	} else {
 		asyncTest("the basics are able to work standalone", function(){
 			makeBasicTestIframe(can.test.path("view/autorender/tests/standalone-basics.html?"+Math.random()));
 		});
+		asyncTest("data-can-autorender to work standalone", function(){
+			makeIframe(can.test.path("view/autorender/tests/standalone-data-attr.html?"+Math.random()));
+		});
 	}
-
 });

@@ -58,7 +58,7 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 	function autoload(){
 		var promises = [];
 		
-		can.each(  can.$("[can-autorender]"), function( el, i){
+		can.each(  can.$("[can-autorender], [data-can-autorender]"), function( el, i){
 			el.style.display = "none";
 
 			
