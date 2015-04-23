@@ -1,4 +1,5 @@
-# can-href
+@page can.view.href
+@parent can.view.bindings
 
 Sets an element's href attribute so that it's url will set the specified attribute values on [can.route].
 
@@ -7,8 +8,9 @@ Sets an element's href attribute so that it's url will set the specified attribu
 @param {String} attrName
 @param {can.stache.key} attrValue
 
-## Use
+@body
 
+## Use
 
 With no pretty routing rules, the following:
 
@@ -51,5 +53,3 @@ If `recipeId` is observable and changes to 7:
 ```
 <li><a href='#!page/7'>{{recipe.name}}</a></li>
 ```
-
-
