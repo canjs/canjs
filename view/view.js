@@ -726,6 +726,22 @@ steal('can/util', function (can) {
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
 			return def.resolve(renderer);
+		},
+
+		// Returns a function that automatically converts all computes passed to it
+		simpleHelper: function(fn) {
+			return function() {
+				var realArgs = [];
+				can.each(arguments, function(val, i) {
+					if (i <= arguments.length) {
+						while (val && val.isComputed) {
+							val = val();
+						}
+						realArgs.push(val);
+					}
+				});
+				return fn.apply(this, realArgs);
+			};
 		}
 	});
 

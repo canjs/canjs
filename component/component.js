@@ -255,6 +255,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						hookupOptions.scope.add(this.scope),
 					options = {
 						helpers: {}
+					},
+					addHelper = function(name, fn) {
+						options.helpers[name] = function() {
+							return fn.apply(componentScope, arguments);
+						};
 					};
 
 				// ## Helpers
@@ -262,13 +267,23 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				// Setup helpers to callback with `this` as the component
 				can.each(this.helpers || {}, function (val, prop) {
 					if (can.isFunction(val)) {
-						options.helpers[prop] = function () {
-							return val.apply(componentScope, arguments);
-						};
+						addHelper(prop, val);
 					}
 				});
-				
-				
+
+				// Setup simple helpers
+				can.each(this.simpleHelpers || {}, function(val, prop) {
+					//!steal-remove-start
+					if(options.helpers[prop]) {
+						can.dev.warn('Component ' + component.tag +
+						' already has a helper called ' + prop);
+					}
+					//!steal-remove-end
+
+					// Convert the helper
+					addHelper(prop, can.view.simpleHelper(val));
+				});
+
 				// Teardown reverse bindings when the element is removed
 				teardownFunctions.push(function(){
 					can.each(handlers, function (handler, prop) {
