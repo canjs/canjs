@@ -24,6 +24,8 @@ The following is supported by CanJS's [can.mustache] and [can.stache] templates 
    <input can-value="{name}"/>
    ```
 
+ - [can.view.href] - Sets an element's href attribute so that it's url will set the specified attribute values on [can.route].
+
 ## Plugins
 
 The following functionality is available within plugins:
