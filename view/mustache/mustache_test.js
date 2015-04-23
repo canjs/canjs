@@ -3977,4 +3977,19 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			equal(Object.keys(can.view.nodeLists.nodeMap).length, 0, 'All nodes have been removed from nodeMap');
 		});
 	}
+
+	test('registerSimpleHelper', 3, function() {
+		can.Mustache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+
+		var template = can.view.mustache('<div>Result: {{simple first second}}</div>');
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
 });
