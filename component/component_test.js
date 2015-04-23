@@ -1656,4 +1656,23 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			}, 20);
 		});
 	}
+
+	test('component simpleHelpers', function() {
+		can.Component.extend({
+			tag: 'simple-helper',
+			template: can.stache('Result: {{add first second}}'),
+			scope: {
+				first: 4,
+				second: 3
+			},
+			simpleHelpers: {
+				add: function(a, b) {
+					return a + b;
+				}
+			}
+		});
+
+		var frag = can.stache('<simple-helper></simple-helper>')();
+		equal(frag.childNodes[0].innerHTML, 'Result: 7');
+	});
 });

@@ -3962,6 +3962,20 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Meals', 'shows if case');
 	});
 
+	test('registerSimpleHelper', 3, function() {
+		var template = can.stache('<div>Result: {{simple first second}}</div>');
+		can.stache.registerSimpleHelper('simple', function (first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+	
 	test('Helper handles list replacement (#1652)', 3, function () {
 		var state = new can.Map({
 			list: []
