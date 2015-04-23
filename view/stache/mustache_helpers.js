@@ -150,10 +150,15 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			};
 		}
 	};
-	
+
+	var registerHelper = function(name, callback){
+		helpers[name] = callback;
+	};
+
 	return {
-		registerHelper: function(name, callback){
-			helpers[name] = callback;
+		registerHelper: registerHelper,
+		registerSimpleHelper: function(name, callback) {
+			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
 			var helper = options.attr("helpers." + name);
