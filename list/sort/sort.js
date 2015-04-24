@@ -87,6 +87,15 @@ steal('can/util', 'can/list', function () {
 			if (comparator && typeof comparator === 'function') {
 				return comparator(a, b);
 			}
+			
+			if (typeof comparator === 'object' && comparator.property) {
+				a = a[comparator.property];
+				b = b[comparator.property];
+				
+				if (comparator.direction === 'desc') {
+					return a === b ? 0 : a > b ? -1 : 1;
+				}
+			}
 
 			return a === b ? 0 : a < b ? -1 : 1;
 		},

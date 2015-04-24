@@ -114,6 +114,72 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		equal(list[0].name, 'high');
 	});
 
+	test('Defining a comparator object with descending direction', 1, function () {
+		var list = new can.List([{
+			priority: 4,
+			name: 'low'
+		}, {
+			priority: 1,
+			name: 'high'
+		}, {
+			priority: 2,
+			name: 'middle'
+		}, {
+			priority: 3,
+			name: 'mid'
+		}, {
+			priority: 5,
+			name: 'lowest'
+		}]);
+		list.attr('comparator', { property: 'priority', direction: 'desc' });
+		equal(list[0].name, 'lowest');
+	});
+	
+	test('Defining a comparator object with default ascending direction', 1, function () {
+		var list = new can.List([{
+			priority: 4,
+			name: 'low'
+		}, {
+			priority: 1,
+			name: 'high'
+		}, {
+			priority: 2,
+			name: 'middle'
+		}, {
+			priority: 3,
+			name: 'mid'
+		}, {
+			priority: 5,
+			name: 'lowest'
+		}]);
+		list.attr('comparator', { property: 'priority' });
+		equal(list[0].name, 'high');
+	});
+	
+	test('Defining a descending comparator object and verify live binding works', 2, function () {
+		var list = new can.List([{
+			priority: 4,
+			name: 'low'
+		}, {
+			priority: 1,
+			name: 'high'
+		}, {
+			priority: 2,
+			name: 'middle'
+		}, {
+			priority: 3,
+			name: 'mid'
+		}, {
+			priority: 5,
+			name: 'lowest'
+		}]);
+		list.attr('comparator', { property: 'priority' });
+		equal(list[0].name, 'high');
+	
+		list.push({ priority: 0, name: 'super' });
+		equal(list[0].name, 'super');
+	});
+
 	test('Defining a comparator property that is a function of a can.Map', 4, function () {
 		var list = new can.Map.List([
 			new can.Map({
