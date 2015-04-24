@@ -76,6 +76,77 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			p0 = ta.getElementsByClassName("with-args")[0];
 			can.trigger(p0, "click");
 		});
+
+		test("(event) handlers", function () {
+			//expect(12);
+			var ta = document.getElementById("qunit-fixture");
+			var template = can.view.stache("<div>" +
+			"{{#each foodTypes}}" +
+			"<p (click)='doSomething'>{{content}}</p>" +
+			"{{/each}}" +
+			"</div>");
+
+			var foodTypes = new can.List([{
+				title: "Fruits",
+				content: "oranges, apples"
+			}, {
+				title: "Breads",
+				content: "pasta, cereal"
+			}, {
+				title: "Sweets",
+				content: "ice cream, candy"
+			}]);
+
+			function doSomething(foodType, el, ev) {
+				ok(true, "doSomething called");
+				equal(el[0].nodeName.toLowerCase(), "p", "this is the element");
+				equal(ev.type, "click", "1st argument is the event");
+				equal(foodType, foodTypes[0], "2nd argument is the 1st foodType");
+
+			}
+
+			var frag = template({
+				foodTypes: foodTypes,
+				doSomething: doSomething
+			});
+
+			ta.appendChild(frag);
+			var p0 = ta.getElementsByTagName("p")[0];
+			can.trigger(p0, "click");
+
+
+			//var scope = new can.Map({
+			//	test: "testval"
+			//});
+			//can.Component.extend({
+			//	tag: "fancy-event-args-tester",
+			//	scope: scope
+			//});
+			//template = can.view.mustache("<div>" +
+			//"{{#each foodTypes}}" +
+			//"<fancy-event-args-tester class='with-args' (click)='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
+			//"{{/each}}" +
+			//"</div>");
+			//function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
+			//	ok(true, "withArgs called");
+			//	equal(el1[0].nodeName.toLowerCase(), "fancy-event-args-tester", "@element is the event's DOM element");
+			//	equal(ev1.type, "click", "@event is the click event");
+			//	equal(scope, compScope, "Component scope accessible through @viewModel");
+			//	equal(testVal, scope.attr("test"), "Attributes accessible");
+			//	equal(context.title, foodTypes[0].title, "Context passed in");
+			//	equal(title, foodTypes[0].title, "Title passed in");
+			//	equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
+			//}
+			//
+			//frag = template({
+			//	foodTypes: foodTypes,
+			//	withArgs: withArgs
+			//});
+			//ta.innerHTML = "";
+			//ta.appendChild(frag);
+			//p0 = ta.getElementsByClassName("with-args")[0];
+			//can.trigger(p0, "click");
+		});
 	}
 
 	if (window.jQuery) {
