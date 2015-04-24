@@ -35,7 +35,20 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 
 			return clone.innerHTML === "<xyz></xyz>";
 		})(),
-		namespacesWork = typeof document !== "undefined" && !!document.createElementNS;
+		namespacesWork = typeof document !== "undefined" && !!document.createElementNS,
+		// A dummy element we use for creating non-standard attribute names (e.g. containing () and [])
+		attributeDummy = document.createElement('div'),
+		// Sets the attribute on an element. Uses a hack when setAttribute complains
+		setAttribute = function(el, attrName, value) {
+			try {
+				el.setAttribute(attrName, value);
+			} catch(e) {
+				// We got an error. Set innerHTML with the non-standard attribute and clone
+				// that attribute node
+				attributeDummy.innerHTML = '<div ' + attrName + '="' + value + '"></div>';
+				el.setAttributeNode(attributeDummy.childNodes[0].attributes[0].cloneNode());
+			}
+		};
 
 	/**
 	 * @function cloneNode
@@ -69,7 +82,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 				var attributes = can.makeArray(node.attributes);
 				can.each(attributes, function (node) {
 					if(node && node.specified) {
-						copy.setAttribute(node.nodeName, node.nodeValue);
+						setAttribute(copy, node.nodeName, node.nodeValue);
 					}
 				});
 			}
@@ -118,7 +131,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 								callback:  value
 							});
 						} else  {
-							el.setAttribute(attrName, value);
+							setAttribute(el, attrName, value);
 						}
 					}
 				}
