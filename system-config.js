@@ -12,6 +12,7 @@ if(MySystem.env === "development" && typeof window === "undefined") {
 			}
 		}
 	});
-} 
+}
+
 
 
