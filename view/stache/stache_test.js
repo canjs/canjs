@@ -3930,4 +3930,69 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 
 		equal(frag.childNodes.length, 1, "only the placeholder textnode");
 	});
+
+	test('Helper binds to nested properties', 3, function () {
+
+		var dotSyntaxCount = 0;
+		var nestedAttrsCount = 0;
+		var bothAttrsCount = 0;
+
+		var state = new can.Map({
+			parent: null
+		});
+
+		var helpers = {
+			bindViaDotSyntax: function (options) {
+
+				dotSyntaxCount++;
+
+				if (dotSyntaxCount === 3) {
+					ok(true, 'bindViaDotSyntax helper evaluated 3 times');
+				}
+
+				return this.attr('parent.child') ?
+					options.fn() :
+					options.inverse();
+			},
+			bindViaNestedAttrs: function (options) {
+
+				nestedAttrsCount++;
+
+				if (nestedAttrsCount === 3) {
+					ok(true, 'bindViaNestedAttrs helper evaluated 3 times');
+				}
+
+				return this.attr('parent') && this.attr('parent').attr('child') ?
+					options.fn() :
+					options.inverse();
+			},
+			bindViaBoth: function (options) {
+
+				bothAttrsCount++;
+
+				if (bothAttrsCount === 3) {
+					ok(true, 'bindViaBoth helper evaluated 3 times');
+				}
+
+				return (this.attr('parent') && this.attr('parent').attr('child')) ||
+					this.attr('parent.child') ?
+						options.fn() :
+						options.inverse();
+			}
+		};
+
+		// Helpers evaluated 1st time...
+		var frag = can.stache(
+			'{{#bindViaDotSyntax}}{{/bindViaDotSyntax}}' +
+			'{{#bindViaNestedAttrs}}{{/bindViaNestedAttrs}}' +
+			'{{#bindViaBoth}}{{/bindViaBoth}}')(state, helpers);
+
+		// Helpers evaluated 2nd time...
+		state.attr('parent', {
+			child: 'foo'
+		});
+
+		// Helpers evaluated 3rd time...
+		state.attr('parent.child', 'bar');
+	});
 });
