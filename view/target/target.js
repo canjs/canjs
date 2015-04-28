@@ -37,7 +37,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		})(),
 		namespacesWork = typeof document !== "undefined" && !!document.createElementNS,
 		// A dummy element we use for creating non-standard attribute names (e.g. containing () and [])
-		attributeDummy = document.createElement('div'),
+		attributeDummy = typeof document !== "undefined" ? document.createElement('div') : null,
 		// Sets the attribute on an element. Uses a hack when setAttribute complains
 		setAttribute = function(el, attrName, value) {
 			try {
