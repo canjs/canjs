@@ -115,37 +115,37 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			can.trigger(p0, "click");
 
 
-			//var scope = new can.Map({
-			//	test: "testval"
-			//});
-			//can.Component.extend({
-			//	tag: "fancy-event-args-tester",
-			//	scope: scope
-			//});
-			//template = can.view.mustache("<div>" +
-			//"{{#each foodTypes}}" +
-			//"<fancy-event-args-tester class='with-args' (click)='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
-			//"{{/each}}" +
-			//"</div>");
-			//function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
-			//	ok(true, "withArgs called");
-			//	equal(el1[0].nodeName.toLowerCase(), "fancy-event-args-tester", "@element is the event's DOM element");
-			//	equal(ev1.type, "click", "@event is the click event");
-			//	equal(scope, compScope, "Component scope accessible through @viewModel");
-			//	equal(testVal, scope.attr("test"), "Attributes accessible");
-			//	equal(context.title, foodTypes[0].title, "Context passed in");
-			//	equal(title, foodTypes[0].title, "Title passed in");
-			//	equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
-			//}
-			//
-			//frag = template({
-			//	foodTypes: foodTypes,
-			//	withArgs: withArgs
-			//});
-			//ta.innerHTML = "";
-			//ta.appendChild(frag);
-			//p0 = ta.getElementsByClassName("with-args")[0];
-			//can.trigger(p0, "click");
+			var scope = new can.Map({
+				test: "testval"
+			});
+			can.Component.extend({
+				tag: "fancy-event-args-tester",
+				scope: scope
+			});
+			template = can.view.mustache("<div>" +
+			"{{#each foodTypes}}" +
+			"<fancy-event-args-tester class='with-args' (click)='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
+			"{{/each}}" +
+			"</div>");
+			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
+				ok(true, "withArgs called");
+				equal(el1[0].nodeName.toLowerCase(), "fancy-event-args-tester", "@element is the event's DOM element");
+				equal(ev1.type, "click", "@event is the click event");
+				equal(scope, compScope, "Component scope accessible through @viewModel");
+				equal(testVal, scope.attr("test"), "Attributes accessible");
+				equal(context.title, foodTypes[0].title, "Context passed in");
+				equal(title, foodTypes[0].title, "Title passed in");
+				equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
+			}
+
+			frag = template({
+				foodTypes: foodTypes,
+				withArgs: withArgs
+			});
+			ta.innerHTML = "";
+			ta.appendChild(frag);
+			p0 = ta.getElementsByClassName("with-args")[0];
+			can.trigger(p0, "click");
 		});
 	}
 
@@ -908,5 +908,50 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
 		
+	});
+
+	test('importing scope [prop]="{this}"', function() {
+		can.Component.extend({
+			tag: 'import-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-parent',
+			template: can.stache('<import-scope [test]="{this}"></import-scope>' +
+				'<div>Imported: {{test.name}} {{test.age}}</div>')
+		});
+
+		var template = can.stache('<import-parent></import-parent>');
+		can.append(can.$('#qunit-fixture'), template({}));
+		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
+			'Imported: David 7',
+			'{this} component scope imported into variable');
+	});
+
+	test('importing scope [prop]="{scopeProp}"', function() {
+		can.Component.extend({
+			tag: 'import-prop-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-prop-parent',
+			template: can.stache('<import-prop-scope [test]="{name}"></import-prop-scope>' +
+				'<div>Imported: {{test}}</div>')
+		});
+
+		var template = can.stache('<import-prop-parent></import-prop-parent>');
+		can.append(can.$('#qunit-fixture'), template({}));
+		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
+			'Imported: David',  '{name} component scope imported into variable');
 	});
 });

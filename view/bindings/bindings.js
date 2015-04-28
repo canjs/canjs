@@ -51,8 +51,11 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		};
 	})(),
-		removeCurly = function(value){
-			if(value[0] === "{" && value[value.length-1] === "}") {
+		removeBrackets = function(value, open, close){
+			open = open || "{";
+			close = close || "}";
+
+			if(value[0] === open && value[value.length-1] === close) {
 				return value.substr(1, value.length - 2);
 			}
 			return value;
@@ -69,7 +72,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = can.trim(removeCurly(el.getAttribute("can-value"))),
+		var attr = can.trim(removeBrackets(el.getAttribute("can-value"))),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
 			// data.attr('name') property.
@@ -172,7 +175,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// For example, can-submit and (submit) binds on the submit event.
 			event = attributeName.indexOf('can-') === 0 ?
 				attributeName.substr("can-".length) :
-				attributeName.substr(1, attributeName.length - 2),
+				removeBrackets(attributeName, '(', ')'),
 		// This is the method that the event will initially trigger. It will look up the method by the string name
 		// passed in the attribute and call it.
 			handler = function (ev) {
@@ -181,7 +184,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				// mustacheCore.expressionData will read the attribute
 				// value and parse it identically to how mustache helpers
 				// get parsed.
-				var attrInfo = mustacheCore.expressionData(removeCurly(attrVal));
+				var attrInfo = mustacheCore.expressionData(removeBrackets(attrVal));
 
 				// We grab the first item and treat it as a method that
 				// we'll call.
@@ -469,4 +472,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
+	can.view.attr(/\[[\w\.]+\]/, function(el, options) {
+		var prop = removeBrackets(el.getAttribute(options.attributeName));
+		var name = removeBrackets(options.attributeName, '[', ']');
+
+		can.one.call(el, 'inserted', function() {
+			var value = can.viewModel(el);
+
+			if(prop !== 'this' && prop !== '.') {
+				value = value.attr(prop);
+			}
+
+			options.scope.attr(name, value);
+		});
+	});
 });
