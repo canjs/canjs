@@ -1,5 +1,9 @@
-@function can.view.bindings.can-EVENT can-EVENT
+@function can.view.bindings.can-EVENT can-EVENT/(EVENT)
 @parent can.view.bindings
+
+@signature `(EVENT)='{methodKey [argKey..] [hashName=hashKey...]}'`
+
+Specify a callback function to be called on a particular event. This is a shorthand for `can-EVENT` attributes.
 
 @signature `can-EVENT='{methodKey [argKey..] [hashName=hashKey...]}'`
 
@@ -62,7 +66,7 @@ can.view.bindings supports creating special event types
 bound by adding attributes like `can-SPECIAL='KEY'`. This is 
 similar to [$.special](http://benalman.com/news/2010/03/jquery-special-events/).
 
-### can-enter
+### can-enter / (enter)
 
 can-enter is a special event that calls its handler whenever the enter 
 key is pressed while focused on the current element. For example: 

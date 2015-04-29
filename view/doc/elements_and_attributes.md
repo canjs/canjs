@@ -14,10 +14,21 @@ The following is supported by CanJS's [can.mustache] and [can.stache] templates 
 
  - [can.view.bindings.can-EVENT] - Specify a callback function to be called on a particular event. 
  
+	`<div can-click="{doSomething item}">...</div>`
+
+  OR
+
+	`<div (click)="{doSomething item}">...</div>`
+
+ - [can.view.bindings.import-scope] - Import values or the complete view model from a child component into the current scope with `[prop]="{childProp}"`
+
    ```
-   <div can-click="{doSomething item}">...</div>
+	<car-selector>
+		<year-selector [year]="{selectedYear}" />
+		<car-list selection="{year}" />
+	</car-selector>
    ```
- 
+
  - [can.view.bindings.can-value] - Sets up two way bindings in a template.
  
    ```

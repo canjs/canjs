@@ -188,5 +188,25 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		parser(intermediate, makeChecks(tests) );
 	});
 	
-	
+	test('allow () and [] to enclose attributes', function() {
+		parser('<p [click]="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["[click]"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["[click]"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+
+		parser('<p (click)="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["(click)"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["(click)"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+	});
 });
