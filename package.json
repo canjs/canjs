@@ -15,7 +15,7 @@
 		"github": "https://github.com/bitovi/canjs"
 	},
 	"dependencies": {
-		"can-simple-dom": "0.2.2"
+		"can-simple-dom": "git://github.com/canjs/can-simple-dom#master"
 	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"
@@ -42,7 +42,7 @@
 		"jquery": "^1.11.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
-		"steal": "~0.7.1",
+		"steal": "^0.10.0",
 		"steal-qunit": "0.0.2",
 		"steal-tools": "~0.7.1",
 		"testee": "^0.1.3",
