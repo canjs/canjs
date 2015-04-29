@@ -35,7 +35,7 @@ steal("can/util", "can/view",function(can){
 		if(tagHandler) {
 			//!steal-remove-start
 			if (typeof tags[tagName.toLowerCase()] !== 'undefined') {
-				can.dev.warn("Custom tag: " + tagName.toLowerCase() + "is already defined");
+				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " is already defined");
 			}
 			//!steal-remove-end
 			// if we have html5shive ... re-generate
