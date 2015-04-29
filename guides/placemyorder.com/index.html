@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>PlaceMyOrder.com</title>
-  <link rel="stylesheet" type="text/css" href="styles/styles.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
@@ -14,7 +14,7 @@
     <ul>
       <li class="active"><a href="index.html">Home</a></li>
       <li><a href="restaurants.html">Restaurants</a></li>
-      <li><a href="orders.html">Order History</a></li>
+      <li><a href="orders.html">Order History <span class="badge">4</span></a></li>
     </ul>
   </nav>
   </header>
@@ -199,37 +199,40 @@
   <div class="order-history">
     <h2>Order History</h2>
     
-    <table class="table table-striped">
+    <table class="table">
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Phone</th>
+          <th>Name / Address / Phone</th>
           <th>Order</th>
           <th>Total</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr class="info">
           <th scope="row">1</th>
-          <td>Tom Greever</td>
-          <td>8728 N Spring Garden Lane</td>
-          <td>630-551-8787</td>
+          <td>Tom Greever
+          <br />8728 N Spring Garden Lane
+          <br />630-551-8787
+          </td>
           <td>
               <ul>
                 <li>Spinach Fennel Watercress Ravioli</li>
               </ul>
           </td>
           <td>$23.99</td>
-          <td><a href="#">Delete</a></td>
+          <td>
+	          <span class="badge">New Order!</span>
+	          <p class="action">Mark as: <a href="#">Preparing</a></p>
+	        </td>
         </tr>
-        <tr>
+        <tr class="preparing">
           <th scope="row">2</th>
-          <td>Justin Meyer</td>
-          <td>99 Cherry Dr.</td>
-          <td>773-555-1234</td>
+          <td>Justin Meyer
+	          <br />99 Cherry Dr.
+	          <br />773-555-1234
+          </td>
           <td>
               <ul>
                 <li>Spinach Fennel Watercress Ravioli</li>
@@ -237,20 +240,66 @@
               </ul>
           </td>
           <td>$123.99</td>
-          <td><a href="#">Delete</a></td>
+          <td>
+	          <span class="badge">Preparing</span>
+	          <p class="action">Mark as: <a href="#">Out for Delivery</a></p>
+          </td>
         </tr>
         <tr>
           <th scope="row">3</th>
-          <td>Brian Moschel</td>
-          <td>223 Liebengood Road</td>
-          <td>555-645-8736</td>
+          <td>Brian Moschel
+          <br />223 Liebengood Road
+          <br />555-645-8736
+	          
+          </td>
           <td>
               <ul>
                 <li>Crab Pancakes with Sorrel Syrup</li>
               </ul>
           </td>
           <td>$43.99</td>
-          <td><a href="#">Delete</a></td>
+          <td>
+	          <span class="badge">Out for Delivery</span>
+	          <p class="action">Mark as: <a href="#">Delivered</a></p>
+          </td>
+        </tr>
+        
+         <tr>
+          <th scope="row">3</th>
+          <td>Brian Moschel
+          <br />223 Liebengood Road
+          <br />555-645-8736
+	          
+          </td>
+          <td>
+              <ul>
+                <li>Crab Pancakes with Sorrel Syrup</li>
+              </ul>
+          </td>
+          <td>$43.99</td>
+          <td>
+	          <span class="badge">Out for Delivery</span>
+	          <p class="action">Mark as: <a href="#">Delivered</a></p>
+          </td>
+        </tr>
+        
+         <tr class="delivered">
+          <th scope="row">3</th>
+          <td>Brian Moschel
+          <br />223 Liebengood Road
+          <br />555-645-8736
+	          
+          </td>
+          <td>
+              <ul>
+                <li>Crab Pancakes with Sorrel Syrup</li>
+              </ul>
+          </td>
+          <td>$43.99</td>
+          <td>
+	          <span class="badge">Delivered</span>
+	          <p class="action"><a href="#">Delete</a></p>
+          </td>
         </tr>
       </tbody>
     </table>

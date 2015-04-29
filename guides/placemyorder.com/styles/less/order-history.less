@@ -2,4 +2,28 @@
   .table; 
   .table-striped;
   .wrapper;
+  .badge {
+	  margin-bottom: 5px;
+  }
+  .action {
+	  font-size: @font-size-small;
+  }
+  .info {
+	  .badge {
+		  background-color: @brand-success;
+	  }
+  }
+  .preparing {
+	  .badge {
+		  background-color: @brand-info;
+	  }
+  }
+  .delivered {
+	  color: darken(@gray-lighter,10%);
+	  background-color: @gray-lighter;
+	  
+	  .badge {
+		  background-color: darken(@gray-lighter,10%);
+	  }
+  }
 }
