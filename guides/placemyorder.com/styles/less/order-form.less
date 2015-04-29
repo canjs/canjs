@@ -1,0 +1,41 @@
+.order-form {
+  .wrapper;
+  width: @screen-xs;
+  
+  form {
+    p {
+      .help-block;
+      display: none;
+    }
+    .has-error p, .text-error {
+      color: @state-danger-text;
+      display: block;
+    }
+  }
+  .submit {
+    .text-center;
+    .btn {
+      .btn-success; 
+      font-size: @font-size-large;
+    }
+  }
+}
+.restaurant-header {
+  .wrapper;
+  .restaurant;
+  color: @white;
+  padding: 0;
+  .text-shadow;
+  
+  .background {
+    padding: @grid-gutter-width/2;
+    background-color: rgba(0,0,0,.6);
+    .black-gradient;
+  }
+}
+.tab-pane {
+  padding: @grid-gutter-width/2;
+}
+.nav.nav-tabs {
+  height: 42px;
+}
