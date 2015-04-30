@@ -4,7 +4,7 @@ steal("can/util", "can/view/callbacks", function(can){
 		var moduleName = el.getAttribute("from");
 		var importPromise;
 		if(moduleName) {
-			importPromise = window.promise = can["import"](moduleName);
+			importPromise = can["import"](moduleName);
 		} else {
 			importPromise = can.Deferred().reject("No moduleName provided").promise();
 		}
