@@ -46,3 +46,19 @@ The following functionality is available within plugins:
    <can import from="helpers/stache-helpers"/>
    <my-component> {{myHelper "value"}} </my-component>
    ```
+
+   You can also dynamically import a module and nest content within:
+
+   ```
+   {{#eq page "home"}}
+     <can-import from="components/my-component">
+       {{#eq state "pending"}}
+         <img src="loading.gif"/>
+       {{/eq}}
+
+       {{#eq state "resolved"}}
+         <my-component></my-component>
+       {{/eq}}
+     </can-import>
+   {{/eq}}
+   ```
