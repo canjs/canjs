@@ -3977,4 +3977,30 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			equal(Object.keys(can.view.nodeLists.nodeMap).length, 0, 'All nodes have been removed from nodeMap');
 		});
 	}
+
+	test('Helper handles list replacement (#1652)', 3, function () {
+
+		var state = new can.Map({
+			list: []
+		});
+
+		var helpers = {
+			listHasLength: function (options) {
+				ok(true, 'listHasLength helper evaluated');
+				return this.attr('list').attr('length') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helper evaluated 1st time...
+		can.mustache('{{#listHasLength}}{{/listHasLength}}')(state, helpers);
+
+		// Helper evaluated 2nd time...
+		state.attr('list', []);
+		
+		// Helper evaluated 3rd time...
+		state.attr('list').push('...')
+
+	});
 });
