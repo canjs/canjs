@@ -1,54 +1,43 @@
-steal("can/view/stache/mustache_core.js", "can/view/parser",function(mustacheCore, parser){
-	
+steal("can/view/stache/mustache_core.js", "can/view/parser",
+			"can/view/import", function(mustacheCore, parser){
+
 	return function(source){
-		
+
 		var template = mustacheCore.cleanLineEndings(source);
 		var imports = [],
 			inImport = false,
 			inFrom = false;
-		
-		var keepToken = function(){
-			return inImport ? false : true;
-		};
-		
+
 		var intermediate = parser(template, {
 			start: function( tagName, unary ){
 				if(tagName === "can-import") {
 					inImport = true;
-				}
-				return keepToken();
-			},
-			end: function( tagName, unary ){
-				if(tagName === "can-import") {
+				} else if(inImport) {
 					inImport = false;
-					return false;
 				}
-				return keepToken();
 			},
 			attrStart: function( attrName ){
 				if(attrName === "from") {
 					inFrom = true;
 				}
-				return keepToken();
 			},
 			attrEnd:   function( attrName ){
 				if(attrName === "from") {
 					inFrom = false;
 				}
-				return keepToken();
 			},
 			attrValue: function( value ){
 				if(inFrom && inImport) {
 					imports.push(value);
 				}
-				return keepToken();
 			},
-			chars: keepToken,
-			comment: keepToken,
-			special: keepToken,
-			done: keepToken
+			close: function(tagName){
+				if(tagName === "can-import") {
+					imports.pop();
+				}
+			}
 		}, true);
-	    
+
 		return {intermediate: intermediate, imports: imports};
 	};
 
