@@ -1,14 +1,14 @@
 steal("can-simple-dom", "can/view/parser", function(simpleDOM, canParser){
-	
+
 	var document = new simpleDOM.Document();
 	var serializer = new simpleDOM.HTMLSerializer(simpleDOM.voidMap);
-	
+
 	var parser = new simpleDOM.HTMLParser(function(string){
-				
+
 		var tokens = [];
 		var currentTag,
 			currentAttr;
-		
+
 		canParser(string, {
 			start: function( tagName, unary ){
 				currentTag = { type: "StartTag", attributes: [], tagName: tagName };
@@ -36,11 +36,11 @@ steal("can-simple-dom", "can/view/parser", function(simpleDOM, canParser){
 			},
 			special:   function( value ){},
 			done:      function( ){}
-	   });
-	   
-	   return tokens;
+		});
+
+		return tokens;
 	}, document, simpleDOM.voidMap);
-	
+
 	if(Object.defineProperty) {
 		Object.defineProperty(simpleDOM.Element.prototype, "innerHTML", {
 			get: function(){
@@ -64,5 +64,5 @@ steal("can-simple-dom", "can/view/parser", function(simpleDOM, canParser){
 	global.window = global;
 	global.addEventListener = function(){};
 	global.removeEventListener = function(){};
-	
+
 });

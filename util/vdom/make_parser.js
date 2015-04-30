@@ -1,12 +1,12 @@
 steal("can/view/parser","can-simple-dom",function(canParser, simpleDOM){
-	
+
 	return function(document){
 		return new simpleDOM.HTMLParser(function(string){
-				
+
 			var tokens = [];
 			var currentTag,
 				currentAttr;
-			
+
 			canParser(string, {
 				start: function( tagName, unary ){
 					currentTag = { type: "StartTag", attributes: [], tagName: tagName };
@@ -34,9 +34,9 @@ steal("can/view/parser","can-simple-dom",function(canParser, simpleDOM){
 				},
 				special:   function( value ){},
 				done:      function( ){}
-		   });
-		   
-		   return tokens;
+			});
+
+			return tokens;
 		}, document, simpleDOM.voidMap);
 	};
 

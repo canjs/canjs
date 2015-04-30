@@ -22,7 +22,8 @@
 		"notStrictEqual": true,
 		"raises": true,
 		"start": true,
-		"stop": true
+		"stop": true,
+		"global": true
 	},
 
 

@@ -1,12 +1,12 @@
-/* jshint maxdepth:7*/
+/* jshint maxdepth:7,node:true*/
 steal(function(){
-	
+
 	var each = function(items, callback){
 		for ( var i = 0; i < items.length; i++ ) {
 			callback(items[i], i);
 		}
 	};
-	
+
 	function makeMap(str){
 		var obj = {}, items = str.split(",");
 		each(items, function(name){
@@ -21,7 +21,7 @@ steal(function(){
 		}
 		return intermediate;
 	}
-	
+
 	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]*",
 		spaceEQspace = "\\s*=\\s*",
@@ -93,8 +93,8 @@ steal(function(){
 				};
 			});
 		}
-		
-		
+
+
 		function parseStartTag(tag, tagName, rest, unary) {
 			tagName = tagName.toLowerCase();
 
@@ -107,11 +107,11 @@ steal(function(){
 			if (closeSelf[tagName] && stack.last() === tagName) {
 				parseEndTag("", tagName);
 			}
-			
+
 			unary = empty[tagName] || !!unary;
-			
+
 			handler.start(tagName, unary);
-			
+
 			if (!unary) {
 				stack.push(tagName);
 			}
@@ -120,7 +120,7 @@ steal(function(){
 
 
 			handler.end(tagName,unary);
-			
+
 		}
 
 		function parseEndTag(tag, tagName) {
@@ -129,7 +129,7 @@ steal(function(){
 			if (!tagName) {
 				pos = 0;
 			}
-				
+
 
 				// Find the closest opened tag of the same type
 			else {
@@ -138,9 +138,9 @@ steal(function(){
 						break;
 					}
 				}
-					
+
 			}
-				
+
 
 			if (pos >= 0) {
 				// Close all the open elements, up the stack
@@ -149,12 +149,12 @@ steal(function(){
 						handler.close(stack[i]);
 					}
 				}
-					
+
 				// Remove the open elements from the stack
 				stack.length = pos;
 			}
 		}
-		
+
 		function parseMustache(mustache, inside){
 			if(handler.special){
 				handler.special(inside);
@@ -167,12 +167,12 @@ steal(function(){
 				}
 			}
 			charsText = "";
-		}
-		
-		var index, 
-			chars, 
-			match, 
-			stack = [], 
+		};
+
+		var index,
+			chars,
+			match,
+			stack = [],
 			last = html,
 			// an accumulating text for the next .chars callback
 			charsText = "";
@@ -222,7 +222,7 @@ steal(function(){
 					}
 				} else if (html.indexOf("{{") === 0 ) {
 					match = html.match(mustache);
-					
+
 					if (match) {
 						callChars();
 						html = html.substring(match[0].length);
@@ -240,11 +240,11 @@ steal(function(){
 
 					var text = index < 0 ? html : html.substring(0, index);
 					html = index < 0 ? "" : html.substring(index);
-		
+
 					if (text) {
 						charsText += text;
 					}
-					
+
 				}
 
 			} else {
@@ -262,24 +262,24 @@ steal(function(){
 			if (html === last) {
 				throw "Parse Error: " + html;
 			}
-				
+
 			last = html;
 		}
 		callChars();
 		// Clean up any remaining tags
 		parseEndTag();
 
-		
+
 		handler.done();
 		return intermediate;
 	};
 	HTMLParser.parseAttrs = function(rest, handler){
-		
-		
+
+
 		(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
 			if(special) {
 				handler.special(special);
-				
+
 			}
 			if(name || dblQuote || singleQuote || val) {
 				var value = arguments[3] ? arguments[3] :
@@ -287,7 +287,7 @@ steal(function(){
 					arguments[5] ? arguments[5] :
 					fillAttrs[name.toLowerCase()] ? name : "";
 				handler.attrStart(name || "");
-				
+
 				var last = mustache.lastIndex = 0,
 					res = mustache.exec(value),
 					chars;
@@ -311,10 +311,10 @@ steal(function(){
 				handler.attrEnd(name || "");
 			}
 
-			
+
 		});
 	};
 
 	return HTMLParser;
-	
+
 });

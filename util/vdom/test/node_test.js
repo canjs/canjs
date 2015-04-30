@@ -1,3 +1,4 @@
+/* global __dirname */
 var steal = require("steal").clone();
 var path = require("path");
 
