@@ -249,6 +249,10 @@
 			"hidden": true,
 			"hasTest": false
 		},
+		"can/view/import/import": {
+			"name": "can.view.import",
+			"type": "plugin"
+		},
 		"can/map/sort/sort": {
 			"name": "can.map.sort",
 			"type": "plugin",
