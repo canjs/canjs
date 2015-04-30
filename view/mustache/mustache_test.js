@@ -4003,4 +4003,38 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		state.attr('list').push('...')
 
 	});
+
+	test('Helper binds to nested properties (#1651)', function () {
+
+		var nestedAttrsCount = 0,
+			state = new can.Map({
+				parent: null
+			});
+
+		var helpers = {
+			bindViaNestedAttrs: function (options) {
+
+				nestedAttrsCount++;
+
+				if (nestedAttrsCount === 3) {
+					ok(true, 'bindViaNestedAttrs helper evaluated 3 times');
+				}
+
+				return this.attr('parent') && this.attr('parent').attr('child') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helpers evaluated 1st time...
+		can.mustache('{{#bindViaNestedAttrs}}{{/bindViaNestedAttrs}}')(state, helpers);
+
+		// Helpers evaluated 2nd time...
+		state.attr('parent', {
+			child: 'foo'
+		});
+
+		// Helpers evaluated 3rd time...
+		state.attr('parent.child', 'bar');
+	});
 });

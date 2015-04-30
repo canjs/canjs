@@ -3969,4 +3969,38 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		// Helper evaluated 3rd time...
 		state.attr('list').push('...')
 	});
+
+	test('Helper binds to nested properties (#1651)', function () {
+
+		var nestedAttrsCount = 0,
+			state = new can.Map({
+				parent: null
+			});
+
+		var helpers = {
+			bindViaNestedAttrs: function (options) {
+
+				nestedAttrsCount++;
+
+				if (nestedAttrsCount === 3) {
+					ok(true, 'bindViaNestedAttrs helper evaluated 3 times');
+				}
+
+				return this.attr('parent') && this.attr('parent').attr('child') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helpers evaluated 1st time...
+		can.stache('{{#bindViaNestedAttrs}}{{/bindViaNestedAttrs}}')(state, helpers);
+
+		// Helpers evaluated 2nd time...
+		state.attr('parent', {
+			child: 'foo'
+		});
+
+		// Helpers evaluated 3rd time...
+		state.attr('parent.child', 'bar');
+	});
 });
