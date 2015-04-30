@@ -107,7 +107,7 @@ With [Grunt](http://gruntjs.com/) as a build tool your `Gruntfile.js` to create 
 
 ## Bower + RequireJS
 
-A fairly common setup is using CanJS with RequireJS and [Bower](http://bower.io/) as the package manager which is described in the following section. For a working example have a look at the [RequireJS + CanJS TodoMVC example](http://todomvc.com/labs/dependency-examples/canjs_require/).
+A fairly common setup is using CanJS with RequireJS and [Bower](http://bower.io/) as the package manager which is described in the following section. For a working example have a look at the [RequireJS + CanJS TodoMVC example](http://todomvc.com/examples/canjs_require/).
 
 If you haven't yet, initialize a `bower.json` in your project folder by running
 
