@@ -43,7 +43,7 @@ describe("Building steal projects", function(){
 				if(error){
 					done(error)
 				}
-				// build the project that 
+				// build the project that
 				// uses a plugin
 				stealTools.build({
 					config: __dirname+"/config.js",
@@ -56,10 +56,10 @@ describe("Building steal projects", function(){
 						find(browser, "MODULE", function(m){
 							assert.equal(m.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
 							assert.equal(m.mustache.childNodes[0].textContent, "Mustache Hi", "Mustache generated correctly");
-							
+
 							var div = browser.document.createElement('div');
 							div.appendChild(m.stache);
-							
+
 							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache Hi", "Stache generated correctly");
 							close();
 						}, close);
@@ -79,7 +79,7 @@ describe("Building steal projects", function(){
 				quiet: true,
 				minify: false
 			}).then(function(){
-				
+
 				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
 					find(browser, "MODULE", function(m){
 						assert(typeof m, "object", "Correctly returned the module");
@@ -103,7 +103,7 @@ describe("Building steal projects", function(){
 				minify: false,
 				bundleSteal: true
 			}).then(function(){
-				
+
 				var browser = open("test/builders/steal-tools/prod-bundled.html", function(browser, close){
 					// If we got here it worked.
 					close();
