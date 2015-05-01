@@ -173,7 +173,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 					raw = raw.data;
 				}
 
-				if (typeof raw === 'undefined') {
+				if (typeof raw === 'undefined' || !can.isArray(raw)) {
 					throw new Error('Could not get any raw data while converting using .models');
 				}
 
@@ -331,15 +331,15 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			};
 		},
 		// ## createURLFromResource
-		// For each of the names (create, update, destroy, findOne, and findAll) use the 
+		// For each of the names (create, update, destroy, findOne, and findAll) use the
 		// URL provided by the `resource` property. For example:
-		// 		
+		//
 		// 		ToDo = can.Model.extend({
 		// 			resource: "/todos"
 		// 		}, {});
-		// 	
+		//
 		// 	Will create a can.Model that is identical to:
-		// 	
+		//
 		// 		ToDo = can.Model.extend({
 		// 			findAll: "GET /todos",
 		// 			findOne: "GET /todos/{id}",
@@ -347,7 +347,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 		// 			update:  "PUT /todos/{id}",
 		// 			destroy: "DELETE /todos/{id}"
 		// 		},{});
-		// 
+		//
 		// - `model`: the can.Model that has the resource property
 		// - `method`: a property from the ajaxMethod object
 		createURLFromResource = function(model, name) {
@@ -642,7 +642,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			can.dispatch.call(constructor, funcName, [this]);
 		};
 	});
-	
+
 
 	// # can.Model.List
 	// Model Lists are just like `Map.List`s except that when their items are
