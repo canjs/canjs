@@ -37,6 +37,7 @@ var open = function(url, callback, done){
 };
 
 describe("Building steal projects", function(){
+	this.timeout(5000);
 
 	it("works with ejs, mustache, and stache", function(done){
 			rmdir(__dirname+"/bundles", function(error){
