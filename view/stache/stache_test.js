@@ -3930,8 +3930,21 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 
 		equal(frag.childNodes.length, 1, "only the placeholder textnode");
 	});
+	
+	test("#1617 compute defined after template", function(){
+		var myMap = new can.Map();
 
+		// 1. Render a stache template with a binding to a key that is not a can.compute
+		var dom = can.stache('{{ myMap.test }}')({myMap: myMap});
+		can.$('#qunit-fixture').html(dom);
+		// 2. Set that key to a can.compute
+		myMap.attr('test', can.compute(function() { return "def"; }));
 
+		equal(document.getElementById('qunit-fixture').innerHTML,
+			"def", "correct value");
+
+	});
+	
 	test('template with a block section and nested if doesnt render correctly', function() {
 		var myMap = new can.Map({
 			bar: true

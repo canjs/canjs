@@ -412,6 +412,10 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/util/batch', funct
 				};
 				this._on = function(update) {
 					handler = function(ev, newVal,oldVal) {
+						// get the new value
+						if(typeof newVal === "function"){
+							newVal = newVal();
+						}
 						update(newVal, oldVal, ev.batchNum);
 					};
 
