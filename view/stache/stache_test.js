@@ -3930,4 +3930,21 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 
 		equal(frag.childNodes.length, 1, "only the placeholder textnode");
 	});
+
+
+	test('template with a block section and nested if doesnt render correctly', function() {
+		var myMap = new can.Map({
+			bar: true
+		});
+
+		var frag = can.stache(
+					"{{#bar}}<div>{{#if foo}}My Meals{{else}}My Order{{/if}}</div>{{/bar}}"
+					)(myMap);
+
+		can.append(can.$('#qunit-fixture'), frag);
+		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Order', 'shows else case');
+		myMap.attr('foo', true);
+		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Meals', 'shows if case');
+
+	});
 });

@@ -255,7 +255,9 @@ steal(
 
 					while (scope) {
 						context = scope._context;
-						if (context !== null) {
+						if (context !== null &&
+							// if its a primitive type, keep looking up the scope, since there won't be any properties
+							(typeof context === "object" || typeof context === "function") ) {
 							var data = can.compute.read(context, names, can.simpleExtend({
 								/* Store found observable, incase we want to set it as the rootObserve. */
 								foundObservable: function (observe, nameIndex) {
