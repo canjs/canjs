@@ -2,9 +2,13 @@
 var steal = require("steal").clone();
 var path = require("path");
 
+global.System = steal.System;
+
+/*
 steal.config({
 	config: path.join(__dirname,"..","..", "..","package.json!npm")
 });
+*/
 
 steal.import("can/util/vdom/test/main.stache!").then(function(renderer){
 	var res = renderer({});
