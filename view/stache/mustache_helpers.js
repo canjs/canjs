@@ -13,6 +13,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 	
 	var helpers = {
 		"each": function(items, options){
+			
 			var resolved = resolve(items),
 				result = [],
 				keys,
@@ -21,6 +22,13 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			
 			if( resolved instanceof can.List ) {
 				return function(el){
+					// make a child nodeList inside the can.view.live.html nodeList
+					// so that if the html is re
+					var nodeList = [el];
+					nodeList.expression = "live.list";
+					can.view.nodeLists.register(nodeList, null, options.nodeList);
+					can.view.nodeLists.update(options.nodeList, [el]);
+					
 					var cb = function (item, index, parentNodeList) {
 								
 						return options.fn(options.scope.add({
@@ -28,7 +36,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 							}).add(item), options.options, parentNodeList);
 							
 					};
-					live.list(el, items, cb, options.context, el.parentNode, options.nodeList);
+					live.list(el, items, cb, options.context, el.parentNode, nodeList);
 				};
 			}
 			
@@ -142,10 +150,15 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			};
 		}
 	};
-	
+
+	var registerHelper = function(name, callback){
+		helpers[name] = callback;
+	};
+
 	return {
-		registerHelper: function(name, callback){
-			helpers[name] = callback;
+		registerHelper: registerHelper,
+		registerSimpleHelper: function(name, callback) {
+			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
 			var helper = options.attr("helpers." + name);

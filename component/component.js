@@ -9,7 +9,7 @@
 // `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup` 
 // to hookup the component.
 
-steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks) {
+steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks, elements) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
 	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i,
@@ -255,6 +255,11 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 						hookupOptions.scope.add(this.scope),
 					options = {
 						helpers: {}
+					},
+					addHelper = function(name, fn) {
+						options.helpers[name] = function() {
+							return fn.apply(componentScope, arguments);
+						};
 					};
 
 				// ## Helpers
@@ -262,13 +267,23 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 				// Setup helpers to callback with `this` as the component
 				can.each(this.helpers || {}, function (val, prop) {
 					if (can.isFunction(val)) {
-						options.helpers[prop] = function () {
-							return val.apply(componentScope, arguments);
-						};
+						addHelper(prop, val);
 					}
 				});
-				
-				
+
+				// Setup simple helpers
+				can.each(this.simpleHelpers || {}, function(val, prop) {
+					//!steal-remove-start
+					if(options.helpers[prop]) {
+						can.dev.warn('Component ' + component.tag +
+						' already has a helper called ' + prop);
+					}
+					//!steal-remove-end
+
+					// Convert the helper
+					addHelper(prop, can.view.simpleHelper(val));
+				});
+
 				// Teardown reverse bindings when the element is removed
 				teardownFunctions.push(function(){
 					can.each(handlers, function (handler, prop) {
@@ -340,9 +355,13 @@ steal("can/util", "can/view/callbacks","can/control", "can/observe", "can/view/m
 									subtemplate !== hookupOptions.subtemplate ?
 									rendererOptions :
 									hookupOptions;
-
-							can.view.live.replace([el], subtemplate(
-								opts.scope, opts.options));
+							
+							if(rendererOptions.parentNodeList) {
+								var frag = subtemplate( opts.scope, opts.options, rendererOptions.parentNodeList );
+								elements.replace([el], frag);
+							} else {
+								can.view.live.replace([el], subtemplate( opts.scope, opts.options ));
+							}
 
 							// Restore the content tag so it could potentially be used again (as in lists)
 							options.tags.content = contentHookup;

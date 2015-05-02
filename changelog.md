@@ -3,6 +3,17 @@
 @parent guides 5
 -->
 
+__2.2.5__ ( Apr 22 2015 )
+
+- [#each helper should use it&#39;s own NodeList](https://github.com/bitovi/canjs/pull/1634)
+- [Nested can.Component with &lt;content/&gt; tag causes detached DOM nodes](https://github.com/bitovi/canjs/issues/1627)
+- [Nested can.Component causes detached DOM nodes](https://github.com/bitovi/canjs/issues/1625)
+- [can.appendChild passed null el](https://github.com/bitovi/canjs/issues/1621)
+- [CanJS 2.2.4 can.List.replace() incorrect behavior](https://github.com/bitovi/canjs/issues/1606)
+- [allow comporator fn return any negative value](https://github.com/bitovi/canjs/pull/1601)
+- [can/map/define default behaviors with &quot;*&quot;](https://github.com/bitovi/canjs/issues/1373)
+
+
 __2.2.4__ ( Apr 03 2015 )
 
 - [This makes list update sorting when comparator changes.](https://github.com/bitovi/canjs/pull/1604)

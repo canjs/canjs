@@ -1586,4 +1586,131 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define
 
 	});
 
+	if(can.isFunction(Object.keys)) {
+		test('<content> node list cleans up properly as direct child (#1625, #1627)', 2, function() {
+			var size = Object.keys(can.view.nodeLists.nodeMap).length;
+			var items = [];
+			var viewModel = new can.Map({
+				show: false
+			});
+			var toggle = function() {
+				viewModel.attr('show', !viewModel.attr('show'));
+			};
+
+			for (var i = 0; i < 100; i++) {
+				items.push({
+					// Random 5 character String
+					name: Math.random().toString(36)
+						.replace(/[^a-z]+/g, '').substr(0, 5)
+				});
+			}
+
+			can.Component.extend({
+				tag: 'grandparent-component',
+				template: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
+				scope: viewModel
+			});
+
+			can.Component.extend({
+				tag: 'parent-component',
+				template: can.stache('{{#items}}<child-component>\n:)\n</child-component>{{/items}}'),
+				scope: {
+					items: items
+				}
+			});
+
+			can.Component.extend({
+				tag: 'child-component',
+				template: can.stache('<div>\n<content/>\n</div>')
+			});
+
+			can.append(can.$("#qunit-fixture"), can.stache('<grandparent-component></grandparent-component>')());
+
+			toggle();
+			equal(Object.keys(can.view.nodeLists.nodeMap).length - size, 0,
+				'No new items added to nodeMap');
+
+			toggle();
+			equal(Object.keys(can.view.nodeLists.nodeMap).length - size, 0,
+				'No new items added to nodeMap');
+
+			can.remove(can.$("#qunit-fixture>*"));
+		});
+
+		asyncTest('<content> node list cleans up properly, directly nested (#1625, #1627)', function() {
+			var items = [];
+			var viewModel = window.viewModel = new can.Map({
+				show: true
+			});
+
+			for (var i = 0; i < 100; i++) {
+				items.push({
+					// Random 5 character String
+					name: Math.random().toString(36)
+						.replace(/[^a-z]+/g, '').substr(0, 5),
+					foo: 'test ' + i
+				});
+			}
+
+			can.Component.extend({
+				tag: 'grandparent-component',
+				template: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
+				scope: viewModel
+			});
+
+			can.Component.extend({
+				tag: 'parent-component',
+				template: can.stache('{{#items}}<child-component>{{foo}}</child-component>{{/items}}'),
+				scope: {
+					items: items
+				}
+			});
+
+			can.Component.extend({
+				tag: 'child-component',
+				template: can.stache('<div>{{#if bar}}<content/>{{/if}}</div>'),
+				scope: {
+					bar: true
+				}
+			});
+
+			can.append(can.$("#qunit-fixture"), can.stache('<grandparent-component></grandparent-component>')());
+
+			var old = can.unbindAndTeardown;
+			var count = 0;
+			can.unbindAndTeardown = function(name) {
+				if(name === 'foo') {
+					count++;
+				}
+				return old.call(this, arguments);
+			};
+
+			// Dispatches async
+			setTimeout(function() {
+				equal(count, 100, '100 items unbound');
+				can.unbindAndTeardown = old;
+				can.remove(can.$("#qunit-fixture>*"));
+				start();
+			}, 20);
+		});
+	}
+
+	test('component simpleHelpers', function() {
+		can.Component.extend({
+			tag: 'simple-helper',
+			template: can.stache('Result: {{add first second}}'),
+			scope: {
+				first: 4,
+				second: 3
+			},
+			simpleHelpers: {
+				add: function(a, b) {
+					return a + b;
+				}
+			}
+		});
+
+		var frag = can.stache('<simple-helper></simple-helper>')();
+		equal(frag.childNodes[0].innerHTML, 'Result: 7');
+	});
 });

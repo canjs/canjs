@@ -512,4 +512,14 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		ok(!heroes._bindings, "list has no bindings");
 	});
 
+	test('sorting works when returning any negative value (#1601)', function() {
+		var list = new can.List([1, 4, 2]);
+
+		list.attr('comparator', function(a, b) {
+			return a - b;
+		});
+
+		list.sort();
+		deepEqual(list.attr(), [1, 2, 4]);
+	});
 });

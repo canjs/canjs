@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.2.4",
+	"version": "2.3.0-pre.0",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -40,6 +40,7 @@
 		"grunt-simple-mocha": "^0.4.0",
 		"grunt-string-replace": "~0.2.2",
 		"jquery": "^1.11.0",
+		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
 		"steal": "^0.10.1",

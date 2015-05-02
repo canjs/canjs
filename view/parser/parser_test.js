@@ -1,13 +1,13 @@
 steal("can/view/parser", "steal-qunit", function(parser){
-	
-	
+
+
 	module("can/view/parser");
-	
-	
+
+
 	var makeChecks = function(tests){
 		var count = 0;
 		var makeCheck = function(name){
-			
+
 			return function(){
 				if(count >= tests.length) {
 					ok(false, "called "+name+" with "+arguments[0]);
@@ -20,12 +20,12 @@ steal("can/view/parser", "steal-qunit", function(parser){
 					}
 					count++;
 				}
-				
-				
+
+
 			};
 		};
-		
-		
+
+
 		return {
 			start: makeCheck("start"),
 			end: makeCheck("end"),
@@ -39,12 +39,12 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			done: makeCheck("done")
 		};
 	};
-	
-	
+
+
 	test("html to html", function(){
-		
-		
-		
+
+
+
 		var tests = [
 			["start", ["h1", false]],
 			["attrStart", ["id"]],
@@ -64,15 +64,15 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["h1"]],
 			["done",[]]
 		];
-		
-		
-		
+
+
+
 		parser("<h1 id='foo' {{#if}}{{.}}{{/if}} class='a{{foo}}'>Hello {{message}}!</h1>",makeChecks(tests));
-		
+
 	});
-	
+
 	test("special in an attribute in an in-tag section", function(){
-		
+
 		parser("<div {{#truthy}}foo='{{baz}}'{{/truthy}}></div>",makeChecks([
 			["start", ["div", false]],
 			["special", ["#truthy"]],
@@ -84,11 +84,11 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["div"]],
 			["done",[]]
 		]));
-		
+
 	});
-	
+
 	test("special with a custom attribute", function(){
-		
+
 		parser('<div {{#attribute}} {{name}}="{{value}}" {{/attribute}}></div>',makeChecks([
 			["start", ["div", false]],
 			["special", ["#attribute"]],
@@ -101,12 +101,12 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["div"]],
 			["done",[]]
 		]));
-		
-		
+
+
 	});
-	
+
 	test("single attribute value", function(){
-		
+
 		parser('<input DISABLED/>',makeChecks([
 			["start", ["input", true]],
 			["attrStart", ["DISABLED"]],
@@ -116,7 +116,7 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["done",[]]
 		]));
 	});
-	
+
 	test("trailing linebreaks in IE", function(){
 		parser("12345{{!\n  This is a\n  multi-line comment...\n}}67890\n",makeChecks([
 			["chars", ["12345"]],
@@ -158,8 +158,8 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["done", []]
 		]));
 	});
-	
-	
+
+
 	test('output json', function(){
 		var tests = [
 			["start", ["h1", false]],
@@ -180,15 +180,15 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["h1"]],
 			["done",[]]
 		];
-		
+
 		var intermediate = parser("<h1 id='foo' {{#if}}{{.}}{{/if}} class='a{{foo}}'>Hello {{message}}!</h1>",makeChecks(tests), true);
-		
-	
-		
+
+
+
 		parser(intermediate, makeChecks(tests) );
 	});
-	
-	
+
+
 	test('less than outside of an element', function(){
 		var tests = [
 			["start", ["h1", false]],
@@ -197,13 +197,34 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["h1"]],
 			["done",[]]
 		];
-		
+
 		var intermediate = parser("<h1> < </h1>",makeChecks(tests), true);
-		
-	
-		
+
+
+
 		parser(intermediate, makeChecks(tests) );
 	});
-	
-	
+
+
+	test('allow () and [] to enclose attributes', function() {
+		parser('<p [click]="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["[click]"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["[click]"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+
+		parser('<p (click)="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["(click)"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["(click)"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+	});
 });

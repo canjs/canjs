@@ -51,8 +51,11 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		};
 	})(),
-		removeCurly = function(value){
-			if(value[0] === "{" && value[value.length-1] === "}") {
+		removeBrackets = function(value, open, close){
+			open = open || "{";
+			close = close || "}";
+
+			if(value[0] === open && value[value.length-1] === close) {
 				return value.substr(1, value.length - 2);
 			}
 			return value;
@@ -69,7 +72,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = can.trim(removeCurly(el.getAttribute("can-value"))),
+		var attr = can.trim(removeBrackets(el.getAttribute("can-value"))),
 			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
 			// scope of the template is some object called data, the compute representing this can-value will be the 
 			// data.attr('name') property.
@@ -163,28 +166,25 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		}
 	};
 
-	// ## can-EVENT
-	// The following section contains code for implementing the can-EVENT attribute. 
-	// This binds on a wildcard attribute name. Whenever a view is being processed 
-	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler 
-	// that calls a method identified by the value of this attribute.
-	can.view.attr(/can-[\w\.]+/, function (el, data) {
+	var handleEvent = function (el, data) {
 
 		// the attribute name is the function to call
 		var attributeName = data.attributeName,
-			// The event type to bind on is deteremined by whatever is after can-
-			//
-			// For example, can-submit binds on the submit event.
-			event = attributeName.substr("can-".length),
-			// This is the method that the event will initially trigger. It will look up the method by the string name
-			// passed in the attribute and call it.
+		// The event type to bind on is determin by whatever is after can-
+		// or it is a (event)
+		// For example, can-submit and (submit) binds on the submit event.
+			event = attributeName.indexOf('can-') === 0 ?
+				attributeName.substr("can-".length) :
+				removeBrackets(attributeName, '(', ')'),
+		// This is the method that the event will initially trigger. It will look up the method by the string name
+		// passed in the attribute and call it.
 			handler = function (ev) {
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
 				// mustacheCore.expressionData will read the attribute
 				// value and parse it identically to how mustache helpers
 				// get parsed.
-				var attrInfo = mustacheCore.expressionData(removeCurly(attrVal));
+				var attrInfo = mustacheCore.expressionData(removeBrackets(attrVal));
 
 				// We grab the first item and treat it as a method that
 				// we'll call.
@@ -271,8 +271,16 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
-	});
+	};
 
+	// ## can-EVENT
+	// The following section contains code for implementing the can-EVENT attribute. 
+	// This binds on a wildcard attribute name. Whenever a view is being processed 
+	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler 
+	// that calls a method identified by the value of this attribute.
+	can.view.attr(/can-[\w\.]+/, handleEvent);
+	// ## (EVENT)
+	can.view.attr(/\([\w\.]+\)/, handleEvent);
 
 	// ## Two way binding can.Controls
 	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves 
@@ -464,4 +472,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
+	can.view.attr(/\[[\w\.]+\]/, function(el, options) {
+		var prop = removeBrackets(el.getAttribute(options.attributeName));
+		var name = removeBrackets(options.attributeName, '[', ']');
+
+		can.one.call(el, 'inserted', function() {
+			var value = can.viewModel(el);
+
+			if(prop !== 'this' && prop !== '.') {
+				value = value.attr(prop);
+			}
+
+			options.scope.attr(name, value);
+		});
+	});
 });

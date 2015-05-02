@@ -23,7 +23,7 @@ steal(function(){
 	}
 
 	var alphaNumericHU = "-:A-Za-z0-9_",
-		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]*",
+		attributeNames = "[\\(|\\[]?[a-zA-Z_:]["+alphaNumericHU+":.]*[\\)|\\]]?",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",

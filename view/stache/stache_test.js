@@ -1,17 +1,17 @@
 /* jshint asi:true,multistr:true*/
-steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(){
-	
-	
+steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","steal-qunit",function(){
+
+
 	QUnit.module("can/view/stache",{
 		setup: function(){
 			can.view.ext = '.stache';
 			this.animals = ['sloth', 'bear', 'monkey'];
 		}
 	});
-	
-	
+
+
 	// HELPERS
-	
+
 	var getText = function(template, data, options){
 		var div = document.createElement("div");
 		div.appendChild( can.stache(template)(data) );
@@ -37,97 +37,97 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 					txt += getTextFromFrag(node);
 				}
 			});
-			
+
 			return txt;
 		};
-	
-	
-	
+
+
+
 	test("html to html", function(){
-		
+
 		var stashed = can.stache("<h1 class='foo'><span>Hello World!</span></h1>");
-		
-		
+
+
 		var frag = stashed();
 		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
 	});
-	
-	
+
+
 	test("basic replacement", function(){
-		
+
 		var stashed = can.stache("<h1 class='foo'><span>Hello {{message}}!</span></h1>");
-		
-		
+
+
 		var frag = stashed({
 			message: "World"
 		});
 		equal(frag.childNodes[0].innerHTML.toLowerCase(), "<span>hello world!</span>","got back the right text");
 	});
-	
-	
+
+
 	test("a section helper", function(){
-		
-		
+
+
 		can.stache.registerHelper("helper", function(options){
-			
+
 			return options.fn({message: "World"});
-			
+
 		});
-		
+
 		var stashed = can.stache("<h1 class='foo'>{{#helper}}<span>Hello {{message}}!</span>{{/helper}}</h1>");
-		
-		
+
+
 		var frag = stashed({});
 		equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(), "span", "got a span");
-		
+
 		equal(frag.childNodes[0].childNodes[0].innerHTML, "Hello World!","got back the right text");
-		
+
 	});
-	
+
 	test("attribute sections", function(){
 		var stashed = can.stache("<h1 style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>Hi</h1>");
-		
+
 		var frag = stashed({
 			top: 1,
 			left: 2,
 			color: 3
 		});
-		
+
 		equal(frag.childNodes[0].style.top, "1px", "top works");
 		equal(frag.childNodes[0].style.left, "2px", "left works");
 		equal(frag.childNodes[0].style.backgroundColor.replace(/\s/g,""), "rgb(0,0,3)", "color works");
 	});
-	
+
 	test("attributes sections", function(){
 		var template = can.stache("<div {{attributes}}/>");
 		var frag = template({
 			attributes: "foo='bar'"
 		});
-		
+
 		equal(frag.childNodes[0].getAttribute('foo'), "bar", "set attribute");
-		
+
 		template = can.stache("<div {{#truthy}}foo='{{baz}}'{{/truthy}}/>");
-		
+
 		frag = template({
 			truthy: true,
 			baz: "bar"
 		});
-		
+
 		equal(frag.childNodes[0].getAttribute('foo'), "bar", "set attribute");
-		
+
 		frag = template({
 			truthy: false,
 			baz: "bar"
 		});
-		
+
 		equal(frag.childNodes[0].getAttribute('foo'), null, "attribute not set if not truthy");
-		
-		
+
+
 	});
-	
-	
+
+
 	test("boxes example", function(){
-		
+
 		var boxes = [],
 			Box = can.Map.extend({
 				count: 0,
@@ -152,7 +152,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				number: i
 			}));
 		}
-		
+
 		var stashed = can.stache("{{#each boxes}}"+
 				"<div class='box-view'>"+
 					"<div class='box' id='box-{{number}}'  style='top: {{top}}px; left: {{left}}px; background: rgb(0,0,{{color}});'>"+
@@ -160,22 +160,22 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 					"</div>"+
 				"</div>"+
 			"{{/each}}");
-		
+
 		var frag = stashed({
 			boxes: boxes
 		});
-		
+
 		//equal(frag.children.length, 2, "there are 2 childNodes");
-		
+
 		equal(frag.childNodes[0].childNodes[0].style.top, "0px");
-		
+
 		boxes[0].tick();
-		
+
 		ok(frag.childNodes[0].childNodes[0].style.top !== "0px");
-		
+
 	});
-	
-	
+
+
 	var override = {
 		comments: {
 			'Standalone Without Newline': '!',
@@ -223,7 +223,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				} else if(spec === 'partials'){
 					//expected = expected.replace(/\</g,"&lt;").replace(/\>/g,"&gt;")
 				}
-				
+
 
 				// register the partials in the spec
 				if (t.partials) {
@@ -237,13 +237,13 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 					t.data.lambda = eval('(' + t.data.lambda.js + ')');
 				}
 				var res = can.stache(t.template)(t.data);
-				
+
 				deepEqual(getTextFromFrag(res), expected);
 			});
 		});
 	});
 
-	
+
 
 	test('Tokens returning 0 where they should diplay the number', function () {
 		var template = "<div id='zero'>{{completed}}</div>";
@@ -297,7 +297,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		teacher.attr('name', '<i>Mr Scott</i>');
 
 		deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
-		
+
 		deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott");
 
 		can.remove(can.$('#qunit-fixture>*'));
@@ -355,7 +355,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		
+
 		deepEqual( getText(t.template, t.data) , expected);
 	});
 
@@ -391,12 +391,12 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		var template = can.stache(t.template)
 		var frag = template(t.data);
-		
+
 		var div = document.createElement("div");
 		div.appendChild(frag);
 
 		equal(div.innerHTML, t.expected);
-		
+
 		equal(getText(t.template, {}), t.expected2);
 	});
 
@@ -433,7 +433,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 	test("No arguments passed to helper", function () {
 		var template = can.stache("{{noargHelper}}")
-		
+
 		can.stache.registerHelper("noargHelper", function () {
 			return "foo"
 		})
@@ -632,13 +632,13 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		
+
 		deepEqual( getText(t.template,t.data) , expected);
 
 		var div = document.createElement('div');
-		
+
 		div.appendChild(can.stache(t.template)(t.data2));
-		
+
 		deepEqual(div.innerHTML, expected, 'Using Observe.List');
 		t.data2.names.push('What');
 	});
@@ -692,7 +692,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 	test("multi line elements", function () {
 		var text = "<div\n class=\"{{myClass}}\" />",
 			result = can.stache(text)({myClass: 'a'});
-		
+
 		equal(result.childNodes[0].className, "a", "class name is right");
 	});
 
@@ -700,7 +700,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
 
 		var div = document.createElement('div');
-		
+
 		div.appendChild( can.stache(text)({
 			tags: "foo < bar < car > zar > poo",
 			quotes: "I use 'quote' fingers & &amp;ersands \"a lot\"",
@@ -762,11 +762,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			id: 1,
 			name: 'Dishes'
 		}]);
-		
+
 		div = document.createElement('div');
 
 		div.appendChild( can.stache(text)({todos: todos}) );
-		
+
 		equal(div.getElementsByTagName('option')
 			.length, 1, '1 item in list')
 
@@ -892,10 +892,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		obs.removeAttr('attributes');
 
 		equal(p.getAttribute('some'), null, 'attribute is undefined');
-		
+
 		obs.attr('attributes', 'some="newText"');
 
-		// 
+		//
 		equal(p.getAttribute('some'), 'newText', 'attribute updated');
 
 		obs.removeAttr('message');
@@ -1040,7 +1040,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		ul.appendChild(compiled);
 
 		equal(ul.getElementsByTagName('li')[0].innerHTML, 'No items', 'initial observable state');
-		
+
 		obs.attr('items', [{
 			name: 'foo'
 		}]);
@@ -1550,7 +1550,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 	// https://github.com/bitovi/canjs/issues/228
 	test("Contexts within helpers not always resolved correctly", function () {
-		
+
 		can.stache.registerHelper("bad_context", function (context, options) {
 			return ["<span>"+this.text+"</span> should not be ",options.fn(context)];
 		});
@@ -1566,7 +1566,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			div = document.createElement('div');
 
 		div.appendChild(renderer(data));
-		
+
 		equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
 		equal(div.getElementsByTagName('span')[1].innerHTML, "bar", 'Incorrect text in helper inner template');
 		equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
@@ -1592,7 +1592,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 	// https://github.com/bitovi/canjs/issues/231
 	test("Functions and helpers should be passed the same context", function () {
-		
+
 		var textNodes = function(el, cb) {
 			can.each(el.childNodes, function(el){
 				if(el.nodeType === 3) {
@@ -1602,7 +1602,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				}
 			})
 		}
-		
+
 		can.stache.registerHelper("to_upper", function (fn, options) {
 			if (!fn.fn) {
 				return typeof fn === "function" ? fn()
@@ -1629,7 +1629,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				}
 			},
 			div = document.createElement('div');
-			
+
 		window.other_text = 'Window context';
 
 		div.appendChild(renderer(data));
@@ -1676,7 +1676,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		div.appendChild(renderer(liveData));
 		equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-		
+
 		liveData.todos.push({
 			id: 3,
 			name: 'Knives'
@@ -1820,9 +1820,9 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				name: fancyName
 			}
 		});
-		
-		
-		
+
+
+
 		ok(/World/.test(result.childNodes[0].innerHTML), "Hello World worked");
 	});
 
@@ -2035,7 +2035,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		deepEqual( getText( t.template, t.data), expected);
 	});
 
-	
+
 	test("avoid global helpers", function () {
 
 		var noglobals = can.stache("{{sometext person.name}}");
@@ -2066,9 +2066,9 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		equal(div.innerHTML, "Mr. Ajax");
 		equal(div2.innerHTML, "Ajax rules");
-		
+
 	});
-	
+
 
 	test("Each does not redraw items", function () {
 
@@ -2146,7 +2146,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		equal(div.getElementsByTagName('span')
 			.length, 1, "There is 1 sloth");
-			
+
 		animals.pop();
 
 		equal(div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!");
@@ -2560,7 +2560,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			url = "http://google.com/",
 			templateEscape = can.stache('{{link "' + text + '" "' + url + '"}}'),
 			templateUnescape = can.stache('{{{link "' + text + '" "' + url + '"}}}');
-		
+
 		can.stache.registerHelper('link', function (text, url) {
 			var link = '<a href="' + url + '">' + text + '</a>';
 			return can.stache.safeString(link);
@@ -2570,7 +2570,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		div.appendChild(templateEscape({}));
 
 		equal(div.children.length, 1, 'rendered a DOM node');
-		
+
 		equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
 		equal(div.children[0].innerHTML, text, 'rendered the text properly');
 		equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
@@ -2968,7 +2968,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			.push('second');
 
 		equal(labels.length, 2, "after pushing two label");
-		
+
 		data.removeAttr('item');
 
 		equal(labels.length, 0, "after removing item no label");
@@ -2995,7 +2995,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			bindings++;
 			return can.Map.prototype.bind.apply(this, arguments);
 		}
-		
+
 		// unbind will be called twice
 		function unbind(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
@@ -3210,7 +3210,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 	});
 
 	test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
-		
+
 		var renderer = can.stache('    {{description}}: \
 		<ul> \
 		{{#each list}} \
@@ -3237,7 +3237,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		stop();
 		setTimeout(function () {
-			
+
 			start();
 			data1.attr('list', [{
 				name: 'first'
@@ -3245,10 +3245,10 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			data2.attr('list', [{
 				name: 'first'
 			}]);
-			
+
 			equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')
 				.length, 1, "there should be an li as we set an attr to an array");
-				
+
 			equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')
 				.length, 1);
 			equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0].innerHTML, 'first');
@@ -3315,7 +3315,7 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 
 		equal(labels.length, 1, "first label removed")
 	});
-	
+
 	test("#each with #if directly nested (#750)", function(){
 		var template = can.stache("<ul>{{#each list}} {{#if visible}}<li>{{name}}</li>{{/if}} {{/each}}</ul>");
 		var data = new can.Map(
@@ -3335,74 +3335,74 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 					}
 				]
 			});
-		
+
 		var frag = template(data);
-		
+
 		data.attr('list').pop();
-		
+
 		equal(frag.childNodes[0].getElementsByTagName('li').length, 1, "only first should be visible")
-		
+
 	});
-	
+
 	test("can.view.tag", function(){
-		
+
 		expect(4);
-		
+
 		can.view.tag("stache-tag", function(el, tagData){
 			ok(tagData.scope instanceof can.view.Scope, "got scope");
 			ok(tagData.options instanceof can.view.Scope, "got options");
 			equal(typeof tagData.subtemplate, "function", "got subtemplate");
 			var frag = tagData.subtemplate(tagData.scope.add({last: "Meyer"}), tagData.options);
-			
+
 			equal( frag.childNodes[0].innerHTML, "Justin Meyer", "rendered right");
 		});
-		
+
 		var template = can.stache("<stache-tag><span>{{first}} {{last}}</span></stache-tag>")
-		
+
 		template({first: "Justin"});
-		
+
 	})
-	
+
 	test("can.view.attr", function(){
-		
+
 		expect(3);
-		
+
 		can.view.attr("stache-attr", function(el, attrData){
 			ok(attrData.scope instanceof can.view.Scope, "got scope");
 			ok(attrData.options instanceof can.view.Scope, "got options");
 			equal(attrData.attributeName, "stache-attr", "got attribute name");
-			
+
 		});
-		
+
 		var template = can.stache("<div stache-attr='foo'></div>");
-		
+
 		template({});
-		
+
 	});
-	
+
 	if(window.jQuery || window.Zepto) {
-		
+
 		test("helpers returning jQuery or Zepto collection", function(){
-			
+
 			can.stache.registerHelper("jQueryHelper", function(options){
 				var section = options.fn({first: "Justin"});
 				return $("<h1>").append( section );
 			});
-			
+
 			var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
-			
+
 			var res = template({last: "Meyer"});
-			
+
 			equal(res.childNodes[0].nodeName.toLowerCase(), "h1");
-			
+
 			equal(res.childNodes[0].innerHTML, "Justin Meyer");
-			
+
 		});
 	}
-	
+
 	test("./ in key", function(){
 		var template = can.stache( "<div><label>{{name}}</label>{{#children}}<span>{{./name}}-{{name}}</span>{{/children}}</div>");
-		
+
 		var data = {
 			name: "CanJS",
 			children: [{},{name: "stache"}]
@@ -3412,48 +3412,48 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal( spans[0].innerHTML, "-CanJS", "look in current level" );
 		equal( spans[1].innerHTML, "stache-stache", "found in current level" );
 	});
-	
+
 	test("self closing tags callback custom tag callbacks (#880)", function(){
-		
+
 		can.view.tag("stache-tag", function(el, tagData){
 			ok(true,"tag callback called");
 			equal(tagData.scope.attr(".").foo, "bar", "got scope");
 			ok(!tagData.subtemplate, "there is no subtemplate");
 		});
-		
+
 		var template = can.stache("<div><stache-tag/></div>");
-		
+
 		template({
 			foo: "bar"
 		});
-		
+
 	});
-	
+
 	test("empty custom tags do not have a subtemplate (#880)", function(){
-		
+
 		can.view.tag("stache-tag", function(el, tagData){
 			ok(true,"tag callback called");
 			equal(tagData.scope.attr(".").foo, "bar", "got scope");
 			ok(!tagData.subtemplate, "there is no subtemplate");
 		});
-		
+
 		var template = can.stache("<div><stache-tag></stache-tag></div>");
-		
+
 		template({
 			foo: "bar"
 		});
-		
+
 	});
 
 	test("inverse in tag", function(){
 		var template = can.stache('<span {{^isBlack}} style="display:none"{{/if}}>Hi</span>');
-		
+
 		var res = template({
 			isBlack: false
 		});
-		
+
 		equal(res.childNodes[0].style.display, "none", "color is not set");
-		
+
 	});
 
 	//!steal-remove-start
@@ -3595,13 +3595,13 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			'</svg>';
 		var frag = can.stache(template)({});
 
-		
+
 		equal(frag.childNodes[0].childNodes[0].getAttribute("r"), "25");
 	});
-	
+
 	test("single property read does not infinately loop (#1155)",function(){
 		stop();
-		
+
 		var map = new can.Map({state: false});
 		var current = false;
 		var source = can.compute(1)
@@ -3612,9 +3612,9 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			return source();
 		});
 		number.bind("change",function(){});
-		
+
 		var template = can.stache("<div>{{#if map.state}}<span>Hi</span>{{/if}}</div>")
-		
+
 		template({
 			map: map
 		});
@@ -3622,11 +3622,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		map.attr("state", current = !current);
 		ok(true,"no error at this point");
 		start();
-		
+
 	});
-	
+
 	test("methods become observable (#1164)", function(){
-		
+
 		var TeamModel = can.Map.extend({
 
 			shortName : function() {
@@ -3675,11 +3675,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		list.splice(-1);
 		equal(frag.childNodes.length, children - 1, 'Child node removed');
 	});
-	
+
 	test('stache can accept an intermediate (#1387)', function(){
 		var template = "<div class='{{className}}'>{{message}}</div>";
 		var intermediate = can.view.parser(template,{}, true);
-		
+
 		var renderer = can.stache(intermediate);
 		var frag = renderer({className: "foo", message: "bar"});
 		equal(frag.childNodes[0].className, "foo", "correct class name");
@@ -3705,53 +3705,53 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		equal(div.childNodes[0].innerHTML, "goodbye World", "Partial updates when attr is updated");
 
 	});
-	
+
 	test("#each with null or undefined and then a list", function(){
 		var template = can.stache("<ul>{{#each items}}<li>{{name}}</li>{{/each}}");
 		var data = new can.Map({items: null});
 		var frag = template(data);
-		
+
 		var div = document.createElement("div");
 		div.appendChild(frag);
-		
-		
+
+
 		data.attr("items", [{name: "foo"}]);
-		
+
 		equal(div.getElementsByTagName("li").length, 1, "li added");
 	});
-	
+
 	test("promises work (#179)", function(){
-		
+
 		var template = can.stache(
 			"{{#if promise.isPending}}<span class='pending'></span>{{/if}}"+
 			"{{#if promise.isRejected}}<span class='rejected'>{{promise.reason.message}}</span>{{/if}}"+
 			"{{#if promise.isResolved}}<span class='resolved'>{{promise.value.message}}</span>{{/if}}");
-		
+
 		var def = new can.Deferred();
 		var data = {
 			promise: def.promise()
 		};
-		
+
 		var frag = template(data);
 		var div = document.createElement("div");
 		div.appendChild(frag);
-		
+
 		var spans = div.getElementsByTagName("span");
-		
+
 		equal(spans.length, 1);
 		equal(spans[0].className, "pending");
-		
+
 		stop();
-		
+
 		def.resolve({message: "Hi there"});
-		
+
 		// better than timeouts would be using can-inserted, but we don't have can/view/bindings
 		setTimeout(function(){
 			equal(spans.length, 1);
 			equal(spans[0].className, "resolved");
 			equal(spans[0].innerHTML, "Hi there");
-			
-			
+
+
 			var def = new can.Deferred();
 			var data = {
 				promise: def.promise()
@@ -3760,74 +3760,74 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			spans = div.getElementsByTagName("span");
-			
+
 			def.reject({message: "BORKED"});
-			
+
 			setTimeout(function(){
 				equal(spans.length, 1);
 				equal(spans[0].className, "rejected");
 				equal(spans[0].innerHTML, "BORKED");
-				
+
 				start();
 			}, 30);
 		},30);
-		
+
 	});
-	
+
 	test("{#list} works right (#1551)", function(){
 		var data = new can.Map({});
 		var template = can.stache("<div>{{#items}}<span/>{{/items}}</div>");
 		var frag = template(data);
-		
+
 		data.attr("items",new can.List());
-		
+
 		data.attr("items").push("foo");
-		
+
 		var spans = frag.childNodes[0].getElementsByTagName("span");
-		
+
 		equal(spans.length,1, "one span");
-		
+
 	});
-	
+
 	test("promises are not rebound (#1572)", function(){
 		stop();
 		var d = new can.Deferred();
-		
+
 		var compute = can.compute(d);
-		
+
 		var template = can.stache("<div>{{#if promise.isPending}}<span/>{{/if}}</div>");
 		var frag = template({
 			promise: compute
 		});
 		var div = frag.childNodes[0],
 			spans = div.getElementsByTagName("span");
-		
+
 		var d2 = new can.Deferred();
 		compute(d2);
-		
+
 		setTimeout(function(){
 			d2.resolve("foo");
-			
+
 			setTimeout(function(){
 				equal(spans.length, 0, "there should be no spans");
 				start();
 			},30);
 		},10);
-		
+
 	});
-	
+
 	test("reading alternate values on promises (#1572)", function(){
 		var promise = new can.Deferred();
 		promise.myAltProp = "AltValue";
-		
+
 		var template = can.stache("<div>{{d.myAltProp}}</div>");
-		
+
 		var frag = template({d: promise});
-		
+
 		equal(frag.childNodes[0].innerHTML, "AltValue", "read value");
-		
+
 	});
-	
+
 	test("don't setup live binding for raw data with seciton helper", function () {
 		expect(0);
 		var template = can.stache("<ul>{{#animals}}" +
@@ -3845,16 +3845,16 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 		template({
 			animals: this.animals
 		});
-		
+
 		can.bind = oldBind;
 	});
-	
+
 	test("possible to teardown immediate nodeList (#1593)", function(){
 		expect(3);
 		var map = new can.Map({show: true});
 		var oldBind = map.bind,
 			oldUnbind = map.unbind;
-			
+
 		map.bind = function(){
 			ok(true, "bound");
 			return oldBind.apply(this, arguments);
@@ -3863,25 +3863,25 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			ok(true, "unbound");
 			return oldUnbind.apply(this, arguments);
 		};
-		
+
 		var template = can.stache("{{#if show}}<span/>TEXT{{/if}}");
 		var nodeList = can.view.nodeLists.register([], undefined, true);
 		var frag = template(map,{},nodeList);
 		can.view.nodeLists.update(nodeList, frag.childNodes);
-		
+
 		equal(nodeList.length, 1, "our nodeList has the nodeList of #if show");
-		
+
 		can.view.nodeLists.unregister(nodeList);
-		
+
 		// has to be async b/c of the temporary bind for performance
 		stop();
 		setTimeout(function(){
 			start();
 		},10);
-		
+
 	});
-	
-		// the define test doesn't include the stache plugin and 
+
+		// the define test doesn't include the stache plugin and
 	// the stache test doesn't include define plugin, so have to put this here
 	test('#1590 #each with surrounding block and setter', function(){
 		// the problem here ... is that a batch is happening
@@ -3897,11 +3897,11 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			people: people,
 			product: product
 		});
-		
+
 		can.batch.start();
 		product(1);
 		can.batch.stop();
-		
+
 		equal(frag.childNodes[0].getElementsByTagName('span').length, 1, "no duplicates");
 
 	});
@@ -3914,20 +3914,20 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 			var frag = template({
 				radius: 6
 			});
-			
+
 			equal(frag.childNodes[0].namespaceURI, "http://www.w3.org/2000/svg", "svg namespace");
 		});
 	}
-	
+
 	test("to virtual dom output", function(){
 		can.noDOM = true;
 		var template = can.stache("<h1>{{#test}}<span>{{name}}</span>{{/test}}</h1>");
-		
+
 		var res = template({
 			test: true,
 			name: "Hello"
 		});
-		
+
 		deepEqual(res, [
 			{
 				tag: "h1",
@@ -3937,8 +3937,33 @@ steal("can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","s
 				}]
 			}
 		]);
-		
+
 	});
-	
-	
+
+
+	test('using #each when toggling between list and null', function() {
+		var state = new can.Map();
+		var frag = can.stache('{{#each deepness.rows}}<div></div>{{/each}}')(state);
+
+		state.attr('deepness', {
+			rows: ['test']
+		});
+		state.attr('deepness', null);
+
+		equal(frag.childNodes.length, 1, "only the placeholder textnode");
+	});
+
+	test('registerSimpleHelper', 3, function() {
+		var template = can.stache('<div>Result: {{simple first second}}</div>');
+		can.stache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
 });

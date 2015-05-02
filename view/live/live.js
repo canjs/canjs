@@ -170,6 +170,12 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				indexMap = [],
 				// True once all previous events have been fired
 				afterPreviousEvents = false,
+				// Indicates that we should not be responding to changes in the list.
+				// It's possible that the compute change causes this list behavior to be torn down.
+				// However that same "change" dispatch will eventually fire the updateList handler because
+				// the list of "change" handlers is copied when dispatching starts.
+				// A 'perfect' fix would be to use linked lists for event handlers.
+				isTornDown = false,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
 					if (!afterPreviousEvents) {
@@ -338,6 +344,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				},
 				// Called when the list is replaced or setup.
 				updateList = function (ev, newList, oldList) {
+					if(isTornDown) {
+						return;
+					}
 					teardownList();
 					// make an empty list if the compute returns null or undefined
 					list = newList || [];
@@ -360,6 +369,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			parentNode = elements.getParentNode(el, parentNode);
 			// Setup binding and teardown to add and remove events
 			var data = setup(parentNode, function () {
+				// TODO: for stache, binding on the compute is not necessary.
 				if (can.isFunction(compute)) {
 					compute.bind('change', updateList);
 				}
@@ -369,12 +379,16 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				}
 				teardownList(true);
 			});
+			
 			if(!nodeList) {
 				live.replace(masterNodeList, text, data.teardownCheck);
 			} else {
 				elements.replace(masterNodeList, text);
 				nodeLists.update(masterNodeList, [text]);
-				nodeList.unregistered = data.teardownCheck;
+				nodeList.unregistered = function(){
+					data.teardownCheck();
+					isTornDown = true;
+				};
 			}
 			
 			// run the list setup

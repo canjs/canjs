@@ -288,4 +288,14 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		l.attr('1', 'foo');
 		equal(l.attr('1'), 'foo');
 	});
+
+	test('splice with similar but less items works (#1606)', function() {
+		var list = new can.List([ 'aa', 'bb', 'cc']);
+
+		list.splice(0, list.length, 'aa', 'cc', 'dd');
+		deepEqual(list.attr(), ['aa', 'cc', 'dd']);
+
+		list.splice(0, list.length, 'aa', 'cc');
+		deepEqual(list.attr(), ['aa', 'cc']);
+	});
 });
