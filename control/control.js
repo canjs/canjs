@@ -209,7 +209,7 @@ steal('can/util', 'can/construct', function (can) {
 			// which were cached in `setup`, are used and all elements are bound using `delegate` from `this.element`.
 			on: function (el, selector, eventName, func) {
 				if (!el) {
-					this.off();
+					this.off(true);
 
 					var cls = this.constructor,
 						bindings = this._bindings,
@@ -231,10 +231,10 @@ steal('can/util', 'can/construct', function (can) {
 
 					// Set up the ability to `destroy` the control later.
 					can.bind.call(element, "removed", destroyCB);
-					bindings.user.push(function (el) {
+					bindings.removed = function (el) {
 						can.unbind.call(el, "removed", destroyCB);
-					});
-					return bindings.user.length;
+					};
+					return;
 				}
 
 				// if `el` is a string, use that as `selector` and re-set it to this control's element...
@@ -264,16 +264,25 @@ steal('can/util', 'can/construct', function (can) {
 			// 
 			// Unbinds all event handlers on the controller.
 			// This should _only_ be called in combination with .on()
-			off: function () {
+			off: function (dontRemoveUserBindings) {
 				var el = this.element[0],
 					bindings = this._bindings;
 				if( bindings ) {
-					each(bindings.user || [], function (value) {
-						value(el);
-					});
+					if(!dontRemoveUserBindings){
+						each(bindings.user || [], function (value) {
+							value(el);
+						});
+					}
 					each(bindings.control || {}, function (value) {
 						value(el);
 					});
+					if(bindings.removed){
+						bindings.removed(el);
+					}
+				}
+				if(this._bindings && dontRemoveUserBindings){
+					this._bindings.control = {};
+					delete this._bindings.removed;
 				}
 				// Adds bindings.
 				this._bindings = {user: [], control: {}};
