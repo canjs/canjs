@@ -27,6 +27,9 @@ not listed here, the behavior is the same as the `text` type.
 
 Cross binds the input's string text value with the observable value.
 
+The value of the observable is changed after the input's `change` event, 
+which is after `blur`.
+
 @demo can/view/bindings/doc/hyperloop.html
 
 ## input type=checkbox
