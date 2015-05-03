@@ -144,6 +144,9 @@ steal(function () {
 	// this is here in case can.compute hasn't loaded
 	can.__reading = function () {};
 
+	can.isNode = typeof process === "object" &&
+		{}.toString.call(process) === "[object process]";
+
 	//!steal-remove-start
 	can.dev = {
 		warnTimeout: 5000,
