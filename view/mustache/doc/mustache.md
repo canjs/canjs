@@ -11,6 +11,8 @@
 @plugin can/view/mustache
 @download http://canjs.us/release/latest/can.mustache.js
 
+@deprecated {2.2} can.mustache is still supported (and will be through 3.0), but no longer actively maintained. [can.stache] is the recommended view engine in CanJS, especially when using with [can.Component], as there remains potential for memory leaks in can.mustache that are fixed in [can.stache]. Projects using can.mustache should consider switching to [can.stache], as the APIs are almost identical and switching is relatively easy.
+
 @description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
 when used with [can.Maps](#can_observe).
 

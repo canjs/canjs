@@ -157,6 +157,8 @@ Changes `<hello-world>Hi There</hello-world>` into:
 
     <hello-world><h1>Hi There</h1></hello-world>
 
+It is recommended to use [can.stache] with can.Component instead of [can.mustache]. [can.mustache] is deprecated as of 2.2, and [can.stache] will provide improved performance and memory usage.
+
 ### viewModel
 
 A component's [can.Component::viewModel viewModel] defines a can.Map that
