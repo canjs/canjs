@@ -23,15 +23,9 @@ define(["@loader", "module", "can/view/stache/system"], function(loader, module,
   }
 
   function cleanBody(){
-    var toRemove = [];
-    can.each(can.$("body")[0].childNodes, function(el){
-      if(!isScript(el)) {
-        toRemove.push(can.$(el));
-      }
-    });
-    can.each(toRemove, function(el){
-      can.remove(el);
-    });
+		can.each(can.makeArray(can.$("body")[0].childNodes, function(el){
+			can.remove(el);
+		}));
   }
 
   function render(){
