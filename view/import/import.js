@@ -9,6 +9,11 @@ steal("can/util", "can/view/callbacks", function(can){
 			importPromise = can.Deferred().reject("No moduleName provided").promise();
 		}
 
+		var readyPromises = tagData.options.attr("helpers.readyPromises");
+		if(readyPromises) {
+			readyPromises.push(importPromise);
+		}
+
 		if(tagData.subtemplate) {
 			var scope = tagData.scope.add(importPromise);
 			var frag = tagData.subtemplate(scope, tagData.options);

@@ -648,7 +648,7 @@ steal('can/util', function (can) {
 				// Return the deferred...
 				return deferred;
 			} else {
-				// get is called async but in 
+				// get is called async but in
 				// ff will be async so we need to temporarily reset
 				reading = can.__clearReading();
 
@@ -694,7 +694,7 @@ steal('can/util', function (can) {
 				return response;
 			}
 		},
-		
+
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
@@ -713,7 +713,7 @@ steal('can/util', function (can) {
 			} else {
 				renderer = makeRenderer( info.renderer(id, text) );
 			}
-			
+
 			def = def || new can.Deferred();
 
 			// Cache if we are caching.
@@ -742,6 +742,21 @@ steal('can/util', function (can) {
 				});
 				return fn.apply(this, realArgs);
 			};
+		},
+
+		/**
+		 * @hide
+		 * Render a view asynchronously by waiting for readyPromises to resolve.
+		 */
+		renderAsync: function(renderer, data, options){
+			if(!options) options = {};
+			if(!options.readyPromises) {
+				options.readyPromises = [];
+			}
+			var frag = renderer(data, options);
+			return can.when.apply(can, options.readyPromises).then(function(){
+				return frag;
+			});
 		}
 	});
 
