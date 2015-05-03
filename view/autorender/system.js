@@ -23,9 +23,9 @@ define(["@loader", "module", "can/view/stache/system"], function(loader, module,
   }
 
   function cleanBody(){
-		can.each(can.makeArray(can.$("body")[0].childNodes, function(el){
+		can.each(can.makeArray(can.$("body")[0].childNodes), function(el){
 			can.remove(el);
-		}));
+		});
   }
 
   function render(){
