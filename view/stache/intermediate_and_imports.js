@@ -5,8 +5,12 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 
 		var template = mustacheCore.cleanLineEndings(source);
 		var imports = [],
+			ases = {},
 			inImport = false,
-			inFrom = false;
+			inFrom = false,
+			inAs = false,
+			currentAs = "",
+			currentFrom = "";
 
 		var intermediate = parser(template, {
 			start: function( tagName, unary ){
@@ -19,16 +23,32 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			attrStart: function( attrName ){
 				if(attrName === "from") {
 					inFrom = true;
+				} else if(attrName === "as") {
+					inAs = true;
 				}
 			},
-			attrEnd:   function( attrName ){
+			attrEnd: function( attrName ){
 				if(attrName === "from") {
 					inFrom = false;
+				} else if(attrName === "as") {
+					inAs = false;
 				}
 			},
 			attrValue: function( value ){
 				if(inFrom && inImport) {
 					imports.push(value);
+					currentFrom = value;
+				} else if(inAs && inImport) {
+					currentAs = value;
+				}
+			},
+			end: function(tagName){
+				if(tagName === "can-import") {
+					// Set the as value to the from
+					if(currentAs) {
+						ases[currentAs] = currentFrom;
+						currentAs = "";
+					}
 				}
 			},
 			close: function(tagName){
@@ -38,7 +58,7 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			}
 		}, true);
 
-		return {intermediate: intermediate, imports: imports};
+		return {intermediate: intermediate, imports: imports, ases: ases};
 	};
 
 });
