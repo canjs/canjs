@@ -42,12 +42,14 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 	},
 	rerender = function(){
 		var body = document.body;
-		can.each(can.makeArray(body.childNodes), function(el){
-			if(el.tagName && el.tagName.toLowerCase() !== "script") {
-				can.remove(el);
-			}
+		can.view.renderAsync(this.render, this.state).then(function(frag){
+			can.each(can.makeArray(body.childNodes), function(el){
+				if(el.tagName && el.tagName.toLowerCase() !== "script") {
+					can.remove(el);
+				}
+			});
+			body.appendChild(frag);
 		});
-		body.appendChild(this.render(this.state));
 	},
 	renderNode = function(url){
 		var state = new this.viewModel;
