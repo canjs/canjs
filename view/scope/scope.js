@@ -208,6 +208,12 @@ steal(
 						return {
 							value: this._context
 						};
+					} else if(attr === "@root") {
+						var cur = this;
+						while(cur._parent) {
+							cur = cur._parent;
+						}
+						return { value: cur._context };
 					}
 
 					// Array of names from splitting attr string into names.  ```"a.b\.c.d\\.e" //-> ['a', 'b', 'c', 'd.e']```

@@ -750,12 +750,27 @@ steal('can/util', function (can) {
 		 */
 		renderAsync: function(renderer, data, options){
 			if(!options) options = {};
-			if(!options.readyPromises) {
-				options.readyPromises = [];
-			}
 			var frag = renderer(data, options);
-			return can.when.apply(can, options.readyPromises).then(function(){
-				return frag;
+
+			function waitForPromises(){
+				var readyPromises = [];
+				if(data.__readyPromises) {
+					readyPromises = data.__readyPromises;
+					data.__readyPromises = [];
+				}
+
+				if(readyPromises.length === 0) {
+					return new can.Deferred().resolve();
+				}
+
+				return can.when.apply(can, readyPromises).then(waitForPromises);
+			}
+
+			return waitForPromises().then(function(){
+				return {
+					fragment: frag,
+					data: data.__pageData
+				};
 			});
 		}
 	});

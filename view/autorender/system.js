@@ -42,13 +42,13 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 	},
 	rerender = function(){
 		var body = document.body;
-		can.view.renderAsync(this.render, this.state).then(function(frag){
+		can.view.renderAsync(this.render, this.state).then(function(result){
 			can.each(can.makeArray(body.childNodes), function(el){
 				if(el.tagName && el.tagName.toLowerCase() !== "script") {
 					can.remove(el);
 				}
 			});
-			body.appendChild(frag);
+			body.appendChild(result.fragment);
 		});
 	},
 	renderNode = function(url){

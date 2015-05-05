@@ -9,9 +9,9 @@ steal("can/util", "can/view/callbacks", function(can){
 			importPromise = can.Deferred().reject("No moduleName provided").promise();
 		}
 
-		var readyPromises = tagData.options.attr("helpers.readyPromises");
-		if(readyPromises) {
-			readyPromises.push(importPromise);
+		var root = tagData.scope.attr("@root");
+		if(root) {
+			root.waitFor(importPromise);
 		}
 
 		if(tagData.subtemplate) {
