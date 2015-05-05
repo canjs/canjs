@@ -10,7 +10,7 @@ steal("can/util", "can/view/callbacks", function(can){
 		}
 
 		var root = tagData.scope.attr("@root");
-		if(root) {
+		if(root && can.isFunction(root.waitFor)) {
 			root.waitFor(importPromise);
 		}
 
