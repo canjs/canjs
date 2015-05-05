@@ -48,7 +48,7 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 					can.remove(el);
 				}
 			});
-			body.appendChild(result.fragment);
+			can.appendChild(body, result.fragment);
 		});
 	},
 	renderNode = function(url){
