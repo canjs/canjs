@@ -59,8 +59,18 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 			var html = body.innerHTML;
 
 			// Do cleanup here.
+			function traverse(el){
+				var cur = el.firstChild;
+				while(cur) {
+					can.trigger(cur, "removed");
+					traverse(cur);
+					cur = cur.nextSibling;
+				}
+			}
+
 			var cur = body.firstChild;
 			while(cur) {
+				traverse(cur);
 				can.trigger(cur, "removed");
 				body.removeChild(cur);
 				cur = body.firstChild;
