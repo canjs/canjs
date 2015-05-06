@@ -3919,27 +3919,6 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		});
 	}
 
-	test("to virtual dom output", function(){
-		can.noDOM = true;
-		var template = can.stache("<h1>{{#test}}<span>{{name}}</span>{{/test}}</h1>");
-
-		var res = template({
-			test: true,
-			name: "Hello"
-		});
-
-		deepEqual(res, [
-			{
-				tag: "h1",
-				children: [{
-					tag: "span",
-					children: ["Hello"]
-				}]
-			}
-		]);
-
-	});
-
 
 	test('using #each when toggling between list and null', function() {
 		var state = new can.Map();

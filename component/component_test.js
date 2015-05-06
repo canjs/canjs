@@ -369,7 +369,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define
 			var base = new can.Map({});
 
 			var frag = template(base);
-			var root = simpleDocument.createElement("div");
+			var root = doc.createElement("div");
 			root.appendChild(frag);
 
 			var items = [{
@@ -1517,7 +1517,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define
 		});
 	}
 
-	makeTest("can/component dom");
+	makeTest("can/component dom", document);
 	makeTest("can/component vdom", simpleDocument);
 
 
