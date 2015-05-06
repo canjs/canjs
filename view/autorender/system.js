@@ -52,7 +52,25 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 	renderNode = function(url){
 		var state = new this.viewModel;
 		state.attr(can.route.deparam(url));
-		return can.view.renderAsync(this.render, state);
+		var doc = new document.constructor;
+		var body = doc.documentElement.firstChild;
+		return can.view.renderAsync(this.render, state, {}, body)
+		.then(function(result){
+			var html = body.innerHTML;
+
+			// Do cleanup here.
+			var cur = body.firstChild;
+			while(cur) {
+				can.trigger(cur, "removed");
+				body.removeChild(cur);
+				cur = body.firstChild;
+			}
+
+			return {
+				html: html,
+				data: result.data
+			};
+		});
 	};
 
 	function translate(load){
