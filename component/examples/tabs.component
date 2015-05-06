@@ -1,0 +1,98 @@
+<can-component tag='can-tabs'>
+  <style type='less'>
+    	margin-top: 20px;
+	button {clear: both;}
+	ul {
+	    padding: 0px; margin: 0px;
+	}
+	ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
+	ul { display: inline-block; }
+	li {
+	    float: left;
+	    padding: 10px;
+	    background-color: #F6F6F6;
+	    list-style: none;
+	    margin-left: 10px;
+	    color: #1C94C4;
+	    font-weight: bold;
+	    text-decoration: none;
+	}
+	li.active {
+	    color: #F6A828;
+	    cursor: default;
+	}
+	can-panel {
+
+	    clear: both;
+	    display: block;
+	}
+  </style>
+  <template type='text/stache'>
+		<can-import from="can/component/examples/panel.component!"/>
+
+    <ul>
+      {{#panels}}
+        <li {{#isActive}}class='active'{{/isActive}}
+        	can-click='makeActive'>
+	    	  {{title}}
+    	</li>
+      {{/panels}}
+    </ul>
+    <content></content>
+  </template>
+  <view-model>
+    import can from "can";
+
+    export default can.Map.extend({
+	// Contains a list of all panel scopes within the
+	// tabs element.
+	panels: [],
+	// When a `<panel>` element is inserted into the document,
+	// it calls this method to add the panel's scope to the
+	// panels array.
+	addPanel: function(panel){
+		// If this is the first panel, activate it.
+		if( this.attr("panels").length === 0 ) {
+			this.makeActive(panel);
+		}
+		this.attr("panels").push(panel);
+	},
+	// When a `<panel>` element is removed from the document,
+	// it calls this method to remove the panel's scope from
+	// the panels array.
+	removePanel: function(panel){
+		var panels = this.attr("panels");
+		can.batch.start();
+		panels.splice(panels.indexOf(panel),1);
+		// if the panel was active, make the first item active
+		if(panel === this.attr("active")){
+			if(panels.length){
+				this.makeActive(panels[0]);
+			} else {
+				this.removeAttr("active")
+			}
+		}
+		can.batch.stop()
+	},
+	makeActive: function(panel){
+		this.attr("active",panel);
+		this.attr("panels").each(function(panel){
+			panel.attr("active", false)
+		});
+		panel.attr("active",true);
+
+	},
+	// this is scope, not mustache
+	// consider removing scope as arg
+	isActive: function( panel ) {
+		return this.attr('active') == panel;
+	}
+    });
+  </view-model>
+  <events>
+     export default {}
+  </events>
+  <helpers>
+     export default {}
+  </helpers>
+</can-component>
