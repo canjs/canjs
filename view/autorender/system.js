@@ -12,8 +12,6 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
   function setup(){
     loader.import(loader.main).then(function(r){
       main = r;
-
-			main.start();
       liveReload();
     });
   }
@@ -73,7 +71,7 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 
 		return "define("+JSON.stringify(intermediateAndImports.imports)+",function(" +
 			args.join(", ") + "){\n" +
-			"return {\n" +
+			"var __export = {\n" +
 			"\trender: stache(" + JSON.stringify(intermediateAndImports.intermediate) + "),\n" +
 			"\tstart: " + start.toString() + ",\n" +
 			"\trerender: " + rerender.toString() + ",\n" +
@@ -81,8 +79,10 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 			can.map(ases, function(from, name){
 				return "\t" + name + ": " + name +"['default'] || " + name;
 			}).join(",\n") +
-			"\n};\n" +
-		"})";
+			"\n};\n\n" +
+			"if(typeof steal !== 'undefined' && !(typeof process === 'object' && {}.toString.call(process) === '[object process]')) steal.done().then(function() { __export.start(); });\n" +
+			"return __export;\n" +
+		"});";
 	}
 
   return {
