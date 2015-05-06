@@ -1,4 +1,4 @@
-steal("can/util", "can/map", function(can){
+steal("can/util", "can/map", "can/compute",function(can){
 
 	function sortedSetJson(set){
 		if(set == null) {
@@ -27,7 +27,7 @@ steal("can/util", "can/map", function(can){
 			this.__readyPromises.push(promise);
 			return promise;
 		},
-		pageData: function(key, set, inst){
+		pageData: can.__notObserve(function(key, set, inst){
 			var appState = this;
 
 			function store(data){
@@ -48,7 +48,7 @@ steal("can/util", "can/map", function(can){
 			}
 
 			return inst;
-		}
+		})
 	});
 
 	return can.AppState;

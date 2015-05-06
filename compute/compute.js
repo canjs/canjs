@@ -107,5 +107,14 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 
 	can.compute.set = can.Compute.set;
 
+	can.__notObserve = function(fn){
+		return function(){
+			var previousReads = can.__clearReading();
+			var res = fn.apply(this, arguments);
+			can.__setReading(previousReads);
+			return res;
+		};
+	};
+
 	return can.compute;
 });
