@@ -18,7 +18,13 @@ steal("can/util", "can/view/callbacks", function(can){
 			var scope = tagData.scope.add(importPromise);
 			var frag = tagData.subtemplate(scope, tagData.options);
 
+			var nodeList = can.view.nodeLists.register([], undefined, true);
+			can.one.call(el, "removed", function(){
+				can.view.nodeLists.unregister(nodeList);
+			});
+
 			can.appendChild(el, frag);
+			can.view.nodeLists.update(nodeList, can.childNodes(el));
 		}
 	});
 
