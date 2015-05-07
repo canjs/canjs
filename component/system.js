@@ -166,6 +166,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 				return loader.locate(styleLoad);
 			});
 			stylePromise = locatePromise.then(function(){
+				if(loader.has(styleName)) loader["delete"](styleName);
 				loader.define(styleName, styleText, {
 					metadata: styleLoad.metadata,
 					address: address("style", types.style)
@@ -178,6 +179,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			var templateName = name("template");
 			deps.push(templateName);
 			ases.push("template");
+			if(loader.has(templateName)) loader["delete"](templateName);
 			loader.define(templateName, templateDefine(result), {
 				address: address("template")
 			});
@@ -188,6 +190,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			var viewModelName = name("view-model");
 			deps.push(viewModelName);
 			ases.push("viewModel");
+			if(loader.has(viewModelName)) loader["delete"](viewModelName);
 			loader.define(viewModelName, texts["view-model"], {
 				address: address("view-model")
 			});
@@ -198,6 +201,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			var eventsName = name("events");
 			deps.push(eventsName);
 			ases.push("events");
+			if(loader.has(eventsName)) loader["delete"](eventsName);
 			loader.define(eventsName, texts.events, {
 				address: address("events")
 			});
@@ -208,6 +212,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			var helpersName = name("helpers");
 			deps.push(helpersName);
 			ases.push("helpers");
+			if(loader.has(helpersName)) loader["delete"](helpersName);
 			loader.define(helpersName, texts.helpers, {
 				address: address("helpers")
 			});
