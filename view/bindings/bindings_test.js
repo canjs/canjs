@@ -954,4 +954,39 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
 			'Imported: David',  '{name} component scope imported into variable');
 	});
+	
+	test('live importing scope [prop]={scopeProp}', function(){
+		can.Component.extend({
+			tag: 'import-prop-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7,
+				updateName: function(){
+					this.attr('name',"Justin")
+				}
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-prop-parent',
+			template: can.stache('<import-prop-scope [test]="{name}" [child]="{this}"></import-prop-scope>' +
+				'<div>Imported: {{test}}</div>')
+		});
+
+		var template = can.stache('<import-prop-parent></import-prop-parent>');
+		var frag = template({});
+		var importPropParent = frag.firstChild;
+		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
+		
+		can.viewModel(importPropScope).updateName();
+		
+		var importPropParentViewModel = can.viewModel(importPropParent);
+		
+		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
+		
+		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
+		
+		
+	});
 });
