@@ -121,10 +121,10 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 		};
 	}
 
-	function addresser(loadAddress, name, plugin){
-		return function(part){
-			var base = loadAddress + "/" + part;
-			return base + "." + (plugin || "js");
+	function addresser(loadAddress){
+		return function(part, plugin){
+			var base = loadAddress + "." + part;
+			return base + (plugin ? ("." + plugin) : "");
 		};
 	}
 
@@ -179,7 +179,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			deps.push(templateName);
 			ases.push("template");
 			loader.define(templateName, templateDefine(result), {
-				address: address("stache")
+				address: address("template")
 			});
 		}
 
