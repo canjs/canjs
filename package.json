@@ -101,7 +101,8 @@
 		"ext": {
 			"ejs": "can/view/ejs/system",
 			"mustache": "can/view/mustache/system",
-			"stache": "can/view/stache/system"
+			"stache": "can/view/stache/system",
+			"component": "can/component/system"
 		},
 		"buildConfig": {
 			"map": {
