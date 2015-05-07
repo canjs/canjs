@@ -955,10 +955,45 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'Imported: David',  '{name} component scope imported into variable');
 	});
 	
+	test('live importing scope [prop]={scopeProp}', function(){
+		can.Component.extend({
+			tag: 'import-prop-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7,
+				updateName: function(){
+					this.attr('name',"Justin");
+				}
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-prop-parent',
+			template: can.stache('<import-prop-scope [test]="{name}" [child]="{this}"></import-prop-scope>' +
+				'<div>Imported: {{test}}</div>')
+		});
+
+		var template = can.stache('<import-prop-parent></import-prop-parent>');
+		var frag = template({});
+		var importPropParent = frag.firstChild;
+		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
+		
+		can.viewModel(importPropScope).updateName();
+		
+		var importPropParentViewModel = can.viewModel(importPropParent);
+		
+		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
+		
+		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
+		
+	});
+	
 	test('reference values (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
 			tag: 'reference-export',
+			template: can.stache('<span>{{referenceExport.name}}</span>'),
 			viewModel: {}
 		});
 		
@@ -970,7 +1005,40 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var refExport = can.viewModel(frag.firstChild);
 		refExport.attr("name","done");
 		
-		equal(frag.lastChild.nodeValue, "done");
+		equal( frag.lastChild.firstChild.nodeValue, "done");
+		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
 	});
+	
+	test('reference values with <content> tag', function(){
+		can.Component.extend({
+			tag: "other-export",
+			viewModel: {
+				name: "OTHER-EXPORT"
+			}
+		});
+	
+		can.Component.extend({
+			tag: "ref-export",
+			template: can.stache('<other-export #other-export/><content>{{otherExport.name}}</content>')
+		});
+		
+		// this should have otherExport name in the page
+		var t1 = can.stache("<ref-export></ref-export>");
+		
+		// this should not have anything in 'one', but something in 'two'
+		var t2 = can.stache("<form><other-export #other/><ref-export><b>{{otherExport.name}}</b><label>{{other.name}}</label></ref-export></form>");
+		
+		var f1 = t1();
+		equal(f1.firstChild.lastChild.nodeValue, "OTHER-EXPORT", "content");
+		
+		var f2 = t2();
+		var one = f2.firstChild.getElementsByTagName('b')[0];
+		var two = f2.firstChild.getElementsByTagName('label')[0];
+		
+		equal(one.firstChild.nodeValue, "", "external content, internal export");
+		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
+	});
+	
+	
 	
 });

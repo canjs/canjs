@@ -4039,7 +4039,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		// Helpers evaluated 3rd time...
 		state.attr('parent.child', 'bar');
-	});	
+	});
 
 	test('registerSimpleHelper', 3, function() {
 		can.Mustache.registerSimpleHelper('simple', function(first, second) {

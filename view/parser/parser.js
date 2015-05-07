@@ -18,8 +18,7 @@ steal("can/view", function(can){
 		return intermediate;
 	}
 	
-	var alpha = 
-		alphaNumericHU = "-:A-Za-z0-9_",
+	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[^=>\\s\\{\\}\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
