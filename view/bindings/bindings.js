@@ -474,10 +474,10 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	// [abc]='{this}'
 	// [def]='{blah}'
-	can.view.attr(/\[[\w\.]+\]/, function(el, attrData) {
+	can.view.attr(/\[[\w\.-]+\]/, function(el, attrData) {
 		
 		var prop = removeBrackets(el.getAttribute(attrData.attributeName));
-		var name = removeBrackets(attrData.attributeName, '[', ']');
+		var name = removeBrackets(can.camelize(attrData.attributeName.toLowerCase()), '[', ']');
 
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);

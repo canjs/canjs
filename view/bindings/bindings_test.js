@@ -970,7 +970,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		can.Component.extend({
 			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope [test]="{name}" [child]="{this}"></import-prop-scope>' +
+			template: can.stache('<import-prop-scope [test]="{name}" [child-component]="{this}"></import-prop-scope>' +
 				'<div>Imported: {{test}}</div>')
 		});
 
@@ -985,8 +985,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
 		
-		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
-		
+		equal(importPropParentViewModel.attr("childComponent"), can.viewModel(importPropScope), "got this");
 		
 	});
 });
