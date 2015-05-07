@@ -113,14 +113,19 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 		};
 	}
 
-	function name(tagName, part, plugin){
-		return "can-component/" + tagName + "/" + part +
-			(plugin ? ("." + plugin) : "");
+	function namer(loadName){
+		var baseName = loadName.substr(0, loadName.indexOf("!"));
+
+		return function(part, plugin){
+			return baseName + "/" + part + (plugin ? ("." + plugin) : "");
+		};
 	}
 
-	function address(name, plugin){
-		var base = loader.baseURL + name;
-		return base + "." + (plugin || "js");
+	function addresser(loadAddress, name, plugin){
+		return function(part){
+			var base = loadAddress + "/" + part;
+			return base + "." + (plugin || "js");
+		};
 	}
 
 	function templateDefine(intermediateAndImports){
@@ -145,11 +150,14 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 
 		loader = loader.localLoader || loader;
 
+		var name = namer(load.name);
+		var address = addresser(load.address);
+
 		// Define the styles
 		stylePromise = Promise.resolve();
 		if(texts.style) {
 			var styleText = tagName + " {\n" + texts.style + "}\n";
-			var styleName = name(tagName, "style", types.style);
+			var styleName = name("style", types.style);
 			var styleLoad = {};
 
 			var normalizePromise = loader.normalize(styleName + "!");
@@ -160,48 +168,48 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			stylePromise = locatePromise.then(function(){
 				loader.define(styleName, styleText, {
 					metadata: styleLoad.metadata,
-					address: address(name(tagName, "style"), types.style)
+					address: address("style", types.style)
 				});
 			});
 		}
 
 		// Define the template
 		if(result.intermediate.length) {
-			var templateName = name(tagName, "template");
+			var templateName = name("template");
 			deps.push(templateName);
 			ases.push("template");
 			loader.define(templateName, templateDefine(result), {
-				address: address(templateName, "stache")
+				address: address("stache")
 			});
 		}
 
 		// Define the viewModel
 		if(texts["view-model"]) {
-			var viewModelName = name(tagName, "view-model");
+			var viewModelName = name("view-model");
 			deps.push(viewModelName);
 			ases.push("viewModel");
 			loader.define(viewModelName, texts["view-model"], {
-				address: address(viewModelName)
+				address: address("view-model")
 			});
 		}
 
 		// Define events
 		if(texts.events) {
-			var eventsName = name(tagName, "events");
+			var eventsName = name("events");
 			deps.push(eventsName);
 			ases.push("events");
 			loader.define(eventsName, texts.events, {
-				address: address(eventsName)
+				address: address("events")
 			});
 		}
 
 		// Define helpers
 		if(texts.helpers) {
-			var helpersName = name(tagName, "helpers");
+			var helpersName = name("helpers");
 			deps.push(helpersName);
 			ases.push("helpers");
 			loader.define(helpersName, texts.helpers, {
-				address: address(helpersName)
+				address: address("helpers")
 			});
 		}
 
