@@ -360,7 +360,7 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 	});
 
 	test("Handlebars advanced helpers (from docs)", function () {
-		can.stache.registerHelper('exercise', function (group, action, num, options) {
+		can.stache.registerSimpleHelper('exercise', function (group, action, num, options) {
 			if (group && group.length > 0 && action && num > 0) {
 				return options.fn({
 					group: group,
@@ -395,9 +395,9 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		var div = document.createElement("div");
 		div.appendChild(frag);
 
-		equal(div.innerHTML, t.expected);
+		equal(div.innerHTML, t.expected, "with data");
 		
-		equal(getText(t.template, {}), t.expected2);
+		equal(getText(t.template, {}), t.expected2, "without data");
 	});
 
 	test("Passing functions as data, then executing them", function () {

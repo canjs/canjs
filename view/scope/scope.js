@@ -13,7 +13,7 @@ steal(
 	'can/compute', function (can, makeComputeData) {
 
 		// ## Helpers
-
+		
 		// Regex for escaped periods
 		var escapeReg = /(\\)?\./g,
 		// Regex for double escaped periods
@@ -60,7 +60,11 @@ steal(
 				// ## Scope.read
 				// Scope.read was moved to can.compute.read
 				// can.compute.read reads properties from a parent.  A much more complex version of getObject.
-				read: can.compute.read
+				read: can.compute.read,
+				Refs: can.Map.extend({}),
+				refsScope: function(){
+					return new can.view.Scope( new this.Refs() );
+				}
 			},
 			/**
 			 * @prototype
@@ -128,7 +132,44 @@ steal(
 					return this.computeData(key, options)
 						.compute;
 				},
-
+				getRefs: function(){
+					var scope = this,
+						context;
+					while (scope) {
+						context = scope._context;
+						if(context instanceof Scope.Refs) {
+							return context;
+						}
+						scope = scope._parent;
+					}
+				},
+				// this takes a scope and essentially copies its chain from
+				// right before the last Refs.  And it does not include the ref.
+				// this is a helper function to provide lexical semantics for refs.
+				// This will not be needed for leakScope: false.
+				cloneFromRef: function(){
+					var contexts = [];
+					var scope = this,
+						context,
+						parent;
+					while (scope) {
+						context = scope._context;
+						if(context instanceof Scope.Refs) {
+							parent = scope._parent;
+							break;
+						}
+						contexts.push(context);
+						scope = scope._parent;
+					}
+					if(parent) {
+						can.each(contexts, function(context){
+							parent = parent.add(context);
+						});
+						return parent;
+					} else {
+						return this;
+					}
+				},
 				// ## Scope.prototype.read
 				// Finds the first isntance of a key in the available scopes and returns the keys value along with the the observable the key
 				// was found in, readsData and the current scope.
@@ -186,7 +227,26 @@ steal(
 						// Tracks the most likely observable to use as a setter.
 						setObserveDepth = -1,
 						currentSetReads,
-						currentSetObserve;
+						currentSetObserve,
+					// Only search one reference scope for a variable.
+						searchedRefsScope = false,
+						refInstance,
+						readOptions = can.simpleExtend({
+							/* Store found observable, incase we want to set it as the rootObserve. */
+							foundObservable: function (observe, nameIndex) {
+								currentObserve = observe;
+								currentReads = names.slice(nameIndex);
+							},
+							earlyExit: function (parentValue, nameIndex) {
+								if (nameIndex > setObserveDepth) {
+									currentSetObserve = currentObserve;
+									currentSetReads = currentReads;
+									setObserveDepth = nameIndex;
+								}
+							},
+							// Execute anonymous functions found along the way
+							executeAnonymousFunctions: true
+						}, options);
 
 					// Goes through each scope context provided until it finds the key (attr).  Once the key is found
 					// then it's value is returned along with an observe, the current scope and reads.
@@ -196,25 +256,19 @@ steal(
 
 					while (scope) {
 						context = scope._context;
-						if (context !== null &&
+						refInstance = context instanceof Scope.Refs;
+						if ( context !== null &&
 							// if its a primitive type, keep looking up the scope, since there won't be any properties
-							(typeof context === "object" || typeof context === "function") ) {
-							var data = can.compute.read(context, names, can.simpleExtend({
-								/* Store found observable, incase we want to set it as the rootObserve. */
-								foundObservable: function (observe, nameIndex) {
-									currentObserve = observe;
-									currentReads = names.slice(nameIndex);
-								},
-								earlyExit: function (parentValue, nameIndex) {
-									if (nameIndex > setObserveDepth) {
-										currentSetObserve = currentObserve;
-										currentSetReads = currentReads;
-										setObserveDepth = nameIndex;
-									}
-								},
-								// Execute anonymous functions found along the way
-								executeAnonymousFunctions: true
-							}, options));
+							(typeof context === "object" || typeof context === "function") &&
+							!( searchedRefsScope && refInstance )
+							
+							) {
+							
+							if(refInstance) {
+								searchedRefsScope = true;
+							}
+							
+							var data = can.compute.read(context, names, readOptions);
 							// **Key was found**, return value and location data
 							if (data.value !== undefined) {
 								return {

@@ -167,7 +167,6 @@
 		"./list/sort/sort": "./dist/cjs/list/sort/sort",
 		"./control/plugin/plugin": "./dist/cjs/control/plugin/plugin",
 		"./view/modifiers/modifiers": "./dist/cjs/view/modifiers/modifiers",
-		"./util/object/object": "./dist/cjs/util/object/object",
 		"./util/fixture/fixture": "./dist/cjs/util/fixture/fixture",
 		"./view/bindings/bindings": "./dist/cjs/view/bindings/bindings",
 		"./view/live/live": "./dist/cjs/view/live/live",
