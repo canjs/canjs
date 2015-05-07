@@ -1109,6 +1109,16 @@ steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 				}
 			});
 			return filteredList;
+		},
+		map: function (callback, thisArg) {
+			var filteredList = new can.List(),
+				self = this;
+			this.each(function(item, index, list){
+				var mapped = callback.call( thisArg | self, item, index, self);
+				filteredList.push(mapped);
+
+			});
+			return filteredList;
 		}
 	});
 	can.List = Map.List = list;
