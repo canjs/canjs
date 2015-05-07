@@ -2,7 +2,7 @@ steal("can/util", "can/map", "can/compute",function(can){
 
 	function sortedSetJson(set){
 		if(set == null) {
-			return set
+			return set;
 		} else {
 			var sorted = {};
 
@@ -10,6 +10,7 @@ steal("can/util", "can/map", "can/compute",function(can){
 			for(var k in set){
 				keys.push(k);
 			}
+			keys.sort();
 			can.each(keys, function(prop){
 				sorted[prop] = set[prop];
 			});
@@ -17,7 +18,7 @@ steal("can/util", "can/map", "can/compute",function(can){
 		}
 	}
 
-	can.AppState = can.Map.extend({
+	can.AppMap = can.Map.extend({
 		setup: function(){
 			can.Map.prototype.setup.apply(this, arguments);
 			this.__readyPromises = [];
@@ -51,6 +52,6 @@ steal("can/util", "can/map", "can/compute",function(can){
 		})
 	});
 
-	return can.AppState;
+	return can.AppMap;
 
 });
