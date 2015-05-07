@@ -23,7 +23,7 @@ steal("can/util", "can/view/callbacks", function(can){
 				can.view.nodeLists.unregister(nodeList);
 			});
 
-			can.appendChild(el, frag);
+			can.appendChild(el, frag, can.document);
 			can.view.nodeLists.update(nodeList, can.childNodes(el));
 		}
 	});
