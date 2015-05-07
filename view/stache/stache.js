@@ -113,7 +113,7 @@ steal(
 				if( !node.attributes ) {
 					node.attributes = [];
 				}
-				node.attributes.push(callback);
+				node.attributes.unshift(callback);
 			};
 		
 		parser(template,{

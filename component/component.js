@@ -12,7 +12,7 @@
 steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks, elements) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
-	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i,
+	var ignoreAttributesRegExp = /^(dataViewId|class|id|\[[\w\.]+\])$/i,
 		paramReplacer = /\{([^\}]+)\}/g;
 
 	/**
