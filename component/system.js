@@ -140,10 +140,13 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			texts = result.texts,
 			types = result.types,
 			deps = ["can/component/component"],
-			ases = ["Component"];
+			ases = ["Component"],
+			stylePromise;
+
+		loader = loader.localLoader || loader;
 
 		// Define the styles
-		var stylePromise = Promise.resolve();
+		stylePromise = Promise.resolve();
 		if(texts.style) {
 			var styleText = tagName + " {\n" + texts.style + "}\n";
 			var styleName = name(tagName, "style", types.style);
@@ -159,7 +162,6 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 					metadata: styleLoad.metadata,
 					address: address(name(tagName, "style"), types.style)
 				});
-
 			});
 		}
 
