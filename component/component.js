@@ -384,7 +384,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 
 				}
 				// Append the resulting document fragment to the element
-				can.appendChild(el, frag);
+				can.appendChild(el, frag, can.document);
 
 				// update the nodeList with the new children so the mapping gets applied
 				can.view.nodeLists.update(nodeList, can.childNodes(el));

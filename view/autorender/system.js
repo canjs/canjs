@@ -53,34 +53,41 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 		var state = new this.viewModel;
 		state.attr(can.route.deparam(url));
 		var doc = new document.constructor;
-		var body = doc.documentElement.firstChild;
-		return can.view.renderAsync(this.render, state, {}, body)
+
+		var renderPromise = can.view.renderAsync(this.render, state, {}, doc)
 		.then(function(result){
-			var html = body.innerHTML;
+			var html = doc.body.innerHTML;
 
-			// Do cleanup here.
-			function traverse(el){
-				var cur = el.firstChild;
-				while(cur) {
-					can.trigger(cur, "removed");
-					traverse(cur);
-					cur = cur.nextSibling;
-				}
-			}
-
-			var cur = body.firstChild;
-			while(cur) {
-				traverse(cur);
-				can.trigger(cur, "removed");
-				body.removeChild(cur);
-				cur = body.firstChild;
-			}
+			triggerInBody("removed");
+			doc.documentElement.removeChild(doc.body);
 
 			return {
 				html: html,
 				data: result.data
 			};
 		});
+
+		function triggerInBody(event) {
+			// Do cleanup here.
+			function traverse(el){
+				var cur = el.firstChild;
+				while(cur) {
+					can.trigger(cur, event);
+					traverse(cur);
+					cur = cur.nextSibling;
+				}
+			}
+
+			var cur = doc.body.firstChild;
+			while(cur) {
+				traverse(cur);
+				can.trigger(cur, event);
+				cur = cur.nextSibling;
+			}
+		}
+
+
+		return renderPromise;
 	};
 
 	function translate(load){

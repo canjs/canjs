@@ -110,9 +110,9 @@ steal('can/util', "can/view",function (can) {
 			var last = oldElements[oldElements.length - 1];
 			// Insert it in the `document` or `documentFragment`
 			if (last.nextSibling) {
-				can.insertBefore(last.parentNode, newFrag, last.nextSibling);
+				can.insertBefore(last.parentNode, newFrag, last.nextSibling, can.document);
 			} else {
-				can.appendChild(last.parentNode, newFrag);
+				can.appendChild(last.parentNode, newFrag, can.document);
 			}
 		},
 		/**

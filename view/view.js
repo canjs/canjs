@@ -748,14 +748,9 @@ steal('can/util', function (can) {
 		 * @hide
 		 * Render a view asynchronously by waiting for readyPromises to resolve.
 		 */
-		renderAsync: function(renderer, data, options, appendToElement){
+		renderAsync: function(renderer, data, options, doc){
 			if(!options) options = {};
 			var frag = renderer(data, options);
-			// If someone provided an element to append to, do it now...
-			// this is needed so that in Node events are fired in the correct order.
-			if(appendToElement) {
-				can.appendChild(appendToElement, frag);
-			}
 
 			function waitForPromises(){
 				var readyPromises = [];
@@ -765,6 +760,15 @@ steal('can/util', function (can) {
 				}
 
 				if(readyPromises.length === 0) {
+					// If provided a document to use to fire events, set this as the can.document
+					// and insert the fragment into the body.
+					if(doc) {
+						var oldDoc = can.document;
+						can.document = doc;
+						can.appendChild(doc.body, frag, doc);
+						can.document = oldDoc;
+					}
+
 					return new can.Deferred().resolve();
 				}
 

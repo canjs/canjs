@@ -13,6 +13,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 				"view-model": true,
 				"events": true,
 				"helpers": true,
+				"script": true,
 				"can-import": true
 			},
 			areIn = {},
@@ -22,6 +23,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 				events: "",
 				helpers: ""
 			},
+			froms = {};
 			types = {},
 			attrs = {},
 			values = {},
@@ -61,6 +63,13 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 				}
 				if(currentAttr === "type" && tags[currentTag]) {
 					types[currentTag] = (value+"").replace("text/", "");
+
+					// <script type="events">
+					if(currentTag === "script" && tags[value]) {
+						currentTag = value;
+					}
+				} else if(currentAttr === "from" && tags[currentTag]) {
+					froms[currentTag] = value;
 				}
 				attrs[currentAttr] = value;
 				return keepToken();
@@ -105,6 +114,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 		intermediate.shift();
 
 		return {
+			froms: froms,
 			intermediate: intermediate,
 			imports: imports,
 			tagName: tagName,
@@ -144,6 +154,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			tagName = result.tagName,
 			texts = result.texts,
 			types = result.types,
+			froms = result.froms,
 			deps = ["can/component/component"],
 			ases = ["Component"],
 			stylePromise;
@@ -153,13 +164,85 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 		var name = namer(load.name);
 		var address = addresser(load.address);
 
+		// Define the template
+		if(froms.template || result.intermediate.length) {
+			ases.push("template");
+
+			if(froms.template) {
+				deps.push(froms.template);
+			} else if(result.intermediate.length) {
+				var templateName = name("template");
+				deps.push(templateName);
+				if(loader.has(templateName)) loader["delete"](templateName);
+				loader.define(templateName, templateDefine(result), {
+					address: address("template")
+				});
+			}
+		}
+
+		// Define the viewModel
+		if(froms["view-model"] || texts["view-model"]) {
+			ases.push("viewModel");
+
+			if(froms["view-model"]) {
+				deps.push(froms["view-model"]);
+			} else {
+				var viewModelName = name("view-model");
+				deps.push(viewModelName);
+				if(loader.has(viewModelName)) loader["delete"](viewModelName);
+				loader.define(viewModelName, texts["view-model"], {
+					address: address("view-model")
+				});
+			}
+		}
+
+		// Define events
+		if(froms.events || texts.events) {
+			ases.push("events");
+
+			if(froms.events) {
+				deps.push(froms.events);
+			} else if(texts.events) {
+				var eventsName = name("events");
+				deps.push(eventsName);
+				if(loader.has(eventsName)) loader["delete"](eventsName);
+				loader.define(eventsName, texts.events, {
+					address: address("events")
+				});
+			}
+		}
+
+		// Define helpers
+		if(froms.helpers || texts.helpers) {
+			ases.push("helpers");
+
+			if(froms.helpers) {
+				deps.push(froms.helpers);
+			} else if(texts.helpers) {
+				var helpersName = name("helpers");
+				deps.push(helpersName);
+				if(loader.has(helpersName)) loader["delete"](helpersName);
+				loader.define(helpersName, texts.helpers, {
+					address: address("helpers")
+				});
+			}
+		}
+
 		// Define the styles
 		stylePromise = Promise.resolve();
-		if(texts.style) {
-			var styleText = tagName + " {\n" + texts.style + "}\n";
-			var styleName = name("style", types.style);
-			var styleLoad = {};
 
+		if(froms.style) {
+			deps.push(froms.style);
+		} else if(texts.style) {
+			var styleName = name("style", types.style || "css");
+			deps.push(styleName);
+
+			var styleText = texts.style;
+			if(types.style === "less") {
+				var styleText = tagName + " {\n" + texts.style + "}\n";
+			}
+
+			var styleLoad = {};
 			var normalizePromise = loader.normalize(styleName + "!");
 			var locatePromise = normalizePromise.then(function(name){
 				styleLoad = { name: name, metadata: {} };
@@ -167,54 +250,11 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			});
 			stylePromise = locatePromise.then(function(){
 				if(loader.has(styleName)) loader["delete"](styleName);
+
 				loader.define(styleName, styleText, {
 					metadata: styleLoad.metadata,
 					address: address("style", types.style)
 				});
-			});
-		}
-
-		// Define the template
-		if(result.intermediate.length) {
-			var templateName = name("template");
-			deps.push(templateName);
-			ases.push("template");
-			if(loader.has(templateName)) loader["delete"](templateName);
-			loader.define(templateName, templateDefine(result), {
-				address: address("template")
-			});
-		}
-
-		// Define the viewModel
-		if(texts["view-model"]) {
-			var viewModelName = name("view-model");
-			deps.push(viewModelName);
-			ases.push("viewModel");
-			if(loader.has(viewModelName)) loader["delete"](viewModelName);
-			loader.define(viewModelName, texts["view-model"], {
-				address: address("view-model")
-			});
-		}
-
-		// Define events
-		if(texts.events) {
-			var eventsName = name("events");
-			deps.push(eventsName);
-			ases.push("events");
-			if(loader.has(eventsName)) loader["delete"](eventsName);
-			loader.define(eventsName, texts.events, {
-				address: address("events")
-			});
-		}
-
-		// Define helpers
-		if(texts.helpers) {
-			var helpersName = name("helpers");
-			deps.push(helpersName);
-			ases.push("helpers");
-			if(loader.has(helpersName)) loader["delete"](helpersName);
-			loader.define(helpersName, texts.helpers, {
-				address: address("helpers")
 			});
 		}
 
