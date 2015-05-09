@@ -26,7 +26,7 @@ render `tagData.subtemplate` and the result is inserted as the childNodes of `el
 `can.view.tag` is a low-level way to add custom behavior to custom elements. Often, you
 want to do this with [can.Component]. However, `can.view.tag` is
 useful for when [can.Component] might be considered overkill.  For example, the
-following creates a [jQueryUI](http://api.jqueryui.com/datepicker/) everytime a
+following creates a [jQueryUI DatePicker](http://api.jqueryui.com/datepicker/) everytime a
 `<jqui-datepicker>` element is found:
 
     can.view.tag("jqui-datepicker", function(el, tagData){
