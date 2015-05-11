@@ -202,17 +202,15 @@
 			"isDefault": true,
 			"hidden": true
 		},
-		"can/util/string/string": {
-			"name": "can.util.string",
+		"can/util/util": {
+			"name": "can.util",
 			"type": "core",
 			"isDefault": true,
-			"hidden": true
-		},
-		"can/util/attr/attr": {
-			"name": "can.util.attr",
-			"type": "core",
-			"isDefault": true,
-			"hidden": true
+			"hidden": true,
+			"configurations": [
+				"jquery",
+				"jquery-2"
+			]
 		},
 		"can/view/autorender/autorender": {
 			"name": "can.autorender",
