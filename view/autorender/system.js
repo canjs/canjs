@@ -22,13 +22,15 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
     }
 
     loader.import("live-reload", { name: module.id }).then(function(reload){
-      reload(function(){
-				main.rerender();
-			});
+			loader.normalize(loader.main).then(function(mainName){
+				reload(function(){
+					main.rerender();
+				});
 
-      reload(loader.main, function(r){
-        main = r;
-      });
+				reload(mainName, function(r){
+					main = r;
+				});
+			});
     });
   }
 
@@ -95,14 +97,15 @@ define(["@loader", "module", "can/view/stache/intermediate_and_imports"], functi
 
 		var ases = intermediateAndImports.ases;
 		var imports = intermediateAndImports.imports;
-		var args = ["stache"];
+		var args = [];
 		can.each(ases, function(from, name){
 			// Move the as to the front of the array.
 			imports.splice(imports.indexOf(from), 1);
 			imports.unshift(from);
-			args.push(name);
+			args.unshift(name);
 		});
 		imports.unshift("can/view/stache/stache");
+		args.unshift("stache");
 
 		return "define("+JSON.stringify(intermediateAndImports.imports)+",function(" +
 			args.join(", ") + "){\n" +

@@ -1,9 +1,5 @@
 define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], function(loader, mustacheCore, parser){
 
-	var interop = function(mod){
-		if(mod && mod["default"]) return mod["default"];
-	};
-
 	function parse(source){
 		var template = mustacheCore.cleanLineEndings(source),
 			tags = {
