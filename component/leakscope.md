@@ -43,7 +43,7 @@ Finally, if `<hello-world>` is defined like:
 ```
 can.Component.extend({
   tag: "hello-world",
-  tag: can.stache("{{greeting}} <content/>{{exclamation}}")
+  template: can.stache("{{greeting}} <content/>{{exclamation}}")
 })
 ```
 
