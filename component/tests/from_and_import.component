@@ -1,0 +1,8 @@
+<can-component tag="from-and-import">
+	<template>
+		<can-import from="can/component/examples/hello-world.component!"/>
+
+		<hello-world></hello-world>
+	</template>
+	<view-model from="can/component/tests/from_and_import"/>
+</can-component>

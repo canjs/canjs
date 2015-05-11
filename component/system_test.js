@@ -22,3 +22,14 @@ test("from works", function(){
 	});
 	stop();
 });
+
+test("view-model from with can-import in template works", function(){
+	expect(1);
+
+	loader.import("can/component/tests/from_and_import.component!").then(function(){
+		ok(true, "Yay it works");
+		start();
+	});
+
+	stop();
+});

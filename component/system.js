@@ -78,6 +78,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 
 					attrs.as = false;
 					attrs.from = false;
+					areIn["can-import"] = false;
 				}
 				return keepToken();
 			},
@@ -155,7 +156,7 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			ases = ["Component"],
 			stylePromise;
 
-		loader = loader.localLoader || loader;
+		var localLoader = loader.localLoader || loader;
 
 		var name = namer(load.name);
 		var address = addresser(load.address);
@@ -169,8 +170,8 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			} else if(result.intermediate.length) {
 				var templateName = name("template");
 				deps.push(templateName);
-				if(loader.has(templateName)) loader["delete"](templateName);
-				loader.define(templateName, templateDefine(result), {
+				if(localLoader.has(templateName)) localLoader["delete"](templateName);
+				localLoader.define(templateName, templateDefine(result), {
 					address: address("template")
 				});
 			}
@@ -185,8 +186,8 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			} else {
 				var viewModelName = name("view-model");
 				deps.push(viewModelName);
-				if(loader.has(viewModelName)) loader["delete"](viewModelName);
-				loader.define(viewModelName, texts["view-model"], {
+				if(localLoader.has(viewModelName)) localLoader["delete"](viewModelName);
+				localLoader.define(viewModelName, texts["view-model"], {
 					address: address("view-model")
 				});
 			}
@@ -201,8 +202,8 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			} else if(texts.events) {
 				var eventsName = name("events");
 				deps.push(eventsName);
-				if(loader.has(eventsName)) loader["delete"](eventsName);
-				loader.define(eventsName, texts.events, {
+				if(localLoader.has(eventsName)) localLoader["delete"](eventsName);
+				localLoader.define(eventsName, texts.events, {
 					address: address("events")
 				});
 			}
@@ -217,8 +218,8 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			} else if(texts.helpers) {
 				var helpersName = name("helpers");
 				deps.push(helpersName);
-				if(loader.has(helpersName)) loader["delete"](helpersName);
-				loader.define(helpersName, texts.helpers, {
+				if(localLoader.has(helpersName)) localLoader["delete"](helpersName);
+				localLoader.define(helpersName, texts.helpers, {
 					address: address("helpers")
 				});
 			}
@@ -239,15 +240,15 @@ define(["@loader", "can/view/stache/mustache_core", "can/view/parser/parser"], f
 			}
 
 			var styleLoad = {};
-			var normalizePromise = loader.normalize(styleName + "!");
+			var normalizePromise = localLoader.normalize(styleName + "!");
 			var locatePromise = normalizePromise.then(function(name){
 				styleLoad = { name: name, metadata: {} };
-				return loader.locate(styleLoad);
+				return localLoader.locate(styleLoad);
 			});
 			stylePromise = locatePromise.then(function(){
-				if(loader.has(styleName)) loader["delete"](styleName);
+				if(localLoader.has(styleName)) localLoader["delete"](styleName);
 
-				loader.define(styleName, styleText, {
+				localLoader.define(styleName, styleText, {
 					metadata: styleLoad.metadata,
 					address: address("style", types.style)
 				});
