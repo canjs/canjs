@@ -908,4 +908,63 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			
 		equal(personEvents,2);
 	});
+
+	test('Can read a defined property with a set/get method (#1648)', function () {
+		// Problem: "get" is not passed the correct "lastSetVal"
+		// Problem: Cannot read the value of "foo"
+
+		var Map = can.Map.extend({
+			define: {
+				foo: {
+					value: '',
+					set: function (setVal) {
+						return setVal;
+					},
+					get: function (lastSetVal) {
+						return lastSetVal;
+					}
+				}
+			}
+		});
+
+		var map = new Map();
+
+		equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+
+		map.attr('foo', 'baz');
+
+		equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	});
+
+	test('Can bind to a defined property with a set/get method (#1648)', 3, function () {
+		// Problem: "get" is not called before and after the "set"
+		// Problem: Function bound to "foo" is not called
+		// Problem: Cannot read the value of "foo"
+
+		var Map = can.Map.extend({
+			define: {
+				foo: {
+					value: '',
+					set: function (setVal) {
+						return setVal;
+					},
+					get: function (lastSetVal) {
+						return lastSetVal;
+					}
+				}
+			}
+		});
+
+		var map = new Map();
+
+		map.bind('foo', function () {
+			ok(true, 'Bound function is called');
+		});
+		
+		equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+
+		map.attr('foo', 'baz');
+
+		equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	});
 });
