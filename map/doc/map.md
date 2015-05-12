@@ -11,6 +11,11 @@
 
 @description Create observable objects.
 
+
+Watch this video to see an example of creating an ATM machine using can.Map:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/QP9mHyxZNiI" frameborder="0" allowfullscreen></iframe>
+
 @signature `new can.Map([props])`
 
 Creates a new instance of can.Map.
