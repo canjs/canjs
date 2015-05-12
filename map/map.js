@@ -539,7 +539,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					this[prop] = val;
 				}
 			},
-
+			one: can.one,
 			bind: function (eventName, handler) {
 				var computedBinding = this._computedBindings && this._computedBindings[eventName];
 				if (computedBinding) {
