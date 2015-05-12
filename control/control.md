@@ -149,7 +149,7 @@ the element is wrapped with `jQuery( element )`.
 ## Listening to events
 
 Control automatically binds prototype methods that look
-like event handlers. Listen to __click__s on `<li>` elements like:
+like event handlers. Listen to __click__'s on `<li>` elements like:
 
     var Todos = can.Control.extend({
       init: function( element , options ) {...},

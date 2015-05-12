@@ -39,6 +39,17 @@ of using live-binding, we could listen to when offset changes and update the pag
 
 @demo can/component/examples/paginate_events_next_update_page.html 
 
+Components have the ability to bind to special [can.events.inserted inserted] and [can.events.removed removed] events that are called when a component's tag has been inserted into or removed from the page:
+
+      events: {
+        "inserted": function(){
+          // called when the component's tag is inserted into the DOM 
+        },
+        "removed": function(){
+          // called when the component's tag is removed from the DOM 
+        }
+      }
+
 ## High performance template rendering
 
 While [can.view.bindings] conveniently allows you to call a [can.Component::viewModel viewModel] method from a template like:
