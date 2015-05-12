@@ -179,6 +179,7 @@
 		"./view/mustache/system": "./dist/cjs/view/mustache/system",
 		"./view/ejs/system": "./dist/cjs/view/ejs/system",
 		"./util/event": "./dist/cjs/util/event",
+		"./view/import/import": "./dist/cjs/view/import/import",
 		"./map/sort/sort": "./dist/cjs/map/sort/sort"
 	}
 }
