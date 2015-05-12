@@ -37,11 +37,7 @@
 
 <script type="text/javascript" src="<%= configuration.library %>"></script>
 <script type="text/javascript" src="dist/<%= dist.replace('-2', '') %>.js"></script>
-<% modules.forEach(function(module) { %>
-<% if(!module.isDefault) { %>
-<script type="text/javascript" src="dist/<%= module %>.js"></script>
-<% } %>
-<% }); %>
+<% modules.forEach(function(module) { %><% if(!module.isDefault) { %><script type="text/javascript" src="dist/<%= module %>.js"></script><% } %><% }); %>
 <script type="text/javascript" src="test/pluginified/latest.js"></script>
 
 <script type="text/javascript">
