@@ -14,7 +14,18 @@ steal("can/util", "can/view/callbacks", function(can){
 			root.waitFor(importPromise);
 		}
 
-		if(tagData.subtemplate) {
+		// Set the viewModel to the promise
+		can.viewModel(el, importPromise);
+
+		// If there is a can-tag present we will hand-off rendering to that tag.
+		var handOffTag = el.getAttribute("can-tag");
+		if(handOffTag) {
+			var scope = tagData.scope.add(importPromise);
+			var callback = can.view.callbacks._tags[handOffTag];
+			callback(el, can.extend(tagData, {
+				scope: scope
+			}));
+		} else if(tagData.subtemplate) {
 			var scope = tagData.scope.add(importPromise);
 			var frag = tagData.subtemplate(scope, tagData.options);
 

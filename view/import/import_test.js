@@ -45,3 +45,15 @@ test("dynamic imports will only load when in scope", function(){
 
 	QUnit.stop();
 });
+
+test("if a can-tag is present rendering is handed over to that tag", function(){
+	var iai = getIntermediateAndImports("<can-import from='can/view/import/test/hello' can-tag='loading'/>");
+	can.view.tag("loading", function(el){
+		var template = stache("it worked");
+		can.appendChild(el, template());
+	});
+	var template = stache(iai.intermediate);
+
+	var res = template();
+	equal(res.childNodes[0].childNodes[0].nodeValue, "it worked", "Rendered with the can-tag");
+});
