@@ -3931,7 +3931,6 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(frag.childNodes.length, 1, "only the placeholder textnode");
 	});
 
-
 	test('template with a block section and nested if doesnt render correctly', function() {
 		var myMap = new can.Map({
 			bar: true
@@ -3945,6 +3944,63 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Order', 'shows else case');
 		myMap.attr('foo', true);
 		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Meals', 'shows if case');
+	});
 
+	test('Helper handles list replacement (#1652)', 3, function () {
+		var state = new can.Map({
+			list: []
+		});
+
+		var helpers = {
+			listHasLength: function (options) {
+				ok(true, 'listHasLength helper evaluated');
+				return this.attr('list').attr('length') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helper evaluated 1st time...
+		can.stache('{{#listHasLength}}{{/listHasLength}}')(state, helpers);
+
+		// Helper evaluated 2nd time...
+		state.attr('list', []);
+
+		// Helper evaluated 3rd time...
+		state.attr('list').push('...')
+	});
+
+	test('Helper binds to nested properties (#1651)', function () {
+
+		var nestedAttrsCount = 0,
+			state = new can.Map({
+				parent: null
+			});
+
+		var helpers = {
+			bindViaNestedAttrs: function (options) {
+
+				nestedAttrsCount++;
+
+				if (nestedAttrsCount === 3) {
+					ok(true, 'bindViaNestedAttrs helper evaluated 3 times');
+				}
+
+				return this.attr('parent') && this.attr('parent').attr('child') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helpers evaluated 1st time...
+		can.stache('{{#bindViaNestedAttrs}}{{/bindViaNestedAttrs}}')(state, helpers);
+
+		// Helpers evaluated 2nd time...
+		state.attr('parent', {
+			child: 'foo'
+		});
+
+		// Helpers evaluated 3rd time...
+		state.attr('parent.child', 'bar');
 	});
 });

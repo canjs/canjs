@@ -202,7 +202,9 @@ steal("can/util",
 				// `true` if the expression looks like a helper.
 				looksLikeAHelper = exprData.args.length || !can.isEmptyObject(exprData.hash),
 				// The "peaked" at value of the name.
-				initialValue;
+				initialValue,
+				// The function that calls the helper
+				helperEvaluator;
 				
 			// Convert lookup values in arguments to actual values.
 			for(var i = 0, len = exprData.args.length; i < len; i++) {
@@ -318,9 +320,11 @@ steal("can/util",
 
 				args.push(helperOptions);
 				// Call the helper.
-				return function () {
+				helperEvaluator = function () {
 					return helper.fn.apply(context, args) || '';
 				};
+				helperEvaluator.bindOnce = false;
+				return helperEvaluator;
 
 			}
 			
