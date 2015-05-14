@@ -48,9 +48,9 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 
 		// ## getId
 		getId = function (inst) {
-			// `can.__reading` makes a note that `id` was just read.
-			can.__reading(inst, inst.constructor.id);
-			// Use `__get` instead of `attr` for performance. (But that means we have to remember to call `can.__reading`.)
+			// `can.__observe` makes a note that `id` was just read.
+			can.__observe(inst, inst.constructor.id);
+			// Use `__get` instead of `attr` for performance. (But that means we have to remember to call `can.__observe`.)
 			return inst.__get(inst.constructor.id);
 		},
 
