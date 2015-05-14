@@ -261,7 +261,7 @@ are observable, it means that the view of that Control will update itself whenev
 of the compute updates. Here's a simple slider that works off of a compute:
 
 ```
-var project = new Observe({
+var project = new can.Map({
     name: 'A Very Important Project',
     percentDone: .35
 });

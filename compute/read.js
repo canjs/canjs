@@ -176,7 +176,7 @@ steal("can/util", function(can){
 						observeData.dispatch("state",["rejected","pending"]);
 					});
 				}
-				can.__reading(observeData,"state");
+				can.__observe(observeData,"state");
 				return prop in observeData ? observeData[prop] : value[prop];
 			}
 		},

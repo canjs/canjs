@@ -73,11 +73,10 @@ steal(
 
 				// ## Scope.prototype.attr
 				// Reads a value from the current context or parent contexts.
-				attr: function (key, value) {
+				attr: can.__notObserve(function (key, value) {
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
-					var previousReads = can.__clearReading(),
-						options = {
+					var options = {
 							isArgument: true,
 							returnObserveMethods: true,
 							proxyMethods: false
@@ -98,10 +97,8 @@ steal(
 
 						can.compute.set(obj, key, value, options);
 					}
-
-					can.__setReading(previousReads);
 					return res.value;
-				},
+				}),
 
 				// ## Scope.prototype.add
 				// Creates a new scope and sets the current scope to be the parent.

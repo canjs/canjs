@@ -101,9 +101,8 @@ steal("can/util",
 			var rendererWithScope = function(ctx, opts, parentNodeList){
 				return renderer(ctx || parentScope, opts, parentNodeList);
 			};
-			return function (newScope, newOptions, parentNodeList) {
+			return can.__notObserve(function (newScope, newOptions, parentNodeList) {
 				// prevent binding on fn.
-				var reads = can.__clearReading();
 				// If a non-scope value is passed, add that to the parent scope.
 				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
 					newScope = parentScope.add(newScope);
@@ -112,9 +111,8 @@ steal("can/util",
 					newOptions = parentOptions.add(newOptions);
 				}
 				var result = rendererWithScope(newScope, newOptions || parentOptions, parentNodeList|| nodeList );
-				can.__setReading(reads);
 				return result;
-			};
+			});
 		};
 	
 
@@ -509,7 +507,7 @@ steal("can/util",
 					// A helper function should do it's own binding.  Similar to how
 					// we prevented this function's compute from being noticed by parent expressions,
 					// we hide any observables read in the function by saving any observables that
-					// have been read and then setting them back which overwrites any `can.__reading` calls
+					// have been read and then setting them back which overwrites any `can.__observe` calls
 					// performed in value.
 					var old = can.__clearReading();
 					value(this);
