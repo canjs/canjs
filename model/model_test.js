@@ -76,6 +76,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-
 				start();
 			});
 	});
+
 	asyncTest('findAll deferred reject', function () {
 		// This test is automatically paused
 		function rejectDeferred(df) {
@@ -1434,6 +1435,35 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-
 			start();
 		});
 
+	});
+
+	test("findAll rejects when parseModels returns non-array data #1662", function(){
+		can.fixture("/mymodels", function () {
+			return {
+				status: 'success',
+				message: ''
+			};
+		});
+
+		var MyModel = can.Model.extend({
+			findAll: "/mymodels",
+			parseModels: function(raw) {
+				raw.data = undefined;
+				return raw;
+			},
+		}, {});
+
+		stop();
+
+		MyModel.findAll({})
+			.then(function(){
+				ok(false, 'This should not succeed');
+				start();
+			}, function(err){
+				ok(err instanceof Error, 'Got an error');
+				equal(err.message, 'Could not get any raw data while converting using .models');
+				start();
+			});
 	});
 
 	test("Nested lists", function(){
