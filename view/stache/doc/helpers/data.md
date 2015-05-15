@@ -17,10 +17,10 @@ on an element.  `{{data name}}` allows you to save the
 context so it can later be retrieved by [can.data] or
 `$.fn.data`. 
 
-<a class="jsbin-embed" href="http://jsbin.com/juxem/7/embed?html,js,output">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
+<a class="jsbin-embed" href="http://jsbin.com/juxem/latest/embed?html,js,output">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
 
 ### Getting more specific
 
 By passing a key name as the second argument to the data helper, you can specify which data is used: `{{data name key}}`.
 
-<a class="jsbin-embed" href="http://jsbin.com/munuco/1/embed?html,js,output">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
+<a class="jsbin-embed" href="http://jsbin.com/munuco/latest/embed?html,js,output">JS Bin</a><script src="http://static.jsbin.com/js/embed.js"></script>
