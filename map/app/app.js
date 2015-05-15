@@ -23,6 +23,17 @@ steal("can/util", "can/map", "can/compute",function(can){
 			can.Map.prototype.setup.apply(this, arguments);
 			this.__readyPromises = [];
 			this.__pageData = {};
+
+			if(typeof System !== "undefined" && System.has("asset-register")) {
+				var register = System.get("asset-register")["default"];
+				var self = this;
+				register("inline-cache", function(){
+					var script = document.createElement("script");
+					var text = document.createTextNode("\nINLINE_CACHE = " + JSON.stringify(self.__pageData) + ";\n")
+					script.appendChild(text);
+					return script;
+				});
+			}
 		},
 		waitFor: function(promise){
 			this.__readyPromises.push(promise);
