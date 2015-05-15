@@ -223,7 +223,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						}
 					});
 
-					can.__reading(map, '__keys');
+					can.__observe(map, '__keys');
 					if(firstSerialize) {
 						serializeMap = null;
 					}
@@ -248,7 +248,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			 */
 			keys: function (map) {
 				var keys = [];
-				can.__reading(map, '__keys');
+				can.__observe(map, '__keys');
 				for (var keyName in map._data) {
 					keys.push(keyName);
 				}
@@ -366,7 +366,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					return this._attrs(attr, val);
 				// If we are getting a value.
 				} else if (arguments.length === 1) {
-					can.__reading(this, attr);
 					return this._get(attr);
 				} else {
 					// Otherwise we are setting.
@@ -433,10 +432,13 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 						return value;
 					}
 					var first = attr.substr(0, dotIndex),
-						second = attr.substr(dotIndex+1),
-						current = this.__get( first );
+						second = attr.substr(dotIndex+1);
+					can.__observe(this, first);
+					var current = this.__get( first );
+					
 					return current && current._get ?  current._get(second) : undefined;
 				} else {
+					can.__observe(this, attr);
 					return this.__get( attr );
 				}
 			},

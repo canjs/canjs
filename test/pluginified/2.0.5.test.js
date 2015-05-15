@@ -1054,12 +1054,12 @@ var __m29 = (function (undefined) {
 	})
 
 	test("can.Map serialize triggers reading (#626)", function () {
-		var old = can.__reading;
+		var old = can.__observe;
 
 		var attributesRead = [];
 		var readingTriggeredForKeys = false;
 
-		can.__reading = function (object, attribute) {
+		can.__observe = function (object, attribute) {
 			if (attribute === "__keys") {
 				readingTriggeredForKeys = true;
 			} else {
@@ -1079,7 +1079,7 @@ var __m29 = (function (undefined) {
 		ok(can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1, "map serialization triggered __reading on all attributes");
 		ok(readingTriggeredForKeys, "map serialization triggered __reading for __keys");
 
-		can.__reading = old;
+		can.__observe = old;
 	})
 
 	test("Test top level attributes", 7, function () {
@@ -3585,8 +3585,8 @@ var __m34 = (function () {
 	});
 	test('uses attr with isNew', function () {
 		// TODO this does not seem to be consistent expect(2);
-		var old = can.__reading;
-		can.__reading = function (object, attribute) {
+		var old = can.__observe;
+		can.__observe = function (object, attribute) {
 			if (attribute === 'id') {
 				ok(true, 'used attr');
 			}
@@ -3595,7 +3595,7 @@ var __m34 = (function () {
 			id: 4
 		});
 		m.isNew();
-		can.__reading = old;
+		can.__observe = old;
 	});
 	test('extends defaults by calling base method', function () {
 		var M1 = can.Model.extend({

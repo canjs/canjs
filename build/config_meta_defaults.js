@@ -85,6 +85,10 @@ module.exports = function(){
 				if(load.address.indexOf("node_modules") >= 0) {
 					return true;
 				}
+			}, function(moduleName) {
+					if(moduleName.indexOf('/system') !== -1) {
+						return true;
+					}
 			}])
 		}
 	};

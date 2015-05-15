@@ -204,6 +204,9 @@ steal('can/util', 'can/observe', function (can) {
 			}
 		},
 		'number': function (val) {
+			if(val == null) {
+				return val;
+			}
 			return +(val);
 		},
 		'boolean': function (val) {
@@ -223,6 +226,9 @@ steal('can/util', 'can/observe', function (can) {
 			return val;
 		},
 		'string': function (val) {
+			if(val == null) {
+				return val;
+			}
 			return '' + val;
 		},
 		'compute': {
