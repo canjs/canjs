@@ -180,12 +180,6 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 			return ret;
 		};
 
-		can.proxy = function (f, ctx) {
-			return function () {
-				return f.apply(ctx, arguments);
-			};
-		};
-
 		// Make ajax.
 		var XHR = $.ajaxSettings.xhr;
 		$.ajaxSettings.xhr = function () {

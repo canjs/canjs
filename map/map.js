@@ -438,7 +438,6 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					
 					return current && current._get ?  current._get(second) : undefined;
 				} else {
-					console.log(this, attr);
 					can.__observe(this, attr);
 					return this.__get( attr );
 				}

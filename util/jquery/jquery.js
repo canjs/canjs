@@ -95,11 +95,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 			}
 			return this;
 		},
-		proxy: function (fn, context) {
-			return function () {
-				return fn.apply(context, arguments);
-			};
-		},
+		proxy: can.proxy,
 		attr: attr
 	});
 	// Wrap binding functions.
