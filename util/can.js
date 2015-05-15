@@ -41,6 +41,15 @@ steal(function () {
 		return arr && arr[arr.length - 1];
 	};
 
+	can.proxy = function (fn, context) {
+		if(Function.prototype.bind) {
+			return fn.bind(context);
+		}
+
+		return function () {
+			return fn.apply(context, arguments);
+		};
+	};
 
 	can.frag = function(item){
 		var frag;
