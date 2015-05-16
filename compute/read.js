@@ -61,13 +61,21 @@ steal("can/util", function(can){
 			parent: prev
 		};
 	};
-	
+
+
 	var readValue = function(value, index, reads, options, state, prev){
-		for(var i =0, len = read.valueReaders.length; i < len; i++){
-			if( read.valueReaders[i].test(value, index, reads, options) ) {
-				value = read.valueReaders[i].read(value, index, reads, options, state, prev);
+		var usedValueReader;
+		do {
+			
+			usedValueReader = false;
+			for(var i =0, len = read.valueReaders.length; i < len; i++){
+				if( read.valueReaders[i].test(value, index, reads, options) ) {
+					value = read.valueReaders[i].read(value, index, reads, options, state, prev);
+					//usedValueReader = true;
+				}
 			}
-		}
+		} while(usedValueReader);
+		
 		return value;
 	};
 	// value readers check the current value
@@ -176,7 +184,7 @@ steal("can/util", function(can){
 						observeData.dispatch("state",["rejected","pending"]);
 					});
 				}
-				can.__reading(observeData,"state");
+				can.__observe(observeData,"state");
 				return prop in observeData ? observeData[prop] : value[prop];
 			}
 		},

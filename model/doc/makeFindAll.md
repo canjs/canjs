@@ -1,15 +1,19 @@
 @function  can.Model.makeFindAll makeFindAll
 @parent can.Model.static
 
+`makeFindAll` is a hook that lets you define special `findAll` behavior. 
+It is a generator function that lets you return the function that will 
+actually be called when `findAll` is called.
+
 @signature `can.Model.makeFindAll: function(findAllData) -> findAll`
 
 Returns the external `findAll` method given the implemented [can.Model.findAllData findAllData] function.
 
 @param {can.Model.findAllData} findAllData
 
-[can.Model.findAll] is implemented with a `String`, [can.AjaxSettings ajax settings object], or
+[can.Model.findAll] is implemented with a `String`, [can.ajax ajax settings object], or
 [can.Model.findAllData findAllData] function. If it is implemented as
-a `String` or [can.AjaxSettings ajax settings object], those values are used
+a `String` or [can.ajax ajax settings object], those values are used
 to create a [can.Model.findAllData findAllData] function.
 
 The [can.Model.findAllData findAllData] function is passed to `makeFindAll`. `makeFindAll`
@@ -23,8 +27,12 @@ Returns function that implements the external API of `findAll`.
 
 ## Use
 
+When a user calls `MyModel.findAll({})`, the function returned by 
+`makeFindAll` will be called. Here you can specify what you want to happen 
+before the real request for data is made. Call the function passed in `findAllData` with `params` to make the AJAX request, or whatever the external request for data normally does.
+
 `makeFindAll` can be used to implement base models that perform special
-behavior. `makeFindAll` is passed a [can.Model.findAllData findAllData] function that retrieves raw
+behavior, like caching, or adding special parameters to the request object. `makeFindAll` is passed a [can.Model.findAllData findAllData] function that retrieves raw
 data. It should return a function that when called, uses
 the findAllData function to get the raw data and manually convert it to model instances with
 [can.Model.models models].

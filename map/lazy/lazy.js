@@ -157,6 +157,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		},
 		// Reads a property from the `object`.
 		_get: function (attr) {
+			can.__observe(this, attr);
 			var data = this._goto(attr);
 
 			// if it's already observe return it

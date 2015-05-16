@@ -1,4 +1,4 @@
-steal('can/util','can/view/stache', 'can/test/benchmarks.js', 'can/test',function (can, stache, benchmarks) {
+steal('can/util','can/view/stache', 'steal-benchmark', 'can/test',function (can, stache, b) {
 	
 	/* jshint ignore:start */
 	can.ajax({
@@ -25,26 +25,25 @@ steal('can/util','can/view/stache', 'can/test/benchmarks.js', 'can/test',functio
 	
 	var intermediate = can.view.parser(window._ParserBenchmarkText,handles);
 	
-	
-	benchmarks.add(
+	b.suite("can/view/stache compile").add(
 		"can/view/stache compile template from string",
 		function () {
 
 		},
 		function () {
-			can.stache(window._ParserBenchmarkText);
+			window.frag = can.stache(window._ParserBenchmarkText);
 		},
 		function () {
 			
-		});
+		})
 		
-	benchmarks.add(
+	.add(
 		"can/view/stache compile template from string",
 		function () {
 
 		},
 		function () {
-			can.stache(intermediate);
+			window.frag = can.stache(intermediate);
 		},
 		function () {
 			

@@ -1358,4 +1358,30 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", "steal-qunit
 		equal(count, 1, "attr only called once to get cached value");
 	});
 
+	test("computes in observes leak handlers (#1676)", function(){
+		var handler = function() {};
+
+		// 1. Create a Map
+		var person = new can.Map({
+		  pet: {type: 'dog', name: 'fluffy'}
+		});
+		
+		equal(person._bindings || 0, 0, "no bindings");
+		
+		// 2. Manually add a compute that references a nested property of the same Map
+		person.attr('petInfo', can.compute(function() {
+		  return person.attr('pet.type') + ': ' + person.attr('pet.name');
+		}));
+		
+		equal(person._bindings || 0, 0, "After adding compute no bindings");
+		
+		// 3. Bind to the Map's 'change' event
+		person.bind('change', handler);
+		equal(person._bindings, 2, "After adding compute no bindings");
+		
+		// 4. Unbind the 'change' event
+		person.unbind('change', handler);
+		equal(person._bindings, 0, "After unbinding no bindings");
+	});
+
 });

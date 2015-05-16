@@ -908,4 +908,125 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			
 		equal(personEvents,2);
 	});
+
+	test('Can read a defined property with a set/get method (#1648)', function () {
+		// Problem: "get" is not passed the correct "lastSetVal"
+		// Problem: Cannot read the value of "foo"
+
+		var Map = can.Map.extend({
+			define: {
+				foo: {
+					value: '',
+					set: function (setVal) {
+						return setVal;
+					},
+					get: function (lastSetVal) {
+						return lastSetVal;
+					}
+				}
+			}
+		});
+
+		var map = new Map();
+
+		equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+
+		map.attr('foo', 'baz');
+
+		equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	});
+
+	test('Can bind to a defined property with a set/get method (#1648)', 3, function () {
+		// Problem: "get" is not called before and after the "set"
+		// Problem: Function bound to "foo" is not called
+		// Problem: Cannot read the value of "foo"
+
+		var Map = can.Map.extend({
+			define: {
+				foo: {
+					value: '',
+					set: function (setVal) {
+						return setVal;
+					},
+					get: function (lastSetVal) {
+						return lastSetVal;
+					}
+				}
+			}
+		});
+
+		var map = new Map();
+
+		map.bind('foo', function () {
+			ok(true, 'Bound function is called');
+		});
+		
+		equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+
+		map.attr('foo', 'baz');
+
+		equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	});
+	
+	
+	test("type converters handle null and undefined in expected ways (1693)", function () {
+
+		var Typer = can.Map.extend({
+			define: {
+				date: {  type: 'date' },
+				string: {type: 'string'},
+				number: {  type: 'number' },
+				'boolean': {  type: 'boolean' },
+				htmlbool: {  type: 'htmlbool' },
+				leaveAlone: {  type: '*' }
+			}
+		});
+
+		var t = new Typer().attr({
+			date: undefined,
+			string: undefined,
+			number: undefined,
+			'boolean': undefined,
+			htmlbool: undefined,
+			leaveAlone: undefined
+		});
+
+		equal(t.attr("date"), undefined, "converted to date");
+
+		equal(t.attr("string"), undefined, "converted to string");
+
+		equal(t.attr("number"), undefined, "converted to number");
+
+		equal(t.attr("boolean"), false, "converted to boolean");
+
+		equal(t.attr("htmlbool"), false, "converted to htmlbool");
+
+		equal(t.attr("leaveAlone"), undefined, "left as object");
+		
+		t = new Typer().attr({
+			date: null,
+			string: null,
+			number: null,
+			'boolean': null,
+			htmlbool: null,
+			leaveAlone: null
+		});
+
+		equal(t.attr("date"), null, "converted to date");
+
+		equal(t.attr("string"), null, "converted to string");
+
+		equal(t.attr("number"), null, "converted to number");
+
+		equal(t.attr("boolean"), false, "converted to boolean");
+
+		equal(t.attr("htmlbool"), false, "converted to htmlbool");
+
+		equal(t.attr("leaveAlone"), null, "left as object");
+
+	});
+	
+	
+	
+	
 });

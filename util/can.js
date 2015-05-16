@@ -123,7 +123,7 @@ steal(function () {
 	};
 	
 	// this is here in case can.compute hasn't loaded
-	can.__reading = function () {};
+	can.__observe = function () {};
 
 	//!steal-remove-start
 	can.dev = {

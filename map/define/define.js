@@ -155,7 +155,7 @@ steal('can/util', 'can/observe', function (can) {
 			if (getter) {
 				// if there's a getter we don't call old set
 				// instead we call the getter's compute with the new value
-				if(setValue !== undefined && !setterCalled && setter.length >= 2) {
+				if(setValue !== undefined && !setterCalled && setter.length >= 1) {
 					this[prop](setValue);
 				}
 				
@@ -163,7 +163,7 @@ steal('can/util', 'can/observe', function (can) {
 				return;
 			}
 			// if it took a setter and returned nothing, don't set the value
-			else if (setValue === undefined && !setterCalled && setter.length >= 2) {
+			else if (setValue === undefined && !setterCalled && setter.length >= 1) {
 				//!steal-remove-start
 				asyncTimer = setTimeout(function () {
 					can.dev.warn('can/map/setter.js: Setter "' + prop + '" did not return a value or call the setter callback.');
@@ -204,6 +204,9 @@ steal('can/util', 'can/observe', function (can) {
 			}
 		},
 		'number': function (val) {
+			if(val == null) {
+				return val;
+			}
 			return +(val);
 		},
 		'boolean': function (val) {
@@ -223,6 +226,9 @@ steal('can/util', 'can/observe', function (can) {
 			return val;
 		},
 		'string': function (val) {
+			if(val == null) {
+				return val;
+			}
 			return '' + val;
 		},
 		'compute': {
