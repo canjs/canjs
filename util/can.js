@@ -43,7 +43,7 @@ steal(function () {
 	var protoBind = Function.prototype.bind;
 	if(protoBind) {
 		can.proxy = function(fn, context){
-			return protoBind.apply(fn, context);
+			return protoBind.call(fn, context);
 		};
 	} else {
 		can.proxy = function (fn, context) {
