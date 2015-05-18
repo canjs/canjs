@@ -103,11 +103,12 @@ steal('can/util/can.js', 'can/util/attr', 'mootools', 'can/event', 'can/util/fra
 			return Object.keys(object)
 				.length === 0;
 		};
+		var k = function(){};
 		// Map function helpers.
 		can.proxy = function () {
 			var args = can.makeArray(arguments),
 				func = args.shift();
-			return func.bind.apply(func, args);
+			return k.bind.apply(func, args);
 		};
 		can.isFunction = function (f) {
 			return typeOf(f) === 'function';
