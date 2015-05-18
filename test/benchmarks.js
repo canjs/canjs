@@ -1,10 +1,10 @@
-steal("steal","benchmark", function(steal){
+steal("benchmark", function(){
 	
 	var suite = new Benchmark.Suite;
 	
 	suite.on('cycle', function(event) {
 	  console.log(String(event.target));
-	})
+	});
 	
 	var benchmarks =  {
 		add: function(name, setup, benchmark, teardown){
@@ -25,10 +25,10 @@ steal("steal","benchmark", function(steal){
 		on: function(){
 			return suite.on.apply(this, arguments)
 		}
-	}
-	steal.bind("done", function(){
+	};
+	steal().done().then(function(){
 		benchmarks.run();
-	})
+	});
 	
 	return benchmarks;
-})
+});

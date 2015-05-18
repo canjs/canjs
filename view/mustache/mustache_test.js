@@ -3301,12 +3301,15 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				visible: true
 			}]
 		});
-
+		var unbindCount = 0;
 		function handler(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
 			if (eventType === "visible") {
-				start();
-				ok(true, "unbound visible")
+				ok(true, "unbound visible");
+				unbindCount++;
+				if(unbindCount >= 2) {
+					start();
+				}
 			}
 		}
 
@@ -3320,7 +3323,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		}]);
 
 		stop();
-	})
+	});
 
 	test("direct live section", function () {
 		var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");

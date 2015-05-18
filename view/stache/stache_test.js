@@ -1387,7 +1387,7 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 	})
 
 	test("reading a property from a parent object when the current context is an observe", function () {
-		var template = can.stache("{{#foos}}<span>{{bar}}</span>{{/foos}}")
+		var template = can.stache("{{#foos}}<span>{{bar}}</span>{{/foos}}");
 		var data = {
 			foos: new can.List([{
 				name: "hi"
@@ -1395,7 +1395,7 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 				name: 'bye'
 			}]),
 			bar: "Hello World"
-		}
+		};
 
 		var div = document.createElement('div');
 		var res = template(data);
@@ -1405,7 +1405,7 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(spans.length, 2, 'Got two <span> elements');
 		equal(spans[0].innerHTML, 'Hello World', 'First span Hello World');
 		equal(spans[1].innerHTML, 'Hello World', 'Second span Hello World');
-	})
+	});
 
 	test("helper parameters don't convert functions", function () {
 		can.stache.registerHelper('helperWithFn', function (fn) {
@@ -3850,7 +3850,10 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 	});
 	
 	test("possible to teardown immediate nodeList (#1593)", function(){
-		expect(3);
+		// show will be bound and unbound twice as computeData switches to the
+		// faster algorithim.  In the future, it might be possible to prevent
+		// the duplicate binding / unbinding
+		expect(5);
 		var map = new can.Map({show: true});
 		var oldBind = map.bind,
 			oldUnbind = map.unbind;
@@ -3930,6 +3933,19 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 
 		equal(frag.childNodes.length, 1, "only the placeholder textnode");
 	});
+	
+	test("compute defined after template (#1617)", function(){
+		var myMap = new can.Map();
+
+		// 1. Render a stache template with a binding to a key that is not a can.compute
+		var frag = can.stache('<span>{{ myMap.test }}</span>')({myMap: myMap});
+		
+		// 2. Set that key to a can.compute
+		myMap.attr('test', can.compute(function() { return "def"; }));
+
+		equal(frag.firstChild.firstChild.nodeValue, "def", "correct value");
+	});
+	
 
 	test('template with a block section and nested if doesnt render correctly', function() {
 		var myMap = new can.Map({

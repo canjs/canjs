@@ -17,14 +17,17 @@ steal("can/util", function(){
 	// - `context` - What `func` should be called with.
 	// - `oldObserved` - A map of observable / event pairs this function used to be listening to.
 	// - `onchanged` - What to callback whenever any of the observables changed.
-	function observe(func, context, oldObserved, onchanged) {
+	function observe(func, context, oldInfo, onchanged) {
 		// Call the function, get the value as well as the observed objects and events
 		var info = getValueAndObserved(func, context),
 			// The objects-event pairs that must be bound to
-			newObserveSet = info.observed;
+			newObserveSet = info.observed,
+			oldObserved = oldInfo.observed;
 		// Go through what needs to be observed.
-		bindNewSet(oldObserved, newObserveSet, onchanged);
-		unbindOldSet(oldObserved, onchanged);
+		if(info.names !== oldInfo.names) {
+			bindNewSet(oldObserved, newObserveSet, onchanged);
+			unbindOldSet(oldObserved, onchanged);
+		}
 		// set ready after all previous events have fired
 		can.batch.afterPreviousEvents(function(){
 			info.ready = true;
@@ -66,7 +69,11 @@ steal("can/util", function(){
 	
 	can.__observe = can.__reading = function (obj, event) {
 		if (observedStack.length) {
-			observedStack[observedStack.length-1][obj._cid + '|' + event] = {
+			var name = obj._cid + '|' + event,
+				top = observedStack[observedStack.length-1];
+			
+			top.names += name;
+			top.observed[name] = {
 				obj: obj,
 				event: event + ""
 			};
@@ -88,7 +95,7 @@ steal("can/util", function(){
 	can.__clearObserved = can.__clearReading = function () {
 		if (observedStack.length) {
 			var ret = observedStack[observedStack.length-1];
-			observedStack[observedStack.length-1] = {};
+			observedStack[observedStack.length-1] = {observed: {}};
 			return ret;
 		}
 	};
@@ -107,14 +114,12 @@ steal("can/util", function(){
 	
 	var getValueAndObserved = function (func, self) {
 		
-		observedStack.push({});
+		observedStack.push({names: "", observed: {}});
 
 		var value = func.call(self);
-
-		return {
-			value: value,
-			observed: observedStack.pop()
-		};
+		var stackItem = observedStack.pop();
+		stackItem.value = value;
+		return stackItem;
 	};
 
 	// This will not be optimized.

@@ -248,18 +248,7 @@ steal("can/util",
 						compute = computeData.compute;
 						
 					initialValue = computeData.initialValue;
-					// Optimize for a simple attribute read.
-					if(computeData.reads &&
-						// a single property read
-						computeData.reads.length === 1 &&
-						// on a map
-						computeData.root instanceof can.Map &&
-						// that isn't calling a function
-						!can.isFunction(computeData.root[computeData.reads[0]]) ) {
-						compute = can.compute(computeData.root, computeData.reads[0]);
-					}
-					
-					
+
 					// Set name to be the compute if the compute reads observables,
 					// or the value of the value of the compute if no observables are found.
 					if(computeData.compute.computeInstance.hasDependencies) {

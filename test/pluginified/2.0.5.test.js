@@ -10331,42 +10331,6 @@ var __m48 = (function () {
 
 	});
 
-	test("directly nested live sections unbind without needing the element to be removed", function () {
-		var template = can.view.mustache(
-			"<div>" +
-			"{{#items}}" +
-			"<p>first</p>" +
-			"{{#visible}}<label>foo</label>{{/visible}}" +
-			"<p>second</p>" +
-			"{{/items}}" +
-			"</div>");
-
-		var data = new can.Map({
-			items: [{
-				visible: true
-			}]
-		});
-
-		function handler(eventType) {
-			can.Map.prototype.unbind.apply(this, arguments);
-			if (eventType === "visible") {
-				start();
-				ok(true, "unbound visible")
-			}
-		}
-
-		data.attr("items.0")
-			.unbind = handler;
-
-		template(data);
-
-		data.attr("items", [{
-			visible: true
-		}]);
-
-		stop();
-	})
-
 	test("direct live section", function () {
 		var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
 

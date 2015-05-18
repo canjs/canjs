@@ -44,6 +44,7 @@
 		"steal": "~0.7.1",
 		"steal-qunit": "0.0.2",
 		"steal-tools": "~0.7.1",
+		"steal-benchmark": "~0.0.1",
 		"testee": "^0.1.3",
 		"zombie": "~2.0.8"
 	},

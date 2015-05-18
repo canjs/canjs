@@ -38,7 +38,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		var readInfo,
 			onchanged,
 			batchNum;
-
+		singleBind = false;
 		return {
 			// Set up handler for when the compute changes
 			on: function(updater){
@@ -55,7 +55,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 								newValue = func.call(context);
 								readInfo.value = newValue;
 							} else {
-								readInfo = getValueAndBind(func, context, readInfo.observed, onchanged);
+								readInfo = getValueAndBind(func, context, readInfo, onchanged);
 								newValue = readInfo.value;
 							}
 							
@@ -66,7 +66,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					};
 				}
 
-				readInfo = getValueAndBind(func, context, {}, onchanged);
+				readInfo = getValueAndBind(func, context, {observed: {}}, onchanged);
 				
 				if(singleBind) {
 					// prevent other calls from being observed;
@@ -308,11 +308,15 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			this._get = settings.get ? can.proxy(settings.get, settings) : this._get;
 
 			// This allows updater to be called without any arguments.
-			var self = this,
-				oldUpdater = this.updater;
-			this.updater = function() {
-				oldUpdater.call(self, self._get(), self.value);
-			};
+			// selfUpdater flag can be set by things that want to call updater themselves.
+			if(!settings.__selfUpdater) {
+				var self = this,
+					oldUpdater = this.updater;
+				this.updater = function() {
+					oldUpdater.call(self, self._get(), self.value);
+				};
+			}
+			
 			
 			this._on = settings.on ? settings.on : this._on;
 			this._off = settings.off ? settings.off : this._off;
