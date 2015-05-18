@@ -40,7 +40,19 @@ steal(function () {
 	can.last = function(arr){
 		return arr && arr[arr.length - 1];
 	};
-
+	var protoBind = Function.prototype.bind;
+	if(protoBind) {
+		can.proxy = function(fn, context){
+			return protoBind.apply(fn, context);
+		};
+	} else {
+		can.proxy = function (fn, context) {
+			return function () {
+				return fn.apply(context, arguments);
+			};
+		};
+	}
+	
 
 	can.frag = function(item){
 		var frag;
