@@ -5,11 +5,12 @@
 
 steal(
 	'can/util',
+	'can/view/scope/compute_data.js',
 	'can/construct',
 	'can/map',
 	'can/list',
 	'can/view',
-	'can/compute', function (can) {
+	'can/compute', function (can, makeComputeData) {
 
 		// ## Helpers
 
@@ -97,8 +98,6 @@ steal(
 
 						can.compute.set(obj, key, value, options);
 					}
-
-
 					return res.value;
 				}),
 
@@ -120,51 +119,7 @@ steal(
 				// Finds the first location of the key in the scope and then provides a get-set compute that represents the key's value
 				// and other information about where the value was found.
 				computeData: function (key, options) {
-					options = options || {
-						args: []
-					};
-					var self = this,
-						rootObserve,
-						rootReads,
-						computeData = {
-							// computeData.compute returns a get-set compute that is tied to the first location of the provided
-							// key in the context of the scope.
-							compute: can.compute(function (newVal) {
-								// **Compute setter**
-								if (arguments.length) {
-									if(rootObserve.isComputed) {
-										rootObserve(newVal);
-									} else if(rootReads.length) {
-										var last = rootReads.length - 1;
-										var obj = rootReads.length ? can.compute.read(rootObserve, rootReads.slice(0, last)).value
-											: rootObserve;
-										can.compute.set(obj, rootReads[last], newVal, options);
-									}
-									// **Compute getter**
-								} else {
-									// If computeData has found the value for the key in the past in an observable then go directly to
-									// the observable (rootObserve) that the value was found in the last time and return the new value.  This
-									// is a huge performance gain for the fact that we aren't having to check the entire scope each time.
-									if (rootObserve) {
-										return can.compute.read(rootObserve, rootReads, options)
-											.value;
-									}
-									// If the key has not already been located in a observable then we need to search the scope for the
-									// key.  Once we find the key then we need to return it's value and if it is found in an observable
-									// then we need to store the observable so the next time this compute is called it can grab the value
-									// directly from the observable.
-									var data = self.read(key, options);
-									rootObserve = data.rootObserve;
-									rootReads = data.reads;
-									computeData.scope = data.scope;
-									computeData.initialValue = data.value;
-									computeData.reads = data.reads;
-									computeData.root = rootObserve;
-									return data.value;
-								}
-							})
-						};
-					return computeData;
+					return makeComputeData(this, key, options);
 				},
 
 				// ## Scope.prototype.compute
@@ -260,7 +215,9 @@ steal(
 
 					while (scope) {
 						context = scope._context;
-						if (context !== null) {
+						if (context !== null &&
+							// if its a primitive type, keep looking up the scope, since there won't be any properties
+							(typeof context === "object" || typeof context === "function") ) {
 							var data = can.compute.read(context, names, can.simpleExtend({
 								/* Store found observable, incase we want to set it as the rootObserve. */
 								foundObservable: function (observe, nameIndex) {

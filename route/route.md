@@ -11,6 +11,14 @@
 client state by synchronizing the window.location.hash with
 an [can.Map].
 
+Watch this video for an overview of can.route's functionality and an example showing how to connect two tab widgets to the browser's history:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/ef0LKDiaPZ0" frameborder="0" allowfullscreen></iframe>
+
+In the following CanJS community we also talk about web application routing:
+
+<iframe width="662" height="372" src="https://www.youtube.com/watch?v=0Hhuv5Qru9k" frameborder="0" allowfullscreen></iframe>
+
 @signature `can.route( template [, defaults] )`
 
 Create a route matching rule.

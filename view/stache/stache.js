@@ -102,10 +102,13 @@ steal(
 			},
 			// Copys the state object for use in renderers.
 			copyState = function(overwrites){
+				var lastElement = state.sectionElementStack[state.sectionElementStack.length - 1];
 				var cur = {
 					tag: state.node && state.node.tag,
 					attr: state.attr && state.attr.name,
-					directlyNested: state.sectionElementStack.length ? state.sectionElementStack[state.sectionElementStack.length - 1] === "section" : true
+					// <content> elements should be considered direclty nested
+					directlyNested: state.sectionElementStack.length ?
+						lastElement === "section" || lastElement === "custom": true
 				};
 				return overwrites ? can.simpleExtend(cur, overwrites) : cur;
 			},
@@ -150,7 +153,7 @@ steal(
 				} else {
 					section.push(state.node);
 					
-					state.sectionElementStack.push("element");
+					state.sectionElementStack.push( isCustomTag ? 'custom': 'element' );
 					
 					// If it's a custom tag with content, we need a section renderer.
 					if( isCustomTag ) {

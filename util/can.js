@@ -41,6 +41,7 @@ steal(function () {
 		return arr && arr[arr.length - 1];
 	};
 
+	
 	can.isDOM = function(el) {
 		return (el.ownerDocument || el) === can.global.document;
 	};
@@ -59,6 +60,19 @@ steal(function () {
 			return nodes;
 		}
 	};
+
+	var protoBind = Function.prototype.bind;
+	if(protoBind) {
+		can.proxy = function(fn, context){
+			return protoBind.call(fn, context);
+		};
+	} else {
+		can.proxy = function (fn, context) {
+			return function () {
+				return fn.apply(context, arguments);
+			};
+		};
+	}
 
 	can.frag = function(item, doc){
 		var document = doc || can.document || can.global.document;
@@ -142,7 +156,7 @@ steal(function () {
 	};
 
 	// this is here in case can.compute hasn't loaded
-	can.__reading = function () {};
+	can.__observe = function () {};
 
 	can.isNode = typeof process === "object" &&
 		{}.toString.call(process) === "[object process]";

@@ -1639,28 +1639,16 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define
 
 		asyncTest('<content> node list cleans up properly, directly nested (#1625, #1627)', function() {
 			var items = [];
-			var viewModel = window.viewModel = new can.Map({
-				show: true
-			});
-
-			for (var i = 0; i < 100; i++) {
+			for (var i = 0; i < 2; i++) {
 				items.push({
-					// Random 5 character String
-					name: Math.random().toString(36)
-						.replace(/[^a-z]+/g, '').substr(0, 5),
-					foo: 'test ' + i
+					name: 'test ' + i,
+					parentAttrInContent: 'test ' + i
 				});
 			}
 
 			can.Component.extend({
-				tag: 'grandparent-component',
-				template: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
-				scope: viewModel
-			});
-
-			can.Component.extend({
 				tag: 'parent-component',
-				template: can.stache('{{#items}}<child-component>{{foo}}</child-component>{{/items}}'),
+				template: can.stache('{{#items}}<child-component>{{parentAttrInContent}}</child-component>{{/items}}'),
 				scope: {
 					items: items
 				}
@@ -1674,22 +1662,24 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can", "can/map/define
 				}
 			});
 
-			can.append(can.$("#qunit-fixture"), can.stache('<grandparent-component></grandparent-component>')());
+			can.append(can.$("#qunit-fixture"), can.stache('<parent-component></parent-component>')());
 
 			var old = can.unbindAndTeardown;
 			var count = 0;
 			can.unbindAndTeardown = function(name) {
-				if(name === 'foo') {
+				if(name === 'parentAttrInContent') {
 					count++;
 				}
 				return old.call(this, arguments);
 			};
+			
+			can.remove(can.$("#qunit-fixture>*"));
 
 			// Dispatches async
 			setTimeout(function() {
-				equal(count, 100, '100 items unbound');
+				equal(count, 2, '2 items unbound');
 				can.unbindAndTeardown = old;
-				can.remove(can.$("#qunit-fixture>*"));
+				
 				start();
 			}, 20);
 		});

@@ -7,6 +7,10 @@
 
 > Note: can.fixture depends on the can.object plugin. If you are not using the AMD or Steal version of CanJS you need to include [can.object.js](http://canjs.com/release/latest/can.object.js) __before__ can.fixture.
 
+In the following CanJS community hangout we also talk about CanJS models and fixtures:
+
+<iframe width="662" height="372" src="https://www.youtube.com/watch?v=Tyr_087p8CQ" frameborder="0" allowfullscreen></iframe>
+
 @signature `can.fixture( url, toUrl )`
 
 Trap requests from one url and redirect them from another.

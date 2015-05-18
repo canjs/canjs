@@ -3933,7 +3933,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
         });
 
         test("possible to teardown immediate nodeList (#1593)", function(){
-            expect(3);
+            expect(5);
             var map = new can.Map({show: true});
             var oldBind = map.bind,
                 oldUnbind = map.unbind;

@@ -3301,12 +3301,15 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				visible: true
 			}]
 		});
-
+		var unbindCount = 0;
 		function handler(eventType) {
 			can.Map.prototype.unbind.apply(this, arguments);
 			if (eventType === "visible") {
-				start();
-				ok(true, "unbound visible")
+				ok(true, "unbound visible");
+				unbindCount++;
+				if(unbindCount >= 2) {
+					start();
+				}
 			}
 		}
 
@@ -3320,7 +3323,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		}]);
 
 		stop();
-	})
+	});
 
 	test("direct live section", function () {
 		var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
@@ -3991,5 +3994,65 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			second: 4
 		}));
 		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+	
+	test('Helper handles list replacement (#1652)', 3, function () {
+
+		var state = new can.Map({
+			list: []
+		});
+
+		var helpers = {
+			listHasLength: function (options) {
+				ok(true, 'listHasLength helper evaluated');
+				return this.attr('list').attr('length') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helper evaluated 1st time...
+		can.mustache('{{#listHasLength}}{{/listHasLength}}')(state, helpers);
+
+		// Helper evaluated 2nd time...
+		state.attr('list', []);
+		
+		// Helper evaluated 3rd time...
+		state.attr('list').push('...')
+
+	});
+
+	test('Helper binds to nested properties (#1651)', function () {
+
+		var nestedAttrsCount = 0,
+			state = new can.Map({
+				parent: null
+			});
+
+		var helpers = {
+			bindViaNestedAttrs: function (options) {
+
+				nestedAttrsCount++;
+
+				if (nestedAttrsCount === 3) {
+					ok(true, 'bindViaNestedAttrs helper evaluated 3 times');
+				}
+
+				return this.attr('parent') && this.attr('parent').attr('child') ?
+					options.fn() :
+					options.inverse();
+			}
+		};
+
+		// Helpers evaluated 1st time...
+		can.mustache('{{#bindViaNestedAttrs}}{{/bindViaNestedAttrs}}')(state, helpers);
+
+		// Helpers evaluated 2nd time...
+		state.attr('parent', {
+			child: 'foo'
+		});
+
+		// Helpers evaluated 3rd time...
+		state.attr('parent.child', 'bar');
 	});
 });

@@ -6,7 +6,9 @@ Register custom behavior for a given tag.
 @signature `can.view.tag( tagName, tagHandler(el, tagData) )`
 
 Registers the `tagHandler` callback when `tagName` is found 
-in a template.
+in a template. Check out this video where we talk about different possiblities to use can.view.tag:
+
+<iframe width="662" height="372" src="https://www.youtube.com/watch?v=ahjd5OQcs7c" frameborder="0" allowfullscreen></iframe>
 
 @release 2.1
 
@@ -26,7 +28,7 @@ render `tagData.subtemplate` and the result is inserted as the childNodes of `el
 `can.view.tag` is a low-level way to add custom behavior to custom elements. Often, you
 want to do this with [can.Component]. However, `can.view.tag` is
 useful for when [can.Component] might be considered overkill.  For example, the
-following creates a [jQueryUI](http://api.jqueryui.com/datepicker/) everytime a
+following creates a [jQueryUI DatePicker](http://api.jqueryui.com/datepicker/) everytime a
 `<jqui-datepicker>` element is found:
 
     can.view.tag("jqui-datepicker", function(el, tagData){

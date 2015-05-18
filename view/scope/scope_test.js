@@ -185,7 +185,7 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 			}
 			changes++;
 		});
-		equal(compute(), 'Justin');
+		equal(compute(), 'Justin', 'read value after bind');
 		me.attr('name.first', 'Brian');
 		me.removeAttr('name');
 		me.attr('name', {

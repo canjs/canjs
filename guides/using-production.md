@@ -44,9 +44,4 @@ Read up in the [can-compile + RequireJS](https://github.com/daffl/can-compile#lo
 
 ## Building with StealJS
 
-When using [using-steal CanJS with StealJS] with the generated application you can simply run
-
-> ./js app/scripts/build.js
-
-In your JavaScriptMVC folder. This will create `app/production.js` and `app/production.css` which will be loaded when
-referencing `steal.production.js` in `app/index.html` (instead of `steal.js` itself).
+See [using CanJS 2.2 with StealJS](http://blog.bitovi.com/using-canjs-2-2-with-stealjs/) for tips on building Can with StealJS.

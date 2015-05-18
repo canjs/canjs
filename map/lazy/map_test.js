@@ -136,12 +136,12 @@ steal("can/map/lazy", "can/compute", "can/test", "steal-qunit", function (undefi
 	})
 
 	test("can.Map serialize triggers reading (#626)", function () {
-		var old = can.__reading;
+		var old = can.__observe;
 
 		var attributesRead = [];
 		var readingTriggeredForKeys = false;
 
-		can.__reading = function (object, attribute) {
+		can.__observe = function (object, attribute) {
 			if (attribute === "__keys") {
 				readingTriggeredForKeys = true;
 			} else {
@@ -159,11 +159,12 @@ steal("can/map/lazy", "can/compute", "can/test", "steal-qunit", function (undefi
 		testMap.serialize();
 
 
-		ok(can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1, "map serialization triggered __reading on all attributes");
+		ok( can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1,  "map serialization triggered __reading on all attributes");
+		
 		ok(readingTriggeredForKeys, "map serialization triggered __reading for __keys");
 
-		can.__reading = old;
-	})
+		can.__observe = old;
+	});
 
 	test("Test top level attributes", 7, function () {
 		var test = new can.LazyMap({

@@ -26,7 +26,7 @@ user content can read the component's view model.
 
 Lets define what __outer scope__, __component's template__ and __user content__ mean.
 
-If I have component `<my-widget>` in a template like:
+If I have a `<hello-world>` component in a template like:
 
 ```
 {{#data}}
@@ -38,12 +38,12 @@ The __outer scope__ of `<hello-world>` has `data` as its context.  The __user co
 `<hello-world>` is the template between its tags.  In this case, the __user content__
 is `{{subject}}`.
 
-Finally, if `<my-widget>` is defined like:
+Finally, if `<hello-world>` is defined like:
 
 ```
 can.Component.extend({
   tag: "hello-world",
-  tag: can.stache("{{greeting}} <content/>{{exclamation}}")
+  template: can.stache("{{greeting}} <content/>{{exclamation}}")
 })
 ```
 

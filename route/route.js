@@ -531,7 +531,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 */
 		current: function (options) {
 			// "reads" the url so the url is live-bindable.
-			can.__reading(eventsObject,"__url");
+			can.__observe(eventsObject,"__url");
 			return this._call("matchingPartOfURL") === can.route.param(options);
 		},
 		bindings: {

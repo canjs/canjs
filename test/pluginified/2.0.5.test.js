@@ -1054,12 +1054,12 @@ var __m29 = (function (undefined) {
 	})
 
 	test("can.Map serialize triggers reading (#626)", function () {
-		var old = can.__reading;
+		var old = can.__observe;
 
 		var attributesRead = [];
 		var readingTriggeredForKeys = false;
 
-		can.__reading = function (object, attribute) {
+		can.__observe = function (object, attribute) {
 			if (attribute === "__keys") {
 				readingTriggeredForKeys = true;
 			} else {
@@ -1079,7 +1079,7 @@ var __m29 = (function (undefined) {
 		ok(can.inArray("cats", attributesRead ) !== -1 && can.inArray( "dogs", attributesRead ) !== -1, "map serialization triggered __reading on all attributes");
 		ok(readingTriggeredForKeys, "map serialization triggered __reading for __keys");
 
-		can.__reading = old;
+		can.__observe = old;
 	})
 
 	test("Test top level attributes", 7, function () {
@@ -3585,8 +3585,8 @@ var __m34 = (function () {
 	});
 	test('uses attr with isNew', function () {
 		// TODO this does not seem to be consistent expect(2);
-		var old = can.__reading;
-		can.__reading = function (object, attribute) {
+		var old = can.__observe;
+		can.__observe = function (object, attribute) {
 			if (attribute === 'id') {
 				ok(true, 'used attr');
 			}
@@ -3595,7 +3595,7 @@ var __m34 = (function () {
 			id: 4
 		});
 		m.isNew();
-		can.__reading = old;
+		can.__observe = old;
 	});
 	test('extends defaults by calling base method', function () {
 		var M1 = can.Model.extend({
@@ -10330,42 +10330,6 @@ var __m48 = (function () {
 		equal(labels.length, 0, "after removing item no label");
 
 	});
-
-	test("directly nested live sections unbind without needing the element to be removed", function () {
-		var template = can.view.mustache(
-			"<div>" +
-			"{{#items}}" +
-			"<p>first</p>" +
-			"{{#visible}}<label>foo</label>{{/visible}}" +
-			"<p>second</p>" +
-			"{{/items}}" +
-			"</div>");
-
-		var data = new can.Map({
-			items: [{
-				visible: true
-			}]
-		});
-
-		function handler(eventType) {
-			can.Map.prototype.unbind.apply(this, arguments);
-			if (eventType === "visible") {
-				start();
-				ok(true, "unbound visible")
-			}
-		}
-
-		data.attr("items.0")
-			.unbind = handler;
-
-		template(data);
-
-		data.attr("items", [{
-			visible: true
-		}]);
-
-		stop();
-	})
 
 	test("direct live section", function () {
 		var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");

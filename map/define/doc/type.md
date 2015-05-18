@@ -12,11 +12,12 @@ Converts a value passed to [can.Map::attr attr] into an appropriate value.
 
 ## Use
 
-The `type` property specifies the type of the attribute.  The type can be specified as either a type function that returns the type coerced value or one of the following strings:
+The `type` property specifies the type of the attribute.  The type can be specified 
+as either a type function that returns the type coerced value or one of the following strings:
 
- - `"string"` - Converts the value to a string.
- - `"date"` - Converts the value to a date or `null if the date can not be converted.
- - `"number"` - Passes the value through `parseFloat`.
+ - `"string"` - Converts the value to a string except `null` or `undefined`.
+ - `"date"` - Converts the value to a date or `null` if the date can not be converted.
+ - `"number"` - Passes the value through `parseFloat` except for `null` or `undefined`.
  - `"boolean"` - Converts falsey, `"false"` or `"0"` to `false` and everything else to true.
  - `"htmlbool"` - Like `boolean`, but also converts empty strings to
    `true`. Used, for example, when input is from component attributes like
