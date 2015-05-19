@@ -174,11 +174,6 @@
 				"jquery-2"
 			]
 		},
-		"can/util/object/object": {
-			"name": "can.Object",
-			"type": "plugin",
-			"description": "Helper methods for object comparison"
-		},
 		"can/util/fixture/fixture": {
 			"name": "can.fixture",
 			"type": "plugin",
@@ -202,15 +197,20 @@
 			"isDefault": true,
 			"hidden": true
 		},
-		"can/util/util": {
-			"name": "can.util",
-			"type": "core",
-			"isDefault": true,
-			"hidden": true,
-			"configurations": [
-				"jquery",
-				"jquery-2"
-			]
+		"can/util/tests/tests": {
+			"name": "can.util.tests",
+			"type": "plugin",
+			"hidden": true
+		},
+		"can/util/object/object": {
+			"name": "can.Object",
+			"type": "plugin",
+			"description": "Helper methods for object comparison"
+		},
+		"can/util/function/function": {
+			"name": "can.util.function",
+			"type": "plugin",
+			"hidden": true
 		},
 		"can/view/autorender/autorender": {
 			"name": "can.autorender",
