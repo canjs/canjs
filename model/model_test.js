@@ -7,9 +7,8 @@
 /* global Base: true */
 /* global Product: true */
 /* global Organisation: true */
-/* global Company: true */
 /* global My: true */
-steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-qunit", function () {
+steal("can/model", "can/test", "can/util/fixture", "steal-qunit", function () {
 	QUnit.module('can/model', {
 		setup: function () {}
 	});
@@ -1097,44 +1096,6 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-
 			start();
 		});
 	});
-	test('Creating nested models adds them to the store (#357)', function () {
-		// Raw data. Nested object is there twice
-		var employees = [{
-			id: 1,
-			name: 'David',
-			company: {
-				id: 2,
-				name: 'Google'
-			}
-		}, {
-			id: 2,
-			name: 'Tom',
-			company: {
-				id: 3,
-				name: 'Amazon'
-			}
-		}, {
-			id: 3,
-			name: 'John',
-			company: {
-				id: 2,
-				name: 'Google'
-			}
-		}];
-		// Company model
-		Company = can.Model.extend({}, {});
-		// Person model with nested Company
-		Person = can.Model.extend({
-			attributes: {
-				company: 'Company.model'
-			}
-		}, {});
-		// Initialize raw data as Model instances
-		var people = Person.models(employees);
-		// Suddenly Google was bought by Bitovi! and we need to change name.
-		people[0].company.attr('name', 'Bitovi');
-		ok(people[0].company === people[2].company, 'found the same company instance');
-	});
 
 	test('destroy not calling callback for new instances (#403)', function () {
 		var Recipe = can.Model.extend({}, {});
@@ -1450,7 +1411,7 @@ steal("can/model", 'can/map/attributes', "can/test", "can/util/fixture", "steal-
 			parseModels: function(raw) {
 				raw.data = undefined;
 				return raw;
-			},
+			}
 		}, {});
 
 		stop();

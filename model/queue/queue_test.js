@@ -1,7 +1,7 @@
 /* global Person: true */
 /* global User: true */
 /* global Hero: true */
-steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/map/attributes', "can/test", "steal-qunit", function () {
+steal('can/util', 'can/model', 'can/model/queue', 'can/util/fixture', 'can/test', 'steal-qunit', function () {
 	QUnit.module('can/model/queue', {
 		setup: function () {}
 	});

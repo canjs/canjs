@@ -672,7 +672,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 					equal(curVal, 20);
 					break;
 				case 2:
-					equal(curVal, 20, "on bind");
+					equal(curVal, 30, "on bind");
 					break;
 				case 3:
 					equal(curVal, 30, "on bind");
