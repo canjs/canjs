@@ -129,6 +129,7 @@
 			"name": "can.Map.attributes",
 			"type": "plugin",
 			"deprecated": true,
+			"hasTest": false,
 			"description": "Define Observe attributes"
 		},
 		"can/map/validations/validations": {
