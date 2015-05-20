@@ -3,6 +3,26 @@
 @parent guides 5
 -->
 
+__2.2.6__ ( May 20 2015 )
+
+- [Fix calling define getters on map initialization](https://github.com/bitovi/canjs/pull/1704)
+- [Cleans up computes and fixes deep .attr calls.](https://github.com/bitovi/canjs/pull/1696)
+- [can/define with type: &#39;string&#39; given values of null or undefined returns &#39;null&#39; or &#39;undefined&#39;](https://github.com/bitovi/canjs/issues/1693)
+- [Mangled file in AMD builds](https://github.com/bitovi/canjs/issues/1684)
+- [Compute memory leak with nested properties](https://github.com/bitovi/canjs/issues/1676)
+- [can.Model.findAll should reject if parseModels returns a non-array `data` property.](https://github.com/bitovi/canjs/issues/1662)
+- [Cannot bind to future nested properties](https://github.com/bitovi/canjs/issues/1657)
+- [Check for vulnerability against iOS 8 object length bug](https://github.com/bitovi/canjs/issues/1654)
+- [can.stache helpers that rely on array replacement don&#39;t work, but work in can.mustache](https://github.com/bitovi/canjs/issues/1652)
+- [Helpers bind to nested properties differently in stache/mustache](https://github.com/bitovi/canjs/issues/1651)
+- [Cannot read value of property defined with &quot;get&quot; AND &quot;set&quot; methods ](https://github.com/bitovi/canjs/issues/1648)
+- [Use Function.prototype.bind if available](https://github.com/bitovi/canjs/issues/1632)
+- [Compute code gets inserted into DOM with Stache sometimes](https://github.com/bitovi/canjs/issues/1617)
+- [Problem with defines called out of order](https://github.com/bitovi/canjs/issues/1519)
+- [can.compute nested key behaviour inconsistency with map bindings](https://github.com/bitovi/canjs/issues/1231)
+- [bug with component that has an if inside an inverse tag](https://github.com/bitovi/canjs/issues/1115)
+
+
 __2.2.5__ ( Apr 22 2015 )
 
 - [#each helper should use it&#39;s own NodeList](https://github.com/bitovi/canjs/pull/1634)
