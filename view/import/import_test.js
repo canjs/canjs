@@ -57,3 +57,19 @@ test("if a can-tag is present rendering is handed over to that tag", function(){
 	var res = template();
 	equal(res.childNodes[0].childNodes[0].nodeValue, "it worked", "Rendered with the can-tag");
 });
+
+test("can use an import's value", function(){
+	var template = "<can-import from='can/view/import/test/person' [person]='{value}' />hello {{person.name}}";
+
+	var iai = getIntermediateAndImports(template);
+
+	var renderer = stache(iai.intermediate);
+	var res = renderer(new can.Map());
+
+	can["import"]("can/view/import/test/person").then(function(){
+		equal(res.childNodes[2].nodeValue, "world", "Got the person.name from the import");
+	}).then(QUnit.start);
+
+	QUnit.stop();
+});
+

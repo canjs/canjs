@@ -15,19 +15,24 @@ steal("can/util", "can/view/callbacks", function(can){
 		}
 
 		// Set the viewModel to the promise
-		can.viewModel(el, importPromise);
+		can.data(can.$(el), "viewModel", importPromise);
+
+		// Set the scope
+		var scope = tagData.scope.add(importPromise);
 
 		// If there is a can-tag present we will hand-off rendering to that tag.
 		var handOffTag = el.getAttribute("can-tag");
 		if(handOffTag) {
-			var scope = tagData.scope.add(importPromise);
 			var callback = can.view.callbacks._tags[handOffTag];
 			callback(el, can.extend(tagData, {
 				scope: scope
 			}));
-		} else if(tagData.subtemplate) {
-			var scope = tagData.scope.add(importPromise);
-			var frag = tagData.subtemplate(scope, tagData.options);
+		}
+		// Render the subtemplate and register nodeLists
+		else {
+			var frag = tagData.subtemplate ?
+				tagData.subtemplate(scope, tagData.options) :
+				document.createDocumentFragment();
 
 			var nodeList = can.view.nodeLists.register([], undefined, true);
 			can.one.call(el, "removed", function(){
