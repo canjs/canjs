@@ -73,3 +73,9 @@ test("can use an import's value", function(){
 	QUnit.stop();
 });
 
+test("specify the viewModel with [.] syntax", function(){
+	var template = "<can-import from='can/view/import/test/person' [.]='{value}' />";
+	var iai = getIntermediateAndImports(template);
+
+	equal(iai.ases.viewModel, "can/view/import/test/person", "viewModel set with [.] syntax");
+});

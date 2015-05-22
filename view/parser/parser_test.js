@@ -227,4 +227,17 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["done",[]]
 		]));
 	});
+
+	test('allow [.]', function() {
+		parser('<p [.]="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["[.]"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["[.]"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+	});
+
 });
