@@ -174,32 +174,19 @@ steal(
 						context,
 					// The current scope.
 						scope = this,
-					// While we are looking for a value, we track the most likely place this value will be found.
-					// This is so if there is no me.name.first, we setup a listener on me.name.
-					// The most likely candidate is the one with the most "read matches" "lowest" in the
-					// context chain.
-					// By "read matches", we mean the most number of values along the key.
-					// By "lowest" in the context chain, we mean the closest to the current context.
-					// We track the starting position of the likely place with `defaultObserve`.
-						defaultObserve,
-					// Tracks how to read from the defaultObserve.
-						defaultReads = [],
-					// Tracks the highest found number of "read matches".
-						defaultPropertyDepth = -1,
-					// `scope.read` is designed to be called within a compute, but
-					// for performance reasons only listens to observables within one context.
-					// This is to say, if you have me.name in the current context, but me.name.first and
-					// we are looking for me.name.first, we don't setup bindings on me.name and me.name.first.
-					// To make this happen, we clear readings if they do not find a value.  But,
-					// if that path turns out to be the default read, we need to restore them.  This
-					// variable remembers those reads so they can be restored.
-						defaultComputeReadings,
-					// Tracks the default's scope.
-						defaultScope,
+						
+					// If no value can be found, this is a list of of every observed
+					// object and property name to observe.
+						undefinedObserves = [],
 					// Tracks the first found observe.
 						currentObserve,
 					// Tracks the reads to get the value for a scope.
-						currentReads;
+						currentReads,
+						
+						// Tracks the most likely observable to use as a setter.
+						setObserveDepth = -1,
+						currentSetReads,
+						currentSetObserve;
 
 					// Goes through each scope context provided until it finds the key (attr).  Once the key is found
 					// then it's value is returned along with an observe, the current scope and reads.
@@ -218,16 +205,11 @@ steal(
 									currentObserve = observe;
 									currentReads = names.slice(nameIndex);
 								},
-								// Called when we were unable to find a value.
 								earlyExit: function (parentValue, nameIndex) {
-									/* If this has more matching values */
-									if (nameIndex > defaultPropertyDepth) {
-										defaultObserve = currentObserve;
-										defaultReads = currentReads;
-										defaultPropertyDepth = nameIndex;
-										defaultScope = scope;
-										/* Clear and save readings so next attempt does not use these readings */
-										defaultComputeReadings = can.__clearReading();
+									if (nameIndex > setObserveDepth) {
+										currentSetObserve = currentObserve;
+										currentSetReads = currentReads;
+										setObserveDepth = nameIndex;
 									}
 								},
 								// Execute anonymous functions found along the way
@@ -241,10 +223,12 @@ steal(
 									value: data.value,
 									reads: currentReads
 								};
+							} else {
+								// save all old readings before we try the next scope
+								undefinedObserves.push( can.__clearObserved() );
 							}
 						}
-						// Prevent prior readings and then move up to the next scope.
-						can.__clearReading();
+
 						if(!stopLookup) {
 							// Move up to the next scope.
 							scope = scope._parent;
@@ -253,24 +237,21 @@ steal(
 						}
 					}
 
-					// **Key was not found**, return undefined for the value.  Unless an observable was
-					// found in the process of searching for the key, then return the most likely observable along with it's
-					// scope and reads.
-
-					if (defaultObserve) {
-						can.__setReading(defaultComputeReadings);
-						return {
-							scope: defaultScope,
-							rootObserve: defaultObserve,
-							reads: defaultReads,
-							value: undefined
-						};
-					} else {
-						return {
-							names: names,
-							value: undefined
-						};
+					// **Key was not found**, return undefined for the value.  
+					// Make sure we listen to everything we checked for when the value becomes defined.
+					// Once it becomes defined, we won't have to listen to so many things.
+					var len = undefinedObserves.length;
+					if (len) {
+						for(var i = 0; i < len; i++) {
+							can.__addObserved(undefinedObserves[i]);
+						}
 					}
+					return {
+						setRoot: currentSetObserve,
+						reads: currentSetReads,
+						value: undefined
+					};
+					
 				}
 			});
 

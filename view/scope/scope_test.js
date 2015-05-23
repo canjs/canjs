@@ -1,26 +1,21 @@
 steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 	QUnit.module('can/view/scope');
-	/*	test("basics",function(){
+	
+	test("basics",function(){
 
-	 var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 
+		var items = new can.Map({ people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 });
+		
+		var itemsScope = new can.view.Scope(items),
+		arrayScope = new can.view.Scope(itemsScope.attr('people'), itemsScope),
+		firstItem = new can.view.Scope( arrayScope.attr('0'), arrayScope );
+		
+		var nameInfo = firstItem.read('name');
+		deepEqual(nameInfo.reads, ["name"]);
+		equal(nameInfo.scope, firstItem);
+		equal(nameInfo.value,"Justin");
+		equal(nameInfo.rootObserve, items.people[0]);
 
-	 var itemsScope = new can.view.Scope(items),
-	 arrayScope = new can.view.Scope(itemsScope.attr('people'), itemsScope),
-	 firstItem = new can.view.Scope( arrayScope.attr('0'), arrayScope );
-
-	 var nameInfo = firstItem.get('name');
-	 equal(nameInfo.name, "name");
-	 equal(nameInfo.scope, firstItem);
-	 equal(nameInfo.value,"Justin");
-	 equal(nameInfo.parent, items.people[0]);
-
-	 var countInfo = firstItem.get('count');
-	 equal( countInfo.name, "count" );
-	 equal( countInfo.scope, itemsScope );
-	 equal(countInfo.value,1000);
-	 equal(countInfo.parent, items);
-
-	 });*/
+	});
 	/*
 	 * REMOVE
 	 test("adding items",function(){
@@ -111,54 +106,7 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		equal(cur.attr('..'), row, 'got row');
 		equal(cur.attr('../first'), 'Justin', 'got row');
 	});
-	/*	test("use highest default observe in stack", function(){
-	 var bottom = new can.Map({
-	 name: "bottom"
-	 });
-	 var top = new can.Map({
-	 name: "top"
-	 });
 
-	 var base = new can.view.Scope( bottom ),
-	 cur = base.add(top);
-
-	 var fooInfo = cur.get("foo");
-	 ok(fooInfo.parent ===  top, "we pick the current if we have no leads");
-
-	 })*/
-	test('use highest default observe in stack unless you\'ve found your way in something that does exist', function () {
-		var bottom = new can.Map({
-			name: {
-				first: 'Justin'
-			}
-		});
-		var middle = new can.Map({
-			name: {
-				first: 'Brian'
-			}
-		});
-		var top = new can.Map({
-			title: 'top'
-		});
-		var cur = new can.view.Scope(bottom)
-			.add(middle)
-			.add(top);
-		var lastNameInfo = cur.read('name.last', {});
-		ok(lastNameInfo.rootObserve === middle, 'pick the default observe with the highest depth');
-		deepEqual(lastNameInfo.reads, [
-			'name',
-			'last'
-		], 'pick the default observe with the highest depth');
-	});
-	/*	test("use observe like objects, e.g. can.route, within scope properly", function() {
-	 var expected = "video"
-	 var cur = new can.view.Scope({}).add(can.route);
-	 can.route.attr('type', expected);
-	 var type = cur.get('type'); 
-
-	 equal(type.value, expected);
-	 equal(type.parent, can.route);
-	 })*/
 	test('nested properties with compute', function () {
 		var me = new can.Map({
 			name: {
@@ -424,6 +372,26 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		computeData.compute(5);
 		equal(compute(), 5, "updated compute value");
 		equal( computeData.compute(), 5, "the compute has the right value");
+	});
+	
+	test("computesData can find update when initially undefined parent scope becomes defined (#579)", function(){
+		expect(2);
+		
+		var map = new can.Map();
+		var scope = new can.view.Scope(map);
+		var top = scope.add(new can.Map());
+		
+		var computeData = top.computeData("value",{});
+		
+		equal( computeData.compute(), undefined, "initially undefined");
+		
+		computeData.compute.bind("change", function(ev, newVal){
+			equal(newVal, "first");
+		});
+		
+		map.attr("value","first");
+		
+		
 	});
 
 });
