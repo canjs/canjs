@@ -13618,30 +13618,7 @@ var __m78 = (function () {
 	 ok(fooInfo.parent ===  top, "we pick the current if we have no leads");
 
 	 })*/
-	test('use highest default observe in stack unless you\'ve found your way in something that does exist', function () {
-		var bottom = new can.Map({
-			name: {
-				first: 'Justin'
-			}
-		});
-		var middle = new can.Map({
-			name: {
-				first: 'Brian'
-			}
-		});
-		var top = new can.Map({
-			title: 'top'
-		});
-		var cur = new can.view.Scope(bottom)
-			.add(middle)
-			.add(top);
-		var lastNameInfo = cur.read('name.last', {});
-		ok(lastNameInfo.rootObserve === middle, 'pick the default observe with the highest depth');
-		deepEqual(lastNameInfo.reads, [
-			'name',
-			'last'
-		], 'pick the default observe with the highest depth');
-	});
+
 	/*	test("use observe like objects, e.g. can.route, within scope properly", function() {
 	 var expected = "video"
 	 var cur = new can.view.Scope({}).add(can.route);

@@ -73,9 +73,9 @@ steal("can/util", "can/view",function(can){
 				res;
 				
 			if(tagCallback) {
-				var reads = can.__clearReading();
+				var reads = can.__clearObserved();
 				res = tagCallback(el, tagData);
-				can.__setReading(reads);
+				can.__setObserved(reads);
 			} else {
 				res = scope;
 			}
