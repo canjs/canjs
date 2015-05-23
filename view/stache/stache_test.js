@@ -3946,7 +3946,6 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(frag.firstChild.firstChild.nodeValue, "def", "correct value");
 	});
 	
-
 	test('template with a block section and nested if doesnt render correctly', function() {
 		var myMap = new can.Map({
 			bar: true
@@ -4019,4 +4018,19 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		// Helpers evaluated 3rd time...
 		state.attr('parent.child', 'bar');
 	});
+
+	test('registerSimpleHelper', 3, function() {
+		var template = can.stache('<div>Result: {{simple first second}}</div>');
+		can.stache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+	
 });
