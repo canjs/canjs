@@ -1,4 +1,4 @@
-steal("can/util", function(){
+steal("can/util", function(can){
 	
 	// # can/compute/observe
 	// Exports a function that calls a function and binds to any observables it reads.
