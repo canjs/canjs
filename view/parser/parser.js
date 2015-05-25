@@ -19,7 +19,7 @@ steal("can/view", function(can){
 	}
 	
 	var alphaNumericHU = "-:A-Za-z0-9_",
-		attributeNames = "[\\(|\\[]?[a-zA-Z_:]["+alphaNumericHU+":.]*[\\)|\\]]?",
+		attributeNames = "[^=>\\s\\{\\}\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",
@@ -164,6 +164,7 @@ steal("can/view", function(can){
 		};
 
 		while (html) {
+
 			chars = true;
 
 			// Make sure we're not in a script or style element
