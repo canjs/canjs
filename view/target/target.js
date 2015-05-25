@@ -179,25 +179,41 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		}
 		return el;
 	}
-	
-	function hydratePath(el, pathData, args){
+
+	function getCallbacks(el, pathData, args, elementCallbacks){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
-			callbackData,
-			child = el;
-		
-		for(var i = 0, len = path.length; i < len; i++) {
+			child = el,
+			pathLength = path ? path.length : 0,
+			pathsLength = paths ? paths.length : 0;
+
+		for(var i = 0; i < pathLength; i++) {
 			child = child.childNodes[path[i]];
 		}
-		
-		for(i = 0, len = callbacks.length; i < len; i++) {
-			callbackData = callbacks[i];
-			callbackData.callback.apply(child, args );
+
+		elementCallbacks.push({element: child, callbacks: callbacks});
+
+		for( i= 0 ; i < pathsLength; i++) {
+			getCallbacks(child, paths[i], args, elementCallbacks);
 		}
-		if(paths && paths.length){
-			for( i= paths.length - 1 ; i >= 0; i--) {
-				hydratePath(child,paths[i], args);
+
+		return elementCallbacks;
+	}
+
+	function hydratePath(el, pathData, args) {
+		var callbacks = getCallbacks(el, pathData, args, []),
+			len = callbacks.length,
+			callbacksLength,
+			callbackElement,
+			callbackData;
+
+		for(var i = 0; i < len; i++) {
+			callbackData = callbacks[i];
+			callbacksLength = callbackData.callbacks.length;
+			callbackElement = callbackData.element;
+			for(var c = 0; c < callbacksLength; c++) {
+				callbackData.callbacks[c].callback.apply(callbackElement, args);
 			}
 		}
 	}
