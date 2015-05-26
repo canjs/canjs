@@ -1,14 +1,10 @@
 {
 	"globals": {
-
 		"steal": true,
 		"can": true,
-
-
 		"Zepto": true,
-
-
 		"QUnit": true,
+		"System": true,
 		"test": true,
 		"asyncTest": true,
 		"expect": true,
@@ -25,8 +21,6 @@
 		"stop": true,
 		"global": true
 	},
-
-
 	"curly": true,
 	"eqeqeq": true,
 	"freeze": true,
@@ -38,18 +32,17 @@
 	"trailing": true,
 	"maxdepth": 4,
 	"boss" : true,
-
 	"eqnull": true,
 	"evil": true,
 	"loopfunc": true,
 	"smarttabs": true,
 	"maxerr" : 200,
-
 	"jquery": true,
 	"dojo": true,
 	"mootools": true,
 	"yui": true,
 	"browser": true,
 	"phantom": true,
-	"rhino": true
+	"rhino": true,
+	"node": true
 }

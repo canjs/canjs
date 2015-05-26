@@ -29,7 +29,7 @@ steal("can/util", "can/map", "can/compute",function(can){
 				var self = this;
 				register("inline-cache", function(){
 					var script = document.createElement("script");
-					var text = document.createTextNode("\nINLINE_CACHE = " + JSON.stringify(self.__pageData) + ";\n")
+					var text = document.createTextNode("\nINLINE_CACHE = " + JSON.stringify(self.__pageData) + ";\n");
 					script.appendChild(text);
 					return script;
 				});
@@ -44,7 +44,9 @@ steal("can/util", "can/map", "can/compute",function(can){
 
 			function store(data){
 				var keyData = appState.__pageData[key];
-				if(!keyData) keyData = appState.__pageData[key] = {};
+				if(!keyData) {
+					keyData = appState.__pageData[key] = {};
+				}
 
 				keyData[sortedSetJson(set)] = typeof data.serialize === "function" ?
 					data.serialize() : data;

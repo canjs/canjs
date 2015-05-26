@@ -64,7 +64,9 @@ steal('can/util', 'can/route', function (can) {
 
 			// Intercepts clicks on `<a>` elements and rewrites original `history` methods.
 			bind: function () {
-				if(can.isNode) return;
+				if(can.isNode) {
+					return;
+				}
 
 				// Intercept routable links.
 				can.delegate.call(can.$(document.documentElement), 'a', 'click', anchorClickHandler);

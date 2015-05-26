@@ -7,7 +7,7 @@ QUnit.module("pageData");
 
 var keys = Object.keys || function(obj){
 	var result = [];
-	for (prop in obj) {
+	for (var prop in obj) {
 		result.push(prop);
 	}
 };

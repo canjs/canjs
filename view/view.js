@@ -749,7 +749,9 @@ steal('can/util', function (can) {
 		 * Render a view asynchronously by waiting for readyPromises to resolve.
 		 */
 		renderAsync: function(renderer, data, options, doc){
-			if(!options) options = {};
+			if(!options) {
+				options = {};
+			}
 			var frag = renderer(data, options);
 
 			function waitForPromises(){

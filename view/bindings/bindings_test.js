@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mustache", "can/view/stache", "steal-qunit", function (special) {
+steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mustache", "can/view/stache", "steal-qunit", function () {
 	QUnit.module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-fixture").innerHTML = "";
@@ -963,7 +963,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				name: 'David',
 				age: 7,
 				updateName: function(){
-					this.attr('name',"Justin")
+					this.attr('name', 'Justin');
 				}
 			}
 		});
