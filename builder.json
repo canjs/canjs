@@ -285,7 +285,7 @@
 			"library": "bower_components/zepto/zepto.js",
 			"steal": {
 				"map": {
-					"util/util": "util/zepto/zepto"
+					"can/util/util": "can/util/zepto/zepto"
 				}
 			}
 		},
@@ -294,7 +294,7 @@
 			"library": "bower_components/mootools/dist/mootools-core.js",
 			"steal": {
 				"map": {
-					"util/util": "util/mootools/mootools"
+					"can/util/util": "can/util/mootools/mootools"
 				}
 			}
 		},
@@ -303,7 +303,7 @@
 			"library": "util/yui/yui-3.7.3.js",
 			"steal": {
 				"map": {
-					"util/util": "util/yui/yui"
+					"can/util/util": "can/util/yui/yui"
 				}
 			}
 		},
@@ -312,7 +312,7 @@
 			"library": "util/dojo/dojo-1.8.1.js",
 			"steal": {
 				"map": {
-					"util/util": "util/dojo/dojo"
+					"can/util/util": "can/util/dojo/dojo"
 				}
 			}
 		}
