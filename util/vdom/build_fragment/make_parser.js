@@ -1,7 +1,7 @@
 steal("can/view/parser","can-simple-dom",function(canParser, simpleDOM){
 
 	return function(document){
-		return new simpleDOM.HTMLParser(function(string){
+		return new simpleDOM["default"].HTMLParser(function(string){
 
 			var tokens = [];
 			var currentTag,
@@ -37,7 +37,7 @@ steal("can/view/parser","can-simple-dom",function(canParser, simpleDOM){
 			});
 
 			return tokens;
-		}, document, simpleDOM.voidMap);
+		}, document, simpleDOM["default"].voidMap);
 	};
 
 });

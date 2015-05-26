@@ -253,6 +253,11 @@
 			"type": "plugin",
 			"hidden": true,
 			"hasTest": false
+		},
+		"can/util/vdom/build_fragment/build_fragment": {
+			"name": "can.util.vdom.buildFragment",
+			"type": "plugin",
+			"hidden": true
 		}
 	},
 	"types": {

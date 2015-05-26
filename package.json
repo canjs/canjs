@@ -183,6 +183,7 @@
 		"./view/mustache/system": "./dist/cjs/view/mustache/system",
 		"./view/ejs/system": "./dist/cjs/view/ejs/system",
 		"./util/event": "./dist/cjs/util/event",
-		"./map/sort/sort": "./dist/cjs/map/sort/sort"
+		"./map/sort/sort": "./dist/cjs/map/sort/sort",
+		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment"
 	}
 }

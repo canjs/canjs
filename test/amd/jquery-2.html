@@ -29,6 +29,7 @@
             "paths": {
                 "can": "dist/amd/can",
                 "dojo": "bower_components/dojo",
+                "simple-dom": "node_modules/can-simple-dom/dist/amd/simple-dom",
                 "jquery": "bower_components/jquery/dist/jquery"
             },
             "map": {
@@ -55,7 +56,8 @@
             "can/util/fixture", "can/view/bindings",
             "can/view/live", "can/view/scope",
             "can/util/tests", "can/util/object",
-            "can/util/function", "can/view/autorender"
+            "can/util/function", "can/view/autorender",
+            "can/util/vdom/build_fragment"
         ]), function() {
             require(["test/pluginified/latest"], function() {
                 QUnit.start();

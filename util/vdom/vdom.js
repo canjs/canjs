@@ -1,6 +1,6 @@
 // Everything CanJS+jquery app needs to run to pass
 // if you are doing almost everything with the can.util layer
-steal("can-simple-dom", "./make_parser", function(simpleDOM, makeParser){
+steal("can-simple-dom", "./build_fragment/make_parser", function(simpleDOM, makeParser){
 
 	var document = new simpleDOM.Document();
 	var serializer = new simpleDOM.HTMLSerializer(simpleDOM.voidMap);

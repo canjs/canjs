@@ -1,9 +1,9 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(simpleDom){
+steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(){
 	var browserDoc = window.document;
-	var simpleDocument = new simpleDom.Document();
+	var simpleDocument = new SimpleDOM.Document();
 
-	var serializer = new simpleDom.HTMLSerializer(simpleDom.voidMap);
+	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 	makeTest('can/view/stache vdom', simpleDocument);
 	makeTest('can/view/stache dom', browserDoc);
@@ -3356,7 +3356,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment.js","can/view/stache", "ca
 
 		test("@index in partials loaded from script templates", function () {
 
-			if (!(doc instanceof simpleDom.Document)) {
+			if (!(doc instanceof SimpleDOM.Document)) {
 				// add template as script
 
 				var script = doc.createElement("script");
