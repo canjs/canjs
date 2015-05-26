@@ -734,13 +734,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 							 '</a>';
 		//var mustacheRenderer = can.mustache(templateString);
 		var stacheRenderer = can.stache(templateString);
-		
+
 		var obj = new can.Map({thing: 'stuff'});
-		
-		
+
+
 		stacheRenderer(obj);
 		ok(true, 'stache worked without errors');
-		
+
 	});
 
 	test("can-event throws an error when inside #if block (#1182)", function(){
@@ -885,12 +885,12 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
 	});
-	
+
 	test("by default can-EVENT calls with values, not computes", function(){
 		stop();
 		var ta = document.getElementById("qunit-fixture");
 		var template = can.stache("<div id='click-me' can-click='{map.method one map.two map.three}'></div>");
-		
+
 		var one = can.compute(1);
 		var three = can.compute(3);
 		var MyMap = can.Map.extend({
@@ -901,13 +901,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				start();
 			}
 		});
-		
+
 		var map = new MyMap({"two": 2, "three": three});
-		
+
 		var frag = template({one: one, map: map});
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
-		
+
 	});
 
 	test('importing scope [prop]="{this}"', function() {
@@ -954,7 +954,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
 			'Imported: David',  '{name} component scope imported into variable');
 	});
-	
+
 	test('live importing scope [prop]={scopeProp}', function(){
 		can.Component.extend({
 			tag: 'import-prop-scope',
@@ -978,17 +978,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var frag = template({});
 		var importPropParent = frag.firstChild;
 		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
-		
+
 		can.viewModel(importPropScope).updateName();
-		
+
 		var importPropParentViewModel = can.viewModel(importPropParent);
-		
+
 		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
-		
+
 		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
-		
+
 	});
-	
+
 	test('reference values (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
@@ -996,19 +996,19 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			template: can.stache('<span>{{referenceExport.name}}</span>'),
 			viewModel: {}
 		});
-		
+
 		var template = can.stache('{{#person}}{{#name}}'+
 			"<reference-export #reference-export/>"+
 			"{{/name}}{{/person}}<span>{{referenceExport.name}}</span>");
 		var frag = template(data);
-		
+
 		var refExport = can.viewModel(frag.firstChild);
 		refExport.attr("name","done");
-		
+
 		equal( frag.lastChild.firstChild.nodeValue, "done");
 		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
 	});
-	
+
 	test('reference values with <content> tag', function(){
 		can.Component.extend({
 			tag: "other-export",
@@ -1016,29 +1016,40 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				name: "OTHER-EXPORT"
 			}
 		});
-	
+
 		can.Component.extend({
 			tag: "ref-export",
 			template: can.stache('<other-export #other-export/><content>{{otherExport.name}}</content>')
 		});
-		
+
 		// this should have otherExport name in the page
 		var t1 = can.stache("<ref-export></ref-export>");
-		
+
 		// this should not have anything in 'one', but something in 'two'
 		var t2 = can.stache("<form><other-export #other/><ref-export><b>{{otherExport.name}}</b><label>{{other.name}}</label></ref-export></form>");
-		
+
 		var f1 = t1();
 		equal(f1.firstChild.lastChild.nodeValue, "OTHER-EXPORT", "content");
-		
+
 		var f2 = t2();
 		var one = f2.firstChild.getElementsByTagName('b')[0];
 		var two = f2.firstChild.getElementsByTagName('label')[0];
-		
+
 		equal(one.firstChild.nodeValue, "", "external content, internal export");
 		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
 	});
-	
-	
-	
+
+	test("binding to arbitrary properties", function(){
+		var template = can.stache("<div hidden='{hidden}'></div>");
+		var map = new can.Map({ hidden: false });
+
+		var frag = template(map);
+
+		equal(frag.firstChild.hidden, false, "Initially not hidden");
+
+		map.attr("hidden", true);
+
+		equal(frag.firstChild.hidden, true, "Hidden now");
+	});
+
 });
