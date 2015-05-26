@@ -14,7 +14,7 @@ steal("can/util", "can/view",function(can){
 		} else {
 			var cb = attributes[attributeName];
 			if( !cb ) {
-				
+
 				for( var i = 0, len = regExpAttributes.length; i < len; i++) {
 					var attrMatcher = regExpAttributes[i];
 					if(attrMatcher.match.test(attributeName)) {
@@ -28,7 +28,9 @@ steal("can/util", "can/view",function(can){
 	};
 
 	var attributes = {},
+		attributeValues = {},
 		regExpAttributes = [],
+		regExpAttributeValues = [],
 		automaticCustomElementCharacters = /[-\:]/;
 
 	var tag = can.view.tag = function (tagName, tagHandler) {
@@ -43,7 +45,7 @@ steal("can/util", "can/view",function(can){
 				can.global.html5.elements += " " + tagName;
 				can.global.html5.shivDocument();
 			}
-	
+
 			tags[tagName.toLowerCase()] = tagHandler;
 		} else {
 			var cb = tags[tagName.toLowerCase()];
@@ -53,25 +55,54 @@ steal("can/util", "can/view",function(can){
 			}
 			return cb;
 		}
-		
+
 	};
 	var tags = {};
-	
+
+
+	var attrValue = can.view.attrValue = function (attributeValue, attrValueHandler) {
+		if(attrValueHandler) {
+			if (typeof attributeValue === "string") {
+				attributeValues[attributeValue] = attrValueHandler;
+			} else {
+				regExpAttributeValues.push({
+					match: attributeValue,
+					handler: attrValueHandler
+				});
+			}
+		} else {
+			var cb = attributeValues[attributeValue];
+			if( !cb ) {
+
+				for( var i = 0, len = regExpAttributeValues.length; i < len; i++) {
+					var attrMatcher = regExpAttributeValues[i];
+					if(attrMatcher.match.test(attributeValue)) {
+						cb = attrMatcher.handler;
+						break;
+					}
+				}
+			}
+			return cb;
+		}
+	};
+
+
 	can.view.callbacks = {
 		_tags: tags,
 		_attributes: attributes,
 		_regExpAttributes: regExpAttributes,
 		tag: tag,
 		attr: attr,
+		attrValue: attrValue,
 		// handles calling back a tag callback
 		tagHandler: function(el, tagName, tagData){
 			var helperTagCallback = tagData.options.attr('tags.' + tagName),
 				tagCallback = helperTagCallback || tags[tagName];
-	
+
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content
 			var scope = tagData.scope,
 				res;
-				
+
 			if(tagCallback) {
 				var reads = can.__clearObserved();
 				res = tagCallback(el, tagData);
@@ -79,17 +110,17 @@ steal("can/util", "can/view",function(can){
 			} else {
 				res = scope;
 			}
-	
+
 			//!steal-remove-start
 			if (!tagCallback) {
 				can.dev.warn('can/view/scanner.js: No custom element found for ' + tagName);
 			}
 			//!steal-remove-end
-	
+
 			// If the tagCallback gave us something to render with, and there is content within that element
 			// render it!
 			if (res && tagData.subtemplate) {
-	
+
 				if (scope !== res) {
 					scope = scope.add(res);
 				}

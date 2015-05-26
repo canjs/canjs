@@ -1,9 +1,9 @@
 /* jshint maxdepth:7*/
 steal("can/util", "can/view/elements.js",function(can, elements){
-	
+
 	var processNodes = function(nodes, paths, location){
 		var frag = document.createDocumentFragment();
-		
+
 		for(var i = 0, len = nodes.length; i < len; i++) {
 			var node = nodes[i];
 			frag.appendChild( processNode(node,paths,location.concat(i)) );
@@ -13,13 +13,13 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		keepsTextNodes =  typeof document !== "undefined" && (function(){
 			var testFrag = document.createDocumentFragment();
 			var div = document.createElement("div");
-			
+
 			div.appendChild(document.createTextNode(""));
 			div.appendChild(document.createTextNode(""));
 			testFrag.appendChild(div);
-			
+
 			var cloned  = testFrag.cloneNode(true);
-			
+
 			return cloned.childNodes[0].childNodes.length === 2;
 		})(),
 		clonesWork = typeof document !== "undefined" && (function(){
@@ -86,13 +86,13 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 					}
 				});
 			}
-			
+
 			if(node.childNodes) {
 				can.each(node.childNodes, function(child){
 					copy.appendChild( cloneNode(child) );
 				});
 			}
-			
+
 			return copy;
 		};
 
@@ -114,7 +114,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 			}
 			return callback;
 		};
-		
+
 		if(nodeType === "object") {
 			if( node.tag ) {
 				if(namespacesWork && node.namespace) {
@@ -122,7 +122,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 				} else {
 					el = document.createElement(node.tag);
 				}
-				
+
 				if(node.attrs) {
 					for(var attrName in node.attrs) {
 						var value = node.attrs[attrName];
@@ -140,6 +140,11 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 						getCallback().callbacks.push({callback: node.attributes[i]});
 					}
 				}
+				if(node.attributeValues) {
+					for(i = 0, len = node.attributeValues.length; i < len; i++) {
+						getCallback().callbacks.push({callback: node.attributeValues[i]});
+					}
+				}
 				if(node.children && node.children.length) {
 					// add paths
 					if(callback) {
@@ -151,19 +156,19 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 				}
 			} else if(node.comment) {
 				el = document.createComment(node.comment);
-				
+
 				if(node.callbacks) {
 					for(i = 0, len = node.attributes.length; i < len; i++ ) {
 						getCallback().callbacks.push({callback: node.callbacks[i]});
 					}
 				}
 			}
-			
-			
+
+
 		} else if(nodeType === "string"){
 			el = document.createTextNode(node);
 		} else if(nodeType === "function") {
-			
+
 			if(keepsTextNodes) {
 				el = document.createTextNode("");
 				getCallback().callbacks.push({callback: node});
@@ -175,22 +180,22 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 					return node.apply(el,arguments );
 				}});
 			}
-			
+
 		}
 		return el;
 	}
-	
+
 	function hydratePath(el, pathData, args){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
 			callbackData,
 			child = el;
-		
+
 		for(var i = 0, len = path.length; i < len; i++) {
 			child = child.childNodes[path[i]];
 		}
-		
+
 		for(i = 0, len = callbacks.length; i < len; i++) {
 			callbackData = callbacks[i];
 			callbackData.callback.apply(child, args );
@@ -219,7 +224,7 @@ steal("can/util", "can/view/elements.js",function(can, elements){
 		};
 	}
 	makeTarget.keepsTextNodes = keepsTextNodes;
-	
+
 	can.view.target = makeTarget;
 
 	return makeTarget;
