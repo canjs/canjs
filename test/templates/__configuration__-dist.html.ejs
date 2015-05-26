@@ -35,6 +35,7 @@
 	QUnit.config.autostart = false;
 </script>
 
+<script type="text/javascript" src="node_modules/can-simple-dom/dist/global/can-simple-dom.js"></script>
 <script type="text/javascript" src="<%= configuration.library %>"></script>
 <script type="text/javascript" src="dist/<%= dist.replace('-2', '') %>.js"></script>
 <% modules.forEach(function(module) { %><% if(!module.isDefault) { %><script type="text/javascript" src="dist/<%= module %>.js"></script><% } %><% }); %>
