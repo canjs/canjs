@@ -342,7 +342,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				}
 
 				// this is the value passed to the fn
-				lastSetValue.set(newVal);
+				return lastSetValue.set(newVal);
 			};
 
 			// make sure get is called with the newVal, but not setter

@@ -497,9 +497,9 @@ steal("can/util",
 					// we hide any observables read in the function by saving any observables that
 					// have been read and then setting them back which overwrites any `can.__observe` calls
 					// performed in value.
-					var old = can.__clearReading();
+					var old = can.__clearObserved();
 					value(this);
-					can.__setReading(old);
+					can.__setObserved(old);
 					
 				}
 				// If the compute has observable dependencies, setup live binding.

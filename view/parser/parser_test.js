@@ -188,7 +188,6 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		parser(intermediate, makeChecks(tests) );
 	});
 
-
 	test('less than outside of an element', function(){
 		var tests = [
 			["start", ["h1", false]],
@@ -226,6 +225,26 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["p"]],
 			["done",[]]
 		]));
+
+		parser('<p (click-me)="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["(click-me)"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["(click-me)"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
+
+		parser('<p (click_me)="test"></p>', makeChecks([
+			["start", ["p", false]],
+			["attrStart", ["(click_me)"]],
+			["attrValue", ["test"]],
+			["attrEnd", ["(click_me)"]],
+			["end",["p"]],
+			["close",["p"]],
+			["done",[]]
+		]));
 	});
 
 	test('allow [.]', function() {
@@ -239,5 +258,4 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["done",[]]
 		]));
 	});
-
 });

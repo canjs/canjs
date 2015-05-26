@@ -214,7 +214,7 @@ steal(
 					
 					state.node.attrs[state.attr.name] =
 						state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
-					
+
 					var attrCallback = viewCallbacks.attr(attrName);
 					if(attrCallback) {
 						if( !state.node.attributes ) {

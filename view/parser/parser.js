@@ -1,11 +1,11 @@
 /* jshint maxdepth:7,node:true*/
 steal(function(){
 
-	var each = function(items, callback){
+	function each(items, callback){
 		for ( var i = 0; i < items.length; i++ ) {
 			callback(items[i], i);
 		}
-	};
+	}
 
 	function makeMap(str){
 		var obj = {}, items = str.split(",");
@@ -14,6 +14,7 @@ steal(function(){
 		});
 		return obj;
 	}
+	
 	function handleIntermediate(intermediate, handler){
 		for(var i = 0, len = intermediate.length; i < len; i++) {
 			var item = intermediate[i];
@@ -23,7 +24,7 @@ steal(function(){
 	}
 
 	var alphaNumericHU = "-:A-Za-z0-9_",
-		attributeNames = "[\\(|\\[]?[a-zA-Z_:.]["+alphaNumericHU+":.]*[\\)|\\]]?",
+		attributeNames = "[^=>\\s\\{\\}\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",
@@ -181,6 +182,7 @@ steal(function(){
 		};
 
 		while (html) {
+
 			chars = true;
 
 			// Make sure we're not in a script or style element

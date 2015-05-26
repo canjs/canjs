@@ -12,7 +12,7 @@
 steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks, elements) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
-	var ignoreAttributesRegExp = /^(dataViewId|class|id|\[[\w\.-]+\])$/i,
+	var ignoreAttributesRegExp = /^(dataViewId|class|id|\[[\w\.-]+\]|#[\w\.-])$/i,
 		paramReplacer = /\{([^\}]+)\}/g;
 
 	/**
@@ -94,10 +94,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 			 */
 			// ### setup
 			// When a new component instance is created, setup bindings, render the template, etc.
-			setup: function (el, hookupOptions) {
+			setup: function (el, componentTagData) {
 				// Setup values passed to component
 				var initialScopeData = {
-						"@root": hookupOptions.scope.attr("@root")
+						"@root": componentTagData.scope.attr("@root")
 					},
 					component = this,
 					// If a template is not provided, we fall back to
@@ -151,14 +151,14 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						value = value.substr(1, value.length - 2 );
 					} else {
 						// Legacy template types will crossbind "foo=bar"
-						if(hookupOptions.templateType !== "legacy") {
+						if(componentTagData.templateType !== "legacy") {
 							initialScopeData[name] = value;
 							return;
 						}
 					}
 					// Cross-bind the value in the scope to this
 					// component's viewModel
-					var computeData = hookupOptions.scope.computeData(value, {
+					var computeData = componentTagData.scope.computeData(value, {
 						args: []
 					}),
 						compute = computeData.compute;
@@ -201,7 +201,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 					componentScope = scope;
 				} else if (can.isFunction(scope)) {
 					// If `this.viewModel` is a function, call the function and
-					var scopeResult = scope.call(this, initialScopeData, hookupOptions.scope, el);
+					var scopeResult = scope.call(this, initialScopeData, componentTagData.scope, el);
 
 					if (scopeResult instanceof can.Map) {
 						// If the function returns a can.Map, use that as the viewModel
@@ -233,7 +233,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 					componentScope.bind(prop, handlers[prop]);
 				});
 				// Setup the attributes bindings
-				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || hookupOptions.templateType !== "legacy") {
+				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || componentTagData.templateType !== "legacy") {
 					// Bind on the `attributes` event and update the viewModel.
 					can.bind.call(el, "attributes", function (ev) {
 						// Convert attribute name from the `attribute-name` to the `attributeName` format.
@@ -252,9 +252,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				can.data(can.$(el), "viewModel", this.scope);
 
 				// Create a real Scope object out of the viewModel property
-				var renderedScope = lexicalContent ?
-						this.scope :
-						hookupOptions.scope.add(this.scope),
+				var renderedScope = (lexicalContent ?
+						can.view.Scope.refsScope() :
+						componentTagData.scope.add( new can.view.Scope.Refs() ) ).add(this.scope),
 					options = {
 						helpers: {}
 					},
@@ -332,14 +332,16 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 					}
 
 					// We need be alerted to when a <content> element is rendered so we can put the original contents of the widget in its place
-					options.tags.content = function contentHookup(el, rendererOptions) {
+					options.tags.content = function contentHookup(el, contentTagData) {
 						// First check if there was content within the custom tag
-						// otherwise, render what was within <content>, the default code
-						var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate;
+						// otherwise, render what was within <content>, the default code.
+						// `componentTagData.subtemplate` is the content inside this component
+						var subtemplate = componentTagData.subtemplate || contentTagData.subtemplate,
+							renderingLightContent = subtemplate === componentTagData.subtemplate;
 
 						if (subtemplate) {
 
-							// `rendererOptions.options` is a viewModel of helpers where `<content>` was found, so
+							// `contentTagData.options` is a viewModel of helpers where `<content>` was found, so
 							// the right helpers should already be available.
 							// However, `_tags.content` is going to point to this current content callback.  We need to
 							// remove that so it will walk up the chain
@@ -351,15 +353,33 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 							// bindings inside the "light dom" content of
 							// the component will have access to the
 							// internal viewModel. This can be overridden to be
-							// lexical with the lexicalContent
-							// option,
-							var opts = !lexicalContent ||
-									subtemplate !== hookupOptions.subtemplate ?
-									rendererOptions :
-									hookupOptions;
-
-							if(rendererOptions.parentNodeList) {
-								var frag = subtemplate( opts.scope, opts.options, rendererOptions.parentNodeList );
+							// lexical with the leakScope option.
+							var opts;
+							if( renderingLightContent ) {
+								if(lexicalContent) {
+									// render with the same scope the component was found within.
+									opts = componentTagData;
+								} else {
+									// render with the component's viewModel mixed in, however
+									// we still want the outer refs to be used, NOT the component's refs
+									// <component> {{some value }} </component>
+									// To fix this, we
+									// walk down the scope to the component's ref, clone scopes from that point up
+									// use that as the new scope.
+									opts = {
+										scope: contentTagData.scope.cloneFromRef(),
+										options: contentTagData.options
+									};
+								}
+								
+							} else {
+								// we are rendering default content so this content should 
+								// use the same scope as the <content> tag was found within.
+								opts = contentTagData;
+							}
+							
+							if(contentTagData.parentNodeList) {
+								var frag = subtemplate( opts.scope, opts.options, contentTagData.parentNodeList );
 								elements.replace([el], frag);
 							} else {
 								can.view.live.replace([el], subtemplate( opts.scope, opts.options ));
@@ -370,16 +390,16 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						}
 					};
 					// Render the component's template
-					frag = this.constructor.renderer(renderedScope, hookupOptions.options.add(options), nodeList);
+					frag = this.constructor.renderer(renderedScope, componentTagData.options.add(options), nodeList);
 				} else {
-					// Otherwise render the contents between the
-					if(hookupOptions.templateType === "legacy") {
-						frag = can.view.frag(hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : "");
+					// Otherwise render the contents between the 
+					if(componentTagData.templateType === "legacy") {
+						frag = can.view.frag(componentTagData.subtemplate ? componentTagData.subtemplate(renderedScope, componentTagData.options.add(options)) : "");
 					} else {
-						// we need to be the parent ... or we need to
-						frag = hookupOptions.subtemplate ?
-							hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options), nodeList) :
-							el.ownerDocument.createDocumentFragment();
+						// we need to be the parent ... or we need to 
+						frag = componentTagData.subtemplate ?
+							componentTagData.subtemplate(renderedScope, componentTagData.options.add(options), nodeList) :
+							document.createDocumentFragment();
 					}
 
 				}

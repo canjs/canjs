@@ -848,31 +848,29 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	// The old attributes plugin interferes severly with this test.
 	// TODO remove this condition when taking the plugins out of the main repository
-	if(!can.Map.attributes) {
-		test('value and get (#1521)', function () {
-			var MyMap = can.Map.extend({
-				define: {
-					data: {
-						value: function () {
-							return new can.List(['test']);
-						}
-					},
-					size: {
-						value: 1,
-						get: function (val) {
-							var list = this.attr('data');
-							var length = list.attr('length');
-							return val + length;
-						}
+	test('value and get (#1521)', function () {
+		var MyMap = can.Map.extend({
+			define: {
+				data: {
+					value: function () {
+						return new can.List(['test']);
+					}
+				},
+				size: {
+					value: 1,
+					get: function (val) {
+						var list = this.attr('data');
+						var length = list.attr('length');
+						return val + length;
 					}
 				}
-			});
-
-			var map = new MyMap({});
-			equal(map.attr('size'), 2);
+			}
 		});
-	}
-	
+
+		var map = new MyMap({});
+		equal(map.attr('size'), 2);
+	});
+
 	
 	test("One event on getters (#1585)", function(){
 
@@ -1026,7 +1024,20 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	});
 	
-	
-	
-	
+	test('Initial value does not call getter', function() {
+		expect(0);
+
+		var Map = can.Map.extend({
+			define: {
+				count: {
+					get: function(lastVal) {
+						ok(false, 'Should not be called');
+						return lastVal;
+					}
+				}
+			}
+		});
+
+		new Map({ count: 100 });
+	});
 });

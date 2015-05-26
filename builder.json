@@ -129,6 +129,7 @@
 			"name": "can.Map.attributes",
 			"type": "plugin",
 			"deprecated": true,
+			"hasTest": false,
 			"description": "Define Observe attributes"
 		},
 		"can/map/validations/validations": {
@@ -174,11 +175,6 @@
 				"jquery-2"
 			]
 		},
-		"can/util/object/object": {
-			"name": "can.Object",
-			"type": "plugin",
-			"description": "Helper methods for object comparison"
-		},
 		"can/util/fixture/fixture": {
 			"name": "can.fixture",
 			"type": "plugin",
@@ -202,16 +198,19 @@
 			"isDefault": true,
 			"hidden": true
 		},
-		"can/util/string/string": {
-			"name": "can.util.string",
-			"type": "core",
-			"isDefault": true,
+		"can/util/tests/tests": {
+			"name": "can.util.tests",
+			"type": "plugin",
 			"hidden": true
 		},
-		"can/util/attr/attr": {
-			"name": "can.util.attr",
-			"type": "core",
-			"isDefault": true,
+		"can/util/object/object": {
+			"name": "can.Object",
+			"type": "plugin",
+			"description": "Helper methods for object comparison"
+		},
+		"can/util/function/function": {
+			"name": "can.util.function",
+			"type": "plugin",
 			"hidden": true
 		},
 		"can/view/autorender/autorender": {

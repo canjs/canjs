@@ -63,7 +63,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			
 			return function(scope, options, nodeList){
 				if ( !(scope instanceof can.view.Scope) ) {
-					scope = new can.view.Scope(scope || {});
+					scope = can.view.Scope.refsScope().add(scope || {});
 				}
 				if ( !(options instanceof mustacheCore.Options) ) {
 					options = new mustacheCore.Options(options || {});

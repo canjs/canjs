@@ -742,47 +742,6 @@ steal('can/util', function (can) {
 				});
 				return fn.apply(this, realArgs);
 			};
-		},
-
-		/**
-		 * @hide
-		 * Render a view asynchronously by waiting for readyPromises to resolve.
-		 */
-		renderAsync: function(renderer, data, options, doc){
-			if(!options) {
-				options = {};
-			}
-			var frag = renderer(data, options);
-
-			function waitForPromises(){
-				var readyPromises = [];
-				if(data.__readyPromises) {
-					readyPromises = data.__readyPromises;
-					data.__readyPromises = [];
-				}
-
-				if(readyPromises.length === 0) {
-					// If provided a document to use to fire events, set this as the can.document
-					// and insert the fragment into the body.
-					if(doc) {
-						var oldDoc = can.document;
-						can.document = doc;
-						can.appendChild(doc.body, frag, doc);
-						can.document = oldDoc;
-					}
-
-					return new can.Deferred().resolve();
-				}
-
-				return can.when.apply(can, readyPromises).then(waitForPromises);
-			}
-
-			return waitForPromises().then(function(){
-				return {
-					fragment: frag,
-					data: data.__pageData
-				};
-			});
 		}
 	});
 

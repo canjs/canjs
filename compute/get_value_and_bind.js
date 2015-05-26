@@ -95,7 +95,7 @@ steal("can/util", function(){
 	can.__clearObserved = can.__clearReading = function () {
 		if (observedStack.length) {
 			var ret = observedStack[observedStack.length-1];
-			observedStack[observedStack.length-1] = {observed: {}};
+			observedStack[observedStack.length-1] = {names: "", observed: {}};
 			return ret;
 		}
 	};
@@ -108,7 +108,9 @@ steal("can/util", function(){
 
 	can.__addObserved = can.__addReading = function(o){
 		if (observedStack.length) {
-			can.simpleExtend(observedStack[observedStack.length-1], o);
+			var last = observedStack[observedStack.length-1];
+			can.simpleExtend(last.observed, o.observed);
+			last.names += o.names;
 		}
 	};
 	

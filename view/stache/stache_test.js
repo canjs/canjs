@@ -360,7 +360,7 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 	});
 
 	test("Handlebars advanced helpers (from docs)", function () {
-		can.stache.registerHelper('exercise', function (group, action, num, options) {
+		can.stache.registerSimpleHelper('exercise', function (group, action, num, options) {
 			if (group && group.length > 0 && action && num > 0) {
 				return options.fn({
 					group: group,
@@ -395,9 +395,9 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		var div = document.createElement("div");
 		div.appendChild(frag);
 
-		equal(div.innerHTML, t.expected);
-
-		equal(getText(t.template, {}), t.expected2);
+		equal(div.innerHTML, t.expected, "with data");
+		
+		equal(getText(t.template, {}), t.expected2, "without data");
 	});
 
 	test("Passing functions as data, then executing them", function () {
@@ -3948,19 +3948,18 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		}));
 		equal(frag.childNodes[0].innerHTML, 'Result: 6');
 	});
-	
+
 	test("compute defined after template (#1617)", function(){
 		var myMap = new can.Map();
 
 		// 1. Render a stache template with a binding to a key that is not a can.compute
 		var frag = can.stache('<span>{{ myMap.test }}</span>')({myMap: myMap});
-		
+
 		// 2. Set that key to a can.compute
 		myMap.attr('test', can.compute(function() { return "def"; }));
 
 		equal(frag.firstChild.firstChild.nodeValue, "def", "correct value");
 	});
-	
 
 	test('template with a block section and nested if doesnt render correctly', function() {
 		var myMap = new can.Map({
@@ -3977,6 +3976,20 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		equal(can.$('#qunit-fixture div')[0].innerHTML, 'My Meals', 'shows if case');
 	});
 
+	test('registerSimpleHelper', 3, function() {
+		var template = can.stache('<div>Result: {{simple first second}}</div>');
+		can.stache.registerSimpleHelper('simple', function (first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+	
 	test('Helper handles list replacement (#1652)', 3, function () {
 		var state = new can.Map({
 			list: []
