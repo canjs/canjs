@@ -1,4 +1,4 @@
-steal('steal-qunit', 'can/util/inserted', 'steal-qunit', function (QUnit) {
+steal('can/util/inserted', 'steal-qunit', function () {
 	QUnit.module('can/util/inserted');
 	if (window.jQuery) {
 		test('jquery', function () {

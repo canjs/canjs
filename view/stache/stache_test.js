@@ -5,14 +5,12 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
-	makeTest('can/view/stache vdom', simpleDocument);
 	makeTest('can/view/stache dom', browserDoc);
-
+	if(window.jQuery) {
+		makeTest('can/view/stache vdom', simpleDocument);
+	}
 
 	// HELPERS
-
-
-
 	function makeTest(name, doc) {
 		var isNormalDOM = doc === window.document;
 
@@ -3611,7 +3609,8 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var frag = can.stache(tmpl)({});
 			can.append(this.$fixture, frag);
 
-			equal(this.$fixture.find("my-tag").length, 1, "Element created in default namespace");
+			equal(this.fixture.getElementsByTagName("my-tag").length, 1,
+				"Element created in default namespace");
 		});
 
 		test("Partials are passed helpers (#791)", function () {

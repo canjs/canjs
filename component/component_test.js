@@ -1429,10 +1429,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			});
 			var frag = can.stache('<rebind-viewmodel></rebind-viewmodel>')();
 			var rebind = frag.firstChild;
-			can.append( this.$fixture, can.$(rebind) );
+			can.append(this.$fixture, rebind);
 
 			can.viewModel(can.$(rebind)).attr('item.name', 'CDN');
-
 		});
 
 
@@ -1518,7 +1517,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 	}
 
 	makeTest("can/component dom", document);
-	makeTest("can/component vdom", simpleDocument);
+	if(window.jQuery) {
+		makeTest("can/component vdom", simpleDocument);
+	}
 
 
 

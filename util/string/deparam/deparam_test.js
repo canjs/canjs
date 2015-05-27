@@ -1,4 +1,4 @@
-steal('steal-qunit', 'can/util/string/deparam', function (QUnit) {
+steal('can/util/string/deparam', 'steal-qunit', function () {
 	QUnit.module('can/util/string/deparam');
 	/** /
 test("Basic deparam",function(){

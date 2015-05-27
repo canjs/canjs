@@ -6,8 +6,9 @@ steal("./make_parser", "can/util",function(makeParser, can){
 		if(context && context.length) {
 			context = context[0];
 		}
-		if( context && ((context.ownerDocument || context ) !== can.global.document)) {
-
+		// Also checks if this is a YUI wrapped node
+		if (context && ((context.ownerDocument || context) !== can.global.document) &&
+				!context._yuid) {
 			var parser = makeParser(context.ownerDocument || context);
 			return parser.parse(text);
 
