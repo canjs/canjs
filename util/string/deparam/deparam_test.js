@@ -1,5 +1,5 @@
-steal('can/util/string/deparam', function () {
-	module('can/util/string/deparam');
+steal('steal-qunit', 'can/util/string/deparam', function (QUnit) {
+	QUnit.module('can/util/string/deparam');
 	/** /
 test("Basic deparam",function(){
 
@@ -43,10 +43,10 @@ test("deparam an array", function(){
 	equal(data.a[0],1)
 	equal(data.a[1],2)
 })
-    
+
 test("deparam object with spaces", function(){
    var data = can.deparam("a+b=c+d&+e+f+=+j+h+");
-    
+
     equal(data["a b"], "c d")
     equal(data[" e f "], " j h ")
 })

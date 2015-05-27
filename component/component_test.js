@@ -1,8 +1,8 @@
-steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
+steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (SimpleDOM) {
 
-	var simpleDocument = new SimpleDOM.Document();
+	var simpleDocument = new SimpleDOM["default"].Document();
 
-	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
+	var serializer = new SimpleDOM["default"].HTMLSerializer(SimpleDOM["default"].voidMap);
 
 	var innerHTML = function(node){
 		if("innerHTML" in node) {
@@ -1522,7 +1522,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 
 
-	module("can/component mustache");
+	QUnit.module("can/component mustache");
 
 
 	asyncTest('(mu)stache integration', function(){
@@ -1672,14 +1672,14 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				}
 				return old.call(this, arguments);
 			};
-			
+
 			can.remove(can.$("#qunit-fixture>*"));
 
 			// Dispatches async
 			setTimeout(function() {
 				equal(count, 2, '2 items unbound');
 				can.unbindAndTeardown = old;
-				
+
 				start();
 			}, 20);
 		});
