@@ -6,7 +6,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 	makeTest('can/view/stache dom', browserDoc);
-	if(window.jQuery) {
+	if(window.jQuery && window.steal) {
 		makeTest('can/view/stache vdom', simpleDocument);
 	}
 

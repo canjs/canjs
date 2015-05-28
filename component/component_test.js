@@ -1517,7 +1517,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 	}
 
 	makeTest("can/component dom", document);
-	if(window.jQuery) {
+	if(window.jQuery && window.steal) {
 		makeTest("can/component vdom", simpleDocument);
 	}
 

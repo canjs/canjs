@@ -950,8 +950,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		});
 
 		var template = can.stache('<import-prop-parent></import-prop-parent>');
-		can.append(can.$('#qunit-fixture'), template({}));
-		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
+		var frag = template({});
+
+		equal(frag.childNodes[0].childNodes[1].innerHTML,
 			'Imported: David',  '{name} component scope imported into variable');
 	});
 
