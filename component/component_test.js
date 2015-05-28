@@ -1,8 +1,8 @@
-steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function (SimpleDOM) {
+steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", function () {
 
-	var simpleDocument = new SimpleDOM["default"].Document();
+	var simpleDocument = new SimpleDOM.Document();
 
-	var serializer = new SimpleDOM["default"].HTMLSerializer(SimpleDOM["default"].voidMap);
+	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
 
 	var innerHTML = function(node){
 		if("innerHTML" in node) {
