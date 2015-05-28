@@ -1,8 +1,8 @@
 // # can/view/stache/mustache_core.js
-// 
+//
 // This provides helper utilities for Mustache processing. Currently,
 // only stache uses these helpers.  Ideally, these utilities could be used
-// in other libraries implementing Mustache-like features.  
+// in other libraries implementing Mustache-like features.
 
 steal("can/util",
 	"./utils",
@@ -17,19 +17,19 @@ steal("can/util",
 	elements = elements || can.view.elements;
 	Scope = Scope || can.view.Scope;
 	nodeLists = nodeLists || can.view.nodeLists;
-	
+
 	// ## Types
-	
+
 	// A lookup is an object that is used to identify a lookup in the scope.
 	/**
 	 * @hide
 	 * @typedef {{get: String}} can.mustache.Lookup
 	 * @option {String} get A value in the scope to look up.
 	 */
-	
+
 
 	// ## Helpers
-	
+
 	// Breaks up the name and arguments of a mustache expression.
 	var argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 		// Identifies the type of an argument or hash in a mustache expression.
@@ -69,9 +69,9 @@ steal("can/util",
 				isArgument: isArgument,
 				args: [scope.attr('.'), scope]
 			});
-			
+
 			can.compute.temporarilyBind(data.compute);
-			
+
 			return data;
 		},
 		// Returns a value or compute for the given key.
@@ -84,7 +84,7 @@ steal("can/util",
 				return data.compute;
 			}
 		},
-		// Sets .fn and .inverse on a helperOptions object and makes sure 
+		// Sets .fn and .inverse on a helperOptions object and makes sure
 		// they can reference the current scope and options.
 		convertToScopes = function(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer){
 			// overwrite fn and inverse to always convert to scopes
@@ -114,9 +114,9 @@ steal("can/util",
 				return result;
 			});
 		};
-	
 
-	
+
+
 	var core = {
 		// ## mustacheCore.expressionData
 		// Returns processed information about the arguments and hash in a mustache expression.
@@ -133,7 +133,7 @@ steal("can/util",
 			var args = [],
 				hashes = {},
 				i = 0;
-			
+
 			(can.trim(expression) + ' ').replace(argumentsRegExp, function (whole, arg) {
 				var m;
 				// Check for special helper arguments (string/number/boolean/hashes).
@@ -153,7 +153,7 @@ steal("can/util",
 				}
 				i++;
 			});
-			
+
 			return {
 				name: args.shift(),
 				args: args,
@@ -161,20 +161,20 @@ steal("can/util",
 			};
 		},
 		// ## mustacheCore.makeEvaluator
-		// Given a scope and expression, returns a function that evaluates that expression in the scope. 
-		// 
+		// Given a scope and expression, returns a function that evaluates that expression in the scope.
+		//
 		// This function first reads lookup values in the args and hash.  Then it tries to figure out
 		// if a helper is being called or a value is being read.  Finally, depending on
 		// if it's a helper, or not, and which mode the expression is in, it returns
 		// a function that can quickly evaluate the expression.
 		/**
-		 * @hide 
-		 * Given a mode and expresion data, returns a function that evaluates that expression. 
+		 * @hide
+		 * Given a mode and expresion data, returns a function that evaluates that expression.
 		 * @param {can.view.Scope} The scope in which the expression is evaluated.
 		 * @param {can.view.Options} The option helpers in which the expression is evaluated.
 		 * @param {String} mode Either null, #, ^. > is handled elsewhere
 		 * @param {Object} exprData Data about what was in the mustache expression
-		 * @param {renderer} [truthyRenderer] Used to render a subsection 
+		 * @param {renderer} [truthyRenderer] Used to render a subsection
 		 * @param {renderer} [falseyRenderer] Used to render the inverse subsection
 		 * @param {String} [stringOnly] A flag to indicate that only strings will be returned by subsections.
 		 * @return {Function} An 'evaluator' function that evaluates the expression.
@@ -191,10 +191,10 @@ steal("can/util",
 				},
 				// The current context.
 				context = scope.attr("."),
-				
+
 				// The main value.
 				name = exprData.name,
-				
+
 				// If name is a helper, this gets set to the helper.
 				helper,
 				// `true` if the expression looks like a helper.
@@ -203,7 +203,7 @@ steal("can/util",
 				initialValue,
 				// The function that calls the helper
 				helperEvaluator;
-				
+
 			// Convert lookup values in arguments to actual values.
 			for(var i = 0, len = exprData.args.length; i < len; i++) {
 				var arg = exprData.args[i];
@@ -224,12 +224,12 @@ steal("can/util",
 
 			// Lookup value in name.  Also determine if name is a helper.
 			if ( isLookup(name) ) {
-			
+
 				// If the expression looks like a helper, try to get a helper right away.
 				if (looksLikeAHelper) {
 					// Try to find a registered helper.
 					helper = mustacheHelpers.getHelper(name.get, options);
-					
+
 					// If a function is on top of the context, call that as a helper.
 					if(!helper && typeof context[name.get] === "function") {
 						helper = {fn: context[name.get]};
@@ -237,16 +237,16 @@ steal("can/util",
 
 				}
 				// If a helper has not been found, either because this does not look like a helper
-				// or because a helper was not found, get the value of name and determine 
+				// or because a helper was not found, get the value of name and determine
 				// if it's a value or not.
 				if(!helper) {
 					var get = name.get;
-					
+
 					// Get info about the compute that represents this lookup.
 					// This way, we can get the initial value without "reading" the compute.
 					var computeData = getKeyComputeData(name.get, scope, false),
 						compute = computeData.compute;
-						
+
 					initialValue = computeData.initialValue;
 
 					// Set name to be the compute if the compute reads observables,
@@ -282,17 +282,17 @@ steal("can/util",
 			}
 
 
-			
+
 			// If inverse mode, reverse renderers.
 			if(mode === "^") {
 				var temp = truthyRenderer;
 				truthyRenderer = falseyRenderer;
 				falseyRenderer = temp;
 			}
-			
+
 			// Check for a registered helper or a helper-like function.
 			if ( helper ) {
-				
+
 				// Add additional data to be used by helper functions
 				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
 
@@ -314,7 +314,7 @@ steal("can/util",
 				return helperEvaluator;
 
 			}
-			
+
 			// Return evaluators for no mode.
 			if(!mode) {
 				// If it's computed, return a function that just reads the compute.
@@ -323,7 +323,7 @@ steal("can/util",
 				}
 				// Just return name as the value
 				else {
-					
+
 					return function(){
 						return '' + (name != null ? name : '');
 					};
@@ -342,7 +342,7 @@ steal("can/util",
 					// If it's an array, render.
 					if (utils.isArrayLike(value) ) {
 						var isObserveList = utils.isObserveLike(value);
-						
+
 						if(isObserveList ? value.attr("length") : value.length) {
 							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
 								(value, isObserveList, helperOptions, options);
@@ -367,7 +367,7 @@ steal("can/util",
 		 * @hide
 		 * Returns a renderer function that live binds a partial.
 		 * @param {String} partialName the name of the partial.
-		 * @return {function(this:HTMLElement,can.view.Scope,can.view.Options)} A renderer function 
+		 * @return {function(this:HTMLElement,can.view.Scope,can.view.Options)} A renderer function
 		 * live binds a partial.
 		 */
 		makeLiveBindingPartialRenderer: function(partialName, state){
@@ -396,11 +396,15 @@ steal("can/util",
 							proxyMethods: false
 						}).value;
 
+						if (scopePartialName === null) {
+							return can.frag("");
+						}
 						if (scopePartialName) {
 							localPartialName = scopePartialName;
 						}
 
-						res = can.view.render(localPartialName, scope, options );
+						res = can.isFunction(localPartialName) ? localPartialName(scope, options)
+							: can.view.render(localPartialName, scope, options );
 					}
 
 					return can.frag(res);
@@ -419,7 +423,7 @@ steal("can/util",
 		 * Return a renderer function that evaluates to a string.
 		 * @param {String} mode
 		 * @param {can.mustache.Expression} expression
-		 * @return {function(can.view.Scope,can.view.Options, can.view.renderer, can.view.renderer)} 
+		 * @return {function(can.view.Scope,can.view.Options, can.view.renderer, can.view.renderer)}
 		 */
 		makeStringBranchRenderer: function(mode, expression){
 			var exprData = expressionData(expression),
@@ -443,7 +447,7 @@ steal("can/util",
 			};
 		},
 		// ## mustacheCore.makeLiveBindingBranchRenderer
-		// Return a renderer function that evaluates the mustache expression and 
+		// Return a renderer function that evaluates the mustache expression and
 		// sets up live binding if a compute with dependencies is found. Otherwise,
 		// the element's value is set.
 		//
@@ -458,41 +462,41 @@ steal("can/util",
 		 * @param {Object} state The html state of where the expression was found.
 		 */
 		makeLiveBindingBranchRenderer: function(mode, expression, state){
-			
+
 			// Pre-process the expression.
 			var exprData = expressionData(expression);
-			
+
 			// A branching renderer takes truthy and falsey renderer.
 			return function branchRenderer(scope, options, parentSectionNodeList, truthyRenderer, falseyRenderer){
-				
+
 				var nodeList = [this];
 				nodeList.expression = expression;
 				// register this nodeList.
 				// Regsiter it with its parent ONLY if this is directly nested.  Otherwise, it's unencessary.
 				nodeLists.register(nodeList, null, state.directlyNested ? parentSectionNodeList || true :  true);
-				
-				
+
+
 				// Get the evaluator. This does not need to be cached (probably) because if there
 				// an observable value, it will be handled by `can.view.live`.
 				var evaluator = makeEvaluator( scope, options, nodeList, mode, exprData, truthyRenderer, falseyRenderer,
-					// If this is within a tag, make sure we only get string values. 
+					// If this is within a tag, make sure we only get string values.
 					state.tag );
-				
-				// Create a compute that can not be observed by other 
-				// comptues. This is important because this renderer is likely called by 
+
+				// Create a compute that can not be observed by other
+				// comptues. This is important because this renderer is likely called by
 				// parent expresions.  If this value changes, the parent expressions should
-				// not re-evaluate. We prevent that by making sure this compute is ignored by 
+				// not re-evaluate. We prevent that by making sure this compute is ignored by
 				// everyone else.
 				var compute = can.compute(evaluator, null, false, evaluator.bindOnce === false ?  false : true);
-				
+
 				// Bind on the compute to set the cached value. This helps performance
 				// so live binding can read a cached value instead of re-calculating.
 				compute.bind("change", can.k);
 				var value = compute();
-				
+
 				// If value is a function, it's a helper that returned a function.
 				if(typeof value === "function") {
-					
+
 					// A helper function should do it's own binding.  Similar to how
 					// we prevented this function's compute from being noticed by parent expressions,
 					// we hide any observables read in the function by saving any observables that
@@ -501,11 +505,11 @@ steal("can/util",
 					var old = can.__clearObserved();
 					value(this);
 					can.__setObserved(old);
-					
+
 				}
 				// If the compute has observable dependencies, setup live binding.
 				else if( compute.computeInstance.hasDependencies ) {
-					
+
 					// Depending on where the template is, setup live-binding differently.
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
@@ -522,7 +526,7 @@ steal("can/util",
 				}
 				// If the compute has no observable dependencies, just set the value on the element.
 				else {
-					
+
 					if(state.attr) {
 						can.attr.set(this, state.attr, value);
 					}
@@ -536,7 +540,7 @@ steal("can/util",
 						elements.replace([this], can.frag(value));
 					}
 				}
-				// Unbind the compute. 
+				// Unbind the compute.
 				compute.unbind("change", can.k);
 			};
 		},
@@ -551,7 +555,7 @@ steal("can/util",
 		splitModeFromExpression: function(expression, state){
 			expression = can.trim(expression);
 			var mode = expression.charAt(0);
-	
+
 			if( "#/{&^>!".indexOf(mode) >= 0 ) {
 				expression = can.trim( expression.substr(1) );
 			} else {
@@ -575,7 +579,7 @@ steal("can/util",
 		 * @return {String}
 		 */
 		cleanLineEndings: function(template){
-			
+
 			// Finds mustache tags with space around them or no space around them.
 			return template.replace( mustacheLineBreakRegExp,
 				function(whole,
@@ -589,33 +593,33 @@ steal("can/util",
 					spaceLessSpecial,
 					spaceLessExpression,
 					matchIndex){
-				
+
 				// IE 8 will provide undefined
 				spaceAfter = (spaceAfter || "");
 				returnBefore = (returnBefore || "");
 				spaceBefore = (spaceBefore || "");
-				
+
 				var modeAndExpression = splitModeFromExpression(expression || spaceLessExpression,{});
-				
+
 				// If it's a partial or tripple stache, leave in place.
 				if(spaceLessSpecial || ">{".indexOf( modeAndExpression.mode) >= 0) {
 					return whole;
 				}  else if( "^#!/".indexOf(  modeAndExpression.mode ) >= 0 ) {
-					
-					// Return the magic tag and a trailing linebreak if this did not 
+
+					// Return the magic tag and a trailing linebreak if this did not
 					// start a new line and there was an end line.
 					return special+( matchIndex !== 0 && returnAfter.length ? returnBefore+"\n" :"");
 
-							
+
 				} else {
 					// There is no mode, return special with spaces around it.
 					return spaceBefore+special+spaceAfter+(spaceBefore.length || matchIndex !== 0 ? returnBefore+"\n" : "");
 				}
-				
+
 			});
 		},
 		// ## can.view.Options
-		// 
+		//
 		// This contains the local helpers, partials, and tags available to a template.
 		/**
 		 * @hide
@@ -632,7 +636,7 @@ steal("can/util",
 			}
 		})
 	};
-	
+
 	// ## Local Variable Cache
 	//
 	// The following creates slightly more quickly accessible references of the following
@@ -640,8 +644,8 @@ steal("can/util",
 	var makeEvaluator = core.makeEvaluator,
 		expressionData = core.expressionData,
 		splitModeFromExpression = core.splitModeFromExpression;
-	
-	
+
+
 	return core;
 });
 
