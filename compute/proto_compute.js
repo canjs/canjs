@@ -289,8 +289,16 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					return target.unbind(eventName || propertyName, handler);
 				};
 			} else {
-				this._get = can.proxy(this._get, target);
-				this._set = can.proxy(this._set, target);
+				this._get = function() {
+					return can.getObject(propertyName, [target]);
+				};
+				this._set = function(value) {
+					// allow setting properties n levels deep, if separated with dot syntax
+					var properties = propertyName.split("."),
+						leafPropertyName = properties.pop(),
+						targetProperty = can.getObject(properties.join('.'), [target]);
+					targetProperty[leafPropertyName] = value;
+				};
 			}
 		},
 
