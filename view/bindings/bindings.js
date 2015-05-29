@@ -271,6 +271,15 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
+
+		// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
+		var attributesHandler = function(ev) {
+			if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
+				can.unbind.call(el, event, handler);
+				can.unbind.call(el, 'attributes', attributesHandler);
+			}
+		};
+		can.bind.call(el, 'attributes', attributesHandler);
 	});
 
 

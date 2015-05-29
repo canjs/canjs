@@ -663,6 +663,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 	};
 	live.attr = live.simpleAttribute;
 	live.attrs = live.attributes;
+	live.getAttributeParts = getAttributeParts;
 	var newLine = /(\r|\n)+/g;
 	var getValue = function (val) {
 		var regexp = /^["'].*["']$/;
