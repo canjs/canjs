@@ -192,7 +192,7 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 		return el;
 	}
 
-	function getCallbacks(el, pathData, args, elementCallbacks){
+	function getCallbacks(el, pathData, elementCallbacks){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
@@ -207,15 +207,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 		elementCallbacks.push({element: child, callbacks: callbacks});
 
 		for( i= 0 ; i < pathsLength; i++) {
-			getCallbacks(child, paths[i], args, elementCallbacks);
+			getCallbacks(child, paths[i], elementCallbacks);
 		}
 
-		return elementCallbacks;
 	}
 
-	function hydratePath(el, pathData, args) {
-		var callbacks = getCallbacks(el, pathData, args, []),
-			len = callbacks.length,
+	function hydrateCallbacks(callbacks, args) {
+		var len = callbacks.length,
 			callbacksLength,
 			callbackElement,
 			callbackData;
@@ -239,9 +237,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			hydrate: function(){
 				var cloned = cloneNode(this.clone);
 				var args = can.makeArray(arguments);
-				for(var i = paths.length - 1; i >=0 ; i--) {
-					hydratePath(cloned,paths[i], args);
+
+				var callbacks = [];
+				for(var i = 0; i < paths.length; i++) {
+					getCallbacks(cloned, paths[i], callbacks);
 				}
+				hydrateCallbacks(callbacks, args);
+
 				return cloned;
 			}
 		};

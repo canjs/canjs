@@ -426,6 +426,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 		test("Handlebars advanced helpers (from docs)", function () {
 			can.stache.registerSimpleHelper('exercise', function (group, action, num, options) {
+
 				if (group && group.length > 0 && action && num > 0) {
 					return options.fn({
 						group: group,

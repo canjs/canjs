@@ -79,3 +79,20 @@ test("specify the viewModel with [.] syntax", function(){
 
 	equal(iai.ases.viewModel, "can/view/import/test/person", "viewModel set with [.] syntax");
 });
+
+test("can import a template and use it", function(){
+	var template = "<can-import from='can/view/import/test/other.stache!' #other='{value}' />{{> other}}";
+
+	can.stache.async(template).then(function(renderer){
+		var frag = renderer();
+
+		// Import will happen async
+		can["import"]("can/view/import/test/other.stache!").then(function(){
+			equal(frag.childNodes[1].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
+
+			QUnit.start();
+		});
+	});
+
+	QUnit.stop();
+});
