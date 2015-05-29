@@ -1,6 +1,6 @@
 /* jshint maxdepth:7*/
 steal("can/util", "can/view/elements.js",function(can, elements, vdom){
-	
+
 	// if an object or a function
 	// convert into what it should look like
 	// then the modification can happen in place
@@ -8,7 +8,7 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 	// blah!
 	var processNodes = function(nodes, paths, location, document){
 		var frag = document.createDocumentFragment();
-		
+
 		for(var i = 0, len = nodes.length; i < len; i++) {
 			var node = nodes[i];
 			frag.appendChild( processNode(node,paths,location.concat(i), document) );
@@ -18,13 +18,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 		keepsTextNodes =  typeof document !== "undefined" && (function(){
 			var testFrag = document.createDocumentFragment();
 			var div = document.createElement("div");
-			
+
 			div.appendChild(document.createTextNode(""));
 			div.appendChild(document.createTextNode(""));
 			testFrag.appendChild(div);
-			
+
 			var cloned  = testFrag.cloneNode(true);
-			
+
 			return can.childNodes(cloned.firstChild).length === 2;
 		})(),
 		clonesWork = typeof document !== "undefined" && (function(){
@@ -91,13 +91,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 					}
 				});
 			}
-			
+
 			if(node.childNodes) {
 				can.each(node.childNodes, function(child){
 					copy.appendChild( cloneNode(child) );
 				});
 			}
-			
+
 			return copy;
 		};
 
@@ -119,7 +119,7 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			}
 			return callback;
 		};
-		
+
 		if(nodeType === "object") {
 			if( node.tag ) {
 				if(namespacesWork && node.namespace) {
@@ -127,7 +127,7 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 				} else {
 					el = document.createElement(node.tag);
 				}
-				
+
 				if(node.attrs) {
 					for(var attrName in node.attrs) {
 						var value = node.attrs[attrName];
@@ -152,26 +152,26 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 					} else {
 						p = paths;
 					}
-					
+
 					el.appendChild( processNodes(node.children, p, loc, document) );
 				}
 			} else if(node.comment) {
 				el = document.createComment(node.comment);
-				
+
 				if(node.callbacks) {
 					for(i = 0, len = node.attributes.length; i < len; i++ ) {
 						getCallback().callbacks.push({callback: node.callbacks[i]});
 					}
 				}
 			}
-			
-			
+
+
 		} else if(nodeType === "string"){
-			
+
 			el = document.createTextNode(node);
-			
+
 		} else if(nodeType === "function") {
-			
+
 			if(keepsTextNodes) {
 				el = document.createTextNode("");
 				getCallback().callbacks.push({
@@ -187,29 +187,43 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 					}
 				});
 			}
-			
+
 		}
 		return el;
 	}
-	
-	function hydratePath(el, pathData, args){
+
+	function getCallbacks(el, pathData, elementCallbacks){
 		var path = pathData.path,
 			callbacks = pathData.callbacks,
 			paths = pathData.paths,
-			callbackData,
-			child = el;
-		
-		for(var i = 0, len = path.length; i < len; i++) {
+			child = el,
+			pathLength = path ? path.length : 0,
+			pathsLength = paths ? paths.length : 0;
+
+		for(var i = 0; i < pathLength; i++) {
 			child = child.childNodes.item(path[i]);
 		}
-		
-		for(i = 0, len = callbacks.length; i < len; i++) {
-			callbackData = callbacks[i];
-			callbackData.callback.apply(child, args );
+
+		elementCallbacks.push({element: child, callbacks: callbacks});
+
+		for( i= 0 ; i < pathsLength; i++) {
+			getCallbacks(child, paths[i], elementCallbacks);
 		}
-		if(paths && paths.length){
-			for( i= paths.length - 1 ; i >= 0; i--) {
-				hydratePath(child,paths[i], args);
+
+	}
+
+	function hydrateCallbacks(callbacks, args) {
+		var len = callbacks.length,
+			callbacksLength,
+			callbackElement,
+			callbackData;
+
+		for(var i = 0; i < len; i++) {
+			callbackData = callbacks[i];
+			callbacksLength = callbackData.callbacks.length;
+			callbackElement = callbackData.element;
+			for(var c = 0; c < callbacksLength; c++) {
+				callbackData.callbacks[c].callback.apply(callbackElement, args);
 			}
 		}
 	}
@@ -223,15 +237,19 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			hydrate: function(){
 				var cloned = cloneNode(this.clone);
 				var args = can.makeArray(arguments);
-				for(var i = paths.length - 1; i >=0 ; i--) {
-					hydratePath(cloned,paths[i], args);
+
+				var callbacks = [];
+				for(var i = 0; i < paths.length; i++) {
+					getCallbacks(cloned, paths[i], callbacks);
 				}
+				hydrateCallbacks(callbacks, args);
+
 				return cloned;
 			}
 		};
 	}
 	makeTarget.keepsTextNodes = keepsTextNodes;
-	
+
 	can.view.target = makeTarget;
 
 	return makeTarget;
