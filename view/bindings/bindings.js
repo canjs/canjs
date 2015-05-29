@@ -474,60 +474,57 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	// [abc]='{this}'
 	// [def]='{blah}'
-	can.view.attr(/\[[\w\.]+\]/, function(el, attrData) {
-		
+	can.view.attr(/\[[\w\.\-_]+\]/, function(el, attrData) {
 		var prop = removeBrackets(el.getAttribute(attrData.attributeName));
-		var name = removeBrackets(attrData.attributeName, '[', ']');
+		var name = can.camelize(removeBrackets(attrData.attributeName, '[', ']'));
 
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);
-		
+
 		var computeData = scope.computeData(prop, {
-			args: []
-		}),
+				args: []
+			}),
 			compute = computeData.compute;
-		
+
 		var handler = function (ev, newVal) {
 			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
 			attrData.scope.attr(name, newVal);
 		};
 		compute.bind("change", handler);
-		
+
 		attrData.scope.attr(name, compute());
-		
+
 		can.one.call(el, 'removed', function() {
 			compute.unbind("change", handler);
 		});
-		
+
 	});
-	
-	
-	can.view.attr(/#[\w\.]+/, function(el, attrData) {
-		
+
+	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
+
 		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".";
 		var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
 
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);
 		var refs = attrData.scope.getRefs();
-		
+
 		var computeData = scope.computeData(prop, {
-			args: []
-		}),
+				args: []
+			}),
 			compute = computeData.compute;
-		
+
 		var handler = function (ev, newVal) {
 			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
 			refs.attr(name, newVal);
 		};
 		compute.bind("change", handler);
-		
+
 		refs.attr(name, compute());
-		
+
 		can.one.call(el, 'removed', function() {
 			compute.unbind("change", handler);
 		});
-		
+
 	});
-	
 });

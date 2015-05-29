@@ -414,7 +414,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		ready: function (val) {
 			if (val !== true) {
 				can.route._setup();
-				can.route.setState();
+				if(!can.isNode) {
+					can.route.setState();
+				}
 			}
 			return can.route;
 		},

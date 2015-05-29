@@ -13,7 +13,7 @@ steal('can/util', 'can/route', function (can) {
 	"use strict";
 
 	// Initialize plugin only if browser supports pushstate.
-	if (window.history && history.pushState) {
+	if ((window.history && history.pushState) || can.isNode) {
 
 		// Registers itself within `can.route.bindings`.
 		can.route.bindings.pushstate = {
@@ -64,6 +64,10 @@ steal('can/util', 'can/route', function (can) {
 
 			// Intercepts clicks on `<a>` elements and rewrites original `history` methods.
 			bind: function () {
+				if(can.isNode) {
+					return;
+				}
+
 				// Intercept routable links.
 				can.delegate.call(can.$(document.documentElement), 'a', 'click', anchorClickHandler);
 

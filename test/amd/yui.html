@@ -6,7 +6,7 @@
     <title>YUI Test Suite</title>
     <link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"
     />
-    <script type="text/javascript" src="../../bower_components/html5shiv/dist/html5shiv.js"></script>
+    <script type="text/javascript" src="../../bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -29,6 +29,7 @@
             "paths": {
                 "can": "dist/amd/can",
                 "dojo": "bower_components/dojo",
+                "simple-dom": "node_modules/can-simple-dom/dist/amd/simple-dom",
                 "yui": "util/yui/yui-3.7.3"
             },
             "map": {
@@ -54,7 +55,8 @@
             "can/util/fixture", "can/view/bindings",
             "can/view/live", "can/view/scope",
             "can/util/tests", "can/util/object",
-            "can/util/function", "can/view/autorender"
+            "can/util/function", "can/view/autorender",
+            "can/util/vdom/build_fragment"
         ]), function() {
             require(["test/pluginified/latest"], function() {
                 QUnit.start();

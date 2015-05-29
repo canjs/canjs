@@ -20,7 +20,7 @@
 	<![endif]-->
     <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css"
     />
-    <script type="text/javascript" src="bower_components/html5shiv/dist/html5shiv.js"></script>
+    <script type="text/javascript" src="bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -39,6 +39,7 @@
         QUnit.config.autostart = false;
     </script>
 
+    <script type="text/javascript" src="node_modules/can-simple-dom/dist/global/can-simple-dom.js"></script>
     <script type="text/javascript" src="bower_components/zepto/zepto.js"></script>
     <script type="text/javascript" src="dist/can.zepto.js"></script>
     <script type="text/javascript" src="dist/can.list.promise.js"></script>
@@ -61,6 +62,7 @@
     <script type="text/javascript" src="dist/can.object.js"></script>
     <script type="text/javascript" src="dist/can.util.function.js"></script>
     <script type="text/javascript" src="dist/can.autorender.js"></script>
+    <script type="text/javascript" src="dist/can.util.vdom.buildfragment.js"></script>
     <script type="text/javascript" src="test/pluginified/latest.js"></script>
 
     <script type="text/javascript">

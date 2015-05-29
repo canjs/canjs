@@ -39,6 +39,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		bind(data);
 		return data;
 	},
+		getChildNodes = function(node){
+			var childNodes = node.childNodes;
+			if("length" in childNodes) {
+				return childNodes;
+			} else {
+				var cur = node.firstChild;
+				var nodes = [];
+				while(cur) {
+					nodes.push(cur);
+					cur = cur.nextSibling;
+				}
+				return nodes;
+			}
+		},
 		// #### listen
 		// Calls setup, but presets bind and unbind to
 		// operate on a compute
@@ -74,8 +88,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			return obj && obj.nodeType;
 		},
 		addTextNodeIfNoChildren = function(frag){
-			if(!frag.childNodes.length) {
-				frag.appendChild(document.createTextNode(""));
+			if(!frag.firstChild) {
+				frag.appendChild(frag.ownerDocument.createTextNode(""));
 			}
 		};
 	/**
@@ -168,7 +182,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						return;
 					}
 					// Collect new html and mappings
-					var frag = document.createDocumentFragment(),
+					var frag = text.ownerDocument.createDocumentFragment(),
 						newNodeLists = [],
 						newIndicies = [];
 					// For each new item,
@@ -189,7 +203,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						
 						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
 						
-						var childNodes = can.makeArray(itemFrag.childNodes);
+						var childNodes = can.makeArray(getChildNodes(itemFrag));
 						if(nodeList) {
 							nodeLists.update(itemNodeList, childNodes);
 							newNodeLists.push(itemNodeList);
@@ -311,7 +325,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
 				},
 				// A text node placeholder
-				text = document.createTextNode(''),
+				text = el.ownerDocument.createTextNode(''),
 				// The current list.
 				list,
 				// Called when the list is replaced with a new list or the binding is torn-down.
@@ -439,9 +453,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					}
 					
 					// We need to mark each node as belonging to the node list.
-					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					oldNodes = nodeLists.update(nodes, getChildNodes(frag));
 					if(isFunction) {
-						val(frag.childNodes[0]);
+						val(frag.firstChild);
 					}
 					elements.replace(oldNodes, frag);
 					
@@ -482,7 +496,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				frag = can.view.hookup(frag, nodes[0].parentNode);
 			}
 			// We need to mark each node as belonging to the node list.
-			nodeLists.update(nodes, frag.childNodes);
+			nodeLists.update(nodes, getChildNodes(frag));
 			elements.replace(oldNodes, frag);
 			return nodes;
 		},
@@ -509,7 +523,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			});
 			// The text node that will be updated
 				
-			var node = document.createTextNode(can.view.toStr(compute()));
+			var node = el.ownerDocument.createTextNode(can.view.toStr(compute()));
 			if(nodeList) {
 				nodeList.unregistered = data.teardownCheck;
 				data.nodeList = nodeList;

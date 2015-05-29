@@ -1,5 +1,5 @@
 steal('can/util', 'can/map', 'can/list', function (can, Map) {
-	
+
 	//!steal-remove-start
 	can.dev.warn("can/map/attributes is a deprecated plugin and will be removed in a future release. "+
 		"can/map/define provides the same functionality in a more complete API.");

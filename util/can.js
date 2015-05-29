@@ -2,7 +2,7 @@
 steal(function () {
 	/* global GLOBALCAN */
 	var glbl = typeof window !== "undefined" ? window : global;
-	
+
 	var can = {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
 		glbl.can = can;
@@ -36,10 +36,31 @@ steal(function () {
 		}
 		return d;
 	};
-	
+
 	can.last = function(arr){
 		return arr && arr[arr.length - 1];
 	};
+
+	
+	can.isDOM = function(el) {
+		return (el.ownerDocument || el) === can.global.document;
+	};
+
+	can.childNodes = function(node) {
+		var childNodes = node.childNodes;
+		if("length" in childNodes) {
+			return childNodes;
+		} else {
+			var cur = node.firstChild;
+			var nodes = [];
+			while(cur) {
+				nodes.push(cur);
+				cur = cur.nextSibling;
+			}
+			return nodes;
+		}
+	};
+
 	var protoBind = Function.prototype.bind;
 	if(protoBind) {
 		can.proxy = function(fn, context){
@@ -52,12 +73,12 @@ steal(function () {
 			};
 		};
 	}
-	
 
-	can.frag = function(item){
+	can.frag = function(item, doc){
+		var document = doc || can.document || can.global.document;
 		var frag;
 		if(!item || typeof item === "string"){
-			frag = can.buildFragment(item == null ? "" : ""+item, document.body);
+			frag = can.buildFragment(item == null ? "" : ""+item, document);
 			// If we have an empty frag...
 			if (!frag.childNodes.length) {
 				frag.appendChild(document.createTextNode(''));
@@ -76,15 +97,15 @@ steal(function () {
 			});
 			return frag;
 		} else {
-			frag = can.buildFragment( ""+item, document.body);
+			frag = can.buildFragment( ""+item, document);
 			// If we have an empty frag...
-			if (!frag.childNodes.length) {
+			if (!can.childNodes(frag).length) {
 				frag.appendChild(document.createTextNode(''));
 			}
 			return frag;
 		}
 	};
-	
+
 	// Define the `can.scope` function that can be used to retrieve the `scope` from the element
 	can.scope = can.viewModel = function (el, attr, val) {
 		el = can.$(el);
@@ -105,37 +126,40 @@ steal(function () {
 				return el;
 		}
 	};
-	
+
 	can["import"] = function(moduleName) {
 		var deferred = new can.Deferred();
-		
+
 		if(typeof window.System === "object" && can.isFunction(window.System["import"])) {
 			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
 		} else if(window.define && window.define.amd){
-			
+
 			window.require([moduleName], function(value){
 				deferred.resolve(value);
 			});
-			
+
 		} else if(window.steal) {
-			
+
 			steal.steal(moduleName, function(value){
 				deferred.resolve(value);
 			});
-			
+
 		} else if(window.require){
 			deferred.resolve(window.require(moduleName));
 		} else {
 			// ideally this will use can.getObject
 			deferred.resolve();
 		}
-		
+
 		return deferred.promise();
 	};
-	
+
 	// this is here in case can.compute hasn't loaded
 	can.__observe = function () {};
+
+	can.isNode = typeof process === "object" &&
+		{}.toString.call(process) === "[object process]";
 
 	//!steal-remove-start
 	can.dev = {

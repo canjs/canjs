@@ -14,6 +14,9 @@
 		"url": "git@github.com:bitovi/canjs.git",
 		"github": "https://github.com/bitovi/canjs"
 	},
+	"dependencies": {
+		"can-simple-dom": "^0.2.8"
+	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"
 	},
@@ -39,11 +42,10 @@
 		"jquery": "^1.11.0",
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
-		"jquery-ui": "1.10.5",
 		"rimraf": "2.1",
-		"steal": "~0.7.1",
+		"steal": "^0.10.1",
 		"steal-qunit": "0.0.2",
-		"steal-tools": "~0.7.1",
+		"steal-tools": "^0.10.0",
 		"steal-benchmark": "~0.0.1",
 		"testee": "^0.1.3",
 		"zombie": "~2.0.8"
@@ -63,11 +65,15 @@
 	],
 	"main": "./can",
 	"system": {
+		"configDependencies": [
+			"system-config"
+		],
 		"ignoreBrowser": true,
 		"main": "can",
 		"map": {
 			"can/can": "can",
 			"jquery/jquery": "jquery",
+			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"jquery-ui/jquery-ui": "jquery-ui",
 			"steal-qunit/steal-qunit": "steal-qunit"
 		},
@@ -78,10 +84,6 @@
 			"zepto/zepto": "bower_components/zepto/zepto.js"
 		},
 		"meta": {
-			"jquery": {
-				"format": "global",
-				"exports": "jQuery"
-			},
 			"dojo/dojo": {
 				"format": "global"
 			},
@@ -180,6 +182,7 @@
 		"./view/mustache/system": "./dist/cjs/view/mustache/system",
 		"./view/ejs/system": "./dist/cjs/view/ejs/system",
 		"./util/event": "./dist/cjs/util/event",
-		"./map/sort/sort": "./dist/cjs/map/sort/sort"
+		"./map/sort/sort": "./dist/cjs/map/sort/sort",
+		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment"
 	}
 }
