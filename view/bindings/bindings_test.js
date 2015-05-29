@@ -840,7 +840,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	test('Conditional can-EVENT bindings are bound/unbound', 2, function () {
-		stop();
 		var state = new can.Map({
 			enableClick: true,
 			clickHandler: function () {
@@ -857,13 +856,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var btn = document.getElementById('find-me');
 
 		can.trigger(btn, 'click');
-
 		state.attr('enableClick', false);
 
-		can.trigger(btn, 'click');
+		stop();
+		setTimeout(function() {
+			can.trigger(btn, 'click');
+			state.attr('enableClick', true);
 
-		state.attr('enableClick', true);
-
-		can.trigger(btn, 'click');
+			setTimeout(function() {
+				can.trigger(btn, 'click');
+				start();
+			}, 10);
+		}, 10);
 	});
 });
