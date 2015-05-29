@@ -14,11 +14,18 @@ The following is supported by CanJS's [can.mustache] and [can.stache] templates 
 
  - [can.view.bindings.can-EVENT] - Specify a callback function to be called on a particular event. 
  
+	`<div (click)="{doSomething item}">...</div>`
+	
+   OR
+
 	`<div can-click="{doSomething item}">...</div>`
 
-  OR
-
-	`<div (click)="{doSomething item}">...</div>`
+ - [can.view.href] - Sets an element's href attribute so that it's url will 
+   set the specified attribute values on [can.route].
+   
+   ```
+   <a can-href="{page='recipe' id=id}">Details</a>
+   ```
 
  - [can.view.bindings.import-scope] - Import values or the complete view model from a child component into the current scope with `[prop]="{childProp}"`
 
@@ -34,8 +41,6 @@ The following is supported by CanJS's [can.mustache] and [can.stache] templates 
    ```
    <input can-value="{name}"/>
    ```
-
- - [can.view.href] - Sets an element's href attribute so that it's url will set the specified attribute values on [can.route].
 
 ## Plugins
 

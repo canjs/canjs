@@ -472,11 +472,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
-	// [abc]='{this}'
-	// [def]='{blah}'
-	can.view.attr(/\[[\w\.\-_]+\]/, function(el, attrData) {
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName));
-		var name = can.camelize(removeBrackets(attrData.attributeName, '[', ']'));
+	// ^abc='{this}'
+	// ^def='{blah}'
+	can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
+		
+		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
+			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
+			twoWayBind = true;
+
+		if(prop.charAt(0) === "{") {
+			twoWayBind = false;
+			prop = removeBrackets( prop );
+		}
 
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);
@@ -502,9 +509,16 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
 
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".";
-		var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
+		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
+			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
+			twoWayBind = true;
 
+		
+		if(prop.charAt(0) === "{") {
+			twoWayBind = false;
+			prop = removeBrackets( prop );
+		}
+		
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);
 		var refs = attrData.scope.getRefs();
@@ -521,9 +535,19 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		compute.bind("change", handler);
 
 		refs.attr(name, compute());
+		
+		if(twoWayBind) {
+			var twoWayHandler = function(ev, newVal){
+				compute(newVal);
+			};
+			refs.bind(name, twoWayHandler);
+		}
 
 		can.one.call(el, 'removed', function() {
 			compute.unbind("change", handler);
+			if(twoWayBind) {
+				refs.unbind(name, twoWayHandler);
+			}
 		});
 
 	});

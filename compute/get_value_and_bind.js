@@ -116,11 +116,14 @@ steal("can/util", function(){
 			var name = obj._cid + '|' + event,
 				top = observedInfoStack[observedInfoStack.length-1];
 			
-			top.names += name;
-			top.observed[name] = {
-				obj: obj,
-				event: event + ""
-			};
+			if(!top.observed[name]) {
+				top.names += name;
+				top.observed[name] = {
+					obj: obj,
+					event: event + ""
+				};
+			}
+			
 		}
 	};
 	// ### can.__isRecordingObserves
