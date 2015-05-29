@@ -394,8 +394,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				// Only update if we have finished processing all prior events,
 				// the compute is being listened to,
 				// and the batchNum has changed.
-				if (readInfo.ready && 
-					compute.bound && 
+				if (readInfo.ready &&
+					compute.bound &&
 					(ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 						
 					// Keep the old value.
@@ -438,7 +438,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	};
 	
 	// A list of temporarily bound computes
-	var computes, 
+	var computes,
 		// Unbinds all temporarily bound computes.
 		unbindComputes = function () {
 			for (var i = 0, len = computes.length; i < len; i++) {

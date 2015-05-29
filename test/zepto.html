@@ -4,7 +4,7 @@
 
 <head>
     <title>CanJS Zepto tests</title>
-    <script type="text/javascript" src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+    <script type="text/javascript" src="../bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         System['import']("package.json!npm").then(function() {
             var config = window.CONFIGURATION = {
                 "map": {
-                    "util/util": "util/zepto/zepto"
+                    "can/util/util": "can/util/zepto/zepto"
                 }
             };
             steal.config(config);

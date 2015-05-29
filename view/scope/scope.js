@@ -13,7 +13,7 @@ steal(
 	'can/compute', function (can, makeComputeData) {
 
 		// ## Helpers
-		
+
 		// Regex for escaped periods
 		var escapeReg = /(\\)?\./g,
 		// Regex for double escaped periods
@@ -204,10 +204,16 @@ steal(
 							value: this._context
 						};
 					} else if(attr === "@root") {
-						var cur = this;
+						var cur = this, child = this;
 						while(cur._parent) {
+							child = cur;
 							cur = cur._parent;
 						}
+
+						if(cur._context instanceof Scope.Refs) {
+							cur = child;
+						}
+
 						return { value: cur._context };
 					}
 
@@ -221,7 +227,7 @@ steal(
 						context,
 					// The current scope.
 						scope = this,
-						
+
 					// If no value can be found, this is a list of of every observed
 					// object and property name to observe.
 						undefinedObserves = [],
@@ -229,7 +235,7 @@ steal(
 						currentObserve,
 					// Tracks the reads to get the value for a scope.
 						currentReads,
-						
+
 						// Tracks the most likely observable to use as a setter.
 						setObserveDepth = -1,
 						currentSetReads,
@@ -267,13 +273,13 @@ steal(
 							// if its a primitive type, keep looking up the scope, since there won't be any properties
 							(typeof context === "object" || typeof context === "function") &&
 							!( searchedRefsScope && refInstance )
-							
+
 							) {
-							
+
 							if(refInstance) {
 								searchedRefsScope = true;
 							}
-							
+
 							var data = can.compute.read(context, names, readOptions);
 							// **Key was found**, return value and location data
 							if (data.value !== undefined) {
@@ -297,7 +303,7 @@ steal(
 						}
 					}
 
-					// **Key was not found**, return undefined for the value.  
+					// **Key was not found**, return undefined for the value.
 					// Make sure we listen to everything we checked for when the value becomes defined.
 					// Once it becomes defined, we won't have to listen to so many things.
 					var len = undefinedObserves.length;
@@ -311,7 +317,7 @@ steal(
 						reads: currentSetReads,
 						value: undefined
 					};
-					
+
 				}
 			});
 

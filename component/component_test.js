@@ -1429,10 +1429,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			});
 			var frag = can.stache('<rebind-viewmodel></rebind-viewmodel>')();
 			var rebind = frag.firstChild;
-			can.append( this.$fixture, can.$(rebind) );
+			can.append(this.$fixture, rebind);
 
 			can.viewModel(can.$(rebind)).attr('item.name', 'CDN');
-
 		});
 
 
@@ -1518,11 +1517,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 	}
 
 	makeTest("can/component dom", document);
-	makeTest("can/component vdom", simpleDocument);
+	if(window.jQuery && window.steal) {
+		makeTest("can/component vdom", simpleDocument);
+	}
 
 
 
-	module("can/component mustache");
+	QUnit.module("can/component mustache");
 
 
 	asyncTest('(mu)stache integration', function(){
@@ -1672,14 +1673,14 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				}
 				return old.call(this, arguments);
 			};
-			
+
 			can.remove(can.$("#qunit-fixture>*"));
 
 			// Dispatches async
 			setTimeout(function() {
 				equal(count, 2, '2 items unbound');
 				can.unbindAndTeardown = old;
-				
+
 				start();
 			}, 20);
 		});

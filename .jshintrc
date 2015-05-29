@@ -5,6 +5,7 @@
 		"Zepto": true,
 		"QUnit": true,
 		"System": true,
+		"SimpleDOM": true,
 		"test": true,
 		"asyncTest": true,
 		"expect": true,

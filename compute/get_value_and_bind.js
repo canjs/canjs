@@ -11,7 +11,7 @@
 //
 // - can.__observe - All other observes call this method to be visible to computed functions.
 // - can.__notObserve - Returns a function that can not be observed.
-steal("can/util", function(){
+steal("can/util", function(can){
 	
 	// ## getValueAndBind
 	// Calls `func` with "this" as `context` and binds to any observables that
