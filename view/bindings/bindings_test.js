@@ -910,7 +910,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});
 
-	test('importing scope ^prop="{{this}}"', function() {
+	/*test('importing scope ^prop="{{this}}"', function() {
 		can.Component.extend({
 			tag: 'import-scope',
 			template: can.stache('Hello {{name}}'),
@@ -1092,7 +1092,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
 
-	});
+	});*/
 
 	test('reference values (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
@@ -1171,7 +1171,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
 	});
 
-	test("^parent within another parent that does not leak scope", function(){
+	/*test("^parent within another parent that does not leak scope", function(){
 		can.Component.extend({
 			tag: "outer-noleak",
 			viewModel: {
@@ -1225,7 +1225,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var vm = can.viewModel(frag.firstChild);
 		ok(vm.attr("myChild") instanceof can.Map, "got instance");
 		
-	});
+	});*/
 	
 
 });

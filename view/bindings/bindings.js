@@ -474,7 +474,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	// ^abc='{this}'
 	// ^def='{blah}'
-	can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
+	/*can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
 		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
 			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
 			twoWayBind = true;
@@ -505,7 +505,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			childCompute.unbind("change", handler);
 		});
 
-	});
+	});*/
 
 	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
 

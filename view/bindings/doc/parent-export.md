@@ -1,4 +1,5 @@
 @function can.view.bindings.parent-export ^PARENT
+@hide
 @parent can.view.bindings
 
 Export a value in the current viewModel onto the parent viewModel.
