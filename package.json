@@ -42,7 +42,6 @@
 		"jquery": "^1.11.0",
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
-		"jquery-ui": "1.10.5",
 		"rimraf": "2.1",
 		"steal": "^0.10.1",
 		"steal-qunit": "0.0.2",

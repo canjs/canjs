@@ -379,7 +379,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 								lightTemplateData = contentTagData;
 							}
 							// add a protected scope so the parent view model can be looked up
-							lightTemplateData.scope = lightTemplateData.scope.add(viewModel,{protected: true, viewModel: true});
+							lightTemplateData.scope = lightTemplateData.scope.add(viewModel,{"protected": true, viewModel: true});
 							
 							if(contentTagData.parentNodeList) {
 								var frag = subtemplate( lightTemplateData.scope, lightTemplateData.options, contentTagData.parentNodeList );

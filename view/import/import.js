@@ -27,6 +27,11 @@ steal("can/util", "can/view/callbacks", function(can){
 			callback(el, can.extend(tagData, {
 				scope: scope
 			}));
+
+			var viewModel = can.viewModel(el);
+			importPromise.then(function(val){
+				viewModel.attr("value", val);
+			});
 		}
 		// Render the subtemplate and register nodeLists
 		else {

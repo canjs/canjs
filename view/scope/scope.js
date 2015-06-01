@@ -61,7 +61,7 @@ steal(
 				// Scope.read was moved to can.compute.read
 				// can.compute.read reads properties from a parent.  A much more complex version of getObject.
 				read: can.compute.read,
-				Refs: can.Map.extend({__isRefs: true}),
+				Refs: can.Map.extend({}),
 				Break: function(){},
 				refsScope: function(){
 					return new can.view.Scope( new this.Refs() );
@@ -83,7 +83,7 @@ steal(
 				attr: can.__notObserve(function (key, value, options) {
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
-					var options = can.simpleExtend({
+					options = can.simpleExtend({
 							isArgument: true,
 							returnObserveMethods: true,
 							proxyMethods: false
@@ -147,8 +147,7 @@ steal(
 					});
 				},
 				getContext: function(tester){
-					var scope = this,
-						context;
+					var scope = this;
 					while (scope) {
 						if(tester(scope)) {
 							return scope._context;
@@ -157,7 +156,7 @@ steal(
 					}
 				},
 				getRoot: function(){
-					var cur = this, 
+					var cur = this,
 						child = this;
 						
 					while(cur._parent) {
@@ -212,7 +211,7 @@ steal(
 				 */
 				read: function (attr, options) {
 					// skip protected
-					if(this._meta['protected']) {
+					if(this._meta.protected) {
 						return this._parent.read(attr, options);
 					}
 					
@@ -227,7 +226,7 @@ steal(
 					// check if we should be running this on a parent.
 					else if (attr.substr(0, 3) === "../") {
 						return this._parent.read(attr.substr(3), options);
-					} 
+					}
 					else if (attr === "." || attr === "this") {
 						return {
 							value: this._context
@@ -267,7 +266,6 @@ steal(
 					// Only search one reference scope for a variable.
 						searchedRefsScope = false,
 						refInstance,
-						breakInstance,
 						readOptions = can.simpleExtend({
 							/* Store found observable, incase we want to set it as the rootObserve. */
 							foundObservable: function (observe, nameIndex) {

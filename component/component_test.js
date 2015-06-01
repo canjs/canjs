@@ -249,7 +249,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			var hello = frag.firstChild;
 
 			equal(can.trim( innerHTML(hello) ), "Hello World");
-			return;
+			
 			can.Component.extend({
 				tag: "hello-world-no-template",
 				leakScope: false,
