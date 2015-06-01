@@ -258,6 +258,11 @@
 			"name": "can.util.vdom.buildFragment",
 			"type": "plugin",
 			"hidden": true
+		},
+		"can/view/import/import": {
+			"name": "can.view.import",
+			"type": "plugin",
+			"hidden": true
 		}
 	},
 	"types": {
