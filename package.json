@@ -133,7 +133,6 @@
 			"grunt-simple-mocha",
 			"grunt-string-replace",
 			"steal-benchmark",
-			"can-simple-dom",
 			"rimraf",
 			"lodash",
 			"browserify",
