@@ -132,6 +132,7 @@
 			"grunt-shell",
 			"grunt-simple-mocha",
 			"grunt-string-replace",
+			"steal-benchmark",
 			"rimraf",
 			"lodash",
 			"browserify",
