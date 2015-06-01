@@ -132,7 +132,8 @@
 			"rimraf",
 			"lodash",
 			"browserify",
-			"grunt-banner"
+			"grunt-banner",
+			"steal-benchmark"
 		]
 	},
 	"browser": {
