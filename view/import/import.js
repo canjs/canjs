@@ -28,7 +28,7 @@ steal("can/util", "can/view/callbacks", function(can){
 			callback(el, can.extend(tagData, {
 				scope: scope
 			}));
-			
+
 			can.data(can.$(el), "viewModel", importPromise);
 			can.data(can.$(el), "scope", importPromise);
 		}

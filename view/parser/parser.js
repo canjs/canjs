@@ -14,7 +14,7 @@ steal(function(){
 		});
 		return obj;
 	}
-	
+
 	function handleIntermediate(intermediate, handler){
 		for(var i = 0, len = intermediate.length; i < len; i++) {
 			var item = intermediate[i];

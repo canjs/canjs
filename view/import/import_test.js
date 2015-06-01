@@ -58,8 +58,8 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 			var res = template();
 			equal(res.childNodes[0].childNodes[0].nodeValue, "it worked", "Rendered with the can-tag");
 		});
-		
-		
+
+
 
 		asyncTest("can use an import's value", function(){
 			var template = "<can-import from='can/view/import/test/person' #person='{value}' />hello {{person.name}}";
@@ -73,13 +73,6 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				equal(res.childNodes[2].nodeValue, "world", "Got the person.name from the import");
 				start();
 			});
-		});
-
-		test("specify the viewModel with [.] syntax", function(){
-			var template = "<can-import from='can/view/import/test/person' [.]='{value}' />";
-			var iai = getIntermediateAndImports(template);
-
-			equal(iai.ases.viewModel, "can/view/import/test/person", "viewModel set with [.] syntax");
 		});
 
 		asyncTest("can import a template and use it", function(){

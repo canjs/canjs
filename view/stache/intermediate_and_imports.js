@@ -23,26 +23,23 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			attrStart: function( attrName ){
 				if(attrName === "from") {
 					inFrom = true;
-				} else if(inImport && attrName === "[.]") {
+				} else if(attrName === "as") {
 					inAs = true;
-					currentAs = "viewModel";
-					return false;
 				}
 			},
 			attrEnd: function( attrName ){
 				if(attrName === "from") {
 					inFrom = false;
-				} else if(inImport && attrName === "[.]") {
+				} else if(attrName === "as") {
 					inAs = false;
-					return false;
 				}
 			},
 			attrValue: function( value ){
 				if(inFrom && inImport) {
 					imports.push(value);
 					currentFrom = value;
-				} else if(inAs && currentAs === "viewModel") {
-					return false;
+				} else if(inAs && inImport) {
+					currentAs = value;
 				}
 			},
 			end: function(tagName){
@@ -51,7 +48,6 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 					if(currentAs) {
 						ases[currentAs] = currentFrom;
 						currentAs = "";
-						inAs = false;
 					}
 				}
 			},
