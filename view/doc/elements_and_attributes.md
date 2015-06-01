@@ -27,7 +27,24 @@ The following is supported by CanJS's [can.mustache] and [can.stache] templates 
    <a can-href="{page='recipe' id=id}">Details</a>
    ```
 
- - [can.view.bindings.import-scope] - Import values or the complete view model from a child component into the current scope with `[prop]="{childProp}"`
+ - [can.view.bindings.reference] - Export a reference variable from an 
+   element's [can.Component.prototype.viewModel viewModel] into the template.
+   
+   Two way:
+   
+   ```
+   <drivers-select #selected-plate="{selected.licensePlate}"/>
+   <edit-plate plate-name="{selectedPlate}"/>
+   ```
+   
+   One way:
+   
+   ```
+   <year-selector #year="{{selectedYear}}" />
+   Celebrate like it's {{year}}!
+   ```
+
+ - [can.view.bindings.parent-export] - Import values or the complete view model from a child component into the current scope with `[prop]="{childProp}"`
 
    ```
 	<car-selector>

@@ -980,7 +980,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'Imported: David',  '{name} component scope imported into variable');
 	});
 
-	test('live importing scope 6prop={{scopeProp}} with hyphenated properties', function(){
+	test('live importing scope ^prop={{scopeProp}} with hyphenated properties', function(){
 		can.Component.extend({
 			tag: 'import-prop-scope',
 			template: can.stache('Hello {{name}}'),
@@ -1170,6 +1170,61 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
 	});
 
-
+	test("^parent within another parent that does not leak scope", function(){
+		can.Component.extend({
+			tag: "outer-noleak",
+			viewModel: {
+				isOuter: true
+			},
+			leakScope: false
+		});
+		can.Component.extend({
+			tag: "my-child",
+			viewModel : {
+				isChild: true
+			},
+			leakScope: false
+		});
+		
+		
+		var template = can.stache("<outer-noleak><my-child ^my-child/></outer-noleak>");
+		var frag = template();
+		var vm = can.viewModel(frag.firstChild);
+		ok(vm.attr("myChild") instanceof can.Map, "got instance");
+		
+	});
+	
+	test("^parent within another parent that does not leak scope", function(){
+		can.Component.extend({
+			tag: "outer-noleak",
+			template: can.stache("<f-b><content/></f-b>"),
+			viewModel: {
+				isOuter: true
+			},
+			leakScope: false
+		});
+		can.Component.extend({
+			tag: "my-child",
+			viewModel : {
+				isChild: true
+			},
+			leakScope: false
+		});
+		can.Component.extend({
+			tag: "f-b",
+			template: can.stache("<content/>"),
+			viewModel: {
+				fooBar: true
+			}
+		});
+		
+		
+		var template = can.stache("<outer-noleak><my-child ^my-child/></outer-noleak>");
+		var frag = template();
+		var vm = can.viewModel(frag.firstChild);
+		ok(vm.attr("myChild") instanceof can.Map, "got instance");
+		
+	});
+	
 
 });

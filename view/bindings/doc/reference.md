@@ -1,4 +1,4 @@
-@function can.view.bindings.reference #reference
+@function can.view.bindings.reference #REFERENCE
 @parent can.view.bindings
 
 @description Export a value into a template's references scope.

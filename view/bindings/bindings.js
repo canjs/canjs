@@ -475,7 +475,6 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	// ^abc='{this}'
 	// ^def='{blah}'
 	can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
-		
 		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
 			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
 			twoWayBind = true;
@@ -485,24 +484,25 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			prop = removeBrackets( prop );
 		}
 
-		var viewModel = can.viewModel(el);
-		var scope = new can.view.Scope(viewModel);
-
-		var computeData = scope.computeData(prop, {
-				args: []
+		var childViewModel = can.viewModel(el),
+			childScope = new can.view.Scope(childViewModel),
+			computeData = childScope.computeData(prop, {
+				args: [],
+				
 			}),
-			compute = computeData.compute;
+			childCompute = computeData.compute,
+			parentViewModel = attrData.scope.getViewModel();
 
 		var handler = function (ev, newVal) {
 			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-			attrData.scope.attr(name, newVal);
+			parentViewModel.attr(name, newVal);
 		};
-		compute.bind("change", handler);
+		childCompute.bind("change", handler);
 
-		attrData.scope.attr(name, compute());
+		parentViewModel.attr( name, childCompute() );
 
 		can.one.call(el, 'removed', function() {
-			compute.unbind("change", handler);
+			childCompute.unbind("change", handler);
 		});
 
 	});
