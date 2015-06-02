@@ -1,4 +1,4 @@
-steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js', function (can, bubble) {
+steal('can/util', './bubble.js','../map_helpers.js', 'can/map', 'can/list', './nested_reference.js', function (can, bubble, mapHelpers) {
 
 	can.LazyMap = can.Map.extend({
 		_bubble: bubble
@@ -13,10 +13,8 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			// The namespace this `object` uses to listen to events.
 			can.cid(this, ".lazyMap");
 			// Sets all `attrs`.
-			this._init = 1;
-			this._computedBindings = {};
-			this._setupComputes();
-			var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
+			this._setupComputedProperties();
+			var teardownMapping = obj && mapHelpers.addToMap(obj, this);
 
 
 			// keep references to Observes in `_data`
@@ -31,10 +29,9 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 				this.___set(prop, value);
 			}, this));
 			this.bind('change', can.proxy(this._changes, this));
-
-			delete this._init;
 		},
-
+		_changes: function (ev, attr, how, newVal, oldVal) {
+		},
 		// todo: function should be renamed
 		_addChild: function (path, newChild, setNewChild) {
 			var self = this;
@@ -114,7 +111,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		// converts the value into an observable if needed
 		__type: function(value, prop){
 			// If we are getting an object.
-			if (!( value instanceof can.LazyMap) && can.Map.helpers.canMakeObserve(value)  ) {
+			if (!( value instanceof can.LazyMap) && mapHelpers.canMakeObserve(value)  ) {
 
 				if( can.isArray(value) ) {
 					var List = can.LazyList;
@@ -130,7 +127,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		// if it finds an object, uses [] to follow properties
 		// if it finds something else, it uses __get
 		_goto: function (attr, keepKey) {
-			var parts = can.Map.helpers.attrParts(attr, keepKey).slice(0),
+			var parts = mapHelpers.attrParts(attr, keepKey).slice(0),
 				prev,
 				path = [],
 				part;
@@ -139,7 +136,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			var cur = this instanceof can.List ? this[parts.shift()] : this.__get();
 
 			// TODO we might also have to check for dot separated keys in each iteration
-			while (cur && !can.Map.helpers.isObservable(cur) && parts.length) {
+			while (cur && !can.isMapLike(cur) && parts.length) {
 				if (part !== undefined) {
 					path.push(part);
 				}
@@ -161,13 +158,13 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			var data = this._goto(attr);
 
 			// if it's already observe return it
-			if (can.Map.helpers.isObservable(data.value)) {
+			if (can.isMapLike(data.value)) {
 				if (data.parts.length) {
 					return data.value._get(data.parts);
 				} else {
 					return data.value;
 				}
-			} else if (data.value && can.Map.helpers.canMakeObserve(data.value)) {
+			} else if (data.value && mapHelpers.canMakeObserve(data.value)) {
 				// if object create LazyMap/LazyList
 				var converted = this.__type(data.value, data.prop);
 				// ... and replace it
@@ -188,7 +185,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		// `value` - The raw value to set.
 		_set: function (attr, value, keepKey) {
 			var data = this._goto(attr, keepKey);
-			if (can.Map.helpers.isObservable(data.value) && data.parts.length) {
+			if (can.isMapLike(data.value) && data.parts.length) {
 				return data.value._set(data.parts, value);
 			} else if (!data.parts.length) {
 				this.__set(attr, value, data.value, data);
@@ -210,7 +207,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 				var changeType = data.parent.hasOwnProperty(data.prop) ? "set" : "add";
 
 				// if it is or should be a Lazy
-				if (convert && can.Map.helpers.canMakeObserve(value)) {
+				if (convert && mapHelpers.canMakeObserve(value)) {
 					// make it a lazy
 					value = this.__type(value, prop);
 					var self = this;
@@ -237,8 +234,10 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		},
 		// Directly sets a property on this `object`.
 		___set: function (prop, val, data) {
-			if (this[prop] && this[prop].isComputed && can.isFunction(this.constructor.prototype[prop])) {
-				this[prop](val);
+			var computedAttr = this._computedAttrs[prop];
+			
+			if (computedAttr) {
+				computedAttr.compute(val);
 			} else if (data) {
 				data.parent[data.prop] = val;
 			} else {
@@ -259,7 +258,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 		 */
 		_attrs: function (props, remove) {
 			if (props === undefined) {
-				return can.Map.helpers.serialize(this, 'attr', {});
+				return mapHelpers.serialize(this, 'attr', {});
 			}
 
 			props = can.extend({}, props);
@@ -281,7 +280,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 						self.removeAttr(prop);
 					}
 					return;
-				} else if (!can.Map.helpers.isObservable(curVal) && can.Map.helpers.canMakeObserve(curVal)) {
+				} else if (!can.isMapLike(curVal) && mapHelpers.canMakeObserve(curVal)) {
 					// convert curVal to observe
 					curVal = self.attr(prop);
 				}
@@ -295,7 +294,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 				if (newVal instanceof can.Map) {
 					self.__set(prop, newVal, curVal, data);
 					// if its an object, let attr merge
-				} else if (can.Map.helpers.isObservable(curVal) && can.Map.helpers.canMakeObserve(newVal) && curVal.attr) {
+				} else if (can.isMapLike(curVal) && mapHelpers.canMakeObserve(newVal) && curVal.attr) {
 					curVal.attr(newVal, remove);
 					// otherwise just set
 				} else if (curVal !== newVal) {

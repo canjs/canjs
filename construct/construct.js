@@ -191,6 +191,7 @@ steal('can/util/string', function (can) {
 			// Get a raw instance object (`init` is not called).
 			var inst = this.instance(),
 				args;
+			inst._initializing = true;
 			// Call `setup` if there is a `setup`
 			if (inst.setup) {
 				args = inst.setup.apply(inst, arguments);
@@ -200,6 +201,7 @@ steal('can/util/string', function (can) {
 			if (inst.init) {
 				inst.init.apply(inst, args || arguments);
 			}
+			delete inst._initializing;
 			return inst;
 		},
 		// Overwrites an object with methods. Used in the `super` plugin.
@@ -463,6 +465,10 @@ steal('can/util/string', function (can) {
 			if(fullName) {
 				parts = fullName.split('.');
 				shortName = parts.pop();
+			} else if(klass && klass.shortName) {
+				shortName = klass.shortName;
+			} else if(this.shortName) {
+				shortName = this.shortName;
 			}
 			//!steal-remove-start
 			/* jshint ignore:start */
