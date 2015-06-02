@@ -16,6 +16,7 @@ steal("can/util", "can/view/callbacks", function(can){
 
 		// Set the viewModel to the promise
 		can.data(can.$(el), "viewModel", importPromise);
+		can.data(can.$(el), "scope", importPromise);
 
 		// Set the scope
 		var scope = tagData.scope.add(importPromise);
@@ -23,15 +24,13 @@ steal("can/util", "can/view/callbacks", function(can){
 		// If there is a can-tag present we will hand-off rendering to that tag.
 		var handOffTag = el.getAttribute("can-tag");
 		if(handOffTag) {
-			var callback = can.view.callbacks._tags[handOffTag];
+			var callback = can.view.tag(handOffTag);
 			callback(el, can.extend(tagData, {
 				scope: scope
 			}));
-
-			var viewModel = can.viewModel(el);
-			importPromise.then(function(val){
-				viewModel.attr("value", val);
-			});
+			
+			can.data(can.$(el), "viewModel", importPromise);
+			can.data(can.$(el), "scope", importPromise);
 		}
 		// Render the subtemplate and register nodeLists
 		else {

@@ -47,7 +47,9 @@ steal('steal-qunit', 'can/view/stache/', 'can/component/', 'can/view/stache/inte
 			QUnit.stop();
 		});
 
-		test("if a can-tag is present rendering is handed over to that tag", function(){
+
+
+		test("if a can-tag is present, handed over rendering to that tag", function(){
 			var iai = getIntermediateAndImports("<can-import from='can/view/import/test/hello' can-tag='loading'/>");
 			can.view.tag("loading", function(el){
 				var template = stache("it worked");
@@ -58,6 +60,8 @@ steal('steal-qunit', 'can/view/stache/', 'can/component/', 'can/view/stache/inte
 			var res = template();
 			equal(res.childNodes[0].childNodes[0].nodeValue, "it worked", "Rendered with the can-tag");
 		});
+		
+		
 
 		test("can use an import's value", function(){
 			var template = "<can-import from='can/view/import/test/person' #person='{value}' />hello {{person.name}}";
@@ -101,7 +105,7 @@ steal('steal-qunit', 'can/view/stache/', 'can/component/', 'can/view/stache/inte
 		test("importing a template works with can-tag", function(){
 			Component.extend({
 				tag: "my-waiter",
-				template: can.stache("{{#eq state 'resolved'}}" +
+				template: can.stache("{{#isResolved}}" +
 				"<content></content>" +
 				"{{else}}" +
 				"<div class='loading'></div>" +
