@@ -66,6 +66,11 @@
 			"description": "High performance Mustache templates",
 			"type": "plugin"
 		},
+		"can/view/href/href": {
+			"name": "can.view.href",
+			"type": "plugin",
+			"description": "Make flexible route links"
+		},
 		"can/control/control": {
 			"name": "can.Control",
 			"description": "Declarative event bindings",
