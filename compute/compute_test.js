@@ -332,6 +332,19 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var result = can.compute.read(parent, reads);
 		equal(result.value, Todo, 'Got the same Todo');
 	});
+
+	test("compute.read returns renderer functions instead of executing them", function() {
+		var renderer = function(){
+			return 'rendered';
+		};
+		renderer.render = true;
+
+		var parent = can.compute(new can.Map({template: renderer}));
+		var reads = ["template"];
+
+		var result = can.compute.read(parent, reads, { executeAnonymousFunctions: true });
+		equal(result.value, renderer, 'Got the renderer function');
+	});
 	
 	test("compute.set with different values", 4, function() {
 		var comp = can.compute("David");
