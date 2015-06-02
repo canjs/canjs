@@ -133,7 +133,7 @@ steal('can/util', './bubble.js','../map_helpers.js', 'can/map', 'can/list', './n
 				part;
 
 			// are we dealing with list or map
-			var cur = this instanceof can.List ? this[parts.shift()] : this.__get();
+			var cur = this instanceof can.List ? this[parts.shift()] : this.___get();
 
 			// TODO we might also have to check for dot separated keys in each iteration
 			while (cur && !can.isMapLike(cur) && parts.length) {
@@ -256,11 +256,10 @@ steal('can/util', './bubble.js','../map_helpers.js', 'can/map', 'can/list', './n
 		 * @param {Object} props
 		 * @param {Boolean} remove true if you should remove properties that are not in props
 		 */
-		_attrs: function (props, remove) {
-			if (props === undefined) {
-				return mapHelpers.serialize(this, 'attr', {});
-			}
-
+		_getAttrs: function(){
+			return mapHelpers.serialize(this, 'attr', {});
+		},
+		_setAttrs: function (props, remove) {
 			props = can.extend({}, props);
 			var self = this,
 				prop,
@@ -283,11 +282,6 @@ steal('can/util', './bubble.js','../map_helpers.js', 'can/map', 'can/list', './n
 				} else if (!can.isMapLike(curVal) && mapHelpers.canMakeObserve(curVal)) {
 					// convert curVal to observe
 					curVal = self.attr(prop);
-				}
-
-				//
-				if (self.__convert) {
-					newVal = self.__convert(prop, newVal);
 				}
 
 				// if we're dealing with models, want to call _set to let converter run

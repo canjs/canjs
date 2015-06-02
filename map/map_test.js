@@ -224,7 +224,7 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 		map.unbind('name', handler);
 		map.unbind('name', handler);
 		equal(map._computedAttrs.name.count, 0, '0 handlers listening to computed property');
-		ok(!map._computedAttrs.name.handler, 'computed property handler removed');
+		
 	});
 
 	test("serializing cycles", function(){

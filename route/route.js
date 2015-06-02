@@ -608,7 +608,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	// The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
 	// instead act on the `can.route.data` observe.
-	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get','each'], function (name) {
+	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '___get','each'], function (name) {
 		can.route[name] = function () {
 			// `delegate` and `undelegate` require
 			// the `can/map/delegate` plugin

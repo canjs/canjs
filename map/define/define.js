@@ -280,8 +280,8 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 		return oldType.call(this, newValue, prop);
 	};
 
-	var oldRemove = proto._remove;
-	proto._remove = function (prop, current) {
+	var oldRemove = proto.__remove;
+	proto.__remove = function (prop, current) {
 		var remove = getPropDefineBehavior("remove", prop, this.define),
 			res;
 		if (remove) {
