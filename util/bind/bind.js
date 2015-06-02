@@ -13,7 +13,7 @@ steal('can/util', function (can) {
 		can.addEvent.apply(this, arguments);
 		// If not initializing, and the first binding
 		// call bindsetup if the function exists.
-		if (!this._init) {
+		if (!this._initializing) {
 			if (!this._bindings) {
 				this._bindings = 1;
 				// setup live-binding
@@ -27,11 +27,8 @@ steal('can/util', function (can) {
 		return this;
 	};
 	can.unbindAndTeardown = function (event, handler) {
-		if (!this.__bindEvents) {
-			return this;
-		}
-
-		var handlers = this.__bindEvents[event] || [];
+		var bindEvents = this.__bindEvents || {};
+		var handlers = bindEvents[event] || [];
 		var handlerCount = handlers.length;
 
 		// Remove the event handler
