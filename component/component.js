@@ -105,13 +105,13 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 					lexicalContent = ((typeof this.leakScope === "undefined" ?
 									   false :
 									   !this.leakScope) &&
-									  this.template),
+									  !!this.template),
 					twoWayBindings = {},
 					scope = this.scope || this.viewModel,
 					// tracks which viewModel property is currently updating
 					viewModelPropertyUpdates = {},
 					// the object added to the viewModel
-					componentScope,
+					viewModel,
 					frag,
 					// an array of teardown stuff that should happen when the element is removed
 					teardownFunctions = [],
@@ -168,7 +168,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
 						viewModelPropertyUpdates[name] = (viewModelPropertyUpdates[name] || 0 )+1;
 
-						componentScope.attr(name, newVal);
+						viewModel.attr(name, newVal);
 						can.batch.afterPreviousEvents(function(){
 							--viewModelPropertyUpdates[name];
 						});
@@ -195,23 +195,23 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				});
 				if (this.constructor.Map) {
 					// If `Map` property is set on the constructor use it to wrap the `initialScopeData`
-					componentScope = new this.constructor.Map(initialScopeData);
+					viewModel = new this.constructor.Map(initialScopeData);
 				} else if (scope instanceof can.Map) {
-					// If `this.scope` is instance of `can.Map` assign it to the `componentScope`
-					componentScope = scope;
+					// If `this.scope` is instance of `can.Map` assign it to the `viewModel`
+					viewModel = scope;
 				} else if (can.isFunction(scope)) {
 					// If `this.viewModel` is a function, call the function and
 					var scopeResult = scope.call(this, initialScopeData, componentTagData.scope, el);
 
 					if (scopeResult instanceof can.Map) {
 						// If the function returns a can.Map, use that as the viewModel
-						componentScope = scopeResult;
+						viewModel = scopeResult;
 					} else if (scopeResult.prototype instanceof can.Map) {
 						// If `scopeResult` is of a `can.Map` type, use it to wrap the `initialScopeData`
-						componentScope = new scopeResult(initialScopeData);
+						viewModel = new scopeResult(initialScopeData);
 					} else {
 						// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialScopeData`
-						componentScope = new(can.Map.extend(scopeResult))(initialScopeData);
+						viewModel = new(can.Map.extend(scopeResult))(initialScopeData);
 					}
 
 				}
@@ -226,11 +226,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						// Check that this property is not being changed because
 						// it's scope value just changed
 						if (!viewModelPropertyUpdates[prop]) {
-							//console.log("updating view.scope ",prop,"from",  componentScope._cid);
 							computeData.compute(newVal);
 						}
 					};
-					componentScope.bind(prop, handlers[prop]);
+					viewModel.bind(prop, handlers[prop]);
 				});
 				// Setup the attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || componentTagData.templateType !== "legacy") {
@@ -239,28 +238,30 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						// Convert attribute name from the `attribute-name` to the `attributeName` format.
 						var camelized = can.camelize(ev.attributeName);
 						if (!twoWayBindings[camelized] && !ignoreAttributesRegExp.test(camelized) ) {
-							// If there is a mapping for this attribute, update the `componentScope` attribute
-							componentScope.attr(camelized, el.getAttribute(ev.attributeName));
+							// If there is a mapping for this attribute, update the `viewModel` attribute
+							viewModel.attr(camelized, el.getAttribute(ev.attributeName));
 						}
 					});
 
 				}
 
-				// Set `componentScope` to `this.viewModel` and set it to the element's `data` object as a `viewModel` property
-				this.scope = this.viewModel = componentScope;
+				// Set `viewModel` to `this.viewModel` and set it to the element's `data` object as a `viewModel` property
+				this.scope = this.viewModel = viewModel;
 				can.data(can.$(el), "scope", this.scope);
 				can.data(can.$(el), "viewModel", this.scope);
 
 				// Create a real Scope object out of the viewModel property
-				var renderedScope = (lexicalContent ?
+				// The scope used to render the component's template.
+				// However, if there is no template, the "light" dom is rendered with this anyway.
+				var shadowScope = (lexicalContent ?
 						can.view.Scope.refsScope() :
-						componentTagData.scope.add( new can.view.Scope.Refs() ) ).add(this.scope),
+						componentTagData.scope.add( new can.view.Scope.Refs() )   ).add(this.scope,{viewModel: true}),
 					options = {
 						helpers: {}
 					},
 					addHelper = function(name, fn) {
 						options.helpers[name] = function() {
-							return fn.apply(componentScope, arguments);
+							return fn.apply(viewModel, arguments);
 						};
 					};
 
@@ -289,7 +290,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				// Teardown reverse bindings when the element is removed
 				teardownFunctions.push(function(){
 					can.each(handlers, function (handler, prop) {
-						componentScope.unbind(prop, handlers[prop]);
+						viewModel.unbind(prop, handlers[prop]);
 					});
 				});
 
@@ -354,11 +355,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 							// the component will have access to the
 							// internal viewModel. This can be overridden to be
 							// lexical with the leakScope option.
-							var opts;
+							var lightTemplateData;
 							if( renderingLightContent ) {
 								if(lexicalContent) {
 									// render with the same scope the component was found within.
-									opts = componentTagData;
+									lightTemplateData = componentTagData;
 								} else {
 									// render with the component's viewModel mixed in, however
 									// we still want the outer refs to be used, NOT the component's refs
@@ -366,7 +367,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 									// To fix this, we
 									// walk down the scope to the component's ref, clone scopes from that point up
 									// use that as the new scope.
-									opts = {
+									lightTemplateData = {
 										scope: contentTagData.scope.cloneFromRef(),
 										options: contentTagData.options
 									};
@@ -375,14 +376,16 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 							} else {
 								// we are rendering default content so this content should 
 								// use the same scope as the <content> tag was found within.
-								opts = contentTagData;
+								lightTemplateData = contentTagData;
 							}
+							// add a protected scope so the parent view model can be looked up
+							lightTemplateData.scope = lightTemplateData.scope.add(viewModel,{"protected": true, viewModel: true});
 							
 							if(contentTagData.parentNodeList) {
-								var frag = subtemplate( opts.scope, opts.options, contentTagData.parentNodeList );
+								var frag = subtemplate( lightTemplateData.scope, lightTemplateData.options, contentTagData.parentNodeList );
 								elements.replace([el], frag);
 							} else {
-								can.view.live.replace([el], subtemplate( opts.scope, opts.options ));
+								can.view.live.replace([el], subtemplate( lightTemplateData.scope, lightTemplateData.options ));
 							}
 
 							// Restore the content tag so it could potentially be used again (as in lists)
@@ -390,15 +393,15 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						}
 					};
 					// Render the component's template
-					frag = this.constructor.renderer(renderedScope, componentTagData.options.add(options), nodeList);
+					frag = this.constructor.renderer(shadowScope, componentTagData.options.add(options), nodeList);
 				} else {
-					// Otherwise render the contents between the 
+					// Otherwise render the contents between the element
 					if(componentTagData.templateType === "legacy") {
-						frag = can.view.frag(componentTagData.subtemplate ? componentTagData.subtemplate(renderedScope, componentTagData.options.add(options)) : "");
+						frag = can.view.frag(componentTagData.subtemplate ? componentTagData.subtemplate(shadowScope, componentTagData.options.add(options)) : "");
 					} else {
 						// we need to be the parent ... or we need to 
 						frag = componentTagData.subtemplate ?
-							componentTagData.subtemplate(renderedScope, componentTagData.options.add(options), nodeList) :
+							componentTagData.subtemplate(shadowScope, componentTagData.options.add(options), nodeList) :
 							document.createDocumentFragment();
 					}
 

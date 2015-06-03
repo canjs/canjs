@@ -173,7 +173,7 @@ module.exports = function (grunt) {
 			options: {
 				dst: 'docco/',
 				layout : 'parallel',
-				css : 'resources/docco.css'
+				css : 'build/docco.css'
 			},
 			docs: {
 				files : [

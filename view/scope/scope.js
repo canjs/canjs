@@ -62,6 +62,7 @@ steal(
 				// can.compute.read reads properties from a parent.  A much more complex version of getObject.
 				read: can.compute.read,
 				Refs: can.Map.extend({}),
+				Break: function(){},
 				refsScope: function(){
 					return new can.view.Scope( new this.Refs() );
 				}
@@ -70,23 +71,23 @@ steal(
 			 * @prototype
 			 */
 			{
-				init: function (context, parent) {
+				init: function (context, parent, meta) {
 					this._context = context;
 					this._parent = parent;
 					this.__cache = {};
+					this._meta = meta || {};
 				},
 
 				// ## Scope.prototype.attr
 				// Reads a value from the current context or parent contexts.
-				attr: can.__notObserve(function (key, value) {
+				attr: can.__notObserve(function (key, value, options) {
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
-					var options = {
+					options = can.simpleExtend({
 							isArgument: true,
 							returnObserveMethods: true,
 							proxyMethods: false
-						},
-						res = this.read(key, options);
+						}, options);
 
 					// Allow setting a value on the context
 					if(arguments.length === 2) {
@@ -101,8 +102,11 @@ steal(
 						}
 
 						can.compute.set(obj, key, value, options);
+					} else {
+						var res = this.read(key, options);
+						return res.value;
 					}
-					return res.value;
+					
 				}),
 
 				// ## Scope.prototype.add
@@ -111,9 +115,9 @@ steal(
 				// var scope = new can.view.Scope([{name:"Chris"}, {name: "Justin"}]).add({name: "Brian"});
 				// scope.attr("name") //-> "Brian"
 				// ```
-				add: function (context) {
+				add: function (context, meta) {
 					if (context !== this._context) {
-						return new this.constructor(context, this);
+						return new this.constructor(context, this, meta);
 					} else {
 						return this;
 					}
@@ -133,15 +137,37 @@ steal(
 						.compute;
 				},
 				getRefs: function(){
-					var scope = this,
-						context;
+					return this.getContext(function(scope){
+						return scope._context  instanceof Scope.Refs;
+					});
+				},
+				getViewModel: function(){
+					return this.getContext(function(scope){
+						return scope._meta.viewModel;
+					});
+				},
+				getContext: function(tester){
+					var scope = this;
 					while (scope) {
-						context = scope._context;
-						if(context instanceof Scope.Refs) {
-							return context;
+						if(tester(scope)) {
+							return scope._context;
 						}
 						scope = scope._parent;
 					}
+				},
+				getRoot: function(){
+					var cur = this,
+						child = this;
+						
+					while(cur._parent) {
+						child = cur;
+						cur = cur._parent;
+					}
+
+					if(cur._context instanceof Scope.Refs) {
+						cur = child;
+					}
+					return cur._context;
 				},
 				// this takes a scope and essentially copies its chain from
 				// right before the last Refs.  And it does not include the ref.
@@ -184,6 +210,11 @@ steal(
 				 * @option {*} value the found value
 				 */
 				read: function (attr, options) {
+					// skip protected
+					if(this._meta.protected) {
+						return this._parent.read(attr, options);
+					}
+					
 					// check if we should only look within current scope
 					var stopLookup;
 					if(attr.substr(0, 2) === './') {
@@ -195,26 +226,18 @@ steal(
 					// check if we should be running this on a parent.
 					else if (attr.substr(0, 3) === "../") {
 						return this._parent.read(attr.substr(3), options);
-					} else if (attr === "..") {
-						return {
-							value: this._parent._context
-						};
-					} else if (attr === "." || attr === "this") {
+					}
+					else if (attr === "." || attr === "this") {
 						return {
 							value: this._context
 						};
+					}
+					else if (attr === "..") {
+						return {
+							value: this._parent._context
+						};
 					} else if(attr === "@root") {
-						var cur = this, child = this;
-						while(cur._parent) {
-							child = cur;
-							cur = cur._parent;
-						}
-
-						if(cur._context instanceof Scope.Refs) {
-							cur = child;
-						}
-
-						return { value: cur._context };
+						return { value: this.getRoot() };
 					}
 
 					// Array of names from splitting attr string into names.  ```"a.b\.c.d\\.e" //-> ['a', 'b', 'c', 'd.e']```
@@ -269,11 +292,15 @@ steal(
 					while (scope) {
 						context = scope._context;
 						refInstance = context instanceof Scope.Refs;
+
+						
+						
 						if ( context !== null &&
 							// if its a primitive type, keep looking up the scope, since there won't be any properties
 							(typeof context === "object" || typeof context === "function") &&
-							!( searchedRefsScope && refInstance )
-
+							!( searchedRefsScope && refInstance ) &&
+							// If the scope is protected skip
+							! scope._meta.protected
 							) {
 
 							if(refInstance) {

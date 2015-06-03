@@ -1,4 +1,4 @@
-@page can.view.href
+@page can.view.href can-href
 @parent can.view.bindings
 
 Sets an element's href attribute so that it's url will set the specified attribute values on [can.route].
