@@ -24,10 +24,12 @@ steal('can/compute', 'can/util', 'can/list', function () {
 
 					// Update the derived list when the key/value changes
 					meta.key.bind('change', function (ev, newKey, oldKey) {
+						console.log('Key Change:', oldKey, '=>', newKey);
 						// self._updateKey(meta, oldKey);
 						self._updateKeyAndLog(meta, oldKey);
 					});
-					meta.value.bind('change', function () {
+					meta.value.bind('change', function (ev, newVal, oldVal) {
+						console.log('Value Change:', oldVal, '=>', newVal);
 						// self._updateValue(meta);
 						self._updateValueAndLog(meta);
 					});
@@ -46,8 +48,6 @@ steal('can/compute', 'can/util', 'can/list', function () {
 			},
 			_updateKeyAndLog: function (meta, oldKey) {
 				console.log('Update:', oldKey, '>', meta.key(), '=', meta.value());
-				if (meta.key() === meta.value()) {
-				}
 				this._updateKey(meta, oldKey);
 				console.log('Result:', this.attr());
 			},
@@ -79,9 +79,6 @@ steal('can/compute', 'can/util', 'can/list', function () {
 			_getMeta: function (key) {
 				var sourceKey = can.compute(key);
 
-				// Keep this out of the compute so that changes to the list
-				// don't force the compute to re-evalaute
-				
 				var derivedValue = can.compute(function () {
 					var i = sourceKey();
 					var item;
@@ -142,7 +139,15 @@ steal('can/compute', 'can/util', 'can/list', function () {
 
 	var DerivedList = can.List.extend({}, mixin(can.List.prototype, {
 		_saveMeta: function (meta) {
-			this._meta.splice(meta.sourceKey(), 0, meta);
+			var i = meta.sourceKey(); 
+			
+			this._meta.splice(i, 0, meta);
+
+			can.batch.start();
+			for (i = i + 1; i < this._meta.length; i++) {
+				this._meta[i].sourceKey(i);
+			}
+			can.batch.stop();
 		},
 		_deriveKey: function (mappedIndex, sourceIndex) {
 			if (typeof mappedIndex === 'boolean') {
@@ -152,38 +157,59 @@ steal('can/compute', 'can/util', 'can/list', function () {
 			}
 		},
 		_mapIndex: function (comparedSourceIndex) {
-			var self = this;
 			var mapping = {};
 			var maxPreIndex = 0;
-			var preItemMeta;
-			var key; 
+			
+			can.each(this._meta, function (itemMeta, i) {
+				var itemSourceIndex = i;
+				var itemKey = itemMeta.key(); 
 
-			can.each(this._meta, function (itemMeta) {
-				var itemSourceIndex = itemMeta.sourceKey();
-				var val = self._source.attr(itemSourceIndex);
-				if (typeof itemMeta.key() === 'undefined') {
+				console.log('Compare:', {
+					iSourceIndex: comparedSourceIndex, 
+					sourceIndex: itemSourceIndex, 
+					itemKey: itemKey, 
+					value: itemMeta.value()
+				})
+
+				if (typeof itemKey === 'undefined') {
 					return;
 				}
 
+				if (comparedSourceIndex === itemSourceIndex) {
+					return false;
+				}
+
 				if (itemSourceIndex < comparedSourceIndex && itemSourceIndex > maxPreIndex) {
+					console.log('  maxPreIndex:', itemSourceIndex);
 					maxPreIndex = itemSourceIndex;
 				}
 
-				mapping[itemSourceIndex] = itemMeta.key();
+				mapping[itemSourceIndex] = itemKey;
 			});
 
-			var index = typeof mapping[maxPreIndex] !== 'undefined' ? mapping[maxPreIndex] + 1 : 0;
+			var index = typeof mapping[maxPreIndex] !== 'undefined' ? 
+				mapping[maxPreIndex] + 1 : 
+				0;
+			
+			console.log('Insert:', index); 
 			return index;
 		},
 		_updateKey: function (meta, oldVal) { 
 			var key = meta.key();
 			var value = meta.value(); 
 
-			if (oldVal) {
+			// If the item is already in the correct position - as would be
+			// the case if an item was spliced before it - then don't move
+			// the item
+			if (this.attr(key) === value) {
+				return;
+			}
+
+			if (!! oldVal || oldVal === 0) {
 				this.splice(oldVal, 1);
 			}
 			
-			if (typeof key !== 'undefined') {
+			if (!! key || key === 0) {
 				this.splice(key, 0, value);
 			}
 		},
@@ -194,6 +220,24 @@ steal('can/compute', 'can/util', 'can/list', function () {
 			
 			this._source.bind('add', function (ev, newItems, index) {
 				self._indexKeys(this.keys.call(newItems, index));
+			});
+
+			this._source.bind('remove', function (ev, removedItems, offset) {
+				removedItems.forEach(function (item, index) {
+
+					// The source index
+					var sourceIndex = index + offset;
+
+					// The derived index
+					var meta = self._meta[sourceIndex];
+					var key = meta.key();
+
+					// Remove the derived item
+					self.splice(key, 1);
+
+					// Remove the source meta from the store
+					self._meta.splice(sourceIndex, 1);
+				});
 			});
 		},
 		_getMetaObject: function () {

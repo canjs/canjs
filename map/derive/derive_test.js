@@ -45,8 +45,10 @@ test('Map - mapKeys', function () {
 test('List - compact', function () {
 	console.log('test: List - compact');
 	var source = new can.List([0, 1, false, 2, '', 3]);
+	// var source = new can.List([0, 1]);
+	// var source = new can.List([1]);
 
-	var derived = source.deriveList(function (item, index) {
+	var derived = source.deriveList(function (item) {
 		return !! item;
 	});
 
@@ -70,12 +72,13 @@ test('List - compact', function () {
 	source.unshift('unshifted');
 	console.log(derived.attr()); //-> ["unshifted", 1, 2, 3, "pushed"]
 	equal(derived.attr(0), 'unshifted', 'Unshifted truthy derived at correct index');
-
-	// TODO: Remove
-	// console.log('>>> Remove');
-	// source.splice(2, 1);
-	// console.log(derived.attr()); //-> ["unshifted", 1, 3, "pushed"]
-	// equal(derived.attr(2), 3, 'Spliced value removed');
+	
+	// Remove
+	console.log('>>> Remove');
+	source.splice(4, 1);
+	console.log(derived.attr()); //-> ["unshifted", 1, 3, "pushed"]
+	
+	equal(derived.attr(2), 3, 'Spliced value removed');
 });
 
 });
