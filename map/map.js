@@ -9,11 +9,12 @@
 // - `___get`, `___set`, `___remove` - read / write / remove raw values.
 //
 // When `attr` gets or sets multiple properties it calls `_getAttrs` or `_setAttrs`.
+//
+// [bubble.js](bubble.html) - Handles bubbling of child events to parent events.  
+// [map_helpers.js](map_helpers.html) - Assorted helpers for handling cycles during serialization or
+// instantition of objects.
 steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', function (can, bind, bubble, mapHelpers) {
 	
-	/**
-	 * @add can.Map
-	 */
 	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
 		/**
@@ -77,7 +78,8 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				}
 			}
 			
-			// If we inherit from can.Map, but not can.List, make sure any lists are the correct type.
+			// If we inherit from can.Map, but not can.List, create a can.List that 
+			// creates instances of this Map type.
 			if (can.List && !(this.prototype instanceof can.List)) {
 				this.List = Map.List.extend({
 					Map: this
@@ -86,24 +88,31 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 		},
 		// ### shortName
-		// Tells `can.Construct` to show this as a `Map` in the debugger.
+		// Tells `can.Construct` to show instance as `Map` in the debugger.
 		shortName: "Map",
-		// Reference to bubbling helpers.
-		// Given an eventName, determine if bubbling should be setup.
+		
+		// ### _bubbleRule
+		// Returns which events to setup bubbling on for a given bound event.
+		// By default, only bubbles "change" events if someone listens to a
+	    // "change" event or a nested event like "foo.bar".
 		_bubbleRule: function(eventName) {
 			return (eventName === "change" || eventName.indexOf(".") >= 0 ) ?
 				["change"] :
 				[];
 		},
-		// Adds an event to this Map.
+		
+		// ### bind,  unbind
+		// Listen to events on the Map constructor.  These
+		// are here mostly for can.Model.
 		bind: can.bindAndSetup,
-		on: can.bindAndSetup,
-		// Removes an event from this Map.
 		unbind: can.unbindAndTeardown,
-		off: can.unbindAndTeardown,
+		
+		// ### id
 		// Name of the id field. Used in can.Model.
 		id: "id",
 		
+		// ### keys
+		// An observable way to get the keys from a map.
 		keys: function (map) {
 			var keys = [];
 			can.__observe(map, '__keys');
@@ -145,6 +154,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				teardownMapping();
 			}
 		},
+		
 		// ### _setupComputes
 		// Sets up computed properties on a Map. 
 		// Stores information for each computed property on
@@ -166,9 +176,11 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			var computes = this.constructor._computedPropertyNames;
 
 			for (var i = 0, len = computes.length; i < len; i++) {
-				setupComputeAttr(this, this._computedAttrs, computes[i]);
+				var attrName = computes[i];
+				mapHelpers.addComputedAttr(this, attrName, this[attrName].clone(this));
 			}
 		},
+		
 		// ### _setupDefaults
 		// Returns the default values for the instance.
 		_setupDefaults: function(){
@@ -186,7 +198,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			} else if (type !== "string" && type !== "number") {
 				// Get or set multiple attributes.
 				return this._setAttrs(attr, val);
-			} 
+			}
 			else if (arguments.length === 1) {
 				// Get a single attribute.
 				return this._get(attr);
@@ -227,6 +239,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				return this.__get( attr );
 			}
 		},
+		
 		// ### __get
 		// Signals `can.compute` that an observable
 		// property is being read.
@@ -234,6 +247,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			can.__observe(this, attr);
 			return this.___get( attr );
 		},
+		
 		// ### ___get
 		// When called with an argument, returns the value of this property. If that
 		// property is represented by a computed attribute, return the value of that compute.  
@@ -404,6 +418,13 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			}
 		},
 		
+		// ### ___serialize
+		// Serializes a property.  Uses map helpers to
+		// recursively serialize nested observables.
+		___serialize: function(name, val){
+			return mapHelpers.getValue(this, name, val, "serialize");
+		},
+		
 		// ### _getAttrs
 		// Returns the values of all attributes as a plain JavaScript object.
 		_getAttrs: function(){
@@ -478,7 +499,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					target: this
 				}, [attr, how, newVal, oldVal]);
 
-			} 
+			}
 			
 			can.batch.trigger(this, {
 				type: attr,
@@ -498,88 +519,92 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 		_bindsetup: function(){},
 		_bindteardown: function(){},
 		
+		// ### one
+		// Listens once to an event.
 		one: can.one,
+		
+		// ### bind
+		// Listens to an event on a map.  
+		// If the event is a  computed property, 
+		// listen to the compute and forward its events
+        // to this map.  
 		bind: function (eventName, handler) {
+			
 			var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
 			if (computedBinding) {
-				// The first time we bind to this computed property we
-				// initialize `count` and `batchTrigger` the change event.
 				if (!computedBinding.count) {
 					computedBinding.count = 1;
-					if(!computedBinding.handler) {
-						var map = this;
-						computedBinding.handler = function (ev, newVal, oldVal) {
-							can.batch.trigger(map, {
-								type: eventName,
-								batchNum: ev.batchNum,
-								target: map
-							}, [newVal, oldVal]);
-						};
-					}
 					computedBinding.compute.bind("change", computedBinding.handler);
 				} else {
-					// Increment number of things listening to this computed property.
 					computedBinding.count++;
 				}
 
 			}
-			// The first time we bind to this Map, `_bindsetup` will
-			// be called to setup child event bubbling.
+			
+			// Sets up bubbling if needed.  
 			bubble.bind(this, eventName);
+			
 			return can.bindAndSetup.apply(this, arguments);
 
 		},
+		
+		// ### unbind
+		// Stops listening to an event.
+		// If this is the last listener of a computed property,
+		// stop forwarding events of the computed property to this map.
 		unbind: function (eventName, handler) {
 			var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
 			if (computedBinding) {
-				// If there is only one listener, we unbind the change event handler
-				// and clean it up since no one is listening to this property any more.
 				if (computedBinding.count === 1) {
 					computedBinding.count = 0;
 					computedBinding.compute.unbind("change", computedBinding.handler);
 				} else {
-					// Decrement number of things listening to this computed property
 					computedBinding.count--;
 				}
 
 			}
+			
+			// Teardown bubbling if needed.
 			bubble.unbind(this, eventName);
 			return can.unbindAndTeardown.apply(this, arguments);
 
 		},
 		
-		
+		// ### compute
+		// Creates a compute that represents a value on this map. If the property is a function
+		// on the prototype, a "function" compute wil be created.  
+		// Otherwise, a compute will be created that reads the observable attributes.
 		compute: function (prop) {
-			// If the property is a function, use it as the getter/setter
-			// otherwise, create a new compute that returns the value of a property on `this`
+
 			if (can.isFunction(this.constructor.prototype[prop])) {
+				
 				return can.compute(this[prop], this);
 			} else {
+				
 				var reads = prop.split("."),
-					last = reads.length - 1,
-					options = {
-						args: []
-					};
+					last = reads.length - 1;
+					
 				return can.compute(function (newVal) {
 					if (arguments.length) {
 						can.compute.read(this, reads.slice(0, last))
 							.value.attr(reads[last], newVal);
 					} else {
-						return can.compute.read(this, reads, options)
-							.value;
+						return can.compute.read(this, reads, {
+							args: []
+						}).value;
 					}
 				}, this);
 			}
 
 		},
 		
-		
+		// ### each
+		// loops through all the key-value pairs on this map.
 		each: function () {
 			return can.each.apply(undefined, [this].concat(can.makeArray(arguments)));
 		},
 		
-		
-
+		// ### _each
 		// Iterator that does not trigger live binding.
 		_each: function (callback) {
 			var data = this.___get();
@@ -591,18 +616,12 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 		},
 	});
 
+	// ### etc
 	// Setup on/off aliases
 	Map.prototype.on = Map.prototype.bind;
 	Map.prototype.off = Map.prototype.unbind;
-
-	var setupComputeAttr = function(map, computedAttrs, attrName){
-		computedAttrs[attrName] = {
-			count: 0,
-			// Make the context of the compute the current Map
-			compute: map[attrName].clone(map)
-		};
-	};
-
+	Map.on = Map.bind;
+	Map.off = Map.unbind;
 
 	return Map;
 });

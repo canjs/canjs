@@ -125,16 +125,16 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/list', function (can,
 		return value === null || !type ? value : converter.call(Class, value, oldVal, function () {}, type);
 	};
 	
-	var oldSerialize = mapHelpers._serialize;
-	mapHelpers._serialize = function(map, name, val){
+	var oldSerialize = can.Map.prototype.___serialize;
+	can.Map.prototype.___serialize = function(name, val){
 		
-		var constructor = map.constructor,
+		var constructor = this.constructor,
 			type = constructor.attributes ? constructor.attributes[name] : 0,
 			converter = constructor.serialize ? constructor.serialize[type] : 0;
 		
 		return val && typeof val.serialize === 'function' ?
 			// call attrs or serialize to get the original data back
-			oldSerialize.apply(this, arguments) :
+			oldSerialize.call(this, name, val) :
 			// otherwise if we have  a converter
 			converter ?
 			// use the converter

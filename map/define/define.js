@@ -95,8 +95,8 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 			}
 		}
 
-		// Replace original this.attr
-		this._get = originalGet;
+		// delete this._get which will default to the one on the prototype.
+		delete this._get;
 
 		return defaults;
 	};
@@ -308,25 +308,22 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 			var def = this.define[attr],
 				get = def.get;
 			if (get) {
-				this._computedAttrs[attr] = {
-					count: 0,
-					compute: can.compute.async(undefined, get, this)
-				};
+				mapHelpers.addComputedAttr(this, attr, can.compute.async(undefined, get, this));
 			}
 		}
 	};
 	// Overwrite the invidual property serializer b/c we will overwrite it.
-	var oldSingleSerialize = mapHelpers._serialize;
-	mapHelpers._serialize = function(map, name, val){
-		return serializeProp(map, name, val);
+	var oldSingleSerialize = proto.___serialize;
+	proto.___serialize = function(name, val){
+		return serializeProp(this, name, val);
 	};
 	// If the map has a define serializer for the given attr, run it.
 	var serializeProp = function(map, attr, val) {
 		var serializer = attr === "*" ? false : getPropDefineBehavior("serialize", attr, map.define);
 		if(serializer === undefined) {
-			return oldSingleSerialize.apply(this, arguments);
+			return oldSingleSerialize.call(map, attr, val);
 		} else if(serializer !== false){
-			return typeof serializer === "function" ? serializer.call(map, val, attr): oldSingleSerialize.apply(this, arguments);
+			return typeof serializer === "function" ? serializer.call(map, val, attr): oldSingleSerialize.call(map, attr, val);
 		}
 	};
 	

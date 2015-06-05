@@ -741,7 +741,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		var bindCallbacks = 0;
 		
 		getMap.bind("value", function(ev, newVal, oldVal){
-			//debugger;
+
 			switch(bindCallbacks) {
 				case 0:
 					equal(newVal, 2, "0 - bind called with new val");
@@ -1031,7 +1031,6 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			define: {
 				count: {
 					get: function(lastVal) {
-						debugger;
 						ok(false, 'Should not be called');
 						return lastVal;
 					}

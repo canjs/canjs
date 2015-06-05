@@ -1,37 +1,15 @@
 // # can/map/map_hepers
 // Helper functions that are primarily used to serialize
-// a map, or create a map from a JS Object.
+// a map, or track the maps created from plain JavaScript objects.
+// `can.Map` handles cycles in objects nicely!
 
 steal('can/util', function(){
 	
-	
-	// ## Helpers
-
-	// A temporary map of Maps that have been made from plain JS objects.
-	var madeMap = null;
-	// Clears out map of converted objects.
-	var teardownMap = function () {
-		for (var cid in madeMap) {
-			if (madeMap[cid].added) {
-				delete madeMap[cid].obj._cid;
-			}
-		}
-		madeMap = null;
-	};
-	// Retrieves a Map instance from an Object.
-	var getMapFromObject = function (obj) {
-		return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
-	};
-	// A temporary map of Maps
-	var serializeMap = null;
-	
-	var mapHelpers;
-	return mapHelpers = {
-		// ### can.mapHelpers.attrParts
+	var mapHelpers = {
+		// ### mapHelpers.attrParts
 		// Parses attribute name into its parts.
 		attrParts: function (attr, keepKey) {
 			//Keep key intact
-		
 			if (keepKey ) {
 				return [attr];
 			}
@@ -39,23 +17,141 @@ steal('can/util', function(){
 			return typeof attr === "object" ? attr : ("" + attr)
 				.split(".");
 		},
-		getMapFromObject: getMapFromObject,
-		/**
-		 * @hide
-		 * Tracks Map instances created from JS Objects
-		 * @param {Object} obj original Object
-		 * @param {can.Map} instance the can.Map instance
-		 * @return {Function} function to clear out object mapping
-		 */
+
+		// ### can.mapHelpers.canMakeObserve
+		// Determines if an object can be made into an observable.
+		canMakeObserve: function (obj) {
+			return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
+		},
+		
+		// ### mapHelpers.serialize
+		// Serializes a Map or Map.List by recursively calling the `how`
+		// method on any child objects. This is able to handle
+		// cycles.
+		// `map` - the map or list to serialize.
+		// `how` - the method to call recursively.
+		// `where` - the target Object or Array that becomes the serialized result.
+		serialize: (function(){
+			
+			// A temporary mapping of map cids to the serialized result.
+			var serializeMap = null;
+			
+			return function (map, how, where) {
+				var cid = can.cid(map),
+					firstSerialize = false;
+				
+				// If there isn't an existing serializeMap, this means
+				// this is the initial non-recursive call to this function. 
+				// We mark this  as the first call, and then setup the serializeMap.
+				// The serialize map is further devided into `how` because
+				// `.serialize` might call `.attr`. 
+				if(!serializeMap) {
+					firstSerialize = true;
+					serializeMap = {
+						attr: {},
+						serialize: {}
+					};
+				}
+				
+				serializeMap[how][cid] = where;
+				// Go through each property.
+				map.each(function (val, name) {
+					// If the value is an `object`, and has an `attr` or `serialize` function.
+					var result,
+						isObservable =  can.isMapLike(val),
+						serialized = isObservable && serializeMap[how][can.cid(val)];
+						
+					if( serialized ) {
+						result = serialized;
+					} else {
+						// special attr or serializer
+						if(map["___"+how]) {
+							result =  map["___"+how](name, val);
+						} else {
+							result = mapHelpers.getValue(map, name, val, how);
+						}
+					}
+					// this is probably removable
+					if(result !== undefined){
+						where[name] = result;
+					}
+				});
+			
+				if(firstSerialize) {
+					serializeMap = null;
+				}
+				return where;
+			};
+		})(),
+		
+		// ## getValue
+		// If `val` is an observable, calls `how` on it; otherwise
+		// returns the value of `val`.
+		getValue: function(map, name, val, how){
+			if( can.isMapLike(val) ) {
+				return val[how]();
+			} else {
+				return val;
+			}
+		},
+		
+		// ## define
+		// A hook to call whenever a Map is defined.  
+		// We need a better place for this.
+		define: null,
+		
+		// ## addComputedAttr
+		// Adds a compute so it will control the behavior of an
+		// attribute.  Each computedAttrs object has:
+		// - `compute` - the compute that will be read and updated.
+		// - `count` - the number of bindings to this individual property.
+		//   This is used to know when to bind `handler` to the compute.
+		// - `handler` - a function that when bound to `compute` forwards all
+		//   events to `map`.
+		addComputedAttr: function(map, attrName, compute){
+			map._computedAttrs[attrName] = {
+				compute: compute,
+				count: 0,
+				handler: function (ev, newVal, oldVal) {
+					can.batch.trigger(map, {
+						type: attrName,
+						batchNum: ev.batchNum,
+						target: map
+					}, [newVal, oldVal]);
+				}
+			};
+		},
+		
 		// ### can.mapHelpers.addToMap
-		// Tracks Map instances created from JS objects
-		addToMap: function (obj, instance) {
+		// Tracks map instances created from JS objects.
+		// This should be called whenever an instance is created for a particular object.
+		// This may return a `teardown` function that should be called after all instances
+		// might be created.
+		//
+		// While creating map instances from plain ole JS objects (POJOs), it's
+		// possible that the same JS object exists as two different properties and
+		// we want only one map instance created for one JS object.
+		//
+		// ```
+		// var obj = {name: "I am everywhere"}
+		// var map = new can.Map({obj1: obj, obj2: obj});
+		// ok( map.attr("obj1") === map.attr("obj2") )
+		// ```
+		// 
+		// This works by temporarily adding a `cid` to any found POJO object
+		// and storing it in a temporary Object that maps those `cid`s to 
+		// the POJO and the instance created for it.  
+		// The `teardown` function removes those temporary `cid`s and 
+		// clears the map for memory safety.
+		addToMap: function addToMap(obj, instance) {
 			var teardown;
+			
 			// Setup a fresh mapping if `madeMap` is missing.
 			if (!madeMap) {
 				teardown = teardownMap;
 				madeMap = {};
 			}
+			
 			// Record if Object has a `_cid` before adding one.
 			var hasCid = obj._cid;
 			var cid = can.cid(obj);
@@ -71,80 +167,34 @@ steal('can/util', function(){
 			}
 			return teardown;
 		},
-		/**
-		 * @hide
-		 * Determines if `obj` can be made into an observable
-		 * @param {Object} obj Object to check
-		 * @return {Boolean} whether `obj` can be made into an observable
-		 */
-		// ### can.mapHelpers.canMakeObserve
-		// Determines if an object can be made into an observable.
-		canMakeObserve: function (obj) {
-			return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
-		},
-		/**
-		 * @hide
-		 * Serializes a Map or Map.List
-		 * @param {can.Map|can.List} map The observable.
-		 * @param {String} how To serialize using `attr` or `serialize`.
-		 * @param {String} where Object or Array to put properties in.
-		 * @return {Object|Array} serialized Map or List data.
-		 */
-		// ### can.mapHelpers.serialize
-		// Serializes a Map or Map.List
-		serialize: function (map, how, where) {
-			var cid = can.cid(map),
-				firstSerialize = false;
-			if(!serializeMap) {
-				firstSerialize = true;
-				// Serialize might call .attr() so we need to keep different map
-				serializeMap = {
-					attr: {},
-					serialize: {}
-				};
-			}
-			serializeMap[how][cid] = where;
-			// Go through each property.
-			map.each(function (val, name) {
-				// If the value is an `object`, and has an `attrs` or `serialize` function.
-				var result,
-					isObservable =  can.isMapLike(val),
-					serialized = isObservable && serializeMap[how][can.cid(val)];
-				if( serialized ) {
-					result = serialized;
-				} else {
-					if(how === "serialize") {
-						result = mapHelpers._serialize(map, name, val);
-					} else {
-						result = mapHelpers._getValue(map, name, val, how);
-					}
-				}
-				// this is probably removable
-				if(result !== undefined){
-					where[name] = result;
-				}
-			});
 		
-			can.__observe(map, '__keys');
-			if(firstSerialize) {
-				serializeMap = null;
-			}
-			return where;
-		},
-		_serialize: function(map, name, val){
-			return mapHelpers._getValue(map, name, val, "serialize");
-		},
-		_getValue: function(map, name, val, how){
-			if( can.isMapLike(val) ) {
-				return val[how]();
-			} else {
-				return val;
-			}
-		},
-		define: null
+		// ### getMapFromObject
+		// Returns the map instance already created for this object `obj` or
+		// `undefined` if nothing has been already created.
+		getMapFromObject: function (obj) {
+			return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
+		}
 	};
 	
+	// ## POJOs to Map instance helpers
 	
+	// ### madeMap
+	// A temporary map of Maps that have been made from plain JS objects.
+	// `{POJO_CID: {obj: POJO, instance: MAP, added: Boolean}}`
+	var madeMap = null;
+	
+	// ### teardownMap
+	// Clears out map of converted objects and removes temporary `cids`.
+	var teardownMap = function () {
+		for (var cid in madeMap) {
+			if (madeMap[cid].added) {
+				delete madeMap[cid].obj._cid;
+			}
+		}
+		madeMap = null;
+	};
+	
+	return mapHelpers;
 });
 
 

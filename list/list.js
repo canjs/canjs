@@ -330,9 +330,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				}
 				if (args.length > 2) {
 					// make added items bubble to this list
-					for (i = 0, len = added.length; i < len; i++) {
-						bubble.set(this, i, added[i]);
-					}
+					bubble.addMany(this, added);
 					this._triggerChange("" + index, "add", added, removed);
 				}
 				can.batch.stop();
