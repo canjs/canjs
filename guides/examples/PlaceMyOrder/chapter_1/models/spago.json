@@ -1,0 +1,36 @@
+{
+  "name": "Spago",
+  "slug": "spago",
+  "images": {
+    "thumbnail": "images/1-thumbnail.jpg",
+    "owner": "images/1-owner.jpg",
+    "banner": "images/1-banner.jpg"
+  },
+  "address": {
+    "street": "3108 Winchester Ct.",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60045"
+  },
+  "menu": [
+    {
+      "name": "Spinach Fennel Watercress Ravioli",
+      "price": 35.99
+    }, {
+      "name": "Garlic Fries",
+      "price": 15.99
+    }, {
+      "name": "Herring in Lavender Dill Reduction",
+      "price": 45.99
+    }, {
+      "name": "Crab Pancakes with Sorrel Syrup",
+      "price": 35.99
+    }, {
+      "name": "Chicken with Tomato Carrot Chutney Sauce",
+      "price": 45.99
+    }, {
+      "name": "Onion fries",
+      "price": 15.99
+    }
+  ]
+}
