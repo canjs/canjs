@@ -1,3 +1,4 @@
+zip -r ch-0_canjs-getting-started.zip chapter_1/app/
 zip -r ch-1_canjs-getting-started.zip chapter_1/app/
 zip -r ch-2_canjs-getting-started.zip chapter_2/app/
 zip -r ch-3_canjs-getting-started.zip chapter_3/app/
