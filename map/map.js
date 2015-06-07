@@ -294,6 +294,12 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				
 			} else {
 				current = this._initializing ? undefined : this.___get( attr );
+				
+				// //Convert if there is a converter.  Remove in 3.0.
+				if (this.__convert) {
+					value = this.__convert(attr, value);
+				}
+				
 				this.__set(attr, this.__type(value, attr), current);
 			}
 		},
@@ -457,6 +463,11 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 						self.removeAttr(prop);
 					}
 					return;
+				}
+				
+				// Run converter if there is one. Remove in 3.0.
+				if (self.__convert) {
+					newVal = self.__convert( prop, newVal );
 				}
 				
 				if ( can.isMapLike(curVal) && mapHelpers.canMakeObserve(newVal) ) {
