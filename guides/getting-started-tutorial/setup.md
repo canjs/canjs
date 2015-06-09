@@ -151,6 +151,6 @@ chapter to learn more.
 - - -
 
 <span class="pull-left">[&lsaquo; Getting Started](Tutorial.html)</span>
-<span class="pull-right">[Application Foundations &rsaquo;](ApplicationFoundations.html)</span>
+<span class="pull-right">[Application Design &rsaquo;](ApplicationDesign.html)</span>
 
 </div>
