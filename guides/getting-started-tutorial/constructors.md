@@ -82,7 +82,7 @@ var actor = new Person('Abe', 'Vigoda');
 - - -
 
 <span class="pull-left">[&lsaquo; Application Design](ApplicationDesign.html)</span>
-<span class="pull-right">[Getting to Know Components &rsaquo;](Components.html)</span>
+<span class="pull-right">[Observables &rsaquo;](Observables.html)</span>
 
 </div>
 

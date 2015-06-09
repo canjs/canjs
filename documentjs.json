@@ -4,7 +4,7 @@
 			"glob": {
 				"ignore": [
 					"guides/*.md",
-				  	"guides/**/*.md"
+				  	"guides/**/*.md",
 					"{node_modules,bower_components}/**/*", 
 					"lib/**/*",
 					"test/**/*",
