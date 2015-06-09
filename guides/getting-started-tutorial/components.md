@@ -1,5 +1,5 @@
 @page Components Getting to Know Components
-@parent Tutorial 3
+@parent Tutorial 4
 @disableTableOfContents
 
 @body
