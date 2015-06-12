@@ -207,6 +207,7 @@ steal("can/map/attributes", "can/model", "can/util/fixture", "can/test", "steal-
 		project.bind('foo', function () {});
 		equal(task.attr('owner.name'), 'Michael', 'owner hash correctly modeled');
 		equal(project.attr('creator.name'), 'Michael', 'creator hash correctly modeled');
+		
 		task.attr({
 			owner: {
 				id: 29,
@@ -215,7 +216,9 @@ steal("can/map/attributes", "can/model", "can/util/fixture", "can/test", "steal-
 		});
 		equal(task.attr('owner.name'), 'Amy', 'Task correctly updated to Amy user model');
 		equal(task.attr('owner.id'), 29, 'Task correctly updated to Amy user model');
+		
 		equal(project.attr('creator.name'), 'Michael', 'Project creator should still be Michael');
+		
 		equal(project.attr('creator.id'), 17, 'Project creator should still be Michael');
 		equal(NestedAttrTest.User.store[17].id, 17, 'The model store should still have Michael associated by his id');
 	});

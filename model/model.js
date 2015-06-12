@@ -51,7 +51,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// `can.__observe` makes a note that `id` was just read.
 			can.__observe(inst, inst.constructor.id);
 			// Use `__get` instead of `attr` for performance. (But that means we have to remember to call `can.__observe`.)
-			return inst.__get(inst.constructor.id);
+			return inst.___get(inst.constructor.id);
 		},
 
 		// ## ajax
@@ -550,7 +550,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// ## can.Model#bind and can.Model#unbind
 			// These aren't actually implemented here, but their setup needs to be changed to account for the store.
 			_bindsetup: function () {
-				var modelInstance = this.__get(this.constructor.id);
+				var modelInstance = this.___get(this.constructor.id);
 				if (modelInstance != null) {
 					this.constructor.store[modelInstance ] = this;
 				}
@@ -632,7 +632,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 			// handler( 'change','1.destroyed' ). This is used
 			// to remove items on destroyed from Model Lists.
 			// but there should be a better way.
-			can.dispatch.call(this, {type:"change", target: this}, [funcName]);
+			can.dispatch.call(this, {type:funcName, target: this}, []);
 
 			//!steal-remove-start
 			can.dev.log("Model.js - " + constructor.shortName + " " + funcName);
@@ -667,9 +667,7 @@ steal('can/util', 'can/map', 'can/list', function (can) {
 				// Otherwise, set up the list like normal.
 				can.List.prototype.setup.apply(this, arguments);
 			}
-			this._init = 1;
 			this.bind('destroyed', can.proxy(this._destroyed, this));
-			delete this._init;
 		},
 		_destroyed: function (ev, attr) {
 			if (/\w+/.test(attr)) {

@@ -17,7 +17,7 @@ steal(function () {
 		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
 	can.isMapLike = function(obj){
-		return can.Map && (obj instanceof can.Map || obj && obj.__get);
+		return can.Map && (obj instanceof can.Map || obj && obj.___get);
 	};
 
 	var cid = 0;

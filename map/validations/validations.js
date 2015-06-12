@@ -152,7 +152,7 @@ steal('can/util', 'can/map', function (can) {
 				// funcs - the validation functions
 				addErrors = function (attr, funcs) {
 					can.each(funcs, function (func) {
-						var res = func.call(self, isTest ? self.__convert ? self.__convert(attr, newVal) : newVal : self.attr(attr));
+						var res = func.call(self, isTest ? newVal : self.attr(attr));
 						if (res) {
 							if (!errors[attr]) {
 								errors[attr] = [];
