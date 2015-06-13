@@ -345,7 +345,7 @@ together using the AppState, Routing, and `can.Map`'s define plugin.
 
 - - -
 
-<span class="pull-left">[&lsaquo; Models (& Fixtures)](Models.html)</span>
+<span class="pull-left">[&lsaquo; Event Handling](EventHandling.html)</span>
 <span class="pull-right">[Creating the Menu Component &rsaquo;](CreatingTheMenuComponent.html)</span>
 
 </div>

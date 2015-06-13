@@ -238,7 +238,7 @@ the DOM with the results. <a href="#ModelListReference">↩</a>
 
 - - -
 
-<span class="pull-left">[&lsaquo; More on Components](MoreOnComponents.html)</span>
-<span class="pull-right">[Sending Data to a Service &rsaquo;](SendingDataToAService.html)</span>
+<span class="pull-left">[&lsaquo; View Models](ViewModels.html)</span>
+<span class="pull-right">[Event Handling &rsaquo;](EventHandling.html)</span>
 
 </div>

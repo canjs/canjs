@@ -8,24 +8,21 @@
 
 - - - -
 **In this Chapter**
- - Stache Templates
  - Event Handling
- - Getting and Setting Scope Properties
- - View Models
 
-Get the code for: [chapter 3](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
 
 - - -
 
 To add an event handler, we have to make changes in two places:
 
 1. The view template
-2. The `can.Component` scope
+2. The `can.Component` view model
 
-Let's work with an example. You can add event handling to any element in the
+Let’s work with an example. You can add event handling to any element in the
 template by adding an attribute with the event name prefixed by `can-` (this
-event name can be [any standard DOM event](https://developer.mozilla.org/en-
-US/docs/Web/Events)). Going back to the `restaurant_list.stache` file, edit
+event name can be [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)).
+Going back to the `restaurant_list.stache` file, edit
 the select tag as follows:
 
 ```html
@@ -34,12 +31,12 @@ the select tag as follows:
 
 A `change` event handler was created by adding the `can-change` attribute to
 the select tag. The value of that attribute maps to a property on the
-`can.Component`'s scope, which acts as the event handler.
+`can.Component`’s view model, which acts as the event handler.
 
-Open up `restaurant_list.js` and modify the scope as follows:
+Open up `restaurant_list.js` and modify the view model as follows:
 
 ```
-scope: {
+viewModel: {
   restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
   currentRestaurant: undefined,
   restaurantSelected: function() {
@@ -58,7 +55,7 @@ should see something like this:
 
 ![](../can/guides/images/3_first_continued/SelectARestaurant.png)
 
-When you select an option from the dropdown and the select's change event is
+When you select an option from the dropdown and the select’s change event is
 fired, you should see:
 
 ![](../can/guides/images/3_first_continued/SelectARestaurantChangeEvent.png)
@@ -71,15 +68,15 @@ element in our template as follows:
 <select class="form-control" can-change="restaurantSelected" can-mousedown="handleMouseDown">
 ```
 
-And, then add the appropriate event handler to our scope. NOTE: Adding event
+And, then add the appropriate event handler to our view model. NOTE: Adding event
 handlers in this way directly binds the events to the element. This can impact
 performance in situations where you have many elements to bind events to. For
-more performant event binding, you can use the `can.Component`'s [events
+more performant event binding, you can use the `can.Component`’s [events
 property](../docs/can.Component.prototype.events.html).
 
 - - -
 
-<span class="pull-left">[&lsaquo; Components](Components.html)</span>
-<span class="pull-right">[View Models &rsaquo;](ViewModels.html)</span>
+<span class="pull-left">[&lsaquo; Models (& Fixtures)](Models.html)</span>
+<span class="pull-right">[Sending Data to a Service &rsaquo;](SendingDataToAService.html)</span>
 
 </div>

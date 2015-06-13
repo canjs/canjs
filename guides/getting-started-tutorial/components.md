@@ -120,6 +120,6 @@ referenced it as a Stache data key in our template.
 - - -
 
 <span class="pull-left">[&lsaquo; App State and Routing](AppStateAndRouting.html)</span>
-<span class="pull-right">[Event Handling &rsaquo;](EventHandling.html)</span>
+<span class="pull-right">[View Models &rsaquo;](ViewModels.html)</span>
 
 </div>

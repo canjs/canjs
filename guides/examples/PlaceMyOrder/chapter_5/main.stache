@@ -1,0 +1,22 @@
+{{> header.stache}}
+
+{{#eq page "home"}}
+  {{> home.stache}}
+{{/eq}}
+
+{{#eq page "restaurants"}}
+  {{#if slug}}
+    {{#eq action 'order'}}
+      <pmo-order slug="{slug}"></pmo-order>
+    {{/eq}}
+    {{^if action}}
+      <pmo-restaurant-details slug="{slug}"></pmo-restaurant-details>
+    {{/if}}
+  {{else}}
+    <pmo-restaurant-list></pmo-restaurant-list>
+  {{/if}}
+{{/eq}}
+
+{{#eq page "orders"}}
+  <pmo-order-history></pmo-order-history>
+{{/eq}}

@@ -102,7 +102,7 @@ adding REST service interaction with `can.Model`.
 
 - - -
 
-<span class="pull-left">[&lsaquo; Event Handling](EventHandling.html)</span>
+<span class="pull-left">[&lsaquo; Components](Components.html)</span>
 <span class="pull-right">[Models (& Fixtures) &rsaquo;](Models.html)</span>
 
 </div>
