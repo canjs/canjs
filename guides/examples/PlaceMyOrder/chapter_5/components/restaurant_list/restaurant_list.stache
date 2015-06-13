@@ -1,0 +1,27 @@
+<div class="restaurants">
+  <h2 class="page-header">Restaurants</h2>
+  <form class="form">
+    <div class="form-group">
+      <label>State</label>
+      <select can-value="{state}">
+        {{^if state}}
+        <option value="">Choose a state</option>
+        {{/if}}
+        {{#each states}}
+        <option value="{{name}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>City</label>
+      <select can-value="city">
+        {{^if city}}
+        <option value="">Choose a city</option>
+        {{/if}}
+        {{#each cities}}
+        <option>{{.}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </form>
+</div>
