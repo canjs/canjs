@@ -1,5 +1,5 @@
 @page EventHandling Event Handling
-@parent Tutorial 8
+@parent Tutorial 10
 @disableTableOfContents
 
 @body

@@ -1,5 +1,5 @@
 @page ViewModels View Models
-@parent Tutorial 9
+@parent Tutorial 8
 @disableTableOfContents
 
 @body
