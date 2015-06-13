@@ -1739,5 +1739,51 @@ steal("can/model", "can/test", "can/util/fixture", "steal-qunit", function () {
 
 	});
 
+    test("Extend the extended list's Map property #1745", function(){
+
+        var myMap = can.Map.extend({
+            publisher: 'Julian'
+        });
+
+        var Todo = can.Model.extend({
+            findAll: 'GET /tasks'
+        },{});
+
+        Todo.List = Todo.List.extend({
+            Map: myMap
+        }, {});
+
+        var todoListMap = new Todo.List.Map();
+
+        ok(todoListMap instanceof myMap, "The Map property of Todo.List is set correct and can be used #1745");
+    });
+
+    test("foo", function(){
+        can.fixture("GET /tasks",function(){
+            return [
+                {id: 1, name: "task 1"},
+                {id: 2, name: "task 2"}
+            ];
+        });
+
+        var myMap = can.Map.extend({
+            publisher: 'Julian'
+        });
+
+        var Todo = can.Model.extend({
+            findAll: 'GET /tasks'
+        },{});
+
+        Todo.List = Todo.List.extend({
+            Map: myMap
+        }, {});
+
+        Todo.findAll({}, function(tasks){
+
+            ok(tasks[0] instanceof Todo.List.Map, "Task-List-Map is an instance of List.Map");
+            ok(tasks[0] instanceof myMap, "Task-List-Map is an instance of myMap");
+        });
+    })
+
 });
 
