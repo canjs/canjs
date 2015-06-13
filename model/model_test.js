@@ -389,7 +389,7 @@ steal("can/model", "can/test", "can/util/fixture", "steal-qunit", function () {
 		});
 	});
 	test('isNew', function () {
-        can.Model('Person');
+		can.Model('Person');
 		var p = new Person();
 		ok(p.isNew(), 'nothing provided is new');
 		var p2 = new Person({
@@ -1740,67 +1740,66 @@ steal("can/model", "can/test", "can/util/fixture", "steal-qunit", function () {
 
 	});
 
-    test("Extend the extended list's Map property #1745", function(){
+	test("Extend the extended list's Map property #1745", function(){
 
-        var myMap = can.Map.extend({
-            publisher: 'Julian'
-        });
+		var myMap = can.Map.extend({
+			publisher: 'Julian'
+		});
 
-        var Todo = can.Model.extend({
-            findAll: 'GET /tasks'
-        },{});
+		var Todo = can.Model.extend({
+			findAll: 'GET /tasks'
+		},{});
 
-        Todo.List = Todo.List.extend({
-            Map: myMap
-        }, {});
+		Todo.List = Todo.List.extend({
+			Map: myMap
+		}, {});
 
-        var todoListMap = new Todo.List.Map();
+		var todoListMap = new Todo.List.Map();
 
-        ok(todoListMap instanceof myMap, "The Map property of Todo.List is set correct and can be used #1745");
-    });
+		ok(todoListMap instanceof myMap, "The Map property of Todo.List is set correct and can be used #1745");
+	});
 
-    test("can.Model.List.Map inheritance from griven Map in can.Model.List", function(){
+	test("can.Model.List.Map inheritance from griven Map in can.Model.List", function(){
 
-        can.fixture("GET /tasks",function(){
-            return [
-                {customid: 1, name: "task 1"},
-                {customid: 2, name: "task 2"}
-            ];
-        });
+		can.fixture("GET /tasks",function(){
+			return [
+				{customid: 1, name: "task 1"},
+				{customid: 2, name: "task 2"}
+			];
+		});
 
-        can.fixture('PUT /tasks/{id}', function() {
-            return { customid: 1, updated: true };
-        });
+		can.fixture('PUT /tasks/{id}', function() {
+			return { customid: 1, updated: true };
+		});
 
-        var myMap = can.Map.extend({
-            publisher: 'Julian'
-        });
+		var myMap = can.Map.extend({
+			publisher: 'Julian'
+		});
 
-        var Todo = can.Model.extend({
-            id: "customid",
-            findAll: 'GET /tasks',
-            update: "PUT /tasks/{customid}"
-        },{});
+		var Todo = can.Model.extend({
+			id: "customid",
+			findAll: 'GET /tasks',
+			update: "PUT /tasks/{customid}"
+		},{});
 
-        Todo.List = Todo.List.extend({
-            Map: myMap
-        }, {});
-        stop();
+		Todo.List = Todo.List.extend({
+			Map: myMap
+		}, {});
+		stop();
 
-        Todo.findAll({}, function(tasks){
-            equal(tasks[0].attr('publisher'), 'Julian', "ok");
-            ok(tasks[0] instanceof Todo.List.Map, "Task-List-Map is an instance of List.Map");
-            ok(tasks[0] instanceof myMap, "Task-List-Map is an instance of myMap");
+		Todo.findAll({}, function(tasks){
+			equal(tasks[0].attr('publisher'), 'Julian', "ok");
+			ok(tasks[0] instanceof Todo.List.Map, "Task-List-Map is an instance of List.Map");
+			ok(tasks[0] instanceof myMap, "Task-List-Map is an instance of myMap");
 
 
-            tasks[0].save(function(res) {
-                ok(res.updated, 'put override called with object');
-                start();
-            });
+			tasks[0].save(function(res) {
+				ok(res.updated, 'put override called with object');
+				start();
+			});
 
-        });
-
-    })
+		});
+	});
 
 });
 
