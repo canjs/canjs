@@ -11,7 +11,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -262,6 +262,6 @@ adding REST service interaction with `can.Model`.
 - - -
 
 <span class="pull-left">[&lsaquo; Components](Components.html)</span>
-<span class="pull-right">[Models (& Fixtures) &rsaquo;](Models.html)</span>
+<span class="pull-right">[Data Models and Fixtures &rsaquo;](DataModelsAndFixtures.html)</span>
 
 </div>

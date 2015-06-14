@@ -12,11 +12,11 @@
  - Configuring and Downloading CanJS
  - Application Bootstrap
 
-Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
 
 - - -
 
-To begin, we’ll use an [example project](https://github.com/bitovi/canjs/blob/guides-overhaul/guides/examples/PlaceMyOrder/ch-0_canjs-getting-started.zip?raw=true)
+To begin, we’ll use an [example project](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-0_canjs-getting-started.zip?raw=true)
 that has all of the dependencies required for the sample app that we’re going
 to build. The example project also has some CSS and images to make our example
 app a little bit more stylish.
