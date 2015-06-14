@@ -1,5 +1,5 @@
 @page EventHandling Event Handling
-@parent Tutorial 10
+@parent Tutorial 11
 @disableTableOfContents
 
 @body
@@ -10,7 +10,7 @@
 **In this Chapter**
  - Event Handling
 
-Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 8](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -76,7 +76,7 @@ property](../docs/can.Component.prototype.events.html).
 
 - - -
 
-<span class="pull-left">[&lsaquo; Data Models and Fixtures](DataModelsAndFixtures.html)</span>
+<span class="pull-left">[&lsaquo; Loading States](LoadingStates.html)</span>
 <span class="pull-right">[Sending Data to a Service &rsaquo;](SendingDataToAService.html)</span>
 
 </div>

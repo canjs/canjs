@@ -40,7 +40,8 @@ var RestaurantListViewModel = can.Map.extend({
 		},
 		city: {
 			value: null
-		}
+		},
+		// Restaurant code will go here
 	}
 });
 

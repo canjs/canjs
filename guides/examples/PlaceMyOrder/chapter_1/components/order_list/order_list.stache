@@ -1,0 +1,63 @@
+<h4>{{title}}</h4>
+
+{{#each orders}}
+  <div class="order {{status}}">
+    <address>
+      {{name}} <br />{{address}} <br />{{phone}}
+    </address>
+
+    <div class="items">
+      <ul>
+        {{#each items}}<li>{{name}}</li>{{/each}}
+      </ul>
+    </div>
+
+    <div class="total">${{total}}</div>
+
+    <div class="actions">
+      {{#eq status 'new'}}
+        <span class="badge">New Order!</span>
+        <p class="action">
+          Mark as:
+          <a href="javascript://" (click)="{markAs 'preparing'}">
+            Preparing
+          </a>
+        </p>
+      {{/eq}}
+
+      {{#eq status 'preparing'}}
+        <span class="badge">Preparing</span>
+        <p class="action">
+          Mark as:
+          <a href="javascript://" (click)="{markAs 'delivery'}">
+            Out for delivery
+          </a>
+        </p>
+      {{/eq}}
+
+      {{#eq status 'delivery'}}
+        <span class="badge">Out for delivery</span>
+        <p class="action">
+          Mark as:
+          <a href="javascript://" (click)="{markAs 'delivered'}">
+            Delivered
+          </a>
+        </p>
+      {{/eq}}
+
+      {{#eq status 'delivered'}}
+        <span class="badge">Delivered</span>
+      {{/eq}}
+
+      <p class="action">
+        <a href="javascript://" (click)="{destroy}">
+          Delete
+        </a>
+      </p>
+    </div>
+  </div>
+{{/each}}
+
+{{^if orders.length}}
+  <div class="order empty">{{emptyMessage}}</div>
+{{/if}}

@@ -1,8 +1,6 @@
 {{#with order}}
   <h3>Thanks for your order {{name}}!</h3>
-  <div>
-  	<label class="control-label">Confirmation Number: {{_id}}</label>
-  </div>
+  <div><label class="control-label">Confirmation Number: {{_id}}</label></div>
 
   <h4>Items ordered:</h4>
   <ul class="list-group panel">

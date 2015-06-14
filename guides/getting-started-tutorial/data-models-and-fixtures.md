@@ -329,6 +329,6 @@ should work the same as well.
 - - -
 
 <span class="pull-left">[&lsaquo; View Models](ViewModels.html)</span>
-<span class="pull-right">[Event Handling &rsaquo;](EventHandling.html)</span>
+<span class="pull-right">[Loading States &rsaquo;](LoadingStates.html)</span>
 
 </div>

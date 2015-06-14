@@ -38,6 +38,8 @@ Open your `components/restaurant_list/restaurant_list.stache` and edit it as fol
     </div>
     <!-- The city select will go here -->
   </form>
+
+  <!-- Restaurants code will go here -->
 </div>
 ```
 

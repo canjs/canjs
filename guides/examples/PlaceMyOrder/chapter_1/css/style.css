@@ -3398,7 +3398,7 @@ fieldset[disabled] .restaurant-header .btn.active {
   width: 768px;
   margin: 0 auto;
   border: 1px solid #eeeeee;
-  background: #ffffff url(file:/Library/WebServer/Documents/GitHub/place-my-order/public/images/loading.gif) no-repeat center center;
+  background: #ffffff url(../images/loading.gif) no-repeat center center;
   padding: 15px;
   margin-bottom: 15px;
   min-height: 60px;

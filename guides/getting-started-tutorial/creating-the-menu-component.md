@@ -1,5 +1,5 @@
 @page CreatingTheMenuComponent Creating the Menu Component
-@parent Tutorial 12
+@parent Tutorial 13
 @disableTableOfContents
 
 @body
