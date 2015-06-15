@@ -15,6 +15,8 @@ how simple it is to get an application up and running using CanJS, we’ll
 develop one together. This guide will walk you through the steps of building
 a small e-commerce app with CanJS called [Place My Order](http://place-my-order.com/).
 
+![place-my-order.com home page](../can/guides/images/application-design/Home.png)
+
 ## The Basics
 Every CanJS application contains:
 
