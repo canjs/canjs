@@ -14,61 +14,130 @@ Get the code for: [chapter 8](https://github.com/bitovi/canjs/blob/minor/guides/
 
 - - -
 
-To add an event handler, we have to make changes in two places:
+CanJS makes it easy to handle any
+[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)
+, such as a `change` event, in your component. To add an event handler, we
+have to make changes in two places:
 
 1. The view template
 2. The `can.Component` view model
 
-Let’s work with an example. You can add event handling to any element in the
-template by adding an attribute with the event name prefixed by `can-` (this
-event name can be [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)).
-Going back to the `restaurant_list.stache` file, edit
-the select tag as follows:
+Before we can work with an example, let’s get the restaurant details page
+working. When you go to the Restaurants page in your browser, then select
+a state and city, then click the “Place My Order” button next to a restaurant,
+the page will have a `pmo-restaurant-details` element without any content.
+As we’ve discussed earlier, you need to include the component’s script
+file to register the component with CanJS. While we’re add it, we’re going to
+include the scripts for the rest of the components that we’re going to use.
+Let’s edit the `index.html` file by replacing these lines:
+
+```
+	<!-- Replace with order component script -->
+	<!-- Replace with order details component script -->
+	<!-- Replace with order history component script -->
+	<!-- Replace with order list component script -->
+	<!-- Replace with order phone component script -->
+```
+
+…with these lines:
+
+```
+	<script src="components/order/order.js"></script>
+	<script src="components/order_details/order_details.js"></script>
+	<script src="components/order_list/order_list.js"></script>
+	<script src="components/order_history/order_history.js"></script>
+	<script src="components/order_phone/order_phone.js"></script>
+```
+
+We have just one more file we need to include before we move on. This
+section is going to introduce the concept of orders from a restaurant, and
+we’ll want to have an `Order` model, so let’s find this line:
+
+```
+	<!-- Replace with order model script -->
+```
+
+…and replace it with this line:
+
+```
+    <script src="models/order.js"></script>
+```
+
+Now if you refresh the page, you’ll see the details for the Spago restaurant.
+If you click the “Order from Spago” button, you’ll find yourself with a menu,
+name field, and address field; however, we’re missing one important piece of
+customer information: a phone number. Let’s build a `phone-validator`
+component to collect this information, and add some event handling to
+validate the field as the user types.
+
+You can add event handling to any element in the template by adding an
+attribute with the event name prefixed by `can-`; again, this event name can be
+[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)
+. Let’s open the `components/order_phone/order_phone.stache file and add the
+following:
 
 ```html
-<select class="form-control" can-change="restaurantSelected">
+<div class="form-group{{#if error}} has-error{{/if}}">
+  <label>Phone:</label>
+  <input name="phone" type="text" (keyup)="{setPhoneValue @element.val}">
+  {{#if error}}
+    {{#eq order.phone '911'}}
+      <p>That's not your real number :-(</p>
+    {{else}}
+      <p>Please enter a phone number in the format 555-555-5555</p>
+    {{/eq}}
+  {{/if}}
+</div>
 ```
 
-A `change` event handler was created by adding the `can-change` attribute to
-the select tag. The value of that attribute maps to a property on the
-`can.Component`’s view model, which acts as the event handler.
-
-Open up `restaurant_list.js` and modify the view model as follows:
+Notice the `<input />` element with a `(keyup)` event handler. Whenever there
+is a `keyup` event in the `input`, the code in the value will be executed. In
+this case, we’re passing `@element.val` to the `setPhoneValue` helper. Let’s
+add the component’s JavaScript to the `components/order_phone/order_phone.js`
+file:
 
 ```
-viewModel: {
-  restaurants: [{name: 'First'}, {name: 'Second'}, {name: 'Third'}],
-  currentRestaurant: undefined,
-  restaurantSelected: function() {
-    alert('You\'ve selected a restaurant');
+var PhoneViewModel = can.Map.extend({
+  error: function(){
+    var phone = this.attr("order").attr("phone");
+    return phone && (!/^(\d|-)*$/.test(phone) || phone === "911");
+  },
+
+  setPhoneValue: function(val){
+    this.attr('order').attr('phone', val);
   }
-}
+});
+
+can.Component.extend({
+  tag: 'phone-validator',
+  viewModel: PhoneViewModel,
+  template: can.view('components/order_phone/order_phone.stache')
+});
 ```
 
-In that modification, we added properties that map to all of the data keys and
-event handlers we defined in our Stache template.
+Here you can see the `setPhoneValue` helper function, which takes the `val`
+passed to it by the template and sets the `phone` property of the
+component’s `order` property to `val`.
 
-![](../can/guides/images/3_first_continued/MapOfScopeToTemplate.png)
-
-Go back out to the application in your browser and refresh the page. You
-should see something like this:
-
-![](../can/guides/images/3_first_continued/SelectARestaurant.png)
-
-When you select an option from the dropdown and the select’s change event is
-fired, you should see:
-
-![](../can/guides/images/3_first_continued/SelectARestaurantChangeEvent.png)
-
-You can place as many event handlers as you need on an element. If we wanted
-to add a mousedown event handler, all we would have to do is edit the select
-element in our template as follows:
+But how do errors show up? The template is using the `error` property on the
+component, which looks like this:
 
 ```
-<select class="form-control" can-change="restaurantSelected" can-mousedown="handleMouseDown">
+  error: function(){
+    var phone = this.attr("order").attr("phone");
+    return phone && (!/^(\d|-)*$/.test(phone) || phone === "911");
+  },
 ```
 
-And, then add the appropriate event handler to our view model. NOTE: Adding event
+Notice that the `error` property uses `this.attr("order").attr("phone")` in
+its getter. Because of CanJS’s [observables](Observables.html), CanJS is
+aware of us setting that value in our `setPhoneValue` helper, and thus only
+runs the getter again (what we like to call “recomputing the value”) when
+the value has changed. When the `setPhoneValue` helper sets the value, CanJS
+recomputes the `error` property’s value, which will return an error if you
+type “911” or anything that doesn’t look like a phone number.
+
+Note that you can place as many event handlers as you need on an element. Adding event
 handlers in this way directly binds the events to the element. This can impact
 performance in situations where you have many elements to bind events to. For
 more performant event binding, you can use the `can.Component`’s [events
