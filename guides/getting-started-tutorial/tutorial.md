@@ -13,16 +13,23 @@ framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. To see just
 how simple it is to get an application up and running using CanJS, we’ll
 develop one together. This guide will walk you through the steps of building
-a small e-commerce app with CanJS.
+a small e-commerce app with CanJS called [Place My Order](http://place-my-order.com/).
 
 ## The Basics
 Every CanJS application contains:
 
+- [Observables](#observables),
 - [Models](#models),
 - [Views](#views),
 - [Components](#components),
 - [Application State](#appstate), and
 - [Routing](#routing)
+
+<a name="observables"></a>
+### Observables
+Observable objects provide a way for you make changes to data and listen to
+those changes. Observables such as `can.List` and `can.Map` provide the
+foundation for updating model objects, views, and even routes in your app.
 
 <a name="models"></a>
 ### Models
