@@ -3,7 +3,7 @@
     <div class="loading"></div>
   {{else}}
     {{#value}}
-      <div class="restaurant-header" style="background-image: url(../app/{{images.banner}});">
+      <div class="restaurant-header" style="background-image: url({{images.banner}});">
         <div class="background">
           <h2>{{name}}</h2>
 
@@ -26,7 +26,7 @@
       <div class="restaurant-content">
         <h3>The best food this side of the Mississippi</h3>
 
-        <p class="description"><img src="../app/{{images.owner}}" />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum purus magna, nec pulvinar lacus gravida gravida. Quisque posuere a sapien vel aliquet. Vivamus feugiat sagittis eros, eget elementum mi malesuada ut. Aliquam dapibus diam vehicula dui rutrum condimentum. Donec in nibh fermentum, aliquet neque sed, gravida augue. Nunc convallis pretium felis quis elementum. Etiam vitae nunc magna. Mauris elementum purus id dolor euismod, sit amet aliquam augue consequat. Sed sagittis condimentum pulvinar. Nullam mattis ligula augue. Aliquam vitae lectus nec enim posuere ultricies sed viverra ligula. Sed nec lacus tortors.</p>
+        <p class="description"><img src="{{images.owner}}" />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fermentum purus magna, nec pulvinar lacus gravida gravida. Quisque posuere a sapien vel aliquet. Vivamus feugiat sagittis eros, eget elementum mi malesuada ut. Aliquam dapibus diam vehicula dui rutrum condimentum. Donec in nibh fermentum, aliquet neque sed, gravida augue. Nunc convallis pretium felis quis elementum. Etiam vitae nunc magna. Mauris elementum purus id dolor euismod, sit amet aliquam augue consequat. Sed sagittis condimentum pulvinar. Nullam mattis ligula augue. Aliquam vitae lectus nec enim posuere ultricies sed viverra ligula. Sed nec lacus tortors.</p>
         <p class="order-link">
           <a class="btn" can-href="{ page='restaurants' slug=slug action='order'}">
             Order from {{name}}
