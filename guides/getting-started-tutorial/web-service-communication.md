@@ -74,6 +74,6 @@ order history functionality.
 - - -
 
 <span class="pull-left">[&lsaquo; Event Handling](EventHandling.html)</span>
-<span class="pull-right">[Creating the Menu Component &rsaquo;](CreatingTheMenuComponent.html)</span>
+<span class="pull-right">[Recap &rsaquo;](Recap.html)</span>
 
 </div>
