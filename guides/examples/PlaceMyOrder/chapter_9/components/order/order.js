@@ -25,6 +25,9 @@ var OrderViewModel = can.Map.extend({
   },
 
   placeOrder: function() {
+    var order = this.attr('order');
+    this.attr('saveStatus', order.save());
+    return false;
   },
 
   startNewOrder: function() {

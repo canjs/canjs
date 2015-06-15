@@ -146,7 +146,7 @@ If you go out to your application, and refresh it, you should see the following:
 
 - - -
 
-<span class="pull-left">[&lsaquo; Sending Data to a Service](SendingDataToAService.html)</span>
+<span class="pull-left">[&lsaquo; Web Service Communication](WebServiceCommunication.html)</span>
 <span class="pull-right">[App State & Basic Routing &rsaquo;](AppState.html)</span>
 
 </div>

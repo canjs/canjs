@@ -146,6 +146,6 @@ property](../docs/can.Component.prototype.events.html).
 - - -
 
 <span class="pull-left">[&lsaquo; Loading States](LoadingStates.html)</span>
-<span class="pull-right">[Sending Data to a Service &rsaquo;](SendingDataToAService.html)</span>
+<span class="pull-right">[Web Service Communication &rsaquo;](WebServiceCommunication.html)</span>
 
 </div>
