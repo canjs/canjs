@@ -414,7 +414,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		ready: function (val) {
 			if (val !== true) {
 				can.route._setup();
-				if(!can.isNode) {
+				if(can.isBrowserWindow) {
 					can.route.setState();
 				}
 			}
