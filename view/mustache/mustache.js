@@ -268,7 +268,7 @@ steal('can/util',
 					 *
 					 *     {{#chapters}}
 					 *        <li>{{title}} - {{name}}</li>
-					 *     {{chapters}}
+					 *     {{/chapters}}
 					 *
 					 * With:
 					 *
@@ -992,7 +992,7 @@ steal('can/util',
 									 *
 									 * The template:
 									 *
-									 *     <p>{{countTo number}}{{num}}{{/countTo}}</p>
+									 *     <p>{{#countTo number}}{{num}}{{/countTo}}</p>
 									 *
 									 * Rendered with:
 									 *
