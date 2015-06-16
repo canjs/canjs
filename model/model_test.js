@@ -1801,5 +1801,18 @@ steal("can/model", "can/test", "can/util/fixture", "steal-qunit", function () {
 		});
 	});
 
+	test("Define Plugin is working with can.Model", function() {
+		var Todo = can.Model.extend({
+		},{
+			define: {
+				status: {
+					value: "new"
+				}
+			}
+		});
+
+		var todo = new Todo();
+		equal(todo.attr('status'), 'new', "new status");
+	});
 });
 
