@@ -115,6 +115,8 @@ requested.
 Go ahead and refresh the Restaurants page in your browser. Now, we can
 select a state, a city, and then immediately see a list of restaurants!
 
+![Restaurant list](../can/guides/images/application-design/RestaurantList.png)
+
 - - -
 
 <span class="pull-left">[&lsaquo; Data Models and Fixtures](DataModelsAndFixtures.html)</span>

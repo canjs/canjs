@@ -26,12 +26,15 @@ Before we can work with an example, let’s get the restaurant details page
 working. When you go to the Restaurants page in your browser, then select
 a state and city, then click the “Place My Order” button next to a restaurant,
 the page will have a `pmo-restaurant-details` element without any content.
+
+![Empty pmo-restaurant-details element](../can/guides/images/event-handling/EmptyRestaurantDetails.png)
+
 As we’ve discussed earlier, you need to include the component’s script
-file to register the component with CanJS. While we’re add it, we’re going to
+file to register the component with CanJS. While we’re at it, we’re going to
 include the scripts for the rest of the components that we’re going to use.
 Let’s edit the `index.html` file by replacing these lines:
 
-```
+```html
 	<!-- Replace with order component script -->
 	<!-- Replace with order details component script -->
 	<!-- Replace with order history component script -->
@@ -41,7 +44,7 @@ Let’s edit the `index.html` file by replacing these lines:
 
 …with these lines:
 
-```
+```html
 	<script src="components/order/order.js"></script>
 	<script src="components/order_details/order_details.js"></script>
 	<script src="components/order_list/order_list.js"></script>
@@ -64,6 +67,9 @@ we’ll want to have an `Order` model, so let’s find this line:
 ```
 
 Now if you refresh the page, you’ll see the details for the Spago restaurant.
+
+![Restaurant details page](../can/guides/images/application-design/RestaurantDetails.png)
+
 If you click the “Order from Spago” button, you’ll find yourself with a menu,
 name field, and address field; however, we’re missing one important piece of
 customer information: a phone number. Let’s build a `phone-validator`
@@ -73,7 +79,7 @@ validate the field as the user types.
 You can add event handling to any element in the template by adding an
 attribute with the event name prefixed by `can-`; again, this event name can be
 [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)
-. Let’s open the `components/order_phone/order_phone.stache file and add the
+. Let’s open the `components/order_phone/order_phone.stache` file and add the
 following:
 
 ```html
@@ -136,6 +142,8 @@ runs the getter again (what we like to call “recomputing the value”) when
 the value has changed. When the `setPhoneValue` helper sets the value, CanJS
 recomputes the `error` property’s value, which will return an error if you
 type “911” or anything that doesn’t look like a phone number.
+
+![Restaurant order error when you type 911 as your phone number](../can/guides/images/event-handling/RestaurantOrderError911.png)
 
 Note that you can place as many event handlers as you need on an element. Adding event
 handlers in this way directly binds the events to the element. This can impact

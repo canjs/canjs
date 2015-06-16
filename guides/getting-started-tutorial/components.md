@@ -32,7 +32,7 @@ the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
-Let’s dive in to the good stuff, and start working with the app! Put the
+Let’s dive in to the good stuff and start working with the app! Put the
 following code inside `components/restaurant_list/restaurant_list.js`:
 
 ```
@@ -67,6 +67,8 @@ in the index.html file. Find this line:
 Now, go back out to your app in the browser and refresh it. On the Restaurants page, you should
 see it printing: "Hello Restaurant Customer".
 
+![Hello Restaurant Customer message](../can/guides/images/components/HelloRestaurantCustomer.png)
+
 ### Auto Instantiation
 
 If you recall from [our previous discussion regarding `can.Construct`](Constructors.html), whenever you
@@ -91,7 +93,7 @@ The `can.Component` we created above had three properties.
 - [viewModel](#viewmodel)
 
 <a name="tag"></a>
-#### The "tag" Property
+#### The “tag” Property
 The `can.Component`’s `tag` property associates that
 `can.Component` with a specific, custom HTML tag.
 
