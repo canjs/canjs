@@ -298,4 +298,21 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		list.splice(0, list.length, 'aa', 'cc');
 		deepEqual(list.attr(), ['aa', 'cc']);
 	});
+
+	test('filter returns same list type (#1744)', function() {
+		var ParentList = can.List.extend();
+		var ChildList = ParentList.extend();
+
+		var children = new ChildList([1,2,3]);
+
+		ok(children.filter(function() {}) instanceof ChildList);
+	});
+
+	test('reverse returns the same list instance (#1744)', function() {
+		var ParentList = can.List.extend();
+		var ChildList = ParentList.extend();
+
+		var children = new ChildList([1,2,3]);
+		ok(children.reverse() === children);
+	});
 });
