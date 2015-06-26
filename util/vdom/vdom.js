@@ -33,5 +33,14 @@ steal("can-simple-dom", "./build_fragment/make_parser", function(simpleDOM, make
 	global.window = global;
 	global.addEventListener = function(){};
 	global.removeEventListener = function(){};
-
+	global.location = {
+		href: '',
+		protocol: '',
+		host: '',
+		hostname: '',
+		port: '',
+		pathname: '',
+		search: '',
+		hash: ''
+	};
 });
