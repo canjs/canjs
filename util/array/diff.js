@@ -26,7 +26,7 @@ steal(function(){
 			if(  newIndex+1 < newLength && newList[newIndex+1] === oldItem) {
 				patches.push({index: oldIndex, deleteCount: 0, insert: [ newList[newIndex] ]});
 				oldIndex++;
-				newIndex++;
+				newIndex += 2;
 				continue;
 			}
 			// look for single removal, does the next item in the oldList equal the current newList item.
@@ -55,7 +55,7 @@ steal(function(){
 		// a b 
 		// a b c d e
 		patches.push( 
-					{index: oldIndex,
+					{index: newIndex,
 					 deleteCount: oldLength-oldIndex,
 					 insert: slice.call(newList, newIndex) } );
 		

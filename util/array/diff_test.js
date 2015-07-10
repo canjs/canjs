@@ -38,7 +38,6 @@ steal('can/util/array/diff.js', 'can/test', 'steal-qunit', function (diff) {
 			insert: ["w","z"]
 		}]);
 		
-		debugger;
 		patches = diff(["a","b","b"],["c","a","b"]);
 		deepEqual(patches, [{
 			index: 0,
