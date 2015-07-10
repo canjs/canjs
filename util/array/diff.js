@@ -37,12 +37,12 @@ steal(function(){
 				oldIndex += 2;
 				newIndex++;
 				continue;
-			} 
+			}
 			// just clean up the rest and exit
 			// 1 2 3 
 			// 1 2 5 6 7
 			else {
-				patches.push( 
+				patches.push(
 					{index: newIndex,
 					 deleteCount: oldLength-oldIndex,
 					 insert: slice.call(newList, newIndex) } );
@@ -54,7 +54,7 @@ steal(function(){
 		}
 		// a b 
 		// a b c d e
-		patches.push( 
+		patches.push(
 					{index: newIndex,
 					 deleteCount: oldLength-oldIndex,
 					 insert: slice.call(newList, newIndex) } );

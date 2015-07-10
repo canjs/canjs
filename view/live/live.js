@@ -1,7 +1,7 @@
-steal('can/util', 
-	'can/view/elements.js', 
-	'can/view', 
-	'can/view/node_lists', 
+steal('can/util',
+	'can/view/elements.js',
+	'can/view',
+	'can/view/node_lists',
 	'can/view/parser',
 	'can/util/array/diff.js', function (can, elements, view, nodeLists, parser, diff) {
 
