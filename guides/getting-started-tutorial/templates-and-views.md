@@ -14,7 +14,7 @@ Get the code for: [chapter 2](https://github.com/bitovi/canjs/blob/minor/guides/
 
 - - -
 
-As mentioned previously, we’re using Stache templates in
+As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
 included the `can.stache` plugin. The CanJS docs tell us that,
 “Stache templates look similar to normal HTML, except they contain keys for
@@ -22,10 +22,10 @@ inserting data into the template and *sections* to *enumerate* and/or filter
 the enclosed template blocks.” They can also contain limited *conditional
 logic* to show or hide content.
 
-There are three aspects of Stache templates that we’ll review:
+There are four aspects of Stache templates that we’ll review:
 
+- [sections & context](#context),
 - [enumeration](#enumeration),
-- [sections](#sections),
 - [conditional logic](#conditionallogic), and
 - [partials](#partials)
 
@@ -62,17 +62,64 @@ Edit it as follows:
 ```
 
 Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
-and [Handlebar](http://handlebarsjs.com/) template formats. For more
+and [Handlebar](http://handlebarsjs.com/) formatting arguments. For more
 information on the details of these formats, see their respective websites.
+
+<a name="context"></a>
+## Sections and Context
+Sections are execution blocks that define context. They should should map to either an object
+or an array. Context refers to the data that is available for you to _directly access_ from a Stache template.
+Direct access means accessing a property without providing any contextual identifiers (such as a dot, 
+or a path). 
+
+Using a fictious person object as an example root object, I can directly access the "firstName" 
+property of the person object using `{{firstName}}`. If, however, I want to access the person's city, 
+which is stored on its address property, I would have to use `{{address.city}}`.
+
+You can reference the context object, itself, using a notation that is similar to that used
+by an operating system to define its context.
+
+```html
+<div>My Current Context Object: {{.}}</div> 
+<div>My Parent Context Object: {{../}}</div> 
+<div>An Item on my Parent Context's Object: {{../myItem}}</div>
+<div>My Parent's Parent Context Object: {{../../}}</div>
+```
+
+There may be times when you want to directly access a subset of data. You can do this by 
+defining a new context. For example, if you have an object, that contains another object, 
+you can reference its properties from the root context as follows:
+
+```html
+<ul>
+   <li>{{address.city}}</li>
+   <li>{{address.state}}</li>
+</ul>
+```
+As you can see, that's a lot of typing&mdash;especially if you need to refer to several
+properties on nestedObject. Instead of typing out the full path for each property, you can define
+a new context and access the properties directly from it, as below:
+
+```html
+{{#address}}
+<ul>
+   <li>{{city}}</li>
+   <li>{{state}}</li>
+</ul>
+{{/address}}
+```
+
+This is where understanding how to reference the parent context can be very useful. You may 
+want to define a limiting context and yet still be able to access some properties from the 
+parent context within it.
 
 <a name="enumeration"></a>
 ## Enumeration
-Enumerating means that you
-can loop through the contents of an iterable item. We’ve done this above for
+Enumerating allows you to loop through the contents of an iterable item. We’ve done this above for
 the options in our select dropdown. The `{{#each key}} ... {{/each}}` tag set
-is used to enumerate over an enumerable collection, such as an array. In the
-example above, we are enumerating over an array of objects. As with [sections](#sections),
-the properties of the objects we are enumerating over are accessible
+is used to iterate over an enumerable collection, such as an array. In the
+example above, we are looping over an array of objects. As with [sections](#sections),
+the properties of the objects we are iterating over are accessible
 from data keys inside the `#each` scope without dot notation. In the example
 above, we saw:
 
@@ -89,17 +136,6 @@ above, we saw:
 Because the scope of the `{{#each}}` block is `items`, we can reference
 the `name` and `price` properties of `items` directly&mdash;i.e, we don't need to
 write `{{items.name}}` or `{{items.price}}`, we can just write `{{name}}` or `{{price}}`.
-
-<a name="sections"></a>
-## Sections
-Finally, sections are execution blocks. They define an object
-context within which we can access an object’s properties without having to
-use dot notation. Including a section in a template reduces the amount of
-typing you are required to do and reduces the possibility for error as well.
-The example above contains a section, the `order` section. Sections
-begin with `{{#with ...}}` and end with `{{/with}}`.
-
-The section key should map to either an object or an array.
 
 <a name="conditionallogic"></a>
 ## Conditional Logic
