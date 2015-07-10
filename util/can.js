@@ -41,7 +41,7 @@ steal(function () {
 		return arr && arr[arr.length - 1];
 	};
 
-	
+
 	can.isDOM = function(el) {
 		return (el.ownerDocument || el) === can.global.document;
 	};
@@ -160,6 +160,10 @@ steal(function () {
 
 	can.isNode = typeof process === "object" &&
 		{}.toString.call(process) === "[object process]";
+
+	can.isBrowserWindow = typeof window !== "undefined" &&
+		typeof document !== "undefined" && typeof SimpleDOM === "undefined";
+
 
 	//!steal-remove-start
 	can.dev = {
