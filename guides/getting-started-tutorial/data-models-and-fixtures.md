@@ -167,7 +167,7 @@ It’s time to connect all of this together in our view model. Simply open up
 		},
 ```
 
-…and replace it with this:
+and replace it with this:
 
 ```
 		states: {
@@ -188,7 +188,7 @@ In the same file, find the cities property:
 		},
 ```
 
-…and replace it with this:
+and replace it with this:
 
 ```
 		cities: {
@@ -232,7 +232,7 @@ instead of just an array. Find the `form` element:
   </form>
 ```
 
-…and replace it with this new one:
+and replace it with this new one:
 
 ```
   <form class="form">
@@ -312,7 +312,7 @@ Find these lines:
 	<!-- Replace with state model script -->
 ```
 
-…and replace it with these lines:
+and replace it with these lines:
 
 ```
 	<script src="models/city.js"></script>
