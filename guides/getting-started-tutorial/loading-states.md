@@ -10,7 +10,7 @@
 **In this Chapter**
  - Loading States
 
-Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: loading states](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-7_canjs-getting-started.zip?raw=true)
 
 - - -
 
