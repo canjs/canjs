@@ -24,8 +24,7 @@ is bound to two things:
 
 Since you already know about creating instances of `can.Map`, creating an
 `appState` object, which is a `can.Map`, will be easy. Let’s see how this works.
-Open up your `app.js` file and update it as shown below. Note that the
-`appState` object is a `can.Map`—i.e., it is [observable](Observables.html).
+Open up your `app.js` file and update it as shown below.
 
 ```
 $(function () {
@@ -59,12 +58,11 @@ $(function () {
 ```
 
 ## Routing
-Before we dive into the details of the `appState` object,
-let’s quickly discuss routing. Routing in CanJS allows
-us to manage browser history and client state by synchronizing the
-`window.location.hash` with a `can.Map`. In other words, we can use routing to
-reflect the state of our application or set the state of our application. One
-of the things that makes routing powerful is that it records the state of the
+Before we dive into the details of the `appState` object, let’s quickly discuss 
+routing. Routing in CanJS allows us to manage browser history and client state by 
+synchronizing the `window.location.hash` with a `can.Map`. In other words, we can 
+use routing to reflect the state of our application or set the state of our application. 
+One of the things that makes routing powerful is that it records the state of the
 application in the browser’s history. We’ll see some specific examples of this
 as we proceed.
 
