@@ -15,9 +15,9 @@ Get the code for: [chapter 5](https://github.com/bitovi/canjs/blob/minor/guides/
 
 - - -
 
-In the last chapter, we created the `currentRestaurant` and included it in our
-template. Let’s add a little bit more advanced functionality: two select elements
-where selecting an option in the first one changes the list in the second.
+In the last chapter, we created the `currentRestaurant` component, and included it in our
+template. Let’s add a little bit more advanced functionality: two select elements,
+where selecting an option in the first one changes the options in the second.
 
 Open your `components/restaurant_list/restaurant_list.stache` and edit it as follows:
 
@@ -88,7 +88,8 @@ can.Component.extend({
 });
 ```
 
-Here we’re using [the define plugin](TheDefinePlugin.html) to set up two new
+Here we’re using [the define plugin](TheDefinePlugin.html), something
+we'll go into detail on later, to set up two new
 properties: `state` to keep track of the selected state, and `states` with
 the list of states that can be selected. In the `state` setter, we’re showing
 an alert when a new state is selected. If you refresh the Restaurants page,
@@ -255,8 +256,8 @@ can.Component.extend({
 ```
 
 If you go back out to your application and refresh the page, it should all
-look and work the same. What we’ve done, by
-separating out the view model, is make the code easier to read and maintain.
+look and work the same. What we’ve done, by separating out the view model, 
+is make the code easier to read and maintain.
 
 In the next chapter, we’ll learn about working with more realistic data by
 adding REST service interaction with `can.Model`.
