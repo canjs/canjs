@@ -33,15 +33,14 @@ where the `placeOrder` property is defined:
   },
 ```
 
-This code is pretty straightforward: the first line in the getter function
-gets the `order`, the second sets the `saveStatus` property on the component’s
-view model to whatever the `save` method on the `order` object returns, and
-the third line returns `false` to stop the `form` element’s default submission
-behavior.
+This code is pretty straightforward: 
+ - The first line in the getter function gets the `order`, 
+ - the second sets the `saveStatus` property on the component’s view model to whatever the `save` method on the `order` object returns, and
+ - the third line returns `false` to stop the `form` element’s default submission behavior.
 
 ## Saving and updating a model
 Let’s look at a few items in the code above.
-Unlike data access functions (like `findAll`, `findOne`),
+Unlike data access functions (e.g., `findAll`, `findOne`),
 which are called statically off of the prototype, the `save`, `update`, and
 `delete` functions are called off of a specific instance of a model. So, if
 we want to create a new order, we will need to work with an instance of the
