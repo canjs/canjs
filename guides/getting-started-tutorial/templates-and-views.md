@@ -67,17 +67,20 @@ information on the details of these formats, see their respective websites.
 
 <a name="context"></a>
 ## Sections and Context
-Sections are execution blocks that define context. They should should map to either an object
-or an array. Context refers to the data that is available for you to _directly access_ from a Stache template.
-Direct access means accessing a property without providing any contextual identifiers (such as a dot, 
-or a path). 
+There may be times when you want to work only with a subset of data. You can do this by 
+defining a new context. A context loosely refers to the data that is available for you to 
+_directly access_ from a Stache template. Direct access means accessing a property without
+providing any contextual identifiers (such as a dot, or a path). A valid context must be 
+either an object or an array. 
 
-Using a fictious person object as an example root object, I can directly access the "firstName" 
-property of the person object using `{{firstName}}`. If, however, I want to access the person's city, 
-which is stored on its address property, I would have to use `{{address.city}}`.
+Sections are execution blocks that define context. In the example above, you can directly access 
+the "name" property of the order object using `{{name}}`, because the context has been set to the 
+order object. If the context were not set to the order object, you would have to refer to the name 
+property using `{{order.name}}`.
 
-You can reference the context object, itself, using a notation that is similar to that used
-by an operating system to define its context.
+From within a given context, you can also reference the context object, itself, or items outside the
+context using a notation similar to that used by an operating system to reference its context. 
+See examples below:
 
 ```html
 <div>My Current Context Object: {{.}}</div> 
@@ -85,33 +88,6 @@ by an operating system to define its context.
 <div>An Item on my Parent Context's Object: {{../myItem}}</div>
 <div>My Parent's Parent Context Object: {{../../}}</div>
 ```
-
-There may be times when you want to directly access a subset of data. You can do this by 
-defining a new context. For example, if you have an object, that contains another object, 
-you can reference its properties from the root context as follows:
-
-```html
-<ul>
-   <li>{{address.city}}</li>
-   <li>{{address.state}}</li>
-</ul>
-```
-As you can see, that's a lot of typing&mdash;especially if you need to refer to several
-properties on nestedObject. Instead of typing out the full path for each property, you can define
-a new context and access the properties directly from it, as below:
-
-```html
-{{#address}}
-<ul>
-   <li>{{city}}</li>
-   <li>{{state}}</li>
-</ul>
-{{/address}}
-```
-
-This is where understanding how to reference the parent context can be very useful. You may 
-want to define a limiting context and yet still be able to access some properties from the 
-parent context within it.
 
 <a name="enumeration"></a>
 ## Enumeration
