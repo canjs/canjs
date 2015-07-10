@@ -19,21 +19,20 @@ Get the code for: [chapter 4](https://github.com/bitovi/canjs/blob/minor/guides/
 <a name="first-component"></a>
 ## First can.Component
 If you recall from the introduction, a [`can.Component`](../docs/can.Component.html) is like a self-contained,
-mini web application—i.e., it’s encapsulated. Because `can.Component`’s are
+mini web application. In other words, it’s encapsulated. Because `can.Component`’s are
 encapsulated, they should each contain their own:
 
 - View template file (.stache file)
 - JavaScript file
 - CSS file
 
-This is why we created a `components` folder for our app — instead of, say, a
+This is why we created a `components` folder for our app&mdash;instead of, say, a
 `js` folder. Each component we develop will be in a folder that contains all
 the files that support that component. This makes components portable,
 enabling you to reuse them across projects. It also isolates them, making
 them easier to test and maintain.
 
-Let’s dive in to the good stuff and start working with the app! Put the
-following code inside `components/restaurant_list/restaurant_list.js`:
+Put the following code inside `components/restaurant_list/restaurant_list.js`:
 
 ```
 can.Component.extend({
@@ -58,7 +57,7 @@ in the index.html file. Find this line:
 <!-- Replace with restaurant list component script -->
 ```
 
-…and replace it with this line:
+and replace it with this line:
 
 ```
 <script src="components/restaurant_list/restaurant_list.js"></script>
