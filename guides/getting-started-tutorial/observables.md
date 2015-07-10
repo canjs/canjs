@@ -12,25 +12,28 @@
 
 - - -
 
+Observables are the subjects in the
+[observer pattern](http://en.wikipedia.org/wiki/Observer_pattern). 
 CanJS’s observables - [`can.Map`](../docs/can.Map.html), [`can.List`](../docs/can.List.html),
-and [`can.compute`](../docs/can.compute.html) - let you make changes to data and listen
-for those changes.  Observables are the subjects in the
-[observer pattern](http://en.wikipedia.org/wiki/Observer_pattern).  CanJS comes with
-three forms of observables:
+and [`can.compute`](../docs/can.compute.html) - let you create relationships between objects
+where one object (or objects) listens for and responds to changes in another object.   CanJS comes with
+three observables:
 
  - [`can.Map`](../docs/can.Map.html) - Used for Objects.
  - [`can.List`](../docs/can.List.html) - Used for Arrays.
  - [`can.compute`](../docs/can.compute.html) - Used for values.
 
-`can.Map` and `can.List` are often extended to create observable types.
+`can.Map` and `can.List` are often extended to create observable types. For example,
 [can.Model](../docs/can.Model.html) and [can.route](../docs/can.route.html) are
-based on `can.Map`, and `can.Component`’s [`viewModel`](../docs/can.Component.prototype.viewModel.html)
-is a `can.Map`, but observables are useful on their own too.
+based on `can.Map`, and a `can.Component`’s [`viewModel`](../docs/can.Component.prototype.viewModel.html)
+is a `can.Map`. Observables are useful on their own too. 
+
+You will rarely, if ever, work directly with a can.compute.
 
 To create a Map, call `new can.Map(object)`. This will give you a map
-with the same properties and values as _object_. To create a List, call
-`new can.List(array)`. This will give you a List with the same elements as
-_array_.
+with the same properties and values as the _object_ you passed in to the `can.Map` constructor. 
+To create a List, call `new can.List(array)`. This will give you a List with the same elements as the
+_array_ you passed into the `can.List` constructor.
 
 ```
 var pagination = new can.Map({page: 1, perPage: 25, count: 1388});
@@ -43,7 +46,7 @@ hobbies.attr(2); // 'party rocking'
 ## Manipulating properties
 
 The [`attr`](../docs/can.Map.prototype.attr.html) method is
-used to read and write a property or properties from a Map or List.
+used to read a property from, or write a property to a `can.Map` or `can.List`.
 
 ```
 pagination.attr('perPage');     // 25
@@ -120,7 +123,7 @@ paginate.each(function(val, key) {
 
 Extending a `can.Map` (or `can.List`) lets you create custom observable
 types. The following extends `can.Map` to create a Paginate type that
-has a `.next()` method to change its state:
+has a `.next()` method:
 
 ```
 Paginate = can.Map.extend({
@@ -147,8 +150,8 @@ pageInfo.page()         //-> 2
 ## Observable Arrays
 
 As mentioned above, CanJS also provides observable arrays with `can.List`.
-`can.List` inherits from `can.Map`, so a List works much the same way an
-Map does, with the addition of several methods useful for working with
+`can.List` inherits from `can.Map`. A `can.List` works much the same way a
+`can.Map` does, with the addition of methods useful for working with
 arrays:
 
 - [`indexOf`](../docs/can.List.prototype.indexOf.html), which looks for an item in a
@@ -166,7 +169,7 @@ anywhere in a List.
 
 When these methods are used to modify a List, the appropriate events are
 emitted. See [the API for Lists](../docs/can.List.html) for more
-information on the arguments passed to those event handlers.
+information.
 
 ## Computed values
 
@@ -238,7 +241,7 @@ changed, reading the value is fast.
 
 ### Converted Computes
 
-Computes are also useful for creating links to properties within Observes. One
+Computes are also useful for creating links to properties within Observables. One
 of the most frequent examples of this is when converting from one unit to
 another.
 
