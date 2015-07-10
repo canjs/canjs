@@ -325,6 +325,8 @@ according to plan, you should be able to refresh the Restaurants page
 and see the same list that we had before. Selecting a state, then a city,
 should work the same as well.
 
+![set up state selector](../can/guides/images/view-models/view_model_city.png)
+
 - - -
 
 <span class="pull-left">[&lsaquo; View Models](ViewModels.html)</span>
