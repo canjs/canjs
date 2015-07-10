@@ -26,7 +26,7 @@ the `components/restaurant_list/restaurant_list.js` file. Find this line:
 		// Restaurant code will go here
 ```
 
-…and replace it with these lines:
+and replace it with these lines:
 
 ```
 		restaurants: {
@@ -58,7 +58,7 @@ Now let’s make use of this new property and it’s attributes in our
   <!-- Restaurants code will go here -->
 ```
 
-…and replace it with these lines:
+and replace it with these lines:
 
 ```
   {{#if restaurants.isPending}}
