@@ -26,14 +26,14 @@ you can control its:
 
 <a name="serialization"></a>
 ### serialization 
-The first property we’ll talk about is serialization. The
+The first property we’ll talk about is [serialization](https://en.wikipedia.org/wiki/Serialization). The
 serialize property defines how the attribute will behave when the map is
 serialized. This can be useful for serializing complex types like dates,
 arrays, or objects into string formats. You can also control whether or not a
 given property can be serialized. Returning `undefined` from a serialization
 function for any property means this property will not be part of the
-serialized object. Serialization is tied directly to routing. We’ll see how
-this works when we continue our discussion of routing in a later chapter.
+serialized object. Managing serialization is an important consideration in routing. 
+We’ll see how this works when we discuss routing in a later chapter.
 
 <a name="get"></a>
 ### get 
@@ -85,10 +85,12 @@ function, or one of the following strings:
 - `boolean` - Converts falsey values (such as `""` or `0`) to `false` and everything else to `true`.
 - `*` - Prevents the default coercion of Objects to can.Maps and Arrays to can.Lists.
 
-There are two ways to define the `type` property: `Type`, or `type`. `Type`,
-uppercase, defines a constructor that will be invoked any time the property is
-set. Any data passed into the setter will be passed as arguments for the
-constructor. `type`, lowercase, is set on the prototype of the object—i.e.,
+There are two ways to define the `type` property: 
+ - `Type`
+ - `type` 
+`Type`, uppercase, is instance specific. A constructor that will be invoked, creating a new object,
+any time the property is set. Any data passed into the setter will be passed as arguments for the
+constructor. In contrast, `type`, lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
 
 <a name="value"></a>
