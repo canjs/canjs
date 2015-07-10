@@ -15,8 +15,8 @@ Get the code for: [chapter 8](https://github.com/bitovi/canjs/blob/minor/guides/
 - - -
 
 CanJS makes it easy to handle any
-[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)
-, such as a `change` event, in your component. To add an event handler, we
+[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events), 
+such as a `change` event, in your component. To add an event handler, we
 have to make changes in two places:
 
 1. The view template
@@ -42,7 +42,7 @@ Let’s edit the `index.html` file by replacing these lines:
 	<!-- Replace with order phone component script -->
 ```
 
-…with these lines:
+with these lines:
 
 ```html
 	<script src="components/order/order.js"></script>
@@ -53,33 +53,48 @@ Let’s edit the `index.html` file by replacing these lines:
 ```
 
 We have just one more file we need to include before we move on. This
-section is going to introduce the concept of orders from a restaurant, and
-we’ll want to have an `Order` model, so let’s find this line:
+section is going to introduce orders from a restaurant, and
+we’ll want to have an `Order` model. Find this line:
 
 ```
 	<!-- Replace with order model script -->
 ```
 
-…and replace it with this line:
+and replace it with this line:
 
 ```
     <script src="models/order.js"></script>
 ```
 
-Now if you refresh the page, you’ll see the details for the Spago restaurant.
+Now, if you refresh the page, you’ll see the details for Spago.
 
 ![Restaurant details page](../can/guides/images/application-design/RestaurantDetails.png)
 
-If you click the “Order from Spago” button, you’ll find yourself with a menu,
-name field, and address field; however, we’re missing one important piece of
+If you click the “Order from Spago” button, you’ll find yourself with a menu, a
+name field, and an address field; however, we’re missing one important piece of
 customer information: a phone number. Let’s build a `phone-validator`
 component to collect this information, and add some event handling to
 validate the field as the user types.
 
-You can add event handling to any element in the template by adding an
-attribute with the event name prefixed by `can-`; again, this event name can be
-[any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events)
-. Let’s open the `components/order_phone/order_phone.stache` file and add the
+There are two ways you can add event handling to an element:
+ - by adding an attribute with the event name prefixed by `can-`.
+ - by adding an attribute with the event name surrounded in parenthesis, e.g., `(click)`.
+
+Of these, the preferred method is to use parenthesis to surround the event name.
+Again, this event name can be [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events).
+
+In addition to defining an event, you can pass certain predefined parameters 
+to the method that handles the event. These parameters include:
+
+   - @element - The can.$ wrapped element where the event occurred.
+   - @event - The event object&mdash;or properties off of that object.
+   - @viewModel - If the element is a can.Component, the component's viewModel.
+   - @context - The current context.
+
+You are not limited to these parameters. Any valid value can be passed in to the 
+handler method. Separate method parameters with a space, e.g., {{myMethod arg1 arg2}}
+
+Let’s open the `components/order_phone/order_phone.stache` file and add the
 following:
 
 ```html
@@ -97,8 +112,8 @@ following:
 ```
 
 Notice the `<input />` element with a `(keyup)` event handler. Whenever there
-is a `keyup` event in the `input`, the code in the value will be executed. In
-this case, we’re passing `@element.val` to the `setPhoneValue` helper. Let’s
+is a `keyup` event in the `input`, the code in the value will be executed. We’re 
+also passing `@element.val` to the `setPhoneValue` helper. Let’s
 add the component’s JavaScript to the `components/order_phone/order_phone.js`
 file:
 
@@ -138,7 +153,7 @@ component, which looks like this:
 Notice that the `error` property uses `this.attr("order").attr("phone")` in
 its getter. Because of CanJS’s [observables](Observables.html), CanJS is
 aware of us setting that value in our `setPhoneValue` helper, and thus only
-runs the getter again (what we like to call “recomputing the value”) when
+runs the getter again (called “recomputing the value”) when
 the value has changed. When the `setPhoneValue` helper sets the value, CanJS
 recomputes the `error` property’s value, which will return an error if you
 type “911” or anything that doesn’t look like a phone number.
