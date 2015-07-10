@@ -12,7 +12,7 @@
  - `can.fixture`
  - Connecting `can.Model` with `can.Component`
 
-Get the code for: [chapter 6](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: data models and fixtures](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
 
 - - -
 
