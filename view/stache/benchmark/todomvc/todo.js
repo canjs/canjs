@@ -15,17 +15,6 @@ var Todo = MemoryModel.extend({
 
 // List for Todos
 Todo.List = Todo.List.extend({
-	filter: function (check) {
-		var list = [];
-
-		this.each(function (todo) {
-			if (check(todo)) {
-				list.push(todo);
-			}
-		});
-
-		return list;
-	},
 
 	completed: function () {
 		return this.filter(function (todo) {
