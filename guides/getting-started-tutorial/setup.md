@@ -36,21 +36,22 @@ The example project has the following folder structure:
 	└── models
 </pre>
 
-The `app.js` folder is used to bootstrap our application. We’ll discuss this
+Let's walk through each folder, and discuss it. 
+
+The `app.js` folder is used to bootstrap our application. We’ll go over this
 in more detail <a href="#application-bootstrap">below</a>.
 
-The `components` folder is where we’ll put all of the smaller parts that make
+The `components` folder is where we’ll put all of the parts that make
 up our application. A component-based structure makes it easier to both manage
-the contents of the component and port the component (should you want to use
-it in another application).
+and port our application's components (should you, for example, want to use 
+a component in another application).
 
 The `css` folder contains a `style.css` file that is used for the entire app.
-Because we’re using a component-based structure, we would typically recommend
-putting any CSS files in their respective component folders, but we’ve only
-included one CSS file here for simplicity.
+We would typically recommend putting any CSS files in their respective component 
+folders, however we’ve only included one CSS file in this application for simplicity.
 
 The `images` folder contains images that are used throughout the app.
-Again, if you had images that were specific to any components, we would
+Again, if you had images that were specific to a component, we would
 recommend putting them in their respective component folder.
 
 The `index.html` file is the HTML file that loads all of the app’s scripts and
@@ -58,7 +59,7 @@ styles.
 
 The `libs` folder contains all of the app’s JavaScript dependencies.
 
-The `models` folder contains some JSON files that will work as fake server
+The `models` folder contains some JSON files that we will use as fake server
 responses and some JavaScript files that we’ll fill out later to mock an
 HTTP server.
 
@@ -70,21 +71,21 @@ The easiest way to get CanJS is to use <a href="../download.html" target="_blank
 which allows you to download the specific parts of CanJS you need for your application.
 
 The custom download page loads with all the elements in the core CanJS library
-already selected. We wanted all of those in our build, so we left them checked.
+already selected. We want all of those in our build, so leave them checked.
 CanJS relies on an external core library for some of its functionality. There
 are several options available (jQuery, Dojo, YUI, etc.). The default option is
-jQuery; that's what we’ll be working with here.
+jQuery. That's what we’ll be working with here.
 
 The right side of the page lists all of the plugins. From the list of plugins,
-we selected the following:
+select the following:
 
 ![CanJS plugins to select](../can/guides/images/setup/DownloadOptions.png)
 
 At the bottom of the page, clicking the download button will prompt you to
 download a file called `can.custom.js`, which you can save to your local machine.
 
-There is one additional file we needed. This file is special because normally
-you wouldn't want it to be a part of your final application,
+There is one additional file we need. This file is special because normally
+you don't want it to be a part of your final application,
 but it can be very helpful during development. The file is `can.fixture.js`.
 [can.fixture](../docs/can.fixture.html) allows you to simulate RESTful services.
 You can download it <a href="http://canjs.com/release/2.3.0/can.fixture.js" target="_blank">here</a>.
@@ -124,8 +125,8 @@ loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 
 Earlier, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
-remove `can.fixture.js`. In addition, to simplify things, we’re provided a CSS
-file for you with all the styles needed for this example.
+remove `can.fixture.js`. In addition, to simplify things, we’ve provided a complete CSS
+file for you.
 
 ## Application Bootstrap <a name="application-bootstrap"></a>
 The `app.js` file is the script that will bootstrap our application. Edit the
