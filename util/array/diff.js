@@ -24,7 +24,7 @@ steal(function(){
 			// 1 2 3
 			// 1 2 4 3
 			if(  newIndex+1 < newLength && newList[newIndex+1] === oldItem) {
-				patches.push({index: oldIndex, deleteCount: 0, insert: [ newList[newIndex] ]});
+				patches.push({index: newIndex, deleteCount: 0, insert: [ newList[newIndex] ]});
 				oldIndex++;
 				newIndex += 2;
 				continue;
@@ -33,7 +33,7 @@ steal(function(){
 			// 1 2 3
 			// 1 3
 			else if( oldIndex+1 < oldLength  && oldList[oldIndex+1] === newItem ) {
-				patches.push({index: oldIndex, deleteCount: 1, insert: []});
+				patches.push({index: newIndex, deleteCount: 1, insert: []});
 				oldIndex += 2;
 				newIndex++;
 				continue;

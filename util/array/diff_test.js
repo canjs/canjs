@@ -49,7 +49,25 @@ steal('can/util/array/diff.js', 'can/test', 'steal-qunit', function (diff) {
 			insert: []
 		}]);
 		
-		
+		// a, b, c, d, e, f, g
+		// a, c, d, e, f, g
+		// a, c, e, f, g
+		// a, c, e, g
+		patches = diff(["a","b","c","d","e","f","g"],["a","c","e","g"]);
+		deepEqual(patches, [{
+			index: 1,
+			insert: [],
+			deleteCount: 1
+		},{
+			index: 2,
+			deleteCount: 1,
+			insert: []
+		},
+		{
+			index: 3,
+			deleteCount: 1,
+			insert: []
+		}]);
 		
 	});
 
