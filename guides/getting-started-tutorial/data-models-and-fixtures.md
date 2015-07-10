@@ -91,7 +91,7 @@ We’re not going to connect to a server to retrieve our data; however, we’re
 going to code our model as if we were. How can this possibly work? CanJS
 provides a handy utility, `can.fixture`, that we can use to easily mimic the
 functionality of connecting to a server. `can.fixture`
-intercepts an AJAX request and simulates the response with a file or a
+intercepts an AJAX request and simulates a server response with a file or a
 function. You can use `can.fixture` to develop JavaScript independently of
 backend services.
 
@@ -110,13 +110,12 @@ can.fixture('GET /api/states', 'models/states.json');
 
 The first argument to `can.fixture`, `GET /api/states`, tells CanJS to
 intercept any `GET` requests to the resource `/api/states`. The second argument
-is just a string to a file that has the data we want to get when the application makes
-a service call. Because we’re simulating a `findAll` function, we need to return
-an array. The `findAll` function expects an array. By default, if it does not
-receive one, it will throw an error. If you need to connect to services that
-return data that doesn’t match the expected return type of the `find*`
-functions, don’t fret. There are ways to manage this, which we’ll work with
-later on.
+is a path to a file with the data the fixture will return. Because we’re simulating 
+a `findAll` function, we need to return an array. The `findAll` function 
+expects an array. By default, if it does not receive one, it will throw an error. 
+If you need to connect to services that return data that doesn’t match the expected 
+return type of the `find*` functions, don’t fret. There are ways to manage this, 
+which we’ll work with later on.
 
 Let’s also create a fixture that will respond to our requests for the list
 of cities for each state. This one is going to be a little different because
