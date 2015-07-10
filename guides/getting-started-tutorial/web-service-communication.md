@@ -10,7 +10,7 @@
 **In this Chapter**
   - Saving and Updating a can.Model
 
-Get the code for: [chapter 9](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: web service communication](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-9_canjs-getting-started.zip?raw=true)
 
 - - -
 
