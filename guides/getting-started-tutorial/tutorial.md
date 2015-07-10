@@ -65,18 +65,18 @@ how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
 Template libraries require a rendering engine and CanJS provides that for
-you with the `can.view` object. A `can.view` contains
+you with the `can.view` object. `can.view` contains
 utilities “for the loading, processing, rendering, and live-updating of
 templates”. In addition, `can.view` is used to bind views to observable
 objects.
 
 <a name="components"></a>
 ### Components
-A [can.Component](../docs/can.Component.html) is kind of like a mini web application.
-A `can.Component` contains the JavaScript and HTML it needs&mdash;all wrapped up in a single,
-functional unit. This makes `can.Component`’s portable, reusable, and
+A [can.Component](../docs/can.Component.html) is like a mini web application.
+It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
+item. This makes `can.Component`’s portable, reusable, and
 encapsulated. `can.Component`’s are easy to test and easy to use. Building an
-application with them is kind of like building with Lego&trade;. As we say
+application with them is kind of like building with Legos&trade;. As we say
 at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need and link them
 together using the Application State and Routing to compose your application.
@@ -88,9 +88,9 @@ of an Application State object. An Application State object, or AppState object 
 is an observable object that, as its name implies, contains the state of 
 your application. Where other application frameworks model their applications 
 with routes, controllers, etc., CanJS takes a more unified, semantic approach. 
-It encapsulates the state of your application into an object. This is a 
-very powerful approach to writing applications—freeing developers from 
-many of the constraints of a DOM-centric paradigm to think more directly 
+It encapsulates the state of your application. This is a 
+very powerful approach to writing applications that freeis developers from 
+many of the constraints of a DOM-centric paradigm, allowing them to think more directly 
 about the application itself.
 
 <a name="routing"></a>
