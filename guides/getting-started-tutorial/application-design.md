@@ -11,10 +11,7 @@
  - Designing an Application
 - - -
 
-The first step in putting together a CanJS app is sketching out the various
-states of your application, as you understand them at the moment
-(requirements are always subject to change!),
-and any supporting elements you might need.
+The first step in putting together a CanJS app is sketching out the states of your application.
 
 We’ll be building a small application called “Place My Order”. Place My Order is a
 website that lets you select from available restaurants in your area, view their
@@ -22,62 +19,64 @@ menus, and purchase items for delivery. For this sample application, we’ll kee
 things pretty simple. We won’t worry about registration, authentication, or
 payment processing.
 
-Let’s walk through the different pages of our application.
+Let’s walk through the different states of our application.
 
 ## Home
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
 
-The home page includes a header for navigation and a quick summary of the website’s
-purpose. You can see the main purposes of the website: to order from a restaurant
-and see your order history.
+The Home state includes a header for navigation and a quick summary of the website’s
+purpose. You can see the main purposes of the website: 
+
+ - order from a restaurant
+ - see your order history.
 
 ## Restaurants
 
 ![Restaurant locator page](../can/guides/images/application-design/RestaurantLocator.png)
 
-The restaurants page is the starting point for finding a restaurant from which you
-want to order. Here, you can see that the process starts by selecting a (U.S.)
-state and city.
+The Restaurants state is the starting point for finding a restaurant from which you
+want to order. Restaurants are displayed by region. To show a list of restaurants
+first select a (U.S.) state and city.
 
 ### Finding a Restaurant
 
 ![Restaurant list page](../can/guides/images/application-design/RestaurantList.png)
 
-After you select a state and city, you’re presented with a list of restaurants from
-which to order. The list includes details about the restaurant, such as its rating
+The list of restaurants includes details about each restaurant, such as its rating
 and hours, as well as a “Place My Order” button.
 
 ### Restaurant Details
 
 ![Restaurant details page](../can/guides/images/application-design/RestaurantDetails.png)
 
-The restaurant details page includes more information about the restaurant and an
+The restaurant details state displays more information about a selected restaurant and an
 order button to start the ordering process.
 
 ### Ordering from a Restaurant
 
 ![Restaurant order form](../can/guides/images/application-design/RestaurantOrderForm.png)
 
-The order page has a simple menu and form for collecting the user’s information. We
-ask for their name, address, and phone number. At the bottom of the page, we show a
-total amount for the order and a button to place the order.
+The order state has a simple menu and form for collecting the user’s information. 
+At the bottom of the page, we show a total amount for the order and a button to 
+place the order.
 
 ### Order Confirmation
 
 ![Restaurant order confirmation page](../can/guides/images/application-design/RestaurantOrderConfirmation.png)
 
-The order confirmation page shows the items the user selected for purchase, a total,
-as well as their information. Note that this page also has a link to restart the
-ordering process in case the user wants to place another order at the same restaurant.
+The order confirmation state shows the items the user selected, a total,
+and the personal information they've provided with the order. Note that this state 
+also has a link to restart the ordering process, should the user want to place another 
+order at the same restaurant.
 
 ## Order History
 
 ![Order history page](../can/guides/images/application-design/OrderHistory.png)
 
-The order history page has a list of orders with different statuses: new, preparing,
-in delivery, and delivered. This page allows you to mark orders as different
-statuses as they move through the entire flow.
+The order history state has a list of orders with different statuses: new, preparing,
+in delivery, and delivered. This state allows you to mark orders with different
+statuses as they move through the workflow.
 
 - - -
 
