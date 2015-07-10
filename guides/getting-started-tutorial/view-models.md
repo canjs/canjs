@@ -98,6 +98,8 @@ If you refresh the Restaurants page, you should see a select element with the
 states as options; when you select a state, an alert will appear with the selected 
 state’s name.
 
+![set up state selector](../can/guides/images/view-models/view_model_state.png)
+
 ## Getting and Setting Scope Properties
 It’s important to understand how to get and set the properties
 of the view model. Getting and setting are done through the `attr` function off of
@@ -194,6 +196,8 @@ If you refresh the Restaurants page in your browser, select a state,
 select a city, then select another state, you’ll see the “Choose a city”
 option in the city select element instead of the first city in that
 state.
+
+![set up state selector](../can/guides/images/view-models/view_model_city.png)
 
 ## Separating the Component & View Model
 It’s considered a best practice to keep your `can.Components`
