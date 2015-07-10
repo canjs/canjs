@@ -8,7 +8,9 @@
 
 - - - -
 **In this Chapter**
- - `can.Map`, `can.List`, and `can.compute`
+ - `can.Map`, 
+ - `can.List`, and 
+ - `can.compute`
 
 - - -
 
