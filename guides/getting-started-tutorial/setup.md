@@ -12,7 +12,7 @@
  - Configuring and Downloading CanJS
  - Application Bootstrap
 
-Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: setup](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
 
 - - -
 
