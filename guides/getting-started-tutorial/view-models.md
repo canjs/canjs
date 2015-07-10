@@ -88,13 +88,15 @@ can.Component.extend({
 });
 ```
 
-Here we’re using [the define plugin](TheDefinePlugin.html), something
-we'll go into detail on later, to set up two new
-properties: `state` to keep track of the selected state, and `states` with
-the list of states that can be selected. In the `state` setter, we’re showing
-an alert when a new state is selected. If you refresh the Restaurants page,
-you should see a select element with the states as options; when you select
-a state, an alert will appear with the selected state’s name.
+Here we’re using [the define plugin](TheDefinePlugin.html) to set up two new
+properties: 
+- `state` to keep track of the selected state, and 
+- `states` with the list of states that can be selected. 
+
+In the `state` setter, we’re showing an alert when a new state is selected. 
+If you refresh the Restaurants page, you should see a select element with the 
+states as options; when you select a state, an alert will appear with the selected 
+state’s name.
 
 ## Getting and Setting Scope Properties
 It’s important to understand how to get and set the properties
@@ -108,7 +110,7 @@ Open up `components/restaurant_list/restaurant_list.js` and replace this:
 // City code will go here
 ```
 
-…with this:
+with this:
 
 ```
       cities: {
@@ -143,7 +145,7 @@ Open `components/restaurant_list/restaurant_list.stache` and find this line:
 <!-- The city select will go here -->
 ```
 
-…and replace it with this:
+and replace it with this:
 
 ```
     <div class="form-group">
@@ -178,7 +180,7 @@ by nullifying the city when the state changes. Find the state setter:
         }
 ```
 
-…and replace it with this:
+and replace it with this:
 
 ```
         set: function() {
