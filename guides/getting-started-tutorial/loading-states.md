@@ -14,7 +14,7 @@ Get the code for: [chapter 7](https://github.com/bitovi/canjs/blob/minor/guides/
 
 - - -
 
-Loading data from a remote server never happens immediately, so it’s best
+Loading data from a remote server never happens immediately, so it’s a best
 practice to show some sort of indicator to improve the user’s experience.
 CanJS makes this easy with observable promises.
 
@@ -106,9 +106,9 @@ can.fixture('GET /api/restaurants/{_id}', 'models/spago.json');
 ```
 
 The first line will let us make a `GET` request to `/api/restaurants` to
-fetch the list of restaurants. The second line is for returning data for
-a specific restaurant; normally this would be dynamic depending on which
-restaurant we want info for, but for the sake of simplicity, we’re
+fetch the list of restaurants. The second line will return data for
+a specific restaurant. Normally, this would be dynamic, depending on which
+restaurant we want info for. For simplicity, however, we’re
 responding with the same fixture data regardless of which restaurant is
 requested.
 
