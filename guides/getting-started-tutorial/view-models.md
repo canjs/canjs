@@ -133,10 +133,10 @@ with this:
       }
 ```
 
-This code creates three new properties: `city` with the name of the city
-that’s selected, `citiesByState` which is an object that has the list of
-cities by state name, and `cities` which is the list of cities for the
-selected state.
+This code creates three new properties: 
+- `city` with the name of the city that’s selected, 
+- `citiesByState` which is an object that has the list of cities by state name, and 
+- `cities` which is the list of cities for the selected state.
 
 Let’s update the stache file to take advantage of these new properties.
 Open `components/restaurant_list/restaurant_list.stache` and find this line:
