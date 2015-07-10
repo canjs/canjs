@@ -9,19 +9,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		num(2);
 	});
 	test('inner computes values are not bound to', function () {
-		var num = can.compute(1),
-			numBind = num.bind,
-			numUnbind = num.unbind;
-		var bindCount = 0;
-
-		num.computeInstance.bind = function () {
-			bindCount++;
-			return numBind.apply(this, arguments);
-		};
-		num.computeInstance.unbind = function () {
-			bindCount--;
-			return numUnbind.apply(this, arguments);
-		};
+		var num = can.compute(1);
 		var outer = can.compute(function() {
 			var inner = can.compute(function() {
 				return num() + 1;
@@ -34,7 +22,8 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		// We do a timeout because we temporarily bind on num so that we can use its cached value.
 		stop();
 		setTimeout(function () {
-			equal(bindCount, 1, 'compute only bound to once');
+			equal(num.computeInstance._bindings, 1, 'inner compute only bound once');
+			equal(outer.computeInstance._bindings, 1, 'outer compute only bound once');
 			start();
 		}, 50);
 	});
@@ -794,4 +783,13 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 	});
 
+	test('compute change handler context is set to the function not can.Compute', function() {
+		var comp = can.compute(null);
+
+		comp.bind('change', function() {
+			equal(typeof this, 'function');
+		});
+
+		comp('test');
+	});
 });
