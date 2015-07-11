@@ -18,9 +18,13 @@ As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache 
 our app. Remember that when we downloaded our custom build of CanJS, we
 included the `can.stache` plugin. The CanJS docs tell us that,
 “Stache templates look similar to normal HTML, except they contain keys for
-inserting data into the template and *sections* to *enumerate* and/or filter
+inserting data into the template and *sections* to *enumerate* and/or *filter*
 the enclosed template blocks.” They can also contain limited *conditional
 logic* to show or hide content.
+
+Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
+and [Handlebar](http://handlebarsjs.com/) formatting arguments. For more
+information on the details of these formats, see their respective websites.
 
 There are four aspects of Stache templates that we’ll review:
 
@@ -60,10 +64,6 @@ Edit it as follows:
   <div><label class="control-label">Address: {{address}}</label></div>
 {{/with}}
 ```
-
-Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
-and [Handlebar](http://handlebarsjs.com/) formatting arguments. For more
-information on the details of these formats, see their respective websites.
 
 <a name="context"></a>
 ## Sections and Context
