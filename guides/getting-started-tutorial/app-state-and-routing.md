@@ -52,7 +52,7 @@ $(function () {
 	//appState.attr('page', 'restaurants');
 
 	appState.bind('change', function(ev, prop, change, newVal, oldVal) {
-		console.log('Changed the “' + prop + '” property from “' + oldVal + '” to “' + newVal + '”.');
+		alert('Changed the “' + prop + '” property from “' + oldVal + '” to “' + newVal + '”.');
 	});
 });
 ```
@@ -128,6 +128,8 @@ Notice the `//appState.attr('page', 'restaurants');` line at the end of our
 Now, refresh the app in your browser. The path will now be `#!restaurants`,
 and you’ll notice that the Restaurants link in the navigation is highlighted.
 
+![place-my-order.com home page](../can/guides/images/app-state-routing/app_state_route_rest.png)
+
 Note that, after we initialized our routes, updating the value of our
 `appState`’s `page` property caused the route to update as well.
 The value of the `page` property was serialized and appended
@@ -146,7 +148,7 @@ These lines use [`can.Map.bind`](../docs/can.Map.prototype.bind.html) to
 watch for changes to the `appState` object. Go ahead and change the URL from
 `#!restaurants` to `#!orders`. You should see an alert with this message:
 
-> Changed the “page” property from “restaurants” to “orders”.
+![place-my-order.com home page](../can/guides/images/app-state-routing/change_state_alert.png)
 
 It was mentioned earlier that we bound our AppState to the
 application’s `main.stache`. This is the key to connecting the
