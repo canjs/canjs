@@ -32,7 +32,7 @@ serialized. This can be useful for serializing complex types like dates,
 arrays, or objects into string formats. You can also control whether or not a
 given property can be serialized. Returning `undefined` from a serialization
 function for any property means this property will not be part of the
-serialized object. Managing serialization is an important consideration in routing. 
+serialized object. Managing serialization is an important consideration in [routing](AppStateAndRouting.html). 
 We’ll see how this works when we discuss routing in a later chapter.
 
 <a name="get"></a>
@@ -88,6 +88,7 @@ function, or one of the following strings:
 There are two ways to define the `type` property: 
  - `Type`
  - `type` 
+
 `Type`, uppercase, is instance specific. A constructor that will be invoked, creating a new object,
 any time the property is set. Any data passed into the setter will be passed as arguments for the
 constructor. In contrast, `type`, lowercase, is set on the prototype of the object—i.e.,
