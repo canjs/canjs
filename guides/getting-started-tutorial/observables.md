@@ -16,8 +16,7 @@
 
 Observables are the subjects in the
 [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern). 
-CanJS’s observables - [`can.Map`](../docs/can.Map.html), [`can.List`](../docs/can.List.html),
-and [`can.compute`](../docs/can.compute.html) - let you create relationships between objects
+CanJS’s observables let you create relationships between objects
 where one object (or objects) listens for and responds to changes in another object.   CanJS comes with
 three observables:
 
@@ -28,12 +27,13 @@ three observables:
 `can.Map` and `can.List` are often extended to create observable types. For example,
 [can.Model](../docs/can.Model.html) and [can.route](../docs/can.route.html) are
 based on `can.Map`, and a `can.Component`’s [`viewModel`](../docs/can.Component.prototype.viewModel.html)
-is a `can.Map`. Observables are useful on their own too. 
+is a `can.Map`. You will rarely work directly with a can.compute.
 
-You will rarely, if ever, work directly with a can.compute.
+## Creating Instances
 
 To create a Map, call `new can.Map(object)`. This will give you a map
 with the same properties and values as the _object_ you passed in to the `can.Map` constructor. 
+
 To create a List, call `new can.List(array)`. This will give you a List with the same elements as the
 _array_ you passed into the `can.List` constructor.
 
@@ -51,6 +51,8 @@ The [`attr`](../docs/can.Map.prototype.attr.html) method is
 used to read a property from, or write a property to a `can.Map` or `can.List`.
 
 ```
+var pagination = new can.Map({page: 1, perPage: 25, count: 1388});
+
 pagination.attr('perPage');     // 25
 pagination.attr('perPage', 50);
 pagination.attr('perPage');     // 50
@@ -59,7 +61,7 @@ pagination.attr({page: 10, lastVisited: 1});
 pagination.attr(); // {page: 10, perPage: 50, count: 1388, lastVisited: 1}
 ```
 
-Properties can be removed from Observes with [`removeAttr`](../docs/can.Map.prototype.removeAttr.html),
+Properties can be removed by using [`removeAttr`](../docs/can.Map.prototype.removeAttr.html),
 which is equivalent to the `delete` keyword:
 
 ```
@@ -75,18 +77,21 @@ was changed. You can listen for these events by using
 [bind](../docs/can.Map.prototype.bind.html):
 
 ```
-paginate.bind('change', function(event, attr, how, newVal, oldVal) {
+// In this example, the chanage to pagination's perPage attribute, on line 16,
+// is responded to by the functions listening to pagination's change and perPage 
+// attributes. Note the values passed in to the functions when they are called.
+pagination.bind('change', function(event, attr, how, newVal, oldVal) {
 	attr;   // 'perPage'
 	how;    // 'set'
 	newVal; // 30
 	oldVal; // 50
 });
-paginate.bind('perPage', function(event, newVal, oldVal) {
+pagination.bind('perPage', function(event, newVal, oldVal) {
 	newVal; // 30
 	oldVal; // 50
 });
 
-paginate.attr('perPage', 30);
+pagination.attr('perPage', 30);
 ```
 
 You can similarly stop listening to these events by using
@@ -111,14 +116,16 @@ timesChanged; // 1
 If you want to iterate through the properties on a Map, use `each`:
 
 ```
-paginate.each(function(val, key) {
+var pagination = new can.Map({page: 10, perPage: 25, count: 1388});
+
+pagination.each(function(val, key) {
 	console.log(key + ': ' + val);
 });
 
 // The console shows:
 // page: 10
-// perPage: 30
-// lastVisited: 1
+// perPage: 25
+// count: 1388
 ```
 
 ## Extending a Map
@@ -151,7 +158,7 @@ pageInfo.page()         //-> 2
 
 ## Observable Arrays
 
-As mentioned above, CanJS also provides observable arrays with `can.List`.
+CanJS also provides observable arrays with `can.List`.
 `can.List` inherits from `can.Map`. A `can.List` works much the same way a
 `can.Map` does, with the addition of methods useful for working with
 arrays:
@@ -169,8 +176,8 @@ of a List.
 - [`splice`](../docs/can.List.prototype.splice.html), which removes and inserts items
 anywhere in a List.
 
-When these methods are used to modify a List, the appropriate events are
-emitted. See [the API for Lists](../docs/can.List.html) for more
+When these methods are used to modify a List, events are
+emitted, which you can listen for as well. See [the API for Lists](../docs/can.List.html) for more
 information.
 
 ## Computed values
