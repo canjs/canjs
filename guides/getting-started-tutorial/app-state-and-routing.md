@@ -150,11 +150,10 @@ watch for changes to the `appState` object. Go ahead and change the URL from
 
 ![place-my-order.com home page](../can/guides/images/app-state-routing/change_state_alert.png)
 
-It was mentioned earlier that we bound our AppState to the
-application’s `main.stache`. This is the key to connecting the
-AppState to our [components](Components.html). Because the `appState` object
-is bound to our main template, which includes the rest of the components in
-the app, *these attributes will automatically be included in the scope of
+It was mentioned earlier that we bound our AppState to the application’s `main.stache`. 
+This is the key to connecting the AppState to our [components](Components.html). 
+Because the `appState` object is bound to our main template, which includes the rest of 
+the components in the app, *these attributes will automatically be included in the scope of
 the components*.
 
 Before moving on, let’s remove the following lines from our application:
