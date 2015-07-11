@@ -77,9 +77,10 @@ was changed. You can listen for these events by using
 [bind](../docs/can.Map.prototype.bind.html):
 
 ```
-// In this example, the chanage to pagination's perPage attribute, on line 16,
-// is responded to by the functions listening to pagination's change and perPage 
-// attributes. Note the values passed in to the functions when they are called.
+// In this example, the chanage to pagination's perPage attribute, 
+// on line 16, is responded to by the functions listening to 
+// pagination's change and perPage attributes. Note the values passed 
+// in to the functions when they are called.
 pagination.bind('change', function(event, attr, how, newVal, oldVal) {
 	attr;   // 'perPage'
 	how;    // 'set'
