@@ -67,26 +67,73 @@ Edit it as follows:
 
 <a name="context"></a>
 ## Sections and Context
-There may be times when you want to work only with a subset of data. You can do this by 
-defining a new context. A context loosely refers to the data that is available for you to 
+Assume for the moment that we have the following customerOrder object passed in to our Stache template:
+
+```
+{
+   customerNumber: 12543,
+   customerType: 'Business',
+   order: {
+      name: 'Rudloph Steiner',
+      _id: 837267,
+      items: [
+         {
+            name: 'Garden Gnome',
+            price: 23.70
+         }
+      ],
+      total: 23.70,
+      phone: '+49 170 345 6789',
+      address: 'Beuselstrasse 15, Berlin'
+   }
+}
+```
+We can easily access the:
+
+- customerNumber,
+- customerType, and
+- oder
+
+fields in our Stache template. These are the properties that are 
+directly available off of the object passed in to the template, and are therefore,
+are a part of the templates root context. We can reference them simply by wrapping
+them in single or double curly braces, e.g., `{customerNumber}`. If, however, we 
+want to reference a value off of the order property, such as the order name, or _id,
+we need to use dot notation, e.g., `{order.name}`. If you have a lot of properties
+you need to reference off of a nested object, this can be tedious. Stache makes this
+easy for you to resolve by allowing you to define limited contexts.
+
+A context loosely refers to the data that is available for you to 
 _directly access_ from a Stache template. Direct access means accessing a property without
 providing any contextual identifiers (such as a dot, or a path). A valid context must be 
 either an object or an array. 
 
-Sections are execution blocks that define context. In the example above, you can directly access 
-the "name" property of the order object using `{{name}}`, because the context has been set to the 
-order object. If the context were not set to the order object, you would have to refer to the name 
-property using `{{order.name}}`.
+Sections are execution blocks that define context. In the following example, 
+you can directly access the "name" property of the order object using `{{name}}`, because the context 
+has been set to the order object. If the context were not set to the order object, you would have to 
+refer to the name property using `{{order.name}}`.
+
+```html
+{{#with order}}
+  <h3>Thanks for your order {{name}}!</h3>
+  <div>
+  	<label class="control-label">Confirmation Number: {{_id}}</label>
+  </div>
+...
+{{/with}}
+```
 
 From within a given context, you can also reference the context object, itself, or items outside the
 context using a notation similar to that used by an operating system to reference its context. 
 See examples below:
 
 ```html
-<div>My Current Context Object: {{.}}</div> 
-<div>My Parent Context Object: {{../}}</div> 
-<div>An Item on my Parent Context's Object: {{../myItem}}</div>
-<div>My Parent's Parent Context Object: {{../../}}</div>
+{{#with order}}
+   <div>My Current Context Object: {{.}}</div> <!-- references the order object-->
+   <div>My Parent Context Object: {{../}}</div>  <!-- references the customerOrder object--> 
+   <div>An Item on my Parent Context's Object: {{../customerNumber}}</div>
+   <div>My Parent's Parent Context Object: {{../../}}</div> <!-- example of how you might access the parent of a parent -->
+{{/with}}
 ```
 
 <a name="enumeration"></a>
