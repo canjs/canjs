@@ -122,7 +122,7 @@ This makes the following URLs possible:
 
 Let’s take a moment to see how these routes are bound to our `appState` object.
 Notice the `//appState.attr('page', 'restaurants');` line at the end of our
-`app.js` file; let’s comment it out so it looks like
+`app.js` file; let’s uncomment that line so it looks like
 `appState.attr('page', 'restaurants');`
 
 Now, refresh the app in your browser. The path will now be `#!restaurants`,
