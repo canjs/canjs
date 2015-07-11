@@ -128,6 +128,8 @@ Notice the `//appState.attr('page', 'restaurants');` line at the end of our
 Now, refresh the app in your browser. The path will now be `#!restaurants`,
 and you’ll notice that the Restaurants link in the navigation is highlighted.
 
+![place-my-order.com home page](../can/guides/images/app-state-routing/app_state_route_rest.png)
+
 Note that, after we initialized our routes, updating the value of our
 `appState`’s `page` property caused the route to update as well.
 The value of the `page` property was serialized and appended
