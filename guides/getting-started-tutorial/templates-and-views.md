@@ -92,19 +92,19 @@ We can easily access the:
 
 - customerNumber,
 - customerType, and
-- oder
+- order
 
 fields in our Stache template. These are the properties that are 
 directly available off of the object passed in to the template, and are therefore,
-are a part of the templates root context. We can reference them simply by wrapping
+are a part of the template's root context. We can reference them simply by wrapping
 them in single or double curly braces, e.g., `{customerNumber}`. If, however, we 
-want to reference a value off of the order property, such as the order name, or _id,
-we need to use dot notation, e.g., `{order.name}`. If you have a lot of properties
+want to reference a value off of the order property&mdash;such as "name", or "_id"&mdash;we 
+need to use dot notation, e.g., `{order.name}`. If you have a lot of properties
 you need to reference off of a nested object, this can be tedious. Stache makes this
-easy for you to resolve by allowing you to define limited contexts.
+easy for you to resolve by allowing you to define contexts.
 
 A context loosely refers to the data that is available for you to 
-_directly access_ from a Stache template. Direct access means accessing a property without
+_directly access_. Direct access means accessing a property without
 providing any contextual identifiers (such as a dot, or a path). A valid context must be 
 either an object or an array. 
 
