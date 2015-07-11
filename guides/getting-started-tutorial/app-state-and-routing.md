@@ -52,7 +52,7 @@ $(function () {
 	//appState.attr('page', 'restaurants');
 
 	appState.bind('change', function(ev, prop, change, newVal, oldVal) {
-		console.log('Changed the “' + prop + '” property from “' + oldVal + '” to “' + newVal + '”.');
+		alert('Changed the “' + prop + '” property from “' + oldVal + '” to “' + newVal + '”.');
 	});
 });
 ```
