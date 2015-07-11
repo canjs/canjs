@@ -177,8 +177,8 @@ of a List.
 - [`splice`](../docs/can.List.prototype.splice.html), which removes and inserts items
 anywhere in a List.
 
-When these methods are used to modify a List, events are
-emitted, which you can listen for as well. See [the API for Lists](../docs/can.List.html) for more
+When these methods are used to modify a List events are
+emitted that you can listen for, as well. See [the API for Lists](../docs/can.List.html) for more
 information.
 
 ## Computed values
