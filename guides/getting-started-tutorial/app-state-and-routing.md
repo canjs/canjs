@@ -148,7 +148,7 @@ These lines use [`can.Map.bind`](../docs/can.Map.prototype.bind.html) to
 watch for changes to the `appState` object. Go ahead and change the URL from
 `#!restaurants` to `#!orders`. You should see an alert with this message:
 
-> Changed the “page” property from “restaurants” to “orders”.
+![place-my-order.com home page](../can/guides/images/app-state-routing/change_state_alert.png)
 
 It was mentioned earlier that we bound our AppState to the
 application’s `main.stache`. This is the key to connecting the
