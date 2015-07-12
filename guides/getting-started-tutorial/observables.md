@@ -8,26 +8,27 @@
 
 - - - -
 **In this Chapter**
- - `can.Map`, 
- - `can.List`, and 
- - `can.compute`
-
+ - `can.Map`, and 
+ - `can.List`
 - - -
 
 Observables are the subjects in the
 [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern). 
-CanJS’s observables let you create relationships between objects
-where one object (or objects) listens for and responds to changes in another object.   CanJS comes with
-three observables:
+They let you create relationships between objects
+where one object (or objects) listens for and responds to changes in another object. 
+Most of the core objects in CanJS are observables. Understanding how to effectively
+work with observables lies at the heart of understanding how to build successful 
+CanJS applications.
+
+In this section, we'll review the two observables that make up the core of most CanJS objects:
 
  - [`can.Map`](../docs/can.Map.html) - Used for Objects.
  - [`can.List`](../docs/can.List.html) - Used for Arrays.
- - [`can.compute`](../docs/can.compute.html) - Used for values.
 
 `can.Map` and `can.List` are often extended to create observable types. For example,
 [can.Model](../docs/can.Model.html) and [can.route](../docs/can.route.html) are
 based on `can.Map`, and a `can.Component`’s [`viewModel`](../docs/can.Component.prototype.viewModel.html)
-is a `can.Map`. You will rarely work directly with a can.compute.
+is a `can.Map`.
 
 ## Creating Instances
 
@@ -181,102 +182,7 @@ When these methods are used to modify a List events are
 emitted that you can listen for, as well. See [the API for Lists](../docs/can.List.html) for more
 information.
 
-## Computed values
 
-CanJS also provides a way to make values themselves observable with
-[`can.compute`](../docs/can.compute.html). A Compute represents a dynamic value
-that can be read, set, and listened to just like a Map.
-
-### Static Computes
-
-A simple static Compute contains a single value and is created by calling
-`can.compute(value)`. This value can be read, set, and listened to:
-
-```
-// create a Compute
-var age = can.compute(25),
-	previousAge = 0;
-
-// read the Compute’s value
-age(); // 25
-
-// listen for changes in the Compute’s value
-age.bind('change', function(ev, newVal, oldVal) {
-	previousAge = oldVal;
-});
-
-// set the Compute’s value
-age(26);
-
-age();       // 26
-previousAge; // 25
-```
-
-### Composite Computes
-
-Computes can also be used to generate a unique value based on values derived
-from other observable properties. This type of compute is created by calling
-`can.compute(getterFunction)`. When the observable properties that the compute is
-derived from change, the value of the compute changes:
-
-```
-var name = new can.Map({
-	first: 'Alice',
-	last: 'Liddell'
-});
-var fullName = can.compute(function() {
-	// We use attr to read the values
-	// so the compute knows what to listen to.
-	return name.attr('first') + ' ' + name.attr('last');
-});
-var previousName = '';
-
-fullName();   // 'Alice Liddell'
-
-fullName.bind('change', function(ev, newVal, oldVal) {
-	previousName = oldVal;
-});
-
-name.attr({
-	first: 'Allison',
-	last: 'Wonderland'
-});
-
-fullname();   // 'Allison Wonderland'
-previousName; // 'Alice Liddell'
-```
-
-Since the value of the Compute is cached any time a derived value is
-changed, reading the value is fast.
-
-### Converted Computes
-
-Computes are also useful for creating links to properties within Observables. One
-of the most frequent examples of this is when converting from one unit to
-another.
-
-```
-// progress ranges from 0 to 1.
-var project = new can.Map({ progress: 0.3 });
-var progressPercentage = can.compute(function(newVal) {
-	if(newVal !== undefined) {
-		// set a value
-		project.attr('progress', newVal / 100);
-	} else {
-		// get the value
-		return project.attr('progress') * 100;
-	}
-});
-
-percentage();     // 30
-
-// Setting percentage...
-percentage(75);
-// ...updates project.progress!
-project.attr('progress'); // .75
-```
-
-- - -
 
 <span class="pull-left">[&lsaquo; Application Foundations](ApplicationFoundations.html)</span>
 <span class="pull-right">[The Define Plugin &rsaquo;](TheDefinePlugin.html)</span>
