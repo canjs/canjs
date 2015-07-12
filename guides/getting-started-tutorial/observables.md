@@ -77,8 +77,30 @@ pagination.attr(); // {page: 10, perPage: 50, lastVisited: 1}
 
 When a property on a Map is changed with `attr`, the Map will emit two
 events: A _change_ event and an event with the same name as the property that
-was changed. You can listen for these events by using
-[bind](../docs/can.Map.prototype.bind.html):
+was changed. There are two ways you can listen for these events:
+
+- The define plugin
+- bind
+
+One of the major advantages of using the define plugin in your applicaitons is that
+it handles managing the relationships of your observables for you. Any time you reference
+a `can.Map` or `can.List` (or one of their child objects) in a define property
+that property is automatically subscribed as a listener for that `can.Map` or `can.List`.
+
+```
+    define: {
+      page: {
+        set: function(newVal){
+          //Because this setter function references the limit property, using .attr syntax
+          //Any time that the limit property changes, this code will automatically run
+          this.attr('offset', (parseInt(newVal) - 1) * this.attr('limit'));
+        }
+      }
+    }
+```
+
+You can also listen for events by using [bind](../docs/can.Map.prototype.bind.html),
+however this is less common:
 
 ```
 // In this example, the chanage to pagination's perPage attribute, 
