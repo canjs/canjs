@@ -160,7 +160,7 @@ above, we saw:
 {{/each}}
 ```
 
-Because the scope of the `{{#each}}` block is `items`, we can reference
+Because the context of the `{{#each}}` block is `items`, we can reference
 the `name` and `price` properties of `items` directly&mdash;i.e, we don't need to
 write `{{items.name}}` or `{{items.price}}`, we can just write `{{name}}` or `{{price}}`.
 
