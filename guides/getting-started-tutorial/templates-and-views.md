@@ -14,6 +14,10 @@ Get the code for: [chapter: templates and views](https://github.com/bitovi/canjs
 
 - - -
 
+Now that we have a basic sketch of our application, and we've covered a few CanJS fundamentals,
+it's time for us to start building our application. We'll begin by working with the
+application's templates.
+
 As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
 included the `can.stache` plugin. The CanJS docs tell us that,
