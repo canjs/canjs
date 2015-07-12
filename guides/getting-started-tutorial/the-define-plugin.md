@@ -17,23 +17,12 @@ The `define` plugin allows you to finely control the the behavior of the
 attributes on a `can.Map`. For any property you declare in the `define` plugin,
 you can control its:
 
-- [serialization](#serialization)
 - [get](#get)
 - [set](#set)
 - [type](#type)
-- [value](#value), and
+- [value](#value)
 - [remove](#remove)
-
-<a name="serialization"></a>
-### serialization 
-The first property we’ll talk about is [serialization](https://en.wikipedia.org/wiki/Serialization). The
-serialize property defines how the attribute will behave when the map is
-serialized. This can be useful for serializing complex types like dates,
-arrays, or objects into string formats. You can also control whether or not a
-given property can be serialized. Returning `undefined` from a serialization
-function for any property means this property will not be part of the
-serialized object. Managing serialization is an important consideration in [routing](AppStateAndRouting.html). 
-We’ll see how this works when we discuss routing in a later chapter.
+- [serialization](#serialization)
 
 <a name="get"></a>
 ### get 
@@ -111,6 +100,17 @@ the prototype of the object—i.e., it is not instance specific.
 ### remove 
 Called when an attribute is removed. Can be used, for example, for
 removal validation.
+
+<a name="serialization"></a>
+### serialization 
+The last property we’ll talk about is [serialization](https://en.wikipedia.org/wiki/Serialization). The
+serialize property defines how the attribute will behave when the map is
+serialized. Managing this property can be useful when serializing complex types like dates,
+arrays, or objects into strings. You can also control whether or not a
+given property can be serialized. Returning `undefined` from a serialization
+function for any property means this property will not be part of the
+serialized object. Managing serialization is an important consideration in [routing](AppStateAndRouting.html). 
+We’ll see how this works when we discuss routing in a later chapter.
 
 - - -
 
