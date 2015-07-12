@@ -1,4 +1,4 @@
-@page TemplatesAndViews Templates and Views
+@page StacheTemplates Stache Templates
 @parent Tutorial 5
 @disableTableOfContents
 
@@ -10,7 +10,7 @@
 **In this Chapter**
  - Stache Templates
 
-Get the code for: [chapter: templates and views](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-2_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: stache templates](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-2_canjs-getting-started.zip?raw=true)
 
 - - -
 
