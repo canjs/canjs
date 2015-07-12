@@ -115,6 +115,6 @@ removal validation.
 - - -
 
 <span class="pull-left">[&lsaquo; Observables](Observables.html)</span>
-<span class="pull-right">[Templates and Views &rsaquo;](TemplatesAndViews.html)</span>
+<span class="pull-right">[Templates and Views &rsaquo;](StacheTemplates.html)</span>
 
 </div>
