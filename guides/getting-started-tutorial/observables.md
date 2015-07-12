@@ -50,6 +50,9 @@ hobbies.attr(2); // 'party rocking'
 
 The [`attr`](../docs/can.Map.prototype.attr.html) method is
 used to read a property from, or write a property to a `can.Map` or `can.List`.
+While you can read the properties of a `can.Map` or `can.List` directly off 
+of the object, to take advantage of the observable functionality you must
+use the `.attr` syntax.
 
 ```
 var pagination = new can.Map({page: 1, perPage: 25, count: 1388});
