@@ -89,7 +89,7 @@ There are two ways you can add event handling to an element:
 ```
 
 Of these, the preferred method is to use parenthesis to surround the event name.
-Again, this event name can be [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events).
+Again, [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events) is supported.
 
 In addition to defining an event, you can pass certain predefined parameters 
 to the method that handles the event. These parameters include:
