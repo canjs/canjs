@@ -14,7 +14,7 @@ Get the code for: [chapter: web service communication](https://github.com/bitovi
 
 - - -
 
-To illustrate sending data to a service, let’s implementing saving an order in
+To illustrate sending data to a service, let’s implement saving an order in
 our `pmo-order` component. In the `components/order/order.js` file, locate
 where the `placeOrder` property is defined:
 
