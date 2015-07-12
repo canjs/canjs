@@ -82,10 +82,11 @@ was changed. There are two ways you can listen for these events:
 - The define plugin
 - bind
 
-One of the major advantages of using the define plugin in your applicaitons is that
-it handles managing the relationships of your observables for you. Any time you reference
-a `can.Map` or `can.List` (or one of their child objects) in a define property
-that property is automatically subscribed as a listener for that `can.Map` or `can.List`.
+One of the major advantages of using the [define plugin](TheDefinePlugin.html) (discussed in the next chapter)
+in your applicaitons is that it handles managing the relationships of your observables 
+for you. Any time you reference a `can.Map` or `can.List` (or one of their child objects) 
+in a define property that property is automatically subscribed as a listener for that `can.Map` 
+or `can.List`.
 
 ```
     define: {
