@@ -91,6 +91,16 @@ The `can.Component` we created above had three properties.
 - [template](#template), and
 - [viewModel](#viewmodel)
 
+```
+can.Component.extend({
+  tag: 'pmo-restaurant-list',
+  template: can.view('components/restaurant_list/restaurant_list.stache'),
+  viewModel: {
+    currentRestaurant: 'Hello Restaurant Customer'
+  }
+});
+```
+
 <a name="tag"></a>
 #### The “tag” Property
 The `can.Component`’s `tag` property associates that
