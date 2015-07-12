@@ -24,12 +24,56 @@ you can control its:
 - [remove](#remove)
 - [serialization](#serialization)
 
+Before we get into the properties of the define plugin, however, let's look at how to set it up.
+Creating a define is as simple as adding a define property to the instance properties
+of the `can.Map`. This property is an object literal. Remember from our conversation on 
+[`can.Construct`](Constructors.html) that passing in one argument to a `can.Construct` will set 
+its instance properties. This is important to know should you create a `can.Map` that has both
+instance and static properties, and you want to use the define plugin. Below are two an examples:
+
+```
+    //can.Map with one argument
+    var Person = can.Map.extend({
+        define: {
+            //define properties go here
+            myProperty: {
+               //property attributes
+            }
+        }
+    });
+    
+    //can.Map with two arguments
+    var Person = can.Map.extend(
+    {
+       //static properties go here
+    },
+    {
+        define: {
+            //define properties go here
+            myProperty: {
+               //property attributes
+            }
+        }
+    });
+```
+
 <a name="get"></a>
 ### get 
 A `get` function defines what happens when a value is read on a `can.Map`.
 It is typically used to provide properties that derive their value from other
-properties of the map. This is often useful when you are dealing with routing
-for creating aliases. We’ll see an example of how this is accomplished below.
+properties of the map, as below: 
+
+```
+    var Person = can.Map.extend({
+        define: {
+            fullName: {
+                get: function () {
+                    return this.attr("first") + " " + this.attr("last");
+                }
+            }
+        }
+    });
+```
 
 <a name="set"></a>
 ### set 
@@ -78,10 +122,20 @@ There are two ways to define the `type` property:
  - `Type`
  - `type` 
 
-`Type`, uppercase, is instance specific. A constructor that will be invoked, creating a new object,
-any time the property is set. Any data passed into the setter will be passed as arguments for the
+`Type`, uppercase, is instance specific. Using `Type`, a constructor will be invoked each 
+time the property is set. Any data passed into the setter will be passed as arguments for the
 constructor. In contrast, `type`, lowercase, is set on the prototype of the object—i.e.,
 it is not instance specific.
+
+```
+     define: {
+       items: {
+         type: function(newValue){
+           return typeof newValue === "string" ?  newValue.split(",") : newValue;
+         }
+       }
+     }
+```
 
 <a name="value"></a>
 ### value 
@@ -90,6 +144,14 @@ value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
 object. This is because JavaScript passes primitives by value, and all other
 values (objects, arrays, etc.) by reference.
+
+```
+    define: {
+      prop: {
+        value: function(){ return []; }
+      }
+    }
+```
 
 As with `type`, above, there are two ways to define the `value` property: `Value`,
 or `value`. `Value`, uppercase, provides a constructor function, ensuring that
@@ -111,6 +173,13 @@ given property can be serialized. Returning `undefined` from a serialization
 function for any property means this property will not be part of the
 serialized object. Managing serialization is an important consideration in [routing](AppStateAndRouting.html). 
 We’ll see how this works when we discuss routing in a later chapter.
+
+```
+    define: {
+      locationIds: {
+        serialize: false
+    }
+```
 
 - - -
 
