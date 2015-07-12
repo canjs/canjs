@@ -172,7 +172,8 @@ Note that you can place as many event handlers as you need on an element. Adding
 handlers in this way directly binds the events to the element. This can impact
 performance in situations where you have many elements to bind events to. For
 more performant event binding, you can use the `can.Component`’s [events
-property](../docs/can.Component.prototype.events.html).
+property](../docs/can.Component.prototype.events.html). Discussing this is beyond
+the scope of this introduction. See the API for more details.
 
 - - -
 
