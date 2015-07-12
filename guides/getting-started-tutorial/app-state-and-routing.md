@@ -168,7 +168,7 @@ appState.bind('change', function(ev, prop, change, newVal, oldVal) {
 
 - - -
 
-<span class="pull-left">[&lsaquo; Templates and Views](TemplatesAndViews.html)</span>
+<span class="pull-left">[&lsaquo; Templates and Views](StacheTemplates.html)</span>
 <span class="pull-right">[Components &rsaquo;](Components.html)</span>
 
 </div>
