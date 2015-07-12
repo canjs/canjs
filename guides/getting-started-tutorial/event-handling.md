@@ -80,6 +80,14 @@ There are two ways you can add event handling to an element:
  - by adding an attribute with the event name prefixed by `can-`.
  - by adding an attribute with the event name surrounded in parenthesis, e.g., `(click)`.
 
+```html
+   <!--Example using can- syntax-->
+   <input name="phone" type="text" can-keyup="{setPhoneValue @element.val}">
+   
+   <!--Example using () syntax-->
+   <input name="phone" type="text" (keyup)="{setPhoneValue @element.val}">
+```
+
 Of these, the preferred method is to use parenthesis to surround the event name.
 Again, this event name can be [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events).
 
