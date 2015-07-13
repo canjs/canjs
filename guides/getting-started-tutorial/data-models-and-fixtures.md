@@ -24,7 +24,7 @@ the data the service returns. Additionally, `can.Model` extends
 the features of a `can.Map`, such as being [observable](Observables.html).
 
 We’ll use `can.Model` to provide data for our state and city elements from
-last chapter.
+the last chapter.
 
 First, let’s open the `models/state.js` file and add the following code:
 
