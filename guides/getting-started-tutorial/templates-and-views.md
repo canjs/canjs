@@ -37,9 +37,9 @@ There are four aspects of Stache templates that we’ll review:
 - [conditional logic](#conditionallogic), and
 - [partials](#partials)
 
-It will be easiest for us to look at these with an example, so let’s create
+It will be easiest for us to look at these with an example, so let’s work with
 one. Open up your `components/order_details/order_details.stache` file.
-Edit it as follows:
+It should look like this:
 
 
 ```html
@@ -101,11 +101,12 @@ We can easily access the:
 fields in our Stache template. These are the properties that are 
 directly available off of the object passed in to the template, and are therefore,
 are a part of the template's root context. We can reference them simply by wrapping
-them in single or double curly braces, e.g., `{customerNumber}`. If, however, we 
+them in double curly braces, e.g., `{{customerNumber}}`. If, however, we 
 want to reference a value off of the order property&mdash;such as "name", or "_id"&mdash;we 
-need to use dot notation, e.g., `{order.name}`. If you have a lot of properties
-you need to reference off of a nested object, this can be tedious. Stache makes this
-easy for you to resolve by allowing you to define contexts.
+need to use dot notation, e.g., `{{order.name}}`. If you have a lot of properties
+you need to reference off of a nested object, using dot notation can be tedious. 
+Stache provides you the ability to create contexts to make working with nested objects
+easier.
 
 A context loosely refers to the data that is available for you to 
 _directly access_. Direct access means accessing a property without
@@ -167,7 +168,7 @@ write `{{items.name}}` or `{{items.price}}`, we can just write `{{name}}` or `{{
 <a name="conditionallogic"></a>
 ## Conditional Logic
 Stache templates have a limited capacity for conditional logic. Open up your
-`main.stache` file and edit it as follows:
+`main.stache` file. It should look like this:
 
 ```
 {{> header.stache}}
@@ -204,8 +205,10 @@ You might also notice the use of the `^` character, which will render the
 section if the result of the helper is false. In other words, you can write
 `{{^if action}}content{{/if}}` instead of `{{#if action}}{{else}}content{{/if}}`
 
-If you need to use more complex logic in your application, `can.Component`
-provides [helpers](../docs/can.Component.prototype.helpers.html).
+In general, it's best to keep complex logic out of your templates. Their main funciton 
+should be to display data from the view model. If you need to use more complex logic 
+to display data in your templates, you can use a helper. Helpers are not covered in detail 
+in this guide; but you can get more information on them in the API: [Helpers](../docs/can.Component.prototype.helpers.html)
 
 <a name="partials"></a>
 ## Partials
