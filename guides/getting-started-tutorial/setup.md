@@ -12,6 +12,7 @@
  - Configuring and Downloading CanJS
  - Application Bootstrap
 
+<a name="chapter-code"></a>
 Get the code for: [chapter: setup](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-0_canjs-getting-started.zip?raw=true)
 
 - - -
@@ -19,7 +20,7 @@ Get the code for: [chapter: setup](https://github.com/bitovi/canjs/blob/minor/gu
 To begin, we’ll use an example project that has all of the dependencies required 
 for the sample app that we’re going to build. The example project also has some 
 CSS and images to make our example app a little bit more stylish. Download the example
-project, by getting the code for this chapter (see above).
+project, by getting the <a href="#chapter-code">code for this chapter</a> (see above).
 
 ## Folder Structure
 
