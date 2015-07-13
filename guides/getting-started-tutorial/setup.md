@@ -132,8 +132,6 @@ At the bottom of the page, just before the closing body tag, are all of the scri
 tags. We’re using the jQuery edition of CanJS, so the first script tag
 loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 
-### can.fixture
-
 Earlier, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
 remove `can.fixture.js`. In addition, to simplify things, we’ve provided a complete CSS
