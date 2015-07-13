@@ -93,10 +93,9 @@ download a file called `can.custom.js`, which you can save to your local machine
 
 ### can.fixture
 
-The can.fxiture dependency is special because normally
+The [`can.fixture`](../docs/can.fixture.html) dependency is special because, normally,
 you don't want it to be a part of your final application; however, it can be very 
-helpful during development. The file is `can.fixture.js`.
-[can.fixture](../docs/can.fixture.html) allows you to simulate RESTful services.
+helpful during development. `can.fixture.js` allows you to simulate RESTful services.
 You can <a href="http://canjs.com/release/2.3.0/can.fixture.js" target="_blank">download it here</a>.
 
 ### jQuery
