@@ -11,7 +11,8 @@
 CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki/Model_View_ViewModel" target="_blank">MVVM</a>
 framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. This guide 
-will walk you through an analysis of a small e-commerce app built with CanJS called [Place My Order](http://place-my-order.com/). In each relevant section, we'll give you some code to play with
+will walk you through an analysis of a small e-commerce app built with CanJS called Place My Order. 
+In each relevant section, we'll give you some code to play with
 so you can have hands on experience working with CanJS, as you learn.
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
