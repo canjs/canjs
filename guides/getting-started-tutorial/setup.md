@@ -66,6 +66,12 @@ HTTP server.
 
 ## Dependencies
 
+Our application will have the following dependencies:
+
+- CanJS
+- jQuery
+- can.fixture
+
 ### CanJS
 
 The easiest way to get CanJS is to use <a href="../download.html" target="_blank">the custom download page</a>,
@@ -123,6 +129,8 @@ Our `index.html` file currently looks like this:
 At the bottom of the page, just before the closing body tag, are all of the script
 tags. We’re using the jQuery edition of CanJS, so the first script tag
 loaded must be jQuery. Following jQuery, we load `can.custom.js`.
+
+### can.fixture
 
 Earlier, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
