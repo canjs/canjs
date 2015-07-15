@@ -1706,4 +1706,28 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 		var frag = can.stache('<simple-helper></simple-helper>')();
 		equal(frag.childNodes[0].innerHTML, 'Result: 7');
 	});
+
+	test('event registered twice #1778', function() {
+		expect(1);
+
+		var oldProcessor = can.Control.processors.click;
+
+		can.Control.processors.click = function() {
+			console.log('clicked');
+			ok(true, 'clicked');
+			return can.noop;
+		};
+
+		can.Component.extend({
+			tag: 'event-registered-twice',
+			events: {
+				click: function() {}
+			}
+		});
+
+		var renderer = can.stache('<event-registered-twice></event-registered-twice>');
+		renderer();
+
+		can.Control.processors.click = oldProcessor;
+	});
 });
