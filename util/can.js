@@ -14,7 +14,10 @@ steal(function () {
 
 	can.isDeferred = can.isPromise = function (obj) {
 		// Returns `true` if something looks like a deferred.
-		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
+		return obj && (
+			(window.Promise && (obj instanceof window.Promise)) ||
+			(can.isFunction(obj.then) && can.isFunction(obj['catch'] || obj.fail))
+		);
 	};
 	can.isMapLike = function(obj){
 		return can.Map && (obj instanceof can.Map || obj && obj.___get);
