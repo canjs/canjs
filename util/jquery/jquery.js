@@ -236,35 +236,35 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 			} else {
 				$.removeData(this, "canHasAttributesBindings");
 			}
-			
+
 		}
 	};
 
-	
+
 	// ## Fix build fragment.
 	// In IE8, we can pass jQuery a fragment and it removes newlines.
 	// This checks for that and replaces can.buildFragment with something
 	// that if only a single text node is returned, returns a fragment with
 	// a text node that is set to the content.
 	(function(){
-		
+
 		var text = "<-\n>",
 			frag = can.buildFragment(text, document);
 		if(frag.firstChild && (text !== frag.firstChild.nodeValue) ) {
-			
+
 			var oldBuildFragment  = can.buildFragment;
 			can.buildFragment = function(content, context){
 				var res = oldBuildFragment(content, context);
-				if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
+				if(res.childNodes.length === 1 && res.childNodes.item(0).nodeType === 3) {
 					res.childNodes[0].nodeValue = content;
 				}
 				return res;
 			};
-			
+
 		}
-		
-		
-		
+
+
+
 	})();
 
 	$.event.special.inserted = {};
