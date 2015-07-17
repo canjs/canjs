@@ -1,6 +1,8 @@
 /* global global: false */
 steal(function () {
 	/* global GLOBALCAN */
+	/* global self */
+	/* global WorkerGlobalScope */
 	var glbl = typeof window !== "undefined" ? window :
 		(typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) ? self : global;
 
