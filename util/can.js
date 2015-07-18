@@ -1,7 +1,10 @@
 /* global global: false */
 steal(function () {
 	/* global GLOBALCAN */
-	var glbl = typeof window !== "undefined" ? window : global;
+	/* global self */
+	/* global WorkerGlobalScope */
+	var glbl = typeof window !== "undefined" ? window :
+		(typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) ? self : global;
 
 	var can = {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
