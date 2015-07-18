@@ -62,7 +62,7 @@ steal('can/util/can.js', function (can) {
 	can.insertBefore = function (el, child, ref, document) {
 		var children;
 		if (child.nodeType === 11) {
-			children = can.makeArray(child.childNodes);
+			children = can.makeArray(can.childNodes(child));
 		} else {
 			children = [child];
 		}
