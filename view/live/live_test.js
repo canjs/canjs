@@ -133,10 +133,13 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		equal(div.getElementsByTagName('label')
 			.length, 2, 'There are 2 labels');
 		div.getElementsByTagName('label')[0].myexpando = 'EXPANDO-ED';
+		
 		map.attr('animals')
 			.push('turtle');
+			
 		equal(div.getElementsByTagName('label')[0].myexpando, 'EXPANDO-ED', 'same expando');
 		equal(div.getElementsByTagName('span')[2].innerHTML, 'turtle', 'turtle added');
+		
 		map.attr('animals', new can.List([
 			'sloth',
 			'bear',

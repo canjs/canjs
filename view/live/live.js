@@ -1,4 +1,9 @@
-steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'can/view/parser',function (can, elements, view, nodeLists, parser) {
+steal('can/util',
+	'can/view/elements.js',
+	'can/view',
+	'can/view/node_lists',
+	'can/view/parser',
+	'can/util/array/diff.js', function (can, elements, view, nodeLists, parser, diff) {
 
 	elements = elements || can.view.elements;
 	nodeLists = nodeLists || can.view.NodeLists;
@@ -178,6 +183,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				isTornDown = false,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
+					
 					if (!afterPreviousEvents) {
 						return;
 					}
@@ -344,23 +350,48 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				},
 				// Called when the list is replaced or setup.
 				updateList = function (ev, newList, oldList) {
+					
 					if(isTornDown) {
 						return;
 					}
-					teardownList();
+					
+					
 					// make an empty list if the compute returns null or undefined
 					list = newList || [];
 					
+					
+					afterPreviousEvents = true;
+					if(newList && oldList) {
+						var patches = diff(oldList, newList);
+						
+						if ( oldList.unbind ) {
+							oldList.unbind('add', add)
+								.unbind('remove', remove)
+								.unbind('move', move);
+						}
+						for(var i = 0, patchLen = patches.length; i < patchLen; i++) {
+							var patch = patches[i];
+							if(patch.deleteCount) {
+								remove({}, {
+									length: patch.deleteCount
+								}, patch.index, true);
+							}
+							if(patch.insert.length) {
+								add({}, patch.insert, patch.index);
+							}
+						}
+					} else {
+						teardownList();
+						add({}, list, 0);
+					}
+					afterPreviousEvents = false;
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
 							.bind('remove', remove)
 							.bind('move', move);
 					}
-					// temporarily allow add method.
-					afterPreviousEvents = true;
-					add({}, list, 0);
-					afterPreviousEvents = false;
+					
 					
 					can.batch.afterPreviousEvents(function(){
 						afterPreviousEvents = true;
