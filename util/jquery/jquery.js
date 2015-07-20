@@ -256,7 +256,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", 'can/util/array
 			can.buildFragment = function(content, context){
 				var res = oldBuildFragment(content, context);
 				if(res.childNodes.length === 1 && res.childNodes.item(0).nodeType === 3) {
-					res.childNodes[0].nodeValue = content;
+					res.childNodes.item(0).nodeValue = content;
 				}
 				return res;
 			};
