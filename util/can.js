@@ -166,6 +166,8 @@ steal(function () {
 
 	can.isBrowserWindow = typeof window !== "undefined" &&
 		typeof document !== "undefined" && typeof SimpleDOM === "undefined";
+	can.isWebWorker = typeof WorkerGlobalScope !== "undefined" &&
+		(self instanceof WorkerGlobalScope);
 
 
 	//!steal-remove-start
