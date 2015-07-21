@@ -986,7 +986,7 @@ Gets an object from a string.
 
 Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
 
-    Foo = {Bar: {Zar: {"Ted"}}}
+    Foo = {Bar: {Zar: "Ted"}}
     can.getObject("Foo.Bar.Zar") //-> "Ted"
 */
 //
