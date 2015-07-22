@@ -43,4 +43,8 @@ steal("can/util/can.js", "can-simple-dom", "./build_fragment/make_parser", funct
 		search: '',
 		hash: ''
 	};
+	global.history = {
+		pushState: can.k,
+		replaceState: can.k
+	};
 });
