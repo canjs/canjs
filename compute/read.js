@@ -108,7 +108,8 @@ steal("can/util", function(can){
 			return type === 'function' && !value.isComputed &&
 				(options.executeAnonymousFunctions || (options.isArgument && i === reads.length) ) &&
 				!(can.Construct && value.prototype instanceof can.Construct) &&
-				!(can.route && value === can.route);
+				!(can.route && value === can.route) &&
+				!(!!value.render);
 		},
 		read: function(value, i, reads, options, state, prev){
 			if (options.isArgument && i === reads.length) {

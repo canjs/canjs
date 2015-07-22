@@ -4019,4 +4019,18 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		// Helpers evaluated 3rd time...
 		state.attr('parent.child', 'bar');
 	});
+
+	test("Using a renderer function as a partial", function(){
+		var template = can.stache("{{> other}}");
+		var partial = can.stache("hello there");
+		var map = new can.Map({ other: null });
+
+		var frag = template(map);
+
+		equal(frag.firstChild.nodeValue, "", "Initially it is a blank textnode");
+
+		map.attr("other", partial);
+
+		equal(frag.firstChild.nodeValue, "hello there", "partial rendered");
+	});
 });
