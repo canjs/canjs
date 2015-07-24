@@ -282,22 +282,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				this._control = new this.constructor.Control(el, {
 					// Pass the viewModel to the control so we can listen to it's changes from the controller.
 					scope: this.scope,
-					viewModel: this.scope
+					viewModel: this.scope,
+					destroy: callTeardownFunctions
 				});
-
-				// If control has a 'destroy' event, unbind the properties after its called #1415
-				if(this._control && this._control.destroy){
-					var oldDestroy = this._control.destroy;
-					this._control.destroy = function(){
-						oldDestroy.apply(this, arguments);
-						callTeardownFunctions();
-					};
-					this._control.on();
-				} else {
-					can.bind.call(el, "removed", function () {
-						callTeardownFunctions();
-					});
-				}
 
 				// ## Rendering
 
@@ -478,6 +465,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 			// Call `can.Control.prototype.off` function on this instance to cleanup the bindings.
 			can.Control.prototype.off.apply(this, arguments);
 			this._bindings.readyComputes = {};
+		},
+		destroy: function() {
+			if(typeof this.options.destroy === 'function') {
+				this.options.destroy.apply(this, arguments);
+			}
 		}
 	});
 
