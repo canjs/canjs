@@ -838,4 +838,35 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.trigger(document.getElementById("click-me"), "click");
 		
 	});
+
+	test('Conditional can-EVENT bindings are bound/unbound', 2, function () {
+		var state = new can.Map({
+			enableClick: true,
+			clickHandler: function () {
+				ok(true, '"click" was handled');
+			}
+		});
+
+		var template = can.stache('<button id="find-me" {{#if enableClick}}can-click="{clickHandler}"{{/if}}></button>');
+		var frag = template(state);
+
+		var sandbox = document.getElementById("qunit-fixture");
+		sandbox.appendChild(frag);
+
+		var btn = document.getElementById('find-me');
+
+		can.trigger(btn, 'click');
+		state.attr('enableClick', false);
+
+		stop();
+		setTimeout(function() {
+			can.trigger(btn, 'click');
+			state.attr('enableClick', true);
+
+			setTimeout(function() {
+				can.trigger(btn, 'click');
+				start();
+			}, 10);
+		}, 10);
+	});
 });

@@ -4019,4 +4019,23 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		// Helpers evaluated 3rd time...
 		state.attr('parent.child', 'bar');
 	});
+
+	test('Custom attribute callbacks are called when in a conditional within a live section', 8, function () {
+		can.view.attr('test-attr', function(el, attrData) {
+			ok(true, "test-attr called");
+			equal(attrData.attributeName, 'test-attr', "attributeName set correctly");
+			ok(attrData.scope, "scope isn't undefined");
+			ok(attrData.options, "options isn't undefined");
+		});
+
+		var state = new can.Map({
+			showAttr: true
+		});
+
+		var template = can.stache('<button id="find-me" {{#if showAttr}}test-attr{{/if}}></button>');
+		template(state);
+
+		state.attr('showAttr', false);
+		state.attr('showAttr', true);
+	});
 });
