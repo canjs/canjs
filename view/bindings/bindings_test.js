@@ -869,4 +869,19 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			}, 10);
 		}, 10);
 	});
+
+	test("<select can-value={value}> with undefined value selects option without value", function () {
+
+		var template = can.view.stache("<select can-value='opt'><option>Loading...</option></select>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var select = ta.childNodes[0];
+		QUnit.equal(select.selectedIndex, 0, 'Got selected index');
+	});
 });
