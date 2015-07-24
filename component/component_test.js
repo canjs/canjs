@@ -1558,6 +1558,31 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 
 	});
 
+	test("attach events on init", function(){
+
+		expect(2);
+		can.Component.extend({
+			tag: 'app-foo',
+			template: can.stache('<div>click me</div>'),
+			events: {
+				init: function(){
+					this.on("div", 'click', 'doSomethingfromInit');
+				},
+				inserted: function(){
+					this.on("div", 'click', 'doSomethingfromInserted');
+				},
+				doSomethingfromInserted: function(){
+					ok(true, "bound in inserted");
+				},
+				doSomethingfromInit: function(){
+					ok(true, "bound in init");
+				}
+			}
+		});
+		can.append( can.$("#qunit-fixture"), can.stache("<app-foo></app-foo>")({}));
+		can.trigger(can.$('#qunit-fixture div'), 'click');
+	});
+
 	if(can.isFunction(Object.keys)) {
 		test('<content> node list cleans up properly as direct child (#1625, #1627)', 2, function() {
 			var size = Object.keys(can.view.nodeLists.nodeMap).length;

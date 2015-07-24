@@ -274,7 +274,7 @@ steal("can/control", "steal-qunit", function () {
 			'{noExistStuff} proc': function () {}
 		});
 		var c = new Control(document.createElement('div'));
-		equal(c._bindings.user.length, 1, 'There is only one binding');
+		equal(c._bindings.removed.length, 1, 'There is only one binding');
 	});
 	test('Multiple calls to destroy', 2, function () {
 		var Control = can.Control({
@@ -288,6 +288,30 @@ steal("can/control", "steal-qunit", function () {
 		c.destroy();
 		c.destroy();
 	});
+
+	test("calling on shouldn't unbind anything", function(){
+		var Control = can.Control({
+			init: function(){
+				this.on('click', function(){
+					ok(true, 'clicked 1');
+				})
+			},
+			"click": function(){
+				ok(true, 'clicked 2');
+			},
+			"removed": function(){
+				ok(true, 'removed');
+			},
+			"{foo} change": function(){}
+		});
+		can.append(can.$('#qunit-fixture'), '<div></div>');
+		var c = new Control("#qunit-fixture div");
+		expect(3);
+		c.on();
+		can.trigger(can.$('#qunit-fixture div'), 'click');
+		can.remove(can.$('#qunit-fixture div'));
+	});
+
 	if (can.dev) {
 		test('Control is logging information in dev mode', function () {
 			expect(2);
