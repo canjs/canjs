@@ -312,8 +312,16 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				return;
 			}
 			var val = this.options.value();
+			// For https://github.com/bitovi/canjs/issues/1679. We don't want to set
+			// null or undefined on select fields because Chrome shows it as blank
+			if(val == null && this.element[0].nodeName.toUpperCase() !== "SELECT") {
+				val = '';
+			}
+
 			// Set the element's value to match the attribute that was passed in
-			this.element[0].value = (val == null ? '' : val);
+			if(val != null) {
+				this.element[0].value = val;
+			}
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
 			// If the input value changes, this will set the live bound data to reflect the change.
