@@ -6,7 +6,7 @@ a component's viewModel values in the user content.
 
 @option {Boolean}  `false` limits reading to:
  
-- the component's viewModel from the the component's template, and
+- the component's viewModel from the component's template, and
 - the outer scope values from the user content.
 
 `true` adds the ability to read:

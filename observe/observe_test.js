@@ -1384,4 +1384,46 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", "steal-qunit
 		equal(person._bindings, 0, "After unbinding no bindings");
 	});
 
+	test('compute bound to object property (#1719)', 4, function () {
+		var obj = {};
+		obj.foo = 'bar';
+
+		var value = can.compute(obj, 'foo', 'change');
+		equal(value(), 'bar', 'property retrieved correctly');
+
+		value('baz');
+		equal(obj.foo, 'baz', 'property changed correctly');
+
+		var handler = function(ev, newVal, oldVal) {
+			equal(newVal, 'qux', 'change handler newVal correct');
+			equal(oldVal, 'baz', 'change handler oldVal correct');
+		};
+		value.bind('change', handler);
+		value('qux');
+		value.unbind('change', handler);
+	});
+
+	test('compute bound to nested object property (#1719)', 4, function () {
+		var obj = {
+			prop: {
+				subprop: {
+					foo: 'bar'
+				}
+			}
+		};
+
+		var value = can.compute(obj, 'prop.subprop.foo', 'change');
+		equal(value(), 'bar', 'property retrieved correctly');
+
+		value('baz');
+		equal(obj.prop.subprop.foo, 'baz', 'property changed correctly');
+
+		var handler = function(ev, newVal, oldVal) {
+			equal(newVal, 'qux', 'change handler newVal correct');
+			equal(oldVal, 'baz', 'change handler oldVal correct');
+		};
+		value.bind('change', handler);
+		value('qux');
+		value.unbind('change', handler);
+	});
 });
