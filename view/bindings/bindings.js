@@ -258,7 +258,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				return scopeData.value.apply(scopeData.parent, args);
 			};
-
+		
 		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is
 		// a function that returns an object containing an event and a handler. These are to be used for binding. For example,
 		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to
@@ -271,6 +271,15 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
+		
+		// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
+		var attributesHandler = function(ev) {
+			if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
+				can.unbind.call(el, event, handler);
+				can.unbind.call(el, 'attributes', attributesHandler);
+			}
+		};
+		can.bind.call(el, 'attributes', attributesHandler);
 	};
 
 	// ## can-EVENT
@@ -311,8 +320,16 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				return;
 			}
 			var val = this.options.value();
+			// For https://github.com/bitovi/canjs/issues/1679. We don't want to set
+			// null or undefined on select fields because Chrome shows it as blank
+			if(val == null && this.element[0].nodeName.toUpperCase() !== "SELECT") {
+				val = '';
+			}
+
 			// Set the element's value to match the attribute that was passed in
-			this.element[0].value = (val == null ? '' : val);
+			if(val != null) {
+				this.element[0].value = val;
+			}
 		},
 		// If the input value changes, this will set the live bound data to reflect the change.
 			// If the input value changes, this will set the live bound data to reflect the change.

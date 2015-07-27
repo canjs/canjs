@@ -3,6 +3,17 @@
 @parent guides 5
 -->
 
+__2.2.7__ ( Jul 24 2015 )
+
+- [can.compute change handler context should be the function not the can.Compute object](https://github.com/bitovi/canjs/issues/1763)
+- [Provide a getter and setter compute interface for non-map-like targets](https://github.com/bitovi/canjs/issues/1719)
+- [Unable to load canjs in node.js environment](https://github.com/bitovi/canjs/issues/1711)
+- [Makes scope.computeData listen to every observable in scope when value is not defined.](https://github.com/bitovi/canjs/pull/1709)
+- [&lt;select can-value=&quot;{value}&quot; with undefined value and option without value](https://github.com/bitovi/canjs/issues/1679)
+- [Conditional can-EVENT bindings don&#39;t work in stache](https://github.com/bitovi/canjs/issues/1650)
+- [Event handlers attached on Component&#39;s init (event) are not called. ](https://github.com/bitovi/canjs/issues/1623)
+
+
 __2.2.6__ ( May 20 2015 )
 
 - [Fix calling define getters on map initialization](https://github.com/bitovi/canjs/pull/1704)

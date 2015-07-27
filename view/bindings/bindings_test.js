@@ -957,7 +957,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'Imported: David 7',
 			'{this} component scope imported into variable');
 	});
-
+	
 	test('importing scope ^prop="{{scopeProp}}"', function() {
 		can.Component.extend({
 			tag: 'import-prop-scope',
@@ -1227,5 +1227,53 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});*/
 	
+
+
+	test('Conditional can-EVENT bindings are bound/unbound', 2, function () {
+		var state = new can.Map({
+			enableClick: true,
+			clickHandler: function () {
+				ok(true, '"click" was handled');
+			}
+		});
+
+		var template = can.stache('<button id="find-me" {{#if enableClick}}can-click="{clickHandler}"{{/if}}></button>');
+		var frag = template(state);
+
+		var sandbox = document.getElementById("qunit-fixture");
+		sandbox.appendChild(frag);
+
+		var btn = document.getElementById('find-me');
+
+		can.trigger(btn, 'click');
+		state.attr('enableClick', false);
+
+		stop();
+		setTimeout(function() {
+			can.trigger(btn, 'click');
+			state.attr('enableClick', true);
+
+			setTimeout(function() {
+				can.trigger(btn, 'click');
+				start();
+			}, 10);
+		}, 10);
+	});
+
+	test("<select can-value={value}> with undefined value selects option without value", function () {
+
+		var template = can.view.stache("<select can-value='opt'><option>Loading...</option></select>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var select = ta.childNodes[0];
+		QUnit.equal(select.selectedIndex, 0, 'Got selected index');
+	});
+
 
 });
