@@ -24,5 +24,5 @@ Example:
 </my-tabs>
 ```
 
-Currently this __only__ works with [can/view/autorender] and the [can/view/stache/system] plugin.
+Currently this __only__ works with [can/view/autorender] or the [can/view/stache/system] plugin.
 

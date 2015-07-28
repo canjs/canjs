@@ -13,10 +13,13 @@
 steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.js', function (can, bind) {
 
 	// The `can.compute` generator function.
+
 	can.compute = function (getterSetter, context, eventName, bindOnce) {
 		// Create an internal `can.Compute`.
 		var internalCompute = new can.Compute(getterSetter, context, eventName, bindOnce);
 		// The "compute" function that calls compute instance's get or set function. 
+		var bind = internalCompute.bind;
+		var unbind = internalCompute.unbind;
 		var compute = function(val) {
 			if(arguments.length) {
 				return internalCompute.set(val);
@@ -24,10 +27,27 @@ steal('can/util', 'can/util/bind', 'can/util/batch', 'can/compute/proto_compute.
 
 			return internalCompute.get();
 		};
+		var cid = can.cid(compute, 'compute');
+		var handlerKey = '__handler' + cid;
 
-		// Point the compute function's methods to the compute instance's methods.
-		compute.bind = can.proxy(internalCompute.bind, internalCompute);
-		compute.unbind = can.proxy(internalCompute.unbind, internalCompute);
+		compute.bind = function(ev, handler) {
+			var computeHandler = handler && handler[handlerKey];
+			if(handler && !computeHandler) {
+				computeHandler = handler[handlerKey] = function() {
+					handler.apply(compute, arguments);
+				};
+			}
+
+			return bind.call(internalCompute, ev, computeHandler);
+		};
+		compute.unbind = function(ev, handler) {
+			var computeHandler = handler && handler[handlerKey];
+			if(computeHandler) {
+				delete handler[handlerKey];
+				return internalCompute.unbind(ev, computeHandler);
+			}
+			return unbind.apply(internalCompute, arguments);
+		};
 		compute.isComputed = internalCompute.isComputed;
 		compute.clone = function(ctx) {
 			if(typeof getterSetter === 'function') {

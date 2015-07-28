@@ -1,4 +1,4 @@
-steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
+steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, live, utils, liveStache) {
 	live = live || can.view.live;
 	
 	var TextSectionBuilder = function(){
@@ -41,7 +41,7 @@ steal("can/util", "can/view/live","./utils.js",function(can, live, utils){
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
 					} else {
-						live.attributes( this, compute );
+						liveStache.attributes(this, compute, scope, options);
 					}
 					compute.unbind("change", emptyHandler);
 				} else {

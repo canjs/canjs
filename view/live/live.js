@@ -708,6 +708,7 @@ steal('can/util',
 	};
 	live.attr = live.simpleAttribute;
 	live.attrs = live.attributes;
+	live.getAttributeParts = getAttributeParts;
 	var newLine = /(\r|\n)+/g;
 	var getValue = function (val) {
 		var regexp = /^["'].*["']$/;
