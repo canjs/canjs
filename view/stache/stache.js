@@ -293,7 +293,7 @@ steal(
 						}
 						makeRendererAndUpdateSection(state.node.section, mode, expression );
 					} else {
-						throw mode+" is currently not supported within a tag.";
+						throw new Error(mode+" is currently not supported within a tag.");
 					}
 					
 					

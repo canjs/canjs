@@ -490,7 +490,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 					if( Map.helpers.isObservable(current) ) {
 						current._set(second, value);
 					} else {
-						throw "can.Map: Object does not exist";
+						throw new Error("can.Map: Object does not exist");
 					}
 				} else {
 					if (this.__convert) {

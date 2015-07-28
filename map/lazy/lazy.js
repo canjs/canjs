@@ -192,7 +192,7 @@ steal('can/util', './bubble.js', 'can/map', 'can/list', './nested_reference.js',
 			} else if (!data.parts.length) {
 				this.__set(attr, value, data.value, data);
 			} else {
-				throw "can.LazyMap: object does not exist";
+				throw new Error("can.LazyMap: object does not exist");
 			}
 		},
 		__set: function (prop, value, current, data, convert) {
