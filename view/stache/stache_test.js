@@ -2168,7 +2168,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 			//animals.push("dog")
 			equal(div.getElementsByTagName('label')
-				.length, 2, "There are 2 labels")
+				.length, 2, "There are 2 labels");
 
 			animals.push("turtle")
 

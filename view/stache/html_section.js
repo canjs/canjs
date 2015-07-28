@@ -1,6 +1,6 @@
 steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( can, target, utils, mustacheCore ) {
 
-	
+
 	var decodeHTML = typeof document !== "undefined" && (function(){
 		var el = document.createElement('div');
 		return function(html){
@@ -8,25 +8,25 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 				return html.replace(/\r\n/g,"\n");
 			}
 			el.innerHTML = html;
-			return el.childNodes.length === 0 ? "" : el.childNodes[0].nodeValue;
+			return el.childNodes.length === 0 ? "" : el.childNodes.item(0).nodeValue;
 		};
 	})();
 	// ## HTMLSectionBuilder
 	//
 	// Contains a stack of HTMLSections.
 	// An HTMLSection is created everytime a subsection is found. For example:
-	// 
+	//
 	//     {{#if items}} {{#items}} X
 	//
-	// At the point X was being processed, their would be 2 HTMLSections in the 
+	// At the point X was being processed, their would be 2 HTMLSections in the
 	// stack.  One for the content of `{{#if items}}` and the other for the
 	// content of `{{#items}}`
 	var HTMLSectionBuilder = function(){
 		this.stack = [new HTMLSection()];
 	};
-	
+
 	can.extend(HTMLSectionBuilder.prototype,utils.mixins);
-	
+
 	can.extend(HTMLSectionBuilder.prototype,{
 		startSubSection: function(process){
 			var newSection = new HTMLSection(process);
@@ -60,7 +60,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 		},
 		compile: function(){
 			var compiled = this.stack.pop().compile();
-			
+
 			return function(scope, options, nodeList){
 				if ( !(scope instanceof can.view.Scope) ) {
 					scope = can.view.Scope.refsScope().add(scope || {});
@@ -78,7 +78,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			return this.last().pop();
 		}
 	});
-	
+
 	var HTMLSection = function(process){
 		this.data = "targetData";
 		this.targetData = [];
@@ -139,7 +139,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			return !this.targetData.length;
 		}
 	});
-	
+
 	return HTMLSectionBuilder;
-	
+
 });

@@ -414,7 +414,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		ready: function (val) {
 			if (val !== true) {
 				can.route._setup();
-				if(can.isBrowserWindow) {
+				if(can.isBrowserWindow || can.isWebWorker) {
 					can.route.setState();
 				}
 			}
@@ -550,7 +550,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				// For hashbased routing, it's everything after the #, for
 				// pushState it's configurable
 				matchingPartOfURL: function () {
-					return location.href.split(/#!?/)[1] || "";
+					var loc = can.route.location || location;
+					return loc.href.split(/#!?/)[1] || "";
 				},
 				// gets called with the serialized can.route data after a route has changed
 				// returns what the url has been updated to (for matching purposes)

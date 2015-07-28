@@ -1,7 +1,6 @@
 // Everything CanJS+jquery app needs to run to pass
 // if you are doing almost everything with the can.util layer
-steal("can-simple-dom", "./build_fragment/make_parser", function(simpleDOM, makeParser){
-
+steal("can/util/can.js", "can-simple-dom", "./build_fragment/make_parser", function(can, simpleDOM, makeParser){
 	var document = new simpleDOM.Document();
 	var serializer = new simpleDOM.HTMLSerializer(simpleDOM.voidMap);
 	var parser = makeParser(document);
@@ -29,6 +28,7 @@ steal("can-simple-dom", "./build_fragment/make_parser", function(simpleDOM, make
 		Object.defineProperty(simpleDOM.Element.prototype, "innerHTML", descriptor());
 		Object.defineProperty(simpleDOM.Element.prototype, "outerHTML", descriptor(true));
 	}
+	var global = can.global;
 	global.document = document;
 	global.window = global;
 	global.addEventListener = function(){};
@@ -42,5 +42,9 @@ steal("can-simple-dom", "./build_fragment/make_parser", function(simpleDOM, make
 		pathname: '',
 		search: '',
 		hash: ''
+	};
+	global.history = {
+		pushState: can.k,
+		replaceState: can.k
 	};
 });

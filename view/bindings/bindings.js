@@ -366,7 +366,6 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			},
 			// This event is triggered by the DOM.  If a change event occurs, we must set the value of the compute (options.value).
 			"change": function () {
-
 				if (this.isCheckbox) {
 					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If
 					// can-false-value was used and checked is false, set value to the string value of can-false-value.
@@ -488,7 +487,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			childScope = new can.view.Scope(childViewModel),
 			computeData = childScope.computeData(prop, {
 				args: [],
-				
+
 			}),
 			childCompute = computeData.compute,
 			parentViewModel = attrData.scope.getViewModel();
@@ -513,12 +512,12 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
 			twoWayBind = true;
 
-		
+
 		if(prop.charAt(0) === "{") {
 			twoWayBind = false;
 			prop = removeBrackets( prop );
 		}
-		
+
 		var viewModel = can.viewModel(el);
 		var scope = new can.view.Scope(viewModel);
 		var refs = attrData.scope.getRefs();
@@ -537,7 +536,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 		var initialValue = compute();
 		refs.attr(name, initialValue === undefined ? null : initialValue);
-		
+
 		if(twoWayBind) {
 			var twoWayHandler = function(ev, newVal){
 				compute(newVal);
