@@ -19,6 +19,10 @@ var	allModuleNames = _.map(modules,function(mod){
 	};
 
 var canNormalize = function(name, depLoad, curName){
+	if(!depLoad) {
+		return name;
+	}
+
 	if( depLoad.address.indexOf("node_modules") >= 0 ) {
 		return denpm(name);
 	}
@@ -216,7 +220,7 @@ module.exports = function(){
 								moduleName = "./"+moduleName
 							}
 							return moduleName;
-						} 
+						}
 						if(depName === "jquery/jquery") {
 							return "jquery"
 						}
@@ -228,9 +232,9 @@ module.exports = function(){
 						if(isNpm(moduleName)) {
 							moduleName = moduleName.substr(moduleName.lastIndexOf("#")+1);
 						}
-						
+
 						name = moduleName.replace("can/","")+".js";
-						
+
 						return path.join(__dirname,"..", "dist", "cjs", name);
 					},
 					format: "cjs",
