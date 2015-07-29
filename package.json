@@ -46,7 +46,8 @@
 		"steal-tools": "~0.7.1",
 		"steal-benchmark": "~0.0.1",
 		"testee": "^0.1.3",
-		"zombie": "~2.0.8"
+		"zombie": "~2.0.8",
+		"documentjs": "0.3.0-pre.5"
 	},
 	"scripts": {
 		"test": "grunt test"
@@ -133,7 +134,8 @@
 			"lodash",
 			"browserify",
 			"grunt-banner",
-			"steal-benchmark"
+			"steal-benchmark",
+			"documentjs"
 		]
 	},
 	"browser": {
