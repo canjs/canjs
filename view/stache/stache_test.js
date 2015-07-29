@@ -1,5 +1,6 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",function(){
+steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",
+	"./mustache_core_test.js",function(){
 	var browserDoc = window.document;
 	var simpleDocument = new SimpleDOM.Document();
 
@@ -4148,4 +4149,76 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		state.attr('showAttr', false);
 		state.attr('showAttr', true);
 	});
+	
+	test("inner expressions (#1769)", function(){
+	
+		
+	
+		var template = can.stache("{{helperA helperB(1 valueA propA=valueB propC=2) 'def' outerPropA=helperC(2 valueB)}}")
+	
+		var frag = template({
+			valueA: "A",
+			valueB: "B"
+		},{
+			helperA: function(arg1, arg2, options){
+				equal(arg1, "helperB value", "static argument");
+				equal(arg2, "def", "scope argument");
+				equal(options.hash.outerPropA, "helperC value", "scope hash");
+				return "helperA value";
+			},
+			helperB: function(arg1, arg2, options){
+				equal(arg1, 1, "static argument");
+				equal(arg2, "A", "scope argument");
+				equal(options.hash.propA, "B", "scope hash");
+				equal(options.hash.propC, 2, "static hash");
+				return "helperB value";
+			},
+			helperC: function(arg1, arg2){
+				equal(arg1, 2, "helperC static argument");
+				equal(arg2, "B", "helperC scope argument");
+				return "helperC value";
+			}
+		});
+		
+		equal(frag.firstChild.nodeValue, "helperA value");
+		
+		var template = can.stache("{{helperA helperB(1 valueA propA=valueB propC=2) 'def' outerPropA=helperC(2 valueB)}}");
+	
+	
+		var valueB = can.compute("B");
+	
+		var frag = template({
+			valueA: "A",
+			valueB: valueB
+		},{
+			helperA: function(arg1, arg2, options){
+				equal(arg1(), "helperB value", "static argument");
+				equal(arg2, "def", "scope argument");
+				equal(options.hash.outerPropA(), "helperC value", "scope hash");
+				return arg1()+"-"+options.hash.outerPropA();
+			},
+			helperB: function(arg1, arg2, options){
+				equal(arg1, 1, "static argument");
+				equal(arg2, "A", "scope argument");
+				equal(options.hash.propA(), "B", "scope hash");
+				equal(options.hash.propC, 2, "static hash");
+				return "helperB="+options.hash.propA();
+			},
+			helperC: function(arg1, arg2){
+				equal(arg1, 2, "helperC static argument");
+				equal(arg2(), "B", "helperC scope argument");
+				return "helperC="+arg2();
+			}
+		});
+		
+		equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
+		
+		valueB("X");
+		
+		equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
+	});
+	
+	
+	
+	
 });

@@ -31,7 +31,8 @@ steal("can/util",
 	// ## Helpers
 
 	// Breaks up the name and arguments of a mustache expression.
-	var argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+	var argumentsRegExp = /('.*?'|".*?"|=|[\w]+|[\(\)])/g,
+		literalRegExp = /('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined)/,
 		// Identifies the type of an argument or hash in a mustache expression.
 		literalNumberStringBooleanRegExp = /^(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(?:(.+?)=(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(.+))))$/,
 		// Finds mustache tags and their surrounding whitespace.
@@ -115,8 +116,109 @@ steal("can/util",
 			});
 		};
 
+	var Expression = function(value){
+		this._value = value;
+	};
+	Expression.prototype.value = function(scope){
+		return this._value;
+	};
+	var MethodExpression = function(name, args, hash) {
+		this.name = name;
+		this.args = args;
+		this.hash = hash;
+	};
+	MethodExpression.prototype = new Expression;
+	
+	MethodExpression.prototype.args = function(scope){
+		var args = [];
+		for(var i = 0, len = this.args.length; i < len; i++) {
+			var arg = this.args[i];
+			args.push( arg.value.apply(arg, arguments) );
+		}
+		return args;
+	};
+	MethodExpression.prototype.hash = function(scope){
+		var hash = {};
+		for(var prop in this.hash) {
+			var val = this.hash[prop];
+			hash[prop] = val.value.apply(arg, arguments);
+		}
+		return hash;
+	};
+	MethodExpression.prototype.fn = function(scope, options){
+		var args = this.args(),
+			hash = this.hash(),
+			context = scope.attr("."),
+			looksLikeAHelper = this.args.length || !can.isEmptyObject(this.hash),
+			helper;
+			
+		// If the expression looks like a helper, try to get a helper right away.
+		if (looksLikeAHelper) {
+			// Try to find a registered helper.
+			helper = mustacheHelpers.getHelper(this.name, options);
 
+			// If a function is on top of the context, call that as a helper.
+			if(!helper && typeof context[this.name] === "function") {
+				helper = {fn: context[this.name]};
+			}
 
+		}
+		if(!helper) {
+			// Get info about the compute that represents this lookup.
+			// This way, we can get the initial value without "reading" the compute.
+			var computeData = getKeyComputeData(this.name, scope, false),
+				compute = computeData.compute;
+
+			initialValue = computeData.initialValue;
+
+			// Set name to be the compute if the compute reads observables,
+			// or the value of the value of the compute if no observables are found.
+			if(computeData.compute.computeInstance.hasDependencies) {
+				name = compute;
+			} else {
+				name = initialValue;
+			}
+
+			// If it doesn't look like a helper and there is no value, check helpers
+			// anyway. This is for when foo is a helper in `{{foo}}`.
+			if( !looksLikeAHelper && initialValue === undefined ) {
+				helper = mustacheHelpers.getHelper(get, options);
+			}
+			// Otherwise, if the value is a function, we'll call that as a helper.
+			else if(typeof initialValue === "function") {
+				helper = {
+					fn: initialValue
+				};
+			}
+
+		}
+		return helper && helper.fn;
+	};
+	
+	MethodExpression.prototype.value = function(scope, options, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
+		
+		//!steal-remove-start
+		if ( !helper && initialValue === undefined) {
+			if(looksLikeAHelper) {
+				can.dev.warn('can/view/stache/mustache_core.js: Unable to find helper "' + exprData.name.get + '".');
+			} else {
+				can.dev.warn('can/view/stache/mustache_core.js: Unable to find key or helper "' + exprData.name.get + '".');
+			}
+		}
+		//!steal-remove-end
+		
+		
+	};
+	var ScopeExpression = function(key){
+		this.key = key;
+	};
+	ScopeExpression.prototype = new Expression;
+	ScopeExpression.prototype.value = function(scope) {
+		return getKeyArgValue(this.key, scope);
+	};
+	
+	
+	
 	var core = {
 		// ## mustacheCore.expressionData
 		// Returns processed information about the arguments and hash in a mustache expression.
@@ -130,35 +232,56 @@ steal("can/util",
 		 * @option {Object.<String,can.mustache.Lookup|*>} hashes A mapping of hash name to lookup values or JS literal values.
 		 */
 		expressionData: function(expression){
-			var args = [],
-				hashes = {},
-				i = 0;
-
-			(can.trim(expression) + ' ').replace(argumentsRegExp, function (whole, arg) {
-				var m;
-				// Check for special helper arguments (string/number/boolean/hashes).
-				if (i && (m = arg.match(literalNumberStringBooleanRegExp))) {
-					if(m[1] || m[2]) {
-						args.push(utils.jsonParse(m[1] || m[2]));
+			var tokens = this.expressionDataTokenize(expression);
+			return this._expressionData(tokens, {index: 0});
+		},
+		_expressionData: function(tokens, cursor){
+			var args = [];
+			var hashes = {};
+			var i = 0;
+			while(cursor.index < tokens.length) {
+				var token = tokens[cursor.index],
+					nextToken = tokens[cursor.index+1],
+					futureToken = tokens[cursor.index+2];
+				
+				if(token === "(") {
+					cursor.index++;
+					args.push( this._expressionData(tokens, cursor) );
+				} else if(token === ")") {
+					cursor.index++;
+					return {
+						name: args.shift(),
+						args: args,
+						hash: hashes
+					};
+				} else if( nextToken === "=" ) {
+					cursor.index++;
+					cursor.index++;
+					cursor.index++;
+					if(futureToken === "(") {
+						hashes[token] = this._expressionData(tokens, cursor);
+					} else {
+						
+						hashes[token] = literalRegExp.test( futureToken ) ? 
+						 utils.jsonParse( futureToken ) : {get: futureToken};
 					}
-					// Found a hash object.
-					else {
-						// Addd to the hash object.
-						hashes[m[3]] =  (m[6] ?  {get: m[6]} :  utils.jsonParse(m[4] || m[5]));
-					}
+				} else {
+					cursor.index++;
+					args.push( literalRegExp.test( token ) ? utils.jsonParse( token ) :  {get: token} );
 				}
-				// Otherwise output a normal interpolation reference.
-				else {
-					args.push({get: arg});
-				}
-				i++;
-			});
-
+			}
 			return {
 				name: args.shift(),
 				args: args,
 				hash: hashes
 			};
+		},
+		expressionDataTokenize: function(expression){
+			var tokens = [];
+			(can.trim(expression) + ' ').replace(argumentsRegExp, function (whole, arg) {
+				tokens.push(arg);
+			});
+			return tokens;
 		},
 		// ## mustacheCore.makeEvaluator
 		// Given a scope and expression, returns a function that evaluates that expression in the scope.
@@ -206,7 +329,7 @@ steal("can/util",
 			for(var i = 0, len = exprData.args.length; i < len; i++) {
 				var arg = exprData.args[i];
 				if (arg && isLookup(arg)) {
-					args.push(getKeyArgValue(arg.get, scope, true));
+					args.push(getKeyArgValue(arg.get, scope));
 				} else {
 					args.push(arg);
 				}
