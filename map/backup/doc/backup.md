@@ -10,6 +10,11 @@ and lets you restore the original values of an Map's properties after they are c
 Here is an example showing how to use `[can.Map.backup.prototype.backup backup]` to save values,
 `[can.Map.backup.prototype.restore restore]` to restore them, and `[can.Map.backup.prototype.isDirty isDirty]`
 
+By default `backup` uses `attr` function on the map to get backup value, 
+if you want to use `serialize` or custom method use `options` parameter of 
+`[can.Map.backup.prototype.backup backup]` method. 
+
+
 to check if the Map has changed:
 
 ```
