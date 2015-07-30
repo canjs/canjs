@@ -68,9 +68,9 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 			// If a this.attr() was called using dot syntax (e.g number.0),
 			// disregard everything after the "." until we call the
 			// original this._get().
-			prop = (originalProp.indexOf('.') !== -1 ?
+			var prop = (originalProp.indexOf('.') !== -1 ?
 				originalProp.substr(0, originalProp.indexOf('.')) :
-				prop);
+				originalProp);
 
 			// If this property has a default and we haven't yet committed it to
 			// this.attr()
