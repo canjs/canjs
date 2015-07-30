@@ -9,14 +9,16 @@ steal('can/util/can.js', function (can) {
 		return typeof arr !== "function" &&
 			( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
 	};
-	
+
 	can.each = function (elements, callback, context) {
 		var i = 0,
 			key,
 			len,
 			item;
 		if (elements) {
-			if ( isArrayLike(elements) ) {
+			if (can.RedBlackTree && elements instanceof can.RedBlackTree) {
+                elements.each(callback, context);
+            } else if ( isArrayLike(elements) ) {
 				if(can.List && elements instanceof can.List ) {
 					for (len = elements.attr("length"); i < len; i++) {
 						item = elements.attr(i);
