@@ -153,7 +153,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			var found = false;
 			var newOptions = options.helpers.add({
 				case: function(value, options){
-					if(resolve(expression) == resolve(value)) {
+					if(resolve(expression) === resolve(value)) {
 						found = true;
 						return options.fn(options.scope || this);
 					}
