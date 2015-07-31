@@ -2273,7 +2273,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			div.appendChild(template(data))
 
 			equal(innerHTML(div), "100 values");
-		})
+		});
 
 		test("Computes should be resolved prior to accessing attributes", function () {
 			var template = can.stache("{{list.length}}"),
@@ -4154,7 +4154,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 	
 		
 	
-		var template = can.stache("{{helperA helperB(1 valueA propA=valueB propC=2) 'def' outerPropA=helperC(2 valueB)}}")
+		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
 	
 		var frag = template({
 			valueA: "A",
@@ -4181,39 +4181,62 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		});
 		
 		equal(frag.firstChild.nodeValue, "helperA value");
-		
-		var template = can.stache("{{helperA helperB(1 valueA propA=valueB propC=2) 'def' outerPropA=helperC(2 valueB)}}");
+	});
+	
+	test("inner expressions with computes", function(){
+		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
 	
 	
 		var valueB = can.compute("B");
+		var changes = 0;
 	
 		var frag = template({
 			valueA: "A",
 			valueB: valueB
 		},{
 			helperA: function(arg1, arg2, options){
-				equal(arg1(), "helperB value", "static argument");
+				
+				if(changes === 0) {
+					equal(arg1(), "helperB=B", "static argument");
+					equal(options.hash.outerPropA(), "helperC=B", "scope hash 0");
+				} else {
+					equal(arg1(), "helperB=X", "static argument");
+					equal(options.hash.outerPropA(), "helperC=X", "scope hash 1");
+				}
+				
 				equal(arg2, "def", "scope argument");
-				equal(options.hash.outerPropA(), "helperC value", "scope hash");
+				
 				return arg1()+"-"+options.hash.outerPropA();
 			},
 			helperB: function(arg1, arg2, options){
 				equal(arg1, 1, "static argument");
 				equal(arg2, "A", "scope argument");
-				equal(options.hash.propA(), "B", "scope hash");
+				if(changes === 0) {
+					equal(options.hash.propA(), "B", "scope hash");
+				} else {
+					equal(options.hash.propA(), "X", "scope hash");
+				}
+				
 				equal(options.hash.propC, 2, "static hash");
 				return "helperB="+options.hash.propA();
 			},
 			helperC: function(arg1, arg2){
 				equal(arg1, 2, "helperC static argument");
-				equal(arg2(), "B", "helperC scope argument");
+				if(changes === 0) {
+					equal(arg2(), "B", "helperC scope argument");
+				} else {
+					equal(arg2(), "X", "helperC scope argument");
+				}
 				return "helperC="+arg2();
 			}
 		});
 		
 		equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
 		
+		changes++;
+		can.batch.start();
 		valueB("X");
+		can.batch.stop();
 		
 		equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
 	});
