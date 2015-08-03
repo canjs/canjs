@@ -4127,6 +4127,37 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 			equal(frag.firstChild.nodeValue, "hello there", "partial rendered");
 		});
+
+		test("Handlebars helper: switch/case", function() {
+			var expected;
+			var t = {
+				template: '{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
+					'{{#default}}Not 10 ducks{{/default}}{{/switch}}',
+				expected: "10 ducks",
+				data: {
+					ducks: '10',
+					tenDucks: function() {
+						return '10'
+					}
+				},
+				liveData: new can.Map({
+					ducks: '10',
+					tenDucks: function() {
+						return '10'
+					}
+				})
+			};
+
+			expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+			deepEqual(getText(t.template, t.data), expected);
+
+			deepEqual(getText(t.template, t.liveData), expected);
+
+			t.data.ducks = 5;
+
+			deepEqual(getText(t.template, t.data), 'Not 10 ducks');
+		});
+
 	}
 
 
