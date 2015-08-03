@@ -2,9 +2,15 @@ steal("can/util", "can/view/callbacks", function(can){
 
 	can.view.tag("can-import", function(el, tagData){
 		var moduleName = el.getAttribute("from");
+
+		// If the module is part of the helpers pass that into can.import
+		// as the parentName
+		var templateModule = tagData.options.attr("helpers.module");
+		var parentName = templateModule ? templateModule.id : undefined;
+
 		var importPromise;
 		if(moduleName) {
-			importPromise = can["import"](moduleName);
+			importPromise = can["import"](moduleName, parentName);
 		} else {
 			importPromise = can.Deferred().reject("No moduleName provided").promise();
 		}

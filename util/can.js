@@ -130,11 +130,13 @@ steal(function () {
 		}
 	};
 
-	can["import"] = function(moduleName) {
+	can["import"] = function(moduleName, parentName) {
 		var deferred = new can.Deferred();
 
 		if(typeof window.System === "object" && can.isFunction(window.System["import"])) {
-			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
+			window.System["import"](moduleName, {
+				name: parentName
+			}).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
 		} else if(window.define && window.define.amd){
 
