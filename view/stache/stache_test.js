@@ -4158,6 +4158,29 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			deepEqual(getText(t.template, t.data), 'Not 10 ducks');
 		});
 
+		test("~ helper joins to the baseUrl", function(){
+			can.baseUrl = "http://foocdn.com/bitovi";
+
+			var template = can.stache("{{~ 'hello/' name}}");
+			var map = new can.Map({ name: "world" });
+
+			var frag = template(map);
+
+			equal(frag.firstChild.nodeValue, "http://foocdn.com/bitovi/hello/world", "joined from can.baseUrl");
+			can.baseUrl = undefined;
+		});
+
+		test("~ helper can be relative to template module", function(){
+			var baseUrl = "http://foocdn.com/bitovi";
+
+			var template = can.stache("{{~ '../hello/' name}}");
+			var map = new can.Map({ name: "world" });
+
+			var frag = template(map, { module: { uri: baseUrl } });
+
+			equal(frag.firstChild.nodeValue, "http://foocdn.com/hello/world", "relative lookup works");
+		});
+
 	}
 
 

@@ -165,6 +165,36 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				}
 			});
 			return options.fn(options.scope, newOptions);
+		},
+		'~': function(firstExpr/* , expr... */){
+			var args = [].slice.call(arguments);
+			var options = args.pop();
+
+			var moduleReference = can.map(args, function(expr){
+				var value = resolve(expr);
+				return can.isFunction(value) ? value() : value;
+			}).join("");
+
+			var templateModule = options.helpers.attr("helpers.module");
+			var parentAddress = templateModule ? templateModule.uri: undefined;
+
+			var isRelative = moduleReference[0] === ".";
+
+			if(isRelative && parentAddress) {
+				return can.joinURIs(parentAddress, moduleReference);
+			} else {
+				var baseUrl = can.baseUrl || (typeof System !== "undefined" &&
+																			System.baseUrl) ||
+																			// TODO support AMD baseurl
+																			location.pathname;
+
+				// Make sure one of them has a needed /
+				if(moduleReference[0] !== "/" && baseUrl[baseUrl.length - 1] !== "/") {
+					baseUrl += "/";
+				}
+
+				return can.joinURIs(baseUrl, moduleReference);
+			}
 		}
 	};
 
