@@ -20,6 +20,6 @@ Where `name` is a scope value, this might return `http://example.com/app/hello/w
 The url to join with is determined by the following factors:
 
 * If attempting to load a relative url, such as `{{~ "../foo.png"}}` and using StealJS the template's address will be used as a reference to look up the location.
-* If the `can.baseUrl` string is set, this will be used.
-* If the `System.baseUrl` is set, this will be used.
+* If the `can.baseURL` string is set, this will be used.
+* If the `System.baseURL` is set, this will be used.
 * Lastly we fall back to `location.pathname`.

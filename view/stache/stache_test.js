@@ -4158,8 +4158,8 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			deepEqual(getText(t.template, t.data), 'Not 10 ducks');
 		});
 
-		test("~ helper joins to the baseUrl", function(){
-			can.baseUrl = "http://foocdn.com/bitovi";
+		test("~ helper joins to the baseURL", function(){
+			can.baseURL = "http://foocdn.com/bitovi";
 
 			var template = can.stache("{{~ 'hello/' name}}");
 			var map = new can.Map({ name: "world" });
