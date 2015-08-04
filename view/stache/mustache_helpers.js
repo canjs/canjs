@@ -183,17 +183,17 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			if(isRelative && parentAddress) {
 				return can.joinURIs(parentAddress, moduleReference);
 			} else {
-				var baseUrl = can.baseUrl || (typeof System !== "undefined" &&
-																			System.baseUrl) ||
-																			// TODO support AMD baseurl
+				var baseURL = can.baseURL || (typeof System !== "undefined" &&
+																			(System.renderingLoader && System.renderingLoader.baseURL ||
+																			System.baseURL)) ||
 																			location.pathname;
 
 				// Make sure one of them has a needed /
-				if(moduleReference[0] !== "/" && baseUrl[baseUrl.length - 1] !== "/") {
-					baseUrl += "/";
+				if(moduleReference[0] !== "/" && baseURL[baseURL.length - 1] !== "/") {
+					baseURL += "/";
 				}
 
-				return can.joinURIs(baseUrl, moduleReference);
+				return can.joinURIs(baseURL, moduleReference);
 			}
 		}
 	};
