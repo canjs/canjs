@@ -31,7 +31,7 @@ steal("can/util",
 	// ## Helpers
 
 	// Breaks up the name and arguments of a mustache expression.
-	var argumentsRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/]+|[\(\)])/g,
+	var argumentsRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/~]+|[\(\)])/g,
 		literalRegExp = /^('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)$/,
 		// Finds mustache tags and their surrounding whitespace.
 		mustacheLineBreakRegExp = /(?:(?:^|(\r?)\n)(\s*)(\{\{([^\}]*)\}\}\}?)([^\S\n\r]*)($|\r?\n))|(\{\{([^\}]*)\}\}\}?)/g,
