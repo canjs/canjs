@@ -65,7 +65,7 @@ __HTML Result__
 
 To update the html using live-binding, change an observable value:
 
-	data.attr('message', 5)
+	data.attr('messages', 5)
 
 This updates this paragraph in the HTML Result to:
 
