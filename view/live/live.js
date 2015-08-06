@@ -356,12 +356,9 @@ steal('can/util',
 					}
 					
 					
-					// make an empty list if the compute returns null or undefined
-					list = newList || [];
-					
-					
 					afterPreviousEvents = true;
 					if(newList && oldList) {
+						list = newList || [];
 						var patches = diff(oldList, newList);
 						
 						if ( oldList.unbind ) {
@@ -382,6 +379,7 @@ steal('can/util',
 						}
 					} else {
 						teardownList();
+						list = newList || [];
 						add({}, list, 0);
 					}
 					afterPreviousEvents = false;
