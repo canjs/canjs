@@ -234,7 +234,9 @@ steal("can/util",
 			contexts: scope,
 			hash: hash,
 			nodeList: nodeList,
-			exprData: this
+			exprData: this,
+			options: options,
+			helpers: options
 		});
 
 		args.push(helperOptions);

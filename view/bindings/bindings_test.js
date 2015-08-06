@@ -1275,5 +1275,53 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		QUnit.equal(select.selectedIndex, 0, 'Got selected index');
 	});
 
-
+	test("<select can-value> keeps its value as <option>s change with {{#list}} (#1762)", function(){
+		var template = can.view.stache("<select can-value='{id}'>{{#values}}<option value='{{.}}'>{{.}}</option>{{/values}}</select>");
+		var values = can.compute( ["1","2","3","4"]);
+		var id = can.compute("2");
+		var frag = template({
+			values: values,
+			id: id
+		});
+		stop();
+		var select = frag.firstChild;
+		// the value is set asynchronously
+		setTimeout(function(){
+			ok(select.childNodes[1].selected, "value is initially selected");
+			
+			values(["7","2","5","4"]);
+			
+			ok(select.childNodes[1].selected, "after changing options, value should still be selected");
+			
+			
+			start();
+		},20);
+		
+	});
+	
+	test("<select can-value> keeps its value as <option>s change with {{#each}} (#1762)", function(){
+		var template = can.view.stache("<select can-value='{id}'>{{#each values}}<option value='{{.}}'>{{.}}</option>{{/values}}</select>");
+		var values = can.compute( ["1","2","3","4"]);
+		var id = can.compute("2");
+		var frag = template({
+			values: values,
+			id: id
+		});
+		stop();
+		var select = frag.firstChild;
+		
+		
+		// the value is set asynchronously
+		setTimeout(function(){
+			ok(select.childNodes[1].selected, "value is initially selected");
+			
+			values(["7","2","5","4"]);
+			
+			ok(select.childNodes[1].selected, "after changing options, value should still be selected");
+			
+			
+			start();
+		},20);
+		
+	});
 });

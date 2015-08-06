@@ -125,6 +125,17 @@ steal('can/util', "can/view",function (can) {
 		 * @param {DocumentFragment} newFrag
 		 */
 		replace: function (oldElements, newFrag) {
+			// The following helps make sure that a selected <option> remains
+			// the same by removing `selected` from the currently selected option
+			// and adding selected to an option that has the same value.
+			var selectedValue,
+				parentNode = oldElements[0].parentNode;
+				
+			if(parentNode.nodeName.toUpperCase() === "SELECT" && parentNode.selectedIndex >= 0) {
+				selectedValue = parentNode.value;
+			}
+			
+			
 			elements.after(oldElements, newFrag);
 			if(can.remove(can.$(oldElements)).length < oldElements.length && !selectsCommentNodes) {
 				can.each(oldElements, function(el) {
@@ -132,6 +143,9 @@ steal('can/util', "can/view",function (can) {
 						el.parentNode.removeChild(el);
 					}
 				});
+			}
+			if(selectedValue !== undefined) {
+				parentNode.value = selectedValue;
 			}
 		}
 	};

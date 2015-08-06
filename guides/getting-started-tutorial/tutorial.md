@@ -13,7 +13,7 @@ framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. This guide 
 will walk you through an analysis of a small e-commerce app built with CanJS called Place My Order. 
 In each relevant section, we'll give you some code to play with
-so you can have hands on experience working with CanJS, as you learn.
+so you will have hands on experience working with CanJS.
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
 
@@ -35,39 +35,27 @@ foundation for updating model objects, views, and even routes in your app.
 
 <a name="models"></a>
 ### Models
-Models manage the data of an application. A model notifies the elements
-associated with it when its state has changed. In CanJS this is the [can.Model](../docs/can.Model.html)
-object. `can.Model` makes it almost effortless to handle all of your CRUD
-(Create, Read, Update, and Delete) operations.
+Models let you get and modify data from the server. They also listen to changes 
+made by the server. In CanJS the object that handles this is [can.Model](../docs/can.Model.html). 
+`can.Model` makes it almost effortless to handle all of your Create, 
+Retrieve, Update, and Delete (CRUD) operations.
 
 <a name="views"></a>
 ### Views 
-Views request information from the model and use the data it provides to
+Views are given information from the model and use the data it provides to
 generate visual output that’s meaningful to a user—in our case HTML. In
-CanJS, views are created using:
+CanJS, the preferred method for creating views is using [Stache](../docs/can.stache.html) 
+templates.
 
-1. View Templates,
-2. The [can.view](../docs/can.view.html) object
-
-The view template can be plain HTML or it can utilize a template library
-to provide it with more functionality. Most of the time, your views will work
-with a template library. CanJS supports several JS template libraries,
-including:
-
-- Stache
-- Mustache
-
-While you can use any of the above template types, the preferred type
-is [Stache](../docs/can.stache.html). It provides the most clarity to your code and is the easiest
-of the two options to use. At this time, Stache is supplied as a supporting
+At this time, Stache is supplied as a supporting
 library, which means you must explicitly add it to your application. We’ll see
 how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
 Template libraries require a rendering engine and CanJS provides that for
-you with the `can.view` object. `can.view` contains
+you with `can.stache`. `can.stache` contains
 utilities “for the loading, processing, rendering, and live-updating of
-templates”. In addition, `can.view` is used to bind views to observable
+templates”. In addition, `can.stache` is used to bind views to observable
 objects.
 
 <a name="components"></a>

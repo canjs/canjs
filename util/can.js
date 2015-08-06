@@ -130,11 +130,56 @@ steal(function () {
 		}
 	};
 
-	can["import"] = function(moduleName) {
+
+	var parseURI = function(url){
+			var m = String(url).replace(/^\s+|\s+$/g, '').match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
+				// authority = '//' + user + ':' + pass '@' + hostname + ':' port
+			return (m ? {
+				href     : m[0] || '',
+				protocol : m[1] || '',
+				authority: m[2] || '',
+				host     : m[3] || '',
+				hostname : m[4] || '',
+				port     : m[5] || '',
+				pathname : m[6] || '',
+				search   : m[7] || '',
+				hash     : m[8] || ''
+			} : null);
+		};
+
+	can.joinURIs = function(base, href) {
+		function removeDotSegments(input) {
+			var output = [];
+			input.replace(/^(\.\.?(\/|$))+/, '')
+				.replace(/\/(\.(\/|$))+/g, '/')
+				.replace(/\/\.\.$/, '/../')
+				.replace(/\/?[^\/]*/g, function (p) {
+					if (p === '/..') {
+						output.pop();
+					} else {
+						output.push(p);
+					}
+				});
+			return output.join('').replace(/^\//, input.charAt(0) === '/' ? '/' : '');
+		}
+
+		href = parseURI(href || '');
+		base = parseURI(base || '');
+
+		return !href || !base ? null : (href.protocol || base.protocol) +
+			(href.protocol || href.authority ? href.authority : base.authority) +
+			removeDotSegments(href.protocol || href.authority || href.pathname.charAt(0) === '/' ? href.pathname : (href.pathname ? ((base.authority && !base.pathname ? '/' : '') + base.pathname.slice(0, base.pathname.lastIndexOf('/') + 1) + href.pathname) : base.pathname)) +
+				(href.protocol || href.authority || href.pathname ? href.search : (href.search || base.search)) +
+				href.hash;
+	};
+
+	can["import"] = function(moduleName, parentName) {
 		var deferred = new can.Deferred();
 
 		if(typeof window.System === "object" && can.isFunction(window.System["import"])) {
-			window.System["import"](moduleName).then(can.proxy(deferred.resolve, deferred),
+			window.System["import"](moduleName, {
+				name: parentName
+			}).then(can.proxy(deferred.resolve, deferred),
 				can.proxy(deferred.reject, deferred));
 		} else if(window.define && window.define.amd){
 

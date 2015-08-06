@@ -83,7 +83,7 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 
 				// Import will happen async
 				can["import"]("can/view/import/test/other.stache!").then(function(){
-					equal(frag.childNodes[1].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
+					equal(frag.childNodes[3].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
 
 					QUnit.start();
 				});
@@ -106,7 +106,7 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				var frag = renderer();
 
 				can["import"]("can/view/import/test/other.stache!").then(function(){
-					equal(frag.childNodes[0].childNodes[0].firstChild.nodeValue, "hi there", "Partial worked with can-tag");
+					equal(frag.childNodes[0].childNodes[2].firstChild.nodeValue, "hi there", "Partial worked with can-tag");
 
 					QUnit.start();
 				});

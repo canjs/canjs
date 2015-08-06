@@ -1,6 +1,6 @@
 steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 	live = live || can.view.live;
-	
+
 	var resolve = function (value) {
 		if (utils.isObserveLike(value) && utils.isArrayLike(value) && value.attr('length')) {
 			return value;
@@ -10,16 +10,16 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return value;
 		}
 	};
-	
+
 	var helpers = {
 		"each": function(items, options){
-			
+
 			var resolved = resolve(items),
 				result = [],
 				keys,
 				key,
 				i;
-			
+
 			if( resolved instanceof can.List ) {
 				return function(el){
 					// make a child nodeList inside the can.view.live.html nodeList
@@ -28,18 +28,18 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 					nodeList.expression = "live.list";
 					can.view.nodeLists.register(nodeList, null, options.nodeList);
 					can.view.nodeLists.update(options.nodeList, [el]);
-					
+
 					var cb = function (item, index, parentNodeList) {
-								
+
 						return options.fn(options.scope.add({
 								"@index": index
 							}).add(item), options.options, parentNodeList);
-							
+
 					};
 					live.list(el, items, cb, options.context, el.parentNode, nodeList);
 				};
 			}
-			
+
 			var expr = resolved;
 
 			if ( !! expr && utils.isArrayLike(expr)) {
@@ -67,10 +67,10 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 						})
 						.add(expr[key])));
 				}
-				
+
 			}
 			return result;
-			
+
 		},
 		"@index": function(offset, options) {
 			if (!options) {
@@ -145,9 +145,56 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			// Get the argument before that.
 			var data = arguments.length === 2 ? this : arguments[1];
 			return function(el){
-				
+
 				can.data( can.$(el), attr, data || this.context );
 			};
+		},
+		'switch': function(expression, options){
+			var found = false;
+			var newOptions = options.helpers.add({
+				case: function(value, options){
+					if(resolve(expression) === resolve(value)) {
+						found = true;
+						return options.fn(options.scope || this);
+					}
+				},
+				default: function(options){
+					if(!found) {
+						return options.fn(options.scope || this);
+					}
+				}
+			});
+			return options.fn(options.scope, newOptions);
+		},
+		'~': function(firstExpr/* , expr... */){
+			var args = [].slice.call(arguments);
+			var options = args.pop();
+
+			var moduleReference = can.map(args, function(expr){
+				var value = resolve(expr);
+				return can.isFunction(value) ? value() : value;
+			}).join("");
+
+			var templateModule = options.helpers.attr("helpers.module");
+			var parentAddress = templateModule ? templateModule.uri: undefined;
+
+			var isRelative = moduleReference[0] === ".";
+
+			if(isRelative && parentAddress) {
+				return can.joinURIs(parentAddress, moduleReference);
+			} else {
+				var baseURL = can.baseURL || (typeof System !== "undefined" &&
+																			(System.renderingLoader && System.renderingLoader.baseURL ||
+																			System.baseURL)) ||
+																			location.pathname;
+
+				// Make sure one of them has a needed /
+				if(moduleReference[0] !== "/" && baseURL[baseURL.length - 1] !== "/") {
+					baseURL += "/";
+				}
+
+				return can.joinURIs(baseURL, moduleReference);
+			}
 		}
 	};
 
@@ -170,5 +217,5 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		}
 	};
-	
+
 });
