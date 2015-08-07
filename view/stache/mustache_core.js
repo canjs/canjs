@@ -57,12 +57,12 @@ steal("can/util",
 			}
 			return txt;
 		},
-		getKeyComputeData = function (key, scope, isArgument) {
+		getKeyComputeData = function (key, scope, isArgument, args) {
 
 			// Get a compute (and some helper data) that represents key's value in the current scope
 			var data = scope.computeData(key, {
 				isArgument: isArgument,
-				args: [scope.attr('.'), scope]
+				args: args && args.length ? args : [scope.attr('.'), scope]
 			});
 
 			can.compute.temporarilyBind(data.compute);
@@ -155,7 +155,8 @@ steal("can/util",
 			helper,
 			name,
 			methodKey = this.name.key,
-			initialValue;
+			initialValue,
+			args;
 			
 		// If the expression looks like a helper, try to get a helper right away.
 		if (looksLikeAHelper) {
@@ -165,14 +166,18 @@ steal("can/util",
 			// If a function is on top of the context, call that as a helper.
 			var context = scope.attr(".");
 			if(!helper && typeof context[methodKey] === "function") {
+				//!steal-remove-start
+				can.dev.warn('can/view/stache/mustache_core.js: In 3.0, method "' + methodKey + '" will not be called as a helper, but as a method.');
+				//!steal-remove-end
 				helper = {fn: context[methodKey]};
 			}
 
 		}
 		if(!helper) {
+			args = this.args(scope);
 			// Get info about the compute that represents this lookup.
 			// This way, we can get the initial value without "reading" the compute.
-			var computeData = getKeyComputeData(methodKey, scope, false),
+			var computeData = getKeyComputeData(methodKey, scope, false, args),
 				compute = computeData.compute;
 
 			initialValue = computeData.initialValue;
@@ -190,12 +195,6 @@ steal("can/util",
 			if( !looksLikeAHelper && initialValue === undefined ) {
 				helper = mustacheHelpers.getHelper(methodKey, options);
 			}
-			// Otherwise, if the value is a function, we'll call that as a helper.
-			else if(typeof initialValue === "function") {
-				helper = {
-					fn: initialValue
-				};
-			}
 
 		}
 		
@@ -211,6 +210,7 @@ steal("can/util",
 		
 		return {
 			name: name,
+			args: args,
 			helper: helper && helper.fn
 		};
 	};

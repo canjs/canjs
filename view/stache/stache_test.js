@@ -4295,7 +4295,17 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
 	});
 	
-	
+	test("parent scope functions not called with arguments (#1833)", function(){
+		var data = {
+			child: {value: 1},
+			method: function(arg){
+				equal(arg, 1, "got the right arg");
+			}
+		};
+		
+		var template = can.stache("{{#child}}{{method value}}{{/child}}");
+		template(data);
+	});
 	
 	
 });

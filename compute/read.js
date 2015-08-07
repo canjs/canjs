@@ -114,7 +114,7 @@ steal("can/util", function(can){
 			if (options.isArgument && i === reads.length) {
 				return options.proxyMethods !== false ? can.proxy(value, prev) : value;
 			}
-			return value.call(prev);
+			return value.apply(prev, options.args || []);
 		}
 	}];
 	
