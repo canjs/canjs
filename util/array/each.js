@@ -16,7 +16,7 @@ steal('can/util/can.js', function (can) {
 			len,
 			item;
 		if (elements) {
-			if (can.RedBlackTree && elements instanceof can.RedBlackTree) {
+			if (can.TreeList && elements instanceof can.TreeList) {
                 elements.each(callback, context);
             } else if ( isArrayLike(elements) ) {
 				if(can.List && elements instanceof can.List ) {

@@ -10,17 +10,17 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return value;
 		}
 	};
-	
+
 	var helpers = {
 		"each": function(items, options){
-			
+
 			var resolved = resolve(items),
 				result = [],
 				keys,
 				key,
 				i;
 
-			if( resolved instanceof can.List || resolved instanceof can.RedBlackTree) {
+			if( resolved instanceof can.List || resolved instanceof can.TreeList) {
 				return function(el){
 					// make a child nodeList inside the can.view.live.html nodeList
 					// so that if the html is re
