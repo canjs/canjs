@@ -1,6 +1,5 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit",
-	"./mustache_core_test.js",function(){
+steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test","can/view/mustache/spec/specs","steal-qunit","can/view/stache/mustache_core_test.js",function(){
 	var browserDoc = window.document;
 	var simpleDocument = new SimpleDOM.Document();
 

@@ -703,7 +703,7 @@ steal("can/util",
 	var makeEvaluator = core.makeEvaluator,
 		splitModeFromExpression = core.splitModeFromExpression;
 
-
+	can.view.mustacheCore = core;
 	return core;
 });
 
