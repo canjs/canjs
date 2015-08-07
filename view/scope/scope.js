@@ -218,7 +218,7 @@ steal(
 						isInParentContext = attr.substr(0, 3) === "../",
 						isCurrentContext = attr === "." || attr === "this",
 						isParentContext = attr === "..",
-						isContextBased = isInCurrentContext || 
+						isContextBased = isInCurrentContext ||
 							isInParentContext ||
 							isCurrentContext ||
 							isParentContext;

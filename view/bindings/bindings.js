@@ -207,7 +207,6 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				//!steal-remove-end
 
-				var args = [];
 				var $el = can.$(this);
 				var viewModel = can.viewModel($el[0]);
 				
