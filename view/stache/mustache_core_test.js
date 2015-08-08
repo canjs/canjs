@@ -73,12 +73,12 @@ steal("./mustache_core.js", "steal-qunit", function(){
 			{}
 		);
 		
-		var result = callFullName.value(scope, new can.view.Scope({}));
+		var result = callFullName.value(scope, new can.view.Scope({}),  {});
 		
 		equal(result, "marshall thompson");
 	});
 	
-	test("MethodExpression.value non-observable values", function(){
+	test("MethodExpression.value observable values", function(){
 		// {{fullName first 'thompson'}}
 		
 		var scope = new can.view.Scope({
@@ -94,7 +94,7 @@ steal("./mustache_core.js", "steal-qunit", function(){
 			{}
 		);
 		
-		var result = callFullName.value(scope, new can.view.Scope({}));
+		var result = callFullName.value(scope, new can.view.Scope({}), {asCompute: true});
 		
 		equal(result(), "marshall thompson");
 	});

@@ -222,22 +222,17 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					notContext: true
 				});
 				var convertToValue = function(arg){
-					if(typeof arg === "function" && arg.isComputed) {
+					if(typeof arg === "function") {
 						return convertToValue( arg() );
 					} else {
 						return arg;
 					}
 				};
 				
-				var args = can.map( attrInfo.args(localScope), convertToValue),
-					hash = {},
-					hasHash;
-				
-				can.each( attrInfo.hash(localScope), function(value, name){
-					hasHash = true;
-					hash[name] = convertToValue(value);
-				});
-				if(hasHash) {
+				var args = attrInfo.args(localScope, null, {}),
+					hash = attrInfo.hash(localScope, null, {});
+					
+				if(!can.isEmptyObject(hash)) {
 					args.push(hash);
 				}
 				/*

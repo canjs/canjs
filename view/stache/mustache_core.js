@@ -57,27 +57,14 @@ steal("can/util",
 			}
 			return txt;
 		},
-		getKeyComputeData = function (key, scope, isArgument, args) {
+		getKeyComputeData = function (key, scope, readOptions) {
 
 			// Get a compute (and some helper data) that represents key's value in the current scope
-			var data = scope.computeData(key, {
-				isArgument: isArgument,
-				args: args && args.length ? args : [scope.attr('.'), scope]
-			});
+			var data = scope.computeData(key, readOptions);
 
 			can.compute.temporarilyBind(data.compute);
 
 			return data;
-		},
-		// Returns a value or compute for the given key.
-		getKeyArgValue = function(key, scope){
-			var data = getKeyComputeData(key, scope, true);
-			// If there are no dependencies, just return the value.
-			if (!data.compute.computeInstance.hasDependencies) {
-				return data.initialValue;
-			} else {
-				return data.compute;
-			}
 		},
 		// Sets .fn and .inverse on a helperOptions object and makes sure
 		// they can reference the current scope and options.
@@ -113,7 +100,7 @@ steal("can/util",
 	var Expression = function(value){
 		this._value = value;
 	};
-	Expression.prototype.value = function(scope){
+	Expression.prototype.value = function(){
 		return this._value;
 	};
 	
@@ -121,8 +108,18 @@ steal("can/util",
 		this.key = key;
 	};
 	ScopeExpression.prototype = new Expression();
-	ScopeExpression.prototype.value = function(scope) {
-		return getKeyArgValue(this.key, scope);
+	ScopeExpression.prototype.value = function(scope, helperOptions, readOptions) {
+		if(readOptions.asCompute){
+			var data = getKeyComputeData(this.key, scope, readOptions);
+			// If there are no dependencies, just return the value.
+			if (!data.compute.computeInstance.hasDependencies) {
+				return data.initialValue;
+			} else {
+				return data.compute;
+			}
+		} else {
+			return scope.read(this.key, readOptions).value;
+		}
 	};
 	
 	var MethodExpression = function(name, args, hash) {
@@ -132,7 +129,7 @@ steal("can/util",
 	};
 	MethodExpression.prototype = new Expression();
 	
-	MethodExpression.prototype.args = function(scope){
+	MethodExpression.prototype.args = function(scope, helperOptions, readOptions){
 		var args = [];
 		for(var i = 0, len = this._args.length; i < len; i++) {
 			var arg = this._args[i];
@@ -140,7 +137,7 @@ steal("can/util",
 		}
 		return args;
 	};
-	MethodExpression.prototype.hash = function(scope){
+	MethodExpression.prototype.hash = function(scope, helperOptions, readOptions){
 		var hash = {};
 		for(var prop in this._hash) {
 			var val = this._hash[prop];
@@ -148,7 +145,7 @@ steal("can/util",
 		}
 		return hash;
 	};
-	MethodExpression.prototype.helperAndValue = function(scope, options){
+	MethodExpression.prototype.helperAndValue = function(scope, helperOptions, readOptions){
 		//{{foo bar}}
 		
 		var looksLikeAHelper = this._args.length || !can.isEmptyObject(this._hash),
@@ -161,7 +158,7 @@ steal("can/util",
 		// If the expression looks like a helper, try to get a helper right away.
 		if (looksLikeAHelper) {
 			// Try to find a registered helper.
-			helper = mustacheHelpers.getHelper(methodKey, options);
+			helper = mustacheHelpers.getHelper(methodKey, helperOptions);
 
 			// If a function is on top of the context, call that as a helper.
 			var context = scope.attr(".");
@@ -174,10 +171,13 @@ steal("can/util",
 
 		}
 		if(!helper) {
-			args = this.args(scope);
+			args = this.args(scope, helperOptions, readOptions);
 			// Get info about the compute that represents this lookup.
 			// This way, we can get the initial value without "reading" the compute.
-			var computeData = getKeyComputeData(methodKey, scope, false, args),
+			var computeData = getKeyComputeData(methodKey, scope, {
+				isArgument: false,
+				args: args && args.length ? args : [scope.attr('.'), scope]
+			}),
 				compute = computeData.compute;
 
 			initialValue = computeData.initialValue;
@@ -193,7 +193,7 @@ steal("can/util",
 			// If it doesn't look like a helper and there is no value, check helpers
 			// anyway. This is for when foo is a helper in `{{foo}}`.
 			if( !looksLikeAHelper && initialValue === undefined ) {
-				helper = mustacheHelpers.getHelper(methodKey, options);
+				helper = mustacheHelpers.getHelper(methodKey, helperOptions);
 			}
 
 		}
@@ -214,32 +214,32 @@ steal("can/util",
 			helper: helper && helper.fn
 		};
 	};
-	MethodExpression.prototype.evaluator = function(helper, scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly){
+	MethodExpression.prototype.evaluator = function(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly){
 
 
-		var helperOptions = {
+		var helperOptionArg = {
 			fn: function () {},
 			inverse: function () {}
 		},
 			context = scope.attr("."),
-			args = this.args(scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly),
-			hash = this.hash(scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+			args = this.args(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly),
+			hash = this.hash(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		// Add additional data to be used by helper functions
-		convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
+		convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
 
-		can.simpleExtend(helperOptions, {
+		can.simpleExtend(helperOptionArg, {
 			context: context,
 			scope: scope,
 			contexts: scope,
 			hash: hash,
 			nodeList: nodeList,
 			exprData: this,
-			options: options,
-			helpers: options
+			helperOptions: helperOptions,
+			helpers: helperOptions
 		});
 
-		args.push(helperOptions);
+		args.push(helperOptionArg);
 		// Call the helper.
 		return function () {
 			return helper.apply(context, args) || '';
@@ -248,10 +248,10 @@ steal("can/util",
 		
 	};
 
-	MethodExpression.prototype.value = function(scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly) {
-		var helper = this.helperAndValue(scope, options).helper;
+	MethodExpression.prototype.value = function(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly) {
+		var helper = this.helperAndValue(scope, helperOptions, readOptions).helper;
 		
-		var fn = this.evaluator(helper, scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+		var fn = this.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 		
 		var compute = can.compute(fn);
 		
@@ -357,20 +357,27 @@ steal("can/util",
 		 * @param {String} [stringOnly] A flag to indicate that only strings will be returned by subsections.
 		 * @return {Function} An 'evaluator' function that evaluates the expression.
 		 */
-		makeEvaluator: function (scope, options, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
+		makeEvaluator: function (scope, helperOptions, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
 
 			if(mode === "^") {
 				var temp = truthyRenderer;
 				truthyRenderer = falseyRenderer;
 				falseyRenderer = temp;
 			}
-
-			var helperAndValue = exprData.helperAndValue(scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+			
+			var readOptions = {
+				// will return a function instead of calling it.
+				// allowing it to be turned into a compute if necessary.
+				isArgument: true,
+				args: [scope.attr('.'), scope],
+				asCompute: true
+			};
+			var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 			var helper = helperAndValue.helper;
 			var name = helperAndValue.name;
 		
 			if(helper) {
-				return exprData.evaluator(helper, scope, options, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+				return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 			}
 			
 		
@@ -389,11 +396,11 @@ steal("can/util",
 				}
 			} else if( mode === "#" || mode === "^" ) {
 				// Setup renderers.
-				var helperOptions = {
+				var helperOptionArg = {
 					fn: function () {},
 					inverse: function () {}
 				};
-				convertToScopes(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer);
+				convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
 				return function(){
 					// Get the value
 					var value;
@@ -408,14 +415,14 @@ steal("can/util",
 
 						if(isObserveList ? value.attr("length") : value.length) {
 							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
-								(value, isObserveList, helperOptions, options);
+								(value, isObserveList, helperOptionArg, helperOptions );
 						} else {
-							return helperOptions.inverse(scope, options);
+							return helperOptionArg.inverse(scope, helperOptions);
 						}
 					}
 					// If truthy, render fn, otherwise, inverse.
 					else {
-						return value ? helperOptions.fn(value || scope, options) : helperOptions.inverse(scope, options);
+						return value ? helperOptionArg.fn(value || scope, helperOptions) : helperOptionArg.inverse(scope, helperOptions);
 					}
 				};
 			} else {
