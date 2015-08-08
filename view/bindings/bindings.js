@@ -188,7 +188,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				// We grab the first item and treat it as a method that
 				// we'll call.
-				var scopeData = data.scope.read(attrInfo.name.get, {
+				var scopeData = data.scope.read(attrInfo.name.key, {
 					returnObserveMethods: true,
 					isArgument: true,
 					executeAnonymousFunctions: true
@@ -207,17 +207,40 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				//!steal-remove-end
 
-				var args = [];
 				var $el = can.$(this);
 				var viewModel = can.viewModel($el[0]);
+				
+				// make a scope with these things just under 
+				
 				var localScope = data.scope.add({
 					"@element": $el,
 					"@event": ev,
 					"@viewModel": viewModel,
 					"@scope": data.scope,
 					"@context": data.scope._context
+				},{
+					notContext: true
 				});
-
+				var convertToValue = function(arg){
+					if(typeof arg === "function" && arg.isComputed) {
+						return convertToValue( arg() );
+					} else {
+						return arg;
+					}
+				};
+				
+				var args = can.map( attrInfo.args(localScope), convertToValue),
+					hash = {},
+					hasHash;
+				
+				can.each( attrInfo.hash(localScope), function(value, name){
+					hasHash = true;
+					hash[name] = convertToValue(value);
+				});
+				if(hasHash) {
+					args.push(hash);
+				}
+				/*
 				// .expressionData() gives us a hash object representing
 				// any expressions inside the definition that look like
 				// foo=bar. If there's no hash keys, we'll omit this hash
@@ -248,7 +271,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 							args.unshift(arg);
 						}
 					}
-				}
+				}*/
+				
 				// If no arguments are provided, the method will simply
 				// receive the legacy arguments.
 				if (!args.length) {

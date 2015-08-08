@@ -214,25 +214,38 @@ steal(
 					if(this._meta.protected) {
 						return this._parent.read(attr, options);
 					}
+					var isInCurrentContext = attr.substr(0, 2) === './',
+						isInParentContext = attr.substr(0, 3) === "../",
+						isCurrentContext = attr === "." || attr === "this",
+						isParentContext = attr === "..",
+						isContextBased = isInCurrentContext ||
+							isInParentContext ||
+							isCurrentContext ||
+							isParentContext;
+							
+					// notContent items can be read, but are skipped if you are doing .. sorta stuff.
+					if(isContextBased && this._meta.notContext) {
+						return this._parent.read(attr, options);
+					}
 					
 					// check if we should only look within current scope
 					var stopLookup;
-					if(attr.substr(0, 2) === './') {
+					if(isInCurrentContext) {
 						// set flag to halt lookup from walking up scope
 						stopLookup = true;
 						// stop lookup from checking parent scopes
 						attr = attr.substr(2);
 					}
 					// check if we should be running this on a parent.
-					else if (attr.substr(0, 3) === "../") {
+					else if (isInParentContext) {
 						return this._parent.read(attr.substr(3), options);
 					}
-					else if (attr === "." || attr === "this") {
+					else if ( isCurrentContext ) {
 						return {
 							value: this._context
 						};
 					}
-					else if (attr === "..") {
+					else if ( isParentContext ) {
 						return {
 							value: this._parent._context
 						};

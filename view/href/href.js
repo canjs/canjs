@@ -19,14 +19,19 @@ steal("can/util",
 		var attrInfo = mustacheCore.expressionData('tmp ' + removeCurly(el.getAttribute("can-href")));
 		// -> {hash: {foo: 'bar', zed: 5, abc: {get: 'myValue'}}}
 
+		var convertToValue = function(arg){
+			if(typeof arg === "function" && arg.isComputed) {
+				return convertToValue( arg() );
+			} else {
+				return arg;
+			}
+		};
+
 		var routeHref = can.compute(function(){
 			var hash = {};
-			can.each(attrInfo.hash, function(val, key) {
-				if (val && val.hasOwnProperty("get")) {
-					hash[key] = attrData.scope.read(val.get, {}).value;
-				} else {
-					hash[key] = val;
-				}
+			
+			can.each(attrInfo.hash(attrData.scope), function(val, key) {
+				hash[key] = convertToValue(val);
 			});
 			return can.route.url(hash);
 		});
