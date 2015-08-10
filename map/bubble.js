@@ -99,7 +99,7 @@ steal('can/util', function(can){
 			// Called when many `children` are added to `parent`.
 			addMany: function(parent, children){
 				for (var i = 0, len = children.length; i < len; i++) {
-					bubble.add(this, children[i], i);
+					bubble.add(parent, children[i], i);
 				}
 			},
 			// ## bubble.remove
