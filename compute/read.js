@@ -6,7 +6,16 @@ steal("can/util", function(can){
 	// there are things that you need to evaluate when you get them back as a property read
 	// for example a compute or a function you might need to call to get the next value to 
 	// actually check
-	// - isArgument - should be renamed to something like "dontReadLastPropertyValue"
+	// - isArgument - should be renamed to something like "onLastPropertyReadReturnFunctionInsteadOfCallingIt".
+	//   This is used to make a compute out of that function if necessary.
+	// - executeAnonymousFunctions - call a function if it's found
+	// - proxyMethods - if the last read is a method, return a function so `this` will be correct.
+	// - args - arguments to call functions with.
+	// - returnObserveMethods - return the function on an observable instead of trying to call it.
+	//
+	// Callbacks
+	// - earlyExit - called if a value could not be found
+	// - foundObservable - called when an observable value is found
 	var read = function (parent, reads, options) {
 		options = options || {};
 		var state = {

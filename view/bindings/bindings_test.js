@@ -1324,4 +1324,22 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		},20);
 		
 	});
+	
+	test("(event) methods on objects are called (#1839)", function(){
+		var template = can.stache("<div (click)='{setSomething person.message}'/>");
+		var data = {
+			setSomething: function(message){
+				equal(message, "Matthew P finds good bugs");
+			},
+			person: {
+				name: "Matthew P",
+				message: function(){
+					return this.name + " finds good bugs";
+				}
+			}
+		};
+		var frag = template(data);
+		can.trigger( frag.firstChild, "click" );
+	});
+	
 });
