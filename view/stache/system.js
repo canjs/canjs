@@ -2,7 +2,9 @@
 steal("@loader", "can/util/can.js", "can/view/stache", "can/view/stache/intermediate_and_imports.js",function(loader, can, stache, getIntermediateAndImports){
 
 	function addBundles(dynamicImports) {
-		if(!dynamicImports.length) return;
+		if(!dynamicImports.length) {
+			return;
+		}
 
 		var bundle = loader.localLoader.bundle;
 		if(!bundle) {
