@@ -211,6 +211,10 @@ module.exports = function(){
 					graphs: allModuleNames.concat(['can']),
 					useNormalizedDependencies: false,
 					normalize: function(depName, depLoad, curName, curLoad ){
+						// @loader is part of the
+						if(!depLoad) {
+							return depName;
+						}
 
 						// if its not in node_modules
 						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
