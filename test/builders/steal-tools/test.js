@@ -61,7 +61,7 @@ describe("Building steal projects", function(){
 							var div = browser.document.createElement('div');
 							div.appendChild(m.stache);
 
-							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache Hi", "Stache generated correctly");
+							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache HI", "Stache generated correctly");
 							close();
 						}, close);
 					}, done);
