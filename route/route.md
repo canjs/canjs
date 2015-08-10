@@ -26,7 +26,7 @@ should start with either a character (a-Z) or colon (:).  Examples:
 
 @body
 
-## Video
+## Use
 
 Watch this video for an overview of can.route's functionality and an example showing how to connect two tab widgets to the browser's history:
 
