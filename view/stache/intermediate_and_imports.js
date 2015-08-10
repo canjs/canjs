@@ -5,15 +5,18 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 
 		var template = mustacheCore.cleanLineEndings(source);
 		var imports = [],
+			dynamicImports = [],
 			ases = {},
 			inImport = false,
 			inFrom = false,
 			inAs = false,
+			isUnary = false,
 			currentAs = "",
 			currentFrom = "";
 
 		var intermediate = parser(template, {
 			start: function( tagName, unary ){
+				isUnary = unary;
 				if(tagName === "can-import") {
 					inImport = true;
 				} else if(inImport) {
@@ -37,6 +40,9 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			attrValue: function( value ){
 				if(inFrom && inImport) {
 					imports.push(value);
+					if(!isUnary) {
+						dynamicImports.push(value);
+					}
 					currentFrom = value;
 				} else if(inAs && inImport) {
 					currentAs = value;
@@ -58,7 +64,12 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			}
 		}, true);
 
-		return {intermediate: intermediate, imports: imports, ases: ases};
+		return {
+			intermediate: intermediate,
+			imports: imports,
+			dynamicImports: dynamicImports,
+			ases: ases
+		};
 	};
 
 });

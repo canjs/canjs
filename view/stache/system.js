@@ -1,8 +1,26 @@
 "format steal";
-steal("can/view/stache", "can/view/stache/intermediate_and_imports.js",function(stache, getIntermediateAndImports){
+steal("@loader", "can/util/can.js", "can/view/stache", "can/view/stache/intermediate_and_imports.js",function(loader, can, stache, getIntermediateAndImports){
+
+	function addBundles(dynamicImports) {
+		if(!dynamicImports.length) return;
+
+		var bundle = loader.localLoader.bundle;
+		if(!bundle) {
+			bundle = loader.localLoader.bundle = [];
+		}
+
+		can.each(dynamicImports, function(moduleName){
+			if(!~bundle.indexOf(moduleName)) {
+				bundle.push(moduleName);
+			}
+		});
+	}
 
 	function translate(load) {
 		var intermediateAndImports = getIntermediateAndImports(load.source);
+
+		// Add bundle configuration for these dynamic imports
+		addBundles(intermediateAndImports.dynamicImports);
 
 		intermediateAndImports.imports.unshift("can/view/stache/mustache_core");
 		intermediateAndImports.imports.unshift("can/view/stache/stache");
