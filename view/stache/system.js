@@ -6,9 +6,11 @@ steal("@loader", "can/util/can.js", "can/view/stache", "can/view/stache/intermed
 			return;
 		}
 
-		var bundle = loader.localLoader.bundle;
+		// In the build the "main" loader is the localLoader
+		var localLoader = loader.localLoader || loader;
+		var bundle = localLoader.bundle;
 		if(!bundle) {
-			bundle = loader.localLoader.bundle = [];
+			bundle = localLoader.bundle = [];
 		}
 
 		can.each(dynamicImports, function(moduleName){
