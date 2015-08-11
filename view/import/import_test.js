@@ -113,4 +113,20 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 			});
 		});
 
+		asyncTest("can dynamically import a template and use it", function(){
+			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' #other='{value}'/>{{> other}}";
+
+			can.stache.async(template).then(function(renderer){
+				var frag = renderer();
+
+				// Import will happen async
+				can["import"]("can/view/import/test/other.stache!").then(function(){
+					equal(frag.childNodes[3].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
+
+					QUnit.start();
+				});
+			});
+
+		});
+
 	});
