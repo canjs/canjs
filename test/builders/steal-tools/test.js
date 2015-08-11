@@ -3,7 +3,16 @@ var assert = require("assert"),
 	connect = require("connect"),
 	stealTools = require("steal-tools"),
 	path = require("path"),
-	rmdir = require("rimraf");
+	rmdir = require("rimraf"),
+	fs = require("fs");
+
+var exists = function(dest){
+	try {
+		return !!fs.readFileSync(dest, "utf8");
+	} catch(err){
+		return false;
+	}
+};
 
 // Helpers
 var find = function(browser, property, callback, done){
@@ -115,6 +124,30 @@ describe("Building steal projects", function(){
 					}
 				});
 			}).catch(done);
+		});
+	});
+
+	it("adds dynamically imported modules to the bundle", function(done){
+		rmdir(__dirname + "/import/dist", function(error){
+			if(error) return done(error);
+
+			console.log("building it");
+			stealTools.build({
+				config: __dirname + "/config.js",
+				main: "import/app",
+				bundlesPath: __dirname + "/import/dist/bundles"
+			}, {
+				quiet: true,
+				minify: false,
+				bundleSteal: true
+			}).then(function(buildResult){
+				var loader = buildResult.loader;
+				assert.equal(loader.bundle[0], "import/thing", "import/thing added a bundle");
+
+				assert(exists(__dirname + "/import/dist/bundles/import/thing.js"), "thing.js bundle written out");
+
+				done();
+			});
 		});
 	});
 
