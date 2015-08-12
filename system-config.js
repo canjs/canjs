@@ -1,8 +1,9 @@
 "format cjs";
 
 var MySystem = require('@loader');
+var isDevelopment = MySystem.env === "development" || (MySystem.envMap && MySystem.envMap.development);
 
-if(MySystem.env === "development" && typeof window === "undefined" && !MySystem.buildForClient) {
+if(isDevelopment && typeof window === "undefined" && !MySystem.buildForClient) {
 	exports.systemConfig = {
 		meta: {
 			'jquery': {
