@@ -1,4 +1,4 @@
-/* jshint asi:true*/
+/* jshint asi:true,scripturl:true */
 steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 
 

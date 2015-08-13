@@ -7,7 +7,7 @@
 // on `<a>` elements across document and accordingly updates `can.route` state
 // and window's pathname.
 
-/*jshint maxdepth:6*/
+/*jshint maxdepth:6, scripturl:true*/
 
 steal('can/util', 'can/route', function (can) {
 	"use strict";
