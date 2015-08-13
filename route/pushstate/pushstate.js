@@ -151,6 +151,10 @@ steal('can/util', 'can/route', function (can) {
 				// Fix for IE showing blank host, but blank host means current host.
 				var linksHost = node.host || window.location.host;
 
+				if(node.href === "javascript://") {
+					return;
+				}
+
 				// If link is within the same domain and descendant of `root`
 				if (window.location.host === linksHost) {
 					var root = cleanRoot();
