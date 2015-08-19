@@ -90,7 +90,7 @@ This is one of the most useful features of components.
 
 ## Tabs Widget Behavior
 
-Before implementing the component itself, we'll
+Before implementing the component itself, we’ll
 define an observable *view model*--the `scope` object
 of the UI element. This makes the code modular and easier
 to manage (and also allows for unit testing).

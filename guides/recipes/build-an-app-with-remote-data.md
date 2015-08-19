@@ -28,7 +28,7 @@ Using *any* server with a [*REST* interface](http://blog.mashape.com/post/608205
 
 ## Create a Chat Application
 
-To put together a chat application, we'll use two methods
+To put together a chat application, we’ll use two methods
 from `can.Model` to fetch the messages and create new ones:
 
 ```
@@ -53,10 +53,10 @@ return a `can.List`.
 ```
 
 The tabs Component used `can-click` to listen for click events.
-Since this chat application uses a `<form>` for sending messages, we'll use
+Since this chat application uses a `<form>` for sending messages, we’ll use
 `can-submit` to specify an event handler.
 
-There's one more helper used in the template: [`can-value`](http://canjs.com/docs/can.view.bindings.can-value.html).
+There’s one more helper used in the template: [`can-value`](http://canjs.com/docs/can.view.bindings.can-value.html).
 This automatically two-way binds the value of an input field to an observable
 property on the `scope` of the component (in this case, `newMessage`).
 

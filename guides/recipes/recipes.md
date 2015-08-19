@@ -30,7 +30,7 @@ To follow along with the other recipes, you can also use
 
 You can also [Download CanJS](http://canjs.com/download.html)
 or follow [other tutorials](http://canjs.com/guides/Tutorial.html) to get
-started, but for the rest of the examples, we'll be using this
+started, but for the rest of the examples, we’ll be using this
 setup.
 
 ## Request a Recipe

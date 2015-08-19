@@ -19,7 +19,7 @@ Get the code for: [chapter: components](https://github.com/bitovi/canjs/blob/min
 <a name="first-component"></a>
 ## First can.Component
 If you recall from the introduction, a [`can.Component`](../docs/can.Component.html) is like a self-contained,
-mini web application. In other words, it’s encapsulated. Because `can.Component`’s are
+mini web application; in other words, it’s encapsulated. Because `can.Component`’s are
 encapsulated, they should each contain their own:
 
 - View template file (.stache file)

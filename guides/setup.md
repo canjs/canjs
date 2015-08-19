@@ -16,7 +16,7 @@ Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/minor/guides/
 
 - - -
 
-To begin, we'll make sure we have everything we need to make our application.
+To begin, we’ll make sure we have everything we need to make our application.
 The first thing to do is get CanJS. The easiest way to get CanJS is to use
 the the custom download page, which allows you to
 download the specific parts of CanJS you need for your application.
@@ -25,7 +25,7 @@ The custom download page loads with all the elements in the core CanJS library
 already selected. We want all of those in our build, so leave them checked.
 CanJS relies on an external core library for some of its functionality. There
 are several options available (jQuery, Dojo, YUI, etc.). The default option is
-jQuery; and that's what we'll be working with here.
+jQuery; and that's what we’ll be working with here.
 
 The right side of the page lists all of the plugins. From the list of plugins,
 select the following:
@@ -43,7 +43,7 @@ but it can be very helpful during development. The file is `can.fixture.js`.
 [can.fixture](../docs/can.fixture.html) allows you to simulate RESTful services. We'll cover how to
 include `can.fixture` in the next chapter.
 
-In the next step, we'll set up the application's folder structure, and move the
+In the next step, we’ll set up the application's folder structure, and move the
 `can.custom.js` file into its appropriate folder in the app.
 
 ## Folder Structure
@@ -110,12 +110,12 @@ It should look like this:
 ```
 
 At the bottom of the page, just before the body tag, are all of the script
-tags. We're using the jQuery edition of CanJS, so the first script tag
+tags. We’re using the jQuery edition of CanJS, so the first script tag
 loaded must be jQuery. Following jQuery, we load `can.custom.js`.
 
 In the last chapter, we mentioned including `can.fixture.js`. In a
 normal project, once you connected to the actual REST services, you would
-remove `can.fixture.js`. In addition, to simplify things, we're using the
+remove `can.fixture.js`. In addition, to simplify things, we’re using the
 Bootstrap framework for our CSS; however Bootstrap is not required to use CanJS.
 
 ### Base Template
@@ -139,7 +139,7 @@ If you open up your application in a browser, you should see:
 > The Requisite "Hello World" Message
 
 At this point, we haven't done much. We aren't using CanJS at all yet.
-We're just using jQuery to set the HTML contents of a DOM element.
+We’re just using jQuery to set the HTML contents of a DOM element.
 
 So, how do we get the application to actually *do something*? Building apps
 with CanJS centers around building can.Components, read on to the next

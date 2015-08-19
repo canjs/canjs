@@ -12,7 +12,7 @@ CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki
 framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. This guide 
 will walk you through an analysis of a small e-commerce app built with CanJS called Place My Order. 
-In each relevant section, we'll give you some code to play with
+In each relevant section, we’ll give you some code to play with
 so you will have hands on experience working with CanJS.
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
@@ -64,7 +64,7 @@ A [can.Component](../docs/can.Component.html) is like a mini web application.
 It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
 item. This makes `can.Component`’s portable, reusable, and
 encapsulated. `can.Component`’s are easy to test and easy to use. Building an
-application with them is kind of like building with Legos&trade;. As we say
+application with them is kind of like building with Lego&trade;. As we say
 at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need and link them
 together using the Application State and Routing to compose your application.
@@ -77,7 +77,7 @@ is an observable object that, as its name implies, contains the state of
 your application. Where other application frameworks model their applications 
 with routes, controllers, etc., CanJS takes a more unified, semantic approach. 
 It encapsulates the state of your application. This is a 
-very powerful approach to writing applications that freeis developers from 
+very powerful approach to writing applications that frees developers from
 many of the constraints of a DOM-centric paradigm, allowing them to think more directly 
 about the application itself.
 

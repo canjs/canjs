@@ -36,7 +36,7 @@ purpose. You can see the main purposes of the website:
 ![Restaurant locator page](../can/guides/images/application-design/RestaurantLocator.png)
 
 The Restaurants state is the starting point for finding a restaurant from which you
-want to order. Restaurants are displayed by region. To show a list of restaurants
+want to order. Restaurants are displayed by region. To show a list of restaurants,
 first select a (U.S.) state and city.
 
 ### Finding a Restaurant
@@ -66,7 +66,7 @@ place the order.
 ![Restaurant order confirmation page](../can/guides/images/application-design/RestaurantOrderConfirmation.png)
 
 The order confirmation state shows the items the user selected, a total,
-and the personal information they've provided with the order. Note that this state 
+and the personal information they’ve provided with the order. Note that this state
 also has a link to restart the ordering process, should the user want to place another 
 order at the same restaurant.
 

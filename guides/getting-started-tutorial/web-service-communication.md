@@ -23,7 +23,7 @@ where the `placeOrder` property is defined:
   },
 ```
 
-…and replace it with this implementation:
+and replace it with this implementation:
 
 ```
   placeOrder: function() {
@@ -33,7 +33,7 @@ where the `placeOrder` property is defined:
   },
 ```
 
-Let's see what's going on here:
+Let’s see what's going on here:
  - The first line in the getter function gets the `order`, 
  - the second sets the `saveStatus` property on the component’s view model to whatever the `save` method on the `order` object returns, and
  - the third line returns `false` to stop the `form` element’s default submission behavior.

@@ -24,7 +24,7 @@ you can control its:
 - [remove](#remove)
 - [serialization](#serialization)
 
-Before we get into the properties of the define plugin, however, let's look at how to set it up.
+Before we get into the properties of the define plugin, however, let’s look at how to set it up.
 Creating a define is as simple as adding a define property to the instance properties
 of the `can.Map`. This property is an object literal. Remember from our conversation on 
 [`can.Construct`](Constructors.html) that passing in one argument to a `can.Construct` will set 

@@ -8,7 +8,7 @@ that displays in a human-readable format. This means handling
 application state that changes over time, as well as making
 information rendered in a template human-readable using a helper function.
 
-First, we'll add a `createdAt` property to the data like:
+First, we’ll add a `createdAt` property to the data like:
 
 ```
  var data = new can.Map({

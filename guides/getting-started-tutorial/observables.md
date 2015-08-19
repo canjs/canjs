@@ -20,7 +20,7 @@ Most of the core objects in CanJS are observables. Understanding how to effectiv
 work with observables lies at the heart of understanding how to build successful 
 CanJS applications.
 
-In this section, we'll review the two observables that make up the core of most CanJS objects:
+In this section, we’ll review the two observables that make up the core of most CanJS objects:
 
  - [`can.Map`](../docs/can.Map.html) - Used for Objects.
  - [`can.List`](../docs/can.List.html) - Used for Arrays.
@@ -85,7 +85,7 @@ was changed. There are two ways you can listen for these events:
 One of the major advantages of using the [define plugin](TheDefinePlugin.html) (discussed in the next chapter)
 in your applicaitons is that it handles managing the relationships of your observables 
 for you. Any time you reference a `can.Map` or `can.List` (or one of their child objects) 
-in a define property that property is automatically subscribed as a listener for that `can.Map` 
+in a define property, that property is automatically subscribed as a listener for that `can.Map`
 or `can.List`.
 
 ```
@@ -104,9 +104,9 @@ You can also listen for events by using [bind](../docs/can.Map.prototype.bind.ht
 however this is less common:
 
 ```
-// In this example, the chanage to pagination's perPage attribute, 
+// In this example, the chanage to pagination’s perPage attribute,
 // on line 16, is responded to by the functions listening to 
-// pagination's change and perPage attributes. Note the values passed 
+// pagination’s change and perPage attributes. Note the values passed
 // in to the functions when they are called.
 pagination.bind('change', function(event, attr, how, newVal, oldVal) {
 	attr;   // 'perPage'

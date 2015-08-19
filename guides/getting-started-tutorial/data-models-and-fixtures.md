@@ -16,7 +16,7 @@ Get the code for: [chapter: data models and fixtures](https://github.com/bitovi/
 
 - - -
 
-The next item we're going to go over is [can.Model](../docs/can.Model.html).
+The next item we’re going to go over is [can.Model](../docs/can.Model.html).
 Models make interacting with JSON REST services *really easy*. They do this by
 encapsulating most of the code required to connect to a service and managing
 the data the service returns. Additionally, `can.Model` extends

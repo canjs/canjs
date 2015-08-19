@@ -100,7 +100,7 @@ to the method that handles the event. These parameters include:
    - @context - The current context.
 
 You are not limited to these parameters. Any valid value can be passed in to the 
-handler method. Separate method parameters with a space, e.g., {{myMethod arg1 arg2}}
+handler method. Separate method parameters with a space, e.g. `{{myMethod arg1 arg2}}`
 
 Let’s open the `components/order_phone/order_phone.stache` file and add the
 following:

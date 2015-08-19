@@ -3,7 +3,8 @@
 
 @body
 
-In this guide you'll learn how to build a plugin for CanJS. As is standard with programming tutorials, we'll build something that says "Hello World".
+In this guide you'll learn how to build a plugin for CanJS. As is standard with programming tutorials,
+we’ll build something that says "Hello World".
 
 ## Setup
 
@@ -71,7 +72,7 @@ It's highly recommended that you create documentation for your plugin. You can u
 
 ## Grunt work flow
 
-Now that you have developed a plugin, tests and examples, it's time to build the plugin using Grunt. The following commands are available:
+Now that you have developed a plugin, tests and examples, it’s time to build the plugin using Grunt. The following commands are available:
 
 Run jsbeautifier and JSHint:
 

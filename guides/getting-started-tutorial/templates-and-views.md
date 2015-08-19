@@ -15,7 +15,7 @@ Get the code for: [chapter: stache templates](https://github.com/bitovi/canjs/bl
 - - -
 
 Now that we have a basic sketch of our application, and we've covered a few CanJS fundamentals,
-it's time for us to start working with the sample application. We'll begin with the
+it’s time for us to start working with the sample application. We'll begin with the
 application's templates.
 
 As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache templates in
@@ -99,8 +99,8 @@ We can easily access the:
 - order
 
 fields in our Stache template. These are the properties that are 
-directly available off of the object passed in to the template, and are therefore,
-are a part of the template's root context. We can reference them simply by wrapping
+directly available off of the object passed in to the template, and are therefore
+a part of the template’s root context. We can reference them simply by wrapping
 them in double curly braces, e.g., `{{customerNumber}}`. If, however, we 
 want to reference a value off of the order property&mdash;such as "name", or "_id"&mdash;we 
 need to use dot notation, e.g., `{{order.name}}`. If you have a lot of properties
@@ -205,7 +205,7 @@ You might also notice the use of the `^` character, which will render the
 section if the result of the helper is false. In other words, you can write
 `{{^if action}}content{{/if}}` instead of `{{#if action}}{{else}}content{{/if}}`
 
-In general, it's best to keep complex logic out of your templates. Their main funciton 
+In general, it’s best to keep complex logic out of your templates. Their main funciton
 should be to display data from the view model. If you need to use more complex logic 
 to display data in your templates, you can use a helper. Helpers are not covered in detail 
 in this guide; but you can get more information on them in the API: [Helpers](../docs/can.Component.prototype.helpers.html)

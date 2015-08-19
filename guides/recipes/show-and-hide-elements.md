@@ -30,7 +30,7 @@ data.attr("visible", !data.attr("visible"))
 
 ### Application State
 
-Typically, it's not a good idea to mix view state and application data.
+Typically, it’s not a good idea to mix view state and application data.
 In the previous example, the `message` is application data, while the
 `visible` property represents view state. In CanJS, state and data
 should be separated using different observables.
