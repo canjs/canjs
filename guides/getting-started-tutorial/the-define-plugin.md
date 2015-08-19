@@ -184,6 +184,6 @@ We’ll see how this works when we discuss routing in a later chapter.
 - - -
 
 <span class="pull-left">[&lsaquo; Observables](Observables.html)</span>
-<span class="pull-right">[Templates and Views &rsaquo;](StacheTemplates.html)</span>
+<span class="pull-right">[Stache Templates &rsaquo;](StacheTemplates.html)</span>
 
 </div>
