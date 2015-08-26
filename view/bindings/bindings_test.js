@@ -1485,4 +1485,24 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	
+	test("renders dynamic custom attributes (#1800)", function () {
+	
+		var template = can.view.stache("<ul>{{#actions}}<li can-click='{{.}}'>{{.}}</li>{{/actions}}</ul>");
+	
+		var map = new can.Map({
+			actions: ["action1", "action2"],
+			action1: function(){console.log("item 1 clicked")},
+			action2: function(){console.log("item 2 clicked")}
+		});
+	
+		var frag = template(map);
+	
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+		var list = ta.childNodes[0];
+		QUnit.equal(ta.innerHTML, "<ul><li can-click=\"action1\">action1</li><li can-click=\"action2\">action2</li></ul>", 'attributes not proccesed');
+	});
+	
+
+	
 });
