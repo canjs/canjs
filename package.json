@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.3.0-pre.8",
+	"version": "2.3.0-pre.9",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -75,7 +75,7 @@
 			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"jquery-ui/jquery-ui": "jquery-ui",
 			"steal-qunit/steal-qunit": "steal-qunit",
-      "can/util/vdom/vdom": "@empty"
+			"can/util/vdom/vdom": "@empty"
 		},
 		"paths": {
 			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
@@ -99,9 +99,9 @@
 				"format": "global",
 				"exports": "Zepto"
 			},
-      "can/util/vdom/vdom": {
-        "sideBundle": true
-      }
+			"can/util/vdom/vdom": {
+				"sideBundle": true
+			}
 		},
 		"ext": {
 			"ejs": "can/view/ejs/system",
@@ -142,41 +142,47 @@
 			"steal-benchmark",
 			"documentjs"
 		],
-    "envs": {
-      "server-development": {
+		"envs": {
+			"server-development": {
 				"map": {
-          "can/util/vdom/vdom": "can/util/vdom/vdom"
-        },
-        "meta": {
-          "jquery": {
-            "format": "global",
-            "deps": ["can/util/vdom/vdom"]
-          }
-        }
-      },
-      "server-production": {
+					"can/util/vdom/vdom": "can/util/vdom/vdom"
+				},
+				"meta": {
+					"jquery": {
+						"format": "global",
+						"deps": [
+							"can/util/vdom/vdom"
+						]
+					}
+				}
+			},
+			"server-production": {
 				"map": {
-          "can/util/vdom/vdom": "can/util/vdom/vdom"
-        },
-        "meta": {
-          "jquery": {
-            "format": "global",
-            "deps": ["can/util/vdom/vdom"]
-          }
-        }
-      },
-      "build-development": {
+					"can/util/vdom/vdom": "can/util/vdom/vdom"
+				},
+				"meta": {
+					"jquery": {
+						"format": "global",
+						"deps": [
+							"can/util/vdom/vdom"
+						]
+					}
+				}
+			},
+			"build-development": {
 				"map": {
-          "can/util/vdom/vdom": "can/util/vdom/vdom"
-        },
-        "meta": {
-          "jquery": {
-            "format": "global",
-            "deps": ["can/util/vdom/vdom"]
-          }
-        }
-      }
-    }
+					"can/util/vdom/vdom": "can/util/vdom/vdom"
+				},
+				"meta": {
+					"jquery": {
+						"format": "global",
+						"deps": [
+							"can/util/vdom/vdom"
+						]
+					}
+				}
+			}
+		}
 	},
 	"browser": {
 		"./can": "./dist/cjs/can",
