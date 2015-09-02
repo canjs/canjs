@@ -210,6 +210,7 @@
 		"./map/delegate/delegate": "./dist/cjs/map/delegate/delegate",
 		"./map/setter/setter": "./dist/cjs/map/setter/setter",
 		"./map/attributes/attributes": "./dist/cjs/map/attributes/attributes",
+		"./map/interrupt/interrupt": "./dist/cjs/map/interrupt/interrupt",
 		"./map/validations/validations": "./dist/cjs/map/validations/validations",
 		"./map/backup/backup": "./dist/cjs/map/backup/backup",
 		"./map/list/list": "./dist/cjs/map/list/list",
