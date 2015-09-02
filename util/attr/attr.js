@@ -58,7 +58,7 @@ steal("can/util/can.js", function (can) {
 					}
 				},
 				style: function (el, val) {
-					return el.style.cssText = val || "";
+					return el.style && "cssText" in el.style ? el.style.cssText = val || "" : el.setAttribute("style", val);
 				}
 			},
 			// These are elements whos default value we should set.
@@ -66,10 +66,12 @@ steal("can/util/can.js", function (can) {
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
+				var usingMutationObserver = can.isDOM(el) && attr.MutationObserver;
+				
 				attrName = attrName.toLowerCase();
 				var oldValue;
 				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
-				if (!attr.MutationObserver) {
+				if (!usingMutationObserver) {
 					oldValue = attr.get(el, attrName);
 				}
 
@@ -105,7 +107,7 @@ steal("can/util/can.js", function (can) {
 				}
 
 				// Now that the value has been set, for browsers without MutationObservers, check to see that value has changed and if so trigger the "attributes" event on the element.
-				if (!attr.MutationObserver && newValue !== oldValue) {
+				if (!usingMutationObserver && newValue !== oldValue) {
 					attr.trigger(el, attrName, oldValue);
 				}
 			},

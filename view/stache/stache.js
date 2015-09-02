@@ -15,6 +15,7 @@ steal(
 
 	// Make sure that we can also use our modules with Stache as a plugin
 	parser = parser || can.view.parser;
+	can.view.parser = parser;
 	viewCallbacks = viewCallbacks || can.view.callbacks;
 
 	var svgNamespace = "http://www.w3.org/2000/svg";
@@ -115,7 +116,7 @@ steal(
 				if( !node.attributes ) {
 					node.attributes = [];
 				}
-				node.attributes.push(callback);
+				node.attributes.unshift(callback);
 			};
 		
 		parser(template,{
@@ -213,7 +214,7 @@ steal(
 					
 					state.node.attrs[state.attr.name] =
 						state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
-					
+
 					var attrCallback = viewCallbacks.attr(attrName);
 					if(attrCallback) {
 						if( !state.node.attributes ) {
@@ -273,14 +274,20 @@ steal(
 				}
 				// `{{}}` in an attribute like `class="{{}}"`
 				else if(state.attr) {
-					
-					if(!state.attr.section) {
-						state.attr.section = new TextSectionBuilder();
-						if(state.attr.value) {
-							state.attr.section.add(state.attr.value);
+					// if in a special
+					if( viewCallbacks.attr(state.attr.name ) && !state.attr.value ) {
+						this.attrValue("{{"+text+"}}");
+					} else {
+						
+						if(!state.attr.section) {
+							state.attr.section = new TextSectionBuilder();
+							if(state.attr.value) {
+								state.attr.section.add(state.attr.value);
+							}
 						}
+						makeRendererAndUpdateSection(state.attr.section, mode, expression );
 					}
-					makeRendererAndUpdateSection(state.attr.section, mode, expression );
+					
 				}
 				// `{{}}` in a tag like `<div {{}}>`
 				else if(state.node) {

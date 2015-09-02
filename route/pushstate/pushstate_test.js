@@ -1,4 +1,4 @@
-/* jshint asi:true*/
+/* jshint asi:true,scripturl:true */
 steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 
 
@@ -396,8 +396,8 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 		if (typeof steal !== 'undefined') {
 
 			var makeTestingIframe = function (callback) {
-	
-	
+
+
 				window.routeTestReady = function (iCanRoute, loc, history, win) {
 					callback({
 						route: iCanRoute,
@@ -411,7 +411,7 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 						delete window.routeTestReady;
 					});
 				};
-	
+
 				var iframe = document.createElement('iframe');
 				iframe.src = can.test.path("route/pushstate/testing.html")+"?" + Math.random();
 				can.$("#qunit-fixture")[0].appendChild(iframe);
@@ -565,6 +565,31 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 				can.$("#qunit-fixture")[0].appendChild(iframe);
 			});
 
+			test("javascript:// links do not get pushstated", function(){
+				stop();
+				makeTestingIframe(function (info, done) {
+					info.route(":type", { type: "yay" });
+					info.route.ready();
+
+
+					var window = info.window;
+					var link = window.document.createElement("a");
+					link.href = "javascript://";
+					link.innerHTML = "Click Me";
+
+					window.document.body.appendChild(link);
+					try {
+						window.can.trigger(window.can.$(link), "click");
+						ok(true, "Clicking javascript:// anchor did not cause a security exception");
+					} catch(err) {
+						ok(false, "Clicking javascript:// anchor caused a security exception");
+					}
+
+					start();
+					done();
+				});
+			});
+
 			if(window.parent === window) {
 				// we can't call back if running in multiple frames
 				test("no doubled history states (#656)", function () {
@@ -651,44 +676,44 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 						info.route.bindings.pushstate.root = can.test.path("route/pushstate/testing.html", true).replace("route/pushstate/testing.html", "");
 						info.route(":module\\.html");
 						info.route.ready();
-	
+
 						setTimeout(function(){
 							ok(!info.route.attr('module'), 'there is no route match');
 							start();
-	
+
 							done();
 						}, 100);
 					});
 				});
-	
+
 			}
-	
+
 			test("routed links must descend from pushstate root (#652)", 1, function () {
-	
-	
+
+
 				stop();
-	
+
 				var setupRoutesAndRoot = function (iCanRoute, root) {
 					iCanRoute(":section/");
 					iCanRoute(":section/:sub/");
 					iCanRoute.bindings.pushstate.root = root;
 					iCanRoute.ready();
 				};
-	
-	
+
+
 				var createLink = function (win, url) {
 					var link = win.document.createElement("a");
 					link.href = link.innerHTML = url;
 					win.document.body.appendChild(link);
 					return link;
 				};
-	
+
 				// The following makes sure a link that is not "rooted" will
 				// behave normally and not call pushState
 				makeTestingIframe(function (info, done) {
 					setupRoutesAndRoot(info.route, "/app/");
 					var link = createLink(info.window, "/route/pushstate/empty.html"); // a link to somewhere outside app
-	
+
 					var clickKiller = function(ev) {
 						if(ev.preventDefault) {
 							ev.preventDefault();
@@ -697,21 +722,21 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 					};
 					// kill the click b/c phantom doesn't like it.
 					can.bind.call(info.window.document,"click",clickKiller);
-					
+
 					info.history.pushState = function () {
 						ok(false, "pushState should not have been called");
 					};
-	
+
 					// click a link and make sure the iframe url changes
 					eventFire(link, "click")
-	
+
 					done();
 					setTimeout(next, 10);
 				});
-	
+
 				var next = function () {
 					makeTestingIframe(function (info, done) {
-	
+
 						var timer;
 						info.route.bind("change", function () {
 							clearTimeout(timer);
@@ -719,31 +744,31 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 								// deepEqual doesn't like to compare objects from different contexts
 								// so we copy it
 								var obj = can.simpleExtend({}, info.route.attr());
-	
+
 								deepEqual(obj, {
 									section: "something",
 									sub: "test",
 									route: ":section/:sub/"
 								}, "route's data is correct");
-	
+
 								done();
 								start();
 							}, 10);
-	
+
 						});
-	
+
 						setupRoutesAndRoot(info.route, "/app/");
 						var link = createLink(info.window, "/app/something/test/");
-	
-	
+
+
 						eventFire(link, "click")
 						// click a link and make sure the iframe url changes
-	
+
 					});
-	
-	
+
+
 				};
-	
+
 			});
 
 			test("replaceStateOn makes changes to an attribute use replaceSate (#1137)", function() {
@@ -856,7 +881,7 @@ steal('can/route/pushstate', "can/test", "steal-qunit", function () {
 					}, 30);
 				});
 			});
-			
+
 		} // end steal-only
 
 		test("empty default is matched even if last", function () {

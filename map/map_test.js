@@ -220,11 +220,11 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 			});
 		map.bind('name', handler);
 		map.bind('name', handler);
-		equal(map._computedBindings.name.count, 2, '2 handlers listening to computed property');
+		equal(map._computedAttrs.name.count, 2, '2 handlers listening to computed property');
 		map.unbind('name', handler);
 		map.unbind('name', handler);
-		equal(map._computedBindings.name.count, 0, '0 handlers listening to computed property');
-		ok(!map._computedBindings.name.handler, 'computed property handler removed');
+		equal(map._computedAttrs.name.count, 0, '0 handlers listening to computed property');
+		
 	});
 
 	test("serializing cycles", function(){

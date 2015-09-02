@@ -1,0 +1,37 @@
+<div class="restaurants">
+  <h2 class="page-header">Restaurants</h2>
+  <form class="form">
+    <div class="form-group">
+      <label>State</label>
+      <select can-value="{state}" {{#if states.isPending}}disabled{{/if}}>
+        {{#if states.isPending}}
+          <option value="">Loading...</option>
+        {{else}}
+          {{^if state}}
+          <option value="">Choose a state</option>
+          {{/if}}
+          {{#each states.value}}
+          <option value="{{short}}">{{name}}</option>
+          {{/each}}
+        {{/if}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>City</label>
+      <select can-value="city" {{^if state}}disabled{{/if}}>
+        {{#if cities.isPending}}
+          <option value="">Loading...</option>
+        {{else}}
+          {{^if city}}
+          <option value="">Choose a city</option>
+          {{/if}}
+          {{#each cities.value}}
+          <option>{{name}}</option>
+          {{/each}}
+        {{/if}}
+      </select>
+    </div>
+  </form>
+
+  <!-- Restaurants code will go here -->
+</div>

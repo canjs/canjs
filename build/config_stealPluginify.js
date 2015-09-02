@@ -10,9 +10,19 @@ var	allModuleNames = _.map(modules,function(mod){
 		return mod.moduleName;
 	}),
 	coreModules = _.map(_.filter(modules, "isDefault"),"moduleName"),
-	config = path.join(__dirname,"..","package.json!npm");
+	config = path.join(__dirname,"..","package.json!npm"),
+	makeSystemConfig = function(options){
+		return _.extend({
+			config: config,
+			buildForClient: true
+		}, options);
+	};
 
 var canNormalize = function(name, depLoad, curName){
+	if(!depLoad) {
+		return name;
+	}
+
 	if( depLoad.address.indexOf("node_modules") >= 0 ) {
 		return denpm(name);
 	}
@@ -31,13 +41,12 @@ var npmify = function(moduleName){
 var makeStandaloneAndStealUtil = function(lib){
 	var libUtilName = "util/"+lib+"/"+lib+".js";
 	var configuration = {
-		system: {
-			config: config,
+		system: makeSystemConfig({
 			main: coreModules,
 			paths: {
 				"can/util/util": libUtilName
 			}
-		},
+		}),
 		options : {
 			//verbose: true
 		},
@@ -81,10 +90,9 @@ var pkg = require('../package.json');
 var makeAmdUtil = function(lib){
 	var moduleName = "can/util/"+lib+"/"+lib;
 	return {
-		system: {
-			config: config,
+		system: makeSystemConfig({
 			main: moduleName
-		},
+		}),
 		options : {
 			//quiet: true
 		},
@@ -120,10 +128,9 @@ var testModules = modules.filter(function(mod){
 module.exports = function(){
 	return {
 		"tests": {
-			system: {
+			system: makeSystemConfig({
 				main: testModules,
-				config: config
-			},
+			}),
 			options : {
 				//verbose: true
 			},
@@ -145,10 +152,9 @@ module.exports = function(){
 		},
 		// standalone & steal - plugins, jquery core, and jquery steal
 		"cjs-jquery": {
-			system: {
-				config: config,
+			system: makeSystemConfig({
 				main: allModuleNames.concat(['can'])
-			},
+			}),
 			options : {
 				//verbose: true
 			},
@@ -205,6 +211,10 @@ module.exports = function(){
 					graphs: allModuleNames.concat(['can']),
 					useNormalizedDependencies: false,
 					normalize: function(depName, depLoad, curName, curLoad ){
+						// @loader is part of the
+						if(!depLoad) {
+							return depName;
+						}
 
 						// if its not in node_modules
 						if(depLoad.address.indexOf("node_modules") === -1 && curLoad.address.indexOf("node_modules") === -1) {
@@ -214,7 +224,7 @@ module.exports = function(){
 								moduleName = "./"+moduleName
 							}
 							return moduleName;
-						} 
+						}
 						if(depName === "jquery/jquery") {
 							return "jquery"
 						}
@@ -226,9 +236,9 @@ module.exports = function(){
 						if(isNpm(moduleName)) {
 							moduleName = moduleName.substr(moduleName.lastIndexOf("#")+1);
 						}
-						
+
 						name = moduleName.replace("can/","")+".js";
-						
+
 						return path.join(__dirname,"..", "dist", "cjs", name);
 					},
 					format: "cjs",
@@ -246,13 +256,12 @@ module.exports = function(){
 		"standalone & steal - core & utils - zepto": makeStandaloneAndStealUtil("zepto"),
 		"standalone & steal - core & utils - mootools": makeStandaloneAndStealUtil("mootools"),
 		"amd": {
-			system: {
-				config: config,
+			system: makeSystemConfig({
 				main: allModuleNames.concat(["can"]),
 				map: {
 					"can/util/util" : "can/util/library"
 				}
-			},
+			}),
 			options : {
 				quiet: true
 			},

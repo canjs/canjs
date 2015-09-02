@@ -1,15 +1,20 @@
-/* jshint maxdepth:7*/
-steal("can/view", function(can){
-	
-	
+/* jshint maxdepth:7,node:true*/
+steal(function(){
+
+	function each(items, callback){
+		for ( var i = 0; i < items.length; i++ ) {
+			callback(items[i], i);
+		}
+	}
+
 	function makeMap(str){
 		var obj = {}, items = str.split(",");
-		for ( var i = 0; i < items.length; i++ ) {
-			obj[ items[i] ] = true;
-		}
-			
+		each(items, function(name){
+			obj[name] = true;
+		});
 		return obj;
 	}
+
 	function handleIntermediate(intermediate, handler){
 		for(var i = 0, len = intermediate.length; i < len; i++) {
 			var item = intermediate[i];
@@ -17,9 +22,9 @@ steal("can/view", function(can){
 		}
 		return intermediate;
 	}
-	
+
 	var alphaNumericHU = "-:A-Za-z0-9_",
-		attributeNames = "[a-zA-Z_:]["+alphaNumericHU+":.]*",
+		attributeNames = "[^=>\\s\\{\\}\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",
@@ -80,17 +85,17 @@ steal("can/view", function(can){
 		handler = handler || {};
 		if(returnIntermediate) {
 			// overwrite handlers so they add to intermediate
-			can.each(tokenTypes, function(name){
+			each(tokenTypes, function(name){
 				var callback = handler[name] || fn;
 				handler[name] = function(){
 					if( callback.apply(this, arguments) !== false ) {
-						intermediate.push({tokenType: name, args: can.makeArray(arguments)});
+						intermediate.push({tokenType: name, args: [].slice.call(arguments, 0) });
 					}
 				};
 			});
 		}
-		
-		
+
+
 		function parseStartTag(tag, tagName, rest, unary) {
 			tagName = tagName.toLowerCase();
 
@@ -103,11 +108,11 @@ steal("can/view", function(can){
 			if (closeSelf[tagName] && stack.last() === tagName) {
 				parseEndTag("", tagName);
 			}
-			
+
 			unary = empty[tagName] || !!unary;
-			
+
 			handler.start(tagName, unary);
-			
+
 			if (!unary) {
 				stack.push(tagName);
 			}
@@ -116,7 +121,7 @@ steal("can/view", function(can){
 
 
 			handler.end(tagName,unary);
-			
+
 		}
 
 		function parseEndTag(tag, tagName) {
@@ -125,7 +130,7 @@ steal("can/view", function(can){
 			if (!tagName) {
 				pos = 0;
 			}
-				
+
 
 				// Find the closest opened tag of the same type
 			else {
@@ -134,9 +139,9 @@ steal("can/view", function(can){
 						break;
 					}
 				}
-					
+
 			}
-				
+
 
 			if (pos >= 0) {
 				// Close all the open elements, up the stack
@@ -145,25 +150,39 @@ steal("can/view", function(can){
 						handler.close(stack[i]);
 					}
 				}
-					
+
 				// Remove the open elements from the stack
 				stack.length = pos;
 			}
 		}
-		
+
 		function parseMustache(mustache, inside){
 			if(handler.special){
 				handler.special(inside);
 			}
 		}
-		
-		
-		var index, chars, match, stack = [], last = html;
+		var callChars = function(){
+			if(charsText) {
+				if(handler.chars) {
+					handler.chars(charsText);
+				}
+			}
+			charsText = "";
+		};
+
+		var index,
+			chars,
+			match,
+			stack = [],
+			last = html,
+			// an accumulating text for the next .chars callback
+			charsText = "";
 		stack.last = function () {
 			return this[this.length - 1];
 		};
 
 		while (html) {
+
 			chars = true;
 
 			// Make sure we're not in a script or style element
@@ -174,6 +193,7 @@ steal("can/view", function(can){
 					index = html.indexOf("-->");
 
 					if (index >= 0) {
+						callChars();
 						if (handler.comment) {
 							handler.comment(html.substring(4, index));
 						}
@@ -186,6 +206,7 @@ steal("can/view", function(can){
 					match = html.match(endTag);
 
 					if (match) {
+						callChars();
 						html = html.substring(match[0].length);
 						match[0].replace(endTag, parseEndTag);
 						chars = false;
@@ -196,14 +217,16 @@ steal("can/view", function(can){
 					match = html.match(startTag);
 
 					if (match) {
+						callChars();
 						html = html.substring(match[0].length);
 						match[0].replace(startTag, parseStartTag);
 						chars = false;
 					}
 				} else if (html.indexOf("{{") === 0 ) {
 					match = html.match(mustache);
-					
+
 					if (match) {
+						callChars();
 						html = html.substring(match[0].length);
 						match[0].replace(mustache, parseMustache);
 					}
@@ -211,13 +234,19 @@ steal("can/view", function(can){
 
 				if (chars) {
 					index = html.search(txtBreak);
+					if(index === 0 && html === last) {
+						charsText += html.charAt(0);
+						html = html.substr(1);
+						index = html.search(txtBreak);
+					}
 
 					var text = index < 0 ? html : html.substring(0, index);
 					html = index < 0 ? "" : html.substring(index);
 
-					if (handler.chars && text) {
-						handler.chars(text);
+					if (text) {
+						charsText += text;
 					}
+
 				}
 
 			} else {
@@ -235,24 +264,24 @@ steal("can/view", function(can){
 			if (html === last) {
 				throw "Parse Error: " + html;
 			}
-				
+
 			last = html;
 		}
-
+		callChars();
 		// Clean up any remaining tags
 		parseEndTag();
 
-		
+
 		handler.done();
 		return intermediate;
 	};
 	HTMLParser.parseAttrs = function(rest, handler){
-		
-		
+
+
 		(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
 			if(special) {
 				handler.special(special);
-				
+
 			}
 			if(name || dblQuote || singleQuote || val) {
 				var value = arguments[3] ? arguments[3] :
@@ -260,7 +289,7 @@ steal("can/view", function(can){
 					arguments[5] ? arguments[5] :
 					fillAttrs[name.toLowerCase()] ? name : "";
 				handler.attrStart(name || "");
-				
+
 				var last = mustache.lastIndex = 0,
 					res = mustache.exec(value),
 					chars;
@@ -284,12 +313,10 @@ steal("can/view", function(can){
 				handler.attrEnd(name || "");
 			}
 
-			
+
 		});
 	};
 
-	can.view.parser = HTMLParser;
-	
 	return HTMLParser;
-	
+
 });

@@ -1,7 +1,7 @@
 // # can/view/bindings/bindings.js
-// 
-// This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute 
-// for in template event bindings. These are usable in any mustache template, but mainly and documented 
+//
+// This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
+// for in template event bindings. These are usable in any mustache template, but mainly and documented
 // for use within can.Component.
 steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", function (can, mustacheCore) {
 	/**
@@ -51,8 +51,11 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		};
 	})(),
-		removeCurly = function(value){
-			if(value[0] === "{" && value[value.length-1] === "}") {
+		removeBrackets = function(value, open, close){
+			open = open || "{";
+			close = close || "}";
+
+			if(value[0] === open && value[value.length-1] === close) {
 				return value.substr(1, value.length - 2);
 			}
 			return value;
@@ -60,18 +63,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	// ## can-value
 	// Implement the `can-value` special attribute
-	// 
+	//
 	// ### Usage
-	// 		
+	//
 	// 		<input can-value="name" />
-	// 
-	// When a view engine finds this attribute, it will call this callback. The value of the attribute 
+	//
+	// When a view engine finds this attribute, it will call this callback. The value of the attribute
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
 
-		var attr = can.trim(removeCurly(el.getAttribute("can-value"))),
-			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current 
-			// scope of the template is some object called data, the compute representing this can-value will be the 
+		var attr = can.trim(removeBrackets(el.getAttribute("can-value"))),
+			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current
+			// scope of the template is some object called data, the compute representing this can-value will be the
 			// data.attr('name') property.
 			value = data.scope.computeData(attr, {
 				args: []
@@ -80,14 +83,14 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			trueValue,
 			falseValue;
 
-		// Depending on the type of element, this attribute has different behavior. can.Controls are defined (further below 
-		// in this file) for each type of input. This block of code collects arguments and instantiates each can.Control. There 
+		// Depending on the type of element, this attribute has different behavior. can.Controls are defined (further below
+		// in this file) for each type of input. This block of code collects arguments and instantiates each can.Control. There
 		// is one for checkboxes/radios, another for multiselect inputs, and another for everything else.
 		if (el.nodeName.toLowerCase() === "input") {
 			if (el.type === "checkbox") {
-				// If the element is a checkbox and has an attribute called "can-true-value", 
-				// set up a compute that toggles the value of the checkbox to "true" based on another attribute. 
-				// 
+				// If the element is a checkbox and has an attribute called "can-true-value",
+				// set up a compute that toggles the value of the checkbox to "true" based on another attribute.
+				//
 				// 		<input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female' />
 				if (can.attr.has(el, "can-true-value")) {
 					trueValue = el.getAttribute("can-true-value");
@@ -102,8 +105,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 
 			if (el.type === "checkbox" || el.type === "radio") {
-				// For checkboxes and radio buttons, create a Checked can.Control around the input.  Pass in 
-				// the compute representing the can-value and can-true-value and can-false-value properties (if 
+				// For checkboxes and radio buttons, create a Checked can.Control around the input.  Pass in
+				// the compute representing the can-value and can-true-value and can-false-value properties (if
 				// they were used).
 				new Checked(el, {
 					value: value,
@@ -114,7 +117,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		}
 		if (el.nodeName.toLowerCase() === "select" && el.multiple) {
-			// For multiselect enabled select inputs, we instantiate a special control around that select element 
+			// For multiselect enabled select inputs, we instantiate a special control around that select element
 			// called Multiselect
 			new Multiselect(el, {
 				value: value
@@ -128,7 +131,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			});
 			return;
 		}
-		// The default case. Instantiate the Value control around the element. Pass it the compute representing 
+		// The default case. Instantiate the Value control around the element. Pass it the compute representing
 		// the observable attribute property that was set.
 		new Value(el, {
 			value: value
@@ -137,13 +140,13 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	// ## Special Event Types (can-SPECIAL)
 
-	// A special object, similar to [$.event.special](http://benalman.com/news/2010/03/jquery-special-events/), 
-	// for adding hooks for special can-SPECIAL types (not native DOM events). Right now, only can-enter is 
+	// A special object, similar to [$.event.special](http://benalman.com/news/2010/03/jquery-special-events/),
+	// for adding hooks for special can-SPECIAL types (not native DOM events). Right now, only can-enter is
 	// supported, but this object might be exported so that it can be added to easily.
-	// 
-	// To implement a can-SPECIAL event type, add a property to the special object, whose value is a function 
-	// that returns the following: 
-	//		
+	//
+	// To implement a can-SPECIAL event type, add a property to the special object, whose value is a function
+	// that returns the following:
+	//
 	//		// the real event name to bind to
 	//		event: "event-name",
 	//		handler: function (ev) {
@@ -163,32 +166,29 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		}
 	};
 
-	// ## can-EVENT
-	// The following section contains code for implementing the can-EVENT attribute. 
-	// This binds on a wildcard attribute name. Whenever a view is being processed 
-	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler 
-	// that calls a method identified by the value of this attribute.
-	can.view.attr(/can-[\w\.]+/, function (el, data) {
+	var handleEvent = function (el, data) {
 
 		// the attribute name is the function to call
 		var attributeName = data.attributeName,
-			// The event type to bind on is deteremined by whatever is after can-
-			//
-			// For example, can-submit binds on the submit event.
-			event = attributeName.substr("can-".length),
-			// This is the method that the event will initially trigger. It will look up the method by the string name
-			// passed in the attribute and call it.
+		// The event type to bind on is determin by whatever is after can-
+		// or it is a (event)
+		// For example, can-submit and (submit) binds on the submit event.
+			event = attributeName.indexOf('can-') === 0 ?
+				attributeName.substr("can-".length) :
+				removeBrackets(attributeName, '(', ')'),
+		// This is the method that the event will initially trigger. It will look up the method by the string name
+		// passed in the attribute and call it.
 			handler = function (ev) {
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
 				// mustacheCore.expressionData will read the attribute
 				// value and parse it identically to how mustache helpers
 				// get parsed.
-				var attrInfo = mustacheCore.expressionData(removeCurly(attrVal));
+				var attrInfo = mustacheCore.expressionData(removeBrackets(attrVal));
 
 				// We grab the first item and treat it as a method that
 				// we'll call.
-				var scopeData = data.scope.read(attrInfo.name.get, {
+				var scopeData = data.scope.read(attrInfo.name.key, {
 					returnObserveMethods: true,
 					isArgument: true,
 					executeAnonymousFunctions: true
@@ -207,17 +207,35 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				//!steal-remove-end
 
-				var args = [];
 				var $el = can.$(this);
 				var viewModel = can.viewModel($el[0]);
+				
+				// make a scope with these things just under 
+				
 				var localScope = data.scope.add({
 					"@element": $el,
 					"@event": ev,
 					"@viewModel": viewModel,
 					"@scope": data.scope,
 					"@context": data.scope._context
+				},{
+					notContext: true
 				});
-
+				var convertToValue = function(arg){
+					if(typeof arg === "function") {
+						return convertToValue( arg() );
+					} else {
+						return arg;
+					}
+				};
+				
+				var args = attrInfo.args(localScope, null, {}),
+					hash = attrInfo.hash(localScope, null, {});
+					
+				if(!can.isEmptyObject(hash)) {
+					args.push(hash);
+				}
+				/*
 				// .expressionData() gives us a hash object representing
 				// any expressions inside the definition that look like
 				// foo=bar. If there's no hash keys, we'll omit this hash
@@ -248,7 +266,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 							args.unshift(arg);
 						}
 					}
-				}
+				}*/
+				
 				// If no arguments are provided, the method will simply
 				// receive the legacy arguments.
 				if (!args.length) {
@@ -258,7 +277,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				return scopeData.value.apply(scopeData.parent, args);
 			};
-
+		
 		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is
 		// a function that returns an object containing an event and a handler. These are to be used for binding. For example,
 		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to
@@ -271,7 +290,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
 		can.bind.call(el, event, handler);
-
+		
 		// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
 		var attributesHandler = function(ev) {
 			if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
@@ -280,19 +299,27 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		};
 		can.bind.call(el, 'attributes', attributesHandler);
-	});
+	};
 
+	// ## can-EVENT
+	// The following section contains code for implementing the can-EVENT attribute.
+	// This binds on a wildcard attribute name. Whenever a view is being processed
+	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler
+	// that calls a method identified by the value of this attribute.
+	can.view.attr(/can-[\w\.]+/, handleEvent);
+	// ## (EVENT)
+	can.view.attr(/\([\w\.]+\)/, handleEvent);
 
 	// ## Two way binding can.Controls
-	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves 
-	// two functions: 
+	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves
+	// two functions:
 	// 1. Bind on the property changing (the compute we're two-way binding to) and change the input value.
 	// 2. Bind on the input changing and change the property (compute) we're two-way binding to.
 	// There is one control per input type. There could easily be more for more advanced input types, like the HTML5 type="date" input type.
 
 
-	// ### Value 
-	// A can.Control that manages the two-way bindings on most inputs.  When can-value is found as an attribute 
+	// ### Value
+	// A can.Control that manages the two-way bindings on most inputs.  When can-value is found as an attribute
 	// on an input, the callback above instantiates this Value control on the input element.
 	var Value = can.Control.extend({
 		init: function () {
@@ -342,8 +369,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		}
 	}),
-	// ### Checked 
-	// A can.Control that manages the two-way bindings on a checkbox element.  When can-value is found as an attribute 
+	// ### Checked
+	// A can.Control that manages the two-way bindings on a checkbox element.  When can-value is found as an attribute
 	// on a checkbox, the callback above instantiates this Checked control on the checkbox element.
 		Checked = can.Control.extend({
 			init: function () {
@@ -351,7 +378,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				this.isCheckbox = (this.element[0].type.toLowerCase() === "checkbox");
 				this.check();
 			},
-			// `value` is the compute representing the can-value for this element.  For example can-value="foo" and current 
+			// `value` is the compute representing the can-value for this element.  For example can-value="foo" and current
 			// scope is someObj, value is the compute representing someObj.attr('foo')
 			"{value} change": "check",
 			check: function () {
@@ -359,7 +386,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				if (this.isCheckbox) {
 					var value = this.options.value(),
 						trueValue = this.options.trueValue || true;
-					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set 
+					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set
 					// the checked property based on their equality.
 					this.element[0].checked = (value == trueValue);
 				}
@@ -375,9 +402,8 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			},
 			// This event is triggered by the DOM.  If a change event occurs, we must set the value of the compute (options.value).
 			"change": function () {
-
 				if (this.isCheckbox) {
-					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If 
+					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If
 					// can-false-value was used and checked is false, set value to the string value of can-false-value.
 					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
 				}
@@ -391,7 +417,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		}),
 		// ### Multiselect
-		// A can.Control that handles select input with the "multiple" attribute (meaning more than one can be selected at once). 
+		// A can.Control that handles select input with the "multiple" attribute (meaning more than one can be selected at once).
 		Multiselect = Value.extend({
 			init: function () {
 				this.delimiter = ";";
@@ -420,7 +446,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					isSelected[val] = true;
 				});
 
-				// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then 
+				// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then
 				// set its selected property if it was in the list of vals that were just set.
 				can.each(this.element[0].childNodes, function (option) {
 					if (option.value) {
@@ -430,7 +456,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				});
 
 			},
-			// A helper function used by the 'change' handler below. Its purpose is to return an array of selected 
+			// A helper function used by the 'change' handler below. Its purpose is to return an array of selected
 			// values, like ["foo", "bar"]
 			get: function () {
 				var values = [],
@@ -481,4 +507,85 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
+	// ^abc='{this}'
+	// ^def='{blah}'
+	/*can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
+		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
+			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
+			twoWayBind = true;
+
+		if(prop.charAt(0) === "{") {
+			twoWayBind = false;
+			prop = removeBrackets( prop );
+		}
+
+		var childViewModel = can.viewModel(el),
+			childScope = new can.view.Scope(childViewModel),
+			computeData = childScope.computeData(prop, {
+				args: [],
+
+			}),
+			childCompute = computeData.compute,
+			parentViewModel = attrData.scope.getViewModel();
+
+		var handler = function (ev, newVal) {
+			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
+			parentViewModel.attr(name, newVal);
+		};
+		childCompute.bind("change", handler);
+
+		parentViewModel.attr( name, childCompute() );
+
+		can.one.call(el, 'removed', function() {
+			childCompute.unbind("change", handler);
+		});
+
+	});*/
+
+	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
+
+		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
+			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
+			twoWayBind = true;
+
+
+		if(prop.charAt(0) === "{") {
+			twoWayBind = false;
+			prop = removeBrackets( prop );
+		}
+
+		var viewModel = can.viewModel(el);
+		var scope = new can.view.Scope(viewModel);
+		var refs = attrData.scope.getRefs();
+
+		var computeData = scope.computeData(prop, {
+				args: [],
+				isArgument: true
+			}),
+			compute = computeData.compute;
+
+		var handler = function (ev, newVal) {
+			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
+			refs.attr(name, newVal);
+		};
+		compute.bind("change", handler);
+
+		var initialValue = compute();
+		refs.attr(name, initialValue === undefined ? null : initialValue);
+
+		if(twoWayBind) {
+			var twoWayHandler = function(ev, newVal){
+				compute(newVal);
+			};
+			refs.bind(name, twoWayHandler);
+		}
+
+		can.one.call(el, 'removed', function() {
+			compute.unbind("change", handler);
+			if(twoWayBind) {
+				refs.unbind(name, twoWayHandler);
+			}
+		});
+
+	});
 });

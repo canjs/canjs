@@ -1,0 +1,6 @@
+<div class="homepage">
+  <img src="images/homepage-hero.jpg" width="250" height="380" />
+  <h1>Ordering food has never been easier</h1>
+  <p>We make it easier than ever to order gourmet food from your favorite local restaurants.</p>
+  <p><a class="btn" can-href="{page='restaurants'}" role="button">Choose a Restaurant</a></p>
+</div>

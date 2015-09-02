@@ -1,4 +1,9 @@
-steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'can/view/parser',function (can, elements, view, nodeLists, parser) {
+steal('can/util',
+	'can/view/elements.js',
+	'can/view',
+	'can/view/node_lists',
+	'can/view/parser',
+	'can/util/array/diff.js', function (can, elements, view, nodeLists, parser, diff) {
 
 	elements = elements || can.view.elements;
 	nodeLists = nodeLists || can.view.NodeLists;
@@ -39,6 +44,20 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 		bind(data);
 		return data;
 	},
+		getChildNodes = function(node){
+			var childNodes = node.childNodes;
+			if("length" in childNodes) {
+				return childNodes;
+			} else {
+				var cur = node.firstChild;
+				var nodes = [];
+				while(cur) {
+					nodes.push(cur);
+					cur = cur.nextSibling;
+				}
+				return nodes;
+			}
+		},
 		// #### listen
 		// Calls setup, but presets bind and unbind to
 		// operate on a compute
@@ -74,8 +93,8 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			return obj && obj.nodeType;
 		},
 		addTextNodeIfNoChildren = function(frag){
-			if(!frag.childNodes.length) {
-				frag.appendChild(document.createTextNode(""));
+			if(!frag.firstChild) {
+				frag.appendChild(frag.ownerDocument.createTextNode(""));
 			}
 		};
 	/**
@@ -164,11 +183,12 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				isTornDown = false,
 				// Called when items are added to the list.
 				add = function (ev, items, index) {
+					
 					if (!afterPreviousEvents) {
 						return;
 					}
 					// Collect new html and mappings
-					var frag = document.createDocumentFragment(),
+					var frag = text.ownerDocument.createDocumentFragment(),
 						newNodeLists = [],
 						newIndicies = [];
 					// For each new item,
@@ -189,7 +209,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 						
 						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
 						
-						var childNodes = can.makeArray(itemFrag.childNodes);
+						var childNodes = can.makeArray(getChildNodes(itemFrag));
 						if(nodeList) {
 							nodeLists.update(itemNodeList, childNodes);
 							newNodeLists.push(itemNodeList);
@@ -311,7 +331,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
 				},
 				// A text node placeholder
-				text = document.createTextNode(''),
+				text = el.ownerDocument.createTextNode(''),
 				// The current list.
 				list,
 				// Called when the list is replaced with a new list or the binding is torn-down.
@@ -330,23 +350,46 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				},
 				// Called when the list is replaced or setup.
 				updateList = function (ev, newList, oldList) {
+					
 					if(isTornDown) {
 						return;
 					}
-					teardownList();
-					// make an empty list if the compute returns null or undefined
-					list = newList || [];
 					
+					
+					afterPreviousEvents = true;
+					if(newList && oldList) {
+						list = newList || [];
+						var patches = diff(oldList, newList);
+						
+						if ( oldList.unbind ) {
+							oldList.unbind('add', add)
+								.unbind('remove', remove)
+								.unbind('move', move);
+						}
+						for(var i = 0, patchLen = patches.length; i < patchLen; i++) {
+							var patch = patches[i];
+							if(patch.deleteCount) {
+								remove({}, {
+									length: patch.deleteCount
+								}, patch.index, true);
+							}
+							if(patch.insert.length) {
+								add({}, patch.insert, patch.index);
+							}
+						}
+					} else {
+						teardownList();
+						list = newList || [];
+						add({}, list, 0);
+					}
+					afterPreviousEvents = false;
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
 							.bind('remove', remove)
 							.bind('move', move);
 					}
-					// temporarily allow add method.
-					afterPreviousEvents = true;
-					add({}, list, 0);
-					afterPreviousEvents = false;
+					
 					
 					can.batch.afterPreviousEvents(function(){
 						afterPreviousEvents = true;
@@ -439,9 +482,9 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 					}
 					
 					// We need to mark each node as belonging to the node list.
-					oldNodes = nodeLists.update(nodes, frag.childNodes);
+					oldNodes = nodeLists.update(nodes, getChildNodes(frag));
 					if(isFunction) {
-						val(frag.childNodes[0]);
+						val(frag.firstChild);
 					}
 					elements.replace(oldNodes, frag);
 					
@@ -482,7 +525,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 				frag = can.view.hookup(frag, nodes[0].parentNode);
 			}
 			// We need to mark each node as belonging to the node list.
-			nodeLists.update(nodes, frag.childNodes);
+			nodeLists.update(nodes, getChildNodes(frag));
 			elements.replace(oldNodes, frag);
 			return nodes;
 		},
@@ -509,7 +552,7 @@ steal('can/util', 'can/view/elements.js', 'can/view', 'can/view/node_lists', 'ca
 			});
 			// The text node that will be updated
 				
-			var node = document.createTextNode(can.view.toStr(compute()));
+			var node = el.ownerDocument.createTextNode(can.view.toStr(compute()));
 			if(nodeList) {
 				nodeList.unregistered = data.teardownCheck;
 				data.nodeList = nodeList;

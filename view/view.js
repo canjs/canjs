@@ -648,7 +648,7 @@ steal('can/util', function (can) {
 				// Return the deferred...
 				return deferred;
 			} else {
-				// get is called async but in 
+				// get is called async but in
 				// ff will be async so we need to temporarily reset
 				reading = can.__clearReading();
 
@@ -694,7 +694,7 @@ steal('can/util', function (can) {
 				return response;
 			}
 		},
-		
+
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
@@ -713,7 +713,7 @@ steal('can/util', function (can) {
 			} else {
 				renderer = makeRenderer( info.renderer(id, text) );
 			}
-			
+
 			def = def || new can.Deferred();
 
 			// Cache if we are caching.
@@ -726,6 +726,22 @@ steal('can/util', function (can) {
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
 			return def.resolve(renderer);
+		},
+
+		// Returns a function that automatically converts all computes passed to it
+		simpleHelper: function(fn) {
+			return function() {
+				var realArgs = [];
+				can.each(arguments, function(val, i) {
+					if (i <= arguments.length) {
+						while (val && val.isComputed) {
+							val = val();
+						}
+						realArgs.push(val);
+					}
+				});
+				return fn.apply(this, realArgs);
+			};
 		}
 	});
 

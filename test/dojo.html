@@ -4,7 +4,7 @@
 
 <head>
     <title>CanJS Dojo tests</title>
-    <script type="text/javascript" src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+    <script type="text/javascript" src="../bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -29,6 +29,7 @@
                 "can/view/view_test.js",
                 "can/view/ejs/ejs_test.js",
                 "can/view/stache/stache_test.js",
+                "can/view/href/href_test.js",
                 "can/control/control_test.js",
                 "can/route/route_test.js",
                 "can/control/route/route_test.js",
@@ -54,6 +55,8 @@
                 "can/util/object/object_test.js",
                 "can/util/function/function_test.js",
                 "can/view/autorender/autorender_test.js",
+                "can/util/vdom/build_fragment/build_fragment_test.js",
+                "can/view/import/import_test.js",
                 function() {
                     can.dev.logLevel = 3;
                 });

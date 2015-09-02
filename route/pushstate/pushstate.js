@@ -7,13 +7,13 @@
 // on `<a>` elements across document and accordingly updates `can.route` state
 // and window's pathname.
 
-/*jshint maxdepth:6*/
+/*jshint maxdepth:6, scripturl:true*/
 
 steal('can/util', 'can/route', function (can) {
 	"use strict";
 
 	// Initialize plugin only if browser supports pushstate.
-	if (window.history && history.pushState) {
+	if ((window.history && history.pushState) || can.isNode) {
 
 		// Registers itself within `can.route.bindings`.
 		can.route.bindings.pushstate = {
@@ -64,6 +64,10 @@ steal('can/util', 'can/route', function (can) {
 
 			// Intercepts clicks on `<a>` elements and rewrites original `history` methods.
 			bind: function () {
+				if(can.isNode) {
+					return;
+				}
+
 				// Intercept routable links.
 				can.delegate.call(can.$(document.documentElement), 'a', 'click', anchorClickHandler);
 
@@ -146,6 +150,10 @@ steal('can/util', 'can/route', function (can) {
 				var node = this._node || this;
 				// Fix for IE showing blank host, but blank host means current host.
 				var linksHost = node.host || window.location.host;
+
+				if(node.href === "javascript://") {
+					return;
+				}
 
 				// If link is within the same domain and descendant of `root`
 				if (window.location.host === linksHost) {

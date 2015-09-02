@@ -66,6 +66,30 @@ steal('can/util/can.js', 'can/util/attr', 'can/event', 'zepto', 'can/util/object
 		can.each = oldEach;
 		can.attr = attr;
 		can.event = event;
+		function likeArray(obj) { return typeof obj.length === 'number'; }
+		can.map = function(elements, callback) {
+			var value, values = [], i, key;
+			if (likeArray(elements)) {
+				for ( i = 0; i < elements.length; i++) {
+					value = callback(elements[i], i);
+					if (value != null) {
+						values.push(value);
+					}
+				}
+			} else {
+				for (key in elements) {
+					value = callback(elements[key], key);
+					if (value != null) {
+						values.push(value);
+					}
+						
+				}
+			}
+			return values;
+		};
+
+		
+		
 		var arrHas = function (obj, name) {
 			return obj[0] && obj[0][name] || obj[name];
 		};

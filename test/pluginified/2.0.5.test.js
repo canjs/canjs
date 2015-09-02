@@ -1,4 +1,4 @@
-(function(undefined) {
+(function(module, undefined) {
 
 // ## component/component_test.js
 var __m1 = (function () {
@@ -14194,4 +14194,4 @@ var __m79 = (function () {
 })(undefined);
 
 
-})();
+})(QUnit.module);

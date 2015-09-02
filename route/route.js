@@ -414,7 +414,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		ready: function (val) {
 			if (val !== true) {
 				can.route._setup();
-				can.route.setState();
+				if(can.isBrowserWindow || can.isWebWorker) {
+					can.route.setState();
+				}
 			}
 			return can.route;
 		},
@@ -548,7 +550,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				// For hashbased routing, it's everything after the #, for
 				// pushState it's configurable
 				matchingPartOfURL: function () {
-					return location.href.split(/#!?/)[1] || "";
+					var loc = can.route.location || location;
+					return loc.href.split(/#!?/)[1] || "";
 				},
 				// gets called with the serialized can.route data after a route has changed
 				// returns what the url has been updated to (for matching purposes)
@@ -606,7 +609,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	// The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
 	// instead act on the `can.route.data` observe.
-	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get','each'], function (name) {
+	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '___get','each'], function (name) {
 		can.route[name] = function () {
 			// `delegate` and `undelegate` require
 			// the `can/map/delegate` plugin
