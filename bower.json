@@ -2,7 +2,7 @@
   "name": "canjs",
   "repo": "bitovi/canjs",
   "description": "Can do JavaScript",
-  "version": "2.3.0-pre.9",
+  "version": "2.3.0-pre.10",
   "main": "can.js",
   "keywords": [
     "mvc",
