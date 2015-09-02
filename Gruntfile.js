@@ -215,6 +215,9 @@ module.exports = function (grunt) {
 		simplemocha: {
 			builders: {
 				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
+			},
+			server: {
+				src: ["test/server/test.js"]
 			}
 		},
 		"steal-export": require("./build/config_stealPluginify")(),

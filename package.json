@@ -44,7 +44,7 @@
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
-		"steal": "^0.11.0-pre.2",
+		"steal": "^0.11.0-pre.0",
 		"steal-benchmark": "~0.0.1",
 		"steal-qunit": "0.0.2",
 		"steal-tools": "^0.11.0-pre.8",
@@ -67,9 +67,6 @@
 	],
 	"main": "./can",
 	"system": {
-		"configDependencies": [
-			"system-config"
-		],
 		"ignoreBrowser": true,
 		"main": "can",
 		"map": {
@@ -77,7 +74,8 @@
 			"jquery/jquery": "jquery",
 			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"jquery-ui/jquery-ui": "jquery-ui",
-			"steal-qunit/steal-qunit": "steal-qunit"
+			"steal-qunit/steal-qunit": "steal-qunit",
+      "can/util/vdom/vdom": "@empty"
 		},
 		"paths": {
 			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
@@ -100,7 +98,10 @@
 			"zepto/zepto": {
 				"format": "global",
 				"exports": "Zepto"
-			}
+			},
+      "can/util/vdom/vdom": {
+        "sideBundle": true
+      }
 		},
 		"ext": {
 			"ejs": "can/view/ejs/system",
@@ -140,7 +141,42 @@
 			"grunt-banner",
 			"steal-benchmark",
 			"documentjs"
-		]
+		],
+    "envs": {
+      "server-development": {
+				"map": {
+          "can/util/vdom/vdom": "can/util/vdom/vdom"
+        },
+        "meta": {
+          "jquery": {
+            "format": "global",
+            "deps": ["can/util/vdom/vdom"]
+          }
+        }
+      },
+      "server-production": {
+				"map": {
+          "can/util/vdom/vdom": "can/util/vdom/vdom"
+        },
+        "meta": {
+          "jquery": {
+            "format": "global",
+            "deps": ["can/util/vdom/vdom"]
+          }
+        }
+      },
+      "build-development": {
+				"map": {
+          "can/util/vdom/vdom": "can/util/vdom/vdom"
+        },
+        "meta": {
+          "jquery": {
+            "format": "global",
+            "deps": ["can/util/vdom/vdom"]
+          }
+        }
+      }
+    }
 	},
 	"browser": {
 		"./can": "./dist/cjs/can",
