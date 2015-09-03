@@ -554,16 +554,32 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(tm.attr('foo'), 'baz');
 	});
 
-	test("value generator can read other properties", function () {
-		var NumbersMap = can.Map.extend({
+	test("Value generator can read other properties", function () {
+		var Map = can.Map.extend({
+			letters: 'ABC',
 			numbers: [1, 2, 3],
 			define: {
+				definedLetters: {
+					value: 'DEF'
+				},
 				definedNumbers: {
 					value: [4, 5, 6]
+				},
+				generatedLetters: {
+					value: function () {
+						return 'GHI';
+					}
 				},
 				generatedNumbers: {
 					value: function () {
 						return new can.List([7, 8, 9]);
+					}
+				},
+
+				// Get prototype defaults
+				firstLetter: {
+					value: function () {
+						return this.attr('letters').substr(0, 1);
 					}
 				},
 				firstNumber: {
@@ -571,9 +587,23 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 						return this.attr('numbers.0');
 					}
 				},
+
+				// Get defined simple `value` defaults
+				middleLetter: {
+					value: function () {
+						return this.attr('definedLetters').substr(1, 1);
+					}
+				},
 				middleNumber: {
 					value: function () {
 						return this.attr('definedNumbers.1');
+					}
+				},
+
+				// Get defined `value` function defaults
+				lastLetter: {
+					value: function () {
+						return this.attr('generatedLetters').substr(2, 1);
 					}
 				},
 				lastNumber: {
@@ -584,15 +614,23 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			}
 		});
 
-		var n = NumbersMap();
-		var prefix = 'was able to read dependent value from ';
+		var map = new Map();
+		var prefix = 'Was able to read dependent value from ';
 
-		equal(n.attr('firstNumber'), 1,
+		equal(map.attr('firstLetter'), 'A',
 			prefix + 'traditional can.Map style property definition');
-		equal(n.attr('middleNumber'), 5,
-			prefix + 'Define plugin style default property definition');
-		equal(n.attr('lastNumber'), 9,
-			prefix + 'Define plugin style generated default property definition');
+		equal(map.attr('firstNumber'), 1,
+			prefix + 'traditional can.Map style property definition');
+
+		equal(map.attr('middleLetter'), 'E',
+			prefix + 'define plugin style default property definition');
+		equal(map.attr('middleNumber'), 5,
+			prefix + 'define plugin style default property definition');
+		
+		equal(map.attr('lastLetter'), 'I',
+			prefix + 'define plugin style generated default property definition');
+		equal(map.attr('lastNumber'), 9,
+			prefix + 'define plugin style generated default property definition');
 	});
 
 	test('default behaviors with "*" work for attributes', function() {
