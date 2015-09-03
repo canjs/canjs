@@ -150,10 +150,11 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			};
 		},
 		'switch': function(expression, options){
+			var expressionValue = resolve(expression);
 			var found = false;
 			var newOptions = options.helpers.add({
 				case: function(value, options){
-					if(resolve(expression) === resolve(value)) {
+					if(!found && expressionValue === resolve(value)) {
 						found = true;
 						return options.fn(options.scope || this);
 					}
