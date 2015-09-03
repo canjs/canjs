@@ -646,6 +646,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		return can.route.data.attr.apply(can.route.data, newArguments);
 	};
 
+	//Allow for overriding of route batching by can.transaction
+	can.route.batch = can.batch;
+
 	var // Deparameterizes the portion of the hash of interest and assign the
 	// values to the `can.route.data` removing existing values no longer in the hash.
 	// setState is called typically by hashchange which fires asynchronously
@@ -660,13 +663,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// if the hash data is currently changing, or
 		// the hash is what we set it to anyway, do NOT change the hash
 		if (!changingData || hash !== lastHash) {
-			can.batch.start();
+			can.route.batch.start();
 			recursiveClean(oldParams, curParams, can.route.data);
 
 			can.route.attr(curParams);
 			// trigger a url change so its possible to live-bind on url-based changes
-			can.batch.trigger(eventsObject,"__url",[hash, lastHash]);
-			can.batch.stop();
+			can.route.batch.trigger(eventsObject,"__url",[hash, lastHash]);
+			can.route.batch.stop();
 		}
 	};
 
