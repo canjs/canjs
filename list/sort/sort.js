@@ -91,33 +91,42 @@ steal('can/util', 'can/list', function () {
 			return a === b ? 0 : a < b ? -1 : 1;
 		},
 		_changes: function (ev, attr, how, newVal, oldVal) {
+			var dotIndex = ("" + attr).indexOf('.');
 
 			// If a comparator is defined and the change was to a
 			// list item, consider moving the item.
-			if (this.comparator && /^\d+/.test(attr)) {
-	
-				if (ev.batchNum && ev.batchNum !== this._lastBatchNum) {
-					this.sort();
-					this._lastBatchNum = ev.batchNum;
-					return;
+			if (this.comparator && dotIndex !== -1) {
+				if (ev.batchNum) {
+					if (ev.batchNum === this._lastProcessedBatchNum) {
+						return;
+					} else {
+						this.sort();
+						this._lastProcessedBatchNum = ev.batchNum;
+						return;
+					}
 				}
 	
-				// get the index
-				var currentIndex = +/^\d+/.exec(attr)[0],
-					// and item
-					item = this[currentIndex];
-	
-				if (typeof item !== 'undefined') {
+				var currentIndex = +attr.substr(0, dotIndex);
+				var item = this[currentIndex];
+				var changedAttr = attr.substr(dotIndex + 1);
+
+				// Don't waste time evaluating items in ways that aren't
+				// relevant or have changed in ways that aren't relevant.
+				if (typeof item !== 'undefined' &&
+					(typeof this.comparator !== 'string' ||
+						this.comparator.indexOf(changedAttr) === 0)) {
 	
 					// Determine where this item should reside as a result
 					// of the change
-					var newIndex = this._getInsertIndex(item, currentIndex);
-	
+					var newIndex =
+						this._getRelativeInsertIndex(item, currentIndex);
+
 					if (newIndex !== currentIndex) {
 						this._swapItems(currentIndex, newIndex);
 	
-						// Trigger length change so that {{#block}} helper can re-render
-						can.trigger(this, 'length', [
+						// Trigger length change so that {{#block}} helper
+						// can re-render
+						can.batch.trigger(this, 'length', [
 							this.length
 						]);
 					}
@@ -129,33 +138,61 @@ steal('can/util', 'can/list', function () {
 		/**
 		 * @hide
 		 */
-		_getInsertIndex: function (item, currentIndex) {
-			var a = this._getComparatorValue(item),
-				b,
-				offset = 0;
+		_getInsertIndex: function (item) {
+			var length = this.length;
+			var offset = 0;
+			var a = this._getComparatorValue(item);
+			var b, comparedItem;
 
-			for (var i = 0; i < this.length; i++) {
-				b = this._getComparatorValue(this[i]);
+			for (var i = 0; i < length; i++) {
+				comparedItem = this[i];
 
-				// If we've reached the index that the item currently
-				// resides in and still haven't found an ideal insert index,
-				// offset the returned index by -1 to account for the fact
-				// that this item would be moved if placed at the
-				// suggested index.
-				if (typeof currentIndex !== 'undefined' && i === currentIndex) {
+				b = this._getComparatorValue(comparedItem);
+
+				// The index(i) will increment even though the current
+				// item isn't a candidate. If we ignored this, it would
+				// suggest moving the item after itself. Which would look like
+				// this:
+				//   [1(a, b), 2, 3] // i = 0; a === b; Don't swap;
+				//   [1(a), 2(b), 3] // i = 1; a < b; Do swap (a) from 0 to 1;
+				//   [2, 3] // splice(0, 1)
+				//   [2, 1, 3] // splice(1, 0, a)
+				if (item === comparedItem) {
 					offset = -1;
 					continue;
 				}
 
-				// If we've found an item ranked greater than or the same as this
+				// If we've found an item ranked greater than this
 				// item, consider this a good "insert" index.
 				if (this._comparator(a, b) < 0) {
 					return i + offset;
 				}
 			}
 
-			// The index of the last item in the list
-			return i + offset;
+			// Move the item to the end of the list
+			return length + offset;
+		},
+
+		_getRelativeInsertIndex: function (item, currentIndex) {
+			var naiveInsertIndex = this._getInsertIndex(item);
+			var nextItemIndex = currentIndex + 1;
+			var a = this._getComparatorValue(item);
+			var b;
+
+			// If a forward swap is suggested by _getInsertIndex, inspect
+			// the next item for the same value. Otherwise, we may be
+			// needlessly leapfroging over same value items to be naively
+			// positioned before an item with a greater value. Otherwise,
+			// the naiveInsertIndex is totally valid.
+			if (currentIndex < naiveInsertIndex && nextItemIndex < this.length) {
+				b = this._getComparatorValue(this[nextItemIndex]);
+
+				if (this._comparator(a, b) === 0) {
+					return currentIndex;
+				}
+			}
+
+			return naiveInsertIndex;
 		},
 
 		_getComparatorValue: function (item, overwrittenComparator) {
@@ -241,7 +278,7 @@ steal('can/util', 'can/list', function () {
 
 			if (! silent) {
 				// Trigger length change so that {{#block}} helper can re-render
-				can.trigger(this, 'length', [this.length]);
+				can.batch.trigger(this, 'length', [this.length]);
 			}
 
 			return this;
@@ -262,7 +299,7 @@ steal('can/util', 'can/list', function () {
 
 			if (! silent) {
 				// Update the DOM via can.view.live.list
-				can.trigger(this, 'move', [
+				can.batch.trigger(this, 'move', [
 					temporaryItemReference,
 					newIndex,
 					oldIndex
