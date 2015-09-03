@@ -447,7 +447,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			__get: function (attr) {
 				if (attr) {
 					// If property is a compute return the result, otherwise get the value directly
-					if (this._computedBindings[attr]) {
+					if (this.hasOwnProperty(attr) && this._computedBindings[attr]) {
 						return this[attr]();
 					} else {
 						return this._data[attr];
@@ -530,7 +530,7 @@ steal('can/util', 'can/util/bind','./bubble.js', 'can/construct', 'can/util/batc
 			},
 			// Directly sets a property on this `object`.
 			___set: function (prop, val) {
-				if ( this._computedBindings[prop] ) {
+				if (this.hasOwnProperty(prop) && this._computedBindings[prop] ) {
 					this[prop](val);
 				} else {
 					this._data[prop] = val;

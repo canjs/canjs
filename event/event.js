@@ -35,7 +35,7 @@ steal('can/util/can.js', function (can) {
 	can.addEvent = function (event, handler) {
 		// Initialize event cache.
 		var allEvents = this.__bindEvents || (this.__bindEvents = {}),
-			eventList = allEvents[event] || (allEvents[event] = []);
+			eventList = allEvents.hasOwnProperty(event) && allEvents[event] || (allEvents[event] = []);
 
 		// Add the event
 		eventList.push({
