@@ -57,7 +57,7 @@ If the following component is defined:
         tag: "hello-world",
         leakScope: true, // the default value
         template: can.stache("{{greeting}} <content/>{{exclamation}}"),
-        viewModel: { greeting: "Hello", subject: "LEAK" }
+        viewModel: { subject: "LEAK", exclamation: "!" }
     })
 
 And used like so:
@@ -66,7 +66,7 @@ And used like so:
 
 With the following data in the outer scope:
 
-    { subject: "World", exclamation: "!" }
+    { greeting: "Hello", subject: "World"}
 
 Will render the following if `leakScope` is true:
 

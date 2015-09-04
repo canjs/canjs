@@ -522,4 +522,193 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		list.sort();
 		deepEqual(list.attr(), [1, 2, 4]);
 	});
+
+	test('Batched events originating from sort plugin lack batchNum (#1707)', function () {
+		var list = new can.List();
+		list.attr('comparator', 'id');
+
+		list.bind('length', function (ev) {
+			ok(ev.batchNum, 'Has batchNum');
+		});
+
+		can.batch.start();
+		list.push({ id: 'a' });
+		list.push({ id: 'a' });
+		list.push({ id: 'a' });
+		can.batch.stop();
+	});
+
+	test('The sort plugin\'s _change handler ignores batched _changes (#1706)', function () {
+		var list = new can.List();
+		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
+		var sort = list.sort;
+		list.attr('comparator', 'id');
+
+		list.bind('move', function (ev) {
+			ok(false, 'No "move" events should be fired');
+		});
+		list._getRelativeInsertIndex = function () {
+			ok(false, 'No items should be evaluated independently');
+			return _getRelativeInsertIndex.apply(this, arguments);
+		};
+		list.sort = function () {
+			ok(true, 'Batching caused sort() to be called');
+			return sort.apply(this, arguments);
+		};
+
+		can.batch.start();
+		list.push({ id: 'c', index: 1 });
+		list.push({ id: 'a', index: 2 });
+		list.push({ id: 'a', index: 3 });
+		can.batch.stop();
+
+		equal(list.attr('2.id'), 'c', 'List was sorted');
+	});
+
+	test('Items aren\'t unecessarily swapped to the end of a list of equal items (#1705)', function () {
+		var list = new can.List([
+			{ id: 'a', index: 1 },
+			{ id: 'b', index: 2 },
+			{ id: 'c', index: 3 }
+		]);
+		list.attr('comparator', 'id');
+		list.bind('move', function () {
+			ok(false, 'No "move" events should be fired');
+		});
+
+		list.attr('0.id', 'b');
+		equal(list.attr('0.index'), 1, 'Item hasn\'t moved');
+
+		ok(true, '_getRelativeInsertIndex prevented an unecessary \'move\' event');
+	});
+
+	test('Items aren\'t unecessarily swapped to the beginning of a list of equal items (#1705)', function () {
+		var list = new can.List([
+			{ id: 'a', index: 1 },
+			{ id: 'b', index: 2 },
+			{ id: 'c', index: 3 }
+		]);
+		list.attr('comparator', 'id');
+		list.bind('move', function () {
+			ok(false, 'No "move" events should be fired');
+		});
+
+		list.attr('2.id', 'b');
+		equal(list.attr('2.index'), 3, 'Item hasn\'t moved');
+
+		ok(true, '_getRelativeInsertIndex prevented an unecessary \'move\' event');
+	});
+
+	test('Insert index is not evaluted for irrelevant changes', function () {
+		var list = new can.List([
+			{
+				id: 'a',
+				index: 1
+			},
+			{
+				id: 'b',
+				index: 2,
+				child: {
+					grandchild: {
+						id: 'c',
+						index: 3
+					}
+				}
+			}
+		]);
+
+		// Setup
+		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
+
+		list.bind('move', function (ev) {
+			ok(false, 'A "move" events should be fired');
+		});
+		list._getRelativeInsertIndex = function () {
+			ok(false, 'This item should not be evaluated independently');
+			return _getRelativeInsertIndex.apply(this, arguments);
+		};
+		list.attr('comparator', 'id');
+
+		// Start test
+		list.attr('0.index', 4);
+		list.attr('comparator', 'child.grandchild.id');
+		list.attr('1.child.grandchild.index', 4);
+
+		list._getRelativeInsertIndex = function () {
+			ok(true, 'This item should be evaluated independently');
+			return _getRelativeInsertIndex.apply(this, arguments);
+		};
+
+		list.attr('1.child', {
+			grandchild: {
+				id: 'c',
+				index: 4
+			}
+		});
+
+		equal(list.attr('0.id'), 'a', 'Item not moved');
+	});
+
+	test('_getInsertIndex moves items to the end', function () {
+		var list = new can.List();
+		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
+		var sort = list.sort;
+
+		list.attr('comparator', 'id');
+
+		list.bind('move', function (ev) {
+			ok(false, 'No "move" events should be fired');
+		});
+		list._getRelativeInsertIndex = function () {
+			ok(false, 'No items should be evaluated independently');
+			return _getRelativeInsertIndex.apply(this, arguments);
+		};
+		list.sort = function () {
+			ok(true, 'Batching caused sort() to be called');
+			return sort.apply(this, arguments);
+		};
+
+		list.replace([
+			{ id: 'a', index: 1 },
+			{ id: 'a', index: 2 },
+			{ id: 'a', index: 3 }
+		]);
+
+		equal(list.attr('0.index'), 3, 'Item positioned correctly');
+		equal(list.attr('1.index'), 2, 'Item positioned correctly');
+		equal(list.attr('2.index'), 1, 'Item positioned correctly');
+	});
+
+
+	test('_getInsertIndex chooses correct index', function () {
+		var list = new can.List();
+		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
+		var sort = list.sort;
+
+		list.attr('comparator', 'id');
+
+		list.bind('move', function (ev) {
+			ok(false, 'No "move" events should be fired');
+		});
+		list._getRelativeInsertIndex = function () {
+			ok(false, 'No items should be evaluated independently');
+			return _getRelativeInsertIndex.apply(this, arguments);
+		};
+		list.sort = function () {
+			ok(true, 'Batching caused sort() to be called');
+			return sort.apply(this, arguments);
+		};
+
+		can.batch.start();
+		list.replace([
+			{ id: 'a', index: 1 },
+			{ id: 'b', index: 2 },
+			{ id: 'c', index: 3 }
+		]);
+		can.batch.stop();
+
+		equal(list.attr('0.index'), 1, 'Item positioned correctly');
+		equal(list.attr('1.index'), 2, 'Item positioned correctly');
+		equal(list.attr('2.index'), 3, 'Item positioned correctly');
+	});
 });

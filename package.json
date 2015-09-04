@@ -50,7 +50,7 @@
 		"steal-tools": "^0.11.0-pre.12",
 		"testee": "^0.1.3",
 		"zombie": "2.5.1",
-		"documentjs": "0.3.0-pre.5"
+		"documentjs": "0.3.0"
 	},
 	"scripts": {
 		"test": "grunt test"

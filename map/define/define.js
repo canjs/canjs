@@ -61,16 +61,15 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 			originalGet = this._get;
 
 		// Overwrite this._get with a version that commits defaults to
-		// this.attr() as needed. Because calling this.attr() for each individual
-		// default would be expensive.
+		// this.attr() as needed. Because calling this.attr() for each
+		// individual default would be expensive.
 		this._get = function (originalProp) {
-
 			// If a this.attr() was called using dot syntax (e.g number.0),
 			// disregard everything after the "." until we call the
 			// original this._get().
-			prop = (originalProp.indexOf('.') !== -1 ?
+			var prop = (originalProp.indexOf('.') !== -1 ?
 				originalProp.substr(0, originalProp.indexOf('.')) :
-				prop);
+				originalProp);
 
 			// If this property has a default and we haven't yet committed it to
 			// this.attr()
