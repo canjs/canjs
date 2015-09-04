@@ -315,4 +315,30 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		var children = new ChildList([1,2,3]);
 		ok(children.reverse() === children);
 	});
+	
+	
+	test("slice and join are observable by a compute (#1884)", function(){
+		expect(2);
+		
+		var list = new can.List([1,2,3]);
+		
+		var sliced = can.compute(function(){
+			return list.slice(0,1);
+		});
+		var joined = can.compute(function(){
+			return list.join(",");
+		});
+		
+		sliced.bind("change", function(ev, newVal){
+			deepEqual(newVal.attr(), [2], "got a new can.List");
+		});
+		joined.bind("change", function(ev, newVal){
+			equal(newVal, "2,3", "joined is observable");
+		});
+		
+		list.shift();
+		
+		
+	});
+	
 });
