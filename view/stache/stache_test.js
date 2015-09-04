@@ -4158,6 +4158,22 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			deepEqual(getText(t.template, t.data), 'Not 10 ducks');
 		});
 
+		test("Handlerbars helper: switch - changing to default (#1857)", function(){
+			var template = can.stache('{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
+					'{{#default}}Not 10 ducks{{/default}}{{/switch}}');
+			var map = new can.Map({
+				ducks: "10"
+			});
+
+			var frag = template(map);
+
+			deepEqual(getTextFromFrag(frag), "10 ducks");
+
+			map.attr("ducks", "12");
+
+			deepEqual(getTextFromFrag(frag), "Not 10 ducks");
+		});
+
 		test("~ helper joins to the baseURL", function(){
 			can.baseURL = "http://foocdn.com/bitovi";
 
@@ -4202,13 +4218,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		state.attr('showAttr', false);
 		state.attr('showAttr', true);
 	});
-	
+
 	test("inner expressions (#1769)", function(){
-	
-		
-	
+
+
+
 		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
-	
+
 		var frag = template({
 			valueA: "A",
 			valueB: "B"
@@ -4232,23 +4248,23 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				return "helperC value";
 			}
 		});
-		
+
 		equal(frag.firstChild.nodeValue, "helperA value");
 	});
-	
+
 	test("inner expressions with computes", function(){
 		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
-	
-	
+
+
 		var valueB = can.compute("B");
 		var changes = 0;
-	
+
 		var frag = template({
 			valueA: "A",
 			valueB: valueB
 		},{
 			helperA: function(arg1, arg2, options){
-				
+
 				if(changes === 0) {
 					equal(arg1(), "helperB=B", "static argument");
 					equal(options.hash.outerPropA(), "helperC=B", "scope hash 0");
@@ -4256,9 +4272,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					equal(arg1(), "helperB=X", "static argument");
 					equal(options.hash.outerPropA(), "helperC=X", "scope hash 1");
 				}
-				
+
 				equal(arg2, "def", "scope argument");
-				
+
 				return arg1()+"-"+options.hash.outerPropA();
 			},
 			helperB: function(arg1, arg2, options){
@@ -4269,7 +4285,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				} else {
 					equal(options.hash.propA(), "X", "scope hash");
 				}
-				
+
 				equal(options.hash.propC, 2, "static hash");
 				return "helperB="+options.hash.propA();
 			},
@@ -4283,17 +4299,17 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				return "helperC="+arg2();
 			}
 		});
-		
+
 		equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
-		
+
 		changes++;
 		can.batch.start();
 		valueB("X");
 		can.batch.stop();
-		
+
 		equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
 	});
-	
+
 	test("parent scope functions not called with arguments (#1833)", function(){
 		var data = {
 			child: {value: 1},
@@ -4301,10 +4317,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				equal(arg, 1, "got the right arg");
 			}
 		};
-		
+
 		var template = can.stache("{{#child}}{{method value}}{{/child}}");
 		template(data);
 	});
-	
-	
+
+
 });
