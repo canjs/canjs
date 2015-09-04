@@ -624,7 +624,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 * ```
 		 */
 		indexOf: function (item, fromIndex) {
-			this.attr('length');
+			can.__observe(this, "length");
 			return can.inArray(item, this, fromIndex);
 		},
 
@@ -650,7 +650,8 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 * ```
 		 */
 		join: function () {
-			return [].join.apply(this.attr(), arguments);
+			can.__observe(this, "length");
+			return [].join.apply(this, arguments);
 		},
 
 		/**
@@ -708,6 +709,8 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 * ```
 		 */
 		slice: function () {
+			// tells computes to listen on length for changes.
+			can.__observe(this, "length");
 			var temp = Array.prototype.slice.apply(this, arguments);
 			return new this.constructor(temp);
 		},
