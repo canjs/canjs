@@ -673,7 +673,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 */
 		reverse: function() {
 			var list = [].reverse.call(can.makeArray(this));
-			this.replace(list);
+			return this.replace(list);
 		},
 
 		/**
@@ -838,7 +838,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			return this;
 		},
 		filter: function (callback, thisArg) {
-			var filteredList = new can.List(),
+			var filteredList = new this.constructor(),
 				self = this,
 				filtered;
 			this.each(function(item, index, list){
