@@ -18,7 +18,7 @@ steal('can/util', 'can/construct', function (can, Construct) {
 			//!steal-remove-start
 			for (var i = 0; i < funcs.length; i++) {
 				if (typeof funcs[i] === "string" && !isFunction(this[funcs[i]])) {
-					throw ("class.js " + (this.fullName || this.Class.fullName) + " does not have a " + funcs[i] + "method!");
+					throw new Error("class.js " + (this.fullName || this.Class.fullName) + " does not have a " + funcs[i] + "method!");
 				}
 			}
 			//!steal-remove-end

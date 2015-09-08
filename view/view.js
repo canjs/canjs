@@ -43,7 +43,7 @@ steal('can/util', function (can) {
 			can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
 			//!steal-remove-end
 
-			throw "can.view: No template or empty template:" + url;
+			throw new Error("can.view: No template or empty template:" + url);
 		}
 	};
 
