@@ -145,12 +145,15 @@ steal("can/util",
 		}
 		return hash;
 	};
+	// looks up the name key in the scope
+	// returns a `helper` property if there is a helper for the key.
+	// returns a `value` property if the value is looked up.
 	MethodExpression.prototype.helperAndValue = function(scope, helperOptions, readOptions){
 		//{{foo bar}}
 		
 		var looksLikeAHelper = this._args.length || !can.isEmptyObject(this._hash),
 			helper,
-			name,
+			value,
 			methodKey = this.name.key,
 			initialValue,
 			args;
@@ -185,9 +188,9 @@ steal("can/util",
 			// Set name to be the compute if the compute reads observables,
 			// or the value of the value of the compute if no observables are found.
 			if(computeData.compute.computeInstance.hasDependencies) {
-				name = compute;
+				value = compute;
 			} else {
-				name = initialValue;
+				value = initialValue;
 			}
 
 			// If it doesn't look like a helper and there is no value, check helpers
@@ -209,7 +212,7 @@ steal("can/util",
 		//!steal-remove-end
 		
 		return {
-			name: name,
+			value: value,
 			args: args,
 			helper: helper && helper.fn
 		};
@@ -249,7 +252,13 @@ steal("can/util",
 	};
 
 	MethodExpression.prototype.value = function(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly) {
-		var helper = this.helperAndValue(scope, helperOptions, readOptions).helper;
+		var helperAndValue = this.helperAndValue(scope, helperOptions, readOptions);
+		
+		var helper = helperAndValue.helper;
+		// a method could have been called, resulting in a value
+		if(!helper) {
+			return helperAndValue.value;
+		}
 		
 		var fn = this.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 		
@@ -374,7 +383,7 @@ steal("can/util",
 			};
 			var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 			var helper = helperAndValue.helper;
-			var name = helperAndValue.name;
+			var value = helperAndValue.value;
 		
 			if(helper) {
 				return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
@@ -384,14 +393,14 @@ steal("can/util",
 			// Return evaluators for no mode.
 			if(!mode) {
 				// If it's computed, return a function that just reads the compute.
-				if(name && name.isComputed) {
-					return name;
+				if(value && value.isComputed) {
+					return value;
 				}
-				// Just return name as the value
+				// Just return value as the value
 				else {
 
 					return function(){
-						return '' + (name != null ? name : '');
+						return '' + (value != null ? value : '');
 					};
 				}
 			} else if( mode === "#" || mode === "^" ) {
@@ -403,26 +412,26 @@ steal("can/util",
 				convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
 				return function(){
 					// Get the value
-					var value;
-					if (can.isFunction(name) && name.isComputed) {
-						value = name();
+					var finalValue;
+					if (can.isFunction(value) && value.isComputed) {
+						finalValue = value();
 					} else {
-						value = name;
+						finalValue = value;
 					}
 					// If it's an array, render.
-					if (utils.isArrayLike(value) ) {
-						var isObserveList = utils.isObserveLike(value);
+					if (utils.isArrayLike(finalValue) ) {
+						var isObserveList = utils.isObserveLike(finalValue);
 
-						if(isObserveList ? value.attr("length") : value.length) {
+						if(isObserveList ? finalValue.attr("length") : finalValue.length) {
 							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
-								(value, isObserveList, helperOptionArg, helperOptions );
+								(finalValue, isObserveList, helperOptionArg, helperOptions );
 						} else {
 							return helperOptionArg.inverse(scope, helperOptions);
 						}
 					}
 					// If truthy, render fn, otherwise, inverse.
 					else {
-						return value ? helperOptionArg.fn(value || scope, helperOptions) : helperOptionArg.inverse(scope, helperOptions);
+						return finalValue ? helperOptionArg.fn(finalValue || scope, helperOptions) : helperOptionArg.inverse(scope, helperOptions);
 					}
 				};
 			} else {
