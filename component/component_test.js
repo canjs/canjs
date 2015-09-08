@@ -1679,5 +1679,21 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 				start();
 			}, 20);
 		});
+
+		test("components control destroy method is called", function(){
+			expect(0);
+			can.Component.extend({
+				tag: 'comp-control-destroy-test',
+				template: can.stache('<div>click me</div>'),
+				events: {
+					"{document} click" : function () {
+						ok(true, "click registered");
+					}
+				}
+			});
+			can.append(can.$("#qunit-fixture"), can.stache("<comp-control-destroy-test></comp-control-destroy-test>")({}));
+			can.remove(can.$("#qunit-fixture>*"));
+			can.trigger(can.$(document), 'click');
+		});
 	}
 });
