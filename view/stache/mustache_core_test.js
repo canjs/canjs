@@ -99,4 +99,27 @@ steal("./mustache_core.js", "steal-qunit", function(){
 		equal(result(), "marshall thompson");
 	});
 	
+	test("methods can return values (#1887)", function(){
+		var MyMap = can.Map.extend({
+			getSomething: function(arg){
+				return this.attr("foo") + arg();
+			}
+		});
+		
+		var scope =
+			new can.view.Scope(new MyMap({foo: 2, bar: 3}))
+				.add({});
+		
+		var callGetSomething = new mustacheCore.MethodExpression(
+			new mustacheCore.ScopeExpression("getSomething"),
+			[new mustacheCore.ScopeExpression("bar")],
+			{}
+		);
+		
+		var result = callGetSomething.value(scope, new can.view.Scope({}), {asCompute: true});
+		
+		equal(result(), 5);
+	});
+	
+	
 });
