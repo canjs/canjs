@@ -9,7 +9,7 @@
 // `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup`
 // to hookup the component.
 
-steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/mustache", function (can, viewCallbacks, elements, bindings) {
+steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/mustache", "can/util/view_model", function (can, viewCallbacks, elements, bindings) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
 	var ignoreAttributesRegExp = /^(dataViewId|class|id|\[[\w\.-]+\]|#[\w\.-])$/i,
@@ -100,20 +100,20 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						"@root": componentTagData.scope.attr("@root")
 					},
 					component = this,
-					// If a template is not provided, we fall back to
-					// dynamic scoping regardless of settings.
+				// If a template is not provided, we fall back to
+				// dynamic scoping regardless of settings.
 					lexicalContent = ((typeof this.leakScope === "undefined" ?
-									   false :
-									   !this.leakScope) &&
-									  !!this.template),
+						false :
+						!this.leakScope) &&
+					!!this.template),
 					twoWayBindings = {},
 					scope = this.scope || this.viewModel,
-					// tracks which viewModel property is currently updating
+				// tracks which viewModel property is currently updating
 					viewModelPropertyUpdates = {},
-					// the object added to the viewModel
+				// the object added to the viewModel
 					viewModel,
 					frag,
-					// an array of teardown stuff that should happen when the element is removed
+				// an array of teardown stuff that should happen when the element is removed
 					teardownFunctions = [],
 					callTeardownFunctions = function(){
 						for(var i = 0, len = teardownFunctions.length ; i < len; i++) {
@@ -138,7 +138,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 					// user tried to pass something like id="{foo}", so give them a good warning
 					if(ignoreAttributesRegExp.test(name) && value[0] === "{" && value[value.length-1] === "}") {
 						can.dev.warn("can/component: looks like you're trying to pass "+name+" as an attribute into a component, "+
-							"but it is not a supported attribute");
+						"but it is not a supported attribute");
 					}
 					//!steal-remove-end
 
@@ -156,26 +156,26 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							return;
 						}
 					}
-					
+
 					// Use logic from bindings
 					var compute = bindings.getParentCompute(el, componentTagData.scope, value, {});
-					
+
 					// if we actually got a compute
 					if(compute && compute.isComputed) {
 						bindings.bindParentToChild(el, compute, function(newValue){
 							viewModel.attr(name, newValue);
 						}, viewModelPropertyUpdates, name);
-						
+
 						// Set the value to be added to the viewModel
 						initialScopeData[name] = compute();
-	
+
 						twoWayBindings[name] = compute;
 					} else {
 						initialScopeData[name] = compute;
 					}
-					
+
 				});
-				
+
 				if (this.constructor.Map) {
 					// If `Map` property is set on the constructor use it to wrap the `initialScopeData`
 					viewModel = new this.constructor.Map(initialScopeData);
@@ -341,7 +341,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 										options: contentTagData.options
 									};
 								}
-								
+
 							} else {
 								// we are rendering default content so this content should 
 								// use the same scope as the <content> tag was found within.
@@ -349,7 +349,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							}
 							// add a protected scope so the parent view model can be looked up
 							lightTemplateData.scope = lightTemplateData.scope.add(viewModel,{"protected": true, viewModel: true});
-							
+
 							if(contentTagData.parentNodeList) {
 								var frag = subtemplate( lightTemplateData.scope, lightTemplateData.options, contentTagData.parentNodeList );
 								elements.replace([el], frag);
@@ -384,117 +384,117 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 		});
 
 	var ComponentControl = can.Control.extend({
-		// Change lookup to first look in the viewModel.
-		_lookup: function (options) {
-			return [options.scope, options, window];
-		},
-		_action: function (methodName, options, controlInstance ) {
-			var hasObjectLookup, readyCompute;
+			// Change lookup to first look in the viewModel.
+			_lookup: function (options) {
+				return [options.scope, options, window];
+			},
+			_action: function (methodName, options, controlInstance ) {
+				var hasObjectLookup, readyCompute;
 
-			paramReplacer.lastIndex = 0;
+				paramReplacer.lastIndex = 0;
 
-			hasObjectLookup = paramReplacer.test(methodName);
+				hasObjectLookup = paramReplacer.test(methodName);
 
-			// If we don't have options (a `control` instance), we'll run this
-			// later.
-			if( !controlInstance && hasObjectLookup) {
-				return;
-			} else if( !hasObjectLookup ) {
-				return can.Control._action.apply(this, arguments);
-			} else {
-				// We have `hasObjectLookup` and `controlInstance`.
+				// If we don't have options (a `control` instance), we'll run this
+				// later.
+				if( !controlInstance && hasObjectLookup) {
+					return;
+				} else if( !hasObjectLookup ) {
+					return can.Control._action.apply(this, arguments);
+				} else {
+					// We have `hasObjectLookup` and `controlInstance`.
 
-				readyCompute = can.compute(function(){
-					var delegate;
+					readyCompute = can.compute(function(){
+						var delegate;
 
-					// Set the delegate target and get the name of the event we're listening to.
-					var name = methodName.replace(paramReplacer, function(matched, key){
-						var value;
+						// Set the delegate target and get the name of the event we're listening to.
+						var name = methodName.replace(paramReplacer, function(matched, key){
+							var value;
 
-						// If we are listening directly on the `viewModel` set it as a delegate target.
-						if(key === "scope" || key === "viewModel") {
-							delegate = options.scope;
-							return "";
-						}
+							// If we are listening directly on the `viewModel` set it as a delegate target.
+							if(key === "scope" || key === "viewModel") {
+								delegate = options.scope;
+								return "";
+							}
 
-						// Remove `scope.` from the start of the key and read the value from the `viewModel`.
-						key = key.replace(/^(scope|^viewModel)\./,"");
-						value = can.compute.read(options.scope, can.compute.read.reads(key), {isArgument: true}).value;
+							// Remove `scope.` from the start of the key and read the value from the `viewModel`.
+							key = key.replace(/^(scope|^viewModel)\./,"");
+							value = can.compute.read(options.scope, can.compute.read.reads(key), {isArgument: true}).value;
 
-						// If `value` is undefined use `can.getObject` to get the value.
-						if(value === undefined) {
-							value = can.getObject(key);
-						}
+							// If `value` is undefined use `can.getObject` to get the value.
+							if(value === undefined) {
+								value = can.getObject(key);
+							}
 
-						// If `value` is a string we just return it, otherwise we set it as a delegate target.
-						if(typeof value === "string") {
-							return value;
-						} else {
-							delegate = value;
-							return "";
-						}
+							// If `value` is a string we just return it, otherwise we set it as a delegate target.
+							if(typeof value === "string") {
+								return value;
+							} else {
+								delegate = value;
+								return "";
+							}
 
-					});
+						});
 
-					// Get the name of the `event` we're listening to.
-					var parts = name.split(/\s+/g),
-						event = parts.pop();
+						// Get the name of the `event` we're listening to.
+						var parts = name.split(/\s+/g),
+							event = parts.pop();
 
-					// Return everything needed to handle the event we're listening to.
-					return {
-						processor: this.processors[event] || this.processors.click,
-						parts: [name, parts.join(" "), event],
-						delegate: delegate || undefined
+						// Return everything needed to handle the event we're listening to.
+						return {
+							processor: this.processors[event] || this.processors.click,
+							parts: [name, parts.join(" "), event],
+							delegate: delegate || undefined
+						};
+
+					}, this);
+
+					// Create a handler function that we'll use to handle the `change` event on the `readyCompute`.
+					var handler = function(ev, ready){
+						controlInstance._bindings.control[methodName](controlInstance.element);
+						controlInstance._bindings.control[methodName] = ready.processor(
+							ready.delegate || controlInstance.element,
+							ready.parts[2], ready.parts[1], methodName, controlInstance);
 					};
 
-				}, this);
+					readyCompute.bind("change", handler);
 
-				// Create a handler function that we'll use to handle the `change` event on the `readyCompute`.
-				var handler = function(ev, ready){
-					controlInstance._bindings.control[methodName](controlInstance.element);
-					controlInstance._bindings.control[methodName] = ready.processor(
-									ready.delegate || controlInstance.element,
-									ready.parts[2], ready.parts[1], methodName, controlInstance);
-				};
+					controlInstance._bindings.readyComputes[methodName] = {
+						compute: readyCompute,
+						handler: handler
+					};
 
-				readyCompute.bind("change", handler);
-
-				controlInstance._bindings.readyComputes[methodName] = {
-					compute: readyCompute,
-					handler: handler
-				};
-
-				return readyCompute();
+					return readyCompute();
+				}
 			}
-		}
-	},
-	// Extend `events` with a setup method that listens to changes in `viewModel` and
-	// rebinds all templated event handlers.
-	{
-		setup: function (el, options) {
-			this.scope = options.scope;
-			this.viewModel = options.viewModel;
-			return can.Control.prototype.setup.call(this, el, options);
 		},
-		off: function(){
-			// If `this._bindings` exists we need to go through it's `readyComputes` and manually
-			// unbind `change` event listeners set by the controller.
-			if( this._bindings ) {
-				can.each(this._bindings.readyComputes || {}, function (value) {
-					value.compute.unbind("change", value.handler);
-				});
+		// Extend `events` with a setup method that listens to changes in `viewModel` and
+		// rebinds all templated event handlers.
+		{
+			setup: function (el, options) {
+				this.scope = options.scope;
+				this.viewModel = options.viewModel;
+				return can.Control.prototype.setup.call(this, el, options);
+			},
+			off: function(){
+				// If `this._bindings` exists we need to go through it's `readyComputes` and manually
+				// unbind `change` event listeners set by the controller.
+				if( this._bindings ) {
+					can.each(this._bindings.readyComputes || {}, function (value) {
+						value.compute.unbind("change", value.handler);
+					});
+				}
+				// Call `can.Control.prototype.off` function on this instance to cleanup the bindings.
+				can.Control.prototype.off.apply(this, arguments);
+				this._bindings.readyComputes = {};
+			},
+			destroy: function() {
+				can.Control.prototype.destroy.apply( this, arguments );
+				if(typeof this.options.destroy === 'function') {
+					this.options.destroy.apply(this, arguments);
+				}
 			}
-			// Call `can.Control.prototype.off` function on this instance to cleanup the bindings.
-			can.Control.prototype.off.apply(this, arguments);
-			this._bindings.readyComputes = {};
-		},
-		destroy: function() {
-			can.Control.prototype.destroy.apply( this, arguments );
-			if(typeof this.options.destroy === 'function') {
-				this.options.destroy.apply(this, arguments);
-			}
-		}
-	});
+		});
 
 	/**
 	 * @description Read and write a component element's viewModel.
@@ -524,8 +524,8 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 	 * `$("my-element").viewModel("name", "Whatnot");`
 	 *
 	 */
-		// Define the `can.viewModel` function that can be used to retrieve the
-		// `viewModel` from the element
+	// Define the `can.viewModel` function that can be used to retrieve the
+	// `viewModel` from the element
 
 
 	var $ = can.$;
