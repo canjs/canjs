@@ -102,11 +102,11 @@ steal("./mustache_core.js", "steal-qunit", function(){
 	test("methods can return values (#1887)", function(){
 		var MyMap = can.Map.extend({
 			getSomething: function(arg){
-				return this.attr("foo") + arg()
+				return this.attr("foo") + arg();
 			}
 		});
 		
-		var scope = 
+		var scope =
 			new can.view.Scope(new MyMap({foo: 2, bar: 3}))
 				.add({});
 		
