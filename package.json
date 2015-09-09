@@ -73,12 +73,17 @@
 			"steal-qunit/steal-qunit": "steal-qunit"
 		},
 		"paths": {
+			"benchmark/benchmark": "bower_components/benchmark/benchmark.js",
 			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
 			"yui/yui": "util/yui/yui-3.7.3.js",
 			"mootools/mootools": "bower_components/mootools/dist/mootools-core.js",
 			"zepto/zepto": "bower_components/zepto/zepto.js"
 		},
 		"meta": {
+			"benchmark/benchmark": {
+				"format": "global",
+				"exports": "Benchmark"
+			},
 			"jquery": {
 				"format": "global",
 				"exports": "jQuery"

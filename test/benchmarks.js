@@ -26,7 +26,8 @@ steal("benchmark", function(){
 			return suite.on.apply(this, arguments)
 		}
 	};
-	steal().done().then(function(){
+
+	steal().then(function(){
 		benchmarks.run();
 	});
 	
