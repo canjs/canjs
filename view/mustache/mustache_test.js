@@ -571,7 +571,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 	test("Handlebars helper: unless", function () {
 		var t = {
 			template: "{{#unless missing}}Andy is missing!{{/unless}}" +
-					  "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
+			          "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
 			expected: "Andy is missing! But he wasn't cool anyways.",
 			data: {
 				name: 'Andy'
