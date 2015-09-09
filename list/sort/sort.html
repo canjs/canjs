@@ -50,10 +50,10 @@ var template = can.view.stache(
 	'</table>'
 );
 
-var rows = new can.List();
+var rows = window.rows = new can.List();
 var rowCount = 25;
 var colCount = 25;
-rows.comparator = 'cols.0.num';
+rows.attr('comparator', '0.num');
 
 for (var i = 0; i < rowCount; i++) {
 
@@ -82,10 +82,7 @@ var data = {
 	rows: rows,
 	changeComparator: function (map, el) {
 		var index = el.attr('comparator-index');
-
-		rows.comparator = index + '.num';
-		rows.sort();
-		can.trigger(rows, 'length', [rows.length]);
+		rows.attr('comparator', index + '.num');
 	}
 };
 
@@ -95,15 +92,15 @@ $("#out").html( template( data , {}) );
 // Increment every number by a few every couple of secs
 // This will result in the color of the cell being changed
 
-setInterval(function () {
-	can.batch.start();
-	rows.each(function (row) {
-		row.each(function (td) {
-			td.attr('num', td.attr('num')+1);
-		});
-	})
-	can.batch.stop();
-}, 2000);
+// setInterval(function () {
+// 	can.batch.start();
+// 	rows.each(function (row) {
+// 		row.each(function (td) {
+// 			td.attr('num', td.attr('num')+1);
+// 		});
+// 	})
+// 	can.batch.stop();
+// }, 2000);
 
 
 

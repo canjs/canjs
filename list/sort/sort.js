@@ -3,22 +3,20 @@ steal('can/util', 'can/list', function () {
 	// BUBBLE RULE
 	// 1. list.bind("change") -> bubbling
 	//    list.unbind("change") -> no bubbling
-	
+
 	// 2. list.attr("comparator","id") -> nothing
 	//    list.bind("length") -> bubbling
 	//    list.removeAttr("comparator") -> nothing
-	
+
 	// 3. list.bind("change") -> bubbling
 	//    list.attr("comparator","id") -> bubbling
 	//    list.unbind("change") -> no bubbling
-	
 
-
-	// 4. list.bind("length") -> nothing 
+	// 4. list.bind("length") -> nothing
 	//    list.attr("comparator","id") -> bubbling
 	//    list.removeAttr("comparator") -> nothing
-	
-	// 5. list.bind("length") -> nothing 
+
+	// 5. list.bind("length") -> nothing
 	//    list.attr("comparator","id") -> bubbling
 	//    list.unbind("length") -> nothing
 
@@ -39,10 +37,6 @@ steal('can/util', 'can/list', function () {
 		setup = proto.setup,
 		unbind = proto.unbind;
 
-	//Add `move` as an event that lazy-bubbles
-
-	// extend the list for sorting support
-
 	can.extend(proto, {
 		setup: function (instances, options) {
 			setup.apply(this, arguments);
@@ -50,6 +44,7 @@ steal('can/util', 'can/list', function () {
 			this._comparatorBound = false;
 
 			this.bind('comparator', can.proxy(this._comparatorUpdated, this));
+			delete this._init;
 			
 			if (this.comparator) {
 				this.sort();
@@ -58,29 +53,28 @@ steal('can/util', 'can/list', function () {
 		_comparatorUpdated: function(ev, newValue){
 			if( newValue || newValue === 0 ) {
 				this.sort();
-				
+
 				if(this._bindings > 0 && ! this._comparatorBound) {
 					this.bind("change", this._comparatorBound = function(){});
 				}
 			} else if(this._comparatorBound){
 				unbind.call(this, "change", this._comparatorBound);
 				this._comparatorBound = false;
-				
+
 			}
-			
-			// if anyone is listening to this object
 		},
 		unbind: function(ev, handler){
 			var res = unbind.apply(this, arguments);
-			
+
 			if(this._comparatorBound && this._bindings === 1) {
 				unbind.call(this,"change", this._comparatorBound);
 				this._comparatorBound = false;
 			}
-			
+
 			return res;
 		},
 		_comparator: function (a, b) {
+
 			var comparator = this.comparator;
 
 			// If the user has defined a comparator, use it
@@ -88,7 +82,13 @@ steal('can/util', 'can/list', function () {
 				return comparator(a, b);
 			}
 
-			return a === b ? 0 : a < b ? -1 : 1;
+			// Compare strings correctly in all languages
+			if (typeof a === 'string' && typeof b === 'string' &&
+					''.localeCompare) {
+				return a.localeCompare(b);
+			}
+
+			return (a === b) ? 0 : (a < b) ? -1 : 1;
 		},
 		_changes: function (ev, attr, how, newVal, oldVal) {
 			var dotIndex = ("" + attr).indexOf('.');
@@ -105,7 +105,7 @@ steal('can/util', 'can/list', function () {
 						return;
 					}
 				}
-	
+
 				var currentIndex = +attr.substr(0, dotIndex);
 				var item = this[currentIndex];
 				var changedAttr = attr.substr(dotIndex + 1);
@@ -115,7 +115,7 @@ steal('can/util', 'can/list', function () {
 				if (typeof item !== 'undefined' &&
 					(typeof this.comparator !== 'string' ||
 						this.comparator.indexOf(changedAttr) === 0)) {
-	
+
 					// Determine where this item should reside as a result
 					// of the change
 					var newIndex =
@@ -123,54 +123,46 @@ steal('can/util', 'can/list', function () {
 
 					if (newIndex !== currentIndex) {
 						this._swapItems(currentIndex, newIndex);
-	
+
 						// Trigger length change so that {{#block}} helper
 						// can re-render
 						can.batch.trigger(this, 'length', [
 							this.length
 						]);
 					}
-	
+
 				}
 			}
 			_changes.apply(this, arguments);
 		},
-		/**
-		 * @hide
-		 */
-		_getInsertIndex: function (item) {
-			var length = this.length;
-			var offset = 0;
+
+		_getInsertIndex: function (item, lowerBound, upperBound) {
+
+			var insertIndex = 0;
 			var a = this._getComparatorValue(item);
-			var b, comparedItem;
+			var b, dir, comparedItem, testIndex;
 
-			for (var i = 0; i < length; i++) {
-				comparedItem = this[i];
+			lowerBound = (typeof lowerBound === 'number' ?
+				lowerBound : 0);
+			upperBound = (typeof upperBound === 'number' ?
+				upperBound : this.length - 1);
 
+			while (lowerBound <= upperBound) {
+				testIndex = (lowerBound + upperBound) / 2 | 0;
+				comparedItem = this[testIndex];
 				b = this._getComparatorValue(comparedItem);
+				dir = this._comparator(a, b); // -1 === a < b; 1 === a > b
 
-				// The index(i) will increment even though the current
-				// item isn't a candidate. If we ignored this, it would
-				// suggest moving the item after itself. Which would look like
-				// this:
-				//   [1(a, b), 2, 3] // i = 0; a === b; Don't swap;
-				//   [1(a), 2(b), 3] // i = 1; a < b; Do swap (a) from 0 to 1;
-				//   [2, 3] // splice(0, 1)
-				//   [2, 1, 3] // splice(1, 0, a)
-				if (item === comparedItem) {
-					offset = -1;
-					continue;
-				}
 
-				// If we've found an item ranked greater than this
-				// item, consider this a good "insert" index.
-				if (this._comparator(a, b) < 0) {
-					return i + offset;
+				if (dir < 0) { // Compared item > our item
+					upperBound = testIndex - 1;
+				} else if (dir >= 0) { // Compared item <= our item
+					lowerBound = testIndex + 1;
+					insertIndex = lowerBound;
 				}
 			}
 
-			// Move the item to the end of the list
-			return length + offset;
+			return insertIndex;
 		},
 
 		_getRelativeInsertIndex: function (item, currentIndex) {
@@ -178,6 +170,16 @@ steal('can/util', 'can/list', function () {
 			var nextItemIndex = currentIndex + 1;
 			var a = this._getComparatorValue(item);
 			var b;
+
+			// Don't count the item being moved itself - which would
+			// cause something like this:
+			//   [1(a, b), 2, 3] // i = 0; a === b; Don't swap;
+			//   [1(a), 2(b), 3] // i = 1; a < b; Do swap (a) from 0 to 1;
+			//   .splice(0, 1) // [2, 3]
+			//   .splice(1, 0, a) // [2, 1, 3]
+			if (naiveInsertIndex >= currentIndex) {
+				naiveInsertIndex -= 1;
+			}
 
 			// If a forward swap is suggested by _getInsertIndex, inspect
 			// the next item for the same value. Otherwise, we may be
@@ -195,6 +197,9 @@ steal('can/util', 'can/list', function () {
 			return naiveInsertIndex;
 		},
 
+		/**
+		 * @returns {number} The value that should be passed to the comparator
+		 **/
 		_getComparatorValue: function (item, overwrittenComparator) {
 
 			// Use the value passed to .sort() as the comparator value
@@ -203,9 +208,11 @@ steal('can/util', 'can/list', function () {
 				overwrittenComparator :
 				this.comparator;
 
-			// If the comparator is a string use that value to get
-			// property on the item. If the comparator is a method,
-			// it'll be used elsewhere.
+			// If the comparator is a string, use it to get the value of that
+			// property on the item. Example:
+			//   list.comparator = 'prop'; // -> item.attr('prop');
+			//   list.comparator = 'method'; // -> item['method']();
+			// If the comparator is a method, don't do anything.
 			if (item && comparator && typeof comparator === 'string') {
 				item = typeof item[comparator] === 'function' ?
 					item[comparator]() :
@@ -224,9 +231,6 @@ steal('can/util', 'can/list', function () {
 			return a;
 		},
 
-		/**
-		 * @hide
-		 */
 		sort: function (comparator, silent) {
 			var a, b, c, isSorted;
 
@@ -284,9 +288,6 @@ steal('can/util', 'can/list', function () {
 			return this;
 		},
 
-		/**
-		 * @hide
-		 */
 		_swapItems: function (oldIndex, newIndex, silent) {
 
 			var temporaryItemReference = this[oldIndex];
@@ -306,13 +307,9 @@ steal('can/util', 'can/list', function () {
 				]);
 			}
 		}
-		
+
 	});
-	// create push, unshift
-	// converts to an array of arguments
-	var getArgs = function (args) {
-		return args[0] && can.isArray(args[0]) ? args[0] : can.makeArray(args);
-	};
+
 	can.each({
 			/**
 			 * @function push
@@ -360,32 +357,42 @@ steal('can/util', 'can/list', function () {
 			proto[name] = function () {
 
 				if (this.comparator && arguments.length) {
-					// get the items being added
-					var args = getArgs(arguments);
-					var i = args.length;
+					// Get the items being added
+					var args = can.makeArray(arguments);
+					var length = args.length;
+					var i = 0;
+					var newIndex, val;
 
-					while (i--) {
-						// Go through and convert anything to an `map` that needs
-						// to be converted.
-						var val = can.bubble.set(this, i, this.__type(args[i], i) );
+					// Increment, don't decrement in order to minimize the
+					// number of items after each subsequent .splice();
+					while (i < length) {
+
+						// Convert anything to an `map` that needs to be converted.
+						val = can.bubble.set(this, i, this.__type(args[i], i) );
+
+						// Get the sorted index
+						newIndex = this._getInsertIndex(val);
 
 						// Insert this item at the correct index
-						var newIndex = this._getInsertIndex(val);
+						// NOTE: On ultra-big lists, this will be the slowest
+						// part of an "add" because `.splice()` is O(n)
 						Array.prototype.splice.apply(this, [newIndex, 0, val]);
 
+						// Render, etc
 						this._triggerChange('' + newIndex, 'add', [val], undefined);
+
+						// Next
+						i++;
 					}
 
+					// Render, etc
 					can.batch.trigger(this, 'reset', [args]);
 
 					return this;
 				} else {
-					// call the original method
+					// Call the original method
 					return old.apply(this, arguments);
 				}
-
-
-
 			};
 		});
 
@@ -398,9 +405,7 @@ steal('can/util', 'can/list', function () {
 
 		proto.splice = function (index, howMany) {
 
-			var args = can.makeArray(arguments),
-				newElements =[],
-				i, len;
+			var args = can.makeArray(arguments);
 
 			// Don't use this "sort" oriented splice unless this list has a
 			// comparator
@@ -408,18 +413,18 @@ steal('can/util', 'can/list', function () {
 				return oldSplice.apply(this, args);
 			}
 
-			// Get the list of new items intended to be added to the list
-			for (i = 2, len = args.length; i < len; i++) {
-				args[i] = this.__type(args[i], i);
-				newElements.push(args[i]);
-			}
-
 			// Remove items using the original splice method
 			oldSplice.call(this, index, howMany);
 
+			// Remove the 1st and 2nd args so that the newly added
+			// items can be processed directly, rather than `.slice()`
+			// which creates a copy, or `for (...) { added.push(args[i]); }`
+			// which iterates needlessly
+			args.splice(0, 2);
+
 			// Add items by way of push so that they're sorted into
 			// the correct position
-			proto.push.apply(this, newElements);
+			proto.push.apply(this, args);
 		};
 	})();
 
