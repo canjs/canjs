@@ -9,9 +9,9 @@ steal('can/util',
 
 		// # mustache.js
 		// `can.Mustache`: The Mustache templating engine.
-		// 
-		// See the [Transformation](#section-29) section within *Scanning Helpers* for a detailed explanation 
-		// of the runtime render code design. The majority of the Mustache engine implementation 
+		//
+		// See the [Transformation](#section-29) section within *Scanning Helpers* for a detailed explanation
+		// of the runtime render code design. The majority of the Mustache engine implementation
 		// occurs within the *Transformation* scanning helper.
 
 		// ## Initialization
@@ -119,7 +119,7 @@ steal('can/util',
 		// Put Mustache on the `can` object.
 		can.Mustache = can.global.Mustache = Mustache;
 
-		/** 
+		/**
 		 * @prototype
 		 */
 		Mustache.prototype.
@@ -155,7 +155,7 @@ steal('can/util',
 			scanner: new can.view.Scanner({
 				// A hash of strings for the scanner to inject at certain points.
 				text: {
-					// This is the logic to inject at the beginning of a rendered template. 
+					// This is the logic to inject at the beginning of a rendered template.
 					// This includes initializing the `context` stack.
 					start: "", //"var "+SCOPE+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
 					scope: SCOPE,
@@ -174,14 +174,14 @@ steal('can/util',
 				//			// A simple token to match, like "{{".
 				//			"token",
 				//
-				//			// Optional. A complex (regexp) token to match that 
+				//			// Optional. A complex (regexp) token to match that
 				//			// overrides the simple token.
 				//			"[\\s\\t]*{{",
 				//
-				//			// Optional. A function that executes advanced 
-				//			// manipulation of the matched content. This is 
+				//			// Optional. A function that executes advanced
+				//			// manipulation of the matched content. This is
 				//			// rarely used.
-				//			function(content){   
+				//			function(content){
 				//				return content;
 				//			}
 				//		]
@@ -379,7 +379,7 @@ steal('can/util',
 				//			//                             status: 0
 				//			//                           }
 				//			fn: function(content, cmd) {
-				//				return 'for text injection' || 
+				//				return 'for text injection' ||
 				//					{ raw: 'to bypass text injection' };
 				//			}
 				//		}
@@ -387,18 +387,18 @@ steal('can/util',
 					// ### Partials
 					//
 					// Partials begin with a greater than sign, like {{> box}}.
-					// 
-					// Partials are rendered at runtime (as opposed to compile time), 
+					//
+					// Partials are rendered at runtime (as opposed to compile time),
 					// so recursive partials are possible. Just avoid infinite loops.
-					// 
+					//
 					// For example, this template and partial:
-					// 
+					//
 					// 		base.mustache:
 					// 			<h2>Names</h2>
 					// 			{{#names}}
 					// 				{{> user}}
 					// 			{{/names}}
-					// 			
+					//
 					// 		user.mustache:
 					// 			<strong>{{name}}</strong>
 					{
@@ -413,17 +413,17 @@ steal('can/util',
 					},
 
 					// ### Data Hookup
-					// 
+					//
 					// This will attach the data property of `this` to the element
 					// its found on using the first argument as the data attribute
 					// key.
-					// 
+					//
 					// For example:
-					// 	
+					//
 					//		<li id="nameli" {{ data 'name' }}></li>
-					// 
+					//
 					// then later you can access it like:
-					// 
+					//
 					//		can.$('#nameli').data('name');
 					/**
 					 * @function can.mustache.helpers.data {{data name}}
@@ -478,34 +478,34 @@ steal('can/util',
 							var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 								parts = content.match(quickFunc);
 
-							//find 
+							//find
 							return "can.proxy(function(__){var " + parts[1] + "=can.$(__);with(" + SCOPE + ".attr('.')){" + parts[2] + "}}, this);";
 						}
 					},
 					// ### Transformation (default)
 					//
 					// This transforms all content to its interpolated equivalent,
-					// including calls to the corresponding helpers as applicable. 
+					// including calls to the corresponding helpers as applicable.
 					// This outputs the render code for almost all cases.
 					//
 					// #### Definitions
-					// 
-					// * `context` - This is the object that the current rendering context operates within. 
+					//
+					// * `context` - This is the object that the current rendering context operates within.
 					//		Each nested template adds a new `context` to the context stack.
-					// * `stack` - Mustache supports nested sections, 
+					// * `stack` - Mustache supports nested sections,
 					//		each of which add their own context to a stack of contexts.
-					//		Whenever a token gets interpolated, it will check for a match against the 
+					//		Whenever a token gets interpolated, it will check for a match against the
 					//		last context in the stack, then iterate through the rest of the stack checking for matches.
 					//		The first match is the one that gets returned.
 					// * `Mustache.txt` - This serializes a collection of logic, optionally contained within a section.
 					//		If this is a simple interpolation, only the interpolation lookup will be passed.
-					//		If this is a section, then an `options` object populated by the truthy (`options.fn`) and 
-					//		falsey (`options.inverse`) encapsulated functions will also be passed. This section handling 
+					//		If this is a section, then an `options` object populated by the truthy (`options.fn`) and
+					//		falsey (`options.inverse`) encapsulated functions will also be passed. This section handling
 					//		exists to support the runtime context nesting that Mustache supports.
 					// * `Mustache.get` - This resolves an interpolation reference given a stack of contexts.
-					// * `options` - An object containing methods for executing the inner contents of sections or helpers.  
-					//		`options.fn` - Contains the inner template logic for a truthy section.  
-					//		`options.inverse` - Contains the inner template logic for a falsey section.  
+					// * `options` - An object containing methods for executing the inner contents of sections or helpers.
+					//		`options.fn` - Contains the inner template logic for a truthy section.
+					//		`options.inverse` - Contains the inner template logic for a falsey section.
 					//		`options.hash` - Contains the merged hash object argument for custom helpers.
 					//
 					// #### Design
@@ -513,17 +513,17 @@ steal('can/util',
 					// This covers the design of the render code that the transformation helper generates.
 					//
 					// ##### Pseudocode
-					// 
+					//
 					// A detailed explanation is provided in the following sections, but here is some brief pseudocode
-					// that gives a high level overview of what the generated render code does (with a template similar to  
+					// that gives a high level overview of what the generated render code does (with a template similar to
 					// `"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"`).
 					//
 					// *Initialize the render code.*
-					// 
+					//
 					// 		view = []
 					// 		context = []
 					// 		stack = fn { context.concat([this]) }
-					// 		
+					//
 					// *Render the root section.*
 					//
 					// 		view.push( "string" )
@@ -531,22 +531,22 @@ steal('can/util',
 					//
 					// *Render the nested section with `can.Mustache.txt`.*
 					//
-					// 			txt( 
+					// 			txt(
 					//
 					// *Add the current context to the stack.*
 					//
-					// 				stack(), 
+					// 				stack(),
 					//
 					// *Flag this for truthy section mode.*
 					//
 					// 				"#",
 					//
 					// *Interpolate and check the `a` variable for truthyness using the stack with `can.Mustache.get`.*
-					// 
+					//
 					// 				get( "a", stack() ),
 					//
 					// *Include the nested section's inner logic.
-					// The stack argument is usually the parent section's copy of the stack, 
+					// The stack argument is usually the parent section's copy of the stack,
 					// but it can be an override context that was passed by a custom helper.
 					// Sections can nest `0..n` times -- **NESTCEPTION**.*
 					//
@@ -596,8 +596,8 @@ steal('can/util',
 					// 			if (arguments.length == 1 && context) {
 					// 				s = !context.__sc0pe ? [context] : context;
 					// 			} else {
-					// 				s = context && context.__sc0pe 
-					//					? context.concat([self]) 
+					// 				s = context && context.__sc0pe
+					//					? context.concat([self])
 					//					: __sc0pe(context).concat([self]);
 					// 			}
 					// 			return (s.__sc0pe = true) && s;
@@ -606,54 +606,54 @@ steal('can/util',
 					// The `___v1ew` is the the array used to serialize the view.
 					// The `___c0nt3xt` is a stacking array of contexts that slices and expands with each nested section.
 					// The `__sc0pe` function is used to more easily update the context stack in certain situations.
-					// Usually, the stack function simply adds a new context (`self`/`this`) to a context stack. 
+					// Usually, the stack function simply adds a new context (`self`/`this`) to a context stack.
 					// However, custom helpers will occasionally pass override contexts that need their own context stack.
 					//
 					// ##### Sections
 					//
-					// Each section, `{{#section}} content {{/section}}`, within a Mustache template generates a section 
-					// context in the resulting render code. The template itself is treated like a root section, with the 
+					// Each section, `{{#section}} content {{/section}}`, within a Mustache template generates a section
+					// context in the resulting render code. The template itself is treated like a root section, with the
 					// same execution logic as any others. Each section can have `0..n` nested sections within it.
 					//
-					// Here's an example of a template without any descendent sections.  
-					// Given the template: `"{{a.b.c.d.e.name}}" == "Phil"`  
+					// Here's an example of a template without any descendent sections.
+					// Given the template: `"{{a.b.c.d.e.name}}" == "Phil"`
 					// Would output the following render code:
 					//
 					//		___v1ew.push("\"");
 					//		___v1ew.push(can.view.txt(1, '', 0, this, function() {
-					// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), null, 
-					//				can.Mustache.get("a.b.c.d.e.name", 
+					// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), null,
+					//				can.Mustache.get("a.b.c.d.e.name",
 					//					__sc0pe(___c0nt3xt, this))
 					//			);
 					//		}));
 					//		___v1ew.push("\" == \"Phil\"");
 					//
-					// The simple strings will get appended to the view. Any interpolated references (like `{{a.b.c.d.e.name}}`) 
+					// The simple strings will get appended to the view. Any interpolated references (like `{{a.b.c.d.e.name}}`)
 					// will be pushed onto the view via `can.view.txt` in order to support live binding.
-					// The function passed to `can.view.txt` will call `can.Mustache.txt`, which serializes the object data by doing 
+					// The function passed to `can.view.txt` will call `can.Mustache.txt`, which serializes the object data by doing
 					// a context lookup with `can.Mustache.get`.
 					//
 					// `can.Mustache.txt`'s first argument is a copy of the context stack with the local context `this` added to it.
 					// This stack will grow larger as sections nest.
 					//
-					// The second argument is for the section type. This will be `"#"` for truthy sections, `"^"` for falsey, 
+					// The second argument is for the section type. This will be `"#"` for truthy sections, `"^"` for falsey,
 					// or `null` if it is an interpolation instead of a section.
 					//
-					// The third argument is the interpolated value retrieved with `can.Mustache.get`, which will perform the 
+					// The third argument is the interpolated value retrieved with `can.Mustache.get`, which will perform the
 					// context lookup and return the approriate string or object.
 					//
 					// Any additional arguments, if they exist, are used for passing arguments to custom helpers.
 					//
 					// For nested sections, the last argument is an `options` object that contains the nested section's logic.
 					//
-					// Here's an example of a template with a single nested section.  
-					// Given the template: `"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"`  
+					// Here's an example of a template with a single nested section.
+					// Given the template: `"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"`
 					// Would output the following render code:
 					//
 					//		___v1ew.push("\"");
 					// 		___v1ew.push(can.view.txt(0, '', 0, this, function() {
-					// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), "#", 
-					//				can.Mustache.get("a", __sc0pe(___c0nt3xt, this)), 
+					// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), "#",
+					//				can.Mustache.get("a", __sc0pe(___c0nt3xt, this)),
 					//					[{
 					// 					_: function() {
 					// 						return ___v1ew.join("");
@@ -661,12 +661,12 @@ steal('can/util',
 					// 				}, {
 					// 					fn: function(___c0nt3xt) {
 					// 						var ___v1ew = [];
-					// 						___v1ew.push(can.view.txt(1, '', 0, this, 
+					// 						___v1ew.push(can.view.txt(1, '', 0, this,
 					//								function() {
 					//                                  return can.Mustache.txt(
-					// 									__sc0pe(___c0nt3xt, this), 
-					// 									null, 
-					// 									can.Mustache.get("b.c.d.e.name", 
+					// 									__sc0pe(___c0nt3xt, this),
+					// 									null,
+					// 									can.Mustache.get("b.c.d.e.name",
 					// 										__sc0pe(___c0nt3xt, this))
 					// 								);
 					// 							}
@@ -682,11 +682,11 @@ steal('can/util',
 					// These act similarly to custom helpers: `options.fn` will be called for truthy sections, `options.inverse` will be called for falsey sections.
 					// The `options._` function only exists as a dummy function to make generating the section nesting easier (a section may have a `fn`, `inverse`,
 					// or both, but there isn't any way to determine that at compilation time).
-					// 
+					//
 					// Within the `fn` function is the section's render context, which in this case will render anything between the `{{#a}}` and `{{/a}}` tokens.
 					// This function has `___c0nt3xt` as an argument because custom helpers can pass their own override contexts. For any case where custom helpers
 					// aren't used, `___c0nt3xt` will be equivalent to the `__sc0pe(___c0nt3xt, this)` stack created by its parent section. The `inverse` function
-					// works similarly, except that it is added when `{{^a}}` and `{{else}}` are used. `var ___v1ew = []` is specified in `fn` and `inverse` to 
+					// works similarly, except that it is added when `{{^a}}` and `{{else}}` are used. `var ___v1ew = []` is specified in `fn` and `inverse` to
 					// ensure that live binding in nested sections works properly.
 					//
 					// All of these nested sections will combine to return a compiled string that functions similar to EJS in its uses of `can.view.txt`.
@@ -707,7 +707,7 @@ steal('can/util',
 							content = can.trim(content);
 
 							// Determine what the active mode is.
-							// 
+							//
 							// * `#` - Truthy section
 							// * `^` - Falsey section
 							// * `/` - Close the prior section
@@ -812,7 +812,7 @@ steal('can/util',
 									 *
 									 *     Hi Jon!
 									 */
-									// 
+									//
 									/**
 									 * @function can.mustache.helpers.helper {{helper args hashes}}
 									 * @parent can.mustache.htags 0
@@ -977,7 +977,7 @@ steal('can/util',
 									 * on the [can.mustache.helper helper function] page.
 									 *
 									 */
-									// 
+									//
 									/**
 									 * @function can.mustache.helpers.sectionHelper {{#helper args hashes}}
 									 * @parent can.mustache.htags 1
@@ -1209,7 +1209,7 @@ steal('can/util',
 								content = content.substring(1);
 							}
 
-							// `else` helpers are special and should be skipped since they don't 
+							// `else` helpers are special and should be skipped since they don't
 							// have any logic aside from kicking off an `inverse` function.
 							if (mode !== 'else') {
 								var args = [],
@@ -1223,7 +1223,7 @@ steal('can/util',
 									',\n' + (mode ? '"' + mode + '"' : 'null') + ',';
 
 								// Parse the helper arguments.
-								// This needs uses this method instead of a split(/\s/) so that 
+								// This needs uses this method instead of a split(/\s/) so that
 								// strings with spaces can be correctly parsed.
 								(can.trim(content) + ' ')
 									.replace(argumentsRegExp, function (whole, arg) {
@@ -1548,7 +1548,7 @@ steal('can/util',
 			// computeData gives us an initial value
 			var initialValue = computeData.initialValue,
 				helperObj = Mustache.getHelper(key, options);
-			  
+
 			//!steal-remove-start
 			if (initialValue === undefined && !isHelper && !helperObj) {
 				can.dev.warn('can/view/mustache/mustache.js: Unable to find key "' + key + '".');
@@ -1609,13 +1609,13 @@ steal('can/util',
 		//
 		// Custom helpers can be added via `can.Mustache.registerHelper`,
 		// but there are also some built-in helpers included by default.
-		// Most of the built-in helpers are little more than aliases to actions 
-		// that the base version of Mustache simply implies based on the 
+		// Most of the built-in helpers are little more than aliases to actions
+		// that the base version of Mustache simply implies based on the
 		// passed in object.
-		// 
+		//
 		// Built-in helpers:
-		// 
-		// * `data` - `data` is a special helper that is implemented via scanning helpers. 
+		//
+		// * `data` - `data` is a special helper that is implemented via scanning helpers.
 		//		It hooks up the active element to the active data object: `<div {{data "key"}} />`
 		// * `if` - Renders a truthy section: `{{#if var}} render {{/if}}`
 		// * `unless` - Renders a falsey section: `{{#unless var}} render {{/unless}}`
@@ -1692,7 +1692,7 @@ steal('can/util',
 		Mustache.render = function (partial, scope, options) {
 			// TOOD: clean up the following
 			// If there is a "partial" property and there is not
-			// an already-cached partial, we use the value of the 
+			// an already-cached partial, we use the value of the
 			// property to look up the partial
 
 			// if this partial is not cached ...
@@ -1714,7 +1714,7 @@ steal('can/util',
 		/**
 		 * @function can.mustache.safeString
 		 * @parent can.mustache.methods
-		 * 
+		 *
 		 * @signature `can.mustache.safeString(str)`
 		 *
 		 * @param {String} str A string you don't want to become escaped.
@@ -1924,7 +1924,10 @@ steal('can/util',
 			 *     {{/unless}}
 			 */
 			'unless': function (expr, options) {
-				return Mustache._helpers['if'].fn.apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
+				return Mustache._helpers['if'].fn.apply(this, [expr, can.extend({}, options, {
+					fn: options.inverse,
+					inverse: options.fn
+				})]);
 			},
 
 			// Implements the `each` built-in helper.
@@ -2004,7 +2007,7 @@ steal('can/util',
 			 */
 			'each': function (expr, options) {
 				// Check if this is a list or a compute that resolves to a list, and setup
-				// the incremental live-binding 
+				// the incremental live-binding
 
 				// First, see what we are dealing with.  It's ok to read the compute
 				// because can.view.text is only temporarily binding to what is going on here.
@@ -2246,7 +2249,7 @@ steal('can/util',
 				});
 			}
 		});
-		
+
 		can.mustache.registerHelper = can.proxy(can.Mustache.registerHelper, can.Mustache);
 		can.mustache.safeString = can.Mustache.safeString;
 		return can;
