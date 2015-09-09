@@ -1000,13 +1000,14 @@ steal('can/util',
 									 *
 									 * Will call the `countTo` helper:
 									 *
-									 *     can.mustache.registerHelper('madLib',
+									 *     can.mustache.registerHelper('countTo',
 									 *       function(number, options){
-									 *         var out = []
+									 *         var out = [];
 									 *         for(var i =0; i < number; i++){
-									 *           out.push( options.fn({num: i+1}) )
+									 *           var docFrag = options.fn({num: i+1});
+									 *           out.push( docFrag.textContent );
 									 *         }
-									 *         return out.join(" ")
+									 *         return out.join(" ");
 									 *     });
 									 *
 									 * Results in:
@@ -1046,7 +1047,7 @@ steal('can/util',
 									 * The template:
 									 *
 									 *     <p>The bed is
-									 *        {{isJustRight firmness}}
+									 *        {{#isJustRight firmness}}
 									 *           pefect!
 									 *        {{else}}
 									 *           uncomfortable.
@@ -1061,11 +1062,10 @@ steal('can/util',
 									 *     can.mustache.registerHelper('isJustRight',
 									 *       function(number, options){
 									 *         if(number > 50){
-									 *           return options.fn(this)
+									 *           return options.fn(this);
 									 *         } else {
-									 *           return options.inverse(this)
+									 *           return options.inverse(this);
 									 *         }
-									 *         return out.join(" ")
 									 *     });
 									 *
 									 * Results in:
