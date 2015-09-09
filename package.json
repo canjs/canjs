@@ -50,7 +50,7 @@
 		"steal-tools": "^0.11.0-pre.12",
 		"testee": "^0.1.3",
 		"zombie": "2.5.1",
-		"documentjs": "0.3.0"
+		"documentjs": "bitovi/documentjs#master"
 	},
 	"scripts": {
 		"test": "grunt test"

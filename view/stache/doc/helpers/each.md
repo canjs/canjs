@@ -70,3 +70,8 @@ Renders:
       <li>Josh</li>
       <li>27</li>
     </ul>
+
+{{#each key}} iteration will do basic diffing and aim to only update the DOM where the change occured. Whereas
+[can.stache.Sections Sections] iteration will re-render the entire section for any change in the list.
+[can.stache.Sections Sections] iteration is the prefered method to use when a list is replaced or changing significantly.
+When doing single list item changes frequently, {{#each key}} iteration is the faster choice.
