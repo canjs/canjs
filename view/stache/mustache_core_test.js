@@ -121,5 +121,33 @@ steal("./mustache_core.js", "steal-qunit", function(){
 		equal(result(), 5);
 	});
 	
+	test("methods don't update correctly (#1891)", function(){
+		var map = new can.Map({
+		  num: 1,
+		  num2: function () {
+		    return this.attr('num') * 2;
+		  },
+		  runTest: function () {
+		    this.attr('num', this.attr('num') * 2);
+		  }
+		});
+		
+		var scope =
+			new can.view.Scope(map);
+		
+		var num2Expression = new mustacheCore.ScopeExpression("num2");
+		var num2 = num2Expression.value( scope, new can.view.Scope({}), {asCompute: true} );
+		
+		num2.bind("change", function(ev, newVal){
+			
+		});
+		
+		map.runTest();
+		
+		equal( num2(), 4, "num2 updated correctly");
+		
+	});
+	
+	
 	
 });

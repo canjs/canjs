@@ -291,9 +291,7 @@ steal(
 									currentSetReads = currentReads;
 									setObserveDepth = nameIndex;
 								}
-							},
-							// Execute anonymous functions found along the way
-							executeAnonymousFunctions: true
+							}
 						}, options);
 
 					// Goes through each scope context provided until it finds the key (attr).  Once the key is found
