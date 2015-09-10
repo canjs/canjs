@@ -55,7 +55,7 @@ __JavaScript__
 		messages: 0
 	});
 
-	var template = can.view("#template", data)
+	var template = can.view("template", data)
 	document.body.appendChild(template);
 
 __HTML Result__
