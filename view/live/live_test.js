@@ -229,6 +229,6 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 
 		can.view.elements.setAttr(el, "value", 1);
 		can.view.live.attribute(el, 'value', compute);
-		ok(true, 'No exception thrown.')
+		ok(true, 'No exception thrown.');
 	});
 });
