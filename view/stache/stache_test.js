@@ -4038,4 +4038,24 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		state.attr('showAttr', false);
 		state.attr('showAttr', true);
 	});
+
+	test("methods don't update correctly (#1891)", function() {
+		var map = new can.Map({
+			num1: 1,
+			num2: function () { return this.attr('num1') * 2; }
+		});
+		var frag = can.stache(
+			'<span class="num1">{{num1}}</span>' +
+			'<span class="num2">{{num2}}</span>')(map);
+
+		can.append(can.$('#qunit-fixture'), frag);
+
+		equal(can.$('#qunit-fixture .num1')[0].innerHTML, '1', 'Rendered correct value');
+		equal(can.$('#qunit-fixture .num2')[0].innerHTML, '2', 'Rendered correct value');
+
+		map.attr('num1', map.attr('num1') * 2);
+
+		equal(can.$('#qunit-fixture .num1')[0].innerHTML, '2', 'Rendered correct value');
+		equal(can.$('#qunit-fixture .num2')[0].innerHTML, '4', 'Rendered correct value');
+	});
 });

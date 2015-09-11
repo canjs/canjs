@@ -106,7 +106,7 @@ steal("can/util", function(can){
 			var type = typeof value;
 			// i = reads.length if this is the last iteration of the read for-loop.
 			return type === 'function' && !value.isComputed &&
-				(options.executeAnonymousFunctions || (options.isArgument && i === reads.length) ) &&
+				(options.executeAnonymousFunctions !== false || (options.isArgument && i === reads.length) ) &&
 				!(can.Construct && value.prototype instanceof can.Construct) &&
 				!(can.route && value === can.route);
 		},
