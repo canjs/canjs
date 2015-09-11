@@ -220,7 +220,15 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		
 		
 	});
-	
-	
-	
+
+	test("can.live.attribute works with non-string attributes (#1790)", function() {
+		var el = document.createElement('div'),
+			compute = can.compute(function() {
+				return 2;
+			});
+
+		can.view.elements.setAttr(el, "value", 1);
+		can.view.live.attribute(el, 'value', compute);
+		ok(true, 'No exception thrown.')
+	});
 });
