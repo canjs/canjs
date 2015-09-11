@@ -12,10 +12,6 @@
 @description Create observable objects.
 
 
-Watch this video to see an example of creating an ATM machine using can.Map:
-
-<iframe width="662" height="372" src="https://www.youtube.com/embed/QP9mHyxZNiI" frameborder="0" allowfullscreen></iframe>
-
 @signature `new can.Map([props])`
 
 Creates a new instance of can.Map.
@@ -29,6 +25,13 @@ Creates a new extended constructor function.
 
 
 @body
+
+## Use
+
+Watch this video to see an example of creating an ATM machine using can.Map:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/QP9mHyxZNiI" frameborder="0" allowfullscreen></iframe>
+
 
 `can.Map` provides a way for you to listen for and keep track of changes
 to objects. When you use the getters and setters provided by `can.Map`,
