@@ -3,6 +3,18 @@
 @parent guides 5
 -->
 
+__2.2.8/2.2.9__ ( Sep 11 2015 )
+
+- [View bound to method breaks on re-evaluation](https://github.com/bitovi/canjs/issues/1891)
+- [fixed regression component control destructor](https://github.com/bitovi/canjs/pull/1886)
+- [Fix typo in default generator dependent property resolution logic](https://github.com/bitovi/canjs/pull/1820)
+- [attr.split() causes errors in IE10,11 in live.js on CanJS 2.2.6 when using jQuery](https://github.com/bitovi/canjs/issues/1790)
+- [Only attempt unbind when __bindEvents is defined](https://github.com/bitovi/canjs/pull/1780)
+- [can.Component events registered twice in 2.2.x](https://github.com/bitovi/canjs/issues/1778)
+- [can.map throws strings, not errors. ](https://github.com/bitovi/canjs/issues/1773)
+- [Handle a few sort plugin edge cases](https://github.com/bitovi/canjs/pull/1718)
+
+
 __2.2.7__ ( Jul 24 2015 )
 
 - [can.compute change handler context should be the function not the can.Compute object](https://github.com/bitovi/canjs/issues/1763)
