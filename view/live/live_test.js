@@ -235,21 +235,26 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 				return '<label>Animal=</label> <span>' + animal + '</span>';
 			},
 			unbind = list.unbind;
-			
+
 		list.unbind = function(){
 			ok(false, "unbind called");
 			return unbind.apply(this, arguments);
 		};
-		
+
 		div.innerHTML = 'my <b>fav</b> animals: <span></span> !';
 		var el = div.getElementsByTagName('span')[0];
-		
+
 		can.view.live.list(el, list, template, {});
-		
-		
-		
 	});
-	
-	
-	
+
+	test("can.live.attribute works with non-string attributes (#1790)", function() {
+		var el = document.createElement('div'),
+			compute = can.compute(function() {
+				return 2;
+			});
+
+		can.view.elements.setAttr(el, "value", 1);
+		can.view.live.attribute(el, 'value', compute);
+		ok(true, 'No exception thrown.');
+	});
 });
