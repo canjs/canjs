@@ -14,7 +14,7 @@ specified attributes are of the correct form by
 matching it against the regular expression provided.
 
 	init : function(){
-		this.validateFormatOf(["email"],/[\w\.]+@]w+\.\w+/,{
+		this.validateFormatOf(["email"],/[\w\.]+@\w+\.\w+/,{
 			message : "invalid email"
 		})
 	}
