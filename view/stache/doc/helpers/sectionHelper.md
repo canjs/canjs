@@ -65,7 +65,7 @@ render.
 The template:
 
     <p>The bed is
-       {{isJustRight firmness}}
+       {{#isJustRight firmness}}
           pefect!
        {{else}}
           uncomfortable.
