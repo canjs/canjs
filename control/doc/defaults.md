@@ -23,3 +23,24 @@ the result will be stored in [can.Control::options this.options].
 
 	new Message( "#el1" ); //writes "Hello World"
 	new Message( "#el12", { message: "hi" } ); //writes hi
+
+## Shared Properties
+
+New instances of a can.Control will create a shallow copy of the default
+options. Be aware as shallow copies keep a reference to object types, such as
+objects, maps and computes.
+
+```
+var Sample = can.Control.extend({
+  defaults: {
+    computedProp: can.compute(),
+    primitiveProp: 'sample'
+  }
+}, {});
+
+var a = new Sample('div');
+var b = new Sample('li');
+
+//`computedProp` will be shared across instances of the `Sample` control.
+//a.options.computedProp === b.options.computedProp
+```
