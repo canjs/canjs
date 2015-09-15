@@ -42,9 +42,13 @@ steal("can/util/can.js", function (can) {
 				"value": "value",
 				"innertext": "innerText",
 				"textcontent": "textContent",
+				"for": "htmlFor",
 				"checked": true,
 				"disabled": true,
-				"readonly": true,
+				"readonly": function (el, val) {
+					el.readOnly = true;
+					return val;
+				},
 				"required": true,
 				// For the `src` attribute we are using a setter function to prevent values such as an empty string or null from being set.
 				// An `img` tag attempts to fetch the `src` when it is set, so we need to prevent that from happening by removing the attribute instead.
