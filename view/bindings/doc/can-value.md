@@ -27,7 +27,7 @@ not listed here, the behavior is the same as the `text` type.
 
 Cross binds the input's string text value with the observable value.
 
-The value of the observable is changed after the input's `change` event, 
+The value of the observable is changed after the input's `change` event,
 which is after `blur`.
 
 @demo can/view/bindings/doc/hyperloop.html
@@ -52,3 +52,12 @@ If the radio element is checked, sets the observable specified by `can-value` to
 Cross binds the selected option value with an observable value.
 
 @demo can/view/bindings/doc/select.html
+
+## textarea
+
+Cross binds the textarea's string text value with the observable value.
+
+The value of the observable is changed after the textarea's `change` event,
+which is after `blur`.
+
+@demo can/view/bindings/doc/textarea.html
