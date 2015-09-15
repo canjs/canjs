@@ -48,9 +48,9 @@ Example:
 {{/eq}}
 ```
 
-## <can-tag>
+## can-tag
 
-`<can-tag>` allows for injecting a component, using the imported promise as the
+`can-tag` allows for injecting a component, using the imported promise as the
 injected component's view model.
 
 The example below shows a loading graphic until the cart component has been loaded.
