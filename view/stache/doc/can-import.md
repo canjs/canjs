@@ -47,3 +47,29 @@ Example:
 <can-import from="components/away"></can-import>
 {{/eq}}
 ```
+
+## <can-tag>
+
+`<can-tag>` allows for injecting a component, using the imported promise as the
+injected component's view model.
+
+The example below shows a loading graphic until the cart component has been loaded.
+Once the cart promise is resolved, `<shopping-cart></shopping-cart>` is injected
+into the page.
+
+Loading Indicator Component
+
+```
+can.Component.extend({
+  tag: "loading-indicator",
+  template: can.stache("{{#isResolved}}<content/>{{else}}<img src="loading.gif"/>{{/isResolved}}")
+});
+```
+
+Main Template
+
+```
+<can-import from="cart" can-tag="loading-indicator">
+  <shopping-cart></shopping-cart>
+</can-import>
+```
