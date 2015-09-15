@@ -334,45 +334,6 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 
 		});
 
-		/*test('Supress events during sort with ' + templateEngine + ' using the ' + helperType +' helper', function () {
-			var el = document.createElement('div');
-
-			var items = new can.List([
-				{ id: 4 },
-				{ id: 1 },
-				{ id: 6 },
-				{ id: 3 },
-				{ id: 2 },
-				{ id: 8 },
-				{ id: 0 },
-				{ id: 5 },
-				{ id: 6 },
-				{ id: 9 },
-			]);
-
-			// Render the template and place inside the <div>
-			el.appendChild(renderer({
-				items: items
-			}));
-
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
-
-			// Check that the "4" is at the beginning of the list
-			equal(firstElText, 4, 'First LI is a "4"');
-
-			// Sort the list in-place
-			items.attr('comparator' , 'id');
-
-			// Use the default comparator, but don't fire events
-			items.sort(undefined, true);
-
-			firstElText = el.getElementsByTagName('li')[0].innerText;
-
-			// Check that the "4" is at the beginning of the list
-			equal(firstElText, 4, 'The first LI has not changed as a result of the sort');
-
-		});*/
-
 		test('Push multiple items with ' + templateEngine + ' using the ' + helperType +' helper (#1509)', function () {
 			var el = document.createElement('div');
 
@@ -388,7 +349,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				equal(items.length, 1, 'One single item was added');
 			});
 
-			items.push([
+			items.push.apply(items, [
 				{ id: 4 },
 				{ id: 1 },
 				{ id: 6 }
@@ -443,71 +404,71 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 
 		equal(list.attr('length'), 2, 'item removed');
 	});
-	
+
 	test("sorting works with #each (#1566)", function(){
-		
+
 		var heroes = new can.List([ { id: 1, name: 'Superman'}, { id: 2, name: 'Batman'} ]);
-		
+
 		heroes.attr('comparator', 'name');
-		
+
 		var template = can.stache("<ul>\n{{#each heroes}}\n<li>{{id}}-{{name}}</li>\n{{/each}}</ul>");
-		
+
 		var frag = template({
 			heroes: heroes
 		});
-		
+
 		var lis = frag.childNodes[0].getElementsByTagName("li");
-		
+
 		equal(lis[0].innerHTML, "2-Batman");
 		equal(lis[1].innerHTML, "1-Superman");
-		
+
 		heroes.attr('comparator', 'id');
-		
+
 		equal(lis[0].innerHTML, "1-Superman");
 		equal(lis[1].innerHTML, "2-Batman");
 	});
-	
+
 	test("sorting works with comparator added after a binding", function(){
 		var heroes = new can.List([ { id: 1, name: 'Superman'}, { id: 2, name: 'Batman'} ]);
-		
+
 		var template = can.stache("<ul>\n{{#each heroes}}\n<li>{{id}}-{{name}}</li>\n{{/each}}</ul>");
-		
+
 		var frag = template({
 			heroes: heroes
 		});
-		
+
 		heroes.attr('comparator', 'id');
-		
+
 		heroes.attr("0.id",3);
-		
+
 		var lis = frag.childNodes[0].getElementsByTagName("li");
-		
+
 		equal(lis[0].innerHTML, "2-Batman");
 		equal(lis[1].innerHTML, "3-Superman");
-		
+
 	});
-	
+
 	test("removing comparator tears down bubbling", function(){
-		
+
 		var heroes = new can.List([ { id: 1, name: 'Superman'}, { id: 2, name: 'Batman'} ]);
 		var lengthHandler = function(){};
-		
+
 		heroes.bind("length",lengthHandler);
-		
+
 		ok(!heroes[0]._bindings, "item has no bindings");
-		
+
 		heroes.attr('comparator', 'id');
-		
+
 		heroes.attr("0.id",3);
-		
+
 		ok(heroes._bindings, "list has bindings");
 		ok(heroes[0]._bindings, "item has bindings");
-		
+
 		heroes.removeAttr('comparator');
-		
+
 		ok(!heroes[0]._bindings, "has bindings");
 		ok(heroes._bindings, "list has bindings");
-		
+
 		heroes.unbind("length",lengthHandler);
 		ok(!heroes._bindings, "list has no bindings");
 	});
@@ -649,66 +610,29 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		equal(list.attr('0.id'), 'a', 'Item not moved');
 	});
 
-	test('_getInsertIndex moves items to the end', function () {
-		var list = new can.List();
-		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
-		var sort = list.sort;
+	test('_getInsertIndex positions items correctly', function () {
+		var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var alphabet = letters.split('');
+		var expected = alphabet.slice(0);
+		var sorted = new can.List(alphabet);
 
-		list.attr('comparator', 'id');
+		// Enable the sort plugin
+		sorted.attr('comparator', can.List.prototype._comparator);
 
-		list.bind('move', function (ev) {
-			ok(false, 'No "move" events should be fired');
+		// There are some gotcha's that we can't compare to native sort:
+		// http://blog.rodneyrehm.de/archives/14-Sorting-Were-Doing-It-Wrong.html
+		var samples = ['0A','ZZ','**','LM','LL','Josh','James','Juan','Julia',
+			'!!HOORAY!!'];
+
+		can.each(samples, function (value) {
+			expected.push(value);
+			expected.sort(can.List.prototype._comparator);
+			sorted.push(value);
+			
+			can.each(expected, function (value, index) {
+				equal(value, sorted.attr(index),
+					'Sort plugin output matches native output');
+			});
 		});
-		list._getRelativeInsertIndex = function () {
-			ok(false, 'No items should be evaluated independently');
-			return _getRelativeInsertIndex.apply(this, arguments);
-		};
-		list.sort = function () {
-			ok(true, 'Batching caused sort() to be called');
-			return sort.apply(this, arguments);
-		};
-
-		list.replace([
-			{ id: 'a', index: 1 },
-			{ id: 'a', index: 2 },
-			{ id: 'a', index: 3 }
-		]);
-
-		equal(list.attr('0.index'), 3, 'Item positioned correctly');
-		equal(list.attr('1.index'), 2, 'Item positioned correctly');
-		equal(list.attr('2.index'), 1, 'Item positioned correctly');
-	});
-
-
-	test('_getInsertIndex chooses correct index', function () {
-		var list = new can.List();
-		var _getRelativeInsertIndex = list._getRelativeInsertIndex;
-		var sort = list.sort;
-
-		list.attr('comparator', 'id');
-
-		list.bind('move', function (ev) {
-			ok(false, 'No "move" events should be fired');
-		});
-		list._getRelativeInsertIndex = function () {
-			ok(false, 'No items should be evaluated independently');
-			return _getRelativeInsertIndex.apply(this, arguments);
-		};
-		list.sort = function () {
-			ok(true, 'Batching caused sort() to be called');
-			return sort.apply(this, arguments);
-		};
-
-		can.batch.start();
-		list.replace([
-			{ id: 'a', index: 1 },
-			{ id: 'b', index: 2 },
-			{ id: 'c', index: 3 }
-		]);
-		can.batch.stop();
-
-		equal(list.attr('0.index'), 1, 'Item positioned correctly');
-		equal(list.attr('1.index'), 2, 'Item positioned correctly');
-		equal(list.attr('2.index'), 3, 'Item positioned correctly');
 	});
 });
