@@ -209,7 +209,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
-			var helper = options.attr("helpers." + name);
+			var helper = options && options.attr("helpers." + name);
 			if(!helper) {
 				helper = helpers[name];
 			}
