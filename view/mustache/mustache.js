@@ -811,7 +811,7 @@ steal('can/util',
 									 * would render:
 									 *
 									 *     Hi Jon!
-									 * 									 
+									 * 
 									 * ## Understanding when to use Sections with lists
 									 * 
 									 * Section iteration will re-render the entire section for any change in the list. It is the prefered method to
