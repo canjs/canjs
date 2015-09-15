@@ -56,7 +56,7 @@ of the string, then they will be persisted.
 @return {Boolean} Whether __obj__ is an Array.
 
 @body
-`can.isArray(object)` returns if the object is an explicitly an Array. If `can.isArray` 
+`can.isArray(object)` returns if the object is an explicitly an Array. If `can.isArray`
 is passed an array-like object, it will return `false`.
 
     can.isArray([]);    // true
@@ -262,7 +262,7 @@ and binds a callback handler on an object for a given event.  It works on:
 - Objects with bind / unbind methods
 
 The idea is that `can.on` can be used on anything that produces events
-and it will figure out the appropriate way to bind to it. 
+and it will figure out the appropriate way to bind to it.
 
 
 __Binding to an object__
@@ -540,7 +540,7 @@ The following lists how the NodeList is created by each library:
 
 @body
 `can.append( wrappedNodeList, html )` inserts content to the end of each wrapped node list item(s) passed.
-This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API
 for [.append](http://api.jquery.com/append/).
 
     // Before
@@ -650,7 +650,7 @@ otherwise a Deferred that resolves to __deferred__.
 `can.when(deferred)` provides the ability to execute callback function(s)
 typically based on a Deferred or AJAX object.
 
-This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API 
+This is a wrapper API for the underlying library being used. If you're using jQuery, this is a wrapper API
 for [jQuery.when](http://api.jquery.com/jquery.when/);
 
     can.when( can.ajax('api/farm/animals') ).then(function(animals){
@@ -658,7 +658,7 @@ for [jQuery.when](http://api.jquery.com/jquery.when/);
     });
 
 You can also use this to wait for the results of multiple deferreds.
-    
+
     can.when( can.ajax('api/farm/animals'), can.ajax('api/farm/beacons') ).then(function(animals, beacons){
         // perform some logic using both the animals and beacons data
     });
@@ -673,6 +673,7 @@ You can also use this for regular JavaScript objects.
 /**
 @constructor can.Deferred
 @parent can.util
+@group can.Deferred.prototype 0 Prototype
 
 @description `can.Deferred` is a object that allows users to assign and chain callback
 function(s) for the success or failure state of both asynchronous and synchronous function(s).
