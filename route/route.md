@@ -134,12 +134,20 @@ to update can.route's data.
     can.route.attr( "type", "songs" )
     // location.hash -> "#!content/songs"
     
-Default values can also be added:
+Default values can be added to a route:
 
     can.route("content/:type",{type: "videos" });
     location.hash = "#!content/"
     // can.route -> {type : "videos"}
-    
+    // location.hash -> "#!content/"
+
+Defaults can also be set on the root page of your app:
+
+    can.route( "", { page: "index" } );
+    location.hash = "#!";
+    // can.route.attr() -> { page: "index" }
+    // location.hash -> "#!"
+
 ## Initializing can.route
 
 After your application has created all of its routes, call [can.route.ready]
