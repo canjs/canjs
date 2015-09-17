@@ -169,6 +169,13 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 			}
 		});
 	});
+	test( "Concat doesn't serialize items", function () {
+		var l1 = new can.List( [ { test: 1 } ] );
+		var l2 = new can.List( [] );
+		ok( l1[ 0 ] === l1.concat( l2 )[ 0 ], "Obj 0 of list 1 is the same obj in the concatenated list." );
+		ok( l1[ 0 ] === l1.concat( [] )[ 0 ], "Obj 0 of list 1 is the same obj in the concatenated list." );
+		ok( l1[ 0 ] === l2.concat( l1 )[ 0 ], "Obj 0 of list 1 is the same obj in the concatenated list." );
+	});
 	test('splice removes items in IE (#562)', function () {
 		var l = new can.List(['a']);
 		l.splice(0, 1);

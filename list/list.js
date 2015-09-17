@@ -740,9 +740,9 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		concat: function () {
 			var args = [];
 			can.each(can.makeArray(arguments), function (arg, i) {
-				args[i] = arg instanceof can.List ? arg.serialize() : arg;
+				args[i] = arg instanceof can.List ? can.makeArray( arg ) : arg;
 			});
-			return new this.constructor(Array.prototype.concat.apply(this.serialize(), args));
+			return new this.constructor( Array.prototype.concat.apply( can.makeArray( this ), args ) );
 		},
 
 		/**
