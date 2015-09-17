@@ -167,18 +167,26 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	};
 
 	var handleEvent = function (el, data) {
-
-		// the attribute name is the function to call
+		
+		// Get the `event` name and if we are listening to the element or viewModel.
+		// The attribute name is the name of the event.
 		var attributeName = data.attributeName,
-		// The event type to bind on is determin by whatever is after can-
-		// or it is a (event)
-		// For example, can-submit and (submit) binds on the submit event.
+		// The old way of binding is can-X
+			legacyBinding = attributeName.indexOf('can-') === 0,
 			event = attributeName.indexOf('can-') === 0 ?
 				attributeName.substr("can-".length) :
 				removeBrackets(attributeName, '(', ')'),
+			onBindElement = !legacyBinding;
+		
+		if(event.charAt(0) === "$") {
+			event = event.substr(1);
+			onBindElement = true;
+		}
+		
+		
 		// This is the method that the event will initially trigger. It will look up the method by the string name
 		// passed in the attribute and call it.
-			handler = function (ev) {
+		var handler = function (ev) {
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
 				// mustacheCore.expressionData will read the attribute
@@ -189,7 +197,6 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				// We grab the first item and treat it as a method that
 				// we'll call.
 				var scopeData = data.scope.read(attrInfo.name.key, {
-					returnObserveMethods: true,
 					isArgument: true
 				});
 
@@ -216,17 +223,18 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					"@event": ev,
 					"@viewModel": viewModel,
 					"@scope": data.scope,
-					"@context": data.scope._context
+					"@context": data.scope._context,
+					
+					"%element": this,
+					"$element": $el,
+					"%event": ev,
+					"%viewModel": viewModel,
+					"%scope": data.scope,
+					"%context": data.scope._context
 				},{
 					notContext: true
 				});
-				var convertToValue = function(arg){
-					if(typeof arg === "function") {
-						return convertToValue( arg() );
-					} else {
-						return arg;
-					}
-				};
+				
 				
 				var args = attrInfo.args(localScope, null, {}),
 					hash = attrInfo.hash(localScope, null, {});
@@ -234,38 +242,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				if(!can.isEmptyObject(hash)) {
 					args.push(hash);
 				}
-				/*
-				// .expressionData() gives us a hash object representing
-				// any expressions inside the definition that look like
-				// foo=bar. If there's no hash keys, we'll omit this hash
-				// from our method arguments.
-				if (!can.isEmptyObject(attrInfo.hash)) {
-					var hash = {};
-					can.each(attrInfo.hash, function(val, key) {
-						if (val && val.hasOwnProperty("get")) {
-							var s = !val.get.indexOf("@") ? localScope : data.scope;
-							hash[key] = s.read(val.get, {}).value;
-						} else {
-							hash[key] = val;
-						}
-					});
-					args.unshift(hash);
-				}
-
-				// We go through each non-hash expression argument and
-				// prepend it to our argument list.
-				if (attrInfo.args.length) {
-					var arg;
-					for (var i = attrInfo.args.length-1; i >= 0; i--) {
-						arg = attrInfo.args[i];
-						if (arg && arg.hasOwnProperty("get")) {
-							var s = !arg.get.indexOf("@") ? localScope : data.scope;
-							args.unshift(s.read(arg.get, {}).value);
-						} else {
-							args.unshift(arg);
-						}
-					}
-				}*/
+		
 				
 				// If no arguments are provided, the method will simply
 				// receive the legacy arguments.
@@ -307,7 +284,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	// that calls a method identified by the value of this attribute.
 	can.view.attr(/can-[\w\.]+/, handleEvent);
 	// ## (EVENT)
-	can.view.attr(/\([\w\.]+\)/, handleEvent);
+	can.view.attr(/^\([\$?\w\.]+\)$/, handleEvent);
 
 	// ## Two way binding can.Controls
 	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves
@@ -541,50 +518,111 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 	});*/
 
-	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
-
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
-			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
-			twoWayBind = true;
-
-
-		if(prop.charAt(0) === "{") {
-			twoWayBind = false;
-			prop = removeBrackets( prop );
+	var setElement = function(el, prop, value) {
+		if(el.nodeName.toLowerCase() === "input" && el.type === "checkbox") {
+			var trueValue = true;
+			// If `can-true-value` attribute was set, check if the value is equal to that string value, and set
+			// the checked property based on their equality.
+			el.checked = (value == trueValue);
+		} else {
+			can.attr.set(el, prop, value == null ? "" : value)
 		}
+	};
 
-		var viewModel = can.viewModel(el);
-		var scope = new can.view.Scope(viewModel);
-		var refs = attrData.scope.getRefs();
-
-		var computeData = scope.computeData(prop, {
-				args: [],
-				isArgument: true
-			}),
-			compute = computeData.compute;
-
-		var handler = function (ev, newVal) {
-			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-			refs.attr(name, newVal);
-		};
-		compute.bind("change", handler);
-
-		var initialValue = compute();
-		refs.attr(name, initialValue === undefined ? null : initialValue);
-
-		if(twoWayBind) {
-			var twoWayHandler = function(ev, newVal){
-				compute(newVal);
-			};
-			refs.bind(name, twoWayHandler);
-		}
-
-		can.one.call(el, 'removed', function() {
-			compute.unbind("change", handler);
-			if(twoWayBind) {
-				refs.unbind(name, twoWayHandler);
+	var elementCompute = function(el, prop, event){
+		return can.compute(el[prop],{
+			on: function(updater){
+				can.bind.call(el,event, updater);
+			},
+			off: function(){
+				can.unbind.call(el,event, updater);
+			},
+			get: function(){
+				return can.attr.get(el, prop);
+			},
+			set: function(value){
+				setElement(el, prop, value);
 			}
 		});
+	};
+
+	can.view.attr(/\[\(?[\$#]?[\w\.\-_]+\)?\]/, function(el, attrData){
+		
+		var scopeProp = el.getAttribute(attrData.attributeName) || ".",
+			attrName = can.camelize( attrData.attributeName.substring(2, attrData.attributeName.length - 2) ),
+			firstChar = attrName.charAt(0),
+			isDOM = firstChar === "$",
+			isRef = firstChar === "#";
+		
+		// Get what we are binding to from the scope
+		
+		var parentExpression = mustacheCore.expressionData(scopeProp);
+		var parentCompute = parentExpression.value(attrData.scope, new can.view.Scope(), {});
+		
+		// Get what we are binding to from the child
+		var childCompute;
+		if(isDOM) {
+			childCompute = elementCompute(el, attrName.substr(1), "change");
+		} else {
+			var childExpression = mustacheCore.expressionData(  attrName );
+			var childContext = can.viewModel(el);
+			var childScope = new can.view.Scope(childContext);
+			childCompute = childExpression.value(childScope, new can.view.Scope(), {});
+		}
+		
+		// tracks which viewModel property is currently updating
+		var childUpdates = {};
+		
+		// setup listening on parent and forwarding to viewModel
+		var updateChild = function(ev, newValue){
+			
+			// Save the viewModel property name so it is not updated multiple times.
+			childUpdates[attrName] = (childUpdates[attrName] || 0 )+1;
+
+			childCompute(newValue);
+			
+			// only after the batch has finished, reduce the update counter
+			can.batch.afterPreviousEvents(function(){
+				--childUpdates[attrName];
+			});
+		};
+		
+		
+		parentCompute.bind("change", updateChild);
+		
+		// setup event binding on viewModel and forward to parent.
+		var updateScope = function(ev, newVal){
+			if (!childUpdates[attrName]) {
+				parentCompute(newVal);
+			}
+		};
+		childCompute.bind("change", updateScope);
+		
+		
+		can.one.call(el, 'removed', function() {
+			parentCompute.unbind("change", updateChild);
+			childCompute.unbind("change", updateScope);
+		});
+		
+		// should it set?  What if both defined?
+		updateChild({}, parentCompute());
+		
+	});
+	
+	
+	// #ref-export shorthand
+	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
+		if(el.getAttribute(attrData.attributeName)) {
+			console.warn("#reference attributes can only export the view model.");
+		}
+		
+		
+		var prop = ".",
+			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
+
+		var viewModel = can.viewModel(el);
+		var refs = attrData.scope.getRefs();
+		refs.attr(name, viewModel);
 
 	});
 });

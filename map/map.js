@@ -592,13 +592,13 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				return can.compute(this[prop], this);
 			} else {
 				
-				var reads = prop.split("."),
+				var reads = can.compute.read.reads(prop),
 					last = reads.length - 1;
 					
 				return can.compute(function (newVal) {
 					if (arguments.length) {
-						can.compute.read(this, reads.slice(0, last))
-							.value.attr(reads[last], newVal);
+						can.compute.read(this, reads.slice(0, last),{})
+							.value.attr(reads[last].key, newVal);
 					} else {
 						return can.compute.read(this, reads, {
 							args: []

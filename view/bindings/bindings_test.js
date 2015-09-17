@@ -82,7 +82,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			var ta = document.getElementById("qunit-fixture");
 			var template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
-			"<p (click)='doSomething'>{{content}}</p>" +
+			"<p ($click)='doSomething'>{{content}}</p>" +
 			"{{/each}}" +
 			"</div>");
 
@@ -124,7 +124,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			});
 			template = can.view.mustache("<div>" +
 			"{{#each foodTypes}}" +
-			"<fancy-event-args-tester class='with-args' (click)='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
+			"<fancy-event-args-tester class='with-args' (click)='withArgs @event @element @viewModel @viewModel.test . title content=content'/>" +
 			"{{/each}}" +
 			"</div>");
 			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
@@ -898,6 +898,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				equal(ONE, 1);
 				equal(two, 2);
 				equal(three, 3);
+				equal(this, map, "this set right");
 				start();
 			}
 		});
@@ -1114,7 +1115,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
 	});
 	
-	test('two-way reference values #ref="{foo}"', function(){
+	/*test('two-way reference values [(#ref)]="foo"', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
 			tag: 'reference-export',
@@ -1124,10 +1125,15 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			tag: 'ref-import'
 		});
 
-		var template = can.stache("<reference-export #ref-name='{name}'/>"+
-			"<ref-import name='{refName}'/>");
-			
-		var frag = template(data);
+		var template = can.stache("<reference-export [(name)]='#refName'/>"+
+			"<ref-import [(name)]='#refName'/> {{helperToGetScope}}");
+		
+		var scope;
+		var frag = template(data,{
+			helperToGetScope: function(options){
+				scope = options.scope;
+			}
+		});
 
 		var refExport = can.viewModel(frag.firstChild);
 		var refImport = can.viewModel(frag.lastChild);
@@ -1138,6 +1144,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		refImport.attr("name","v2");
 		
 		equal(refExport.attr("name"),"v2", "updated ref-export");
+		
+		equal( scope.getRefs().attr("refName"), "v2", "actually put in refs scope");
 		
 	});
 
@@ -1169,7 +1177,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		equal(one.firstChild.nodeValue, "", "external content, internal export");
 		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
-	});
+	});*/
 
 	/*test("^parent within another parent that does not leak scope", function(){
 		can.Component.extend({
@@ -1326,7 +1334,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 	test("(event) methods on objects are called (#1839)", function(){
-		var template = can.stache("<div (click)='{setSomething person.message}'/>");
+		var template = can.stache("<div ($click)='setSomething person.message'/>");
 		var data = {
 			setSomething: function(message){
 				equal(message, "Matthew P finds good bugs");
@@ -1340,6 +1348,104 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		};
 		var frag = template(data);
 		can.trigger( frag.firstChild, "click" );
+	});
+	
+	test("[(view-model-prop)]='scopeProp' (#1700)", function(){
+		
+		can.Component.extend({
+			tag: "view-model-able"
+		});
+		
+		var template = can.stache("<div [(view-model-prop)]='scopeProp'/>");
+		
+		var attrSetCalled = 0;
+		
+		var map = new can.Map({scopeProp: "Hello"});
+		var oldAttr = map.attr;
+		map.attr = function(attrName, value){
+			if(typeof attrName === "string" && arguments.length > 1) {
+				attrSetCalled++;
+			}
+			
+			return oldAttr.apply(this, arguments);
+		};
+		
+		
+		var frag = template(map);
+		var viewModel = can.viewModel(frag.firstChild);
+		
+		equal(attrSetCalled, 0, "set is not called on scope map");
+		equal( viewModel.attr("viewModelProp"), "Hello", "initial value set" );
+		
+		var viewModel = can.viewModel(frag.firstChild);
+		var viewModelAttrSetCalled = 1;
+		viewModel.attr = function(attrName){
+			if(typeof attrName === "string" && arguments.length > 1) {
+				viewModelAttrSetCalled++;
+			}
+			
+			return oldAttr.apply(this, arguments);
+		};
+		
+		
+		viewModel.attr("viewModelProp","HELLO");
+		equal(map.attr("scopeProp"), "HELLO", "binding from child to parent");
+		equal(attrSetCalled, 1, "set is called once on scope map");
+		// TODO: 3 is the current can.Component behavior.  Do we want this?
+		equal(viewModelAttrSetCalled, 3, "set is called once viewModel");
+		
+		
+		map.attr("scopeProp","WORLD");
+		equal( viewModel.attr("viewModelProp"), "WORLD", "binding from parent to child" );
+		equal(attrSetCalled, 2, "set is called once on scope map");
+		equal(viewModelAttrSetCalled, 4, "set is called once on viewModel");
+		
+	});
+	
+	// new two-way binding
+	
+	test("[($value)]='age' input text (#1700)", function () {
+
+		var template = can.view.stache("<input [($value)]='age'/>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
+
+		map.attr("age", "31");
+
+		equal(input.value, "31", "input value update correctly");
+
+		input.value = "32";
+
+		can.trigger(input, "change");
+
+		equal(map.attr("age"), "32", "updated from input");
+
+	});
+	
+	test('[($checked)] with truthy and falsy values binds to checkbox (#1700)', function() {
+		var data = new can.Map({
+				completed: 1
+			}),
+			frag = can.view.stache('<input type="checkbox" [($checked)]="completed"/>')(data);
+			
+		can.append(can.$("#qunit-fixture"), frag);
+
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
+		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		data.attr('completed', 0);
+		equal(input.checked, false, 'checkbox value bound (via attr check)');
 	});
 	
 });

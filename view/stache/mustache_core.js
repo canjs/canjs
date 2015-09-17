@@ -468,9 +468,7 @@ steal("can/util",
 					// Use can.view to get and render the partial.
 					else {
 						var scopePartialName = scope.read(localPartialName, {
-							isArgument: true,
-							returnObserveMethods: true,
-							proxyMethods: false
+							isArgument: true
 						}).value;
 
 						if (scopePartialName === null) {

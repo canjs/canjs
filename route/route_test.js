@@ -700,7 +700,7 @@ steal("can/route", "can/test", "steal-qunit", function () {
 				iCanRoute.attr("page","test");
 				iCanRoute.ready();
 				
-				var val = win.can.compute.read({route: iCanRoute},["route"]).value;
+				var val = win.can.compute.read({route: iCanRoute},win.can.compute.read.reads("route")).value;
 				
 				setTimeout(function(){
 					equal(val,iCanRoute,"read correctly");

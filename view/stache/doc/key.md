@@ -138,3 +138,81 @@ And use it like:
       <li>{{@indexNum}} {{name}}</li>
     {{/each}}
 
+## Keys in different expressions
+
+The value returned by a key can change depending on where the key is used.  There
+are 5 main places keys are used:
+
+ - __values__ like: `{{some.key}}`
+ - __helper arguments__ like: `{{helper some.key}}`
+ - __sub-expression arguments__ like: `{{helper(some.key)}}`
+ - [can.view.bindings.can-EVENT (event)] bindings like: `(click)="method(some.key)"`
+ - __component__ bindings like: `some-attr="{some.key}"`
+
+
+
+
+A key like `some.key` might represent a lot of different data structures.
+
+```
+// A non-observable JS object:
+{some: {key: "value"}};
+
+// A non-observable JS object w/ a function at the end
+{some: {key: function(){ return "value"; }}}
+
+// A non-observable JS object with intermeidate functions:
+{some: function(){ return {key: "value"}}}
+
+// A observable can.Map
+{some: new can.Map({key: "value"})}
+
+// A method on an observable can.Map that reads observables
+var Some = can.Map.extend({key: function(){ return this.attr("value")}})
+{some: new Some({value: "value"})}
+```
+
+In general, blah!
+
+<table>
+	<thead>
+		<tr>
+			<th>use</th>
+			<th>example</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>values</td><td><code>{{key}}</code></td>
+		</tr>
+	</tbody>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
+			<th/><th>values</th>
+		</tr>
+		<tr>
+			<th/><th><code>{{key}}</code></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>{key: 1}</code></td><td>1</td>
+		</tr>
+		
+	</tbody>
+</table>
+
+### 
+
+
+|  | computes | functions | properties
+| --- | --- | --- | ---
+| helpers | R | R | (R)
+| components | R() | R() | R
+| methods | R() | R() | R
+

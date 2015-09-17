@@ -61,7 +61,7 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 
 
 
-		asyncTest("can use an import's value", function(){
+		/*asyncTest("can use an import's value", function(){
 			var template = "<can-import from='can/view/import/test/person' #person='{value}' />hello {{person.name}}";
 
 			var iai = getIntermediateAndImports(template);
@@ -73,9 +73,9 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				equal(res.childNodes[2].nodeValue, "world", "Got the person.name from the import");
 				start();
 			});
-		});
+		});*/
 
-		asyncTest("can import a template and use it", function(){
+		/*asyncTest("can import a template and use it", function(){
 			var template = "<can-import from='can/view/import/test/other.stache!' #other='{value}' />{{> other}}";
 
 			can.stache.async(template).then(function(renderer){
@@ -88,9 +88,9 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 					QUnit.start();
 				});
 			});
-		});
+		});*/
 
-		asyncTest("importing a template works with can-tag", function(){
+		/*asyncTest("importing a template works with can-tag", function(){
 			Component.extend({
 				tag: "my-waiter",
 				template: can.stache("{{#isResolved}}" +
@@ -111,9 +111,9 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 					QUnit.start();
 				});
 			});
-		});
+		});*/
 
-		asyncTest("can dynamically import a template and use it", function(){
+		/*asyncTest("can dynamically import a template and use it", function(){
 			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' #other='{value}'/>{{> other}}";
 
 			can.stache.async(template).then(function(renderer){
@@ -127,6 +127,6 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				});
 			});
 
-		});
+		});*/
 
 	});

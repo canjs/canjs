@@ -437,7 +437,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 
 						// Remove `scope.` from the start of the key and read the value from the `viewModel`.
 						key = key.replace(/^(scope|^viewModel)\./,"");
-						value = can.compute.read(options.scope, key.split("."), {isArgument: true}).value;
+						value = can.compute.read(options.scope, can.compute.read.reads(key), {isArgument: true}).value;
 
 						// If `value` is undefined use `can.getObject` to get the value.
 						if(value === undefined) {
