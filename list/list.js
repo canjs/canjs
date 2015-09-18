@@ -770,6 +770,34 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		},
 
 		/**
+		 * @function can.List.prototype.reduce reduce
+		 * @description The reduce() method applies a function against an accumulator and each
+		 * value of the array (from left-to-right) to reduce it to a single value.
+		 * @signature `list.reduce(callback[, initialValue])`
+		 * @param {function(previousValue, currentValue, index, list)} function to execute on each value
+		 * in the array, taking four arguments: The value returned from the previous invocation of the _callback_, or the _initialValue_,
+		 * the current element being processed in the array, the index of the current element, and the list itself.
+		 * @param {Object} [initialValue] Value to use as the first argument to the first call of the callback.
+		 *
+		 * @body
+		 * `reduce` calls a callback for each element in the List.
+		 *
+		 * ```
+		 * var list = new can.List([0, 1, 2, 3, 4]);
+		 * list.reduce(function(p, c, i, l) {
+		 *      return p + c;
+		 * }); // -> 10
+		 *
+		 * list.reduce(function(p, c, i, l) {
+		 *      return p + c
+	     * }, 10); // -> 20
+		 * ```
+		 */
+		reduce: function(cb, initial) {
+			return Array.prototype.reduce.apply(this.serialize(), arguments);
+		},
+
+		/**
 		 * @function can.List.prototype.replace replace
 		 * @description Replace all the elements of a List.
 		 * @signature `list.replace(collection)`
