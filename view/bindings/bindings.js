@@ -196,17 +196,17 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				// We break out early if the first argument isn't available
 				// anywhere.
-
-				//!steal-remove-start
 				if (!scopeData.value) {
+					//!steal-remove-start
 					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + attrInfo.name.get, {
 						element: el,
 						scope: data.scope
 					});
+					//!steal-remove-end
 					return null;
+					
 				}
-				//!steal-remove-end
-
+				
 				var args = [];
 				var $el = can.$(this);
 				var viewModel = can.viewModel($el[0]);
