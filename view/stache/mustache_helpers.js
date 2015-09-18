@@ -167,7 +167,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			});
 			return options.fn(options.scope, newOptions);
 		},
-		'~': function(firstExpr/* , expr... */){
+		'joinBase': function(firstExpr/* , expr... */){
 			var args = [].slice.call(arguments);
 			var options = args.pop();
 

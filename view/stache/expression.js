@@ -7,37 +7,7 @@ steal("can/util",
 	
 	// ## Helpers
 	
-	// Sets .fn and .inverse on a helperOptions object and makes sure
-	// they can reference the current scope and options.
-	var convertToScopes = function(helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer){
-			// overwrite fn and inverse to always convert to scopes
-			if(truthyRenderer) {
-				helperOptions.fn = makeRendererConvertScopes(truthyRenderer, scope, options, nodeList);
-			}
-			if(falseyRenderer) {
-				helperOptions.inverse = makeRendererConvertScopes(falseyRenderer, scope, options, nodeList);
-			}
-		},
-		// Returns a new renderer function that makes sure any data or helpers passed
-		// to it are converted to a can.view.Scope and a can.view.Options.
-		makeRendererConvertScopes = function (renderer, parentScope, parentOptions, nodeList) {
-			var rendererWithScope = function(ctx, opts, parentNodeList){
-				return renderer(ctx || parentScope, opts, parentNodeList);
-			};
-			return can.__notObserve(function (newScope, newOptions, parentNodeList) {
-				// prevent binding on fn.
-				// If a non-scope value is passed, add that to the parent scope.
-				if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
-					newScope = parentScope.add(newScope);
-				}
-				if (newOptions !== undefined && !(newOptions instanceof core.Options)) {
-					newOptions = parentOptions.add(newOptions);
-				}
-				var result = rendererWithScope(newScope, newOptions || parentOptions, parentNodeList|| nodeList );
-				return result;
-			});
-		},
-		getKeyComputeData = function (key, scope, readOptions) {
+	var getKeyComputeData = function (key, scope, readOptions) {
 	
 			// Get a compute (and some helper data) that represents key's value in the current scope
 			var data = scope.computeData(key, readOptions);
@@ -46,6 +16,40 @@ steal("can/util",
 	
 			return data;
 		};
+	
+	var lookupValue = function(key, scope, helperOptions, readOptions){
+		var computeData = getKeyComputeData(key, scope, readOptions);
+		// If there are no dependencies, just return the value.
+		if (!computeData.compute.computeInstance.hasDependencies) {
+			return {value: computeData.initialValue, computeData: computeData};
+		} else {
+			return {value: computeData.compute, computeData: computeData};
+		}
+	};
+	
+	var lookupValueOrHelper = function(key, scope, helperOptions, readOptions){
+		var res = lookupValue(key, scope, helperOptions, readOptions);
+
+		// If it doesn't look like a helper and there is no value, check helpers
+		// anyway. This is for when foo is a helper in `{{foo}}`.
+		if( res.computeData.initialValue === undefined ) {
+			if(key.charAt(0) === "@" && key !== "@index") {
+				key = key.substr(1);
+			}
+			var helper = mustacheHelpers.getHelper(key, helperOptions);
+			res.helper = helper && helper.fn;
+		}
+		return res;
+	};
+	// If not a Literal or an Arg, convert to an arg for caching.
+	var convertToArgExpression = function(expr){
+		if(!(expr instanceof Arg) && !(expr instanceof Literal)) {
+			return new Arg(expr);
+		} else {
+			return expr;
+		}
+		
+	};
 	
 	// ## Literal
 	// For inline static values like `{{"Hello World"}}`
@@ -58,22 +62,25 @@ steal("can/util",
 	
 	// ## Lookup
 	// `new Lookup(String, [Expression])`
-	// Looks up a value in the scope, returns a compute for the value it finds.
-	// If passed an expression, that is used to lookup data
+	// Finds a value in the scope or a helper.
 	var Lookup = function(key, root) {
 		this.key = key;
 		this.rootExpr = root;
 	};
 	Lookup.prototype.value = function(scope, helperOptions){
-		var data = getKeyComputeData(this.key, scope);
-		// If there are no dependencies, just return the value.
-		if (!data.compute.computeInstance.hasDependencies) {
-			return data.initialValue;
-		} else {
-			return data.compute;
-		}
+		var result = lookupValueOrHelper(this.key, scope, helperOptions);
+		return result.helper || result.value;
 	};
 	
+	// ## ScopeLookup
+	// Looks up a value in the scope, returns a compute for the value it finds.
+	// If passed an expression, that is used to lookup data
+	var ScopeLookup = function(key, root) {
+		Lookup.apply(this, arguments);
+	};
+	ScopeLookup.prototype.value = function(scope, helperOptions){
+		return lookupValue(this.key, scope, helperOptions).value;
+	};
 	
 	// @ -> operates in Lookup
 	// ~ -> operates in arguments?
@@ -83,32 +90,26 @@ steal("can/util",
 	var Arg = function(expression, modifiers){
 		this.expr = expression;
 		this.modifiers = modifiers || {};
+		this.isCompute = false;
 	};
 	Arg.prototype.value = function(){
 		if(!this._value) {
 			// protect here?
-			this._value = expression.value();
+			this._value = this.expr.value.apply(this.expr, arguments);
+			this.isCompute = this._value && this._value.isComputed;
 		}
 		
-		if(this.modifiers.compute) {
+		if(!this.isCompute || this.modifiers.compute) {
 			return this._value;
 		} else {
 			return this._value();
 		}
 	};
 	
+	
 	var Hash = function(name, expr){
 		this.name = name;
 		this.expr = expr;
-	};
-	
-	var convertToArgExpression = function(expr){
-		if(!(expr instanceof Arg) || !(expr instanceof Literal)) {
-			return new Arg(expr);
-		} else {
-			return expr;
-		}
-		
 	};
 	
 	// ## Call
@@ -121,32 +122,64 @@ steal("can/util",
 			hashExprs[name] = convertToArgExpression(expr);
 		});
 	};
-	Call.prototype.addArg = function(argExpresion){
-		this.argExprs.push(convertToArgExpression(argExpresion))
+	Call.prototype.args = function(scope, helperOptions){
+		var args = [];
+		for(var i = 0, len = this.argExprs.length; i < len; i++) {
+			var arg = this.argExprs[i];
+			args.push( arg.value.apply(arg, arguments) );
+		}
+		return args;
+	};
+	Call.prototype.hash = function(scope, helperOptions){
+		var hash = {};
+		for(var prop in this.hashExprs) {
+			var val = this.hashExprs[prop];
+			hash[prop] = val.value.apply(val, arguments);
+		}
+		return hash;
 	};
 	Call.prototype.value = function(scope, helperScope){
 		
-		var func = methodExpression.value(scope, helperScope);
+		var method = this.methodExpr.value(scope, helperScope);
+		var self = this;
 		
-		// ~
 		return can.compute(function(){
-			var finalArgs = args.map(function(compute){
-				if("~") {
-					return compute;
-				} else {
-					return compute();
-				}
-			});
+			var func = method;
+			if(func && func.isComputed) {
+				func = func();
+			}
+			if(typeof func === "function") {
+				var args = self.args(scope, helperScope);
+				var hash = self.hash(scope, helperScope);
+				// if fn/inverse is needed, add after this
+				args.push(hash);
+				
+				return func.apply(null, args);
+			}
 			
-			func.apply(null, finalArgs);
 		});
 		
+	};
+	
+	var HelperLookup = function(){
+		Lookup.apply(this, arguments);
+	};
+	HelperLookup.prototype.value = function(scope, helperOptions){
+		var result = lookupValueOrHelper(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope]});
+		return result.helper || result.value;
+	};
+	var HelperScopeLookup = function(){
+		Lookup.apply(this, arguments);
+	};
+	HelperScopeLookup.prototype.value = function(scope, helperOptions){
+		return lookupValue(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope]}).value;
 	};
 	
 	var Helper = function(methodExpression, argExpressions, hashExpressions){
 		this.methodExpr = methodExpression;
 		this.argExprs = argExpressions;
 		this.hashExprs = hashExpressions;
+		this.mode = null;
 	};
 	Helper.prototype.args = function(scope, helperOptions){
 		var args = [];
@@ -168,12 +201,15 @@ steal("can/util",
 	// returns a `helper` property if there is a helper for the key.
 	// returns a `value` property if the value is looked up.
 	Helper.prototype.helperAndValue = function(scope, helperOptions){
-		//{{foo bar}}
 		
+		//{{foo bar}}
 		var looksLikeAHelper = this.argExprs.length || !can.isEmptyObject(this.hashExprs),
 			helper,
 			value,
-			methodKey = this.methodExpr.key.substr(1),
+			// If a literal, this means it should be treated as a key. But helpers work this way for some reason.
+			// TODO: fix this so numbers will also be assumed to be keys.
+			methodKey = this.methodExpr instanceof Literal ? 
+				""+this.methodExpr._value : this.methodExpr.key,
 			initialValue,
 			args;
 			
@@ -236,7 +272,7 @@ steal("can/util",
 			helper: helper && helper.fn
 		};
 	};
-	Helper.prototype.evaluator = function(helper, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly){
+	Helper.prototype.evaluator = function(helper, scope, helperOptions, /*REMOVE*/readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly){
 
 		var helperOptionArg = {
 			fn: function () {},
@@ -247,7 +283,7 @@ steal("can/util",
 			hash = this.hash(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		// Add additional data to be used by helper functions
-		convertToScopes(helperOptionArg, scope, nodeList, truthyRenderer, falseyRenderer);
+		utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
 
 		can.simpleExtend(helperOptionArg, {
 			context: context,
@@ -374,9 +410,15 @@ steal("can/util",
 			this.stack.push(type);
 		},
 		replaceTopAndPush: function(type){
-			var old = this.stack.pop();
-			// get parent and clean
-			var children = ensureChildren(this.top()).children;
+			var children;
+			if(this.top() === this.root) {
+				children = ensureChildren(this.top()).children;
+			} else {
+				var old = this.stack.pop();
+				// get parent and clean
+				children = ensureChildren(this.top()).children;
+			}
+			
 			children.pop();
 			children.push(type);
 			this.stack.push(type);
@@ -408,21 +450,27 @@ steal("can/util",
 			
 			var base = stack.stack[stack.stack.length - 2];
 			// That lookup shouldn't be part of a Helper already or
-			if(base.type !== "Helper" && base)
-			stack.replaceTopAndPush({
-				type: "Helper",
-				method: convertToAtLookup(top)
-			});
+			if(base.type !== "Helper" && base) {
+				stack.replaceTopAndPush({
+					type: "Helper",
+					method: top
+				});
+			}
 		}
 	};
 	
 	var expression = {
 		Literal: Literal,
 		Lookup: Lookup,
+		ScopeLookup: ScopeLookup,
+		
 		Arg: Arg,
 		Hash: Hash,
 		Call: Call,
 		Helper: Helper,
+		HelperLookup: HelperLookup,
+		HelperScopeLookup: HelperScopeLookup,
+		
 		tokenize: function(expression){
 			var tokens = [];
 			(can.trim(expression) + ' ').replace(tokensRegExp, function (whole, arg) {
@@ -432,17 +480,20 @@ steal("can/util",
 		},
 		parse: function(expression){
 			var ast = this.ast(expression);
-			return this.hydrateAst(ast);
+			var expr = this.hydrateAst(ast, "Helper");
+			
+			return expr;
 		},
-		hydrateAst: function(ast){
+		hydrateAst: function(ast, type, scopeOnly){
 			if(ast.type === "Lookup") {
-				return new Lookup(ast.key, ast.root && this.hydrateAst(ast.root) );
+				var name = (type === "Helper" && !ast.root ? "Helper" : "")+(scopeOnly ? "Scope" : "")+"Lookup";
+				return new expression[name](ast.key, ast.root && this.hydrateAst(ast.root, type) );
 			}
 			else if(ast.type === "Literal") {
 				return new Literal(ast.value);
 			}
 			else if(ast.type === "Arg") {
-				return new Arg(this.hydrateAst(ast.children[0]),{compute: true});
+				return new Arg(this.hydrateAst(ast.children[0], type, scopeOnly),{compute: true});
 			} else if(ast.type === "Hash") {
 				throw new Error("");
 			} else if(ast.type === "Call" || ast.type === "Helper") {
@@ -453,12 +504,12 @@ steal("can/util",
 				for(var i = 0 ; i <children.length; i++) {
 					var child = children[i];
 					if(child.type === "Hash") {
-						hashes[child.prop] = this.hydrateAst( child.children[0] );
+						hashes[child.prop] = this.hydrateAst( child.children[0], ast.type, true );
 					} else {
-						args.push( this.hydrateAst(child) );
+						args.push( this.hydrateAst(child, ast.type, true) );
 					}
 				}
-				return new (ast.type === "Call" ? Call : Helper)(this.hydrateAst(ast.method), args, hashes);
+				return new (ast.type === "Call" ? Call : Helper)(this.hydrateAst(ast.method, ast.type), args, hashes);
 			}
 		},
 		ast: function(expression){
@@ -499,7 +550,7 @@ steal("can/util",
 							var top = stack.top();
 							stack.replaceTopAndPush({
 								type: "Helper",
-								method: convertToAtLookup(top)
+								method: top.type === "Root" ? can.last(top.children) : top
 							});
 							
 						}

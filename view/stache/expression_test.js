@@ -24,6 +24,26 @@ steal("./expression.js", "steal-qunit", function(){
 		
 	});
 	
+	test("expression.ast - helper followed by hash", function(){
+		var ast = expression.ast("print_hash prop=own_prop");
+		
+		deepEqual(ast, {
+			type: "Helper",
+			method: {
+				type: "Lookup",
+				key: "print_hash"
+			},
+			children: [
+				{
+					type: "Hash", 
+					prop: "prop",
+					children: [{type: "Lookup", key: "own_prop"}]
+				}
+			]
+		});
+		
+	});
+	
 	test("expression.ast - everything", function(){
 		var ast = expression.ast("helperA helperB(1, valueA, propA=~valueB propC=2).zed() 'def' nested@prop outerPropA=helperC(2,valueB)");
 		
@@ -58,7 +78,7 @@ steal("./expression.js", "steal-qunit", function(){
 			type: "Helper",
 			method: {
 				type: "Lookup",
-				key: "@helperA"
+				key: "helperA"
 			},
 			children: [
 				{
@@ -88,11 +108,11 @@ steal("./expression.js", "steal-qunit", function(){
 			twoExpr = new expression.Literal(2),
 			def = new expression.Literal('def'),
 		
-			valueA = new expression.Lookup("valueA"),
-			valueB = new expression.Lookup("valueB"),
-			nested = new expression.Lookup("nested@prop"),
+			valueA = new expression.ScopeLookup("valueA"),
+			valueB = new expression.ScopeLookup("valueB"),
+			nested = new expression.HelperScopeLookup("nested@prop"),
 			
-			helperA = new expression.Lookup("@helperA"),
+			helperA = new expression.HelperLookup("helperA"),
 			helperB = new expression.Lookup("@helperB"),
 			helperC = new expression.Lookup("@helperC");
 		
@@ -105,7 +125,7 @@ steal("./expression.js", "steal-qunit", function(){
 			}
 		);
 		
-		var callHelperBdotZed = new expression.Lookup(".zed", callHelperB);
+		var callHelperBdotZed = new expression.ScopeLookup(".zed", callHelperB);
 		
 		var callHelperC = new expression.Call(
 			helperC,
@@ -121,7 +141,19 @@ steal("./expression.js", "steal-qunit", function(){
 			}
 		);
 		
-		deepEqual( exprData, callHelperA);
+		deepEqual(callHelperB, exprData.argExprs[0].rootExpr, "call helper b");
+		
+		deepEqual(callHelperC, exprData.hashExprs.outerPropA, "helperC call");
+		
+		deepEqual(callHelperBdotZed, exprData.argExprs[0], "call helper b.zed");
+		
+		var expectedArgs = [callHelperBdotZed, def, nested];
+		can.each(exprData.argExprs, function(arg, i){
+			deepEqual(arg, expectedArgs[i], "helperA arg["+i);
+		});
+		
+		
+		deepEqual( exprData, callHelperA, "full thing");
 	});
 	
 	test("numeric expression.Literal", function(){
@@ -142,7 +174,7 @@ steal("./expression.js", "steal-qunit", function(){
 		});
 		
 		var callFullName = new expression.Helper(
-			new expression.Lookup("@fullName"),
+			new expression.HelperLookup("fullName"),
 			[new expression.Literal('marshall'), new expression.Literal('thompson')],
 			{}
 		);
@@ -163,8 +195,8 @@ steal("./expression.js", "steal-qunit", function(){
 		});
 		
 		var callFullName = new expression.Helper(
-			new expression.Lookup("@fullName"),
-			[new expression.Lookup("first"), new expression.Literal('thompson')],
+			new expression.HelperLookup("fullName"),
+			[new expression.HelperLookup("first"), new expression.Literal('thompson')],
 			{}
 		);
 		
@@ -185,8 +217,8 @@ steal("./expression.js", "steal-qunit", function(){
 				.add({});
 		
 		var callGetSomething = new expression.Helper(
-			new expression.Lookup("@getSomething"),
-			[new expression.Lookup("bar")],
+			new expression.HelperLookup("getSomething"),
+			[new expression.ScopeLookup("bar")],
 			{}
 		);
 		
@@ -221,5 +253,7 @@ steal("./expression.js", "steal-qunit", function(){
 		equal( num2(), 4, "num2 updated correctly");
 		
 	});
+	
+	
 	
 });

@@ -2696,6 +2696,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 		});
 
+		// TODO: duplicate with %
 		test("Rendering indicies of an array with @index", function () {
 			var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 			var list = [0, 1, 2, 3];
@@ -2709,7 +2710,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				equal(innerHTML(lis[i]), (i + ' ' + i), 'rendered index and value are correct');
 			}
 		});
-
+		// TODO: duplicate with %
 		test("Rendering indicies of an array with @index + offset (#1078)", function () {
 			var template = can.stache("<ul>{{#each list}}<li>{{@index 5}} {{.}}</li>{{/each}}</ul>");
 			var list = [0, 1, 2, 3];
@@ -2724,6 +2725,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			}
 		});
 
+		// TODO: duplicate with %
 		test("Passing indices into helpers as values", function () {
 			var template = can.stache("<ul>{{#each list}}<li>{{test @index}} {{.}}</li>{{/each}}</ul>");
 			var list = [0, 1, 2, 3];
@@ -2741,6 +2743,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			}
 		});
 
+		// TODO: duplicate with %
 		test("Rendering live bound indicies with #each, @index and a simple can.List", function () {
 			var list = new can.List(['a', 'b', 'c']);
 			var template = can.stache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
@@ -4175,10 +4178,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			deepEqual(getTextFromFrag(frag), "Not 10 ducks");
 		});
 
-		test("~ helper joins to the baseURL", function(){
+		test("joinBase helper joins to the baseURL", function(){
 			can.baseURL = "http://foocdn.com/bitovi";
 
-			var template = can.stache("{{~ 'hello/' name}}");
+			var template = can.stache("{{joinBase 'hello/' name}}");
 			var map = new can.Map({ name: "world" });
 
 			var frag = template(map);
@@ -4187,141 +4190,138 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			can.baseUrl = undefined;
 		});
 
-		test("~ helper can be relative to template module", function(){
+		test("joinBase helper can be relative to template module", function(){
 			var baseUrl = "http://foocdn.com/bitovi";
 
-			var template = can.stache("{{~ '../hello/' name}}");
+			var template = can.stache("{{joinBase '../hello/' name}}");
 			var map = new can.Map({ name: "world" });
 
 			var frag = template(map, { module: { uri: baseUrl } });
 
 			equal(frag.firstChild.nodeValue, "http://foocdn.com/hello/world", "relative lookup works");
 		});
+			
+		test('Custom attribute callbacks are called when in a conditional within a live section', 8, function () {
+			can.view.attr('test-attr', function(el, attrData) {
+				ok(true, "test-attr called");
+				equal(attrData.attributeName, 'test-attr', "attributeName set correctly");
+				ok(attrData.scope, "scope isn't undefined");
+				ok(attrData.options, "options isn't undefined");
+			});
+	
+			var state = new can.Map({
+				showAttr: true
+			});
+	
+			var template = can.stache('<button id="find-me" {{#if showAttr}}test-attr{{/if}}></button>');
+			template(state);
+	
+			state.attr('showAttr', false);
+			state.attr('showAttr', true);
+		});
+	
+		test("inner expressions (#1769)", function(){
+			
+			var template = can.stache("{{helperA helperB(1,valueA,propA=valueB propC=2) 'def' outerPropA=helperC(2, ~valueB)}}");
+	
+			var frag = template(new can.Map({
+				valueA: "A",
+				valueB: "B"
+			}),{
+				helperA: function(arg1, arg2, options){
+					equal(arg1(), "helperB value", "call expression argument to helperA");
+					equal(arg2, "def", "scope argument");
+					equal(options.hash.outerPropA(), "helperC value", "scope hash");
+					return "helperA value";
+				},
+				helperB: function(arg1, arg2, options){
+					equal(arg1, 1, "static argument");
+					equal(arg2, "A", "scope argument");
+					equal(options.propA, "B", "scope hash");
+					equal(options.propC, 2, "static hash");
+					return "helperB value";
+				},
+				helperC: function(arg1, arg2){
+					equal(arg1, 2, "helperC static argument");
+					equal(arg2(), "B", "helperC scope argument");
+					return "helperC value";
+				}
+			});
+	
+			equal(frag.firstChild.nodeValue, "helperA value");
+		});
+	
+		test("inner expressions with computes", function(){
+			var template = can.stache("{{helperA helperB(1,valueA,propA=valueB propC=2) 'def' outerPropA=helperC(2,valueB)}}");
+	
+	
+			var valueB = can.compute("B");
+			var changes = 0;
+	
+			var frag = template({
+				valueA: "A",
+				valueB: valueB
+			},{
+				helperA: function(arg1, arg2, options){
+	
+					if(changes === 0) {
+						equal(arg1(), "helperB=B", "static argument");
+						equal(options.hash.outerPropA(), "helperC=B", "scope hash 0");
+					} else {
+						equal(arg1(), "helperB=X", "static argument");
+						equal(options.hash.outerPropA(), "helperC=X", "scope hash 1");
+					}
+	
+					equal(arg2, "def", "scope argument");
+	
+					return arg1()+"-"+options.hash.outerPropA();
+				},
+				helperB: function(arg1, arg2, options){
+					equal(arg1, 1, "static argument");
+					equal(arg2, "A", "scope argument");
+					if(changes === 0) {
+						equal(options.propA, "B", "scope hash");
+					} else {
+						equal(options.propA, "X", "scope hash");
+					}
+	
+					equal(options.propC, 2, "static hash");
+					return "helperB="+options.propA;
+				},
+				helperC: function(arg1, arg2){
+					equal(arg1, 2, "helperC static argument");
+					if(changes === 0) {
+						equal(arg2, "B", "helperC scope argument");
+					} else {
+						equal(arg2, "X", "helperC scope argument");
+					}
+					return "helperC="+arg2;
+				}
+			});
+	
+			equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
+	
+			changes++;
+			can.batch.start();
+			valueB("X");
+			can.batch.stop();
+	
+			equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
+		});
+	
+		test("parent scope functions not called with arguments (#1833)", function(){
+			var data = {
+				child: {value: 1},
+				method: function(arg){
+					equal(arg, 1, "got the right arg");
+				}
+			};
+	
+			var template = can.stache("{{#child}}{{method value}}{{/child}}");
+			template(data);
+		});
 
 	}
 
-
-	test('Custom attribute callbacks are called when in a conditional within a live section', 8, function () {
-		can.view.attr('test-attr', function(el, attrData) {
-			ok(true, "test-attr called");
-			equal(attrData.attributeName, 'test-attr', "attributeName set correctly");
-			ok(attrData.scope, "scope isn't undefined");
-			ok(attrData.options, "options isn't undefined");
-		});
-
-		var state = new can.Map({
-			showAttr: true
-		});
-
-		var template = can.stache('<button id="find-me" {{#if showAttr}}test-attr{{/if}}></button>');
-		template(state);
-
-		state.attr('showAttr', false);
-		state.attr('showAttr', true);
-	});
-
-	test("inner expressions (#1769)", function(){
-
-
-
-		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
-
-		var frag = template({
-			valueA: "A",
-			valueB: "B"
-		},{
-			helperA: function(arg1, arg2, options){
-				equal(arg1, "helperB value", "static argument");
-				equal(arg2, "def", "scope argument");
-				equal(options.hash.outerPropA, "helperC value", "scope hash");
-				return "helperA value";
-			},
-			helperB: function(arg1, arg2, options){
-				equal(arg1, 1, "static argument");
-				equal(arg2, "A", "scope argument");
-				equal(options.hash.propA, "B", "scope hash");
-				equal(options.hash.propC, 2, "static hash");
-				return "helperB value";
-			},
-			helperC: function(arg1, arg2){
-				equal(arg1, 2, "helperC static argument");
-				equal(arg2, "B", "helperC scope argument");
-				return "helperC value";
-			}
-		});
-
-		equal(frag.firstChild.nodeValue, "helperA value");
-	});
-
-	test("inner expressions with computes", function(){
-		var template = can.stache("{{helperA (helperB 1 valueA propA=valueB propC=2) 'def' outerPropA=(helperC 2 valueB)}}");
-
-
-		var valueB = can.compute("B");
-		var changes = 0;
-
-		var frag = template({
-			valueA: "A",
-			valueB: valueB
-		},{
-			helperA: function(arg1, arg2, options){
-
-				if(changes === 0) {
-					equal(arg1(), "helperB=B", "static argument");
-					equal(options.hash.outerPropA(), "helperC=B", "scope hash 0");
-				} else {
-					equal(arg1(), "helperB=X", "static argument");
-					equal(options.hash.outerPropA(), "helperC=X", "scope hash 1");
-				}
-
-				equal(arg2, "def", "scope argument");
-
-				return arg1()+"-"+options.hash.outerPropA();
-			},
-			helperB: function(arg1, arg2, options){
-				equal(arg1, 1, "static argument");
-				equal(arg2, "A", "scope argument");
-				if(changes === 0) {
-					equal(options.hash.propA(), "B", "scope hash");
-				} else {
-					equal(options.hash.propA(), "X", "scope hash");
-				}
-
-				equal(options.hash.propC, 2, "static hash");
-				return "helperB="+options.hash.propA();
-			},
-			helperC: function(arg1, arg2){
-				equal(arg1, 2, "helperC static argument");
-				if(changes === 0) {
-					equal(arg2(), "B", "helperC scope argument");
-				} else {
-					equal(arg2(), "X", "helperC scope argument");
-				}
-				return "helperC="+arg2();
-			}
-		});
-
-		equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
-
-		changes++;
-		can.batch.start();
-		valueB("X");
-		can.batch.stop();
-
-		equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
-	});
-
-	test("parent scope functions not called with arguments (#1833)", function(){
-		var data = {
-			child: {value: 1},
-			method: function(arg){
-				equal(arg, 1, "got the right arg");
-			}
-		};
-
-		var template = can.stache("{{#child}}{{method value}}{{/child}}");
-		template(data);
-	});
-
-
+	// NOTHING SHOULD GO HERE
 });
