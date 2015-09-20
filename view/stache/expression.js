@@ -336,7 +336,7 @@ steal("can/util",
 	// AT @NAME
 	// 
 	var keyRegExp = /[\w\.\\\-_@\/\&%]+/,
-		tokensRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/\&%]+|[\(\)]|,|\~)/g,
+		tokensRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/*%]+|[\(\)]|,|\~)/g,
 		literalRegExp = /^('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)$/;
 	
 	var isTokenKey = function(token){
@@ -478,22 +478,63 @@ steal("can/util",
 			});
 			return tokens;
 		},
-		parse: function(expression){
-			var ast = this.ast(expression);
-			var expr = this.hydrateAst(ast, "Helper");
+		lookupRules: {
+			"default": function(ast, methodType, isArg){
+				var name = (methodType === "Helper" && !ast.root ? "Helper" : "")+(isArg ? "Scope" : "")+"Lookup";
+				return expression[name];
+			},
+			"method": function(ast, methodType, isArg){
+				return ScopeLookup;
+			}
+		},
+		methodRules: {
+			"default": function(ast){
+				
+				return ast.type === "Call" ? Call : Helper;
+			},
+			"call": function(ast){
+				return Call;
+			}
+		},
+		// ## expression.parse
+		// 
+		// - {String} expressionString - A stache expression like "abc foo()"
+		// - {Object} options
+		//   - baseMethodType - Treat this like a Helper or Call.  Default to "Helper"
+		//   - lookupRule - "default" or "method"
+		//   - methodRule - "default" or "call"
+		parse: function(expressionString, options){
+			options =  options || {};
+			var ast = this.ast(expressionString);
+			
+			if(!options.lookupRule) {
+				options.lookupRule = "default";
+			}
+			if(typeof options.lookupRule === "string") {
+				options.lookupRule = expression.lookupRules[options.lookupRule];
+			}
+			if(!options.methodRule) {
+				options.methodRule = "default";
+			}
+			if(typeof options.methodRule === "string") {
+				options.methodRule = expression.methodRules[options.methodRule];
+			}
+			
+			var expr = this.hydrateAst(ast, options, options.baseMethodType || "Helper");
 			
 			return expr;
 		},
-		hydrateAst: function(ast, type, scopeOnly){
+		hydrateAst: function(ast, options, methodType, isArg){
 			if(ast.type === "Lookup") {
-				var name = (type === "Helper" && !ast.root ? "Helper" : "")+(scopeOnly ? "Scope" : "")+"Lookup";
-				return new expression[name](ast.key, ast.root && this.hydrateAst(ast.root, type) );
+				var name = (methodType === "Helper" && !ast.root ? "Helper" : "")+(isArg ? "Scope" : "")+"Lookup";
+				
+				return new (options.lookupRule(ast, methodType, isArg))(ast.key, ast.root && this.hydrateAst(ast.root, options, methodType) );
 			}
 			else if(ast.type === "Literal") {
 				return new Literal(ast.value);
 			}
 			else if(ast.type === "Arg") {
-				return new Arg(this.hydrateAst(ast.children[0], type, scopeOnly),{compute: true});
+				return new Arg(this.hydrateAst(ast.children[0], options, methodType, isArg),{compute: true});
 			} else if(ast.type === "Hash") {
 				throw new Error("");
 			} else if(ast.type === "Call" || ast.type === "Helper") {
@@ -504,12 +545,13 @@ steal("can/util",
 				for(var i = 0 ; i <children.length; i++) {
 					var child = children[i];
 					if(child.type === "Hash") {
-						hashes[child.prop] = this.hydrateAst( child.children[0], ast.type, true );
+						hashes[child.prop] = this.hydrateAst( child.children[0], options, ast.type, true );
 					} else {
-						args.push( this.hydrateAst(child, ast.type, true) );
+						args.push( this.hydrateAst(child, options, ast.type, true) );
 					}
 				}
-				return new (ast.type === "Call" ? Call : Helper)(this.hydrateAst(ast.method, ast.type), args, hashes);
+				
+				return new (options.methodRule(ast))(this.hydrateAst(ast.method, options, ast.type), args, hashes);
 			}
 		},
 		ast: function(expression){

@@ -1,7 +1,7 @@
 steal("can/util",
-	"can/view/stache/mustache_core.js",
+	"can/view/stache/expression.js",
 	"can/view/callbacks",
-	"can/view/scope", function (can, mustacheCore) {
+	"can/view/scope", function (can, expression) {
 
 
 	var removeCurly = function(value){
@@ -16,11 +16,10 @@ steal("can/util",
 
 		// foo='bar' zed=5 abc=myValue
 		// Note: 'tmp ' is added because expressionData "Breaks up the name and arguments of a mustache expression.", but we don't use name:
-		var attrInfo = mustacheCore.expressionData('tmp ' + removeCurly(el.getAttribute("can-href")));
+		var attrInfo = expression.parse('tmp(' + removeCurly(el.getAttribute("can-href"))+")", {baseMethodType: "Call"});
 		// -> {hash: {foo: 'bar', zed: 5, abc: {get: 'myValue'}}}
-
 		var routeHref = can.compute(function(){
-			return can.route.url(attrInfo.hash(attrData.scope, null, {}));
+			return can.route.url(attrInfo.hash(attrData.scope, null));
 		});
 
 

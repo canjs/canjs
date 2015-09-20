@@ -10,7 +10,7 @@ steal("./expression.js", "steal-qunit", function(){
 		
 		deepEqual(res, literals.split(" "));
 		
-		var keys = "key foo.bar foo@bar %foo &foo foo/bar";
+		var keys = "key foo.bar foo@bar %foo *foo foo/bar";
 		res = expression.tokenize(keys);
 		deepEqual(res, keys.split(" "));
 		

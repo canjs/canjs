@@ -107,7 +107,7 @@ steal(
 						.compute;
 				},
 				getRefs: function(){
-					return this.getContext(function(scope){
+					return this.getScope(function(scope){
 						return scope._context  instanceof Scope.Refs;
 					});
 				},
@@ -117,10 +117,14 @@ steal(
 					});
 				},
 				getContext: function(tester){
+					var res = this.getScope(tester);
+					return res && res._context;
+				},
+				getScope: function(tester){
 					var scope = this;
 					while (scope) {
 						if(tester(scope)) {
-							return scope._context;
+							return scope;
 						}
 						scope = scope._parent;
 					}
@@ -228,7 +232,7 @@ steal(
 					// The current context (a scope is just data and a parent scope).
 						context,
 					// The current scope.
-						scope = this,
+						scope = attr.charAt(0) === "*" ? this.getRefs() : this,
 
 					// If no value can be found, this is a list of of every observed
 					// object and property name to observe.

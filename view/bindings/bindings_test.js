@@ -5,6 +5,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		}
 	});
 
+	var foodTypes = new can.List([{
+		title: "Fruits",
+		content: "oranges, apples"
+	}, {
+		title: "Breads",
+		content: "pasta, cereal"
+	}, {
+		title: "Sweets",
+		content: "ice cream, candy"
+	}]);
+
 	if(typeof document.getElementsByClassName === 'function') {
 		test("can-event handlers", function () {
 			//expect(12);
@@ -15,16 +26,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			"{{/each}}" +
 			"</div>");
 
-			var foodTypes = new can.List([{
-				title: "Fruits",
-				content: "oranges, apples"
-			}, {
-				title: "Breads",
-				content: "pasta, cereal"
-			}, {
-				title: "Sweets",
-				content: "ice cream, candy"
-			}]);
+			
 
 			function doSomething(foodType, el, ev) {
 				ok(true, "doSomething called");
@@ -43,19 +45,23 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			var p0 = ta.getElementsByTagName("p")[0];
 			can.trigger(p0, "click");
 
-
+		});
+		
+		test("can-event special keys", function(){
 			var scope = new can.Map({
 				test: "testval"
 			});
+			var ta = document.getElementById("qunit-fixture");
 			can.Component.extend({
 				tag: "can-event-args-tester",
 				scope: scope
 			});
-			template = can.view.mustache("<div>" +
+			var template = can.view.mustache("<div>" +
 			"{{#each foodTypes}}" +
 			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
 			"{{/each}}" +
 			"</div>");
+			
 			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
 				ok(true, "withArgs called");
 				equal(el1[0].nodeName.toLowerCase(), "can-event-args-tester", "@element is the event's DOM element");
@@ -1095,89 +1101,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});*/
 
-	test('reference values (#1700)', function(){
-		var data = new can.Map({person: {name: {}}});
-		can.Component.extend({
-			tag: 'reference-export',
-			template: can.stache('<span>{{referenceExport.name}}</span>'),
-			viewModel: {}
-		});
-
-		var template = can.stache('{{#person}}{{#name}}'+
-			"<reference-export #reference-export/>"+
-			"{{/name}}{{/person}}<span>{{referenceExport.name}}</span>");
-		var frag = template(data);
-
-		var refExport = can.viewModel(frag.firstChild);
-		refExport.attr("name","done");
-
-		equal( frag.lastChild.firstChild.nodeValue, "done");
-		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
-	});
 	
-	/*test('two-way reference values [(#ref)]="foo"', function(){
-		var data = new can.Map({person: {name: {}}});
-		can.Component.extend({
-			tag: 'reference-export',
-			viewModel: {}
-		});
-		can.Component.extend({
-			tag: 'ref-import'
-		});
-
-		var template = can.stache("<reference-export [(name)]='#refName'/>"+
-			"<ref-import [(name)]='#refName'/> {{helperToGetScope}}");
-		
-		var scope;
-		var frag = template(data,{
-			helperToGetScope: function(options){
-				scope = options.scope;
-			}
-		});
-
-		var refExport = can.viewModel(frag.firstChild);
-		var refImport = can.viewModel(frag.lastChild);
-		refExport.attr("name","v1");
-
-		equal(refImport.attr("name"),"v1", "updated ref-import");
-		
-		refImport.attr("name","v2");
-		
-		equal(refExport.attr("name"),"v2", "updated ref-export");
-		
-		equal( scope.getRefs().attr("refName"), "v2", "actually put in refs scope");
-		
-	});
-
-	test('reference values with <content> tag', function(){
-		can.Component.extend({
-			tag: "other-export",
-			viewModel: {
-				name: "OTHER-EXPORT"
-			}
-		});
-
-		can.Component.extend({
-			tag: "ref-export",
-			template: can.stache('<other-export #other-export="{{name}}"/><content>{{otherExport}}</content>')
-		});
-
-		// this should have otherExport name in the page
-		var t1 = can.stache("<ref-export></ref-export>");
-
-		// this should not have anything in 'one', but something in 'two'
-		var t2 = can.stache("<form><other-export #other/><ref-export><b>{{otherExport.name}}</b><label>{{other.name}}</label></ref-export></form>");
-
-		var f1 = t1();
-		equal(f1.firstChild.lastChild.nodeValue, "OTHER-EXPORT", "content");
-
-		var f2 = t2();
-		var one = f2.firstChild.getElementsByTagName('b')[0];
-		var two = f2.firstChild.getElementsByTagName('label')[0];
-
-		equal(one.firstChild.nodeValue, "", "external content, internal export");
-		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
-	});*/
 
 	/*test("^parent within another parent that does not leak scope", function(){
 		can.Component.extend({
@@ -1350,13 +1274,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.trigger( frag.firstChild, "click" );
 	});
 	
-	test("[(view-model-prop)]='scopeProp' (#1700)", function(){
+	test("two way - viewModel (#1700)", function(){
 		
 		can.Component.extend({
 			tag: "view-model-able"
 		});
 		
-		var template = can.stache("<div [(view-model-prop)]='scopeProp'/>");
+		var template = can.stache("<div {view-model-prop}='scopeProp'/>");
 		
 		var attrSetCalled = 0;
 		
@@ -1404,9 +1328,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	
 	// new two-way binding
 	
-	test("[($value)]='age' input text (#1700)", function () {
+	test("two-way - DOM - input text (#1700)", function () {
 
-		var template = can.view.stache("<input [($value)]='age'/>");
+		var template = can.view.stache("<input {$value}='age'/>");
 
 		var map = new can.Map();
 
@@ -1434,11 +1358,11 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});
 	
-	test('[($checked)] with truthy and falsy values binds to checkbox (#1700)', function() {
+	test('two-way - DOM - {$checked} with truthy and falsy values binds to checkbox (#1700)', function() {
 		var data = new can.Map({
 				completed: 1
 			}),
-			frag = can.view.stache('<input type="checkbox" [($checked)]="completed"/>')(data);
+			frag = can.view.stache('<input type="checkbox" {$checked}="completed"/>')(data);
 			
 		can.append(can.$("#qunit-fixture"), frag);
 
@@ -1447,5 +1371,145 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		data.attr('completed', 0);
 		equal(input.checked, false, 'checkbox value bound (via attr check)');
 	});
+	
+	test('two-way - reference - {*ref}="foo" (#1700)', function(){
+		var data = new can.Map({person: {name: {}}});
+		can.Component.extend({
+			tag: 'reference-export',
+			viewModel: {tag: 'reference-export'}
+		});
+		can.Component.extend({
+			tag: 'ref-import',
+			viewModel: {tag: 'ref-import'}
+		});
+
+		var template = can.stache("<reference-export {name}='*refName'/>"+
+			"<ref-import {name}='*refName'/> {{helperToGetScope}}");
+		
+		var scope;
+		var frag = template(data,{
+			helperToGetScope: function(options){
+				scope = options.scope;
+			}
+		});
+		
+		var refExport = can.viewModel(frag.firstChild);
+		var refImport = can.viewModel(frag.firstChild.nextSibling);
+		
+		refExport.attr("name","v1");
+		
+		equal( scope.getRefs()._context.attr("*refName"), "v1", "reference scope updated");
+
+		equal(refImport.attr("name"),"v1", "updated ref-import");
+		
+		refImport.attr("name","v2");
+		
+		equal(refExport.attr("name"),"v2", "updated ref-export");
+		
+		equal( scope.getRefs()._context.attr("*refName"), "v2", "actually put in refs scope");
+		
+	});
+	
+	test('two-way - reference - with <content> tag', function(){
+		can.Component.extend({
+			tag: "other-export",
+			viewModel: {
+				name: "OTHER-EXPORT"
+			}
+		});
+
+		can.Component.extend({
+			tag: "ref-export",
+			template: can.stache('<other-export {name}="*otherExport"/><content>{{*otherExport}}</content>')
+		});
+
+		// this should have otherExport name in the page
+		var t1 = can.stache("<ref-export></ref-export>");
+
+		// this should not have anything in 'one', but something in 'two'
+		var t2 = can.stache("<form><other-export *other/><ref-export><b>{{*otherExport.name}}</b><label>{{*other.name}}</label></ref-export></form>");
+
+		var f1 = t1();
+		equal(f1.firstChild.lastChild.nodeValue, "OTHER-EXPORT", "content");
+
+		var f2 = t2();
+		var one = f2.firstChild.getElementsByTagName('b')[0];
+		var two = f2.firstChild.getElementsByTagName('label')[0];
+
+		equal(one.firstChild.nodeValue, "", "external content, internal export");
+		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
+	});
+	
+	test('two-way - reference shorthand (#1700)', function(){
+		var data = new can.Map({person: {name: {}}});
+		can.Component.extend({
+			tag: 'reference-export',
+			template: can.stache('<span>{{*referenceExport.name}}</span>'),
+			viewModel: {}
+		});
+
+		var template = can.stache('{{#person}}{{#name}}'+
+			"<reference-export *reference-export/>"+
+			"{{/name}}{{/person}}<span>{{*referenceExport.name}}</span>");
+		var frag = template(data);
+
+		var refExport = can.viewModel(frag.firstChild);
+		refExport.attr("name","done");
+
+		equal( frag.lastChild.firstChild.nodeValue, "done");
+		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
+	});
+	
+	test('one-way - parent to child - viewModel', function(){
+		
+		
+		can.Component.extend({
+			tag: "view-model-able"
+		});
+		
+		var template = can.stache("<div view-model-prop{='scopeProp'/>");
+		
+
+		var map = new can.Map({scopeProp: "Venus"});
+		
+		var frag = template(map);
+		var viewModel = can.viewModel(frag.firstChild);
+		
+		equal( viewModel.attr("viewModelProp"), "Venus", "initial value set" );
+		
+		viewModel.attr("viewModelProp","Earth");
+		equal(map.attr("scopeProp"), "Venus", "no binding from child to parent");
+		
+		map.attr("scopeProp","Mars");
+		equal( viewModel.attr("viewModelProp"), "Mars", "binding from parent to child" );
+	});
+	
+	test('one-way - child to parent - viewModel', function(){
+		
+		can.Component.extend({
+			tag: "view-model-able",
+			viewModel: {
+				viewModelProp: "Mercury"
+			}
+		});
+		
+		var template = can.stache("<view-model-able view-model-prop}='scopeProp'/>");
+		
+		var map = new can.Map({scopeProp: "Venus"});
+		
+		var frag = template(map);
+		var viewModel = can.viewModel(frag.firstChild);
+		
+		equal( viewModel.attr("viewModelProp"), "Mercury", "initial value kept" );
+		equal( map.attr("scopeProp"), "Mercury", "initial value set on parent" );
+		
+		viewModel.attr("viewModelProp","Earth");
+		equal(map.attr("scopeProp"), "Earth", "binding from child to parent");
+		
+		map.attr("scopeProp","Mars");
+		equal( viewModel.attr("viewModelProp"), "Earth", "no binding from parent to child" );
+	});
+
+	
 	
 });

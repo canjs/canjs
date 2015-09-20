@@ -3,7 +3,7 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
 // for in template event bindings. These are usable in any mustache template, but mainly and documented
 // for use within can.Component.
-steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", function (can, mustacheCore) {
+steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", function (can, expression) {
 	/**
 	 * @function isContentEditable
 	 * @hide
@@ -189,14 +189,25 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 		var handler = function (ev) {
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
-				// mustacheCore.expressionData will read the attribute
+				
+				var $el = can.$(this),
+					viewModel = can.viewModel($el[0]);
+				
+				// expression.parse will read the attribute
 				// value and parse it identically to how mustache helpers
 				// get parsed.
-				var attrInfo = mustacheCore.expressionData(removeBrackets(attrVal));
-
+				var expr = expression.parse(removeBrackets(attrVal),{lookupRule: "method", methodRule: "call"});
+				
+				if(!(expr instanceof expression.Call) && !(expr instanceof expression.Helper)) {
+					var defaultArgs = can.map( [data.scope._context, $el].concat(can.makeArray(arguments) ), function(data){
+						return new expression.Literal(data);
+					});
+					expr = new expression.Call(expr, defaultArgs, {} );
+				}
+				
 				// We grab the first item and treat it as a method that
 				// we'll call.
-				var scopeData = data.scope.read(attrInfo.name.key, {
+				var scopeData = data.scope.read(expr.methodExpr.key, {
 					isArgument: true
 				});
 
@@ -213,8 +224,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				//!steal-remove-end
 
-				var $el = can.$(this);
-				var viewModel = can.viewModel($el[0]);
+				
 				
 				// make a scope with these things just under 
 				
@@ -236,21 +246,13 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				});
 				
 				
-				var args = attrInfo.args(localScope, null, {}),
-					hash = attrInfo.hash(localScope, null, {});
+				var args = expr.args(localScope, null),
+					hash = expr.hash(localScope, null);
 					
 				if(!can.isEmptyObject(hash)) {
 					args.push(hash);
 				}
 		
-				
-				// If no arguments are provided, the method will simply
-				// receive the legacy arguments.
-				if (!args.length) {
-					// The arguments array includes extra args passed in to
-					// the event.
-					args = [data.scope._context, $el].concat(can.makeArray(arguments));
-				}
 				return scopeData.value.apply(scopeData.parent, args);
 			};
 		
@@ -483,41 +485,6 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
-	// ^abc='{this}'
-	// ^def='{blah}'
-	/*can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
-			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
-			twoWayBind = true;
-
-		if(prop.charAt(0) === "{") {
-			twoWayBind = false;
-			prop = removeBrackets( prop );
-		}
-
-		var childViewModel = can.viewModel(el),
-			childScope = new can.view.Scope(childViewModel),
-			computeData = childScope.computeData(prop, {
-				args: [],
-
-			}),
-			childCompute = computeData.compute,
-			parentViewModel = attrData.scope.getViewModel();
-
-		var handler = function (ev, newVal) {
-			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-			parentViewModel.attr(name, newVal);
-		};
-		childCompute.bind("change", handler);
-
-		parentViewModel.attr( name, childCompute() );
-
-		can.one.call(el, 'removed', function() {
-			childCompute.unbind("change", handler);
-		});
-
-	});*/
-
 	var setElement = function(el, prop, value) {
 		if(el.nodeName.toLowerCase() === "input" && el.type === "checkbox") {
 			var trueValue = true;
@@ -525,7 +492,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			// the checked property based on their equality.
 			el.checked = (value == trueValue);
 		} else {
-			can.attr.set(el, prop, value == null ? "" : value)
+			can.attr.set(el, prop, value == null ? "" : value);
 		}
 	};
 
@@ -545,75 +512,140 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 	};
-
-	can.view.attr(/\[\(?[\$#]?[\w\.\-_]+\)?\]/, function(el, attrData){
+	
+	
+	var getScopeCompute = function(el, scope, scopeProp, options){
+		var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
+		return parentExpression.value(scope, new can.view.Scope());
+	};
+	
+	var getElementCompute = function(el, attributeName, options){
 		
-		var scopeProp = el.getAttribute(attrData.attributeName) || ".",
-			attrName = can.camelize( attrData.attributeName.substring(2, attrData.attributeName.length - 2) ),
+		var attrName = can.camelize( attributeName.replace(/^\{/,"").replace(/[\}\{]$/,"") ),
 			firstChar = attrName.charAt(0),
-			isDOM = firstChar === "$",
-			isRef = firstChar === "#";
-		
-		// Get what we are binding to from the scope
-		
-		var parentExpression = mustacheCore.expressionData(scopeProp);
-		var parentCompute = parentExpression.value(attrData.scope, new can.view.Scope(), {});
-		
-		// Get what we are binding to from the child
-		var childCompute;
+			isDOM = firstChar === "$";
+			
 		if(isDOM) {
 			childCompute = elementCompute(el, attrName.substr(1), "change");
 		} else {
-			var childExpression = mustacheCore.expressionData(  attrName );
+			var childExpression = expression.parse(attrName,{baseMethodType: "Call"});
 			var childContext = can.viewModel(el);
 			var childScope = new can.view.Scope(childContext);
 			childCompute = childExpression.value(childScope, new can.view.Scope(), {});
 		}
-		
-		// tracks which viewModel property is currently updating
-		var childUpdates = {};
+		return childCompute;
+	};
+	
+	var bindParentToChild = function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
 		
 		// setup listening on parent and forwarding to viewModel
 		var updateChild = function(ev, newValue){
-			
 			// Save the viewModel property name so it is not updated multiple times.
-			childUpdates[attrName] = (childUpdates[attrName] || 0 )+1;
+			bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
 
-			childCompute(newValue);
+			childUpdate(newValue);
 			
 			// only after the batch has finished, reduce the update counter
 			can.batch.afterPreviousEvents(function(){
-				--childUpdates[attrName];
+				--bindingsSemaphore[attrName];
 			});
 		};
 		
-		
 		parentCompute.bind("change", updateChild);
 		
-		// setup event binding on viewModel and forward to parent.
+
+		if(!parentCompute.computeInstance.hasDependencies) {
+			parentCompute.unbind("change", handler);
+		} else {
+			can.one.call(el, 'removed', function() {
+				parentCompute.unbind("change", updateChild);
+			});
+		}
+		
+		return updateChild;
+	};
+	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName){
 		var updateScope = function(ev, newVal){
-			if (!childUpdates[attrName]) {
-				parentCompute(newVal);
+			
+			if (!bindingsSemaphore[attrName]) {
+				parentUpdate(newVal);
 			}
 		};
+		
 		childCompute.bind("change", updateScope);
 		
-		
 		can.one.call(el, 'removed', function() {
-			parentCompute.unbind("change", updateChild);
 			childCompute.unbind("change", updateScope);
 		});
+		return updateScope;
+	};
+	
+	// parentToChild, childToParent, initializeValues
+	var bindings = function(el, attrData, options){
+		var attrName = attrData.attributeName;
+		// Get what we are binding to from the scope
+		var parentCompute = getScopeCompute(el, attrData.scope, el.getAttribute(attrName) || ".", options);
 		
-		// should it set?  What if both defined?
-		updateChild({}, parentCompute());
+		// Get what we are binding to from the child
+		var childCompute = getElementCompute(el, attrName, options);
 		
+		// tracks which viewModel property is currently updating
+		var bindingsSemaphore = {};
+		
+		if(options.parentToChild){
+			// setup listening on parent and forwarding to viewModel
+			var updateChild = bindParentToChild(el, parentCompute, childCompute, bindingsSemaphore, attrName);
+		}
+		if(options.childToParent){
+			// setup event binding on viewModel and forward to parent.
+			var updateScope = bindChildToParent(el, parentCompute, childCompute, bindingsSemaphore, attrName);
+		}
+		
+		if(options.initializeValues) {
+			if(options.parentToChild && !options.childToParent) {
+				updateChild({}, parentCompute());
+			}
+			else if(!options.parentToChild && options.childToParent) {
+				updateScope({}, childCompute());
+			}
+			// Two way
+			// Update child or parent depending on who has a value.
+			// If both have a value, update the child.
+			else if( childCompute() === undefined) {
+				updateChild({}, parentCompute());
+			} else if(parentCompute() === undefined) {
+				updateScope({}, childCompute());
+			} else {
+				updateChild({}, parentCompute());
+			}
+		}
+		
+		return {
+			parentCompute: parentCompute,
+			childCompute: childCompute
+		};
+	};
+	
+	// ## One way - parent to child
+	can.view.attr(/[\$\*]?[\w\.\-_]+\{/, function(el, attrData){
+		bindings(el, attrData, {parentToChild: true, initializeValues: true});
+	});
+	
+	// ## One way - child to parent
+	can.view.attr(/^[\$\*]?[\w\.\-_]+\}$/, function(el, attrData){
+		bindings(el, attrData, {childToParent: true, initializeValues: true});
+	});
+	
+	// ## Two way binding
+	can.view.attr(/\{[\$\*]?[\w\.\-_]+\}/, function(el, attrData){
+		bindings(el, attrData, {childToParent: true, parentToChild: true, initializeValues: true});
 	});
 	
 	
 	// #ref-export shorthand
-	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
+	can.view.attr(/\*[\w\.\-_]+/, function(el, attrData) {
 		if(el.getAttribute(attrData.attributeName)) {
-			console.warn("#reference attributes can only export the view model.");
+			console.warn("&reference attributes can only export the view model.");
 		}
 		
 		
@@ -622,7 +654,14 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 		var viewModel = can.viewModel(el);
 		var refs = attrData.scope.getRefs();
-		refs.attr(name, viewModel);
+		refs._context.attr("*"+name, viewModel);
 
 	});
+	
+	return {
+		getParentCompute: getScopeCompute,
+		bindParentToChild: bindParentToChild,
+		bindChildToParent: bindChildToParent,
+		setupDataBinding: bindings
+	};
 });

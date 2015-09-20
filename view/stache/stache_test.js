@@ -1267,7 +1267,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					if (item.attr('complete')) {
 						num++;
 					}
-				})
+				});
 				return num;
 			};
 
@@ -1284,7 +1284,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
 			var item = new can.Map({
 				complete: true
-			})
+			});
 			l.push(item);
 
 			equal(child.getAttribute("items"), "3", "now there are 3 complete");
@@ -1292,7 +1292,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			item.attr('complete', false);
 
 			equal(child.getAttribute("items"), "2", "now there are 2 complete");
-		})
+		});
 
 		test("in tag toggling", function () {
 			var text = "<div {{ obs.val }}></div>"

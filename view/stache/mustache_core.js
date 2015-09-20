@@ -217,7 +217,7 @@ steal("can/util",
 			var exprData = core.expression.parse(expressionString),
 				// Use the full mustache expression as the cache key.
 				fullExpression = mode+expressionString;
-
+				
 			// convert a lookup like `{{value}}` to still be called as a helper if necessary.
 			if(!(exprData instanceof expression.Helper) && !(exprData instanceof expression.Call)) {
 				exprData = new expression.Helper(exprData,[],{});
@@ -287,6 +287,7 @@ steal("can/util",
 				// so live binding can read a cached value instead of re-calculating.
 				compute.bind("change", can.k);
 				var value = compute();
+				
 
 				// If value is a function, it's a helper that returned a function.
 				if(typeof value === "function") {

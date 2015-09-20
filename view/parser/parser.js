@@ -24,7 +24,7 @@ steal(function(){
 	}
 
 	var alphaNumericHU = "-:A-Za-z0-9_",
-		attributeNames = "[^=>\\s\\{\\}\\/]+",
+		attributeNames = "[^=>\\s\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
 		quote2quote = "'((?:\\\\.|[^'])*)'",
@@ -43,14 +43,15 @@ steal(function(){
 	            ")\\s*(\\/?)>"),
 		endTag = new RegExp("^<\\/(["+alphaNumericHU+"]+)[^>]*>"),
 		attr = new RegExp("(?:"+
-					"(?:("+attributeNames+")|"+stash+")"+
+					"(?:"+stash+"|("+attributeNames+"))"+
 								"(?:"+spaceEQspace+
 									"(?:"+
 										"(?:"+dblQuote2dblQuote+")|(?:"+quote2quote+")|([^>\\s]+)"+
 									")"+
 								")?)","g"),
 		mustache = new RegExp(stash,"g"),
-		txtBreak = /<|\{\{/;
+		txtBreak = /<|\{\{/,
+		space = /\s/;
 
 	// Empty Elements - HTML 5
 	var empty = makeMap("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed");
@@ -275,46 +276,137 @@ steal(function(){
 		handler.done();
 		return intermediate;
 	};
+	
+	var callAttrStart = function(state, curIndex, handler, rest){
+		state.attrStart = rest.substring(typeof state.nameStart == "number" ? state.nameStart : curIndex, curIndex);
+		handler.attrStart(state.attrStart);
+		state.inName = false;
+	};
+	
+	var callAttrEnd = function(state, curIndex, handler, rest){
+		if(state.valueStart !== undefined && state.valueStart < curIndex) {
+			handler.attrValue(rest.substring(state.valueStart, curIndex));
+		} 
+		// if this never got to be inValue, like `DISABLED` then send a attrValue
+		else if(!state.inValue){
+			//handler.attrValue(state.attrStart);
+		}
+		handler.attrEnd(state.attrStart);
+		state.attrStart = undefined;
+		state.valueStart = undefined;
+		state.inValue = false;
+		state.inName = false;
+		state.inQuote = false;
+		state.lookingForName = true;
+	};
+	
 	HTMLParser.parseAttrs = function(rest, handler){
-
-
-		(rest != null ? rest : "").replace(attr, function (text, name, special, dblQuote, singleQuote, val) {
-			if(special) {
-				handler.special(special);
-
+		if(!rest) {
+			return;
+		}
+		var i = 0;
+		var state = {
+			inDoubleCurly: false,
+			inName: false,
+			nameStart: undefined,
+			inValue: false,
+			valueStart: undefined,
+			inQuote: false,
+			attrStart: undefined,
+			lookingForName: true,
+			lookingForValue: false,
+			lookingForEq : false
+		};
+		while(i < rest.length) {
+			var curIndex = i;
+			var cur = rest.charAt(i);
+			var next = rest.charAt(i+1);
+			var nextNext = rest.charAt(i+2);
+			i++;
+			
+			
+			if(cur === "{" && next === "{") {
+				if(state.inValue && curIndex > state.valueStart) {
+					handler.attrValue(rest.substring(state.valueStart, curIndex));
+				} 
+				// `{{#foo}}DISABLED{{/foo}}`
+				else if(state.inName && state.nameStart < curIndex) {
+					callAttrStart(state, curIndex, handler, rest);
+					callAttrEnd(state, curIndex, handler, rest);
+				}
+				state.inDoubleCurly = true;
+				state.doubleCurlyStart = curIndex+2;
+				i++;
 			}
-			if(name || dblQuote || singleQuote || val) {
-				var value = arguments[3] ? arguments[3] :
-					arguments[4] ? arguments[4] :
-					arguments[5] ? arguments[5] :
-					fillAttrs[name.toLowerCase()] ? name : "";
-				handler.attrStart(name || "");
-
-				var last = mustache.lastIndex = 0,
-					res = mustache.exec(value),
-					chars;
-				while(res) {
-					chars = value.substring(
-						last,
-						mustache.lastIndex - res[0].length );
-					if( chars.length ) {
-						handler.attrValue(chars);
+			else if(state.inDoubleCurly) {
+				if(cur === "}" && next === "}") {
+					// for `{{{}}}`
+					var isTriple = nextNext === "}" ?  1: 0;
+					handler.special(rest.substring(state.doubleCurlyStart, curIndex));
+					state.inDoubleCurly = false;
+					if(state.inValue) {
+						state.valueStart = curIndex+2+isTriple;
 					}
-					handler.special(res[1]);
-					last = mustache.lastIndex;
-					res = mustache.exec(value);
-				}
-				chars = value.substr(
-						last,
-						value.length );
-				if(chars) {
-					handler.attrValue(chars);
-				}
-				handler.attrEnd(name || "");
+					i += (1+isTriple);
+				} 
 			}
+			else if(state.inValue) {
+				if(state.inQuote) {
+					if(cur === state.inQuote) {
+						callAttrEnd(state, curIndex, handler, rest);
+					}
+				}
+				else if(space.test(cur)) {
+					callAttrEnd(state, curIndex, handler, rest);
+				}
+			}
+			// if we hit an = outside a value
+			else if(cur === "=" && (state.lookingForEq || state.lookingForName || state.inName)) {
+				
+				// if we haven't yet started this attribute `{{}}=foo` case:
+				if(!state.attrStart) {
+					callAttrStart(state, curIndex, handler, rest);
+				}
+				state.lookingForValue = true;
+				state.lookingForName = false;
+			}
+			// if we are currently in a name, check if we found a space
+			else if(state.inName) {
+				if(space.test(cur)) {
+					callAttrStart(state, curIndex, handler, rest);
+					state.lookingForEq = true;
+				} 
+			}
+			else if(state.lookingForName) {
+				if(!space.test(cur)) {
+					// might have just started a name, we need to close it
+					if(state.attrStart) {
+						callAttrEnd(state, curIndex, handler, rest);
+					}
+					state.nameStart = curIndex;
+					state.inName = true;
+				}
+			} 
+			else if(state.lookingForValue) {
+				if(!space.test(cur)) {
+					state.lookingForValue = false;
+					state.inValue = true;
+					if(cur === "'" || cur === '"') {
+						state.inQuote = cur;
+						state.valueStart = curIndex+1;
+					} else {
+						state.valueStart = curIndex;
+					}
+				}
+			}
+		}
+		
+		if(state.inName) {
+			callAttrStart(state, curIndex+1, handler, rest);
+			callAttrEnd(state, curIndex+1, handler, rest);
+		}
 
-
-		});
+		
 	};
 
 	return HTMLParser;
