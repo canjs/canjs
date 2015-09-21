@@ -7,51 +7,57 @@ steal("can/util",
 	
 	// ## Helpers
 	
+	// Helper for getting a bound compute in the scope.
 	var getKeyComputeData = function (key, scope, readOptions) {
-	
-			// Get a compute (and some helper data) that represents key's value in the current scope
+
 			var data = scope.computeData(key, readOptions);
 	
 			can.compute.temporarilyBind(data.compute);
 	
 			return data;
+		},
+		// Looks up a value in the scope and returns a compute if the value is
+		// observable and the value if not.
+		lookupValue = function(key, scope, helperOptions, readOptions){
+			var computeData = getKeyComputeData(key, scope, readOptions);
+			// If there are no dependencies, just return the value.
+			if (!computeData.compute.computeInstance.hasDependencies) {
+				return {value: computeData.initialValue, computeData: computeData};
+			} else {
+				return {value: computeData.compute, computeData: computeData};
+			}
+		},
+		// Looks up a value in the scope, and if it is `undefined`, looks up
+		// the value as a helper.
+		lookupValueOrHelper = function(key, scope, helperOptions, readOptions){
+			var res = lookupValue(key, scope, helperOptions, readOptions);
+	
+			// If it doesn't look like a helper and there is no value, check helpers
+			// anyway. This is for when foo is a helper in `{{foo}}`.
+			if( res.computeData.initialValue === undefined ) {
+				if(key.charAt(0) === "@" && key !== "@index") {
+					key = key.substr(1);
+				}
+				var helper = mustacheHelpers.getHelper(key, helperOptions);
+				res.helper = helper && helper.fn;
+			}
+			return res;
+		},
+		// If not a Literal or an Arg, convert to an arg for caching.
+		convertToArgExpression = function(expr){
+			if(!(expr instanceof Arg) && !(expr instanceof Literal)) {
+				return new Arg(expr);
+			} else {
+				return expr;
+			}
+			
 		};
 	
-	var lookupValue = function(key, scope, helperOptions, readOptions){
-		var computeData = getKeyComputeData(key, scope, readOptions);
-		// If there are no dependencies, just return the value.
-		if (!computeData.compute.computeInstance.hasDependencies) {
-			return {value: computeData.initialValue, computeData: computeData};
-		} else {
-			return {value: computeData.compute, computeData: computeData};
-		}
-	};
+	// ## Expression Types
+	//
+	// These expression types return a value. They are assembled by `expression.parse`.
 	
-	var lookupValueOrHelper = function(key, scope, helperOptions, readOptions){
-		var res = lookupValue(key, scope, helperOptions, readOptions);
-
-		// If it doesn't look like a helper and there is no value, check helpers
-		// anyway. This is for when foo is a helper in `{{foo}}`.
-		if( res.computeData.initialValue === undefined ) {
-			if(key.charAt(0) === "@" && key !== "@index") {
-				key = key.substr(1);
-			}
-			var helper = mustacheHelpers.getHelper(key, helperOptions);
-			res.helper = helper && helper.fn;
-		}
-		return res;
-	};
-	// If not a Literal or an Arg, convert to an arg for caching.
-	var convertToArgExpression = function(expr){
-		if(!(expr instanceof Arg) && !(expr instanceof Literal)) {
-			return new Arg(expr);
-		} else {
-			return expr;
-		}
-		
-	};
-	
-	// ## Literal
+	// ### Literal
 	// For inline static values like `{{"Hello World"}}`
 	var Literal = function(value){
 		this._value = value;
@@ -60,7 +66,7 @@ steal("can/util",
 		return this._value;
 	};
 	
-	// ## Lookup
+	// ### Lookup
 	// `new Lookup(String, [Expression])`
 	// Finds a value in the scope or a helper.
 	var Lookup = function(key, root) {
@@ -69,10 +75,12 @@ steal("can/util",
 	};
 	Lookup.prototype.value = function(scope, helperOptions){
 		var result = lookupValueOrHelper(this.key, scope, helperOptions);
+		// TODO: remove this.  This is hacky.
+		this.isHelper = result.helper;
 		return result.helper || result.value;
 	};
 	
-	// ## ScopeLookup
+	// ### ScopeLookup
 	// Looks up a value in the scope, returns a compute for the value it finds.
 	// If passed an expression, that is used to lookup data
 	var ScopeLookup = function(key, root) {
@@ -82,11 +90,9 @@ steal("can/util",
 		return lookupValue(this.key, scope, helperOptions).value;
 	};
 	
-	// @ -> operates in Lookup
-	// ~ -> operates in arguments?
-	
-	// ## Arg
-	// `new ArgExpr(Expression [,modifierOptions] )`
+	// ### Arg
+	// `new Arg(Expression [,modifierOptions] )`
+	// Returns a value, not a compute.
 	var Arg = function(expression, modifiers){
 		this.expr = expression;
 		this.modifiers = modifiers || {};
@@ -106,14 +112,14 @@ steal("can/util",
 		}
 	};
 	
+	// ### Hash
+	// A placeholder. This isn't actually used.
+	var Hash = function(){ };
 	
-	var Hash = function(name, expr){
-		this.name = name;
-		this.expr = expr;
-	};
-	
-	// ## Call
-	// `new Call( new Lookup("method"), [new ScopeExpr("name")], {})
+	// ### Call
+	// `new Call( new Lookup("method"), [new ScopeExpr("name")], {})`
+	// A call expression like `method(arg1, arg2)` that, by default,
+	// calls `method` with non compute values.
 	var Call = function(methodExpression, argExpressions, hashExpressions){
 		this.methodExpr = methodExpression;
 		this.argExprs = can.map(argExpressions, convertToArgExpression);
@@ -138,10 +144,14 @@ steal("can/util",
 		}
 		return hash;
 	};
-	Call.prototype.value = function(scope, helperScope){
+	Call.prototype.value = function(scope, helperScope, helperOptions){
 		
 		var method = this.methodExpr.value(scope, helperScope);
+		// TODO: remove this hack
+		this.isHelper = this.methodExpr.isHelper;
+		
 		var self = this;
+		var hasHash = !can.isEmptyObject(this.hashExprs);
 		
 		return can.compute(function(){
 			var func = method;
@@ -152,7 +162,13 @@ steal("can/util",
 				var args = self.args(scope, helperScope);
 				var hash = self.hash(scope, helperScope);
 				// if fn/inverse is needed, add after this
-				args.push(hash);
+				if(hasHash) {
+					args.push(hash);
+				}
+				
+				if(helperOptions) {
+					args.push(helperOptions);
+				}
 				
 				return func.apply(null, args);
 			}
@@ -161,6 +177,12 @@ steal("can/util",
 		
 	};
 	
+	
+	
+	// ### HelperLookup
+	// An expression that looks up a value in the helper or scope.
+	// Any functions found prior to the last one are called with
+	// the context and scope.
 	var HelperLookup = function(){
 		Lookup.apply(this, arguments);
 	};
@@ -168,6 +190,11 @@ steal("can/util",
 		var result = lookupValueOrHelper(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope]});
 		return result.helper || result.value;
 	};
+	
+	// ### HelperScopeLookup
+	// An expression that looks up a value in the scope.
+	// Any functions found prior to the last one are called with
+	// the context and scope.
 	var HelperScopeLookup = function(){
 		Lookup.apply(this, arguments);
 	};
@@ -207,8 +234,8 @@ steal("can/util",
 			helper,
 			value,
 			// If a literal, this means it should be treated as a key. But helpers work this way for some reason.
-			// TODO: fix this so numbers will also be assumed to be keys.
-			methodKey = this.methodExpr instanceof Literal ? 
+			// TODO: fix parsing so numbers will also be assumed to be keys.
+			methodKey = this.methodExpr instanceof Literal ?
 				""+this.methodExpr._value : this.methodExpr.key,
 			initialValue,
 			args;
@@ -401,7 +428,7 @@ steal("can/util",
 		},
 		replaceTopLastChild: function(type){
 			var children = ensureChildren(this.top()).children;
-			var last = children.pop();
+			children.pop();
 			children.push(type);
 			return type;
 		},
@@ -414,7 +441,7 @@ steal("can/util",
 			if(this.top() === this.root) {
 				children = ensureChildren(this.top()).children;
 			} else {
-				var old = this.stack.pop();
+				this.stack.pop();
 				// get parent and clean
 				children = ensureChildren(this.top()).children;
 			}
@@ -526,8 +553,6 @@ steal("can/util",
 		},
 		hydrateAst: function(ast, options, methodType, isArg){
 			if(ast.type === "Lookup") {
-				var name = (methodType === "Helper" && !ast.root ? "Helper" : "")+(isArg ? "Scope" : "")+"Lookup";
-				
 				return new (options.lookupRule(ast, methodType, isArg))(ast.key, ast.root && this.hydrateAst(ast.root, options, methodType) );
 			}
 			else if(ast.type === "Literal") {
@@ -561,23 +586,24 @@ steal("can/util",
 			});
 		},
 		parseAst: function(tokens, cursor) {
-			var stack = new Stack();
+			var stack = new Stack(),
+				top;
 			
 			while(cursor.index < tokens.length) {
 				var token = tokens[cursor.index],
-					nextToken = tokens[cursor.index+1],
-					futureToken = tokens[cursor.index+2];
+					nextToken = tokens[cursor.index+1];
 				
 				cursor.index++;
-
+				
+				// Literal
 				if(literalRegExp.test( token )) {
 					convertToHelperIfTopIsLookup(stack);
 					stack.addTo(["Helper", "Call", "Hash"], {type: "Literal", value: utils.jsonParse( token )});
 				}
-				// hash 
+				// Hash 
 				else if(nextToken === "=") {
 					//convertToHelperIfTopIsLookup(stack);
-					var top = stack.top();
+					top = stack.top();
 					
 					// If top is a Lookup, we might need to convert to a helper.
 					if(top && top.type === "Lookup") {
@@ -589,7 +615,7 @@ steal("can/util",
 						if(firstParent.type === "Call" || firstParent.type === "Root") {
 							
 							stack.popUntil(["Call"]);
-							var top = stack.top();
+							top = stack.top();
 							stack.replaceTopAndPush({
 								type: "Helper",
 								method: top.type === "Root" ? can.last(top.children) : top
@@ -602,7 +628,7 @@ steal("can/util",
 					cursor.index++;
 					
 				}
-				// SCOPE `key`
+				// Lookup
 				else if(keyRegExp.test(token)) {
 					var last = stack.topLastChild();
 
@@ -621,11 +647,14 @@ steal("can/util",
 					}
 					
 				}
+				// Arg
 				else if(token === "~") {
 					convertToHelperIfTopIsLookup(stack);
 					stack.addToAndPush(["Helper", "Call","Hash"], {type: "Arg", key: token});
-				} else if(token === "(") {
-					var top = stack.top();
+				}
+				// Call
+				else if(token === "(") {
+					top = stack.top();
 					if(top.type === "Lookup") {
 						stack.replaceTopAndPush({
 							type: "Call",
@@ -634,9 +663,13 @@ steal("can/util",
 					} else {
 						throw new Error("Unable to understand expression "+tokens.join(''));
 					}
-				} else if(token === ")") {
+				}
+				// End Call
+				else if(token === ")") {
 					stack.popTo(["Call"]);
-				} else if(token === ",") {
+				}
+				// End Call argument
+				else if(token === ",") {
 					stack.popUntil(["Call"]);
 				}
 			}

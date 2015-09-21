@@ -121,7 +121,7 @@ steal("can/util", function(can){
 			// i = reads.length if this is the last iteration of the read for-loop.
 			return type === 'function' && !value.isComputed &&
 				!(can.Construct && value.prototype instanceof can.Construct) &&
-				!(can.route && value === can.route) && 
+				!(can.route && value === can.route) &&
 				!isAt(i, reads);
 		},
 		read: function(value, i, reads, options, state, prev){
@@ -206,7 +206,7 @@ steal("can/util", function(can){
 				} else {
 					if(prop.key in value) {
 						return value[prop.key];
-					} 
+					}
 					// TODO: remove in 3.0.  This is for backwards compat with @key and @index.
 					else if( prop.at && specialRead[prop.key] && ( ("@"+prop.key) in value)) {
 						//!steal-remove-start

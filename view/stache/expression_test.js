@@ -35,7 +35,7 @@ steal("./expression.js", "steal-qunit", function(){
 			},
 			children: [
 				{
-					type: "Hash", 
+					type: "Hash",
 					prop: "prop",
 					children: [{type: "Lookup", key: "own_prop"}]
 				}
@@ -54,12 +54,12 @@ steal("./expression.js", "steal-qunit", function(){
 				{type: "Literal", value: 1},
 				{type: "Lookup", key: "valueA"},
 				{
-					type: "Hash", 
+					type: "Hash",
 					prop: "propA",
 					children: [{type: "Arg", key: "~", children: [{type: "Lookup", key: "valueB"} ]}]
 				},
 				{
-					type: "Hash", 
+					type: "Hash",
 					prop: "propC",
 					children: [{type: "Literal", value: 2}]
 				}
@@ -92,7 +92,7 @@ steal("./expression.js", "steal-qunit", function(){
 				{type: "Literal", value: 'def'},
 				{type: "Lookup", key: "nested@prop"},
 				{
-					type: "Hash", 
+					type: "Hash",
 					prop: "outerPropA",
 					children: [helperCCall]
 				}

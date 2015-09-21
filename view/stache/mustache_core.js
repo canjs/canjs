@@ -81,27 +81,51 @@ steal("can/util",
 		 * @return {Function} An 'evaluator' function that evaluates the expression.
 		 */
 		makeEvaluator: function (scope, helperOptions, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
-
+			
 			if(mode === "^") {
 				var temp = truthyRenderer;
 				truthyRenderer = falseyRenderer;
 				falseyRenderer = temp;
 			}
 			
-			var readOptions = {
-				// will return a function instead of calling it.
-				// allowing it to be turned into a compute if necessary.
-				isArgument: true,
-				args: [scope.attr('.'), scope],
-				asCompute: true
-			};
-			var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
-			var helper = helperAndValue.helper;
-			var value = helperAndValue.value;
-		
-			if(helper) {
-				return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+			var value,
+				helperOptionArg;
+			
+			if(exprData instanceof expression.Call) {
+				helperOptionArg =  {
+					fn: function () {},
+					inverse: function () {},
+					context: scope.attr("."),
+					scope: scope,
+					nodeList: nodeList,
+					exprData: this,
+					helpersScope: helperOptions
+				};
+				utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
+				
+				value = exprData.value(scope, helperOptions, helperOptionArg);
+				if(exprData.isHelper) {
+					return value;
+				}
+			} else {
+				var readOptions = {
+					// will return a function instead of calling it.
+					// allowing it to be turned into a compute if necessary.
+					isArgument: true,
+					args: [scope.attr('.'), scope],
+					asCompute: true
+				};
+				var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+				var helper = helperAndValue.helper;
+				value = helperAndValue.value;
+			
+				if(helper) {
+					return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+				}
 			}
+			
+			
+			
 			
 		
 			// Return evaluators for no mode.
@@ -119,7 +143,7 @@ steal("can/util",
 				}
 			} else if( mode === "#" || mode === "^" ) {
 				// Setup renderers.
-				var helperOptionArg = {
+				helperOptionArg = {
 					fn: function () {},
 					inverse: function () {}
 				};
@@ -132,8 +156,11 @@ steal("can/util",
 					} else {
 						finalValue = value;
 					}
+					if(typeof finalValue === "function") {
+						return finalValue;
+					}
 					// If it's an array, render.
-					if (utils.isArrayLike(finalValue) ) {
+					else if (utils.isArrayLike(finalValue) ) {
 						var isObserveList = utils.isObserveLike(finalValue);
 
 						if(isObserveList ? finalValue.attr("length") : finalValue.length) {

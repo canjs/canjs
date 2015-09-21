@@ -4320,6 +4320,86 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var template = can.stache("{{#child}}{{method value}}{{/child}}");
 			template(data);
 		});
+		
+		test("call expression - simple", function(){
+			
+			var template = can.stache("{{method(arg)}}");
+			var age = can.compute(32);
+			var frag = template({
+				method: function(num){
+					return num*2;
+				},
+				arg: age
+			});
+			
+			equal( frag.firstChild.nodeValue, "64", "method call works");
+			
+		});
+		
+		test("call expression #each passed list", function () {
+
+			var animals = new can.List(['sloth', 'bear']),
+				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachHelper(animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+
+			var div = doc.createElement('div');
+
+			var frag = renderer({
+				animals: animals
+			});
+			div.appendChild(frag);
+
+			div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+			//animals.push("dog")
+			equal(div.getElementsByTagName('label')
+				.length, 2, "There are 2 labels");
+
+			animals.push("turtle");
+
+			equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+			equal(innerHTML(div.getElementsByTagName('span')[2]), "turtle", "turtle added");
+
+		});
+		
+		test("call expression #each passed compute", function () {
+
+			var animals = can.compute( new can.List(['sloth', 'bear']) ),
+				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachHelper(~animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+
+			var div = doc.createElement('div');
+
+			var frag = renderer({
+				animals: animals
+			});
+			div.appendChild(frag);
+
+			div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+			//animals.push("dog")
+			equal(div.getElementsByTagName('label')
+				.length, 2, "There are 2 labels");
+
+			animals( new can.List(['sloth', 'bear','turtle']) );
+
+			equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+			equal(innerHTML(div.getElementsByTagName('span')[2]), "turtle", "turtle added");
+
+		});
+		
+		test("call expression with #if", function(){
+			
+			var truthy = can.compute(true);
+			var template = can.stache("{{#if(truthy)}}true{{else}}false{{/if}}");
+			var frag = template({truthy: truthy});
+			
+			equal( frag.firstChild.nodeValue, "true", "set to true");
+			
+			truthy(false);
+			
+			equal( frag.firstChild.nodeValue, "false", "set to false");
+		});
 
 	}
 

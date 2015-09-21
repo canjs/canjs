@@ -299,7 +299,6 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 	test("compute.read works with a Map wrapped in a compute", function() {
 		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
-		var reads = ["map", "first"];
 
 		var result = can.compute.read(parent, can.compute.read.reads("map.first"));
 		equal(result.value, "Justin", "The correct value is found.");

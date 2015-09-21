@@ -107,7 +107,6 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 									   !this.leakScope) &&
 									  !!this.template),
 					twoWayBindings = {},
-					viewModelBindingComputes = {},
 					scope = this.scope || this.viewModel,
 					// tracks which viewModel property is currently updating
 					viewModelPropertyUpdates = {},

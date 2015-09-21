@@ -73,13 +73,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				equal(hash.content, foodTypes[0].content, "Args with = passed in as a hash");
 			}
 
-			frag = template({
+			var frag = template({
 				foodTypes: foodTypes,
 				withArgs: withArgs
 			});
 			ta.innerHTML = "";
 			ta.appendChild(frag);
-			p0 = ta.getElementsByClassName("with-args")[0];
+			var p0 = ta.getElementsByClassName("with-args")[0];
 			can.trigger(p0, "click");
 		});
 
@@ -917,250 +917,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});
 
-	/*test('importing scope ^prop="{{this}}"', function() {
-		can.Component.extend({
-			tag: 'import-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-parent',
-			template: can.stache('<import-scope ^test="{{this}}"></import-scope>' +
-				'<div>Imported: {{test.name}} {{test.age}}</div>')
-		});
-
-		var template = can.stache('<import-parent></import-parent>');
-		var frag = template({});
-		
-		equal(frag.childNodes[0].childNodes[1].innerHTML,
-			'Imported: David 7',
-			'{this} component scope imported into variable');
-	});
-	
-	test('importing scope ^prop', function() {
-		can.Component.extend({
-			tag: 'import-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-parent',
-			template: can.stache('<import-scope ^test></import-scope>' +
-				'<div>Imported: {{test.name}} {{test.age}}</div>')
-		});
-
-		var template = can.stache('<import-parent></import-parent>');
-		var frag = template({});
-		
-		equal(frag.childNodes[0].childNodes[1].innerHTML,
-			'Imported: David 7',
-			'{this} component scope imported into variable');
-	});
-	
-	test('importing scope ^prop="{{scopeProp}}"', function() {
-		can.Component.extend({
-			tag: 'import-prop-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope ^test="{{name}}"></import-prop-scope>' +
-				'<div>Imported: {{test}}</div>')
-		});
-
-		var template = can.stache('<import-prop-parent></import-prop-parent>');
-		var frag = template({});
-
-		equal(frag.childNodes[0].childNodes[1].innerHTML,
-			'Imported: David',  '{name} component scope imported into variable');
-	});
-
-	test('live importing scope ^prop={{scopeProp}} with hyphenated properties', function(){
-		can.Component.extend({
-			tag: 'import-prop-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7,
-				updateName: function(){
-					this.attr('name', 'Justin');
-				}
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope ^test="{{name}}" ^child-component="{{this}}"></import-prop-scope>' +
-				'<div>Imported: {{test}}</div>')
-		});
-
-		var template = can.stache('<import-prop-parent></import-prop-parent>');
-		var frag = template({});
-		var importPropParent = frag.firstChild;
-		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
-
-		can.viewModel(importPropScope).updateName();
-
-		var importPropParentViewModel = can.viewModel(importPropParent);
-
-		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
-
-		equal(importPropParentViewModel.attr("childComponent"), can.viewModel(importPropScope), "got this");
-
-	});
-
-	test('importing scope ^prop="{{this}}"', function() {
-		can.Component.extend({
-			tag: 'import-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-parent',
-			template: can.stache('<import-scope ^test="{{this}}"></import-scope>' +
-				'<div>Imported: {{test.name}} {{test.age}}</div>')
-		});
-
-		var template = can.stache('<import-parent></import-parent>');
-		can.append(can.$('#qunit-fixture'), template({}));
-		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
-			'Imported: David 7',
-			'{this} component scope imported into variable');
-	});
-
-	test('importing scope ^prop="{{scopeProp}}"', function() {
-		can.Component.extend({
-			tag: 'import-prop-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope ^test="{{name}}"></import-prop-scope>' +
-				'<div>Imported: {{test}}</div>')
-		});
-
-		var template = can.stache('<import-prop-parent></import-prop-parent>');
-		can.append(can.$('#qunit-fixture'), template({}));
-		equal(document.getElementById('qunit-fixture').childNodes[0].childNodes[1].innerHTML,
-			'Imported: David',  '{name} component scope imported into variable');
-	});
-
-	test('live importing scope ^prop={{scopeProp}}', function(){
-		can.Component.extend({
-			tag: 'import-prop-scope',
-			template: can.stache('Hello {{name}}'),
-			viewModel: {
-				name: 'David',
-				age: 7,
-				updateName: function(){
-					this.attr('name',"Justin");
-				}
-			}
-		});
-
-		can.Component.extend({
-			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope ^test="{{name}}" ^child="{{this}}"></import-prop-scope>' +
-				'<div>Imported: {{test}}</div>')
-		});
-
-		var template = can.stache('<import-prop-parent></import-prop-parent>');
-		var frag = template({});
-		var importPropParent = frag.firstChild;
-		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
-
-		can.viewModel(importPropScope).updateName();
-
-		var importPropParentViewModel = can.viewModel(importPropParent);
-
-		equal(importPropParentViewModel.attr("test"), "Justin", "got Justin");
-
-		equal(importPropParentViewModel.attr("child"), can.viewModel(importPropScope), "got this");
-
-	});*/
-
-	
-
-	/*test("^parent within another parent that does not leak scope", function(){
-		can.Component.extend({
-			tag: "outer-noleak",
-			viewModel: {
-				isOuter: true
-			},
-			leakScope: false
-		});
-		can.Component.extend({
-			tag: "my-child",
-			viewModel : {
-				isChild: true
-			},
-			leakScope: false
-		});
-		
-		
-		var template = can.stache("<outer-noleak><my-child ^my-child/></outer-noleak>");
-		var frag = template();
-		var vm = can.viewModel(frag.firstChild);
-		ok(vm.attr("myChild") instanceof can.Map, "got instance");
-		
-	});
-	
-	test("^parent within another parent that does not leak scope", function(){
-		can.Component.extend({
-			tag: "outer-noleak",
-			template: can.stache("<f-b><content/></f-b>"),
-			viewModel: {
-				isOuter: true
-			},
-			leakScope: false
-		});
-		can.Component.extend({
-			tag: "my-child",
-			viewModel : {
-				isChild: true
-			},
-			leakScope: false
-		});
-		can.Component.extend({
-			tag: "f-b",
-			template: can.stache("<content/>"),
-			viewModel: {
-				fooBar: true
-			}
-		});
-		
-		
-		var template = can.stache("<outer-noleak><my-child ^my-child/></outer-noleak>");
-		var frag = template();
-		var vm = can.viewModel(frag.firstChild);
-		ok(vm.attr("myChild") instanceof can.Map, "got instance");
-		
-	});*/
-	
-
-
 	test('Conditional can-EVENT bindings are bound/unbound', 2, function () {
 		var state = new can.Map({
 			enableClick: true,
@@ -1301,7 +1057,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(attrSetCalled, 0, "set is not called on scope map");
 		equal( viewModel.attr("viewModelProp"), "Hello", "initial value set" );
 		
-		var viewModel = can.viewModel(frag.firstChild);
+		viewModel = can.viewModel(frag.firstChild);
+		
 		var viewModelAttrSetCalled = 1;
 		viewModel.attr = function(attrName){
 			if(typeof attrName === "string" && arguments.length > 1) {
@@ -1315,7 +1072,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		viewModel.attr("viewModelProp","HELLO");
 		equal(map.attr("scopeProp"), "HELLO", "binding from child to parent");
 		equal(attrSetCalled, 1, "set is called once on scope map");
-		// TODO: 3 is the current can.Component behavior.  Do we want this?
+		
 		equal(viewModelAttrSetCalled, 3, "set is called once viewModel");
 		
 		
@@ -1510,6 +1267,114 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal( viewModel.attr("viewModelProp"), "Earth", "no binding from parent to child" );
 	});
 
+	test('one way - child to parent - importing viewModel .}="test"', function() {
+		can.Component.extend({
+			tag: 'import-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-parent',
+			template: can.stache('<import-scope .}="test"></import-scope>' +
+				'<div>Imported: {{test.name}} {{test.age}}</div>')
+		});
+
+		var template = can.stache('<import-parent></import-parent>');
+		var frag = template({});
+		
+		equal(frag.childNodes[0].childNodes[1].innerHTML,
+			'Imported: David 7',
+			'{.} component scope imported into variable');
+	});
 	
+	
+	test('one way - child to parent - importing viewModel prop}="test"', function() {
+		can.Component.extend({
+			tag: 'import-prop-scope',
+			template: can.stache('Hello {{name}}'),
+			viewModel: {
+				name: 'David',
+				age: 7
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-prop-parent',
+			template: can.stache('<import-prop-scope name}="test"></import-prop-scope>' +
+				'<div>Imported: {{test}}</div>')
+		});
+
+		var template = can.stache('<import-prop-parent></import-prop-parent>');
+		var frag = template({});
+
+		equal(frag.childNodes[0].childNodes[1].innerHTML,
+			'Imported: David',  '{name} component scope imported into variable');
+	});
+
+	test('one way - child to parent - importing viewModel hypenated-prop}="test"', function(){
+		can.Component.extend({
+			tag: 'import-prop-scope',
+			template: can.stache('Hello {{userName}}'),
+			viewModel: {
+				userName: 'David',
+				age: 7,
+				updateName: function(){
+					this.attr('userName', 'Justin');
+				}
+			}
+		});
+
+		can.Component.extend({
+			tag: 'import-prop-parent',
+			template: can.stache('<import-prop-scope user-name}="test" .}="childComponent"></import-prop-scope>' +
+				'<div>Imported: {{test}}</div>')
+		});
+
+		var template = can.stache('<import-prop-parent></import-prop-parent>');
+		var frag = template({});
+		var importPropParent = frag.firstChild;
+		var importPropScope = importPropParent.getElementsByTagName("import-prop-scope")[0];
+
+		can.viewModel(importPropScope).updateName();
+
+		var importPropParentViewModel = can.viewModel(importPropParent);
+
+		equal(importPropParentViewModel.attr("test"), "Justin", "got hypenated prop");
+
+		equal(importPropParentViewModel.attr("childComponent"), can.viewModel(importPropScope), "got view model");
+
+	});
+
+
+
+	test("one-way - child to parent - parent that does not leak scope, but has no template", function(){
+		can.Component.extend({
+			tag: "outer-noleak",
+			viewModel: {
+				isOuter: true
+			},
+			leakScope: false
+		});
+		can.Component.extend({
+			tag: "my-child",
+			viewModel : {
+				isChild: true
+			},
+			leakScope: false
+		});
+		
+		
+		var template = can.stache("<outer-noleak><my-child .}='myChild'/></outer-noleak>");
+		var frag = template();
+		var vm = can.viewModel(frag.firstChild);
+		ok(vm.attr("myChild") instanceof can.Map, "got instance");
+		
+	});
+	
+
 	
 });

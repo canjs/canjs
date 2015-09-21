@@ -26,8 +26,6 @@ steal(function(){
 	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[^=>\\s\\/]+",
 		spaceEQspace = "\\s*=\\s*",
-		dblQuote2dblQuote = "\"((?:\\\\.|[^\"])*)\"",
-		quote2quote = "'((?:\\\\.|[^'])*)'",
 		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
 		  "(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
 		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
@@ -42,13 +40,6 @@ steal(function(){
 	                ")*"+
 	            ")\\s*(\\/?)>"),
 		endTag = new RegExp("^<\\/(["+alphaNumericHU+"]+)[^>]*>"),
-		attr = new RegExp("(?:"+
-					"(?:"+stash+"|("+attributeNames+"))"+
-								"(?:"+spaceEQspace+
-									"(?:"+
-										"(?:"+dblQuote2dblQuote+")|(?:"+quote2quote+")|([^>\\s]+)"+
-									")"+
-								")?)","g"),
 		mustache = new RegExp(stash,"g"),
 		txtBreak = /<|\{\{/,
 		space = /\s/;
@@ -68,7 +59,7 @@ steal(function(){
 	var closeSelf = makeMap("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr");
 
 	// Attributes that have their values filled in disabled="disabled"
-	var fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected");
+	// var fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected");
 
 	// Special Elements (can contain anything)
 	var special = makeMap("script,style");
@@ -278,7 +269,7 @@ steal(function(){
 	};
 	
 	var callAttrStart = function(state, curIndex, handler, rest){
-		state.attrStart = rest.substring(typeof state.nameStart == "number" ? state.nameStart : curIndex, curIndex);
+		state.attrStart = rest.substring(typeof state.nameStart === "number" ? state.nameStart : curIndex, curIndex);
 		handler.attrStart(state.attrStart);
 		state.inName = false;
 	};
@@ -286,7 +277,7 @@ steal(function(){
 	var callAttrEnd = function(state, curIndex, handler, rest){
 		if(state.valueStart !== undefined && state.valueStart < curIndex) {
 			handler.attrValue(rest.substring(state.valueStart, curIndex));
-		} 
+		}
 		// if this never got to be inValue, like `DISABLED` then send a attrValue
 		else if(!state.inValue){
 			//handler.attrValue(state.attrStart);
@@ -305,6 +296,7 @@ steal(function(){
 			return;
 		}
 		var i = 0;
+		var curIndex;
 		var state = {
 			inDoubleCurly: false,
 			inName: false,
@@ -318,7 +310,7 @@ steal(function(){
 			lookingForEq : false
 		};
 		while(i < rest.length) {
-			var curIndex = i;
+			curIndex = i;
 			var cur = rest.charAt(i);
 			var next = rest.charAt(i+1);
 			var nextNext = rest.charAt(i+2);
@@ -328,7 +320,7 @@ steal(function(){
 			if(cur === "{" && next === "{") {
 				if(state.inValue && curIndex > state.valueStart) {
 					handler.attrValue(rest.substring(state.valueStart, curIndex));
-				} 
+				}
 				// `{{#foo}}DISABLED{{/foo}}`
 				else if(state.inName && state.nameStart < curIndex) {
 					callAttrStart(state, curIndex, handler, rest);
@@ -348,7 +340,7 @@ steal(function(){
 						state.valueStart = curIndex+2+isTriple;
 					}
 					i += (1+isTriple);
-				} 
+				}
 			}
 			else if(state.inValue) {
 				if(state.inQuote) {
@@ -375,7 +367,7 @@ steal(function(){
 				if(space.test(cur)) {
 					callAttrStart(state, curIndex, handler, rest);
 					state.lookingForEq = true;
-				} 
+				}
 			}
 			else if(state.lookingForName) {
 				if(!space.test(cur)) {
@@ -386,7 +378,7 @@ steal(function(){
 					state.nameStart = curIndex;
 					state.inName = true;
 				}
-			} 
+			}
 			else if(state.lookingForValue) {
 				if(!space.test(cur)) {
 					state.lookingForValue = false;
