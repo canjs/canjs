@@ -4174,10 +4174,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			deepEqual(getTextFromFrag(frag), "Not 10 ducks");
 		});
 
-		test("~ helper joins to the baseURL", function(){
+		test("joinBase helper joins to the baseURL", function(){
 			can.baseURL = "http://foocdn.com/bitovi";
 
-			var template = can.stache("{{~ 'hello/' name}}");
+			var template = can.stache("{{joinBase 'hello/' name}}");
 			var map = new can.Map({ name: "world" });
 
 			var frag = template(map);
@@ -4186,10 +4186,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			can.baseUrl = undefined;
 		});
 
-		test("~ helper can be relative to template module", function(){
+		test("joinBase helper can be relative to template module", function(){
 			var baseUrl = "http://foocdn.com/bitovi";
 
-			var template = can.stache("{{~ '../hello/' name}}");
+			var template = can.stache("{{joinBase '../hello/' name}}");
 			var map = new can.Map({ name: "world" });
 
 			var frag = template(map, { module: { uri: baseUrl } });
