@@ -3,7 +3,7 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
 // for in template event bindings. These are usable in any mustache template, but mainly and documented
 // for use within can.Component.
-steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", function (can, mustacheCore) {
+steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, mustacheCore) {
 	/**
 	 * @function isContentEditable
 	 * @hide
