@@ -1,6 +1,6 @@
 sudo: false
 language: node_js
-node_js: 0.10
+node_js: 0.12
 before_script: node_modules/.bin/bower install
 script: npm test
 before_install:
