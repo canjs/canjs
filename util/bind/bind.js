@@ -27,8 +27,11 @@ steal('can/util', function (can) {
 		return this;
 	};
 	can.unbindAndTeardown = function (event, handler) {
-		var bindEvents = this.__bindEvents || {};
-		var handlers = bindEvents[event] || [];
+		if (!this.__bindEvents) {
+			return this;
+		}
+
+		var handlers = this.__bindEvents[event] || [];
 		var handlerCount = handlers.length;
 
 		// Remove the event handler

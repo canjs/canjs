@@ -5,25 +5,25 @@
 The event object dispatched when an element is removed from the document.
 
 @option {HTMLElement} target The attribute that changed.
-@option {String} [type="removed"] The type is always "removed" for an removed event.
+@option {String} [type="removed"] The type is always "removed" for a removed event.
 @option {Boolean} [bubbles=false] Removed events do not bubble.
 
 @body
 
 ## Use
 
-Listen to an `removed` event on an element with the base-library's [can.$ NodeList]. For example,
+Listen to a `removed` event on an element with the base-library's [can.$ NodeList]. For example,
 with jQuery:
 
     $(el).bind("removed", function(ev){
-      ev.type // "inserted"
+      ev.type // "removed"
       ev.target // el
     })
     
     $(el).remove()
 
 
-Listen to an `removed` event with [can.Control] like:
+Listen to a `removed` event with [can.Control] like:
 
     can.Control.extend({
       "removed": function(el, ev){
@@ -36,17 +36,18 @@ Call a method when an element is removed within a template like:
     <div can-removed="destroyItem">...</div>
 
 
-Listen to an `removed` event with [can.Component::events can.Component's events] object like:
+Listen to a `removed` event with [can.Component::events can.Component's events] object like:
 
     can.Component.extend({
-      tag: "panel"
-      "removed": function(el, ev){
+      tag: "panel",
+      events: {
+        "removed": function(el, ev){
         
-      }
+        }
     })
 
 
-To create an `inserted` event, you must use the base-library [can.$ NodeList]'s DOM modifier methods.
+To create a `removed` event, you must use the base-library [can.$ NodeList]'s DOM modifier methods.
 
 For jQuery or Zepto, use `$.fn.html`, `$.fn.remove`, `$.fn.empty`, etc:
 
