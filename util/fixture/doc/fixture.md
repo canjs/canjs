@@ -293,7 +293,7 @@ sets of fixtures.  You can add something like the following to your fixtures.js 
     if( /fixtureSet1/.test( window.location.search) ){
       can.fixture("/foo","//foo/fixtures/foo1.json');
     } else if(/fixtureSet2/.test( window.location.search)){
-      can.fixture("/foo","//foo/fixtures/foo1.json');
+      can.fixture("/foo","//foo/fixtures/foo2.json');
     } else {
       // default fixtures (maybe no fixtures)
     }
