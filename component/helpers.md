@@ -6,7 +6,7 @@ Helper functions used with the component's template.
 @option {Object.<String,can.mustache.helper>}
 
 An object of [can.mustache] helper names and methods. The helpers are only
-available within the component's template and source html. The helper's
+available within the component's template and source html. Helpers
 are always called back with `this` as the [can.Component::viewModel viewModel].
 
 @body

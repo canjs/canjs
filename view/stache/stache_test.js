@@ -4132,7 +4132,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var expected;
 			var t = {
 				template: '{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
-					'{{#default}}Not 10 ducks{{/default}}{{/switch}}',
+				'{{#default}}Not 10 ducks{{/default}}{{/switch}}',
 				expected: "10 ducks",
 				data: {
 					ducks: '10',
@@ -4160,7 +4160,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 		test("Handlerbars helper: switch - changing to default (#1857)", function(){
 			var template = can.stache('{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
-					'{{#default}}Not 10 ducks{{/default}}{{/switch}}');
+			'{{#default}}Not 10 ducks{{/default}}{{/switch}}');
 			var map = new can.Map({
 				ducks: "10"
 			});
@@ -4327,4 +4327,21 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		ok(typeof options.fn === 'function', 'each helper returned');
 	});
 
+	test("methods don't update correctly (#1891)", function() {
+		var map = new can.Map({
+			num1: 1,
+			num2: function () { return this.attr('num1') * 2; }
+		});
+		var frag = can.stache(
+			'<span class="num1">{{num1}}</span>' +
+			'<span class="num2">{{num2}}</span>')(map);
+
+		equal(frag.firstChild.firstChild.nodeValue, '1', 'Rendered correct value');
+		equal(frag.lastChild.firstChild.nodeValue, '2', 'Rendered correct value');
+
+		map.attr('num1', map.attr('num1') * 2);
+
+		equal(frag.firstChild.firstChild.nodeValue, '2', 'Rendered correct value');
+		equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
+	});
 });

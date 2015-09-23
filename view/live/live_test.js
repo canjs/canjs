@@ -133,13 +133,13 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		equal(div.getElementsByTagName('label')
 			.length, 2, 'There are 2 labels');
 		div.getElementsByTagName('label')[0].myexpando = 'EXPANDO-ED';
-		
+
 		map.attr('animals')
 			.push('turtle');
-			
+
 		equal(div.getElementsByTagName('label')[0].myexpando, 'EXPANDO-ED', 'same expando');
 		equal(div.getElementsByTagName('span')[2].innerHTML, 'turtle', 'turtle added');
-		
+
 		map.attr('animals', new can.List([
 			'sloth',
 			'bear',
@@ -192,17 +192,17 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 			start();
 		}, 100);
 	});
-	
+
 	test('html live binding handles getting a function from a compute',5, function(){
 		var handler = function(el){
 			ok(true, "called handler");
 			equal(el.nodeType, 3, "got a placeholder");
 		};
-		
+
 		var div = document.createElement('div'),
 			placeholder = document.createTextNode('');
 		div.appendChild(placeholder);
-		
+
 		var count = can.compute(0);
 		var html = can.compute(function(){
 			if(count() === 0) {
@@ -211,19 +211,19 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 				return handler;
 			}
 		});
-		
-		
+
+
 		can.view.live.html(placeholder, html, div);
-		
+
 		equal(div.getElementsByTagName("h1").length, 1, "got h1");
 		count(1);
 		equal(div.getElementsByTagName("h1").length, 0, "got h1");
 		count(0);
 		equal(div.getElementsByTagName("h1").length, 1, "got h1");
-		
-		
+
+
 	});
-	
+
 	test("can.view.live.list does not unbind on a list unnecessarily (#1835)", function(){
 		expect(0);
 		var div = document.createElement('div'),
@@ -235,21 +235,29 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 				return '<label>Animal=</label> <span>' + animal + '</span>';
 			},
 			unbind = list.unbind;
-			
+
 		list.unbind = function(){
 			ok(false, "unbind called");
 			return unbind.apply(this, arguments);
 		};
-		
+
 		div.innerHTML = 'my <b>fav</b> animals: <span></span> !';
 		var el = div.getElementsByTagName('span')[0];
-		
+
 		can.view.live.list(el, list, template, {});
-		
-		
-		
+
+
+
 	});
-	
-	
-	
+
+	test("can.live.attribute works with non-string attributes (#1790)", function() {
+		var el = document.createElement('div'),
+			compute = can.compute(function() {
+				return 2;
+			});
+
+		can.view.elements.setAttr(el, "value", 1);
+		can.view.live.attribute(el, 'value', compute);
+		ok(true, 'No exception thrown.');
+	});
 });
