@@ -150,6 +150,7 @@
 				"meta": {
 					"jquery": {
 						"format": "global",
+						"exports": "jQuery",
 						"deps": [
 							"can/util/vdom/vdom"
 						]
@@ -176,6 +177,7 @@
 				"meta": {
 					"jquery": {
 						"format": "global",
+						"exports": "jQuery",
 						"deps": [
 							"can/util/vdom/vdom"
 						]
