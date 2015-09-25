@@ -516,14 +516,31 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	var getValue = function(value){
 		return value && value.isComputed ? value() : value;
 	};
+	
+	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/;
+	var attributeNameInfo = function(attributeName){
+		var matches = attributeName.match(bindingsRegExp);
+		var twoWay = !!matches[1],
+			childToParent = twoWay || !!matches[2],
+			parentToChild = twoWay || !childToParent;
+		
+		
+		return {
+			childToParent: childToParent,
+			parentToChild: parentToChild,
+			propName: matches[3]
+		};
+	};
+	
+	// parent compute
 	var getScopeCompute = function(el, scope, scopeProp, options){
 		var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
 		return parentExpression.value(scope, new can.view.Scope());
 	};
-	
+	// child compute
 	var getElementCompute = function(el, attributeName, options){
 		
-		var attrName = can.camelize( attributeName.replace(/^\{/,"").replace(/[\}\{]$/,"") ),
+		var attrName = can.camelize( options.propName || attributeName.substr(1) ),
 			firstChar = attrName.charAt(0),
 			isDOM = firstChar === "$",
 			childCompute;
@@ -539,17 +556,17 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		return childCompute;
 	};
 	
+	// parent -> child binding
 	var bindParentToChild = function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
 		
 		// setup listening on parent and forwarding to viewModel
 		var updateChild = function(ev, newValue){
 			// Save the viewModel property name so it is not updated multiple times.
 			bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
-
 			childUpdate(newValue);
 			
 			// only after the batch has finished, reduce the update counter
-			can.batch.afterPreviousEvents(function(){
+			can.batch.after(function(){
 				--bindingsSemaphore[attrName];
 			});
 		};
@@ -557,23 +574,18 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		if(parentCompute && parentCompute.isComputed) {
 			parentCompute.bind("change", updateChild);
 		
-			
 			can.one.call(el, 'removed', function() {
 				parentCompute.unbind("change", updateChild);
 			});
 			
 		}
 		
-		
-		
 		return updateChild;
 	};
 	
-	
-	
+	// child -> parent binding
 	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName){
 		var updateScope = function(ev, newVal){
-			
 			if (!bindingsSemaphore[attrName]) {
 				parentUpdate(newVal);
 			}
@@ -590,6 +602,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		return updateScope;
 	};
 	
+	
 	// parentToChild, childToParent, initializeValues
 	var bindings = function(el, attrData, options){
 		var attrName = attrData.attributeName;
@@ -597,7 +610,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		var parentCompute = getScopeCompute(el, attrData.scope, el.getAttribute(attrName) || ".", options);
 		
 		// Get what we are binding to from the child
-		var childCompute = getElementCompute(el, attrName, options);
+		var childCompute = getElementCompute(el, options.propName || attrName.replace(/^\{/,"").replace(/\}$/,""), options);
 		
 		// tracks which viewModel property is currently updating
 		var bindingsSemaphore = {},
@@ -638,19 +651,12 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		};
 	};
 	
-	// ## One way - parent to child
-	can.view.attr(/[\$\*]?[\w\.\-_]+\{/, function(el, attrData){
-		bindings(el, attrData, {parentToChild: true, initializeValues: true});
-	});
-	
-	// ## One way - child to parent
-	can.view.attr(/^[\$\*]?[\w\.\-_]+\}$/, function(el, attrData){
-		bindings(el, attrData, {childToParent: true, initializeValues: true});
-	});
-	
-	// ## Two way binding
-	can.view.attr(/\{[\$\*]?[\w\.\-_]+\}/, function(el, attrData){
-		bindings(el, attrData, {childToParent: true, parentToChild: true, initializeValues: true});
+	can.view.attr(/^\{[^\}]+\}$/, function(el, attrData){
+		
+		var attrNameInfo = attributeNameInfo(attrData.attributeName);
+		attrNameInfo.initializeValues = true;
+		
+		bindings(el, attrData, attrNameInfo);
 	});
 	
 	

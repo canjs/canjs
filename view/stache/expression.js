@@ -567,14 +567,17 @@ steal("can/util",
 				var hashes = {},
 					args = [],
 					children = ast.children;
-				for(var i = 0 ; i <children.length; i++) {
-					var child = children[i];
-					if(child.type === "Hash") {
-						hashes[child.prop] = this.hydrateAst( child.children[0], options, ast.type, true );
-					} else {
-						args.push( this.hydrateAst(child, options, ast.type, true) );
+				if(children) {
+					for(var i = 0 ; i <children.length; i++) {
+						var child = children[i];
+						if(child.type === "Hash") {
+							hashes[child.prop] = this.hydrateAst( child.children[0], options, ast.type, true );
+						} else {
+							args.push( this.hydrateAst(child, options, ast.type, true) );
+						}
 					}
 				}
+				
 				
 				return new (options.methodRule(ast))(this.hydrateAst(ast.method, options, ast.type), args, hashes);
 			}

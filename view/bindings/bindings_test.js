@@ -1036,7 +1036,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			tag: "view-model-able"
 		});
 		
-		var template = can.stache("<div {view-model-prop}='scopeProp'/>");
+		var template = can.stache("<div {(view-model-prop)}='scopeProp'/>");
 		
 		var attrSetCalled = 0;
 		
@@ -1087,7 +1087,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	
 	test("two-way - DOM - input text (#1700)", function () {
 
-		var template = can.view.stache("<input {$value}='age'/>");
+		var template = can.view.stache("<input {($value)}='age'/>");
 
 		var map = new can.Map();
 
@@ -1115,11 +1115,11 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});
 	
-	test('two-way - DOM - {$checked} with truthy and falsy values binds to checkbox (#1700)', function() {
+	test('two-way - DOM - {($checked)} with truthy and falsy values binds to checkbox (#1700)', function() {
 		var data = new can.Map({
 				completed: 1
 			}),
-			frag = can.view.stache('<input type="checkbox" {$checked}="completed"/>')(data);
+			frag = can.view.stache('<input type="checkbox" {($checked)}="completed"/>')(data);
 			
 		can.append(can.$("#qunit-fixture"), frag);
 
@@ -1129,7 +1129,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(input.checked, false, 'checkbox value bound (via attr check)');
 	});
 	
-	test('two-way - reference - {*ref}="foo" (#1700)', function(){
+	test('two-way - reference - {(child)}="*ref" (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
 			tag: 'reference-export',
@@ -1140,8 +1140,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			viewModel: {tag: 'ref-import'}
 		});
 
-		var template = can.stache("<reference-export {name}='*refName'/>"+
-			"<ref-import {name}='*refName'/> {{helperToGetScope}}");
+		var template = can.stache("<reference-export {(name)}='*refName'/>"+
+			"<ref-import {(name)}='*refName'/> {{helperToGetScope}}");
 		
 		var scope;
 		var frag = template(data,{
@@ -1177,7 +1177,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		can.Component.extend({
 			tag: "ref-export",
-			template: can.stache('<other-export {name}="*otherExport"/><content>{{*otherExport}}</content>')
+			template: can.stache('<other-export {(name)}="*otherExport"/><content>{{*otherExport}}</content>')
 		});
 
 		// this should have otherExport name in the page
@@ -1220,11 +1220,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test('one-way - parent to child - viewModel', function(){
 		
 		
-		can.Component.extend({
-			tag: "view-model-able"
-		});
-		
-		var template = can.stache("<div view-model-prop{='scopeProp'/>");
+		var template = can.stache("<div {view-model-prop}='scopeProp'/>");
 		
 
 		var map = new can.Map({scopeProp: "Venus"});
@@ -1250,7 +1246,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			}
 		});
 		
-		var template = can.stache("<view-model-able view-model-prop}='scopeProp'/>");
+		var template = can.stache("<view-model-able {^view-model-prop}='scopeProp'/>");
 		
 		var map = new can.Map({scopeProp: "Venus"});
 		
@@ -1267,7 +1263,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal( viewModel.attr("viewModelProp"), "Earth", "no binding from parent to child" );
 	});
 
-	test('one way - child to parent - importing viewModel .}="test"', function() {
+	test('one way - child to parent - importing viewModel {^.}="test"', function() {
 		can.Component.extend({
 			tag: 'import-scope',
 			template: can.stache('Hello {{name}}'),
@@ -1279,7 +1275,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		can.Component.extend({
 			tag: 'import-parent',
-			template: can.stache('<import-scope .}="test"></import-scope>' +
+			template: can.stache('<import-scope {^.}="test"></import-scope>' +
 				'<div>Imported: {{test.name}} {{test.age}}</div>')
 		});
 
@@ -1292,7 +1288,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 	
-	test('one way - child to parent - importing viewModel prop}="test"', function() {
+	test('one way - child to parent - importing viewModel {^prop}="test"', function() {
 		can.Component.extend({
 			tag: 'import-prop-scope',
 			template: can.stache('Hello {{name}}'),
@@ -1304,7 +1300,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		can.Component.extend({
 			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope name}="test"></import-prop-scope>' +
+			template: can.stache('<import-prop-scope {^name}="test"></import-prop-scope>' +
 				'<div>Imported: {{test}}</div>')
 		});
 
@@ -1315,7 +1311,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'Imported: David',  '{name} component scope imported into variable');
 	});
 
-	test('one way - child to parent - importing viewModel hypenated-prop}="test"', function(){
+	test('one way - child to parent - importing viewModel {^hypenated-prop}="test"', function(){
 		can.Component.extend({
 			tag: 'import-prop-scope',
 			template: can.stache('Hello {{userName}}'),
@@ -1330,7 +1326,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		can.Component.extend({
 			tag: 'import-prop-parent',
-			template: can.stache('<import-prop-scope user-name}="test" .}="childComponent"></import-prop-scope>' +
+			template: can.stache('<import-prop-scope {^user-name}="test" {^.}="childComponent"></import-prop-scope>' +
 				'<div>Imported: {{test}}</div>')
 		});
 
@@ -1368,7 +1364,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		});
 		
 		
-		var template = can.stache("<outer-noleak><my-child .}='myChild'/></outer-noleak>");
+		var template = can.stache("<outer-noleak><my-child {^.}='myChild'/></outer-noleak>");
 		var frag = template();
 		var vm = can.viewModel(frag.firstChild);
 		ok(vm.attr("myChild") instanceof can.Map, "got instance");
