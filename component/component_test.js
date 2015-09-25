@@ -1734,6 +1734,22 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				start();
 			}, 20);
 		});
+
+		test("components control destroy method is called", function(){
+			expect(0);
+			can.Component.extend({
+				tag: 'comp-control-destroy-test',
+				template: can.stache('<div>click me</div>'),
+				events: {
+					"{document} click" : function () {
+						ok(true, "click registered");
+					}
+				}
+			});
+			can.append(can.$("#qunit-fixture"), can.stache("<comp-control-destroy-test></comp-control-destroy-test>")({}));
+			can.remove(can.$("#qunit-fixture>*"));
+			can.trigger(can.$(document), 'click');
+		});
 	}
 
 	test('component simpleHelpers', function() {
@@ -1753,5 +1769,27 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 		var frag = can.stache('<simple-helper></simple-helper>')();
 		equal(frag.childNodes[0].innerHTML, 'Result: 7');
+	});
+
+	test("component destroy should teardown event handlers", function () {
+		var count = 0,
+			map = new can.Map({value: 1});
+
+		can.Component.extend({
+			tag: "page-element",
+			viewModel: { map: map },
+			events: {
+				'{scope.map} value': function(){
+					count++;
+				}
+			}
+		});
+		can.append(can.$("#qunit-fixture"), can.stache("<page-element></page-element>")());
+		can.remove(can.$("#qunit-fixture>*"));
+		map.attr("value", 2);
+
+		equal(count, 0, "Event handler should NOT be called since the element was removed.");
+
+		can.remove(can.$("#qunit-fixture>*"));
 	});
 });

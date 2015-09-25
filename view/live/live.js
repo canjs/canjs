@@ -638,7 +638,8 @@ steal('can/util',
 				can.data(wrapped, 'hooks', hooks = {});
 			}
 			// Get the attribute value.
-			var attr = elements.getAttr(el, attributeName),
+			// Cast to String. String expected for rendering. Attr may return other types for some attributes.
+			var attr = String(elements.getAttr(el, attributeName)),
 				// Split the attribute value by the template.
 				// Only split out the first __!!__ so if we have multiple hookups in the same attribute,
 				// they will be put in the right spot on first render

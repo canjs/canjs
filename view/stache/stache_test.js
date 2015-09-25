@@ -1,6 +1,8 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view","can/test",
-	"can/view/mustache/spec/specs","steal-qunit","can/view/stache/expression_test.js",function(){
+steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view",
+	"can/test","can/view/mustache/spec/specs","steal-qunit",
+	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
+	function(){
 	var browserDoc = window.document;
 	var simpleDocument = new SimpleDOM.Document();
 
@@ -4136,7 +4138,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var expected;
 			var t = {
 				template: '{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
-					'{{#default}}Not 10 ducks{{/default}}{{/switch}}',
+				'{{#default}}Not 10 ducks{{/default}}{{/switch}}',
 				expected: "10 ducks",
 				data: {
 					ducks: '10',
@@ -4164,7 +4166,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 		test("Handlerbars helper: switch - changing to default (#1857)", function(){
 			var template = can.stache('{{#switch ducks}}{{#case "10"}}10 ducks{{/case}}' +
-					'{{#default}}Not 10 ducks{{/default}}{{/switch}}');
+			'{{#default}}Not 10 ducks{{/default}}{{/switch}}');
 			var map = new can.Map({
 				ducks: "10"
 			});
@@ -4339,7 +4341,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		test("call expression #each passed list", function () {
 
 			var animals = new can.List(['sloth', 'bear']),
-				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachHelper(animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachOf(animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 			var div = doc.createElement('div');
 
@@ -4365,7 +4367,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		test("call expression #each passed compute", function () {
 
 			var animals = can.compute( new can.List(['sloth', 'bear']) ),
-				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachHelper(~animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+				renderer = can.stache("<div>my<b>favorite</b>animals:{{#eachOf(~animals)}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 			var div = doc.createElement('div');
 
@@ -4390,18 +4392,43 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		
 		test("call expression with #if", function(){
 			
-			var truthy = can.compute(true);
-			var template = can.stache("{{#if(truthy)}}true{{else}}false{{/if}}");
-			var frag = template({truthy: truthy});
-			
-			equal( frag.firstChild.nodeValue, "true", "set to true");
-			
-			truthy(false);
-			
-			equal( frag.firstChild.nodeValue, "false", "set to false");
+				var truthy = can.compute(true);
+				var template = can.stache("{{#if(truthy)}}true{{else}}false{{/if}}");
+				var frag = template({truthy: truthy});
+				
+				equal( frag.firstChild.nodeValue, "true", "set to true");
+				
+				truthy(false);
+				
+				equal( frag.firstChild.nodeValue, "false", "set to false");
+			});
+	
+			test('getHelper w/o optional options argument (#1497)', function() {
+			var options = can.stache.getHelper('each');
+			ok(typeof options.fn === 'function', 'each helper returned');
 		});
-
+	
+		test("methods don't update correctly (#1891)", function() {
+			var map = new can.Map({
+				num1: 1,
+				num2: function () { return this.attr('num1') * 2; }
+			});
+			var frag = can.stache(
+				'<span class="num1">{{num1}}</span>' +
+				'<span class="num2">{{num2}}</span>')(map);
+	
+			equal(frag.firstChild.firstChild.nodeValue, '1', 'Rendered correct value');
+			equal(frag.lastChild.firstChild.nodeValue, '2', 'Rendered correct value');
+	
+			map.attr('num1', map.attr('num1') * 2);
+	
+			equal(frag.firstChild.firstChild.nodeValue, '2', 'Rendered correct value');
+			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
+		});
+		
+		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
 	// NOTHING SHOULD GO HERE
+
 });

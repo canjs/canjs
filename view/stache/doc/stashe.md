@@ -31,7 +31,7 @@ that can be inserted in the page.
 
 ## Use
 
-[Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
+[Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/)
 templates are compatible with can.stache.
 
 Stache templates looks similar to normal HTML except
@@ -55,7 +55,7 @@ __JavaScript__
 		messages: 0
 	});
 
-	var template = can.view("#template", data)
+	var template = can.view("template", data)
 	document.body.appendChild(template);
 
 __HTML Result__
@@ -90,8 +90,8 @@ can.stache provides significantly more functionality such as:
  - Passes values in the scope to [can.Component] with `{key}`.
  - [can.stache.sectionRenderer section renderers] return documentFragments.
  - [can.mustache.helpers.elementCallback Element callbacks] like `{{(el) -> CODE}}` are no longer supported.
- 
- 
+
+
 ### Passing values in the scope to can.Components
 
 A [can.mustache] template passes values from the scope to a [can.Component]
@@ -102,13 +102,13 @@ by specifying the key of the value in the attribute directly.  For example:
       template: "<h1>{{greeting}}</h1>"
     });
     var template = can.mustache("<my-tag greeting='message'></my-tag>");
-    
+
     var frag = template({
       message: "Hi"
     });
-    
+
     frag //-> <my-tag greeting='message'><h1>Hi</h1></my-tag>
-   
+
 With stache, you wrap the key with `{}`. For example:
 
     can.Component.extend({
@@ -116,29 +116,29 @@ With stache, you wrap the key with `{}`. For example:
       template: "<h1>{{greeting}}</h1>"
     });
     var template = can.stache("<my-tag greeting='{message}'></my-tag>");
-    
+
     var frag = template({
       message: "Hi"
     });
-     
+
     frag //-> <my-tag greeting='{message}'><h1>Hi</h1></my-tag>
 
 If the key was not wrapped, the template would render:
 
     frag //-> <my-tag greeting='message'><h1>message</h1></my-tag>
- 
+
 Because the attribute value would be passed as the value of `greeting`.
- 
+
 ### Section renderers return documentFragments
 
-A [can.mustache.sectionRenderer Mustache section renderer] called 
+A [can.mustache.sectionRenderer Mustache section renderer] called
 like `options.fn()` or `options.inverse()` would always return a String. For example,
 the following would wrap the `.fn` section in an `<h1>` tag:
 
     can.mustache.registerHelper("wrapH1", function(options.fn()){
        return "<h1>"+options.fn()+"</h1>";
     });
-    
+
     var template = can.mustache("{{#wrapH1}}Hi There!{{/#wrapH1}}");
     template() //-> <h1>Hi There</h1>
 
@@ -153,7 +153,7 @@ jQuery, this can be done like:
     can.stache.registerHelper("wrapH1", function(options.fn()){
        return $("<h1>").append( options.fn() );
     });
-    
+
     var template = can.stache("{{#wrapH1}}Hi There!{{/#wrapH1}}");
     template() //-> <h1>Hi There</h1>
 
@@ -161,7 +161,7 @@ jQuery, this can be done like:
 ### Element callbacks are no longer supported
 
 `can.mustache` supported [can.mustache.helpers.elementCallback element callbacks] like `{{(el) -> CODE}}`. These
-are not supported in `can.stache`.  Instead, create a helper that returns a function or register 
+are not supported in `can.stache`.  Instead, create a helper that returns a function or register
 a [can.view.attr custom attribute].
 
     can.stache.registerHelper("elementCallback", function(){
@@ -173,6 +173,44 @@ a [can.view.attr custom attribute].
     can.view.tag("element-callback", function(el){
       CODE
     })
+
+## Working with Promises
+
+Promises passed into a template have the following attributes that are observable:
+
+- isPending
+- isResolved
+- isRejected
+- value - the resolved value of the promise, only available if `isResolved` is true
+- reason - the rejected value, only available if `isRejected` is true
+- state - "pending", "resolved", or "rejected"
+
+Stache Template
+
+```
+<script id="template" type="text/stache">
+	{{#if items.isPending}}
+		<img src="loading.png"/>
+	{{/if}}
+
+	{{#if items.isResolved}}
+		{{#each items.value}}
+			<h2>{{name}}</h2>
+		{{/each}}
+	{{/if}}
+
+	{{#if items.isRejected}}
+		<img src="error.png"/>
+	{{/if}}
+</script>
+```
+
+JavaScript
+
+```
+var promise = $.get('/items');
+var template = can.view('template', { items: promise });
+```
 
 ## Tags
 

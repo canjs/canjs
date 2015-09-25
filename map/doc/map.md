@@ -12,10 +12,6 @@
 @description Create observable objects.
 
 
-Watch this video to see an example of creating an ATM machine using can.Map:
-
-<iframe width="662" height="372" src="https://www.youtube.com/embed/QP9mHyxZNiI" frameborder="0" allowfullscreen></iframe>
-
 @signature `new can.Map([props])`
 
 Creates a new instance of can.Map.
@@ -25,10 +21,17 @@ Creates a new instance of can.Map.
 
 @signature `can.Map.extend([name,] [staticProperties,] instanceProperties)`
 
-Creates a new extended constructor function. 
+Creates a new extended constructor function.
 
 
 @body
+
+## Use
+
+Watch this video to see an example of creating an ATM machine using can.Map:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/QP9mHyxZNiI" frameborder="0" allowfullscreen></iframe>
+
 
 `can.Map` provides a way for you to listen for and keep track of changes
 to objects. When you use the getters and setters provided by `can.Map`,
@@ -130,3 +133,8 @@ that makes binding to specific types of events easier:
     o.removeAttr('a'); // 'a was removed.'
                        // 'a was changed.'
 
+## Object.prototype.watch
+
+Due to a method available on the base Object prototype called "watch", refrain from
+using properties with the same name on Gecko based browsers as there will be a
+collision. [Source](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/watch)

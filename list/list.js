@@ -591,7 +591,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				if (res && res.unbind) {
 					bubble.remove(this, res);
 				}
-				
+
 				return res;
 			};
 		});
@@ -818,7 +818,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 * attrList.attr(['Adam', 'Ben'], true);         // 0, set, Adam, Alexis
 		 *                                               // 1, set, Ben, Bill
 		 * replaceList.replace(['Adam', 'Ben']);         // 0, remove, undefined, ['Alexis', 'Bill']
-		 *                                               // 0, add, undefined, ['Adam', 'Ben']
+		 *                                               // 0, add, ['Adam', 'Ben'], ['Alexis', 'Bill']
 		 *
 		 * attrList.attr(['Amber'], true);               // 0, set, Amber, Adam
 		 *                                               // 1, remove, undefined, Ben

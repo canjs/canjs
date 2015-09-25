@@ -115,7 +115,7 @@ module.exports = function (grunt) {
 				options: {
 					port: 8000,
 					keepalive: true,
-					base: 'guides/examples/PlaceMyOrder/chapter_9/app/'
+					base: '.'
 				}
 			}
 		},

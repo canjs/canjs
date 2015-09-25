@@ -68,8 +68,9 @@
 		},
 		"can/view/href/href": {
 			"name": "can.view.href",
-			"type": "plugin",
-			"description": "Make flexible route links"
+			"type": "core",
+			"description": "Make flexible route links",
+			"isDefault": true
 		},
 		"can/control/control": {
 			"name": "can.Control",

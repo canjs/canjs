@@ -198,7 +198,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		}
 	};
-	helpers.eachHelper = helpers.each;
+	
+	helpers.eachOf = helpers.each;
 
 	var registerHelper = function(name, callback){
 		helpers[name] = callback;
@@ -210,7 +211,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
-			var helper = options.get("helpers." + name,{proxyMethods: false});
+			
+			var helper = options && options.get("helpers." + name,{proxyMethods: false});
 			if(!helper) {
 				helper = helpers[name];
 			}

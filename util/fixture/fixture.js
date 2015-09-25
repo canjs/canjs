@@ -105,7 +105,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// If no error handling is provided, we provide one and throw an
 				// error.
 				settings.error = function (xhr, error, message) {
-					throw "fixtures.js Error " + error + " " + message;
+					throw new Error("fixtures.js Error " + error + " " + message);
 				};
 			}
 			// Otherwise, it is a function and we add the fixture data type so the

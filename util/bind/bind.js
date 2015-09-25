@@ -7,7 +7,7 @@ steal('can/util', function (can) {
 	 * are no more event handlers.
 	 *
 	 */
-	// ## Bind helpers
+		// ## Bind helpers
 	can.bindAndSetup = function () {
 		// Add the event to this object
 		can.addEvent.apply(this, arguments);
@@ -27,8 +27,11 @@ steal('can/util', function (can) {
 		return this;
 	};
 	can.unbindAndTeardown = function (event, handler) {
-		var bindEvents = this.__bindEvents || {};
-		var handlers = bindEvents[event] || [];
+		if (!this.__bindEvents) {
+			return this;
+		}
+
+		var handlers = this.__bindEvents[event] || [];
 		var handlerCount = handlers.length;
 
 		// Remove the event handler

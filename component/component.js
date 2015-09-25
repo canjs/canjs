@@ -489,6 +489,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			this._bindings.readyComputes = {};
 		},
 		destroy: function() {
+			can.Control.prototype.destroy.apply( this, arguments );
 			if(typeof this.options.destroy === 'function') {
 				this.options.destroy.apply(this, arguments);
 			}
