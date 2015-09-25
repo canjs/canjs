@@ -185,9 +185,9 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				return can.joinURIs(parentAddress, moduleReference);
 			} else {
 				var baseURL = can.baseURL || (typeof System !== "undefined" &&
-																			(System.renderingLoader && System.renderingLoader.baseURL ||
-																			System.baseURL)) ||
-																			location.pathname;
+					(System.renderingLoader && System.renderingLoader.baseURL ||
+					System.baseURL)) ||
+					location.pathname;
 
 				// Make sure one of them has a needed /
 				if(moduleReference[0] !== "/" && baseURL[baseURL.length - 1] !== "/") {
@@ -198,6 +198,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		}
 	};
+	
+	helpers.eachOf = helpers.each;
 
 	var registerHelper = function(name, callback){
 		helpers[name] = callback;
@@ -209,7 +211,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
-			var helper = options && options.attr("helpers." + name);
+			
+			var helper = options && options.get("helpers." + name,{proxyMethods: false});
 			if(!helper) {
 				helper = helpers[name];
 			}

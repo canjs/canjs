@@ -10,7 +10,7 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		firstItem = new can.view.Scope( arrayScope.attr('0'), arrayScope );
 
 		var nameInfo = firstItem.read('name');
-		deepEqual(nameInfo.reads, ["name"]);
+		deepEqual(nameInfo.reads, [{key: "name", at: false}]);
 		equal(nameInfo.scope, firstItem);
 		equal(nameInfo.value,"Justin");
 		equal(nameInfo.rootObserve, items.people[0]);
@@ -206,11 +206,7 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		var data = {
 			map: new MapConstruct()
 		};
-		var res = can.view.Scope.read(data, [
-			'map',
-			'foo'
-		], {
-			returnObserveMethods: true,
+		var res = can.view.Scope.read(data, can.compute.read.reads('map.foo'), {
 			isArgument: true
 		});
 		res.value(true);

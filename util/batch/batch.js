@@ -8,7 +8,8 @@ steal('can/util/can.js', function (can) {
 		batchEvents = [],
 		stopCallbacks = [],
 		// an array of the currently dispatching batch events ... here so we can add things to the end of it (1519).
-		currentBatchEvents = null;
+		currentBatchEvents = null,
+		currentBatchCallbacks = null;
 		
 	can.batch = {
 		/**
@@ -177,8 +178,8 @@ steal('can/util/can.js', function (can) {
 
 				currentBatchEvents = batchEvents.slice(0);
 
-				var	callbacks = stopCallbacks.slice(0),
-					i, len;
+				currentBatchCallbacks = stopCallbacks.slice(0);
+				var i, len;
 				batchEvents = [];
 				stopCallbacks = [];
 				// Capture current batchNum so it can be check in live bindings
@@ -188,13 +189,15 @@ steal('can/util/can.js', function (can) {
 					can.batch.start();
 				}
 				for(i = 0; i < currentBatchEvents.length; i++) {
+					currentBatchEvents[i][1][0].orderNum = i;
 					can.dispatch.apply(currentBatchEvents[i][0],currentBatchEvents[i][1]);
 				}
 				currentBatchEvents = null;
 
-				for(i = 0, len = callbacks.length; i < callbacks.length; i++) {
-					callbacks[i]();
+				for(i = 0, len = currentBatchCallbacks.length; i < currentBatchCallbacks.length; i++) {
+					currentBatchCallbacks[i]();
 				}
+				currentBatchCallbacks = null;
 				can.batch.batchNum = undefined;
 			}
 		},
@@ -247,7 +250,14 @@ steal('can/util/can.js', function (can) {
 					[{type: "ready"}, []]
 				]);
 			} else {
-				handler();
+				handler({});
+			}
+		},
+		after: function(handler){
+			if(currentBatchEvents) {
+				currentBatchCallbacks.push(handler);
+			} else {
+				handler({});
 			}
 		}
 	};

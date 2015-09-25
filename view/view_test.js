@@ -598,7 +598,7 @@ steal("can/view/callbacks",
 			equal(foodTypes[item], cur, "can get the current scope");
 			var attr = el.getAttribute("on-click");
 
-			equal(attrData.scope.attr(attr), doSomething, "can call a parent's function");
+			equal(attrData.scope.get(attr,{proxyMethods: false}), doSomething, "can call a parent's function");
 			item++;
 		});
 		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
@@ -634,7 +634,7 @@ steal("can/view/callbacks",
 
 			var attr = el.getAttribute("on-click");
 
-			equal(attrData.scope.attr(attr), doSomething, "can call a parent's function");
+			equal(attrData.scope.get(attr,{proxyMethods: false}), doSomething, "can call a parent's function");
 
 			item++;
 		});

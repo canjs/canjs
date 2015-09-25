@@ -65,7 +65,7 @@ steal("can/util", "can/view",function(can){
 		attr: attr,
 		// handles calling back a tag callback
 		tagHandler: function(el, tagName, tagData){
-			var helperTagCallback = tagData.options.attr('tags.' + tagName),
+			var helperTagCallback = tagData.options.get('tags.' + tagName,{proxyMethods: false}),
 				tagCallback = helperTagCallback || tags[tagName];
 	
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content

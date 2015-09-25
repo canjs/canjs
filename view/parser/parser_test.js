@@ -14,9 +14,9 @@ steal("can/view/parser", "steal-qunit", function(parser){
 				} else {
 					var test = tests[count],
 						args = test[1];
-					equal(name, test[0], "test "+count+" called "+name);
+					equal(name, test[0], "test "+count+" "+name+"(");
 					for(var i = 0 ; i < args.length; i++) {
-						equal(arguments[i], args[i], (i+1)+" argument is right");
+						equal(arguments[i], args[i], (i+1)+" arg -> "+args[i]);
 					}
 					count++;
 				}
@@ -110,7 +110,6 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		parser('<input DISABLED/>',makeChecks([
 			["start", ["input", true]],
 			["attrStart", ["DISABLED"]],
-			["attrValue", ["DISABLED"]],
 			["attrEnd", ["DISABLED"]],
 			["end", ["input", true]],
 			["done",[]]
@@ -245,5 +244,42 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["close",["p"]],
 			["done",[]]
 		]));
+	});
+	
+	
+	test('allow {} to enclose attributes', function() {
+		
+		parser.parseAttrs('{a}="b" {{#c}}d{{/c}}',makeChecks([
+			["attrStart", ["{a}"]],
+			["attrValue", ["b"]],
+			["attrEnd", ["{a}"]],
+			["special",["#c"]],
+			["attrStart", ["d"]],
+			["attrEnd", ["d"]],
+			["special",["/c"]],
+		]));
+		
+		
+	});
+	
+	test('tripple curly in attrs', function(){
+		parser.parseAttrs('items="{{{ completed }}}"',makeChecks([
+			["attrStart", ["items"]],
+			["special",["{ completed "]],
+			["attrEnd", ["items"]]
+		]));
+	});
+	
+	test('something', function(){
+		parser.parseAttrs("c d='e'",makeChecks([
+			["attrStart", ["c"]],
+			["attrEnd", ["c"]],
+			["attrStart", ["d"]],
+			["attrValue", ["e"]],
+			["attrEnd", ["d"]],
+		]));
+		
+		
+		
 	});
 });

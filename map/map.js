@@ -556,7 +556,6 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				bubble.bind(this, eventName);
 
 				return can.bindAndSetup.apply(this, arguments);
-
 			},
 
 			// ### unbind
@@ -580,25 +579,25 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				return can.unbindAndTeardown.apply(this, arguments);
 
 			},
-
+			
 			// ### compute
 			// Creates a compute that represents a value on this map. If the property is a function
 			// on the prototype, a "function" compute wil be created.  
 			// Otherwise, a compute will be created that reads the observable attributes.
 			compute: function (prop) {
-
+	
 				if (can.isFunction(this.constructor.prototype[prop])) {
-
+					
 					return can.compute(this[prop], this);
 				} else {
-
-					var reads = prop.split("."),
+				
+					var reads = can.compute.read.reads(prop),
 						last = reads.length - 1;
-
+						
 					return can.compute(function (newVal) {
 						if (arguments.length) {
 							can.compute.read(this, reads.slice(0, last))
-								.value.attr(reads[last], newVal);
+								.value.attr(reads[last].key, newVal);
 						} else {
 							return can.compute.read(this, reads, {
 								args: []
@@ -606,7 +605,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 						}
 					}, this);
 				}
-
+			
 			},
 
 			// ### each

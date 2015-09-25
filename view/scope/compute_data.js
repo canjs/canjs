@@ -14,7 +14,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					// on a map
 					computeData.root instanceof can.Map &&
 					// that isn't calling a function
-					!can.isFunction(computeData.root[computeData.reads[0]]);
+					!can.isFunction(computeData.root[computeData.reads[0].key]);
 	};
 	
 	var getValueAndBindScopeRead = function(scopeRead, scopeReadChanged){
@@ -28,13 +28,13 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 	};
 	var getValueAndBindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
 		var target = computeData.root,
-			prop = computeData.reads[0];
+			prop = computeData.reads[0].key;
 		target.bind(prop, singlePropertyReadChanged);
 		// something: true is just a dummy value so we know something is observed
 		return {value: computeData.initialValue, observed: {something: true}};
 	};
 	var unbindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
-		computeData.root.unbind(computeData.reads[0], singlePropertyReadChanged);
+		computeData.root.unbind(computeData.reads[0].key, singlePropertyReadChanged);
 	};
 	var scopeReader = function(scope, key, options, computeData, newVal){
 		if (arguments.length > 4) {
@@ -46,7 +46,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 				var last = computeData.reads.length - 1;
 				var obj = computeData.reads.length ? can.compute.read(root, computeData.reads.slice(0, last)).value
 					: root;
-				can.compute.set(obj, computeData.reads[last], newVal, options);
+				can.compute.set(obj, computeData.reads[last].key, newVal, options);
 			}
 			// **Compute getter**
 		} else {

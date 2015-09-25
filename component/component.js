@@ -9,7 +9,7 @@
 // `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup`
 // to hookup the component.
 
-steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "can/observe", "can/view/mustache", "can/view/bindings", function (can, viewCallbacks, elements) {
+steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/mustache", function (can, viewCallbacks, elements, bindings) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
 	var ignoreAttributesRegExp = /^(dataViewId|class|id|\[[\w\.-]+\]|#[\w\.-])$/i,
@@ -156,43 +156,26 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 							return;
 						}
 					}
-					// Cross-bind the value in the scope to this
-					// component's viewModel
-					var computeData = componentTagData.scope.computeData(value, {
-						args: []
-					}),
-						compute = computeData.compute;
-
-					// bind on this, check it's value, if it has dependencies
-					var handler = function (ev, newVal) {
-						// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-						viewModelPropertyUpdates[name] = (viewModelPropertyUpdates[name] || 0 )+1;
-
-						viewModel.attr(name, newVal);
-						can.batch.afterPreviousEvents(function(){
-							--viewModelPropertyUpdates[name];
-						});
-					};
-
-					// Compute only returned if bindable
-					compute.bind("change", handler);
-
-					// Set the value to be added to the viewModel
-					initialScopeData[name] = compute();
-
-					// We don't need to listen to the compute `change` if it doesn't have any dependencies
-					if (!compute.computeInstance.hasDependencies) {
-						compute.unbind("change", handler);
+					
+					// Use logic from bindings
+					var compute = bindings.getParentCompute(el, componentTagData.scope, value, {});
+					
+					// if we actually got a compute
+					if(compute && compute.isComputed) {
+						bindings.bindParentToChild(el, compute, function(newValue){
+							viewModel.attr(name, newValue);
+						}, viewModelPropertyUpdates, name);
+						
+						// Set the value to be added to the viewModel
+						initialScopeData[name] = compute();
+	
+						twoWayBindings[name] = compute;
 					} else {
-						// Make sure we unbind (there's faster ways of doing this)
-						teardownFunctions.push(function () {
-							compute.unbind("change", handler);
-						});
-						// Setup the two-way binding
-						twoWayBindings[name] = computeData;
+						initialScopeData[name] = compute;
 					}
-
+					
 				});
+				
 				if (this.constructor.Map) {
 					// If `Map` property is set on the constructor use it to wrap the `initialScopeData`
 					viewModel = new this.constructor.Map(initialScopeData);
@@ -213,7 +196,6 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 						// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialScopeData`
 						viewModel = new(can.Map.extend(scopeResult))(initialScopeData);
 					}
-
 				}
 
 				// ## Two way bindings
@@ -221,12 +203,12 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 				// Object to hold the bind handlers so we can tear them down
 				var handlers = {};
 				// Setup reverse bindings
-				can.each(twoWayBindings, function (computeData, prop) {
+				can.each(twoWayBindings, function (compute, prop) {
 					handlers[prop] = function (ev, newVal) {
 						// Check that this property is not being changed because
 						// it's scope value just changed
 						if (!viewModelPropertyUpdates[prop]) {
-							computeData.compute(newVal);
+							compute(newVal);
 						}
 					};
 					viewModel.bind(prop, handlers[prop]);
@@ -437,7 +419,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/control", "ca
 
 						// Remove `scope.` from the start of the key and read the value from the `viewModel`.
 						key = key.replace(/^(scope|^viewModel)\./,"");
-						value = can.compute.read(options.scope, key.split("."), {isArgument: true}).value;
+						value = can.compute.read(options.scope, can.compute.read.reads(key), {isArgument: true}).value;
 
 						// If `value` is undefined use `can.getObject` to get the value.
 						if(value === undefined) {

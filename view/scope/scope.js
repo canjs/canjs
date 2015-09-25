@@ -12,41 +12,6 @@ steal(
 	'can/view',
 	'can/compute', function (can, makeComputeData) {
 
-		// ## Helpers
-
-		// Regex for escaped periods
-		var escapeReg = /(\\)?\./g,
-		// Regex for double escaped periods
-			escapeDotReg = /\\\./g,
-		// **getNames**
-		// Returns array of names by splitting provided string by periods and single escaped periods.
-		// ```getNames("a.b\.c.d\\.e") //-> ['a', 'b', 'c', 'd.e']```
-			getNames = function (attr) {
-				var names = [],
-					last = 0;
-				// Goes through attr string and places the characters found between the periods and single escaped periods into the
-				// `names` array.  Double escaped periods are ignored.
-				attr.replace(escapeReg, function (first, second, index) {
-					/* If period is double escaped then leave in place */
-					if (!second) {
-						names.push(
-							attr
-								.slice(last, index)
-								/* replaces double-escaped period with period */
-								.replace(escapeDotReg, '.')
-						);
-						last = index + first.length;
-					}
-				});
-				/* Adds last portion of attr to names array */
-				names.push(
-					attr
-						.slice(last)
-						/* replaces double-escaped period with period */
-						.replace(escapeDotReg, '.')
-				);
-				return names;
-			};
 
 		/**
 		 * @add can.view.Scope
@@ -77,17 +42,23 @@ steal(
 					this.__cache = {};
 					this._meta = meta || {};
 				},
-
+				get: can.__notObserve(function (key, options) {
+					
+					options = can.simpleExtend({
+						isArgument: true
+					}, options);
+					
+					var res = this.read(key, options);
+					return res.value;
+				}),
 				// ## Scope.prototype.attr
 				// Reads a value from the current context or parent contexts.
 				attr: can.__notObserve(function (key, value, options) {
 					// Reads for whatever called before attr.  It's possible
 					// that this.read clears them.  We want to restore them.
 					options = can.simpleExtend({
-							isArgument: true,
-							returnObserveMethods: true,
-							proxyMethods: false
-						}, options);
+						isArgument: true
+					}, options);
 
 					// Allow setting a value on the context
 					if(arguments.length === 2) {
@@ -103,8 +74,7 @@ steal(
 
 						can.compute.set(obj, key, value, options);
 					} else {
-						var res = this.read(key, options);
-						return res.value;
+						return this.get(key, options);
 					}
 					
 				}),
@@ -137,7 +107,7 @@ steal(
 						.compute;
 				},
 				getRefs: function(){
-					return this.getContext(function(scope){
+					return this.getScope(function(scope){
 						return scope._context  instanceof Scope.Refs;
 					});
 				},
@@ -147,10 +117,14 @@ steal(
 					});
 				},
 				getContext: function(tester){
+					var res = this.getScope(tester);
+					return res && res._context;
+				},
+				getScope: function(tester){
 					var scope = this;
 					while (scope) {
 						if(tester(scope)) {
-							return scope._context;
+							return scope;
 						}
 						scope = scope._parent;
 					}
@@ -254,15 +228,11 @@ steal(
 					}
 
 					// Array of names from splitting attr string into names.  ```"a.b\.c.d\\.e" //-> ['a', 'b', 'c', 'd.e']```
-					var names = attr.indexOf('\\.') === -1 ?
-							// Reference doesn't contain escaped periods
-							attr.split('.')
-							// Reference contains escaped periods ```(`a.b\.c.foo` == `a["b.c"].foo)```
-							: getNames(attr),
+					var names = can.compute.read.reads(attr),
 					// The current context (a scope is just data and a parent scope).
 						context,
 					// The current scope.
-						scope = this,
+						scope = attr.charAt(0) === "*" ? this.getRefs() : this,
 
 					// If no value can be found, this is a list of of every observed
 					// object and property name to observe.

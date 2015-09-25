@@ -1701,7 +1701,7 @@ steal('can/util',
 		Mustache.getHelper = function (name, options) {
 			var helper;
 			if (options) {
-				helper = options.attr("helpers." + name);
+				helper = options.get("helpers." + name,{proxyMethods: false});
 			}
 			return helper ? {
 				fn: helper
@@ -1802,7 +1802,7 @@ steal('can/util',
 		};
 
 		Mustache.renderPartial = function (partialName, scope, options) {
-			var partial = options.attr("partials." + partialName);
+			var partial = options.get("partials." + partialName,{proxyMethods: false});
 			if (partial) {
 				return partial.render ? partial.render(scope, options) :
 					partial(scope, options);

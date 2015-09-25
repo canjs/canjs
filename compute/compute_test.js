@@ -270,14 +270,14 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			read;
 		foostructor.self = foostructor;
 
-		read = can.compute.read(obj, ["next_level","thing","self","text"]);
+		read = can.compute.read(obj, can.compute.read.reads("next_level.thing.self.text") );
 		equal(read.value, "bar", "static properties on a can.Construct-based function");
 
-		read = can.compute.read(obj, ["next_level","thing","self"], { isArgument: true });
+		read = can.compute.read(obj, can.compute.read.reads("next_level.thing.self"), { isArgument: true });
 		ok(read.value === foostructor, "arguments shouldn't be executed");
 
 		foostructor.self = function() { return foostructor; };
-		read = can.compute.read(obj, ["next_level","thing","self","text"], { executeAnonymousFunctions: true });
+		read = can.compute.read(obj, can.compute.read.reads("next_level.thing.self.text"), { });
 		equal(read.value, "bar", "anonymous functions in the middle of a read should be executed if requested");
 	});
 	
@@ -299,26 +299,23 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 	test("compute.read works with a Map wrapped in a compute", function() {
 		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
-		var reads = ["map", "first"];
 
-		var result = can.compute.read(parent, reads);
+		var result = can.compute.read(parent, can.compute.read.reads("map.first"));
 		equal(result.value, "Justin", "The correct value is found.");
 	});
 
 	test('compute.read works with a Map wrapped in a compute', function() {
 		var parent = new can.Compute(new can.Map({map: {first: 'Justin' }}));
-		var reads = ['map', 'first'];
 
-		var result = can.Compute.read(parent, reads);
+		var result = can.Compute.read(parent, can.compute.read.reads("map.first"));
 		equal(result.value, 'Justin', 'The correct value is found.');
 	});
 
 	test("compute.read returns constructor functions instead of executing them (#1332)", function() {
 		var Todo = can.Map.extend({});
 		var parent = can.compute(new can.Map({map: { Test: Todo }}));
-		var reads = ["map", "Test"];
 
-		var result = can.compute.read(parent, reads);
+		var result = can.compute.read(parent, can.compute.read.reads("map.Test"));
 		equal(result.value, Todo, 'Got the same Todo');
 	});
 	
@@ -613,28 +610,6 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		});
 	});
 
-	test('can.Construct derived classes should be considered objects, not functions (#450)', function() {
-		var foostructor = can.Map({ text: 'bar' }, {}),
-			obj = {
-				next_level: {
-					thing: foostructor,
-					text: 'In the inner context'
-				}
-			},
-			read;
-		foostructor.self = foostructor;
-
-		read = can.Compute.read(obj, ['next_level','thing','self','text']);
-		equal(read.value, 'bar', 'static properties on a can.Construct-based function');
-
-		read = can.Compute.read(obj, ['next_level','thing','self'], { isArgument: true });
-		ok(read.value === foostructor, 'arguments shouldn\'t be executed');
-
-		foostructor.self = function() { return foostructor; };
-		read = can.Compute.read(obj, ['next_level','thing','self','text'], { executeAnonymousFunctions: true });
-		equal(read.value, 'bar', 'anonymous functions in the middle of a read should be executed if requested');
-	});
-
 	test('compute.async read without binding', function() {
 		var source = new can.Compute(1);
 
@@ -761,7 +736,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var map = new can.Map();
 		
 		var c = can.compute(function(){
-			return can.Compute.read({map: map},["map","data","value"]).value;
+			return can.Compute.read({map: map},can.compute.read.reads("map.data.value")).value;
 		});
 		
 		var calls = 0;
@@ -792,6 +767,22 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 		comp('test');
 	});
+	
+	test('can.compute.reads', function(){
+		deepEqual( can.compute.read.reads("@foo"),
+			[{key: "foo", at: true}]);
+			
+		deepEqual( can.compute.read.reads("@foo.bar"),
+			[{key: "foo", at: true}, {key: "bar", at: false}]);
+			
+		deepEqual( can.compute.read.reads("@foo\\.bar"),
+			[{key: "foo.bar", at: true}]);
+			
+		deepEqual( can.compute.read.reads("foo.bar@zed"),
+			[{key: "foo", at: false},{key: "bar", at: false},{key: "zed", at: true}]);
+		
+	});
+	
 
 	test('Calling .unbind() on un-bound compute does not throw an error', function () {
 		var count =  can.compute(0);

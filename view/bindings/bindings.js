@@ -3,7 +3,8 @@
 // This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
 // for in template event bindings. These are usable in any mustache template, but mainly and documented
 // for use within can.Component.
-steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, mustacheCore) {
+
+steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, expression) {
 	/**
 	 * @function isContentEditable
 	 * @hide
@@ -167,29 +168,47 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	};
 
 	var handleEvent = function (el, data) {
-
-		// the attribute name is the function to call
+		
+		// Get the `event` name and if we are listening to the element or viewModel.
+		// The attribute name is the name of the event.
 		var attributeName = data.attributeName,
-		// The event type to bind on is determin by whatever is after can-
-		// or it is a (event)
-		// For example, can-submit and (submit) binds on the submit event.
+		// The old way of binding is can-X
+			legacyBinding = attributeName.indexOf('can-') === 0,
 			event = attributeName.indexOf('can-') === 0 ?
 				attributeName.substr("can-".length) :
 				removeBrackets(attributeName, '(', ')'),
+			onBindElement = !legacyBinding;
+		
+		if(event.charAt(0) === "$") {
+			event = event.substr(1);
+			onBindElement = true;
+		}
+		
+		
 		// This is the method that the event will initially trigger. It will look up the method by the string name
 		// passed in the attribute and call it.
-			handler = function (ev) {
+		var handler = function (ev) {
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
-				// mustacheCore.expressionData will read the attribute
+				
+				var $el = can.$(this),
+					viewModel = can.viewModel($el[0]);
+				
+				// expression.parse will read the attribute
 				// value and parse it identically to how mustache helpers
 				// get parsed.
-				var attrInfo = mustacheCore.expressionData(removeBrackets(attrVal));
-
+				var expr = expression.parse(removeBrackets(attrVal),{lookupRule: "method", methodRule: "call"});
+				
+				if(!(expr instanceof expression.Call) && !(expr instanceof expression.Helper)) {
+					var defaultArgs = can.map( [data.scope._context, $el].concat(can.makeArray(arguments) ), function(data){
+						return new expression.Literal(data);
+					});
+					expr = new expression.Call(expr, defaultArgs, {} );
+				}
+				
 				// We grab the first item and treat it as a method that
 				// we'll call.
-				var scopeData = data.scope.read(attrInfo.name.key, {
-					returnObserveMethods: true,
+				var scopeData = data.scope.read(expr.methodExpr.key, {
 					isArgument: true
 				});
 
@@ -198,7 +217,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 
 				//!steal-remove-start
 				if (!scopeData.value) {
-					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + attrInfo.name.get, {
+					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
 						element: el,
 						scope: data.scope
 					});
@@ -206,8 +225,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 				}
 				//!steal-remove-end
 
-				var $el = can.$(this);
-				var viewModel = can.viewModel($el[0]);
+				
 				
 				// make a scope with these things just under 
 				
@@ -216,64 +234,26 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 					"@event": ev,
 					"@viewModel": viewModel,
 					"@scope": data.scope,
-					"@context": data.scope._context
+					"@context": data.scope._context,
+					
+					"%element": this,
+					"$element": $el,
+					"%event": ev,
+					"%viewModel": viewModel,
+					"%scope": data.scope,
+					"%context": data.scope._context
 				},{
 					notContext: true
 				});
-				var convertToValue = function(arg){
-					if(typeof arg === "function") {
-						return convertToValue( arg() );
-					} else {
-						return arg;
-					}
-				};
 				
-				var args = attrInfo.args(localScope, null, {}),
-					hash = attrInfo.hash(localScope, null, {});
+				
+				var args = expr.args(localScope, null),
+					hash = expr.hash(localScope, null);
 					
 				if(!can.isEmptyObject(hash)) {
 					args.push(hash);
 				}
-				/*
-				// .expressionData() gives us a hash object representing
-				// any expressions inside the definition that look like
-				// foo=bar. If there's no hash keys, we'll omit this hash
-				// from our method arguments.
-				if (!can.isEmptyObject(attrInfo.hash)) {
-					var hash = {};
-					can.each(attrInfo.hash, function(val, key) {
-						if (val && val.hasOwnProperty("get")) {
-							var s = !val.get.indexOf("@") ? localScope : data.scope;
-							hash[key] = s.read(val.get, {}).value;
-						} else {
-							hash[key] = val;
-						}
-					});
-					args.unshift(hash);
-				}
-
-				// We go through each non-hash expression argument and
-				// prepend it to our argument list.
-				if (attrInfo.args.length) {
-					var arg;
-					for (var i = attrInfo.args.length-1; i >= 0; i--) {
-						arg = attrInfo.args[i];
-						if (arg && arg.hasOwnProperty("get")) {
-							var s = !arg.get.indexOf("@") ? localScope : data.scope;
-							args.unshift(s.read(arg.get, {}).value);
-						} else {
-							args.unshift(arg);
-						}
-					}
-				}*/
-				
-				// If no arguments are provided, the method will simply
-				// receive the legacy arguments.
-				if (!args.length) {
-					// The arguments array includes extra args passed in to
-					// the event.
-					args = [data.scope._context, $el].concat(can.makeArray(arguments));
-				}
+		
 				return scopeData.value.apply(scopeData.parent, args);
 			};
 		
@@ -307,7 +287,7 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 	// that calls a method identified by the value of this attribute.
 	can.view.attr(/can-[\w\.]+/, handleEvent);
 	// ## (EVENT)
-	can.view.attr(/\([\w\.]+\)/, handleEvent);
+	can.view.attr(/^\([\$?\w\.]+\)$/, handleEvent);
 
 	// ## Two way binding can.Controls
 	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves
@@ -506,85 +486,199 @@ steal("can/util", "can/view/stache/mustache_core.js", "can/view/callbacks", "can
 			}
 		});
 
-	// ^abc='{this}'
-	// ^def='{blah}'
-	/*can.view.attr(/\^[\w\.\-_]+/, function(el, attrData) {
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
-			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
-			twoWayBind = true;
-
-		if(prop.charAt(0) === "{") {
-			twoWayBind = false;
-			prop = removeBrackets( prop );
+	var setElement = function(el, prop, value) {
+		if(el.nodeName.toLowerCase() === "input" && el.type === "checkbox") {
+			var trueValue = true;
+			// If `can-true-value` attribute was set, check if the value is equal to that string value, and set
+			// the checked property based on their equality.
+			el.checked = (value == trueValue); // jshint ignore:line
+		} else {
+			can.attr.set(el, prop, value == null ? "" : value);
 		}
+	};
 
-		var childViewModel = can.viewModel(el),
-			childScope = new can.view.Scope(childViewModel),
-			computeData = childScope.computeData(prop, {
-				args: [],
-
-			}),
-			childCompute = computeData.compute,
-			parentViewModel = attrData.scope.getViewModel();
-
-		var handler = function (ev, newVal) {
-			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-			parentViewModel.attr(name, newVal);
-		};
-		childCompute.bind("change", handler);
-
-		parentViewModel.attr( name, childCompute() );
-
-		can.one.call(el, 'removed', function() {
-			childCompute.unbind("change", handler);
-		});
-
-	});*/
-
-	can.view.attr(/#[\w\.\-_]+/, function(el, attrData) {
-
-		var prop = removeBrackets(el.getAttribute(attrData.attributeName)) || ".",
-			name = can.camelize( attrData.attributeName.substr(1).toLowerCase() ),
-			twoWayBind = true;
-
-
-		if(prop.charAt(0) === "{") {
-			twoWayBind = false;
-			prop = removeBrackets( prop );
-		}
-
-		var viewModel = can.viewModel(el);
-		var scope = new can.view.Scope(viewModel);
-		var refs = attrData.scope.getRefs();
-
-		var computeData = scope.computeData(prop, {
-				args: [],
-				isArgument: true
-			}),
-			compute = computeData.compute;
-
-		var handler = function (ev, newVal) {
-			// setup counter to prevent updating the scope with viewModel changes caused by scope updates.
-			refs.attr(name, newVal);
-		};
-		compute.bind("change", handler);
-
-		var initialValue = compute();
-		refs.attr(name, initialValue === undefined ? null : initialValue);
-
-		if(twoWayBind) {
-			var twoWayHandler = function(ev, newVal){
-				compute(newVal);
-			};
-			refs.bind(name, twoWayHandler);
-		}
-
-		can.one.call(el, 'removed', function() {
-			compute.unbind("change", handler);
-			if(twoWayBind) {
-				refs.unbind(name, twoWayHandler);
+	var elementCompute = function(el, prop, event){
+		return can.compute(el[prop],{
+			on: function(updater){
+				can.bind.call(el,event, updater);
+			},
+			off: function(updater){
+				can.unbind.call(el,event, updater);
+			},
+			get: function(){
+				return can.attr.get(el, prop);
+			},
+			set: function(value){
+				setElement(el, prop, value);
 			}
 		});
+	};
+	
+	var getValue = function(value){
+		return value && value.isComputed ? value() : value;
+	};
+	
+	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/;
+	var attributeNameInfo = function(attributeName){
+		var matches = attributeName.match(bindingsRegExp);
+		var twoWay = !!matches[1],
+			childToParent = twoWay || !!matches[2],
+			parentToChild = twoWay || !childToParent;
+		
+		
+		return {
+			childToParent: childToParent,
+			parentToChild: parentToChild,
+			propName: matches[3]
+		};
+	};
+	
+	// parent compute
+	var getScopeCompute = function(el, scope, scopeProp, options){
+		var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
+		return parentExpression.value(scope, new can.view.Scope());
+	};
+	// child compute
+	var getElementCompute = function(el, attributeName, options){
+		
+		var attrName = can.camelize( options.propName || attributeName.substr(1) ),
+			firstChar = attrName.charAt(0),
+			isDOM = firstChar === "$",
+			childCompute;
+			
+		if(isDOM) {
+			childCompute = elementCompute(el, attrName.substr(1), "change");
+		} else {
+			var childExpression = expression.parse(attrName,{baseMethodType: "Call"});
+			var childContext = can.viewModel(el);
+			var childScope = new can.view.Scope(childContext);
+			childCompute = childExpression.value(childScope, new can.view.Scope(), {});
+		}
+		return childCompute;
+	};
+	
+	// parent -> child binding
+	var bindParentToChild = function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
+		
+		// setup listening on parent and forwarding to viewModel
+		var updateChild = function(ev, newValue){
+			// Save the viewModel property name so it is not updated multiple times.
+			bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+			childUpdate(newValue);
+			
+			// only after the batch has finished, reduce the update counter
+			can.batch.after(function(){
+				--bindingsSemaphore[attrName];
+			});
+		};
+		
+		if(parentCompute && parentCompute.isComputed) {
+			parentCompute.bind("change", updateChild);
+		
+			can.one.call(el, 'removed', function() {
+				parentCompute.unbind("change", updateChild);
+			});
+			
+		}
+		
+		return updateChild;
+	};
+	
+	// child -> parent binding
+	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName){
+		var updateScope = function(ev, newVal){
+			if (!bindingsSemaphore[attrName]) {
+				parentUpdate(newVal);
+			}
+		};
+		
+		if(childCompute && childCompute.isComputed) {
+			childCompute.bind("change", updateScope);
+		
+			can.one.call(el, 'removed', function() {
+				childCompute.unbind("change", updateScope);
+			});
+		}
+		
+		return updateScope;
+	};
+	
+	
+	// parentToChild, childToParent, initializeValues
+	var bindings = function(el, attrData, options){
+		var attrName = attrData.attributeName;
+		// Get what we are binding to from the scope
+		var parentCompute = getScopeCompute(el, attrData.scope, el.getAttribute(attrName) || ".", options);
+		
+		// Get what we are binding to from the child
+		var childCompute = getElementCompute(el, options.propName || attrName.replace(/^\{/,"").replace(/\}$/,""), options);
+		
+		// tracks which viewModel property is currently updating
+		var bindingsSemaphore = {},
+			updateChild,
+			updateScope;
+		
+		if(options.parentToChild){
+			// setup listening on parent and forwarding to viewModel
+			updateChild = bindParentToChild(el, parentCompute, childCompute, bindingsSemaphore, attrName);
+		}
+		if(options.childToParent){
+			// setup event binding on viewModel and forward to parent.
+			updateScope = bindChildToParent(el, parentCompute, childCompute, bindingsSemaphore, attrName);
+		}
+		
+		if(options.initializeValues) {
+			if(options.parentToChild && !options.childToParent) {
+				updateChild({}, getValue(parentCompute) );
+			}
+			else if(!options.parentToChild && options.childToParent) {
+				updateScope({}, getValue(childCompute) );
+			}
+			// Two way
+			// Update child or parent depending on who has a value.
+			// If both have a value, update the child.
+			else if( childCompute() === undefined) {
+				updateChild({}, getValue(parentCompute) );
+			} else if(parentCompute() === undefined) {
+				updateScope({}, getValue(childCompute) );
+			} else {
+				updateChild({}, getValue(parentCompute) );
+			}
+		}
+		
+		return {
+			parentCompute: parentCompute,
+			childCompute: childCompute
+		};
+	};
+	
+	can.view.attr(/^\{[^\}]+\}$/, function(el, attrData){
+		
+		var attrNameInfo = attributeNameInfo(attrData.attributeName);
+		attrNameInfo.initializeValues = true;
+		
+		bindings(el, attrData, attrNameInfo);
+	});
+	
+	
+	// #ref-export shorthand
+	can.view.attr(/\*[\w\.\-_]+/, function(el, attrData) {
+		if(el.getAttribute(attrData.attributeName)) {
+			console.warn("&reference attributes can only export the view model.");
+		}
+		
+		var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
+
+		var viewModel = can.viewModel(el);
+		var refs = attrData.scope.getRefs();
+		refs._context.attr("*"+name, viewModel);
 
 	});
+	
+	return {
+		getParentCompute: getScopeCompute,
+		bindParentToChild: bindParentToChild,
+		bindChildToParent: bindChildToParent,
+		setupDataBinding: bindings
+	};
 });
