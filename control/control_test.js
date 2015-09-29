@@ -288,6 +288,43 @@ steal("can/control", "steal-qunit", function () {
 		c.destroy();
 		c.destroy();
 	});
+	// Added support for drag and drop events (#1955)
+	test("drag and drop events", function() {
+		expect(7);
+		var DragDrop = can.Control("", {
+			" dragstart": function() {
+				ok(true, "dragstart called");
+			},
+			" dragenter": function() {
+				ok(true, "dragenter called");
+			},
+			" dragover": function() {
+				ok(true, "dragover called");
+			},
+			" dragleave": function() {
+				ok(true, "dragleave called");
+			},
+			" drag": function() {
+				ok(true, "drag called");
+			},
+			" drop": function() {
+				ok(true, "drop called");
+			},
+			" dragend": function() {
+				ok(true, "dragend called");
+			}
+		});
+		can.append(can.$("#qunit-fixture"), '<div id="draggable"/>');
+		new DragDrop("#draggable");
+		can.trigger(can.$("#draggable"), "dragstart");
+		can.trigger(can.$("#draggable"), "dragenter");
+		can.trigger(can.$("#draggable"), "dragover");
+		can.trigger(can.$("#draggable"), "dragleave");
+		can.trigger(can.$("#draggable"), "drag");
+		can.trigger(can.$("#draggable"), "drop");
+		can.trigger(can.$("#draggable"), "dragend");
+		can.remove(can.$("#draggable"));
+	});
 	if (can.dev) {
 		test('Control is logging information in dev mode', function () {
 			expect(2);
