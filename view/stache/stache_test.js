@@ -4456,6 +4456,29 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
 		});
 
+		test('eq called twice (#1931)', function() {
+			expect(1);
+
+			var oldIs = can.stache.getHelper('is').fn;
+
+			can.stache.registerHelper('is', function() {
+				ok(true, 'comparator invoked');
+				return oldIs.apply(this, arguments);
+			});
+
+			var a = can.compute(0),
+			b = can.compute(0);
+
+			can.stache('{{eq a b}}')({ a: a, b: b });
+
+			can.batch.start();
+			a(1);
+			b(1);
+			can.batch.stop();
+
+			can.stache.registerHelper('is', oldIs);
+		});
+
 		test("#each with else works (#1979)", function(){
 			var list = new can.List(["a","b"]);
 			var template = can.stache("<div>{{#each list}}<span>{{.}}</span>{{else}}<label>empty</label>{{/each}}</div>");
