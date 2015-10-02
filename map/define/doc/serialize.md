@@ -3,7 +3,7 @@
 
 Called when an attribute is removed.
 
-@signature `serializer( currentValue )`
+@signature `serialize( currentValue )`
 
 @param {*} value The current value of the attribute. 
 
