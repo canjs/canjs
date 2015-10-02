@@ -1,5 +1,5 @@
 "format steal";
-steal("can/util", "can/map/app", function(can, AppState){
+steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 	
 	var deferred = new can.Deferred(),
 		ignoreAttributesRegExp = /^(dataViewId|class|id|type|src)$/i;
