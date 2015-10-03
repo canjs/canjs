@@ -1,11 +1,8 @@
 sudo: false
 language: node_js
-node_js: 0.10
+node_js: node
 before_script: node_modules/.bin/bower install
 script: npm test
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
 env:
   - TEST_SUITE=loaders
   - TEST_SUITE=dists
