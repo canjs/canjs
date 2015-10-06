@@ -16,7 +16,7 @@ steal('can/util', 'can/route', function (can) {
 	var isFileProtocol = window.location && window.location.protocol === 'file:';
 
 	// Initialize plugin only if browser supports pushstate.
-	if ((!isFileProtocol && hasPushstate) || can.isNode) {
+	if (!isFileProtocol && hasPushstate) {
 
 		// Registers itself within `can.route.bindings`.
 		can.route.bindings.pushstate = {
