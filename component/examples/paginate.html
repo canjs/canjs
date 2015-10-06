@@ -49,11 +49,14 @@
 		    color: #ccc;
 		    text-align: center;
 		}
+		.waiting {
+			opacity: 0.5;
+		}
 	</style>
 <div id='out'></div>
-<script id="appMustache" type='text/mustache'>
+<script id="app-stache" type='text/stache'>
   <app>
-    <grid deferredData='websitesDeferred'>
+    <grid {promise-data}='websitesPromise'>
       {{#each items}}
         <tr>
           <td width='40%'>{{name}}</td>
@@ -61,14 +64,14 @@
         </tr>
       {{/each}}
     </grid>
-    <next-prev paginate='paginate'></next-prev>
-    <page-count page='paginate.page' count='paginate.pageCount'></page-count>
+    <next-prev {paginate}='paginate'></next-prev>
+    <page-count {page}='paginate.page' {count}='paginate.pageCount'></page-count>
   </app>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'> 
-steal("can/util", "can/component", "can/map/setter", "can/util/fixture",
-  "can/model", function (can) {
+steal("can/util", "can/component", "can/map/define", "can/util/fixture",
+  "can/model", "can/view/stache",function (can) {
 
 var Website = can.Model.extend({
   findAll: "/websites"
@@ -93,24 +96,44 @@ can.fixture("/websites", function (request) {
 });
 
 var Paginate = can.Map.extend({
-  count: Infinity,
-  offset: 0,
-  limit: 5,
+  define: {
+  	count: {
+  	  value: Infinity,
+  	  count: function (newCount) {
+        return newCount < 0 ? 0 : newCount;
+      }
+  	},
+  	offset: {
+  	  value: 0,
+  	  set: function (newOffset) {
+  	    return newOffset < 0 ?
+  	      0 :
+  	      Math.min(newOffset, !isNaN(this.count - 1) ?
+  	        this.count - 1 :
+  	        Infinity);
+      }
+	},
+  	limit: {value: 5},
+  	page: {
+  	  get: function(){
+  	  	return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+  	  },
+  	  set: function(newVal){
+  	  	this.attr('offset', (parseInt(newVal, 10) - 1) * this.attr('limit'));
+  	  }
+  	},
+  	pageCount: {
+  	  get: function(){
+  	    return this.attr('count') ?
+          Math.ceil(this.attr('count') / this.attr('limit')) : null;
+  	  }
+  	}
+  },
   next: function () {
     this.attr('offset', this.offset + this.limit);
   },
   prev: function () {
     this.attr('offset', this.offset - this.limit);
-  },
-  setOffset: function (newOffset) {
-    return newOffset < 0 ?
-      0 :
-      Math.min(newOffset, !isNaN(this.count - 1) ?
-        this.count - 1 :
-        Infinity);
-  },
-  setCount: function (newCount, success, error) {
-    return newCount < 0 ? 0 : newCount;
   },
   canNext: function () {
     return this.attr('offset') < this.attr('count') -
@@ -118,74 +141,70 @@ var Paginate = can.Map.extend({
   },
   canPrev: function () {
     return this.attr('offset') > 0;
-  },
-  page: function (newVal) {
-    if (newVal === undefined) {
-      return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
-    } else {
-      this.attr('offset', (parseInt(newVal, 10) - 1) * this.attr('limit'));
-    }
-  },
-  pageCount: function () {
-    return this.attr('count') ?
-      Math.ceil(this.attr('count') / this.attr('limit')) : null;
   }
 });
 
 can.Component.extend({
   tag: "app",
-  viewModel: function () {
-    return {
-      paginate: new Paginate({
-        limit: 5
-      }),
-      websitesDeferred: function () {
-        var params = {
-          limit: this.attr('paginate.limit'),
-          offset: this.attr('paginate.offset')
-        },
-          websitesDeferred = Website.findAll(params),
-          self = this;
+  viewModel: {
+  	define: {
+  	  paginate: {
+  	  	value: function(){
+  	  	  return new Paginate({ limit: 5 });
+  	  	}
+  	  },
+  	  websitesPromise: {
+  	  	get: function(){
+  	  	  var params = {
+              limit: this.attr('paginate.limit'),
+              offset: this.attr('paginate.offset')
+            },
+            websitesPromise = Website.findAll(params),
+            self = this;
 
-        websitesDeferred.then(function (websites) {
-          self.attr('paginate.count', websites.count);
-        });
+          websitesPromise.then(function (websites) {
+            self.attr('paginate.count', websites.count);
+          });
 
-        return websitesDeferred;
-      }
-    }
+          return websitesPromise;
+  	    }
+  	  }
+  	}
   }
 });
 
 can.Component.extend({
   tag: "grid",
+  template: can.stache("<table><tbody {{#waiting}}class='waiting'{{/waiting}}><content></content></tbody></table>"),
   viewModel: {
-    items: [],
-    waiting: true
-  },
-  template: "<table><tbody><content></content></tbody></table>",
-  events: {
-    init: function () {
-      this.update();
-    },
-    "{viewModel} deferreddata": "update",
-    update: function () {
-      var deferred = this.viewModel.attr('deferreddata'),
-        viewModel = this.viewModel,
-        el = this.element;
-      if (can.isDeferred(deferred)) {
-        this.viewModel.attr("waiting", true);
-        this.element.find('tbody').css('opacity', 0.5);
-        deferred.then(function (items) {
-          viewModel.attr('items').replace(items);
-        });
-      } else {
-        viewModel.attr('items').attr(deferred, true);
+    define: {
+      items: {
+        get: function(lastSet, resolve){
+          var promise = this.attr("promiseData");
+          if(promise) {
+          	promise.then(resolve);
+          }
+          
+        }
+      },
+      waiting: {
+        get: function(lastSet, resolve){
+      	  var promise = this.attr("promiseData");
+      	  if(promise) {
+      	  	if( promise.state() === "pending" ) {
+	      	    promise.then(function(){
+	      	  	  resolve(false);
+	      	    });
+	      	    return true;
+	      	  } else {
+	      	    return false;
+	      	  }
+      	  } else {
+      	  	return true;
+      	  }
+      	  
+        }
       }
-    },
-    "{items} change": function () {
-      this.viewModel.attr("waiting", false);
-      this.element.find('tbody').css('opacity', 1);
     }
   }
 });
@@ -193,18 +212,18 @@ can.Component.extend({
 can.Component.extend({
   tag: "next-prev",
   template: 
+    can.stache('<a href="javascript://"' + 
+      'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" ($click)="paginate.prev()">Prev</a>' + 
     '<a href="javascript://"' + 
-      'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" can-click="paginate.prev">Prev</a>' + 
-    '<a href="javascript://"' + 
-      'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" can-click="paginate.next">Next</a>'
+      'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" ($click)="paginate.next()">Next</a>')
 });
 
 can.Component.extend({
   tag: "page-count",
-  template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
+  template: can.stache('Page <span>{{page}}</span> of <span>{{count}}</span>.')
 });
 
-$("#out").html(can.view("appMustache", {}))
+$("#out").html(can.view("app-stache", {}))
 
 });
 	</script>
