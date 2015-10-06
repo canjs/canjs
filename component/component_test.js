@@ -1516,6 +1516,22 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			equal(removeCount, 2, 'internal removed twice');
 
 		});
+		
+		test("component viewModels are initialized with binding values", function(){
+			can.Component.extend({
+				tag: 'init-viewmodel',
+				viewModel: {
+					init: function(props){
+						equal(props.prop, "value", "got initialized with a value");
+					}
+				}
+			});
+			can.stache("<init-viewmodel {prop}='passedProp'/>")({
+				passedProp: "value"
+			});
+		});
+		
+		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
 	makeTest("can/component dom", document);
@@ -1750,6 +1766,8 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			can.remove(can.$("#qunit-fixture>*"));
 			can.trigger(can.$(document), 'click');
 		});
+		
+		// PUT NEW TESTS THAT NEED TO TEST AGAINST MUSTACHE JUST ABOVE THIS LINE
 	}
 
 	test('component simpleHelpers', function() {
@@ -1792,4 +1810,6 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 		can.remove(can.$("#qunit-fixture>*"));
 	});
+	
+	// DONT PUT TESTS HERE!!!  Look up for where to put new tests.
 });

@@ -95,6 +95,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			// ### setup
 			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, componentTagData) {
+				
 				// Setup values passed to component
 				var initialScopeData = {
 						"@root": componentTagData.scope.attr("@root")
@@ -106,7 +107,8 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 									   false :
 									   !this.leakScope) &&
 									  !!this.template),
-					twoWayBindings = {},
+					bindingsData = {},
+					//twoWayBindings = {},
 					scope = this.scope || this.viewModel,
 					// tracks which viewModel property is currently updating
 					viewModelPropertyUpdates = {},
@@ -119,7 +121,8 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						for(var i = 0, len = teardownFunctions.length ; i < len; i++) {
 							teardownFunctions[i]();
 						}
-					};
+					},
+					$el = can.$(el);
 
 				// ## Scope
 
@@ -127,11 +130,13 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				can.each(this.constructor.attributeScopeMappings, function (val, prop) {
 					initialScopeData[prop] = el.getAttribute(can.hyphenate(val));
 				});
-
+				
 				// Get the value in the viewModel for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
-					var name = can.camelize(node.name.toLowerCase()),
+					
+					var nodeName = node.name,
+						name = can.camelize(nodeName.toLowerCase()),
 						value = node.value;
 
 					//!steal-remove-start
@@ -141,15 +146,19 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							"but it is not a supported attribute");
 					}
 					//!steal-remove-end
-
+					
+					var isDataBindings = bindings.dataBindingsRegExp.test(nodeName);
 					// Ignore attributes already present in the ScopeMappings.
-					if (component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name) || viewCallbacks.attr(node.nodeName)) {
+					if (component.constructor.attributeScopeMappings[name] ||
+						ignoreAttributesRegExp.test(name) ||
+						// we will handle 
+						( viewCallbacks.attr(nodeName) && !isDataBindings ) ) {
 						return;
 					}
 					// Only setup bindings if attribute looks like `foo="{bar}"`
 					if(value[0] === "{" && value[value.length-1] === "}") {
 						value = value.substr(1, value.length - 2 );
-					} else {
+					} else if(!isDataBindings){
 						// Legacy template types will crossbind "foo=bar"
 						if(componentTagData.templateType !== "legacy") {
 							initialScopeData[name] = value;
@@ -157,23 +166,29 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						}
 					}
 					
+					var bindingData = bindings.attributeNameInfo(nodeName);
+					bindingData.propName = can.camelize(bindingData.propName);
+					bindingsData[bindingData.propName] = bindingData;
+					
+					
 					// Use logic from bindings
 					var compute = bindings.getParentCompute(el, componentTagData.scope, value, {});
 					
 					// if we actually got a compute
 					if(compute && compute.isComputed) {
-						bindings.bindParentToChild(el, compute, function(newValue){
-							viewModel.attr(name, newValue);
-						}, viewModelPropertyUpdates, name);
+						if(bindingData.parentToChild) {
+							bindings.bindParentToChild(el, compute, function(newValue){
+								viewModel.attr(bindingData.propName, newValue);
+							}, viewModelPropertyUpdates, bindingData.propName);
+							
+							// Set the value to be added to the viewModel
+							initialScopeData[bindingData.propName] = compute();
+						}
 						
-						// Set the value to be added to the viewModel
-						initialScopeData[name] = compute();
-	
-						twoWayBindings[name] = compute;
+						bindingsData[bindingData.propName].parentCompute = compute;
 					} else {
-						initialScopeData[name] = compute;
+						initialScopeData[bindingData.propName] = compute;
 					}
-					
 				});
 				
 				if (this.constructor.Map) {
@@ -203,15 +218,26 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				// Object to hold the bind handlers so we can tear them down
 				var handlers = {};
 				// Setup reverse bindings
-				can.each(twoWayBindings, function (compute, prop) {
-					handlers[prop] = function (ev, newVal) {
-						// Check that this property is not being changed because
-						// it's scope value just changed
-						if (!viewModelPropertyUpdates[prop]) {
-							compute(newVal);
+				can.each(bindingsData, function (bindingData, prop) {
+					if(bindingData.childToParent) {
+						handlers[prop] = function (ev, newVal) {
+							// Check that this property is not being changed because
+							// it's scope value just changed
+							if (!viewModelPropertyUpdates[prop]) {
+								bindingData.parentCompute(newVal);
+							}
+						};
+						viewModel.bind(prop, handlers[prop]);
+						// it's possible there's nothing to update
+						if(bindingData.parentCompute) {
+							bindings.initializeValues(bindingData,
+								prop === "." ? viewModel : viewModel.attr(prop),
+								bindingData.parentCompute, function(){}, function(ev, newVal){
+								bindingData.parentCompute(newVal);
+							});
 						}
-					};
-					viewModel.bind(prop, handlers[prop]);
+						
+					}
 				});
 				// Setup the attributes bindings
 				if (!can.isEmptyObject(this.constructor.attributeScopeMappings) || componentTagData.templateType !== "legacy") {
@@ -219,7 +245,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 					can.bind.call(el, "attributes", function (ev) {
 						// Convert attribute name from the `attribute-name` to the `attributeName` format.
 						var camelized = can.camelize(ev.attributeName);
-						if (!twoWayBindings[camelized] && !ignoreAttributesRegExp.test(camelized) ) {
+						if (!bindingsData[camelized] && !ignoreAttributesRegExp.test(camelized) ) {
 							// If there is a mapping for this attribute, update the `viewModel` attribute
 							viewModel.attr(camelized, el.getAttribute(ev.attributeName));
 						}
@@ -229,8 +255,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 
 				// Set `viewModel` to `this.viewModel` and set it to the element's `data` object as a `viewModel` property
 				this.scope = this.viewModel = viewModel;
-				can.data(can.$(el), "scope", this.scope);
-				can.data(can.$(el), "viewModel", this.scope);
+				can.data($el, "scope", this.scope);
+				can.data($el, "viewModel", this.scope);
+				can.data($el,"preventDataBindings", true);
 
 				// Create a real Scope object out of the viewModel property
 				// The scope used to render the component's template.

@@ -521,6 +521,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/;
 	var attributeNameInfo = function(attributeName){
 		var matches = attributeName.match(bindingsRegExp);
+		if(!matches) {
+			return {
+				childToParent: true,
+				parentToChild: true,
+				propName: attributeName
+			};
+		}
 		var twoWay = !!matches[1],
 			childToParent = twoWay || !!matches[2],
 			parentToChild = twoWay || !childToParent;
@@ -585,6 +592,9 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	};
 	
 	// child -> parent binding
+	// el -> the element
+	// parentUpdate -> a method that updates the parent
+	// 
 	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName){
 		var updateScope = function(ev, newVal){
 			if (!bindingsSemaphore[attrName]) {
@@ -628,22 +638,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 		
 		if(options.initializeValues) {
-			if(options.parentToChild && !options.childToParent) {
-				updateChild({}, getValue(parentCompute) );
-			}
-			else if(!options.parentToChild && options.childToParent) {
-				updateScope({}, getValue(childCompute) );
-			}
-			// Two way
-			// Update child or parent depending on who has a value.
-			// If both have a value, update the child.
-			else if( childCompute() === undefined) {
-				updateChild({}, getValue(parentCompute) );
-			} else if(parentCompute() === undefined) {
-				updateScope({}, getValue(childCompute) );
-			} else {
-				updateChild({}, getValue(parentCompute) );
-			}
+			initializeValues(options, childCompute, parentCompute, updateChild, updateScope);
 		}
 		
 		return {
@@ -651,9 +646,30 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			childCompute: childCompute
 		};
 	};
+	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateScope){
+		if(options.parentToChild && !options.childToParent) {
+			updateChild({}, getValue(parentCompute) );
+		}
+		else if(!options.parentToChild && options.childToParent) {
+			updateScope({}, getValue(childCompute) );
+		}
+		// Two way
+		// Update child or parent depending on who has a value.
+		// If both have a value, update the child.
+		else if( getValue(childCompute) === undefined) {
+			updateChild({}, getValue(parentCompute) );
+		} else if(parentCompute() === undefined) {
+			updateScope({}, getValue(childCompute) );
+		} else {
+			updateChild({}, getValue(parentCompute) );
+		}
+	};
 	
-	can.view.attr(/^\{[^\}]+\}$/, function(el, attrData){
-		
+	var dataBindingsRegExp = /^\{[^\}]+\}$/;
+	can.view.attr(dataBindingsRegExp, function(el, attrData){
+		if(can.data(can.$(el),"preventDataBindings")){
+			return;
+		}
 		var attrNameInfo = attributeNameInfo(attrData.attributeName);
 		attrNameInfo.initializeValues = true;
 		
@@ -679,6 +695,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		getParentCompute: getScopeCompute,
 		bindParentToChild: bindParentToChild,
 		bindChildToParent: bindChildToParent,
-		setupDataBinding: bindings
+		setupDataBinding: bindings,
+		// a regular expression that 
+		dataBindingsRegExp: dataBindingsRegExp,
+		attributeNameInfo: attributeNameInfo,
+		initializeValues: initializeValues
 	};
 });

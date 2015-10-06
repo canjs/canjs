@@ -185,27 +185,25 @@ can.Component.extend({
       items: {
         get: function(lastSet, resolve) {
           var promise = this.attr("promiseData");
-          if (promise) {
-            promise.then(resolve);
-          }
+
+          promise.then(resolve);
+          
 
         }
       },
       waiting: {
         get: function(lastSet, resolve) {
           var promise = this.attr("promiseData");
-          if (promise) {
-            if (promise.state() === "pending") {
-              promise.then(function() {
-                resolve(false);
-              });
-              return true;
-            } else {
-              return false;
-            }
-          } else {
+          
+          if (promise.state() === "pending") {
+            promise.then(function() {
+              resolve(false);
+            });
             return true;
+          } else {
+            return false;
           }
+          
 
         }
       }
