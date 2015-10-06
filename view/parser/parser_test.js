@@ -279,7 +279,17 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["attrEnd", ["d"]],
 		]));
 		
+	});
+	
+	test('references', function(){
 		
+		parser("<year-selector *y />",makeChecks([
+			["start", ["year-selector", true]],
+			["attrStart", ["*y"]],
+			["attrEnd", ["*y"]],
+			["end",["year-selector"]],
+			["done",[]]
+		]));
 		
 	});
 });

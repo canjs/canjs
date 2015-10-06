@@ -1,5 +1,5 @@
 @page can.stache.Helpers Helpers
-@parent can.stache.pages 3
+@parent can.stache.pages 4
 
 # Helpers
 

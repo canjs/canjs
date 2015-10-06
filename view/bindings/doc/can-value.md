@@ -3,6 +3,8 @@
 
 Sets up two way bindings in a template.
 
+@deprecated {2.2} Use [can.view.bindings.twoWay two way binding] (`[($value)]="KEY"`) instead.
+
 @signature `can-value='KEY'`
 
 Binds the element's value or checked property to the value specified by

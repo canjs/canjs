@@ -247,8 +247,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				});
 				
 				
-				var args = expr.args(localScope, null),
-					hash = expr.hash(localScope, null);
+				var args = expr.args(localScope, null)(),
+					hash = expr.hash(localScope, null)();
 					
 				if(!can.isEmptyObject(hash)) {
 					args.push(hash);

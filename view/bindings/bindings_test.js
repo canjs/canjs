@@ -1018,6 +1018,25 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var data = {
 			setSomething: function(message){
 				equal(message, "Matthew P finds good bugs");
+				equal(this, data, "setSomething called with correct scope");
+			},
+			person: {
+				name: "Matthew P",
+				message: function(){
+					return this.name + " finds good bugs";
+				}
+			}
+		};
+		var frag = template(data);
+		can.trigger( frag.firstChild, "click" );
+	});
+	
+	test("(event) methods on objects are called with call expressions (#1839)", function(){
+		var template = can.stache("<div ($click)='setSomething(person.message)'/>");
+		var data = {
+			setSomething: function(message){
+				equal(message, "Matthew P finds good bugs");
+				equal(this, data, "setSomething called with correct scope");
 			},
 			person: {
 				name: "Matthew P",

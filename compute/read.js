@@ -121,11 +121,12 @@ steal("can/util", function(can){
 			// i = reads.length if this is the last iteration of the read for-loop.
 			return type === 'function' && !value.isComputed &&
 				!(can.Construct && value.prototype instanceof can.Construct) &&
-				!(can.route && value === can.route) &&
-				!isAt(i, reads);
+				!(can.route && value === can.route);
 		},
 		read: function(value, i, reads, options, state, prev){
-			if (options.isArgument && i === reads.length) {
+			if( isAt(i, reads) ) {
+				return i === reads.length ? can.proxy(value, prev) : value;
+			}else if ( options.isArgument && i === reads.length) {
 				return options.proxyMethods !== false ? can.proxy(value, prev) : value;
 			}
 			return value.apply(prev, options.args || []);

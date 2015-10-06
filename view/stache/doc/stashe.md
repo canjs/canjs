@@ -1,8 +1,8 @@
 @function can.stache
 @parent canjs
 @release 2.1
-@group can.stache.static 0 Methods
-@group can.stache.pages 1 Pages
+@group can.stache.pages 0 Pages
+@group can.stache.static 1 Methods
 @group can.stache.types 2 Types
 @group can.stache.tags 3 Basic Tags
 @group can.stache.htags 4 Helper Tags
@@ -15,7 +15,7 @@
 @download http://canjs.us/release/latest/can.stache.js
 
 
-@description Logic-less Handlebar and Mustache templates with live binding.
+@description Live binding Mustache and Handlebars-comptable templates.
 
 @signature `can.stache(template)`
 
@@ -31,57 +31,54 @@ that can be inserted in the page.
 
 ## Use
 
-[Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/)
-templates are compatible with can.stache.
+Stache templates are a [mustache](https://mustache.github.io/mustache.5.html) and [handlebars](http://handlebarsjs.com/) compatable 
+syntax.  They are used to:
 
-Stache templates looks similar to normal HTML except
-they contain keys for inserting data into the template
-and [can.stache.Sections sections] to enumerate and/or filter the enclosed template blocks.
+- Convert data into HTML.
+- Update the HTML when observable data changes.
+- Provide custom elements and bindings.
 
-For example, the following renders a welcome header for
-a user and displays the number of messages.
+The following 
+creates a stache template, renders it with data, and inserts
+the result into the page:
 
-__Stache Template__
+```
+// renderer is a "renderer function"
+var renderer = can.stache("<h1>Hello {{subject}}</h1>");
 
-	<script id="template" type="text/stache">
-		<h1>Welcome {{user}}!</h1>
-		<p>You have {{messages}} messages.</p>
-	</script>
+// "renderer functions" render a template and return a
+// document fragment.
+var fragment = renderer({subject: "World"})
 
-__JavaScript__
+// A document fragment is a collection of elements that can be 
+// used with jQuery or with normal DOM methods.
+fragment //-> <h1>Hello World</h1>
+document.body.appendChild(fragment)
+``` 
 
-	var data = new can.Map({
-		user: 'Tina Fey',
-		messages: 0
-	});
+Render a template with observable data like [can.Map]s or [can.List]s and the HTML will update
+when the observable data changes.
 
-	var template = can.view("template", data)
-	document.body.appendChild(template);
+```
+var renderer = can.stache("<h1>Hello {{subject}}</h1>");
+var map = new can.Map({subject: "World"});
+var fragment = renderer(map)
+document.body.appendChild(fragment)
 
-__HTML Result__
+map.attr("subject","Earth");
 
-	<h1>Welcome Tina Fey!</h1>
-	<p>You have 0 messages.</p>
+document.body.innerHTML //-> <h1>Hello Earth</h1>
+``` 
 
-To update the html using live-binding, change an observable value:
+There's a whole lot of behavior that `can.stache` provides.  The following walks through
+the most important stuff:
 
-	data.attr('messages', 5)
-
-This updates this paragraph in the HTML Result to:
-
-	<p>You have 5 messages.</p>
-
-
-
-can.stache provides significantly more functionality such as:
-
-- [can.stache.Basics Context and Path Basics]
-- [can.stache.Sections Sections]
-- [can.stache.helpers.partial Partials]
-- [can.stache.Acquisition Acquiring Templates]
-- [can.stache.Helpers Helpers]
-- [can.stache.Binding Live Binding]
-
+- [can.stache.magicTagTypes] - The different tag types like `{{key}}` and `{{#key}}...{{/key}}`
+- [can.stache.scopeAndContext] - How key values are looked up.
+- [can.stache.expressions] - Supported expression types like `{{helper arg}}` and `{{method(arg)}}`
+- [can.stache.Acquisition] - How to load templates into your application.
+- [can.stache.Helpers] - The built in helpers and how to create your own.
+- [can.stache.Binding] - How live binding works.
 
 ## Differences from can.mustache
 

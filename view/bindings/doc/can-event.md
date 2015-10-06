@@ -1,5 +1,7 @@
-@function can.view.bindings.can-EVENT can-EVENT/(EVENT)
+@function can.view.bindings.can-EVENT can-EVENT
 @parent can.view.bindings
+
+@deprecated {2.2} Use [can.view.bindings.event event binding] (`($EVENT)="METHOD()"`) instead.
 
 @signature `(EVENT)='{methodKey [argKey..] [hashName=hashKey...]}'`
 

@@ -1,5 +1,4 @@
 @page can.stache.Sections Sections
-@parent can.stache.pages 2
 
 Sections (`[can.stache.tags.section {{#key}}]` followed by `[can.stache.tags.close {{/key}}]`) have multiple uses 
 depending on what type of object is passed to the section. In all cases, using a section will change 

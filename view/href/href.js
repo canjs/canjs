@@ -17,9 +17,10 @@ steal("can/util",
 		// foo='bar' zed=5 abc=myValue
 		// Note: 'tmp ' is added because expressionData "Breaks up the name and arguments of a mustache expression.", but we don't use name:
 		var attrInfo = expression.parse('tmp(' + removeCurly(el.getAttribute("can-href"))+")", {baseMethodType: "Call"});
+		var getHash = attrInfo.hash(attrData.scope, null);
 		// -> {hash: {foo: 'bar', zed: 5, abc: {get: 'myValue'}}}
 		var routeHref = can.compute(function(){
-			return can.route.url(attrInfo.hash(attrData.scope, null));
+			return can.route.url(getHash());
 		});
 
 
