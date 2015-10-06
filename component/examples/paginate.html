@@ -97,49 +97,51 @@ can.fixture("/websites", function (request) {
 
 var Paginate = can.Map.extend({
   define: {
-  	count: {
-  	  value: Infinity,
-  	  count: function (newCount) {
+    count: {
+      value: Infinity,
+      count: function(newCount) {
         return newCount < 0 ? 0 : newCount;
       }
-  	},
-  	offset: {
-  	  value: 0,
-  	  set: function (newOffset) {
-  	    return newOffset < 0 ?
-  	      0 :
-  	      Math.min(newOffset, !isNaN(this.count - 1) ?
-  	        this.count - 1 :
-  	        Infinity);
+    },
+    offset: {
+      value: 0,
+      set: function(newOffset) {
+        return newOffset < 0 ?
+          0 :
+          Math.min(newOffset, !isNaN(this.count - 1) ?
+            this.count - 1 :
+            Infinity);
       }
-	},
-  	limit: {value: 5},
-  	page: {
-  	  get: function(){
-  	  	return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
-  	  },
-  	  set: function(newVal){
-  	  	this.attr('offset', (parseInt(newVal, 10) - 1) * this.attr('limit'));
-  	  }
-  	},
-  	pageCount: {
-  	  get: function(){
-  	    return this.attr('count') ?
+    },
+    limit: {
+      value: 5
+    },
+    page: {
+      get: function() {
+        return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+      },
+      set: function(newVal) {
+        this.attr('offset', (parseInt(newVal, 10) - 1) * this.attr('limit'));
+      }
+    },
+    pageCount: {
+      get: function() {
+        return this.attr('count') ?
           Math.ceil(this.attr('count') / this.attr('limit')) : null;
-  	  }
-  	}
+      }
+    }
   },
-  next: function () {
+  next: function() {
     this.attr('offset', this.offset + this.limit);
   },
-  prev: function () {
+  prev: function() {
     this.attr('offset', this.offset - this.limit);
   },
-  canNext: function () {
+  canNext: function() {
     return this.attr('offset') < this.attr('count') -
       this.attr('limit');
   },
-  canPrev: function () {
+  canPrev: function() {
     return this.attr('offset') > 0;
   }
 });
@@ -147,29 +149,31 @@ var Paginate = can.Map.extend({
 can.Component.extend({
   tag: "app",
   viewModel: {
-  	define: {
-  	  paginate: {
-  	  	value: function(){
-  	  	  return new Paginate({ limit: 5 });
-  	  	}
-  	  },
-  	  websitesPromise: {
-  	  	get: function(){
-  	  	  var params = {
+    define: {
+      paginate: {
+        value: function() {
+          return new Paginate({
+            limit: 5
+          });
+        }
+      },
+      websitesPromise: {
+        get: function() {
+          var params = {
               limit: this.attr('paginate.limit'),
               offset: this.attr('paginate.offset')
             },
             websitesPromise = Website.findAll(params),
             self = this;
 
-          websitesPromise.then(function (websites) {
+          websitesPromise.then(function(websites) {
             self.attr('paginate.count', websites.count);
           });
 
           return websitesPromise;
-  	    }
-  	  }
-  	}
+        }
+      }
+    }
   }
 });
 
@@ -179,30 +183,30 @@ can.Component.extend({
   viewModel: {
     define: {
       items: {
-        get: function(lastSet, resolve){
+        get: function(lastSet, resolve) {
           var promise = this.attr("promiseData");
-          if(promise) {
-          	promise.then(resolve);
+          if (promise) {
+            promise.then(resolve);
           }
-          
+
         }
       },
       waiting: {
-        get: function(lastSet, resolve){
-      	  var promise = this.attr("promiseData");
-      	  if(promise) {
-      	  	if( promise.state() === "pending" ) {
-	      	    promise.then(function(){
-	      	  	  resolve(false);
-	      	    });
-	      	    return true;
-	      	  } else {
-	      	    return false;
-	      	  }
-      	  } else {
-      	  	return true;
-      	  }
-      	  
+        get: function(lastSet, resolve) {
+          var promise = this.attr("promiseData");
+          if (promise) {
+            if (promise.state() === "pending") {
+              promise.then(function() {
+                resolve(false);
+              });
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return true;
+          }
+
         }
       }
     }
@@ -211,11 +215,10 @@ can.Component.extend({
 
 can.Component.extend({
   tag: "next-prev",
-  template: 
-    can.stache('<a href="javascript://"' + 
-      'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" ($click)="paginate.prev()">Prev</a>' + 
-    '<a href="javascript://"' + 
-      'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" ($click)="paginate.next()">Next</a>')
+  template: can.stache('<a href="javascript://"' +
+    'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" ($click)="paginate.prev()">Prev</a>' +
+    '<a href="javascript://"' +
+    'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" ($click)="paginate.next()">Next</a>')
 });
 
 can.Component.extend({
