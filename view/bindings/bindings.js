@@ -191,7 +191,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				var attrVal = el.getAttribute(attributeName);
 				if (!attrVal) { return; }
 				
-				var $el = can.$(this),
+				var $el = can.$(el),
 					viewModel = can.viewModel($el[0]);
 				
 				// expression.parse will read the attribute
