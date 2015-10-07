@@ -2,7 +2,7 @@
 <div id='out'></div>
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'> 
-steal("can/component", function() {
+steal("can/component", "can/view/stache",function() {
 
     can.Component.extend({
       tag: "my-paginate",
@@ -16,7 +16,7 @@ steal("can/component", function() {
           return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
         }
       },
-      template: "Page <span>1</span> <button class='next'>Next</button>",
+      template: can.stache("Page <span>1</span> <button class='next'>Next</button>"),
       events: {
       	".next click": function(){
       	  this.viewModel.next();	
@@ -27,7 +27,7 @@ steal("can/component", function() {
       }
     })
 
-    $("#out").html(can.view.mustache("<my-paginate/>")({}))
+    $("#out").html(can.stache("<my-paginate/>")({}))
 })
 </script>
 </body>

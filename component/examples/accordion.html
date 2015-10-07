@@ -1,6 +1,6 @@
 <div id="demo">
 <div id='out'></div>
-<script id="app" type="text/mustache">
+<script id="app" type="text/stache">
 	<accordion>
 		<panel title="Contacts">
 			<button>Change title attribute to "Users"</button>
@@ -24,7 +24,7 @@
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script id="demo-source">
-steal("can/component",function(){
+steal("can/component","can/view/stache",function(){
 
 can.Component.extend({
 	tag: "accordion",
@@ -62,27 +62,26 @@ can.Component.extend({
 		makeActive: function(panel){
 			this.attr("active",panel);
 			this.attr("panels").each(function(panel){
-				panel.attr("active", false)
-			})
+				panel.attr("active", false);
+			});
 			panel.attr("active",true);
 			
 		},
 		// this is scope, not mustache
 		// consider removing scope as arg
 		isActive: function( panel ) {
-			return this.attr('active') == panel
+			return this.attr('active') == panel;
 		}
 	}
 });
 
 can.Component.extend({
 	template: 
-		"<h2 can-click='makeActive'>{{title}}</h2>"+
-		"{{#if active}}<content></content>{{/if}}",
+		can.stache("<h2 can-click='makeActive'>{{title}}</h2>"+
+		"{{#if active}}<content></content>{{/if}}"),
 	tag:"panel",
 	viewModel: {
-		active: false,
-		title: "@"
+		active: false
 	},
 	events: {
 		inserted: function(){
@@ -97,9 +96,9 @@ can.Component.extend({
 $("#out").html( can.view("app",{}) );
 
 $("#out").on("click","button", function(){
-	$(this).parent().attr("title", "Users")
+	$(this).parent().attr("title", "Users");
 	$(this).remove();
-})
+});
 
 });
 </script>

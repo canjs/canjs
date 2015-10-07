@@ -1,9 +1,18 @@
-@property {String|can.view.renderer} [can.Component.prototype.template]
+@property {can.view.renderer|String} [can.Component.prototype.template]
 @parent can.Component.prototype
 
 Provides a template to render directly within the component's tag. The template is rendered with the
 component's [can.Component::viewModel viewModel].  `<content>` elements within the template are replaced by
 the source elements within the component's tag.
+
+@option {can.view.renderer} A [can.view.renderer] returned by [can.stache] or 
+[can.view]. For example:
+
+    can.Component({
+      tag: "my-tabs",
+      template: can.stache("<ul>{{#panels}}<li>{{title}}</li> ...")
+    })
+
 
 @option {String} The string contents of a [can.mustache] template.  For example:
 
@@ -12,20 +21,15 @@ the source elements within the component's tag.
       template: "<ul>{{#panels}}<li>{{title}}</li> ..."
     })
 
-@option {can.view.renderer} A [can.view.renderer] returned by [can.mustache] or 
-[can.view]. For example:
+Note: Using mustache is deprecated.  Please switch to [can.stache].
 
-    can.Component({
-      tag: "my-tabs",
-      template: can.view("/ui/components/my-tabs.mustache")
-    })
 
 @body
 
 
 ## Use
 
-The mustache template specified by the `template` property works similar to 
+The template specified by the `template` property works similar to 
 the [http://www.w3.org/TR/shadow-dom/ W3C Shadow DOM proposal]. It represents the contents
 of a custom element, while being able to reposition the user provided __source__ elements
 with the `<content>` tag.
@@ -46,7 +50,7 @@ __can.Component:__
 
     can.Component({
       "tag": "my-greeting",
-      template: "<h1><content/></h1>",
+      template: can.stache("<h1><content/></h1>"),
       viewModel: {
         title: "can.Component"
       }
@@ -101,13 +105,13 @@ The following sections break this down more.
 
 ## Template insertion
 
-The [can.mustache] template specified by template is rendered directly withing the custom tag.
+The template specified by template is rendered directly withing the custom tag.
 
 For example the following component:
 
     can.Component({
       tag: "my-greeting",
-      template: "<h1>Hello There</h1>"
+      template: can.stache("<h1>Hello There</h1>")
     });
 
 With the following source html:
@@ -142,7 +146,7 @@ template. For example, if we change the component to look like:
 
     can.Component({
       tag: "my-greeting",
-      template: "<h1><content/></h1>"
+      template: can.stache("<h1><content/></h1>")
     });
 
 And rendered with source html like:
@@ -161,7 +165,7 @@ change the component to look like:
 
     can.Component({
       tag: "my-greeting",
-      template: "<h1><content>Hello World</content></h1>"
+      template: can.stache("<h1><content>Hello World</content></h1>")
     });
 
 And rendered with source html like:

@@ -25,57 +25,33 @@ and custom tags.
    - [can.view.bindings.toChild]=[can.stache.key] - one way binding to child
    - [can.view.bindings.toParent]=[can.stache.key] - one way binding to parent
    - [can.view.bindings.twoWay]=[can.stache.key] - two way binding child to parent
+   
+  Example:
+  
+  ```
+  <my-tag {to-child}="key" 
+          {^to-parent}="key" 
+          {(two-way)}="key"></my-tag>
+  ```
 
 @signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
 
-Create an instance of a component on a particular 
-tag in a [can.stache] template.
+  Create an instance of a component on a particular 
+  tag in a [can.stache] template.  This form of two way bindings is deprecated as of 2.3. It looked like:
 
-@release 2.1
+  ```
+  <my-tag attr-name="{key}"></my-tag>
+  ```  
 
-@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
-property of the component.
-
-@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
-valid. Any attributes added to the element are added as properties to the
-component's [can.Component::viewModel viewModel]. In the DOM, attribute names
-are case insensitive.  To pass a camelCase attribute to the component's viewModel,
-hypenate the attribute name like:
-
-    <tag attr-name="{key}"></tag>
-
-This will set `attrName` on the component's viewModel.
-
-@param {can.stache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel] that will be looked
-up in the [can.view.Scope can.stache scope]. 
-
-@param {can.stache.key} [ATTR-VALUE] If the attribute value is not
-wrapped with `{}`, the string value of the attribute will be
-set on the component's viewModel.
+  @release 2.1
+  
+   Please check earlier versions of the documentation for more information.
 
 @signature `< TAG [ATTR-NAME=KEY|ATTR-VALUE] >`
 
-Create an instance of a component on a particular 
-tag in a [can.mustache] template.
-
-@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
-property of the component.
-
-@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
-valid. Any attributes added to the element are added as properties to the
-component's [can.Component::viewModel viewModel].
-
-@param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel]. By default `ATTR-VALUE`
-values are looked up in the [can.view.viewModel can.mustache viewModel]. If the string value
-of the `ATTR-NAME` is desired, this can be specified like: 
-
-    ATTR-NAME: "@"
-
-@param {can.mustache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel] that will be looked
-up in the [can.view.Scope can.stache scope].
+  Create an instance of a component on a particular 
+  tag in a [can.mustache] template. Use of [can.mustache] is deprecated as of 
+  2.3.  Please check earlier versions of the documentation for more information.
 
 
 
@@ -397,45 +373,53 @@ This demo uses a `Paginate` can.Map to assist with maintaining a paginated state
     ...
     });
     
-The `app` component creates an instance of the `Paginate` model
-and a `websitesDeferred` that represents a request for the Websites
+The `app` component, using the [can.Map.define define plugin], creates an instance of the `Paginate` model
+and a `websitesPromise` that represents a request for the Websites
 that should be displayed.
 
-    viewModel: function () {
-      return {
-        paginate: new Paginate({
-          limit: 5
-        }),
-        websitesDeferred: can.compute(function () {
-          var params = {
-            limit: this.attr('paginate.limit'),
-            offset: this.attr('paginate.offset')
-          },
-            websitesDeferred = Website.findAll(params),
-            self = this;
-
-          websitesDeferred.then(function (websites) {
-            self.attr('paginate.count', websites.count)
-          });
+    viewModel: {
+      define: {
+        paginate: {
+          value: function() {
+            return new Paginate({
+              limit: 5
+            });
+          }
+        },
+        websitesPromise: {
+          get: function() {
+            var params = {
+                  limit: this.attr('paginate.limit'),
+                  offset: this.attr('paginate.offset')
+              },
+              websitesPromise = Website.findAll(params),
+              self = this;
+  
+            websitesPromise.then(function(websites) {
+              self.attr('paginate.count', websites.count);
+            });
     
-          return websitesDeferred;
-        })
+            return websitesPromise;
+          }
+        }
       }
     }
 
-The `app` control passes paginate, paginate's values, and websitesDeferreds to
+The `app` control passes paginate, paginate's values, and websitesPromise to
 its sub-components:
 
-    <grid deferredData='websitesDeferred'>
-      {{#each items}}
-        <tr>
-          <td width='40%'>{{name}}</td>
-          <td width='70%'>{{url}}</td>
-        </tr>
-      {{/each}}
-    </grid>
-    <next-prev paginate='paginate'/>
-    <page-count page='paginate.page' count='paginate.pageCount'/>
+    <app>
+      <grid {promise-data}='websitesPromise'>
+        {{#each items}}
+          <tr>
+            <td width='40%'>{{name}}</td>
+            <td width='70%'>{{url}}</td>
+          </tr>
+        {{/each}}
+      </grid>
+      <next-prev {paginate}='paginate'></next-prev>
+      <page-count {page}='paginate.page' {count}='paginate.pageCount'/>
+    </app>
 
 ## IE 8 Support
 

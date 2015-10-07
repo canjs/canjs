@@ -177,7 +177,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			event = attributeName.indexOf('can-') === 0 ?
 				attributeName.substr("can-".length) :
 				removeBrackets(attributeName, '(', ')'),
-			onBindElement = !legacyBinding;
+			onBindElement = legacyBinding;
 		
 		if(event.charAt(0) === "$") {
 			event = event.substr(1);
@@ -268,12 +268,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 		// Bind the handler defined above to the element we're currently processing and the event name provided in this
 		// attribute name (can-click="foo")
-		can.bind.call(el, event, handler);
+		can.bind.call(onBindElement ? el : can.viewModel(el), event, handler);
 		
 		// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
 		var attributesHandler = function(ev) {
 			if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
-				can.unbind.call(el, event, handler);
+				
+				can.unbind.call(onBindElement ? el : can.viewModel(el), event, handler);
 				can.unbind.call(el, 'attributes', attributesHandler);
 			}
 		};

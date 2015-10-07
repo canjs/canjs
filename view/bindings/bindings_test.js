@@ -1390,6 +1390,22 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-
+	test("viewModel binding (event)", function(){
+		
+		can.Component.extend({
+			tag: "viewmodel-binding",
+			viewModel: {
+				makeMyEvent: function(){
+					this.dispatch("myevent");
+				}
+			}
+		});
+		var frag = can.stache("<viewmodel-binding (myevent)='doSomething()'/>")({
+			doSomething: function(){
+				ok(true, "called!");
+			}
+		});
+		can.viewModel(frag.firstChild).makeMyEvent();
+	});
 	
 });
