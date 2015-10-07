@@ -92,24 +92,14 @@ steal("can/util",
 	
 	// ### Arg
 	// `new Arg(Expression [,modifierOptions] )`
-	// Returns a value, not a compute.
+	// Used to identify an expression that should return a value.
 	var Arg = function(expression, modifiers){
 		this.expr = expression;
 		this.modifiers = modifiers || {};
 		this.isCompute = false;
 	};
 	Arg.prototype.value = function(){
-		if(!this._value) {
-			// protect here?
-			this._value = this.expr.value.apply(this.expr, arguments);
-			this.isCompute = this._value && this._value.isComputed;
-		}
-		
-		if(!this.isCompute || this.modifiers.compute) {
-			return this._value;
-		} else {
-			return this._value();
-		}
+		return this.expr.value.apply(this.expr, arguments);
 	};
 	
 	// ### Hash
@@ -132,17 +122,38 @@ steal("can/util",
 		var args = [];
 		for(var i = 0, len = this.argExprs.length; i < len; i++) {
 			var arg = this.argExprs[i];
-			args.push( arg.value.apply(arg, arguments) );
+			var value = arg.value.apply(arg, arguments);
+			args.push({
+				call: value && value.isComputed && !arg.modifiers.compute,
+				value: value
+			});
 		}
-		return args;
+		return function(){
+			var finalArgs = [];
+			for(var i = 0, len = args.length; i < len; i++) {
+				finalArgs[i] = args[i].call ? args[i].value() : args[i].value;
+			}
+			return finalArgs;
+		};
 	};
 	Call.prototype.hash = function(scope, helperOptions){
 		var hash = {};
 		for(var prop in this.hashExprs) {
-			var val = this.hashExprs[prop];
-			hash[prop] = val.value.apply(val, arguments);
+			var val = this.hashExprs[prop],
+				value = val.value.apply(val, arguments);
+				
+			hash[prop] = {
+				call: value && value.isComputed && !val.modifiers.compute,
+				value: value
+			};
 		}
-		return hash;
+		return function(){
+			var finalHash = {};
+			for(var prop in hash) {
+				finalHash[prop] = hash[prop].call ? hash[prop].value() : hash[prop].value;
+			}
+			return finalHash;
+		};
 	};
 	Call.prototype.value = function(scope, helperScope, helperOptions){
 		
@@ -150,8 +161,9 @@ steal("can/util",
 		// TODO: remove this hack
 		this.isHelper = this.methodExpr.isHelper;
 		
-		var self = this;
-		var hasHash = !can.isEmptyObject(this.hashExprs);
+		var hasHash = !can.isEmptyObject(this.hashExprs),
+			getArgs = this.args(scope, helperScope),
+			getHash = this.hash(scope, helperScope);
 		
 		return can.compute(function(){
 			var func = method;
@@ -159,11 +171,11 @@ steal("can/util",
 				func = func();
 			}
 			if(typeof func === "function") {
-				var args = self.args(scope, helperScope);
-				var hash = self.hash(scope, helperScope);
+				var args = getArgs();
+				
 				// if fn/inverse is needed, add after this
 				if(hasHash) {
-					args.push(hash);
+					args.push(getHash());
 				}
 				
 				if(helperOptions) {

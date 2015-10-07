@@ -3,7 +3,7 @@
 
 
 A named reference to a value in the [can.view.Scope scope] or 
-[can.view.Options options] of a template being rendered.
+[can.view.Options helper scope] of a template being rendered.
 
 @option {String}
 
@@ -20,9 +20,17 @@ the scope. Keys can look like:
  - `{{./name}}` - looks up a single property in the current context.
  - `{{../name}}` - looks up a single property in the parent context.
  - `{{.}}` or `{{this}}` - looks up the current context.
- - `@index` - The index of a value in an array or [can.List].
- - `@key` - The property name of a value within an object or [can.Map].
- 
+ - `{{%index}}` - The index of a value in an array or [can.List].
+ - `{{%key}}` - The property name of a value within an object or [can.Map].
+ - `{{~key}}` - Pass a compute as the key's value instead of the value.
+ - `{{*reference}}` - Lookup a value in the references scope.
+ - `{{@key}}` - Pass the value at key, even if it's a function or a compute.
+
+Besides stache templates, keys can also be used in other places:
+
+ - event bindings - `($click)="method(key)"
+ - data bindings - `[prop]="key"`
+
 @body
 
 ## Use
@@ -117,25 +125,25 @@ Will write out:
     Jan Mark Andrew 
 
 
-## @index and @key
+## %index and %key
 
-When looping over an array or [can.List], you an use `@index` to write out
+When looping over an array or [can.List], you an use `%index` to write out
 the index of each property:
 
     {{#each task}}
-      <li>{{@index}} {{name}}</li>
+      <li>{{%index}} {{name}}</li>
     {{/each}}
     
 Indexes start at 0.  If you want to start at 1, you can create a helper like:
 
-    can.stache.registerHelper('@indexNum', function(options){
-      return options.scope.attr("@index")+1;
+    can.stache.registerHelper('%indexNum', function(options){
+      return options.scope.attr("%index")+1;
     })
 
 And use it like:
 
     {{#each task}}
-      <li>{{@indexNum}} {{name}}</li>
+      <li>{{%indexNum}} {{name}}</li>
     {{/each}}
 
 ## Keys in different expressions
@@ -206,13 +214,3 @@ In general, blah!
 		
 	</tbody>
 </table>
-
-### 
-
-
-|  | computes | functions | properties
-| --- | --- | --- | ---
-| helpers | R | R | (R)
-| components | R() | R() | R
-| methods | R() | R() | R
-

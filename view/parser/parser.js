@@ -360,6 +360,7 @@ steal(function(){
 					callAttrStart(state, curIndex, handler, rest);
 				}
 				state.lookingForValue = true;
+				state.lookingForEq = false;
 				state.lookingForName = false;
 			}
 			// if we are currently in a name, check if we found a space
@@ -395,6 +396,8 @@ steal(function(){
 		
 		if(state.inName) {
 			callAttrStart(state, curIndex+1, handler, rest);
+			callAttrEnd(state, curIndex+1, handler, rest);
+		} else if(state.lookingForEq) {
 			callAttrEnd(state, curIndex+1, handler, rest);
 		}
 

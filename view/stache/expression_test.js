@@ -254,6 +254,26 @@ steal("./expression.js", "steal-qunit", function(){
 		
 	});
 	
-	
+	test("call expressions called with different scopes give different results (#1791)", function(){
+		var exprData = expression.parse("doSomething(number)");
+		
+		var res = exprData.value(new can.view.Scope({
+			doSomething: function(num){
+				return num*2;
+			},
+			number: can.compute(2)
+		}));
+		
+		equal( res(), 4);
+		
+		res = exprData.value(new can.view.Scope({
+			doSomething: function(num){
+				return num*3;
+			},
+			number: can.compute(4)
+		}));
+		
+		equal( res(), 12);
+	});
 	
 });

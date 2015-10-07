@@ -624,6 +624,8 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 				}
 			},
+			
+			dispatch: can.dispatch
 		});
 
 	// ### etc

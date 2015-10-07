@@ -1,4 +1,3 @@
-/**
 @function can.stache.tags.section {{#key}}
 @parent can.stache.tags 3
 

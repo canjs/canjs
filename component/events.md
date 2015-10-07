@@ -54,7 +54,7 @@ Components have the ability to bind to special [can.events.inserted inserted] an
 
 While [can.view.bindings] conveniently allows you to call a [can.Component::viewModel viewModel] method from a template like:
 
-    <input can-change="doSomething"/>
+    <input ($change)="doSomething"/>
     
 This has the effect of binding an event handler directly to this element. Every element that has a `can-click` or similar attribute has an event handler bound to it. For a large grid or list, this could have a performance penalty.
 

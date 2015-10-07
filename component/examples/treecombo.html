@@ -36,24 +36,24 @@
 	}
 </style>
 <div id='out'></div>
-<script id="app" type="text/mustache">
-  <div><treecombo items='locations' title='Locations'/></div>
+<script id="app" type="text/stache">
+  <div><treecombo {items}='locations' title='Locations'/></div>
 </script>
-<script id="tree-combo-stash" type='text/mustache'>
+<script id="tree-combo-stash" type='text/stache'>
   <ul class='breadcrumb'>
-    <li can-click='emptyBreadcrumb'>{{title}}</li>
+    <li ($click)='emptyBreadcrumb()'>{{title}}</li>
     {{#each breadcrumb}}
-      <li can-click='updateBreadcrumb'>{{title}}</li>
+      <li ($click)='updateBreadcrumb(.)'>{{title}}</li>
     {{/each}}
   </ul>
   <ul class='options'>
     <content>
       {{#selectableItems}}
-        <li {{#isSelected}}class='active'{{/isSelected}} can-click='toggle'>
-          <input type='checkbox' {{#isSelected}}checked{{/isSelected}}/>
+        <li {{#isSelected}}class='active'{{/isSelected}} ($click)='toggle(.)'>
+          <input type='checkbox' {{#isSelected(.)}}checked{{/isSelected}}/>
             {{title}}
           {{#if children.length}}
-            <button class='showChildren' can-click='showChildren'>+</button>
+            <button class='showChildren' ($click)='showChildren(.,%event)'>+</button>
           {{/if}}
         </li>
       {{/selectableItems}}
@@ -63,7 +63,7 @@
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript'>
 steal("can/util", "can/component", "can/map/setter", "can/util/fixture",
-  "can/model", function (can) {
+  "can/model", "can/view/stache",function (can) {
 
 can.Component.extend({
 	tag: "treecombo",
@@ -87,12 +87,12 @@ can.Component.extend({
 				return this.attr('items');
 			}
 		},
-		showChildren: function( item, el, ev ) {
+		showChildren: function( item, ev ) {
 			ev.stopPropagation();
-			this.attr('breadcrumb').push(item)
+			this.attr('breadcrumb').push(item);
 		},
 		emptyBreadcrumb: function( ) {
-			this.attr("breadcrumb").attr([], true)
+			this.attr("breadcrumb").attr([], true);
 		},
 		updateBreadcrumb: function( item ){
 			var breadcrumb = this.attr("breadcrumb"),
@@ -105,22 +105,14 @@ can.Component.extend({
 		    if(index === -1 ){
 		    	selected.push(item);
 		    } else {
-		      	selected.splice(index, 1) 
+		      	selected.splice(index, 1);
 		    }
-		}
-	},
-	helpers: {
-		isSelected: function( options ){
-			if(this.attr("selected").indexOf( options.context ) > -1){
-				return options.fn();
-			} else {
-				return options.inverse()
-			}
+		},
+		isSelected: function(item){
+			return this.attr("selected").indexOf( item ) > -1;
 		}
 	}
-})
-
-
+});
 
 
 var base = new can.Map({
@@ -173,12 +165,12 @@ var base = new can.Map({
 	      ]
 	    }]
 	  }]
-})
+});
 
 $("#out").html( can.view("app",base) ) ;
 	
 	
 	
 
-})
+});
 </script>

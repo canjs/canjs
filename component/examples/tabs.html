@@ -34,7 +34,7 @@ tabs ul { display: inline-block; }
 </style>
 <div id="demo-html">
 <div id='out'></div>
-<script id="app" type="text/mustache">
+<script id="app" type="text/stache">
   <p><button can-click="addVegies">Add Vegetables</button></p>
   <tabs>
     {{#each foodTypes}}
@@ -45,21 +45,21 @@ tabs ul { display: inline-block; }
 </div>
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script id="demo-source">
-steal("can/component",function(){
+steal("can/component","can/view/stache",function(){
 	
 can.Component.extend({
 	tag: "tabs",
 	template: 	
-		"<ul>"+
+		can.stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
     			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "can-click='makeActive'>"+
+    			    "($click)='makeActive(.)'>"+
     			  "{{title}}"+
     			"</li>"+
     		"{{/panels}}"+
     	"</ul>"+
-    	"<content></content>",
+    	"<content></content>"),
 	viewModel: {
 		// Contains a list of all panel scopes within the
 		// tabs element.
@@ -108,11 +108,10 @@ can.Component.extend({
 });
 
 can.Component.extend({
-	template: "{{#if active}}<content></content>{{/if}}",
+	template: can.stache("{{#if active}}<content></content>{{/if}}"),
 	tag:"panel",
 	viewModel: {
-		active: false,
-		title: "@"
+		active: false
 	},
 	events: {
 		inserted: function(){
@@ -137,7 +136,7 @@ $("#out").html( can.view("app",{
 		foodTypes.push({
 			title: "Vegetables",
 			content: "Carrots, peas, kale"
-		})
+		});
 	}
 }));
 

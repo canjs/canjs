@@ -1018,6 +1018,25 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var data = {
 			setSomething: function(message){
 				equal(message, "Matthew P finds good bugs");
+				equal(this, data, "setSomething called with correct scope");
+			},
+			person: {
+				name: "Matthew P",
+				message: function(){
+					return this.name + " finds good bugs";
+				}
+			}
+		};
+		var frag = template(data);
+		can.trigger( frag.firstChild, "click" );
+	});
+	
+	test("(event) methods on objects are called with call expressions (#1839)", function(){
+		var template = can.stache("<div ($click)='setSomething(person.message)'/>");
+		var data = {
+			setSomething: function(message){
+				equal(message, "Matthew P finds good bugs");
+				equal(this, data, "setSomething called with correct scope");
 			},
 			person: {
 				name: "Matthew P",
@@ -1184,17 +1203,18 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var t1 = can.stache("<ref-export></ref-export>");
 
 		// this should not have anything in 'one', but something in 'two'
-		var t2 = can.stache("<form><other-export *other/><ref-export><b>{{*otherExport.name}}</b><label>{{*other.name}}</label></ref-export></form>");
+		//var t2 = can.stache("<form><other-export *other/><ref-export><b>{{*otherExport.name}}</b><label>{{*other.name}}</label></ref-export></form>");
 
 		var f1 = t1();
+		equal(can.viewModel( f1.firstChild.firstChild ).attr("name"), "OTHER-EXPORT", "viewModel set correctly");
 		equal(f1.firstChild.lastChild.nodeValue, "OTHER-EXPORT", "content");
 
-		var f2 = t2();
+		/*var f2 = t2();
 		var one = f2.firstChild.getElementsByTagName('b')[0];
 		var two = f2.firstChild.getElementsByTagName('label')[0];
 
 		equal(one.firstChild.nodeValue, "", "external content, internal export");
-		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");
+		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");*/
 	});
 	
 	test('two-way - reference shorthand (#1700)', function(){
@@ -1371,6 +1391,22 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-
+	test("viewModel binding (event)", function(){
+		
+		can.Component.extend({
+			tag: "viewmodel-binding",
+			viewModel: {
+				makeMyEvent: function(){
+					this.dispatch("myevent");
+				}
+			}
+		});
+		var frag = can.stache("<viewmodel-binding (myevent)='doSomething()'/>")({
+			doSomething: function(){
+				ok(true, "called!");
+			}
+		});
+		can.viewModel(frag.firstChild).makeMyEvent();
+	});
 	
 });
