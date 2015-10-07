@@ -182,7 +182,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							}, viewModelPropertyUpdates, bindingData.propName);
 							
 							// Set the value to be added to the viewModel
-							initialScopeData[bindingData.propName] = compute();
+							var initialValue = compute();
+							if(initialValue !== undefined) {
+								initialScopeData[bindingData.propName] = initialValue;
+							}
 						}
 						
 						bindingsData[bindingData.propName].parentCompute = compute;
