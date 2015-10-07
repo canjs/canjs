@@ -390,14 +390,14 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 
 	});
 
-	test("A scope's @root is the last context", function(){
+	test("A scope's %root is the last context", function(){
 		var map = new can.Map();
 		var refs = can.view.Scope.refsScope();
 		// Add a bunch of contexts onto the scope, we want to make sure we make it to
 		// the top.
 		var scope = refs.add(map).add(new can.view.Scope.Refs()).add(new can.Map());
 
-		var root = scope.attr("@root");
+		var root = scope.attr("%root");
 
 		ok(!(root instanceof can.view.Scope.Refs), "root isn't a reference");
 		equal(root, map, "The root is the map passed into the scope");

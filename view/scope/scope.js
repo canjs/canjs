@@ -223,7 +223,7 @@ steal(
 						return {
 							value: this._parent._context
 						};
-					} else if(attr === "@root") {
+					} else if(attr === "%root") {
 						return { value: this.getRoot() };
 					}
 
