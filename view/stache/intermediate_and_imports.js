@@ -26,14 +26,14 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			attrStart: function( attrName ){
 				if(attrName === "from") {
 					inFrom = true;
-				} else if(attrName === "as") {
+				} else if(attrName === "as" || attrName === "export-as") {
 					inAs = true;
 				}
 			},
 			attrEnd: function( attrName ){
 				if(attrName === "from") {
 					inFrom = false;
-				} else if(attrName === "as") {
+				} else if(attrName === "as" || attrName === "export-as") {
 					inAs = false;
 				}
 			},
@@ -68,7 +68,8 @@ steal("can/view/stache/mustache_core.js", "can/view/parser",
 			intermediate: intermediate,
 			imports: imports,
 			dynamicImports: dynamicImports,
-			ases: ases
+			ases: ases,
+			exports: ases
 		};
 	};
 

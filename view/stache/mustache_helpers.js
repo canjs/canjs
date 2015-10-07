@@ -153,7 +153,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			var expressionValue = resolve(expression);
 			var found = false;
 			var newOptions = options.helpers.add({
-				case: function(value, options){
+				"case": function(value, options){
 					if(!found && expressionValue === resolve(value)) {
 						found = true;
 						return options.fn(options.scope || this);
@@ -198,7 +198,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			}
 		}
 	};
-	
+
 	helpers.eachOf = helpers.each;
 
 	var registerHelper = function(name, callback){
@@ -211,7 +211,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			registerHelper(name, can.view.simpleHelper(callback));
 		},
 		getHelper: function(name, options){
-			
+
 			var helper = options && options.get("helpers." + name,{proxyMethods: false});
 			if(!helper) {
 				helper = helpers[name];
