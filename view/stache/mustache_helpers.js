@@ -37,7 +37,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 
 					};
 					live.list(el, items, cb, options.context, el.parentNode, nodeList, function(list, parentNodeList){
-						return options.inverse(options.scope.add(list), options.options, parentNodeList)
+						return options.inverse(options.scope.add(list), options.options, parentNodeList);
 					});
 				};
 			}
