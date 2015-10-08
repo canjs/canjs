@@ -15,7 +15,7 @@ steal("can/util", "can/view/callbacks", function(can){
 			importPromise = can.Deferred().reject("No moduleName provided").promise();
 		}
 
-		var root = tagData.scope.attr("@root");
+		var root = tagData.scope.attr("%root");
 		if(root && can.isFunction(root.waitFor)) {
 			root.waitFor(importPromise);
 		}

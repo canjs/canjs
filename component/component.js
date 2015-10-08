@@ -98,7 +98,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				
 				// Setup values passed to component
 				var initialScopeData = {
-						"@root": componentTagData.scope.attr("@root")
+						"%root": componentTagData.scope.attr("%root")
 					},
 					component = this,
 				// If a template is not provided, we fall back to
