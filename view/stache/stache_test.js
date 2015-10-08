@@ -4426,6 +4426,15 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
 		});
 		
+		test("#each with else works (#1979)", function(){
+			var list = new can.List(["a","b"]);
+			var template = can.stache("<div>{{#each list}}<span>{{.}}</span>{{else}}<label>empty</label>{{/each}}</div>");
+			var frag = template({list: list});
+			list.replace([]);
+			var labels = frag.firstChild.getElementsByTagName("label");
+			equal(labels.length, 1, "empty case");
+		});
+		
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
