@@ -65,10 +65,10 @@ efficiently inserted into the DOM.
 This code:
 
     
- 1. Loads the template a 'mytemplate.ejs'. It might look like:
+ 1. Loads the template a 'person.ejs'. It might look like:
     <pre><code>&lt;h2>&lt;%= name %>&lt;/h2></pre></code>
 
- 2. Renders it with {message: 'hello world'}, resulting in a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment] that contains:
+ 2. Renders it with {name: 'Justin'}, resulting in a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment documentFragment] that contains:
     <pre><code>&lt;h2>Justin&lt;/h2></pre></code>
 
  3. Inserts the result into the foo element. Foo might look like:
