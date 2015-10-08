@@ -96,6 +96,57 @@ steal('can/util',
 			if(!frag.firstChild) {
 				frag.appendChild(frag.ownerDocument.createTextNode(""));
 			}
+		},
+		getLiveFragment = function(itemHTML){
+			var gotText = typeof itemHTML === "string",
+				// and convert it into elements.
+				itemFrag = can.frag(itemHTML);
+				// Add those elements to the mappings.
+			return gotText ? can.view.hookup(itemFrag) : itemFrag;
+		},
+		// a helper function that renders something and adds its nodeLists to newNodeLists
+		// in the right way for both stache and mustache.
+		renderAndAddToNodeLists = function(newNodeLists, nodeList, render, context, args){
+			var itemNodeList = [];
+
+			if(nodeList) {
+				nodeLists.register(itemNodeList,null, true);
+			}
+			
+			var itemHTML = render.apply(context, args.concat([itemNodeList])),
+				itemFrag = getLiveFragment(itemHTML);
+
+			var childNodes = can.makeArray(getChildNodes(itemFrag));
+			if(nodeList) {
+				nodeLists.update(itemNodeList, childNodes);
+				newNodeLists.push(itemNodeList);
+			} else {
+				newNodeLists.push(nodeLists.register(childNodes));
+			}
+			return itemFrag;
+		},
+		removeFromNodeList = function(masterNodeList, index, length){
+			var removedMappings = masterNodeList.splice(index + 1, length),
+				itemsToRemove = [];
+			can.each(removedMappings, function (nodeList) {
+				
+				// Unregister to free up event bindings.
+				var nodesToRemove = nodeLists.unregister(nodeList);
+				
+				// add items that we will remove all at once
+				[].push.apply(itemsToRemove, nodesToRemove);
+			});
+			return itemsToRemove;
+		},
+		addFalseyIfEmpty = function(list, falseyRender, masterNodeList, nodeList){
+			if(falseyRender && list.length === 0){
+				// there are no items ... we should render the falsey template
+				var falseyNodeLists = [];
+				var falseyFrag = renderAndAddToNodeLists(falseyNodeLists, nodeList, falseyRender, list, [list]);
+
+				elements.after([masterNodeList[0]], falseyFrag);
+				masterNodeList.push(falseyNodeLists[0]);
+			}
 		};
 	/**
 	 * @property {Object} can.view.live
@@ -166,7 +217,7 @@ steal('can/util',
 		 *       })
 		 *
 		 */
-		list: function (el, compute, render, context, parentNode, nodeList) {
+		list: function (el, compute, render, context, parentNode, nodeList, falseyRender) {
 			// A nodeList of all elements this live-list manages.
 			// This is here so that if this live list is within another section
 			// that section is able to remove the items in this list.
@@ -193,30 +244,8 @@ steal('can/util',
 						newIndicies = [];
 					// For each new item,
 					can.each(items, function (item, key) {
-						var itemNodeList = [];
-
-						if(nodeList) {
-							nodeLists.register(itemNodeList,null, true);
-						}
-						
 						var itemIndex = can.compute(key + index),
-							// get its string content
-							itemHTML = render.call(context, item, itemIndex, itemNodeList),
-							gotText = typeof itemHTML === "string",
-							// and convert it into elements.
-							itemFrag = can.frag(itemHTML);
-						// Add those elements to the mappings.
-						
-						itemFrag = gotText ? can.view.hookup(itemFrag) : itemFrag;
-						
-						var childNodes = can.makeArray(getChildNodes(itemFrag));
-						if(nodeList) {
-							nodeLists.update(itemNodeList, childNodes);
-							newNodeLists.push(itemNodeList);
-						} else {
-							newNodeLists.push(nodeLists.register(childNodes));
-						}
-						
+							itemFrag = renderAndAddToNodeLists(newNodeLists, nodeList, render, context, [item, itemIndex]);
 						
 						// Hookup the fragment (which sets up child live-bindings) and
 						// add it to the collection of all added elements.
@@ -227,6 +256,12 @@ steal('can/util',
 					// The position of elements is always after the initial text placeholder node
 					var masterListIndex = index+1;
 					
+					// remove falsey if there's something there
+					if(!indexMap.length) {
+						// remove all leftover things
+						var falseyItemsToRemove = removeFromNodeList(masterNodeList, 0, masterNodeList.length - 1);
+						can.remove(can.$(falseyItemsToRemove));
+					}
 					
 					// Check if we are adding items at the end
 					if (!masterNodeList[masterListIndex]) {
@@ -265,22 +300,18 @@ steal('can/util',
 					if(index < 0) {
 						index = indexMap.length + index;
 					}
+					var itemsToRemove = removeFromNodeList(masterNodeList, index, items.length);
 
-					var removedMappings = masterNodeList.splice(index + 1, items.length),
-						itemsToRemove = [];
-					can.each(removedMappings, function (nodeList) {
-						
-						// Unregister to free up event bindings.
-						var nodesToRemove = nodeLists.unregister(nodeList);
-						
-						// add items that we will remove all at once
-						[].push.apply(itemsToRemove, nodesToRemove);
-					});
 					// update indices after remove point
 					indexMap.splice(index, items.length);
 					for (var i = index, len = indexMap.length; i < len; i++) {
 						indexMap[i](i);
 					}
+					
+					// adds the falsey section if the list is empty
+					addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
+					
+					
 					// don't remove elements during teardown.  Something else will probably be doing that.
 					if(!fullTeardown) {
 						can.remove(can.$(itemsToRemove));
@@ -378,9 +409,13 @@ steal('can/util',
 							}
 						}
 					} else {
-						teardownList();
+						if(oldList) {
+							teardownList();
+						}
+						
 						list = newList || [];
 						add({}, list, 0);
+						addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
 					}
 					afterPreviousEvents = false;
 					// list might be a plain array

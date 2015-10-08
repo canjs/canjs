@@ -260,4 +260,76 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		can.view.live.attribute(el, 'value', compute);
 		ok(true, 'No exception thrown.');
 	});
+	
+	test('list and an falsey section (#1979)', function () {
+		var div = document.createElement('div'),
+			template = function (num) {
+				return '<label>num=</label> <span>' + num + '</span>';
+			},
+			falseyTemplate = function (num) {
+				return '<p>NOTHING</p>';
+			};
+			
+		var compute = can.compute([
+			0,
+			1
+		]);
+		div.innerHTML = 'my <b>fav</b> nums: <span></span> !';
+		var el = div.getElementsByTagName('span')[0];
+		can.view.live.list(el, compute, template, {}, undefined, undefined, falseyTemplate );
+		
+		equal(div.getElementsByTagName('label')
+			.length, 2, 'There are 2 labels');
+			
+		compute([]);
+		
+		var spans = div.getElementsByTagName('span');
+		equal(spans.length, 0, 'there are 0 spans');
+		
+		var ps = div.getElementsByTagName('p');
+		equal(ps.length, 1, 'there is 1 p');
+		
+		compute([2]);
+		
+		spans = div.getElementsByTagName('span');
+		equal(spans.length, 1, 'there is 1 spans');
+		
+		ps = div.getElementsByTagName('p');
+		equal(ps.length, 0, 'there is 1 p');
+		
+	});
+	
+	test('list and an initial falsey section (#1979)', function(){
+	
+		var div = document.createElement('div'),
+			template = function (num) {
+				return '<label>num=</label> <span>' + num + '</span>';
+			},
+			falseyTemplate = function (num) {
+				return '<p>NOTHING</p>';
+			};
+			
+		var compute = can.compute([]);
+		
+		div.innerHTML = 'my <b>fav</b> nums: <span></span> !';
+		var el = div.getElementsByTagName('span')[0];
+		can.view.live.list(el, compute, template, {}, undefined, undefined, falseyTemplate );
+		
+		var spans = div.getElementsByTagName('span');
+		equal(spans.length, 0, 'there are 0 spans');
+		
+		var ps = div.getElementsByTagName('p');
+		equal(ps.length, 1, 'there is 1 p');
+		
+		compute([2]);
+		
+		spans = div.getElementsByTagName('span');
+		equal(spans.length, 1, 'there is 1 spans');
+		
+		ps = div.getElementsByTagName('p');
+		equal(ps.length, 0, 'there is 1 p');
+	
+	});
+	
+	
 });
