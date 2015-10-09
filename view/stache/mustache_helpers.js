@@ -161,7 +161,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 						return options.fn(options.scope || this);
 					}
 				},
-				default: function(options){
+				"default": function(options){
 					if(!found) {
 						return options.fn(options.scope || this);
 					}
