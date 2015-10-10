@@ -1,5 +1,5 @@
 @function can.view.bindings.twoWay {\(two-way\)}
-@parent can.view.bindings
+@parent can.view.bindings 3
 
 @description Two-way bind a value in the [can.Component::viewModel viewModel] or the element to the parent scope.
 

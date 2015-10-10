@@ -276,4 +276,13 @@ steal("./expression.js", "steal-qunit", function(){
 		equal( res(), 12);
 	});
 	
+	test("convertKeyToLookup", function(){
+		
+		equal( expression.convertKeyToLookup("../foo"), "../@foo" );
+		equal( expression.convertKeyToLookup("foo"), "@foo" );
+		equal( expression.convertKeyToLookup(".foo"), "@foo" );
+		equal( expression.convertKeyToLookup("./foo"), "./@foo" );
+		equal( expression.convertKeyToLookup("foo.bar"), "foo@bar" );
+		
+	});
 });

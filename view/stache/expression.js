@@ -465,19 +465,29 @@ steal("can/util",
 		}
 	});
 	
-	// converts "../foo" -> "../@foo", "foo" -> "@foo", ".foo" -> "@foo", "./foo" -> "./@foo"
+	// converts 
+	// - "../foo" -> "../@foo", 
+	// - "foo" -> "@foo", 
+	// - ".foo" -> "@foo", 
+	// - "./foo" -> "./@foo"
+	// - "foo.bar" -> "foo@bar"
+	var convertKeyToLookup = function(key){
+		var lastPath = key.lastIndexOf("./");
+		var lastDot = key.lastIndexOf(".");
+		if(lastDot > lastPath) {
+			return key.substr(0, lastDot)+"@"+key.substr(lastDot+1);
+		}
+		var firstNonPathCharIndex = lastPath === -1 ? 0 : lastPath+2;
+		var firstNonPathChar = key.charAt(firstNonPathCharIndex);
+		if(firstNonPathChar === "." || firstNonPathChar === "@" ) {
+			return key.substr(0, firstNonPathCharIndex)+"@"+key.substr(firstNonPathCharIndex+1);
+		} else {
+			return key.substr(0, firstNonPathCharIndex)+"@"+key.substr(firstNonPathCharIndex);
+		}
+	};
 	var convertToAtLookup = function(ast){
 		if(ast.type === "Lookup") {
-			var key = ast.key;
-			var lastPath = key.lastIndexOf("./");
-			var firstNonPathCharIndex = lastPath === -1 ? 0 : lastPath+2;
-			var firstNonPathChar = key.charAt(firstNonPathCharIndex);
-			if(firstNonPathChar === "." || firstNonPathChar === "@" ) {
-				key = key.substr(0, firstNonPathCharIndex)+"@"+key.substr(firstNonPathCharIndex+1);
-			} else {
-				key = key.substr(0, firstNonPathCharIndex)+"@"+key.substr(firstNonPathCharIndex);
-			}
-			ast.key = key;
+			ast.key = convertKeyToLookup(ast.key);
 		}
 		return ast;
 	};
@@ -499,6 +509,7 @@ steal("can/util",
 	};
 	
 	var expression = {
+		convertKeyToLookup: convertKeyToLookup,
 		Literal: Literal,
 		Lookup: Lookup,
 		ScopeLookup: ScopeLookup,

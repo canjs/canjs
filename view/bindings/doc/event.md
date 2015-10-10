@@ -1,5 +1,5 @@
 @function can.view.bindings.event \(event\)
-@parent can.view.bindings
+@parent can.view.bindings 0
 
 @description Listen to events on elements or component view models.
 

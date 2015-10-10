@@ -1,5 +1,5 @@
 @function can.view.bindings.reference *REFERENCE
-@parent can.view.bindings
+@parent can.view.bindings 4
 
 @description Export a viewModel into a template's references scope.
 
