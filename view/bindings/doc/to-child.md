@@ -1,5 +1,5 @@
 @function can.view.bindings.toChild {to-child}
-@parent can.view.bindings
+@parent can.view.bindings 1
 
 @description One-way bind a value in the parent scope to the [can.Component::viewModel viewModel].
 
@@ -39,5 +39,8 @@
 `{child-prop}="key"` is used to pass values from the scope to a component.  You can use CallExpressions like:
 
 ```
-<my-component {some-prop}="someMethod(arg)"/>
+<player-scores {scores}="game.scoresForPlayer('Alison')"/>
+<player-scores {scores}="game.scoresForPlayer('Jeff')"/>
 ```
+
+@demo can/view/bindings/doc/to-child.html

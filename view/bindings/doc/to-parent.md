@@ -1,5 +1,5 @@
 @function can.view.bindings.toParent {^to-parent}
-@parent can.view.bindings
+@parent can.view.bindings 2
 
 @description One-way bind a value in the current [can.Component::viewModel viewModel] to the parent scope.
 
