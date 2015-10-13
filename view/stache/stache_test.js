@@ -338,6 +338,10 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 		can.stache.registerHelper('there', function (options) {
 			return 'there';
 		});
+		// Test for #1985
+		can.stache.registerHelper('zero', function (options) {
+			return 0;
+		});
 		can.stache.registerHelper('bark', function (obj, str, number, options) {
 			var hash = options.hash || {};
 			return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
@@ -345,8 +349,8 @@ steal("can/view/stache", "can/view", "can/test","can/view/mustache/spec/specs","
 				hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 		});
 		var t = {
-			template: "{{hello}} {{there}}! {{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
-			expected: "Hello there! The dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
+			template: "{{hello}} {{there}}! {{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}} Then there were {{zero}} barks :(",
+			expected: "Hello there! The dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly. Then there were 0 barks :(",
 			data: {
 				name: 'dog',
 				hello: 'Hello'

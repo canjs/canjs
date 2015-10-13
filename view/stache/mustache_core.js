@@ -308,7 +308,7 @@ steal("can/util",
 				args.push(helperOptions);
 				// Call the helper.
 				helperEvaluator = function () {
-					return helper.fn.apply(context, args) || '';
+					return helper.fn.apply(context, args);
 				};
 				helperEvaluator.bindOnce = false;
 				return helperEvaluator;
@@ -532,7 +532,7 @@ steal("can/util",
 					else if(state.text && typeof value === "string") {
 						this.nodeValue = value;
 					}
-					else if( value ){
+					else if( value != null ){
 						elements.replace([this], can.frag(value));
 					}
 				}
