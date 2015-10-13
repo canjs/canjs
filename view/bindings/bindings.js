@@ -72,71 +72,65 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// When a view engine finds this attribute, it will call this callback. The value of the attribute
 	// should be a string representing some value in the current scope to cross-bind to.
 	can.view.attr("can-value", function (el, data) {
-
-		var attr = can.trim(removeBrackets(el.getAttribute("can-value"))),
-			// Turn the attribute passed in into a compute.  If the user passed in can-value="name" and the current
-			// scope of the template is some object called data, the compute representing this can-value will be the
-			// data.attr('name') property.
-			value = data.scope.computeData(attr, {
-				args: []
-			})
-				.compute,
-			trueValue,
-			falseValue;
-
-		// Depending on the type of element, this attribute has different behavior. can.Controls are defined (further below
-		// in this file) for each type of input. This block of code collects arguments and instantiates each can.Control. There
-		// is one for checkboxes/radios, another for multiselect inputs, and another for everything else.
-		if (el.nodeName.toLowerCase() === "input") {
+		var propName = "$value",
+			attrValue = can.trim(removeBrackets(el.getAttribute("can-value"))),
+			getterSetter;
+		
+		if (el.nodeName.toLowerCase() === "input" && ( el.type === "checkbox" || el.type === "radio" ) ) {
+			
+			var property = getScopeCompute(el, data.scope, attrValue, {});
 			if (el.type === "checkbox") {
-				// If the element is a checkbox and has an attribute called "can-true-value",
-				// set up a compute that toggles the value of the checkbox to "true" based on another attribute.
-				//
-				// 		<input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female' />
-				if (can.attr.has(el, "can-true-value")) {
-					trueValue = el.getAttribute("can-true-value");
-				} else {
-					trueValue = true;
-				}
-				if (can.attr.has(el, "can-false-value")) {
-					falseValue = el.getAttribute("can-false-value");
-				} else {
-					falseValue = false;
-				}
-			}
-
-			if (el.type === "checkbox" || el.type === "radio") {
-				// For checkboxes and radio buttons, create a Checked can.Control around the input.  Pass in
-				// the compute representing the can-value and can-true-value and can-false-value properties (if
-				// they were used).
-				new Checked(el, {
-					value: value,
-					trueValue: trueValue,
-					falseValue: falseValue
+				
+				var trueValue = can.attr.has(el, "can-true-value") ? el.getAttribute("can-true-value") : true,
+					falseValue = can.attr.has(el, "can-false-value") ? el.getAttribute("can-false-value") : false;
+				
+				getterSetter = can.compute(function(newValue){
+					// jshint eqeqeq: false
+					if(arguments.length) {
+						property(newValue ? trueValue : falseValue);
+					}
+					else {
+						return property() == trueValue;
+					}
 				});
-				return;
 			}
-		}
-		if (el.nodeName.toLowerCase() === "select" && el.multiple) {
-			// For multiselect enabled select inputs, we instantiate a special control around that select element
-			// called Multiselect
-			new Multiselect(el, {
-				value: value
+			else if(el.type === "radio") {
+				// radio is two-way bound to if the property value
+				// equals the element value
+				
+				getterSetter = can.compute(function(newValue){
+					// jshint eqeqeq: false
+					if(arguments.length) {
+						if( newValue ) {
+							property(el.value);
+						}
+					}
+					else {
+						return property() == el.value;
+					}
+				});
+
+			}
+			propName = "$checked";
+			attrValue = "getterSetter";
+			data.scope = new can.view.Scope({
+				getterSetter: getterSetter
 			});
-			return;
 		}
 		// For contenteditable elements, we instantiate a Content control.
-		if (isContentEditable(el)) {
-			new Content(el, {
-				value: value
-			});
-			return;
+		else if (isContentEditable(el)) {
+			propName = "$innerHTML";
 		}
-		// The default case. Instantiate the Value control around the element. Pass it the compute representing
-		// the observable attribute property that was set.
-		new Value(el, {
-			value: value
+		
+		bindings(el, data, {
+			attrValue: attrValue,
+			propName: propName,
+			childToParent: true,
+			parentToChild: true,
+			initializeValues: true,
+			syncChildWithParent: true
 		});
+
 	});
 
 	// ## Special Event Types (can-SPECIAL)
@@ -217,6 +211,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 
 				//!steal-remove-start
 				if (!scopeData.value) {
+					scopeData = data.scope.read(expr.methodExpr.key, {
+						isArgument: true
+					});
+					
 					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
 						element: el,
 						scope: data.scope
@@ -290,228 +288,93 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// ## (EVENT)
 	can.view.attr(/^\([\$?\w\.]+\)$/, handleEvent);
 
-	// ## Two way binding can.Controls
-	// Each type of input that is supported by view/bindings is wrapped with a special can.Control.  The control serves
-	// two functions:
-	// 1. Bind on the property changing (the compute we're two-way binding to) and change the input value.
-	// 2. Bind on the input changing and change the property (compute) we're two-way binding to.
-	// There is one control per input type. There could easily be more for more advanced input types, like the HTML5 type="date" input type.
-
-
-	// ### Value
-	// A can.Control that manages the two-way bindings on most inputs.  When can-value is found as an attribute
-	// on an input, the callback above instantiates this Value control on the input element.
-	var Value = can.Control.extend({
-		init: function () {
-			// Handle selects by calling `set` after this thread so the rest of the element can finish rendering.
-			if (this.element[0].nodeName.toUpperCase() === "SELECT") {
-				setTimeout(can.proxy(this.set, this), 1);
-			} else {
-				this.set();
-			}
-
-		},
-		// If the live bound data changes, call set to reflect the change in the dom.
-		"{value} change": "set",
-		set: function () {
-			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
-			if (!this.element) {
-				return;
-			}
-			var val = this.options.value();
-			// For https://github.com/bitovi/canjs/issues/1679. We don't want to set
-			// null or undefined on select fields because Chrome shows it as blank
-			if(val == null && this.element[0].nodeName.toUpperCase() !== "SELECT") {
-				val = '';
-			}
-
-			// Set the element's value to match the attribute that was passed in
-			if(val != null) {
-				this.element[0].value = val;
-			}
-		},
-		// If the input value changes, this will set the live bound data to reflect the change.
-			// If the input value changes, this will set the live bound data to reflect the change.
-		"change": function () {
-			// This may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
-			if (!this.element) {
-				return;
-			}
-			var el = this.element[0];
-
-			// Set the value of the attribute passed in to reflect what the user typed
-			this.options.value(el.value);
-			var newVal = this.options.value();
-
-			// If the newVal isn't the same as the input, set it's value
-			if(el.value !== newVal) {
-				el.value = newVal;
-			}
-		}
-	}),
-	// ### Checked
-	// A can.Control that manages the two-way bindings on a checkbox element.  When can-value is found as an attribute
-	// on a checkbox, the callback above instantiates this Checked control on the checkbox element.
-		Checked = can.Control.extend({
-			init: function () {
-				// If its not a checkbox, its a radio input
-				this.isCheckbox = (this.element[0].type.toLowerCase() === "checkbox");
-				this.check();
-			},
-			// `value` is the compute representing the can-value for this element.  For example can-value="foo" and current
-			// scope is someObj, value is the compute representing someObj.attr('foo')
-			"{value} change": "check",
-			check: function () {
-				// jshint eqeqeq: false
-				if (this.isCheckbox) {
-					var value = this.options.value(),
-						trueValue = this.options.trueValue || true;
-					// If `can-true-value` attribute was set, check if the value is equal to that string value, and set
-					// the checked property based on their equality.
-					this.element[0].checked = (value == trueValue);
-				}
-				// Its a radio input type
-				else {
-					var setOrRemove = this.options.value() == this.element[0].value ?
-						"set" : "remove";
-
-					can.attr[setOrRemove](this.element[0], 'checked', true);
-
-				}
-
-			},
-			// This event is triggered by the DOM.  If a change event occurs, we must set the value of the compute (options.value).
-			"change": function () {
-				if (this.isCheckbox) {
-					// If the checkbox is checked and can-true-value was used, set value to the string value of can-true-value.  If
-					// can-false-value was used and checked is false, set value to the string value of can-false-value.
-					this.options.value(this.element[0].checked ? this.options.trueValue : this.options.falseValue);
-				}
-				// Radio input type
-				else {
-					if (this.element[0].checked) {
-						this.options.value(this.element[0].value);
-					}
-				}
-
-			}
-		}),
-		// ### Multiselect
-		// A can.Control that handles select input with the "multiple" attribute (meaning more than one can be selected at once).
-		Multiselect = Value.extend({
-			init: function () {
-				this.delimiter = ";";
-				// Call `set` after this thread so the rest of the element can finish rendering.
-				setTimeout(can.proxy(this.set, this), 1);
-			},
-			// Since this control extends Value (above), the set method will be called when the value compute changes (and on init).
-			set: function () {
-
-				var newVal = this.options.value();
-
-
-				// When given a string, try to extract all the options from it (i.e. "a;b;c;d")
-				if (typeof newVal === 'string') {
-					newVal = newVal.split(this.delimiter);
-					this.isString = true;
-				}
-				// When given something else, try to make it an array and deal with it
-				else if (newVal) {
-					newVal = can.makeArray(newVal);
-				}
-
-				// Make an object containing all the options passed in for convenient lookup
-				var isSelected = {};
-				can.each(newVal, function (val) {
-					isSelected[val] = true;
-				});
-
-				// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then
-				// set its selected property if it was in the list of vals that were just set.
-				can.each(this.element[0].childNodes, function (option) {
-					if (option.value) {
-						option.selected = !! isSelected[option.value];
-					}
-
-				});
-
-			},
-			// A helper function used by the 'change' handler below. Its purpose is to return an array of selected
-			// values, like ["foo", "bar"]
-			get: function () {
-				var values = [],
-					children = this.element[0].childNodes;
-
-				can.each(children, function (child) {
-					if (child.selected && child.value) {
-						values.push(child.value);
-					}
-				});
-
-				return values;
-			},
-			// Called when the user changes this input in any way.
-			'change': function () {
-				// Get an array of the currently selected values
-				var value = this.get(),
-					currentValue = this.options.value();
-
-				// If the compute is a string, set its value to the joined version of the values array (i.e. "foo;bar")
-				if (this.isString || typeof currentValue === "string") {
-					this.isString = true;
-					this.options.value(value.join(this.delimiter));
-				}
-				// If the compute is a can.List, replace its current contents with the new array of values
-				else if (currentValue instanceof can.List) {
-					currentValue.attr(value, true);
-				}
-				// Otherwise set the value to the array of values selected in the input.
-				else {
-					this.options.value(value);
-				}
-
-			}
-		}),
-		Content = can.Control.extend({
-			init: function () {
-				this.set();
-				this.on("blur", "setValue");
-			},
-			"{value} change": "set",
-			set: function () {
-				var val = this.options.value();
-				this.element[0].innerHTML = (typeof val === 'undefined' ? '' : val);
-			},
-			setValue: function () {
-				this.options.value(this.element[0].innerHTML);
-			}
-		});
-
-	var setElement = function(el, prop, value) {
-		if(el.nodeName.toLowerCase() === "input" && el.type === "checkbox") {
-			var trueValue = true;
-			// If `can-true-value` attribute was set, check if the value is equal to that string value, and set
-			// the checked property based on their equality.
-			el.checked = (value == trueValue); // jshint ignore:line
-		} else {
-			can.attr.set(el, prop, value == null ? "" : value);
-		}
-	};
+	
 
 	var elementCompute = function(el, prop, event){
+		if(!event) {
+			if(prop === "innerHTML") {
+				event = ["blur","change"];
+			}
+			else {
+				event = "change";
+			}
+		}
+		if(!can.isArray(event)) {
+			event = [event];
+		}
+		
+		var hasChildren = el.nodeName.toLowerCase() === "select",
+			isMultiselectValue = prop === "value" && hasChildren && el.multiple,
+			isStringValue,
+			lastSet,
+			set = function(newVal){
+				lastSet = newVal;
+				if(isMultiselectValue) {
+					if (newVal && typeof newVal === 'string') {
+						newVal = newVal.split(";");
+						isStringValue = true;
+					}
+					// When given something else, try to make it an array and deal with it
+					else if (newVal) {
+						newVal = can.makeArray(newVal);
+					} else {
+						newVal = [];
+					}
+	
+					// Make an object containing all the options passed in for convenient lookup
+					var isSelected = {};
+					can.each(newVal, function (val) {
+						isSelected[val] = true;
+					});
+	
+					// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then
+					// set its selected property if it was in the list of vals that were just set.
+					can.each(el.childNodes, function (option) {
+						if (option.value) {
+							option.selected = !! isSelected[option.value];
+						}
+					});
+				} else {
+					can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+				}
+				return newVal;
+				
+			};
+			
+		if(hasChildren) {
+			// have to set later ... probably only with mustache.
+			setTimeout(function(){ set(lastSet); },1);
+		}
+		
 		return can.compute(el[prop],{
 			on: function(updater){
-				can.bind.call(el,event, updater);
+				can.each(event, function(eventName){
+					can.bind.call(el,eventName, updater);
+				});
 			},
 			off: function(updater){
-				can.unbind.call(el,event, updater);
+				can.each(event, function(eventName){
+					can.unbind.call(el,eventName, updater);
+				});
 			},
 			get: function(){
+				if(isMultiselectValue) {
+					
+					var values = [],
+						children = el.childNodes;
+	
+					can.each(children, function (child) {
+						if (child.selected && child.value) {
+							values.push(child.value);
+						}
+					});
+					
+					return isStringValue ? values.join(";"): values;
+				}
+
 				return can.attr.get(el, prop);
 			},
-			set: function(value){
-				setElement(el, prop, value);
-			}
+			set: set
 		});
 	};
 	
@@ -555,7 +418,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			childCompute;
 			
 		if(isDOM) {
-			childCompute = elementCompute(el, attrName.substr(1), "change");
+			childCompute = elementCompute(el, attrName.substr(1));
 		} else {
 			var childExpression = expression.parse(attrName,{baseMethodType: "Call"});
 			var childContext = can.viewModel(el);
@@ -596,10 +459,25 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// el -> the element
 	// parentUpdate -> a method that updates the parent
 	// 
-	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName){
+	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName, syncChild){
+		var parentUpdateIsFunction = typeof parentUpdate === "function";
+		
 		var updateScope = function(ev, newVal){
 			if (!bindingsSemaphore[attrName]) {
-				parentUpdate(newVal);
+				if(parentUpdateIsFunction) {
+					parentUpdate(newVal);
+					if( syncChild ) {
+						if(parentUpdate() !== childCompute()) {
+							bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+							childCompute(parentUpdate());
+							can.batch.after(function(){
+								--bindingsSemaphore[attrName];
+							});
+						}
+					}
+				} else if(parentUpdate instanceof can.Map) {
+					parentUpdate.attr(newVal, true);
+				}
 			}
 		};
 		
@@ -617,9 +495,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	
 	// parentToChild, childToParent, initializeValues
 	var bindings = function(el, attrData, options){
+		
 		var attrName = attrData.attributeName;
 		// Get what we are binding to from the scope
-		var parentCompute = getScopeCompute(el, attrData.scope, el.getAttribute(attrName) || ".", options);
+		var parentCompute = getScopeCompute(el, attrData.scope, options.attrValue || el.getAttribute(attrName) || ".", options);
 		
 		// Get what we are binding to from the child
 		var childCompute = getElementCompute(el, options.propName || attrName.replace(/^\{/,"").replace(/\}$/,""), options);
@@ -635,7 +514,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 		if(options.childToParent){
 			// setup event binding on viewModel and forward to parent.
-			updateScope = bindChildToParent(el, parentCompute, childCompute, bindingsSemaphore, attrName);
+			updateScope = bindChildToParent(el, parentCompute, childCompute, bindingsSemaphore, attrName, options.syncChildWithParent);
 		}
 		
 		if(options.initializeValues) {
@@ -648,6 +527,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		};
 	};
 	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateScope){
+		
 		if(options.parentToChild && !options.childToParent) {
 			updateChild({}, getValue(parentCompute) );
 		}
@@ -659,7 +539,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		// If both have a value, update the child.
 		else if( getValue(childCompute) === undefined) {
 			updateChild({}, getValue(parentCompute) );
-		} else if(parentCompute() === undefined) {
+		} else if(getValue(parentCompute) === undefined) {
 			updateScope({}, getValue(childCompute) );
 		} else {
 			updateChild({}, getValue(parentCompute) );
@@ -676,7 +556,6 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		
 		bindings(el, attrData, attrNameInfo);
 	});
-	
 	
 	// #ref-export shorthand
 	can.view.attr(/\*[\w\.\-_]+/, function(el, attrData) {

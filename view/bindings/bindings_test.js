@@ -366,7 +366,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(input.checked, false, 'checkbox value bound (via uncheck)');
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
-
+	
+	// TODO: next
 	test("checkboxes with can-true-value bind properly", function () {
 		var data = new can.Map({
 			sex: "male"
@@ -376,6 +377,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, true, 'checkbox value bound (via attr check)');
+		
 		data.attr('sex', 'female');
 		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
 		input.checked = true;
@@ -1407,6 +1409,27 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			}
 		});
 		can.viewModel(frag.firstChild).makeMyEvent();
+	});
+	
+	test("checkboxes with {($checked)} bind properly", function () {
+		var data = new can.Map({
+			completed: true
+		}),
+			frag = can.view.stache('<input type="checkbox" {($checked)}="completed"/>')(data);
+		can.append(can.$("#qunit-fixture"), frag);
+
+		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
+		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
+		data.attr('completed', false);
+		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
+		input.checked = true;
+		can.trigger(input, 'change');
+		equal(input.checked, true, 'checkbox value bound (via check)');
+		equal(data.attr('completed'), true, 'checkbox value bound (via check)');
+		input.checked = false;
+		can.trigger(input, 'change');
+		equal(input.checked, false, 'checkbox value bound (via uncheck)');
+		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
 	
 });

@@ -39,14 +39,17 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 	var scopeReader = function(scope, key, options, computeData, newVal){
 		if (arguments.length > 4) {
 			var root = computeData.root || computeData.setRoot;
-			
-			if(root.isComputed) {
-				root(newVal);
-			} else if(computeData.reads.length) {
-				var last = computeData.reads.length - 1;
-				var obj = computeData.reads.length ? can.compute.read(root, computeData.reads.slice(0, last)).value
-					: root;
-				can.compute.set(obj, computeData.reads[last].key, newVal, options);
+			if(root) {
+				if(root.isComputed) {
+					root(newVal);
+				} else if(computeData.reads.length) {
+					var last = computeData.reads.length - 1;
+					var obj = computeData.reads.length ? can.compute.read(root, computeData.reads.slice(0, last)).value
+						: root;
+					can.compute.set(obj, computeData.reads[last].key, newVal, options);
+				}
+			} else {
+				// WARN ... you can't set nothing
 			}
 			// **Compute getter**
 		} else {

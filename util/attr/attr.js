@@ -41,6 +41,7 @@ steal("can/util/can.js", function (can) {
 				"class": "className",
 				"value": "value",
 				"innertext": "innerText",
+				"innerhtml": "innerHTML",
 				"textcontent": "textContent",
 				"for": "htmlFor",
 				"checked": true,
@@ -67,6 +68,15 @@ steal("can/util/can.js", function (can) {
 			},
 			// These are elements whos default value we should set.
 			defaultValue: ["input", "textarea"],
+			setAttrOrProp: function(el, attrName, val){
+				attrName = attrName.toLowerCase();
+				var prop = attr.map[attrName];
+				if(prop === true && !val) {
+					this.remove(el, attrName);
+				} else {
+					this.set(el, attrName, val);
+				}
+			},
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
@@ -138,6 +148,8 @@ steal("can/util/can.js", function (can) {
 				var prop = attr.map[attrName];
 				if(typeof prop === "string" && el[prop]) {
 					return el[prop];
+				} else if(prop === true) {
+					return el[attrName];
 				}
 
 				return el.getAttribute(attrName);
