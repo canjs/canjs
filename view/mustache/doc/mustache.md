@@ -14,6 +14,10 @@
 @description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
 when used with [can.Maps](#can_observe).
 
+@deprecated {2.3} can.mustache will no longer be the default 
+template engine in 3.0.  Please switch to [can.stache]. [can-upgrade](https://github.com/canjs/can-upgrade)
+can help.
+
 @signature `can.mustache( [id,] template )`
 
 Creates an instance of a mustache template. 

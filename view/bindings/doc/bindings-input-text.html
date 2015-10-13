@@ -1,0 +1,28 @@
+<script type='text/stache' can-autorender id='demo-html'>
+<p>Distance:
+   <input {($value)}='loop.dist'/>
+</p>
+<p>Time:
+   {{loop.travelTime}} hrs
+</p>
+</script>
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+import can from "can";
+import "can/view/autorender/";
+import "can/view/stache/";
+
+var HyperLoop = can.Map.extend({
+  travelTime: function(){
+    return this.attr('dist') / 962; 
+  }
+});
+
+var loop = new HyperLoop({
+  dist: 3429.19 /* Chi to SF */
+});
+
+$("#demo-html").viewModel({
+	loop: loop
+});
+</script>
+
