@@ -407,21 +407,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// parent compute
 	var getScopeCompute = function(el, scope, scopeProp, options){
 		var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
-		var result = parentExpression.value(scope, new can.view.Scope());
-		// if the scope was like {something: Map}
-		// we want to be able to update all its properties
-		/*if(result instanceof can.Map) {
-			return can.compute(function(attrs){
-				if(arguments.length) {
-					result.attr(attrs, true);
-				} else {
-					return result.attr();
-				}
-			});
-		} else {
-			return result;
-		}*/
-		return result;
+		return parentExpression.value(scope, new can.view.Scope());
 	};
 	// child compute
 	var getElementCompute = function(el, attributeName, options){
