@@ -1,7 +1,4 @@
-var can = require('can/util/'),
-	stache = require('can/')
-
-('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b) {
+steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b) {
 
 	/* jshint ignore:start */
 	var suite = b.suite("can/view/stache spinning circle");
