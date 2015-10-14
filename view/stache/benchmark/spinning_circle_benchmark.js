@@ -3,6 +3,7 @@ steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b)
 	/* jshint ignore:start */
 	var suite = b.suite("can/view/stache spinning circle");
 	
+	
 	suite.add(
 		"basics",
 		function () {
@@ -67,6 +68,7 @@ steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b)
 	suite.add(
 		"initial render",
 		function () {
+			
 			var frag = template({boxes: boxes});
 			window.frag = frag;
 		},
@@ -112,10 +114,16 @@ steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b)
 					boxes.push( box );
 				}
 				
-				
 			},
 			teardown: function(){
+				
 				window.frag = null;
+			},
+			onStart: function(){
+				//console.profile("init")
+			},
+			onComplete: function(){
+				//console.profileEnd("init")
 			}
 		});
 	/* jshint ignore:end */

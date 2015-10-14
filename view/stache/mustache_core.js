@@ -309,12 +309,20 @@ steal("can/util",
 				// parent expresions.  If this value changes, the parent expressions should
 				// not re-evaluate. We prevent that by making sure this compute is ignored by
 				// everyone else.
-				var compute = can.compute(evaluator, null, false);
+				//var compute = can.compute(evaluator, null, false);
+				var gotCompute = evaluator.isComputed,
+					compute;
+				if(gotCompute) {
+					compute = evaluator;
+				} else {
+					compute = can.compute(evaluator, null, false);
+				}
+				
+				
 				// Bind on the compute to set the cached value. This helps performance
 				// so live binding can read a cached value instead of re-calculating.
-				compute.bind("change", can.k);
+				compute.computeInstance.bind("change", can.k);
 				var value = compute();
-				
 
 				// If value is a function, it's a helper that returned a function.
 				if(typeof value === "function") {
@@ -328,7 +336,7 @@ steal("can/util",
 
 				}
 				// If the compute has observable dependencies, setup live binding.
-				else if( compute.computeInstance.hasDependencies ) {
+				else if(gotCompute || compute.computeInstance.hasDependencies ) {
 
 					// Depending on where the template is, setup live-binding differently.
 					if(state.attr) {
@@ -361,7 +369,7 @@ steal("can/util",
 					}
 				}
 				// Unbind the compute.
-				compute.unbind("change", can.k);
+				compute.computeInstance.unbind("change", can.k);
 			};
 		},
 		// ## mustacheCore.splitModeFromExpression

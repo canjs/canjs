@@ -1705,19 +1705,12 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 		});
 
 		asyncTest('<content> node list cleans up properly, directly nested (#1625, #1627)', function() {
-			var items = [];
-			for (var i = 0; i < 2; i++) {
-				items.push({
-					name: 'test ' + i,
-					parentAttrInContent: 'test ' + i
-				});
-			}
 
 			can.Component.extend({
 				tag: 'parent-component',
 				template: can.stache('{{#items}}<child-component>{{parentAttrInContent}}</child-component>{{/items}}'),
 				scope: {
-					items: items
+					items: [{parentAttrInContent: 0},{parentAttrInContent: 1} ]
 				}
 			});
 
@@ -1729,7 +1722,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				}
 			});
 
-			can.append(can.$("#qunit-fixture"), can.stache('<parent-component></parent-component>')());
+			can.append(can.$("#qunit-fixture"), can.stache('<parent-component/>')());
 
 			var old = can.unbindAndTeardown;
 			var count = 0;
@@ -1744,7 +1737,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 			// Dispatches async
 			setTimeout(function() {
-				equal(count, 2, '2 items unbound');
+				equal(count, 4, '2 items unbound, but unbinding the temporary unbind and the actual unbind');
 				can.unbindAndTeardown = old;
 
 				start();

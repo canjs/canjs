@@ -86,8 +86,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		// ## Setup getter / setter functional computes
 		// Uses the function as both a getter and setter.
 		_setupGetterSetterFn: function(getterSetter, context, eventName) {
-			this._set = can.proxy(getterSetter, context);
-			this._get = can.proxy(getterSetter, context);
+			this._set = context ? can.proxy(getterSetter, context) : getterSetter;
+			this._get = context ? can.proxy(getterSetter, context) : getterSetter;
 			this._canObserve = eventName === false ? false : true;
 			// The helper provides the on and off methods that use `getValueAndBind`.
 			var handlers = setupComputeHandlers(this, getterSetter, context || this);
@@ -154,8 +154,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			
 			this.value = initialValue;
 			
-			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
-			this._get = settings.get ? can.proxy(settings.get, settings) : this._get;
+			this._set = settings.set || this._set;
+			this._get = settings.get || this._get;
 
 			// This allows updater to be called without any arguments.
 			// selfUpdater flag can be set by things that want to call updater themselves.
@@ -437,12 +437,13 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	// ### temporarilyBind
 	// Binds computes for a moment to cache their value and prevent re-calculating it.
 	can.Compute.temporarilyBind = function (compute) {
-		compute.bind('change', can.k);
+		var computeInstance = compute.computeInstance || compute;
+		computeInstance.bind('change', can.k);
 		if (!computes) {
 			computes = [];
 			setTimeout(unbindComputes, 10);
 		}
-		computes.push(compute);
+		computes.push(computeInstance);
 	};
 	
 	// A list of temporarily bound computes

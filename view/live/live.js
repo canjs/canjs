@@ -63,9 +63,9 @@ steal('can/util',
 		// operate on a compute
 		listen = function (el, compute, change) {
 			return setup(el, function () {
-				compute.bind('change', change);
+				compute.computeInstance.bind('change', change);
 			}, function (data) {
-				compute.unbind('change', change);
+				compute.computeInstance.unbind('change', change);
 				if (data.nodeList) {
 					nodeLists.unregister(data.nodeList);
 				}

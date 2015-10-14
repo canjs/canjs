@@ -91,16 +91,15 @@ steal("can/util", function(can){
 	// ## can.__observe
 	// Indicates that an observable is being read.  
 	// Updates the top of the stack with the observable being read.
-	var observe = can.__observe = can.__reading = function (obj, event) {
-		if (observedInfoStack.length) {
+	var observe = can.__observe = function (obj, event) {
+		var top = observedInfoStack[observedInfoStack.length-1];
+		if (top) {
 			var evStr = event + "",
-				name = obj._cid + '|' + evStr,
-				top = observedInfoStack[observedInfoStack.length-1];
-			
+				name = obj._cid + '|' + evStr;
 			if(top.traps) {
-				top.traps.push([obj, event]);
+				top.traps.push({obj: obj, event: evStr, name: name});
 			} 
-			else if(!top.ignore && !top.newObserved[name]) {
+			else if(!top.ignore && !(name in top.newObserved)) {
 				top.newObserved[name] = {
 					obj: obj,
 					event: evStr
@@ -114,6 +113,8 @@ steal("can/util", function(can){
 			
 		}
 	};
+	window._stats = {traps: 0, noTraps: 0};
+	can.__reading = can.__observe;
 	
 	can.__trapObserves = function(){
 		if (observedInfoStack.length) {
@@ -128,8 +129,22 @@ steal("can/util", function(can){
 		}
 	};
 	can.__observes = function(observes){
-		for(var i =0, len = observes.length; i < len; i++) {
-			observe(observes[i][0], observes[i][1]);
+		// a bit more optimized so we don't have to repeat everything in can.__observe
+		var top = observedInfoStack[observedInfoStack.length-1];
+		if (top) {
+			for(var i =0, len = observes.length; i < len; i++) {
+				var trap = observes[i],
+					name = trap.name;
+				
+				if(!(name in top.newObserved)) {
+					top.newObserved[name] = trap;
+					
+					if(!(name in top.oldObserved)) {
+						trap.obj.bind(trap.event, top.onchanged);
+					}
+					top.oldObserved[name] = null;
+				}
+			}
 		}
 	};
 	

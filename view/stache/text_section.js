@@ -3,8 +3,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 	
 	var TextSectionBuilder = function(){
 		this.stack = [new TextSection()];
-	},
-		emptyHandler = function(){};
+	};
 	
 	can.extend(TextSectionBuilder.prototype,utils.mixins);
 	
@@ -32,9 +31,9 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 				
 				var compute = can.compute(function(){
 					return renderer(scope, options);
-				}, this, false);
+				}, null, false);
 				
-				compute.bind("change", emptyHandler);
+				compute.computeInstance.bind("change", can.k);
 				var value = compute();
 				
 				if( compute.computeInstance.hasDependencies ) {
@@ -43,7 +42,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 					} else {
 						liveStache.attributes(this, compute, scope, options);
 					}
-					compute.unbind("change", emptyHandler);
+					compute.computeInstance.unbind("change", can.k);
 				} else {
 					if(state.attr) {
 						can.attr.set(this, state.attr, value);
