@@ -402,7 +402,10 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				// Only update if we have finished processing all prior events,
 				// the compute is being listened to,
 				// and the batchNum has changed.
-				if (readInfo.ready &&
+				
+				// It's possible that something we are listening to changed before we even get readInfo
+				if (readInfo && 
+					readInfo.ready &&
 					compute.bound &&
 					(ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 						
@@ -419,16 +422,13 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		return {
 			// Call `onchanged` when any source observables change.
 			on: function(){
-				readInfo = getValueAndBind(func, context, {observed: {}}, onchanged);
+				readInfo = getValueAndBind(func, context, {}, onchanged);
 				compute.value = readInfo.value;
-				compute.hasDependencies = !can.isEmptyObject(readInfo.observed);
+				compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 			},
 			// Unbind `onchanged` from all source observables.
 			off: function(){
-				for (var name in readInfo.observed) {
-					var ob = readInfo.observed[name];
-					ob.obj.unbind(ob.event, onchanged);
-				}
+				getValueAndBind.unbindReadInfo(readInfo, onchanged);
 			}
 		};
 	};

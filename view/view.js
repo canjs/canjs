@@ -600,7 +600,7 @@ steal('can/util', function (can) {
 
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
-			var reading, deferred, dataCopy, async, response;
+			var deferred, dataCopy, async, response;
 			if (deferreds.length) {
 				// Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
@@ -648,18 +648,13 @@ steal('can/util', function (can) {
 				// Return the deferred...
 				return deferred;
 			} else {
-				// get is called async but in
-				// ff will be async so we need to temporarily reset
-				reading = can.__clearReading();
 
 				// If there's a `callback` function
 				async = isFunction(callback);
-				// Get the `view` type
-				deferred = getRenderer(view, async);
-
-				if (reading) {
-					can.__setReading(reading);
-				}
+				
+				// get is called async but in
+				// ff will be async so we need to temporarily reset
+				deferred = can.__notObserve(getRenderer)(view, async);
 
 				// If we are `async`...
 				if (async) {

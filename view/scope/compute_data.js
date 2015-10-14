@@ -18,20 +18,15 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 	};
 	
 	var getValueAndBindScopeRead = function(scopeRead, scopeReadChanged){
-		return getValueAndBind(scopeRead, null, {observed: {}}, scopeReadChanged);
+		return getValueAndBind(scopeRead, null, {}, scopeReadChanged);
 	};
-	var unbindScopeRead = function(readInfo, scopeReadChanged){
-		for (var name in readInfo.observed) {
-			var ob = readInfo.observed[name];
-			ob.obj.unbind(ob.event, scopeReadChanged);
-		}
-	};
+	var unbindScopeRead = getValueAndBind.unbindReadInfo;
 	var getValueAndBindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
 		var target = computeData.root,
 			prop = computeData.reads[0].key;
 		target.bind(prop, singlePropertyReadChanged);
 		// something: true is just a dummy value so we know something is observed
-		return {value: computeData.initialValue, observed: {something: true}};
+		return {value: computeData.initialValue, newObserved: {something: true}};
 	};
 	var unbindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
 		computeData.root.unbind(computeData.reads[0].key, singlePropertyReadChanged);
@@ -137,7 +132,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					}
 					// TODO deal with this right
 					compute.computeInstance.value = readInfo.value;
-					compute.computeInstance.hasDependencies = !can.isEmptyObject(readInfo.observed);
+					compute.computeInstance.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 				},
 				off: function(){
 					if(isFastPathBound) {

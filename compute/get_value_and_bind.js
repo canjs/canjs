@@ -19,17 +19,16 @@ steal("can/util", function(can){
 	// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.  
 	// Returns the `newInfo` set of listeners and the value `func` returned.
 	function getValueAndBind( func, context, oldObservedInfo, onchanged ) {
-		// Call the function, get the value as well as the observed objects and events
-		var newObservedInfo = getValueAndObserved(func, context),
-			newObserveSet = newObservedInfo.observed,
-			oldObserved = oldObservedInfo.observed;
+		
+		var oldObserved = oldObservedInfo.newObserved || {},
+			// Call the function, get the value as well as the observed objects and events
+			newObservedInfo = getValueAndObserved(func, context, oldObserved, onchanged);
 		
 		// If the names of what we've bound to have changed,
 		// bind on what's new and unbind on what's old.
-		if(newObservedInfo.names !== oldObservedInfo.names) {
-			bindNewSet(oldObserved, newObserveSet, onchanged);
-			unbindOldSet(oldObserved, onchanged);
-		}
+		
+		unbindOldSet(oldObserved, onchanged);
+		
 		
 		// Set ready after all previous events have fired.
 		can.batch.afterPreviousEvents(function(){
@@ -40,12 +39,12 @@ steal("can/util", function(can){
 	}
 	// ### getValueAndObserved
 	// Reads a function and returns its observedInfo object.
-	var getValueAndObserved = function (func, self) {
+	var getValueAndObserved = function (func, self, oldObserved, onchanged) {
 		
 		// Add this function call's observedInfo to the stack,
 		// runs the function, pops off the observedInfo, and returns it.
 		
-		observedInfoStack.push({names: "", observed: {}});
+		observedInfoStack.push({names: "", newObserved: {}, oldObserved: oldObserved, onchanged: onchanged, ignore: 0});
 		var value = func.call(self);
 
 		var stackItem = observedInfoStack.pop();
@@ -53,33 +52,14 @@ steal("can/util", function(can){
 		return stackItem;
 	};
 
-	// ### bindNewSet
-	// Binds to all observables in `newObserveSet` that are not in
-	// `oldObserved` set.
-	var bindNewSet = function(oldObserved, newObserveSet, onchanged){
-		for(var name in newObserveSet ) {
-			bindOrPreventUnbinding(oldObserved, newObserveSet, name, onchanged);
-		}
-	};
-
-	// ### bindOrPreventUnbinding
-	// Binds on a particular observable if it is not in `oldObserved`.
-	// If it is in `oldObserved` deletes it so it is not unbound.
-	var bindOrPreventUnbinding = function(oldObserved, newObserveSet, name, onchanged){
-		if( oldObserved[name] ) {
-			delete oldObserved[name];
-		} else {
-			var obEv = newObserveSet[name];
-			obEv.obj.bind(obEv.event, onchanged);
-		}
-	};
-
 	// ### unbindOldSet
 	// Unbinds everything in `oldObserved`.
 	var unbindOldSet = function(oldObserved, onchanged){
 		for (var name in oldObserved) {
 			var obEv = oldObserved[name];
-			obEv.obj.unbind(obEv.event, onchanged);
+			if(obEv) {
+				obEv.obj.unbind(obEv.event, onchanged);
+			}
 		}
 	};
 	
@@ -111,21 +91,48 @@ steal("can/util", function(can){
 	// ## can.__observe
 	// Indicates that an observable is being read.  
 	// Updates the top of the stack with the observable being read.
-	can.__observe = can.__reading = function (obj, event) {
+	var observe = can.__observe = can.__reading = function (obj, event) {
 		if (observedInfoStack.length) {
-			var name = obj._cid + '|' + event,
+			var evStr = event + "",
+				name = obj._cid + '|' + evStr,
 				top = observedInfoStack[observedInfoStack.length-1];
 			
-			if(!top.observed[name]) {
-				top.names += name;
-				top.observed[name] = {
+			if(top.traps) {
+				top.traps.push([obj, event]);
+			} 
+			else if(!top.ignore && !top.newObserved[name]) {
+				top.newObserved[name] = {
 					obj: obj,
-					event: event + ""
+					event: evStr
 				};
+				
+				if(!(name in top.oldObserved)) {
+					obj.bind(evStr, top.onchanged);
+				}
+				top.oldObserved[name] = null;
 			}
 			
 		}
 	};
+	
+	can.__trapObserves = function(){
+		if (observedInfoStack.length) {
+			var top = observedInfoStack[observedInfoStack.length-1];
+			var traps = top.traps = [];
+			return function(){
+				top.traps = null;
+				return traps;
+			};
+		} else {
+			return function(){return [];};
+		}
+	};
+	can.__observes = function(observes){
+		for(var i =0, len = observes.length; i < len; i++) {
+			observe(observes[i][0], observes[i][1]);
+		}
+	};
+	
 	// ### can.__isRecordingObserves
 	// Returns if some function is in the process of recording observes.
 	can.__isRecordingObserves = function(){
@@ -136,41 +143,22 @@ steal("can/util", function(can){
 	// Protects a function from being observed.
 	can.__notObserve = function(fn){
 		return function(){
-			var previousReads = can.__clearObserved();
-			var res = fn.apply(this, arguments);
-			can.__setObserved(previousReads);
-			return res;
+			if (observedInfoStack.length) {
+				var top = observedInfoStack[observedInfoStack.length-1];
+				top.ignore++;
+				var res = fn.apply(this, arguments);
+				top.ignore--;
+				return res;
+			} else {
+				return fn.apply(this, arguments);
+			}
 		};
 	};
 	
-	// ### can.__clearObserved
-	// Whipes out all previous `can.__observe` calls for the current
-	// `getValueAndBind`.
-	can.__clearObserved = can.__clearReading = function () {
-		if (observedInfoStack.length) {
-			var ret = observedInfoStack[observedInfoStack.length-1];
-			observedInfoStack[observedInfoStack.length-1] = {names: "", observed: {}};
-			return ret;
-		}
-	};
-
-	// ### can.__setObserved
-	// Restores an observedInfo object, overwriting anything that
-	// might have come before.
-	can.__setObserved = can.__setReading = function (o) {
-		if (observedInfoStack.length) {
-			observedInfoStack[observedInfoStack.length-1] = o;
-		}
-	};
-
-	// ### can.__addObserved
-	// Merges an observedInfo object into the current 
-	// `getValueAndBind`'s observedInfo object.
-	can.__addObserved = can.__addReading = function(o){
-		if (observedInfoStack.length) {
-			var last = observedInfoStack[observedInfoStack.length-1];
-			can.simpleExtend(last.observed, o.observed);
-			last.names += o.names;
+	getValueAndBind.unbindReadInfo = function(readInfo, onchanged){
+		for (var name in readInfo.newObserved) {
+			var ob = readInfo.newObserved[name];
+			ob.obj.unbind(ob.event, onchanged);
 		}
 	};
 

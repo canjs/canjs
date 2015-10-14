@@ -1,4 +1,7 @@
-steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b) {
+var can = require('can/util/'),
+	stache = require('can/')
+
+('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b) {
 
 	/* jshint ignore:start */
 	b.suite("can/view/stache spinning circle").add(
