@@ -72,6 +72,7 @@
 		"map": {
 			"can/can": "can",
 			"jquery/jquery": "jquery",
+			"steal-benchmark/steal-benchmark": "steal-benchmark",
 			"can-simple-dom/can-simple-dom": "can-simple-dom",
 			"jquery-ui/jquery-ui": "jquery-ui",
 			"steal-qunit/steal-qunit": "steal-qunit",
@@ -143,12 +144,10 @@
 			"grunt-shell",
 			"grunt-simple-mocha",
 			"grunt-string-replace",
-			"steal-benchmark",
 			"rimraf",
 			"lodash",
 			"browserify",
 			"grunt-banner",
-			"steal-benchmark",
 			"documentjs"
 		],
 		"envs": {
