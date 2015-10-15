@@ -99,13 +99,13 @@ steal("can/util", function(can){
 			if(top.traps) {
 				top.traps.push({obj: obj, event: evStr, name: name});
 			} 
-			else if(!top.ignore && !(name in top.newObserved)) {
+			else if(!top.ignore && !top.newObserved[name]) {
 				top.newObserved[name] = {
 					obj: obj,
 					event: evStr
 				};
 				
-				if(!(name in top.oldObserved)) {
+				if(!top.oldObserved[name]) {
 					obj.bind(evStr, top.onchanged);
 				}
 				top.oldObserved[name] = null;
@@ -136,10 +136,10 @@ steal("can/util", function(can){
 				var trap = observes[i],
 					name = trap.name;
 				
-				if(!(name in top.newObserved)) {
+				if(!top.newObserved[name]) {
 					top.newObserved[name] = trap;
 					
-					if(!(name in top.oldObserved)) {
+					if(!top.oldObserved[name]) {
 						trap.obj.bind(trap.event, top.onchanged);
 					}
 					top.oldObserved[name] = null;

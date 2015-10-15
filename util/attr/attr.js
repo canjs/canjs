@@ -62,9 +62,18 @@ steal("can/util/can.js", function (can) {
 						return val;
 					}
 				},
-				style: function (el, val) {
-					return el.style && "cssText" in el.style ? el.style.cssText = val || "" : el.setAttribute("style", val);
-				}
+				style: (function () {
+					var el = can.global.document && document.createElement('div');
+					if ( el && el.style && ("cssText" in el.style) ) {
+						return function (el, val) {
+							return el.style.cssText = (val || "");
+						};
+					} else {
+						return function (el, val) {
+							return el.setAttribute("style", val);
+						};
+					}
+				})()
 			},
 			// These are elements whos default value we should set.
 			defaultValue: ["input", "textarea"],

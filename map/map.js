@@ -342,7 +342,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on `_data` and set up bubbling.
-					this.___set(prop, bubble.set(this, prop, value, current) );
+					this.___set(prop, typeof value === "object" ? bubble.set(this, prop, value, current) : value );
 
 					// Computed properties change events are already forwarded.
 					if(!this._computedAttrs[prop]) {
@@ -351,7 +351,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 
 					// Stop bubbling old nested maps.
-					if (current) {
+					if (typeof current === "object") {
 						bubble.teardownFromParent(this, current);
 					}
 				}

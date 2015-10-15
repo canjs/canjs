@@ -62,9 +62,15 @@ steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b)
 			},
 			teardown: function(){
 				$(div).remove();
+			},
+			onStart: function(){
+				console.profile("init")
+			},
+			onComplete: function(){
+				console.profileEnd("init")
 			}
 		});
-	
+	/*
 	suite.add(
 		"initial render",
 		function () {
@@ -125,6 +131,6 @@ steal('can/util','can/view/stache', 'steal-benchmark', function (can, stache, b)
 			onComplete: function(){
 				//console.profileEnd("init")
 			}
-		});
+		});*/
 	/* jshint ignore:end */
 });
