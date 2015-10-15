@@ -110,7 +110,7 @@
 		$("#start").click(function(){
 			 loopCount = 0;
    			 totalTime = 0;
-   			 console.profile("loops");
+   			 //console.profile("loops");
    			 benchmarkLoop(run);
 		});
 		
@@ -133,7 +133,7 @@
 			    	benchmarkLoop(fn);
 			    },1);
 		    } else {
-		    	console.profileEnd("loops");
+		    	//console.profileEnd("loops");
 		    }
 		   
 		};
