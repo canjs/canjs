@@ -381,7 +381,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	var updateOnChange = function(compute, newValue, oldValue, batchNum){
 		// Only trigger event when value has changed
 		if (newValue !== oldValue) {
-			can.batch.trigger(compute, batchNum ? {type: "change", batchNum: batchNum} : 'change', [
+			can.batch.trigger(compute, {type: "change", batchNum: batchNum}, [
 				newValue,
 				oldValue
 			]);
@@ -394,7 +394,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	var setupComputeHandlers = function(compute, func, context) {
 
 		// The last observeInfo object returned by getValueAndBind.
-		var readInfo,
+		var readInfo = {},
 			// The last batch number seen.
 			batchNum,
 			// A function that gets called whenever any observed observables change.
@@ -404,15 +404,14 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				// and the batchNum has changed.
 				
 				// It's possible that something we are listening to changed before we even get readInfo
-				if (readInfo && 
-					readInfo.ready &&
+				if (readInfo.ready &&
 					compute.bound &&
 					(ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
 						
 					// Keep the old value.
 					var oldValue = readInfo.value;
 					// Get the new value and register this event handler to any new observables.
-					readInfo = getValueAndBind(func, context, readInfo, onchanged);
+					getValueAndBind(func, context, readInfo, onchanged);
 					// Update the compute with the new value.
 					compute.updater(readInfo.value, oldValue, ev.batchNum);
 					batchNum = ev.batchNum;
@@ -422,7 +421,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		return {
 			// Call `onchanged` when any source observables change.
 			on: function(){
-				readInfo = getValueAndBind(func, context, {}, onchanged);
+				getValueAndBind(func, context, readInfo, onchanged);
 				compute.value = readInfo.value;
 				compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 			},

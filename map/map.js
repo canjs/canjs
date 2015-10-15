@@ -216,7 +216,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// To read the actual values, `_get` calls
 			// `___get`.
 			_get: function (attr) {
-				attr = ""+attr;
+				attr = attr+"";
 				var dotIndex = attr.indexOf('.');
 
 				if( dotIndex >= 0 ) {

@@ -93,16 +93,19 @@ steal("can/util/can.js", function (can) {
 				
 				attrName = attrName.toLowerCase();
 				var oldValue;
-				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
+				// In order to later trigger an event we need to compare the new value to the old value, 
+				// so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
 				if (!usingMutationObserver) {
 					oldValue = attr.get(el, attrName);
 				}
 
-				var tagName = el.nodeName.toString().toLowerCase(),
-					prop = attr.map[attrName],
+				var prop = attr.map[attrName],
 					newValue;
 
-				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. Then check if the property is `true`, and if so set the value to `true`, also making sure to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true because for these boolean properties, setting them to false would be the same as removing the attribute.
+				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. 
+				// Then check if the property is `true`, and if so set the value to `true`, also making sure 
+				// to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true 
+				// because for these boolean properties, setting them to false would be the same as removing the attribute.
 				//
 				// For all other attributes use `setAttribute` to set the new value.
 				if (typeof prop === "function") {
@@ -111,7 +114,7 @@ steal("can/util/can.js", function (can) {
 					newValue = el[attrName] = true;
 
 					if (attrName === "checked" && el.type === "radio") {
-						if (can.inArray(tagName, attr.defaultValue) >= 0) {
+						if (can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 							el.defaultChecked = true;
 						}
 					}
@@ -121,7 +124,7 @@ steal("can/util/can.js", function (can) {
 					if (el[prop] !== val) {
 						el[prop] = val;
 					}
-					if (prop === "value" && can.inArray(tagName, attr.defaultValue) >= 0) {
+					if (prop === "value" && can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 						el.defaultValue = val;
 					}
 				} else {

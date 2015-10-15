@@ -18,39 +18,30 @@ steal("can/util", function(can){
 	// `func` reads. When any of those observables change, `onchanged` is called.  
 	// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.  
 	// Returns the `newInfo` set of listeners and the value `func` returned.
-	function getValueAndBind( func, context, oldObservedInfo, onchanged ) {
+	function getValueAndBind( func, context, observedInfo, onchanged ) {
 		
-		var oldObserved = oldObservedInfo.newObserved || {},
-			// Call the function, get the value as well as the observed objects and events
-			newObservedInfo = getValueAndObserved(func, context, oldObserved, onchanged);
-		
-		// If the names of what we've bound to have changed,
-		// bind on what's new and unbind on what's old.
-		
-		unbindOldSet(oldObserved, onchanged);
-		
-		
-		// Set ready after all previous events have fired.
-		can.batch.afterPreviousEvents(function(){
-			newObservedInfo.ready = true;
-		});
-		
-		return newObservedInfo;
-	}
-	// ### getValueAndObserved
-	// Reads a function and returns its observedInfo object.
-	var getValueAndObserved = function (func, self, oldObserved, onchanged) {
+		observedInfo.oldObserved = observedInfo.newObserved || {};
+		observedInfo.onchanged = onchanged;
+		observedInfo.ignore = 0;
+		observedInfo.newObserved = {};
+		observedInfo.ready = false;
 		
 		// Add this function call's observedInfo to the stack,
 		// runs the function, pops off the observedInfo, and returns it.
 		
-		observedInfoStack.push({names: "", newObserved: {}, oldObserved: oldObserved, onchanged: onchanged, ignore: 0});
-		var value = func.call(self);
-
-		var stackItem = observedInfoStack.pop();
-		stackItem.value = value;
-		return stackItem;
-	};
+		observedInfoStack.push(observedInfo);
+		observedInfo.value = func.call(context);
+		observedInfoStack.pop();
+		
+		unbindOldSet(observedInfo.oldObserved, onchanged);
+		
+		// Set ready after all previous events have fired.
+		can.batch.afterPreviousEvents(function(){
+			observedInfo.ready = true;
+		});
+		
+		return observedInfo;
+	}
 
 	// ### unbindOldSet
 	// Unbinds everything in `oldObserved`.
