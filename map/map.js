@@ -201,10 +201,10 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				}
 				else if (arguments.length === 1) {
 					// Get a single attribute.
-					return this._get(attr);
+					return this._get(attr+"");
 				} else {
 					// Set an attribute.
-					this._set(attr, val);
+					this._set(attr+"", val);
 					return this;
 				}
 			},
@@ -216,7 +216,6 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// To read the actual values, `_get` calls
 			// `___get`.
 			_get: function (attr) {
-				attr = attr+"";
 				var dotIndex = attr.indexOf('.');
 
 				if( dotIndex >= 0 ) {
@@ -276,11 +275,11 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// If the map is initializing, the current value does not need to be
 			// read because no change events are dispatched anyway.
 			_set: function (attr, value, keepKey) {
-				attr = ""+attr;
+
 				var dotIndex = attr.indexOf('.'),
 					current;
 
-				if(!keepKey && dotIndex >= 0){
+				if(dotIndex >= 0 && !keepKey){
 					var first = attr.substr(0, dotIndex),
 						second = attr.substr(dotIndex+1);
 
@@ -313,7 +312,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// list or map instance is used.
 			__type: function(value, prop){
 
-				if (!( value instanceof can.Map) && mapHelpers.canMakeObserve(value)  ) {
+				if (typeof value === "object" && !( value instanceof can.Map) && mapHelpers.canMakeObserve(value)  ) {
 
 					var cached = mapHelpers.getMapFromObject(value);
 					if(cached) {

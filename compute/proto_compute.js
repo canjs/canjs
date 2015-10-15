@@ -394,11 +394,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	var setupComputeHandlers = function(compute, func, context) {
 
 		// The last observeInfo object returned by getValueAndBind.
-		var readInfo = {},
-			// The last batch number seen.
-			batchNum,
+		var readInfo = new getValueAndBind.ObservedInfo(func, context,
 			// A function that gets called whenever any observed observables change.
-			onchanged = function(ev){
+			function(ev){
 				// Only update if we have finished processing all prior events,
 				// the compute is being listened to,
 				// and the batchNum has changed.
@@ -411,23 +409,25 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					// Keep the old value.
 					var oldValue = readInfo.value;
 					// Get the new value and register this event handler to any new observables.
-					getValueAndBind(func, context, readInfo, onchanged);
+					getValueAndBind(readInfo);
 					// Update the compute with the new value.
 					compute.updater(readInfo.value, oldValue, ev.batchNum);
 					batchNum = ev.batchNum;
 				}
-			};
+			}),
+			// The last batch number seen.
+			batchNum;
 			
 		return {
 			// Call `onchanged` when any source observables change.
 			on: function(){
-				getValueAndBind(func, context, readInfo, onchanged);
+				getValueAndBind(readInfo);
 				compute.value = readInfo.value;
 				compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 			},
 			// Unbind `onchanged` from all source observables.
 			off: function(){
-				getValueAndBind.unbindReadInfo(readInfo, onchanged);
+				getValueAndBind.unbindReadInfo(readInfo);
 			}
 		};
 	};

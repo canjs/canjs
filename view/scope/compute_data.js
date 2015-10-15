@@ -17,16 +17,13 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					!can.isFunction(computeData.root[computeData.reads[0].key]);
 	};
 	
-	var getValueAndBindScopeRead = function(readInfo, scopeRead, scopeReadChanged){
-		getValueAndBind(scopeRead, null, readInfo, scopeReadChanged);
-	};
+	
 	var unbindScopeRead = getValueAndBind.unbindReadInfo;
 	var getValueAndBindSinglePropertyRead = function(readInfo, computeData, singlePropertyReadChanged){
 		var target = computeData.root,
 			prop = computeData.reads[0].key;
 		target.bind(prop, singlePropertyReadChanged);
 		readInfo.value = computeData.initialValue;
-		
 	};
 	var unbindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
 		computeData.root.unbind(computeData.reads[0].key, singlePropertyReadChanged);
@@ -86,25 +83,26 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 			// store the last batch number
 			batchNum,
 			// the observables read by the last calling of `scopeRead`
-			readInfo = {},
-			// What to do when a full scope read has changed
-			scopeReadChanged = function(ev){
-				// only run this if we have changed the batch and everything.
-				if (readInfo.ready && compute.computeInstance.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
-					// Keep the old value
-					var oldValue = readInfo.value,
-						newValue;
+			readInfo = new getValueAndBind.ObservedInfo(scopeRead, null,
+				// What to do when a full scope read has changed
+				function(ev){
+					// only run this if we have changed the batch and everything.
+					if (readInfo.ready && compute.computeInstance.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
+						// Keep the old value
+						var oldValue = readInfo.value,
+							newValue;
+							
+						// Get the new value
+						getValueAndBind(readInfo);
+						newValue = readInfo.value;
 						
-					// Get the new value
-					getValueAndBind(scopeRead, null, readInfo, scopeReadChanged);
-					newValue = readInfo.value;
-					
-					
-					// Call the updater with old and new values
-					compute.computeInstance.updater(newValue, oldValue, ev.batchNum);
-					batchNum = batchNum = ev.batchNum;
-				}
-			},
+						
+						// Call the updater with old and new values
+						compute.computeInstance.updater(newValue, oldValue, ev.batchNum);
+						batchNum = batchNum = ev.batchNum;
+					}
+				}),
+
 			// What to do when a single property has changed
 			singlePropertyReadChanged = function(ev, newVal, oldVal){
 				if(typeof newVal !== "function") {
@@ -112,7 +110,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 				} else {
 					// switch bindings
 					unbindSinglePropertyRead(computeData,singlePropertyReadChanged );
-					getValueAndBindScopeRead(readInfo, scopeRead, scopeReadChanged);
+					getValueAndBind(readInfo);
 					isFastPathBound = false;
 					compute.computeInstance.updater(readInfo.value, oldVal, ev.batchNum);
 				}
@@ -122,12 +120,14 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 			
 			compute = can.compute(undefined,{
 				on: function() {
-					getValueAndBindScopeRead(readInfo, scopeRead, scopeReadChanged);
+					// 
+					getValueAndBind(readInfo);
+					
 					if( isFastPath(computeData) ) {
 						// bind before unbind to keep bind count correct
 						getValueAndBindSinglePropertyRead(readInfo, computeData, singlePropertyReadChanged);
-						unbindScopeRead(readInfo, scopeReadChanged);
-						// clear newObserved so if thi switches back, we're ok with it
+						unbindScopeRead(readInfo);
+						// clear newObserved so if this switches back, we're ok with it
 						readInfo.newObserved = {};
 						isFastPathBound = true;
 					}
@@ -139,7 +139,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					if(isFastPathBound) {
 						unbindSinglePropertyRead(computeData, singlePropertyReadChanged);
 					} else {
-						unbindScopeRead(readInfo, scopeReadChanged);
+						unbindScopeRead(readInfo);
 					}
 				},
 				set: scopeRead,

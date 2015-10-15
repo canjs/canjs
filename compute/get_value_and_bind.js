@@ -13,15 +13,20 @@
 // - can.__notObserve - Returns a function that can not be observed.
 steal("can/util", function(can){
 	
+	function ObservedInfo(func, context, onchanged){
+		this.func = func;
+		this.context = context;
+		this.onchanged = onchanged;
+	}
+	
 	// ## getValueAndBind
 	// Calls `func` with "this" as `context` and binds to any observables that
 	// `func` reads. When any of those observables change, `onchanged` is called.  
 	// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.  
 	// Returns the `newInfo` set of listeners and the value `func` returned.
-	function getValueAndBind( func, context, observedInfo, onchanged ) {
+	function getValueAndBind(observedInfo) {
 		
 		observedInfo.oldObserved = observedInfo.newObserved || {};
-		observedInfo.onchanged = onchanged;
 		observedInfo.ignore = 0;
 		observedInfo.newObserved = {};
 		observedInfo.ready = false;
@@ -30,10 +35,10 @@ steal("can/util", function(can){
 		// runs the function, pops off the observedInfo, and returns it.
 		
 		observedInfoStack.push(observedInfo);
-		observedInfo.value = func.call(context);
+		observedInfo.value = observedInfo.func.call(observedInfo.context);
 		observedInfoStack.pop();
 		
-		unbindOldSet(observedInfo.oldObserved, onchanged);
+		unbindOldSet(observedInfo);
 		
 		// Set ready after all previous events have fired.
 		can.batch.afterPreviousEvents(function(){
@@ -45,7 +50,10 @@ steal("can/util", function(can){
 
 	// ### unbindOldSet
 	// Unbinds everything in `oldObserved`.
-	var unbindOldSet = function(oldObserved, onchanged){
+	var unbindOldSet = function(observedInfo){
+		var onchanged = observedInfo.onchanged,
+			oldObserved = observedInfo.oldObserved;
+			
 		for (var name in oldObserved) {
 			var obEv = oldObserved[name];
 			if(obEv) {
@@ -104,7 +112,7 @@ steal("can/util", function(can){
 			
 		}
 	};
-	window._stats = {traps: 0, noTraps: 0};
+	
 	can.__reading = can.__observe;
 	
 	can.__trapObserves = function(){
@@ -161,12 +169,14 @@ steal("can/util", function(can){
 		};
 	};
 	
-	getValueAndBind.unbindReadInfo = function(readInfo, onchanged){
+	getValueAndBind.unbindReadInfo = function(readInfo){
+		var onchanged = readInfo.onchanged;
 		for (var name in readInfo.newObserved) {
 			var ob = readInfo.newObserved[name];
 			ob.obj.unbind(ob.event, onchanged);
 		}
 	};
+	getValueAndBind.ObservedInfo = ObservedInfo;
 
 	return getValueAndBind;
 
