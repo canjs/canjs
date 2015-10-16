@@ -33,9 +33,15 @@
 <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
+	var MODULE_ALIAS = module;
+    module = undefined;
 </script>
 
 <script type="text/javascript" src="node_modules/can-simple-dom/dist/global/can-simple-dom.js"></script>
+<script type="text/javascript">
+    module = MODULE_ALIAS;
+</script>
+
 <script type="text/javascript" src="<%= configuration.library %>"></script>
 <script type="text/javascript" src="dist/<%= dist.replace('-2', '') %>.js"></script>
 <% modules.forEach(function(module) { %><% if(!module.isDefault) { %><script type="text/javascript" src="dist/<%= module %>.js"></script><% } %><% }); %>
