@@ -90,14 +90,14 @@ steal("can/util", function(can){
 	// ## can.__observe
 	// Indicates that an observable is being read.  
 	// Updates the top of the stack with the observable being read.
-	var observe = can.__observe = function (obj, event) {
+	can.__observe = function (obj, event) {
 		var top = observedInfoStack[observedInfoStack.length-1];
 		if (top) {
 			var evStr = event + "",
 				name = obj._cid + '|' + evStr;
 			if(top.traps) {
 				top.traps.push({obj: obj, event: evStr, name: name});
-			} 
+			}
 			else if(!top.ignore && !top.newObserved[name]) {
 				top.newObserved[name] = {
 					obj: obj,
