@@ -13,6 +13,27 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		makeTest('can/view/stache vdom', simpleDocument);
 	}
 
+
+	// Add tests that shouldn't run in VDOM here.
+	if(window.steal) {
+		QUnit.asyncTest("routeUrl and routeCurrent helper", function(){
+			makeIframe(  can.test.path("view/stache/test/route-url-current.html?"+Math.random()) );
+		});
+	}
+
+
+	function makeIframe(src){
+		var iframe = document.createElement('iframe');
+		window.removeMyself = function(){
+			delete window.removeMyself;
+			document.body.removeChild(iframe);
+			start();
+		};
+
+		document.body.appendChild(iframe);
+		iframe.src = src;
+	}
+
 	// HELPERS
 	function makeTest(name, doc) {
 		var isNormalDOM = doc === window.document;

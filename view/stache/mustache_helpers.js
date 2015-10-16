@@ -10,6 +10,21 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return value;
 		}
 	};
+	var resolveHash = function(hash){
+		var params = {};
+		for(var prop in hash) {
+			var value = hash[prop];
+			if(value && value.isComputed) {
+				params[prop] = value();
+			} else {
+				params[prop] = value;
+			}
+		}
+		return params;
+	};
+	var looksLikeOptions = function(options){
+		return options && typeof options.fn === "function" && typeof options.inverse === "function";
+	};
 
 	var helpers = {
 		"each": function(items, options){
@@ -198,8 +213,37 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 
 				return can.joinURIs(baseURL, moduleReference);
 			}
+		},
+		routeUrl: function(params, merge){
+			// check if called like a mustache helper
+			if(!params) {
+				params = {};
+			}
+			
+			if(typeof params.fn === "function" && typeof params.inverse === "function") {
+				params = resolveHash(params.hash);
+			}
+			return can.route.url(params, typeof merge === "boolean" ? merge : undefined);
+		},
+		routeCurrent: function(params){
+			// check if this a normal helper call
+			var last = can.last(arguments),
+				isOptions = last && looksLikeOptions(last);
+			if( last && isOptions && !(last.exprData instanceof can.expression.Call) ) {
+				if(can.route.current( resolveHash(params.hash || {}))) {
+					return params.fn();
+				} else {
+					return params.inverse();
+				}
+			} else {
+				return can.route.current(looksLikeOptions(params) ? {} : params || {});
+			}
+			
 		}
 	};
+	
+	// TODO ... remove as this is hacky
+	helpers.routeCurrent.callAsMethod = true;
 
 	helpers.eachOf = helpers.each;
 
