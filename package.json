@@ -15,7 +15,7 @@
 		"github": "https://github.com/bitovi/canjs"
 	},
 	"dependencies": {
-		"can-simple-dom": "^0.2.16"
+		"can-simple-dom": "^0.2.19"
 	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"
