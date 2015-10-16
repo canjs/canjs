@@ -287,10 +287,14 @@ steal(
 							if(refInstance) {
 								searchedRefsScope = true;
 							}
-
+							var getObserves = can.__trapObserves();
+							
 							var data = can.compute.read(context, names, readOptions);
+							
+							var observes = getObserves();
 							// **Key was found**, return value and location data
 							if (data.value !== undefined) {
+								can.__observes(observes);
 								return {
 									scope: scope,
 									rootObserve: currentObserve,
@@ -299,7 +303,7 @@ steal(
 								};
 							} else {
 								// save all old readings before we try the next scope
-								undefinedObserves.push( can.__clearObserved() );
+								undefinedObserves.push.apply(undefinedObserves, observes);
 							}
 						}
 
@@ -314,12 +318,7 @@ steal(
 					// **Key was not found**, return undefined for the value.
 					// Make sure we listen to everything we checked for when the value becomes defined.
 					// Once it becomes defined, we won't have to listen to so many things.
-					var len = undefinedObserves.length;
-					if (len) {
-						for(var i = 0; i < len; i++) {
-							can.__addObserved(undefinedObserves[i]);
-						}
-					}
+					can.__observes(undefinedObserves);
 					return {
 						setRoot: currentSetObserve,
 						reads: currentSetReads,

@@ -26,7 +26,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				"{{/animals}}</ul>";
 
 		}
-	})
+	});
 
 	// Override expected spec result for whitespace only issues
 	var override = {

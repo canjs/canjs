@@ -176,9 +176,8 @@ steal('can/util/can.js', function (can) {
 					return;
 				}
 
-				currentBatchEvents = batchEvents.slice(0);
-
-				currentBatchCallbacks = stopCallbacks.slice(0);
+				currentBatchEvents = batchEvents;
+				currentBatchCallbacks = stopCallbacks;
 				var i, len;
 				batchEvents = [];
 				stopCallbacks = [];
@@ -189,7 +188,6 @@ steal('can/util/can.js', function (can) {
 					can.batch.start();
 				}
 				for(i = 0; i < currentBatchEvents.length; i++) {
-					currentBatchEvents[i][1][0].orderNum = i;
 					can.dispatch.apply(currentBatchEvents[i][0],currentBatchEvents[i][1]);
 				}
 				currentBatchEvents = null;
@@ -243,11 +241,11 @@ steal('can/util/can.js', function (can) {
 		},
 		afterPreviousEvents: function(handler){
 			if(currentBatchEvents) {
-				var obj = {};
-				can.bind.call(obj,"ready", handler);
+				// This basically creates an object with an event handler that
+				// will be dispatched.
+				var obj = {__bindEvents: {ready: [{handler: handler}]}};
 				currentBatchEvents.push([
-					obj,
-					[{type: "ready"}, []]
+					obj, [{type: "ready"}, []]
 				]);
 			} else {
 				handler({});

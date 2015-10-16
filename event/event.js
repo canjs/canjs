@@ -236,18 +236,27 @@ steal('can/util/can.js', function (can) {
 		if (!events) {
 			return;
 		}
-
+		var eventName;
 		// Initialize the event object
 		if (typeof event === 'string') {
+			eventName = event;
 			event = {
 				type: event
 			};
+		} else {
+			eventName = event.type;
+		}
+		
+		// Grab event listeners
+		var handlers = events[eventName];
+		if(!handlers) {
+			return;
+		} else {
+			handlers = handlers.slice(0);
 		}
 
-		// Grab event listeners
-		var eventName = event.type,
-			handlers = (events[eventName] || []).slice(0),
-			passed = [event];
+		
+		var passed = [event];
 		
 		// Execute handlers listening for this event.
 		if(args) {

@@ -30,7 +30,8 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 	test('can.compute.truthy', function () {
 		var result = 0;
-		var num = can.compute(3);
+		var numValue;
+		var num = can.compute(numValue = 3);
 		var truthy = can.compute.truthy(num);
 		var tester = can.compute(function () {
 			if (truthy()) {
@@ -49,10 +50,10 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			}
 		});
 		equal(tester(), 1, 'on bind, we call tester once');
-		num(2);
-		num(1);
-		num(0);
-		num(-1);
+		num(numValue = 2);
+		num(numValue = 1);
+		num(numValue = 0);
+		num(numValue = -1);
 	});
 	test('a binding compute does not double read', function () {
 		var sourceAge = 30,

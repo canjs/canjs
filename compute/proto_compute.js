@@ -86,8 +86,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		// ## Setup getter / setter functional computes
 		// Uses the function as both a getter and setter.
 		_setupGetterSetterFn: function(getterSetter, context, eventName) {
-			this._set = can.proxy(getterSetter, context);
-			this._get = can.proxy(getterSetter, context);
+			this._set = context ? can.proxy(getterSetter, context) : getterSetter;
+			this._get = context ? can.proxy(getterSetter, context) : getterSetter;
 			this._canObserve = eventName === false ? false : true;
 			// The helper provides the on and off methods that use `getValueAndBind`.
 			var handlers = setupComputeHandlers(this, getterSetter, context || this);
@@ -154,8 +154,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			
 			this.value = initialValue;
 			
-			this._set = settings.set ? can.proxy(settings.set, settings) : this._set;
-			this._get = settings.get ? can.proxy(settings.get, settings) : this._get;
+			this._set = settings.set || this._set;
+			this._get = settings.get || this._get;
 
 			// This allows updater to be called without any arguments.
 			// selfUpdater flag can be set by things that want to call updater themselves.
@@ -381,7 +381,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	var updateOnChange = function(compute, newValue, oldValue, batchNum){
 		// Only trigger event when value has changed
 		if (newValue !== oldValue) {
-			can.batch.trigger(compute, batchNum ? {type: "change", batchNum: batchNum} : 'change', [
+			can.batch.trigger(compute, {type: "change", batchNum: batchNum}, [
 				newValue,
 				oldValue
 			]);
@@ -394,14 +394,14 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	var setupComputeHandlers = function(compute, func, context) {
 
 		// The last observeInfo object returned by getValueAndBind.
-		var readInfo,
-			// The last batch number seen.
-			batchNum,
+		var readInfo = new getValueAndBind.ObservedInfo(func, context,
 			// A function that gets called whenever any observed observables change.
-			onchanged = function(ev){
+			function(ev){
 				// Only update if we have finished processing all prior events,
 				// the compute is being listened to,
 				// and the batchNum has changed.
+				
+				// It's possible that something we are listening to changed before we even get readInfo
 				if (readInfo.ready &&
 					compute.bound &&
 					(ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
@@ -409,26 +409,25 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					// Keep the old value.
 					var oldValue = readInfo.value;
 					// Get the new value and register this event handler to any new observables.
-					readInfo = getValueAndBind(func, context, readInfo, onchanged);
+					getValueAndBind(readInfo);
 					// Update the compute with the new value.
 					compute.updater(readInfo.value, oldValue, ev.batchNum);
 					batchNum = ev.batchNum;
 				}
-			};
+			}),
+			// The last batch number seen.
+			batchNum;
 			
 		return {
 			// Call `onchanged` when any source observables change.
 			on: function(){
-				readInfo = getValueAndBind(func, context, {observed: {}}, onchanged);
+				getValueAndBind(readInfo);
 				compute.value = readInfo.value;
-				compute.hasDependencies = !can.isEmptyObject(readInfo.observed);
+				compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 			},
 			// Unbind `onchanged` from all source observables.
 			off: function(){
-				for (var name in readInfo.observed) {
-					var ob = readInfo.observed[name];
-					ob.obj.unbind(ob.event, onchanged);
-				}
+				getValueAndBind.unbindReadInfo(readInfo);
 			}
 		};
 	};
@@ -437,12 +436,13 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	// ### temporarilyBind
 	// Binds computes for a moment to cache their value and prevent re-calculating it.
 	can.Compute.temporarilyBind = function (compute) {
-		compute.bind('change', can.k);
+		var computeInstance = compute.computeInstance || compute;
+		computeInstance.bind('change', can.k);
 		if (!computes) {
 			computes = [];
 			setTimeout(unbindComputes, 10);
 		}
-		computes.push(compute);
+		computes.push(computeInstance);
 	};
 	
 	// A list of temporarily bound computes

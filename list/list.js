@@ -359,7 +359,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 						curVal.attr(newVal, remove);
 						//changed from a coercion to an explicit
 					} else if (curVal !== newVal) {
-						this._set(prop, newVal);
+						this._set(prop+"", newVal);
 					} else {
 
 					}
