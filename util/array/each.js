@@ -1,15 +1,21 @@
 /* jshint maxdepth:7*/
 steal('can/util/can.js', function (can) {
-	
+
 	// The following is from jQuery
 	var isArrayLike = function(obj){
 		// The `in` check is from jQuery’s fix for an iOS 8 64-bit JIT object length bug:
 		// https://github.com/jquery/jquery/pull/2185
-		var length = "length" in obj && obj.length;
+		// When passing a non-object (e.g. boolean) can.each fails where it previously did nothing.
+		// https://github.com/bitovi/canjs/issues/1989
+		var length = obj && typeof obj !== 'boolean' &&
+			typeof obj !== 'number' &&
+			"length" in obj && obj.length;
+		
+		// var length = "length" in obj && obj.length;
 		return typeof arr !== "function" &&
 			( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
 	};
-	
+
 	can.each = function (elements, callback, context) {
 		var i = 0,
 			key,
@@ -32,9 +38,9 @@ steal('can/util/can.js', function (can) {
 						}
 					}
 				}
-				
+
 			} else if (typeof elements === "object") {
-				
+
 				if (can.Map && elements instanceof can.Map || elements === can.route) {
 					var keys = can.Map.keys(elements);
 					for(i =0, len = keys.length; i < len; i++) {
@@ -51,7 +57,7 @@ steal('can/util/can.js', function (can) {
 						}
 					}
 				}
-				
+
 			}
 		}
 		return elements;
