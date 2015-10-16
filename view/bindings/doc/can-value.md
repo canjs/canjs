@@ -3,7 +3,7 @@
 
 Sets up two way bindings in a template.
 
-@deprecated {2.3} Use [can.view.bindings.twoWay two way binding] (`[($value)]="KEY"`) instead.
+@deprecated {2.3} Use [can.view.bindings.twoWay two way binding] like `{($value)}="KEY"` instead.
 
 @signature `can-value='KEY'`
 
