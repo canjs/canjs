@@ -4202,7 +4202,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 			equal(frag.firstChild.nodeValue, "http://foocdn.com/hello/world", "relative lookup works");
 		});
-			
+
 		test('Custom attribute callbacks are called when in a conditional within a live section', 8, function () {
 			can.view.attr('test-attr', function(el, attrData) {
 				ok(true, "test-attr called");
@@ -4210,22 +4210,22 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				ok(attrData.scope, "scope isn't undefined");
 				ok(attrData.options, "options isn't undefined");
 			});
-	
+
 			var state = new can.Map({
 				showAttr: true
 			});
-	
+
 			var template = can.stache('<button id="find-me" {{#if showAttr}}test-attr{{/if}}></button>');
 			template(state);
-	
+
 			state.attr('showAttr', false);
 			state.attr('showAttr', true);
 		});
-	
+
 		test("inner expressions (#1769)", function(){
-			
+
 			var template = can.stache("{{helperA helperB(1,valueA,propA=valueB propC=2) 'def' outerPropA=helperC(2, ~valueB)}}");
-	
+
 			var frag = template(new can.Map({
 				valueA: "A",
 				valueB: "B"
@@ -4249,23 +4249,23 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					return "helperC value";
 				}
 			});
-	
+
 			equal(frag.firstChild.nodeValue, "helperA value");
 		});
-	
+
 		test("inner expressions with computes", function(){
 			var template = can.stache("{{helperA helperB(1,valueA,propA=valueB propC=2) 'def' outerPropA=helperC(2,valueB)}}");
-	
-	
+
+
 			var valueB = can.compute("B");
 			var changes = 0;
-	
+
 			var frag = template({
 				valueA: "A",
 				valueB: valueB
 			},{
 				helperA: function(arg1, arg2, options){
-	
+
 					if(changes === 0) {
 						equal(arg1(), "helperB=B", "static argument");
 						equal(options.hash.outerPropA(), "helperC=B", "scope hash 0");
@@ -4273,9 +4273,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 						equal(arg1(), "helperB=X", "static argument");
 						equal(options.hash.outerPropA(), "helperC=X", "scope hash 1");
 					}
-	
+
 					equal(arg2, "def", "scope argument");
-	
+
 					return arg1()+"-"+options.hash.outerPropA();
 				},
 				helperB: function(arg1, arg2, options){
@@ -4286,7 +4286,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					} else {
 						equal(options.propA, "X", "scope hash");
 					}
-	
+
 					equal(options.propC, 2, "static hash");
 					return "helperB="+options.propA;
 				},
@@ -4300,17 +4300,17 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					return "helperC="+arg2;
 				}
 			});
-	
+
 			equal(frag.firstChild.nodeValue, "helperB=B-helperC=B");
-	
+
 			changes++;
 			can.batch.start();
 			valueB("X");
 			can.batch.stop();
-	
+
 			equal(frag.firstChild.nodeValue, "helperB=X-helperC=X");
 		});
-	
+
 		test("parent scope functions not called with arguments (#1833)", function(){
 			var data = {
 				child: {value: 1},
@@ -4318,13 +4318,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					equal(arg, 1, "got the right arg");
 				}
 			};
-	
+
 			var template = can.stache("{{#child}}{{method value}}{{/child}}");
 			template(data);
 		});
-		
+
 		test("call expression - simple", function(){
-			
+
 			var template = can.stache("{{method(arg)}}");
 			var age = can.compute(32);
 			var frag = template({
@@ -4333,11 +4333,11 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				},
 				arg: age
 			});
-			
+
 			equal( frag.firstChild.nodeValue, "64", "method call works");
-			
+
 		});
-		
+
 		test("call expression #each passed list", function () {
 
 			var animals = new can.List(['sloth', 'bear']),
@@ -4363,7 +4363,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[2]), "turtle", "turtle added");
 
 		});
-		
+
 		test("call expression #each passed compute", function () {
 
 			var animals = can.compute( new can.List(['sloth', 'bear']) ),
@@ -4389,25 +4389,25 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[2]), "turtle", "turtle added");
 
 		});
-		
+
 		test("call expression with #if", function(){
-			
+
 				var truthy = can.compute(true);
 				var template = can.stache("{{#if(truthy)}}true{{else}}false{{/if}}");
 				var frag = template({truthy: truthy});
-				
+
 				equal( frag.firstChild.nodeValue, "true", "set to true");
-				
+
 				truthy(false);
-				
+
 				equal( frag.firstChild.nodeValue, "false", "set to false");
 			});
-	
+
 			test('getHelper w/o optional options argument (#1497)', function() {
 			var options = can.stache.getHelper('each');
 			ok(typeof options.fn === 'function', 'each helper returned');
 		});
-	
+
 		test("methods don't update correctly (#1891)", function() {
 			var map = new can.Map({
 				num1: 1,
@@ -4416,16 +4416,16 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var frag = can.stache(
 				'<span class="num1">{{num1}}</span>' +
 				'<span class="num2">{{num2}}</span>')(map);
-	
+
 			equal(frag.firstChild.firstChild.nodeValue, '1', 'Rendered correct value');
 			equal(frag.lastChild.firstChild.nodeValue, '2', 'Rendered correct value');
-	
+
 			map.attr('num1', map.attr('num1') * 2);
-	
+
 			equal(frag.firstChild.firstChild.nodeValue, '2', 'Rendered correct value');
 			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
 		});
-		
+
 		test("#each with else works (#1979)", function(){
 			var list = new can.List(["a","b"]);
 			var template = can.stache("<div>{{#each list}}<span>{{.}}</span>{{else}}<label>empty</label>{{/each}}</div>");
@@ -4434,7 +4434,39 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var labels = frag.firstChild.getElementsByTagName("label");
 			equal(labels.length, 1, "empty case");
 		});
-		
+
+		test("Re-evaluating a case in a switch (#1988)", function(){
+			var template = can.stache("{{#switch page}}{{#case 'home'}}<h1 id='home'>Home</h1>" +
+				"{{/case}}{{#case 'users'}}{{#if slug}}<h1 id='user'>User - {{slug}}</h1>" +
+				"{{else}}<h1 id='users'>Users</h1><ul><li>User 1</li><li>User 2</li>" +
+				"</ul>{{/if}}{{/case}}{{/switch}}");
+
+			var map = new can.Map({
+				page: "home"
+			});
+
+			var frag = template(map);
+
+			equal(frag.firstChild.getAttribute("id"), "home", "'home' is the first item shown");
+
+			map.attr("page", "users");
+			equal(frag.firstChild.nextSibling.getAttribute("id"), "users", "'users' is the item shown when the page is users");
+
+
+			map.attr("slug", "Matthew");
+			equal(frag.firstChild.nextSibling.getAttribute("id"), "user", "'user' is the item shown when the page is users and there is a slug");
+
+
+			can.batch.start();
+			map.attr("page", "home");
+			map.removeAttr("slug");
+			can.batch.stop();
+
+			equal(frag.firstChild.getAttribute("id"), "home", "'home' is the first item shown");
+			equal(frag.firstChild.nextSibling.nodeType, 3, "the next sibling is a TextNode");
+			equal(frag.firstChild.nextSibling.nextSibling, undefined, "there are no more nodes");
+		});
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
