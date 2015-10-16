@@ -37,15 +37,20 @@
     <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
     <script type="text/javascript">
         QUnit.config.autostart = false;
+        var MODULE_ALIAS = module;
+        module = undefined;
     </script>
 
     <script type="text/javascript" src="node_modules/can-simple-dom/dist/global/can-simple-dom.js"></script>
+    <script type="text/javascript">
+        module = MODULE_ALIAS;
+    </script>
+
     <script type="text/javascript" src="bower_components/zepto/zepto.js"></script>
     <script type="text/javascript" src="dist/can.zepto.js"></script>
     <script type="text/javascript" src="dist/can.list.promise.js"></script>
     <script type="text/javascript" src="dist/can.ejs.js"></script>
     <script type="text/javascript" src="dist/can.stache.js"></script>
-    <script type="text/javascript" src="dist/can.view.href.js"></script>
     <script type="text/javascript" src="dist/can.route.pushstate.js"></script>
     <script type="text/javascript" src="dist/can.model.queue.js"></script>
     <script type="text/javascript" src="dist/can.construct.super.js"></script>
