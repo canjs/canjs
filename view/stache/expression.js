@@ -76,7 +76,7 @@ steal("can/util",
 	Lookup.prototype.value = function(scope, helperOptions){
 		var result = lookupValueOrHelper(this.key, scope, helperOptions);
 		// TODO: remove this.  This is hacky.
-		this.isHelper = result.helper;
+		this.isHelper = result.helper && !result.helper.callAsMethod;
 		return result.helper || result.value;
 	};
 	
@@ -338,7 +338,7 @@ steal("can/util",
 		args.push(helperOptionArg);
 		// Call the helper.
 		return function () {
-			return helper.apply(context, args) || '';
+			return helper.apply(context, args);
 		};
 	};
 	

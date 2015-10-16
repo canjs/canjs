@@ -451,6 +451,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		url: function (options, merge) {
 
 			if (merge) {
+				can.__observe(eventsObject,"__url");
 				options = can.extend({}, can.route.deparam(can.route._call("matchingPartOfURL")), options);
 			}
 			return can.route._call("root") + can.route.param(options);

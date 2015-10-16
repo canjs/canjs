@@ -98,7 +98,7 @@ steal("can/util",
 					context: scope.attr("."),
 					scope: scope,
 					nodeList: nodeList,
-					exprData: this,
+					exprData: exprData,
 					helpersScope: helperOptions
 				};
 				utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
