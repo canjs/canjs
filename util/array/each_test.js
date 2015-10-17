@@ -18,4 +18,12 @@ steal('can/test', 'steal-qunit', function () {
 		equal(i, 3, 'Last index should be the length of the array');
 	});
 
+  test('#1989 - isArrayLike needs to check for object type', function() {
+    try {
+      can.each(true, function(index) { });
+      ok(true, 'can.each on true worked');
+    } catch(e) {
+      ok(false, 'Should not fail');
+    }
+  });
 });
