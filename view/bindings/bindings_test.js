@@ -1432,4 +1432,36 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
 	
+	test("two-way element empty value (1996)", function(){
+
+
+		var template = can.view.stache("<input can-value='age'/>");
+
+		var map = new can.Map();
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
+
+		map.attr("age", "31");
+
+		equal(input.value, "31", "input value update correctly");
+
+		input.value = "";
+
+		can.trigger(input, "change");
+
+		equal(map.attr("age"), "", "updated from input");
+
+	});
+
+	
 });

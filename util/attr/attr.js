@@ -158,7 +158,7 @@ steal("can/util/can.js", function (can) {
 			get: function (el, attrName) {
 				attrName = attrName.toLowerCase();
 				var prop = attr.map[attrName];
-				if(typeof prop === "string" && el[prop]) {
+				if(typeof prop === "string" && (prop in el) ) {
 					return el[prop];
 				} else if(prop === true) {
 					return el[attrName];
