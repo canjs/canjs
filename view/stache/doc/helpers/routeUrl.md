@@ -9,7 +9,7 @@ Passes the hashes to `can.route.url` and returns the result.
 
 @param {can.stache.expressions} hashes A hash expression like `page='edit' recipeId=id`.
 
-@param {Boolean} merge Pass `true` to create a url that merges `hashes` into the 
+@param {Boolean} [merge] Pass `true` to create a url that merges `hashes` into the 
 current [can.route] properties.  Passing the `merge` argument is only available 
 in [can.stache.expressions Call expressions] like `routeUrl(id=itemId, true)`.
 
@@ -22,7 +22,7 @@ in [can.stache.expressions Call expressions] like `routeUrl(id=itemId, true)`.
 Use the `routeUrl` helper like:
 
 ```
-<li><a href='{{routeUrl page="recipe" id=5}}'>{{recipe.name}}</a></li>
+<a href='{{routeUrl page="recipe" id=5}}'>{{recipe.name}}</a>
 ```
 
 This produces (with no pretty routing rules):
@@ -58,6 +58,6 @@ It also writes out the current url like:
 {{ routeUrl(undefined,true) }}
 ```
 
-This ends up calling `can.route.url({}, true)` which has the effect of writing out
+This calls `can.route.url({}, true)` which has the effect of writing out
 the current url.
 

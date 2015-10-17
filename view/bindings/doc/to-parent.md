@@ -42,13 +42,13 @@ The use of `{^to-parent}` bindings changes between exporting __viewModel propert
 `{^child-prop}="key"` can be used to export single values or the complete view model from a 
 child component into the parent scope. Typically, the values are exported to the references scope.
 
-For example, a `car-selector` parent component that contains a `year-selector` and a `car-list` component where 
-we want to share the `selectedYear` property from `year-selector` as the `year` property can be done like this:
+In the following example, it connects the __selected__ driver in `<drivers-list>` with an editable __plateName__ in
+`<edit-plate>`:
 
-	<car-selector>
-		<year-selector {^selected-year}="*year" />
-		<car-list {selection)="*year" />
-	</car-selector>
+    <drivers-list {^selected}="*editing"/>
+    <edit-plate {(plate-name)}="*editing.licensePlate"/>
+
+@demo can/view/bindings/doc/to-parent.html
 	
 ## Exporting DOM properties
 
