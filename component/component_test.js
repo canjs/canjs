@@ -1696,4 +1696,37 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			can.trigger(can.$(document), 'click');
 		});
 	}
+
+	test('if viewModel changes, DOM should be updated before viewModel fires the change event (#1685)', function() {
+		can.Component.extend({
+			tag: 'content-renderer',
+			template: '{{{content}}}',
+			viewModel: {
+				define: {
+					content: {
+						type: 'string',
+						value: 'loading...',
+						set: function(newVal){
+							return newVal;
+						}
+					}
+				}
+			},
+			events: {
+				'{scope} content change': function() {
+					// The DOM should be updated by the time
+					// this change event fires
+					equal(this.element.html(), 'new');
+				}
+			}
+		});
+
+		var context = new can.Map({
+			'content': ''
+		});
+
+		can.append(can.$("#qunit-fixture"), can.stache('<content-renderer content="{content}"></content-renderer>')(context));
+		context.attr('content', 'new');
+
+	});
 });
