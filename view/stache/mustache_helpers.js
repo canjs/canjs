@@ -167,11 +167,11 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			};
 		},
 		'switch': function(expression, options){
-			var expressionValue = resolve(expression);
+			resolve(expression);
 			var found = false;
 			var newOptions = options.helpers.add({
 				"case": function(value, options){
-					if(!found && expressionValue === resolve(value)) {
+					if(!found && resolve(expression) === resolve(value)) {
 						found = true;
 						return options.fn(options.scope || this);
 					}
