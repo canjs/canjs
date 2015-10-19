@@ -211,7 +211,7 @@ steal("can/util",
 		Lookup.apply(this, arguments);
 	};
 	HelperScopeLookup.prototype.value = function(scope, helperOptions){
-		return lookupValue(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope]}).value;
+		return lookupValue(this.key, scope, helperOptions, {callMethodsOnObservables: true, isArgument: true, args: [scope.attr('.'), scope]}).value;
 	};
 	
 	var Helper = function(methodExpression, argExpressions, hashExpressions){

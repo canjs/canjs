@@ -6,6 +6,7 @@ steal("can/util", function(can){
 	// actually check
 	// - isArgument - should be renamed to something like "onLastPropertyReadReturnFunctionInsteadOfCallingIt".
 	//   This is used to make a compute out of that function if necessary.
+	// - callMethodsOnObservables - this is an overwrite ... so normal methods won't be called, but observable ones will.
 	// - executeAnonymousFunctions - call a function if it's found, defaults to true
 	// - proxyMethods - if the last read is a method, return a function so `this` will be correct.
 	// - args - arguments to call functions with.
@@ -126,7 +127,11 @@ steal("can/util", function(can){
 		read: function(value, i, reads, options, state, prev){
 			if( isAt(i, reads) ) {
 				return i === reads.length ? can.proxy(value, prev) : value;
-			}else if ( options.isArgument && i === reads.length) {
+			}
+			else if(options.callMethodsOnObservables && can.isMapLike(prev)) {
+				return value.apply(prev, options.args || []);
+			}
+			else if ( options.isArgument && i === reads.length ) {
 				return options.proxyMethods !== false ? can.proxy(value, prev) : value;
 			}
 			return value.apply(prev, options.args || []);
