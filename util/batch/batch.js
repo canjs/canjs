@@ -215,7 +215,7 @@ steal('can/util/can.js', function (can) {
 		 */
 		trigger: function (item, event, args) {
 			// Don't send events if initalizing.
-			if (!item._initializing) {
+			if (!item.__inSetup) {
 				event = typeof event === 'string' ? {
 					type: event,
 					batchNum: can.batch.batchNum

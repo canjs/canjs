@@ -13,7 +13,7 @@ steal('can/util', function (can) {
 		can.addEvent.apply(this, arguments);
 		// If not initializing, and the first binding
 		// call bindsetup if the function exists.
-		if (!this._initializing) {
+		if (!this.__inSetup) {
 			if (!this._bindings) {
 				this._bindings = 1;
 				// setup live-binding

@@ -191,17 +191,17 @@ steal('can/util/string', function (can) {
 			// Get a raw instance object (`init` is not called).
 			var inst = this.instance(),
 				args;
-			inst._initializing = true;
 			// Call `setup` if there is a `setup`
 			if (inst.setup) {
+				inst.__inSetup = true;
 				args = inst.setup.apply(inst, arguments);
+				delete inst.__inSetup;
 			}
-			// Call `init` if there is an `init`  
+			// Call `init` if there is an `init`
 			// If `setup` returned `args`, use those as the arguments
 			if (inst.init) {
 				inst.init.apply(inst, args || arguments);
 			}
-			delete inst._initializing;
 			return inst;
 		},
 		// Overwrites an object with methods. Used in the `super` plugin.
