@@ -24,7 +24,7 @@ The error message can be overwritten with `options` __message__ property:
 			 {message: "must be a number"},
 			 function(val){
 					 if( typeof val === 'number' ){
-						 return true
+						 return undefined;
 					 }
 			 })
 	 }
