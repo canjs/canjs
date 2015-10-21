@@ -95,13 +95,16 @@
 				"exports": "jQuery"
 			},
 			"dojo/dojo": {
-				"format": "global"
+				"format": "global",
+				"exports": "Dojo"
 			},
 			"yui/yui": {
+				"exports": "YUI",
 				"format": "global",
 				"scriptEval": true
 			},
 			"mootools/mootools": {
+				"exports": "MooTools",
 				"format": "global",
 				"scriptEval": true
 			},

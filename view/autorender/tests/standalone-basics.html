@@ -1,3 +1,11 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+	<script type="text/javascript" src="../../../bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+
 <script>
 	window.isReady = window.parent.isReady || function(el) {
 		console.log(el.length);
@@ -8,13 +16,13 @@
 	};
 	window.removeMyself = window.parent.removeMyself;
 </script>
-<script src="../../../bower_components/jquery/dist/jquery.js"></script>
+<script src="../../../node_modules/jquery/dist/jquery.js"></script>
 <script src="../../../dist/can.jquery.js"></script>
 <script src="../../../dist/can.stache.js"></script>
 <script src="../../../dist/can.autorender.js"></script>
 <script src="standalone-basics.js"></script>
 
-<script type="text/stache" id="basics" foo="bar" can-autorender>
+<script type="text/stache" id="basics" foo="bar">
 	<my-component></my-component>
 </script>
 <script>
@@ -24,3 +32,6 @@
 		});
 	});
 </script>
+
+</body>
+</html>
