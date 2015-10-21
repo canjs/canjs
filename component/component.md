@@ -359,8 +359,6 @@ The following tree combo lets people walk through a hierarchy, and select locati
 The secret to this widget is the viewModel's `breadcrumb` property, which is an array
 of items the user has navigated through, and `selectableItems`, which represents the children of the
 last item in the breadcrumb.  These are defined on the viewModel:
->>>>>>> origin
-
 
     breadcrumb: [],
     selectableItems: function(){
