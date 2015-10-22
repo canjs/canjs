@@ -92,11 +92,13 @@ the user hits the enter key on this input.
 To listen on a can.Component's [can.Component::viewModel viewModel], wrap the event name with `(event)` like:
 
 ```
-<my-component (show)="doSomething()"/>
+<player-edit 
+  	(close)="removeEdit()" 
+  	{player}="editingPlayer"/>
 ```
 
-ViewModels can publish events on themselves. For instance, in the following `<player-edit>` component,
-it dispatches a `"close"` event when it's close method is called:
+ViewModels can publish events on themselves. The following `<player-edit>` component
+ dispatches a `"close"` event on itself when its `close` method is called:
 
 ```
 can.Component.extend({
@@ -108,14 +110,6 @@ can.Component.extend({
     }
   }
 });
-```
-
-These can be listened to with `(event)` bindings like:
-
-```
-<player-edit 
-  	(close)="removeEdit()" 
-  	{player}="editingPlayer"/>
 ```
 
 The following demo uses this ability to create a close button that 
