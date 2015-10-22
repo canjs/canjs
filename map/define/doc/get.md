@@ -180,7 +180,7 @@ the [can.List] will be updated with the `id`s of the `locations`.
 var Store = can.Map.extend({
 	define: {
 		locationIds: {
-			Value: can.List 
+			Value: can.List,
 			get: function(initialValue){
 				var ids = [];
 				this.attr('locations').each(function(location){
