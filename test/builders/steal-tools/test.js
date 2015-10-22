@@ -3,7 +3,16 @@ var assert = require("assert"),
 	connect = require("connect"),
 	stealTools = require("steal-tools"),
 	path = require("path"),
-	rmdir = require("rimraf");
+	rmdir = require("rimraf"),
+	fs = require("fs");
+
+var exists = function(dest){
+	try {
+		return !!fs.readFileSync(dest, "utf8");
+	} catch(err){
+		return false;
+	}
+};
 
 // Helpers
 var find = function(browser, property, callback, done){
@@ -37,13 +46,14 @@ var open = function(url, callback, done){
 };
 
 describe("Building steal projects", function(){
+	this.timeout(20000);
 
 	it("works with ejs, mustache, and stache", function(done){
 			rmdir(__dirname+"/bundles", function(error){
 				if(error){
 					done(error)
 				}
-				// build the project that 
+				// build the project that
 				// uses a plugin
 				stealTools.build({
 					config: __dirname+"/config.js",
@@ -56,11 +66,11 @@ describe("Building steal projects", function(){
 						find(browser, "MODULE", function(m){
 							assert.equal(m.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
 							assert.equal(m.mustache.childNodes[0].textContent, "Mustache Hi", "Mustache generated correctly");
-							
+
 							var div = browser.document.createElement('div');
 							div.appendChild(m.stache);
-							
-							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache Hi", "Stache generated correctly");
+
+							assert.equal(div.getElementsByTagName('h1')[0].textContent, "Stache HI", "Stache generated correctly");
 							close();
 						}, close);
 					}, done);
@@ -79,7 +89,7 @@ describe("Building steal projects", function(){
 				quiet: true,
 				minify: false
 			}).then(function(){
-				
+
 				open("test/builders/steal-tools/bundle/prod.html", function(browser, close){
 					find(browser, "MODULE", function(m){
 						assert(typeof m, "object", "Correctly returned the module");
@@ -103,7 +113,7 @@ describe("Building steal projects", function(){
 				minify: false,
 				bundleSteal: true
 			}).then(function(){
-				
+
 				var browser = open("test/builders/steal-tools/prod-bundled.html", function(browser, close){
 					// If we got here it worked.
 					close();
@@ -114,6 +124,30 @@ describe("Building steal projects", function(){
 					}
 				});
 			}).catch(done);
+		});
+	});
+
+	it("adds dynamically imported modules to the bundle", function(done){
+		rmdir(__dirname + "/import/dist", function(error){
+			if(error) return done(error);
+
+			console.log("building it");
+			stealTools.build({
+				config: __dirname + "/config.js",
+				main: "import/app",
+				bundlesPath: __dirname + "/import/dist/bundles"
+			}, {
+				quiet: true,
+				minify: false,
+				bundleSteal: true
+			}).then(function(buildResult){
+				var loader = buildResult.loader;
+				assert.equal(loader.bundle[0], "import/thing", "import/thing added a bundle");
+
+				assert(exists(__dirname + "/import/dist/bundles/import/thing.js"), "thing.js bundle written out");
+
+				done();
+			});
 		});
 	});
 

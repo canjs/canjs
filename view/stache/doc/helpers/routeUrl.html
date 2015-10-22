@@ -1,0 +1,33 @@
+
+<script type='text/stache' id='demo-html'>
+<pre>url={{ routeUrl(undefined,true) }}</pre>
+
+<a	{{^ routeCurrent(page='home') }}
+		href="{{ routeUrl(page='home') }}"
+	{{/routeCurrent}}
+	>home</a>
+
+<a  {{^routeCurrent page='restaurants'}}
+		href="{{routeUrl page='restaurants'}}"
+	{{/routeCurrent}}
+	>restaurants</a>
+
+{{#eq page 'home'}}
+	<h1>Home page</h1>
+{{else}}
+	<h1>Restaurants page</h1>
+{{/eq}}
+</script>
+
+<script src="../../../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import can from "can";
+import "can/view/stache/";
+import route from "can/route/"
+import $ from "jquery";
+
+can.route(':page',{page: 'home'});
+can.route.ready();
+$("body").append( can.view('demo-html',route) );
+</script>
+
+

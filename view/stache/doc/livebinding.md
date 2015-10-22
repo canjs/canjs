@@ -48,3 +48,13 @@ update the paragraph tag to reflect the new value.
 
 
 For more information visit the [can.Map] documentation.
+
+### Binding between components
+If you are looking for information on bindings between components like this:
+```
+(event)="key()" for event binding.
+{prop}="key" for one-way binding to a child.
+{^prop}="key" for one-way binding to a parent.
+{(prop)}="key" for two-way binding.
+```
+See [can.view.bindings].

@@ -23,7 +23,7 @@ steal('can/util','can/view/parser', 'can/test/benchmarks.js', 'can/test',functio
 		done:      function( ){}
 	 };
 	
-	var intermediate = can.view.parser(window._ParserBenchmarkText,handles);
+	var intermediate = parser(window._ParserBenchmarkText,handles);
 	
 	benchmarks.add(
 		"can/view/stache/parser Updating elements",

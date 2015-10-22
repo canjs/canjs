@@ -10,7 +10,7 @@ A set function defines the behavior of what happens when a value is set on a
 
  - Add or remove other attributes as side effects
  - Coerce the set value into an appropriate action
- 
+
 The behavior of the setter depends on the number of arguments specified. This means that a
 setter like:
 
@@ -29,13 +29,13 @@ behaves differently than:
     }
 
 @param {*} [newVal] The [can.Map::define.type type function] coerced value the user intends to set on the
-can.Map. 
+can.Map.
 
-@param {function(*)} [setValue(newValue)] A callback that can set the value of the property 
-asyncronously. 
+@param {function(*)} [setValue(newValue)] A callback that can set the value of the property
+asyncronously.
 
-@return {*|undefined} If a non-undefined value is returned, that value is set as 
-the attribute value. 
+@return {*|undefined} If a non-undefined value is returned, that value is set as
+the attribute value.
 
 
 If an `undefined` value is returned, the behavior depends on the number of
@@ -44,15 +44,15 @@ arguments the setter declares:
  - If the setter _does not_ specify the `newValue` argument, the attribute value is set
    to whatever was passed to [can.Map::attr attr].
  - If the setter specifies the `newValue` argument only, the attribute value will be removed.
- - If the setter specifies both `newValue` and `setValue`, the value of the property will not be 
+ - If the setter specifies both `newValue` and `setValue`, the value of the property will not be
    updated until `setValue` is called.
 
 
-@body 
+@body
 
 ## Use
 
-An attribute's `set` function can be used to customize the behavior of when an attribute value is set 
+An attribute's `set` function can be used to customize the behavior of when an attribute value is set
 via [can.Map::attr].  Lets see some common cases:
 
 #### Side effects
@@ -62,13 +62,13 @@ The following makes setting a `page` property update the `offset`:
     define: {
       page: {
         set: function(newVal){
-          this.attr('offset', (parseInt(newVal) - 1) * 
+          this.attr('offset', (parseInt(newVal) - 1) *
                                this.attr('limit'));
         }
       }
     }
-    
-The following makes changing `makeId` remove the `modelId` property: 
+
+The following makes changing `makeId` remove the `modelId` property:
 
     define: {
       makeId: {
@@ -82,7 +82,7 @@ The following makes changing `makeId` remove the `modelId` property:
         }
       }
     }
-    
+
 #### Asynchronous Setter
 
 The following shows an async setter:
@@ -162,7 +162,7 @@ For example, in the example below, Paginator can.Map includes a `page` property,
 
 ## Merging
 
-By default, if a value returned from a setter is an object, array, can.Map, or can.List, the effect will be to replace the property with the new object completely. 
+By default, if a value returned from a setter is an object, array, can.Map, or can.List, the effect will be to replace the property with the new object completely.
 
     Contact = can.Map.extend({
       define: {
@@ -174,7 +174,9 @@ By default, if a value returned from a setter is an object, array, can.Map, or c
       }
     })
 
-    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    var alice = new Contact({
+			info: {name: 'Alice Liddell', email: 'alice@liddell.com'}
+		});
     alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
     alice.info._cid; // '.map1'
 
@@ -205,12 +207,19 @@ If you would rather have the new Map or List merged into the current value, not 
       }
     })
 
-    var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+    var alice = new Contact({
+			info: {name: 'Alice Liddell', email: 'alice@liddell.com'}
+		});
     alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
     alice.info._cid; // '.map1'
 
     alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
-    alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
+    alice.attr();
+    //{
+    //  name: 'Allison Wonderland',
+    //  email: 'alice@liddell.com',
+    //  phone: '888-888-8888'
+    //}
     alice.info._cid; // '.map1'
 
 ## Batched Changes

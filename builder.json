@@ -66,6 +66,12 @@
 			"description": "High performance Mustache templates",
 			"type": "plugin"
 		},
+		"can/view/href/href": {
+			"name": "can.view.href",
+			"type": "core",
+			"description": "Make flexible route links",
+			"isDefault": true
+		},
 		"can/control/control": {
 			"name": "can.Control",
 			"description": "Declarative event bindings",
@@ -253,6 +259,16 @@
 			"type": "plugin",
 			"hidden": true,
 			"hasTest": false
+		},
+		"can/util/vdom/build_fragment/build_fragment": {
+			"name": "can.util.vdom.buildFragment",
+			"type": "plugin",
+			"hidden": true
+		},
+		"can/view/import/import": {
+			"name": "can.view.import",
+			"type": "plugin",
+			"hidden": true
 		}
 	},
 	"types": {

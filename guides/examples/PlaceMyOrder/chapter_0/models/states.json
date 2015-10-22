@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "short": "WI",
+      "name": "Wisconsin"
+    },
+    {
+      "short": "MI",
+      "name": "Michigan"
+    },
+    {
+      "short": "IL",
+      "name": "Illinois"
+    }
+  ]
+}

@@ -6,82 +6,66 @@
 @link ../docco/component/component.html docco
 
 
-@description Create widgets that use a template, a view-model, 
+@description Create widgets that use a template, a view-model 
 and custom tags.
+
+@signature `< TAG BINDINGS... >`
+
+  Create an instance of a component on a particular tag in a [can.stache] template.
+  In 2.3, use the [can.view.bindings bindings] syntaxes to setup bindings.
+
+  @release 2.3
+  
+  @param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
+  property of the component.
+  
+  @param {can.view.bindings} BINDINGS Use the following binding syntaxes
+  to connect the component's [can.Component::viewModel] to the template's [can.view.Scope scope]:
+  
+   - [can.view.bindings.toChild]=[can.stache.key] - one way binding to child
+   - [can.view.bindings.toParent]=[can.stache.key] - one way binding to parent
+   - [can.view.bindings.twoWay]=[can.stache.key] - two way binding child to parent
+   
+  Example:
+  
+  ```
+  <my-tag {to-child}="key" 
+          {^to-parent}="key" 
+          {(two-way)}="key"></my-tag>
+  ```
 
 @signature `< TAG [ATTR-NAME="{KEY}|ATTR-VALUE"] >`
 
-Create an instance of a component on a particular 
-tag in a [can.stache] template.
+  Create an instance of a component on a particular 
+  tag in a [can.stache] template.  This form of two way bindings is deprecated as of 2.3. It looked like:
 
-@release 2.1
+  ```
+  <my-tag attr-name="{key}"></my-tag>
+  ```  
 
-@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
-property of the component.
-
-@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
-valid. Any attributes added to the element are added as properties to the
-component's [can.Component::viewModel viewModel]. In the DOM, attribute names
-are case insensitive.  To pass a camelCase attribute to the component's viewModel,
-hypenate the attribute name like:
-
-    <tag attr-name="{key}"></tag>
-
-This will set `attrName` on the component's viewModel.
-
-@param {can.stache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel] that will be looked
-up in the [can.view.Scope can.stache scope]. 
-
-@param {can.stache.key} [ATTR-VALUE] If the attribute value is not
-wrapped with `{}`, the string value of the attribute will be
-set on the component's viewModel.
+  @release 2.1
+  
+   Please check earlier versions of the documentation for more information.
 
 @signature `< TAG [ATTR-NAME=KEY|ATTR-VALUE] >`
 
-Create an instance of a component on a particular 
-tag in a [can.mustache] template.
-
-@param {String} TAG An HTML tag name that matches the [can.Component::tag tag]
-property of the component.
-
-@param {String} ATTR-NAME An HTML attribute name. Any attribute name is
-valid. Any attributes added to the element are added as properties to the
-component's [can.Component::viewModel viewModel].
-
-@param {can.mustache.key} [ATTR-VALUE] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel]. By default, `ATTR-VALUE`
-values are looked up in the [can.view.viewModel can.mustache viewModel]. If the string value
-of the `ATTR-NAME` is desired, this can be specified like: 
-
-    ATTR-NAME: "@"
-
-@param {can.mustache.key} [KEY] Specifies the value of a property passed to
-the component instance's [can.Component::viewModel viewModel] that will be looked
-up in the [can.view.Scope can.stache scope].
+  Create an instance of a component on a particular 
+  tag in a [can.mustache] template. Use of [can.mustache] is deprecated as of 
+  2.3.  Please check earlier versions of the documentation for more information.
 
 
 
 @body
 
+
 ## Use
 
-Watch this video for an overview of can.Component, why you should use it, and a hello world example:
-
-<iframe width="662" height="372" src="https://www.youtube.com/embed/BM1Jc3lVUrk" frameborder="0" allowfullscreen></iframe>
-
-This video provides a more in depth overview of the API, and goes over several examples of can.Components:
-
-<iframe width="662" height="372" src="https://www.youtube.com/embed/ogX765S4iuc" frameborder="0" allowfullscreen></iframe>
-
-Note: the videos above reference the `scope` property, which was replaced by the [can.Component::viewModel viewModel] property in 2.2.
-
 To create a `can.Component`, you must first [can.Component.extend extend] `can.Component`
-with the methods and properties your component will need:
+with the methods and properties of how your component behaves:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
+      template: can.stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
       viewModel: {
         visible: false,
         message: "Hello There!"
@@ -93,12 +77,12 @@ with the methods and properties your component will need:
       }
     });
 
-This element says "Click me" until a user clicks it. Then, it 
-says "Hello There!"  To create a a instance of this component on the page, 
+This element says "Click me" until a user clicks it and then 
+says "Hello There!".  To create a a instance of this component on the page, 
 add `<hello-world></hello-world>` to a mustache template, render
-the template, and insert the result in the page:
+the template and insert the result in the page like:
 
-    var template = can.mustache("<hello-world></hello-world>");
+    var template = can.stache("<hello-world></hello-world>");
     $(document.body).append( template() );
 
 Check this out here:
@@ -106,9 +90,8 @@ Check this out here:
 @demo can/component/examples/click_me.html
 
 
-
 Typically, you do not append a single component at a time.  Instead, 
-you'll render a template with many custom tags:
+you'll render a template with many custom tags like:
 
     <srchr-app>
       <srchr-search models="models">
@@ -126,11 +109,11 @@ Use [can.Component.extend] to create a `can.Component` constructor function
 that will automatically get initialized whenever the component's tag is 
 found. 
 
-Note that inheriting from components works differently than other CanJS APIs. You can't call `.extend` on a 
-particular component to create a "subclass" of that component. 
+Note that inheriting from components works differently than other CanJS APIs. You 
+can't call `.extend` on a particular component to create a "subclass" of that component. 
 
-Instead, components work more like HTML elements. To reuse functionality from a base component, add it to a parent component
-that wraps other components. Pass any needed viewModel properties to your component through its attributes.
+Instead, components work more like HTML elements. To reuse functionality from a base component, build on top of it with parent 
+components that wrap other components in their template and pass any needed viewModel properties via attributes.
 
 ### Tag
 
@@ -153,10 +136,10 @@ The following component:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "<h1>Hello World</h1>"
+      template: can.stache("<h1>Hello World</h1>")
     });
 
-changes `<hello-world></hello-world>` elements into:
+Changes `<hello-world></hello-world>` elements into:
 
     <hello-world><h1>Hello World</h1></hello-world>
 
@@ -166,75 +149,67 @@ The following component:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "<h1><content/></h1>"
+      template: can.stache("<h1><content/></h1>")
     });
 
-changes `<hello-world>Hi There</hello-world>` into:
+Changes `<hello-world>Hi There</hello-world>` into:
 
     <hello-world><h1>Hi There</h1></hello-world>
 
 ### viewModel
 
 A component's [can.Component::viewModel viewModel] defines a can.Map that
-is used to render the component's template. The can.Map's properties 
-are typically set by attributes on the custom element's 
-HTML. By default, every attribute value is looked up in the parent viewModel, 
-and added to the component's viewModel.
+is used to render the component's template. The maps properties 
+are typically set by attribute [can.view.bindings bindings] on the custom element. 
+By default, every attribute's value is looked up in the parent viewModel
+of the custom element and added to the viewModel object.
 
-This component:
+The following component:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "<h1>{{message}}</h1>"
+      template: can.stache("<h1>{{message}}</h1>")
     });
 
-changes the following rendered template:
+Changes the following rendered template:
 
-    var template = can.mustache("<hello-world message='greeting'/>");
+    var template = can.stache("<hello-world {message}='greeting'/>");
     template({
       greeting: "Salutations"
     })
 
-into:
+Into:
 
     <hello-world><h1>Salutations</h1></hello-world>
 
-Default values can be provided. This component:
+Default values can be provided. The following component:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "<h1>{{message}}</h1>",
+      template: can.stache("<h1>{{message}}</h1>"),
       viewModel: {
         message: "Hi"
       }
     });
 
-changes the following rendered template:
+Changes the following rendered template:
 
-    var template = can.mustache("<hello-world message='greeting'/>");
+    var template = can.stache("<hello-world/>");
     template({})
 
-into:
+Into:
 
     <hello-world><h1>Hi</h1></hello-world>
 
-If you want to set the string value of the attribute on a viewModel, give it a
-default value of "@".  This component:
+If you want to set the string value of the attribute on viewModel,
+set an attribute without any binding syntax.
 
-    can.Component.extend({
-      tag: "hello-world",
-      template: "<h1>{{message}}</h1>",
-      viewModel: {
-        message: "@"
-      }
-    });
+The following template, with the previous `"hello-world"` component:
 
-changes the following rendered template:
-
-    var template = can.mustache("<hello-world message='Howdy'/>");
+    var template = can.stache("<hello-world message='Howdy'/>");
     template({})
 
-into:
+Renders to:
 
     <hello-world><h1>Howdy</h1></hello-world>
 
@@ -246,7 +221,7 @@ adds "!" to the message every time `<hello-world>` is clicked:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "<h1>{{message}}</h1>",
+      template: can.stache("<h1>{{message}}</h1>"),
       events: {
         "click" : function(){
           var currentMessage = this.viewModel.attr("message");
@@ -255,9 +230,8 @@ adds "!" to the message every time `<hello-world>` is clicked:
       }
     });
 
-Components have the ability to bind to special [can.events.inserted inserted] 
-and [can.events.removed removed] events that are called when a component's tag has 
-been inserted into or removed from the page.
+Components have the ability to bind to special [can.events.inserted inserted] and [can.events.removed removed] events 
+that are called when a component's tag has been inserted into or removed from the page.
 
 ### Helpers
 
@@ -267,9 +241,9 @@ only renders friendly messages:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "{{#isFriendly message}}"+
+      template: can.stache("{{#isFriendly message}}"+
                   "<h1>{{message}}</h1>"+
-                "{{/isFriendly}}",
+                "{{/isFriendly}}"),
       helpers: {
         isFriendly: function(message, options){
           if( /hi|hello|howdy/.test(message) ) {
@@ -298,25 +272,25 @@ by specifying the key of the value in the attribute directly.  For example:
     
     frag //-> <my-tag greeting='message'><h1>Hi</h1></my-tag>
    
-With [can.stache], you wrap the key with `{}`. For example:
+With [can.stache], you wrap the attribute name with `{}` for parent to child binding. For example:
 
     can.Component.extend({
       tag: "my-tag",
-      template: "<h1>{{greeting}}</h1>"
+      template: can.stache("<h1>{{greeting}}</h1>")
     });
-    var template = can.stache("<my-tag greeting='{message}'></my-tag>");
+    var template = can.stache("<my-tag {greeting}='message'></my-tag>");
     
     var frag = template({
       message: "Hi"
     });
    
-    frag //-> <my-tag greeting='{message}'><h1>Hi</h1></my-tag>
+    frag //-> <my-tag {greeting}='message'><h1>Hi</h1></my-tag>
 
 If the key was not wrapped, the template would render:
 
     frag //-> <my-tag greeting='message'><h1>message</h1></my-tag>
  
-because the attribute value would be passed as the value of `greeting`.
+Because the attribute value would be passed as the value of `greeting`.
 
 ## Examples
 
@@ -330,7 +304,7 @@ to add a new tab.
 @demo can/component/examples/tabs.html
 
 An instance of the tabs widget is created by creating `<tabs>` and `<panel>`
-elements:
+elements like:
 
     <tabs>
       {{#each foodTypes}}
@@ -338,27 +312,27 @@ elements:
       {{/each}}
     </tabs>
 
-To add another panel, all we have to do is add data to `foodTypes`:
+To add another panel, all we have to do is add data to `foodTypes` like:
 
     foodTypes.push({
       title: "Vegetables",
       content: "Carrots, peas, kale"
     })
 
-The `<panel>` element listens for when it is inserted
+The secret is that the `<panel>` element listens to when it is inserted
 and adds its data to the tabs' list of panels with:
 
     this.element.parent().viewModel().addPanel( this.viewModel );
 
 ### TreeCombo
 
-The following tree combo lets people walk through a hierarchy, and select locations.
+The following tree combo lets people walk through a hierarchy and select locations.
 
 @demo can/component/examples/treecombo.html
 
 The secret to this widget is the viewModel's `breadcrumb` property, which is an array
 of items the user has navigated through, and `selectableItems`, which represents the children of the
-last item in the breadcrumb.  These are defined on the viewModel:
+last item in the breadcrub.  These are defined on the viewModel like:
 
 
     breadcrumb: [],
@@ -378,9 +352,9 @@ last item in the breadcrumb.  These are defined on the viewModel:
     }
 
 When the "+" icon is clicked next to each item, the viewModel's `showChildren` method is called, which
-adds that item to the breadcrumb:
+adds that item to the breadcrumb like:
 
-    showChildren: function( item, el, ev ) {
+    showChildren: function( item, ev ) {
       ev.stopPropagation();
       this.attr('breadcrumb').push(item)
     },
@@ -388,13 +362,8 @@ adds that item to the breadcrumb:
 ### Paginate
 
 The following example shows 3 
-widget-like components: 
-
- - a grid, 
- - next / prev buttons, and 
- - a page count indicator. 
- 
-And, it shows an application component that puts them all together.
+widget-like components: a grid, next / prev buttons, and a page count indicator. And,
+it shows an application component that puts them all together.
 
 @demo can/component/examples/paginate.html
 
@@ -404,56 +373,71 @@ This demo uses a `Paginate` can.Map to assist with maintaining a paginated state
     ...
     });
     
-The `app` component creates an instance of the `Paginate` model,
-and a `websitesDeferred`, which represents a request for the Websites
+The `app` component, using the [can.Map.define define plugin], creates an instance of the `Paginate` model
+and a `websitesPromise` that represents a request for the Websites
 that should be displayed.
 
-    viewModel: function () {
-      return {
-        paginate: new Paginate({
-          limit: 5
-        }),
-        websitesDeferred: can.compute(function () {
-          var params = {
-            limit: this.attr('paginate.limit'),
-            offset: this.attr('paginate.offset')
-          },
-            websitesDeferred = Website.findAll(params),
-            self = this;
-
-          websitesDeferred.then(function (websites) {
-            self.attr('paginate.count', websites.count)
-          });
+    viewModel: {
+      define: {
+        paginate: {
+          value: function() {
+            return new Paginate({
+              limit: 5
+            });
+          }
+        },
+        websitesPromise: {
+          get: function() {
+            var params = {
+                  limit: this.attr('paginate.limit'),
+                  offset: this.attr('paginate.offset')
+              },
+              websitesPromise = Website.findAll(params),
+              self = this;
+  
+            websitesPromise.then(function(websites) {
+              self.attr('paginate.count', websites.count);
+            });
     
-          return websitesDeferred;
-        })
+            return websitesPromise;
+          }
+        }
       }
     }
 
-The `app` control passes:
-
- - paginate, 
- - paginate's values, and 
- - websitesDeferreds to
- 
+The `app` control passes paginate, paginate's values, and websitesPromise to
 its sub-components:
 
-    <grid deferredData='websitesDeferred'>
-      {{#each items}}
-        <tr>
-          <td width='40%'>{{name}}</td>
-          <td width='70%'>{{url}}</td>
-        </tr>
-      {{/each}}
-    </grid>
-    <next-prev paginate='paginate'/>
-    <page-count page='paginate.page' count='paginate.pageCount'/>
+    <app>
+      <grid {promise-data}='websitesPromise'>
+        {{#each items}}
+          <tr>
+            <td width='40%'>{{name}}</td>
+            <td width='70%'>{{url}}</td>
+          </tr>
+        {{/each}}
+      </grid>
+      <next-prev {paginate}='paginate'></next-prev>
+      <page-count {page}='paginate.page' {count}='paginate.pageCount'/>
+    </app>
 
 ## IE 8 Support
 
-While CanJS does support Internet Explorer 8, if you decide
-to use `can.Component`,  you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
+While CanJS does support Internet Explorer 8 out of the box, if you decide
+to use `can.Component` then you will need to include [HTML5 Shiv](https://github.com/aFarkas/html5shiv)
 in order for your custom tags to work properly.
 
-For namespaced tag names (e.g. `<can:example>`) and hyphenated tag 
-names (e.g. `<can-example>`) to work properly, you will need to use version 3.7.2 or later.
+For namespaced tag names (e.g. `<can:example>`) and hyphenated tag names (e.g. `<can-example>`) to work properly, you will 
+need to use version 3.7.2 or later.
+
+## Videos
+
+Watch this video for an overview of can.Component, why you should use it, and a hello world example:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/BM1Jc3lVUrk" frameborder="0" allowfullscreen></iframe>
+
+This video provides a more in depth overview of the API and goes over several examples of can.Components:
+
+<iframe width="662" height="372" src="https://www.youtube.com/embed/ogX765S4iuc" frameborder="0" allowfullscreen></iframe>
+
+Note: the videos above reference the `scope` property, which was replaced by the [can.Component::viewModel viewModel] property in 2.2.

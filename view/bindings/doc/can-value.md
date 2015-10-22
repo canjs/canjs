@@ -3,6 +3,8 @@
 
 Sets up two way bindings in a template.
 
+@deprecated {2.3} Use [can.view.bindings.twoWay two way binding] like `{($value)}="KEY"` instead.
+
 @signature `can-value='KEY'`
 
 Binds the element's value or checked property to the value specified by
@@ -27,7 +29,7 @@ not listed here, the behavior is the same as the `text` type.
 
 Cross binds the input's string text value with the observable value.
 
-The value of the observable is changed after the input's `change` event, 
+The value of the observable is changed after the input's `change` event,
 which is after `blur`.
 
 @demo can/view/bindings/doc/hyperloop.html
@@ -52,3 +54,12 @@ If the radio element is checked, sets the observable specified by `can-value` to
 Cross binds the selected option value with an observable value.
 
 @demo can/view/bindings/doc/select.html
+
+## textarea
+
+Cross binds the textarea's string text value with the observable value.
+
+The value of the observable is changed after the textarea's `change` event,
+which is after `blur`.
+
+@demo can/view/bindings/doc/textarea.html

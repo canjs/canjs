@@ -7,13 +7,13 @@ steal('can/util', function (can) {
 	 * are no more event handlers.
 	 *
 	 */
-	// ## Bind helpers
+		// ## Bind helpers
 	can.bindAndSetup = function () {
 		// Add the event to this object
 		can.addEvent.apply(this, arguments);
 		// If not initializing, and the first binding
 		// call bindsetup if the function exists.
-		if (!this._init) {
+		if (!this.__inSetup) {
 			if (!this._bindings) {
 				this._bindings = 1;
 				// setup live-binding

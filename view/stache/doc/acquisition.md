@@ -1,5 +1,5 @@
 @page can.stache.Acquisition Template Acquisition
-@parent can.stache.pages 4
+@parent can.stache.pages 3
 
 There are number of ways to acquire templates such as: raw text,
 URL, or script tags in the markup.

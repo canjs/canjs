@@ -36,15 +36,10 @@
 			"jquery": "../../../../node_modules/jquery/dist/jquery.js",
 			"can/*": "../../../../*.js"
 		},
-		meta: {
-			jquery: {
-				exports: "jQuery"
-			}
-		},
 		ext: {
-			ejs: "can/view/ejs/ejs",
-			mustache: "can/view/mustache/mustache",
-			stache: "can/view/stache/stache"
+			ejs: "can/view/ejs/system",
+			mustache: "can/view/mustache/system",
+			stache: "can/view/stache/system"
 		},
 		bundle: [ "components/one/one" ]
 	});

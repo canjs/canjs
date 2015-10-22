@@ -41,10 +41,15 @@ steal("can/util/can.js", function (can) {
 				"class": "className",
 				"value": "value",
 				"innertext": "innerText",
+				"innerhtml": "innerHTML",
 				"textcontent": "textContent",
+				"for": "htmlFor",
 				"checked": true,
 				"disabled": true,
-				"readonly": true,
+				"readonly": function (el, val) {
+					el.readOnly = true;
+					return val;
+				},
 				"required": true,
 				// For the `src` attribute we are using a setter function to prevent values such as an empty string or null from being set.
 				// An `img` tag attempts to fetch the `src` when it is set, so we need to prevent that from happening by removing the attribute instead.
@@ -57,27 +62,50 @@ steal("can/util/can.js", function (can) {
 						return val;
 					}
 				},
-				style: function (el, val) {
-					return el.style.cssText = val || "";
-				}
+				style: (function () {
+					var el = can.global.document && document.createElement('div');
+					if ( el && el.style && ("cssText" in el.style) ) {
+						return function (el, val) {
+							return el.style.cssText = (val || "");
+						};
+					} else {
+						return function (el, val) {
+							return el.setAttribute("style", val);
+						};
+					}
+				})()
 			},
 			// These are elements whos default value we should set.
 			defaultValue: ["input", "textarea"],
+			setAttrOrProp: function(el, attrName, val){
+				attrName = attrName.toLowerCase();
+				var prop = attr.map[attrName];
+				if(prop === true && !val) {
+					this.remove(el, attrName);
+				} else {
+					this.set(el, attrName, val);
+				}
+			},
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
+				var usingMutationObserver = can.isDOM(el) && attr.MutationObserver;
+				
 				attrName = attrName.toLowerCase();
 				var oldValue;
-				// In order to later trigger an event we need to compare the new value to the old value, so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
-				if (!attr.MutationObserver) {
+				// In order to later trigger an event we need to compare the new value to the old value, 
+				// so here we go ahead and retrieve the old value for browsers that don't have native MutationObservers.
+				if (!usingMutationObserver) {
 					oldValue = attr.get(el, attrName);
 				}
 
-				var tagName = el.nodeName.toString().toLowerCase(),
-					prop = attr.map[attrName],
+				var prop = attr.map[attrName],
 					newValue;
 
-				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. Then check if the property is `true`, and if so set the value to `true`, also making sure to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true because for these boolean properties, setting them to false would be the same as removing the attribute.
+				// Using the property of `attr.map`, go through and check if the property is a function, and if so call it. 
+				// Then check if the property is `true`, and if so set the value to `true`, also making sure 
+				// to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true 
+				// because for these boolean properties, setting them to false would be the same as removing the attribute.
 				//
 				// For all other attributes use `setAttribute` to set the new value.
 				if (typeof prop === "function") {
@@ -86,7 +114,7 @@ steal("can/util/can.js", function (can) {
 					newValue = el[attrName] = true;
 
 					if (attrName === "checked" && el.type === "radio") {
-						if (can.inArray(tagName, attr.defaultValue) >= 0) {
+						if (can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 							el.defaultChecked = true;
 						}
 					}
@@ -96,7 +124,7 @@ steal("can/util/can.js", function (can) {
 					if (el[prop] !== val) {
 						el[prop] = val;
 					}
-					if (prop === "value" && can.inArray(tagName, attr.defaultValue) >= 0) {
+					if (prop === "value" && can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 						el.defaultValue = val;
 					}
 				} else {
@@ -105,7 +133,7 @@ steal("can/util/can.js", function (can) {
 				}
 
 				// Now that the value has been set, for browsers without MutationObservers, check to see that value has changed and if so trigger the "attributes" event on the element.
-				if (!attr.MutationObserver && newValue !== oldValue) {
+				if (!usingMutationObserver && newValue !== oldValue) {
 					attr.trigger(el, attrName, oldValue);
 				}
 			},
@@ -130,8 +158,10 @@ steal("can/util/can.js", function (can) {
 			get: function (el, attrName) {
 				attrName = attrName.toLowerCase();
 				var prop = attr.map[attrName];
-				if(typeof prop === "string" && el[prop]) {
+				if(typeof prop === "string" && (prop in el) ) {
 					return el[prop];
+				} else if(prop === true) {
+					return el[attrName];
 				}
 
 				return el.getAttribute(attrName);

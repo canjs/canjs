@@ -126,7 +126,7 @@ with Observes and use `attr` to read properties. In this template, using
 <li><%= todo.attr('description') %></li>
 ```
 
-If you change the Todo's description, the template's output will automatically
+If you change the Todo's description, the template’s output will automatically
 update:
 
 ```
@@ -159,7 +159,7 @@ added or removed from it, it will update the output of the template.
 ## Element callbacks
 
 If the code inside `<%= %>` or `<%== %>` evaluates to a function, the function
-will be called back with the element it's inside as its first argument. This is
+will be called back with the element it’s inside as its first argument. This is
 useful to initialize functionality on an element within the template, like
 starting an element hidden:
 

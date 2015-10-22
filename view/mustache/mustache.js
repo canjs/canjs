@@ -811,6 +811,27 @@ steal('can/util',
 									 * would render:
 									 *
 									 *     Hi Jon!
+									 * 
+									 * ## Understanding when to use Sections with lists
+									 * 
+									 * Section iteration will re-render the entire section for any change in the list. It is the prefered method to
+									 * use when a list is replaced or changing significantly. Whereas [can.stache.helpers.each {{#each key}}] iteration
+									 * will do basic diffing and aim to only update the DOM where the change occured. When doing single list item
+									 * changes frequently, [can.stache.helpers.each {{#each key}}] iteration is the faster choice.
+									 * 
+									 * For example, assuming "list" is a can.List instance:
+									 * 
+									 * {{#if list}} will check for the truthy value of list. This is akin to checking for the truthy value of any JS object and will result to true, regardless of list contents or length.
+									 * 
+									 * {{#if list.length}} will check for the truthy value of the length attribute. If you have an empty list, the length will be 0, so the #if will result to false and no contents will be rendered. If there is a length >= 1, this will result to true and the contents of the #if will be rendered.
+									 * 
+									 * {{#each list}} and {{#list}} both iterate through an instance of can.List, however we setup the bindings differently.
+									 * 
+									 * {{#each list}} will setup bindings on every individual item being iterated through, while {{#list}} will not. This makes a difference in two scenarios:
+									 * 
+									 * 1) You have a large list, with minimal updates planned after initial render. In this case, {{#list}} might be more advantageous as there will be a faster initial render. However, if any part of the list changes, the entire {{#list}} area will be re-processed.
+									 * 
+									 * 2) You have a large list, with many updates planned after initial render. A grid with many columns of editable fields, for instance. In this case, you many want to use {{#each list}}, even though it will be slower on initial render(we're setting up more bindings), you'll have faster updates as there are now many sections.
 									 */
 									// 
 									/**
@@ -1000,13 +1021,14 @@ steal('can/util',
 									 *
 									 * Will call the `countTo` helper:
 									 *
-									 *     can.mustache.registerHelper('madLib',
+									 *     can.mustache.registerHelper('countTo',
 									 *       function(number, options){
-									 *         var out = []
+									 *         var out = [];
 									 *         for(var i =0; i < number; i++){
-									 *           out.push( options.fn({num: i+1}) )
+									 *           var docFrag = options.fn({num: i+1});
+									 *           out.push( docFrag.textContent );
 									 *         }
-									 *         return out.join(" ")
+									 *         return out.join(" ");
 									 *     });
 									 *
 									 * Results in:
@@ -1046,7 +1068,7 @@ steal('can/util',
 									 * The template:
 									 *
 									 *     <p>The bed is
-									 *        {{isJustRight firmness}}
+									 *        {{#isJustRight firmness}}
 									 *           pefect!
 									 *        {{else}}
 									 *           uncomfortable.
@@ -1061,11 +1083,10 @@ steal('can/util',
 									 *     can.mustache.registerHelper('isJustRight',
 									 *       function(number, options){
 									 *         if(number > 50){
-									 *           return options.fn(this)
+									 *           return options.fn(this);
 									 *         } else {
-									 *           return options.inverse(this)
+									 *           return options.inverse(this);
 									 *         }
-									 *         return out.join(" ")
 									 *     });
 									 *
 									 * Results in:
@@ -1645,6 +1666,27 @@ steal('can/util',
 		};
 
 		/**
+		 * @function can.mustache.registerSimpleHelper
+		 * @parent can.mustache.methods
+		 * @description Register a simple helper.
+		 * @function can.mustache.registerSimpleHelper registerSimpleHelper
+		 * @signature `Mustache.registerSimpleHelper(name, helper)`
+		 * @param {String} name The name of the helper.
+		 * @param {can.mustache.simplehelper} helper The simple helper function.
+		 *
+		 * @body
+		 * Registers a helper with the Mustache system that passes the values
+		 * instead of computes as arguments. This is useful if your helper does not
+		 * modify the argument computes and you only need the actual values.
+		 * Pass the name of the helper followed by the
+		 * function to which Mustache should invoke.
+		 * These are run at runtime.
+		 */
+		Mustache.registerSimpleHelper = function(name, fn) {
+			Mustache.registerHelper(name, can.view.simpleHelper(fn));
+		};
+
+		/**
 		 * @hide
 		 * @function can.MustacheConstructor.getHelper getHelper
 		 * @description Retrieve a helper.
@@ -1659,7 +1701,7 @@ steal('can/util',
 		Mustache.getHelper = function (name, options) {
 			var helper;
 			if (options) {
-				helper = options.attr("helpers." + name);
+				helper = options.get("helpers." + name,{proxyMethods: false});
 			}
 			return helper ? {
 				fn: helper
@@ -1694,16 +1736,17 @@ steal('can/util',
 			// If there is a "partial" property and there is not
 			// an already-cached partial, we use the value of the 
 			// property to look up the partial
-
+			
 			// if this partial is not cached ...
 			if (!can.view.cached[partial]) {
 				// we don't want to bind to changes so clear and restore reading
-				var reads = can.__clearReading();
-				var scopePartialName = scope.attr(partial);
-				if (scopePartialName) {
-					partial = scopePartialName;
-				}
-				can.__setReading(reads);
+				can.__notObserve(function(){
+					var scopePartialName = scope.attr(partial);
+					if (scopePartialName) {
+						partial = scopePartialName;
+					}
+				})();
+				
 			}
 
 			// Call into `can.view.render` passing the
@@ -1760,7 +1803,7 @@ steal('can/util',
 		};
 
 		Mustache.renderPartial = function (partialName, scope, options) {
-			var partial = options.attr("partials." + partialName);
+			var partial = options.get("partials." + partialName,{proxyMethods: false});
 			if (partial) {
 				return partial.render ? partial.render(scope, options) :
 					partial(scope, options);
@@ -2001,6 +2044,27 @@ steal('can/util',
 			 *       <li>Josh</li>
 			 *       <li>27</li>
 			 *     </ul>
+			 * 
+			 * ## Understanding when to use #each with lists
+			 * 
+			 * {{#each key}} iteration will do basic diffing and aim to only update the DOM where the change occured. Whereas
+			 * [can.stache.Sections Sections] iteration will re-render the entire section for any change in the list.
+			 * [can.stache.Sections Sections] iteration is the prefered method to use when a list is replaced or changing significantly.
+			 * When doing single list item changes frequently, {{#each key}} iteration is the faster choice.
+			 * 
+			 * For example, assuming "list" is a can.List instance:
+			 * 
+			 * {{#if list}} will check for the truthy value of list. This is akin to checking for the truthy value of any JS object and will result to true, regardless of list contents or length.
+			 * 
+			 * {{#if list.length}} will check for the truthy value of the length attribute. If you have an empty list, the length will be 0, so the #if will result to false and no contents will be rendered. If there is a length >= 1, this will result to true and the contents of the #if will be rendered.
+			 * 
+			 * {{#each list}} and {{#list}} both iterate through an instance of can.List, however we setup the bindings differently.
+			 * 
+			 * {{#each list}} will setup bindings on every individual item being iterated through, while {{#list}} will not. This makes a difference in two scenarios:
+			 * 
+			 * 1) You have a large list, with minimal updates planned after initial render. In this case, {{#list}} might be more advantageous as there will be a faster initial render. However, if any part of the list changes, the entire {{#list}} area will be re-processed.
+			 * 
+			 * 2) You have a large list, with many updates planned after initial render. A grid with many columns of editable fields, for instance. In this case, you many want to use {{#each list}}, even though it will be slower on initial render(we're setting up more bindings), you'll have faster updates as there are now many sections.
 			 */
 			'each': function (expr, options) {
 				// Check if this is a list or a compute that resolves to a list, and setup

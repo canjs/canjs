@@ -1,0 +1,60 @@
+<div class="order-form">
+  {{#if restaurant.isPending}}
+    <div class="loading"></div>
+  {{else}}
+    {{#restaurant.value}}
+      {{#if saveStatus.isResolved}}
+        <pmo-order-details order="{saveStatus.value}"></pmo-order-details>
+        <p><a href="javascript://" (click)="{startNewOrder}">Place another order</a></p>
+      {{else}}
+        {{#if saveStatus.isPending}}
+          <div class="loading"></div>
+        {{else}}
+          <h3>Order from {{name}}</h3>
+
+          <form (submit)="placeOrder">
+            <p class="info {{^if order.items.length}}text-error{{else}}text-success{{/if}}">
+              {{^if order.items.length}}
+                Please choose an item
+              {{else}}
+                {{order.items.length}} selected
+              {{/if}}
+            </p>
+
+            <ul class="panel">
+              {{#each menu}}
+                <li>
+                  <label>
+                    <input type="checkbox"
+                      (change)="{order.items.toggle this}"
+                      {{#if order.items.has}}checked{{/if}}>
+                    {{name}} <span class="badge">${{price}}</span>
+                  </label>
+                </li>
+              {{/each}}
+            </ul>
+
+            <div class="form-group">
+              <label>Name:</label>
+              <input name="name" type="text" can-value="{order.name}">
+              <p>Please enter your name.</p>
+            </div>
+
+            <div class="form-group">
+              <label>Address:</label>
+              <input name="address" type="text" can-value="{order.address}">
+              <p class="help-text">Please enter your address.</p>
+            </div>
+
+            <phone-validator order="{order}"></phone-validator>
+
+            <div class="submit">
+              <h4>Total: ${{order.total}}</h4>
+              <button type="submit" {{^if order.items.length}}disabled{{/if}}>Place My Order!</button>
+            </div>
+          </form>
+        {{/if}}
+      {{/if}}
+    {{/restaurant.value}}
+  {{/if}}
+</div>

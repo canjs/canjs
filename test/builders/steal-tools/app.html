@@ -9,7 +9,7 @@
 	<h1 id="qunit-header">Steal-Tools Build Suite</h1>
 
 	<h2 id="qunit-banner"></h2>
-	
+
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"></ol>
@@ -20,13 +20,13 @@
 	<script>
 		System.import("config.js").then(function(){
 			System.import("app").then(function(){
-				
+
 				test("stache", function(){
 					var div = document.createElement('div');
 					div.appendChild(MODULE.stache);
-					QUnit.equal( div.getElementsByTagName("h1")[0].innerHTML, "Stache Hi", "matches" );
+					QUnit.equal( div.getElementsByTagName("h1")[0].innerHTML, "Stache HI", "matches" );
 				});
-				
+
 				QUnit.start();
 			});
 		});

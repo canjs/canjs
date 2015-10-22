@@ -1,0 +1,16 @@
+<header>
+  <nav>
+    <h1>PlaceMyOrder.com</h1>
+    <ul>
+      <li class="{{#eq page 'home'}}active{{/eq}}">
+        <a can-href='{page="home"}'>Home</a>
+      </li>
+      <li class="{{#eq page 'restaurants'}}active{{/eq}}">
+        <a can-href='{page="restaurants"}'>Restaurants</a>
+      </li>
+      <li class="{{#eq page 'orders'}}active{{/eq}}">
+        <a can-href='{page="orders"}'>Order History</a>
+      </li>
+    </ul>
+  </nav>
+</header>

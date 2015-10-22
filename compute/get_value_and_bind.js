@@ -1,154 +1,183 @@
+// # can/compute/get_value_and_bind
+//
+// This module:
+//
+// Exports a function that calls an arbitrary function and binds to any observables that
+// function reads. When any of those observables change, a callback function is called.
+//
+// And ...
+//
+// Adds two main methods to can:
+//
+// - can.__observe - All other observes call this method to be visible to computed functions.
+// - can.__notObserve - Returns a function that can not be observed.
 steal("can/util", function(can){
 	
-	// # can/compute/observe
-	// Exports a function that calls a function and binds to any observables it reads.
-	// When any of those observables change, a callback function is called.
-	//
-	// And ...
-	//
-	// Adds two main methods to can:
-	//
-	// - can.__observe - All other observes call this method to be visible to computed functions.
-	// - can.__notObserve - Returns a function that can not be observed.
-	//
-	// ## observe
-	// This module's export:
-	// - `func` - A function to read and and bind to all observables it might read.
-	// - `context` - What `func` should be called with.
-	// - `oldObserved` - A map of observable / event pairs this function used to be listening to.
-	// - `onchanged` - What to callback whenever any of the observables changed.
-	function observe(func, context, oldInfo, onchanged) {
-		// Call the function, get the value as well as the observed objects and events
-		var info = getValueAndObserved(func, context),
-			// The objects-event pairs that must be bound to
-			newObserveSet = info.observed,
-			oldObserved = oldInfo.observed;
-		// Go through what needs to be observed.
-		if(info.names !== oldInfo.names) {
-			bindNewSet(oldObserved, newObserveSet, onchanged);
-			unbindOldSet(oldObserved, onchanged);
-		}
-		// set ready after all previous events have fired
-		can.batch.afterPreviousEvents(function(){
-			info.ready = true;
-		});
-		
-		return info;
+	function ObservedInfo(func, context, onchanged){
+		this.func = func;
+		this.context = context;
+		this.onchanged = onchanged;
 	}
 	
-	// The top of this is what observables and events the current observer
-	// should listen to.
-	
-	// ## Observe Helpers
-	//
-	// The following methods are used to call a function that relies on
-	// observable data and to track the observable events which should 
-	// be listened to when changes occur.
-	// To do this, `can.__observe(observable, event)` is called to
-	// "broadcast" the corresponding event on each read.
-	// 
-	// ### Observed
-	//
-	// An "Observed" is an object of observable objects and events that
-	// a function relies on. These objects and events must be listened to
-	// in order to determine when to check a function for updates.
-	// This looks like the following:
-	//
-	//     { 
-	//       "map1|first": {obj: map, event: "first"},
-	//       "map1|last" : {obj: map, event: "last"}
-	//     }
-	// 
-	// Each object-event pair is mapped so no duplicates will be listed.
-	var observedStack = [];
-	
-	// returns if some function is in the process of recording observes.
-	can.__isRecordingObserves = function(){
-		return observedStack.length;
-	};
-	
-	can.__observe = can.__reading = function (obj, event) {
-		if (observedStack.length) {
-			var name = obj._cid + '|' + event,
-				top = observedStack[observedStack.length-1];
+	// ## getValueAndBind
+	// Calls `func` with "this" as `context` and binds to any observables that
+	// `func` reads. When any of those observables change, `onchanged` is called.  
+	// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.  
+	// Returns the `newInfo` set of listeners and the value `func` returned.
+	function getValueAndBind(observedInfo) {
+		
+		observedInfo.oldObserved = observedInfo.newObserved || {};
+		observedInfo.ignore = 0;
+		observedInfo.newObserved = {};
+		observedInfo.ready = false;
+		
+		// Add this function call's observedInfo to the stack,
+		// runs the function, pops off the observedInfo, and returns it.
+		
+		observedInfoStack.push(observedInfo);
+		observedInfo.value = observedInfo.func.call(observedInfo.context);
+		observedInfoStack.pop();
+		
+		unbindOldSet(observedInfo);
+		
+		// Set ready after all previous events have fired.
+		can.batch.afterPreviousEvents(function(){
+			observedInfo.ready = true;
+		});
+		
+		return observedInfo;
+	}
+
+	// ### unbindOldSet
+	// Unbinds everything in `oldObserved`.
+	var unbindOldSet = function(observedInfo){
+		var onchanged = observedInfo.onchanged,
+			oldObserved = observedInfo.oldObserved;
 			
-			top.names += name;
-			top.observed[name] = {
-				obj: obj,
-				event: event + ""
-			};
+		for (var name in oldObserved) {
+			var obEv = oldObserved[name];
+			if(obEv) {
+				obEv.obj.unbind(obEv.event, onchanged);
+			}
 		}
 	};
 	
 	
-	// protects a function from being observed.
+
+	// ### observedInfoStack
+	//
+	// This is the stack of all `observedInfo` objects that are the result of
+	// recursive `getValueAndBind` calls.  
+	// `getValueAndBind` can indirectly call itself anytime a compute reads another 
+	// compute.
+	//
+	// An `observedInfo` entry looks like:
+	//
+	//     {
+	//       observed: { 
+	//         "map1|first": {obj: map, event: "first"},
+	//         "map1|last" : {obj: map, event: "last"}
+	//       },
+	//       names: "map1|firstmap1|last"
+	//     }
+	//
+	// Where:
+	// - `observed` is a map of `"cid|event"` to the observable and event.
+	//   We use keys like `"cid|event"` to quickly identify if we have already observed this observable.
+	// - `names` is all the keys so we can quickly tell if two observedInfo objects are the same.
+	var observedInfoStack = [];
+	
+	// ## can.__observe
+	// Indicates that an observable is being read.  
+	// Updates the top of the stack with the observable being read.
+	can.__observe = function (obj, event) {
+		var top = observedInfoStack[observedInfoStack.length-1];
+		if (top) {
+			var evStr = event + "",
+				name = obj._cid + '|' + evStr;
+			if(top.traps) {
+				top.traps.push({obj: obj, event: evStr, name: name});
+			}
+			else if(!top.ignore && !top.newObserved[name]) {
+				top.newObserved[name] = {
+					obj: obj,
+					event: evStr
+				};
+				
+				if(!top.oldObserved[name]) {
+					obj.bind(evStr, top.onchanged);
+				}
+				top.oldObserved[name] = null;
+			}
+			
+		}
+	};
+	
+	can.__reading = can.__observe;
+	
+	can.__trapObserves = function(){
+		if (observedInfoStack.length) {
+			var top = observedInfoStack[observedInfoStack.length-1];
+			var traps = top.traps = [];
+			return function(){
+				top.traps = null;
+				return traps;
+			};
+		} else {
+			return function(){return [];};
+		}
+	};
+	can.__observes = function(observes){
+		// a bit more optimized so we don't have to repeat everything in can.__observe
+		var top = observedInfoStack[observedInfoStack.length-1];
+		if (top) {
+			for(var i =0, len = observes.length; i < len; i++) {
+				var trap = observes[i],
+					name = trap.name;
+				
+				if(!top.newObserved[name]) {
+					top.newObserved[name] = trap;
+					
+					if(!top.oldObserved[name]) {
+						trap.obj.bind(trap.event, top.onchanged);
+					}
+					top.oldObserved[name] = null;
+				}
+			}
+		}
+	};
+	
+	// ### can.__isRecordingObserves
+	// Returns if some function is in the process of recording observes.
+	can.__isRecordingObserves = function(){
+		return observedInfoStack.length;
+	};
+	
+	// ### can.__notObserve
+	// Protects a function from being observed.
 	can.__notObserve = function(fn){
 		return function(){
-			var previousReads = can.__clearObserved();
-			var res = fn.apply(this, arguments);
-			can.__setObserved(previousReads);
-			return res;
+			if (observedInfoStack.length) {
+				var top = observedInfoStack[observedInfoStack.length-1];
+				top.ignore++;
+				var res = fn.apply(this, arguments);
+				top.ignore--;
+				return res;
+			} else {
+				return fn.apply(this, arguments);
+			}
 		};
 	};
 	
-	// The following methods 
-	can.__clearObserved = can.__clearReading = function () {
-		if (observedStack.length) {
-			var ret = observedStack[observedStack.length-1];
-			observedStack[observedStack.length-1] = {names: "", observed: {}};
-			return ret;
+	getValueAndBind.unbindReadInfo = function(readInfo){
+		var onchanged = readInfo.onchanged;
+		for (var name in readInfo.newObserved) {
+			var ob = readInfo.newObserved[name];
+			ob.obj.unbind(ob.event, onchanged);
 		}
 	};
+	getValueAndBind.ObservedInfo = ObservedInfo;
 
-	can.__setObserved = can.__setReading = function (o) {
-		if (observedStack.length) {
-			observedStack[observedStack.length-1] = o;
-		}
-	};
-
-	can.__addObserved = can.__addReading = function(o){
-		if (observedStack.length) {
-			var last = observedStack[observedStack.length-1];
-			can.simpleExtend(last.observed, o.observed);
-			last.names += o.names;
-		}
-	};
-	
-	var getValueAndObserved = function (func, self) {
-		
-		observedStack.push({names: "", observed: {}});
-
-		var value = func.call(self);
-		var stackItem = observedStack.pop();
-		stackItem.value = value;
-		return stackItem;
-	};
-
-	// This will not be optimized.
-	var bindNewSet = function(oldObserved, newObserveSet, onchanged){
-		for(var name in newObserveSet ) {
-			bindOrPreventUnbinding(oldObserved, newObserveSet, name, onchanged);
-		}
-	};
-
-	// This will be optimized.
-	var bindOrPreventUnbinding = function(oldObserved, newObserveSet, name, onchanged){
-		if( oldObserved[name] ) {
-			delete oldObserved[name];
-		} else {
-			var obEv = newObserveSet[name];
-			obEv.obj.bind(obEv.event, onchanged);
-		}
-	};
-
-	var unbindOldSet = function(oldObserved, onchanged){
-		for (var name in oldObserved) {
-			var obEv = oldObserved[name];
-			obEv.obj.unbind(obEv.event, onchanged);
-		}
-	};
-
-
-	return observe;
+	return getValueAndBind;
 
 });

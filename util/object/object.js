@@ -143,7 +143,7 @@ steal('can/util', function (can) {
 	 * @param {Object} subset
 	 * @param {Object} set
 	 * @param {Object} compares
-	 * @returns {Boolean} Whether or not subset is a subset of set
+	 * @return {Boolean} Whether or not subset is a subset of set
 	 * @body
 	 * ## Example
 	 * ```

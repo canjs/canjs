@@ -1,0 +1,7 @@
+<can-import from="import/other" />
+
+{{#eq page "list"}}
+	<can-import from="import/thing">
+		<span>thing</span>
+	</can-import>
+{{/if}}

@@ -19,13 +19,14 @@ Rendered with:
 
 Will call the `countTo` helper:
 
-    can.stache.registerHelper('madLib',
+    can.stache.registerHelper('countTo',
       function(number, options){
-        var out = []
+        var out = [];
         for(var i =0; i < number; i++){
-          out.push( options.fn({num: i+1}) )
+          var docFrag = options.fn({num: i+1});
+          out.push( docFrag.textContent );
         }
-        return out.join(" ")
+        return out.join(" ");
     });
 
 Results in:
@@ -80,11 +81,10 @@ Will call the `isJustRight` helper:
     can.stache.registerHelper('isJustRight',
       function(number, options){
         if(number > 50){
-          return options.fn(this)
+          return options.fn(this);
         } else {
-          return options.inverse(this)
+          return options.inverse(this);
         }
-        return out.join(" ")
     });
 
 Results in:
