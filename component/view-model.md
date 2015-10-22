@@ -3,9 +3,7 @@
 
 @description
 
-Provides or describes a [can.Map] constructor function or `can.Map` instance that will be
-used to retrieve values found in the component's [can.Component::template template]. The map 
-instance is initialized with values specified by the component element's attributes.
+Provides or describes a [can.Map] constructor function or `can.Map` instance that will be used to retrieve values found in the component's [can.Component::template template]. The map instance is initialized with values specified by attributes set on the component's HTML element.
 
 __Note:__ This page documents behavior of components in [can.stache]. [can.mustache] behaves
 slightly differently. If you want the behavior of components with [can.mustache], 
@@ -13,8 +11,7 @@ please look at versions of this page prior to 2.3. In 2.3, use [can.view.binding
 [can.view.bindings.toParent] and [can.view.bindings.twoWay] to setup viewModel 
 bindings.
 
-@option {Object} A plain JavaScript object that is used to define the prototype methods and properties of
-[can.Construct constructor function] that extends [can.Map]. For example:
+@option {Object} A plain JavaScript object that is used to define the prototype methods and properties of the [can.Construct constructor function] that extends [can.Map]. For example:
 
     can.Component.extend({
       tag: "my-paginate",
@@ -27,8 +24,7 @@ bindings.
       }
     });
 
-@option {can.Map} A `can.Map` constructor function will be used to create an instance of the observable
-`can.Map` placed at the head of the template's viewModel.  For example:
+@option {can.Map} A `can.Map` constructor function will be used to create an instance of the observable `can.Map` used as the template's viewModel.  For example:
 
     var Paginate = can.Map.extend({
       offset: 0,
@@ -41,19 +37,16 @@ bindings.
       tag: "my-paginate",
       viewModel: Paginate
     })
-    
 
-@option {function} Returns the instance or constructor function of the object that will be added
-to the viewModel.
+@option {function} Returns the instance or constructor function of the object that will be added to the viewModel.
 
-@param {Object} attrs An object of values specified by the custom element's attributes. For example,
-a template rendered like:
+@param {Object} attrs An object of values specified by the custom element's attributes. For example, a template rendered like:
 
-    can.mustache("<my-element title="name"></my-element>")({
+    can.stache("<my-element title="name"></my-element>")({
       name: "Justin"
     })
 
-Creates an instance of following control:
+Creates an instance of the following component:
 
     can.Component.extend({
     	tag: "my-element",
@@ -65,27 +58,24 @@ Creates an instance of following control:
 
 And calls the viewModel function with `attrs` like `{title: "Justin"}`.
 
-@param {can.view.viewModel} parentScope
+@param {can.view.viewModel} parentviewModel
 
-The viewModel the custom tag was found within.  By default, any attribute's values will
-be looked up within the current viewModel, but if you want to add values without needing
-the user to provide an attribute, you can set this up here.  For example:
+The viewModel the custom tag was found within.  By default, any attribute's values will be looked up within the current viewModel, but if you want to add values without needing the user to provide an attribute, you can set this up here.  For example:
 
     can.Component.extend({
     	tag: "my-element",
-    	viewModel: function(attrs, parentScope){
-    	  return new can.Map({title: parentScope.attr('name')});
+    	viewModel: function(attrs, parentViewModel){
+    	  return new can.Map({title: parentViewModel.attr('name')});
     	}
     });
 
-Notice how the attribute's value is looked up in `my-element`'s parent viewModel.
+Notice how the attribute's value is looked up in `my-element`'s parentViewModel.
 
-@param {HTMLElement} element The element the [can.Component] is going to be placed on. If you want
-to add custom attribute handling, you can do that here.  For example:
+@param {HTMLElement} element The element the [can.Component] is going to be placed on. If you want to add custom attribute handling, you can do that here.  For example:
 
     can.Component.extend({
     	tag: "my-element",
-    	viewModel: function(attrs, parentScope, el){
+    	viewModel: function(attrs, parentViewModel, el){
     	  return new can.Map({title: el.getAttribute('title')});
     	}
     });
@@ -124,7 +114,7 @@ component shows the current page number based off a `limit` and `offset` value:
 
 If this component HTML was inserted into the page like:
 
-    var template = can.stache("<my-paginate/>")
+    var template = can.stache("<my-paginate></my-paginate>")
     $("body").append(template())
 
 It would result in:
@@ -167,24 +157,35 @@ Values can be "passed" into the viewModel of a component, similar to passing arg
 
 As mentioned in the deprecation warning above, using [can.stache], values are passed into components like this:
 
+    <my-paginate offset='{index}' limit='{size}'></my-paginate>
+
+But using [can.mustache], values are passed like this:
+
+    <my-paginate offset='index' limit='size'></my-paginate>
+
+The rest of the examples in this section show `can.stache` syntax.
+
+The next example would create an offset and limit property on the component that are one-way bound (from parent to child) to the values of index and size.
+
     <my-paginate {offset}='index' {limit}='size'></my-paginate>
 
-The above would create an offset and limit property on the component that are initialized to whatever index and size are, NOT cross-bind 
-the offset and limit properties to the index and size.
+The one-way binding is created when using double brackets.  It would NOT two-way bind the `offset` and `limit` properties to the `index` and `size`. So if the `<my-paginate>` component changed the value of `offset` in its viewModel, the value of `index` would not update.
 
-The following component requires an `offset` and `limit`:
+The following component requires an `offset` and `limit` to be passed in:
 
     can.Component.extend({
       tag: "my-paginate",
       viewModel: {
         page: function(){
           return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
-        }
+        },
+        offset: null,
+        limit: null
       },
       template: can.stache("Page {{page}}.")
     });
 
-If `<my-paginate>`'s source html is rendered like:
+If `<my-paginate>`'s source html is rendered like...
 
     var template = can.stache("<my-paginate {offset}='index' {limit}='size'></my-paginate>");
     
@@ -195,13 +196,11 @@ If `<my-paginate>`'s source html is rendered like:
     
     $("body").append( template( pageInfo ) );
 
-... `pageInfo`'s index and size are set as the component's offset and 
-limit attributes. If we were to change the value of `pageInfo`'s 
-index like:
+... the `index` and `size` properties are set as the component's `offset` and `limit` attributes. If change the value of `index` like...
 
-    pageInfo.attr("index",20)
+    pageInfo.attr("index", 20);
 
-... the component's offset value will change and its template will update to:
+... the component's `offset` value will change and its template will update to:
 
     <my-paginate>Page 1</my-paginate>
 
@@ -230,9 +229,7 @@ Clicking the __Change title__ button sets a `<panel>` element's `title` attribut
 
 ## Calling methods on viewModel from events within the template
 
-Using html attributes like `can-EVENT-METHOD`, you can directly call a viewModel method
-from a template. For example, we can make `<my-paginate>` elements include a next
-button that calls the viewModel's `next` method like:
+Using HTML attributes like `can-EVENT`, you can directly call a viewModel method from a template. In this example we make `<my-paginate>` elements include a next button that calls the viewModel's `next` method:
 
     can.Component.extend({
       tag: "my-paginate",
@@ -250,7 +247,6 @@ button that calls the viewModel's `next` method like:
     })
 
 viewModel methods get called back with the current context, the element that you are listening to
-and the event that triggered the callback.
 
 @demo can/component/examples/paginate_next.html
 
