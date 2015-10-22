@@ -89,9 +89,9 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/list', function (can,
 		 * functionality for attributes.
 		 *
 		 */
-		clss.setup = function (superClass, stat, proto) {
+		clss.setup = function (superClass, fullName, stat, proto) {
 			var self = this;
-			oldSetup.call(self, superClass, stat, proto);
+			oldSetup.call(self, superClass, fullName, stat, proto);
 			can.each(['attributes'], function (name) {
 				if (!self[name] || superClass[name] === self[name]) {
 					self[name] = {};

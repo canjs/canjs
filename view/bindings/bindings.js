@@ -209,19 +209,20 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				// We break out early if the first argument isn't available
 				// anywhere.
 
-				//!steal-remove-start
 				if (!scopeData.value) {
 					scopeData = data.scope.read(expr.methodExpr.key, {
 						isArgument: true
 					});
-					
+
+					//!steal-remove-start
 					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
 						element: el,
 						scope: data.scope
 					});
+					//!steal-remove-end
+
 					return null;
 				}
-				//!steal-remove-end
 
 				
 				
