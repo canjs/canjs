@@ -3,8 +3,9 @@
 		"docs": {
 			"glob": {
 				"ignore": [
-					"guides/*.md", 
-					"{node_modules,bower_components}/**/*", 
+					"guides/*.md",
+				  	"guides/**/*.md",
+					"{node_modules,bower_components,dist}/**/*", 
 					"lib/**/*",
 					"test/**/*",
 					"util/dojo/dojo.js",
@@ -16,7 +17,7 @@
 		},
 		"guides": {
 			"glob": {
-				"pattern": "{guides/*.md,*.md}"
+				"pattern": "{guides/*.md,guides/**/*.md,*.md}"
 			},
 			"ignoreTemplateRender": true,
 			"parent": "guides"

@@ -1,5 +1,5 @@
-steal('can/util', 'can/map', 'can/list', function (can, Map) {
-	
+steal('can/util','can/map/map_helpers.js', 'can/map', 'can/list', function (can, mapHelpers, Map) {
+
 	//!steal-remove-start
 	can.dev.warn("can/map/attributes is a deprecated plugin and will be removed in a future release. "+
 		"can/map/define provides the same functionality in a more complete API.");
@@ -89,9 +89,9 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 		 * functionality for attributes.
 		 *
 		 */
-		clss.setup = function (superClass, stat, proto) {
+		clss.setup = function (superClass, fullName, stat, proto) {
 			var self = this;
-			oldSetup.call(self, superClass, stat, proto);
+			oldSetup.call(self, superClass, fullName, stat, proto);
 			can.each(['attributes'], function (name) {
 				if (!self[name] || superClass[name] === self[name]) {
 					self[name] = {};
@@ -125,16 +125,16 @@ steal('can/util', 'can/map', 'can/list', function (can, Map) {
 		return value === null || !type ? value : converter.call(Class, value, oldVal, function () {}, type);
 	};
 	
-	var oldSerialize = can.Map.helpers._serialize;
-	can.Map.helpers._serialize = function(map, name, val){
+	var oldSerialize = can.Map.prototype.___serialize;
+	can.Map.prototype.___serialize = function(name, val){
 		
-		var constructor = map.constructor,
+		var constructor = this.constructor,
 			type = constructor.attributes ? constructor.attributes[name] : 0,
 			converter = constructor.serialize ? constructor.serialize[type] : 0;
 		
 		return val && typeof val.serialize === 'function' ?
 			// call attrs or serialize to get the original data back
-			oldSerialize.apply(this, arguments) :
+			oldSerialize.call(this, name, val) :
 			// otherwise if we have  a converter
 			converter ?
 			// use the converter

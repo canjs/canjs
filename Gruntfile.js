@@ -114,6 +114,7 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					port: 8000,
+					keepalive: true,
 					base: '.'
 				}
 			}
@@ -173,7 +174,7 @@ module.exports = function (grunt) {
 			options: {
 				dst: 'docco/',
 				layout : 'parallel',
-				css : 'resources/docco.css'
+				css : 'build/docco.css'
 			},
 			docs: {
 				files : [
@@ -214,6 +215,9 @@ module.exports = function (grunt) {
 		simplemocha: {
 			builders: {
 				src: ["test/builders/steal-tools/test.js","test/builders/browserify/test.js"]
+			},
+			server: {
+				src: ["test/server/test.js"]
 			}
 		},
 		"steal-export": require("./build/config_stealPluginify")(),

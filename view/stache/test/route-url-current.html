@@ -1,0 +1,61 @@
+<script>
+
+	window.hasError = window.parent.hasError || function(error) {
+		console.log("error in autoload", error)
+	};
+	window.removeMyself = window.parent.removeMyself || function(){};
+
+	window.QU = window.parent.QUnit || {equal: console.log.bind(console), ok: console.log.bind(console)};
+</script>
+<script type="text/stache" id="basics">
+	<a can-href="{page='recipe' id=recipe.id}">{{recipe.name}}</a>
+</script>
+<script src='../../../node_modules/steal/steal.js' main='@empty'></script>
+
+
+<script>
+steal('can', 'can/view/stache','can/route',function(can){
+	can.route.ready();
+	var template = can.stache("<a href=\"{{routeUrl page='recipe' id=recipe.id}}\">{{recipe.name}}</a>");
+
+	var frag = template({
+		recipe: new can.Map({id: 5, name: 'Cool recipe'})
+	});
+	
+	QU.equal( frag.firstChild.getAttribute("href"), "#!&page=recipe&id=5", "href set");
+
+	template = can.stache("<a href=\"{{routeUrl(page='recipe' id=recipe.id}}\">{{recipe.name}}</a>");
+
+	frag = template({
+		recipe: new can.Map({id: 5, name: 'Cool recipe'})
+	});
+
+	QU.equal( frag.firstChild.getAttribute("href"), "#!&page=recipe&id=5", "href set");
+
+	template = can.stache("{{#routeCurrent(undefined)}}yes{{else}}no{{/routeCurrent}}");
+
+	frag = template({});
+	QU.equal(frag.firstChild.nodeValue, "yes", "route is current");
+
+	template = can.stache("{{#routeCurrent()}}yes{{else}}no{{/routeCurrent}}");
+
+	frag = template({});
+	QU.equal(frag.firstChild.nodeValue, "yes", "route is current");
+
+	can.route.attr({"foo":"bar"});
+
+	setTimeout(function(){
+
+		template = can.stache("{{#routeCurrent()}}yes{{else}}no{{/routeCurrent}}");
+
+		frag = template({});
+		QU.equal(frag.firstChild.nodeValue, "no", "route is not current");
+
+		removeMyself();
+		
+	},100);
+	
+	
+	
+});
+</script>

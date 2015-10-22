@@ -1,5 +1,5 @@
 "format steal";
-steal("can/util",function(can){
+steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 	
 	var deferred = new can.Deferred(),
 		ignoreAttributesRegExp = /^(dataViewId|class|id|type|src)$/i;
@@ -39,8 +39,11 @@ steal("can/util",function(can){
 		}
 	}
 	function setupScope(el) {
-		var scope = can.viewModel(el);
-		
+		el = can.$(el);
+
+		var scope = (can.data(el, "scope") || can.data(el, "viewModel")) ?
+			can.viewModel(el) : new AppState();
+
 		can.each(el.attributes||[], function(attr) {
 			setAttr(el, attr.name, scope);
 		});

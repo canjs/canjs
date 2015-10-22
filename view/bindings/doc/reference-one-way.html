@@ -1,0 +1,30 @@
+<script type="text/stache" id="demo-html">
+<year-selector *year-selector />
+Celebrate like it's {{*yearSelector.selectedYear}}!
+</script>
+<script src="../../../node_modules/steal/steal.js" id='demo-source'>
+import can from "can";
+import stache from "can/view/stache/";
+import 'can/map/define/';
+
+can.Component.extend({
+	tag: "year-selector",
+	template: stache("<select {($value)}='selectedYear'>"+
+			"<option value='1999'>1999</option>"+
+			"<option value='2014'>2014</option>"+
+		"</select>"),
+	viewModel: {
+		define: {
+			selectedYear: {
+				value: 1999,
+				type: 'number'
+			}
+		}
+	}
+});
+
+$("body").append(can.view("demo-html",{}));
+	
+</script>
+
+

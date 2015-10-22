@@ -36,11 +36,6 @@
 			"jquery": "../../../node_modules/jquery/dist/jquery.js",
 			"can/*": "../../../*.js"
 		},
-		meta: {
-			jquery: {
-				exports: "jQuery"
-			}
-		},
 		ext: {
 			ejs: "view/ejs/ejs.js",
 			mustache: "view/mustache/mustache.js",

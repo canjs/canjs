@@ -110,6 +110,7 @@
 		$("#start").click(function(){
 			 loopCount = 0;
    			 totalTime = 0;
+   			 //console.profile("loops");
    			 benchmarkLoop(run);
 		});
 		
@@ -124,13 +125,15 @@
 		    var endDate = new Date();
 		    totalTime += endDate - startDate;
 		    loopCount++;
-		    if (loopCount % 20 === 0) {
+		    if (loopCount % 100 === 0) {
 		        $('#timing').text('Performed ' + loopCount + ' iterations in ' + totalTime + ' ms (average ' + (totalTime / loopCount).toFixed(2) + ' ms per loop).');
 		    }
 		    if(loopCount < 1000) {
 		    	timeout = setTimeout(function(){
 			    	benchmarkLoop(fn);
 			    },1);
+		    } else {
+		    	//console.profileEnd("loops");
 		    }
 		   
 		};

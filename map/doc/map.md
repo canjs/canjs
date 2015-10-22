@@ -21,7 +21,7 @@ Creates a new instance of can.Map.
 
 @signature `can.Map.extend([name,] [staticProperties,] instanceProperties)`
 
-Creates a new extended constructor function. 
+Creates a new extended constructor function.
 
 
 @body
@@ -133,3 +133,8 @@ that makes binding to specific types of events easier:
     o.removeAttr('a'); // 'a was removed.'
                        // 'a was changed.'
 
+## Object.prototype.watch
+
+Due to a method available on the base Object prototype called "watch", refrain from
+using properties with the same name on Gecko based browsers as there will be a
+collision. [Source](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/watch)

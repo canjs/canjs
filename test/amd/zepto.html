@@ -6,7 +6,7 @@
     <title>Zepto Test Suite</title>
     <link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"
     />
-    <script type="text/javascript" src="../../bower_components/html5shiv/dist/html5shiv.js"></script>
+    <script type="text/javascript" src="../../bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -29,6 +29,8 @@
             "paths": {
                 "can": "dist/amd/can",
                 "dojo": "bower_components/dojo",
+                "simple-dom": "node_modules/can-simple-dom/dist/amd/simple-dom",
+                "micro-location": "node_modules/can-simple-dom/node_modules/micro-location/lib/micro-location",
                 "zepto": "bower_components/zepto/zepto"
             },
             "map": {
@@ -43,7 +45,7 @@
             "can/list/promise", "can/observe",
             "can/compute", "can/model", "can/view",
             "can/view/ejs", "can/view/stache",
-            "can/control", "can/route",
+            "can/view/href", "can/control", "can/route",
             "can/control/route", "can/view/mustache",
             "can/route/pushstate", "can/model/queue",
             "can/construct/super", "can/construct/proxy",
@@ -54,7 +56,9 @@
             "can/util/fixture", "can/view/bindings",
             "can/view/live", "can/view/scope",
             "can/util/tests", "can/util/object",
-            "can/util/function", "can/view/autorender"
+            "can/util/function", "can/view/autorender",
+            "can/util/vdom/build_fragment",
+            "can/view/import"
         ]), function() {
             require(["test/pluginified/latest"], function() {
                 QUnit.start();

@@ -1,6 +1,11 @@
 @property {can.compute} can.Map.prototype.COMPUTE-ATTR
 @parent can.Map.prototype 0
 
+@deprecated {2.3} Using attributes as a compute directly have been deprecated in favor of the [can.Map.prototype.define define] plugin, which provides the same
+functionality. It will still be maintained up to 3.0 and potentially after.
+Projects using computes as a direct attribute should consider switching the
+[can.Map.prototype.define define] plugin.
+
 @description Specify an attribute that is computed from other attributes.
 
 @option {can.compute} A compute that reads values on instances of the

@@ -3,14 +3,14 @@
 
 @body
 
-Now that 2.0 is out, we're setting our sights on the 
+Now that 2.0 is out, we’re setting our sights on the
 future.  Help us get there by ranking issues and features
 on bithub and fixing them!
 
 ## Community
 
-There's more than code that goes into a library.  Checkout
-how we're working to improve CanJS's community:
+There’s more than code that goes into a library.  Checkout
+how we’re working to improve CanJS's community:
 
 ### Bithub.com
 
@@ -22,7 +22,7 @@ rest of the community know where to focus.__
 
 ### Meetups
 
-We've started meetups across the US.  Bitovi provides 
+We’ve started meetups across the US.  Bitovi provides
 monthly training and workshop material.  Checkout
 meetup for meetups and [bithub.com](http://bithub.com/canjs/events)
 for other events.
@@ -37,11 +37,11 @@ that feel completely native.
 ## LazyMap and LazyList
 
 We want our observable layer to handle anything you throw at 
-it.  We've started work on a LazyMap and LazyList that 
+it.  We’ve started work on a LazyMap and LazyList that
 experiences almost no initialization penalty.  As you
 read nested objects, it converts them into LazyMaps and LazyLists.
 
-Furthermore, we want to setup bubbling only when it's necessary and not 
+Furthermore, we want to setup bubbling only when it’s necessary and not
 by default. This will reduce the number of events, improving performance.
 
 ## Component improvements
@@ -62,7 +62,7 @@ decreases page load times.
 
 ## Dirty checking computes
 
-Want to use plain old objects in can.Component?  We're looking to
+Want to use plain old objects in can.Component?  We’re looking to
 create a compute that checks its value periodically.  Hopefully
 this becomes unnecessary as object mutation observers and 
 proxies arrive in more browsers.

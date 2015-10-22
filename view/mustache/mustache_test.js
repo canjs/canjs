@@ -26,7 +26,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				"{{/animals}}</ul>";
 
 		}
-	})
+	});
 
 	// Override expected spec result for whitespace only issues
 	var override = {
@@ -285,6 +285,10 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		can.Mustache.registerHelper('there', function (options) {
 			return 'there';
 		});
+		// Test for #1109
+		can.Mustache.registerHelper('zero', function (options) {
+			return 0;
+		});
 		can.Mustache.registerHelper('bark', function (obj, str, number, options) {
 			var hash = options.hash || {};
 			return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
@@ -292,8 +296,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 				hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 		});
 		var t = {
-			template: "{{hello}} {{there}}!\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
-			expected: "Hello there!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
+			template: "{{hello}} {{there}}!\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}} Then there were {{zero}} barks :(",
+			expected: "Hello there!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly. Then there were 0 barks :(",
 			data: {
 				name: 'dog',
 				hello: 'Hello'
@@ -302,10 +306,8 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		var expected = t.expected.replace(/&quot;/g, '&#34;')
 			.replace(/\r\n/g, '\n');
-		deepEqual(new can.Mustache({
-				text: t.template
-			})
-			.render(t.data), expected);
+
+		deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 	});
 
 	test("Handlebars advanced helpers (from docs)", function () {
@@ -3981,6 +3983,21 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		});
 	}
 
+	test('registerSimpleHelper', 3, function() {
+		can.Mustache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+
+		var template = can.view.mustache('<div>Result: {{simple first second}}</div>');
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+	
 	test('Helper handles list replacement (#1652)', 3, function () {
 
 		var state = new can.Map({
@@ -4039,5 +4056,35 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 		// Helpers evaluated 3rd time...
 		state.attr('parent.child', 'bar');
+	});
+
+	test('registerSimpleHelper', 3, function() {
+		can.Mustache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+
+		var template = can.view.mustache('<div>Result: {{simple first second}}</div>');
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
+	});
+
+	test('registerSimpleHelper', 3, function() {
+		can.Mustache.registerSimpleHelper('simple', function(first, second) {
+			equal(first, 2);
+			equal(second, 4);
+			return first + second;
+		});
+
+		var template = can.view.mustache('<div>Result: {{simple first second}}</div>');
+		var frag = template(new can.Map({
+			first: 2,
+			second: 4
+		}));
+		equal(frag.childNodes[0].innerHTML, 'Result: 6');
 	});
 });

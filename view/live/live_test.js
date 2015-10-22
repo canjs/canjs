@@ -133,10 +133,13 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		equal(div.getElementsByTagName('label')
 			.length, 2, 'There are 2 labels');
 		div.getElementsByTagName('label')[0].myexpando = 'EXPANDO-ED';
+
 		map.attr('animals')
 			.push('turtle');
+
 		equal(div.getElementsByTagName('label')[0].myexpando, 'EXPANDO-ED', 'same expando');
 		equal(div.getElementsByTagName('span')[2].innerHTML, 'turtle', 'turtle added');
+
 		map.attr('animals', new can.List([
 			'sloth',
 			'bear',
@@ -189,17 +192,17 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 			start();
 		}, 100);
 	});
-	
+
 	test('html live binding handles getting a function from a compute',5, function(){
 		var handler = function(el){
 			ok(true, "called handler");
 			equal(el.nodeType, 3, "got a placeholder");
 		};
-		
+
 		var div = document.createElement('div'),
 			placeholder = document.createTextNode('');
 		div.appendChild(placeholder);
-		
+
 		var count = can.compute(0);
 		var html = can.compute(function(){
 			if(count() === 0) {
@@ -208,17 +211,43 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 				return handler;
 			}
 		});
-		
-		
+
+
 		can.view.live.html(placeholder, html, div);
-		
+
 		equal(div.getElementsByTagName("h1").length, 1, "got h1");
 		count(1);
 		equal(div.getElementsByTagName("h1").length, 0, "got h1");
 		count(0);
 		equal(div.getElementsByTagName("h1").length, 1, "got h1");
-		
-		
+
+
+	});
+
+	test("can.view.live.list does not unbind on a list unnecessarily (#1835)", function(){
+		expect(0);
+		var div = document.createElement('div'),
+			list = new can.List([
+				'sloth',
+				'bear'
+			]),
+			template = function (animal) {
+				return '<label>Animal=</label> <span>' + animal + '</span>';
+			},
+			unbind = list.unbind;
+
+		list.unbind = function(){
+			ok(false, "unbind called");
+			return unbind.apply(this, arguments);
+		};
+
+		div.innerHTML = 'my <b>fav</b> animals: <span></span> !';
+		var el = div.getElementsByTagName('span')[0];
+
+		can.view.live.list(el, list, template, {});
+
+
+
 	});
 
 	test("can.live.attribute works with non-string attributes (#1790)", function() {
@@ -231,4 +260,76 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		can.view.live.attribute(el, 'value', compute);
 		ok(true, 'No exception thrown.');
 	});
+	
+	test('list and an falsey section (#1979)', function () {
+		var div = document.createElement('div'),
+			template = function (num) {
+				return '<label>num=</label> <span>' + num + '</span>';
+			},
+			falseyTemplate = function (num) {
+				return '<p>NOTHING</p>';
+			};
+			
+		var compute = can.compute([
+			0,
+			1
+		]);
+		div.innerHTML = 'my <b>fav</b> nums: <span></span> !';
+		var el = div.getElementsByTagName('span')[0];
+		can.view.live.list(el, compute, template, {}, undefined, undefined, falseyTemplate );
+		
+		equal(div.getElementsByTagName('label')
+			.length, 2, 'There are 2 labels');
+			
+		compute([]);
+		
+		var spans = div.getElementsByTagName('span');
+		equal(spans.length, 0, 'there are 0 spans');
+		
+		var ps = div.getElementsByTagName('p');
+		equal(ps.length, 1, 'there is 1 p');
+		
+		compute([2]);
+		
+		spans = div.getElementsByTagName('span');
+		equal(spans.length, 1, 'there is 1 spans');
+		
+		ps = div.getElementsByTagName('p');
+		equal(ps.length, 0, 'there is 1 p');
+		
+	});
+	
+	test('list and an initial falsey section (#1979)', function(){
+	
+		var div = document.createElement('div'),
+			template = function (num) {
+				return '<label>num=</label> <span>' + num + '</span>';
+			},
+			falseyTemplate = function (num) {
+				return '<p>NOTHING</p>';
+			};
+			
+		var compute = can.compute([]);
+		
+		div.innerHTML = 'my <b>fav</b> nums: <span></span> !';
+		var el = div.getElementsByTagName('span')[0];
+		can.view.live.list(el, compute, template, {}, undefined, undefined, falseyTemplate );
+		
+		var spans = div.getElementsByTagName('span');
+		equal(spans.length, 0, 'there are 0 spans');
+		
+		var ps = div.getElementsByTagName('p');
+		equal(ps.length, 1, 'there is 1 p');
+		
+		compute([2]);
+		
+		spans = div.getElementsByTagName('span');
+		equal(spans.length, 1, 'there is 1 spans');
+		
+		ps = div.getElementsByTagName('p');
+		equal(ps.length, 0, 'there is 1 p');
+	
+	});
+	
+	
 });

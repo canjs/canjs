@@ -1,5 +1,5 @@
 /* jshint indent:false */
-steal("can/view/target", "steal-qunit", function(target){
+steal("can/view/target","can-simple-dom", "steal-qunit", function(target, simpleDom){
 	
 	
 	module("can/view/target");
@@ -117,5 +117,41 @@ steal("can/view/target", "steal-qunit", function(target){
 		}]);
 		data.hydrate();
 	});
+	
+	test("renderToVirtualDOM", function(){
+
+		var simpleDocument = new simpleDom.Document();
+		
+		// <h1>{{#if foo}}<span></span>{{/if}}foo</h1>
+		var innerData = target([
+			{
+				tag: "span"
+			}
+		], simpleDocument);
+		
+		
+		var outerData = target([
+			{
+				tag: "h1",
+				children: [
+					function(data){
+						this.parentNode.insertBefore(innerData.hydrate(data), this);
+						this.parentNode.removeChild(this);
+					},
+					"foo"
+				]
+			}
+		], simpleDocument);
+		
+		var out = outerData.hydrate({foo: true});
+		
+		equal(out.firstChild.nodeName, "H1");
+		
+		equal(out.firstChild.firstChild.nodeName, "SPAN");
+		equal(out.firstChild.lastChild.nodeValue, "foo");
+
+	});
+	
+	
 	
 });

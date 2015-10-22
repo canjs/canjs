@@ -1,11 +1,11 @@
 <body>
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script type='text/javascript' id="data-source"> 
-steal("can/component", function() {
-
+<script src="../../node_modules/steal/steal.js" main="@empty" id="data-source">
+  import Component from "can/component/";
+  import stache from "can/view/stache/";
+	
   can.Component.extend({
     tag: "hello-world",
-    template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
+    template: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
     viewModel: {
       visible: false,
       message: "Hello There!"
@@ -17,7 +17,6 @@ steal("can/component", function() {
     }
   });
 
-  $("body").append(can.view.mustache("<hello-world/>")({}))
-})
+  $("body").append(stache("<hello-world/>")({}));
 </script>
 </body>

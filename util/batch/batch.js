@@ -8,7 +8,8 @@ steal('can/util/can.js', function (can) {
 		batchEvents = [],
 		stopCallbacks = [],
 		// an array of the currently dispatching batch events ... here so we can add things to the end of it (1519).
-		currentBatchEvents = null;
+		currentBatchEvents = null,
+		currentBatchCallbacks = null;
 		
 	can.batch = {
 		/**
@@ -175,10 +176,9 @@ steal('can/util/can.js', function (can) {
 					return;
 				}
 
-				currentBatchEvents = batchEvents.slice(0);
-
-				var	callbacks = stopCallbacks.slice(0),
-					i, len;
+				currentBatchEvents = batchEvents;
+				currentBatchCallbacks = stopCallbacks;
+				var i, len;
 				batchEvents = [];
 				stopCallbacks = [];
 				// Capture current batchNum so it can be check in live bindings
@@ -192,9 +192,10 @@ steal('can/util/can.js', function (can) {
 				}
 				currentBatchEvents = null;
 
-				for(i = 0, len = callbacks.length; i < callbacks.length; i++) {
-					callbacks[i]();
+				for(i = 0, len = currentBatchCallbacks.length; i < currentBatchCallbacks.length; i++) {
+					currentBatchCallbacks[i]();
 				}
+				currentBatchCallbacks = null;
 				can.batch.batchNum = undefined;
 			}
 		},
@@ -214,7 +215,7 @@ steal('can/util/can.js', function (can) {
 		 */
 		trigger: function (item, event, args) {
 			// Don't send events if initalizing.
-			if (!item._init) {
+			if (!item.__inSetup) {
 				event = typeof event === 'string' ? {
 					type: event,
 					batchNum: can.batch.batchNum
@@ -240,14 +241,21 @@ steal('can/util/can.js', function (can) {
 		},
 		afterPreviousEvents: function(handler){
 			if(currentBatchEvents) {
-				var obj = {};
-				can.bind.call(obj,"ready", handler);
+				// This basically creates an object with an event handler that
+				// will be dispatched.
+				var obj = {__bindEvents: {ready: [{handler: handler}]}};
 				currentBatchEvents.push([
-					obj,
-					[{type: "ready"}, []]
+					obj, [{type: "ready"}, []]
 				]);
 			} else {
-				handler();
+				handler({});
+			}
+		},
+		after: function(handler){
+			if(currentBatchEvents) {
+				currentBatchCallbacks.push(handler);
+			} else {
+				handler({});
 			}
 		}
 	};

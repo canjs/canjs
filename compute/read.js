@@ -1,13 +1,21 @@
 steal("can/util", function(can){
 	
 	
-	
-	
 	// there are things that you need to evaluate when you get them back as a property read
 	// for example a compute or a function you might need to call to get the next value to 
 	// actually check
-	// - isArgument - should be renamed to something like "dontReadLastPropertyValue"
+	// - isArgument - should be renamed to something like "onLastPropertyReadReturnFunctionInsteadOfCallingIt".
+	//   This is used to make a compute out of that function if necessary.
+	// - callMethodsOnObservables - this is an overwrite ... so normal methods won't be called, but observable ones will.
+	// - executeAnonymousFunctions - call a function if it's found, defaults to true
+	// - proxyMethods - if the last read is a method, return a function so `this` will be correct.
+	// - args - arguments to call functions with.
+	//
+	// Callbacks
+	// - earlyExit - called if a value could not be found
+	// - foundObservable - called when an observable value is found
 	var read = function (parent, reads, options) {
+		
 		options = options || {};
 		var state = {
 			foundObservable: false
@@ -63,7 +71,13 @@ steal("can/util", function(can){
 	};
 
 
+	var isAt = function(index, reads) {
+		var prevRead = reads[index-1];
+		return prevRead && prevRead.at;
+	};
+
 	var readValue = function(value, index, reads, options, state, prev){
+		// if the previous read is AT false ... we shouldn't be doing this;
 		var usedValueReader;
 		do {
 			
@@ -86,7 +100,8 @@ steal("can/util", function(can){
 		name: "compute",
 		// compute value reader
 		test: function(value, i, reads, options){
-			return value && value.isComputed;
+			
+			return value && value.isComputed && !isAt(i, reads);
 		},
 		read: function(value, i, reads, options, state){
 			if(options.isArgument && i === reads.length ) {
@@ -106,15 +121,20 @@ steal("can/util", function(can){
 			var type = typeof value;
 			// i = reads.length if this is the last iteration of the read for-loop.
 			return type === 'function' && !value.isComputed &&
-				(options.executeAnonymousFunctions !== false || (options.isArgument && i === reads.length) ) &&
 				!(can.Construct && value.prototype instanceof can.Construct) &&
 				!(can.route && value === can.route);
 		},
 		read: function(value, i, reads, options, state, prev){
-			if (options.isArgument && i === reads.length) {
+			if( isAt(i, reads) ) {
+				return i === reads.length ? can.proxy(value, prev) : value;
+			}
+			else if(options.callMethodsOnObservables && can.isMapLike(prev)) {
+				return value.apply(prev, options.args || []);
+			}
+			else if ( options.isArgument && i === reads.length ) {
 				return options.proxyMethods !== false ? can.proxy(value, prev) : value;
 			}
-			return value.call(prev);
+			return value.apply(prev, options.args || []);
 		}
 	}];
 	
@@ -129,20 +149,12 @@ steal("can/util", function(can){
 					options.foundObservable(value, index);
 					state.foundObservable = true;
 				}
-				if (typeof value[prop] === 'function' && value.constructor.prototype[prop] === value[prop]) {
+				if (typeof value[prop.key] === 'function' && value.constructor.prototype[prop.key] === value[prop.key]) {
 					// call that method
-					if (options.returnObserveMethods) {
-						return value[prop];
-					// if the property value is a can.Construct
-					} else if ( (prop === 'constructor' && value instanceof can.Construct) ||
-						(value[prop].prototype instanceof can.Construct)) {
-						return value[prop];
-					} else {
-						return value[prop].apply(value, options.args || []);
-					}
+					return value[prop.key];
 				} else {
 					// use attr to get that value
-					return value.attr(prop);
+					return value.attr(prop.key);
 				}
 			}
 		},
@@ -185,7 +197,7 @@ steal("can/util", function(can){
 					});
 				}
 				can.__observe(observeData,"state");
-				return prop in observeData ? observeData[prop] : value[prop];
+				return prop.key in observeData ? observeData[prop.key] : value[prop.key];
 			}
 		},
 		
@@ -198,11 +210,24 @@ steal("can/util", function(can){
 				if(value == null) {
 					return undefined;
 				} else {
-					return value[prop];
+					if(prop.key in value) {
+						return value[prop.key];
+					}
+					// TODO: remove in 3.0.  This is for backwards compat with @key and @index.
+					else if( prop.at && specialRead[prop.key] && ( ("@"+prop.key) in value)) {
+						//!steal-remove-start
+						can.dev.warn("Use %"+prop.key+" in place of @"+prop.key+".");
+						
+						//!steal-remove-end
+						return value["@"+prop.key];
+					}
+					
 				}
 			}
 		}
 	];
+	
+	var specialRead = {index: true, key: true, event: true, element: true, viewModel: true};
 	
 	// This should be able to set a property similar to how read works.
 	read.write = function(parent, key, value, options) {
@@ -225,6 +250,40 @@ steal("can/util", function(can){
 		}
 	};
 	
+
+	read.reads = function(key) {
+		var keys = [];
+		var last = 0;
+		var at = false;
+		if( key.charAt(0) === "@" ) {
+			last = 1;
+			at = true;
+		}
+		var keyToAdd = "";
+		for(var i = last; i < key.length; i++) {
+			var character = key.charAt(i);
+			if(character === "." || character === "@") {
+				if( key.charAt(i -1) !== "\\" ) {
+					keys.push({
+						key: keyToAdd,
+						at: at
+					});
+					at = character === "@";
+					keyToAdd = "";
+				} else {
+					keyToAdd = keyToAdd.substr(0,keyToAdd.length - 1) + ".";
+				}
+			} else {
+				keyToAdd += character;
+			}
+		}
+		keys.push({
+			key: keyToAdd,
+			at: at
+		});
+		
+		return keys;
+	};
 	
 	return read;
 });

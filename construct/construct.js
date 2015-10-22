@@ -193,9 +193,11 @@ steal('can/util/string', function (can) {
 				args;
 			// Call `setup` if there is a `setup`
 			if (inst.setup) {
+				inst.__inSetup = true;
 				args = inst.setup.apply(inst, arguments);
+				delete inst.__inSetup;
 			}
-			// Call `init` if there is an `init`  
+			// Call `init` if there is an `init`
 			// If `setup` returned `args`, use those as the arguments
 			if (inst.init) {
 				inst.init.apply(inst, args || arguments);
@@ -463,6 +465,10 @@ steal('can/util/string', function (can) {
 			if(fullName) {
 				parts = fullName.split('.');
 				shortName = parts.pop();
+			} else if(klass && klass.shortName) {
+				shortName = klass.shortName;
+			} else if(this.shortName) {
+				shortName = this.shortName;
 			}
 			//!steal-remove-start
 			/* jshint ignore:start */

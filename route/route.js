@@ -414,7 +414,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		ready: function (val) {
 			if (val !== true) {
 				can.route._setup();
-				can.route.setState();
+				if(can.isBrowserWindow || can.isWebWorker) {
+					can.route.setState();
+				}
 			}
 			return can.route;
 		},
@@ -449,6 +451,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		url: function (options, merge) {
 
 			if (merge) {
+				can.__observe(eventsObject,"__url");
 				options = can.extend({}, can.route.deparam(can.route._call("matchingPartOfURL")), options);
 			}
 			return can.route._call("root") + can.route.param(options);
@@ -548,7 +551,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 				// For hashbased routing, it's everything after the #, for
 				// pushState it's configurable
 				matchingPartOfURL: function () {
-					return location.href.split(/#!?/)[1] || "";
+					var loc = can.route.location || location;
+					return loc.href.split(/#!?/)[1] || "";
 				},
 				// gets called with the serialized can.route data after a route has changed
 				// returns what the url has been updated to (for matching purposes)
@@ -606,7 +610,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 	// The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
 	// instead act on the `can.route.data` observe.
-	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '__get','each'], function (name) {
+	each(['bind', 'unbind', 'on', 'off', 'delegate', 'undelegate', 'removeAttr', 'compute', '_get', '___get','each'], function (name) {
 		can.route[name] = function () {
 			// `delegate` and `undelegate` require
 			// the `can/map/delegate` plugin
@@ -643,6 +647,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		return can.route.data.attr.apply(can.route.data, newArguments);
 	};
 
+	//Allow for overriding of route batching by can.transaction
+	can.route.batch = can.batch;
+
 	var // Deparameterizes the portion of the hash of interest and assign the
 	// values to the `can.route.data` removing existing values no longer in the hash.
 	// setState is called typically by hashchange which fires asynchronously
@@ -657,13 +664,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// if the hash data is currently changing, or
 		// the hash is what we set it to anyway, do NOT change the hash
 		if (!changingData || hash !== lastHash) {
-			can.batch.start();
+			can.route.batch.start();
 			recursiveClean(oldParams, curParams, can.route.data);
 
 			can.route.attr(curParams);
 			// trigger a url change so its possible to live-bind on url-based changes
-			can.batch.trigger(eventsObject,"__url",[hash, lastHash]);
-			can.batch.stop();
+			can.route.batch.trigger(eventsObject,"__url",[hash, lastHash]);
+			can.route.batch.stop();
 		}
 	};
 

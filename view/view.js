@@ -20,7 +20,7 @@ steal('can/util', function (can) {
 	 * @hide
 	 * Rendering function factory method
 	 * @param textRenderer
-	 * @returns {renderer}
+	 * @return {renderer}
 	 */
 	var makeRenderer = function(textRenderer) {
 		var renderer = function() {
@@ -54,7 +54,7 @@ steal('can/util', function (can) {
 	 * @function get
 	 * @param {String | Object} obj url string or object with url property
 	 * @param {Boolean} async If the ajax request should be asynchronous.
-	 * @returns {can.Deferred} a `view` renderer deferred.
+	 * @return {can.Deferred} a `view` renderer deferred.
 	 */
 	var	getRenderer = function (obj, async) {
 		// If `obj` already is a renderer function just resolve a Deferred with it
@@ -153,7 +153,7 @@ steal('can/util', function (can) {
 	/**
 	 * @hide
 	 * @param {Object|can.Deferred} data
-	 * @returns {Array} deferred objects
+	 * @return {Array} deferred objects
 	 */
 	var getDeferreds = function (data) {
 		var deferreds = [];
@@ -180,7 +180,7 @@ steal('can/util', function (can) {
 	 * @hide
 	 * @function usefulPart
 	 * @param {Array|*} resolved
-	 * @returns {*}
+	 * @return {*}
 	 */
 	var usefulPart = function (resolved) {
 		return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved;
@@ -254,7 +254,7 @@ steal('can/util', function (can) {
 		 * hook up a fragment to its parent node
 		 * @param fragment
 		 * @param parentNode
-		 * @returns {*}
+		 * @return {*}
 		 */
 		hookup: function (fragment, parentNode) {
 			var hookupEls = [],
@@ -486,7 +486,7 @@ steal('can/util', function (can) {
 		 * into the view cache.
 		 * @param id
 		 * @param stringRenderer
-		 * @returns {*}
+		 * @return {*}
 		 */
 		preloadStringRenderer: function(id, stringRenderer) {
 			return this.preload(id, makeRenderer(stringRenderer) );
@@ -575,7 +575,7 @@ steal('can/util', function (can) {
 		 * @param {Function} renderer
 		 * @param data
 		 * @param {Object} helpers helper methods for this template
-		 * @returns {*}
+		 * @return {*}
 		 */
 		renderTo: function(format, renderer, data, helpers){
 			return (format === "string" && renderer.render ? renderer.render : renderer)(data, helpers);
@@ -589,7 +589,7 @@ steal('can/util', function (can) {
 		 * @param data
 		 * @param helpers
 		 * @param callback
-		 * @returns {*}
+		 * @return {*}
 		 */
 		renderAs: function (format, view, data, helpers, callback) {
 			// If helpers is a `function`, it is actually a callback.
@@ -600,7 +600,7 @@ steal('can/util', function (can) {
 
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
-			var reading, deferred, dataCopy, async, response;
+			var deferred, dataCopy, async, response;
 			if (deferreds.length) {
 				// Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
@@ -648,18 +648,13 @@ steal('can/util', function (can) {
 				// Return the deferred...
 				return deferred;
 			} else {
-				// get is called async but in 
-				// ff will be async so we need to temporarily reset
-				reading = can.__clearReading();
 
 				// If there's a `callback` function
 				async = isFunction(callback);
-				// Get the `view` type
-				deferred = getRenderer(view, async);
-
-				if (reading) {
-					can.__setReading(reading);
-				}
+				
+				// get is called async but in
+				// ff will be async so we need to temporarily reset
+				deferred = can.__notObserve(getRenderer)(view, async);
 
 				// If we are `async`...
 				if (async) {
@@ -694,7 +689,7 @@ steal('can/util', function (can) {
 				return response;
 			}
 		},
-		
+
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
@@ -713,7 +708,7 @@ steal('can/util', function (can) {
 			} else {
 				renderer = makeRenderer( info.renderer(id, text) );
 			}
-			
+
 			def = def || new can.Deferred();
 
 			// Cache if we are caching.
@@ -726,6 +721,22 @@ steal('can/util', function (can) {
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
 			return def.resolve(renderer);
+		},
+
+		// Returns a function that automatically converts all computes passed to it
+		simpleHelper: function(fn) {
+			return function() {
+				var realArgs = [];
+				can.each(arguments, function(val, i) {
+					if (i <= arguments.length) {
+						while (val && val.isComputed) {
+							val = val();
+						}
+						realArgs.push(val);
+					}
+				});
+				return fn.apply(this, realArgs);
+			};
 		}
 	});
 
