@@ -12,7 +12,10 @@ steal('can/util/can.js', 'can/util/attr', 'can/util/array/each.js', 'can/util/ar
 	}
 
 	can.isArray = function(arr){
-		return arr instanceof Array;
+		if (Array.isArray) {
+			return Array.isArray(arr);
+		}
+		return Object.prototype.toString.call(arr) === "[object Array]";
 	};
 
 	can.isFunction = (function () {
