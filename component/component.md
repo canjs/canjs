@@ -360,7 +360,6 @@ The secret to this widget is the viewModel's `breadcrumb` property, which is an 
 of items the user has navigated through, and `selectableItems`, which represents the children of the
 last item in the breadcrumb.  These are defined on the viewModel:
 
-
     breadcrumb: [],
     selectableItems: function(){
       var breadcrumb = this.attr("breadcrumb");
