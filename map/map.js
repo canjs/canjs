@@ -283,7 +283,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					var first = attr.substr(0, dotIndex),
 						second = attr.substr(dotIndex+1);
 
-					current =  this._initializing ? undefined : this.___get( first );
+					current =  this.__inSetup ? undefined : this.___get( first );
 
 					if( can.isMapLike(current) ) {
 						current._set(second, value);
@@ -292,7 +292,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 
 				} else {
-					current = this._initializing ? undefined : this.___get( attr );
+					current = this.__inSetup ? undefined : this.___get( attr );
 
 					// //Convert if there is a converter.  Remove in 3.0.
 					if (this.__convert) {

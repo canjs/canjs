@@ -28,7 +28,7 @@ steal('can/util', function(can){
 			// should setup bubbling if this is the first time 
 			// an event that bubbles is bound.
 			bind: function(parent, eventName) {
-				if (!parent._initializing ) {
+				if (!parent.__inSetup ) {
 					
 					var bubbleEvents = bubble.events(parent, eventName),
 						len = bubbleEvents.length,

@@ -628,11 +628,32 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			expected.push(value);
 			expected.sort(can.List.prototype._comparator);
 			sorted.push(value);
-			
+
 			can.each(expected, function (value, index) {
 				equal(value, sorted.attr(index),
 					'Sort plugin output matches native output');
 			});
 		});
+	});
+
+	test('set comparator on init', function() {
+		var Item = can.Map.extend();
+		Item.List = Item.List.extend({
+			init: function() {
+				this.attr('comparator', 'isPrimary');
+			}
+		});
+
+		var items = [
+			{ isPrimary: false },
+			{ isPrimary: true },
+			{ isPrimary: false }
+		];
+
+		deepEqual(new Item.List(items).serialize(), [
+			{ isPrimary: false },
+			{ isPrimary: false },
+			{ isPrimary: true }
+		]);
 	});
 });
