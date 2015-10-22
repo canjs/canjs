@@ -1423,7 +1423,8 @@ steal('can/util',
 				args.push(helperOptions);
 				// Call the helper.
 				return function () {
-					return helper.fn.apply(context, args) || '';
+					var result = helper.fn.apply(context, args);
+					return result == null ? '' : result;
 				};
 
 			}
