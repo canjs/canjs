@@ -1,4 +1,4 @@
-steal("can/list", function (can) {
+steal("can/util/can.js", "can/list", function (can) {
 
 	var oldReplace = can.List.prototype.replace;
 
