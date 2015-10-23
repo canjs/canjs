@@ -1,4 +1,4 @@
-steal('can/util/can.js', function () {
+steal('can/util/can.js', function (can) {
 	var core_hasOwn = Object.prototype.hasOwnProperty,
 		isWindow = function (obj) {
 			// In IE8 window.window !== window.window, so we allow == here.
