@@ -29,7 +29,7 @@ Every CanJS application contains:
 
 <a name="observables"></a>
 ### Observables
-Observable objects provide a way for you make changes to data and listen to
+Observable objects provide a way for you to make changes to data and listen to
 those changes. Observables such as `can.List` and `can.Map` provide the
 foundation for updating model objects, views, and even routes in your app.
 
@@ -84,7 +84,7 @@ about the application itself.
 <a name="routing"></a>
 ### Routing
 For many JavaScript MV* frameworks, routing divides an application into
-logical views and binds those view to Controllers. *This is not how things work in
+logical views and binds those views to Controllers. *This is not how things work in
 CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
 Rather, it has to do with AppState. In brief,
 CanJS maintains a reciprocal relationship between an application’s route

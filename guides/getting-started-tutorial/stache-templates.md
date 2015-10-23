@@ -205,7 +205,7 @@ You might also notice the use of the `^` character, which will render the
 section if the result of the helper is false. In other words, you can write
 `{{^if action}}content{{/if}}` instead of `{{#if action}}{{else}}content{{/if}}`
 
-In general, it’s best to keep complex logic out of your templates. Their main funciton
+In general, it’s best to keep complex logic out of your templates. Their main function
 should be to display data from the view model. If you need to use more complex logic 
 to display data in your templates, you can use a helper. Helpers are not covered in detail 
 in this guide; but you can get more information on them in the API: [Helpers](../docs/can.Component.prototype.helpers.html)
