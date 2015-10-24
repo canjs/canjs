@@ -36,6 +36,16 @@ var State = can.Model.extend({
 });
 ```
 
+Then add the following to `models/city.js`:
+
+```
+var City = can.Model.extend({
+  findAll: 'GET /api/cities'
+}, {
+  // Include second, empty parameter object to set instanceProperties
+});
+```
+
 Because it is a [can.Construct](../docs/can.Construct.html), `can.Model.extend`
 can take up to three parameters:
 
