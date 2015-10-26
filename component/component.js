@@ -265,10 +265,19 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				// Create a real Scope object out of the viewModel property
 				// The scope used to render the component's template.
 				// However, if there is no template, the "light" dom is rendered with this anyway.
-				var shadowScope = (lexicalContent ?
-						can.view.Scope.refsScope() :
-						componentTagData.scope.add( new can.view.Scope.Refs() )   ).add(this.scope,{viewModel: true}),
-					options = {
+				var shadowScope;
+				if(lexicalContent) {
+					shadowScope = can.view.Scope.refsScope().add(this.scope,{viewModel: true});
+				} else {
+					// if this component has a template,
+					// render the template with it's own Refs scope
+					// otherwise, just add this component's viewModel.
+					shadowScope = ( this.constructor.renderer ?
+						componentTagData.scope.add( new can.view.Scope.Refs() ) :
+						componentTagData.scope  )
+							.add(this.scope,{viewModel: true});
+				}
+				var options = {
 						helpers: {}
 					},
 					addHelper = function(name, fn) {
