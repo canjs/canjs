@@ -1507,6 +1507,43 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			equal(removeCount, 2, 'internal removed twice');
 
 		});
+		
+		test("references scopes are available to bindings nested in components (#2029)", function(){
+
+			var template = can.stache('<export-er {^value}="*reference" />'+
+				'<wrap-er><simple-example {key}="*reference"/></wrap-er>');
+							
+			can.Component.extend({
+				tag : "wrap-er"
+			});
+			can.Component.extend({
+				tag : "export-er",
+				events : {
+					"init" : function() {
+						var self = this.viewModel;
+						stop();
+						setTimeout(function() {
+							self.attr("value", 100);
+							var wrapper = frag.lastChild,
+								simpleExample = wrapper.firstChild,
+								textNode = simpleExample.firstChild;
+							equal(textNode.nodeValue, "100", "updated value with reference");
+							start();
+						}, 10);
+	
+					}
+				}
+			});
+	
+			can.Component.extend({
+				tag : "simple-example",
+				template : can.stache("{{key}}"),
+				viewModel : {}
+			});
+			var frag = template({});
+	
+		});
+		
 	}
 
 	makeTest("can/component new bindings dom", document);

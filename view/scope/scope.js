@@ -26,7 +26,7 @@ steal(
 				// Scope.read was moved to can.compute.read
 				// can.compute.read reads properties from a parent.  A much more complex version of getObject.
 				read: can.compute.read,
-				Refs: can.Map.extend({}),
+				Refs: can.Map.extend({shortName: "ReferenceMap"},{}),
 				Break: function(){},
 				refsScope: function(){
 					return new can.view.Scope( new this.Refs() );
