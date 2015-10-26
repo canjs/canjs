@@ -31,4 +31,3 @@ See the [Changelog](changelog.md).
 
 ### License
 MIT License, see [License](license.md).
-

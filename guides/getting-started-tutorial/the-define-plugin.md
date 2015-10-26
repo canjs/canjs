@@ -29,32 +29,32 @@ Creating a define is as simple as adding a define property to the instance prope
 of the `can.Map`. This property is an object literal. Remember from our conversation on 
 [`can.Construct`](Constructors.html) that passing in one argument to a `can.Construct` will set 
 its instance properties. This is important to know should you create a `can.Map` that has both
-instance and static properties, and you want to use the define plugin. Below are two an examples:
+instance and static properties, and you want to use the define plugin. Below are two examples:
 
 ```
-    //can.Map with one argument
-    var Person = can.Map.extend({
-        define: {
-            //define properties go here
-            myProperty: {
-               //property attributes
-            }
+//can.Map with one argument
+var Person = can.Map.extend({
+    define: {
+        //define properties go here
+        myProperty: {
+           //property attributes
         }
-    });
-    
-    //can.Map with two arguments
-    var Person = can.Map.extend(
-    {
-       //static properties go here
-    },
-    {
-        define: {
-            //define properties go here
-            myProperty: {
-               //property attributes
-            }
+    }
+});
+
+//can.Map with two arguments
+var Person = can.Map.extend(
+{
+   //static properties go here
+},
+{
+    define: {
+        //define properties go here
+        myProperty: {
+           //property attributes
         }
-    });
+    }
+});
 ```
 
 <a name="get"></a>
@@ -64,15 +64,15 @@ It is typically used to provide properties that derive their value from other
 properties of the map, as below: 
 
 ```
-    var Person = can.Map.extend({
-        define: {
-            fullName: {
-                get: function () {
-                    return this.attr("first") + " " + this.attr("last");
-                }
+var Person = can.Map.extend({
+    define: {
+        fullName: {
+            get: function () {
+                return this.attr("first") + " " + this.attr("last");
             }
         }
-    });
+    }
+});
 ```
 
 <a name="set"></a>
@@ -128,13 +128,13 @@ constructor. In contrast, `type`, lowercase, is set on the prototype of the obje
 it is not instance specific.
 
 ```
-     define: {
-       items: {
-         type: function(newValue){
-           return typeof newValue === "string" ?  newValue.split(",") : newValue;
-         }
-       }
-     }
+define: {
+  items: {
+    type: function(newValue){
+      return typeof newValue === "string" ?  newValue.split(",") : newValue;
+    }
+  }
+}
 ```
 
 <a name="value"></a>
@@ -146,11 +146,11 @@ object. This is because JavaScript passes primitives by value, and all other
 values (objects, arrays, etc.) by reference.
 
 ```
-    define: {
-      prop: {
-        value: function(){ return []; }
-      }
-    }
+define: {
+  prop: {
+    value: function(){ return []; }
+  }
+}
 ```
 
 As with `type`, above, there are two ways to define the `value` property: `Value`,
@@ -175,10 +175,10 @@ serialized object. Managing serialization is an important consideration in [rout
 We’ll see how this works when we discuss routing in a later chapter.
 
 ```
-    define: {
-      locationIds: {
-        serialize: false
-    }
+define: {
+  locationIds: {
+    serialize: false
+}
 ```
 
 - - -

@@ -364,7 +364,7 @@ steal("can/util",
 					else if(state.text && typeof value === "string") {
 						this.nodeValue = value;
 					}
-					else if( value ){
+					else if( value != null ){
 						elements.replace([this], can.frag(value, this.ownerDocument));
 					}
 				}
