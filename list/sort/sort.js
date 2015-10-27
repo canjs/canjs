@@ -35,7 +35,7 @@ steal('can/util', 'can/list', function () {
 	};
 
 	var proto = can.List.prototype,
-		_changes = proto._changes || function(){},
+		_changes = proto._changes,
 		setup = proto.setup,
 		unbind = proto.unbind;
 
@@ -46,10 +46,10 @@ steal('can/util', 'can/list', function () {
 	can.extend(proto, {
 		setup: function (instances, options) {
 			setup.apply(this, arguments);
-			this.bind('change', can.proxy(this._changes, this));
 			this._comparatorBound = false;
-
+			this._init = 1;
 			this.bind('comparator', can.proxy(this._comparatorUpdated, this));
+			delete this._init;
 			
 			if (this.comparator) {
 				this.sort();

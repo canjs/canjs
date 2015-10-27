@@ -1,4 +1,4 @@
-steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelpers) {
+steal('can/util', 'can/observe', function (can) {
 	var define = can.define = {};
 	
 	var getPropDefineBehavior = function(behavior, attr, define) {
@@ -18,7 +18,7 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 	};
 
 	// This is called when the Map is defined
-	mapHelpers.define = function (Map) {
+	can.Map.helpers.define = function (Map) {
 		var definitions = Map.prototype.define;
 		//!steal-remove-start
 		if(Map.define){
@@ -150,12 +150,12 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 					//!steal-remove-start
 					clearTimeout(asyncTimer);
 					//!steal-remove-end
-				}, errorCallback, getter ? this._computedAttrs[prop].compute.computeInstance.lastSetValue.get() : current);
+				}, errorCallback, getter ? this[prop].computeInstance.lastSetValue.get() : current);
 			if (getter) {
 				// if there's a getter we don't call old set
 				// instead we call the getter's compute with the new value
 				if(setValue !== undefined && !setterCalled && setter.length >= 1) {
-					this._computedAttrs[prop].compute(setValue);
+					this[prop](setValue);
 				}
 				
 				can.batch.stop();
@@ -300,23 +300,23 @@ steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelp
 		return oldRemove.call(this, prop, current);
 	};
 
-	var oldSetupComputes = proto._setupComputedProperties;
-	proto._setupComputedProperties = function () {
+	var oldSetupComputes = proto._setupComputes;
+	proto._setupComputes = function (defaultsValues) {
 		oldSetupComputes.apply(this, arguments);
 		for (var attr in this.define) {
 			var def = this.define[attr],
 				get = def.get;
 			if (get) {
-				this._computedAttrs[attr] = {
-					count: 0,
-					compute: can.compute.async(undefined, get, this)
+				this[attr] = can.compute.async(defaultsValues[attr], get, this);
+				this._computedBindings[attr] = {
+					count: 0
 				};
 			}
 		}
 	};
 	// Overwrite the invidual property serializer b/c we will overwrite it.
-	var oldSingleSerialize = mapHelpers._serialize;
-	mapHelpers._serialize = function(map, name, val){
+	var oldSingleSerialize = can.Map.helpers._serialize;
+	can.Map.helpers._serialize = function(map, name, val){
 		return serializeProp(map, name, val);
 	};
 	// If the map has a define serializer for the given attr, run it.

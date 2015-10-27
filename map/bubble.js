@@ -46,7 +46,6 @@ steal('can/util', function(can){
 					ev.triggeredNS[parent._cid] = true;
 					// send change event with modified attr to parent
 					can.trigger(parent, ev, args);
-					can.trigger(parent, args[0], [args[2], args[3]]);
 				});
 			},
 			teardownFromParent: function (parent, child, eventName ) {
@@ -58,7 +57,7 @@ steal('can/util', function(can){
 				return parent._bubbleBindings && parent._bubbleBindings[eventName];
 			},
 			bind: function(parent, eventName) {
-				if (!parent._initializing ) {
+				if (!parent._init ) {
 					var bubbleEvents = bubble.event(parent, eventName),
 						len = bubbleEvents.length,
 						bubbleEvent;
@@ -128,11 +127,11 @@ steal('can/util', function(can){
 			set: function(parent, prop, value, current){
 
 				//var res = parent.__type(value, prop);
-				if( can.isMapLike(value) ) {
+				if( can.Map.helpers.isObservable(value) ) {
 					bubble.add(parent, value, prop);
 				}
 				// bubble.add will remove, so only remove if we are replacing another object
-				if( can.isMapLike(current) ) {
+				if( can.Map.helpers.isObservable(current) ) {
 					bubble.remove(parent, current);
 				}
 				return value;

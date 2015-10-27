@@ -1,4 +1,5 @@
-steal('can/util','can/map/map_helpers.js', 'can/map', 'can/list', function (can, mapHelpers, Map) {
+steal('can/util', 'can/map', 'can/list', function (can, Map) {
+	
 	//!steal-remove-start
 	can.dev.warn("can/map/attributes is a deprecated plugin and will be removed in a future release. "+
 		"can/map/define provides the same functionality in a more complete API.");
@@ -124,8 +125,8 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/list', function (can,
 		return value === null || !type ? value : converter.call(Class, value, oldVal, function () {}, type);
 	};
 	
-	var oldSerialize = mapHelpers._serialize;
-	mapHelpers._serialize = function(map, name, val){
+	var oldSerialize = can.Map.helpers._serialize;
+	can.Map.helpers._serialize = function(map, name, val){
 		
 		var constructor = map.constructor,
 			type = constructor.attributes ? constructor.attributes[name] : 0,

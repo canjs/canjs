@@ -1,4 +1,4 @@
-steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",function (can, Map, bubble, mapHelpers) {
+steal("can/util", "can/map", "can/map/bubble.js",function (can, Map, bubble) {
 
 	// Helpers for `observable` lists.
 	var splice = [].splice,
@@ -87,14 +87,16 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			setup: function (instances, options) {
 				this.length = 0;
 				can.cid(this, ".map");
-				this._setupComputedProperties();
+				this._init = 1;
+				this._computedBindings = {};
+				this._setupComputes();
 				instances = instances || [];
 				var teardownMapping;
 
 				if (can.isDeferred(instances)) {
 					this.replace(instances);
 				} else {
-					teardownMapping = instances.length && mapHelpers.addToMap(instances, this);
+					teardownMapping = instances.length && can.Map.helpers.addToMap(instances, this);
 					this.push.apply(this, can.makeArray(instances || []));
 				}
 
@@ -103,7 +105,9 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				}
 
 				// this change needs to be ignored
+				this.bind('change', can.proxy(this._changes, this));
 				can.simpleExtend(this, options);
+				delete this._init;
 			},
 			_triggerChange: function (attr, how, newVal, oldVal) {
 
@@ -181,7 +185,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			 * Returns the serialized form of this list.
 			 */
 			serialize: function () {
-				return mapHelpers.serialize(this, 'serialize', []);
+				return Map.helpers.serialize(this, 'serialize', []);
 			},
 			/**
 			 * @function can.List.prototype.each each
@@ -594,7 +598,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			 */
 			_attrs: function (items, remove) {
 				if (items === undefined) {
-					return mapHelpers.serialize(this, 'attr', []);
+					return Map.helpers.serialize(this, 'attr', []);
 				}
 
 				// Create a copy.
@@ -612,7 +616,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 					var curVal = this[prop],
 						newVal = items[prop];
 
-					if ( can.isMapLike(curVal) && mapHelpers.canMakeObserve(newVal)) {
+					if (Map.helpers.isObservable(curVal) && Map.helpers.canMakeObserve(newVal)) {
 						curVal.attr(newVal, remove);
 						//changed from a coercion to an explicit
 					} else if (curVal !== newVal) {
