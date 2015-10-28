@@ -1,37 +1,20 @@
 "format steal";
-steal("@loader", "can/util/can.js", "can/view/stache", "can/view/stache/intermediate_and_imports.js",function(loader, can, stache, getIntermediateAndImports){
-
-	function addBundles(dynamicImports) {
-		if(!dynamicImports.length) {
-			return;
-		}
-
-		// In the build the "main" loader is the localLoader
-		var localLoader = loader.localLoader || loader;
-		var bundle = localLoader.bundle;
-		if(!bundle) {
-			bundle = localLoader.bundle = [];
-		}
-
-		can.each(dynamicImports, function(moduleName){
-			if(!~bundle.indexOf(moduleName)) {
-				bundle.push(moduleName);
-			}
-		});
-	}
+steal("can/view/stache", "can/view/stache/intermediate_and_imports.js", "can/view/stache/add_bundles.js",function(stache, getIntermediateAndImports, addBundles){
 
 	function translate(load) {
 		var intermediateAndImports = getIntermediateAndImports(load.source);
 
 		// Add bundle configuration for these dynamic imports
-		addBundles(intermediateAndImports.dynamicImports);
+		return addBundles(intermediateAndImports.dynamicImports, load.name).then(function(){
 
-		intermediateAndImports.imports.unshift("can/view/stache/mustache_core");
-		intermediateAndImports.imports.unshift("can/view/stache/stache");
-		intermediateAndImports.imports.unshift("module");
+			intermediateAndImports.imports.unshift("can/view/stache/mustache_core");
+			intermediateAndImports.imports.unshift("can/view/stache/stache");
+			intermediateAndImports.imports.unshift("module");
 
-		return template(intermediateAndImports.imports,
-										intermediateAndImports.intermediate);
+			return template(intermediateAndImports.imports,
+											intermediateAndImports.intermediate);
+
+		});
 	}
 
 	function template(imports, intermediate){
