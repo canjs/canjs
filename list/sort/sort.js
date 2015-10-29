@@ -1,4 +1,4 @@
-steal('can/util', 'can/list', function () {
+steal('can/util', 'can/list', function (can) {
 
 	// BUBBLE RULE
 	// 1. list.bind("change") -> bubbling

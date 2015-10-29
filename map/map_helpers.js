@@ -3,7 +3,7 @@
 // a map, or track the maps created from plain JavaScript objects.
 // `can.Map` handles cycles in objects nicely!
 
-steal('can/util', function(){
+steal('can/util', 'can/util/object/isplain', function(can){
 	
 	var mapHelpers = {
 		// ### mapHelpers.attrParts
