@@ -9,7 +9,7 @@ Provides template event, one-way, and two-way bindings.
 ## Use
 
 The `can/view/bindings` plugin provides [can.view.attr custom attributes] useful for template declarative event, one-way and two-way 
-bindings on element attributes, component [can.Component::viewModel viewModels]s, and the [can.view.Scope scope]. Bindings look like:
+bindings on element attributes, component [can.Component::viewModel viewModels], and the [can.view.Scope scope]. Bindings look like:
 
 - `(event)="key()"` for event binding.
 - `{prop}="key"` for one-way binding to a child.
