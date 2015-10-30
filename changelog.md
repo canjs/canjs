@@ -3,6 +3,17 @@
 @parent guides 5
 -->
 
+__2.3.1__ ( Oct 29 2015 )
+
+- [Make define part of the core](https://github.com/bitovi/canjs/issues/2040)
+- [global var &quot;GLOBALCAN&quot; fails](https://github.com/bitovi/canjs/issues/2039)
+- [Allow relative can-imports](https://github.com/bitovi/canjs/pull/2038)
+- [Replaced references to element.innerText in tests so that they pass i…](https://github.com/bitovi/canjs/pull/2033)
+- [references scopes are not available to bindings nested in components](https://github.com/bitovi/canjs/issues/2029)
+- [References of &#39;can&#39; not locally scoped in modules](https://github.com/bitovi/canjs/issues/2022)
+- [Adding scoped reference to &#39;can&#39;. Removing dependancy on Global &#39;can&#39;.](https://github.com/bitovi/canjs/pull/2021)
+
+
 __2.3.0__ ( Oct 23 2015 )
 
 - [sort plugin: comparator set on init does not keep list sorted](https://github.com/bitovi/canjs/issues/2006)

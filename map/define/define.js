@@ -1,4 +1,8 @@
-steal('can/util','can/map/map_helpers.js', 'can/observe', function (can, mapHelpers) {
+steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (can, mapHelpers) {
+	if(can.define) {
+		return;
+	}
+
 	var define = can.define = {};
 	
 	var getPropDefineBehavior = function(behavior, attr, define) {
