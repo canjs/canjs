@@ -32,7 +32,8 @@ steal("can/util", "can/view/callbacks", function(can){
 		if(handOffTag) {
 			var callback = can.view.tag(handOffTag);
 			callback(el, can.extend(tagData, {
-				scope: scope
+				scope: scope,
+				preventDataBindings: true
 			}));
 
 			can.data(can.$(el), "viewModel", importPromise);

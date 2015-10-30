@@ -212,7 +212,7 @@ steal("can/util",
 							isArgument: true
 						}).value;
 
-						if (scopePartialName === null) {
+						if (scopePartialName === null || !scopePartialName && localPartialName[0] === '*') {
 							return can.frag("");
 						}
 						if (scopePartialName) {

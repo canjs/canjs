@@ -76,7 +76,22 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 		});
 
 		asyncTest("can import a template and use it", function(){
-			var template = "<can-import from='can/view/import/test/other.stache!' {^value}='*other' />{{> *other}}";
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' />{{{*other()}}}";
+
+			can.stache.async(template).then(function(renderer){
+				var frag = renderer();
+
+				// Import will happen async
+				can["import"]("can/view/import/test/other.stache!").then(function(){
+					equal(frag.childNodes[3].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
+
+					QUnit.start();
+				});
+			});
+		});
+
+		asyncTest("can import a template and use it using the > syntax", function(){
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' />{{> *other}}";
 
 			can.stache.async(template).then(function(renderer){
 				var frag = renderer();
@@ -97,15 +112,16 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				"<content></content>" +
 				"{{else}}" +
 				"<div class='loading'></div>" +
-				"{{/eq}}")
+				"{{/isResolved}}")
 			});
 
-			var template = "<can-import from='can/view/import/test/other.stache!' {^value}='*other' can-tag='my-waiter'>{{> *other}}</can-import>";
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' can-tag='my-waiter'>{{{*other()}}}</can-import>";
 
 			can.stache.async(template).then(function(renderer){
-				var frag = renderer();
+				var frag = renderer(new can.Map());
 
 				can["import"]("can/view/import/test/other.stache!").then(function(){
+					ok(frag.childNodes[0].childNodes.length > 1, "Something besides a text node is inserted");
 					equal(frag.childNodes[0].childNodes[2].firstChild.nodeValue, "hi there", "Partial worked with can-tag");
 
 					QUnit.start();
@@ -114,7 +130,7 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 		});
 
 		asyncTest("can dynamically import a template and use it", function(){
-			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' {^value}='*other'/>{{> *other}}";
+			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' {^@value}='*other'/>{{> *other}}";
 
 			can.stache.async(template).then(function(renderer){
 				var frag = renderer();

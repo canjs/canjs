@@ -95,7 +95,6 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			// ### setup
 			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, componentTagData) {
-
 				// Setup values passed to component
 				var initialScopeData = {
 						"%root": componentTagData.scope.attr("%root")
@@ -133,7 +132,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				// Get the value in the viewModel for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
-
+					if(componentTagData.preventDataBindings) {
+						return;
+					}
+					
 					var nodeName = node.name,
 						name = can.camelize(nodeName.toLowerCase()),
 						value = node.value;
@@ -222,6 +224,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				var handlers = {};
 				// Setup reverse bindings
 				can.each(bindingsData, function (bindingData, prop) {
+					if(componentTagData.preventDataBindings) {
+						return;
+					}
+
 					if(bindingData.childToParent) {
 						handlers[prop] = function (ev, newVal) {
 							// Check that this property is not being changed because
@@ -261,7 +267,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				this.scope = this.viewModel = viewModel;
 				can.data($el, "scope", this.scope);
 				can.data($el, "viewModel", this.scope);
-				can.data($el,"preventDataBindings", true);
+				if(!componentTagData.preventDataBindings) {
+					can.data($el,"preventDataBindings", true);
+				}
 
 				// Create a real Scope object out of the viewModel property
 				// The scope used to render the component's template.
