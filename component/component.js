@@ -170,7 +170,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 					bindingsData[bindingData.propName] = bindingData;
 
 					// Use logic from bindings
-					var compute = bindings.getParentCompute(el, componentTagData.scope, value, {});
+					var compute = bindings.getParentCompute(el, componentTagData.scope, value, {templateType: componentTagData.templateType});
 
 					// if we actually got a compute
 					if(compute && compute.isComputed) {
