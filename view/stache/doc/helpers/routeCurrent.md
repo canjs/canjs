@@ -52,7 +52,7 @@ It this functionality could use call expressions like:
 The following demo uses `routeCurrent` and [can.stache.helpers.routeUrl] to 
 create links that update [can.route]'s `page` attribute:
 
-@demo can/view/stache/doc/helpers/routeUrl.html
+@demo can/view/stache/doc/helpers/route-url.html
 
 It also writes out the current url like:
 
