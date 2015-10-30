@@ -38,7 +38,17 @@ steal("can/util/can.js", function (can) {
 			 * `element.getAttribute` and `element.setAttribute`.
 			 */
 			map: {
-				"class": "className",
+				"class": function(el, val) {
+					val = val || '';
+					el.className = val;
+
+					if(el.className !== val) {
+						// e.g. svg elements #2015
+						el.setAttribute('class', val);
+					}
+
+					return val;
+				},
 				"value": "value",
 				"innertext": "innerText",
 				"innerhtml": "innerHTML",
@@ -90,7 +100,7 @@ steal("can/util/can.js", function (can) {
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {
 				var usingMutationObserver = can.isDOM(el) && attr.MutationObserver;
-				
+
 				attrName = attrName.toLowerCase();
 				var oldValue;
 				// In order to later trigger an event we need to compare the new value to the old value, 

@@ -106,9 +106,6 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 
 		document.getElementById("qunit-fixture").appendChild(div);
 
-		can.attr.set(div, "class", "my-class");
-		equal(div.className, "my-class", "Map class to className");
-
 		can.attr.set(div, "for", "my-for");
 		equal(div.htmlFor, "my-for", "Map for to htmlFor");
 
@@ -122,6 +119,30 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 		equal(div.readOnly, true, "Map readonly to readOnly");
 
 		can.remove(can.$("#qunit-fixture>*"));
+	});
+
+	test('set class attribute if className fails (#2015)', function() {
+		var div = document.createElement('div');
+		var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		var obj = { toString: function() { return 'my-class'; } };
+
+		can.attr.set(div, 'class', 'my-class');
+		equal(div.getAttribute('class'), 'my-class', 'class mapped to className');
+
+		can.attr.set(div, 'class', undefined);
+		equal(div.getAttribute('class'), '', 'an undefined className is an empty string');
+
+		can.attr.set(div, 'class', obj);
+		equal(div.getAttribute('class'), 'my-class', 'you can pass an object to className');
+
+		can.attr.set(svg, 'class', 'my-class');
+		equal(svg.getAttribute('class'), 'my-class', 'class was set as an attribute');
+
+		can.attr.set(svg, 'class', undefined);
+		equal(svg.getAttribute('class'), '', 'an undefined class is an empty string');
+
+		can.attr.set(svg, 'class', obj);
+		equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to class');
 	});
 
 	if (window.jQuery || window.Zepto) {
