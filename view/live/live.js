@@ -286,6 +286,11 @@ steal('can/util',
 						indexMap[i](i);
 					}
 				},
+				// Called when an item is set with .attr
+				set = function(ev, newVal, index) {
+					remove({}, { length: 1 }, index, true);
+					add({}, [newVal], index);
+				},
 				// Called when items are removed or when the bindings are torn down.
 				remove = function (ev, items, index, duringTeardown, fullTeardown) {
 					if (!afterPreviousEvents) {
@@ -371,6 +376,7 @@ steal('can/util',
 					// array
 					if (list && list.unbind) {
 						list.unbind('add', add)
+							.unbind('set', set)
 							.unbind('remove', remove)
 							.unbind('move', move);
 					}
@@ -394,6 +400,7 @@ steal('can/util',
 						
 						if ( oldList.unbind ) {
 							oldList.unbind('add', add)
+								.unbind('set', set)
 								.unbind('remove', remove)
 								.unbind('move', move);
 						}
@@ -421,6 +428,7 @@ steal('can/util',
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
+							.bind('set', set)
 							.bind('remove', remove)
 							.bind('move', move);
 					}
