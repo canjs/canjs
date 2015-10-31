@@ -40,11 +40,12 @@ steal("can/util/can.js", function (can) {
 			map: {
 				"class": function(el, val) {
 					val = val || '';
-					el.className = val;
 
-					if(el.className !== val) {
-						// e.g. svg elements #2015
+					if(el.namespaceURI === 'http://www.w3.org/2000/svg') {
 						el.setAttribute('class', val);
+					}
+					else {
+						el.className = val;
 					}
 
 					return val;
