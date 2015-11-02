@@ -5,7 +5,7 @@
 ## The CanJS download
 
 The buttons on the [CanJS homepage](http://canjs.com) lets you either get the full download or create customized download using the
-[download builder](#section_Thedownloadbuilder). The full download is a zipped version of [this repository](https://github.com/bitovi/canjs.com)
+[download builder](#section_Thedownloadbuilder). The full download is a zipped version of [this repository](https://github.com/canjs/canjs.com)
 and contains:
 
 - `can.<library>.js` (e.g. `can.jquery.js`) - The core build for a supported library
@@ -29,7 +29,7 @@ contain a "Download from:" link so that you will be able to re-download the same
 
 ## Bower
 
-[Bower](http://bower.io/) is a package manager to organize dependencies on front-end packages. Bower runs over Git, and is package-agnostic. The CanJS Bower package references the [same repository](https://github.com/bitovi/canjs.com)
+[Bower](http://bower.io/) is a package manager to organize dependencies on front-end packages. Bower runs over Git, and is package-agnostic. The CanJS Bower package references the [same repository](https://github.com/canjs/canjs.com)
 (and files) as the Zip download. With [NodeJS](http://nodejs.org) available Bower can easily be installed via:
 
 > npm install bower -g
@@ -63,7 +63,7 @@ We also make every CanJS version available via our homepage as:
     - [can.yui.js](http://canjs.com/release/latest/can.yui.js)
 - [canjs.com/--version--/can.jquery.js](http://canjs.com/release/2.0.0/can.jquery.js) - For a specific version
 
-A list of all available CDN releases and files can be found at [github.com/bitovi/canjs.com/tree/gh-pages/release](https://github.com/bitovi/canjs.com/tree/gh-pages/release).
+A list of all available CDN releases and files can be found at [github.com/canjs/canjs.com/tree/gh-pages/release](https://github.com/canjs/canjs.com/tree/gh-pages/release).
 
 __Note:__ We highly recommend to always reference a specific version and never `latest` directly in a production environment.
 Latest can contain backwards incompatible releases __and will break your application__.

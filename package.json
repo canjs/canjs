@@ -11,8 +11,8 @@
 	"homepage": "http://canjs.com/",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:bitovi/canjs.git",
-		"github": "https://github.com/bitovi/canjs"
+		"url": "git@github.com:canjs/canjs.git",
+		"github": "https://github.com/canjs/canjs"
 	},
 	"dependencies": {
 		"can-simple-dom": "^0.2.20"

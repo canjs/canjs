@@ -111,7 +111,7 @@ you can download a zip file containing the code relevant to that chapter, as fol
  - Topic 2
  - Connecting `can.Model`’s with `can.Component`’s
 
-Get the code for: [chapter 0](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-0_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 0](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-0_canjs-getting-started.zip?raw=true)
 
 - - -
 
