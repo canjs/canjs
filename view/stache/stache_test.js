@@ -1648,7 +1648,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('li')[0]), 'Todo #1', 'Pushing to the list works');
 		});
 
-		// https://github.com/bitovi/canjs/issues/228
+		// https://github.com/canjs/canjs/issues/228
 		test("Contexts within helpers not always resolved correctly", function () {
 
 			can.stache.registerHelper("bad_context", function (context, options) {
@@ -1672,7 +1672,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[2]), "In the inner context", 'Incorrect other_text in helper inner template');
 		});
 
-		// https://github.com/bitovi/canjs/issues/227
+		// https://github.com/canjs/canjs/issues/227
 		test("Contexts are not always passed to partials properly", function () {
 			can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
 
@@ -1690,7 +1690,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[1]), "foo", 'Incorrect text in helper inner template');
 		});
 
-		// https://github.com/bitovi/canjs/issues/231
+		// https://github.com/canjs/canjs/issues/231
 		test("Functions and helpers should be passed the same context", function () {
 
 			var textNodes = function(el, cb) {
@@ -1739,7 +1739,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[0]), data.next_level.other_text.toUpperCase(), 'correct context passed to helper');
 		});
 
-		// https://github.com/bitovi/canjs/issues/153
+		// https://github.com/canjs/canjs/issues/153
 		test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function () {
 			var renderer = can.stache('{{ #todos }}{{ name }}{{ /todos }}'),
 				renderer2 = can.stache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),

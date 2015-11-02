@@ -12,7 +12,7 @@
  - Recommended folder structure
  - Applicaiton Bootstrap
 
-Get the code for: [chapter 1](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter 1](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-1_canjs-getting-started.zip?raw=true)
 
 - - -
 
@@ -64,7 +64,7 @@ Off of a root folder called `PlaceMyOrder`, create the following subfolders:
         └── site_css
 </pre>
 
-Copy the <a href="https://raw.githubusercontent.com/bitovi/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a>
+Copy the <a href="https://raw.githubusercontent.com/canjs/canjs/guides-overhaul/guides/examples/PlaceMyOrder/chapter_9/app/site_css/place_my_order.css" target="_blank">CSS file</a>
 that accompanies this guide into your `site_css` folder. We won't be covering
 any of the CSS here. Next, copy the `can.custom.js` file you downloaded in
 the previous step into the `libs` folder.
