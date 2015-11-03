@@ -1435,7 +1435,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("two-way element empty value (1996)", function(){
 
 
-		var template = can.view.stache("<input can-value='age'/>");
+		var template = can.stache("<input can-value='age'/>");
 
 		var map = new can.Map();
 
@@ -1461,6 +1461,27 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		equal(map.attr("age"), "", "updated from input");
 
+	});
+	
+	test("exporting methods (#2051)", function(){
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				method : function() {
+					ok(true, "foo called");
+					return 5;
+				}
+			}
+		});
+		
+		var template = can.stache("<foo-bar {^@method}='*refKey'></foo-bar>{{*refKey()}}");
+
+		var frag = template({});
+		equal( frag.lastChild.nodeValue, "5");
+		
+		
+
+		
 	});
 
 	

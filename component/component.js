@@ -234,7 +234,8 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						// it's possible there's nothing to update
 						if(bindingData.parentCompute) {
 							bindings.initializeValues(bindingData,
-								prop === "." ? viewModel : viewModel.attr(prop),
+								// call read so functions can be exported correctly.
+								prop === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(prop), {}).value,
 								bindingData.parentCompute, function(){}, function(ev, newVal){
 								bindingData.parentCompute(newVal);
 							});
