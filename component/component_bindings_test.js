@@ -247,7 +247,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			var hello = frag.firstChild;
 
 			equal(can.trim( innerHTML(hello) ), "Hello World");
-			
+
 			can.Component.extend({
 				tag: "hello-world-no-template",
 				leakScope: false,
@@ -1126,7 +1126,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				idData: "id-success",
 				classData: "class-success"
 			};
-			
+
 			var frag = can.stache(
 				"<stay-classy {(id)}='idData'" +
 				" {(class)}='classData'></stay-classy>")(data);
@@ -1231,9 +1231,9 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 		});
 
-		
+
 		test("passing id works now", function(){
-			
+
 			can.Component.extend({
 				tag: 'my-thing',
 				template: can.stache('hello')
@@ -1242,7 +1242,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			var frag = stache(new can.Map({productId: 123}));
 			equal( can.viewModel(frag.firstChild).attr("id"), 123);
 		});
-		
+
 
 		test("stache conditionally nested components calls inserted once (#967)", function(){
 			expect(2);
@@ -1507,12 +1507,12 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			equal(removeCount, 2, 'internal removed twice');
 
 		});
-		
+
 		test("references scopes are available to bindings nested in components (#2029)", function(){
 
 			var template = can.stache('<export-er {^value}="*reference" />'+
 				'<wrap-er><simple-example {key}="*reference"/></wrap-er>');
-							
+
 			can.Component.extend({
 				tag : "wrap-er"
 			});
@@ -1530,20 +1530,88 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 							equal(textNode.nodeValue, "100", "updated value with reference");
 							start();
 						}, 10);
-	
+
 					}
 				}
 			});
-	
+
 			can.Component.extend({
 				tag : "simple-example",
 				template : can.stache("{{key}}"),
 				viewModel : {}
 			});
 			var frag = template({});
-	
+
 		});
-		
+
+		test('two-way binding syntax PRIOR to v2.3 shall NOT let a child property initialize an undefined parent property (#2020)', function(){
+			var renderer = can.stache('<pa-rent/>');
+
+			can.Component.extend({
+				tag : 'pa-rent',
+				template: can.stache('<chi-ld child-prop="{parentProp}" />')
+			});
+
+			can.Component.extend({
+				tag : 'chi-ld',
+				viewModel: {
+					childProp: 'bar'
+				}
+			});
+
+			var frag = renderer({});
+
+			var parentVM = can.viewModel(frag.firstChild);
+			var childVM = can.viewModel(frag.firstChild.firstChild);
+
+			equal(parentVM.attr('parentProp'), undefined, 'parentProp is undefined');
+			equal(childVM.attr('childProp'), 'bar', 'childProp is bar');
+
+			parentVM.attr('parentProp', 'foo');
+
+			equal(parentVM.attr('parentProp'), 'foo', 'parentProp is foo');
+			equal(childVM.attr('childProp'), 'foo', 'childProp is foo');
+
+			childVM.attr('childProp', 'baz');
+
+			equal(parentVM.attr('parentProp'), 'baz', 'parentProp is baz');
+			equal(childVM.attr('childProp'), 'baz', 'childProp is baz');
+		});
+
+		test('two-way binding syntax INTRODUCED in v2.3 ALLOWS a child property to initialize an undefined parent property', function(){
+			var renderer = can.stache('<pa-rent/>');
+
+			can.Component.extend({
+				tag : 'pa-rent',
+				template: can.stache('<chi-ld {(child-prop)}="parentProp" />')
+			});
+
+			can.Component.extend({
+				tag : 'chi-ld',
+				viewModel: {
+					childProp: 'bar'
+				}
+			});
+
+			var frag = renderer({});
+
+			var parentVM = can.viewModel(frag.firstChild);
+			var childVM = can.viewModel(frag.firstChild.firstChild);
+
+			equal(parentVM.attr('parentProp'), 'bar', 'parentProp is bar');
+			equal(childVM.attr('childProp'), 'bar', 'childProp is bar');
+
+			parentVM.attr('parentProp', 'foo');
+
+			equal(parentVM.attr('parentProp'), 'foo', 'parentProp is foo');
+			equal(childVM.attr('childProp'), 'foo', 'childProp is foo');
+
+			childVM.attr('childProp', 'baz');
+
+			equal(parentVM.attr('parentProp'), 'baz', 'parentProp is baz');
+			equal(childVM.attr('childProp'), 'baz', 'childProp is baz');
+		});
+
 	}
 
 	makeTest("can/component new bindings dom", document);

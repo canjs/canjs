@@ -95,7 +95,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			// ### setup
 			// When a new component instance is created, setup bindings, render the template, etc.
 			setup: function (el, componentTagData) {
-				
+
 				// Setup values passed to component
 				var initialScopeData = {
 						"%root": componentTagData.scope.attr("%root")
@@ -129,11 +129,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				can.each(this.constructor.attributeScopeMappings, function (val, prop) {
 					initialScopeData[prop] = el.getAttribute(can.hyphenate(val));
 				});
-				
+
 				// Get the value in the viewModel for each attribute
 				// the hookup should probably happen after?
 				can.each(can.makeArray(el.attributes), function (node, index) {
-					
+
 					var nodeName = node.name,
 						name = can.camelize(nodeName.toLowerCase()),
 						value = node.value;
@@ -145,12 +145,12 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						"but it is not a supported attribute");
 					}
 					//!steal-remove-end
-					
+
 					var isDataBindings = bindings.dataBindingsRegExp.test(nodeName);
 					// Ignore attributes already present in the ScopeMappings.
 					if (component.constructor.attributeScopeMappings[name] ||
 						ignoreAttributesRegExp.test(name) ||
-						// we will handle 
+						// we will handle
 						( viewCallbacks.attr(nodeName) && !isDataBindings ) ) {
 						return;
 					}
@@ -164,7 +164,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							return;
 						}
 					}
-					
+
 					var bindingData = bindings.attributeNameInfo(nodeName);
 					bindingData.propName = can.camelize(bindingData.propName);
 					bindingsData[bindingData.propName] = bindingData;
@@ -179,14 +179,14 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 							bindings.bindParentToChild(el, compute, function(newValue){
 								viewModel.attr(bindingData.propName, newValue);
 							}, viewModelPropertyUpdates, bindingData.propName);
-							
+
 							// Set the value to be added to the viewModel
 							var initialValue = compute();
 							if(initialValue !== undefined) {
 								initialScopeData[bindingData.propName] = initialValue;
 							}
 						}
-						
+
 						bindingsData[bindingData.propName].parentCompute = compute;
 
 					} else {
@@ -232,14 +232,14 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 						};
 						viewModel.bind(prop, handlers[prop]);
 						// it's possible there's nothing to update
-						if(bindingData.parentCompute) {
+						if(bindingData.syntaxStyle === 'new' && bindingData.parentCompute) {
 							bindings.initializeValues(bindingData,
 								prop === "." ? viewModel : viewModel.attr(prop),
 								bindingData.parentCompute, function(){}, function(ev, newVal){
 								bindingData.parentCompute(newVal);
 							});
 						}
-						
+
 					}
 				});
 				// Setup the attributes bindings
@@ -382,7 +382,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								}
 
 							} else {
-								// we are rendering default content so this content should 
+								// we are rendering default content so this content should
 								// use the same scope as the <content> tag was found within.
 								lightTemplateData = contentTagData;
 							}
@@ -407,7 +407,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 					if(componentTagData.templateType === "legacy") {
 						frag = can.view.frag(componentTagData.subtemplate ? componentTagData.subtemplate(shadowScope, componentTagData.options.add(options)) : "");
 					} else {
-						// we need to be the parent ... or we need to 
+						// we need to be the parent ... or we need to
 						frag = componentTagData.subtemplate ?
 							componentTagData.subtemplate(shadowScope, componentTagData.options.add(options), nodeList) :
 							document.createDocumentFragment();
