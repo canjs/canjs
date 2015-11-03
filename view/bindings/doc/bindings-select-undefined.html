@@ -3,6 +3,9 @@
 <script type='text/stache' id="attending-template">
 <p>Attending? 
   <select {($value)}='attending'>
+  	  {{^attending}}
+  	  	<option value=''></option>
+  	  {{/attending}}
 	  <option value='yes'>Yes</option>
 	  <option value='no'>No</option>
 	  <option value='maybe'>Maybe</option>
@@ -12,13 +15,28 @@
 </script>
 </div>
 <script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
+	DEMO_HTML = document.getElementById("demo").innerHTML;
 </script>
 <script src="../../../node_modules/steal/steal.js" main="@empty"></script>
 <script>
-steal("can/view/bindings", "can/view/stache", function(){
-		
-var person = new can.Map({
+steal("can/view/bindings", "can/view/stache", "can/map/define",function(){
+	
+Person = can.Map.extend({
+	define: {
+		attending: {
+			set: function(newVal){
+				if(newVal === "") {
+					this.removeAttr("attending");
+					return undefined;
+				} else {
+					return newVal;
+				}
+			}
+		}
+	}
+});
+	
+person = new Person({
 //  attending: "no"
 });
 
@@ -27,7 +45,9 @@ var frag = can.view(
 	person,
 	{
       attendence: function(){
-        return person.attr("attending") ? 
+      	var keys = can.Map.keys( person );
+      	
+        return keys.indexOf("attending") >= 0 ? 
           "are a " + person.attr("attending") :
           "have not responded";
     

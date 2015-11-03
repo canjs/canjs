@@ -204,11 +204,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			child = child.childNodes.item(path[i]);
 		}
 
-		elementCallbacks.push({element: child, callbacks: callbacks});
-
 		for( i= 0 ; i < pathsLength; i++) {
 			getCallbacks(child, paths[i], elementCallbacks);
 		}
+
+		elementCallbacks.push({element: child, callbacks: callbacks});
+
+		
 
 	}
 

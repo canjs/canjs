@@ -1467,7 +1467,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("One way binding from a select's value to a parent compute updates the parent with the select's initial value (#2027)", function(){
 		var template = can.stache("<select {^$value}='value'><option>One</option></select>");
 		var map = new can.Map();
-	​
+		
 		var frag = template(map);
 		var select = frag.childNodes.item(0);
 		
@@ -1475,8 +1475,8 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			equal(select.selectedIndex, 0, "selectedIndex is 0 because no value exists on the map");
 			equal(map.attr("value"), "One", "The map's value property is set to the select's value");
 			start();
-		},1)
-	​
+		},1);
+		
 		stop();
 		
 	});
