@@ -12,7 +12,7 @@
  - Basic Routing
  - Binding the AppState Object to the Application and Routes
 
-Get the code for: [chapter: app state and routing](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: app state and routing](/guides/examples/PlaceMyOrder/ch-3_canjs-getting-started.zip)
 - - -
 
 As mentioned in the [introduction](Tutorial.html), CanJS suggests using a global
