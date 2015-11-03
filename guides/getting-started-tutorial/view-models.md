@@ -11,7 +11,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-Get the code for: [chapter: view models](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: view models](/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip)
 
 - - -
 

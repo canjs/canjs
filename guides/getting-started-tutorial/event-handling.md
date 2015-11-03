@@ -10,7 +10,7 @@
 **In this Chapter**
  - Event Handling
 
-Get the code for: [chapter: event handling](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: event handling](/guides/examples/PlaceMyOrder/ch-8_canjs-getting-started.zip)
 
 - - -
 

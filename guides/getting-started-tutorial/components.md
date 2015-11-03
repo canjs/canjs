@@ -12,7 +12,7 @@
   - Auto Instantiation
   - Anatomy of a `can.Component`
 
-Get the code for: [chapter: components](https://github.com/canjs/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-4_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: components](/guides/examples/PlaceMyOrder/ch-4_canjs-getting-started.zip)
 
 - - -
 
