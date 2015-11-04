@@ -33,6 +33,14 @@ steal("can/util/can.js", "can-simple-dom", "./build_fragment/make_parser", funct
 	global.window = global;
 	global.addEventListener = function(){};
 	global.removeEventListener = function(){};
+	global.navigator = {
+		userAgent: "",
+		platform: "",
+		language: "",
+		languages: [],
+		plugins: [],
+		onLine: true
+	};
 	global.location = {
 		href: '',
 		protocol: '',
