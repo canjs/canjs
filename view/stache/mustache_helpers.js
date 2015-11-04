@@ -139,7 +139,10 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			return helpers.is.apply(this, arguments);
 		},
 		'unless': function (expr, options) {
-			return helpers['if'].apply(this, [can.isFunction(expr) ? can.compute(function() { return !expr(); }) : !expr, options]);
+			return helpers['if'].apply(this, [expr, can.extend({}, options, {
+				fn: options.inverse,
+				inverse: options.fn
+			})]);
 		},
 		'with': function (expr, options) {
 			var ctx = expr;
