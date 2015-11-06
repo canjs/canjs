@@ -5,7 +5,7 @@
 @description Call a function on each element of a List.
 @signature `list.each( callback(item, index) )`
 
-`each` iterates through the Map, calling a function
+`each` iterates through the List, calling a function
 for each element.
 
 @param {function(*, Number)} callback the function to call for each element
@@ -18,14 +18,14 @@ the loop will stop.
 @body
 ```
 var i = 0;
-new can.Map([1, 10, 100]).each(function(element, index) {
+new can.List([1, 10, 100]).each(function(element, index) {
     i += element;
 });
 
 i; // 111
 
 i = 0;
-new can.Map([1, 10, 100]).each(function(element, index) {
+new can.List([1, 10, 100]).each(function(element, index) {
     i += element;
     if(index >= 1) {
         return false;
