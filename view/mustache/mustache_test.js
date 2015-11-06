@@ -572,13 +572,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	test("Handlebars helper: unless", function () {
 		var t = {
-			template: "{{#unless missing}}Andy is missing!{{/unless}}",
-			expected: "Andy is missing!",
+			template: "{{#unless missing}}Andy is missing!{{/unless}}" +
+			          "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
+			expected: "Andy is missing! But he wasn't cool anyways.",
 			data: {
 				name: 'Andy'
 			},
 			liveData: new can.Map({
-				name: 'Andy'
+				name: 'Andy',
+				// #1202 #unless does not work with computes
+				isCool: can.compute(function () {
+					return t.liveData.attr("missing");
+				})
 			})
 		};
 
