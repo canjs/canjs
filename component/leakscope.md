@@ -1,8 +1,7 @@
 @property {Boolean} can.Component.prototype.leakScope
 @parent can.Component.prototype
 
-@description Allow reading the outer scope values from a component's template and
-a component's viewModel values in the user content.
+@description Allows a component to access scope values, user content, and viewModel values on parent components outside of its template.
 
 @option {Boolean}  `false` limits reading to:
  
@@ -34,9 +33,7 @@ If I have a `<hello-world>` component in a template like:
 {{/data}}
 ```
 
-The __outer scope__ of `<hello-world>` has `data` as its context.  The __user content__ of
-`<hello-world>` is the template between its tags.  In this case, the __user content__
-is `{{subject}}`.
+The __outer scope__ of `<hello-world>` has `data` as its context.  The __user content__ of `<hello-world>` is the template between its tags.  In this case, the __user content__ is `{{subject}}`.
 
 Finally, if `<hello-world>` is defined like:
 
@@ -76,10 +73,6 @@ But if `leakScope` is false:
 
     <hello-world>Hello World</hello-world>
 
-Because when the scope isn't leaked, the __component's template__ 
-does not see `exclamation`. The __user content__ does not see the 
-viewModel's `subject` and uses the outer scope's `subject` which is `"World"`.
+Because when the scope isn't leaked, the __component's template__ does not see `exclamation`. The __user content__ does not see the viewModel's `subject` and uses the outer scope's `subject` which is `"World"`.
 
-Using the `leakScope: false` option is useful for hiding and protecting
-internal details of `can.Component`, potentially preventing accidental
-clashes.
+Using the `leakScope: false` option is useful for hiding and protecting internal details of `can.Component`, potentially preventing accidental clashes.

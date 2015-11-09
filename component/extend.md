@@ -34,4 +34,4 @@ rendered within the custom element.
 
 Note that inheriting from components works differently than other CanJS APIs. You can't call `.extend` on a particular component to create a "subclass" of that component. 
 
-Instead, components work more like HTML elements. To reuse functionality from a base component, build on top of it with parent components that wrap other components in their template and pass any needed viewModel properties via attributes.
+Instead, components work more like HTML elements. To reuse functionality from a base component, wrap it in the template with a parent component and pass any needed viewModel properties as HTML attributes using [can.view.bindings].
