@@ -1485,4 +1485,29 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	
+	test("renders dynamic custom attributes (#1800)", function () {
+	
+		var template = can.view.stache("<ul>{{#actions}}<li can-click='{{.}}'>{{.}}</li>{{/actions}}</ul>");
+	
+		var map = new can.Map({
+			actions: ["action1", "action2"],
+			action1: function(){
+				equal(calling, 0,"action1");
+			},
+			action2: function(){
+				equal(calling, 1,"action2");
+			}
+		});
+	
+		var frag = template(map),
+			lis = frag.firstChild.getElementsByTagName("li");
+	
+		var calling = 0;
+		can.trigger(lis[0], "click");
+		calling  = 1;
+		can.trigger(lis[1], "click");
+	});
+	
+
+	
 });
