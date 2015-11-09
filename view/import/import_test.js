@@ -61,8 +61,8 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 
 
 
-		/*asyncTest("can use an import's value", function(){
-			var template = "<can-import from='can/view/import/test/person' #person='{value}' />hello {{person.name}}";
+		asyncTest("can use an import's value", function(){
+			var template = "<can-import from='can/view/import/test/person' {^value}='*person' />hello {{*person.name}}";
 
 			var iai = getIntermediateAndImports(template);
 
@@ -73,10 +73,10 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				equal(res.childNodes[2].nodeValue, "world", "Got the person.name from the import");
 				start();
 			});
-		});*/
+		});
 
-		/*asyncTest("can import a template and use it", function(){
-			var template = "<can-import from='can/view/import/test/other.stache!' #other='{value}' />{{> other}}";
+		asyncTest("can import a template and use it", function(){
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' />{{{*other()}}}";
 
 			can.stache.async(template).then(function(renderer){
 				var frag = renderer();
@@ -88,33 +88,49 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 					QUnit.start();
 				});
 			});
-		});*/
+		});
 
-		/*asyncTest("importing a template works with can-tag", function(){
+		asyncTest("can import a template and use it using the > syntax", function(){
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' />{{> *other}}";
+
+			can.stache.async(template).then(function(renderer){
+				var frag = renderer();
+
+				// Import will happen async
+				can["import"]("can/view/import/test/other.stache!").then(function(){
+					equal(frag.childNodes[3].firstChild.nodeValue, "hi there", "Partial was renderered right after the can-import");
+
+					QUnit.start();
+				});
+			});
+		});
+
+		asyncTest("importing a template works with can-tag", function(){
 			Component.extend({
 				tag: "my-waiter",
 				template: can.stache("{{#isResolved}}" +
 				"<content></content>" +
 				"{{else}}" +
 				"<div class='loading'></div>" +
-				"{{/eq}}")
+				"{{/isResolved}}")
 			});
 
-			var template = "<can-import from='can/view/import/test/other.stache!' #other='{value}' can-tag='my-waiter'>{{> other}}</can-import>";
+			var template = "<can-import from='can/view/import/test/other.stache!' {^@value}='*other' can-tag='my-waiter'>{{{*other()}}}</can-import>";
 
 			can.stache.async(template).then(function(renderer){
-				var frag = renderer();
+				var frag = renderer(new can.Map());
 
 				can["import"]("can/view/import/test/other.stache!").then(function(){
+					ok(frag.childNodes[0].childNodes.length > 1, "Something besides a text node is inserted");
 					equal(frag.childNodes[0].childNodes[2].firstChild.nodeValue, "hi there", "Partial worked with can-tag");
 
 					QUnit.start();
 				});
 			});
-		});*/
+		});
 
-		/*asyncTest("can dynamically import a template and use it", function(){
-			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' #other='{value}'/>{{> other}}";
+		asyncTest("can dynamically import a template and use it", function(){
+			var template = "<can-import from='can/view/import/test/other-dynamic.stache!' {^@value}='*other'/>{{> *other}}";
 
 			can.stache.async(template).then(function(renderer){
 				var frag = renderer();
@@ -127,6 +143,6 @@ steal('can/view/stache/', 'can/component/', 'can/view/stache/intermediate_and_im
 				});
 			});
 
-		});*/
+		});
 
 	});

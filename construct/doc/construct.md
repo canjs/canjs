@@ -17,7 +17,7 @@ constructor function of your own.
 ## Use
 
 In the example below, `Animal` is a constructor function returned by [can.Construct.extend can.Construct.extend]. All instances of `Animal` will have a `speak`
-method, and the `Animal` constructor itself has a `legs` property.
+method, and the `Animal` constructor has a `legs` property.
 
 
     var Animal = can.Construct.extend({
@@ -32,7 +32,7 @@ method, and the `Animal` constructor itself has a `legs` property.
     });
 
 
-You can make instances by calling your constructor with the `new` keyword. When you do, the [can.Construct::init init]
+You can make instances of your object by calling your constructor function with the `new` keyword. When an object is created, the [can.Construct::init init]
 method gets called (if you supplied one):
 
     var panther = new Animal('growl');
@@ -44,4 +44,4 @@ method gets called (if you supplied one):
 There are two plugins available to help make using `can.Construct` even simpler.
 
 -   [can.Construct.super] allows you to easily call base methods by making `this._super` available in inherited methods.
--   [can.Construct.proxy] helps you keep your scope straight when creating callbacks inside constructors.
+-   [can.Construct.proxy] creates a static callback function that sets the value of `this` to an instance of the constructor function.
