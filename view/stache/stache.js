@@ -274,20 +274,15 @@ steal(
 				}
 				// `{{}}` in an attribute like `class="{{}}"`
 				else if(state.attr) {
-					// if in a special
-					if( viewCallbacks.attr(state.attr.name ) && !state.attr.value ) {
-						this.attrValue("{{"+text+"}}");
-					} else {
-						
-						if(!state.attr.section) {
-							state.attr.section = new TextSectionBuilder();
-							if(state.attr.value) {
-								state.attr.section.add(state.attr.value);
-							}
+
+					if(!state.attr.section) {
+						state.attr.section = new TextSectionBuilder();
+						if(state.attr.value) {
+							state.attr.section.add(state.attr.value);
 						}
-						makeRendererAndUpdateSection(state.attr.section, mode, expression );
 					}
-					
+					makeRendererAndUpdateSection(state.attr.section, mode, expression );
+
 				}
 				// `{{}}` in a tag like `<div {{}}>`
 				else if(state.node) {

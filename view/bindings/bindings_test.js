@@ -1491,16 +1491,21 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	
 		var map = new can.Map({
 			actions: ["action1", "action2"],
-			action1: function(){console.log("item 1 clicked")},
-			action2: function(){console.log("item 2 clicked")}
+			action1: function(){
+				equal(calling, 0,"action1");
+			},
+			action2: function(){
+				equal(calling, 1,"action2");
+			}
 		});
 	
-		var frag = template(map);
+		var frag = template(map),
+			lis = frag.firstChild.getElementsByTagName("li");
 	
-		var ta = document.getElementById("qunit-fixture");
-		ta.appendChild(frag);
-		var list = ta.childNodes[0];
-		QUnit.equal(ta.innerHTML, "<ul><li can-click=\"action1\">action1</li><li can-click=\"action2\">action2</li></ul>", 'attributes not proccesed');
+		var calling = 0;
+		can.trigger(lis[0], "click");
+		calling  = 1;
+		can.trigger(lis[1], "click");
 	});
 	
 
