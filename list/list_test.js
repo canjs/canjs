@@ -1,7 +1,7 @@
 steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function(){
-	
+
 	QUnit.module('can/list');
-	
+
 	test('list attr changes length', function () {
 		var l = new can.List([
 			0,
@@ -216,13 +216,13 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		equal(filtered.length, 1, "one item");
 		equal(filtered[0].name, "Mary", "filter works");
 	});
-	
-	
+
+
 	test('removing expandos on lists', function(){
 		var list = new can.List(["a","b"]);
-		
+
 		list.removeAttr("foo");
-		
+
 		equal(list.length, 2);
 	});
 
@@ -241,7 +241,7 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 
 	  deepEqual(result, ["a", "b"]);
 	});
-	
+
 	test("add event always returns an array as the value (#998)", function() {
 		var list = new can.List([]),
 			msg;
@@ -257,7 +257,7 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		msg = "works on replace()";
 		list.replace([4]);
 	});
-	
+
 	test("Setting with .attr() out of bounds of length triggers add event with leading undefineds", function() {
 		var list = new can.List([1]);
 		list.bind("add", function(ev, newElements, index) {
@@ -315,30 +315,46 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 		var children = new ChildList([1,2,3]);
 		ok(children.reverse() === children);
 	});
-	
-	
+
+
 	test("slice and join are observable by a compute (#1884)", function(){
 		expect(2);
-		
+
 		var list = new can.List([1,2,3]);
-		
+
 		var sliced = can.compute(function(){
 			return list.slice(0,1);
 		});
 		var joined = can.compute(function(){
 			return list.join(",");
 		});
-		
+
 		sliced.bind("change", function(ev, newVal){
 			deepEqual(newVal.attr(), [2], "got a new can.List");
 		});
 		joined.bind("change", function(ev, newVal){
 			equal(newVal, "2,3", "joined is observable");
 		});
-		
+
 		list.shift();
-		
-		
 	});
-	
+
+	test("list should implement the reduce method (#1939)", function() {
+		var list1 = new can.List([0, 1, 2, 3, 4]);
+		var result1 = list1.reduce(function(p, c) {
+			return p + c;
+		});
+		ok(result1 === 10);
+
+		var result2 = list1.reduce(function(p, c) {
+			return p + c;
+		}, 10);
+		ok(result2 === 20);
+
+		var list2 = new can.List([[0, 1], [2, 3], [4, 5]]);
+		var result3 = list2.reduce(function(p, c) {
+			return p.concat(c);
+		});
+		ok(result3.length === 6);
+	});
 });
