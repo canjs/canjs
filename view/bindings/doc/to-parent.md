@@ -59,3 +59,24 @@ In the following example, it connects the __selected__ driver in `<drivers-list>
 ```
 
 Updates `name` in the scope when the `<input>` element's `value` changes.
+
+## Exporting Functions
+
+You can export a function to the parent scope with a binding like:
+
+```
+<my-tabs {^@add-panel}="@*addPanel">
+```
+
+And pass the method like:
+
+```
+<my-panel {add-panel}="@*addPanel" title="CanJS">CanJS Content</my-panel>
+```
+
+Check it out in this demo:
+
+@demo can/view/bindings/doc/to-parent-function.html
+
+Notice that `@` is used to prevent reading the function.  
+

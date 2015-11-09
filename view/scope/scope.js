@@ -232,7 +232,7 @@ steal(
 					// The current context (a scope is just data and a parent scope).
 						context,
 					// The current scope.
-						scope = attr.charAt(0) === "*" ? this.getRefs() : this,
+						scope = names[0].key.charAt(0) === "*" ? this.getRefs() : this,
 
 					// If no value can be found, this is a list of of every observed
 					// object and property name to observe.

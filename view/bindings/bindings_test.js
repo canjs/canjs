@@ -1464,6 +1464,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 	test("exporting methods (#2051)", function(){
+		expect(2);
+		
+		
 		can.Component.extend({
 			tag : 'foo-bar',
 			viewModel : {
@@ -1474,13 +1477,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			}
 		});
 		
-		var template = can.stache("<foo-bar {^@method}='*refKey'></foo-bar>{{*refKey()}}");
+		var template = can.stache("<foo-bar {^@method}='@*refKey'></foo-bar>{{*refKey()}}");
 
 		var frag = template({});
 		equal( frag.lastChild.nodeValue, "5");
-		
-		
-
 		
 	});
 
