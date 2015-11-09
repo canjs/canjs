@@ -115,4 +115,26 @@ steal("can/map/backup", "can/model", "can/test", "steal-qunit", function () {
 
 		recipe.attr('name', 'cheese');
 	});
+
+	test('use backup custom method via options', function () {
+		var Map = can.Map.extend({
+			customBackup: function(){
+				return {
+					first: this.attr('first')
+				}
+			}
+		});
+		var map = new Map({first: 'John', last: 'Galt'})
+		map.backup('customBackup');
+		map.attr('last', 'Dow');
+		ok(!map.isDirty(), 'last value does not affect isDirty');
+		map.attr('first', 'Jane');
+		ok(map.isDirty(), 'first value is does affect isDirty');
+
+		map.restore();
+		ok(map.attr('first') == 'John', 'first is restored');
+		ok(map.attr('last') == 'Dow', 'last not affected by restore');
+		ok(!map.isDirty(), 'isDirty is false');
+	});
+
 });

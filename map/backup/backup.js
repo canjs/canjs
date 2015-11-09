@@ -20,17 +20,32 @@ steal('can/util', 'can/compute', 'can/map', 'can/util/object', function (can) {
 			return oldSetup.apply(this, arguments);
 		},
 
-		backup: function () {
-			this._backupStore(this.attr());
+		backup: function (options) {
+
+			options = options || {}
+
+			if (options === true){
+				options = {serialize: true, removeAttr: false}
+			}
+			if (typeof options === 'string'){
+				options = {fn: options, removeAttr: false}
+			}
+			options.fn = options.fn || (options.serialize ? 'serialize' : 'attr')
+			options.removeAttr = options.removeAttr === undefined ? true : options.removeAttr
+
+			this._backupStore.options = can.extend({}, options)
+			this._backupStore(this[options.fn]());
 			return this;
 		},
 		isDirty: function (checkAssociations) {
-			return this._backupStore() && !can.Object.same(this.attr(), this._backupStore(), undefined, undefined, undefined, !! checkAssociations);
+			var options = this._backupStore.options
+			return this._backupStore() && !can.Object.same(this[options.fn](), this._backupStore(), undefined, undefined, undefined, !! checkAssociations);
 		},
 		restore: function (restoreAssociations) {
+			var options = this._backupStore.options
 			var props = restoreAssociations ? this._backupStore() : flatProps(this._backupStore(), this);
 			if (this.isDirty(restoreAssociations)) {
-				this.attr(props, true);
+				this.attr(props, options.removeAttr);
 			}
 			return this;
 		}
