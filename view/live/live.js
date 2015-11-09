@@ -350,14 +350,13 @@ steal('can/util',
 					
 					var parentNode = masterNodeList[0].parentNode;
 
-
 					// Move the DOM nodes into the proper location
 					parentNode.insertBefore(movedElements, referenceElement);
 
 					// Now, do the same for the masterNodeList. We need to keep it
 					// in sync with the DOM.
 
-					// Save a reference to the "node" in that we're manually moving
+					// Save a reference to the "node" that we're manually moving
 					var temp = masterNodeList[currentIndex];
 
 					// Remove the movedItem from the masterNodeList
@@ -365,6 +364,26 @@ steal('can/util',
 
 					// Move the movedItem to the correct index in the masterNodeList
 					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
+
+					// Convert back to a zero-based array index
+					newIndex = newIndex - 1;
+					currentIndex = currentIndex - 1;
+
+					// Grab the index compute from the `indexMap`
+					var indexCompute = indexMap[currentIndex];
+
+					// Remove the index compute from the `indexMap`
+					[].splice.apply(indexMap, [currentIndex, 1]);
+
+					// Move the index compute to the correct index in the `indexMap`
+					[].splice.apply(indexMap, [newIndex, 0, indexCompute]);
+
+					var i = Math.min(currentIndex, newIndex);
+					var len = indexMap.length;
+
+					for (i, len; i < len; i++) {
+						indexMap[i](i);
+					}
 				},
 				// A text node placeholder
 				text = el.ownerDocument.createTextNode(''),
