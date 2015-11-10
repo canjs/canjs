@@ -304,10 +304,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			event = [event];
 		}
 
-        var multipleSelectDelimeter = ";";
-        if (el.hasAttribute("can-delimeter")) {
-            multipleSelectDelimeter = el.getAttribute("can-delimeter");
-        }
+		var multipleSelectDelimeter = ";";
+		if (el.hasAttribute("can-delimeter")) {
+			multipleSelectDelimeter = el.getAttribute("can-delimeter");
+		}
 
 		var hasChildren = el.nodeName.toLowerCase() === "select",
 			isMultiselectValue = prop === "value" && hasChildren && el.multiple,
