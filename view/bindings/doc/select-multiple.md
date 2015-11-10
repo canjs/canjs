@@ -61,6 +61,9 @@ string are used as values to match against `<option>` tag values.
 
 @demo can/view/bindings/doc/select_multiple_string.html
 
+If `can-delimeter` is provided as an attribute to the select element,
+it will be used instead of `;`.
+
 ## Cross binding undefined 
 
 If the `KEY` value begins as undefined [can.Map] property like:

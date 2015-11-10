@@ -304,6 +304,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			event = [event];
 		}
 
+        var multipleSelectDelimeter = ";";
+        if (el.hasAttribute("can-delimeter")) {
+            multipleSelectDelimeter = el.getAttribute("can-delimeter");
+        }
+
 		var hasChildren = el.nodeName.toLowerCase() === "select",
 			isMultiselectValue = prop === "value" && hasChildren && el.multiple,
 			isStringValue,
@@ -312,7 +317,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				lastSet = newVal;
 				if(isMultiselectValue) {
 					if (newVal && typeof newVal === 'string') {
-						newVal = newVal.split(";");
+						newVal = newVal.split(multipleSelectDelimeter);
 						isStringValue = true;
 					}
 					// When given something else, try to make it an array and deal with it
@@ -370,7 +375,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 						}
 					});
 
-					return isStringValue ? values.join(";"): values;
+					return isStringValue ? values.join(multipleSelectDelimeter): values;
 				}
 
 				return can.attr.get(el, prop);

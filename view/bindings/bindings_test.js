@@ -1508,6 +1508,55 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.trigger(lis[1], "click");
 	});
 	
+	test("can-value select multiple with values seperated by a ,", function () {
+		var template = can.view.stache(
+			"<select can-value='color' multiple can-delimeter=','>" +
+			"<option value='red'>Red</option>" +
+			"<option value='green'>Green</option>" +
+			"<option value='ultraviolet'>Ultraviolet</option>" +
+			"</select>");
 
-	
+		var map = new can.Map({
+			color: "red"
+		});
+
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var inputs = ta.getElementsByTagName("select"),
+			options = inputs[0].getElementsByTagName('option');
+
+		// Wait for Multiselect.set() to be called.
+		setTimeout(function() {
+			equal(inputs[0].value, 'red', "default value set");
+
+			map.attr("color", "green");
+			equal(inputs[0].value, 'green', "alternate value set");
+
+			options[0].selected = true;
+
+			equal(map.attr("color"), "green", "not yet updated from input");
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "red,green", "updated from input");
+
+			map.removeAttr("color");
+			equal(inputs[0].value, '', "attribute removed from map");
+
+			options[1].selected = true;
+			can.trigger(inputs[0], "change");
+			equal(map.attr("color"), "green", "updated from input");
+
+			map.attr("color", "red,green");
+
+			ok(options[0].selected, 'red option selected from map');
+			ok(options[1].selected, 'green option selected from map');
+			ok(!options[2].selected, 'ultraviolet option NOT selected from map');
+
+			can.remove(can.$(inputs));
+			start();
+		}, 1);
+	});
 });
