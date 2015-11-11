@@ -724,6 +724,29 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		}, 1);
 	});
 
+	test('two-way bound values that do not match a select option set selectedIndex to -1 (#2027)', function() {
+		var renderer = can.view.stache('<select {($value)}="key"><option value="foo">foo</option><option value="bar">bar</option></select>');
+		var map = new can.Map({ });
+		var frag = renderer(map);
+
+		equal(frag.firstChild.selectedIndex, 0, 'undefined <- {($first value)}: selectedIndex = 0');
+
+		map.attr('key', 'notfoo');
+		equal(frag.firstChild.selectedIndex, -1, 'notfoo: selectedIndex = -1');
+
+		map.attr('key', 'foo');
+		strictEqual(frag.firstChild.selectedIndex, 0, 'foo: selectedIndex = 0');
+
+		map.attr('key', 'notbar');
+		equal(frag.firstChild.selectedIndex, -1, 'notbar: selectedIndex = -1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar: selectedIndex = 1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar (no change): selectedIndex = 1');
+	});
+
 	test('radio type conversion (#811)', function(){
 		var data = new can.Map({
 			id: 1
@@ -742,13 +765,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 							 '</a>';
 		//var mustacheRenderer = can.mustache(templateString);
 		var stacheRenderer = can.stache(templateString);
-		
+
 		var obj = new can.Map({thing: 'stuff'});
-		
-		
+
+
 		stacheRenderer(obj);
 		ok(true, 'stache worked without errors');
-		
+
 	});
 
 	test("can-event throws an error when inside #if block (#1182)", function(){

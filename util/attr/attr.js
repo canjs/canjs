@@ -131,6 +131,10 @@ steal("can/util/can.js", function (can) {
 					}
 
 				} else if (prop) {
+					if(prop === 'value' && el.nodeName.toLowerCase() === 'select') {
+						el.selectedIndex = -1; // (re-)initialize to unselected #2027
+					}
+
 					newValue = val;
 					if (el[prop] !== val) {
 						el[prop] = val;
