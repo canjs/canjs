@@ -3,6 +3,13 @@
 @plugin can/map/validations
 @test can/map/validations/test.html
 
+@deprecated {2.3} This validations plugin
+will be removed in 3.0.  It will be replaced by 
+[can-validate](https://github.com/canjs/can-validate).
+
+@body
+
+
 The `can/map/validations` plugin provides validations on maps. Validations
 are set on [can.Map]'s __static__ `init` function.
 
