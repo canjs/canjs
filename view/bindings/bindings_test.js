@@ -1509,6 +1509,35 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.trigger(lis[1], "click");
 	});
 
+	//!steal-remove-start
+	if (can.dev) {
+		test("warning on a mismatched quote (#1995)", function () {
+			expect(4);
+			var oldlog = can.dev.warn,
+				message = 'can/view/bindings/bindings.js: mismatched binding syntax - (foo}';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			};
+			
+			can.stache("<div (foo}='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {foo)';
+			can.stache("<div {foo)='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {(foo})';
+			can.stache("<div {(foo})='bar'/>")();
+
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - ({foo})';
+			can.stache("<div ({foo})='bar'/>")();
+
+
+			can.dev.warn = oldlog;
+		});
+	}
+	//!steal-remove-end
+	
+
 
 	test("One way binding from a select's value to a parent compute updates the parent with the select's initial value (#2027)", function(){
 		var template = can.stache("<select {^$value}='value'><option value='One'>One</option></select>");
