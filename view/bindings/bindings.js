@@ -548,6 +548,20 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 	};
 
+	//!steal-remove-start
+	
+	var syntaxWarning = function(el, attrData) {
+		can.dev.warn('can/view/bindings/bindings.js: mismatched binding syntax - ' + attrData.attributeName);
+	};
+		
+	can.view.attr(/^\(.+\}$/, syntaxWarning);
+
+	can.view.attr(/^\{.+\)$/, syntaxWarning);
+
+	can.view.attr(/^\(\{.+\}\)$/, syntaxWarning);
+	
+	//!steal-remove-end
+
 	var dataBindingsRegExp = /^\{[^\}]+\}$/;
 	can.view.attr(dataBindingsRegExp, function(el, attrData){
 		if(can.data(can.$(el),"preventDataBindings")){
