@@ -1507,6 +1507,34 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		calling  = 1;
 		can.trigger(lis[1], "click");
 	});
+
+	//!steal-remove-start
+	if (can.dev) {
+		test("warning on a mismatched quote (#1995)", function () {
+			expect(4);
+			var oldlog = can.dev.warn,
+				message = 'can/view/bindings/bindings.js: mismatched binding syntax - (foo}';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			};
+			
+			can.stache("<div (foo}='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {foo)';
+			can.stache("<div {foo)='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {(foo})';
+			can.stache("<div {(foo})='bar'/>")();
+
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - ({foo})';
+			can.stache("<div ({foo})='bar'/>")();
+
+
+			can.dev.warn = oldlog;
+		});
+	}
+	//!steal-remove-end
 	
 
 	
