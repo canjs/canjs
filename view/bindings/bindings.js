@@ -347,11 +347,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 						}
 					});
 				} else {
-					if(!options.legacyBindings && hasChildren && ("selectedIndex" in el) && newVal == null) {
+					if(!options.legacyBindings && hasChildren && ("selectedIndex" in el)) {
 						el.selectedIndex = -1;
-					} else {
-						can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
 					}
+					can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+					
 					
 				}
 				return newVal;
