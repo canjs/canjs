@@ -1465,7 +1465,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	test("One way binding from a select's value to a parent compute updates the parent with the select's initial value (#2027)", function(){
-		var template = can.stache("<select {^$value}='value'><option>One</option></select>");
+		var template = can.stache("<select {^$value}='value'><option value='One'>One</option></select>");
 		var map = new can.Map();
 		
 		var frag = template(map);
@@ -1480,4 +1480,91 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		stop();
 		
 	});
+	
+	test("two way binding from a select's value to null has no selection (#2027)", function(){
+		var template = can.stache("<select {($value)}='key'><option value='One'>One</option></select>");
+		var map = new can.Map({key: null});
+		
+		var frag = template(map);
+		var select = frag.childNodes.item(0);
+		
+		setTimeout(function(){
+			equal(select.selectedIndex, -1, "selectedIndex is 0 because no value exists on the map");
+			equal(map.attr("key"), null, "The map's value property is set to the select's value");
+			start();
+		},1);
+		
+		stop();
+		
+	});
+	
+	test('two-way bound values that do not match a select option set selectedIndex to -1 (#2027)', function() {
+		var renderer = can.view.stache('<select {($value)}="key"><option value="foo">foo</option><option value="bar">bar</option></select>');
+		var map = new can.Map({ });
+		var frag = renderer(map);
+
+		equal(frag.firstChild.selectedIndex, 0, 'undefined <- {($first value)}: selectedIndex = 0');
+
+		map.attr('key', 'notfoo');
+		equal(frag.firstChild.selectedIndex, -1, 'notfoo: selectedIndex = -1');
+
+		map.attr('key', 'foo');
+		strictEqual(frag.firstChild.selectedIndex, 0, 'foo: selectedIndex = 0');
+
+		map.attr('key', 'notbar');
+		equal(frag.firstChild.selectedIndex, -1, 'notbar: selectedIndex = -1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar: selectedIndex = 1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar (no change): selectedIndex = 1');
+	});
+	
+	test("two way bound select empty string null or undefined value (#2027)", function () {
+
+		var template = can.stache(
+			"<select id='null-select' {($value)}='color-1'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>" +
+			"<select id='undefined-select' {($value)}='color-2'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>"+
+			"<select id='string-select' {($value)}='color-3'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>");
+
+		var map = new can.Map({
+			'color-1': null,
+			'color-2': undefined,
+			'color-3': ""
+		});
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var nullInput = document.getElementById("null-select");
+		var nullInputOptions = nullInput.getElementsByTagName('option');
+		var undefinedInput = document.getElementById("undefined-select");
+		var undefinedInputOptions = undefinedInput.getElementsByTagName('option');
+		var stringInput = document.getElementById("string-select");
+		var stringInputOptions = stringInput.getElementsByTagName('option');
+
+		// wait for set to be called which will change the selects
+		setTimeout(function(){
+			ok(!nullInputOptions[0].selected, "default (null) value set");
+			ok(undefinedInputOptions[0].selected, "default (undefined) value set");
+			ok(stringInputOptions[0].selected, "default ('') value set");
+			start();
+		}, 1);
+	});
+	
 });

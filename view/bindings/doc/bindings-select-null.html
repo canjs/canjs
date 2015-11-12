@@ -2,13 +2,13 @@
 <div id='out'></div>
 <script type='text/stache' id="attending-template">
 <p>Attending? 
-  <select {($value)}='selectAttending'>
+  <select {($value)}='attending'>
 	  <option value='yes'>Yes</option>
 	  <option value='no'>No</option>
 	  <option value='maybe'>Maybe</option>
   </select>
 </p>
-<p>You {{attendence}}.</p>
+<p>{{attending}}.</p>
 </script>
 </div>
 <script>
@@ -20,16 +20,13 @@ steal("can/view/bindings", "can/view/stache", "can/map/define",function(){
 	
 Person = can.Map.extend({
 	define: {
-		selectAttending: {
-			get: function(){
-				return this.attr("attending") || null;
-			},
-			set: function(attending){
-				if(!attending ) {
+		attending: {
+			set: function(newVal){
+				if(newVal === "") {
 					this.removeAttr("attending");
-					
+					return undefined;
 				} else {
-					this.attr("attending", attending);
+					return newVal;
 				}
 			}
 		}
@@ -37,20 +34,10 @@ Person = can.Map.extend({
 });
 	
 person = new Person({
+	attending: null
 });
 
-var frag = can.view(
-	"attending-template",
-	person,
-	{
-      attendence: function(){
-      	var keys = can.Map.keys( person );
-        return keys.indexOf("attending") >= 0 ? 
-          "are a " + person.attr("attending") :
-          "have not responded";
-    
-    }
-});
+var frag = can.view( "attending-template", person);
 
 $("#out").html( frag );
 

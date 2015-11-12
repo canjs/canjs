@@ -128,7 +128,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			childToParent: true,
 			parentToChild: true,
 			initializeValues: true,
-			syncChildWithParent: true
+			syncChildWithParent: true,
+			legacyBindings: true
 		});
 
 	});
@@ -346,7 +347,12 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 						}
 					});
 				} else {
-					can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+					if(!options.legacyBindings && hasChildren && ("selectedIndex" in el) && newVal == null) {
+						el.selectedIndex = -1;
+					} else {
+						can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+					}
+					
 				}
 				return newVal;
 				
