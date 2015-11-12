@@ -330,6 +330,29 @@ steal("can/view/live", "can/observe", "can/test", "steal-qunit", function () {
 		equal(ps.length, 0, 'there is 1 p');
 	
 	});
-	
-	
+
+	test('rendered list items should re-render when updated (#2007)', function () {
+		var partial = document.createElement('div');
+		var placeholderElement = document.createElement('span');
+		var list = new can.List([ 'foo' ]);
+		var renderer = function(item) {
+			return '<span>' + item + '</span>';
+		};
+
+		partial.appendChild(placeholderElement);
+
+		can.view.live.list(placeholderElement, list, renderer, {});
+
+		equal(partial.getElementsByTagName('span')[0].firstChild.data, 'foo', 'list item 0 is foo');
+
+		list.push('bar');
+
+		equal(partial.getElementsByTagName('span')[1].firstChild.data, 'bar', 'list item 1 is bar');
+
+		list.attr(0, 'baz');
+
+		equal(partial.getElementsByTagName('span')[0].firstChild.data, 'baz', 'list item 0 is baz');
+	});
+
+
 });

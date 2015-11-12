@@ -3,7 +3,7 @@
 
 Called when an attribute is removed.
 
-@signature `remover( currentValue )`
+@signature `remove( currentValue )`
 
 @return {*|false} If `false` is returned, the value is not removed.
 

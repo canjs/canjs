@@ -1436,7 +1436,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("two-way element empty value (1996)", function(){
 
 
-		var template = can.view.stache("<input can-value='age'/>");
+		var template = can.stache("<input can-value='age'/>");
 
 		var map = new can.Map();
 
@@ -1463,6 +1463,52 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(map.attr("age"), "", "updated from input");
 
 	});
+	
+	test("exporting methods (#2051)", function(){
+		expect(2);
+		
+		
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				method : function() {
+					ok(true, "foo called");
+					return 5;
+				}
+			}
+		});
+		
+		var template = can.stache("<foo-bar {^@method}='@*refKey'></foo-bar>{{*refKey()}}");
+
+		var frag = template({});
+		equal( frag.lastChild.nodeValue, "5");
+		
+	});
+
+	
+	test("renders dynamic custom attributes (#1800)", function () {
+	
+		var template = can.view.stache("<ul>{{#actions}}<li can-click='{{.}}'>{{.}}</li>{{/actions}}</ul>");
+	
+		var map = new can.Map({
+			actions: ["action1", "action2"],
+			action1: function(){
+				equal(calling, 0,"action1");
+			},
+			action2: function(){
+				equal(calling, 1,"action2");
+			}
+		});
+	
+		var frag = template(map),
+			lis = frag.firstChild.getElementsByTagName("li");
+	
+		var calling = 0;
+		can.trigger(lis[0], "click");
+		calling  = 1;
+		can.trigger(lis[1], "click");
+	});
+	
 
 	test("One way binding from a select's value to a parent compute updates the parent with the select's initial value (#2027)", function(){
 		var template = can.stache("<select {^$value}='value'><option value='One'>One</option></select>");

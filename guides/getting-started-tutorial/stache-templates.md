@@ -10,7 +10,7 @@
 **In this Chapter**
  - Stache Templates
 
-Get the code for: [chapter: stache templates](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-2_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: stache templates](/guides/examples/PlaceMyOrder/ch-2_canjs-getting-started.zip)
 
 - - -
 
@@ -146,7 +146,7 @@ See examples below:
 Enumerating allows you to loop through the contents of an iterable item. We’ve done this above for
 the options in our select dropdown. The `{{#each key}} ... {{/each}}` tag set
 is used to iterate over an enumerable collection, such as an array. In the
-example above, we are looping over an array of objects. As with [sections](#sections),
+example above, we are looping over an array of objects. As with [sections](#context),
 the properties of the objects we are iterating over are accessible
 from data keys inside the `#each` scope without dot notation. In the example
 above, we saw:

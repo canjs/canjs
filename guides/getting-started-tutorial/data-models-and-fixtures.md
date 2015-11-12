@@ -12,7 +12,7 @@
  - `can.fixture`
  - Connecting `can.Model` with `can.Component`
 
-Get the code for: [chapter: data models and fixtures](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: data models and fixtures](/guides/examples/PlaceMyOrder/ch-6_canjs-getting-started.zip)
 
 - - -
 
@@ -31,6 +31,16 @@ First, let’s open the `models/state.js` file and add the following code:
 ```
 var State = can.Model.extend({
   findAll: 'GET /api/states'
+}, {
+  // Include second, empty parameter object to set instanceProperties
+});
+```
+
+Then add the following to `models/city.js`:
+
+```
+var City = can.Model.extend({
+  findAll: 'GET /api/cities'
 }, {
   // Include second, empty parameter object to set instanceProperties
 });

@@ -17,7 +17,8 @@ be given.
 @param {can.stache.expressions} CALL_EXPRESSION A call expression like `method(key)` that is called when the `DOM_EVENT` 
 is fired. The following key values are also supported:
 
- - `%element` - The [can.$] wrapped element the event happened upon.
+ - `%element` - The element the event happened upon.
+ - `$element` - The [can.$] wrapped element the event happened upon.
  - `%event` - The event object.
  - `%viewModel` - If the element is a [can.Component], the component's [can.Component::viewModel viewModel].
  - `%context` - The current context.
@@ -37,7 +38,8 @@ be given.
 @param {can.stache.expressions} CALL_EXPRESSION A call expression like `method(key)` that is called when the `DOM_EVENT` 
 is fired. The following key values are also supported:
 
- - `%element` - The [can.$] wrapped element the event happened upon.
+ - `%element` - The element the event happened upon.
+ - `$element` - The [can.$] wrapped element the event happened upon.
  - `%event` - The event object.
  - `%viewModel` - If the element is a [can.Component], the component's [can.Component::viewModel viewModel].
  - `%context` - The current context.

@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -11,11 +11,11 @@
 	"homepage": "http://canjs.com/",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:bitovi/canjs.git",
-		"github": "https://github.com/bitovi/canjs"
+		"url": "git@github.com:canjs/canjs.git",
+		"github": "https://github.com/canjs/canjs"
 	},
 	"dependencies": {
-		"can-simple-dom": "^0.2.20"
+		"can-simple-dom": "^0.2.21"
 	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <3.0.0"

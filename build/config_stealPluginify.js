@@ -186,7 +186,7 @@ module.exports = function(){
 					modules: [{type: "core"}],
 					dest: path.join(__dirname,"..","dist/can.jquery.dev.js"),
 					normalize: canNormalize,
-					keepDevelopmentCode: true,
+					removeDevelopmentCode: false,
 					minify: false
 				},
 				"jquery-core-min +ignorelibs": {

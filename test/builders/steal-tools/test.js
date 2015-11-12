@@ -131,7 +131,6 @@ describe("Building steal projects", function(){
 		rmdir(__dirname + "/import/dist", function(error){
 			if(error) return done(error);
 
-			console.log("building it");
 			stealTools.build({
 				config: __dirname + "/config.js",
 				main: "import/app",

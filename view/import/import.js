@@ -1,6 +1,7 @@
 steal("can/util", "can/view/callbacks", function(can){
 
 	can.view.tag("can-import", function(el, tagData){
+		var $el = can.$(el);
 		var moduleName = el.getAttribute("from");
 
 		// If the module is part of the helpers pass that into can.import
@@ -21,8 +22,8 @@ steal("can/util", "can/view/callbacks", function(can){
 		}
 
 		// Set the viewModel to the promise
-		can.data(can.$(el), "viewModel", importPromise);
-		can.data(can.$(el), "scope", importPromise);
+		can.data($el, "viewModel", importPromise);
+		can.data($el, "scope", importPromise);
 
 		// Set the scope
 		var scope = tagData.scope.add(importPromise);
@@ -31,12 +32,14 @@ steal("can/util", "can/view/callbacks", function(can){
 		var handOffTag = el.getAttribute("can-tag");
 		if(handOffTag) {
 			var callback = can.view.tag(handOffTag);
+			can.data($el,"preventDataBindings", true);
 			callback(el, can.extend(tagData, {
 				scope: scope
 			}));
+			can.data($el,"preventDataBindings", false);
 
-			can.data(can.$(el), "viewModel", importPromise);
-			can.data(can.$(el), "scope", importPromise);
+			can.data($el, "viewModel", importPromise);
+			can.data($el, "scope", importPromise);
 		}
 		// Render the subtemplate and register nodeLists
 		else {

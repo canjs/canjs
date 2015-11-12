@@ -286,6 +286,11 @@ steal('can/util',
 						indexMap[i](i);
 					}
 				},
+				// Called when an item is set with .attr
+				set = function(ev, newVal, index) {
+					remove({}, { length: 1 }, index, true);
+					add({}, [newVal], index);
+				},
 				// Called when items are removed or when the bindings are torn down.
 				remove = function (ev, items, index, duringTeardown, fullTeardown) {
 					if (!afterPreviousEvents) {
@@ -345,14 +350,13 @@ steal('can/util',
 					
 					var parentNode = masterNodeList[0].parentNode;
 
-
 					// Move the DOM nodes into the proper location
 					parentNode.insertBefore(movedElements, referenceElement);
 
 					// Now, do the same for the masterNodeList. We need to keep it
 					// in sync with the DOM.
 
-					// Save a reference to the "node" in that we're manually moving
+					// Save a reference to the "node" that we're manually moving
 					var temp = masterNodeList[currentIndex];
 
 					// Remove the movedItem from the masterNodeList
@@ -360,6 +364,26 @@ steal('can/util',
 
 					// Move the movedItem to the correct index in the masterNodeList
 					[].splice.apply(masterNodeList, [newIndex, 0, temp]);
+
+					// Convert back to a zero-based array index
+					newIndex = newIndex - 1;
+					currentIndex = currentIndex - 1;
+
+					// Grab the index compute from the `indexMap`
+					var indexCompute = indexMap[currentIndex];
+
+					// Remove the index compute from the `indexMap`
+					[].splice.apply(indexMap, [currentIndex, 1]);
+
+					// Move the index compute to the correct index in the `indexMap`
+					[].splice.apply(indexMap, [newIndex, 0, indexCompute]);
+
+					var i = Math.min(currentIndex, newIndex);
+					var len = indexMap.length;
+
+					for (i, len; i < len; i++) {
+						indexMap[i](i);
+					}
 				},
 				// A text node placeholder
 				text = el.ownerDocument.createTextNode(''),
@@ -371,6 +395,7 @@ steal('can/util',
 					// array
 					if (list && list.unbind) {
 						list.unbind('add', add)
+							.unbind('set', set)
 							.unbind('remove', remove)
 							.unbind('move', move);
 					}
@@ -394,6 +419,7 @@ steal('can/util',
 						
 						if ( oldList.unbind ) {
 							oldList.unbind('add', add)
+								.unbind('set', set)
 								.unbind('remove', remove)
 								.unbind('move', move);
 						}
@@ -421,6 +447,7 @@ steal('can/util',
 					// list might be a plain array
 					if (list.bind) {
 						list.bind('add', add)
+							.bind('set', set)
 							.bind('remove', remove)
 							.bind('move', move);
 					}

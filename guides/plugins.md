@@ -120,4 +120,4 @@ Your plugin is now available via the [bower registry](http://bower.io/search)!
 
 That's all there is to it. In this guide you developed a CanJS plugin complete with tests and examples and learned how to distribute it via bower.
 
-If you've created a CanJS plugin we'd love to hear about it over on [BitHub](http://bithub.com) [IRC](http://webchat.freenode.net/?channels=canjs) or our [forums](http://forum.javascriptmvc.com).
+If you've created a CanJS plugin we'd love to hear about it over on [BitHub](http://bithub.com) [IRC](http://webchat.freenode.net/?channels=canjs) or our [forums](http://forums.donejs.com/c/canjs).

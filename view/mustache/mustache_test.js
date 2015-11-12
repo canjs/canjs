@@ -572,13 +572,18 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 
 	test("Handlebars helper: unless", function () {
 		var t = {
-			template: "{{#unless missing}}Andy is missing!{{/unless}}",
-			expected: "Andy is missing!",
+			template: "{{#unless missing}}Andy is missing!{{/unless}}" +
+			          "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
+			expected: "Andy is missing! But he wasn't cool anyways.",
 			data: {
 				name: 'Andy'
 			},
 			liveData: new can.Map({
-				name: 'Andy'
+				name: 'Andy',
+				// #1202 #unless does not work with computes
+				isCool: can.compute(function () {
+					return t.liveData.attr("missing");
+				})
 			})
 		};
 
@@ -1832,7 +1837,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
 	});
 
-	// https://github.com/bitovi/canjs/issues/228
+	// https://github.com/canjs/canjs/issues/228
 	test("Contexts within helpers not always resolved correctly", function () {
 		can.Mustache.registerHelper("bad_context", function (context, options) {
 			return "<span>" + this.text + "</span> should not be " + options.fn(context);
@@ -1854,7 +1859,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
 	});
 
-	// https://github.com/bitovi/canjs/issues/227
+	// https://github.com/canjs/canjs/issues/227
 	test("Contexts are not always passed to partials properly", function () {
 		can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}', ".mustache")
 
@@ -1872,7 +1877,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
 	});
 
-	// https://github.com/bitovi/canjs/issues/231
+	// https://github.com/canjs/canjs/issues/231
 	test("Functions and helpers should be passed the same context", function () {
 		can.Mustache.registerHelper("to_upper", function (fn, options) {
 			if (!fn.fn) {
@@ -1905,7 +1910,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 		equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
 	});
 
-	// https://github.com/bitovi/canjs/issues/153
+	// https://github.com/canjs/canjs/issues/153
 	test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function () {
 		var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
 			renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),

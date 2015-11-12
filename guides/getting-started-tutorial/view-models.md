@@ -11,7 +11,7 @@
  - Getting and Setting Scope Properties
  - View Models
 
-Get the code for: [chapter: view models](https://github.com/bitovi/canjs/blob/minor/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip?raw=true)
+Get the code for: [chapter: view models](/guides/examples/PlaceMyOrder/ch-5_canjs-getting-started.zip)
 
 - - -
 
@@ -169,7 +169,7 @@ the element will have a “Choose a city” option.
 
 If you refresh the Restaurants page, you’ll see the new city select
 element that has options as soon as you select a state. However, there’s
-a bug: if you change the state, the first city for the new state show as
+a bug: if you change the state, the first city for the new state is automatically
 selected, even though the user hasn’t made a city choice. Let’s fix this
 by nullifying the city when the state changes. Find the state setter:
 

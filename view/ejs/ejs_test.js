@@ -1283,7 +1283,7 @@ steal("can/model", "can/view/ejs", "can/test", "steal-qunit", function () {
 		Todos.splice(0, 2);
 		equal(li.length, 0, '0 items in list');
 	});
-	// https://github.com/bitovi/canjs/issues/153
+	// https://github.com/canjs/canjs/issues/153
 	test('Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node', function () {
 		can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>');
 		can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>');

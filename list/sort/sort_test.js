@@ -172,7 +172,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				items: items
 			}));
 
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
+			var firstElText = el.querySelector('li').firstChild.data;
 
 			/// Check that the template rendered an item
 			equal(firstElText, 'b',
@@ -184,7 +184,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			});
 
 			// Get the text of the first <li> in the <div>
-			firstElText = el.getElementsByTagName('li')[0].innerText;
+			firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the template rendered that item at the correct index
 			equal(firstElText, 'a',
@@ -208,7 +208,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				items: items
 			}));
 
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
+			var firstElText = el.querySelector('li').firstChild.data;
 
 			/// Check that the template rendered an item
 			equal(firstElText, 'a', 'First LI is a "a"');
@@ -218,8 +218,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				id: 'b'
 			});
 
-			// Get the text of the first <li> in the <div>
-			firstElText = el.getElementsByTagName('li')[1].innerText;
+			firstElText = el.querySelectorAll('li')[1].firstChild.data;
 
 			// Check that the template rendered that item at the correct index
 			equal(firstElText, 'b',
@@ -241,7 +240,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				items: items
 			}));
 
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
+			var firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the "b" is at the beginning of the list
 			equal(firstElText, 'b',
@@ -253,7 +252,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			});
 
 			// Get the text of the first <li> in the <div>
-			firstElText = el.getElementsByTagName('li')[0].innerText;
+			firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the "a" was added to the beginning of the list despite
 			// the splice
@@ -280,7 +279,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				items: items
 			}));
 
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
+			var firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the "x" is at the beginning of the list
 			equal(firstElText, 'x', 'First LI is a "x"');
@@ -289,7 +288,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			items.attr('2').attr('id', 'a');
 
 			// Get the text of the first <li> in the <div>
-			firstElText = el.getElementsByTagName('li')[0].innerText;
+			firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the "a" was added to the beginning of the list despite
 			// the splice
@@ -319,7 +318,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				items: items
 			}));
 
-			var firstElText = el.getElementsByTagName('li')[0].innerText;
+			var firstElText = el.querySelector('li').firstChild.data;
 
 			// Check that the "4" is at the beginning of the list
 			equal(firstElText, 4, 'First LI is a "4"');
@@ -327,7 +326,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			// Sort the list in-place
 			items.attr('comparator' , 'id');
 
-			firstElText = el.getElementsByTagName('li')[0].innerText;
+			firstElText = el.querySelector('li').firstChild.data;
 
 			equal(firstElText, 0, 'The `0` was moved to beginning of the list' +
 				'once sorted.');
@@ -655,5 +654,39 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 			{ isPrimary: false },
 			{ isPrimary: true }
 		]);
+	});
+
+	test('{{@index}} is updated for "move" events (#1962)', function () {
+		var list = new can.List([100, 200, 300]);
+		list.attr('comparator', function (a, b) { return a < b ? -1 : 1; });
+
+		var template = can.stache('<ul>{{#each list}}<li>' +
+				'<span class="index">{{@index}}</span> - ' +
+				'<span class="value">{{.}}</span>' +
+			'</li>{{/each}}</ul>');
+		
+		var frag = template({ list: list });
+		var expected;
+
+		var evaluate = function () {
+			var liEls = frag.querySelectorAll('li');
+			
+			for (var i = 0; i < expected.length; i++) {
+				var li = liEls[i];
+				var index = li.querySelectorAll('.index')[0].innerHTML;
+				var value = li.querySelectorAll('.value')[0].innerHTML;
+				
+				equal(index, ''+i, '{{@index}} rendered correct value');
+				equal(value, ''+expected[i], '{{.}} rendered correct value');
+			}
+		};
+
+		expected = [100, 200, 300];
+		evaluate();
+
+		list.attr('comparator', function (a, b) { return a < b ? 1 : -1; });
+
+		expected = [300, 200, 100];
+		evaluate();
 	});
 });

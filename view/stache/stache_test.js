@@ -695,13 +695,18 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 		test("Handlebars helper: unless", function () {
 			var t = {
-				template: "{{#unless missing}}Andy is missing!{{/unless}}",
-				expected: "Andy is missing!",
+				template: "{{#unless missing}}Andy is missing!{{/unless}}" +
+			              "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
+				expected: "Andy is missing! But he wasn't cool anyways.",
 				data: {
 					name: 'Andy'
 				},
 				liveData: new can.Map({
-					name: 'Andy'
+					name: 'Andy',
+					// #1202 #unless does not work with computes
+					isCool: can.compute(function () {
+						return t.liveData.attr("missing");
+					})
 				})
 			};
 
@@ -1648,7 +1653,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('li')[0]), 'Todo #1', 'Pushing to the list works');
 		});
 
-		// https://github.com/bitovi/canjs/issues/228
+		// https://github.com/canjs/canjs/issues/228
 		test("Contexts within helpers not always resolved correctly", function () {
 
 			can.stache.registerHelper("bad_context", function (context, options) {
@@ -1672,7 +1677,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[2]), "In the inner context", 'Incorrect other_text in helper inner template');
 		});
 
-		// https://github.com/bitovi/canjs/issues/227
+		// https://github.com/canjs/canjs/issues/227
 		test("Contexts are not always passed to partials properly", function () {
 			can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
 
@@ -1690,7 +1695,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[1]), "foo", 'Incorrect text in helper inner template');
 		});
 
-		// https://github.com/bitovi/canjs/issues/231
+		// https://github.com/canjs/canjs/issues/231
 		test("Functions and helpers should be passed the same context", function () {
 
 			var textNodes = function(el, cb) {
@@ -1739,7 +1744,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(div.getElementsByTagName('span')[0]), data.next_level.other_text.toUpperCase(), 'correct context passed to helper');
 		});
 
-		// https://github.com/bitovi/canjs/issues/153
+		// https://github.com/canjs/canjs/issues/153
 		test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function () {
 			var renderer = can.stache('{{ #todos }}{{ name }}{{ /todos }}'),
 				renderer2 = can.stache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
@@ -4449,6 +4454,29 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 			equal(frag.firstChild.firstChild.nodeValue, '2', 'Rendered correct value');
 			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
+		});
+
+		test('eq called twice (#1931)', function() {
+			expect(1);
+
+			var oldIs = can.stache.getHelper('is').fn;
+
+			can.stache.registerHelper('is', function() {
+				ok(true, 'comparator invoked');
+				return oldIs.apply(this, arguments);
+			});
+
+			var a = can.compute(0),
+			b = can.compute(0);
+
+			can.stache('{{eq a b}}')({ a: a, b: b });
+
+			can.batch.start();
+			a(1);
+			b(1);
+			can.batch.stop();
+
+			can.stache.registerHelper('is', oldIs);
 		});
 
 		test("#each with else works (#1979)", function(){

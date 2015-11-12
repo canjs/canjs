@@ -50,7 +50,7 @@ lets you write a url that only changes specified properties:
 The following demo uses `routeUrl` and [can.stache.helpers.routeCurrent] to 
 create links that update [can.route]'s `page` attribute:
 
-@demo can/view/stache/doc/helpers/routeUrl.html
+@demo can/view/stache/doc/helpers/route-url.html
 
 It also writes out the current url like:
 

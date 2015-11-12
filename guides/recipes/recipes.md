@@ -35,5 +35,5 @@ setup.
 
 ## Request a Recipe
 
-To request a new recipe or vote on an upcoming one, [submit an issue](https://github.com/bitovi/canjs.com/issues)
+To request a new recipe or vote on an upcoming one, [submit an issue](https://github.com/canjs/canjs.com/issues)
 to the `canjs.com` respository on GitHub.
