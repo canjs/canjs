@@ -11,7 +11,7 @@ steal(
 	'can/list',
 	'can/view',
 	'can/compute', function (can, makeComputeData) {
-		
+
 		/**
 		 * @add can.view.Scope
 		 */
@@ -26,13 +26,13 @@ steal(
 			// - notContext - This can't be looked within using `./` and `../`. It will be skipped.  This is
 			//   for virtual contexts like those used by `%index`.
 			this._meta = meta || {};
-			
+
 			// A cache that can be used to store computes used to look up within this scope.
 			// For example if someone creates a compute to lookup `name`, another compute does not
 			// need to be created.
 			this.__cache = {};
 		}
-		
+
 		/**
 		 * @static
 		 */
@@ -44,7 +44,7 @@ steal(
 			// ## Scope.Refs
 			// A special type of `can.Map` used for the references scope.
 			Refs: can.Map.extend({shortName: "ReferenceMap"},{}),
-			
+
 			// ## Scope.refsScope
 			// A scope with a references scope in it and no parent. 
 			refsScope: function(){
@@ -55,7 +55,7 @@ steal(
 		 * @prototype
 		 */
 		can.simpleExtend(Scope.prototype,{
-			
+
 			// ## Scope.prototype.add
 			// Creates a new scope and sets the current scope to be the parent.
 			// ```
@@ -72,7 +72,7 @@ steal(
 					return this;
 				}
 			},
-			
+
 			// ## Scope.prototype.read
 			// Reads from the scope chain and returns the first non-`undefined` value.
 			// `read` deals mostly with setting up "context based" keys to start reading
@@ -92,7 +92,7 @@ steal(
 				if(attr === "%root") {
 					return { value: this.getRoot() };
 				}
-				
+
 				// Identify context based keys.  Context based keys try to
 				// specify a particular context a key should be within.
 				var isInCurrentContext = attr.substr(0, 2) === './',
@@ -103,16 +103,16 @@ steal(
 						isInParentContext ||
 						isCurrentContext ||
 						isParentContext;
-						
+
 				// `notContext` contexts should be skipped if the key is "context based".
 				// For example, the context that holds `%index`.
 				if(isContextBased && this._meta.notContext) {
 					return this._parent.read(attr, options);
 				}
-				
+
 				// If true, lookup stops after the current context. 
 				var currentScopeOnly;
-				
+
 				if(isInCurrentContext) {
 					// Stop lookup from checking parent scopes.
 					// Set flag to halt lookup from walking up scope.
@@ -120,8 +120,14 @@ steal(
 					attr = attr.substr(2);
 				}
 				else if (isInParentContext) {
-					// Read from the parent context.
-					return this._parent.read(attr.substr(3), options);
+					// walk up until we find a parent that can have context.
+					// the `isContextBased` check above won't catch it when you go from
+					// `../foo` to `foo` because `foo` isn't context based.
+					var parent = this._parent;
+					while(parent._meta.notContext) {
+						parent = parent._parent;
+					}
+					return parent.read(attr.substr(3), options);
 				}
 				else if ( isCurrentContext ) {
 					return {
@@ -133,7 +139,7 @@ steal(
 						value: this._parent._context
 					};
 				}
-				
+
 				// if it's a reference scope, read from there.
 				var keyReads = can.compute.read.reads(attr);
 				if(keyReads[0].key.charAt(0) === "*") {
@@ -153,7 +159,7 @@ steal(
 				// If no value can be found, this is a list of of every observed
 				// object and property name to observe.
 					undefinedObserves = [],
-					
+
 				// Tracks the first found observe.
 					currentObserve,
 				// Tracks the reads to get the value from `currentObserve`.
@@ -163,7 +169,7 @@ steal(
 					setObserveDepth = -1,
 					currentSetReads,
 					currentSetObserve,
-					
+
 					readOptions = can.simpleExtend({
 						/* Store found observable, incase we want to set it as the rootObserve. */
 						foundObservable: function (observe, nameIndex) {
@@ -188,18 +194,18 @@ steal(
 				while (currentScope) {
 					currentContext = currentScope._context;
 
-					
-					
+
+
 					if ( currentContext !== null &&
-						// if its a primitive type, keep looking up the scope, since there won't be any properties
+							// if its a primitive type, keep looking up the scope, since there won't be any properties
 						(typeof currentContext === "object" || typeof currentContext === "function")
-						) {
+					) {
 
 						// Prevent computes from temporarily observing the reading of observables.
 						var getObserves = can.__trapObserves();
-						
+
 						var data = can.compute.read(currentContext, keyReads, readOptions);
-						
+
 						// Retrieve the observes that were read.
 						var observes = getObserves();
 						// If a **value was was found**, return value and location data.
@@ -238,15 +244,15 @@ steal(
 					value: undefined
 				};
 			},
-			
+
 			// ## Scope.prototype.get
 			// Gets a value from the scope without being observable.
 			get: can.__notObserve(function (key, options) {
-				
+
 				options = can.simpleExtend({
 					isArgument: true
 				}, options);
-				
+
 				var res = this.read(key, options);
 				return res.value;
 			}),
@@ -282,7 +288,7 @@ steal(
 			getRoot: function(){
 				var cur = this,
 					child = this;
-					
+
 				while(cur._parent) {
 					child = cur;
 					cur = cur._parent;
@@ -293,13 +299,13 @@ steal(
 				}
 				return cur._context;
 			},
-			
-			
+
+
 			// ## Scope.prototype.attr
 			// Gets or sets a value in the scope without being observable.
 			attr: can.__notObserve(function (key, value, options) {
-				
-				
+
+
 				options = can.simpleExtend({
 					isArgument: true
 				}, options);
@@ -307,7 +313,7 @@ steal(
 				// Allow setting a value on the context
 				if(arguments.length === 2) {
 					var lastIndex = key.lastIndexOf('.'),
-						// Either get the paren of a key or the current context object with `.`
+					// Either get the paren of a key or the current context object with `.`
 						readKey = lastIndex !== -1 ? key.substring(0, lastIndex) : '.',
 						obj = this.read(readKey, options).value;
 
@@ -320,10 +326,10 @@ steal(
 				} else {
 					return this.get(key, options);
 				}
-				
+
 			}),
 
-			
+
 
 			// ## Scope.prototype.computeData
 			// Finds the first location of the key in the scope and then provides a get-set compute that represents the key's value
@@ -368,9 +374,9 @@ steal(
 				}
 			}
 		});
-		
+
 		can.view.Scope = Scope;
-		
+
 		function Options(data, parent, meta){
 			if (!data.helpers && !data.partials && !data.tags) {
 				data = {
@@ -381,8 +387,8 @@ steal(
 		}
 		Options.prototype = new Scope();
 		Options.prototype.constructor = Options;
-		
+
 		can.view.Options = Options;
-		
+
 		return Scope;
 	});

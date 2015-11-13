@@ -4558,6 +4558,31 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 		});
 		
+		test("Rendering live bound indicies with #each, @index and a simple can.List (#2067)", function () {
+			var list = new can.List([{value:'a'}, {value:'b'}, {value: 'c'}]);
+			var template = can.stache("<ul>{{#each list}}<li>{{%index}} {{value}}</li>{{/each}}</ul>");
+
+			var tpl = template({
+				list: list
+			}).firstChild;
+			//.getElementsByTagName('li');
+
+			var lis = tpl.getElementsByTagName('li');
+			equal(lis.length, 3, "three lis");
+
+			equal(innerHTML(lis[0]), '0 a', "first index and value are correct");
+			equal(innerHTML(lis[1]), '1 b', "second index and value are correct");
+			equal(innerHTML(lis[2]), '2 c', "third index and value are correct");
+			
+		});
+		
+		test("%index content should be skipped by ../ (#1554)", function(){
+			var list = new can.List(["a","b"]);
+			var tmpl = can.stache('{{#each items}}<li>{{.././items.indexOf .}}</li>{{/each}}');
+			var frag = tmpl({items: list});
+			equal(frag.lastChild.firstChild.nodeValue, "1", "read indexOf");
+		});
+		
 		test("rendering style tag (#2035)",function(){
 			var map = new can.Map({color: 'green'});
 			var frag = can.stache('<style>body {color: {{color}} }</style>')(map);
