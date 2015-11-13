@@ -1546,8 +1546,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var frag = template(map);
 		var select = frag.childNodes.item(0);
 
-		can.trigger(select, 'change');
-
 		setTimeout(function(){
 			equal(select.selectedIndex, 0, "selectedIndex is 0 because no value exists on the map");
 			equal(map.attr("value"), "One", "The map's value property is set to the select's value");
