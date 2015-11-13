@@ -362,6 +362,9 @@ steal('can/util', 'can/list', function (can) {
 					var length = args.length;
 					var i = 0;
 					var newIndex, val;
+					
+					// Pre-sort so that the splices have the smallest O(n) overhead;
+					args = args.sort(this.__comparator);
 
 					// Increment, don't decrement in order to minimize the
 					// number of items after each subsequent .splice();
