@@ -128,7 +128,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			childToParent: true,
 			parentToChild: true,
 			initializeValues: true,
-			syncChildWithParent: true
+			syncChildWithParent: true,
+			legacyBindings: true
 		});
 
 	});
@@ -291,7 +292,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 
 
 
-	var elementCompute = function(el, prop, event){
+	var elementCompute = function(el, prop, event, options){
 		if(!event) {
 			if(prop === "innerHTML") {
 				event = ["blur","change"];
@@ -308,7 +309,17 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			isMultiselectValue = prop === "value" && hasChildren && el.multiple,
 			isStringValue,
 			lastSet,
+			scheduledAsyncSet = false,
 			set = function(newVal){
+				// Templates write parent's out before children.  This should probably change.
+				// But it means we don't do a set immediately.
+				if(hasChildren && !scheduledAsyncSet) {
+					scheduledAsyncSet = true;
+					setTimeout(function(){
+						set(newVal);
+					},1);
+				}
+				
 				lastSet = newVal;
 				if(isMultiselectValue) {
 					if (newVal && typeof newVal === 'string') {
@@ -336,15 +347,24 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 						}
 					});
 				} else {
+					if(!options.legacyBindings && hasChildren && ("selectedIndex" in el)) {
+						el.selectedIndex = -1;
+					}
 					can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+					
+					
 				}
 				return newVal;
 
 			};
-
+		
+		// Parent is hydrated before children.  So we do
+		// a tiny wait to do any sets.
 		if(hasChildren) {
 			// have to set later ... probably only with mustache.
-			setTimeout(function(){ set(lastSet); },1);
+			setTimeout(function(){
+				scheduledAsyncSet = true;
+			},1);
 		}
 
 		return can.compute(el[prop],{
@@ -420,7 +440,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			childCompute;
 
 		if(isDOM) {
-			childCompute = elementCompute(el, attrName.substr(1));
+			childCompute = elementCompute(el, attrName.substr(1), undefined, options);
 		} else {
 			var childExpression = expression.parse(attrName,{baseMethodType: "Call"});
 			var childContext = can.viewModel(el);
@@ -569,7 +589,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 		var attrNameInfo = attributeNameInfo(attrData.attributeName);
 		attrNameInfo.initializeValues = true;
-
+		attrNameInfo.templateType = attrData.templateType;
 		bindings(el, attrData, attrNameInfo);
 	});
 

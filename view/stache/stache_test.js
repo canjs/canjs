@@ -1841,13 +1841,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				el.value = value() || "";
 			}
 			var val;
-			can.stache.registerHelper('value', function (value) {
+			can.stache.registerHelper('myValue', function (value) {
 				return function (el) {
 					val = new Value(el, value);
 				}
 			});
 
-			var renderer = can.stache('<input {{value user.name}}/>');
+			var renderer = can.stache('<input {{myValue user.name}}/>');
 
 			var div = doc.createElement('div'),
 				u = new can.Map({
@@ -1874,7 +1874,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			val.teardown();
 
 			// name is undefined
-			renderer = can.stache('<input {{value user.name}}/>');
+			renderer = can.stache('<input {{myValue user.name}}/>');
 			div = doc.createElement('div');
 			u = new can.Map({});
 			div.appendChild(renderer({
@@ -1894,7 +1894,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			val.teardown();
 
 			// name is null
-			renderer = can.stache('<input {{value user.name}}/>');
+			renderer = can.stache('<input {{myValue user.name}}/>');
 			div = doc.createElement('div');
 			u = new can.Map({
 				name: null
