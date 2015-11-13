@@ -62,7 +62,7 @@ steal(function(){
 	// var fillAttrs = makeMap("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected");
 
 	// Special Elements (can contain anything)
-	var special = makeMap("script,style");
+	var special = makeMap("script");
 
 	// Callback names on `handler`.
 	var tokenTypes = "start,end,close,attrStart,attrEnd,attrValue,chars,comment,special,done".split(",");

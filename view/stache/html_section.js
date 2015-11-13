@@ -112,7 +112,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 				data = decodeHTML(data);
 			}
 			if(this.targetStack.length) {
-				this.targetStack[this.targetStack.length-1].children.push(data);
+				can.last(this.targetStack).children.push(data);
 			} else {
 				this[this.data].push(data);
 			}
@@ -123,13 +123,12 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 				this.inverseCompiled = target(this.inverseData, can.document || can.global.document);
 				delete this.inverseData;
 			}
-			delete this.targetData;
-			delete this.targetStack;
+			this.targetStack = this.targetData = null;
 			return this.compiled;
 		},
 		children: function(){
 			if(this.targetStack.length) {
-				return this.targetStack[this.targetStack.length-1].children;
+				return can.last(this.targetStack).children;
 			} else {
 				return this[this.data];
 			}
@@ -139,7 +138,7 @@ steal("can/util","can/view/target","./utils.js","./mustache_core.js",function( c
 			return !this.targetData.length;
 		}
 	});
-
+	HTMLSectionBuilder.HTMLSection = HTMLSection;
 	return HTMLSectionBuilder;
 
 });
