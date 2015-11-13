@@ -3,6 +3,32 @@
 @parent guides 5
 -->
 
+__2.3.2__ ( Nov 13 2015 )
+
+- [adds warning for mismatched binding syntaxes](https://github.com/canjs/canjs/pull/2078)
+- [Don&#39;t remove development code from development build.](https://github.com/canjs/canjs/pull/2070)
+- [makes exporting function work, but not pretty](https://github.com/canjs/canjs/pull/2064)
+- [Fix issue #1202 and &#39;unless&#39; helper](https://github.com/canjs/canjs/pull/2058)
+- [Add navigator object to vdom global object - #2056](https://github.com/canjs/canjs/pull/2057)
+- [Add navigator object to vdom](https://github.com/canjs/canjs/issues/2056)
+- [Cannot export a component&#39;s prototype function to the references scope](https://github.com/canjs/canjs/issues/2051)
+- [New 2-way bindings run setter twice with default values](https://github.com/canjs/canjs/issues/2049)
+- [Added a setter for class attr to handle svg elements where className cann…](https://github.com/canjs/canjs/pull/2048)
+- [Previous behavior restored for &quot;old&quot; two-way binding syntax](https://github.com/canjs/canjs/pull/2046)
+- [All can-import tests are passing again](https://github.com/canjs/canjs/pull/2045)
+- [Importing a template doesn&#39;t work with the new syntax](https://github.com/canjs/canjs/issues/2042)
+- [Formalize two-way binding with selects.](https://github.com/canjs/canjs/issues/2027)
+- [New bindings updating the scope when created](https://github.com/canjs/canjs/issues/2020)
+- [Dead links](https://github.com/canjs/canjs/issues/2018)
+- [svgEl.className is readOnly so live binding does not work](https://github.com/canjs/canjs/issues/2015)
+- [stache does not update view with can.List and deep properties](https://github.com/canjs/canjs/issues/2007)
+- [can.jquery.dev.js doesn&#39;t include dev parts of code](https://github.com/canjs/canjs/issues/2004)
+- [After change of comparator @index in view stays the same for elements](https://github.com/canjs/canjs/issues/1962)
+- [eq helper called twice](https://github.com/canjs/canjs/issues/1931)
+- [Condition (helper) inside can-EVENT doesn&#39;t work](https://github.com/canjs/canjs/issues/1800)
+- [Stache conditionals within custom attributes break in 2.3.0-pre.2](https://github.com/canjs/canjs/issues/1770)
+
+
 __2.3.1__ ( Oct 29 2015 )
 
 - [Make define part of the core](https://github.com/canjs/canjs/issues/2040)
