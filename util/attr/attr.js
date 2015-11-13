@@ -132,7 +132,9 @@ steal("can/util/can.js", function (can) {
 
 				} else if (prop) {
 					newValue = val;
-					if (el[prop] !== val) {
+					// https://github.com/canjs/canjs/issues/356
+					// But still needs to be set for <option>fields
+					if (el[prop] !== val || el.nodeName.toUpperCase() === 'OPTION') {
 						el[prop] = val;
 					}
 					if (prop === "value" && can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
