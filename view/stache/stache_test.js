@@ -4565,7 +4565,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 			map = new can.Map({showGreen: true});
 			frag = can.stache('<style>body {color: {{#showGreen}}green{{/showGreen}} }</style>')(map);
-			ontent = frag.firstChild.firstChild.nodeValue;
+			content = frag.firstChild.firstChild.nodeValue;
 			equal(content,"body {color: green }","sub expressions work");
 			
 		});

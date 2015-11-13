@@ -42,7 +42,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 					}
 					else if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
-					} 
+					}
 					else {
 						liveStache.attributes(this, compute, scope, options);
 					}
@@ -53,7 +53,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 					}
 					else if(state.attr) {
 						can.attr.set(this, state.attr, value);
-					} 
+					}
 					else {
 						live.setAttributes(this, value);
 					}

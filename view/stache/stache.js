@@ -312,7 +312,7 @@ steal(
 						makeRendererAndUpdateSection(state.node.section, mode, expression );
 					} else {
 						throw new Error(mode+" is currently not supported within a tag.");
-					}	
+					}
 				}
 				else {
 					makeRendererAndUpdateSection( state.textContentOnly || section, mode, expression );
