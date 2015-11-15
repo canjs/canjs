@@ -22,7 +22,7 @@ dom elements or observable objects the component listens to.
 @option {can.Component.prototype.helpers} [helpers] Specifies helpers
 used to render the component's template.
 
-@option {can.Component.prototype.simpleHelpers} [helpers] Specifies helpers
+@option {can.Component.prototype.simpleHelpers} [simpleHelpers] Specifies helpers
 used to render the component's template.
 
 @option {can.Component.prototype.viewModel} [viewModel] Specifies an object
