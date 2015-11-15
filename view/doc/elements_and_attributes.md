@@ -31,24 +31,31 @@ With the release of canJS 2.3 the new [can.view.bindings binding syntax] provide
         <my-component {child-prop}="value"/>
       </example>
       ```
+      
       Updates `child-prop` when `value` changes
+      
     * One-Way binds the `value` in the [can.view.Scope scope] to a element's attribute or property.
       ```
       <input {$placeholder}="value">
       ```
+      
       Updates `placeholder` when `value` changes
+      
     * Reverse the One-Way binding by adding a `^` at the beginning.
       ```
       <example>
         <my-component {^child-prop}="value"/>
       </example>
       ```
+      
       Updates `value` when `child-prop` changes
+      
     * Export a [can.Component::viewModel viewModel] to the references scope by adding an attribute with the hypenated name of the reference scope property
       ```
       <example {child-prop}="*foobar"/>
       <input type="text" {($value)}="*foobar">
       ```
+      
       Export `child-prop` from `<example>`'s [can.Component::viewModel viewModel] into `*foobar` (reference scope) and two-way bind `*foobar` to the element's attribute. If the element's attribute changes, `*foobar` will change and updates the `child-prop` on `<example>`. If `child-prop` nothing will happen.
       
       
@@ -59,17 +66,22 @@ With the release of canJS 2.3 the new [can.view.bindings binding syntax] provide
         <my-component {(child-prop)}="value"/>
       </example>
       ```
+      
       Updates `child-prop` when `value` changes, updates `value` when `child-prop` changes.
+      
     * Two-Way binds the `value` in the [can.view.Scope scope] and the element's attribute or property.
       ```
       <input {($value)}="myValue">
       ```
+      
       Updates the element's attribute `value` when `myValue` changes, updates `myValue` when the element's attribute `value` changes.
+      
     * Export a [can.Component::viewModel viewModel] to the references scope by adding an attribute with the hypenated name of the reference scope property
       ```
       <example {(child-prop)}="*foobar"/>
       <input type="text" {($value)}="*foobar">
       ```
+      
       Export and two-way bind `child-prop` from `<example>`'s [can.Component::viewModel viewModel] into `*foobar` (reference scope) and two-way bind `*foobar` to the element's attribute. If the element's attribute changes, `*foobar` will change and updates the `child-prop` on `<example>`. If `child-prop` changes, `*foobar` will change and updates the element's value attribute.
  
  - Passes primitive to [can.Component::viewModel viewModel]
