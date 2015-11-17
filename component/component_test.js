@@ -1596,7 +1596,8 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
 			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
 			equal(stacheResult[2], "VALUE3", "stache  {{}} cross binds attribute");
-			equal(mustacheResult[2], "value 3", "mustache sticks with old value even though property has changed");
+			
+			equal(mustacheResult[2], "VALUE 3", "mustache sticks with old value even though property has changed");
 
 			equal(stacheResult[3], "value4", "stache sees new attributes");
 

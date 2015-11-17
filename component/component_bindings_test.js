@@ -1386,6 +1386,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				tag: 'destroyable-component',
 				events: {
 					destroy: function(){
+			
 						this.viewModel.attr('product', null);
 					}
 				}
@@ -1610,6 +1611,29 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 			equal(parentVM.attr('parentProp'), 'baz', 'parentProp is baz');
 			equal(childVM.attr('childProp'), 'baz', 'childProp is baz');
+		});
+		
+		test("conditional attributes (#2077)", function(){
+			can.Component.extend({
+				tag: 'some-comp',
+				viewModel: {}
+			});
+			var template = can.stache("<some-comp {{#if preview}}next-page='{nextPage}'{{/if}}></some-comp>");
+			
+			var map = new can.Map({preview: true, nextPage: 2});
+			var frag = template(map);
+			
+			var vm = can.viewModel(frag.firstChild);
+			
+			stop();
+			
+			setTimeout(function(){
+				equal(vm.attr("nextPage"), 2);
+				start();
+			},10);
+			
+			
+			//debugger;
 		});
 
 	}
