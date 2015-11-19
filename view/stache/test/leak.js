@@ -49,7 +49,7 @@ steal(
 				}
 			},
 			runTest: function () {
-				for (var i = 0; i <= 5; i++) {
+				for (var i = 0; i < 6; i++) {
 					this.attr('showCollection', 
 						! this.attr('showCollection'));
 				}
@@ -66,7 +66,7 @@ steal(
 
 	can.Component.extend({
 		tag: 'list-toggler-1',
-		template: 
+		template: can.stache(
 			'<button can-click="{runTest}">' + 
 				'Leak #1' +
 			'</button>' +
@@ -74,20 +74,20 @@ steal(
 				'<list-viewer-1 local-collection="{parentCollection}">\n' + 
 					'{{id}}\n' +
 				'</list-viewer-1>' + 
-			'{{/if}}',
+			'{{/if}}'),
 		viewModel: makeViewModel()
 	});
 
 	can.Component.extend({
 		tag: 'list-viewer-1',
-		template: 
+		template: can.stache(
 			'<ul>' + 
 				'{{#each localCollection}}' +
 					'<li class="leaked">' +
 						'<content />' + 
 					'</li>' +
 				'{{/each}}' +
-			'</ul>'
+			'</ul>')
 	});
 
 
@@ -99,24 +99,24 @@ steal(
 
 	can.Component.extend({
 		tag: 'list-toggler-2',
-		template: 
+		template: can.stache(
 			'<button can-click="{runTest}">' + 
 				'Leak #2' +
 			'</button>' +
 			'{{#if showCollection}}' +
 				'<list-viewer-2 local-collection="{parentCollection}"></list-viewer-2>' + 
-			'{{/if}}',
+			'{{/if}}'),
 		viewModel: makeViewModel()
 	});
 
 	can.Component.extend({
 		tag: 'list-viewer-2',
-		template: 
+		template: can.stache(
 			'{{#each localCollection}}' +
 				'<li class="leaked">' +
 					'{{id}}' +
 				'</li>' +
-			'{{/each}}'
+			'{{/each}}')
 	});
 
 
@@ -128,24 +128,24 @@ steal(
 
 	can.Component.extend({
 		tag: 'list-toggler-3',
-		template: 
+		template: can.stache(
 			'<button can-click="{runTest}">' + 
 				'Leak #3' +
 			'</button>' +
 			'{{#if showCollection}}' +
 				'<list-viewer-3 local-collection="{parentMap}"></list-viewer-3>' + 
-			'{{/if}}',
+			'{{/if}}'),
 		viewModel: makeViewModel()
 	});
 
 	can.Component.extend({
 		tag: 'list-viewer-3',
-		template: 
+		template: can.stache(
 			'{{#each localCollection}}' +
 				'<li class="leaked">' +
 					'{{@key}} - {{.}}' +
 				'</li>' +
-			'{{/each}}'
+			'{{/each}}')
 	});
 
 	var template = can.stache(
