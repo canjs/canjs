@@ -7,7 +7,7 @@
 steal(
 'can/util',
 'can/view/stache',
-'can/component', 
+'can/component',
 'can/map/define', function (can) {
 
 	/**
@@ -22,7 +22,7 @@ steal(
 				},
 				parentMap: {
 					value: function () {
-						var map = {}; 
+						var map = {};
 
 						for (var i = 0; i < 1000; i++) {
 							map['key-' + i] = 'foo';
@@ -33,7 +33,7 @@ steal(
 				},
 				parentCollection: {
 					value: function () {
-						var collection = []; 
+						var collection = [];
 
 						for (var i = 0; i < 1000; i++) {
 							collection.push(new can.Map({
@@ -50,16 +50,19 @@ steal(
 			},
 			runTest: function () {
 				for (var i = 0; i < 6; i++) {
-					this.attr('showCollection', 
-						! this.attr('showCollection'));
+					this.toggle();
 				}
+			},
+			toggle: function () {
+				this.attr('showCollection',
+					! this.attr('showCollection'));
 			}
 		};
 	};
 
 	/**
 	 * Leak #1
-	 * 
+	 *
 	 * The user content provided to <list-viewer-1> has more than one child
 	 * DOM node
 	 **/
@@ -67,13 +70,12 @@ steal(
 	can.Component.extend({
 		tag: 'list-toggler-1',
 		template: can.stache(
-			'<button can-click="{runTest}">' + 
-				'Leak #1' +
-			'</button>' +
+			'<button can-click="{runTest}">Test #1</button>' +
+			'<button can-click="{toggle}">Toggle #1</button>' +
 			'{{#if showCollection}}' +
-				'<list-viewer-1 local-collection="{parentCollection}">\n' + 
-					'{{id}}\n' +
-				'</list-viewer-1>' + 
+				'<list-viewer-1 local-collection="{parentCollection}">' +
+					'{{id}}' +
+				'</list-viewer-1>' +
 			'{{/if}}'),
 		viewModel: makeViewModel()
 	});
@@ -81,30 +83,28 @@ steal(
 	can.Component.extend({
 		tag: 'list-viewer-1',
 		template: can.stache(
-			'<ul>' + 
+			'<ul>' +
 				'{{#each localCollection}}' +
 					'<li class="leaked">' +
-						'<content />' + 
+						'<content />' +
 					'</li>' +
 				'{{/each}}' +
 			'</ul>')
 	});
 
-
 	/**
 	 * Leak #2
-	 * 
-	 * The template of <list-viewer-2> doesn't have a root node
+	 *
+	 * {{@key}} is used in a template
 	 **/
 
 	can.Component.extend({
 		tag: 'list-toggler-2',
 		template: can.stache(
-			'<button can-click="{runTest}">' + 
-				'Leak #2' +
-			'</button>' +
+			'<button can-click="{runTest}">Test #2</button>' +
+			'<button can-click="{toggle}">Toggle #2</button>' +
 			'{{#if showCollection}}' +
-				'<list-viewer-2 local-collection="{parentCollection}"></list-viewer-2>' + 
+				'<list-viewer-2 local-collection="{parentMap}"></list-viewer-2>' +
 			'{{/if}}'),
 		viewModel: makeViewModel()
 	});
@@ -114,44 +114,14 @@ steal(
 		template: can.stache(
 			'{{#each localCollection}}' +
 				'<li class="leaked">' +
-					'{{id}}' +
-				'</li>' +
-			'{{/each}}')
-	});
-
-
-	/**
-	 * Leak #3
-	 * 
-	 * {{@key}} is used in a template
-	 **/
-
-	can.Component.extend({
-		tag: 'list-toggler-3',
-		template: can.stache(
-			'<button can-click="{runTest}">' + 
-				'Leak #3' +
-			'</button>' +
-			'{{#if showCollection}}' +
-				'<list-viewer-3 local-collection="{parentMap}"></list-viewer-3>' + 
-			'{{/if}}'),
-		viewModel: makeViewModel()
-	});
-
-	can.Component.extend({
-		tag: 'list-viewer-3',
-		template: can.stache(
-			'{{#each localCollection}}' +
-				'<li class="leaked">' +
 					'{{@key}} - {{.}}' +
 				'</li>' +
 			'{{/each}}')
 	});
 
 	var template = can.stache(
-		'<list-toggler-1></list-toggler-1>\n' +
-		'<list-toggler-2></list-toggler-2>\n' +
-		'<list-toggler-3></list-toggler-3>\n');
+		'<list-toggler-1></list-toggler-1> | ' +
+		'<list-toggler-2></list-toggler-2>');
 	var frag = template();
 	$(document.body).append(frag);
 });
