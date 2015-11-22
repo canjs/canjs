@@ -35,7 +35,6 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 				
 				compute.computeInstance.bind("change", can.k);
 				var value = compute();
-				
 				if( compute.computeInstance.hasDependencies ) {
 					if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);

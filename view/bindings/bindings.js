@@ -1,15 +1,21 @@
 // # can/view/bindings/bindings.js
 //
-// This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
-// for in template event bindings. These are usable in any mustache template, but mainly and documented
-// for use within can.Component.
-
+// This module provides CanJS's default data and event bindings.
+// It's broken up into several parts:
+// 
+// - Behaviors - Binding behaviors that run given an attribute or element.
+// - Attribute Syntaxes - Hooks up custom attributes to their behaviors.
+// - getComputeFrom - Methods that return a compute cross bound to the scope, viewModel, or element.
+// - bind - Methods for setting up cross binding
+// - getBindingInfo - A helper that returns the details of a data binding given an attribute.
+// - makeDataBinding - A helper method for setting up a data binding.
+// - initializeValues - A helper that initializes a data binding.
 steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, expression, viewCallbacks) {
 	
-	
+	// ## Behaviors
 	var behaviors = {
-		// ### behaviors.viewModel
-		// Sets up all of an element's data binding attributes to "soon-to-be-created"
+		// ### bindings.behaviors.viewModel
+		// Sets up all of an element's data binding attributes to a "soon-to-be-created"
 		// `viewModel`. 
 		// This is primarily used by `can.Component` to ensure that its
 		// `viewModel` is initialized with values from the data bindings as quickly as possible.
@@ -31,12 +37,14 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				viewModel,
 				onViewModels = [],
 				onTeardowns = {},
+				// Track info about each binding, we need this for binding attributes correctly.
+				bindingInfos = {},
 				attributeViewModelBindings = can.extend({}, initialViewModelData);
 			
 			// For each attribute, 
 			can.each( can.makeArray(el.attributes), function(node){
 				// start the data binding process.
-				var res = makeDataBinding(node, el, {
+				var dataBinding = makeDataBinding(node, el, {
 					templateType: tagData.templateType,
 					scope: tagData.scope,
 					semaphore: bindingsSemaphore,
@@ -45,18 +53,19 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					},
 					attributeViewModelBindings: attributeViewModelBindings
 				});
-				
-				// For bindings that change the viewModel,
-				if(res) {
-					// Save the initial value on the viewModel.
-					if(res.bindingInfo.parentToChild) {
-						initialViewModelData[res.viewModelName] = res.value;
+				if(dataBinding) {
+					// For bindings that change the viewModel,
+					if(dataBinding.onViewModel) {
+						// Save the initial value on the viewModel.
+						if(dataBinding.bindingInfo.parentToChild) {
+							initialViewModelData[dataBinding.bindingInfo.childName] = dataBinding.value;
+						}
+						// Save what needs to happen after the `viewModel` is created.
+						onViewModels.push(dataBinding.onViewModel);
 					}
-					// Save what needs to happen after the `viewModel` is created.
-					onViewModels.push(res.onViewModel);
-					// Save how to tear this down.  
-					onTeardowns[node.name] = res.onTeardown;
+					onTeardowns[node.name] = dataBinding.onTeardown;
 				}
+				
 			});
 			
 			// Create the `viewModel` and call what needs to be happen after
@@ -70,27 +79,36 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			// Listen to attribute changes and re-initialize
 			// the bindings.
 			can.bind.call(el, "attributes", function (ev) {
-				var attrName = ev.attributeName;
+				
+				var attrName = ev.attributeName,
+					value = el.getAttribute(attrName);
+				
 				
 				if( onTeardowns[attrName] ) {
 					onTeardowns[attrName]();
 				}
-				
-				var res = makeDataBinding({name: attrName, value: el.getAttribute(attrName)}, el, {
-					templateType: tagData.templateType,
-					scope: tagData.scope,
-					semaphore: {},
-					getViewModel: function(){
-						return viewModel;
-					},
-					attributeViewModelBindings: attributeViewModelBindings,
-					// always update the viewModel accordingly.
-					initializeValues: true
-				});
-				// The viewModel is created, so 
-				if(res) {
-					res.onViewModel();
-					onTeardowns[attrName] = res.onTeardown;
+				// Parent attribute bindings we always re-setup
+				var parentBindingWasAttribute = bindingInfos[attrName] && bindingInfos[attrName].parent === "attribute";
+				if(value !== null || parentBindingWasAttribute ) {
+					var dataBinding = makeDataBinding({name: attrName, value: value}, el, {
+						templateType: tagData.templateType,
+						scope: tagData.scope,
+						semaphore: {},
+						getViewModel: function(){
+							return viewModel;
+						},
+						attributeViewModelBindings: attributeViewModelBindings,
+						// always update the viewModel accordingly.
+						initializeValues: true
+					});
+					if(dataBinding) {
+						// The viewModel is created, so call callback immediately.
+						if(dataBinding.onViewModel) {
+							dataBinding.onViewModel();
+						}
+						bindingInfos[attrName] = dataBinding.bindingInfo;
+						onTeardowns[attrName] = dataBinding.onTeardown;
+					}
 				}
 			});
 			
@@ -100,7 +118,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				}
 			};
 		},
-		// ### behaviors.data
+		// ### bindings.behaviors.data
 		// This is called when an individual data binding attribute is placed on an element.
 		// For example `{^value}="name"`.
 		data: function(el, attrData){
@@ -109,7 +127,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			}
 			var viewModel = can.viewModel(el);
 			
-			var res = makeDataBinding({
+			var dataBinding = makeDataBinding({
 				name: attrData.attributeName,
 				value: el.getAttribute(attrData.attributeName)
 			}, el, {
@@ -118,14 +136,15 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				semaphore: {},
 				getViewModel: function(){
 					return viewModel;
-				},
-				setupTeardown: true
+				}
 			});
-			if(res) {
-				res.onViewModel();
+			
+			if(dataBinding.onViewModel) {
+				dataBinding.onViewModel();
 			}
+			can.one.call(el, 'removed', dataBinding.onTeardown);
 		},
-		// ### behaviors.reference
+		// ### bindings.behaviors.reference
 		// Provides the shorthand `*ref` behavior that exports the `viewModel`.
 		// For example `{^value}="name"`.
 		reference: function(el, attrData) {
@@ -140,7 +159,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			refs._context.attr("*"+name, viewModel);
 	
 		},
-		// ### behaviors.event
+		// ### bindings.behaviors.event
 		// The following section contains code for implementing the can-EVENT attribute.
 		// This binds on a wildcard attribute name. Whenever a view is being processed
 		// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler
@@ -263,7 +282,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			};
 			can.bind.call(el, 'attributes', attributesHandler);
 		},
-		// ### behaviors.value
+		// ### bindings.behaviors.value
 		// Behavior for the deprecated can-value
 		value: function(el, data) {
 			var propName = "$value",
@@ -332,7 +351,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	};
 	
 		
-	// ## Custom Attributes
+	// ## Attribute Syntaxes
 	// The following sets up the bindings functions to be called 
 	// when called in a template.
 	
@@ -361,172 +380,14 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	can.view.attr("can-value", behaviors.value);
 	
 	
-	// ## makeDataBinding
-	// Makes a data binding for a attribute `node`.  If the
-	// data binding involves a `viewModel`, an object will be returned
-	// that finishes the data binding once a `viewModel` has been created.
-	// - `node` - an attribute node or an object with a `name` and `value` property.
-	// - `el` - the element this binding belongs on.
-	// - `bindingData` - an object with:
-	//   - `templateType` - the type of template. Ex: "legacy" for mustache.
-	//   - `scope` - the `can.view.Scope`,
-	//   - `semaphore` - an object that keeps track of changes in different properties to prevent cycles,
-	//   - `getViewModel`  - a function that returns the `viewModel` when called.  This function can be passed around (not called) even if the 
-	//                       `viewModel` doesn't exist yet.
-	//   - `attributeViewModelBindings` - properties already specified as being a viewModel<->attribute (as opposed to viewModel<->scope) binding.
-	var makeDataBinding = function(node, el, bindingData){
-		
-		var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType);
-		if(!bindingInfo) {
-			return;
-		}
-		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData);
-		var childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData);
-		var updateParent;
-		
-		// Only bind to 
-		if(bindingInfo.parentToChild){
-			
-			var updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
-		}
-		
-		var onViewModel = function(){
-			if(bindingInfo.childToParent){
-				// setup listening on parent and forwarding to viewModel
-				updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName,
-					bindingData.syncChildWithParent);
-			}
-			if(bindingData.initializeValues || bindingInfo.initializeValues) {
-				initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
-			}
-			
-			if(bindingData.setupTeardown) {
-				can.one.call(el, 'removed', onTeardown);
-			}
-		};
-		// TODO: onTeardown isn't returned?
-		var onTeardown = function() {
-			unbindUpdate(parentCompute, updateChild);
-			unbindUpdate(childCompute, updateParent);
-		};
-		if(bindingInfo.child === "viewModel") {
-			return {
-				value: getValue(parentCompute),
-				viewModelName: bindingInfo.childName,
-				onViewModel: onViewModel,
-				bindingInfo: bindingInfo,
-				onTeardown: onTeardown
-			};
-		} else {
-			onViewModel();
-		}
-	};
-	
-	// ## getBindingInfo
-	// takes a node object like {name, value} and returns
-	// an object with information about that binding.
-	// Properties:
-	// - `parent` - where is the parentName read from: "scope", "attribute", "viewModel".
-	// - `parentName` - what is the parent property that should be read.
-	// - `child` - where is the childName read from: "scope", "attribute", "viewModel".
-	//  - `childName` - what is the child property that should be read.
-	// - `parentToChild` - should changes in the parent update the child.
-	// - `childToParent` - should changes in the child update the parent.
-	// - `bindingAttributeName` - the attribute name that created this binding.
-	// - `initializeValues` - should parent and child be initialized to their counterpart.
-	// If undefined is return, there is no binding.
-	var getBindingInfo = function(node, attributeViewModelBindings, templateType){
-		var attributeName = node.name,
-			attributeValue = node.value;
-		
-		// Does this match the new binding syntax?
-		var matches = attributeName.match(bindingsRegExp);
-		if(!matches) {
-			var ignoreAttribute = ignoreAttributesRegExp.test(attributeName);
-			var vmName = can.camelize(attributeName);
-			
-			//!steal-remove-start
-			// user tried to pass something like id="{foo}", so give them a good warning
-			if(ignoreAttribute) {
-				can.dev.warn("can/component: looks like you're trying to pass "+attributeName+" as an attribute into a component, "+
-				"but it is not a supported attribute");
-			}
-			//!steal-remove-end
-			
-			// if this is handled by another binding or a attribute like `id`.
-			if ( ignoreAttribute || viewCallbacks.attr(attributeName) ) {
-				return;
-			}
-			var syntaxRight = attributeValue[0] === "{" && can.last(attributeValue) === "}";
-			var isAttributeToChild = templateType === "legacy" ? attributeViewModelBindings[vmName] : !syntaxRight;
-			var scopeName = syntaxRight ? attributeValue.substr(1, attributeValue.length - 2 ) : attributeValue;
-			if(isAttributeToChild) {
-				return {
-					bindingAttributeName: attributeName,
-					parent: "attribute",
-					parentName: attributeName,
-					child: "viewModel",
-					childName: vmName,
-					parentToChild: true,
-					childToParent: true
-				};
-			} else {
-				return {
-					bindingAttributeName: attributeName,
-					parent: "scope",
-					parentName: scopeName,
-					child: "viewModel",
-					childName: vmName,
-					parentToChild: true,
-					childToParent: true
-				};
-			}
-		}
-		
-		var twoWay = !!matches[1],
-			childToParent = twoWay || !!matches[2],
-			parentToChild = twoWay || !childToParent;
-		
-		var childName = matches[3];
-		var isDOM = childName.charAt(0) === "$";
-		if(isDOM) {
-			
-			return {
-				parent: "scope",
-				child: "attribute",
-				childToParent: childToParent,
-				parentToChild: parentToChild,
-				bindingAttributeName: attributeName,
-				childName: childName.substr(1),
-				parentName: attributeValue,
-				initializeValues: true
-			};
-		} else {
-			return {
-				parent: "scope",
-				child: "viewModel",
-				childToParent: childToParent,
-				parentToChild: parentToChild,
-				bindingAttributeName: attributeName,
-				childName: can.camelize(childName),
-				parentName: attributeValue,
-				initializeValues: true
-			};
-		}
-
-	};
-	// Regular expressions for getBindingInfo
-	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/,
-		ignoreAttributesRegExp = /^(data-view-id|class|id|\[[\w\.-]+\]|#[\w\.-])$/i;
-	
-	
 	// ## getComputeFrom
 	// An object of helper functions that make a getter/setter compute
 	// on different types of objects.
 	var getComputeFrom = {
+		// {foo}="someMethod(.,1)"
 		scope: function(el, scope, scopeProp, options){
 			var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
-			return parentExpression.value(scope, new can.view.Scope());
+			return parentExpression.value(scope, new can.view.Options({}));
 		},
 		viewModel: function(el, scope, vmName, options) {
 			return can.compute(function(newVal){
@@ -656,7 +517,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		childToParent: function(el, parentUpdate, childCompute, bindingsSemaphore, attrName, syncChild){
 			var parentUpdateIsFunction = typeof parentUpdate === "function";
 	
-			var updateScope = function(ev, newVal){
+			var updateParent = function(ev, newVal){
 				if (!bindingsSemaphore[attrName]) {
 					if(parentUpdateIsFunction) {
 						parentUpdate(newVal);
@@ -676,10 +537,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			};
 	
 			if(childCompute && childCompute.isComputed) {
-				childCompute.bind("change", updateScope);
+				childCompute.bind("change", updateParent);
 			}
 	
-			return updateScope;
+			return updateParent;
 		},
 		// parent -> child binding
 		parentToChild: function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
@@ -704,14 +565,188 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 	};
 	
+	// ## getBindingInfo
+	// takes a node object like {name, value} and returns
+	// an object with information about that binding.
+	// Properties:
+	// - `parent` - where is the parentName read from: "scope", "attribute", "viewModel".
+	// - `parentName` - what is the parent property that should be read.
+	// - `child` - where is the childName read from: "scope", "attribute", "viewModel".
+	//  - `childName` - what is the child property that should be read.
+	// - `parentToChild` - should changes in the parent update the child.
+	// - `childToParent` - should changes in the child update the parent.
+	// - `bindingAttributeName` - the attribute name that created this binding.
+	// - `initializeValues` - should parent and child be initialized to their counterpart.
+	// If undefined is return, there is no binding.
+	var getBindingInfo = function(node, attributeViewModelBindings, templateType){
+		var attributeName = node.name,
+			attributeValue = node.value || "";
+		
+		// Does this match the new binding syntax?
+		var matches = attributeName.match(bindingsRegExp);
+		if(!matches) {
+			var ignoreAttribute = ignoreAttributesRegExp.test(attributeName);
+			var vmName = can.camelize(attributeName);
+			
+			//!steal-remove-start
+			// user tried to pass something like id="{foo}", so give them a good warning
+			if(ignoreAttribute) {
+				can.dev.warn("can/component: looks like you're trying to pass "+attributeName+" as an attribute into a component, "+
+				"but it is not a supported attribute");
+			}
+			//!steal-remove-end
+			
+			// if this is handled by another binding or a attribute like `id`.
+			if ( ignoreAttribute || viewCallbacks.attr(attributeName) ) {
+				return;
+			}
+			var syntaxRight = attributeValue[0] === "{" && can.last(attributeValue) === "}";
+			var isAttributeToChild = templateType === "legacy" ? attributeViewModelBindings[vmName] : !syntaxRight;
+			var scopeName = syntaxRight ? attributeValue.substr(1, attributeValue.length - 2 ) : attributeValue;
+			if(isAttributeToChild) {
+				return {
+					bindingAttributeName: attributeName,
+					parent: "attribute",
+					parentName: attributeName,
+					child: "viewModel",
+					childName: vmName,
+					parentToChild: true,
+					childToParent: true
+				};
+			} else {
+				return {
+					bindingAttributeName: attributeName,
+					parent: "scope",
+					parentName: scopeName,
+					child: "viewModel",
+					childName: vmName,
+					parentToChild: true,
+					childToParent: true
+				};
+			}
+		}
+		
+		var twoWay = !!matches[1],
+			childToParent = twoWay || !!matches[2],
+			parentToChild = twoWay || !childToParent;
+		
+		var childName = matches[3];
+		var isDOM = childName.charAt(0) === "$";
+		if(isDOM) {
+			
+			return {
+				parent: "scope",
+				child: "attribute",
+				childToParent: childToParent,
+				parentToChild: parentToChild,
+				bindingAttributeName: attributeName,
+				childName: childName.substr(1),
+				parentName: attributeValue,
+				initializeValues: true
+			};
+		} else {
+			return {
+				parent: "scope",
+				child: "viewModel",
+				childToParent: childToParent,
+				parentToChild: parentToChild,
+				bindingAttributeName: attributeName,
+				childName: can.camelize(childName),
+				parentName: attributeValue,
+				initializeValues: true
+			};
+		}
+
+	};
+	// Regular expressions for getBindingInfo
+	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/,
+		ignoreAttributesRegExp = /^(data-view-id|class|id|\[[\w\.-]+\]|#[\w\.-])$/i;
+	
+	
+	// ## makeDataBinding
+	// Makes a data binding for an attribute `node`.  Returns an object with information
+	// about the binding, including an `onTeardown` method that undoes the binding.  
+	// If the data binding involves a `viewModel`, an `onViewModel` method is returned on
+	// the object.  This method must be called after the element has a `viewModel` with the
+	// `viewModel` to complete the binding.
+	// 
+	// - `node` - an attribute node or an object with a `name` and `value` property.
+	// - `el` - the element this binding belongs on.
+	// - `bindingData` - an object with:
+	//   - `templateType` - the type of template. Ex: "legacy" for mustache.
+	//   - `scope` - the `can.view.Scope`,
+	//   - `semaphore` - an object that keeps track of changes in different properties to prevent cycles,
+	//   - `getViewModel`  - a function that returns the `viewModel` when called.  This function can be passed around (not called) even if the 
+	//      `viewModel` doesn't exist yet.
+	//   - `attributeViewModelBindings` - properties already specified as being a viewModel<->attribute (as opposed to viewModel<->scope) binding.
+	// 
+	// Returns:
+	// - `undefined` - If this isn't a data binding.
+	// - `object` - An object with information about the binding.
+	var makeDataBinding = function(node, el, bindingData){
+		
+		// Get information about the binding.
+		var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType);
+		if(!bindingInfo) {
+			return;
+		}
+		// Get computes for the parent and child binding
+		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData);
+		var childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData);
+		var updateParent;
+		
+		
+		// Only bind to the parent if it will update the child.
+		if(bindingInfo.parentToChild){
+			var updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
+		}
+		
+		// This completes the binding.  We can't call it right away because
+		// the `viewModel` might not have been created yet.
+		var completeBinding = function(){
+			if(bindingInfo.childToParent){
+				// setup listening on parent and forwarding to viewModel
+				updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName,
+					bindingData.syncChildWithParent);
+			}
+			if(bindingData.initializeValues || bindingInfo.initializeValues) {
+				initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
+			}
+			
+			
+		};
+		// This tears down the binding.
+		var onTeardown = function() {
+			unbindUpdate(parentCompute, updateChild);
+			unbindUpdate(childCompute, updateParent);
+		};
+		// If this binding depends on the viewModel, which might not have been created,
+		// return the function to complete the binding as `onViewModel`.
+		if(bindingInfo.child === "viewModel") {
+			return {
+				value: getValue(parentCompute),
+				onViewModel: completeBinding,
+				bindingInfo: bindingInfo,
+				onTeardown: onTeardown
+			};
+		} else {
+			completeBinding();
+			return {
+				bindingInfo: bindingInfo,
+				onTeardown: onTeardown
+			};
+			
+		}
+	};
+	
 	// ## initializeValues
-	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateScope){
+	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateParent){
 
 		if(options.parentToChild && !options.childToParent) {
 			updateChild({}, getValue(parentCompute) );
 		}
 		else if(!options.parentToChild && options.childToParent) {
-			updateScope({}, getValue(childCompute) );
+			updateParent({}, getValue(childCompute) );
 		}
 		// Two way
 		// Update child or parent depending on who has a value.
@@ -719,7 +754,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		else if( getValue(childCompute) === undefined) {
 			updateChild({}, getValue(parentCompute) );
 		} else if(getValue(parentCompute) === undefined) {
-			updateScope({}, getValue(childCompute) );
+			updateParent({}, getValue(childCompute) );
 		} else {
 			updateChild({}, getValue(parentCompute) );
 		}

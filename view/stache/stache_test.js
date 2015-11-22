@@ -4557,6 +4557,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 		});
 
+		test("checked as a custom attribute", function(){
+			var map = new can.Map({
+				preview: true
+			});
+			var frag = can.stache("<div {{#if preview}}checked{{/if}}></div>")(map);
+			equal(frag.firstChild.getAttribute("checked"), "", "got attribute");
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
