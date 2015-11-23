@@ -553,7 +553,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 								});
 							}
 						}
-					} 
+					}
 					// The parentCompute can sometimes be just an observable if the observable
 					// is on a plain JS object. This updates the observable to match whatever the
 					// new value is.
