@@ -37,8 +37,7 @@ steal("can/util", function(can){
 		observedInfoStack.push(observedInfo);
 		observedInfo.value = observedInfo.func.call(observedInfo.context);
 		observedInfoStack.pop();
-		
-		unbindOldSet(observedInfo);
+		updateBindings(observedInfo);
 		
 		// Set ready after all previous events have fired.
 		can.batch.afterPreviousEvents(function(){
@@ -48,14 +47,25 @@ steal("can/util", function(can){
 		return observedInfo;
 	}
 
-	// ### unbindOldSet
+	// ### updateBindings
 	// Unbinds everything in `oldObserved`.
-	var unbindOldSet = function(observedInfo){
+	var updateBindings = function(observedInfo){
 		var onchanged = observedInfo.onchanged,
-			oldObserved = observedInfo.oldObserved;
-			
-		for (var name in oldObserved) {
-			var obEv = oldObserved[name];
+			newObserved = observedInfo.newObserved,
+			oldObserved = observedInfo.oldObserved,
+			name,
+			obEv;
+		
+		for (name in newObserved) {
+			obEv = newObserved[name];
+			if(!oldObserved[name]) {
+				obEv.obj.bind(obEv.event, onchanged);
+			} else {
+				oldObserved[name] = null;
+			}
+		}
+		for (name in oldObserved) {
+			obEv = oldObserved[name];
 			if(obEv) {
 				obEv.obj.unbind(obEv.event, onchanged);
 			}
@@ -103,11 +113,6 @@ steal("can/util", function(can){
 					obj: obj,
 					event: evStr
 				};
-				
-				if(!top.oldObserved[name]) {
-					obj.bind(evStr, top.onchanged);
-				}
-				top.oldObserved[name] = null;
 			}
 			
 		}
@@ -137,11 +142,6 @@ steal("can/util", function(can){
 				
 				if(!top.newObserved[name]) {
 					top.newObserved[name] = trap;
-					
-					if(!top.oldObserved[name]) {
-						trap.obj.bind(trap.event, top.onchanged);
-					}
-					top.oldObserved[name] = null;
 				}
 			}
 		}

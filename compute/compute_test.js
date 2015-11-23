@@ -790,4 +790,24 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		count.unbind('change');
 		ok(true, 'No error was thrown');
 	});
+	
+
+	test("dependent computes update in the right order (2093)", function() {
+		
+		var root = can.compute('a'),			
+			childB = can.compute(function() {
+				return root();
+			}),
+			combine = can.compute(function() {
+				console.log("combine eval");
+				return root() + childB();
+			});
+
+		combine.bind("change", function(ev, newVal) {
+			equal(newVal, "bb", "concat changed");
+		});
+		console.log("UPDATE");
+		root('b');
+	}); 
+
 });
