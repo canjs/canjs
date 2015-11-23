@@ -1612,16 +1612,7 @@ steal('can/util',
 		 * @static
 		 */
 
-		can.view.Options = can.view.Scope.extend({
-			init: function (data, parent) {
-				if (!data.helpers && !data.partials && !data.tags) {
-					data = {
-						helpers: data
-					};
-				}
-				can.view.Scope.prototype.init.apply(this, arguments);
-			}
-		});
+		
 
 		// ## Helpers
 		//

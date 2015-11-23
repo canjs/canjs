@@ -4,6 +4,132 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			document.getElementById("qunit-fixture").innerHTML = "";
 		}
 	});
+	
+	test("attributeNameInfo", function(){
+		// MUSTACHE BEHAVIOR
+		var info = can.bindings.getBindingInfo({name: "foo", value: "bar"},{foo: "@"},"legacy");
+		deepEqual(info,{
+			parent: "attribute",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "foo",
+			parentName: "foo",
+			bindingAttributeName: "foo"
+		}, "legacy with @");
+		
+
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "bar"},{},"legacy");
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "foo-ed"
+		},"legacy");
+		
+		// ORIGINAL STACHE BEHAVIOR
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "bar"});
+		deepEqual(info, {
+			parent: "attribute",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "foo-ed",
+			bindingAttributeName: "foo-ed"
+		}, "OG stache attr binding");
+		
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "{bar}"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "foo-ed"
+		}, "OG stache vm binding");
+		
+		// NEW BINDINGS
+		
+		// element based
+		info = can.bindings.getBindingInfo({name: "{$foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: false,
+			parentToChild: true,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{$foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{($foo-ed)}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: true,
+			parentToChild: true,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{($foo-ed)}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{^$foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: true,
+			parentToChild: false,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{^$foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+		// vm based
+		info = can.bindings.getBindingInfo({name: "{foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: false,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{foo-ed}",
+			initializeValues: true
+		}, "new vm binding");
+		
+		info = can.bindings.getBindingInfo({name: "{(foo-ed)}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{(foo-ed)}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{^foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: false,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{^foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+	});
 
 	var foodTypes = new can.List([{
 		title: "Fruits",
@@ -1641,5 +1767,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			start();
 		}, 1);
 	});
+	
+
 
 });
