@@ -35,15 +35,20 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			
 			var bindingsSemaphore = {},
 				viewModel,
-				onViewModels = [],
+				// Stores callbacks for when the viewModel is created.
+				onCompleteBindings = [],
+				// Stores what needs to be called when the element is removed
+				// to prevent memory leaks.
 				onTeardowns = {},
 				// Track info about each binding, we need this for binding attributes correctly.
 				bindingInfos = {},
 				attributeViewModelBindings = can.extend({}, initialViewModelData);
 			
-			// For each attribute, 
+			// For each attribute, we start the binding process,
+			// and save what's returned to be used when the `viewModel` is created,
+			// the element is removed, or the attribute changes values.
 			can.each( can.makeArray(el.attributes), function(node){
-				// start the data binding process.
+				
 				var dataBinding = makeDataBinding(node, el, {
 					templateType: tagData.templateType,
 					scope: tagData.scope,
@@ -55,13 +60,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				});
 				if(dataBinding) {
 					// For bindings that change the viewModel,
-					if(dataBinding.onViewModel) {
-						// Save the initial value on the viewModel.
+					if(dataBinding.onCompleteBinding) {
+						// save the initial value on the viewModel.
 						if(dataBinding.bindingInfo.parentToChild) {
 							initialViewModelData[dataBinding.bindingInfo.childName] = dataBinding.value;
 						}
 						// Save what needs to happen after the `viewModel` is created.
-						onViewModels.push(dataBinding.onViewModel);
+						onCompleteBindings.push(dataBinding.onCompleteBinding);
 					}
 					onTeardowns[node.name] = dataBinding.onTeardown;
 				}
@@ -72,8 +77,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			// the `viewModel` is created.
 			viewModel = makeViewModel(initialViewModelData);
 			
-			for(var i = 0, len = onViewModels.length; i < len; i++) {
-				onViewModels[i]();
+			for(var i = 0, len = onCompleteBindings.length; i < len; i++) {
+				onCompleteBindings[i]();
 			}
 			
 			// Listen to attribute changes and re-initialize
@@ -87,8 +92,9 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				if( onTeardowns[attrName] ) {
 					onTeardowns[attrName]();
 				}
-				// Parent attribute bindings we always re-setup
+				// Parent attribute bindings we always re-setup.
 				var parentBindingWasAttribute = bindingInfos[attrName] && bindingInfos[attrName].parent === "attribute";
+				
 				if(value !== null || parentBindingWasAttribute ) {
 					var dataBinding = makeDataBinding({name: attrName, value: value}, el, {
 						templateType: tagData.templateType,
@@ -103,8 +109,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					});
 					if(dataBinding) {
 						// The viewModel is created, so call callback immediately.
-						if(dataBinding.onViewModel) {
-							dataBinding.onViewModel();
+						if(dataBinding.onCompleteBinding) {
+							dataBinding.onCompleteBinding();
 						}
 						bindingInfos[attrName] = dataBinding.bindingInfo;
 						onTeardowns[attrName] = dataBinding.onTeardown;
@@ -139,8 +145,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				}
 			});
 			
-			if(dataBinding.onViewModel) {
-				dataBinding.onViewModel();
+			if(dataBinding.onCompleteBinding) {
+				dataBinding.onCompleteBinding();
 			}
 			can.one.call(el, 'removed', dataBinding.onTeardown);
 		},
@@ -149,7 +155,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		// For example `{^value}="name"`.
 		reference: function(el, attrData) {
 			if(el.getAttribute(attrData.attributeName)) {
-				console.warn("&reference attributes can only export the view model.");
+				console.warn("*reference attributes can only export the view model.");
 			}
 	
 			var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
@@ -157,7 +163,6 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			var viewModel = can.viewModel(el);
 			var refs = attrData.scope.getRefs();
 			refs._context.attr("*"+name, viewModel);
-	
 		},
 		// ### bindings.behaviors.event
 		// The following section contains code for implementing the can-EVENT attribute.
@@ -384,11 +389,15 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// An object of helper functions that make a getter/setter compute
 	// on different types of objects.
 	var getComputeFrom = {
-		// {foo}="someMethod(.,1)"
+		// ### getComputeFrom.scope
+		// Returns a compute from the scope.  This handles expressions like `someMethod(.,1)`.
 		scope: function(el, scope, scopeProp, options){
 			var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
 			return parentExpression.value(scope, new can.view.Options({}));
 		},
+		// ### getComputeFrom.viewModel
+		// Returns a compute that's two-way bound to the `viewModel` returned by 
+		// `options.getViewModel()`.
 		viewModel: function(el, scope, vmName, options) {
 			return can.compute(function(newVal){
 				var viewModel = options.getViewModel();
@@ -400,7 +409,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				
 			});
 		},
+		// ### getComputeFrom.attribute
+		// Returns a compute that is two-way bound to an attribute or property on the element.
 		attribute: function(el, scope, prop, options, event){
+			// Determine the event or events we need to listen to 
+			// when this value changes.
 			if(!event) {
 				if(prop === "innerHTML") {
 					event = ["blur","change"];
@@ -413,11 +426,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				event = [event];
 			}
 	
+			
 			var hasChildren = el.nodeName.toLowerCase() === "select",
 				isMultiselectValue = prop === "value" && hasChildren && el.multiple,
 				isStringValue,
 				lastSet,
 				scheduledAsyncSet = false,
+				// Sets the element property or attribute.
 				set = function(newVal){
 					// Templates write parent's out before children.  This should probably change.
 					// But it means we don't do a set immediately.
@@ -463,6 +478,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					return newVal;
 	
 				},
+				// Returns the value of the element property or attribute.
 				get = function(){
 					if(isMultiselectValue) {
 	
@@ -481,8 +497,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					return can.attr.get(el, prop);
 				};
 			
-			// Parent is hydrated before children.  So we do
-			// a tiny wait to do any sets.
+			// If the element has children like `<select>`, those
+			// elements are hydrated (by can.view.target) after the select and only then
+			// get their `value`s set. This make sure that when the value is set,
+			// it will happen after the children are setup.
 			if(hasChildren) {
 				// have to set later ... probably only with mustache.
 				setTimeout(function(){
@@ -511,27 +529,36 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// An object with helpers that perform bindings in a certain direction.  
 	// These use the semaphore to prevent cycles.
 	var bind = {
-		// child -> parent binding
-		// el -> the element
-		// parentUpdate -> a method that updates the parent
-		childToParent: function(el, parentUpdate, childCompute, bindingsSemaphore, attrName, syncChild){
-			var parentUpdateIsFunction = typeof parentUpdate === "function";
+		// ## bind.childToParent
+		// Listens to the child and updates the parent when it changes.
+		// - `syncChild` - Makes sure the child is equal to the parent after the parent is set.
+		childToParent: function(el, parentCompute, childCompute, bindingsSemaphore, attrName, syncChild){
+			var parentUpdateIsFunction = typeof parentCompute === "function";
 	
+			// Updates the parent if 
 			var updateParent = function(ev, newVal){
 				if (!bindingsSemaphore[attrName]) {
 					if(parentUpdateIsFunction) {
-						parentUpdate(newVal);
+						parentCompute(newVal);
+						
 						if( syncChild ) {
-							if(parentUpdate() !== childCompute()) {
+							// If, after setting the parent, it's value is not the same as the child,
+							// update the child with the value of the parent.
+							// This is used by `can-value`.
+							if(parentCompute() !== childCompute()) {
 								bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
-								childCompute(parentUpdate());
+								childCompute(parentCompute());
 								can.batch.after(function(){
 									--bindingsSemaphore[attrName];
 								});
 							}
 						}
-					} else if(parentUpdate instanceof can.Map) {
-						parentUpdate.attr(newVal, true);
+					} 
+					// The parentCompute can sometimes be just an observable if the observable
+					// is on a plain JS object. This updates the observable to match whatever the
+					// new value is.
+					else if(parentCompute instanceof can.Map) {
+						parentCompute.attr(newVal, true);
 					}
 				}
 			};
@@ -666,7 +693,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// ## makeDataBinding
 	// Makes a data binding for an attribute `node`.  Returns an object with information
 	// about the binding, including an `onTeardown` method that undoes the binding.  
-	// If the data binding involves a `viewModel`, an `onViewModel` method is returned on
+	// If the data binding involves a `viewModel`, an `onCompleteBinding` method is returned on
 	// the object.  This method must be called after the element has a `viewModel` with the
 	// `viewModel` to complete the binding.
 	// 
@@ -721,11 +748,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			unbindUpdate(childCompute, updateParent);
 		};
 		// If this binding depends on the viewModel, which might not have been created,
-		// return the function to complete the binding as `onViewModel`.
+		// return the function to complete the binding as `onCompleteBinding`.
 		if(bindingInfo.child === "viewModel") {
 			return {
 				value: getValue(parentCompute),
-				onViewModel: completeBinding,
+				onCompleteBinding: completeBinding,
 				bindingInfo: bindingInfo,
 				onTeardown: onTeardown
 			};
@@ -740,6 +767,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	};
 	
 	// ## initializeValues
+	// Updates the parent or child value depending on the direction of the binding
+	// or if the child or parent is `undefined`.
 	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateParent){
 
 		if(options.parentToChild && !options.childToParent) {
@@ -760,23 +789,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 	};
 	
-	/**
-	 * @function isContentEditable
-	 * @hide
-	 *
-	 * Determines if an element is contenteditable.
-	 *
-	 * An element is contenteditable if it contains the `contenteditable`
-	 * attribute set to either an empty string or "true".
-	 *
-	 * By default an element is also contenteditable if its immediate parent
-	 * has a truthy version of the attribute, unless the element is explicitly
-	 * set to "false".
-	 *
-	 * @param {HTMLElement} el
-	 * @return {Boolean} returns if the element is editable
-	 */
-	// Function for determining of an element is contenteditable
+	// ## isContentEditable
+	// Determines if an element is contenteditable.
+	// An element is contenteditable if it contains the `contenteditable`
+	// attribute set to either an empty string or "true".
+	// By default an element is also contenteditable if its immediate parent
+	// has a truthy version of the attribute, unless the element is explicitly
+	// set to "false".
 	var isContentEditable = (function(){
 		// A contenteditable element has a value of an empty string or "true"
 		var values = {
@@ -827,7 +846,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 
 	
 	// ## Special Event Types (can-SPECIAL)
-
+	// 
 	// A special object, similar to [$.event.special](http://benalman.com/news/2010/03/jquery-special-events/),
 	// for adding hooks for special can-SPECIAL types (not native DOM events). Right now, only can-enter is
 	// supported, but this object might be exported so that it can be added to easily.
@@ -857,7 +876,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 
 	can.bindings = {
 		behaviors: behaviors,
-		getBindingInfo: getBindingInfo
+		getBindingInfo: getBindingInfo,
+		special: special
 	};
 	return can.bindings;
 });
