@@ -62,7 +62,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					// For bindings that change the viewModel,
 					if(dataBinding.onCompleteBinding) {
 						// save the initial value on the viewModel.
-						if(dataBinding.bindingInfo.parentToChild) {
+						if(dataBinding.bindingInfo.parentToChild && dataBinding.value !== undefined) {
 							initialViewModelData[dataBinding.bindingInfo.childName] = dataBinding.value;
 						}
 						// Save what needs to happen after the `viewModel` is created.
