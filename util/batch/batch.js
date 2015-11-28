@@ -252,27 +252,7 @@ steal('can/util/can.js', function (can) {
 			}
 		},
 		afterPreviousEvents: function(handler){
-			if(false) {
-				var obj;
-				// This basically creates an object with an event handler that
-				// will be dispatched, or we assume this is already setup.
-				if(typeof handler === "function") {
-					obj = {__bindEvents: {ready: [{handler: handler}]}};
-				} else {
-					obj = handler;
-				}
-				collectingBatch.events.push([
-					obj,
-					[{type: "ready"}, []]
-				]);
-			} else {
-				if(typeof handler === "function") {
-					handler({});
-				} else {
-					handler.__bindEvents.ready[0].handler.call(handler, {});
-				}
-				
-			}
+			handler({});
 		},
 		after: function(handler){
 			var batch = collectingBatch || dispatchingBatch;

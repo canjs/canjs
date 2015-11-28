@@ -25,10 +25,6 @@ steal("can/util", function(can){
 		///this.count = 0;
 		this.ignore = 0;
 		this.inBatch = false;
-		this.ready = false;
-		// this is a performance hack for `afterPreviousEvents`.
-		// Basically, we can get the ready=true handler called super fast.
-		this.__bindEvents = {ready: [{handler: setReady}]};
 		compute.observedInfo = this;
 	}
 	
@@ -65,7 +61,7 @@ steal("can/util", function(can){
 			}
 		},
 		onDependencyChange: function(ev){
-			if(this.ready && this.bound) {
+			if(this.bound) {
 				if(ev.batchNum !== undefined) {
 					// Only need to register once per batchNum
 					if(ev.batchNum !== this.batchNum) {
@@ -95,7 +91,6 @@ steal("can/util", function(can){
 			this.oldObserved = this.newObserved || {};
 			this.ignore = 0;
 			this.newObserved = {};
-			this.ready = false;
 			
 			// Add this function call's observedInfo to the stack,
 			// runs the function, pops off the observedInfo, and returns it.
@@ -105,8 +100,6 @@ steal("can/util", function(can){
 			observedInfoStack.pop();
 			this.updateBindings();
 			
-			// Set ready after all previous events have fired.
-			can.batch.afterPreviousEvents(this);
 		},
 		// ### updateBindings
 		// Unbinds everything in `oldObserved`.
@@ -141,17 +134,15 @@ steal("can/util", function(can){
 		}
 	});
 	
-	function setReady() {
-		this.ready = true;
-	}
+
 	
-	var updateOrder = {},
+	var updateOrder = [],
 		curDepth = Infinity,
-		maxDepth = 1;
+		maxDepth = 0;
 		
 	// could get a registerUpdate from a 5 while a 1 is going on because the 5 listens to the 1
 	ObservedInfo.registerUpdate = function(observeInfo, batchNum){
-		var depth = observeInfo.getDepth();
+		var depth = observeInfo.getDepth()-1;
 		curDepth = Math.min(depth, curDepth);
 		maxDepth = Math.max(maxDepth, depth);
 		var objs = updateOrder[depth];
@@ -162,16 +153,16 @@ steal("can/util", function(can){
 	};
 	ObservedInfo.batchEnd = function(batchNum){
 		while( curDepth <= maxDepth ) {
-			var cur = updateOrder[curDepth].shift();
+			var cur = updateOrder[curDepth].pop();
 			if(cur) {
 				cur.updateCompute(batchNum);
 			} else {
 				curDepth++;
 			}
 		}
-		updateOrder = {};
+		updateOrder = [];
 		curDepth = Infinity;
-		maxDepth = 1;
+		maxDepth = 0;
 	};
 	
 	
