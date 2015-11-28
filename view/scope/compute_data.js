@@ -1,4 +1,4 @@
-steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,compute, getValueAndBind){
+steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,compute, ObservedInfo){
 	// The goal of this is to create a high-performance compute that represents a key value from can.view.Scope.
 	// If the key value is something like {{name}} and the context is a can.Map, a faster
 	// binding path will be used where new rebindings don't need to be looked for with every change of 
@@ -18,7 +18,6 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 	};
 	
 	
-	var unbindScopeRead = getValueAndBind.unbindReadInfo;
 	var getValueAndBindSinglePropertyRead = function(readInfo, computeData, singlePropertyReadChanged){
 		var target = computeData.root,
 			prop = computeData.reads[0].key;
@@ -82,27 +81,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 			},
 			// store the last batch number
 			batchNum,
-			// the observables read by the last calling of `scopeRead`
-			readInfo = new getValueAndBind.ObservedInfo(scopeRead, null,
-				// What to do when a full scope read has changed
-				function(ev){
-					// only run this if we have changed the batch and everything.
-					if (readInfo.ready && compute.computeInstance.bound && (ev.batchNum === undefined || ev.batchNum !== batchNum) ) {
-						// Keep the old value
-						var oldValue = readInfo.value,
-							newValue;
-							
-						// Get the new value
-						getValueAndBind(readInfo);
-						newValue = readInfo.value;
-						
-						
-						// Call the updater with old and new values
-						compute.computeInstance.updater(newValue, oldValue, ev.batchNum);
-						batchNum = batchNum = ev.batchNum;
-					}
-				}),
-
+			
 			// What to do when a single property has changed
 			singlePropertyReadChanged = function(ev, newVal, oldVal){
 				if(typeof newVal !== "function") {
@@ -110,7 +89,7 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 				} else {
 					// switch bindings
 					unbindSinglePropertyRead(computeData,singlePropertyReadChanged );
-					getValueAndBind(readInfo);
+					readInfo.getValueAndBind();
 					isFastPathBound = false;
 					compute.computeInstance.updater(readInfo.value, oldVal, ev.batchNum);
 				}
@@ -121,12 +100,12 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 			compute = can.compute(undefined,{
 				on: function() {
 					// 
-					getValueAndBind(readInfo);
+					readInfo.getValueAndBind();
 					
 					if( isFastPath(computeData) ) {
 						// bind before unbind to keep bind count correct
 						getValueAndBindSinglePropertyRead(readInfo, computeData, singlePropertyReadChanged);
-						unbindScopeRead(readInfo);
+						readInfo.teardown();
 						// clear newObserved so if this switches back, we're ok with it
 						readInfo.newObserved = {};
 						isFastPathBound = true;
@@ -139,14 +118,17 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					if(isFastPathBound) {
 						unbindSinglePropertyRead(computeData, singlePropertyReadChanged);
 					} else {
-						unbindScopeRead(readInfo);
+						readInfo.teardown();
 					}
 				},
 				set: scopeRead,
 				get: scopeRead,
 				// a hack until we clean up can.compute for 3.0
 				__selfUpdater: true
-			});
+			}),
+			
+			// the observables read by the last calling of `scopeRead`
+			readInfo = new ObservedInfo(scopeRead, null, compute.computeInstance);
 		
 		computeData.compute = compute;
 		return computeData;
