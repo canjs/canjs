@@ -76,32 +76,7 @@ steal("can/util", function(can){
 					this.updateCompute(ev.batchNum);
 				}
 			}
-			/*
-			if(this.inBatch) {
-				
-				this.count--;
-				if(this.count <= 0) {
-					this.updateCompute(ev);
-					this.inBatch = false;
-				} 
-			} else {
-				if( this.ready &&
-					(ev.batchNum === undefined || ev.batchNum !== this.batchNum) ) {
-					this.updateCompute(ev);
-				}
-			}*/
 		},
-		/*onSourceNotify: function (batchNum){
-			if(this.ready) {
-				if(batchNum !== this.batchNum) {
-					this.batchNum = batchNum;
-					this.inBatch = true;
-					this.count = 1;
-				} else {
-					this.count++;
-				}
-			}
-		},*/
 		updateCompute: function(batchNum){
 			// Keep the old value.
 			var oldValue = this.value;
@@ -172,14 +147,8 @@ steal("can/util", function(can){
 	
 	var updateOrder = {},
 		curDepth = Infinity,
-		minDepth = 1,
 		maxDepth = 1;
 		
-	ObservedInfo.batchStart = function(){
-		updateOrder = {};
-		curDepth = Infinity;
-		maxDepth = 1;
-	};
 	// could get a registerUpdate from a 5 while a 1 is going on because the 5 listens to the 1
 	ObservedInfo.registerUpdate = function(observeInfo, batchNum){
 		var depth = observeInfo.getDepth();
@@ -192,8 +161,6 @@ steal("can/util", function(can){
 		objs.push(observeInfo);
 	};
 	ObservedInfo.batchEnd = function(batchNum){
-		var i = 1,
-			updates;
 		while( curDepth <= maxDepth ) {
 			var cur = updateOrder[curDepth].shift();
 			if(cur) {

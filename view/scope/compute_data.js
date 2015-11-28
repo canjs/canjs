@@ -79,8 +79,6 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					return scopeReader(scope, key, options, computeData);
 				}
 			},
-			// store the last batch number
-			batchNum,
 			
 			// What to do when a single property has changed
 			singlePropertyReadChanged = function(ev, newVal, oldVal){

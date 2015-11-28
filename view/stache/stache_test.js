@@ -3,7 +3,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 	"can/test","can/view/mustache/spec/specs","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
-		console.log("STACHE TEST");
+	
 	var browserDoc = window.document;
 	var simpleDocument = new SimpleDOM.Document();
 
