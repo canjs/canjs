@@ -903,5 +903,21 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		},10);
 		
 	});
+	
+	test("can.__isRecording observes doesn't understand can.__notObserve (#2099)", function(){
+		expect(0);
+		var compute = can.compute(1);
+		compute.computeInstance.bind = function() {
+			ok(false);
+		};
+		
+		var outer = can.compute(function(){
+			can.__notObserve(function(){
+				compute();
+			})();
+		});
+		
+		outer.bind("change", function(){});
+	});
 
 });

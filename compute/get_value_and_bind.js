@@ -244,7 +244,8 @@ steal("can/util", function(can){
 	// ### can.__isRecordingObserves
 	// Returns if some function is in the process of recording observes.
 	can.__isRecordingObserves = function(){
-		return observedInfoStack.length;
+		var len = observedInfoStack.length;
+		return len && (observedInfoStack[len-1].ignore === 0);
 	};
 	
 	// ### can.__notObserve
