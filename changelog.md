@@ -3,6 +3,21 @@
 @parent guides 5
 -->
 
+__2.3.3__ ( Nov 30 2015 )
+
+- [can.__isRecording observes doesn&#39;t understand can.__notObserve](https://github.com/canjs/canjs/issues/2099)
+- [computes on Map prototypes are not readable by can.compute.read](https://github.com/canjs/canjs/issues/2098)
+- [Live binding on a derived attribute breaks when it&#39;s removed from then added back to the page.](https://github.com/canjs/canjs/issues/2095)
+- [Compute binding order](https://github.com/canjs/canjs/pull/2094)
+- [Compute binding problem with setter](https://github.com/canjs/canjs/issues/2093)
+- [elements and attributes doc](https://github.com/canjs/canjs/pull/2087)
+- [Bug with conditional attribute](https://github.com/canjs/canjs/issues/2077)
+- [%index doesn&#39;t work with can.Map values in master](https://github.com/canjs/canjs/issues/2067)
+- [Rendering style tag with stache template](https://github.com/canjs/canjs/issues/2035)
+- [Documentation Elements and Attributes](https://github.com/canjs/canjs/issues/2028)
+- [The @index context should be skipped by `../`](https://github.com/canjs/canjs/issues/1554)
+
+
 __2.3.2__ ( Nov 13 2015 )
 
 - [adds warning for mismatched binding syntaxes](https://github.com/canjs/canjs/pull/2078)
