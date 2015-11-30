@@ -919,5 +919,17 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		outer.bind("change", function(){});
 	});
+	
+	test("prototype computes work (#2098)", function(){
+		var Map = can.Map.extend({
+			plusOne: can.compute(function(){
+				return this.attr("value")+1;
+			})
+		});
+		var root = new Map({value: 2}),
+			read;
+		read = can.compute.read(root, can.compute.read.reads("plusOne") );
+		equal(read.value, 3, "static properties on a can.Construct-based function");
+	});
 
 });
