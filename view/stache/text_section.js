@@ -36,16 +36,24 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 				compute.computeInstance.bind("change", can.k);
 				var value = compute();
 				if( compute.computeInstance.hasDependencies ) {
-					if(state.attr) {
+					if(state.textContentOnly) {
+						live.text(this, compute);
+					}
+					else if(state.attr) {
 						live.simpleAttribute(this, state.attr, compute);
-					} else {
+					}
+					else {
 						liveStache.attributes(this, compute, scope, options);
 					}
 					compute.computeInstance.unbind("change", can.k);
 				} else {
-					if(state.attr) {
+					if(state.textContentOnly) {
+						this.nodeValue = value;
+					}
+					else if(state.attr) {
 						can.attr.set(this, state.attr, value);
-					} else {
+					}
+					else {
 						live.setAttributes(this, value);
 					}
 				}

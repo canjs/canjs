@@ -4556,6 +4556,19 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 			
 		});
+		
+		test("rendering style tag (#2035)",function(){
+			var map = new can.Map({color: 'green'});
+			var frag = can.stache('<style>body {color: {{color}} }</style>')(map);
+			var content = frag.firstChild.firstChild.nodeValue;
+			equal(content,"body {color: green }","got the right style text");
+			
+			map = new can.Map({showGreen: true});
+			frag = can.stache('<style>body {color: {{#showGreen}}green{{/showGreen}} }</style>')(map);
+			content = frag.firstChild.firstChild.nodeValue;
+			equal(content,"body {color: green }","sub expressions work");
+			
+		});
 
 		test("checked as a custom attribute", function(){
 			var map = new can.Map({
