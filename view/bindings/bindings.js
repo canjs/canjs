@@ -1,27 +1,801 @@
 // # can/view/bindings/bindings.js
 //
-// This file defines the `can-value` attribute for two-way bindings and the `can-EVENT` attribute
-// for in template event bindings. These are usable in any mustache template, but mainly and documented
-// for use within can.Component.
+// This module provides CanJS's default data and event bindings.
+// It's broken up into several parts:
+// 
+// - Behaviors - Binding behaviors that run given an attribute or element.
+// - Attribute Syntaxes - Hooks up custom attributes to their behaviors.
+// - getComputeFrom - Methods that return a compute cross bound to the scope, viewModel, or element.
+// - bind - Methods for setting up cross binding
+// - getBindingInfo - A helper that returns the details of a data binding given an attribute.
+// - makeDataBinding - A helper method for setting up a data binding.
+// - initializeValues - A helper that initializes a data binding.
+steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, expression, viewCallbacks) {
+	
+	// ## Behaviors
+	var behaviors = {
+		// ### bindings.behaviors.viewModel
+		// Sets up all of an element's data binding attributes to a "soon-to-be-created"
+		// `viewModel`. 
+		// This is primarily used by `can.Component` to ensure that its
+		// `viewModel` is initialized with values from the data bindings as quickly as possible.
+		// Component could look up the data binding values itself.  However, that lookup
+		// would have to be duplicated when the bindings are established.
+		// Instead, this uses the `makeDataBinding` helper, which allows creation of the `viewModel`
+		// after scope values have been looked up.
+		//
+		// - `makeViewModel(initialViewModelData)` - a function that returns the `viewModel`.
+		// - `initialViewModelData` any initial data that should already be added to the `viewModel`.
+		//
+		// Returns:
+		// - `function` - a function that tears all the bindings down. Component
+		// wants all the bindings active so cleanup can be done during a component being removed.
+		viewModel: function(el, tagData, makeViewModel, initialViewModelData){
+			initialViewModelData = initialViewModelData || {};
+			
+			var bindingsSemaphore = {},
+				viewModel,
+				// Stores callbacks for when the viewModel is created.
+				onCompleteBindings = [],
+				// Stores what needs to be called when the element is removed
+				// to prevent memory leaks.
+				onTeardowns = {},
+				// Track info about each binding, we need this for binding attributes correctly.
+				bindingInfos = {},
+				attributeViewModelBindings = can.extend({}, initialViewModelData);
+			
+			// For each attribute, we start the binding process,
+			// and save what's returned to be used when the `viewModel` is created,
+			// the element is removed, or the attribute changes values.
+			can.each( can.makeArray(el.attributes), function(node){
+				
+				var dataBinding = makeDataBinding(node, el, {
+					templateType: tagData.templateType,
+					scope: tagData.scope,
+					semaphore: bindingsSemaphore,
+					getViewModel: function(){
+						return viewModel;
+					},
+					attributeViewModelBindings: attributeViewModelBindings
+				});
+				if(dataBinding) {
+					// For bindings that change the viewModel,
+					if(dataBinding.onCompleteBinding) {
+						// save the initial value on the viewModel.
+						if(dataBinding.bindingInfo.parentToChild && dataBinding.value !== undefined) {
+							initialViewModelData[dataBinding.bindingInfo.childName] = dataBinding.value;
+						}
+						// Save what needs to happen after the `viewModel` is created.
+						onCompleteBindings.push(dataBinding.onCompleteBinding);
+					}
+					onTeardowns[node.name] = dataBinding.onTeardown;
+				}
+				
+			});
+			
+			// Create the `viewModel` and call what needs to be happen after
+			// the `viewModel` is created.
+			viewModel = makeViewModel(initialViewModelData);
+			
+			for(var i = 0, len = onCompleteBindings.length; i < len; i++) {
+				onCompleteBindings[i]();
+			}
+			
+			// Listen to attribute changes and re-initialize
+			// the bindings.
+			can.bind.call(el, "attributes", function (ev) {
+				
+				var attrName = ev.attributeName,
+					value = el.getAttribute(attrName);
+				
+				
+				if( onTeardowns[attrName] ) {
+					onTeardowns[attrName]();
+				}
+				// Parent attribute bindings we always re-setup.
+				var parentBindingWasAttribute = bindingInfos[attrName] && bindingInfos[attrName].parent === "attribute";
+				
+				if(value !== null || parentBindingWasAttribute ) {
+					var dataBinding = makeDataBinding({name: attrName, value: value}, el, {
+						templateType: tagData.templateType,
+						scope: tagData.scope,
+						semaphore: {},
+						getViewModel: function(){
+							return viewModel;
+						},
+						attributeViewModelBindings: attributeViewModelBindings,
+						// always update the viewModel accordingly.
+						initializeValues: true
+					});
+					if(dataBinding) {
+						// The viewModel is created, so call callback immediately.
+						if(dataBinding.onCompleteBinding) {
+							dataBinding.onCompleteBinding();
+						}
+						bindingInfos[attrName] = dataBinding.bindingInfo;
+						onTeardowns[attrName] = dataBinding.onTeardown;
+					}
+				}
+			});
+			
+			return function(){
+				for(var attrName in onTeardowns) {
+					onTeardowns[attrName]();
+				}
+			};
+		},
+		// ### bindings.behaviors.data
+		// This is called when an individual data binding attribute is placed on an element.
+		// For example `{^value}="name"`.
+		data: function(el, attrData){
+			if(can.data(can.$(el),"preventDataBindings")){
+				return;
+			}
+			var viewModel = can.viewModel(el);
+			
+			var dataBinding = makeDataBinding({
+				name: attrData.attributeName,
+				value: el.getAttribute(attrData.attributeName)
+			}, el, {
+				templateType: attrData.templateType,
+				scope: attrData.scope,
+				semaphore: {},
+				getViewModel: function(){
+					return viewModel;
+				}
+			});
+			
+			if(dataBinding.onCompleteBinding) {
+				dataBinding.onCompleteBinding();
+			}
+			can.one.call(el, 'removed', dataBinding.onTeardown);
+		},
+		// ### bindings.behaviors.reference
+		// Provides the shorthand `*ref` behavior that exports the `viewModel`.
+		// For example `{^value}="name"`.
+		reference: function(el, attrData) {
+			if(el.getAttribute(attrData.attributeName)) {
+				console.warn("*reference attributes can only export the view model.");
+			}
+	
+			var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
+	
+			var viewModel = can.viewModel(el);
+			var refs = attrData.scope.getRefs();
+			refs._context.attr("*"+name, viewModel);
+		},
+		// ### bindings.behaviors.event
+		// The following section contains code for implementing the can-EVENT attribute.
+		// This binds on a wildcard attribute name. Whenever a view is being processed
+		// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler
+		// that calls a method identified by the value of this attribute.
+		event: function(el, data) {
+	
+			// Get the `event` name and if we are listening to the element or viewModel.
+			// The attribute name is the name of the event.
+			var attributeName = data.attributeName,
+			// The old way of binding is can-X
+				legacyBinding = attributeName.indexOf('can-') === 0,
+				event = attributeName.indexOf('can-') === 0 ?
+					attributeName.substr("can-".length) :
+					removeBrackets(attributeName, '(', ')'),
+				onBindElement = legacyBinding;
+	
+			if(event.charAt(0) === "$") {
+				event = event.substr(1);
+				onBindElement = true;
+			}
+	
+	
+			// This is the method that the event will initially trigger. It will look up the method by the string name
+			// passed in the attribute and call it.
+			var handler = function (ev) {
+					var attrVal = el.getAttribute(attributeName);
+					if (!attrVal) { return; }
+	
+					var $el = can.$(el),
+						viewModel = can.viewModel($el[0]);
+	
+					// expression.parse will read the attribute
+					// value and parse it identically to how mustache helpers
+					// get parsed.
+					var expr = expression.parse(removeBrackets(attrVal),{lookupRule: "method", methodRule: "call"});
+	
+					if(!(expr instanceof expression.Call) && !(expr instanceof expression.Helper)) {
+						var defaultArgs = can.map( [data.scope._context, $el].concat(can.makeArray(arguments) ), function(data){
+							return new expression.Literal(data);
+						});
+						expr = new expression.Call(expr, defaultArgs, {} );
+					}
+	
+					// We grab the first item and treat it as a method that
+					// we'll call.
+					var scopeData = data.scope.read(expr.methodExpr.key, {
+						isArgument: true
+					});
+	
+					// We break out early if the first argument isn't available
+					// anywhere.
+	
+					if (!scopeData.value) {
+						scopeData = data.scope.read(expr.methodExpr.key, {
+							isArgument: true
+						});
+	
+						//!steal-remove-start
+						can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
+							element: el,
+							scope: data.scope
+						});
+						//!steal-remove-end
+	
+						return null;
+					}
+	
+	
+	
+					// make a scope with these things just under
+	
+					var localScope = data.scope.add({
+						"@element": $el,
+						"@event": ev,
+						"@viewModel": viewModel,
+						"@scope": data.scope,
+						"@context": data.scope._context,
+	
+						"%element": this,
+						"$element": $el,
+						"%event": ev,
+						"%viewModel": viewModel,
+						"%scope": data.scope,
+						"%context": data.scope._context
+					},{
+						notContext: true
+					});
+	
+	
+					var args = expr.args(localScope, null)(),
+						hash = expr.hash(localScope, null)();
+	
+					if(!can.isEmptyObject(hash)) {
+						args.push(hash);
+					}
+	
+					return scopeData.value.apply(scopeData.parent, args);
+				};
+	
+			// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is
+			// a function that returns an object containing an event and a handler. These are to be used for binding. For example,
+			// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to
+			// determine on keyup if the enter key was pressed.
+			if (special[event]) {
+				var specialData = special[event](data, el, handler);
+				handler = specialData.handler;
+				event = specialData.event;
+			}
+			// Bind the handler defined above to the element we're currently processing and the event name provided in this
+			// attribute name (can-click="foo")
+			can.bind.call(onBindElement ? el : can.viewModel(el), event, handler);
+	
+			// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
+			var attributesHandler = function(ev) {
+				if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
+	
+					can.unbind.call(onBindElement ? el : can.viewModel(el), event, handler);
+					can.unbind.call(el, 'attributes', attributesHandler);
+				}
+			};
+			can.bind.call(el, 'attributes', attributesHandler);
+		},
+		// ### bindings.behaviors.value
+		// Behavior for the deprecated can-value
+		value: function(el, data) {
+			var propName = "$value",
+				attrValue = can.trim(removeBrackets(el.getAttribute("can-value"))),
+				getterSetter;
+	
+			if (el.nodeName.toLowerCase() === "input" && ( el.type === "checkbox" || el.type === "radio" ) ) {
+	
+				var property = getComputeFrom.scope(el, data.scope, attrValue, {});
+				if (el.type === "checkbox") {
+	
+					var trueValue = can.attr.has(el, "can-true-value") ? el.getAttribute("can-true-value") : true,
+						falseValue = can.attr.has(el, "can-false-value") ? el.getAttribute("can-false-value") : false;
+	
+					getterSetter = can.compute(function(newValue){
+						// jshint eqeqeq: false
+						if(arguments.length) {
+							property(newValue ? trueValue : falseValue);
+						}
+						else {
+							return property() == trueValue;
+						}
+					});
+				}
+				else if(el.type === "radio") {
+					// radio is two-way bound to if the property value
+					// equals the element value
+	
+					getterSetter = can.compute(function(newValue){
+						// jshint eqeqeq: false
+						if(arguments.length) {
+							if( newValue ) {
+								property(el.value);
+							}
+						}
+						else {
+							return property() == el.value;
+						}
+					});
+	
+				}
+				propName = "$checked";
+				attrValue = "getterSetter";
+				data.scope = new can.view.Scope({
+					getterSetter: getterSetter
+				});
+			}
+			// For contenteditable elements, we instantiate a Content control.
+			else if (isContentEditable(el)) {
+				propName = "$innerHTML";
+			}
+	
+			makeDataBinding({
+				name: "{("+propName+"})",
+				value: attrValue
+			}, el, {
+				templateType: data.templateType,
+				scope: data.scope,
+				semaphore: {},
+				initializeValues: true,
+				legacyBindings: true,
+				syncChildWithParent: true
+			});
+	
+		}
+	};
+	
+		
+	// ## Attribute Syntaxes
+	// The following sets up the bindings functions to be called 
+	// when called in a template.
+	
+	// `{}="bar"` data bindings.
+	can.view.attr(/^\{[^\}]+\}$/, behaviors.data);
 
-steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, expression) {
-	/**
-	 * @function isContentEditable
-	 * @hide
-	 *
-	 * Determines if an element is contenteditable.
-	 *
-	 * An element is contenteditable if it contains the `contenteditable`
-	 * attribute set to either an empty string or "true".
-	 *
-	 * By default an element is also contenteditable if its immediate parent
-	 * has a truthy version of the attribute, unless the element is explicitly
-	 * set to "false".
-	 *
-	 * @param {HTMLElement} el
-	 * @return {Boolean} returns if the element is editable
-	 */
-	// Function for determining of an element is contenteditable
+	// `*ref-export` shorthand.
+	can.view.attr(/\*[\w\.\-_]+/, behaviors.reference);
+
+	// `(EVENT)` event bindings.
+	can.view.attr(/^\([\$?\w\.]+\)$/, behaviors.event);
+	
+	
+	//!steal-remove-start
+	function syntaxWarning(el, attrData) {
+		can.dev.warn('can/view/bindings/bindings.js: mismatched binding syntax - ' + attrData.attributeName);
+	}
+	can.view.attr(/^\(.+\}$/, syntaxWarning);
+	can.view.attr(/^\{.+\)$/, syntaxWarning);
+	can.view.attr(/^\(\{.+\}\)$/, syntaxWarning);
+	//!steal-remove-end
+
+	
+	// Legacy bindings.
+	can.view.attr(/can-[\w\.]+/, behaviors.event);
+	can.view.attr("can-value", behaviors.value);
+	
+	
+	// ## getComputeFrom
+	// An object of helper functions that make a getter/setter compute
+	// on different types of objects.
+	var getComputeFrom = {
+		// ### getComputeFrom.scope
+		// Returns a compute from the scope.  This handles expressions like `someMethod(.,1)`.
+		scope: function(el, scope, scopeProp, options){
+			var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
+			return parentExpression.value(scope, new can.view.Options({}));
+		},
+		// ### getComputeFrom.viewModel
+		// Returns a compute that's two-way bound to the `viewModel` returned by 
+		// `options.getViewModel()`.
+		viewModel: function(el, scope, vmName, options) {
+			return can.compute(function(newVal){
+				var viewModel = options.getViewModel();
+				if(arguments.length) {
+					viewModel.attr(vmName,newVal);
+				} else {
+					return vmName === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
+				}
+				
+			});
+		},
+		// ### getComputeFrom.attribute
+		// Returns a compute that is two-way bound to an attribute or property on the element.
+		attribute: function(el, scope, prop, options, event){
+			// Determine the event or events we need to listen to 
+			// when this value changes.
+			if(!event) {
+				if(prop === "innerHTML") {
+					event = ["blur","change"];
+				}
+				else {
+					event = "change";
+				}
+			}
+			if(!can.isArray(event)) {
+				event = [event];
+			}
+	
+			
+			var hasChildren = el.nodeName.toLowerCase() === "select",
+				isMultiselectValue = prop === "value" && hasChildren && el.multiple,
+				isStringValue,
+				lastSet,
+				scheduledAsyncSet = false,
+				// Sets the element property or attribute.
+				set = function(newVal){
+					// Templates write parent's out before children.  This should probably change.
+					// But it means we don't do a set immediately.
+					if(hasChildren && !scheduledAsyncSet) {
+						scheduledAsyncSet = true;
+						setTimeout(function(){
+							set(newVal);
+						},1);
+					}
+					
+					lastSet = newVal;
+					if(isMultiselectValue) {
+						if (newVal && typeof newVal === 'string') {
+							newVal = newVal.split(";");
+							isStringValue = true;
+						}
+						// When given something else, try to make it an array and deal with it
+						else if (newVal) {
+							newVal = can.makeArray(newVal);
+						} else {
+							newVal = [];
+						}
+	
+						// Make an object containing all the options passed in for convenient lookup
+						var isSelected = {};
+						can.each(newVal, function (val) {
+							isSelected[val] = true;
+						});
+	
+						// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then
+						// set its selected property if it was in the list of vals that were just set.
+						can.each(el.childNodes, function (option) {
+							if (option.value) {
+								option.selected = !! isSelected[option.value];
+							}
+						});
+					} else {
+						if(!options.legacyBindings && hasChildren && ("selectedIndex" in el)) {
+							el.selectedIndex = -1;
+						}
+						can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+					}
+					return newVal;
+	
+				},
+				// Returns the value of the element property or attribute.
+				get = function(){
+					if(isMultiselectValue) {
+	
+						var values = [],
+							children = el.childNodes;
+	
+						can.each(children, function (child) {
+							if (child.selected && child.value) {
+								values.push(child.value);
+							}
+						});
+	
+						return isStringValue ? values.join(";"): values;
+					}
+	
+					return can.attr.get(el, prop);
+				};
+			
+			// If the element has children like `<select>`, those
+			// elements are hydrated (by can.view.target) after the select and only then
+			// get their `value`s set. This make sure that when the value is set,
+			// it will happen after the children are setup.
+			if(hasChildren) {
+				// have to set later ... probably only with mustache.
+				setTimeout(function(){
+					scheduledAsyncSet = true;
+				},1);
+			}
+	
+			return can.compute(get(),{
+				on: function(updater){
+					can.each(event, function(eventName){
+						can.bind.call(el,eventName, updater);
+					});
+				},
+				off: function(updater){
+					can.each(event, function(eventName){
+						can.unbind.call(el,eventName, updater);
+					});
+				},
+				get: get,
+				set: set
+			});
+		}
+	};
+	
+	// ## bind
+	// An object with helpers that perform bindings in a certain direction.  
+	// These use the semaphore to prevent cycles.
+	var bind = {
+		// ## bind.childToParent
+		// Listens to the child and updates the parent when it changes.
+		// - `syncChild` - Makes sure the child is equal to the parent after the parent is set.
+		childToParent: function(el, parentCompute, childCompute, bindingsSemaphore, attrName, syncChild){
+			var parentUpdateIsFunction = typeof parentCompute === "function";
+	
+			// Updates the parent if 
+			var updateParent = function(ev, newVal){
+				if (!bindingsSemaphore[attrName]) {
+					if(parentUpdateIsFunction) {
+						parentCompute(newVal);
+						
+						if( syncChild ) {
+							// If, after setting the parent, it's value is not the same as the child,
+							// update the child with the value of the parent.
+							// This is used by `can-value`.
+							if(parentCompute() !== childCompute()) {
+								bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+								childCompute(parentCompute());
+								can.batch.after(function(){
+									--bindingsSemaphore[attrName];
+								});
+							}
+						}
+					}
+					// The parentCompute can sometimes be just an observable if the observable
+					// is on a plain JS object. This updates the observable to match whatever the
+					// new value is.
+					else if(parentCompute instanceof can.Map) {
+						parentCompute.attr(newVal, true);
+					}
+				}
+			};
+	
+			if(childCompute && childCompute.isComputed) {
+				childCompute.bind("change", updateParent);
+			}
+	
+			return updateParent;
+		},
+		// parent -> child binding
+		parentToChild: function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
+	
+			// setup listening on parent and forwarding to viewModel
+			var updateChild = function(ev, newValue){
+				// Save the viewModel property name so it is not updated multiple times.
+				bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+				childUpdate(newValue);
+	
+				// only after the batch has finished, reduce the update counter
+				can.batch.after(function(){
+					--bindingsSemaphore[attrName];
+				});
+			};
+	
+			if(parentCompute && parentCompute.isComputed) {
+				parentCompute.bind("change", updateChild);
+			}
+	
+			return updateChild;
+		}
+	};
+	
+	// ## getBindingInfo
+	// takes a node object like {name, value} and returns
+	// an object with information about that binding.
+	// Properties:
+	// - `parent` - where is the parentName read from: "scope", "attribute", "viewModel".
+	// - `parentName` - what is the parent property that should be read.
+	// - `child` - where is the childName read from: "scope", "attribute", "viewModel".
+	//  - `childName` - what is the child property that should be read.
+	// - `parentToChild` - should changes in the parent update the child.
+	// - `childToParent` - should changes in the child update the parent.
+	// - `bindingAttributeName` - the attribute name that created this binding.
+	// - `initializeValues` - should parent and child be initialized to their counterpart.
+	// If undefined is return, there is no binding.
+	var getBindingInfo = function(node, attributeViewModelBindings, templateType){
+		var attributeName = node.name,
+			attributeValue = node.value || "";
+		
+		// Does this match the new binding syntax?
+		var matches = attributeName.match(bindingsRegExp);
+		if(!matches) {
+			var ignoreAttribute = ignoreAttributesRegExp.test(attributeName);
+			var vmName = can.camelize(attributeName);
+			
+			//!steal-remove-start
+			// user tried to pass something like id="{foo}", so give them a good warning
+			if(ignoreAttribute) {
+				can.dev.warn("can/component: looks like you're trying to pass "+attributeName+" as an attribute into a component, "+
+				"but it is not a supported attribute");
+			}
+			//!steal-remove-end
+			
+			// if this is handled by another binding or a attribute like `id`.
+			if ( ignoreAttribute || viewCallbacks.attr(attributeName) ) {
+				return;
+			}
+			var syntaxRight = attributeValue[0] === "{" && can.last(attributeValue) === "}";
+			var isAttributeToChild = templateType === "legacy" ? attributeViewModelBindings[vmName] : !syntaxRight;
+			var scopeName = syntaxRight ? attributeValue.substr(1, attributeValue.length - 2 ) : attributeValue;
+			if(isAttributeToChild) {
+				return {
+					bindingAttributeName: attributeName,
+					parent: "attribute",
+					parentName: attributeName,
+					child: "viewModel",
+					childName: vmName,
+					parentToChild: true,
+					childToParent: true
+				};
+			} else {
+				return {
+					bindingAttributeName: attributeName,
+					parent: "scope",
+					parentName: scopeName,
+					child: "viewModel",
+					childName: vmName,
+					parentToChild: true,
+					childToParent: true
+				};
+			}
+		}
+		
+		var twoWay = !!matches[1],
+			childToParent = twoWay || !!matches[2],
+			parentToChild = twoWay || !childToParent;
+		
+		var childName = matches[3];
+		var isDOM = childName.charAt(0) === "$";
+		if(isDOM) {
+			
+			return {
+				parent: "scope",
+				child: "attribute",
+				childToParent: childToParent,
+				parentToChild: parentToChild,
+				bindingAttributeName: attributeName,
+				childName: childName.substr(1),
+				parentName: attributeValue,
+				initializeValues: true
+			};
+		} else {
+			return {
+				parent: "scope",
+				child: "viewModel",
+				childToParent: childToParent,
+				parentToChild: parentToChild,
+				bindingAttributeName: attributeName,
+				childName: can.camelize(childName),
+				parentName: attributeValue,
+				initializeValues: true
+			};
+		}
+
+	};
+	// Regular expressions for getBindingInfo
+	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/,
+		ignoreAttributesRegExp = /^(data-view-id|class|id|\[[\w\.-]+\]|#[\w\.-])$/i;
+	
+	
+	// ## makeDataBinding
+	// Makes a data binding for an attribute `node`.  Returns an object with information
+	// about the binding, including an `onTeardown` method that undoes the binding.  
+	// If the data binding involves a `viewModel`, an `onCompleteBinding` method is returned on
+	// the object.  This method must be called after the element has a `viewModel` with the
+	// `viewModel` to complete the binding.
+	// 
+	// - `node` - an attribute node or an object with a `name` and `value` property.
+	// - `el` - the element this binding belongs on.
+	// - `bindingData` - an object with:
+	//   - `templateType` - the type of template. Ex: "legacy" for mustache.
+	//   - `scope` - the `can.view.Scope`,
+	//   - `semaphore` - an object that keeps track of changes in different properties to prevent cycles,
+	//   - `getViewModel`  - a function that returns the `viewModel` when called.  This function can be passed around (not called) even if the 
+	//      `viewModel` doesn't exist yet.
+	//   - `attributeViewModelBindings` - properties already specified as being a viewModel<->attribute (as opposed to viewModel<->scope) binding.
+	// 
+	// Returns:
+	// - `undefined` - If this isn't a data binding.
+	// - `object` - An object with information about the binding.
+	var makeDataBinding = function(node, el, bindingData){
+		
+		// Get information about the binding.
+		var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType);
+		if(!bindingInfo) {
+			return;
+		}
+		// Get computes for the parent and child binding
+		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData);
+		var childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData);
+		var updateParent;
+		
+		
+		// Only bind to the parent if it will update the child.
+		if(bindingInfo.parentToChild){
+			var updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
+		}
+		
+		// This completes the binding.  We can't call it right away because
+		// the `viewModel` might not have been created yet.
+		var completeBinding = function(){
+			if(bindingInfo.childToParent){
+				// setup listening on parent and forwarding to viewModel
+				updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName,
+					bindingData.syncChildWithParent);
+			}
+			if(bindingData.initializeValues || bindingInfo.initializeValues) {
+				initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
+			}
+			
+			
+		};
+		// This tears down the binding.
+		var onTeardown = function() {
+			unbindUpdate(parentCompute, updateChild);
+			unbindUpdate(childCompute, updateParent);
+		};
+		// If this binding depends on the viewModel, which might not have been created,
+		// return the function to complete the binding as `onCompleteBinding`.
+		if(bindingInfo.child === "viewModel") {
+			return {
+				value: getValue(parentCompute),
+				onCompleteBinding: completeBinding,
+				bindingInfo: bindingInfo,
+				onTeardown: onTeardown
+			};
+		} else {
+			completeBinding();
+			return {
+				bindingInfo: bindingInfo,
+				onTeardown: onTeardown
+			};
+			
+		}
+	};
+	
+	// ## initializeValues
+	// Updates the parent or child value depending on the direction of the binding
+	// or if the child or parent is `undefined`.
+	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateParent){
+
+		if(options.parentToChild && !options.childToParent) {
+			updateChild({}, getValue(parentCompute) );
+		}
+		else if(!options.parentToChild && options.childToParent) {
+			updateParent({}, getValue(childCompute) );
+		}
+		// Two way
+		// Update child or parent depending on who has a value.
+		// If both have a value, update the child.
+		else if( getValue(childCompute) === undefined) {
+			updateChild({}, getValue(parentCompute) );
+		} else if(getValue(parentCompute) === undefined) {
+			updateParent({}, getValue(childCompute) );
+		} else {
+			updateChild({}, getValue(parentCompute) );
+		}
+	};
+	
+	// ## isContentEditable
+	// Determines if an element is contenteditable.
+	// An element is contenteditable if it contains the `contenteditable`
+	// attribute set to either an empty string or "true".
+	// By default an element is also contenteditable if its immediate parent
+	// has a truthy version of the attribute, unless the element is explicitly
+	// set to "false".
 	var isContentEditable = (function(){
 		// A contenteditable element has a value of an empty string or "true"
 		var values = {
@@ -60,82 +834,19 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				return value.substr(1, value.length - 2);
 			}
 			return value;
+		},
+		getValue = function(value){
+			return value && value.isComputed ? value() : value;
+		},
+		unbindUpdate = function(compute, updateOther){
+			if(compute && compute.isComputed && typeof updateOther === "function") {
+				compute.unbind("change", updateOther);
+			}
 		};
 
-	// ## can-value
-	// Implement the `can-value` special attribute
-	//
-	// ### Usage
-	//
-	// 		<input can-value="name" />
-	//
-	// When a view engine finds this attribute, it will call this callback. The value of the attribute
-	// should be a string representing some value in the current scope to cross-bind to.
-	can.view.attr("can-value", function (el, data) {
-		var propName = "$value",
-			attrValue = can.trim(removeBrackets(el.getAttribute("can-value"))),
-			getterSetter;
-
-		if (el.nodeName.toLowerCase() === "input" && ( el.type === "checkbox" || el.type === "radio" ) ) {
-
-			var property = getScopeCompute(el, data.scope, attrValue, {});
-			if (el.type === "checkbox") {
-
-				var trueValue = can.attr.has(el, "can-true-value") ? el.getAttribute("can-true-value") : true,
-					falseValue = can.attr.has(el, "can-false-value") ? el.getAttribute("can-false-value") : false;
-
-				getterSetter = can.compute(function(newValue){
-					// jshint eqeqeq: false
-					if(arguments.length) {
-						property(newValue ? trueValue : falseValue);
-					}
-					else {
-						return property() == trueValue;
-					}
-				});
-			}
-			else if(el.type === "radio") {
-				// radio is two-way bound to if the property value
-				// equals the element value
-
-				getterSetter = can.compute(function(newValue){
-					// jshint eqeqeq: false
-					if(arguments.length) {
-						if( newValue ) {
-							property(el.value);
-						}
-					}
-					else {
-						return property() == el.value;
-					}
-				});
-
-			}
-			propName = "$checked";
-			attrValue = "getterSetter";
-			data.scope = new can.view.Scope({
-				getterSetter: getterSetter
-			});
-		}
-		// For contenteditable elements, we instantiate a Content control.
-		else if (isContentEditable(el)) {
-			propName = "$innerHTML";
-		}
-
-		bindings(el, data, {
-			attrValue: attrValue,
-			propName: propName,
-			childToParent: true,
-			parentToChild: true,
-			initializeValues: true,
-			syncChildWithParent: true,
-			legacyBindings: true
-		});
-
-	});
-
+	
 	// ## Special Event Types (can-SPECIAL)
-
+	// 
 	// A special object, similar to [$.event.special](http://benalman.com/news/2010/03/jquery-special-events/),
 	// for adding hooks for special can-SPECIAL types (not native DOM events). Right now, only can-enter is
 	// supported, but this object might be exported so that it can be added to easily.
@@ -162,459 +873,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		}
 	};
 
-	var handleEvent = function (el, data) {
 
-		// Get the `event` name and if we are listening to the element or viewModel.
-		// The attribute name is the name of the event.
-		var attributeName = data.attributeName,
-		// The old way of binding is can-X
-			legacyBinding = attributeName.indexOf('can-') === 0,
-			event = attributeName.indexOf('can-') === 0 ?
-				attributeName.substr("can-".length) :
-				removeBrackets(attributeName, '(', ')'),
-			onBindElement = legacyBinding;
-
-		if(event.charAt(0) === "$") {
-			event = event.substr(1);
-			onBindElement = true;
-		}
-
-
-		// This is the method that the event will initially trigger. It will look up the method by the string name
-		// passed in the attribute and call it.
-		var handler = function (ev) {
-				var attrVal = el.getAttribute(attributeName);
-				if (!attrVal) { return; }
-
-				var $el = can.$(el),
-					viewModel = can.viewModel($el[0]);
-
-				// expression.parse will read the attribute
-				// value and parse it identically to how mustache helpers
-				// get parsed.
-				var expr = expression.parse(removeBrackets(attrVal),{lookupRule: "method", methodRule: "call"});
-
-				if(!(expr instanceof expression.Call) && !(expr instanceof expression.Helper)) {
-					var defaultArgs = can.map( [data.scope._context, $el].concat(can.makeArray(arguments) ), function(data){
-						return new expression.Literal(data);
-					});
-					expr = new expression.Call(expr, defaultArgs, {} );
-				}
-
-				// We grab the first item and treat it as a method that
-				// we'll call.
-				var scopeData = data.scope.read(expr.methodExpr.key, {
-					isArgument: true
-				});
-
-				// We break out early if the first argument isn't available
-				// anywhere.
-
-				if (!scopeData.value) {
-					scopeData = data.scope.read(expr.methodExpr.key, {
-						isArgument: true
-					});
-
-					//!steal-remove-start
-					can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
-						element: el,
-						scope: data.scope
-					});
-					//!steal-remove-end
-
-					return null;
-				}
-
-
-
-				// make a scope with these things just under
-
-				var localScope = data.scope.add({
-					"@element": $el,
-					"@event": ev,
-					"@viewModel": viewModel,
-					"@scope": data.scope,
-					"@context": data.scope._context,
-
-					"%element": this,
-					"$element": $el,
-					"%event": ev,
-					"%viewModel": viewModel,
-					"%scope": data.scope,
-					"%context": data.scope._context
-				},{
-					notContext: true
-				});
-
-
-				var args = expr.args(localScope, null)(),
-					hash = expr.hash(localScope, null)();
-
-				if(!can.isEmptyObject(hash)) {
-					args.push(hash);
-				}
-
-				return scopeData.value.apply(scopeData.parent, args);
-			};
-
-		// This code adds support for special event types, like can-enter="foo". special.enter (or any special[event]) is
-		// a function that returns an object containing an event and a handler. These are to be used for binding. For example,
-		// when a user adds a can-enter attribute, we'll bind on the keyup event, and the handler performs special logic to
-		// determine on keyup if the enter key was pressed.
-		if (special[event]) {
-			var specialData = special[event](data, el, handler);
-			handler = specialData.handler;
-			event = specialData.event;
-		}
-		// Bind the handler defined above to the element we're currently processing and the event name provided in this
-		// attribute name (can-click="foo")
-		can.bind.call(onBindElement ? el : can.viewModel(el), event, handler);
-
-		// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
-		var attributesHandler = function(ev) {
-			if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
-
-				can.unbind.call(onBindElement ? el : can.viewModel(el), event, handler);
-				can.unbind.call(el, 'attributes', attributesHandler);
-			}
-		};
-		can.bind.call(el, 'attributes', attributesHandler);
+	can.bindings = {
+		behaviors: behaviors,
+		getBindingInfo: getBindingInfo,
+		special: special
 	};
-
-	// ## can-EVENT
-	// The following section contains code for implementing the can-EVENT attribute.
-	// This binds on a wildcard attribute name. Whenever a view is being processed
-	// and can-xxx (anything starting with can-), this callback will be run.  Inside, its setting up an event handler
-	// that calls a method identified by the value of this attribute.
-	can.view.attr(/can-[\w\.]+/, handleEvent);
-	// ## (EVENT)
-	can.view.attr(/^\([\$?\w\.]+\)$/, handleEvent);
-
-
-
-	var elementCompute = function(el, prop, event, options){
-		if(!event) {
-			if(prop === "innerHTML") {
-				event = ["blur","change"];
-			}
-			else {
-				event = "change";
-			}
-		}
-		if(!can.isArray(event)) {
-			event = [event];
-		}
-
-		var hasChildren = el.nodeName.toLowerCase() === "select",
-			isMultiselectValue = prop === "value" && hasChildren && el.multiple,
-			isStringValue,
-			lastSet,
-			scheduledAsyncSet = false,
-			set = function(newVal){
-				// Templates write parent's out before children.  This should probably change.
-				// But it means we don't do a set immediately.
-				if(hasChildren && !scheduledAsyncSet) {
-					scheduledAsyncSet = true;
-					setTimeout(function(){
-						set(newVal);
-					},1);
-				}
-				
-				lastSet = newVal;
-				if(isMultiselectValue) {
-					if (newVal && typeof newVal === 'string') {
-						newVal = newVal.split(";");
-						isStringValue = true;
-					}
-					// When given something else, try to make it an array and deal with it
-					else if (newVal) {
-						newVal = can.makeArray(newVal);
-					} else {
-						newVal = [];
-					}
-
-					// Make an object containing all the options passed in for convenient lookup
-					var isSelected = {};
-					can.each(newVal, function (val) {
-						isSelected[val] = true;
-					});
-
-					// Go through each &lt;option/&gt; element, if it has a value property (its a valid option), then
-					// set its selected property if it was in the list of vals that were just set.
-					can.each(el.childNodes, function (option) {
-						if (option.value) {
-							option.selected = !! isSelected[option.value];
-						}
-					});
-				} else {
-					if(!options.legacyBindings && hasChildren && ("selectedIndex" in el)) {
-						el.selectedIndex = -1;
-					}
-					can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
-					
-					
-				}
-				return newVal;
-
-			};
-		
-		// Parent is hydrated before children.  So we do
-		// a tiny wait to do any sets.
-		if(hasChildren) {
-			// have to set later ... probably only with mustache.
-			setTimeout(function(){
-				scheduledAsyncSet = true;
-			},1);
-		}
-
-		return can.compute(el[prop],{
-			on: function(updater){
-				can.each(event, function(eventName){
-					can.bind.call(el,eventName, updater);
-				});
-			},
-			off: function(updater){
-				can.each(event, function(eventName){
-					can.unbind.call(el,eventName, updater);
-				});
-			},
-			get: function(){
-				if(isMultiselectValue) {
-
-					var values = [],
-						children = el.childNodes;
-
-					can.each(children, function (child) {
-						if (child.selected && child.value) {
-							values.push(child.value);
-						}
-					});
-
-					return isStringValue ? values.join(";"): values;
-				}
-
-				return can.attr.get(el, prop);
-			},
-			set: set
-		});
-	};
-
-	var getValue = function(value){
-		return value && value.isComputed ? value() : value;
-	};
-
-	var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/;
-	var attributeNameInfo = function(attributeName){
-		var matches = attributeName.match(bindingsRegExp);
-		if(!matches) {
-			return {
-				childToParent: true,
-				parentToChild: true,
-				propName: attributeName
-			};
-		}
-		var twoWay = !!matches[1],
-			childToParent = twoWay || !!matches[2],
-			parentToChild = twoWay || !childToParent;
-
-
-		return {
-			childToParent: childToParent,
-			parentToChild: parentToChild,
-			propName: matches[3],
-			syntaxStyle: 'new'
-		};
-	};
-
-	// parent compute
-	var getScopeCompute = function(el, scope, scopeProp, options){
-		var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
-		return parentExpression.value(scope, new can.view.Scope());
-	};
-	// child compute
-	var getElementCompute = function(el, attributeName, options){
-
-		var attrName = can.camelize( options.propName || attributeName.substr(1) ),
-			firstChar = attrName.charAt(0),
-			isDOM = firstChar === "$",
-			childCompute;
-
-		if(isDOM) {
-			childCompute = elementCompute(el, attrName.substr(1), undefined, options);
-		} else {
-			var childExpression = expression.parse(attrName,{baseMethodType: "Call"});
-			var childContext = can.viewModel(el);
-			var childScope = new can.view.Scope(childContext);
-			childCompute = childExpression.value(childScope, new can.view.Scope(), {});
-		}
-		return childCompute;
-	};
-
-	// parent -> child binding
-	var bindParentToChild = function(el, parentCompute, childUpdate, bindingsSemaphore, attrName){
-
-		// setup listening on parent and forwarding to viewModel
-		var updateChild = function(ev, newValue){
-			// Save the viewModel property name so it is not updated multiple times.
-			bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
-			childUpdate(newValue);
-
-			// only after the batch has finished, reduce the update counter
-			can.batch.after(function(){
-				--bindingsSemaphore[attrName];
-			});
-		};
-
-		if(parentCompute && parentCompute.isComputed) {
-			parentCompute.bind("change", updateChild);
-
-			can.one.call(el, 'removed', function() {
-				parentCompute.unbind("change", updateChild);
-			});
-
-		}
-
-		return updateChild;
-	};
-
-	// child -> parent binding
-	// el -> the element
-	// parentUpdate -> a method that updates the parent
-	//
-	var bindChildToParent = function(el, parentUpdate, childCompute, bindingsSemaphore, attrName, syncChild){
-		var parentUpdateIsFunction = typeof parentUpdate === "function";
-
-		var updateScope = function(ev, newVal){
-			if (!bindingsSemaphore[attrName]) {
-				if(parentUpdateIsFunction) {
-					parentUpdate(newVal);
-					if( syncChild ) {
-						if(parentUpdate() !== childCompute()) {
-							bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
-							childCompute(parentUpdate());
-							can.batch.after(function(){
-								--bindingsSemaphore[attrName];
-							});
-						}
-					}
-				} else if(parentUpdate instanceof can.Map) {
-					parentUpdate.attr(newVal, true);
-				}
-			}
-		};
-
-		if(childCompute && childCompute.isComputed) {
-			childCompute.bind("change", updateScope);
-
-			can.one.call(el, 'removed', function() {
-				childCompute.unbind("change", updateScope);
-			});
-		}
-
-		return updateScope;
-	};
-
-
-	// parentToChild, childToParent, initializeValues
-	var bindings = function(el, attrData, options){
-
-		var attrName = attrData.attributeName;
-		// Get what we are binding to from the scope
-		var parentCompute = getScopeCompute(el, attrData.scope, options.attrValue || el.getAttribute(attrName) || ".", options);
-
-		// Get what we are binding to from the child
-		var childCompute = getElementCompute(el, options.propName || attrName.replace(/^\{/,"").replace(/\}$/,""), options);
-
-		// tracks which viewModel property is currently updating
-		var bindingsSemaphore = {},
-			updateChild,
-			updateScope;
-
-		if(options.parentToChild){
-			// setup listening on parent and forwarding to viewModel
-			updateChild = bindParentToChild(el, parentCompute, childCompute, bindingsSemaphore, attrName);
-		}
-		if(options.childToParent){
-			// setup event binding on viewModel and forward to parent.
-			updateScope = bindChildToParent(el, parentCompute, childCompute, bindingsSemaphore, attrName, options.syncChildWithParent);
-		}
-
-		if(options.initializeValues) {
-			initializeValues(options, childCompute, parentCompute, updateChild, updateScope);
-		}
-
-		return {
-			parentCompute: parentCompute,
-			childCompute: childCompute
-		};
-	};
-	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateScope){
-
-		if(options.parentToChild && !options.childToParent) {
-			updateChild({}, getValue(parentCompute) );
-		}
-		else if(!options.parentToChild && options.childToParent) {
-			updateScope({}, getValue(childCompute) );
-		}
-		// Two way
-		// Update child or parent depending on who has a value.
-		// If both have a value, update the child.
-		else if( getValue(childCompute) === undefined) {
-			updateChild({}, getValue(parentCompute) );
-		} else if(getValue(parentCompute) === undefined) {
-			updateScope({}, getValue(childCompute) );
-		} else {
-			updateChild({}, getValue(parentCompute) );
-		}
-	};
-
-	//!steal-remove-start
-	
-	var syntaxWarning = function(el, attrData) {
-		can.dev.warn('can/view/bindings/bindings.js: mismatched binding syntax - ' + attrData.attributeName);
-	};
-		
-	can.view.attr(/^\(.+\}$/, syntaxWarning);
-
-	can.view.attr(/^\{.+\)$/, syntaxWarning);
-
-	can.view.attr(/^\(\{.+\}\)$/, syntaxWarning);
-	
-	//!steal-remove-end
-
-	var dataBindingsRegExp = /^\{[^\}]+\}$/;
-	can.view.attr(dataBindingsRegExp, function(el, attrData){
-		if(can.data(can.$(el),"preventDataBindings")){
-			return;
-		}
-		var attrNameInfo = attributeNameInfo(attrData.attributeName);
-		attrNameInfo.initializeValues = true;
-		attrNameInfo.templateType = attrData.templateType;
-		bindings(el, attrData, attrNameInfo);
-	});
-
-	// #ref-export shorthand
-	can.view.attr(/\*[\w\.\-_]+/, function(el, attrData) {
-		if(el.getAttribute(attrData.attributeName)) {
-			console.warn("&reference attributes can only export the view model.");
-		}
-
-		var name = can.camelize( attrData.attributeName.substr(1).toLowerCase() );
-
-		var viewModel = can.viewModel(el);
-		var refs = attrData.scope.getRefs();
-		refs._context.attr("*"+name, viewModel);
-
-	});
-
-	return {
-		getParentCompute: getScopeCompute,
-		bindParentToChild: bindParentToChild,
-		bindChildToParent: bindChildToParent,
-		setupDataBinding: bindings,
-		// a regular expression that
-		dataBindingsRegExp: dataBindingsRegExp,
-		attributeNameInfo: attributeNameInfo,
-		initializeValues: initializeValues
-	};
+	return can.bindings;
 });

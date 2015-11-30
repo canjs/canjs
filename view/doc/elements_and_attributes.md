@@ -10,60 +10,86 @@ attribute behavior.  However, CanJS and its plugins supply the following behavio
 
 ## Core
 
-The following is supported by CanJS's [can.mustache] and [can.stache] templates by default:
+With the release of canJS 2.3 the new [can.view.bindings binding syntax] provides powerful event, one-way and two-way bindings on element attributes, component viewModels, and the scope.
+
+ - Event-Binding
+    * Binds events on [can.Component::viewModel viewModel] and calls method on the [can.view.Scope scope] with the [can.stache.expressions specified arguments]
+      ```
+      <my-component (show)="doSomething('primitive', key, hash1=key1)"/>
+      ```
+      
+    * Binds events on a `DOMEvent` and calls method on the [can.view.Scope scope] with the [can.stache.expressions specified arguments]
+      ```
+      <div ($click)="doSomething('primitive', key, hash1=key1)"/>
+      ```
  
- - `ATTR-NAME="{KEY}"` - Two-way bind the `KEY` value in scope with `attrName` in
-   a component's [can.Component.prototype.viewModel viewModel].
-   
-   Two way:
-   
-   ```
-   <edit-plate plate-name="{selectedPlate}"/>
-   ```
-   
-   One way:
-   
-   ```
-   <edit-plate plate-name="{{selectedPlate}}"/>
-   ```
-   
- - [can.view.bindings.reference] - Export a reference variable from an 
-   element's [can.Component.prototype.viewModel viewModel] into the template.
-   
-   Two way:
-   
-   ```
-   <drivers-select #selected-plate="{selected.licensePlate}"/>
-   <edit-plate plate-name="{selectedPlate}"/>
-   ```
-   
-   One way:
-   
-   ```
-   <year-selector #year="{{selectedYear}}" />
-   Celebrate like it's {{year}}!
-   ```
-
- - [can.view.bindings.can-value] - Sets up two way bindings in a template.
  
-   ```
-   <input can-value="{name}"/>
-   ```
-
- - [can.view.bindings.can-EVENT] - Specify a callback function to be called on a particular event. 
+ - One-Way-Binding
+    * One-Way binds the `value` in the [can.view.Scope scope] to a child component's [can.Component::viewModel viewModel] property (`child-prop`)
+      ```
+      <example>
+        <my-component {child-prop}="value"/>
+      </example>
+      ```
+      
+      Updates `child-prop` when `value` changes
+      
+    * One-Way binds the `value` in the [can.view.Scope scope] to a element's attribute or property.
+      ```
+      <input {$placeholder}="value">
+      ```
+      
+      Updates `placeholder` when `value` changes
+      
+    * Reverse the One-Way binding by adding a `^` at the beginning.
+      ```
+      <example>
+        <my-component {^child-prop}="value"/>
+      </example>
+      ```
+      
+      Updates `value` when `child-prop` changes
+      
+    * Export a [can.Component::viewModel viewModel] to the references scope by adding an attribute with the hypenated name of the reference scope property
+      ```
+      <example {child-prop}="*foobar"/>
+      <input type="text" {($value)}="*foobar">
+      ```
+      
+      Export `child-prop` from `<example>`'s [can.Component::viewModel viewModel] into `*foobar` (reference scope) and two-way bind `*foobar` to the element's attribute. If the element's attribute changes, `*foobar` will change and updates the `child-prop` on `<example>`. If `child-prop` nothing will happen.
+      
+      
+ - Two-Way-Binding
+    * Two-Way binds the `value` in the [can.view.Scope scope] and the child component's [can.Component::viewModel viewModel] property (`child-prop`)
+      ```
+      <example>
+        <my-component {(child-prop)}="value"/>
+      </example>
+      ```
+      
+      Updates `child-prop` when `value` changes, updates `value` when `child-prop` changes.
+      
+    * Two-Way binds the `value` in the [can.view.Scope scope] and the element's attribute or property.
+      ```
+      <input {($value)}="myValue">
+      ```
+      
+      Updates the element's attribute `value` when `myValue` changes, updates `myValue` when the element's attribute `value` changes.
+      
+    * Export a [can.Component::viewModel viewModel] to the references scope by adding an attribute with the hypenated name of the reference scope property
+      ```
+      <example {(child-prop)}="*foobar"/>
+      <input type="text" {($value)}="*foobar">
+      ```
+      
+      Export and two-way bind `child-prop` from `<example>`'s [can.Component::viewModel viewModel] into `*foobar` (reference scope) and two-way bind `*foobar` to the element's attribute. If the element's attribute changes, `*foobar` will change and updates the `child-prop` on `<example>`. If `child-prop` changes, `*foobar` will change and updates the element's value attribute.
  
-	`<div (click)="{doSomething item}">...</div>`
-	
-   or
-
-	`<div can-click="{doSomething item}">...</div>`
-
- - [can.view.href] - Sets an element's href attribute so that it's url will 
-   set the specified attribute values on [can.route].
-   
+ - Passes primitive to [can.Component::viewModel viewModel]
+   This does not binding properties together but show you how you can pass a primitive string to a component [can.Component::viewModel viewModel]
    ```
-   <a can-href="{page='recipe' id=id}">Details</a>
+   <example child-prop="foobar"/>
    ```
+
 
 ## Plugins
 

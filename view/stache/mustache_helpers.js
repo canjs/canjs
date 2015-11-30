@@ -47,8 +47,9 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 					var cb = function (item, index, parentNodeList) {
 
 						return options.fn(options.scope.add({
+								"%index": index,
 								"@index": index
-							}).add(item), options.options, parentNodeList);
+							},{notContext: true}).add(item), options.options, parentNodeList);
 
 					};
 					live.list(el, items, cb, options.context, el.parentNode, nodeList, function(list, parentNodeList){
@@ -62,8 +63,9 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			if ( !! expr && utils.isArrayLike(expr)) {
 				for (i = 0; i < expr.length; i++) {
 					result.push(options.fn(options.scope.add({
+							"%index": i,
 							"@index": i
-						})
+						},{notContext: true})
 						.add(expr[i])));
 				}
 			} else if (utils.isObserveLike(expr)) {
@@ -73,15 +75,17 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				for (i = 0; i < keys.length; i++) {
 					key = keys[i];
 					result.push(options.fn(options.scope.add({
+							"%key": key,
 							"@key": key
-						})
+						},{notContext: true})
 						.add(expr[key])));
 				}
 			} else if (expr instanceof Object) {
 				for (key in expr) {
 					result.push(options.fn(options.scope.add({
+							"%key": key,
 							"@key": key
-						})
+						},{notContext: true})
 						.add(expr[key])));
 				}
 

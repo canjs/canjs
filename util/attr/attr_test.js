@@ -102,7 +102,7 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 
 	test("Map special attributes", function () {
 
-		var div = document.createElement("div");
+		var div = document.createElement("label");
 
 		document.getElementById("qunit-fixture").appendChild(div);
 

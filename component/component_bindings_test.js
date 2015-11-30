@@ -1386,6 +1386,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				tag: 'destroyable-component',
 				events: {
 					destroy: function(){
+			
 						this.viewModel.attr('product', null);
 					}
 				}
@@ -1611,6 +1612,71 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			equal(parentVM.attr('parentProp'), 'baz', 'parentProp is baz');
 			equal(childVM.attr('childProp'), 'baz', 'childProp is baz');
 		});
+		
+		test("conditional attributes (#2077)", function(){
+			can.Component.extend({
+				tag: 'some-comp',
+				viewModel: {}
+			});
+			var template = can.stache("<some-comp "+
+				"{{#if preview}}{next}='nextPage'{{/if}} "+
+				"{swap}='{{swapName}}' "+
+				"{{#preview}}checked{{/preview}} "+
+				"></some-comp>");
+			
+			var map = new can.Map({
+				preview: true,
+				nextPage: 2,
+				swapName: "preview"
+			});
+			var frag = template(map);
+			
+			var vm = can.viewModel(frag.firstChild);
+			
+			var threads = [
+				function(){
+					
+					equal(vm.attr("next"), 2, "has binidng");
+					equal(vm.attr("swap"), true, "swap - has binding");
+					equal(vm.attr("checked"), "", "attr - has binding");
+					map.attr("preview", false);
+				},
+				function(){
+					equal(vm.attr("swap"), false, "swap - updated binidng");
+					
+					ok(vm.attr("checked") === null, "attr - value set to null");
+					
+					map.attr("nextPage", 3);
+					equal(vm.attr("next"), 2, "not updating after binding is torn down");
+					map.attr("preview", true);
+					
+				},
+				function(){
+					equal(vm.attr("next"), 3, "re-initialized with binding");
+					equal(vm.attr("swap"), true, "swap - updated binidng");
+					equal(vm.attr("checked"), "", "attr - has binding set again");
+					map.attr("swapName", "nextPage");
+				},
+				function(){
+					equal(vm.attr("swap"), 3, "swap - updated binding key");
+					map.attr("nextPage",4);
+					equal(vm.attr("swap"), 4, "swap - updated binding");
+				}
+			];
+			stop();
+			var index = 0;
+			var next = function(){
+				if(index < threads.length) {
+					threads[index]();
+					index++;
+					setTimeout(next, 10);
+				} else {
+					start();
+				}
+			};
+			setTimeout(next,10);
+		});
+		
 
 	}
 

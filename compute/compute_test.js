@@ -518,6 +518,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var combo = new can.Compute(function() {
 			return combined1.get() + ' ' + combined2.get();
 		});
+		
 
 		var callbacks = 0;
 		combo.bind('change', function(){
@@ -695,20 +696,19 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 	test("bug with nested computes and batch ordering (#1519)", function(){
 	
-		var ft = can.compute('a');
-		var other = can.compute(3);
-		
-		var propA = can.compute(function(){
-			return ft() ==='a';
+		var root = can.compute('a');
+	
+		var isA = can.compute(function(){
+			return root() ==='a';
 		});
 		
-		var propB = can.compute(function(){
-			return ft() === 'b';
+		var isB = can.compute(function(){
+			return root() === 'b';
 		});
 		
 		var combined = can.compute(function(){
-			var valA = propA(),
-				valB = propB();
+			var valA = isA(),
+				valB = isB();
 
 			return valA || valB;
 		});
@@ -717,18 +717,14 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		combined.bind('change', function(){ });
 		
-		ft.bind('change', function() {
-			can.batch.start();
-			other(2);
-			can.batch.stop();
-		});
+		
 
 		can.batch.start();
-		ft('b');
+		root('b');
 		can.batch.stop();
 
 		equal(combined(), true);
-		equal(other(), 2);
+		//equal(other(), 2);
 	});
 	
 	test("can.Compute.read can read a promise (#179)", function(){
@@ -790,4 +786,122 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		count.unbind('change');
 		ok(true, 'No error was thrown');
 	});
+	
+
+	test("dependent computes update in the right order (2093)", function() {
+		
+		var root = can.compute('a'),
+			childB = can.compute(function() {
+				return root();
+			}),
+			combine = can.compute(function() {
+				return root() + childB();
+			});
+
+		combine.bind("change", function(ev, newVal) {
+			equal(newVal, "bb", "concat changed");
+		});
+		root('b');
+	});
+	
+	test("dependent computes update in the right order with a batch (#2093)", function() {
+		
+		// so the problem is that `child` then `combine` happens.
+		// without a batch, child change fires before `combine`, firing `grandChild`, which
+		// then triggers `combine`.
+		
+		
+		// the goal should be for 
+		var root = can.compute('a'),
+			child = can.compute(function() {
+				return root();
+			}),
+			child2 = can.compute(function(){
+				return root();
+			}),
+			grandChild = can.compute(function(){
+				return child();
+			}),
+			combine = can.compute(function() {
+				return child2()+grandChild();
+			});
+			
+		/*console.log("root", root.computeInstance._cid, 
+			"child", child.computeInstance._cid,
+			"grandChild", grandChild.computeInstance._cid,
+			"combine", combine.computeInstance._cid);*/
+
+		combine.bind("change", function(ev, newVal) {
+			equal(newVal, "bb", "concat changed");
+		});
+		
+		/*root.bind("change", function(ev, newVal){
+			console.log("root change", ev.batchNum)
+		});
+		child.bind("change", function(ev, newVal){
+			console.log("child change", ev.batchNum)
+		});
+		grandChild.bind("change", function(ev, newVal){
+			console.log("grandChild change", ev.batchNum)
+		});*/
+		
+		can.batch.start();
+		root('b');
+		can.batch.stop();
+	});
+	
+	test("bug with nested computes and batch ordering (#1519)", function(){
+	
+		var root = can.compute('a');
+	
+		var isA = can.compute(function(){
+			return root() ==='a';
+		});
+		
+		var isB = can.compute(function(){
+			return root() === 'b';
+		});
+		
+		var combined = can.compute(function(){
+			var valA = isA(),
+				valB = isB();
+
+			return valA || valB;
+		});
+		
+		equal(combined(), true);
+		
+		combined.bind('change', function(){ });
+		
+		
+
+		can.batch.start();
+		root('b');
+		can.batch.stop();
+
+		equal(combined(), true);
+		//equal(other(), 2);
+	});
+	
+	test("binding, unbinding, and rebinding works after a timeout (#2095)", function(){
+		var root = can.compute(1),
+			derived = can.compute(function(){
+				return root();
+			});
+			
+		var change = function(){};
+		derived.bind("change", change);
+		derived.unbind("change", change);
+		
+		stop();
+		setTimeout(function(){
+			derived.bind("change", function(ev, newVal, oldVal){
+				equal(newVal, 2, "updated");
+				start();
+			});
+			root(2);
+		},10);
+		
+	});
+
 });
