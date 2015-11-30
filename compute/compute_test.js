@@ -875,14 +875,33 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 		
 
-		//can.batch.start();
+		can.batch.start();
 		root('b');
-		//can.batch.stop();
+		can.batch.stop();
 
 		equal(combined(), true);
 		//equal(other(), 2);
 	});
 	
-	
+	test("binding, unbinding, and rebinding works after a timeout (#2095)", function(){
+		var root = can.compute(1),
+			derived = can.compute(function(){
+				return root();
+			});
+			
+		var change = function(){};
+		derived.bind("change", change);
+		derived.unbind("change", change);
+		
+		stop();
+		setTimeout(function(){
+			derived.bind("change", function(ev, newVal, oldVal){
+				equal(newVal, 2, "updated");
+				start();
+			});
+			root(2);
+		},10);
+		
+	});
 
 });

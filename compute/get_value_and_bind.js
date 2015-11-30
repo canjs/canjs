@@ -131,6 +131,7 @@ steal("can/util", function(can){
 				var ob = this.newObserved[name];
 				this.removeEdge(ob);
 			}
+			this.newObserved = {};
 		}
 	});
 	
