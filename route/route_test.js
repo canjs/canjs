@@ -816,7 +816,8 @@ steal("can/route", "can/test", "steal-qunit", function () {
 
 			route.attr({
 				bool: true
-			}, true)
+			}, true);
+			
 			deepEqual(route.attr(), {
 				'bool': "true"
 			});
