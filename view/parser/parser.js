@@ -26,8 +26,8 @@ steal(function(){
 	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[^=>\\s\\/]+",
 		spaceEQspace = "\\s*=\\s*",
-		singleCurly = "\{[^\}\{]\}",
-		doubleCurly = "\{\{[^\}]\}\}\}?",
+		singleCurly = "\\{[^\\}\\{]\\}",
+		doubleCurly = "\\{\\{[^\\}]\\}\\}\\}?",
 		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
 		  "(?:"+doubleCurly+")|(?:"+singleCurly+")|(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
 		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
@@ -326,7 +326,7 @@ steal(function(){
 				else if(state.inName && state.nameStart < curIndex) {
 					callAttrStart(state, curIndex, handler, rest);
 					callAttrEnd(state, curIndex, handler, rest);
-				} 
+				}
 				// foo={{bar}}
 				else if(state.lookingForValue){
 					state.inValue = true;
