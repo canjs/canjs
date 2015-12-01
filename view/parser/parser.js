@@ -26,8 +26,10 @@ steal(function(){
 	var alphaNumericHU = "-:A-Za-z0-9_",
 		attributeNames = "[^=>\\s\\/]+",
 		spaceEQspace = "\\s*=\\s*",
+		singleCurly = "\{[^\}\{]\}",
+		doubleCurly = "\{\{[^\}]\}\}\}?",
 		attributeEqAndValue = "(?:"+spaceEQspace+"(?:"+
-		  "(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
+		  "(?:"+doubleCurly+")|(?:"+singleCurly+")|(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
 		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
 		stash = "\\{\\{([^\\}]*)\\}\\}\\}?",
 		startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
@@ -316,7 +318,6 @@ steal(function(){
 			var nextNext = rest.charAt(i+2);
 			i++;
 			
-			
 			if(cur === "{" && next === "{") {
 				if(state.inValue && curIndex > state.valueStart) {
 					handler.attrValue(rest.substring(state.valueStart, curIndex));
@@ -325,6 +326,10 @@ steal(function(){
 				else if(state.inName && state.nameStart < curIndex) {
 					callAttrStart(state, curIndex, handler, rest);
 					callAttrEnd(state, curIndex, handler, rest);
+				} 
+				// foo={{bar}}
+				else if(state.lookingForValue){
+					state.inValue = true;
 				}
 				state.inDoubleCurly = true;
 				state.doubleCurlyStart = curIndex+2;
@@ -398,6 +403,8 @@ steal(function(){
 			callAttrStart(state, curIndex+1, handler, rest);
 			callAttrEnd(state, curIndex+1, handler, rest);
 		} else if(state.lookingForEq) {
+			callAttrEnd(state, curIndex+1, handler, rest);
+		} else if(state.inValue) {
 			callAttrEnd(state, curIndex+1, handler, rest);
 		}
 

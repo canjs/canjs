@@ -292,4 +292,27 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		]));
 		
 	});
+	
+	test('quotes around attributes (#2097)', function(){
+
+		parser("<c-d a={z}/>",makeChecks([
+			["start", ["c-d", true]],
+			["attrStart", ["a"]],
+			["attrValue", ["{z}"]],
+			["attrEnd", ["a"]],
+			["end",["c-d"]],
+			["done",[]]
+		]));
+		
+		parser("<span v={{.}}/>",makeChecks([
+			["start", ["span", true]],
+			["attrStart", ["v"]],
+			["special", ["."]],
+			["attrEnd", ["v"]],
+			["end",["span"]],
+			["done",[]]
+		]));
+		
+	});
+	
 });
