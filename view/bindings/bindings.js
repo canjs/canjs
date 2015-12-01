@@ -88,7 +88,6 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				var attrName = ev.attributeName,
 					value = el.getAttribute(attrName);
 				
-				
 				if( onTeardowns[attrName] ) {
 					onTeardowns[attrName]();
 				}
@@ -131,15 +130,18 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			if(can.data(can.$(el),"preventDataBindings")){
 				return;
 			}
-			var viewModel = can.viewModel(el);
+			var viewModel = can.viewModel(el),
+				semaphore = {},
+				teardown;
 			
+			// Setup binding
 			var dataBinding = makeDataBinding({
 				name: attrData.attributeName,
 				value: el.getAttribute(attrData.attributeName)
 			}, el, {
 				templateType: attrData.templateType,
 				scope: attrData.scope,
-				semaphore: {},
+				semaphore: semaphore,
 				getViewModel: function(){
 					return viewModel;
 				}
@@ -148,7 +150,46 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			if(dataBinding.onCompleteBinding) {
 				dataBinding.onCompleteBinding();
 			}
-			can.one.call(el, 'removed', dataBinding.onTeardown);
+			teardown = dataBinding.onTeardown;
+
+			can.one.call(el, 'removed', function(){
+				teardown();
+			});
+			
+			// Listen for changes
+			can.bind.call(el, "attributes", function (ev) {
+				var attrName = ev.attributeName,
+					value = el.getAttribute(attrName);
+					
+				if( attrName === attrData.attributeName ) {
+					
+					if( teardown ) {
+						teardown();
+					}
+					
+					if(value !== null  ) {
+						
+						var dataBinding = makeDataBinding({name: attrName, value: value}, el, {
+							templateType: attrData.templateType,
+							scope: attrData.scope,
+							semaphore: semaphore,
+							getViewModel: function(){
+								return viewModel;
+							},
+							// always update the viewModel accordingly.
+							initializeValues: true
+						});
+						if(dataBinding) {
+							// The viewModel is created, so call callback immediately.
+							if(dataBinding.onCompleteBinding) {
+								dataBinding.onCompleteBinding();
+							}
+							teardown = dataBinding.onTeardown;
+						}
+					}
+					
+				}
+			});
 		},
 		// ### bindings.behaviors.reference
 		// Provides the shorthand `*ref` behavior that exports the `viewModel`.
@@ -392,8 +433,13 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		// ### getComputeFrom.scope
 		// Returns a compute from the scope.  This handles expressions like `someMethod(.,1)`.
 		scope: function(el, scope, scopeProp, options){
-			var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
-			return parentExpression.value(scope, new can.view.Options({}));
+			if(!scopeProp) {
+				return can.compute();
+			} else {
+				var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
+				return parentExpression.value(scope, new can.view.Options({}));
+			}
+			
 		},
 		// ### getComputeFrom.viewModel
 		// Returns a compute that's two-way bound to the `viewModel` returned by 

@@ -198,9 +198,6 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 		}
 
 		elementCallbacks.push({element: child, callbacks: callbacks});
-
-		
-
 	}
 
 	function hydrateCallbacks(callbacks, args) {

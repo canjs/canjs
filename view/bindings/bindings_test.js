@@ -1768,6 +1768,35 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		}, 1);
 	});
 	
+	test("dynamic attribute bindings (#2016)", function(){
 
+		var template = can.view.stache("<input {($value)}='{{propName}}'/>");
+
+		var map = new can.Map({propName: 'first', first: "Justin", last: "Meyer"});
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var input = ta.getElementsByTagName("input")[0];
+		equal(input.value, "Justin", "input value set correctly if key does not exist in map");
+		
+		stop();
+		map.attr('propName','last');
+		setTimeout(function(){
+			
+			equal(input.value, "Meyer", "input value set correctly if key does not exist in map");
+			
+			input.value = "Lueke";
+
+			can.trigger(input, "change");
+	
+			equal(map.attr("last"), "Lueke", "updated from input");
+			
+			start();
+		},10);
+
+	});
 
 });
