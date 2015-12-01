@@ -293,7 +293,7 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		
 	});
 	
-	test('quotes around attributes (#2097)', function(){
+	test('quotes around attributes and other lazy attribute writing (#2097)', function(){
 
 		parser("<c-d a={z}/>",makeChecks([
 			["start", ["c-d", true]],
@@ -313,6 +313,17 @@ steal("can/view/parser", "steal-qunit", function(parser){
 			["done",[]]
 		]));
 		
+		
+		
+		parser("<div {{^f}} d {{/f}}/>",makeChecks([
+			["start", ["div", true]],
+			["special", ["^f"]],
+			["attrStart", ["d"]],
+			["attrEnd", ["d"]],
+			["special", ["/f"]],
+			["end",["div"]],
+			["done",[]]
+		]));
 	});
 	
 });

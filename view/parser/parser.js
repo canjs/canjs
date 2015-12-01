@@ -289,6 +289,7 @@ steal(function(){
 		state.valueStart = undefined;
 		state.inValue = false;
 		state.inName = false;
+		state.lookingForEq = false;
 		state.inQuote = false;
 		state.lookingForName = true;
 	};
@@ -317,7 +318,7 @@ steal(function(){
 			var next = rest.charAt(i+1);
 			var nextNext = rest.charAt(i+2);
 			i++;
-			
+			//debugger;
 			if(cur === "{" && next === "{") {
 				if(state.inValue && curIndex > state.valueStart) {
 					handler.attrValue(rest.substring(state.valueStart, curIndex));
@@ -330,6 +331,10 @@ steal(function(){
 				// foo={{bar}}
 				else if(state.lookingForValue){
 					state.inValue = true;
+				}
+				// a {{bar}}
+				else if(state.lookingForEq && state.attrStart) {
+					callAttrEnd(state, curIndex, handler, rest);
 				}
 				state.inDoubleCurly = true;
 				state.doubleCurlyStart = curIndex+2;
