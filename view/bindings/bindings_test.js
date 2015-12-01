@@ -4,6 +4,132 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			document.getElementById("qunit-fixture").innerHTML = "";
 		}
 	});
+	
+	test("attributeNameInfo", function(){
+		// MUSTACHE BEHAVIOR
+		var info = can.bindings.getBindingInfo({name: "foo", value: "bar"},{foo: "@"},"legacy");
+		deepEqual(info,{
+			parent: "attribute",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "foo",
+			parentName: "foo",
+			bindingAttributeName: "foo"
+		}, "legacy with @");
+		
+
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "bar"},{},"legacy");
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "foo-ed"
+		},"legacy");
+		
+		// ORIGINAL STACHE BEHAVIOR
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "bar"});
+		deepEqual(info, {
+			parent: "attribute",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "foo-ed",
+			bindingAttributeName: "foo-ed"
+		}, "OG stache attr binding");
+		
+		info = can.bindings.getBindingInfo({name: "foo-ed", value: "{bar}"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "foo-ed"
+		}, "OG stache vm binding");
+		
+		// NEW BINDINGS
+		
+		// element based
+		info = can.bindings.getBindingInfo({name: "{$foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: false,
+			parentToChild: true,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{$foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{($foo-ed)}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: true,
+			parentToChild: true,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{($foo-ed)}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{^$foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "attribute",
+			childToParent: true,
+			parentToChild: false,
+			parentName: "bar",
+			childName: "foo-ed",
+			bindingAttributeName: "{^$foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+		// vm based
+		info = can.bindings.getBindingInfo({name: "{foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: false,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{foo-ed}",
+			initializeValues: true
+		}, "new vm binding");
+		
+		info = can.bindings.getBindingInfo({name: "{(foo-ed)}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: true,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{(foo-ed)}",
+			initializeValues: true
+		}, "new el binding");
+		
+		info = can.bindings.getBindingInfo({name: "{^foo-ed}", value: "bar"});
+		deepEqual(info, {
+			parent: "scope",
+			child: "viewModel",
+			parentToChild: false,
+			childToParent: true,
+			childName: "fooEd",
+			parentName: "bar",
+			bindingAttributeName: "{^foo-ed}",
+			initializeValues: true
+		}, "new el binding");
+		
+	});
 
 	var foodTypes = new can.List([{
 		title: "Fruits",
@@ -26,7 +152,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			"{{/each}}" +
 			"</div>");
 
-			
+
 
 			function doSomething(foodType, el, ev) {
 				ok(true, "doSomething called");
@@ -46,7 +172,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			can.trigger(p0, "click");
 
 		});
-		
+
 		test("can-event special keys", function(){
 			var scope = new can.Map({
 				test: "testval"
@@ -61,7 +187,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
 			"{{/each}}" +
 			"</div>");
-			
+
 			function withArgs(ev1, el1, compScope, testVal, context, title, hash) {
 				ok(true, "withArgs called");
 				equal(el1[0].nodeName.toLowerCase(), "can-event-args-tester", "@element is the event's DOM element");
@@ -366,7 +492,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(input.checked, false, 'checkbox value bound (via uncheck)');
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
-	
+
 	// TODO: next
 	test("checkboxes with can-true-value bind properly", function () {
 		var data = new can.Map({
@@ -377,7 +503,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
 		equal(input.checked, true, 'checkbox value bound (via attr check)');
-		
+
 		data.attr('sex', 'female');
 		equal(input.checked, false, 'checkbox value unbound (via attr uncheck)');
 		input.checked = true;
@@ -742,13 +868,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 							 '</a>';
 		//var mustacheRenderer = can.mustache(templateString);
 		var stacheRenderer = can.stache(templateString);
-		
+
 		var obj = new can.Map({thing: 'stuff'});
-		
-		
+
+
 		stacheRenderer(obj);
 		ok(true, 'stache worked without errors');
-		
+
 	});
 
 	test("can-event throws an error when inside #if block (#1182)", function(){
@@ -893,12 +1019,12 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
 	});
-	
+
 	test("by default can-EVENT calls with values, not computes", function(){
 		stop();
 		var ta = document.getElementById("qunit-fixture");
 		var template = can.stache("<div id='click-me' can-click='{map.method one map.two map.three}'></div>");
-		
+
 		var one = can.compute(1);
 		var three = can.compute(3);
 		var MyMap = can.Map.extend({
@@ -910,9 +1036,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				start();
 			}
 		});
-		
+
 		var map = new MyMap({"two": 2, "three": three});
-		
+
 		var frag = template({one: one, map: map});
 		ta.appendChild(frag);
 		can.trigger(document.getElementById("click-me"), "click");
@@ -966,6 +1092,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	test("<select can-value> keeps its value as <option>s change with {{#list}} (#1762)", function(){
+
 		var template = can.view.stache("<select can-value='{id}'>{{#values}}<option value='{{.}}'>{{.}}</option>{{/values}}</select>");
 		var values = can.compute( ["1","2","3","4"]);
 		var id = can.compute("2");
@@ -978,17 +1105,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		// the value is set asynchronously
 		setTimeout(function(){
 			ok(select.childNodes[1].selected, "value is initially selected");
-			
+
 			values(["7","2","5","4"]);
-			
+
 			ok(select.childNodes[1].selected, "after changing options, value should still be selected");
-			
-			
+
+
 			start();
 		},20);
-		
+
 	});
-	
+
 	test("<select can-value> keeps its value as <option>s change with {{#each}} (#1762)", function(){
 		var template = can.view.stache("<select can-value='{id}'>{{#each values}}<option value='{{.}}'>{{.}}</option>{{/values}}</select>");
 		var values = can.compute( ["1","2","3","4"]);
@@ -999,22 +1126,22 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		});
 		stop();
 		var select = frag.firstChild;
-		
-		
+
+
 		// the value is set asynchronously
 		setTimeout(function(){
 			ok(select.childNodes[1].selected, "value is initially selected");
-			
+
 			values(["7","2","5","4"]);
-			
+
 			ok(select.childNodes[1].selected, "after changing options, value should still be selected");
-			
-			
+
+
 			start();
 		},20);
-		
+
 	});
-	
+
 	test("(event) methods on objects are called (#1839)", function(){
 		var template = can.stache("<div ($click)='setSomething person.message'/>");
 		var data = {
@@ -1032,7 +1159,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var frag = template(data);
 		can.trigger( frag.firstChild, "click" );
 	});
-	
+
 	test("(event) methods on objects are called with call expressions (#1839)", function(){
 		var template = can.stache("<div ($click)='setSomething(person.message)'/>");
 		var data = {
@@ -1050,62 +1177,62 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var frag = template(data);
 		can.trigger( frag.firstChild, "click" );
 	});
-	
+
 	test("two way - viewModel (#1700)", function(){
-		
+
 		can.Component.extend({
 			tag: "view-model-able"
 		});
-		
+
 		var template = can.stache("<div {(view-model-prop)}='scopeProp'/>");
-		
+
 		var attrSetCalled = 0;
-		
+
 		var map = new can.Map({scopeProp: "Hello"});
 		var oldAttr = map.attr;
 		map.attr = function(attrName, value){
 			if(typeof attrName === "string" && arguments.length > 1) {
 				attrSetCalled++;
 			}
-			
+
 			return oldAttr.apply(this, arguments);
 		};
-		
-		
+
+
 		var frag = template(map);
 		var viewModel = can.viewModel(frag.firstChild);
-		
+
 		equal(attrSetCalled, 0, "set is not called on scope map");
 		equal( viewModel.attr("viewModelProp"), "Hello", "initial value set" );
-		
+
 		viewModel = can.viewModel(frag.firstChild);
-		
+
 		var viewModelAttrSetCalled = 1;
 		viewModel.attr = function(attrName){
 			if(typeof attrName === "string" && arguments.length > 1) {
 				viewModelAttrSetCalled++;
 			}
-			
+
 			return oldAttr.apply(this, arguments);
 		};
-		
-		
+
+
 		viewModel.attr("viewModelProp","HELLO");
 		equal(map.attr("scopeProp"), "HELLO", "binding from child to parent");
 		equal(attrSetCalled, 1, "set is called once on scope map");
-		
+
 		equal(viewModelAttrSetCalled, 3, "set is called once viewModel");
-		
-		
+
+
 		map.attr("scopeProp","WORLD");
 		equal( viewModel.attr("viewModelProp"), "WORLD", "binding from parent to child" );
 		equal(attrSetCalled, 2, "set is called once on scope map");
 		equal(viewModelAttrSetCalled, 4, "set is called once on viewModel");
-		
+
 	});
-	
+
 	// new two-way binding
-	
+
 	test("two-way - DOM - input text (#1700)", function () {
 
 		var template = can.view.stache("<input {($value)}='age'/>");
@@ -1135,13 +1262,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(map.attr("age"), "32", "updated from input");
 
 	});
-	
+
 	test('two-way - DOM - {($checked)} with truthy and falsy values binds to checkbox (#1700)', function() {
 		var data = new can.Map({
 				completed: 1
 			}),
 			frag = can.view.stache('<input type="checkbox" {($checked)}="completed"/>')(data);
-			
+
 		can.append(can.$("#qunit-fixture"), frag);
 
 		var input = can.$("#qunit-fixture")[0].getElementsByTagName('input')[0];
@@ -1149,7 +1276,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		data.attr('completed', 0);
 		equal(input.checked, false, 'checkbox value bound (via attr check)');
 	});
-	
+
 	test('two-way - reference - {(child)}="*ref" (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
@@ -1163,31 +1290,31 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		var template = can.stache("<reference-export {(name)}='*refName'/>"+
 			"<ref-import {(name)}='*refName'/> {{helperToGetScope}}");
-		
+
 		var scope;
 		var frag = template(data,{
 			helperToGetScope: function(options){
 				scope = options.scope;
 			}
 		});
-		
+
 		var refExport = can.viewModel(frag.firstChild);
 		var refImport = can.viewModel(frag.firstChild.nextSibling);
-		
+
 		refExport.attr("name","v1");
-		
+
 		equal( scope.getRefs()._context.attr("*refName"), "v1", "reference scope updated");
 
 		equal(refImport.attr("name"),"v1", "updated ref-import");
-		
+
 		refImport.attr("name","v2");
-		
+
 		equal(refExport.attr("name"),"v2", "updated ref-export");
-		
+
 		equal( scope.getRefs()._context.attr("*refName"), "v2", "actually put in refs scope");
-		
+
 	});
-	
+
 	test('two-way - reference - with <content> tag', function(){
 		can.Component.extend({
 			tag: "other-export",
@@ -1218,7 +1345,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(one.firstChild.nodeValue, "", "external content, internal export");
 		equal(two.firstChild.nodeValue, "OTHER-EXPORT", "external content, external export");*/
 	});
-	
+
 	test('two-way - reference shorthand (#1700)', function(){
 		var data = new can.Map({person: {name: {}}});
 		can.Component.extend({
@@ -1238,49 +1365,49 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal( frag.lastChild.firstChild.nodeValue, "done");
 		equal( frag.firstChild.firstChild.firstChild.nodeValue, "", "not done");
 	});
-	
+
 	test('one-way - parent to child - viewModel', function(){
-		
-		
+
+
 		var template = can.stache("<div {view-model-prop}='scopeProp'/>");
-		
+
 
 		var map = new can.Map({scopeProp: "Venus"});
-		
+
 		var frag = template(map);
 		var viewModel = can.viewModel(frag.firstChild);
-		
+
 		equal( viewModel.attr("viewModelProp"), "Venus", "initial value set" );
-		
+
 		viewModel.attr("viewModelProp","Earth");
 		equal(map.attr("scopeProp"), "Venus", "no binding from child to parent");
-		
+
 		map.attr("scopeProp","Mars");
 		equal( viewModel.attr("viewModelProp"), "Mars", "binding from parent to child" );
 	});
-	
+
 	test('one-way - child to parent - viewModel', function(){
-		
+
 		can.Component.extend({
 			tag: "view-model-able",
 			viewModel: {
 				viewModelProp: "Mercury"
 			}
 		});
-		
+
 		var template = can.stache("<view-model-able {^view-model-prop}='scopeProp'/>");
-		
+
 		var map = new can.Map({scopeProp: "Venus"});
-		
+
 		var frag = template(map);
 		var viewModel = can.viewModel(frag.firstChild);
-		
+
 		equal( viewModel.attr("viewModelProp"), "Mercury", "initial value kept" );
 		equal( map.attr("scopeProp"), "Mercury", "initial value set on parent" );
-		
+
 		viewModel.attr("viewModelProp","Earth");
 		equal(map.attr("scopeProp"), "Earth", "binding from child to parent");
-		
+
 		map.attr("scopeProp","Mars");
 		equal( viewModel.attr("viewModelProp"), "Earth", "no binding from parent to child" );
 	});
@@ -1303,13 +1430,13 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		var template = can.stache('<import-parent></import-parent>');
 		var frag = template({});
-		
+
 		equal(frag.childNodes[0].childNodes[1].innerHTML,
 			'Imported: David 7',
 			'{.} component scope imported into variable');
 	});
-	
-	
+
+
 	test('one way - child to parent - importing viewModel {^prop}="test"', function() {
 		can.Component.extend({
 			tag: 'import-prop-scope',
@@ -1384,17 +1511,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			},
 			leakScope: false
 		});
-		
-		
+
+
 		var template = can.stache("<outer-noleak><my-child {^.}='myChild'/></outer-noleak>");
 		var frag = template();
 		var vm = can.viewModel(frag.firstChild);
 		ok(vm.attr("myChild") instanceof can.Map, "got instance");
-		
+
 	});
-	
+
 	test("viewModel binding (event)", function(){
-		
+
 		can.Component.extend({
 			tag: "viewmodel-binding",
 			viewModel: {
@@ -1410,7 +1537,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		});
 		can.viewModel(frag.firstChild).makeMyEvent();
 	});
-	
+
 	test("checkboxes with {($checked)} bind properly", function () {
 		var data = new can.Map({
 			completed: true
@@ -1431,7 +1558,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(input.checked, false, 'checkbox value bound (via uncheck)');
 		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 	});
-	
+
 	test("two-way element empty value (1996)", function(){
 
 
@@ -1462,8 +1589,11 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(map.attr("age"), "", "updated from input");
 
 	});
-	
+
 	test("exporting methods (#2051)", function(){
+		expect(2);
+
+
 		can.Component.extend({
 			tag : 'foo-bar',
 			viewModel : {
@@ -1473,16 +1603,171 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				}
 			}
 		});
-		
-		var template = can.stache("<foo-bar {^@method}='*refKey'></foo-bar>{{*refKey()}}");
+
+		var template = can.stache("<foo-bar {^@method}='@*refKey'></foo-bar>{{*refKey()}}");
 
 		var frag = template({});
 		equal( frag.lastChild.nodeValue, "5");
-		
-		
 
-		
 	});
 
+
+	test("renders dynamic custom attributes (#1800)", function () {
+
+		var template = can.view.stache("<ul>{{#actions}}<li can-click='{{.}}'>{{.}}</li>{{/actions}}</ul>");
+
+		var map = new can.Map({
+			actions: ["action1", "action2"],
+			action1: function(){
+				equal(calling, 0,"action1");
+			},
+			action2: function(){
+				equal(calling, 1,"action2");
+			}
+		});
+
+		var frag = template(map),
+			lis = frag.firstChild.getElementsByTagName("li");
+
+		var calling = 0;
+		can.trigger(lis[0], "click");
+		calling  = 1;
+		can.trigger(lis[1], "click");
+	});
+
+	//!steal-remove-start
+	if (can.dev) {
+		test("warning on a mismatched quote (#1995)", function () {
+			expect(4);
+			var oldlog = can.dev.warn,
+				message = 'can/view/bindings/bindings.js: mismatched binding syntax - (foo}';
+
+			can.dev.warn = function (text) {
+				equal(text, message, 'Got expected message logged.');
+			};
+			
+			can.stache("<div (foo}='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {foo)';
+			can.stache("<div {foo)='bar'/>")();
+			
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - {(foo})';
+			can.stache("<div {(foo})='bar'/>")();
+
+			message = 'can/view/bindings/bindings.js: mismatched binding syntax - ({foo})';
+			can.stache("<div ({foo})='bar'/>")();
+
+
+			can.dev.warn = oldlog;
+		});
+	}
+	//!steal-remove-end
 	
+
+
+	test("One way binding from a select's value to a parent compute updates the parent with the select's initial value (#2027)", function(){
+		var template = can.stache("<select {^$value}='value'><option value='One'>One</option></select>");
+		var map = new can.Map();
+
+		var frag = template(map);
+		var select = frag.childNodes.item(0);
+
+		setTimeout(function(){
+			equal(select.selectedIndex, 0, "selectedIndex is 0 because no value exists on the map");
+			equal(map.attr("value"), "One", "The map's value property is set to the select's value");
+			start();
+		},1);
+
+		stop();
+
+	});
+
+	test("two way binding from a select's value to null has no selection (#2027)", function(){
+		var template = can.stache("<select {($value)}='key'><option value='One'>One</option></select>");
+		var map = new can.Map({key: null});
+
+		var frag = template(map);
+		var select = frag.childNodes.item(0);
+
+		setTimeout(function(){
+			equal(select.selectedIndex, -1, "selectedIndex is 0 because no value exists on the map");
+			equal(map.attr("key"), null, "The map's value property is set to the select's value");
+			start();
+		},1);
+
+		stop();
+
+	});
+
+	test('two-way bound values that do not match a select option set selectedIndex to -1 (#2027)', function() {
+		var renderer = can.view.stache('<select {($value)}="key"><option value="foo">foo</option><option value="bar">bar</option></select>');
+		var map = new can.Map({ });
+		var frag = renderer(map);
+
+		equal(frag.firstChild.selectedIndex, 0, 'undefined <- {($first value)}: selectedIndex = 0');
+
+		map.attr('key', 'notfoo');
+		equal(frag.firstChild.selectedIndex, -1, 'notfoo: selectedIndex = -1');
+
+		map.attr('key', 'foo');
+		strictEqual(frag.firstChild.selectedIndex, 0, 'foo: selectedIndex = 0');
+
+		map.attr('key', 'notbar');
+		equal(frag.firstChild.selectedIndex, -1, 'notbar: selectedIndex = -1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar: selectedIndex = 1');
+
+		map.attr('key', 'bar');
+		strictEqual(frag.firstChild.selectedIndex, 1, 'bar (no change): selectedIndex = 1');
+	});
+
+	test("two way bound select empty string null or undefined value (#2027)", function () {
+
+		var template = can.stache(
+			"<select id='null-select' {($value)}='color-1'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>" +
+			"<select id='undefined-select' {($value)}='color-2'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>"+
+			"<select id='string-select' {($value)}='color-3'>" +
+				"<option value=''>Choose</option>" +
+				"<option value='red'>Red</option>" +
+				"<option value='green'>Green</option>" +
+			"</select>");
+
+		var map = new can.Map({
+			'color-1': null,
+			'color-2': undefined,
+			'color-3': ""
+		});
+		stop();
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var nullInput = document.getElementById("null-select");
+		var nullInputOptions = nullInput.getElementsByTagName('option');
+		var undefinedInput = document.getElementById("undefined-select");
+		var undefinedInputOptions = undefinedInput.getElementsByTagName('option');
+		var stringInput = document.getElementById("string-select");
+		var stringInputOptions = stringInput.getElementsByTagName('option');
+
+		// wait for set to be called which will change the selects
+		setTimeout(function(){
+			ok(!nullInputOptions[0].selected, "default (null) value set");
+			ok(!undefinedInputOptions[0].selected, "default (undefined) value set");
+			ok(!stringInputOptions[0].selected, "default ('') value set");
+			start();
+		}, 1);
+	});
+	
+
+
 });

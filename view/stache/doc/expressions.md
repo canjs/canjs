@@ -61,7 +61,7 @@ the a compute that looks up the value of `key` only in the top of the [can.view.
 
 In general the rules are as follows:
 
- - __call expression arguments__ `{{method(key)}}` - values values are passed.
+ - __call expression arguments__ `{{method(key)}}` - values are passed.
  - __helper expression arguments__ `{{helper key}}` - computes are passed.
  - __hash value in call expression__ `{{method(hash=key)}}` - values are set as property values.
  - __hash value in helper expression__ `{{method hash=key}}` - computes are set as property values.

@@ -8,8 +8,13 @@ steal("can/util/can.js", function (can) {
 	// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 	// the triggering of `attributes` event async.
 	var setImmediate = can.global.setImmediate || function (cb) {
-				return setTimeout(cb, 0);
-			},
+			return setTimeout(cb, 0);
+		},
+		// this is a hack to deal with a problem with can-simple-dom
+		formElements = {"input": true, "textarea": true, "select": true},
+		hasProperty = function(el,attrName){
+			return (attrName in el) || formElements[el.nodeName.toLowerCase()];
+		},
 		attr = {
 			// This property lets us know if the browser supports mutation observers.
 			// If they are supported then that will be setup in can/util/jquery and those native events will be used to inform observers of attribute changes.
@@ -121,7 +126,7 @@ steal("can/util/can.js", function (can) {
 				// For all other attributes use `setAttribute` to set the new value.
 				if (typeof prop === "function") {
 					newValue = prop(el, val);
-				} else if (prop === true) {
+				} else if (prop === true && hasProperty(el, prop)) {
 					newValue = el[attrName] = true;
 
 					if (attrName === "checked" && el.type === "radio") {
@@ -130,17 +135,18 @@ steal("can/util/can.js", function (can) {
 						}
 					}
 
-				} else if (prop) {
+				} else if (prop !== true && hasProperty(el, prop)) {
 					newValue = val;
-					if (el[prop] !== val) {
+					// https://github.com/canjs/canjs/issues/356
+					// But still needs to be set for <option>fields
+					if (el[prop] !== val || el.nodeName.toUpperCase() === 'OPTION') {
 						el[prop] = val;
 					}
 					if (prop === "value" && can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 						el.defaultValue = val;
 					}
 				} else {
-					el.setAttribute(attrName, val);
-					newValue = val;
+					attr.setAttribute(el, attrName, val);
 				}
 
 				// Now that the value has been set, for browsers without MutationObservers, check to see that value has changed and if so trigger the "attributes" event on the element.
@@ -148,6 +154,39 @@ steal("can/util/can.js", function (can) {
 					attr.trigger(el, attrName, oldValue);
 				}
 			},
+			setAttribute: (function(){
+				var doc = can.global.document;
+				if(doc && document.createAttribute) {
+					try {
+						doc.createAttribute("{}");
+					} catch(e) {
+						var invalidNodes = {},
+							attributeDummy = document.createElement('div');
+				
+						return function(el, attrName, val){
+							var first = attrName.charAt(0),
+								cachedNode,
+								node;
+							if((first === "{" || first === "(" || first === "*") && el.setAttributeNode) {
+								cachedNode = invalidNodes[attrName];
+								if(!cachedNode) {
+									attributeDummy.innerHTML = '<div ' + attrName + '=""></div>';
+									cachedNode = invalidNodes[attrName] = attributeDummy.childNodes[0].attributes[0];
+								}
+								node = cachedNode.cloneNode();
+								node.value = val;
+								el.setAttributeNode(node);
+							} else {
+								el.setAttribute(attrName, val);
+							}
+						};
+					}
+				}
+				return function(el, attrName, val){
+					el.setAttribute(attrName, val);
+				};
+				
+			})(),
 			// ## attr.trigger
 			// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 			trigger: function (el, attrName, oldValue) {
@@ -169,9 +208,9 @@ steal("can/util/can.js", function (can) {
 			get: function (el, attrName) {
 				attrName = attrName.toLowerCase();
 				var prop = attr.map[attrName];
-				if(typeof prop === "string" && (prop in el) ) {
+				if(typeof prop === "string" && hasProperty(el, prop) ) {
 					return el[prop];
-				} else if(prop === true) {
+				} else if(prop === true && hasProperty(el, prop) ) {
 					return el[attrName];
 				}
 
@@ -192,9 +231,9 @@ steal("can/util/can.js", function (can) {
 				if (typeof setter === "function") {
 					setter(el, undefined);
 				}
-				if (setter === true) {
+				if (setter === true && hasProperty(el, attrName) ) {
 					el[attrName] = false;
-				} else if (typeof setter === "string") {
+				} else if (typeof setter === "string" && hasProperty(el, setter) ) {
 					el[setter] = "";
 				} else {
 					el.removeAttribute(attrName);

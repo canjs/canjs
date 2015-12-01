@@ -3,6 +3,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 	"can/test","can/view/mustache/spec/specs","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
+	
 	var browserDoc = window.document;
 	var simpleDocument = new SimpleDOM.Document();
 
@@ -1841,13 +1842,13 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 				el.value = value() || "";
 			}
 			var val;
-			can.stache.registerHelper('value', function (value) {
+			can.stache.registerHelper('myValue', function (value) {
 				return function (el) {
 					val = new Value(el, value);
 				}
 			});
 
-			var renderer = can.stache('<input {{value user.name}}/>');
+			var renderer = can.stache('<input {{myValue user.name}}/>');
 
 			var div = doc.createElement('div'),
 				u = new can.Map({
@@ -1874,7 +1875,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			val.teardown();
 
 			// name is undefined
-			renderer = can.stache('<input {{value user.name}}/>');
+			renderer = can.stache('<input {{myValue user.name}}/>');
 			div = doc.createElement('div');
 			u = new can.Map({});
 			div.appendChild(renderer({
@@ -1894,7 +1895,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			val.teardown();
 
 			// name is null
-			renderer = can.stache('<input {{value user.name}}/>');
+			renderer = can.stache('<input {{myValue user.name}}/>');
 			div = doc.createElement('div');
 			u = new can.Map({
 				name: null
@@ -4456,6 +4457,29 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(frag.lastChild.firstChild.nodeValue, '4', 'Rendered correct value');
 		});
 
+		test('eq called twice (#1931)', function() {
+			expect(1);
+
+			var oldIs = can.stache.getHelper('is').fn;
+
+			can.stache.registerHelper('is', function() {
+				ok(true, 'comparator invoked');
+				return oldIs.apply(this, arguments);
+			});
+
+			var a = can.compute(0),
+			b = can.compute(0);
+
+			can.stache('{{eq a b}}')({ a: a, b: b });
+
+			can.batch.start();
+			a(1);
+			b(1);
+			can.batch.stop();
+
+			can.stache.registerHelper('is', oldIs);
+		});
+
 		test("#each with else works (#1979)", function(){
 			var list = new can.List(["a","b"]);
 			var template = can.stache("<div>{{#each list}}<span>{{.}}</span>{{else}}<label>empty</label>{{/each}}</div>");
@@ -4533,7 +4557,52 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 			
 		});
+		
+		test("Rendering live bound indicies with #each, @index and a simple can.List (#2067)", function () {
+			var list = new can.List([{value:'a'}, {value:'b'}, {value: 'c'}]);
+			var template = can.stache("<ul>{{#each list}}<li>{{%index}} {{value}}</li>{{/each}}</ul>");
 
+			var tpl = template({
+				list: list
+			}).firstChild;
+			//.getElementsByTagName('li');
+
+			var lis = tpl.getElementsByTagName('li');
+			equal(lis.length, 3, "three lis");
+
+			equal(innerHTML(lis[0]), '0 a', "first index and value are correct");
+			equal(innerHTML(lis[1]), '1 b', "second index and value are correct");
+			equal(innerHTML(lis[2]), '2 c', "third index and value are correct");
+			
+		});
+		
+		test("%index content should be skipped by ../ (#1554)", function(){
+			var list = new can.List(["a","b"]);
+			var tmpl = can.stache('{{#each items}}<li>{{.././items.indexOf .}}</li>{{/each}}');
+			var frag = tmpl({items: list});
+			equal(frag.lastChild.firstChild.nodeValue, "1", "read indexOf");
+		});
+		
+		test("rendering style tag (#2035)",function(){
+			var map = new can.Map({color: 'green'});
+			var frag = can.stache('<style>body {color: {{color}} }</style>')(map);
+			var content = frag.firstChild.firstChild.nodeValue;
+			equal(content,"body {color: green }","got the right style text");
+			
+			map = new can.Map({showGreen: true});
+			frag = can.stache('<style>body {color: {{#showGreen}}green{{/showGreen}} }</style>')(map);
+			content = frag.firstChild.firstChild.nodeValue;
+			equal(content,"body {color: green }","sub expressions work");
+			
+		});
+
+		test("checked as a custom attribute", function(){
+			var map = new can.Map({
+				preview: true
+			});
+			var frag = can.stache("<div {{#if preview}}checked{{/if}}></div>")(map);
+			equal(frag.firstChild.getAttribute("checked"), "", "got attribute");
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

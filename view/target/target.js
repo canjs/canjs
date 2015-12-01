@@ -41,19 +41,8 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			return clone.innerHTML === "<xyz></xyz>";
 		})(),
 		namespacesWork = typeof document !== "undefined" && !!document.createElementNS,
-		// A dummy element we use for creating non-standard attribute names (e.g. containing () and [])
-		attributeDummy = typeof document !== "undefined" ? document.createElement('div') : null,
 		// Sets the attribute on an element. Uses a hack when setAttribute complains
-		setAttribute = function(el, attrName, value) {
-			try {
-				el.setAttribute(attrName, value);
-			} catch(e) {
-				// We got an error. Set innerHTML with the non-standard attribute and clone
-				// that attribute node
-				attributeDummy.innerHTML = '<div ' + attrName + '="' + value + '"></div>';
-				el.setAttributeNode(attributeDummy.childNodes[0].attributes[0].cloneNode());
-			}
-		};
+		setAttribute = can.attr.setAttribute;
 
 	/**
 	 * @function cloneNode
@@ -204,11 +193,13 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			child = child.childNodes.item(path[i]);
 		}
 
-		elementCallbacks.push({element: child, callbacks: callbacks});
-
 		for( i= 0 ; i < pathsLength; i++) {
 			getCallbacks(child, paths[i], elementCallbacks);
 		}
+
+		elementCallbacks.push({element: child, callbacks: callbacks});
+
+		
 
 	}
 

@@ -8,16 +8,7 @@ steal("can/util", "can/view/scope",function(can){
 		 * @hide
 		 * The Options scope.
 		 */
-	var Options = can.view.Scope.extend({
-		init: function (data, parent) {
-			if (!data.helpers && !data.partials && !data.tags) {
-				data = {
-					helpers: data
-				};
-			}
-			can.view.Scope.prototype.init.apply(this, arguments);
-		}
-	});
+	var Options = can.view.Options;
 	
 	return {
 		// Returns if something looks like an array.  This works for can.List
