@@ -13,7 +13,7 @@ steal("can/util/can.js", function (can) {
 		// this is a hack to deal with a problem with can-simple-dom
 		formElements = {"input": true, "textarea": true, "select": true},
 		hasProperty = function(el,attrName){
-			return (attrName in el) || formElements[el.nodeName.toLowerCase()];
+			return (attrName in el) || (can.document && formElements[el.nodeName.toLowerCase()]);
 		},
 		attr = {
 			// This property lets us know if the browser supports mutation observers.
@@ -126,7 +126,7 @@ steal("can/util/can.js", function (can) {
 				// For all other attributes use `setAttribute` to set the new value.
 				if (typeof prop === "function") {
 					newValue = prop(el, val);
-				} else if (prop === true && hasProperty(el, prop)) {
+				} else if (prop === true && hasProperty(el, attrName)) {
 					newValue = el[attrName] = true;
 
 					if (attrName === "checked" && el.type === "radio") {
@@ -135,7 +135,7 @@ steal("can/util/can.js", function (can) {
 						}
 					}
 
-				} else if (prop !== true && hasProperty(el, prop)) {
+				} else if (typeof prop === "string" && hasProperty(el, prop)) {
 					newValue = val;
 					// https://github.com/canjs/canjs/issues/356
 					// But still needs to be set for <option>fields
@@ -210,7 +210,7 @@ steal("can/util/can.js", function (can) {
 				var prop = attr.map[attrName];
 				if(typeof prop === "string" && hasProperty(el, prop) ) {
 					return el[prop];
-				} else if(prop === true && hasProperty(el, prop) ) {
+				} else if(prop === true && hasProperty(el, attrName) ) {
 					return el[attrName];
 				}
 
