@@ -236,7 +236,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 					list.splice( index, itemsInChildListTree(replacement), replacement );
 					foundIds[nodeId] = true;
 					rCount--;
-				} 
+				}
 				index++;
 			}
 			// Only do this if 
@@ -326,7 +326,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				if(parent !== true) {
 					if(directlyNested) {
 						parent.replacements.push(nodeList);
-					} 
+					}
 					else {
 						parent.newDeepChildren.push(nodeList);
 					}
