@@ -15,8 +15,8 @@ To report a bug, please visit [GitHub Issues](https://github.com/canjs/canjs/iss
 
 When filing a bug, it is helpful to include:
 
-- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS fiddles:
-  - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
+- Small examples using tools like [JSBin]. You can clone the following CanJS bins:
+  - [jQuery](http://justinbmeyer.jsbin.com/venaje/edit?html,js,output)
   - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
   - [Dojo](http://jsfiddle.net/donejs/9x96n/)
   - [YUI](http://jsfiddle.net/donejs/w6m73/)
