@@ -1530,7 +1530,23 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 				passedProp: "value"
 			});
 		});
-		
+
+		test("%root property should not be serialized inside prototype of can.Component constructor (#2080)", function () {
+			var viewModel = can.Map.extend({});
+
+			var comp = can.Component.extend({
+				tag: "foo",
+				viewModel: viewModel,
+				init: function () {
+					ok(!this.viewModel.serialize()['%root'], "serialized viewModel contains '%root' property");
+				}
+			});
+
+			var template = can.stache("<foo/>");
+
+			can.append(this.$fixture, template());
+		});
+
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
