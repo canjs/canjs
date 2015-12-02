@@ -128,6 +128,13 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				map[id(node, idMap)] = replacements[i];
 			}
 			return map;
+		},
+		addUnfoundAsDeepChildren = function(list, rMap, foundIds){
+			for(var repId in rMap) {
+				if(!foundIds[repId]) {
+					list.newDeepChildren.push(rMap[repId]);
+				}
+			}
 		};
 
 	// ## Registering & Updating
@@ -195,8 +202,12 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				oldListLength
 			].concat(newNodes));
 
+			// Replacements are nodes that have replaced the original element this is on.
+			// We can't simply insert elements because stache does children before parents.
 			if(nodeList.replacements){
 				nodeLists.nestReplacements(nodeList);
+				nodeList.deepChildren = nodeList.newDeepChildren;
+				nodeList.newDeepChildren = [];
 			} else {
 				nodeLists.nestList(nodeList);
 			}
@@ -204,26 +215,35 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			return oldNodes;
 		},
 		// Goes through each node in the list. [el1, el2, el3, ...]
-		// Ginds the nodeList for that node in repacements.  el1's nodeList might look like [el1, [el2]].
+		// Finds the nodeList for that node in repacements.  el1's nodeList might look like [el1, [el2]].
 		// Replaces that element and any other elements in the node list with the 
 		// nodelist itself. resulting in [ [el1, [el2]], el3, ...]
+		// If a replacement is not found, it was improperly added, so we add it as a deepChild.
 		nestReplacements: function(list){
 			var index = 0,
 				// temporary id map that is limited to this call
 				idMap = {},
 				// replacements are in reverse order in the DOM
 				rMap = replacementMap(list.replacements, idMap),
-				rCount = list.replacements.length;
+				rCount = list.replacements.length,
+				foundIds = {};
 			
 			while(index < list.length && rCount) {
 				var node = list[index],
-					replacement = rMap[readId(node, idMap)];
+					nodeId = readId(node, idMap),
+					replacement = rMap[nodeId];
 				if( replacement ) {
 					list.splice( index, itemsInChildListTree(replacement), replacement );
+					foundIds[nodeId] = true;
 					rCount--;
-				}
+				} 
 				index++;
 			}
+			// Only do this if 
+			if(rCount) {
+				addUnfoundAsDeepChildren(list, rMap, foundIds );
+			}
+			
 			list.replacements = [];
 		},
 		// ## nodeLists.nestList
@@ -292,20 +312,27 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		},
 		// ## nodeLists.register
 		// Registers a nodeList and returns the nodeList passed to register
-		register: function (nodeList, unregistered, parent) {
+		register: function (nodeList, unregistered, parent, directlyNested) {
 			// If a unregistered callback has been provided assign it to the nodeList
 			// as a property to be called when the nodeList is unregistred.
+			can.cid(nodeList);
 			nodeList.unregistered = unregistered;
 			nodeList.parentList = parent;
 			
-			if(parent === true) {
-				// this is the "top" parent in stache
+			if(parent) {
+				nodeList.deepChildren = [];
+				nodeList.newDeepChildren = [];
 				nodeList.replacements = [];
-			} else if(parent) {
-				// TOOD: remove
-				parent.replacements.push(nodeList);
-				nodeList.replacements = [];
-			} else {
+				if(parent !== true) {
+					if(directlyNested) {
+						parent.replacements.push(nodeList);
+					} 
+					else {
+						parent.newDeepChildren.push(nodeList);
+					}
+				}
+			}
+			else {
 				nodeLists.nestList(nodeList);
 			}
 			
@@ -333,9 +360,14 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				} else {
 					// Recursively unregister each of the child lists in 
 					// the nodeList.
-					push.apply(nodes, nodeLists.unregister(node));
+					push.apply(nodes, nodeLists.unregister(node, true));
 				}
 			});
+			
+			can.each(nodeList.deepChildren, function(nodeList){
+				nodeLists.unregister(nodeList, true);
+			});
+			
 			return nodes;
 		},
 
@@ -343,14 +375,23 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		// Unregister's a nodeList and returns the unregistered nodes.  
 		// Call if the nodeList is no longer being updated. This will 
 		// also unregister all child nodeLists.
-		unregister: function (nodeList) {
-			var nodes = nodeLists.unregisterChildren(nodeList);
+		unregister: function (nodeList, isChild) {
+			var nodes = nodeLists.unregisterChildren(nodeList, true);
+			
 			// If an 'unregisted' function was provided during registration, remove
 			// it from the list, and call the function provided.
 			if (nodeList.unregistered) {
 				var unregisteredCallback = nodeList.unregistered;
-				delete nodeList.unregistered;
-				delete nodeList.replacements;
+				nodeList.replacements = nodeList.unregistered = null;
+				if(!isChild) {
+					var deepChildren = nodeList.parentList && nodeList.parentList.deepChildren;
+					if(deepChildren) {
+						var index = deepChildren.indexOf(nodeList);
+						if(index !== -1) {
+							deepChildren.splice(index,1);
+						}
+					}
+				}
 				unregisteredCallback();
 			}
 			return nodes;

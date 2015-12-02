@@ -106,18 +106,20 @@ steal('can/util',
 		},
 		// a helper function that renders something and adds its nodeLists to newNodeLists
 		// in the right way for both stache and mustache.
-		renderAndAddToNodeLists = function(newNodeLists, nodeList, render, context, args){
+		renderAndAddToNodeLists = function(newNodeLists, parentNodeList, render, context, args){
 			var itemNodeList = [];
 
-			if(nodeList) {
-				nodeLists.register(itemNodeList,null, true);
+			if(parentNodeList) {
+				nodeLists.register(itemNodeList,null, parentNodeList, true);
+				itemNodeList.parentList = parentNodeList;
+				itemNodeList.expression = "#each SUBEXPRESSION";
 			}
 			
 			var itemHTML = render.apply(context, args.concat([itemNodeList])),
 				itemFrag = getLiveFragment(itemHTML);
 
 			var childNodes = can.makeArray(getChildNodes(itemFrag));
-			if(nodeList) {
+			if(parentNodeList) {
 				nodeLists.update(itemNodeList, childNodes);
 				newNodeLists.push(itemNodeList);
 			} else {
@@ -293,6 +295,7 @@ steal('can/util',
 				},
 				// Called when items are removed or when the bindings are torn down.
 				remove = function (ev, items, index, duringTeardown, fullTeardown) {
+					
 					if (!afterPreviousEvents) {
 						return;
 					}
@@ -313,12 +316,14 @@ steal('can/util',
 						indexMap[i](i);
 					}
 					
-					// adds the falsey section if the list is empty
-					addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
+					
+					
 					
 					
 					// don't remove elements during teardown.  Something else will probably be doing that.
 					if(!fullTeardown) {
+						// adds the falsey section if the list is empty
+						addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
 						can.remove(can.$(itemsToRemove));
 					} else {
 						nodeLists.unregister(masterNodeList);
