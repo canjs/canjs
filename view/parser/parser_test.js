@@ -292,4 +292,38 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		]));
 		
 	});
+	
+	test('quotes around attributes and other lazy attribute writing (#2097)', function(){
+
+		parser("<c-d a={z}/>",makeChecks([
+			["start", ["c-d", true]],
+			["attrStart", ["a"]],
+			["attrValue", ["{z}"]],
+			["attrEnd", ["a"]],
+			["end",["c-d"]],
+			["done",[]]
+		]));
+		
+		parser("<span v={{.}}/>",makeChecks([
+			["start", ["span", true]],
+			["attrStart", ["v"]],
+			["special", ["."]],
+			["attrEnd", ["v"]],
+			["end",["span"]],
+			["done",[]]
+		]));
+		
+		
+		
+		parser("<div {{^f}} d {{/f}}/>",makeChecks([
+			["start", ["div", true]],
+			["special", ["^f"]],
+			["attrStart", ["d"]],
+			["attrEnd", ["d"]],
+			["special", ["/f"]],
+			["end",["div"]],
+			["done",[]]
+		]));
+	});
+	
 });

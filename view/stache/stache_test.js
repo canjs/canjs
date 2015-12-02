@@ -4603,6 +4603,12 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var frag = can.stache("<div {{#if preview}}checked{{/if}}></div>")(map);
 			equal(frag.firstChild.getAttribute("checked"), "", "got attribute");
 		});
+		
+		test("sections with attribute spacing (#2097)", function(){
+			var template = can.stache('<div {{#foo}} disabled {{/foo}}>');
+			var frag = template({foo: true});
+			equal(frag.firstChild.getAttribute("disabled"),"","disabled set");
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
