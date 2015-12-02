@@ -52,7 +52,7 @@ steal('can/util/can.js', function (can) {
 					}
 				} else {
 					for (key in elements) {
-						if (elements.hasOwnProperty(key) && callback.call(context || elements[key], elements[key], key, elements) === false) {
+						if (Object.prototype.hasOwnProperty.call(elements, key) && callback.call(context || elements[key], elements[key], key, elements) === false) {
 							break;
 						}
 					}
