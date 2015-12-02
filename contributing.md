@@ -17,10 +17,7 @@ When filing a bug, it is helpful to include:
 
 - Small examples using tools like JSBin. You can clone the following CanJS bins:
   - [jQuery](http://justinbmeyer.jsbin.com/venaje/edit?html,js,output)
-  - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
-  - [Dojo](http://jsfiddle.net/donejs/9x96n/)
-  - [YUI](http://jsfiddle.net/donejs/w6m73/)
-  - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
+  - [Zepto](http://justinbmeyer.jsbin.com/veqola/edit?html,js,output)
 - Breaking unit tests (optional)
 - Proposed fix solutions (optional)
 
