@@ -1761,6 +1761,28 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			can.trigger(can.$(document), 'click');
 		});
 		
+		test("<content> tag doesn't leak memory", function(){
+
+			can.Component.extend({
+				tag: 'my-viewer',
+				template: can.stache('<div><content /></div>')
+			});
+			
+			var template = can.stache('{{#show}}<my-viewer>{{value}}</my-viewer>{{/show}}');
+			
+			var map = new can.Map({show: true, value: "hi"});
+			
+			can.append(can.$("#qunit-fixture"), template(map));
+			
+			map.attr("show", false);
+			map.attr("show", true);
+			map.attr("show", false);
+			map.attr("show", true);
+			map.attr("show", false);
+			equal(map._bindings,1, "only one binding");
+			can.remove(can.$("#qunit-fixture>*"));
+		});
+		
 		// PUT NEW TESTS THAT NEED TO TEST AGAINST MUSTACHE JUST ABOVE THIS LINE
 	}
 
