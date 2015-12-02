@@ -3,6 +3,21 @@
 @parent guides 5
 -->
 
+__2.3.4__ ( Dec 02 2015 )
+
+- [Update each.js](https://github.com/canjs/canjs/pull/2114)
+- [Stache leaks](https://github.com/canjs/canjs/pull/2111)
+- [Stache removes attribute &quot;id&quot;  from input elements if value should be interpolated](https://github.com/canjs/canjs/issues/2110)
+- [makes dynamic bindings work](https://github.com/canjs/canjs/pull/2108)
+- [makes attributes that point to {} or {{}} work without enclosing quotes](https://github.com/canjs/canjs/pull/2107)
+- [Dynamic bindings broken](https://github.com/canjs/canjs/issues/2106)
+- [Update deprecated_models.md](https://github.com/canjs/canjs/pull/2104)
+- [quotes around attributes](https://github.com/canjs/canjs/issues/2097)
+- [deprecation warning not showing up](https://github.com/canjs/canjs/issues/2091)
+- [Stache templates leak for various reasons](https://github.com/canjs/canjs/issues/2090)
+- [can.each doesn&#39;t work if elements is missing `hasOwnProperty`](https://github.com/canjs/canjs/issues/1958)
+
+
 __2.3.3__ ( Nov 30 2015 )
 
 - [can.__isRecording observes doesn&#39;t understand can.__notObserve](https://github.com/canjs/canjs/issues/2099)
