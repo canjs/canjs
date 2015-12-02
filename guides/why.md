@@ -16,7 +16,7 @@ chat app that works as an Android, iOS, and Desktop app.
 <h2 id="Flexible">Flexible</h2>
 
 CanJS is __flexible__. Unlike other frameworks, it's designed to work in almost any situation.  You can readily use third party plugins,
-modify the DOM with jQuery directly, and even use alternate DOM libraries like Zepto and Dojo.
+modify the DOM with jQuery directly, and even use alternate DOM libraries like Zepto and Dojo. CanJS supports all browsers, including IE8.
 
 <h2 id="Powerful">Powerful</h2>
 
