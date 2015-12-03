@@ -445,10 +445,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		// Returns a compute that's two-way bound to the `viewModel` returned by 
 		// `options.getViewModel()`.
 		viewModel: function(el, scope, vmName, options) {
+			var setName = vmName.replace(/@/g,"");
 			return can.compute(function(newVal){
 				var viewModel = options.getViewModel();
 				if(arguments.length) {
-					viewModel.attr(vmName,newVal);
+					viewModel.attr(setName,newVal);
 				} else {
 					return vmName === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
 				}

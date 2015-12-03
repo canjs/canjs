@@ -1798,5 +1798,36 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		},10);
 
 	});
+	
+	test("@function reference to child (#2116)", function(){
+		expect(2);
+		var template = can.stache('<foo-bar {@child}="@parent"></foo-bar>');
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				method: function(){
+					ok(false, "should not be called");
+				}
+			}
+		});
+
+		var VM = can.Map.extend({
+			parent : function() {
+				ok(false, "should not be called");
+			}
+		});
+
+		var vm = new VM({});
+		var frag = template(vm);
+
+		ok( typeof can.viewModel(frag.firstChild).attr("child") === "function", "to child binding");
+		
+		
+		template = can.stache('<foo-bar {^@method}="@vmMethod"></foo-bar>');
+		vm = new VM({});
+		template(vm);
+		
+		ok(typeof vm.attr("vmMethod") === "function", "parent export function");
+	});
 
 });
