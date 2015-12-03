@@ -893,7 +893,6 @@ steal("can/view/callbacks",
 				div  = document.createElement("div");
 
 			div.appendChild(frag);
-			div.querySelectorAll("col").length
 
 			equal(div.querySelectorAll("col").length, 2, "Hookup with self-closing tag rendered properly with " + ext );
 			equal(div.innerHTML.indexOf("@@!!@@"), -1, "Hookup with self-closing tag did not leave orphaned @@!!@@ text content with " + ext );
