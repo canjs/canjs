@@ -1798,5 +1798,90 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		},10);
 
 	});
+	
+	test("@function reference to child (#2116)", function(){
+		expect(2);
+		var template = can.stache('<foo-bar {@child}="@parent"></foo-bar>');
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				method: function(){
+					ok(false, "should not be called");
+				}
+			}
+		});
+
+		var VM = can.Map.extend({
+			parent : function() {
+				ok(false, "should not be called");
+			}
+		});
+
+		var vm = new VM({});
+		var frag = template(vm);
+
+		equal( typeof can.viewModel(frag.firstChild).attr("child"), "function", "to child binding");
+		
+		
+		template = can.stache('<foo-bar {^@method}="@vmMethod"></foo-bar>');
+		vm = new VM({});
+		template(vm);
+		
+		ok(typeof vm.attr("vmMethod") === "function", "parent export function");
+	});
+	
+	test("setter only gets called once (#2117)", function(){
+		expect(1);
+		var VM = can.Map.extend({
+			_set: function(prop, val){
+				if(prop === "bar") {
+					equal(val, "BAR");
+				}
+				return can.Map.prototype._set.apply(this, arguments);
+			}
+		});
+		
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : VM
+		});
+		
+		var template = can.stache('<foo-bar {bar}="bar"/>');
+		
+		template(new can.Map({bar: "BAR"}));
+		
+	});
+	
+	test("function reference to child binding (#2116)", function(){
+		expect(2);
+		var template = can.stache('<foo-bar {child}="@parent"></foo-bar>');
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				
+			}
+		});
+
+		var VM = can.Map.extend({
+		});
+
+		var vm = new VM({});
+		var frag = template(vm);
+		
+		vm.attr("parent", function(){ ok(false, "should not be called"); });
+
+		equal( typeof can.viewModel(frag.firstChild).attr("child"), "function", "to child binding");
+		
+		
+		template = can.stache('<foo-bar {^@method}="vmMethod"></foo-bar>');
+		vm = new VM({});
+		frag = template(vm);
+		
+		can.viewModel(frag.firstChild).attr("method",function(){
+			ok(false, "method should not be called");
+		});
+		
+		equal(typeof vm.attr("vmMethod"), "function", "parent export function");
+	});
 
 });
