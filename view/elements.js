@@ -80,7 +80,7 @@ steal('can/util', "can/view",function (can) {
 		// when generated as part of binding hookup
 		selfClosingTags: {
 			col: true
-		}
+		},
 		// Used to determine the parentNode if el is directly within a documentFragment
 		getParentNode: function (el, defaultParentNode) {
 			return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
