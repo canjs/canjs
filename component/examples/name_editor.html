@@ -5,45 +5,36 @@
 
 
 <script type='text/mustache' id='app-template'>
-<h1>{{#me}}{{first}} {{last}}{{/me}}</h1>
-<name-editor first="me.first" last="me.last">
-	Editing {{honorific}}
-</name-editor>
+<foo-bar {foo}="foo" {bar}="bar"></foo-bar>
 </script>
 <script type='text/javascript'> 
-steal("can/component", function() {
+steal("can/component", "can/map/define","can/view/stache"
+	,function() {
 
-	can.Component.extend({
-		tag: "name-editor",
-		viewModel: {
-			firstPH: "first",
-			lastPH: "last",
-			honorific: function(){
-				if( this.attr('first') == "Justin" ) {
-					return "Mr."
-				} else {
-					return "Mrs."
+		can.Component.extend({
+			tag : 'foo-bar',
+			leakScope : false,
+			viewModel : {
+				define : {
+					foo : {
+						set : function(newVal) {
+							console.log('foo set to ' + newVal);
+						}
+					},
+					bar : {
+						set : function(newVal) {
+							console.log('bar set to ' + newVal);
+						}
+					}
 				}
 			}
-		},
-		template: 
-			"<form><content/>"+
-				"<input can-value='first'/>"+
-				"<input can-value='last'/>"+
-			"</form>"	
+		});
+
+		var vm = new can.Map({
+			bar : 'test'
+		});
+
+		$('#out').html(can.view('app-template')(vm));
 	});
-
-	var me = new can.Map({
-		first: "Justin",
-		last: "Meyer"
-	})
-
-    $("#out").html(can.view("app-template",{
-    	me: new can.Map({
-			first: "Justin",
-			last: "Meyer"
-		})
-    }))
-})
 </script>
 </body>
