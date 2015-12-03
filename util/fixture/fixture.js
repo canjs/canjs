@@ -1,128 +1,170 @@
-steal('can/util','can/util/string','can/util/object', function (can) {
+// # can/util/fixture.js
+//
+// Intercepts AJAX requests and simulates them with either a function or a
+// file. This is used to develop independently from backend services.
+steal('can/util', 'can/util/string', 'can/util/object', function (can) {
+	// can.fixture relies on can.Object in order to work and needs to be
+	// included before can.fixture in order to use it, otherwise it'll error.
+	if (!can.Object) {
+		throw new Error('can.fixture depends on can.Object. Please include it before can.fixture.');
+	}
 
+	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
+	var getUrl = function (url) {
+		if (typeof steal !== 'undefined') {
+			// New steal
+			// TODO The correct way to make this work with new Steal is to change getUrl
+			// to return a deferred and have the other code accept a deferred.
+			if(steal.joinURIs) {
+				var base = steal.config("baseUrl");
+				var joined = steal.joinURIs(base, url);
+				return joined;
+			}
+
+			// Legacy steal
+			if (can.isFunction(steal.config)) {
+				if (steal.System) {
+					return steal.joinURIs(steal.config('baseURL'), url);
+				}
+				else {
+					return steal.config()
+						.root.mapJoin(url)
+						.toString();
+				}
+			}
+			return steal.root.join(url)
+				.toString();
+		}
+		return (can.fixture.rootUrl || '') + url;
+	};
+
+	// Manipulates the AJAX prefilter to identify whether or not we should
+	// manipulate the AJAX call to change the URL to a static file or call
+	// a function for a dynamic fixture.
 	var updateSettings = function (settings, originalOptions) {
-			if (!can.fixture.on) {
-				return;
+		if (!can.fixture.on || settings.fixture === false) {
+			return;
+		}
+
+		// A simple wrapper for logging fixture.js.
+		var log = function () {
+			//!steal-remove-start
+			can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
+				.join(' '));
+			//!steal-remove-end
+		};
+
+		// We always need the type which can also be called method, default to GET
+		settings.type = settings.type || settings.method || 'GET';
+
+		// add the fixture option if programmed in
+		var data = overwrite(settings);
+
+			// If there is not a fixture for this AJAX request, do nothing.
+		if (!settings.fixture) {
+			if (window.location.protocol === "file:") {
+				log("ajax request to " + settings.url + ", no fixture found");
+			}
+			return;
+		}
+
+		// If the fixture already exists on can.fixture, update the fixture option
+		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
+			settings.fixture = can.fixture[settings.fixture];
+		}
+
+		// If the fixture setting is a string, we just change the URL of the
+		// AJAX call to the fixture URL.
+		if (typeof settings.fixture === "string") {
+			var url = settings.fixture;
+
+			// If the URL starts with //, we need to update the URL to become
+			// the full path.
+			if (/^\/\//.test(url)) {
+				// this lets us use rootUrl w/o having steal...
+				url = getUrl(settings.fixture.substr(2));
 			}
 
-			//simple wrapper for logging
-			var _logger = function(type, arr){
-				if(console.log.apply){
-					console[type].apply(console, arr)
-				} else {
-					console[type](arr)
-				}
-			},
-			log = function () {
-				if (window.console && console.log) {
-					Array.prototype.unshift.call(arguments, 'fixture INFO:');
-					_logger( "log", Array.prototype.slice.call(arguments) );
-				}
-				else if (window.opera && window.opera.postError) {
-					opera.postError("fixture INFO: " + out);
-				}
+			if (data) {
+				// Template static fixture URLs
+				url = can.sub(url, data);
 			}
 
-			// We always need the type which can also be called method, default to GET
-			settings.type = settings.type || settings.method || 'GET';
+			delete settings.fixture;
 
-			// add the fixture option if programmed in
-			var data = overwrite(settings);
+			//!steal-remove-start
+			log("looking for fixture in " + url);
+			//!steal-remove-end
 
-			// if we don't have a fixture, do nothing
-			if (!settings.fixture) {
-				if (window.location.protocol === "file:") {
-					log("ajax request to " + settings.url + ", no fixture found");
-				}
-				return;
+			// Override the AJAX settings, changing the URL to the fixture file,
+			// removing the data, and changing the type to GET.
+			settings.url = url;
+			settings.data = null;
+			settings.type = "GET";
+			if (!settings.error) {
+				// If no error handling is provided, we provide one and throw an
+				// error.
+				settings.error = function (xhr, error, message) {
+					throw new Error("fixtures.js Error " + error + " " + message);
+				};
+			}
+			// Otherwise, it is a function and we add the fixture data type so the
+			// fixture transport will handle it.
+		} else {
+			//!steal-remove-start
+			log("using a dynamic fixture for " + settings.type + " " + settings.url);
+			//!steal-remove-end
+
+			// TODO: make everything go here for timing and other fun stuff
+			// add to settings data from fixture ...
+			if (settings.dataTypes) {
+				settings.dataTypes.splice(0, 0, "fixture");
 			}
 
-			//if referencing something else, update the fixture option
-			if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
-				settings.fixture = can.fixture[settings.fixture];
+			if (data && originalOptions) {
+				originalOptions.data = originalOptions.data || {};
+				can.extend(originalOptions.data, data);
 			}
-
-			// if a string, we just point to the right url
-			if (typeof settings.fixture == "string") {
-				var url = settings.fixture;
-
-				if (/^\/\//.test(url)) {
-					// this lets us use rootUrl w/o having steal...
-					url = can.fixture.rootUrl === steal.config().root ?
-						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
-						can.fixture.rootUrl + settings.fixture.substr(2);
-				}
-
-				if(data) {
-					// Template static fixture URLs
-					url = can.sub(url, data);
-				}
-
-				delete settings.fixture;
-
-				//!steal-remove-start
-				log("looking for fixture in " + url);
-				//!steal-remove-end
-
-				settings.url = url;
-				settings.data = null;
-				settings.type = "GET";
-				if (!settings.error) {
-					settings.error = function (xhr, error, message) {
-						throw "fixtures.js Error " + error + " " + message;
-					};
-				}
-			}
-			else {
-				//!steal-remove-start
-				log("using a dynamic fixture for " + settings.type + " " + settings.url);
-				//!steal-remove-end
-
-				//it's a function ... add the fixture datatype so our fixture transport handles it
-				// TODO: make everything go here for timing and other fun stuff
-				// add to settings data from fixture ...
-				settings.dataTypes && settings.dataTypes.splice(0, 0, "fixture");
-
-				if (data && originalOptions) {
-					can.extend(originalOptions.data, data)
-				}
-			}
-		},
+		}
+	},
 		// A helper function that takes what's called with response
 		// and moves some common args around to make it easier to call
-		extractResponse = function(status, statusText, responses, headers) {
+		extractResponse = function (status, statusText, responses, headers) {
 			// if we get response(RESPONSES, HEADERS)
-			if(typeof status != "number"){
+			if (typeof status !== "number") {
 				headers = statusText;
 				responses = status;
-				statusText = "success"
+				statusText = "success";
 				status = 200;
 			}
 			// if we get response(200, RESPONSES, HEADERS)
-			if(typeof statusText != "string"){
+			if (typeof statusText !== "string") {
 				headers = responses;
 				responses = statusText;
 				statusText = "success";
 			}
-			if ( status >= 400 && status <= 599 ) {
-				this.dataType = "text"
+			if (status >= 400 && status <= 599) {
+				this.dataType = "text";
 			}
 			return [status, statusText, extractResponses(this, responses), headers];
 		},
-		// If we get data instead of responses,
-		// make sure we provide a response type that matches the first datatype (typically json)
-		extractResponses = function(settings, responses){
+		// If we get data instead of responses, make sure we provide a response
+		// type that matches the first datatype (typically JSON)
+		extractResponses = function (settings, responses) {
 			var next = settings.dataTypes ? settings.dataTypes[0] : (settings.dataType || 'json');
 			if (!responses || !responses[next]) {
-				var tmp = {}
+				var tmp = {};
 				tmp[next] = responses;
 				responses = tmp;
 			}
 			return responses;
 		};
 
-	//used to check urls
-	// check if jQuery
+	// Set up prefiltering and transmission handling in order to actually power
+	// can.fixture. This is handled two different ways, depending on whether or
+	// not CanJS is using jQuery or not.
+
+	// If we are using jQuery, we have access to ajaxPrefilter and ajaxTransport
 	if (can.ajaxPrefilter && can.ajaxTransport) {
 
 		// the pre-filter needs to re-route the url
@@ -140,78 +182,83 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					// we'll immediately wait the delay time for all fixtures
 					timeout = setTimeout(function () {
 						// if the user wants to call success on their own, we allow it ...
-						var success = function() {
-							if(stopped === false) {
-								callback.apply(null, extractResponse.apply(s, arguments) );
+						var success = function () {
+							if (stopped === false) {
+								callback.apply(null, extractResponse.apply(s, arguments));
 							}
 						},
-						// get the result form the fixture
-						result = s.fixture(original, success, headers, s);
-						if(result !== undefined) {
-							// make sure the result has the right dataType
+							// get the result form the fixture
+							result = s.fixture(original, success, headers, s);
+						if (result !== undefined) {
+							// Run the callback as a 200 success and with the results with the correct dataType
 							callback(200, "success", extractResponses(s, result), {});
 						}
 					}, can.fixture.delay);
 				},
 				abort: function () {
 					stopped = true;
-					clearTimeout(timeout)
+					clearTimeout(timeout);
 				}
 			};
 		});
+		// If we are not using jQuery, we don't have access to those nice ajaxPrefilter
+		// and ajaxTransport functions, so we need to monkey patch can.ajax.
 	} else {
 		var AJAX = can.ajax;
 		can.ajax = function (settings) {
 			updateSettings(settings, settings);
+
+			// If the call is a fixture call, we run the same type of code as we would
+			// with jQuery's ajaxTransport.
 			if (settings.fixture) {
-				var timeout, d = new can.Deferred(),
+				var timeout, deferred = new can.Deferred(),
 					stopped = false;
 
 				//TODO this should work with response
-				d.getResponseHeader = function () {
-				}
+				deferred.getResponseHeader = function () {};
 
-				// call success and fail
-				d.then(settings.success, settings.fail);
+				// Call success or fail after deferred resolves
+				deferred.then(settings.success, settings.fail);
 
-				// abort should stop the timeout and calling success
-				d.abort = function () {
+				// Abort should stop the timeout and calling the success callback
+				deferred.abort = function () {
 					clearTimeout(timeout);
 					stopped = true;
-					d.reject(d)
-				}
+					deferred.reject(deferred);
+				};
 				// set a timeout that simulates making a request ....
 				timeout = setTimeout(function () {
 					// if the user wants to call success on their own, we allow it ...
-					var success = function() {
+					var success = function () {
 						var response = extractResponse.apply(settings, arguments),
 							status = response[0];
 
-						if ( (status >= 200 && status < 300 || status === 304) && stopped === false) {
-							d.resolve(response[2][settings.dataType], "success", d)
+						if ((status >= 200 && status < 300 || status === 304) && stopped === false) {
+							deferred.resolve(response[2][settings.dataType]);
 						} else {
 							// TODO probably resolve better
-							d.reject(d, 'error', response[1]);
+							deferred.reject(deferred, 'error', response[1]);
 						}
 					},
-					// get the result form the fixture
-					result = settings.fixture(settings, success, settings.headers, settings);
-					if(result !== undefined) {
-						d.resolve(result, "success", d)
+						// Get the results from the fixture.
+						result = settings.fixture(settings, success, settings.headers, settings);
+					if (result !== undefined) {
+						// Resolve with fixture results
+						deferred.resolve(result);
 					}
 				}, can.fixture.delay);
-				
-				return d;
+
+				return deferred;
+				// Otherwise just run a normal can.ajax call.
 			} else {
 				return AJAX(settings);
 			}
-		}
+		};
 	}
 
-	var typeTest = /^(script|json|text|jsonp)$/,
-	// a list of 'overwrite' settings object
-		overwrites = [],
-	// returns the index of an overwrite function
+	// A list of 'overwrite' settings objects
+	var overwrites = [],
+		// Finds and returns the index of an overwrite function
 		find = function (settings, exact) {
 			for (var i = 0; i < overwrites.length; i++) {
 				if ($fixture._similar(settings, overwrites[i], exact)) {
@@ -220,247 +267,150 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 			return -1;
 		},
-	// overwrites the settings fixture if an overwrite matches
+		// Overwrites the settings fixture if an overwrite matches
 		overwrite = function (settings) {
 			var index = find(settings);
 			if (index > -1) {
 				settings.fixture = overwrites[index].fixture;
-				return $fixture._getData(overwrites[index].url, settings.url)
+				return $fixture._getData(overwrites[index].url, settings.url);
 			}
 
 		},
-		/**
-		 * Makes an attempt to guess where the id is at in the url and returns it.
-		 * @param {Object} settings
-		 */
-			getId = function (settings) {
+		// Attemps to guess where the id is in an AJAX call's URL and returns it.
+		getId = function (settings) {
 			var id = settings.data.id;
 
 			if (id === undefined && typeof settings.data === "number") {
 				id = settings.data;
 			}
 
-			/*
-			 Check for id in params(if query string)
-			 If this is just a string representation of an id, parse
-			 if(id === undefined && typeof settings.data === "string") {
-			 id = settings.data;
-			 }
-			 //*/
-
+			// Parses the URL looking for all digits
 			if (id === undefined) {
+				// Set id equal to the value
 				settings.url.replace(/\/(\d+)(\/|$|\.)/g, function (all, num) {
 					id = num;
 				});
 			}
 
 			if (id === undefined) {
+				// If that doesn't work Parses the URL looking for all words
 				id = settings.url.replace(/\/(\w+)(\/|$|\.)/g, function (all, num) {
-					if (num != 'update') {
+					// As long as num isn't the word "update", set id equal to the value
+					if (num !== 'update') {
 						id = num;
 					}
-				})
+				});
 			}
 
-			if (id === undefined) { // if still not set, guess a random number
-				id = Math.round(Math.random() * 1000)
+			if (id === undefined) {
+				// If id is still not set, a random number is guessed.
+				id = Math.round(Math.random() * 1000);
 			}
 
 			return id;
 		};
 
-	/**
-	 * @plugin can/util/fixture
-	 * @test can/util/fixture/qunit.html
-	 *
-	 * `can.fixture` intercept an AJAX request and simulates the response with a file or function.
-	 * Read more about the usage in the [overview can.fixture].
-	 *
-	 * @param {Object|String} settings Configures the AJAX requests the fixture should
-	 * intercept.  If an __object__ is passed, the object's properties and values
-	 * are matched against the settings passed to can.ajax.
-	 *
-	 * If a __string__ is passed, it can be used to match the url and type. Urls
-	 * can be templated, using <code>{NAME}</code> as wildcards.
-	 *
-	 * @param {Function|String} fixture The response to use for the AJAX
-	 * request. If a __string__ url is passed, the ajax request is redirected
-	 * to the url. If a __function__ is provided, it looks like:
-	 *
-	 *     fixture( originalSettings, settings, callback, headers)
-	 *
-	 * where:
-	 *
-	 *   - originalSettings - the orignal settings passed to can.ajax
-	 *   - settings - the settings after all filters have run
-	 *   - callback - a callback to call with the response if the fixture executes asynchronously
-	 *   - headers - request headers
-	 *
-	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
-	 * allowing the AJAX request to behave normally.
-	 */
+	// ## can.fixture
+	// Simulates AJAX requests.
 	var $fixture = can.fixture = function (settings, fixture) {
-		// if we provide a fixture ...
+		// If fixture is provided, set up a new fixture.
 		if (fixture !== undefined) {
-			if (typeof settings == 'string') {
-				// handle url strings
+			if (typeof settings === 'string') {
+				// Match URL if it has GET, POST, PUT, or DELETE.
 				var matches = settings.match(/(GET|POST|PUT|DELETE) (.+)/i);
+				// If not, we don't set the type, which eventually defaults to GET
 				if (!matches) {
 					settings = {
-						url : settings
+						url: settings
 					};
+					// If it does match, we split the URL in half and create an object with
+					// each half as the url and type properties.
 				} else {
 					settings = {
-						url : matches[2],
-						type : matches[1]
+						url: matches[2],
+						type: matches[1]
 					};
 				}
-
 			}
 
-			//handle removing.  An exact match if fixture was provided, otherwise, anything similar
-			var index = find(settings, !!fixture);
+			// Check if the same fixture was previously added, if so, we remove it
+			// from our array of fixture overwrites.
+			var index = find(settings, !! fixture);
 			if (index > -1) {
-				overwrites.splice(index, 1)
+				overwrites.splice(index, 1);
 			}
 			if (fixture == null) {
-				return
+				return;
 			}
 			settings.fixture = fixture;
-			overwrites.push(settings)
+			overwrites.push(settings);
+			// If a fixture isn't provided, we assume that settings is
+			// an array of fixtures, and we should iterate over it, and set up
+			// the new fixtures.
 		} else {
-			can.each(settings, function(fixture, url){
+			can.each(settings, function (fixture, url) {
 				$fixture(url, fixture);
-			})
+			});
 		}
 	};
 	var replacer = can.replacer;
 
 	can.extend(can.fixture, {
-		// given ajax settings, find an overwrite
-		_similar : function (settings, overwrite, exact) {
+		// Find an overwrite, given some ajax settings.
+		_similar: function (settings, overwrite, exact) {
 			if (exact) {
-				return can.Object.same(settings, overwrite, {fixture : null})
+				return can.Object.same(settings, overwrite, {
+					fixture: null
+				});
 			} else {
-				return can.Object.subset(settings, overwrite, can.fixture._compare)
+				return can.Object.subset(settings, overwrite, can.fixture._compare);
 			}
 		},
-		_compare : {
-			url : function (a, b) {
-				return !!$fixture._getData(b, a)
+		// Comparator object used to find a similar overwrite.
+		_compare: {
+			url: function (a, b) {
+				return !!$fixture._getData(b, a);
 			},
-			fixture : null,
-			type : "i"
+			fixture: null,
+			type: "i"
 		},
-		// gets data from a url like "/todo/{id}" given "todo/5"
-		_getData : function (fixtureUrl, url) {
+		// Returns data from a url, given a fixtue URL. For example, given
+		// "todo/{id}" and "todo/5", it will return an object with an id property
+		// equal to 5.
+		_getData: function (fixtureUrl, url) {
 			var order = [],
-				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.').replace('?', '\\?'),
+				// Sanitizes fixture URL
+				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.')
+					.replace('?', '\\?'),
+				// Creates a regular expression out of the adjusted fixture URL and
+				// runs it on the URL we passed in.
 				res = new RegExp(fixtureUrlAdjusted.replace(replacer, function (whole, part) {
-					order.push(part)
-					return "([^\/]+)"
-				}) + "$").exec(url),
+					order.push(part);
+					return "([^\/]+)";
+				}) + "$")
+					.exec(url),
 				data = {};
 
+			// If there were no matches, return null;
 			if (!res) {
 				return null;
 			}
+
+			// Shift off the URL and just keep the data.
 			res.shift();
 			can.each(order, function (name) {
-				data[name] = res.shift()
-			})
+				// Add data from regular expression onto data object.
+				data[name] = res.shift();
+			});
 			return data;
 		},
-
-		make : function (types, count, make, filter) {
-			/**
-			 * @function can.fixture.make
-			 * @parent can.fixture
-			 *
-			 * `can.fixture.make` is used for findAll / findOne style requests.
-			 *
-			 * ## With can.ajax
-			 *
-			 *     //makes a nested list of messages
-			 *     can.fixture.make(["messages","message"], 1000,
-			 *      function(i, messages){
-			 *       return {
-			 *         subject: "This is message "+i,
-			 *         body: "Here is some text for this message",
-			 *         date: Math.floor( new Date().getTime() ),
-			 *         parentId : i < 100 ? null : Math.floor(Math.random()*i)
-			 *       }
-			 *     })
-			 *     //uses the message fixture to return messages limited by
-			 *     // offset, limit, order, etc.
-			 *     can.ajax({
-			 *       url: "messages",
-			 *       data: {
-			 *          offset: 100,
-			 *          limit: 50,
-			 *          order: ["date ASC"],
-			 *          parentId: 5},
-			 *        },
-			 *        fixture: "-messages",
-			 *        success: function( messages ) {  ... }
-			 *     });
-			 *
-			 * ## With can.Model
-			 *
-			 * `can.fixture.make` returns a model store that offers `findAll`, `findOne`, `create`,
-			 * `update` and `destroy` fixture functions you can map to a [can.Model] Ajax request.
-			 * Consider a model like this:
-			 *
-			 *      var Todo = can.Model({
-			 *          findAll : 'GET /todos',
-			 *          findOne : 'GET /todos/{id}',
-			 *          create  : 'POST /todos',
-			 *          update  : 'PUT /todos/{id}',
-			 *          destroy : 'DELETE /todos/{id}'
-			 *      }, {});
-			 *
-			 * And an unnamed generated fixture like this:
-			 *
-			 *      var store = can.fixture.make(100, function(i) {
-			 *          return {
-			 *              id : i,
-			 *              name : 'Todo ' + i
-			 *          }
-			 *      });
-			 *
-			 * You can map can.Model requests using the return value of `can.fixture.make`:
-			 *
-			 *      can.fixture('GET /todos', store.findAll);
-			 *      can.fixture('GET /todos/{id}', store.findOne);
-			 *      can.fixture('POST /todos', store.create);
-			 *      can.fixture('PUT /todos/{id}', store.update);
-			 *      can.fixture('DELETE /todos/{id}', store.destroy);
-			 *
-			 * @param {Array|String} types An array of the fixture names or the singular fixture name.
-			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
-			 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
-			 * will simply add s to the end of it for the plural name. If this parameter is not an array
-			 * or a String the fixture won't be added and only return the generator object.
-			 * @param {Number} count the number of items to create
-			 * @param {Function} make a function that will return the JavaScript object. The
-			 * make function is called back with the id and the current array of items.
-			 * @param {Function} filter (optional) a function used to further filter results. Used for to simulate
-			 * server params like searchText or startDate.
-			 * The function should return true if the item passes the filter,
-			 * false otherwise. For example:
-			 *
-			 *
-			 *     function(item, settings){
-			 *       if(settings.data.searchText){
-			 *            var regex = new RegExp("^"+settings.data.searchText)
-			 *           return regex.test(item.name);
-			 *       }
-			 *     }
-			 *
-			 * @return {Object} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
-			 * *update* and *destroy*.
-			 */
-			var items = [], // TODO: change this to a hash
+		// ## can.fixture.store
+		// Make a store of objects to use when making requests against fixtures.
+		store: function (count, make, filter) {
+			/*jshint eqeqeq:false */
+			
+			// the currentId to use when a new instance is created.
+			var	currentId = 0,
 				findOne = function (id) {
 					for (var i = 0; i < items.length; i++) {
 						if (id == items[i].id) {
@@ -468,68 +418,111 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 						}
 					}
 				},
-				methods = {};
-
-			if (typeof types === "string") {
-				types = [types + "s", types ]
-			} else if (!can.isArray(types)) {
-				filter = make;
-				make = count;
-				count = types;
+				methods = {},
+				types,
+				items,
+				reset;
+				
+			if(can.isArray(count) && typeof count[0] === "string" ){
+				types = count;
+				count = make;
+				make= filter;
+				filter = arguments[3];
+			} else if(typeof count === "string") {
+				types = [count + "s", count];
+				count = make;
+				make= filter;
+				filter = arguments[3];
 			}
+			
+			
+			if(typeof count === "number") {
+				items = [];
+				reset = function () {
+					items = [];
+					for (var i = 0; i < (count); i++) {
+						//call back provided make
+						var item = make(i, items);
+	
+						if (!item.id) {
+							item.id = i;
+						}
+						currentId = Math.max(item.id + 1, currentId + 1) || items.length;
+						items.push(item);
+					}
+					if (can.isArray(types)) {
+						can.fixture["~" + types[0]] = items;
+						can.fixture["-" + types[0]] = methods.findAll;
+						can.fixture["-" + types[1]] = methods.findOne;
+						can.fixture["-" + types[1] + "Update"] = methods.update;
+						can.fixture["-" + types[1] + "Destroy"] = methods.destroy;
+						can.fixture["-" + types[1] + "Create"] = methods.create;
+					}
+				};
+			} else {
+				filter = make;
+				var initialItems = count;
+				reset = function(){
+					items = initialItems.slice(0);
+				};
+			}
+			
 
 			// make all items
 			can.extend(methods, {
-				findAll : function (settings) {
+				findAll: function (request) {
+					request = request || {};
 					//copy array of items
 					var retArr = items.slice(0);
-					settings.data = settings.data || {};
+					request.data = request.data || {};
 					//sort using order
 					//order looks like ["age ASC","gender DESC"]
-					can.each((settings.data.order || []).slice(0).reverse(), function (name) {
-						var split = name.split(" ");
-						retArr = retArr.sort(function (a, b) {
-							if (split[1].toUpperCase() !== "ASC") {
-								if (a[split[0]] < b[split[0]]) {
-									return 1;
-								} else if (a[split[0]] == b[split[0]]) {
-									return 0
+					can.each((request.data.order || [])
+						.slice(0)
+						.reverse(), function (name) {
+							var split = name.split(" ");
+							retArr = retArr.sort(function (a, b) {
+								if (split[1].toUpperCase() !== "ASC") {
+									if (a[split[0]] < b[split[0]]) {
+										return 1;
+									} else if (a[split[0]] === b[split[0]]) {
+										return 0;
+									} else {
+										return -1;
+									}
 								} else {
-									return -1;
+									if (a[split[0]] < b[split[0]]) {
+										return -1;
+									} else if (a[split[0]] === b[split[0]]) {
+										return 0;
+									} else {
+										return 1;
+									}
 								}
-							}
-							else {
-								if (a[split[0]] < b[split[0]]) {
-									return -1;
-								} else if (a[split[0]] == b[split[0]]) {
-									return 0
-								} else {
-									return 1;
-								}
-							}
+							});
 						});
-					});
 
 					//group is just like a sort
-					can.each((settings.data.group || []).slice(0).reverse(), function (name) {
-						var split = name.split(" ");
-						retArr = retArr.sort(function (a, b) {
-							return a[split[0]] > b[split[0]];
+					can.each((request.data.group || [])
+						.slice(0)
+						.reverse(), function (name) {
+							var split = name.split(" ");
+							retArr = retArr.sort(function (a, b) {
+								return a[split[0]] > b[split[0]];
+							});
 						});
-					});
 
-
-					var offset = parseInt(settings.data.offset, 10) || 0,
-						limit = parseInt(settings.data.limit, 10) || (items.length - offset),
+					var offset = parseInt(request.data.offset, 10) || 0,
+						limit = parseInt(request.data.limit, 10) || (items.length - offset),
 						i = 0;
 
 					//filter results if someone added an attr like parentId
-					for (var param in settings.data) {
+					for (var param in request.data) {
 						i = 0;
-						if (settings.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
-							(param.indexOf("Id") != -1 || param.indexOf("_id") != -1)) {
+						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
+							(param.indexOf("Id") !== -1 || param.indexOf("_id") !== -1)) {
 							while (i < retArr.length) {
-								if (settings.data[param] != retArr[i][param]) {
+								if (request.data[param] != retArr[i][param]) { // jshint eqeqeq: false
 									retArr.splice(i, 1);
 								} else {
 									i++;
@@ -538,10 +531,19 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 						}
 					}
 
-					if (filter) {
+					if ( typeof filter === "function" ) {
 						i = 0;
 						while (i < retArr.length) {
-							if (!filter(retArr[i], settings)) {
+							if (!filter(retArr[i], request)) {
+								retArr.splice(i, 1);
+							} else {
+								i++;
+							}
+						}
+					} else if( typeof filter === "object" ) {
+						i = 0;
+						while (i < retArr.length) {
+							if ( !can.Object.subset(retArr[i], request.data, filter) ) {
 								retArr.splice(i, 1);
 							} else {
 								i++;
@@ -549,140 +551,146 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 						}
 					}
 
-					//return data spliced with limit and offset
+					// Return the data spliced with limit and offset, along with related values
+					// (e.g. count, limit, offset)
 					return {
-						"count" : retArr.length,
-						"limit" : settings.data.limit,
-						"offset" : settings.data.offset,
-						"data" : retArr.slice(offset, offset + limit)
+						"count": retArr.length,
+						"limit": request.data.limit,
+						"offset": request.data.offset,
+						"data": retArr.slice(offset, offset + limit)
 					};
 				},
-				findOne : function (orig, response) {
-					var item = findOne(getId(orig));
-					response(item ? item : undefined);
+
+				/**
+				 * @description Simulate a findOne request on a fixture.
+				 * @function can.fixture.types.Store.findOne
+				 * @parent can.fixture.types.Store
+				 * @signature `store.findOne(request, response)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} response A function to call with the retrieved item.
+				 *
+				 * @body
+				 * `store.findOne(request, response(item))` simulates a request to
+				 * get a single item from the server by id.
+				 *
+				 *     todosStore.findOne({
+				 *       url: "/todos/5"
+				 *     }, function(todo){
+				 *
+				 *     });
+				 *
+				 */
+				findOne: function (request, response) {
+					var item = findOne(getId(request));
+					
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
+					response(item);
 				},
-				update : function (orig,response) {
-					var id = getId(orig);
+				// ## fixtureStore.update
+				// Simulates a can.Model.update to a fixture
+				update: function (request, response) {
+					var id = getId(request),
+						item = findOne(id);
+
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id), orig.data);
+					can.extend(item, request.data);
 					response({
-						id : getId(orig)
+						id: id
 					}, {
-						location : orig.url + "/" + getId(orig)
+						location: request.url || "/" + getId(request)
 					});
 				},
-				destroy : function (settings) {
-					var id = getId(settings);
+
+				/**
+				 * @description Simulate destroying a Model on a fixture.
+				 * @function can.fixture.types.Store.destroy
+				 * @parent can.fixture.types.Store
+				 * @signature `store.destroy(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call after destruction.
+				 *
+				 * @body
+				 * `store.destroy(request, response())` simulates
+				 * a request to destroy an item from the server.
+				 *
+				 * ```
+				 * todosStore.destroy({
+				 *   url: "/todos/5"
+				 * }, function(){});
+				 * ```
+				 */
+				destroy: function (request, response) {
+					var id = getId(request),
+						item = findOne(id);
+						
+					if(typeof item === "undefined") {
+						return response(404, 'Requested resource not found');
+					}
+
 					for (var i = 0; i < items.length; i++) {
-						if (items[i].id == id) {
+						if (items[i].id == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
 							break;
 						}
 					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id) || {}, settings.data);
 					return {};
 				},
-				create : function (settings, response) {
-					var item = make(items.length, items);
+
+				// ## fixtureStore.create
+				// Simulates a can.Model.create to a fixture
+				create: function (settings, response) {
+					var item = typeof make === 'function' ? make(items.length, items) : {};
 
 					can.extend(item, settings.data);
 
+					// If an ID wasn't passed into the request, we give the item
+					// a unique ID.
 					if (!item.id) {
-						item.id = items.length;
+						item.id = currentId++;
 					}
 
+					// Push the new item into the store.
 					items.push(item);
-					var id = item.id || parseInt(Math.random() * 100000, 10);
 					response({
-						id : id
+						id: item.id
 					}, {
-						location : settings.url + "/" + id
-					})
+						location: settings.url + "/" + item.id
+					});
 				}
 			});
-
-			for (var i = 0; i < (count); i++) {
-				//call back provided make
-				var item = make(i, items);
-
-				if (!item.id) {
-					item.id = i;
-				}
-				items.push(item);
-			}
-
+			reset();
 			// if we have types given add them to can.fixture
-			if(can.isArray(types)) {
-				can.fixture["~" + types[0]] = items;
-				can.fixture["-" + types[0]] = methods.findAll;
-				can.fixture["-" + types[1]] = methods.findOne;
-				can.fixture["-" + types[1]+"Update"] = methods.update;
-				can.fixture["-" + types[1]+"Destroy"] = methods.destroy;
-				can.fixture["-" + types[1]+"Create"] = methods.create;
-			}
 
 			return can.extend({
 				getId: getId,
-				find : function(settings){
-					return findOne( getId(settings) );
-				}
+				find: function (settings) {
+					return findOne(getId(settings));
+				},
+				reset: reset
 			}, methods);
 		},
-		/**
-		 * @function can.fixture.rand
-		 * @parent can.fixture
-		 *
-		 * `can.fixture.rand` creates random integers or random arrays of
-		 * other arrays.
-		 *
-		 * ## Examples
-		 *
-		 *     var rand = can.fixture.rand;
-		 *
-		 *     // get a random integer between 0 and 10 (inclusive)
-		 *     rand(11);
-		 *
-		 *     // get a random number between -5 and 5 (inclusive)
-		 *     rand(-5, 6);
-		 *
-		 *     // pick a random item from an array
-		 *     rand(["j","m","v","c"],1)[0]
-		 *
-		 *     // pick a random number of items from an array
-		 *     rand(["j","m","v","c"])
-		 *
-		 *     // pick 2 items from an array
-		 *     rand(["j","m","v","c"],2)
-		 *
-		 *     // pick between 2 and 3 items at random
-		 *     rand(["j","m","v","c"],2,3)
-		 *
-		 *
-		 * @param {Array|Number} arr An array of items to select from.
-		 * If a number is provided, a random number is returned.
-		 * If min and max are not provided, a random number of items are selected
-		 * from this array.
-		 * @param {Number} [min] If only min is provided, min items
-		 * are selected.
-		 * @param {Number} [max] If min and max are provided, a random number of
-		 * items between min and max (inclusive) is selected.
-		 */
-		rand : function (arr, min, max) {
-			if (typeof arr == 'number') {
-				if (typeof min == 'number') {
+		rand: function randomize(arr, min, max) {
+			if (typeof arr === 'number') {
+				if (typeof min === 'number') {
 					return arr + Math.floor(Math.random() * (min - arr));
 				} else {
 					return Math.floor(Math.random() * arr);
 				}
 
 			}
-			var rand = arguments.callee;
+			var rand = randomize;
 			// get a random set
 			if (min === undefined) {
-				return rand(arr, rand(arr.length + 1))
+				return rand(arr, rand(arr.length + 1));
 			}
 			// get a random selection of arr
 			var res = [];
@@ -692,107 +700,49 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				max = min;
 			}
 			//random max
-			max = min + Math.round(rand(max - min))
+			max = min + Math.round(rand(max - min));
 			for (var i = 0; i < max; i++) {
-				res.push(arr.splice(rand(arr.length), 1)[0])
+				res.push(arr.splice(rand(arr.length), 1)[0]);
 			}
 			return res;
 		},
-		/**
-		 * @hide
-		 *
-		 * Use can.fixture.xhr to create an object that looks like an xhr object.
-		 *
-		 * ## Example
-		 *
-		 * The following example shows how the -restCreate fixture uses xhr to return
-		 * a simulated xhr object:
-		 * @codestart
-		 * "-restCreate" : function( settings, cbType ) {
-		 *   switch(cbType){
-		 *     case "success":
-		 *       return [
-		 *         {id: parseInt(Math.random()*1000)},
-		 *         "success",
-		 *         can.fixture.xhr()];
-		 *     case "complete":
-		 *       return [
-		 *         can.fixture.xhr({
-		 *           getResponseHeader: function() { 
-		 *             return settings.url+"/"+parseInt(Math.random()*1000);
-		 *           }
-		 *         }),
-		 *         "success"];
-		 *   }
-		 * }
-		 * @codeend
-		 * @param {Object} [xhr] properties that you want to overwrite
-		 * @return {Object} an object that looks like a successful XHR object.
-		 */
-		xhr : function (xhr) {
+		xhr: function (xhr) {
 			return can.extend({}, {
-				abort : can.noop,
-				getAllResponseHeaders : function () {
+				abort: can.noop,
+				getAllResponseHeaders: function () {
 					return "";
 				},
-				getResponseHeader : function () {
+				getResponseHeader: function () {
 					return "";
 				},
-				open : can.noop,
-				overrideMimeType : can.noop,
-				readyState : 4,
-				responseText : "",
-				responseXML : null,
-				send : can.noop,
-				setRequestHeader : can.noop,
-				status : 200,
-				statusText : "OK"
+				open: can.noop,
+				overrideMimeType: can.noop,
+				readyState: 4,
+				responseText: "",
+				responseXML: null,
+				send: can.noop,
+				setRequestHeader: can.noop,
+				status: 200,
+				statusText: "OK"
 			}, xhr);
 		},
-		/**
-		 * @attribute can.fixture.on
-		 * @parent can.fixture
-		 *
-		 * `can.fixture.on` lets you programatically turn off fixtures. This is mostly used for testing.
-		 *
-		 *     can.fixture.on = false
-		 *     Task.findAll({}, function(){
-		 *       can.fixture.on = true;
-		 *     })
-		 */
-		on : true
+		on: true
 	});
-	/**
-	 * @attribute can.fixture.delay
-	 * @parent can.fixture
-	 *
-	 * `can.fixture.delay` indicates the delay in milliseconds between an ajax request is made and
-	 * the success and complete handlers are called.  This only sets
-	 * functional synchronous fixtures that return a result. By default, the delay is 200ms.
-	 *
-	 * @codestart
-	 * steal('can/util/fixtures').then(function(){
-	 *   can.fixture.delay = 1000;
-	 * })
-	 * @codeend
-	 */
+
+	// ## can.fixture.delay
+	// The delay, in milliseconds, between an AJAX request being made and when
+	// the success callback gets called.
 	can.fixture.delay = 200;
 
-	/**
-	 * @attribute can.fixture.rootUrl
-	 * @parent can.fixture
-	 *
-	 * `can.fixture.rootUrl` contains the root URL for fixtures to use.
-	 * If you are using StealJS it will use the Steal root
-	 * URL by default.
-	 */
-	can.fixture.rootUrl = window.steal ? steal.config().root : undefined;
+	// ## can.fixture.rootUrl
+	// The root URL which fixtures will use.
+	can.fixture.rootUrl = getUrl('');
 
 	can.fixture["-handleFunction"] = function (settings) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
 			settings.fixture = can.fixture[settings.fixture];
 		}
-		if (typeof settings.fixture == "function") {
+		if (typeof settings.fixture === "function") {
 			setTimeout(function () {
 				if (settings.success) {
 					settings.success.apply(null, settings.fixture(settings, "success"));
@@ -808,5 +758,6 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
+	can.fixture.make = can.fixture.store;
 	return can.fixture;
 });

@@ -15,11 +15,9 @@
 <div id="control"></div>
 <button>Update myPlugin</button>
 </div>	
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' src="../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/javascript' id="demo-source">
-steal('can/construct/super')
-.then('can/control/plugin')
-.then(function(){
+steal('can/construct/super', 'can/control/plugin',function(){
 	
 var Plugin = can.Control({
   pluginName: 'myPlugin'

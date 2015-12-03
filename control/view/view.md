@@ -1,8 +1,11 @@
-@page can.Control.view 
+@page can.Control.view
+@hide
 @parent can.Control
 @plugin can/control/view
-@test can/control/view/qunit.html
+@test can/control/view/test.html
 @download http://donejs.com/can/dist/can.control.view.js
+
+__DEPRECATED__
 
 Renders a View template with the controller instance. If the first argument
 is not supplied, it looks for a view in `/views/controlName/action_name.ejs`.

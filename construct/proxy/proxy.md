@@ -1,108 +1,163 @@
 @page can.Construct.proxy
-@parent can.Construct
-@plugin can/construct/proxy
-@test can/construct/proxy/qunit.html
+@parent can.Construct.plugins
+@test can/construct/proxy/test.html
 @download http://donejs.com/can/dist/can.construct.proxy.js
 
-`can.Construct.prototype.proxy( funcName, [args...] )` takes a 
-function name and returns a new function that
-will call the original function with the same `this` 
-from which it was created. `proxy` is useful 
-for creating callback functions that have 'this' 
-set correctly.
 
-The following example increments a `Counter`'s `count`
-every second:
+@description Creates callback functions that have `this` set correctly.
 
-	Counter = can.Construct({
-	  init : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy(function(){
-	      this.count++;
-	    }), 1000 );
-	  }
-	})
-	var counter = new Counter();
-	// later check count
-	setTimeout(function(){
-	  console.log(counter.count)
-	},5000)
-	
-`proxy` also accepts a method name like `this.proxy('methodName')`, allowing 
-the previous example to work like:
+@signature `can.Construct.proxy(callback, [...args])`
 
-	Counter = can.Construct({
-	  init : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy('increment'), 1000);
-	  },
-	  increment : function(){
-	    this.count++;
-	  }
-	})
+Creates a static callback function that has `this` set to an instance of the constructor
+function.
 
-## Currying Arguments
+@param {Function|String|Array.<Function|String>} callback 
+The function or functions to proxy.
 
-Pass additional arguments to `proxy` and it will 
-fill in arguments on the returning function.  When invoked,
-the additional arguments will appear first in the methods
-parameters followed by the callback's arguments.
+Passing a single function returns a function bound to the constructor.
+```
+var Animal = can.Construct.extend({
+    init: function(name) {
+        this.name = name;
+    },
+    speak: function (words) {
+        console.log(this.name + ' says: ' + words);
+    }
+});
 
-The `Counter` constructor accepts a `by` argument which is used
-to increment the count by the `by` amount specified.  
+var dog = new Animal("Gertrude");
 
-	Counter = can.Construct({
-	  init : function( by ) {
-	    this.count = 0;
-	    setTimeout( this.proxy('increment', by), 1000);
-	  },
-	  increment : function( by ) {
-	    this.count += by;
-	  }
-	})
-    
-    // create a counter that increments by 10
-    new Counter(10)
-	
-## 	Piping Functions
+// Passing a function
+var dogDance = dog.proxy(function(dance){
+    console.log(this.name + ' loves dancing the ' + dance);
+});
+dogDance('hokey pokey'); // Gertrude loves dancing the hokey pokey
+```
 
-`proxy` can take an array of functions to call as 
-the first argument.  When the returned callback function
-is called each function in the array is passed the return 
-value of the prior function.  This is often used
-to eliminate currying callback functions.
+Passing an array of functions returns a function that when executed will call the functions in order applying the returned values from the previous function onto the next function.
+```
+// Passing an array of functions
+var dogCount = dog.proxy([
+    function (start){
+        console.log(start);
+        return [start, start + 1];
+    },
+    function(start, next) {
+        console.log(start + ' ' + next);
+        return [start, next, next + 1];
+    },
+    function(start, next, last) {
+        console.log(start + ' ' + next + ' ' + last);
+    }
+]);
 
-The `Counter` accepts a callback that will be called with 
-the count every second.
+dogCount(3); // 3, 3 4, 3 4 5
+```
 
-	Counter = can.Construct({
-	  init : function( by , callback) {
-	    this.count = 0;
-	    setTimeout( this.proxy(['increment', callback], by), 1000);
-	  },
-	  increment : function( by ) {
-	    this.count += by;
-	    // return the arguments passed to the next function
-	    return [this.count]
-	  }
-	})
-	
-	new Counter(10, function(count){
-	  console.log(count);
-	})
+In either case a string can be passed instead of a function and this will be used to look the function up on the constructor
 
-## `proxy` on Constructors
+```
+var dogTalk = dog.proxy('speak');
+dogTalk('This is crAAaaaaAAzzzyyy'); // Gertrude says: This is crAAaaaaAAzzzyyy
+```
 
-`proxy` is also available on constructor functions.  Example:
+@param {*} args Any number of arguments to be partially applied to the first function.
+Continuing from the example above:
 
-	Counter = can.Construct({
-	  start : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy('increment'), 1000);
-	  },
-	  increment : function(){
-	    this.count++;
-	  }
-	},{});
-	
-    Counter.start();
+```
+var func = function(feeling, thing){
+    console.log(this.name + ' ' + feeling + ' ' + thing);
+};
+// Passing one argument (partial application)
+var dogLoves = dog.proxy(func, 'loves');
+dogLoves('cupcakes!'); // Gertrude loves cupcakes!
+
+// Passing many arguments
+var dogHateUnicorns = dog.proxy(func, 'hates', 'unicorns');
+dogHateUnicorns(); // Gertrude hates unicorns
+```
+@return {Function} a function that calls `callback` with the same context as the current context
+
+
+@body
+
+## Partially applying parameters
+
+If you pass more than one parameter to `proxy`, the additional parameters will
+be passed as parameters to the callback before any parameters passed to the
+proxied function.
+
+Here is a simple example of this:
+
+```
+var Animal = can.Construct.extend({
+    init: function(name) {
+        this.name = name;
+    }
+});
+var dog = new Animal("Gertrude");
+
+var func = function(feeling, thing){
+    console.log(this.name + ' ' + feeling + ' ' + thing);
+};
+
+// Passing one argument (partial application)
+var dogLoves = dog.proxy(func, 'loves');
+dogLoves('cupcakes!'); // Gertrude loves cupcakes!
+```
+
+## Piping callbacks and currying arguments
+
+If you pass an array of functions and strings as the first parameter to `proxy`,
+`proxy` will call the callbacks in sequence, passing the return value of each
+as a parameter to the next. This is useful to avoid having to curry callbacks.
+
+Here's a simple example of this:
+
+```
+var Animal = can.Construct.extend({});
+var dog = new Animal();
+
+// Passing an array of functions
+var dogCount = dog.proxy([
+    function (start){
+        console.log(start);
+        return [start, start + 1];
+    },
+    function(start, next) {
+        console.log(start + ' ' + next);
+        return [start, next, next + 1];
+    },
+    function(start, next, last) {
+        console.log(start + ' ' + next + ' ' + last);
+    }
+]);
+
+dogCount(3); // 3, 3 4, 3 4 5
+```
+
+## `proxy` on constructors
+
+can.Construct.proxy also adds `proxy` to the constructor, so you can use it
+in static functions with the constructor as `this`.
+
+Here's a counter construct that keeps its count staticly and increments after one second:
+
+```
+var DelayedStaticCounter = can.Construct.extend({
+    setup: function() {
+        this.count = 0;
+    }
+    incrementSoon: function() {
+        setTimeout(this.proxy(function() {
+            this.count++;
+        }), 1000);
+    }
+}, {});
+
+DelayedStaticCounter.incrementSoon();
+```
+
+## See also
+
+[can.proxy] is a way to proxy callbacks outside of `can.Construct`s.

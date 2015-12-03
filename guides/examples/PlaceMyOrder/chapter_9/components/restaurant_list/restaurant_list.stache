@@ -1,0 +1,62 @@
+<div class="restaurants">
+  <h2 class="page-header">Restaurants</h2>
+  <form class="form">
+    <div class="form-group">
+      <label>State</label>
+      <select can-value="{state}" {{#if states.isPending}}disabled{{/if}}>
+        {{#if states.isPending}}
+          <option value="">Loading...</option>
+        {{else}}
+          {{^if state}}
+          <option value="">Choose a state</option>
+          {{/if}}
+          {{#each states.value}}
+          <option value="{{short}}">{{name}}</option>
+          {{/each}}
+        {{/if}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>City</label>
+      <select can-value="city" {{^if state}}disabled{{/if}}>
+        {{#if cities.isPending}}
+          <option value="">Loading...</option>
+        {{else}}
+          {{^if city}}
+          <option value="">Choose a city</option>
+          {{/if}}
+          {{#each cities.value}}
+          <option>{{name}}</option>
+          {{/each}}
+        {{/if}}
+      </select>
+    </div>
+  </form>
+
+  {{#if restaurants.isPending}}
+  <div class="restaurant loading"></div>
+  {{/if}}
+
+  {{#if restaurants.isResolved}}
+    {{#each restaurants.value}}
+    <div class="restaurant">
+      <img src="{{images.thumbnail}}" width="100" height="100">
+      <h3>{{name}}</h3>
+      {{#address}}
+      <div class="address">
+        {{street}}<br />{{city}}, {{state}} {{zip}}
+      </div>
+      {{/address}}
+
+      <div class="hours-price">
+        $$$<br />
+        Hours: M-F 10am-11pm
+        <span class="open-now">Open Now</span>
+      </div>
+
+      <a class="btn" can-href="{ page='restaurants' slug=slug }">Place My Order</a>
+      <br />
+    </div>
+    {{/each}}
+  {{/if}}
+</div>

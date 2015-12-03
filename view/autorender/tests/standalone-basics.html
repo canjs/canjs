@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+	<script type="text/javascript" src="../../../bower_components/modernizr/modernizr.js"></script>
+</head>
+<body>
+
+<script>
+	window.isReady = window.parent.isReady || function(el) {
+		console.log(el.length);
+		console.log(el.html());
+	};
+	window.hasError = window.parent.hasError || function(error) {
+		console.log("error in autoload", error)
+	};
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script src="../../../node_modules/jquery/dist/jquery.js"></script>
+<script src="../../../dist/can.jquery.js"></script>
+<script src="../../../dist/can.stache.js"></script>
+<script src="../../../dist/can.autorender.js"></script>
+<script src="standalone-basics.js"></script>
+
+<script type="text/stache" id="basics" foo="bar" can-autorender>
+	<my-component></my-component>
+</script>
+<script>
+	$(function() {
+		can.autorender().then(function() {
+			isReady($("body my-component"), can.viewModel('my-component'));
+		});
+	});
+</script>
+
+</body>
+</html>

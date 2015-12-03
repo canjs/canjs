@@ -1,0 +1,15 @@
+.tmp*
+*.swp
+*.orig
+*node_modules*
+standalone*
+docs*
+*.DS_Store
+.idea
+bower_components/
+test/pluginified/latest.js
+docco
+test/
+build/
+guides/
+!dist/

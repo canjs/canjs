@@ -1,0 +1,25 @@
+<div id="app"></div>
+<script src="../../node_modules/steal/steal.js"></script>
+<script>
+steal("can",function(){
+	
+  can.Component.extend({
+      tag: "todos-editor",
+      template: "<form can-click='toggle'>Edit: "+
+                  "{{#if visible}}<input type='text'/>{{/if}}"+
+                "</form>",
+      scope: {
+        visible: true,
+        toggle: function(context, el, ev){
+          this.attr("visible", !this.attr("visible") )
+        }
+      }
+  })
+
+  var template = can.view.mustache("Here is my "+
+                     "<todos-editor></todos-editor>")
+
+  $("#app").html( template() );
+    
+})
+</script>

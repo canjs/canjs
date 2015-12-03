@@ -1,0 +1,26 @@
+{
+	"sites": {
+		"docs": {
+			"glob": {
+				"ignore": [
+					"guides/*.md",
+				  	"guides/**/*.md",
+					"{node_modules,bower_components,dist}/**/*", 
+					"lib/**/*",
+					"test/**/*",
+					"util/dojo/dojo.js",
+					"**/*_test.js",
+					"Gruntfile.js"]
+			},
+			"ignoreTemplateRender": true,
+			"parent" : "canjs"
+		},
+		"guides": {
+			"glob": {
+				"pattern": "{guides/*.md,guides/**/*.md,*.md}"
+			},
+			"ignoreTemplateRender": true,
+			"parent": "guides"
+		}
+	}
+}

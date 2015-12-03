@@ -51,14 +51,16 @@
             <div id="data_update_target"></div>
         </div>
 
-		<script type='text/javascript' src='../../steal/steal.js'></script>
+		<script type='text/javascript' src="../node_modules/steal/steal.js" main="@empty"></script>
 		<script type='text/javascript'>
-            steal('can/route', 'can/util/json.js', 'can/util/form_params',
-            function() {
+            steal(
+            	'can/route', 
+            	'jquerypp/dom/form_params',
+            	function() {
                 
                 window.location.hash = "";
-                can.$('#data_update_target').html();
-                can.$('#hash_update_target').html();
+                $('#data_update_target').html();
+                $('#hash_update_target').html();
                 var hash_cnt = 0, data_cnt = 0;
                 
                 can.route.routes = {};
@@ -74,41 +76,41 @@
                     'var2': 'def2'
                 });
                 
-                can.$(window).bind('hashchange', function() {
-                    can.$('#hash_update_target').append( ++hash_cnt + ": Hash: <span class=\"green\">" + window.location.hash )
-                                            .append( "</span> Route data: " + can.toJSON( $.route.data._data ) + "<br />" );
+                $(window).bind('hashchange', function() {
+                    $('#hash_update_target').append( ++hash_cnt + ": Hash: <span class=\"green\">" + window.location.hash )
+                                            .append( "</span> Route data: " + JSON.stringify( can.route.data._data ) + "<br />" );
                 });
 
                 can.route.bind('change', function(ev, attr, how, newVal, oldVal){
-                    can.$('#data_update_target').append( ++data_cnt + ": <span class=\"green\">" + showChange(attr, how, newVal, oldVal) )
-                                            .append( "</span> Route data: " + can.toJSON( $.route.data._data ) + "<br />" );
+                    $('#data_update_target').append( ++data_cnt + ": <span class=\"green\">" + showChange(attr, how, newVal, oldVal) )
+                                            .append( "</span> Route data: " + JSON.stringify( can.route.data._data ) + "<br />" );
                 });
 
                 showChange = function(attr, how, newVal, oldVal){
                     switch (how) {
                     case "set" :
-                        can.$('#data_form > #' + attr).val(newVal);
+                        $('#data_form > #' + attr).val(newVal);
                         return (how + " " + attr + ": " + oldVal + " => " + newVal);
                         break;
                     case "remove" :
-                        can.$('#data_form > #' + attr).val('');
+                        $('#data_form > #' + attr).val('');
                         return (how + " " + attr);
                         break;
                     case "add" :
-                        can.$('#data_form > #' + attr).val(newVal);
+                        $('#data_form > #' + attr).val(newVal);
                         return (how + " " + attr + ": " + newVal);
                         break;
                     }
                 }
                 
-                can.$('#data_form').bind('submit', function() {
-                    data = can.$('#data_form').formParams();
+                $('#data_form').bind('submit', function() {
+                    data = $('#data_form').formParams();
                     for (var val in data) {
                         if (data[val] == "") {
                             delete data[val];
                         }
                     }
-                    can.route.attrs(data, true);
+                    can.route.attr(data, true);
                     return false;
                 });
             })

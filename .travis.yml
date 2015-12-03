@@ -1,8 +1,12 @@
+sudo: false
 language: node_js
-node_js: 0.8
-before_script: build/ci/init.sh
-script:
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_jquery.html
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_dojo.html
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_mootools.html
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_yui.html
+node_js: 0.10
+before_script: node_modules/.bin/bower install
+script: npm test
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+env:
+  - TEST_SUITE=loaders
+  - TEST_SUITE=dists
+  - TEST_SUITE=individuals
