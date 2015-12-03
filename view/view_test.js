@@ -873,4 +873,31 @@ steal("can/view/callbacks",
 		equal(getLIText(div1), "123", "Batched lists rendered properly with stache.");
 		equal(getLIText(div2), "123", "Batched lists rendered properly with mustache.");
 	});
+
+	test('hookups on self-closing elements do not leave orphaned @@!!@@ text content (#1113)', function(){
+		var
+			list = new can.List([{},{}]),
+			templates = {
+				"ejs"      : "<table><colgroup><% list.each( function() { %><col /><% }) %></colgroup></table>",
+				"mustache" : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>",
+				"stache"   : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>"
+			};
+			
+		can.each([
+			"ejs",
+			"mustache",
+			"stache"
+		], function (ext) {
+			var
+				frag = can[ext](templates[ext])({ list : list }),
+				div  = document.createElement("div");
+
+			div.appendChild(frag);
+			div.querySelectorAll("col").length
+
+			equal(div.querySelectorAll("col").length, 2, "Hookup with self-closing tag rendered properly with " + ext );
+			equal(div.innerHTML.indexOf("@@!!@@"), -1, "Hookup with self-closing tag did not leave orphaned @@!!@@ text content with " + ext );
+		});
+
+	});
 });
