@@ -3,6 +3,12 @@
 @parent guides 5
 -->
 
+__2.3.5__ ( Dec 03 2015 )
+
+- [Binding an undefined property to a component runs the setter](https://github.com/canjs/canjs/issues/2117)
+- [Passing a function reference with @ runs it](https://github.com/canjs/canjs/issues/2116)
+
+
 __2.3.4__ ( Dec 02 2015 )
 
 - [Update each.js](https://github.com/canjs/canjs/pull/2114)
