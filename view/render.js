@@ -203,6 +203,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 
 			// The magic tag is outside or between tags.
 			if (status === 0 && !contentProp) {
+				var selfClosing = !!elements.selfClosingTags[tag];
 				// Return an element tag with a hookup in place of the content
 				return "<" + tag + can.view.hook(
 					// if value is an object, it's likely something returned by .safeString
@@ -219,7 +220,7 @@ steal('can/view', './elements', 'can/view/live', 'can/util/string', function (ca
 						live.html(el, compute, parentNode);
 						unbind();
 						//children have to be properly nested HTML for buildFragment to work properly
-					}) + ">" + tagChildren(tag) + "</" + tag + ">";
+					}) + ( selfClosing ? "/>" : ">" + tagChildren(tag) + "</" + tag + ">" );
 				// In a tag, but not in an attribute
 			} else if (status === 1) {
 				// remember the old attr name
