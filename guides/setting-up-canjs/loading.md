@@ -1,15 +1,181 @@
 @page using-loading Loading
 @parent Using 1
 
-There are several ways to load CanJS in your application. Most likely you will use one of the pre-built versions like `can.jquery.js` but it is also possible to load each module individually using AMD or Steal.
+The best way to load CanJS is with a module loader like [StealJS](http://stealjs.com), [Browserify](http://browserify.org/),
+or [RequireJS](http://requirejs.org/).  Module loaders let you load just the parts of CanJS your application needs.
+
+If you aren't using a module loader, you can also use a simple `<script>` tag.
+
+## StealJS
+
+[StealJS](http://stealjs.com) is able to load ES6, CommonJS, AMD and legacy steal formatted modules.  It's also
+able to load from NPM without any configuration. After installing `can` with:
+
+```
+> npm install can --save
+```
+
+You can import its core modules like:
+
+```
+import can from "can";
+can.Component.extend({ ... })
+```
+
+But it's better if you import just what you need:
+
+```
+import Component from "can/component/component";
+Component.extend({ ... });
+```
+
+StealJS supports "modlet" module names that end with "/".  This means that the above could
+also be written like:
+
+```
+import Component from "can/component/";
+Component.extend({ ... });
+```
+
+You can also use CommonJS or AMD in your modules:
+
+```
+var Component = require("can/component/");
+Component.extend({ ... });
+```
+
+Also, with StealJS, you can import templates from files:
+
+```
+import Component from "can/component/";
+import todosTemplate from "./todos.stache!";
+Component.extend({
+  tag: "my-todos",
+  template: todosTemplate
+});
+```
+
+If you are using StealJS, checkout [DoneJS](http://donejs). It is a "super framework" that combines CanJS and StealJS.
+
+## Browserify
+
+The [can npm package](https://www.npmjs.com/package/can) works with browserify. After installing `can`:
+
+```
+> npm install can --save
+```
+
+Require the core `can` modules like:
+
+```
+var can = require("can");
+```
+
+You can also `require` specific modules:
+
+```
+var Component = require("can/component/component");
+Component.extend({ ... });
+```
+
+Note that nearly all module names repeat the folder name (ex: `can/view/stache/stache`).  
+
+## AMD
+
+The [CanJS Download](../download.html) contains an `amd/` folder which allows you to 
+load any CanJS component and plugin using an AMD module loader 
+like [RequireJS](http://requirejs.org/). Unlike many other JavaScript libraries CanJS is fully 
+modular and loading a dependency will only include the modules actually 
+used (for example, `can/control` will only load `can/construct` and `can/util`).
+The `amd-dev/` folder contains the same files but with debugging message enabled which can be very helpful during development.
+
+### Configuration
+
+The default library used with AMD modules is jQuery. 
+CanJS will reference the `jquery` module so that name needs
+to point to your jQuery source and the `can` module name needs to be mapped to the `amd/` folder of the CanJS download.
+
+### RequireJS
+
+In RequireJS a simple configuration looks like this:
+
+    <script type="text/javascript" src="require.js"></script>
+    <script type="text/javascript">
+      require.config({
+        paths : {
+          "jquery" : "http://code.jquery.com/jquery-2.0.3",
+          "can": "path/to/can/amd"
+        }
+      });
+
+      require(['can/control', 'can/view/mustache'], function(Control, can) {
+        // Use Mustache and Control
+        var MyControl = Control.extend({
+          init: function() {
+            this.element.html(can.view('path/to/view.mustache', this.options));
+          }
+        });
+      });
+    </script>
+
+The `can` module is a shortcut that loads CanJS's core plugins and returns the `can` namespace:
+
+    require(['can'], function(can) {
+      // Use can.Control, can.view, can.Model etc.
+    });
+
+
+### Dojo
+
+The configuration for Dojo is similar but `can/util/library` needs to be mapped to `can/util/dojo`:
+
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js">
+    </script>
+    <script src="can.dojo.js"></script>
+    <script>
+      require({
+        aliases : [
+          ['can/util/library', 'can/util/dojo']
+        ],
+        paths : {
+          can: 'path/to/can/amd'
+        }
+      });
+
+      require(['can/control'], function(Control) {
+        // Use Control
+      });
+    </script>
+
+### Using other libraries
+
+If you would like to use another library, map the `can/util/library` module to `can/util/zepto`,
+`can/util/yui` or `can/util/mootools`.
+
+With RequireJS and Zepto, it loks like this:
+
+    require.config({
+      paths : {
+        "can": "path/to/can/amd",
+        "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
+      },
+      map : {
+        '*' : {
+          "can/util/library" : "can/util/zepto"
+        }
+      }
+    });
+
+
 
 ## In a `<script>` tag
 
-The most common way of using CanJS is the core builds from the download (or download builder) included in a `<script>` tag. The following section contains quick instructions how to load CanJS for each library it supports.
+If you are unable to use a module loader, you can still use builds from the download (or download builder) 
+and load CanJS with a `<script>` tag. The following section contains quick instructions how to load CanJS for each library it supports.
 
 ### jQuery
 
-CanJS supports jQuery in the latest 1.X and 2.0 version. Include jQuery before your CanJS jQuery build to get started:
+CanJS supports jQuery in the latest 1.X and 2.X version. Include jQuery before your CanJS jQuery build to get started:
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js">
     </script>
@@ -161,86 +327,3 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
     });
 
 
-## AMD
-
-The [CanJS Download](../download.html) contains an `amd/` folder which allows you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/). Unlike many other JavaScript libraries CanJS is fully modular and loading a dependency will only include the modules actually used (for example, `can/control` will only load `can/construct` and `can/util`). The `amd-dev/` folder contains the same files but with debugging message enabled which can be very helpful during development.
-
-### Configuration
-
-The default library used with AMD modules is jQuery. CanJS will reference the `jquery` module so that name needs to point to your jQuery source and the `can` module name needs to be mapped to the `amd/` folder of the CanJS download.
-
-### RequireJS
-
-In RequireJS a simple configuration looks like this:
-
-    <script type="text/javascript" src="require.js"></script>
-    <script type="text/javascript">
-      require.config({
-        paths : {
-          "jquery" : "http://code.jquery.com/jquery-2.0.3",
-          "can": "path/to/can/amd"
-        }
-      });
-
-      require(['can/control', 'can/view/mustache'], function(Control, can) {
-        // Use Mustache and Control
-        var MyControl = Control.extend({
-          init: function() {
-            this.element.html(can.view('path/to/view.mustache', this.options));
-          }
-        });
-      });
-    </script>
-
-The `can` module is a shortcut that loads CanJS's core plugins and returns the `can` namespace:
-
-    require(['can'], function(can) {
-      // Use can.Control, can.view, can.Model etc.
-    });
-
-
-### Dojo
-
-The configuration for Dojo is similar but `can/util/library` needs to be mapped to `can/util/dojo`:
-
-    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js">
-    </script>
-    <script src="can.dojo.js"></script>
-    <script>
-      require({
-        aliases : [
-          ['can/util/library', 'can/util/dojo']
-        ],
-        paths : {
-          can: 'path/to/can/amd'
-        }
-      });
-
-      require(['can/control'], function(Control) {
-        // Use Control
-      });
-    </script>
-
-### Using other libraries
-
-If you would like to use another library, map the `can/util/library` module to `can/util/zepto`,
-`can/util/yui` or `can/util/mootools`.
-
-With RequireJS and Zepto, it loks like this:
-
-    require.config({
-      paths : {
-        "can": "path/to/can/amd",
-        "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
-      },
-      map : {
-        '*' : {
-          "can/util/library" : "can/util/zepto"
-        }
-      }
-    });
-
-
-## StealJS
-
-See [using CanJS 2.2 with StealJS](http://blog.bitovi.com/using-canjs-2-2-with-stealjs/) for instructions on loading Can with the latest StealJS.

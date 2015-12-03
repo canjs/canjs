@@ -1,6 +1,32 @@
 @page using-download Download
 @parent Using 0
 
+@description Learn how to download and install NPM.
+
+## NPM
+
+Intall the [can npm package](https://www.npmjs.com/package/can) with:
+
+```
+> npm install can --save
+```
+
+The npm package is configured for use automatically with [StealJS](http://stealjs.com) and 
+[Browserify](http://browserify.org/).  For example, with StealJS, you can import `can` like:
+
+```
+import can from "can";
+```
+
+With CommonJS/Browserify you can require `can` like:
+
+```
+var can = require("can");
+```
+
+The NPM package's root folder contains `steal` formatted modules. But it also includes the contents
+of the __CanJS download__, including an AMD build, in the `dist` folder. If you are using RequireJS, you can configure it 
+to load from the `dist` folder.
 
 ## The CanJS download
 
@@ -15,6 +41,7 @@ and contains:
 - `amd/` - CanJS provided as AMD modules (see [using-require using with RequireJS] for usage)
 - `amd-dev/` - CanJS AMD modules with development messages
 - `steal/` - CanJS modules using the StealJS syntax (see [using-steal using with StealJS])
+- `cjs/` - CanJS modules using the CommonJS syntax.
 
 The [download page](http://canjs.com/download.html) also offers those downloads for older versions and pre-releases for the next version from the "Other Versions" dropdown.
 
@@ -71,13 +98,10 @@ Latest can contain backwards incompatible releases __and will break your applica
 
 ## JSFiddle
 
-To make quick demos and examples for CanJS you can use one of the following [JSFiddles](http://jsfiddle.com):
+To make quick demos and examples for CanJS you can use one of the following JSBins:
 
-  - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
-  - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
-  - [Dojo](http://jsfiddle.net/donejs/9x96n/)
-  - [YUI](http://jsfiddle.net/donejs/w6m73/)
-  - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
+  - [jQuery](http://justinbmeyer.jsbin.com/venaje/edit?html,js,output)
+  - [Zepto](http://justinbmeyer.jsbin.com/veqola/edit?html,js,output)
 
 
 ## IE 8 Support
