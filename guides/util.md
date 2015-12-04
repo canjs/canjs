@@ -21,12 +21,12 @@ can.esc('<foo><bar>'); // '&lt;foo&gt;&lt;bar&gt;'
 
 `can.getObject` looks up an object by path.
 ```
-can.('foo.bar', [{foo: {bar: 'baz'}}]); // 'baz'
+can.getObject('foo.bar', [{foo: {bar: 'baz'}}]); // 'baz'
 ```
 
 `can.capitalize` capitalizes a string.
 ```
-can.('fooBar'); // 'FooBar'
+can.capitalize('fooBar'); // 'FooBar'
 ```
 
 `can.sub` allows micro-templating.
