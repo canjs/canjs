@@ -44,20 +44,25 @@ is able to combine observable values into new observable values.
 The [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behavior
 on custom Map types.
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/codubev/edit?js,console">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console">JS Bin on jsbin.com</a>
 
 <a name="models"></a>
 ### Models
-Models let you get and modify data from the serve. They also hydrate 
+Models let you get and modify data from the server. They also hydrate 
 raw, serialized service data into more useful (and observable) typed 
 data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect to restful services
 and perform Create, Retrieve, Update, and Delete (CRUD) operations.
+
+The following uses [can.fixture](../docs/can.fixture.html) to simulate a restful service and `can.Model`
+to create an order, updated it, and delete it.
+
+<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/codubev/edit?js,console">JS Bin on jsbin.com</a>
 
 <a name="views"></a>
 ### Views 
 Views are given information from the model and use the data it provides to
 generate visual output that’s meaningful to a user—in our case HTML. In
-CanJS, the preferred method for creating views is using [Stache](../docs/can.stache.html) 
+CanJS, the preferred method for creating views is using [can.stache](../docs/can.stache.html) 
 templates.
 
 At this time, Stache is supplied as a supporting
