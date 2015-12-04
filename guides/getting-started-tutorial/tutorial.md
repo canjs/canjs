@@ -11,34 +11,47 @@
 CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki/Model_View_ViewModel" target="_blank">MVVM</a>
 framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. This guide 
-will walk you through an analysis of a small e-commerce app built with CanJS called Place My Order. 
+will walk you through an analysis of a small e-commerce app built with CanJS called __Place My Order__. 
 In each relevant section, we’ll give you some code to play with
 so you will have hands on experience working with CanJS.
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
 
+For a version of this guide that walks through testing, documenting, building, and deploying the same
+application, checkout [DoneJS's In Depth Guide](http://donejs.com/place-my-order.html).  This
+guide focuses more on the CanJS parts. 
+
 ## The Basics
+
 Every CanJS application contains:
 
 - [Observables](#observables),
 - [Models](#models),
 - [Views](#views),
-- [Components](#components),
-- [Application State](#appstate), and
+- [Custom Elements](#custom_elements),
+- [Application ViewModel](#appviewmodel), and
 - [Routing](#routing)
 
 <a name="observables"></a>
 ### Observables
 Observable objects provide a way for you to make changes to data and listen to
-those changes. Observables such as `can.List` and `can.Map` provide the
-foundation for updating model objects, views, and even routes in your app.
+those changes. Observables such as [can.List](../docs/can.List.html) and [can.Map](../docs/can.Map.html) provide the
+foundation for updating model objects, views, and even routes in your app. [can.compute](../docs/can.compute.html)
+is able to combine observable values into new observable values.
+
+<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/koqaxe/edit?js,console">JS Bin on jsbin.com</a>
+
+The [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behavior
+on custom Map types.
+
+<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/codubev/edit?js,console">JS Bin on jsbin.com</a>
 
 <a name="models"></a>
 ### Models
-Models let you get and modify data from the server. They also listen to changes 
-made by the server. In CanJS the object that handles this is [can.Model](../docs/can.Model.html). 
-`can.Model` makes it almost effortless to handle all of your Create, 
-Retrieve, Update, and Delete (CRUD) operations.
+Models let you get and modify data from the serve. They also hydrate 
+raw, serialized service data into more useful (and observable) typed 
+data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect to restful services
+and perform Create, Retrieve, Update, and Delete (CRUD) operations.
 
 <a name="views"></a>
 ### Views 
@@ -58,8 +71,8 @@ utilities “for the loading, processing, rendering, and live-updating of
 templates”. In addition, `can.stache` is used to bind views to observable
 objects.
 
-<a name="components"></a>
-### Components
+<a name="custom_elements"></a>
+### Custom Elements
 A [can.Component](../docs/can.Component.html) is like a mini web application.
 It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
 item. This makes `can.Component`’s portable, reusable, and
@@ -69,8 +82,8 @@ at Bitovi, “The secret to building large applications is to never build large
 applications.” Rather, you build the components you need and link them
 together using the Application State and Routing to compose your application.
 
-<a name="appstate"></a>
-### Application State
+<a name="appviewmodel"></a>
+### Application ViewModel
 One of the things that sets CanJS apart from other frameworks is its use
 of an Application State object. An Application State object, or AppState object for short,
 is an observable object that, as its name implies, contains the state of 
@@ -120,3 +133,4 @@ Get the code for: [chapter 0](/guides/examples/PlaceMyOrder/ch-0_canjs-getting-s
 <span class="pull-right">[Setup &rsaquo;](Setup.html)</span>
 
 </div>
+<script src="http://static.jsbin.com/js/embed.min.js?3.35.5"></script>
