@@ -16,7 +16,7 @@ To report a bug, please visit [GitHub Issues](https://github.com/canjs/canjs/iss
 When filing a bug, it is helpful to include:
 
 - Small examples using tools like JSBin. You can clone the following CanJS bins:
-  - [jQuery](http://justinbmeyer.jsbin.com/venaje/edit?html,js,output)
+  - [jQuery](http://jsbin.com/venaje/1/edit?html,js,output)
   - [Zepto](http://justinbmeyer.jsbin.com/veqola/edit?html,js,output)
 - Breaking unit tests (optional)
 - Proposed fix solutions (optional)
