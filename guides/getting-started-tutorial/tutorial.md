@@ -27,6 +27,7 @@ Every CanJS application contains:
 
 - [Observables](#observables),
 - [Models](#models),
+- [ViewModels](#view-models)
 - [Views](#views),
 - [Custom Elements](#custom_elements),
 - [Application ViewModel](#appviewmodel), and
@@ -35,14 +36,16 @@ Every CanJS application contains:
 <a name="observables"></a>
 ### Observables
 Observable objects provide a way for you to make changes to data and listen to
-those changes. Observables such as [can.List](../docs/can.List.html) and [can.Map](../docs/can.Map.html) provide the
-foundation for updating model objects, views, and even routes in your app. [can.compute](../docs/can.compute.html)
-is able to combine observable values into new observable values.
+those changes. Observables such as [can.List](../docs/can.List.html), [can.Map](../docs/can.Map.html), and
+[can.compute](../docs/can.compute.html) provide the
+foundation for models, view-models, view bindings, and even routing in your app. [can.compute](../docs/can.compute.html)
+is able to combine observable values into new observable values. 
 
 <a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/koqaxe/edit?js,console">JS Bin on jsbin.com</a>
 
-The [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behavior
-on custom Map types.
+The 
+[define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behaviors on
+custom Map types. 
 
 <a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console">JS Bin on jsbin.com</a>
 
@@ -58,11 +61,22 @@ to create an order, updated it, and delete it.
 
 <a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/codubev/edit?js,console">JS Bin on jsbin.com</a>
 
+<a name="view-models"></a>
+### ViewModels
+
+ViewModels contain the state and model data used by the views to create HTML.  They also
+contain methods that the views can call. Custom [can.Map](../docs/can.Map.html) types
+are used as easily unit-testable view-models.  
+
 <a name="views"></a>
 ### Views 
-Views are given information from the model and use the data it provides to
-generate visual output that’s meaningful to a user—in our case HTML. In
-CanJS, the preferred method for creating views is using [can.stache](../docs/can.stache.html) 
+
+Views are passed a view-model and generate visual output that’s meaningful to a user - in our case that
+output is HTML.  Views are able to listen to changes in view-models and models and update their
+output. They are also able to listen to HTML events, like clicks, and call methods on the view-models
+and models.
+
+In CanJS, the preferred method for creating views is using [can.stache](../docs/can.stache.html) 
 templates.
 
 At this time, Stache is supplied as a supporting
@@ -70,14 +84,37 @@ library, which means you must explicitly add it to your application. We’ll see
 how to do that when we set up our application in the next chapter. In future
 releases of CanJS, Stache will be available as a part of the core CanJS lib.
 
-Template libraries require a rendering engine and CanJS provides that for
-you with `can.stache`. `can.stache` contains
-utilities “for the loading, processing, rendering, and live-updating of
-templates”. In addition, `can.stache` is used to bind views to observable
-objects.
-
 <a name="custom_elements"></a>
 ### Custom Elements
+
+Custom HTML Elements like `<order-list>` are how CanJS encapsulates and orchestrates different pieces of 
+functionality within an application.  
+
+By encapsulate, we mean that instead of adding a slider
+to your page like:
+
+```
+$("#rating").slider({start: 1, end: 10, value: 5});
+```
+
+You add a slider to the view like:
+
+```
+<my-slider start="0" end="10" value="5"/>
+```
+
+By orchastrate, we mean that custom element communication is also setup in the 
+view.
+
+```
+<order-page>
+  <rating-box {rating}="order.rating"/>
+  <my-slider start="0" end="10" {(value)}="order.rating"/>
+</order-page>
+```
+
+
+
 A [can.Component](../docs/can.Component.html) is like a mini web application.
 It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
 item. This makes `can.Component`’s portable, reusable, and
