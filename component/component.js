@@ -153,6 +153,13 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								viewModel = new(can.Map.extend(scopeResult))(initialViewModelData);
 							}
 						}
+
+						var oldSerialize = viewModel.serialize;
+						viewModel.serialize = function () {
+							var result = oldSerialize.apply(this, arguments);
+							delete result["%root"];
+							return result;
+						};
 						
 						return viewModel;
 					}, initialViewModelData));
