@@ -153,9 +153,10 @@ steal("can/util", function(can){
 		objs.push(observeInfo);
 	};
 	ObservedInfo.batchEnd = function(batchNum){
+		var cur;
 		while( curDepth <= maxDepth ) {
-			var cur = updateOrder[curDepth].pop();
-			if(cur) {
+			var last = updateOrder[curDepth];
+			if(last && (cur = last.pop())) {
 				cur.updateCompute(batchNum);
 			} else {
 				curDepth++;
