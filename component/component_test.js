@@ -1534,7 +1534,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 		test("%root property should not be serialized inside prototype of can.Component constructor (#2080)", function () {
 			var viewModel = can.Map.extend({});
 
-			var comp = can.Component.extend({
+			can.Component.extend({
 				tag: "foo",
 				viewModel: viewModel,
 				init: function () {
