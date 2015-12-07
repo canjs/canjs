@@ -355,7 +355,6 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 				}
 			}
 		}
-		delete serialized['%root'];
 		return serialized;
 	};
 
