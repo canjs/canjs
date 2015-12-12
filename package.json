@@ -2,11 +2,11 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.3.5",
+	"version": "2.3.6",
 	"keywords": [
-	    "CanJS",
-	    "DoneJS"
-  	],
+		"CanJS",
+		"DoneJS"
+	],
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",

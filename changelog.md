@@ -3,6 +3,13 @@
 @parent guides 5
 -->
 
+__2.3.6__ ( Dec 11 2015 )
+
+- [Cannot read property &#39;pop&#39; of undefined ](https://github.com/canjs/canjs/issues/2121)
+- [can.view.txt does not handle binding hookup on self-closing elements correctly](https://github.com/canjs/canjs/issues/2113)
+- [%root property is serialized when can.Map instance is shared between a component viewModel and a can.route](https://github.com/canjs/canjs/issues/2080)
+
+
 __2.3.5__ ( Dec 03 2015 )
 
 - [Binding an undefined property to a component runs the setter](https://github.com/canjs/canjs/issues/2117)
