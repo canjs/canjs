@@ -1856,5 +1856,45 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		},10);
 		
 	});
+	
+	test("select bindings work if options are replaced (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		data.bind("countryCode", function(ev, newVal){
+			ok(false, "countryCode changed to "+newVal);
+		});
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/countries}}'+
+		'</select>');
+		
+		var frag = template(data);
+		stop();
+		setTimeout(function(){
+			data.attr("countries").replace([
+				{code: 'IND', countryName:'INDIA'},
+				{code: 'RUS', countryName:'RUSSIA'},
+				{code: 'US', countryName:'USA'}
+			]);
+			
+			setTimeout(function(){
+				equal(data.attr("countryCode"), "US", "country set to USA");
+				
+				start();
+			},10);
+			
+		},10);
+		
+		
+			
+	});
 
 });

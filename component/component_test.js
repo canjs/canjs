@@ -1531,6 +1531,38 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			});
 		});
 		
+		test("wrong context inside <content> tags (#2092)", function(){
+
+			can.Component.extend({
+				tag: 'some-context',
+				viewModel: {
+					items: [{value: "A", name: "X"}, {value: "B", name: "Y"}]
+				},
+				template: can.stache("{{#each items}}<content><span>{{name}}</span></content>{{/each}}")
+			});
+			
+			var templateA = can.stache("<some-context><span>{{value}}</span></some-context>");
+			
+			var frag = templateA({});
+			
+			var spans = frag.firstChild.getElementsByTagName("span");
+			
+			equal(spans[0].firstChild.nodeValue, "A", "context is right");
+			equal(spans[1].firstChild.nodeValue, "B", "context is right");
+			
+			var templateB = can.stache("<some-context/>");
+			
+			frag = templateB({});
+			
+			spans = frag.firstChild.getElementsByTagName("span");
+			
+			equal(spans[0].firstChild.nodeValue, "X", "context is right X");
+			equal(spans[1].firstChild.nodeValue, "Y", "context is right");
+			
+		});
+		
+		
+		
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
