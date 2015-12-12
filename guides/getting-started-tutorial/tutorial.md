@@ -29,9 +29,8 @@ Every CanJS application contains:
 - [Models](#models),
 - [ViewModels](#view-models)
 - [Views](#views),
-- [Custom Elements](#custom_elements),
-- [Application ViewModel](#appviewmodel), and
-- [Routing](#routing)
+- [Custom Elements](#custom_elements), and
+- [Routing with an AppViewModel](#routing)
 
 <a name="observables"></a>
 ### Observables
@@ -90,7 +89,7 @@ releases of CanJS, Stache will be available as a part of the core CanJS lib.
 Custom HTML Elements like `<order-list>` are how CanJS encapsulates and orchestrates different pieces of 
 functionality within an application.  
 
-By encapsulate, we mean that instead of adding a slider
+By __encapsulate__, we mean that instead of adding a slider
 to your page like:
 
 ```
@@ -103,8 +102,31 @@ You add a slider to the view like:
 <my-slider start="0" end="10" value="5"/>
 ```
 
-By orchastrate, we mean that custom element communication is also setup in the 
-view.
+Custom elements are built with 
+[can.Component](../docs/can.Component.html).  These combine a
+view-model and view.
+
+```
+var SliderViewModel = can.Map.extend({
+  position: function(){
+    ...
+  }
+});
+
+can.Component.extend({
+  tag: "my-slider",
+  viewModel: SliderViewModel,
+  view: can.stache("<div style='left: {{position.left}}px; right: {{position.right}}px'/>")
+});
+```
+
+
+By __orchastrate__, we mean that custom element communication is also setup in the 
+view with [view bindings](../docs/can.view.bindings.html). The following:
+
+- updates `<rating-box>`'s `rating` when `order.rating` changes.
+- updates `<my-slider>`'s  `value` when `order.rating` changes and
+  updates `order.rating` when `<my-slider>`'s `value` changes.
 
 ```
 <order-page>
@@ -114,46 +136,41 @@ view.
 ```
 
 
-
-A [can.Component](../docs/can.Component.html) is like a mini web application.
-It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
-item. This makes `can.Component`’s portable, reusable, and
-encapsulated. `can.Component`’s are easy to test and easy to use. Building an
-application with them is kind of like building with Lego&trade;. As we say
-at Bitovi, “The secret to building large applications is to never build large
-applications.” Rather, you build the components you need and link them
-together using the Application State and Routing to compose your application.
-
-<a name="appviewmodel"></a>
-### Application ViewModel
-One of the things that sets CanJS apart from other frameworks is its use
-of an Application State object. An Application State object, or AppState object for short,
-is an observable object that, as its name implies, contains the state of 
-your application. Where other application frameworks model their applications 
-with routes, controllers, etc., CanJS takes a more unified, semantic approach. 
-It encapsulates the state of your application. This is a 
-very powerful approach to writing applications that frees developers from
-many of the constraints of a DOM-centric paradigm, allowing them to think more directly 
-about the application itself.
-
 <a name="routing"></a>
-### Routing
-For many JavaScript MV* frameworks, routing divides an application into
-logical views and binds those views to Controllers. *This is not how things work in
-CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
-Rather, it has to do with AppState. In brief,
-CanJS maintains a reciprocal relationship between an application’s route
-and its state. In other words, if you change the state of an application,
-your route will change. If you change your route, your application’s state
-will change.
+### Routing with an AppViewModel
 
-This is a very powerful programming paradigm. For example, you can recreate
-a specific state in your application from any point, just by accessing a
-specific route.
+CanJS maintains a reciprocal relationship between an application’s url
+and a [can.Map](../docs/can.Map.html) view-model. This view-model instance
+represents the state of the application as a whole and so is
+called the `appViewModel`.  When the url changes,
+CanJS will update the properties of the `appViewModel`.  When
+the `appViewModel` changes, CanJS will update the url.
 
-If this doesn't make sense right now, don't worry. As we develop our
-application together, you’ll see, more and more, how this works, and just 
-how powerful this aspect of CanJS can be.
+```
+var AppViewModel = can.Map.extend({
+  define: {
+    
+  }
+});
+
+var appViewModel = new AppViewModel();
+can.route.map(appViewModel);
+can.route.ready();
+```
+
+
+The `appViewModel` is used to render your application's 
+main template.
+
+```
+var mainTemplate = can.stache("....");
+$("body").append(mainTemplate(appViewModel));
+```
+
+By encapulating the state of your application, Application ViewModels free developers 
+from worrying about what the url looks like.  Instead, you can focus on
+updating the state of the application.
+
 
 ## Using the Getting Started Guide
 Each chapter in the Getting Started Guide is prefaced with an overview of the

@@ -73,16 +73,133 @@ pagination.removeAttr('count');
 pagination.attr(); // {page: 10, perPage: 50, lastVisited: 1}
 ```
 
-## Listening to events
+## Extending a Map
 
-When a property on a Map is changed with `attr`, the Map will emit two
+Extending a `can.Map` (or `can.List`) lets you create custom observable
+types. The following extends `can.Map` to create a Paginate type that
+has a `.next()` method:
+
+```
+Paginate = can.Map.extend({
+  define: {
+    limit: {
+      value: 100
+    },
+    offset: {
+      value: 100
+    },
+    count: {
+      value: Infinity
+    }
+  },
+  page: function() {
+	return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+  },
+  next: function() {
+	this.attr('offset', this.attr('offset') + this.attr('limit') );
+  }
+});
+
+var pageInfo = new Paginate();
+pageInfo.attr("offset") //-> 0
+
+pageInfo.next();
+
+pageInfo.attr("offset") //-> 100
+pageInfo.page()         //-> 2
+```
+
+## Responding to changes
+
+When a property on a Map is changed with `attr`, it will emit an event with the
+name of the changed property.  You can [bind](../docs/can.Map.prototype.bind.html)
+to those events and perform some action:
+
+```
+pagination.bind('page', function(event, newVal, oldVal) {
+	newVal; // 11
+	oldVal; // 10
+	
+	$("#page").text("Page: "+newVal);
+});
+
+pagination.attr('page', 11);
+```
+
+Although `bind` and it's corresponding `unbind` method exist, __there's almost no
+reason to ever use them__.  
+
+The first reason is that live-binding should be 
+updating the page for you.  For example:
+
+```
+var template = can.stache("<span>Page: {{page}}</span>");
+$("body").append(template(pagination));
+pagination.attr('page', 12);
+```
+
+The other common reason to listen to changes is to create some new, combined 
+state. For instance, calculating the total price of a list of items like:
+
+```
+var items = new can.List([
+  {name: "nachos", price: 10.25},
+  {name: "water", price: 0},
+  {name: "taco", price: 3.25}
+]);
+```
+
+A simple function that is passed to the view is able to listen when items
+are added, removed, or change prices:
+
+```
+var total = new can.compute(function(){
+  var total = 0;
+  items.forEach(function(item){
+    return total += item.attr("price")
+  });
+  return total;
+});
+
+var template = can.stache("<span>total: {{total}}</span>");
+$("body").append(template(pagination));
+
+items.pop();
+```
+
+
+
+
+ the Map will emit two
 events: A _change_ event and an event with the same name as the property that
-was changed. There are two ways you can listen for these events:
+was changed. There are three ways you can listen and respond to these events:
 
 - The define plugin
+- computes
 - bind
 
-One of the major advantages of using the [define plugin](TheDefinePlugin.html) (discussed in the next chapter)
+The [define plugin](TheDefinePlugin.html) (discussed in the next chapter) plugin is the 
+most common way of listening and responding to changes in `can.Map` as it can
+automatically subscribe to observable dependencies and update a new state 
+value.  For example, 
+
+```
+var Person = can.Map.extend({
+  define: {
+    fullName: {
+      get: function(){
+        return this.attr("first")+" "+this.attr("last")
+      }
+    }
+  }
+})
+```
+
+
+
+
+
+One of the major advantages of using the 
 in your applicaitons is that it handles managing the relationships of your observables 
 for you. Any time you reference a `can.Map` or `can.List` (or one of their child objects) 
 in a define property, that property is automatically subscribed as a listener for that `can.Map`
@@ -114,12 +231,7 @@ pagination.bind('change', function(event, attr, how, newVal, oldVal) {
 	newVal; // 30
 	oldVal; // 50
 });
-pagination.bind('perPage', function(event, newVal, oldVal) {
-	newVal; // 30
-	oldVal; // 50
-});
 
-pagination.attr('perPage', 30);
 ```
 
 You can similarly stop listening to these events by using
@@ -156,33 +268,7 @@ pagination.each(function(val, key) {
 // count: 1388
 ```
 
-## Extending a Map
 
-Extending a `can.Map` (or `can.List`) lets you create custom observable
-types. The following extends `can.Map` to create a Paginate type that
-has a `.next()` method:
-
-```
-Paginate = can.Map.extend({
-  limit: 100,
-  offset: 0,
-  count: Infinity,
-  page: function() {
-	return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
-  },
-  next: function() {
-	this.attr('offset', this.attr('offset') + this.attr('limit') );
-  }
-});
-
-var pageInfo = new Paginate();
-pageInfo.attr("offset") //-> 0
-
-pageInfo.next();
-
-pageInfo.attr("offset") //-> 100
-pageInfo.page()         //-> 2
-```
 
 ## Observable Arrays
 
