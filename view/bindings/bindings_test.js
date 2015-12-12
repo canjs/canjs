@@ -1770,7 +1770,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	
 	test("dynamic attribute bindings (#2016)", function(){
 
-		var template = can.view.stache("<input {($value)}='{{propName}}'/>");
+		var template = can.stache("<input {($value)}='{{propName}}'/>");
 
 		var map = new can.Map({propName: 'first', first: "Justin", last: "Meyer"});
 
@@ -1797,6 +1797,64 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			start();
 		},10);
 
+	});
+	
+	test("select bindings respond to changes immediately or during insert (#2134)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'},
+			{code: 'IND', countryName:'INDIA'},
+			{code: 'RUS', countryName:'RUSSIA'}
+		];
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var frag = template(data);
+		data.attr('countryCode', 'IND');
+		
+		stop();
+		setTimeout(function(){
+			start();
+			equal(frag.firstChild.value, "IND", "got last updated value");
+		},10);
+		
+	});
+	
+	test("select bindings respond to changes immediately or during insert using can-value (#2134)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'},
+			{code: 'IND', countryName:'INDIA'},
+			{code: 'RUS', countryName:'RUSSIA'}
+		];
+		
+		var template = can.stache('<select can-value="{countryCode}">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var frag = template(data);
+		data.attr('countryCode', 'IND');
+		
+		stop();
+		setTimeout(function(){
+			start();
+			equal(frag.firstChild.value, "IND", "got last updated value");
+		},10);
+		
 	});
 
 });
