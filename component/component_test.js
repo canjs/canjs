@@ -1547,6 +1547,25 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			can.append(this.$fixture, template());
 		});
 
+		test("component context is maintained when <content /> is inside blocks (#2137)", function() {
+			can.Component.extend({
+				tag: 'viewmodel-context',
+				template: can.stache('{{#each items}}<content/>{{/each}}'),
+				viewModel: {
+					context: 'Component Scope',
+					items: [{
+						context: 'Item'
+					}]
+				}
+			});
+
+			var template = can.stache('<viewmodel-context>{{context}}</viewmodel-context>');
+
+			can.append(this.$fixture, template());
+
+			equal(this.$fixture.find('viewmodel-context').text(), 'Item');
+		});
+
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
