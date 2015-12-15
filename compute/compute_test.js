@@ -958,4 +958,14 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		
 	});
 
+	test("compute should not fire event when NaN is set multiple times #2128", function() {
+		var compute = can.compute(NaN);
+
+		compute.bind("change", function() {
+			ok(false, "change event should not be fired");
+		});
+
+		ok(isNaN(compute()));
+		compute(NaN);
+	});
 });
