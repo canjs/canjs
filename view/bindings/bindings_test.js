@@ -1876,7 +1876,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'{{/countries}}'+
 		'</select>');
 		
-		var frag = template(data);
+		template(data);
 		stop();
 		setTimeout(function(){
 			data.attr("countries").replace([
