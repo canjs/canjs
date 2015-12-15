@@ -4609,6 +4609,21 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var frag = template({foo: true});
 			equal(frag.firstChild.getAttribute("disabled"),"","disabled set");
 		});
+		
+
+		test("keep @index working with multi-dimensional arrays (#2127)", function() {
+			var data = new can.Map({
+				array2 : [['asd'], ['sdf']]
+			});
+			
+			var template = can.stache('<div>{{#each array2}}<span>{{@index}}</span>{{/each}}</div>');
+			
+			var frag = template(data);
+			
+			var spans = frag.firstChild.getElementsByTagName("span");
+			equal( spans[0].firstChild.nodeValue, "0");
+		}); 
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
