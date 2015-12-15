@@ -1536,6 +1536,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			can.Component.extend({
 				tag: 'some-context',
 				viewModel: {
+					value: "WRONG",
 					items: [{value: "A", name: "X"}, {value: "B", name: "Y"}]
 				},
 				template: can.stache("{{#each items}}<content><span>{{name}}</span></content>{{/each}}")
