@@ -321,8 +321,12 @@ steal(
 						// Get the last part of the key which is what we want to set
 						key = key.substring(lastIndex + 1, key.length);
 					}
-
-					can.compute.set(obj, key, value, options);
+					if(key.charAt(0) === "*") {
+						can.compute.set(this.getRefs()._context, key, value, options);
+					} else {
+						can.compute.set(obj, key, value, options);
+					}
+					
 				} else {
 					return this.get(key, options);
 				}

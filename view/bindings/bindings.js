@@ -56,14 +56,15 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					getViewModel: function(){
 						return viewModel;
 					},
-					attributeViewModelBindings: attributeViewModelBindings
+					attributeViewModelBindings: attributeViewModelBindings,
+					alreadyUpdatedChild: true
 				});
 				if(dataBinding) {
 					// For bindings that change the viewModel,
 					if(dataBinding.onCompleteBinding) {
 						// save the initial value on the viewModel.
 						if(dataBinding.bindingInfo.parentToChild && dataBinding.value !== undefined) {
-							initialViewModelData[dataBinding.bindingInfo.childName] = dataBinding.value;
+							initialViewModelData[cleanVMName(dataBinding.bindingInfo.childName)] = dataBinding.value;
 						}
 						// Save what needs to happen after the `viewModel` is created.
 						onCompleteBindings.push(dataBinding.onCompleteBinding);
@@ -337,7 +338,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	
 			if (el.nodeName.toLowerCase() === "input" && ( el.type === "checkbox" || el.type === "radio" ) ) {
 	
-				var property = getComputeFrom.scope(el, data.scope, attrValue, {});
+				var property = getComputeFrom.scope(el, data.scope, attrValue, {}, true);
 				if (el.type === "checkbox") {
 	
 					var trueValue = can.attr.has(el, "can-true-value") ? el.getAttribute("can-true-value") : true,
@@ -432,32 +433,47 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	var getComputeFrom = {
 		// ### getComputeFrom.scope
 		// Returns a compute from the scope.  This handles expressions like `someMethod(.,1)`.
-		scope: function(el, scope, scopeProp, options){
+		scope: function(el, scope, scopeProp, bindingData, mustBeACompute){
 			if(!scopeProp) {
 				return can.compute();
 			} else {
-				var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
-				return parentExpression.value(scope, new can.view.Options({}));
+				if(mustBeACompute) {
+					var parentExpression = expression.parse(scopeProp,{baseMethodType: "Call"});
+					return parentExpression.value(scope, new can.view.Options({}));
+				} else {
+					return function(newVal){
+						scope.attr(cleanVMName(scopeProp), newVal);
+					};
+				}
+				
 			}
 			
 		},
 		// ### getComputeFrom.viewModel
 		// Returns a compute that's two-way bound to the `viewModel` returned by 
 		// `options.getViewModel()`.
-		viewModel: function(el, scope, vmName, options) {
-			return can.compute(function(newVal){
-				var viewModel = options.getViewModel();
-				if(arguments.length) {
-					viewModel.attr(vmName,newVal);
-				} else {
-					return vmName === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
-				}
-				
-			});
+		viewModel: function(el, scope, vmName, bindingData, mustBeACompute) {
+			var setName = cleanVMName(vmName);
+			if(mustBeACompute) {
+				return can.compute(function(newVal){
+					var viewModel = bindingData.getViewModel();
+					if(arguments.length) {
+						viewModel.attr(setName,newVal);
+					} else {
+						return vmName === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
+					}
+				});
+			} else {
+				return function(newVal){
+					bindingData.getViewModel().attr(setName,newVal);
+				};
+			}
+			
+			
 		},
 		// ### getComputeFrom.attribute
 		// Returns a compute that is two-way bound to an attribute or property on the element.
-		attribute: function(el, scope, prop, options, event){
+		attribute: function(el, scope, prop, bindingData, mustBeACompute, event){
 			// Determine the event or events we need to listen to 
 			// when this value changes.
 			if(!event) {
@@ -517,7 +533,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 							}
 						});
 					} else {
-						if(!options.legacyBindings && hasChildren && ("selectedIndex" in el)) {
+						if(!bindingData.legacyBindings && hasChildren && ("selectedIndex" in el)) {
 							el.selectedIndex = -1;
 						}
 						can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
@@ -764,15 +780,23 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		if(!bindingInfo) {
 			return;
 		}
-		// Get computes for the parent and child binding
-		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData);
-		var childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData);
-		var updateParent;
+		// assign some bindingData props to the bindingInfo
+		bindingInfo.alreadyUpdatedChild = bindingData.alreadyUpdatedChild;
+		if( bindingData.initializeValues) {
+			bindingInfo.initializeValues = true;
+		}
 		
+		// Get computes for the parent and child binding
+		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData, bindingInfo.parentToChild),
+			childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent),
+			
+			// these are the functions bound to one compute that update the other.
+			updateParent,
+			updateChild;
 		
 		// Only bind to the parent if it will update the child.
 		if(bindingInfo.parentToChild){
-			var updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
+			updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
 		}
 		
 		// This completes the binding.  We can't call it right away because
@@ -783,7 +807,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName,
 					bindingData.syncChildWithParent);
 			}
-			if(bindingData.initializeValues || bindingInfo.initializeValues) {
+			if(bindingInfo.initializeValues) {
 				initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
 			}
 			
@@ -816,23 +840,29 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// ## initializeValues
 	// Updates the parent or child value depending on the direction of the binding
 	// or if the child or parent is `undefined`.
-	var initializeValues = function(options, childCompute, parentCompute, updateChild, updateParent){
-
-		if(options.parentToChild && !options.childToParent) {
-			updateChild({}, getValue(parentCompute) );
+	var initializeValues = function(bindingInfo, childCompute, parentCompute, updateChild, updateParent){
+		var doUpdateParent = false;
+		if(bindingInfo.parentToChild && !bindingInfo.childToParent) {
+			// updateChild
 		}
-		else if(!options.parentToChild && options.childToParent) {
-			updateParent({}, getValue(childCompute) );
+		else if(!bindingInfo.parentToChild && bindingInfo.childToParent) {
+			doUpdateParent = true;
 		}
 		// Two way
 		// Update child or parent depending on who has a value.
 		// If both have a value, update the child.
 		else if( getValue(childCompute) === undefined) {
-			updateChild({}, getValue(parentCompute) );
+			// updateChild
 		} else if(getValue(parentCompute) === undefined) {
+			doUpdateParent = true;
+		}
+		
+		if(doUpdateParent) {
 			updateParent({}, getValue(childCompute) );
 		} else {
-			updateChild({}, getValue(parentCompute) );
+			if(!bindingInfo.alreadyUpdatedChild) {
+				updateChild({}, getValue(parentCompute) );
+			}
 		}
 	};
 	
@@ -889,6 +919,9 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			if(compute && compute.isComputed && typeof updateOther === "function") {
 				compute.unbind("change", updateOther);
 			}
+		},
+		cleanVMName = function(name){
+			return name.replace(/@/g,"");
 		};
 
 	
