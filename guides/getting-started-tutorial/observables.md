@@ -92,9 +92,6 @@ Paginate = can.Map.extend({
       value: Infinity
     }
   },
-  page: function() {
-	return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
-  },
   next: function() {
 	this.attr('offset', this.attr('offset') + this.attr('limit') );
   }
@@ -106,7 +103,6 @@ pageInfo.attr("offset") //-> 0
 pageInfo.next();
 
 pageInfo.attr("offset") //-> 100
-pageInfo.page()         //-> 2
 ```
 
 ## Responding to changes
@@ -126,130 +122,126 @@ pagination.bind('page', function(event, newVal, oldVal) {
 pagination.attr('page', 11);
 ```
 
-Although `bind` and it's corresponding `unbind` method exist, __there's almost no
-reason to ever use them__.  
+Although `bind` and its corresponding `unbind` method exist, __there's almost no
+reason to ever use them!__  This is because there are better ways to perform
+the common actions that would require binding to an observable.
 
-The first reason is that live-binding should be 
-updating the page for you.  For example:
+For example, `stache` templates will automatically update when an observable changes:
 
 ```
-var template = can.stache("<span>Page: {{page}}</span>");
+var template = can.stache("<span id='page'>{{page}}</span>");
 $("body").append(template(pagination));
+
+document.getElementById("page").innerHTML //-> "11"
+
 pagination.attr('page', 12);
+
+document.getElementById("page").innerHTML //-> "12"
 ```
 
-The other common reason to listen to changes is to create some new, combined 
-state. For instance, calculating the total price of a list of items like:
+The other common use case is to create some new, derived value.  [can.compute](../docs/can.compute.html)
+or [define getters](../docs/can.Map.prototype.define.get.html) lets you use functional
+(and reactive) programming techniques to derive new values from source 
+state. 
+
+For example, we can create a virtual `page` observable that derives its value from the 
+`offset` and `limit`:
 
 ```
-var items = new can.List([
+var pagination = new Paginate({
+  limit: 10,
+  offset: 20
+});
+
+var page = can.compute(function(){
+  return Math.floor(pagination.attr('offset') / 
+                    pagination.attr('limit')) + 1;
+});
+
+page() //-> 3
+
+page.bind("change", function(ev, newValue){
+  newValue //-> 4
+});
+
+pagination.attr("offset",30);
+```
+
+In this example `page` will automatically be updated when either `offset` or `limit` change.
+
+
+However, `page` is more commonly created as a "virtual" property of the `Paginate` Map type
+using a [define getter](../docs/can.Map.prototype.define.get.html):
+
+```
+Paginate = can.Map.extend({
+  define: {
+    ...
+    page: {
+      get: function() {
+	    return Math.floor(this.attr('offset') / this.attr('limit')) + 1;
+      }
+    }
+  },
+  ...
+});
+
+var pageInfo = new Paginate({
+  limit: 10,
+  offset: 20,
+  count: 30
+});
+pageInfo.attr("page") //-> 3
+
+pageInfo.bind("page", function(ev, newVal){
+  newVal //-> 4
+});
+
+pageInfo.next();
+```
+
+Using computes and define getters are very similar to using functional-reactive programming
+event streams.  Given some source state, they are able to derive and combine it into new values.
+
+Computes and define getters are easier, but less powerful than event streams.  Computes
+and define getters only respond to changes in values where event streams 
+are also able to respond to events. However, computes and define getters 
+are eaiser to express and automatically manage subscriptions to source values.
+
+For example, consider deriving a total for one of two menus depending on the time
+of day:
+
+```
+var lunch = new can.List([
   {name: "nachos", price: 10.25},
   {name: "water", price: 0},
   {name: "taco", price: 3.25}
 ]);
-```
 
-A simple function that is passed to the view is able to listen when items
-are added, removed, or change prices:
+var dinner = new can.List([
+  {name: "burrito", price: 12.25},
+  {name: "agua", price: 1.20}
+]);
 
-```
-var total = new can.compute(function(){
-  var total = 0;
-  items.forEach(function(item){
-    return total += item.attr("price")
+var timeOfDay = can.compute("lunch");
+
+var total = can.compute(function(){
+  var list = timeOfDay() === "lunch" ? lunch : dinner;
+  var sum = 0;
+  list.forEach(function(item){
+    sum += item.attr("price");
   });
-  return total;
+  return sum;
 });
-
-var template = can.stache("<span>total: {{total}}</span>");
-$("body").append(template(pagination));
-
-items.pop();
 ```
 
+In this example, `total` will listen to not only `timeOfDay`, but
+also when items are added or removed to `lunch` or `dinner`, and each item's
+`price`.  Furthermore, it only listens to just what needs to be listened to. It will
+listen to either `lunch` or `dinner`, but not both.
 
-
-
- the Map will emit two
-events: A _change_ event and an event with the same name as the property that
-was changed. There are three ways you can listen and respond to these events:
-
-- The define plugin
-- computes
-- bind
-
-The [define plugin](TheDefinePlugin.html) (discussed in the next chapter) plugin is the 
-most common way of listening and responding to changes in `can.Map` as it can
-automatically subscribe to observable dependencies and update a new state 
-value.  For example, 
-
-```
-var Person = can.Map.extend({
-  define: {
-    fullName: {
-      get: function(){
-        return this.attr("first")+" "+this.attr("last")
-      }
-    }
-  }
-})
-```
-
-
-
-
-
-One of the major advantages of using the 
-in your applicaitons is that it handles managing the relationships of your observables 
-for you. Any time you reference a `can.Map` or `can.List` (or one of their child objects) 
-in a define property, that property is automatically subscribed as a listener for that `can.Map`
-or `can.List`.
-
-```
-    define: {
-      page: {
-        set: function(newVal){
-          //Because this setter function references the limit property, using .attr syntax
-          //Any time that the limit property changes, this code will automatically run
-          this.attr('offset', (parseInt(newVal) - 1) * this.attr('limit'));
-        }
-      }
-    }
-```
-
-You can also listen for events by using [bind](../docs/can.Map.prototype.bind.html),
-however this is less common:
-
-```
-// In this example, the chanage to pagination’s perPage attribute,
-// on line 16, is responded to by the functions listening to 
-// pagination’s change and perPage attributes. Note the values passed
-// in to the functions when they are called.
-pagination.bind('change', function(event, attr, how, newVal, oldVal) {
-	attr;   // 'perPage'
-	how;    // 'set'
-	newVal; // 30
-	oldVal; // 50
-});
-
-```
-
-You can similarly stop listening to these events by using
-[`unbind`](../docs/can.Map.prototype.unbind.html):
-
-```
-var timesChanged = 0,
-	changeHandler = function() { timesChanged++; },
-	obs = new can.Map({value: 10});
-
-obs.bind('change', changeHandler);
-obs.attr('value', 20);
-timesChanged; // 1
-
-obs.unbind('change', changeHandler);
-obs.attr('value', 30);
-timesChanged; // 1
-```
+In the [next chapter](TheDefinePlugin.html) we'll expand on the use of the define plugin
+and show how it can handle asyncronous derived data like AJAX requests.
 
 ## Iterating though a Map
 
