@@ -1981,5 +1981,30 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(typeof vm.attr("vmMethod"), "function", "parent export function");
 
 	});
+	
+	test("backtrack path in to-parent bindings (#2132)", function(){
+		can.Component.extend({
+			tag: "parent-export",
+			viewModel: {
+				value: "VALUE"
+			}
+		});
+		
+		var template = can.stache("{{#innerMap}}<parent-export {^value}='../parentValue'/>{{/innerMap}}");
+		
+		var data = new can.Map({
+			innerMap: {}
+		});
+		
+		template(data);
+		
+		equal(data.attr("parentValue"), "VALUE", "set on correct context");
+		equal(data.attr("innerMap.parentValue"), undefined, "nothing on innerMap");
+		
+	});
+	
+	
+	
+	
 
 });

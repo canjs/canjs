@@ -299,7 +299,39 @@ steal(
 				}
 				return cur._context;
 			},
+			set: function(key, value, options){
+				// Use `.read` to read everything upto, but not including the last property name
+				// to find the object we want to set some property on.
+				// For example:
+				//  - `foo.bar` -> `foo`
+				//  - `../foo.bar` -> `../foo`
+				//  - `../foo` -> `..`
+				//  - `foo` -> `.`
+				var dotIndex = key.lastIndexOf('.'),
+					slashIndex = key.lastIndexOf('/'),
+					contextPath,
+					propName;
+				
+				if(slashIndex > dotIndex) {
+					contextPath = key.substring(0, slashIndex);
+					propName = key.substring(slashIndex + 1, key.length);
+				} else {
+					if(dotIndex !== -1) {
+						contextPath = key.substring(0, dotIndex);
+						propName = key.substring(dotIndex + 1, key.length);
+					} else {
+						contextPath = ".";
+						propName = key;
+					}
+				}
 
+				if(key.charAt(0) === "*") {
+					can.compute.set(this.getRefs()._context, key, value, options);
+				} else {
+					var context = this.read(contextPath, options).value;
+					can.compute.set(context, propName, value, options);
+				}
+			},
 
 			// ## Scope.prototype.attr
 			// Gets or sets a value in the scope without being observable.
@@ -312,20 +344,7 @@ steal(
 
 				// Allow setting a value on the context
 				if(arguments.length === 2) {
-					var lastIndex = key.lastIndexOf('.'),
-					// Either get the paren of a key or the current context object with `.`
-						readKey = lastIndex !== -1 ? key.substring(0, lastIndex) : '.',
-						obj = this.read(readKey, options).value;
-
-					if(lastIndex !== -1) {
-						// Get the last part of the key which is what we want to set
-						key = key.substring(lastIndex + 1, key.length);
-					}
-					if(key.charAt(0) === "*") {
-						can.compute.set(this.getRefs()._context, key, value, options);
-					} else {
-						can.compute.set(obj, key, value, options);
-					}
+					return this.set(key, value, options);
 					
 				} else {
 					return this.get(key, options);
