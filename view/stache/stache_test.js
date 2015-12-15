@@ -4622,7 +4622,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			
 			var spans = frag.firstChild.getElementsByTagName("span");
 			equal( spans[0].firstChild.nodeValue, "0");
-		}); 
+		});
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}

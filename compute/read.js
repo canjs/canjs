@@ -211,7 +211,7 @@ steal("can/util", function(can){
 			read: function(value, prop){
 				if(value == null) {
 					return undefined;
-				} else {					
+				} else {
 					if(prop.key in value) {
 						return value[prop.key];
 					}
