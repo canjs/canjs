@@ -92,6 +92,7 @@ steal("can/util", function(can){
 		
 		return value;
 	};
+	
 	// value readers check the current value
 	// and get a new value from it
 	// ideally they would keep calling until 
@@ -220,6 +221,8 @@ steal("can/util", function(can){
 						can.dev.warn("Use %"+prop.key+" in place of @"+prop.key+".");
 						
 						//!steal-remove-end
+						
+						prop.at = false;
 						return value["@"+prop.key];
 					}
 					
