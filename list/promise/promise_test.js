@@ -154,6 +154,30 @@ steal("can/list/promise", "can/compute", "can/test", "steal-qunit", function () 
 		
 	});
 	
+	test("list is always updated with the last promise passed to replace (#2136)", function(){
+		
+		var list = new can.List();
+		
+		stop();
+		
+		list.replace( new can.Deferred( function( def ) {
+			setTimeout( function(){
+				def.resolve([ "A" ]);
+				
+				setTimeout(function(){
+					equal(list.attr(0), "B", "list set to last promise's value");
+					start();
+				},10);
+				
+			}, 20 );
+		}));
+		
+		list.replace( new can.Deferred( function( def ) {
+			setTimeout( function(){
+				def.resolve([ "B" ]);
+			}, 10 );
+		}));
+	});
 	
 	
 
