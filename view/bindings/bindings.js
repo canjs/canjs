@@ -494,13 +494,14 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				isStringValue,
 				lastSet,
 				scheduledAsyncSet = false,
+				timer,
 				// Sets the element property or attribute.
 				set = function(newVal){
 					// Templates write parent's out before children.  This should probably change.
 					// But it means we don't do a set immediately.
 					if(hasChildren && !scheduledAsyncSet) {
-						scheduledAsyncSet = true;
-						setTimeout(function(){
+						clearTimeout(timer);
+						timer = setTimeout(function(){
 							set(newVal);
 						},1);
 					}

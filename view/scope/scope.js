@@ -365,7 +365,7 @@ steal(
 						parent = scope._parent;
 						break;
 					}
-					contexts.push(context);
+					contexts.unshift(context);
 					scope = scope._parent;
 				}
 				if(parent) {
