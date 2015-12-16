@@ -380,8 +380,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	// ## updateOnChange
 	// A helper to trigger an event when a value changes
 	var updateOnChange = function(compute, newValue, oldValue, batchNum){
-		var valueChanged = isNaN(newValue) ? !isNaN(oldValue) : newValue !== oldValue;
 
+		var valueChanged = newValue !== oldValue && !(newValue !== newValue && oldValue !== oldValue);
+		
 		// Only trigger event when value has changed
 		if (valueChanged) {
 			can.batch.trigger(compute, {type: "change", batchNum: batchNum}, [
