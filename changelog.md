@@ -3,6 +3,21 @@
 @parent guides 5
 -->
 
+__2.3.7__ ( Dec 15 2015 )
+
+- [Incorrect view model context with &lt;content/&gt;](https://github.com/canjs/canjs/issues/2137)
+- [List replace with deferreds does not take into account stale/overtaken deferreds](https://github.com/canjs/canjs/issues/2136)
+- [two-way binding bug regarding select dropdowns when value is set in inserted or init](https://github.com/canjs/canjs/issues/2134)
+- [support backtrack path in export {^to-parent} bindings](https://github.com/canjs/canjs/issues/2132)
+- [Inconsistent binding with &quot;with&quot; helper](https://github.com/canjs/canjs/issues/2129)
+- [can.compute | NaN -&gt; NaN dispatches a change event](https://github.com/canjs/canjs/issues/2128)
+- [{{(at)index}} doesn&#39;t work with arrays inside arrays](https://github.com/canjs/canjs/issues/2127)
+- [Using a define getter breaks pushstate url updates.](https://github.com/canjs/canjs/issues/2105)
+- [Wrong context inside &lt;content/&gt;](https://github.com/canjs/canjs/issues/2092)
+- [expressions are caching Args computes in the wrong spots](https://github.com/canjs/canjs/issues/1971)
+- [Dynamic select menus don&#39;t live bind correctly](https://github.com/canjs/canjs/issues/1762)
+
+
 __2.3.6__ ( Dec 11 2015 )
 
 - [Cannot read property &#39;pop&#39; of undefined ](https://github.com/canjs/canjs/issues/2121)
