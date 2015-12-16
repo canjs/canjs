@@ -336,15 +336,18 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			__set: function (prop, value, current) {
 
 				if (value !== current) {
+					var computedAttr = this._computedAttrs[prop];
+					
 					// Dispatch an "add" event if adding a new property.
-					var changeType = current !== undefined || this.___get()
+					var changeType = computedAttr || current !== undefined || this.___get()
 						.hasOwnProperty(prop) ? "set" : "add";
 
 					// Set the value on `_data` and set up bubbling.
 					this.___set(prop, typeof value === "object" ? bubble.set(this, prop, value, current) : value );
 
-					// Computed properties change events are already forwarded.
-					if(!this._computedAttrs[prop]) {
+					// Computed properties change events are already forwarded except if
+					// no one is listening to them.
+					if(!computedAttr || !computedAttr.count) {
 						this._triggerChange(prop, changeType, value, current);
 					}
 
@@ -501,25 +504,28 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// If the map is bubbling, this will fire a change event.
 			// Otherwise, it only fires a "named" event. Triggers a
 			// "__keys" event if a property has been added or removed.
-			_triggerChange: function (attr, how, newVal, oldVal) {
+			_triggerChange: function (attr, how, newVal, oldVal, batchNum) {
 
 				if(bubble.isBubbling(this, "change")) {
 					can.batch.trigger(this, {
 						type: "change",
-						target: this
+						target: this,
+						batchNum: batchNum
 					}, [attr, how, newVal, oldVal]);
 
 				}
 
 				can.batch.trigger(this, {
 					type: attr,
-					target: this
+					target: this,
+					batchNum: batchNum
 				}, [newVal, oldVal]);
 
 				if(how === "remove" || how === "add") {
 					can.batch.trigger(this, {
 						type: "__keys",
-						target: this
+						target: this,
+						batchNum: batchNum
 					});
 				}
 			},

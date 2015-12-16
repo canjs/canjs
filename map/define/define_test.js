@@ -1078,4 +1078,28 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		new Map({ count: 100 });
 	});
+	
+	test("getters produce change events", function(){
+		var Map = can.Map.extend({
+			define: {
+				count: {
+					get: function(lastVal) {
+						return lastVal;
+					}
+				}
+			}
+		});
+		
+		var map = new Map();
+		
+		map.bind("change", function(){
+			ok(true, "change called");
+		});
+		
+		map.attr("count", 22);
+	});
+	
+	
+	
+	
 });

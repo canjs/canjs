@@ -113,11 +113,7 @@ steal('can/util', 'can/util/object/isplain', function(can){
 				compute: compute,
 				count: 0,
 				handler: function (ev, newVal, oldVal) {
-					can.batch.trigger(map, {
-						type: attrName,
-						batchNum: ev.batchNum,
-						target: map
-					}, [newVal, oldVal]);
+					map._triggerChange(attrName, "set", newVal, oldVal, ev.batchNum);
 				}
 			};
 		},
