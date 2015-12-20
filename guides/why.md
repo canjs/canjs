@@ -15,14 +15,18 @@ chat app that works as an Android, iOS, and Desktop app.
 
 <h2 id="Flexible">Flexible</h2>
 
-CanJS is __flexible__. Unlike other frameworks, it's designed to work in almost any situation.  You can readily use third party plugins,
-modify the DOM with jQuery directly, and even use alternate DOM libraries like Zepto and Dojo. CanJS supports all browsers, including IE8.
+CanJS is __flexible__. Unlike other frameworks, it's designed to work in almost any situation. 
+You can readily use third party plugins,
+modify the DOM with jQuery directly, and even use alternate DOM libraries like Zepto and Dojo. 
+CanJS supports all browsers, including IE8.
 
 <h2 id="Powerful">Powerful</h2>
 
-CanJS is __powerful__. Create [custom elements](../docs/can.Component.html) with [one and two-way bindings](/docs/can.view.bindings.html). 
-Easily [define](../docs/can.Map.prototype.define.html) the behavior of observable objects. Avoid memory leaks with smart model stores and smart event
-binding.  
+CanJS is __powerful__. Create [custom elements](../docs/can.Component.html) with 
+[one and two-way bindings](/docs/can.view.bindings.html). 
+Easily [define](../docs/can.Map.prototype.define.html) the behavior of 
+observable objects and their derived values. Avoid memory 
+leaks with smart model stores and smart event binding.  
 
 <h2 id="Fast">Fast</h2>
 

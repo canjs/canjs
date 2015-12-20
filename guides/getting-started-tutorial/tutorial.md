@@ -40,13 +40,14 @@ those changes. Observables such as [can.List](../docs/can.List.html), [can.Map](
 foundation for models, view-models, view bindings, and even routing in your app. [can.compute](../docs/can.compute.html)
 is able to combine observable values into new observable values. 
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/koqaxe/edit?js,console">JS Bin on jsbin.com</a>
+[Example: Creating a derived value from source observables.](http://justinbmeyer.jsbin.com/koqaxe/edit?js,console)
+
 
 The 
 [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behaviors on
 custom Map types. 
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console">JS Bin on jsbin.com</a>
+[Example: Creating a derived value as part of a custom type.](http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console)
 
 <a name="models"></a>
 ### Models
@@ -55,10 +56,7 @@ raw, serialized service data into more useful (and observable) typed
 data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect to restful services
 and perform Create, Retrieve, Update, and Delete (CRUD) operations.
 
-The following uses [can.fixture](../docs/can.fixture.html) to simulate a restful service and `can.Model`
-to create an order, updated it, and delete it.
-
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/codubev/edit?js,console">JS Bin on jsbin.com</a>
+[Example: Simulate a restful service and create, update, and delete its data.](http://justinbmeyer.jsbin.com/codubev/edit?js,console)
 
 <a name="view-models"></a>
 ### ViewModels
@@ -66,6 +64,8 @@ to create an order, updated it, and delete it.
 ViewModels contain the state and model data used by the views to create HTML.  They also
 contain methods that the views can call. Custom [can.Map](../docs/can.Map.html) types
 are used as easily unit-testable view-models.  
+
+[Example: Defining and testing a view-model that derives values from source state.](http://jsbin.com/sotero/edit?js,output)
 
 <a name="views"></a>
 ### Views 
