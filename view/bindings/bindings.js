@@ -533,10 +533,12 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 							}
 						});
 					} else {
-						if(!bindingData.legacyBindings && hasChildren && ("selectedIndex" in el)) {
-							el.selectedIndex = -1;
+						if(!bindingData.legacyBindings && hasChildren && ("selectedIndex" in el) && prop === "value" ) {
+							can.attr.setSelectValue(el, newVal);
+						} else {
+							can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
 						}
-						can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
+						
 					}
 					return newVal;
 	
@@ -555,6 +557,8 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 						});
 	
 						return isStringValue ? values.join(";"): values;
+					} else if(hasChildren && ("selectedIndex" in el) && el.selectedIndex === -1) {
+						return undefined;
 					}
 	
 					return can.attr.get(el, prop);
@@ -569,6 +573,9 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				setTimeout(function(){
 					scheduledAsyncSet = true;
 				},1);
+				// The following would allow a select's value
+				// to be undefined.
+				// el.selectedIndex = -1;
 			}
 	
 			return can.compute(get(),{

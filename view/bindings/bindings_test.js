@@ -1762,8 +1762,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		// wait for set to be called which will change the selects
 		setTimeout(function(){
 			ok(!nullInputOptions[0].selected, "default (null) value set");
-			ok(!undefinedInputOptions[0].selected, "default (undefined) value set");
-			ok(!stringInputOptions[0].selected, "default ('') value set");
+			// the first item is selected because "" is the value.
+			ok(undefinedInputOptions[0].selected, "default (undefined) value set");
+			ok(stringInputOptions[0].selected, "default ('') value set");
 			start();
 		}, 1);
 	});
@@ -2003,8 +2004,26 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-	
-	
+	test("two-way binding with empty strings (#2147)", function(){
+		var template = can.stache("<select {($value)}='val'>"+
+			'<option value="">Loading...</option>'+
+			'<option>Empty...</option>'+
+			"</select>");
+			
+		var map = new can.Map({
+			foo: true,
+			val: ""
+		});
+		
+		var frag = template(map);
+		
+		setTimeout(function(){
+			//map.attr("foo", false);
+			equal( frag.firstChild.selectedIndex, 0, "empty strings are bound");
+			start();
+		},10);
+		stop();
+	});
 	
 
 });
