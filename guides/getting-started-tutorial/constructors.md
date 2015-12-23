@@ -16,7 +16,7 @@
 Before we work with any of the objects in CanJS, it will be helpful for us to
 understand [can.Construct](../docs/can.Construct.html). We won’t be working
 with `can.Construct` directly. However, many of the objects in CanJS are derived from
-`can.Construct`. Understanding it, therefore, will make it easier for you to understand other
+`can.Construct`. Understanding it will make it easier for you to understand other
 concepts we’re going to cover.
 
 `can.Construct` provides a way to easily use the power of prototypal
@@ -33,25 +33,37 @@ We’ll look at the extend function first.
 
 ## The extend function
 `can.Construct`’s `extend` function is used to create
-“constructor functions”. Constructor functions create instances of objects.
-The extend function can take up to three arguments:
+“constructor functions” that inherit from the base constructor function. 
+To create a constructor function of your own, call __can.Construct__ with the:
 
-1. `name`: string
-2. `staticProperties`: object
-3. `instanceProperties`: object
+- __staticProperties__ that are attached directly to the constructor, and
+- instance __prototypeProperties__.
 
-The `extend` function behaves differently depending on the number of arguments you
-pass it. 
- - If you pass it one argument, it will use the value you pass it to set its
-`instanceProperties`. 
- - If you pass it two arguments, it uses the first to set its
-`staticProperties` and the second to set its `instanceProperties`. 
- - If you pass in all three arguments, the first will set its name, the second its
-`staticProperties`, and the third its `instanceProperties`.
+__can.Construct__ sets up the prototype chain so subclasses can be further
+extended and sub-classed as far as you like:
 
-This pattern will apply to all objects in CanJS that have an extend function.
-For example, if we only want to set `staticProperties` we must call the
-function as follows:
+```
+var Order = can.Construct.extend({
+  init: function(){},
+
+  customer: function() { ... },
+  
+  needAddress: function( account ) {
+    return false;
+  }
+});
+
+var CarryOutOrder = Order.extend({
+  needAddress: function( account ) {
+    return account.hasAddress();
+  }
+});
+```
+
+If only one set of properties is passed to __can.Construct__, it's assumed to
+be the prototype properties.  If two sets of properties are passed, the
+first argument are static properties, the second argument are prototype
+properties.
 
 ```
 can.Construct.extend({
@@ -60,27 +72,31 @@ can.Construct.extend({
   // Blank object as second parameter
 });
 ```
+
 This example is highlighted because calling a `can.Construct` with two parameters, 
 the last of which is an empty object, is common. Also common is the mistake of
 ommitting the last parameter of the call, which can lead to unexpected behavior.
 
+
 ## The init function
-The `init` function is called whenever a new instance of a
-`can.Construct` is created. `init` is where the bulk of your initialization code
+
+When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and
+calls [init](../docs/can.Construct.prototype.init.html) with
+the arguments passed to `new Constructor(...)`. `init` is where initialization code
 should go. Inside of the `init` function, the `this` keyword will refer to the
 new object instance created by the constructor. Additionaly, `this` will contain 
 the instance properties you pass to the constructor. A common thing to do in `init` 
 is save the arguments passed into the constructor. An example is below:
 
 ```
-var Person = can.Construct.extend({
-  init: function(first, last) {
-    this.first = first;
-    this.last = last;
+var Order = can.Construct.extend({
+  init: function(price, item) {
+    this.price = price;
+    this.item = item;
   }
 });
 
-var actor = new Person('Abe', 'Vigoda');
+var order = new Order(20, 'Green Eggs & Ham');
 ```
 
 - - -

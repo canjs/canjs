@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>CanJS Test</title>
+</head>
+<body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+    <script src="http://canjs.com/release/latest/can.jquery.js"></script>
+    <script src="http://canjs.com/release/latest/can.map.define.js"></script>
+    <script src="http://canjs.com/release/latest/can.stache.js"></script>
+    <script type='text/stache' id='app'>
+    	<hello-world/>
+    </script>
+    
+    <script type="text/javascript">
+        can.Component.extend({
+        	tag: 'hello-world',
+        	template: can.stache("<h1>{{message}}</h1>"),
+        	viewModel: {
+        		message: "Hi there!"
+        	}
+        });
+        $("body").append(can.view("app",{}));
+    </script>
+</body>
+</html>

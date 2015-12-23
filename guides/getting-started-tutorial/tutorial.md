@@ -11,94 +11,213 @@
 CanJS is a lightweight, modern JavaScript <a href="https://en.wikipedia.org/wiki/Model_View_ViewModel" target="_blank">MVVM</a>
 framework that’s fast and easy to use, while remaining robust and extensible
 enough to power some of the most trafficked websites in the world. This guide 
-will walk you through an analysis of a small e-commerce app built with CanJS called Place My Order. 
+will walk you through an analysis of a small e-commerce app built with CanJS called __Place My Order__. 
 In each relevant section, we’ll give you some code to play with
 so you will have hands on experience working with CanJS.
 
 ![place-my-order.com home page](../can/guides/images/application-design/Home.png)
 
+For a version of this guide that walks through testing, documenting, building, and deploying the same
+application, checkout [DoneJS's In Depth Guide](http://donejs.com/place-my-order.html).  This
+guide focuses more on the CanJS parts. 
+
 ## The Basics
+
 Every CanJS application contains:
 
 - [Observables](#observables),
 - [Models](#models),
+- [ViewModels](#view-models)
 - [Views](#views),
-- [Components](#components),
-- [Application State](#appstate), and
-- [Routing](#routing)
+- [Custom Elements](#custom_elements), and
+- [Routing with an AppViewModel](#routing)
 
 <a name="observables"></a>
 ### Observables
 Observable objects provide a way for you to make changes to data and listen to
-those changes. Observables such as `can.List` and `can.Map` provide the
-foundation for updating model objects, views, and even routes in your app.
+those changes. Observables such as [can.List](../docs/can.List.html), [can.Map](../docs/can.Map.html), and
+[can.compute](../docs/can.compute.html) provide the
+foundation for models, view-models, view bindings, and even routing in your app. [can.compute](../docs/can.compute.html)
+is able to combine observable values into new observable values. 
+
+[Example: Creating a derived value from source observables.](http://justinbmeyer.jsbin.com/koqaxe/edit?js,console)
+
+```
+var info = can.compute(function(){
+  return person.attr("first")+" "+person.attr("last")+
+    " likes "+ hobbies.join(", ")+"."
+});
+```
+
+The [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behaviors on
+custom Map types. 
+
+[Example: Creating a derived value as part of a custom type.](http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console)
+```
+Person = can.Map.extend({
+  define: {
+    fullName: {
+      get: function(){
+        return this.attr("first")+" "+this.attr("last");
+      }
+    }
+  }
+});
+```
+
 
 <a name="models"></a>
 ### Models
-Models let you get and modify data from the server. They also listen to changes 
-made by the server. In CanJS the object that handles this is [can.Model](../docs/can.Model.html). 
-`can.Model` makes it almost effortless to handle all of your Create, 
-Retrieve, Update, and Delete (CRUD) operations.
+Models let you get and modify data from the server. They also hydrate 
+raw, serialized service data into more useful (and observable) typed 
+data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect to restful services
+and perform Create, Retrieve, Update, and Delete (CRUD) operations.
+
+[Example: Simulate a restful service and create, update, and delete its data.](http://justinbmeyer.jsbin.com/codubev/edit?js,console)
+```
+// Create an order.
+var order = new Order({
+  price: 20
+});
+
+// Create it on the server.
+order.save().then(function(order){
+  // Change its values and
+  // update it on the server.
+  return order.attr("price",22)
+       .save();
+}).then(function(order){
+  // Destroy it on the server.
+  return order.destroy();
+});
+```
+
+<a name="view-models"></a>
+### ViewModels
+
+ViewModels contain the state and model data used by views to create HTML. They also
+contain methods that the views can call. Custom [can.Map](../docs/can.Map.html) types
+are used as easily unit-testable view-models.  
+
+[Example: Define and test a view-model that derives values from source state.](http://jsbin.com/sotero/edit?js,output)
+```
+var RestaurantListVM = can.Map.extend({
+  define: {
+    restaurants: {
+      get: function() {
+        var state = this.attr('state'),
+            city = this.attr('city');
+
+        if(state && city) {
+          return Restaurant.findAll({
+            'address.state': state,
+            'address.city': city
+          });
+        }
+
+        return null;
+      }
+    }
+  }
+});
+```
 
 <a name="views"></a>
 ### Views 
-Views are given information from the model and use the data it provides to
-generate visual output that’s meaningful to a user—in our case HTML. In
-CanJS, the preferred method for creating views is using [Stache](../docs/can.stache.html) 
-templates.
 
-At this time, Stache is supplied as a supporting
+Views are passed a view-model and generate visual output that’s meaningful to a user - in our case that
+output is HTML.  Views are able to:
+
+- Listen to changes in view-models and models and update the HTML (__one-way bindings__). 
+- Listen to HTML events, like clicks, and call methods on the view-models and models (__event bindings__).
+- Listen to form elements changing and update view-model and model data (__two-way bindings__). 
+
+In CanJS, the preferred method for creating views is using [can.stache](../docs/can.stache.html) 
+templates. `can.stache` uses mustache/handlebars syntax. `can.stache`'s event and two-way binding
+syntaxes can be found at [can.view.bindings](../docs/can.view.bindings.html).
+
+At this time, `can.stache` is supplied as a supporting
 library, which means you must explicitly add it to your application. We’ll see
-how to do that when we set up our application in the next chapter. In future
-releases of CanJS, Stache will be available as a part of the core CanJS lib.
+how to do that when we set up our application in the next chapter. In 3.0, 
+Stache will part of the core CanJS lib.
 
-Template libraries require a rendering engine and CanJS provides that for
-you with `can.stache`. `can.stache` contains
-utilities “for the loading, processing, rendering, and live-updating of
-templates”. In addition, `can.stache` is used to bind views to observable
-objects.
+[Example: Generate HTML for the previous example's view-model.](http://justinbmeyer.jsbin.com/gewavi/edit?html,output)
+```
+<label>State</label>
+{{#if states.isPending}}
+  <select disabled><option>Loading...</option></select>
+{{else}}
+  <select {($value)}="state">
+    {{^if state}}
+      <option value="">Choose a state</option>
+    {{/if}}
+    {{#each states.value}}
+      <option value="{{short}}">{{name}}</option>
+    {{/each}}
+  </select>
+{{/if}}
+```
 
-<a name="components"></a>
-### Components
-A [can.Component](../docs/can.Component.html) is like a mini web application.
-It contains the JavaScript, CSS, and HTML necessary to create a fully functional  
-item. This makes `can.Component`’s portable, reusable, and
-encapsulated. `can.Component`’s are easy to test and easy to use. Building an
-application with them is kind of like building with Lego&trade;. As we say
-at Bitovi, “The secret to building large applications is to never build large
-applications.” Rather, you build the components you need and link them
-together using the Application State and Routing to compose your application.
+<a name="custom_elements"></a>
+### Custom Elements
 
-<a name="appstate"></a>
-### Application State
-One of the things that sets CanJS apart from other frameworks is its use
-of an Application State object. An Application State object, or AppState object for short,
-is an observable object that, as its name implies, contains the state of 
-your application. Where other application frameworks model their applications 
-with routes, controllers, etc., CanJS takes a more unified, semantic approach. 
-It encapsulates the state of your application. This is a 
-very powerful approach to writing applications that frees developers from
-many of the constraints of a DOM-centric paradigm, allowing them to think more directly 
-about the application itself.
+Custom HTML Elements are how CanJS encapsulates and orchestrates different pieces of 
+functionality within an application. Custom elements are built with 
+[can.Component](../docs/can.Component.html) and combine a
+view-model and view.
+
+[Example: Encapsulate rich select behavior with a custom <select-loader> element.](http://justinbmeyer.jsbin.com/sonuwuc/edit?html,js,output)
+```
+<select-loader {promise}="states" {(value)}="state"
+               choose-text="Choose a state">
+  {{#each states.value}}
+    <option value="{{short}}">{{name}}</option>
+  {{/each}}
+</select-loader>
+```
 
 <a name="routing"></a>
-### Routing
-For many JavaScript MV* frameworks, routing divides an application into
-logical views and binds those views to Controllers. *This is not how things work in
-CanJS*. Routing in CanJS has nothing to do with binding views to Controllers.
-Rather, it has to do with AppState. In brief,
-CanJS maintains a reciprocal relationship between an application’s route
-and its state. In other words, if you change the state of an application,
-your route will change. If you change your route, your application’s state
-will change.
+### Routing with an AppViewModel
 
-This is a very powerful programming paradigm. For example, you can recreate
-a specific state in your application from any point, just by accessing a
-specific route.
+CanJS maintains a reciprocal relationship between the browser's url
+and a [can.Map](../docs/can.Map.html) view-model. This view-model instance
+represents the state of the application as a whole and so is
+called the `appViewModel`.  When the url changes,
+CanJS will update the properties of the `appViewModel`.  When
+the `appViewModel` changes, CanJS will update the url.  
 
-If this doesn't make sense right now, don't worry. As we develop our
-application together, you’ll see, more and more, how this works, and just 
-how powerful this aspect of CanJS can be.
+[can.route](../docs/can.route.html) is used to setup the relationship between the 
+`appViewModel` and the URL. It can be used with both [pushstate](../docs/can.route.pushstate.html) and
+hashchange (the default) routing.  
+
+[Example: Route between <home-page> and <restaurants-page> custom elements.](http://jsbin.com/surokag/edit?html,js,output)
+```
+{{#eq page 'home'}}
+  <home-page/>
+{{else}}
+  <restaurants-page/>
+{{/eq}}
+```
+```
+var AppViewModel = can.Map.extend({
+  define: {}
+});
+// Create an instance of that map
+var appViewModel = new AppViewModel();
+
+// Connect the map to the browser's URL
+can.route.map(appViewModel);
+
+// Define pretty routing rules
+can.route(":page",{page: "home"});
+
+// Start the two-way binding between the URL and the `appViewModel`.
+can.route.ready();
+```
+
+Application ViewModels free developers 
+from worrying about what the url looks like. Instead, you focus on
+updating the state of the application.
 
 ## Using the Getting Started Guide
 Each chapter in the Getting Started Guide is prefaced with an overview of the
@@ -120,3 +239,4 @@ Get the code for: [chapter 0](/guides/examples/PlaceMyOrder/ch-0_canjs-getting-s
 <span class="pull-right">[Setup &rsaquo;](Setup.html)</span>
 
 </div>
+<script src="http://static.jsbin.com/js/embed.min.js?3.35.5"></script>
