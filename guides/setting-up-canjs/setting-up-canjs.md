@@ -189,11 +189,44 @@ var Component = require("can/component/component");
 Component.extend({ ... });
 ```
 
-Note that nearly all module names repeat the folder name (ex: `can/view/stache/stache`).  
+Note that nearly all module names repeat the folder name (ex: `can/view/stache/stache`).
 
-### Building to production
+### Requiring templates
 
+You can require any CanJS templates using the [can-compilify](https://www.npmjs.com/package/can-compilify) Browserify 
+transform. Complete instructions for installing and using the transform are available on [npm](https://www.npmjs.com/package/can-compilify).
 
+Install can-compilify:
+
+```
+> npm install can --save
+```
+
+Require a template in your code:
+
+```
+// app.js
+var Map = require("can/map/");
+var $ = require("jquery");
+var template = require("./main.stache");
+
+var data = new Map({message: "Hello World"});
+
+$("body").append(template(data));
+```
+
+And include the can-compilify transform from the command line:
+
+```
+> browserify -t can-compilify app.js > app.bundle.js
+```
+
+You could also add can-compilify to your package.json.
+
+### Building templates to production
+
+Using the can-compilify tranform, your production bundle(s) will include a compiled version of your 
+templates so no extra setup is required.
 
 ## RequireJS from NPM, the Download or Bower
 
