@@ -42,12 +42,29 @@ is able to combine observable values into new observable values.
 
 [Example: Creating a derived value from source observables.](http://justinbmeyer.jsbin.com/koqaxe/edit?js,console)
 
+```
+var info = can.compute(function(){
+  return person.attr("first")+" "+person.attr("last")+
+    " likes "+ hobbies.join(", ")+"."
+});
+```
 
-The 
-[define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behaviors on
+The [define plugin](../docs/can.Map.prototype.define.html) allows you to define rich property behaviors on
 custom Map types. 
 
 [Example: Creating a derived value as part of a custom type.](http://justinbmeyer.jsbin.com/wuwifaf/edit?js,console)
+```
+Person = can.Map.extend({
+  define: {
+    fullName: {
+      get: function(){
+        return this.attr("first")+" "+this.attr("last");
+      }
+    }
+  }
+});
+```
+
 
 <a name="models"></a>
 ### Models
@@ -57,120 +74,150 @@ data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect
 and perform Create, Retrieve, Update, and Delete (CRUD) operations.
 
 [Example: Simulate a restful service and create, update, and delete its data.](http://justinbmeyer.jsbin.com/codubev/edit?js,console)
+```
+// Create an order.
+var order = new Order({
+  price: 20
+});
+
+// Create it on the server.
+order.save().then(function(order){
+  // Change its values and
+  // update it on the server.
+  return order.attr("price",22)
+       .save();
+}).then(function(order){
+  // Destroy it on the server.
+  return order.destroy();
+});
+```
 
 <a name="view-models"></a>
 ### ViewModels
 
-ViewModels contain the state and model data used by the views to create HTML.  They also
+ViewModels contain the state and model data used by views to create HTML. They also
 contain methods that the views can call. Custom [can.Map](../docs/can.Map.html) types
 are used as easily unit-testable view-models.  
 
-[Example: Defining and testing a view-model that derives values from source state.](http://jsbin.com/sotero/edit?js,output)
+[Example: Define and test a view-model that derives values from source state.](http://jsbin.com/sotero/edit?js,output)
+```
+var RestaurantListVM = can.Map.extend({
+  define: {
+    restaurants: {
+      get: function() {
+        var state = this.attr('state'),
+            city = this.attr('city');
+
+        if(state && city) {
+          return Restaurant.findAll({
+            'address.state': state,
+            'address.city': city
+          });
+        }
+
+        return null;
+      }
+    }
+  }
+});
+```
 
 <a name="views"></a>
 ### Views 
 
 Views are passed a view-model and generate visual output that’s meaningful to a user - in our case that
-output is HTML.  Views are able to listen to changes in view-models and models and update their
-output. They are also able to listen to HTML events, like clicks, and call methods on the view-models
-and models.
+output is HTML.  Views are able to:
+
+- Listen to changes in view-models and models and update the HTML (__one-way bindings__). 
+- Listen to HTML events, like clicks, and call methods on the view-models and models (__event bindings__).
+- Listen to form elements changing and update view-model and model data (__two-way bindings__). 
 
 In CanJS, the preferred method for creating views is using [can.stache](../docs/can.stache.html) 
-templates.
+templates. `can.stache` uses mustache/handlebars syntax. `can.stache`'s event and two-way binding
+syntaxes can be found at [can.view.bindings](../docs/can.view.bindings.html).
 
-At this time, Stache is supplied as a supporting
+At this time, `can.stache` is supplied as a supporting
 library, which means you must explicitly add it to your application. We’ll see
-how to do that when we set up our application in the next chapter. In future
-releases of CanJS, Stache will be available as a part of the core CanJS lib.
+how to do that when we set up our application in the next chapter. In 3.0, 
+Stache will part of the core CanJS lib.
+
+[Example: Generate HTML for the previous example's view-model.](http://justinbmeyer.jsbin.com/gewavi/edit?html,output)
+```
+<label>State</label>
+{{#if states.isPending}}
+  <select disabled><option>Loading...</option></select>
+{{else}}
+  <select {($value)}="state">
+    {{^if state}}
+      <option value="">Choose a state</option>
+    {{/if}}
+    {{#each states.value}}
+      <option value="{{short}}">{{name}}</option>
+    {{/each}}
+  </select>
+{{/if}}
+```
 
 <a name="custom_elements"></a>
 ### Custom Elements
 
-Custom HTML Elements like `<order-list>` are how CanJS encapsulates and orchestrates different pieces of 
-functionality within an application.  
-
-By __encapsulate__, we mean that instead of adding a slider
-to your page like:
-
-```
-$("#rating").slider({start: 1, end: 10, value: 5});
-```
-
-You add a slider to the view like:
-
-```
-<my-slider start="0" end="10" value="5"/>
-```
-
-Custom elements are built with 
-[can.Component](../docs/can.Component.html).  These combine a
+Custom HTML Elements are how CanJS encapsulates and orchestrates different pieces of 
+functionality within an application. Custom elements are built with 
+[can.Component](../docs/can.Component.html) and combine a
 view-model and view.
 
+[Example: Encapsulate rich select behavior with a custom <select-loader> element.](http://justinbmeyer.jsbin.com/sonuwuc/edit?html,js,output)
 ```
-var SliderViewModel = can.Map.extend({
-  position: function(){
-    ...
-  }
-});
-
-can.Component.extend({
-  tag: "my-slider",
-  viewModel: SliderViewModel,
-  view: can.stache("<div style='left: {{position.left}}px; right: {{position.right}}px'/>")
-});
+<select-loader {promise}="states" {(value)}="state"
+               choose-text="Choose a state">
+  {{#each states.value}}
+    <option value="{{short}}">{{name}}</option>
+  {{/each}}
+</select-loader>
 ```
-
-
-By __orchastrate__, we mean that custom element communication is also setup in the 
-view with [view bindings](../docs/can.view.bindings.html). The following:
-
-- updates `<rating-box>`'s `rating` when `order.rating` changes.
-- updates `<my-slider>`'s  `value` when `order.rating` changes and
-  updates `order.rating` when `<my-slider>`'s `value` changes.
-
-```
-<order-page>
-  <rating-box {rating}="order.rating"/>
-  <my-slider start="0" end="10" {(value)}="order.rating"/>
-</order-page>
-```
-
 
 <a name="routing"></a>
 ### Routing with an AppViewModel
 
-CanJS maintains a reciprocal relationship between an application’s url
+CanJS maintains a reciprocal relationship between the browser's url
 and a [can.Map](../docs/can.Map.html) view-model. This view-model instance
 represents the state of the application as a whole and so is
 called the `appViewModel`.  When the url changes,
 CanJS will update the properties of the `appViewModel`.  When
-the `appViewModel` changes, CanJS will update the url.
+the `appViewModel` changes, CanJS will update the url.  
 
+[can.route](../docs/can.route.html) is used to setup the relationship between the 
+`appViewModel` and the URL. It can be used with both [pushstate](../docs/can.route.pushstate.html) and
+hashchange (the default) routing.  
+
+[Example: Route between <home-page> and <restaurants-page> custom elements.](http://jsbin.com/surokag/edit?html,js,output)
+```
+{{#eq page 'home'}}
+  <home-page/>
+{{else}}
+  <restaurants-page/>
+{{/eq}}
+```
 ```
 var AppViewModel = can.Map.extend({
-  define: {
-    
-  }
+  define: {}
 });
-
+// Create an instance of that map
 var appViewModel = new AppViewModel();
+
+// Connect the map to the browser's URL
 can.route.map(appViewModel);
+
+// Define pretty routing rules
+can.route(":page",{page: "home"});
+
+// Start the two-way binding between the URL and the `appViewModel`.
 can.route.ready();
 ```
 
-
-The `appViewModel` is used to render your application's 
-main template.
-
-```
-var mainTemplate = can.stache("....");
-$("body").append(mainTemplate(appViewModel));
-```
-
-By encapulating the state of your application, Application ViewModels free developers 
-from worrying about what the url looks like.  Instead, you can focus on
+Application ViewModels free developers 
+from worrying about what the url looks like. Instead, you focus on
 updating the state of the application.
-
 
 ## Using the Getting Started Guide
 Each chapter in the Getting Started Guide is prefaced with an overview of the
