@@ -931,5 +931,41 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		read = can.compute.read(root, can.compute.read.reads("plusOne") );
 		equal(read.value, 3, "static properties on a can.Construct-based function");
 	});
+	
+	test("handles missing update order items (#2121)",function(){
+		var root1 = can.compute("root1"),
+			child1 = can.compute(function(){
+				return root1();
+			}),
+			root2 = can.compute("root2"),
+			child2 = can.compute(function(){
+				return root2();
+			}),
+			gc2 = can.compute(function(){
+				return child2();
+			}),
+			res = can.compute(function(){
+				return child1() + gc2();
+			});
+			
+		res.bind("change", function(ev, newVal){
+			equal(newVal, "ROOT1root2");
+		});
+		
+		can.batch.start();
+		root1("ROOT1");
+		can.batch.stop();
+		
+	});
 
+	test("compute should not fire event when NaN is set multiple times #2128", function() {
+		var compute = can.compute(NaN);
+
+		compute.bind("change", function() {
+			ok(false, "change event should not be fired");
+		});
+
+		ok(isNaN(compute()));
+		compute(NaN);
+	});
 });

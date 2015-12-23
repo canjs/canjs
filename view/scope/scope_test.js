@@ -403,4 +403,17 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		equal(root, map, "The root is the map passed into the scope");
 	});
 
+	test("can set scope attributes with ../ (#2132)", function(){
+		
+		var map = new can.Map();
+		var scope = new can.view.Scope(map);
+		var top = scope.add(new can.Map());
+		
+		top.attr("../foo", "bar");
+		
+		equal(map.attr("foo"), "bar");
+		
+	});
+
+
 });

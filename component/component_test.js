@@ -1531,6 +1531,52 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			});
 		});
 		
+		test("wrong context inside <content> tags (#2092)", function(){
+
+			can.Component.extend({
+				tag: 'some-context',
+				viewModel: {
+					value: "WRONG",
+					items: [{value: "A", name: "X"}, {value: "B", name: "Y"}]
+				},
+				template: can.stache("{{#each items}}<content><span>{{name}}</span></content>{{/each}}")
+			});
+			
+			var templateA = can.stache("<some-context><span>{{value}}</span></some-context>");
+			
+			var frag = templateA({});
+			
+			var spans = frag.firstChild.getElementsByTagName("span");
+			
+			equal(spans[0].firstChild.nodeValue, "A", "context is right");
+			equal(spans[1].firstChild.nodeValue, "B", "context is right");
+			
+			var templateB = can.stache("<some-context/>");
+			
+			frag = templateB({});
+			
+			spans = frag.firstChild.getElementsByTagName("span");
+			
+			equal(spans[0].firstChild.nodeValue, "X", "context is right X");
+			equal(spans[1].firstChild.nodeValue, "Y", "context is right");
+			
+		});
+
+		test("%root property should not be serialized inside prototype of can.Component constructor (#2080)", function () {
+			var viewModel = can.Map.extend({});
+
+			can.Component.extend({
+				tag: "foo",
+				viewModel: viewModel,
+				init: function () {
+					ok(!this.viewModel.serialize()['%root'], "serialized viewModel contains '%root' property");
+				}
+			});
+
+			var template = can.stache("<foo/>");
+
+			can.append(this.$fixture, template());
+		});
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
@@ -1759,6 +1805,28 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			can.append(can.$("#qunit-fixture"), can.stache("<comp-control-destroy-test></comp-control-destroy-test>")({}));
 			can.remove(can.$("#qunit-fixture>*"));
 			can.trigger(can.$(document), 'click');
+		});
+		
+		test("<content> tag doesn't leak memory", function(){
+
+			can.Component.extend({
+				tag: 'my-viewer',
+				template: can.stache('<div><content /></div>')
+			});
+			
+			var template = can.stache('{{#show}}<my-viewer>{{value}}</my-viewer>{{/show}}');
+			
+			var map = new can.Map({show: true, value: "hi"});
+			
+			can.append(can.$("#qunit-fixture"), template(map));
+			
+			map.attr("show", false);
+			map.attr("show", true);
+			map.attr("show", false);
+			map.attr("show", true);
+			map.attr("show", false);
+			equal(map._bindings,1, "only one binding");
+			can.remove(can.$("#qunit-fixture>*"));
 		});
 		
 		// PUT NEW TESTS THAT NEED TO TEST AGAINST MUSTACHE JUST ABOVE THIS LINE

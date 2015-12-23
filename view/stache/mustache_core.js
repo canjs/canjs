@@ -195,7 +195,7 @@ steal("can/util",
 
 				var nodeList = [this];
 				nodeList.expression = ">" + partialName;
-				nodeLists.register(nodeList, null, state.directlyNested ? parentSectionNodeList || true :  true);
+				nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
 
 				var partialFrag = can.compute(function(){
 					var localPartialName = partialName;
@@ -295,7 +295,7 @@ steal("can/util",
 				nodeList.expression = expressionString;
 				// register this nodeList.
 				// Regsiter it with its parent ONLY if this is directly nested.  Otherwise, it's unencessary.
-				nodeLists.register(nodeList, null, state.directlyNested ? parentSectionNodeList || true :  true);
+				nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
 
 
 				// Get the evaluator. This does not need to be cached (probably) because if there

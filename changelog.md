@@ -3,6 +3,49 @@
 @parent guides 5
 -->
 
+__2.3.7__ ( Dec 15 2015 )
+
+- [Incorrect view model context with &lt;content/&gt;](https://github.com/canjs/canjs/issues/2137)
+- [List replace with deferreds does not take into account stale/overtaken deferreds](https://github.com/canjs/canjs/issues/2136)
+- [two-way binding bug regarding select dropdowns when value is set in inserted or init](https://github.com/canjs/canjs/issues/2134)
+- [support backtrack path in export {^to-parent} bindings](https://github.com/canjs/canjs/issues/2132)
+- [Inconsistent binding with &quot;with&quot; helper](https://github.com/canjs/canjs/issues/2129)
+- [can.compute | NaN -&gt; NaN dispatches a change event](https://github.com/canjs/canjs/issues/2128)
+- [{{(at)index}} doesn&#39;t work with arrays inside arrays](https://github.com/canjs/canjs/issues/2127)
+- [Using a define getter breaks pushstate url updates.](https://github.com/canjs/canjs/issues/2105)
+- [Wrong context inside &lt;content/&gt;](https://github.com/canjs/canjs/issues/2092)
+- [expressions are caching Args computes in the wrong spots](https://github.com/canjs/canjs/issues/1971)
+- [Dynamic select menus don&#39;t live bind correctly](https://github.com/canjs/canjs/issues/1762)
+
+
+__2.3.6__ ( Dec 11 2015 )
+
+- [Cannot read property &#39;pop&#39; of undefined ](https://github.com/canjs/canjs/issues/2121)
+- [can.view.txt does not handle binding hookup on self-closing elements correctly](https://github.com/canjs/canjs/issues/2113)
+- [%root property is serialized when can.Map instance is shared between a component viewModel and a can.route](https://github.com/canjs/canjs/issues/2080)
+
+
+__2.3.5__ ( Dec 03 2015 )
+
+- [Binding an undefined property to a component runs the setter](https://github.com/canjs/canjs/issues/2117)
+- [Passing a function reference with @ runs it](https://github.com/canjs/canjs/issues/2116)
+
+
+__2.3.4__ ( Dec 02 2015 )
+
+- [Update each.js](https://github.com/canjs/canjs/pull/2114)
+- [Stache leaks](https://github.com/canjs/canjs/pull/2111)
+- [Stache removes attribute &quot;id&quot;  from input elements if value should be interpolated](https://github.com/canjs/canjs/issues/2110)
+- [makes dynamic bindings work](https://github.com/canjs/canjs/pull/2108)
+- [makes attributes that point to {} or {{}} work without enclosing quotes](https://github.com/canjs/canjs/pull/2107)
+- [Dynamic bindings broken](https://github.com/canjs/canjs/issues/2106)
+- [Update deprecated_models.md](https://github.com/canjs/canjs/pull/2104)
+- [quotes around attributes](https://github.com/canjs/canjs/issues/2097)
+- [deprecation warning not showing up](https://github.com/canjs/canjs/issues/2091)
+- [Stache templates leak for various reasons](https://github.com/canjs/canjs/issues/2090)
+- [can.each doesn&#39;t work if elements is missing `hasOwnProperty`](https://github.com/canjs/canjs/issues/1958)
+
+
 __2.3.3__ ( Nov 30 2015 )
 
 - [can.__isRecording observes doesn&#39;t understand can.__notObserve](https://github.com/canjs/canjs/issues/2099)

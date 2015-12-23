@@ -41,7 +41,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 					// so that if the html is re
 					var nodeList = [el];
 					nodeList.expression = "live.list";
-					can.view.nodeLists.register(nodeList, null, options.nodeList);
+					can.view.nodeLists.register(nodeList, null, options.nodeList, true);
+					// runs nest replacements
 					can.view.nodeLists.update(options.nodeList, [el]);
 
 					var cb = function (item, index, parentNodeList) {

@@ -1770,7 +1770,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	
 	test("dynamic attribute bindings (#2016)", function(){
 
-		var template = can.view.stache("<input {($value)}='{{propName}}'/>");
+		var template = can.stache("<input {($value)}='{{propName}}'/>");
 
 		var map = new can.Map({propName: 'first', first: "Justin", last: "Meyer"});
 
@@ -1798,5 +1798,213 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		},10);
 
 	});
+	
+	test("select bindings respond to changes immediately or during insert (#2134)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'},
+			{code: 'IND', countryName:'INDIA'},
+			{code: 'RUS', countryName:'RUSSIA'}
+		];
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var frag = template(data);
+		data.attr('countryCode', 'IND');
+		
+		stop();
+		setTimeout(function(){
+			start();
+			equal(frag.firstChild.value, "IND", "got last updated value");
+		},10);
+		
+	});
+	
+	test("select bindings respond to changes immediately or during insert using can-value (#2134)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'},
+			{code: 'IND', countryName:'INDIA'},
+			{code: 'RUS', countryName:'RUSSIA'}
+		];
+		
+		var template = can.stache('<select can-value="{countryCode}">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var frag = template(data);
+		data.attr('countryCode', 'IND');
+		
+		stop();
+		setTimeout(function(){
+			start();
+			equal(frag.firstChild.value, "IND", "got last updated value");
+		},10);
+		
+	});
+	
+	test("select bindings work if options are replaced (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		data.bind("countryCode", function(ev, newVal){
+			ok(false, "countryCode changed to "+newVal);
+		});
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/countries}}'+
+		'</select>');
+		
+		template(data);
+		stop();
+		setTimeout(function(){
+			data.attr("countries").replace([
+				{code: 'IND', countryName:'INDIA'},
+				{code: 'RUS', countryName:'RUSSIA'},
+				{code: 'US', countryName:'USA'}
+			]);
+			
+			setTimeout(function(){
+				equal(data.attr("countryCode"), "US", "country set to USA");
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
+	
+	
+	test("@function reference to child (#2116)", function(){
+		expect(2);
+		var template = can.stache('<foo-bar {@child}="@parent"></foo-bar>');
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				method: function(){
+					ok(false, "should not be called");
+				}
+			}
+		});
+
+		var VM = can.Map.extend({
+			parent : function() {
+				ok(false, "should not be called");
+			}
+		});
+
+		var vm = new VM({});
+		var frag = template(vm);
+
+		equal( typeof can.viewModel(frag.firstChild).attr("child"), "function", "to child binding");
+		
+		
+		template = can.stache('<foo-bar {^@method}="@vmMethod"></foo-bar>');
+		vm = new VM({});
+		template(vm);
+		
+		ok(typeof vm.attr("vmMethod") === "function", "parent export function");
+	});
+	
+	test("setter only gets called once (#2117)", function(){
+		expect(1);
+		var VM = can.Map.extend({
+			_set: function(prop, val){
+				if(prop === "bar") {
+					equal(val, "BAR");
+				}
+				return can.Map.prototype._set.apply(this, arguments);
+			}
+		});
+		
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : VM
+		});
+		
+		var template = can.stache('<foo-bar {bar}="bar"/>');
+		
+		template(new can.Map({bar: "BAR"}));
+		
+	});
+	
+	test("function reference to child binding (#2116)", function(){
+		expect(2);
+		var template = can.stache('<foo-bar {child}="@parent"></foo-bar>');
+		can.Component.extend({
+			tag : 'foo-bar',
+			viewModel : {
+				
+			}
+		});
+
+		var VM = can.Map.extend({
+		});
+
+		var vm = new VM({});
+		var frag = template(vm);
+		
+		vm.attr("parent", function(){ ok(false, "should not be called"); });
+
+		equal( typeof can.viewModel(frag.firstChild).attr("child"), "function", "to child binding");
+		
+		
+		template = can.stache('<foo-bar {^@method}="vmMethod"></foo-bar>');
+		vm = new VM({});
+		frag = template(vm);
+		
+		can.viewModel(frag.firstChild).attr("method",function(){
+			ok(false, "method should not be called");
+		});
+		
+		equal(typeof vm.attr("vmMethod"), "function", "parent export function");
+
+	});
+	
+	test("backtrack path in to-parent bindings (#2132)", function(){
+		can.Component.extend({
+			tag: "parent-export",
+			viewModel: {
+				value: "VALUE"
+			}
+		});
+		
+		var template = can.stache("{{#innerMap}}<parent-export {^value}='../parentValue'/>{{/innerMap}}");
+		
+		var data = new can.Map({
+			innerMap: {}
+		});
+		
+		template(data);
+		
+		equal(data.attr("parentValue"), "VALUE", "set on correct context");
+		equal(data.attr("innerMap.parentValue"), undefined, "nothing on innerMap");
+		
+	});
+	
+	
+	
+	
 
 });

@@ -153,6 +153,13 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								viewModel = new(can.Map.extend(scopeResult))(initialViewModelData);
 							}
 						}
+
+						var oldSerialize = viewModel.serialize;
+						viewModel.serialize = function () {
+							var result = oldSerialize.apply(this, arguments);
+							delete result["%root"];
+							return result;
+						};
 						
 						return viewModel;
 					}, initialViewModelData));
@@ -223,7 +230,8 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				// ## Rendering
 
 				// Keep a nodeList so we can kill any directly nested nodeLists within this component
-				var nodeList = can.view.nodeLists.register([], undefined, true);
+				var nodeList = can.view.nodeLists.register([], undefined, componentTagData.parentNodeList || true, false);
+				nodeList.expression = "<"+this.tag+">";
 				teardownFunctions.push(function(){
 					can.view.nodeLists.unregister(nodeList);
 				});
@@ -281,7 +289,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								// use the same scope as the <content> tag was found within.
 								lightTemplateData = contentTagData;
 							}
-
+							
 							if(contentTagData.parentNodeList) {
 								var frag = subtemplate( lightTemplateData.scope, lightTemplateData.options, contentTagData.parentNodeList );
 								elements.replace([el], frag);

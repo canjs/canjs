@@ -19,9 +19,12 @@ steal('can/util/can.js', function (can) {
 			// valid table with a `tbody` that has the `innerHTML` we want.
 			// Then the container is the `firstChild` of the `tbody`.
 			// [source](http://www.ericvasilik.com/2006/07/code-karma.html).
-			if (name === 'tbody' || name === 'tfoot' || name === 'thead') {
+			if (name === 'tbody' || name === 'tfoot' || name === 'thead' || name === 'colgroup') {
 				temp.innerHTML = '<table>' + html + '</table>';
 				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild;
+			} else if (name === 'col') {
+				temp.innerHTML = '<table><colgroup>' + html + '</colgroup></table>';
+				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild.firstChild;
 			} else if (name === 'tr') {
 				temp.innerHTML = '<table><tbody>' + html + '</tbody></table>';
 				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild.firstChild;

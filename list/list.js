@@ -833,7 +833,17 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 */
 		replace: function (newList) {
 			if (can.isDeferred(newList)) {
-				newList.then(can.proxy(this.replace, this));
+				if(this._promise) {
+					this._promise.__isCurrentPromise = false;
+				}
+				var promise = this._promise = newList;
+				promise.__isCurrentPromise = true;
+				var self = this;
+				newList.then(function(newList){
+					if(promise.__isCurrentPromise) {
+						self.replace(newList);
+					}
+				});
 			} else {
 				this.splice.apply(this, [0, this.length].concat(can.makeArray(newList || [])));
 			}

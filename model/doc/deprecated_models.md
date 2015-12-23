@@ -1,6 +1,11 @@
 @function can.Model.models models
 @parent can.Model.static
 
+@deprecated {2.1} Prior to 2.1, `.models` was used to convert the ajax
+responses into a data format useful for converting them into an observable
+list AND for converting them into that list. In 2.1, [can.Model.parseModels] should
+be used to convert the ajax responses into a data format useful to [can.Model.models].
+
 @description Convert raw data into can.Model instances. Merge data with items in
 the store if matches are found.
 
@@ -12,12 +17,6 @@ __data__.
 
 
 @body
-
-#### WARNING:
-Prior to 2.1, `.models` was used to convert the ajax
-responses into a data format useful for converting them into an observable
-list AND for converting them into that list. In 2.1, [can.Model.parseModels] should
-be used to convert the ajax responses into a data format useful to [can.Model.models].
 
 ## Use
 
