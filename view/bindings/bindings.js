@@ -10,11 +10,11 @@
 // - getBindingInfo - A helper that returns the details of a data binding given an attribute.
 // - makeDataBinding - A helper method for setting up a data binding.
 // - initializeValues - A helper that initializes a data binding.
-steal("can/util", 
-	"can/view/stache/expression.js", 
-	"can/view/callbacks", 
+steal("can/util",
+	"can/view/stache/expression.js",
+	"can/view/callbacks",
 	"can/view/live",
-	"can/view/scope", 
+	"can/view/scope",
 	"can/view/href", function (can, expression, viewCallbacks, live) {
 	
 	// ## Behaviors
@@ -502,7 +502,6 @@ steal("can/util",
 				timer,
 				// Sets the element property or attribute.
 				set = function(newVal){
-					console.log("SET");
 					// Templates write parent's out before children.  This should probably change.
 					// But it means we don't do a set immediately.
 					if(hasChildren && !scheduledAsyncSet) {
@@ -551,7 +550,6 @@ steal("can/util",
 				},
 				// Returns the value of the element property or attribute.
 				get = function(){
-					console.log("GET");
 					if(isMultiselectValue) {
 	
 						var values = [],
@@ -584,22 +582,33 @@ steal("can/util",
 				// to be undefined.
 				// el.selectedIndex = -1;
 			}
-	
+			var observer;
+			
 			return can.compute(get(),{
 				on: function(updater){
 					can.each(event, function(eventName){
 						can.bind.call(el,eventName, updater);
 					});
 					if(hasChildren) {
-						console.log("SETTING UP");
-						can.data(can.$(el), "canBindingCallback", function(){
-							console.log("MUTATED");
+						var onMuataion = function (mutations) {
 							if(stickyCompute) {
 								set(stickyCompute());
 							} else {
-								scheduledAsyncSet && updater();
+								if(scheduledAsyncSet) {
+									updater();
+								}
 							}
-						});
+						};
+						if(can.attr.MutationObserver) {
+							observer = new can.attr.MutationObserver(onMuataion);
+							observer.observe(el, {
+								childList: true,
+								subtree: true
+							});
+						} else {
+							// TODO: Remove in 3.0.
+							can.data(can.$(el), "canBindingCallback", onMuataion);
+						}
 					}
 					
 				},
@@ -608,7 +617,11 @@ steal("can/util",
 						can.unbind.call(el,eventName, updater);
 					});
 					if(hasChildren) {
-						can.data(can.$(el), "canBindingCallback",null);
+						if(can.attr.MutationObserver) {
+							observer.disconnect();
+						} else {
+							can.data(can.$(el), "canBindingCallback",null);
+						}
 					}
 				},
 				get: get,
@@ -905,17 +918,23 @@ steal("can/util",
 		}
 	};
 	
-	//
-	var updateSelectValue = function(el){
-		var bindingCallback = can.data(can.$(el),"canBindingCallback");
-		if(bindingCallback) {
-			bindingCallback(el);
-		}
-	};
-	live.registerChildMutationCallback("select",updateSelectValue);
-	live.registerChildMutationCallback("optgroup",function(el){
-		updateSelectValue(el.parentNode);
-	});
+	// For "sticky" select values, we need to know when `<option>`s are
+	// added or removed to a `<select>`.  If we don't have 
+	// MutationObserver, we need to setup can.view.live to
+	// callback when this happens.
+	if( can.attr.MutationObserver ) {
+		var updateSelectValue = function(el){
+			var bindingCallback = can.data(can.$(el),"canBindingCallback");
+			if(bindingCallback) {
+				bindingCallback(el);
+			}
+		};
+		live.registerChildMutationCallback("select",updateSelectValue);
+		live.registerChildMutationCallback("optgroup",function(el){
+			updateSelectValue(el.parentNode);
+		});
+	}
+	
 	
 	// ## isContentEditable
 	// Determines if an element is contenteditable.

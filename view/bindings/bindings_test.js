@@ -1874,12 +1874,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'{{/countries}}'+
 		'</select>');
 		
-		var frag = template(data);
-		var select = frag.firstChild;
+		template(data);
+		
 		stop();
 		setTimeout(function(){
-			console.log("empting list",select.value, select.selectedIndex);
-			
 			data.attr("countries").replace([]);
 			
 		
@@ -1909,12 +1907,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'{{/each}}'+
 		'</select>');
 		
-		var frag = template(data);
-		var select = frag.firstChild;
+		template(data);
 		stop();
 		setTimeout(function(){
-			console.log("empting list",select.value, select.selectedIndex);
-			
 			data.attr("countries").replace([]);
 			
 		
@@ -1948,14 +1943,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var select = frag.firstChild;
 		stop();
 		setTimeout(function(){
-			console.log("empting list",select.value, select.selectedIndex);
 			
 			data.attr("countries").replace([]);
 			
-			
-			console.log("emptied list",select.value, select.selectedIndex);
 			setTimeout(function(){
-				console.log("adding back",select.value, select.selectedIndex);
 				data.attr("countries").replace(countries);
 				
 				equal(data.attr("countryCode"), "US", "country kept as USA");
@@ -1991,14 +1982,10 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var select = frag.firstChild;
 		stop();
 		setTimeout(function(){
-			console.log("empting list",select.value, select.selectedIndex);
 			
 			data.attr("countries").replace([]);
 			
-			
-			console.log("emptied list",select.value, select.selectedIndex);
 			setTimeout(function(){
-				console.log("adding back",select.value, select.selectedIndex);
 				data.attr("countries").replace(countries);
 				
 				equal(data.attr("countryCode"), "US", "country kept as USA");
