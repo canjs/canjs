@@ -1858,7 +1858,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-	test("select bindings work if options are replaced (#1762)", function(){
+	test("two-way <select> bindings update to `undefined` if options are replaced (#1762)", function(){
 		var countries = [{code: 'MX', countryName:'MEXICO'},
 			{code: 'US', countryName:'USA'}
 		];
@@ -1867,9 +1867,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			countryCode: 'US',
 			countries: countries
 		});
-		data.bind("countryCode", function(ev, newVal){
-			ok(false, "countryCode changed to "+newVal);
-		});
 		
 		var template = can.stache('<select {($value)}="countryCode">'+
 			'{{#countries}}'+
@@ -1877,17 +1874,17 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			'{{/countries}}'+
 		'</select>');
 		
-		template(data);
+		var frag = template(data);
+		var select = frag.firstChild;
 		stop();
 		setTimeout(function(){
-			data.attr("countries").replace([
-				{code: 'IND', countryName:'INDIA'},
-				{code: 'RUS', countryName:'RUSSIA'},
-				{code: 'US', countryName:'USA'}
-			]);
+			console.log("empting list",select.value, select.selectedIndex);
 			
+			data.attr("countries").replace([]);
+			
+		
 			setTimeout(function(){
-				equal(data.attr("countryCode"), "US", "country set to USA");
+				equal(data.attr("countryCode"), undefined, "countryCode set to undefined");
 				
 				start();
 			},10);
@@ -1896,6 +1893,126 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
+	test("two-way <select> bindings update to `undefined` if options are replaced - each (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var frag = template(data);
+		var select = frag.firstChild;
+		stop();
+		setTimeout(function(){
+			console.log("empting list",select.value, select.selectedIndex);
+			
+			data.attr("countries").replace([]);
+			
+		
+			setTimeout(function(){
+				equal(data.attr("countryCode"), undefined, "countryCode set to undefined");
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
+	
+	test("one-way <select> bindings keep value if options are replaced (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {$value}="countryCode">'+
+			'{{#countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/countries}}'+
+		'</select>');
+		
+		var frag = template(data);
+		var select = frag.firstChild;
+		stop();
+		setTimeout(function(){
+			console.log("empting list",select.value, select.selectedIndex);
+			
+			data.attr("countries").replace([]);
+			
+			
+			console.log("emptied list",select.value, select.selectedIndex);
+			setTimeout(function(){
+				console.log("adding back",select.value, select.selectedIndex);
+				data.attr("countries").replace(countries);
+				
+				equal(data.attr("countryCode"), "US", "country kept as USA");
+				
+				setTimeout(function(){
+					ok( select.getElementsByTagName("option")[1].selected, "USA still selected");
+				},10);
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
+	
+	test("one-way <select> bindings keep value if options are replaced - each (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {$value}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var frag = template(data);
+		var select = frag.firstChild;
+		stop();
+		setTimeout(function(){
+			console.log("empting list",select.value, select.selectedIndex);
+			
+			data.attr("countries").replace([]);
+			
+			
+			console.log("emptied list",select.value, select.selectedIndex);
+			setTimeout(function(){
+				console.log("adding back",select.value, select.selectedIndex);
+				data.attr("countries").replace(countries);
+				
+				equal(data.attr("countryCode"), "US", "country kept as USA");
+				
+				setTimeout(function(){
+					ok( select.getElementsByTagName("option")[1].selected, "USA still selected");
+				},10);
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
 	
 	test("@function reference to child (#2116)", function(){
 		expect(2);

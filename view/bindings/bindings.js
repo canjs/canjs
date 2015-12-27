@@ -10,7 +10,12 @@
 // - getBindingInfo - A helper that returns the details of a data binding given an attribute.
 // - makeDataBinding - A helper method for setting up a data binding.
 // - initializeValues - A helper that initializes a data binding.
-steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/control", "can/view/scope", "can/view/href", function (can, expression, viewCallbacks) {
+steal("can/util", 
+	"can/view/stache/expression.js", 
+	"can/view/callbacks", 
+	"can/view/live",
+	"can/view/scope", 
+	"can/view/href", function (can, expression, viewCallbacks, live) {
 	
 	// ## Behaviors
 	var behaviors = {
@@ -433,7 +438,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	var getComputeFrom = {
 		// ### getComputeFrom.scope
 		// Returns a compute from the scope.  This handles expressions like `someMethod(.,1)`.
-		scope: function(el, scope, scopeProp, bindingData, mustBeACompute){
+		scope: function(el, scope, scopeProp, bindingData, mustBeACompute, stickyCompute){
 			if(!scopeProp) {
 				return can.compute();
 			} else {
@@ -452,7 +457,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		// ### getComputeFrom.viewModel
 		// Returns a compute that's two-way bound to the `viewModel` returned by 
 		// `options.getViewModel()`.
-		viewModel: function(el, scope, vmName, bindingData, mustBeACompute) {
+		viewModel: function(el, scope, vmName, bindingData, mustBeACompute, stickyCompute) {
 			var setName = cleanVMName(vmName);
 			if(mustBeACompute) {
 				return can.compute(function(newVal){
@@ -473,7 +478,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		},
 		// ### getComputeFrom.attribute
 		// Returns a compute that is two-way bound to an attribute or property on the element.
-		attribute: function(el, scope, prop, bindingData, mustBeACompute, event){
+		attribute: function(el, scope, prop, bindingData, mustBeACompute, stickyCompute, event){
 			// Determine the event or events we need to listen to 
 			// when this value changes.
 			if(!event) {
@@ -497,6 +502,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				timer,
 				// Sets the element property or attribute.
 				set = function(newVal){
+					console.log("SET");
 					// Templates write parent's out before children.  This should probably change.
 					// But it means we don't do a set immediately.
 					if(hasChildren && !scheduledAsyncSet) {
@@ -545,6 +551,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				},
 				// Returns the value of the element property or attribute.
 				get = function(){
+					console.log("GET");
 					if(isMultiselectValue) {
 	
 						var values = [],
@@ -583,11 +590,26 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 					can.each(event, function(eventName){
 						can.bind.call(el,eventName, updater);
 					});
+					if(hasChildren) {
+						console.log("SETTING UP");
+						can.data(can.$(el), "canBindingCallback", function(){
+							console.log("MUTATED");
+							if(stickyCompute) {
+								set(stickyCompute());
+							} else {
+								scheduledAsyncSet && updater();
+							}
+						});
+					}
+					
 				},
 				off: function(updater){
 					can.each(event, function(eventName){
 						can.unbind.call(el,eventName, updater);
 					});
+					if(hasChildren) {
+						can.data(can.$(el), "canBindingCallback",null);
+					}
 				},
 				get: get,
 				set: set
@@ -675,7 +697,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	// - `bindingAttributeName` - the attribute name that created this binding.
 	// - `initializeValues` - should parent and child be initialized to their counterpart.
 	// If undefined is return, there is no binding.
-	var getBindingInfo = function(node, attributeViewModelBindings, templateType){
+	var getBindingInfo = function(node, attributeViewModelBindings, templateType, tagName){
 		var attributeName = node.name,
 			attributeValue = node.value || "";
 		
@@ -730,8 +752,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		var childName = matches[3];
 		var isDOM = childName.charAt(0) === "$";
 		if(isDOM) {
-			
-			return {
+			var bindingInfo = {
 				parent: "scope",
 				child: "attribute",
 				childToParent: childToParent,
@@ -741,6 +762,10 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				parentName: attributeValue,
 				initializeValues: true
 			};
+			if(tagName === "select" && !childToParent) {
+				bindingInfo.stickyParentToChild = true;
+			}
+			return bindingInfo;
 		} else {
 			return {
 				parent: "scope",
@@ -783,7 +808,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 	var makeDataBinding = function(node, el, bindingData){
 		
 		// Get information about the binding.
-		var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType);
+		var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType, el.nodeName.toLowerCase());
 		if(!bindingInfo) {
 			return;
 		}
@@ -795,11 +820,12 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		
 		// Get computes for the parent and child binding
 		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData, bindingInfo.parentToChild),
-			childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent),
+			childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent, bindingInfo.stickyParentToChild && parentCompute),
 			
 			// these are the functions bound to one compute that update the other.
 			updateParent,
-			updateChild;
+			updateChild,
+			childLifecycle;
 		
 		// Only bind to the parent if it will update the child.
 		if(bindingInfo.parentToChild){
@@ -814,6 +840,11 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 				updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName,
 					bindingData.syncChildWithParent);
 			}
+			// the child needs to be bound even if
+			else if(bindingInfo.stickyParentToChild) {
+				childCompute.bind("change", childLifecycle = can.k);
+			}
+			
 			if(bindingInfo.initializeValues) {
 				initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
 			}
@@ -824,6 +855,7 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 		var onTeardown = function() {
 			unbindUpdate(parentCompute, updateChild);
 			unbindUpdate(childCompute, updateParent);
+			unbindUpdate(childCompute, childLifecycle);
 		};
 		// If this binding depends on the viewModel, which might not have been created,
 		// return the function to complete the binding as `onCompleteBinding`.
@@ -872,6 +904,18 @@ steal("can/util", "can/view/stache/expression.js", "can/view/callbacks", "can/co
 			}
 		}
 	};
+	
+	//
+	var updateSelectValue = function(el){
+		var bindingCallback = can.data(can.$(el),"canBindingCallback");
+		if(bindingCallback) {
+			bindingCallback(el);
+		}
+	};
+	live.registerChildMutationCallback("select",updateSelectValue);
+	live.registerChildMutationCallback("optgroup",function(el){
+		updateSelectValue(el.parentNode);
+	});
 	
 	// ## isContentEditable
 	// Determines if an element is contenteditable.
