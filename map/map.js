@@ -252,9 +252,9 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// property is represented by a computed attribute, return the value of that compute.  
 			// If no argument is provided, return the raw data.
 			___get: function (attr) {
-				var computedAttr = this._computedAttrs[attr];
 				if (attr) {
-					if (this.___isComputedAttr(attr)) {
+					var computedAttr = this._computedAttrs[attr];
+					if (computedAttr && computedAttr.compute) {
 						return computedAttr.compute();
 					} else {
 						return this._data[attr];
@@ -262,17 +262,6 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				} else {
 					return this._data;
 				}
-			},
-
-			___isComputedAttr: function (attr) {
-				var computedAttrs = this._computedAttrs;
-				var result = computedAttrs[attr] || false;
-				if (Object.prototype.watch || Object.prototype.unwatch) {
-					if (attr === 'watch' || attr === 'unwatch') {
-						result = computedAttrs.hasOwnProperty(attr);
-					}
-				}
-				return result;
 			},
 
 			// ### _set
