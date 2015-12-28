@@ -6,7 +6,8 @@ steal('can/util/can.js', function (can) {
 		transactions = 0,
 		dispatchingBatch = null,
 		collectingBatch = null,
-		batches = [];
+		batches = [],
+		dispatchingBatches = false;
 		
 	can.batch = {
 		/**
@@ -181,7 +182,8 @@ steal('can/util/can.js', function (can) {
 			if (transactions === 0) {
 				collectingBatch = null;
 				var batch;
-				if(batches.length === 1) {
+				if(dispatchingBatches === false) {
+					dispatchingBatches = true;
 					while(batch = batches.shift()) {
 						var events = batch.events;
 						var callbacks = batch.callbacks;
@@ -207,6 +209,7 @@ steal('can/util/can.js', function (can) {
 						can.batch.batchNum = undefined;
 						
 					}
+					dispatchingBatches = false;
 				}
 				
 				
@@ -252,7 +255,14 @@ steal('can/util/can.js', function (can) {
 			}
 		},
 		afterPreviousEvents: function(handler){
-			handler({});
+			var batch = can.last(batches);
+			
+			if(batch) {
+				batch.callbacks.push(handler);
+			} else {
+				handler({});
+			}
+			
 		},
 		after: function(handler){
 			var batch = collectingBatch || dispatchingBatch;

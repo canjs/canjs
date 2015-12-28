@@ -25,10 +25,15 @@ steal("can/util", function(can){
 		///this.count = 0;
 		this.ignore = 0;
 		this.inBatch = false;
+		this.ready = false;
 		compute.observedInfo = this;
+		this.setReady = can.proxy(this._setReady, this);
 	}
 	
 	can.simpleExtend(ObservedInfo.prototype,{
+		_setReady: function(){
+			this.ready = true;
+		},
 		getDepth: function(){
 			if(this.depth !== null) {
 				return this.depth;
@@ -61,7 +66,7 @@ steal("can/util", function(can){
 			}
 		},
 		onDependencyChange: function(ev){
-			if(this.bound) {
+			if(this.bound && this.ready) {
 				if(ev.batchNum !== undefined) {
 					// Only need to register once per batchNum
 					if(ev.batchNum !== this.batchNum) {
@@ -80,6 +85,7 @@ steal("can/util", function(can){
 			this.getValueAndBind();
 			// Update the compute with the new value.
 			this.compute.updater(this.value, oldValue, batchNum);
+			
 		},
 		// ## getValueAndBind
 		// Calls `func` with "this" as `context` and binds to any observables that
@@ -91,6 +97,7 @@ steal("can/util", function(can){
 			this.oldObserved = this.newObserved || {};
 			this.ignore = 0;
 			this.newObserved = {};
+			this.ready = false;
 			
 			// Add this function call's observedInfo to the stack,
 			// runs the function, pops off the observedInfo, and returns it.
@@ -99,7 +106,7 @@ steal("can/util", function(can){
 			this.value = this.func.call(this.context);
 			observedInfoStack.pop();
 			this.updateBindings();
-			
+			can.batch.afterPreviousEvents(this.setReady);
 		},
 		// ### updateBindings
 		// Unbinds everything in `oldObserved`.

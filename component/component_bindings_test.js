@@ -1677,7 +1677,56 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 			setTimeout(next,10);
 		});
 		
+		test("<content> (#2151)", function(){
 
+			can.Component.extend({
+				tag : 'list-items',
+				template : can.stache("<ul>"+
+					"{{#items}}"+
+						"{{#if render}}"+
+							"<li><content /></li>"+
+						"{{/if}}"+
+						"{{/items}}"+
+					"</ul>"),
+				viewModel : {
+					define : {
+						items : {
+							value : function() {
+								return new can.List([{
+									id : 1,
+									context : 'Item 1',
+									render : false
+								}, {
+									id : 2,
+									context : 'Item 2',
+									render : false
+								}]);
+							}
+						}
+					}
+				}
+			});
+
+			can.Component.extend({
+				tag : 'list-item',
+				template : can.stache("{{item.context}}")
+			});
+
+			var template = can.stache("<list-items><list-item item='{.}'/></list-items>");
+			
+			var frag = template();
+			
+			can.batch.start();
+			can.viewModel(frag.firstChild).attr('items').each(function(item, index) {
+				item.attr('render', true);
+			});
+			can.batch.stop();
+			
+			var lis = frag.firstChild.getElementsByTagName("li");
+			ok( innerHTML(lis[0]).indexOf("Item 1") >= 0, "Item 1 written out");
+			ok( innerHTML(lis[1]).indexOf("Item 2") >= 0, "Item 2 written out");
+			
+		});
 	}
 
 	makeTest("can/component new bindings dom", document);

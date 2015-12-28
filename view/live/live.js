@@ -456,7 +456,10 @@ steal('can/util',
 							.bind('remove', remove)
 							.bind('move', move);
 					}
-					afterPreviousEvents = true;
+					
+					can.batch.afterPreviousEvents(function(){
+						afterPreviousEvents = true;
+					});
 				};
 			parentNode = elements.getParentNode(el, parentNode);
 			// Setup binding and teardown to add and remove events
