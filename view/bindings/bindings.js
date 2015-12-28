@@ -922,7 +922,7 @@ steal("can/util",
 	// added or removed to a `<select>`.  If we don't have 
 	// MutationObserver, we need to setup can.view.live to
 	// callback when this happens.
-	if( can.attr.MutationObserver ) {
+	if( !can.attr.MutationObserver ) {
 		var updateSelectValue = function(el){
 			var bindingCallback = can.data(can.$(el),"canBindingCallback");
 			if(bindingCallback) {
