@@ -590,7 +590,7 @@ steal("can/util",
 						can.bind.call(el,eventName, updater);
 					});
 					if(hasChildren) {
-						var onMuataion = function (mutations) {
+						var onMutation = function (mutations) {
 							if(stickyCompute) {
 								set(stickyCompute());
 							} else {
@@ -600,14 +600,14 @@ steal("can/util",
 							}
 						};
 						if(can.attr.MutationObserver) {
-							observer = new can.attr.MutationObserver(onMuataion);
+							observer = new can.attr.MutationObserver(onMutation);
 							observer.observe(el, {
 								childList: true,
 								subtree: true
 							});
 						} else {
-							// TODO: Remove in 3.0.
-							can.data(can.$(el), "canBindingCallback", onMuataion);
+							// TODO: Remove in 3.0. Can't store a function b/c Zepto doesn't support it.
+							can.data(can.$(el), "canBindingCallback", {onMutation: onMutation});
 						}
 					}
 					
@@ -926,7 +926,7 @@ steal("can/util",
 		var updateSelectValue = function(el){
 			var bindingCallback = can.data(can.$(el),"canBindingCallback");
 			if(bindingCallback) {
-				bindingCallback(el);
+				bindingCallback.onMutation(el);
 			}
 		};
 		live.registerChildMutationCallback("select",updateSelectValue);
