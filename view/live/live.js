@@ -186,7 +186,7 @@ steal('can/util',
 			}
 		},
 		callChildMutationCallback: function(el) {
-			var callback = childMutationCallbacks[el.nodeName.toLowerCase()];
+			var callback = el && childMutationCallbacks[el.nodeName.toLowerCase()];
 			if(callback) {
 				callback(el);
 			}
