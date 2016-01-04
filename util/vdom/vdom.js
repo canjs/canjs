@@ -19,7 +19,12 @@ steal("can/util/can.js", "can-simple-dom", "./build_fragment/make_parser", funct
 						cur = this.firstChild;
 					}
 					if(""+html) {
-						var frag = parser.parse(""+html);
+						var frag ;
+						if (this.nodeName === "SCRIPT") {
+							frag = document.createTextNode(""+html);
+						} else {
+							frag = parser.parse(""+html);
+						}
 						this.appendChild(frag);
 					}
 				}
