@@ -1762,8 +1762,9 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		// wait for set to be called which will change the selects
 		setTimeout(function(){
 			ok(!nullInputOptions[0].selected, "default (null) value set");
-			ok(!undefinedInputOptions[0].selected, "default (undefined) value set");
-			ok(!stringInputOptions[0].selected, "default ('') value set");
+			// the first item is selected because "" is the value.
+			ok(undefinedInputOptions[0].selected, "default (undefined) value set");
+			ok(stringInputOptions[0].selected, "default ('') value set");
 			start();
 		}, 1);
 	});
@@ -1857,7 +1858,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-	test("select bindings work if options are replaced (#1762)", function(){
+	test("two-way <select> bindings update to `undefined` if options are replaced (#1762)", function(){
 		var countries = [{code: 'MX', countryName:'MEXICO'},
 			{code: 'US', countryName:'USA'}
 		];
@@ -1865,9 +1866,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var data = new can.Map({
 			countryCode: 'US',
 			countries: countries
-		});
-		data.bind("countryCode", function(ev, newVal){
-			ok(false, "countryCode changed to "+newVal);
 		});
 		
 		var template = can.stache('<select {($value)}="countryCode">'+
@@ -1877,16 +1875,14 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		'</select>');
 		
 		template(data);
+		
 		stop();
 		setTimeout(function(){
-			data.attr("countries").replace([
-				{code: 'IND', countryName:'INDIA'},
-				{code: 'RUS', countryName:'RUSSIA'},
-				{code: 'US', countryName:'USA'}
-			]);
+			data.attr("countries").replace([]);
 			
+		
 			setTimeout(function(){
-				equal(data.attr("countryCode"), "US", "country set to USA");
+				equal(data.attr("countryCode"), undefined, "countryCode set to undefined");
 				
 				start();
 			},10);
@@ -1895,6 +1891,115 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
+	test("two-way <select> bindings update to `undefined` if options are replaced - each (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {($value)}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		template(data);
+		stop();
+		setTimeout(function(){
+			data.attr("countries").replace([]);
+			
+		
+			setTimeout(function(){
+				equal(data.attr("countryCode"), undefined, "countryCode set to undefined");
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
+	
+	test("one-way <select> bindings keep value if options are replaced (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {$value}="countryCode">'+
+			'{{#countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/countries}}'+
+		'</select>');
+		
+		var frag = template(data);
+		var select = frag.firstChild;
+		stop();
+		setTimeout(function(){
+			
+			data.attr("countries").replace([]);
+			
+			setTimeout(function(){
+				data.attr("countries").replace(countries);
+				
+				equal(data.attr("countryCode"), "US", "country kept as USA");
+				
+				setTimeout(function(){
+					ok( select.getElementsByTagName("option")[1].selected, "USA still selected");
+				},10);
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
+	
+	test("one-way <select> bindings keep value if options are replaced - each (#1762)", function(){
+		var countries = [{code: 'MX', countryName:'MEXICO'},
+			{code: 'US', countryName:'USA'}
+		];
+		
+		var data = new can.Map({
+			countryCode: 'US',
+			countries: countries
+		});
+		
+		var template = can.stache('<select {$value}="countryCode">'+
+			'{{#each countries}}'+
+				'<option value="{{code}}">{{countryName}}</option>'+
+			'{{/each}}'+
+		'</select>');
+		
+		var frag = template(data);
+		var select = frag.firstChild;
+		stop();
+		setTimeout(function(){
+			
+			data.attr("countries").replace([]);
+			
+			setTimeout(function(){
+				data.attr("countries").replace(countries);
+				
+				equal(data.attr("countryCode"), "US", "country kept as USA");
+				
+				setTimeout(function(){
+					ok( select.getElementsByTagName("option")[1].selected, "USA still selected");
+				},10);
+				
+				start();
+			},10);
+			
+		},10);
+		
+	});
 	
 	test("@function reference to child (#2116)", function(){
 		expect(2);
@@ -2003,8 +2108,26 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
-	
-	
+	test("two-way binding with empty strings (#2147)", function(){
+		var template = can.stache("<select {($value)}='val'>"+
+			'<option value="">Loading...</option>'+
+			'<option>Empty...</option>'+
+			"</select>");
+			
+		var map = new can.Map({
+			foo: true,
+			val: ""
+		});
+		
+		var frag = template(map);
+		
+		setTimeout(function(){
+			//map.attr("foo", false);
+			equal( frag.firstChild.selectedIndex, 0, "empty strings are bound");
+			start();
+		},10);
+		stop();
+	});
 	
 
 });
