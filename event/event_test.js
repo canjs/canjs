@@ -160,7 +160,7 @@ steal('can/event', "can/control", 'can/test', "can/control", "steal-qunit", func
 		can.event.delegate.call(some_object, '', 'some_event', handler);
 		some_object.dispatch("some_event");
 		can.event.undelegate.call(some_object, '', 'some_event', handler);
-		
+
 		// Fire the event
 		equal(bind_fallback_fired, true, "Bind fallback fired");
 		equal(handler_fired, true, "Delegated handler fired");
@@ -244,7 +244,7 @@ steal('can/event', "can/control", 'can/test', "can/control", "steal-qunit", func
 
 		var div = document.createElement("div");
 		var instance = new MyControl(div, {});
-		
+
 		can.$(div).trigger("click");
 		equal(clicked, true, "click event handler was bound successfully via init");
 
@@ -257,5 +257,23 @@ steal('can/event', "can/control", 'can/test', "can/control", "steal-qunit", func
 		instance.on();
 		can.$(div).trigger("click");
 		equal(clicked, true, "click event handler was bound successfully via on()");
+	});
+
+	test("can.unbind/can.removeEvent with 0 arguments should remove all event listeners (#1870)", function() {
+		var obj1 = can.extend({}, can.event);
+		obj1.addEvent("ping", function() {});
+		obj1.addEvent("pong", function() {});
+		equal(Object.keys(obj1.__bindEvents).length, 2);
+
+		obj1.removeEvent();
+		equal(Object.keys(obj1.__bindEvents).length, 0);
+
+		var obj2 = can.extend({}, can.event);
+		obj2.bind("ping", function() {});
+		obj2.bind("pong", function() {});
+		equal(Object.keys(obj2.__bindEvents).length, 2);
+
+		obj2.unbind();
+		equal(Object.keys(obj2.__bindEvents).length, 0);
 	});
 });
