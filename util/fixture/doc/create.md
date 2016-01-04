@@ -6,7 +6,7 @@
 @param {Function} callback A function to call with the created item.
 
 @body
-`store.destroy(request, callback)` simulates a request to destroy an item from the server.
+`store.create(request, callback)` simulates a request to add an item to the store.
 
 
     todosStore.create({
