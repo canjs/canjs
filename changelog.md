@@ -3,6 +3,16 @@
 @parent guides 5
 -->
 
+__2.3.8__ ( Jan 04 2016 )
+
+- [vdom innerHTML implementation should append a text node for script tags](https://github.com/canjs/canjs/issues/2156)
+- [User DOM not found when rendering multiple &lt;content&gt;&#39;s as a result of a batched &quot;set&quot;](https://github.com/canjs/canjs/issues/2151)
+- [option value as empty string are not selected with two way binding](https://github.com/canjs/canjs/issues/2147)
+- [Sub expression as named parameter](https://github.com/canjs/canjs/issues/2140)
+- [FF debugging functions conflicting with can.Map](https://github.com/canjs/canjs/issues/2069)
+- [Dynamic select menus don&#39;t live bind correctly](https://github.com/canjs/canjs/issues/1762)
+
+
 __2.3.7__ ( Dec 15 2015 )
 
 - [Incorrect view model context with &lt;content/&gt;](https://github.com/canjs/canjs/issues/2137)
