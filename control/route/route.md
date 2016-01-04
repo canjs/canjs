@@ -4,6 +4,9 @@
 @test can/control/view/test.html
 @download http://donejs.com/can/dist/can.control.route.js
 
+@deprecated {2.3} Control based routing should be avoided in favor of
+state based routing which is explained in the getting started guide.
+
 @body
 The can.Control.route plugin adds a __route__ [can.Control.processors processor] to [can.Control].
 This allows creating routes and binding to [can.route] in a single step by listening to the _route_ event
