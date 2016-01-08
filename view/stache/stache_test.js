@@ -4624,6 +4624,69 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal( spans[0].firstChild.nodeValue, "0");
 		});
 
+		test("partials are not working within an {{#each}} (#2174)", function() {
+
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			var frag = renderer(data);
+
+			data.attr('items.0.name', 'WORLD');
+
+			data.attr('items').splice(0, 0, {
+				name : 'HELLO'
+			});
+			equal( innerHTML(frag.firstChild), "HELLOWORLD");
+		});
+		
+		test("partials don't leak (#2174)", function() {
+			
+			can.stache.registerHelper("somethingCrazy", function(name, options){
+				return function(el){
+					var nodeList = [el];
+					nodeList.expression = "something crazy";
+					can.view.nodeLists.register(nodeList, function(){
+						ok(true, "nodeList torn down");
+					}, options.nodeList, true);
+					can.view.nodeLists.update(options.nodeList, [el]);
+				};
+			});
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{somethingCrazy name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			renderer(data);
+
+			data.attr('items').pop();
+		});
+
+		test("partials should leave binding to helpers and properties (#2174)", function() {
+			can.view.registerView('test', '<input id="one"> {{name}}');
+			var renderer = can.stache('{{#each items}}{{>test}}{{/each}}');
+
+			var data = new can.Map({ items: [] });
+			var frag = renderer(data);
+			data.attr('items').splice(0, 0, {name: 'bob'});
+
+			// simulate the user entering text
+			frag.firstChild.nextSibling.setAttribute('value', 'user text');
+			// re-render the partial for the 0th element
+			data.attr('items.0.name', 'dave');
+
+			equal(frag.firstChild.nextSibling.getAttribute('value'), 'user text');
+         });
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

@@ -192,7 +192,6 @@ steal("can/util",
 			partialName = can.trim(partialName);
 
 			return function(scope, options, parentSectionNodeList){
-
 				var nodeList = [this];
 				nodeList.expression = ">" + partialName;
 				nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
@@ -200,11 +199,12 @@ steal("can/util",
 				var partialFrag = can.compute(function(){
 					var localPartialName = partialName;
 						// Look up partials in options first.
-					var partial = options.attr("partials." + localPartialName),
-						res;
+					var partial = options.attr("partials." + localPartialName), renderer;
 					if (partial) {
-						res = partial.render ? partial.render(scope, options) :
-							partial(scope, options);
+						renderer = function() {
+							return partial.render ? partial.render(scope, options, nodeList)
+								: partial(scope, options);
+						};
 					}
 					// Use can.view to get and render the partial.
 					else {
@@ -219,15 +219,16 @@ steal("can/util",
 							localPartialName = scopePartialName;
 						}
 
-						res = can.isFunction(localPartialName) ? localPartialName(scope, options)
-							: can.view.render(localPartialName, scope, options );
+						renderer = function() {
+							return can.isFunction(localPartialName) ? localPartialName(scope, options, nodeList)
+								: can.view.render(localPartialName, scope, options, nodeList);
+						};
 					}
+					var res = can.__notObserve(renderer)();
 					return can.frag(res);
-
 				});
 
 				live.html(this, partialFrag, this.parentNode, nodeList);
-
 			};
 		},
 		// ## mustacheCore.makeStringBranchRenderer
