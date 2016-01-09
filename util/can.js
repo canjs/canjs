@@ -98,6 +98,9 @@ steal(function () {
 			can.each(item, function(item){
 				frag.appendChild( can.frag(item) );
 			});
+			if (!can.childNodes(frag).length) {
+				frag.appendChild(document.createTextNode(''));
+			}
 			return frag;
 		} else {
 			frag = can.buildFragment( ""+item, document);
