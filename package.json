@@ -53,7 +53,7 @@
 		"steal-qunit": "0.0.2",
 		"steal-tools": "^0.13.2",
 		"testee": "^0.2.4",
-		"zombie": "2.5.1",
+		"zombie": "3.1.1",
 		"documentjs": "~0.3.2"
 	},
 	"scripts": {
