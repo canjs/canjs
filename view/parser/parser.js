@@ -23,7 +23,8 @@ steal(function(){
 		return intermediate;
 	}
 
-	var alphaNumericHU = "-:A-Za-z0-9_",
+	var alphaNumeric = "A-Za-z0-9",
+		alphaNumericHU = "-:_"+alphaNumeric,
 		attributeNames = "[^=>\\s\\/]+",
 		spaceEQspace = "\\s*=\\s*",
 		singleCurly = "\\{[^\\}\\{]\\}",
@@ -32,7 +33,7 @@ steal(function(){
 		  "(?:"+doubleCurly+")|(?:"+singleCurly+")|(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",
 		matchStash = "\\{\\{[^\\}]*\\}\\}\\}?",
 		stash = "\\{\\{([^\\}]*)\\}\\}\\}?",
-		startTag = new RegExp("^<(["+alphaNumericHU+"]+)"+
+		startTag = new RegExp("^<(["+alphaNumeric+"]["+alphaNumericHU+"]*)"+
 				"(" +
 					"(?:\\s*"+
 						"(?:(?:"+

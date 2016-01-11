@@ -1,13 +1,11 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view",
+steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache", "can/view",
 	"can/test","can/view/mustache/spec/specs","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
 	
 	var browserDoc = window.document;
-	var simpleDocument = new SimpleDOM.Document();
-
-	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
+	var simpleDocument = can.simpleDocument;
 
 	makeTest('can/view/stache dom', browserDoc);
 	if(window.jQuery && window.steal) {

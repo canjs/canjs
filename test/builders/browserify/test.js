@@ -11,7 +11,7 @@ var browserify = require('browserify');
 var fs = require('fs'), path = require("path");
 
 
-// Helpers
+// Helper
 var find = function(browser, property, callback, done){
 	var start = new Date();
 	var check = function(){
