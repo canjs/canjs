@@ -1,8 +1,8 @@
-steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", "can/component/component_bindings_test.js",function () {
+steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/define", "can/component", "can/view/stache" ,"can/route", "steal-qunit", "can/component/component_bindings_test.js",function () {
 
-	var simpleDocument = new SimpleDOM.Document();
+	var simpleDocument = can.simpleDocument;
 
-	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
+	
 
 	var innerHTML = function(node){
 		if("innerHTML" in node) {
