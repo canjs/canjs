@@ -44,7 +44,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		var innerHTML = function(node){
 			return "innerHTML" in node ?
 				node.innerHTML :
-				serializer.serialize(node.firstChild);
+				undefined;
 		};
 		var getValue = function(node){
 			// textareas are cross bound to their internal innerHTML

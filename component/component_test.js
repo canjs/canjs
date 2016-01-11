@@ -7,8 +7,6 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 	var innerHTML = function(node){
 		if("innerHTML" in node) {
 			return node.innerHTML;
-		} else {
-			return serializer.serialize(node.firstChild);
 		}
 	};
 
