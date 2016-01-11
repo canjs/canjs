@@ -20,6 +20,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		QUnit.asyncTest("routeUrl and routeCurrent helper", function(){
 			makeIframe(  can.test.path("view/stache/test/route-url-current.html?"+Math.random()) );
 		});
+
+		QUnit.asyncTest("system/stache plugin accepts nodelists", function(){
+			makeIframe( can.test.path("view/stache/test/system/test.html?"+Math.random()) );
+		});
 	}
 
 
@@ -4520,15 +4524,15 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(frag.firstChild.nextSibling.nodeType, 3, "the next sibling is a TextNode");
 			equal(frag.firstChild.nextSibling.nextSibling, undefined, "there are no more nodes");
 		});
-		
+
 		test("#each passed a method (2001)", function(){
 			var users = new can.List([
 				{name: "Alexis", num: 4, age: 88},
 				{name: "Brian", num: 2, age: 31}
 			]);
-			
+
 			var template = can.stache("<div>{{#each people}}<span/>{{/each}}</div>");
-			
+
 			var VM = can.Map.extend({
 				people: function() {
 					return this.attr("users");
@@ -4537,25 +4541,25 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					$('#content').empty();
 				}
 			});
-			
+
 			var frag = template(new VM({
 				users: users
 			})),
 				div = frag.firstChild,
 				spans = div.getElementsByTagName("span");
-			
+
 			equal(spans.length, 2, "two spans");
-			
+
 			can.append(this.$fixture,frag);
-			
+
 			stop();
 			setTimeout(function(){
 				start();
 				can.remove( can.$(div) );
 				ok(true, "removed without breaking");
 			},10);
-			
-			
+
+
 		});
 		
 		test("Rendering live bound indicies with #each, @index and a simple can.List (#2067)", function () {
