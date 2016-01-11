@@ -38,7 +38,7 @@ steal('can/util/can.js', function (can) {
 				container.innerHTML = '' + html;
 			}
 			// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
-			var tmp = {}, 
+			var tmp = {},
 				children = can.childNodes( container );
 			tmp.length = children.length;
 			for (var i = 0; i < children.length; i++) {
