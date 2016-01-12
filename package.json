@@ -249,6 +249,7 @@
 		"./util/event": "./dist/cjs/util/event",
 		"./map/sort/sort": "./dist/cjs/map/sort/sort",
 		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment",
+		"./util/vdom/document/document": "./dist/cjs/util/vdom/document/document",
 		"./view/import/import": "./dist/cjs/view/import/import"
 	}
 }
