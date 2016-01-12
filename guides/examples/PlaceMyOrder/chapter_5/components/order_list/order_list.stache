@@ -19,7 +19,7 @@
         <span class="badge">New Order!</span>
         <p class="action">
           Mark as:
-          <a href="javascript://" (click)="{markAs 'preparing'}">
+          <a href="javascript://" ($click)="markAs('preparing')">
             Preparing
           </a>
         </p>
@@ -29,7 +29,7 @@
         <span class="badge">Preparing</span>
         <p class="action">
           Mark as:
-          <a href="javascript://" (click)="{markAs 'delivery'}">
+          <a href="javascript://" ($click)="markAs('delivery')">
             Out for delivery
           </a>
         </p>
@@ -39,7 +39,7 @@
         <span class="badge">Out for delivery</span>
         <p class="action">
           Mark as:
-          <a href="javascript://" (click)="{markAs 'delivered'}">
+          <a href="javascript://" ($click)="markAs('delivered')">
             Delivered
           </a>
         </p>
@@ -50,7 +50,7 @@
       {{/eq}}
 
       <p class="action">
-        <a href="javascript://" (click)="{destroy}">
+        <a href="javascript://" ($click)="destroy()">
           Delete
         </a>
       </p>

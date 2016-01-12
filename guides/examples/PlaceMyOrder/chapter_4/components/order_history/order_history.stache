@@ -12,28 +12,28 @@
     <pmo-orders-list
       status="new"
       title="New Orders"
-      orders="{orders.value.new}"
+      {(orders)}="orders.value.new"
       empty-message="No new orders">
     </pmo-orders-list>
 
     <pmo-orders-list
       status="preparing"
       title="Preparing"
-      orders="{orders.value.preparing}"
+      {(orders)}="orders.value.preparing"
       empty-message="No orders preparing">
     </pmo-orders-list>
 
     <pmo-orders-list
       status="delivery"
       title="In delivery"
-      orders="{orders.value.delivery}"
+      {(orders)}="orders.value.delivery"
       empty-message="No orders in delivery">
     </pmo-orders-list>
 
     <pmo-orders-list
       status="delivered"
       title="Delivered"
-      orders="{orders.value.delivered}"
+      {(orders)}="orders.value.delivered"
       empty-message="No delivered orders">
     </pmo-orders-list>
   {{/if}}

@@ -82,7 +82,7 @@ and replace it with these lines:
         <span class="open-now">Open Now</span>
       </div>
 
-      <a class="btn" can-href="{ page='restaurants' slug=slug }">Place My Order</a>
+      <a class="btn" href="{{ routeUrl(page='restaurants' slug=slug) }}">Place My Order</a>
       <br />
     </div>
     {{/each}}

@@ -23,7 +23,9 @@ the data the service returns. Additionally, `can.Model` extends
 [can.Map](../docs/can.Map.html), meaning that the objects returned have all of
 the features of a `can.Map`, such as being [observable](Observables.html).
 
-We’ll use `can.Model` to provide data for our state and city elements from
+For applications requiring real-time, high performance, restful data connections 
+you should check out [can-connect](http://connect.canjs.com/). For our simple case,
+we’ll use `can.Model` to provide data for our state and city elements from
 the last chapter.
 
 First, let’s open the `models/state.js` file and add the following code:
@@ -219,7 +221,7 @@ instead of just an array. Find the `form` element:
   <form class="form">
     <div class="form-group">
       <label>State</label>
-      <select can-value="{state}">
+      <select {($value)}="state">
         {{^if state}}
         <option value="">Choose a state</option>
         {{/if}}
@@ -230,7 +232,7 @@ instead of just an array. Find the `form` element:
     </div>
     <div class="form-group">
       <label>City</label>
-      <select can-value="city">
+      <select {($value)}="city">
         {{^if city}}
         <option value="">Choose a city</option>
         {{/if}}
@@ -248,7 +250,7 @@ and replace it with this new one:
   <form class="form">
     <div class="form-group">
       <label>State</label>
-      <select can-value="{state}" {{#if states.isPending}}disabled{{/if}}>
+      <select {($value)}="state" {{#if states.isPending}}disabled{{/if}}>
         {{#if states.isPending}}
           <option value="">Loading...</option>
         {{else}}
@@ -263,7 +265,7 @@ and replace it with this new one:
     </div>
     <div class="form-group">
       <label>City</label>
-      <select can-value="city" {{^if state}}disabled{{/if}}>
+      <select {($value)}="city" {{^if state}}disabled{{/if}}>
         {{#if cities.isPending}}
           <option value="">Loading...</option>
         {{else}}

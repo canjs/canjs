@@ -1,105 +1,13 @@
 /*!
- * CanJS - 2.3.0-pre.1
+ * CanJS - 2.3.9
  * http://canjs.com/
- * Copyright (c) 2015 Bitovi
- * Fri, 29 May 2015 22:07:38 GMT
+ * Copyright (c) 2016 Bitovi
+ * Wed, 13 Jan 2016 14:10:46 GMT
  * Licensed MIT
- */
 
-/*[global-shim-start]*/
-!function(exports,global){var origDefine=global.define,get=function(e){var o,l=e.split("."),n=global;for(o=0;o<l.length&&n;o++)n=n[l[o]];return n},modules=global.define&&global.define.modules||global._define&&global._define.modules||{},ourDefine=global.define=function(e,o,l){var n;"function"==typeof o&&(l=o,o=[]);var i,r=[];for(i=0;i<o.length;i++)r.push(exports[o[i]]?get(exports[o[i]]):modules[o[i]]||get(o[i]));if(!o.length&&l.length){n={exports:{}};var t=function(e){return exports[e]?get(exports[e]):modules[e]};r.push(t,n.exports,n)}else r[0]||"exports"!==o[0]||(n={exports:{}},r[0]=n.exports,"module"===o[1]&&(r[1]=n));global.define=origDefine;var f=l?l.apply(null,r):void 0;global.define=ourDefine,modules[e]=n&&n.exports?n.exports:f};global.define.orig=origDefine,global.define.modules=modules,global.define.amd=!0,global.System={define:function(__name,__code){global.define=origDefine,eval("(function() { "+__code+" \n }).call(global);"),global.define=ourDefine},orig:global.System}}({},window);
-/*can@2.3.0-pre.1#util/can*/
-define("can/util/can",[],function(){var e="undefined"!=typeof window?window:global,n={};("undefined"==typeof GLOBALCAN||GLOBALCAN!==!1)&&(e.can=n),n.global=e,n.k=function(){},n.isDeferred=n.isPromise=function(e){return e&&"function"==typeof e.then&&"function"==typeof e.pipe},n.isMapLike=function(e){return n.Map&&(e instanceof n.Map||e&&e.__get)};var t=0;n.cid=function(e,n){return e._cid||(t++,e._cid=(n||"")+t),e._cid},n.VERSION="2.3.0-pre.1",n.simpleExtend=function(e,n){for(var t in n)e[t]=n[t];return e},n.last=function(e){return e&&e[e.length-1]},n.isDOM=function(e){return(e.ownerDocument||e)===n.global.document},n.childNodes=function(e){var n=e.childNodes;if("length"in n)return n;for(var t=e.firstChild,o=[];t;)o.push(t),t=t.nextSibling;return o};var o=Function.prototype.bind;return o?n.proxy=function(e,n){return o.call(e,n)}:n.proxy=function(e,n){return function(){return e.apply(n,arguments)}},n.frag=function(e,t){var o,r=t||n.document||n.global.document;return e&&"string"!=typeof e?11===e.nodeType?e:"number"==typeof e.nodeType?(o=r.createDocumentFragment(),o.appendChild(e),o):"number"==typeof e.length?(o=r.createDocumentFragment(),n.each(e,function(e){o.appendChild(n.frag(e))}),o):(o=n.buildFragment(""+e,r),n.childNodes(o).length||o.appendChild(r.createTextNode("")),o):(o=n.buildFragment(null==e?"":""+e,r),o.childNodes.length||o.appendChild(r.createTextNode("")),o)},n.scope=n.viewModel=function(e,t,o){e=n.$(e);var r=n.data(e,"scope")||n.data(e,"viewModel");switch(r||(r=new n.Map,n.data(e,"scope",r),n.data(e,"viewModel",r)),arguments.length){case 0:case 1:return r;case 2:return r.attr(t);default:return r.attr(t,o),e}},n["import"]=function(e){var t=new n.Deferred;return"object"==typeof window.System&&n.isFunction(window.System["import"])?window.System["import"](e).then(n.proxy(t.resolve,t),n.proxy(t.reject,t)):window.define&&window.define.amd?window.require([e],function(e){t.resolve(e)}):window.steal?steal.steal(e,function(e){t.resolve(e)}):window.require?t.resolve(window.require(e)):t.resolve(),t.promise()},n.__observe=function(){},n.isNode="object"==typeof process&&"[object process]"==={}.toString.call(process),n});
-/*can@2.3.0-pre.1#util/attr/attr*/
-define("can/util/attr/attr",["can/util/can"],function(t){var e=t.global.setImmediate||function(t){return setTimeout(t,0)},r={MutationObserver:t.global.MutationObserver||t.global.WebKitMutationObserver||t.global.MozMutationObserver,map:{"class":"className",value:"value",innertext:"innerText",textcontent:"textContent",checked:!0,disabled:!0,readonly:!0,required:!0,src:function(t,e){return null==e||""===e?(t.removeAttribute("src"),null):(t.setAttribute("src",e),e)},style:function(t,e){return t.style&&"cssText"in t.style?t.style.cssText=e||"":t.setAttribute("style",e)}},defaultValue:["input","textarea"],set:function(e,n,a){var u=t.isDOM(e)&&r.MutationObserver;n=n.toLowerCase();var i;u||(i=r.get(e,n));var o,s=e.nodeName.toString().toLowerCase(),l=r.map[n];"function"==typeof l?o=l(e,a):l===!0?(o=e[n]=!0,"checked"===n&&"radio"===e.type&&t.inArray(s,r.defaultValue)>=0&&(e.defaultChecked=!0)):l?(o=a,e[l]!==a&&(e[l]=a),"value"===l&&t.inArray(s,r.defaultValue)>=0&&(e.defaultValue=a)):(e.setAttribute(n,a),o=a),u||o===i||r.trigger(e,n,i)},trigger:function(r,n,a){return t.data(t.$(r),"canHasAttributesBindings")?(n=n.toLowerCase(),e(function(){t.trigger(r,{type:"attributes",attributeName:n,target:r,oldValue:a,bubbles:!1},[])})):void 0},get:function(t,e){e=e.toLowerCase();var n=r.map[e];return"string"==typeof n&&t[n]?t[n]:t.getAttribute(e)},remove:function(t,e){e=e.toLowerCase();var n;r.MutationObserver||(n=r.get(t,e));var a=r.map[e];"function"==typeof a&&a(t,void 0),a===!0?t[e]=!1:"string"==typeof a?t[a]="":t.removeAttribute(e),r.MutationObserver||null==n||r.trigger(t,e,n)},has:function(){var e=t.global.document&&document.createElement("div");return e&&e.hasAttribute?function(t,e){return t.hasAttribute(e)}:function(t,e){return null!==t.getAttribute(e)}}()};return r});
-/*can@2.3.0-pre.1#event/event*/
-define("can/event/event",["can/util/can"],function(t){return t.addEvent=function(t,n){var e=this.__bindEvents||(this.__bindEvents={}),i=e[t]||(e[t]=[]);return i.push({handler:n,name:t}),this},t.listenTo=function(n,e,i){var r=this.__listenToEvents;r||(r=this.__listenToEvents={});var s=t.cid(n),o=r[s];o||(o=r[s]={obj:n,events:{}});var a=o.events[e];a||(a=o.events[e]=[]),a.push(i),t.bind.call(n,e,i)},t.stopListening=function(n,e,i){var r=this.__listenToEvents,s=r,o=0;if(!r)return this;if(n){var a=t.cid(n);if((s={})[a]=r[a],!r[a])return this}for(var v in s){var l,h=s[v];n=r[v].obj,e?(l={})[e]=h.events[e]:l=h.events;for(var u in l){var d=l[u]||[];for(o=0;o<d.length;)i&&i===d[o]||!i?(t.unbind.call(n,u,d[o]),d.splice(o,1)):o++;d.length||delete h.events[u]}t.isEmptyObject(h.events)&&delete r[v]}return this},t.removeEvent=function(t,n,e){if(!this.__bindEvents)return this;for(var i,r=this.__bindEvents[t]||[],s=0,o="function"==typeof n;s<r.length;)i=r[s],(e?e(i,t,n):o&&i.handler===n||!o&&(i.cid===n||!n))?r.splice(s,1):s++;return this},t.dispatch=function(t,n){var e=this.__bindEvents;if(e){"string"==typeof t&&(t={type:t});var i=t.type,r=(e[i]||[]).slice(0),s=[t];n&&s.push.apply(s,n);for(var o=0,a=r.length;a>o;o++)r[o].handler.apply(this,s);return t}},t.one=function(n,e){var i=function(){return t.unbind.call(this,n,i),e.apply(this,arguments)};return t.bind.call(this,n,i),this},t.event={on:function(){return 0===arguments.length&&t.Control&&this instanceof t.Control?t.Control.prototype.on.call(this):t.addEvent.apply(this,arguments)},off:function(){return 0===arguments.length&&t.Control&&this instanceof t.Control?t.Control.prototype.off.call(this):t.removeEvent.apply(this,arguments)},bind:t.addEvent,unbind:t.removeEvent,delegate:function(n,e,i){return t.addEvent.call(this,e,i)},undelegate:function(n,e,i){return t.removeEvent.call(this,e,i)},trigger:t.dispatch,one:t.one,addEvent:t.addEvent,removeEvent:t.removeEvent,listenTo:t.listenTo,stopListening:t.stopListening,dispatch:t.dispatch},t.event});
-/*can@2.3.0-pre.1#util/array/each*/
-define("can/util/array/each",["can/util/can"],function(t){var e=function(t){var e="length"in t&&t.length;return"function"!=typeof arr&&(0===e||"number"==typeof e&&e>0&&e-1 in t)};return t.each=function(n,a,r){var f,i,l,c=0;if(n)if(e(n))if(t.List&&n instanceof t.List)for(i=n.attr("length");i>c&&(l=n.attr(c),a.call(r||l,l,c,n)!==!1);c++);else for(i=n.length;i>c&&(l=n[c],a.call(r||l,l,c,n)!==!1);c++);else if("object"==typeof n)if(t.Map&&n instanceof t.Map||n===t.route){var o=t.Map.keys(n);for(c=0,i=o.length;i>c&&(f=o[c],l=n.attr(f),a.call(r||l,l,f,n)!==!1);c++);}else for(f in n)if(n.hasOwnProperty(f)&&a.call(r||n[f],n[f],f,n)===!1)break;return n},t});
-/*can@2.3.0-pre.1#util/inserted/inserted*/
-define("can/util/inserted/inserted",["can/util/can"],function(e){e.inserted=function(n,r){if(n.length){n=e.makeArray(n);for(var i,t,a=r||n[0].ownerDocument||n[0],d=!1,o=e.$(a.contains?a:a.body),s=0;void 0!==(t=n[s]);s++){if(!d){if(!t.getElementsByTagName)continue;if(!e.has(o,t).length)return;d=!0}if(d&&t.getElementsByTagName){i=e.makeArray(t.getElementsByTagName("*")),e.trigger(t,"inserted",[],!1);for(var f,c=0;void 0!==(f=i[c]);c++)e.trigger(f,"inserted",[],!1)}}}},e.appendChild=function(n,r,i){var t;t=11===r.nodeType?e.makeArray(e.childNodes(r)):[r],n.appendChild(r),e.inserted(t,i)},e.insertBefore=function(n,r,i,t){var a;a=11===r.nodeType?e.makeArray(r.childNodes):[r],n.insertBefore(r,i),e.inserted(a,t)}});
-/*can@2.3.0-pre.1#util/jquery/jquery*/
-define("can/util/jquery/jquery",["dist/jquery","can/util/can","can/util/attr/attr","can/event/event","can/util/array/each","can/util/inserted/inserted"],function(t,e,n,r){var i=function(t){return t.nodeName&&(1===t.nodeType||9===t.nodeType)||t==window};t=t||window.jQuery,t.extend(e,t,{trigger:function(n,r,a,s){i(n)?t.event.trigger(r,a,n,!s):n.trigger?n.trigger(r,a):("string"==typeof r&&(r={type:r}),r.target=r.target||n,a&&(a.length&&"string"==typeof a?a=[a]:a.length||(a=[a])),a||(a=[]),e.dispatch.call(n,r,a))},event:e.event,addEvent:e.addEvent,removeEvent:e.removeEvent,buildFragment:function(e,n){var r;return e=[e],n=n||document,n=!n.nodeType&&n[0]||n,n=n.ownerDocument||n,r=t.buildFragment(e,n),r.cacheable?t.clone(r.fragment):r.fragment||r},$:t,each:e.each,bind:function(n,r){return this.bind&&this.bind!==e.bind?this.bind(n,r):i(this)?t.event.add(this,n,r):e.addEvent.call(this,n,r),this},unbind:function(n,r){return this.unbind&&this.unbind!==e.unbind?this.unbind(n,r):i(this)?t.event.remove(this,n,r):e.removeEvent.call(this,n,r),this},delegate:function(n,r,a){return this.delegate?this.delegate(n,r,a):i(this)?t(this).delegate(n,r,a):e.bind.call(this,r,a),this},undelegate:function(n,r,a){return this.undelegate?this.undelegate(n,r,a):i(this)?t(this).undelegate(n,r,a):e.unbind.call(this,r,a),this},proxy:e.proxy,attr:n}),e.on=e.bind,e.off=e.unbind,t.each(["append","filter","addClass","remove","data","get","has"],function(t,n){e[n]=function(t){return t[n].apply(t,e.makeArray(arguments).slice(1))}});var a=t.cleanData;t.cleanData=function(n){t.each(n,function(t,n){n&&e.trigger(n,"removed",[],!1)}),a(n)};var s,u=t.fn.domManip;t.fn.domManip=function(t,e,n){for(var r=1;r<arguments.length;r++)if("function"==typeof arguments[r]){s=r;break}return u.apply(this,arguments)},t(document.createElement("div")).append(document.createElement("div")),t.fn.domManip=2===s?function(t,n,r){return u.call(this,t,n,function(t){var n;11===t.nodeType&&(n=e.makeArray(e.childNodes(t)));var i=r.apply(this,arguments);return e.inserted(n?n:[t]),i})}:function(t,n){return u.call(this,t,function(t){var r;11===t.nodeType&&(r=e.makeArray(e.childNodes(t)));var i=n.apply(this,arguments);return e.inserted(r?r:[t]),i})};var d=t.attr;t.attr=function(t,n){if(e.isDOM(t)&&e.attr.MutationObserver)return d.apply(this,arguments);var r,i;arguments.length>=3&&(r=d.call(this,t,n));var a=d.apply(this,arguments);return arguments.length>=3&&(i=d.call(this,t,n)),i!==r&&e.attr.trigger(t,n,r),a};var o=t.removeAttr;return t.removeAttr=function(t,n){if(e.isDOM(t)&&e.attr.MutationObserver)return o.apply(this,arguments);var r=d.call(this,t,n),i=o.apply(this,arguments);return null!=r&&e.attr.trigger(t,n,r),i},t.event.special.attributes={setup:function(){if(e.isDOM(this)&&e.attr.MutationObserver){var t=this,n=new e.attr.MutationObserver(function(n){n.forEach(function(n){var r=e.simpleExtend({},n);e.trigger(t,r,[])})});n.observe(this,{attributes:!0,attributeOldValue:!0}),e.data(e.$(this),"canAttributesObserver",n)}else e.data(e.$(this),"canHasAttributesBindings",!0)},teardown:function(){e.isDOM(this)&&e.attr.MutationObserver?(e.data(e.$(this),"canAttributesObserver").disconnect(),t.removeData(this,"canAttributesObserver")):t.removeData(this,"canHasAttributesBindings")}},function(){var t="<-\n>",n=e.buildFragment(t,document);if(n.firstChild&&t!==n.firstChild.nodeValue){var r=e.buildFragment;e.buildFragment=function(t,e){var n=r(t,e);return 1===n.childNodes.length&&3===n.childNodes[0].nodeType&&(n.childNodes[0].nodeValue=t),n}}}(),t.event.special.inserted={},t.event.special.removed={},e});
-/*can@2.3.0-pre.1#util/util*/
-define("can/util/util",["can/util/jquery/jquery"],function(u){return u});
-/*can@2.3.0-pre.1#view/view*/
-define("can/view/view",["can/util/util"],function(e){var r=e.isFunction,n=e.makeArray,t=1,i=function(e){var r=function(){return c.frag(e.apply(this,arguments))};return r.render=function(){return e.apply(e,arguments)},r},u=function(e,r){if(!e.length)throw"can.view: No template or empty template:"+r},a=function(n,t){if(r(n)){var i=e.Deferred();return i.resolve(n)}var a,o,d,f="string"==typeof n?n:n.url,s=n.engine&&"."+n.engine||f.match(/\.[\w\d]+$/);if(f.match(/^#/)&&(f=f.substr(1)),(o=document.getElementById(f))&&(s="."+o.type.match(/\/(x\-)?(.+)/)[2]),s||c.cached[f]||(f+=s=c.ext),e.isArray(s)&&(s=s[0]),d=c.toId(f),f.match(/^\/\//)&&(f=f.substr(2),f=window.steal?steal.config().root.mapJoin(""+steal.id(f)):f),window.require&&require.toUrl&&(f=require.toUrl(f)),a=c.types[s],c.cached[d])return c.cached[d];if(o)return c.registerView(d,o.innerHTML,a);var p=new e.Deferred;return e.ajax({async:t,url:f,dataType:"text",error:function(e){u("",f),p.reject(e)},success:function(e){u(e,f),c.registerView(d,e,a,p)}}),p},o=function(r){var n=[];if(e.isDeferred(r))return[r];for(var t in r)e.isDeferred(r[t])&&n.push(r[t]);return n},d=function(r){return e.isArray(r)&&"success"===r[1]?r[0]:r},c=e.view=e.template=function(e,n,t,i){return r(t)&&(i=t,t=void 0),c.renderAs("fragment",e,n,t,i)};return e.extend(c,{frag:function(e,r){return c.hookup(c.fragment(e),r)},fragment:function(r){if("string"!=typeof r&&11===r.nodeType)return r;var n=e.buildFragment(r,document.body);return n.childNodes.length||n.appendChild(document.createTextNode("")),n},toId:function(r){return e.map(r.toString().split(/\/|\./g),function(e){return e?e:void 0}).join("_")},toStr:function(e){return null==e?"":""+e},hookup:function(r,n){var t,i,u=[];return e.each(r.childNodes?e.makeArray(r.childNodes):r,function(r){1===r.nodeType&&(u.push(r),u.push.apply(u,e.makeArray(r.getElementsByTagName("*"))))}),e.each(u,function(e){e.getAttribute&&(t=e.getAttribute("data-view-id"))&&(i=c.hookups[t])&&(i(e,n,t),delete c.hookups[t],e.removeAttribute("data-view-id"))}),r},hookups:{},hook:function(e){return c.hookups[++t]=e," data-view-id='"+t+"'"},cached:{},cachedRenderers:{},cache:!0,register:function(r){this.types["."+r.suffix]=r,e[r.suffix]=c[r.suffix]=function(e,n){var t,u;if(!n)return u=function(){return t||(t=r.fragRenderer?r.fragRenderer(null,e):i(r.renderer(null,e))),t.apply(this,arguments)},u.render=function(){var n=r.renderer(null,e);return n.apply(n,arguments)},u;var a=function(){return t||(t=r.fragRenderer?r.fragRenderer(e,n):r.renderer(e,n)),t.apply(this,arguments)};return r.fragRenderer?c.preload(e,a):c.preloadStringRenderer(e,a)}},types:{},ext:".ejs",registerScript:function(e,r,n){return"can.view.preloadStringRenderer('"+r+"',"+c.types["."+e].script(r,n)+");"},preload:function(r,n){var t=c.cached[r]=(new e.Deferred).resolve(function(e,r){return n.call(e,e,r)});return t.__view_id=r,c.cachedRenderers[r]=n,n},preloadStringRenderer:function(e,r){return this.preload(e,i(r))},render:function(r,n,t,i){return e.view.renderAs("string",r,n,t,i)},renderTo:function(e,r,n,t){return("string"===e&&r.render?r.render:r)(n,t)},renderAs:function(t,i,u,f,s){r(f)&&(s=f,f=void 0);var p,l,h,g,v,m=o(u);if(m.length)return l=new e.Deferred,h=e.extend({},u),m.push(a(i,!0)),e.when.apply(e,m).then(function(r){var i,a=n(arguments),o=a.pop();if(e.isDeferred(u))h=d(r);else for(var c in u)e.isDeferred(u[c])&&(h[c]=d(a.shift()));i=e.view.renderTo(t,o,h,f),l.resolve(i,h),s&&s(i,h)},function(){l.reject.apply(l,arguments)}),l;if(p=e.__clearReading(),g=r(s),l=a(i,g),p&&e.__setReading(p),g)v=l,l.then(function(r){s(u?e.view.renderTo(t,r,u,f):r)});else{if("resolved"===l.state()&&l.__view_id){var w=c.cachedRenderers[l.__view_id];return u?e.view.renderTo(t,w,u,f):w}l.then(function(r){v=u?e.view.renderTo(t,r,u,f):r})}return v},registerView:function(r,n,t,u){var a,o="object"==typeof t?t:c.types[t||c.ext];return a=o.fragRenderer?o.fragRenderer(r,n):i(o.renderer(r,n)),u=u||new e.Deferred,c.cache&&(c.cached[r]=u,u.__view_id=r,c.cachedRenderers[r]=a),u.resolve(a)},simpleHelper:function(r){return function(){var n=[];return e.each(arguments,function(e,r){if(r<=arguments.length){for(;e&&e.isComputed;)e=e();n.push(e)}}),r.apply(this,n)}}}),e});
-/*can@2.3.0-pre.1#view/callbacks/callbacks*/
-define("can/view/callbacks/callbacks",["can/util/util","can/view/view"],function(t){var e=t.view.attr=function(t,e){if(!e){var i=a[t];if(!i)for(var l=0,n=r.length;n>l;l++){var s=r[l];if(s.match.test(t)){i=s.handler;break}}return i}"string"==typeof t?a[t]=e:r.push({match:t,handler:e})},a={},r=[],i=/[-\:]/,l=t.view.tag=function(e,a){if(!a){var r=n[e.toLowerCase()];return!r&&i.test(e)&&(r=function(){}),r}t.global.html5&&(t.global.html5.elements+=" "+e,t.global.html5.shivDocument()),n[e.toLowerCase()]=a},n={};return t.view.callbacks={_tags:n,_attributes:a,_regExpAttributes:r,tag:l,attr:e,tagHandler:function(e,a,r){var i,l=r.options.attr("tags."+a),s=l||n[a],c=r.scope;if(s){var o=t.__clearObserved();i=s(e,r),t.__setObserved(o)}else i=c;if(i&&r.subtemplate){c!==i&&(c=c.add(i));var v=r.subtemplate(c,r.options),f="string"==typeof v?t.view.frag(v):v;t.appendChild(e,f)}}},t.view.callbacks});
-/*can@2.3.0-pre.1#view/elements*/
-define("can/view/elements",["can/util/util","can/view/view"],function(t){var e="undefined"!=typeof document?document:null,n=e&&function(){return 1===t.$(document.createComment("~")).length}(),o={tagToContentPropMap:{option:e&&"textContent"in document.createElement("option")?"textContent":"innerText",textarea:"value"},attrMap:t.attr.map,attrReg:/([^\s=]+)[\s]*=[\s]*/,defaultValue:t.attr.defaultValue,tagMap:{"":"span",colgroup:"col",table:"tbody",tr:"td",ol:"li",ul:"li",tbody:"tr",thead:"tr",tfoot:"tr",select:"option",optgroup:"option"},reverseTagMap:{col:"colgroup",tr:"tbody",option:"select",td:"tr",th:"tr",li:"ul"},getParentNode:function(t,e){return e&&11===t.parentNode.nodeType?e:t.parentNode},setAttr:t.attr.set,getAttr:t.attr.get,removeAttr:t.attr.remove,contentText:function(t){return"string"==typeof t?t:t||0===t?""+t:""},after:function(e,n){var o=e[e.length-1];o.nextSibling?t.insertBefore(o.parentNode,n,o.nextSibling,t.document):t.appendChild(o.parentNode,n,t.document)},replace:function(e,r){o.after(e,r),t.remove(t.$(e)).length<e.length&&!n&&t.each(e,function(t){8===t.nodeType&&t.parentNode.removeChild(t)})}};return t.view.elements=o,o});
-/*can@2.3.0-pre.1#util/string/string*/
-define("can/util/string/string",["can/util/util"],function(e){var r=/_|-/,n=/\=\=/,t=/([A-Z]+)([A-Z][a-z])/g,a=/([a-z\d])([A-Z])/g,u=/([a-z\d])([A-Z])/g,i=/\{([^\}]+)\}/g,c=/"/g,o=/'/g,l=/-+(.)?/g,p=/[a-z][A-Z]/g,f=function(e,r,n){var t=e[r];return void 0===t&&n===!0&&(t=e[r]={}),t},g=function(e){return/^f|^o/.test(typeof e)},d=function(e){var r=null===e||void 0===e||isNaN(e)&&""+e=="NaN";return""+(r?"":e)};return e.extend(e,{esc:function(e){return d(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(c,"&#34;").replace(o,"&#39;")},getObject:function(r,n,t){var a,u,i,c,o=r?r.split("."):[],l=o.length,p=0;if(n=e.isArray(n)?n:[n||window],c=n.length,!l)return n[0];for(p;c>p;p++){for(a=n[p],i=void 0,u=0;l>u&&g(a);u++)i=a,a=f(i,o[u]);if(void 0!==i&&void 0!==a)break}if(t===!1&&void 0!==a&&delete i[o[u-1]],t===!0&&void 0===a)for(a=n[0],u=0;l>u&&g(a);u++)a=f(a,o[u],!0);return a},capitalize:function(e,r){return e.charAt(0).toUpperCase()+e.slice(1)},camelize:function(e){return d(e).replace(l,function(e,r){return r?r.toUpperCase():""})},hyphenate:function(e){return d(e).replace(p,function(e,r){return e.charAt(0)+"-"+e.charAt(1).toLowerCase()})},underscore:function(e){return e.replace(n,"/").replace(t,"$1_$2").replace(a,"$1_$2").replace(u,"_").toLowerCase()},sub:function(r,n,t){var a=[];return r=r||"",a.push(r.replace(i,function(r,u){var i=e.getObject(u,n,t===!0?!1:void 0);return void 0===i||null===i?(a=null,""):g(i)&&a?(a.push(i),""):""+i})),null===a?a:a.length<=1?a[0]:a},replacer:i,undHash:r}),e});
-/*can@2.3.0-pre.1#construct/construct*/
-define("can/construct/construct",["can/util/string/string"],function(t){var n,r=0;try{Object.getOwnPropertyDescriptor({}),n=!0}catch(e){n=!1}var o=function(t,n){var r=Object.getOwnPropertyDescriptor(t,n);return r&&(r.get||r.set)?r:null},u=function(n,r,e){e=e||n;var u;for(var i in n)(u=o(n,i))?this._defineProperty(e,r,i,u):t.Construct._overwrite(e,r,i,n[i])},i=function(n,r,e){e=e||n;for(var o in n)t.Construct._overwrite(e,r,o,n[o])};return t.Construct=function(){return arguments.length?t.Construct.extend.apply(t.Construct,arguments):void 0},t.extend(t.Construct,{constructorExtends:!0,newInstance:function(){var t,n=this.instance();return n.setup&&(t=n.setup.apply(n,arguments)),n.init&&n.init.apply(n,t||arguments),n},_inherit:n?u:i,_defineProperty:function(t,n,r,e){Object.defineProperty(t,r,e)},_overwrite:function(t,n,r,e){t[r]=e},setup:function(n,r){this.defaults=t.extend(!0,{},n.defaults,this.defaults)},instance:function(){r=1;var t=new this;return r=0,t},extend:function(n,e,o){function u(){return r?void 0:this.constructor!==a&&arguments.length&&a.constructorExtends?a.extend.apply(a,arguments):a.newInstance.apply(a,arguments)}var i=n,s=e,c=o;"string"!=typeof i&&(c=s,s=i,i=null),c||(c=s,s=null),c=c||{};var a,p,f,l,d,y,g,h,v,m=this,w=this.prototype;v=this.instance(),t.Construct._inherit(c,w,v),i&&(p=i.split("."),g=p.pop()),"undefined"==typeof constructorName&&(a=function(){return u.apply(this,arguments)});for(y in m)m.hasOwnProperty(y)&&(a[y]=m[y]);t.Construct._inherit(s,m,a),i&&(f=t.getObject(p.join("."),window,!0),h=f,l=t.underscore(i.replace(/\./g,"_")),d=t.underscore(g),f[g]=a),t.extend(a,{constructor:a,prototype:v,namespace:h,_shortName:d,fullName:i,_fullName:l}),void 0!==g&&(a.shortName=g),a.prototype.constructor=a;var C=[m].concat(t.makeArray(arguments)),_=a.setup.apply(a,C);return a.init&&a.init.apply(a,_||C),a}}),t.Construct.prototype.setup=function(){},t.Construct.prototype.init=function(){},t.Construct});
-/*can@2.3.0-pre.1#control/control*/
-define("can/control/control",["can/util/util","can/construct/construct"],function(t){var n,e=function(n,e,o){return t.bind.call(n,e,o),function(){t.unbind.call(n,e,o)}},o=t.isFunction,s=t.extend,i=t.each,r=[].slice,u=/\{([^\}]+)\}/g,c=t.getObject("$.event.special",[t])||{},l=function(n,e,o,s){return t.delegate.call(n,e,o,s),function(){t.undelegate.call(n,e,o,s)}},a=function(n,o,s,i){return i?l(n,t.trim(i),o,s):e(n,o,s)},h=t.Control=t.Construct({setup:function(){if(t.Construct.setup.apply(this,arguments),t.Control){var n,e=this;e.actions={};for(n in e.prototype)e._isAction(n)&&(e.actions[n]=e._action(n))}},_shifter:function(n,e){var s="string"==typeof e?n[e]:e;return o(s)||(s=n[s]),function(){return n.called=e,s.apply(n,[this.nodeName?t.$(this):this].concat(r.call(arguments,0)))}},_isAction:function(t){var n=this.prototype[t],e=typeof n;return"constructor"!==t&&("function"===e||"string"===e&&o(this.prototype[n]))&&!!(c[t]||f[t]||/[^\w]/.test(t))},_action:function(e,o){if(u.lastIndex=0,o||!u.test(e)){var s=o?t.sub(e,this._lookup(o)):e;if(!s)return null;var i=t.isArray(s),r=i?s[1]:s,c=r.split(/\s+/g),l=c.pop();return{processor:f[l]||n,parts:[r,c.join(" "),l],delegate:i?s[0]:void 0}}},_lookup:function(t){return[t,window]},processors:{},defaults:{}},{setup:function(n,e){var o,i=this.constructor,r=i.pluginName||i._fullName;return this.element=t.$(n),r&&"can_control"!==r&&this.element.addClass(r),o=t.data(this.element,"controls"),o||(o=[],t.data(this.element,"controls",o)),o.push(this),this.options=s({},i.defaults,e),this.on(),[this.element,this.options]},on:function(n,e,o,s){if(!n){this.off();var i,r,u=this.constructor,c=this._bindings,l=u.actions,h=this.element,f=t.Control._shifter(this,"destroy");for(i in l)l.hasOwnProperty(i)&&(r=l[i]||u._action(i,this.options,this),r&&(c.control[i]=r.processor(r.delegate||h,r.parts[2],r.parts[1],i,this)));return t.bind.call(h,"removed",f),c.user.push(function(n){t.unbind.call(n,"removed",f)}),c.user.length}return"string"==typeof n&&(s=o,o=e,e=n,n=this.element),void 0===s&&(s=o,o=e,e=null),"string"==typeof s&&(s=t.Control._shifter(this,s)),this._bindings.user.push(a(n,o,s,e)),this._bindings.user.length},off:function(){var t=this.element[0],n=this._bindings;n&&(i(n.user||[],function(n){n(t)}),i(n.control||{},function(n){n(t)})),this._bindings={user:[],control:{}}},destroy:function(){if(null!==this.element){var n,e=this.constructor,o=e.pluginName||e._fullName;this.off(),o&&"can_control"!==o&&this.element.removeClass(o),n=t.data(this.element,"controls"),n.splice(t.inArray(this,n),1),t.trigger(this,"destroyed"),this.element=null}}}),f=t.Control.processors;return n=function(n,e,o,s,i){return a(n,e,t.Control._shifter(i,s),o)},i(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","resize","scroll","select","submit","focusin","focusout","mouseenter","mouseleave","touchstart","touchmove","touchcancel","touchend","touchleave","inserted","removed"],function(t){f[t]=n}),h});
-/*can@2.3.0-pre.1#util/bind/bind*/
-define("can/util/bind/bind",["can/util/util"],function(i){return i.bindAndSetup=function(){return i.addEvent.apply(this,arguments),this._init||(this._bindings?this._bindings++:(this._bindings=1,this._bindsetup&&this._bindsetup())),this},i.unbindAndTeardown=function(n,t){var s=this.__bindEvents[n]||[],d=s.length;return i.removeEvent.apply(this,arguments),null===this._bindings?this._bindings=0:this._bindings=this._bindings-(d-s.length),!this._bindings&&this._bindteardown&&this._bindteardown(),this},i});
-/*can@2.3.0-pre.1#map/bubble*/
-define("can/map/bubble",["can/util/util"],function(n){var e=n.bubble={event:function(n,e){return n.constructor._bubbleRule(e,n)},childrenOf:function(n,i){n._each(function(b,r){b&&b.bind&&e.toParent(b,n,r,i)})},teardownChildrenFrom:function(n,i){n._each(function(b){e.teardownFromParent(n,b,i)})},toParent:function(e,i,b,r){n.listenTo.call(i,e,r,function(){var r=n.makeArray(arguments),t=r.shift();r[0]=(n.List&&i instanceof n.List?i.indexOf(e):b)+(r[0]?"."+r[0]:""),t.triggeredNS=t.triggeredNS||{},t.triggeredNS[i._cid]||(t.triggeredNS[i._cid]=!0,n.trigger(i,t,r))})},teardownFromParent:function(e,i,b){i&&i.unbind&&n.stopListening.call(e,i,b)},isBubbling:function(n,e){return n._bubbleBindings&&n._bubbleBindings[e]},bind:function(n,i){if(!n._init){var b,r=e.event(n,i),t=r.length;n._bubbleBindings||(n._bubbleBindings={});for(var u=0;t>u;u++)b=r[u],n._bubbleBindings[b]?n._bubbleBindings[b]++:(n._bubbleBindings[b]=1,e.childrenOf(n,b))}},unbind:function(i,b){for(var r,t=e.event(i,b),u=t.length,d=0;u>d;d++)r=t[d],i._bubbleBindings&&i._bubbleBindings[r]--,i._bubbleBindings&&!i._bubbleBindings[r]&&(delete i._bubbleBindings[r],e.teardownChildrenFrom(i,r),n.isEmptyObject(i._bubbleBindings)&&delete i._bubbleBindings)},add:function(i,b,r){if(b instanceof n.Map&&i._bubbleBindings)for(var t in i._bubbleBindings)i._bubbleBindings[t]&&(e.teardownFromParent(i,b,t),e.toParent(b,i,r,t))},removeMany:function(n,i){for(var b=0,r=i.length;r>b;b++)e.remove(n,i[b])},remove:function(i,b){if(b instanceof n.Map&&i._bubbleBindings)for(var r in i._bubbleBindings)i._bubbleBindings[r]&&e.teardownFromParent(i,b,r)},set:function(i,b,r,t){return n.Map.helpers.isObservable(r)&&e.add(i,r,b),n.Map.helpers.isObservable(t)&&e.remove(i,t),r}};return e});
-/*can@2.3.0-pre.1#util/batch/batch*/
-define("can/util/batch/batch",["can/util/can"],function(t){var n=1,a=0,i=[],c=[],e=null;t.batch={start:function(t){a++,t&&c.push(t)},stop:function(l,u){if(l?a=0:a--,0===a){if(null!==e)return;e=i.slice(0);var h,r,f=c.slice(0);for(i=[],c=[],t.batch.batchNum=n,n++,u&&t.batch.start(),h=0;h<e.length;h++)t.dispatch.apply(e[h][0],e[h][1]);for(e=null,h=0,r=f.length;h<f.length;h++)f[h]();t.batch.batchNum=void 0}},trigger:function(c,l,u){if(!c._init)if(l="string"==typeof l?{type:l}:l,e)e.push([c,[l,u]]);else{if(0===a)return t.dispatch.call(c,l,u);l.batchNum=n,i.push([c,[l,u]])}},afterPreviousEvents:function(n){if(e){var a={};t.bind.call(a,"ready",n),e.push([a,[{type:"ready"},[]]])}else n()}}});
-/*can@2.3.0-pre.1#map/map*/
-define("can/map/map",["can/util/util","can/util/bind/bind","can/map/bubble","can/construct/construct","can/util/batch/batch"],function(t,e,i){var n=null,s=function(){for(var t in n)n[t].added&&delete n[t].obj._cid;n=null},r=function(t){return n&&n[t._cid]&&n[t._cid].instance},a=null,o=t.Map=t.Construct.extend({setup:function(){if(t.Construct.setup.apply(this,arguments),t.Map){this.defaults||(this.defaults={}),this._computes=[];for(var e in this.prototype)"define"!==e&&"constructor"!==e&&("function"!=typeof this.prototype[e]||this.prototype[e].prototype instanceof t.Construct)?this.defaults[e]=this.prototype[e]:this.prototype[e].isComputed&&this._computes.push(e);this.helpers.define&&this.helpers.define(this)}!t.List||this.prototype instanceof t.List||(this.List=o.List.extend({Map:this},{}))},_bubble:i,_bubbleRule:function(t){return"change"===t||t.indexOf(".")>=0?["change"]:[]},_computes:[],bind:t.bindAndSetup,on:t.bindAndSetup,unbind:t.unbindAndTeardown,off:t.unbindAndTeardown,id:"id",helpers:{define:null,attrParts:function(t,e){return e?[t]:"object"==typeof t?t:(""+t).split(".")},addToMap:function(e,i){var r;n||(r=s,n={});var a=e._cid,o=t.cid(e);return n[o]||(n[o]={obj:e,instance:i,added:!a}),r},isObservable:function(e){return e instanceof t.Map||e&&e===t.route},canMakeObserve:function(e){return e&&!t.isDeferred(e)&&(t.isArray(e)||t.isPlainObject(e))},serialize:function(e,i,n){var s=t.cid(e),r=!1;return a||(r=!0,a={attr:{},serialize:{}}),a[i][s]=n,e.each(function(s,r){var u,h=o.helpers.isObservable(s),c=h&&a[i][t.cid(s)];u=c?c:"serialize"===i?o.helpers._serialize(e,r,s):o.helpers._getValue(e,r,s,i),void 0!==u&&(n[r]=u)}),t.__observe(e,"__keys"),r&&(a=null),n},_serialize:function(t,e,i){return o.helpers._getValue(t,e,i,"serialize")},_getValue:function(t,e,i,n){return o.helpers.isObservable(i)?i[n]():i}},keys:function(e){var i=[];t.__observe(e,"__keys");for(var n in e._data)i.push(n);return i}},{setup:function(e){e instanceof t.Map&&(e=e.serialize()),this._data={},t.cid(this,".map"),this._init=1,this._computedBindings={};var i=this._setupDefaults(e);this._setupComputes(i);var n=e&&t.Map.helpers.addToMap(e,this),s=t.extend(t.extend(!0,{},i),e);this.attr(s),n&&n(),this.bind("change",t.proxy(this._changes,this)),delete this._init},_setupComputes:function(){for(var t,e=this.constructor._computes,i=0,n=e.length;n>i;i++)t=e[i],this[t]=this[t].clone(this),this._computedBindings[t]={count:0}},_setupDefaults:function(){return this.constructor.defaults||{}},_bindsetup:function(){},_bindteardown:function(){},_changes:function(e,i,n,s,r){t.batch.trigger(this,{type:i,batchNum:e.batchNum,target:e.target},[s,r])},_triggerChange:function(e,n,s,r){i.isBubbling(this,"change")?t.batch.trigger(this,{type:"change",target:this},[e,n,s,r]):t.batch.trigger(this,e,[s,r]),("remove"===n||"add"===n)&&t.batch.trigger(this,{type:"__keys",target:this})},_each:function(t){var e=this.__get();for(var i in e)e.hasOwnProperty(i)&&t(e[i],i)},attr:function(t,e){var i=typeof t;return"string"!==i&&"number"!==i?this._attrs(t,e):1===arguments.length?this._get(t):(this._set(t,e),this)},each:function(){return t.each.apply(void 0,[this].concat(t.makeArray(arguments)))},removeAttr:function(e){var i=t.List&&this instanceof t.List,n=t.Map.helpers.attrParts(e),s=n.shift(),r=i?this[s]:this._data[s];return n.length&&r?r.removeAttr(n):("string"==typeof e&&~e.indexOf(".")&&(s=e),this._remove(s,r),r)},_remove:function(t,e){t in this._data&&(delete this._data[t],t in this.constructor.prototype||delete this[t],this._triggerChange(t,"remove",void 0,e))},_get:function(e){e=""+e;var i=e.indexOf(".");if(i>=0){var n=this.__get(e);if(void 0!==n)return n;var s=e.substr(0,i),r=e.substr(i+1);t.__observe(this,s);var a=this.__get(s);return a&&a._get?a._get(r):void 0}return t.__observe(this,e),this.__get(e)},__get:function(t){return t?this._computedBindings[t]?this[t]():this._data[t]:this._data},__type:function(e,i){if(!(e instanceof t.Map)&&t.Map.helpers.canMakeObserve(e)){var n=r(e);if(n)return n;if(t.isArray(e)){var s=t.List;return new s(e)}var a=this.constructor.Map||t.Map;return new a(e)}return e},_set:function(t,e,i){t=""+t;var n,s=t.indexOf(".");if(!i&&s>=0){var r=t.substr(0,s),a=t.substr(s+1);if(n=this._init?void 0:this.__get(r),!o.helpers.isObservable(n))throw"can.Map: Object does not exist";n._set(a,e)}else this.__convert&&(e=this.__convert(t,e)),n=this._init?void 0:this.__get(t),this.__set(t,this.__type(e,t),n)},__set:function(t,e,i){if(e!==i){var n=void 0!==i||this.__get().hasOwnProperty(t)?"set":"add";this.___set(t,this.constructor._bubble.set(this,t,e,i)),this._computedBindings[t]||this._triggerChange(t,n,e,i),i&&this.constructor._bubble.teardownFromParent(this,i)}},___set:function(t,e){this._computedBindings[t]?this[t](e):this._data[t]=e,"function"==typeof this.constructor.prototype[t]||this._computedBindings[t]||(this[t]=e)},one:t.one,bind:function(e,i){var n=this._computedBindings&&this._computedBindings[e];if(n)if(n.count)n.count++;else{n.count=1;var s=this;n.handler=function(i,n,r){t.batch.trigger(s,{type:e,batchNum:i.batchNum,target:s},[n,r])},this[e].bind("change",n.handler)}return this.constructor._bubble.bind(this,e),t.bindAndSetup.apply(this,arguments)},unbind:function(e,i){var n=this._computedBindings&&this._computedBindings[e];return n&&(1===n.count?(n.count=0,this[e].unbind("change",n.handler),delete n.handler):n.count--),this.constructor._bubble.unbind(this,e),t.unbindAndTeardown.apply(this,arguments)},serialize:function(){return t.Map.helpers.serialize(this,"serialize",{})},_attrs:function(e,i){if(void 0===e)return o.helpers.serialize(this,"attr",{});e=t.simpleExtend({},e);var n,s,r=this;t.batch.start(),this.each(function(t,n){if("_cid"!==n){if(s=e[n],void 0===s)return void(i&&r.removeAttr(n));r.__convert&&(s=r.__convert(n,s)),o.helpers.isObservable(s)?r.__set(n,r.__type(s,n),t):o.helpers.isObservable(t)&&o.helpers.canMakeObserve(s)?t.attr(s,i):t!==s&&r.__set(n,r.__type(s,n),t),delete e[n]}});for(n in e)"_cid"!==n&&(s=e[n],this._set(n,s,!0));return t.batch.stop(),this},compute:function(e){if(t.isFunction(this.constructor.prototype[e]))return t.compute(this[e],this);var i=e.split("."),n=i.length-1,s={args:[]};return t.compute(function(e){return arguments.length?void t.compute.read(this,i.slice(0,n)).value.attr(i[n],e):t.compute.read(this,i,s).value},this)}});return o.prototype.on=o.prototype.bind,o.prototype.off=o.prototype.unbind,o});
-/*can@2.3.0-pre.1#list/list*/
-define("can/list/list",["can/util/util","can/map/map","can/map/bubble"],function(t,e,i){var r=[].splice,h=function(){var t={0:"a",length:1};return r.call(t,0,1),!t[0]}(),n=e.extend({Map:e},{setup:function(e,i){this.length=0,t.cid(this,".map"),this._init=1,this._computedBindings={},this._setupComputes(),e=e||[];var r;t.isDeferred(e)?this.replace(e):(r=e.length&&t.Map.helpers.addToMap(e,this),this.push.apply(this,t.makeArray(e||[]))),r&&r(),this.bind("change",t.proxy(this._changes,this)),t.simpleExtend(this,i),delete this._init},_triggerChange:function(i,r,h,n){e.prototype._triggerChange.apply(this,arguments);var s=+i;~(""+i).indexOf(".")||isNaN(s)||("add"===r?(t.batch.trigger(this,r,[h,s]),t.batch.trigger(this,"length",[this.length])):"remove"===r?(t.batch.trigger(this,r,[n,s]),t.batch.trigger(this,"length",[this.length])):t.batch.trigger(this,r,[h,s]))},__get:function(e){return e?this[e]&&this[e].isComputed&&t.isFunction(this.constructor.prototype[e])?this[e]():this[e]:this},__set:function(e,i,r){if(e=isNaN(+e)||e%1?e:+e,"number"==typeof e&&e>this.length-1){var h=new Array(e+1-this.length);return h[h.length-1]=i,this.push.apply(this,h),h}return t.Map.prototype.__set.call(this,""+e,i,r)},___set:function(t,e){this[t]=e,+t>=this.length&&(this.length=+t+1)},_remove:function(t,e){isNaN(+t)?(delete this[t],this._triggerChange(t,"remove",void 0,e)):this.splice(t,1)},_each:function(t){for(var e=this.__get(),i=0;i<e.length;i++)t(e[i],i)},serialize:function(){return e.helpers.serialize(this,"serialize",[])},splice:function(e,n){var s,a,l,o=t.makeArray(arguments),c=[],p=o.length>2;for(e=e||0,s=0,a=o.length-2;a>s;s++)l=s+2,o[l]=this.__type(o[l],l),c.push(o[l]),this[s+e]!==o[l]&&(p=!1);if(p&&this.length<=c.length)return c;void 0===n&&(n=o[1]=this.length-e);var g=r.apply(this,o);if(!h)for(s=this.length;s<g.length+this.length;s++)delete this[s];if(t.batch.start(),n>0&&(i.removeMany(this,g),this._triggerChange(""+e,"remove",void 0,g)),o.length>2){for(s=0,a=c.length;a>s;s++)i.set(this,s,c[s]);this._triggerChange(""+e,"add",c,g)}return t.batch.stop(),g},_attrs:function(i,r){return void 0===i?e.helpers.serialize(this,"attr",[]):(i=t.makeArray(i),t.batch.start(),this._updateAttrs(i,r),void t.batch.stop())},_updateAttrs:function(t,i){for(var r=Math.min(t.length,this.length),h=0;r>h;h++){var n=this[h],s=t[h];e.helpers.isObservable(n)&&e.helpers.canMakeObserve(s)?n.attr(s,i):n!==s&&this._set(h,s)}t.length>this.length?this.push.apply(this,t.slice(this.length)):t.length<this.length&&i&&this.splice(t.length)}}),s=function(e){return e[0]&&t.isArray(e[0])?e[0]:t.makeArray(e)};return t.each({push:"length",unshift:0},function(t,e){var r=[][e];n.prototype[e]=function(){for(var e,h,n=[],s=t?this.length:0,a=arguments.length;a--;)h=arguments[a],n[a]=i.set(this,a,this.__type(h,a));return e=r.apply(this,n),(!this.comparator||n.length)&&this._triggerChange(""+s,"add",n,void 0),e}}),t.each({pop:"length",shift:0},function(t,e){n.prototype[e]=function(){if(!this.length)return void 0;var r=s(arguments),h=t&&this.length?this.length-1:0,n=[][e].apply(this,r);return this._triggerChange(""+h,"remove",void 0,[n]),n&&n.unbind&&i.remove(this,n),n}}),t.extend(n.prototype,{indexOf:function(e,i){return this.attr("length"),t.inArray(e,this,i)},join:function(){return[].join.apply(this.attr(),arguments)},reverse:function(){var e=[].reverse.call(t.makeArray(this));this.replace(e)},slice:function(){var t=Array.prototype.slice.apply(this,arguments);return new this.constructor(t)},concat:function(){var e=[];return t.each(t.makeArray(arguments),function(i,r){e[r]=i instanceof t.List?i.serialize():i}),new this.constructor(Array.prototype.concat.apply(this.serialize(),e))},forEach:function(e,i){return t.each(this,e,i||this)},replace:function(e){return t.isDeferred(e)?e.then(t.proxy(this.replace,this)):this.splice.apply(this,[0,this.length].concat(t.makeArray(e||[]))),this},filter:function(e,i){var r,h=new t.List,n=this;return this.each(function(t,s,a){r=e.call(i|n,t,s,n),r&&h.push(t)}),h},map:function(e,i){var r=new t.List,h=this;return this.each(function(t,n,s){var a=e.call(i|h,t,n,h);r.push(a)}),r}}),t.List=e.List=n,t.List});
-/*can@2.3.0-pre.1#compute/read*/
-define("can/compute/read",["can/util/util"],function(e){var t=function(e,r,o){o=o||{};for(var a,s,u={foundObservable:!1},i=n(e,0,r,o,u),d=r.length,c=0;d>c;){s=i;for(var l=0,f=t.propertyReaders.length;f>l;l++){var v=t.propertyReaders[l];if(v.test(i)){i=v.read(i,r[c],c,o,u);break}}if(c+=1,i=n(i,c,r,o,u,s),a=typeof i,c<r.length&&(null===i||"function"!==a&&"object"!==a))return o.earlyExit&&o.earlyExit(s,c-1,i),{value:void 0,parent:s}}return void 0===i&&o.earlyExit&&o.earlyExit(s,c-1),{value:i,parent:s}},n=function(e,n,r,o,a,s){var u;do{u=!1;for(var i=0,d=t.valueReaders.length;d>i;i++)t.valueReaders[i].test(e,n,r,o)&&(e=t.valueReaders[i].read(e,n,r,o,a,s))}while(u);return e};return t.valueReaders=[{name:"compute",test:function(e,t,n,r){return e&&e.isComputed},read:function(t,n,r,o,a){return o.isArgument&&n===r.length?t:(!a.foundObservable&&o.foundObservable&&(o.foundObservable(t,n),a.foundObservable=!0),t instanceof e.Compute?t.get():t())}},{name:"function",test:function(t,n,r,o){var a=typeof t;return!("function"!==a||t.isComputed||!(o.executeAnonymousFunctions||o.isArgument&&n===r.length)||e.Construct&&t.prototype instanceof e.Construct||e.route&&t===e.route)},read:function(t,n,r,o,a,s){return o.isArgument&&n===r.length?o.proxyMethods!==!1?e.proxy(t,s):t:t.call(s)}}],t.propertyReaders=[{name:"map",test:e.isMapLike,read:function(t,n,r,o,a){return!a.foundObservable&&o.foundObservable&&(o.foundObservable(t,r),a.foundObservable=!0),"function"==typeof t[n]&&t.constructor.prototype[n]===t[n]?o.returnObserveMethods?t[n]:"constructor"===n&&t instanceof e.Construct||t[n].prototype instanceof e.Construct?t[n]:t[n].apply(t,o.args||[]):t.attr(n)}},{name:"promise",test:function(t){return e.isPromise(t)},read:function(t,n,r,o,a){!a.foundObservable&&o.foundObservable&&(o.foundObservable(t,r),a.foundObservable=!0);var s=t.__observeData;return t.__observeData||(s=t.__observeData={isPending:!0,state:"pending",isResolved:!1,isRejected:!1,value:void 0,reason:void 0},e.cid(s),e.simpleExtend(s,e.event),t.then(function(e){s.isPending=!1,s.isResolved=!0,s.value=e,s.state="resolved",s.dispatch("state",["resolved","pending"])},function(e){s.isPending=!1,s.isRejected=!0,s.reason=e,s.state="rejected",s.dispatch("state",["rejected","pending"])})),e.__observe(s,"state"),n in s?s[n]:t[n]}},{name:"object",test:function(){return!0},read:function(e,t){return null==e?void 0:e[t]}}],t.write=function(t,n,r,o){return o=o||{},e.isMapLike(t)?!o.isArgument&&t._data&&t._data[n]&&t._data[n].isComputed?t._data[n](r):t.attr(n,r):t[n]&&t[n].isComputed?t[n](r):void("object"==typeof t&&(t[n]=r))},t});
-/*can@2.3.0-pre.1#compute/get_value_and_bind*/
-define("can/compute/get_value_and_bind",["can/util/util"],function(e){function n(n,r,i,v){var o=t(n,r),d=o.observed,u=i.observed;return o.names!==i.names&&(a(u,d,v),s(u,v)),e.batch.afterPreviousEvents(function(){o.ready=!0}),o}var r=[];e.__isRecordingObserves=function(){return r.length},e.__observe=e.__reading=function(e,n){if(r.length){var t=e._cid+"|"+n,a=r[r.length-1];a.names+=t,a.observed[t]={obj:e,event:n+""}}},e.__notObserve=function(n){return function(){var r=e.__clearObserved(),t=n.apply(this,arguments);return e.__setObserved(r),t}},e.__clearObserved=e.__clearReading=function(){if(r.length){var e=r[r.length-1];return r[r.length-1]={names:"",observed:{}},e}},e.__setObserved=e.__setReading=function(e){r.length&&(r[r.length-1]=e)},e.__addObserved=e.__addReading=function(n){if(r.length){var t=r[r.length-1];e.simpleExtend(t.observed,n.observed),t.names+=n.names}};var t=function(e,n){r.push({names:"",observed:{}});var t=e.call(n),a=r.pop();return a.value=t,a},a=function(e,n,r){for(var t in n)i(e,n,t,r)},i=function(e,n,r,t){if(e[r])delete e[r];else{var a=n[r];a.obj.bind(a.event,t)}},s=function(e,n){for(var r in e){var t=e[r];t.obj.unbind(t.event,n)}};return n});
-/*can@2.3.0-pre.1#compute/proto_compute*/
-define("can/compute/proto_compute",["can/util/util","can/util/bind/bind","can/compute/read","can/compute/get_value_and_bind","can/util/batch/batch"],function(t,e,n,i){var s=function(e,n,i,s){n!==i&&t.batch.trigger(e,s?{type:"change",batchNum:s}:"change",[n,i])},u=function(e,n,s,u){var o,h,r;return u=!1,{on:function(a){var c=this;h||(h=function(t){if(o.ready&&e.bound&&(void 0===t.batchNum||t.batchNum!==r)){var a,f=o.value;u?(a=n.call(s),o.value=a):(o=i(n,s,o,h),a=o.value),c.updater(a,f,t.batchNum),r=r=t.batchNum}}),o=i(n,s,{observed:{}},h),u&&(n=t.__notObserve(n)),e.value=o.value,e.hasDependencies=!t.isEmptyObject(o.observed)},off:function(t){for(var e in o.observed){var n=o.observed[e];n.obj.unbind(n.event,h)}}}},o=function(){},h=function(t,e,n){this.value=t,s(this,t,e,n)},r=function(t,e,n){return function(){return t.call(e,n.get())}},a=function(t,e){return function(n){void 0!==n&&e(n,t.value)}};t.Compute=function(e,n,i,s){for(var u=[],o=0,h=arguments.length;h>o;o++)u[o]=arguments[o];var r=typeof u[1];"function"==typeof u[0]?this._setupGetterSetterFn(u[0],u[1],u[2],u[3]):u[1]?"string"===r?this._setupContextString(u[0],u[1],u[2]):"function"===r?this._setupContextFunction(u[0],u[1],u[2]):u[1]&&u[1].fn?this._setupAsyncCompute(u[0],u[1]):this._setupContextSettings(u[0],u[1]):this._setupInitialValue(u[0]),this._args=u,this.isComputed=!0,t.cid(this,"compute")},t.simpleExtend(t.Compute.prototype,{_bindsetup:t.__notObserve(function(){this.bound=!0,this._on(this.updater)}),_bindteardown:function(){this._off(this.updater),this.bound=!1},bind:t.bindAndSetup,unbind:t.unbindAndTeardown,clone:function(e){return e&&"function"==typeof this._args[0]?this._args[1]=e:e&&(this._args[2]=e),new t.Compute(this._args[0],this._args[1],this._args[2],this._args[3])},_on:o,_off:o,get:function(){return t.__isRecordingObserves()&&this._canObserve!==!1&&(t.__observe(this,"change"),this.bound||t.Compute.temporarilyBind(this)),this.bound?this.value:this._get()},_get:function(){return this.value},set:function(t){var e=this.value,n=this._set(t,e);return this.hasDependencies?this._setUpdates?this.value:this._get():(void 0===n?this.value=this._get():this.value=n,s(this,this.value,e),this.value)},_set:function(t){return this.value=t},updater:h,_computeFn:function(t){return arguments.length?this.set(t):this.get()},toFunction:function(){return t.proxy(this._computeFn,this)},_setupGetterSetterFn:function(e,n,i,s){this._set=t.proxy(e,n),this._get=t.proxy(e,n),this._canObserve=i===!1?!1:!0;var o=u(this,e,n||this,s);this._on=o.on,this._off=o.off},_setupContextString:function(e,n,i){var s=t.isMapLike(e),u=this,o=function(t,e,n){u.updater(e,n,t.batchNum)};s?(this.hasDependencies=!0,this._get=function(){return e.attr(n)},this._set=function(t){e.attr(n,t)},this._on=function(t){e.bind(i||n,o),this.value=this._get()},this._off=function(){return e.unbind(i||n,o)}):(this._get=t.proxy(this._get,e),this._set=t.proxy(this._set,e))},_setupContextFunction:function(e,n,i){this.value=e,this._set=n,t.simpleExtend(this,i)},_setupContextSettings:function(e,n){if(this.value=e,this._set=n.set?t.proxy(n.set,n):this._set,this._get=n.get?t.proxy(n.get,n):this._get,!n.__selfUpdater){var i=this,s=this.updater;this.updater=function(){s.call(i,i._get(),i.value)}}this._on=n.on?n.on:this._on,this._off=n.off?n.off:this._off},_setupAsyncCompute:function(e,n){this.value=e;var i,s=t.proxy(this.updater,this),o=this,h=n.fn;this.updater=s;var c=new t.Compute(e);this.lastSetValue=c,this._setUpdates=!0,this._set=function(t){return t===c.get()?this.value:c.set(t)},this._get=r(h,n.context,c),0===h.length?i=u(this,h,n.context):1===h.length?i=u(this,function(){return h.call(n.context,c.get())},n):(this.updater=a(this,s),i=u(this,function(){var t=h.call(n.context,c.get(),function(t){s(t,o.value)});return void 0!==t?t:this.value},n)),this._on=i.on,this._off=i.off},_setupInitialValue:function(t){this.value=t}});var c,f=function(){for(var t=0,e=c.length;e>t;t++)c[t].unbind("change",o);c=null};return t.Compute.temporarilyBind=function(t){t.bind("change",o),c||(c=[],setTimeout(f,10)),c.push(t)},t.Compute.async=function(e,n,i){return new t.Compute(e,{fn:n,context:i})},t.Compute.read=n,t.Compute.set=n.write,t.Compute.truthy=function(e){return new t.Compute(function(){var t=e.get();return"function"==typeof t&&(t=t.get()),!!t})},t.Compute});
-/*can@2.3.0-pre.1#compute/compute*/
-define("can/compute/compute",["can/util/util","can/util/bind/bind","can/util/batch/batch","can/compute/proto_compute"],function(n,t){n.compute=function(t,e,u,o){var c=new n.Compute(t,e,u,o),r=function(n){return arguments.length?c.set(n):c.get()};return r.bind=n.proxy(c.bind,c),r.unbind=n.proxy(c.unbind,c),r.isComputed=c.isComputed,r.clone=function(u){return"function"==typeof t&&(e=u),n.compute(t,e,u,o)},r.computeInstance=c,r};var e,u=function(){},o=function(){for(var n=0,t=e.length;t>n;n++)e[n].unbind("change",u);e=null};return n.compute.temporarilyBind=function(n){n.bind("change",u),e||(e=[],setTimeout(o,10)),e.push(n)},n.compute.truthy=function(t){return n.compute(function(){var n=t();return"function"==typeof n&&(n=n()),!!n})},n.compute.async=function(t,e,u){return n.compute(t,{fn:e,context:u})},n.compute.read=n.Compute.read,n.compute.set=n.Compute.set,n.__notObserve=function(t){return function(){var e=n.__clearReading(),u=t.apply(this,arguments);return n.__setReading(e),u}},n.compute});
-/*can@2.3.0-pre.1#observe/observe*/
-define("can/observe/observe",["can/util/util","can/map/map","can/list/list","can/compute/compute"],function(t){return t.Observe=t.Map,t.Observe.startBatch=t.batch.start,t.Observe.stopBatch=t.batch.stop,t.Observe.triggerBatch=t.batch.trigger,t});
-/*can@2.3.0-pre.1#view/scope/compute_data*/
-define("can/view/scope/compute_data",["can/util/util","can/compute/compute","can/compute/get_value_and_bind"],function(e,t,n){var o=function(t){return t.reads&&1===t.reads.length&&t.root instanceof e.Map&&!e.isFunction(t.root[t.reads[0]])},a=function(e,t){return n(e,null,{observed:{}},t)},u=function(e,t){for(var n in e.observed){var o=e.observed[n];o.obj.unbind(o.event,t)}},r=function(e,t){var n=e.root,o=e.reads[0];return n.bind(o,t),{value:e.initialValue,observed:{something:!0}}},c=function(e,t){e.root.unbind(e.reads[0],t)},s=function(t,n,o,a,u){if(!(arguments.length>4)){if(a.root)return e.compute.read(a.root,a.reads,o).value;var r=t.read(n,o);return a.scope=r.scope,a.initialValue=r.value,a.reads=r.reads,a.root=r.rootObserve,a.setRoot=r.setRoot,r.value}var c=a.root||a.setRoot;if(c.isComputed)c(u);else if(a.reads.length){var s=a.reads.length-1,i=a.reads.length?e.compute.read(c,a.reads.slice(0,s)).value:c;e.compute.set(i,a.reads[s],u,o)}};return function(t,i,d){d=d||{args:[]};var v,l,f={},p=function(e){return arguments.length?s(t,i,d,f,e):s(t,i,d,f)},m=function(e){if(l.ready&&g.computeInstance.bound&&(void 0===e.batchNum||e.batchNum!==v)){var t,o=l.value;l=n(p,null,l,m),t=l.value,g.computeInstance.updater(t,o,e.batchNum),v=v=e.batchNum}},b=function(e,t,n){"function"!=typeof t?g.computeInstance.updater(t,n,e.batchNum):(c(f,b),l=a(p,m),h=!1,g.computeInstance.updater(l.value,n,e.batchNum))},h=!1,g=e.compute(void 0,{on:function(){if(l=a(p,m),o(f)){var t=l;l=r(f,b),u(t,m),h=!0}g.computeInstance.value=l.value,g.computeInstance.hasDependencies=!e.isEmptyObject(l.observed)},off:function(){h?c(f,b):u(l,m)},set:p,get:p,__selfUpdater:!0});return f.compute=g,f}});
-/*can@2.3.0-pre.1#view/scope/scope*/
-define("can/view/scope/scope",["can/util/util","can/view/scope/compute_data","can/construct/construct","can/map/map","can/list/list","can/view/view","can/compute/compute"],function(e,t){var n=/(\\)?\./g,r=/\\\./g,s=function(e){var t=[],s=0;return e.replace(n,function(n,i,o){i||(t.push(e.slice(s,o).replace(r,".")),s=o+n.length)}),t.push(e.slice(s).replace(r,".")),t},i=e.Construct.extend({read:e.compute.read,Refs:e.Map.extend({}),refsScope:function(){return new e.view.Scope(new this.Refs)}},{init:function(e,t){this._context=e,this._parent=t,this.__cache={}},attr:e.__notObserve(function(t,n){var r={isArgument:!0,returnObserveMethods:!0,proxyMethods:!1},s=this.read(t,r);if(2===arguments.length){var i=t.lastIndexOf("."),o=-1!==i?t.substring(0,i):".",a=this.read(o,r).value;-1!==i&&(t=t.substring(i+1,t.length)),e.compute.set(a,t,n,r)}return s.value}),add:function(e){return e!==this._context?new this.constructor(e,this):this},computeData:function(e,n){return t(this,e,n)},compute:function(e,t){return this.computeData(e,t).compute},getRefs:function(){for(var e,t=this;t;){if(e=t._context,e instanceof i.Refs)return e;t=t._parent}},cloneFromRef:function(){for(var t,n,r=[],s=this;s;){if(t=s._context,t instanceof i.Refs){n=s._parent;break}r.push(t),s=s._parent}return n?(e.each(r,function(e){n=n.add(e)}),n):this},read:function(t,n){var r;if("./"===t.substr(0,2))r=!0,t=t.substr(2);else{if("../"===t.substr(0,3))return this._parent.read(t.substr(3),n);if(".."===t)return{value:this._parent._context};if("."===t||"this"===t)return{value:this._context};if("@root"===t){for(var o=this,a=this;o._parent;)a=o,o=o._parent;return o._context instanceof i.Refs&&(o=a),{value:o._context}}}for(var c,u,f,p,l,v,h=-1===t.indexOf("\\.")?t.split("."):s(t),d=this,_=[],m=-1,x=!1,b=e.simpleExtend({foundObservable:function(e,t){u=e,f=h.slice(t)},earlyExit:function(e,t){t>m&&(l=u,p=f,m=t)},executeAnonymousFunctions:!0},n);d;){if(c=d._context,v=c instanceof i.Refs,!(null===c||"object"!=typeof c&&"function"!=typeof c||x&&v)){v&&(x=!0);var g=e.compute.read(c,h,b);if(void 0!==g.value)return{scope:d,rootObserve:u,value:g.value,reads:f};_.push(e.__clearObserved())}d=r?null:d._parent}var w=_.length;if(w)for(var R=0;w>R;R++)e.__addObserved(_[R]);return{setRoot:l,reads:p,value:void 0}}});return e.view.Scope=i,i});
-/*can@2.3.0-pre.1#view/scanner*/
-define("can/view/scanner",["can/view/view","can/view/elements","can/view/callbacks/callbacks"],function(can,elements,viewCallbacks){var newLine=/(\r|\n)+/g,notEndTag=/\//,clean=function(t){return t.split("\\").join("\\\\").split("\n").join("\\n").split('"').join('\\"').split("	").join("\\t")},getTag=function(t,e,n){if(t)return t;for(;n<e.length;){if("<"===e[n]&&!notEndTag.test(e[n+1]))return elements.reverseTagMap[e[n+1]]||"span";n++}return""},bracketNum=function(t){return--t.split("{").length- --t.split("}").length},myEval=function(script){eval(script)},attrReg=/([^\s]+)[\s]*=[\s]*$/,startTxt="var ___v1ew = [];",finishTxt="return ___v1ew.join('')",put_cmd="___v1ew.push(\n",insert_cmd=put_cmd,htmlTag=null,quote=null,beforeQuote=null,rescan=null,getAttrName=function(){var t=beforeQuote.match(attrReg);return t&&t[1]},status=function(){return quote?"'"+getAttrName()+"'":htmlTag?1:0},top=function(t){return t[t.length-1]},Scanner;return can.view.Scanner=Scanner=function(t){can.extend(this,{text:{},tokens:[]},t),this.text.options=this.text.options||"",this.tokenReg=[],this.tokenSimple={"<":"<",">":">",'"':'"',"'":"'"},this.tokenComplex=[],this.tokenMap={};for(var e,n=0;e=this.tokens[n];n++)e[2]?(this.tokenReg.push(e[2]),this.tokenComplex.push({abbr:e[1],re:new RegExp(e[2]),rescan:e[3]})):(this.tokenReg.push(e[1]),this.tokenSimple[e[1]]=e[0]),this.tokenMap[e[0]]=e[1];this.tokenReg=new RegExp("("+this.tokenReg.slice(0).concat(["<",">",'"',"'"]).join("|")+")","g")},Scanner.prototype={helpers:[],scan:function(t,e){var n=[],s=0,a=this.tokenSimple,r=this.tokenComplex;t=t.replace(newLine,"\n"),this.transform&&(t=this.transform(t)),t.replace(this.tokenReg,function(e,i){var o=arguments[arguments.length-2];if(o>s&&n.push(t.substring(s,o)),a[e])n.push(e);else for(var u,c=0;u=r[c];c++)if(u.re.test(e)){n.push(u.abbr),u.rescan&&n.push(u.rescan(i));break}s=o+i.length}),s<t.length&&n.push(t.substr(s));var i,o,u,c,l="",p=[startTxt+(this.text.start||"")],h=function(t,e){p.push(put_cmd,'"',clean(t),'"'+(e||"")+");")},g=[],f=null,m=!1,k={attributeHookups:[],tagHookups:[],lastTagHookup:""},b=function(){k.lastTagHookup=k.tagHookups.pop()+k.tagHookups.length},v="",x=[],w=!1,T=!1,d=0,_=this.tokenMap;for(htmlTag=quote=beforeQuote=null;void 0!==(u=n[d++]);){if(null===f)switch(u){case _.left:case _.escapeLeft:case _.returnLeft:m=htmlTag&&1;case _.commentLeft:f=u,l.length&&h(l),l="";break;case _.escapeFull:m=htmlTag&&1,rescan=1,f=_.escapeLeft,l.length&&h(l),rescan=n[d++],l=rescan.content||rescan,rescan.before&&h(rescan.before),n.splice(d,0,_.right);break;case _.commentFull:break;case _.templateLeft:l+=_.left;break;case"<":0!==n[d].indexOf("!--")&&(htmlTag=1,m=0),l+=u;break;case">":htmlTag=0;var H="/"===l.substr(l.length-1)||"--"===l.substr(l.length-2),N="";if(k.attributeHookups.length&&(N="attrs: ['"+k.attributeHookups.join("','")+"'], ",k.attributeHookups=[]),v+k.tagHookups.length!==k.lastTagHookup&&v===top(k.tagHookups))H&&(l=l.substr(0,l.length-1)),p.push(put_cmd,'"',clean(l),'"',",can.view.pending({tagName:'"+v+"',"+N+"scope: "+(this.text.scope||"this")+this.text.options),H?(p.push("}));"),l="/>",b()):"<"===n[d]&&n[d+1]==="/"+v?(p.push("}));"),l=u,b()):(p.push(",subtemplate: function("+this.text.argNames+"){\n"+startTxt+(this.text.start||"")),l="");else if(m||!w&&elements.tagToContentPropMap[x[x.length-1]]||N){var R=",can.view.pending({"+N+"scope: "+(this.text.scope||"this")+this.text.options+'}),"';H?h(l.substr(0,l.length-1),R+'/>"'):h(l,R+'>"'),l="",m=0}else l+=u;(H||w)&&(x.pop(),v=x[x.length-1],w=!1),k.attributeHookups=[];break;case"'":case'"':if(htmlTag)if(quote&&quote===u){quote=null;var L=getAttrName();if(viewCallbacks.attr(L)&&k.attributeHookups.push(L),T){l+=u,h(l),p.push(finishTxt,"}));\n"),l="",T=!1;break}}else if(null===quote&&(quote=u,beforeQuote=i,c=getAttrName(),"img"===v&&"src"===c||"style"===c)){h(l.replace(attrReg,"")),l="",T=!0,p.push(insert_cmd,"can.view.txt(2,'"+getTag(v,n,d)+"',"+status()+",this,function(){",startTxt),h(c+"="+u);break}default:if("<"===i){v="!--"===u.substr(0,3)?"!--":u.split(/\s/)[0];var S,y=!1;0===v.indexOf("/")&&(y=!0,S=v.substr(1)),y?(top(x)===S&&(v=S,w=!0),top(k.tagHookups)===S&&(h(l.substr(0,l.length-1)),p.push(finishTxt+"}}) );"),l="><",b())):(v.lastIndexOf("/")===v.length-1&&(v=v.substr(0,v.length-1)),"!--"!==v&&viewCallbacks.tag(v)&&("content"===v&&elements.tagMap[top(x)]&&(u=u.replace("content",elements.tagMap[top(x)])),k.tagHookups.push(v)),x.push(v))}l+=u}else switch(u){case _.right:case _.returnRight:switch(f){case _.left:o=bracketNum(l),1===o?(p.push(insert_cmd,"can.view.txt(0,'"+getTag(v,n,d)+"',"+status()+",this,function(){",startTxt,l),g.push({before:"",after:finishTxt+"}));\n"})):(s=g.length&&-1===o?g.pop():{after:";"},s.before&&p.push(s.before),p.push(l,";",s.after));break;case _.escapeLeft:case _.returnLeft:o=bracketNum(l),o&&g.push({before:finishTxt,after:"}));\n"});for(var j=f===_.escapeLeft?1:0,C={insert:insert_cmd,tagName:getTag(v,n,d),status:status(),specialAttribute:T},q=0;q<this.helpers.length;q++){var E=this.helpers[q];if(E.name.test(l)){l=E.fn(l,C),E.name.source===/^>[\s]*\w*/.source&&(j=0);break}}"object"==typeof l?l.startTxt&&l.end&&T?p.push(insert_cmd,"can.view.toStr( ",l.content,"() ) );"):(l.startTxt?p.push(insert_cmd,"can.view.txt(\n"+("string"==typeof status()||(null!=l.escaped?l.escaped:j))+",\n'"+v+"',\n"+status()+",\nthis,\n"):l.startOnlyTxt&&p.push(insert_cmd,"can.view.onlytxt(this,\n"),p.push(l.content),l.end&&p.push("));")):T?p.push(insert_cmd,l,");"):p.push(insert_cmd,"can.view.txt(\n"+("string"==typeof status()||j)+",\n'"+v+"',\n"+status()+",\nthis,\nfunction(){ "+(this.text.escape||"")+"return ",l,o?startTxt:"}));\n"),rescan&&rescan.after&&rescan.after.length&&(h(rescan.after.length),rescan=null)}f=null,l="";break;case _.templateLeft:l+=_.left;break;default:l+=u}i=u}l.length&&h(l),p.push(";");var M=p.join(""),A={out:(this.text.outStart||"")+M+" "+finishTxt+(this.text.outEnd||"")};return myEval.call(A,"this.fn = (function("+this.text.argNames+"){"+A.out+"});\r\n//# sourceURL="+e+".js"),A}},can.view.pending=function(t){var e=can.view.getHooks();return can.view.hook(function(n){can.each(e,function(t){t(n)}),t.templateType="legacy",t.tagName&&viewCallbacks.tagHandler(n,t.tagName,t),can.each(t&&t.attrs||[],function(e){t.attributeName=e;var s=viewCallbacks.attr(e);s&&s(n,t)})})},can.view.tag("content",function(t,e){return e.scope}),can.view.Scanner=Scanner,Scanner});
-/*can@2.3.0-pre.1#view/node_lists/node_lists*/
-define("can/view/node_lists/node_lists",["can/util/util","can/view/elements"],function(e){var n=!0;try{document.createTextNode("")._=0}catch(t){n=!1}var r={},a={},i="ejs_"+Math.random(),s=0,u=function(e,t){var r=t||a,u=l(e,r);return u?u:n||3!==e.nodeType?(++s,e[i]=(e.nodeName?"element_":"obj_")+s):(++s,r["text_"+s]=e,"text_"+s)},l=function(e,t){if(n||3!==e.nodeType)return e[i];for(var r in t)if(t[r]===e)return r},c=[].splice,o=[].push,p=function(e){for(var n=0,t=0,r=e.length;r>t;t++){var a=e[t];a.nodeType?n++:n+=p(a)}return n},f=function(e,n){for(var t={},r=0,a=e.length;a>r;r++){var i=d.first(e[r]);t[u(i,n)]=e[r]}return t},d={id:u,update:function(n,t){var r=d.unregisterChildren(n);t=e.makeArray(t);var a=n.length;return c.apply(n,[0,a].concat(t)),n.replacements?d.nestReplacements(n):d.nestList(n),r},nestReplacements:function(e){for(var n=0,t={},r=f(e.replacements,t),a=e.replacements.length;n<e.length&&a;){var i=e[n],s=r[l(i,t)];s&&(e.splice(n,p(s),s),a--),n++}e.replacements=[]},nestList:function(e){for(var n=0;n<e.length;){var t=e[n],a=r[u(t)];a?a!==e&&e.splice(n,p(a),a):r[u(t)]=e,n++}},last:function(e){var n=e[e.length-1];return n.nodeType?n:d.last(n)},first:function(e){var n=e[0];return n.nodeType?n:d.first(n)},flatten:function(e){for(var n=[],t=0;t<e.length;t++){var r=e[t];r.nodeType?n.push(r):n.push.apply(n,d.flatten(r))}return n},register:function(e,n,t){return e.unregistered=n,e.parentList=t,t===!0?e.replacements=[]:t?(t.replacements.push(e),e.replacements=[]):d.nestList(e),e},unregisterChildren:function(n){var t=[];return e.each(n,function(e){e.nodeType?(n.replacements||delete r[u(e)],t.push(e)):o.apply(t,d.unregister(e))}),t},unregister:function(e){var n=d.unregisterChildren(e);if(e.unregistered){var t=e.unregistered;delete e.unregistered,delete e.replacements,t()}return n},nodeMap:r};return e.view.nodeLists=d,d});
-/*can@2.3.0-pre.1#view/parser/parser*/
-define("can/view/parser/parser",[],function(){function e(e,t){for(var r=0;r<e.length;r++)t(e[r],r)}function t(t){var r={},a=t.split(",");return e(a,function(e){r[e]=!0}),r}function r(e,t){for(var r=0,a=e.length;a>r;r++){var n=e[r];t[n.tokenType].apply(t,n.args)}return e}var a="-:A-Za-z0-9_",n="[^=>\\s\\{\\}\\/]+",s="\\s*=\\s*",i='"((?:\\\\.|[^"])*)"',o="'((?:\\\\.|[^'])*)'",l="(?:"+s+"(?:(?:\"[^\"]*\")|(?:'[^']*')|[^>\\s]+))?",c="\\{\\{[^\\}]*\\}\\}\\}?",u="\\{\\{([^\\}]*)\\}\\}\\}?",p=new RegExp("^<(["+a+"]+)((?:\\s*(?:(?:(?:"+n+")?"+l+")|(?:"+c+")+))*)\\s*(\\/?)>"),f=new RegExp("^<\\/(["+a+"]+)[^>]*>"),d=new RegExp("(?:(?:("+n+")|"+u+")(?:"+s+"(?:(?:"+i+")|(?:"+o+")|([^>\\s]+)))?)","g"),g=new RegExp(u,"g"),h=/<|\{\{/,m=t("area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed"),b=t("a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,ins,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video"),v=t("abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var"),x=t("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr"),w=t("checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected"),y=t("script,style"),E="start,end,close,attrStart,attrEnd,attrValue,chars,comment,special,done".split(","),k=function(){},A=function(t,a,n){function s(e,t,r,n){if(t=t.toLowerCase(),b[t])for(;O.last()&&v[O.last()];)i("",O.last());x[t]&&O.last()===t&&i("",t),n=m[t]||!!n,a.start(t,n),n||O.push(t),A.parseAttrs(r,a),a.end(t,n)}function i(e,t){var r;if(t)for(r=O.length-1;r>=0&&O[r]!==t;r--);else r=0;if(r>=0){for(var n=O.length-1;n>=r;n--)a.close&&a.close(O[n]);O.length=r}}function o(e,t){a.special&&a.special(t)}if("object"==typeof t)return r(t,a);var l=[];a=a||{},n&&e(E,function(e){var t=a[e]||k;a[e]=function(){t.apply(this,arguments)!==!1&&l.push({tokenType:e,args:[].slice.call(arguments,0)})}});var c,u,d,w=function(){S&&a.chars&&a.chars(S),S=""},O=[],R=t,S="";for(O.last=function(){return this[this.length-1]};t;){if(u=!0,O.last()&&y[O.last()])t=t.replace(new RegExp("([\\s\\S]*?)</"+O.last()+"[^>]*>"),function(e,t){return t=t.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g,"$1$2"),a.chars&&a.chars(t),""}),i("",O.last());else if(0===t.indexOf("<!--")?(c=t.indexOf("-->"),c>=0&&(w(),a.comment&&a.comment(t.substring(4,c)),t=t.substring(c+3),u=!1)):0===t.indexOf("</")?(d=t.match(f),d&&(w(),t=t.substring(d[0].length),d[0].replace(f,i),u=!1)):0===t.indexOf("<")?(d=t.match(p),d&&(w(),t=t.substring(d[0].length),d[0].replace(p,s),u=!1)):0===t.indexOf("{{")&&(d=t.match(g),d&&(w(),t=t.substring(d[0].length),d[0].replace(g,o))),u){c=t.search(h),0===c&&t===R&&(S+=t.charAt(0),t=t.substr(1),c=t.search(h));var j=0>c?t:t.substring(0,c);t=0>c?"":t.substring(c),j&&(S+=j)}if(t===R)throw"Parse Error: "+t;R=t}return w(),i(),a.done(),l};return A.parseAttrs=function(e,t){(null!=e?e:"").replace(d,function(e,r,a,n,s,i){if(a&&t.special(a),r||n||s||i){var o=arguments[3]?arguments[3]:arguments[4]?arguments[4]:arguments[5]?arguments[5]:w[r.toLowerCase()]?r:"";t.attrStart(r||"");for(var l,c=g.lastIndex=0,u=g.exec(o);u;)l=o.substring(c,g.lastIndex-u[0].length),l.length&&t.attrValue(l),t.special(u[1]),c=g.lastIndex,u=g.exec(o);l=o.substr(c,o.length),l&&t.attrValue(l),t.attrEnd(r||"")}})},A});
-/*can@2.3.0-pre.1#view/live/live*/
-define("can/view/live/live",["can/util/util","can/view/elements","can/view/view","can/view/node_lists/node_lists","can/view/parser/parser"],function(e,t,n,r,i){t=t||e.view.elements,r=r||e.view.NodeLists,i=i||e.view.parser;var a=function(t,n,r){var i=!1,a=function(){return i||(i=!0,r(o),e.unbind.call(t,"removed",a)),!0},o={teardownCheck:function(e){return e?!1:a()}};return e.bind.call(t,"removed",a),n(o),o},o=function(e){var t=e.childNodes;if("length"in t)return t;for(var n=e.firstChild,r=[];n;)r.push(n),n=n.nextSibling;return r},u=function(e,t,n){return a(e,function(){t.bind("change",n)},function(e){t.unbind("change",n),e.nodeList&&r.unregister(e.nodeList)})},c=function(e){var t,n={};return i.parseAttrs(e,{attrStart:function(e){n[e]="",t=e},attrValue:function(e){n[t]+=e},attrEnd:function(){}}),n},s=[].splice,d=function(e){return e&&e.nodeType},l=function(e){e.firstChild||e.appendChild(e.ownerDocument.createTextNode(""))},f={list:function(n,i,u,c,d,l){var p,v=l||[n],h=[],g=!1,b=!1,w=function(n,i,a){if(g){var d=N.ownerDocument.createDocumentFragment(),f=[],p=[];e.each(i,function(t,n){var i=[];l&&r.register(i,null,!0);var s=e.compute(n+a),v=u.call(c,t,s,i),h="string"==typeof v,g=e.frag(v);g=h?e.view.hookup(g):g;var b=e.makeArray(o(g));l?(r.update(i,b),f.push(i)):f.push(r.register(b)),d.appendChild(g),p.push(s)});var b=a+1;if(v[b]){var w=r.first(v[b]);e.insertBefore(w.parentNode,d,w)}else t.after(1===b?[N]:[r.last(v[b-1])],d);s.apply(v,[b,0].concat(f)),s.apply(h,[a,0].concat(p));for(var m=a+p.length,k=h.length;k>m;m++)h[m](m)}},m=function(t,n,i,a,o){if(g&&(a||!y.teardownCheck(N.parentNode))){0>i&&(i=h.length+i);var u=v.splice(i+1,n.length),c=[];e.each(u,function(e){var t=r.unregister(e);[].push.apply(c,t)}),h.splice(i,n.length);for(var s=i,d=h.length;d>s;s++)h[s](s);o?r.unregister(v):e.remove(e.$(c))}},k=function(t,n,i,a){if(g){i+=1,a+=1;var o,u=v[i],c=e.frag(r.flatten(v[a]));o=i>a?r.last(u).nextSibling:r.first(u);var s=v[0].parentNode;s.insertBefore(c,o);var d=v[a];[].splice.apply(v,[a,1]),[].splice.apply(v,[i,0,d])}},N=n.ownerDocument.createTextNode(""),A=function(e){p&&p.unbind&&p.unbind("add",w).unbind("remove",m).unbind("move",k),m({},{length:v.length-1},0,!0,e)},C=function(t,n,r){b||(A(),p=n||[],p.bind&&p.bind("add",w).bind("remove",m).bind("move",k),g=!0,w({},p,0),g=!1,e.batch.afterPreviousEvents(function(){g=!0}))};d=t.getParentNode(n,d);var y=a(d,function(){e.isFunction(i)&&i.bind("change",C)},function(){e.isFunction(i)&&i.unbind("change",C),A(!0)});l?(t.replace(v,N),r.update(v,[N]),l.unregistered=function(){y.teardownCheck(),b=!0}):f.replace(v,N,y.teardownCheck),C({},e.isFunction(i)?i():i)},html:function(n,i,a,c){var s;a=t.getParentNode(n,a),s=u(a,i,function(e,t,n){var i=r.first(f).parentNode;i&&p(t),s.teardownCheck(r.first(f).parentNode)});var f=c||[n],p=function(n){var i="function"==typeof n,u=d(n),c=e.frag(i?"":n),s=e.makeArray(f);l(c),u||i||(c=e.view.hookup(c,a)),s=r.update(f,o(c)),i&&n(c.firstChild),t.replace(s,c)};s.nodeList=f,c?c.unregistered=s.teardownCheck:r.register(f,s.teardownCheck),p(i())},replace:function(n,i,a){var u=n.slice(0),c=e.frag(i);return r.register(n,a),"string"==typeof i&&(c=e.view.hookup(c,n[0].parentNode)),r.update(n,o(c)),t.replace(u,c),n},text:function(n,i,a,o){var c=t.getParentNode(n,a),s=u(c,i,function(t,n,r){"unknown"!=typeof d.nodeValue&&(d.nodeValue=e.view.toStr(n)),s.teardownCheck(d.parentNode)}),d=n.ownerDocument.createTextNode(e.view.toStr(i()));o?(o.unregistered=s.teardownCheck,s.nodeList=o,r.update(o,[d]),t.replace([n],d)):s.nodeList=f.replace([n],d,s.teardownCheck)},setAttributes:function(t,n){var r=c(n);for(var i in r)e.attr.set(t,i,r[i])},attributes:function(n,r,i){var a={},o=function(r){var i,o=c(r);for(i in o){var u=o[i],s=a[i];u!==s&&e.attr.set(n,i,u),delete a[i]}for(i in a)t.removeAttr(n,i);a=o};u(n,r,function(e,t){o(t)}),arguments.length>=3?a=c(i):o(r())},attributePlaceholder:"__!!__",attributeReplace:/__!!__/g,attribute:function(n,r,i){u(n,i,function(e,i){t.setAttr(n,r,c.render())});var a,o=e.$(n);a=e.data(o,"hooks"),a||e.data(o,"hooks",a={});var c,s=t.getAttr(n,r),d=s.split(f.attributePlaceholder),l=[];l.push(d.shift(),d.join(f.attributePlaceholder)),a[r]?a[r].computes.push(i):a[r]={render:function(){var e=0,n=s?s.replace(f.attributeReplace,function(){return t.contentText(c.computes[e++]())}):t.contentText(c.computes[e++]());return n},computes:[i],batchNum:void 0},c=a[r],l.splice(1,0,i()),t.setAttr(n,r,l.join(""))},specialAttribute:function(e,n,r){u(e,r,function(r,i){t.setAttr(e,n,v(i))}),t.setAttr(e,n,v(r()))},simpleAttribute:function(e,n,r){u(e,r,function(r,i){t.setAttr(e,n,i)}),t.setAttr(e,n,r())}};f.attr=f.simpleAttribute,f.attrs=f.attributes;var p=/(\r|\n)+/g,v=function(e){var n=/^["'].*["']$/;return e=e.replace(t.attrReg,"").replace(p,""),n.test(e)?e.substr(1,e.length-2):e};return e.view.live=f,f});
-/*can@2.3.0-pre.1#view/render*/
-define("can/view/render",["can/view/view","can/view/elements","can/view/live/live","can/util/string/string"],function(t,n,e){var i,r=[],u=function(t){var e=n.tagMap[t]||"span";return"span"===e?"@@!!@@":"<"+e+">"+u(e)+"</"+e+">"},o=function(n,e){if("string"==typeof n)return n;if(!n&&0!==n)return"";var i=n.hookup&&function(t,e){n.hookup.call(n,t,e)}||"function"==typeof n&&n;return i?e?"<"+e+" "+t.view.hook(i)+"></"+e+">":(r.push(i),""):""+n},c=function(n,e){return"string"==typeof n||"number"==typeof n?t.esc(n):o(n,e)},s=!1,a=function(){};return t.extend(t.view,{live:e,setupLists:function(){var n,e=t.view.lists;return t.view.lists=function(t,e){return n={list:t,renderer:e},Math.random()},function(){return t.view.lists=e,n}},getHooks:function(){var t=r.slice(0);return i=t,r=[],t},onlytxt:function(t,n){return c(n.call(t))},txt:function(f,p,l,v,h){var w,g,d,b,y=n.tagMap[p]||"span",k=!1,m=a;if(s)w=h.call(v);else{("string"==typeof l||1===l)&&(s=!0);var x=t.view.setupLists();m=function(){d.unbind("change",a)},d=t.compute(h,v,!1),d.bind("change",a),g=x(),w=d(),s=!1,k=d.computeInstance.hasDependencies}if(g)return m(),"<"+y+t.view.hook(function(t,n){e.list(t,g.list,g.renderer,v,n)})+"></"+y+">";if(!k||"function"==typeof w)return m(),(s||2===f||!f?o:c)(w,0===l&&y);var M=n.tagToContentPropMap[p];return 0!==l||M?1===l?(r.push(function(t){e.attributes(t,d,d()),m()}),d()):2===f?(b=l,r.push(function(t){e.specialAttribute(t,b,d),m()}),d()):(b=0===l?M:l,(0===l?i:r).push(function(t){e.attribute(t,b,d),m()}),e.attributePlaceholder):"<"+y+t.view.hook(f&&"object"!=typeof w?function(t,n){e.text(t,d,n),m()}:function(t,n){e.html(t,d,n),m()})+">"+u(y)+"</"+y+">"}}),t});
-/*can@2.3.0-pre.1#view/stache/utils*/
-define("can/view/stache/utils",["can/util/util"],function(){return{isArrayLike:function(t){return t&&t.splice&&"number"==typeof t.length},isObserveLike:function(t){return t instanceof can.Map||t&&!!t._get},emptyHandler:function(){},jsonParse:function(str){return"'"===str[0]?str.substr(1,str.length-2):"undefined"===str?void 0:can.global.JSON?JSON.parse(str):eval("("+str+")")},mixins:{last:function(){return this.stack[this.stack.length-1]},add:function(t){this.last().add(t)},subSectionDepth:function(){return this.stack.length-1}}}});
-/*can@2.3.0-pre.1#view/stache/mustache_helpers*/
-define("can/view/stache/mustache_helpers",["can/util/util","can/view/stache/utils","can/view/live/live"],function(e,n,t){t=t||e.view.live;var i=function(t){return n.isObserveLike(t)&&n.isArrayLike(t)&&t.attr("length")?t:e.isFunction(t)?t():t},r={each:function(r,s){var o,u,a,c=i(r),f=[];if(c instanceof e.List)return function(n){var i=[n];i.expression="live.list",e.view.nodeLists.register(i,null,s.nodeList),e.view.nodeLists.update(s.nodeList,[n]);var o=function(e,n,t){return s.fn(s.scope.add({"@index":n}).add(e),s.options,t)};t.list(n,r,o,s.context,n.parentNode,i)};var l=c;if(l&&n.isArrayLike(l))for(a=0;a<l.length;a++)f.push(s.fn(s.scope.add({"@index":a}).add(l[a])));else if(n.isObserveLike(l))for(o=e.Map.keys(l),a=0;a<o.length;a++)u=o[a],f.push(s.fn(s.scope.add({"@key":u}).add(l[u])));else if(l instanceof Object)for(u in l)f.push(s.fn(s.scope.add({"@key":u}).add(l[u])));return f},"@index":function(n,t){t||(t=n,n=0);var i=t.scope.attr("@index");return""+((e.isFunction(i)?i():i)+n)},"if":function(n,t){var r;return r=e.isFunction(n)?e.compute.truthy(n)():!!i(n),r?t.fn(t.scope||this):t.inverse(t.scope||this)},is:function(){var n,t,r=arguments[arguments.length-1];if(arguments.length-2<=0)return r.inverse();for(var s=0;s<arguments.length-1;s++){if(t=i(arguments[s]),t=e.isFunction(t)?t():t,s>0&&t!==n)return r.inverse();n=t}return r.fn()},eq:function(){return r.is.apply(this,arguments)},unless:function(n,t){return r["if"].apply(this,[e.isFunction(n)?e.compute(function(){return!n()}):!n,t])},"with":function(e,n){var t=e;return e=i(e),e?n.fn(t):void 0},log:function(e,n){"undefined"!=typeof console&&console.log&&(n?console.log(e,n.context):console.log(e.context))},data:function(n){var t=2===arguments.length?this:arguments[1];return function(i){e.data(e.$(i),n,t||this.context)}}},s=function(e,n){r[e]=n};return{registerHelper:s,registerSimpleHelper:function(n,t){s(n,e.view.simpleHelper(t))},getHelper:function(e,n){var t=n.attr("helpers."+e);return t||(t=r[e]),t?{fn:t}:void 0}}});
-/*can@2.3.0-pre.1#view/stache/mustache_core*/
-define("can/view/stache/mustache_core",["can/util/util","can/view/stache/utils","can/view/stache/mustache_helpers","can/view/live/live","can/view/elements","can/view/scope/scope","can/view/node_lists/node_lists"],function(e,t,n,r,i,a,s){r=r||e.view.live,i=i||e.view.elements,a=a||e.view.Scope,s=s||e.view.nodeLists;var o=/((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,u=/^(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(?:(.+?)=(?:(?:('.*?'|".*?")|([0-9]+\.?[0-9]*|true|false|null|undefined))|(.+))))$/,c=/(?:(?:^|(\r?)\n)(\s*)(\{\{([^\}]*)\}\}\}?)([^\S\n\r]*)($|\r?\n))|(\{\{([^\}]*)\}\}\}?)/g,l=function(e){return e&&"string"==typeof e.get},f=function(t,n,r,i){for(var a=(e.document||e.global.document).createDocumentFragment(),s=0,o=t.length;o>s;s++)p(a,r.fn(n?t.attr(""+s):t[s],i));return a},p=function(e,t){t&&e.appendChild("string"==typeof t?e.ownerDocument.createTextNode(t):t)},h=function(e,t,n,r){for(var i="",a=0,s=e.length;s>a;a++)i+=n.fn(t?e.attr(""+a):e[a],r);return i},v=function(t,n,r){var i=n.computeData(t,{isArgument:r,args:[n.attr("."),n]});return e.compute.temporarilyBind(i.compute),i},d=function(e,t){var n=v(e,t,!0);return n.compute.computeInstance.hasDependencies?n.compute:n.initialValue},g=function(e,t,n,r,i,a){i&&(e.fn=m(i,t,n,r)),a&&(e.inverse=m(a,t,n,r))},m=function(t,n,r,i){var a=function(e,r,i){return t(e||n,r,i)};return e.__notObserve(function(t,s,o){void 0===t||t instanceof e.view.Scope||(t=n.add(t)),void 0===s||s instanceof x.Options||(s=r.add(s));var u=a(t,s||r,o||i);return u})},x={expressionData:function(n){var r=[],i={},a=0;return(e.trim(n)+" ").replace(o,function(e,n){var s;a&&(s=n.match(u))?s[1]||s[2]?r.push(t.jsonParse(s[1]||s[2])):i[s[3]]=s[6]?{get:s[6]}:t.jsonParse(s[4]||s[5]):r.push({get:n}),a++}),{name:r.shift(),args:r,hash:i}},makeEvaluator:function(r,i,a,s,o,u,c,p){for(var m,x,b,w=[],y={},O={fn:function(){},inverse:function(){}},_=r.attr("."),D=o.name,k=o.args.length||!e.isEmptyObject(o.hash),E=0,L=o.args.length;L>E;E++){var A=o.args[E];A&&l(A)?w.push(d(A.get,r,!0)):w.push(A)}for(var N in o.hash)l(o.hash[N])?y[N]=d(o.hash[N].get,r):y[N]=o.hash[N];if(l(D)&&(k&&(m=n.getHelper(D.get,i),m||"function"!=typeof _[D.get]||(m={fn:_[D.get]})),!m)){var S=D.get,B=v(D.get,r,!1),F=B.compute;x=B.initialValue,D=B.compute.computeInstance.hasDependencies?F:x,k||void 0!==x?"function"==typeof x&&(m={fn:x}):m=n.getHelper(S,i)}if("^"===s){var j=u;u=c,c=j}if(m)return g(O,r,i,a,u,c),e.simpleExtend(O,{context:_,scope:r,contexts:r,hash:y,nodeList:a,exprData:o}),w.push(O),b=function(){return m.fn.apply(_,w)||""},b.bindOnce=!1,b;if(!s)return D&&D.isComputed?D:function(){return""+(null!=D?D:"")};if("#"===s||"^"===s){g(O,r,i,a,u,c);var M=function(){var n;if(n=e.isFunction(D)&&D.isComputed?D():D,t.isArrayLike(n)){var a=t.isObserveLike(n);return(a?n.attr("length"):n.length)?(p?h:f)(n,a,O,i):O.inverse(r,i)}return n?O.fn(n||r,i):O.inverse(r,i)};return M.bindOnce=!1,M}},makeLiveBindingPartialRenderer:function(t,n){return t=e.trim(t),function(i,a,o){var u=[this];u.expression=">"+t,s.register(u,null,n.directlyNested?o||!0:!0);var c=e.compute(function(){var n,r=t,s=a.attr("partials."+r);if(s)n=s.render?s.render(i,a):s(i,a);else{var o=i.read(r,{isArgument:!0,returnObserveMethods:!0,proxyMethods:!1}).value;if(null===o)return e.frag("");o&&(r=o),n=e.isFunction(r)?r(i,a):e.view.render(r,i,a)}return e.frag(n)});r.html(this,c,this.parentNode,u)}},makeStringBranchRenderer:function(e,t){var n=w(t),r=e+t;return function(t,i,a,s){var o=t.__cache[r];(e||!o)&&(o=b(t,i,null,e,n,a,s,!0),e||(t.__cache[r]=o));var u=o();return null==u?"":""+u}},makeLiveBindingBranchRenderer:function(t,n,a){var o=w(n);return function(u,c,l,f,p){var h=[this];h.expression=n,s.register(h,null,a.directlyNested?l||!0:!0);var v=b(u,c,h,t,o,f,p,a.tag),d=e.compute(v,null,!1,v.bindOnce===!1?!1:!0);d.bind("change",e.k);var g=d();if("function"==typeof g){var m=e.__clearObserved();g(this),e.__setObserved(m)}else d.computeInstance.hasDependencies?a.attr?r.simpleAttribute(this,a.attr,d):a.tag?r.attributes(this,d):a.text&&"object"!=typeof g?r.text(this,d,this.parentNode,h):r.html(this,d,this.parentNode,h):a.attr?e.attr.set(this,a.attr,g):a.tag?r.setAttributes(this,g):a.text&&"string"==typeof g?this.nodeValue=g:g&&i.replace([this],e.frag(g,this.ownerDocument));d.unbind("change",e.k)}},splitModeFromExpression:function(t,n){t=e.trim(t);var r=t.charAt(0);return"#/{&^>!".indexOf(r)>=0?t=e.trim(t.substr(1)):r=null,"{"===r&&n.node&&(r=null),{mode:r,expression:t}},cleanLineEndings:function(e){return e.replace(c,function(e,t,n,r,i,a,s,o,u,c){a=a||"",t=t||"",n=n||"";var l=y(i||u,{});return o||">{".indexOf(l.mode)>=0?e:"^#!/".indexOf(l.mode)>=0?r+(0!==c&&s.length?t+"\n":""):n+r+a+(n.length||0!==c?t+"\n":"")})},Options:e.view.Scope.extend({init:function(t,n){t.helpers||t.partials||t.tags||(t={helpers:t}),e.view.Scope.prototype.init.apply(this,arguments)}})},b=x.makeEvaluator,w=x.expressionData,y=x.splitModeFromExpression;return x});
-/*can@2.3.0-pre.1#view/bindings/bindings*/
-define("can/view/bindings/bindings",["can/util/util","can/view/stache/mustache_core","can/view/callbacks/callbacks","can/control/control","can/view/scope/scope"],function(e,t){var n=function(){var e={"":!0,"true":!0,"false":!1},t=function(t){if(t&&t.getAttribute){var n=t.getAttribute("contenteditable");return e[n]}};return function(e){var n=t(e);return"boolean"==typeof n?n:!!t(e.parentNode)}}(),i=function(e,t,n){return t=t||"{",n=n||"}",e[0]===t&&e[e.length-1]===n?e.substr(1,e.length-2):e};e.view.attr("can-value",function(t,a){var s,l,h=e.trim(i(t.getAttribute("can-value"))),v=a.scope.computeData(h,{args:[]}).compute;return"input"===t.nodeName.toLowerCase()&&("checkbox"===t.type&&(s=e.attr.has(t,"can-true-value")?t.getAttribute("can-true-value"):!0,l=e.attr.has(t,"can-false-value")?t.getAttribute("can-false-value"):!1),"checkbox"===t.type||"radio"===t.type)?void new u(t,{value:v,trueValue:s,falseValue:l}):"select"===t.nodeName.toLowerCase()&&t.multiple?void new r(t,{value:v}):n(t)?void new c(t,{value:v}):void new o(t,{value:v})});var a={enter:function(e,t,n){return{event:"keyup",handler:function(e){return 13===e.keyCode?n.call(this,e):void 0}}}},s=function(n,s){var o=s.attributeName,u=0===o.indexOf("can-")?o.substr("can-".length):i(o,"(",")"),r=function(a){var u=n.getAttribute(o);if(u){var r=t.expressionData(i(u)),c=s.scope.read(r.name.get,{returnObserveMethods:!0,isArgument:!0,executeAnonymousFunctions:!0}),l=[],h=e.$(this),v=e.viewModel(h[0]),f=s.scope.add({"@element":h,"@event":a,"@viewModel":v,"@scope":s.scope,"@context":s.scope._context});if(!e.isEmptyObject(r.hash)){var p={};e.each(r.hash,function(e,t){if(e&&e.hasOwnProperty("get")){var n=e.get.indexOf("@")?s.scope:f;p[t]=n.read(e.get,{}).value}else p[t]=e}),l.unshift(p)}if(r.args.length)for(var d,m=r.args.length-1;m>=0;m--)if(d=r.args[m],d&&d.hasOwnProperty("get")){var g=d.get.indexOf("@")?s.scope:f;l.unshift(g.read(d.get,{}).value)}else l.unshift(d);return l.length||(l=[s.scope._context,h].concat(e.makeArray(arguments))),c.value.apply(c.parent,l)}};if(a[u]){var c=a[u](s,n,r);r=c.handler,u=c.event}e.bind.call(n,u,r)};e.view.attr(/can-[\w\.]+/,s),e.view.attr(/\([\w\.]+\)/,s);var o=e.Control.extend({init:function(){"SELECT"===this.element[0].nodeName.toUpperCase()?setTimeout(e.proxy(this.set,this),1):this.set()},"{value} change":"set",set:function(){if(this.element){var e=this.options.value();this.element[0].value=null==e?"":e}},change:function(){if(this.element){var e=this.element[0];this.options.value(e.value);var t=this.options.value();e.value!==t&&(e.value=t)}}}),u=e.Control.extend({init:function(){this.isCheckbox="checkbox"===this.element[0].type.toLowerCase(),this.check()},"{value} change":"check",check:function(){if(this.isCheckbox){var t=this.options.value(),n=this.options.trueValue||!0;this.element[0].checked=t==n}else{var i=this.options.value()==this.element[0].value?"set":"remove";e.attr[i](this.element[0],"checked",!0)}},change:function(){this.isCheckbox?this.options.value(this.element[0].checked?this.options.trueValue:this.options.falseValue):this.element[0].checked&&this.options.value(this.element[0].value)}}),r=o.extend({init:function(){this.delimiter=";",setTimeout(e.proxy(this.set,this),1)},set:function(){var t=this.options.value();"string"==typeof t?(t=t.split(this.delimiter),this.isString=!0):t&&(t=e.makeArray(t));var n={};e.each(t,function(e){n[e]=!0}),e.each(this.element[0].childNodes,function(e){e.value&&(e.selected=!!n[e.value])})},get:function(){var t=[],n=this.element[0].childNodes;return e.each(n,function(e){e.selected&&e.value&&t.push(e.value)}),t},change:function(){var t=this.get(),n=this.options.value();this.isString||"string"==typeof n?(this.isString=!0,this.options.value(t.join(this.delimiter))):n instanceof e.List?n.attr(t,!0):this.options.value(t)}}),c=e.Control.extend({init:function(){this.set(),this.on("blur","setValue")},"{value} change":"set",set:function(){var e=this.options.value();this.element[0].innerHTML="undefined"==typeof e?"":e},setValue:function(){this.options.value(this.element[0].innerHTML)}});e.view.attr(/\[[\w\.\-_]+\]/,function(t,n){var a=i(t.getAttribute(n.attributeName)),s=e.camelize(i(n.attributeName,"[","]")),o=e.viewModel(t),u=new e.view.Scope(o),r=u.computeData(a,{args:[]}),c=r.compute,l=function(e,t){n.scope.attr(s,t)};c.bind("change",l),n.scope.attr(s,c()),e.one.call(t,"removed",function(){c.unbind("change",l)})}),e.view.attr(/#[\w\.\-_]+/,function(t,n){var a=i(t.getAttribute(n.attributeName))||".",s=e.camelize(n.attributeName.substr(1).toLowerCase()),o=e.viewModel(t),u=new e.view.Scope(o),r=n.scope.getRefs(),c=u.computeData(a,{args:[],isArgument:!0}),l=c.compute,h=function(e,t){r.attr(s,t)};l.bind("change",h);var v=l();r.attr(s,void 0===v?null:v),e.one.call(t,"removed",function(){l.unbind("change",h)})})});
-/*can@2.3.0-pre.1#view/mustache/mustache*/
-define("can/view/mustache/mustache",["can/util/util","can/view/scope/scope","can/view/view","can/view/scanner","can/compute/compute","can/view/render","can/view/bindings/bindings"],function(e){e.view.ext=".mustache";var n="scope",t="___h4sh",r="{scope:"+n+",options:options}",i="{scope:"+n+",options:options, special: true}",s=n+",options",o=/((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g,a=/^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,c=function(e){return'{get:"'+e.replace(/"/g,'\\"')+'"}'},u=function(e){return e&&"string"==typeof e.get},f=function(n){return n instanceof e.Map||n&&!!n._get},p=function(e){return e&&e.splice&&"number"==typeof e.length},l=function(n,t,r){var i=function(e,r){return n(e||t,r)};return function(n,s){return void 0===n||n instanceof e.view.Scope||(n=t.add(n)),void 0===s||s instanceof e.view.Options||(s=r.add(s)),i(n,s||r)}},h=function(n,t){if(this.constructor!==h){var r=new h(n);return function(e,n){return r.render(e,n)}}return"function"==typeof n?void(this.template={fn:n}):(e.extend(this,n),void(this.template=this.scanner.scan(this.text,this.name)))};e.Mustache=e.global.Mustache=h,h.prototype.render=function(n,t){return n instanceof e.view.Scope||(n=new e.view.Scope(n||{})),t instanceof e.view.Options||(t=new e.view.Options(t||{})),t=t||{},this.template.fn.call(n,n,t)},e.extend(h.prototype,{scanner:new e.view.Scanner({text:{start:"",scope:n,options:",options: options",argNames:s},tokens:[["returnLeft","{{{","{{[{&]"],["commentFull","{{!}}","^[\\s\\t]*{{!.+?}}\\n"],["commentLeft","{{!","(\\n[\\s\\t]*{{!|{{!)"],["escapeFull","{{}}","(^[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}$)",function(e){return{before:/^\n.+?\n$/.test(e)?"\n":"",content:e.match(/\{\{(.+?)\}\}/)[1]||""}}],["escapeLeft","{{"],["returnRight","}}}"],["right","}}"]],helpers:[{name:/^>[\s]*\w*/,fn:function(n,t){var r=e.trim(n.replace(/^>\s?/,"")).replace(/["|']/g,"");return"can.Mustache.renderPartial('"+r+"',"+s+")"}},{name:/^\s*data\s/,fn:function(e,t){var r=e.match(/["|'](.*)["|']/)[1];return"can.proxy(function(__){can.data(can.$(__),'"+r+"', this.attr('.')); }, "+n+")"}},{name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,fn:function(e){var t=/\s*\(([\$\w]+)\)\s*->([^\n]*)/,r=e.match(t);return"can.proxy(function(__){var "+r[1]+"=can.$(__);with("+n+".attr('.')){"+r[2]+"}}, this);"}},{name:/^.*$/,fn:function(n,u){var f=!1,p={content:"",startTxt:!1,startOnlyTxt:!1,end:!1};if(n=e.trim(n),n.length&&(f=n.match(/^([#^\/]|else$)/))){switch(f=f[0]){case"#":case"^":u.specialAttribute?p.startOnlyTxt=!0:(p.startTxt=!0,p.escaped=0);break;case"/":return p.end=!0,p.content+='return ___v1ew.join("");}}])',p}n=n.substring(1)}if("else"!==f){var l,h=[],v=[],g=0;p.content+="can.Mustache.txt(\n"+(u.specialAttribute?i:r)+",\n"+(f?'"'+f+'"':"null")+",",(e.trim(n)+" ").replace(o,function(e,n){g&&(l=n.match(a))?l[2]?h.push(l[0]):v.push(l[4]+":"+(l[6]?l[6]:c(l[5]))):h.push(c(n)),g++}),p.content+=h.join(","),v.length&&(p.content+=",{"+t+":{"+v.join(",")+"}}")}switch(f&&"else"!==f&&(p.content+=",[\n\n"),f){case"^":case"#":p.content+="{fn:function("+s+"){var ___v1ew = [];";break;case"else":p.content+='return ___v1ew.join("");}},\n{inverse:function('+s+"){\nvar ___v1ew = [];";break;default:p.content+=")"}return f||(p.startTxt=!0,p.end=!0),p}}]})});for(var v=e.view.Scanner.prototype.helpers,g=0;g<v.length;g++)h.prototype.scanner.helpers.unshift(v[g]);return h.txt=function(n,r,i){for(var s,o,a=n.scope,c=n.options,v=[],g={fn:function(){},inverse:function(){}},d=a.attr("."),m=!0,w=3;w<arguments.length;w++){var _=arguments[w];if(r&&e.isArray(_))g=e.extend.apply(e,[g].concat(_));else if(_&&_[t]){s=_[t];for(var x in s)u(s[x])&&(s[x]=h.get(s[x].get,n,!1,!0))}else _&&u(_)?v.push(h.get(_.get,n,!1,!0,!0)):v.push(_)}if(u(i)){var y=i.get;i=h.get(i.get,n,v.length,!1),m=y===i}if(g.fn=l(g.fn,a,c),g.inverse=l(g.inverse,a,c),"^"===r){var b=g.fn;g.fn=g.inverse,g.inverse=b}return(o=m&&"string"==typeof i&&h.getHelper(i,c)||e.isFunction(i)&&!i.isComputed&&{fn:i})?(e.extend(g,{context:d,scope:a,contexts:a,hash:s}),v.push(g),function(){return o.fn.apply(d,v)||""}):function(){var n;n=e.isFunction(i)&&i.isComputed?i():i;var t,s,o,a=v.length?v:[n],c=!0,u=[];if(r)for(t=0;t<a.length;t++)o=a[t],s="undefined"!=typeof o&&f(o),p(o)?"#"===r?c=c&&!!(s?o.attr("length"):o.length):"^"===r&&(c=c&&!(s?o.attr("length"):o.length)):c="#"===r?c&&!!o:"^"===r?c&&!o:c;if(c){if("#"===r){if(p(n)){var l=f(n);for(t=0;t<n.length;t++)u.push(g.fn(l?n.attr(""+t):n[t]));return u.join("")}return g.fn(n||{})||""}return"^"===r?g.inverse(n||{})||"":""+(null!=n?n:"")}return""}},h.get=function(n,t,r,i,s){var o=t.scope.attr("."),a=t.options||{};if(r){if(h.getHelper(n,a))return n;if(t.scope&&e.isFunction(o[n]))return o[n]}var c=t.scope.computeData(n,{isArgument:i,args:[o,t.scope]}),u=c.compute;e.compute.temporarilyBind(u);var f=c.initialValue;h.getHelper(n,a);return s||void 0!==f&&c.scope===t.scope||!h.getHelper(n,a)?u.computeInstance.hasDependencies?u:f:n},h.resolve=function(n){return f(n)&&p(n)&&n.attr("length")?n:e.isFunction(n)?n():n},e.view.Options=e.view.Scope.extend({init:function(n,t){n.helpers||n.partials||n.tags||(n={helpers:n}),e.view.Scope.prototype.init.apply(this,arguments)}}),h._helpers={},h.registerHelper=function(e,n){this._helpers[e]={name:e,fn:n}},h.registerSimpleHelper=function(n,t){h.registerHelper(n,e.view.simpleHelper(t))},h.getHelper=function(e,n){var t;return n&&(t=n.attr("helpers."+e)),t?{fn:t}:this._helpers[e]},h.render=function(n,t,r){if(!e.view.cached[n]){var i=e.__clearReading(),s=t.attr(n);s&&(n=s),e.__setReading(i)}return e.view.render(n,t,r)},h.safeString=function(e){return{toString:function(){return e}}},h.renderPartial=function(n,t,r){var i=r.attr("partials."+n);return i?i.render?i.render(t,r):i(t,r):e.Mustache.render(n,t,r)},e.each({"if":function(n,t){var r;return r=e.isFunction(n)?e.compute.truthy(n)():!!h.resolve(n),r?t.fn(t.contexts||this):t.inverse(t.contexts||this)},is:function(){var n,t,r=arguments[arguments.length-1];if(arguments.length-2<=0)return r.inverse();for(var i=0;i<arguments.length-1;i++){if(t=h.resolve(arguments[i]),t=e.isFunction(t)?t():t,i>0&&t!==n)return r.inverse();n=t}return r.fn()},eq:function(){return h._helpers.is.fn.apply(this,arguments)},unless:function(n,t){return h._helpers["if"].fn.apply(this,[e.isFunction(n)?e.compute(function(){return!n()}):!n,t])},each:function(n,t){var r,i,s,o=h.resolve(n),a=[];if(e.view.lists&&(o instanceof e.List||n&&n.isComputed&&void 0===o))return e.view.lists(n,function(e,n){return t.fn(t.scope.add({"@index":n}).add(e))});if(n=o,n&&p(n)){for(s=0;s<n.length;s++)a.push(t.fn(t.scope.add({"@index":s}).add(n[s])));return a.join("")}if(f(n)){for(r=e.Map.keys(n),s=0;s<r.length;s++)i=r[s],a.push(t.fn(t.scope.add({"@key":i}).add(n[i])));return a.join("")}if(n instanceof Object){for(i in n)a.push(t.fn(t.scope.add({"@key":i}).add(n[i])));return a.join("")}},"with":function(e,n){var t=e;return e=h.resolve(e),e?n.fn(t):void 0},log:function(e,n){"undefined"!=typeof console&&console.log&&(n?console.log(e,n.context):console.log(e.context))},"@index":function(n,t){t||(t=n,n=0);var r=t.scope.attr("@index");return""+((e.isFunction(r)?r():r)+n)}},function(e,n){h.registerHelper(n,e)}),e.view.register({suffix:"mustache",contentType:"x-mustache-template",script:function(e,n){return"can.Mustache(function("+s+") { "+new h({text:n,name:e}).template.out+" })"},renderer:function(e,n){return h({text:n,name:e})}}),e.mustache.registerHelper=e.proxy(e.Mustache.registerHelper,e.Mustache),e.mustache.safeString=e.Mustache.safeString,e});
-/*can@2.3.0-pre.1#component/component*/
-define("can/component/component",["can/util/util","can/view/callbacks/callbacks","can/view/elements","can/control/control","can/observe/observe","can/view/mustache/mustache","can/view/bindings/bindings"],function(t,e,n){var o=/^(dataViewId|class|id|\[[\w\.-]+\]|#[\w\.-])$/i,i=/\{([^\}]+)\}/g,s=t.Component=t.Construct.extend({setup:function(){if(t.Construct.setup.apply(this,arguments),t.Component){var e=this,n=this.prototype.scope||this.prototype.viewModel;if(this.Control=a.extend(this.prototype.events),n&&("object"!=typeof n||n instanceof t.Map)?n.prototype instanceof t.Map&&(this.Map=n):this.Map=t.Map.extend(n||{}),this.attributeScopeMappings={},t.each(this.Map?this.Map.defaults:{},function(t,n){"@"===t&&(e.attributeScopeMappings[n]=n)}),this.prototype.template)if("function"==typeof this.prototype.template){var o=this.prototype.template;this.renderer=function(){return t.view.frag(o.apply(null,arguments))}}else this.renderer=t.view.mustache(this.prototype.template);t.view.tag(this.prototype.tag,function(t,n){new e(t,n)})}}},{setup:function(i,s){var a,c,p={"@root":s.scope.attr("@root")},r=this,u=("undefined"==typeof this.leakScope?!1:!this.leakScope)&&this.template,l={},h=this.scope||this.viewModel,d={},f=[],m=function(){for(var t=0,e=f.length;e>t;t++)f[t]()};if(t.each(this.constructor.attributeScopeMappings,function(e,n){p[n]=i.getAttribute(t.hyphenate(e))}),t.each(t.makeArray(i.attributes),function(n,i){var c=t.camelize(n.name.toLowerCase()),u=n.value;if(!(r.constructor.attributeScopeMappings[c]||o.test(c)||e.attr(n.nodeName))){if("{"===u[0]&&"}"===u[u.length-1])u=u.substr(1,u.length-2);else if("legacy"!==s.templateType)return void(p[c]=u);var h=s.scope.computeData(u,{args:[]}),m=h.compute,v=function(e,n){d[c]=(d[c]||0)+1,a.attr(c,n),t.batch.afterPreviousEvents(function(){--d[c]})};m.bind("change",v),p[c]=m(),m.computeInstance.hasDependencies?(f.push(function(){m.unbind("change",v)}),l[c]=h):m.unbind("change",v)}}),this.constructor.Map)a=new this.constructor.Map(p);else if(h instanceof t.Map)a=h;else if(t.isFunction(h)){var v=h.call(this,p,s.scope,i);a=v instanceof t.Map?v:v.prototype instanceof t.Map?new v(p):new(t.Map.extend(v))(p)}var g={};t.each(l,function(t,e){g[e]=function(n,o){d[e]||t.compute(o)},a.bind(e,g[e])}),t.isEmptyObject(this.constructor.attributeScopeMappings)&&"legacy"===s.templateType||t.bind.call(i,"attributes",function(e){var n=t.camelize(e.attributeName);l[n]||o.test(n)||a.attr(n,i.getAttribute(e.attributeName))}),this.scope=this.viewModel=a,t.data(t.$(i),"scope",this.scope),t.data(t.$(i),"viewModel",this.scope);var b=(u?t.view.Scope.refsScope():s.scope.add(new t.view.Scope.Refs)).add(this.scope),y={helpers:{}},w=function(t,e){y.helpers[t]=function(){return e.apply(a,arguments)}};if(t.each(this.helpers||{},function(e,n){t.isFunction(e)&&w(n,e)}),t.each(this.simpleHelpers||{},function(e,n){w(n,t.view.simpleHelper(e))}),f.push(function(){t.each(g,function(t,e){a.unbind(e,g[e])})}),this._control=new this.constructor.Control(i,{scope:this.scope,viewModel:this.scope}),this._control&&this._control.destroy){var M=this._control.destroy;this._control.destroy=function(){M.apply(this,arguments),m()},this._control.on()}else t.bind.call(i,"removed",function(){m()});var C=t.view.nodeLists.register([],void 0,!0);f.push(function(){t.view.nodeLists.unregister(C)}),this.constructor.renderer?(y.tags||(y.tags={}),y.tags.content=function _(e,o){var i=s.subtemplate||o.subtemplate,a=i===s.subtemplate;if(i){delete y.tags.content;var c;if(c=a?u?s:{scope:o.scope.cloneFromRef(),options:o.options}:o,o.parentNodeList){var p=i(c.scope,c.options,o.parentNodeList);n.replace([e],p)}else t.view.live.replace([e],i(c.scope,c.options));y.tags.content=_}},c=this.constructor.renderer(b,s.options.add(y),C)):c="legacy"===s.templateType?t.view.frag(s.subtemplate?s.subtemplate(b,s.options.add(y)):""):s.subtemplate?s.subtemplate(b,s.options.add(y),C):document.createDocumentFragment(),t.appendChild(i,c,t.document),t.view.nodeLists.update(C,t.childNodes(i))}}),a=t.Control.extend({_lookup:function(t){return[t.scope,t,window]},_action:function(e,n,o){var s,a;if(i.lastIndex=0,s=i.test(e),o||!s){if(s){a=t.compute(function(){var o,s=e.replace(i,function(e,i){var s;return"scope"===i||"viewModel"===i?(o=n.scope,""):(i=i.replace(/^(scope|^viewModel)\./,""),s=t.compute.read(n.scope,i.split("."),{isArgument:!0}).value,void 0===s&&(s=t.getObject(i)),"string"==typeof s?s:(o=s,""))}),a=s.split(/\s+/g),c=a.pop();return{processor:this.processors[c]||this.processors.click,parts:[s,a.join(" "),c],delegate:o||void 0}},this);var c=function(t,n){o._bindings.control[e](o.element),o._bindings.control[e]=n.processor(n.delegate||o.element,n.parts[2],n.parts[1],e,o)};return a.bind("change",c),o._bindings.readyComputes[e]={compute:a,handler:c},a()}return t.Control._action.apply(this,arguments)}}},{setup:function(e,n){return this.scope=n.scope,this.viewModel=n.viewModel,t.Control.prototype.setup.call(this,e,n)},off:function(){this._bindings&&t.each(this._bindings.readyComputes||{},function(t){t.compute.unbind("change",t.handler)}),t.Control.prototype.off.apply(this,arguments),this._bindings.readyComputes={}}}),c=t.$;return c.fn&&(c.fn.scope=c.fn.viewModel=function(){return t.viewModel.apply(t,[this].concat(t.makeArray(arguments)))}),s});
-/*can@2.3.0-pre.1#model/model*/
-define("can/model/model",["can/util/util","can/map/map","can/list/list"],function(t){var e=function(e,r,i){var n=new t.Deferred;return e.then(function(){var e=t.makeArray(arguments),s=!0;try{e[0]=i.apply(r,e)}catch(o){s=!1,n.rejectWith(n,[o].concat(e))}s&&n.resolveWith(n,e)},function(){n.rejectWith(this,arguments)}),"function"==typeof e.abort&&(n.abort=function(){return e.abort()}),n},r=0,i=function(e){return t.__observe(e,e.constructor.id),e.__get(e.constructor.id)},n=function(e,r,i,n,s,o){var a={};if("string"==typeof e){var u=e.split(/\s+/);a.url=u.pop(),u.length&&(a.type=u.pop())}else t.extend(a,e);return a.data="object"!=typeof r||t.isArray(r)?r:t.extend(a.data||{},r),a.url=t.sub(a.url,a.data,!0),t.ajax(t.extend({type:i||"post",dataType:n||"json",success:s,error:o},a))},s=function(r,n,s,o,a){var u;t.isArray(r)?(u=r[1],r=r[0]):u=r.serialize(),u=[u];var c,l,d=r.constructor;return("update"===n||"destroy"===n)&&u.unshift(i(r)),l=d[n].apply(d,u),c=e(l,r,function(t){return r[a||n+"d"](t,l),r}),l.abort&&(c.abort=function(){l.abort()}),c.then(s,o),c},o={models:function(e,r,i){if(t.Model._reqs++,e){if(e instanceof this.List)return e;var n=this,s=[],o=n.List||f,a=r instanceof t.List?r:new o,u=e instanceof f,c=u?e.serialize():e;if(c=n.parseModels(c,i),c.data&&(e=c,c=c.data),"undefined"==typeof c||!t.isArray(c))throw new Error("Could not get any raw data while converting using .models");return a.length&&a.splice(0),t.each(c,function(t){s.push(n.model(t,i))}),a.push.apply(a,s),t.isArray(e)||t.each(e,function(t,e){"data"!==e&&a.attr(e,t)}),setTimeout(t.proxy(this._clean,this),1),a}},model:function(e,r,i){if(e){e="function"==typeof e.serialize?e.serialize():this.parseModel(e,i);var n=e[this.id];(n||0===n)&&this.store[n]&&(r=this.store[n]);var s=r&&t.isFunction(r.attr)?r.attr(e,this.removeAttr||!1):new this(e);return s}}},a={parseModel:function(e){return function(r){return e?t.getObject(e,r):r}},parseModels:function(e){return function(r){if(t.isArray(r))return r;e=e||"data";var i=t.getObject(e,r);if(!t.isArray(i))throw new Error("Could not get any raw data while converting using .models");return i}}},u={create:{url:"_shortName",type:"post"},update:{data:function(e,r){r=r||{};var i=this.id;return r[i]&&r[i]!==e&&(r["new"+t.capitalize(e)]=r[i],delete r[i]),r[i]=e,r},type:"put"},destroy:{type:"delete",data:function(t,e){return e=e||{},e.id=e[this.id]=t,e}},findAll:{url:"_shortName"},findOne:{}},c=function(t,e){return function(r){return r=t.data?t.data.apply(this,arguments):r,n(e||this[t.url||"_url"],r,t.type||"get")}},l=function(t,e){if(t.resource){var r=t.resource.replace(/\/+$/,"");return"findAll"===e||"create"===e?r:r+"/{"+t.id+"}"}};t.Model=t.Map.extend({fullName:"can.Model",_reqs:0,setup:function(e,i,n,s){if("string"!=typeof i&&(s=n,n=i),s||(s=n),this.store={},t.Map.setup.apply(this,arguments),t.Model){n&&n.List?(this.List=n.List,this.List.Map=this):this.List=e.List.extend({Map:this},{});var d=this,p=t.proxy(this._clean,d);t.each(u,function(r,i){if(n&&n[i]&&("string"==typeof n[i]||"object"==typeof n[i])?d[i]=c(r,n[i]):n&&n.resource&&!t.isFunction(n[i])&&(d[i]=c(r,l(d,i))),d["make"+t.capitalize(i)]){var s=d["make"+t.capitalize(i)](d[i]);t.Construct._overwrite(d,e,i,function(){t.Model._reqs++;var e=s.apply(this,arguments),r=e.then(p,p);return r.abort=e.abort,r})}});var h={};t.each(o,function(r,i){var s="parse"+t.capitalize(i),o=n&&n[i]||d[i];"string"==typeof o?(d[s]=o,t.Construct._overwrite(d,e,i,r)):n&&n[i]&&(h[s]=!0)}),t.each(a,function(r,i){var s=n&&n[i]||d[i];if("string"==typeof s)t.Construct._overwrite(d,e,i,r(s));else if(!(n&&t.isFunction(n[i])||d[i])){var o=r();o.useModelConverter=h[i],t.Construct._overwrite(d,e,i,o)}}),"can.Model"!==d.fullName&&d.fullName||(d.fullName="Model"+ ++r),t.Model._reqs=0,this._url=this._shortName+"/{"+this.id+"}"}},_ajax:c,_makeRequest:s,_clean:function(){if(t.Model._reqs--,!t.Model._reqs)for(var e in this.store)this.store[e]._bindings||delete this.store[e];return arguments[0]},models:o.models,model:o.model},{setup:function(e){var r=e&&e[this.constructor.id];t.Model._reqs&&null!=r&&(this.constructor.store[r]=this),t.Map.prototype.setup.apply(this,arguments)},isNew:function(){var t=i(this);return!(t||0===t)},save:function(t,e){return s(this,this.isNew()?"create":"update",t,e)},destroy:function(e,r){if(this.isNew()){var i=this,n=t.Deferred();return n.then(e,r),n.done(function(t){i.destroyed(t)}).resolve(i)}return s(this,"destroy",e,r,"destroyed")},_bindsetup:function(){var e=this.__get(this.constructor.id);return null!=e&&(this.constructor.store[e]=this),t.Map.prototype._bindsetup.apply(this,arguments)},_bindteardown:function(){return delete this.constructor.store[i(this)],t.Map.prototype._bindteardown.apply(this,arguments)},___set:function(e,r){t.Map.prototype.___set.call(this,e,r),e===this.constructor.id&&this._bindings&&(this.constructor.store[i(this)]=this)}});var d=function(t){return function(e,r,i){return this[t](e,null,i)}},p=function(t){return this.parseModel.useModelConverter?this.model(t):this.parseModel(t)},h={makeFindAll:d("models"),makeFindOne:d("model"),makeCreate:p,makeUpdate:p,makeDestroy:p};t.each(h,function(r,i){t.Model[i]=function(i){return function(){var n=t.makeArray(arguments),s=t.isFunction(n[1])?n.splice(0,1):n.splice(0,2),o=e(i.apply(this,s),this,r);return o.then(n[0],n[1]),o}}}),t.each(["created","updated","destroyed"],function(e){t.Model.prototype[e]=function(r){var i=this,n=i.constructor;r&&"object"==typeof r&&this.attr(t.isFunction(r.attr)?r.attr():r),t.dispatch.call(this,{type:"change",target:this},[e]),t.dispatch.call(n,e,[this])}});var f=t.Model.List=t.List.extend({_bubbleRule:function(e,r){var i=t.List._bubbleRule(e,r);return i.push("destroyed"),i}},{setup:function(e){t.isPlainObject(e)&&!t.isArray(e)?(t.List.prototype.setup.apply(this),this.replace(t.isDeferred(e)?e:this.constructor.Map.findAll(e))):t.List.prototype.setup.apply(this,arguments),this._init=1,this.bind("destroyed",t.proxy(this._destroyed,this)),delete this._init},_destroyed:function(t,e){if(/\w+/.test(e))for(var r;(r=this.indexOf(t.target))>-1;)this.splice(r,1)}});return t.Model});
-/*can@2.3.0-pre.1#util/string/deparam/deparam*/
-define("can/util/string/deparam/deparam",["can/util/util","can/util/string/string"],function(t){var n=/^\d+$/,e=/([^\[\]]+)|(\[\])/g,r=/([^?#]*)(#.*)?$/,i=function(t){return decodeURIComponent(t.replace(/\+/g," "))};return t.extend(t,{deparam:function(a){var u,c,o={};return a&&r.test(a)&&(u=a.split("&"),t.each(u,function(t){var r=t.split("="),a=i(r.shift()),u=i(r.join("=")),p=o;if(a){r=a.match(e);for(var s=0,d=r.length-1;d>s;s++)p[r[s]]||(p[r[s]]=n.test(r[s+1])||"[]"===r[s+1]?[]:{}),p=p[r[s]];c=r.pop(),"[]"===c?p.push(u):p[c]=u}})),o}}),t});
-/*can@2.3.0-pre.1#route/route*/
-define("can/route/route",["can/util/util","can/map/map","can/list/list","can/util/string/deparam/deparam"],function(t){var e,r,n,a,u=/\:([\w\.]+)/g,o=/^(?:&[^=]+=[^&]*)+/,i=function(e){var r=[];return t.each(e,function(e,n){r.push(("className"===n?"class":n)+'="'+("href"===n?e:t.esc(e))+'"')}),r.join(" ")},c=function(t,e){var r=0,n=0,a={};for(var u in t.defaults)t.defaults[u]===e[u]&&(a[u]=1,r++);for(;n<t.names.length;n++){if(!e.hasOwnProperty(t.names[n]))return-1;a[t.names[n]]||r++}return r},l=window.location,s=function(t){return(t+"").replace(/([.?*+\^$\[\]\\(){}|\-])/g,"\\$1")},d=t.each,f=t.extend,h=function(e){return e&&"object"==typeof e?(e=e instanceof t.Map?e.attr():t.isFunction(e.slice)?e.slice():t.extend({},e),t.each(e,function(t,r){e[r]=h(t)})):void 0!==e&&null!==e&&t.isFunction(e.toString)&&(e=e.toString()),e},p=function(t){return t.replace(/\\/g,"")},g=[],m=function(r,u,o,i){a=1,g.push(u),clearTimeout(e),e=setTimeout(function(){a=0;var e=t.route.data.serialize(),r=t.route.param(e,!0);t.route._call("setURL",r,g),t.batch.trigger(_,"__url",[r,n]),n=r,g=[]},10)},_=t.extend({},t.event);t.route=function(e,r){var n=t.route._call("root");n.lastIndexOf("/")===n.length-1&&0===e.indexOf("/")&&(e=e.substr(1)),r=r||{};for(var a,o,i=[],c="",l=u.lastIndex=0,d=t.route._call("querySeparator"),f=t.route._call("matchSlashes");a=u.exec(e);)i.push(a[1]),c+=p(e.substring(l,u.lastIndex-a[0].length)),o="\\"+(p(e.substr(u.lastIndex,1))||d+(f?"":"|/")),c+="([^"+o+"]"+(r[a[1]]?"*":"+")+")",l=u.lastIndex;return c+=e.substr(l).replace("\\",""),t.route.routes[e]={test:new RegExp("^"+c+"($|"+s(d)+")"),route:e,names:i,defaults:r,length:e.split("/").length},t.route},f(t.route,{param:function(e,r){var n,a,o=0,i=e.route,l=0;if(delete e.route,d(e,function(){l++}),d(t.route.routes,function(t,r){return a=c(t,e),a>o&&(n=t,o=a),a>=l?!1:void 0}),t.route.routes[i]&&c(t.route.routes[i],e)===o&&(n=t.route.routes[i]),n){var s,h=f({},e),p=n.route.replace(u,function(t,r){return delete h[r],e[r]===n.defaults[r]?"":encodeURIComponent(e[r])}).replace("\\","");return d(n.defaults,function(t,e){h[e]===t&&delete h[e]}),s=t.param(h),r&&t.route.attr("route",n.route),p+(s?t.route._call("querySeparator")+s:"")}return t.isEmptyObject(e)?"":t.route._call("querySeparator")+t.param(e)},deparam:function(e){var r=t.route._call("root");r.lastIndexOf("/")===r.length-1&&0===e.indexOf("/")&&(e=e.substr(1));var n={length:-1},a=t.route._call("querySeparator"),u=t.route._call("paramsMatcher");if(d(t.route.routes,function(t,r){t.test.test(e)&&t.length>n.length&&(n=t)}),n.length>-1){var o=e.match(n.test),i=o.shift(),c=e.substr(i.length-(o[o.length-1]===a?1:0)),l=c&&u.test(c)?t.deparam(c.slice(1)):{};return l=f(!0,{},n.defaults,l),d(o,function(t,e){t&&t!==a&&(l[n.names[e]]=decodeURIComponent(t))}),l.route=n.route,l}return e.charAt(0)!==a&&(e=a+e),u.test(e)?t.deparam(e.slice(1)):{}},data:new t.Map({}),map:function(e){var r;r=e.prototype instanceof t.Map?new e:e,t.route.data=r},routes:{},ready:function(e){return e!==!0&&(t.route._setup(),t.isNode||t.route.setState()),t.route},url:function(e,r){return r&&(e=t.extend({},t.route.deparam(t.route._call("matchingPartOfURL")),e)),t.route._call("root")+t.route.param(e)},link:function(e,r,n,a){return"<a "+i(f({href:t.route.url(r,a)},n))+">"+e+"</a>"},current:function(e){return t.__observe(_,"__url"),this._call("matchingPartOfURL")===t.route.param(e)},bindings:{hashchange:{paramsMatcher:o,querySeparator:"&",matchSlashes:!1,bind:function(){t.bind.call(window,"hashchange",b)},unbind:function(){t.unbind.call(window,"hashchange",b)},matchingPartOfURL:function(){return l.href.split(/#!?/)[1]||""},setURL:function(t){return l.hash!=="#"+t&&(l.hash="!"+t),t},root:"#!"}},defaultBinding:"hashchange",currentBinding:null,_setup:function(){t.route.currentBinding||(t.route._call("bind"),t.route.bind("change",m),t.route.currentBinding=t.route.defaultBinding)},_teardown:function(){t.route.currentBinding&&(t.route._call("unbind"),t.route.unbind("change",m),t.route.currentBinding=null),clearTimeout(e),a=0},_call:function(){var e=t.makeArray(arguments),r=e.shift(),n=t.route.bindings[t.route.currentBinding||t.route.defaultBinding],a=n[r];return a.apply?a.apply(n,e):a}}),d(["bind","unbind","on","off","delegate","undelegate","removeAttr","compute","_get","__get","each"],function(e){t.route[e]=function(){return t.route.data[e]?t.route.data[e].apply(t.route.data,arguments):void 0}}),t.route.attr=function(e,r){var n,a=typeof e;return n=void 0===r?arguments:"string"!==a&&"number"!==a?[h(e),r]:[e,h(r)],t.route.data.attr.apply(t.route.data,n)};var b=t.route.setState=function(){var e=t.route._call("matchingPartOfURL"),u=r;r=t.route.deparam(e),a&&e===n||(t.batch.start(),v(u,r,t.route.data),t.route.attr(r),t.batch.trigger(_,"__url",[e,n]),t.batch.stop())},v=function(t,e,r){for(var n in t)void 0===e[n]?r.removeAttr(n):"[object Object]"===Object.prototype.toString.call(t[n])&&v(t[n],e[n],r.attr(n))};return t.route});
-/*can@2.3.0-pre.1#control/route/route*/
-define("can/control/route/route",["can/util/util","can/route/route","can/control/control"],function(t){return t.Control.processors.route=function(o,r,u,n,e){u=u||"",t.route.routes[u]||("/"===u[0]&&(u=u.substring(1)),t.route(u));var c,i=function(o,r,i){if(t.route.attr("route")===u&&(void 0===o.batchNum||o.batchNum!==c)){c=o.batchNum;var a=t.route.attr();delete a.route,t.isFunction(e[n])?e[n](a):e[e[n]](a)}};return t.route.bind("change",i),function(){t.route.unbind("change",i)}},t});
-/*can@2.3.0-pre.1#util/event*/
-define("can/util/event",["can/util/can","can/event/event"],function(n){return n});
-/*[global-shim-end]*/
-!function(){window._define=window.define,window.define=window.define.orig,window.System=window.System.orig}();
-/*!
- * CanJS - 2.3.0-pre.1
- * http://canjs.com/
- * Copyright (c) 2015 Bitovi
- * Fri, 29 May 2015 22:07:38 GMT
- * Licensed MIT
+ * Includes: can/component/component,can/construct/construct,can/map/map,can/list/list,can/compute/compute,can/model/model,can/view/view,can/view/href/href,can/control/control,can/route/route,can/control/route/route,can/view/mustache/mustache,can/view/stache/stache,can/map/define/define
+ * Download from: http://bitbuilder.herokuapp.com/can.custom.js?configuration=jquery&plugins=can%2Fcomponent%2Fcomponent&plugins=can%2Fconstruct%2Fconstruct&plugins=can%2Fmap%2Fmap&plugins=can%2Flist%2Flist&plugins=can%2Fcompute%2Fcompute&plugins=can%2Fmodel%2Fmodel&plugins=can%2Fview%2Fview&plugins=can%2Fview%2Fhref%2Fhref&plugins=can%2Fcontrol%2Fcontrol&plugins=can%2Froute%2Froute&plugins=can%2Fcontrol%2Froute%2Froute&plugins=can%2Fview%2Fmustache%2Fmustache&plugins=can%2Fview%2Fstache%2Fstache&plugins=can%2Fmap%2Fdefine%2Fdefine
  */
-
 /*[global-shim-start]*/
 (function (exports, global){
 	var origDefine = global.define;
@@ -144,6 +52,8 @@ define("can/util/event",["can/util/can","can/event/event"],function(n){return n}
 			if(deps[1] === "module") {
 				args[1] = module;
 			}
+		} else if(!args[0] && deps[0] === "module") {
+			args[0] = { id: moduleName };
 		}
 
 		global.define = origDefine;
@@ -156,1210 +66,9562 @@ define("can/util/event",["can/util/can","can/event/event"],function(n){return n}
 	global.define.orig = origDefine;
 	global.define.modules = modules;
 	global.define.amd = true;
-	global.System = {
-		define: function(__name, __code){
-			global.define = origDefine;
-			eval("(function() { " + __code + " \n }).call(global);");
-			global.define = ourDefine;
-		},
-		orig: global.System
-	};
+	ourDefine("@loader", [], function(){
+		// shim for @@global-helpers
+		var noop = function(){};
+		return {
+			get: function(){
+				return { prepareGlobal: noop, retrieveGlobal: noop };
+			},
+			global: global,
+			__exec: function(__load){
+				eval("(function() { " + __load.source + " \n }).call(global);");
+			}
+		};
+	});
 })({},window)
-/*can@2.3.0-pre.1#map/define/define*/
-define('can/map/define/define', [
-	'can/util/util',
-	'can/observe/observe'
+/*can/util/can*/
+define('can/util/can', [], function () {
+    var glbl = typeof window !== 'undefined' ? window : typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope ? self : global;
+    var can = {};
+    if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
+        glbl.can = can;
+    }
+    can.global = glbl;
+    can.k = function () {
+    };
+    can.isDeferred = can.isPromise = function (obj) {
+        return obj && typeof obj.then === 'function' && typeof obj.pipe === 'function';
+    };
+    can.isMapLike = function (obj) {
+        return can.Map && (obj instanceof can.Map || obj && obj.___get);
+    };
+    var cid = 0;
+    can.cid = function (object, name) {
+        if (!object._cid) {
+            cid++;
+            object._cid = (name || '') + cid;
+        }
+        return object._cid;
+    };
+    can.VERSION = '@EDGE';
+    can.simpleExtend = function (d, s) {
+        for (var prop in s) {
+            d[prop] = s[prop];
+        }
+        return d;
+    };
+    can.last = function (arr) {
+        return arr && arr[arr.length - 1];
+    };
+    can.isDOM = function (el) {
+        return (el.ownerDocument || el) === can.global.document;
+    };
+    can.childNodes = function (node) {
+        var childNodes = node.childNodes;
+        if ('length' in childNodes) {
+            return childNodes;
+        } else {
+            var cur = node.firstChild;
+            var nodes = [];
+            while (cur) {
+                nodes.push(cur);
+                cur = cur.nextSibling;
+            }
+            return nodes;
+        }
+    };
+    var protoBind = Function.prototype.bind;
+    if (protoBind) {
+        can.proxy = function (fn, context) {
+            return protoBind.call(fn, context);
+        };
+    } else {
+        can.proxy = function (fn, context) {
+            return function () {
+                return fn.apply(context, arguments);
+            };
+        };
+    }
+    can.frag = function (item, doc) {
+        var document = doc || can.document || can.global.document;
+        var frag;
+        if (!item || typeof item === 'string') {
+            frag = can.buildFragment(item == null ? '' : '' + item, document);
+            if (!frag.childNodes.length) {
+                frag.appendChild(document.createTextNode(''));
+            }
+            return frag;
+        } else if (item.nodeType === 11) {
+            return item;
+        } else if (typeof item.nodeType === 'number') {
+            frag = document.createDocumentFragment();
+            frag.appendChild(item);
+            return frag;
+        } else if (typeof item.length === 'number') {
+            frag = document.createDocumentFragment();
+            can.each(item, function (item) {
+                frag.appendChild(can.frag(item));
+            });
+            return frag;
+        } else {
+            frag = can.buildFragment('' + item, document);
+            if (!can.childNodes(frag).length) {
+                frag.appendChild(document.createTextNode(''));
+            }
+            return frag;
+        }
+    };
+    can.scope = can.viewModel = function (el, attr, val) {
+        el = can.$(el);
+        var scope = can.data(el, 'scope') || can.data(el, 'viewModel');
+        if (!scope) {
+            scope = new can.Map();
+            can.data(el, 'scope', scope);
+            can.data(el, 'viewModel', scope);
+        }
+        switch (arguments.length) {
+        case 0:
+        case 1:
+            return scope;
+        case 2:
+            return scope.attr(attr);
+        default:
+            scope.attr(attr, val);
+            return el;
+        }
+    };
+    var parseURI = function (url) {
+        var m = String(url).replace(/^\s+|\s+$/g, '').match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
+        return m ? {
+            href: m[0] || '',
+            protocol: m[1] || '',
+            authority: m[2] || '',
+            host: m[3] || '',
+            hostname: m[4] || '',
+            port: m[5] || '',
+            pathname: m[6] || '',
+            search: m[7] || '',
+            hash: m[8] || ''
+        } : null;
+    };
+    can.joinURIs = function (base, href) {
+        function removeDotSegments(input) {
+            var output = [];
+            input.replace(/^(\.\.?(\/|$))+/, '').replace(/\/(\.(\/|$))+/g, '/').replace(/\/\.\.$/, '/../').replace(/\/?[^\/]*/g, function (p) {
+                if (p === '/..') {
+                    output.pop();
+                } else {
+                    output.push(p);
+                }
+            });
+            return output.join('').replace(/^\//, input.charAt(0) === '/' ? '/' : '');
+        }
+        href = parseURI(href || '');
+        base = parseURI(base || '');
+        return !href || !base ? null : (href.protocol || base.protocol) + (href.protocol || href.authority ? href.authority : base.authority) + removeDotSegments(href.protocol || href.authority || href.pathname.charAt(0) === '/' ? href.pathname : href.pathname ? (base.authority && !base.pathname ? '/' : '') + base.pathname.slice(0, base.pathname.lastIndexOf('/') + 1) + href.pathname : base.pathname) + (href.protocol || href.authority || href.pathname ? href.search : href.search || base.search) + href.hash;
+    };
+    can['import'] = function (moduleName, parentName) {
+        var deferred = new can.Deferred();
+        if (typeof window.System === 'object' && can.isFunction(window.System['import'])) {
+            window.System['import'](moduleName, { name: parentName }).then(can.proxy(deferred.resolve, deferred), can.proxy(deferred.reject, deferred));
+        } else if (window.define && window.define.amd) {
+            window.require([moduleName], function (value) {
+                deferred.resolve(value);
+            });
+        } else if (window.steal) {
+            steal.steal(moduleName, function (value) {
+                deferred.resolve(value);
+            });
+        } else if (window.require) {
+            deferred.resolve(window.require(moduleName));
+        } else {
+            deferred.resolve();
+        }
+        return deferred.promise();
+    };
+    can.__observe = function () {
+    };
+    can.isNode = typeof process === 'object' && {}.toString.call(process) === '[object process]';
+    can.isBrowserWindow = typeof window !== 'undefined' && typeof document !== 'undefined' && typeof SimpleDOM === 'undefined';
+    can.isWebWorker = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+    return can;
+});
+/*can/util/attr/attr*/
+define('can/util/attr/attr', ['can/util/can'], function (can) {
+    var setImmediate = can.global.setImmediate || function (cb) {
+            return setTimeout(cb, 0);
+        }, formElements = {
+            'input': true,
+            'textarea': true,
+            'select': true
+        }, hasProperty = function (el, attrName) {
+            return attrName in el || can.document && formElements[el.nodeName.toLowerCase()];
+        }, attr = {
+            MutationObserver: can.global.MutationObserver || can.global.WebKitMutationObserver || can.global.MozMutationObserver,
+            map: {
+                'class': function (el, val) {
+                    val = val || '';
+                    if (el.namespaceURI === 'http://www.w3.org/2000/svg') {
+                        el.setAttribute('class', val);
+                    } else {
+                        el.className = val;
+                    }
+                    return val;
+                },
+                'value': 'value',
+                'innertext': 'innerText',
+                'innerhtml': 'innerHTML',
+                'textcontent': 'textContent',
+                'for': 'htmlFor',
+                'checked': true,
+                'disabled': true,
+                'readonly': function (el, val) {
+                    el.readOnly = true;
+                    return val;
+                },
+                'required': true,
+                src: function (el, val) {
+                    if (val == null || val === '') {
+                        el.removeAttribute('src');
+                        return null;
+                    } else {
+                        el.setAttribute('src', val);
+                        return val;
+                    }
+                },
+                style: function () {
+                    var el = can.global.document && document.createElement('div');
+                    if (el && el.style && 'cssText' in el.style) {
+                        return function (el, val) {
+                            return el.style.cssText = val || '';
+                        };
+                    } else {
+                        return function (el, val) {
+                            return el.setAttribute('style', val);
+                        };
+                    }
+                }()
+            },
+            defaultValue: [
+                'input',
+                'textarea'
+            ],
+            setAttrOrProp: function (el, attrName, val) {
+                attrName = attrName.toLowerCase();
+                var prop = attr.map[attrName];
+                if (prop === true && !val) {
+                    this.remove(el, attrName);
+                } else {
+                    this.set(el, attrName, val);
+                }
+            },
+            setSelectValue: function (el, val) {
+                if (val != null) {
+                    var options = el.getElementsByTagName('option');
+                    for (var i = 0; i < options.length; i++) {
+                        if (val == options[i].value) {
+                            options[i].selected = true;
+                            return;
+                        }
+                    }
+                }
+                el.selectedIndex = -1;
+            },
+            set: function (el, attrName, val) {
+                var usingMutationObserver = can.isDOM(el) && attr.MutationObserver;
+                attrName = attrName.toLowerCase();
+                var oldValue;
+                if (!usingMutationObserver) {
+                    oldValue = attr.get(el, attrName);
+                }
+                var prop = attr.map[attrName], newValue;
+                if (typeof prop === 'function') {
+                    newValue = prop(el, val);
+                } else if (prop === true && hasProperty(el, attrName)) {
+                    newValue = el[attrName] = true;
+                    if (attrName === 'checked' && el.type === 'radio') {
+                        if (can.inArray((el.nodeName + '').toLowerCase(), attr.defaultValue) >= 0) {
+                            el.defaultChecked = true;
+                        }
+                    }
+                } else if (typeof prop === 'string' && hasProperty(el, prop)) {
+                    newValue = val;
+                    if (el[prop] !== val || el.nodeName.toUpperCase() === 'OPTION') {
+                        el[prop] = val;
+                    }
+                    if (prop === 'value' && can.inArray((el.nodeName + '').toLowerCase(), attr.defaultValue) >= 0) {
+                        el.defaultValue = val;
+                    }
+                } else {
+                    attr.setAttribute(el, attrName, val);
+                }
+                if (!usingMutationObserver && newValue !== oldValue) {
+                    attr.trigger(el, attrName, oldValue);
+                }
+            },
+            setAttribute: function () {
+                var doc = can.global.document;
+                if (doc && document.createAttribute) {
+                    try {
+                        doc.createAttribute('{}');
+                    } catch (e) {
+                        var invalidNodes = {}, attributeDummy = document.createElement('div');
+                        return function (el, attrName, val) {
+                            var first = attrName.charAt(0), cachedNode, node;
+                            if ((first === '{' || first === '(' || first === '*') && el.setAttributeNode) {
+                                cachedNode = invalidNodes[attrName];
+                                if (!cachedNode) {
+                                    attributeDummy.innerHTML = '<div ' + attrName + '=""></div>';
+                                    cachedNode = invalidNodes[attrName] = attributeDummy.childNodes[0].attributes[0];
+                                }
+                                node = cachedNode.cloneNode();
+                                node.value = val;
+                                el.setAttributeNode(node);
+                            } else {
+                                el.setAttribute(attrName, val);
+                            }
+                        };
+                    }
+                }
+                return function (el, attrName, val) {
+                    el.setAttribute(attrName, val);
+                };
+            }(),
+            trigger: function (el, attrName, oldValue) {
+                if (can.data(can.$(el), 'canHasAttributesBindings')) {
+                    attrName = attrName.toLowerCase();
+                    return setImmediate(function () {
+                        can.trigger(el, {
+                            type: 'attributes',
+                            attributeName: attrName,
+                            target: el,
+                            oldValue: oldValue,
+                            bubbles: false
+                        }, []);
+                    });
+                }
+            },
+            get: function (el, attrName) {
+                attrName = attrName.toLowerCase();
+                var prop = attr.map[attrName];
+                if (typeof prop === 'string' && hasProperty(el, prop)) {
+                    return el[prop];
+                } else if (prop === true && hasProperty(el, attrName)) {
+                    return el[attrName];
+                }
+                return el.getAttribute(attrName);
+            },
+            remove: function (el, attrName) {
+                attrName = attrName.toLowerCase();
+                var oldValue;
+                if (!attr.MutationObserver) {
+                    oldValue = attr.get(el, attrName);
+                }
+                var setter = attr.map[attrName];
+                if (typeof setter === 'function') {
+                    setter(el, undefined);
+                }
+                if (setter === true && hasProperty(el, attrName)) {
+                    el[attrName] = false;
+                } else if (typeof setter === 'string' && hasProperty(el, setter)) {
+                    el[setter] = '';
+                } else {
+                    el.removeAttribute(attrName);
+                }
+                if (!attr.MutationObserver && oldValue != null) {
+                    attr.trigger(el, attrName, oldValue);
+                }
+            },
+            has: function () {
+                var el = can.global.document && document.createElement('div');
+                if (el && el.hasAttribute) {
+                    return function (el, name) {
+                        return el.hasAttribute(name);
+                    };
+                } else {
+                    return function (el, name) {
+                        return el.getAttribute(name) !== null;
+                    };
+                }
+            }()
+        };
+    return attr;
+});
+/*can/event/event*/
+define('can/event/event', ['can/util/can'], function (can) {
+    can.addEvent = function (event, handler) {
+        var allEvents = this.__bindEvents || (this.__bindEvents = {}), eventList = allEvents[event] || (allEvents[event] = []);
+        eventList.push({
+            handler: handler,
+            name: event
+        });
+        return this;
+    };
+    can.listenTo = function (other, event, handler) {
+        var idedEvents = this.__listenToEvents;
+        if (!idedEvents) {
+            idedEvents = this.__listenToEvents = {};
+        }
+        var otherId = can.cid(other);
+        var othersEvents = idedEvents[otherId];
+        if (!othersEvents) {
+            othersEvents = idedEvents[otherId] = {
+                obj: other,
+                events: {}
+            };
+        }
+        var eventsEvents = othersEvents.events[event];
+        if (!eventsEvents) {
+            eventsEvents = othersEvents.events[event] = [];
+        }
+        eventsEvents.push(handler);
+        can.bind.call(other, event, handler);
+    };
+    can.stopListening = function (other, event, handler) {
+        var idedEvents = this.__listenToEvents, iterIdedEvents = idedEvents, i = 0;
+        if (!idedEvents) {
+            return this;
+        }
+        if (other) {
+            var othercid = can.cid(other);
+            (iterIdedEvents = {})[othercid] = idedEvents[othercid];
+            if (!idedEvents[othercid]) {
+                return this;
+            }
+        }
+        for (var cid in iterIdedEvents) {
+            var othersEvents = iterIdedEvents[cid], eventsEvents;
+            other = idedEvents[cid].obj;
+            if (!event) {
+                eventsEvents = othersEvents.events;
+            } else {
+                (eventsEvents = {})[event] = othersEvents.events[event];
+            }
+            for (var eventName in eventsEvents) {
+                var handlers = eventsEvents[eventName] || [];
+                i = 0;
+                while (i < handlers.length) {
+                    if (handler && handler === handlers[i] || !handler) {
+                        can.unbind.call(other, eventName, handlers[i]);
+                        handlers.splice(i, 1);
+                    } else {
+                        i++;
+                    }
+                }
+                if (!handlers.length) {
+                    delete othersEvents.events[eventName];
+                }
+            }
+            if (can.isEmptyObject(othersEvents.events)) {
+                delete idedEvents[cid];
+            }
+        }
+        return this;
+    };
+    can.removeEvent = function (event, fn, __validate) {
+        if (!this.__bindEvents) {
+            return this;
+        }
+        var events = this.__bindEvents[event] || [], i = 0, ev, isFunction = typeof fn === 'function';
+        while (i < events.length) {
+            ev = events[i];
+            if (__validate ? __validate(ev, event, fn) : isFunction && ev.handler === fn || !isFunction && (ev.cid === fn || !fn)) {
+                events.splice(i, 1);
+            } else {
+                i++;
+            }
+        }
+        return this;
+    };
+    can.dispatch = function (event, args) {
+        var events = this.__bindEvents;
+        if (!events) {
+            return;
+        }
+        var eventName;
+        if (typeof event === 'string') {
+            eventName = event;
+            event = { type: event };
+        } else {
+            eventName = event.type;
+        }
+        var handlers = events[eventName];
+        if (!handlers) {
+            return;
+        } else {
+            handlers = handlers.slice(0);
+        }
+        var passed = [event];
+        if (args) {
+            passed.push.apply(passed, args);
+        }
+        for (var i = 0, len = handlers.length; i < len; i++) {
+            handlers[i].handler.apply(this, passed);
+        }
+        return event;
+    };
+    can.one = function (event, handler) {
+        var one = function () {
+            can.unbind.call(this, event, one);
+            return handler.apply(this, arguments);
+        };
+        can.bind.call(this, event, one);
+        return this;
+    };
+    can.event = {
+        on: function () {
+            if (arguments.length === 0 && can.Control && this instanceof can.Control) {
+                return can.Control.prototype.on.call(this);
+            } else {
+                return can.addEvent.apply(this, arguments);
+            }
+        },
+        off: function () {
+            if (arguments.length === 0 && can.Control && this instanceof can.Control) {
+                return can.Control.prototype.off.call(this);
+            } else {
+                return can.removeEvent.apply(this, arguments);
+            }
+        },
+        bind: can.addEvent,
+        unbind: can.removeEvent,
+        delegate: function (selector, event, handler) {
+            return can.addEvent.call(this, event, handler);
+        },
+        undelegate: function (selector, event, handler) {
+            return can.removeEvent.call(this, event, handler);
+        },
+        trigger: can.dispatch,
+        one: can.one,
+        addEvent: can.addEvent,
+        removeEvent: can.removeEvent,
+        listenTo: can.listenTo,
+        stopListening: can.stopListening,
+        dispatch: can.dispatch
+    };
+    return can.event;
+});
+/*can/util/array/each*/
+define('can/util/array/each', ['can/util/can'], function (can) {
+    var isArrayLike = function (obj) {
+        var length = obj && typeof obj !== 'boolean' && typeof obj !== 'number' && 'length' in obj && obj.length;
+        return typeof arr !== 'function' && (length === 0 || typeof length === 'number' && length > 0 && length - 1 in obj);
+    };
+    can.each = function (elements, callback, context) {
+        var i = 0, key, len, item;
+        if (elements) {
+            if (isArrayLike(elements)) {
+                if (can.List && elements instanceof can.List) {
+                    for (len = elements.attr('length'); i < len; i++) {
+                        item = elements.attr(i);
+                        if (callback.call(context || item, item, i, elements) === false) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (len = elements.length; i < len; i++) {
+                        item = elements[i];
+                        if (callback.call(context || item, item, i, elements) === false) {
+                            break;
+                        }
+                    }
+                }
+            } else if (typeof elements === 'object') {
+                if (can.Map && elements instanceof can.Map || elements === can.route) {
+                    var keys = can.Map.keys(elements);
+                    for (i = 0, len = keys.length; i < len; i++) {
+                        key = keys[i];
+                        item = elements.attr(key);
+                        if (callback.call(context || item, item, key, elements) === false) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (key in elements) {
+                        if (Object.prototype.hasOwnProperty.call(elements, key) && callback.call(context || elements[key], elements[key], key, elements) === false) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return elements;
+    };
+    return can;
+});
+/*can/util/inserted/inserted*/
+define('can/util/inserted/inserted', ['can/util/can'], function (can) {
+    can.inserted = function (elems, document) {
+        if (!elems.length) {
+            return;
+        }
+        elems = can.makeArray(elems);
+        var doc = document || elems[0].ownerDocument || elems[0], inDocument = false, root = can.$(doc.contains ? doc : doc.body), children;
+        for (var i = 0, elem; (elem = elems[i]) !== undefined; i++) {
+            if (!inDocument) {
+                if (elem.getElementsByTagName) {
+                    if (can.has(root, elem).length) {
+                        inDocument = true;
+                    } else {
+                        return;
+                    }
+                } else {
+                    continue;
+                }
+            }
+            if (inDocument && elem.getElementsByTagName) {
+                children = can.makeArray(elem.getElementsByTagName('*'));
+                can.trigger(elem, 'inserted', [], false);
+                for (var j = 0, child; (child = children[j]) !== undefined; j++) {
+                    can.trigger(child, 'inserted', [], false);
+                }
+            }
+        }
+    };
+    can.appendChild = function (el, child, document) {
+        var children;
+        if (child.nodeType === 11) {
+            children = can.makeArray(can.childNodes(child));
+        } else {
+            children = [child];
+        }
+        el.appendChild(child);
+        can.inserted(children, document);
+    };
+    can.insertBefore = function (el, child, ref, document) {
+        var children;
+        if (child.nodeType === 11) {
+            children = can.makeArray(can.childNodes(child));
+        } else {
+            children = [child];
+        }
+        el.insertBefore(child, ref);
+        can.inserted(children, document);
+    };
+});
+/*can/util/jquery/jquery*/
+define('can/util/jquery/jquery', [
+    'jquery/dist/jquery',
+    'can/util/can',
+    'can/util/attr/attr',
+    'can/event/event',
+    'can/util/array/each',
+    'can/util/inserted/inserted'
+], function ($, can, attr, event) {
+    var isBindableElement = function (node) {
+        return node.nodeName && (node.nodeType === 1 || node.nodeType === 9) || node == window || node.addEventListener;
+    };
+    $ = $ || window.jQuery;
+    $.extend(can, $, {
+        trigger: function (obj, event, args, bubbles) {
+            if (isBindableElement(obj)) {
+                $.event.trigger(event, args, obj, !bubbles);
+            } else if (obj.trigger) {
+                obj.trigger(event, args);
+            } else {
+                if (typeof event === 'string') {
+                    event = { type: event };
+                }
+                event.target = event.target || obj;
+                if (args) {
+                    if (args.length && typeof args === 'string') {
+                        args = [args];
+                    } else if (!args.length) {
+                        args = [args];
+                    }
+                }
+                if (!args) {
+                    args = [];
+                }
+                can.dispatch.call(obj, event, args);
+            }
+        },
+        event: can.event,
+        addEvent: can.addEvent,
+        removeEvent: can.removeEvent,
+        buildFragment: function (elems, context) {
+            var ret;
+            elems = [elems];
+            context = context || document;
+            context = !context.nodeType && context[0] || context;
+            context = context.ownerDocument || context;
+            ret = $.buildFragment(elems, context);
+            return ret.cacheable ? $.clone(ret.fragment) : ret.fragment || ret;
+        },
+        $: $,
+        each: can.each,
+        bind: function (ev, cb) {
+            if (this.bind && this.bind !== can.bind) {
+                this.bind(ev, cb);
+            } else if (isBindableElement(this)) {
+                $.event.add(this, ev, cb);
+            } else {
+                can.addEvent.call(this, ev, cb);
+            }
+            return this;
+        },
+        unbind: function (ev, cb) {
+            if (this.unbind && this.unbind !== can.unbind) {
+                this.unbind(ev, cb);
+            } else if (isBindableElement(this)) {
+                $.event.remove(this, ev, cb);
+            } else {
+                can.removeEvent.call(this, ev, cb);
+            }
+            return this;
+        },
+        delegate: function (selector, ev, cb) {
+            if (this.delegate) {
+                this.delegate(selector, ev, cb);
+            } else if (isBindableElement(this)) {
+                $(this).delegate(selector, ev, cb);
+            } else {
+                can.bind.call(this, ev, cb);
+            }
+            return this;
+        },
+        undelegate: function (selector, ev, cb) {
+            if (this.undelegate) {
+                this.undelegate(selector, ev, cb);
+            } else if (isBindableElement(this)) {
+                $(this).undelegate(selector, ev, cb);
+            } else {
+                can.unbind.call(this, ev, cb);
+            }
+            return this;
+        },
+        proxy: can.proxy,
+        attr: attr
+    });
+    can.on = can.bind;
+    can.off = can.unbind;
+    $.each([
+        'append',
+        'filter',
+        'addClass',
+        'remove',
+        'data',
+        'get',
+        'has'
+    ], function (i, name) {
+        can[name] = function (wrapped) {
+            return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1));
+        };
+    });
+    var oldClean = $.cleanData;
+    $.cleanData = function (elems) {
+        $.each(elems, function (i, elem) {
+            if (elem) {
+                can.trigger(elem, 'removed', [], false);
+            }
+        });
+        oldClean(elems);
+    };
+    var oldDomManip = $.fn.domManip, cbIndex;
+    $.fn.domManip = function (args, cb1, cb2) {
+        for (var i = 1; i < arguments.length; i++) {
+            if (typeof arguments[i] === 'function') {
+                cbIndex = i;
+                break;
+            }
+        }
+        return oldDomManip.apply(this, arguments);
+    };
+    $(document.createElement('div')).append(document.createElement('div'));
+    $.fn.domManip = cbIndex === 2 ? function (args, table, callback) {
+        return oldDomManip.call(this, args, table, function (elem) {
+            var elems;
+            if (elem.nodeType === 11) {
+                elems = can.makeArray(can.childNodes(elem));
+            }
+            var ret = callback.apply(this, arguments);
+            can.inserted(elems ? elems : [elem]);
+            return ret;
+        });
+    } : function (args, callback) {
+        return oldDomManip.call(this, args, function (elem) {
+            var elems;
+            if (elem.nodeType === 11) {
+                elems = can.makeArray(can.childNodes(elem));
+            }
+            var ret = callback.apply(this, arguments);
+            can.inserted(elems ? elems : [elem]);
+            return ret;
+        });
+    };
+    var oldAttr = $.attr;
+    $.attr = function (el, attrName) {
+        if (can.isDOM(el) && can.attr.MutationObserver) {
+            return oldAttr.apply(this, arguments);
+        } else {
+            var oldValue, newValue;
+            if (arguments.length >= 3) {
+                oldValue = oldAttr.call(this, el, attrName);
+            }
+            var res = oldAttr.apply(this, arguments);
+            if (arguments.length >= 3) {
+                newValue = oldAttr.call(this, el, attrName);
+            }
+            if (newValue !== oldValue) {
+                can.attr.trigger(el, attrName, oldValue);
+            }
+            return res;
+        }
+    };
+    var oldRemove = $.removeAttr;
+    $.removeAttr = function (el, attrName) {
+        if (can.isDOM(el) && can.attr.MutationObserver) {
+            return oldRemove.apply(this, arguments);
+        } else {
+            var oldValue = oldAttr.call(this, el, attrName), res = oldRemove.apply(this, arguments);
+            if (oldValue != null) {
+                can.attr.trigger(el, attrName, oldValue);
+            }
+            return res;
+        }
+    };
+    $.event.special.attributes = {
+        setup: function () {
+            if (can.isDOM(this) && can.attr.MutationObserver) {
+                var self = this;
+                var observer = new can.attr.MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        var copy = can.simpleExtend({}, mutation);
+                        can.trigger(self, copy, []);
+                    });
+                });
+                observer.observe(this, {
+                    attributes: true,
+                    attributeOldValue: true
+                });
+                can.data(can.$(this), 'canAttributesObserver', observer);
+            } else {
+                can.data(can.$(this), 'canHasAttributesBindings', true);
+            }
+        },
+        teardown: function () {
+            if (can.isDOM(this) && can.attr.MutationObserver) {
+                can.data(can.$(this), 'canAttributesObserver').disconnect();
+                $.removeData(this, 'canAttributesObserver');
+            } else {
+                $.removeData(this, 'canHasAttributesBindings');
+            }
+        }
+    };
+    (function () {
+        var text = '<-\n>', frag = can.buildFragment(text, document);
+        if (frag.firstChild && text !== frag.firstChild.nodeValue) {
+            var oldBuildFragment = can.buildFragment;
+            can.buildFragment = function (content, context) {
+                var res = oldBuildFragment(content, context);
+                if (res.childNodes.length === 1 && res.childNodes.item(0).nodeType === 3) {
+                    res.childNodes.item(0).nodeValue = content;
+                }
+                return res;
+            };
+        }
+    }());
+    $.event.special.inserted = {};
+    $.event.special.removed = {};
+    return can;
+});
+/*can/util/util*/
+define('can/util/util', ['can/util/jquery/jquery'], function (can) {
+    return can;
+});
+/*can/view/view*/
+define('can/view/view', ['can/util/util'], function (can) {
+    var isFunction = can.isFunction, makeArray = can.makeArray, hookupId = 1;
+    var makeRenderer = function (textRenderer) {
+        var renderer = function () {
+            return $view.frag(textRenderer.apply(this, arguments));
+        };
+        renderer.render = function () {
+            return textRenderer.apply(textRenderer, arguments);
+        };
+        return renderer;
+    };
+    var checkText = function (text, url) {
+        if (!text.length) {
+            throw new Error('can.view: No template or empty template:' + url);
+        }
+    };
+    var getRenderer = function (obj, async) {
+        if (isFunction(obj)) {
+            var def = can.Deferred();
+            return def.resolve(obj);
+        }
+        var url = typeof obj === 'string' ? obj : obj.url, suffix = obj.engine && '.' + obj.engine || url.match(/\.[\w\d]+$/), type, el, id;
+        if (url.match(/^#/)) {
+            url = url.substr(1);
+        }
+        if (el = document.getElementById(url)) {
+            suffix = '.' + el.type.match(/\/(x\-)?(.+)/)[2];
+        }
+        if (!suffix && !$view.cached[url]) {
+            url += suffix = $view.ext;
+        }
+        if (can.isArray(suffix)) {
+            suffix = suffix[0];
+        }
+        id = $view.toId(url);
+        if (url.match(/^\/\//)) {
+            url = url.substr(2);
+            url = !window.steal ? url : steal.config().root.mapJoin('' + steal.id(url));
+        }
+        if (window.require) {
+            if (require.toUrl) {
+                url = require.toUrl(url);
+            }
+        }
+        type = $view.types[suffix];
+        if ($view.cached[id]) {
+            return $view.cached[id];
+        } else if (el) {
+            return $view.registerView(id, el.innerHTML, type);
+        } else {
+            var d = new can.Deferred();
+            can.ajax({
+                async: async,
+                url: url,
+                dataType: 'text',
+                error: function (jqXHR) {
+                    checkText('', url);
+                    d.reject(jqXHR);
+                },
+                success: function (text) {
+                    checkText(text, url);
+                    $view.registerView(id, text, type, d);
+                }
+            });
+            return d;
+        }
+    };
+    var getDeferreds = function (data) {
+        var deferreds = [];
+        if (can.isDeferred(data)) {
+            return [data];
+        } else {
+            for (var prop in data) {
+                if (can.isDeferred(data[prop])) {
+                    deferreds.push(data[prop]);
+                }
+            }
+        }
+        return deferreds;
+    };
+    var usefulPart = function (resolved) {
+        return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved;
+    };
+    var $view = can.view = can.template = function (view, data, helpers, callback) {
+        if (isFunction(helpers)) {
+            callback = helpers;
+            helpers = undefined;
+        }
+        return $view.renderAs('fragment', view, data, helpers, callback);
+    };
+    can.extend($view, {
+        frag: function (result, parentNode) {
+            return $view.hookup($view.fragment(result), parentNode);
+        },
+        fragment: function (result) {
+            if (typeof result !== 'string' && result.nodeType === 11) {
+                return result;
+            }
+            var frag = can.buildFragment(result, document.body);
+            if (!frag.childNodes.length) {
+                frag.appendChild(document.createTextNode(''));
+            }
+            return frag;
+        },
+        toId: function (src) {
+            return can.map(src.toString().split(/\/|\./g), function (part) {
+                if (part) {
+                    return part;
+                }
+            }).join('_');
+        },
+        toStr: function (txt) {
+            return txt == null ? '' : '' + txt;
+        },
+        hookup: function (fragment, parentNode) {
+            var hookupEls = [], id, func;
+            can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function (node) {
+                if (node.nodeType === 1) {
+                    hookupEls.push(node);
+                    hookupEls.push.apply(hookupEls, can.makeArray(node.getElementsByTagName('*')));
+                }
+            });
+            can.each(hookupEls, function (el) {
+                if (el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id])) {
+                    func(el, parentNode, id);
+                    delete $view.hookups[id];
+                    el.removeAttribute('data-view-id');
+                }
+            });
+            return fragment;
+        },
+        hookups: {},
+        hook: function (cb) {
+            $view.hookups[++hookupId] = cb;
+            return ' data-view-id=\'' + hookupId + '\'';
+        },
+        cached: {},
+        cachedRenderers: {},
+        cache: true,
+        register: function (info) {
+            this.types['.' + info.suffix] = info;
+            can[info.suffix] = $view[info.suffix] = function (id, text) {
+                var renderer, renderFunc;
+                if (!text) {
+                    renderFunc = function () {
+                        if (!renderer) {
+                            if (info.fragRenderer) {
+                                renderer = info.fragRenderer(null, id);
+                            } else {
+                                renderer = makeRenderer(info.renderer(null, id));
+                            }
+                        }
+                        return renderer.apply(this, arguments);
+                    };
+                    renderFunc.render = function () {
+                        var textRenderer = info.renderer(null, id);
+                        return textRenderer.apply(textRenderer, arguments);
+                    };
+                    return renderFunc;
+                }
+                var registeredRenderer = function () {
+                    if (!renderer) {
+                        if (info.fragRenderer) {
+                            renderer = info.fragRenderer(id, text);
+                        } else {
+                            renderer = info.renderer(id, text);
+                        }
+                    }
+                    return renderer.apply(this, arguments);
+                };
+                if (info.fragRenderer) {
+                    return $view.preload(id, registeredRenderer);
+                } else {
+                    return $view.preloadStringRenderer(id, registeredRenderer);
+                }
+            };
+        },
+        types: {},
+        ext: '.ejs',
+        registerScript: function (type, id, src) {
+            return 'can.view.preloadStringRenderer(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
+        },
+        preload: function (id, renderer) {
+            var def = $view.cached[id] = new can.Deferred().resolve(function (data, helpers) {
+                return renderer.call(data, data, helpers);
+            });
+            def.__view_id = id;
+            $view.cachedRenderers[id] = renderer;
+            return renderer;
+        },
+        preloadStringRenderer: function (id, stringRenderer) {
+            return this.preload(id, makeRenderer(stringRenderer));
+        },
+        render: function (view, data, helpers, callback) {
+            return can.view.renderAs('string', view, data, helpers, callback);
+        },
+        renderTo: function (format, renderer, data, helpers) {
+            return (format === 'string' && renderer.render ? renderer.render : renderer)(data, helpers);
+        },
+        renderAs: function (format, view, data, helpers, callback) {
+            if (isFunction(helpers)) {
+                callback = helpers;
+                helpers = undefined;
+            }
+            var deferreds = getDeferreds(data);
+            var deferred, dataCopy, async, response;
+            if (deferreds.length) {
+                deferred = new can.Deferred();
+                dataCopy = can.extend({}, data);
+                deferreds.push(getRenderer(view, true));
+                can.when.apply(can, deferreds).then(function (resolved) {
+                    var objs = makeArray(arguments), renderer = objs.pop(), result;
+                    if (can.isDeferred(data)) {
+                        dataCopy = usefulPart(resolved);
+                    } else {
+                        for (var prop in data) {
+                            if (can.isDeferred(data[prop])) {
+                                dataCopy[prop] = usefulPart(objs.shift());
+                            }
+                        }
+                    }
+                    result = can.view.renderTo(format, renderer, dataCopy, helpers);
+                    deferred.resolve(result, dataCopy);
+                    if (callback) {
+                        callback(result, dataCopy);
+                    }
+                }, function () {
+                    deferred.reject.apply(deferred, arguments);
+                });
+                return deferred;
+            } else {
+                async = isFunction(callback);
+                deferred = can.__notObserve(getRenderer)(view, async);
+                if (async) {
+                    response = deferred;
+                    deferred.then(function (renderer) {
+                        callback(data ? can.view.renderTo(format, renderer, data, helpers) : renderer);
+                    });
+                } else {
+                    if (deferred.state() === 'resolved' && deferred.__view_id) {
+                        var currentRenderer = $view.cachedRenderers[deferred.__view_id];
+                        return data ? can.view.renderTo(format, currentRenderer, data, helpers) : currentRenderer;
+                    } else {
+                        deferred.then(function (renderer) {
+                            response = data ? can.view.renderTo(format, renderer, data, helpers) : renderer;
+                        });
+                    }
+                }
+                return response;
+            }
+        },
+        registerView: function (id, text, type, def) {
+            var info = typeof type === 'object' ? type : $view.types[type || $view.ext], renderer;
+            if (info.fragRenderer) {
+                renderer = info.fragRenderer(id, text);
+            } else {
+                renderer = makeRenderer(info.renderer(id, text));
+            }
+            def = def || new can.Deferred();
+            if ($view.cache) {
+                $view.cached[id] = def;
+                def.__view_id = id;
+                $view.cachedRenderers[id] = renderer;
+            }
+            return def.resolve(renderer);
+        },
+        simpleHelper: function (fn) {
+            return function () {
+                var realArgs = [];
+                can.each(arguments, function (val, i) {
+                    if (i <= arguments.length) {
+                        while (val && val.isComputed) {
+                            val = val();
+                        }
+                        realArgs.push(val);
+                    }
+                });
+                return fn.apply(this, realArgs);
+            };
+        }
+    });
+    return can;
+});
+/*can/view/callbacks/callbacks*/
+define('can/view/callbacks/callbacks', [
+    'can/util/util',
+    'can/view/view'
 ], function (can) {
-	var define = can.define = {};
-	var getPropDefineBehavior = function (behavior, attr, define) {
-		var prop, defaultProp;
-		if (define) {
-			prop = define[attr];
-			defaultProp = define['*'];
-			if (prop && prop[behavior] !== undefined) {
-				return prop[behavior];
-			} else if (defaultProp && defaultProp[behavior] !== undefined) {
-				return defaultProp[behavior];
-			}
-		}
-	};
-	can.Map.helpers.define = function (Map) {
-		var definitions = Map.prototype.define;
-		Map.defaultGenerators = {};
-		for (var prop in definitions) {
-			var type = definitions[prop].type;
-			if (typeof type === 'string') {
-				if (typeof define.types[type] === 'object') {
-					delete definitions[prop].type;
-					can.extend(definitions[prop], define.types[type]);
-				}
-			}
-			if ('value' in definitions[prop]) {
-				if (typeof definitions[prop].value === 'function') {
-					Map.defaultGenerators[prop] = definitions[prop].value;
-				} else {
-					Map.defaults[prop] = definitions[prop].value;
-				}
-			}
-			if (typeof definitions[prop].Value === 'function') {
-				(function (Constructor) {
-					Map.defaultGenerators[prop] = function () {
-						return new Constructor();
-					};
-				}(definitions[prop].Value));
-			}
-		}
-	};
-	var oldSetupDefaults = can.Map.prototype._setupDefaults;
-	can.Map.prototype._setupDefaults = function (obj) {
-		var defaults = oldSetupDefaults.call(this), propsCommittedToAttr = {}, Map = this.constructor, originalGet = this._get;
-		this._get = function (originalProp) {
-			prop = originalProp.indexOf('.') !== -1 ? originalProp.substr(0, originalProp.indexOf('.')) : prop;
-			if (prop in defaults && !(prop in propsCommittedToAttr)) {
-				this.attr(prop, defaults[prop]);
-				propsCommittedToAttr[prop] = true;
-			}
-			return originalGet.apply(this, arguments);
-		};
-		for (var prop in Map.defaultGenerators) {
-			if (!obj || !(prop in obj)) {
-				defaults[prop] = Map.defaultGenerators[prop].call(this);
-			}
-		}
-		this._get = originalGet;
-		return defaults;
-	};
-	var proto = can.Map.prototype, oldSet = proto.__set;
-	proto.__set = function (prop, value, current, success, error) {
-		var errorCallback = function (errors) {
-			var stub = error && error.call(self, errors);
-			if (stub !== false) {
-				can.trigger(self, 'error', [
-					prop,
-					errors
-				], true);
-			}
-			return false;
-		}, self = this, setter = getPropDefineBehavior('set', prop, this.define), getter = getPropDefineBehavior('get', prop, this.define);
-		if (setter) {
-			can.batch.start();
-			var setterCalled = false, setValue = setter.call(this, value, function (value) {
-				if (getter) {
-					self[prop](value);
-				} else {
-					oldSet.call(self, prop, value, current, success, errorCallback);
-				}
-				setterCalled = true;
-			}, errorCallback, getter ? this[prop].computeInstance.lastSetValue.get() : current);
-			if (getter) {
-				if (setValue !== undefined && !setterCalled && setter.length >= 1) {
-					this[prop](setValue);
-				}
-				can.batch.stop();
-				return;
-			} else if (setValue === undefined && !setterCalled && setter.length >= 1) {
-				can.batch.stop();
-				return;
-			} else {
-				if (!setterCalled) {
-					oldSet.call(self, prop, setter.length === 0 && setValue === undefined ? value : setValue, current, success, errorCallback);
-				}
-				can.batch.stop();
-				return this;
-			}
-		} else {
-			oldSet.call(self, prop, value, current, success, errorCallback);
-		}
-		return this;
-	};
-	define.types = {
-		'date': function (str) {
-			var type = typeof str;
-			if (type === 'string') {
-				str = Date.parse(str);
-				return isNaN(str) ? null : new Date(str);
-			} else if (type === 'number') {
-				return new Date(str);
-			} else {
-				return str;
-			}
-		},
-		'number': function (val) {
-			if (val == null) {
-				return val;
-			}
-			return +val;
-		},
-		'boolean': function (val) {
-			if (val === 'false' || val === '0' || !val) {
-				return false;
-			}
-			return true;
-		},
-		'htmlbool': function (val) {
-			return typeof val === 'string' || !!val;
-		},
-		'*': function (val) {
-			return val;
-		},
-		'string': function (val) {
-			if (val == null) {
-				return val;
-			}
-			return '' + val;
-		},
-		'compute': {
-			set: function (newValue, setVal, setErr, oldValue) {
-				if (newValue.isComputed) {
-					return newValue;
-				}
-				if (oldValue && oldValue.isComputed) {
-					oldValue(newValue);
-					return oldValue;
-				}
-				return newValue;
-			},
-			get: function (value) {
-				return value && value.isComputed ? value() : value;
-			}
-		}
-	};
-	var oldType = proto.__type;
-	proto.__type = function (value, prop) {
-		var type = getPropDefineBehavior('type', prop, this.define), Type = getPropDefineBehavior('Type', prop, this.define), newValue = value;
-		if (typeof type === 'string') {
-			type = define.types[type];
-		}
-		if (type || Type) {
-			if (type) {
-				newValue = type.call(this, newValue, prop);
-			}
-			if (Type && !(newValue instanceof Type)) {
-				newValue = new Type(newValue);
-			}
-			return newValue;
-		} else if (can.isPlainObject(newValue) && newValue.define) {
-			newValue = can.Map.extend(newValue);
-			newValue = new newValue();
-		}
-		return oldType.call(this, newValue, prop);
-	};
-	var oldRemove = proto._remove;
-	proto._remove = function (prop, current) {
-		var remove = getPropDefineBehavior('remove', prop, this.define), res;
-		if (remove) {
-			can.batch.start();
-			res = remove.call(this, current);
-			if (res === false) {
-				can.batch.stop();
-				return;
-			} else {
-				res = oldRemove.call(this, prop, current);
-				can.batch.stop();
-				return res;
-			}
-		}
-		return oldRemove.call(this, prop, current);
-	};
-	var oldSetupComputes = proto._setupComputes;
-	proto._setupComputes = function (defaultsValues) {
-		oldSetupComputes.apply(this, arguments);
-		for (var attr in this.define) {
-			var def = this.define[attr], get = def.get;
-			if (get) {
-				this[attr] = can.compute.async(defaultsValues[attr], get, this);
-				this._computedBindings[attr] = { count: 0 };
-			}
-		}
-	};
-	var oldSingleSerialize = can.Map.helpers._serialize;
-	can.Map.helpers._serialize = function (map, name, val) {
-		return serializeProp(map, name, val);
-	};
-	var serializeProp = function (map, attr, val) {
-		var serializer = attr === '*' ? false : getPropDefineBehavior('serialize', attr, map.define);
-		if (serializer === undefined) {
-			return oldSingleSerialize.apply(this, arguments);
-		} else if (serializer !== false) {
-			return typeof serializer === 'function' ? serializer.call(map, val, attr) : oldSingleSerialize.apply(this, arguments);
-		}
-	};
-	var oldSerialize = proto.serialize;
-	proto.serialize = function (property) {
-		var serialized = oldSerialize.apply(this, arguments);
-		if (property) {
-			return serialized;
-		}
-		var serializer, val;
-		for (var attr in this.define) {
-			if (!(attr in serialized)) {
-				serializer = this.define && this.define[attr] && this.define[attr].serialize;
-				if (serializer) {
-					val = serializeProp(this, attr, this.attr(attr));
-					if (val !== undefined) {
-						serialized[attr] = val;
-					}
-				}
-			}
-		}
-		return serialized;
-	};
-	return can.define;
+    var attr = can.view.attr = function (attributeName, attrHandler) {
+        if (attrHandler) {
+            if (typeof attributeName === 'string') {
+                attributes[attributeName] = attrHandler;
+            } else {
+                regExpAttributes.push({
+                    match: attributeName,
+                    handler: attrHandler
+                });
+            }
+        } else {
+            var cb = attributes[attributeName];
+            if (!cb) {
+                for (var i = 0, len = regExpAttributes.length; i < len; i++) {
+                    var attrMatcher = regExpAttributes[i];
+                    if (attrMatcher.match.test(attributeName)) {
+                        cb = attrMatcher.handler;
+                        break;
+                    }
+                }
+            }
+            return cb;
+        }
+    };
+    var attributes = {}, regExpAttributes = [], automaticCustomElementCharacters = /[-\:]/;
+    var tag = can.view.tag = function (tagName, tagHandler) {
+        if (tagHandler) {
+            if (can.global.html5) {
+                can.global.html5.elements += ' ' + tagName;
+                can.global.html5.shivDocument();
+            }
+            tags[tagName.toLowerCase()] = tagHandler;
+        } else {
+            var cb = tags[tagName.toLowerCase()];
+            if (!cb && automaticCustomElementCharacters.test(tagName)) {
+                cb = function () {
+                };
+            }
+            return cb;
+        }
+    };
+    var tags = {};
+    can.view.callbacks = {
+        _tags: tags,
+        _attributes: attributes,
+        _regExpAttributes: regExpAttributes,
+        tag: tag,
+        attr: attr,
+        tagHandler: function (el, tagName, tagData) {
+            var helperTagCallback = tagData.options.get('tags.' + tagName, { proxyMethods: false }), tagCallback = helperTagCallback || tags[tagName];
+            var scope = tagData.scope, res;
+            if (tagCallback) {
+                res = can.__notObserve(tagCallback)(el, tagData);
+            } else {
+                res = scope;
+            }
+            if (res && tagData.subtemplate) {
+                if (scope !== res) {
+                    scope = scope.add(res);
+                }
+                var result = tagData.subtemplate(scope, tagData.options);
+                var frag = typeof result === 'string' ? can.view.frag(result) : result;
+                can.appendChild(el, frag);
+            }
+        }
+    };
+    return can.view.callbacks;
 });
-/*[global-shim-end]*/
-(function (){
-	window._define = window.define;
-	window.define = window.define.orig;
-	window.System = window.System.orig;
-})();
-/*!
- * CanJS - 2.3.0-pre.1
- * http://canjs.com/
- * Copyright (c) 2015 Bitovi
- * Fri, 29 May 2015 22:07:38 GMT
- * Licensed MIT
- */
-
-/*[global-shim-start]*/
-(function (exports, global){
-	var origDefine = global.define;
-
-	var get = function(name){
-		var parts = name.split("."),
-			cur = global,
-			i;
-		for(i = 0 ; i < parts.length; i++){
-			if(!cur) {
-				break;
-			}
-			cur = cur[parts[i]];
-		}
-		return cur;
-	};
-	var modules = (global.define && global.define.modules) ||
-		(global._define && global._define.modules) || {};
-	var ourDefine = global.define = function(moduleName, deps, callback){
-		var module;
-		if(typeof deps === "function") {
-			callback = deps;
-			deps = [];
-		}
-		var args = [],
-			i;
-		for(i =0; i < deps.length; i++) {
-			args.push( exports[deps[i]] ? get(exports[deps[i]]) : ( modules[deps[i]] || get(deps[i]) )  );
-		}
-		// CJS has no dependencies but 3 callback arguments
-		if(!deps.length && callback.length) {
-			module = { exports: {} };
-			var require = function(name) {
-				return exports[name] ? get(exports[name]) : modules[name];
-			};
-			args.push(require, module.exports, module);
-		}
-		// Babel uses the exports and module object.
-		else if(!args[0] && deps[0] === "exports") {
-			module = { exports: {} };
-			args[0] = module.exports;
-			if(deps[1] === "module") {
-				args[1] = module;
-			}
-		}
-
-		global.define = origDefine;
-		var result = callback ? callback.apply(null, args) : undefined;
-		global.define = ourDefine;
-
-		// Favor CJS module.exports over the return value
-		modules[moduleName] = module && module.exports ? module.exports : result;
-	};
-	global.define.orig = origDefine;
-	global.define.modules = modules;
-	global.define.amd = true;
-	global.System = {
-		define: function(__name, __code){
-			global.define = origDefine;
-			eval("(function() { " + __code + " \n }).call(global);");
-			global.define = ourDefine;
-		},
-		orig: global.System
-	};
-})({},window)
-/*can@2.3.0-pre.1#view/target/target*/
-define('can/view/target/target', [
-	'can/util/util',
-	'can/view/elements'
-], function (can, elements, vdom) {
-	var processNodes = function (nodes, paths, location, document) {
-		var frag = document.createDocumentFragment();
-		for (var i = 0, len = nodes.length; i < len; i++) {
-			var node = nodes[i];
-			frag.appendChild(processNode(node, paths, location.concat(i), document));
-		}
-		return frag;
-	}, keepsTextNodes = typeof document !== 'undefined' && function () {
-			var testFrag = document.createDocumentFragment();
-			var div = document.createElement('div');
-			div.appendChild(document.createTextNode(''));
-			div.appendChild(document.createTextNode(''));
-			testFrag.appendChild(div);
-			var cloned = testFrag.cloneNode(true);
-			return can.childNodes(cloned.firstChild).length === 2;
-		}(), clonesWork = typeof document !== 'undefined' && function () {
-			var a = document.createElement('a');
-			a.innerHTML = '<xyz></xyz>';
-			var clone = a.cloneNode(true);
-			return clone.innerHTML === '<xyz></xyz>';
-		}(), namespacesWork = typeof document !== 'undefined' && !!document.createElementNS, attributeDummy = typeof document !== 'undefined' ? document.createElement('div') : null, setAttribute = function (el, attrName, value) {
-		try {
-			el.setAttribute(attrName, value);
-		} catch (e) {
-			attributeDummy.innerHTML = '<div ' + attrName + '="' + value + '"></div>';
-			el.setAttributeNode(attributeDummy.childNodes[0].attributes[0].cloneNode());
-		}
-	};
-	var cloneNode = clonesWork ? function (el) {
-		return el.cloneNode(true);
-	} : function (node) {
-		var copy;
-		if (node.nodeType === 1) {
-			copy = document.createElement(node.nodeName);
-		} else if (node.nodeType === 3) {
-			copy = document.createTextNode(node.nodeValue);
-		} else if (node.nodeType === 8) {
-			copy = document.createComment(node.nodeValue);
-		} else if (node.nodeType === 11) {
-			copy = document.createDocumentFragment();
-		}
-		if (node.attributes) {
-			var attributes = can.makeArray(node.attributes);
-			can.each(attributes, function (node) {
-				if (node && node.specified) {
-					setAttribute(copy, node.nodeName, node.nodeValue);
-				}
-			});
-		}
-		if (node.childNodes) {
-			can.each(node.childNodes, function (child) {
-				copy.appendChild(cloneNode(child));
-			});
-		}
-		return copy;
-	};
-	function processNode(node, paths, location, document) {
-		var callback, loc = location, nodeType = typeof node, el, p, i, len;
-		var getCallback = function () {
-			if (!callback) {
-				callback = {
-					path: location,
-					callbacks: []
-				};
-				paths.push(callback);
-				loc = [];
-			}
-			return callback;
-		};
-		if (nodeType === 'object') {
-			if (node.tag) {
-				if (namespacesWork && node.namespace) {
-					el = document.createElementNS(node.namespace, node.tag);
-				} else {
-					el = document.createElement(node.tag);
-				}
-				if (node.attrs) {
-					for (var attrName in node.attrs) {
-						var value = node.attrs[attrName];
-						if (typeof value === 'function') {
-							getCallback().callbacks.push({ callback: value });
-						} else {
-							setAttribute(el, attrName, value);
-						}
-					}
-				}
-				if (node.attributes) {
-					for (i = 0, len = node.attributes.length; i < len; i++) {
-						getCallback().callbacks.push({ callback: node.attributes[i] });
-					}
-				}
-				if (node.children && node.children.length) {
-					if (callback) {
-						p = callback.paths = [];
-					} else {
-						p = paths;
-					}
-					el.appendChild(processNodes(node.children, p, loc, document));
-				}
-			} else if (node.comment) {
-				el = document.createComment(node.comment);
-				if (node.callbacks) {
-					for (i = 0, len = node.attributes.length; i < len; i++) {
-						getCallback().callbacks.push({ callback: node.callbacks[i] });
-					}
-				}
-			}
-		} else if (nodeType === 'string') {
-			el = document.createTextNode(node);
-		} else if (nodeType === 'function') {
-			if (keepsTextNodes) {
-				el = document.createTextNode('');
-				getCallback().callbacks.push({ callback: node });
-			} else {
-				el = document.createComment('~');
-				getCallback().callbacks.push({
-					callback: function () {
-						var el = document.createTextNode('');
-						elements.replace([this], el);
-						return node.apply(el, arguments);
-					}
-				});
-			}
-		}
-		return el;
-	}
-	function getCallbacks(el, pathData, elementCallbacks) {
-		var path = pathData.path, callbacks = pathData.callbacks, paths = pathData.paths, child = el, pathLength = path ? path.length : 0, pathsLength = paths ? paths.length : 0;
-		for (var i = 0; i < pathLength; i++) {
-			child = child.childNodes.item(path[i]);
-		}
-		elementCallbacks.push({
-			element: child,
-			callbacks: callbacks
-		});
-		for (i = 0; i < pathsLength; i++) {
-			getCallbacks(child, paths[i], elementCallbacks);
-		}
-	}
-	function hydrateCallbacks(callbacks, args) {
-		var len = callbacks.length, callbacksLength, callbackElement, callbackData;
-		for (var i = 0; i < len; i++) {
-			callbackData = callbacks[i];
-			callbacksLength = callbackData.callbacks.length;
-			callbackElement = callbackData.element;
-			for (var c = 0; c < callbacksLength; c++) {
-				callbackData.callbacks[c].callback.apply(callbackElement, args);
-			}
-		}
-	}
-	function makeTarget(nodes, doc) {
-		var paths = [];
-		var frag = processNodes(nodes, paths, [], doc || can.global.document);
-		return {
-			paths: paths,
-			clone: frag,
-			hydrate: function () {
-				var cloned = cloneNode(this.clone);
-				var args = can.makeArray(arguments);
-				var callbacks = [];
-				for (var i = 0; i < paths.length; i++) {
-					getCallbacks(cloned, paths[i], callbacks);
-				}
-				hydrateCallbacks(callbacks, args);
-				return cloned;
-			}
-		};
-	}
-	makeTarget.keepsTextNodes = keepsTextNodes;
-	can.view.target = makeTarget;
-	return makeTarget;
-});
-/*can@2.3.0-pre.1#view/stache/html_section*/
-define('can/view/stache/html_section', [
-	'can/util/util',
-	'can/view/target/target',
-	'can/view/stache/utils',
-	'can/view/stache/mustache_core'
-], function (can, target, utils, mustacheCore) {
-	var decodeHTML = typeof document !== 'undefined' && function () {
-			var el = document.createElement('div');
-			return function (html) {
-				if (html.indexOf('&') === -1) {
-					return html.replace(/\r\n/g, '\n');
-				}
-				el.innerHTML = html;
-				return el.childNodes.length === 0 ? '' : el.childNodes[0].nodeValue;
-			};
-		}();
-	var HTMLSectionBuilder = function () {
-		this.stack = [new HTMLSection()];
-	};
-	can.extend(HTMLSectionBuilder.prototype, utils.mixins);
-	can.extend(HTMLSectionBuilder.prototype, {
-		startSubSection: function (process) {
-			var newSection = new HTMLSection(process);
-			this.stack.push(newSection);
-			return newSection;
-		},
-		endSubSectionAndReturnRenderer: function () {
-			if (this.last().isEmpty()) {
-				this.stack.pop();
-				return null;
-			} else {
-				var htmlSection = this.endSection();
-				return can.proxy(htmlSection.compiled.hydrate, htmlSection.compiled);
-			}
-		},
-		startSection: function (process) {
-			var newSection = new HTMLSection(process);
-			this.last().add(newSection.targetCallback);
-			this.stack.push(newSection);
-		},
-		endSection: function () {
-			this.last().compile();
-			return this.stack.pop();
-		},
-		inverse: function () {
-			this.last().inverse();
-		},
-		compile: function () {
-			var compiled = this.stack.pop().compile();
-			return function (scope, options, nodeList) {
-				if (!(scope instanceof can.view.Scope)) {
-					scope = can.view.Scope.refsScope().add(scope || {});
-				}
-				if (!(options instanceof mustacheCore.Options)) {
-					options = new mustacheCore.Options(options || {});
-				}
-				return compiled.hydrate(scope, options, nodeList);
-			};
-		},
-		push: function (chars) {
-			this.last().push(chars);
-		},
-		pop: function () {
-			return this.last().pop();
-		}
-	});
-	var HTMLSection = function (process) {
-		this.data = 'targetData';
-		this.targetData = [];
-		this.targetStack = [];
-		var self = this;
-		this.targetCallback = function (scope, options, sectionNode) {
-			process.call(this, scope, options, sectionNode, can.proxy(self.compiled.hydrate, self.compiled), self.inverseCompiled && can.proxy(self.inverseCompiled.hydrate, self.inverseCompiled));
-		};
-	};
-	can.extend(HTMLSection.prototype, {
-		inverse: function () {
-			this.inverseData = [];
-			this.data = 'inverseData';
-		},
-		push: function (data) {
-			this.add(data);
-			this.targetStack.push(data);
-		},
-		pop: function () {
-			return this.targetStack.pop();
-		},
-		add: function (data) {
-			if (typeof data === 'string') {
-				data = decodeHTML(data);
-			}
-			if (this.targetStack.length) {
-				this.targetStack[this.targetStack.length - 1].children.push(data);
-			} else {
-				this[this.data].push(data);
-			}
-		},
-		compile: function () {
-			this.compiled = target(this.targetData, can.document || can.global.document);
-			if (this.inverseData) {
-				this.inverseCompiled = target(this.inverseData, can.document || can.global.document);
-				delete this.inverseData;
-			}
-			delete this.targetData;
-			delete this.targetStack;
-			return this.compiled;
-		},
-		children: function () {
-			if (this.targetStack.length) {
-				return this.targetStack[this.targetStack.length - 1].children;
-			} else {
-				return this[this.data];
-			}
-		},
-		isEmpty: function () {
-			return !this.targetData.length;
-		}
-	});
-	return HTMLSectionBuilder;
-});
-/*can@2.3.0-pre.1#view/stache/text_section*/
-define('can/view/stache/text_section', [
-	'can/util/util',
-	'can/view/live/live',
-	'can/view/stache/utils'
-], function (can, live, utils) {
-	live = live || can.view.live;
-	var TextSectionBuilder = function () {
-		this.stack = [new TextSection()];
-	}, emptyHandler = function () {
-	};
-	can.extend(TextSectionBuilder.prototype, utils.mixins);
-	can.extend(TextSectionBuilder.prototype, {
-		startSection: function (process) {
-			var subSection = new TextSection();
-			this.last().add({
-				process: process,
-				truthy: subSection
-			});
-			this.stack.push(subSection);
-		},
-		endSection: function () {
-			this.stack.pop();
-		},
-		inverse: function () {
-			this.stack.pop();
-			var falseySection = new TextSection();
-			this.last().last().falsey = falseySection;
-			this.stack.push(falseySection);
-		},
-		compile: function (state) {
-			var renderer = this.stack[0].compile();
-			return function (scope, options) {
-				var compute = can.compute(function () {
-					return renderer(scope, options);
-				}, this, false, true);
-				compute.bind('change', emptyHandler);
-				var value = compute();
-				if (compute.computeInstance.hasDependencies) {
-					if (state.attr) {
-						live.simpleAttribute(this, state.attr, compute);
-					} else {
-						live.attributes(this, compute);
-					}
-					compute.unbind('change', emptyHandler);
-				} else {
-					if (state.attr) {
-						can.attr.set(this, state.attr, value);
-					} else {
-						live.setAttributes(this, value);
-					}
-				}
-			};
-		}
-	});
-	var passTruthyFalsey = function (process, truthy, falsey) {
-		return function (scope, options) {
-			return process.call(this, scope, options, truthy, falsey);
-		};
-	};
-	var TextSection = function () {
-		this.values = [];
-	};
-	can.extend(TextSection.prototype, {
-		add: function (data) {
-			this.values.push(data);
-		},
-		last: function () {
-			return this.values[this.values.length - 1];
-		},
-		compile: function () {
-			var values = this.values, len = values.length;
-			for (var i = 0; i < len; i++) {
-				var value = this.values[i];
-				if (typeof value === 'object') {
-					values[i] = passTruthyFalsey(value.process, value.truthy && value.truthy.compile(), value.falsey && value.falsey.compile());
-				}
-			}
-			return function (scope, options) {
-				var txt = '', value;
-				for (var i = 0; i < len; i++) {
-					value = values[i];
-					txt += typeof value === 'string' ? value : value.call(this, scope, options);
-				}
-				return txt;
-			};
-		}
-	});
-	return TextSectionBuilder;
-});
-/*can@2.3.0-pre.1#view/import/import*/
-define('can/view/import/import', [
-	'can/util/util',
-	'can/view/callbacks/callbacks'
+/*can/view/elements*/
+define('can/view/elements', [
+    'can/util/util',
+    'can/view/view'
 ], function (can) {
-	can.view.tag('can-import', function (el, tagData) {
-		var moduleName = el.getAttribute('from');
-		var importPromise;
-		if (moduleName) {
-			importPromise = can['import'](moduleName);
-		} else {
-			importPromise = can.Deferred().reject('No moduleName provided').promise();
-		}
-		var root = tagData.scope.attr('@root');
-		if (root && can.isFunction(root.waitFor)) {
-			root.waitFor(importPromise);
-		}
-		can.data(can.$(el), 'viewModel', importPromise);
-		var scope = tagData.scope.add(importPromise);
-		var handOffTag = el.getAttribute('can-tag');
-		if (handOffTag) {
-			var callback = can.view.callbacks._tags[handOffTag];
-			callback(el, can.extend(tagData, { scope: scope }));
-			var viewModel = can.viewModel(el);
-			importPromise.then(function (val) {
-				viewModel.attr('value', val);
-			});
-		} else {
-			var frag = tagData.subtemplate ? tagData.subtemplate(scope, tagData.options) : document.createDocumentFragment();
-			var nodeList = can.view.nodeLists.register([], undefined, true);
-			can.one.call(el, 'removed', function () {
-				can.view.nodeLists.unregister(nodeList);
-			});
-			can.appendChild(el, frag, can.document);
-			can.view.nodeLists.update(nodeList, can.childNodes(el));
-		}
-	});
+    var doc = typeof document !== 'undefined' ? document : null;
+    var selectsCommentNodes = doc && function () {
+        return can.$(document.createComment('~')).length === 1;
+    }();
+    var elements = {
+        tagToContentPropMap: {
+            option: doc && 'textContent' in document.createElement('option') ? 'textContent' : 'innerText',
+            textarea: 'value'
+        },
+        attrMap: can.attr.map,
+        attrReg: /([^\s=]+)[\s]*=[\s]*/,
+        defaultValue: can.attr.defaultValue,
+        tagMap: {
+            '': 'span',
+            colgroup: 'col',
+            table: 'tbody',
+            tr: 'td',
+            ol: 'li',
+            ul: 'li',
+            tbody: 'tr',
+            thead: 'tr',
+            tfoot: 'tr',
+            select: 'option',
+            optgroup: 'option'
+        },
+        reverseTagMap: {
+            col: 'colgroup',
+            tr: 'tbody',
+            option: 'select',
+            td: 'tr',
+            th: 'tr',
+            li: 'ul'
+        },
+        selfClosingTags: { col: true },
+        getParentNode: function (el, defaultParentNode) {
+            return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
+        },
+        setAttr: can.attr.set,
+        getAttr: can.attr.get,
+        removeAttr: can.attr.remove,
+        contentText: function (text) {
+            if (typeof text === 'string') {
+                return text;
+            }
+            if (!text && text !== 0) {
+                return '';
+            }
+            return '' + text;
+        },
+        after: function (oldElements, newFrag) {
+            var last = oldElements[oldElements.length - 1];
+            if (last.nextSibling) {
+                can.insertBefore(last.parentNode, newFrag, last.nextSibling, can.document);
+            } else {
+                can.appendChild(last.parentNode, newFrag, can.document);
+            }
+        },
+        replace: function (oldElements, newFrag) {
+            var selectedValue, parentNode = oldElements[0].parentNode;
+            if (parentNode.nodeName.toUpperCase() === 'SELECT' && parentNode.selectedIndex >= 0) {
+                selectedValue = parentNode.value;
+            }
+            elements.after(oldElements, newFrag);
+            if (can.remove(can.$(oldElements)).length < oldElements.length && !selectsCommentNodes) {
+                can.each(oldElements, function (el) {
+                    if (el.nodeType === 8) {
+                        el.parentNode.removeChild(el);
+                    }
+                });
+            }
+            if (selectedValue !== undefined) {
+                parentNode.value = selectedValue;
+            }
+        }
+    };
+    can.view.elements = elements;
+    return elements;
 });
-/*can@2.3.0-pre.1#view/stache/intermediate_and_imports*/
-define('can/view/stache/intermediate_and_imports', [
-	'can/view/stache/mustache_core',
-	'can/view/parser/parser',
-	'can/view/import/import'
-], function (mustacheCore, parser) {
-	return function (source) {
-		var template = mustacheCore.cleanLineEndings(source);
-		var imports = [], ases = {}, inImport = false, inFrom = false, inAs = false, currentAs = '', currentFrom = '';
-		var intermediate = parser(template, {
-			start: function (tagName, unary) {
-				if (tagName === 'can-import') {
-					inImport = true;
-				} else if (inImport) {
-					inImport = false;
-				}
-			},
-			attrStart: function (attrName) {
-				if (attrName === 'from') {
-					inFrom = true;
-				} else if (inImport && attrName === '[.]') {
-					inAs = true;
-					currentAs = 'viewModel';
-					return false;
-				}
-			},
-			attrEnd: function (attrName) {
-				if (attrName === 'from') {
-					inFrom = false;
-				} else if (inImport && attrName === '[.]') {
-					inAs = false;
-					return false;
-				}
-			},
-			attrValue: function (value) {
-				if (inFrom && inImport) {
-					imports.push(value);
-					currentFrom = value;
-				} else if (inAs && currentAs === 'viewModel') {
-					return false;
-				}
-			},
-			end: function (tagName) {
-				if (tagName === 'can-import') {
-					if (currentAs) {
-						ases[currentAs] = currentFrom;
-						currentAs = '';
-						inAs = false;
-					}
-				}
-			},
-			close: function (tagName) {
-				if (tagName === 'can-import') {
-					imports.pop();
-				}
-			}
-		}, true);
-		return {
-			intermediate: intermediate,
-			imports: imports,
-			ases: ases
-		};
-	};
+/*can/util/bind/bind*/
+define('can/util/bind/bind', ['can/util/util'], function (can) {
+    can.bindAndSetup = function () {
+        can.addEvent.apply(this, arguments);
+        if (!this.__inSetup) {
+            if (!this._bindings) {
+                this._bindings = 1;
+                if (this._bindsetup) {
+                    this._bindsetup();
+                }
+            } else {
+                this._bindings++;
+            }
+        }
+        return this;
+    };
+    can.unbindAndTeardown = function (event, handler) {
+        if (!this.__bindEvents) {
+            return this;
+        }
+        var handlers = this.__bindEvents[event] || [];
+        var handlerCount = handlers.length;
+        can.removeEvent.apply(this, arguments);
+        if (this._bindings === null) {
+            this._bindings = 0;
+        } else {
+            this._bindings = this._bindings - (handlerCount - handlers.length);
+        }
+        if (!this._bindings && this._bindteardown) {
+            this._bindteardown();
+        }
+        return this;
+    };
+    return can;
 });
-/*can@2.3.0-pre.1#view/stache/stache*/
-define('can/view/stache/stache', [
-	'can/util/util',
-	'can/view/parser/parser',
-	'can/view/target/target',
-	'can/view/stache/html_section',
-	'can/view/stache/text_section',
-	'can/view/stache/mustache_core',
-	'can/view/stache/mustache_helpers',
-	'can/view/stache/intermediate_and_imports',
-	'can/view/callbacks/callbacks',
-	'can/view/bindings/bindings'
-], function (can, parser, target, HTMLSectionBuilder, TextSectionBuilder, mustacheCore, mustacheHelpers, getIntermediateAndImports, viewCallbacks) {
-	parser = parser || can.view.parser;
-	can.view.parser = parser;
-	viewCallbacks = viewCallbacks || can.view.callbacks;
-	var svgNamespace = 'http://www.w3.org/2000/svg';
-	var namespaces = {
-		'svg': svgNamespace,
-		'g': svgNamespace
-	};
-	function stache(template) {
-		if (typeof template === 'string') {
-			template = mustacheCore.cleanLineEndings(template);
-		}
-		var section = new HTMLSectionBuilder(), state = {
-			node: null,
-			attr: null,
-			sectionElementStack: [],
-			text: false,
-			namespaceStack: []
-		}, makeRendererAndUpdateSection = function (section, mode, stache) {
-			if (mode === '>') {
-				section.add(mustacheCore.makeLiveBindingPartialRenderer(stache, state));
-			} else if (mode === '/') {
-				section.endSection();
-				if (section instanceof HTMLSectionBuilder) {
-					state.sectionElementStack.pop();
-				}
-			} else if (mode === 'else') {
-				section.inverse();
-			} else {
-				var makeRenderer = section instanceof HTMLSectionBuilder ? mustacheCore.makeLiveBindingBranchRenderer : mustacheCore.makeStringBranchRenderer;
-				if (mode === '{' || mode === '&') {
-					section.add(makeRenderer(null, stache, copyState()));
-				} else if (mode === '#' || mode === '^') {
-					section.startSection(makeRenderer(mode, stache, copyState()));
-					if (section instanceof HTMLSectionBuilder) {
-						state.sectionElementStack.push('section');
-					}
-				} else {
-					section.add(makeRenderer(null, stache, copyState({ text: true })));
-				}
-			}
-		}, copyState = function (overwrites) {
-			var lastElement = state.sectionElementStack[state.sectionElementStack.length - 1];
-			var cur = {
-				tag: state.node && state.node.tag,
-				attr: state.attr && state.attr.name,
-				directlyNested: state.sectionElementStack.length ? lastElement === 'section' || lastElement === 'custom' : true
-			};
-			return overwrites ? can.simpleExtend(cur, overwrites) : cur;
-		}, addAttributesCallback = function (node, callback) {
-			if (!node.attributes) {
-				node.attributes = [];
-			}
-			node.attributes.unshift(callback);
-		};
-		parser(template, {
-			start: function (tagName, unary) {
-				var matchedNamespace = namespaces[tagName];
-				if (matchedNamespace && !unary) {
-					state.namespaceStack.push(matchedNamespace);
-				}
-				state.node = {
-					tag: tagName,
-					children: [],
-					namespace: matchedNamespace || can.last(state.namespaceStack)
-				};
-			},
-			end: function (tagName, unary) {
-				var isCustomTag = viewCallbacks.tag(tagName);
-				if (unary) {
-					section.add(state.node);
-					if (isCustomTag) {
-						addAttributesCallback(state.node, function (scope, options, parentNodeList) {
-							viewCallbacks.tagHandler(this, tagName, {
-								scope: scope,
-								options: options,
-								subtemplate: null,
-								templateType: 'stache',
-								parentNodeList: parentNodeList
-							});
-						});
-					}
-				} else {
-					section.push(state.node);
-					state.sectionElementStack.push(isCustomTag ? 'custom' : 'element');
-					if (isCustomTag) {
-						section.startSubSection();
-					}
-				}
-				state.node = null;
-			},
-			close: function (tagName) {
-				var matchedNamespace = namespaces[tagName];
-				if (matchedNamespace) {
-					state.namespaceStack.pop();
-				}
-				var isCustomTag = viewCallbacks.tag(tagName), renderer;
-				if (isCustomTag) {
-					renderer = section.endSubSectionAndReturnRenderer();
-				}
-				var oldNode = section.pop();
-				if (isCustomTag) {
-					addAttributesCallback(oldNode, function (scope, options, parentNodeList) {
-						viewCallbacks.tagHandler(this, tagName, {
-							scope: scope,
-							options: options,
-							subtemplate: renderer,
-							templateType: 'stache',
-							parentNodeList: parentNodeList
-						});
-					});
-				}
-				state.sectionElementStack.pop();
-			},
-			attrStart: function (attrName) {
-				if (state.node.section) {
-					state.node.section.add(attrName + '="');
-				} else {
-					state.attr = {
-						name: attrName,
-						value: ''
-					};
-				}
-			},
-			attrEnd: function (attrName) {
-				if (state.node.section) {
-					state.node.section.add('" ');
-				} else {
-					if (!state.node.attrs) {
-						state.node.attrs = {};
-					}
-					state.node.attrs[state.attr.name] = state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
-					var attrCallback = viewCallbacks.attr(attrName);
-					if (attrCallback) {
-						if (!state.node.attributes) {
-							state.node.attributes = [];
-						}
-						state.node.attributes.push(function (scope, options) {
-							attrCallback(this, {
-								attributeName: attrName,
-								scope: scope,
-								options: options
-							});
-						});
-					}
-					state.attr = null;
-				}
-			},
-			attrValue: function (value) {
-				var section = state.node.section || state.attr.section;
-				if (section) {
-					section.add(value);
-				} else {
-					state.attr.value += value;
-				}
-			},
-			chars: function (text) {
-				section.add(text);
-			},
-			special: function (text) {
-				var firstAndText = mustacheCore.splitModeFromExpression(text, state), mode = firstAndText.mode, expression = firstAndText.expression;
-				if (expression === 'else') {
-					(state.attr && state.attr.section ? state.attr.section : section).inverse();
-					return;
-				}
-				if (mode === '!') {
-					return;
-				}
-				if (state.node && state.node.section) {
-					makeRendererAndUpdateSection(state.node.section, mode, expression);
-					if (state.node.section.subSectionDepth() === 0) {
-						state.node.attributes.push(state.node.section.compile(copyState()));
-						delete state.node.section;
-					}
-				} else if (state.attr) {
-					if (!state.attr.section) {
-						state.attr.section = new TextSectionBuilder();
-						if (state.attr.value) {
-							state.attr.section.add(state.attr.value);
-						}
-					}
-					makeRendererAndUpdateSection(state.attr.section, mode, expression);
-				} else if (state.node) {
-					if (!state.node.attributes) {
-						state.node.attributes = [];
-					}
-					if (!mode) {
-						state.node.attributes.push(mustacheCore.makeLiveBindingBranchRenderer(null, expression, copyState()));
-					} else if (mode === '#' || mode === '^') {
-						if (!state.node.section) {
-							state.node.section = new TextSectionBuilder();
-						}
-						makeRendererAndUpdateSection(state.node.section, mode, expression);
-					} else {
-						throw mode + ' is currently not supported within a tag.';
-					}
-				} else {
-					makeRendererAndUpdateSection(section, mode, expression);
-				}
-			},
-			comment: function (text) {
-				section.add({ comment: text });
-			},
-			done: function () {
-			}
-		});
-		return section.compile();
-	}
-	var escMap = {
-		'\n': '\\n',
-		'\r': '\\r',
-		'\u2028': '\\u2028',
-		'\u2029': '\\u2029'
-	};
-	var esc = function (string) {
-		return ('' + string).replace(/["'\\\n\r\u2028\u2029]/g, function (character) {
-			if ('\'"\\'.indexOf(character) >= 0) {
-				return '\\' + character;
-			} else {
-				return escMap[character];
-			}
-		});
-	};
-	can.view.register({
-		suffix: 'stache',
-		contentType: 'x-stache-template',
-		fragRenderer: function (id, text) {
-			return stache(text);
-		},
-		script: function (id, src) {
-			return 'can.stache("' + esc(src) + '")';
-		}
-	});
-	can.view.ext = '.stache';
-	can.extend(can.stache, mustacheHelpers);
-	can.extend(stache, mustacheHelpers);
-	can.stache.safeString = stache.safeString = function (text) {
-		return {
-			toString: function () {
-				return text;
-			}
-		};
-	};
-	can.stache.async = function (source) {
-		var iAi = getIntermediateAndImports(source);
-		var importPromises = can.map(iAi.imports, function (moduleName) {
-			return can['import'](moduleName);
-		});
-		return can.when.apply(can, importPromises).then(function () {
-			return stache(iAi.intermediate);
-		});
-	};
-	return stache;
+/*can/util/batch/batch*/
+define('can/util/batch/batch', ['can/util/can'], function (can) {
+    var batchNum = 1, transactions = 0, dispatchingBatch = null, collectingBatch = null, batches = [], dispatchingBatches = false;
+    can.batch = {
+        start: function (batchStopHandler) {
+            transactions++;
+            if (transactions === 1) {
+                var batch = {
+                    events: [],
+                    callbacks: [],
+                    number: batchNum++
+                };
+                batches.push(batch);
+                if (batchStopHandler) {
+                    batch.callbacks.push(batchStopHandler);
+                }
+                collectingBatch = batch;
+            }
+        },
+        stop: function (force, callStart) {
+            if (force) {
+                transactions = 0;
+            } else {
+                transactions--;
+            }
+            if (transactions === 0) {
+                collectingBatch = null;
+                var batch;
+                if (dispatchingBatches === false) {
+                    dispatchingBatches = true;
+                    while (batch = batches.shift()) {
+                        var events = batch.events;
+                        var callbacks = batch.callbacks;
+                        dispatchingBatch = batch;
+                        can.batch.batchNum = batch.number;
+                        var i, len;
+                        if (callStart) {
+                            can.batch.start();
+                        }
+                        for (i = 0, len = events.length; i < len; i++) {
+                            can.dispatch.apply(events[i][0], events[i][1]);
+                        }
+                        can.batch._onDispatchedEvents(batch.number);
+                        for (i = 0; i < callbacks.length; i++) {
+                            callbacks[i]();
+                        }
+                        dispatchingBatch = null;
+                        can.batch.batchNum = undefined;
+                    }
+                    dispatchingBatches = false;
+                }
+            }
+        },
+        _onDispatchedEvents: function () {
+        },
+        trigger: function (item, event, args) {
+            if (!item.__inSetup) {
+                event = typeof event === 'string' ? { type: event } : event;
+                if (collectingBatch) {
+                    event.batchNum = collectingBatch.number;
+                    collectingBatch.events.push([
+                        item,
+                        [
+                            event,
+                            args
+                        ]
+                    ]);
+                } else {
+                    if (dispatchingBatch) {
+                        event.batchNum = dispatchingBatch.number;
+                    }
+                    can.dispatch.call(item, event, args);
+                }
+            }
+        },
+        afterPreviousEvents: function (handler) {
+            var batch = can.last(batches);
+            if (batch) {
+                batch.callbacks.push(handler);
+            } else {
+                handler({});
+            }
+        },
+        after: function (handler) {
+            var batch = collectingBatch || dispatchingBatch;
+            if (batch) {
+                batch.callbacks.push(handler);
+            } else {
+                handler({});
+            }
+        }
+    };
 });
-/*[global-shim-end]*/
-(function (){
-	window._define = window.define;
-	window.define = window.define.orig;
-	window.System = window.System.orig;
-})();
-/*!
- * CanJS - 2.3.0-pre.0
- * http://canjs.com/
- * Copyright (c) 2015 Bitovi
- * Tue, 02 Jun 2015 20:00:57 GMT
- * Licensed MIT
- */
-
-/*[global-shim-start]*/
-(function (exports, global){
-	var origDefine = global.define;
-
-	var get = function(name){
-		var parts = name.split("."),
-			cur = global,
-			i;
-		for(i = 0 ; i < parts.length; i++){
-			if(!cur) {
-				break;
-			}
-			cur = cur[parts[i]];
-		}
-		return cur;
-	};
-	var modules = (global.define && global.define.modules) ||
-		(global._define && global._define.modules) || {};
-	var ourDefine = global.define = function(moduleName, deps, callback){
-		var module;
-		if(typeof deps === "function") {
-			callback = deps;
-			deps = [];
-		}
-		var args = [],
-			i;
-		for(i =0; i < deps.length; i++) {
-			args.push( exports[deps[i]] ? get(exports[deps[i]]) : ( modules[deps[i]] || get(deps[i]) )  );
-		}
-		// CJS has no dependencies but 3 callback arguments
-		if(!deps.length && callback.length) {
-			module = { exports: {} };
-			var require = function(name) {
-				return exports[name] ? get(exports[name]) : modules[name];
-			};
-			args.push(require, module.exports, module);
-		}
-		// Babel uses the exports and module object.
-		else if(!args[0] && deps[0] === "exports") {
-			module = { exports: {} };
-			args[0] = module.exports;
-			if(deps[1] === "module") {
-				args[1] = module;
-			}
-		}
-
-		global.define = origDefine;
-		var result = callback ? callback.apply(null, args) : undefined;
-		global.define = ourDefine;
-
-		// Favor CJS module.exports over the return value
-		modules[moduleName] = module && module.exports ? module.exports : result;
-	};
-	global.define.orig = origDefine;
-	global.define.modules = modules;
-	global.define.amd = true;
-	global.System = {
-		define: function(__name, __code){
-			global.define = origDefine;
-			eval("(function() { " + __code + " \n }).call(global);");
-			global.define = ourDefine;
-		},
-		orig: global.System
-	};
-})({},window)
-/*can@2.3.0-pre.0#view/href/href*/
+/*can/compute/read*/
+define('can/compute/read', ['can/util/util'], function (can) {
+    var read = function (parent, reads, options) {
+        options = options || {};
+        var state = { foundObservable: false };
+        var cur = readValue(parent, 0, reads, options, state), type, prev, readLength = reads.length, i = 0;
+        while (i < readLength) {
+            prev = cur;
+            for (var r = 0, readersLength = read.propertyReaders.length; r < readersLength; r++) {
+                var reader = read.propertyReaders[r];
+                if (reader.test(cur)) {
+                    cur = reader.read(cur, reads[i], i, options, state);
+                    break;
+                }
+            }
+            i = i + 1;
+            cur = readValue(cur, i, reads, options, state, prev);
+            type = typeof cur;
+            if (i < reads.length && (cur === null || type !== 'function' && type !== 'object')) {
+                if (options.earlyExit) {
+                    options.earlyExit(prev, i - 1, cur);
+                }
+                return {
+                    value: undefined,
+                    parent: prev
+                };
+            }
+        }
+        if (cur === undefined) {
+            if (options.earlyExit) {
+                options.earlyExit(prev, i - 1);
+            }
+        }
+        return {
+            value: cur,
+            parent: prev
+        };
+    };
+    var isAt = function (index, reads) {
+        var prevRead = reads[index - 1];
+        return prevRead && prevRead.at;
+    };
+    var readValue = function (value, index, reads, options, state, prev) {
+        var usedValueReader;
+        do {
+            usedValueReader = false;
+            for (var i = 0, len = read.valueReaders.length; i < len; i++) {
+                if (read.valueReaders[i].test(value, index, reads, options)) {
+                    value = read.valueReaders[i].read(value, index, reads, options, state, prev);
+                }
+            }
+        } while (usedValueReader);
+        return value;
+    };
+    read.valueReaders = [
+        {
+            name: 'compute',
+            test: function (value, i, reads, options) {
+                return value && value.isComputed && !isAt(i, reads);
+            },
+            read: function (value, i, reads, options, state) {
+                if (options.isArgument && i === reads.length) {
+                    return value;
+                }
+                if (!state.foundObservable && options.foundObservable) {
+                    options.foundObservable(value, i);
+                    state.foundObservable = true;
+                }
+                return value instanceof can.Compute ? value.get() : value();
+            }
+        },
+        {
+            name: 'function',
+            test: function (value, i, reads, options) {
+                var type = typeof value;
+                return type === 'function' && !value.isComputed && !(can.Construct && value.prototype instanceof can.Construct) && !(can.route && value === can.route);
+            },
+            read: function (value, i, reads, options, state, prev) {
+                if (isAt(i, reads)) {
+                    return i === reads.length ? can.proxy(value, prev) : value;
+                } else if (options.callMethodsOnObservables && can.isMapLike(prev)) {
+                    return value.apply(prev, options.args || []);
+                } else if (options.isArgument && i === reads.length) {
+                    return options.proxyMethods !== false ? can.proxy(value, prev) : value;
+                }
+                return value.apply(prev, options.args || []);
+            }
+        }
+    ];
+    read.propertyReaders = [
+        {
+            name: 'map',
+            test: can.isMapLike,
+            read: function (value, prop, index, options, state) {
+                if (!state.foundObservable && options.foundObservable) {
+                    options.foundObservable(value, index);
+                    state.foundObservable = true;
+                }
+                var val = value[prop.key];
+                if (typeof val === 'function' && value.constructor.prototype[prop.key] === val && !val.isComputed) {
+                    return val;
+                } else {
+                    return value.attr(prop.key);
+                }
+            }
+        },
+        {
+            name: 'promise',
+            test: function (value) {
+                return can.isPromise(value);
+            },
+            read: function (value, prop, index, options, state) {
+                if (!state.foundObservable && options.foundObservable) {
+                    options.foundObservable(value, index);
+                    state.foundObservable = true;
+                }
+                var observeData = value.__observeData;
+                if (!value.__observeData) {
+                    observeData = value.__observeData = {
+                        isPending: true,
+                        state: 'pending',
+                        isResolved: false,
+                        isRejected: false,
+                        value: undefined,
+                        reason: undefined
+                    };
+                    can.cid(observeData);
+                    can.simpleExtend(observeData, can.event);
+                    value.then(function (value) {
+                        observeData.isPending = false;
+                        observeData.isResolved = true;
+                        observeData.value = value;
+                        observeData.state = 'resolved';
+                        observeData.dispatch('state', [
+                            'resolved',
+                            'pending'
+                        ]);
+                    }, function (reason) {
+                        observeData.isPending = false;
+                        observeData.isRejected = true;
+                        observeData.reason = reason;
+                        observeData.state = 'rejected';
+                        observeData.dispatch('state', [
+                            'rejected',
+                            'pending'
+                        ]);
+                    });
+                }
+                can.__observe(observeData, 'state');
+                return prop.key in observeData ? observeData[prop.key] : value[prop.key];
+            }
+        },
+        {
+            name: 'object',
+            test: function () {
+                return true;
+            },
+            read: function (value, prop) {
+                if (value == null) {
+                    return undefined;
+                } else {
+                    if (prop.key in value) {
+                        return value[prop.key];
+                    } else if (prop.at && specialRead[prop.key] && '@' + prop.key in value) {
+                        prop.at = false;
+                        return value['@' + prop.key];
+                    }
+                }
+            }
+        }
+    ];
+    var specialRead = {
+        index: true,
+        key: true,
+        event: true,
+        element: true,
+        viewModel: true
+    };
+    read.write = function (parent, key, value, options) {
+        options = options || {};
+        if (can.isMapLike(parent)) {
+            if (!options.isArgument && parent._data && parent._data[key] && parent._data[key].isComputed) {
+                return parent._data[key](value);
+            } else {
+                return parent.attr(key, value);
+            }
+        }
+        if (parent[key] && parent[key].isComputed) {
+            return parent[key](value);
+        }
+        if (typeof parent === 'object') {
+            parent[key] = value;
+        }
+    };
+    read.reads = function (key) {
+        var keys = [];
+        var last = 0;
+        var at = false;
+        if (key.charAt(0) === '@') {
+            last = 1;
+            at = true;
+        }
+        var keyToAdd = '';
+        for (var i = last; i < key.length; i++) {
+            var character = key.charAt(i);
+            if (character === '.' || character === '@') {
+                if (key.charAt(i - 1) !== '\\') {
+                    keys.push({
+                        key: keyToAdd,
+                        at: at
+                    });
+                    at = character === '@';
+                    keyToAdd = '';
+                } else {
+                    keyToAdd = keyToAdd.substr(0, keyToAdd.length - 1) + '.';
+                }
+            } else {
+                keyToAdd += character;
+            }
+        }
+        keys.push({
+            key: keyToAdd,
+            at: at
+        });
+        return keys;
+    };
+    return read;
+});
+/*can/compute/get_value_and_bind*/
+define('can/compute/get_value_and_bind', ['can/util/util'], function (can) {
+    function ObservedInfo(func, context, compute) {
+        this.newObserved = {};
+        this.oldObserved = null;
+        this.func = func;
+        this.context = context;
+        this.compute = compute;
+        this.onDependencyChange = can.proxy(this.onDependencyChange, this);
+        this.depth = null;
+        this.childDepths = {};
+        this.ignore = 0;
+        this.inBatch = false;
+        this.ready = false;
+        compute.observedInfo = this;
+        this.setReady = can.proxy(this._setReady, this);
+    }
+    can.simpleExtend(ObservedInfo.prototype, {
+        _setReady: function () {
+            this.ready = true;
+        },
+        getDepth: function () {
+            if (this.depth !== null) {
+                return this.depth;
+            } else {
+                return this.depth = this._getDepth();
+            }
+        },
+        _getDepth: function () {
+            var max = 0, childDepths = this.childDepths;
+            for (var cid in childDepths) {
+                if (childDepths[cid] > max) {
+                    max = childDepths[cid];
+                }
+            }
+            return max + 1;
+        },
+        addEdge: function (objEv) {
+            objEv.obj.bind(objEv.event, this.onDependencyChange);
+            if (objEv.obj.observedInfo) {
+                this.childDepths[objEv.obj._cid] = objEv.obj.observedInfo.getDepth();
+                this.depth = null;
+            }
+        },
+        removeEdge: function (objEv) {
+            objEv.obj.unbind(objEv.event, this.onDependencyChange);
+            if (objEv.obj.observedInfo) {
+                delete this.childDepths[objEv.obj._cid];
+                this.depth = null;
+            }
+        },
+        onDependencyChange: function (ev) {
+            if (this.bound && this.ready) {
+                if (ev.batchNum !== undefined) {
+                    if (ev.batchNum !== this.batchNum) {
+                        ObservedInfo.registerUpdate(this);
+                        this.batchNum = ev.batchNum;
+                    }
+                } else {
+                    this.updateCompute(ev.batchNum);
+                }
+            }
+        },
+        updateCompute: function (batchNum) {
+            var oldValue = this.value;
+            this.getValueAndBind();
+            this.compute.updater(this.value, oldValue, batchNum);
+        },
+        getValueAndBind: function () {
+            this.bound = true;
+            this.oldObserved = this.newObserved || {};
+            this.ignore = 0;
+            this.newObserved = {};
+            this.ready = false;
+            observedInfoStack.push(this);
+            this.value = this.func.call(this.context);
+            observedInfoStack.pop();
+            this.updateBindings();
+            can.batch.afterPreviousEvents(this.setReady);
+        },
+        updateBindings: function () {
+            var newObserved = this.newObserved, oldObserved = this.oldObserved, name, obEv;
+            for (name in newObserved) {
+                obEv = newObserved[name];
+                if (!oldObserved[name]) {
+                    this.addEdge(obEv);
+                } else {
+                    oldObserved[name] = null;
+                }
+            }
+            for (name in oldObserved) {
+                obEv = oldObserved[name];
+                if (obEv) {
+                    this.removeEdge(obEv);
+                }
+            }
+        },
+        teardown: function () {
+            this.bound = false;
+            for (var name in this.newObserved) {
+                var ob = this.newObserved[name];
+                this.removeEdge(ob);
+            }
+            this.newObserved = {};
+        }
+    });
+    var updateOrder = [], curDepth = Infinity, maxDepth = 0;
+    ObservedInfo.registerUpdate = function (observeInfo, batchNum) {
+        var depth = observeInfo.getDepth() - 1;
+        curDepth = Math.min(depth, curDepth);
+        maxDepth = Math.max(maxDepth, depth);
+        var objs = updateOrder[depth];
+        if (!objs) {
+            objs = updateOrder[depth] = [];
+        }
+        objs.push(observeInfo);
+    };
+    ObservedInfo.batchEnd = function (batchNum) {
+        var cur;
+        while (curDepth <= maxDepth) {
+            var last = updateOrder[curDepth];
+            if (last && (cur = last.pop())) {
+                cur.updateCompute(batchNum);
+            } else {
+                curDepth++;
+            }
+        }
+        updateOrder = [];
+        curDepth = Infinity;
+        maxDepth = 0;
+    };
+    var observedInfoStack = [];
+    can.__observe = function (obj, event) {
+        var top = observedInfoStack[observedInfoStack.length - 1];
+        if (top) {
+            var evStr = event + '', name = obj._cid + '|' + evStr;
+            if (top.traps) {
+                top.traps.push({
+                    obj: obj,
+                    event: evStr,
+                    name: name
+                });
+            } else if (!top.ignore && !top.newObserved[name]) {
+                top.newObserved[name] = {
+                    obj: obj,
+                    event: evStr
+                };
+            }
+        }
+    };
+    can.__reading = can.__observe;
+    can.__trapObserves = function () {
+        if (observedInfoStack.length) {
+            var top = observedInfoStack[observedInfoStack.length - 1];
+            var traps = top.traps = [];
+            return function () {
+                top.traps = null;
+                return traps;
+            };
+        } else {
+            return function () {
+                return [];
+            };
+        }
+    };
+    can.__observes = function (observes) {
+        var top = observedInfoStack[observedInfoStack.length - 1];
+        if (top) {
+            for (var i = 0, len = observes.length; i < len; i++) {
+                var trap = observes[i], name = trap.name;
+                if (!top.newObserved[name]) {
+                    top.newObserved[name] = trap;
+                }
+            }
+        }
+    };
+    can.__isRecordingObserves = function () {
+        var len = observedInfoStack.length;
+        return len && observedInfoStack[len - 1].ignore === 0;
+    };
+    can.__notObserve = function (fn) {
+        return function () {
+            if (observedInfoStack.length) {
+                var top = observedInfoStack[observedInfoStack.length - 1];
+                top.ignore++;
+                var res = fn.apply(this, arguments);
+                top.ignore--;
+                return res;
+            } else {
+                return fn.apply(this, arguments);
+            }
+        };
+    };
+    can.batch._onDispatchedEvents = ObservedInfo.batchEnd;
+    return ObservedInfo;
+});
+/*can/compute/proto_compute*/
+define('can/compute/proto_compute', [
+    'can/util/util',
+    'can/util/bind/bind',
+    'can/compute/read',
+    'can/compute/get_value_and_bind',
+    'can/util/batch/batch'
+], function (can, bind, read, ObservedInfo) {
+    can.Compute = function (getterSetter, context, eventName, bindOnce) {
+        can.cid(this, 'compute');
+        var args = [];
+        for (var i = 0, arglen = arguments.length; i < arglen; i++) {
+            args[i] = arguments[i];
+        }
+        var contextType = typeof args[1];
+        if (typeof args[0] === 'function') {
+            this._setupGetterSetterFn(args[0], args[1], args[2], args[3]);
+        } else if (args[1]) {
+            if (contextType === 'string') {
+                this._setupProperty(args[0], args[1], args[2]);
+            } else if (contextType === 'function') {
+                this._setupSetter(args[0], args[1], args[2]);
+            } else {
+                if (args[1] && args[1].fn) {
+                    this._setupAsyncCompute(args[0], args[1]);
+                } else {
+                    this._setupSettings(args[0], args[1]);
+                }
+            }
+        } else {
+            this._setupSimpleValue(args[0]);
+        }
+        this._args = args;
+        this.isComputed = true;
+    };
+    can.simpleExtend(can.Compute.prototype, {
+        _setupGetterSetterFn: function (getterSetter, context, eventName) {
+            this._set = context ? can.proxy(getterSetter, context) : getterSetter;
+            this._get = context ? can.proxy(getterSetter, context) : getterSetter;
+            this._canObserve = eventName === false ? false : true;
+            var handlers = setupComputeHandlers(this, getterSetter, context || this);
+            this._on = handlers.on;
+            this._off = handlers.off;
+        },
+        _setupProperty: function (target, propertyName, eventName) {
+            var isObserve = can.isMapLike(target), self = this, handler;
+            if (isObserve) {
+                handler = function (ev, newVal, oldVal) {
+                    self.updater(newVal, oldVal, ev.batchNum);
+                };
+                this.hasDependencies = true;
+                this._get = function () {
+                    return target.attr(propertyName);
+                };
+                this._set = function (val) {
+                    target.attr(propertyName, val);
+                };
+            } else {
+                handler = function () {
+                    self.updater(self._get(), self.value);
+                };
+                this._get = function () {
+                    return can.getObject(propertyName, [target]);
+                };
+                this._set = function (value) {
+                    var properties = propertyName.split('.'), leafPropertyName = properties.pop(), targetProperty = can.getObject(properties.join('.'), [target]);
+                    targetProperty[leafPropertyName] = value;
+                };
+            }
+            this._on = function (update) {
+                can.bind.call(target, eventName || propertyName, handler);
+                this.value = this._get();
+            };
+            this._off = function () {
+                return can.unbind.call(target, eventName || propertyName, handler);
+            };
+        },
+        _setupSetter: function (initialValue, setter, eventName) {
+            this.value = initialValue;
+            this._set = setter;
+            can.simpleExtend(this, eventName);
+        },
+        _setupSettings: function (initialValue, settings) {
+            this.value = initialValue;
+            this._set = settings.set || this._set;
+            this._get = settings.get || this._get;
+            if (!settings.__selfUpdater) {
+                var self = this, oldUpdater = this.updater;
+                this.updater = function () {
+                    oldUpdater.call(self, self._get(), self.value);
+                };
+            }
+            this._on = settings.on ? settings.on : this._on;
+            this._off = settings.off ? settings.off : this._off;
+        },
+        _setupAsyncCompute: function (initialValue, settings) {
+            var self = this;
+            this.value = initialValue;
+            this._setUpdates = true;
+            this.lastSetValue = new can.Compute(initialValue);
+            this._set = function (newVal) {
+                if (newVal === self.lastSetValue.get()) {
+                    return this.value;
+                }
+                return self.lastSetValue.set(newVal);
+            };
+            this._get = function () {
+                return getter.call(settings.context, self.lastSetValue.get());
+            };
+            var getter = settings.fn, bindings;
+            if (getter.length === 0) {
+                bindings = setupComputeHandlers(this, getter, settings.context);
+            } else if (getter.length === 1) {
+                bindings = setupComputeHandlers(this, function () {
+                    return getter.call(settings.context, self.lastSetValue.get());
+                }, settings);
+            } else {
+                var oldUpdater = this.updater, setValue = function (newVal) {
+                        oldUpdater.call(self, newVal, self.value);
+                    };
+                this.updater = function (newVal) {
+                    oldUpdater.call(self, newVal, self.value);
+                };
+                bindings = setupComputeHandlers(this, function () {
+                    var res = getter.call(settings.context, self.lastSetValue.get(), setValue);
+                    return res !== undefined ? res : this.value;
+                }, this);
+            }
+            this._on = bindings.on;
+            this._off = bindings.off;
+        },
+        _setupSimpleValue: function (initialValue) {
+            this.value = initialValue;
+        },
+        _bindsetup: can.__notObserve(function () {
+            this.bound = true;
+            this._on(this.updater);
+        }),
+        _bindteardown: function () {
+            this._off(this.updater);
+            this.bound = false;
+        },
+        bind: can.bindAndSetup,
+        unbind: can.unbindAndTeardown,
+        clone: function (context) {
+            if (context && typeof this._args[0] === 'function') {
+                this._args[1] = context;
+            } else if (context) {
+                this._args[2] = context;
+            }
+            return new can.Compute(this._args[0], this._args[1], this._args[2], this._args[3]);
+        },
+        _on: can.k,
+        _off: can.k,
+        get: function () {
+            if (can.__isRecordingObserves() && this._canObserve !== false) {
+                can.__observe(this, 'change');
+                if (!this.bound) {
+                    can.Compute.temporarilyBind(this);
+                }
+            }
+            if (this.bound) {
+                return this.value;
+            } else {
+                return this._get();
+            }
+        },
+        _get: function () {
+            return this.value;
+        },
+        set: function (newVal) {
+            var old = this.value;
+            var setVal = this._set(newVal, old);
+            if (this._setUpdates) {
+                return this.value;
+            }
+            if (this.hasDependencies) {
+                return this._get();
+            }
+            if (setVal === undefined) {
+                this.value = this._get();
+            } else {
+                this.value = setVal;
+            }
+            updateOnChange(this, this.value, old);
+            return this.value;
+        },
+        _set: function (newVal) {
+            return this.value = newVal;
+        },
+        updater: function (newVal, oldVal, batchNum) {
+            this.value = newVal;
+            updateOnChange(this, newVal, oldVal, batchNum);
+        },
+        toFunction: function () {
+            return can.proxy(this._computeFn, this);
+        },
+        _computeFn: function (newVal) {
+            if (arguments.length) {
+                return this.set(newVal);
+            }
+            return this.get();
+        }
+    });
+    var updateOnChange = function (compute, newValue, oldValue, batchNum) {
+        var valueChanged = newValue !== oldValue && !(newValue !== newValue && oldValue !== oldValue);
+        if (valueChanged) {
+            can.batch.trigger(compute, {
+                type: 'change',
+                batchNum: batchNum
+            }, [
+                newValue,
+                oldValue
+            ]);
+        }
+    };
+    var setupComputeHandlers = function (compute, func, context) {
+        var readInfo = new ObservedInfo(func, context, compute);
+        return {
+            on: function () {
+                readInfo.getValueAndBind();
+                compute.value = readInfo.value;
+                compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
+            },
+            off: function () {
+                readInfo.teardown();
+            }
+        };
+    };
+    can.Compute.temporarilyBind = function (compute) {
+        var computeInstance = compute.computeInstance || compute;
+        computeInstance.bind('change', can.k);
+        if (!computes) {
+            computes = [];
+            setTimeout(unbindComputes, 10);
+        }
+        computes.push(computeInstance);
+    };
+    var computes, unbindComputes = function () {
+            for (var i = 0, len = computes.length; i < len; i++) {
+                computes[i].unbind('change', can.k);
+            }
+            computes = null;
+        };
+    can.Compute.async = function (initialValue, asyncComputer, context) {
+        return new can.Compute(initialValue, {
+            fn: asyncComputer,
+            context: context
+        });
+    };
+    can.Compute.truthy = function (compute) {
+        return new can.Compute(function () {
+            var res = compute.get();
+            if (typeof res === 'function') {
+                res = res.get();
+            }
+            return !!res;
+        });
+    };
+    can.Compute.read = read;
+    can.Compute.set = read.write;
+    return can.Compute;
+});
+/*can/compute/compute*/
+define('can/compute/compute', [
+    'can/util/util',
+    'can/util/bind/bind',
+    'can/util/batch/batch',
+    'can/compute/proto_compute'
+], function (can, bind) {
+    can.compute = function (getterSetter, context, eventName, bindOnce) {
+        var internalCompute = new can.Compute(getterSetter, context, eventName, bindOnce);
+        var bind = internalCompute.bind;
+        var unbind = internalCompute.unbind;
+        var compute = function (val) {
+            if (arguments.length) {
+                return internalCompute.set(val);
+            }
+            return internalCompute.get();
+        };
+        var cid = can.cid(compute, 'compute');
+        var handlerKey = '__handler' + cid;
+        compute.bind = function (ev, handler) {
+            var computeHandler = handler && handler[handlerKey];
+            if (handler && !computeHandler) {
+                computeHandler = handler[handlerKey] = function () {
+                    handler.apply(compute, arguments);
+                };
+            }
+            return bind.call(internalCompute, ev, computeHandler);
+        };
+        compute.unbind = function (ev, handler) {
+            var computeHandler = handler && handler[handlerKey];
+            if (computeHandler) {
+                delete handler[handlerKey];
+                return internalCompute.unbind(ev, computeHandler);
+            }
+            return unbind.apply(internalCompute, arguments);
+        };
+        compute.isComputed = internalCompute.isComputed;
+        compute.clone = function (ctx) {
+            if (typeof getterSetter === 'function') {
+                context = ctx;
+            }
+            return can.compute(getterSetter, context, ctx, bindOnce);
+        };
+        compute.computeInstance = internalCompute;
+        return compute;
+    };
+    can.compute.truthy = function (compute) {
+        return can.compute(function () {
+            var res = compute();
+            if (typeof res === 'function') {
+                res = res();
+            }
+            return !!res;
+        });
+    };
+    can.compute.async = function (initialValue, asyncComputer, context) {
+        return can.compute(initialValue, {
+            fn: asyncComputer,
+            context: context
+        });
+    };
+    can.compute.read = can.Compute.read;
+    can.compute.set = can.Compute.set;
+    can.compute.temporarilyBind = can.Compute.temporarilyBind;
+    return can.compute;
+});
+/*can/view/scope/compute_data*/
+define('can/view/scope/compute_data', [
+    'can/util/util',
+    'can/compute/compute',
+    'can/compute/get_value_and_bind'
+], function (can, compute, ObservedInfo) {
+    var isFastPath = function (computeData) {
+        return computeData.reads && computeData.reads.length === 1 && computeData.root instanceof can.Map && !can.isFunction(computeData.root[computeData.reads[0].key]);
+    };
+    var getValueAndBindSinglePropertyRead = function (readInfo, computeData, singlePropertyReadChanged) {
+        var target = computeData.root, prop = computeData.reads[0].key;
+        target.bind(prop, singlePropertyReadChanged);
+        readInfo.value = computeData.initialValue;
+    };
+    var unbindSinglePropertyRead = function (computeData, singlePropertyReadChanged) {
+        computeData.root.unbind(computeData.reads[0].key, singlePropertyReadChanged);
+    };
+    var scopeReader = function (scope, key, options, computeData, newVal) {
+        if (arguments.length > 4) {
+            var root = computeData.root || computeData.setRoot;
+            if (root) {
+                if (root.isComputed) {
+                    root(newVal);
+                } else if (computeData.reads.length) {
+                    var last = computeData.reads.length - 1;
+                    var obj = computeData.reads.length ? can.compute.read(root, computeData.reads.slice(0, last)).value : root;
+                    can.compute.set(obj, computeData.reads[last].key, newVal, options);
+                }
+            } else {
+            }
+        } else {
+            if (computeData.root) {
+                return can.compute.read(computeData.root, computeData.reads, options).value;
+            }
+            var data = scope.read(key, options);
+            computeData.scope = data.scope;
+            computeData.initialValue = data.value;
+            computeData.reads = data.reads;
+            computeData.root = data.rootObserve;
+            computeData.setRoot = data.setRoot;
+            return data.value;
+        }
+    };
+    return function (scope, key, options) {
+        options = options || { args: [] };
+        var computeData = {}, scopeRead = function (newVal) {
+                if (arguments.length) {
+                    return scopeReader(scope, key, options, computeData, newVal);
+                } else {
+                    return scopeReader(scope, key, options, computeData);
+                }
+            }, singlePropertyReadChanged = function (ev, newVal, oldVal) {
+                if (typeof newVal !== 'function') {
+                    compute.computeInstance.updater(newVal, oldVal, ev.batchNum);
+                } else {
+                    unbindSinglePropertyRead(computeData, singlePropertyReadChanged);
+                    readInfo.getValueAndBind();
+                    isFastPathBound = false;
+                    compute.computeInstance.updater(readInfo.value, oldVal, ev.batchNum);
+                }
+            }, isFastPathBound = false, compute = can.compute(undefined, {
+                on: function () {
+                    readInfo.getValueAndBind();
+                    if (isFastPath(computeData)) {
+                        getValueAndBindSinglePropertyRead(readInfo, computeData, singlePropertyReadChanged);
+                        readInfo.teardown();
+                        readInfo.newObserved = {};
+                        isFastPathBound = true;
+                    }
+                    compute.computeInstance.value = readInfo.value;
+                    compute.computeInstance.hasDependencies = isFastPathBound || !can.isEmptyObject(readInfo.newObserved);
+                },
+                off: function () {
+                    if (isFastPathBound) {
+                        unbindSinglePropertyRead(computeData, singlePropertyReadChanged);
+                    } else {
+                        readInfo.teardown();
+                    }
+                },
+                set: scopeRead,
+                get: scopeRead,
+                __selfUpdater: true
+            }), readInfo = new ObservedInfo(scopeRead, null, compute.computeInstance);
+        computeData.compute = compute;
+        return computeData;
+    };
+});
+/*can/util/string/string*/
+define('can/util/string/string', ['can/util/util'], function (can) {
+    var strUndHash = /_|-/, strColons = /\=\=/, strWords = /([A-Z]+)([A-Z][a-z])/g, strLowUp = /([a-z\d])([A-Z])/g, strDash = /([a-z\d])([A-Z])/g, strReplacer = /\{([^\}]+)\}/g, strQuote = /"/g, strSingleQuote = /'/g, strHyphenMatch = /-+(.)?/g, strCamelMatch = /[a-z][A-Z]/g, getNext = function (obj, prop, add) {
+            var result = obj[prop];
+            if (result === undefined && add === true) {
+                result = obj[prop] = {};
+            }
+            return result;
+        }, isContainer = function (current) {
+            return /^f|^o/.test(typeof current);
+        }, convertBadValues = function (content) {
+            var isInvalid = content === null || content === undefined || isNaN(content) && '' + content === 'NaN';
+            return '' + (isInvalid ? '' : content);
+        };
+    can.extend(can, {
+        esc: function (content) {
+            return convertBadValues(content).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(strQuote, '&#34;').replace(strSingleQuote, '&#39;');
+        },
+        getObject: function (name, roots, add) {
+            var parts = name ? name.split('.') : [], length = parts.length, current, r = 0, i, container, rootsLength;
+            roots = can.isArray(roots) ? roots : [roots || window];
+            rootsLength = roots.length;
+            if (!length) {
+                return roots[0];
+            }
+            for (r; r < rootsLength; r++) {
+                current = roots[r];
+                container = undefined;
+                for (i = 0; i < length && isContainer(current); i++) {
+                    container = current;
+                    current = getNext(container, parts[i]);
+                }
+                if (container !== undefined && current !== undefined) {
+                    break;
+                }
+            }
+            if (add === false && current !== undefined) {
+                delete container[parts[i - 1]];
+            }
+            if (add === true && current === undefined) {
+                current = roots[0];
+                for (i = 0; i < length && isContainer(current); i++) {
+                    current = getNext(current, parts[i], true);
+                }
+            }
+            return current;
+        },
+        capitalize: function (s, cache) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        },
+        camelize: function (str) {
+            return convertBadValues(str).replace(strHyphenMatch, function (match, chr) {
+                return chr ? chr.toUpperCase() : '';
+            });
+        },
+        hyphenate: function (str) {
+            return convertBadValues(str).replace(strCamelMatch, function (str, offset) {
+                return str.charAt(0) + '-' + str.charAt(1).toLowerCase();
+            });
+        },
+        underscore: function (s) {
+            return s.replace(strColons, '/').replace(strWords, '$1_$2').replace(strLowUp, '$1_$2').replace(strDash, '_').toLowerCase();
+        },
+        sub: function (str, data, remove) {
+            var obs = [];
+            str = str || '';
+            obs.push(str.replace(strReplacer, function (whole, inside) {
+                var ob = can.getObject(inside, data, remove === true ? false : undefined);
+                if (ob === undefined || ob === null) {
+                    obs = null;
+                    return '';
+                }
+                if (isContainer(ob) && obs) {
+                    obs.push(ob);
+                    return '';
+                }
+                return '' + ob;
+            }));
+            return obs === null ? obs : obs.length <= 1 ? obs[0] : obs;
+        },
+        replacer: strReplacer,
+        undHash: strUndHash
+    });
+    return can;
+});
+/*can/construct/construct*/
+define('can/construct/construct', ['can/util/string/string'], function (can) {
+    var initializing = 0;
+    var canGetDescriptor;
+    try {
+        Object.getOwnPropertyDescriptor({});
+        canGetDescriptor = true;
+    } catch (e) {
+        canGetDescriptor = false;
+    }
+    var getDescriptor = function (newProps, name) {
+            var descriptor = Object.getOwnPropertyDescriptor(newProps, name);
+            if (descriptor && (descriptor.get || descriptor.set)) {
+                return descriptor;
+            }
+            return null;
+        }, inheritGetterSetter = function (newProps, oldProps, addTo) {
+            addTo = addTo || newProps;
+            var descriptor;
+            for (var name in newProps) {
+                if (descriptor = getDescriptor(newProps, name)) {
+                    this._defineProperty(addTo, oldProps, name, descriptor);
+                } else {
+                    can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+                }
+            }
+        }, simpleInherit = function (newProps, oldProps, addTo) {
+            addTo = addTo || newProps;
+            for (var name in newProps) {
+                can.Construct._overwrite(addTo, oldProps, name, newProps[name]);
+            }
+        };
+    can.Construct = function () {
+        if (arguments.length) {
+            return can.Construct.extend.apply(can.Construct, arguments);
+        }
+    };
+    can.extend(can.Construct, {
+        constructorExtends: true,
+        newInstance: function () {
+            var inst = this.instance(), args;
+            if (inst.setup) {
+                inst.__inSetup = true;
+                args = inst.setup.apply(inst, arguments);
+                delete inst.__inSetup;
+            }
+            if (inst.init) {
+                inst.init.apply(inst, args || arguments);
+            }
+            return inst;
+        },
+        _inherit: canGetDescriptor ? inheritGetterSetter : simpleInherit,
+        _defineProperty: function (what, oldProps, propName, descriptor) {
+            Object.defineProperty(what, propName, descriptor);
+        },
+        _overwrite: function (what, oldProps, propName, val) {
+            what[propName] = val;
+        },
+        setup: function (base, fullName) {
+            this.defaults = can.extend(true, {}, base.defaults, this.defaults);
+        },
+        instance: function () {
+            initializing = 1;
+            var inst = new this();
+            initializing = 0;
+            return inst;
+        },
+        extend: function (name, staticProperties, instanceProperties) {
+            var fullName = name, klass = staticProperties, proto = instanceProperties;
+            if (typeof fullName !== 'string') {
+                proto = klass;
+                klass = fullName;
+                fullName = null;
+            }
+            if (!proto) {
+                proto = klass;
+                klass = null;
+            }
+            proto = proto || {};
+            var _super_class = this, _super = this.prototype, Constructor, parts, current, _fullName, _shortName, propName, shortName, namespace, prototype;
+            prototype = this.instance();
+            can.Construct._inherit(proto, _super, prototype);
+            if (fullName) {
+                parts = fullName.split('.');
+                shortName = parts.pop();
+            } else if (klass && klass.shortName) {
+                shortName = klass.shortName;
+            } else if (this.shortName) {
+                shortName = this.shortName;
+            }
+            if (typeof constructorName === 'undefined') {
+                Constructor = function () {
+                    return init.apply(this, arguments);
+                };
+            }
+            function init() {
+                if (!initializing) {
+                    return this.constructor !== Constructor && arguments.length && Constructor.constructorExtends ? Constructor.extend.apply(Constructor, arguments) : Constructor.newInstance.apply(Constructor, arguments);
+                }
+            }
+            for (propName in _super_class) {
+                if (_super_class.hasOwnProperty(propName)) {
+                    Constructor[propName] = _super_class[propName];
+                }
+            }
+            can.Construct._inherit(klass, _super_class, Constructor);
+            if (fullName) {
+                current = can.getObject(parts.join('.'), window, true);
+                namespace = current;
+                _fullName = can.underscore(fullName.replace(/\./g, '_'));
+                _shortName = can.underscore(shortName);
+                current[shortName] = Constructor;
+            }
+            can.extend(Constructor, {
+                constructor: Constructor,
+                prototype: prototype,
+                namespace: namespace,
+                _shortName: _shortName,
+                fullName: fullName,
+                _fullName: _fullName
+            });
+            if (shortName !== undefined) {
+                Constructor.shortName = shortName;
+            }
+            Constructor.prototype.constructor = Constructor;
+            var t = [_super_class].concat(can.makeArray(arguments)), args = Constructor.setup.apply(Constructor, t);
+            if (Constructor.init) {
+                Constructor.init.apply(Constructor, args || t);
+            }
+            return Constructor;
+        }
+    });
+    can.Construct.prototype.setup = function () {
+    };
+    can.Construct.prototype.init = function () {
+    };
+    return can.Construct;
+});
+/*can/map/bubble*/
+define('can/map/bubble', ['can/util/util'], function (can) {
+    var bubble = can.bubble = {
+        bind: function (parent, eventName) {
+            if (!parent.__inSetup) {
+                var bubbleEvents = bubble.events(parent, eventName), len = bubbleEvents.length, bubbleEvent;
+                if (!parent._bubbleBindings) {
+                    parent._bubbleBindings = {};
+                }
+                for (var i = 0; i < len; i++) {
+                    bubbleEvent = bubbleEvents[i];
+                    if (!parent._bubbleBindings[bubbleEvent]) {
+                        parent._bubbleBindings[bubbleEvent] = 1;
+                        bubble.childrenOf(parent, bubbleEvent);
+                    } else {
+                        parent._bubbleBindings[bubbleEvent]++;
+                    }
+                }
+            }
+        },
+        unbind: function (parent, eventName) {
+            var bubbleEvents = bubble.events(parent, eventName), len = bubbleEvents.length, bubbleEvent;
+            for (var i = 0; i < len; i++) {
+                bubbleEvent = bubbleEvents[i];
+                if (parent._bubbleBindings) {
+                    parent._bubbleBindings[bubbleEvent]--;
+                }
+                if (parent._bubbleBindings && !parent._bubbleBindings[bubbleEvent]) {
+                    delete parent._bubbleBindings[bubbleEvent];
+                    bubble.teardownChildrenFrom(parent, bubbleEvent);
+                    if (can.isEmptyObject(parent._bubbleBindings)) {
+                        delete parent._bubbleBindings;
+                    }
+                }
+            }
+        },
+        add: function (parent, child, prop) {
+            if (child instanceof can.Map && parent._bubbleBindings) {
+                for (var eventName in parent._bubbleBindings) {
+                    if (parent._bubbleBindings[eventName]) {
+                        bubble.teardownFromParent(parent, child, eventName);
+                        bubble.toParent(child, parent, prop, eventName);
+                    }
+                }
+            }
+        },
+        addMany: function (parent, children) {
+            for (var i = 0, len = children.length; i < len; i++) {
+                bubble.add(parent, children[i], i);
+            }
+        },
+        remove: function (parent, child) {
+            if (child instanceof can.Map && parent._bubbleBindings) {
+                for (var eventName in parent._bubbleBindings) {
+                    if (parent._bubbleBindings[eventName]) {
+                        bubble.teardownFromParent(parent, child, eventName);
+                    }
+                }
+            }
+        },
+        removeMany: function (parent, children) {
+            for (var i = 0, len = children.length; i < len; i++) {
+                bubble.remove(parent, children[i]);
+            }
+        },
+        set: function (parent, prop, value, current) {
+            if (can.isMapLike(value)) {
+                bubble.add(parent, value, prop);
+            }
+            if (can.isMapLike(current)) {
+                bubble.remove(parent, current);
+            }
+            return value;
+        },
+        events: function (map, boundEventName) {
+            return map.constructor._bubbleRule(boundEventName, map);
+        },
+        toParent: function (child, parent, prop, eventName) {
+            can.listenTo.call(parent, child, eventName, function () {
+                var args = can.makeArray(arguments), ev = args.shift();
+                args[0] = (can.List && parent instanceof can.List ? parent.indexOf(child) : prop) + (args[0] ? '.' + args[0] : '');
+                ev.triggeredNS = ev.triggeredNS || {};
+                if (ev.triggeredNS[parent._cid]) {
+                    return;
+                }
+                ev.triggeredNS[parent._cid] = true;
+                can.trigger(parent, ev, args);
+                if (eventName === 'change') {
+                    can.trigger(parent, args[0], [
+                        args[2],
+                        args[3]
+                    ]);
+                }
+            });
+        },
+        childrenOf: function (parent, eventName) {
+            parent._each(function (child, prop) {
+                if (child && child.bind) {
+                    bubble.toParent(child, parent, prop, eventName);
+                }
+            });
+        },
+        teardownFromParent: function (parent, child, eventName) {
+            if (child && child.unbind) {
+                can.stopListening.call(parent, child, eventName);
+            }
+        },
+        teardownChildrenFrom: function (parent, eventName) {
+            parent._each(function (child) {
+                bubble.teardownFromParent(parent, child, eventName);
+            });
+        },
+        isBubbling: function (parent, eventName) {
+            return parent._bubbleBindings && parent._bubbleBindings[eventName];
+        }
+    };
+    return bubble;
+});
+/*can/util/object/isplain/isplain*/
+define('can/util/object/isplain/isplain', ['can/util/can'], function (can) {
+    var core_hasOwn = Object.prototype.hasOwnProperty, isWindow = function (obj) {
+            return obj !== null && obj == obj.window;
+        }, isPlainObject = function (obj) {
+            if (!obj || typeof obj !== 'object' || obj.nodeType || isWindow(obj)) {
+                return false;
+            }
+            try {
+                if (obj.constructor && !core_hasOwn.call(obj, 'constructor') && !core_hasOwn.call(obj.constructor.prototype, 'isPrototypeOf')) {
+                    return false;
+                }
+            } catch (e) {
+                return false;
+            }
+            var key;
+            for (key in obj) {
+            }
+            return key === undefined || core_hasOwn.call(obj, key);
+        };
+    can.isPlainObject = isPlainObject;
+    return can;
+});
+/*can/map/map_helpers*/
+define('can/map/map_helpers', [
+    'can/util/util',
+    'can/util/object/isplain/isplain'
+], function (can) {
+    var mapHelpers = {
+        attrParts: function (attr, keepKey) {
+            if (keepKey) {
+                return [attr];
+            }
+            return typeof attr === 'object' ? attr : ('' + attr).split('.');
+        },
+        canMakeObserve: function (obj) {
+            return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj));
+        },
+        serialize: function () {
+            var serializeMap = null;
+            return function (map, how, where) {
+                var cid = can.cid(map), firstSerialize = false;
+                if (!serializeMap) {
+                    firstSerialize = true;
+                    serializeMap = {
+                        attr: {},
+                        serialize: {}
+                    };
+                }
+                serializeMap[how][cid] = where;
+                map.each(function (val, name) {
+                    var result, isObservable = can.isMapLike(val), serialized = isObservable && serializeMap[how][can.cid(val)];
+                    if (serialized) {
+                        result = serialized;
+                    } else {
+                        if (map['___' + how]) {
+                            result = map['___' + how](name, val);
+                        } else {
+                            result = mapHelpers.getValue(map, name, val, how);
+                        }
+                    }
+                    if (result !== undefined) {
+                        where[name] = result;
+                    }
+                });
+                if (firstSerialize) {
+                    serializeMap = null;
+                }
+                return where;
+            };
+        }(),
+        getValue: function (map, name, val, how) {
+            if (can.isMapLike(val)) {
+                return val[how]();
+            } else {
+                return val;
+            }
+        },
+        define: null,
+        addComputedAttr: function (map, attrName, compute) {
+            map._computedAttrs[attrName] = {
+                compute: compute,
+                count: 0,
+                handler: function (ev, newVal, oldVal) {
+                    map._triggerChange(attrName, 'set', newVal, oldVal, ev.batchNum);
+                }
+            };
+        },
+        addToMap: function addToMap(obj, instance) {
+            var teardown;
+            if (!madeMap) {
+                teardown = teardownMap;
+                madeMap = {};
+            }
+            var hasCid = obj._cid;
+            var cid = can.cid(obj);
+            if (!madeMap[cid]) {
+                madeMap[cid] = {
+                    obj: obj,
+                    instance: instance,
+                    added: !hasCid
+                };
+            }
+            return teardown;
+        },
+        getMapFromObject: function (obj) {
+            return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
+        }
+    };
+    var madeMap = null;
+    var teardownMap = function () {
+        for (var cid in madeMap) {
+            if (madeMap[cid].added) {
+                delete madeMap[cid].obj._cid;
+            }
+        }
+        madeMap = null;
+    };
+    return mapHelpers;
+});
+/*can/map/map*/
+define('can/map/map', [
+    'can/util/util',
+    'can/util/bind/bind',
+    'can/map/bubble',
+    'can/map/map_helpers',
+    'can/construct/construct',
+    'can/util/batch/batch'
+], function (can, bind, bubble, mapHelpers) {
+    var Map = can.Map = can.Construct.extend({
+        setup: function () {
+            can.Construct.setup.apply(this, arguments);
+            this._computedPropertyNames = [];
+            if (can.Map) {
+                if (!this.defaults) {
+                    this.defaults = {};
+                }
+                for (var prop in this.prototype) {
+                    if (prop !== 'define' && prop !== 'constructor' && (typeof this.prototype[prop] !== 'function' || this.prototype[prop].prototype instanceof can.Construct)) {
+                        this.defaults[prop] = this.prototype[prop];
+                    } else if (this.prototype[prop].isComputed) {
+                        this._computedPropertyNames.push(prop);
+                    }
+                }
+                if (mapHelpers.define) {
+                    mapHelpers.define(this);
+                }
+            }
+            if (can.List && !(this.prototype instanceof can.List)) {
+                this.List = Map.List.extend({ Map: this }, {});
+            }
+        },
+        shortName: 'Map',
+        _bubbleRule: function (eventName) {
+            return eventName === 'change' || eventName.indexOf('.') >= 0 ? ['change'] : [];
+        },
+        bind: can.bindAndSetup,
+        unbind: can.unbindAndTeardown,
+        id: 'id',
+        keys: function (map) {
+            var keys = [];
+            can.__observe(map, '__keys');
+            for (var keyName in map._data) {
+                keys.push(keyName);
+            }
+            return keys;
+        }
+    }, {
+        setup: function (obj) {
+            if (obj instanceof can.Map) {
+                obj = obj.serialize();
+            }
+            this._data = {};
+            can.cid(this, '.map');
+            this._setupComputedProperties();
+            var teardownMapping = obj && mapHelpers.addToMap(obj, this);
+            var defaultValues = this._setupDefaults(obj);
+            var data = can.extend(can.extend(true, {}, defaultValues), obj);
+            this.attr(data);
+            if (teardownMapping) {
+                teardownMapping();
+            }
+        },
+        _setupComputedProperties: function () {
+            this._computedAttrs = {};
+            var computes = this.constructor._computedPropertyNames;
+            for (var i = 0, len = computes.length; i < len; i++) {
+                var attrName = computes[i];
+                mapHelpers.addComputedAttr(this, attrName, this[attrName].clone(this));
+            }
+        },
+        _setupDefaults: function () {
+            return this.constructor.defaults || {};
+        },
+        attr: function (attr, val) {
+            var type = typeof attr;
+            if (attr === undefined) {
+                return this._getAttrs();
+            } else if (type !== 'string' && type !== 'number') {
+                return this._setAttrs(attr, val);
+            } else if (arguments.length === 1) {
+                return this._get(attr + '');
+            } else {
+                this._set(attr + '', val);
+                return this;
+            }
+        },
+        _get: function (attr) {
+            var dotIndex = attr.indexOf('.');
+            if (dotIndex >= 0) {
+                var value = this.___get(attr);
+                if (value !== undefined) {
+                    can.__observe(this, attr);
+                    return value;
+                }
+                var first = attr.substr(0, dotIndex), second = attr.substr(dotIndex + 1);
+                var current = this.__get(first);
+                return current && current._get ? current._get(second) : undefined;
+            } else {
+                return this.__get(attr);
+            }
+        },
+        __get: function (attr) {
+            can.__observe(this, attr);
+            return this.___get(attr);
+        },
+        ___get: function (attr) {
+            if (attr) {
+                var computedAttr = this._computedAttrs[attr];
+                if (computedAttr && computedAttr.compute) {
+                    return computedAttr.compute();
+                } else {
+                    return this._data[attr];
+                }
+            } else {
+                return this._data;
+            }
+        },
+        _set: function (attr, value, keepKey) {
+            var dotIndex = attr.indexOf('.'), current;
+            if (dotIndex >= 0 && !keepKey) {
+                var first = attr.substr(0, dotIndex), second = attr.substr(dotIndex + 1);
+                current = this.__inSetup ? undefined : this.___get(first);
+                if (can.isMapLike(current)) {
+                    current._set(second, value);
+                } else {
+                    throw new Error('can.Map: Object does not exist');
+                }
+            } else {
+                current = this.__inSetup ? undefined : this.___get(attr);
+                if (this.__convert) {
+                    value = this.__convert(attr, value);
+                }
+                this.__set(attr, this.__type(value, attr), current);
+            }
+        },
+        __type: function (value, prop) {
+            if (typeof value === 'object' && !(value instanceof can.Map) && mapHelpers.canMakeObserve(value)) {
+                var cached = mapHelpers.getMapFromObject(value);
+                if (cached) {
+                    return cached;
+                }
+                if (can.isArray(value)) {
+                    var List = can.List;
+                    return new List(value);
+                } else {
+                    var Map = this.constructor.Map || can.Map;
+                    return new Map(value);
+                }
+            }
+            return value;
+        },
+        __set: function (prop, value, current) {
+            if (value !== current) {
+                var computedAttr = this._computedAttrs[prop];
+                var changeType = computedAttr || current !== undefined || this.___get().hasOwnProperty(prop) ? 'set' : 'add';
+                this.___set(prop, typeof value === 'object' ? bubble.set(this, prop, value, current) : value);
+                if (!computedAttr || !computedAttr.count) {
+                    this._triggerChange(prop, changeType, value, current);
+                }
+                if (typeof current === 'object') {
+                    bubble.teardownFromParent(this, current);
+                }
+            }
+        },
+        ___set: function (prop, val) {
+            var computedAttr = this._computedAttrs[prop];
+            if (computedAttr) {
+                computedAttr.compute(val);
+            } else {
+                this._data[prop] = val;
+            }
+            if (typeof this.constructor.prototype[prop] !== 'function' && !computedAttr) {
+                this[prop] = val;
+            }
+        },
+        removeAttr: function (attr) {
+            return this._remove(attr);
+        },
+        _remove: function (attr) {
+            var parts = mapHelpers.attrParts(attr), prop = parts.shift(), current = this.___get(prop);
+            if (parts.length && current) {
+                return current.removeAttr(parts);
+            } else {
+                if (typeof attr === 'string' && !!~attr.indexOf('.')) {
+                    prop = attr;
+                }
+                this.__remove(prop, current);
+                return current;
+            }
+        },
+        __remove: function (prop, current) {
+            if (prop in this._data) {
+                this.___remove(prop);
+                this._triggerChange(prop, 'remove', undefined, current);
+            }
+        },
+        ___remove: function (prop) {
+            delete this._data[prop];
+            if (!(prop in this.constructor.prototype)) {
+                delete this[prop];
+            }
+        },
+        ___serialize: function (name, val) {
+            return mapHelpers.getValue(this, name, val, 'serialize');
+        },
+        _getAttrs: function () {
+            return mapHelpers.serialize(this, 'attr', {});
+        },
+        _setAttrs: function (props, remove) {
+            props = can.simpleExtend({}, props);
+            var prop, self = this, newVal;
+            can.batch.start();
+            this.each(function (curVal, prop) {
+                if (prop === '_cid') {
+                    return;
+                }
+                newVal = props[prop];
+                if (newVal === undefined) {
+                    if (remove) {
+                        self.removeAttr(prop);
+                    }
+                    return;
+                }
+                if (self.__convert) {
+                    newVal = self.__convert(prop, newVal);
+                }
+                if (can.isMapLike(curVal) && mapHelpers.canMakeObserve(newVal)) {
+                    curVal.attr(newVal, remove);
+                } else if (curVal !== newVal) {
+                    self.__set(prop, self.__type(newVal, prop), curVal);
+                }
+                delete props[prop];
+            });
+            for (prop in props) {
+                if (prop !== '_cid') {
+                    newVal = props[prop];
+                    this._set(prop, newVal, true);
+                }
+            }
+            can.batch.stop();
+            return this;
+        },
+        serialize: function () {
+            return mapHelpers.serialize(this, 'serialize', {});
+        },
+        _triggerChange: function (attr, how, newVal, oldVal, batchNum) {
+            if (bubble.isBubbling(this, 'change')) {
+                can.batch.trigger(this, {
+                    type: 'change',
+                    target: this,
+                    batchNum: batchNum
+                }, [
+                    attr,
+                    how,
+                    newVal,
+                    oldVal
+                ]);
+            }
+            can.batch.trigger(this, {
+                type: attr,
+                target: this,
+                batchNum: batchNum
+            }, [
+                newVal,
+                oldVal
+            ]);
+            if (how === 'remove' || how === 'add') {
+                can.batch.trigger(this, {
+                    type: '__keys',
+                    target: this,
+                    batchNum: batchNum
+                });
+            }
+        },
+        _bindsetup: function () {
+        },
+        _bindteardown: function () {
+        },
+        one: can.one,
+        bind: function (eventName, handler) {
+            var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
+            if (computedBinding) {
+                if (!computedBinding.count) {
+                    computedBinding.count = 1;
+                    computedBinding.compute.bind('change', computedBinding.handler);
+                } else {
+                    computedBinding.count++;
+                }
+            }
+            bubble.bind(this, eventName);
+            return can.bindAndSetup.apply(this, arguments);
+        },
+        unbind: function (eventName, handler) {
+            var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
+            if (computedBinding) {
+                if (computedBinding.count === 1) {
+                    computedBinding.count = 0;
+                    computedBinding.compute.unbind('change', computedBinding.handler);
+                } else {
+                    computedBinding.count--;
+                }
+            }
+            bubble.unbind(this, eventName);
+            return can.unbindAndTeardown.apply(this, arguments);
+        },
+        compute: function (prop) {
+            if (can.isFunction(this.constructor.prototype[prop])) {
+                return can.compute(this[prop], this);
+            } else {
+                var reads = can.compute.read.reads(prop), last = reads.length - 1;
+                return can.compute(function (newVal) {
+                    if (arguments.length) {
+                        can.compute.read(this, reads.slice(0, last)).value.attr(reads[last].key, newVal);
+                    } else {
+                        return can.compute.read(this, reads, { args: [] }).value;
+                    }
+                }, this);
+            }
+        },
+        each: function () {
+            return can.each.apply(undefined, [this].concat(can.makeArray(arguments)));
+        },
+        _each: function (callback) {
+            var data = this.___get();
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    callback(data[prop], prop);
+                }
+            }
+        },
+        dispatch: can.dispatch
+    });
+    Map.prototype.on = Map.prototype.bind;
+    Map.prototype.off = Map.prototype.unbind;
+    Map.on = Map.bind;
+    Map.off = Map.unbind;
+    return Map;
+});
+/*can/list/list*/
+define('can/list/list', [
+    'can/util/util',
+    'can/map/map',
+    'can/map/bubble',
+    'can/map/map_helpers'
+], function (can, Map, bubble, mapHelpers) {
+    var splice = [].splice, spliceRemovesProps = function () {
+            var obj = {
+                0: 'a',
+                length: 1
+            };
+            splice.call(obj, 0, 1);
+            return !obj[0];
+        }();
+    var list = Map.extend({ Map: Map }, {
+            setup: function (instances, options) {
+                this.length = 0;
+                can.cid(this, '.map');
+                this._setupComputedProperties();
+                instances = instances || [];
+                var teardownMapping;
+                if (can.isDeferred(instances)) {
+                    this.replace(instances);
+                } else {
+                    teardownMapping = instances.length && mapHelpers.addToMap(instances, this);
+                    this.push.apply(this, can.makeArray(instances || []));
+                }
+                if (teardownMapping) {
+                    teardownMapping();
+                }
+                can.simpleExtend(this, options);
+            },
+            _triggerChange: function (attr, how, newVal, oldVal) {
+                Map.prototype._triggerChange.apply(this, arguments);
+                var index = +attr;
+                if (!~('' + attr).indexOf('.') && !isNaN(index)) {
+                    if (how === 'add') {
+                        can.batch.trigger(this, how, [
+                            newVal,
+                            index
+                        ]);
+                        can.batch.trigger(this, 'length', [this.length]);
+                    } else if (how === 'remove') {
+                        can.batch.trigger(this, how, [
+                            oldVal,
+                            index
+                        ]);
+                        can.batch.trigger(this, 'length', [this.length]);
+                    } else {
+                        can.batch.trigger(this, how, [
+                            newVal,
+                            index
+                        ]);
+                    }
+                }
+            },
+            ___get: function (attr) {
+                if (attr) {
+                    if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
+                        return this[attr]();
+                    } else {
+                        return this[attr];
+                    }
+                } else {
+                    return this;
+                }
+            },
+            __set: function (prop, value, current) {
+                prop = isNaN(+prop) || prop % 1 ? prop : +prop;
+                if (typeof prop === 'number' && prop > this.length - 1) {
+                    var newArr = new Array(prop + 1 - this.length);
+                    newArr[newArr.length - 1] = value;
+                    this.push.apply(this, newArr);
+                    return newArr;
+                }
+                return can.Map.prototype.__set.call(this, '' + prop, value, current);
+            },
+            ___set: function (attr, val) {
+                this[attr] = val;
+                if (+attr >= this.length) {
+                    this.length = +attr + 1;
+                }
+            },
+            __remove: function (prop, current) {
+                if (isNaN(+prop)) {
+                    delete this[prop];
+                    this._triggerChange(prop, 'remove', undefined, current);
+                } else {
+                    this.splice(prop, 1);
+                }
+            },
+            _each: function (callback) {
+                var data = this.___get();
+                for (var i = 0; i < data.length; i++) {
+                    callback(data[i], i);
+                }
+            },
+            serialize: function () {
+                return mapHelpers.serialize(this, 'serialize', []);
+            },
+            splice: function (index, howMany) {
+                var args = can.makeArray(arguments), added = [], i, len, listIndex, allSame = args.length > 2;
+                index = index || 0;
+                for (i = 0, len = args.length - 2; i < len; i++) {
+                    listIndex = i + 2;
+                    args[listIndex] = this.__type(args[listIndex], listIndex);
+                    added.push(args[listIndex]);
+                    if (this[i + index] !== args[listIndex]) {
+                        allSame = false;
+                    }
+                }
+                if (allSame && this.length <= added.length) {
+                    return added;
+                }
+                if (howMany === undefined) {
+                    howMany = args[1] = this.length - index;
+                }
+                var removed = splice.apply(this, args);
+                if (!spliceRemovesProps) {
+                    for (i = this.length; i < removed.length + this.length; i++) {
+                        delete this[i];
+                    }
+                }
+                can.batch.start();
+                if (howMany > 0) {
+                    bubble.removeMany(this, removed);
+                    this._triggerChange('' + index, 'remove', undefined, removed);
+                }
+                if (args.length > 2) {
+                    bubble.addMany(this, added);
+                    this._triggerChange('' + index, 'add', added, removed);
+                }
+                can.batch.stop();
+                return removed;
+            },
+            _getAttrs: function () {
+                return mapHelpers.serialize(this, 'attr', []);
+            },
+            _setAttrs: function (items, remove) {
+                items = can.makeArray(items);
+                can.batch.start();
+                this._updateAttrs(items, remove);
+                can.batch.stop();
+            },
+            _updateAttrs: function (items, remove) {
+                var len = Math.min(items.length, this.length);
+                for (var prop = 0; prop < len; prop++) {
+                    var curVal = this[prop], newVal = items[prop];
+                    if (can.isMapLike(curVal) && mapHelpers.canMakeObserve(newVal)) {
+                        curVal.attr(newVal, remove);
+                    } else if (curVal !== newVal) {
+                        this._set(prop + '', newVal);
+                    } else {
+                    }
+                }
+                if (items.length > this.length) {
+                    this.push.apply(this, items.slice(this.length));
+                } else if (items.length < this.length && remove) {
+                    this.splice(items.length);
+                }
+            }
+        }), getArgs = function (args) {
+            return args[0] && can.isArray(args[0]) ? args[0] : can.makeArray(args);
+        };
+    can.each({
+        push: 'length',
+        unshift: 0
+    }, function (where, name) {
+        var orig = [][name];
+        list.prototype[name] = function () {
+            var args = [], len = where ? this.length : 0, i = arguments.length, res, val;
+            while (i--) {
+                val = arguments[i];
+                args[i] = bubble.set(this, i, this.__type(val, i));
+            }
+            res = orig.apply(this, args);
+            if (!this.comparator || args.length) {
+                this._triggerChange('' + len, 'add', args, undefined);
+            }
+            return res;
+        };
+    });
+    can.each({
+        pop: 'length',
+        shift: 0
+    }, function (where, name) {
+        list.prototype[name] = function () {
+            if (!this.length) {
+                return undefined;
+            }
+            var args = getArgs(arguments), len = where && this.length ? this.length - 1 : 0;
+            var res = [][name].apply(this, args);
+            this._triggerChange('' + len, 'remove', undefined, [res]);
+            if (res && res.unbind) {
+                bubble.remove(this, res);
+            }
+            return res;
+        };
+    });
+    can.extend(list.prototype, {
+        indexOf: function (item, fromIndex) {
+            can.__observe(this, 'length');
+            return can.inArray(item, this, fromIndex);
+        },
+        join: function () {
+            can.__observe(this, 'length');
+            return [].join.apply(this, arguments);
+        },
+        reverse: function () {
+            var list = [].reverse.call(can.makeArray(this));
+            return this.replace(list);
+        },
+        slice: function () {
+            can.__observe(this, 'length');
+            var temp = Array.prototype.slice.apply(this, arguments);
+            return new this.constructor(temp);
+        },
+        concat: function () {
+            var args = [];
+            can.each(can.makeArray(arguments), function (arg, i) {
+                args[i] = arg instanceof can.List ? arg.serialize() : arg;
+            });
+            return new this.constructor(Array.prototype.concat.apply(this.serialize(), args));
+        },
+        forEach: function (cb, thisarg) {
+            return can.each(this, cb, thisarg || this);
+        },
+        replace: function (newList) {
+            if (can.isDeferred(newList)) {
+                if (this._promise) {
+                    this._promise.__isCurrentPromise = false;
+                }
+                var promise = this._promise = newList;
+                promise.__isCurrentPromise = true;
+                var self = this;
+                newList.then(function (newList) {
+                    if (promise.__isCurrentPromise) {
+                        self.replace(newList);
+                    }
+                });
+            } else {
+                this.splice.apply(this, [
+                    0,
+                    this.length
+                ].concat(can.makeArray(newList || [])));
+            }
+            return this;
+        },
+        filter: function (callback, thisArg) {
+            var filteredList = new this.constructor(), self = this, filtered;
+            this.each(function (item, index, list) {
+                filtered = callback.call(thisArg | self, item, index, self);
+                if (filtered) {
+                    filteredList.push(item);
+                }
+            });
+            return filteredList;
+        },
+        map: function (callback, thisArg) {
+            var filteredList = new can.List(), self = this;
+            this.each(function (item, index, list) {
+                var mapped = callback.call(thisArg | self, item, index, self);
+                filteredList.push(mapped);
+            });
+            return filteredList;
+        }
+    });
+    can.List = Map.List = list;
+    return can.List;
+});
+/*can/view/scope/scope*/
+define('can/view/scope/scope', [
+    'can/util/util',
+    'can/view/scope/compute_data',
+    'can/construct/construct',
+    'can/map/map',
+    'can/list/list',
+    'can/view/view',
+    'can/compute/compute'
+], function (can, makeComputeData) {
+    function Scope(context, parent, meta) {
+        this._context = context;
+        this._parent = parent;
+        this._meta = meta || {};
+        this.__cache = {};
+    }
+    can.simpleExtend(Scope, {
+        read: can.compute.read,
+        Refs: can.Map.extend({ shortName: 'ReferenceMap' }, {}),
+        refsScope: function () {
+            return new can.view.Scope(new this.Refs());
+        }
+    });
+    can.simpleExtend(Scope.prototype, {
+        add: function (context, meta) {
+            if (context !== this._context) {
+                return new this.constructor(context, this, meta);
+            } else {
+                return this;
+            }
+        },
+        read: function (attr, options) {
+            if (attr === '%root') {
+                return { value: this.getRoot() };
+            }
+            var isInCurrentContext = attr.substr(0, 2) === './', isInParentContext = attr.substr(0, 3) === '../', isCurrentContext = attr === '.' || attr === 'this', isParentContext = attr === '..', isContextBased = isInCurrentContext || isInParentContext || isCurrentContext || isParentContext;
+            if (isContextBased && this._meta.notContext) {
+                return this._parent.read(attr, options);
+            }
+            var currentScopeOnly;
+            if (isInCurrentContext) {
+                currentScopeOnly = true;
+                attr = attr.substr(2);
+            } else if (isInParentContext) {
+                var parent = this._parent;
+                while (parent._meta.notContext) {
+                    parent = parent._parent;
+                }
+                return parent.read(attr.substr(3), options);
+            } else if (isCurrentContext) {
+                return { value: this._context };
+            } else if (isParentContext) {
+                return { value: this._parent._context };
+            }
+            var keyReads = can.compute.read.reads(attr);
+            if (keyReads[0].key.charAt(0) === '*') {
+                return this.getRefs()._read(keyReads, options, true);
+            } else {
+                return this._read(keyReads, options, currentScopeOnly);
+            }
+        },
+        _read: function (keyReads, options, currentScopeOnly) {
+            var currentScope = this, currentContext, undefinedObserves = [], currentObserve, currentReads, setObserveDepth = -1, currentSetReads, currentSetObserve, readOptions = can.simpleExtend({
+                    foundObservable: function (observe, nameIndex) {
+                        currentObserve = observe;
+                        currentReads = keyReads.slice(nameIndex);
+                    },
+                    earlyExit: function (parentValue, nameIndex) {
+                        if (nameIndex > setObserveDepth) {
+                            currentSetObserve = currentObserve;
+                            currentSetReads = currentReads;
+                            setObserveDepth = nameIndex;
+                        }
+                    }
+                }, options);
+            while (currentScope) {
+                currentContext = currentScope._context;
+                if (currentContext !== null && (typeof currentContext === 'object' || typeof currentContext === 'function')) {
+                    var getObserves = can.__trapObserves();
+                    var data = can.compute.read(currentContext, keyReads, readOptions);
+                    var observes = getObserves();
+                    if (data.value !== undefined) {
+                        can.__observes(observes);
+                        return {
+                            scope: currentScope,
+                            rootObserve: currentObserve,
+                            value: data.value,
+                            reads: currentReads
+                        };
+                    } else {
+                        undefinedObserves.push.apply(undefinedObserves, observes);
+                    }
+                }
+                if (currentScopeOnly) {
+                    currentScope = null;
+                } else {
+                    currentScope = currentScope._parent;
+                }
+            }
+            can.__observes(undefinedObserves);
+            return {
+                setRoot: currentSetObserve,
+                reads: currentSetReads,
+                value: undefined
+            };
+        },
+        get: can.__notObserve(function (key, options) {
+            options = can.simpleExtend({ isArgument: true }, options);
+            var res = this.read(key, options);
+            return res.value;
+        }),
+        getScope: function (tester) {
+            var scope = this;
+            while (scope) {
+                if (tester(scope)) {
+                    return scope;
+                }
+                scope = scope._parent;
+            }
+        },
+        getContext: function (tester) {
+            var res = this.getScope(tester);
+            return res && res._context;
+        },
+        getRefs: function () {
+            return this.getScope(function (scope) {
+                return scope._context instanceof Scope.Refs;
+            });
+        },
+        getRoot: function () {
+            var cur = this, child = this;
+            while (cur._parent) {
+                child = cur;
+                cur = cur._parent;
+            }
+            if (cur._context instanceof Scope.Refs) {
+                cur = child;
+            }
+            return cur._context;
+        },
+        set: function (key, value, options) {
+            var dotIndex = key.lastIndexOf('.'), slashIndex = key.lastIndexOf('/'), contextPath, propName;
+            if (slashIndex > dotIndex) {
+                contextPath = key.substring(0, slashIndex);
+                propName = key.substring(slashIndex + 1, key.length);
+            } else {
+                if (dotIndex !== -1) {
+                    contextPath = key.substring(0, dotIndex);
+                    propName = key.substring(dotIndex + 1, key.length);
+                } else {
+                    contextPath = '.';
+                    propName = key;
+                }
+            }
+            if (key.charAt(0) === '*') {
+                can.compute.set(this.getRefs()._context, key, value, options);
+            } else {
+                var context = this.read(contextPath, options).value;
+                can.compute.set(context, propName, value, options);
+            }
+        },
+        attr: can.__notObserve(function (key, value, options) {
+            options = can.simpleExtend({ isArgument: true }, options);
+            if (arguments.length === 2) {
+                return this.set(key, value, options);
+            } else {
+                return this.get(key, options);
+            }
+        }),
+        computeData: function (key, options) {
+            return makeComputeData(this, key, options);
+        },
+        compute: function (key, options) {
+            return this.computeData(key, options).compute;
+        },
+        cloneFromRef: function () {
+            var contexts = [];
+            var scope = this, context, parent;
+            while (scope) {
+                context = scope._context;
+                if (context instanceof Scope.Refs) {
+                    parent = scope._parent;
+                    break;
+                }
+                contexts.unshift(context);
+                scope = scope._parent;
+            }
+            if (parent) {
+                can.each(contexts, function (context) {
+                    parent = parent.add(context);
+                });
+                return parent;
+            } else {
+                return this;
+            }
+        }
+    });
+    can.view.Scope = Scope;
+    function Options(data, parent, meta) {
+        if (!data.helpers && !data.partials && !data.tags) {
+            data = { helpers: data };
+        }
+        Scope.call(this, data, parent, meta);
+    }
+    Options.prototype = new Scope();
+    Options.prototype.constructor = Options;
+    can.view.Options = Options;
+    return Scope;
+});
+/*can/view/stache/utils*/
+define('can/view/stache/utils', [
+    'can/util/util',
+    'can/view/scope/scope'
+], function (can) {
+    var Options = can.view.Options;
+    return {
+        isArrayLike: function (obj) {
+            return obj && obj.splice && typeof obj.length === 'number';
+        },
+        isObserveLike: function (obj) {
+            return obj instanceof can.Map || obj && !!obj._get;
+        },
+        emptyHandler: function () {
+        },
+        jsonParse: function (str) {
+            if (str[0] === '\'') {
+                return str.substr(1, str.length - 2);
+            } else if (str === 'undefined') {
+                return undefined;
+            } else if (can.global.JSON) {
+                return JSON.parse(str);
+            } else {
+                return eval('(' + str + ')');
+            }
+        },
+        mixins: {
+            last: function () {
+                return this.stack[this.stack.length - 1];
+            },
+            add: function (chars) {
+                this.last().add(chars);
+            },
+            subSectionDepth: function () {
+                return this.stack.length - 1;
+            }
+        },
+        convertToScopes: function (helperOptions, scope, options, nodeList, truthyRenderer, falseyRenderer) {
+            if (truthyRenderer) {
+                helperOptions.fn = this.makeRendererConvertScopes(truthyRenderer, scope, options, nodeList);
+            }
+            if (falseyRenderer) {
+                helperOptions.inverse = this.makeRendererConvertScopes(falseyRenderer, scope, options, nodeList);
+            }
+        },
+        makeRendererConvertScopes: function (renderer, parentScope, parentOptions, nodeList) {
+            var rendererWithScope = function (ctx, opts, parentNodeList) {
+                return renderer(ctx || parentScope, opts, parentNodeList);
+            };
+            return can.__notObserve(function (newScope, newOptions, parentNodeList) {
+                if (newScope !== undefined && !(newScope instanceof can.view.Scope)) {
+                    newScope = parentScope.add(newScope);
+                }
+                if (newOptions !== undefined && !(newOptions instanceof Options)) {
+                    newOptions = parentOptions.add(newOptions);
+                }
+                var result = rendererWithScope(newScope, newOptions || parentOptions, parentNodeList || nodeList);
+                return result;
+            });
+        },
+        Options: Options
+    };
+});
+/*can/view/node_lists/node_lists*/
+define('can/view/node_lists/node_lists', [
+    'can/util/util',
+    'can/view/elements'
+], function (can) {
+    var canExpando = true;
+    try {
+        document.createTextNode('')._ = 0;
+    } catch (ex) {
+        canExpando = false;
+    }
+    var nodeMap = {}, textNodeMap = {}, expando = 'ejs_' + Math.random(), _id = 0, id = function (node, localMap) {
+            var _textNodeMap = localMap || textNodeMap;
+            var id = readId(node, _textNodeMap);
+            if (id) {
+                return id;
+            } else {
+                if (canExpando || node.nodeType !== 3) {
+                    ++_id;
+                    return node[expando] = (node.nodeName ? 'element_' : 'obj_') + _id;
+                } else {
+                    ++_id;
+                    _textNodeMap['text_' + _id] = node;
+                    return 'text_' + _id;
+                }
+            }
+        }, readId = function (node, textNodeMap) {
+            if (canExpando || node.nodeType !== 3) {
+                return node[expando];
+            } else {
+                for (var textNodeID in textNodeMap) {
+                    if (textNodeMap[textNodeID] === node) {
+                        return textNodeID;
+                    }
+                }
+            }
+        }, splice = [].splice, push = [].push, itemsInChildListTree = function (list) {
+            var count = 0;
+            for (var i = 0, len = list.length; i < len; i++) {
+                var item = list[i];
+                if (item.nodeType) {
+                    count++;
+                } else {
+                    count += itemsInChildListTree(item);
+                }
+            }
+            return count;
+        }, replacementMap = function (replacements, idMap) {
+            var map = {};
+            for (var i = 0, len = replacements.length; i < len; i++) {
+                var node = nodeLists.first(replacements[i]);
+                map[id(node, idMap)] = replacements[i];
+            }
+            return map;
+        }, addUnfoundAsDeepChildren = function (list, rMap, foundIds) {
+            for (var repId in rMap) {
+                if (!foundIds[repId]) {
+                    list.newDeepChildren.push(rMap[repId]);
+                }
+            }
+        };
+    var nodeLists = {
+        id: id,
+        update: function (nodeList, newNodes) {
+            var oldNodes = nodeLists.unregisterChildren(nodeList);
+            newNodes = can.makeArray(newNodes);
+            var oldListLength = nodeList.length;
+            splice.apply(nodeList, [
+                0,
+                oldListLength
+            ].concat(newNodes));
+            if (nodeList.replacements) {
+                nodeLists.nestReplacements(nodeList);
+                nodeList.deepChildren = nodeList.newDeepChildren;
+                nodeList.newDeepChildren = [];
+            } else {
+                nodeLists.nestList(nodeList);
+            }
+            return oldNodes;
+        },
+        nestReplacements: function (list) {
+            var index = 0, idMap = {}, rMap = replacementMap(list.replacements, idMap), rCount = list.replacements.length, foundIds = {};
+            while (index < list.length && rCount) {
+                var node = list[index], nodeId = readId(node, idMap), replacement = rMap[nodeId];
+                if (replacement) {
+                    list.splice(index, itemsInChildListTree(replacement), replacement);
+                    foundIds[nodeId] = true;
+                    rCount--;
+                }
+                index++;
+            }
+            if (rCount) {
+                addUnfoundAsDeepChildren(list, rMap, foundIds);
+            }
+            list.replacements = [];
+        },
+        nestList: function (list) {
+            var index = 0;
+            while (index < list.length) {
+                var node = list[index], childNodeList = nodeMap[id(node)];
+                if (childNodeList) {
+                    if (childNodeList !== list) {
+                        list.splice(index, itemsInChildListTree(childNodeList), childNodeList);
+                    }
+                } else {
+                    nodeMap[id(node)] = list;
+                }
+                index++;
+            }
+        },
+        last: function (nodeList) {
+            var last = nodeList[nodeList.length - 1];
+            if (last.nodeType) {
+                return last;
+            } else {
+                return nodeLists.last(last);
+            }
+        },
+        first: function (nodeList) {
+            var first = nodeList[0];
+            if (first.nodeType) {
+                return first;
+            } else {
+                return nodeLists.first(first);
+            }
+        },
+        flatten: function (nodeList) {
+            var items = [];
+            for (var i = 0; i < nodeList.length; i++) {
+                var item = nodeList[i];
+                if (item.nodeType) {
+                    items.push(item);
+                } else {
+                    items.push.apply(items, nodeLists.flatten(item));
+                }
+            }
+            return items;
+        },
+        register: function (nodeList, unregistered, parent, directlyNested) {
+            can.cid(nodeList);
+            nodeList.unregistered = unregistered;
+            nodeList.parentList = parent;
+            if (parent) {
+                nodeList.deepChildren = [];
+                nodeList.newDeepChildren = [];
+                nodeList.replacements = [];
+                if (parent !== true) {
+                    if (directlyNested) {
+                        parent.replacements.push(nodeList);
+                    } else {
+                        parent.newDeepChildren.push(nodeList);
+                    }
+                }
+            } else {
+                nodeLists.nestList(nodeList);
+            }
+            return nodeList;
+        },
+        unregisterChildren: function (nodeList) {
+            var nodes = [];
+            can.each(nodeList, function (node) {
+                if (node.nodeType) {
+                    if (!nodeList.replacements) {
+                        delete nodeMap[id(node)];
+                    }
+                    nodes.push(node);
+                } else {
+                    push.apply(nodes, nodeLists.unregister(node, true));
+                }
+            });
+            can.each(nodeList.deepChildren, function (nodeList) {
+                nodeLists.unregister(nodeList, true);
+            });
+            return nodes;
+        },
+        unregister: function (nodeList, isChild) {
+            var nodes = nodeLists.unregisterChildren(nodeList, true);
+            if (nodeList.unregistered) {
+                var unregisteredCallback = nodeList.unregistered;
+                nodeList.replacements = nodeList.unregistered = null;
+                if (!isChild) {
+                    var deepChildren = nodeList.parentList && nodeList.parentList.deepChildren;
+                    if (deepChildren) {
+                        var index = deepChildren.indexOf(nodeList);
+                        if (index !== -1) {
+                            deepChildren.splice(index, 1);
+                        }
+                    }
+                }
+                unregisteredCallback();
+            }
+            return nodes;
+        },
+        nodeMap: nodeMap
+    };
+    can.view.nodeLists = nodeLists;
+    return nodeLists;
+});
+/*can/view/parser/parser*/
+define('can/view/parser/parser', [], function () {
+    function each(items, callback) {
+        for (var i = 0; i < items.length; i++) {
+            callback(items[i], i);
+        }
+    }
+    function makeMap(str) {
+        var obj = {}, items = str.split(',');
+        each(items, function (name) {
+            obj[name] = true;
+        });
+        return obj;
+    }
+    function handleIntermediate(intermediate, handler) {
+        for (var i = 0, len = intermediate.length; i < len; i++) {
+            var item = intermediate[i];
+            handler[item.tokenType].apply(handler, item.args);
+        }
+        return intermediate;
+    }
+    var alphaNumericHU = '-:A-Za-z0-9_', attributeNames = '[^=>\\s\\/]+', spaceEQspace = '\\s*=\\s*', singleCurly = '\\{[^\\}\\{]\\}', doubleCurly = '\\{\\{[^\\}]\\}\\}\\}?', attributeEqAndValue = '(?:' + spaceEQspace + '(?:' + '(?:' + doubleCurly + ')|(?:' + singleCurly + ')|(?:"[^"]*")|(?:\'[^\']*\')|[^>\\s]+))?', matchStash = '\\{\\{[^\\}]*\\}\\}\\}?', stash = '\\{\\{([^\\}]*)\\}\\}\\}?', startTag = new RegExp('^<([' + alphaNumericHU + ']+)' + '(' + '(?:\\s*' + '(?:(?:' + '(?:' + attributeNames + ')?' + attributeEqAndValue + ')|' + '(?:' + matchStash + ')+)' + ')*' + ')\\s*(\\/?)>'), endTag = new RegExp('^<\\/([' + alphaNumericHU + ']+)[^>]*>'), mustache = new RegExp(stash, 'g'), txtBreak = /<|\{\{/, space = /\s/;
+    var empty = makeMap('area,base,basefont,br,col,frame,hr,img,input,isindex,link,meta,param,embed');
+    var block = makeMap('a,address,article,applet,aside,audio,blockquote,button,canvas,center,dd,del,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frameset,h1,h2,h3,h4,h5,h6,header,hgroup,hr,iframe,ins,isindex,li,map,menu,noframes,noscript,object,ol,output,p,pre,section,script,table,tbody,td,tfoot,th,thead,tr,ul,video');
+    var inline = makeMap('abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var');
+    var closeSelf = makeMap('colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr');
+    var special = makeMap('script');
+    var tokenTypes = 'start,end,close,attrStart,attrEnd,attrValue,chars,comment,special,done'.split(',');
+    var fn = function () {
+    };
+    var HTMLParser = function (html, handler, returnIntermediate) {
+        if (typeof html === 'object') {
+            return handleIntermediate(html, handler);
+        }
+        var intermediate = [];
+        handler = handler || {};
+        if (returnIntermediate) {
+            each(tokenTypes, function (name) {
+                var callback = handler[name] || fn;
+                handler[name] = function () {
+                    if (callback.apply(this, arguments) !== false) {
+                        intermediate.push({
+                            tokenType: name,
+                            args: [].slice.call(arguments, 0)
+                        });
+                    }
+                };
+            });
+        }
+        function parseStartTag(tag, tagName, rest, unary) {
+            tagName = tagName.toLowerCase();
+            if (block[tagName]) {
+                while (stack.last() && inline[stack.last()]) {
+                    parseEndTag('', stack.last());
+                }
+            }
+            if (closeSelf[tagName] && stack.last() === tagName) {
+                parseEndTag('', tagName);
+            }
+            unary = empty[tagName] || !!unary;
+            handler.start(tagName, unary);
+            if (!unary) {
+                stack.push(tagName);
+            }
+            HTMLParser.parseAttrs(rest, handler);
+            handler.end(tagName, unary);
+        }
+        function parseEndTag(tag, tagName) {
+            var pos;
+            if (!tagName) {
+                pos = 0;
+            } else {
+                for (pos = stack.length - 1; pos >= 0; pos--) {
+                    if (stack[pos] === tagName) {
+                        break;
+                    }
+                }
+            }
+            if (pos >= 0) {
+                for (var i = stack.length - 1; i >= pos; i--) {
+                    if (handler.close) {
+                        handler.close(stack[i]);
+                    }
+                }
+                stack.length = pos;
+            }
+        }
+        function parseMustache(mustache, inside) {
+            if (handler.special) {
+                handler.special(inside);
+            }
+        }
+        var callChars = function () {
+            if (charsText) {
+                if (handler.chars) {
+                    handler.chars(charsText);
+                }
+            }
+            charsText = '';
+        };
+        var index, chars, match, stack = [], last = html, charsText = '';
+        stack.last = function () {
+            return this[this.length - 1];
+        };
+        while (html) {
+            chars = true;
+            if (!stack.last() || !special[stack.last()]) {
+                if (html.indexOf('<!--') === 0) {
+                    index = html.indexOf('-->');
+                    if (index >= 0) {
+                        callChars();
+                        if (handler.comment) {
+                            handler.comment(html.substring(4, index));
+                        }
+                        html = html.substring(index + 3);
+                        chars = false;
+                    }
+                } else if (html.indexOf('</') === 0) {
+                    match = html.match(endTag);
+                    if (match) {
+                        callChars();
+                        html = html.substring(match[0].length);
+                        match[0].replace(endTag, parseEndTag);
+                        chars = false;
+                    }
+                } else if (html.indexOf('<') === 0) {
+                    match = html.match(startTag);
+                    if (match) {
+                        callChars();
+                        html = html.substring(match[0].length);
+                        match[0].replace(startTag, parseStartTag);
+                        chars = false;
+                    }
+                } else if (html.indexOf('{{') === 0) {
+                    match = html.match(mustache);
+                    if (match) {
+                        callChars();
+                        html = html.substring(match[0].length);
+                        match[0].replace(mustache, parseMustache);
+                    }
+                }
+                if (chars) {
+                    index = html.search(txtBreak);
+                    if (index === 0 && html === last) {
+                        charsText += html.charAt(0);
+                        html = html.substr(1);
+                        index = html.search(txtBreak);
+                    }
+                    var text = index < 0 ? html : html.substring(0, index);
+                    html = index < 0 ? '' : html.substring(index);
+                    if (text) {
+                        charsText += text;
+                    }
+                }
+            } else {
+                html = html.replace(new RegExp('([\\s\\S]*?)</' + stack.last() + '[^>]*>'), function (all, text) {
+                    text = text.replace(/<!--([\s\S]*?)-->|<!\[CDATA\[([\s\S]*?)]]>/g, '$1$2');
+                    if (handler.chars) {
+                        handler.chars(text);
+                    }
+                    return '';
+                });
+                parseEndTag('', stack.last());
+            }
+            if (html === last) {
+                throw new Error('Parse Error: ' + html);
+            }
+            last = html;
+        }
+        callChars();
+        parseEndTag();
+        handler.done();
+        return intermediate;
+    };
+    var callAttrStart = function (state, curIndex, handler, rest) {
+        state.attrStart = rest.substring(typeof state.nameStart === 'number' ? state.nameStart : curIndex, curIndex);
+        handler.attrStart(state.attrStart);
+        state.inName = false;
+    };
+    var callAttrEnd = function (state, curIndex, handler, rest) {
+        if (state.valueStart !== undefined && state.valueStart < curIndex) {
+            handler.attrValue(rest.substring(state.valueStart, curIndex));
+        } else if (!state.inValue) {
+        }
+        handler.attrEnd(state.attrStart);
+        state.attrStart = undefined;
+        state.valueStart = undefined;
+        state.inValue = false;
+        state.inName = false;
+        state.lookingForEq = false;
+        state.inQuote = false;
+        state.lookingForName = true;
+    };
+    HTMLParser.parseAttrs = function (rest, handler) {
+        if (!rest) {
+            return;
+        }
+        var i = 0;
+        var curIndex;
+        var state = {
+            inDoubleCurly: false,
+            inName: false,
+            nameStart: undefined,
+            inValue: false,
+            valueStart: undefined,
+            inQuote: false,
+            attrStart: undefined,
+            lookingForName: true,
+            lookingForValue: false,
+            lookingForEq: false
+        };
+        while (i < rest.length) {
+            curIndex = i;
+            var cur = rest.charAt(i);
+            var next = rest.charAt(i + 1);
+            var nextNext = rest.charAt(i + 2);
+            i++;
+            if (cur === '{' && next === '{') {
+                if (state.inValue && curIndex > state.valueStart) {
+                    handler.attrValue(rest.substring(state.valueStart, curIndex));
+                } else if (state.inName && state.nameStart < curIndex) {
+                    callAttrStart(state, curIndex, handler, rest);
+                    callAttrEnd(state, curIndex, handler, rest);
+                } else if (state.lookingForValue) {
+                    state.inValue = true;
+                } else if (state.lookingForEq && state.attrStart) {
+                    callAttrEnd(state, curIndex, handler, rest);
+                }
+                state.inDoubleCurly = true;
+                state.doubleCurlyStart = curIndex + 2;
+                i++;
+            } else if (state.inDoubleCurly) {
+                if (cur === '}' && next === '}') {
+                    var isTriple = nextNext === '}' ? 1 : 0;
+                    handler.special(rest.substring(state.doubleCurlyStart, curIndex));
+                    state.inDoubleCurly = false;
+                    if (state.inValue) {
+                        state.valueStart = curIndex + 2 + isTriple;
+                    }
+                    i += 1 + isTriple;
+                }
+            } else if (state.inValue) {
+                if (state.inQuote) {
+                    if (cur === state.inQuote) {
+                        callAttrEnd(state, curIndex, handler, rest);
+                    }
+                } else if (space.test(cur)) {
+                    callAttrEnd(state, curIndex, handler, rest);
+                }
+            } else if (cur === '=' && (state.lookingForEq || state.lookingForName || state.inName)) {
+                if (!state.attrStart) {
+                    callAttrStart(state, curIndex, handler, rest);
+                }
+                state.lookingForValue = true;
+                state.lookingForEq = false;
+                state.lookingForName = false;
+            } else if (state.inName) {
+                if (space.test(cur)) {
+                    callAttrStart(state, curIndex, handler, rest);
+                    state.lookingForEq = true;
+                }
+            } else if (state.lookingForName) {
+                if (!space.test(cur)) {
+                    if (state.attrStart) {
+                        callAttrEnd(state, curIndex, handler, rest);
+                    }
+                    state.nameStart = curIndex;
+                    state.inName = true;
+                }
+            } else if (state.lookingForValue) {
+                if (!space.test(cur)) {
+                    state.lookingForValue = false;
+                    state.inValue = true;
+                    if (cur === '\'' || cur === '"') {
+                        state.inQuote = cur;
+                        state.valueStart = curIndex + 1;
+                    } else {
+                        state.valueStart = curIndex;
+                    }
+                }
+            }
+        }
+        if (state.inName) {
+            callAttrStart(state, curIndex + 1, handler, rest);
+            callAttrEnd(state, curIndex + 1, handler, rest);
+        } else if (state.lookingForEq) {
+            callAttrEnd(state, curIndex + 1, handler, rest);
+        } else if (state.inValue) {
+            callAttrEnd(state, curIndex + 1, handler, rest);
+        }
+    };
+    return HTMLParser;
+});
+/*can/util/array/diff*/
+define('can/util/array/diff', [], function () {
+    var slice = [].slice;
+    return function (oldList, newList) {
+        var oldIndex = 0, newIndex = 0, oldLength = oldList.length, newLength = newList.length, patches = [];
+        while (oldIndex < oldLength && newIndex < newLength) {
+            var oldItem = oldList[oldIndex], newItem = newList[newIndex];
+            if (oldItem === newItem) {
+                oldIndex++;
+                newIndex++;
+                continue;
+            }
+            if (newIndex + 1 < newLength && newList[newIndex + 1] === oldItem) {
+                patches.push({
+                    index: newIndex,
+                    deleteCount: 0,
+                    insert: [newList[newIndex]]
+                });
+                oldIndex++;
+                newIndex += 2;
+                continue;
+            } else if (oldIndex + 1 < oldLength && oldList[oldIndex + 1] === newItem) {
+                patches.push({
+                    index: newIndex,
+                    deleteCount: 1,
+                    insert: []
+                });
+                oldIndex += 2;
+                newIndex++;
+                continue;
+            } else {
+                patches.push({
+                    index: newIndex,
+                    deleteCount: oldLength - oldIndex,
+                    insert: slice.call(newList, newIndex)
+                });
+                return patches;
+            }
+        }
+        if (newIndex === newLength && oldIndex === oldLength) {
+            return patches;
+        }
+        patches.push({
+            index: newIndex,
+            deleteCount: oldLength - oldIndex,
+            insert: slice.call(newList, newIndex)
+        });
+        return patches;
+    };
+});
+/*can/view/live/live*/
+define('can/view/live/live', [
+    'can/util/util',
+    'can/view/elements',
+    'can/view/view',
+    'can/view/node_lists/node_lists',
+    'can/view/parser/parser',
+    'can/util/array/diff'
+], function (can, elements, view, nodeLists, parser, diff) {
+    elements = elements || can.view.elements;
+    nodeLists = nodeLists || can.view.NodeLists;
+    parser = parser || can.view.parser;
+    var setup = function (el, bind, unbind) {
+            var tornDown = false, teardown = function () {
+                    if (!tornDown) {
+                        tornDown = true;
+                        unbind(data);
+                        can.unbind.call(el, 'removed', teardown);
+                    }
+                    return true;
+                }, data = {
+                    teardownCheck: function (parent) {
+                        return parent ? false : teardown();
+                    }
+                };
+            can.bind.call(el, 'removed', teardown);
+            bind(data);
+            return data;
+        }, getChildNodes = function (node) {
+            var childNodes = node.childNodes;
+            if ('length' in childNodes) {
+                return childNodes;
+            } else {
+                var cur = node.firstChild;
+                var nodes = [];
+                while (cur) {
+                    nodes.push(cur);
+                    cur = cur.nextSibling;
+                }
+                return nodes;
+            }
+        }, listen = function (el, compute, change) {
+            return setup(el, function () {
+                compute.computeInstance.bind('change', change);
+            }, function (data) {
+                compute.computeInstance.unbind('change', change);
+                if (data.nodeList) {
+                    nodeLists.unregister(data.nodeList);
+                }
+            });
+        }, getAttributeParts = function (newVal) {
+            var attrs = {}, attr;
+            parser.parseAttrs(newVal, {
+                attrStart: function (name) {
+                    attrs[name] = '';
+                    attr = name;
+                },
+                attrValue: function (value) {
+                    attrs[attr] += value;
+                },
+                attrEnd: function () {
+                }
+            });
+            return attrs;
+        }, splice = [].splice, isNode = function (obj) {
+            return obj && obj.nodeType;
+        }, addTextNodeIfNoChildren = function (frag) {
+            if (!frag.firstChild) {
+                frag.appendChild(frag.ownerDocument.createTextNode(''));
+            }
+        }, getLiveFragment = function (itemHTML) {
+            var gotText = typeof itemHTML === 'string', itemFrag = can.frag(itemHTML);
+            return gotText ? can.view.hookup(itemFrag) : itemFrag;
+        }, renderAndAddToNodeLists = function (newNodeLists, parentNodeList, render, context, args) {
+            var itemNodeList = [];
+            if (parentNodeList) {
+                nodeLists.register(itemNodeList, null, parentNodeList, true);
+                itemNodeList.parentList = parentNodeList;
+                itemNodeList.expression = '#each SUBEXPRESSION';
+            }
+            var itemHTML = render.apply(context, args.concat([itemNodeList])), itemFrag = getLiveFragment(itemHTML);
+            var childNodes = can.makeArray(getChildNodes(itemFrag));
+            if (parentNodeList) {
+                nodeLists.update(itemNodeList, childNodes);
+                newNodeLists.push(itemNodeList);
+            } else {
+                newNodeLists.push(nodeLists.register(childNodes));
+            }
+            return itemFrag;
+        }, removeFromNodeList = function (masterNodeList, index, length) {
+            var removedMappings = masterNodeList.splice(index + 1, length), itemsToRemove = [];
+            can.each(removedMappings, function (nodeList) {
+                var nodesToRemove = nodeLists.unregister(nodeList);
+                [].push.apply(itemsToRemove, nodesToRemove);
+            });
+            return itemsToRemove;
+        }, addFalseyIfEmpty = function (list, falseyRender, masterNodeList, nodeList) {
+            if (falseyRender && list.length === 0) {
+                var falseyNodeLists = [];
+                var falseyFrag = renderAndAddToNodeLists(falseyNodeLists, nodeList, falseyRender, list, [list]);
+                elements.after([masterNodeList[0]], falseyFrag);
+                masterNodeList.push(falseyNodeLists[0]);
+            }
+        }, childMutationCallbacks = {};
+    var live = {
+        registerChildMutationCallback: function (tag, callback) {
+            if (callback) {
+                childMutationCallbacks[tag] = callback;
+            } else {
+                return childMutationCallbacks[tag];
+            }
+        },
+        callChildMutationCallback: function (el) {
+            var callback = el && childMutationCallbacks[el.nodeName.toLowerCase()];
+            if (callback) {
+                callback(el);
+            }
+        },
+        list: function (el, compute, render, context, parentNode, nodeList, falseyRender) {
+            var masterNodeList = nodeList || [el], indexMap = [], afterPreviousEvents = false, isTornDown = false, add = function (ev, items, index) {
+                    if (!afterPreviousEvents) {
+                        return;
+                    }
+                    var frag = text.ownerDocument.createDocumentFragment(), newNodeLists = [], newIndicies = [];
+                    can.each(items, function (item, key) {
+                        var itemIndex = can.compute(key + index), itemFrag = renderAndAddToNodeLists(newNodeLists, nodeList, render, context, [
+                                item,
+                                itemIndex
+                            ]);
+                        frag.appendChild(itemFrag);
+                        newIndicies.push(itemIndex);
+                    });
+                    var masterListIndex = index + 1;
+                    if (!indexMap.length) {
+                        var falseyItemsToRemove = removeFromNodeList(masterNodeList, 0, masterNodeList.length - 1);
+                        can.remove(can.$(falseyItemsToRemove));
+                    }
+                    if (!masterNodeList[masterListIndex]) {
+                        elements.after(masterListIndex === 1 ? [text] : [nodeLists.last(masterNodeList[masterListIndex - 1])], frag);
+                    } else {
+                        var el = nodeLists.first(masterNodeList[masterListIndex]);
+                        can.insertBefore(el.parentNode, frag, el);
+                    }
+                    splice.apply(masterNodeList, [
+                        masterListIndex,
+                        0
+                    ].concat(newNodeLists));
+                    splice.apply(indexMap, [
+                        index,
+                        0
+                    ].concat(newIndicies));
+                    for (var i = index + newIndicies.length, len = indexMap.length; i < len; i++) {
+                        indexMap[i](i);
+                    }
+                    if (ev.callChildMutationCallback !== false) {
+                        live.callChildMutationCallback(text.parentNode);
+                    }
+                }, set = function (ev, newVal, index) {
+                    remove({}, { length: 1 }, index, true);
+                    add({}, [newVal], index);
+                }, remove = function (ev, items, index, duringTeardown, fullTeardown) {
+                    if (!afterPreviousEvents) {
+                        return;
+                    }
+                    if (!duringTeardown && data.teardownCheck(text.parentNode)) {
+                        return;
+                    }
+                    if (index < 0) {
+                        index = indexMap.length + index;
+                    }
+                    var itemsToRemove = removeFromNodeList(masterNodeList, index, items.length);
+                    indexMap.splice(index, items.length);
+                    for (var i = index, len = indexMap.length; i < len; i++) {
+                        indexMap[i](i);
+                    }
+                    if (!fullTeardown) {
+                        addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
+                        can.remove(can.$(itemsToRemove));
+                        if (ev.callChildMutationCallback !== false) {
+                            live.callChildMutationCallback(text.parentNode);
+                        }
+                    } else {
+                        nodeLists.unregister(masterNodeList);
+                    }
+                }, move = function (ev, item, newIndex, currentIndex) {
+                    if (!afterPreviousEvents) {
+                        return;
+                    }
+                    newIndex = newIndex + 1;
+                    currentIndex = currentIndex + 1;
+                    var referenceNodeList = masterNodeList[newIndex];
+                    var movedElements = can.frag(nodeLists.flatten(masterNodeList[currentIndex]));
+                    var referenceElement;
+                    if (currentIndex < newIndex) {
+                        referenceElement = nodeLists.last(referenceNodeList).nextSibling;
+                    } else {
+                        referenceElement = nodeLists.first(referenceNodeList);
+                    }
+                    var parentNode = masterNodeList[0].parentNode;
+                    parentNode.insertBefore(movedElements, referenceElement);
+                    var temp = masterNodeList[currentIndex];
+                    [].splice.apply(masterNodeList, [
+                        currentIndex,
+                        1
+                    ]);
+                    [].splice.apply(masterNodeList, [
+                        newIndex,
+                        0,
+                        temp
+                    ]);
+                    newIndex = newIndex - 1;
+                    currentIndex = currentIndex - 1;
+                    var indexCompute = indexMap[currentIndex];
+                    [].splice.apply(indexMap, [
+                        currentIndex,
+                        1
+                    ]);
+                    [].splice.apply(indexMap, [
+                        newIndex,
+                        0,
+                        indexCompute
+                    ]);
+                    var i = Math.min(currentIndex, newIndex);
+                    var len = indexMap.length;
+                    for (i, len; i < len; i++) {
+                        indexMap[i](i);
+                    }
+                    if (ev.callChildMutationCallback !== false) {
+                        live.callChildMutationCallback(text.parentNode);
+                    }
+                }, text = el.ownerDocument.createTextNode(''), list, teardownList = function (fullTeardown) {
+                    if (list && list.unbind) {
+                        list.unbind('add', add).unbind('set', set).unbind('remove', remove).unbind('move', move);
+                    }
+                    remove({ callChildMutationCallback: !!fullTeardown }, { length: masterNodeList.length - 1 }, 0, true, fullTeardown);
+                }, updateList = function (ev, newList, oldList) {
+                    if (isTornDown) {
+                        return;
+                    }
+                    afterPreviousEvents = true;
+                    if (newList && oldList) {
+                        list = newList || [];
+                        var patches = diff(oldList, newList);
+                        if (oldList.unbind) {
+                            oldList.unbind('add', add).unbind('set', set).unbind('remove', remove).unbind('move', move);
+                        }
+                        for (var i = 0, patchLen = patches.length; i < patchLen; i++) {
+                            var patch = patches[i];
+                            if (patch.deleteCount) {
+                                remove({ callChildMutationCallback: false }, { length: patch.deleteCount }, patch.index, true);
+                            }
+                            if (patch.insert.length) {
+                                add({ callChildMutationCallback: false }, patch.insert, patch.index);
+                            }
+                        }
+                    } else {
+                        if (oldList) {
+                            teardownList();
+                        }
+                        list = newList || [];
+                        add({ callChildMutationCallback: false }, list, 0);
+                        addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
+                    }
+                    live.callChildMutationCallback(text.parentNode);
+                    afterPreviousEvents = false;
+                    if (list.bind) {
+                        list.bind('add', add).bind('set', set).bind('remove', remove).bind('move', move);
+                    }
+                    can.batch.afterPreviousEvents(function () {
+                        afterPreviousEvents = true;
+                    });
+                };
+            parentNode = elements.getParentNode(el, parentNode);
+            var data = setup(parentNode, function () {
+                if (can.isFunction(compute)) {
+                    compute.bind('change', updateList);
+                }
+            }, function () {
+                if (can.isFunction(compute)) {
+                    compute.unbind('change', updateList);
+                }
+                teardownList(true);
+            });
+            if (!nodeList) {
+                live.replace(masterNodeList, text, data.teardownCheck);
+            } else {
+                elements.replace(masterNodeList, text);
+                nodeLists.update(masterNodeList, [text]);
+                nodeList.unregistered = function () {
+                    data.teardownCheck();
+                    isTornDown = true;
+                };
+            }
+            updateList({}, can.isFunction(compute) ? compute() : compute);
+        },
+        html: function (el, compute, parentNode, nodeList) {
+            var data;
+            parentNode = elements.getParentNode(el, parentNode);
+            data = listen(parentNode, compute, function (ev, newVal, oldVal) {
+                var attached = nodeLists.first(nodes).parentNode;
+                if (attached) {
+                    makeAndPut(newVal);
+                }
+                var pn = nodeLists.first(nodes).parentNode;
+                data.teardownCheck(pn);
+                live.callChildMutationCallback(pn);
+            });
+            var nodes = nodeList || [el], makeAndPut = function (val) {
+                    var isFunction = typeof val === 'function', aNode = isNode(val), frag = can.frag(isFunction ? '' : val), oldNodes = can.makeArray(nodes);
+                    addTextNodeIfNoChildren(frag);
+                    if (!aNode && !isFunction) {
+                        frag = can.view.hookup(frag, parentNode);
+                    }
+                    oldNodes = nodeLists.update(nodes, getChildNodes(frag));
+                    if (isFunction) {
+                        val(frag.firstChild);
+                    }
+                    elements.replace(oldNodes, frag);
+                };
+            data.nodeList = nodes;
+            if (!nodeList) {
+                nodeLists.register(nodes, data.teardownCheck);
+            } else {
+                nodeList.unregistered = data.teardownCheck;
+            }
+            makeAndPut(compute());
+        },
+        replace: function (nodes, val, teardown) {
+            var oldNodes = nodes.slice(0), frag = can.frag(val);
+            nodeLists.register(nodes, teardown);
+            if (typeof val === 'string') {
+                frag = can.view.hookup(frag, nodes[0].parentNode);
+            }
+            nodeLists.update(nodes, getChildNodes(frag));
+            elements.replace(oldNodes, frag);
+            return nodes;
+        },
+        text: function (el, compute, parentNode, nodeList) {
+            var parent = elements.getParentNode(el, parentNode);
+            var data = listen(parent, compute, function (ev, newVal, oldVal) {
+                if (typeof node.nodeValue !== 'unknown') {
+                    node.nodeValue = can.view.toStr(newVal);
+                }
+                data.teardownCheck(node.parentNode);
+            });
+            var node = el.ownerDocument.createTextNode(can.view.toStr(compute()));
+            if (nodeList) {
+                nodeList.unregistered = data.teardownCheck;
+                data.nodeList = nodeList;
+                nodeLists.update(nodeList, [node]);
+                elements.replace([el], node);
+            } else {
+                data.nodeList = live.replace([el], node, data.teardownCheck);
+            }
+        },
+        setAttributes: function (el, newVal) {
+            var attrs = getAttributeParts(newVal);
+            for (var name in attrs) {
+                can.attr.set(el, name, attrs[name]);
+            }
+        },
+        attributes: function (el, compute, currentValue) {
+            var oldAttrs = {};
+            var setAttrs = function (newVal) {
+                var newAttrs = getAttributeParts(newVal), name;
+                for (name in newAttrs) {
+                    var newValue = newAttrs[name], oldValue = oldAttrs[name];
+                    if (newValue !== oldValue) {
+                        can.attr.set(el, name, newValue);
+                    }
+                    delete oldAttrs[name];
+                }
+                for (name in oldAttrs) {
+                    elements.removeAttr(el, name);
+                }
+                oldAttrs = newAttrs;
+            };
+            listen(el, compute, function (ev, newVal) {
+                setAttrs(newVal);
+            });
+            if (arguments.length >= 3) {
+                oldAttrs = getAttributeParts(currentValue);
+            } else {
+                setAttrs(compute());
+            }
+        },
+        attributePlaceholder: '__!!__',
+        attributeReplace: /__!!__/g,
+        attribute: function (el, attributeName, compute) {
+            listen(el, compute, function (ev, newVal) {
+                elements.setAttr(el, attributeName, hook.render());
+            });
+            var wrapped = can.$(el), hooks;
+            hooks = can.data(wrapped, 'hooks');
+            if (!hooks) {
+                can.data(wrapped, 'hooks', hooks = {});
+            }
+            var attr = String(elements.getAttr(el, attributeName)), parts = attr.split(live.attributePlaceholder), goodParts = [], hook;
+            goodParts.push(parts.shift(), parts.join(live.attributePlaceholder));
+            if (hooks[attributeName]) {
+                hooks[attributeName].computes.push(compute);
+            } else {
+                hooks[attributeName] = {
+                    render: function () {
+                        var i = 0, newAttr = attr ? attr.replace(live.attributeReplace, function () {
+                                return elements.contentText(hook.computes[i++]());
+                            }) : elements.contentText(hook.computes[i++]());
+                        return newAttr;
+                    },
+                    computes: [compute],
+                    batchNum: undefined
+                };
+            }
+            hook = hooks[attributeName];
+            goodParts.splice(1, 0, compute());
+            elements.setAttr(el, attributeName, goodParts.join(''));
+        },
+        specialAttribute: function (el, attributeName, compute) {
+            listen(el, compute, function (ev, newVal) {
+                elements.setAttr(el, attributeName, getValue(newVal));
+            });
+            elements.setAttr(el, attributeName, getValue(compute()));
+        },
+        simpleAttribute: function (el, attributeName, compute) {
+            listen(el, compute, function (ev, newVal) {
+                elements.setAttr(el, attributeName, newVal);
+            });
+            elements.setAttr(el, attributeName, compute());
+        }
+    };
+    live.attr = live.simpleAttribute;
+    live.attrs = live.attributes;
+    live.getAttributeParts = getAttributeParts;
+    var newLine = /(\r|\n)+/g;
+    var getValue = function (val) {
+        var regexp = /^["'].*["']$/;
+        val = val.replace(elements.attrReg, '').replace(newLine, '');
+        return regexp.test(val) ? val.substr(1, val.length - 2) : val;
+    };
+    can.view.live = live;
+    return live;
+});
+/*can/view/stache/mustache_helpers*/
+define('can/view/stache/mustache_helpers', [
+    'can/util/util',
+    'can/view/stache/utils',
+    'can/view/live/live'
+], function (can, utils, live) {
+    live = live || can.view.live;
+    var resolve = function (value) {
+        if (utils.isObserveLike(value) && utils.isArrayLike(value) && value.attr('length')) {
+            return value;
+        } else if (can.isFunction(value)) {
+            return value();
+        } else {
+            return value;
+        }
+    };
+    var resolveHash = function (hash) {
+        var params = {};
+        for (var prop in hash) {
+            var value = hash[prop];
+            if (value && value.isComputed) {
+                params[prop] = value();
+            } else {
+                params[prop] = value;
+            }
+        }
+        return params;
+    };
+    var looksLikeOptions = function (options) {
+        return options && typeof options.fn === 'function' && typeof options.inverse === 'function';
+    };
+    var helpers = {
+        'each': function (items, options) {
+            var resolved = resolve(items), result = [], keys, key, i;
+            if (resolved instanceof can.List) {
+                return function (el) {
+                    var nodeList = [el];
+                    nodeList.expression = 'live.list';
+                    can.view.nodeLists.register(nodeList, null, options.nodeList, true);
+                    can.view.nodeLists.update(options.nodeList, [el]);
+                    var cb = function (item, index, parentNodeList) {
+                        return options.fn(options.scope.add({
+                            '%index': index,
+                            '@index': index
+                        }, { notContext: true }).add(item), options.options, parentNodeList);
+                    };
+                    live.list(el, items, cb, options.context, el.parentNode, nodeList, function (list, parentNodeList) {
+                        return options.inverse(options.scope.add(list), options.options, parentNodeList);
+                    });
+                };
+            }
+            var expr = resolved;
+            if (!!expr && utils.isArrayLike(expr)) {
+                for (i = 0; i < expr.length; i++) {
+                    result.push(options.fn(options.scope.add({
+                        '%index': i,
+                        '@index': i
+                    }, { notContext: true }).add(expr[i])));
+                }
+            } else if (utils.isObserveLike(expr)) {
+                keys = can.Map.keys(expr);
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    result.push(options.fn(options.scope.add({
+                        '%key': key,
+                        '@key': key
+                    }, { notContext: true }).add(expr[key])));
+                }
+            } else if (expr instanceof Object) {
+                for (key in expr) {
+                    result.push(options.fn(options.scope.add({
+                        '%key': key,
+                        '@key': key
+                    }, { notContext: true }).add(expr[key])));
+                }
+            }
+            return result;
+        },
+        '@index': function (offset, options) {
+            if (!options) {
+                options = offset;
+                offset = 0;
+            }
+            var index = options.scope.attr('@index');
+            return '' + ((can.isFunction(index) ? index() : index) + offset);
+        },
+        'if': function (expr, options) {
+            var value;
+            if (can.isFunction(expr)) {
+                value = can.compute.truthy(expr)();
+            } else {
+                value = !!resolve(expr);
+            }
+            if (value) {
+                return options.fn(options.scope || this);
+            } else {
+                return options.inverse(options.scope || this);
+            }
+        },
+        'is': function () {
+            var lastValue, curValue, options = arguments[arguments.length - 1];
+            if (arguments.length - 2 <= 0) {
+                return options.inverse();
+            }
+            var args = arguments;
+            var callFn = can.compute(function () {
+                for (var i = 0; i < args.length - 1; i++) {
+                    curValue = resolve(args[i]);
+                    curValue = can.isFunction(curValue) ? curValue() : curValue;
+                    if (i > 0) {
+                        if (curValue !== lastValue) {
+                            return false;
+                        }
+                    }
+                    lastValue = curValue;
+                }
+                return true;
+            });
+            return callFn() ? options.fn() : options.inverse();
+        },
+        'eq': function () {
+            return helpers.is.apply(this, arguments);
+        },
+        'unless': function (expr, options) {
+            return helpers['if'].apply(this, [
+                expr,
+                can.extend({}, options, {
+                    fn: options.inverse,
+                    inverse: options.fn
+                })
+            ]);
+        },
+        'with': function (expr, options) {
+            var ctx = expr;
+            expr = resolve(expr);
+            if (!!expr) {
+                return options.fn(ctx);
+            }
+        },
+        'log': function (expr, options) {
+            if (typeof console !== 'undefined' && console.log) {
+                if (!options) {
+                    console.log(expr.context);
+                } else {
+                    console.log(expr, options.context);
+                }
+            }
+        },
+        'data': function (attr) {
+            var data = arguments.length === 2 ? this : arguments[1];
+            return function (el) {
+                can.data(can.$(el), attr, data || this.context);
+            };
+        },
+        'switch': function (expression, options) {
+            resolve(expression);
+            var found = false;
+            var newOptions = options.helpers.add({
+                'case': function (value, options) {
+                    if (!found && resolve(expression) === resolve(value)) {
+                        found = true;
+                        return options.fn(options.scope || this);
+                    }
+                },
+                'default': function (options) {
+                    if (!found) {
+                        return options.fn(options.scope || this);
+                    }
+                }
+            });
+            return options.fn(options.scope, newOptions);
+        },
+        'joinBase': function (firstExpr) {
+            var args = [].slice.call(arguments);
+            var options = args.pop();
+            var moduleReference = can.map(args, function (expr) {
+                var value = resolve(expr);
+                return can.isFunction(value) ? value() : value;
+            }).join('');
+            var templateModule = options.helpers.attr('helpers.module');
+            var parentAddress = templateModule ? templateModule.uri : undefined;
+            var isRelative = moduleReference[0] === '.';
+            if (isRelative && parentAddress) {
+                return can.joinURIs(parentAddress, moduleReference);
+            } else {
+                var baseURL = can.baseURL || typeof System !== 'undefined' && (System.renderingLoader && System.renderingLoader.baseURL || System.baseURL) || location.pathname;
+                if (moduleReference[0] !== '/' && baseURL[baseURL.length - 1] !== '/') {
+                    baseURL += '/';
+                }
+                return can.joinURIs(baseURL, moduleReference);
+            }
+        },
+        routeUrl: function (params, merge) {
+            if (!params) {
+                params = {};
+            }
+            if (typeof params.fn === 'function' && typeof params.inverse === 'function') {
+                params = resolveHash(params.hash);
+            }
+            return can.route.url(params, typeof merge === 'boolean' ? merge : undefined);
+        },
+        routeCurrent: function (params) {
+            var last = can.last(arguments), isOptions = last && looksLikeOptions(last);
+            if (last && isOptions && !(last.exprData instanceof can.expression.Call)) {
+                if (can.route.current(resolveHash(params.hash || {}))) {
+                    return params.fn();
+                } else {
+                    return params.inverse();
+                }
+            } else {
+                return can.route.current(looksLikeOptions(params) ? {} : params || {});
+            }
+        }
+    };
+    helpers.routeCurrent.callAsMethod = true;
+    helpers.eachOf = helpers.each;
+    var registerHelper = function (name, callback) {
+        helpers[name] = callback;
+    };
+    return {
+        registerHelper: registerHelper,
+        registerSimpleHelper: function (name, callback) {
+            registerHelper(name, can.view.simpleHelper(callback));
+        },
+        getHelper: function (name, options) {
+            var helper = options && options.get('helpers.' + name, { proxyMethods: false });
+            if (!helper) {
+                helper = helpers[name];
+            }
+            if (helper) {
+                return { fn: helper };
+            }
+        }
+    };
+});
+/*can/view/stache/expression*/
+define('can/view/stache/expression', [
+    'can/util/util',
+    'can/view/stache/utils',
+    'can/view/stache/mustache_helpers',
+    'can/view/scope/scope'
+], function (can, utils, mustacheHelpers, Scope) {
+    var getKeyComputeData = function (key, scope, readOptions) {
+            var data = scope.computeData(key, readOptions);
+            can.compute.temporarilyBind(data.compute);
+            return data;
+        }, lookupValue = function (key, scope, helperOptions, readOptions) {
+            var computeData = getKeyComputeData(key, scope, readOptions);
+            if (!computeData.compute.computeInstance.hasDependencies) {
+                return {
+                    value: computeData.initialValue,
+                    computeData: computeData
+                };
+            } else {
+                return {
+                    value: computeData.compute,
+                    computeData: computeData
+                };
+            }
+        }, lookupValueOrHelper = function (key, scope, helperOptions, readOptions) {
+            var res = lookupValue(key, scope, helperOptions, readOptions);
+            if (res.computeData.initialValue === undefined) {
+                if (key.charAt(0) === '@' && key !== '@index') {
+                    key = key.substr(1);
+                }
+                var helper = mustacheHelpers.getHelper(key, helperOptions);
+                res.helper = helper && helper.fn;
+            }
+            return res;
+        }, convertToArgExpression = function (expr) {
+            if (!(expr instanceof Arg) && !(expr instanceof Literal)) {
+                return new Arg(expr);
+            } else {
+                return expr;
+            }
+        };
+    var Literal = function (value) {
+        this._value = value;
+    };
+    Literal.prototype.value = function () {
+        return this._value;
+    };
+    var Lookup = function (key, root) {
+        this.key = key;
+        this.rootExpr = root;
+    };
+    Lookup.prototype.value = function (scope, helperOptions) {
+        var result = lookupValueOrHelper(this.key, scope, helperOptions);
+        this.isHelper = result.helper && !result.helper.callAsMethod;
+        return result.helper || result.value;
+    };
+    var ScopeLookup = function (key, root) {
+        Lookup.apply(this, arguments);
+    };
+    ScopeLookup.prototype.value = function (scope, helperOptions) {
+        return lookupValue(this.key, scope, helperOptions).value;
+    };
+    var Arg = function (expression, modifiers) {
+        this.expr = expression;
+        this.modifiers = modifiers || {};
+        this.isCompute = false;
+    };
+    Arg.prototype.value = function () {
+        return this.expr.value.apply(this.expr, arguments);
+    };
+    var Hash = function () {
+    };
+    var Call = function (methodExpression, argExpressions, hashExpressions) {
+        this.methodExpr = methodExpression;
+        this.argExprs = can.map(argExpressions, convertToArgExpression);
+        var hashExprs = this.hashExprs = {};
+        can.each(hashExpressions, function (expr, name) {
+            hashExprs[name] = convertToArgExpression(expr);
+        });
+    };
+    Call.prototype.args = function (scope, helperOptions) {
+        var args = [];
+        for (var i = 0, len = this.argExprs.length; i < len; i++) {
+            var arg = this.argExprs[i];
+            var value = arg.value.apply(arg, arguments);
+            args.push({
+                call: value && value.isComputed && !arg.modifiers.compute,
+                value: value
+            });
+        }
+        return function () {
+            var finalArgs = [];
+            for (var i = 0, len = args.length; i < len; i++) {
+                finalArgs[i] = args[i].call ? args[i].value() : args[i].value;
+            }
+            return finalArgs;
+        };
+    };
+    Call.prototype.hash = function (scope, helperOptions) {
+        var hash = {};
+        for (var prop in this.hashExprs) {
+            var val = this.hashExprs[prop], value = val.value.apply(val, arguments);
+            hash[prop] = {
+                call: value && value.isComputed && !val.modifiers.compute,
+                value: value
+            };
+        }
+        return function () {
+            var finalHash = {};
+            for (var prop in hash) {
+                finalHash[prop] = hash[prop].call ? hash[prop].value() : hash[prop].value;
+            }
+            return finalHash;
+        };
+    };
+    Call.prototype.value = function (scope, helperScope, helperOptions) {
+        var method = this.methodExpr.value(scope, helperScope);
+        this.isHelper = this.methodExpr.isHelper;
+        var hasHash = !can.isEmptyObject(this.hashExprs), getArgs = this.args(scope, helperScope), getHash = this.hash(scope, helperScope);
+        return can.compute(function () {
+            var func = method;
+            if (func && func.isComputed) {
+                func = func();
+            }
+            if (typeof func === 'function') {
+                var args = getArgs();
+                if (hasHash) {
+                    args.push(getHash());
+                }
+                if (helperOptions) {
+                    args.push(helperOptions);
+                }
+                return func.apply(null, args);
+            }
+        });
+    };
+    var HelperLookup = function () {
+        Lookup.apply(this, arguments);
+    };
+    HelperLookup.prototype.value = function (scope, helperOptions) {
+        var result = lookupValueOrHelper(this.key, scope, helperOptions, {
+            isArgument: true,
+            args: [
+                scope.attr('.'),
+                scope
+            ]
+        });
+        return result.helper || result.value;
+    };
+    var HelperScopeLookup = function () {
+        Lookup.apply(this, arguments);
+    };
+    HelperScopeLookup.prototype.value = function (scope, helperOptions) {
+        return lookupValue(this.key, scope, helperOptions, {
+            callMethodsOnObservables: true,
+            isArgument: true,
+            args: [
+                scope.attr('.'),
+                scope
+            ]
+        }).value;
+    };
+    var Helper = function (methodExpression, argExpressions, hashExpressions) {
+        this.methodExpr = methodExpression;
+        this.argExprs = argExpressions;
+        this.hashExprs = hashExpressions;
+        this.mode = null;
+    };
+    Helper.prototype.args = function (scope, helperOptions) {
+        var args = [];
+        for (var i = 0, len = this.argExprs.length; i < len; i++) {
+            var arg = this.argExprs[i];
+            args.push(arg.value.apply(arg, arguments));
+        }
+        return args;
+    };
+    Helper.prototype.hash = function (scope, helperOptions) {
+        var hash = {};
+        for (var prop in this.hashExprs) {
+            var val = this.hashExprs[prop];
+            hash[prop] = val.value.apply(val, arguments);
+        }
+        return hash;
+    };
+    Helper.prototype.helperAndValue = function (scope, helperOptions) {
+        var looksLikeAHelper = this.argExprs.length || !can.isEmptyObject(this.hashExprs), helper, value, methodKey = this.methodExpr instanceof Literal ? '' + this.methodExpr._value : this.methodExpr.key, initialValue, args;
+        if (looksLikeAHelper) {
+            helper = mustacheHelpers.getHelper(methodKey, helperOptions);
+            var context = scope.attr('.');
+            if (!helper && typeof context[methodKey] === 'function') {
+                helper = { fn: context[methodKey] };
+            }
+        }
+        if (!helper) {
+            args = this.args(scope, helperOptions);
+            var computeData = getKeyComputeData(methodKey, scope, {
+                    isArgument: false,
+                    args: args && args.length ? args : [
+                        scope.attr('.'),
+                        scope
+                    ]
+                }), compute = computeData.compute;
+            initialValue = computeData.initialValue;
+            if (computeData.compute.computeInstance.hasDependencies) {
+                value = compute;
+            } else {
+                value = initialValue;
+            }
+            if (!looksLikeAHelper && initialValue === undefined) {
+                helper = mustacheHelpers.getHelper(methodKey, helperOptions);
+            }
+        }
+        return {
+            value: value,
+            args: args,
+            helper: helper && helper.fn
+        };
+    };
+    Helper.prototype.evaluator = function (helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly) {
+        var helperOptionArg = {
+                fn: function () {
+                },
+                inverse: function () {
+                }
+            }, context = scope.attr('.'), args = this.args(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly), hash = this.hash(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+        utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
+        can.simpleExtend(helperOptionArg, {
+            context: context,
+            scope: scope,
+            contexts: scope,
+            hash: hash,
+            nodeList: nodeList,
+            exprData: this,
+            helperOptions: helperOptions,
+            helpers: helperOptions
+        });
+        args.push(helperOptionArg);
+        return function () {
+            return helper.apply(context, args);
+        };
+    };
+    Helper.prototype.value = function (scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly) {
+        var helperAndValue = this.helperAndValue(scope, helperOptions);
+        var helper = helperAndValue.helper;
+        if (!helper) {
+            return helperAndValue.value;
+        }
+        var fn = this.evaluator(helper, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+        var compute = can.compute(fn);
+        can.compute.temporarilyBind(compute);
+        if (!compute.computeInstance.hasDependencies) {
+            return compute();
+        } else {
+            return compute;
+        }
+    };
+    var keyRegExp = /[\w\.\\\-_@\/\&%]+/, tokensRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/*%\$]+|[\(\)]|,|\~)/g, literalRegExp = /^('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)$/;
+    var isTokenKey = function (token) {
+        return keyRegExp.test(token);
+    };
+    var testDot = /^[\.@]\w/;
+    var isAddingToExpression = function (token) {
+        return isTokenKey(token) && testDot.test(token);
+    };
+    var ensureChildren = function (type) {
+        if (!type.children) {
+            type.children = [];
+        }
+        return type;
+    };
+    var Stack = function () {
+        this.root = {
+            children: [],
+            type: 'Root'
+        };
+        this.current = this.root;
+        this.stack = [this.root];
+    };
+    can.simpleExtend(Stack.prototype, {
+        top: function () {
+            return can.last(this.stack);
+        },
+        isRootTop: function () {
+            return this.top() === this.root;
+        },
+        popTo: function (types) {
+            this.popUntil(types);
+            if (!this.isRootTop()) {
+                this.stack.pop();
+            }
+        },
+        firstParent: function (types) {
+            var curIndex = this.stack.length - 2;
+            while (curIndex > 0 && can.inArray(this.stack[curIndex].type, types) === -1) {
+                curIndex--;
+            }
+            return this.stack[curIndex];
+        },
+        popUntil: function (types) {
+            while (can.inArray(this.top().type, types) === -1 && !this.isRootTop()) {
+                this.stack.pop();
+            }
+            return this.top();
+        },
+        addTo: function (types, type) {
+            var cur = this.popUntil(types);
+            ensureChildren(cur).children.push(type);
+        },
+        addToAndPush: function (types, type) {
+            this.addTo(types, type);
+            this.stack.push(type);
+        },
+        topLastChild: function () {
+            return can.last(this.top().children);
+        },
+        replaceTopLastChild: function (type) {
+            var children = ensureChildren(this.top()).children;
+            children.pop();
+            children.push(type);
+            return type;
+        },
+        replaceTopLastChildAndPush: function (type) {
+            this.replaceTopLastChild(type);
+            this.stack.push(type);
+        },
+        replaceTopAndPush: function (type) {
+            var children;
+            if (this.top() === this.root) {
+                children = ensureChildren(this.top()).children;
+            } else {
+                this.stack.pop();
+                children = ensureChildren(this.top()).children;
+            }
+            children.pop();
+            children.push(type);
+            this.stack.push(type);
+            return type;
+        }
+    });
+    var convertKeyToLookup = function (key) {
+        var lastPath = key.lastIndexOf('./');
+        var lastDot = key.lastIndexOf('.');
+        if (lastDot > lastPath) {
+            return key.substr(0, lastDot) + '@' + key.substr(lastDot + 1);
+        }
+        var firstNonPathCharIndex = lastPath === -1 ? 0 : lastPath + 2;
+        var firstNonPathChar = key.charAt(firstNonPathCharIndex);
+        if (firstNonPathChar === '.' || firstNonPathChar === '@') {
+            return key.substr(0, firstNonPathCharIndex) + '@' + key.substr(firstNonPathCharIndex + 1);
+        } else {
+            return key.substr(0, firstNonPathCharIndex) + '@' + key.substr(firstNonPathCharIndex);
+        }
+    };
+    var convertToAtLookup = function (ast) {
+        if (ast.type === 'Lookup') {
+            ast.key = convertKeyToLookup(ast.key);
+        }
+        return ast;
+    };
+    var convertToHelperIfTopIsLookup = function (stack) {
+        var top = stack.top();
+        if (top && top.type === 'Lookup') {
+            var base = stack.stack[stack.stack.length - 2];
+            if (base.type !== 'Helper' && base) {
+                stack.replaceTopAndPush({
+                    type: 'Helper',
+                    method: top
+                });
+            }
+        }
+    };
+    var expression = {
+        convertKeyToLookup: convertKeyToLookup,
+        Literal: Literal,
+        Lookup: Lookup,
+        ScopeLookup: ScopeLookup,
+        Arg: Arg,
+        Hash: Hash,
+        Call: Call,
+        Helper: Helper,
+        HelperLookup: HelperLookup,
+        HelperScopeLookup: HelperScopeLookup,
+        tokenize: function (expression) {
+            var tokens = [];
+            (can.trim(expression) + ' ').replace(tokensRegExp, function (whole, arg) {
+                tokens.push(arg);
+            });
+            return tokens;
+        },
+        lookupRules: {
+            'default': function (ast, methodType, isArg) {
+                var name = (methodType === 'Helper' && !ast.root ? 'Helper' : '') + (isArg ? 'Scope' : '') + 'Lookup';
+                return expression[name];
+            },
+            'method': function (ast, methodType, isArg) {
+                return ScopeLookup;
+            }
+        },
+        methodRules: {
+            'default': function (ast) {
+                return ast.type === 'Call' ? Call : Helper;
+            },
+            'call': function (ast) {
+                return Call;
+            }
+        },
+        parse: function (expressionString, options) {
+            options = options || {};
+            var ast = this.ast(expressionString);
+            if (!options.lookupRule) {
+                options.lookupRule = 'default';
+            }
+            if (typeof options.lookupRule === 'string') {
+                options.lookupRule = expression.lookupRules[options.lookupRule];
+            }
+            if (!options.methodRule) {
+                options.methodRule = 'default';
+            }
+            if (typeof options.methodRule === 'string') {
+                options.methodRule = expression.methodRules[options.methodRule];
+            }
+            var expr = this.hydrateAst(ast, options, options.baseMethodType || 'Helper');
+            return expr;
+        },
+        hydrateAst: function (ast, options, methodType, isArg) {
+            if (ast.type === 'Lookup') {
+                return new (options.lookupRule(ast, methodType, isArg))(ast.key, ast.root && this.hydrateAst(ast.root, options, methodType));
+            } else if (ast.type === 'Literal') {
+                return new Literal(ast.value);
+            } else if (ast.type === 'Arg') {
+                return new Arg(this.hydrateAst(ast.children[0], options, methodType, isArg), { compute: true });
+            } else if (ast.type === 'Hash') {
+                throw new Error('');
+            } else if (ast.type === 'Call' || ast.type === 'Helper') {
+                var hashes = {}, args = [], children = ast.children;
+                if (children) {
+                    for (var i = 0; i < children.length; i++) {
+                        var child = children[i];
+                        if (child.type === 'Hash') {
+                            hashes[child.prop] = this.hydrateAst(child.children[0], options, ast.type, true);
+                        } else {
+                            args.push(this.hydrateAst(child, options, ast.type, true));
+                        }
+                    }
+                }
+                return new (options.methodRule(ast))(this.hydrateAst(ast.method, options, ast.type), args, hashes);
+            }
+        },
+        ast: function (expression) {
+            var tokens = this.tokenize(expression);
+            return this.parseAst(tokens, { index: 0 });
+        },
+        parseAst: function (tokens, cursor) {
+            var stack = new Stack(), top;
+            while (cursor.index < tokens.length) {
+                var token = tokens[cursor.index], nextToken = tokens[cursor.index + 1];
+                cursor.index++;
+                if (literalRegExp.test(token)) {
+                    convertToHelperIfTopIsLookup(stack);
+                    stack.addTo([
+                        'Helper',
+                        'Call',
+                        'Hash'
+                    ], {
+                        type: 'Literal',
+                        value: utils.jsonParse(token)
+                    });
+                } else if (nextToken === '=') {
+                    top = stack.top();
+                    if (top && top.type === 'Lookup') {
+                        var firstParent = stack.firstParent([
+                            'Call',
+                            'Helper',
+                            'Hash'
+                        ]);
+                        if (firstParent.type === 'Call' || firstParent.type === 'Root') {
+                            stack.popUntil(['Call']);
+                            top = stack.top();
+                            stack.replaceTopAndPush({
+                                type: 'Helper',
+                                method: top.type === 'Root' ? can.last(top.children) : top
+                            });
+                        }
+                    }
+                    stack.addToAndPush([
+                        'Helper',
+                        'Call'
+                    ], {
+                        type: 'Hash',
+                        prop: token
+                    });
+                    cursor.index++;
+                } else if (keyRegExp.test(token)) {
+                    var last = stack.topLastChild();
+                    if (last && last.type === 'Call' && isAddingToExpression(token)) {
+                        stack.replaceTopLastChildAndPush({
+                            type: 'Lookup',
+                            root: last,
+                            key: token
+                        });
+                    } else {
+                        convertToHelperIfTopIsLookup(stack);
+                        stack.addToAndPush([
+                            'Helper',
+                            'Call',
+                            'Hash',
+                            'Arg'
+                        ], {
+                            type: 'Lookup',
+                            key: token
+                        });
+                    }
+                } else if (token === '~') {
+                    convertToHelperIfTopIsLookup(stack);
+                    stack.addToAndPush([
+                        'Helper',
+                        'Call',
+                        'Hash'
+                    ], {
+                        type: 'Arg',
+                        key: token
+                    });
+                } else if (token === '(') {
+                    top = stack.top();
+                    if (top.type === 'Lookup') {
+                        stack.replaceTopAndPush({
+                            type: 'Call',
+                            method: convertToAtLookup(top)
+                        });
+                    } else {
+                        throw new Error('Unable to understand expression ' + tokens.join(''));
+                    }
+                } else if (token === ')') {
+                    stack.popTo(['Call']);
+                } else if (token === ',') {
+                    stack.popUntil(['Call']);
+                }
+            }
+            return stack.root.children[0];
+        }
+    };
+    can.expression = expression;
+    return expression;
+});
+/*can/view/href/href*/
 define('can/view/href/href', [
-	'can/util/util',
-	'can/view/stache/mustache_core',
-	'can/view/callbacks/callbacks',
-	'can/view/scope/scope'
-], function (can, mustacheCore) {
-	var removeCurly = function (value) {
-		if (value[0] === '{' && value[value.length - 1] === '}') {
-			return value.substr(1, value.length - 2);
-		}
-		return value;
-	};
-	can.view.attr('can-href', function (el, attrData) {
-		var attrInfo = mustacheCore.expressionData('tmp ' + removeCurly(el.getAttribute('can-href')));
-		var routeHref = can.compute(function () {
-			var hash = {};
-			can.each(attrInfo.hash, function (val, key) {
-				if (val && val.hasOwnProperty('get')) {
-					hash[key] = attrData.scope.read(val.get, {}).value;
-				} else {
-					hash[key] = val;
-				}
-			});
-			return can.route.url(hash);
-		});
-		el.setAttribute('href', routeHref());
-		var handler = function (ev, newVal) {
-			el.setAttribute('href', newVal);
-		};
-		routeHref.bind('change', handler);
-		can.bind.call(el, 'removed', function () {
-			routeHref.unbind('change', handler);
-		});
-	});
+    'can/util/util',
+    'can/view/stache/expression',
+    'can/view/callbacks/callbacks',
+    'can/view/scope/scope'
+], function (can, expression) {
+    var removeCurly = function (value) {
+        if (value[0] === '{' && value[value.length - 1] === '}') {
+            return value.substr(1, value.length - 2);
+        }
+        return value;
+    };
+    can.view.attr('can-href', function (el, attrData) {
+        var attrInfo = expression.parse('tmp(' + removeCurly(el.getAttribute('can-href')) + ')', { baseMethodType: 'Call' });
+        var getHash = attrInfo.hash(attrData.scope, null);
+        var routeHref = can.compute(function () {
+            return can.route.url(getHash());
+        });
+        el.setAttribute('href', routeHref());
+        var handler = function (ev, newVal) {
+            el.setAttribute('href', newVal);
+        };
+        routeHref.bind('change', handler);
+        can.bind.call(el, 'removed', function () {
+            routeHref.unbind('change', handler);
+        });
+    });
+});
+/*can/view/bindings/bindings*/
+define('can/view/bindings/bindings', [
+    'can/util/util',
+    'can/view/stache/expression',
+    'can/view/callbacks/callbacks',
+    'can/view/live/live',
+    'can/view/scope/scope',
+    'can/view/href/href'
+], function (can, expression, viewCallbacks, live) {
+    var behaviors = {
+        viewModel: function (el, tagData, makeViewModel, initialViewModelData) {
+            initialViewModelData = initialViewModelData || {};
+            var bindingsSemaphore = {}, viewModel, onCompleteBindings = [], onTeardowns = {}, bindingInfos = {}, attributeViewModelBindings = can.extend({}, initialViewModelData);
+            can.each(can.makeArray(el.attributes), function (node) {
+                var dataBinding = makeDataBinding(node, el, {
+                    templateType: tagData.templateType,
+                    scope: tagData.scope,
+                    semaphore: bindingsSemaphore,
+                    getViewModel: function () {
+                        return viewModel;
+                    },
+                    attributeViewModelBindings: attributeViewModelBindings,
+                    alreadyUpdatedChild: true
+                });
+                if (dataBinding) {
+                    if (dataBinding.onCompleteBinding) {
+                        if (dataBinding.bindingInfo.parentToChild && dataBinding.value !== undefined) {
+                            initialViewModelData[cleanVMName(dataBinding.bindingInfo.childName)] = dataBinding.value;
+                        }
+                        onCompleteBindings.push(dataBinding.onCompleteBinding);
+                    }
+                    onTeardowns[node.name] = dataBinding.onTeardown;
+                }
+            });
+            viewModel = makeViewModel(initialViewModelData);
+            for (var i = 0, len = onCompleteBindings.length; i < len; i++) {
+                onCompleteBindings[i]();
+            }
+            can.bind.call(el, 'attributes', function (ev) {
+                var attrName = ev.attributeName, value = el.getAttribute(attrName);
+                if (onTeardowns[attrName]) {
+                    onTeardowns[attrName]();
+                }
+                var parentBindingWasAttribute = bindingInfos[attrName] && bindingInfos[attrName].parent === 'attribute';
+                if (value !== null || parentBindingWasAttribute) {
+                    var dataBinding = makeDataBinding({
+                        name: attrName,
+                        value: value
+                    }, el, {
+                        templateType: tagData.templateType,
+                        scope: tagData.scope,
+                        semaphore: {},
+                        getViewModel: function () {
+                            return viewModel;
+                        },
+                        attributeViewModelBindings: attributeViewModelBindings,
+                        initializeValues: true
+                    });
+                    if (dataBinding) {
+                        if (dataBinding.onCompleteBinding) {
+                            dataBinding.onCompleteBinding();
+                        }
+                        bindingInfos[attrName] = dataBinding.bindingInfo;
+                        onTeardowns[attrName] = dataBinding.onTeardown;
+                    }
+                }
+            });
+            return function () {
+                for (var attrName in onTeardowns) {
+                    onTeardowns[attrName]();
+                }
+            };
+        },
+        data: function (el, attrData) {
+            if (can.data(can.$(el), 'preventDataBindings')) {
+                return;
+            }
+            var viewModel = can.viewModel(el), semaphore = {}, teardown;
+            var dataBinding = makeDataBinding({
+                name: attrData.attributeName,
+                value: el.getAttribute(attrData.attributeName)
+            }, el, {
+                templateType: attrData.templateType,
+                scope: attrData.scope,
+                semaphore: semaphore,
+                getViewModel: function () {
+                    return viewModel;
+                }
+            });
+            if (dataBinding.onCompleteBinding) {
+                dataBinding.onCompleteBinding();
+            }
+            teardown = dataBinding.onTeardown;
+            can.one.call(el, 'removed', function () {
+                teardown();
+            });
+            can.bind.call(el, 'attributes', function (ev) {
+                var attrName = ev.attributeName, value = el.getAttribute(attrName);
+                if (attrName === attrData.attributeName) {
+                    if (teardown) {
+                        teardown();
+                    }
+                    if (value !== null) {
+                        var dataBinding = makeDataBinding({
+                            name: attrName,
+                            value: value
+                        }, el, {
+                            templateType: attrData.templateType,
+                            scope: attrData.scope,
+                            semaphore: semaphore,
+                            getViewModel: function () {
+                                return viewModel;
+                            },
+                            initializeValues: true
+                        });
+                        if (dataBinding) {
+                            if (dataBinding.onCompleteBinding) {
+                                dataBinding.onCompleteBinding();
+                            }
+                            teardown = dataBinding.onTeardown;
+                        }
+                    }
+                }
+            });
+        },
+        reference: function (el, attrData) {
+            if (el.getAttribute(attrData.attributeName)) {
+                console.warn('*reference attributes can only export the view model.');
+            }
+            var name = can.camelize(attrData.attributeName.substr(1).toLowerCase());
+            var viewModel = can.viewModel(el);
+            var refs = attrData.scope.getRefs();
+            refs._context.attr('*' + name, viewModel);
+        },
+        event: function (el, data) {
+            var attributeName = data.attributeName, legacyBinding = attributeName.indexOf('can-') === 0, event = attributeName.indexOf('can-') === 0 ? attributeName.substr('can-'.length) : removeBrackets(attributeName, '(', ')'), onBindElement = legacyBinding;
+            if (event.charAt(0) === '$') {
+                event = event.substr(1);
+                onBindElement = true;
+            }
+            var handler = function (ev) {
+                var attrVal = el.getAttribute(attributeName);
+                if (!attrVal) {
+                    return;
+                }
+                var $el = can.$(el), viewModel = can.viewModel($el[0]);
+                var expr = expression.parse(removeBrackets(attrVal), {
+                    lookupRule: 'method',
+                    methodRule: 'call'
+                });
+                if (!(expr instanceof expression.Call) && !(expr instanceof expression.Helper)) {
+                    var defaultArgs = can.map([
+                        data.scope._context,
+                        $el
+                    ].concat(can.makeArray(arguments)), function (data) {
+                        return new expression.Literal(data);
+                    });
+                    expr = new expression.Call(expr, defaultArgs, {});
+                }
+                var scopeData = data.scope.read(expr.methodExpr.key, { isArgument: true });
+                if (!scopeData.value) {
+                    scopeData = data.scope.read(expr.methodExpr.key, { isArgument: true });
+                    return null;
+                }
+                var localScope = data.scope.add({
+                    '@element': $el,
+                    '@event': ev,
+                    '@viewModel': viewModel,
+                    '@scope': data.scope,
+                    '@context': data.scope._context,
+                    '%element': this,
+                    '$element': $el,
+                    '%event': ev,
+                    '%viewModel': viewModel,
+                    '%scope': data.scope,
+                    '%context': data.scope._context
+                }, { notContext: true });
+                var args = expr.args(localScope, null)(), hash = expr.hash(localScope, null)();
+                if (!can.isEmptyObject(hash)) {
+                    args.push(hash);
+                }
+                return scopeData.value.apply(scopeData.parent, args);
+            };
+            if (special[event]) {
+                var specialData = special[event](data, el, handler);
+                handler = specialData.handler;
+                event = specialData.event;
+            }
+            can.bind.call(onBindElement ? el : can.viewModel(el), event, handler);
+            var attributesHandler = function (ev) {
+                if (ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
+                    can.unbind.call(onBindElement ? el : can.viewModel(el), event, handler);
+                    can.unbind.call(el, 'attributes', attributesHandler);
+                }
+            };
+            can.bind.call(el, 'attributes', attributesHandler);
+        },
+        value: function (el, data) {
+            var propName = '$value', attrValue = can.trim(removeBrackets(el.getAttribute('can-value'))), getterSetter;
+            if (el.nodeName.toLowerCase() === 'input' && (el.type === 'checkbox' || el.type === 'radio')) {
+                var property = getComputeFrom.scope(el, data.scope, attrValue, {}, true);
+                if (el.type === 'checkbox') {
+                    var trueValue = can.attr.has(el, 'can-true-value') ? el.getAttribute('can-true-value') : true, falseValue = can.attr.has(el, 'can-false-value') ? el.getAttribute('can-false-value') : false;
+                    getterSetter = can.compute(function (newValue) {
+                        if (arguments.length) {
+                            property(newValue ? trueValue : falseValue);
+                        } else {
+                            return property() == trueValue;
+                        }
+                    });
+                } else if (el.type === 'radio') {
+                    getterSetter = can.compute(function (newValue) {
+                        if (arguments.length) {
+                            if (newValue) {
+                                property(el.value);
+                            }
+                        } else {
+                            return property() == el.value;
+                        }
+                    });
+                }
+                propName = '$checked';
+                attrValue = 'getterSetter';
+                data.scope = new can.view.Scope({ getterSetter: getterSetter });
+            } else if (isContentEditable(el)) {
+                propName = '$innerHTML';
+            }
+            makeDataBinding({
+                name: '{(' + propName + '})',
+                value: attrValue
+            }, el, {
+                templateType: data.templateType,
+                scope: data.scope,
+                semaphore: {},
+                initializeValues: true,
+                legacyBindings: true,
+                syncChildWithParent: true
+            });
+        }
+    };
+    can.view.attr(/^\{[^\}]+\}$/, behaviors.data);
+    can.view.attr(/\*[\w\.\-_]+/, behaviors.reference);
+    can.view.attr(/^\([\$?\w\.]+\)$/, behaviors.event);
+    can.view.attr(/can-[\w\.]+/, behaviors.event);
+    can.view.attr('can-value', behaviors.value);
+    var getComputeFrom = {
+        scope: function (el, scope, scopeProp, bindingData, mustBeACompute, stickyCompute) {
+            if (!scopeProp) {
+                return can.compute();
+            } else {
+                if (mustBeACompute) {
+                    var parentExpression = expression.parse(scopeProp, { baseMethodType: 'Call' });
+                    return parentExpression.value(scope, new can.view.Options({}));
+                } else {
+                    return function (newVal) {
+                        scope.attr(cleanVMName(scopeProp), newVal);
+                    };
+                }
+            }
+        },
+        viewModel: function (el, scope, vmName, bindingData, mustBeACompute, stickyCompute) {
+            var setName = cleanVMName(vmName);
+            if (mustBeACompute) {
+                return can.compute(function (newVal) {
+                    var viewModel = bindingData.getViewModel();
+                    if (arguments.length) {
+                        viewModel.attr(setName, newVal);
+                    } else {
+                        return vmName === '.' ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
+                    }
+                });
+            } else {
+                return function (newVal) {
+                    bindingData.getViewModel().attr(setName, newVal);
+                };
+            }
+        },
+        attribute: function (el, scope, prop, bindingData, mustBeACompute, stickyCompute, event) {
+            if (!event) {
+                if (prop === 'innerHTML') {
+                    event = [
+                        'blur',
+                        'change'
+                    ];
+                } else {
+                    event = 'change';
+                }
+            }
+            if (!can.isArray(event)) {
+                event = [event];
+            }
+            var hasChildren = el.nodeName.toLowerCase() === 'select', isMultiselectValue = prop === 'value' && hasChildren && el.multiple, isStringValue, lastSet, scheduledAsyncSet = false, timer, set = function (newVal) {
+                    if (hasChildren && !scheduledAsyncSet) {
+                        clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            set(newVal);
+                        }, 1);
+                    }
+                    lastSet = newVal;
+                    if (isMultiselectValue) {
+                        if (newVal && typeof newVal === 'string') {
+                            newVal = newVal.split(';');
+                            isStringValue = true;
+                        } else if (newVal) {
+                            newVal = can.makeArray(newVal);
+                        } else {
+                            newVal = [];
+                        }
+                        var isSelected = {};
+                        can.each(newVal, function (val) {
+                            isSelected[val] = true;
+                        });
+                        can.each(el.childNodes, function (option) {
+                            if (option.value) {
+                                option.selected = !!isSelected[option.value];
+                            }
+                        });
+                    } else {
+                        if (!bindingData.legacyBindings && hasChildren && 'selectedIndex' in el && prop === 'value') {
+                            can.attr.setSelectValue(el, newVal);
+                        } else {
+                            can.attr.setAttrOrProp(el, prop, newVal == null ? '' : newVal);
+                        }
+                    }
+                    return newVal;
+                }, get = function () {
+                    if (isMultiselectValue) {
+                        var values = [], children = el.childNodes;
+                        can.each(children, function (child) {
+                            if (child.selected && child.value) {
+                                values.push(child.value);
+                            }
+                        });
+                        return isStringValue ? values.join(';') : values;
+                    } else if (hasChildren && 'selectedIndex' in el && el.selectedIndex === -1) {
+                        return undefined;
+                    }
+                    return can.attr.get(el, prop);
+                };
+            if (hasChildren) {
+                setTimeout(function () {
+                    scheduledAsyncSet = true;
+                }, 1);
+            }
+            var observer;
+            return can.compute(get(), {
+                on: function (updater) {
+                    can.each(event, function (eventName) {
+                        can.bind.call(el, eventName, updater);
+                    });
+                    if (hasChildren) {
+                        var onMutation = function (mutations) {
+                            if (stickyCompute) {
+                                set(stickyCompute());
+                            } else {
+                                if (scheduledAsyncSet) {
+                                    updater();
+                                }
+                            }
+                        };
+                        if (can.attr.MutationObserver) {
+                            observer = new can.attr.MutationObserver(onMutation);
+                            observer.observe(el, {
+                                childList: true,
+                                subtree: true
+                            });
+                        } else {
+                            can.data(can.$(el), 'canBindingCallback', { onMutation: onMutation });
+                        }
+                    }
+                },
+                off: function (updater) {
+                    can.each(event, function (eventName) {
+                        can.unbind.call(el, eventName, updater);
+                    });
+                    if (hasChildren) {
+                        if (can.attr.MutationObserver) {
+                            observer.disconnect();
+                        } else {
+                            can.data(can.$(el), 'canBindingCallback', null);
+                        }
+                    }
+                },
+                get: get,
+                set: set
+            });
+        }
+    };
+    var bind = {
+        childToParent: function (el, parentCompute, childCompute, bindingsSemaphore, attrName, syncChild) {
+            var parentUpdateIsFunction = typeof parentCompute === 'function';
+            var updateParent = function (ev, newVal) {
+                if (!bindingsSemaphore[attrName]) {
+                    if (parentUpdateIsFunction) {
+                        parentCompute(newVal);
+                        if (syncChild) {
+                            if (parentCompute() !== childCompute()) {
+                                bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0) + 1;
+                                childCompute(parentCompute());
+                                can.batch.after(function () {
+                                    --bindingsSemaphore[attrName];
+                                });
+                            }
+                        }
+                    } else if (parentCompute instanceof can.Map) {
+                        parentCompute.attr(newVal, true);
+                    }
+                }
+            };
+            if (childCompute && childCompute.isComputed) {
+                childCompute.bind('change', updateParent);
+            }
+            return updateParent;
+        },
+        parentToChild: function (el, parentCompute, childUpdate, bindingsSemaphore, attrName) {
+            var updateChild = function (ev, newValue) {
+                bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0) + 1;
+                childUpdate(newValue);
+                can.batch.after(function () {
+                    --bindingsSemaphore[attrName];
+                });
+            };
+            if (parentCompute && parentCompute.isComputed) {
+                parentCompute.bind('change', updateChild);
+            }
+            return updateChild;
+        }
+    };
+    var getBindingInfo = function (node, attributeViewModelBindings, templateType, tagName) {
+        var attributeName = node.name, attributeValue = node.value || '';
+        var matches = attributeName.match(bindingsRegExp);
+        if (!matches) {
+            var ignoreAttribute = ignoreAttributesRegExp.test(attributeName);
+            var vmName = can.camelize(attributeName);
+            if (ignoreAttribute || viewCallbacks.attr(attributeName)) {
+                return;
+            }
+            var syntaxRight = attributeValue[0] === '{' && can.last(attributeValue) === '}';
+            var isAttributeToChild = templateType === 'legacy' ? attributeViewModelBindings[vmName] : !syntaxRight;
+            var scopeName = syntaxRight ? attributeValue.substr(1, attributeValue.length - 2) : attributeValue;
+            if (isAttributeToChild) {
+                return {
+                    bindingAttributeName: attributeName,
+                    parent: 'attribute',
+                    parentName: attributeName,
+                    child: 'viewModel',
+                    childName: vmName,
+                    parentToChild: true,
+                    childToParent: true
+                };
+            } else {
+                return {
+                    bindingAttributeName: attributeName,
+                    parent: 'scope',
+                    parentName: scopeName,
+                    child: 'viewModel',
+                    childName: vmName,
+                    parentToChild: true,
+                    childToParent: true
+                };
+            }
+        }
+        var twoWay = !!matches[1], childToParent = twoWay || !!matches[2], parentToChild = twoWay || !childToParent;
+        var childName = matches[3];
+        var isDOM = childName.charAt(0) === '$';
+        if (isDOM) {
+            var bindingInfo = {
+                parent: 'scope',
+                child: 'attribute',
+                childToParent: childToParent,
+                parentToChild: parentToChild,
+                bindingAttributeName: attributeName,
+                childName: childName.substr(1),
+                parentName: attributeValue,
+                initializeValues: true
+            };
+            if (tagName === 'select' && !childToParent) {
+                bindingInfo.stickyParentToChild = true;
+            }
+            return bindingInfo;
+        } else {
+            return {
+                parent: 'scope',
+                child: 'viewModel',
+                childToParent: childToParent,
+                parentToChild: parentToChild,
+                bindingAttributeName: attributeName,
+                childName: can.camelize(childName),
+                parentName: attributeValue,
+                initializeValues: true
+            };
+        }
+    };
+    var bindingsRegExp = /\{(\()?(\^)?([^\}\)]+)\)?\}/, ignoreAttributesRegExp = /^(data-view-id|class|id|\[[\w\.-]+\]|#[\w\.-])$/i;
+    var makeDataBinding = function (node, el, bindingData) {
+        var bindingInfo = getBindingInfo(node, bindingData.attributeViewModelBindings, bindingData.templateType, el.nodeName.toLowerCase());
+        if (!bindingInfo) {
+            return;
+        }
+        bindingInfo.alreadyUpdatedChild = bindingData.alreadyUpdatedChild;
+        if (bindingData.initializeValues) {
+            bindingInfo.initializeValues = true;
+        }
+        var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData, bindingInfo.parentToChild), childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent, bindingInfo.stickyParentToChild && parentCompute), updateParent, updateChild, childLifecycle;
+        if (bindingInfo.parentToChild) {
+            updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);
+        }
+        var completeBinding = function () {
+            if (bindingInfo.childToParent) {
+                updateParent = bind.childToParent(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName, bindingData.syncChildWithParent);
+            } else if (bindingInfo.stickyParentToChild) {
+                childCompute.bind('change', childLifecycle = can.k);
+            }
+            if (bindingInfo.initializeValues) {
+                initializeValues(bindingInfo, childCompute, parentCompute, updateChild, updateParent);
+            }
+        };
+        var onTeardown = function () {
+            unbindUpdate(parentCompute, updateChild);
+            unbindUpdate(childCompute, updateParent);
+            unbindUpdate(childCompute, childLifecycle);
+        };
+        if (bindingInfo.child === 'viewModel') {
+            return {
+                value: getValue(parentCompute),
+                onCompleteBinding: completeBinding,
+                bindingInfo: bindingInfo,
+                onTeardown: onTeardown
+            };
+        } else {
+            completeBinding();
+            return {
+                bindingInfo: bindingInfo,
+                onTeardown: onTeardown
+            };
+        }
+    };
+    var initializeValues = function (bindingInfo, childCompute, parentCompute, updateChild, updateParent) {
+        var doUpdateParent = false;
+        if (bindingInfo.parentToChild && !bindingInfo.childToParent) {
+        } else if (!bindingInfo.parentToChild && bindingInfo.childToParent) {
+            doUpdateParent = true;
+        } else if (getValue(childCompute) === undefined) {
+        } else if (getValue(parentCompute) === undefined) {
+            doUpdateParent = true;
+        }
+        if (doUpdateParent) {
+            updateParent({}, getValue(childCompute));
+        } else {
+            if (!bindingInfo.alreadyUpdatedChild) {
+                updateChild({}, getValue(parentCompute));
+            }
+        }
+    };
+    if (!can.attr.MutationObserver) {
+        var updateSelectValue = function (el) {
+            var bindingCallback = can.data(can.$(el), 'canBindingCallback');
+            if (bindingCallback) {
+                bindingCallback.onMutation(el);
+            }
+        };
+        live.registerChildMutationCallback('select', updateSelectValue);
+        live.registerChildMutationCallback('optgroup', function (el) {
+            updateSelectValue(el.parentNode);
+        });
+    }
+    var isContentEditable = function () {
+            var values = {
+                '': true,
+                'true': true,
+                'false': false
+            };
+            var editable = function (el) {
+                if (!el || !el.getAttribute) {
+                    return;
+                }
+                var attr = el.getAttribute('contenteditable');
+                return values[attr];
+            };
+            return function (el) {
+                var val = editable(el);
+                if (typeof val === 'boolean') {
+                    return val;
+                } else {
+                    return !!editable(el.parentNode);
+                }
+            };
+        }(), removeBrackets = function (value, open, close) {
+            open = open || '{';
+            close = close || '}';
+            if (value[0] === open && value[value.length - 1] === close) {
+                return value.substr(1, value.length - 2);
+            }
+            return value;
+        }, getValue = function (value) {
+            return value && value.isComputed ? value() : value;
+        }, unbindUpdate = function (compute, updateOther) {
+            if (compute && compute.isComputed && typeof updateOther === 'function') {
+                compute.unbind('change', updateOther);
+            }
+        }, cleanVMName = function (name) {
+            return name.replace(/@/g, '');
+        };
+    var special = {
+        enter: function (data, el, original) {
+            return {
+                event: 'keyup',
+                handler: function (ev) {
+                    if (ev.keyCode === 13) {
+                        return original.call(this, ev);
+                    }
+                }
+            };
+        }
+    };
+    can.bindings = {
+        behaviors: behaviors,
+        getBindingInfo: getBindingInfo,
+        special: special
+    };
+    return can.bindings;
+});
+/*can/control/control*/
+define('can/control/control', [
+    'can/util/util',
+    'can/construct/construct'
+], function (can) {
+    var bind = function (el, ev, callback) {
+            can.bind.call(el, ev, callback);
+            return function () {
+                can.unbind.call(el, ev, callback);
+            };
+        }, isFunction = can.isFunction, extend = can.extend, each = can.each, slice = [].slice, paramReplacer = /\{([^\}]+)\}/g, special = can.getObject('$.event.special', [can]) || {}, delegate = function (el, selector, ev, callback) {
+            can.delegate.call(el, selector, ev, callback);
+            return function () {
+                can.undelegate.call(el, selector, ev, callback);
+            };
+        }, binder = function (el, ev, callback, selector) {
+            return selector ? delegate(el, can.trim(selector), ev, callback) : bind(el, ev, callback);
+        }, basicProcessor;
+    var Control = can.Control = can.Construct({
+        setup: function () {
+            can.Construct.setup.apply(this, arguments);
+            if (can.Control) {
+                var control = this, funcName;
+                control.actions = {};
+                for (funcName in control.prototype) {
+                    if (control._isAction(funcName)) {
+                        control.actions[funcName] = control._action(funcName);
+                    }
+                }
+            }
+        },
+        _shifter: function (context, name) {
+            var method = typeof name === 'string' ? context[name] : name;
+            if (!isFunction(method)) {
+                method = context[method];
+            }
+            return function () {
+                context.called = name;
+                return method.apply(context, [this.nodeName ? can.$(this) : this].concat(slice.call(arguments, 0)));
+            };
+        },
+        _isAction: function (methodName) {
+            var val = this.prototype[methodName], type = typeof val;
+            return methodName !== 'constructor' && (type === 'function' || type === 'string' && isFunction(this.prototype[val])) && !!(special[methodName] || processors[methodName] || /[^\w]/.test(methodName));
+        },
+        _action: function (methodName, options) {
+            paramReplacer.lastIndex = 0;
+            if (options || !paramReplacer.test(methodName)) {
+                var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
+                if (!convertedName) {
+                    return null;
+                }
+                var arr = can.isArray(convertedName), name = arr ? convertedName[1] : convertedName, parts = name.split(/\s+/g), event = parts.pop();
+                return {
+                    processor: processors[event] || basicProcessor,
+                    parts: [
+                        name,
+                        parts.join(' '),
+                        event
+                    ],
+                    delegate: arr ? convertedName[0] : undefined
+                };
+            }
+        },
+        _lookup: function (options) {
+            return [
+                options,
+                window
+            ];
+        },
+        processors: {},
+        defaults: {}
+    }, {
+        setup: function (element, options) {
+            var cls = this.constructor, pluginname = cls.pluginName || cls._fullName, arr;
+            this.element = can.$(element);
+            if (pluginname && pluginname !== 'can_control') {
+                this.element.addClass(pluginname);
+            }
+            arr = can.data(this.element, 'controls');
+            if (!arr) {
+                arr = [];
+                can.data(this.element, 'controls', arr);
+            }
+            arr.push(this);
+            this.options = extend({}, cls.defaults, options);
+            this.on();
+            return [
+                this.element,
+                this.options
+            ];
+        },
+        on: function (el, selector, eventName, func) {
+            if (!el) {
+                this.off();
+                var cls = this.constructor, bindings = this._bindings, actions = cls.actions, element = this.element, destroyCB = can.Control._shifter(this, 'destroy'), funcName, ready;
+                for (funcName in actions) {
+                    if (actions.hasOwnProperty(funcName)) {
+                        ready = actions[funcName] || cls._action(funcName, this.options, this);
+                        if (ready) {
+                            bindings.control[funcName] = ready.processor(ready.delegate || element, ready.parts[2], ready.parts[1], funcName, this);
+                        }
+                    }
+                }
+                can.bind.call(element, 'removed', destroyCB);
+                bindings.user.push(function (el) {
+                    can.unbind.call(el, 'removed', destroyCB);
+                });
+                return bindings.user.length;
+            }
+            if (typeof el === 'string') {
+                func = eventName;
+                eventName = selector;
+                selector = el;
+                el = this.element;
+            }
+            if (func === undefined) {
+                func = eventName;
+                eventName = selector;
+                selector = null;
+            }
+            if (typeof func === 'string') {
+                func = can.Control._shifter(this, func);
+            }
+            this._bindings.user.push(binder(el, eventName, func, selector));
+            return this._bindings.user.length;
+        },
+        off: function () {
+            var el = this.element[0], bindings = this._bindings;
+            if (bindings) {
+                each(bindings.user || [], function (value) {
+                    value(el);
+                });
+                each(bindings.control || {}, function (value) {
+                    value(el);
+                });
+            }
+            this._bindings = {
+                user: [],
+                control: {}
+            };
+        },
+        destroy: function () {
+            if (this.element === null) {
+                return;
+            }
+            var Class = this.constructor, pluginName = Class.pluginName || Class._fullName, controls;
+            this.off();
+            if (pluginName && pluginName !== 'can_control') {
+                this.element.removeClass(pluginName);
+            }
+            controls = can.data(this.element, 'controls');
+            controls.splice(can.inArray(this, controls), 1);
+            can.trigger(this, 'destroyed');
+            this.element = null;
+        }
+    });
+    var processors = can.Control.processors;
+    basicProcessor = function (el, event, selector, methodName, control) {
+        return binder(el, event, can.Control._shifter(control, methodName), selector);
+    };
+    each([
+        'change',
+        'click',
+        'contextmenu',
+        'dblclick',
+        'keydown',
+        'keyup',
+        'keypress',
+        'mousedown',
+        'mousemove',
+        'mouseout',
+        'mouseover',
+        'mouseup',
+        'reset',
+        'resize',
+        'scroll',
+        'select',
+        'submit',
+        'focusin',
+        'focusout',
+        'mouseenter',
+        'mouseleave',
+        'touchstart',
+        'touchmove',
+        'touchcancel',
+        'touchend',
+        'touchleave',
+        'inserted',
+        'removed',
+        'dragstart',
+        'dragenter',
+        'dragover',
+        'dragleave',
+        'drag',
+        'drop',
+        'dragend'
+    ], function (v) {
+        processors[v] = basicProcessor;
+    });
+    return Control;
+});
+/*can/observe/observe*/
+define('can/observe/observe', [
+    'can/util/util',
+    'can/map/map',
+    'can/list/list',
+    'can/compute/compute'
+], function (can) {
+    can.Observe = can.Map;
+    can.Observe.startBatch = can.batch.start;
+    can.Observe.stopBatch = can.batch.stop;
+    can.Observe.triggerBatch = can.batch.trigger;
+    return can;
+});
+/*can/view/scanner*/
+define('can/view/scanner', [
+    'can/view/view',
+    'can/view/elements',
+    'can/view/callbacks/callbacks'
+], function (can, elements, viewCallbacks) {
+    var newLine = /(\r|\n)+/g, notEndTag = /\//, clean = function (content) {
+            return content.split('\\').join('\\\\').split('\n').join('\\n').split('"').join('\\"').split('\t').join('\\t');
+        }, getTag = function (tagName, tokens, i) {
+            if (tagName) {
+                return tagName;
+            } else {
+                while (i < tokens.length) {
+                    if (tokens[i] === '<' && !notEndTag.test(tokens[i + 1])) {
+                        return elements.reverseTagMap[tokens[i + 1]] || 'span';
+                    }
+                    i++;
+                }
+            }
+            return '';
+        }, bracketNum = function (content) {
+            return --content.split('{').length - --content.split('}').length;
+        }, myEval = function (script) {
+            eval(script);
+        }, attrReg = /([^\s]+)[\s]*=[\s]*$/, startTxt = 'var ___v1ew = [];', finishTxt = 'return ___v1ew.join(\'\')', put_cmd = '___v1ew.push(\n', insert_cmd = put_cmd, htmlTag = null, quote = null, beforeQuote = null, rescan = null, getAttrName = function () {
+            var matches = beforeQuote.match(attrReg);
+            return matches && matches[1];
+        }, status = function () {
+            return quote ? '\'' + getAttrName() + '\'' : htmlTag ? 1 : 0;
+        }, top = function (stack) {
+            return stack[stack.length - 1];
+        }, Scanner;
+    can.view.Scanner = Scanner = function (options) {
+        can.extend(this, {
+            text: {},
+            tokens: []
+        }, options);
+        this.text.options = this.text.options || '';
+        this.tokenReg = [];
+        this.tokenSimple = {
+            '<': '<',
+            '>': '>',
+            '"': '"',
+            '\'': '\''
+        };
+        this.tokenComplex = [];
+        this.tokenMap = {};
+        for (var i = 0, token; token = this.tokens[i]; i++) {
+            if (token[2]) {
+                this.tokenReg.push(token[2]);
+                this.tokenComplex.push({
+                    abbr: token[1],
+                    re: new RegExp(token[2]),
+                    rescan: token[3]
+                });
+            } else {
+                this.tokenReg.push(token[1]);
+                this.tokenSimple[token[1]] = token[0];
+            }
+            this.tokenMap[token[0]] = token[1];
+        }
+        this.tokenReg = new RegExp('(' + this.tokenReg.slice(0).concat([
+            '<',
+            '>',
+            '"',
+            '\''
+        ]).join('|') + ')', 'g');
+    };
+    Scanner.prototype = {
+        helpers: [],
+        scan: function (source, name) {
+            var tokens = [], last = 0, simple = this.tokenSimple, complex = this.tokenComplex;
+            source = source.replace(newLine, '\n');
+            if (this.transform) {
+                source = this.transform(source);
+            }
+            source.replace(this.tokenReg, function (whole, part) {
+                var offset = arguments[arguments.length - 2];
+                if (offset > last) {
+                    tokens.push(source.substring(last, offset));
+                }
+                if (simple[whole]) {
+                    tokens.push(whole);
+                } else {
+                    for (var i = 0, token; token = complex[i]; i++) {
+                        if (token.re.test(whole)) {
+                            tokens.push(token.abbr);
+                            if (token.rescan) {
+                                tokens.push(token.rescan(part));
+                            }
+                            break;
+                        }
+                    }
+                }
+                last = offset + part.length;
+            });
+            if (last < source.length) {
+                tokens.push(source.substr(last));
+            }
+            var content = '', buff = [startTxt + (this.text.start || '')], put = function (content, bonus) {
+                    buff.push(put_cmd, '"', clean(content), '"' + (bonus || '') + ');');
+                }, endStack = [], lastToken, startTag = null, magicInTag = false, specialStates = {
+                    attributeHookups: [],
+                    tagHookups: [],
+                    lastTagHookup: ''
+                }, popTagHookup = function () {
+                    specialStates.lastTagHookup = specialStates.tagHookups.pop() + specialStates.tagHookups.length;
+                }, tagName = '', tagNames = [], popTagName = false, bracketCount, specialAttribute = false, i = 0, token, tmap = this.tokenMap, attrName;
+            htmlTag = quote = beforeQuote = null;
+            for (; (token = tokens[i++]) !== undefined;) {
+                if (startTag === null) {
+                    switch (token) {
+                    case tmap.left:
+                    case tmap.escapeLeft:
+                    case tmap.returnLeft:
+                        magicInTag = htmlTag && 1;
+                    case tmap.commentLeft:
+                        startTag = token;
+                        if (content.length) {
+                            put(content);
+                        }
+                        content = '';
+                        break;
+                    case tmap.escapeFull:
+                        magicInTag = htmlTag && 1;
+                        rescan = 1;
+                        startTag = tmap.escapeLeft;
+                        if (content.length) {
+                            put(content);
+                        }
+                        rescan = tokens[i++];
+                        content = rescan.content || rescan;
+                        if (rescan.before) {
+                            put(rescan.before);
+                        }
+                        tokens.splice(i, 0, tmap.right);
+                        break;
+                    case tmap.commentFull:
+                        break;
+                    case tmap.templateLeft:
+                        content += tmap.left;
+                        break;
+                    case '<':
+                        if (tokens[i].indexOf('!--') !== 0) {
+                            htmlTag = 1;
+                            magicInTag = 0;
+                        }
+                        content += token;
+                        break;
+                    case '>':
+                        htmlTag = 0;
+                        var emptyElement = content.substr(content.length - 1) === '/' || content.substr(content.length - 2) === '--', attrs = '';
+                        if (specialStates.attributeHookups.length) {
+                            attrs = 'attrs: [\'' + specialStates.attributeHookups.join('\',\'') + '\'], ';
+                            specialStates.attributeHookups = [];
+                        }
+                        if (tagName + specialStates.tagHookups.length !== specialStates.lastTagHookup && tagName === top(specialStates.tagHookups)) {
+                            if (emptyElement) {
+                                content = content.substr(0, content.length - 1);
+                            }
+                            buff.push(put_cmd, '"', clean(content), '"', ',can.view.pending({tagName:\'' + tagName + '\',' + attrs + 'scope: ' + (this.text.scope || 'this') + this.text.options);
+                            if (emptyElement) {
+                                buff.push('}));');
+                                content = '/>';
+                                popTagHookup();
+                            } else if (tokens[i] === '<' && tokens[i + 1] === '/' + tagName) {
+                                buff.push('}));');
+                                content = token;
+                                popTagHookup();
+                            } else {
+                                buff.push(',subtemplate: function(' + this.text.argNames + '){\n' + startTxt + (this.text.start || ''));
+                                content = '';
+                            }
+                        } else if (magicInTag || !popTagName && elements.tagToContentPropMap[tagNames[tagNames.length - 1]] || attrs) {
+                            var pendingPart = ',can.view.pending({' + attrs + 'scope: ' + (this.text.scope || 'this') + this.text.options + '}),"';
+                            if (emptyElement) {
+                                put(content.substr(0, content.length - 1), pendingPart + '/>"');
+                            } else {
+                                put(content, pendingPart + '>"');
+                            }
+                            content = '';
+                            magicInTag = 0;
+                        } else {
+                            content += token;
+                        }
+                        if (emptyElement || popTagName) {
+                            tagNames.pop();
+                            tagName = tagNames[tagNames.length - 1];
+                            popTagName = false;
+                        }
+                        specialStates.attributeHookups = [];
+                        break;
+                    case '\'':
+                    case '"':
+                        if (htmlTag) {
+                            if (quote && quote === token) {
+                                quote = null;
+                                var attr = getAttrName();
+                                if (viewCallbacks.attr(attr)) {
+                                    specialStates.attributeHookups.push(attr);
+                                }
+                                if (specialAttribute) {
+                                    content += token;
+                                    put(content);
+                                    buff.push(finishTxt, '}));\n');
+                                    content = '';
+                                    specialAttribute = false;
+                                    break;
+                                }
+                            } else if (quote === null) {
+                                quote = token;
+                                beforeQuote = lastToken;
+                                attrName = getAttrName();
+                                if (tagName === 'img' && attrName === 'src' || attrName === 'style') {
+                                    put(content.replace(attrReg, ''));
+                                    content = '';
+                                    specialAttribute = true;
+                                    buff.push(insert_cmd, 'can.view.txt(2,\'' + getTag(tagName, tokens, i) + '\',' + status() + ',this,function(){', startTxt);
+                                    put(attrName + '=' + token);
+                                    break;
+                                }
+                            }
+                        }
+                    default:
+                        if (lastToken === '<') {
+                            tagName = token.substr(0, 3) === '!--' ? '!--' : token.split(/\s/)[0];
+                            var isClosingTag = false, cleanedTagName;
+                            if (tagName.indexOf('/') === 0) {
+                                isClosingTag = true;
+                                cleanedTagName = tagName.substr(1);
+                            }
+                            if (isClosingTag) {
+                                if (top(tagNames) === cleanedTagName) {
+                                    tagName = cleanedTagName;
+                                    popTagName = true;
+                                }
+                                if (top(specialStates.tagHookups) === cleanedTagName) {
+                                    put(content.substr(0, content.length - 1));
+                                    buff.push(finishTxt + '}}) );');
+                                    content = '><';
+                                    popTagHookup();
+                                }
+                            } else {
+                                if (tagName.lastIndexOf('/') === tagName.length - 1) {
+                                    tagName = tagName.substr(0, tagName.length - 1);
+                                }
+                                if (tagName !== '!--' && viewCallbacks.tag(tagName)) {
+                                    if (tagName === 'content' && elements.tagMap[top(tagNames)]) {
+                                        token = token.replace('content', elements.tagMap[top(tagNames)]);
+                                    }
+                                    specialStates.tagHookups.push(tagName);
+                                }
+                                tagNames.push(tagName);
+                            }
+                        }
+                        content += token;
+                        break;
+                    }
+                } else {
+                    switch (token) {
+                    case tmap.right:
+                    case tmap.returnRight:
+                        switch (startTag) {
+                        case tmap.left:
+                            bracketCount = bracketNum(content);
+                            if (bracketCount === 1) {
+                                buff.push(insert_cmd, 'can.view.txt(0,\'' + getTag(tagName, tokens, i) + '\',' + status() + ',this,function(){', startTxt, content);
+                                endStack.push({
+                                    before: '',
+                                    after: finishTxt + '}));\n'
+                                });
+                            } else {
+                                last = endStack.length && bracketCount === -1 ? endStack.pop() : { after: ';' };
+                                if (last.before) {
+                                    buff.push(last.before);
+                                }
+                                buff.push(content, ';', last.after);
+                            }
+                            break;
+                        case tmap.escapeLeft:
+                        case tmap.returnLeft:
+                            bracketCount = bracketNum(content);
+                            if (bracketCount) {
+                                endStack.push({
+                                    before: finishTxt,
+                                    after: '}));\n'
+                                });
+                            }
+                            var escaped = startTag === tmap.escapeLeft ? 1 : 0, commands = {
+                                    insert: insert_cmd,
+                                    tagName: getTag(tagName, tokens, i),
+                                    status: status(),
+                                    specialAttribute: specialAttribute
+                                };
+                            for (var ii = 0; ii < this.helpers.length; ii++) {
+                                var helper = this.helpers[ii];
+                                if (helper.name.test(content)) {
+                                    content = helper.fn(content, commands);
+                                    if (helper.name.source === /^>[\s]*\w*/.source) {
+                                        escaped = 0;
+                                    }
+                                    break;
+                                }
+                            }
+                            if (typeof content === 'object') {
+                                if (content.startTxt && content.end && specialAttribute) {
+                                    buff.push(insert_cmd, 'can.view.toStr( ', content.content, '() ) );');
+                                } else {
+                                    if (content.startTxt) {
+                                        buff.push(insert_cmd, 'can.view.txt(\n' + (typeof status() === 'string' || (content.escaped != null ? content.escaped : escaped)) + ',\n\'' + tagName + '\',\n' + status() + ',\nthis,\n');
+                                    } else if (content.startOnlyTxt) {
+                                        buff.push(insert_cmd, 'can.view.onlytxt(this,\n');
+                                    }
+                                    buff.push(content.content);
+                                    if (content.end) {
+                                        buff.push('));');
+                                    }
+                                }
+                            } else if (specialAttribute) {
+                                buff.push(insert_cmd, content, ');');
+                            } else {
+                                buff.push(insert_cmd, 'can.view.txt(\n' + (typeof status() === 'string' || escaped) + ',\n\'' + tagName + '\',\n' + status() + ',\nthis,\nfunction(){ ' + (this.text.escape || '') + 'return ', content, bracketCount ? startTxt : '}));\n');
+                            }
+                            if (rescan && rescan.after && rescan.after.length) {
+                                put(rescan.after.length);
+                                rescan = null;
+                            }
+                            break;
+                        }
+                        startTag = null;
+                        content = '';
+                        break;
+                    case tmap.templateLeft:
+                        content += tmap.left;
+                        break;
+                    default:
+                        content += token;
+                        break;
+                    }
+                }
+                lastToken = token;
+            }
+            if (content.length) {
+                put(content);
+            }
+            buff.push(';');
+            var template = buff.join(''), out = { out: (this.text.outStart || '') + template + ' ' + finishTxt + (this.text.outEnd || '') };
+            myEval.call(out, 'this.fn = (function(' + this.text.argNames + '){' + out.out + '});\r\n//# sourceURL=' + name + '.js');
+            return out;
+        }
+    };
+    can.view.pending = function (viewData) {
+        var hooks = can.view.getHooks();
+        return can.view.hook(function (el) {
+            can.each(hooks, function (fn) {
+                fn(el);
+            });
+            viewData.templateType = 'legacy';
+            if (viewData.tagName) {
+                viewCallbacks.tagHandler(el, viewData.tagName, viewData);
+            }
+            can.each(viewData && viewData.attrs || [], function (attributeName) {
+                viewData.attributeName = attributeName;
+                var callback = viewCallbacks.attr(attributeName);
+                if (callback) {
+                    callback(el, viewData);
+                }
+            });
+        });
+    };
+    can.view.tag('content', function (el, tagData) {
+        return tagData.scope;
+    });
+    can.view.Scanner = Scanner;
+    return Scanner;
+});
+/*can/view/render*/
+define('can/view/render', [
+    'can/view/view',
+    'can/view/elements',
+    'can/view/live/live',
+    'can/util/string/string'
+], function (can, elements, live) {
+    var pendingHookups = [], tagChildren = function (tagName) {
+            var newTag = elements.tagMap[tagName] || 'span';
+            if (newTag === 'span') {
+                return '@@!!@@';
+            }
+            return '<' + newTag + '>' + tagChildren(newTag) + '</' + newTag + '>';
+        }, contentText = function (input, tag) {
+            if (typeof input === 'string') {
+                return input;
+            }
+            if (!input && input !== 0) {
+                return '';
+            }
+            var hook = input.hookup && function (el, id) {
+                input.hookup.call(input, el, id);
+            } || typeof input === 'function' && input;
+            if (hook) {
+                if (tag) {
+                    return '<' + tag + ' ' + can.view.hook(hook) + '></' + tag + '>';
+                } else {
+                    pendingHookups.push(hook);
+                }
+                return '';
+            }
+            return '' + input;
+        }, contentEscape = function (txt, tag) {
+            return typeof txt === 'string' || typeof txt === 'number' ? can.esc(txt) : contentText(txt, tag);
+        }, withinTemplatedSectionWithinAnElement = false, emptyHandler = function () {
+        };
+    var lastHookups;
+    can.extend(can.view, {
+        live: live,
+        setupLists: function () {
+            var old = can.view.lists, data;
+            can.view.lists = function (list, renderer) {
+                data = {
+                    list: list,
+                    renderer: renderer
+                };
+                return Math.random();
+            };
+            return function () {
+                can.view.lists = old;
+                return data;
+            };
+        },
+        getHooks: function () {
+            var hooks = pendingHookups.slice(0);
+            lastHookups = hooks;
+            pendingHookups = [];
+            return hooks;
+        },
+        onlytxt: function (self, func) {
+            return contentEscape(func.call(self));
+        },
+        txt: function (escape, tagName, status, self, func) {
+            var tag = elements.tagMap[tagName] || 'span', setupLiveBinding = false, value, listData, compute, unbind = emptyHandler, attributeName;
+            if (withinTemplatedSectionWithinAnElement) {
+                value = func.call(self);
+            } else {
+                if (typeof status === 'string' || status === 1) {
+                    withinTemplatedSectionWithinAnElement = true;
+                }
+                var listTeardown = can.view.setupLists();
+                unbind = function () {
+                    compute.unbind('change', emptyHandler);
+                };
+                compute = can.compute(func, self, false);
+                compute.bind('change', emptyHandler);
+                listData = listTeardown();
+                value = compute();
+                withinTemplatedSectionWithinAnElement = false;
+                setupLiveBinding = compute.computeInstance.hasDependencies;
+            }
+            if (listData) {
+                unbind();
+                return '<' + tag + can.view.hook(function (el, parentNode) {
+                    live.list(el, listData.list, listData.renderer, self, parentNode);
+                }) + '></' + tag + '>';
+            }
+            if (!setupLiveBinding || typeof value === 'function') {
+                unbind();
+                return (withinTemplatedSectionWithinAnElement || escape === 2 || !escape ? contentText : contentEscape)(value, status === 0 && tag);
+            }
+            var contentProp = elements.tagToContentPropMap[tagName];
+            if (status === 0 && !contentProp) {
+                var selfClosing = !!elements.selfClosingTags[tag];
+                return '<' + tag + can.view.hook(escape && typeof value !== 'object' ? function (el, parentNode) {
+                    live.text(el, compute, parentNode);
+                    unbind();
+                } : function (el, parentNode) {
+                    live.html(el, compute, parentNode);
+                    unbind();
+                }) + (selfClosing ? '/>' : '>' + tagChildren(tag) + '</' + tag + '>');
+            } else if (status === 1) {
+                pendingHookups.push(function (el) {
+                    live.attributes(el, compute, compute());
+                    unbind();
+                });
+                return compute();
+            } else if (escape === 2) {
+                attributeName = status;
+                pendingHookups.push(function (el) {
+                    live.specialAttribute(el, attributeName, compute);
+                    unbind();
+                });
+                return compute();
+            } else {
+                attributeName = status === 0 ? contentProp : status;
+                (status === 0 ? lastHookups : pendingHookups).push(function (el) {
+                    live.attribute(el, attributeName, compute);
+                    unbind();
+                });
+                return live.attributePlaceholder;
+            }
+        }
+    });
+    return can;
+});
+/*can/view/mustache/mustache*/
+define('can/view/mustache/mustache', [
+    'can/util/util',
+    'can/view/scope/scope',
+    'can/view/view',
+    'can/view/scanner',
+    'can/compute/compute',
+    'can/view/render',
+    'can/view/bindings/bindings'
+], function (can) {
+    can.view.ext = '.mustache';
+    var SCOPE = 'scope', HASH = '___h4sh', CONTEXT_OBJ = '{scope:' + SCOPE + ',options:options}', SPECIAL_CONTEXT_OBJ = '{scope:' + SCOPE + ',options:options, special: true}', ARG_NAMES = SCOPE + ',options', argumentsRegExp = /((([^'"\s]+?=)?('.*?'|".*?"))|.*?)\s/g, literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/, makeLookupLiteral = function (type) {
+            return '{get:"' + type.replace(/"/g, '\\"') + '"}';
+        }, isLookup = function (obj) {
+            return obj && typeof obj.get === 'string';
+        }, isObserveLike = function (obj) {
+            return obj instanceof can.Map || obj && !!obj._get;
+        }, isArrayLike = function (obj) {
+            return obj && obj.splice && typeof obj.length === 'number';
+        }, makeConvertToScopes = function (original, scope, options) {
+            var originalWithScope = function (ctx, opts) {
+                return original(ctx || scope, opts);
+            };
+            return function (updatedScope, updatedOptions) {
+                if (updatedScope !== undefined && !(updatedScope instanceof can.view.Scope)) {
+                    updatedScope = scope.add(updatedScope);
+                }
+                if (updatedOptions !== undefined && !(updatedOptions instanceof can.view.Options)) {
+                    updatedOptions = options.add(updatedOptions);
+                }
+                return originalWithScope(updatedScope, updatedOptions || options);
+            };
+        };
+    var Mustache = function (options, helpers) {
+        if (this.constructor !== Mustache) {
+            var mustache = new Mustache(options);
+            return function (data, options) {
+                return mustache.render(data, options);
+            };
+        }
+        if (typeof options === 'function') {
+            this.template = { fn: options };
+            return;
+        }
+        can.extend(this, options);
+        this.template = this.scanner.scan(this.text, this.name);
+    };
+    can.Mustache = can.global.Mustache = Mustache;
+    Mustache.prototype.render = function (data, options) {
+        if (!(data instanceof can.view.Scope)) {
+            data = new can.view.Scope(data || {});
+        }
+        if (!(options instanceof can.view.Options)) {
+            options = new can.view.Options(options || {});
+        }
+        options = options || {};
+        return this.template.fn.call(data, data, options);
+    };
+    can.extend(Mustache.prototype, {
+        scanner: new can.view.Scanner({
+            text: {
+                start: '',
+                scope: SCOPE,
+                options: ',options: options',
+                argNames: ARG_NAMES
+            },
+            tokens: [
+                [
+                    'returnLeft',
+                    '{{{',
+                    '{{[{&]'
+                ],
+                [
+                    'commentFull',
+                    '{{!}}',
+                    '^[\\s\\t]*{{!.+?}}\\n'
+                ],
+                [
+                    'commentLeft',
+                    '{{!',
+                    '(\\n[\\s\\t]*{{!|{{!)'
+                ],
+                [
+                    'escapeFull',
+                    '{{}}',
+                    '(^[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}$)',
+                    function (content) {
+                        return {
+                            before: /^\n.+?\n$/.test(content) ? '\n' : '',
+                            content: content.match(/\{\{(.+?)\}\}/)[1] || ''
+                        };
+                    }
+                ],
+                [
+                    'escapeLeft',
+                    '{{'
+                ],
+                [
+                    'returnRight',
+                    '}}}'
+                ],
+                [
+                    'right',
+                    '}}'
+                ]
+            ],
+            helpers: [
+                {
+                    name: /^>[\s]*\w*/,
+                    fn: function (content, cmd) {
+                        var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, '');
+                        return 'can.Mustache.renderPartial(\'' + templateName + '\',' + ARG_NAMES + ')';
+                    }
+                },
+                {
+                    name: /^\s*data\s/,
+                    fn: function (content, cmd) {
+                        var attr = content.match(/["|'](.*)["|']/)[1];
+                        return 'can.proxy(function(__){' + 'can.data(can.$(__),\'' + attr + '\', this.attr(\'.\')); }, ' + SCOPE + ')';
+                    }
+                },
+                {
+                    name: /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+                    fn: function (content) {
+                        var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/, parts = content.match(quickFunc);
+                        return 'can.proxy(function(__){var ' + parts[1] + '=can.$(__);with(' + SCOPE + '.attr(\'.\')){' + parts[2] + '}}, this);';
+                    }
+                },
+                {
+                    name: /^.*$/,
+                    fn: function (content, cmd) {
+                        var mode = false, result = {
+                                content: '',
+                                startTxt: false,
+                                startOnlyTxt: false,
+                                end: false
+                            };
+                        content = can.trim(content);
+                        if (content.length && (mode = content.match(/^([#^\/]|else$)/))) {
+                            mode = mode[0];
+                            switch (mode) {
+                            case '#':
+                            case '^':
+                                if (cmd.specialAttribute) {
+                                    result.startOnlyTxt = true;
+                                } else {
+                                    result.startTxt = true;
+                                    result.escaped = 0;
+                                }
+                                break;
+                            case '/':
+                                result.end = true;
+                                result.content += 'return ___v1ew.join("");}}])';
+                                return result;
+                            }
+                            content = content.substring(1);
+                        }
+                        if (mode !== 'else') {
+                            var args = [], hashes = [], i = 0, m;
+                            result.content += 'can.Mustache.txt(\n' + (cmd.specialAttribute ? SPECIAL_CONTEXT_OBJ : CONTEXT_OBJ) + ',\n' + (mode ? '"' + mode + '"' : 'null') + ',';
+                            (can.trim(content) + ' ').replace(argumentsRegExp, function (whole, arg) {
+                                if (i && (m = arg.match(literalNumberStringBooleanRegExp))) {
+                                    if (m[2]) {
+                                        args.push(m[0]);
+                                    } else {
+                                        hashes.push(m[4] + ':' + (m[6] ? m[6] : makeLookupLiteral(m[5])));
+                                    }
+                                } else {
+                                    args.push(makeLookupLiteral(arg));
+                                }
+                                i++;
+                            });
+                            result.content += args.join(',');
+                            if (hashes.length) {
+                                result.content += ',{' + HASH + ':{' + hashes.join(',') + '}}';
+                            }
+                        }
+                        if (mode && mode !== 'else') {
+                            result.content += ',[\n\n';
+                        }
+                        switch (mode) {
+                        case '^':
+                        case '#':
+                            result.content += '{fn:function(' + ARG_NAMES + '){var ___v1ew = [];';
+                            break;
+                        case 'else':
+                            result.content += 'return ___v1ew.join("");}},\n{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];';
+                            break;
+                        default:
+                            result.content += ')';
+                            break;
+                        }
+                        if (!mode) {
+                            result.startTxt = true;
+                            result.end = true;
+                        }
+                        return result;
+                    }
+                }
+            ]
+        })
+    });
+    var helpers = can.view.Scanner.prototype.helpers;
+    for (var i = 0; i < helpers.length; i++) {
+        Mustache.prototype.scanner.helpers.unshift(helpers[i]);
+    }
+    Mustache.txt = function (scopeAndOptions, mode, name) {
+        var scope = scopeAndOptions.scope, options = scopeAndOptions.options, args = [], helperOptions = {
+                fn: function () {
+                },
+                inverse: function () {
+                }
+            }, hash, context = scope.attr('.'), getHelper = true, helper;
+        for (var i = 3; i < arguments.length; i++) {
+            var arg = arguments[i];
+            if (mode && can.isArray(arg)) {
+                helperOptions = can.extend.apply(can, [helperOptions].concat(arg));
+            } else if (arg && arg[HASH]) {
+                hash = arg[HASH];
+                for (var prop in hash) {
+                    if (isLookup(hash[prop])) {
+                        hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions, false, true);
+                    }
+                }
+            } else if (arg && isLookup(arg)) {
+                args.push(Mustache.get(arg.get, scopeAndOptions, false, true, true));
+            } else {
+                args.push(arg);
+            }
+        }
+        if (isLookup(name)) {
+            var get = name.get;
+            name = Mustache.get(name.get, scopeAndOptions, args.length, false);
+            getHelper = get === name;
+        }
+        helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
+        helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
+        if (mode === '^') {
+            var tmp = helperOptions.fn;
+            helperOptions.fn = helperOptions.inverse;
+            helperOptions.inverse = tmp;
+        }
+        if (helper = getHelper && (typeof name === 'string' && Mustache.getHelper(name, options)) || can.isFunction(name) && !name.isComputed && { fn: name }) {
+            can.extend(helperOptions, {
+                context: context,
+                scope: scope,
+                contexts: scope,
+                hash: hash
+            });
+            args.push(helperOptions);
+            return function () {
+                var result = helper.fn.apply(context, args);
+                return result == null ? '' : result;
+            };
+        }
+        return function () {
+            var value;
+            if (can.isFunction(name) && name.isComputed) {
+                value = name();
+            } else {
+                value = name;
+            }
+            var validArgs = args.length ? args : [value], valid = true, result = [], i, argIsObserve, arg;
+            if (mode) {
+                for (i = 0; i < validArgs.length; i++) {
+                    arg = validArgs[i];
+                    argIsObserve = typeof arg !== 'undefined' && isObserveLike(arg);
+                    if (isArrayLike(arg)) {
+                        if (mode === '#') {
+                            valid = valid && !!(argIsObserve ? arg.attr('length') : arg.length);
+                        } else if (mode === '^') {
+                            valid = valid && !(argIsObserve ? arg.attr('length') : arg.length);
+                        }
+                    } else {
+                        valid = mode === '#' ? valid && !!arg : mode === '^' ? valid && !arg : valid;
+                    }
+                }
+            }
+            if (valid) {
+                if (mode === '#') {
+                    if (isArrayLike(value)) {
+                        var isObserveList = isObserveLike(value);
+                        for (i = 0; i < value.length; i++) {
+                            result.push(helperOptions.fn(isObserveList ? value.attr('' + i) : value[i]));
+                        }
+                        return result.join('');
+                    } else {
+                        return helperOptions.fn(value || {}) || '';
+                    }
+                } else if (mode === '^') {
+                    return helperOptions.inverse(value || {}) || '';
+                } else {
+                    return '' + (value != null ? value : '');
+                }
+            }
+            return '';
+        };
+    };
+    Mustache.get = function (key, scopeAndOptions, isHelper, isArgument, isLookup) {
+        var context = scopeAndOptions.scope.attr('.'), options = scopeAndOptions.options || {};
+        if (isHelper) {
+            if (Mustache.getHelper(key, options)) {
+                return key;
+            }
+            if (scopeAndOptions.scope && can.isFunction(context[key])) {
+                return context[key];
+            }
+        }
+        var computeData = scopeAndOptions.scope.computeData(key, {
+                isArgument: isArgument,
+                args: [
+                    context,
+                    scopeAndOptions.scope
+                ]
+            }), compute = computeData.compute;
+        can.compute.temporarilyBind(compute);
+        var initialValue = computeData.initialValue, helperObj = Mustache.getHelper(key, options);
+        if (!isLookup && (initialValue === undefined || computeData.scope !== scopeAndOptions.scope) && Mustache.getHelper(key, options)) {
+            return key;
+        }
+        if (!compute.computeInstance.hasDependencies) {
+            return initialValue;
+        } else {
+            return compute;
+        }
+    };
+    Mustache.resolve = function (value) {
+        if (isObserveLike(value) && isArrayLike(value) && value.attr('length')) {
+            return value;
+        } else if (can.isFunction(value)) {
+            return value();
+        } else {
+            return value;
+        }
+    };
+    Mustache._helpers = {};
+    Mustache.registerHelper = function (name, fn) {
+        this._helpers[name] = {
+            name: name,
+            fn: fn
+        };
+    };
+    Mustache.registerSimpleHelper = function (name, fn) {
+        Mustache.registerHelper(name, can.view.simpleHelper(fn));
+    };
+    Mustache.getHelper = function (name, options) {
+        var helper;
+        if (options) {
+            helper = options.get('helpers.' + name, { proxyMethods: false });
+        }
+        return helper ? { fn: helper } : this._helpers[name];
+    };
+    Mustache.render = function (partial, scope, options) {
+        if (!can.view.cached[partial]) {
+            can.__notObserve(function () {
+                var scopePartialName = scope.attr(partial);
+                if (scopePartialName) {
+                    partial = scopePartialName;
+                }
+            })();
+        }
+        return can.view.render(partial, scope, options);
+    };
+    Mustache.safeString = function (str) {
+        return {
+            toString: function () {
+                return str;
+            }
+        };
+    };
+    Mustache.renderPartial = function (partialName, scope, options) {
+        var partial = options.get('partials.' + partialName, { proxyMethods: false });
+        if (partial) {
+            return partial.render ? partial.render(scope, options) : partial(scope, options);
+        } else {
+            return can.Mustache.render(partialName, scope, options);
+        }
+    };
+    can.each({
+        'if': function (expr, options) {
+            var value;
+            if (can.isFunction(expr)) {
+                value = can.compute.truthy(expr)();
+            } else {
+                value = !!Mustache.resolve(expr);
+            }
+            if (value) {
+                return options.fn(options.contexts || this);
+            } else {
+                return options.inverse(options.contexts || this);
+            }
+        },
+        'is': function () {
+            var lastValue, curValue, options = arguments[arguments.length - 1];
+            if (arguments.length - 2 <= 0) {
+                return options.inverse();
+            }
+            for (var i = 0; i < arguments.length - 1; i++) {
+                curValue = Mustache.resolve(arguments[i]);
+                curValue = can.isFunction(curValue) ? curValue() : curValue;
+                if (i > 0) {
+                    if (curValue !== lastValue) {
+                        return options.inverse();
+                    }
+                }
+                lastValue = curValue;
+            }
+            return options.fn();
+        },
+        'eq': function () {
+            return Mustache._helpers.is.fn.apply(this, arguments);
+        },
+        'unless': function (expr, options) {
+            return Mustache._helpers['if'].fn.apply(this, [
+                expr,
+                can.extend({}, options, {
+                    fn: options.inverse,
+                    inverse: options.fn
+                })
+            ]);
+        },
+        'each': function (expr, options) {
+            var resolved = Mustache.resolve(expr), result = [], keys, key, i;
+            if (can.view.lists && (resolved instanceof can.List || expr && expr.isComputed && resolved === undefined)) {
+                return can.view.lists(expr, function (item, index) {
+                    return options.fn(options.scope.add({ '@index': index }).add(item));
+                });
+            }
+            expr = resolved;
+            if (!!expr && isArrayLike(expr)) {
+                for (i = 0; i < expr.length; i++) {
+                    result.push(options.fn(options.scope.add({ '@index': i }).add(expr[i])));
+                }
+                return result.join('');
+            } else if (isObserveLike(expr)) {
+                keys = can.Map.keys(expr);
+                for (i = 0; i < keys.length; i++) {
+                    key = keys[i];
+                    result.push(options.fn(options.scope.add({ '@key': key }).add(expr[key])));
+                }
+                return result.join('');
+            } else if (expr instanceof Object) {
+                for (key in expr) {
+                    result.push(options.fn(options.scope.add({ '@key': key }).add(expr[key])));
+                }
+                return result.join('');
+            }
+        },
+        'with': function (expr, options) {
+            var ctx = expr;
+            expr = Mustache.resolve(expr);
+            if (!!expr) {
+                return options.fn(ctx);
+            }
+        },
+        'log': function (expr, options) {
+            if (typeof console !== 'undefined' && console.log) {
+                if (!options) {
+                    console.log(expr.context);
+                } else {
+                    console.log(expr, options.context);
+                }
+            }
+        },
+        '@index': function (offset, options) {
+            if (!options) {
+                options = offset;
+                offset = 0;
+            }
+            var index = options.scope.attr('@index');
+            return '' + ((can.isFunction(index) ? index() : index) + offset);
+        }
+    }, function (fn, name) {
+        Mustache.registerHelper(name, fn);
+    });
+    can.view.register({
+        suffix: 'mustache',
+        contentType: 'x-mustache-template',
+        script: function (id, src) {
+            return 'can.Mustache(function(' + ARG_NAMES + ') { ' + new Mustache({
+                text: src,
+                name: id
+            }).template.out + ' })';
+        },
+        renderer: function (id, text) {
+            return Mustache({
+                text: text,
+                name: id
+            });
+        }
+    });
+    can.mustache.registerHelper = can.proxy(can.Mustache.registerHelper, can.Mustache);
+    can.mustache.safeString = can.Mustache.safeString;
+    return can;
+});
+/*can/util/view_model/view_model*/
+define('can/util/view_model/view_model', ['can/util/util'], function (can) {
+    var $ = can.$;
+    if ($.fn) {
+        $.fn.scope = $.fn.viewModel = function () {
+            return can.viewModel.apply(can, [this].concat(can.makeArray(arguments)));
+        };
+    }
+});
+/*can/component/component*/
+define('can/component/component', [
+    'can/util/util',
+    'can/view/callbacks/callbacks',
+    'can/view/elements',
+    'can/view/bindings/bindings',
+    'can/control/control',
+    'can/observe/observe',
+    'can/view/mustache/mustache',
+    'can/util/view_model/view_model'
+], function (can, viewCallbacks, elements, bindings) {
+    var paramReplacer = /\{([^\}]+)\}/g;
+    var Component = can.Component = can.Construct.extend({
+        setup: function () {
+            can.Construct.setup.apply(this, arguments);
+            if (can.Component) {
+                var self = this, protoViewModel = this.prototype.scope || this.prototype.viewModel;
+                this.Control = ComponentControl.extend(this.prototype.events);
+                if (!protoViewModel || typeof protoViewModel === 'object' && !(protoViewModel instanceof can.Map)) {
+                    this.Map = can.Map.extend(protoViewModel || {});
+                } else if (protoViewModel.prototype instanceof can.Map) {
+                    this.Map = protoViewModel;
+                }
+                this.attributeScopeMappings = {};
+                can.each(this.Map ? this.Map.defaults : {}, function (val, prop) {
+                    if (val === '@') {
+                        self.attributeScopeMappings[prop] = prop;
+                    }
+                });
+                if (this.prototype.template) {
+                    if (typeof this.prototype.template === 'function') {
+                        var temp = this.prototype.template;
+                        this.renderer = function () {
+                            return can.view.frag(temp.apply(null, arguments));
+                        };
+                    } else {
+                        this.renderer = can.view.mustache(this.prototype.template);
+                    }
+                }
+                can.view.tag(this.prototype.tag, function (el, options) {
+                    new self(el, options);
+                });
+            }
+        }
+    }, {
+        setup: function (el, componentTagData) {
+            var initialViewModelData = { '%root': componentTagData.scope.attr('%root') }, component = this, lexicalContent = (typeof this.leakScope === 'undefined' ? false : !this.leakScope) && !!this.template, viewModel, frag, teardownFunctions = [], callTeardownFunctions = function () {
+                    for (var i = 0, len = teardownFunctions.length; i < len; i++) {
+                        teardownFunctions[i]();
+                    }
+                }, $el = can.$(el), setupBindings = !can.data($el, 'preventDataBindings');
+            can.each(this.constructor.attributeScopeMappings, function (val, prop) {
+                initialViewModelData[prop] = el.getAttribute(can.hyphenate(val));
+            });
+            if (setupBindings) {
+                teardownFunctions.push(bindings.behaviors.viewModel(el, componentTagData, function (initialViewModelData) {
+                    var protoViewModel = component.scope || component.viewModel;
+                    if (component.constructor.Map) {
+                        viewModel = new component.constructor.Map(initialViewModelData);
+                    } else if (protoViewModel instanceof can.Map) {
+                        viewModel = protoViewModel;
+                    } else if (can.isFunction(protoViewModel)) {
+                        var scopeResult = protoViewModel.call(component, initialViewModelData, componentTagData.scope, el);
+                        if (scopeResult instanceof can.Map) {
+                            viewModel = scopeResult;
+                        } else if (scopeResult.prototype instanceof can.Map) {
+                            viewModel = new scopeResult(initialViewModelData);
+                        } else {
+                            viewModel = new (can.Map.extend(scopeResult))(initialViewModelData);
+                        }
+                    }
+                    var oldSerialize = viewModel.serialize;
+                    viewModel.serialize = function () {
+                        var result = oldSerialize.apply(this, arguments);
+                        delete result['%root'];
+                        return result;
+                    };
+                    return viewModel;
+                }, initialViewModelData));
+            }
+            this.scope = this.viewModel = viewModel;
+            can.data($el, 'scope', this.viewModel);
+            can.data($el, 'viewModel', this.viewModel);
+            can.data($el, 'preventDataBindings', true);
+            var shadowScope;
+            if (lexicalContent) {
+                shadowScope = can.view.Scope.refsScope().add(this.viewModel, { viewModel: true });
+            } else {
+                shadowScope = (this.constructor.renderer ? componentTagData.scope.add(new can.view.Scope.Refs()) : componentTagData.scope).add(this.viewModel, { viewModel: true });
+            }
+            var options = { helpers: {} }, addHelper = function (name, fn) {
+                    options.helpers[name] = function () {
+                        return fn.apply(viewModel, arguments);
+                    };
+                };
+            can.each(this.helpers || {}, function (val, prop) {
+                if (can.isFunction(val)) {
+                    addHelper(prop, val);
+                }
+            });
+            can.each(this.simpleHelpers || {}, function (val, prop) {
+                addHelper(prop, can.view.simpleHelper(val));
+            });
+            this._control = new this.constructor.Control(el, {
+                scope: this.viewModel,
+                viewModel: this.viewModel,
+                destroy: callTeardownFunctions
+            });
+            var nodeList = can.view.nodeLists.register([], undefined, componentTagData.parentNodeList || true, false);
+            nodeList.expression = '<' + this.tag + '>';
+            teardownFunctions.push(function () {
+                can.view.nodeLists.unregister(nodeList);
+            });
+            if (this.constructor.renderer) {
+                if (!options.tags) {
+                    options.tags = {};
+                }
+                options.tags.content = function contentHookup(el, contentTagData) {
+                    var subtemplate = componentTagData.subtemplate || contentTagData.subtemplate, renderingLightContent = subtemplate === componentTagData.subtemplate;
+                    if (subtemplate) {
+                        delete options.tags.content;
+                        var lightTemplateData;
+                        if (renderingLightContent) {
+                            if (lexicalContent) {
+                                lightTemplateData = componentTagData;
+                            } else {
+                                lightTemplateData = {
+                                    scope: contentTagData.scope.cloneFromRef(),
+                                    options: contentTagData.options
+                                };
+                            }
+                        } else {
+                            lightTemplateData = contentTagData;
+                        }
+                        if (contentTagData.parentNodeList) {
+                            var frag = subtemplate(lightTemplateData.scope, lightTemplateData.options, contentTagData.parentNodeList);
+                            elements.replace([el], frag);
+                        } else {
+                            can.view.live.replace([el], subtemplate(lightTemplateData.scope, lightTemplateData.options));
+                        }
+                        options.tags.content = contentHookup;
+                    }
+                };
+                frag = this.constructor.renderer(shadowScope, componentTagData.options.add(options), nodeList);
+            } else {
+                if (componentTagData.templateType === 'legacy') {
+                    frag = can.view.frag(componentTagData.subtemplate ? componentTagData.subtemplate(shadowScope, componentTagData.options.add(options)) : '');
+                } else {
+                    frag = componentTagData.subtemplate ? componentTagData.subtemplate(shadowScope, componentTagData.options.add(options), nodeList) : document.createDocumentFragment();
+                }
+            }
+            can.appendChild(el, frag, can.document);
+            can.view.nodeLists.update(nodeList, can.childNodes(el));
+        }
+    });
+    var ComponentControl = can.Control.extend({
+        _lookup: function (options) {
+            return [
+                options.scope,
+                options,
+                window
+            ];
+        },
+        _action: function (methodName, options, controlInstance) {
+            var hasObjectLookup, readyCompute;
+            paramReplacer.lastIndex = 0;
+            hasObjectLookup = paramReplacer.test(methodName);
+            if (!controlInstance && hasObjectLookup) {
+                return;
+            } else if (!hasObjectLookup) {
+                return can.Control._action.apply(this, arguments);
+            } else {
+                readyCompute = can.compute(function () {
+                    var delegate;
+                    var name = methodName.replace(paramReplacer, function (matched, key) {
+                        var value;
+                        if (key === 'scope' || key === 'viewModel') {
+                            delegate = options.viewModel;
+                            return '';
+                        }
+                        key = key.replace(/^(scope|^viewModel)\./, '');
+                        value = can.compute.read(options.viewModel, can.compute.read.reads(key), { isArgument: true }).value;
+                        if (value === undefined) {
+                            value = can.getObject(key);
+                        }
+                        if (typeof value === 'string') {
+                            return value;
+                        } else {
+                            delegate = value;
+                            return '';
+                        }
+                    });
+                    var parts = name.split(/\s+/g), event = parts.pop();
+                    return {
+                        processor: this.processors[event] || this.processors.click,
+                        parts: [
+                            name,
+                            parts.join(' '),
+                            event
+                        ],
+                        delegate: delegate || undefined
+                    };
+                }, this);
+                var handler = function (ev, ready) {
+                    controlInstance._bindings.control[methodName](controlInstance.element);
+                    controlInstance._bindings.control[methodName] = ready.processor(ready.delegate || controlInstance.element, ready.parts[2], ready.parts[1], methodName, controlInstance);
+                };
+                readyCompute.bind('change', handler);
+                controlInstance._bindings.readyComputes[methodName] = {
+                    compute: readyCompute,
+                    handler: handler
+                };
+                return readyCompute();
+            }
+        }
+    }, {
+        setup: function (el, options) {
+            this.scope = options.scope;
+            this.viewModel = options.viewModel;
+            return can.Control.prototype.setup.call(this, el, options);
+        },
+        off: function () {
+            if (this._bindings) {
+                can.each(this._bindings.readyComputes || {}, function (value) {
+                    value.compute.unbind('change', value.handler);
+                });
+            }
+            can.Control.prototype.off.apply(this, arguments);
+            this._bindings.readyComputes = {};
+        },
+        destroy: function () {
+            can.Control.prototype.destroy.apply(this, arguments);
+            if (typeof this.options.destroy === 'function') {
+                this.options.destroy.apply(this, arguments);
+            }
+        }
+    });
+    var $ = can.$;
+    if ($.fn) {
+        $.fn.scope = $.fn.viewModel = function () {
+            return can.viewModel.apply(can, [this].concat(can.makeArray(arguments)));
+        };
+    }
+    return Component;
+});
+/*can/model/model*/
+define('can/model/model', [
+    'can/util/util',
+    'can/map/map',
+    'can/list/list'
+], function (can) {
+    var pipe = function (def, thisArg, func) {
+            var d = new can.Deferred();
+            def.then(function () {
+                var args = can.makeArray(arguments), success = true;
+                try {
+                    args[0] = func.apply(thisArg, args);
+                } catch (e) {
+                    success = false;
+                    d.rejectWith(d, [e].concat(args));
+                }
+                if (success) {
+                    d.resolveWith(d, args);
+                }
+            }, function () {
+                d.rejectWith(this, arguments);
+            });
+            if (typeof def.abort === 'function') {
+                d.abort = function () {
+                    return def.abort();
+                };
+            }
+            return d;
+        }, modelNum = 0, getId = function (inst) {
+            can.__observe(inst, inst.constructor.id);
+            return inst.___get(inst.constructor.id);
+        }, ajax = function (ajaxOb, data, type, dataType, success, error) {
+            var params = {};
+            if (typeof ajaxOb === 'string') {
+                var parts = ajaxOb.split(/\s+/);
+                params.url = parts.pop();
+                if (parts.length) {
+                    params.type = parts.pop();
+                }
+            } else {
+                can.extend(params, ajaxOb);
+            }
+            params.data = typeof data === 'object' && !can.isArray(data) ? can.extend(params.data || {}, data) : data;
+            params.url = can.sub(params.url, params.data, true);
+            return can.ajax(can.extend({
+                type: type || 'post',
+                dataType: dataType || 'json',
+                success: success,
+                error: error
+            }, params));
+        }, makeRequest = function (modelObj, type, success, error, method) {
+            var args;
+            if (can.isArray(modelObj)) {
+                args = modelObj[1];
+                modelObj = modelObj[0];
+            } else {
+                args = modelObj.serialize();
+            }
+            args = [args];
+            var deferred, model = modelObj.constructor, jqXHR;
+            if (type === 'update' || type === 'destroy') {
+                args.unshift(getId(modelObj));
+            }
+            jqXHR = model[type].apply(model, args);
+            deferred = pipe(jqXHR, modelObj, function (data) {
+                modelObj[method || type + 'd'](data, jqXHR);
+                return modelObj;
+            });
+            if (jqXHR.abort) {
+                deferred.abort = function () {
+                    jqXHR.abort();
+                };
+            }
+            deferred.then(success, error);
+            return deferred;
+        }, converters = {
+            models: function (instancesRawData, oldList, xhr) {
+                can.Model._reqs++;
+                if (!instancesRawData) {
+                    return;
+                }
+                if (instancesRawData instanceof this.List) {
+                    return instancesRawData;
+                }
+                var self = this, tmp = [], ListClass = self.List || ML, modelList = oldList instanceof can.List ? oldList : new ListClass(), rawDataIsList = instancesRawData instanceof ML, raw = rawDataIsList ? instancesRawData.serialize() : instancesRawData;
+                raw = self.parseModels(raw, xhr);
+                if (raw.data) {
+                    instancesRawData = raw;
+                    raw = raw.data;
+                }
+                if (typeof raw === 'undefined' || !can.isArray(raw)) {
+                    throw new Error('Could not get any raw data while converting using .models');
+                }
+                if (modelList.length) {
+                    modelList.splice(0);
+                }
+                can.each(raw, function (rawPart) {
+                    tmp.push(self.model(rawPart, xhr));
+                });
+                modelList.push.apply(modelList, tmp);
+                if (!can.isArray(instancesRawData)) {
+                    can.each(instancesRawData, function (val, prop) {
+                        if (prop !== 'data') {
+                            modelList.attr(prop, val);
+                        }
+                    });
+                }
+                setTimeout(can.proxy(this._clean, this), 1);
+                return modelList;
+            },
+            model: function (attributes, oldModel, xhr) {
+                if (!attributes) {
+                    return;
+                }
+                if (typeof attributes.serialize === 'function') {
+                    attributes = attributes.serialize();
+                } else {
+                    attributes = this.parseModel(attributes, xhr);
+                }
+                var id = attributes[this.id];
+                if ((id || id === 0) && this.store[id]) {
+                    oldModel = this.store[id];
+                }
+                var model = oldModel && can.isFunction(oldModel.attr) ? oldModel.attr(attributes, this.removeAttr || false) : new this(attributes);
+                return model;
+            }
+        }, makeParser = {
+            parseModel: function (prop) {
+                return function (attributes) {
+                    return prop ? can.getObject(prop, attributes) : attributes;
+                };
+            },
+            parseModels: function (prop) {
+                return function (attributes) {
+                    if (can.isArray(attributes)) {
+                        return attributes;
+                    }
+                    prop = prop || 'data';
+                    var result = can.getObject(prop, attributes);
+                    if (!can.isArray(result)) {
+                        throw new Error('Could not get any raw data while converting using .models');
+                    }
+                    return result;
+                };
+            }
+        }, ajaxMethods = {
+            create: {
+                url: '_shortName',
+                type: 'post'
+            },
+            update: {
+                data: function (id, attrs) {
+                    attrs = attrs || {};
+                    var identity = this.id;
+                    if (attrs[identity] && attrs[identity] !== id) {
+                        attrs['new' + can.capitalize(id)] = attrs[identity];
+                        delete attrs[identity];
+                    }
+                    attrs[identity] = id;
+                    return attrs;
+                },
+                type: 'put'
+            },
+            destroy: {
+                type: 'delete',
+                data: function (id, attrs) {
+                    attrs = attrs || {};
+                    attrs.id = attrs[this.id] = id;
+                    return attrs;
+                }
+            },
+            findAll: { url: '_shortName' },
+            findOne: {}
+        }, ajaxMaker = function (ajaxMethod, str) {
+            return function (data) {
+                data = ajaxMethod.data ? ajaxMethod.data.apply(this, arguments) : data;
+                return ajax(str || this[ajaxMethod.url || '_url'], data, ajaxMethod.type || 'get');
+            };
+        }, createURLFromResource = function (model, name) {
+            if (!model.resource) {
+                return;
+            }
+            var resource = model.resource.replace(/\/+$/, '');
+            if (name === 'findAll' || name === 'create') {
+                return resource;
+            } else {
+                return resource + '/{' + model.id + '}';
+            }
+        };
+    can.Model = can.Map.extend({
+        fullName: 'can.Model',
+        _reqs: 0,
+        setup: function (base, fullName, staticProps, protoProps) {
+            if (typeof fullName !== 'string') {
+                protoProps = staticProps;
+                staticProps = fullName;
+            }
+            if (!protoProps) {
+                protoProps = staticProps;
+            }
+            this.store = {};
+            can.Map.setup.apply(this, arguments);
+            if (!can.Model) {
+                return;
+            }
+            if (staticProps && staticProps.List) {
+                this.List = staticProps.List;
+                this.List.Map = this;
+            } else {
+                this.List = base.List.extend({ Map: this }, {});
+            }
+            var self = this, clean = can.proxy(this._clean, self);
+            can.each(ajaxMethods, function (method, name) {
+                if (staticProps && staticProps[name] && (typeof staticProps[name] === 'string' || typeof staticProps[name] === 'object')) {
+                    self[name] = ajaxMaker(method, staticProps[name]);
+                } else if (staticProps && staticProps.resource && !can.isFunction(staticProps[name])) {
+                    self[name] = ajaxMaker(method, createURLFromResource(self, name));
+                }
+                if (self['make' + can.capitalize(name)]) {
+                    var newMethod = self['make' + can.capitalize(name)](self[name]);
+                    can.Construct._overwrite(self, base, name, function () {
+                        can.Model._reqs++;
+                        var def = newMethod.apply(this, arguments);
+                        var then = def.then(clean, clean);
+                        then.abort = def.abort;
+                        return then;
+                    });
+                }
+            });
+            var hasCustomConverter = {};
+            can.each(converters, function (converter, name) {
+                var parseName = 'parse' + can.capitalize(name), dataProperty = staticProps && staticProps[name] || self[name];
+                if (typeof dataProperty === 'string') {
+                    self[parseName] = dataProperty;
+                    can.Construct._overwrite(self, base, name, converter);
+                } else if (staticProps && staticProps[name]) {
+                    hasCustomConverter[parseName] = true;
+                }
+            });
+            can.each(makeParser, function (maker, parseName) {
+                var prop = staticProps && staticProps[parseName] || self[parseName];
+                if (typeof prop === 'string') {
+                    can.Construct._overwrite(self, base, parseName, maker(prop));
+                } else if ((!staticProps || !can.isFunction(staticProps[parseName])) && !self[parseName]) {
+                    var madeParser = maker();
+                    madeParser.useModelConverter = hasCustomConverter[parseName];
+                    can.Construct._overwrite(self, base, parseName, madeParser);
+                }
+            });
+            if (self.fullName === 'can.Model' || !self.fullName) {
+                self.fullName = 'Model' + ++modelNum;
+            }
+            can.Model._reqs = 0;
+            this._url = this._shortName + '/{' + this.id + '}';
+        },
+        _ajax: ajaxMaker,
+        _makeRequest: makeRequest,
+        _clean: function () {
+            can.Model._reqs--;
+            if (!can.Model._reqs) {
+                for (var id in this.store) {
+                    if (!this.store[id]._bindings) {
+                        delete this.store[id];
+                    }
+                }
+            }
+            return arguments[0];
+        },
+        models: converters.models,
+        model: converters.model
+    }, {
+        setup: function (attrs) {
+            var id = attrs && attrs[this.constructor.id];
+            if (can.Model._reqs && id != null) {
+                this.constructor.store[id] = this;
+            }
+            can.Map.prototype.setup.apply(this, arguments);
+        },
+        isNew: function () {
+            var id = getId(this);
+            return !(id || id === 0);
+        },
+        save: function (success, error) {
+            return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
+        },
+        destroy: function (success, error) {
+            if (this.isNew()) {
+                var self = this;
+                var def = can.Deferred();
+                def.then(success, error);
+                return def.done(function (data) {
+                    self.destroyed(data);
+                }).resolve(self);
+            }
+            return makeRequest(this, 'destroy', success, error, 'destroyed');
+        },
+        _bindsetup: function () {
+            var modelInstance = this.___get(this.constructor.id);
+            if (modelInstance != null) {
+                this.constructor.store[modelInstance] = this;
+            }
+            return can.Map.prototype._bindsetup.apply(this, arguments);
+        },
+        _bindteardown: function () {
+            delete this.constructor.store[getId(this)];
+            return can.Map.prototype._bindteardown.apply(this, arguments);
+        },
+        ___set: function (prop, val) {
+            can.Map.prototype.___set.call(this, prop, val);
+            if (prop === this.constructor.id && this._bindings) {
+                this.constructor.store[getId(this)] = this;
+            }
+        }
+    });
+    var makeGetterHandler = function (name) {
+            return function (data, readyState, xhr) {
+                return this[name](data, null, xhr);
+            };
+        }, createUpdateDestroyHandler = function (data) {
+            if (this.parseModel.useModelConverter) {
+                return this.model(data);
+            }
+            return this.parseModel(data);
+        };
+    var responseHandlers = {
+        makeFindAll: makeGetterHandler('models'),
+        makeFindOne: makeGetterHandler('model'),
+        makeCreate: createUpdateDestroyHandler,
+        makeUpdate: createUpdateDestroyHandler,
+        makeDestroy: createUpdateDestroyHandler
+    };
+    can.each(responseHandlers, function (method, name) {
+        can.Model[name] = function (oldMethod) {
+            return function () {
+                var args = can.makeArray(arguments), oldArgs = can.isFunction(args[1]) ? args.splice(0, 1) : args.splice(0, 2), def = pipe(oldMethod.apply(this, oldArgs), this, method);
+                def.then(args[0], args[1]);
+                return def;
+            };
+        };
+    });
+    can.each([
+        'created',
+        'updated',
+        'destroyed'
+    ], function (funcName) {
+        can.Model.prototype[funcName] = function (attrs) {
+            var self = this, constructor = self.constructor;
+            if (attrs && typeof attrs === 'object') {
+                this.attr(can.isFunction(attrs.attr) ? attrs.attr() : attrs);
+            }
+            can.dispatch.call(this, {
+                type: funcName,
+                target: this
+            }, []);
+            can.dispatch.call(constructor, funcName, [this]);
+        };
+    });
+    var ML = can.Model.List = can.List.extend({
+        _bubbleRule: function (eventName, list) {
+            var bubbleRules = can.List._bubbleRule(eventName, list);
+            bubbleRules.push('destroyed');
+            return bubbleRules;
+        }
+    }, {
+        setup: function (params) {
+            if (can.isPlainObject(params) && !can.isArray(params)) {
+                can.List.prototype.setup.apply(this);
+                this.replace(can.isDeferred(params) ? params : this.constructor.Map.findAll(params));
+            } else {
+                can.List.prototype.setup.apply(this, arguments);
+            }
+            this.bind('destroyed', can.proxy(this._destroyed, this));
+        },
+        _destroyed: function (ev, attr) {
+            if (/\w+/.test(attr)) {
+                var index;
+                while ((index = this.indexOf(ev.target)) > -1) {
+                    this.splice(index, 1);
+                }
+            }
+        }
+    });
+    return can.Model;
+});
+/*can/util/string/deparam/deparam*/
+define('can/util/string/deparam/deparam', [
+    'can/util/util',
+    'can/util/string/string'
+], function (can) {
+    var digitTest = /^\d+$/, keyBreaker = /([^\[\]]+)|(\[\])/g, paramTest = /([^?#]*)(#.*)?$/, prep = function (str) {
+            return decodeURIComponent(str.replace(/\+/g, ' '));
+        };
+    can.extend(can, {
+        deparam: function (params) {
+            var data = {}, pairs, lastPart;
+            if (params && paramTest.test(params)) {
+                pairs = params.split('&');
+                can.each(pairs, function (pair) {
+                    var parts = pair.split('='), key = prep(parts.shift()), value = prep(parts.join('=')), current = data;
+                    if (key) {
+                        parts = key.match(keyBreaker);
+                        for (var j = 0, l = parts.length - 1; j < l; j++) {
+                            if (!current[parts[j]]) {
+                                current[parts[j]] = digitTest.test(parts[j + 1]) || parts[j + 1] === '[]' ? [] : {};
+                            }
+                            current = current[parts[j]];
+                        }
+                        lastPart = parts.pop();
+                        if (lastPart === '[]') {
+                            current.push(value);
+                        } else {
+                            current[lastPart] = value;
+                        }
+                    }
+                });
+            }
+            return data;
+        }
+    });
+    return can;
+});
+/*can/route/route*/
+define('can/route/route', [
+    'can/util/util',
+    'can/map/map',
+    'can/list/list',
+    'can/util/string/deparam/deparam'
+], function (can) {
+    var matcher = /\:([\w\.]+)/g, paramsMatcher = /^(?:&[^=]+=[^&]*)+/, makeProps = function (props) {
+            var tags = [];
+            can.each(props, function (val, name) {
+                tags.push((name === 'className' ? 'class' : name) + '="' + (name === 'href' ? val : can.esc(val)) + '"');
+            });
+            return tags.join(' ');
+        }, matchesData = function (route, data) {
+            var count = 0, i = 0, defaults = {};
+            for (var name in route.defaults) {
+                if (route.defaults[name] === data[name]) {
+                    defaults[name] = 1;
+                    count++;
+                }
+            }
+            for (; i < route.names.length; i++) {
+                if (!data.hasOwnProperty(route.names[i])) {
+                    return -1;
+                }
+                if (!defaults[route.names[i]]) {
+                    count++;
+                }
+            }
+            return count;
+        }, location = window.location, wrapQuote = function (str) {
+            return (str + '').replace(/([.?*+\^$\[\]\\(){}|\-])/g, '\\$1');
+        }, each = can.each, extend = can.extend, stringify = function (obj) {
+            if (obj && typeof obj === 'object') {
+                if (obj instanceof can.Map) {
+                    obj = obj.attr();
+                } else {
+                    obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj);
+                }
+                can.each(obj, function (val, prop) {
+                    obj[prop] = stringify(val);
+                });
+            } else if (obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
+                obj = obj.toString();
+            }
+            return obj;
+        }, removeBackslash = function (str) {
+            return str.replace(/\\/g, '');
+        }, timer, curParams, lastHash, changingData, changedAttrs = [], onRouteDataChange = function (ev, attr, how, newval) {
+            changingData = 1;
+            changedAttrs.push(attr);
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                changingData = 0;
+                var serialized = can.route.data.serialize(), path = can.route.param(serialized, true);
+                can.route._call('setURL', path, changedAttrs);
+                can.batch.trigger(eventsObject, '__url', [
+                    path,
+                    lastHash
+                ]);
+                lastHash = path;
+                changedAttrs = [];
+            }, 10);
+        }, eventsObject = can.extend({}, can.event);
+    can.route = function (url, defaults) {
+        var root = can.route._call('root');
+        if (root.lastIndexOf('/') === root.length - 1 && url.indexOf('/') === 0) {
+            url = url.substr(1);
+        }
+        defaults = defaults || {};
+        var names = [], res, test = '', lastIndex = matcher.lastIndex = 0, next, querySeparator = can.route._call('querySeparator'), matchSlashes = can.route._call('matchSlashes');
+        while (res = matcher.exec(url)) {
+            names.push(res[1]);
+            test += removeBackslash(url.substring(lastIndex, matcher.lastIndex - res[0].length));
+            next = '\\' + (removeBackslash(url.substr(matcher.lastIndex, 1)) || querySeparator + (matchSlashes ? '' : '|/'));
+            test += '([^' + next + ']' + (defaults[res[1]] ? '*' : '+') + ')';
+            lastIndex = matcher.lastIndex;
+        }
+        test += url.substr(lastIndex).replace('\\', '');
+        can.route.routes[url] = {
+            test: new RegExp('^' + test + '($|' + wrapQuote(querySeparator) + ')'),
+            route: url,
+            names: names,
+            defaults: defaults,
+            length: url.split('/').length
+        };
+        return can.route;
+    };
+    extend(can.route, {
+        param: function (data, _setRoute) {
+            var route, matches = 0, matchCount, routeName = data.route, propCount = 0;
+            delete data.route;
+            each(data, function () {
+                propCount++;
+            });
+            each(can.route.routes, function (temp, name) {
+                matchCount = matchesData(temp, data);
+                if (matchCount > matches) {
+                    route = temp;
+                    matches = matchCount;
+                }
+                if (matchCount >= propCount) {
+                    return false;
+                }
+            });
+            if (can.route.routes[routeName] && matchesData(can.route.routes[routeName], data) === matches) {
+                route = can.route.routes[routeName];
+            }
+            if (route) {
+                var cpy = extend({}, data), res = route.route.replace(matcher, function (whole, name) {
+                        delete cpy[name];
+                        return data[name] === route.defaults[name] ? '' : encodeURIComponent(data[name]);
+                    }).replace('\\', ''), after;
+                each(route.defaults, function (val, name) {
+                    if (cpy[name] === val) {
+                        delete cpy[name];
+                    }
+                });
+                after = can.param(cpy);
+                if (_setRoute) {
+                    can.route.attr('route', route.route);
+                }
+                return res + (after ? can.route._call('querySeparator') + after : '');
+            }
+            return can.isEmptyObject(data) ? '' : can.route._call('querySeparator') + can.param(data);
+        },
+        deparam: function (url) {
+            var root = can.route._call('root');
+            if (root.lastIndexOf('/') === root.length - 1 && url.indexOf('/') === 0) {
+                url = url.substr(1);
+            }
+            var route = { length: -1 }, querySeparator = can.route._call('querySeparator'), paramsMatcher = can.route._call('paramsMatcher');
+            each(can.route.routes, function (temp, name) {
+                if (temp.test.test(url) && temp.length > route.length) {
+                    route = temp;
+                }
+            });
+            if (route.length > -1) {
+                var parts = url.match(route.test), start = parts.shift(), remainder = url.substr(start.length - (parts[parts.length - 1] === querySeparator ? 1 : 0)), obj = remainder && paramsMatcher.test(remainder) ? can.deparam(remainder.slice(1)) : {};
+                obj = extend(true, {}, route.defaults, obj);
+                each(parts, function (part, i) {
+                    if (part && part !== querySeparator) {
+                        obj[route.names[i]] = decodeURIComponent(part);
+                    }
+                });
+                obj.route = route.route;
+                return obj;
+            }
+            if (url.charAt(0) !== querySeparator) {
+                url = querySeparator + url;
+            }
+            return paramsMatcher.test(url) ? can.deparam(url.slice(1)) : {};
+        },
+        data: new can.Map({}),
+        map: function (data) {
+            var appState;
+            if (data.prototype instanceof can.Map) {
+                appState = new data();
+            } else {
+                appState = data;
+            }
+            can.route.data = appState;
+        },
+        routes: {},
+        ready: function (val) {
+            if (val !== true) {
+                can.route._setup();
+                if (can.isBrowserWindow || can.isWebWorker) {
+                    can.route.setState();
+                }
+            }
+            return can.route;
+        },
+        url: function (options, merge) {
+            if (merge) {
+                can.__observe(eventsObject, '__url');
+                options = can.extend({}, can.route.deparam(can.route._call('matchingPartOfURL')), options);
+            }
+            return can.route._call('root') + can.route.param(options);
+        },
+        link: function (name, options, props, merge) {
+            return '<a ' + makeProps(extend({ href: can.route.url(options, merge) }, props)) + '>' + name + '</a>';
+        },
+        current: function (options) {
+            can.__observe(eventsObject, '__url');
+            return this._call('matchingPartOfURL') === can.route.param(options);
+        },
+        bindings: {
+            hashchange: {
+                paramsMatcher: paramsMatcher,
+                querySeparator: '&',
+                matchSlashes: false,
+                bind: function () {
+                    can.bind.call(window, 'hashchange', setState);
+                },
+                unbind: function () {
+                    can.unbind.call(window, 'hashchange', setState);
+                },
+                matchingPartOfURL: function () {
+                    var loc = can.route.location || location;
+                    return loc.href.split(/#!?/)[1] || '';
+                },
+                setURL: function (path) {
+                    if (location.hash !== '#' + path) {
+                        location.hash = '!' + path;
+                    }
+                    return path;
+                },
+                root: '#!'
+            }
+        },
+        defaultBinding: 'hashchange',
+        currentBinding: null,
+        _setup: function () {
+            if (!can.route.currentBinding) {
+                can.route._call('bind');
+                can.route.bind('change', onRouteDataChange);
+                can.route.currentBinding = can.route.defaultBinding;
+            }
+        },
+        _teardown: function () {
+            if (can.route.currentBinding) {
+                can.route._call('unbind');
+                can.route.unbind('change', onRouteDataChange);
+                can.route.currentBinding = null;
+            }
+            clearTimeout(timer);
+            changingData = 0;
+        },
+        _call: function () {
+            var args = can.makeArray(arguments), prop = args.shift(), binding = can.route.bindings[can.route.currentBinding || can.route.defaultBinding], method = binding[prop];
+            if (method.apply) {
+                return method.apply(binding, args);
+            } else {
+                return method;
+            }
+        }
+    });
+    each([
+        'bind',
+        'unbind',
+        'on',
+        'off',
+        'delegate',
+        'undelegate',
+        'removeAttr',
+        'compute',
+        '_get',
+        '___get',
+        'each'
+    ], function (name) {
+        can.route[name] = function () {
+            if (!can.route.data[name]) {
+                return;
+            }
+            return can.route.data[name].apply(can.route.data, arguments);
+        };
+    });
+    can.route.attr = function (attr, val) {
+        var type = typeof attr, newArguments;
+        if (val === undefined) {
+            newArguments = arguments;
+        } else if (type !== 'string' && type !== 'number') {
+            newArguments = [
+                stringify(attr),
+                val
+            ];
+        } else {
+            newArguments = [
+                attr,
+                stringify(val)
+            ];
+        }
+        return can.route.data.attr.apply(can.route.data, newArguments);
+    };
+    can.route.batch = can.batch;
+    var setState = can.route.setState = function () {
+        var hash = can.route._call('matchingPartOfURL');
+        var oldParams = curParams;
+        curParams = can.route.deparam(hash);
+        if (!changingData || hash !== lastHash) {
+            can.route.batch.start();
+            recursiveClean(oldParams, curParams, can.route.data);
+            can.route.attr(curParams);
+            can.route.batch.trigger(eventsObject, '__url', [
+                hash,
+                lastHash
+            ]);
+            can.route.batch.stop();
+        }
+    };
+    var recursiveClean = function (old, cur, data) {
+        for (var attr in old) {
+            if (cur[attr] === undefined) {
+                data.removeAttr(attr);
+            } else if (Object.prototype.toString.call(old[attr]) === '[object Object]') {
+                recursiveClean(old[attr], cur[attr], data.attr(attr));
+            }
+        }
+    };
+    return can.route;
+});
+/*can/control/route/route*/
+define('can/control/route/route', [
+    'can/util/util',
+    'can/route/route',
+    'can/control/control'
+], function (can) {
+    can.Control.processors.route = function (el, event, selector, funcName, controller) {
+        selector = selector || '';
+        if (!can.route.routes[selector]) {
+            if (selector[0] === '/') {
+                selector = selector.substring(1);
+            }
+            can.route(selector);
+        }
+        var batchNum, check = function (ev, attr, how) {
+                if (can.route.attr('route') === selector && (ev.batchNum === undefined || ev.batchNum !== batchNum)) {
+                    batchNum = ev.batchNum;
+                    var d = can.route.attr();
+                    delete d.route;
+                    if (can.isFunction(controller[funcName])) {
+                        controller[funcName](d);
+                    } else {
+                        controller[controller[funcName]](d);
+                    }
+                }
+            };
+        can.route.bind('change', check);
+        return function () {
+            can.route.unbind('change', check);
+        };
+    };
+    return can;
+});
+/*can/view/target/target*/
+define('can/view/target/target', [
+    'can/util/util',
+    'can/view/elements'
+], function (can, elements, vdom) {
+    var processNodes = function (nodes, paths, location, document) {
+            var frag = document.createDocumentFragment();
+            for (var i = 0, len = nodes.length; i < len; i++) {
+                var node = nodes[i];
+                frag.appendChild(processNode(node, paths, location.concat(i), document));
+            }
+            return frag;
+        }, keepsTextNodes = typeof document !== 'undefined' && function () {
+            var testFrag = document.createDocumentFragment();
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(''));
+            div.appendChild(document.createTextNode(''));
+            testFrag.appendChild(div);
+            var cloned = testFrag.cloneNode(true);
+            return can.childNodes(cloned.firstChild).length === 2;
+        }(), clonesWork = typeof document !== 'undefined' && function () {
+            var a = document.createElement('a');
+            a.innerHTML = '<xyz></xyz>';
+            var clone = a.cloneNode(true);
+            return clone.innerHTML === '<xyz></xyz>';
+        }(), namespacesWork = typeof document !== 'undefined' && !!document.createElementNS, setAttribute = can.attr.setAttribute;
+    var cloneNode = clonesWork ? function (el) {
+        return el.cloneNode(true);
+    } : function (node) {
+        var copy;
+        if (node.nodeType === 1) {
+            copy = document.createElement(node.nodeName);
+        } else if (node.nodeType === 3) {
+            copy = document.createTextNode(node.nodeValue);
+        } else if (node.nodeType === 8) {
+            copy = document.createComment(node.nodeValue);
+        } else if (node.nodeType === 11) {
+            copy = document.createDocumentFragment();
+        }
+        if (node.attributes) {
+            var attributes = can.makeArray(node.attributes);
+            can.each(attributes, function (node) {
+                if (node && node.specified) {
+                    setAttribute(copy, node.nodeName, node.nodeValue);
+                }
+            });
+        }
+        if (node.childNodes) {
+            can.each(node.childNodes, function (child) {
+                copy.appendChild(cloneNode(child));
+            });
+        }
+        return copy;
+    };
+    function processNode(node, paths, location, document) {
+        var callback, loc = location, nodeType = typeof node, el, p, i, len;
+        var getCallback = function () {
+            if (!callback) {
+                callback = {
+                    path: location,
+                    callbacks: []
+                };
+                paths.push(callback);
+                loc = [];
+            }
+            return callback;
+        };
+        if (nodeType === 'object') {
+            if (node.tag) {
+                if (namespacesWork && node.namespace) {
+                    el = document.createElementNS(node.namespace, node.tag);
+                } else {
+                    el = document.createElement(node.tag);
+                }
+                if (node.attrs) {
+                    for (var attrName in node.attrs) {
+                        var value = node.attrs[attrName];
+                        if (typeof value === 'function') {
+                            getCallback().callbacks.push({ callback: value });
+                        } else {
+                            setAttribute(el, attrName, value);
+                        }
+                    }
+                }
+                if (node.attributes) {
+                    for (i = 0, len = node.attributes.length; i < len; i++) {
+                        getCallback().callbacks.push({ callback: node.attributes[i] });
+                    }
+                }
+                if (node.children && node.children.length) {
+                    if (callback) {
+                        p = callback.paths = [];
+                    } else {
+                        p = paths;
+                    }
+                    el.appendChild(processNodes(node.children, p, loc, document));
+                }
+            } else if (node.comment) {
+                el = document.createComment(node.comment);
+                if (node.callbacks) {
+                    for (i = 0, len = node.attributes.length; i < len; i++) {
+                        getCallback().callbacks.push({ callback: node.callbacks[i] });
+                    }
+                }
+            }
+        } else if (nodeType === 'string') {
+            el = document.createTextNode(node);
+        } else if (nodeType === 'function') {
+            if (keepsTextNodes) {
+                el = document.createTextNode('');
+                getCallback().callbacks.push({ callback: node });
+            } else {
+                el = document.createComment('~');
+                getCallback().callbacks.push({
+                    callback: function () {
+                        var el = document.createTextNode('');
+                        elements.replace([this], el);
+                        return node.apply(el, arguments);
+                    }
+                });
+            }
+        }
+        return el;
+    }
+    function getCallbacks(el, pathData, elementCallbacks) {
+        var path = pathData.path, callbacks = pathData.callbacks, paths = pathData.paths, child = el, pathLength = path ? path.length : 0, pathsLength = paths ? paths.length : 0;
+        for (var i = 0; i < pathLength; i++) {
+            child = child.childNodes.item(path[i]);
+        }
+        for (i = 0; i < pathsLength; i++) {
+            getCallbacks(child, paths[i], elementCallbacks);
+        }
+        elementCallbacks.push({
+            element: child,
+            callbacks: callbacks
+        });
+    }
+    function hydrateCallbacks(callbacks, args) {
+        var len = callbacks.length, callbacksLength, callbackElement, callbackData;
+        for (var i = 0; i < len; i++) {
+            callbackData = callbacks[i];
+            callbacksLength = callbackData.callbacks.length;
+            callbackElement = callbackData.element;
+            for (var c = 0; c < callbacksLength; c++) {
+                callbackData.callbacks[c].callback.apply(callbackElement, args);
+            }
+        }
+    }
+    function makeTarget(nodes, doc) {
+        var paths = [];
+        var frag = processNodes(nodes, paths, [], doc || can.global.document);
+        return {
+            paths: paths,
+            clone: frag,
+            hydrate: function () {
+                var cloned = cloneNode(this.clone);
+                var args = can.makeArray(arguments);
+                var callbacks = [];
+                for (var i = 0; i < paths.length; i++) {
+                    getCallbacks(cloned, paths[i], callbacks);
+                }
+                hydrateCallbacks(callbacks, args);
+                return cloned;
+            }
+        };
+    }
+    makeTarget.keepsTextNodes = keepsTextNodes;
+    can.view.target = makeTarget;
+    return makeTarget;
+});
+/*can/view/stache/mustache_core*/
+define('can/view/stache/mustache_core', [
+    'can/util/util',
+    'can/view/stache/utils',
+    'can/view/stache/mustache_helpers',
+    'can/view/stache/expression',
+    'can/view/live/live',
+    'can/view/elements',
+    'can/view/scope/scope',
+    'can/view/node_lists/node_lists'
+], function (can, utils, mustacheHelpers, expression, live, elements, Scope, nodeLists) {
+    live = live || can.view.live;
+    elements = elements || can.view.elements;
+    Scope = Scope || can.view.Scope;
+    nodeLists = nodeLists || can.view.nodeLists;
+    var mustacheLineBreakRegExp = /(?:(?:^|(\r?)\n)(\s*)(\{\{([^\}]*)\}\}\}?)([^\S\n\r]*)($|\r?\n))|(\{\{([^\}]*)\}\}\}?)/g, getItemsFragContent = function (items, isObserveList, helperOptions, options) {
+            var frag = (can.document || can.global.document).createDocumentFragment();
+            for (var i = 0, len = items.length; i < len; i++) {
+                append(frag, helperOptions.fn(isObserveList ? items.attr('' + i) : items[i], options));
+            }
+            return frag;
+        }, append = function (frag, content) {
+            if (content) {
+                frag.appendChild(typeof content === 'string' ? frag.ownerDocument.createTextNode(content) : content);
+            }
+        }, getItemsStringContent = function (items, isObserveList, helperOptions, options) {
+            var txt = '';
+            for (var i = 0, len = items.length; i < len; i++) {
+                txt += helperOptions.fn(isObserveList ? items.attr('' + i) : items[i], options);
+            }
+            return txt;
+        };
+    var core = {
+        expression: expression,
+        makeEvaluator: function (scope, helperOptions, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
+            if (mode === '^') {
+                var temp = truthyRenderer;
+                truthyRenderer = falseyRenderer;
+                falseyRenderer = temp;
+            }
+            var value, helperOptionArg;
+            if (exprData instanceof expression.Call) {
+                helperOptionArg = {
+                    fn: function () {
+                    },
+                    inverse: function () {
+                    },
+                    context: scope.attr('.'),
+                    scope: scope,
+                    nodeList: nodeList,
+                    exprData: exprData,
+                    helpersScope: helperOptions
+                };
+                utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
+                value = exprData.value(scope, helperOptions, helperOptionArg);
+                if (exprData.isHelper) {
+                    return value;
+                }
+            } else {
+                var readOptions = {
+                    isArgument: true,
+                    args: [
+                        scope.attr('.'),
+                        scope
+                    ],
+                    asCompute: true
+                };
+                var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+                var helper = helperAndValue.helper;
+                value = helperAndValue.value;
+                if (helper) {
+                    return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
+                }
+            }
+            if (!mode) {
+                if (value && value.isComputed) {
+                    return value;
+                } else {
+                    return function () {
+                        return '' + (value != null ? value : '');
+                    };
+                }
+            } else if (mode === '#' || mode === '^') {
+                helperOptionArg = {
+                    fn: function () {
+                    },
+                    inverse: function () {
+                    }
+                };
+                utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
+                return function () {
+                    var finalValue;
+                    if (can.isFunction(value) && value.isComputed) {
+                        finalValue = value();
+                    } else {
+                        finalValue = value;
+                    }
+                    if (typeof finalValue === 'function') {
+                        return finalValue;
+                    } else if (utils.isArrayLike(finalValue)) {
+                        var isObserveList = utils.isObserveLike(finalValue);
+                        if (isObserveList ? finalValue.attr('length') : finalValue.length) {
+                            return (stringOnly ? getItemsStringContent : getItemsFragContent)(finalValue, isObserveList, helperOptionArg, helperOptions);
+                        } else {
+                            return helperOptionArg.inverse(scope, helperOptions);
+                        }
+                    } else {
+                        return finalValue ? helperOptionArg.fn(finalValue || scope, helperOptions) : helperOptionArg.inverse(scope, helperOptions);
+                    }
+                };
+            } else {
+            }
+        },
+        makeLiveBindingPartialRenderer: function (partialName, state) {
+            partialName = can.trim(partialName);
+            return function (scope, options, parentSectionNodeList) {
+                var nodeList = [this];
+                nodeList.expression = '>' + partialName;
+                nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
+                var partialFrag = can.compute(function () {
+                    var localPartialName = partialName;
+                    var partial = options.attr('partials.' + localPartialName), renderer;
+                    if (partial) {
+                        renderer = function () {
+                            return partial.render ? partial.render(scope, options, nodeList) : partial(scope, options);
+                        };
+                    } else {
+                        var scopePartialName = scope.read(localPartialName, { isArgument: true }).value;
+                        if (scopePartialName === null || !scopePartialName && localPartialName[0] === '*') {
+                            return can.frag('');
+                        }
+                        if (scopePartialName) {
+                            localPartialName = scopePartialName;
+                        }
+                        renderer = function () {
+                            return can.isFunction(localPartialName) ? localPartialName(scope, options, nodeList) : can.view.render(localPartialName, scope, options, nodeList);
+                        };
+                    }
+                    var res = can.__notObserve(renderer)();
+                    return can.frag(res);
+                });
+                live.html(this, partialFrag, this.parentNode, nodeList);
+            };
+        },
+        makeStringBranchRenderer: function (mode, expressionString) {
+            var exprData = core.expression.parse(expressionString), fullExpression = mode + expressionString;
+            if (!(exprData instanceof expression.Helper) && !(exprData instanceof expression.Call)) {
+                exprData = new expression.Helper(exprData, [], {});
+            }
+            return function branchRenderer(scope, options, truthyRenderer, falseyRenderer) {
+                var evaluator = scope.__cache[fullExpression];
+                if (mode || !evaluator) {
+                    evaluator = makeEvaluator(scope, options, null, mode, exprData, truthyRenderer, falseyRenderer, true);
+                    if (!mode) {
+                        scope.__cache[fullExpression] = evaluator;
+                    }
+                }
+                var res = evaluator();
+                return res == null ? '' : '' + res;
+            };
+        },
+        makeLiveBindingBranchRenderer: function (mode, expressionString, state) {
+            var exprData = core.expression.parse(expressionString);
+            if (!(exprData instanceof expression.Helper) && !(exprData instanceof expression.Call)) {
+                exprData = new expression.Helper(exprData, [], {});
+            }
+            return function branchRenderer(scope, options, parentSectionNodeList, truthyRenderer, falseyRenderer) {
+                var nodeList = [this];
+                nodeList.expression = expressionString;
+                nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
+                var evaluator = makeEvaluator(scope, options, nodeList, mode, exprData, truthyRenderer, falseyRenderer, state.tag);
+                var gotCompute = evaluator.isComputed, compute;
+                if (gotCompute) {
+                    compute = evaluator;
+                } else {
+                    compute = can.compute(evaluator, null, false);
+                }
+                compute.computeInstance.bind('change', can.k);
+                var value = compute();
+                if (typeof value === 'function') {
+                    can.__notObserve(value)(this);
+                } else if (gotCompute || compute.computeInstance.hasDependencies) {
+                    if (state.attr) {
+                        live.simpleAttribute(this, state.attr, compute);
+                    } else if (state.tag) {
+                        live.attributes(this, compute);
+                    } else if (state.text && typeof value !== 'object') {
+                        live.text(this, compute, this.parentNode, nodeList);
+                    } else {
+                        live.html(this, compute, this.parentNode, nodeList);
+                    }
+                } else {
+                    if (state.attr) {
+                        can.attr.set(this, state.attr, value);
+                    } else if (state.tag) {
+                        live.setAttributes(this, value);
+                    } else if (state.text && typeof value === 'string') {
+                        this.nodeValue = value;
+                    } else if (value != null) {
+                        elements.replace([this], can.frag(value, this.ownerDocument));
+                    }
+                }
+                compute.computeInstance.unbind('change', can.k);
+            };
+        },
+        splitModeFromExpression: function (expression, state) {
+            expression = can.trim(expression);
+            var mode = expression.charAt(0);
+            if ('#/{&^>!'.indexOf(mode) >= 0) {
+                expression = can.trim(expression.substr(1));
+            } else {
+                mode = null;
+            }
+            if (mode === '{' && state.node) {
+                mode = null;
+            }
+            return {
+                mode: mode,
+                expression: expression
+            };
+        },
+        cleanLineEndings: function (template) {
+            return template.replace(mustacheLineBreakRegExp, function (whole, returnBefore, spaceBefore, special, expression, spaceAfter, returnAfter, spaceLessSpecial, spaceLessExpression, matchIndex) {
+                spaceAfter = spaceAfter || '';
+                returnBefore = returnBefore || '';
+                spaceBefore = spaceBefore || '';
+                var modeAndExpression = splitModeFromExpression(expression || spaceLessExpression, {});
+                if (spaceLessSpecial || '>{'.indexOf(modeAndExpression.mode) >= 0) {
+                    return whole;
+                } else if ('^#!/'.indexOf(modeAndExpression.mode) >= 0) {
+                    return special + (matchIndex !== 0 && returnAfter.length ? returnBefore + '\n' : '');
+                } else {
+                    return spaceBefore + special + spaceAfter + (spaceBefore.length || matchIndex !== 0 ? returnBefore + '\n' : '');
+                }
+            });
+        },
+        Options: utils.Options
+    };
+    var makeEvaluator = core.makeEvaluator, splitModeFromExpression = core.splitModeFromExpression;
+    can.view.mustacheCore = core;
+    return core;
+});
+/*can/view/stache/html_section*/
+define('can/view/stache/html_section', [
+    'can/util/util',
+    'can/view/target/target',
+    'can/view/stache/utils',
+    'can/view/stache/mustache_core'
+], function (can, target, utils, mustacheCore) {
+    var decodeHTML = typeof document !== 'undefined' && function () {
+        var el = document.createElement('div');
+        return function (html) {
+            if (html.indexOf('&') === -1) {
+                return html.replace(/\r\n/g, '\n');
+            }
+            el.innerHTML = html;
+            return el.childNodes.length === 0 ? '' : el.childNodes.item(0).nodeValue;
+        };
+    }();
+    var HTMLSectionBuilder = function () {
+        this.stack = [new HTMLSection()];
+    };
+    can.extend(HTMLSectionBuilder.prototype, utils.mixins);
+    can.extend(HTMLSectionBuilder.prototype, {
+        startSubSection: function (process) {
+            var newSection = new HTMLSection(process);
+            this.stack.push(newSection);
+            return newSection;
+        },
+        endSubSectionAndReturnRenderer: function () {
+            if (this.last().isEmpty()) {
+                this.stack.pop();
+                return null;
+            } else {
+                var htmlSection = this.endSection();
+                return can.proxy(htmlSection.compiled.hydrate, htmlSection.compiled);
+            }
+        },
+        startSection: function (process) {
+            var newSection = new HTMLSection(process);
+            this.last().add(newSection.targetCallback);
+            this.stack.push(newSection);
+        },
+        endSection: function () {
+            this.last().compile();
+            return this.stack.pop();
+        },
+        inverse: function () {
+            this.last().inverse();
+        },
+        compile: function () {
+            var compiled = this.stack.pop().compile();
+            return function (scope, options, nodeList) {
+                if (!(scope instanceof can.view.Scope)) {
+                    scope = can.view.Scope.refsScope().add(scope || {});
+                }
+                if (!(options instanceof mustacheCore.Options)) {
+                    options = new mustacheCore.Options(options || {});
+                }
+                return compiled.hydrate(scope, options, nodeList);
+            };
+        },
+        push: function (chars) {
+            this.last().push(chars);
+        },
+        pop: function () {
+            return this.last().pop();
+        }
+    });
+    var HTMLSection = function (process) {
+        this.data = 'targetData';
+        this.targetData = [];
+        this.targetStack = [];
+        var self = this;
+        this.targetCallback = function (scope, options, sectionNode) {
+            process.call(this, scope, options, sectionNode, can.proxy(self.compiled.hydrate, self.compiled), self.inverseCompiled && can.proxy(self.inverseCompiled.hydrate, self.inverseCompiled));
+        };
+    };
+    can.extend(HTMLSection.prototype, {
+        inverse: function () {
+            this.inverseData = [];
+            this.data = 'inverseData';
+        },
+        push: function (data) {
+            this.add(data);
+            this.targetStack.push(data);
+        },
+        pop: function () {
+            return this.targetStack.pop();
+        },
+        add: function (data) {
+            if (typeof data === 'string') {
+                data = decodeHTML(data);
+            }
+            if (this.targetStack.length) {
+                can.last(this.targetStack).children.push(data);
+            } else {
+                this[this.data].push(data);
+            }
+        },
+        compile: function () {
+            this.compiled = target(this.targetData, can.document || can.global.document);
+            if (this.inverseData) {
+                this.inverseCompiled = target(this.inverseData, can.document || can.global.document);
+                delete this.inverseData;
+            }
+            this.targetStack = this.targetData = null;
+            return this.compiled;
+        },
+        children: function () {
+            if (this.targetStack.length) {
+                return can.last(this.targetStack).children;
+            } else {
+                return this[this.data];
+            }
+        },
+        isEmpty: function () {
+            return !this.targetData.length;
+        }
+    });
+    HTMLSectionBuilder.HTMLSection = HTMLSection;
+    return HTMLSectionBuilder;
+});
+/*can/view/stache/live_attr*/
+define('can/view/stache/live_attr', [
+    'can/util/util',
+    'can/view/live/live',
+    'can/view/elements',
+    'can/view/callbacks/callbacks'
+], function (can, live, elements, viewCallbacks) {
+    live = live || can.view.live;
+    elements = elements || can.view.elements;
+    viewCallbacks = viewCallbacks || can.view.callbacks;
+    return {
+        attributes: function (el, compute, scope, options) {
+            var oldAttrs = {};
+            var setAttrs = function (newVal) {
+                var newAttrs = live.getAttributeParts(newVal), name;
+                for (name in newAttrs) {
+                    var newValue = newAttrs[name], oldValue = oldAttrs[name];
+                    if (newValue !== oldValue) {
+                        can.attr.set(el, name, newValue);
+                        var callback = viewCallbacks.attr(name);
+                        if (callback) {
+                            callback(el, {
+                                attributeName: name,
+                                scope: scope,
+                                options: options
+                            });
+                        }
+                    }
+                    delete oldAttrs[name];
+                }
+                for (name in oldAttrs) {
+                    elements.removeAttr(el, name);
+                }
+                oldAttrs = newAttrs;
+            };
+            var handler = function (ev, newVal) {
+                setAttrs(newVal);
+            };
+            compute.bind('change', handler);
+            can.bind.call(el, 'removed', function () {
+                compute.unbind('change', handler);
+            });
+            setAttrs(compute());
+        }
+    };
+});
+/*can/view/stache/text_section*/
+define('can/view/stache/text_section', [
+    'can/util/util',
+    'can/view/live/live',
+    'can/view/stache/utils',
+    'can/view/stache/live_attr'
+], function (can, live, utils, liveStache) {
+    live = live || can.view.live;
+    var TextSectionBuilder = function () {
+        this.stack = [new TextSection()];
+    };
+    can.extend(TextSectionBuilder.prototype, utils.mixins);
+    can.extend(TextSectionBuilder.prototype, {
+        startSection: function (process) {
+            var subSection = new TextSection();
+            this.last().add({
+                process: process,
+                truthy: subSection
+            });
+            this.stack.push(subSection);
+        },
+        endSection: function () {
+            this.stack.pop();
+        },
+        inverse: function () {
+            this.stack.pop();
+            var falseySection = new TextSection();
+            this.last().last().falsey = falseySection;
+            this.stack.push(falseySection);
+        },
+        compile: function (state) {
+            var renderer = this.stack[0].compile();
+            return function (scope, options) {
+                var compute = can.compute(function () {
+                    return renderer(scope, options);
+                }, null, false);
+                compute.computeInstance.bind('change', can.k);
+                var value = compute();
+                if (compute.computeInstance.hasDependencies) {
+                    if (state.textContentOnly) {
+                        live.text(this, compute);
+                    } else if (state.attr) {
+                        live.simpleAttribute(this, state.attr, compute);
+                    } else {
+                        liveStache.attributes(this, compute, scope, options);
+                    }
+                    compute.computeInstance.unbind('change', can.k);
+                } else {
+                    if (state.textContentOnly) {
+                        this.nodeValue = value;
+                    } else if (state.attr) {
+                        can.attr.set(this, state.attr, value);
+                    } else {
+                        live.setAttributes(this, value);
+                    }
+                }
+            };
+        }
+    });
+    var passTruthyFalsey = function (process, truthy, falsey) {
+        return function (scope, options) {
+            return process.call(this, scope, options, truthy, falsey);
+        };
+    };
+    var TextSection = function () {
+        this.values = [];
+    };
+    can.extend(TextSection.prototype, {
+        add: function (data) {
+            this.values.push(data);
+        },
+        last: function () {
+            return this.values[this.values.length - 1];
+        },
+        compile: function () {
+            var values = this.values, len = values.length;
+            for (var i = 0; i < len; i++) {
+                var value = this.values[i];
+                if (typeof value === 'object') {
+                    values[i] = passTruthyFalsey(value.process, value.truthy && value.truthy.compile(), value.falsey && value.falsey.compile());
+                }
+            }
+            return function (scope, options) {
+                var txt = '', value;
+                for (var i = 0; i < len; i++) {
+                    value = values[i];
+                    txt += typeof value === 'string' ? value : value.call(this, scope, options);
+                }
+                return txt;
+            };
+        }
+    });
+    return TextSectionBuilder;
+});
+/*can/view/import/import*/
+define('can/view/import/import', [
+    'can/util/util',
+    'can/view/callbacks/callbacks'
+], function (can) {
+    can.view.tag('can-import', function (el, tagData) {
+        var $el = can.$(el);
+        var moduleName = el.getAttribute('from');
+        var templateModule = tagData.options.attr('helpers.module');
+        var parentName = templateModule ? templateModule.id : undefined;
+        var importPromise;
+        if (moduleName) {
+            importPromise = can['import'](moduleName, parentName);
+        } else {
+            importPromise = can.Deferred().reject('No moduleName provided').promise();
+        }
+        var root = tagData.scope.attr('%root');
+        if (root && can.isFunction(root.waitFor)) {
+            root.waitFor(importPromise);
+        }
+        can.data($el, 'viewModel', importPromise);
+        can.data($el, 'scope', importPromise);
+        var scope = tagData.scope.add(importPromise);
+        var handOffTag = el.getAttribute('can-tag');
+        if (handOffTag) {
+            var callback = can.view.tag(handOffTag);
+            can.data($el, 'preventDataBindings', true);
+            callback(el, can.extend(tagData, { scope: scope }));
+            can.data($el, 'preventDataBindings', false);
+            can.data($el, 'viewModel', importPromise);
+            can.data($el, 'scope', importPromise);
+        } else {
+            var frag = tagData.subtemplate ? tagData.subtemplate(scope, tagData.options) : document.createDocumentFragment();
+            var nodeList = can.view.nodeLists.register([], undefined, true);
+            can.one.call(el, 'removed', function () {
+                can.view.nodeLists.unregister(nodeList);
+            });
+            can.appendChild(el, frag, can.document);
+            can.view.nodeLists.update(nodeList, can.childNodes(el));
+        }
+    });
+});
+/*can/view/stache/intermediate_and_imports*/
+define('can/view/stache/intermediate_and_imports', [
+    'can/view/stache/mustache_core',
+    'can/view/parser/parser',
+    'can/view/import/import'
+], function (mustacheCore, parser) {
+    return function (source) {
+        var template = mustacheCore.cleanLineEndings(source);
+        var imports = [], dynamicImports = [], ases = {}, inImport = false, inFrom = false, inAs = false, isUnary = false, currentAs = '', currentFrom = '';
+        var intermediate = parser(template, {
+            start: function (tagName, unary) {
+                isUnary = unary;
+                if (tagName === 'can-import') {
+                    inImport = true;
+                } else if (inImport) {
+                    inImport = false;
+                }
+            },
+            attrStart: function (attrName) {
+                if (attrName === 'from') {
+                    inFrom = true;
+                } else if (attrName === 'as' || attrName === 'export-as') {
+                    inAs = true;
+                }
+            },
+            attrEnd: function (attrName) {
+                if (attrName === 'from') {
+                    inFrom = false;
+                } else if (attrName === 'as' || attrName === 'export-as') {
+                    inAs = false;
+                }
+            },
+            attrValue: function (value) {
+                if (inFrom && inImport) {
+                    imports.push(value);
+                    if (!isUnary) {
+                        dynamicImports.push(value);
+                    }
+                    currentFrom = value;
+                } else if (inAs && inImport) {
+                    currentAs = value;
+                }
+            },
+            end: function (tagName) {
+                if (tagName === 'can-import') {
+                    if (currentAs) {
+                        ases[currentAs] = currentFrom;
+                        currentAs = '';
+                    }
+                }
+            },
+            close: function (tagName) {
+                if (tagName === 'can-import') {
+                    imports.pop();
+                }
+            }
+        }, true);
+        return {
+            intermediate: intermediate,
+            imports: imports,
+            dynamicImports: dynamicImports,
+            ases: ases,
+            exports: ases
+        };
+    };
+});
+/*can/view/stache/stache*/
+define('can/view/stache/stache', [
+    'can/util/util',
+    'can/view/parser/parser',
+    'can/view/target/target',
+    'can/view/stache/html_section',
+    'can/view/stache/text_section',
+    'can/view/stache/mustache_core',
+    'can/view/stache/mustache_helpers',
+    'can/view/stache/intermediate_and_imports',
+    'can/view/callbacks/callbacks',
+    'can/view/bindings/bindings'
+], function (can, parser, target, HTMLSectionBuilder, TextSectionBuilder, mustacheCore, mustacheHelpers, getIntermediateAndImports, viewCallbacks) {
+    parser = parser || can.view.parser;
+    can.view.parser = parser;
+    viewCallbacks = viewCallbacks || can.view.callbacks;
+    var svgNamespace = 'http://www.w3.org/2000/svg';
+    var namespaces = {
+            'svg': svgNamespace,
+            'g': svgNamespace
+        }, textContentOnlyTag = {
+            style: true,
+            script: true
+        };
+    function stache(template) {
+        if (typeof template === 'string') {
+            template = mustacheCore.cleanLineEndings(template);
+        }
+        var section = new HTMLSectionBuilder(), state = {
+                node: null,
+                attr: null,
+                sectionElementStack: [],
+                text: false,
+                namespaceStack: [],
+                textContentOnly: null
+            }, makeRendererAndUpdateSection = function (section, mode, stache) {
+                if (mode === '>') {
+                    section.add(mustacheCore.makeLiveBindingPartialRenderer(stache, copyState()));
+                } else if (mode === '/') {
+                    section.endSection();
+                    if (section instanceof HTMLSectionBuilder) {
+                        state.sectionElementStack.pop();
+                    }
+                } else if (mode === 'else') {
+                    section.inverse();
+                } else {
+                    var makeRenderer = section instanceof HTMLSectionBuilder ? mustacheCore.makeLiveBindingBranchRenderer : mustacheCore.makeStringBranchRenderer;
+                    if (mode === '{' || mode === '&') {
+                        section.add(makeRenderer(null, stache, copyState()));
+                    } else if (mode === '#' || mode === '^') {
+                        section.startSection(makeRenderer(mode, stache, copyState()));
+                        if (section instanceof HTMLSectionBuilder) {
+                            state.sectionElementStack.push('section');
+                        }
+                    } else {
+                        section.add(makeRenderer(null, stache, copyState({ text: true })));
+                    }
+                }
+            }, copyState = function (overwrites) {
+                var lastElement = state.sectionElementStack[state.sectionElementStack.length - 1];
+                var cur = {
+                    tag: state.node && state.node.tag,
+                    attr: state.attr && state.attr.name,
+                    directlyNested: state.sectionElementStack.length ? lastElement === 'section' || lastElement === 'custom' : true,
+                    textContentOnly: !!state.textContentOnly
+                };
+                return overwrites ? can.simpleExtend(cur, overwrites) : cur;
+            }, addAttributesCallback = function (node, callback) {
+                if (!node.attributes) {
+                    node.attributes = [];
+                }
+                node.attributes.unshift(callback);
+            };
+        parser(template, {
+            start: function (tagName, unary) {
+                var matchedNamespace = namespaces[tagName];
+                if (matchedNamespace && !unary) {
+                    state.namespaceStack.push(matchedNamespace);
+                }
+                state.node = {
+                    tag: tagName,
+                    children: [],
+                    namespace: matchedNamespace || can.last(state.namespaceStack)
+                };
+            },
+            end: function (tagName, unary) {
+                var isCustomTag = viewCallbacks.tag(tagName);
+                if (unary) {
+                    section.add(state.node);
+                    if (isCustomTag) {
+                        addAttributesCallback(state.node, function (scope, options, parentNodeList) {
+                            viewCallbacks.tagHandler(this, tagName, {
+                                scope: scope,
+                                options: options,
+                                subtemplate: null,
+                                templateType: 'stache',
+                                parentNodeList: parentNodeList
+                            });
+                        });
+                    }
+                } else {
+                    section.push(state.node);
+                    state.sectionElementStack.push(isCustomTag ? 'custom' : tagName);
+                    if (isCustomTag) {
+                        section.startSubSection();
+                    } else if (textContentOnlyTag[tagName]) {
+                        state.textContentOnly = new TextSectionBuilder();
+                    }
+                }
+                state.node = null;
+            },
+            close: function (tagName) {
+                var matchedNamespace = namespaces[tagName];
+                if (matchedNamespace) {
+                    state.namespaceStack.pop();
+                }
+                var isCustomTag = viewCallbacks.tag(tagName), renderer;
+                if (isCustomTag) {
+                    renderer = section.endSubSectionAndReturnRenderer();
+                }
+                if (textContentOnlyTag[tagName]) {
+                    section.last().add(state.textContentOnly.compile(copyState()));
+                    state.textContentOnly = null;
+                }
+                var oldNode = section.pop();
+                if (isCustomTag) {
+                    addAttributesCallback(oldNode, function (scope, options, parentNodeList) {
+                        viewCallbacks.tagHandler(this, tagName, {
+                            scope: scope,
+                            options: options,
+                            subtemplate: renderer,
+                            templateType: 'stache',
+                            parentNodeList: parentNodeList
+                        });
+                    });
+                }
+                state.sectionElementStack.pop();
+            },
+            attrStart: function (attrName) {
+                if (state.node.section) {
+                    state.node.section.add(attrName + '="');
+                } else {
+                    state.attr = {
+                        name: attrName,
+                        value: ''
+                    };
+                }
+            },
+            attrEnd: function (attrName) {
+                if (state.node.section) {
+                    state.node.section.add('" ');
+                } else {
+                    if (!state.node.attrs) {
+                        state.node.attrs = {};
+                    }
+                    state.node.attrs[state.attr.name] = state.attr.section ? state.attr.section.compile(copyState()) : state.attr.value;
+                    var attrCallback = viewCallbacks.attr(attrName);
+                    if (attrCallback) {
+                        if (!state.node.attributes) {
+                            state.node.attributes = [];
+                        }
+                        state.node.attributes.push(function (scope, options) {
+                            attrCallback(this, {
+                                attributeName: attrName,
+                                scope: scope,
+                                options: options
+                            });
+                        });
+                    }
+                    state.attr = null;
+                }
+            },
+            attrValue: function (value) {
+                var section = state.node.section || state.attr.section;
+                if (section) {
+                    section.add(value);
+                } else {
+                    state.attr.value += value;
+                }
+            },
+            chars: function (text) {
+                (state.textContentOnly || section).add(text);
+            },
+            special: function (text) {
+                var firstAndText = mustacheCore.splitModeFromExpression(text, state), mode = firstAndText.mode, expression = firstAndText.expression;
+                if (expression === 'else') {
+                    (state.attr && state.attr.section ? state.attr.section : state.textContentOnly || section).inverse();
+                    return;
+                }
+                if (mode === '!') {
+                    return;
+                }
+                if (state.node && state.node.section) {
+                    makeRendererAndUpdateSection(state.node.section, mode, expression);
+                    if (state.node.section.subSectionDepth() === 0) {
+                        state.node.attributes.push(state.node.section.compile(copyState()));
+                        delete state.node.section;
+                    }
+                } else if (state.attr) {
+                    if (!state.attr.section) {
+                        state.attr.section = new TextSectionBuilder();
+                        if (state.attr.value) {
+                            state.attr.section.add(state.attr.value);
+                        }
+                    }
+                    makeRendererAndUpdateSection(state.attr.section, mode, expression);
+                } else if (state.node) {
+                    if (!state.node.attributes) {
+                        state.node.attributes = [];
+                    }
+                    if (!mode) {
+                        state.node.attributes.push(mustacheCore.makeLiveBindingBranchRenderer(null, expression, copyState()));
+                    } else if (mode === '#' || mode === '^') {
+                        if (!state.node.section) {
+                            state.node.section = new TextSectionBuilder();
+                        }
+                        makeRendererAndUpdateSection(state.node.section, mode, expression);
+                    } else {
+                        throw new Error(mode + ' is currently not supported within a tag.');
+                    }
+                } else {
+                    makeRendererAndUpdateSection(state.textContentOnly || section, mode, expression);
+                }
+            },
+            comment: function (text) {
+                section.add({ comment: text });
+            },
+            done: function () {
+            }
+        });
+        return section.compile();
+    }
+    var escMap = {
+        '\n': '\\n',
+        '\r': '\\r',
+        '\u2028': '\\u2028',
+        '\u2029': '\\u2029'
+    };
+    var esc = function (string) {
+        return ('' + string).replace(/["'\\\n\r\u2028\u2029]/g, function (character) {
+            if ('\'"\\'.indexOf(character) >= 0) {
+                return '\\' + character;
+            } else {
+                return escMap[character];
+            }
+        });
+    };
+    can.view.register({
+        suffix: 'stache',
+        contentType: 'x-stache-template',
+        fragRenderer: function (id, text) {
+            return stache(text);
+        },
+        script: function (id, src) {
+            return 'can.stache("' + esc(src) + '")';
+        }
+    });
+    can.view.ext = '.stache';
+    can.extend(can.stache, mustacheHelpers);
+    can.extend(stache, mustacheHelpers);
+    can.stache.safeString = stache.safeString = function (text) {
+        return {
+            toString: function () {
+                return text;
+            }
+        };
+    };
+    can.stache.async = function (source) {
+        var iAi = getIntermediateAndImports(source);
+        var importPromises = can.map(iAi.imports, function (moduleName) {
+            return can['import'](moduleName);
+        });
+        return can.when.apply(can, importPromises).then(function () {
+            return stache(iAi.intermediate);
+        });
+    };
+    return stache;
+});
+/*can/map/define/define*/
+define('can/map/define/define', [
+    'can/util/util',
+    'can/map/map_helpers',
+    'can/map/map',
+    'can/compute/compute'
+], function (can, mapHelpers) {
+    if (can.define) {
+        return;
+    }
+    var define = can.define = {};
+    var getPropDefineBehavior = function (behavior, attr, define) {
+        var prop, defaultProp;
+        if (define) {
+            prop = define[attr];
+            defaultProp = define['*'];
+            if (prop && prop[behavior] !== undefined) {
+                return prop[behavior];
+            } else if (defaultProp && defaultProp[behavior] !== undefined) {
+                return defaultProp[behavior];
+            }
+        }
+    };
+    mapHelpers.define = function (Map) {
+        var definitions = Map.prototype.define;
+        Map.defaultGenerators = {};
+        for (var prop in definitions) {
+            var type = definitions[prop].type;
+            if (typeof type === 'string') {
+                if (typeof define.types[type] === 'object') {
+                    delete definitions[prop].type;
+                    can.extend(definitions[prop], define.types[type]);
+                }
+            }
+            if ('value' in definitions[prop]) {
+                if (typeof definitions[prop].value === 'function') {
+                    Map.defaultGenerators[prop] = definitions[prop].value;
+                } else {
+                    Map.defaults[prop] = definitions[prop].value;
+                }
+            }
+            if (typeof definitions[prop].Value === 'function') {
+                (function (Constructor) {
+                    Map.defaultGenerators[prop] = function () {
+                        return new Constructor();
+                    };
+                }(definitions[prop].Value));
+            }
+        }
+    };
+    var oldSetupDefaults = can.Map.prototype._setupDefaults;
+    can.Map.prototype._setupDefaults = function (obj) {
+        var defaults = oldSetupDefaults.call(this), propsCommittedToAttr = {}, Map = this.constructor, originalGet = this._get;
+        this._get = function (originalProp) {
+            var prop = originalProp.indexOf('.') !== -1 ? originalProp.substr(0, originalProp.indexOf('.')) : originalProp;
+            if (prop in defaults && !(prop in propsCommittedToAttr)) {
+                this.attr(prop, defaults[prop]);
+                propsCommittedToAttr[prop] = true;
+            }
+            return originalGet.apply(this, arguments);
+        };
+        for (var prop in Map.defaultGenerators) {
+            if (!obj || !(prop in obj)) {
+                defaults[prop] = Map.defaultGenerators[prop].call(this);
+            }
+        }
+        delete this._get;
+        return defaults;
+    };
+    var proto = can.Map.prototype, oldSet = proto.__set;
+    proto.__set = function (prop, value, current, success, error) {
+        var errorCallback = function (errors) {
+                var stub = error && error.call(self, errors);
+                if (stub !== false) {
+                    can.trigger(self, 'error', [
+                        prop,
+                        errors
+                    ], true);
+                }
+                return false;
+            }, self = this, setter = getPropDefineBehavior('set', prop, this.define), getter = getPropDefineBehavior('get', prop, this.define);
+        if (setter) {
+            can.batch.start();
+            var setterCalled = false, setValue = setter.call(this, value, function (value) {
+                    if (getter) {
+                        self[prop](value);
+                    } else {
+                        oldSet.call(self, prop, value, current, success, errorCallback);
+                    }
+                    setterCalled = true;
+                }, errorCallback, getter ? this._computedAttrs[prop].compute.computeInstance.lastSetValue.get() : current);
+            if (getter) {
+                if (setValue !== undefined && !setterCalled && setter.length >= 1) {
+                    this._computedAttrs[prop].compute(setValue);
+                }
+                can.batch.stop();
+                return;
+            } else if (setValue === undefined && !setterCalled && setter.length >= 1) {
+                can.batch.stop();
+                return;
+            } else {
+                if (!setterCalled) {
+                    oldSet.call(self, prop, setter.length === 0 && setValue === undefined ? value : setValue, current, success, errorCallback);
+                }
+                can.batch.stop();
+                return this;
+            }
+        } else {
+            oldSet.call(self, prop, value, current, success, errorCallback);
+        }
+        return this;
+    };
+    define.types = {
+        'date': function (str) {
+            var type = typeof str;
+            if (type === 'string') {
+                str = Date.parse(str);
+                return isNaN(str) ? null : new Date(str);
+            } else if (type === 'number') {
+                return new Date(str);
+            } else {
+                return str;
+            }
+        },
+        'number': function (val) {
+            if (val == null) {
+                return val;
+            }
+            return +val;
+        },
+        'boolean': function (val) {
+            if (val === 'false' || val === '0' || !val) {
+                return false;
+            }
+            return true;
+        },
+        'htmlbool': function (val) {
+            return typeof val === 'string' || !!val;
+        },
+        '*': function (val) {
+            return val;
+        },
+        'string': function (val) {
+            if (val == null) {
+                return val;
+            }
+            return '' + val;
+        },
+        'compute': {
+            set: function (newValue, setVal, setErr, oldValue) {
+                if (newValue.isComputed) {
+                    return newValue;
+                }
+                if (oldValue && oldValue.isComputed) {
+                    oldValue(newValue);
+                    return oldValue;
+                }
+                return newValue;
+            },
+            get: function (value) {
+                return value && value.isComputed ? value() : value;
+            }
+        }
+    };
+    var oldType = proto.__type;
+    proto.__type = function (value, prop) {
+        var type = getPropDefineBehavior('type', prop, this.define), Type = getPropDefineBehavior('Type', prop, this.define), newValue = value;
+        if (typeof type === 'string') {
+            type = define.types[type];
+        }
+        if (type || Type) {
+            if (type) {
+                newValue = type.call(this, newValue, prop);
+            }
+            if (Type && !(newValue instanceof Type)) {
+                newValue = new Type(newValue);
+            }
+            return newValue;
+        } else if (can.isPlainObject(newValue) && newValue.define) {
+            newValue = can.Map.extend(newValue);
+            newValue = new newValue();
+        }
+        return oldType.call(this, newValue, prop);
+    };
+    var oldRemove = proto.__remove;
+    proto.__remove = function (prop, current) {
+        var remove = getPropDefineBehavior('remove', prop, this.define), res;
+        if (remove) {
+            can.batch.start();
+            res = remove.call(this, current);
+            if (res === false) {
+                can.batch.stop();
+                return;
+            } else {
+                res = oldRemove.call(this, prop, current);
+                can.batch.stop();
+                return res;
+            }
+        }
+        return oldRemove.call(this, prop, current);
+    };
+    var oldSetupComputes = proto._setupComputedProperties;
+    proto._setupComputedProperties = function () {
+        oldSetupComputes.apply(this, arguments);
+        for (var attr in this.define) {
+            var def = this.define[attr], get = def.get;
+            if (get) {
+                mapHelpers.addComputedAttr(this, attr, can.compute.async(undefined, get, this));
+            }
+        }
+    };
+    var oldSingleSerialize = proto.___serialize;
+    proto.___serialize = function (name, val) {
+        return serializeProp(this, name, val);
+    };
+    var serializeProp = function (map, attr, val) {
+        var serializer = attr === '*' ? false : getPropDefineBehavior('serialize', attr, map.define);
+        if (serializer === undefined) {
+            return oldSingleSerialize.call(map, attr, val);
+        } else if (serializer !== false) {
+            return typeof serializer === 'function' ? serializer.call(map, val, attr) : oldSingleSerialize.call(map, attr, val);
+        }
+    };
+    var oldSerialize = proto.serialize;
+    proto.serialize = function (property) {
+        var serialized = oldSerialize.apply(this, arguments);
+        if (property) {
+            return serialized;
+        }
+        var serializer, val;
+        for (var attr in this.define) {
+            if (!(attr in serialized)) {
+                serializer = this.define && this.define[attr] && this.define[attr].serialize;
+                if (serializer) {
+                    val = serializeProp(this, attr, this.attr(attr));
+                    if (val !== undefined) {
+                        serialized[attr] = val;
+                    }
+                }
+            }
+        }
+        return serialized;
+    };
+    return can.define;
 });
 /*[global-shim-end]*/
 (function (){
 	window._define = window.define;
 	window.define = window.define.orig;
-	window.System = window.System.orig;
 })();

@@ -4,15 +4,15 @@
   {{else}}
     {{#restaurant.value}}
       {{#if saveStatus.isResolved}}
-        <pmo-order-details order="{saveStatus.value}"></pmo-order-details>
-        <p><a href="javascript://" (click)="{startNewOrder}">Place another order</a></p>
+        <pmo-order-details {(order)}="saveStatus.value"></pmo-order-details>
+        <p><a href="javascript://" ($click)="startNewOrder()">Place another order</a></p>
       {{else}}
         {{#if saveStatus.isPending}}
           <div class="loading"></div>
         {{else}}
           <h3>Order from {{name}}</h3>
 
-          <form (submit)="placeOrder">
+          <form ($submit)="placeOrder()">
             <p class="info {{^if order.items.length}}text-error{{else}}text-success{{/if}}">
               {{^if order.items.length}}
                 Please choose an item
@@ -26,8 +26,8 @@
                 <li>
                   <label>
                     <input type="checkbox"
-                      (change)="{order.items.toggle this}"
-                      {{#if order.items.has}}checked{{/if}}>
+                      ($change)="order.items.toggle(.)"
+                      {{#if order.items.has(.)}}checked{{/if}}>
                     {{name}} <span class="badge">${{price}}</span>
                   </label>
                 </li>
@@ -36,17 +36,17 @@
 
             <div class="form-group">
               <label>Name:</label>
-              <input name="name" type="text" can-value="{order.name}">
+              <input name="name" type="text" {($value)}="order.name">
               <p>Please enter your name.</p>
             </div>
 
             <div class="form-group">
               <label>Address:</label>
-              <input name="address" type="text" can-value="{order.address}">
+              <input name="address" type="text" {($value)}="order.address">
               <p class="help-text">Please enter your address.</p>
             </div>
 
-            <phone-validator order="{order}"></phone-validator>
+            <phone-validator {(order)}="order"></phone-validator>
 
             <div class="submit">
               <h4>Total: ${{order.total}}</h4>

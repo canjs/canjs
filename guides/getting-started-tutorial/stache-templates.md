@@ -20,7 +20,7 @@ application's templates.
 
 As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
-included the `can.stache` plugin. The CanJS docs tell us that,
+included the [can.stache](http://canjs.com/docs/can.stache.html) plugin. The CanJS docs tell us that,
 “Stache templates look similar to normal HTML, except they contain keys for
 inserting data into the template and *sections* to *enumerate* and/or *filter*
 the enclosed template blocks.” They can also contain limited *conditional
@@ -180,10 +180,10 @@ Stache templates have a limited capacity for conditional logic. Open up your
 {{#eq page "restaurants"}}
   {{#if slug}}
     {{#eq action 'order'}}
-      <pmo-order slug="{slug}"></pmo-order>
+      <pmo-order {(slug)}="slug"></pmo-order>
     {{/eq}}
     {{^if action}}
-      <pmo-restaurant-details slug="{slug}"></pmo-restaurant-details>
+      <pmo-restaurant-details {(slug)}="slug"></pmo-restaurant-details>
     {{/if}}
   {{else}}
     <pmo-restaurant-list></pmo-restaurant-list>
