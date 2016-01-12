@@ -50,7 +50,13 @@ steal('can/util/can.js', function (can) {
 		if(html && html.nodeType === 11) {
 			return html;
 		}
-		var parts = fragment(html, undefined, doc || document),
+		if(!doc) {
+			doc = document;
+		} else if(doc.length) {
+			doc = doc[0];
+		}
+		
+		var parts = fragment(html, undefined, doc),
 			frag = (doc || document).createDocumentFragment();
 		for(var i = 0, length = parts.length; i < length; i++) {
 			frag.appendChild(parts[i]);
