@@ -3,7 +3,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 	var innerHTML = function(node){
 		if("innerHTML" in node) {
 			return node.innerHTML;
-		} 
+		}
 	};
 
 
