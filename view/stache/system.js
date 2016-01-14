@@ -23,12 +23,12 @@ steal("can/view/stache", "can/view/stache/intermediate_and_imports.js", "can/vie
 
 		return "define("+imports+",function(module, stache, mustacheCore){\n" +
 			"\tvar renderer = stache(" + intermediate + ");\n" +
-			"\treturn function(scope, options){\n" +
+			"\treturn function(scope, options, nodeList){\n" +
 			"\t\tvar moduleOptions = { module: module };\n" +
 			"\t\tif(!(options instanceof mustacheCore.Options)) {\n" +
 			"\t\t\toptions = new mustacheCore.Options(options || {});\n" +
 			"\t\t}\n" +
-			"\t\treturn renderer(scope, options.add(moduleOptions));\n" +
+			"\t\treturn renderer(scope, options.add(moduleOptions), nodeList);\n" +
 			"\t};\n" +
 		"});";
 	}

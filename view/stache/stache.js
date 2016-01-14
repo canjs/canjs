@@ -62,7 +62,7 @@ steal(
 				
 				if(mode === ">") {
 					// Partials use liveBindingPartialRenderers
-					section.add(mustacheCore.makeLiveBindingPartialRenderer(stache, state));
+					section.add(mustacheCore.makeLiveBindingPartialRenderer(stache, copyState()));
 
 				} else if(mode === "/") {
 					
