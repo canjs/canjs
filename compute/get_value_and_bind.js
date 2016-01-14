@@ -79,13 +79,16 @@ steal("can/util", function(can){
 			}
 		},
 		updateCompute: function(batchNum){
-			// Keep the old value.
-			var oldValue = this.value;
-			// Get the new value and register this event handler to any new observables.
-			this.getValueAndBind();
-			// Update the compute with the new value.
-			this.compute.updater(this.value, oldValue, batchNum);
-			
+			// It's possible this became unbound since it was registered to update
+			// Only actually update if something didn't come in and unbind it. (#2188).
+			if(this.bound) {
+				// Keep the old value.
+				var oldValue = this.value;
+				// Get the new value and register this event handler to any new observables.
+				this.getValueAndBind();
+				// Update the compute with the new value.
+				this.compute.updater(this.value, oldValue, batchNum);
+			}
 		},
 		// ## getValueAndBind
 		// Calls `func` with "this" as `context` and binds to any observables that
