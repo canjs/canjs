@@ -666,13 +666,13 @@ steal('can/util/string', function (can) {
 	 *
 	 *
 	 * Usually, you should use [can.Construct::init init] to do your constructor function's initialization.
-	 * Use `setup` instead for:
+	 * You should, instead, use `setup` when:
 	 *
-	 *   - initialization code that you want to run before the inheriting constructor's
+	 *   - there is initialization code that you want to run before the inheriting constructor's
 	 *     `init` method is called.
-	 *   - initialization code that should run whether or not inheriting constructors
+	 *   - there is initialization code that should run whether or not inheriting constructors
 	 *     call their base's `init` methods.
-	 *   - modifying the arguments that will get passed to `init`.
+	 *   - you want to modify the arguments that will get passed to `init`.
 	 *
 	 * ## Example
 	 *
@@ -742,7 +742,7 @@ steal('can/util/string', function (can) {
 	 *         this.language = language;
 	 *     },
 	 *     bio: function() {
-	 *         return "Hi! I'm "" + this.first + " " + this.last +
+	 *         return "Hi! I'm " + this.first + " " + this.last +
 	 *             " and I write " + this.language + ".";
 	 *     }
 	 * });
