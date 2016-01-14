@@ -3,6 +3,12 @@
 @parent guides 5
 -->
 
+__2.3.9__ ( Jan 11 2016 )
+
+- [Partial defined by registerView throws error after element is modified](https://github.com/canjs/canjs/issues/2174)
+- [stache system plugin needs nodeList](https://github.com/canjs/canjs/issues/2166)
+
+
 __2.3.8__ ( Jan 04 2016 )
 
 - [vdom innerHTML implementation should append a text node for script tags](https://github.com/canjs/canjs/issues/2156)

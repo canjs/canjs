@@ -18,6 +18,10 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		QUnit.asyncTest("routeUrl and routeCurrent helper", function(){
 			makeIframe(  can.test.path("view/stache/test/route-url-current.html?"+Math.random()) );
 		});
+
+		QUnit.asyncTest("system/stache plugin accepts nodelists", function(){
+			makeIframe( can.test.path("view/stache/test/system-nodelist.html?"+Math.random()) );
+		});
 	}
 
 
@@ -4518,15 +4522,15 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			equal(frag.firstChild.nextSibling.nodeType, 3, "the next sibling is a TextNode");
 			equal(frag.firstChild.nextSibling.nextSibling, undefined, "there are no more nodes");
 		});
-		
+
 		test("#each passed a method (2001)", function(){
 			var users = new can.List([
 				{name: "Alexis", num: 4, age: 88},
 				{name: "Brian", num: 2, age: 31}
 			]);
-			
+
 			var template = can.stache("<div>{{#each people}}<span/>{{/each}}</div>");
-			
+
 			var VM = can.Map.extend({
 				people: function() {
 					return this.attr("users");
@@ -4535,25 +4539,25 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 					$('#content').empty();
 				}
 			});
-			
+
 			var frag = template(new VM({
 				users: users
 			})),
 				div = frag.firstChild,
 				spans = div.getElementsByTagName("span");
-			
+
 			equal(spans.length, 2, "two spans");
-			
+
 			can.append(this.$fixture,frag);
-			
+
 			stop();
 			setTimeout(function(){
 				start();
 				can.remove( can.$(div) );
 				ok(true, "removed without breaking");
 			},10);
-			
-			
+
+
 		});
 		
 		test("Rendering live bound indicies with #each, @index and a simple can.List (#2067)", function () {
@@ -4621,6 +4625,69 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var spans = frag.firstChild.getElementsByTagName("span");
 			equal( spans[0].firstChild.nodeValue, "0");
 		});
+
+		test("partials are not working within an {{#each}} (#2174)", function() {
+
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			var frag = renderer(data);
+
+			data.attr('items.0.name', 'WORLD');
+
+			data.attr('items').splice(0, 0, {
+				name : 'HELLO'
+			});
+			equal( innerHTML(frag.firstChild), "HELLOWORLD");
+		});
+		
+		test("partials don't leak (#2174)", function() {
+			
+			can.stache.registerHelper("somethingCrazy", function(name, options){
+				return function(el){
+					var nodeList = [el];
+					nodeList.expression = "something crazy";
+					can.view.nodeLists.register(nodeList, function(){
+						ok(true, "nodeList torn down");
+					}, options.nodeList, true);
+					can.view.nodeLists.update(options.nodeList, [el]);
+				};
+			});
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{somethingCrazy name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			renderer(data);
+
+			data.attr('items').pop();
+		});
+
+		test("partials should leave binding to helpers and properties (#2174)", function() {
+			can.view.registerView('test', '<input id="one"> {{name}}');
+			var renderer = can.stache('{{#each items}}{{>test}}{{/each}}');
+
+			var data = new can.Map({ items: [] });
+			var frag = renderer(data);
+			data.attr('items').splice(0, 0, {name: 'bob'});
+
+			// simulate the user entering text
+			frag.firstChild.nextSibling.setAttribute('value', 'user text');
+			// re-render the partial for the 0th element
+			data.attr('items.0.name', 'dave');
+
+			equal(frag.firstChild.nextSibling.getAttribute('value'), 'user text');
+         });
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
