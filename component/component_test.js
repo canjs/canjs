@@ -1577,6 +1577,44 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can", "can/map/define", 
 
 			can.append(this.$fixture, template());
 		});
+		
+		test("can.Map property is not updated in component fragment when changed withing a batch (#2191)", function(){
+
+			var template  = can.stache(
+				"{{#if isVisible}}" +
+					"{{myMap.test}}" +
+					"<my-component>" +
+						"{{myMap.test}}" +
+					"</my-component>" +
+				"{{/if}}"
+			);
+
+			var vm = new can.Map({
+				isVisible : false,
+				myMap : {test: 'old-value'}
+			});
+
+			can.Component.extend({
+				tag: 'my-component',
+				vm: {},
+				events: {
+					inserted: function(){
+						console.log('INSERTED!');
+						vm.attr('myMap.test', 'new-value');
+					}
+				}
+			});
+
+			can.append(this.$fixture, template(vm));
+
+			can.batch.start();
+			vm.attr('isVisible', true);
+			can.batch.stop();
+			
+			equal(this.fixture.lastChild.firstChild.nodeValue, 'new-value', "should be new-value");
+
+		});
+		
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
