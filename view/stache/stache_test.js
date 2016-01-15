@@ -4689,7 +4689,42 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			data.attr('items.0.name', 'dave');
 
 			equal(frag.firstChild.nextSibling.getAttribute('value'), 'user text');
-         });
+        });
+
+		test("nested switch statement fail (#2188)", function(){
+			
+			var template  = can.stache("<div>{{#switch outer}}"+
+				'{{#case "outerValue1"}}'+
+					"{{#switch inner}}"+
+						"{{#case 'innerValue1'}}"+
+							"INNER1"+
+						"{{/case}}"+
+					"{{/switch}}"+
+				"{{/case}}"+
+				'{{#case "outerValue2"}}'+
+					"OUTER2"+
+				"{{/case}}"+
+		    "{{/switch}}</div>");
+		    
+
+			var vm = new can.Map({
+				outer : "outerValue1",
+				inner : "innerValue1"
+			});
+
+			var frag = template(vm);
+
+			can.batch.start();
+			vm.removeAttr("inner");
+			vm.attr("outer", "outerValue2");
+			can.batch.stop();
+
+		    
+		    ok( innerHTML(frag.firstChild).indexOf("OUTER2") >= 0, "has OUTER2");
+		    ok( innerHTML(frag.firstChild).indexOf("INNER1") === -1, "does not have INNER1");
+		    
+		    
+		});
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
