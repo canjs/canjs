@@ -3,6 +3,12 @@
 @parent guides 5
 -->
 
+__2.3.10__ ( Jan 14 2016 )
+
+- [Computes that are registered to be updated don&#39;t get updated if they are unbound](https://github.com/canjs/canjs/pull/2189)
+- [nested switch statements cause a nodeList error](https://github.com/canjs/canjs/issues/2188)
+
+
 __2.3.9__ ( Jan 11 2016 )
 
 - [Partial defined by registerView throws error after element is modified](https://github.com/canjs/canjs/issues/2174)
