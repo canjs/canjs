@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.11__ ( Jan 21 2016 )
+
+- [makes events fired as a result of a batch happen after any previous batches](https://github.com/canjs/canjs/pull/2203)
+- [can.batch.afterPreviousEvents firing too late](https://github.com/canjs/canjs/issues/2198)
+- [makes jQuery work without public buildFragment and overwritable domManip](https://github.com/canjs/canjs/pull/2177)
+- [jQuery 2.2 compatible. ](https://github.com/canjs/canjs/issues/2176)
+
+
 __2.3.10__ ( Jan 14 2016 )
 
 - [Computes that are registered to be updated don&#39;t get updated if they are unbound](https://github.com/canjs/canjs/pull/2189)
