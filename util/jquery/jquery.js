@@ -35,6 +35,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", "can/util/fragm
 		event: can.event,
 		addEvent: can.addEvent,
 		removeEvent: can.removeEvent,
+		buildFragment: can.buildFragment,
 		$: $,
 		each: can.each,
 		bind: function (ev, cb) {
