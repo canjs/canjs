@@ -94,7 +94,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		cloned('-');
 		equal(cloned(), '.-');
 	});
-	
+
 	test('compute updated method uses get and old value (#732)', function () {
 		expect(9);
 		var input = {
@@ -119,45 +119,45 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		value(2);
 		equal(value(), 2, 'updated value');
 		equal(input.value, 2, 'updated input.value');
-		
-		
-		
+
+
+
 		value.bind('change', function (ev, newVal, oldVal) {
 			equal(newVal, 3, 'newVal');
 			equal(oldVal, 2, 'oldVal');
 			value.unbind('change', this.Constructor);
 		});
 		ok(input.onchange, 'binding to onchange');
-		
-		
+
+
 		input.value = 3;
 		input.onchange({});
-		
+
 		ok(!input.onchange, 'removed binding');
 		equal(value(), 3);
 	});
-	
+
 	test("a compute updated by source changes within a batch is part of that batch", function(){
-		
+
 		var computeA = can.compute("a");
 		var computeB = can.compute("b");
-		
+
 		var combined1 = can.compute(function(){
-			
+
 			return computeA()+" "+computeB();
-			
+
 		});
-		
+
 		var combined2 = can.compute(function(){
-			
+
 			return computeA()+" "+computeB();
-			
+
 		});
-		
+
 		var combo = can.compute(function(){
 			return combined1()+" "+combined2();
 		});
-		
+
 		var callbacks = 0;
 		combo.bind("change", function(){
 			if(callbacks === 0){
@@ -167,28 +167,28 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			}
 			callbacks++;
 		});
-		
+
 		can.batch.start();
 		computeA("A");
 		computeB("B");
 		can.batch.stop();
 	});
-	
+
 	test("compute.async can be like a normal getter", function(){
 		var first = can.compute("Justin"),
 			last = can.compute("Meyer"),
 			fullName = can.compute.async("", function(){
 				return first()+" "+last();
 			});
-			
+
 		equal(fullName(), "Justin Meyer");
 	});
-	
+
 	test("compute.async operate on single value", function(){
-		
+
 		var a = can.compute(1);
 		var b = can.compute(2);
-				
+
 		var obj = can.compute.async({}, function( curVal ){
 			if(a()) {
 				curVal.a = a();
@@ -202,28 +202,28 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			}
 			return curVal;
 		});
-		
+
 		obj.bind("change", function(){});
-		
+
 		deepEqual( obj(), {a: 1, b: 2}, "object has all properties" );
-		
+
 		a(0);
-		
+
 		deepEqual( obj(), {b: 2}, "removed a" );
-		
+
 		b(0);
-		
+
 		deepEqual( obj(), {}, "removed b" );
-		
+
 	});
-	
+
 	test("compute.async async changing value", function(){
-		
+
 		var a = can.compute(1);
 		var b = can.compute(2);
-				
+
 		var async = can.compute.async(undefined,function( curVal, setVal ){
-			
+
 			if(a()) {
 				setTimeout(function(){
 					setVal("a");
@@ -236,28 +236,28 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 				return null;
 			}
 		});
-		
+
 		var changeArgs = [
 			{newVal: "a", oldVal: undefined, run: function(){ a(0); } },
 			{newVal: "b", oldVal: "a", run: function(){ b(0); }},
 			{newVal: null, oldVal: "b", run: function(){ start(); }}
 		],
 			changeNum = 0;
-		
+
 		stop();
-		
-		
+
+
 		async.bind("change", function(ev, newVal, oldVal){
 			var data = changeArgs[changeNum++];
 			equal( newVal, data.newVal, "newVal is correct" );
 			equal( oldVal, data.oldVal, "oldVal is correct" );
-			
+
 			setTimeout(data.run, 10);
-			
+
 		});
-		
-		
-		
+
+
+
 	});
 
 	test("can.Construct derived classes should be considered objects, not functions (#450)", function() {
@@ -281,22 +281,22 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		read = can.compute.read(obj, can.compute.read.reads("next_level.thing.self.text"), { });
 		equal(read.value, "bar", "anonymous functions in the middle of a read should be executed if requested");
 	});
-	
+
 	test("compute.async read without binding", function(){
-		
+
 		var source = can.compute(1);
-		
+
 		var async = can.compute.async([],function( curVal, setVal ){
 			curVal.push(source());
 			return curVal;
 		});
-		
+
 		ok(async(), "calling async worked");
-		
-		
-		
+
+
+
 	});
-	
+
 
 	test("compute.read works with a Map wrapped in a compute", function() {
 		var parent = can.compute(new can.Map({map: {first: "Justin" }}));
@@ -319,7 +319,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var result = can.compute.read(parent, can.compute.read.reads("map.Test"));
 		equal(result.value, Todo, 'Got the same Todo');
 	});
-	
+
 	test("compute.set with different values", 4, function() {
 		var comp = can.compute("David");
 		var parent = {
@@ -333,7 +333,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		map.bind('change', function(ev, attr, how, value) {
 			equal(value, "Brian", "Got change event on map");
 		});
-		
+
 		can.compute.set(parent, "name", "Matthew");
 		equal(parent.name, "Matthew", "Name set");
 
@@ -347,7 +347,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 	// ========================================
 	QUnit.module('can/Compute');
-	
+
 	test('single value compute', function () {
 		expect(2);
 		var num = new can.Compute(1);
@@ -506,7 +506,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 	test('a compute updated by source changes within a batch is part of that batch', function () {
 		var computeA = new can.Compute('a');
 		var computeB = new can.Compute('b');
-		
+
 		var combined1 = new can.Compute(function() {
 			return computeA.get() + ' ' + computeB.get();
 		});
@@ -518,7 +518,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		var combo = new can.Compute(function() {
 			return combined1.get() + ' ' + combined2.get();
 		});
-		
+
 
 		var callbacks = 0;
 		combo.bind('change', function(){
@@ -529,7 +529,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			}
 			callbacks++;
 		});
-		
+
 		can.batch.start();
 		computeA.set('A');
 		computeB.set('B');
@@ -648,39 +648,39 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		});
 
 		equal(async.get(), 11, "initial value");
-		
+
 		async.set(20);
-		
+
 		async.bind("change", function(){});
-		
+
 		async.set(20);
-		
+
 		async.set(30);
 	});
 
 
-	
+
 	test("setting compute.async with a observable dependency gets a new value and can re-compute", 4, function(){
 		// this is needed for define with a set and get.
 		var compute = can.compute(1);
 		var add;
-		
+
 		var async = can.compute.async(1, function(curVal){
 			add = curVal;
 			return compute()+add;
 		});
-		
-		
+
+
 		equal( async(), 2, "can read unbound");
-		
+
 		async.bind("change", function(ev, newVal, oldVal){
 			equal(newVal, 3, "change new val");
 			equal(oldVal, 2, "change old val");
 		});
-		
-		
+
+
 		async(2);
-		
+
 		equal( async(), 3, "can read unbound");
 	});
 
@@ -695,29 +695,29 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 	});
 
 	test("bug with nested computes and batch ordering (#1519)", function(){
-	
+
 		var root = can.compute('a');
-	
+
 		var isA = can.compute(function(){
 			return root() ==='a';
 		});
-		
+
 		var isB = can.compute(function(){
 			return root() === 'b';
 		});
-		
+
 		var combined = can.compute(function(){
 			var valA = isA(),
 				valB = isB();
 
 			return valA || valB;
 		});
-		
+
 		equal(combined(), true);
-		
+
 		combined.bind('change', function(){ });
-		
-		
+
+
 
 		can.batch.start();
 		root('b');
@@ -726,16 +726,16 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal(combined(), true);
 		//equal(other(), 2);
 	});
-	
+
 	test("can.Compute.read can read a promise (#179)", function(){
-		
+
 		var def = new can.Deferred();
 		var map = new can.Map();
-		
+
 		var c = can.compute(function(){
 			return can.Compute.read({map: map},can.compute.read.reads("map.data.value")).value;
 		});
-		
+
 		var calls = 0;
 		c.bind("change", function(ev, newVal, oldVal){
 			calls++;
@@ -744,15 +744,15 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			equal(oldVal, undefined, "oldVal");
 			start();
 		});
-		
+
 		map.attr("data", def);
-		
+
 		setTimeout(function(){
 			def.resolve("Something");
 		},2);
-		
+
 		stop();
-		
+
 	});
 
 	test('compute change handler context is set to the function not can.Compute', function() {
@@ -764,32 +764,32 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 
 		comp('test');
 	});
-	
+
 	test('can.compute.reads', function(){
 		deepEqual( can.compute.read.reads("@foo"),
 			[{key: "foo", at: true}]);
-			
+
 		deepEqual( can.compute.read.reads("@foo.bar"),
 			[{key: "foo", at: true}, {key: "bar", at: false}]);
-			
+
 		deepEqual( can.compute.read.reads("@foo\\.bar"),
 			[{key: "foo.bar", at: true}]);
-			
+
 		deepEqual( can.compute.read.reads("foo.bar@zed"),
 			[{key: "foo", at: false},{key: "bar", at: false},{key: "zed", at: true}]);
-		
+
 	});
-	
+
 
 	test('Calling .unbind() on un-bound compute does not throw an error', function () {
 		var count =  can.compute(0);
 		count.unbind('change');
 		ok(true, 'No error was thrown');
 	});
-	
+
 
 	test("dependent computes update in the right order (2093)", function() {
-		
+
 		var root = can.compute('a'),
 			childB = can.compute(function() {
 				return root();
@@ -803,15 +803,15 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		});
 		root('b');
 	});
-	
+
 	test("dependent computes update in the right order with a batch (#2093)", function() {
-		
+
 		// so the problem is that `child` then `combine` happens.
 		// without a batch, child change fires before `combine`, firing `grandChild`, which
 		// then triggers `combine`.
-		
-		
-		// the goal should be for 
+
+
+		// the goal should be for
 		var root = can.compute('a'),
 			child = can.compute(function() {
 				return root();
@@ -825,8 +825,8 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			combine = can.compute(function() {
 				return child2()+grandChild();
 			});
-			
-		/*console.log("root", root.computeInstance._cid, 
+
+		/*console.log("root", root.computeInstance._cid,
 			"child", child.computeInstance._cid,
 			"grandChild", grandChild.computeInstance._cid,
 			"combine", combine.computeInstance._cid);*/
@@ -834,7 +834,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		combine.bind("change", function(ev, newVal) {
 			equal(newVal, "bb", "concat changed");
 		});
-		
+
 		/*root.bind("change", function(ev, newVal){
 			console.log("root change", ev.batchNum)
 		});
@@ -844,36 +844,36 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		grandChild.bind("change", function(ev, newVal){
 			console.log("grandChild change", ev.batchNum)
 		});*/
-		
+
 		can.batch.start();
 		root('b');
 		can.batch.stop();
 	});
-	
+
 	test("bug with nested computes and batch ordering (#1519)", function(){
-	
+
 		var root = can.compute('a');
-	
+
 		var isA = can.compute(function(){
 			return root() ==='a';
 		});
-		
+
 		var isB = can.compute(function(){
 			return root() === 'b';
 		});
-		
+
 		var combined = can.compute(function(){
 			var valA = isA(),
 				valB = isB();
 
 			return valA || valB;
 		});
-		
+
 		equal(combined(), true);
-		
+
 		combined.bind('change', function(){ });
-		
-		
+
+
 
 		can.batch.start();
 		root('b');
@@ -882,17 +882,17 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		equal(combined(), true);
 		//equal(other(), 2);
 	});
-	
+
 	test("binding, unbinding, and rebinding works after a timeout (#2095)", function(){
 		var root = can.compute(1),
 			derived = can.compute(function(){
 				return root();
 			});
-			
+
 		var change = function(){};
 		derived.bind("change", change);
 		derived.unbind("change", change);
-		
+
 		stop();
 		setTimeout(function(){
 			derived.bind("change", function(ev, newVal, oldVal){
@@ -901,25 +901,25 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			});
 			root(2);
 		},10);
-		
+
 	});
-	
+
 	test("can.__isRecording observes doesn't understand can.__notObserve (#2099)", function(){
 		expect(0);
 		var compute = can.compute(1);
 		compute.computeInstance.bind = function() {
 			ok(false);
 		};
-		
+
 		var outer = can.compute(function(){
 			can.__notObserve(function(){
 				compute();
 			})();
 		});
-		
+
 		outer.bind("change", function(){});
 	});
-	
+
 	test("prototype computes work (#2098)", function(){
 		var Map = can.Map.extend({
 			plusOne: can.compute(function(){
@@ -931,7 +931,7 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		read = can.compute.read(root, can.compute.read.reads("plusOne") );
 		equal(read.value, 3, "static properties on a can.Construct-based function");
 	});
-	
+
 	test("handles missing update order items (#2121)",function(){
 		var root1 = can.compute("root1"),
 			child1 = can.compute(function(){
@@ -947,15 +947,15 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 			res = can.compute(function(){
 				return child1() + gc2();
 			});
-			
+
 		res.bind("change", function(ev, newVal){
 			equal(newVal, "ROOT1root2");
 		});
-		
+
 		can.batch.start();
 		root1("ROOT1");
 		can.batch.stop();
-		
+
 	});
 
 	test("compute should not fire event when NaN is set multiple times #2128", function() {
@@ -968,4 +968,39 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		ok(isNaN(compute()));
 		compute(NaN);
 	});
+
+	test("can.batch.afterPreviousEvents firing too late (#2198)", function(){
+
+
+		var compute1 = can.compute("a"),
+			compute2 = can.compute("b");
+
+		var derived = can.compute(function() {
+			return compute1().toUpperCase();
+		});
+
+		derived.bind("change", function() {
+			var afterPrevious = false;
+
+			compute2.bind("change", function() {
+				ok(afterPrevious, "after previous should have fired so we would respond to this event");
+			});
+
+			can.batch.start();
+			can.batch.stop();
+
+			// we should get this callback before we are notified of the change
+			can.batch.afterPreviousEvents(function() {
+				afterPrevious = true;
+			});
+
+			compute2("c");
+		});
+
+		can.batch.start();
+		compute1("x");
+		can.batch.stop();
+	});
+
+
 });
