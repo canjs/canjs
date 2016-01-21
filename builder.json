@@ -265,6 +265,11 @@
 			"type": "plugin",
 			"hidden": true
 		},
+		"can/util/vdom/document/document": {
+			"name": "can.util.vdom.document",
+			"type": "plugin",
+			"hidden": true
+		},
 		"can/view/import/import": {
 			"name": "can.view.import",
 			"type": "plugin",

@@ -19,7 +19,7 @@
 		"github": "https://github.com/canjs/canjs"
 	},
 	"dependencies": {
-		"can-simple-dom": "^0.2.21"
+		"can-simple-dom": "^0.3.0-pre.2"
 	},
 	"peerDependencies": {
 		"jquery": ">=1.9.0 <1.12.0 || >=2.1.0 <2.2.0"
@@ -48,12 +48,12 @@
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
-		"steal": "^0.13.0",
+		"steal": "^0.13.0-pre.7",
 		"steal-benchmark": "~0.0.1",
 		"steal-qunit": "0.0.2",
-		"steal-tools": "^0.13.0",
+		"steal-tools": "^0.13.2",
 		"testee": "^0.2.4",
-		"zombie": "2.5.1",
+		"zombie": "3.1.1",
 		"documentjs": "~0.3.2"
 	},
 	"scripts": {
@@ -249,6 +249,7 @@
 		"./util/event": "./dist/cjs/util/event",
 		"./map/sort/sort": "./dist/cjs/map/sort/sort",
 		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment",
+		"./util/vdom/document/document": "./dist/cjs/util/vdom/document/document",
 		"./view/import/import": "./dist/cjs/view/import/import"
 	}
 }

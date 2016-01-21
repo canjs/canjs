@@ -23,7 +23,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 
 			Y.DOM.addHTML = function (node, content, where) {
 				if (typeof content === "string" || typeof content === "number") {
-					content = can.buildFragment(content);
+					content = can.buildFragment(content, node.ownerDocument || node.getDOMNode().ownerDocument);
 				}
 				var elems;
 				if (content.nodeType === 11) {
@@ -144,7 +144,7 @@ steal('can/util/can.js', "can/util/attr", 'yui', 'can/event',
 		can.append = function (wrapped, html) {
 			wrapped.each(function (node) {
 				if (typeof html === 'string') {
-					html = can.buildFragment(html, node);
+					html = can.buildFragment(html, node.getDOMNode().ownerDocument);
 				}
 				node.append(html);
 			});
