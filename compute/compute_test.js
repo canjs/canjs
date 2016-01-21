@@ -968,4 +968,41 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		ok(isNaN(compute()));
 		compute(NaN);
 	});
+	
+	test("can.batch.afterPreviousEvents firing too late (#2198)", function(){
+		
+
+		var compute1 = can.compute("a"), 
+			compute2 = can.compute("b");
+
+		var derived = can.compute(function() {
+			return compute1().toUpperCase();
+		});
+
+		derived.bind("change", function() {
+			var afterPrevious = false;
+			
+			compute2.bind("change", function() {
+				ok(afterPrevious, "after previous should have fired so we would respond to this event");
+			});
+
+			can.batch.start();
+			can.batch.stop();
+
+			// we should get this callback before we are notified of the change
+			can.batch.afterPreviousEvents(function() {
+				afterPrevious = true;
+			});
+
+			compute2("c");
+		});
+
+		can.batch.start();
+		compute1("x");
+		can.batch.stop(); 
+
+		
+	});
+	
+	
 });
