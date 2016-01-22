@@ -150,13 +150,11 @@ steal("can/util", function(can){
 					options.foundObservable(value, index);
 					state.foundObservable = true;
 				}
-				var val = value[prop.key];
-				if (typeof val === 'function' && value.constructor.prototype[prop.key] === val && !val.isComputed) {
-					// call that method
-					return val;
+				var res = value.attr(prop.key);
+				if(res !== undefined) {
+					return res;
 				} else {
-					// use attr to get that value
-					return value.attr(prop.key);
+					return value[prop.key];
 				}
 			}
 		},

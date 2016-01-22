@@ -15,6 +15,11 @@
 // instantition of objects.
 steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', function (can, bind, bubble, mapHelpers) {
 
+	// properties that can't be observed on ... no matter what
+	var unobservable = {
+		"constructor": true
+	};
+
 	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
 		/**
@@ -243,7 +248,9 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Signals `can.compute` that an observable
 			// property is being read.
 			__get: function(attr){
-				can.__observe(this, attr);
+				if(!unobservable[attr]) {
+					can.__observe(this, attr);
+				}
 				return this.___get( attr );
 			},
 
@@ -257,7 +264,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					if (computedAttr && computedAttr.compute) {
 						return computedAttr.compute();
 					} else {
-						return this._data[attr];
+						return this._data.hasOwnProperty(attr) ? this._data[attr] : undefined;
 					}
 				} else {
 					return this._data;
@@ -547,7 +554,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			bind: function (eventName, handler) {
 
 				var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
-				if (computedBinding) {
+				if (computedBinding && computedBinding.compute) {
 					if (!computedBinding.count) {
 						computedBinding.count = 1;
 						computedBinding.compute.bind("change", computedBinding.handler);
