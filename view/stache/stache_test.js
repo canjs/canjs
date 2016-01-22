@@ -1,13 +1,11 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view",
+steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache", "can/view",
 	"can/test","can/view/mustache/spec/specs","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
 	
 	var browserDoc = window.document;
-	var simpleDocument = new SimpleDOM.Document();
-
-	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
+	var simpleDocument = can.simpleDocument;
 
 	makeTest('can/view/stache dom', browserDoc);
 	if(window.jQuery && window.steal) {
@@ -22,7 +20,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		});
 
 		QUnit.asyncTest("system/stache plugin accepts nodelists", function(){
-			makeIframe( can.test.path("view/stache/test/system/test.html?"+Math.random()) );
+			makeIframe( can.test.path("view/stache/test/system-nodelist.html?"+Math.random()) );
 		});
 	}
 
@@ -46,7 +44,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		var innerHTML = function(node){
 			return "innerHTML" in node ?
 				node.innerHTML :
-				serializer.serialize(node.firstChild);
+				undefined;
 		};
 		var getValue = function(node){
 			// textareas are cross bound to their internal innerHTML
