@@ -5,6 +5,8 @@
 				"ignore": [
 					"guides/*.md",
 				  	"guides/**/*.md",
+				  	"guides/*.js",
+				  	"guides/**/*.js",
 					"{node_modules,bower_components,dist}/**/*", 
 					"lib/**/*",
 					"test/**/*",
