@@ -4741,7 +4741,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var counter = 0;
 
 			can.stache(template)(state, {
-				trace: function(value) {
+				trace: function(value, options) {
 					if(counter === 0) {
 						equal(value, 'view foo');
 					} else if(counter === 1) {
@@ -4757,6 +4757,8 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 				action: 'edit',
 				page: 'bar'
 			});
+
+			equal(counter, 2, 'Counter incremented twice');
 		});
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!
