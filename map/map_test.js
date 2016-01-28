@@ -338,4 +338,13 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 		source(1);
 		can.batch.stop();
 	});
+
+	test('should get an empty string property value correctly', function() {
+		var map = new can.Map({
+			foo: 'foo',
+			'': 'empty string'
+		});
+
+		equal(map.attr(''), 'empty string');
+	});
 });
