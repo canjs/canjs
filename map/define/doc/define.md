@@ -110,6 +110,54 @@ Here is the cliffnotes version of this plugin.  To define...
 * A custom converter method or a pre-defined standard converter called whenever a property is set - use [can.Map.prototype.define.type type]
 * That custom converter method as a constructor function - use [can.Map.prototype.define.TypeConstructor Type]
 
+## Inheritance
+
+[can.Map] constructors can inherit values from the [can.Map::define can.Map.define]
+plugin. If a parent [can.Map] constructor has a `define` property and a child
+constructor extends the parent and also has a `define` property, the two will
+be merged together so `define` properties from the parent are also available
+on instances of the child. For example:
+
+    var ParentMap = can.Map.extend({
+      define: {
+        inheritedProp: {
+          get: function() {
+            return 15;
+          },
+          set: function(newVal) {
+            return newVal;
+          }
+        },
+        parentProp: {
+          get: function() {
+            return 15;
+          }
+        }
+      }
+    });
+    var ChildMap = ParentMap.extend({
+      define: {
+        childProp: {
+          get: function() {
+            return 22;
+          }
+        },
+        inheritedProp: {
+          get: function() {
+            return 22;
+          }
+        }
+      }
+    });
+
+    var map = new ChildMap();
+
+    map.attr('childProp'); // -> 22
+    map.attr('inheritedProp'); // -> 22
+    map.attr('parentProp'); // -> 15
+
+    map.attr('inheritedProp', 13); // -> calls ParentMap’s setter for inheritedProp
+
 ## Demo
 
 The following shows picking cars by make / model / year:
