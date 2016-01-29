@@ -1136,4 +1136,125 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			start();
 		}, 200);
 	});
+	
+	test("can inherit computes from another map (#1322)", 4, function(){
+		var string1 = 'a string';
+		var string2 = 'another string';
+
+		var ParentMap = can.Map.extend({
+			define: {
+				inheritedProp: {
+					get: function() {
+						return string1;
+					},
+					set: function(newVal) {
+						equal(newVal, string1, 'set was called');
+					}
+				},
+				parentProp: {
+					get: function() {
+						return string1;
+					}
+				}
+			}
+		});
+		var ChildMap = ParentMap.extend({
+			define: {
+				childProp: {
+					get: function() {
+						return string2;
+					}
+				},
+				inheritedProp: {
+					get: function() {
+						return string2;
+					}
+				}
+			}
+		});
+
+		var map = new ChildMap();
+
+		equal(map.attr('childProp'), string2, 'props only in the child have the correct values');
+		equal(map.attr('inheritedProp'), string2, 'props in both have the child values');
+		equal(map.attr('parentProp'), string1, 'props only in the parent have the correct values');
+
+		map.attr('inheritedProp', string1);
+	});
+	
+	test("can inherit primitive values from another map (#1322)", function(){
+		var string1 = 'a string';
+		var string2 = 'another string';
+
+		var ParentMap = can.Map.extend({
+			define: {
+				inheritedProp: {
+					value: string1
+				},
+				parentProp: {
+					value: string1
+				}
+			}
+		});
+		var ChildMap = ParentMap.extend({
+			define: {
+				childProp: {
+					value: string2
+				},
+				inheritedProp: {
+					value: string2
+				}
+			}
+		});
+
+		var map = new ChildMap();
+
+		equal(map.attr('childProp'), string2, 'props only in the child have the correct values');
+		equal(map.attr('inheritedProp'), string2, 'props in both have the child values');
+		equal(map.attr('parentProp'), string1, 'props only in the parent have the correct values');
+	});
+	
+	test("can inherit object values from another map (#1322)", function(){
+		var object1 = {a: 'a'};
+		var object2 = {b: 'b'};
+
+		var ParentMap = can.Map.extend({
+			define: {
+				inheritedProp: {
+					get: function() {
+						return object1;
+					}
+				},
+				parentProp: {
+					get: function() {
+						return object1;
+					}
+				}
+			}
+		});
+		var ChildMap = ParentMap.extend({
+			define: {
+				childProp: {
+					get: function() {
+						return object2;
+					}
+				},
+				inheritedProp: {
+					get: function() {
+						return object2;
+					}
+				}
+			}
+		});
+
+		var map = new ChildMap();
+
+		strictEqual(map.attr('childProp'), object2, 'props only in the child have the correct values');
+		strictEqual(map.attr('inheritedProp'), object2, 'props in both have the child values');
+		strictEqual(map.attr('parentProp'), object1, 'props only in the parent have the correct values');
+	});
+	
+	
+	
+	
 });
