@@ -1,12 +1,12 @@
 steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, live, utils, liveStache) {
 	live = live || can.view.live;
-	
+
 	var TextSectionBuilder = function(){
 		this.stack = [new TextSection()];
 	};
-	
+
 	can.extend(TextSectionBuilder.prototype,utils.mixins);
-	
+
 	can.extend(TextSectionBuilder.prototype,{
 		// Adds a subsection.
 		startSection: function(process){
@@ -24,15 +24,15 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 			this.stack.push(falseySection);
 		},
 		compile: function(state){
-			
+
 			var renderer = this.stack[0].compile();
-			
+
 			return function(scope, options){
-				
+
 				var compute = can.compute(function(){
 					return renderer(scope, options);
 				}, null, false);
-				
+
 				compute.computeInstance.bind("change", can.k);
 				var value = compute();
 				if( compute.computeInstance.hasDependencies ) {
@@ -60,17 +60,17 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 			};
 		}
 	});
-	
+
 	var passTruthyFalsey = function(process, truthy, falsey){
 		return function(scope, options){
 			return process.call(this, scope, options, truthy, falsey);
 		};
 	};
-	
+
 	var TextSection = function(){
 		this.values = [];
 	};
-	
+
 	can.extend( TextSection.prototype, {
 		add: function(data){
 			this.values.push(data);
@@ -81,7 +81,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 		compile: function(){
 			var values = this.values,
 				len = values.length;
-				
+
 			for(var i = 0 ; i < len; i++) {
 				var value = this.values[i];
 				if(typeof value === "object") {
@@ -90,7 +90,7 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 					    value.falsey && value.falsey.compile());
 				}
 			}
-			
+
 			return function(scope, options){
 				var txt = "",
 					value;
@@ -102,6 +102,6 @@ steal("can/util", "can/view/live","./utils.js", "./live_attr.js", function(can, 
 			};
 		}
 	});
-	
+
 	return TextSectionBuilder;
 });
