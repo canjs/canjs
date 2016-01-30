@@ -56,11 +56,6 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/view/ejs/ejs": {
-			"name": "can.ejs",
-			"description": "Live-binding Embedded JavaScript",
-			"type": "plugin"
-		},
 		"can/view/stache/stache": {
 			"name": "can.stache",
 			"description": "High performance Mustache templates",
@@ -87,12 +82,6 @@
 		"can/control/route/route": {
 			"name": "can.Control.route",
 			"description": "Declare routes in your Control",
-			"type": "core",
-			"isDefault": true
-		},
-		"can/view/mustache/mustache": {
-			"name": "can.mustache",
-			"description": "Live-binding Handlebars and Mustache views",
 			"type": "core",
 			"isDefault": true
 		},
@@ -234,18 +223,6 @@
 			"name": "can.view.stache.system",
 			"type": "plugin",
 			"description": "Steal plugin for loading Stache templates",
-			"hasTest": false
-		},
-		"can/view/mustache/system": {
-			"name": "can.view.mustache.system",
-			"type": "plugin",
-			"description": "Steal plugin for loading Mustache templates",
-			"hasTest": false
-		},
-		"can/view/ejs/system": {
-			"name": "can.view.ejs.system",
-			"type": "plugin",
-			"description": "Steal plugin for loading EJS templates",
 			"hasTest": false
 		},
 		"can/util/event": {

@@ -15,8 +15,7 @@ steal(
 	'can/map/setter',
 	'can/map/validations',
 	'can/route',
-	'can/view/ejs',
+	'can/view/stache',
 	'can/util/fixture',
 	'can/view/modifiers',
-	'can/view/mustache',
 	'can/util/func.js');

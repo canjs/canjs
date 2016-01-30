@@ -9,7 +9,7 @@
 // `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup`
 // to hookup the component.
 
-steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/mustache", "can/util/view_model", function (can, viewCallbacks, elements, bindings) {
+steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/stache", "can/util/view_model", function (can, viewCallbacks, elements, bindings) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
 	var paramReplacer = /\{([^\}]+)\}/g;

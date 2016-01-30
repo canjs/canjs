@@ -37,14 +37,14 @@
 <a href='javascript://' id='restore'>RESTORE</a>
 </div>
 
-<script type='text/javascript' src='../../node_modules/steal/steal.js' main="@empty"></script>
+<script type='text/javascript' src='../../../node_modules/steal/steal.js' main="@empty"></script>
 <script type='text/javascript'>
 steal('can/map/backup',
 	  'can/map/delegate',
 	  'can/map/attributes',
 	  'can/model',
 	  'can/util/fixture',
-	  'can/view/ejs',
+	  'can/view/stache',
 	  function(){
 	can.fixture("/contacts.json", function(orig, settings, headers){
 	return [

@@ -1,7 +1,7 @@
 <div id='out'></div>
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script>
-steal("can/view/bindings", "can/view/mustache", function(){
+steal("can/view/bindings", "can/view/stache", function(){
 
 var Score = can.Map.extend({
 	difference: function(){
@@ -14,7 +14,7 @@ window.game = new Score({
 	blue: 99
 });
 
-var template = can.view.mustache(
+var template = can.view.stache(
 	"<p>Blue team:\
 		<div contenteditable can-value='blue'></div>\
 	</p>\

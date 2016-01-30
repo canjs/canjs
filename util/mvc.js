@@ -1,1 +1,1 @@
-steal('can/model', 'can/control/route', 'can/view/ejs');
+steal('can/model', 'can/control/route', 'can/view/stache');

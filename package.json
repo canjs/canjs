@@ -121,8 +121,6 @@
 			}
 		},
 		"ext": {
-			"ejs": "can/view/ejs/system",
-			"mustache": "can/view/mustache/system",
 			"stache": "can/view/stache/system"
 		},
 		"buildConfig": {
@@ -212,13 +210,11 @@
 		"./compute/compute": "./dist/cjs/compute/compute",
 		"./model/model": "./dist/cjs/model/model",
 		"./view/view": "./dist/cjs/view/view",
-		"./view/ejs/ejs": "./dist/cjs/view/ejs/ejs",
 		"./view/stache/stache": "./dist/cjs/view/stache/stache",
 		"./view/href/href": "./dist/cjs/view/href/href",
 		"./control/control": "./dist/cjs/control/control",
 		"./route/route": "./dist/cjs/route/route",
 		"./control/route/route": "./dist/cjs/control/route/route",
-		"./view/mustache/mustache": "./dist/cjs/view/mustache/mustache",
 		"./route/pushstate/pushstate": "./dist/cjs/route/pushstate/pushstate",
 		"./model/queue/queue": "./dist/cjs/model/queue/queue",
 		"./construct/super/super": "./dist/cjs/construct/super/super",
@@ -244,8 +240,6 @@
 		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender",
 		"./util/domless/domless": "./dist/cjs/util/domless/domless",
 		"./view/stache/system": "./dist/cjs/view/stache/system",
-		"./view/mustache/system": "./dist/cjs/view/mustache/system",
-		"./view/ejs/system": "./dist/cjs/view/ejs/system",
 		"./util/event": "./dist/cjs/util/event",
 		"./map/sort/sort": "./dist/cjs/map/sort/sort",
 		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment",
