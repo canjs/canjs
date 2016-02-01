@@ -1,6 +1,6 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
 steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache", "can/view",
-	"can/test","can/view/mustache/spec/specs","steal-qunit",
+	"can/test","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
 
@@ -518,7 +518,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 		if(doc === window.document) {
 			test("Absolute partials", function () {
-				var test_template = can.test.path('view/mustache/test/test_template.mustache');
+				var test_template = can.test.path('view/stache/test/test_template.stache');
 				var t = {
 					template1: "{{> " + test_template + "}}",
 					template2: "{{> " + test_template + "}}",

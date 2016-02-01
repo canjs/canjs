@@ -75,7 +75,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								return can.view.frag(temp.apply(null, arguments));
 							};
 						} else {
-							this.renderer = can.view.mustache(this.prototype.template);
+							this.renderer = can.view.stache(this.prototype.template);
 						}
 					}
 
@@ -436,6 +436,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				}
 			}
 		});
+
+	// This was moved from the legacy view/scanner.js to here in prep for 3.0.0
+	can.view.tag("content", function (el, tagData) {
+		return tagData.scope;
+	});
 
 	/**
 	 * @description Read and write a component element's viewModel.

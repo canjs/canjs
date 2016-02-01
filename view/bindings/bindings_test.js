@@ -1,4 +1,4 @@
-steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mustache", "can/view/stache", "steal-qunit", function () {
+steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/stache", "steal-qunit", function () {
 	QUnit.module('can/view/bindings', {
 		setup: function () {
 			document.getElementById("qunit-fixture").innerHTML = "";
@@ -182,7 +182,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				tag: "can-event-args-tester",
 				scope: scope
 			});
-			var template = can.view.mustache("<div>" +
+			var template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<can-event-args-tester class='with-args' can-click='{withArgs @event @element @viewModel @viewModel.test . title content=content}'/>" +
 			"{{/each}}" +
@@ -254,7 +254,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 				tag: "fancy-event-args-tester",
 				scope: scope
 			});
-			template = can.view.mustache("<div>" +
+			template = can.view.stache("<div>" +
 			"{{#each foodTypes}}" +
 			"<fancy-event-args-tester class='with-args' (click)='withArgs @event @element @viewModel @viewModel.test . title content=content'/>" +
 			"{{/each}}" +
@@ -284,7 +284,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	if (window.jQuery) {
 		test("can-event passes extra args to handler", function () {
 			expect(3);
-			var template = can.view.mustache("<p can-myevent='handleMyEvent'>{{content}}</p>");
+			var template = can.view.stache("<p can-myevent='handleMyEvent'>{{content}}</p>");
 
 			var frag = template({
 				handleMyEvent: function(context, el, event, arg1, arg2) {
@@ -866,7 +866,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 								'{{#if thing}}\n<div />{{/if}}'+
 								'<span>{{name}}</span>'+
 							 '</a>';
-		//var mustacheRenderer = can.mustache(templateString);
+		
 		var stacheRenderer = can.stache(templateString);
 
 		var obj = new can.Map({thing: 'stuff'});
@@ -880,7 +880,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("can-event throws an error when inside #if block (#1182)", function(){
 		var flag = can.compute(false),
 			clickHandlerCount = 0;
-		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+		var frag = can.view.stache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
 			flag: flag,
 			foo: function () {
 				clickHandlerCount++;
@@ -900,7 +900,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("can-EVENT removed in live bindings doesn't unbind (#1112)", function(){
 		var flag = can.compute(true),
 			clickHandlerCount = 0;
-		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+		var frag = can.view.stache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
 			flag: flag,
 			foo: function () {
 				clickHandlerCount++;
@@ -922,7 +922,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	test("can-value compute rejects new value (#887)", function() {
-		var template = can.view.mustache("<input can-value='age'/>");
+		var template = can.view.stache("<input can-value='age'/>");
 
 		// Compute only accepts numbers
 		var compute = can.compute(30, function(newVal, oldVal) {
@@ -951,7 +951,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 
 	test("can-value select multiple applies initial value, when options rendered from array (#1414)", function () {
-		var template = can.view.mustache(
+		var template = can.view.stache(
 			"<select can-value='colors' multiple>" +
 			"{{#each allColors}}<option value='{{value}}'>{{label}}</option>{{/each}}" +
 			"</select>");

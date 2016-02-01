@@ -25,14 +25,14 @@
 <script type='text/javascript' 
         src='../../../node_modules/steal/steal.js' main="@empty">
 </script>
-<script type='text/ejs' id='personEJS'>
-<h3>Person <%= person.attr('name') %> is <%= person.ageThisYear() %> years old.</h3>
+<script type='text/stache' id='personStache'>
+<h3>Person {{person.name}} is {{person.ageThisYear}} years old.</h3>
 </script>
 <script type='text/javascript'  id="demo-source">   
 steal('can/map/validations',
       'can/map/attributes',
       'can/control',
-      'can/view/ejs',function(){
+      'can/view/stache',function(){
 
 // Create a Person Observe Constructor
 // that converts dates
@@ -109,8 +109,7 @@ var Updater = can.Control({
 
 new Updater("#updater",{person: justin})
 
-// use EJS to bind to the name
-$("#person").html(can.view("personEJS", {person: justin}))
+$("#person").html(can.view("personStache", {person: justin}))
 
 })
 </script>

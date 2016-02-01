@@ -1,4 +1,4 @@
-steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/model", "steal-qunit", function () {
+steal("can/list/sort", "can/test", "can/view/stache", "can/view/stache", "can/model", "steal-qunit", function () {
 	QUnit.module('can/list/sort');
 
 	test('List events', (4*3), function () {
@@ -656,12 +656,12 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		]);
 	});
 
-	test('{{@index}} is updated for "move" events (#1962)', function () {
+	test('{{%index}} is updated for "move" events (#1962)', function () {
 		var list = new can.List([100, 200, 300]);
 		list.attr('comparator', function (a, b) { return a < b ? -1 : 1; });
 
 		var template = can.stache('<ul>{{#each list}}<li>' +
-				'<span class="index">{{@index}}</span> - ' +
+				'<span class="index">{{%index}}</span> - ' +
 				'<span class="value">{{.}}</span>' +
 			'</li>{{/each}}</ul>');
 		
@@ -676,7 +676,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 				var index = li.querySelectorAll('.index')[0].innerHTML;
 				var value = li.querySelectorAll('.value')[0].innerHTML;
 				
-				equal(index, ''+i, '{{@index}} rendered correct value');
+				equal(index, ''+i, '{{%index}} rendered correct value');
 				equal(value, ''+expected[i], '{{.}} rendered correct value');
 			}
 		};
