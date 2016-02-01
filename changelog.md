@@ -3,7 +3,7 @@
 @parent guides 5
 -->
 
-__2.3.12__ ( Feb 01 2016 )
+__2.3.12/2.3.13__ ( Feb 01 2016 )
 
 - [jquery 2.2 in peer deps not supported](https://github.com/canjs/canjs/issues/2207)
 - [Keys aren&#39;t documented](https://github.com/canjs/canjs/issues/2202)
