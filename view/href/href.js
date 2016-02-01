@@ -1,7 +1,9 @@
 steal("can/util",
 	"can/view/stache/expression.js",
 	"can/view/callbacks",
-	"can/view/scope", function (can, expression) {
+	"can/view/scope",
+	"can/route",
+	function (can, expression) {
 
 
 	var removeCurly = function(value){

@@ -84,12 +84,6 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/control/route/route": {
-			"name": "can.Control.route",
-			"description": "Declare routes in your Control",
-			"type": "core",
-			"isDefault": true
-		},
 		"can/view/mustache/mustache": {
 			"name": "can.mustache",
 			"description": "Live-binding Handlebars and Mustache views",

@@ -1,4 +1,4 @@
-steal('can/util', 'can/control/route', 'can/model', 'can/map/define',
-	'can/view/mustache', 'can/component', function(can) {
+steal('can/util', 'can/map/define',
+	'can/view/stache', 'can/component', 'can/route',function(can) {
 	return can;
 });

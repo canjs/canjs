@@ -3,7 +3,6 @@ steal(
 	'can/construct',
 	'can/construct/proxy',
 	'can/control',
-	'can/control/route',
 	'can/control/plugin',
 	'can/list',
 	'can/list/promise',
