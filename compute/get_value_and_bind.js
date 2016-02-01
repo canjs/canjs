@@ -12,7 +12,7 @@
 // - can.__observe - All other observes call this method to be visible to computed functions.
 // - can.__notObserve - Returns a function that can not be observed.
 steal("can/util", function(can){
-	
+
 	function ObservedInfo(func, context, compute){
 		this.newObserved = {};
 		this.oldObserved = null;
@@ -22,13 +22,20 @@ steal("can/util", function(can){
 		this.onDependencyChange = can.proxy(this.onDependencyChange, this);
 		this.depth = null;
 		this.childDepths = {};
-		///this.count = 0;
 		this.ignore = 0;
 		this.inBatch = false;
+		this.ready = false;
 		compute.observedInfo = this;
+		this.setReady = can.proxy(this._setReady, this);
 	}
-	
+
 	can.simpleExtend(ObservedInfo.prototype,{
+		getPrimaryDepth: function() {
+			return this.compute._primaryDepth;
+		},
+		_setReady: function(){
+			this.ready = true;
+		},
 		getDepth: function(){
 			if(this.depth !== null) {
 				return this.depth;
@@ -44,7 +51,7 @@ steal("can/util", function(can){
 					max = childDepths[cid];
 				}
 			}
-			return max+1;
+			return max + 1;
 		},
 		addEdge: function(objEv){
 			objEv.obj.bind(objEv.event, this.onDependencyChange);
@@ -61,7 +68,7 @@ steal("can/util", function(can){
 			}
 		},
 		onDependencyChange: function(ev){
-			if(this.bound) {
+			if(this.bound && this.ready) {
 				if(ev.batchNum !== undefined) {
 					// Only need to register once per batchNum
 					if(ev.batchNum !== this.batchNum) {
@@ -74,32 +81,37 @@ steal("can/util", function(can){
 			}
 		},
 		updateCompute: function(batchNum){
-			// Keep the old value.
-			var oldValue = this.value;
-			// Get the new value and register this event handler to any new observables.
-			this.getValueAndBind();
-			// Update the compute with the new value.
-			this.compute.updater(this.value, oldValue, batchNum);
+			// It's possible this became unbound since it was registered to update
+			// Only actually update if something didn't come in and unbind it. (#2188).
+			if(this.bound) {
+				// Keep the old value.
+				var oldValue = this.value;
+				// Get the new value and register this event handler to any new observables.
+				this.getValueAndBind();
+				// Update the compute with the new value.
+				this.compute.updater(this.value, oldValue, batchNum);
+			}
 		},
 		// ## getValueAndBind
 		// Calls `func` with "this" as `context` and binds to any observables that
-		// `func` reads. When any of those observables change, `onchanged` is called.  
-		// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.  
+		// `func` reads. When any of those observables change, `onchanged` is called.
+		// `oldObservedInfo` is A map of observable / event pairs this function used to be listening to.
 		// Returns the `newInfo` set of listeners and the value `func` returned.
 		getValueAndBind: function() {
 			this.bound = true;
 			this.oldObserved = this.newObserved || {};
 			this.ignore = 0;
 			this.newObserved = {};
-			
+			this.ready = false;
+
 			// Add this function call's observedInfo to the stack,
 			// runs the function, pops off the observedInfo, and returns it.
-			
+
 			observedInfoStack.push(this);
 			this.value = this.func.call(this.context);
 			observedInfoStack.pop();
 			this.updateBindings();
-			
+			can.batch.afterPreviousEvents(this.setReady);
 		},
 		// ### updateBindings
 		// Unbinds everything in `oldObserved`.
@@ -108,7 +120,7 @@ steal("can/util", function(can){
 				oldObserved = this.oldObserved,
 				name,
 				obEv;
-			
+
 			for (name in newObserved) {
 				obEv = newObserved[name];
 				if(!oldObserved[name]) {
@@ -134,52 +146,73 @@ steal("can/util", function(can){
 			this.newObserved = {};
 		}
 	});
-	
 
-	
+
+
 	var updateOrder = [],
-		curDepth = Infinity,
-		maxDepth = 0;
-		
+		curPrimaryDepth = Infinity,
+		maxPrimaryDepth = 0;
+
 	// could get a registerUpdate from a 5 while a 1 is going on because the 5 listens to the 1
 	ObservedInfo.registerUpdate = function(observeInfo, batchNum){
 		var depth = observeInfo.getDepth()-1;
-		curDepth = Math.min(depth, curDepth);
-		maxDepth = Math.max(maxDepth, depth);
-		var objs = updateOrder[depth];
-		if(!objs) {
-			objs = updateOrder[depth] = [];
-		}
+		var primaryDepth = observeInfo.getPrimaryDepth();
+
+		curPrimaryDepth = Math.min(primaryDepth, curPrimaryDepth);
+		maxPrimaryDepth = Math.max(primaryDepth, maxPrimaryDepth);
+
+		var primary = updateOrder[primaryDepth] ||
+			(updateOrder[primaryDepth] = {
+				observeInfos: [],
+				current: Infinity,
+				max: 0
+			});
+		var objs = primary.observeInfos[depth] || (primary.observeInfos[depth] = []);
+
 		objs.push(observeInfo);
+
+		primary.current = Math.min(depth, primary.current);
+		primary.max = Math.max(depth, primary.max);
 	};
 	ObservedInfo.batchEnd = function(batchNum){
 		var cur;
-		while( curDepth <= maxDepth ) {
-			var last = updateOrder[curDepth];
-			if(last && (cur = last.pop())) {
-				cur.updateCompute(batchNum);
+
+		while(true) {
+			if(curPrimaryDepth <= maxPrimaryDepth) {
+				var primary = updateOrder[curPrimaryDepth];
+
+				if(primary && primary.current <= primary.max) {
+					var last = primary.observeInfos[primary.current];
+					if(last && (cur = last.pop())) {
+						cur.updateCompute(batchNum);
+					} else {
+						primary.current++;
+					}
+				} else {
+					curPrimaryDepth++;
+				}
 			} else {
-				curDepth++;
+				updateOrder = [];
+				curPrimaryDepth = Infinity;
+				maxPrimaryDepth = 0;
+				return;
 			}
 		}
-		updateOrder = [];
-		curDepth = Infinity;
-		maxDepth = 0;
 	};
-	
-	
+
+
 
 	// ### observedInfoStack
 	//
 	// This is the stack of all `observedInfo` objects that are the result of
-	// recursive `getValueAndBind` calls.  
-	// `getValueAndBind` can indirectly call itself anytime a compute reads another 
+	// recursive `getValueAndBind` calls.
+	// `getValueAndBind` can indirectly call itself anytime a compute reads another
 	// compute.
 	//
 	// An `observedInfo` entry looks like:
 	//
 	//     {
-	//       observed: { 
+	//       observed: {
 	//         "map1|first": {obj: map, event: "first"},
 	//         "map1|last" : {obj: map, event: "last"}
 	//       },
@@ -191,9 +224,9 @@ steal("can/util", function(can){
 	//   We use keys like `"cid|event"` to quickly identify if we have already observed this observable.
 	// - `names` is all the keys so we can quickly tell if two observedInfo objects are the same.
 	var observedInfoStack = [];
-	
+
 	// ## can.__observe
-	// Indicates that an observable is being read.  
+	// Indicates that an observable is being read.
 	// Updates the top of the stack with the observable being read.
 	can.__observe = function (obj, event) {
 		var top = observedInfoStack[observedInfoStack.length-1];
@@ -209,12 +242,12 @@ steal("can/util", function(can){
 					event: evStr
 				};
 			}
-			
+
 		}
 	};
-	
+
 	can.__reading = can.__observe;
-	
+
 	can.__trapObserves = function(){
 		if (observedInfoStack.length) {
 			var top = observedInfoStack[observedInfoStack.length-1];
@@ -234,21 +267,21 @@ steal("can/util", function(can){
 			for(var i =0, len = observes.length; i < len; i++) {
 				var trap = observes[i],
 					name = trap.name;
-				
+
 				if(!top.newObserved[name]) {
 					top.newObserved[name] = trap;
 				}
 			}
 		}
 	};
-	
+
 	// ### can.__isRecordingObserves
 	// Returns if some function is in the process of recording observes.
 	can.__isRecordingObserves = function(){
 		var len = observedInfoStack.length;
 		return len && (observedInfoStack[len-1].ignore === 0);
 	};
-	
+
 	// ### can.__notObserve
 	// Protects a function from being observed.
 	can.__notObserve = function(fn){
@@ -264,9 +297,9 @@ steal("can/util", function(can){
 			}
 		};
 	};
-	
+
 	can.batch._onDispatchedEvents = ObservedInfo.batchEnd;
-	
+
 	return ObservedInfo;
 
 });

@@ -3,6 +3,36 @@
 @parent guides 5
 -->
 
+__2.3.11__ ( Jan 21 2016 )
+
+- [makes events fired as a result of a batch happen after any previous batches](https://github.com/canjs/canjs/pull/2203)
+- [can.batch.afterPreviousEvents firing too late](https://github.com/canjs/canjs/issues/2198)
+- [makes jQuery work without public buildFragment and overwritable domManip](https://github.com/canjs/canjs/pull/2177)
+- [jQuery 2.2 compatible. ](https://github.com/canjs/canjs/issues/2176)
+
+
+__2.3.10__ ( Jan 14 2016 )
+
+- [Computes that are registered to be updated don&#39;t get updated if they are unbound](https://github.com/canjs/canjs/pull/2189)
+- [nested switch statements cause a nodeList error](https://github.com/canjs/canjs/issues/2188)
+
+
+__2.3.9__ ( Jan 11 2016 )
+
+- [Partial defined by registerView throws error after element is modified](https://github.com/canjs/canjs/issues/2174)
+- [stache system plugin needs nodeList](https://github.com/canjs/canjs/issues/2166)
+
+
+__2.3.8__ ( Jan 04 2016 )
+
+- [vdom innerHTML implementation should append a text node for script tags](https://github.com/canjs/canjs/issues/2156)
+- [User DOM not found when rendering multiple &lt;content&gt;&#39;s as a result of a batched &quot;set&quot;](https://github.com/canjs/canjs/issues/2151)
+- [option value as empty string are not selected with two way binding](https://github.com/canjs/canjs/issues/2147)
+- [Sub expression as named parameter](https://github.com/canjs/canjs/issues/2140)
+- [FF debugging functions conflicting with can.Map](https://github.com/canjs/canjs/issues/2069)
+- [Dynamic select menus don&#39;t live bind correctly](https://github.com/canjs/canjs/issues/1762)
+
+
 __2.3.7__ ( Dec 15 2015 )
 
 - [Incorrect view model context with &lt;content/&gt;](https://github.com/canjs/canjs/issues/2137)

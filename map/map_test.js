@@ -303,6 +303,18 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 
 		equal(map._bindings, 1, 'The number of bindings is still correct');
 	});
+	
+	test("Should be able to get and set attribute named 'watch' on can.Map in Firefox", function() {
+		var map = new can.Map({});
+		map.attr("watch");
+		ok(true, "can have attribute named 'watch' on a can.Map instance");
+	});
+
+	test("Should be able to get and set attribute named 'unwatch' on can.Map in Firefox", function() {
+		var map = new can.Map({});
+		map.attr("unwatch");
+		ok(true, "can have attribute named 'unwatch' on a can.Map instance");
+	});
 
 	test('Creating map in compute dispatches all events properly', function() {
 		expect(2);

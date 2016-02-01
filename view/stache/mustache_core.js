@@ -54,11 +54,11 @@ steal("can/util",
 			}
 			return txt;
 		};
-		
 
-	
-	
-	
+
+
+
+
 	var core = {
 		expression: expression,
 		// ## mustacheCore.makeEvaluator
@@ -81,16 +81,16 @@ steal("can/util",
 		 * @return {Function} An 'evaluator' function that evaluates the expression.
 		 */
 		makeEvaluator: function (scope, helperOptions, nodeList, mode, exprData, truthyRenderer, falseyRenderer, stringOnly) {
-			
+
 			if(mode === "^") {
 				var temp = truthyRenderer;
 				truthyRenderer = falseyRenderer;
 				falseyRenderer = temp;
 			}
-			
+
 			var value,
 				helperOptionArg;
-			
+
 			if(exprData instanceof expression.Call) {
 				helperOptionArg =  {
 					fn: function () {},
@@ -102,7 +102,7 @@ steal("can/util",
 					helpersScope: helperOptions
 				};
 				utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
-				
+
 				value = exprData.value(scope, helperOptions, helperOptionArg);
 				if(exprData.isHelper) {
 					return value;
@@ -118,16 +118,12 @@ steal("can/util",
 				var helperAndValue = exprData.helperAndValue(scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 				var helper = helperAndValue.helper;
 				value = helperAndValue.value;
-			
+
 				if(helper) {
 					return exprData.evaluator(helper, scope, helperOptions, readOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 				}
 			}
-			
-			
-			
-			
-		
+
 			// Return evaluators for no mode.
 			if(!mode) {
 				// If it's computed, return a function that just reads the compute.
@@ -192,7 +188,6 @@ steal("can/util",
 			partialName = can.trim(partialName);
 
 			return function(scope, options, parentSectionNodeList){
-
 				var nodeList = [this];
 				nodeList.expression = ">" + partialName;
 				nodeLists.register(nodeList, null, parentSectionNodeList || true, state.directlyNested);
@@ -200,11 +195,12 @@ steal("can/util",
 				var partialFrag = can.compute(function(){
 					var localPartialName = partialName;
 						// Look up partials in options first.
-					var partial = options.attr("partials." + localPartialName),
-						res;
+					var partial = options.attr("partials." + localPartialName), renderer;
 					if (partial) {
-						res = partial.render ? partial.render(scope, options) :
-							partial(scope, options);
+						renderer = function() {
+							return partial.render ? partial.render(scope, options, nodeList)
+								: partial(scope, options);
+						};
 					}
 					// Use can.view to get and render the partial.
 					else {
@@ -219,15 +215,18 @@ steal("can/util",
 							localPartialName = scopePartialName;
 						}
 
-						res = can.isFunction(localPartialName) ? localPartialName(scope, options)
-							: can.view.render(localPartialName, scope, options );
+						renderer = function() {
+							return can.isFunction(localPartialName) ? localPartialName(scope, options, nodeList)
+								: can.view.render(localPartialName, scope, options, nodeList);
+						};
 					}
+					var res = can.__notObserve(renderer)();
 					return can.frag(res);
-
 				});
 
-				live.html(this, partialFrag, this.parentNode, nodeList);
+				partialFrag.computeInstance.setPrimaryDepth(nodeList.nesting);
 
+				live.html(this, partialFrag, this.parentNode, nodeList);
 			};
 		},
 		// ## mustacheCore.makeStringBranchRenderer
@@ -244,7 +243,7 @@ steal("can/util",
 			var exprData = core.expression.parse(expressionString),
 				// Use the full mustache expression as the cache key.
 				fullExpression = mode+expressionString;
-				
+
 			// convert a lookup like `{{value}}` to still be called as a helper if necessary.
 			if(!(exprData instanceof expression.Helper) && !(exprData instanceof expression.Call)) {
 				exprData = new expression.Helper(exprData,[],{});
@@ -317,11 +316,13 @@ steal("can/util",
 				} else {
 					compute = can.compute(evaluator, null, false);
 				}
-				
-				
+
+				compute.computeInstance.setPrimaryDepth(nodeList.nesting);
+
 				// Bind on the compute to set the cached value. This helps performance
 				// so live binding can read a cached value instead of re-calculating.
 				compute.computeInstance.bind("change", can.k);
+
 				var value = compute();
 
 				// If value is a function, it's a helper that returned a function.
@@ -459,6 +460,3 @@ steal("can/util",
 	can.view.mustacheCore = core;
 	return core;
 });
-
-
-

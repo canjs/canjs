@@ -149,7 +149,8 @@ steal('can/util',
 				elements.after([masterNodeList[0]], falseyFrag);
 				masterNodeList.push(falseyNodeLists[0]);
 			}
-		};
+		},
+		childMutationCallbacks = {};
 	/**
 	 * @property {Object} can.view.live
 	 * @parent can.view.static
@@ -177,6 +178,19 @@ steal('can/util',
 	 *
 	 */
 	var live = {
+		registerChildMutationCallback: function(tag, callback){
+			if(callback) {
+				childMutationCallbacks[tag] = callback;
+			} else {
+				return childMutationCallbacks[tag];
+			}
+		},
+		callChildMutationCallback: function(el) {
+			var callback = el && childMutationCallbacks[el.nodeName.toLowerCase()];
+			if(callback) {
+				callback(el);
+			}
+		},
 		/**
 		 * @function can.view.live.list
 		 * @parent can.view.live
@@ -287,6 +301,10 @@ steal('can/util',
 					for (var i = index + newIndicies.length, len = indexMap.length; i < len; i++) {
 						indexMap[i](i);
 					}
+					if(ev.callChildMutationCallback !== false) {
+						live.callChildMutationCallback(text.parentNode);
+					}
+					
 				},
 				// Called when an item is set with .attr
 				set = function(ev, newVal, index) {
@@ -316,19 +334,17 @@ steal('can/util',
 						indexMap[i](i);
 					}
 					
-					
-					
-					
-					
 					// don't remove elements during teardown.  Something else will probably be doing that.
 					if(!fullTeardown) {
 						// adds the falsey section if the list is empty
 						addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
 						can.remove(can.$(itemsToRemove));
+						if(ev.callChildMutationCallback !== false) {
+							live.callChildMutationCallback(text.parentNode);
+						}
 					} else {
 						nodeLists.unregister(masterNodeList);
 					}
-
 				},
 				move = function (ev, item, newIndex, currentIndex) {
 					if (!afterPreviousEvents) {
@@ -389,6 +405,9 @@ steal('can/util',
 					for (i, len; i < len; i++) {
 						indexMap[i](i);
 					}
+					if(ev.callChildMutationCallback !== false) {
+						live.callChildMutationCallback(text.parentNode);
+					}
 				},
 				// A text node placeholder
 				text = el.ownerDocument.createTextNode(''),
@@ -405,7 +424,7 @@ steal('can/util',
 							.unbind('move', move);
 					}
 					// use remove to clean stuff up for us
-					remove({}, {
+					remove({callChildMutationCallback: !!fullTeardown}, {
 						length: masterNodeList.length - 1
 					}, 0, true, fullTeardown);
 				},
@@ -415,7 +434,6 @@ steal('can/util',
 					if(isTornDown) {
 						return;
 					}
-					
 					
 					afterPreviousEvents = true;
 					if(newList && oldList) {
@@ -431,23 +449,24 @@ steal('can/util',
 						for(var i = 0, patchLen = patches.length; i < patchLen; i++) {
 							var patch = patches[i];
 							if(patch.deleteCount) {
-								remove({}, {
+								remove({callChildMutationCallback: false}, {
 									length: patch.deleteCount
 								}, patch.index, true);
 							}
 							if(patch.insert.length) {
-								add({}, patch.insert, patch.index);
+								add({callChildMutationCallback: false}, patch.insert, patch.index);
 							}
 						}
 					} else {
 						if(oldList) {
 							teardownList();
 						}
-						
 						list = newList || [];
-						add({}, list, 0);
+						add({callChildMutationCallback: false}, list, 0);
 						addFalseyIfEmpty(list, falseyRender, masterNodeList, nodeList);
 					}
+					live.callChildMutationCallback(text.parentNode);
+					
 					afterPreviousEvents = false;
 					// list might be a plain array
 					if (list.bind) {
@@ -456,8 +475,12 @@ steal('can/util',
 							.bind('remove', remove)
 							.bind('move', move);
 					}
-					afterPreviousEvents = true;
+					
+					can.batch.afterPreviousEvents(function(){
+						afterPreviousEvents = true;
+					});
 				};
+				
 			parentNode = elements.getParentNode(el, parentNode);
 			// Setup binding and teardown to add and remove events
 			var data = setup(parentNode, function () {
@@ -520,14 +543,15 @@ steal('can/util',
 			var data;
 			parentNode = elements.getParentNode(el, parentNode);
 			data = listen(parentNode, compute, function (ev, newVal, oldVal) {
-				
 				// TODO: remove teardownCheck in 2.1
 				var attached = nodeLists.first(nodes).parentNode;
 				// update the nodes in the DOM with the new rendered value
 				if (attached) {
 					makeAndPut(newVal);
 				}
-				data.teardownCheck(nodeLists.first(nodes).parentNode);
+				var pn = nodeLists.first(nodes).parentNode;
+				data.teardownCheck(pn);
+				live.callChildMutationCallback(pn);
 			});
 
 			var nodes = nodeList || [el],
@@ -550,7 +574,6 @@ steal('can/util',
 						val(frag.firstChild);
 					}
 					elements.replace(oldNodes, frag);
-					
 				};
 				
 			data.nodeList = nodes;

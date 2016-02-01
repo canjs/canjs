@@ -2,6 +2,8 @@ var assert = require("assert");
 var Steal = require("steal");
 
 describe("Running on the server", function(){
+	this.timeout(20000);
+	
 	describe("With Steal", function(){
 		before(function(){
 			var steal = this.steal = Steal.clone();

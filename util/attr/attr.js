@@ -102,6 +102,20 @@ steal("can/util/can.js", function (can) {
 					this.set(el, attrName, val);
 				}
 			},
+			setSelectValue: function(el, val) {
+				// jshint eqeqeq: false
+				if(val != null) {
+					var options = el.getElementsByTagName('option');
+					for(var i  = 0; i < options.length; i++) {
+						if(val == options[i].value) {
+							options[i].selected = true;
+							return;
+						}
+					}
+				}
+				
+				el.selectedIndex = -1;
+			},
 			// ## attr.set
 			// Set the value an attribute on an element.
 			set: function (el, attrName, val) {

@@ -42,4 +42,5 @@ can.util adds the following utility functions to CanJS:
 - [can.unbind unbind] - stop listening for events on an Object
 - [can.undelegate undelegate] - stop listening for events from the children of an Element
 - [can.underscore underscore] - convert a CamelCase or mixedCase string and underscores the String on the capital letter
+- [can.viewModel viewModel] - read and write a component element's viewModel
 - [can.when when] - call a callback Function when a Deferred resolves

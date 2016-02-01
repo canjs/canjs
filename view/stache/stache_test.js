@@ -1,13 +1,11 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/view",
+steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache", "can/view",
 	"can/test","can/view/mustache/spec/specs","steal-qunit",
 	"can/view/stache/expression_test.js","can/view/stache/mustache_helpers.js",
 	function(){
-	
-	var browserDoc = window.document;
-	var simpleDocument = new SimpleDOM.Document();
 
-	var serializer = new SimpleDOM.HTMLSerializer(SimpleDOM.voidMap);
+	var browserDoc = window.document;
+	var simpleDocument = can.simpleDocument;
 
 	makeTest('can/view/stache dom', browserDoc);
 	if(window.jQuery && window.steal) {
@@ -19,6 +17,10 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 	if(window.steal) {
 		QUnit.asyncTest("routeUrl and routeCurrent helper", function(){
 			makeIframe(  can.test.path("view/stache/test/route-url-current.html?"+Math.random()) );
+		});
+
+		QUnit.asyncTest("system/stache plugin accepts nodelists", function(){
+			makeIframe( can.test.path("view/stache/test/system-nodelist.html?"+Math.random()) );
 		});
 	}
 
@@ -42,7 +44,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 		var innerHTML = function(node){
 			return "innerHTML" in node ?
 				node.innerHTML :
-				serializer.serialize(node.firstChild);
+				undefined;
 		};
 		var getValue = function(node){
 			// textareas are cross bound to their internal innerHTML
@@ -449,7 +451,7 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 
 			var expected = t.expected.replace(/&quot;/g, '&#34;')
 				.replace(/\r\n/g, '\n');
-			
+
 			deepEqual( getText(t.template, t.data) , expected);
 		});
 
@@ -4520,15 +4522,15 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(frag.firstChild.nextSibling.nodeType, 3, "the next sibling is a TextNode");
 			equal(frag.firstChild.nextSibling.nextSibling, undefined, "there are no more nodes");
 		});
-		
+
 		test("#each passed a method (2001)", function(){
 			var users = new can.List([
 				{name: "Alexis", num: 4, age: 88},
 				{name: "Brian", num: 2, age: 31}
 			]);
-			
+
 			var template = can.stache("<div>{{#each people}}<span/>{{/each}}</div>");
-			
+
 			var VM = can.Map.extend({
 				people: function() {
 					return this.attr("users");
@@ -4537,27 +4539,27 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 					$('#content').empty();
 				}
 			});
-			
+
 			var frag = template(new VM({
 				users: users
 			})),
 				div = frag.firstChild,
 				spans = div.getElementsByTagName("span");
-			
+
 			equal(spans.length, 2, "two spans");
-			
+
 			can.append(this.$fixture,frag);
-			
+
 			stop();
 			setTimeout(function(){
 				start();
 				can.remove( can.$(div) );
 				ok(true, "removed without breaking");
 			},10);
-			
-			
+
+
 		});
-		
+
 		test("Rendering live bound indicies with #each, @index and a simple can.List (#2067)", function () {
 			var list = new can.List([{value:'a'}, {value:'b'}, {value: 'c'}]);
 			var template = can.stache("<ul>{{#each list}}<li>{{%index}} {{value}}</li>{{/each}}</ul>");
@@ -4573,27 +4575,27 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			equal(innerHTML(lis[0]), '0 a', "first index and value are correct");
 			equal(innerHTML(lis[1]), '1 b', "second index and value are correct");
 			equal(innerHTML(lis[2]), '2 c', "third index and value are correct");
-			
+
 		});
-		
+
 		test("%index content should be skipped by ../ (#1554)", function(){
 			var list = new can.List(["a","b"]);
 			var tmpl = can.stache('{{#each items}}<li>{{.././items.indexOf .}}</li>{{/each}}');
 			var frag = tmpl({items: list});
 			equal(frag.lastChild.firstChild.nodeValue, "1", "read indexOf");
 		});
-		
+
 		test("rendering style tag (#2035)",function(){
 			var map = new can.Map({color: 'green'});
 			var frag = can.stache('<style>body {color: {{color}} }</style>')(map);
 			var content = frag.firstChild.firstChild.nodeValue;
 			equal(content,"body {color: green }","got the right style text");
-			
+
 			map = new can.Map({showGreen: true});
 			frag = can.stache('<style>body {color: {{#showGreen}}green{{/showGreen}} }</style>')(map);
 			content = frag.firstChild.firstChild.nodeValue;
 			equal(content,"body {color: green }","sub expressions work");
-			
+
 		});
 
 		test("checked as a custom attribute", function(){
@@ -4603,25 +4605,160 @@ steal("can-simple-dom", "can/util/vdom/build_fragment","can/view/stache", "can/v
 			var frag = can.stache("<div {{#if preview}}checked{{/if}}></div>")(map);
 			equal(frag.firstChild.getAttribute("checked"), "", "got attribute");
 		});
-		
+
 		test("sections with attribute spacing (#2097)", function(){
 			var template = can.stache('<div {{#foo}} disabled {{/foo}}>');
 			var frag = template({foo: true});
 			equal(frag.firstChild.getAttribute("disabled"),"","disabled set");
 		});
-		
+
 
 		test("keep @index working with multi-dimensional arrays (#2127)", function() {
 			var data = new can.Map({
 				array2 : [['asd'], ['sdf']]
 			});
-			
+
 			var template = can.stache('<div>{{#each array2}}<span>{{@index}}</span>{{/each}}</div>');
-			
+
 			var frag = template(data);
-			
+
 			var spans = frag.firstChild.getElementsByTagName("span");
 			equal( spans[0].firstChild.nodeValue, "0");
+		});
+
+		test("partials are not working within an {{#each}} (#2174)", function() {
+
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			var frag = renderer(data);
+
+			data.attr('items.0.name', 'WORLD');
+
+			data.attr('items').splice(0, 0, {
+				name : 'HELLO'
+			});
+			equal( innerHTML(frag.firstChild), "HELLOWORLD");
+		});
+
+		test("partials don't leak (#2174)", function() {
+
+			can.stache.registerHelper("somethingCrazy", function(name, options){
+				return function(el){
+					var nodeList = [el];
+					nodeList.expression = "something crazy";
+					can.view.nodeLists.register(nodeList, function(){
+						ok(true, "nodeList torn down");
+					}, options.nodeList, true);
+					can.view.nodeLists.update(options.nodeList, [el]);
+				};
+			});
+			var data = new can.Map({
+				items : [{
+					name : 'foo'
+				}],
+				itemRender: can.stache('{{somethingCrazy name}}')
+			});
+
+			var renderer = can.stache('<div>{{#each items}}{{>itemRender}}{{/each}}</div>');
+
+			renderer(data);
+
+			data.attr('items').pop();
+		});
+
+		test("partials should leave binding to helpers and properties (#2174)", function() {
+			can.view.registerView('test', '<input id="one"> {{name}}');
+			var renderer = can.stache('{{#each items}}{{>test}}{{/each}}');
+
+			var data = new can.Map({ items: [] });
+			var frag = renderer(data);
+			data.attr('items').splice(0, 0, {name: 'bob'});
+
+			// simulate the user entering text
+			frag.firstChild.nextSibling.setAttribute('value', 'user text');
+			// re-render the partial for the 0th element
+			data.attr('items.0.name', 'dave');
+
+			equal(frag.firstChild.nextSibling.getAttribute('value'), 'user text');
+        });
+
+		test("nested switch statement fail (#2188)", function(){
+
+			var template  = can.stache("<div>{{#switch outer}}"+
+				'{{#case "outerValue1"}}'+
+					"{{#switch inner}}"+
+						"{{#case 'innerValue1'}}"+
+							"INNER1"+
+						"{{/case}}"+
+					"{{/switch}}"+
+				"{{/case}}"+
+				'{{#case "outerValue2"}}'+
+					"OUTER2"+
+				"{{/case}}"+
+		    "{{/switch}}</div>");
+
+
+			var vm = new can.Map({
+				outer : "outerValue1",
+				inner : "innerValue1"
+			});
+
+			var frag = template(vm);
+
+			can.batch.start();
+			vm.removeAttr("inner");
+			vm.attr("outer", "outerValue2");
+			can.batch.stop();
+
+
+		    ok( innerHTML(frag.firstChild).indexOf("OUTER2") >= 0, "has OUTER2");
+		    ok( innerHTML(frag.firstChild).indexOf("INNER1") === -1, "does not have INNER1");
+
+
+		});
+
+		test('Child bindings are called before the parent', function() {
+			var template = "{{#eq page 'foo'}}" +
+					"{{#eq action 'view'}} {{trace 'view foo'}} {{/eq}}" +
+					"{{#eq action 'edit'}} {{trace 'edit foo'}} {{/eq}}" +
+				"{{/eq}}" +
+				"{{#eq page 'bar'}}" +
+					"{{#eq action 'view'}} {{trace 'view bar'}} {{/eq}}" +
+					"{{#eq action 'edit'}} {{trace 'edit bar'}} {{/eq}}" +
+				"{{/eq}}";
+
+			var state = new can.Map({
+				action: 'view',
+				page: 'foo'
+			});
+			var counter = 0;
+
+			can.stache(template)(state, {
+				trace: function(value, options) {
+					if(counter === 0) {
+						equal(value, 'view foo');
+					} else if(counter === 1) {
+						equal(value, 'edit bar')
+					} else {
+						ok(false, 'Traced an unexpected template call');
+					}
+					counter++;
+				}
+			});
+
+			state.attr({
+				action: 'edit',
+				page: 'bar'
+			});
+
+			equal(counter, 2, 'Counter incremented twice');
 		});
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!

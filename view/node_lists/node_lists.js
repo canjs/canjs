@@ -1,8 +1,8 @@
 // # can/view/node_lists/node_list.js
-// 
+//
 // `can.view.nodeLists` are used to make sure "directly nested" live-binding
 // sections update content correctly.
-// 
+//
 // Consider the following template:
 //
 // ```
@@ -36,14 +36,14 @@ steal('can/util', 'can/view/elements.js', function (can) {
 	} catch (ex) {
 		canExpando = false;
 	}
-	
+
 	// A mapping of element ids to nodeList id allowing us to quickly find an element
 	// that needs to be replaced when updated.
 	var nodeMap = {},
-		// A mapping of ids to text nodes, this map will be used in the 
+		// A mapping of ids to text nodes, this map will be used in the
 		// case of the browser not supporting expando properties.
 		textNodeMap = {},
-		// The name of the expando property; the value returned 
+		// The name of the expando property; the value returned
 		// given a nodeMap key.
 		expando = 'ejs_' + Math.random(),
 		// The id used as the key in our nodeMap, this integer
@@ -74,10 +74,10 @@ steal('can/util', 'can/view/elements.js', function (can) {
 					// If we didn't find the node, we need to register it and return
 					// the id used.
 					++_id;
-	
+
 					// If we didn't find the node, we need to register it and return
 					// the id used.
-					// 
+					//
 					// We have to store the node itself because of the browser's lack
 					// of support for expando properties (i.e. we can't use a look-up
 					// table and store the id on the node as a custom property).
@@ -90,7 +90,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			if (canExpando || node.nodeType !== 3) {
 				return node[expando];
 			} else {
-				// The nodeList has a specific collection for HTMLTextNodes for 
+				// The nodeList has a specific collection for HTMLTextNodes for
 				// (older) browsers that do not support expando properties.
 				for (var textNodeID in textNodeMap) {
 					if (textNodeMap[textNodeID] === node) {
@@ -138,27 +138,27 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		};
 
 	// ## Registering & Updating
-	// 
+	//
 	// To keep all live-bound sections knowing which elements they are managing,
 	// all live-bound elments are registered and updated when they change.
 	//
 	// For example, the above template, when rendered with data like:
-	// 
+	//
 	//     data = new can.Map({
 	//         items: ["first","second"]
 	//     })
 	//
 	// This will first render the following content:
-	// 
+	//
 	//     <div>
 	//         <span data-view-id='5'/>
 	//     </div>
-	// 
+	//
 	// When the `5` callback is called, this will register the `<span>` like:
-	// 
+	//
 	//     var ifsNodes = [<span 5>]
 	//     nodeLists.register(ifsNodes);
-	// 
+	//
 	// And then render `{{if}}`'s contents and update `ifsNodes` with it:
 	//
 	//     nodeLists.update( ifsNodes, [<"\nItems:\n">, <span data-view-id="6">] );
@@ -185,17 +185,17 @@ steal('can/util', 'can/view/elements.js', function (can) {
 	// useful for tearing down live-binding.
 	var nodeLists = {
 		id: id,
-		
+
 		// ## nodeLists.update
 		// Updates a nodeList with new items, i.e. when values for the template have changed.
 		update: function (nodeList, newNodes) {
 			// Unregister all childNodeLists.
 			var oldNodes = nodeLists.unregisterChildren(nodeList);
-			
+
 			newNodes = can.makeArray(newNodes);
 
 			var oldListLength = nodeList.length;
-			
+
 			// Replace oldNodeLists's contents.
 			splice.apply(nodeList, [
 				0,
@@ -211,12 +211,12 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			} else {
 				nodeLists.nestList(nodeList);
 			}
-			
+
 			return oldNodes;
 		},
 		// Goes through each node in the list. [el1, el2, el3, ...]
 		// Finds the nodeList for that node in repacements.  el1's nodeList might look like [el1, [el2]].
-		// Replaces that element and any other elements in the node list with the 
+		// Replaces that element and any other elements in the node list with the
 		// nodelist itself. resulting in [ [el1, [el2]], el3, ...]
 		// If a replacement is not found, it was improperly added, so we add it as a deepChild.
 		nestReplacements: function(list){
@@ -227,7 +227,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				rMap = replacementMap(list.replacements, idMap),
 				rCount = list.replacements.length,
 				foundIds = {};
-			
+
 			while(index < list.length && rCount) {
 				var node = list[index],
 					nodeId = readId(node, idMap),
@@ -239,11 +239,11 @@ steal('can/util', 'can/view/elements.js', function (can) {
 				}
 				index++;
 			}
-			// Only do this if 
+			// Only do this if
 			if(rCount) {
 				addUnfoundAsDeepChildren(list, rMap, foundIds );
 			}
-			
+
 			list.replacements = [];
 		},
 		// ## nodeLists.nestList
@@ -291,7 +291,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		first: function(nodeList) {
 			var first = nodeList[0];
 			// If the first node in the list is not an HTMLElement
-			// it is a nodeList so call `first` again. 
+			// it is a nodeList so call `first` again.
 			if(first.nodeType) {
 				return first;
 			} else {
@@ -318,7 +318,8 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			can.cid(nodeList);
 			nodeList.unregistered = unregistered;
 			nodeList.parentList = parent;
-			
+			nodeList.nesting = parent && typeof parent.nesting !== 'undefined' ? parent.nesting + 1 : 0;
+
 			if(parent) {
 				nodeList.deepChildren = [];
 				nodeList.newDeepChildren = [];
@@ -335,13 +336,13 @@ steal('can/util', 'can/view/elements.js', function (can) {
 			else {
 				nodeLists.nestList(nodeList);
 			}
-			
-			
+
+
 			return nodeList;
 		},
-		
+
 		// ## nodeLists.unregisterChildren
-		// Unregister all childen within the provided list and return the 
+		// Unregister all childen within the provided list and return the
 		// unregistred nodes.
 		// @param {Array.<HTMLElement>} nodeList The child list to unregister.
 		unregisterChildren: function(nodeList){
@@ -358,26 +359,26 @@ steal('can/util', 'can/view/elements.js', function (can) {
 
 					nodes.push(node);
 				} else {
-					// Recursively unregister each of the child lists in 
+					// Recursively unregister each of the child lists in
 					// the nodeList.
 					push.apply(nodes, nodeLists.unregister(node, true));
 				}
 			});
-			
+
 			can.each(nodeList.deepChildren, function(nodeList){
 				nodeLists.unregister(nodeList, true);
 			});
-			
+
 			return nodes;
 		},
 
 		// ## nodeLists.unregister
-		// Unregister's a nodeList and returns the unregistered nodes.  
-		// Call if the nodeList is no longer being updated. This will 
+		// Unregister's a nodeList and returns the unregistered nodes.
+		// Call if the nodeList is no longer being updated. This will
 		// also unregister all child nodeLists.
 		unregister: function (nodeList, isChild) {
 			var nodes = nodeLists.unregisterChildren(nodeList, true);
-			
+
 			// If an 'unregisted' function was provided during registration, remove
 			// it from the list, and call the function provided.
 			if (nodeList.unregistered) {

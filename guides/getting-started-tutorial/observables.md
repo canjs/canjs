@@ -98,11 +98,11 @@ Paginate = can.Map.extend({
 });
 
 var pageInfo = new Paginate();
-pageInfo.attr("offset") //-> 0
+pageInfo.attr("offset") //-> 100
 
 pageInfo.next();
 
-pageInfo.attr("offset") //-> 100
+pageInfo.attr("offset") //-> 200
 ```
 
 ## Responding to changes

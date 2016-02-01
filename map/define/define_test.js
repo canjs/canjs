@@ -1,7 +1,7 @@
 /* jshint asi: false */
 steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
-	
-	
+
+
 	QUnit.module('can/map/define');
 
 	// remove, type, default
@@ -626,7 +626,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 			prefix + 'define plugin style default property definition');
 		equal(map.attr('middleNumber'), 5,
 			prefix + 'define plugin style default property definition');
-		
+
 		equal(map.attr('lastLetter'), 'I',
 			prefix + 'define plugin style generated default property definition');
 		equal(map.attr('lastNumber'), 9,
@@ -769,15 +769,15 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 				}
 			}
 		});
-		
+
 		var getMap = new GetMap();
-		
+
 		getMap.attr("value", computeValue);
-		
+
 		equal(getMap.attr("value"), 1);
 
 		var bindCallbacks = 0;
-		
+
 		getMap.bind("value", function(ev, newVal, oldVal){
 
 			switch(bindCallbacks) {
@@ -794,32 +794,32 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 					equal(oldVal, 3, "2 - bind called with old val");
 					break;
 			}
-			
-			
+
+
 			bindCallbacks++;
 		});
-		
+
 		// Try updating the compute's value
 		computeValue(2);
-		
+
 		// Try setting the value of the property
 		getMap.attr("value", 3);
-		
+
 		equal(getMap.attr("value"), 3, "read value is 3");
 		equal(computeValue(), 3, "the compute value is 3");
-		
+
 		// Try setting to a new comptue
 		var newComputeValue = can.compute(4);
-		
+
 		getMap.attr("value", newComputeValue);
-		
+
 	});
 
 	test('setting a value of a property with type "compute" triggers change events', function () {
 
 		var handler;
 		var message = 'The change event passed the correct {prop} when set with {method}';
-		
+
 		var createChangeHandler = function (expectedOldVal, expectedNewVal, method) {
 			return function (ev, newVal, oldVal) {
 				var subs = { prop: 'newVal', method: method };
@@ -846,7 +846,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(m1.attr('computed'), 0, 'm1 is 1');
 
 		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
-		
+
 
 		handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
 		m1.bind('computed', handler);
@@ -909,7 +909,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(map.attr('size'), 2);
 	});
 
-	
+
 	test("One event on getters (#1585)", function(){
 
 		var AppState = can.Map.extend({
@@ -927,21 +927,21 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 				}
 			}
 		});
-		
+
 		var appState = new AppState();
 		var personEvents = 0;
 		appState.bind("person", function(ev, person) {
 			personEvents++;
 		});
-		
+
 		appState.attr("personId", 5);
-		
+
 
 		appState.attr("person", new can.Map({
 			name: "Julia"
 		}));
 
-			
+
 		equal(personEvents,2);
 	});
 
@@ -996,15 +996,15 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		map.bind('foo', function () {
 			ok(true, 'Bound function is called');
 		});
-		
+
 		equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
 
 		map.attr('foo', 'baz');
 
 		equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
 	});
-	
-	
+
+
 	test("type converters handle null and undefined in expected ways (1693)", function () {
 
 		var Typer = can.Map.extend({
@@ -1038,7 +1038,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(t.attr("htmlbool"), false, "converted to htmlbool");
 
 		equal(t.attr("leaveAlone"), undefined, "left as object");
-		
+
 		t = new Typer().attr({
 			date: null,
 			string: null,
@@ -1061,7 +1061,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(t.attr("leaveAlone"), null, "left as object");
 
 	});
-	
+
 	test('Initial value does not call getter', function() {
 		expect(0);
 
@@ -1078,7 +1078,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		new Map({ count: 100 });
 	});
-	
+
 	test("getters produce change events", function(){
 		var Map = can.Map.extend({
 			define: {
@@ -1089,17 +1089,51 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 				}
 			}
 		});
-		
+
 		var map = new Map();
-		
+
 		map.bind("change", function(){
 			ok(true, "change called");
 		});
-		
+
 		map.attr("count", 22);
 	});
-	
-	
-	
-	
+
+	test("Asynchronous virtual properties cause extra recomputes (#1915)", function() {
+		stop();
+
+		var ran = false;
+		var VM = can.Map.extend({
+		  define: {
+		    foo: {
+		      get: function(lastVal, setVal) {
+		        setTimeout(function() {
+							if(setVal) {
+								setVal(5);
+							}
+		        }, 10);
+		      }
+		    },
+		    bar: {
+		      get: function() {
+		        var foo = this.attr('foo');
+		        if (foo) {
+							if(ran) {
+								ok(false, 'Getter ran twice');
+							}
+							ran = true;
+		          return foo * 2;
+		        }
+		      }
+		    }
+		  }
+		});
+
+		var vm = new VM();
+		vm.bind('bar', function() {});
+		setTimeout(function() {
+			equal(vm.attr('bar'), 10);
+			start();
+		}, 200);
+	});
 });
