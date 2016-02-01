@@ -1,1 +1,2 @@
-steal('can/model', 'can/view/ejs');
+steal('can/model', 'can/view/stache');
+

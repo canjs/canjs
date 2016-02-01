@@ -9,7 +9,7 @@
 // `can.Component.setup` prepares everything needed by the `can.Component.prototype.setup`
 // to hookup the component.
 
-steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/mustache", "can/util/view_model", function (can, viewCallbacks, elements, bindings) {
+steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings","can/control", "can/observe", "can/view/stache", "can/util/view_model", function (can, viewCallbacks, elements, bindings) {
 	// ## Helpers
 	// Attribute names to ignore for setting viewModel values.
 	var paramReplacer = /\{([^\}]+)\}/g;
@@ -75,7 +75,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 								return can.view.frag(temp.apply(null, arguments));
 							};
 						} else {
-							this.renderer = can.view.mustache(this.prototype.template);
+							this.renderer = can.view.stache(this.prototype.template);
 						}
 					}
 
@@ -436,6 +436,11 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				}
 			}
 		});
+
+	// This was moved from the legacy view/scanner.js to here in prep for 3.0.0
+	can.view.tag("content", function (el, tagData) {
+		return tagData.scope;
+	});
 
 	/**
 	 * @description Read and write a component element's viewModel.

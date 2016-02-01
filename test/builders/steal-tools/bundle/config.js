@@ -28,17 +28,13 @@
 		map: {
 			"jquery/jquery": "jquery",
 			"can/util/util": "can/util/jquery/jquery",
-			"stache": "can/view/stache/system",
-			"ejs": "can/view/ejs/system",
-			"mustache" : "can/view/mustache/system"
+			"stache": "can/view/stache/system"
 		},
 		paths: {
 			"jquery": "../../../../node_modules/jquery/dist/jquery.js",
 			"can/*": "../../../../*.js"
 		},
 		ext: {
-			ejs: "can/view/ejs/system",
-			mustache: "can/view/mustache/system",
 			stache: "can/view/stache/system"
 		},
 		bundle: [ "components/one/one" ]

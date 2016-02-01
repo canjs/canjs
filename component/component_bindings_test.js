@@ -119,7 +119,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 						panel.attr("active", true);
 
 					},
-					// this is viewModel, not mustache
+					// this is viewModel, not stache
 					// consider removing viewModel as arg
 					isActive: function (panel) {
 						return this.attr('active') === panel;
@@ -1241,17 +1241,10 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 
 
 		test("stache conditionally nested components calls inserted once (#967)", function(){
-			expect(2);
+			expect(1);
 
 			can.Component.extend({
 				tag: "can-parent-stache",
-				viewModel: {
-					shown: true
-				},
-				template: can.stache("{{#if shown}}<can-child></can-child>{{/if}}")
-			});
-			can.Component.extend({
-				tag: "can-parent-mustache",
 				viewModel: {
 					shown: true
 				},
@@ -1270,11 +1263,6 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			var template = can.stache("<can-parent-stache></can-parent-stache>");
 
 			can.append(this.$fixture, template());
-
-			var template2 = can.stache("<can-parent-mustache></can-parent-mustache>");
-
-			can.append(this.$fixture, template2());
-
 		});
 
 		test("hyphen-less tag names", function () {

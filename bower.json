@@ -30,8 +30,6 @@
       "can/*": "bower_components/canjs/*.js"
     },
     "ext": {
-      "ejs": "can/view/ejs/system",
-      "mustache": "can/view/mustache/system",
       "stache": "can/view/stache/system"
     },
     "buildConfig": {

@@ -123,7 +123,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 						panel.attr("active", true);
 
 					},
-					// this is viewModel, not mustache
+					// this is viewModel, not stache
 					// consider removing viewModel as arg
 					isActive: function (panel) {
 						return this.attr('active') === panel;
@@ -1256,17 +1256,10 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 		//!steal-remove-end
 
 		test("stache conditionally nested components calls inserted once (#967)", function(){
-			expect(2);
+			expect(1);
 
 			can.Component.extend({
 				tag: "can-parent-stache",
-				viewModel: {
-					shown: true
-				},
-				template: can.stache("{{#if shown}}<can-child></can-child>{{/if}}")
-			});
-			can.Component.extend({
-				tag: "can-parent-mustache",
 				viewModel: {
 					shown: true
 				},
@@ -1285,10 +1278,6 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 			var template = can.stache("<can-parent-stache></can-parent-stache>");
 
 			can.append(this.$fixture, template());
-
-			var template2 = can.stache("<can-parent-mustache></can-parent-mustache>");
-
-			can.append(this.$fixture, template2());
 
 		});
 
@@ -1585,10 +1574,10 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 
 
 
-	QUnit.module("can/component mustache");
+	QUnit.module("can/component stache");
 
 
-	asyncTest('(mu)stache integration', function(){
+	asyncTest('stache integration', function(){
 
 		can.Component.extend({
 			tag: 'my-tagged',
@@ -1596,7 +1585,6 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 		});
 
 		var stache = can.stache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
-		var mustache = can.mustache("<my-tagged p1='v1' p2='{v2}' p3='{{v3}}'></my-tagged>");
 
 		var data = new can.Map({
 			v1: "value1",
@@ -1609,16 +1597,9 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 		var stacheFrag = stache(data),
 			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
 
-		var mustacheFrag = mustache(data),
-			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
-
 		equal(stacheResult[0], "v1", "stache uses attribute values");
 		equal(stacheResult[1], "value2", "stache single {} cross binds value");
 		equal(stacheResult[2], "value3", "stache  {{}} cross binds attribute");
-
-		equal(mustacheResult[0], "value1", "mustache looks up attribute values");
-		equal(mustacheResult[1], "value2", "mustache single {} cross binds value");
-		equal(mustacheResult[2], "value 3", "mustache  {{}} cross binds string value");
 
 		data.attr("v1","VALUE1");
 		data.attr("v2",new can.Map({val: "VALUE 2"}));
@@ -1626,22 +1607,15 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 		can.attr.set( stacheFrag.childNodes[0],"p4","value4");
 
 		stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
-		mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
 
 		equal(stacheResult[0], "v1", "stache uses attribute values so it should not change");
-		equal(mustacheResult[0], "VALUE1", "mustache looks up attribute values and updates immediately");
 		equal(stacheResult[1], "VALUE 2", "stache single {} cross binds value and updates immediately");
-		equal(mustacheResult[1], "VALUE 2", "mustache single {} cross binds value and updates immediately");
 
 		equal(stacheResult[2], "value3", "stache {{}} cross binds attribute changes so it wont be updated immediately");
 
 		setTimeout(function(){
-
 			stacheResult = stacheFrag.childNodes[0].innerHTML.split(",");
-			mustacheResult = mustacheFrag.childNodes[0].innerHTML.split(",");
 			equal(stacheResult[2], "VALUE3", "stache  {{}} cross binds attribute");
-			
-			equal(mustacheResult[2], "VALUE 3", "mustache sticks with old value even though property has changed");
 
 			equal(stacheResult[3], "value4", "stache sees new attributes");
 
@@ -1827,7 +1801,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 			can.remove(can.$("#qunit-fixture>*"));
 		});
 		
-		// PUT NEW TESTS THAT NEED TO TEST AGAINST MUSTACHE JUST ABOVE THIS LINE
+		// PUT NEW TESTS THAT NEED TO TEST AGAINST STACHE JUST ABOVE THIS LINE
 	}
 
 	test('component simpleHelpers', function() {

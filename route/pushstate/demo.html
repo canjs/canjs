@@ -102,7 +102,7 @@
 <script type='text/javascript'>
 steal('can/route/pushstate', 
     'can/map',
-    'can/view/ejs',
+    'can/view/stache',
     'can/view/modifiers',
     'can/route',
     'can/util/demos/observer.js',
@@ -247,7 +247,7 @@ function() {
 })
 </script>
 <script type='text/ejs' id='linksEJS'>
-<pre>can.route.link("recipe 5",{type: "recipe", id: 5}) = </code><%= can.route.link("click me",{type: "recipe", id: 5}) %>
+<pre>can.route.link("recipe 5",{type: "recipe", id: 5}) = </pre><%= can.route.link("click me",{type: "recipe", id: 5}) %>
 </script>
 </body>
 </html>
