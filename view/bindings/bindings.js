@@ -512,6 +512,7 @@ steal("can/util",
 					}
 					
 					lastSet = newVal;
+					
 					if(isMultiselectValue) {
 						if (newVal && typeof newVal === 'string') {
 							newVal = newVal.split(";");
@@ -543,8 +544,8 @@ steal("can/util",
 						} else {
 							can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
 						}
-						
 					}
+					
 					return newVal;
 	
 				},
@@ -593,11 +594,9 @@ steal("can/util",
 						var onMutation = function (mutations) {
 							if(stickyCompute) {
 								set(stickyCompute());
-							} else {
-								if(scheduledAsyncSet) {
-									updater();
-								}
 							}
+							
+							updater();
 						};
 						if(can.attr.MutationObserver) {
 							observer = new can.attr.MutationObserver(onMutation);
@@ -775,7 +774,7 @@ steal("can/util",
 				parentName: attributeValue,
 				initializeValues: true
 			};
-			if(tagName === "select" && !childToParent) {
+			if(tagName === "select") {
 				bindingInfo.stickyParentToChild = true;
 			}
 			return bindingInfo;
