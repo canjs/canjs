@@ -263,7 +263,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// property is represented by a computed attribute, return the value of that compute.
 			// If no argument is provided, return the raw data.
 			___get: function (attr) {
-				if (attr) {
+				if (attr !== undefined) {
 					var computedAttr = this._computedAttrs[attr];
 					if (computedAttr && computedAttr.compute) {
 						// return computedAttr.compute();
