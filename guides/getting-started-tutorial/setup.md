@@ -39,7 +39,7 @@ The example project has the following folder structure:
 
 Let’s walk through each folder, and discuss it.
 
-The `app.js` folder is used to bootstrap our application. We’ll go over this
+The `app.js` file is used to bootstrap our application. We’ll go over this
 in more detail <a href="#application-bootstrap">below</a>.
 
 The `components` folder is where we’ll put all of the parts that make
