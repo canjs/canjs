@@ -49,7 +49,7 @@ to the viewModel.
 @param {Object} attrs An object of values specified by the custom element's attributes. For example,
 a template rendered like:
 
-    can.mustache("<my-element title="name"></my-element>")({
+    can.mustache("<my-element title='name'></my-element>")({
       name: "Justin"
     })
 
@@ -169,7 +169,7 @@ As mentioned in the deprecation warning above, using [can.stache], values are pa
 
     <my-paginate {offset}='index' {limit}='size'></my-paginate>
 
-The above would create an offset and limit property on the component that are initialized to whatever index and size are, NOT cross-bind 
+The above would create an offset and limit property on the component that are initialized to whatever index and size are, NOT two-way bind (between component and parent viewModels) 
 the offset and limit properties to the index and size.
 
 The following component requires an `offset` and `limit`:
@@ -256,8 +256,8 @@ and the event that triggered the callback.
 
 ## Publishing events on viewModels
 
-Maps can publish events on themselves. For instance, in the following `<player-edit>` component,
-it dispatches a `"close"` event when it's close method is called:
+Maps can publish events on themselves. For instance, the following `<player-edit>` component,
+dispatches a `"close"` event when it's close method is called:
 
 ```
 can.Component.extend({

@@ -49,7 +49,7 @@ The following explains how each part works:
 __can.Component:__
 
     can.Component({
-      "tag": "my-greeting",
+      tag: "my-greeting",
       template: can.stache("<h1><content/></h1>"),
       viewModel: {
         title: "can.Component"

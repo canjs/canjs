@@ -36,7 +36,7 @@ With the release of canJS 2.3 the new [can.view.bindings binding syntax] provide
       
     * One-Way binds the `value` in the [can.view.Scope scope] to a element's attribute or property.
       ```
-      <input {$placeholder}="value">
+      <input {placeholder}="value">
       ```
       
       Updates `placeholder` when `value` changes
