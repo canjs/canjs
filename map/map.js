@@ -24,7 +24,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 		"constructor": true
 	};
 
-	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
+	// Extend [can.Construct](../construct/construct.html) to make inheriting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
 		/**
 		 * @static
@@ -35,7 +35,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Called when a Map constructor is defined/extended to
 			// perform any initialization behavior for the new constructor
 			// function.
-			setup: function () {
+			setup: function (baseMap) {
 
 				can.Construct.setup.apply(this, arguments);
 
@@ -84,6 +84,13 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					// If define is a function, call it with this can.Map
 					if(mapHelpers.define) {
 						mapHelpers.define(this);
+					}
+
+					// Inherit define values
+					if (baseMap.prototype.define) {
+						var defines = can.simpleExtend({}, baseMap.prototype.define);
+						mapHelpers.twoLevelDeepExtend(defines, this.prototype.define);
+						this.prototype.define = defines;
 					}
 				}
 
