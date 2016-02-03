@@ -4,7 +4,7 @@ steal('can/util/can.js', function (can) {
 	// _DOM Fragment support._
 	var fragmentRE = /^\s*<(\w+)[^>]*>/,
 		toString = {}.toString,
-		fragment = function (html, name) {
+		fragment = function (html, name, doc) {
 			if (name === undefined) {
 				name = fragmentRE.test(html) && RegExp.$1;
 			}
@@ -12,8 +12,8 @@ steal('can/util/can.js', function (can) {
 				// Fix "XHTML"-style tags in all browsers
 				html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, '<$1></$2>');
 			}
-			var container = document.createElement('div'),
-				temp = document.createElement('div');
+			var container = doc.createElement('div'),
+				temp = doc.createElement('div');
 			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
 			// is called on a `tbody`. To get around this, we construct a
 			// valid table with a `tbody` that has the `innerHTML` we want.
@@ -38,19 +38,26 @@ steal('can/util/can.js', function (can) {
 				container.innerHTML = '' + html;
 			}
 			// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
-			var tmp = {}, children = container.childNodes;
+			var tmp = {},
+				children = can.childNodes( container );
 			tmp.length = children.length;
 			for (var i = 0; i < children.length; i++) {
 				tmp[i] = children[i];
 			}
 			return [].slice.call(tmp);
 		};
-	can.buildFragment = function (html, nodes) {
+	can.buildFragment = function (html, doc) {
 		if(html && html.nodeType === 11) {
 			return html;
 		}
-		var parts = fragment(html),
-			frag = document.createDocumentFragment();
+		if(!doc) {
+			doc = document;
+		} else if(doc.length) {
+			doc = doc[0];
+		}
+		
+		var parts = fragment(html, undefined, doc),
+			frag = (doc || document).createDocumentFragment();
 		for(var i = 0, length = parts.length; i < length; i++) {
 			frag.appendChild(parts[i]);
 		}
@@ -65,7 +72,7 @@ steal('can/util/can.js', function (can) {
 	(function(){
 		var text = "<-\n>",
 			frag = can.buildFragment(text, document);
-		if(text !== frag.childNodes[0].nodeValue) {
+		if(text !== frag.firstChild.nodeValue) {
 			var oldBuildFragment = can.buildFragment;
 			can.buildFragment = function(html, nodes){
 				var res = oldBuildFragment(html, nodes);

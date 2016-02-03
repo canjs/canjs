@@ -3,6 +3,32 @@
 @parent guides 5
 -->
 
+__2.3.12/2.3.13__ ( Feb 01 2016 )
+
+- [jquery 2.2 in peer deps not supported](https://github.com/canjs/canjs/issues/2207)
+- [Keys aren&#39;t documented](https://github.com/canjs/canjs/issues/2202)
+- [calling methods directly on an instance of a can.Map with can.compute.read](https://github.com/canjs/canjs/issues/2199)
+- [Parser is not allowing anchor tags as child of inline elements](https://github.com/canjs/canjs/issues/2169)
+- [can.viewModel mentioned in the navigation but not the root page contents](https://github.com/canjs/canjs/issues/2165)
+- [Asynchronous virtual properties cause extra recomputes](https://github.com/canjs/canjs/issues/1915)
+- [Child bindings are called before the parent in Stache](https://github.com/canjs/canjs/issues/1866)
+- [Dynamic select menus don&#39;t live bind correctly](https://github.com/canjs/canjs/issues/1762)
+
+
+__2.3.11__ ( Jan 21 2016 )
+
+- [makes events fired as a result of a batch happen after any previous batches](https://github.com/canjs/canjs/pull/2203)
+- [can.batch.afterPreviousEvents firing too late](https://github.com/canjs/canjs/issues/2198)
+- [makes jQuery work without public buildFragment and overwritable domManip](https://github.com/canjs/canjs/pull/2177)
+- [jQuery 2.2 compatible. ](https://github.com/canjs/canjs/issues/2176)
+
+
+__2.3.10__ ( Jan 14 2016 )
+
+- [Computes that are registered to be updated don&#39;t get updated if they are unbound](https://github.com/canjs/canjs/pull/2189)
+- [nested switch statements cause a nodeList error](https://github.com/canjs/canjs/issues/2188)
+
+
 __2.3.9__ ( Jan 11 2016 )
 
 - [Partial defined by registerView throws error after element is modified](https://github.com/canjs/canjs/issues/2174)

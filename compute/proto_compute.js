@@ -1,5 +1,5 @@
 // # can/compute/proto_compute (aka can.Compute)
-// 
+//
 // Allows the creation of observablue values. This
 // is a prototype based version of [can.compute](compute.html).
 //
@@ -12,12 +12,12 @@
 // - [Settings computes](#setup-settings-computes).
 // - [Simple value computes](#setup-simple-value-computes).
 //
-// 
-// can.Computes have public `.get`, `.set`, `.on`, and `.off` methods that call 
-// internal methods that are configured differently depending on what flavor of 
+//
+// can.Computes have public `.get`, `.set`, `.on`, and `.off` methods that call
+// internal methods that are configured differently depending on what flavor of
 // compute is being created.  Those methods are:
 //
-// - `_on(updater)` - Called the first time the compute is bound. This should bind to 
+// - `_on(updater)` - Called the first time the compute is bound. This should bind to
 //    any source observables.  When any of the source observables have changed, it should call
 //    `updater(newVal, oldVal, batchNum)`.
 //
@@ -38,6 +38,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 	// Checks the arguments and calls different setup methods.
 	can.Compute = function(getterSetter, context, eventName, bindOnce) {
 		can.cid(this, 'compute');
+
 		var args = [];
 
 		for(var i = 0, arglen = arguments.length; i < arglen; i++) {
@@ -47,43 +48,48 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		var contextType = typeof args[1];
 
 		if (typeof args[0] === 'function') {
-			// Getter/Setter functional computes.  
+			// Getter/Setter functional computes.
 			// `new can.Compute(function(){ ... })`
 			this._setupGetterSetterFn(args[0], args[1], args[2], args[3]);
 		} else if (args[1]) {
 			if (contextType === 'string') {
-				// Property computes.  
+				// Property computes.
 				// `new can.Compute(object, propertyName[, eventName])`
 				this._setupProperty(args[0], args[1], args[2]);
 			} else if(contextType === 'function') {
-				// Setter computes.  
+				// Setter computes.
 				// `new can.Compute(initialValue, function(newValue){ ... })`
 				this._setupSetter(args[0], args[1], args[2]);
 			} else {
-				
+
 				if(args[1] && args[1].fn) {
 					// Async computes.
 					this._setupAsyncCompute(args[0], args[1]);
 				} else {
-					// Settings computes.  
+					// Settings computes.
 					//`new can.Compute(initialValue, {on, off, get, set})`
 					this._setupSettings(args[0], args[1]);
 				}
 
 			}
 		} else {
-			// Simple value computes.  
+			// Simple value computes.
 			// `new can.Compute(initialValue)`
 			this._setupSimpleValue(args[0]);
 		}
 
 		this._args = args;
+		this._primaryDepth = 0;
 
 		this.isComputed = true;
-		
+
 	};
 
 	can.simpleExtend(can.Compute.prototype, {
+		setPrimaryDepth: function(depth) {
+			this._primaryDepth = depth;
+		},
+
 		// ## Setup getter / setter functional computes
 		// Uses the function as both a getter and setter.
 		_setupGetterSetterFn: function(getterSetter, context, eventName) {
@@ -92,9 +98,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			this._canObserve = eventName === false ? false : true;
 			// The helper provides the on and off methods that use `getValueAndBind`.
 			var handlers = setupComputeHandlers(this, getterSetter, context || this);
-			this._on = handlers.on;
-			this._off = handlers.off;
-			
+
+			can.simpleExtend(this, handlers);
 		},
 		// ## Setup property computes
 		// Listen to a property changing on an object.
@@ -152,9 +157,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		// Use whatever `on`, `off`, `get`, `set` the users provided
 		// as the internal methods.
 		_setupSettings: function(initialValue, settings) {
-			
+
 			this.value = initialValue;
-			
+
 			this._set = settings.set || this._set;
 			this._get = settings.get || this._get;
 
@@ -167,8 +172,8 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					oldUpdater.call(self, self._get(), self.value);
 				};
 			}
-			
-			
+
+
 			this._on = settings.on ? settings.on : this._on;
 			this._off = settings.off ? settings.off : this._off;
 		},
@@ -178,17 +183,17 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		_setupAsyncCompute: function(initialValue, settings){
 			var self = this;
 			this.value = initialValue;
-			
+
 			// This compute will call update with the new value itself.
 			this._setUpdates = true;
-			
+
 			// An "async" compute has a `lastSetValue` that represents
 			// the last value `compute.set` was called with.
-			// The following creates `lastSetValue` as a can.Compute so when 
+			// The following creates `lastSetValue` as a can.Compute so when
 			//  `lastSetValue` is changed, the `getter` can see that change
 			// and automatically update itself.
 			this.lastSetValue = new can.Compute(initialValue);
-			
+
 			// Wires up setting this compute to set `lastSetValue`.
 			// If the new value matches the last setValue, do nothing.
 			this._set = function(newVal){
@@ -198,19 +203,19 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 
 				return self.lastSetValue.set(newVal);
 			};
-			
+
 			// Wire up the get to pass the lastNewValue
 			this._get = function() {
 				return getter.call(settings.context, self.lastSetValue.get() );
 			};
-			
+
 			// This is the async getter function.  Depending on how many arguments the function takes,
-			// we setup bindings differently.  
+			// we setup bindings differently.
 			var getter = settings.fn,
 				bindings;
-			
-			
-			
+
+
+
 			if(getter.length === 0) {
 				// If it takes no arguments, it should behave just like a Getter compute.
 				bindings = setupComputeHandlers(this, getter, settings.context);
@@ -219,7 +224,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				bindings = setupComputeHandlers(this, function() {
 					return getter.call(settings.context, self.lastSetValue.get() );
 				}, settings);
-				
+
 			} else {
 				// If the function takes 2 arguments, the second argument is a function
 				// that should update the value of the compute (`setValue`). To make this we need
@@ -228,15 +233,15 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 					setValue = function(newVal) {
 						oldUpdater.call(self, newVal, self.value);
 					};
-				
+
 				// Because `setupComputeHandlers` calls `updater` internally with its
-				// readInfo.value as `oldValue` and that might not be up to date, 
+				// readInfo.value as `oldValue` and that might not be up to date,
 				// we overwrite updater to always use self.value.
 				this.updater = function(newVal) {
 					oldUpdater.call(self, newVal, self.value);
 				};
-				
-				
+
+
 				bindings = setupComputeHandlers(this, function() {
 					// Call getter, and get new value
 					var res = getter.call(settings.context, self.lastSetValue.get(), setValue);
@@ -245,8 +250,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 				}, this);
 			}
 
-			this._on = bindings.on;
-			this._off = bindings.off;
+			can.simpleExtend(this, bindings);
 		},
 		// ## Setup simple value computes
 		// Uses the default `_get`, `_set` behaviors.
@@ -321,24 +325,24 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		// Depending on the type of the compute and what `_set` returns, it might need to call `_get` after
 		// `_set` to get the final value.
 		set: function(newVal) {
-			
+
 			var old = this.value;
-			
+
 			// Setter may return the value if setter
 			// is for a value maintained exclusively by this compute.
 			var setVal = this._set(newVal, old);
-			
+
 			// If the setter updated this.value, just return that.
 			if(this._setUpdates) {
 				return this.value;
 			}
-			
+
 			// If the computed function has dependencies,
 			// we should call the getter.
 			if (this.hasDependencies) {
 				return this._get();
 			}
-			
+
 			// Setting may not fire a change event, in which case
 			// the value must be read
 			if (setVal === undefined) {
@@ -374,15 +378,15 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			return this.get();
 		}
 	});
-	
+
 	// ## Helpers
-	
+
 	// ## updateOnChange
 	// A helper to trigger an event when a value changes
 	var updateOnChange = function(compute, newValue, oldValue, batchNum){
 
 		var valueChanged = newValue !== oldValue && !(newValue !== newValue && oldValue !== oldValue);
-		
+
 		// Only trigger event when value has changed
 		if (valueChanged) {
 			can.batch.trigger(compute, {type: "change", batchNum: batchNum}, [
@@ -399,21 +403,24 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 
 		// The last observeInfo object returned by getValueAndBind.
 		var readInfo = new ObservedInfo(func, context, compute);
-			
+
 		return {
 			// Call `onchanged` when any source observables change.
-			on: function(){
+			_on: function() {
 				readInfo.getValueAndBind();
 				compute.value = readInfo.value;
 				compute.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 			},
 			// Unbind `onchanged` from all source observables.
-			off: function(){
+			_off: function() {
 				readInfo.teardown();
+			},
+			getDepth: function() {
+				return readInfo.getDepth();
 			}
 		};
 	};
-	
+
 
 	// ### temporarilyBind
 	// Binds computes for a moment to cache their value and prevent re-calculating it.
@@ -426,7 +433,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		}
 		computes.push(computeInstance);
 	};
-	
+
 	// A list of temporarily bound computes
 	var computes,
 		// Unbinds all temporarily bound computes.
@@ -446,9 +453,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		});
 	};
 
-	
+
 	// ### truthy
-	// Wraps a compute with another compute that only changes when 
+	// Wraps a compute with another compute that only changes when
 	// the wrapped compute's `truthiness` changes.
 	can.Compute.truthy = function(compute) {
 		return new can.Compute(function() {
@@ -459,7 +466,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			return !!res;
 		});
 	};
-	
+
 	// ### compatability
 	// Setting methods that should not be around in 3.0.
 	can.Compute.read = read;

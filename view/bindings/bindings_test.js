@@ -1923,6 +1923,45 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 	});
 	
+	test('previously non-existing select value gets selected from a list when it is added (#1762)', function() {
+	  var template = can.view.stache('<select {($value)}="{person}">' +
+	      '<option></option>' +
+	      '{{#each people}}<option value="{{.}}">{{.}}</option>{{/each}}' +
+	    '</select>' +
+	    '<input type="text" size="5" {($value)}="person">'
+	  );
+
+	  var people = new can.List([
+	    "Alexis",
+	    "Mihael",
+	    "Curtis",
+	    "David"
+	  ]);
+
+	  var vm = new can.Map({
+	    person: 'Brian',
+	    people: people
+	  });
+
+	  stop();
+	  vm.bind('person', function(ev, newVal, oldVal) {
+	    ok(false, 'person attribute should not change');
+	  });
+
+	  var frag = template(vm);
+
+	  equal(vm.attr('person'), 'Brian', 'Person is still set');
+
+	  setTimeout(function() {
+	    people.push('Brian');
+	    setTimeout(function() {
+	      var select = frag.firstChild;
+	      ok(select.lastChild.selected, 'New child should be selected');
+	      start();
+	    }, 20);
+	  }, 20);
+	});
+	
 	test("one-way <select> bindings keep value if options are replaced (#1762)", function(){
 		var countries = [{code: 'MX', countryName:'MEXICO'},
 			{code: 'US', countryName:'USA'}

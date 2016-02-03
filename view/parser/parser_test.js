@@ -138,6 +138,33 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		]));
 	});
 
+	test("anchors are allowed as children of inline elements - #2169", function(){
+		parser("<span><a></a></span>", makeChecks([
+			['start', ['span', false]],
+			['end', ['span', false]],
+			['start', ['a', false]],
+			['end', ['a', false]],
+			['close', ['a']],
+			['close', ['span']],
+			['done', []]
+		]));
+	});
+
+	test("inline tags are closed when a block element is encountered", function(){
+		parser("<span><span><div></div></span></span>", makeChecks([
+			['start', ['span', false]],
+			['end', ['span', false]],
+			['start', ['span', false]],
+			['end', ['span', false]],
+			['close', ['span']],
+			['close', ['span']],
+			['start', ['div', false]],
+			['end', ['div', false]],
+			['close', ['div']],
+			['done', []]
+		]));
+	});
+
 	test("supports single character attributes (#1132)", function(){
 		parser('<circle r="25"></circle>', makeChecks([
 			["start", ["circle", false]],

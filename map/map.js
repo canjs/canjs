@@ -1,6 +1,6 @@
 // # can/map/map.js (aka can.Map)
 // `can.Map` provides the observable pattern for JavaScript objects. It
-// provides an `attr` and `removeAttr` method that can be used to get/set and 
+// provides an `attr` and `removeAttr` method that can be used to get/set and
 // remove properties and nested properties by calling a "pipeline" of protected
 // methods:
 //
@@ -10,10 +10,19 @@
 //
 // When `attr` gets or sets multiple properties it calls `_getAttrs` or `_setAttrs`.
 //
-// [bubble.js](bubble.html) - Handles bubbling of child events to parent events.  
+// [bubble.js](bubble.html) - Handles bubbling of child events to parent events.
 // [map_helpers.js](map_helpers.html) - Assorted helpers for handling cycles during serialization or
 // instantition of objects.
-steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', function (can, bind, bubble, mapHelpers) {
+steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', 'can/compute/get_value_and_bind.js', function (can, bind, bubble, mapHelpers) {
+
+	var readButDontObserveCompute = can.__notObserve(function(compute){
+		return compute();
+	});
+
+	// properties that can't be observed on ... no matter what
+	var unobservable = {
+		"constructor": true
+	};
 
 	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
@@ -78,7 +87,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 				}
 
-				// If we inherit from can.Map, but not can.List, create a can.List that 
+				// If we inherit from can.Map, but not can.List, create a can.List that
 				// creates instances of this Map type.
 				if (can.List && !(this.prototype instanceof can.List)) {
 					this.List = Map.List.extend({
@@ -156,19 +165,19 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			},
 
 			// ### _setupComputes
-			// Sets up computed properties on a Map. 
+			// Sets up computed properties on a Map.
 			// Stores information for each computed property on
 			//  `this._computedAttrs` that looks like:
-			// 
+			//
 			// ```
 			// {
 			//   // the number of bindings on this property
-			//   count: 1,       
+			//   count: 1,
 			//   // a handler that forwards events on the compute
 			//   // to the map instance
 			//   handler: handler,
 			//   compute: compute  // the compute
-			// }	
+			// }
 			// ```
 			_setupComputedProperties: function () {
 				this._computedAttrs = {};
@@ -189,7 +198,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 			// ### attr
 			// The primary get/set interface for can.Map.
-			// Calls `_get`, `_set` or `_attrs` depending on 
+			// Calls `_get`, `_set` or `_attrs` depending on
 			// how it is called.
 			attr: function (attr, val) {
 				var type = typeof attr;
@@ -210,7 +219,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			},
 
 			// ### _get
-			// Handles reading nested properties like "foo.bar" by 
+			// Handles reading nested properties like "foo.bar" by
 			// getting the value of "foo" and recursively
 			// calling `_get` for the value of "bar".
 			// To read the actual values, `_get` calls
@@ -243,21 +252,24 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Signals `can.compute` that an observable
 			// property is being read.
 			__get: function(attr){
-				can.__observe(this, attr);
+				if(!unobservable[attr]) {
+					can.__observe(this, attr);
+				}
 				return this.___get( attr );
 			},
 
 			// ### ___get
 			// When called with an argument, returns the value of this property. If that
-			// property is represented by a computed attribute, return the value of that compute.  
+			// property is represented by a computed attribute, return the value of that compute.
 			// If no argument is provided, return the raw data.
 			___get: function (attr) {
 				if (attr) {
 					var computedAttr = this._computedAttrs[attr];
 					if (computedAttr && computedAttr.compute) {
-						return computedAttr.compute();
+						// return computedAttr.compute();
+						return readButDontObserveCompute(computedAttr.compute);
 					} else {
-						return this._data[attr];
+						return this._data.hasOwnProperty(attr) ? this._data[attr] : undefined;
 					}
 				} else {
 					return this._data;
@@ -265,13 +277,13 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			},
 
 			// ### _set
-			// Handles setting nested properties by finding the 
+			// Handles setting nested properties by finding the
 			// nested observable and recursively calling `_set` on it. Eventually,
 			// it calls `__set` with the `__type` converted value to set
 			// and the current value.  The current value is passed for two reasons:
 			//  - so `__set` can trigger an event if the value has changed.
 			//  - for advanced setting behavior that define.set can do.
-			// 
+			//
 			// If the map is initializing, the current value does not need to be
 			// read because no change events are dispatched anyway.
 			_set: function (attr, value, keepKey) {
@@ -305,7 +317,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 			// ## __type
 			// Converts set values to another type.  By default,
-			// this converts Objects to can.Maps and Arrays to 
+			// this converts Objects to can.Maps and Arrays to
 			// can.Lists.
 			// This also makes it so if a plain JavaScript object
 			// has already been converted to a list or map, that same
@@ -331,13 +343,13 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 			// ## __set
 			// Handles firing events if the value has changed and
-			// works with the `bubble` helpers to setup bubbling.   
+			// works with the `bubble` helpers to setup bubbling.
 			// Calls `___set` to do the actual setting.
 			__set: function (prop, value, current) {
 
 				if (value !== current) {
 					var computedAttr = this._computedAttrs[prop];
-					
+
 					// Dispatch an "add" event if adding a new property.
 					var changeType = computedAttr || current !== undefined || this.___get()
 						.hasOwnProperty(prop) ? "set" : "add";
@@ -540,14 +552,14 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			one: can.one,
 
 			// ### bind
-			// Listens to an event on a map.  
-			// If the event is a  computed property, 
+			// Listens to an event on a map.
+			// If the event is a  computed property,
 			// listen to the compute and forward its events
-			// to this map.  
+			// to this map.
 			bind: function (eventName, handler) {
 
 				var computedBinding = this._computedAttrs && this._computedAttrs[eventName];
-				if (computedBinding) {
+				if (computedBinding && computedBinding.compute) {
 					if (!computedBinding.count) {
 						computedBinding.count = 1;
 						computedBinding.compute.bind("change", computedBinding.handler);
@@ -557,7 +569,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 				}
 
-				// Sets up bubbling if needed.  
+				// Sets up bubbling if needed.
 				bubble.bind(this, eventName);
 
 				return can.bindAndSetup.apply(this, arguments);
@@ -584,21 +596,21 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				return can.unbindAndTeardown.apply(this, arguments);
 
 			},
-			
+
 			// ### compute
 			// Creates a compute that represents a value on this map. If the property is a function
-			// on the prototype, a "function" compute wil be created.  
+			// on the prototype, a "function" compute wil be created.
 			// Otherwise, a compute will be created that reads the observable attributes.
 			compute: function (prop) {
-	
+
 				if (can.isFunction(this.constructor.prototype[prop])) {
-					
+
 					return can.compute(this[prop], this);
 				} else {
-				
+
 					var reads = can.compute.read.reads(prop),
 						last = reads.length - 1;
-						
+
 					return can.compute(function (newVal) {
 						if (arguments.length) {
 							can.compute.read(this, reads.slice(0, last))
@@ -610,7 +622,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 						}
 					}, this);
 				}
-			
+
 			},
 
 			// ### each
@@ -629,7 +641,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 				}
 			},
-			
+
 			dispatch: can.dispatch
 		});
 

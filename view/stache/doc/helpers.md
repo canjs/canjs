@@ -124,7 +124,7 @@ key1 and key2. If the result of comparsion is **truthy**, the section will be re
 			</li>Your name is {{name}}</li>
 		{{else}}
 			<li>Your name is not Alex!</li>
-		{{/if}}
+		{{/is}}
 		</ul>
 
 	Data: 
