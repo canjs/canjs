@@ -18,24 +18,32 @@ Now that we have a basic sketch of our application, and we've covered a few CanJ
 it’s time for us to start working with the sample application. We'll begin with the
 application's templates.
 
-As mentioned in the [introduction](/guides/Tutorial.html), we’re using Stache templates in
+As mentioned in the [introduction](./Tutorial.html), we’re using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
-included the [can.stache](http://canjs.com/docs/can.stache.html) plugin. The CanJS docs tell us that,
-“Stache templates look similar to normal HTML, except they contain keys for
-inserting data into the template and *sections* to *enumerate* and/or *filter*
-the enclosed template blocks.” They can also contain limited *conditional
-logic* to show or hide content.
+included the [can.stache](.../docs/can.stache.html) plugin. 
+
+We can create a simple template, render it to a document fragment and insert it into the page like
+the following:
+
+```
+var template = can.stache("<h1>{{message}}</h1>");
+var frag = template({message: "Hello World"});
+$("body").append(frag);
+```
+
+Stache templates look similar to normal HTML, except they contain magic tags that contain
+a very simple language that can be used to:
+
+- [lookup and insert values into the html output](#context)
+- [loop over arrays and can.Lists](#enumeration)
+- [control-flow behavior like if and switch](#conditionallogic)
+- [render other templates with partials](#partials)
+- perform custom control-flow behavior
+
 
 Stache templates support both [Mustache](https://github.com/janl/mustache.js/)
-and [Handlebar](http://handlebarsjs.com/) formatting arguments. For more
+and [Handlebar](http://handlebarsjs.com/) syntax. For more
 information on the details of these formats, see their respective websites.
-
-There are four aspects of Stache templates that we’ll review:
-
-- [sections & context](#context),
-- [enumeration](#enumeration),
-- [conditional logic](#conditionallogic), and
-- [partials](#partials)
 
 It will be easiest for us to look at these with an example, so let’s work with
 one. Open up your `components/order_details/order_details.stache` file.
@@ -70,8 +78,9 @@ It should look like this:
 ```
 
 <a name="context"></a>
-## Sections and Context
-Assume for the moment that we have the following customerOrder object passed in to our Stache template:
+## Value lookup
+
+Assume for the moment that we have the following `customerOrder` map passed in to our Stache template:
 
 ```
 {
@@ -88,61 +97,94 @@ Assume for the moment that we have the following customerOrder object passed in 
       ],
       total: 23.70,
       phone: '+49 170 345 6789',
-      address: 'Beuselstrasse 15, Berlin'
+      address: 'Beuselstrasse 15, Berlin',
+      
+      total: function(){
+        var sum = 0;
+        this.items.forEach(function(item){
+          sum += item.price;
+        });
+        return sum;
+      }
    }
 }
 ```
-We can easily access the:
 
-- customerNumber,
-- customerType, and
-- order
+If we want to show the `customerType` in a `<span>` we can do that in a stache template like the following:
 
-fields in our Stache template. These are the properties that are 
-directly available off of the object passed in to the template, and are therefore
-a part of the template’s root context. We can reference them simply by wrapping
-them in double curly braces, e.g., `{{customerNumber}}`. If, however, we 
-want to reference a value off of the order property&mdash;such as "name", or "_id"&mdash;we 
-need to use dot notation, e.g., `{{order.name}}`. If you have a lot of properties
-you need to reference off of a nested object, using dot notation can be tedious. 
-Stache provides you the ability to create contexts to make working with nested objects
-easier.
+```
+<span>{{customerType}}</span>
+```
 
-A context loosely refers to the data that is available for you to 
-_directly access_. Direct access means accessing a property without
-providing any contextual identifiers (such as a dot, or a path). A valid context must be 
-either an object or an array. 
+What's inside the magic tags, in this case `customerType`, is a 
+[key lookup expression](../docs/can.stache.expressions.html#section_KeyLookupexpressions). 
+[Keys](../docs/can.stache.key.html) are used to lookup values in the 
+[template scope](../docs/can.view.Scope.html).  
 
-Sections are execution blocks that define context. In the following example, 
-you can directly access the "name" property of the order object using `{{name}}`, because the context 
-has been set to the order object. If the context were not set to the order object, you would have to 
-refer to the name property using `{{order.name}}`.
+A DOT(`.`) operator
+can be used to lookup nested values.  For example:
+
+```
+<h3>Thanks for your order {{order.name}}!</h3>
+<span>{{customerType}}</span>
+```
+
+Similar to variable lookup JavaScript, a stache key lookup can search for a value in multiple places.
+Each of these places is called a __context__.  The collection of all available contexts for a key lookup
+is called a [scope](../docs/can.view.Scope.html).
+
+The root context is
+the data passed to a template. In this case, the root context is the `customerOrder`
+object at the begining of this section.  This is why `{{customerType}}` outputs `Business`.
+
+[Sections](../docs/can.stache.tags.section.html)
+create contexts in Stache.  A section in stache begins with `{{#EXPRESSION}}` or `{{^EXPRESSION}}`
+and ends with `{{/EXPRESSION}}`.  In the following example `{{#with order}}` 
+defines a section whose scope lookup starts finding values in the 
+`customerOrder`'s `order` object first:
 
 ```html
 {{#with order}}
   <h3>Thanks for your order {{name}}!</h3>
-  <div>
-  	<label class="control-label">Confirmation Number: {{_id}}</label>
-  </div>
-...
-{{/with}}
+  <span>{{customerType}}</span>
+{{#with order}}
 ```
 
-From within a given context, you can also reference the context object, itself, or items outside the
-context using a notation similar to that used by an operating system to reference its context. 
+In between `{{#with order}}` and `{{/with}}`, the scope's contexts look like:
+
+```
+[
+  customerOrder.order,
+  customerOrder
+]
+```
+
+The top of the scope is called the __current context__.  In this case it is `customerOrder.order`.
+
+
+When `{{name}}` is looked up, it will first look for `name` on the __current context__.  As that value
+exists, `Rudloph Steiner` will be returned.
+
+When `{{customerType}}` is looked up, it will look for `customerType` on the __current context__.  As
+that value does not exist, the next context, `customerOrder`, will be searched. The value of 
+`customerOrder.customerType` will be returned.
+
+From within a given scope, you can reference the __current context__ or control which context
+should be used to find values.
+
 See examples below:
 
 ```html
 {{#with order}}
    <div>My Current Context Object: {{.}}</div> <!-- references the order object-->
-   <div>My Parent Context Object: {{../}}</div>  <!-- references the customerOrder object--> 
+   <div>My Parent Context Object: {{../.}}</div>  <!-- references the customerOrder object--> 
    <div>An Item on my Parent Context's Object: {{../customerNumber}}</div>
-   <div>My Parent's Parent Context Object: {{../../}}</div> <!-- example of how you might access the parent of a parent -->
+   <div>My Parent's Parent Context Object: {{../../.}}</div> <!-- example of how you might access the parent of a parent -->
 {{/with}}
 ```
 
 <a name="enumeration"></a>
-## Enumeration
+## Looping over arrays
 Enumerating allows you to loop through the contents of an iterable item. We’ve done this above for
 the options in our select dropdown. The `{{#each key}} ... {{/each}}` tag set
 is used to iterate over an enumerable collection, such as an array. In the

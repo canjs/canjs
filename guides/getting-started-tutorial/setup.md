@@ -142,13 +142,13 @@ file as follows:
 
 ```
 $(function () {
-  $('#can-main').html('The Requisite “Hello World” Message');
+  $('#can-main').html('The Requisite "Hello World" Message');
 });
 ```
 
 If you open up your application in a browser, you should see:
 
-> The Requisite “Hello World” Message
+> The Requisite "Hello World" Message
 
 At this point, we haven't done much. We aren't using CanJS at all yet.
 We’re just using jQuery to set the HTML contents of a DOM element.

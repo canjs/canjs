@@ -59,7 +59,7 @@ var Person = can.Map.extend(
 
 <a name="get"></a>
 ### get 
-A `get` function defines what happens when a value is read on a `can.Map`.
+A [get](../docs/can.Map.prototype.define.get.html) function defines what happens when a value is read on a `can.Map`.
 It is typically used to provide properties that derive their value from other
 properties of the map, as below: 
 
@@ -77,7 +77,7 @@ var Person = can.Map.extend({
 
 <a name="set"></a>
 ### set 
-A `set` function defines what happens when a value is set on a `can.Map`.
+A [set](../docs/can.Map.prototype.define.set.html) function defines what happens when a value is set on a `can.Map`.
 It is typically used to update other attributes on the `can.Map` as a side
 effect, or coerce the set value into specific format.
 
@@ -108,7 +108,7 @@ set: function(newValue, setValue) { ... }
 
 <a name="type"></a>
 ### type 
-The `type` property converts a value passed to an `attr` setter function
+The [type](/docs/can.Map.prototype.define.type.html) property converts a value passed to an `attr` setter function
 into a specific value type. The type can be specified as either a type
 function, or one of the following strings:
 
@@ -119,13 +119,16 @@ function, or one of the following strings:
 - `*` - Prevents the default coercion of Objects to can.Maps and Arrays to can.Lists.
 
 There are two ways to define the `type` property: 
+
  - `Type`
  - `type` 
 
-`Type`, uppercase, is instance specific. Using `Type`, a constructor will be invoked each 
-time the property is set. Any data passed into the setter will be passed as arguments for the
-constructor. In contrast, `type`, lowercase, is set on the prototype of the object—i.e.,
-it is not instance specific.
+`Type`, uppercase, makes sure that the set value is an 
+[instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) the provided
+constructor function.  If not, the constructor function will be called with `new` and passed the set value as the first
+argument.
+
+In contrast, `type`, lowercase, is called no matter what and expected to return the value that should be set on the map.
 
 ```
 define: {
@@ -139,6 +142,7 @@ define: {
 
 <a name="value"></a>
 ### value 
+
 Sets the default value for instances of the `can.Map`. If the default
 value should be an object of some type, it should be specified as the return
 value of a function, so that all instances of the map don't point to the same
@@ -154,19 +158,20 @@ define: {
 ```
 
 As with `type`, above, there are two ways to define the `value` property: `Value`,
-or `value`. `Value`, uppercase, provides a constructor function, ensuring that
-a copy of the value is made for each instance. `value`, lowercase, is set on
-the prototype of the object—i.e., it is not instance specific.
+or `value`. [Value](../docs/can.Map.prototype.define.ValueConstructor.html), uppercase, provides a constructor function, ensuring that
+a new instance of `Value` is made for each map instance. If [value](../docs/can.Map.prototype.define.value.html) is not an function,
+that value will be the default value of the attribute. If `value` is a function, 
+that function's return value will be used as the default value of the attribute.
 
 <a name="remove"></a>
 ### remove 
-Called when an attribute is removed. Can be used, for example, for
-removal validation.
+
+The [remove](../docs/can.Map.prototype.define.remove.html) property is called  when an attribute is removed. This is often used to remove other related properties.
 
 <a name="serialization"></a>
 ### serialization 
 The last property we’ll talk about is [serialization](https://en.wikipedia.org/wiki/Serialization). The
-serialize property defines how the attribute will behave when the map is
+[serialize](../docs/can.Map.prototype.define.serialize.html) property defines how the attribute will behave when the map is
 serialized. Managing this property can be useful when serializing complex types like dates,
 arrays, or objects into strings. You can also control whether or not a
 given property can be serialized. Returning `undefined` from a serialization
@@ -178,6 +183,7 @@ We’ll see how this works when we discuss routing in a later chapter.
 define: {
   locationIds: {
     serialize: false
+  }
 }
 ```
 
