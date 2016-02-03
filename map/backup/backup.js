@@ -21,16 +21,17 @@ steal('can/util', 'can/compute', 'can/map', 'can/util/object', function (can) {
 		},
 
 		backup: function () {
-			this._backupStore(this.attr());
+			this._backupStore(this.serialize());
 			return this;
 		},
 		isDirty: function (checkAssociations) {
-			return this._backupStore() && !can.Object.same(this.attr(), this._backupStore(), undefined, undefined, undefined, !! checkAssociations);
+			return this._backupStore() && !can.Object.same(this.attr() && this.serialize(), this._backupStore(), undefined, undefined, undefined, !! checkAssociations);
 		},
-		restore: function (restoreAssociations) {
+		restore: function (restoreAssociations, deepRestore) {
+			deepRestore = deepRestore || false;
 			var props = restoreAssociations ? this._backupStore() : flatProps(this._backupStore(), this);
 			if (this.isDirty(restoreAssociations)) {
-				this.attr(props, true);
+				this.attr(props, deepRestore);
 			}
 			return this;
 		}
