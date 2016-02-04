@@ -2169,7 +2169,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 	test("double render with batched / unbatched events (#2223)", function(){
-		var template = can.stache("{{#page}}{{doLog}}<input {($value)}='foo'/>{{/page}}");
+		var template = can.stache("{{#page}}{{doLog}}<input {($value)}='notAHelper'/>{{/page}}");
 		
 		var appVM = new can.Map();
 
@@ -2186,7 +2186,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.batch.stop();
 		
 		// logs 'child' a 2nd time
-		appVM.attr('foo', 'bar');
+		appVM.attr('notAHelper', 'bar');
 		
 		
 		equal(logCalls, 1, "input rendered the right number of times");
