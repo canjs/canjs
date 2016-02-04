@@ -2168,5 +2168,28 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		stop();
 	});
 	
+	test("double render with batched / unbatched events (#2223)", function(){
+		var template = can.stache("{{#page}}{{doLog}}<input {($value)}='foo'/>{{/page}}");
+		
+		var appVM = new can.Map();
+
+		var logCalls = 0;
+		can.stache.registerHelper('doLog', function(){
+			logCalls++;
+		});
+		
+		template(appVM);
+		
+		
+		can.batch.start();
+		appVM.attr('page', true);
+		can.batch.stop();
+		
+		// logs 'child' a 2nd time
+		appVM.attr('foo', 'bar');
+		
+		
+		equal(logCalls, 1, "input rendered the right number of times");
+	});
 
 });
