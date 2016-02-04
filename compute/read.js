@@ -6,6 +6,8 @@ steal("can/util", function(can){
 	// actually check
 	// - isArgument - should be renamed to something like "onLastPropertyReadReturnFunctionInsteadOfCallingIt".
 	//   This is used to make a compute out of that function if necessary.
+	// - readCompute - can be set to `false` to prevent reading an ending compute.  This is used by component to get a
+	//   compute as a delegate.  In 3.0, this should be removed and force people to write "{@prop} change"
 	// - callMethodsOnObservables - this is an overwrite ... so normal methods won't be called, but observable ones will.
 	// - executeAnonymousFunctions - call a function if it's found, defaults to true
 	// - proxyMethods - if the last read is a method, return a function so `this` will be correct.
@@ -105,7 +107,7 @@ steal("can/util", function(can){
 			return value && value.isComputed && !isAt(i, reads);
 		},
 		read: function(value, i, reads, options, state){
-			if(options.isArgument && i === reads.length ) {
+			if(options.readCompute === false && i === reads.length ) {
 				return value;
 			}
 			

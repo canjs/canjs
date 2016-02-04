@@ -360,7 +360,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 
 							// Remove `viewModel.` from the start of the key and read the value from the `viewModel`.
 							key = key.replace(/^(scope|^viewModel)\./,"");
-							value = can.compute.read(options.viewModel, can.compute.read.reads(key), {isArgument: true}).value;
+							value = can.compute.read(options.viewModel, can.compute.read.reads(key), {
+								// if we find a compute, we should bind on that and not read it
+								readCompute: false
+							}).value;
 
 							// If `value` is undefined use `can.getObject` to get the value.
 							if(value === undefined) {
@@ -392,7 +395,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 
 					// Create a handler function that we'll use to handle the `change` event on the `readyCompute`.
 					var handler = function(ev, ready){
+						// unbinds the old binding
 						controlInstance._bindings.control[methodName](controlInstance.element);
+						// binds the new
 						controlInstance._bindings.control[methodName] = ready.processor(
 							ready.delegate || controlInstance.element,
 							ready.parts[2], ready.parts[1], methodName, controlInstance);
