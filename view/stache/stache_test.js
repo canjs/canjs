@@ -4760,6 +4760,25 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			equal(counter, 2, 'Counter incremented twice');
 		});
+		
+		test("%index is double wrapped compute in helper (#2179)", function(){
+			var appState = new can.Map({
+				todos: [
+					{ description: "Foo" },
+					{ description: "Bar" },
+				]
+			});
+			
+			var template =  can.stache('{{#each todos}}<div>{{indexPlusOne %index}}</div>{{/each}}');
+			
+			can.stache.registerHelper("indexPlusOne", function(val, options) {
+				var resolved = val();
+				equal(typeof resolved,"number", "should be a number");
+				return resolved + 2;
+			});
+			
+			template(appState);
+		});
 
 		test("%index is double wrapped compute in helper (#2179)", function(){
 			var appState = new can.Map({
