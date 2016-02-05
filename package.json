@@ -21,9 +21,6 @@
 	"dependencies": {
 		"can-simple-dom": "^0.3.0-pre.2"
 	},
-	"peerDependencies": {
-		"jquery": ">=1.9.0 <1.12.0 || >=2.1.0 <=2.2.0"
-	},
 	"devDependencies": {
 		"bitovi-tools": "^0.1.1",
 		"bower": "~1.3.8",
