@@ -2238,7 +2238,7 @@ steal('can/util',
 					options = offset;
 					offset = 0;
 				}
-				var index = options.scope.attr("@index");
+				var index = options.scope.read("@index",{isArgument: true}).value;
 				return ""+((can.isFunction(index) ? index() : index) + offset);
 			}
 			/**
