@@ -15,10 +15,6 @@
 // instantition of objects.
 steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', 'can/compute/get_value_and_bind.js', function (can, bind, bubble, mapHelpers) {
 
-	var readButDontObserveCompute = can.__notObserve(function(compute){
-		return compute();
-	});
-
 	// properties that can't be observed on ... no matter what
 	var unobservable = {
 		"constructor": true
@@ -252,7 +248,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Signals `can.compute` that an observable
 			// property is being read.
 			__get: function(attr){
-				if(!unobservable[attr]) {
+				if(!unobservable[attr] && !this._computedAttrs[attr]) {
 					can.__observe(this, attr);
 				}
 				return this.___get( attr );
@@ -267,7 +263,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					var computedAttr = this._computedAttrs[attr];
 					if (computedAttr && computedAttr.compute) {
 						// return computedAttr.compute();
-						return readButDontObserveCompute(computedAttr.compute);
+						return computedAttr.compute();
 					} else {
 						return this._data.hasOwnProperty(attr) ? this._data[attr] : undefined;
 					}
