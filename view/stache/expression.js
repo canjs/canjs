@@ -199,7 +199,7 @@ steal("can/util",
 		Lookup.apply(this, arguments);
 	};
 	HelperLookup.prototype.value = function(scope, helperOptions){
-		var result = lookupValueOrHelper(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope]});
+		var result = lookupValueOrHelper(this.key, scope, helperOptions, {isArgument: true, args: [scope.attr('.'), scope], scopeEvents: false});
 		return result.helper || result.value;
 	};
 	
@@ -707,4 +707,3 @@ steal("can/util",
 	return expression;
 	
 });
-
