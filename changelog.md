@@ -3,6 +3,19 @@
 @parent guides 5
 -->
 
+__2.3.14__ ( Feb 05 2016 )
+
+- [double get](https://github.com/canjs/canjs/pull/2239)
+- [A trapped and &quot;not observed&quot; observed info object would still be observed.](https://github.com/canjs/canjs/pull/2236)
+- [2190 canjs api update](https://github.com/canjs/canjs/pull/2232)
+- [Define getters run twice. setVal is missing on first run.](https://github.com/canjs/canjs/issues/2230)
+- [Batching/Binding Issue](https://github.com/canjs/canjs/issues/2223)
+- [Fix `map.attr` with empty string.](https://github.com/canjs/canjs/pull/2219)
+- [Set jQuery package version using Caret ](https://github.com/canjs/canjs/issues/2212)
+- [2183 update guides](https://github.com/canjs/canjs/pull/2184)
+- [@index is double wrapped compute object in mustache/stache helper in latest version (V2.3.8)](https://github.com/canjs/canjs/issues/2179)
+
+
 __2.3.12/2.3.13__ ( Feb 01 2016 )
 
 - [jquery 2.2 in peer deps not supported](https://github.com/canjs/canjs/issues/2207)
