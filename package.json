@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.3.14",
+	"version": "2.3.15",
 	"keywords": [
 		"CanJS",
 		"DoneJS"
