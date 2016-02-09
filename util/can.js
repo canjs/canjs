@@ -15,9 +15,16 @@ steal(function () {
 	// An empty function useful for where you need a dummy callback.
 	can.k = function(){};
 
-	can.isDeferred = can.isPromise = function (obj) {
-		// Returns `true` if something looks like a deferred.
-		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
+	
+	can.isDeferred = function() {
+		can.dev.warn('can.isDeferred: this function is deprecated and will be removed in a future release. can.isPromise replaces the functionality of can.isDeferred.');
+		return can.isPromise.call(this, arguments);
+	};
+	can.isPromise = function(obj){
+		return obj && (
+			(window.Promise && (obj instanceof Promise)) ||
+			(can.isFunction(obj.then) && can.isFunction(obj.catch || obj.fail) && !(obj instanceof can.List))
+		);
 	};
 	can.isMapLike = function(obj){
 		return can.Map && (obj instanceof can.Map || obj && obj.___get);

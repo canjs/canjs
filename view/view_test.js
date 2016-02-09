@@ -295,13 +295,13 @@ steal("can/view/callbacks",
 			bar: bar
 		};
 		stop();
-		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
+		ok(can.isPromise(original.foo), 'Original foo property is a Deferred');
 		can.view(can.test.path('view/test//deferred.ejs'), original)
 			.then(function (result, data) {
 				ok(data, 'Data exists');
 				equal(data.foo, 'FOO', 'Foo is resolved');
 				equal(data.bar, 'BAR', 'Bar is resolved');
-				ok(can.isDeferred(original.foo), 'Original property did not get modified');
+				ok(can.isPromise(original.foo), 'Original property did not get modified');
 				start();
 			});
 		setTimeout(function () {

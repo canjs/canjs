@@ -6,9 +6,9 @@ steal("can/util/can.js", "can/list", function (can) {
 		// First call the old replace so its
 		// deferred callbacks will be called first
 		var result = oldReplace.apply(this, arguments);
-
-		// If there is a deferred:
-		if (can.isDeferred(data)) {
+		
+		// If there is a promise, that is not a can.List instance or other collection with promise-like methods
+		if (can.isPromise(data)) {
 			if(this._deferred) {
 				this._deferred.__cancelState = true;
 			}

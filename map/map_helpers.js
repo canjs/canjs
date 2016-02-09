@@ -21,7 +21,7 @@ steal('can/util', 'can/util/object/isplain', function(can){
 		// ### can.mapHelpers.canMakeObserve
 		// Determines if an object can be made into an observable.
 		canMakeObserve: function (obj) {
-			return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
+			return obj && !can.isPromise(obj) && (can.isArray(obj) || can.isPlainObject(obj) );
 		},
 		
 		// ### mapHelpers.serialize

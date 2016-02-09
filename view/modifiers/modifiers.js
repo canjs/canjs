@@ -20,7 +20,7 @@ steal('jquery', 'can/util', 'can/view', function ($, can) {
 			// if the first arg is a deferred
 			// wait until it finishes, and call
 			// modify with the result
-			if (can.isDeferred(args[0])) {
+			if (can.isPromise(args[0])) {
 				args[0].done(function (res) {
 					modify.call(self, [res], old);
 				});
@@ -40,7 +40,7 @@ steal('jquery', 'can/util', 'can/view', function ($, can) {
 				// call view with args (there might be deferreds)
 				result = can.view.apply(can.view, args);
 				// if we got a string back
-				if (!can.isDeferred(result)) {
+				if (!can.isPromise(result)) {
 					// we are going to call the old method with that string
 					args = [result];
 				} else {

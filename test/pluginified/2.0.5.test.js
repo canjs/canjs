@@ -316,7 +316,7 @@ var __m1 = (function () {
 				update: function () {
 					var deferred = this.scope.attr('deferreddata'),
 						scope = this.scope;
-					if (can.isDeferred(deferred)) {
+					if (can.isPromise(deferred)) {
 						this.scope.attr('waiting', true);
 						deferred.then(function (items) {
 							scope.attr('items')
@@ -2105,7 +2105,7 @@ var __m32 = (function () {
 			ob = new can.Map({
 				test: dfd
 			});
-		ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
+		ok(can.isPromise(ob.attr('test')), 'Attribute is a deferred');
 		ok(!ob.attr('test')
 			._cid, 'Does not have a _cid');
 	});
@@ -4044,13 +4044,13 @@ var __m39 = (function () {
 			bar: bar
 		};
 		stop();
-		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
+		ok(can.isPromise(original.foo), 'Original foo property is a Deferred');
 		can.view(can.test.path('view/test//deferred.ejs'), original)
 			.then(function (result, data) {
 				ok(data, 'Data exists');
 				equal(data.foo, 'FOO', 'Foo is resolved');
 				equal(data.bar, 'BAR', 'Bar is resolved');
-				ok(can.isDeferred(original.foo), 'Original property did not get modified');
+				ok(can.isPromise(original.foo), 'Original property did not get modified');
 				start();
 			});
 		setTimeout(function () {

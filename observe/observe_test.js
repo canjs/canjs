@@ -828,7 +828,7 @@ steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", "steal-qunit
 			ob = new can.Map({
 				test: dfd
 			});
-		ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
+		ok(can.isPromise(ob.attr('test')), 'Attribute is a deferred');
 		ok(!ob.attr('test')
 			._cid, 'Does not have a _cid');
 	});
