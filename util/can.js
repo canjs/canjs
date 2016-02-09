@@ -16,7 +16,7 @@ steal(function () {
 	can.k = function(){};
 
 	
-	can.isDeferred = function() {
+	can.isDeferred = function(obj) {
 		can.dev.warn('can.isDeferred: this function is deprecated and will be removed in a future release. can.isPromise replaces the functionality of can.isDeferred.');
 		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
