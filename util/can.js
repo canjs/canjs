@@ -18,12 +18,12 @@ steal(function () {
 	
 	can.isDeferred = function() {
 		can.dev.warn('can.isDeferred: this function is deprecated and will be removed in a future release. can.isPromise replaces the functionality of can.isDeferred.');
-		return can.isPromise.call(this, arguments);
+		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
 	can.isPromise = function(obj){
-		return obj && (
+		return !!obj && (
 			(window.Promise && (obj instanceof Promise)) ||
-			(can.isFunction(obj.then) && can.isFunction(obj.catch || obj.fail) && !(obj instanceof can.List))
+			(can.isFunction(obj.then) && !(obj instanceof can.List))
 		);
 	};
 	can.isMapLike = function(obj){
