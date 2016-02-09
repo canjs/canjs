@@ -905,5 +905,25 @@ steal("can/route", "can/test", "steal-qunit", function () {
 		appState.attr('name', 'Brian');
 	});
 
+	test("updating bound can.Map causes single update with a coerced string value", function() {
+		expect(1);
 
+		setupRouteTest(function (iframe, route) {
+			var appVM = new can.Map({});
+
+			route.map(appVM);
+			route.ready();
+
+			appVM.bind('action', function(ev, newVal) {
+				strictEqual(newVal, '10');
+			});
+
+			appVM.attr('action', 10);
+
+			// check after 30ms to see that we only have a single call
+			setTimeout(function() {
+				teardownRouteTest();
+			}, 30);
+		});
+	});
 });
