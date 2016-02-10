@@ -20,7 +20,7 @@ var cart = new can.List([
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Juice', price: 3.05 }
 ]);
-cart.attr("comparator",'price');
+cart.attr("comparator", 'price');
 cart; // -> [Juice, Butter, Bread]
 ```
 
@@ -34,9 +34,9 @@ var cart = new can.List([
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Bread', price: 4.00 }
 ]);
-cart.attr("comparator",'price');
+cart.attr("comparator", 'price');
 cart.bind("length", function(){});
-cart.attr("0.price",5);
+cart.attr("0.price", 5);
 cart; // -> [Butter, Bread, Juice]
 ```
 
@@ -48,12 +48,13 @@ var cart = new can.List([
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Bread', price: 4.00 }
 ]);
+cart.attr('comparator', 'price');
 cart.bind("length", function(){});
-cart.push({title: 'Apple', 3.25});
+cart.push({ title: 'Apple', price: 3.25 });
 cart; // -> [Juice, Apple, Butter, Bread]
 ```
 
-If you are using a `can.List` in a template, it will be bound to 
+If you are using a `can.List` in a template, it will be bound to
 automatically.  Check out this demo that lets you change the sort order
 and a person's name:
 
@@ -73,7 +74,6 @@ stockPrices.attr("comparator", function (a, b) {
 	return a === b ? 0 : a < b ? 1 : -1; // Descending
 })
 stockPrices // -> [0.98, 0.75, 0.16, 0.12, 0.05, 0.01];
-
 ```
 
 ## String Comparators
@@ -87,11 +87,14 @@ var table = new can.List([
 	[1, 8, 2],
 	[7, 9, 5]
 ]);
-table.attr('comparator', '2')
+table.attr('comparator', '2') // Translates to: row.attr('2')
 table  // -> [1, 8, 2],
              [6, 3, 4],
              [7, 9, 5]
 ```
+
+The default sort order for string comparators is ascending. To sort
+items in descending order use a function comparator.
 
 
 ## Move events
@@ -106,7 +109,7 @@ var cart = new can.List([
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Juice', price: 3.25 }
 ]);
-cart.attr('comparator','price');
+cart.attr('comparator', 'price');
 
 cart.bind('move', function (ev, item, newIndex, oldIndex) {
 	console.log('Moved:', item.title + ', from:', oldIndex + ', to:', newIndex);
