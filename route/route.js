@@ -61,11 +61,10 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		stringify = function (obj) {
 			// Object is array, plain object, Map or List
 			if (obj && typeof obj === "object") {
-				// Get native object or array from Map or List
 				if (obj instanceof can.Map) {
-					obj = obj.attr();
-					// Clone object to prevent change original values
+					obj = obj;
 				} else {
+					// Get array from array-like or shallow-copy object
 					obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj);
 				}
 				// Convert each object property or array item into stringified new
@@ -121,10 +120,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// change type coercion during Map setter to coerce all values to strings 
 		stringCoercingMapDecorator = function(map) {
 			var typeSuper = map.__type;
-			map.__type = function(val, prop) {
-				var newArguments = [stringify(val), prop];
-	
-				return typeSuper.apply(map, newArguments);
+			map.__type = function() {
+				return stringify(typeSuper.apply(map, arguments));
 			};
 	
 			return map;
