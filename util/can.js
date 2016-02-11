@@ -23,7 +23,7 @@ steal(function () {
 	can.isPromise = function(obj){
 		return !!obj && (
 			(window.Promise && (obj instanceof Promise)) ||
-			(can.isFunction(obj.then) && !(obj instanceof can.List))
+			(can.isFunction(obj.then) && (can.List === undefined || !(obj instanceof can.List)))
 		);
 	};
 	can.isMapLike = function(obj){
