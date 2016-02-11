@@ -138,6 +138,11 @@ steal('can/util', "can/view",function (can) {
 				
 			if(parentNode.nodeName.toUpperCase() === "SELECT" && parentNode.selectedIndex >= 0) {
 				selectedValue = parentNode.value;
+				can.each(newFrag.childNodes, function (el) {
+					if(el.nodeName.toUpperCase() === 'OPTION' && !!el.hasAttribute('selected')) {
+						selectedValue = el.value;
+					}
+				});
 			}
 			
 			
