@@ -4780,6 +4780,21 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			template(appState);
 		});
 
+
+		test("content within {{#if}} inside partial surrounded by {{#if}} should not display outside partial (#2186)", function() {
+			can.view.registerView('partial', '{{#showHiddenSection}}<div>Hidden</div>{{/showHiddenSection}}');
+			var renderer = can.stache('<div>{{#showPartial}}{{>partial}}{{/showPartial}}</div>');
+			var data = new can.Map({
+				showPartial: true,
+				showHiddenSection: false
+			});
+			var frag = renderer(data);
+			data.attr('showHiddenSection', true);
+			data.attr('showPartial', false);
+
+			equal( innerHTML(frag.firstChild), '');
+		});
+		
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
