@@ -33,6 +33,7 @@ steal('can/util', 'can/list', function (can) {
 	};
 
 	var proto = can.List.prototype,
+		splice = proto.splice;
 		_changes = proto._changes || function(){},
 		setup = proto.setup,
 		unbind = proto.unbind;
@@ -376,10 +377,7 @@ steal('can/util', 'can/list', function (can) {
 						// Insert this item at the correct index
 						// NOTE: On ultra-big lists, this will be the slowest
 						// part of an "add" because `.splice()` is O(n)
-						Array.prototype.splice.apply(this, [newIndex, 0, val]);
-
-						// Render, etc
-						this._triggerChange('' + newIndex, 'add', [val], undefined);
+						splice.apply(this, [newIndex, 0, val]);
 
 						// Next
 						i++;
@@ -399,35 +397,29 @@ steal('can/util', 'can/list', function (can) {
 	// Overwrite .splice so that items added to the list (no matter what the
 	// defined index) are inserted at the correct index, while preserving the
 	// ability to remove items from a list.
-	(function () {
-		var proto = can.List.prototype;
-		var oldSplice = proto.splice;
+	proto.splice = function (index, howMany) {
 
-		proto.splice = function (index, howMany) {
+		var args = can.makeArray(arguments);
 
-			var args = can.makeArray(arguments);
+		// Don't use this "sort" oriented splice unless this list has a
+		// comparator
+		if (! this.comparator) {
+			return splice.apply(this, args);
+		}
 
-			// Don't use this "sort" oriented splice unless this list has a
-			// comparator
-			if (! this.comparator) {
-				return oldSplice.apply(this, args);
-			}
+		// Remove items using the original splice method
+		splice.call(this, index, howMany);
 
-			// Remove items using the original splice method
-			oldSplice.call(this, index, howMany);
+		// Remove the 1st and 2nd args so that the newly added
+		// items can be processed directly, rather than `.slice()`
+		// which creates a copy, or `for (...) { added.push(args[i]); }`
+		// which iterates needlessly
+		args.splice(0, 2);
 
-			// Remove the 1st and 2nd args so that the newly added
-			// items can be processed directly, rather than `.slice()`
-			// which creates a copy, or `for (...) { added.push(args[i]); }`
-			// which iterates needlessly
-			args.splice(0, 2);
-
-			// Add items by way of push so that they're sorted into
-			// the correct position
-			proto.push.apply(this, args);
-		};
-	})();
-
+		// Add items by way of push so that they're sorted into
+		// the correct position
+		proto.push.apply(this, args);
+	};
 
 	return can.Map;
 });
