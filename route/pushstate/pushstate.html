@@ -10,7 +10,7 @@
 <body>
 	
 
-<script type='text/mustache' id='ps-app-stash'>
+<script type='text/stache' id='ps-app-stash'>
 <div class="panel-left">
   <h2>Modules</h2>
   <ul>
@@ -53,7 +53,7 @@ steal("can/route/pushstate", "can/component",function(){
 	});
 	
 	
-	$("body").append( can.view.mustache("<ps-app></ps-app>")({})  )
+	$("body").append( can.view.stache("<ps-app></ps-app>")({})  )
 	
 })
 </script>

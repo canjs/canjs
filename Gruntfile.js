@@ -96,7 +96,7 @@ module.exports = function (grunt) {
 
 					options: function (config) {
 						return {
-							pluginified: ['2.0.5'],
+							pluginified: ['3.0.0'],
 							dist: 'can.' + config
 						};
 					}

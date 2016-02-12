@@ -50,7 +50,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 
 			return count;
 		},
-		location = window.location,
+		location = typeof window !== 'undefined' ? window.location : {},
 		wrapQuote = function (str) {
 			return (str + '')
 				.replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");

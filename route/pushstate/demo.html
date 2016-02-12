@@ -131,8 +131,7 @@ function() {
                 observe: route.def,
                 fullName : "can.route('<span>"+route.route+"</span>', "
             })
-        })
-        //$("#links").html("linksEJS",{})
+        });
         
         new Observer( $("<pre>").appendTo("#link"),
             {
@@ -245,9 +244,6 @@ function() {
         history.pushState(null,null,BASE_URL);
     })
 })
-</script>
-<script type='text/ejs' id='linksEJS'>
-<pre>can.route.link("recipe 5",{type: "recipe", id: 5}) = </pre><%= can.route.link("click me",{type: "recipe", id: 5}) %>
 </script>
 </body>
 </html>

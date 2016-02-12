@@ -1,5 +1,5 @@
 steal('can/util', function() {
-	var viewCheck = /(\.mustache|\.stache|\.ejs|extensionless)$/;
+	var viewCheck = /(\.stache|extensionless)$/;
 
 	can.test = {
 		fixture: function (path) {

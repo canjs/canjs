@@ -79,7 +79,7 @@ steal(
 			// from the right scope.  Once the right scope is located, `_read` is called.
 			/**
 			 * @hide
-			 * @param {can.mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot.
+			 * @param {can.stache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot.
 			 * @param {can.view.Scope.readOptions} options that configure how this gets read.
 			 * @return {{}}
 			 *   @option {Object} parent the value's immediate parent

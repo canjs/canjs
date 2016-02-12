@@ -1,0 +1,10 @@
+<select id="test-dropdown">
+  <option value="none">
+    {{domainList.length}} domains...
+  </option>
+  {{#each domainList}}
+  <option value="<%= domain.attr('id') %>">
+      {{name}}
+  </option>
+  {{/each}}
+</select>
