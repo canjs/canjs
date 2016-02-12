@@ -96,8 +96,7 @@ table  // -> [1, 8, 2],
 The default sort order for string comparators is ascending. To sort
 items in descending order use a function comparator.
 
-
-## Move events
+## Move Events
 
 Whenever there are changes to items in the [can.List], the
 [can.List.plugins.sort] plugin moves the item to the correct
@@ -118,3 +117,9 @@ cart.bind('move', function (ev, item, newIndex, oldIndex) {
 cart.attr('0.price', 4.00); // Moved: Bread, from: 0, to: 3
 							// -> [Juice, Butter, Bread]
 ```
+
+## Changing Comparators
+
+A comparator can be set explicitly with [can.Map::attr attr], or implicitly
+with the more familiar `list.sort(newComparator)`. Both have the same
+effect.
