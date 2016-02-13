@@ -127,7 +127,8 @@ steal(
 					while(parent._meta.notContext) {
 						parent = parent._parent;
 					}
-					return parent.read(attr.substr(3), options);
+					
+					return parent.read(attr.substr(3) || ".", options);
 				}
 				else if ( isCurrentContext ) {
 					return {
