@@ -67,7 +67,7 @@ steal("can/util", function(can){
 				this.depth = null;
 			}
 		},
-		onDependencyChange: function(ev){
+		dependencyChange: function(ev){
 			if(this.bound && this.ready) {
 				if(ev.batchNum !== undefined) {
 					// Only need to register once per batchNum
@@ -79,6 +79,9 @@ steal("can/util", function(can){
 					this.updateCompute(ev.batchNum);
 				}
 			}
+		},
+		onDependencyChange: function(ev, newVal, oldVal){
+			this.dependencyChange(ev, newVal, oldVal);
 		},
 		updateCompute: function(batchNum){
 			// It's possible this became unbound since it was registered to update

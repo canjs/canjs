@@ -62,7 +62,8 @@ steal("can/util",
 						return viewModel;
 					},
 					attributeViewModelBindings: attributeViewModelBindings,
-					alreadyUpdatedChild: true
+					alreadyUpdatedChild: true,
+					nodeList: tagData.parentNodeList
 				});
 				if(dataBinding) {
 					// For bindings that change the viewModel,
@@ -110,7 +111,8 @@ steal("can/util",
 						},
 						attributeViewModelBindings: attributeViewModelBindings,
 						// always update the viewModel accordingly.
-						initializeValues: true
+						initializeValues: true,
+						nodeList: tagData.parentNodeList
 					});
 					if(dataBinding) {
 						// The viewModel is created, so call callback immediately.
@@ -143,7 +145,8 @@ steal("can/util",
 			// Setup binding
 			var dataBinding = makeDataBinding({
 				name: attrData.attributeName,
-				value: el.getAttribute(attrData.attributeName)
+				value: el.getAttribute(attrData.attributeName),
+				nodeList: attrData.nodeList
 			}, el, {
 				templateType: attrData.templateType,
 				scope: attrData.scope,
@@ -183,7 +186,8 @@ steal("can/util",
 								return viewModel;
 							},
 							// always update the viewModel accordingly.
-							initializeValues: true
+							initializeValues: true,
+							nodeList: attrData.nodeList
 						});
 						if(dataBinding) {
 							// The viewModel is created, so call callback immediately.
@@ -833,12 +837,20 @@ steal("can/util",
 		// Get computes for the parent and child binding
 		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData, bindingInfo.parentToChild),
 			childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent, bindingInfo.stickyParentToChild && parentCompute),
-			
 			// these are the functions bound to one compute that update the other.
 			updateParent,
 			updateChild,
 			childLifecycle;
 		
+		if(bindingData.nodeList) {
+			if(parentCompute && parentCompute.isComputed){
+				parentCompute.computeInstance.setPrimaryDepth(bindingData.nodeList.nesting+1);
+			}
+			if(childCompute && childCompute.isComputed){
+				childCompute.computeInstance.setPrimaryDepth(bindingData.nodeList.nesting+1);
+			}
+		}
+
 		// Only bind to the parent if it will update the child.
 		if(bindingInfo.parentToChild){
 			updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);

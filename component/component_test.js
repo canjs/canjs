@@ -1782,7 +1782,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 
 			// Dispatches async
 			setTimeout(function() {
-				equal(count, 4, '2 items unbound, but unbinding the temporary unbind and the actual unbind');
+				equal(count, 2, '2 items unbound. Previously, this would unbind 4 times because of switching to fast path');
 				can.unbindAndTeardown = old;
 
 				start();
@@ -1823,8 +1823,15 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 			map.attr("show", false);
 			map.attr("show", true);
 			map.attr("show", false);
-			equal(map._bindings,1, "only one binding");
-			can.remove(can.$("#qunit-fixture>*"));
+			map.attr("show", true);
+			map.attr("show", false);
+			stop();
+			setTimeout(function(){
+				equal(map._bindings,1, "only one binding");
+				can.remove(can.$("#qunit-fixture>*"));
+				start();
+			},10);
+			
 		});
 		
 		// PUT NEW TESTS THAT NEED TO TEST AGAINST MUSTACHE JUST ABOVE THIS LINE
