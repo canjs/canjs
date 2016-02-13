@@ -846,7 +846,7 @@ steal("can/util",
 			updateParent,
 			updateChild,
 			childLifecycle;
-
+			
 		if(bindingData.nodeList) {
 			if(parentCompute && parentCompute.isComputed){
 				parentCompute.computeInstance.setPrimaryDepth(bindingData.nodeList.nesting+1);
