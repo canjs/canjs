@@ -3,6 +3,11 @@
 @parent guides 5
 -->
 
+__2.3.15__ ( Feb 15 2016 )
+
+- [adds jquery as a dep](https://github.com/canjs/canjs/pull/2242)
+
+
 __2.3.14__ ( Feb 05 2016 )
 
 - [double get](https://github.com/canjs/canjs/pull/2239)
