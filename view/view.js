@@ -511,6 +511,7 @@ steal('can/util', function (can) {
 		 * @param {Object} [data] The data to populate the template with.
 		 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
 		 * @param {Function} [callback] A function executed after the template has been processed.
+		 * @param {NodeList} nodelist parent nodelist to register partial template contents with
 		 * @return {String|can.Deferred} The template with interpolated data in string form
 		 * or a Deferred that resolves to the template with interpolated data.
 		 *
@@ -554,8 +555,8 @@ steal('can/util', function (can) {
 		 */
 		//call `renderAs` with a hardcoded string, as view.render
 		// always operates against resolved template files or hardcoded strings
-		render: function (view, data, helpers, callback) {
-			return can.view.renderAs("string",view, data, helpers, callback);
+		render: function (view, data, helpers, callback, nodelist) {
+			return can.view.renderAs("string",view, data, helpers, callback, nodelist);
 		},
 
 		// ##### renderTo
@@ -567,10 +568,11 @@ steal('can/util', function (can) {
 		 * @param {Function} renderer
 		 * @param data
 		 * @param {Object} helpers helper methods for this template
+		 * @param {NodeList} nodelist parent nodelist to register partial template contents with
 		 * @return {*}
 		 */
-		renderTo: function(format, renderer, data, helpers){
-			return (format === "string" && renderer.render ? renderer.render : renderer)(data, helpers);
+		renderTo: function(format, renderer, data, helpers, nodelist){
+			return (format === "string" && renderer.render ? renderer.render : renderer)(data, helpers, nodelist);
 		},
 
 		/**
@@ -581,9 +583,16 @@ steal('can/util', function (can) {
 		 * @param data
 		 * @param helpers
 		 * @param callback
+		 * @param nodelist
 		 * @return {*}
 		 */
-		renderAs: function (format, view, data, helpers, callback) {
+		renderAs: function (format, view, data, helpers, callback, nodelist) {
+			// if callback has expression prop its actually the nodelist
+			if (callback !== undefined && typeof callback.expression === 'string') {
+				nodelist = callback;
+				callback = undefined;
+			}
+			
 			// If helpers is a `function`, it is actually a callback.
 			if (isFunction(helpers)) {
 				callback = helpers;
@@ -625,7 +634,7 @@ steal('can/util', function (can) {
 						}
 
 						// Get the rendered result.
-						result = can.view.renderTo(format, renderer, dataCopy, helpers);
+						result = can.view.renderTo(format, renderer, dataCopy, helpers, nodelist);
 
 						// Resolve with the rendered view.
 						deferred.resolve(result, dataCopy);
@@ -654,7 +663,7 @@ steal('can/util', function (can) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function (renderer) {
-						callback(data ? can.view.renderTo(format, renderer, data, helpers) : renderer);
+						callback(data ? can.view.renderTo(format, renderer, data, helpers, nodelist) : renderer);
 					});
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -668,12 +677,12 @@ steal('can/util', function (can) {
 					// In the future, we might simply store either a deferred or the cached result.
 					if (deferred.state() === 'resolved' && deferred.__view_id) {
 						var currentRenderer = $view.cachedRenderers[deferred.__view_id];
-						return data ? can.view.renderTo(format, currentRenderer, data, helpers) : currentRenderer;
+						return data ? can.view.renderTo(format, currentRenderer, data, helpers, nodelist) : currentRenderer;
 					} else {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function (renderer) {
-							response = data ? can.view.renderTo(format, renderer, data, helpers) : renderer;
+							response = data ? can.view.renderTo(format, renderer, data, helpers, nodelist) : renderer;
 						});
 					}
 				}
