@@ -451,7 +451,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			 * var names = ['Bob', 'Eve'],
 			 *     list = new can.List(['Alice']);
 			 *
-			 * list.push.apply(list, names);
+			 * list.unshift.apply(list, names);
 			 * list.attr(); // ['Bob', 'Eve', 'Alice']
 			 * ```
 			 *
