@@ -17,8 +17,8 @@ The `define` plugin allows you to finely control the the behavior of the
 attributes on a `can.Map`. For any property you declare in the `define` plugin,
 you can control its:
 
-- [get](#get)
 - [set](#set)
+- [get](#get)
 - [type](#type)
 - [value](#value)
 - [remove](#remove)
@@ -57,24 +57,6 @@ var Person = can.Map.extend(
 });
 ```
 
-<a name="get"></a>
-### get 
-A [get](../docs/can.Map.prototype.define.get.html) function defines what happens when a value is read on a `can.Map`.
-It is typically used to provide properties that derive their value from other
-properties of the map, as below: 
-
-```
-var Person = can.Map.extend({
-    define: {
-        fullName: {
-            get: function () {
-                return this.attr("first") + " " + this.attr("last");
-            }
-        }
-    }
-});
-```
-
 <a name="set"></a>
 ### set 
 A [set](../docs/can.Map.prototype.define.set.html) function defines what happens when a value is set on a `can.Map`.
@@ -105,6 +87,98 @@ set: function(newValue) { ... }
 // the property will not be updated until setValue is called
 set: function(newValue, setValue) { ... }
 ```
+
+<a name="get"></a>
+### get 
+A [get](../docs/can.Map.prototype.define.get.html) function defines what happens when a value is read on a `can.Map`.
+It is typically used to provide properties that derive their value from other
+properties of the map, as below: 
+
+```
+var Person = can.Map.extend({
+    define: {
+        fullName: {
+            get: function () {
+                return this.attr("first") + " " + this.attr("last");
+            }
+        }
+    }
+});
+```
+
+`get` is passed two optional arguments: `lastSetValue` and `resolve`.  
+
+`lastSetValue` is the last value the property was set to.  This, among other uses,
+can be used to update a list in place instead of replacing it.  The following
+keeps `taskIds` updated with all of `tasks`' ids:
+
+```
+var Person = can.Map.extend({
+    define: {
+        taskIds: {
+            Value: can.List,
+            get: function(initialValue){
+                var ids = this.attr('tasks').map(function(task){
+                    return task.attr("id");
+                });
+                return initialValue.replace(ids);
+            }
+        }
+    }
+});
+```
+
+
+
+`resolve` can asynchronously set the retrived value of a 
+"bound" property.  The following makes `person` update when `personId` changes. 
+`person` will be a `Person` instance retrieved from the server.
+
+```
+var AppViewModel = can.Map.extend({
+  define: {
+    person: {
+      get: function(lastSetValue, resolve){
+        Person.findOne({id: this.attr("personId")})
+            .then(resolve);
+      }
+    }
+  }
+});
+```
+
+Asynchronous getters must be bound to to behave correctly.  In most apps, this happens
+automatically because observables are "bound" by a template.  However,
+when testing, you'll need to remember to [bind](../docs/can.Map.prototype.bind.html)
+on that property before reading it. Here's how one might test the previous `AppViewModel`:
+
+```
+var appVM = new AppViewModel({
+  personId: 5
+});
+
+appVM.bind("person", function(ev, newVal, oldVal){
+  // `person` will change from undefined to a
+  // Person instance.
+  ok(newVal instanceof Person)
+});
+
+// appVM is `undefined` here because 
+// `Person.findOne` hasn't returned yet
+appVM.attr("person") //-> undefined
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 <a name="type"></a>
 ### type 

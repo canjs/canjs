@@ -20,7 +20,7 @@ application's templates.
 
 As mentioned in the [introduction](./Tutorial.html), we’re using Stache templates in
 our app. Remember that when we downloaded our custom build of CanJS, we
-included the [can.stache](.../docs/can.stache.html) plugin. 
+included the [can.stache](../docs/can.stache.html) plugin. 
 
 We can create a simple template, render it to a document fragment and insert it into the page like
 the following:
@@ -138,7 +138,7 @@ the data passed to a template. In this case, the root context is the `customerOr
 object at the begining of this section.  This is why `{{customerType}}` outputs `Business`.
 
 [Sections](../docs/can.stache.tags.section.html)
-create contexts in Stache.  A section in stache begins with `{{#EXPRESSION}}` or `{{^EXPRESSION}}`
+create contexts in Stache.  A section begins with `{{#EXPRESSION}}` or `{{^EXPRESSION}}`
 and ends with `{{/EXPRESSION}}`.  In the following example `{{#with order}}` 
 defines a section whose scope lookup starts finding values in the 
 `customerOrder`'s `order` object first:
@@ -206,6 +206,36 @@ above, we saw:
 Because the context of the `{{#each}}` block is `items`, we can reference
 the `name` and `price` properties of `items` directly&mdash;i.e, we don't need to
 write `{{items.name}}` or `{{items.price}}`, we can just write `{{name}}` or `{{price}}`.
+
+Call expressions can also be passed 
+to [#each](../docs/can.stache.helpers.each.html). For example, a ViewModel might
+have a method to get menu items for a particular menu like `"dinner"` or 
+`"lunch"` like:
+
+```
+var OrderViewModel = can.Map.extend({
+  itemsForMenuType: function(type){
+    return this.attr("menu.items").filter(function(item){
+      return item.attr("type") === type;
+    })
+  }
+})
+```
+
+Call this method and return its result to `#each` like:
+
+```
+{{#each itemsForMenuType("lunch")}}
+  <li>...</li>
+{{/each}}
+```
+
+Note that [#key](../docs/can.stache.tags.section.html) can also
+be used to loop through objects with enumerable properties. In general,
+[#each](../docs/can.stache.helpers.each.html) should be used if the key references
+[can.List](../docs/can.List.html) or Arrays that have or often have incremental updates. [#key](../docs/can.stache.tags.section.html)
+should be used when the list is replaced by a list with items that look
+nothing like the previous list's items.
 
 <a name="conditionallogic"></a>
 ## Conditional Logic
