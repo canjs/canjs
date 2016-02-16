@@ -460,7 +460,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				// Batch all of the change events until we are done.
 				can.batch.start();
 				// Merge current properties with the new ones.
-				this.each(function (curVal, prop) {
+				this._each(function (curVal, prop) {
 					// You can not have a _cid property; abort.
 					if (prop === "_cid") {
 						return;
