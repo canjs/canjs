@@ -2191,5 +2191,33 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		
 		equal(logCalls, 1, "input rendered the right number of times");
 	});
+	
+
+	test("Child bindings updated before parent (#2252)", function(){
+		var template = can.stache("{{#eq page 'view'}}<child-binder {page}='page'/>{{/eq}}");
+		can.Component.extend({
+			tag: 'child-binder',
+			template: can.stache('<span/>'),
+			viewModel: {
+				_set: function(prop, val){
+					if(prop === "page"){
+						equal(val,"view", "value should not be edit");
+					}
+					
+					return can.Map.prototype._set.apply(this, arguments);
+				}
+			}
+		});
+		
+		var vm = new can.Map({
+			page : 'view'
+		});
+		template(vm);
+		
+		can.batch.start();
+		vm.attr('page', 'edit');
+		can.batch.stop();
+	});
+
 
 });

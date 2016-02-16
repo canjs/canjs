@@ -234,11 +234,12 @@ steal(
 						if( !state.node.attributes ) {
 							state.node.attributes = [];
 						}
-						state.node.attributes.push(function(scope, options){
+						state.node.attributes.push(function(scope, options, nodeList){
 							attrCallback(this,{
 								attributeName: attrName,
 								scope: scope,
-								options: options
+								options: options,
+								nodeList: nodeList
 							});
 						});
 					}

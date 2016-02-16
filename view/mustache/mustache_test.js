@@ -3314,7 +3314,7 @@ steal("can/model", "can/view/mustache", "can/test", "can/view/mustache/spec/spec
 			if (eventType === "visible") {
 				ok(true, "unbound visible");
 				unbindCount++;
-				if(unbindCount >= 2) {
+				if(unbindCount >= 1) {
 					start();
 				}
 			}

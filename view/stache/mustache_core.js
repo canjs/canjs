@@ -53,7 +53,8 @@ steal("can/util",
 				txt += helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options);
 			}
 			return txt;
-		};
+		},
+		k = function(){};
 
 
 
@@ -321,7 +322,7 @@ steal("can/util",
 
 				// Bind on the compute to set the cached value. This helps performance
 				// so live binding can read a cached value instead of re-calculating.
-				compute.computeInstance.bind("change", can.k);
+				compute.computeInstance.bind("change", k);
 
 				var value = compute();
 
@@ -370,7 +371,7 @@ steal("can/util",
 					}
 				}
 				// Unbind the compute.
-				compute.computeInstance.unbind("change", can.k);
+				compute.computeInstance.unbind("change", k);
 			};
 		},
 		// ## mustacheCore.splitModeFromExpression
