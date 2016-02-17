@@ -391,7 +391,7 @@ steal("can/util",
 				propName = "$innerHTML";
 			}
 	
-			makeDataBinding({
+			var dataBinding = makeDataBinding({
 				name: "{("+propName+"})",
 				value: attrValue
 			}, el, {
@@ -401,6 +401,10 @@ steal("can/util",
 				initializeValues: true,
 				legacyBindings: true,
 				syncChildWithParent: true
+			});
+			
+			can.one.call(el, 'removed', function(){
+				dataBinding.onTeardown();
 			});
 	
 		}

@@ -2219,5 +2219,25 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		can.batch.stop();
 	});
 
+	test("can-value memory leak (#2270)", function () {
+
+		var template = can.view.stache('<div><input can-value="foo"></div>');
+
+		var vm = new can.Map({foo: ''});
+
+		var frag = template(vm);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+		
+		can.remove(can.$(ta.firstChild));
+		stop();
+		setTimeout(function(){
+			// still 1 binding, should be 0
+			equal(vm._bindings,0, "no bindings");
+			start();
+		}, 10);
+
+	});
 
 });
