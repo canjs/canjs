@@ -3,6 +3,17 @@
 @parent guides 5
 -->
 
+__2.3.16__ ( Feb 16 2016 )
+
+- [Documentation for can.List.unshift.apply is not correct](https://github.com/canjs/canjs/issues/2262)
+- [Switch define docs to use new example version.](https://github.com/canjs/canjs/pull/2261)
+- [Batched change notifies child component before parent stache binding](https://github.com/canjs/canjs/issues/2252)
+- [../ looks up wrong property on maps](https://github.com/canjs/canjs/issues/2244)
+- [can.Map constructor is observable](https://github.com/canjs/canjs/issues/2220)
+- [Route/Map triggering too many changes](https://github.com/canjs/canjs/issues/2206)
+- [{{#if}} statement within partial gets displayed outside partial](https://github.com/canjs/canjs/issues/2186)
+
+
 __2.3.15__ ( Feb 15 2016 )
 
 - [adds jquery as a dep](https://github.com/canjs/canjs/pull/2242)
