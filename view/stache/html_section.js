@@ -1,4 +1,4 @@
-steal("can/util","can/view/target","./utils.js","./mustache_core.js","can/view/scope",function( can, target, utils, mustacheCore ) {
+steal("can/util","can/view/target","./utils.js","./mustache_core.js","can/view/scope",function( can, target, utils, mustacheCore) {
 
 
 	var decodeHTML = typeof document !== "undefined" && (function(){

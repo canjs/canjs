@@ -5,7 +5,9 @@
 // can.view loads templates based on a registered type, and given a set of data, returns a document fragment
 // from the template engine's rendering method
 //
-steal('can/util', function (can) {
+define(['can/util/util', 'module'], function(can, viewModule){
+
+	console.log("Defining", viewModule.id);
 
 	var isFunction = can.isFunction,
 		makeArray = can.makeArray,
