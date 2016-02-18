@@ -120,8 +120,15 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// change type coercion during Map setter to coerce all values to strings 
 		stringCoercingMapDecorator = function(map) {
 			var typeSuper = map.__type;
-			map.__type = function() {
-				return stringify(typeSuper.apply(map, arguments));
+			map.__type = function(val, prop) {
+				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].attr('serialize'), 
+					ret = typeSuper.apply(map, arguments); 
+				
+				if (serializable) {
+					return stringify(ret);
+				} else {
+					return ret;
+				}
 			};
 	
 			return map;

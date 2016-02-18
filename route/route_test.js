@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/route", "can/test", "steal-qunit", function () {
+steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 	QUnit.module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -747,7 +747,7 @@ steal("can/route", "can/test", "steal-qunit", function () {
 			expect(1);
 
 			setupRouteTest(function (iframe, route) {
-				var appVM = new can.Map({});
+				var appVM = new can.Map();
 
 				route.map(appVM);
 				route.ready();
@@ -761,7 +761,31 @@ steal("can/route", "can/test", "steal-qunit", function () {
 				// check after 30ms to see that we only have a single call
 				setTimeout(function() {
 					teardownRouteTest();
-				}, 30);
+				}, 5);
+			});
+		});
+
+		test("updating unserialized prop on bound can.Map causes single update without a coerced string value", function() {
+			expect(1);
+        
+			setupRouteTest(function (iframe, route) {
+				var appVM = new can.Map({define: {
+					action: {serialize: false}
+				}});
+        
+				route.map(appVM);
+				route.ready();
+        
+				appVM.bind('action', function(ev, newVal) {
+					equal(typeof newVal, 'function');
+				});
+        
+				appVM.attr('action', function() {});
+        
+				// check after 30ms to see that we only have a single call
+				setTimeout(function() {
+					teardownRouteTest();
+				}, 5);
 			});
 		});
 
