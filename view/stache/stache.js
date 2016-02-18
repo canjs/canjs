@@ -268,7 +268,15 @@ steal(
 				
 				
 				if(expression === "else") {
-					(state.attr && state.attr.section ? state.attr.section : state.textContentOnly || section).inverse();
+					var inverseSection;
+					if(state.attr && state.attr.section) {
+						inverseSection = state.attr.section;
+					} else if(state.node && state.node.section ) {
+						inverseSection = state.node.section;
+					} else {
+						inverseSection = state.textContentOnly || section;
+					}
+					inverseSection.inverse();
 					return;
 				}
 				

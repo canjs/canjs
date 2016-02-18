@@ -4794,6 +4794,23 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			equal( innerHTML(frag.firstChild), '');
 		});
+
+		test("nested sections work (#2229)", function(){
+			var template = can.stache('<div {{#a}}' +
+                '{{#b}}f="f"' +
+                '{{else}}' +
+                    '{{#c}}f="f"{{/c}}' +
+                '{{/b}}' +
+            '{{/a}}/>');
+
+            var frag = template(new can.Map({
+            	a: true,
+            	b: false,
+            	c: true
+            }));
+
+            equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
+		});
 		
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
