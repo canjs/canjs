@@ -3,6 +3,15 @@
 @parent guides 5
 -->
 
+__2.3.17__ ( Feb 19 2016 )
+
+- [Documentation for can.Deferred reject is not correct](https://github.com/canjs/canjs/issues/2280)
+- [Properties on a can.route.map are coerced to strings when they should not be](https://github.com/canjs/canjs/issues/2277)
+- [can-value does not teardown binding](https://github.com/canjs/canjs/issues/2270)
+- [Stache parser creating incorrect output](https://github.com/canjs/canjs/issues/2229)
+- [console.log.apply not supported on IE11?](https://github.com/canjs/canjs/issues/2227)
+
+
 __2.3.16__ ( Feb 16 2016 )
 
 - [Documentation for can.List.unshift.apply is not correct](https://github.com/canjs/canjs/issues/2262)

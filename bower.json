@@ -2,7 +2,7 @@
   "name": "canjs",
   "repo": "canjs/canjs",
   "description": "Can do JavaScript",
-  "version": "2.3.7",
+  "version": "2.3.17",
   "main": "can.js",
   "keywords": [
     "mvc",
