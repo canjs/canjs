@@ -117,18 +117,22 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		// A dummy events object used to dispatch url change events on.
 		eventsObject = can.extend({}, can.event),
 		// everything in the backing Map is a string
-		// change type coercion during Map setter to coerce all values to strings 
+		// add type coercion during Map setter to coerce all values to strings 
 		stringCoercingMapDecorator = function(map) {
-			var typeSuper = map.__type;
-			map.__type = function(val, prop) {
+			var attrSuper = map.attr;
+			
+			map.attr = function(prop, val) {
 				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].serialize,
-					ret = typeSuper.apply(map, arguments);
-				
-				if (serializable) {
-					return stringify(ret);
+					type = typeof prop,
+					args;
+
+				if (serializable) { // if setting non-str non-num attr
+					args = stringify(Array.apply(null, arguments));
 				} else {
-					return ret;
+					args = arguments;
 				}
+				
+				return attrSuper.apply(this, args);
 			};
 	
 			return map;
@@ -639,19 +643,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		};
 	});
 	
-	// everything in the backing Map is a string
-	// coerce attribute names to string or number
-	can.route.attr = function (attr, val) {
-		var type = typeof attr,
-			newArguments;
-		
-		if (type !== "string" && type !== "number" && val !== undefined) { // if setting non-str non-num attr
-			newArguments = [stringify(attr), val];
-		} else {
-			newArguments = arguments;
-		}
-    
-		return can.route.data.attr.apply(can.route.data, newArguments);
+	can.route.attr = function () {
+		return can.route.data.attr.apply(can.route.data, arguments);
 	};
 
 	//Allow for overriding of route batching by can.transaction
