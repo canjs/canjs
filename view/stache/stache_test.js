@@ -4804,9 +4804,9 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
             '{{/a}}/>');
 
             var frag = template(new can.Map({
-            	a: true,
-            	b: false,
-            	c: true
+							a: true,
+							b: false,
+							c: true
             }));
 
             equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
