@@ -851,71 +851,74 @@ steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 	if (typeof require === 'undefined') {
 
 		test("correct stringing", function () {
-			var route = can.route;
+			setupRouteTest(function(iframe, route) {
+				route.routes = {};
 
-			route.routes = {};
+				route.attr('number', 1);
+				propEqual(route.attr(), {
+					'number': "1"
+				});
 
-			route.attr('number', 1);
-			deepEqual(route.attr(), {
-				'number': "1"
-			});
+				route.attr({
+					bool: true
+				}, true);
 
-			route.attr({
-				bool: true
-			}, true);
-			
-			deepEqual(route.attr(), {
-				'bool': "true"
-			});
+				propEqual(route.attr(), {
+					'bool': "true"
+				});
 
-			route.attr({
-				string: "hello"
-			}, true);
-			deepEqual(route.attr(), {
-				'string': "hello"
-			});
+				route.attr({
+					string: "hello"
+				}, true);
+				propEqual(route.attr(), {
+					'string': "hello"
+				});
 
-			route.attr({
-				array: [1, true, "hello"]
-			}, true);
-			deepEqual(route.attr(), {
-				'array': ["1", "true", "hello"]
-			});
+				route.attr({
+					array: [1, true, "hello"]
+				}, true);
+				propEqual(route.attr(), {
+					'array': ["1", "true", "hello"]
+				});
 
-			route.attr({
-				number: 1,
-				bool: true,
-				string: "hello",
-				array: [2, false, "world"],
-				obj: {
-					number: 3,
-					array: [4, true]
-				}
-			}, true);
+				route.attr({
+					number: 1,
+					bool: true,
+					string: "hello",
+					array: [2, false, "world"],
+					obj: {
+						number: 3,
+						array: [4, true]
+					}
+				}, true);
 
-			deepEqual(route.attr(), {
-				number: "1",
-				bool: "true",
-				string: "hello",
-				array: ["2", "false", "world"],
-				obj: {
-					number: "3",
-					array: ["4", "true"]
-				}
-			})
+				propEqual(route.attr(), {
+					number: "1",
+					bool: "true",
+					string: "hello",
+					array: ["2", "false", "world"],
+					obj: {
+						number: "3",
+						array: ["4", "true"]
+					}
+				});
 
-			route.routes = {};
-			route(":type/:id");
+				route.routes = {};
+				route(":type/:id");
 
-			route.attr({
-				type: 'page',
-				id: 10,
-				sort_by_name: true
-			}, true)
-			deepEqual(route.attr(), {
-				type: "page",
-				id: "10",
-				sort_by_name: "true"
+				route.attr({
+					type: 'page',
+					id: 10,
+					sort_by_name: true
+				}, true);
+
+				propEqual(route.attr(), {
+					type: "page",
+					id: "10",
+					sort_by_name: "true"
+				});
+
+				teardownRouteTest();
 			});
 		});
 

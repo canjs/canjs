@@ -121,8 +121,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		stringCoercingMapDecorator = function(map) {
 			var typeSuper = map.__type;
 			map.__type = function(val, prop) {
-				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].attr('serialize'), 
-					ret = typeSuper.apply(map, arguments); 
+				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].attr('serialize'),
+					ret = typeSuper.apply(map, arguments);
 				
 				if (serializable) {
 					return stringify(ret);
