@@ -123,7 +123,6 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			
 			map.attr = function(prop, val) {
 				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].serialize,
-					type = typeof prop,
 					args;
 
 				if (serializable) { // if setting non-str non-num attr
