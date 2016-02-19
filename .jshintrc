@@ -14,6 +14,7 @@
 		"equal": true,
 		"notEqual": true,
 		"deepEqual": true,
+	  	"propEqual": true,
 		"notDeepEqual": true,
 		"strictEqual": true,
 		"notStrictEqual": true,
