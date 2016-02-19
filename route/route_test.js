@@ -1,5 +1,5 @@
 /* jshint asi:true*/
-steal("can/route", "can/test", "steal-qunit", function () {
+steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 	QUnit.module("can/route", {
 		setup: function () {
 			can.route._teardown();
@@ -747,7 +747,7 @@ steal("can/route", "can/test", "steal-qunit", function () {
 			expect(1);
 
 			setupRouteTest(function (iframe, route) {
-				var appVM = new can.Map({});
+				var appVM = new can.Map();
 
 				route.map(appVM);
 				route.ready();
@@ -761,7 +761,31 @@ steal("can/route", "can/test", "steal-qunit", function () {
 				// check after 30ms to see that we only have a single call
 				setTimeout(function() {
 					teardownRouteTest();
-				}, 30);
+				}, 5);
+			});
+		});
+
+		test("updating unserialized prop on bound can.Map causes single update without a coerced string value", function() {
+			expect(1);
+        
+			setupRouteTest(function (iframe, route) {
+				var appVM = new (can.Map.extend({define: {
+					action: {serialize: false}
+				}}))();
+        
+				route.map(appVM);
+				route.ready();
+        
+				appVM.bind('action', function(ev, newVal) {
+					equal(typeof newVal, 'function');
+				});
+        
+				appVM.attr('action', function() {});
+        
+				// check after 30ms to see that we only have a single call
+				setTimeout(function() {
+					teardownRouteTest();
+				}, 5);
 			});
 		});
 
@@ -827,71 +851,74 @@ steal("can/route", "can/test", "steal-qunit", function () {
 	if (typeof require === 'undefined') {
 
 		test("correct stringing", function () {
-			var route = can.route;
+			setupRouteTest(function(iframe, route) {
+				route.routes = {};
 
-			route.routes = {};
+				route.attr('number', 1);
+				propEqual(route.attr(), {
+					'number': "1"
+				});
 
-			route.attr('number', 1);
-			deepEqual(route.attr(), {
-				'number': "1"
-			});
+				route.attr({
+					bool: true
+				}, true);
 
-			route.attr({
-				bool: true
-			}, true);
-			
-			deepEqual(route.attr(), {
-				'bool': "true"
-			});
+				propEqual(route.attr(), {
+					'bool': "true"
+				});
 
-			route.attr({
-				string: "hello"
-			}, true);
-			deepEqual(route.attr(), {
-				'string': "hello"
-			});
+				route.attr({
+					string: "hello"
+				}, true);
+				propEqual(route.attr(), {
+					'string': "hello"
+				});
 
-			route.attr({
-				array: [1, true, "hello"]
-			}, true);
-			deepEqual(route.attr(), {
-				'array': ["1", "true", "hello"]
-			});
+				route.attr({
+					array: [1, true, "hello"]
+				}, true);
+				propEqual(route.attr(), {
+					'array': ["1", "true", "hello"]
+				});
 
-			route.attr({
-				number: 1,
-				bool: true,
-				string: "hello",
-				array: [2, false, "world"],
-				obj: {
-					number: 3,
-					array: [4, true]
-				}
-			}, true);
+				route.attr({
+					number: 1,
+					bool: true,
+					string: "hello",
+					array: [2, false, "world"],
+					obj: {
+						number: 3,
+						array: [4, true]
+					}
+				}, true);
 
-			deepEqual(route.attr(), {
-				number: "1",
-				bool: "true",
-				string: "hello",
-				array: ["2", "false", "world"],
-				obj: {
-					number: "3",
-					array: ["4", "true"]
-				}
-			})
+				propEqual(route.attr(), {
+					number: "1",
+					bool: "true",
+					string: "hello",
+					array: ["2", "false", "world"],
+					obj: {
+						number: "3",
+						array: ["4", "true"]
+					}
+				});
 
-			route.routes = {};
-			route(":type/:id");
+				route.routes = {};
+				route(":type/:id");
 
-			route.attr({
-				type: 'page',
-				id: 10,
-				sort_by_name: true
-			}, true)
-			deepEqual(route.attr(), {
-				type: "page",
-				id: "10",
-				sort_by_name: "true"
+				route.attr({
+					type: 'page',
+					id: 10,
+					sort_by_name: true
+				}, true);
+
+				propEqual(route.attr(), {
+					type: "page",
+					id: "10",
+					sort_by_name: "true"
+				});
+
+				teardownRouteTest();
 			});
 		});
 
