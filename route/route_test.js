@@ -769,9 +769,9 @@ steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 			expect(1);
         
 			setupRouteTest(function (iframe, route) {
-				var appVM = new can.Map({define: {
+				var appVM = new (can.Map.extend({define: {
 					action: {serialize: false}
-				}});
+				}}))();
         
 				route.map(appVM);
 				route.ready();
