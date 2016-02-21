@@ -1575,6 +1575,43 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 
 			can.append(this.$fixture, template());
 		});
+
+		test('Type in a component’s viewModel doesn’t work correctly with lists (#2250)', function() {
+			var Item = can.Map.extend({
+				define: {
+					prop: {
+						value: true
+					}
+				}
+			});
+
+			var Collection = can.List.extend({
+				Map: Item
+			}, {});
+
+			can.Component.extend({
+				tag: "test-component",
+				viewModel: {
+					define: {
+						collection: {
+							Type: Collection
+						},
+						vmProp: {
+							get: function() {
+								return this.attr('collection.0.prop');
+							}
+						}
+					}
+				}
+			});
+
+			var frag = can.stache('<test-component collection="{collection}"></test-component>')({
+				collection: [{}]
+			});
+			var vmPropVal = can.viewModel(can.$(frag.firstChild)).attr('vmProp');
+			ok(vmPropVal, 'value is from defined prop');
+		});
+
 		// PUT NEW TESTS ABOVE THIS LINE
 	}
 
