@@ -367,7 +367,7 @@ steal('can/util', 'can/list', function (can) {
 					// number of items after each subsequent .splice();
 					while (i < length) {
 
-						// Convert anything to an `map` that needs to be converted.
+						// Convert anything to a `map` that needs to be converted.
 						val = can.bubble.set(this, i, this.__type(args[i], i) );
 
 						// Get the sorted index

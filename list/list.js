@@ -479,7 +479,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 					i = arguments.length,
 					res, val;
 
-				// Go through and convert anything to an `map` that needs to be converted.
+				// Go through and convert anything to a `map` that needs to be converted.
 				while (i--) {
 					val = arguments[i];
 					args[i] = bubble.set(this, i, this.__type(val, i) );

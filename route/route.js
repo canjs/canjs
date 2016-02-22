@@ -492,7 +492,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 *
 		 * @body
 		 * Creates and returns an anchor tag with an href of the route
-		 * attributes passed into it, as well as any properies desired
+		 * attributes passed into it, as well as any properties desired
 		 * for the tag.
 		 *
 		 *     can.route.link( "My videos", { type: "videos" }, {}, false )
