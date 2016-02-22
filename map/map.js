@@ -20,7 +20,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 		"constructor": true
 	};
 
-	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
+	// Extend [can.Construct](../construct/construct.html) to make inheriting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
 		/**
 		 * @static
@@ -49,7 +49,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 					if(this.define && !mapHelpers.define) {
 						can.dev.warn("The define property should be on the map's prototype properties, "+
-						"not the static properies. Also, can/map/define is not included.");
+						"not the static properties. Also, can/map/define is not included.");
 					}
 					//!steal-remove-end
 
