@@ -1576,6 +1576,22 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 			can.append(this.$fixture, template());
 		});
 
+		test("%root property is available in a viewModel", function () {
+			var viewModel = can.Map.extend({});
+
+			can.Component.extend({
+				tag: "foo",
+				viewModel: viewModel,
+				init: function () {
+					ok(this.viewModel.attr('%root'), "viewModel contains '%root' property");
+				}
+			});
+
+			var template = can.stache("<foo/>");
+
+			can.append(this.$fixture, template());
+		});
+
 		test('Type in a component’s viewModel doesn’t work correctly with lists (#2250)', function() {
 			var Item = can.Map.extend({
 				define: {
