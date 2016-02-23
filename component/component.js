@@ -96,7 +96,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			setup: function (el, componentTagData) {
 
 				// Setup values passed to component
-				var initialViewModelData = {},
+				var initialViewModelData = {
+						"%root": componentTagData.scope.attr("%root")
+					},
 					component = this,
 					// If a template is not provided, we fall back to
 					// dynamic scoping regardless of settings.
