@@ -900,7 +900,7 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	test("can-EVENT removed in live bindings doesn't unbind (#1112)", function(){
 		var flag = can.compute(true),
 			clickHandlerCount = 0;
-		var frag = can.view.mustache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
+		var frag = can.view.stache("<div {{#if flag}}can-click='foo'{{/if}}>Click</div>")({
 			flag: flag,
 			foo: function () {
 				clickHandlerCount++;
