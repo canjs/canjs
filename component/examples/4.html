@@ -61,11 +61,12 @@
      class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}">Next</a>
 </script>
 
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script type='text/javascript'>
-steal("can/util", "can/component", "can/map/setter", "can/util/fixture",
-	 "can/model", function (can) {
-
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require("can/util/util");
+require("can/component/component");
+require("can/map/setter/setter");
+require("can/util/fixture/fixture");
+require("can/model/model");
 
 var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++",url:"http://jquerypp.com"},
 	          {id:3,name:"JavaScriptMVC",url:"http://javascriptmvc.com"},{id: 4,name:"Bitovi",url:"http://bitovi.com"},
@@ -87,7 +88,6 @@ can.fixture("/websites", function (request) {
 var Website = can.Model.extend({
   findAll: "/websites"
 }, {});
-
 
 
 var Paginate = can.Map.extend({
@@ -154,9 +154,6 @@ websitesCompute.bind("change", function(ev, websitesDeferred){
 websitesCompute().then(writeWebsites)
 
 
-
-
-
 var NextPrev = can.Control({
   init: function(){
     this.element.html(
@@ -175,6 +172,4 @@ new NextPrev("#next-prev",{
 	paginate: paginate
 });
 
-
-})
 </script>

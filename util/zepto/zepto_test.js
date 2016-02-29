@@ -1,6 +1,7 @@
 /* jshint asi:true*/
 can = {};
-steal('zepto', function ($) {
+var $ = require('zepto');  // jshint ignore:line
+System.import('zepto').then(function ($) {
 	var empty = $.fn.empty;
 	$.fn.empty = function () {
 		this.each(function () {
@@ -18,9 +19,18 @@ steal('zepto', function ($) {
 		});
 		return remove.call(this);
 	};
-})
-	.then('can/util/zepto', 'can/util/destroyed.js', function ($, can) {
 
+	return System.import('can/util/zepto')
+		.then(function($){
+			return System.import('can/util/destroyed.js')
+				.then(function(can){
+					return [$, can];
+				})
+		})
+})
+	.then(function (args) {
+		var $ = args[0];  // jshint ignore:line
+		var can = args[1];
 		module("zepto-fill")
 
 		// Zepto 1.0 doesn't have deferreds

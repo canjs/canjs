@@ -15,16 +15,12 @@
 <a href="#" class="prev">PREV</a>
 <a href="#" class="next">NEXT</a>
 <div class="cur">Offset: <span></span></div>
-</div>	
-<script type='text/javascript' src="../node_modules/steal/steal.js" main="@empty"></script>
-<script type='text/javascript' id="demo-source">   
-steal(function() {
-	steal.config({
-		root: '../../'
-	});
-}).then('can/map/setter', 'can/control')
-.then('can/model')
-.then(function(){
+</div>
+<script type='text/javascript' src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can/util/util');
+require('can/map/setter/setter');
+require('can/control/control');
+require('can/model/model');
 
 var Paginate = can.Model({},{
   setCount : function( newCount ){
@@ -58,11 +54,11 @@ var Paginator = can.Control({
   },
   "{paginate} change":function(){
 	var pag = this.options.paginate;
-    this.element.find('.prev')[pag.canPrev() ? 
+    this.element.find('.prev')[pag.canPrev() ?
       'addClass' : 'removeClass']('enabled');
 
-    this.element.find('.next')[pag.canNext() ? 
-      'addClass' : 'removeClass']('enabled');	
+    this.element.find('.next')[pag.canNext() ?
+      'addClass' : 'removeClass']('enabled');
 
     this.element.find('.cur span').html(
 	  pag.attr('offset'))
@@ -75,8 +71,6 @@ new Paginator('#demo-html', {
 	offset: 0,
 	limit: 100
   })
-})
-
 })
 
 </script>

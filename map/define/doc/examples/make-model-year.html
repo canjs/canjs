@@ -15,7 +15,7 @@
 			  {{/each}}
 			{{/if}}
 		</select>
-		
+
 		{{#if modelsPromise}}
 			{{#if models}}
 				<select {($value)}="modelIdString">
@@ -52,9 +52,6 @@
 				<img src="{{thumb}}" width="200px"/>
 			{{/each}}
 		</div>
-		
-		
-		
 	</my-mmy>
 </script>
 </div>
@@ -62,10 +59,12 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../../node_modules/steal/steal.js" main="@empty"></script>
-<script id="demo-source">
-steal("can","can/map/define","can/util/fixture","can/view/stache",
-function(){
+<script id="demo-source" src="../../../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+require('can/map/define/define');
+require('can/model/model');
+require('can/util/fixture/fixture');
+require('can/view/stache/stache');
 
 can.fixture.delay = 1200;
 
@@ -226,5 +225,4 @@ can.Component.extend({
 
 $("#out").html( can.view("app",{}) );
 
-});
 </script>

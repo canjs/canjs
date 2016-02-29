@@ -4,10 +4,9 @@
 	<hello-world></hello-world>
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script id="demo-source">
-steal("can/component",function(){
-	var x = 0;
+<script id="demo-source" src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+
 can.Component.extend({
   tag: "hello-world",
   template: "{{#if visible}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}",
@@ -24,5 +23,4 @@ can.Component.extend({
 
 $("#out").html( can.view("app",{}) )
 
-})
 </script>

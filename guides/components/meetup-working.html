@@ -1,5 +1,4 @@
 <link rel="stylesheet" type="text/css" href="base.css"/>
-<script src="../../node_modules/steal/steal.js"></script>
 
 <section id="todoapp">
 	<header id="header">
@@ -49,12 +48,9 @@
 	<button id="clear-completed">Clear completed (1)</button>
 </footer>
 </section>
-<script>
-steal("can",function(){
-	
-	
-	
-	
-	
-})
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/model/model');
+
 </script>

@@ -14,15 +14,16 @@
 <div id="demo-html">
 <input type="text" id="input" />
 <div id="printer"></div>
-</div>	
-<script type='text/javascript' 
-        src='../../node_modules/steal/steal.js'  main="@empty">
-</script>
-<script type='text/javascript' id="demo-source">   
-steal('can/map/attributes', 'can/control', function(){
-	
+</div>
+<script id="demo-source"
+        type='text/javascript'
+        src='../../../node_modules/steal/steal.js'  main="@empty">
+var can = require('can');
+require('can/map/attributes/attributes');
+require('can/control/control');
+
 var Contact = can.Map.extend({
-  attributes : { 
+  attributes : {
     // labels birthday a date
     birthday : 'date'
   },
@@ -32,8 +33,8 @@ var Contact = can.Map.extend({
       if(typeof raw == 'string'){
         // if a string, convert to a date
         var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-        return new Date( matches[1], 
-                         (+matches[2])-1, 
+        return new Date( matches[1],
+                         (+matches[2])-1,
                          matches[3] )
       }else if(raw instanceof Date){
         return raw;
@@ -42,7 +43,7 @@ var Contact = can.Map.extend({
   },
   serialize:{
     date:function(date){
-      return date.getFullYear() + 
+      return date.getFullYear() +
         "-" + date.getDate() +
         "-" + date.getMonth();
     }
@@ -50,7 +51,7 @@ var Contact = can.Map.extend({
 },{
   // helper function that returns age in years
   age : function(){
-    return new Date().getFullYear() - 
+    return new Date().getFullYear() -
       this.birthday.getFullYear()
   }
 });
@@ -77,8 +78,6 @@ new AgeWidget('#demo-html', {
     birthday: "1985-29-11"
   })
 });
-
-});
 </script>
-    </body>
+</body>
 </html>

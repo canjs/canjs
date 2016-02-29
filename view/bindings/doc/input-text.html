@@ -1,7 +1,8 @@
 <div id='out'></div>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/stache", function(){
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
 
 var HyperLoop = can.Map.extend({
   travelTime: function(){
@@ -24,6 +25,4 @@ var template = can.view.stache(
 
 $("#out").html( template(loop) )
 
-
-})
 </script>

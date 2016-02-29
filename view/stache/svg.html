@@ -2,7 +2,7 @@
 <html>
 <head></head>
 <body>
-	
+
 <svg height="100" width="100">
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 </svg>
@@ -13,17 +13,16 @@
 	   <circle xmlns="http://www.w3.org/2000/svg" cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="blue" />
 	</svg>
 </script>
-<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script type="text/javascript">
-	
-	steal("can/view/stache", function(stache){
+<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty">
+	var $ = require('jquery');
+	var can = require('can');
+	var stache = require('can/view/stache/stache');
 		var template = can.view("svg-example-1");
 
 		var frag = template({});
-		
+
 		$("#out1").append(frag);
-		
-		
+
 		var svg = document.createElement("svg");
 		var myCircle = document.createElement("circle");
 		myCircle.setAttribute("id","mycircle");
@@ -33,12 +32,11 @@
 		myCircle.setAttribute("fill","green");
 		myCircle.setAttribute("stroke","black");
 		myCircle.setAttribute("stroke-width","3");
-	    
-	    svg.appendChild(myCircle);
-	    document.body.appendChild(svg);
-	});
-	
-	
+
+		svg.appendChild(myCircle);
+		document.body.appendChild(svg);
+
+
 </script>
 </body>
 </html>

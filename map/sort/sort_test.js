@@ -1,1 +1,1 @@
-steal('can/list/sort/sort_test.js', function () {});
+require('can/list/sort/sort_test.js');

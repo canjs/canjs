@@ -29,8 +29,8 @@ this removes a the fixture at `url`.
 Trap requests to a url and provide the response with a
 callback function.
 
-@param {String} url Trap requests made 
-by [can.ajax] to this url. 
+@param {String} url Trap requests made
+by [can.ajax] to this url.
 
 The url can be templated with tags that
 look like `{TEMPLATE}`. For example: "/users/{id}". Any templated
@@ -65,7 +65,7 @@ or [can.fixture.types.requestHandler request handler functions].
 
 
 `can.fixture` intercepts an AJAX request and simulates
-the response with a file or function. Use them to develop 
+the response with a file or function. Use them to develop
 JavaScript independently of the backend services.
 
 The following simulates a `GET` request to `/recipes`:
@@ -89,7 +89,7 @@ There are two common ways of using fixtures.  The first is to
 map Ajax requests to another file.  The following
 intercepts requests to `/tasks.json` and directs them
 to `fixtures/tasks.json`:
-    
+
     can.fixture("/tasks.json", "fixtures/tasks.json");
 
 The other common option is to generate the Ajax response with
@@ -241,47 +241,35 @@ Since `response` is called asynchronously you can also set a custom fixture time
 
 ## Organizing fixtures
 
-The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
-<code>can/util/fixture</code> and defines all your fixtures.  For example,
+The __best__ way of organizing fixtures is to have a 'fixtures.js' file that imports
+<code>can/util/fixture/fixture</code> and defines all your fixtures.  For example,
 if you have a 'todo' application, you might
 have <code>todo/fixtures/fixtures.js</code> look like:
 
-    steal({
-            path: '//can/util/fixture.js',
-            ignore: true
-          })
-          .then(function(){
+    var can = require('can');
+    require('can/util/fixtures/fixtures');
 
-      can.fixture({
-          type: 'get',
-          url: '/services/todos.json'
-        },
-        '//todo/fixtures/todos.json');
+    can.fixture({
+      type: 'get',
+      url: '/services/todos.json'
+    },
+    '//todo/fixtures/todos.json');
 
-      can.fixture({
-          type: 'post',
-          url: '/services/todos.json'
-        },
-        function(request, response, settings){
-            response({
-                id: Math.random(),
-                name: settings.data.name
-            })
-        });
+    can.fixture({
+      type: 'post',
+      url: '/services/todos.json'
+    },
+    function(request, response, settings){
+        response({
+            id: Math.random(),
+            name: settings.data.name
+        })
+    });
 
-    })
-
-__Notice__: We used steal's ignore option to prevent
-loading the fixture plugin in production.
-
-Finally, we steal <code>todo/fixtures/fixtures.js</code> in the
+Finally, we import <code>todo/fixtures/fixtures.js</code> in the
 app file (<code>todo/todo.js</code>) like:
 
-
-    steal({path: '//todo/fixtures/fixtures.js',ignore: true});
-
-    //start of your app's steals
-    steal( ... )
+    require('/todo/fixtures/fixtures.js');
 
 We typically keep it a one liner so it's easy to comment out.
 
@@ -297,8 +285,3 @@ sets of fixtures.  You can add something like the following to your fixtures.js 
     } else {
       // default fixtures (maybe no fixtures)
     }
-
-
-
-
-

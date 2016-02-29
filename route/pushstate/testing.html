@@ -5,10 +5,9 @@
 </head>
 <body>
 <p>This is a dummy page to use<br/> for testing route goodness</p>
-<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script type='text/javascript'>
+<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty">
 	var clone = function(obj){
-		
+
 		if(obj && typeof obj === "object") {
 			var cln = {};
 			for(var key in obj) {
@@ -21,7 +20,7 @@
 			return obj;
 		}
 	};
-	
+
 	var configuration = clone(window.parent.CONFIGURATION||{});
 	// TODO pretty hacky. For some reason the original configuration object
 	// gets changed by Steal
@@ -30,11 +29,11 @@
 			"exports": "jQuery"
 		}
 	};
-	
 
-	
-	steal.config(configuration);
-	steal('can/route/pushstate', function () {
+
+
+	System.config(configuration);
+	System.import('can/route/pushstate/pushstate').then(function (can) {
 
 		// make sure it's after ready
 		setTimeout(function () {

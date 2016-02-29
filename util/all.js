@@ -1,20 +1,19 @@
-steal(
-	'can/component',
-	'can/construct',
-	'can/construct/proxy',
-	'can/control',
-	'can/control/plugin',
-	'can/list',
-	'can/list/promise',
-	'can/model',
-	'can/observe',
-	'can/map/attributes',
-	'can/map/backup',
-	'can/map/delegate',
-	'can/map/setter',
-	'can/map/validations',
-	'can/route',
-	'can/view/stache',
-	'can/util/fixture',
-	'can/view/modifiers',
-	'can/util/func.js');
+require('can/component');
+require('can/construct');
+require('can/construct/proxy');
+require('can/control');
+require('can/control/plugin');
+require('can/list');
+require('can/list/promise');
+require('can/model');
+require('can/observe');
+require('can/map/attributes');
+require('can/map/backup');
+require('can/map/delegate');
+require('can/map/setter');
+require('can/map/validations');
+require('can/route');
+require('can/view/stache');
+require('can/util/fixture');
+require('can/view/modifiers');
+require('can/util/func.js');

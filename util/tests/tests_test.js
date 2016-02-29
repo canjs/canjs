@@ -1,1 +1,4 @@
-steal('../string/string_test',  '../inserted/inserted_test', '../attr/attr_test', '../array/each_test');
+require('../string/string_test');
+require('../inserted/inserted_test');
+require('../attr/attr_test');
+require('../array/each_test');

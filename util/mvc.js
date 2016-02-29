@@ -1,2 +1,2 @@
-steal('can/model', 'can/view/stache');
-
+require('can/model/model');
+require('can/view/stache/stache');

@@ -1,10 +1,11 @@
-steal('./system-nodelist.stache!', function(template) {
-	var nl = can.view.nodeLists.register([], undefined, true);
+var can = require('can');
+var template = require('./system-nodelist.stache!');
 
-	can.stache.registerHelper('importTestHelper', function(options) {
-		window.parent.QUnit.equal(options.nodeList, nl.replacements[0], 'correct node list reference');
-		window.parent.removeMyself();
-	});
+var nl = can.view.nodeLists.register([], undefined, true);
 
-	template({}, {}, nl);
+can.stache.registerHelper('importTestHelper', function(options) {
+	window.parent.QUnit.equal(options.nodeList, nl.replacements[0], 'correct node list reference');
+	window.parent.removeMyself();
 });
+
+template({}, {}, nl);

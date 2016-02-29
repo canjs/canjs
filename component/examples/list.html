@@ -1,9 +1,10 @@
 <body>
 <div id='app'></div>
+
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script type='text/stache' id='app-template'>
 <todo-app>
-	<todo-list todos="listOfTodos">
+	<todo-list todos="{ listOfTodos }">
 		<input type='checkbox' can-value="completed"/>
 		{{name}}
 	</todo-list>
@@ -22,10 +23,10 @@
 		</li>
 	{{/todos}}
 	</ul>
-	You've completed {{completedTodos}} {{plural "todo" completedTodos}}.
+	Youve completed {{completedTodos}} {{plural "todo" completedTodos}}.
 </script>
-<script type='text/javascript'>
-steal("can/component", function() {
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
 
 		can.Component.extend({
 		tag: "todo-list",
@@ -62,6 +63,5 @@ steal("can/component", function() {
 	})
 
 	$("#app").html(can.view("app-template",{}))
-})
 </script>
 </body>

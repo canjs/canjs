@@ -8,20 +8,18 @@
   </header>
 </script>
 
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/component","can/view/stache",function(){
-	
-  can.Component({
-    tag: "my-greeting",
-    template: can.stache("<h1><content/></h1>"),
-    viewModel: {
-      title: "can.Component"
-    }
-  });
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+require('can/view/stache/stache');
 
-  $("#out").html( can.view("source-template",{site: "CanJS"}) );
+can.Component({
+  tag: "my-greeting",
+  template: can.stache("<h1><content/></h1>"),
+  viewModel: {
+    title: "can.Component"
+  }
+});
 
-})
+$("#out").html( can.view("source-template",{site: "CanJS"}) );
+
 </script>
-

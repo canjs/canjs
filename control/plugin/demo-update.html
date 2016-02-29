@@ -4,7 +4,7 @@
     <head>
         <title>Controller Example</title>
         <style type='text/css'>
-            
+
         </style>
     </head>
     <body>
@@ -15,13 +15,11 @@
 <ul id="list"></ul>
 </form>
 </div>
-<script type='text/javascript' src='../../../steal/steal.js'></script>
-<script type='text/javascript' id="demo-source">
-steal("can/control/plugin", 
-  "can/model",
-  "can/util/fixture",
-  function(){
-	  	
+<script id="demo-source" type='text/javascript' src='../../node_modules/steal/steal.js' main="@empty">
+require("can/control/plugin/plugin");
+require("can/model/model");
+require("can/util/fixture/fixture");
+
 can.fixture.delay = 2000;
 can.fixture("POST /recipes",function(){
   return {};
@@ -50,7 +48,6 @@ can.Control('Creator', {
 
 $('#createRecipes').creator({recipe: new Recipe()})
 
-})
 </script>
     </body>
 </html>

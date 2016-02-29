@@ -27,8 +27,8 @@
   <input id='editor' value="{{name}}" ($input)="updateName(., $element)" ($blur)="selectTodo(null)" />
 {{/selectedTodo}}
 
-</script> 
-    
+</script>
+
 <h1>Welcome To History-Todo</h1>
     <p>History-Todo shows how to build 2 independent widgets (a list and an editor) and tie them together with a managing controller.  The managing controller also listens to routes.  A full write-up can be found <a href='http://localhost:3002/javascriptmvc/jmvc/docs.html#!rapidstart'>here</a>.</p>
 <p>Combined, this lets you:</p>
@@ -37,124 +37,122 @@
     <li>Click several todos, then use the browser's forward and back button to toggle between them.</li>
 </ol>
 
-<script type='text/javascript' src='../../../node_modules/steal/steal.js'></script>
-<script type='text/javascript'>
+<script type='text/javascript' src='../../../node_modules/steal/steal.js'>
 STEALDOJO = true;
-steal('can/model',
-      'can/route',
-      'can/map',
-      'can/map/define',
-      'can/util/fixture',
-      'can/view',
-      'can/view/stache',
-function($, route) {
+var $ =require('jquery');
+var can = require('can/util/can');
+var route = require('can/route/route');
+require('can/model/model');
+require('can/map/map');
+require('can/map/define/define');
+require('can/util/fixture/fixture');
+require('can/view/view');
+require('can/view/stache/stache');
 
-  // GETS TODOS FROM THE SERVER
-  can.Model('Todo',{
-      findAll : "GET /todos",
-      findOne : "GET /todos/{id}",
-      create  : "POST /todos",
-      update  : "PUT /todos/{id}",
-      destroy : "DELETE /todos/{id}"
-  },
-  {});
+// GETS TODOS FROM THE SERVER
+can.Model('Todo',{
+    findAll : "GET /todos",
+    findOne : "GET /todos/{id}",
+    create  : "POST /todos",
+    update  : "PUT /todos/{id}",
+    destroy : "DELETE /todos/{id}"
+},
+{});
 
-  // WE DON'T HAVE A SERVER, USE FIXTURES
-  // TO SIMULATE ONE:
+// WE DON'T HAVE A SERVER, USE FIXTURES
+// TO SIMULATE ONE:
 
-  // Our fake todos
-  var TODOS = [
-      {id: 1, name: "wake up", complete: true},
-      {id: 2, name: "take out trash", complete: false},
-      {id: 3, name: "do dishes", complete: false}
-  ];
+// Our fake todos
+var TODOS = [
+    {id: 1, name: "wake up", complete: true},
+    {id: 2, name: "take out trash", complete: false},
+    {id: 3, name: "do dishes", complete: false}
+];
 
-  // findAll
-  can.fixture("GET /todos", function(){
-      return TODOS;
-  });
-
-  // findOne
-  can.fixture("GET /todos/{id}", function(orig){
-      // using the id, return that todo
-      return TODOS[(+orig.data.id)-1];
-  })
-
-  // create
-  var id= 4;
-  can.fixture("POST /todos", function(){
-      // just need to send back a new id
-      return {id: (id++)}
-  })
-
-  // update
-  can.fixture("PUT /todos/{id}", function(){
-      // just send back success
-      return {};
-  })
-
-  // destroy
-  can.fixture("DELETE /todos/{id}", function(){
-      // just send back success
-      return {};
-  });
-
-  // CONTROLLERS ARE USED FOR WIDGETS LIKE A LIST OF TODOS
-  // OR FOR MANGING WIDGETS
-
-  var ViewModel = can.Map.extend({
-    define: {
-      selectedTodo: {
-        value: null,
-      },
-      todos: {
-        Type: Todo.List,
-        get: function (curVal, setVal) {
-          Todo.findAll().then(setVal);
-        }
-      }
-    },
-    markAsDone: function (todo, $el) {
-      todo.attr("complete", $el.prop("checked"));
-    },
-    updateName: function (todo, $el) {
-      todo.attr("name", $el.val());
-    },
-    deleteTodo: function (todo, $el) {
-      todo.destroy();
-      if (todo === this.attr("selectedTodo")) {
-        this.selectTodo(null);
-      }
-    },
-    selectTodo: function (id) {
-      // debugger;
-      var self = this;
-      if (id) {
-        Todo.findOne({id: id}).then(function (todo) {
-          self.attr("selectedTodo", todo);
-        });
-      } else {
-        self.attr("selectedTodo", null);
-        window.location.hash = "#!";
-      }
-    },
-    init: function () {
-      var self = this;
-      self.selectTodo(can.route.attr("id"));
-      can.route.bind("change", function (ev) {
-        self.selectTodo(ev.target.attr("id"));
-      });
-    }
-  });
-
-  can.route("todos/:id");
-  can.route.ready();
-
-  window.vm = new ViewModel();
-  var frag = can.view('todosStache', window.vm);
-  document.getElementById("app").appendChild(frag);
+// findAll
+can.fixture("GET /todos", function(){
+    return TODOS;
 });
-	
+
+// findOne
+can.fixture("GET /todos/{id}", function(orig){
+    // using the id, return that todo
+    return TODOS[(+orig.data.id)-1];
+})
+
+// create
+var id= 4;
+can.fixture("POST /todos", function(){
+    // just need to send back a new id
+    return {id: (id++)}
+})
+
+// update
+can.fixture("PUT /todos/{id}", function(){
+    // just send back success
+    return {};
+})
+
+// destroy
+can.fixture("DELETE /todos/{id}", function(){
+    // just send back success
+    return {};
+});
+
+// CONTROLLERS ARE USED FOR WIDGETS LIKE A LIST OF TODOS
+// OR FOR MANGING WIDGETS
+
+var ViewModel = can.Map.extend({
+  define: {
+    selectedTodo: {
+      value: null,
+    },
+    todos: {
+      Type: Todo.List,
+      get: function (curVal, setVal) {
+        Todo.findAll().then(setVal);
+      }
+    }
+  },
+  markAsDone: function (todo, $el) {
+    todo.attr("complete", $el.prop("checked"));
+  },
+  updateName: function (todo, $el) {
+    todo.attr("name", $el.val());
+  },
+  deleteTodo: function (todo, $el) {
+    todo.destroy();
+    if (todo === this.attr("selectedTodo")) {
+      this.selectTodo(null);
+    }
+  },
+  selectTodo: function (id) {
+    // debugger;
+    var self = this;
+    if (id) {
+      Todo.findOne({id: id}).then(function (todo) {
+        self.attr("selectedTodo", todo);
+      });
+    } else {
+      self.attr("selectedTodo", null);
+      window.location.hash = "#!";
+    }
+  },
+  init: function () {
+    var self = this;
+    self.selectTodo(can.route.attr("id"));
+    can.route.bind("change", function (ev) {
+      self.selectTodo(ev.target.attr("id"));
+    });
+  }
+});
+
+can.route("todos/:id");
+can.route.ready();
+
+window.vm = new ViewModel();
+var frag = can.view('todosStache', window.vm);
+document.getElementById("app").appendChild(frag);
 </script>
 </body>
 </html>

@@ -1,4 +1,6 @@
-steal('can/model', 'can/util/object', function () {
+var can = require('can/util/util');
+require('can/model/model');
+require('can/util/object/object');
 
 	//!steal-remove-start
 	can.dev.warn("can/model/cached is a deprecated plugin and will be removed in a future release.");
@@ -204,5 +206,4 @@ steal('can/model', 'can/util/object', function () {
 			can.Model.prototype.destroyed.apply(this, arguments);
 		}
 	});
-	return can.Model.Cached;
-});
+	module.exports = exports = can.Model.Cached;

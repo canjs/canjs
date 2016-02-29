@@ -1,4 +1,3 @@
 // comments are in func.js for documentation purposes.
-steal('can/util/jquery', function (can) {
-	return can;
-});
+var can = require('can/util/jquery/jquery');
+module.exports = can;

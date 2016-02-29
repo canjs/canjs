@@ -1,7 +1,8 @@
 <div id='out'></div>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/stache", function(){
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
 
 var template = can.view.stache(
   "<p><input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female'/> Male</p>"+
@@ -12,7 +13,4 @@ var person = new can.Map({
 })
 
 $("#out").html( template(person) );
-
-
-})
 </script>
