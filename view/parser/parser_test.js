@@ -70,6 +70,28 @@ steal("can/view/parser", "steal-qunit", function(parser){
 		parser("<h1 id='foo' {{#if}}{{.}}{{/if}} class='a{{foo}}'>Hello {{message}}!</h1>",makeChecks(tests));
 
 	});
+	
+	test("uppercase html to html", function(){
+
+
+
+		var tests = [
+			['start', ['div', false]],
+			['end', ['div', false]],
+			["chars", ["sibling"]],
+			['close', ['div']],
+			['start', ['div', false]],
+			['end', ['div', false]],
+			["chars", ["sibling"]],
+			['close', ['div']],
+			['done', []]
+		];
+
+
+
+		parser("<DIV>sibling</DIV><DIV>sibling</DIV>", makeChecks(tests));
+
+	});
 
 	test("special in an attribute in an in-tag section", function(){
 

@@ -131,6 +131,7 @@ steal(function(){
 
 				// Find the closest opened tag of the same type
 			else {
+				tagName = tagName.toLowerCase();
 				for (pos = stack.length - 1; pos >= 0; pos--) {
 					if (stack[pos] === tagName) {
 						break;
