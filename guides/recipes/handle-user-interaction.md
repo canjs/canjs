@@ -101,7 +101,7 @@ var PeopleList = can.Control.extend({
 	...
   },
   'li click': function( li, event ) {
-  	var people = this.options.people;
+  	var people = this.people;
   	var person = li.data('person');
   	var index = people.indexOf(person);
   	people.splice(index, 1);
