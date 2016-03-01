@@ -96,9 +96,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			setup: function (el, componentTagData) {
 
 				// Setup values passed to component
-				var initialViewModelData = {
-						"%root": componentTagData.scope.attr("%root")
-					},
+				var initialViewModelData = {},
 					component = this,
 					// If a template is not provided, we fall back to
 					// dynamic scoping regardless of settings.
@@ -130,6 +128,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				if(setupBindings) {
 					teardownFunctions.push(bindings.behaviors.viewModel(el, componentTagData, function(initialViewModelData){
 						
+						// Make %root available on the viewModel.
+						initialViewModelData["%root"] = componentTagData.scope.attr("%root");
+
 						// Create the component's viewModel.
 						var protoViewModel = component.scope || component.viewModel;
 						if (component.constructor.Map) {
