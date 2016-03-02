@@ -1590,6 +1590,60 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 	});
 
+	test("two-way text input form reset (#2249)", function(){
+
+		var template = can.stache(
+			"<form id='test-form'>" +
+			"<input value='' can-value='name'/>" +
+			"<input value='Biff' can-value='name' />" +
+			"<input />" +
+			"<input type='checkbox' can-value='unchecked' checked/>" +
+			"<input type='checkbox' can-value='checked' checked='false'/>" +
+			"<input type='radio' can-value='radio' value='one' checked>" +
+			"<input type='radio' can-value='radio' value='two'>" +
+			"</form>");
+
+		var map = new can.Map({
+			name: "Marty McFly",
+			unchecked: false,
+			checked: true,
+			radio: "two"
+		});
+
+		var frag = template(map);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+
+		var els = ta.getElementsByTagName("input");
+		var withBinding = els[0],
+			withDefaultValue = els[1],
+			noBinding = els[2],
+			unchecked = els[3],
+			checked = els[4],
+			radioOne = els[5],
+			radioTwo = els[6];
+
+		// set a value different from initial value in tag
+		noBinding.value = "Lorraine Baines McFly";
+
+		equal(withBinding.value, "Marty McFly", "initial value with binding displayed");
+		equal(withDefaultValue.value, "Marty McFly", "initial value with binding displayed when default value given");
+		equal(noBinding.value, "Lorraine Baines McFly", "initial value without binding displayed");
+		ok(!unchecked.checked && checked.checked, "checkboxes set with can-value are correctly set");
+		ok(!radioOne.checked && radioTwo.checked, "radio buttons set with can-value is correctly set");
+
+		var form = ta.getElementsByTagName("form")[0];
+		form.reset();
+
+		equal(withBinding.value, "", "value with binding removed on form reset");
+		equal(withDefaultValue.value, "Biff", "if default value is given in value tag, reset to that");
+		equal(noBinding.value, "", "value without binding removed on form reset");
+		ok(unchecked.checked, "checkbox with default value of checked is reset");
+		ok(checked.checked, "checkbox with explicit default value of unchecked is reset");
+		ok(radioOne.checked && radioTwo.checked, "radio buttons are reset");
+	});
+
 	test("exporting methods (#2051)", function(){
 		expect(2);
 
