@@ -200,13 +200,10 @@ steal('can/util', 'can/list', function (can) {
 		/**
 		 * @returns {number} The value that should be passed to the comparator
 		 **/
-		_getComparatorValue: function (item, overwrittenComparator) {
+		_getComparatorValue: function (item) {
 
-			// Use the value passed to .sort() as the comparator value
-			// if it is a string
-			var comparator = typeof overwrittenComparator === 'string' ?
-				overwrittenComparator :
-				this.comparator;
+			// Get the user supplied comparator
+			var comparator = this.comparator;
 
 			// If the comparator is a string, use it to get the value of that
 			// property on the item. Example:
@@ -231,14 +228,23 @@ steal('can/util', 'can/list', function (can) {
 			return a;
 		},
 
-		sort: function (comparator, silent) {
-			var a, b, c, isSorted;
+		sort: function (comparator) {
 
-			// Use the value passed to .sort() as the comparator function
-			// if it is a function
-			var comparatorFn = can.isFunction(comparator) ?
-				comparator :
-				this._comparator;
+			if (arguments.length) {
+
+				// Set the comparator; Sort if the value changed
+				this.attr('comparator', comparator);
+			} else {
+
+				// Sort without a comparator
+				this._sort();
+			}
+
+			return this;
+		},
+
+		_sort: function () {
+			var a, b, c, isSorted;
 
 			for (var i, iMin, j = 0, n = this.length; j < n-1; j++) {
 				iMin = j;
@@ -248,11 +254,11 @@ steal('can/util', 'can/list', function (can) {
 
 				for (i = j+1; i < n; i++) {
 
-					a = this._getComparatorValue(this.attr(i), comparator);
-					b = this._getComparatorValue(this.attr(iMin), comparator);
+					a = this._getComparatorValue(this.attr(i));
+					b = this._getComparatorValue(this.attr(iMin));
 
 					// [1, 2, 3, 4(b), 9, 6, 3(a)]
-					if (comparatorFn.call(this, a, b) < 0) {
+					if (this._comparator.call(this, a, b) < 0) {
 						isSorted = false;
 						iMin = i;
 					}
@@ -263,7 +269,7 @@ steal('can/util', 'can/list', function (can) {
 					// that are improperly sorted.
 					// Note: This is not part of the original selection
 					// sort agortithm
-					if (c && comparatorFn.call(this, a, c) < 0) {
+					if (c && this._comparator.call(this, a, c) < 0) {
 						isSorted = false;
 					}
 
@@ -275,20 +281,18 @@ steal('can/util', 'can/list', function (can) {
 				}
 
 				if (iMin !== j) {
-					this._swapItems(iMin, j, silent);
+					this._swapItems(iMin, j);
 				}
 			}
 
 
-			if (! silent) {
-				// Trigger length change so that {{#block}} helper can re-render
-				can.batch.trigger(this, 'length', [this.length]);
-			}
+			// Trigger length change so that {{#block}} helper can re-render
+			can.batch.trigger(this, 'length', [this.length]);
 
 			return this;
 		},
 
-		_swapItems: function (oldIndex, newIndex, silent) {
+		_swapItems: function (oldIndex, newIndex) {
 
 			var temporaryItemReference = this[oldIndex];
 
@@ -298,14 +302,12 @@ steal('can/util', 'can/list', function (can) {
 			// Place the item at the correct index
 			[].splice.call(this, newIndex, 0, temporaryItemReference);
 
-			if (! silent) {
-				// Update the DOM via can.view.live.list
-				can.batch.trigger(this, 'move', [
-					temporaryItemReference,
-					newIndex,
-					oldIndex
-				]);
-			}
+			// Update the DOM via can.view.live.list
+			can.batch.trigger(this, 'move', [
+				temporaryItemReference,
+				newIndex,
+				oldIndex
+			]);
 		}
 
 	});
