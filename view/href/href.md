@@ -4,7 +4,7 @@
 @deprecated {2.3} Use the [can.stache.helpers.routeUrl routeUrl helper] instead like:
 `href="{{routeUrl prop=value}}"`.
 
-@description Sets an element's href attribute so that it's url will set the specified attribute values on [can.route].
+@description Sets an element's href attribute so that its url will set the specified attribute values on [can.route].
 
 @siganture `can-href='{[attrName=attrValue...]}'`
 
