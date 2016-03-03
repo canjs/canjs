@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.18__ ( Mar 03 2016 )
+
+- [Make getter / setter converter functions possible with stache helpers](https://github.com/canjs/canjs/issues/2299)
+- [Fix uppercase html parsing](https://github.com/canjs/canjs/pull/2296)
+- [Move where %root is added to a component’s initial viewModel data](https://github.com/canjs/canjs/pull/2282)
+- [`Type` in a component’s VM doesn’t work correctly with lists](https://github.com/canjs/canjs/issues/2250)
+
+
 __2.3.17__ ( Feb 19 2016 )
 
 - [Documentation for can.Deferred reject is not correct](https://github.com/canjs/canjs/issues/2280)
