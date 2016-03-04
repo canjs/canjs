@@ -96,6 +96,8 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					compute.computeInstance.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 				},
 				off: function(){
+					readInfo.dependencyChange = ObservedInfo.prototype.dependencyChange;
+					readInfo.getValueAndBind = ObservedInfo.prototype.getValueAndBind;
 					readInfo.teardown();
 				},
 				set: scopeRead,
