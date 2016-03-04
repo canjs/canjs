@@ -304,13 +304,8 @@ steal("can/util",
 						notContext: true
 					});
 	
-	
-					var args = expr.args(localScope, null)(),
-						hash = expr.hash(localScope, null)();
-	
-					if(!can.isEmptyObject(hash)) {
-						args.push(hash);
-					}
+					var args = expr.args(localScope, null)();
+					
 	
 					return scopeData.value.apply(scopeData.parent, args);
 				};

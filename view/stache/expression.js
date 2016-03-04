@@ -132,7 +132,10 @@ steal("can/util",
 	// `new Call( new Lookup("method"), [new ScopeExpr("name")], {})`
 	// A call expression like `method(arg1, arg2)` that, by default,
 	// calls `method` with non compute values.
-	var Call = function(methodExpression, argExpressions){
+	var Call = function(methodExpression, argExpressions, hashes){
+		if(hashes && !can.isEmptyObject(hashes)) {
+			argExpressions.push(new Hashes(hashes));
+		}
 		this.methodExpr = methodExpression;
 		this.argExprs = can.map(argExpressions, convertToArgExpression);
 	};
