@@ -423,6 +423,23 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		equal( top.attr("../"), map, "looked up value correctly");
 		
 	});
+	
+	test("fast path scope computes can be unbound and then bound (#2305)", function(){
+		var map = new can.Map({prop: "value"});
+		var scope = new can.view.Scope(map);
+		
+		var compute = scope.computeData("prop").compute;
+		
+		var fn = function(){};
+		compute.bind("change", fn);
+		compute.unbind("change", fn);
+		
+		compute.bind("change", function(ev, newVal){
+			equal(newVal, "value2", "got new value in change event");
+		});
+		
+		map.attr("prop","value2");
+	});
 
 
 });
