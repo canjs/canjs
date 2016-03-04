@@ -91,7 +91,6 @@ steal("can/util",
 			// Listen to attribute changes and re-initialize
 			// the bindings.
 			can.bind.call(el, "attributes", function (ev) {
-				
 				var attrName = ev.attributeName,
 					value = el.getAttribute(attrName);
 				
@@ -331,6 +330,8 @@ steal("can/util",
 			// Create a handler that will unbind itself and the event when the attribute is removed from the DOM
 			var attributesHandler = function(ev) {
 				if(ev.attributeName === attributeName && !this.getAttribute(attributeName)) {
+					// console.log("attributesHandler");
+					// throw new Error();
 	
 					can.unbind.call(onBindElement ? el : can.viewModel(el), event, handler);
 					can.unbind.call(el, 'attributes', attributesHandler);

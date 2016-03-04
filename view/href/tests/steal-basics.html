@@ -24,7 +24,7 @@
 <script>
 	steal('can', 'can/view/href', 'can/view/href/tests/steal-basics.js', function(can){
 		console.log();
-		$("body").html(can.view.mustache('<href-component>Test component</href-component>'));
+		$("body").html(can.view.stache('<href-component>Test component</href-component>'));
 		isReady($("body href-component"), can.viewModel('href-component'), function(){
 			can.route(":page/:id");
 		});

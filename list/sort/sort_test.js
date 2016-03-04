@@ -1,4 +1,4 @@
-steal("can/list/sort", "can/test", "can/view/stache", "can/view/stache", "can/model", "steal-qunit", function () {
+steal("can/list/sort", "can/test", "can/view/stache", "can/model", "steal-qunit", function () {
 	QUnit.module('can/list/sort');
 
 	test('List events', (4*3), function () {
@@ -365,9 +365,7 @@ steal("can/list/sort", "can/test", "can/view/stache", "can/view/stache", "can/mo
 	var blockHelperTemplate = '<ul>{{#items}}<li>{{id}}</li>{{/items}}';
 	var eachHelperTemplate = '<ul>{{#each items}}<li>{{id}}</li>{{/each}}';
 
-	renderedTests('Mustache', '{{#block}}', can.mustache(blockHelperTemplate));
 	renderedTests('Stache', '{{#block}}', can.stache(blockHelperTemplate));
-	renderedTests('Mustache', '{{#each}}', can.mustache(eachHelperTemplate));
 	renderedTests('Stache', '{{#each}}', can.stache(eachHelperTemplate));
 
 

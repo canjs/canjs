@@ -439,7 +439,7 @@ steal('can/util', function (can) {
 		 *	can.view.ext = 'txt';
 		 *
 		 */
-		ext: ".ejs",
+		ext: ".stache",
 
 		/**
 		 * Returns the text from a script tag

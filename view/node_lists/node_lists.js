@@ -45,7 +45,7 @@ steal('can/util', 'can/view/elements.js', function (can) {
 		textNodeMap = {},
 		// The name of the expando property; the value returned
 		// given a nodeMap key.
-		expando = 'ejs_' + Math.random(),
+		expando = 'stache_' + Math.random(),
 		// The id used as the key in our nodeMap, this integer
 		// will be preceded by 'element_' or 'obj_' depending on whether
 		// the element has a nodeName.

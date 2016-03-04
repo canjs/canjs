@@ -788,7 +788,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 *     init: function() {
 		 *         this.list = new Todo.List();
 		 *         // live-bind the list into the DOM
-		 *         this.element.html(can.view('list.mustache', this.list));
+		 *         this.element.html(can.view('list.stache', this.list));
 		 *         // when this AJAX call returns, the live-bound DOM will be updated
 		 *         this.list.replace(Todo.findAll());
 		 *     }

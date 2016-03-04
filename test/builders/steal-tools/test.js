@@ -48,7 +48,7 @@ var open = function(url, callback, done){
 describe("Building steal projects", function(){
 	this.timeout(20000);
 
-	it("works with ejs, mustache, and stache", function(done){
+	it("works with stache", function(done){
 			rmdir(__dirname+"/bundles", function(error){
 				if(error){
 					done(error)
@@ -64,9 +64,6 @@ describe("Building steal projects", function(){
 				}).then(function(){
 					open("test/builders/steal-tools/prod.html", function(browser, close) {
 						find(browser, "MODULE", function(m){
-							assert.equal(m.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
-							assert.equal(m.mustache.childNodes[0].textContent, "Mustache Hi", "Mustache generated correctly");
-
 							var div = browser.document.createElement('div');
 							div.appendChild(m.stache);
 

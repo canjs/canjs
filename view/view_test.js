@@ -1,7 +1,5 @@
 steal("can/view/callbacks",
 	"can/view",
-	"can/view/ejs",
-	"can/view/mustache",
 	"can/view/stache",
 	"can/observe",
 	"can/test",
@@ -33,6 +31,19 @@ steal("can/view/callbacks",
 		});
 	};
 
+	var getStringResult = function (src) {
+		var result;
+		if (typeof src === "string") {
+			result = src;
+		}
+		else if (src.toString() === "[object DocumentFragment]") {
+			var div = document.createElement("div");
+			div.appendChild(src);
+			result = div.innerHTML;
+		}
+		return can.trim(result);
+	};
+
 	QUnit.module('can/view', {
 		setup: function () {
 			copy(can.view.callbacks._attributes);
@@ -49,16 +60,17 @@ steal("can/view/callbacks",
 		var data = {message: "hello"},
 			expected = "<h1>hello</h1>",
 			templates= {
-				"ejs" : "<h1><%= message %></h1>",
-				"mustache" : "<h1>{{message}}</h1>",
+				// "ejs" : "<h1><%= message %></h1>",
+				// "mustache" : "<h1>{{message}}</h1>",
 				"stache": "<h1>{{message}}</h1>"
 			},
 			templateUrl = function(ext){
 				return can.test.path('view/test/basic_loading.' + ext);
 			};
 		can.each([
-			'ejs',
-			'mustache',
+			// TODO: move test to ejs/mustache repos respectively
+			// 'ejs',
+			// 'mustache',
 			'stache'
 		], function (ext) {
 
@@ -88,20 +100,18 @@ steal("can/view/callbacks",
 				result = can[ext]( templates[ext ] ).render( data );
 				equal(result, expected, ext+" can."+ext+"(template).renderer(data) "+"result");
 			}
-
 		});
-
-
-
 	});
-
 
 	test('helpers work', function () {
 		var expected = '<h3>helloworld</h3><div>foo</div>';
+
 		can.each([
-			'ejs',
-			'mustache'
-		], function (ext) {
+			// TODO: move to ejs/mustache repos
+			// 'ejs',
+			// 'mustache',
+			'stache'
+		], function (ext, i) {
 			var actual = can.view.render(can.test.path('view/test/helpers.' + ext), {
 				'message': 'helloworld'
 			}, {
@@ -109,22 +119,27 @@ steal("can/view/callbacks",
 					return 'foo';
 				}
 			});
-			equal(can.trim(actual), expected, 'Text rendered');
+			equal(getStringResult(actual), expected, 'Text rendered');
 		});
+
 	});
 
-	test('buildFragment works right', function () {
-		can.append(can.$('#qunit-fixture'), can.view(can.test.path('view/test//plugin.ejs'), {}));
-		ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
-		can.remove(can.$('#something'));
-	});
+	// TODO: move to EJS repo
+	// plugin.ejs
+	// <div <%= (el) -> can.append(el,"<span>Here is something</span>") %> id='something'></div>
+	// test('buildFragment works right', function () {
+	// 	can.append(can.$('#qunit-fixture'), can.view(can.test.path('view/test//plugin.ejs'), {}));
+	// 	ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
+	// 	can.remove(can.$('#something'));
+	// });
 
 	test('async templates, and caching work', function () {
 		stop();
 		var i = 0;
-		can.view.render(can.test.path('view/test//temp.ejs'), {
+		can.view.render(can.test.path('view/test/temp.stache'), {
 			'message': 'helloworld'
-		}, function (text) {
+		}, function (result) {
+			var text = getStringResult(result);
 			ok(/helloworld\s*/.test(text), 'we got a rendered template');
 			i++;
 			equal(i, 2, 'Ajax is not synchronous');
@@ -139,12 +154,12 @@ steal("can/view/callbacks",
 		// that the second time is always faster
 		stop();
 		var first;
-		can.view.render(can.test.path('view/test/large.ejs'), {
+		can.view.render(can.test.path('view/test/large.stache'), {
 			'message': 'helloworld'
 		}, function (text) {
 			first = new Date();
 			ok(text, 'we got a rendered template');
-			can.view.render(can.test.path('view/test/large.ejs'), {
+			can.view.render(can.test.path('view/test/large.stache'), {
 				'message': 'helloworld'
 			}, function (text) {
 				/*
@@ -157,20 +172,21 @@ steal("can/view/callbacks",
 		});
 	});
 
-	test('hookup', function () {
-		can.view(can.test.path('view/test/hookup.ejs'), {});
-		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
-	});
+	// TODO: move to EJS repo
+	// test('hookup', function () {
+	// 	can.view(can.test.path('view/test/hookup.ejs'), {});
+	// 	equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
+	// });
 
-	test('inline templates other than \'tmpl\' like ejs', function () {
+	test('inline templates other than \'tmpl\'', function () {
 		var script = document.createElement('script');
-		script.setAttribute('type', 'test/ejs');
-		script.setAttribute('id', 'test_ejs');
-		script.text = '<span id="new_name"><%= name %></span>';
+		script.setAttribute('type', 'test/stach');
+		script.setAttribute('id', 'test_stache');
+		script.text = '<span id="new_name">{{name}}</span>';
 		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
-		div.appendChild(can.view('test_ejs', {
+		div.appendChild(can.view('test_stache', {
 			name: 'Henry'
 		}));
 		equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, 'Henry');
@@ -179,13 +195,13 @@ steal("can/view/callbacks",
 	//canjs issue #31
 	test('render inline templates with a #', function () {
 		var script = document.createElement('script');
-		script.setAttribute('type', 'test/ejs');
-		script.setAttribute('id', 'test_ejs');
-		script.text = '<span id="new_name"><%= name %></span>';
+		script.setAttribute('type', 'test/stache');
+		script.setAttribute('id', 'test_stache');
+		script.text = '<span id="new_name">{{name}}</span>';
 		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
-		div.appendChild(can.view('#test_ejs', {
+		div.appendChild(can.view('#test_stache', {
 			name: 'Henry'
 		}));
 		//make sure we aren't returning the current document as the template
@@ -200,14 +216,14 @@ steal("can/view/callbacks",
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test/deferreds.ejs'), {
+		can.view.render(can.test.path('view/test/deferreds.stache'), {
 			foo: typeof foo.promise === 'function' ? foo.promise() : foo,
 			bar: bar
 		})
-			.then(function (result) {
-				equal(result, 'FOO and BAR');
-				start();
-			});
+		.then(function (result) {
+			equal(getStringResult(result), 'FOO and BAR');
+			start();
+		});
 		setTimeout(function () {
 			foo.resolve('FOO');
 		}, 100);
@@ -216,11 +232,11 @@ steal("can/view/callbacks",
 	test('deferred', function () {
 		var foo = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test//deferred.ejs'), foo)
-			.then(function (result) {
-				equal(result, 'FOO');
-				start();
-			});
+		can.view.render(can.test.path('view/test//deferred.stache'), foo)
+		.then(function (result) {
+			equal(getStringResult(result), 'FOO');
+			start();
+		});
 		setTimeout(function () {
 			foo.resolve({
 				foo: 'FOO'
@@ -229,17 +245,17 @@ steal("can/view/callbacks",
 	});
 	test('hyphen in type', function () {
 		var script = document.createElement('script');
-		script.setAttribute('type', 'text/x-ejs');
-		script.setAttribute('id', 'hyphenEjs');
+		script.setAttribute('type', 'text/x-stache');
+		script.setAttribute('id', 'hyphenStache');
 		script.text = '\nHyphen\n';
 		document.getElementById('qunit-fixture')
 			.appendChild(script);
 		var div = document.createElement('div');
-		div.appendChild(can.view('hyphenEjs', {}));
+		div.appendChild(can.view('hyphenStache', {}));
 		ok(/Hyphen/.test(div.innerHTML), 'has hyphen');
 	});
 	test('create template with string', function () {
-		can.view.ejs('fool', 'everybody plays the <%= who %> <%= howOften %>');
+		can.view.stache('fool', 'everybody plays the {{who}} {{howOften}}');
 		var div = document.createElement('div');
 		div.appendChild(can.view('fool', {
 			who: 'fool',
@@ -248,44 +264,32 @@ steal("can/view/callbacks",
 		ok(/fool sometimes/.test(div.innerHTML), 'has fool sometimes' + div.innerHTML);
 	});
 	test('return renderer', function () {
-		var directResult = can.view.ejs('renderer_test', 'This is a <%= test %>');
+		var directResult = can.view.stache('renderer_test', 'This is a {{test}}');
 		var renderer = can.view('renderer_test');
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer.render({
+		equal(getStringResult(renderer({
 			test: 'working test'
-		}), 'This is a working test', 'Rendered');
-		renderer = can.view(can.test.path('view/test/template.ejs'));
+		})), 'This is a working test', 'Rendered');
+		renderer = can.view(can.test.path('view/test/template.stache'));
 		ok(can.isFunction(renderer), 'Renderer is a function');
-		equal(renderer.render({
+		equal(getStringResult(renderer({
 			message: 'Rendered!'
-		}), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
+		})), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
 		// raises(function() {
 		//      can.view('jkflsd.ejs');
 		// }, 'Nonexistent template throws error');
 	});
-	test('nameless renderers (#162, #195)', 8, function () {
-		// EJS
-		var nameless = can.view.ejs('<h2><%= message %></h2>'),
+	test('nameless renderers (#162, #195)', 3, function () {
+		var nameless = can.stache('<h2>{{message}}</h2>'),
 			data = {
 				message: 'HI!'
-			}, result = nameless(data),
+			},
+			result = nameless(data),
 			node = result.childNodes[0];
 		ok('ownerDocument' in result, 'Result is a document fragment');
 		equal(node.tagName.toLowerCase(), 'h2', 'Got h2 rendered');
-		equal(node.innerHTML, data.message, 'Got EJS result rendered');
-		equal(nameless.render(data), '<h2>HI!</h2>', '.render EJS works and returns HTML');
-		// Mustache
-		nameless = can.view.mustache('<h3>{{message}}</h3>');
-		data = {
-			message: 'MUSTACHE!'
-		};
-		result = nameless(data);
-		node = result.childNodes[0];
-		ok('ownerDocument' in result, 'Result is a document fragment');
-		equal(node.tagName.toLowerCase(), 'h3', 'Got h3 rendered');
-		equal(node.innerHTML, data.message, 'Got Mustache result rendered');
-		equal(nameless.render(data), '<h3>MUSTACHE!</h3>', '.render Mustache works and returns HTML');
+		equal(node.innerHTML, data.message, 'Got result rendered');
 	});
 	test('deferred resolves with data (#183, #209)', function () {
 		var foo = new can.Deferred();
@@ -296,14 +300,14 @@ steal("can/view/callbacks",
 		};
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view(can.test.path('view/test//deferred.ejs'), original)
-			.then(function (result, data) {
-				ok(data, 'Data exists');
-				equal(data.foo, 'FOO', 'Foo is resolved');
-				equal(data.bar, 'BAR', 'Bar is resolved');
-				ok(can.isDeferred(original.foo), 'Original property did not get modified');
-				start();
-			});
+		can.view(can.test.path('view/test/deferred.stache'), original)
+		.then(function (result, data) {
+			ok(data, 'Data exists');
+			equal(data.foo, 'FOO', 'Foo is resolved');
+			equal(data.bar, 'BAR', 'Bar is resolved');
+			ok(can.isDeferred(original.foo), 'Original property did not get modified');
+			start();
+		});
 		setTimeout(function () {
 			foo.resolve('FOO');
 		}, 100);
@@ -312,19 +316,19 @@ steal("can/view/callbacks",
 		}, 50);
 	});
 	test('Empty model displays __!!__ as input values (#196)', function () {
-		can.view.ejs('test196', 'User id: <%= user.attr(\'id\') || \'-\' %>' + ' User name: <%= user.attr(\'name\') || \'-\' %>');
+		can.view.stache('test196', 'User id: {{user.id}}' + ' User name: {{user.name}}');
 		var frag = can.view('test196', {
 			user: new can.Map()
 		});
 		var div = document.createElement('div');
 		div.appendChild(frag);
-		equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content');
+		equal(div.innerHTML, 'User id:  User name: ', 'Got expected HTML content');
 		can.view('test196', {
 			user: new can.Map()
 		}, function (frag) {
 			div = document.createElement('div');
 			div.appendChild(frag);
-			equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content in callback as well');
+			equal(div.innerHTML, 'User id:  User name: ', 'Got expected HTML content in callback as well');
 		});
 	});
 	test('Select live bound options don\'t contain __!!__', function () {
@@ -341,7 +345,7 @@ steal("can/view/callbacks",
 			id: 4,
 			name: 'microsoft.com'
 		}]),
-			frag = can.view(can.test.path('view/test/select.ejs'), {
+			frag = can.view(can.test.path('view/test/select.stache'), {
 				domainList: domainList
 			}),
 			div = document.createElement('div');
@@ -353,13 +357,12 @@ steal("can/view/callbacks",
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content');
 	});
 	test('Live binding on number inputs', function () {
-		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
+		var template = can.stache('<input id="candy" type="number" {($value)}="number" />');
 		var observe = new can.Map({
 			number: 2
 		});
-		var frag = template({
-			state: observe
-		});
+		var frag = template(observe);
+
 		can.append(can.$('#qunit-fixture'), frag);
 		var input = document.getElementById('candy');
 		equal(input.getAttribute('value'), 2, 'render workered');
@@ -372,13 +375,14 @@ steal("can/view/callbacks",
 			loading: true
 		}),
 			templates = {
-				"ejs" : "<% if (state.attr('loading')) { %>Loading<% }else{ %>Loaded<% } %><table><tbody><tr></tr></tbody></table>",
-				"mustache" : "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>",
+				// TODO: move to ejs/mustache repos
+				// "ejs" : "<% if (state.attr('loading')) { %>Loading<% }else{ %>Loaded<% } %><table><tbody><tr></tr></tbody></table>",
+				// "mustache" : "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>",
 				"stache": "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>"
 			};
 		can.each([
-			'ejs',
-			'mustache',
+			// 'ejs',
+			// 'mustache',
 			'stache'
 		], function (ext) {
 
@@ -392,11 +396,12 @@ steal("can/view/callbacks",
 
 	});
 	test('Resetting a live-bound <textarea> changes its value to __!!__ (#223)', function () {
-		var template = can.view.ejs('<form><textarea><%= this.attr(\'test\') %></textarea></form>'),
+		var template = can.view.stache('<form><textarea>{{test}}</textarea></form>'),
 			frag = template(new can.Map({
 				test: 'testing'
 			})),
-			form, textarea;
+			form,
+			textarea;
 		can.append(can.$('#qunit-fixture'), frag);
 		form = document.getElementById('qunit-fixture')
 			.getElementsByTagName('form')[0];
@@ -410,11 +415,11 @@ steal("can/view/callbacks",
 	test('Deferred fails (#276)', function () {
 		var foo = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test/deferred.ejs'), foo)
-			.fail(function (error) {
-				equal(error.message, 'Deferred error');
-				start();
-			});
+		can.view.render(can.test.path('view/test/deferred.stache'), foo)
+		.fail(function (error) {
+			equal(error.message, 'Deferred error');
+			start();
+		});
 		setTimeout(function () {
 			foo.reject({
 				message: 'Deferred error'
@@ -425,14 +430,14 @@ steal("can/view/callbacks",
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render(can.test.path('view/test//deferreds.ejs'), {
+		can.view.render(can.test.path('view/test//deferreds.stache'), {
 			foo: typeof foo.promise === 'function' ? foo.promise() : foo,
 			bar: bar
 		})
-			.fail(function (error) {
-				equal(error.message, 'foo error');
-				start();
-			});
+		.fail(function (error) {
+			equal(error.message, 'foo error');
+			start();
+		});
 		setTimeout(function () {
 			foo.reject({
 				message: 'foo error'
@@ -440,8 +445,9 @@ steal("can/view/callbacks",
 		}, 100);
 		bar.resolve('Bar done');
 	});
+	// TODO: Move to EJS repo
 	test('Using \'=\' in attribute does not truncate the value', function () {
-		var template = can.view.ejs('<img id=\'equalTest\' <%= this.attr(\'class\') %> src="<%= this.attr(\'src\') %>">'),
+		var template = can.stache('<img id=\'equalTest\' {{class}} src="{{src}}">'),
 			obs = new can.Map({
 				'class': 'class="someClass"',
 				'src': 'http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png'
@@ -462,13 +468,13 @@ steal("can/view/callbacks",
 
 			ok(tagData.options.attr('helpers.myhelper')(), "got a helper");
 			equal(tagData.scope.attr('foo'), "bar", "got scope and can read from it");
-			equal(tagData.subtemplate(tagData.scope.add({
+			equal(getStringResult(tagData.subtemplate(tagData.scope.add({
 				message: "hi"
-			}), tagData.options), "<p>sub says hi</p>");
+			})), tagData.options), "<p>sub says hi</p>");
 
 		});
 
-		var template = can.view.mustache("<panel title='foo'><p>sub says {{message}}</p></panel>");
+		var template = can.stache("<panel title='foo'><p>sub says {{message}}</p></panel>");
 
 		template({
 			foo: "bar"
@@ -487,7 +493,7 @@ steal("can/view/callbacks",
 
 		});
 
-		var template = can.view.mustache("<empty-tag title='foo'></empty-tag>");
+		var template = can.stache("<empty-tag title='foo'></empty-tag>");
 
 		template({
 			foo: "bar"
@@ -522,7 +528,7 @@ steal("can/view/callbacks",
 
 		});
 
-		var template = can.view.mustache("<tabs>" +
+		var template = can.stache("<tabs>" +
 			"{{#each foodTypes}}" +
 			"<panel title='{{title}}'>{{content}}</panel>" +
 			"{{/each}}" +
@@ -567,7 +573,7 @@ steal("can/view/callbacks",
 
 		});
 
-		var template = can.view.mustache("<tabs>" +
+		var template = can.stache("<tabs>" +
 			"{{#each foodTypes}}" +
 			"<panel title='{{title}}'>{{tabsHelper}}{{content}}</panel>" +
 			"{{/each}}" +
@@ -601,7 +607,7 @@ steal("can/view/callbacks",
 			equal(attrData.scope.get(attr,{proxyMethods: false}), doSomething, "can call a parent's function");
 			item++;
 		});
-		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
+		var template = can.stache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
 		var foodTypes = new can.List([{
 			title: 'Fruits',
 			content: 'oranges, apples'
@@ -639,7 +645,7 @@ steal("can/view/callbacks",
 			item++;
 		});
 
-		var template = can.view.mustache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
+		var template = can.stache('<div>' + '{{#each foodTypes}}' + '<p on-click=\'doSomething\'>{{content}}</p>' + '{{/each}}' + '</div>');
 
 		var foodTypes = new can.List([{
 			title: 'Fruits',
@@ -661,21 +667,18 @@ steal("can/view/callbacks",
 	});
 
 	test('content element', function () {
-		var template = can.view.mustache('{{#foo}}<content></content>{{/foo}}');
+		var template = can.stache('{{#foo}}<content></content>{{/foo}}');
 		var context = new can.Map({
 			foo: 'bar'
 		});
-		var frag = template(context, {
-			tags: {
-				content: function (el, options) {
-					equal(el.nodeName.toLowerCase(), 'content', 'got an element');
-					equal(options.scope.attr('.'), 'bar', 'got the context of content');
-					el.innerHTML = 'updated';
-				}
-			}
+		can.view.tag("content", function (el, options) {
+			equal(el.nodeName.toLowerCase(), 'content', 'got an element');
+			equal(options.scope.attr('.'), 'bar', 'got the context of content');
+			el.innerHTML = 'updated';
 		});
-		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content', "found content element");
 
+		var frag = template(context);
+		equal(frag.childNodes[0].nodeName.toLowerCase(), 'content', "found content element");
 		equal(frag.childNodes[0].innerHTML, 'updated', 'content is updated');
 
 		context.removeAttr('foo');
@@ -686,20 +689,17 @@ steal("can/view/callbacks",
 	});
 
 	test("content element inside tbody", function () {
-
-		var template = can.view.mustache("<table><tbody><content></content></tbody></table>");
+		var template = can.stache("<table><tbody><content></content></tbody></table>");
 
 		var context = new can.Map({
 			foo: "bar"
 		});
-		template(context, {
-			tags: {
-				content: function (el, options) {
-					equal(el.parentNode.nodeName.toLowerCase(), "tbody", "got an element in a tbody");
-					equal(options.scope.attr('.'), context, "got the context of content");
-				}
-			}
+
+		can.view.tag("content", function (el, options) {
+			equal(el.parentNode.nodeName.toLowerCase(), "tbody", "got an element in a tbody");
+			equal(options.scope.attr('.'), context, "got the context of content");
 		});
+		template(context);
 	});
 
 	test('extensionless views, enforcing engine (#193)', 1, function () {
@@ -711,7 +711,7 @@ steal("can/view/callbacks",
 		}
 		var frag = can.view({
 			url: path,
-			engine: 'mustache'
+			engine: 'stache'
 		}, {
 			message: 'Hi test'
 		});
@@ -722,8 +722,8 @@ steal("can/view/callbacks",
 
 	test('can.view[engine] always returns fragment renderers (#485)', 2, function () {
 		var template = '<h1>{{message}}</h1>';
-		var withId = can.view.mustache('test-485', template);
-		var withoutId = can.view.mustache(template);
+		var withId = can.stache('test-485', template);
+		var withoutId = can.stache(template);
 		ok(withoutId({
 				message: 'Without id'
 			})
@@ -743,7 +743,7 @@ steal("can/view/callbacks",
 			return;
 		}
 
-		can.view.mustache("theid", "<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
+		can.stache("theid", "<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
 
 		can.view.tag("unique-name", function (el, tagData) {
 			ok(true, "unique-name called!");
@@ -761,7 +761,7 @@ steal("can/view/callbacks",
 			window.html5.elements += ' my-el';
 			window.html5.shivDocument();
 		}
-		var t = can.view.mustache('<div><my-el {{#if foo}}checked{{/if}} class=\'{{bar}}\' >inner</my-el></div>');
+		var t = can.stache('<div><my-el {{#if foo}}checked{{/if}} class=\'{{bar}}\' >inner</my-el></div>');
 		t();
 		ok(true);
 	});
@@ -772,7 +772,7 @@ steal("can/view/callbacks",
 			window.html5.elements += ' unique-element-name';
 			window.html5.shivDocument();
 		}
-		var tmp = can.view.mustache('<div><unique-element-name>{{name}}</unique-element-name></div>');
+		var tmp = can.stache('<div><unique-element-name>{{name}}</unique-element-name></div>');
 		var frag = tmp({
 			name: 'Josh M'
 		});
@@ -785,7 +785,7 @@ steal("can/view/callbacks",
 			window.html5.elements += ' unique-element-name';
 			window.html5.shivDocument();
 		}
-		var tmp = can.view.mustache('<div><unique-element-name></unique-element-name></div>');
+		var tmp = can.stache('<div><unique-element-name></unique-element-name></div>');
 		tmp();
 		ok(true, 'no error');
 	});
@@ -796,7 +796,7 @@ steal("can/view/callbacks",
 	if (window.require) {
 		if (window.require.config && window.require.toUrl) {
 			test('template files relative to requirejs baseUrl (#647)', function () {
-				can.view.ext = '.mustache';
+				can.view.ext = '.stache';
 
 				var oldBaseUrl = window.requirejs.s.contexts._.config.baseUrl;
 				window.require.config({
@@ -812,7 +812,7 @@ steal("can/view/callbacks",
 	test('should not error with IE conditional compilation turned on (#679)', function(){
 		var pass = true;
 		/*@cc_on @*/
-		var template = can.view.mustache('Hello World');
+		var template = can.stache('Hello World');
 		try {
 			template({});
 		} catch(e) {
@@ -822,7 +822,7 @@ steal("can/view/callbacks",
 	});
 	test('renderer passed with Deferred gets executed (#1139)', 1, function() {
 		// See http://jsfiddle.net/a35ZH/1/
-		var template = can.view.mustache('<h1>Value is {{value}}!</h1>');
+		var template = can.stache('<h1>Value is {{value}}!</h1>');
 		var def = can.Deferred();
 
 		stop();
@@ -841,17 +841,14 @@ steal("can/view/callbacks",
 
 	test('live lists are rendered properly when batch updated (#680)', function () {
 		var div1 = document.createElement('div'),
-			div2 = document.createElement('div'),
 			template = "{{#if items.length}}<ul>{{#each items}}<li>{{.}}</li>{{/each}}</ul>{{/if}}",
-			stacheTempl = can.stache(template),
-			mustacheTempl = can.mustache(template);
+			stacheTempl = can.stache(template);
 
 		var data = {
 			items: new can.List()
 		};
 
 		div1.appendChild(stacheTempl(data));
-		div2.appendChild(mustacheTempl(data));
 
 		can.batch.start();
 		for (var i=1; i<=3; i++) {
@@ -871,21 +868,21 @@ steal("can/view/callbacks",
 		};
 
 		equal(getLIText(div1), "123", "Batched lists rendered properly with stache.");
-		equal(getLIText(div2), "123", "Batched lists rendered properly with mustache.");
 	});
 
 	test('hookups on self-closing elements do not leave orphaned @@!!@@ text content (#1113)', function(){
 		var
 			list = new can.List([{},{}]),
 			templates = {
-				"ejs"      : "<table><colgroup><% list.each( function() { %><col /><% }) %></colgroup></table>",
-				"mustache" : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>",
+				// TODO: move to ejs/mustache repos
+				// "ejs"      : "<table><colgroup><% list.each( function() { %><col /><% }) %></colgroup></table>",
+				// "mustache" : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>",
 				"stache"   : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>"
 			};
 			
 		can.each([
-			"ejs",
-			"mustache",
+			// "ejs",
+			// "mustache",
 			"stache"
 		], function (ext) {
 			var

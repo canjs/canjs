@@ -211,7 +211,6 @@
 		"./view/href/href": "./dist/cjs/view/href/href",
 		"./control/control": "./dist/cjs/control/control",
 		"./route/route": "./dist/cjs/route/route",
-		"./control/route/route": "./dist/cjs/control/route/route",
 		"./route/pushstate/pushstate": "./dist/cjs/route/pushstate/pushstate",
 		"./model/queue/queue": "./dist/cjs/model/queue/queue",
 		"./construct/super/super": "./dist/cjs/construct/super/super",
