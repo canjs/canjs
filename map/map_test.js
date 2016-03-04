@@ -338,4 +338,31 @@ steal("can/map", "can/compute", "can/test", "can/list", "steal-qunit", function(
 		source(1);
 		can.batch.stop();
 	});
+
+	test('should get an empty string property value correctly', function() {
+		var map = new can.Map({
+			foo: 'foo',
+			'': 'empty string'
+		});
+
+		equal(map.attr(''), 'empty string');
+	});
+	
+
+	test("can.Map::attr setting is observable", function() {
+		expect(0);
+		var c = can.compute(function() {
+			return new can.Map();
+		});
+
+		c.bind('change', function() {
+			ok(false, "the compute should not be updated");
+		});
+
+		var map = c();
+
+		// recomputes c
+		map.attr('foo', 'bar');
+	});
+
 });

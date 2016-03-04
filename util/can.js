@@ -261,9 +261,9 @@ steal(function () {
 			}
 		},
 		_logger: function (type, arr) {
-			if (console.log.apply) {
+			try {
 				console[type].apply(console, arr);
-			} else {
+			} catch(e) {
 				console[type](arr);
 			}
 		}

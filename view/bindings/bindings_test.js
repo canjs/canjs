@@ -1923,6 +1923,45 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/sta
 		
 	});
 	
+	test('previously non-existing select value gets selected from a list when it is added (#1762)', function() {
+	  var template = can.view.stache('<select {($value)}="{person}">' +
+	      '<option></option>' +
+	      '{{#each people}}<option value="{{.}}">{{.}}</option>{{/each}}' +
+	    '</select>' +
+	    '<input type="text" size="5" {($value)}="person">'
+	  );
+
+	  var people = new can.List([
+	    "Alexis",
+	    "Mihael",
+	    "Curtis",
+	    "David"
+	  ]);
+
+	  var vm = new can.Map({
+	    person: 'Brian',
+	    people: people
+	  });
+
+	  stop();
+	  vm.bind('person', function(ev, newVal, oldVal) {
+	    ok(false, 'person attribute should not change');
+	  });
+
+	  var frag = template(vm);
+
+	  equal(vm.attr('person'), 'Brian', 'Person is still set');
+
+	  setTimeout(function() {
+	    people.push('Brian');
+	    setTimeout(function() {
+	      var select = frag.firstChild;
+	      ok(select.lastChild.selected, 'New child should be selected');
+	      start();
+	    }, 20);
+	  }, 20);
+	});
+	
 	test("one-way <select> bindings keep value if options are replaced (#1762)", function(){
 		var countries = [{code: 'MX', countryName:'MEXICO'},
 			{code: 'US', countryName:'USA'}
@@ -2127,6 +2166,112 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/sta
 			start();
 		},10);
 		stop();
+	});
+	
+	test("double render with batched / unbatched events (#2223)", function(){
+		var template = can.stache("{{#page}}{{doLog}}<input {($value)}='notAHelper'/>{{/page}}");
+		
+		var appVM = new can.Map();
+
+		var logCalls = 0;
+		can.stache.registerHelper('doLog', function(){
+			logCalls++;
+		});
+		
+		template(appVM);
+		
+		
+		can.batch.start();
+		appVM.attr('page', true);
+		can.batch.stop();
+		
+		// logs 'child' a 2nd time
+		appVM.attr('notAHelper', 'bar');
+		
+		
+		equal(logCalls, 1, "input rendered the right number of times");
+	});
+	
+
+	test("Child bindings updated before parent (#2252)", function(){
+		var template = can.stache("{{#eq page 'view'}}<child-binder {page}='page'/>{{/eq}}");
+		can.Component.extend({
+			tag: 'child-binder',
+			template: can.stache('<span/>'),
+			viewModel: {
+				_set: function(prop, val){
+					if(prop === "page"){
+						equal(val,"view", "value should not be edit");
+					}
+					
+					return can.Map.prototype._set.apply(this, arguments);
+				}
+			}
+		});
+		
+		var vm = new can.Map({
+			page : 'view'
+		});
+		template(vm);
+		
+		can.batch.start();
+		vm.attr('page', 'edit');
+		can.batch.stop();
+	});
+
+	test("can-value memory leak (#2270)", function () {
+
+		var template = can.view.stache('<div><input can-value="foo"></div>');
+
+		var vm = new can.Map({foo: ''});
+
+		var frag = template(vm);
+
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(frag);
+		
+		can.remove(can.$(ta.firstChild));
+		stop();
+		setTimeout(function(){
+			// still 1 binding, should be 0
+			equal(vm._bindings,0, "no bindings");
+			start();
+		}, 10);
+
+	});
+	
+	test("converters work (#2299)", function(){
+		
+		can.stache.registerHelper("numberToString", function(newVal, source){
+			if(newVal instanceof can.expression.SetIdentifier) {
+				source(newVal.value === "" ? null : +newVal.value );
+			} else {
+				source = newVal;
+				return source() + "";
+			}
+		});
+		
+		var template = can.view.stache('<input {($value)}="numberToString(~age)">');
+		
+		var map = new can.Map({age: 25});
+		
+		var frag = template(map);
+		
+		equal(frag.firstChild.value, "25");
+		equal(map.attr("age"), 25);
+		
+		map.attr("age",33);
+		
+		equal(frag.firstChild.value, "33");
+		equal(map.attr("age"), 33);
+		
+		frag.firstChild.value = "1";
+		
+		can.trigger(frag.firstChild,"change");
+		
+		equal(frag.firstChild.value, "1");
+		equal(map.attr("age"), 1);
+		
 	});
 	
 

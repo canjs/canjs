@@ -45,7 +45,7 @@ is able to combine observable values into new observable values.
 ```
 var info = can.compute(function(){
   return person.attr("first")+" "+person.attr("last")+
-    " likes "+ hobbies.join(", ")+"."
+    " likes "+ hobbies.join(", ")+".";
 });
 ```
 
@@ -71,7 +71,9 @@ Person = can.Map.extend({
 Models let you get and modify data from the server. They also hydrate 
 raw, serialized service data into more useful (and observable) typed 
 data in the client. [can.Model](../docs/can.Model.html) makes it easy to connect to restful services
-and perform Create, Retrieve, Update, and Delete (CRUD) operations.
+and perform Create, Retrieve, Update, and Delete (CRUD) operations. 
+
+For applications requiring real-time, high performance, restful data connections you should check out [can-connect](http://connect.canjs.com/).
 
 [Example: Simulate a restful service and create, update, and delete its data.](http://justinbmeyer.jsbin.com/codubev/edit?js,console)
 ```

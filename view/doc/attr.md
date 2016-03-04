@@ -142,7 +142,7 @@ Or listened to by `fade-in-when`:
 When you listen to something other than the attribute's element, remember to
 unbind the event handler when the element is [can.events.removed removed] from the page:
 
-    $(el).bind("remove", function(){
+    $(el).bind("removed", function(){
       fadeInCompute.unbind(handler);
     });
 

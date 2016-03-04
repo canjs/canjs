@@ -96,9 +96,7 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 			setup: function (el, componentTagData) {
 
 				// Setup values passed to component
-				var initialViewModelData = {
-						"%root": componentTagData.scope.attr("%root")
-					},
+				var initialViewModelData = {},
 					component = this,
 					// If a template is not provided, we fall back to
 					// dynamic scoping regardless of settings.
@@ -130,6 +128,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 				if(setupBindings) {
 					teardownFunctions.push(bindings.behaviors.viewModel(el, componentTagData, function(initialViewModelData){
 						
+						// Make %root available on the viewModel.
+						initialViewModelData["%root"] = componentTagData.scope.attr("%root");
+
 						// Create the component's viewModel.
 						var protoViewModel = component.scope || component.viewModel;
 						if (component.constructor.Map) {
@@ -360,7 +361,10 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 
 							// Remove `viewModel.` from the start of the key and read the value from the `viewModel`.
 							key = key.replace(/^(scope|^viewModel)\./,"");
-							value = can.compute.read(options.viewModel, can.compute.read.reads(key), {isArgument: true}).value;
+							value = can.compute.read(options.viewModel, can.compute.read.reads(key), {
+								// if we find a compute, we should bind on that and not read it
+								readCompute: false
+							}).value;
 
 							// If `value` is undefined use `can.getObject` to get the value.
 							if(value === undefined) {
@@ -392,7 +396,9 @@ steal("can/util", "can/view/callbacks","can/view/elements.js","can/view/bindings
 
 					// Create a handler function that we'll use to handle the `change` event on the `readyCompute`.
 					var handler = function(ev, ready){
+						// unbinds the old binding
 						controlInstance._bindings.control[methodName](controlInstance.element);
+						// binds the new
 						controlInstance._bindings.control[methodName] = ready.processor(
 							ready.delegate || controlInstance.element,
 							ready.parts[2], ready.parts[1], methodName, controlInstance);

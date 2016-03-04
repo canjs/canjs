@@ -3,7 +3,7 @@
   <form class="form">
     <div class="form-group">
       <label>State</label>
-      <select can-value="{state}" {{#if states.isPending}}disabled{{/if}}>
+      <select {($value)}="state" {{#if states.isPending}}disabled{{/if}}>
         {{#if states.isPending}}
           <option value="">Loading...</option>
         {{else}}
@@ -54,7 +54,7 @@
         <span class="open-now">Open Now</span>
       </div>
 
-      <a class="btn" can-href="{ page='restaurants' slug=slug }">Place My Order</a>
+      <a class="btn" href="{{ routeUrl(page='restaurants' slug=slug) }}">Place My Order</a>
       <br />
     </div>
     {{/each}}

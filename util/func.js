@@ -864,10 +864,10 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
 	var def = can.Deferred();
 
-	def.done(function(reason) {
-	  console.log("Success! " + reason); //-> Success! Woohoo!
+	def.fail(function(reason) {
+	  console.log("Failure! " + reason.foo); //-> Oh, no!
 	});
-	def.resolve("Woohoo!");
+	def.reject({ foo: 'Oh, no!' });
 */
 //
 /**

@@ -27,7 +27,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		//!steal-remove-start
 		if(Map.define){
 			can.dev.warn("The define property should be on the map's prototype properties, "+
-				"not the static properies.");
+				"not the static properties.");
 		}
 		//!steal-remove-end
 		Map.defaultGenerators = {};

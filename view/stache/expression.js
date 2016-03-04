@@ -155,6 +155,8 @@ steal("can/util",
 			return finalHash;
 		};
 	};
+	
+	
 	Call.prototype.value = function(scope, helperScope, helperOptions){
 		
 		var method = this.methodExpr.value(scope, helperScope);
@@ -165,7 +167,7 @@ steal("can/util",
 			getArgs = this.args(scope, helperScope),
 			getHash = this.hash(scope, helperScope);
 		
-		return can.compute(function(){
+		return can.compute(function(newVal){
 			var func = method;
 			if(func && func.isComputed) {
 				func = func();
@@ -180,6 +182,9 @@ steal("can/util",
 				
 				if(helperOptions) {
 					args.push(helperOptions);
+				}
+				if(arguments.length) {
+					args.unshift(new expression.SetIdentifier(newVal));
 				}
 				
 				return func.apply(null, args);
@@ -521,6 +526,8 @@ steal("can/util",
 		HelperLookup: HelperLookup,
 		HelperScopeLookup: HelperScopeLookup,
 		
+		
+		SetIdentifier: function(value){ this.value = value; },
 		tokenize: function(expression){
 			var tokens = [];
 			(can.trim(expression) + ' ').replace(tokensRegExp, function (whole, arg) {

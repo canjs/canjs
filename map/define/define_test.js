@@ -1100,40 +1100,68 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 	});
 
 	test("Asynchronous virtual properties cause extra recomputes (#1915)", function() {
+
 		stop();
 
 		var ran = false;
 		var VM = can.Map.extend({
-		  define: {
-		    foo: {
-		      get: function(lastVal, setVal) {
-		        setTimeout(function() {
-							if(setVal) {
+			define : {
+				foo : {
+					get : function(lastVal, setVal) {
+						setTimeout(function() {
+							if (setVal) {
 								setVal(5);
 							}
-		        }, 10);
-		      }
-		    },
-		    bar: {
-		      get: function() {
-		        var foo = this.attr('foo');
-		        if (foo) {
-							if(ran) {
+						}, 10);
+					}
+				},
+				bar : {
+					get : function() {
+						var foo = this.attr('foo');
+						if (foo) {
+							if (ran) {
 								ok(false, 'Getter ran twice');
 							}
 							ran = true;
-		          return foo * 2;
-		        }
-		      }
-		    }
-		  }
+							return foo * 2;
+						}
+					}
+				}
+			}
 		});
 
 		var vm = new VM();
 		vm.bind('bar', function() {});
+		
 		setTimeout(function() {
 			equal(vm.attr('bar'), 10);
 			start();
 		}, 200);
+
 	});
+	
+
+	test("double get in a compute (#2230)", function() {
+		var VM = can.Map.extend({
+			define : {
+				names : {
+					get : function(val, setVal) {
+						ok(setVal, "setVal passed");
+						return 'Hi!';
+					}
+				}
+			}
+		});
+
+		var vm = new VM();
+		
+		var c = can.compute(function(){
+			return vm.attr("names");
+		});
+
+		c.bind("change", function(){});
+
+	});
+
+	
 });

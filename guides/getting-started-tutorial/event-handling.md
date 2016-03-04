@@ -85,11 +85,12 @@ There are two ways you can add event handling to an element:
 <input name="phone" type="text" can-keyup="{setPhoneValue @element.val}">
    
 <!--Example using () syntax-->
-<input name="phone" type="text" (keyup)="{setPhoneValue @element.val}">
+<input name="phone" type="text" ($keyup)="setPhoneValue(@element.val)">
 ```
 
 Of these, the preferred method is to use parenthesis to surround the event name.
 Again, [any standard DOM event](https://developer.mozilla.org/en-US/docs/Web/Events) is supported.
+More information about `can.stache's` event and two-way binding syntaxes can be found at [can.view.bindings](http://localhost:8080/docs/can.view.bindings.html).
 
 In addition to defining an event, you can pass certain predefined parameters 
 to the method that handles the event. These parameters include:
@@ -108,7 +109,7 @@ following:
 ```html
 <div class="form-group{{#if error}} has-error{{/if}}">
   <label>Phone:</label>
-  <input name="phone" type="text" (keyup)="{setPhoneValue @element.val}">
+  <input name="phone" type="text" ($keyup)="setPhoneValue(@element.val)">
   {{#if error}}
     {{#eq order.phone '911'}}
       <p>That's not your real number :-(</p>
@@ -119,7 +120,7 @@ following:
 </div>
 ```
 
-Notice the `<input />` element with a `(keyup)` event handler. Whenever there
+Notice the `<input />` element with a `($keyup)` event handler. Whenever there
 is a `keyup` event in the `input`, the code in the value will be executed. We’re 
 also passing `@element.val` to the `setPhoneValue` helper. Let’s
 add the component’s JavaScript to the `components/order_phone/order_phone.js`

@@ -62,7 +62,8 @@ steal("can/util",
 						return viewModel;
 					},
 					attributeViewModelBindings: attributeViewModelBindings,
-					alreadyUpdatedChild: true
+					alreadyUpdatedChild: true,
+					nodeList: tagData.parentNodeList
 				});
 				if(dataBinding) {
 					// For bindings that change the viewModel,
@@ -110,7 +111,8 @@ steal("can/util",
 						},
 						attributeViewModelBindings: attributeViewModelBindings,
 						// always update the viewModel accordingly.
-						initializeValues: true
+						initializeValues: true,
+						nodeList: tagData.parentNodeList
 					});
 					if(dataBinding) {
 						// The viewModel is created, so call callback immediately.
@@ -143,7 +145,8 @@ steal("can/util",
 			// Setup binding
 			var dataBinding = makeDataBinding({
 				name: attrData.attributeName,
-				value: el.getAttribute(attrData.attributeName)
+				value: el.getAttribute(attrData.attributeName),
+				nodeList: attrData.nodeList
 			}, el, {
 				templateType: attrData.templateType,
 				scope: attrData.scope,
@@ -183,7 +186,8 @@ steal("can/util",
 								return viewModel;
 							},
 							// always update the viewModel accordingly.
-							initializeValues: true
+							initializeValues: true,
+							nodeList: attrData.nodeList
 						});
 						if(dataBinding) {
 							// The viewModel is created, so call callback immediately.
@@ -387,7 +391,7 @@ steal("can/util",
 				propName = "$innerHTML";
 			}
 	
-			makeDataBinding({
+			var dataBinding = makeDataBinding({
 				name: "{("+propName+"})",
 				value: attrValue
 			}, el, {
@@ -397,6 +401,10 @@ steal("can/util",
 				initializeValues: true,
 				legacyBindings: true,
 				syncChildWithParent: true
+			});
+			
+			can.one.call(el, 'removed', function(){
+				dataBinding.onTeardown();
 			});
 	
 		}
@@ -512,6 +520,7 @@ steal("can/util",
 					}
 					
 					lastSet = newVal;
+					
 					if(isMultiselectValue) {
 						if (newVal && typeof newVal === 'string') {
 							newVal = newVal.split(";");
@@ -543,8 +552,8 @@ steal("can/util",
 						} else {
 							can.attr.setAttrOrProp(el, prop, newVal == null ? "" : newVal);
 						}
-						
 					}
+					
 					return newVal;
 	
 				},
@@ -593,11 +602,9 @@ steal("can/util",
 						var onMutation = function (mutations) {
 							if(stickyCompute) {
 								set(stickyCompute());
-							} else {
-								if(scheduledAsyncSet) {
-									updater();
-								}
 							}
+							
+							updater();
 						};
 						if(can.attr.MutationObserver) {
 							observer = new can.attr.MutationObserver(onMutation);
@@ -775,7 +782,7 @@ steal("can/util",
 				parentName: attributeValue,
 				initializeValues: true
 			};
-			if(tagName === "select" && !childToParent) {
+			if(tagName === "select") {
 				bindingInfo.stickyParentToChild = true;
 			}
 			return bindingInfo;
@@ -834,12 +841,20 @@ steal("can/util",
 		// Get computes for the parent and child binding
 		var parentCompute = getComputeFrom[bindingInfo.parent](el, bindingData.scope, bindingInfo.parentName, bindingData, bindingInfo.parentToChild),
 			childCompute = getComputeFrom[bindingInfo.child](el, bindingData.scope, bindingInfo.childName, bindingData, bindingInfo.childToParent, bindingInfo.stickyParentToChild && parentCompute),
-			
 			// these are the functions bound to one compute that update the other.
 			updateParent,
 			updateChild,
 			childLifecycle;
 		
+		if(bindingData.nodeList) {
+			if(parentCompute && parentCompute.isComputed){
+				parentCompute.computeInstance.setPrimaryDepth(bindingData.nodeList.nesting+1);
+			}
+			if(childCompute && childCompute.isComputed){
+				childCompute.computeInstance.setPrimaryDepth(bindingData.nodeList.nesting+1);
+			}
+		}
+
 		// Only bind to the parent if it will update the child.
 		if(bindingInfo.parentToChild){
 			updateChild = bind.parentToChild(el, parentCompute, childCompute, bindingData.semaphore, bindingInfo.bindingAttributeName);

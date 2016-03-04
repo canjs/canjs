@@ -15,16 +15,12 @@
 // instantition of objects.
 steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/construct', 'can/util/batch', 'can/compute/get_value_and_bind.js', function (can, bind, bubble, mapHelpers) {
 
-	var readButDontObserveCompute = can.__notObserve(function(compute){
-		return compute();
-	});
-
 	// properties that can't be observed on ... no matter what
 	var unobservable = {
 		"constructor": true
 	};
 
-	// Extend [can.Construct](../construct/construct.html) to make inherting a `can.Map` easier.
+	// Extend [can.Construct](../construct/construct.html) to make inheriting a `can.Map` easier.
 	var Map = can.Map = can.Construct.extend(
 		/**
 		 * @static
@@ -53,7 +49,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					}
 					if(this.define && !mapHelpers.define) {
 						can.dev.warn("The define property should be on the map's prototype properties, "+
-						"not the static properies. Also, can/map/define is not included.");
+						"not the static properties. Also, can/map/define is not included.");
 					}
 					//!steal-remove-end
 
@@ -252,7 +248,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Signals `can.compute` that an observable
 			// property is being read.
 			__get: function(attr){
-				if(!unobservable[attr]) {
+				if(!unobservable[attr] && !this._computedAttrs[attr]) {
 					can.__observe(this, attr);
 				}
 				return this.___get( attr );
@@ -263,11 +259,11 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// property is represented by a computed attribute, return the value of that compute.
 			// If no argument is provided, return the raw data.
 			___get: function (attr) {
-				if (attr) {
+				if (attr !== undefined) {
 					var computedAttr = this._computedAttrs[attr];
 					if (computedAttr && computedAttr.compute) {
 						// return computedAttr.compute();
-						return readButDontObserveCompute(computedAttr.compute);
+						return computedAttr.compute();
 					} else {
 						return this._data.hasOwnProperty(attr) ? this._data[attr] : undefined;
 					}
@@ -464,7 +460,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				// Batch all of the change events until we are done.
 				can.batch.start();
 				// Merge current properties with the new ones.
-				this.each(function (curVal, prop) {
+				this._each(function (curVal, prop) {
 					// You can not have a _cid property; abort.
 					if (prop === "_cid") {
 						return;

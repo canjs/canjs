@@ -27,7 +27,7 @@ Open your `components/restaurant_list/restaurant_list.stache` and edit it as fol
   <form class="form">
     <div class="form-group">
       <label>State</label>
-      <select can-value="{state}">
+      <select {($value)}="state">
         {{^if state}}
         <option value="">Choose a state</option>
         {{/if}}
@@ -152,7 +152,7 @@ and replace it with this:
 ```
     <div class="form-group">
       <label>City</label>
-      <select can-value="city">
+      <select {($value)}="city">
         {{^if city}}
         <option value="">Choose a city</option>
         {{/if}}

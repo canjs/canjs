@@ -3972,7 +3972,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		});
 
 		test("possible to teardown immediate nodeList (#1593)", function(){
-			expect(5);
+			expect(3);
 			var map = new can.Map({show: true});
 			var oldBind = map.bind,
 				oldUnbind = map.unbind;
@@ -4760,7 +4760,58 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			equal(counter, 2, 'Counter incremented twice');
 		});
+		
+		test("%index is double wrapped compute in helper (#2179)", function(){
+			var appState = new can.Map({
+				todos: [
+					{ description: "Foo" },
+					{ description: "Bar" },
+				]
+			});
+			
+			var template =  can.stache('{{#each todos}}<div>{{indexPlusOne %index}}</div>{{/each}}');
+			
+			can.stache.registerHelper("indexPlusOne", function(val, options) {
+				var resolved = val();
+				equal(typeof resolved,"number", "should be a number");
+				return resolved + 2;
+			});
+			
+			template(appState);
+		});
 
+
+		test("content within {{#if}} inside partial surrounded by {{#if}} should not display outside partial (#2186)", function() {
+			can.view.registerView('partial', '{{#showHiddenSection}}<div>Hidden</div>{{/showHiddenSection}}');
+			var renderer = can.stache('<div>{{#showPartial}}{{>partial}}{{/showPartial}}</div>');
+			var data = new can.Map({
+				showPartial: true,
+				showHiddenSection: false
+			});
+			var frag = renderer(data);
+			data.attr('showHiddenSection', true);
+			data.attr('showPartial', false);
+
+			equal( innerHTML(frag.firstChild), '');
+		});
+
+		test("nested sections work (#2229)", function(){
+			var template = can.stache('<div {{#a}}' +
+                '{{#b}}f="f"' +
+                '{{else}}' +
+                    '{{#c}}f="f"{{/c}}' +
+                '{{/b}}' +
+            '{{/a}}/>');
+
+            var frag = template(new can.Map({
+							a: true,
+							b: false,
+							c: true
+            }));
+
+            equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
+		});
+		
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

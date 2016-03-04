@@ -689,4 +689,30 @@ steal("can/list/sort", "can/test", "can/view/stache", "can/view/stache", "can/mo
 		expected = [300, 200, 100];
 		evaluate();
 	});
+
+	test('Setting comparator with .sort() (#2159)', function () {
+		var list = new can.List([
+			{ letter: 'x', number: 3 },
+			{ letter: 'y', number: 2 },
+			{ letter: 'z', number: 1 },
+		]);
+
+		list.attr('comparator', 'number');
+
+		equal(list.attr('0.number'), 1, 'First value is correct');
+		equal(list.attr('1.number'), 2, 'Second value is correct');
+		equal(list.attr('2.number'), 3, 'Third value is correct');
+
+		list.sort('letter');
+
+		equal(list.attr('0.letter'), 'x', 'First value is correct after comparator set');
+		equal(list.attr('1.letter'), 'y', 'Second value is correct after comparator set');
+		equal(list.attr('2.letter'), 'z', 'Third value is correct after comparator set');
+
+		list.push({ letter: 'w', number: 4 });
+
+		equal(list.attr('0.letter'), 'w', 'First value is correct after insert');
+		equal(list.attr('0.number'), 4, 'First value is correct after insert');
+
+	});
 });

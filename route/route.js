@@ -61,11 +61,10 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		stringify = function (obj) {
 			// Object is array, plain object, Map or List
 			if (obj && typeof obj === "object") {
-				// Get native object or array from Map or List
 				if (obj instanceof can.Map) {
-					obj = obj.attr();
-					// Clone object to prevent change original values
+					obj = obj;
 				} else {
+					// Get array from array-like or shallow-copy object
 					obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj);
 				}
 				// Convert each object property or array item into stringified new
@@ -116,7 +115,27 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			}, 10);
 		},
 		// A dummy events object used to dispatch url change events on.
-		eventsObject = can.extend({}, can.event);
+		eventsObject = can.extend({}, can.event),
+		// everything in the backing Map is a string
+		// add type coercion during Map setter to coerce all values to strings 
+		stringCoercingMapDecorator = function(map) {
+			var attrSuper = map.attr;
+			
+			map.attr = function(prop, val) {
+				var serializable = this.define === undefined || this.define[prop] === undefined || !!this.define[prop].serialize,
+					args;
+
+				if (serializable) { // if setting non-str non-num attr
+					args = stringify(Array.apply(null, arguments));
+				} else {
+					args = arguments;
+				}
+				
+				return attrSuper.apply(this, args);
+			};
+	
+			return map;
+		};
 
 	can.route = function (url, defaults) {
 		// if route ends with a / and url starts with a /, remove the leading / of the url
@@ -355,7 +374,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 * @hide
 		 * A can.Map that represents the state of the history.
 		 */
-		data: new can.Map({}),
+		data: stringCoercingMapDecorator(new can.Map({})),
 		map: function(data){
 			var appState;
 			// appState is a can.Map constructor function
@@ -366,7 +385,8 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			else {
 				appState = data;
 			}
-			can.route.data = appState;
+			
+			can.route.data = stringCoercingMapDecorator(appState);
 		},
 		/**
 		 * @property {Object} routes
@@ -472,7 +492,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		 *
 		 * @body
 		 * Creates and returns an anchor tag with an href of the route
-		 * attributes passed into it, as well as any properies desired
+		 * attributes passed into it, as well as any properties desired
 		 * for the tag.
 		 *
 		 *     can.route.link( "My videos", { type: "videos" }, {}, false )
@@ -621,30 +641,9 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 			return can.route.data[name].apply(can.route.data, arguments);
 		};
 	});
-
-	// Because everything in hashbang is in fact a string this will automaticaly convert new values to string. Works with single value, or deep hashes.
-	// Main motivation for this is to prevent double route event call for same value.
-	// Example (the problem):
-	// When you load page with hashbang like #!&some_number=2 and bind 'some_number' on routes.
-	// It will fire event with adding of "2" (string) to 'some_number' property
-	// But when you after this set can.route.attr({some_number: 2}) or can.route.attr('some_number', 2). it fires another event with change of 'some_number' from "2" (string) to 2 (integer)
-	// This wont happen again with this normalization
-	can.route.attr = function (attr, val) {
-		var type = typeof attr,
-			newArguments;
-
-		// Reading
-		if (val === undefined) {
-			newArguments = arguments;
-			// Sets object
-		} else if (type !== "string" && type !== "number") {
-			newArguments = [stringify(attr), val];
-			// Sets key - value
-		} else {
-			newArguments = [attr, stringify(val)];
-		}
-
-		return can.route.data.attr.apply(can.route.data, newArguments);
+	
+	can.route.attr = function () {
+		return can.route.data.attr.apply(can.route.data, arguments);
 	};
 
 	//Allow for overriding of route batching by can.transaction

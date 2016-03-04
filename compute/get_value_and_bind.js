@@ -67,7 +67,7 @@ steal("can/util", function(can){
 				this.depth = null;
 			}
 		},
-		onDependencyChange: function(ev){
+		dependencyChange: function(ev){
 			if(this.bound && this.ready) {
 				if(ev.batchNum !== undefined) {
 					// Only need to register once per batchNum
@@ -79,6 +79,9 @@ steal("can/util", function(can){
 					this.updateCompute(ev.batchNum);
 				}
 			}
+		},
+		onDependencyChange: function(ev, newVal, oldVal){
+			this.dependencyChange(ev, newVal, oldVal);
 		},
 		updateCompute: function(batchNum){
 			// It's possible this became unbound since it was registered to update
@@ -230,19 +233,19 @@ steal("can/util", function(can){
 	// Updates the top of the stack with the observable being read.
 	can.__observe = function (obj, event) {
 		var top = observedInfoStack[observedInfoStack.length-1];
-		if (top) {
+		if (top && !top.ignore) {
 			var evStr = event + "",
 				name = obj._cid + '|' + evStr;
+				
 			if(top.traps) {
 				top.traps.push({obj: obj, event: evStr, name: name});
 			}
-			else if(!top.ignore && !top.newObserved[name]) {
+			else if(!top.newObserved[name]) {
 				top.newObserved[name] = {
 					obj: obj,
 					event: evStr
 				};
 			}
-
 		}
 	};
 

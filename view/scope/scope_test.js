@@ -414,6 +414,15 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 		equal(map.attr("foo"), "bar");
 		
 	});
+	
+	test("can read parent context with ../ (#2244)", function(){
+		var map = new can.Map();
+		var scope = new can.view.Scope(map);
+		var top = scope.add(new can.Map());
+		
+		equal( top.attr("../"), map, "looked up value correctly");
+		
+	});
 
 
 });

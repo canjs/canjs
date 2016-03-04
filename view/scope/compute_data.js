@@ -17,16 +17,6 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					!can.isFunction(computeData.root[computeData.reads[0].key]);
 	};
 	
-	
-	var getValueAndBindSinglePropertyRead = function(readInfo, computeData, singlePropertyReadChanged){
-		var target = computeData.root,
-			prop = computeData.reads[0].key;
-		target.bind(prop, singlePropertyReadChanged);
-		readInfo.value = computeData.initialValue;
-	};
-	var unbindSinglePropertyRead = function(computeData, singlePropertyReadChanged){
-		computeData.root.unbind(computeData.reads[0].key, singlePropertyReadChanged);
-	};
 	var scopeReader = function(scope, key, options, computeData, newVal){
 		if (arguments.length > 4) {
 			var root = computeData.root || computeData.setRoot;
@@ -79,45 +69,34 @@ steal("can/util","can/compute","can/compute/get_value_and_bind.js",function(can,
 					return scopeReader(scope, key, options, computeData);
 				}
 			},
-			
-			// What to do when a single property has changed
-			singlePropertyReadChanged = function(ev, newVal, oldVal){
-				if(typeof newVal !== "function") {
-					compute.computeInstance.updater(newVal, oldVal, ev.batchNum);
-				} else {
-					// switch bindings
-					unbindSinglePropertyRead(computeData,singlePropertyReadChanged );
-					readInfo.getValueAndBind();
-					isFastPathBound = false;
-					compute.computeInstance.updater(readInfo.value, oldVal, ev.batchNum);
-				}
-			},
-			// tracks if we are in the fast path or not
-			isFastPathBound = false,
-			
 			compute = can.compute(undefined,{
 				on: function() {
-					// 
+					// setup the observing
 					readInfo.getValueAndBind();
 					
 					if( isFastPath(computeData) ) {
-						// bind before unbind to keep bind count correct
-						getValueAndBindSinglePropertyRead(readInfo, computeData, singlePropertyReadChanged);
-						readInfo.teardown();
-						// clear newObserved so if this switches back, we're ok with it
-						readInfo.newObserved = {};
-						isFastPathBound = true;
+						// When the one dependency changes, we can simply get its newVal and
+						// save it.  If it's a function, we need to start binding the old way.
+						readInfo.dependencyChange = function(ev, newVal){
+							if(typeof newVal !== "function") {
+								this.newVal = newVal;
+							} else {
+								// restore
+								readInfo.dependencyChange = ObservedInfo.prototype.dependencyChange;
+								readInfo.getValueAndBind = ObservedInfo.prototype.getValueAndBind;
+							}
+							return ObservedInfo.prototype.dependencyChange.call(this, ev);
+						};
+						readInfo.getValueAndBind = function(){
+							this.value = this.newVal;
+						};
 					}
 					// TODO deal with this right
 					compute.computeInstance.value = readInfo.value;
-					compute.computeInstance.hasDependencies = isFastPathBound || !can.isEmptyObject(readInfo.newObserved);
+					compute.computeInstance.hasDependencies = !can.isEmptyObject(readInfo.newObserved);
 				},
 				off: function(){
-					if(isFastPathBound) {
-						unbindSinglePropertyRead(computeData, singlePropertyReadChanged);
-					} else {
-						readInfo.teardown();
-					}
+					readInfo.teardown();
 				},
 				set: scopeRead,
 				get: scopeRead,
