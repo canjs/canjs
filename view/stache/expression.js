@@ -45,7 +45,7 @@ steal("can/util",
 		},
 		// If not a Literal or an Arg, convert to an arg for caching.
 		convertToArgExpression = function(expr){
-			if(!(expr instanceof Arg) && !(expr instanceof Literal)) {
+			if(!(expr instanceof Arg) && !(expr instanceof Literal) && !(expr instanceof Hashes)) {
 				return new Arg(expr);
 			} else {
 				return expr;
@@ -102,21 +102,39 @@ steal("can/util",
 		return this.expr.value.apply(this.expr, arguments);
 	};
 	
-	// ### Hash
+	// ### Hashes
 	// A placeholder. This isn't actually used.
-	var Hash = function(){ };
+	var Hashes = function(hashExpressions){
+		this.hashExprs = hashExpressions;
+	};
+	Hashes.prototype.value = function(){
+		var hash = {};
+		for(var prop in this.hashExprs) {
+			var val = this.hashExprs[prop],
+				value = val.value.apply(val, arguments);
+				
+			hash[prop] = {
+				call: value && value.isComputed && (!val.modifiers || !val.modifiers.compute),
+				value: value
+			};
+		}
+		return can.compute(function(){
+			var finalHash = {};
+			for(var prop in hash) {
+				finalHash[prop] = hash[prop].call ? hash[prop].value() : hash[prop].value;
+			}
+			return finalHash;
+		});
+	};
+
 	
 	// ### Call
 	// `new Call( new Lookup("method"), [new ScopeExpr("name")], {})`
 	// A call expression like `method(arg1, arg2)` that, by default,
 	// calls `method` with non compute values.
-	var Call = function(methodExpression, argExpressions, hashExpressions){
+	var Call = function(methodExpression, argExpressions){
 		this.methodExpr = methodExpression;
 		this.argExprs = can.map(argExpressions, convertToArgExpression);
-		var hashExprs = this.hashExprs = {};
-		can.each(hashExpressions, function(expr, name){
-			hashExprs[name] = convertToArgExpression(expr);
-		});
 	};
 	Call.prototype.args = function(scope, helperOptions){
 		var args = [];
@@ -124,7 +142,7 @@ steal("can/util",
 			var arg = this.argExprs[i];
 			var value = arg.value.apply(arg, arguments);
 			args.push({
-				call: value && value.isComputed && !arg.modifiers.compute,
+				call: value && value.isComputed  && (!arg.modifiers || !arg.modifiers.compute),
 				value: value
 			});
 		}
@@ -136,25 +154,6 @@ steal("can/util",
 			return finalArgs;
 		};
 	};
-	Call.prototype.hash = function(scope, helperOptions){
-		var hash = {};
-		for(var prop in this.hashExprs) {
-			var val = this.hashExprs[prop],
-				value = val.value.apply(val, arguments);
-				
-			hash[prop] = {
-				call: value && value.isComputed && !val.modifiers.compute,
-				value: value
-			};
-		}
-		return function(){
-			var finalHash = {};
-			for(var prop in hash) {
-				finalHash[prop] = hash[prop].call ? hash[prop].value() : hash[prop].value;
-			}
-			return finalHash;
-		};
-	};
 	
 	
 	Call.prototype.value = function(scope, helperScope, helperOptions){
@@ -163,9 +162,7 @@ steal("can/util",
 		// TODO: remove this hack
 		this.isHelper = this.methodExpr.isHelper;
 		
-		var hasHash = !can.isEmptyObject(this.hashExprs),
-			getArgs = this.args(scope, helperScope),
-			getHash = this.hash(scope, helperScope);
+		var getArgs = this.args(scope, helperScope);
 		
 		return can.compute(function(newVal){
 			var func = method;
@@ -175,11 +172,7 @@ steal("can/util",
 			if(typeof func === "function") {
 				var args = getArgs();
 				
-				// if fn/inverse is needed, add after this
-				if(hasHash) {
-					args.push(getHash());
-				}
-				
+				// if fn/inverse is needed
 				if(helperOptions) {
 					args.push(helperOptions);
 				}
@@ -520,7 +513,7 @@ steal("can/util",
 		ScopeLookup: ScopeLookup,
 		
 		Arg: Arg,
-		Hash: Hash,
+		Hashes: Hashes,
 		Call: Call,
 		Helper: Helper,
 		HelperLookup: HelperLookup,
@@ -582,6 +575,8 @@ steal("can/util",
 			return expr;
 		},
 		hydrateAst: function(ast, options, methodType, isArg){
+			var hashes,
+				self = this;
 			if(ast.type === "Lookup") {
 				return new (options.lookupRule(ast, methodType, isArg))(ast.key, ast.root && this.hydrateAst(ast.root, options, methodType) );
 			}
@@ -590,24 +585,30 @@ steal("can/util",
 			}
 			else if(ast.type === "Arg") {
 				return new Arg(this.hydrateAst(ast.children[0], options, methodType, isArg),{compute: true});
-			} else if(ast.type === "Hash") {
+			}
+			else if(ast.type === "Hashes") {
+				hashes = {};
+				can.each(ast.children, function(child){
+					hashes[child.prop] = self.hydrateAst( child.children[0], options, ast.type, true );
+				});
+				return new Hashes(hashes);
+			}
+			else if(ast.type === "Hash") {
 				throw new Error("");
-			} else if(ast.type === "Call" || ast.type === "Helper") {
+			}
+			else if(ast.type === "Call" || ast.type === "Helper") {
 				//get all arguments and hashes
-				var hashes = {},
-					args = [],
-					children = ast.children;
-				if(children) {
-					for(var i = 0 ; i <children.length; i++) {
-						var child = children[i];
-						if(child.type === "Hash") {
-							hashes[child.prop] = this.hydrateAst( child.children[0], options, ast.type, true );
-						} else {
-							args.push( this.hydrateAst(child, options, ast.type, true) );
-						}
-					}
-				}
 				
+				var args = [];
+				hashes = {};
+				
+				can.each(ast.children, function(child){
+					if(child.type === "Hash") {
+						hashes[child.prop] = self.hydrateAst( child.children[0], options, ast.type, true );
+					} else {
+						args.push( self.hydrateAst(child, options, ast.type, true) );
+					}
+				});
 				
 				return new (options.methodRule(ast))(this.hydrateAst(ast.method, options, ast.type), args, hashes);
 			}
@@ -656,8 +657,15 @@ steal("can/util",
 							
 						}
 					}
-					
-					stack.addToAndPush(["Helper", "Call"], {type: "Hash", prop: token});
+					// if top is a call expression
+					// then we are added this as a hashes
+					top = stack.popUntil(["Helper", "Call","Hashes"]);
+					// Call expressions group hash in hashes
+					if(top.type === "Call") {
+						stack.addToAndPush(["Call"], {type: "Hashes"});
+					}
+
+					stack.addToAndPush(["Helper", "Hashes"], {type: "Hash", prop: token});
 					cursor.index++;
 					
 				}
