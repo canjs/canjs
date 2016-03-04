@@ -54,15 +54,19 @@ steal("./expression.js", "steal-qunit", function(){
 				{type: "Literal", value: 1},
 				{type: "Lookup", key: "valueA"},
 				{
-					type: "Hash",
-					prop: "propA",
-					children: [{type: "Arg", key: "~", children: [{type: "Lookup", key: "valueB"} ]}]
-				},
-				{
-					type: "Hash",
-					prop: "propC",
-					children: [{type: "Literal", value: 2}]
+					type: "Hashes",
+					children: [{
+						type: "Hash",
+						prop: "propA",
+						children: [{type: "Arg", key: "~", children: [{type: "Lookup", key: "valueB"} ]}]
+					},
+					{
+						type: "Hash",
+						prop: "propC",
+						children: [{type: "Literal", value: 2}]
+					}]
 				}
+				
 			]
 		};
 		var helperCCall = {
@@ -118,11 +122,10 @@ steal("./expression.js", "steal-qunit", function(){
 		
 		var callHelperB = new expression.Call(
 			helperB,
-			[oneExpr, valueA],
-			{
+			[oneExpr, valueA, new expression.Hashes({
 				propA: new expression.Arg(valueB, {compute: true}),
 				propC: twoExpr
-			}
+			})]
 		);
 		
 		var callHelperBdotZed = new expression.ScopeLookup(".zed", callHelperB);
@@ -284,5 +287,19 @@ steal("./expression.js", "steal-qunit", function(){
 		equal( expression.convertKeyToLookup("./foo"), "./@foo" );
 		equal( expression.convertKeyToLookup("foo.bar"), "foo@bar" );
 		
+	});
+
+	test("hashes can be passed in any order to call expressions (#2291)", function(){
+		var exprData = expression.parse("doSomething(foo='bar', true)");
+
+		var res = exprData.value(new can.view.Scope({
+			doSomething: function(options, val){
+				equal(options.foo, 'bar', "hash passed as first arg");
+				equal(val, true, "value passed as second");
+				return 5;
+			},
+			number: can.compute(2)
+		}));
+		res();
 	});
 });

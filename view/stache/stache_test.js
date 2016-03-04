@@ -15,6 +15,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 	// Add tests that shouldn't run in VDOM here.
 	if(window.steal) {
+		module("can/view/stache alternate window");
 		QUnit.asyncTest("routeUrl and routeCurrent helper", function(){
 			makeIframe(  can.test.path("view/stache/test/route-url-current.html?"+Math.random()) );
 		});
