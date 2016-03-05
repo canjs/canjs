@@ -2278,14 +2278,14 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		var template = can.stache('{{#if show}}<select multiple {($value)}="foo"></select><select multiple {($value)}="bar"></select>{{/show}}');
 
 		var map = new can.Map({show: false});
-		var frag  = template(map);
+		template(map);
 
 		can.batch.start();
 		map.attr("show", true);
 		can.batch.stop();
 
 		ok(true, "was able to show without breaking");
-	})
+	});
 	
 
 });
