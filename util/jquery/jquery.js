@@ -164,7 +164,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", "can/util/fragm
 		can.each(['after', 'prepend', 'before', 'append','replaceWith'], function (name) {
 			var original = $.fn[name];
 			$.fn[name] = function () {
-				var elems,
+				var elems = [],
 					args = can.makeArray(arguments);
 
 				if (args[0] != null) {

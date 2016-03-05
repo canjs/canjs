@@ -3,6 +3,15 @@
 @parent guides 5
 -->
 
+__2.3.19__ ( Mar 04 2016 )
+
+- [Fast path scope computes can be unbound then rebound.](https://github.com/canjs/canjs/issues/2305)
+- [Bugfix: elems must be an array for can.inserted()](https://github.com/canjs/canjs/pull/2298)
+- [routeUrl helper, merge option not working](https://github.com/canjs/canjs/issues/2291)
+- [Component fires `inserted` twice on append.](https://github.com/canjs/canjs/issues/2288)
+- [Call expressions with hash expressions are called with args reversed.](https://github.com/canjs/canjs/issues/2243)
+
+
 __2.3.18__ ( Mar 03 2016 )
 
 - [Make getter / setter converter functions possible with stache helpers](https://github.com/canjs/canjs/issues/2299)
