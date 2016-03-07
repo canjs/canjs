@@ -1,6 +1,6 @@
 <table id="websites"></table>
 
-<script id="sites" type="text/mustache">
+<script id="sites" type="text/stache">
   {{#websites}}
     <tr>
       <td width='40%'>{{name}}</td>
@@ -22,8 +22,8 @@ var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++"
 	          {id:11,name:"DoneJS",url:"http://donejs.com"},{id: 12,name:"Mindjet Connect",url:"http://connect.mindjet.com"},
 	          {id:13,name:"JSFiddle",url:"http://jsfiddle.net"},{id: 14,name:"Zepto",url:"http://zepto.com"},
 	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}];
-	          
-	          
+
+
 can.fixture("/websites", function (request) {
   var start = request.data.offset || 0
   end = start + (request.data.limit || websites.length);
@@ -32,7 +32,7 @@ can.fixture("/websites", function (request) {
     data: websites.slice(start, end)
   }
 });
-	 	
+
 var Website = can.Model.extend({
   findAll: "/websites"
 }, {});

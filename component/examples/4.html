@@ -45,7 +45,7 @@
 <table id="websites"></table>
 <div id='next-prev'></div>
 
-<script id="sites" type="text/mustache">
+<script id="sites" type="text/stache">
   {{#websites}}
     <tr>
       <td width='40%'>{{name}}</td>
@@ -54,10 +54,10 @@
   {{/websites}}
 </script>
 
-<script id="next-prev-stache" type="text/mustache">
-  <a href="javascript://" 
+<script id="next-prev-stache" type="text/stache">
+  <a href="javascript://"
      class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}">Prev</a>
-  <a href="javascript://" 
+  <a href="javascript://"
      class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}">Next</a>
 </script>
 
@@ -83,7 +83,7 @@ can.fixture("/websites", function (request) {
     data: websites.slice(start, end)
   }
 });
-	 	
+
 var Website = can.Model.extend({
   findAll: "/websites"
 }, {});
@@ -159,8 +159,8 @@ websitesCompute().then(writeWebsites)
 
 var NextPrev = can.Control({
   init: function(){
-    this.element.html( 
-       can.view('next-prev-stache',this.options) );     
+    this.element.html(
+       can.view('next-prev-stache',this.options) );
   },
   ".next click" : function(){
     this.options.paginate.next();

@@ -488,11 +488,7 @@ steal('can/util', function (can) {
 		// ---------------
 		// can.view's primary purpose is to load templates (from strings or filesystem) and render them
 		//
-		// can.view supports two different forms of rendering systems
-		//
-		// mustache templates return a string based rendering function
-
-		// stache (or other fragment based templating systems) return a document fragment, so 'hookup' steps are not required
+		// can.view supports stache (or any other fragment based templating systems that return a document fragment, so 'hookup' steps are not required)
 		//
 		// ##### render
 		//
@@ -592,7 +588,7 @@ steal('can/util', function (can) {
 				nodelist = callback;
 				callback = undefined;
 			}
-			
+
 			// If helpers is a `function`, it is actually a callback.
 			if (isFunction(helpers)) {
 				callback = helpers;
@@ -652,7 +648,7 @@ steal('can/util', function (can) {
 
 				// If there's a `callback` function
 				async = isFunction(callback);
-				
+
 				// get is called async but in
 				// ff will be async so we need to temporarily reset
 				deferred = can.__notObserve(getRenderer)(view, async);
@@ -694,7 +690,7 @@ steal('can/util', function (can) {
 		/**
 		 * @hide
 		 * Registers a view with `cached` object.  This is used
-		 * internally by this class and Mustache to hookup views.
+		 * internally by this class and Stache to hookup views.
 		 * @param  {String} id
 		 * @param  {String} text
 		 * @param  {String} type

@@ -75,7 +75,7 @@ var people = [
 
 When the event handler for a `click` runs, it needs a way
 to access the object associated with the `li` that was clicked.
-With the [`data`](http://canjs.com/docs/can.mustache.helpers.data.html) helper,
+With the [`data`](http://canjs.com/docs/can.stache.helpers.data.html) helper,
 the element will retain a reference
 to the object it is associated with (in this case, a `person`).
 

@@ -7,16 +7,16 @@
 <div id="demo">
 <div id="app"></div>
 
-<script type="text/mustache" id="app-template">
+<script type="text/stache" id="app-template">
 
-<site-app>	
+<site-app>
   Link Type: <select can-value="type">
     <option value="fun">Fun</option>
     <option value="educational">Educational</option>
     <option value="empty">Empty</option>
     <option value="missing">Missing (404)</option>
   </select>
-  
+
   <table class='table'>
     <thead>
       <tr>
@@ -38,7 +38,7 @@
         <tr class="warning"><td colspan="2">No items</td></tr>
       {{/if}}
     {{/if}}
-    
+
     {{#if items.isRejected}}
       <tr class="danger">
       	<td colspan="2">Error: {{items.reason.responseJSON.message}}!</td>
@@ -46,7 +46,7 @@
     {{/if}}
     </tbody>
   </table>
-</site-app>	
+</site-app>
 
 </script>
 </div>
@@ -54,9 +54,9 @@
 
 <script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
 <script>
-	
+
 steal("can","can/util/fixture","can/list/promise", "can/map/define",function(){
-	
+
 	can.fixture("GET /sites", function(request, response){
 		if(request.data.type == "fun"){
 			return [
@@ -75,11 +75,11 @@ steal("can","can/util/fixture","can/list/promise", "can/map/define",function(){
 		}
 	});
 	can.fixture.delay = 1500;
-	
+
 	Site = can.Model({
 		findAll: "GET /sites"
 	},{});
-	
+
 	can.Component.extend({
 		tag: "site-app",
 		scope: {
@@ -97,11 +97,11 @@ steal("can","can/util/fixture","can/list/promise", "can/map/define",function(){
 			}
 		}
 	});
-	
+
 	$("#app").html(  can.view("app-template",{}))
-	
+
 });
-	
-	
-	
+
+
+
 </script>

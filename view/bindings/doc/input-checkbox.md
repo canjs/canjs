@@ -7,7 +7,7 @@ Cross bind a value to a checkbox.
 
 Cross binds the checked property to a true or false value.
 
-@param {can.mustache.key} KEY A named value in the current scope.
+@param {can.stache.key} KEY A named value in the current scope.
 
 @param {String} [TRUEVALUE] Used to set the checked value of `KEY`.
 
@@ -22,7 +22,7 @@ Cross binds the checked property to a true or false value.
 ## Using can-true-value
 
 An alternative true and false value can be specified by setting `can-true-value` and
-`can-false-value` attributes.  This is used for setting up a "boolean" property that only has two possible valid values, 
+`can-false-value` attributes.  This is used for setting up a "boolean" property that only has two possible valid values,
 whose values are modelled by the true/false checked property of a checkbox, as in the following example:
 
 	<input type='checkbox' can-value='sex' can-true-value='male' can-false-value='female'/>

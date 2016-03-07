@@ -39,7 +39,7 @@ can.Component.extend({
 			// If this is the first panel, activate it.
 			if( this.attr("panels").length === 0 ) {
 				this.makeActive(panel)
-			} 
+			}
 			this.attr("panels").push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
@@ -65,9 +65,9 @@ can.Component.extend({
 				panel.attr("active", false);
 			});
 			panel.attr("active",true);
-			
+
 		},
-		// this is scope, not mustache
+		// this is scope, not stache
 		// consider removing scope as arg
 		isActive: function( panel ) {
 			return this.attr('active') == panel;
@@ -76,7 +76,7 @@ can.Component.extend({
 });
 
 can.Component.extend({
-	template: 
+	template:
 		can.stache("<h2 can-click='makeActive'>{{title}}</h2>"+
 		"{{#if active}}<content></content>{{/if}}"),
 	tag:"panel",
@@ -102,4 +102,3 @@ $("#out").on("click","button", function(){
 
 });
 </script>
-

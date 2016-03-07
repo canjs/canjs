@@ -87,7 +87,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 					el.getAttribute(attrName);
 			},
 			cleanHTMLTextForIE = function(html){
-				return html.replace(/ ejs_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
+				return html.replace(/ stache_0\.\d+="[^"]+"/g,"").replace(/<(\/?[-A-Za-z0-9_]+)/g, function(whole, tagName){
 					return "<"+tagName.toLowerCase();
 				}).replace(/\r?\n/g,"");
 			},
@@ -4760,7 +4760,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			equal(counter, 2, 'Counter incremented twice');
 		});
-		
+
 		test("%index is double wrapped compute in helper (#2179)", function(){
 			var appState = new can.Map({
 				todos: [
@@ -4768,15 +4768,15 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 					{ description: "Bar" },
 				]
 			});
-			
+
 			var template =  can.stache('{{#each todos}}<div>{{indexPlusOne %index}}</div>{{/each}}');
-			
+
 			can.stache.registerHelper("indexPlusOne", function(val, options) {
 				var resolved = val();
 				equal(typeof resolved,"number", "should be a number");
 				return resolved + 2;
 			});
-			
+
 			template(appState);
 		});
 
@@ -4811,7 +4811,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
             equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
 		});
-		
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

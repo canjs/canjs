@@ -48,15 +48,15 @@ li:hover {
 </style>
 <div id="app"></div>
 <script src="../../node_modules/steal/steal.js"></script>
-<script type='text/ejs' id='appMustache'>
+<script type='text/stache' id='appMustache'>
 <todos-app>
 	<todos-list></todos-list>
 	<todos-editor todo='todo'></todos-editor>
 </todos-app>
-</script> 
+</script>
 <script>
 steal("can",function(){
-	
+
 
 	// Setup the model to work with dummy todos because we don't have a service
 // Only findAll and update are used.
@@ -115,7 +115,7 @@ can.Component.extend({
 
 can.Component.extend({
 	tag: "todos-list",
-	template: 
+	template:
 		"<ul>"+
 		  "{{#each todos}}"+
 			"<li>"+

@@ -10,8 +10,8 @@ the content can be rendered with subtemplate.  For example:
       var frag = tagData.subtemplate(tagData.scope, tagData.options)
       $(el).html( frag )
     })
-    
+
 @option {can.view.Scope} scope The scope of the element.  
 
 
-@option {can.view.Options} options The mustache helpers and other non-data values passed to the template.
+@option {can.view.Options} options The stache helpers and other non-data values passed to the template.

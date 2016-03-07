@@ -7,7 +7,7 @@ Cross bind a value to a `<select>` element.
 
 Cross binds the selected option value with an observable value.
 
-@param {can.mustache.key} KEY A named value in the current 
+@param {can.stache.key} KEY A named value in the current 
 scope. `KEY`'s value is cross bound with the selected `<option>` in
 the `<select>`. `KEY` should specify either a [can.Map] property or
 a [can.compute].

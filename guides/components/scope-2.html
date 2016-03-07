@@ -2,8 +2,8 @@
 <script src="../../node_modules/steal/steal.js"></script>
 <script>
 steal("can",function(){
-	
-  var template = can.view.mustache("<h1>Todo: {{mytodo.name}}</h1>"+
+
+  var template = can.view.stache("<h1>Todo: {{mytodo.name}}</h1>"+
                      "<todos-editor todo='mytodo'></todos-editor>")
 
   var mytodo = new can.Map({name: "Do the dishes"})
@@ -23,6 +23,6 @@ steal("can",function(){
   document.body.appendChild(frag)
 
   $("#app").html( frag );
-    
+
 })
 </script>

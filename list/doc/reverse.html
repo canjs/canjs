@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<body>
-<script type="text/mustache" id="people">
+<script type="text/stache" id="people">
 	People(can.List):
 	<ul>
 		{{#each people}}
@@ -15,7 +15,7 @@
 </script>
 
 		<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-		<script type="text/javascript"> 
+		<script type="text/javascript">
 steal('can/list', 'can/view/stache', function() {
 
 	var people = new can.List(['Alexis', 'Justin', 'David']);

@@ -6,7 +6,7 @@
 This is the detailed documentation of the API for CanJS 2.3, a framework for building
 web applications that provides a lightweight inheritance system, observable
 objects and values, and a powerful MVC core with live-bound templates, among other
-resources. 
+resources.
 
 If you are just starting with CanJS, you may want to try our [getting started guide](../guides/Tutorial.html).
 
@@ -19,9 +19,8 @@ framework:
  - [can.Map], [can.List], [can.compute] - observable objects, list, and values.
  - [can.Model] -  observes connected to a RESTful JSON interface
  - [can.view] - template loading, caching, rendering
- - [can.mustache] - Live binding Handlebars and Mustache templates
  - [can.route] -  back button and bookmarking support
- 
+
 The following modules are typically distributed as plugins:
 
  - [can.Map::define] - control the behavior of attributes on a can.Map

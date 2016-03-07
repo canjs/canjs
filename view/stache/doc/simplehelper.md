@@ -47,7 +47,7 @@ can.stache.simpleHelper
 
 If a helper returns a function, that function is called back after
 the template has been rendered into DOM elements. This can
-be used to create mustache tags that have rich behavior.
+be used to create stache tags that have rich behavior.
 
 If the helper is called __within a tag__ like:
 
@@ -76,6 +76,3 @@ following helper would be called with a temporary `<li>` element:
 
 The temporary element depends on the parent element. The default temporary element
 is a `<span>` element.
-
-
-

@@ -1,10 +1,10 @@
 "format steal";
 steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
-	
+
 	var deferred = new can.Deferred(),
 		ignoreAttributesRegExp = /^(dataViewId|class|id|type|src)$/i;
-	
-	var typeMatch = /\s*text\/(mustache|stache|ejs)\s*/;
+
+	var typeMatch = /\s*text\/(stache)\s*/;
 	function isIn(element, type) {
 		while(element.parentNode) {
 			element = element.parentNode;
@@ -26,7 +26,7 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 			can.appendChild(ref.parentNode, element);
 		}
 	}
-	
+
 	function render(renderer, scope, el) {
 		var frag = renderer(scope);
 		if( isIn(el,"head") ) {
@@ -47,21 +47,21 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 		can.each(el.attributes||[], function(attr) {
 			setAttr(el, attr.name, scope);
 		});
-		
+
 		can.bind.call(el, "attributes", function (ev) {
 			setAttr(el, ev.attributeName, scope);
 		});
-		
+
 		return scope;
 	}
-	
+
 	function autoload(){
 		var promises = [];
-		
+
 		can.each(  can.$("[can-autorender]"), function( el, i){
 			el.style.display = "none";
 
-			
+
 			var text = el.innerHTML || el.text,
 				typeAttr = el.getAttribute("type"),
 				typeInfo = typeAttr.match( typeMatch ),
@@ -71,9 +71,9 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 			if(window.System || !(window.define && window.define.amd)) {
 				typeModule += "/" + type;
 			}
-			
+
 			promises.push( can["import"](typeModule).then(function(engine){
-				
+
 				engine = can[type] || engine;
 				if(engine.async) {
 					return engine.async(text).then(function(renderer){
@@ -83,11 +83,11 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 					var renderer = engine(text);
 					render(renderer, setupScope(el), el);
 				}
-				
+
 			}) );
-			
+
 		});
-		
+
 		can.when.apply(can, promises).then(
 			can.proxy(deferred.resolve, deferred),
 			can.proxy(deferred.reject, deferred)

@@ -32,7 +32,7 @@ __and__ as time passes, the timestamp will update to:
 
 __and__ then update to "some seconds ago" and so forth.
 
-To accomplish this, create a `prettyDate` [mustache helper](../docs/can.mustache.helper.html) that converts
+To accomplish this, create a `prettyDate` [stache helper](../docs/can.stache.helper.html) that converts
 dates into a human readable format.  A helper function is called from within the template where its result
 will be displayed.  The following calls `prettyDate` with an observable value of `createdAt`.
 
@@ -43,7 +43,7 @@ will be displayed.  The following calls `prettyDate` with an observable value of
 </h1>
 ```
 
-To call a function from a template, [register](../docs/can.mustache.registerHelper.html) it with `can.view`.
+To call a function from a template, [register](../docs/can.stache.registerHelper.html) it with `can.view`.
 The third argument passed to `can.view` is an object with helper functions, so the `dateHelper` function
 can be registered as `prettyView`.
 

@@ -4,27 +4,27 @@ steal("can/map", "can/view/stache", "can/view/modifiers", "can/test", "steal-qun
 		return;
 	}
 	QUnit.module('can/view/modifiers');
-	
+
 	test('modifier with a deferred', function () {
-	
+
 		$('#qunit-fixture')
 			.html('');
-			
+
 		stop();
 		var foo = can.Deferred();
-		
+
 		$('#qunit-fixture')
 			.html(can.test.path('view/test/deferred.stache'), foo);
-	
+
 		var templateLoaded = new can.Deferred(),
 			id = can.view.toId( can.test.path('view/test/deferred.stache') );
-			
+
 		setTimeout(function () {
 			foo.resolve({
 				foo: 'FOO'
 			});
 		}, 1);
-			
+
 		// keep polling cache until the view is loaded
 		var check = function(){
 			if(can.view.cached[id]) {
@@ -41,11 +41,11 @@ steal("can/map", "can/view/stache", "can/view/modifiers", "can/test", "steal-qun
 					.html(), 'FOO', 'worked!');
 				start();
 			},10);
-			
+
 		});
-		
+
 	});
-	
+
 	/*test("non-HTML content in hookups", function(){
 	 $("#qunit-fixture").html("<textarea></textarea>");
 	 can.render.hookup(function(){});
@@ -66,23 +66,7 @@ steal("can/map", "can/view/stache", "can/view/modifiers", "can/test", "steal-qun
 			d.resolve('Hello World');
 		}, 10);
 	});
-	// TODO: Move to EJS repo?
-	// test('val set with a template within a hookup within another template', function () {
-	// 	var frag = can.view(can.test.path('view/test/hookupvalcall.ejs'), {});
-	// 	var div = document.createElement('div');
-	// 	div.appendChild(frag);
-	// 	equal(div.getElementsByTagName('div')[0].getElementsByTagName('h3')[0].innerHTML, 'in div', 'Rendered within other template');
-	// });
-	// test('jQuery.fn.hookup', function () {
-	// 	can.$('#qunit-fixture')
-	// 		.html('');
-	// 	var els = $(can.view.render(can.test.path('view/test/hookup.ejs'), {}))
-	// 		.hookup();
-	// 	can.$('#qunit-fixture')
-	// 		.html(els);
-	// 	//makes sure no error happens
-	// 	equal(can.$('#qunit-fixture')[0].getElementsByTagName('div')[0].id, 'dummy', 'Element hooked up');
-	// });
+
 	test('hookups don\'t break script execution (issue #130)', function () {
 		// this simulates a pending hookup (hasn't been run yet)
 		can.view.hook(function () {});
@@ -93,7 +77,7 @@ steal("can/map", "can/view/stache", "can/view/modifiers", "can/test", "steal-qun
 			.html(), 'OK');
 		can.$('#qunit-fixture')
 			.html('');
-			
+
 		// clear hookups we check that;
 		can.view.hookups = {};
 	});

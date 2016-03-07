@@ -24,7 +24,7 @@ steal("can/util",
 	// A lookup is an object that is used to identify a lookup in the scope.
 	/**
 	 * @hide
-	 * @typedef {{get: String}} can.mustache.Lookup
+	 * @typedef {{get: String}} can.stache.Lookup
 	 * @option {String} get A value in the scope to look up.
 	 */
 
@@ -237,7 +237,7 @@ steal("can/util",
 		 * @hide
 		 * Return a renderer function that evaluates to a string.
 		 * @param {String} mode
-		 * @param {can.mustache.Expression} expression
+		 * @param {can.stache.Expression} expression
 		 * @return {function(can.view.Scope,can.view.Options, can.view.renderer, can.view.renderer)}
 		 */
 		makeStringBranchRenderer: function(mode, expressionString){
@@ -278,7 +278,7 @@ steal("can/util",
 		 * @hide
 		 * Returns a renderer function that evaluates the mustache expression.
 		 * @param {String} mode
-		 * @param {can.mustache.Expression} expression
+		 * @param {can.stache.Expression} expression
 		 * @param {Object} state The html state of where the expression was found.
 		 */
 		makeLiveBindingBranchRenderer: function(mode, expressionString, state){
@@ -379,7 +379,7 @@ steal("can/util",
 		/**
 		 * @hide
 		 * Returns the mustache mode split from the rest of the expression.
-		 * @param {can.mustache.Expression} expression
+		 * @param {can.stache.Expression} expression
 		 * @param {Object} state The state of HTML where the expression was found.
 		 */
 		splitModeFromExpression: function(expression, state){

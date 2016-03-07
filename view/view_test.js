@@ -60,17 +60,12 @@ steal("can/view/callbacks",
 		var data = {message: "hello"},
 			expected = "<h1>hello</h1>",
 			templates= {
-				// "ejs" : "<h1><%= message %></h1>",
-				// "mustache" : "<h1>{{message}}</h1>",
 				"stache": "<h1>{{message}}</h1>"
 			},
 			templateUrl = function(ext){
 				return can.test.path('view/test/basic_loading.' + ext);
 			};
 		can.each([
-			// TODO: move test to ejs/mustache repos respectively
-			// 'ejs',
-			// 'mustache',
 			'stache'
 		], function (ext) {
 
@@ -107,9 +102,6 @@ steal("can/view/callbacks",
 		var expected = '<h3>helloworld</h3><div>foo</div>';
 
 		can.each([
-			// TODO: move to ejs/mustache repos
-			// 'ejs',
-			// 'mustache',
 			'stache'
 		], function (ext, i) {
 			var actual = can.view.render(can.test.path('view/test/helpers.' + ext), {
@@ -123,15 +115,6 @@ steal("can/view/callbacks",
 		});
 
 	});
-
-	// TODO: move to EJS repo
-	// plugin.ejs
-	// <div <%= (el) -> can.append(el,"<span>Here is something</span>") %> id='something'></div>
-	// test('buildFragment works right', function () {
-	// 	can.append(can.$('#qunit-fixture'), can.view(can.test.path('view/test//plugin.ejs'), {}));
-	// 	ok(/something/.test(can.$('#something span')[0].firstChild.nodeValue), 'something has something');
-	// 	can.remove(can.$('#something'));
-	// });
 
 	test('async templates, and caching work', function () {
 		stop();
@@ -171,12 +154,6 @@ steal("can/view/callbacks",
 			});
 		});
 	});
-
-	// TODO: move to EJS repo
-	// test('hookup', function () {
-	// 	can.view(can.test.path('view/test/hookup.ejs'), {});
-	// 	equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
-	// });
 
 	test('inline templates other than \'tmpl\'', function () {
 		var script = document.createElement('script');
@@ -277,7 +254,7 @@ steal("can/view/callbacks",
 			message: 'Rendered!'
 		})), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered'); // TODO doesn't get caught in Zepto for whatever reason
 		// raises(function() {
-		//      can.view('jkflsd.ejs');
+		//      can.view('jkflsd.stache');
 		// }, 'Nonexistent template throws error');
 	});
 	test('nameless renderers (#162, #195)', 3, function () {
@@ -375,14 +352,9 @@ steal("can/view/callbacks",
 			loading: true
 		}),
 			templates = {
-				// TODO: move to ejs/mustache repos
-				// "ejs" : "<% if (state.attr('loading')) { %>Loading<% }else{ %>Loaded<% } %><table><tbody><tr></tr></tbody></table>",
-				// "mustache" : "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>",
 				"stache": "{{#if state.loading}}Loading{{else}}Loaded{{/if}}<table><tbody><tr></tr></tbody></table>"
 			};
 		can.each([
-			// 'ejs',
-			// 'mustache',
 			'stache'
 		], function (ext) {
 
@@ -445,7 +417,7 @@ steal("can/view/callbacks",
 		}, 100);
 		bar.resolve('Bar done');
 	});
-	// TODO: Move to EJS repo
+
 	test('Using \'=\' in attribute does not truncate the value', function () {
 		var template = can.stache('<img id=\'equalTest\' {{class}} src="{{src}}">'),
 			obs = new can.Map({
@@ -874,15 +846,10 @@ steal("can/view/callbacks",
 		var
 			list = new can.List([{},{}]),
 			templates = {
-				// TODO: move to ejs/mustache repos
-				// "ejs"      : "<table><colgroup><% list.each( function() { %><col /><% }) %></colgroup></table>",
-				// "mustache" : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>",
 				"stache"   : "<table><colgroup>{{#list}}<col/>{{/list}}</colgroup></table>"
 			};
-			
+
 		can.each([
-			// "ejs",
-			// "mustache",
 			"stache"
 		], function (ext) {
 			var

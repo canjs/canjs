@@ -8,7 +8,7 @@ Cross bind a value to a `<select>` element with multiple selections permitted.
 
 Cross binds the selected option values with an observable value.
 
-@param {can.mustache.key} KEY A named value in the current 
+@param {can.stache.key} KEY A named value in the current 
 scope. `KEY`'s value is cross bound with the selected `<option>` in
 the `<select>`. `KEY`'s value should be either Array-like, a String,
 or `undefined`.
@@ -18,7 +18,7 @@ or `undefined`.
 ## Use
 
 Select elements with the multiple attribute (`<select multiple can-value="KEY"/>`)
-have a specified behavior if the value of KEY is Array like, a String, or 
+have a specified behavior if the value of KEY is Array like, a String, or
 undefined.
 
 ## Cross binding to Arrays
@@ -45,12 +45,12 @@ Could be rendered with one of the following:
 
     // A can.List
     { colors: new can.List() }
-    
+
 @demo can/view/bindings/doc/select_multiple.html
 
 ## Cross binding Strings
 
-If the [can.Map] property or [can.compute] value is a 
+If the [can.Map] property or [can.compute] value is a
 string like:
 
     new can.Map({color: "red;green"});
@@ -61,16 +61,16 @@ string are used as values to match against `<option>` tag values.
 
 @demo can/view/bindings/doc/select_multiple_string.html
 
-## Cross binding undefined 
+## Cross binding undefined
 
 If the `KEY` value begins as undefined [can.Map] property like:
 
     new can.Map({colors: undefined});
-    
+
 The property will be converted to a [can.List].
 
 If the `KEY` value begins as an undefined [can.compute] like:
-    
+
     {colors: can.compute()}
 
 The value of the compute will be set to an array.

@@ -66,25 +66,3 @@ The following makes `fullName` able to set `first` and `last`:
     me.attr("fullName", "Brian Moschel")
     me.attr("first") //-> "Brian"
     me.attr("last")  //-> "Moschel"
-
-## Alternatives
-
-[can.mustache] and [can.ejs] will automatically convert any function
-read in the template to a can.compute. So, simply having a fullName
-function like:
-
-    var Person = can.Map.extend({
-        fullName: function(){
-            return this.attr("first") + " " + this.attr("last")
-        }
-    })
-    var me = new Person({first: "Justin", last: "Meyer"})
-
-Will already be live-bound if read in a template like:
-
-    {{me.fullName}}
-    // or
-    <%= me.attr("fullName") %>
-
-The [can.Map.setter setter] plugin can also provide similar functionality as
-Getter/Setter computes.

@@ -1109,7 +1109,7 @@ define('can/view/view', ['can/util/util'], function (can) {
             };
         },
         types: {},
-        ext: '.ejs',
+        ext: '.stache',
         registerScript: function (type, id, src) {
             return 'can.view.preloadStringRenderer(\'' + id + '\',' + $view.types['.' + type].script(id, src) + ');';
         },
@@ -3692,7 +3692,7 @@ define('can/view/node_lists/node_lists', [
     } catch (ex) {
         canExpando = false;
     }
-    var nodeMap = {}, textNodeMap = {}, expando = 'ejs_' + Math.random(), _id = 0, id = function (node, localMap) {
+    var nodeMap = {}, textNodeMap = {}, expando = 'stache_' + Math.random(), _id = 0, id = function (node, localMap) {
             var _textNodeMap = localMap || textNodeMap;
             var id = readId(node, _textNodeMap);
             if (id) {

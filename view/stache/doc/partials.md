@@ -5,8 +5,8 @@
 
 Render another template within the current template.
 
-@param {can.stache.key} key A key that references a value within the current or parent 
-[can.stache.context context]. If the value is a function or [can.compute], the 
+@param {can.stache.key} key A key that references a value within the current or parent
+[can.stache.context context]. If the value is a function or [can.compute], the
 function's return value is used.
 
 If the key value is:
@@ -36,7 +36,7 @@ Partials render at runtime, so recursive partials are possible but make sure you
 
 For example, this template and partial:
 
-__base.mustache__
+__base.stache__
 
 ```
 <h2>Names</h2>
@@ -45,7 +45,7 @@ __base.mustache__
 {{/names}}
 ```
 
-__user.mustache__
+__user.stache__
 
 ```
 <strong>{{name}}</strong>
@@ -84,7 +84,7 @@ The following template uses an absolute path (rooted to steal's root directory):
 
 __Referencing by ID__
 
-Partials can reference templates that exist in script tags on the page by 
+Partials can reference templates that exist in script tags on the page by
 referencing the `id` of the partial in the template.  For example:
 
 ```
@@ -105,7 +105,7 @@ var template = can.view("#mytemplate", {});
 
 __Manually Registering__
 
-Partials can be manually registered by calling `can.view.registerView` 
+Partials can be manually registered by calling `can.view.registerView`
 and passing an identifier and content.  For example:
 
 ```
@@ -126,9 +126,9 @@ Partials can resolve the context object that contains partial identifiers.
 For example:
 
 ```
-var template = can.view("#template", { 
+var template = can.view("#template", {
 	items: []
-	itemsTemplate: "test_template.stache" 
+	itemsTemplate: "test_template.stache"
 });
 
 can.$(document.body).append(template);

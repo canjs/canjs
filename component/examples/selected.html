@@ -9,7 +9,7 @@
 </style>
 <div id="html">
 <div id='out'></div>
-<script type="text/mustache" id="listMustache">
+<script type="text/stache" id="listStache">
 {{#items}}
   <div {{#isSelected}}class='selected'{{/isSelected}}
        can-click='toggle'>
@@ -23,7 +23,7 @@
 <script>
 	DEMO_HTML = document.getElementById("html").innerHTML;
 </script>
-<script type='text/javascript'> 
+<script type='text/javascript'>
 steal("can/component", function() {
 
   can.Component.extend({
@@ -33,7 +33,7 @@ steal("can/component", function() {
       toggle: function(item){
       	var selected = this.attr('selected'),
       		index = selected.indexOf(item);
-      		
+
       	if( index >= 0 ) {
       		selected.splice(index, 1);
       	} else {
@@ -41,19 +41,19 @@ steal("can/component", function() {
       	}
       }
     },
-    template: can.view("listMustache"),
+    template: can.view("listStache"),
     helpers: {
       isSelected: function(options){
         if( this.attr("selected").indexOf(options.context) >=0 ) {
       	  return options.fn();
       	} else {
       	  return options.inverse();
-        }	
+        }
       }
     }
   })
 
-  $("#out").html(can.view.mustache("<my-items/>")({
+  $("#out").html(can.view.stache("<my-items/>")({
     items: new can.List([
       { title: "CanJS" },
       { title: "jQuery++" },

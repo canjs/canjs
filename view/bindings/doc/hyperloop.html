@@ -2,29 +2,28 @@
 <script src="../../../node_modules/steal/steal.js"></script>
 <script>
 steal("can","can/view/bindings",function(can){
-		
+
 	var HyperLoop = can.Map.extend({
 	  travelTime: function(){
 	    return this.attr('dist') /
 				962 /* km/h */
 	  }
 	});
-	
+
 	loop = new HyperLoop({
 		dist: 3429.19 /* Chi to SF */
 	});
-	
-	var template = can.view.mustache(
+
+	var template = can.view.stache(
 	  "<p>Distance:\
-	      <input can-value='dist'/>\
+	      <input can-value='{dist}'/>\
 	  </p>\
 	  <p>Time:\
 	     {{travelTime}} hrs\
 	  </p>");
-		
+
 	$("#out").html( template(loop) );
 
 
 });
 </script>
-

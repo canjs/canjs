@@ -2,7 +2,7 @@
 <script src="../../node_modules/steal/steal.js"></script>
 <script>
 steal("can",function(){
-	
+
   can.Component.extend({
       tag: "todos-editor",
       template: "<form can-click='toggle'>Editor: "+
@@ -16,10 +16,10 @@ steal("can",function(){
       }
   })
 
-  var template = can.view.mustache("Here is my "+
+  var template = can.view.stache("Here is my "+
                      "<todos-editor></todos-editor>")
 
   $("#app").html( template() );
-    
+
 })
 </script>

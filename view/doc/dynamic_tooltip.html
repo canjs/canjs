@@ -8,7 +8,7 @@
 </style>
 <div id="demo">
 <div id="app"></div>
-<script type="text/mustache" id="app-template">
+<script type="text/stache" id="app-template">
 	<table>
 		<thead>
 			<td></td><td>Name</td><td>Email</td>
@@ -30,7 +30,7 @@
 							can-click="notImplemented">
 						Delete
 					</button>
-					<button 
+					<button
 						tooltip="{{archiveTooltip}}"
 						{{^selected.length}}class="disabled"{{/selected.length}}
 						can-click="notImplemented">
@@ -44,13 +44,13 @@
 </div>
 <script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
 <script>
-	steal("can/view/mustache","can/view/bindings", "jquery-ui",function(){
-		
+	steal("can/view/stache","can/view/bindings", "jquery-ui",function(){
+
 		can.view.attr("tooltip", function( el, attrData ) {
 			// A helper that updates or sets up the tooltip
 			var updateTooltip = function(){
 				$(el).tooltip({
-					content: el.getAttribute("tooltip"), 
+					content: el.getAttribute("tooltip"),
 					items: "[tooltip]"
 				})
 			}
@@ -62,23 +62,23 @@
 			})
 			// Setup the tooltip
 			updateTooltip();
-			
+
 		})
-		
+
 		var users = new can.List([
 			{ name: "Justin Meyer", email: "justin@bitovi" },
 			{ name: "Brian Moschel", email: "brian@bitovi" },
 			{ name: "Bitovi", email: "contact@bitovi" },
 		])
-		
+
 		var selected = new can.List();
-		
+
 		$("#app").html( can.view("app-template",{
 			selected: selected,
 			users: users,
 			toggle: function(user){
 				var index = selected.indexOf( user );
-				
+
 				if( index >= 0 ) {
 					selected.splice(index, 1)
 				} else {
@@ -106,5 +106,5 @@
 			}
 		}) )
 	})
-	
+
 </script>

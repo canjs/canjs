@@ -18,7 +18,7 @@ using jQuery, you can listen to jQuery special events too.
 should be a function.
 
 @param {can.stache.key} [argKey...] Key values that will be passed as
-arguments to the `methodKey` function value.  Key values can 
+arguments to the `methodKey` function value.  Key values can
 be read from the scope, or literals like `"foo"`, `1`, etc.
 
 The following key values are also supported:
@@ -32,11 +32,11 @@ The following key values are also supported:
 If no `argKey`s or `hashKey`s are provided, the methodKey will be called with the
 `@context`, `@element` and `@event` as arguments.
 
-@param {String} hashName A property name 
+@param {String} hashName A property name
 that gets added to the `hash` argument.  The hash argument is the
 last value passed to the function specified by `methodKey`.
 
-@param {can.stache.key} hashKey Specifies value that is added 
+@param {can.stache.key} hashKey Specifies value that is added
 to the `hash` argument for a `hashName` value.  `hashKey` supports
 the same key values as `argKey`.
 
@@ -63,18 +63,18 @@ item from `items` when that item is clicked on.
 
 ## Special Event Types
 
-can.view.bindings supports creating special event types 
-(events that aren't natively triggered by the DOM), which are 
-bound by adding attributes like `can-SPECIAL='KEY'`. This is 
+can.view.bindings supports creating special event types
+(events that aren't natively triggered by the DOM), which are
+bound by adding attributes like `can-SPECIAL='KEY'`. This is
 similar to [$.special](http://benalman.com/news/2010/03/jquery-special-events/).
 
 ### can-enter / (enter)
 
-can-enter is a special event that calls its handler whenever the enter 
-key is pressed while focused on the current element. For example: 
+can-enter is a special event that calls its handler whenever the enter
+key is pressed while focused on the current element. For example:
 
 	<input type='text' can-enter='{save}' />
 
-The above template snippet would cause the save method 
-(in the [can.mustache Mustache] [can.view.Scope scope]) whenever 
+The above template snippet would cause the save method
+(in the [can.stache Stache] [can.view.Scope scope]) whenever 
 the user hits the enter key on this input.
