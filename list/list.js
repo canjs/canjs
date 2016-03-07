@@ -128,8 +128,10 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			},
 			___get: function (attr) {
 				if (attr) {
-					if (this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])) {
-						return this[attr]();
+					var computedAttr = this._computedAttrs[attr];
+					if (computedAttr && computedAttr.compute) {
+						// return computedAttr.compute();
+						return computedAttr.compute();
 					} else {
 						return this[attr];
 					}
@@ -472,6 +474,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		function (where, name) {
 			var orig = [][name];
 			list.prototype[name] = function () {
+				can.batch.start();
 				// Get the items being added.
 				var args = [],
 					// Where we are going to add items.
@@ -492,7 +495,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 
 					this._triggerChange("" + len, "add", args, undefined);
 				}
-
+				can.batch.stop();
 				return res;
 			};
 		});
@@ -586,12 +589,13 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				// `remove` - Items removed.
 				// `undefined` - The new values (there are none).
 				// `res` - The old, removed values (should these be unbound).
+				can.batch.start();
 				this._triggerChange("" + len, "remove", undefined, [res]);
 
 				if (res && res.unbind) {
 					bubble.remove(this, res);
 				}
-
+				can.batch.stop();
 				return res;
 			};
 		});
