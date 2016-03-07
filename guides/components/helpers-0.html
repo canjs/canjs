@@ -2,7 +2,7 @@
 <script src="../../node_modules/steal/steal.js"></script>
 <script>
 steal("can",function(){
-	
+
   var TODOS = [
     {id: 1, name: "wake up", complete: true},
     {id: 2, name: "take out trash", complete: false},
@@ -26,12 +26,12 @@ steal("can",function(){
   },
   {});
 
-	
-  var template = can.view.mustache("<todos-list></todos-list>")
+
+  var template = can.view.stache("<todos-list></todos-list>")
 
   can.Component.extend({
 		tag: "todos-list",
-		template: 
+		template:
 			"<ul>"+
 			  "{{#each todos}}"+
 				"<li>"+
@@ -61,6 +61,6 @@ steal("can",function(){
   document.body.appendChild(frag)
 
   $("#app").html( frag );
-    
+
 })
 </script>

@@ -1,7 +1,7 @@
 <div id="todoapp"></div>
 <link rel="stylesheet" type="text/css" href="base.css"/>
 <script src="../../node_modules/steal/steal.js"></script>
-<script type='text/mustache' id='app-template'>
+<script type='text/stache' id='app-template'>
 <todo-app>
 	<header id="header">
 		<todo-create></todo-create>
@@ -11,7 +11,7 @@
 		<label for="toggle-all">Mark all as complete</label>
 		<todo-list></todo-list>
 	</section>
-	
+
 	<footer id="footer" class="{{^todos}}hidden{{/todos}}">
 		<span id="todo-count">
 			<strong>{{todos.remaining}}</strong> {{plural "item" todos.remaining}} left
@@ -29,34 +29,34 @@
 	</footer>
 </todo-app>
 </script>
-<script type='text/mustache' id='todo-create-template'>
+<script type='text/stache' id='todo-create-template'>
 <h1>todos</h1>
 <input id="new-todo" placeholder="What needs to be done?" autofocus="">
 </script>
-<script type='text/mustache' id='todo-list-template'>
+<script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
 	{{#each todos}}
-		<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}" 
+		<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}"
 			can-dblclick="edit">
 			<div class="view">
 				<input class="toggle" type="checkbox" can-value="complete"/>
 				<label>{{text}}</label>
 				<button class="destroy" can-click="destroy"></button>
 			</div>
-			<input class="edit" 
-			       type="text" 
-			       value="{{text}}" 
+			<input class="edit"
+			       type="text"
+			       value="{{text}}"
 			       can-blur="updateTodo"
 			       can-enter="updateTodo"/>
 		</li>
 	{{/todos}}
 </ul>
-	
+
 </script>
 <script>
 steal("can",function(){
-	
-	
+
+
 	var LocalStorage = can.Model.extend({
 		// Implement local storage handling
 		localStore: function (cb) {
@@ -70,7 +70,7 @@ steal("can",function(){
 				window.localStorage[name] = JSON.stringify(data);
 			}
 		},
-	
+
 		findAll: function (params) {
 			var def = new can.Deferred();
 			this.localStore(function (todos) {
@@ -83,7 +83,7 @@ steal("can",function(){
 			});
 			return def;
 		},
-	
+
 		destroy: function (id) {
 			var def = new can.Deferred();
 			this.localStore(function (todos) {
@@ -97,7 +97,7 @@ steal("can",function(){
 			});
 			return def;
 		},
-	
+
 		create: function (attrs) {
 			var def = new can.Deferred();
 			this.localStore(function (todos) {
@@ -107,7 +107,7 @@ steal("can",function(){
 			def.resolve({id : attrs.id});
 			return def;
 		},
-	
+
 		update: function (id, attrs) {
 			var def = new can.Deferred(), todo;
 			this.localStore(function (todos) {
@@ -123,7 +123,7 @@ steal("can",function(){
 			return def;
 		}
 	}, {});
-	
+
 	// Basic Todo entry model
 	// { text: 'todo', complete: false }
 	var Todo = LocalStorage.extend({
@@ -160,8 +160,8 @@ steal("can",function(){
 			return this.attr('length') === this.completed();
 		}
 	});
-	
-	
+
+
 	// The highest level component sets up the
 	// shared state for all sub components.
 	// In this case, it’s the list of todos.
@@ -194,10 +194,10 @@ steal("can",function(){
 					todo.attr('complete', toggle);
 				});
 			},
-	
+
 			// Listen for removing all completed Todos
 			'#clear-completed click': function () {
-				
+
 				for (var i = this.scope.todos.length - 1, todo; i > -1 && (todo = this.scope.todos[i]); i--) {
 					if (todo.attr('complete')) {
 						todo.destroy();
@@ -220,7 +220,7 @@ steal("can",function(){
 			}
 		}
 	})
-	
+
 	can.Component.extend({
 		tag: "todo-create",
 		template: can.view('todo-create-template'),
@@ -240,7 +240,7 @@ steal("can",function(){
 			}
 		}
 	});
-	
+
 	can.Component.extend({
 		tag: "todo-list",
 		template: can.view("todo-list-template"),
@@ -251,7 +251,7 @@ steal("can",function(){
 			},
 			updateTodo: function (todo, el) {
 				var value = can.trim(el.val());
-	
+
 				if (value === '') {
 					todo.destroy();
 				} else {
@@ -264,7 +264,7 @@ steal("can",function(){
 		}
 	})
 
-	
+
 	$("#todoapp").html( can.view("app-template", {}) );
 	can.route.ready()
 })

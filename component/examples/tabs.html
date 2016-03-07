@@ -24,7 +24,7 @@ tabs li.active {
     cursor: default;
 }
 panel {
-   
+
     clear: both;
     display: block;
 }
@@ -46,10 +46,10 @@ tabs ul { display: inline-block; }
 <script src="../../node_modules/steal/steal.js" main="@empty"></script>
 <script id="demo-source">
 steal("can/component","can/view/stache",function(){
-	
+
 can.Component.extend({
 	tag: "tabs",
-	template: 	
+	template:
 		can.stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
@@ -71,7 +71,7 @@ can.Component.extend({
 			// If this is the first panel, activate it.
 			if( this.attr("panels").length === 0 ) {
 				this.makeActive(panel)
-			} 
+			}
 			this.attr("panels").push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
@@ -97,9 +97,9 @@ can.Component.extend({
 				panel.attr("active", false)
 			});
 			panel.attr("active",true);
-			
+
 		},
-		// this is viewModel, not mustache
+		// this is viewModel, not stache
 		// consider removing viewModel as arg
 		isActive: function( panel ) {
 			return this.attr('active') == panel
@@ -143,4 +143,3 @@ $("#out").html( can.view("app",{
 
 });
 </script>
-

@@ -8,7 +8,7 @@
 
 @body
 
-Registers a helper with the Mustache system.
+Registers a helper with the Stache system.
 Pass the name of the helper followed by the
-function to which Mustache should invoke.
+function to which Stache should invoke.
 These are run at runtime.

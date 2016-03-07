@@ -20,7 +20,7 @@ Once downloaded or installed, CanJS can be loaded in a variety of ways:
  - RequireJS
  - Browserify
  - `<script>` tags
- 
+
 The following lists how to setup common combinations.  If you don't see yours, please
 ask on the [forums](http://forums.donejs.com/c/canjs) or [gitter chat](https://gitter.im/canjs/canjs).
 
@@ -49,7 +49,7 @@ Another quick way to start locally is by loading scripts from our CDN:
         <script type='text/stache' id='app'>
         	<hello-world/>
         </script>
-        
+
         <script type="text/javascript">
             can.Component.extend({
             	tag: 'hello-world',
@@ -62,7 +62,7 @@ Another quick way to start locally is by loading scripts from our CDN:
         </script>
     </body>
     </html>
-    
+
 This loads CanJS's core and its two most common plugins [define](../docs/can.Map.prototype.define.html)
 and [stache](../docs/can.stache.html).  Checkout the [release folder](https://github.com/bitovi/canjs.com/tree/gh-pages/release/latest)
 for the list of other plugins you can add.
@@ -193,7 +193,7 @@ Note that nearly all module names repeat the folder name (ex: `can/view/stache/s
 
 ### Requiring templates
 
-You can require any CanJS templates using the [can-compilify](https://www.npmjs.com/package/can-compilify) Browserify 
+You can require any CanJS templates using the [can-compilify](https://www.npmjs.com/package/can-compilify) Browserify
 transform. Complete instructions for installing and using the transform are available on [npm](https://www.npmjs.com/package/can-compilify).
 
 Install can-compilify:
@@ -225,7 +225,7 @@ You could also add can-compilify to your package.json.
 
 ### Building templates to production
 
-Using the can-compilify tranform, your production bundle(s) will include a compiled version of your 
+Using the can-compilify tranform, your production bundle(s) will include a compiled version of your
 templates so no extra setup is required.
 
 ## RequireJS from NPM, the Download or Bower
@@ -267,7 +267,7 @@ In RequireJS a simple configuration looks like this:
       });
 
       require(['can/control', 'can/view/stache'], function(Control, stache) {
-        // Use Mustache and Control
+        // Use Stache and Control
         var MyControl = Control.extend({
           init: function() {
             this.element.html(can.view('path/to/view.stache', this.options));
@@ -332,7 +332,7 @@ Use the [can-compile](https://github.com/canjs/can-compile#loading-with-requirej
 to build templates into an AMD module that can be used by `r.js` to build the app.
 
 
-## Script tags from NPM, the Download, or Bower 
+## Script tags from NPM, the Download, or Bower
 
 The Zip Download (on the [homepage](http://canjs.com)) contains the following
 "global" scripts that can be loaded with just a `<script>` tag.
@@ -516,9 +516,8 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
 
 ### Building templates to production
 
-CanJS can pre-compile [EJS](/docs/can.ejs.html), [Mustache](/docs/can.mustache.html),
-and [Stache](/docs/can.stache.html) views into JavaScript functions contained within a single file in order to avoid 
-additional requests for view files in production. When using 
+CanJS can pre-compile [Stache](/docs/can.stache.html) views into JavaScript functions contained within a single file in order to avoid
+additional requests for view files in production. When using
 CanJS standalone use the [can-compile](https://github.com/daffl/can-compile) Node module. Install with
 
 ```
@@ -536,5 +535,5 @@ This will create `views.production.js` in the current folder containing all pre-
 
 ## Script tags with the download builder
 
-The download builder on the homepage lets you customize what modules are included in a global 
+The download builder on the homepage lets you customize what modules are included in a global
 script.  After downloading that script, the use of that script is just like [loading CanJS with script tag using the zip download](#section_ScripttagsfromNPM_theDownload_orBower).

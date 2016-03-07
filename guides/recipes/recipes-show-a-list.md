@@ -15,7 +15,7 @@ var frag = can.view("app-template", {people: people})
 $("#my-app").html(frag);
 ```
 
-To show a list of data within a mustache template, use the `#each` operator.
+To show a list of data within a stache template, use the `#each` operator.
 
 ```
 <ul>

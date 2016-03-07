@@ -10,7 +10,7 @@ import 'can/map/define/';
 
 can.Component.extend({
 	tag: "tabs",
-	template: 	
+	template:
 		"<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
@@ -32,7 +32,7 @@ can.Component.extend({
 			// If this is the first panel, activate it.
 			if( this.attr("panels").length === 0 ) {
 				this.makeActive(panel)
-			} 
+			}
 			this.attr("panels").push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
@@ -58,9 +58,9 @@ can.Component.extend({
 				panel.attr("active", false)
 			});
 			panel.attr("active",true);
-			
+
 		},
-		// this is viewModel, not mustache
+		// this is viewModel, not stache
 		// consider removing viewModel as arg
 		isActive: function( panel ) {
 			return this.attr('active') == panel
@@ -86,7 +86,5 @@ can.Component.extend({
 });
 
 $("body").append(can.view("demo-html",{}));
-	
+
 </script>
-
-

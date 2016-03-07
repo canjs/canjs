@@ -2,11 +2,11 @@
 <script src="../../node_modules/steal/steal.js"></script>
 <script>
 steal("can",function(){
-	
-  var template = can.view.mustache(
+
+  var template = can.view.stache(
                      "<h1>Todo: {{mytodo.name}}</h1>"+
-                     "<todos-editor todo='mytodo' "+
-                                    "placeholder='name'>"+
+                     "<todos-editor todo='{mytodo}' "+
+                                    "placeholder='{name}'>"+
                     "</todos-editor>")
 
   var mytodo = new can.Map({name: "Do the dishes"})
@@ -16,7 +16,7 @@ steal("can",function(){
     template: "{{#if todo}}"+
                 "<input type='text' "+
                        "placeholder='{{placeholder}}' "+
-                       "can-value='todo.name'/>"+
+                       "can-value='{todo.name}'/>"+
               "{{/if}}",
     scope: {
     	placeholder: "@"
@@ -30,6 +30,6 @@ steal("can",function(){
   document.body.appendChild(frag)
 
   $("#app").html( frag );
-    
+
 })
 </script>

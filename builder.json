@@ -58,7 +58,7 @@
 		},
 		"can/view/stache/stache": {
 			"name": "can.stache",
-			"description": "High performance Mustache templates",
+			"description": "High performance Mustache-like templates",
 			"type": "core",
 			"isDefault": true
 		},

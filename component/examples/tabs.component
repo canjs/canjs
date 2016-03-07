@@ -82,7 +82,7 @@
 		panel.attr("active",true);
 
 	},
-	// this is scope, not mustache
+	// this is scope, not stache
 	// consider removing scope as arg
 	isActive: function( panel ) {
 		return this.attr('active') == panel;

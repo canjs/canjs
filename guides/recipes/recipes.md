@@ -14,7 +14,7 @@ Create a file called `myapp.html` and put the following in it to get started:
 ```
 <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="//canjs.com/release/2.0.4/can.jquery.js"></script>
-<script type="text/mustache" id="app-template">
+<script type="text/stache" id="app-template">
 //Template will go here
 </script>
 <script>

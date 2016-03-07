@@ -1,7 +1,7 @@
 @function can.view.Scope.attr attr
 @parent can.view.Scope.prototype
 
-@param {can.mustache.key} key A dot seperated path.  Use `"\."` if you have a
+@param {can.stache.key} key A dot seperated path.  Use `"\."` if you have a
 property name that includes a dot.
 
 @return {*} The found value or undefined if no value is found.

@@ -1,13 +1,13 @@
 <link rel="stylesheet" type="text/css" href="base.css"/>
 <script src="../../node_modules/steal/steal.js"></script>
-<script type='text/mustache' id='todos-app-template'>
+<script type='text/stache' id='todos-app-template'>
 <todos-app>
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
 		<todos-create></todos-create>
 	</header>
-	
+
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
@@ -18,14 +18,14 @@
 			<strong>{{todos.remainingCount}}</strong> {{plural "item" todos.remainingCount}} left
 		</span>
 		<ul id="filters">
-		
+
 			<li>{{{link "All" undefined}}}</li>
 			<li>{{{link "Active" "active"}}}</li>
 			{{#todos.completedCount}}
 			<li>{{{link "Completed" "completed"}}}</li>
 			{{/todos.completedCount}}
 		</ul>
-		<button id="clear-completed" 
+		<button id="clear-completed"
 				class="{{^todos.completedCount}}hidden{{/todos.completedCount}}",
 				can-click="todos.destroyCompleted">
 			Clear completed ({{todos.completedCount}})
@@ -34,23 +34,23 @@
 </section>
 </todos-app>
 </script>
-<script type='text/mustache' id='todos-list-template'>
+<script type='text/stache' id='todos-list-template'>
 <ul id="todo-list">
 	{{#todos}}
-		<li class="todo {{#completed}}completed{{/completed}} {{#editing}}editing{{/editing}}" 
+		<li class="todo {{#completed}}completed{{/completed}} {{#editing}}editing{{/editing}}"
 			can-dblclick='edit'>
 			<div class="view">
-				<input 
-					class="toggle" 
+				<input
+					class="toggle"
 					type="checkbox"
 					can-value='completed'/>
 				<label>{{name}}</label>
 				<button class="destroy"
 						can-click="destroy"></button>
 			</div>
-			<input class="edit" 
-			       type="text" 
-			       value="{{name}}" 
+			<input class="edit"
+			       type="text"
+			       value="{{name}}"
 			       can-blur='updateTodo'
 			       can-enter='updateTodo'>
 		</li>
@@ -62,7 +62,7 @@
 
 <script>
 steal("can",'can/util/fixture',function(){
-	
+
 	can.fixture({
 		"GET /services/todos": function(){
 			return [
@@ -83,15 +83,15 @@ steal("can",'can/util/fixture',function(){
 			return {}
 		}
 	});
-	
-	
+
+
 	Todo = can.Model.extend({
 		findAll: "/services/todos",
 		create: "/services/todos",
 		destroy: "/services/todos/{id}",
 		update: "/services/todos/{id}"
 	},{})
-	
+
 	Todo.List = can.Model.List.extend({
 		Map: Todo
 	},{
@@ -126,8 +126,8 @@ steal("can",'can/util/fixture',function(){
 			})
 		}
 	})
-	
-	
+
+
 	can.Component.extend({
 		tag: "todos-create",
 		template: '<input id="new-todo" '+
@@ -145,7 +145,7 @@ steal("can",'can/util/fixture',function(){
 			}
 		}
 	});
-	
+
 	can.Component.extend({
 		tag: "todos-list",
 		template: can.view("todos-list-template"),
@@ -164,7 +164,7 @@ steal("can",'can/util/fixture',function(){
 			}
 		}
 	});
-	
+
 	can.Component.extend({
 		tag: "todos-app",
 		scope: {
@@ -190,7 +190,7 @@ steal("can",'can/util/fixture',function(){
 				if(filter){
 					attr.filter = filter;
 				}
-				
+
 				return can.route.link(title,attr,{
 					className: can.route.attr("filter") == filter ? "selected" : ""
 				})
@@ -205,25 +205,13 @@ steal("can",'can/util/fixture',function(){
 			}
 		}
 	})
-	
+
 	can.route.ready()
 	var frag = can.view("todos-app-template",{})
-	
-	
-	
+
+
+
 	$("#app").append(frag);
-	
+
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-

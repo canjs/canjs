@@ -21,10 +21,6 @@
 		System.import("config.js").then(function(){
 			System.import("app").then(function(){
 
-				test("ejs", function(){
-					QUnit.equal(MODULE.ejs.childNodes[0].textContent, "EJS Hi", "EJS generated correctly");
-				})
-
 				test("stache", function(){
 					var div = document.createElement('div');
 					div.appendChild(MODULE.stache);

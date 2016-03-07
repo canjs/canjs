@@ -1,7 +1,7 @@
 <div id="demo">
 <div id='out'></div>
-<script type='text/mustache' id="attending-template">
-<p>Attending? 
+<script type='text/stache' id="attending-template">
+<p>Attending?
   <input type='radio' can-value='attending' value='yes'/> Yes,
   <input type='radio' can-value='attending' value='no'/> No,
   <input type='radio' can-value='attending' value='maybe'/> Maybe
@@ -14,21 +14,21 @@
 </script>
 <script src="../../../node_modules/steal/steal.js" main="@empty"></script>
 <script>
-steal("can/view/bindings", "can/view/mustache", function(){
-			
+steal("can/view/bindings", "can/view/stache", function(){
+
 var person = new can.Map({
   attending: null
 })
 
 var frag = can.view(
   "attending-template",
-  person, 
+  person,
   {
     attendence: function(){
-      return person.attr("attending") ? 
+      return person.attr("attending") ?
         "are a " + person.attr("attending") :
         "have not responded"
-    
+
     }
   });
 

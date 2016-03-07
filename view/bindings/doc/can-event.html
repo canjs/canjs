@@ -2,8 +2,8 @@
 <script src="../../../node_modules/steal/steal.js"></script>
 <script>
 steal("can/view/bindings",function(){
-		
-var template = can.mustache(
+
+var template = can.stache(
   "<div><button can-click='{up}'>&uarr;</button></div>"+
   "<div><input "+
                "can-enter='update' "+
@@ -35,4 +35,3 @@ $("#out").html( template( data ) );
 
 });
 </script>
-

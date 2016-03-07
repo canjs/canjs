@@ -12,7 +12,7 @@ automatically updates the page from the data in your application code.
 In the template section of `myapp.html`, put the following:
 
 ```
-<script type="text/mustache" id="app-template">
+<script type="text/stache" id="app-template">
 	<h1>{{message}}</h1>
 </script>
 ```

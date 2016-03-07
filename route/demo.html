@@ -24,7 +24,7 @@
 				</div>
     		</td>
     		<td>Change the demo's hash (<a href='#!recipe/8'>try it</a>) or push the <a href="javascript://" class='back'>back</a> or
-    			<a href="javascript://" class='forward'>forward</a> 
+    			<a href="javascript://" class='forward'>forward</a>
     			button. Notice how <code>can.route</code>'s attributes change.</td>
     	</tr>
     	<tr>
@@ -36,7 +36,7 @@
 				<pre id='route-data'></pre>
 			    </div>
     		</td>
-    		<td><a id="add-hash">Add</a> or change the Route Data's properties (except for the 
+    		<td><a id="add-hash">Add</a> or change the Route Data's properties (except for the
     			special route property). Notice how the hash changes.</td>
     	</tr>
     	<tr>
@@ -44,7 +44,7 @@
     	</tr>
     	<tr>
     		<td><ul id='routes'></ul></td>
-    		<td>can.route uses these routes to match and create urls. Edit the 
+    		<td>can.route uses these routes to match and create urls. Edit the
     			default values. <a id='changeRoute' href="javascript://">Show Me</a></td>
     	</tr>
     	<tr>
@@ -69,15 +69,15 @@
     	</tr>
     </table>
 	<div>
-		
+
 	</div>
 	<div style='clear: both'></div>
-    
-    
+
+
 	<!--<input type='text' id='create-route'/>-->
-	
-	
-	
+
+
+
 	<h2>Events</h2>
 <pre id='binding'>can.route.bind("change", function(ev, attr, how, newVal, oldVal){
   log(ev.batchNum, attr, how, newVal, oldVal)
@@ -94,7 +94,7 @@
 <div id="container">
 <table>
 	<tbody id='events'>
-		
+
 	</tbody>
 </table>
 </div>
@@ -107,9 +107,9 @@ steal('can/route',
 	'can/route',
 	'can/util/demos/observer.js',
 function() {
-    
+
     // DRAW ROUTES
-    
+
     // route observe that get smapped to routes
     var routes = new can.Map.List([
     	{route : ":type/:id", def : {}},
@@ -118,7 +118,7 @@ function() {
     var drawRoutes = function(){
     	var routesEl= $("#routes");
     	routesEl.empty();
-    	
+
     	// draw routes
 	    routes.each(function(route){
 	    	// setup an Observer
@@ -126,27 +126,26 @@ function() {
 	    	var pre = $("<li><pre></pre>")
 	    		.appendTo(routesEl)
 	    		.find("pre")
-	    	
+
 	    	new Observer(pre,{
 	    		observe: route.def,
 	    		fullName : "can.route('<span>"+route.route+"</span>', "
 	    	})
 	    })
-    	//$("#links").html("linksEJS",{})
-    	
+
     	new Observer( $("<pre>").appendTo("#link"),
     		{
     			observe : new can.Map({type: "recipe", id: "5"}),
     			fullName : "can.route.link('click me',",
     			end : function(){
-    	
+
 					$("#linktry").html(can.route.link("click me", this.options.obs.attr() ));
-    	
-    				
+
+
     				$("#linkresult").text(can.route.link("click me", this.options.obs.attr() ))
-    				
+
     				return "";
-    			
+
     			}
     		});
     	new Observer( $("<pre>").appendTo("#url"),
@@ -154,11 +153,11 @@ function() {
     			observe : new can.Map({type: "recipe"}),
     			fullName : "can.route.url(",
     			end : function(){
-    				
-    				
+
+
     				$("#urlresult").text( can.route.url(this.options.obs.attr() ) );
     				$("#urltry").attr("href", can.route.url(this.options.obs.attr() ))
-    				
+
     				return ""
     			}
     		});
@@ -168,7 +167,7 @@ function() {
     	var li = $(this).closest('li')
     	routes.splice(li.index(), 1);
     })
-    
+
     var change = function(){
     	can.route.routes = {};
     	routes.each(function(route){
@@ -179,16 +178,16 @@ function() {
     }
     change();
     routes.bind("change",change);
-    
+
     // SETUP NAVIGATE
-    
+
     $("#hash").bind("click", function(){
     	var input = $("<input type='text'/>"),
     		start = $("#hash").text();
-    		
+
     	new EditOver(input, {
     		el: $(this),
-    		focus: true	
+    		focus: true
     	})
     	input.bind("change", function(){
     		window.location.hash = input.val();
@@ -209,37 +208,37 @@ function() {
     }
     setInput();
     $(window).bind("hashchange",setInput)
-    
+
     $(".back").click(function(){
     	window.history.back()
     })
     $(".forward").click(function(){
     	window.history.forward()
     })
-    
-    
+
+
     new Observer("#route-data",{
     	observe : can.route.data,
     	observeName : "can.route"
     })
     var lastNum = 0;
 	can.route.bind("change", function(ev, attr, how, newVal, oldVal){
-		
+
 		var content = $("<tr><td>"+
 			[ev.batchNum, attr, how, newVal, ""+oldVal].join("</td><td>")
 			+"</td></tr>");
 		$("#events").append(content);
-		
+
 		if(lastNum != ev.batchNum){
 			content.addClass("border")
 			lastNum = ev.batchNum;
 		}
-		
+
 		var c = $("#container")
 		c.scrollTop( c[0].scrollHeight )
-		
+
 		$("#add-hash").attr("href",can.route.url({foo:"bar"},true))
-		
+
 	})
 	$("#changeRoute").click(function(){
 		routes[1].attr({ route: ":type", def: {type: "recipe",foo: "bar"} }, true)

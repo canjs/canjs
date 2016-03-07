@@ -8,28 +8,28 @@
 __DEPRECATED__
 
 Renders a View template with the controller instance. If the first argument
-is not supplied, it looks for a view in `/views/controlName/action_name.ejs`.
+is not supplied, it looks for a view in `/views/controlName/action_name.stache`.
 If data is not provided, it uses the controller instance as data.
 
 	var Tasks = can.Control.extend('Tasks',{
 		click: function( el ) {
-			// renders with views/tasks/click.ejs with the control as data
+			// renders with views/tasks/click.stache with the control as data
 			this.element.html( this.view() )
 
-			// renders with views/tasks/click.ejs with some data
-			this.element.html( 
+			// renders with views/tasks/click.stache with some data
+			this.element.html(
 				this.view({ name : 'The task' }) );
 
-			// renders with views/tasks/under.ejs
-			this.element.html( 
+			// renders with views/tasks/under.stache
+			this.element.html(
 				this.view("under", [1,2]) );
 
-			// renders with views/tasks/under.micro 
-			this.element.html( 
+			// renders with views/tasks/under.micro
+			this.element.html(
 				this.view("under.micro", [1,2]) );
 
-			// renders with views/shared/top.ejs
-			this.element.html( 
+			// renders with views/shared/top.stache
+			this.element.html(
 				this.view("shared/top", {phrase: "hi"}) );
 		}
 	})

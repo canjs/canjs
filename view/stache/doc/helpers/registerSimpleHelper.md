@@ -8,8 +8,8 @@
 
 @body
 
-Registers a helper with the Mustache system that always returns
+Registers a helper with the Stache system that always returns
 the arguments value (instead of a compute).
 Pass the name of the helper followed by the
-function to which Mustache should invoke.
+function to which Stache should invoke.
 These are run at runtime.
