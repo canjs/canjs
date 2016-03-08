@@ -282,6 +282,10 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 	// The id of the `function` to be bound, used as an expando on the `function`
 	// so we can lookup it's `remove` object.
 	var dojoId = 0,
+	// Checks if a Node is a form node that can contain other elements
+		isFormNode = function(node) {
+			return node.nodeName === 'SELECT' || node.nodeName === 'FORM';
+		},
 	// Takes a node list, goes through each node
 	// and adds events data that has a map of events to
 	// callbackId to `remove` object.  It looks like
@@ -292,7 +296,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 				// returns a node list of its options due to a
 				// bug in Dojo 1.7.1, this is sovled by wrapping
 				// it in an array.
-				node = new dojo.NodeList(node.nodeName === 'SELECT' ? [node] : node);
+				node = new dojo.NodeList(isFormNode(node) ? [node] : node);
 				var events = can.data(node, 'events');
 				if (!events) {
 					can.data(node, 'events', events = {});
@@ -336,7 +340,7 @@ steal('can/util/can.js', 'can/util/attr', 'dojo', 'can/event', 'can/util/fragmen
 			// returns a node list of its options due to a
 			// bug in Dojo 1.7.1, this is sovled by wrapping
 			// it in an array.
-			dojoAddBinding(new dojo.NodeList(this.nodeName === 'SELECT' ? [this] : this), ev, cb);
+			dojoAddBinding(new dojo.NodeList(isFormNode(this) ? [this] : this), ev, cb);
 		} else if (this.addEvent) {
 			this.addEvent(ev, cb);
 		} else {
