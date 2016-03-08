@@ -564,7 +564,7 @@ steal("can/util",
 								values.push(child.value);
 							}
 						});
-	
+
 						return isStringValue ? values.join(";"): values;
 					} else if(hasChildren && ("selectedIndex" in el) && el.selectedIndex === -1) {
 						return undefined;
@@ -595,6 +595,7 @@ steal("can/util",
 					});
 					if(hasChildren) {
 						var onMutation = function (mutations) {
+							
 							if(stickyCompute) {
 								set(stickyCompute());
 							}
@@ -654,10 +655,12 @@ steal("can/util",
 							// This is used by `can-value`.
 							if(parentCompute() !== childCompute()) {
 								bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+								can.batch.start();
 								childCompute(parentCompute());
 								can.batch.after(function(){
 									--bindingsSemaphore[attrName];
 								});
+								can.batch.stop();
 							}
 						}
 					}
@@ -683,12 +686,14 @@ steal("can/util",
 			var updateChild = function(ev, newValue){
 				// Save the viewModel property name so it is not updated multiple times.
 				bindingsSemaphore[attrName] = (bindingsSemaphore[attrName] || 0 )+1;
+				can.batch.start();
 				childUpdate(newValue);
 	
 				// only after the batch has finished, reduce the update counter
 				can.batch.after(function(){
 					--bindingsSemaphore[attrName];
 				});
+				can.batch.stop();
 			};
 	
 			if(parentCompute && parentCompute.isComputed) {

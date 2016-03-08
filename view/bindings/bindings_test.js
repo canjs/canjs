@@ -2273,6 +2273,19 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		equal(map.attr("age"), 1);
 		
 	});
+
+	test("infinite batching with select multiple (#2272)", function(){
+		var template = can.stache('{{#if show}}<select multiple {($value)}="foo"></select><select multiple {($value)}="bar"></select>{{/show}}');
+
+		var map = new can.Map({show: false});
+		template(map);
+
+		can.batch.start();
+		map.attr("show", true);
+		can.batch.stop();
+
+		ok(true, "was able to show without breaking");
+	});
 	
 
 });
