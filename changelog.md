@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.20__ ( Mar 08 2016 )
+
+- [Make define properties work on can.List](https://github.com/canjs/canjs/pull/2313)
+- [Create a CanSimpleDocument constructor](https://github.com/canjs/canjs/pull/2312)
+- [Infinite batching](https://github.com/canjs/canjs/issues/2272)
+- [Form reset won&#39;t work with two-way bindings on elements. w/ CanJS 2.3.15](https://github.com/canjs/canjs/issues/2249)
+
+
 __2.3.19__ ( Mar 04 2016 )
 
 - [Fast path scope computes can be unbound then rebound.](https://github.com/canjs/canjs/issues/2305)
