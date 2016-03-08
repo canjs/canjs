@@ -1163,5 +1163,48 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 	});
 
+	test("Define plugin supports can.List (#1127)", 2, function(){
+		var MyList = can.List.extend({
+			define: {
+				idMap: {
+					get: function() {
+						var map = {};
+						this.each(function(item) {
+							map[item.attr("id")] = item.attr();
+						});
+						return map;
+					},
+					type: "*"
+				}
+			}
+		});
+
+		var list = new MyList([{
+			id: 1,
+			name: "1"
+		}, {
+			id: 2,
+			name: "2"
+		}, {
+			id: 3,
+			name: "3"
+		}]);
+
+		deepEqual(list.attr("idMap"), {
+			"1": {id: 1,name: "1"},
+			"2": {id: 2,name: "2"},
+			"3": {id: 3,name: "3"}
+		}, "can read");
+
+		list.bind("idMap", function(ev, newVal) {
+			deepEqual(newVal, {
+				"1": {id: 1,name: "1"},
+				"2": {id: 2,name: "2"}
+			}, "got event");
+		});
+
+		list.pop();
+	});
+
 	
 });
