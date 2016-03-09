@@ -23,11 +23,16 @@
 <script src="standalone-basics.js"></script>
 
 <script type="text/stache" id="basics" foo="bar" can-autorender>
+	<span id='foo'>{{foo}}</span>
 	<my-component></my-component>
 </script>
 <script>
 	$(function() {
 		can.autorender().then(function() {
+			if (window.parent.QUnit) {
+				window.parent.equal($('#foo').html(), 'bar', 'template tag attributes are part of autorendered view model');
+			}
+
 			isReady($("body my-component"), can.viewModel('my-component'));
 		});
 	});
