@@ -2283,36 +2283,36 @@ test("can-value memory leak (#2270)", function () {
 
 });
 
-test("converters work (#2299)", function(){
-
-	can.stache.registerHelper("numberToString", function(newVal, source){
-		if(newVal instanceof can.expression.SetIdentifier) {
-			source(newVal.value === "" ? null : +newVal.value );
-		} else {
-			source = newVal;
-			return source() + "";
-		}
-	});
-
-	var template = can.view.stache('<input {($value)}="numberToString(~age)">');
-
-	var map = new can.Map({age: 25});
-
-	var frag = template(map);
-
-	equal(frag.firstChild.value, "25");
-	equal(map.attr("age"), 25);
-
-	map.attr("age",33);
-
-	equal(frag.firstChild.value, "33");
-	equal(map.attr("age"), 33);
-
-	frag.firstChild.value = "1";
-
-	can.trigger(frag.firstChild,"change");
-
-	equal(frag.firstChild.value, "1");
-	equal(map.attr("age"), 1);
-
-});
+// test("converters work (#2299)", function(){
+//
+// 	can.stache.registerHelper("numberToString", function(newVal, source){
+// 		if(newVal instanceof can.expression.SetIdentifier) {
+// 			source(newVal.value === "" ? null : +newVal.value );
+// 		} else {
+// 			source = newVal;
+// 			return source() + "";
+// 		}
+// 	});
+//
+// 	var template = can.view.stache('<input {($value)}="numberToString(~age)">');
+//
+// 	var map = new can.Map({age: 25});
+//
+// 	var frag = template(map);
+//
+// 	equal(frag.firstChild.value, "25");
+// 	equal(map.attr("age"), 25);
+//
+// 	map.attr("age",33);
+//
+// 	equal(frag.firstChild.value, "33");
+// 	equal(map.attr("age"), 33);
+//
+// 	frag.firstChild.value = "1";
+//
+// 	can.trigger(frag.firstChild,"change");
+//
+// 	equal(frag.firstChild.value, "1");
+// 	equal(map.attr("age"), 1);
+//
+// });
