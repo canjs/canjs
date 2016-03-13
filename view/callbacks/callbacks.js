@@ -38,7 +38,7 @@ steal("can/util", "can/view",function(can){
 				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " is already defined");
 			}
 			if (!automaticCustomElementCharacters.test(tagName)) {
-				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " not hyphanited");
+				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " is missing a hyphen");
 			}
 			//!steal-remove-end
 			// if we have html5shive ... re-generate
