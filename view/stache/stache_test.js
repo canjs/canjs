@@ -3604,6 +3604,18 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 				can.dev.warn = oldlog;
 			});
+
+			test("logging: warning if tag name is missing a hyphen (#1541)", function() {
+				var oldlog = can.dev.warn;
+				can.dev.warn = function(text) {
+					ok(text, "got a message");
+					can.dev.warn = oldlog;
+				};
+
+				can.view.tag('nohyphen', function(tag, tagHandler) {});
+				var template = can.stache('<nohyphen></nohyphen>');
+				template();
+			});
 		}
 		//!steal-remove-end
 		test("Calling .fn without arguments should forward scope by default (#658)", function(){
@@ -4811,18 +4823,6 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
             }));
 
             equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
-		});
-
-		test("warning if tag name is missing a hyphen (#1541)", function() {
-				var oldlog = can.dev.warn;
-				can.dev.warn = function(text) {
-					ok(text, "got a message");
-					can.dev.warn = oldlog;
-				};
-
-				can.view.tag('nohyphen', function(tag, tagHandler) {});
-				var template = can.stache('<nohyphen></nohyphen>');
-				template();
 		});
 		
 		// PUT NEW TESTS RIGHT BEFORE THIS!
