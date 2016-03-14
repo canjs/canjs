@@ -4821,9 +4821,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 				};
 
 				can.view.tag('nohyphen', function(tag, tagHandler) {});
-
 				var template = can.stache('<nohyphen></nohyphen>');
-				console.log(template());
 				template();
 		});
 		
