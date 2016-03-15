@@ -11,7 +11,7 @@
 // to hookup the component.
 
 var can = require("can/util/util");
-var elements = require("can/view/elements.js");
+var elements = require("can/view/elements");
 var bindings = require("can/view/bindings/bindings");
 
 require("can/view/callbacks/callbacks");
