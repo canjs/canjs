@@ -15,23 +15,13 @@ var reverseNormalize = function(name, load, baseName, baseLoad){
 		return "jquery";
 	}
 
-	if(name === 'mootools/mootools' || name === 'yui/yui' || name === 'zepto/zepto') {
-		return name.split('/')[0];
-	}
-
 	if(load.address.indexOf("node_modules") >= 0 ||
-			load.address.indexOf("bower_components") >= 0 ||
 			load.address.indexOf("lib/") >= 0) {
 		return name.replace(/@.*/,"");
 	}
 
-
 	if(name === "util/library") {
 		return "can/util/library";
-	}
-
-	if(name === "dojo" || name === "dojo/dojo") {
-		return "dojo/main";
 	}
 
 	if(name === "can") {
@@ -77,11 +67,7 @@ module.exports = function(){
 			minify: true
 		},
 		ignorelibs: {
-			ignore: ["dojo","dojo/dojo","dojo/main",
-			"jquery","jquery/jquery",
-			"mootools/mootools","mootools",
-			"zepto","zepto/zepto",
-			"yui","yui/yui"].concat([function(moduleName, load){
+			ignore: ["jquery","jquery/jquery"].concat([function(moduleName, load){
 				if(load.address.indexOf("node_modules") >= 0) {
 					return true;
 				}
@@ -94,5 +80,3 @@ module.exports = function(){
 		}
 	};
 };
-
-

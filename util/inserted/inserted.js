@@ -68,3 +68,5 @@ can.insertBefore = function (el, child, ref, document) {
 	el.insertBefore(child, ref);
 	can.inserted(children, document);
 };
+
+module.exports = can;

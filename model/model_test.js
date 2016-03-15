@@ -17,7 +17,6 @@ QUnit.module('can/model', {
 	setup: function () {}
 });
 
-var isDojo = typeof dojo !== 'undefined';
 test('shadowed id', function () {
 	var MyModel = can.Model.extend({
 		id: 'foo'
@@ -424,19 +423,19 @@ test('Model events', function () {
 	var order = 0;
 	can.Model('Test.Event', {
 		create: function (attrs) {
-			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			var def = new can.Deferred();
 			def.resolve({
 				id: 1
 			});
 			return def;
 		},
 		update: function (id, attrs, success) {
-			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			var def = new can.Deferred();
 			def.resolve(attrs);
 			return def;
 		},
 		destroy: function (id, success) {
-			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			var def = new can.Deferred();
 			def.resolve({});
 			return def;
 		}
@@ -886,14 +885,14 @@ test('model list attr', function () {
 test('destroying a model impact the right list', function () {
 	can.Model('Person', {
 		destroy: function (id, success) {
-			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			var def = new can.Deferred();
 			def.resolve({});
 			return def;
 		}
 	}, {});
 	can.Model('Organisation', {
 		destroy: function (id, success) {
-			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			var def = new can.Deferred();
 			def.resolve({});
 			return def;
 		}

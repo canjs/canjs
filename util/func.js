@@ -511,10 +511,6 @@ a css selector, a HTMLElement or an array of HTMLElements.
 The following lists how the NodeList is created by each library:
 
 - __jQuery__ `jQuery( HTMLElement )`
-- __Zepto__ `Zepto( HTMLElement )`
-- __Dojo__ `new dojo.NodeList( HTMLElement )`
-- __Mootools__ `$$( HTMLElement )`
-- __YUI__ `Y.all(selector)` or `Y.NodeList`
 */
 //
 /**
@@ -1008,30 +1004,6 @@ Gets an object from a string.  It can also modify objects on the 'object path' b
  *
  *     nodeList.text("Hello World")
  *
- * ## Zepto `Zepto( HTMLElement )`
- *
- * A Zepto-wrapped list of elements.
- *
- *     nodeList.text("Hello World")
- *
- * ## Dojo `new dojo.NodeList( HTMLElement )`
- *
- * Dojo's [http://dojotoolkit.org/reference-guide/1.9/dojo/NodeList.html dojo.NodeList] constructor function.
- *
- *     nodeList.text("Hello World")
- *
- *
- * ## Mootools `$$( HTMLElement )`
- *
- * The Mootools [Elements object](http://mootools.net/docs/core/Element/Element#Elements).
- *
- *     nodeList.empty().appendText("Hello World")
- *
- * ## YUI
- *
- * YUI's [NodeList](http://yuilibrary.com/yui/docs/node/).
- *
- *     nodeList.set('text',"Hello World")
  */
 //
 /**

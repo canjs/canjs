@@ -4,49 +4,7 @@ require('can/control/control');
 require('steal-qunit');
 
 QUnit.module('can/control');
-var isOpera = /Opera/.test(navigator.userAgent),
-	isDojo = typeof dojo !== 'undefined';
-// bug in opera/dojo with on/trigger, so skip
-// tests binding and unbind, removing event handlers, etc
-if (!(isOpera && isDojo)) {
-	test('basics', 14, function () {
-		var clickCount = 0;
-		var Things = can.Control({
-			'click': function () {
-				clickCount++;
-			},
-			'span  click': function () {
-				ok(true, 'SPAN clicked');
-			},
-			'{foo} bar': function () {}
-		});
-		var foo = {
-			bind: function (event, cb) {
-				ok(true, 'bind called');
-				equal(event, 'bar', 'bind given bar');
-				ok(cb, 'called with a callback');
-			},
-			unbind: function (event, cb) {
-				ok(true, 'unbind called');
-				equal(event, 'bar', 'unbind given bar');
-				ok(cb, 'called with a callback');
-			}
-		};
-		can.append(can.$('#qunit-fixture'), '<div id=\'things\'>div<span>span</span></div>');
-		var things = new Things('#things', {
-			foo: foo
-		});
-		can.trigger(can.$('#things span'), 'click');
-		can.trigger(can.$('#things'), 'click');
-		equal(clickCount, 2, 'click called twice');
-		things.destroy();
-		can.trigger(can.$('#things span'), 'click');
-		new Things('#things', {
-			foo: foo
-		});
-		can.remove(can.$('#things'));
-	});
-}
+
 test('data', function () {
 	var Things = can.Control({});
 	can.append(can.$('#qunit-fixture'), '<div id=\'things\'>div<span>span</span></div>');
@@ -110,50 +68,44 @@ test('windowresize', function () {
 	ok(called, 'got window resize event');
 	can.remove(can.$('#weird'));
 });
-// there is a bug in opera with dojo with on/trigger, so skip that case
-// can.append( can.$("#qunit-fixture"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
-// dojo.query("#els span").on("a:click", function(){
-// console.log('HOOLLLLER')
-// });
-// dojo.query("#els a").trigger("click");
-if (!(isOpera && isDojo)) {
-	test('on', function () {
-		var called = false,
-			DelegateTest = can.Control({
-				click: function () {}
-			}),
-			Tester = can.Control({
-				init: function (el, ops) {
-					this.on(window, 'click', function (ev) {
-						ok(true, 'Got window click event');
-					});
-					this.on(window, 'click', 'clicked');
-					this.on('click', function () {
-						ok(true, 'Directly clicked element');
-					});
-					this.on('click', 'clicked');
-				},
-				clicked: function () {
-					ok(true, 'Controller action delegated click triggered, too');
-				}
-			}),
-			div = document.createElement('div');
-		can.append(can.$('#qunit-fixture'), div);
-		var rb = new Tester(div);
-		can.append(can.$('#qunit-fixture'), '<div id=\'els\'><span id=\'elspan\'><a href=\'javascript://\' id=\'elsa\'>click me</a></span></div>');
-		var els = can.$('#els');
-		var dt = new DelegateTest(els);
-		dt.on(can.$('#els span'), 'a', 'click', function () {
-			called = true;
-		});
-		can.trigger(can.$('#els a'), 'click');
-		ok(called, 'delegate works');
-		can.remove(els);
-		can.trigger(can.$(div), 'click');
-		can.trigger(window, 'click');
-		rb.destroy();
+
+test('on', function () {
+	var called = false,
+		DelegateTest = can.Control({
+			click: function () {}
+		}),
+		Tester = can.Control({
+			init: function (el, ops) {
+				this.on(window, 'click', function (ev) {
+					ok(true, 'Got window click event');
+				});
+				this.on(window, 'click', 'clicked');
+				this.on('click', function () {
+					ok(true, 'Directly clicked element');
+				});
+				this.on('click', 'clicked');
+			},
+			clicked: function () {
+				ok(true, 'Controller action delegated click triggered, too');
+			}
+		}),
+		div = document.createElement('div');
+	can.append(can.$('#qunit-fixture'), div);
+	var rb = new Tester(div);
+	can.append(can.$('#qunit-fixture'), '<div id=\'els\'><span id=\'elspan\'><a href=\'javascript://\' id=\'elsa\'>click me</a></span></div>');
+	var els = can.$('#els');
+	var dt = new DelegateTest(els);
+	dt.on(can.$('#els span'), 'a', 'click', function () {
+		called = true;
 	});
-}
+	can.trigger(can.$('#els a'), 'click');
+	ok(called, 'delegate works');
+	can.remove(els);
+	can.trigger(can.$(div), 'click');
+	can.trigger(window, 'click');
+	rb.destroy();
+});
+
 test('inherit', function () {
 	var called = false,
 		Parent = can.Control({

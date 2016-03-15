@@ -31,29 +31,6 @@ NodeList.  To get the raw HTMLElement, write:
 
 	this.element[0] //-> HTMLElement
 
-The following details the NodeList used by each library with
-an example of updating its text:
-
-__jQuery__ `jQuery( HTMLElement )`
-
- this.element.text("Hello World")
-
-__Zepto__ `Zepto( HTMLElement )`
-
- this.element.text("Hello World")
-
-__Dojo__ `new dojo.NodeList( HTMLElement )`
-
- this.element.text("Hello World")
-
-__Mootools__ `$$( HTMLElement )`
-
- this.element.empty().appendText("Hello World")
-
-__YUI__
-
- this.element.set("text", "Hello World")
-
 ## Changing `this.element`
 
 Sometimes you don't want what's passed to `new can.Control`
