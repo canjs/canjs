@@ -63,4 +63,4 @@ for (; i < correctedClasses.length; i++) {
 		correctedClasses[i].proxy = proxy;
 	}
 }
-return can;
+module.exports = can;
