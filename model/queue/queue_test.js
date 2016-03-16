@@ -1,7 +1,6 @@
 /* global Person: true */
 /* global User: true */
 /* global Hero: true */
-var can = require('can/util/util');
 require('can/model/model');
 require('can/model/queue/queue');
 require('can/util/fixture/fixture');

@@ -1,4 +1,3 @@
-var can = require('can');
 require('can/list/sort/sort');
 require('can/view/stache/stache');
 require('can/model/model');

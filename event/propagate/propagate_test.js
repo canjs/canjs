@@ -1,5 +1,5 @@
-var can = require('can/util/util');
 var event = require('can/event/propagate/propagate');
+require('can/test/test');
 require('steal-qunit');
 
 QUnit.module('can/event/propagate');

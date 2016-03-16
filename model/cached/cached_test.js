@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/model/cached/cached');
 require('can/util/fixture/fixture');
 require('steal-qunit');

@@ -1,6 +1,5 @@
 /* jshint asi:true */
-var can = require('can/util/util');
-require('can/map/lazy/nested_reference.js');
+require('can/map/lazy/nested_reference');
 require('steal-qunit');
 
 QUnit.module("can/map/lazy/nested_reference");

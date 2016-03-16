@@ -1,5 +1,4 @@
 /*global Person,Task*/
-var can = require('can/util/util');
 require('can/map/validations/validations');
 require('can/compute/compute');
 require('steal-qunit');

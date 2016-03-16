@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('steal-qunit');
 
 QUnit.module('can/list/lazy');

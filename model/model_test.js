@@ -8,7 +8,6 @@
 /* global Product: true */
 /* global Organisation: true */
 /* global My: true */
-var can = require('can/util/util');
 require('can/model/model');
 require('can/util/fixture/fixture');
 require('can/test/test');

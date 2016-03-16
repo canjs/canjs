@@ -1,9 +1,11 @@
 /* global Car */
+// require('can/construct/construct');
 require('can/construct/proxy/proxy');
 require('can/control/control');
 require('steal-qunit');
 
 QUnit.module('can/construct/proxy');
+
 test('static proxy if control is loaded first', function () {
 	var curVal = 0;
 	expect(2);
@@ -35,12 +37,15 @@ test('proxy', function () {
 	cb2();
 });
 
-test('proxy error', 1, function () {
-	can.Construct('Car', {});
-	try {
-		Car.proxy('huh');
-		ok(false, 'I should have errored');
-	} catch (e) {
-		ok(true, 'Error was thrown');
-	}
-});
+// this won't work in dist mode (this functionality is removed)
+if (typeof steal !== 'undefined') {
+	test('proxy error', 1, function () {
+		can.Construct('Car', {});
+		try {
+			Car.proxy('huh');
+			ok(false, 'I should have errored');
+		} catch (e) {
+			ok(true, 'Error was thrown');
+		}
+	});
+}

@@ -1,7 +1,7 @@
 var can = require('can/util/util');
 require('can/map/map');
 require('can/list/list');
-var benchmarks = require('can/test/benchmarks.js');
+var benchmarks = require('can/test/benchmarks');
 
 var objects, map;
 benchmarks.add('Adding a big array to an object', function () {

@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 var Component = require('can/component/component');
 
 module.exports = Component.extend({

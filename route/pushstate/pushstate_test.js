@@ -1,5 +1,4 @@
 /* jshint asi:true,scripturl:true */
-var can = require('can/util/util');
 require('can/route/route');
 require('can/route/pushstate/pushstate');
 require('can/test/test');

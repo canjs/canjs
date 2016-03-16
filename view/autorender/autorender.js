@@ -1,4 +1,3 @@
-var can  = require('can/util/util');
 var AppState = require('can/map/app/app');
 require('can/util/view_model/view_model');
 

@@ -1,4 +1,3 @@
-var can = require('can/util/can');
 require('can/util/vdom/document/document');
 require('can/util/fragment');
 require('steal-qunit');

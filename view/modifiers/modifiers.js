@@ -2,6 +2,8 @@ var $ = require('jquery'); // jshint ignore:line
 var can = require('can/util/util');
 require('can/view/view');
 
+$ = $ || window.$;
+
 //---- ADD jQUERY HELPERS -----
 //converts jquery functions to use views
 var convert, modify, isTemplate, isHTML, isDOM, getCallback,

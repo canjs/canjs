@@ -1,5 +1,4 @@
 "format cjs";
-var can = require('can/util/can');
 var attr = require('can/util/attr/attr');
 require('mootools/mootools');
 require('can/event/event');

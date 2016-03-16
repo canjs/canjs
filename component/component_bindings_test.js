@@ -1,5 +1,4 @@
 /* jshint -W003 */
-var can = require('can');
 require("can/map/define/define");
 require("can/component/component");
 require("can/view/stache/stache");

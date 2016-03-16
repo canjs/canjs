@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/view/view');
 require('can/view/callbacks/callbacks');
 require('can/view/stache/stache');

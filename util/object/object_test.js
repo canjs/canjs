@@ -1,4 +1,3 @@
-var can = require('can/util/can');
 require('can/util/object/object');
 require('./isplain/isplain_test');
 require('steal-qunit');

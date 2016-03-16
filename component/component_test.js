@@ -1,4 +1,3 @@
-var can = require('can');
 require("can/util/vdom/document/document");
 require("can/util/vdom/build_fragment/build_fragment");
 require("can/map/define/define");

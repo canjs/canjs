@@ -1,4 +1,5 @@
 var diff = require('can/util/array/diff');
+require('can/test/test');	
 require('steal-qunit');
 
 QUnit.test("diff", function(){

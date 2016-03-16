@@ -1,5 +1,4 @@
 /*global Recipe*/
-var can = require('can/util/util');
 require('can/map/backup/backup');
 require('can/model/model');
 require('steal-qunit');

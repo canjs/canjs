@@ -1,7 +1,7 @@
 /* jshint asi: false */
-var can = require('can/util/util');
 require('can/map/define/define');
 require('can/route/route');
+require('can/test/test');
 require('steal-qunit');
 
 QUnit.module('can/map/define');

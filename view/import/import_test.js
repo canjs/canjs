@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 var Component = require('can/component/component');
 var stache = require('can/view/stache/stache');
 var getIntermediateAndImports = require('can/view/stache/intermediate_and_imports');

@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/view/bindings/bindings');
 require('can/component/component');
 require('steal-qunit');

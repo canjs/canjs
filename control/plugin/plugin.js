@@ -3,6 +3,9 @@ var $ = require('jquery');
 var can = require('can/util/util');
 require('can/control/control');
 
+
+$ = $ || window.$;
+
 //used to determine if a control instance is one of controllers
 //controllers can be strings or classes
 var i, isAControllerOf = function (instance, controllers) {

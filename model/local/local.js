@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/model/model');
 require('jquery/lang/object/object');
 

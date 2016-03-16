@@ -1,5 +1,4 @@
 /* jshint asi:true,multistr:true,indent:false,latedef:nofunc*/
-var can = require('can/util/util');
 require('can/util/vdom/document/document');
 require('can/util/vdom/build_fragment/build_fragment');
 require('can/view/stache/stache');

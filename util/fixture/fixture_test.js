@@ -1,4 +1,3 @@
-var can = require('can/util/can');
 require('can/util/fixture/fixture');
 require('can/model/model');
 require('can/test/test');

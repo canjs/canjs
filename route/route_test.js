@@ -1,5 +1,4 @@
 /* jshint asi:true*/
-var can = require('can/util/util');
 require('can/route/route');
 require('can/map/define/define');
 require('can/test/test');
@@ -519,7 +518,6 @@ if (typeof steal !== 'undefined') {
 	test("removing things from the hash", function () {
 
 		setupRouteTest(function (iframe, iCanRoute, loc) {
-
 
 			iCanRoute.bind('change', function () {
 

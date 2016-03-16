@@ -1,5 +1,4 @@
 /* jshint asi:true*/
-var can = require('can/util/util');
 require('can/map/map');
 require('can/compute/compute');
 require('can/list/list');

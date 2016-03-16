@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/util/string/string');
 require('./deparam/deparam_test');
 require('steal-qunit');

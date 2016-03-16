@@ -1,5 +1,4 @@
-var can = require('can/util/util');
-require('./expression.js');
+require('./expression');
 require('steal-qunit');
 
 var expression = can.expression;

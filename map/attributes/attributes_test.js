@@ -1,5 +1,4 @@
 /*jshint undef:false,unused:false*/
-var can = require('can/util/util');
 require('can/map/attributes/attributes');
 require('can/model/model');
 require('can/util/fixture/fixture');

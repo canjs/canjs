@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 var nodeLists = require('can/view/node_lists/node_lists');
 var elements = require('can/view/elements');
 require('steal-qunit');

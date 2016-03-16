@@ -1,1 +1,1 @@
-require('can/list/sort/sort_test.js');
+require('can/list/sort/sort_test');

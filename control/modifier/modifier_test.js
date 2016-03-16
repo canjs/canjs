@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/control/modifier/modifier');
 require('can/util/event');
 require('steal-qunit');

@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/view/live/live');
 require('can/observe/observe');
 require('steal-qunit');

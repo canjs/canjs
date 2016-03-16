@@ -1,4 +1,3 @@
-var can = require('can/util/util');
 require('can/compute/compute');
 require('can/map/map');
 require('steal-qunit');

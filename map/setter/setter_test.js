@@ -1,5 +1,4 @@
 /*global School*/
-var can = require('can/util/util');
 require('can/map/setter/setter');
 require('steal-qunit');
 
