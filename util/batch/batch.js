@@ -184,13 +184,15 @@ steal('can/util/can.js', function (can) {
 				var batch;
 				if(dispatchingBatches === false) {
 					dispatchingBatches = true;
+					var callbacks = [],
+						i;
 					while(batch = batches.shift()) {
 						var events = batch.events;
-						var callbacks = batch.callbacks;
+						callbacks.push.apply(callbacks,  batch.callbacks );
 						dispatchingBatch = batch;
 						can.batch.batchNum = batch.number;
-
-						var i, len;
+						//console.log("dispatching", can.batch.batchNum);
+						var len;
 
 						if (callStart) {
 							can.batch.start();
@@ -199,15 +201,14 @@ steal('can/util/can.js', function (can) {
 							can.dispatch.apply(events[i][0],events[i][1]);
 						}
 
-
 						can.batch._onDispatchedEvents(batch.number);
 
-						for(i = 0; i < callbacks.length; i++) {
-							callbacks[i]();
-						}
 						dispatchingBatch = null;
 						can.batch.batchNum = undefined;
 
+					}
+					for(i = callbacks.length - 1; i >= 0 ; i--) {
+						callbacks[i]();
 					}
 					dispatchingBatches = false;
 				}

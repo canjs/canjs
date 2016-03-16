@@ -1382,7 +1382,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 				tag: 'destroyable-component',
 				events: {
 					destroy: function(){
-			
+
 						this.viewModel.attr('product', null);
 					}
 				}
@@ -1608,7 +1608,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			equal(parentVM.attr('parentProp'), 'baz', 'parentProp is baz');
 			equal(childVM.attr('childProp'), 'baz', 'childProp is baz');
 		});
-		
+
 		test("conditional attributes (#2077)", function(){
 			can.Component.extend({
 				tag: 'some-comp',
@@ -1619,19 +1619,19 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 				"{swap}='{{swapName}}' "+
 				"{{#preview}}checked{{/preview}} "+
 				"></some-comp>");
-			
+
 			var map = new can.Map({
 				preview: true,
 				nextPage: 2,
 				swapName: "preview"
 			});
 			var frag = template(map);
-			
+
 			var vm = can.viewModel(frag.firstChild);
-			
+
 			var threads = [
 				function(){
-					
+
 					equal(vm.attr("next"), 2, "has binidng");
 					equal(vm.attr("swap"), true, "swap - has binding");
 					equal(vm.attr("checked"), "", "attr - has binding");
@@ -1639,13 +1639,13 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 				},
 				function(){
 					equal(vm.attr("swap"), false, "swap - updated binidng");
-					
+
 					ok(vm.attr("checked") === null, "attr - value set to null");
-					
+
 					map.attr("nextPage", 3);
 					equal(vm.attr("next"), 2, "not updating after binding is torn down");
 					map.attr("preview", true);
-					
+
 				},
 				function(){
 					equal(vm.attr("next"), 3, "re-initialized with binding");
@@ -1672,7 +1672,7 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			};
 			setTimeout(next,10);
 		});
-		
+
 		test("<content> (#2151)", function(){
 
 			can.Component.extend({
@@ -1709,20 +1709,65 @@ steal("can", "can/map/define", "can/component", "can/view/stache" ,"can/route", 
 			});
 
 			var template = can.stache("<list-items><list-item item='{.}'/></list-items>");
-			
+
 			var frag = template();
-			
+
 			can.batch.start();
 			can.viewModel(frag.firstChild).attr('items').each(function(item, index) {
 				item.attr('render', true);
 			});
 			can.batch.stop();
-			
+
 			var lis = frag.firstChild.getElementsByTagName("li");
 			ok( innerHTML(lis[0]).indexOf("Item 1") >= 0, "Item 1 written out");
 			ok( innerHTML(lis[1]).indexOf("Item 2") >= 0, "Item 2 written out");
-			
+
 		});
+
+		test("out of order rendering (#2323)", function(){
+			var order = 0;
+			can.Component.extend({
+				tag: 'c1',
+				template: can.stache("c1"),
+
+				viewModel: {
+					inner: 'inner-initial'
+				},
+				events: {
+					"{viewModel} inner": function() {
+						equal(++order, 1, "got inner first");
+					}
+				}
+			});
+
+			can.Component.extend({
+				tag: 'c2',
+				template: can.stache("c2: <c1 {inner}='innerLink'></c2>"),
+
+				viewModel: {
+					outer: 'outer-initial',
+					innerLink: 'innerlink-initial'
+				},
+				events: {
+					"{viewModel} outer": function() {
+						can.batch.start(function() {
+							equal(++order, 2, "finished batch later");
+						});
+						this.viewModel.attr('innerLink', Math.random());
+						can.batch.stop();
+					}
+				}
+			});
+
+			var myMap = new can.Map({
+				"foo": 1
+			});
+			can.stache('foo: {{foo}} <c2 {outer}="foo"></c2>')(myMap);
+
+			myMap.attr('foo', 2);
+
+		});
+
 	}
 
 	makeTest("can/component new bindings dom", document);
