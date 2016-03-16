@@ -10,12 +10,12 @@
 // - getBindingInfo - A helper that returns the details of a data binding given an attribute.
 // - makeDataBinding - A helper method for setting up a data binding.
 // - initializeValues - A helper that initializes a data binding.
-steal("can/util",
-	"can/view/stache/expression.js",
-	"can/view/callbacks",
-	"can/view/live",
-	"can/view/scope",
-	"can/view/href", function (can, expression, viewCallbacks, live) {
+var can = require('can/util/util');
+var expression = require('can/view/stache/expression');
+var viewCallbacks = require('can/view/callbacks/callbacks');
+var live = require('can/view/live/live');
+require('can/view/scope/scope');
+require('can/view/href/href');
 
 	// ## Behaviors
 	var behaviors = {
@@ -1045,5 +1045,4 @@ steal("can/util",
 		getBindingInfo: getBindingInfo,
 		special: special
 	};
-	return can.bindings;
-});
+	module.exports = can.bindings;

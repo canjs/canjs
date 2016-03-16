@@ -1,5 +1,4 @@
 <link rel="stylesheet" type="text/css" href="base.css"/>
-<script src="../../node_modules/steal/steal.js"></script>
 <script type='text/stache' id='todos-app-template'>
 <todos-app>
 <section id="todoapp">
@@ -11,7 +10,7 @@
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
-		<todos-list todos='displayedTodos'></todos-list>
+		<todos-list todos='{displayedTodos}'></todos-list>
 	</section>
 	<footer id="footer" class="">
 		<span id="todo-count">
@@ -43,7 +42,7 @@
 				<input
 					class="toggle"
 					type="checkbox"
-					can-value='completed'/>
+					can-value='{completed}'/>
 				<label>{{name}}</label>
 				<button class="destroy"
 						can-click="destroy"></button>
@@ -59,159 +58,160 @@
 </script>
 <div id='app'></div>
 
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/model/model');
+require('can/util/fixture/fixture');
 
-<script>
-steal("can",'can/util/fixture',function(){
-
-	can.fixture({
-		"GET /services/todos": function(){
-			return [
-				{ id: 0, name: "take out trash", completed: false },
-				{ id: 1, name: "mow lawn", completed: false },
-				{ id: 2, name: "pick up laundry", completed: true }
-			]
-		},
-		"POST /services/todos": function(){
-			return {
-				id: Math.floor( Math.random()*10000 )
-			}
-		},
-		"DELETE /services/todos/{id}": function(){
-			return {}
-		},
-		"PUT /services/todos/{id}": function(){
-			return {}
+can.fixture({
+	"GET /services/todos": function(){
+		return [
+			{ id: 0, name: "take out trash", completed: false },
+			{ id: 1, name: "mow lawn", completed: false },
+			{ id: 2, name: "pick up laundry", completed: true }
+		]
+	},
+	"POST /services/todos": function(){
+		return {
+			id: Math.floor( Math.random()*10000 )
 		}
-	});
-
-
-	Todo = can.Model.extend({
-		findAll: "/services/todos",
-		create: "/services/todos",
-		destroy: "/services/todos/{id}",
-		update: "/services/todos/{id}"
-	},{})
-
-	Todo.List = can.Model.List.extend({
-		Map: Todo
-	},{
-		filter: function(tester){
-			var todos = new Todo.List();
-			this.each(function(todo){
-				if(tester(todo)){
-					todos.push(todo)
-				}
-			})
-			return todos;
-		},
-		remainingCount: function(){
-			return this.remaining().length;
-		},
-		remaining: function(){
-			return this.filter(function(todo){
-				return !todo.attr('completed')
-			})
-		},
-		completed: function(){
-			return this.filter(function(todo){
-				return todo.attr('completed')
-			})
-		},
-		completedCount: function(){
-			return this.completed().length
-		},
-		destroyCompleted: function(){
-			this.completed().each(function(todo){
-				todo.destroy()
-			})
-		}
-	})
-
-
-	can.Component.extend({
-		tag: "todos-create",
-		template: '<input id="new-todo" '+
-			'placeholder="What needs to be done?" '+
-			'autofocus="">',
-		events : {
-			"input keyup": function( el, ev ) {
-				if(ev.keyCode == 13){
-					new Todo({
-						name: el.val(),
-						completed: false
-					}).save();
-					el.val("")
-				}
-			}
-		}
-	});
-
-	can.Component.extend({
-		tag: "todos-list",
-		template: can.view("todos-list-template"),
-		scope: {
-			edit: function(todo){
-				todo.attr("editing", true)
-			},
-			updateTodo: function(todo, el){
-				todo.attr("name", el.val());
-				todo.attr("editing",false)
-			}
-		},
-		events: {
-			"{Todo} created": function(Todo, ev, newTodo){
-				this.scope.attr('todos').push(newTodo)
-			}
-		}
-	});
-
-	can.Component.extend({
-		tag: "todos-app",
-		scope: {
-			todos: new Todo.List({}),
-			displayedTodos: function(){
-				var filter = can.route.attr("filter")
-				if(filter == "active"){
-					return this.attr('todos').remaining()
-				} else if(filter == "completed") {
-					return this.attr('todos').completed()
-				} else {
-					return this.attr('todos')
-				}
-			}
-		},
-		helpers: {
-			plural : function(word, num){
-				var val = num();
-				return val == 1 ? word : word+"s";
-			},
-			link: function(title, filter){
-				var attr = {};
-				if(filter){
-					attr.filter = filter;
-				}
-
-				return can.route.link(title,attr,{
-					className: can.route.attr("filter") == filter ? "selected" : ""
-				})
-			}
-		},
-		events: {
-			"#toggle-all click": function(el){
-				var completed = el.prop("checked")
-				this.scope.attr('todos').each(function(todo){
-					todo.attr("completed", completed)
-				})
-			}
-		}
-	})
-
-	can.route.ready()
-	var frag = can.view("todos-app-template",{})
-
-
-
-	$("#app").append(frag);
-
+	},
+	"DELETE /services/todos/{id}": function(){
+		return {}
+	},
+	"PUT /services/todos/{id}": function(){
+		return {}
+	}
 });
+
+
+Todo = can.Model.extend({
+	findAll: "/services/todos",
+	create: "/services/todos",
+	destroy: "/services/todos/{id}",
+	update: "/services/todos/{id}"
+},{})
+
+Todo.List = can.Model.List.extend({
+	Map: Todo
+},{
+	filter: function(tester){
+		var todos = new Todo.List();
+		this.each(function(todo){
+			if(tester(todo)){
+				todos.push(todo)
+			}
+		})
+		return todos;
+	},
+	remainingCount: function(){
+		return this.remaining().length;
+	},
+	remaining: function(){
+		return this.filter(function(todo){
+			return !todo.attr('completed')
+		})
+	},
+	completed: function(){
+		return this.filter(function(todo){
+			return todo.attr('completed')
+		})
+	},
+	completedCount: function(){
+		return this.completed().length
+	},
+	destroyCompleted: function(){
+		this.completed().each(function(todo){
+			todo.destroy()
+		})
+	}
+})
+
+
+can.Component.extend({
+	tag: "todos-create",
+	template: '<input id="new-todo" '+
+		'placeholder="What needs to be done?" '+
+		'autofocus="">',
+	events : {
+		"input keyup": function( el, ev ) {
+			if(ev.keyCode == 13){
+				new Todo({
+					name: el.val(),
+					completed: false
+				}).save();
+				el.val("")
+			}
+		}
+	}
+});
+
+can.Component.extend({
+	tag: "todos-list",
+	template: can.view("todos-list-template"),
+	scope: {
+		edit: function(todo){
+			todo.attr("editing", true)
+		},
+		updateTodo: function(todo, el){
+			todo.attr("name", el.val());
+			todo.attr("editing",false)
+		}
+	},
+	events: {
+		"{Todo} created": function(Todo, ev, newTodo){
+			this.scope.attr('todos').push(newTodo)
+		}
+	}
+});
+
+can.Component.extend({
+	tag: "todos-app",
+	scope: {
+		todos: new Todo.List({}),
+		displayedTodos: function(){
+			var filter = can.route.attr("filter")
+			if(filter == "active"){
+				return this.attr('todos').remaining()
+			} else if(filter == "completed") {
+				return this.attr('todos').completed()
+			} else {
+				return this.attr('todos')
+			}
+		}
+	},
+	helpers: {
+		plural : function(word, num){
+			var val = num();
+			return val == 1 ? word : word+"s";
+		},
+		link: function(title, filter){
+			var attr = {};
+			if(filter){
+				attr.filter = filter;
+			}
+
+			return can.route.link(title,attr,{
+				className: can.route.attr("filter") == filter ? "selected" : ""
+			})
+		}
+	},
+	events: {
+		"#toggle-all click": function(el){
+			var completed = el.prop("checked")
+			this.scope.attr('todos').each(function(todo){
+				todo.attr("completed", completed)
+			})
+		}
+	}
+})
+
+can.route.ready()
+var frag = can.view("todos-app-template",{})
+
+
+
+$("#app").append(frag);
+
 </script>

@@ -44,19 +44,22 @@ li:hover {
     background-color: #eeeeee;
 }
 
+.done {
+    text-decoration: line-through;
+}
 
 </style>
 <div id="app"></div>
-<script src="../../node_modules/steal/steal.js"></script>
 <script type='text/stache' id='appMustache'>
 <todos-app>
 	<todos-list></todos-list>
-	<todos-editor todo='todo'></todos-editor>
+	<todos-editor todo='{todo}'></todos-editor>
 </todos-app>
 </script>
-<script>
-steal("can",function(){
-
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/model/model');
 
 	// Setup the model to work with dummy todos because we don't have a service
 // Only findAll and update are used.
@@ -119,7 +122,7 @@ can.Component.extend({
 		"<ul>"+
 		  "{{#each todos}}"+
 			"<li>"+
-		      "<input type='checkbox' can-value='complete'>"+
+		      "<input type='checkbox' can-value='{complete}'>"+
 		      "<span {{todoClass}} can-click='select'>{{name}}</span> "+
 			  "<a href='javascript://' can-click='destroy'>X</a>"+
 		    "</li>"+
@@ -143,11 +146,9 @@ can.Component.extend({
 can.Component.extend({
 	tag: "todos-editor",
 	template: "{{#todo}}"+
-			"<input can-value='name'/>"+
+			"<input can-value='{name}'/>"+
 			"{{/todo}}"
 })
-
-
 
 can.route("todos/:id");
 
@@ -155,6 +156,4 @@ $("#app").html(can.view("appMustache",{}))
 
 can.route.ready()
 
-
-})
 </script>

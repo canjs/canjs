@@ -8,11 +8,13 @@
   {{/websites}}
   </table>
 </script>
-<script src="../../node_modules/steal/steal.js"></script>
-<script type='text/javascript'>
-steal("can/util", "can/component", "can/util/fixture",
-	 "can/model", "can/view/autorender",function (can) {
-
+<script src="../../node_modules/steal/steal.js">
+var can = require("can/util/util");
+require("can/component/component");
+require("can/map/setter/setter");
+require("can/util/fixture/fixture");
+require("can/model/model");
+require("can/view/autorender/autorender");
 
 var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++",url:"http://jquerypp.com"},
 	          {id:3,name:"JavaScriptMVC",url:"http://javascriptmvc.com"},{id: 4,name:"Bitovi",url:"http://bitovi.com"},
@@ -61,6 +63,4 @@ $("#sites").scope().attr({
   websites: websitesCompute
 });
 
-
-});
 </script>

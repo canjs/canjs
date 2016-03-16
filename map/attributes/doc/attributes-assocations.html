@@ -14,15 +14,12 @@
 <div id="demo-html">
 <div id="contacts"></div>
 </div>
-<script type='text/javascript' src='../../node_modules/steal/steal.js' main="@empty"></script>
-<script type='text/javascript' id="demo-source">
-steal(function() {
-	steal.config({
-		root: '../../../'
-	});
-}).then('can/map/attributes', 'can/model','can/util/fixture')
-.then(function(){
-	
+<script id="demo-source" type='text/javascript' src='../../../node_modules/steal/steal.js' main="@empty">
+var can = require('can');
+require('can/map/attributes/attributes');
+require('can/model/model');
+require('can/util/fixture/fixture');
+
 // simulate ajax response with fixtures
 can.fixture("/contacts.json", function(){
   return [{
@@ -30,20 +27,20 @@ can.fixture("/contacts.json", function(){
     'name' : 'Justin Meyer',
     'birthday': '1982-10-20',
     tasks : [{
-      id: 1, 
-      title: "write up model layer", 
+      id: 1,
+      title: "write up model layer",
       due: "2010-10-5"
     }]},{
     'id': 2,
     'name' : 'Brian Moschel',
     'birthday': '1983-11-10',
     tasks : [{
-      id: 2, 
-      title: "write up funcunit", 
+      id: 2,
+      title: "write up funcunit",
       due: "2009-5-1"
     },{
-      id: 3, 
-      title: "test funcunit", 
+      id: 3,
+      title: "test funcunit",
       due: "2010-3-15"}]
     },{
       'id': 3,
@@ -55,8 +52,8 @@ can.fixture("/contacts.json", function(){
 can.Model.convert.date = function(raw){
   if(typeof raw == 'string'){
     var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
-      return new Date( +matches[1], 
-        (+matches[2])-1, 
+      return new Date( +matches[1],
+        (+matches[2])-1,
         +matches[3] );
   }else if(raw instanceof Date){
     return raw;
@@ -77,7 +74,7 @@ var Task = can.Model({
 
 // A contact model that has many tasks
 var Contact = can.Model({
-  attributes : { 
+  attributes : {
     birthday : 'date',
     tasks: Task
   },
@@ -105,7 +102,7 @@ Contact.findAll({}).done(function(contacts){
 
     var ul = can.$("<ul>");
     var tasks = contact.attr('tasks')
-    
+
     if(tasks){
       tasks.each(function(){
         ul.append('<li>'+this.title+" "
@@ -115,7 +112,6 @@ Contact.findAll({}).done(function(contacts){
 
     ul.appendTo(li)
   });
-});
 });
 </script>
 </body>

@@ -6,7 +6,6 @@ the success and complete handlers are called.  This only sets
 functional synchronous fixtures that return a result. By default, the delay is 200ms.
 
 
-    steal('can/util/fixtures').then(function(){
-        can.fixture.delay = 1000;
-    })
-
+    var can = require('can');
+    require('can/util/fixtures/fixtures');
+    can.fixture.delay = 1000;

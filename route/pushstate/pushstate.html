@@ -8,7 +8,7 @@
 	</style>
 </head>
 <body>
-	
+
 
 <script type='text/stache' id='ps-app-stash'>
 <div class="panel-left">
@@ -19,23 +19,21 @@
     {{/modules}}
     <a href='/can/foo/bar.html'>Testing</a>
   </ul>
-  
+
 </div>
 </script>
-<script type='text/javascript' src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script type='text/javascript'>
-steal("can/route/pushstate", "can/component",function(){
-	
+<script type='text/javascript' src="../../node_modules/steal/steal.js" main="@empty">
+	var can = require('can/util/util');
+	require('can/route/pushstate/pushstate');
+	require('can/component/component');
+
 	can.route.bindings.pushstate.root = steal.config("root")+"" ;
-	
-	
+
 	can.route(":module\\.html");
 	can.route(":module/:plugin/:page\\.html");
-	
-	
-	
+
 	can.route.ready();
-	
+
 	can.Component.extend({
 		tag: "ps-app",
 		template: can.view("ps-app-stash"),
@@ -51,10 +49,8 @@ steal("can/route/pushstate", "can/component",function(){
 			}
 		}
 	});
-	
-	
+
 	$("body").append( can.view.stache("<ps-app></ps-app>")({})  )
 	
-})
 </script>
 </body>

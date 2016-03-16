@@ -1,28 +1,29 @@
 <div id="demo">
-	
+
 <div id='out'></div>
 
 <script type="text/mustache" id="color-template">
-  <p>Colors: 
+  <p>Colors:
     <select can-value='colors' multiple>
       <option value='green'>Green</option>
       <option value='red'>Red</option>
       <option value='blue'>Blue</option>
     </select>
   </p>
-  <p>You selected {{selection colors}}.</p>	
+  <p>You selected {{selection colors}}.</p>
 </script>
 </div>
 
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/mustache", function(){
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
 
 var data = new can.Map();
-	
+
 var frag = can.view("color-template",
 	data,
 	{
@@ -34,6 +35,4 @@ var frag = can.view("color-template",
 
 $("#out").html( frag );
 
-})
 </script>
-

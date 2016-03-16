@@ -43,9 +43,10 @@ tabs ul { display: inline-block; }
   </tabs>
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
-<script id="demo-source">
-steal("can/component","can/view/stache",function(){
+<script id="demo-source" src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+var $ = require('jquery');
+require('can/view/stache/stache');
 
 can.Component.extend({
 	tag: "tabs",
@@ -140,6 +141,4 @@ $("#out").html( can.view("app",{
 	}
 }));
 
-
-});
 </script>

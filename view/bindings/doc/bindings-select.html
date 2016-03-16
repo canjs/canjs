@@ -1,7 +1,7 @@
 <div id="demo">
 <div id='out'></div>
 <script type='text/stache' id="attending-template">
-<p>Attending? 
+<p>Attending?
   <select {($value)}='attending'>
 	  <option value='yes'>Yes</option>
 	  <option value='no'>No</option>
@@ -14,10 +14,11 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/stache", function(){
-		
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
+
 var person = new can.Map({
 //  attending: "no"
 });
@@ -27,15 +28,13 @@ var frag = can.view(
 	person,
 	{
       attendence: function(){
-        return person.attr("attending") ? 
+        return person.attr("attending") ?
           "are a " + person.attr("attending") :
           "have not responded";
-    
+
     }
 });
 
 $("#out").html( frag );
 
-});
 </script>
-

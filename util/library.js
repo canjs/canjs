@@ -1,4 +1,3 @@
 // This is mainly used for the AMD build
-steal('can/util/jquery', function (can) {
-	return can;
-});
+var can = require('can/util/jquery/jquery');
+module.exports = can;

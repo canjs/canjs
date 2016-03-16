@@ -1,1 +1,4 @@
-steal('../string/string', '../inserted/inserted', '../attr/attr', '../array/each');
+require('../string/string');
+require('../inserted/inserted');
+require('../attr/attr');
+require('../array/each');

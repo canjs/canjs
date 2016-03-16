@@ -14,9 +14,10 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/stache", function(){
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
 
 var data = new can.Map({colors: "green;red"});
 
@@ -29,5 +30,4 @@ var frag = can.view("colors-template",data,{
 
 $("#out").html( frag );
 
-})
 </script>

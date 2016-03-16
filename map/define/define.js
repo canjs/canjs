@@ -1,40 +1,41 @@
-steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (can, mapHelpers) {
-	if(can.define) {
-		return;
-	}
+var can = require('can/util/util');
+var mapHelpers = require('can/map/map_helpers');
+require('can/map/map');
+require('can/compute/compute');
 
-	var define = can.define = {};
-	
+if (!can.define) {
+
+	var define = can.define = {}; // jshint ignore:line
+
 	var getPropDefineBehavior = function(behavior, attr, define) {
 		var prop, defaultProp;
 
-		if(define) {
+		if (define) {
 			prop = define[attr];
 			defaultProp = define['*'];
 
-			if(prop && prop[behavior] !== undefined) {
+			if (prop && prop[behavior] !== undefined) {
 				return prop[behavior];
-			}
-			else if(defaultProp && defaultProp[behavior] !== undefined) {
+			} else if (defaultProp && defaultProp[behavior] !== undefined) {
 				return defaultProp[behavior];
 			}
 		}
 	};
 
 	// This is called when the Map is defined
-	mapHelpers.define = function (Map) {
+	mapHelpers.define = function(Map) {
 		var definitions = Map.prototype.define;
 		//!steal-remove-start
-		if(Map.define){
-			can.dev.warn("The define property should be on the map's prototype properties, "+
+		if (Map.define) {
+			can.dev.warn("The define property should be on the map's prototype properties, " +
 				"not the static properties.");
 		}
 		//!steal-remove-end
 		Map.defaultGenerators = {};
 		for (var prop in definitions) {
 			var type = definitions[prop].type;
-			if( typeof type === "string" ) {
-				if(typeof define.types[type] === "object") {
+			if (typeof type === "string") {
+				if (typeof define.types[type] === "object") {
 					delete definitions[prop].type;
 					can.extend(definitions[prop], define.types[type]);
 				}
@@ -47,8 +48,8 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 				}
 			}
 			if (typeof definitions[prop].Value === "function") {
-				(function (Constructor) {
-					Map.defaultGenerators[prop] = function () {
+				(function(Constructor) {
+					Map.defaultGenerators[prop] = function() {
 						return new Constructor();
 					};
 				})(definitions[prop].Value);
@@ -58,7 +59,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 
 
 	var oldSetupDefaults = can.Map.prototype._setupDefaults;
-	can.Map.prototype._setupDefaults = function (obj) {
+	can.Map.prototype._setupDefaults = function(obj) {
 		var defaults = oldSetupDefaults.call(this),
 			propsCommittedToAttr = {},
 			Map = this.constructor,
@@ -67,7 +68,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		// Overwrite this._get with a version that commits defaults to
 		// this.attr() as needed. Because calling this.attr() for each
 		// individual default would be expensive.
-		this._get = function (originalProp) {
+		this._get = function(originalProp) {
 			// If a this.attr() was called using dot syntax (e.g number.0),
 			// disregard everything after the "." until we call the
 			// original this._get().
@@ -77,7 +78,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 
 			// If this property has a default and we haven't yet committed it to
 			// this.attr()
-			if ((prop in defaults) && ! (prop in propsCommittedToAttr)) {
+			if ((prop in defaults) && !(prop in propsCommittedToAttr)) {
 
 				// Commit the property's default so that it can be read in
 				// other defaultGenerators.
@@ -93,7 +94,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		for (var prop in Map.defaultGenerators) {
 			// Only call the prop's value method if the property wasn't provided
 			// during instantiation.
-			if (! obj || ! (prop in obj)) {
+			if (!obj || !(prop in obj)) {
 				defaults[prop] = Map.defaultGenerators[prop].call(this);
 			}
 		}
@@ -107,13 +108,13 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 
 	var proto = can.Map.prototype,
 		oldSet = proto.__set;
-	proto.__set = function (prop, value, current, success, error) {
+	proto.__set = function(prop, value, current, success, error) {
 		//!steal-remove-start
 		var asyncTimer;
 		//!steal-remove-end
 
 		// check if there's a setter
-		var errorCallback = function (errors) {
+		var errorCallback = function(errors) {
 				//!steal-remove-start
 				clearTimeout(asyncTimer);
 				//!steal-remove-end
@@ -124,9 +125,9 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 				// the event twice. :)
 				if (stub !== false) {
 					can.trigger(self, 'error', [
-						prop,
-						errors
-					], true);
+					prop,
+					errors
+				], true);
 				}
 				return false;
 			},
@@ -143,13 +144,13 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 			can.batch.start();
 			var setterCalled = false,
 
-				setValue = setter.call(this, value, function (value) {
-					if(getter) {
+				setValue = setter.call(this, value, function(value) {
+					if (getter) {
 						self[prop](value);
 					} else {
 						oldSet.call(self, prop, value, current, success, errorCallback);
 					}
-					
+
 					setterCalled = true;
 					//!steal-remove-start
 					clearTimeout(asyncTimer);
@@ -158,17 +159,17 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 			if (getter) {
 				// if there's a getter we don't call old set
 				// instead we call the getter's compute with the new value
-				if(setValue !== undefined && !setterCalled && setter.length >= 1) {
+				if (setValue !== undefined && !setterCalled && setter.length >= 1) {
 					this._computedAttrs[prop].compute(setValue);
 				}
-				
+
 				can.batch.stop();
 				return;
 			}
 			// if it took a setter and returned nothing, don't set the value
 			else if (setValue === undefined && !setterCalled && setter.length >= 1) {
 				//!steal-remove-start
-				asyncTimer = setTimeout(function () {
+				asyncTimer = setTimeout(function() {
 					can.dev.warn('can/map/setter.js: Setter "' + prop + '" did not return a value or call the setter callback.');
 				}, can.dev.warnTimeout);
 				//!steal-remove-end
@@ -195,7 +196,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	};
 
 	define.types = {
-		'date': function (str) {
+		'date': function(str) {
 			var type = typeof str;
 			if (type === 'string') {
 				str = Date.parse(str);
@@ -206,13 +207,13 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 				return str;
 			}
 		},
-		'number': function (val) {
-			if(val == null) {
+		'number': function(val) {
+			if (val == null) {
 				return val;
 			}
 			return +(val);
 		},
-		'boolean': function (val) {
+		'boolean': function(val) {
 			if (val === 'false' || val === '0' || !val) {
 				return false;
 			}
@@ -225,35 +226,35 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		'htmlbool': function(val) {
 			return typeof val === "string" || !!val;
 		},
-		'*': function (val) {
+		'*': function(val) {
 			return val;
 		},
-		'string': function (val) {
-			if(val == null) {
+		'string': function(val) {
+			if (val == null) {
 				return val;
 			}
 			return '' + val;
 		},
 		'compute': {
-			set: function(newValue, setVal, setErr, oldValue){
-				if(newValue.isComputed) {
+			set: function(newValue, setVal, setErr, oldValue) {
+				if (newValue.isComputed) {
 					return newValue;
 				}
-				if(oldValue && oldValue.isComputed) {
+				if (oldValue && oldValue.isComputed) {
 					oldValue(newValue);
 					return oldValue;
 				}
 				return newValue;
 			},
-			get: function(value){
+			get: function(value) {
 				return value && value.isComputed ? value() : value;
 			}
 		}
 	};
-	
+
 	// the old type sets up bubbling
 	var oldType = proto.__type;
-	proto.__type = function (value, prop) {
+	proto.__type = function(value, prop) {
 		var type = getPropDefineBehavior("type", prop, this.define),
 			Type = getPropDefineBehavior("Type", prop, this.define),
 			newValue = value;
@@ -276,7 +277,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 
 		}
 		// If we pass in a object with define
-		else if(can.isPlainObject(newValue) && newValue.define) {
+		else if (can.isPlainObject(newValue) && newValue.define) {
 			newValue = can.Map.extend(newValue);
 			newValue = new newValue();
 		}
@@ -284,7 +285,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	};
 
 	var oldRemove = proto.__remove;
-	proto.__remove = function (prop, current) {
+	proto.__remove = function(prop, current) {
 		var remove = getPropDefineBehavior("remove", prop, this.define),
 			res;
 		if (remove) {
@@ -305,7 +306,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	};
 
 	var oldSetupComputes = proto._setupComputedProperties;
-	proto._setupComputedProperties = function () {
+	proto._setupComputedProperties = function() {
 		oldSetupComputes.apply(this, arguments);
 		for (var attr in this.define) {
 			var def = this.define[attr],
@@ -317,39 +318,39 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	};
 	// Overwrite the invidual property serializer b/c we will overwrite it.
 	var oldSingleSerialize = proto.___serialize;
-	proto.___serialize = function(name, val){
+	proto.___serialize = function(name, val) {
 		return serializeProp(this, name, val);
 	};
 	// If the map has a define serializer for the given attr, run it.
 	var serializeProp = function(map, attr, val) {
 		var serializer = attr === "*" ? false : getPropDefineBehavior("serialize", attr, map.define);
-		if(serializer === undefined) {
+		if (serializer === undefined) {
 			return oldSingleSerialize.call(map, attr, val);
-		} else if(serializer !== false){
-			return typeof serializer === "function" ? serializer.call(map, val, attr): oldSingleSerialize.call(map, attr, val);
+		} else if (serializer !== false) {
+			return typeof serializer === "function" ? serializer.call(map, val, attr) : oldSingleSerialize.call(map, attr, val);
 		}
 	};
-	
+
 	// Overwrite serialize to add in any missing define serialized properties.
 	var oldSerialize = proto.serialize;
-	proto.serialize = function (property) {
+	proto.serialize = function(property) {
 		var serialized = oldSerialize.apply(this, arguments);
-		if(property){
+		if (property) {
 			return serialized;
 		}
 		// add in properties not already serialized
-		
+
 		var serializer,
 			val;
 		// Go through each property.
-		for(var attr in this.define){
+		for (var attr in this.define) {
 			// if it's not already defined
-			if(!(attr in serialized)) {
+			if (!(attr in serialized)) {
 				// check there is a serializer so we aren't doing extra work on serializer:false
 				serializer = this.define && this.define[attr] && this.define[attr].serialize;
-				if(serializer) {
+				if (serializer) {
 					val = serializeProp(this, attr, this.attr(attr));
-					if(val !== undefined) {
+					if (val !== undefined) {
 						serialized[attr] = val;
 					}
 				}
@@ -358,5 +359,6 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		return serialized;
 	};
 
-	return can.define;
-});
+	module.exports = exports = can.define;
+
+}

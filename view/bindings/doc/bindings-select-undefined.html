@@ -1,7 +1,7 @@
 <div id="demo">
 <div id='out'></div>
 <script type='text/stache' id="attending-template">
-<p>Attending? 
+<p>Attending?
   <select {($value)}='selectAttending'>
 	  <option value='yes'>Yes</option>
 	  <option value='no'>No</option>
@@ -14,10 +14,11 @@
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML;
 </script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/stache", "can/map/define",function(){
-	
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/view/bindings/bindings');
+
 Person = can.Map.extend({
 	define: {
 		selectAttending: {
@@ -27,7 +28,7 @@ Person = can.Map.extend({
 			set: function(attending){
 				if(!attending ) {
 					this.removeAttr("attending");
-					
+
 				} else {
 					this.attr("attending", attending);
 				}
@@ -35,7 +36,7 @@ Person = can.Map.extend({
 		}
 	}
 });
-	
+
 person = new Person({
 });
 
@@ -45,15 +46,13 @@ var frag = can.view(
 	{
       attendence: function(){
       	var keys = can.Map.keys( person );
-        return keys.indexOf("attending") >= 0 ? 
+        return keys.indexOf("attending") >= 0 ?
           "are a " + person.attr("attending") :
           "have not responded";
-    
+
     }
 });
 
 $("#out").html( frag );
 
-});
 </script>
-

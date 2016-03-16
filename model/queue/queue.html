@@ -19,41 +19,37 @@
 		</div>
 
 
-		<script type='text/javascript' src="../../node_modules/steal/steal.js" main="@empty">
-		</script>
-		<script type='text/javascript' id="demo-source">
-		steal('can/model',
-			'can/util/fixture',
-			'can/model/queue', 
-			function(){
-				
-				var counter = 0;
+		<script id="demo-source" type='text/javascript' src="../../node_modules/steal/steal.js" main="@empty">
+			var can = require('can');
+			require('can/util/fixture/fixture');
+			require('can/model/queue/queue');
 
-				can.fixture.delay = 1000;
+			var counter = 0;
 
-				can.fixture('/people', function(req){
-					var attrs   = req.data;
-					attrs.id    = ++counter;
-					attrs.foo   = "bar";
-					attrs.extra = "EXTRA!";
-					return attrs;
-				})
+			can.fixture.delay = 1000;
 
-				var Person = can.Model({
-					create  : "POST /people",
-					update  : "PUT /people/{id}",
-					destroy : "DESTROY /people/{id}"
-				}, {})
-				p = new Person({name: "Mihael", socialnetworks : {twitter : 'retro'}});
-				p.save(function(){
-					console.log("Changed arguments are preserved after save call returns", p.attr())
-				});
-				p.attr('socialnetworks.twitter', 'mihaelkonjevic');
-				p.save(function(){
-					console.log("Changed arguments are preserved after save call returns", p.attr())
-				});
-				p.attr('foo', 'baz');
+			can.fixture('/people', function(req){
+				var attrs   = req.data;
+				attrs.id    = ++counter;
+				attrs.foo   = "bar";
+				attrs.extra = "EXTRA!";
+				return attrs;
 			})
+
+			var Person = can.Model({
+				create  : "POST /people",
+				update  : "PUT /people/{id}",
+				destroy : "DESTROY /people/{id}"
+			}, {})
+			p = new Person({name: "Mihael", socialnetworks : {twitter : 'retro'}});
+			p.save(function(){
+				console.log("Changed arguments are preserved after save call returns", p.attr())
+			});
+			p.attr('socialnetworks.twitter', 'mihaelkonjevic');
+			p.save(function(){
+				console.log("Changed arguments are preserved after save call returns", p.attr())
+			});
+			p.attr('foo', 'baz');
 		</script>
 	</body>
 </html>

@@ -1,7 +1,8 @@
 <div id='out'></div>
-<script src="../../node_modules/steal/steal.js"></script>
-<script>
-steal('can/view/stache', function(){
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+require('can/view/stache/stache');
+
 	var items = [];
 	for (var i = 0; i < 1000; i++) {
 		items.push({
@@ -37,5 +38,4 @@ steal('can/view/stache', function(){
 		viewModel.attr('show', ! viewModel.attr('show'));
 		console.log(Object.keys(can.view.nodeLists.nodeMap).length)
 	}, 5); 
-});
 </script>

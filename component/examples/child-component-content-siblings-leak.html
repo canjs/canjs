@@ -1,9 +1,7 @@
 <div id='out'></div>
-<script src="../../node_modules/steal/steal.js"></script>
-<script>
-steal('can/view/stache', function(){
-
-
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require("can");
+require('can/view/stache/stache');
 
 	var items = [];
 
@@ -36,7 +34,7 @@ steal('can/view/stache', function(){
 
 	can.Component.extend({
 		tag: 'child-component',
-		template: can.stache('<div>\n<content/>\n</div>\n<div></div>')
+		template: can.stache('<span>\n<content/>\n</span>')
 	});
 
 	$('#out').html(can.stache('<grandparent-component></grandparent-component>'));
@@ -46,5 +44,5 @@ steal('can/view/stache', function(){
 		console.log(Object.keys(can.view.nodeLists.nodeMap).length)
 	}, 5000);
 
-});
+
 </script>

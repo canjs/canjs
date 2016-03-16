@@ -1,3 +1,2 @@
-steal('can/list/sort', function (sortPlugin) {
-	return sortPlugin;
-});
+var sortPlugin = require('can/list/sort/sort');
+module.exports = exports = sortPlugin;

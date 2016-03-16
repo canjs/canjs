@@ -1,8 +1,8 @@
 @module {function()} can/view/autorender can.autorender
 @parent can.view.plugins
 
-A module that automatically renders script and other elements with 
-the [can/view/autorender.can-autorender] attribute. This function is useful to know when 
+A module that automatically renders script and other elements with
+the [can/view/autorender.can-autorender] attribute. This function is useful to know when
 the templates have finished rendering.
 
 @signature `can.autorender(succcess, error)`
@@ -11,9 +11,9 @@ the templates have finished rendering.
 
   @param {function} success A function to callback when all autorendered templates have been rendered
   successfully.
-  
+
   @param {function} [error] A function to callback if a template was not rendered successfully.
-  
+
 @body
 
 ## Use
@@ -33,7 +33,7 @@ For example, you might have a page like:
       {{message}}
     </my-component>
   </script>
-  
+
   <script src='jquery.js'></script>
   <!-- A CanJS build that includes this plugin -->
   <script src='can.custom.js'></script>
@@ -42,10 +42,10 @@ For example, you might have a page like:
   <script>
     // Wait until everything has rendered.
     can.autorender(function(){
-      
+
       // Update the viewModel the template was rendred with:
       $("#main").viewModel().attr("message","Rendered!");
-      
+
     })
   </script>
 </body>
@@ -54,7 +54,7 @@ For example, you might have a page like:
 ## Rendered placement
 
 If the template source is a `<script>` tag within the `<body>`, the rendered template is placed
-immediately following the template. 
+immediately following the template.
 
 For example:
 
@@ -131,9 +131,9 @@ Becomes:
 
 ## Scope
 
-The template is rendered with a [can.Map] made from the attributes of the 
-template source element.  That `map` is available on the 
-template source element via [can.viewModel].  You can 
+The template is rendered with a [can.Map] made from the attributes of the
+template source element.  That `map` is available on the
+template source element via [can.viewModel].  You can
 change the map at any time:
 
 ```
@@ -148,7 +148,7 @@ change the map at any time:
 </body>
 ```
 
-You can change attributes on the element and it will update the 
+You can change attributes on the element and it will update the
 viewModel too:
 
 ```
@@ -177,7 +177,7 @@ For demo pages that require very little setup:
       {{message}}
     </my-component>
   </script>
-  <script src='../node_modules/steal/steal.js' 
+  <script src='../node_modules/steal/steal.js'
           main='can/view/autorender/'>
   </script>
 </body>
@@ -193,13 +193,13 @@ For demo pages that require a little custom setup:
       {{message}}
     </my-component>
   </script>
-  <script src='../node_modules/steal/steal.js' 
+  <script src='../node_modules/steal/steal.js'
           main='@empty'>
-  </script>
-  <script>
-    steal('can','jquery','can/view/autorender', function(can, $){
-      $("my-component").viewModel().attr("message", "Hi");
-    });
+    var can = require('can');
+    var $ = reqire('jquery');
+    require('can/view/autorender/autorender');
+
+    $("my-component").viewModel().attr("message", "Hi");
   </script>
 </body>
 ```

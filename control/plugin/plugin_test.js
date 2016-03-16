@@ -1,24 +1,26 @@
-steal("can/control/plugin", "steal-qunit", function () {
-	if (!window.jQuery) {
-		return;
-	}
+/* jshint -W079 */
+/* global My */
+require('can/control/plugin/plugin');
+require('steal-qunit');
 
-	/* global My */
-	QUnit.module('can/control/plugin');
-	test('pluginName', function () {
+QUnit.module('can/control/plugin');
+
+if (window.jQuery) {
+
+	test('pluginName', function() {
 		expect(8);
 		can.Control('My.TestPlugin', {
 			pluginName: 'my_plugin'
 		}, {
-			init: function (el, ops) {
+			init: function(el, ops) {
 				ok(true, 'Init called');
 				equal(ops.testop, 'testing', 'Test argument set');
 			},
-			method: function (arg) {
+			method: function(arg) {
 				ok(true, 'Method called');
 				equal(arg, 'testarg', 'Test argument passed');
 			},
-			update: function (options) {
+			update: function(options) {
 				ok(true, 'Update called');
 			}
 		});
@@ -40,7 +42,7 @@ steal("can/control/plugin", "steal-qunit", function () {
 		ok(!ta.hasClass('my_plugin'), 'Shouldn\'t have class my_plugin after being destroyed');
 		ok(ta.hasClass('existing_class'), 'Existing class should still be there');
 	});
-	test('.control(), .controls() and _fullname', function () {
+	test('.control(), .controls() and _fullname', function() {
 		expect(3);
 		can.Control('My.TestPlugin', {});
 		var ta = can.$('<div/>')
@@ -51,7 +53,7 @@ steal("can/control/plugin", "steal-qunit", function () {
 			.length, 1, '.controls() returns one instance');
 		ok(ta.control() instanceof My.TestPlugin, 'Control is instance of test plugin');
 	});
-	test('update', function () {
+	test('update', function() {
 		can.Control({
 			pluginName: 'updateTest'
 		}, {});
@@ -66,24 +68,24 @@ steal("can/control/plugin", "steal-qunit", function () {
 		equal(ta.control()
 			.options.testop, 'testing', 'Test option has been extended properly');
 	});
-	test('calling methods', function () {
+	test('calling methods', function() {
 		can.Control({
 			pluginName: 'callTest'
 		}, {
-			returnTest: function () {
+			returnTest: function() {
 				return 'Hi ' + this.name;
 			},
-			setName: function (name) {
+			setName: function(name) {
 				this.name = name;
 			}
 		});
 		var ta = can.$('<div/>')
 			.appendTo($('#qunit-fixture'));
 		ta.callTest();
-		ok(ta.callTest('setName', 'Tester') instanceof jQuery, 'Got jQuery element as return value');
+		ok(ta.callTest('setName', 'Tester') instanceof $, 'Got jQuery element as return value');
 		equal(ta.callTest('returnTest'), 'Hi Tester', 'Got correct return value');
 	});
-	test('always use pluginName first in .control(name) (#448)', 4, function () {
+	test('always use pluginName first in .control(name) (#448)', 4, function() {
 		can.Control('SomeName', {
 			pluginName: 'someTest'
 		}, {});
@@ -101,4 +103,9 @@ steal("can/control/plugin", "steal-qunit", function () {
 		ok(control, 'Got a control from pluginName');
 		equal(control.constructor.pluginName, 'otherTest', 'Got correct control');
 	});
-});
+
+} else {
+	test('dont test anything', function(){
+		ok(true);
+	});
+}

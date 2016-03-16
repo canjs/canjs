@@ -5,7 +5,7 @@
   }
 </style>
 <div id='out'></div>
-<script src="../../node_modules/steal/steal.js" main="@empty"></script>
+
 <script type='text/stache' id='template'>
   <button can-click='back'>Back</button>
   <button can-click='fwd'>Forward</button>
@@ -19,8 +19,14 @@
     <div><a href="#!product/{{id}}" class='{{selectedClass id}}'>{{name}}</a></div>
   {{/appState.products}}
 </script>
-<script>
-steal("can/route", "can/map/define", "can/view/stache", "can/view/bindings", "can/model", "can/util/fixture",function(){
+<script src="../../node_modules/steal/steal.js" main="@empty">
+  var can = require('can');
+  require('can/route/route');
+  require('can/map/define/define');
+  require('can/view/stache/stache');
+  require('can/view/bindings/bindings');
+  require('can/model/model');
+  require('can/util/fixture/fixture');
 
   can.fixture("GET /locations", function(){
     return [
@@ -148,5 +154,4 @@ $("#out").html( can.view('template', {
     }
   }) );
 
-})
 </script>

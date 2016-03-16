@@ -23,9 +23,11 @@ button {
 	cursor: pointer;
 }
 </style>
-<script src="../../node_modules/steal/steal.js"></script>
-<script>
-steal('can/view/stache', 'can/list/sort', 'can/view/bindings', function(){
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var can = require('can');
+require('can/view/stache/stache');
+require('can/list/sort/sort');
+require('can/view/bindings/bindings');
 
 var template = can.view.stache(
 	'<table>' +
@@ -88,7 +90,6 @@ var data = {
 
 $("#out").html( template( data , {}) );
 
-
 // Increment every number by a few every couple of secs
 // This will result in the color of the cell being changed
 
@@ -102,7 +103,4 @@ $("#out").html( template( data , {}) );
 // 	can.batch.stop();
 // }, 2000);
 
-
-
-});
 </script>

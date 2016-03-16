@@ -27,12 +27,13 @@
 		"bower": "~1.3.8",
 		"browserify": "~8.1.0",
 		"connect": "^2.14.4",
+		"documentjs": "~0.3.2",
 		"grunt": "~0.4.0",
 		"grunt-banner": "^0.3.1",
 		"grunt-cli": "~0.1.7",
 		"grunt-contrib-clean": "~0.5.0",
 		"grunt-contrib-connect": "~0.3.0",
-		"grunt-contrib-jshint": "~0.8.0",
+		"grunt-contrib-jshint": "^1.0.0",
 		"grunt-contrib-uglify": "~0.2.1",
 		"grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
 		"grunt-jsbeautifier": "~0.2.6",
@@ -45,13 +46,12 @@
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
 		"rimraf": "2.1",
-		"steal": "^0.13.0-pre.7",
+		"steal": "^0.15.0",
 		"steal-benchmark": "~0.0.1",
 		"steal-qunit": "0.0.2",
-		"steal-tools": "^0.13.3",
+		"steal-tools": "^0.15.0",
 		"testee": "^0.2.4",
-		"zombie": "3.1.1",
-		"documentjs": "~0.3.2"
+		"zombie": "3.1.1"
 	},
 	"scripts": {
 		"test": "grunt test"
