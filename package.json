@@ -213,8 +213,6 @@
 		"./route/route": "./dist/cjs/route/route",
 		"./route/pushstate/pushstate": "./dist/cjs/route/pushstate/pushstate",
 		"./model/queue/queue": "./dist/cjs/model/queue/queue",
-		"./construct/super/super": "./dist/cjs/construct/super/super",
-		"./construct/proxy/proxy": "./dist/cjs/construct/proxy/proxy",
 		"./map/lazy/lazy": "./dist/cjs/map/lazy/lazy",
 		"./map/delegate/delegate": "./dist/cjs/map/delegate/delegate",
 		"./map/setter/setter": "./dist/cjs/map/setter/setter",

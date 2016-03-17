@@ -90,16 +90,6 @@
 			"type": "plugin",
 			"description": "Queued requests to the server."
 		},
-		"can/construct/super/super": {
-			"name": "can.Construct.super",
-			"type": "plugin",
-			"description": "Call super methods"
-		},
-		"can/construct/proxy/proxy": {
-			"name": "can.Construct.proxy",
-			"type": "plugin",
-			"description": "Proxy construct methods"
-		},
 		"can/map/lazy/lazy": {
 			"name": "can.Map.Lazy",
 			"type": "plugin",

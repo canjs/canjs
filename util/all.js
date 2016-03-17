@@ -1,6 +1,5 @@
 require('can/component');
 require('can/construct');
-require('can/construct/proxy');
 require('can/control');
 require('can/control/plugin');
 require('can/list');

@@ -14,8 +14,6 @@ require('can/route/route_test');
 require('can/control/route/route_test');
 require('can/route/pushstate/pushstate_test');
 require('can/model/queue/queue_test');
-require('can/construct/super/super_test');
-require('can/construct/proxy/proxy_test');
 require('can/map/lazy/lazy_test');
 require('can/map/delegate/delegate_test');
 require('can/map/setter/setter_test');
