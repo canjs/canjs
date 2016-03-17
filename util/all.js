@@ -1,7 +1,6 @@
 require('can/component');
 require('can/construct');
 require('can/control');
-require('can/control/plugin');
 require('can/list');
 require('can/list/promise');
 require('can/model');

@@ -137,15 +137,6 @@
 			"type": "plugin",
 			"description": "Sort observable lists"
 		},
-		"can/control/plugin/plugin": {
-			"name": "can.Control.plugin",
-			"type": "plugin",
-			"description": "Registers a jQuery plugin function for Controls",
-			"configurations": [
-				"jquery",
-				"jquery-2"
-			]
-		},
 		"can/view/modifiers/modifiers": {
 			"name": "can.view.modifiers",
 			"type": "plugin",

@@ -23,7 +23,6 @@ require('can/map/backup/backup_test');
 require('can/map/list/list_test');
 require('can/map/define/define_test');
 require('can/list/sort/sort_test');
-require('can/control/plugin/plugin_test');
 require('can/view/modifiers/modifiers_test');
 require('can/util/object/object_test');
 require('can/util/fixture/fixture_test');

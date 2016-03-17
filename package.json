@@ -222,7 +222,6 @@
 		"./map/list/list": "./dist/cjs/map/list/list",
 		"./map/define/define": "./dist/cjs/map/define/define",
 		"./list/sort/sort": "./dist/cjs/list/sort/sort",
-		"./control/plugin/plugin": "./dist/cjs/control/plugin/plugin",
 		"./view/modifiers/modifiers": "./dist/cjs/view/modifiers/modifiers",
 		"./util/fixture/fixture": "./dist/cjs/util/fixture/fixture",
 		"./view/bindings/bindings": "./dist/cjs/view/bindings/bindings",
