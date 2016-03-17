@@ -108,6 +108,16 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 			}
 			return callback;
 		};
+		var setAttr = function(el, attr) {
+			var value = node.attrs[attr];
+			if(typeof value === "function"){
+				getCallback().callbacks.push({
+					callback:  value
+				});
+			} else  {
+				setAttribute(el, attr, value);
+			}
+		};
 
 		if(nodeType === "object") {
 			if( node.tag ) {
@@ -118,15 +128,16 @@ steal("can/util", "can/view/elements.js",function(can, elements, vdom){
 				}
 
 				if(node.attrs) {
+					// If an input tag has a type attribute, set it before any other 
+					// attributes. This is a workaround for an IE8 bug where the value
+					// of an input is changed when the type is changed
+					// https://github.com/canjs/canjs/issues/2324
+					if(node.tag === 'input' && node.attrs.type) {
+						setAttr(el, 'type');
+						delete node.attrs.type;
+					}
 					for(var attrName in node.attrs) {
-						var value = node.attrs[attrName];
-						if(typeof value === "function"){
-							getCallback().callbacks.push({
-								callback:  value
-							});
-						} else  {
-							setAttribute(el, attrName, value);
-						}
+						setAttr(el, attrName);
 					}
 				}
 				if(node.attributes) {
