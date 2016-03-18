@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+	<head></head>
+	<body>
+		<button class="more">More</button>
+        <div id="app"></div>
+		<script type="text/stache" id="tpl">
+			<ul>
+				{{#each items}}
+					<li>{{.}}</li>
+				{{/each}}
+			</ul>
+		</script>
+		<script type="text/javascript" src="../../node_modules/steal/steal.js" main="@empty"></script>
+		<script type="text/javascript">
+			
+			steal("can/view/stache", function(stache){
+				var template = can.view('tpl');
+				
+				var index = 0;
+				var initial = 100;
+				var step = 25;
+				
+				var createItems = function(howMany){
+					var items = [];
+					for(var i = 0; i < howMany; i++) {
+						items.push(index);
+						index++;
+					}
+					return items;
+				}
+
+				var items = new can.List(createItems(initial));
+
+				$('.more').on('click', function(){
+					var list = items.attr();
+					list = list.concat(createItems(step))
+					list.splice(0, step);
+					items.replace(list);
+				});
+
+				var frag = template({
+					items: items
+				});
+				
+				$("#app").append(frag);
+			});
+			
+		</script>
+	</body>
+</html>
