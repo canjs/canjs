@@ -19,14 +19,14 @@ with jQuery:
       ev.type // "inserted"
       ev.target // el
     })
-    
+
     $(parent).append(el);
 
 Listen to an `inserted` event with [can.Control] like:
 
     can.Control.extend({
       "inserted": function(el, ev){
-      
+
       }
     })
 
@@ -40,26 +40,12 @@ Listen to an `inserted` event with [can.Component::events can.Component's events
       tag: "panel",
       events:{
         "inserted": function(el, ev){
-        
+
         }
     })
 
 To create an `inserted` event, you must use the base-library [can.$ NodeList]'s DOM modifier methods.
 
-For jQuery or Zepto, use `$.fn.html`, `$.fn.append`, `$.fn.after`, etc:
+For jQuery, use `$.fn.html`, `$.fn.append`, `$.fn.after`, etc:
 
      $(parent).html(el);
-
-For Mootools use [Element::grab](http://mootools.net/docs/core/Element/Element#Element:grab):
-
-     $(parent).grab(el)
-
-For Dojo, use [dojo.place](http://dojotoolkit.org/reference-guide/1.7/dojo/place.html);
-
-     dojo.place(el,parent,"last");
-     
-For YUI, use anything that calls `Y.DOM.addHTML` append:
-
-    Y.one("div.parent").append(el);
-
-

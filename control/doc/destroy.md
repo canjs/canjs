@@ -32,30 +32,6 @@ is removed auto-magically:
 	// remove the element
 	$( '#clickme' ).remove();
 
-The methods you can use that will destroy controls automatically by library:
-
-__jQuery and Zepto__
-
-- `$.fn.remove`
-- `$.fn.html`
-- `$.fn.replaceWith`
-- `$.fn.empty`
-
-__Dojo__
-
-- `dojo.destroy`
-- `dojo.empty`
-- `dojo.place (with the replace option)`
-
-__Mootools__
-
-- `Element.prototype.destroy`
-
-__YUI__
-
-- `Y.Node.prototype.remove`
-- `Y.Node.prototype.destroy`
-
 
 ## Teardown in Destroy
 

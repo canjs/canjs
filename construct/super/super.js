@@ -1,12 +1,12 @@
 var can = require('can/util/util');
 require('can/construct/construct');
 // tests if we can get super in .toString()
-var isFunction = can.isFunction,
-	fnTest = /xyz/.test(function () {
+var isFunction = can.isFunction;
+var fnTest = /xyz/.test(function () {
 		return this.xyz;
-	}) ? /\b_super\b/ : /.*/,
-	getset = ['get', 'set'],
-	getSuper = function (base, name, fn) {
+	}) ? /\b_super\b/ : /.*/;
+var getset = ['get', 'set'];
+var getSuper = function (base, name, fn) {
 		return function () {
 			var tmp = this._super,
 				ret;

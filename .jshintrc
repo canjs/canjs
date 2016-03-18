@@ -1,8 +1,8 @@
 {
 	"globals": {
+		"define": true,
 		"steal": true,
 		"can": true,
-		"Zepto": true,
 		"QUnit": true,
 		"System": true,
 		"SimpleDOM": true,
@@ -40,11 +40,7 @@
 	"loopfunc": true,
 	"smarttabs": true,
 	"maxerr" : 200,
-	"dojo": true,
-	"mootools": true,
-	"yui": true,
 	"browser": true,
 	"phantom": true,
-	"rhino": true,
 	"node": true
 }

@@ -96,7 +96,7 @@ module.exports = function (grunt) {
 
 					options: function (config) {
 						return {
-							pluginified: ['2.0.5'],
+							pluginified: ['3.0.0'],
 							dist: 'can.' + config
 						};
 					}
@@ -121,7 +121,7 @@ module.exports = function (grunt) {
 		},
 		// Removes the dist folder
 		clean: {
-			test: ['test/pluginified/latest.js'],
+			test: ['test/pluginified/latest.js', 'test/dist/'],
 			build: ['dist/']
 		},
 		'string-replace': {
@@ -160,8 +160,7 @@ module.exports = function (grunt) {
 			},
 			lib: [
 				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
-				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-				'!util/yui/yui-3.7.3.js', '!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
+				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js'
 			]
 		},
 		jsbeautifier: {
@@ -182,7 +181,7 @@ module.exports = function (grunt) {
 						src : [
 							'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
 							'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
-							'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+							'!**/*_test.js'
 						],
 						expand : true
 					}
@@ -194,7 +193,7 @@ module.exports = function (grunt) {
 				options : {
 					jshint : grunt.file.readJSON('.jshintrc'),
 					title : "CanJS Source",
-					exclude : /bower_components\|dist\|docs\|guides\|lib\|node_modules\|src\|examples\|dojo\-\|demos/
+					exclude : /bower_components\|dist\|docs\|guides\|lib\|node_modules\|src\|examples\|demos/
 				},
 				files: {
 					'plato/src': '<%= docco.dev.src %>'
@@ -251,15 +250,14 @@ module.exports = function (grunt) {
 				'test/*.html',
 				'!test/demos_and_tests.html',
 				'!test/performance-loading.html',
-				'!test/index.html',
-				'!test/dojo.html'
+				'!test/index.html'
 			],
 			amd: [ 'test/amd/*.html' ],
 			dist: [ 'test/dist/*.html' ],
 			compatibility: [ 'test/compatibility/*.html' ],
 			dev: [ 'test/dev/*.html' ],
 			individuals: [ '**/test.html', '!view/autorender/test.html',
-				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
+			 '!node_modules/**/test.html' ]
 		}
 	});
 	grunt.registerTask('browserify-package', function(){
@@ -295,11 +293,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:amd',[
 		'clean:build',
 		'steal-export:amd',
-		'steal-export:amd-util-jquery',
-		'steal-export:amd-util-dojo',
-		'steal-export:amd-util-yui',
-		'steal-export:amd-util-zepto',
-		'steal-export:amd-util-mootools',
 		'string-replace:version'
 	]);
 

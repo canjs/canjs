@@ -17,8 +17,8 @@ Get the code for: [chapter: setup](/guides/examples/PlaceMyOrder/ch-0_canjs-gett
 
 - - -
 
-To begin, we’ll use an example project that has all of the dependencies required 
-for the sample app that we’re going to build. The example project also has some 
+To begin, we’ll use an example project that has all of the dependencies required
+for the sample app that we’re going to build. The example project also has some
 CSS and images to make our example app a little bit more stylish. Download the example
 project, by getting the <a href="#chapter-code">code for this chapter</a> (see above).
 
@@ -44,11 +44,11 @@ in more detail <a href="#application-bootstrap">below</a>.
 
 The `components` folder is where we’ll put all of the parts that make
 up our application. A component-based structure makes it easier to both manage
-and port our application's components (should you, for example, want to use 
+and port our application's components (should you, for example, want to use
 a component in another application).
 
 The `css` folder contains a `style.css` file that is used for the entire app.
-We would typically recommend putting any CSS files in their respective component 
+We would typically recommend putting any CSS files in their respective component
 folders, however we’ve only included one CSS file in this application for simplicity.
 
 The `images` folder contains images that are used throughout the app.
@@ -79,8 +79,7 @@ which allows you to download the specific parts of CanJS you need for your appli
 
 The custom download page loads with all the elements in the core CanJS library
 already selected. We want all of those in our build, so leave them checked.
-CanJS relies on an external core library for some of its functionality. There
-are several options available (jQuery, Dojo, YUI, etc.). The default option is
+CanJS relies on an external core library for some of its functionality. The default option is
 jQuery. That's what we’ll be working with here.
 
 The right side of the page lists all of the plugins. From the list of plugins,
@@ -94,7 +93,7 @@ download a file called `can.custom.js`, which you can save to your local machine
 ### can.fixture
 
 The [`can.fixture`](../docs/can.fixture.html) dependency is special because, normally,
-you don't want it to be a part of your final application; however, it can be very 
+you don't want it to be a part of your final application; however, it can be very
 helpful during development. `can.fixture.js` allows you to simulate RESTful services.
 You can <a href="http://canjs.com/release/2.3.0/can.fixture.js" target="_blank">download it here</a>.
 

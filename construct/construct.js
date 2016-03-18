@@ -587,7 +587,7 @@ can.extend(can.Construct, {
 			fullName: fullName,
 			_fullName: _fullName
 		});
-		// Dojo and YUI extend undefined
+
 		if (shortName !== undefined) {
 			Constructor.shortName = shortName;
 		}
