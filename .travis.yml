@@ -2,6 +2,8 @@ sudo: false
 language: node_js
 node_js: 0.10
 script: npm test
+before_script:
+  - "npm install phantomjs -g"
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
