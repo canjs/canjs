@@ -191,7 +191,7 @@ steal('can/util/can.js', function (can) {
 						callbacks.push.apply(callbacks,  batch.callbacks );
 						dispatchingBatch = batch;
 						can.batch.batchNum = batch.number;
-						//console.log("dispatching", can.batch.batchNum);
+						
 						var len;
 
 						if (callStart) {
