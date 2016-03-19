@@ -3,6 +3,13 @@
 @parent guides 5
 -->
 
+__2.3.21__ ( Mar 18 2016 )
+
+- [#each leaking memory in stache](https://github.com/canjs/canjs/issues/2332)
+- [IE8: Stache renders radio buttons with incorrect value](https://github.com/canjs/canjs/issues/2324)
+- [Infinite batch change in 2.3.20 causes out of order rendering](https://github.com/canjs/canjs/issues/2323)
+
+
 __2.3.20__ ( Mar 08 2016 )
 
 - [Make define properties work on can.List](https://github.com/canjs/canjs/pull/2313)
