@@ -20,9 +20,7 @@
 	},
 	"dependencies": {
 		"can-simple-dom": "^0.3.0",
-		"jquery": ">=1.9.0 <1.12.0 || >=2.1.0 <2.3.0",
-		"qunit": "^0.9.0",
-		"requirejs": "^2.1.22"
+		"jquery": ">=1.9.0 <1.12.0 || >=2.1.0 <2.3.0"
 	},
 	"devDependencies": {
 		"bitovi-tools": "^0.1.1",
@@ -46,14 +44,16 @@
 		"jquery-ui": "^1.10.5",
 		"jquerypp": "^2.0.0",
 		"lodash": "2.4.1",
+		"qunit": "^0.9.0",
 		"qunitjs": "^1.22.0",
+		"requirejs": "^2.1.22",
 		"rimraf": "2.1",
 		"steal": "^0.15.0",
 		"steal-benchmark": "~0.0.1",
 		"steal-qunit": "0.0.2",
-		"steal-tools": "^0.15.0",
+		"steal-tools": "0.15.3",
 		"testee": "^0.2.4",
-		"zombie": "3.1.1"
+		"zombie": "^4.2.1"
 	},
 	"scripts": {
 		"test": "grunt test",

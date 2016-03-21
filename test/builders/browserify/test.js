@@ -2,9 +2,9 @@
  * Test that the dist works
  */
 var assert = require("assert"),
-	Browser = require("zombie"),
 	connect = require("connect"),
 	path = require("path"),
+	Browser = require('zombie'),
 	rmdir = require("rimraf");
 	
 var browserify = require('browserify');
