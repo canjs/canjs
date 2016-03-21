@@ -1,7 +1,7 @@
 require('can/view/view');
 require('can/view/callbacks/callbacks');
 require('can/view/stache/stache');
-require('can/observe/observe');
+require('can/map/map');
 require('can/util/fixture/fixture');
 require('can/test/test');
 require('steal-qunit');

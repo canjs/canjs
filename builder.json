@@ -31,13 +31,6 @@
 			"description": "Promises on lists",
 			"type": "plugin"
 		},
-		"can/observe/observe": {
-			"name": "can.Observe",
-			"description": "Observables and key-value bindings",
-			"type": "core",
-			"isDefault": true,
-			"hidden": true
-		},
 		"can/compute/compute": {
 			"name": "can.compute",
 			"description": "can.compute lets you make observable values",
@@ -84,26 +77,6 @@
 			"name": "can.route.pushstate",
 			"description": "can.route with pushstate",
 			"type": "plugin"
-		},
-		"can/map/lazy/lazy": {
-			"name": "can.Map.Lazy",
-			"type": "plugin",
-			"description": "Lazy initializing maps and lists"
-		},
-		"can/map/setter/setter": {
-			"name": "can.Map.setter",
-			"type": "plugin",
-			"description": "Use setter methods on can.Map"
-		},
-		"can/map/validations/validations": {
-			"name": "can.Map.validations",
-			"type": "plugin",
-			"description": "Validate Observe attributes"
-		},
-		"can/map/list/list": {
-			"name": "can.Map.List",
-			"type": "plugin",
-			"description": "Live-updating mapped and filtered observe lists"
 		},
 		"can/map/define/define": {
 			"name": "can.Map.define",

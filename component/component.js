@@ -16,7 +16,7 @@ var bindings = require("can/view/bindings/bindings");
 
 require("can/view/callbacks/callbacks");
 require("can/control/control");
-require("can/observe/observe");
+require("can/map/map");
 require("can/view/stache/stache");
 require("can/util/view_model/view_model");
 

@@ -1,5 +1,5 @@
 require('can/view/live/live');
-require('can/observe/observe');
+require('can/map/map');
 require('steal-qunit');
 
 QUnit.module('can/view/live');
