@@ -253,10 +253,7 @@ module.exports = function(){
 		},
 		"amd": {
 			system: makeSystemConfig({
-				main: allModuleNames.concat(["can"]),
-				map: {
-					"can/util/util" : "can/util/library"
-				}
+				main: allModuleNames.concat(["can"])
 			}),
 			options : {
 				quiet: true

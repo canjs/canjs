@@ -20,10 +20,6 @@ var reverseNormalize = function(name, load, baseName, baseLoad){
 		return name.replace(/@.*/,"");
 	}
 
-	if(name === "util/library") {
-		return "can/util/library";
-	}
-
 	if(name === "can") {
 		return name;
 	}
