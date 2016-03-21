@@ -29,7 +29,7 @@ Listen to an `attributes` event with [can.Control] like:
 
     can.Control.extend({
       "attributes": function(el, ev){
-      
+
       }
     })
 
@@ -39,7 +39,7 @@ Listen to an `attributes` event with [can.Component::events can.Component's even
       tag: "panel",
 			events: {
 				"attributes": function(el, ev){
-					
+
 				}
 			}
     })
@@ -52,21 +52,9 @@ can set attributes direction with `setAttribute` like:
 
 To create an `attributes` event in all browsers, you must use the base-library [can.$ NodeList]'s attribute methods.
 
-For jQuery or Zepto, use `$.fn.attr`
+For jQuery or Zepto
 
      $(el).attr("title","Mr. Sprinkles");
-
-For Mootools use [Element::set](http://mootools.net/docs/core/Element/Element#Element:set):
-
-     $(el).set("title","Mr. Sprinkles")
-
-For Dojo, use `dojo.setAttr` or `dojo.removeAttr`;
-
-     dojo.setAttr(el,"title","Mr. Sprinkles");
-     
-For YUI use `can.attr.set` like:
-
-    can.attr.set(el,"title","Mr. Sprinkles");
 
 ## Asynchronous dispatching
 
@@ -76,15 +64,13 @@ attribute event handlers are not fired until the all current operations are comp
     $(div).bind("attributes", function(){
        console.log("attributes handler")
     })
-    
+
     console.log("about to change title")
     $(el).attr("title","Mr. Sprinkles");
     console.log("changed title")
-   
+
 Ouputs
 
     > about to change title
     > changed title
     > attributes handler
-   
-

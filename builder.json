@@ -189,52 +189,6 @@
 
 				}
 			}
-		},
-		"jquery-2": {
-			"description": "jQuery (2.x)",
-			"hidden": true,
-			"library": "bower_components/jquery/dist/jquery.js",
-			"steal": {
-				"paths": {
-					"jquery/jquery": "bower_components/jquery/dist/jquery.js"
-				}
-			}
-		},
-		"zepto": {
-			"description": "Zepto",
-			"library": "bower_components/zepto/zepto.js",
-			"steal": {
-				"map": {
-					"can/util/util": "can/util/zepto/zepto"
-				}
-			}
-		},
-		"mootools": {
-			"description": "Mootools",
-			"library": "bower_components/mootools/dist/mootools-core.js",
-			"steal": {
-				"map": {
-					"can/util/util": "can/util/mootools/mootools"
-				}
-			}
-		},
-		"yui": {
-			"description": "YUI",
-			"library": "util/yui/yui-3.7.3.js",
-			"steal": {
-				"map": {
-					"can/util/util": "can/util/yui/yui"
-				}
-			}
-		},
-		"dojo": {
-			"description": "Dojo",
-			"library": "util/dojo/dojo-1.8.1.js",
-			"steal": {
-				"map": {
-					"can/util/util": "can/util/dojo/dojo"
-				}
-			}
 		}
 	}
 }

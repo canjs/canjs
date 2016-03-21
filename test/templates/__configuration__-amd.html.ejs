@@ -2,8 +2,7 @@
 <html>
 <head>
 	<title><%= configuration.description %> Test Suite</title>
-	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
-	<script type="text/javascript" src="../../bower_components/modernizr/modernizr.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../node_modules/qunitjs/qunit/qunit.css"/>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -16,8 +15,7 @@
 <div id="qunit-test-area"></div>
 <div id="qunit-fixture"></div>
 
-<script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
-<script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
+<script type="text/javascript" src="../../node_modules/requirejs/require.js"></script>
 <script type="text/javascript">
     <%
         var moduleName = function(file) { return file.substring(0, file.lastIndexOf('.')); }
@@ -26,9 +24,9 @@
             baseUrl: root,
             paths : {
               can: "dist/amd/can",
-              "dojo": "bower_components/dojo",
               "simple-dom": "node_modules/can-simple-dom/dist/amd/simple-dom",
-              "micro-location": "node_modules/can-simple-dom/node_modules/micro-location/lib/micro-location"
+              "micro-location": "node_modules/can-simple-dom/node_modules/micro-location/lib/micro-location",
+              "qunit": "node_modules/qunitjs/qunit/qunit"
             },
             map : {
                 '*' : {
@@ -43,13 +41,18 @@
 
     %>
 
-	QUnit.config.autostart = false;
 	require.config(<%- JSON.stringify(config) %>);
 
 	require(['can/util/fixture'].concat(<%- JSON.stringify(modules) %>), function() {
-		require(["test/pluginified/latest"], function(){
-			QUnit.start();
-		});
+        require(['qunit'], function(QUnit){
+            QUnit.config.autostart = false;
+            require(["test/pluginified/latest"], function(){
+                if(window.Testee) {
+                  window.Testee.init();
+                }
+    			QUnit.start();
+    		});
+        });
 	});
 </script>
 </body>

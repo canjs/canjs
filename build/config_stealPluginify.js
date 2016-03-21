@@ -251,10 +251,6 @@ module.exports = function(){
 				}
 			}
 		},
-		"standalone & steal - core & utils - dojo": makeStandaloneAndStealUtil("dojo"),
-		"standalone & steal - core & utils - yui": makeStandaloneAndStealUtil("yui"),
-		"standalone & steal - core & utils - zepto": makeStandaloneAndStealUtil("zepto"),
-		"standalone & steal - core & utils - mootools": makeStandaloneAndStealUtil("mootools"),
 		"amd": {
 			system: makeSystemConfig({
 				main: allModuleNames.concat(["can"]),
@@ -274,10 +270,6 @@ module.exports = function(){
 				}
 			}
 		},
-		"amd-util-jquery": makeAmdUtil("jquery"),
-		"amd-util-dojo": makeAmdUtil("dojo"),
-		"amd-util-yui": makeAmdUtil("yui"),
-		"amd-util-zepto": makeAmdUtil("zepto"),
-		"amd-util-mootools": makeAmdUtil("mootools")
+		"amd-util-jquery": makeAmdUtil("jquery")
 	};
 };

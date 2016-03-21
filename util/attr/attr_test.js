@@ -147,9 +147,9 @@ test('set class attribute via className or setAttribute for svg (#2015)', functi
 	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
 });
 
-if (window.jQuery || window.Zepto) {
+if (window.jQuery ) {
 
-	test("zepto or jQuery - bind and unbind", function () {
+	test("jQuery - bind and unbind", function () {
 
 		var div = document.createElement("div");
 		var attrHandler = function(ev) {
@@ -207,35 +207,6 @@ if (window.MooTools) {
 		stop();
 		$(div)
 			.set("foo", "bar");
-
-	});
-}
-
-if (window.dojo) {
-	test("Dojo - on, remove, and setAttr", function () {
-
-		var div = document.createElement("div"),
-			nodeList = new dojo.NodeList(div);
-
-		var handler = nodeList.on("attributes", function (ev) {
-			equal(ev.attributeName, "foo", "attribute name is correct");
-			equal(ev.target, div, "target");
-			equal(ev.oldValue, null, "oldValue");
-
-			equal(div.getAttribute(ev.attributeName), "bar");
-
-			handler.remove();
-
-			dojo.setAttr(div, "foo", "abc");
-
-			setTimeout(function () {
-				start();
-			}, 20);
-
-		});
-
-		stop();
-		dojo.setAttr(div, "foo", "bar");
 
 	});
 }

@@ -7,7 +7,6 @@ util/can.*.js
 docs*
 *.DS_Store
 .idea
-bower_components/
 test/pluginified/latest.js
 docco
 test/builders/steal-tools/dist/

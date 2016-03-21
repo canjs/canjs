@@ -4,9 +4,8 @@
 
 <head>
     <title>jQuery Test Suite</title>
-    <link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"
+    <link rel="stylesheet" type="text/css" href="../../node_modules/qunitjs/qunit/qunit.css"
     />
-    <script type="text/javascript" src="../../bower_components/modernizr/modernizr.js"></script>
 </head>
 
 <body>
@@ -20,17 +19,15 @@
     <div id="qunit-test-area"></div>
     <div id="qunit-fixture"></div>
 
-    <script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
-    <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../node_modules/requirejs/require.js"></script>
     <script type="text/javascript">
-        QUnit.config.autostart = false;
         require.config({
             "baseUrl": "../..",
             "paths": {
                 "can": "dist/amd/can",
-                "dojo": "bower_components/dojo",
                 "simple-dom": "node_modules/can-simple-dom/dist/amd/simple-dom",
                 "micro-location": "node_modules/can-simple-dom/node_modules/micro-location/lib/micro-location",
+                "qunit": "node_modules/qunitjs/qunit/qunit",
                 "jquery": "node_modules/jquery/dist/jquery"
             },
             "map": {
@@ -54,8 +51,15 @@
             "can/util/vdom/build_fragment",
             "can/util/vdom/document", "can/view/import"
         ]), function() {
-            require(["test/pluginified/latest"], function() {
-                QUnit.start();
+            require(['qunit'], function(QUnit) {
+                QUnit.config.autostart = false;
+                require(["test/pluginified/latest"],
+                    function() {
+                        if (window.Testee) {
+                            window.Testee.init();
+                        }
+                        QUnit.start();
+                    });
             });
         });
     </script>
