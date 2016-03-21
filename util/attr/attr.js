@@ -15,7 +15,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 	},
 	attr = {
 		// This property lets us know if the browser supports mutation observers.
-		// If they are supported then that will be setup in can/util/jquery and those native events will be used to inform observers of attribute changes.
+		// If they are supported then that will be setup in can/util/util and those native events will be used to inform observers of attribute changes.
 		// Otherwise this module handles triggering an `attributes` event on the element.
 		MutationObserver: can.global.MutationObserver || can.global.WebKitMutationObserver || can.global.MozMutationObserver,
 

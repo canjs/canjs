@@ -27,7 +27,6 @@
 	steal.config({
 		map: {
 			"jquery/jquery": "jquery",
-			"can/util/util": "can/util/jquery/jquery",
 			"stache": "can/view/stache/system"
 		},
 		paths: {
