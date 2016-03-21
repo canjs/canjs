@@ -25,8 +25,8 @@ var extend = function (target, src) {
 			func.call(this, this);
 		}
 	};
-can.Deferred = Deferred;
-can.when = Deferred.when = function () {
+
+Deferred.when = function () {
 	var args = can.makeArray(arguments);
 	if (args.length < 2) {
 		var obj = args[0];
@@ -172,4 +172,8 @@ extend(Deferred.prototype, {
 	}
 });
 Deferred.prototype.pipe = Deferred.prototype.then;
-module.exports = can;
+
+module.exports = {
+	Deferred: Deferred,
+	when: Deferred.when
+};

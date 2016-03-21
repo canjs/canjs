@@ -266,7 +266,6 @@ module.exports = function(){
 					graphs: allModuleNames.concat(["can"])
 				}
 			}
-		},
-		"amd-util-jquery": makeAmdUtil("jquery")
+		}
 	};
 };

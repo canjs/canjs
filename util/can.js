@@ -1,15 +1,15 @@
-/* global global: false */
 /* global GLOBALCAN */
 /* global self */
 /* global WorkerGlobalScope */
-var glbl = typeof window !== "undefined" ? window :
-	(typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) ? self : global;
+var global = require('can/util/global');
+var childNodes = require('can/util/childNodes');
+var isDom = require('can/util/isDom');
 
 var can = {};
 if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
-	glbl.can = can;
+	global.can = can;
 }
-can.global = glbl;
+can.global = global;
 
 // An empty function useful for where you need a dummy callback.
 can.k = function(){};
@@ -44,24 +44,9 @@ can.last = function(arr){
 };
 
 
-can.isDOM = function(el) {
-	return (el.ownerDocument || el) === can.global.document;
-};
+can.isDOM = isDom;
 
-can.childNodes = function(node) {
-	var childNodes = node.childNodes;
-	if("length" in childNodes) {
-		return childNodes;
-	} else {
-		var cur = node.firstChild;
-		var nodes = [];
-		while(cur) {
-			nodes.push(cur);
-			cur = cur.nextSibling;
-		}
-		return nodes;
-	}
-};
+can.childNodes = childNodes;
 
 var protoBind = Function.prototype.bind;
 if(protoBind) {

@@ -1,7 +1,5 @@
-var can = require('can/util/can');
-
 // The following is from jQuery
-can.isArrayLike = function(obj){
+function isArrayLike(obj){
 	// The `in` check is from jQuery’s fix for an iOS 8 64-bit JIT object length bug:
 	// https://github.com/jquery/jquery/pull/2185
 	// When passing a non-object (e.g. boolean) can.each fails where it previously did nothing.
@@ -13,6 +11,6 @@ can.isArrayLike = function(obj){
 	// var length = "length" in obj && obj.length;
 	return typeof arr !== "function" &&
 		( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
-};
+}
 
-module.exports = can.isArrayLike;
+module.exports = isArrayLike;

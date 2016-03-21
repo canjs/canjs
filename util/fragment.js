@@ -1,5 +1,3 @@
-
-var can = require('can/util/can');
 // fragment.js
 // ---------
 // _DOM Fragment support._
@@ -47,7 +45,7 @@ var fragmentRE = /^\s*<(\w+)[^>]*>/,
 		}
 		return [].slice.call(tmp);
 	};
-can.buildFragment = function (html, doc) {
+var buildFragment = function (html, doc) {
 	if(html && html.nodeType === 11) {
 		return html;
 	}
@@ -70,20 +68,22 @@ can.buildFragment = function (html, doc) {
 // This checks for that and replaces can.buildFragment with something
 // that if only a single text node is returned, returns a fragment with
 // a text node that is set to the content.
-(function(){
-	var text = "<-\n>",
-		frag = can.buildFragment(text, document);
-	if(text !== frag.firstChild.nodeValue) {
-		var oldBuildFragment = can.buildFragment;
-		can.buildFragment = function(html, nodes){
-			var res = oldBuildFragment(html, nodes);
-			if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
-				res.childNodes[0].nodeValue = html;
-			}
-			return res;
-		};
 
-	}
-})();
+//TODO: remove this - no longer support ie8
+// (function(){
+// 	var text = "<-\n>",
+// 		frag = can.buildFragment(text, document);
+// 	if(text !== frag.firstChild.nodeValue) {
+// 		var oldBuildFragment = can.buildFragment;
+// 		can.buildFragment = function(html, nodes){
+// 			var res = oldBuildFragment(html, nodes);
+// 			if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
+// 				res.childNodes[0].nodeValue = html;
+// 			}
+// 			return res;
+// 		};
+//
+// 	}
+// })();
 
-module.exports = can;
+module.exports = buildFragment;

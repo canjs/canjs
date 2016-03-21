@@ -1,11 +1,11 @@
-require('./each');
+var each = require('./each');
 
-can.makeArray = function (arr) {
+function makeArray(arr) {
 	var ret = [];
-	can.each(arr, function (a, i) {
+	each(arr, function (a, i) {
 		ret[i] = a;
 	});
 	return ret;
-};
+}
 
-module.exports = can;
+module.exports = makeArray;

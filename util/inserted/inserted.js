@@ -2,8 +2,9 @@
 // Used to alert interested parties of when an element is inserted into the DOM.
 // Given a list of elements, check if the first is in the DOM, and if so triggers the `inserted` event on all elements and their descendants.
 var can = require('can/util/can');
-can.inserted = function (elems, document) {
-	if(!elems.length) {
+
+var inserted = function(elems, document) {
+	if (!elems.length) {
 		return;
 	}
 	// Turn the `elems` property into an array to prevent mutations from changing the looping.
@@ -45,7 +46,7 @@ can.inserted = function (elems, document) {
 
 // ## can.appendChild
 // Used to append a node to an element and trigger the "inserted" event on all of the newly inserted children. Since `can.inserted` takes an array we convert the child to an array, or in the case of a DocumentFragment we first convert the childNodes to an array and call inserted on those.
-can.appendChild = function (el, child, document) {
+var appendChild = function(el, child, document) {
 	var children;
 	if (child.nodeType === 11) {
 		children = can.makeArray(can.childNodes(child));
@@ -58,7 +59,7 @@ can.appendChild = function (el, child, document) {
 
 // ## can.insertBefore
 // Like can.appendChild, used to insert a node to an element before a reference node and then trigger the "inserted" event.
-can.insertBefore = function (el, child, ref, document) {
+var insertBefore = function(el, child, ref, document) {
 	var children;
 	if (child.nodeType === 11) {
 		children = can.makeArray(can.childNodes(child));
@@ -69,4 +70,8 @@ can.insertBefore = function (el, child, ref, document) {
 	can.inserted(children, document);
 };
 
-module.exports = can;
+module.exports = {
+	inserted: inserted,
+	appendChild: appendChild,
+	insertBefore: insertBefore
+};
