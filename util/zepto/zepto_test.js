@@ -1,6 +1,6 @@
 /* jshint asi:true*/
 can = {};
-var $ = require('zepto');  // jshint ignore:line
+require('zepto');  // jshint ignore:line
 System.import('zepto').then(function ($) {
 	var empty = $.fn.empty;
 	$.fn.empty = function () {
@@ -29,7 +29,6 @@ System.import('zepto').then(function ($) {
 		})
 })
 	.then(function (args) {
-		var $ = args[0];  // jshint ignore:line
 		var can = args[1];
 		module("zepto-fill")
 

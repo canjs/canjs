@@ -14,7 +14,7 @@ array-extras
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 var can = require('can/util/can');
 var attr = require('can/util/attr/attr');
-var YUI = require('yui/yui'); // jshint ignore:line
+var YUI = require('yui/yui') || window.YUI; // jshint ignore:line
 require('can/event/event');
 require('can/util/fragment');
 require('can/util/array/each');
@@ -23,7 +23,6 @@ require('can/util/deferred');
 require('can/util/hashchange');
 require('can/util/inserted/inserted');
 
-YUI = YUI || window.YUI;
 // lets overwrite
 YUI.add('can-modifications', function (Y, NAME) {
 	var addHTML = Y.DOM.addHTML;

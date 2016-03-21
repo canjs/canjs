@@ -1,4 +1,4 @@
-require('can/test/test');	
+require('can/test/test');
 require('steal-qunit');
 
 QUnit.module('can/util/array/each');
