@@ -1,5 +1,7 @@
 require('can/view/live/live');
+require('can/compute/compute');
 require('can/map/map');
+require('can/list/list');
 require('steal-qunit');
 
 QUnit.module('can/view/live');
