@@ -15,7 +15,6 @@ var expression = require('can/view/stache/expression');
 var viewCallbacks = require('can/view/callbacks/callbacks');
 var live = require('can/view/live/live');
 require('can/view/scope/scope');
-require('can/view/href/href');
 
 	// ## Behaviors
 	var behaviors = {

@@ -55,12 +55,6 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/view/href/href": {
-			"name": "can.view.href",
-			"type": "core",
-			"description": "Make flexible route links",
-			"isDefault": true
-		},
 		"can/control/control": {
 			"name": "can.Control",
 			"description": "Declarative event bindings",
@@ -87,15 +81,6 @@
 			"name": "can.List.Sort",
 			"type": "plugin",
 			"description": "Sort observable lists"
-		},
-		"can/view/modifiers/modifiers": {
-			"name": "can.view.modifiers",
-			"type": "plugin",
-			"description": "Use jQuery modifiers to render views",
-			"configurations": [
-				"jquery",
-				"jquery-2"
-			]
 		},
 		"can/util/fixture/fixture": {
 			"name": "can.fixture",
