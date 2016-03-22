@@ -1,9 +1,9 @@
 var assert = require("assert"),
-	Browser = require("zombie"),
 	connect = require("connect"),
 	stealTools = require("steal-tools"),
 	path = require("path"),
 	rmdir = require("rimraf"),
+	Browser = require("zombie"),
 	fs = require("fs");
 
 var exists = function(dest){
