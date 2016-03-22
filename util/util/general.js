@@ -1,13 +1,16 @@
 /* general lang-helper functions */
-//TODO: get rid of jquery dependancy
 var can = require('can/util/can');
-var $ = require('jquery'); // jshint ignore:line
 var each = require('can/util/array/each');
 var makeArray = require('can/util/array/makeArray');
 var isArrayLike = require('can/util/array/isArrayLike');
 
 function likeArray(obj) {
 	return typeof obj.length === 'number';
+}
+
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type === 'object' || type === 'function');
 }
 
 function flatten(array) {
@@ -33,11 +36,13 @@ function isArray(arr) {
 	return Object.prototype.toString.call(arr) === "[object Array]";
 }
 
-var inArray = $.inArray;
+function inArray(value, arry, fromIndex) {
+	return arry == null ? -1 : Array.prototype.indexOf.call(arry, value, fromIndex);
+}
 
 function map(elements, callback) {
 	var values = [],
-		putValue = function (val, index) {
+		putValue = function(val, index) {
 			var value = callback(val, index);
 			if (value != null) {
 				values.push(value);
@@ -120,12 +125,42 @@ function extend() {
 	return target;
 }
 
-var isEmptyObject = $.isEmptyObject;
+function isEmptyObject(obj) {
+	var name;
+	for (name in obj) {
+		return false;
+	}
+	return true;
+}
 
-var param = $.param;
+function param(object) {
+	var pairs = [],
+		add = function (key, value) {
+			pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+		};
+	for (var name in object) {
+		buildParam(name, object[name], add);
+	}
+	return pairs.join('&')
+		.replace(/%20/g, '+');
+}
+
+function buildParam(prefix, obj, add) {
+	if (isArray(obj)) {
+		for (var i = 0, l = obj.length; i < l; ++i) {
+			add(prefix + '[]', obj[i]);
+		}
+	} else if ( isObject(obj) ) {
+		for (var name in obj) {
+			buildParam(prefix + '[' + name + ']', obj[name], add);
+		}
+	} else {
+		add(prefix, obj);
+	}
+}
 
 function proxy(cb, that) {
-	return function () {
+	return function() {
 		return cb.apply(that, arguments);
 	};
 }
