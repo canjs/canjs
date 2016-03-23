@@ -170,7 +170,7 @@ if (!can.define) {
 			else if (setValue === undefined && !setterCalled && setter.length >= 1) {
 				//!steal-remove-start
 				asyncTimer = setTimeout(function() {
-					can.dev.warn('can/map/setter.js: Setter "' + prop + '" did not return a value or call the setter callback.');
+					can.dev.warn('can/map/define: Setter "' + prop + '" did not return a value or call the setter callback.');
 				}, can.dev.warnTimeout);
 				//!steal-remove-end
 				can.batch.stop();

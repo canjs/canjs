@@ -23,10 +23,11 @@
 		"stop": true,
 		"global": true
 	},
+	"strict": false,
 	"curly": true,
 	"eqeqeq": true,
 	"freeze": true,
-	"indent": 2,
+	"indent": false,
 	"latedef": 0,
 	"noarg": true,
 	"undef": true,
