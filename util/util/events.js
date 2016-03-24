@@ -1,9 +1,10 @@
 /* general lang-helper functions */
 //TODO: get rid of jquery dependancy
-var $ = require('jquery'); // jshint ignore:line
+var nodeList = require('can/util/node-list');
 var can = require('can/util/can');
-require('can/event/event');
 var attr = require('can/util/attr/attr');
+var domEvents = require('can/util/dom-events/dom-events');
+require('can/event/event');
 
 var isBindableElement = function(node) {
 	// In IE8 window.window !== window.window, so we allow == here.
@@ -17,7 +18,7 @@ function on(ev, cb) {
 	if (this.bind && this.bind !== can.bind) {
 		this.bind(ev, cb);
 	} else if (isBindableElement(this)) {
-		$.event.add(this, ev, cb);
+		domEvents.event.add(this, ev, cb);
 	} else {
 		// Make it bind-able...
 		can.addEvent.call(this, ev, cb);
@@ -31,7 +32,7 @@ function off(ev, cb) {
   if (this.unbind && this.unbind !== can.unbind) {
     this.unbind(ev, cb);
   } else if (isBindableElement(this)) {
-    $.event.remove(this, ev, cb);
+    domEvents.event.remove(this, ev, cb);
   } else {
     // Make it bind-able...
     can.removeEvent.call(this, ev, cb);
@@ -41,7 +42,7 @@ function off(ev, cb) {
 
 function trigger(obj, event, args, bubbles) {
   if (isBindableElement( obj ) ) {
-    $.event.trigger(event, args, obj, !bubbles);
+    domEvents.event.trigger(event, args, obj, !bubbles);
   } else if (obj.trigger) {
     obj.trigger(event, args);
   } else {
@@ -69,7 +70,7 @@ function delegate(selector, ev, cb) {
   if (this.delegate) {
     this.delegate(selector, ev, cb);
   } else if (isBindableElement(this)) {
-    $(this)
+    nodeList(this)
       .delegate(selector, ev, cb);
   } else {
     // make it bind-able ...
@@ -82,7 +83,7 @@ function undelegate(selector, ev, cb) {
   if (this.undelegate) {
     this.undelegate(selector, ev, cb);
   } else if (isBindableElement(this)) {
-    $(this)
+    nodeList(this)
       .undelegate(selector, ev, cb);
   } else {
     can.unbind.call(this, ev, cb);

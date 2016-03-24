@@ -1,8 +1,11 @@
 /* general lang-helper functions */
-var can = require('can/util/can');
 var each = require('can/util/array/each');
 var makeArray = require('can/util/array/makeArray');
 var isArrayLike = require('can/util/array/isArrayLike');
+var isArray = require('can/util/array/isArray');
+var isFunction = require('can/util/isFunction');
+var proxy = require('can/util/proxy');
+var extend = require('can/util/extend');
 
 function likeArray(obj) {
 	return typeof obj.length === 'number';
@@ -29,13 +32,6 @@ var trim = core_trim && !core_trim.call('\uFEFF\xA0') ?
 			.replace(rtrim, '');
 	};
 
-function isArray(arr) {
-	if (Array.isArray) {
-		return Array.isArray(arr);
-	}
-	return Object.prototype.toString.call(arr) === "[object Array]";
-}
-
 function inArray(value, arry, fromIndex) {
 	return arry == null ? -1 : Array.prototype.indexOf.call(arry, value, fromIndex);
 }
@@ -58,71 +54,6 @@ function map(elements, callback) {
 		}
 	}
 	return flatten(values);
-}
-
-function extend() {
-	/*jshint maxdepth:6 */
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0] || {},
-		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if (typeof target === "boolean") {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	}
-
-	// Handle case when target is a string or something (possible in deep copy)
-	if (typeof target !== "object" && !can.isFunction(target)) {
-		target = {};
-	}
-
-	// extend jQuery itself if only one argument is passed
-	if (length === i) {
-		target = this;
-		--i;
-	}
-
-	for (; i < length; i++) {
-		// Only deal with non-null/undefined values
-		if ((options = arguments[i]) != null) {
-			// Extend the base object
-			for (name in options) {
-				src = target[name];
-				copy = options[name];
-
-				// Prevent never-ending loop
-				if (target === copy) {
-					continue;
-				}
-
-				// Recurse if we're merging plain objects or arrays
-				if (deep && copy && (can.isPlainObject(copy) || (copyIsArray = can.isArray(copy)))) {
-					if (copyIsArray) {
-						copyIsArray = false;
-						clone = src && can.isArray(src) ? src : [];
-
-					} else {
-						clone = src && can.isPlainObject(src) ? src : {};
-					}
-
-					// Never move original objects, clone them
-					target[name] = can.extend(deep, clone, copy);
-
-					// Don't bring in undefined values
-				} else if (copy !== undefined) {
-					target[name] = copy;
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
 }
 
 function isEmptyObject(obj) {
@@ -164,17 +95,6 @@ function proxy(cb, that) {
 		return cb.apply(that, arguments);
 	};
 }
-
-var isFunction = (function() {
-	if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
-		return function(value) {
-			return Object.prototype.toString.call(value) === '[object Function]';
-		};
-	}
-	return function(value) {
-		return typeof value === 'function';
-	};
-}());
 
 module.exports = {
 	each: each,

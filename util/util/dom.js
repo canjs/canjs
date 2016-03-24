@@ -4,6 +4,7 @@ var $ = require('jquery'); // jshint ignore:line
 var makeArray = require('can/util/array/makeArray');
 var buildFragment = require('can/util/fragment');
 var data = require('can/util/data');
+var nodeList = require('can/util/node-list');
 
 //TODO: remove this behaviour along with jQuery
 var tmpJqueryModAttr = require('can/util/util/temp-jquery-mod/attr');
@@ -54,7 +55,7 @@ var get = $.get;
 
 module.exports = {
 	ajax: ajax,
-	$: $,
+	$: nodeList,
 	append: fns.append,
 	filter: fns.filter,
 	data: data,
