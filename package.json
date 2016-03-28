@@ -2,7 +2,7 @@
 	"name": "can",
 	"title": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "3.0.0-pre.0",
+	"version": "3.0.0-pre.1",
 	"keywords": [
 		"CanJS",
 		"DoneJS"
@@ -181,13 +181,11 @@
 		"./model/model": "./dist/cjs/model/model",
 		"./view/view": "./dist/cjs/view/view",
 		"./view/stache/stache": "./dist/cjs/view/stache/stache",
-		"./view/href/href": "./dist/cjs/view/href/href",
 		"./control/control": "./dist/cjs/control/control",
 		"./route/route": "./dist/cjs/route/route",
 		"./route/pushstate/pushstate": "./dist/cjs/route/pushstate/pushstate",
 		"./map/define/define": "./dist/cjs/map/define/define",
 		"./list/sort/sort": "./dist/cjs/list/sort/sort",
-		"./view/modifiers/modifiers": "./dist/cjs/view/modifiers/modifiers",
 		"./util/fixture/fixture": "./dist/cjs/util/fixture/fixture",
 		"./view/bindings/bindings": "./dist/cjs/view/bindings/bindings",
 		"./view/live/live": "./dist/cjs/view/live/live",
