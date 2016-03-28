@@ -9,7 +9,7 @@
 
 In the following CanJS community hangout we also talk about CanJS models and fixtures:
 
-<iframe width="662" height="372" src="https://www.youtube.com/watch?v=Tyr_087p8CQ" frameborder="0" allowfullscreen></iframe>
+<iframe width="662" height="372" src="https://www.youtube.com/embed/Tyr_087p8CQ" frameborder="0" allowfullscreen></iframe>
 
 @signature `can.fixture( url, toUrl )`
 

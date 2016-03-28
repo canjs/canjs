@@ -8,7 +8,7 @@ Register custom behavior for a given tag.
 Registers the `tagHandler` callback when `tagName` is found 
 in a template. Check out this video where we talk about different possiblities to use can.view.tag:
 
-<iframe width="662" height="372" src="https://www.youtube.com/watch?v=ahjd5OQcs7c" frameborder="0" allowfullscreen></iframe>
+<iframe width="662" height="372" src="https://www.youtube.com/embed/ahjd5OQcs7c" frameborder="0" allowfullscreen></iframe>
 
 @release 2.1
 
