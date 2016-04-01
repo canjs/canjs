@@ -2320,9 +2320,20 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			div.appendChild(template(data))
 
 			equal(innerHTML(div), "0");
+		});
+
+		test("Helpers can be passed . for the active context", function(){
+			can.stache.registerHelper('randomHelper', function (context) {
+				return context.value
+			});
+			var template = can.stache("<span>{{#with foo}}{{randomHelper .}}{{/with}}</span>");
+			var frag = template(new can.Map({value: "foo"}) );
+
+			frag.firstChild
 		})
 
 		test("Helpers can be passed . or this for the active context", function () {
+
 			can.stache.registerHelper('rsvp', function (attendee, event) {
 				return attendee.name + ' is attending ' + event.name;
 			});
@@ -4762,7 +4773,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		});
 
 		test('. passes compute to helper', function() {
-			var template = '{{#each items}}{{helper .}}{{/each}}';
+			var template = '{{#each items}}{{helper ~.}}{{/each}}';
 			can.stache(template)({
 				items: new can.List([1, 2])
 			}, {

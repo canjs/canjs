@@ -46,7 +46,7 @@ steal(
 			Refs: can.Map.extend({shortName: "ReferenceMap"},{}),
 
 			// ## Scope.refsScope
-			// A scope with a references scope in it and no parent. 
+			// A scope with a references scope in it and no parent.
 			refsScope: function(){
 				return new can.view.Scope( new this.Refs() );
 			}
@@ -60,7 +60,7 @@ steal(
 			// Creates a new scope and sets the current scope to be the parent.
 			// ```
 			// var scope = new can.view.Scope([
-			//   {name:"Chris"}, 
+			//   {name:"Chris"},
 			//   {name: "Justin"}
 			// ]).add({name: "Brian"});
 			// scope.attr("name") //-> "Brian"
@@ -110,7 +110,7 @@ steal(
 					return this._parent.read(attr, options);
 				}
 
-				// If true, lookup stops after the current context. 
+				// If true, lookup stops after the current context.
 				var currentScopeOnly;
 
 				if(isInCurrentContext) {
@@ -130,7 +130,9 @@ steal(
 					return parent.read(attr.substr(3), options);
 				}
 				else if ( isCurrentContext ) {
-					can.__observe(this,"_context");
+					if(this._meta.isObservableContext) {
+						can.__observe(this,"_context");
+					}
 					return {
 						setRoot: this,
 						value: this._context
@@ -151,7 +153,7 @@ steal(
 				}
 			},
 			// ## Scope.prototype._read
-			// 
+			//
 			_read: function(keyReads, options, currentScopeOnly){
 
 				// The current scope and context we are trying to find "keyReads" within.
@@ -227,7 +229,7 @@ steal(
 						}
 					}
 
-					// 
+					//
 					if(currentScopeOnly) {
 						currentScope = null;
 					} else {
@@ -313,7 +315,7 @@ steal(
 					slashIndex = key.lastIndexOf('/'),
 					contextPath,
 					propName;
-				
+
 				if(slashIndex > dotIndex) {
 					contextPath = key.substring(0, slashIndex);
 					propName = key.substring(slashIndex + 1, key.length);
@@ -347,7 +349,7 @@ steal(
 				// Allow setting a value on the context
 				if(arguments.length === 2) {
 					return this.set(key, value, options);
-					
+
 				} else {
 					return this.get(key, options);
 				}
@@ -393,7 +395,7 @@ steal(
 					.compute;
 			},
 			// ## Scope.prototype.cloneFromRef
-			// 
+			//
 			// This takes a scope and essentially copies its chain from
 			// right before the last Refs.  And it does not include the ref.
 			// this is a helper function to provide lexical semantics for refs.

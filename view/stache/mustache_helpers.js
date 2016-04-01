@@ -50,7 +50,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 						return options.fn(options.scope.add({
 								"%index": index,
 								"@index": index
-							},{notContext: true}).add(item), options.options, parentNodeList);
+							},{notContext: true}).add(item, {isObservableContext: true}), options.options, parentNodeList);
 
 					};
 					live.list(el, items, cb, options.context, el.parentNode, nodeList, function(list, parentNodeList){
@@ -231,7 +231,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			if(!params) {
 				params = {};
 			}
-			
+
 			if(typeof params.fn === "function" && typeof params.inverse === "function") {
 				params = resolveHash(params.hash);
 			}
@@ -250,10 +250,10 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			} else {
 				return can.route.current(looksLikeOptions(params) ? {} : params || {});
 			}
-			
+
 		}
 	};
-	
+
 	// TODO ... remove as this is hacky
 	helpers.routeCurrent.callAsMethod = true;
 

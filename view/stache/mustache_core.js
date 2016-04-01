@@ -36,7 +36,7 @@ steal("can/util",
 		getItemsFragContent = function(items, isObserveList, helperOptions, options){
 			var frag = (can.document || can.global.document).createDocumentFragment();
 			for (var i = 0, len = items.length; i < len; i++) {
-				append(frag, helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options) );
+				append(frag, helperOptions.fn( isObserveList ? helperOptions.scope.add( items.attr('' + i), {isObservableContext: true}) : items[i], options) );
 			}
 			return frag;
 		},
@@ -50,7 +50,7 @@ steal("can/util",
 		getItemsStringContent = function(items, isObserveList, helperOptions, options){
 			var txt = "";
 			for (var i = 0, len = items.length; i < len; i++) {
-				txt += helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options);
+				txt += helperOptions.fn( isObserveList ? helperOptions.scope.add( items.attr('' + i), {isObservableContext: true}) : items[i], options);
 			}
 			return txt;
 		};
@@ -141,7 +141,8 @@ steal("can/util",
 				// Setup renderers.
 				helperOptionArg = {
 					fn: function () {},
-					inverse: function () {}
+					inverse: function () {},
+					scope: scope
 				};
 				utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
 				return function(){
