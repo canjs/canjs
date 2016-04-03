@@ -4,6 +4,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	}
 
 	var define = can.define = {};
+	can.exclusiveMapping = false;
 	
 	var getPropDefineBehavior = function(behavior, attr, define) {
 		var prop, defaultProp;
@@ -24,6 +25,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 	// This is called when the Map is defined
 	mapHelpers.define = function (Map) {
 		var definitions = Map.prototype.define;
+		define.exclusiveMapping = Map.prototype.exclusiveMapping;
 		//!steal-remove-start
 		if(Map.define){
 			can.dev.warn("The define property should be on the map's prototype properties, "+
@@ -250,7 +252,28 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 			}
 		}
 	};
-	
+
+	var oldRemapObject = proto._remapObject;
+	proto._remapObject = function (obj) {
+		if (!this.exclusiveMapping || typeof obj !== 'object') {
+			return obj;
+		}
+		var baseObj = oldRemapObject(obj);
+		var newObj = {};
+		if (baseObj.hasOwnProperty('_cid')) {
+			newObj._cid = baseObj._cid;
+		}
+
+		for (var prop in this.define) {
+			if (baseObj.hasOwnProperty(prop)) {
+				newObj[prop] = baseObj[prop];
+			}
+		}
+
+		return newObj;
+	};
+
+
 	// the old type sets up bubbling
 	var oldType = proto.__type;
 	proto.__type = function (value, prop) {
