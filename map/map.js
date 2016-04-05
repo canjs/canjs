@@ -214,7 +214,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					return this._get(attr+"");
 				} else {
 					// Set an attribute.
-					this._set(attr + '', this._remapObject(val));
+					this._set(attr + '', val);
 					return this;
 				}
 			},

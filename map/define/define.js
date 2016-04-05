@@ -292,6 +292,9 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 			}
 			// If there's a Type create a new instance of it
 			if (Type && !(newValue instanceof Type)) {
+				if (Type.shortName === 'Map' && typeof newValue === 'object') {
+					newValue.parent = this;
+				}
 				newValue = new Type(newValue);
 			}
 			// If the newValue is a Map, we need to hook it up
