@@ -1,18 +1,20 @@
 @page canjs.plugins Plugins
 @parent canjs
+@group canjs.plugins.official 0 Officially Supported
+@group canjs.plugins.deprecated 1 Deprecated
+@disabletableofcontents
 
-The following are officially supported plugins:
+## CanJS Plugins
 
-- [can-construct-proxy]
-- [can-control-plugin]
-- [can-map-backup]
-- [can-map-delegate]
-- [can-map-lazy]
-- [can-view-modifiers]
+The following plugins can be installed via `npm` for use with CanJS:
+
+- [can-map-backup] - Backup and restore properties on a `can.Map`
+
+See the list of [canjs.plugins.deprecated deprecated plugins] for plugins that used to be a part of CanJS and are no longer supported.
 
 ## Usage
 
-For any official CanJS plugin, run `npm install name-of-plugin`. Then, you can include it in your project a few different ways.
+For any CanJS plugin, run `npm install name-of-plugin`. Then, you can include it in your project a few different ways.
 
 ### ES6 Use
 

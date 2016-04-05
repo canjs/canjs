@@ -1,5 +1,5 @@
 @page can-map-backup
-@parent canjs.plugins
+@parent canjs.plugins.official
 
 @link http://www.npmjs.com/package/can-map-backup npm
 @link http://canjs.github.io/can-map-backup/docs docs
