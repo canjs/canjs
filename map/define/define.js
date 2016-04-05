@@ -260,13 +260,23 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		}
 		var baseObj = oldRemapObject(obj);
 		var newObj = {};
-		if (baseObj.hasOwnProperty('_cid')) {
-			newObj._cid = baseObj._cid;
+		for (var prop in baseObj) {
+			if (prop.substr(0, 1) === '%' || prop.substr(0, 1) === '_') {
+				newObj[prop] = baseObj[prop];
+			}
 		}
 
 		for (var prop in this.define) {
 			if (baseObj.hasOwnProperty(prop)) {
 				newObj[prop] = baseObj[prop];
+			}
+		}
+
+		if (!this.exclusiveMapping) {
+			for (var prop in baseObj) {
+				if (!newObj.hasOwnProperty(prop)) {
+					newObj[prop] = baseObj[prop];
+				}
 			}
 		}
 
