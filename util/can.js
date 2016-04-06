@@ -17,7 +17,9 @@ steal(function () {
 
 	
 	can.isDeferred = function(obj) {
-		can.dev.warn('can.isDeferred: this function is deprecated and will be removed in a future release. can.isPromise replaces the functionality of can.isDeferred.');
+		if (!!can.dev) { // can.dev may not be defined yet
+			can.dev.warn('can.isDeferred: this function is deprecated and will be removed in a future release. can.isPromise replaces the functionality of can.isDeferred.');
+		}
 		return obj && typeof obj.then === "function" && typeof obj.pipe === "function";
 	};
 	can.isPromise = function(obj){

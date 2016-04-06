@@ -316,7 +316,7 @@ var __m1 = (function () {
 				update: function () {
 					var deferred = this.scope.attr('deferreddata'),
 						scope = this.scope;
-					if (can.isPromise(deferred)) {
+					if (can.isDeferred(deferred)) {
 						this.scope.attr('waiting', true);
 						deferred.then(function (items) {
 							scope.attr('items')
