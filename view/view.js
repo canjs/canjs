@@ -159,11 +159,11 @@ steal('can/util', function (can) {
 		var deferreds = [];
 
 		// pull out deferreds
-		if (can.isDeferred(data)) {
+		if (can.isPromise(data)) {
 			return [data];
 		} else {
 			for (var prop in data) {
-				if (can.isDeferred(data[prop])) {
+				if (can.isPromise(data[prop])) {
 					deferreds.push(data[prop]);
 				}
 			}
@@ -621,13 +621,13 @@ steal('can/util', function (can) {
 							result;
 
 						// Make data look like the resolved deferreds.
-						if (can.isDeferred(data)) {
+						if (can.isPromise(data)) {
 							dataCopy = usefulPart(resolved);
 						} else {
 							// Go through each prop in data again and
 							// replace the defferreds with what they resolved to.
 							for (var prop in data) {
-								if (can.isDeferred(data[prop])) {
+								if (can.isPromise(data[prop])) {
 									dataCopy[prop] = usefulPart(objs.shift());
 								}
 							}

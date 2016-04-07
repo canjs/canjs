@@ -1,5 +1,27 @@
 /**
+@description Check if an object is a Promise.
+@function can.isPromise
+@parent can.util
+@signature `can.isPromise(subject)`
+@param {*} subject The object to check.
+@return {Boolean} Whether __subject__ is a Promise.
+
+@body
+`can.isPromise` returns if an object has the methods expected of a Promise object.
+
+## Example
+Convert any value to a Promise:
+
+	function convertPromise(prm) {
+		return can.isPromise(prm) 
+			? prm 
+			: new Promise(function(resolve) { resolve(prm) });
+	}
+*/
+//
+/**
 @description Check if an object is a Deferred.
+@deprecated {2.3.16} This method has been replaced by [can.isPromise].
 @function can.isDeferred
 @parent can.util
 @signature `can.isDeferred(subject)`

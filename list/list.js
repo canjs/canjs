@@ -91,7 +91,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				instances = instances || [];
 				var teardownMapping;
 
-				if (can.isDeferred(instances)) {
+				if (can.isPromise(instances)) {
 					this.replace(instances);
 				} else {
 					teardownMapping = instances.length && mapHelpers.addToMap(instances, this);
@@ -836,7 +836,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 		 * ```
 		 */
 		replace: function (newList) {
-			if (can.isDeferred(newList)) {
+			if (can.isPromise(newList)) {
 				if(this._promise) {
 					this._promise.__isCurrentPromise = false;
 				}

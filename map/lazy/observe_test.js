@@ -826,7 +826,7 @@ steal('can/util', 'can/observe', 'can/map/lazy', 'can/test', 'steal-qunit', func
 			ob = new can.LazyMap({
 				test: dfd
 			});
-		ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
+		ok(can.isPromise(ob.attr('test')), 'Attribute is a deferred');
 		ok(!ob.attr('test')
 			._cid, 'Does not have a _cid');
 	});

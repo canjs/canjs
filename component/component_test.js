@@ -525,7 +525,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can", "can/map/d
 						var deferred = this.viewModel.attr('deferreddata'),
 							viewModel = this.viewModel;
 
-						if (can.isDeferred(deferred)) {
+						if (can.isPromise(deferred)) {
 							this.viewModel.attr("waiting", true);
 							deferred.then(function (items) {
 								viewModel.attr('items')

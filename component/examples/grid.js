@@ -12,7 +12,7 @@ can.Component.extend({
 		update: function () {
 			var deferred = this.viewModel.attr('deferreddata'),
 				viewModel = this.viewModel;
-			if (can.isDeferred(deferred)) {
+			if (can.isPromise(deferred)) {
 				this.element.find('tbody')
 					.css('opacity', 0.5);
 				deferred.then(function (items) {

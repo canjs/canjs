@@ -52,7 +52,7 @@ steal("can/util", "can/map", "can/compute",function(can){
 					data.serialize() : data;
 			}
 
-			if(can.isDeferred(inst)){
+			if(can.isPromise(inst)){
 				this.waitFor(inst);
 				inst.then(function(data){
 					store(data);

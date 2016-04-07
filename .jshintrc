@@ -21,7 +21,8 @@
 		"raises": true,
 		"start": true,
 		"stop": true,
-		"global": true
+		"global": true,
+	  	"Promise": true
 	},
 	"curly": true,
 	"eqeqeq": true,
