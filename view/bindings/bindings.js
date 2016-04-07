@@ -229,7 +229,7 @@ steal("can/util",
 				legacyBinding = attributeName.indexOf('can-') === 0,
 				event = attributeName.indexOf('can-') === 0 ?
 					attributeName.substr("can-".length) :
-					removeBrackets(attributeName, '(', ')'),
+					can.camelize(removeBrackets(attributeName, '(', ')')),
 				onBindElement = legacyBinding;
 	
 			if(event.charAt(0) === "$") {
@@ -417,7 +417,7 @@ steal("can/util",
 	can.view.attr(/\*[\w\.\-_]+/, behaviors.reference);
 
 	// `(EVENT)` event bindings.
-	can.view.attr(/^\([\$?\w\.]+\)$/, behaviors.event);
+	can.view.attr(/^\([\$?\w\.\-]+\)$/, behaviors.event);
 	
 	
 	//!steal-remove-start
