@@ -2350,12 +2350,11 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 			viewModel: viewModel
 		});
 
-		can.$('#qunit-fixture').append(
-			can.stache('<my-component (foo-bar-event)="fooBarHandler" />')({
-				fooBarHandler: function () {
-					ok(true, 'Handler was called');
-				}
-			}));
+		can.append(can.$('#qunit-fixture'), can.stache('<my-component (foo-bar-event)="fooBarHandler" />')({
+			fooBarHandler: function () {
+				ok(true, 'Handler was called');
+			}
+		}));
 
 		viewModel.dispatch('fooBarEvent');
 	});
