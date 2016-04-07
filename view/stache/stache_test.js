@@ -4813,6 +4813,25 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
             equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
 		});
 		
+		test("helper arguments greater than three (#2343)", function() {
+			can.stache.registerSimpleHelper('foo', function() {
+				equal(arguments.length, 6);
+			});
+
+			var template = can.stache('{{foo 1 2 3 4 5}}');
+			template({});
+		});
+		
+		test("simple helper's last argument is options", function() {
+			can.stache.registerSimpleHelper('foo', function() {
+				var options = arguments[arguments.length-1];
+				ok(options.hasOwnProperty("fn"));
+				ok(options.hasOwnProperty("inverse"));
+			});
+
+			var template = can.stache('{{foo 1 2 3 4 5}}');
+			template({});
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
