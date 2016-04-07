@@ -728,8 +728,9 @@ steal('can/util', function (can) {
 		simpleHelper: function(fn) {
 			return function() {
 				var realArgs = [];
-				can.each(arguments, function(val, i) {
-					if (i <= arguments.length) {
+				var fnArgs = arguments;
+				can.each(fnArgs, function(val, i) {
+					if (i <= fnArgs.length) {
 						while (val && val.isComputed) {
 							val = val();
 						}
