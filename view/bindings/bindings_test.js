@@ -2340,6 +2340,25 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 
 		ok(true, "was able to show without breaking");
 	});
+
+
+	test("(event) bindings can have a dash (\"-\") (#2347)", function () {
+		var viewModel = new can.Map({});
+
+		can.Component.extend({
+			tag: "my-component",
+			viewModel: viewModel
+		});
+
+		can.$('#qunit-fixture').append(
+			can.stache('<my-component (foo-bar-event)="fooBarHandler" />')({
+				fooBarHandler: function () {
+					ok(true, 'Handler was called');
+				}
+			}));
+
+		viewModel.dispatch('fooBarEvent');
+	});
 	
 
 });
