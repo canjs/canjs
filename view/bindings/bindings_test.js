@@ -1,3 +1,4 @@
+var define = require('can-define');
 require('can/view/bindings/bindings');
 require('can/component/component');
 require('steal-qunit');
@@ -2279,7 +2280,108 @@ test("can-value memory leak (#2270)", function () {
 		equal(vm._bindings,0, "no bindings");
 		start();
 	}, 10);
+});
 
+test("two way - viewModel (can-define)", function () {
+
+	var ViewModel = define.Constructor({
+		vmProp: {}
+	});
+
+	can.Component.extend({
+		tag: 'two-way-viewmodel',
+		viewModel: ViewModel
+	});
+
+	var template = can.stache('<two-way-viewmodel {(vm-prop)}="scopeProp" />');
+
+	var Context = define.Constructor({
+		scopeProp: {
+			value: 'Bing!'
+		}
+	});
+
+	var context = new Context();
+	var frag = template(context);
+	var viewModel = can.viewModel(frag.firstChild);
+
+	ok(viewModel instanceof ViewModel, 'ViewModel is a can-define object');
+
+	equal(viewModel.vmProp, 'Bing!', 'ViewModel property set via scope property set');
+	equal(context.scopeProp, 'Bing!', 'Scope property is correct');
+
+	viewModel.vmProp = 'Bang!';
+
+	equal(viewModel.vmProp, 'Bang!', 'ViewModel property was set');
+	equal(context.scopeProp, 'Bang!', 'Scope property set via viewModel property set');
+
+	context.scopeProp = 'BOOM!';
+
+	equal(context.scopeProp, 'BOOM!', 'Scope property was set');
+	equal(viewModel.vmProp, 'BOOM!', 'ViewModel property set via scope property set');
+
+});
+
+test('one-way - parent to child - viewModel (can-define)', function(){
+
+	var template = can.stache('<div {view-model-prop}="scopeProp" />');
+	var Context = define.Constructor({
+		scopeProp: {
+			value: 'Venus'
+		}
+	});
+	var context = new Context();
+	var frag = template(context);
+	var viewModel = can.viewModel(frag.firstChild);
+
+	equal(viewModel.attr('viewModelProp'), 'Venus', 'ViewModel property initially set from scope');
+
+	viewModel.attr('viewModelProp', 'Earth');
+
+	equal(context.scopeProp, 'Venus', 'Scope property unchanged by viewModel set');
+
+	context.scopeProp = 'Mars';
+
+	equal(viewModel.attr('viewModelProp'), 'Mars', 'ViewModel property was set via scope set');
+});
+
+
+test('one-way - child to parent - viewModel (can-define)', function(){
+
+	var ViewModel = define.Constructor({
+		viewModelProp: {
+			value: 'Mercury'
+		}
+	});
+
+	can.Component.extend({
+		tag: 'view-model-able',
+		viewModel: ViewModel
+	});
+
+	var template = can.stache('<view-model-able {^view-model-prop}="scopeProp" />');
+
+	var Context = define.Constructor({
+		scopeProp: {
+			value: 'Venus'
+		}
+	});
+
+	var context = new Context();
+
+	var frag = template(context);
+	var viewModel = can.viewModel(frag.firstChild);
+
+	equal(viewModel.viewModelProp, 'Mercury', 'ViewModel property unchanged by scope property');
+	equal(context.scopeProp, 'Mercury', 'Scope property initially set from viewModel');
+
+	viewModel.viewModelProp = 'Earth';
+
+	equal(context.scopeProp, 'Earth', 'Scope property set via viewModel set');
+
+	context.scopeProp = 'Mars';
+
+	equal(viewModel.viewModelProp, 'Earth', 'ViewModel property unchanged by scope set');
 });
 
 // test("converters work (#2299)", function(){

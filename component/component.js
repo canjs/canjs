@@ -259,26 +259,47 @@ var Component = can.Component = can.Construct.extend(
 					initialViewModelData["%root"] = componentTagData.scope.attr("%root");
 
 					// Create the component's viewModel.
-					var protoViewModel = component.scope || component.viewModel;
+					var protoViewModel = component.viewModel || component.scope;
+
 					if (component.constructor.Map) {
 						// If `Map` property is set on the constructor use it to wrap the `initialViewModelData`
 						viewModel = new component.constructor.Map(initialViewModelData);
 					} else if (protoViewModel instanceof can.Map) {
-						// If `component.viewModel` is instance of `can.Map` assign it to the `viewModel`
+						// If `component.viewModel` is an instance of `can.Map` assign it to the `viewModel`
 						viewModel = protoViewModel;
-					} else if (can.isFunction(protoViewModel)) {
-						// If `component.viewModel` is a function, call the function and
-						var scopeResult = protoViewModel.call(component, initialViewModelData, componentTagData.scope, el);
+					} else if (component.viewModel && ! component.scope && can.isFunction(protoViewModel)) {
+						// If `component.viewModel` is a function, assume it is a Constructor and call it with `new`
+						viewModel = new protoViewModel(initialViewModelData, componentTagData.scope, el);
+					} else if (component.scope && ! component.viewModel && can.isFunction(protoViewModel)) {
+						var defaultProto = can.noop.prototype;
+						var vmProto = protoViewModel.prototype;
+						var isConstructor = true;
 
-						if (scopeResult instanceof can.Map) {
-							// If the function returns a can.Map, use that as the viewModel
-							viewModel = scopeResult;
-						} else if (scopeResult.prototype instanceof can.Map) {
-							// If `scopeResult` is of a `can.Map` type, use it to wrap the `initialViewModelData`
-							viewModel = new scopeResult(initialViewModelData);
+						for (var prop in vmProto) {
+							if (vmProto.hasOwnProperty(prop) && ! defaultProto.hasOwnProperty(prop)) {
+								isConstructor = false;
+								break;
+							}
+						}
+
+						if (isConstructor) {
+							// If `component.scope.prototype` matches a standard function call it with `new`
+							viewModel = new protoViewModel(initialViewModelData, componentTagData.scope, el);
 						} else {
-							// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialViewModelData`
-							viewModel = new(can.Map.extend(scopeResult))(initialViewModelData);
+							// If `component.viewModel` is a function, call the function and
+							var scopeResult = protoViewModel.call(component, initialViewModelData, componentTagData.scope, el);
+
+							if (scopeResult instanceof can.Map) {
+								// If the function returns a can.Map, use that as the viewModel
+								viewModel = scopeResult;
+							} else if (scopeResult.prototype instanceof can.Map) {
+								// If `scopeResult` is of a `can.Map` type, use it to wrap the `initialViewModelData`
+								viewModel = new scopeResult(initialViewModelData);
+							} else {
+								// Otherwise extend `can.Map` with the `scopeResult` and initialize it with the `initialViewModelData`
+								// viewModel = new(can.Map.extend(scopeResult))(initialViewModelData);
+								viewModel = scopeResult;
+							}
 						}
 					}
 
