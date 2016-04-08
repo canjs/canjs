@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.23__ ( Apr 08 2016 )
+
+- [Fixes #2343. calling simple helper now includes all arguments](https://github.com/canjs/canjs/pull/2363)
+- [Stache promise support doesn&#39;t work with ES6 promises](https://github.com/canjs/canjs/issues/2359)
+- [Cannot bind to event with a dash (e.g. &quot;-&quot;)](https://github.com/canjs/canjs/issues/2347)
+- [Deprecate can.isDeferred. More accurate can.isPromise.](https://github.com/canjs/canjs/pull/2247)
+
+
 __2.3.21__ ( Mar 18 2016 )
 
 - [#each leaking memory in stache](https://github.com/canjs/canjs/issues/2332)
