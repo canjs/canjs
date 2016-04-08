@@ -422,8 +422,7 @@ require('can/view/scope/scope');
 	can.view.attr(/\*[\w\.\-_]+/, behaviors.reference);
 
 	// `(EVENT)` event bindings.
-	can.view.attr(/^\([\$?\w\.]+\)$/, behaviors.event);
-
+	can.view.attr(/^\([\$?\w\-\.]+\)$/, behaviors.event);
 
 	//!steal-remove-start
 	function syntaxWarning(el, attrData) {
@@ -469,9 +468,16 @@ require('can/view/scope/scope');
 			var setName = cleanVMName(vmName);
 			if(mustBeACompute) {
 				return can.compute(function(newVal){
+
 					var viewModel = bindingData.getViewModel();
 					if(arguments.length) {
-						viewModel.attr(setName,newVal);
+
+						if (viewModel.attr) {
+							viewModel.attr(setName,newVal);
+						} else {
+							// can-define
+							viewModel[setName] = newVal;
+						}
 					} else {
 						return vmName === "." ? viewModel : can.compute.read(viewModel, can.compute.read.reads(vmName), {}).value;
 					}

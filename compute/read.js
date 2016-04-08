@@ -206,25 +206,40 @@ read.propertyReaders = [
 		name: "object",
 		// this is the default
 		test: function(){return true;},
-		read: function(value, prop){
+		read: function(value, prop, index, options, state){
 			if(value == null) {
 				return undefined;
-			} else {
-				if(prop.key in value) {
-					return value[prop.key];
-				}
-				// TODO: remove in 3.0.  This is for backwards compat with @key and @index.
-				else if( prop.at && specialRead[prop.key] && ( ("@"+prop.key) in value)) {
-					//!steal-remove-start
-					can.dev.warn("Use %"+prop.key+" in place of @"+prop.key+".");
-
-					//!steal-remove-end
-
-					prop.at = false;
-					return value["@"+prop.key];
-				}
-
 			}
+
+			var getObserves = can.__trapObserves();
+			var result, observes;
+
+			if(prop.key in value) {
+				result = value[prop.key];
+			}
+			// TODO: remove in 3.0.  This is for backwards compat with @key and @index.
+			else if( prop.at && specialRead[prop.key] && ( ("@"+prop.key) in value)) {
+
+				//!steal-remove-start
+				can.dev.warn("Use %"+prop.key+" in place of @"+prop.key+".");
+				//!steal-remove-end
+
+				prop.at = false;
+				result = value["@"+prop.key];
+			}
+
+			observes = getObserves();
+
+			if (observes.length) {
+				if (!state.foundObservable && options.foundObservable) {
+					options.foundObservable(value, index);
+					state.foundObservable = true;
+				}
+			}
+
+			can.__observes(observes);
+
+			return result;
 		}
 	}
 ];

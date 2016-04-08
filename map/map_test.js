@@ -1,4 +1,5 @@
 /* jshint asi:true*/
+var define = require('can-define');
 require('can/map/map');
 require('can/compute/compute');
 require('can/list/list');
@@ -366,4 +367,21 @@ test("can.Map::attr setting is observable", function() {
 
 	// recomputes c
 	map.attr('foo', 'bar');
+});
+
+test('Nested define object is not converted to a can.Map', function () {
+	var Name = define.Constructor({
+		first: {
+			value: 'Justin'
+		},
+		last: {
+			value: 'Meyer'
+		}
+	});
+
+	var me = new can.Map({
+		name: new Name()
+	});
+
+	ok(me.attr('name') instanceof Name);
 });

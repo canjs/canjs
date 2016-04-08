@@ -6,6 +6,7 @@ require("can/view/stache/stache");
 require("can/route/route");
 require("steal-qunit");
 require("can/component/component_bindings_test.js");
+var define = require('can-define');
 
 var simpleDocument = can.simpleDocument;
 
@@ -1620,6 +1621,46 @@ function makeTest(name, doc) {
 		});
 		var vmPropVal = can.viewModel(can.$(frag.firstChild)).attr('vmProp');
 		ok(vmPropVal, 'value is from defined prop');
+	});
+
+	test('Works with can-define', function () {
+
+		var VM = define.Constructor({
+			firstName: {
+				type: 'string'
+			},
+			lastName: {
+				type: 'string'
+			},
+			fullName: {
+				get: function () {
+					return [this.firstName, this.lastName].join(' ');
+				}
+			}
+		});
+
+		can.Component.extend({
+			tag: 'can-define-component',
+			viewModel: VM,
+			template: 'Name: {{fullName}}'
+		});
+
+		var frag = can.stache('<can-define-component {first-name}="firstName" {last-name}="lastName" />')({
+			firstName: 'Chris',
+			lastName: 'Gomez'
+		});
+
+		var vm = can.viewModel(frag.firstChild);
+
+		QUnit.ok(vm instanceof VM, 'Constructor was called');
+		QUnit.equal(vm.firstName, 'Chris', 'ViewModel was set from scope');
+		QUnit.equal(vm.lastName, 'Gomez', 'ViewModel was set from scope');
+		QUnit.equal(frag.firstChild.innerHTML, 'Name: Chris Gomez', 'Rendered fullName');
+
+		vm.firstName = 'Justin';
+		vm.lastName = 'Meyer';
+
+		QUnit.equal(frag.firstChild.innerHTML, 'Name: Justin Meyer', 'Rendered fullName after change');
 	});
 
 	// PUT NEW TESTS ABOVE THIS LINE
