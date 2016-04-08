@@ -170,6 +170,7 @@ can.simpleExtend(Scope.prototype,{
 
 			readOptions = can.simpleExtend({
 				/* Store found observable, incase we want to set it as the rootObserve. */
+				// TODO: Remove this micro-optimization
 				foundObservable: function (observe, nameIndex) {
 					currentObserve = observe;
 					currentReads = keyReads.slice(nameIndex);

@@ -277,6 +277,11 @@ can.__observes = function(observes){
 	}
 };
 
+can.__hasObserved = function () {
+	var top = observedInfoStack[observedInfoStack.length-1];
+	return top && ((top.traps && top.traps.length) || can.isEmptyObject(top.newObserved));
+}
+
 // ### can.__isRecordingObserves
 // Returns if some function is in the process of recording observes.
 can.__isRecordingObserves = function(){

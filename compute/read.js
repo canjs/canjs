@@ -211,8 +211,7 @@ read.propertyReaders = [
 				return undefined;
 			}
 
-			var getObserves = can.__trapObserves();
-			var result, observes;
+			var result;
 
 			if(prop.key in value) {
 				result = value[prop.key];
@@ -228,16 +227,13 @@ read.propertyReaders = [
 				result = value["@"+prop.key];
 			}
 
-			observes = getObserves();
-
-			if (observes.length) {
+			// TODO: Move this to `can.view.scope._read`
+			if (can.__hasObserved()) {
 				if (!state.foundObservable && options.foundObservable) {
 					options.foundObservable(value, index);
 					state.foundObservable = true;
 				}
 			}
-
-			can.__observes(observes);
 
 			return result;
 		}
