@@ -21,7 +21,7 @@ When filing a bug, it is helpful to include:
 - Breaking unit tests (optional)
 - Proposed fix solutions (optional)
 
-Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [#canjs IRC channel](http://webchat.freenode.net/?channels=canjs).
+Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](http://forums.donejs.com/c/canjs) or talk to us in [gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
 
 ## Installing 
 
