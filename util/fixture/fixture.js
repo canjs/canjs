@@ -277,8 +277,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 		},
 		// Attemps to guess where the id is in an AJAX call's URL and returns it.
-		getId = function (settings) {
-			var id = settings.data.id;
+		getId = function (settings, idKey) {
+			var id = settings.data[idKey];
 
 			if (id === undefined && typeof settings.data === "number") {
 				id = settings.data;
@@ -406,14 +406,14 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		},
 		// ## can.fixture.store
 		// Make a store of objects to use when making requests against fixtures.
-		store: function (count, make, filter) {
+		store: function (count, make, filter, idKey) {
 			/*jshint eqeqeq:false */
-			
+
 			// the currentId to use when a new instance is created.
 			var	currentId = 0,
 				findOne = function (id) {
 					for (var i = 0; i < items.length; i++) {
-						if (id == items[i].id) {
+						if (id == items[i][idKey]) {
 							return items[i];
 						}
 					}
@@ -422,32 +422,31 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				types,
 				items,
 				reset;
-				
+
 			if(can.isArray(count) && typeof count[0] === "string" ){
 				types = count;
 				count = make;
-				make= filter;
+				make = filter;
 				filter = arguments[3];
 			} else if(typeof count === "string") {
 				types = [count + "s", count];
 				count = make;
-				make= filter;
+				make = filter;
 				filter = arguments[3];
 			}
-			
-			
+
 			if(typeof count === "number") {
 				items = [];
 				reset = function () {
 					items = [];
-					for (var i = 0; i < (count); i++) {
+					for (var i = 0; i < count; i++) {
 						//call back provided make
 						var item = make(i, items);
-	
-						if (!item.id) {
-							item.id = i;
+
+						if (!item[idKey]) {
+							item[idKey] = i;
 						}
-						currentId = Math.max(item.id + 1, currentId + 1) || items.length;
+						currentId = Math.max(item[idKey] + 1, currentId + 1) || items.length;
 						items.push(item);
 					}
 					if (can.isArray(types)) {
@@ -462,11 +461,10 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			} else {
 				filter = make;
 				var initialItems = count;
-				reset = function(){
+				reset = function () {
 					items = initialItems.slice(0);
 				};
 			}
-			
 
 			// make all items
 			can.extend(methods, {
@@ -543,7 +541,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					} else if( typeof filter === "object" ) {
 						i = 0;
 						while (i < retArr.length) {
-							if ( !can.Object.subset(retArr[i], request.data, filter) ) {
+							if (!can.Object.subset(retArr[i], request.data, filter)) {
 								retArr.splice(i, 1);
 							} else {
 								i++;
@@ -581,8 +579,8 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 *
 				 */
 				findOne: function (request, response) {
-					var item = findOne(getId(request));
-					
+					var item = findOne(getId(request, idKey));
+
 					if(typeof item === "undefined") {
 						return response(404, 'Requested resource not found');
 					}
@@ -592,7 +590,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				// ## fixtureStore.update
 				// Simulates a can.Model.update to a fixture
 				update: function (request, response) {
-					var id = getId(request),
+					var id = getId(request, idKey),
 						item = findOne(id);
 
 					if(typeof item === "undefined") {
@@ -604,7 +602,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 					response({
 						id: id
 					}, {
-						location: request.url || "/" + getId(request)
+						location: request.url || '/' + getId(request, idKey)
 					});
 				},
 
@@ -627,15 +625,15 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 				 * ```
 				 */
 				destroy: function (request, response) {
-					var id = getId(request),
+					var id = getId(request, idKey),
 						item = findOne(id);
-						
+
 					if(typeof item === "undefined") {
 						return response(404, 'Requested resource not found');
 					}
 
 					for (var i = 0; i < items.length; i++) {
-						if (items[i].id == id) {  // jshint eqeqeq: false
+						if (items[i][idKey] == id) {  // jshint eqeqeq: false
 							items.splice(i, 1);
 							break;
 						}
@@ -654,16 +652,14 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 
 					// If an ID wasn't passed into the request, we give the item
 					// a unique ID.
-					if (!item.id) {
-						item.id = currentId++;
+					if (!item[idKey]) {
+						item[idKey] = currentId++;
 					}
 
 					// Push the new item into the store.
 					items.push(item);
-					response({
-						id: item.id
-					}, {
-						location: settings.url + "/" + item.id
+					response({}[idKey] = item[idKey],	{
+						location: settings.url + '/' + item[idKey]
 					});
 				}
 			});
@@ -673,7 +669,7 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 			return can.extend({
 				getId: getId,
 				find: function (settings) {
-					return findOne(getId(settings));
+					return findOne(getId(settings, idKey));
 				},
 				reset: reset
 			}, methods);
