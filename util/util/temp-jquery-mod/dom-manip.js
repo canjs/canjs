@@ -1,4 +1,4 @@
-var $ = require('jquery'); // jshint ignore:line
+var $ = require('./jquery-dom-manip'); // jshint ignore:line
 var isArrayLike = require('can/util/array/isArrayLike');
 var buildFragment = require('can/util/fragment');
 var inserted = require('can/util/inserted/inserted').inserted;
@@ -27,7 +27,7 @@ module.exports = function() {
 	var getChildNodes = function(node) {
 		var childNodes = node.childNodes;
 		if ("length" in childNodes) {
-			return $.makeArray(childNodes);
+			return can.makeArray(childNodes);
 		} else {
 			var cur = node.firstChild;
 			var nodes = [];
@@ -40,13 +40,15 @@ module.exports = function() {
 	};
 
 	if (cbIndex === undefined) {
+		var fns = ['after', 'prepend', 'before', 'append', 'replaceWith'];
 		$.fn.domManip = oldDomManip;
 		// we must manually overwrite
-		$.each(['after', 'prepend', 'before', 'append', 'replaceWith'], function(i, name) {
+		for(f in fns){
+			var name = fns[f];
 			var original = $.fn[name];
 			$.fn[name] = function() {
 				var elems,
-					args = $.makeArray(arguments);
+					args = can.makeArray(arguments);
 
 				if (args[0] != null) {
 					// documentFragment
@@ -68,7 +70,8 @@ module.exports = function() {
 
 				return ret;
 			};
-		});
+
+		}
 	} else {
 		// Older jQuery that supports domManip
 
@@ -78,7 +81,7 @@ module.exports = function() {
 				return oldDomManip.call(this, args, table, function(elem) {
 					var elems;
 					if (elem.nodeType === 11) {
-						elems = $.makeArray(childNodes(elem));
+						elems = can.makeArray(childNodes(elem));
 					}
 					var ret = callback.apply(this, arguments);
 					inserted(elems ? elems : [elem]);

@@ -1,6 +1,8 @@
 /* general lang-helper functions */
 //TODO: get rid of jquery dependancy
-var $ = require('jquery'); // jshint ignore:line
+//REMAINING DEPENDENCIES:
+//	jQuery.ajax / jQuery.get
+//	jQuery.cleanData
 var makeArray = require('can/util/array/makeArray');
 var buildFragment = require('can/util/fragment');
 var data = require('can/util/data');

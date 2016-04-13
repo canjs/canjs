@@ -1,4 +1,4 @@
-var $ = require('jquery'); // jshint ignore:line
+var $ = require('./jquery-attr'); // jshint ignore:line
 var attr = require('can/util/attr/attr');
 var isDOM = require('can/util/isDom');
 var trigger = require('can/util/util/events').trigger;
@@ -39,7 +39,7 @@ module.exports = function() {
 			return res;
 		}
 	};
-	$.event.special.attributes = {
+	$["event.special.attributes"] = {
 		setup: function() {
 			if (isDOM(this) && attr.MutationObserver) {
 				var self = this;
