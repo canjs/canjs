@@ -1,3 +1,4 @@
+var each  = require('can/util/array/each');
 require('can/test/test');
 require('steal-qunit');
 
@@ -10,11 +11,11 @@ test('iOS 8 64-bit JIT object length bug', function () {
 
 	var i;
 	for (i = 0; i < 1000; i++) {
-		can.each([]);
+		each([]);
 	}
 
 	i = 0;
-	can.each({1: '1', 2: '2', 3: '3'}, function (index) {
+	each({1: '1', 2: '2', 3: '3'}, function (index) {
 		equal(++i, index, 'Iterate over object');
 	});
 	equal(i, 3, 'Last index should be the length of the array');
@@ -22,8 +23,8 @@ test('iOS 8 64-bit JIT object length bug', function () {
 
 test('#1989 - isArrayLike needs to check for object type', function() {
   try {
-    can.each(true, function(index) { });
-    ok(true, 'can.each on true worked');
+    each(true, function(index) { });
+    ok(true, 'each on true worked');
   } catch(e) {
     ok(false, 'Should not fail');
   }

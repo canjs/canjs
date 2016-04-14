@@ -1,14 +1,13 @@
 /* jshint maxdepth:7*/
-var can = require('can/util/can');
-require('can/util/array/isArrayLike');
+var isArrayLike = require('can/util/array/isArrayLike');
 
-can.each = function (elements, callback, context) {
+function each(elements, callback, context) {
 	var i = 0,
 		key,
 		len,
 		item;
 	if (elements) {
-		if ( can.isArrayLike(elements) ) {
+		if ( isArrayLike(elements) ) {
 			if(can.List && elements instanceof can.List ) {
 				for (len = elements.attr("length"); i < len; i++) {
 					item = elements.attr(i);
@@ -47,5 +46,6 @@ can.each = function (elements, callback, context) {
 		}
 	}
 	return elements;
-};
-module.exports = exports = can;
+}
+
+module.exports = each;

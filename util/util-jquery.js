@@ -1,4 +1,4 @@
-var $ = require('jquery') || window.jQuery; // jshint ignore:line
+var $ = require('jquery'); // jshint ignore:line
 var can = require('can/util/can');
 var attr = require('can/util/attr/attr');
 require('can/event/event');
@@ -11,6 +11,7 @@ var isBindableElement = function (node) {
 	/*jshint eqeqeq:false*/
 	return (node.nodeName && (node.nodeType === 1 || node.nodeType === 9)) || node == window || node.addEventListener;
 };
+// $ = $ || window.jQuery;
 // _jQuery node list._
 $.extend(can, $, {
 	trigger: function (obj, event, args, bubbles) {
@@ -43,7 +44,6 @@ $.extend(can, $, {
 	removeEvent: can.removeEvent,
 	buildFragment: can.buildFragment,
 	$: $,
-	each: can.each,
 	bind: function (ev, cb) {
 		// If we can bind to it...
 		if (this.bind && this.bind !== can.bind) {

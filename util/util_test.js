@@ -1,7 +1,9 @@
-var can = require('can/util/jquery/jquery');
+var can = require('can/util/util');
 require('steal-qunit');
 
-QUnit.module("can/util/jquery");
+require('can/util/inserted/inserted_test');
+
+QUnit.module("can/util/util");
 
 // Problem inspired by attempting to bind a compoments templated event listeners to:
 // https://github.com/vote539/socketio-file-upload/blob/master/client.js

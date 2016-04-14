@@ -253,10 +253,7 @@ module.exports = function(){
 		},
 		"amd": {
 			system: makeSystemConfig({
-				main: allModuleNames.concat(["can"]),
-				map: {
-					"can/util/util" : "can/util/library"
-				}
+				main: allModuleNames.concat(["can"])
 			}),
 			options : {
 				quiet: true
@@ -269,7 +266,6 @@ module.exports = function(){
 					graphs: allModuleNames.concat(["can"])
 				}
 			}
-		},
-		"amd-util-jquery": makeAmdUtil("jquery")
+		}
 	};
 };
