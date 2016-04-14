@@ -48,7 +48,6 @@ module.exports = function() {
 						var copy = $.extend({}, mutation);
 						trigger(self, copy, []);
 					});
-
 				});
 				observer.observe(this, {
 					attributes: true,

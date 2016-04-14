@@ -1,6 +1,26 @@
 var $ = require('can/util/node-list'),
-	extend = require('can/util/extend');
+	extend = require('can/util/extend'),
+	buildFragment = require('can/util/fragment'),
+	getAll = require('./getAll');
+
 //jquery/src/manipulation.js
+
+var disableScript = function( elem ) {
+	elem.type = ( elem.getAttribute( "type" ) !== null ) + "/" + elem.type;
+	return elem;
+};
+var restoreScript = function( elem ) {
+	var match = rscriptTypeMasked.exec( elem.type );
+
+	if ( match ) {
+		elem.type = match[ 1 ];
+	} else {
+		elem.removeAttribute( "type" );
+	}
+
+	return elem;
+};
+
 var domManip = function( collection, args, callback, ignored ) {
 
 	// Flatten any nested arrays
