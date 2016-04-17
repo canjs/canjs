@@ -37,7 +37,7 @@ steal("can/util", "can/view",function(can){
 			if (typeof tags[tagName.toLowerCase()] !== 'undefined') {
 				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " is already defined");
 			}
-			if (!automaticCustomElementCharacters.test(tagName)) {
+			if (!automaticCustomElementCharacters.test(tagName) && tagName !== "content") {
 				can.dev.warn("Custom tag: " + tagName.toLowerCase() + " is missing a hyphen");
 			}
 			//!steal-remove-end
