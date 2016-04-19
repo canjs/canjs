@@ -882,10 +882,17 @@ steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 				};
 
 				route.attr({
-					array: [1, true, "hello", fakeDate]
+					obj: fakeDate
 				}, true);
 				propEqual(route.attr(), {
-					'array': ["1", "true", "hello", "fake time o clock"]
+					'obj': "fake time o clock"
+				});
+
+				route.attr({
+					array: [1, true, "hello"]
+				}, true);
+				propEqual(route.attr(), {
+					'array': ["1", "true", "hello"]
 				});
 
 				route.attr({
