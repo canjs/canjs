@@ -59,7 +59,7 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		extend = can.extend,
 		definedToString = function (obj) {
 			return obj.toString.toString() !== Object.prototype.toString.toString();
-		}, 
+		},
 		// Helper for convert any object (or value) to stringified object (or value)
 		stringify = function (obj) {
 			// Object is array, plain object, Map or List
