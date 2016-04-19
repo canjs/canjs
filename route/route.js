@@ -57,10 +57,13 @@ steal('can/util', 'can/map', 'can/list','can/util/string/deparam', function (can
 		},
 		each = can.each,
 		extend = can.extend,
+		definedToString = function (obj) {
+			return obj.toString.toString() !== Object.prototype.toString.toString();
+		}, 
 		// Helper for convert any object (or value) to stringified object (or value)
 		stringify = function (obj) {
 			// Object is array, plain object, Map or List
-			if (obj && typeof obj === "object") {
+			if (obj && typeof obj === "object" && !definedToString(obj)) {
 				if (obj instanceof can.Map) {
 					obj = obj;
 				} else {
