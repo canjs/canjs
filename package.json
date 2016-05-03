@@ -33,7 +33,8 @@
   "devDependencies": {
     "steal": "^0.16.4",
     "steal-qunit": "^0.1.1",
-    "steal-tools": "^0.16.2"
+    "steal-tools": "^0.16.2",
+    "testee": "^0.2.5"
   },
   "scripts": {
     "test": "testee test/index.html --browsers firefox",
