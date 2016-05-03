@@ -1,2 +1,0 @@
-<can-import from="helpers"/>
-<h1>{{templateName}} {{capitalize message}}</h1>
