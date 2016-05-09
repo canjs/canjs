@@ -103,7 +103,7 @@ CanJS supports the following browsers:
 
 If your changes affect the public API, please make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory. In order to view your changes in documentation you will need to run the [CanJS.com site](https://github.com/canjs/canjs.com) locally and regenerate the docs.
 
-Follow the instructions on [CanJS.com gh-pages branch](https://github.com/canjs/canjs.com/tree/gh-pages#setup) to generate documentation from your local copy of canjs.
+Follow the instructions on [CanJS.com gh-pages branch](https://github.com/bitovi/canjs.com/tree/gh-pages#setup) to generate documentation from your local copy of canjs.
 
 ## Making a build
 
