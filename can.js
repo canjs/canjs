@@ -1,5 +1,8 @@
 var can = require('./util/can');
 
-require('can/component/component');
+require('./construct/construct');
+// require('./compute/compute');
+// require('./control/control');
+// require('./component/component');
 
 module.exports =  can;

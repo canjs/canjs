@@ -4,12 +4,12 @@ stealTools.export({
 	system: {
 		config: __dirname + "/package.json!npm"
 	},
+	options: {
+		useNormalizedDependencies: false
+	},
 	outputs: {
-		"+amd": {},
 		"+global-js": {
-			ignore: function(name, load){
-				return false;
-			}
+			ignore: false
 		}
 	}
 }).catch(function(e){

@@ -19,16 +19,18 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-component": "^3.0.0-pre.1",
+    "can-component": "^3.0.0-pre.3",
     "can-compute": "^3.0.0-pre.2",
     "can-construct": "^3.0.0-pre.3",
     "can-control": "^3.0.0-pre.1",
+    "can-define": "^0.7.4",
     "can-event": "^3.0.0-pre.3",
     "can-list": "^3.0.0-pre.1",
     "can-map": "^3.0.0-pre.2",
     "can-model": "^2.3.11",
-    "can-route": "github:canjs/can-route",
-    "can-simple-dom": "^0.3.0"
+    "can-route": "^3.0.0-pre.3",
+    "can-simple-dom": "^0.3.0",
+    "can-stache": "^3.0.0-pre.1"
   },
   "devDependencies": {
     "steal": "^0.16.4",
