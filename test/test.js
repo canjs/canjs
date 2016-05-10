@@ -1,9 +1,11 @@
 require('../construct/construct_test');
-// require('../component/component_test');
-// require('../compute/compute_test');
-// require('../control/control_test');
-// require('../event/event_test');
-// require('../list/list_test');
-// require('../map/map_test');
-// require('../model/model_test');
+require('../component/component_test');
+require('../compute/compute_test');
+require('../control/control_test');
+require('../event/event_test');
+require('../list/list_test');
+require('../map/map_test');
 // require('../route/route_test');
+// require('../route/pushstate/pushstate_test');
+// require('../util/fixture/fixture_test');
+require('util/util_test');
