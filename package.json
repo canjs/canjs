@@ -211,6 +211,7 @@
 		"./view/view": "./dist/cjs/view/view",
 		"./view/ejs/ejs": "./dist/cjs/view/ejs/ejs",
 		"./view/stache/stache": "./dist/cjs/view/stache/stache",
+		"./view/stache/mustache_core": "./dist/cjs/view/stache/mustache_core",
 		"./view/href/href": "./dist/cjs/view/href/href",
 		"./control/control": "./dist/cjs/control/control",
 		"./route/route": "./dist/cjs/route/route",
