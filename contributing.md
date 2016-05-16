@@ -9,6 +9,10 @@ Thank you for contributing to CanJS!  If you need any help setting up a CanJS de
 
 <iframe width="662" height="372" src="https://www.youtube.com/embed/56DoykBew38" frameborder="0" allowfullscreen></iframe>
 
+## 3.0 Changes
+
+In 3.0, nearly every module has its own repository.  All code changes should go there.  Issue can be submitted to `canjs/canjs`, but once we know the root of the issue, we will move it to a specific repository.  
+
 ## Reporting Bugs
 
 To report a bug, please visit [GitHub Issues](https://github.com/canjs/canjs/issues).
