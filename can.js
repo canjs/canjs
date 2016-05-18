@@ -1,8 +1,7 @@
 var can = require('./util/can');
 
-require('./construct/construct');
-// require('./compute/compute');
-// require('./control/control');
-// require('./component/component');
+require('./component/component');
+require('./view/stache/stache');
+require('./route/route');
 
 module.exports =  can;

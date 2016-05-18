@@ -19,7 +19,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-component": "^3.0.0-pre.3",
+    "can-component": "^3.0.0-pre.4",
     "can-compute": "^3.0.0-pre.2",
     "can-construct": "^3.0.0-pre.3",
     "can-control": "^3.0.0-pre.1",
@@ -32,8 +32,9 @@
     "can-route": "^3.0.0-pre.3",
     "can-simple-dom": "^0.3.0",
     "can-stache": "^3.0.0-pre.4",
-    "can-util": "^3.0.0-pre.15",
-    "can-view-autorender": "^3.0.0-pre.1",
+    "can-util": "^3.0.0-pre.18",
+    "can-view-autorender": "^3.0.0-pre.2",
+    "can-view-import": "^3.0.0-pre.2",
     "can-view-live": "^3.0.0-pre.1",
     "can-view-nodelist": "^3.0.0-pre.1",
     "can-view-parser": "^3.0.0-pre.1",
@@ -41,9 +42,11 @@
     "can-view-target": "^3.0.0-pre.1"
   },
   "devDependencies": {
+    "can-vdom": "0.0.3",
     "jquery": "^2.2.3",
     "steal": "^0.16.4",
     "steal-qunit": "^0.1.1",
+    "steal-stache": "^3.0.0-pre.1",
     "steal-tools": "pre",
     "testee": "^0.2.5"
   },
@@ -64,20 +67,6 @@
   "main": "./can",
   "system": {
     "npmAlgorithm": "flat",
-    "main": "can",
-    "paths": {},
-    "meta": {
-      "can/util/vdom/vdom": {
-        "sideBundle": true
-      }
-    },
-    "ext": {
-      "stache": "can/view/stache/system"
-    },
-    "buildConfig": {
-      "map": {
-        "can/util/util": "can/util/domless/domless"
-      }
-    }
+    "main": "can"
   }
 }

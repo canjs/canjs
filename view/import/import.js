@@ -1,4 +1,4 @@
-var can = require('../util/can');
+var can = require('../../util/can');
 
 require('can-view-import');
 
