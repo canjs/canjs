@@ -151,13 +151,18 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				var teardownMapping = obj && mapHelpers.addToMap(obj, this);
 
 				var defaultValues = this._setupDefaults(obj);
-				var data = can.extend(can.extend(true, {}, defaultValues), obj);
+				var data = can.extend(can.extend(true, {}, defaultValues), this._remapObject(obj));
 
 				this.attr(data);
 
 				if (teardownMapping) {
 					teardownMapping();
 				}
+			},
+
+			// this will be over ridden by define
+			_remapObject:function (obj) {
+				return obj;
 			},
 
 			// ### _setupComputes
@@ -209,7 +214,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 					return this._get(attr+"");
 				} else {
 					// Set an attribute.
-					this._set(attr+"", val);
+					this._set(attr + '', val);
 					return this;
 				}
 			},
@@ -462,7 +467,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				// Merge current properties with the new ones.
 				this._each(function (curVal, prop) {
 					// You can not have a _cid property; abort.
-					if (prop === "_cid") {
+					if (prop === "_cid" || prop === "exclusiveMapping") {
 						return;
 					}
 					newVal = props[prop];
@@ -492,7 +497,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 				// Add remaining props.
 				for (prop in props) {
 					// Ignore _cid.
-					if (prop !== "_cid") {
+					if (prop !== "_cid" && prop !== "exclusiveMapping") {
 						newVal = props[prop];
 						this._set(prop, newVal, true);
 					}
