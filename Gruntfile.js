@@ -258,8 +258,20 @@ module.exports = function (grunt) {
 			dist: [ 'test/dist/*.html' ],
 			compatibility: [ 'test/compatibility/*.html' ],
 			dev: [ 'test/dev/*.html' ],
-			individuals: [ '**/test.html', '!view/autorender/test.html',
-				'!bower_components/**/test.html', '!node_modules/**/test.html' ]
+			individuals: [
+				'component/**/test.html',
+				'compute/**/test.html',
+				'construct/**/test.html',
+				'control/**/test.html',
+				'event/**/test.html',
+				'list/**/test.html',
+				'map/**/test.html',
+				'model/**/test.html',
+				'route/**/test.html',
+				'util/**/test.html',
+				'view/**/test.html',
+				'!view/autorender/test.html'
+			]
 		}
 	});
 	grunt.registerTask('browserify-package', function(){

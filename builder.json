@@ -66,6 +66,12 @@
 			"description": "High performance Mustache templates",
 			"type": "plugin"
 		},
+		"can/view/stache/mustache_core": {
+			"name": "can.stache.mustache.core",
+			"type": "plugin",
+			"hidden": true,
+			"hasTest": false
+		},
 		"can/view/href/href": {
 			"name": "can.view.href",
 			"type": "core",
@@ -287,7 +293,7 @@
 			"library": "node_modules/jquery/dist/jquery.js",
 			"steal": {
 				"paths": {
-					
+
 				}
 			}
 		},
