@@ -690,7 +690,7 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		evaluate();
 	});
 
-	test('Setting comparator with .sort() (#2159)', function () {
+	test(".sort(comparatorFn) is passed list items regardless of .attr('comparator') value (#2159)", function () {
 		var list = new can.List([
 			{ letter: 'x', number: 3 },
 			{ letter: 'y', number: 2 },
@@ -703,16 +703,48 @@ steal("can/list/sort", "can/test", "can/view/mustache", "can/view/stache", "can/
 		equal(list.attr('1.number'), 2, 'Second value is correct');
 		equal(list.attr('2.number'), 3, 'Third value is correct');
 
-		list.sort('letter');
+		list.sort(function (a, b) {
+			a = a.attr('letter');
+			b = b.attr('letter');
+			return (a === b) ? 0 : (a < b) ? -1 : 1;
+		});
 
-		equal(list.attr('0.letter'), 'x', 'First value is correct after comparator set');
-		equal(list.attr('1.letter'), 'y', 'Second value is correct after comparator set');
-		equal(list.attr('2.letter'), 'z', 'Third value is correct after comparator set');
+		equal(list.attr('0.letter'), 'x',
+			'First value is correct after sort with single use comparator');
+		equal(list.attr('1.letter'), 'y',
+			'Second value is correct after sort with single use comparator');
+		equal(list.attr('2.letter'), 'z',
+			'Third value is correct after sort with single use comparator');
+	});
 
-		list.push({ letter: 'w', number: 4 });
+	test("List is not sorted on change after calling .sort(fn)", function () {
+		var list = new can.List([
+			{ letter: 'x', number: 3 },
+			{ letter: 'y', number: 2 },
+			{ letter: 'z', number: 1 },
+		]);
 
-		equal(list.attr('0.letter'), 'w', 'First value is correct after insert');
-		equal(list.attr('0.number'), 4, 'First value is correct after insert');
+		list.sort(function (a, b) {
+			a = a.attr('letter');
+			b = b.attr('letter');
+			return (a === b) ? 0 : (a < b) ? -1 : 1;
+		});
 
+		equal(list.attr('0.letter'), 'x',
+			'First value is correct after sort with single use comparator');
+		equal(list.attr('1.letter'), 'y',
+			'Second value is correct after sort with single use comparator');
+		equal(list.attr('2.letter'), 'z',
+			'Third value is correct after sort with single use comparator');
+
+		list.sort = function () {
+			ok(false, 'The list is not sorted as a result of change');
+		};
+
+		list.attr('2.letter', 'a');
+
+		equal(list.attr('0.letter'), 'x','First value is still correct');
+		equal(list.attr('1.letter'), 'y', 'Second value is still correct');
+		equal(list.attr('2.letter'), 'a', 'Third value is correctly out of place');
 	});
 });

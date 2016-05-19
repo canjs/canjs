@@ -200,13 +200,10 @@ steal('can/util', 'can/list', function (can) {
 		/**
 		 * @returns {number} The value that should be passed to the comparator
 		 **/
-		_getComparatorValue: function (item, overwrittenComparator) {
+		_getComparatorValue: function (item, singleUseComparator) {
 
 			// Use the value passed to .sort() as the comparator value
-			// if it is a string
-			var comparator = typeof overwrittenComparator === 'string' ?
-				overwrittenComparator :
-				this.comparator;
+			var comparator = singleUseComparator || this.comparator;
 
 			// If the comparator is a string, use it to get the value of that
 			// property on the item. Example:
@@ -231,13 +228,13 @@ steal('can/util', 'can/list', function (can) {
 			return a;
 		},
 
-		sort: function (comparator, silent) {
+		sort: function (singleUseComparator) {
 			var a, b, c, isSorted;
 
 			// Use the value passed to .sort() as the comparator function
 			// if it is a function
-			var comparatorFn = can.isFunction(comparator) ?
-				comparator :
+			var comparatorFn = can.isFunction(singleUseComparator) ?
+				singleUseComparator :
 				this._comparator;
 
 			for (var i, iMin, j = 0, n = this.length; j < n-1; j++) {
@@ -248,8 +245,8 @@ steal('can/util', 'can/list', function (can) {
 
 				for (i = j+1; i < n; i++) {
 
-					a = this._getComparatorValue(this.attr(i), comparator);
-					b = this._getComparatorValue(this.attr(iMin), comparator);
+					a = this._getComparatorValue(this.attr(i), singleUseComparator);
+					b = this._getComparatorValue(this.attr(iMin), singleUseComparator);
 
 					// [1, 2, 3, 4(b), 9, 6, 3(a)]
 					if (comparatorFn.call(this, a, b) < 0) {
@@ -275,20 +272,17 @@ steal('can/util', 'can/list', function (can) {
 				}
 
 				if (iMin !== j) {
-					this._swapItems(iMin, j, silent);
+					this._swapItems(iMin, j);
 				}
 			}
 
-
-			if (! silent) {
-				// Trigger length change so that {{#block}} helper can re-render
-				can.batch.trigger(this, 'length', [this.length]);
-			}
+			// Trigger length change so that {{#block}} helper can re-render
+			can.batch.trigger(this, 'length', [this.length]);
 
 			return this;
 		},
 
-		_swapItems: function (oldIndex, newIndex, silent) {
+		_swapItems: function (oldIndex, newIndex) {
 
 			var temporaryItemReference = this[oldIndex];
 
@@ -298,14 +292,12 @@ steal('can/util', 'can/list', function (can) {
 			// Place the item at the correct index
 			[].splice.call(this, newIndex, 0, temporaryItemReference);
 
-			if (! silent) {
-				// Update the DOM via can.view.live.list
-				can.batch.trigger(this, 'move', [
-					temporaryItemReference,
-					newIndex,
-					oldIndex
-				]);
-			}
+			// Update the DOM via can.view.live.list
+			can.batch.trigger(this, 'move', [
+				temporaryItemReference,
+				newIndex,
+				oldIndex
+			]);
 		}
 
 	});
