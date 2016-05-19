@@ -200,10 +200,10 @@ steal('can/util', 'can/list', function (can) {
 		/**
 		 * @returns {number} The value that should be passed to the comparator
 		 **/
-		_getComparatorValue: function (item) {
+		_getComparatorValue: function (item, singleUseComparator) {
 
-			// Get the user supplied comparator
-			var comparator = this.comparator;
+			// Use the value passed to .sort() as the comparator value
+			var comparator = singleUseComparator || this.comparator;
 
 			// If the comparator is a string, use it to get the value of that
 			// property on the item. Example:
@@ -228,23 +228,14 @@ steal('can/util', 'can/list', function (can) {
 			return a;
 		},
 
-		sort: function (comparator) {
-
-			if (arguments.length) {
-
-				// Set the comparator; Sort if the value changed
-				this.attr('comparator', comparator);
-			} else {
-
-				// Sort without a comparator
-				this._sort();
-			}
-
-			return this;
-		},
-
-		_sort: function () {
+		sort: function (singleUseComparator) {
 			var a, b, c, isSorted;
+
+			// Use the value passed to .sort() as the comparator function
+			// if it is a function
+			var comparatorFn = can.isFunction(singleUseComparator) ?
+				singleUseComparator :
+				this._comparator;
 
 			for (var i, iMin, j = 0, n = this.length; j < n-1; j++) {
 				iMin = j;
@@ -254,11 +245,11 @@ steal('can/util', 'can/list', function (can) {
 
 				for (i = j+1; i < n; i++) {
 
-					a = this._getComparatorValue(this.attr(i));
-					b = this._getComparatorValue(this.attr(iMin));
+					a = this._getComparatorValue(this.attr(i), singleUseComparator);
+					b = this._getComparatorValue(this.attr(iMin), singleUseComparator);
 
 					// [1, 2, 3, 4(b), 9, 6, 3(a)]
-					if (this._comparator.call(this, a, b) < 0) {
+					if (comparatorFn.call(this, a, b) < 0) {
 						isSorted = false;
 						iMin = i;
 					}
@@ -269,7 +260,7 @@ steal('can/util', 'can/list', function (can) {
 					// that are improperly sorted.
 					// Note: This is not part of the original selection
 					// sort agortithm
-					if (c && this._comparator.call(this, a, c) < 0) {
+					if (c && comparatorFn.call(this, a, c) < 0) {
 						isSorted = false;
 					}
 
@@ -284,7 +275,6 @@ steal('can/util', 'can/list', function (can) {
 					this._swapItems(iMin, j);
 				}
 			}
-
 
 			// Trigger length change so that {{#block}} helper can re-render
 			can.batch.trigger(this, 'length', [this.length]);
