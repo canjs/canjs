@@ -3,6 +3,15 @@
 @parent guides 5
 -->
 
+__2.3.24__ ( May 19 2016 )
+
+- [Pass list items to .sort(fn) and don&#39;t set the comparator](https://github.com/canjs/canjs/pull/2399)
+- [Browserify build with stache is not working](https://github.com/canjs/canjs/issues/2397)
+- [Properties with serialize: false should not be stringified](https://github.com/canjs/canjs/issues/2396)
+- [Fixing error compiling cjs module with JSPM](https://github.com/canjs/canjs/pull/2394)
+- [Fix mustache core mapping](https://github.com/canjs/canjs/pull/2390)
+
+
 __2.3.23__ ( Apr 08 2016 )
 
 - [Fixes #2343. calling simple helper now includes all arguments](https://github.com/canjs/canjs/pull/2363)
