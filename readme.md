@@ -11,16 +11,25 @@ letting us use the `can` name!
 
 CanJS is a collection of the following client-side JavaScript architectural libraries:
 
-### Premier Collection
+### Core Collection
 
 _The best, most hardened and generally useful libraries in CanJS._
 
 - Constructors - [can-construct](/canjs/can-construct)
 - Observables - [can-define](/canjs/can-define) and [can-compute](/canjs/can-compute)
-- Data connection - [can-connect](/canjs/can-connect)
+- Data connection and service modeling- [can-connect](/canjs/can-connect) and [can-set](/canjs/can-set)
 - Routing - [can-route](/canjs/can-route) and [can-route-pushstate](/canjs/can-route-pushstate)
 - Live binding templates - [can-stache](/canjs/can-stache)
 - Custom elements and view bindings - [can-component](/canjs/can-component) and [can-stache-bindings](can-stache-bindings)
+
+### Ecosystem Collection
+
+_Useful libraries that extend or add important features to the core collection._
+
+- Simulate ajax requests - [can-fixture](/canjs/can-fixture)
+- A virtual DOM that is able to run CanJS's templates - [can-simple-dom](/canjs/can-simple-dom) and [can-vdom](/canjs/can-vdom)
+- Track async activity - [can-zone](/canjs/can-zone)
+
 
 ### Support Collection
 
@@ -29,6 +38,7 @@ _Utility libraries that power the premier collection._
 - DOM and JS utilities - [can-util](/canjs/can-util)
 - Events - [can-event](/canjs/can-event)
 - Observable notification - [can-observe-info](/canjs/can-observe-info)
+- Simple Observable - [can-simple-map](/canjs/can-simple-map)
 - View helpers
   - Register custom elements or attributes in templates - [can-view-callbacks](/canjs/can-view-callbacks)
   - Read a view model from a custom element - [can-view-model](/canjs/can-view-model)
@@ -44,10 +54,19 @@ _Former libraries that are still supported._
 
 - [can-control](/canjs/can-control)
 - [can-map](/canjs/can-map) and [can-list](/canjs/can-list)
+- Adds the ability to define getter and setters on `can.Map` and `can.List` - [can-map-define](/canjs/can-map-define)
+- Adds live-sorting ability to `can-list` - [can-list-sort](/canjs/can-list-sort)
+- [can-map-backup]
+- [can-map-attributes]
+- [can-view-href]
+- [can-map-setter]
 
+### Deprecated Collection
 
+_Libraries that are no longer supported. We still accept patches._
 
-
+- [can-ejs](/canjs/can-ejs)
+- [can-mustache](/canjs/can-mustache)
 
 ### Support / Contributing
 Before you make an issue, please read our [Contributing](contributing.md) guide.
