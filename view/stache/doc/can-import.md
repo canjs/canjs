@@ -48,6 +48,43 @@ Example:
 {{/eq}}
 ```
 
+## static & dynamic import
+### static
+These are imports that are direct dependencies of a template.
+
+Example:
+
+```
+<can-import from="mymodule"/>
+```
+which is equivalent to a ES6 import like:
+```
+import from "mymodule";
+```
+
+### dynamic
+These are conditional imports, things you only want to import in certain situations. Like described before in section "Progressive Loading".
+```
+<can-import from="components/foobar">
+  {{#if isResolved}}
+  <foobar/>
+  {{/if}}
+</can-import>
+```
+which is equivalent to a stealJS import like:
+```
+import loader from "@loader";
+
+loader.import('components/foobar').then(function(foobar) {
+ // access to the module you loaded.
+ // e.g. access to a component's ViewModel 
+ // foobar.ViewModel
+});
+```
+
+Note that when dynamically importing in a stache file, the scope inside `<can-import>` is a Promise, so you have to wait for until it is resolved.
+Use the `{{#if isResolved}}` helper for that.
+
 ## can-tag
 
 `can-tag` allows for injecting a component, using the imported promise as the
