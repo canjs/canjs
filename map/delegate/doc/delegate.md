@@ -119,7 +119,7 @@ for first and last name changes:
       name : {first: "Justin", last: "Meyer"}
     })
     
-    o.bind("name.first,name.last", 
+    o.delegate("name.first,name.last", 
            "set",
            function(ev,newVal,oldVal,from){
     
@@ -133,7 +133,7 @@ Delegate lets you listen when a property is __set__ to a specific value:
       name : "Justin"
     })
     
-    o.bind("name=Brian", 
+    o.delegate("name=Brian", 
            "set",
            function(ev,newVal,oldVal,from){
     
