@@ -6,7 +6,7 @@
 When a user does something, such as clicking, an `event` occurs. Event handlers specify
 how [JavaScript should respond to an event](http://bitovi.com/blog/2010/10/a-crash-course-in-how-dom-events-work.html).
 
-This recipe will introduce handling a click event using a [`can.Control`](http://canjs.com/docs/can.Control).
+This recipe will introduce handling a click event using a [`can.Control`](http://canjs.com/docs/can.Control.html).
 Using a list of people like previous recipes, clicking any individual person's name
 will remove that person from the list.
 
