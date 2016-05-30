@@ -75,7 +75,7 @@ tag.
 
 Notice:
 
- - There is content within `<my-greeting>`..
+ - There is content within `<my-greeting>`.
  - The content looks for a `site` and `title` value.
 
 __Source data:__
@@ -84,8 +84,7 @@ __Source data:__
       site: "CanJS"
     })
 
-This is how we render the source template that uses `<my-greeting>`. Notice
-that the template is rendered with `site` in its [can.view.viewModel viewModel].
+This is how we render the source template that uses `<my-greeting>`. The template is rendered with `site` in its [can.view.viewModel].
 
 __HTML Result:__
 
@@ -95,7 +94,7 @@ __HTML Result:__
       </my-greeting>
     </header>
 
-This is the result of the template transformations.  Notice that the
+This is the result of the template transformations. The
 content within the original `<my-greeting>` is placed within the `<h1>` 
 tag.  Also, notice that the original content is able to access data from
 the source data and from the component's viewModel.
@@ -126,13 +125,13 @@ Produces the following html:
       <my-greeting><h1>Hello There</h1></my-greeting>
     </header>
 
-However, if there was existing content within the source html like:
+However, if there was existing content within the source html, like:
 
     <header>
       <my-greeting>DO REMOVE ME!!!</my-greeting>
     </header>
 
-That content is removed and replaced by the component's template:
+that content is removed, and replaced by the component's template:
 
     <header>
       <my-greeting><h1>Hello There</h1></my-greeting>
@@ -149,11 +148,11 @@ template. For example, if we change the component to look like:
       template: can.stache("<h1><content/></h1>")
     });
 
-And rendered with source html like:
+and rendered with source html, like:
 
     <my-greeting>Hello World</my-greeting>
 
-Produces:
+it produces:
 
     <my-greeting><h1>Hello World</h1></my-greeting>
 
@@ -168,11 +167,11 @@ change the component to look like:
       template: can.stache("<h1><content>Hello World</content></h1>")
     });
 
-And rendered with source html like:
+and rendered with source html like:
 
     <my-greeting></my-greeting>
 
-Produces:
+it produces:
 
     <my-greeting><h1>Hello World</h1></my-greeting>
 
