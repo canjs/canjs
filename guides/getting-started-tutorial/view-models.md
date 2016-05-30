@@ -118,7 +118,9 @@ with this:
       cities: {
         get: function() {
           var state = this.attr('state');
-          return state && this.attr('citiesByState')[state];
+          if (state) {
+              return state & this.attr('citiesByState')[state];
+          }
         }
       },
       citiesByState: {
@@ -131,7 +133,7 @@ with this:
         }
       },
       city: {
-        value: null
+        value: ""
       }
 ```
 
