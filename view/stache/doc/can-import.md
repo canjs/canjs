@@ -80,10 +80,10 @@ System.import('components/foobar').then(function(foobar) {
 });
 ```
 
-Please notice that when dynamically import modules in a stache file, the scope inside `<can-import>` is a Promise, so you have to wait for until it is resolved.
+Please notice that when dynamically importing modules in a stache file, the scope inside <can-import> is a Promise, so you have to wait until it is resolved.
 Use the `{{#if isResolved}}` helper for that.
 
-The recommended way to progressive loading modules with StealJS is to use the `@loader` module provided by steal.
+The recommended way to progressively load modules with StealJS is to use the `@loader` module provided by steal.
 For more information see http://stealjs.com/docs/@loader.html
 
 ## working with modules
@@ -112,7 +112,7 @@ var renderer = canStache('' +
 $('body').append(renderer());
 ```
 
-The other way is to import the module into the templates data. 
+The other way is to import the module into the template's data. 
 **app.js**
 ```
 import canStache from 'can/view/stache/stache';
