@@ -5,6 +5,8 @@
 responses into a data format useful for converting them into a can.Model instance
 AND for converting them into that instance. In 2.1, [can.Model.parseModel] should
 be used to convert the ajax response into a data format useful to [can.Model.model].
+[can.Model.makeFindOne] can be used for further customizing how a response is
+converted into a model instance.
 
 @description Convert raw data into a can.Model instance. If data's [can.Model.id id]
 matches a item in the store's `id`, `data` is merged with the instance and the
