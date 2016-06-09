@@ -91,7 +91,7 @@ to determine if the compute has changed values.
 
 Create a compute from an object's property value. This short-cut
 signature lets you create a compute on objects that have events
-that be listened to with [can.bind].
+that can be listened to with [can.bind].
 
     var input = document.getElementById('age')
     var age = can.compute(input,"value","change");
