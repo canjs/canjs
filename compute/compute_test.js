@@ -877,5 +877,52 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", "./read_test", functi
 		can.batch.stop();
 	});
 
+	test("Change propagation in a batch with late bindings (#2412)", function(){
+		console.clear();
+
+		var rootA = can.compute('a');
+		var rootB = can.compute('b');
+
+		var childA = can.compute(function() {
+		  console.log('rootA - start eval');
+		  return "childA"+rootA();
+		});
+
+		var grandChild = can.compute(function() {
+		  console.log('grandChild - start eval');
+
+		  var b = rootB();
+		  console.log(`grandChild - rootB: ${b}`);
+		  if (b === "b") {
+		    return "grandChild->b";
+		  }
+
+		  var a = childA();
+		  console.log(`grandChild - childA: ${a}`);
+		  return "grandChild->"+a;
+		});
+
+		console.log("rootA",rootA.computeInstance._cid);
+		console.log("rootB",rootB.computeInstance._cid);
+		console.log("childA",childA.computeInstance._cid);
+		console.log("grandChild",grandChild.computeInstance._cid);
+
+		childA.bind('change', function(ev, newVal, oldVal) {
+		  console.log(`childA change: ${newVal}`);
+		});
+
+		grandChild.bind('change', function(ev, newVal, oldVal) {
+		  equal(newVal, "grandChild->childAA");
+		});
+
+		console.log("GRANCHILD = "+grandChild()); // false
+
+		console.log("\nBATCH START\n")
+		can.batch.start();
+		rootA('A');
+		rootB('B');
+		can.batch.stop();
+
+	})
 
 });

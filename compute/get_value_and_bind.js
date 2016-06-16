@@ -160,7 +160,7 @@ steal("can/util", function(can){
 	ObservedInfo.registerUpdate = function(observeInfo, batchNum){
 		var depth = observeInfo.getDepth()-1;
 		var primaryDepth = observeInfo.getPrimaryDepth();
-
+		console.log("registerUpdate", observeInfo.compute._cid, depth);
 		curPrimaryDepth = Math.min(primaryDepth, curPrimaryDepth);
 		maxPrimaryDepth = Math.max(primaryDepth, maxPrimaryDepth);
 
@@ -236,7 +236,7 @@ steal("can/util", function(can){
 		if (top && !top.ignore) {
 			var evStr = event + "",
 				name = obj._cid + '|' + evStr;
-				
+
 			if(top.traps) {
 				top.traps.push({obj: obj, event: evStr, name: name});
 			}
