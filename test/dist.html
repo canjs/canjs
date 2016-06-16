@@ -1,0 +1,19 @@
+<title>CanJS distributable tests</title>
+<script src="../dist/global/can.js"></script>
+<script>
+	steal = {
+	  instantiated: {
+	  	"can-construct@3.0.0-pre.3#can-construct": {
+	  		"default": can.Construct,
+	  		__useDefault: true
+	  	}
+	  }
+	};
+</script>
+<script src="../node_modules/steal/steal.js" main="test/test"></script>
+<script>
+	steal.import('can-construct').then(module => {
+		debugger;
+	})
+</script>
+<div id="qunit-fixture"></div>
