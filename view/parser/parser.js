@@ -57,6 +57,9 @@ steal(function(){
 	// Inline Elements - HTML 5
 	var inline = makeMap("a,abbr,acronym,applet,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,iframe,img,input,ins,kbd,label,map,object,q,s,samp,script,select,small,span,strike,strong,sub,sup,textarea,tt,u,var");
 
+	// Elements for which tag case matters - shouldn't be lowercased.
+	var caseMatters = makeMap("altGlyph,altGlyphDef,altGlyphItem,animateColor,animateMotion,animateTransform,clipPath,feBlend,feColorMatrix,feComponentTransfer,feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap,feDistantLight,feFlood,feFuncA,feFuncB,feFuncG,feFuncR,feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset,fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,foreignObject,glyphRef,linearGradient,radialGradient,textPath");
+
 	// Elements that you can, intentionally, leave open
 	// (and which close themselves)
 	var closeSelf = makeMap("colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr");
@@ -90,9 +93,8 @@ steal(function(){
 			});
 		}
 
-
 		function parseStartTag(tag, tagName, rest, unary) {
-			tagName = tagName.toLowerCase();
+			tagName = caseMatters[tagName] ? tagName : tagName.toLowerCase();
 
 			if (block[tagName] && !inline[tagName]) {
 				var last = stack.last();
@@ -131,7 +133,7 @@ steal(function(){
 
 				// Find the closest opened tag of the same type
 			else {
-				tagName = tagName.toLowerCase();
+				tagName = caseMatters[tagName] ? tagName : tagName.toLowerCase();
 				for (pos = stack.length - 1; pos >= 0; pos--) {
 					if (stack[pos] === tagName) {
 						break;
