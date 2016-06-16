@@ -197,7 +197,7 @@ For demo pages that require a little custom setup:
           main='@empty'>
   </script>
   <script>
-    steal('can','jquery','can/view/autorender', function(can, $){
+    steal('can','jquery','can/view/autorender/', function(can, $){
       $("my-component").viewModel().attr("message", "Hi");
     });
   </script>
