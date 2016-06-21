@@ -4,7 +4,7 @@ dist/
 *.orig
 util/can.*.js
 *node_modules*
-docs*
+doc/
 *.DS_Store
 .idea
 test/pluginified/latest.js

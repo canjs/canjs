@@ -1,5 +1,9 @@
 {
   "name": "can",
+  "scripts": {
+    "test": "testee test/index.html --browsers firefox",
+    "build": "node build.js"
+  },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
   "version": "3.0.0-pre.1",
@@ -22,20 +26,27 @@
     "can-component": "^3.0.0-pre.4",
     "can-compute": "^3.0.0-pre.2",
     "can-construct": "^3.0.0-pre.3",
+	"can-connect": "^0.6.0-pre.5",
     "can-control": "^3.0.0-pre.1",
-    "can-define": "^0.7.4",
+    "can-define": "^0.7.5",
     "can-event": "^3.0.0-pre.3",
     "can-fixture": "^0.4.0-pre.2",
     "can-list": "^3.0.0-pre.1",
     "can-map": "^3.0.0-pre.2",
-    "can-model": "^2.3.11",
+	"can-observe-info": "^3.0.0-pre.4",
     "can-route": "^3.0.0-pre.3",
-    "can-simple-dom": "^0.3.0",
+	"can-set": "^0.5.6",
+    "can-simple-dom": "^0.4.2",
+	"can-simple-map": "^3.0.0-pre.1",
     "can-stache": "^3.0.0-pre.4",
+	"can-stache-bindings": "^3.0.0-pre.4",
     "can-util": "^3.0.0-pre.18",
     "can-view-autorender": "^3.0.0-pre.2",
+	"can-view-callbacks": "^3.0.0-pre.3",
+
     "can-view-import": "^3.0.0-pre.2",
     "can-view-live": "^3.0.0-pre.1",
+	"can-view-model": "^3.0.0-pre.4",
     "can-view-nodelist": "^3.0.0-pre.1",
     "can-view-parser": "^3.0.0-pre.1",
     "can-view-scope": "^3.0.0-pre.5",
@@ -48,11 +59,8 @@
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.0-pre.1",
     "steal-tools": "pre",
-    "testee": "^0.2.5"
-  },
-  "scripts": {
-    "test": "testee test/index.html --browsers firefox",
-    "build": "node build.js"
+    "testee": "^0.2.5",
+	"bit-docs": "^0.0.7"
   },
   "demos": [
     "http://canjs.us/#examples",
@@ -68,5 +76,20 @@
   "system": {
     "npmAlgorithm": "flat",
     "main": "can"
+  },
+  "bit-docs": {
+    "dependencies": {
+      "bit-docs-glob-finder": "^0.0.5",
+	  "bit-docs-dev": "^0.0.3",
+      "bit-docs-js": "^0.0.4",
+	  "bit-docs-generate-html": "^0.0.5",
+	  "bit-docs-html-canjs": "^0.0.4",
+	  "bit-docs-prettify": "^0.0.3"
+    },
+    "glob": {
+      "pattern": "{node_modules,docs}\/can-*\/**\/*.{js,md}",
+	  "ignore": "node_modules\/can-*\/dist\/**\/*"
+    },
+    "parent": "canjs"
   }
 }
