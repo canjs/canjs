@@ -2,7 +2,8 @@
   "name": "can",
   "scripts": {
     "test": "testee test/index.html --browsers firefox",
-    "build": "node build.js"
+    "build": "node build.js",
+    "document": "bit-docs"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
