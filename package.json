@@ -89,7 +89,7 @@
       "bit-docs-prettify": "^0.0.3"
     },
     "glob": {
-      "pattern": "{node_modules,docs}/can-*/**/*.{js,md}",
+      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
       "ignore": "node_modules/can-*/dist/**/*"
     },
     "parent": "canjs"
