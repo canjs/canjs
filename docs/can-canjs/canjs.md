@@ -4,7 +4,7 @@
 
 @body
 
-### Core Collection
+### [can-core Core Collection]
 
 _The best, most hardened and generally useful libraries in CanJS._
 

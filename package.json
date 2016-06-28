@@ -84,7 +84,7 @@
       "bit-docs-dev": "^0.0.3",
       "bit-docs-js": "^0.0.5",
       "bit-docs-generate-html": "^0.0.5",
-      "bit-docs-html-canjs": "^0.0.8",
+      "bit-docs-html-canjs": "^0.0.10",
       "bit-docs-prettify": "^0.0.3"
     },
     "glob": {
