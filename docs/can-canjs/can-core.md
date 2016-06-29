@@ -15,12 +15,59 @@ should install the ones you use directly:
 npm install can-define can-set can-connect can-component can-stache can-route --save
 ```
 
-Lets export each one a bit more in detail.
+Lets export each one a bit more.
+
+## can-compute
+
+[can-compute]s represent an observable value.  A compute can contain its
+own value and notify listeners of changes like:
+
+```js
+var compute = require("can-compute");
+
+var name = compute("Justin");
+
+// read the value
+name() //-> "Justin"
+
+name.on("change", function(ev, newVal, oldVal){
+	newVal //-> "Matthew"
+	oldVal //-> "Justin"
+});
+
+name("Matthew");
+```
+
+More commonly, a compute derives its value from other observables:
+
+```js
+var DefineMap = require("can-define/map/map"),
+	DefineList = require("can-define/list/list"),
+	compute = require("can-compute");
+
+var person = new DefineMap({first: "Justin", last: "Meyer"}),
+	hobbies = new DefineList(["js","bball"]),
+	age = compute(33);
+
+var info = compute(function(){
+	return person.first +" "+ person.last+ " is "+age()+
+		"and like "+hobbies.join(", ")+".";
+});
+
+info() //-> "Justin Meyer is 33 and likes js, bball."
+
+info.on("change", function(ev, newVal){
+	newVal //-> "Justin Meyer is 33 and likes js."
+});
+
+hobbies.pop();
+```
+
 
 ## can-define
 
 [can-define/map/map] and [can-define/list/list] allow you to create observable
-objects with well defined properties.  You can
+maps and lists with well defined properties.  You can
 [can-define.types.propDefinition define a property's type initial value, enumerability, getter-setters and much more].
 For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
 
@@ -411,7 +458,3 @@ mixes in this behavior so you just need to import the module:
 var route = require("can-route");
 require("can-route-pushstate");
 ```
-
-## can-compute
-
-?
