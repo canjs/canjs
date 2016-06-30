@@ -10,7 +10,6 @@ publish-docs:
 	git add -f node_modules/steal-qunit
 	git add -f node_modules/steal-systemjs
 	git add -f node_modules/steal-es6-module-loader
-	git add -f node_modules/steal-platform
 	git add -f node_modules/when
 	git commit -m "Publish docs"
 	git push -f origin gh-pages
