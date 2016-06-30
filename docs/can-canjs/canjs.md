@@ -1,5 +1,5 @@
 @page canjs CanJS
-
+@dest ../index
 @description A constantly evolving and improving set of client side JavaScript architectural libraries.
 
 @body

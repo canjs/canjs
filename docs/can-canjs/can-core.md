@@ -1,7 +1,6 @@
 @page can-core Core
 @parent canjs
-@description The best, most hardened and generally useful
-libraries in CanJS.  
+@description The best, most hardened and generally useful libraries in CanJS.  
 
 @body
 
