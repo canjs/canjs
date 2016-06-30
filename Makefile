@@ -1,4 +1,5 @@
 publish-docs:
+	npm install
 	git checkout -b gh-pages
 	./node_modules/.bin/bit-docs -fd
 	git add -f doc/
