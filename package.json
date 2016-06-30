@@ -55,14 +55,15 @@
     "can-zone": "^0.5.6"
   },
   "devDependencies": {
+    "bit-docs": "^0.0.7",
+    "can-map-attributes": "^1.0.1",
     "can-vdom": "0.0.3",
     "jquery": "^2.2.3",
     "steal": "^0.16.4",
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.0-pre.1",
     "steal-tools": "pre",
-    "testee": "^0.2.5",
-    "bit-docs": "^0.0.7"
+    "testee": "^0.2.5"
   },
   "demos": [
     "http://canjs.us/#examples",
@@ -85,7 +86,7 @@
       "bit-docs-dev": "^0.0.3",
       "bit-docs-js": "^0.0.5",
       "bit-docs-generate-html": "^0.0.5",
-      "bit-docs-html-canjs": "^0.0.11",
+      "bit-docs-html-canjs": "^0.0.12",
       "bit-docs-prettify": "^0.0.3"
     },
     "glob": {
