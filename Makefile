@@ -1,9 +1,8 @@
 publish-docs:
 	git checkout -b gh-pages
-	./node_modules/.bin/bit-docs -f
+	./node_modules/.bin/bit-docs -fd
 	git add -f doc/
 	git add -f index.html
-	git add -f node_modules/jquery
 	git add -f node_modules/can-connect
 	git add -f node_modules/can-fixture
 	git add -f node_modules/can-set
