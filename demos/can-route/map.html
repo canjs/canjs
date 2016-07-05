@@ -1,0 +1,158 @@
+<style>
+  .selected {
+    font-weight: bold;
+    color: Gray;
+  }
+</style>
+<div id='out'></div>
+<script type='text/mustache' id='template'>
+<button can-click='back'>Back</button>
+<button can-click='fwd'>Forward</button>
+<div class='url'>URL: {{appUrl}}</div>
+<h2>Locations</h2>
+{{#appState.locations}}
+  <div><input type='checkbox' can-value='{selected}' />{{name}}</div>
+{{/appState.locations}}
+<h2>Products</h2>
+{{#appState.products}}
+  <div><a href="#!product/{{id}}" class='{{selectedClass id}}'>{{name}}</a></div>
+{{/appState.products}}
+</script>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+require("can-route");
+require("can-map-define");
+require("can-stache");
+require("can-stache-bindings");
+var Model = require("can-model");
+var fixture = require("can-fixture");
+var can = require("can-util/namespace");
+
+  fixture("GET /locations", function(){
+    return [
+      {id: 1, name: "Chicago"},
+      {id: 2, name: "New York"},
+      {id: 3, name: "LA"}
+    ]
+  })
+
+  fixture("GET /products", function(){
+    return [
+      {id: 1, name: "Shampoo"},
+      {id: 2, name: "Conditioner"},
+      {id: 3, name: "Soap"}
+    ]
+  })
+
+  var Locations = Model.extend({
+    findAll: "GET /locations"
+  }, {})
+  var Products = Model.extend({
+    findAll: "GET /products"
+  }, {})
+
+  var AppState = can.Map.extend({
+    define: {
+      products: {
+        // don't serialize this property at all in the route
+        serialize: false,
+        value: []
+      },
+      productId: {
+        type: "number"
+      },
+      locations: {
+        // don't serialize this property at all in the route
+        serialize: false,
+        value: []
+      },
+      // virtual property that contains a comma separated list of ids based on locations that are selected
+      locationIds: {
+
+        // comma separated list of ids
+        serialize: function(){
+          var selected = this.attr('locations').filter(function(location){
+            return location.attr('selected');
+          });
+          if(!selected.length) return;
+          var ids = [];
+          selected.each(function(item){
+            ids.push(item.attr('id'));
+          })
+          return ids.join(',');
+        },
+        remove: function(){
+          // for each id, toggle any matched location
+          this.attr('locations').each(function(location){
+            location.attr('selected', false)
+          })
+        },
+
+        // toggle selected from a comma separated list of ids
+        set: function(val){
+          var arr = val;
+          if(typeof val === "string"){
+            arr = val.split(',')
+          }
+          for (var i = 0; i < arr.length; i++) {
+            arr[i] = +arr[i];
+          };
+          // for each id, toggle any matched location
+          this.attr('locations').each(function(location){
+            if(arr.indexOf(location.attr('id')) !== -1){
+              location.attr('selected', true);
+            } else {
+              location.attr('selected', false)
+            }
+          })
+        }
+      }
+    }
+  });
+
+  // initialize and call map first, so anything binding to can.route will work correctly
+  appState = new AppState();
+  can.route.map(appState);
+
+  // when the data is ready, set the locations property
+  appState.attr('locations', new Locations.List({}))
+  appState.attr('products', new Products.List({}))
+
+  can.route("product/:productId")
+
+  // call ready after the appState is fully initialized
+  can.route.ready();
+
+  var appUrl = can.compute(window.location.href, {
+    get: function(){
+      return window.location.href
+    },
+    on: function(cb){
+      can.route.bind('change', function(){
+        setTimeout(function(){
+          cb();
+        }, 20)
+      })
+
+    }
+  })
+
+var template = $("#template").html();
+$("#out").html( can.stache(template)({
+    appState: appState,
+    appUrl: appUrl,
+    back: function(){
+      window.history.back();
+    },
+    fwd: function(){
+      window.history.forward();
+    }
+  }, {
+    selectedClass: function(id){
+      if(appState.attr('productId') === id()){
+        return 'selected';
+      }
+    }
+  }) );
+
+</script>
