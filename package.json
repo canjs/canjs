@@ -57,7 +57,6 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-fixture": "^0.4.0-pre.5",
-    "can-map-attributes": "^1.0.1",
     "can-map-define": "^3.0.0-pre.2",
     "can-vdom": "0.0.3",
     "jquery": "^2.2.3",
