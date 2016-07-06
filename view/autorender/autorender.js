@@ -39,10 +39,10 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 		}
 	}
 	function setupScope(el) {
-		el = can.$(el);
+		var $el = can.$(el);
 
-		var scope = (can.data(el, "scope") || can.data(el, "viewModel")) ?
-			can.viewModel(el) : new AppState();
+		var scope = (can.data($el, "scope") || can.data($el, "viewModel")) ?
+			can.viewModel($el) : new AppState();
 
 		can.each(el.attributes||[], function(attr) {
 			setAttr(el, attr.name, scope);
