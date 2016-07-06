@@ -4,18 +4,34 @@
 
 @body
 
-### [can-core Core Collection]
+## [can-core Core Collection]
 
 _The best, most hardened and generally useful libraries in CanJS._
 
-- Constructors - [can-construct]
-- Observables - [can-define] and [can-compute]
-- Data connection and service modeling- [can-connect] and [can-set]
-- Routing - [can-route] and [can-route-pushstate]
-- Live binding templates - [can-stache]
-- Custom elements and view bindings - [can-component] and [can-stache-bindings]
+<div class="project-list">
 
-### Ecosystem Collection
+- **[can-construct]** <small class="version">1.3.3</small> <span class="description">Extensible constructors</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+- **[can-define]** <small class="version">1.3.3</small> <span class="description">Observables</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-compute]** <small class="version">1.3.3</small> <span class="description">Observables</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-connect]** <small class="version">1.3.3</small> <span class="description">Data connection</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-set]** <small class="version">1.3.3</small> <span class="description">Service modeling</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-route]** <small class="version">1.3.3</small> <span class="description">Routing</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-route-pushstate]** <small class="version">1.3.3</small> <span class="description">Pushy routing</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-stache]** <small class="version">1.3.3</small> <span class="description">Live binding templates</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-component]** <small class="version">1.3.3</small> <span class="description">Custom elements</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+- **[can-stache-bindings]** <small class="version">1.3.3</small> <span class="description">View bindings</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+
+</div>
+
+## Ecosystem Collection
 
 _Useful libraries that extend or add important features to the core collection._
 
@@ -24,7 +40,7 @@ _Useful libraries that extend or add important features to the core collection._
 - Track async activity - [can-zone]
 
 
-### Infrastructure Collection
+## Infrastructure Collection
 
 _Utility libraries that power the core collection._
 
@@ -41,7 +57,7 @@ _Utility libraries that power the core collection._
   - Keeps part of the DOM up to date with a compute - [can-view-live]
   - Maintains live binding relationships - [can-view-nodelist]
 
-### Legacy Collection
+## Legacy Collection
 
 _Former libraries that are not under active development, but we
 still accept patches._
@@ -57,7 +73,7 @@ still accept patches._
 - [can-ejs]
 - [can-mustache]
 
-### Support / Contributing
+## Support / Contributing
 
 Before you make an issue, please read our [Contributing] guide.
 
