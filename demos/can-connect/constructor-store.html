@@ -1,0 +1,93 @@
+<body>
+	<button id='maker'>Create Todo Editor</button>
+
+<script src="../../node_modules/steal/steal.js">
+import connect from "can-connect";
+import dataUrl from "can-connect/data/url/";
+import constructor from "can-connect/constructor/";
+import constructorStore from "can-connect/constructor/store/";
+import fixture from "can-fixture";
+import canEvent from "can-event";
+
+// A connection that gets todos data
+var todosConnection = connect([constructorStore,constructor,dataUrl,{
+    updatedInstance: function(instance, props){
+  	  Object.assign(instance, props);
+    }
+}],{
+  url: "/todos",
+  instance: function(props) {
+	  return Object.assign(props, canEvent);
+  },
+  serializeInstance: function(instance){
+	  return {id: instance.id, name: instance.name}
+  }
+});
+
+// Trap ajax requests to return and modify the following `todo` object.
+var todo = {
+	id: 5,
+	name: "do the dishes"
+};
+fixture({
+	"GET /todos/{id}": function(){
+		return todo;
+	},
+	"PUT /todos/{id}": function(request){
+		todo.name = request.data.name;
+		return {name: request.data.name};
+	}
+});
+
+var todoEditor = function(id){
+	var element = document.createElement('div');
+	var todo;
+
+	var update = function(){
+		element.firstChild.value = todo.name;
+	};
+
+	element.innerHTML = "<input/><button>X</button>";
+
+	todosConnection.get({id: id}).then(function(retrievedTodo){
+		todo = retrievedTodo;
+		todo.on("name", update);
+		todosConnection.addInstanceReference(todo);
+		update();
+	}).catch(function(e){debugger;});
+
+	// listen to remove
+    element.lastChild.onclick = function(){
+    	todo.off("name", update);
+    	todosConnection.deleteInstanceReference(todo);
+    	element.parentNode.removeChild(element);
+    };
+
+    element.firstChild.onchange = function(){
+    	todo.name = this.value;
+		todo.dispatch("name");
+    };
+
+    element.firstChild.onkeypress = function(ev){
+    	if(ev.keyCode === 13) {
+    		todo.name = this.value;
+			todo.dispatch("name");
+
+			todosConnection.save(todo);
+    	}
+    };
+
+    return element;
+};
+
+
+document.getElementById('maker').onclick = function(){
+	var element = todoEditor(5);
+	document.body.appendChild(element);
+};
+
+
+
+
+</script>
+</body>
