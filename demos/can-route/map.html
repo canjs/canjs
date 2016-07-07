@@ -11,7 +11,7 @@
 <div class='url'>URL: {{appUrl}}</div>
 <h2>Locations</h2>
 {{#appState.locations}}
-  <div><input type='checkbox' can-value='{selected}' />{{name}}</div>
+	<div><input type='checkbox' {($value)}="selected" />{{name}}</div>
 {{/appState.locations}}
 <h2>Products</h2>
 {{#appState.products}}
@@ -20,125 +20,151 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
-require("can-route");
-require("can-map-define");
-require("can-stache");
+var route = require("can-route");
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
 require("can-stache-bindings");
-var Model = require("can-model");
+var superMap = require("can-connect/can/super-map/super-map");
 var fixture = require("can-fixture");
-var can = require("can-util/namespace");
+var compute = require("can-compute");
 
-  fixture("GET /locations", function(){
-    return [
-      {id: 1, name: "Chicago"},
-      {id: 2, name: "New York"},
-      {id: 3, name: "LA"}
-    ]
-  })
+fixture("GET /locations", function(){
+	return [
+		{id: 1, name: "Chicago"},
+		{id: 2, name: "New York"},
+		{id: 3, name: "LA"}
+	]
+})
 
-  fixture("GET /products", function(){
-    return [
-      {id: 1, name: "Shampoo"},
-      {id: 2, name: "Conditioner"},
-      {id: 3, name: "Soap"}
-    ]
-  })
+fixture("GET /products", function(){
+	return [
+		{id: 1, name: "Shampoo"},
+		{id: 2, name: "Conditioner"},
+		{id: 3, name: "Soap"}
+	]
+});
 
-  var Locations = Model.extend({
-    findAll: "GET /locations"
-  }, {})
-  var Products = Model.extend({
-    findAll: "GET /products"
-  }, {})
+var Location = DefineMap.extend({
+	seal: false
+}, {
+	id: "*",
+	selected: "boolean"
+});
 
-  var AppState = can.Map.extend({
-    define: {
-      products: {
-        // don't serialize this property at all in the route
-        serialize: false,
-        value: []
-      },
-      productId: {
-        type: "number"
-      },
-      locations: {
-        // don't serialize this property at all in the route
-        serialize: false,
-        value: []
-      },
-      // virtual property that contains a comma separated list of ids based on locations that are selected
-      locationIds: {
+var LocationList = DefineList.extend({
+	"*": Location
+});
 
-        // comma separated list of ids
-        serialize: function(){
-          var selected = this.attr('locations').filter(function(location){
-            return location.attr('selected');
-          });
-          if(!selected.length) return;
-          var ids = [];
-          selected.each(function(item){
-            ids.push(item.attr('id'));
-          })
-          return ids.join(',');
-        },
-        remove: function(){
-          // for each id, toggle any matched location
-          this.attr('locations').each(function(location){
-            location.attr('selected', false)
-          })
-        },
+var Product = DefineMap.extend({
+	seal: false
+}, {
+	id: "*"
+});
 
-        // toggle selected from a comma separated list of ids
-        set: function(val){
-          var arr = val;
-          if(typeof val === "string"){
-            arr = val.split(',')
-          }
-          for (var i = 0; i < arr.length; i++) {
-            arr[i] = +arr[i];
-          };
-          // for each id, toggle any matched location
-          this.attr('locations').each(function(location){
-            if(arr.indexOf(location.attr('id')) !== -1){
-              location.attr('selected', true);
-            } else {
-              location.attr('selected', false)
-            }
-          })
-        }
-      }
-    }
-  });
+var ProductList = DefineList.extend({
+	"*": Product
+});
 
-  // initialize and call map first, so anything binding to can.route will work correctly
-  appState = new AppState();
-  can.route.map(appState);
+var locationConnect = superMap({
+	url: "/locations",
+	Map: Location,
+	List: LocationList,
+	name: "location"
+});
 
-  // when the data is ready, set the locations property
-  appState.attr('locations', new Locations.List({}))
-  appState.attr('products', new Products.List({}))
+var productConnection = superMap({
+	url: "/products",
+	Map: Product,
+	List: ProductList,
+	name: "product"
+});
 
-  can.route("product/:productId")
+var AppState = DefineMap.extend({
+	route: "string",
+	products: {
+		// don't serialize this property at all in the route
+		serialize: false,
+		value: []
+	},
+	productId: {
+		type: "number"
+	},
+	locations: {
+		// don't serialize this property at all in the route
+		serialize: false,
+		value: []
+	},
+	// virtual property that contains a comma separated list of ids based on locations that are selected
+	locationIds: {
+		// comma separated list of ids
+		serialize: function(){
+			var selected = this.locations.filter(function(location){
+				return location.selected;
+			});
+			if(!selected.length) return;
+			var ids = [];
+			selected.each(function(item){
+				ids.push(item.id);
+			})
+			return ids.join(',');
+		},
+		remove: function(){
+			// for each id, toggle any matched location
+			this.locations.forEach(function(location){
+				location.selected = false;
+			});
+		},
 
-  // call ready after the appState is fully initialized
-  can.route.ready();
+		// toggle selected from a comma separated list of ids
+		set: function(val){
+			var arr = val;
+			if(typeof val === "string"){
+				arr = val.split(',')
+			}
+			for (var i = 0; i < arr.length; i++) {
+				arr[i] = +arr[i];
+			};
+			// for each id, toggle any matched location
+			this.locations.forEach(function(location){
+				if(arr.indexOf(location.id) !== -1){
+					location.selected = true;
+				} else {
+					location.selected = false;
+				}
+			})
+		}
+	}
+});
 
-  var appUrl = can.compute(window.location.href, {
-    get: function(){
-      return window.location.href
-    },
-    on: function(cb){
-      can.route.bind('change', function(){
-        setTimeout(function(){
-          cb();
-        }, 20)
-      })
+// initialize and call map first, so anything binding to can.route will work correctly
+appState = new AppState();
+route.map(appState);
 
-    }
-  })
+// when the data is ready, set the locations property
+appState.locations = new LocationList({});
+appState.products = new ProductList({});
+
+route("product/:productId")
+
+// call ready after the appState is fully initialized
+route.ready();
+
+var appUrl = compute(window.location.href, {
+	get: function(){
+		return window.location.href;
+	},
+	on: function(cb){
+		route.bind('change', function(){
+			setTimeout(function(){
+				cb();
+			}, 20);
+		});
+	}
+});
 
 var template = $("#template").html();
-$("#out").html( can.stache(template)({
+$("#out").html( stache(template)({
     appState: appState,
     appUrl: appUrl,
     back: function(){
@@ -149,7 +175,7 @@ $("#out").html( can.stache(template)({
     }
   }, {
     selectedClass: function(id){
-      if(appState.attr('productId') === id()){
+      if(appState.productId === id()){
         return 'selected';
       }
     }
