@@ -8,26 +8,38 @@
 
 _The best, most hardened and generally useful libraries in CanJS._
 
-<div class="project-list">
+<div class="module-list">
 
-- **[can-construct]** <small class="version">1.3.3</small> <span class="description">Extensible constructors</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-- **[can-define]** <small class="version">1.3.3</small> <span class="description">Observables</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-compute]** <small class="version">1.3.3</small> <span class="description">Observables</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-connect]** <small class="version">1.3.3</small> <span class="description">Data connection</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-set]** <small class="version">1.3.3</small> <span class="description">Service modeling</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-route]** <small class="version">1.3.3</small> <span class="description">Routing</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-route-pushstate]** <small class="version">1.3.3</small> <span class="description">Pushy routing</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-stache]** <small class="version">1.3.3</small> <span class="description">Live binding templates</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-component]** <small class="version">1.3.3</small> <span class="description">Custom elements</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
-- **[can-stache-bindings]** <small class="version">1.3.3</small> <span class="description">View bindings</span> <code class="npm-install">npm install can-construct --save</code><iframe src="https://ghbtns.com/github-btn.html?user=canjs&repo=can-construct&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+- **[can-construct]** <small>1.3.3</small> Extensible constructors
+  - `npm install can-construct --save`
+  - <a class="github-button" href="https://github.com/canjs/can-construct" data-count-href="/canjs/can-construct/stargazers" data-count-api="/repos/canjs/can-construct#stargazers_count">Star</a>
+- **[can-define]** <small>1.3.3</small> Observables 
+  - `npm install can-define --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define" data-count-href="/canjs/can-define/stargazers" data-count-api="/repos/canjs/can-define#stargazers_count">Star</a>
+- **[can-compute]** <small>1.3.3</small> Observables 
+  - `npm install can-compute --save`
+  - <a class="github-button" href="https://github.com/canjs/can-compute" data-count-href="/canjs/can-compute/stargazers" data-count-api="/repos/canjs/can-compute#stargazers_count">Star</a>
+- **[can-connect]** <small>1.3.3</small> Data connection
+  - `npm install can-connect --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect" data-count-href="/canjs/can-connect/stargazers" data-count-api="/repos/canjs/can-connect#stargazers_count">Star</a>
+- **[can-set]** <small>1.3.3</small> Service modeling 
+  - `npm install can-set --save`
+  - <a class="github-button" href="https://github.com/canjs/can-set" data-count-href="/canjs/can-set/stargazers" data-count-api="/repos/canjs/can-set#stargazers_count">Star</a>
+- **[can-route]** <small>1.3.3</small> Routing 
+  - `npm install can-route --save`
+  - <a class="github-button" href="https://github.com/canjs/can-route" data-count-href="/canjs/can-route/stargazers" data-count-api="/repos/canjs/can-route#stargazers_count">Star</a>
+- **[can-route-pushstate]** <small>1.3.3</small> Pushy routing 
+  - `npm install can-route-pushstate --save`
+  - <a class="github-button" href="https://github.com/canjs/can-route-pushstate" data-count-href="/canjs/can-route-pushstate/stargazers" data-count-api="/repos/canjs/can-route-pushstate#stargazers_count">Star</a>
+- **[can-stache]** <small>1.3.3</small> Live binding templates 
+  - `npm install can-stache --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stache" data-count-href="/canjs/can-stache/stargazers" data-count-api="/repos/canjs/can-stache#stargazers_count">Star</a>
+- **[can-component]** <small>1.3.3</small> Custom elements 
+  - `npm install can-component --save`
+  - <a class="github-button" href="https://github.com/canjs/can-component" data-count-href="/canjs/can-component/stargazers" data-count-api="/repos/canjs/can-component#stargazers_count">Star</a>
+- **[can-stache-bindings]** <small>1.3.3</small> View bindings 
+  - `npm install can-stache-bindings --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stache-bindings" data-count-href="/canjs/can-stache-bindings/stargazers" data-count-api="/repos/canjs/can-stache-bindings#stargazers_count">Star</a>
 
 </div>
 
