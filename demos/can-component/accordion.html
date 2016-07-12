@@ -1,0 +1,124 @@
+<div id="demo">
+<div id='out'></div>
+<script id="app" type="text/stache">
+	<accordion>
+		<panel title="Contacts">
+			<button>Change title attribute to "Users"</button>
+			<ul>
+				<li>Justin</li>
+				<li>Brian</li>
+			</ul>
+		</panel>
+		<panel title="Libraries">
+			<ul>
+				<li>CanJS</li>
+				<li>JavaScriptMVC</li>
+			</ul>
+		</panel>
+	</accordion>
+</script>
+</div>
+
+<script>
+	DEMO_HTML = document.getElementById("demo").innerHTML
+</script>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var Component = require("can-component");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var canViewModel = require("can-view-model");
+
+var Panel = DefineMap.extend({
+	active: "boolean"
+});
+
+var AccordionViewModel = DefineMap.extend({
+	active: Panel,
+	// Contains a list of all panel scopes within the
+	// tabs element.
+	panels: {
+		Value: DefineList
+	},
+	// When a `<panel>` element is inserted into the document,
+	// it calls this method to add the panel's scope to the
+	// panels array.
+	addPanel: function(panel){
+		// If this is the first panel, activate it.
+		if( this.panels.length === 0 ) {
+			this.makeActive(panel)
+		} 
+		this.panels.push(panel);
+	},
+	// When a `<panel>` element is removed from the document,
+	// it calls this method to remove the panel's scope from
+	// the panels array.
+	removePanel: function(panel){
+		var panels = this.panels;
+		can.batch.start();
+		panels.splice(panels.indexOf(panel),1);
+		// if the panel was active, make the first item active
+		if(panel === this.active){
+			if(panels.length){
+				this.makeActive(panels[0]);
+			} else {
+				this.active = undefined;
+			}
+		}
+		can.batch.stop()
+	},
+	makeActive: function(panel){
+		this.active = panel;
+		this.panels.forEach(function(panel){
+			panel.active = false;
+		});
+		panel.active = true;
+		
+	},
+	// this is scope, not mustache
+	// consider removing scope as arg
+	isActive: function( panel ) {
+		return this.active === panel;
+	}
+});
+
+Component.extend({
+	tag: "accordion",
+	ViewModel: AccordionViewModel,
+	leakScope: true
+});
+
+Component.extend({
+	template: 
+		stache("<h2 can-click='makeActive'>{{title}}</h2>"+
+		"{{#if active}}<content></content>{{/if}}"),
+	tag:"panel",
+	viewModel: {
+		active: false
+	},
+	events: {
+		inserted: function(){
+			var vm = this.parentViewModel = canViewModel(this.element.parentNode);
+			vm.addPanel(this.viewModel);
+		},
+		removed: function(){
+			this.parentViewModel.removePanel(this.viewModel);
+		}
+	},
+	leakScope: true
+});
+
+var out = document.getElementById("out");
+var template = stache(document.getElementById("app").innerHTML);
+out.appendChild(template({}));
+
+out.addEventListener("click", function(ev){
+	var el = ev.target;
+	var parent = el.parentNode;
+	if(el.nodeName === "BUTTON") {
+		parent.setAttribute("title", "Users");
+		parent.removeChild(el);
+	}
+});
+</script>
+

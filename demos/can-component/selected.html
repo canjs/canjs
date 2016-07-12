@@ -1,0 +1,74 @@
+<body>
+<style>
+	.selected {
+		background-color: yellow;
+	}
+	div {
+		cursor: pointer;
+	}
+</style>
+<div id="html">
+<div id='out'></div>
+<script type="text/stache" id="listStache">
+{{#items}}
+  <div {{#isSelected}}class='selected'{{/isSelected}}
+       can-click='toggle'>
+    {{title}}
+  </div>
+{{/items}}
+</script>
+</div>
+
+<script>
+	DEMO_HTML = document.getElementById("html").innerHTML;
+</script>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var Component = require("can-component");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var stache = require("can-stache");
+
+var ViewModel = DefineMap.extend({
+	selected: {
+		value: DefineList.extend({})
+	},
+	toggle: function(item){
+		var selected = this.selected,
+			index = selected.indexOf(item);
+			
+		if( index >= 0 ) {
+			selected.splice(index, 1);
+		} else {
+			selected.push(item);
+		}
+	}
+});
+
+Component.extend({
+	tag: "my-items",
+	ViewModel: ViewModel,
+	template: stache(document.getElementById("listStache").innerHTML),
+	helpers: {
+		isSelected: function(options){
+			if( this.selected.indexOf(options.context) >=0 ) {
+				return options.fn();
+			} else {
+				return options.inverse();
+			}	
+		}
+	}
+});
+
+var frag = stache("<my-items {items}='items' />")({
+	items: new DefineList([
+		{ title: "CanJS" },
+		{ title: "jQuery++" },
+		{ title: "FuncUnit" },
+		{ title: "DocumentJS" },
+		{ title: "JavaScriptMVC" }
+	])
+});
+
+document.getElementById("out").appendChild(frag);
+</script>
+</body>
