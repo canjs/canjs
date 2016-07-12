@@ -23,7 +23,7 @@ var ViewModel = DefineMap.extend({
 Component.extend({
 	tag: "my-paginate",
 	ViewModel: ViewModel,
-	template: stache("Page {{page}} <button ($click)='next()'>Next</button>")
+	template: stache("Page {{page()}} <button ($click)='next()'>Next</button>")
 });
 
 var out = document.getElementById("out");
