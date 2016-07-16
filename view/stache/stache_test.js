@@ -4832,6 +4832,17 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var template = can.stache('{{foo 1 2 3 4 5}}');
 			template({});
 		});
+
+		if(doc.createElementNS) {
+			test("svg namespace for svg-use elements (#2384)", function(){
+				var template = can.stache('<use xlink:href="svgUri" />');
+				var frag = template({});
+
+				equal(frag.firstChild.namespaceURI, "http://www.w3.org/2000/svg", "svg namespace for svg-use element");
+				equal(frag.firstChild.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
+			});
+		}
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
