@@ -11,7 +11,7 @@
 <div class='url'>URL: {{appUrl}}</div>
 <h2>Locations</h2>
 {{#appState.locations}}
-	<div><input type='checkbox' {($value)}="selected" />{{name}}</div>
+	<div><input type='checkbox' {($checked)}="selected" />{{name}}</div>
 {{/appState.locations}}
 <h2>Products</h2>
 {{#appState.products}}
@@ -46,24 +46,16 @@ fixture("GET /products", function(){
 });
 
 var Location = DefineMap.extend({
-	seal: false
-}, {
 	id: "*",
-	selected: "boolean"
+	name: "string",
+	selected: {
+		type: "boolean",
+		value: false
+	}
 });
 
 var LocationList = DefineList.extend({
 	"*": Location
-});
-
-var Product = DefineMap.extend({
-	seal: false
-}, {
-	id: "*"
-});
-
-var ProductList = DefineList.extend({
-	"*": Product
 });
 
 var locationConnect = superMap({
@@ -71,6 +63,15 @@ var locationConnect = superMap({
 	Map: Location,
 	List: LocationList,
 	name: "location"
+});
+
+var Product = DefineMap.extend({
+	id: "*",
+	name: "string"
+});
+
+var ProductList = DefineList.extend({
+	"*": Product
 });
 
 var productConnection = superMap({
@@ -85,7 +86,7 @@ var AppState = DefineMap.extend({
 	products: {
 		// don't serialize this property at all in the route
 		serialize: false,
-		value: []
+		Type: ProductList
 	},
 	productId: {
 		type: "number"
@@ -93,7 +94,7 @@ var AppState = DefineMap.extend({
 	locations: {
 		// don't serialize this property at all in the route
 		serialize: false,
-		value: []
+		Type: LocationList
 	},
 	// virtual property that contains a comma separated list of ids based on locations that are selected
 	locationIds: {
@@ -106,19 +107,12 @@ var AppState = DefineMap.extend({
 			var ids = [];
 			selected.each(function(item){
 				ids.push(item.id);
-			})
-			return ids.join(',');
-		},
-		remove: function(){
-			// for each id, toggle any matched location
-			this.locations.forEach(function(location){
-				location.selected = false;
 			});
+			return ids.join(",");
 		},
-
 		// toggle selected from a comma separated list of ids
 		set: function(val){
-			var arr = val;
+			var arr = val || [];
 			if(typeof val === "string"){
 				arr = val.split(',')
 			}
@@ -150,12 +144,16 @@ route("product/:productId")
 // call ready after the appState is fully initialized
 route.ready();
 
+route.addEventListener('change', function(){
+	console.log('something changed');
+});
+
 var appUrl = compute(window.location.href, {
 	get: function(){
 		return window.location.href;
 	},
 	on: function(cb){
-		route.bind('change', function(){
+		route.serializedCompute.addEventListener('change', function(){
 			setTimeout(function(){
 				cb();
 			}, 20);
