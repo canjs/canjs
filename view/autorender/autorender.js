@@ -39,10 +39,14 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 		}
 	}
 	function setupScope(el) {
-		el = can.$(el);
-
-		var scope = (can.data(el, "scope") || can.data(el, "viewModel")) ?
-			can.viewModel(el) : new AppState();
+		var $el = can.$(el);
+		
+		var scope = can.data($el, "scope") || can.data($el, "viewModel");
+		if(!scope) {
+			scope = new AppState();
+			can.data($el, "scope", scope);
+			can.data($el, "viewModel", scope);
+		}
 
 		can.each(el.attributes||[], function(attr) {
 			setAttr(el, attr.name, scope);
