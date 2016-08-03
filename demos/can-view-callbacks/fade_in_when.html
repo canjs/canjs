@@ -1,0 +1,64 @@
+<div id="app"></div>
+<script type="text/stache" id="info-template">
+	<button toggle="showing">
+		{{#if showing}}Hide{{else}}Show{{/if}} more info</button>
+	<div fade-in-when="showing">
+		Here is more info!
+	</div>
+</script>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var stache = require("can-stache");
+var canViewCallbacks = require("can-view-callbacks");
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+var compute = require("can-compute");
+var domEvents = require("can-util/dom/events/events");
+
+var $ = require("jquery");
+require("jquery-ui/ui/widgets/tooltip");
+require("jquery-ui/themes/base/all.css");
+
+require("can-stache-bindings");
+require("can-util/dom/events/attributes/attributes");
+
+canViewCallbacks.attr("toggle", function(el, attrData){
+
+	var attrValue = el.getAttribute("toggle")
+		toggleCompute = attrData.scope.compute(attrValue);
+
+	$(el).click(function(){
+		toggleCompute(! toggleCompute() )
+	})
+
+})
+
+canViewCallbacks.attr("fade-in-when", function( el, attrData ) {
+	var attrValue = el.getAttribute("fade-in-when");
+		fadeInCompute = attrData.scope.compute(attrValue),
+		// handler for when the compute changes
+		handler = function(ev, newVal, oldVal){
+			if(newVal && !oldVal) {
+				$(el).fadeIn("slow")
+			} else if(!newVal){
+				$(el).hide()
+			}
+		}
+
+	fadeInCompute.on("change",handler);
+
+	handler( {}, fadeInCompute() , undefined);
+
+	domEvents.addEventListener.call(el,"removed", function(){
+		fadeInCompute.off(handler);
+	});
+
+})
+
+var template = stache($("#info-template").text());
+
+$("#app").html( template({
+	showing: compute(false)
+}) );
+
+</script>

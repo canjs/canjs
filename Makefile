@@ -12,6 +12,8 @@ publish-docs:
 	git add -f node_modules/steal-systemjs
 	git add -f node_modules/steal-es6-module-loader
 	git add -f node_modules/when
+	git add -f node_modules/jquery
+	git add -f node_modules/jquery-ui
 	git commit -m "Publish docs"
 	git push -f origin gh-pages
 	git rm -q -r --cached node_modules
