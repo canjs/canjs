@@ -80,7 +80,8 @@
   "main": "./can",
   "system": {
     "npmAlgorithm": "flat",
-    "main": "can"
+    "main": "can",
+    "npmIgnore": ["bit-docs","testee"]
   },
   "bit-docs": {
     "dependencies": {

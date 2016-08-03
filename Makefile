@@ -6,9 +6,7 @@ publish-docs:
 	git add -f index.html
 	git add -f node_modules/can-*
 	git add -f node_modules/steal
-	git add -f node_modules/steal-qunit
-	git add -f node_modules/steal-systemjs
-	git add -f node_modules/steal-es6-module-loader
+	git add -f node_modules/steal-*
 	git add -f node_modules/when
 	git add -f node_modules/jquery
 	git add -f node_modules/jquery-ui
