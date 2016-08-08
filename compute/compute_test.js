@@ -877,5 +877,36 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", "./read_test", functi
 		can.batch.stop();
 	});
 
+	test("Change propagation in a batch with late bindings (#2412)", function(){
+		var rootA = new can.Compute('a');
+		var rootB = new can.Compute('b');
 
+		var childA = new can.Compute(function() {
+			return "childA"+rootA.get();
+		});
+
+		var grandChild = new can.Compute(function() {
+
+			var b = rootB.get();
+			if (b === "b") {
+				return "grandChild->b";
+			}
+
+			var a = childA.get();
+			return "grandChild->" + a;
+		});
+
+
+		childA.bind('change', function(ev, newVal, oldVal) {});
+
+		grandChild.bind('change', function(ev, newVal, oldVal) {
+			equal(newVal, "grandChild->childAA");
+		});
+
+		can.batch.start();
+		rootA.set('A');
+		rootB.set('B');
+		can.batch.stop();
+
+	});
 });

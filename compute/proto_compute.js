@@ -296,9 +296,12 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		// Returns the cached value if `bound`, otherwise, returns
 		// the _get value.
 		get: function() {
+
+			var recordingObservation = can.__isRecordingObserves();
+
 			// If an external compute is tracking observables and
 			// this compute can be listened to by "function" based computes ....
-			if(can.__isRecordingObserves() && this._canObserve !== false) {
+			if(recordingObservation && this._canObserve !== false) {
 
 				// ... tell the tracking compute to listen to change on this computed.
 				can.__observe(this, 'change');
@@ -310,6 +313,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			}
 			// If computed is bound, use the cached value.
 			if (this.bound) {
+				if(recordingObservation && this.getDepth && this.getDepth() >= recordingObservation.getDepth()) {
+					ObservedInfo.updateUntil(this.readInfo);
+				}
 				return this.value;
 			} else {
 				return this._get();
@@ -405,6 +411,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 		var readInfo = new ObservedInfo(func, context, compute);
 
 		return {
+			readInfo: readInfo,
 			// Call `onchanged` when any source observables change.
 			_on: function() {
 				readInfo.getValueAndBind();

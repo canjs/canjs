@@ -154,7 +154,8 @@ steal("can/util", function(can){
 
 	var updateOrder = [],
 		curPrimaryDepth = Infinity,
-		maxPrimaryDepth = 0;
+		maxPrimaryDepth = 0,
+		currentBatchNum;
 
 	// could get a registerUpdate from a 5 while a 1 is going on because the 5 listens to the 1
 	ObservedInfo.registerUpdate = function(observeInfo, batchNum){
@@ -177,9 +178,39 @@ steal("can/util", function(can){
 		primary.current = Math.min(depth, primary.current);
 		primary.max = Math.max(depth, primary.max);
 	};
-	ObservedInfo.batchEnd = function(batchNum){
+
+	/*
+	 * update all computes to the specified place.
+	 */
+	ObservedInfo.updateUntil = function(observedInfo){
 		var cur;
 
+		while(true) {
+			if(curPrimaryDepth <= maxPrimaryDepth) {
+				var primary = updateOrder[curPrimaryDepth];
+
+				if(primary && primary.current <= primary.max) {
+					var last = primary.observeInfos[primary.current];
+					if(last && (cur = last.pop())) {
+						cur.updateCompute(currentBatchNum);
+						if (cur === observedInfo) {
+							return;
+						}
+					} else {
+						primary.current++;
+					}
+				} else {
+					curPrimaryDepth++;
+				}
+			} else {
+				return;
+			}
+		}
+	};
+
+	ObservedInfo.batchEnd = function(batchNum){
+		var cur;
+		currentBatchNum = batchNum;
 		while(true) {
 			if(curPrimaryDepth <= maxPrimaryDepth) {
 				var primary = updateOrder[curPrimaryDepth];
@@ -281,8 +312,9 @@ steal("can/util", function(can){
 	// ### can.__isRecordingObserves
 	// Returns if some function is in the process of recording observes.
 	can.__isRecordingObserves = function(){
-		var len = observedInfoStack.length;
-		return len && (observedInfoStack[len-1].ignore === 0);
+		var len = observedInfoStack.length,
+			last = observedInfoStack[len-1];
+		return len && (last.ignore === 0) && last;
 	};
 
 	// ### can.__notObserve
