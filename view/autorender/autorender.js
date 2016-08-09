@@ -1,5 +1,5 @@
 "format steal";
-steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
+steal("can/util", "can/map/app", "can/util/view_model", function(can){
 	
 	var deferred = new can.Deferred(),
 		ignoreAttributesRegExp = /^(dataViewId|class|id|type|src)$/i;
@@ -39,10 +39,8 @@ steal("can/util", "can/map/app", "can/util/view_model", function(can, AppState){
 		}
 	}
 	function setupScope(el) {
-		el = can.$(el);
-
-		var scope = (can.data(el, "scope") || can.data(el, "viewModel")) ?
-			can.viewModel(el) : new AppState();
+		// This will create a new scope (if it does not exist) and attach it to `el` with data:
+		var scope = can.viewModel(el);
 
 		can.each(el.attributes||[], function(attr) {
 			setAttr(el, attr.name, scope);
