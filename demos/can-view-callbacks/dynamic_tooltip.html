@@ -1,0 +1,124 @@
+<style>
+    /* use a class instead of disable the button so mouseover events are fired */
+	.disabled {
+		opacity: 0.5;
+	}
+</style>
+<div id="demo">
+<div id="app"></div>
+<script type="text/stache" id="app-template">
+	<table>
+		<thead>
+			<td></td><td>Name</td><td>Email</td>
+		</thead>
+		<tbody>
+			{{#each users}}
+			<tr>
+				<td><input ($change)="toggle(.)" type="checkbox"/></td>
+				<td>{{name}}</td>
+				<td>{{email}}</td>
+			</tr>
+			{{/each}}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+					<button tooltip="{{deleteTooltip}}"
+							{{^selected.length}}class="disabled"{{/selected.length}}
+							($click)="notImplemented()">
+						Delete
+					</button>
+					<button
+						tooltip="{{archiveTooltip}}"
+						{{^selected.length}}class="disabled"{{/selected.length}}
+						($click)="notImplemented()">
+						Archive
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</script>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+
+var stache = require("can-stache");
+var canViewCallbacks = require("can-view-callbacks");
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+var domEvents = require("can-util/dom/events/events");
+
+var $ = require("jquery");
+require("jquery-ui/ui/widgets/tooltip");
+require("jquery-ui/themes/base/all.css");
+
+require("can-stache-bindings");
+require("can-util/dom/events/attributes/attributes");
+
+
+canViewCallbacks.attr("tooltip", function( el, attrData ) {
+	// A helper that updates or sets up the tooltip
+	var updateTooltip = function(){
+		$(el).tooltip({
+			content: el.getAttribute("tooltip"),
+			items: "[tooltip]"
+		})
+	}
+	// When the tooltip attribute changes, update the tooltip
+	domEvents.addEventListener.call(el, "attributes", function(ev){
+		if(ev.attributeName === "tooltip") {
+			updateTooltip();
+		}
+	});
+	// Setup the tooltip
+	updateTooltip();
+
+});
+
+var users = new DefineList([
+	{ name: "Justin Meyer", email: "justin@bitovi" },
+	{ name: "Brian Moschel", email: "brian@bitovi" },
+	{ name: "Bitovi", email: "contact@bitovi" },
+])
+
+var selected = new DefineList();
+
+var template = stache( $("#app-template").text() );
+
+$("#app").html( template({
+	selected: selected,
+	users: users,
+	toggle: function(user){
+		var index = selected.indexOf( user );
+
+		if( index >= 0 ) {
+			selected.splice(index, 1)
+		} else {
+			selected.push(user)
+		}
+	},
+	deleteTooltip: function(){
+		console.log("calling delete", selected.length);
+		var selectedCount = selected.length
+		if(selectedCount) {
+			return "Delete "+selectedCount+" users";
+		} else {
+			return "Select users to delete them.";
+		}
+	},
+	archiveTooltip: function(){
+		var selectedCount = selected.length;
+		if(selectedCount) {
+			return "Archive "+selectedCount+" users";
+		} else {
+			return "Select users to archive them.";
+		}
+	},
+	notImplemented: function(){
+		alert("we didn't make this work for this demo")
+	}
+}) );
+
+</script>
+<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>

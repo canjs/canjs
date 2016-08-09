@@ -1,0 +1,41 @@
+<style>
+	[tooltip] {
+		background-color: rgb(153, 194, 255);
+		border: 1px solid #e1e1e8;
+	}
+	[tooltip]:hover {
+
+	}
+</style>
+<div id="demo">
+<div id="app"></div>
+<script type="text/stache" id="app-template">
+<pre>
+canViewCallbacks.attr(<span tooltip="The attribute name to match.">"tooltip"</span>, function( <span tooltip="HTMLElement">el</span>, <span tooltip="attrData">attrData</span> ) {
+  $(el).<span tooltip="Calls jQueryUI's tooltip plugin.">"tooltip"</span>({
+    content: <span tooltip="Sets the tooltip's content">el.getAttribute("tooltip")</span>,
+    items: <span tooltip="jQueryUI's tooltip needs to be told what type of elements have a tooltip">"[tooltip]"</span>
+  })
+});
+</pre>
+</script>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require("jquery");
+var stache = require("can-stache");
+var canViewCallbacks = require("can-view-callbacks");
+require("jquery-ui/ui/widgets/tooltip");
+require("jquery-ui/themes/base/all.css");
+
+canViewCallbacks.attr("tooltip", function( el, attrData ) {
+	$(el).tooltip({
+		content: el.getAttribute("tooltip"),
+		items: "[tooltip]"
+	})
+})
+
+
+$("#app").html(stache($("#app-template").text())({}) )
+</script>
+<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
