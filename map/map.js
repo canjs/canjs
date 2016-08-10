@@ -372,7 +372,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// or sets the computed attribute.
 			___set: function (prop, val) {
 				var computedAttr = this._computedAttrs[prop];
-				if ( computedAttr ) {
+				if ( computedAttr && computedAttr.compute ) {
 					computedAttr.compute(val);
 				} else {
 					this._data[prop] = val;
