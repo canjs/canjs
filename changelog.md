@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.25__ ( Aug 10 2016 )
+
+- [Set readOnly property based on val](https://github.com/canjs/canjs/pull/2436)
+- [Change propagation in a batch with late bindings - P(1) ~12](https://github.com/canjs/canjs/issues/2421)
+- [Support svg camelCase elements.](https://github.com/canjs/canjs/pull/2420)
+- [fix #1541 can.Component should show a warning if tag name is missing a hyphen](https://github.com/canjs/canjs/pull/2322)
+
+
 __2.3.24__ ( May 19 2016 )
 
 - [Pass list items to .sort(fn) and don&#39;t set the comparator](https://github.com/canjs/canjs/pull/2399)
