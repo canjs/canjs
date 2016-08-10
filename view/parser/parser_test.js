@@ -93,6 +93,26 @@ steal("can/view/parser", "steal-qunit", function(parser){
 
 	});
 
+	test("camelCase tags stay untouched (svg)", function(){
+
+
+
+		var tests = [
+			['start', ['svg', false]],
+			['end', ['svg', false]],
+			['start', ['radialGradient', false]],
+			['end', ['radialGradient', false]],
+			['close', ['radialGradient']],
+			['close', ['svg']],
+			['done', []]
+		];
+
+
+
+		parser("<svg><radialGradient></radialGradient></svg>", makeChecks(tests));
+
+	});
+
 	test("special in an attribute in an in-tag section", function(){
 
 		parser("<div {{#truthy}}foo='{{baz}}'{{/truthy}}></div>",makeChecks([
