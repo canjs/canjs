@@ -63,7 +63,7 @@ steal("can/util/can.js", function (can) {
 				"checked": true,
 				"disabled": true,
 				"readonly": function (el, val) {
-					el.readOnly = true;
+					el.readOnly = val || typeof val === 'string' ? true : false;
 					return val;
 				},
 				"required": true,

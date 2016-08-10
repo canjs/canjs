@@ -100,6 +100,22 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 		equal(input.readOnly, false, "readOnly should be set back to false");
 	});
 
+	test("attr.set READONLY property should be set correctly via one way binding #2431", function () {
+
+		var template = can.stache('<input type="text" {$readonly}="flag"></input>'),
+			compute = can.compute(false);
+
+		var input = template({
+			flag: compute
+		}).childNodes[0];
+
+		equal(input.readOnly, false, "readOnly should be false");
+		compute(true);
+		equal(input.readOnly, true, "readOnly should be set to true");
+		compute(false);
+		equal(input.readOnly, false, "readOnly should be set back to false");
+	});
+
 	test("Map special attributes", function () {
 
 		var div = document.createElement("label");
@@ -115,7 +131,7 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 		can.attr.set(div, "textcontent", "my-content");
 		equal(div.textContent, "my-content", "Map textcontent to textContent");
 
-		can.attr.set(div, "readonly");
+		can.attr.set(div, "readonly", true);
 		equal(div.readOnly, true, "Map readonly to readOnly");
 
 		can.remove(can.$("#qunit-fixture>*"));
