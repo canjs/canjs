@@ -3604,6 +3604,17 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 				can.dev.warn = oldlog;
 			});
+
+			test("Logging: warning if tag name is missing a hyphen (#1541)", function() {
+				var oldlog = can.dev.warn;
+				can.dev.warn = function(text) {
+					ok(text, "got a message");
+					can.dev.warn = oldlog;
+				};
+				can.view.tag('nohyphen', function(tag, tagHandler) {});
+				var template = can.stache('<nohyphen></nohyphen>');
+				template();
+			});
 		}
 		//!steal-remove-end
 		test("Calling .fn without arguments should forward scope by default (#658)", function(){
