@@ -4843,6 +4843,24 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var template = can.stache('{{foo 1 2 3 4 5}}');
 			template({});
 		});
+
+		test('Nested if-s inside a text section (#9)', function(assert){
+			var template = can.stache('<div class="{{#if sorting}}sort{{#if ascending}}-ascend{{/if}}{{/if}}"></div>');
+
+			var vm = new can.Map({
+				sorting: true,
+				ascending: false
+			});
+			var frag = template(vm);
+			var className = frag.firstChild.className;
+
+			assert.equal( className, 'sort');
+
+			vm.attr('ascending', true);
+			className = frag.firstChild.className;
+
+			assert.equal( className, 'sort-ascend');
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

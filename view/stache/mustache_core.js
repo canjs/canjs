@@ -102,7 +102,7 @@ steal("can/util",
 					exprData: exprData,
 					helpersScope: helperOptions
 				};
-				utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
+				utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 				value = exprData.value(scope, helperOptions, helperOptionArg);
 				if(exprData.isHelper) {
@@ -144,7 +144,7 @@ steal("can/util",
 					fn: function () {},
 					inverse: function () {}
 				};
-				utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer);
+				utils.convertToScopes(helperOptionArg, scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 				return function(){
 					// Get the value
 					var finalValue;

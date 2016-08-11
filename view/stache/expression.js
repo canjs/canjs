@@ -323,7 +323,7 @@ steal("can/util",
 			hash = this.hash(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		// Add additional data to be used by helper functions
-		utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
+		utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		can.simpleExtend(helperOptionArg, {
 			context: context,
