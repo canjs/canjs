@@ -21,7 +21,7 @@ Reads a property from this `can.Map`.
 Assigns _value_ to a property on this `can.Map` called _key_.
 
 @param {String} key the property to set
-@param {*} the value to assign to _key_.
+@param {*} value the value to assign to _key_.
 @return {can.Map} this Map, for chaining
 
 @signature `map.attr(obj[, removeOthers])`
