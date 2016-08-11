@@ -316,7 +316,8 @@ steal("can/util",
 
 		var helperOptionArg = {
 			fn: function () {},
-			inverse: function () {}
+			inverse: function () {},
+			stringOnly: stringOnly
 		},
 			context = scope.attr("."),
 			args = this.args(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly),

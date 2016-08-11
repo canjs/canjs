@@ -74,7 +74,7 @@ steal("can/util", "can/view/scope",function(can){
 				}
 				var result = rendererWithScope(newScope, newOptions || parentOptions, parentNodeList|| nodeList );
 				return result;
-			}
+			};
 			return observeObservables ? convertedRenderer : can.__notObserve(convertedRenderer);
 		},
 		Options: Options

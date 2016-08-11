@@ -4861,6 +4861,22 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			assert.equal( className, 'sort-ascend');
 		});
+		test('Helper each inside a text section (attribute) (#8)', function(assert){
+			var template = can.stache('<div class="{{#each list}}{{.}} {{/}}"></div>');
+
+			var vm = new can.Map({
+				list: new can.List(['one','two'])
+			});
+			var frag = template(vm);
+			var className = frag.firstChild.className;
+
+			assert.equal( className, 'one two ' );
+
+			vm.attr('list').push('three');
+			className = frag.firstChild.className;
+
+			assert.equal( className, 'one two three ' );
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
