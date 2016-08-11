@@ -376,7 +376,7 @@ steal("can/util",
 	// AT @NAME
 	// 
 	var keyRegExp = /[\w\.\\\-_@\/\&%]+/,
-		tokensRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/*%\$]+|[\(\)]|,|\~)/g,
+		tokensRegExp = /('.*?'|".*?"|=|[\w\.\\\-_@\/*%\$:]+|[\(\)]|,|\~)/g,
 		literalRegExp = /^('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)$/;
 	
 	var isTokenKey = function(token){
