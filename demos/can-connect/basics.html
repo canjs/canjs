@@ -1,0 +1,81 @@
+<body>
+	<div id='todos-list'></div>
+<script src="../../node_modules/steal/steal.js" id="demo-source">
+var connect = require("can-connect");
+var fixture = require("can-fixture");
+var assign = require("can-util/js/assign/assign");
+
+var Todo = function(props){
+  assign(this, props);
+};
+
+Todo.prototype.isComplete = function(){
+  return this.status === "complete";
+};
+
+var TodoList = function(todos){
+  [].push.apply(this, todos);
+};
+TodoList.prototype = Object.create(Array.prototype);
+
+TodoList.prototype.completed = function(){
+  return this.filter(function(todo){
+    return todo.status === "complete";
+  });
+};
+
+TodoList.prototype.active = function(){
+  return this.filter(function(todo){
+    return todo.status !== "complete";
+  });
+};
+
+// A connection that gets todos data
+var todoConnection = connect([
+	require("can-connect/constructor/constructor"),
+	require("can-connect/data/url/url")
+],{
+  url: "/todos",
+  list: function(listData, set){
+  	return new TodoList(listData.data);
+  },
+  instance: function(props) {
+  	return new Todo(props);
+  }
+});
+
+// Trap ajax requests to return and modify the following `todo` object.
+
+fixture({
+	"GET /todos": function(request){
+		return {
+			data: [
+				{id: 1, name: "mow lawn", status: "assigned"},
+				{id: 2, name: "do dishes", status: "new"},
+				{id: 3, name: "change bulb", status: "complete"}
+			]
+		};
+
+	}
+});
+
+
+
+todoConnection.getList({}).then(function(todos){
+	var todosEl = document.getElementById("todos-list");
+	todosEl.innerHTML = "<h2>Active</h2>"+
+		render(todos.active())+
+		"<h2>Complete</h2>"+
+		render(todos.completed());
+});
+
+var render = function(todos) {
+	return "<ul>"+todos.map(function(todo){
+		return "<li>"+todo.name+
+				"<input type='checkbox' "+
+				(todo.isComplete() ? "checked" : "")+"/></li>";
+	}).join("")+"</ul>";
+};
+
+</script>
+</body>
