@@ -21,6 +21,8 @@ steal(
 	var svgNamespace = "http://www.w3.org/2000/svg";
 	var namespaces = {
 		"svg": svgNamespace,
+		// this allows svg-use to display svg-image which is need in 'attr.js' (via 'target.js') (#2384)
+		"use": svgNamespace,
 		// this allows a partial to start with g.
 		"g": svgNamespace
 	},

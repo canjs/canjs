@@ -192,6 +192,11 @@ steal("can/util/can.js", function (can) {
 								el.setAttributeNode(node);
 							} else {
 								el.setAttribute(attrName, val);
+
+								// fix svg-use not displaying svg-image (i.e. element is collapsed) because namespace-specific 'el.setAttributeNS()' must be used to set 'xlink:href'-attribute instead of 'el.setAttribute()' (#2384)
+								if(el.tagName === "use" && attrName === "xlink:href"){
+									el.setAttributeNS("http://www.w3.org/1999/xlink", "href", val);
+								}
 							}
 						};
 					}
