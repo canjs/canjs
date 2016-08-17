@@ -182,20 +182,21 @@ steal("can/util", function(can){
 	/*
 	 * update all computes to the specified place.
 	 */
-	ObservedInfo.updateUntil = function(observedInfo){
+	ObservedInfo.updateUntil = function(primaryDepth, depth){
 		var cur;
 
 		while(true) {
-			if(curPrimaryDepth <= maxPrimaryDepth) {
+			if(curPrimaryDepth <= maxPrimaryDepth && curPrimaryDepth <= primaryDepth) {
 				var primary = updateOrder[curPrimaryDepth];
 
 				if(primary && primary.current <= primary.max) {
+					if(primary.current > depth) {
+						return;
+					}
+					
 					var last = primary.observeInfos[primary.current];
 					if(last && (cur = last.pop())) {
 						cur.updateCompute(currentBatchNum);
-						if (cur === observedInfo) {
-							return;
-						}
 					} else {
 						primary.current++;
 					}

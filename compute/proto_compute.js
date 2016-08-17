@@ -314,7 +314,7 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			// If computed is bound, use the cached value.
 			if (this.bound) {
 				if(recordingObservation && this.getDepth && this.getDepth() >= recordingObservation.getDepth()) {
-					ObservedInfo.updateUntil(this.readInfo);
+					ObservedInfo.updateUntil(this.getPrimaryDepth(), this.getDepth());
 				}
 				return this.value;
 			} else {
@@ -424,6 +424,9 @@ steal('can/util', 'can/util/bind', 'can/compute/read.js','can/compute/get_value_
 			},
 			getDepth: function() {
 				return readInfo.getDepth();
+			},
+			getPrimaryDepth: function() {
+				return readInfo.getPrimaryDepth();
 			}
 		};
 	};

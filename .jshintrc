@@ -47,5 +47,6 @@
 	"browser": true,
 	"phantom": true,
 	"rhino": true,
-	"node": true
+	"node": true,
+	"strict": false
 }

@@ -909,4 +909,54 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", "./read_test", functi
 		can.batch.stop();
 
 	});
+
+	test("deeply nested computes that are read that don't allow deeper primary depth computes to complete first", function(){
+
+		// This is to setup `grandChild` which will be forced
+		// into reading `childA` which has a higher depth then itself, but isn't changing.
+		// This makes sure that it will get a value for childA before
+		// continuing on to deeper "primary depth" computes (things that are nested in stache).
+		var rootA = new can.Compute('a');
+		var rootB = new can.Compute('b');
+
+		var childA = new can.Compute(function() {
+			return "childA"+rootA.get();
+		},'childA');
+
+		var grandChild = new can.Compute(function() {
+			if(rootB.get() === 'b') {
+				return 'grandChild->b';
+			}
+			return childA.get();
+		},'grandChild');
+
+		// this should update last
+		var deepThing = new can.Compute(function(){
+			return rootB.get();
+		},"deepThing", 4);
+
+		deepThing.setPrimaryDepth(4);
+
+		var order = [];
+
+		childA.bind("change", function(){});
+
+		deepThing.bind("change", function(){
+			order.push("deepThing");
+		});
+
+		grandChild.bind("change", function(ev, newVal){
+			order.push("grandChild "+newVal);
+		});
+
+
+		can.batch.start();
+		rootB.set('B');
+		can.batch.stop();
+
+
+		QUnit.deepEqual(order, ["grandChild childAa","deepThing"]);
+
+	});
+
 });
