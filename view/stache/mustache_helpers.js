@@ -35,7 +35,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				key,
 				i;
 
-			if( resolved instanceof can.List ) {
+			if( resolved instanceof can.List  && !options.stringOnly) {
 				return function(el){
 					// make a child nodeList inside the can.view.live.html nodeList
 					// so that if the html is re
@@ -62,12 +62,14 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			var expr = resolved;
 
 			if ( !! expr && utils.isArrayLike(expr)) {
-				for (i = 0; i < expr.length; i++) {
+				var isCanList = expr instanceof can.List;
+				for (i = 0; i < (isCanList ? expr.attr('length') : expr.length); i++) {
+					var item = isCanList ? expr.attr(i) : expr[i];
 					result.push(options.fn(options.scope.add({
 							"%index": i,
 							"@index": i
 						},{notContext: true})
-						.add(expr[i])));
+						.add(item)));
 				}
 			} else if (utils.isObserveLike(expr)) {
 				keys = can.Map.keys(expr);
@@ -91,7 +93,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				}
 
 			}
-			return result;
+			return !options.stringOnly ? result : result.join('');
 
 		},
 		"@index": function(offset, options) {

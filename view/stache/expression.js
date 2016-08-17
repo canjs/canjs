@@ -316,14 +316,15 @@ steal("can/util",
 
 		var helperOptionArg = {
 			fn: function () {},
-			inverse: function () {}
+			inverse: function () {},
+			stringOnly: stringOnly
 		},
 			context = scope.attr("."),
 			args = this.args(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly),
 			hash = this.hash(scope, helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		// Add additional data to be used by helper functions
-		utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer);
+		utils.convertToScopes(helperOptionArg, scope,helperOptions, nodeList, truthyRenderer, falseyRenderer, stringOnly);
 
 		can.simpleExtend(helperOptionArg, {
 			context: context,

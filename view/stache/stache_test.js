@@ -4843,6 +4843,40 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var template = can.stache('{{foo 1 2 3 4 5}}');
 			template({});
 		});
+
+		test('Nested if-s inside a text section (#9)', function(assert){
+			var template = can.stache('<div class="{{#if sorting}}sort{{#if ascending}}-ascend{{/if}}{{/if}}"></div>');
+
+			var vm = new can.Map({
+				sorting: true,
+				ascending: false
+			});
+			var frag = template(vm);
+			var className = frag.firstChild.className;
+
+			assert.equal( className, 'sort');
+
+			vm.attr('ascending', true);
+			className = frag.firstChild.className;
+
+			assert.equal( className, 'sort-ascend');
+		});
+		test('Helper each inside a text section (attribute) (#8)', function(assert){
+			var template = can.stache('<div class="{{#each list}}{{.}} {{/}}"></div>');
+
+			var vm = new can.Map({
+				list: new can.List(['one','two'])
+			});
+			var frag = template(vm);
+			var className = frag.firstChild.className;
+
+			assert.equal( className, 'one two ' );
+
+			vm.attr('list').push('three');
+			className = frag.firstChild.className;
+
+			assert.equal( className, 'one two three ' );
+		});
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
