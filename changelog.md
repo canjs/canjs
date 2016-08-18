@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.26__ ( Aug 17 2016 )
+
+- [Port can-observation changes for adds updateUntil for dynamic depths](https://github.com/canjs/canjs/pull/2453)
+- [Making colons in keys work](https://github.com/canjs/canjs/pull/2450)
+- [Fixed nested if-s and each helper in attributes](https://github.com/canjs/canjs/pull/2449)
+- [update map.attr value name](https://github.com/canjs/canjs/pull/2448)
+
+
 __2.3.25__ ( Aug 10 2016 )
 
 - [Set readOnly property based on val](https://github.com/canjs/canjs/pull/2436)
