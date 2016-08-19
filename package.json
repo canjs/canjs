@@ -32,6 +32,7 @@
     "can-define": "^0.7.21",
     "can-event": "^3.0.0-pre.3",
     "can-fixture": "^0.4.0-pre.11",
+    "can-jquery": "^3.0.0-pre.5",
     "can-list": "^3.0.0-pre.1",
     "can-map": "^3.0.0-pre.2",
     "can-observation": "^3.0.0-pre.9",
@@ -81,7 +82,10 @@
   "system": {
     "npmAlgorithm": "flat",
     "main": "can",
-    "npmIgnore": ["bit-docs","testee"]
+    "npmIgnore": [
+      "bit-docs",
+      "testee"
+    ]
   },
   "bit-docs": {
     "dependencies": {
