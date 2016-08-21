@@ -9,6 +9,12 @@ require("can-stache");
 require("can-stache-bindings");
 require("can-set");
 require("can-compute");
-require("can-event");
+
+// Extra stuff
+require("can-map");
+require("can-list");
+require("can-connect/can/model/model");
+require("can-jquery");
+require("can-fixture");
 
 module.exports = can;
