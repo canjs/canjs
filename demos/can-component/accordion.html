@@ -19,9 +19,7 @@
 </script>
 </div>
 
-<script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
-</script>
+
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var Component = require("can-component");
 var stache = require("can-stache");
@@ -47,7 +45,7 @@ var AccordionViewModel = DefineMap.extend({
 		// If this is the first panel, activate it.
 		if( this.panels.length === 0 ) {
 			this.makeActive(panel)
-		} 
+		}
 		this.panels.push(panel);
 	},
 	// When a `<panel>` element is removed from the document,
@@ -73,7 +71,7 @@ var AccordionViewModel = DefineMap.extend({
 			panel.active = false;
 		});
 		panel.active = true;
-		
+
 	},
 	// this is scope, not mustache
 	// consider removing scope as arg
@@ -89,7 +87,7 @@ Component.extend({
 });
 
 Component.extend({
-	template: 
+	template:
 		stache("<h2 can-click='makeActive'>{{title}}</h2>"+
 		"{{#if active}}<content></content>{{/if}}"),
 	tag:"panel",
@@ -121,4 +119,6 @@ out.addEventListener("click", function(ev){
 	}
 });
 </script>
-
+<script>
+	DEMO_HTML = document.getElementById("demo").innerHTML
+</script>

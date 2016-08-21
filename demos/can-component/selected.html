@@ -18,10 +18,6 @@
 {{/items}}
 </script>
 </div>
-
-<script>
-	DEMO_HTML = document.getElementById("html").innerHTML;
-</script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var Component = require("can-component");
 var DefineMap = require("can-define/map/map");
@@ -30,12 +26,12 @@ var stache = require("can-stache");
 
 var ViewModel = DefineMap.extend({
 	selected: {
-		value: DefineList.extend({})
+		Value: DefineList
 	},
 	toggle: function(item){
 		var selected = this.selected,
 			index = selected.indexOf(item);
-			
+
 		if( index >= 0 ) {
 			selected.splice(index, 1);
 		} else {
@@ -54,7 +50,7 @@ Component.extend({
 				return options.fn();
 			} else {
 				return options.inverse();
-			}	
+			}
 		}
 	}
 });
@@ -62,13 +58,16 @@ Component.extend({
 var frag = stache("<my-items {items}='items' />")({
 	items: new DefineList([
 		{ title: "CanJS" },
-		{ title: "jQuery++" },
+		{ title: "StealJS" },
 		{ title: "FuncUnit" },
 		{ title: "DocumentJS" },
-		{ title: "JavaScriptMVC" }
+		{ title: "DoneJS" }
 	])
 });
 
 document.getElementById("out").appendChild(frag);
+</script>
+<script>
+	DEMO_HTML = document.getElementById("html").innerHTML;
 </script>
 </body>

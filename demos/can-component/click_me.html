@@ -1,29 +1,30 @@
 <body>
 <script src="../../node_modules/steal/steal.js" main="@empty" id="data-source">
-  import Component from "can-component";
-  import stache from "can-stache";
-	import DefineMap from "can-define/map/map";
+var Component = require("can-component");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
 
-	const ViewModel = DefineMap.extend({
-		message: {
-			value: "Hello There!"
-		},
-		visible: {
-			value: false
-		}
-	});
-	
-  Component.extend({
-    tag: "hello-world",
-    template: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
-    ViewModel: ViewModel,
-    events: {
-      click: function(){
-        this.viewModel.visible = !this.viewModel.visible;
-      }
-    }
-  });
+var HelloWorldVM = DefineMap.extend({
+   message: {
+	   value: "Hello There!"
+   },
+   visible: {
+	   value: false
+   }
+});
 
-	document.body.appendChild(stache("<hello-world/>")({}));
+Component.extend({
+   tag: "hello-world",
+   template: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
+   ViewModel: HelloWorldVM,
+   events: {
+	   click: function() {
+		   this.viewModel.visible = !this.viewModel.visible;
+	   }
+   }
+});
+
+var template = stache("<hello-world/>");
+document.body.appendChild(template({}));
 </script>
 </body>
