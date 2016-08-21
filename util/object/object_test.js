@@ -27,6 +27,11 @@ steal('can/util/object', './isplain/isplain_test.js', 'steal-qunit', function ()
 			{foo: null},
 			{foo: {}}
 		), 'nulls and empty objects are not considered the same. (#773)');
+
+		ok(can.Object.same(
+			{foo: new Date()},
+			{foo: new Date()}
+		), 'Date values are compared');
 	});
 	test('subsets', function () {
 		var res1 = can.Object.subsets({
