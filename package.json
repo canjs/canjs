@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "3.0.0-pre.2",
+  "version": "3.0.0-pre.3",
   "main": "can.js",
   "scripts": {
     "test": "testee test/index.html --browsers firefox",
