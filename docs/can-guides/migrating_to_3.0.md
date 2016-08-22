@@ -234,11 +234,15 @@ route.bind("change", function(){
 });
 ```
 
-Can be modified to listen to the `route` property:
+Can be modified to instead use a compute that calls `serialize` on the route's map:
 
 ```js
-route.on("route", function(){
+var routeMap = compute(function(){
+	return route.map.serialize();
+});
 
+routeMap.bind("change", function(){
+	A property on the route's map changed.
 });
 ```
 
@@ -313,8 +317,6 @@ var DefineList = require("can-define/list/list");
 var superMap = require("can-connect/can/super-map/super-map");
 
 var Message = DefineMap.extend({
-  seal: false
-}, {
   id: "*"
 });
 
