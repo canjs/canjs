@@ -17,10 +17,10 @@ If you are already using `can` through npm just change the version in your `pack
 
 ```js
 {
-	...
+  ...
   "dependencies": {
-		"can": "^3.0.0"
-	}
+    "can": "^3.0.0"
+  }
 }
 ```
 
@@ -121,6 +121,12 @@ Just use the DOM APIs and pass the string directly into [can-stache]:
 ```js
 var templateString = document.getElementById('some-id').innerHTML;
 var render = stache(templateString);
+```
+
+If you were using `can.view.preload` then use [can-stache.registerPartial] instead.
+
+```js
+stache.registerPartial("some-id", renderer);
 ```
 
 ### Promises are needed
