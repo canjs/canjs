@@ -1,1 +1,1 @@
-moudle.exports = require("can-list");
+module.exports = require("can-list");
