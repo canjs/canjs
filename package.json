@@ -36,6 +36,7 @@
     "can-jquery": "^3.0.0-pre.5",
     "can-list": "^3.0.0-pre.1",
     "can-map": "^3.0.0-pre.2",
+    "can-map-define": "^3.0.0-pre.2",
     "can-observation": "^3.0.0-pre.9",
     "can-route": "^3.0.0-pre.13",
     "can-route-pushstate": "^3.0.0-pre.4",
@@ -59,7 +60,6 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-fixture": "^0.4.0-pre.5",
-    "can-map-define": "^3.0.0-pre.2",
     "can-vdom": "0.0.3",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",
