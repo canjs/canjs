@@ -1,5 +1,7 @@
 {
   "name": "can",
+  "version": "3.0.0-pre.2",
+  "main": "can.js",
   "scripts": {
     "test": "testee test/index.html --browsers firefox",
     "build": "node build.js",
@@ -7,7 +9,6 @@
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version": "3.0.0-pre.1",
   "keywords": [
     "CanJS",
     "DoneJS"
@@ -78,7 +79,6 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "main": "./can",
   "system": {
     "npmAlgorithm": "flat",
     "main": "can",
