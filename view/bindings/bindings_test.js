@@ -2360,4 +2360,39 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 
+	test("dropdown does not pick the selected value for mustache and EJS (#2245)", function(){
+		var nameObj = new can.Map({
+			selected : "name3",
+			students : [
+				{name : "name1"},
+				{name : "name2"},
+				{name : "name3"},
+				{name : "name4"}
+			],
+			fn: function(obj){
+				return obj.attr('name') === this.attr('selected');
+			}
+		});
+
+		var template = can.mustache('<select>'+
+				'{{#students}}'+
+					'<option value="{{name}}" {{#fn}} selected="selected"{{/fn name}}>{{name}}</option>'+
+				'{{/students}}'+
+				'</select>');
+
+		var frag = template(nameObj);
+		ok(frag.firstChild.value, "name3");
+		// the value is set asynchronously
+		setTimeout(function(){
+			nameObj.attr('students').push({
+				name : "name4"
+			});
+			nameObj.attr('selected',"name2");
+			ok(frag.firstChild.value, "name2");
+			start();
+		},20);
+		stop();
+
+	});
+
 });
