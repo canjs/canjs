@@ -10,5 +10,6 @@ require("can-stache-bindings");
 require("can-set");
 require("can-compute");
 require("can-event");
+require("can-view-model");
 
 module.exports = can;

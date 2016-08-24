@@ -5,6 +5,8 @@ require("can-route");
 require("can-stache");
 require("can-stache-bindings");
 require("can-compute");
+require("can-event");
+require("can-view-model");
 
 // Extra stuff
 require("can-map");
