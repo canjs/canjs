@@ -17,10 +17,10 @@ If you are already using `can` through npm just change the version in your `pack
 
 ```js
 {
-	...
+  ...
   "dependencies": {
-		"can": "^3.0.0"
-	}
+    "can": "^3.0.0"
+  }
 }
 ```
 
@@ -121,6 +121,12 @@ Just use the DOM APIs and pass the string directly into [can-stache]:
 ```js
 var templateString = document.getElementById('some-id').innerHTML;
 var render = stache(templateString);
+```
+
+If you were using `can.view.preload` then use [can-stache.registerPartial] instead.
+
+```js
+stache.registerPartial("some-id", renderer);
 ```
 
 ### Promises are needed
@@ -228,11 +234,15 @@ route.bind("change", function(){
 });
 ```
 
-Can be modified to listen to the `route` property:
+Can be modified to instead use a compute that calls `serialize` on the route's map:
 
 ```js
-route.on("route", function(){
+var routeMap = compute(function(){
+	return route.map.serialize();
+});
 
+routeMap.bind("change", function(){
+	A property on the route's map changed.
 });
 ```
 
@@ -307,8 +317,6 @@ var DefineList = require("can-define/list/list");
 var superMap = require("can-connect/can/super-map/super-map");
 
 var Message = DefineMap.extend({
-  seal: false
-}, {
   id: "*"
 });
 

@@ -1,5 +1,7 @@
 {
   "name": "can",
+  "version": "3.0.0-pre.5",
+  "main": "can.js",
   "scripts": {
     "test": "testee test/index.html --browsers firefox",
     "build": "node build.js",
@@ -7,7 +9,6 @@
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version": "3.0.0-pre.1",
   "keywords": [
     "CanJS",
     "DoneJS"
@@ -35,6 +36,7 @@
     "can-jquery": "^3.0.0-pre.5",
     "can-list": "^3.0.0-pre.1",
     "can-map": "^3.0.0-pre.2",
+    "can-map-define": "^3.0.0-pre.2",
     "can-observation": "^3.0.0-pre.9",
     "can-route": "^3.0.0-pre.13",
     "can-route-pushstate": "^3.0.0-pre.4",
@@ -48,7 +50,7 @@
     "can-view-callbacks": "^3.0.0-pre.7",
     "can-view-import": "^3.0.0-pre.2",
     "can-view-live": "^3.0.0-pre.4",
-    "can-view-model": "^3.0.0-pre.4",
+    "can-view-model": "^3.0.0-pre.6",
     "can-view-nodelist": "^3.0.0-pre.3",
     "can-view-parser": "^3.0.0-pre.1",
     "can-view-scope": "^3.0.0-pre.14",
@@ -58,7 +60,6 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-fixture": "^0.4.0-pre.5",
-    "can-map-define": "^3.0.0-pre.2",
     "can-vdom": "0.0.3",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",
@@ -78,7 +79,6 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "main": "./can",
   "system": {
     "npmAlgorithm": "flat",
     "main": "can",
