@@ -175,6 +175,8 @@ var websiteStore = fixture.store([{
 
 fixture("/websites/{id}", websiteStore);
 
+fixture.delay = 2000;
+
 var Paginate = DefineMap.extend({
 	count: {
 		value: Infinity,
