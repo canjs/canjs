@@ -1,11 +1,11 @@
 {
   "name": "can",
-  "version": "3.0.0-pre.6",
+  "version": "3.0.0-pre.5",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "postversion": "git push --tags && git checkout major && git branch -D release && git push",
     "testee": "testee test/index.html --browsers firefox",
     "test": "npm run build && npm run testee",
     "release:pre": "npm version prerelease && npm publish",
