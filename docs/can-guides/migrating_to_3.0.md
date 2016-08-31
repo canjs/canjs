@@ -5,6 +5,13 @@
 
 CanJS 3.0 introduces a new even more modular project structure and several new features, while having a minimal number of deprecations or removals to the existing 2.3 API.
 
+This guide goes over:
+
+* How to install CanJS 3.0 and how that differs from in the past.
+* The *minimal migration path*. The steps that are required in order to upgrade from 2.x to 3.0 with the fewest number of code changes.
+* A second migration path with more modern conventions (such as the use of NPM packages).
+* The future proof path using all of the modern libraries we are most excited about (such as [can-define]).
+
 ## Getting CanJS 3.0
 
 The recommended way to install CanJS 3.0 is through [npm](https://www.npmjs.com/). If you are already using the [can package](https://www.npmjs.com/package/can) you can continue to do so, but we recommend installing the specific dependencies that you need.
@@ -55,9 +62,9 @@ This will give you a `can` object with *most* of the same APIs as in 2.3 with th
 
 ### Set leakScope on Components
 
-In CanJS 2.2 we introduced `leakScope: false` as a property on a [can-component]. This prevents values in parent templates from leaking into your Component's template. In 3.0 **leakScope** is now false by default.
+In CanJS 2.2 we introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your Component's template. In 3.0 **leakScope** is now false by default.
 
-If you have a template like:
+If you have a [can-component.prototype.template] like:
 
 ```
 <some-component></some-component>
@@ -79,7 +86,7 @@ If the component's template looks like:
 <h1>Hello {{page}}</h1>
 ```
 
-It can only look-up the `page` property on some-component's own ViewModel. To restore the behavior in 2.x, simply set leakScope to be `true` on the Component:
+It can only look-up the `page` property on some-component's own [can-component.prototype.ViewModel]. To restore the behavior in 2.x, simply set [can-component.prototype.leakScope] to be `true` on the Component:
 
 ```js
 Component.extend({
@@ -92,9 +99,9 @@ Component.extend({
 
 ### Asynchronous inserted/removed events
 
-In your [can-component]s, the **inserted** and **removed** events were previously fired synchronously as the element was inserted into the DOM. To improve performance these events are now fired async. 
+In your [can-component]s, the [can-util/dom/events/inserted/inserted inserted] and [can-util/dom/events/removed/removed] events were previously fired synchronously as the element was inserted into the DOM. To improve performance these events are now fired async. 
 
-There is now a **beforeremove** event that fires synchronously in case you need to perform memory cleanup. For example you might need to access the parent's viewModel:
+There is now a [can-component/beforeremove] event that fires synchronously in case you need to perform memory cleanup. For example you might need to access the parent's viewModel:
 
 ```js
 Component.extend({
@@ -140,7 +147,7 @@ Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### Passing the "this" value within each helper
 
-When passing the `this` value to a helper like:
+When passing the `this` value to a [can-stache.Helpers helper] like:
 
 ```
 {{helper .}}
@@ -164,6 +171,8 @@ Construct.extend("foo.bar", ...)
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global you can do so yourself using the return value of [can-construct.extend].
 
+Instead the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you'll get named objects in your dev tools.
+
 ## Modernized migration path
 
 In addition to the above, to set your project up to more easily be able to upgrade in the future you can take the following measures:
@@ -172,7 +181,7 @@ In addition to the above, to set your project up to more easily be able to upgra
 
 As mentioned earlier in the guide, CanJS 3.0 is divided into separate npm packages. This allows us to more quickly updating parts of CanJS without affecting other functionality. You can take advantage of this by installing the individual can-* packages and using them directly.
 
-You might be using can-component like either:
+You might be using [can-component] like either:
 
 ```js
 var can = require("can");
@@ -254,7 +263,7 @@ In addition to the steps taken in the two above section, if you *really* want to
 
 ### can-define replaces can-map
 
-If you've used `can/map/define` in the past then using can-define should be familiar to you. Using [can-define/map/map] is the easiest migration path and is what we show in all of the examples in CanJS 3.0's docs.
+If you've used [can-map-define] in the past then using [can-define] should be familiar to you. Using [can-define/map/map] is the easiest migration path and is what we show in all of the examples in CanJS 3.0's docs.
 
 A typical map looks like:
 
@@ -296,7 +305,7 @@ var CarOwner = DefineMap.extend({
 });
 ```
 
-Using [can-define] allows you to use maps without the `.attr()` method that's needed in [can-map] and [can-list]. To use this DefineMap just use the dot operator:
+Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that's needed in [can-map] and [can-list]. To use this with DefineMap just use the dot operator instead:
 
 ```js
 var carOwner = new CarOwner();
