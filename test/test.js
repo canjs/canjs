@@ -9,9 +9,11 @@ require('../map/map_test');
 // require('../route/pushstate/pushstate_test');
 require('../util/util_test');
 // require('../view/autorender/autorender_test');
-require('../view/import/import_test');
+// require('../view/import/import_test');
 require('../view/live/live_test');
 require('../view/node_lists/node_lists_test');
 require('../view/parser/parser_test');
 require('../view/scope/scope_test');
 require('../view/stache/stache_test');
+
+require('../docs/can-guides/todomvc/test');

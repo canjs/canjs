@@ -3,40 +3,47 @@
 
 @body
 
-CanJS is designed to be a very well-rounded JavaScript framework, useful to almost any client-side JavaScript
-team.
+CanJS is an evolving and improving set of client side
+JavaScript architectural libraries that balances
+innovation and stability.  
 
-It provides a wealth of JavaScript utilities that combine to make testable and repeatable Model-View-ViewModel
-applications with very little code.  
+CanJS targets experienced developers building complex applications
+with long futures ahead of them.
 
-CanJS provides the default MV\* libraries to the [DoneJS](http://donejs.com) framework.  Checkout DoneJS's [quick
-start guide](http://donejs.com/Guide.html) for an example of using CanJS to build a server-side rendered, real-time
-chat app that works as an Android, iOS, and Desktop app.
+If this is you, checkout the quick start guide
+where you build TodoMVC in about an hour.
 
-<h2 id="Flexible">Flexible</h2>
-
-CanJS is __flexible__. Unlike other frameworks, it's designed to work in almost any situation.
-You can readily use third party plugins or
-modify the DOM with jQuery directly.
-CanJS supports all browsers.
-
-<h2 id="Powerful">Powerful</h2>
-
-CanJS is __powerful__. Create [custom elements](../docs/can.Component.html) with
-[one and two-way bindings](/docs/can.view.bindings.html).
-Easily [define](../docs/can.Map.prototype.define.html) the behavior of
-observable objects and their derived values. Avoid memory
-leaks with smart model stores and smart event binding.  
-
-<h2 id="Fast">Fast</h2>
-
-CanJS is __fast__. It is only about 20k. Its live-binding updates only what needs to be updated without requiring a
-"diff".  
+If you're not sure if this is you, the importance of
+CanJS's goals, or how CanJS accomplishes these goals, please read on.
 
 
-<h2 id="Friendly">Friendly</h2>
+## CanJS's Goals
 
-CanJS is __friendly__.  Our [fulltime](http://donejs.com/About.html#section=section_Fulltimeteam) and
-[core](http://donejs.com/About.html#section=section_Coreteam) team are extremely active on
-[gitter chat](https://gitter.im/canjs/canjs) and on the [forums](http://forums.donejs.com/c/canjs) and
-always wanting to help.
+The goal of CanJS can be summarized as follows:
+
+> You shouldn't have to rewrite your application to
+> keep pace with technology.
+
+Technology changes quickly.  The popular frameworks and tools
+used today will likely not be the same as those used two
+years from now.  Even those that might still be around will
+probably not be easy to upgrade to.
+
+But developers need stable platforms to develop from.
+
+CanJS attempts to strike a balance between these two
+conflicting problems by:
+
+- Providing high quality individually useful and stand-alone libraries.
+- Adopting to new ideas/technology and then integrating as new libraries
+  or features of existing ones.
+
+The experience of using CanJS should be relatively easy at the start,
+but extremely rewarding one over time.  
+
+Bug fixes should be resolved quickly.
+
+New features and libraries should be added that keeps pace with
+innovation.
+
+Breaking changes should be simple to migrate.
