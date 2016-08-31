@@ -189,6 +189,10 @@ label[for='toggle-all'] {
 	border-bottom: none;
 }
 
+#todo-list li.saving {
+	font-style: italic;
+}
+
 #todo-list li.editing {
 	border-bottom: none;
 	padding: 0;

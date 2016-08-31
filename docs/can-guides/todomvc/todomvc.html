@@ -26,13 +26,12 @@
     {{/if}}
     {{#if todosPromise.isResolved}}
         {{#each todosPromise.value}}
-            <li class="todo {{#isEditing(.)}}editing{{/isEditing}}">
+            <li class="todo {{#isEditing(.)}}editing{{/isEditing}} {{#isSaving}}saving{{/isSaving}}">
                 <div class="view">
                     <input class="toggle" type="checkbox" ($change)="toggle()"
-                        {$checked}="complete">
+                        {$checked}="complete" {$disabled}="isSaving()">
                     <label ($dblclick)="edit(.)">
                         {{name}}
-                        {{#isSaving}}...{{/isSaving}}
                     </label>
                     <button class="destroy" ($click)="destroy"></button>
                 </div>
@@ -50,7 +49,8 @@
 		<todo-create/>
 	</header>
 	<section id="main" class="">
-		<input id="toggle-all" type="checkbox" {($checked)}="allChecked">
+		<input id="toggle-all" type="checkbox"
+            {($checked)}="allChecked" {$disabled}="todos.value.saving.length">
 		<label for="toggle-all">Mark all as complete</label>
 		<todo-list {todos-promise}="todos"/>
 	</section>
@@ -97,6 +97,7 @@ can.fixture("/api/todos/{id}", todoStore);
 can.fixture.delay = 1000;
 
 var Todo = can.DefineMap.extend({
+    id: "string",
     name: "string",
     complete: {type: "boolean", value: false},
     //id: "number",
@@ -128,6 +129,13 @@ Todo.List = can.DefineList.extend({
             todo.complete = value;
             todo.save();
         });
+    },
+    saving: {
+        get: function(){
+            return this.filter(function(todo){
+                return todo.isSaving();
+            });
+        }
     }
 });
 
