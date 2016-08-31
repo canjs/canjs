@@ -5,6 +5,13 @@
 
 CanJS 3.0 introduces a new even more modular project structure and several new features, while having a minimal number of deprecations or removals to the existing 2.3 API.
 
+This guide goes over:
+
+* How to install CanJS 3.0 and how that differs from in the past.
+* The *minimal migration path*. The steps that are required in order to upgrade from 2.x to 3.0 with the fewest number of code changes.
+* A second migration path with more modern conventions (such as the use of NPM packages).
+* The future proof path using all of the modern libraries we are most excited about.
+
 ## Getting CanJS 3.0
 
 The recommended way to install CanJS 3.0 is through [npm](https://www.npmjs.com/). If you are already using the [can package](https://www.npmjs.com/package/can) you can continue to do so, but we recommend installing the specific dependencies that you need.
@@ -163,6 +170,8 @@ Construct.extend("foo.bar", ...)
 ```
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global you can do so yourself using the return value of [can-construct.extend].
+
+Instead the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you'll get named objects in your dev tools.
 
 ## Modernized migration path
 

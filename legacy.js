@@ -15,4 +15,8 @@ require("can-connect/can/model/model");
 require("can-jquery");
 require("can-fixture");
 
+// Legacy namespacing for these
+can.view.attr = can.view.callbacks.attr;
+can.view.tag = can.view.callbacks.tag;
+
 module.exports = can;

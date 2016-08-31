@@ -8,7 +8,7 @@ require('../map/map_test');
 // require('../route/route_test');
 // require('../route/pushstate/pushstate_test');
 require('../util/util_test');
-require('../view/autorender/autorender_test');
+// require('../view/autorender/autorender_test');
 require('../view/import/import_test');
 require('../view/live/live_test');
 require('../view/node_lists/node_lists_test');
