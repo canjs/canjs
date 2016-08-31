@@ -1,0 +1,227 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./todomvc.css"/>
+    </head>
+    <body>
+
+<script src="../../../node_modules/jquery/dist/jquery.js"></script>
+<script src="../../../dist/global/can.all.js"></script>
+
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo" placeholder="What needs to be done?"
+    autofocus=""
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+    {{#if todosPromise.isPending}}
+        <li class="todo">
+            <div class="view"><label>Loading ...</label></div>
+        </li>
+    {{/if}}
+    {{#if todosPromise.isRejected}}
+        <li>{{todosPromise.reason.message}}</li>
+    {{/if}}
+    {{#if todosPromise.isResolved}}
+        {{#each todosPromise.value}}
+            <li class="todo {{#isEditing(.)}}editing{{/isEditing}}">
+                <div class="view">
+                    <input class="toggle" type="checkbox" ($change)="toggle()"
+                        {$checked}="complete">
+                    <label ($dblclick)="edit(.)">
+                        {{name}}
+                        {{#isSaving}}...{{/isSaving}}
+                    </label>
+                    <button class="destroy" ($click)="destroy"></button>
+                </div>
+                <input class="edit" type="text" {$value}="name" ($enter)="updateTodoName(., %element.value)">
+            </li>
+        {{/each}}
+    {{/if}}
+</ul>
+</script>
+
+<script type='text/stache' id='todomvc-template'>
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox" {($checked)}="allChecked">
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos-promise}="todos"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todos.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a href="{{routeUrl filter=undefined}}"
+					{{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>All</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='active'}}"
+					{{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>Active</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='complete'}}"
+					{{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed">
+			Clear completed ({{todos.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+<script>
+
+var todoAlgebra = new set.Algebra(
+    set.props.id("id"),
+    set.props.boolean("complete"),
+    set.props.sort("sort")
+);
+
+
+var todoStore = can.fixture.store([
+    { name: "mow lawn", complete: false, id: 5 },
+    { name: "dishes", complete: true, id: 6 },
+    { name: "learn canjs", complete: false, id: 7 }
+], todoAlgebra);
+
+can.fixture("/api/todos/{id}", todoStore);
+can.fixture.delay = 1000;
+
+var Todo = can.DefineMap.extend({
+    name: "string",
+    complete: {type: "boolean", value: false},
+    //id: "number",
+    toggle: function(){
+        this.complete = !this.complete;
+        this.save();
+    }
+});
+
+Todo.List = can.DefineList.extend({
+    "*": Todo,
+    complete: {
+        get: function(){
+            return this.filter({complete: true});
+        }
+    },
+    active: {
+        get: function(){
+            return this.filter({complete: false});
+        }
+    },
+    allComplete: {
+        get: function(){
+            return this.length === this.complete.length;
+        }
+    },
+    updateCompleteTo: function(value){
+        this.forEach(function(todo){
+            todo.complete = value;
+            todo.save();
+        });
+    }
+});
+
+Todo.connection = can.connect.superMap({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos",
+    name: "todo",
+    algebra: todoAlgebra
+});
+Todo.algebra = todoAlgebra;
+
+var TodoCreateVM = can.DefineMap.extend({
+    todo: {Value: Todo},
+    createTodo: function(){
+        this.todo.save().then(function(){
+            this.todo = new Todo();
+        }.bind(this));
+    }
+});
+
+can.Component.extend({
+    tag: "todo-create",
+    view: can.stache.from("todo-create-template"),
+    ViewModel: TodoCreateVM
+});
+
+var TodoListVM = can.DefineMap.extend({
+    destroyTodo: function(todo, event) {
+        if(event) {
+            event.stopPropagation();
+        }
+        todo.destroy();
+    },
+    todosPromise: Promise,
+    isEditing: function(todo){
+        return todo === this.editing;
+    },
+    edit: function(todo){
+        this.editing = todo;
+    },
+    editing: Todo,
+    updateTodoName: function(todo, name) {
+        todo.name = name;
+        todo.save();
+        this.editing = undefined;
+    }
+});
+
+can.Component.extend({
+    tag: "todo-list",
+    view: can.stache.from("todo-list-template"),
+    ViewModel: TodoListVM
+});
+
+var AppVM = can.DefineMap.extend({seal: false},{
+	todos: {
+		get: function(){
+
+			if(!this.filter) {
+				return Todo.getList({});
+			} else {
+				return Todo.getList({complete: this.filter === "complete"});
+			}
+		}
+	},
+	todosList: {
+		get: function(initialValue, resolve){
+			this.todos.then(resolve);
+		}
+	},
+	allChecked: {
+		get: function(){
+			return this.todosList && this.todosList.allComplete;
+		},
+		set: function(newVal){
+			this.todosList && this.todosList.updateCompleteTo(newVal);
+		}
+	},
+	filter: "string",
+	route: "string"
+});
+
+var vm = new AppVM();
+window.vm = vm;
+can.route.map(vm);
+can.route(":filter");
+can.route.ready();
+
+var template = can.stache.from("todomvc-template")
+var frag = template(vm);
+
+document.body.appendChild(frag);
+</script>
+
+    </body>
+</html>
