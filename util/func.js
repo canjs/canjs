@@ -115,7 +115,8 @@ like [http://api.jquery.com/jQuery.each/ jQuery.each].
 @description Merge objects together.
 @function can.extend
 @parent can.util
-@signature `can.extend(target, ...obj)`
+@signature `can.extend([deep], target, ...obj)`
+@param {Boolean} [deep] If true, the merge becomes recursive (aka. deep copy).
 @param {Object} target The object to merge properties into.
 @param {Object} obj Objects containing properties to merge.
 @return {Object} __target__, post-merge.
