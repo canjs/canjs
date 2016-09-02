@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="./todomvc.css"/>
     </head>
     <body>
 
+<script src="../../../node_modules/es6-promise/dist/promise-1.0.0.js"></script>
 <script src="../../../node_modules/jquery/dist/jquery.js"></script>
 <script src="../../../dist/global/can.all.js"></script>
 
@@ -80,10 +82,10 @@
 </script>
 <script>
 
-var todoAlgebra = new set.Algebra(
-    set.props.id("id"),
-    set.props.boolean("complete"),
-    set.props.sort("sort")
+var todoAlgebra = new can.set.Algebra(
+    can.set.props.id("id"),
+    can.set.props.boolean("complete"),
+    can.set.props.sort("sort")
 );
 
 
