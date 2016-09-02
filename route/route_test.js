@@ -873,6 +873,20 @@ steal("can/route", "can/test", "steal-qunit", "can/map/define", function () {
 				propEqual(route.attr(), {
 					'string': "hello"
 				});
+				
+				// test that toString is run on arbitrary objects if an impl is provided
+				var fakeDate = {
+					toString: function() {
+						return "fake time o clock"
+					}
+				};
+
+				route.attr({
+					obj: fakeDate
+				}, true);
+				propEqual(route.attr(), {
+					'obj': "fake time o clock"
+				});
 
 				route.attr({
 					array: [1, true, "hello"]
