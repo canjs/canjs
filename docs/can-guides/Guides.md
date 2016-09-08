@@ -12,7 +12,7 @@ CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS
 framework you marry.  These guides help you advance through the different stages of this
 relationship:
 
- - Introduction (tinder)
+ - Introduction (match.com, tinder, etc)
  - Experimenting (dating)
  - Commitment (put a ring on it)
  - Contributing (make baby extensions)
