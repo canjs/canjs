@@ -1,5 +1,6 @@
 @page canjs CanJS
 @dest ../index
+@outline 0
 @description CanJS is an evolving and improving set of client side
 JavaScript architectural libraries that balances
 innovation and stability.  
