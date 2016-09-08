@@ -18,3 +18,16 @@ Generally speaking, you should not use the global can script and instead
 should import things directly.
 
 ## Create and render the template
+
+
+## Create the todos type and get items left working
+
+## Get todos from the server
+
+## Create todos
+
+## List todos
+
+## Destroy todos
+
+## Edit todos
