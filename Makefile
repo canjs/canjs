@@ -10,6 +10,8 @@ publish-docs:
 	git add -f node_modules/when
 	git add -f node_modules/jquery
 	git add -f node_modules/jquery-ui
+	git add -f node_modules/funcunit
+	git add -f node_modules/syn
 	git commit -m "Publish docs"
 	git push -f origin gh-pages
 	git rm -q -r --cached node_modules
