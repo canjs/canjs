@@ -102,7 +102,8 @@
       "bit-docs-dev": "^0.0.3",
       "bit-docs-js": "^0.0.6",
       "bit-docs-generate-html": "^0.0.10",
-      "bit-docs-html-canjs": "^0.1.0",
+      "bit-docs-html-canjs": "^0.2.0",
+      "bit-docs-html-toc": "^0.2.0",
       "bit-docs-prettify": "^0.0.3",
       "bit-docs-tag-demo": "^0.1.1"
     },
