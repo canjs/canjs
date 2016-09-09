@@ -218,18 +218,143 @@ Update `HTML` to:
 Note:
 
  - completed
- - items left / clear completed changes automatically 
+ - items left / clear completed changes automatically
 
 
 ## Get todos from the server
+
+Update `JavaScript` to:
+
+```js
+var todoAlgebra = new can.set.Algebra(
+  can.set.props.boolean("complete"),
+  can.set.props.id("id"),
+  can.set.props.sort("sort")
+);
+
+
+var todoStore = can.fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], todoAlgebra);
+
+can.fixture("/api/todos/{id}", todoStore);
+can.fixture.delay = 1000;
+
+
+var Todo = can.DefineMap.extend({
+  id: "string",
+  name: "string",
+  complete: {type: "boolean", value: false}
+});
+
+Todo.List = can.DefineList.extend({
+  "*": Todo,
+  active: {
+    get: function(){
+      return this.filter({complete: false})
+    }
+  },
+  complete: {
+    get: function(){
+      return this.filter({complete: true});
+    }
+  }
+});
+
+can.connect.superMap({
+  url: "/api/todos",
+  Map: Todo,
+  List: Todo.List,
+  name: "todo",
+  algebra: todoAlgebra
+});
+
+var template = can.stache.from("todomvc-template");
+var frag = template({todosPromise: Todo.getList({})});
+document.body.appendChild(frag);
+```
+
+Update `HTML` to:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - Create the todos type and get items left working">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<input id="new-todo" placeholder="What needs to be done?"
+               autofocus="">
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox">
+		<label for="toggle-all">Mark all as complete</label>
+		<ul id="todo-list">
+          {{#each todosPromise.value}}
+			<li class="todo {{#if complete}}completed{{/if}}">
+				<div class="view">
+					<input class="toggle" type="checkbox" {($checked)}="complete">
+					<label>{{name}}</label>
+					<button class="destroy"></button>
+				</div>
+				<input class="edit" type="text" value="{{name}}"/>
+			</li>
+          {{/each}}
+		</ul>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a class="selected" href="#!">All</a>
+			</li>
+			<li>
+				<a href="#!active">Active</a>
+			</li>
+			<li>
+				<a href="#!completed">Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.7/dist/global/can.all.js"></script>
+</body>
+
+</html>
+```
+
+Note:
+
+- localStorage
+
+## Destroy todos
 
 ## Create todos
 
 ## List todos
 
-## Destroy todos
-
 ## Edit todos
 
+## Routing
+
+## Check all and clear completed
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.39.15"></script>
