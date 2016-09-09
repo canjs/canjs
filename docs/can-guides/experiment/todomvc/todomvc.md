@@ -103,6 +103,7 @@ Put the markup in a template.  Change the `HTML` tab to the following:
 
 </html>
 ```
+@highlight 11,68
 
 > NOTE: autofocus
 
@@ -113,6 +114,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({});
 document.body.appendChild(frag);
 ```
+@highlight 1-3
 
 ## Create the todos type and get items left working
 
@@ -149,6 +151,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todos: todos});
 document.body.appendChild(frag);
 ```
+@highlight 1-25,28
 
 Update `HTML` to:
 
@@ -214,6 +217,7 @@ Update `HTML` to:
 
 </html>
 ```
+@highlight 22-31,36,50
 
 Note:
 
@@ -231,7 +235,6 @@ var todoAlgebra = new can.set.Algebra(
   can.set.props.id("id"),
   can.set.props.sort("sort")
 );
-
 
 var todoStore = can.fixture.store([
   { name: "mow lawn", complete: false, id: 5 },
@@ -275,6 +278,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
+@highlight 1-15,37-43,46
 
 Update `HTML` to:
 
@@ -340,6 +344,7 @@ Update `HTML` to:
 
 </html>
 ```
+@highlight 22,36,50
 
 Note:
 
@@ -412,6 +417,7 @@ Update `HTML` to:
 
 </html>
 ```
+@highlight 23-24,28
 
 TODO:
 
@@ -486,6 +492,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
+@highlight 46-59
 
 Update `HTML` to:
 
@@ -558,6 +565,7 @@ Update `HTML` to:
 
 </html>
 ```
+@highlight 11-16,18,22
 
 ## List todos
 
