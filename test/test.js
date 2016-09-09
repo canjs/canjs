@@ -16,4 +16,4 @@ require('../view/parser/parser_test');
 require('../view/scope/scope_test');
 require('../view/stache/stache_test');
 
-require('../docs/can-guides/todomvc/test');
+require('../docs/can-guides/experiment/todomvc/test');
