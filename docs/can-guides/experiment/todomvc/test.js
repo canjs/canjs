@@ -5,17 +5,13 @@ F.attach(QUnit);
 
 QUnit.module('todomvc', {
     beforeEach: function (assert) {
-        localStorage.clear();
-		var done = assert.async();
-		F.open(__dirname+"/todomvc.html", function(){
-			done();
-		});
+    	localStorage.clear();
     }
 });
 
 QUnit.test("basics work", function(){
-	F('li.todo').size(3, "there are 3 todos");
-	F('#new-todo').type("new thing\r");
+	F('li.todo', 0).size(3, "there are 3 todos");
+	F('#new-todo', 0).type("new thing\r");
 
-	F('li.todo').size(4, "new todo added");
+	F('li.todo', 0).size(4, "new todo added");
 });
