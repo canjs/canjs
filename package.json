@@ -6,7 +6,7 @@
     "preversion": "npm test",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout major && git branch -D release && git push",
-    "testee": "testee test/index.html --browsers firefox",
+    "testee": "testee test/index.html --browsers canary",
     "test": "npm run build && npm run testee",
     "release:pre": "npm version prerelease && npm publish",
     "release:patch": "npm version patch && npm publish",
