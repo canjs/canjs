@@ -6,3 +6,5 @@ before_install:
   - ./firefox-allow-popups.sh
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+addons:
+  firefox: "45.0"
