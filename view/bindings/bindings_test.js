@@ -2359,5 +2359,40 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		viewModel.dispatch('fooBarEvent');
 	});
 	
+	test("one-way pass computes to components with ~", function(assert) {
+		expect(7);
+		can.Component.extend({
+			tag: "compute-passing",
+			viewModel: new can.Map()
+		});
+
+		var baseVm = new can.Map({foo : "bar"});
+
+		can.append(
+			can.$("#qunit-fixture"),
+			can.stache("<compute-passing {compute}=\"~foo\"></foo-bar>")(baseVm)
+		);
+
+		var vm = can.viewModel(can.$("#qunit-fixture > *"));
+
+		ok(vm.attr("compute").isComputed, "Compute returned");
+		equal(vm.attr("compute")(), "bar", "Compute has correct value");
+
+		vm.attr("compute").bind("change", function() {
+			// NB: This gets called twice below, once by
+			//  the parent and once directly.
+			ok(true, "Change handler called");
+		});
+
+		baseVm.attr("foo", "quux");
+		equal(vm.attr("compute")(), "quux", "Compute updates");
+
+		vm.attr("compute")("xyzzy");
+		equal(baseVm.attr("foo"), "quux", "Compute does not update the other direction");
+
+		vm.attr("compute", "notACompute");
+		baseVm.attr("foo", "thud");
+		ok(vm.attr("compute").isComputed, "Back to being a compute");
+	});
 
 });

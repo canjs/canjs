@@ -472,12 +472,27 @@ steal("can/util",
 					}
 				});
 			} else {
+
 				return function(newVal){
-					bindingData.getViewModel().attr(setName,newVal);
+					var childCompute;
+					var viewModel = bindingData.getViewModel();
+
+					if(stickyCompute) {
+						childCompute = viewModel._get(setName, { readCompute: false });
+						// childCompute is a compute at this point unless it was locally overwritten
+						//  in the child viewModel.
+						if(!childCompute || !childCompute.isComputed) {
+							// If it was locally overwritten, make a new compute for the property.
+							childCompute = can.compute();
+							viewModel._set(setName, childCompute, { readCompute: false });
+						}
+						// Otherwise update the compute's value.
+						childCompute(newVal);
+					} else {
+						viewModel.attr(setName,newVal);
+					}
 				};
 			}
-			
-			
 		},
 		// ### getComputeFrom.attribute
 		// Returns a compute that is two-way bound to an attribute or property on the element.
@@ -741,7 +756,8 @@ steal("can/util",
 	// - `initializeValues` - should parent and child be initialized to their counterpart.
 	// If undefined is return, there is no binding.
 	var getBindingInfo = function(node, attributeViewModelBindings, templateType, tagName){
-		var attributeName = node.name,
+		var bindingInfo,
+			attributeName = node.name,
 			attributeValue = node.value || "";
 		
 		// Does this match the new binding syntax?
@@ -795,7 +811,7 @@ steal("can/util",
 		var childName = matches[3];
 		var isDOM = childName.charAt(0) === "$";
 		if(isDOM) {
-			var bindingInfo = {
+			bindingInfo = {
 				parent: "scope",
 				child: "attribute",
 				childToParent: childToParent,
@@ -810,7 +826,7 @@ steal("can/util",
 			}
 			return bindingInfo;
 		} else {
-			return {
+			bindingInfo = {
 				parent: "scope",
 				child: "viewModel",
 				childToParent: childToParent,
@@ -820,6 +836,10 @@ steal("can/util",
 				parentName: attributeValue,
 				initializeValues: true
 			};
+			if(attributeValue.trim().charAt(0) === "~") {
+				bindingInfo.stickyParentToChild = true;
+			}
+			return bindingInfo;
 		}
 
 	};
@@ -933,7 +953,11 @@ steal("can/util",
 	var initializeValues = function(bindingInfo, childCompute, parentCompute, updateChild, updateParent){
 		var doUpdateParent = false;
 		if(bindingInfo.parentToChild && !bindingInfo.childToParent) {
-			// updateChild
+			if(bindingInfo.stickyParentToChild) {
+				// call updateChild here to set up the compute
+				updateChild({}, getValue(parentCompute));
+			}
+
 		}
 		else if(!bindingInfo.parentToChild && bindingInfo.childToParent) {
 			doUpdateParent = true;
