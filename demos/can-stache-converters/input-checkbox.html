@@ -1,0 +1,35 @@
+<div id="out"></div>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var stache = require("can-stache");
+require("can-stache-bindings");
+
+var template = stache(
+	"{{#each items}}" +
+	"<p><input type='checkbox' {($checked)}='boolean-to-inList(this, person.owns)' /> {{upper(this)}}</p>" +
+	"{{/each}}" + 
+  "<p>You own: {{ownership}}</p>");
+		
+var person = new DefineMap({
+  owns: ["bike"]
+});
+
+var viewModel = new DefineMap({
+	items: ["bike", "car", "sled"],
+	person: person
+});
+
+var frag = template(viewModel, {
+  ownership: function(){
+		var list = person.owns;
+		return list.length ? list.join(" and ") : "nothing";
+  },
+	upper: function(item) {
+		var first = item[0].toUpperCase();
+		return first + item.substr(1);
+	}
+});
+
+out.appendChild(frag);
+</script>
