@@ -1,0 +1,45 @@
+<div id="demo">
+<div id='out'></div>
+<script type='text/stache' id="demo-html">
+<p>Attending?
+  <input type="radio" {($checked)}="equal(~attending, 'yes')" /> Yes
+  <input type='radio' {($checked)}="equal(~attending, 'no')" /> No,
+  <input type='radio' {($checked)}="equal(~attending, 'maybe')" /> Maybe
+</p>
+<p>You {{attendence}}.</p>
+</script>
+</div>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var stache = require("can-stache");
+require("can-stache-converters");
+var DefineMap = require("can-define/map/map");
+			
+var person = new DefineMap({
+  attending: null
+});
+
+
+stache.registerConverter("equal", {
+	get: function(compute, comparer){
+		return compute() === comparer;
+	},
+	set: function(b, compute, comparer){
+		if(b) {
+			compute(comparer);
+		}
+	}
+});
+
+
+var template = stache.from("demo-html");
+var frag = template(person, {
+	attendence: function(){
+		return person.attending ? 
+			"are a " + person.attending :
+			"have not responded"
+	
+	}
+});
+
+out.appendChild(frag);
+</script>
