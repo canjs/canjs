@@ -1,40 +1,33 @@
 <div id="demo">
 <div id='out'></div>
-<script type='text/mustache' id="attending-template">
+<script type='text/stache' id="demo-html">
 <p>Attending? 
-  <select can-value='attending'>
+  <select {($value)}='attending'>
   <option value='yes'>Yes</option>
   <option value='no'>No</option>
   <option value='maybe'>Maybe</option>
   </select>
 </p>
-<p>You {{attendence}}.</p>
+<p>You {{attendence()}}.</p>
 </script>
 </div>
-<script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
-</script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/mustache", function(){
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-converters");
 		
-var person = new can.Map({
+var person = new DefineMap({
   attending: "no"
-})
+});
 
-var frag = can.view(
-	"attending-template",
-	person,
-	{
-      attendence: function(){
-        return person.attr("attending") ? 
-          "are a " + person.attr("attending") :
-          "have not responded"
-    
-    }
-})
+var template = stache.from("demo-html");
+var frag = template(person, {
+	attendence: function(){
+		return person.attending ? 
+			"are a " + person.attending :
+			"have not responded";
+	}
+});
 
-$("#out").html( frag )
-
-})
+out.appendChild(frag);
 </script>
