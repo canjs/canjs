@@ -1,34 +1,38 @@
 <div id="demo">
 <div id='out'></div>
-<script type='text/mustache' id="colors-template">
+<script type='text/stache' id="colors-template">
 <p>Colors: 
-  <select can-value='colors' multiple>
-    <option value='green'>Green</option>
-    <option value='red'>Red</option>
-    <option value='blue'>Blue</option>
+	<select multiple>
+		<option value='green' {($selected)}="boolean-to-inList('green', colors)">Green</option>
+		<option value='red' {($selected)}="boolean-to-inList('red', colors)">Red</option>
+		<option value='blue' {($selected)}="boolean-to-inList('blue', colors)">Blue</option>
   </select>
 </p>
-<p>You selected {{selection colors}}.</p>
+<p>You selected {{selection(colors)}}.</p>
 </script>
 </div>
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
-<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
-<script>
-steal("can/view/bindings", "can/view/mustache", function(){
-	
-var colors = new can.List();
+<script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+require("can-stache-converters");
+var stache = require("can-stache");
 
-var frag = can.view("colors-template",{
-	colors: colors
-},{
+var colors = new DefineList();
+var vm = new DefineMap({ colors: colors });
+
+var template = stache.from("colors-template");
+var frag = template(vm, {
 	selection: function(list){
-		return list.attr("length") ? list.join(", ") : "nothing"
+		return list.length ? list.join(", ") : "nothing"
 	}
-})
+});
 
-$("#out").html( frag );
+colors.on('length', function(){
+	console.log('colors', colors);
+});
 
-})
+out.appendChild(frag);
 </script>
