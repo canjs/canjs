@@ -1978,42 +1978,42 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 	});
 	
 	test('previously non-existing select value gets selected from a list when it is added (#1762)', function() {
-	  var template = can.view.stache('<select {($value)}="{person}">' +
-	      '<option></option>' +
-	      '{{#each people}}<option value="{{.}}">{{.}}</option>{{/each}}' +
-	    '</select>' +
-	    '<input type="text" size="5" {($value)}="person">'
-	  );
+		var template = can.view.stache('<select {($value)}="{person}">' +
+				'<option></option>' +
+				'{{#each people}}<option value="{{.}}">{{.}}</option>{{/each}}' +
+			'</select>' +
+			'<input type="text" size="5" {($value)}="person">'
+		);
 
-	  var people = new can.List([
-	    "Alexis",
-	    "Mihael",
-	    "Curtis",
-	    "David"
-	  ]);
+		var people = new can.List([
+			"Alexis",
+			"Mihael",
+			"Curtis",
+			"David"
+		]);
 
-	  var vm = new can.Map({
-	    person: 'Brian',
-	    people: people
-	  });
+		var vm = new can.Map({
+			person: 'Brian',
+			people: people
+		});
 
-	  stop();
-	  vm.bind('person', function(ev, newVal, oldVal) {
-	    ok(false, 'person attribute should not change');
-	  });
+		stop();
+		vm.bind('person', function(ev, newVal, oldVal) {
+			ok(false, 'person attribute should not change');
+		});
 
-	  var frag = template(vm);
+		var frag = template(vm);
 
-	  equal(vm.attr('person'), 'Brian', 'Person is still set');
+		equal(vm.attr('person'), 'Brian', 'Person is still set');
 
-	  setTimeout(function() {
-	    people.push('Brian');
-	    setTimeout(function() {
-	      var select = frag.firstChild;
-	      ok(select.lastChild.selected, 'New child should be selected');
-	      start();
-	    }, 20);
-	  }, 20);
+		setTimeout(function() {
+			people.push('Brian');
+			setTimeout(function() {
+				var select = frag.firstChild;
+				ok(select.lastChild.selected, 'New child should be selected');
+				start();
+			}, 20);
+		}, 20);
 	});
 	
 	test("one-way <select> bindings keep value if options are replaced (#1762)", function(){
@@ -2395,4 +2395,24 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		ok(vm.attr("compute").isComputed, "Back to being a compute");
 	});
 
+	test("special values get called", function(assert) {
+		expect(1);
+		stop();
+	
+		can.Component.extend({
+			tag: 'ref-syntax',
+			viewModel: new can.Map({
+				method: function() {
+					assert.ok(true, "method called");
+					start();
+				}
+			})
+		});
+	
+		can.append(
+			can.$("#qunit-fixture"),
+			can.stache("<ref-syntax ($inserted)=\"%viewModel.method()\">" +
+							"</ref-syntax>")({})
+		);
+	});
 });

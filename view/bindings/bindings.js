@@ -259,32 +259,6 @@ steal("can/util",
 						expr = new expression.Call(expr, defaultArgs, {} );
 					}
 	
-					// We grab the first item and treat it as a method that
-					// we'll call.
-					var scopeData = data.scope.read(expr.methodExpr.key, {
-						isArgument: true
-					});
-	
-					// We break out early if the first argument isn't available
-					// anywhere.
-	
-					if (!scopeData.value) {
-						scopeData = data.scope.read(expr.methodExpr.key, {
-							isArgument: true
-						});
-	
-						//!steal-remove-start
-						can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
-							element: el,
-							scope: data.scope
-						});
-						//!steal-remove-end
-	
-						return null;
-					}
-	
-	
-	
 					// make a scope with these things just under
 	
 					var localScope = data.scope.add({
@@ -304,6 +278,30 @@ steal("can/util",
 						notContext: true
 					});
 	
+					// We grab the first item and treat it as a method that
+					// we'll call.
+					var scopeData = localScope.read(expr.methodExpr.key, {
+						isArgument: true
+					});
+	
+					// We break out early if the first argument isn't available
+					// anywhere.
+	
+					if (!scopeData.value) {
+						scopeData = localScope.read(expr.methodExpr.key, {
+							isArgument: true
+						});
+	
+						//!steal-remove-start
+						can.dev.warn("can/view/bindings: " + attributeName + " couldn't find method named " + expr.methodExpr.key, {
+							element: el,
+							scope: data.scope
+						});
+						//!steal-remove-end
+	
+						return null;
+					}
+
 					var args = expr.args(localScope, null)();
 					
 	
