@@ -442,13 +442,13 @@ translate property changes to a url and a url to property changes. For example,
 
 ```js
 // a route like:
-route("todo/:todoId");
+route("todo/{todoId}");
 
 // and a hash like:
 window.location.hash = "#!todo/7";
 
 // produces an appViewModel like:
-appViewModel.serialize() //-> {route: "todo/:todoId", todoId: "7"}
+appViewModel.serialize() //-> {route: "todo/{todoId}", todoId: "7"}
 ```
 
 [can-route-pushstate] adds [pushstate](https://developer.mozilla.org/en-US/docs/Web/API/History_API) support. It
