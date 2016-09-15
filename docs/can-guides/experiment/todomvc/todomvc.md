@@ -25,7 +25,8 @@ in a real app.
 
 ## Create and render the template
 
-Put the markup in a template.  Change the `HTML` tab to the following:
+The first step is to render the markup in a [can-stache] live bound template.  Add
+a `<script>` tag around the content in the `HTML` tab as follows:
 
 ```html
 <!DOCTYPE html>
@@ -103,22 +104,42 @@ Put the markup in a template.  Change the `HTML` tab to the following:
 
 </html>
 ```
-@highlight 11,68
+@highlight 11,68,only
 
-> NOTE: autofocus
-
-To render this template, update the `JavaScript` tab to:
+[can-stache.from can-stache.from] can load the contents of the `<script>` tag as
+a template.  To load and render this template, and add the result to the
+body, add the following to the `JavaScript` tab:
 
 ```js
 var template = can.stache.from("todomvc-template");
 var frag = template({});
 document.body.appendChild(frag);
 ```
-@highlight 1-3
+@highlight 1-3,only
+
+
+When complete, you should see the same content as before.  Only now, it's
+rendered with a live-bound stache template.  The live binding means that
+when the template's data is changed, it will update automatically. We'll see
+that in the next step.
+
+
+> NOTE: autofocus
 
 ## Create the todos type and get items left working
 
-Update `JavaScript` to:
+In this section, we will:
+
+ - List todos from a list of todos.
+ - Show the number of active (`complete === true`) and and complete todos.
+ - Connect a todo's `complete` property to a checkbox so that when
+   we toggle the checkbox the number of active and complete todos changes.
+
+Update the `JavaScript` tab to:
+
+ - Define a `Todo` type with [can-define/map/map].
+ - Define a `Todo.List` type along with an `active` and `complete` property with [can-define/list/list].
+ - Create a list of todos and pass those to the template.
 
 ```js
 var Todo = can.DefineMap.extend({
@@ -151,9 +172,19 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todos: todos});
 document.body.appendChild(frag);
 ```
-@highlight 1-25,28
+@highlight 1-25,28,only
 
-Update `HTML` to:
+
+
+
+Update the `HTML` tab to:
+
+- Use [can-stache.helpers.each] to loop through every todo.
+- Add `completed` to the `<li>`'s `className` if the `<li>`'s todo is  complete.
+- Use [can-stache-bindings.twoWay] to two-way bind the checkbox's `checked` property to its todo's `complete` property.  
+- Use [can-stache.tags.escaped] to insert the value todo's `name` as the content of the `<label>` and
+  `value` of the text `<input/>`.
+- Insert the active and complete number of todos.
 
 ```html
 <!DOCTYPE html>
@@ -217,17 +248,33 @@ Update `HTML` to:
 
 </html>
 ```
-@highlight 22-31,36,50
+@highlight 22-31,36,50,only
 
-Note:
-
- - completed
- - items left / clear completed changes automatically
+When complete, you should be able to toggle the checkboxes and see the number of
+items left and the completed count change automatically.  This is because
+[can-stache] is able to listen for changes in observables like [can-define/map/map],
+[can-define/list/list] and [can-compute].
 
 
 ## Get todos from the server
 
-Update `JavaScript` to:
+In this section, we will:
+
+ - Load todos from a restful service.
+ - Fake that restful service.
+
+
+Update the `JavaScript` tab to:
+
+- Define what the restful service layer's parameters are with [can-set].
+- Create a fake data store that is initialized with data for 3 todos with [can-fixture.store].
+- Trap AJAX requests to `"/api/todos"` and provide responses with the data from the fake data store with [can-fixture].
+- Connect the `Todo` and `Todo.List` types to the restful `"/api/todos"` endpoint using [can-connect/can/super-map/super-map].  This allows you to load, create, update, and destroy todos
+on the server.
+- Use [can-connect/can/map/map.getList] to load a list of all todos on the server. The result
+  of `getList` is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to a `Todo.List` with the todos returned from the fake data store.  That `Promise`
+  is passed to the template as `todosPromise`.
+
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -242,7 +289,7 @@ var todoStore = can.fixture.store([
   { name: "learn canjs", complete: false, id: 7 }
 ], todoAlgebra);
 
-can.fixture("/api/todos/{id}", todoStore);
+can.fixture("/api/todos", todoStore);
 can.fixture.delay = 1000;
 
 
@@ -278,9 +325,14 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-@highlight 1-15,37-43,46
+@highlight 1-15,37-43,46,only
 
-Update `HTML` to:
+Update the `HTML` tab to:
+
+ - Use [can-stache.helpers.each] to loop through the promise's resolved value, which
+   is the list of todos returned by the server.
+ - Read the active and completed number of todos from the promise's resolved value.
+
 
 ```html
 <!DOCTYPE html>
@@ -344,15 +396,28 @@ Update `HTML` to:
 
 </html>
 ```
-@highlight 22,36,50
+@highlight 22,36,50,only
 
-Note:
+When complete, you'll notice a 1 second delay before seeing the list of todos as
+they load for the first time from the fixtured data store. On future page reloads, the
+list of todos will load immediately.  This is because [can-connect/can/super-map/super-map] ads the [can-connect/fall-through-cache/fall-through-cache] behavior.  The
+[can-connect/fall-through-cache/fall-through-cache] behavior stores loaded data in
+localStorage.  Future requests will hit localStorage for data first, present that data
+to the user, before making a request to the server and updating the original data with
+any changes.  Use `localStorage.clear()` to see the difference.
 
-- localStorage
 
 ## Destroy todos
 
-Update `HTML` to:
+In this section, we will:
+
+ - Delete a todo on the server when it's destroy button is clicked.  
+ - Remove the todo from the page after it's deleted.
+
+Update the `HTML` tab to:
+
+ - Add `destroying` to the `<li>`'s `className` if the `<li>`'s todo is being destroyed using [can-connect/can/map/map.prototype.isDestroying].
+ - Call the `todo`'s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event].
 
 ```
 <!DOCTYPE html>
@@ -417,15 +482,39 @@ Update `HTML` to:
 
 </html>
 ```
-@highlight 23-24,28
+@highlight 23-24,28,only
 
-TODO:
+When complete, you should be able to delete a todo by clicking its delete button.  After
+clicking the todo, its name will turn red and italic.  Once deleted the todo will be
+automatically removed from the page.  
 
-- make sure we get the right css
+The deleted todo is automatically removed from the page because [can-connect/can/super-map/super-map] ads the [can-connect/real-time/real-time] behavior.  The
+[can-connect/real-time/real-time] behavior automatically updates lists (like `Todo.List`) when instances
+are created, updated or destroyed.  If you've created the right [can-set.Algebra], you
+shouldn't have to manage lists yourself.
+
+Finally, if you refresh the page after deleting, you'll notice the page temporarily shows fewer items.
+This is because the fall through cache's data is shown before the response from fixtured data store
+is used.
+
+
+> TODO: make sure we get the right css
 
 ## Create todos
 
-Update `JavaScript` to:
+In this section, we will:
+
+ - Create a custom element that can create todos on the server.
+ - Use that custom element.
+
+Update the `JavaScript` tab to:
+
+ - Use [can-define/map/map] to create a `TodoCreateVM` view model with:
+   - A `todo` property that holds a new `Todo` instance.
+   - A `createTodo` method that [can-connect/can/map/map.prototype.save]s the `Todo` instance
+     and replaces it with a new one once saved.
+ - Use [can-component] to create a custom `<todo-create>` component that renders the `todo-create-template` template with an instance of the `TodoCreateVM`.
+
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -441,7 +530,7 @@ var todoStore = can.fixture.store([
   { name: "learn canjs", complete: false, id: 7 }
 ], todoAlgebra);
 
-can.fixture("/api/todos/{id}", todoStore);
+can.fixture("/api/todos", todoStore);
 can.fixture.delay = 1000;
 
 
@@ -492,9 +581,14 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-@highlight 46-59
+@highlight 46-59,only
 
-Update `HTML` to:
+Update the `HTML` tab to:
+
+ - Create the `todo-create-template` that:
+   - Updates the `todo`'s `name` with the `<input>`'s `value` using [can-stache-bindings.toParent].
+   - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event].
+ - Use `<todo-create/>`
 
 ```html
 <!DOCTYPE html>
@@ -510,7 +604,7 @@ Update `HTML` to:
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo" placeholder="What needs to be done?"
     autofocus=""
-    {($value)}="todo.name"
+    {^$value}="todo.name"
     ($enter)="createTodo()"/>
 </script>
 
@@ -565,11 +659,26 @@ Update `HTML` to:
 
 </html>
 ```
-@highlight 11-16,18,22
+@highlight 11-16,18,22,only
+
+When complete, you will be able to create a todo by typing the name of the todo and pressing
+`enter`. Notice that the new todo automatically appears in the list of todos. This
+is also because [can-connect/can/super-map/super-map] ads the [can-connect/real-time/real-time] behavior.  The
+[can-connect/real-time/real-time] behavior automatically will inserted newly created items into
+lists that they belong within.
+
 
 ## List todos
 
-Update `JavaScript` to:
+In this section, we will:
+
+ - Define a custom element that lists todos passed to it.
+ - Use that custom element.
+
+Update the `JavaScript` tab to:
+
+ - Create a `TodoListVM` view model type which has a `todos` property of type `Todo.List`.
+ - Use [can-component] to define a `<todo-list>` element.
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -584,7 +693,7 @@ var todoStore = can.fixture.store([
   { name: "learn canjs", complete: false, id: 7 }
 ], todoAlgebra);
 
-can.fixture("/api/todos/{id}", todoStore);
+can.fixture("/api/todos", todoStore);
 can.fixture.delay = 1000;
 
 
@@ -645,9 +754,13 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-@highlight 60-68
+@highlight 60-68,only
 
-Update `HTML` to:
+Update the `HTML` tab to:
+
+ - Create the `todo-list-template` that loops through a list of `todos` (instead of `todosPromise.value`).
+ - Create a `<todo-list>` element and set it's `todos` property to the resolved value of `todosPromise`
+   using [can-stache-bindings.toChild].
 
 ```html
 <!DOCTYPE html>
@@ -722,25 +835,641 @@ Update `HTML` to:
 
 </html>
 ```
-@highlight 18-32,43
+@highlight 18-32,43,only
+
+When complete, everything should work the same. We didn't add any new functionality, we
+just moved code around to make it more isolated, potentially reusable, and more maintainable.
 
 
 ## Edit todos
 
+In this section, we will:
+
+ - Make it possible to edit a todo's `name` and save that change to the server.
+
 Update `JavaScript` to:
 
 ```js
+var todoAlgebra = new can.set.Algebra(
+  can.set.props.boolean("complete"),
+  can.set.props.id("id"),
+  can.set.props.sort("sort")
+);
 
+var todoStore = can.fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], todoAlgebra);
+
+can.fixture("/api/todos", todoStore);
+can.fixture.delay = 1000;
+
+
+var Todo = can.DefineMap.extend({
+  id: "string",
+  name: "string",
+  complete: {type: "boolean", value: false}
+});
+
+Todo.List = can.DefineList.extend({
+  "*": Todo,
+  active: {
+    get: function(){
+      return this.filter({complete: false})
+    }
+  },
+  complete: {
+    get: function(){
+      return this.filter({complete: true});
+    }
+  }
+});
+
+can.connect.superMap({
+  url: "/api/todos",
+  Map: Todo,
+  List: Todo.List,
+  name: "todo",
+  algebra: todoAlgebra
+});
+
+var TodoCreateVM = can.DefineMap.extend({
+  todo: {Value: Todo},
+  createTodo: function(){
+    this.todo.save().then(function(){
+      this.todo = new Todo();
+    }.bind(this));
+  }
+});
+
+can.Component.extend({
+  tag: "todo-create",
+  view: can.stache.from("todo-create-template"),
+  ViewModel: TodoCreateVM
+});
+
+var TodoListVM = can.DefineMap.extend({
+  todos: Todo.List,
+  editing: Todo,
+  backupName: "string",
+  isEditing: function(todo){
+    return todo === this.editing;
+  },
+  edit: function(todo){
+    this.backupName = todo.name;
+    this.editing = todo;
+  },
+  cancelEdit: function(){
+    this.editing.name = this.backupName;
+    this.editing = null;
+  },
+  updateName: function() {
+    this.editing.save();
+    this.editing = null;
+  }
+});
+
+can.Component.extend({
+  tag: "todo-list",
+  view: can.stache.from("todo-list-template"),
+  ViewModel: TodoListVM
+});
+
+var template = can.stache.from("todomvc-template");
+var frag = template({todosPromise: Todo.getList({})});
+document.body.appendChild(frag);
 ```
+@highlight 62-78,only
+
+
+
 
 Update `HTML` to:
 
 ```
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - List todos">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
 
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo" placeholder="What needs to be done?"
+    autofocus=""
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(.)}}editing{{/if}}">
+      <div class="view">
+        <input class="toggle" type="checkbox" {($checked)}="complete">
+        <label ($dblclick)="edit(.)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
+</script>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox">
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos}="todosPromise.value"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a class="selected" href="#!">All</a>
+			</li>
+			<li>
+				<a href="#!active">Active</a>
+			</li>
+			<li>
+				<a href="#!completed">Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
+</body>
+
+</html>
 ```
+@highlight 23,26,29-32,only
 
 ## Routing
 
+Update `JavaScript` to:
+
+```js
+var todoAlgebra = new can.set.Algebra(
+  can.set.props.boolean("complete"),
+  can.set.props.id("id"),
+  can.set.props.sort("sort")
+);
+
+var todoStore = can.fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], todoAlgebra);
+
+can.fixture("/api/todos", todoStore);
+can.fixture.delay = 1000;
+
+
+var Todo = can.DefineMap.extend({
+  id: "string",
+  name: "string",
+  complete: {type: "boolean", value: false}
+});
+
+Todo.List = can.DefineList.extend({
+  "*": Todo,
+  active: {
+    get: function(){
+      return this.filter({complete: false})
+    }
+  },
+  complete: {
+    get: function(){
+      return this.filter({complete: true});
+    }
+  }
+});
+
+can.connect.superMap({
+  url: "/api/todos",
+  Map: Todo,
+  List: Todo.List,
+  name: "todo",
+  algebra: todoAlgebra
+});
+
+var TodoCreateVM = can.DefineMap.extend({
+  todo: {Value: Todo},
+  createTodo: function(){
+    this.todo.save().then(function(){
+      this.todo = new Todo();
+    }.bind(this));
+  }
+});
+
+can.Component.extend({
+  tag: "todo-create",
+  view: can.stache.from("todo-create-template"),
+  ViewModel: TodoCreateVM
+});
+
+var TodoListVM = can.DefineMap.extend({
+  todos: Todo.List,
+  editing: Todo,
+  backupName: "string",
+  isEditing: function(todo){
+    return todo === this.editing;
+  },
+  edit: function(todo){
+    this.backupName = todo.name;
+    this.editing = todo;
+  },
+  cancelEdit: function(){
+    this.editing.name = this.backupName;
+    this.editing = null;
+  },
+  updateName: function() {
+    this.editing.save();
+    this.editing = null;
+  }
+});
+
+can.Component.extend({
+  tag: "todo-list",
+  view: can.stache.from("todo-list-template"),
+  ViewModel: TodoListVM
+});
+
+var AppVM = can.DefineMap.extend({seal: false},{
+  filter: "string",
+  route: "string",
+  todosPromise: {
+    get: function(){
+
+      if(!this.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({complete: this.filter === "complete"});
+      }
+    }
+  }
+});
+
+var template = can.stache.from("todomvc-template");
+
+var vm = new AppVM();
+can.route.map(vm);
+can.route(":filter");
+can.route.ready();
+
+var frag = template(vm);
+document.body.appendChild(frag);
+```
+@highlight 87-109,only
+
+Update `HTML` to:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - Routing">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo" placeholder="What needs to be done?"
+    autofocus=""
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(.)}}editing{{/if}}">
+      <div class="view">
+        <input class="toggle" type="checkbox" {($checked)}="complete">
+        <label ($dblclick)="edit(.)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
+</script>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox">
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos}="todosPromise.value"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a href="{{routeUrl filter=undefined}}"
+					{{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>All</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='active'}}"
+					{{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>Active</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='complete'}}"
+					{{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.8/dist/global/can.all.js"></script>
+</body>
+
+</html>
+```
+@highlight 55-56,59-60,63-64,only
+
+
 ## Check all and clear completed
+
+Update `JavaScript` to:
+
+```js
+var todoAlgebra = new can.set.Algebra(
+  can.set.props.boolean("complete"),
+  can.set.props.id("id"),
+  can.set.props.sort("sort")
+);
+
+var todoStore = can.fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], todoAlgebra);
+
+can.fixture("/api/todos", todoStore);
+can.fixture.delay = 1000;
+
+
+var Todo = can.DefineMap.extend({
+  id: "string",
+  name: "string",
+  complete: {type: "boolean", value: false}
+});
+
+Todo.List = can.DefineList.extend({
+  "*": Todo,
+  active: {
+    get: function(){
+      return this.filter({complete: false})
+    }
+  },
+  complete: {
+    get: function(){
+      return this.filter({complete: true});
+    }
+  },
+  allComplete: {
+    get: function(){
+      return this.length === this.complete.length;
+    }
+  },
+  saving: {
+    get: function(){
+      return this.filter(function(todo){
+        return todo.isSaving();
+      });
+    }
+  },
+  updateCompleteTo: function(value){
+    this.forEach(function(todo){
+      todo.complete = value;
+      todo.save();
+    });
+  },
+  destroyComplete: function(){
+    this.complete.forEach(function(todo){
+      todo.destroy();
+    });
+  }
+});
+
+can.connect.superMap({
+  url: "/api/todos",
+  Map: Todo,
+  List: Todo.List,
+  name: "todo",
+  algebra: todoAlgebra
+});
+
+var TodoCreateVM = can.DefineMap.extend({
+  todo: {Value: Todo},
+  createTodo: function(){
+    this.todo.save().then(function(){
+      this.todo = new Todo();
+    }.bind(this));
+  }
+});
+
+can.Component.extend({
+  tag: "todo-create",
+  view: can.stache.from("todo-create-template"),
+  ViewModel: TodoCreateVM
+});
+
+var TodoListVM = can.DefineMap.extend({
+  todos: Todo.List,
+  editing: Todo,
+  backupName: "string",
+  isEditing: function(todo){
+    return todo === this.editing;
+  },
+  edit: function(todo){
+    this.backupName = todo.name;
+    this.editing = todo;
+  },
+  cancelEdit: function(){
+    this.editing.name = this.backupName;
+    this.editing = null;
+  },
+  updateName: function() {
+    this.editing.save();
+    this.editing = null;
+  }
+});
+
+can.Component.extend({
+  tag: "todo-list",
+  view: can.stache.from("todo-list-template"),
+  ViewModel: TodoListVM
+});
+
+var AppVM = can.DefineMap.extend({seal: false},{
+  filter: "string",
+  route: "string",
+  todosPromise: {
+    get: function(){
+
+      if(!this.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({complete: this.filter === "complete"});
+      }
+    }
+  },
+  todosList: {
+    get: function(initialValue, resolve){
+      this.todosPromise.then(resolve);
+    }
+  },
+  allChecked: {
+    get: function(){
+      return this.todosList && this.todosList.allComplete;
+    },
+    set: function(newVal){
+      this.todosList && this.todosList.updateCompleteTo(newVal);
+    }
+  }
+});
+
+var template = can.stache.from("todomvc-template");
+
+var vm = new AppVM();
+can.route.map(vm);
+can.route(":filter");
+can.route.ready();
+
+var frag = template(vm);
+document.body.appendChild(frag);
+```
+@highlight 40-57,128-135,only
+
+Update `HTML` to:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - Routing">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo" placeholder="What needs to be done?"
+    autofocus=""
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if ./complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(.)}}editing{{/if}}">
+      <div class="view">
+        <input class="toggle" type="checkbox" {($checked)}="complete">
+        <label ($dblclick)="edit(.)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
+</script>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox"
+          {($checked)}="allChecked"
+          {$disabled}="todos.value.saving.length"/>
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos}="todosPromise.value"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a href="{{routeUrl filter=undefined}}"
+					{{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>All</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='active'}}"
+					{{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>Active</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='complete'}}"
+					{{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed"
+            ($click)="todosPromise.value.destroyComplete()">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
+</body>
+
+</html>
+```
+@highlight 45-47,69-70,only
+
+
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.39.15"></script>
