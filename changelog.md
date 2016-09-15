@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.3.27__ ( Sep 15 2016 )
+
+- [Adding PhantomJS from NPM for a newer version](https://github.com/canjs/canjs/pull/2489)
+- [updating core docs to use todo/{todoId} route template syntax](https://github.com/canjs/canjs/pull/2487)
+- [Backporting parent-to-child compute syntax from can-stache-bindings](https://github.com/canjs/canjs/pull/2483)
+- [Backporting stache binding fix for special values. #2370](https://github.com/canjs/canjs/pull/2481)
+
+
 __2.3.26__ ( Aug 17 2016 )
 
 - [Port can-observation changes for adds updateUntil for dynamic depths](https://github.com/canjs/canjs/pull/2453)
