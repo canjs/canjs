@@ -2359,7 +2359,6 @@ steal("can/view/bindings", "can/map", "can/test", "can/component", "can/view/mus
 		viewModel.dispatch('fooBarEvent');
 	});
 	
-<<<<<<< c75da90585d423b6b7f3d83f7b960bb7225295cd
 	test("one-way pass computes to components with ~", function(assert) {
 		expect(7);
 		can.Component.extend({
