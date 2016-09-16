@@ -11,4 +11,4 @@ addons:
   browserstack:
     username: "davidluecke"
     access_key:
-			secure: "cZFGgknEAy7VrmwsltZTh5Oz2iUTplFjwEI+5STW8L4zD/WcuXPgsBGuqSfOaFxPgvAfDeOrFmlrzoeQ1U7KDsoRfIvSX9amDJjPZmO1Zt3qkoh6nN09SSEluuNP5reyrvvV0QngNn5F22x9lKz7k0iV9rJpMq9NvUrn8BcCzck="
+      secure: "Cc3Ub6Zo1GV0ZCS4cCWb39As4rPINzs9LED0OMJYmzHXY7p0eJEisIokhAMmkhOcZAlZ/UfY3yUY83IAp6VJWn76sV6cF0jkHWPTSrjrygoBFaJ5CqziiAiYXDNM3lbMrLkQ7e/hu+y523iWEgLRxSU2JqiLM4lVAuBEp7vOeB0="
