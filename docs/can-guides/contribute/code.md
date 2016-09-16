@@ -7,6 +7,12 @@
 
 ## Overview
 
+Contributing to any Open Source project can be intimidating.  All contributions from all types of contributors are welcome.  We're
+committed to making the experience is pleasant and rewarding as possible.  We're happy to setup a
+pairing session to show you how to fix a bug or write a feature.  
+
+If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
+
 - lots of different repos, but they are mostly similar.
 
 ## Getting the code and verify its working

@@ -847,7 +847,14 @@ In this section, we will:
 
  - Make it possible to edit a todo's `name` and save that change to the server.
 
-Update `JavaScript` to:
+Update the `JavaScript` tab to:
+
+ - Update the `TodoListVM` to include the methods and properties needed to edit a todo's name, including:
+   - An `editing` property of type `Todo` that stores which todo is being edited.
+   - A `backupName` property that stores the todo's name before being edited.
+   - An `edit` method that sets up the editing state.
+   - A `cancelEdit` method that undos the editing state.
+   - A `updateName` method that updates the editing todo and saves it to the server.
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -943,9 +950,14 @@ document.body.appendChild(frag);
 @highlight 62-78,only
 
 
+Update the `HTML` tab to:
 
-
-Update `HTML` to:
+ - Use the `isEditing` method to add `editing` to the todo's `<li>` who is being edited.
+ - Call `edit` with the current context using [can-stache/keys/this].
+ - Setup the edit input to:
+   - Two way bind it's value to the current todo's `name` using [can-stache-bindings.twoWay].
+   - Call `updateName` when the enter key is pressed using [can-stache-bindings.event].
+   - Call `cancelEdit` if the input element loses focus.
 
 ```
 <!DOCTYPE html>
@@ -970,10 +982,10 @@ Update `HTML` to:
   {{#each todos}}
     <li class="todo {{#if complete}}completed{{/if}}
       {{#if isDestroying}}destroying{{/if}}
-      {{#if isEditing(.)}}editing{{/if}}">
+      {{#if isEditing(this)}}editing{{/if}}">
       <div class="view">
         <input class="toggle" type="checkbox" {($checked)}="complete">
-        <label ($dblclick)="edit(.)">{{name}}</label>
+        <label ($dblclick)="edit(this)">{{name}}</label>
         <button class="destroy" ($click)="destroy()"></button>
       </div>
       <input class="edit" type="text"
@@ -1026,9 +1038,38 @@ Update `HTML` to:
 ```
 @highlight 23,26,29-32,only
 
+When complete, you should be able to edit a todo's name.
+
+> change to this
+
 ## Routing
 
-Update `JavaScript` to:
+In this section, we will:
+
+ - Make it possible to use the forward and backwards button to change
+ between showing all todos, only active todos, or only completed todos.
+ - Add links to change between showing all todos, only active todos, or only completed todos.
+ - Make those links bold when the site is currently showing that link.
+
+
+Update the `JavaScript` tab to:
+
+ - Create a `AppVM` view model type that will manage the behavior of the `todomvc-template` and
+   will update when the url changes.
+ - Define a `filter` property that will be updated when the route changes.
+ - Define a `route` property that will be updated when the route changes.
+ - Define a `todosPromise` property that uses `filter` to determine what data should be
+   loaded from the server.  
+   - If `filter` is falsey, all data will be loaded.  
+   - If `filter` is `"complete"`, only complete todos will be loaded.
+   - If `filter` is any other value, the active todos will be loaded.
+ - Create an instance of the application view model (`appVM`).
+ - Connect changes in the url to changes in the `appVM` with [can-route.map].
+ - Create a pretty routing rule so if the url looks like `"!active"`, the `filter` property of
+   `appVM` will be set to `filter` with [can-route].
+ - Initialize the url's values on `appVM` and setup the two way connection with [can-route.ready].
+ - Render the `todomvc-template` with the `appVM`.
+
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -1117,7 +1158,7 @@ can.Component.extend({
   ViewModel: TodoListVM
 });
 
-var AppVM = can.DefineMap.extend({seal: false},{
+var AppVM = can.DefineMap.extend({
   filter: "string",
   route: "string",
   todosPromise: {
@@ -1134,17 +1175,20 @@ var AppVM = can.DefineMap.extend({seal: false},{
 
 var template = can.stache.from("todomvc-template");
 
-var vm = new AppVM();
-can.route.map(vm);
-can.route(":filter");
+var appVM = new AppVM();
+can.route.map(appVM);
+can.route("{filter}");
 can.route.ready();
 
-var frag = template(vm);
+var frag = template(appVM);
 document.body.appendChild(frag);
 ```
 @highlight 87-109,only
 
-Update `HTML` to:
+Update the `HTML` tab to:
+
+ - Set `href` to a url that will set the desired properties on `appVM` when clicked.
+ - Add `class='selected'` to the link if the current route matches the current properties of the `appVM` using [can-stache.helpers.routeCurrent].
 
 ```html
 <!DOCTYPE html>
@@ -1169,10 +1213,10 @@ Update `HTML` to:
   {{#each todos}}
     <li class="todo {{#if complete}}completed{{/if}}
       {{#if isDestroying}}destroying{{/if}}
-      {{#if isEditing(.)}}editing{{/if}}">
+      {{#if isEditing(this)}}editing{{/if}}">
       <div class="view">
         <input class="toggle" type="checkbox" {($checked)}="complete">
-        <label ($dblclick)="edit(.)">{{name}}</label>
+        <label ($dblclick)="edit(this)">{{name}}</label>
         <button class="destroy" ($click)="destroy()"></button>
       </div>
       <input class="edit" type="text"
@@ -1228,10 +1272,30 @@ Update `HTML` to:
 ```
 @highlight 55-56,59-60,63-64,only
 
+When complete, you should be able to click the `All`, `Active`, and `Completed` links and
+see the right data.  When you click from `All` to `Active` or from `All` to `Completed`,
+you'll notice that the list of todos is updated immediately, despite a request being made.
+This is because the [can-connect/fall-through-cache/fall-through-cache] is able to make use
+of the data loaded for the `All` todos page.  It's able to filter out the `Active` and
+`Completed` data.
 
-## Check all and clear completed
+## Toggle all and clear completed
 
-Update `JavaScript` to:
+In this section, we will:
+
+- Make the `toggle-all` button change all todos to complete or incomplete.
+- Make the `clear-completed` button delete all complete todos.
+
+Update the `JavaScript` tab to:
+
+- Add the following properties and methods to `Todo.List`:
+  - A `allComplete` property that returns `true` if every todo is complete.
+  - A `saving` property that returns todos that are being saved using [can-connect/can/map/map.prototype.isSaving].
+  - A `updateCompleteTo` method that updates every todo's `complete` property to the specified value and updates the compute on the server with [can-connect/can/map/map.prototype.save].
+  - A `destroyComplete` method that deletes every complete todo with [can-connect/can/map/map.prototype.destroy].
+- Adds the following properties to `AppVM`:
+  - A `todosList` property that gets its value from the `todosPromise` using an [can-define.types.get asynchronous getter].
+  - A `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
 
 ```js
 var todoAlgebra = new can.set.Algebra(
@@ -1357,7 +1421,7 @@ var AppVM = can.DefineMap.extend({seal: false},{
     }
   },
   todosList: {
-    get: function(initialValue, resolve){
+    get: function(lastSetValue, resolve){
       this.todosPromise.then(resolve);
     }
   },
@@ -1373,17 +1437,21 @@ var AppVM = can.DefineMap.extend({seal: false},{
 
 var template = can.stache.from("todomvc-template");
 
-var vm = new AppVM();
-can.route.map(vm);
-can.route(":filter");
+var appVM = new AppVM();
+can.route.map(appVM);
+can.route("{filter}");
 can.route.ready();
 
-var frag = template(vm);
+var frag = template(appVM);
 document.body.appendChild(frag);
 ```
-@highlight 40-57,128-135,only
+@highlight 35-57,123-135,only
 
-Update `HTML` to:
+Update the `HTML` tab to:
+
+- Cross bind the `toggle-all`'s `checked` property to the `appVM`'s `allChecked` property.
+- Disable the `toggle-all` button while any todo is saving.
+- Call the `Todo.List`'s `destroyComplete` method when the `clear-completed` button is clicked on.
 
 ```html
 <!DOCTYPE html>
@@ -1408,10 +1476,10 @@ Update `HTML` to:
   {{#each todos}}
     <li class="todo {{#if ./complete}}completed{{/if}}
       {{#if isDestroying}}destroying{{/if}}
-      {{#if isEditing(.)}}editing{{/if}}">
+      {{#if isEditing(this)}}editing{{/if}}">
       <div class="view">
         <input class="toggle" type="checkbox" {($checked)}="complete">
-        <label ($dblclick)="edit(.)">{{name}}</label>
+        <label ($dblclick)="edit(this)">{{name}}</label>
         <button class="destroy" ($click)="destroy()"></button>
       </div>
       <input class="edit" type="text"
@@ -1432,7 +1500,7 @@ Update `HTML` to:
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox"
           {($checked)}="allChecked"
-          {$disabled}="todos.value.saving.length"/>
+          {$disabled}="todosList.saving.length"/>
 		<label for="toggle-all">Mark all as complete</label>
 		<todo-list {todos}="todosPromise.value"/>
 	</section>
@@ -1455,7 +1523,7 @@ Update `HTML` to:
 			</li>
 		</ul>
 		<button id="clear-completed"
-            ($click)="todosPromise.value.destroyComplete()">
+            ($click)="todosList.destroyComplete()">
 			Clear completed ({{todosPromise.value.complete.length}})
 		</button>
 	</footer>
@@ -1470,6 +1538,7 @@ Update `HTML` to:
 ```
 @highlight 45-47,69-70,only
 
-
+When complete, you should be able to toggle all todos `complete` state and
+delete the completed todos.  You should also have a really good idea how CanJS works!
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.39.15"></script>
