@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<title>input focused!</title>
+	<style>
+		.wrapper {
+			background: grey;
+			padding: 1em;
+		}
+		.wrapper input {
+			font-size: 18px;
+		}
+		.wrapper input:focus {
+			outline: 5px solid blueviolet;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/stache" id="myTemplate">
+		<div class="wrapper" ($click)="putInFocus()">
+			<input type="text" {($focused)}="inFocus"/>
+		</div>
+
+		<div>In focus: <b>{{inFocus}}</b></div>
+	</script>
+	<script src="../node_modules/steal/steal.js" main="@empty">
+		var stache = require("can-stache");
+		var DefineMap = require("can-define/map/map");
+		require("can-stache-converters");
+
+		var template = stache.from("myTemplate");
+		var ViewModel = DefineMap.extend({
+			inFocus: "boolean",
+			putInFocus: function(){
+				this.inFocus = true;
+			}
+		});
+		var map = new ViewModel({ inFocus: false });
+		window.map = map;
+
+		document.body.appendChild(template(map));
+	</script>
+
+</body>
+</html>
