@@ -172,7 +172,7 @@ This assumes that the service:
 
 [can-connect] connects a data type, typically a `DefineMap` and its `DefineList`,
 to a service layer. This is often done via the
-[can-connect/can/super-map] module which bundles many common behaviors
+[can-connect/can/super-map/super-map] module which bundles many common behaviors
 and performance techniques into a single api:
 
 ```js
@@ -204,25 +204,25 @@ var connection = superMap({
 `superMap` extends the `Map` type, in this case, `Todo`, with
 the ability to make requests to the service layer.
 
- - Get a list of Todos
+ - [can-connect/can/map/map.getList Get a list] of Todos
    ```js
    Todo.getList({complete: true}).then(function(todos){})
    ```
- - Get a single Todo
+ - [can-connect/can/map/map.get Get] a single Todo
    ```js
    Todo.get({_id: 6}).then(function(todo){})
    ```
- - Create a Todo
+ - [can-connect/can/map/map.prototype.save Create] a Todo
    ```js
    var todo = new Todo({name: "do dishes", complete: false})
    todo.save().then(function(todo){})
    ```
- - Update an already created Todo
+ - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
    ```js
    todo.complete = true;
    todo.save().then(function(todo){})
    ```
- - Delete a Todo
+ - [can-connect/can/map/map.prototype.destroy Delete] a Todo
    ```js
    todo.destroy().then(function(todo){})
    ```
@@ -340,10 +340,10 @@ Component.extend({
 
 Bindings look like:
 
- - `(event)="key()"` for event binding.
- - `{prop}="key"` for one-way binding to a child.
- - `{^prop}="key"` for one-way binding to a parent.
- - `{(prop)}="key"` for two-way binding.
+ - `(event)="key()"` for [can-stache-bindings.event event binding].
+ - `{prop}="key"` for [can-stache-bindings.toChild one-way binding to a child].
+ - `{^prop}="key"` for [can-stache-bindings.toParent one-way binding to a parent].
+ - `{(prop)}="key"` for [can-stache-bindings.twoWay two-way binding].
 
 Adding `$` to a binding like `($event)="key()"` changes the binding from the viewModel to the element's attributes or properties.
 
@@ -390,7 +390,7 @@ Adding `$` to a binding like `($event)="key()"` changes the binding from the vie
 ## can-route and can-route-pushstate
 
 [can-route] connects a `DefineMap`'s properties to values in the
-url. Create a map type, connect it to the url, and begin routing like:
+url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [can-route.ready begin routing] like:
 
 ```js
 var route = require("can-route");
