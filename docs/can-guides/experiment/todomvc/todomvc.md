@@ -11,22 +11,41 @@ and [can-fixture].
 The easiest way to get started is to clone the following JSBin:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/sasuje/2/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/sasuje/4/embed?html,output">JS Bin on jsbin.com</a>
 
 The JSBin starts
-with the static HTML and CSS a designer might turn over to a JS developer.
+with the static HTML and CSS a designer might turn over to a JS developer. We will be
+adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.6/dist/global/can.all.js), which is a script that includes
-CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries.
+The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.9/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead
-should import things directly.  Read [guides/setup] on how to setup CanJS
-in a real app.
+should import things directly with a module loader like [StealJS](http://stealjs.com),
+WebPack or Browserify.  In a real app your code will look like:
+
+```js
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/map/map");
+
+var Todo = DefineMap.extend({ ... });
+Todo.List = DefineList.extend({ ... });
+```
+
+Not:
+
+```js
+var Todo = can.DefineMap.extend({ ... });
+Todo.List = can.DefineList.extend({ ... });
+```
+
+Read [guides/setup] on how to setup CanJS in a real app.
 
 ## Create and render the template
 
-The first step is to render the markup in a [can-stache] live bound template.  Add
-a `<script>` tag around the content in the `HTML` tab as follows:
+In this section, we will render the markup in a [can-stache] live bound template.  
+
+Update the `HTML` tab to have a `<script>` tag around the html content.
 
 ```html
 <!DOCTYPE html>
@@ -43,8 +62,7 @@ a `<script>` tag around the content in the `HTML` tab as follows:
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
-		<input id="new-todo" placeholder="What needs to be done?"
-               autofocus="">
+        <input id="new-todo" placeholder="What needs to be done?">
 	</header>
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
@@ -99,15 +117,21 @@ a `<script>` tag around the content in the `HTML` tab as follows:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.6/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
 ```
-@highlight 11,68,only
+@highlight 11,67,only
 
-[can-stache.from can-stache.from] can load the contents of the `<script>` tag as
-a template.  To load and render this template, and add the result to the
+Update the `JavaScript` tab to:
+
+ - Use [can-stache.from can-stache.from] to load the contents of the `<script>` tag as
+ a [template renderer function](can-stache.renderer).
+ - Render the template with an empty object into a [document fragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment).
+ - Insert the fragment into the document's `<body>` element.
+
+ To load and render this template, and add the result to the
 body, add the following to the `JavaScript` tab:
 
 ```js
@@ -124,9 +148,7 @@ when the template's data is changed, it will update automatically. We'll see
 that in the next step.
 
 
-> NOTE: autofocus
-
-## Create the todos type and get items left working
+## Define the todos type and show the active and complete count.
 
 In this section, we will:
 
@@ -134,6 +156,7 @@ In this section, we will:
  - Show the number of active (`complete === true`) and and complete todos.
  - Connect a todo's `complete` property to a checkbox so that when
    we toggle the checkbox the number of active and complete todos changes.
+
 
 Update the `JavaScript` tab to:
 
@@ -175,8 +198,6 @@ document.body.appendChild(frag);
 @highlight 1-25,28,only
 
 
-
-
 Update the `HTML` tab to:
 
 - Use [can-stache.helpers.each] to loop through every todo.
@@ -201,8 +222,7 @@ Update the `HTML` tab to:
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
-		<input id="new-todo" placeholder="What needs to be done?"
-               autofocus="">
+        <input id="new-todo" placeholder="What needs to be done?">
 	</header>
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
@@ -243,17 +263,22 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.6/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
 ```
-@highlight 22-31,36,50,only
+@highlight 21-30,35,49,only
 
 When complete, you should be able to toggle the checkboxes and see the number of
 items left and the completed count change automatically.  This is because
 [can-stache] is able to listen for changes in observables like [can-define/map/map],
 [can-define/list/list] and [can-compute].
+
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/2-items-left.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/2-items-left.webm" type="video/webm">
+</video>
 
 
 ## Get todos from the server
@@ -349,8 +374,7 @@ Update the `HTML` tab to:
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
-		<input id="new-todo" placeholder="What needs to be done?"
-               autofocus="">
+        <input id="new-todo" placeholder="What needs to be done?">
 	</header>
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
@@ -391,12 +415,12 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.7/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
 ```
-@highlight 22,36,50,only
+@highlight 21,35,49,only
 
 When complete, you'll notice a 1 second delay before seeing the list of todos as
 they load for the first time from the fixtured data store. On future page reloads, the
@@ -434,8 +458,7 @@ Update the `HTML` tab to:
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
-		<input id="new-todo" placeholder="What needs to be done?"
-               autofocus="">
+        <input id="new-todo" placeholder="What needs to be done?">
 	</header>
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
@@ -477,12 +500,12 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.7/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
 ```
-@highlight 23-24,28,only
+@highlight 22-23,27,only
 
 When complete, you should be able to delete a todo by clicking its delete button.  After
 clicking the todo, its name will turn red and italic.  Once deleted the todo will be
@@ -496,9 +519,6 @@ shouldn't have to manage lists yourself.
 Finally, if you refresh the page after deleting, you'll notice the page temporarily shows fewer items.
 This is because the fall through cache's data is shown before the response from fixtured data store
 is used.
-
-
-> TODO: make sure we get the right css
 
 ## Create todos
 
@@ -602,8 +622,8 @@ Update the `HTML` tab to:
 <body>
 
 <script type='text/stache' id='todo-create-template'>
-<input id="new-todo" placeholder="What needs to be done?"
-    autofocus=""
+<input id="new-todo"
+    placeholder="What needs to be done?"
     {^$value}="todo.name"
     ($enter)="createTodo()"/>
 </script>
@@ -654,7 +674,7 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.7/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
@@ -774,8 +794,8 @@ Update the `HTML` tab to:
 <body>
 
 <script type='text/stache' id='todo-create-template'>
-<input id="new-todo" placeholder="What needs to be done?"
-    autofocus=""
+<input id="new-todo"
+    placeholder="What needs to be done?">
     {($value)}="todo.name"
     ($enter)="createTodo()"/>
 </script>
@@ -830,7 +850,7 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.7/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
@@ -971,8 +991,8 @@ Update the `HTML` tab to:
 <body>
 
 <script type='text/stache' id='todo-create-template'>
-<input id="new-todo" placeholder="What needs to be done?"
-    autofocus=""
+<input id="new-todo"
+    placeholder="What needs to be done?"
     {($value)}="todo.name"
     ($enter)="createTodo()"/>
 </script>
@@ -1040,8 +1060,6 @@ Update the `HTML` tab to:
 
 When complete, you should be able to edit a todo's name.
 
-> change to this
-
 ## Routing
 
 In this section, we will:
@@ -1064,7 +1082,7 @@ Update the `JavaScript` tab to:
    - If `filter` is `"complete"`, only complete todos will be loaded.
    - If `filter` is any other value, the active todos will be loaded.
  - Create an instance of the application view model (`appVM`).
- - Connect changes in the url to changes in the `appVM` with [can-route.map].
+ - Connect changes in the url to changes in the `appVM` with [can-route.data].
  - Create a pretty routing rule so if the url looks like `"!active"`, the `filter` property of
    `appVM` will be set to `filter` with [can-route].
  - Initialize the url's values on `appVM` and setup the two way connection with [can-route.ready].
@@ -1176,7 +1194,7 @@ var AppVM = can.DefineMap.extend({
 var template = can.stache.from("todomvc-template");
 
 var appVM = new AppVM();
-can.route.map(appVM);
+can.route.data = appVM;
 can.route("{filter}");
 can.route.ready();
 
@@ -1202,8 +1220,8 @@ Update the `HTML` tab to:
 <body>
 
 <script type='text/stache' id='todo-create-template'>
-<input id="new-todo" placeholder="What needs to be done?"
-    autofocus=""
+<input id="new-todo"
+    placeholder="What needs to be done?"
     {($value)}="todo.name"
     ($enter)="createTodo()"/>
 </script>
@@ -1265,7 +1283,7 @@ Update the `HTML` tab to:
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.8/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.9/dist/global/can.all.js"></script>
 </body>
 
 </html>
@@ -1438,7 +1456,7 @@ var AppVM = can.DefineMap.extend({seal: false},{
 var template = can.stache.from("todomvc-template");
 
 var appVM = new AppVM();
-can.route.map(appVM);
+can.route.data = appVM;
 can.route("{filter}");
 can.route.ready();
 
@@ -1465,8 +1483,8 @@ Update the `HTML` tab to:
 <body>
 
 <script type='text/stache' id='todo-create-template'>
-<input id="new-todo" placeholder="What needs to be done?"
-    autofocus=""
+<input id="new-todo"
+    placeholder="What needs to be done?"
     {($value)}="todo.name"
     ($enter)="createTodo()"/>
 </script>
