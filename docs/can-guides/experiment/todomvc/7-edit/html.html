@@ -22,7 +22,8 @@
       {{#if isDestroying}}destroying{{/if}}
       {{#if isEditing(this)}}editing{{/if}}">
       <div class="view">
-        <input class="toggle" type="checkbox" {($checked)}="complete">
+	    <input class="toggle" type="checkbox"
+			   {($checked)}="complete" ($change)="save()">
         <label ($dblclick)="edit(this)">{{name}}</label>
         <button class="destroy" ($click)="destroy()"></button>
       </div>
@@ -70,7 +71,7 @@
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.10/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.11/dist/global/can.all.js"></script>
 </body>
 
 </html>

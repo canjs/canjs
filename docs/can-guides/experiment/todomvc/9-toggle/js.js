@@ -104,14 +104,11 @@ can.Component.extend({
 var AppVM = can.DefineMap.extend({seal: false},{
   filter: "string",
   route: "string",
-  todosPromise: {
-    get: function(){
-
-      if(!this.filter) {
-        return Todo.getList({});
-      } else {
-        return Todo.getList({complete: this.filter === "complete"});
-      }
+  get todosPromise(){
+    if(!this.filter) {
+      return Todo.getList({});
+    } else {
+      return Todo.getList({complete: this.filter === "complete"});
     }
   },
   todosList: {
@@ -127,12 +124,11 @@ var AppVM = can.DefineMap.extend({seal: false},{
   }
 });
 
-var template = can.stache.from("todomvc-template");
-
 var appVM = new AppVM();
 can.route.data = appVM;
 can.route("{filter}");
 can.route.ready();
 
+var template = can.stache.from("todomvc-template");
 var frag = template(appVM);
 document.body.appendChild(frag);

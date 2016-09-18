@@ -11,13 +11,13 @@ and [can-fixture].
 The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/sasuje/7/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/sasuje/10/embed?html,output">JS Bin on jsbin.com</a>
 
 The JSBin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.10/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.11/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead
@@ -264,7 +264,7 @@ Update the `JavaScript` tab to:
    - A `backupName` property that stores the todo's name before being edited.
    - An `edit` method that sets up the editing state.
    - A `cancelEdit` method that undos the editing state if in the editing state.
-   - A `updateName` method that updates the editing todo and saves it to the server.
+   - A `updateName` method that updates the editing todo and [can-connect/can/map/map.prototype.save saves] it to the server.
 
 @sourceref ./7-edit/js.js
 @highlight 58-76,only
@@ -272,7 +272,8 @@ Update the `JavaScript` tab to:
 
 Update the `HTML` tab to:
 
- - Use the `isEditing` method to add `editing` to the todo's `<li>` who is being edited.
+ - Use the `isEditing` method to add `editing` to the `className` of the `<li>` being edited.
+ - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
  - Call `edit` with the current context using [can-stache/keys/this].
  - Setup the edit input to:
    - Two way bind it's value to the current todo's `name` using [can-stache-bindings.twoWay].
@@ -281,7 +282,7 @@ Update the `HTML` tab to:
    - Call `cancelEdit` if the input element loses focus.
 
 @sourceref ./7-edit/html.html
-@highlight 23,26,29-33,only
+@highlight 23,25-27,29-33,only
 
 When complete, you should be able to edit a todo's name.
 
@@ -299,13 +300,13 @@ Update the `JavaScript` tab to:
 
  - Create a `AppVM` view model type that will manage the behavior of the `todomvc-template` and
    will update when the url changes.
- - Define a `filter` property that will be updated when the route changes.
- - Define a `route` property that will be updated when the route changes.
- - Define a `todosPromise` property that uses `filter` to determine what data should be
+   - Define a `filter` property that will be updated when the route changes.
+   - Define a `route` property that will be updated when the route changes.
+   - Define a `todosPromise` property that uses `filter` to determine what data should be
    loaded from the server.  
-   - If `filter` is falsey, all data will be loaded.  
-   - If `filter` is `"complete"`, only complete todos will be loaded.
-   - If `filter` is any other value, the active todos will be loaded.
+     - If `filter` is falsey, all data will be loaded.  
+     - If `filter` is `"complete"`, only complete todos will be loaded.
+     - If `filter` is any other value, the active todos will be loaded.
  - Create an instance of the application view model (`appVM`).
  - Connect changes in the url to changes in the `appVM` with [can-route.data].
  - Create a pretty routing rule so if the url looks like `"!active"`, the `filter` property of
@@ -315,7 +316,7 @@ Update the `JavaScript` tab to:
 
 
 @sourceref ./8-routing/js.js
-@highlight 85-107,only
+@highlight 85-100,103,only
 
 Update the `HTML` tab to:
 
@@ -323,7 +324,7 @@ Update the `HTML` tab to:
  - Add `class='selected'` to the link if the current route matches the current properties of the `appVM` using [can-stache.helpers.routeCurrent].
 
 @sourceref ./8-routing/html.html
-@highlight 56-57,60-61,64-65,only
+@highlight 57-58,61-62,65-66,only
 
 When complete, you should be able to click the `All`, `Active`, and `Completed` links and
 see the right data.  When you click from `All` to `Active` or from `All` to `Completed`,
@@ -351,7 +352,7 @@ Update the `JavaScript` tab to:
   - A `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
 
 @sourceref ./9-toggle/js.js
-@highlight 31-49,117-127,only
+@highlight 31-49,114-124,only
 
 Update the `HTML` tab to:
 
@@ -360,7 +361,7 @@ Update the `HTML` tab to:
 - Call the `Todo.List`'s `destroyComplete` method when the `clear-completed` button is clicked on.
 
 @sourceref ./9-toggle/html.html
-@highlight 46-48,70-71,only
+@highlight 47-49,71-72,only
 
 When complete, you should be able to toggle all todos `complete` state and
 delete the completed todos.  You should also have a really good idea how CanJS works!

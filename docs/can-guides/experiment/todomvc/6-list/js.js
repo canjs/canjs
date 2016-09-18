@@ -39,22 +39,22 @@ can.connect.superMap({
 });
 
 var TodoCreateVM = can.DefineMap.extend({
-    todo: {Value: Todo},
-    createTodo: function(){
-        this.todo.save().then(function(){
-            this.todo = new Todo();
-        }.bind(this));
-    }
+  todo: {Value: Todo},
+  createTodo: function(){
+    this.todo.save().then(function(){
+      this.todo = new Todo();
+    }.bind(this));
+  }
 });
 
 can.Component.extend({
-    tag: "todo-create",
-    view: can.stache.from("todo-create-template"),
-    ViewModel: TodoCreateVM
+  tag: "todo-create",
+  view: can.stache.from("todo-create-template"),
+  ViewModel: TodoCreateVM
 });
 
 var TodoListVM = can.DefineMap.extend({
-    todos: Todo.List
+  todos: Todo.List
 });
 
 can.Component.extend({
