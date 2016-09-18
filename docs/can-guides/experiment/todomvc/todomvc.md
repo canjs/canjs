@@ -8,16 +8,16 @@ and [can-fixture].
 
 ## Setup
 
-The easiest way to get started is to clone the following JSBin:
+The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/sasuje/6/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/sasuje/7/embed?html,output">JS Bin on jsbin.com</a>
 
 The JSBin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.9/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.10/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead
@@ -181,6 +181,11 @@ shouldn't have to manage lists yourself.
 Finally, if you refresh the page after deleting, you'll notice the page temporarily shows fewer items.
 This is because the fall through cache's data is shown before the response from fixtured data store
 is used.
+
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/4-destroy/completed.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/4-destroy/completed.webm" type="video/webm">
+</video>
 
 ## Create todos
 
