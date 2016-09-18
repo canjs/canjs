@@ -1,82 +1,3 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="./todomvc.css"/>
-    </head>
-    <body>
-
-<script src="../../../../node_modules/es6-promise/dist/promise-1.0.0.js"></script>
-<script src="../../../../node_modules/jquery/dist/jquery.js"></script>
-<script src="../../../../dist/global/can.all.js"></script>
-
-<script type='text/stache' id='todo-create-template'>
-<input id="new-todo"
-    placeholder="What needs to be done?"
-    {($value)}="todo.name"
-    ($enter)="createTodo()"/>
-</script>
-
-<script type='text/stache' id='todo-list-template'>
-<ul id="todo-list">
-  {{#each todos}}
-    <li class="todo {{#if ./complete}}completed{{/if}}
-      {{#if isDestroying}}destroying{{/if}}
-      {{#if isEditing(this)}}editing{{/if}}">
-      <div class="view">
-        <input class="toggle" type="checkbox" {($checked)}="complete">
-        <label ($dblclick)="edit(this)">{{name}}</label>
-        <button class="destroy" ($click)="destroy()"></button>
-      </div>
-      <input class="edit" type="text"
-        {($value)}="name"
-        ($enter)="updateName()"
-        {$focused}="isEditing(this)"
-        ($blur)="cancelEdit()"/>
-    </li>
-  {{/each}}
-</ul>
-</script>
-
-<script type="text/stache" id="todomvc-template">
-<section id="todoapp">
-	<header id="header">
-		<h1>todos</h1>
-		<todo-create/>
-	</header>
-	<section id="main" class="">
-		<input id="toggle-all" type="checkbox"
-          {($checked)}="allChecked"
-          {$disabled}="todosList.saving.length"/>
-		<label for="toggle-all">Mark all as complete</label>
-		<todo-list {todos}="todosPromise.value"/>
-	</section>
-	<footer id="footer" class="">
-		<span id="todo-count">
-			<strong>{{todosPromise.value.active.length}}</strong> items left
-		</span>
-		<ul id="filters">
-			<li>
-				<a href="{{routeUrl filter=undefined}}"
-					{{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>All</a>
-			</li>
-			<li>
-				<a href="{{routeUrl filter='active'}}"
-					{{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>Active</a>
-			</li>
-			<li>
-				<a href="{{routeUrl filter='complete'}}"
-					{{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>Completed</a>
-			</li>
-		</ul>
-		<button id="clear-completed"
-            ($click)="todosList.destroyComplete()">
-			Clear completed ({{todosPromise.value.complete.length}})
-		</button>
-	</footer>
-</section>
-</script>
-
-<script>
 var todoAlgebra = new can.set.Algebra(
   can.set.props.boolean("complete"),
   can.set.props.id("id"),
@@ -183,11 +104,14 @@ can.Component.extend({
 var AppVM = can.DefineMap.extend({seal: false},{
   filter: "string",
   route: "string",
-  get todosPromise(){
-    if(!this.filter) {
-      return Todo.getList({});
-    } else {
-      return Todo.getList({complete: this.filter === "complete"});
+  todosPromise: {
+    get: function(){
+
+      if(!this.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({complete: this.filter === "complete"});
+      }
     }
   },
   todosList: {
@@ -199,7 +123,7 @@ var AppVM = can.DefineMap.extend({seal: false},{
     return this.todosList && this.todosList.allComplete;
   },
   set allChecked(newVal){
-      this.todosList && this.todosList.updateCompleteTo(newVal);
+    this.todosList && this.todosList.updateCompleteTo(newVal);
   }
 });
 
@@ -212,7 +136,3 @@ can.route.ready();
 
 var frag = template(appVM);
 document.body.appendChild(frag);
-</script>
-
-    </body>
-</html>

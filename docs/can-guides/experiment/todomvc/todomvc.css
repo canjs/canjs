@@ -192,6 +192,10 @@ label[for='toggle-all'] {
 #todo-list li.saving {
 	font-style: italic;
 }
+#todoapp #todo-list li.destroying label {
+	font-style: italic;
+    color: #a88a8a;
+}
 
 #todo-list li.editing {
 	border-bottom: none;
