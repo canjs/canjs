@@ -101,7 +101,7 @@ can.Component.extend({
   ViewModel: TodoListVM
 });
 
-var AppVM = can.DefineMap.extend({seal: false},{
+var AppVM = can.DefineMap.extend({
   filter: "string",
   route: "string",
   get todosPromise(){
