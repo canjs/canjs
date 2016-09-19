@@ -133,7 +133,7 @@ var AppState = DefineMap.extend({
 
 // initialize and call map first, so anything binding to can.route will work correctly
 appState = new AppState();
-route.map(appState);
+route.data = appState;
 
 // when the data is ready, set the locations property
 appState.locations = new LocationList({});
