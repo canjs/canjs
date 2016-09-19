@@ -1,5 +1,7 @@
 ## [![CanJS](http://bitovi.com/img/os-canjs-logo.png)](http://canjs.com/)
  
+ [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
+
 [![Build Status](https://travis-ci.org/canjs/canjs.png?branch=master)](https://travis-ci.org/canjs/canjs)
 
 > WARNING: This npm package is for the [CanJS client-side MV* libraries](http://canjs.com). It was formerly

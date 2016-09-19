@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js: node
-script: npm test
+script: npm run ci
 before_install:
   - ./firefox-allow-popups.sh
   - "export DISPLAY=:99.0"
