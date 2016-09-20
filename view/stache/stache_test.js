@@ -4877,6 +4877,19 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			assert.equal( className, 'one two three ' );
 		});
+        test("each values update when keys are replaced (#2318)", function () {
+            var template = can.stache("{{#each this}}<p>{{.}}</p>{{/each}}");
+
+            var vm = new can.Map({
+                foo: 'foo-value'
+            });
+            var dom = template(vm);
+
+            vm.attr('foo', 'bar-value');
+            var p = dom.firstChild;
+            equal(p.innerHTML, 'bar-value', 'updated the value inside #each');
+        });
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 
