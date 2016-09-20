@@ -49,7 +49,7 @@
 		"rimraf": "2.1",
 		"steal": "^0.13.0-pre.7",
 		"steal-benchmark": "~0.0.1",
-		"steal-qunit": "0.0.2",
+		"steal-qunit": "0.1.1",
 		"steal-tools": "^0.13.3",
 		"testee": "^0.2.4",
 		"zombie": "3.1.1"
