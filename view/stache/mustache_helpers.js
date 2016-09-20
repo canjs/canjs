@@ -77,7 +77,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				// listen to keys changing so we can livebind lists of attributes.
 				for (i = 0; i < keys.length; i++) {
 					key = keys[i];
-                    var value = can.compute(expr, key)();
+                    var value = expr.attr(key);
                     result.push(options.fn(options.scope.add({
 							"%key": key,
 							"@key": key
