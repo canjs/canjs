@@ -77,6 +77,22 @@ steal("can/util", "can/view/scope",function(can){
 			};
 			return observeObservables ? convertedRenderer : can.__notObserve(convertedRenderer);
 		},
+		// A helper for calling the truthy subsection for each item in a list and putting them in a document Fragment.
+		getItemsFragContent: function(items, helperOptions, scope){
+			var isObserveList = this.isObserveLike(items);
+			var result = [],
+				len = isObserveList ? items.attr('length') : items.length;
+
+			for (var i = 0; i < len; i++) {
+				var aliases = {
+					"%index": i,
+					"@index": i
+				};
+				var item = isObserveList ? items.attr('' + i) : items[i];
+				result.push(helperOptions.fn(scope.add(aliases, {notContext: true }).add(item)));
+			}
+			return result;
+		},
 		Options: Options
 	};
 });
