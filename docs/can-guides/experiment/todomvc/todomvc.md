@@ -5,6 +5,7 @@
 This guide walks through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS's [can-core Core libraries]
 and [can-fixture].
 
+@body
 
 ## Setup
 
@@ -309,7 +310,7 @@ Update the `JavaScript` tab to:
      - If `filter` is any other value, the active todos will be loaded.
  - Create an instance of the application view model (`appVM`).
  - Connect changes in the url to changes in the `appVM` with [can-route.data].
- - Create a pretty routing rule so if the url looks like `"!active"`, the `filter` property of
+ - Create a pretty routing rule so if the url looks like `"#!active"`, the `filter` property of
    `appVM` will be set to `filter` with [can-route].
  - Initialize the url's values on `appVM` and setup the two way connection with [can-route.ready].
  - Render the `todomvc-template` with the `appVM`.
