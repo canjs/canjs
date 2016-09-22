@@ -191,6 +191,9 @@ steal("can/util/can.js", function (can) {
 								node.value = val;
 								el.setAttributeNode(node);
 							} else {
+								if(attrName === 'xlink:href'){
+									attrName = 'href';
+								}
 								el.setAttribute(attrName, val);
 							}
 						};
