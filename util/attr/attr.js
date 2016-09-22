@@ -5,6 +5,11 @@
 
 steal("can/util/can.js", function (can) {
 
+
+	var namespaces = {
+		'xlink': 'http://www.w3.org/1999/xlink'
+	};
+
 	// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 	// the triggering of `attributes` event async.
 	var setImmediate = can.global.setImmediate || function (cb) {
@@ -180,7 +185,8 @@ steal("can/util/can.js", function (can) {
 						return function(el, attrName, val){
 							var first = attrName.charAt(0),
 								cachedNode,
-								node;
+								node,
+								attr;
 							if((first === "{" || first === "(" || first === "*") && el.setAttributeNode) {
 								cachedNode = invalidNodes[attrName];
 								if(!cachedNode) {
@@ -191,7 +197,14 @@ steal("can/util/can.js", function (can) {
 								node.value = val;
 								el.setAttributeNode(node);
 							} else {
-								el.setAttribute(attrName, val);
+								attr = attrName.split(':');
+
+								if(attr.length !== 1) {
+									el.setAttributeNS(namespaces[attr[0]], attrName, val);
+								}
+								else {
+									el.setAttribute(attrName, val);
+								}
 							}
 						};
 					}

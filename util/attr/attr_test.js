@@ -161,6 +161,13 @@ steal('can/util', 'can/view/stache', 'can/util/attr', 'steal-qunit', function ()
 		equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
 	});
 
+	test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
+		var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+
+		can.attr.set(use, "xlink:href", "svgUri");
+		equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
+	});
+
 	if (window.jQuery || window.Zepto) {
 
 		test("zepto or jQuery - bind and unbind", function () {
