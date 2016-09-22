@@ -104,7 +104,7 @@
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.2.0",
-      "bit-docs-html-canjs": "^0.3.4",
+      "bit-docs-html-canjs": "^0.3.5",
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0"
