@@ -107,7 +107,7 @@
       "bit-docs-html-canjs": "^0.3.3",
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
-      "bit-docs-tag-demo": "^0.2.0"
+      "bit-docs-tag-demo": "^0.3.0"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
