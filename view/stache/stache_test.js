@@ -4890,6 +4890,21 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			vm.attr('foo', 'bar-value');
 			var p = dom.firstChild;
 			equal(p.innerHTML, 'bar-value', 'updated the value inside #each');
+
+		});
+
+		test("{{%index}} and {{@index}} work with {{#key}} iteration (#2361)", function () {
+			var template = can.stache('<p>{{#iter}}<span>{{@index}}</span>{{/iter}}</p> \
+					   <p>{{#iter}}<span>{{%index}}</span>{{/iter}}</p>');
+			var div = doc.createElement('div');
+			var dom = template({iter: new can.List(['hey', 'there'])});
+			div.appendChild(dom);
+
+			var span = div.getElementsByTagName('span');
+			equal((span[0].innerHTML), '0', 'iteration for @index');
+			equal((span[1].innerHTML), '1', 'iteration for %index');
+			equal((span[2].innerHTML), '0', 'iteration for %index');
+			equal((span[3].innerHTML), '1', 'iteration for %index');
 		});
 
 		// PUT NEW TESTS RIGHT BEFORE THIS!

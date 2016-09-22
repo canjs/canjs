@@ -32,20 +32,6 @@ steal("can/util",
 	// ## Helpers
 
 	var mustacheLineBreakRegExp = /(?:(?:^|(\r?)\n)(\s*)(\{\{([^\}]*)\}\}\}?)([^\S\n\r]*)($|\r?\n))|(\{\{([^\}]*)\}\}\}?)/g,
-		// A helper for calling the truthy subsection for each item in a list and putting them in a document Fragment.
-		getItemsFragContent = function(items, isObserveList, helperOptions, options){
-			var frag = (can.document || can.global.document).createDocumentFragment();
-			for (var i = 0, len = items.length; i < len; i++) {
-				append(frag, helperOptions.fn( isObserveList ? items.attr('' + i) : items[i], options) );
-			}
-			return frag;
-		},
-		// Appends some content to a document fragment.  If the content is a string, it puts it in a TextNode.
-		append = function(frag, content){
-			if(content) {
-				frag.appendChild(typeof content === "string" ? frag.ownerDocument.createTextNode(content) : content);
-			}
-		},
 		// A helper for calling the truthy subsection for each item in a list and returning them in a string.
 		getItemsStringContent = function(items, isObserveList, helperOptions, options){
 			var txt = "";
@@ -55,9 +41,6 @@ steal("can/util",
 			return txt;
 		},
 		k = function(){};
-
-
-
 
 
 	var core = {
@@ -161,8 +144,11 @@ steal("can/util",
 						var isObserveList = utils.isObserveLike(finalValue);
 
 						if(isObserveList ? finalValue.attr("length") : finalValue.length) {
-							return (stringOnly ? getItemsStringContent: getItemsFragContent  )
-								(finalValue, isObserveList, helperOptionArg, helperOptions );
+							if (stringOnly) {
+								return getItemsStringContent(finalValue, isObserveList, helperOptionArg, helperOptions);
+							} else {
+								return can.frag(utils.getItemsFragContent(finalValue, helperOptionArg, scope));
+							}
 						} else {
 							return helperOptionArg.inverse(scope, helperOptions);
 						}

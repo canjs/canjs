@@ -1132,14 +1132,14 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 
 		var vm = new VM();
 		vm.bind('bar', function() {});
-		
+
 		setTimeout(function() {
 			equal(vm.attr('bar'), 10);
 			start();
 		}, 200);
 
 	});
-	
+
 
 	test("double get in a compute (#2230)", function() {
 		var VM = can.Map.extend({
@@ -1154,7 +1154,7 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		});
 
 		var vm = new VM();
-		
+
 		var c = can.compute(function(){
 			return vm.attr("names");
 		});
@@ -1206,5 +1206,15 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		list.pop();
 	});
 
-	
+	test("compute props can be set to null or undefined (#2372)", function(assert) {
+		var VM = can.Map.extend({ define: {
+			foo: { type: 'compute' }
+		}});
+
+		var vmNull = new VM({foo: null});
+		assert.equal(vmNull.foo, null, "foo is null, no error thrown");
+		var vmUndef = new VM({foo: undefined});
+		assert.equal(vmUndef.foo, undefined, "foo is undefined, no error thrown");
+	});
+
 });

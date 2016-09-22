@@ -62,15 +62,8 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			var expr = resolved;
 
 			if ( !! expr && utils.isArrayLike(expr)) {
-				var isCanList = expr instanceof can.List;
-				for (i = 0; i < (isCanList ? expr.attr('length') : expr.length); i++) {
-					var item = isCanList ? expr.attr(i) : expr[i];
-					result.push(options.fn(options.scope.add({
-							"%index": i,
-							"@index": i
-						},{notContext: true})
-						.add(item)));
-				}
+				var fragItems = utils.getItemsFragContent(expr, options, options.scope);
+				Array.prototype.push.apply(result, fragItems);
 			} else if (utils.isObserveLike(expr)) {
 				keys = expr.constructor.keys(expr);
 
