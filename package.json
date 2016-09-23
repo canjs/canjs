@@ -47,7 +47,7 @@
 		"lodash": "2.4.1",
 		"phantomjs-prebuilt": "^2.1.12",
 		"rimraf": "2.1",
-		"steal": "^0.13.0-pre.7",
+		"steal": "^0.16.36",
 		"steal-benchmark": "~0.0.1",
 		"steal-qunit": "0.0.2",
 		"steal-tools": "^0.13.3",
