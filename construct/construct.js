@@ -1,9 +1,9 @@
 // steal-clean
 steal('can/util/string', function (can) {
 	// ## construct.js
-	// `can.Construct`  
+	// `can.Construct`
 	// _This is a modified version of
-	// [John Resig's class](http://ejohn.org/blog/simple-javascript-inheritance/).  
+	// [John Resig's class](http://ejohn.org/blog/simple-javascript-inheritance/).
 	// It provides class level inheritance and callbacks._
 	// A private flag used to initialize a new class instance without
 	// initializing it's bindings.
@@ -526,6 +526,10 @@ steal('can/util/string', function (can) {
 				_fullName = can.underscore(fullName.replace(/\./g, "_"));
 				_shortName = can.underscore(shortName);
 
+				if (can.isPlainObject(current[shortName])) {
+					can.extend(Constructor, current[shortName]);
+				}
+
 				//!steal-remove-start
 				if (current[shortName]) {
 					can.dev.warn("can/construct/construct.js: There's already something called " + fullName);
@@ -602,7 +606,7 @@ steal('can/util/string', function (can) {
 			/**
 			 * @prototype
 			 */
-			return Constructor; //  
+			return Constructor; //
 			/**
 			 * @property {Object} can.Construct.prototype.constructor constructor
 			 * @parent can.Construct.prototype
