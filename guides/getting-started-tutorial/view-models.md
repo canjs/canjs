@@ -58,7 +58,7 @@ can.Component.extend({
   viewModel: can.Map.extend({
     define: {
       state: {
-        value: null,
+        value: "", //must be empty, not null, so the "Choose a state" option is selected by default
         set: function(newState) {
           if (newState) {
             alert('Selected “' + newState + '” state.');
