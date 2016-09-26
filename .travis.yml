@@ -1,10 +1,14 @@
 sudo: false
 language: node_js
 node_js: node
-script: npm test
+script: npm run ci
 before_install:
   - ./firefox-allow-popups.sh
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 addons:
   firefox: "48.0"
+  browserstack:
+    username: "davidluecke"
+    access_key:
+      secure: "Cc3Ub6Zo1GV0ZCS4cCWb39As4rPINzs9LED0OMJYmzHXY7p0eJEisIokhAMmkhOcZAlZ/UfY3yUY83IAp6VJWn76sV6cF0jkHWPTSrjrygoBFaJ5CqziiAiYXDNM3lbMrLkQ7e/hu+y523iWEgLRxSU2JqiLM4lVAuBEp7vOeB0="

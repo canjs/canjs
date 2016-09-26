@@ -8,6 +8,7 @@
     "postversion": "git push --tags && git checkout major && git branch -D release && git push",
     "testee": "testee test/index.html --browsers firefox",
     "test": "npm run build && npm run testee",
+    "ci": "npm run build && testee test/index.html -c testee.json",
     "release:pre": "npm version prerelease && npm publish",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
@@ -68,8 +69,9 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-fixture": "^0.4.0-pre.5",
-    "can-vdom": "^0.0.5",
     "can-stache-converters": "^3.0.0-pre.1",
+    "can-vdom": "^0.0.5",
+    "es6-promise": "^3.2.1",
     "funcunit": "^3.1.0-pre.1",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",
@@ -77,7 +79,7 @@
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.0-pre.1",
     "steal-tools": "pre",
-    "testee": "^0.2.5"
+    "testee": "^0.3.0-pre.1"
   },
   "demos": [
     "http://canjs.us/#examples",

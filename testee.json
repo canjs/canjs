@@ -1,0 +1,14 @@
+{
+	"timeout": "600",
+	"browsers": [{
+		"os": "win",
+		"browser": "ie",
+		"version": "9.0"
+	}],
+	"launch": {
+		"type": "browserstack",
+		"username": "davidluecke",
+		"password": "VYP7JayA9Nbi5vDF7Gpg",
+		"version": 2
+	}
+}
