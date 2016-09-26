@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 	  }, {
 	    browserName: 'safari',
 	    platform: 'OS X 10.11',
-	    version: '9.0'
+	    version: '10.0'
 	  }, {
 	    browserName: 'internet explorer',
 	    platform: 'Windows 8',
