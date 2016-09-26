@@ -37,6 +37,7 @@
     "can-compute": "^3.0.0-pre.14",
     "can-connect": "^0.6.0-pre.20",
     "can-construct": "^3.0.0-pre.8",
+    "can-construct-super": "^3.0.0-pre",
     "can-control": "^3.0.0-pre.7",
     "can-define": "^0.8.1",
     "can-event": "^3.0.0-pre.14",
