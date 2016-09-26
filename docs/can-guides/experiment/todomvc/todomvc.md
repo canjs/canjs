@@ -27,7 +27,7 @@ WebPack or Browserify.  In a real app your code will look like:
 
 ```js
 var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
 
 var Todo = DefineMap.extend({ ... });
 Todo.List = DefineList.extend({ ... });

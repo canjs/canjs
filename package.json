@@ -33,12 +33,12 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-component": "^3.0.0-pre.15",
+    "can-component": "^3.0.0-pre.16",
     "can-compute": "^3.0.0-pre.14",
     "can-connect": "^0.6.0-pre.20",
     "can-construct": "^3.0.0-pre.8",
     "can-control": "^3.0.0-pre.7",
-    "can-define": "^0.8.1",
+    "can-define": "^0.8.2",
     "can-event": "^3.0.0-pre.14",
     "can-fixture": "^0.4.0-pre.14",
     "can-jquery": "^3.0.0-pre.9",
@@ -53,7 +53,7 @@
     "can-simple-map": "^3.0.0-pre.4",
     "can-stache": "^3.0.0-pre.21",
     "can-stache-bindings": "^3.0.0-pre.21",
-    "can-util": "^3.0.0-pre.55",
+    "can-util": "^3.0.0-pre.56",
     "can-view-autorender": "^3.0.0-pre.4",
     "can-view-callbacks": "^3.0.0-pre.7",
     "can-view-import": "^3.0.0-pre.4",
@@ -104,7 +104,7 @@
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.2.0",
-      "bit-docs-html-canjs": "^0.3.5",
+      "bit-docs-html-canjs": "^0.3.6",
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0"
