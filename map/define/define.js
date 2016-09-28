@@ -163,7 +163,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 					return;
 				}
 				// if it took a setter and returned nothing, don't set the value
-				else if (setValue === undefined && !setterCalled && setter.length >= 1) {
+				else if (setValue === undefined && !setterCalled && setter.length > 1) {
 					//!steal-remove-start
 					asyncTimer = setTimeout(function () {
 						can.dev.warn('can/map/setter.js: Setter "' + prop + '" did not return a value or call the setter callback.');

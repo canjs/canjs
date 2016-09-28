@@ -1206,5 +1206,24 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		list.pop();
 	});
 
+	test("can set properties to undefined", function(){
+		var MyMap = can.Map.extend({
+			define: {
+				foo: {
+					set: function(newVal) {
+						return newVal;
+					}
+				}
+			}
+		});
+
+		var map = new MyMap();
+
+		map.attr('foo', 'bar');
+		equal(map.attr('foo'), 'bar', 'foo should be bar');
+
+		map.attr('foo', undefined);
+		equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined'); 
+	});
 	
 });
