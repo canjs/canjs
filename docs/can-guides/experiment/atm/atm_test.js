@@ -4,14 +4,13 @@ var Deposit = window.Deposit;
 var Account = window.Account;
 var ATM = window.ATM;
 
-
 QUnit.module("ATM system",{
 	setup: function(){
-		can.fixture = 1;
+		can.fixture.delay = 1;
 		localStorage.clear();
 	},
 	teardown: function(){
-		can.fixture = 2000;
+		can.fixture.delay = 2000;
 	}
 });
 
@@ -126,52 +125,50 @@ QUnit.test("ATM basics", function () {
 	stop();
 
 	atm.on("state", function (ev, newVal) {
-		console.log("state", newVal);
+
 		if (newVal === "choosingTransaction") {
 
-			ok(!atm.isVerifyingPin, "no longer verifing the pin");
+			QUnit.ok(!atm.isVerifyingPin, "no longer verifing the pin");
 			atm.chooseDeposit();
 
 		} else if (newVal === "pickingAccount") {
 
-			ok(true, "in picking account state");
+			QUnit.ok(true, "in picking account state");
 			atm.chooseAccount(atm.accounts[0]);
 
 		} else if (newVal === "depositInfo") {
 
-			ok(true, "in depositInfo state");
+			QUnit.ok(true, "in depositInfo state");
 			var currentTransaction = atm.currentTransaction;
 
 			currentTransaction.amount = 120;
 
-			equal(currentTransaction.state, "ready");
-			ok(atm.isTransactionReady, "is isTransactionReady");
+			QUnit.equal(currentTransaction.state, "ready");
+			QUnit.ok(atm.isTransactionReady, "is isTransactionReady");
 
-			debugger;
 			atm.currentTransaction.execute();
-			equal(atm.state, "depositInfo", "in deposit state");
+			QUnit.equal(atm.state, "depositInfo", "in deposit state");
 
-			ok(atm.isTransactionExecuting, "is isTransactionExecuting");
-			start();
+			QUnit.ok(atm.isTransactionExecuting, "is isTransactionExecuting");
 
-		} /*else if (newVal === "transactionSuccessful") {
+		} else if (newVal === "transactionSuccessful") {
 
-			ok(true, "in transactionSuccessful state");
+			QUnit.ok(true, "in transactionSuccessful state");
 			atm.receiptTime = 100;
 			atm.printReceiptAndExit();
 
 		} else if (newVal === "printingReceipt") {
 
-			ok(true, "in printingReceipt state");
+			QUnit.ok(true, "in printingReceipt state");
 
 		} else if (newVal === "readingCard") {
 
-			ok(true, "in readingCard state");
-			ok( !atm.card, "card is removed");
-			ok( !atm.transactions, "transactions removed");
-			start();
+			QUnit.ok(true, "in readingCard state");
+			QUnit.ok( !atm.card, "card is removed");
+			QUnit.ok( !atm.transactions, "transactions removed");
+			QUnit.start();
 
-		} */
+		}
 
 	});
 

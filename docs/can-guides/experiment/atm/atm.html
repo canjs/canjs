@@ -27,8 +27,7 @@
 	</p>
 	<p>
 		Enter Card Number:
-		<input name="card" 	can-blur="addCardNumber"
-							can-enter="addCardNumber"/>
+		<input name="card" ($enter)="cardNumber(%element.value)"/>
 	</p>
 {{/eq}}
 
@@ -38,8 +37,9 @@
 		Enter Pin Number:
 		<input name="pin"
 			type="password"
+            autofocus
 			{{#isVerifyingPin}}DISABLED{{/isVerifyingPin}}
-			 can-blur="addPinNumber" can-enter="addPinNumber"/>
+              ($enter)="pinNumber(%element.value)"/>
 
 		{{#isVerifyingPin}}
 		  	<div class='warn'>
@@ -50,7 +50,7 @@
   			</div>
 		{{/isVerifyingPin}}
 	</p>
-	<a href="javascript://" can-click="exit">exit</a>
+	<a href="javascript://" ($click)="exit()">exit</a>
 {{/eq}}
 
 {{#eq state "choosingTransaction"}}
@@ -58,9 +58,9 @@
 	<p>What would you like to do?</p>
 	<nav>
 		<ul>
-			<li can-click="chooseDeposit">Deposit</li>
-			<li can-click="chooseWithdraw">Withdraw</li>
-			<li can-click="printReceiptAndExit">Exit</li>
+			<li ($click)="chooseDeposit()">Deposit</li>
+			<li ($click)="chooseWithdraw()">Withdraw</li>
+			<li ($click)="printReceiptAndExit()">Exit</li>
 		</ul>
 	</nav>
 {{/eq}}
@@ -70,7 +70,7 @@
 	<p>Please pick your account:</p>
 	<ul>
 		{{#each accounts}}
-			<li can-click="chooseAccount">{{name}} - ${{balance}}</li>
+			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
 		{{/each}}
 	</ul>
 {{/eq}}
@@ -82,7 +82,7 @@
 		into {{currentTransaction.account.name}}
 		(${{currentTransaction.account.balance}})?
 
-		<input name="deposit" can-value="currentTransaction.amount"/>
+		<input name="deposit" {($value)}="currentTransaction.amount"/>
 	</p>
 
 	{{#if isTransactionExecuting}}
@@ -93,11 +93,11 @@
 			</p>
 		</div>
 	{{else}}
-		<button can-click="currentTransaction.execute"
+		<button ($click)="currentTransaction.execute()"
 			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
 			Deposit
 		</button>
-		<a href="javascript://" can-click="removeTransaction">cancel</a>
+		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
 	{{/if}}
 
 
@@ -110,7 +110,7 @@
 		from {{currentTransaction.account.name}}
 		(${{currentTransaction.account.balance}})?
 
-		<input name="withdrawl" can-value="currentTransaction.amount"/>
+		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
 	</p>
 	{{#if isTransactionExecuting}}
 		<div class='warn'>
@@ -120,11 +120,11 @@
 			</p>
 		</div>
 	{{else}}
-		<button can-click="currentTransaction.execute"
+		<button ($click)="currentTransaction.execute()"
 			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
 			Withdraw
 		</button>
-		<a href="javascript://" can-click="removeTransaction">cancel</a>
+		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
 	{{/if}}
 {{/eq}}
 
@@ -137,8 +137,8 @@
 	<p>What would you like to do?</p>
 	<nav>
 		<ul>
-			<li can-click="removeTransaction">Another transaction</li>
-			<li can-click="printReceiptAndExit">Exit</li>
+			<li ($click)="removeTransaction()">Another transaction</li>
+			<li ($click)="printReceiptAndExit()">Exit</li>
 		</ul>
 	</nav>
 {{/eq}}
@@ -149,7 +149,7 @@
 	<ul>
 		{{#if transactions.length}}
 			{{#each transactions}}
-				<li>{{actionName}} ${{amount}} from {{account.name}}</li>
+				<li>{{actionName(this)}} ${{amount}} {{actionPrep(this)}} {{account.name}}</li>
 			{{/each}}
 		{{else}}
 			<li>None</li>
@@ -158,7 +158,7 @@
 	<h3>Accounts</h3>
 	<ul>
 		{{#each accounts}}
-			<li can-click="chooseAccount">{{name}} - ${{balance}}</li>
+			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
 		{{/each}}
 	</ul>
 	<div class='warn'>

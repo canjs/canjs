@@ -8,7 +8,7 @@ can.fixture({
 		}
 	},
 	"/deposit": function () { return {}; },
-	"/withdraw": function () { return {}; },
+	"/withdrawl": function () { return {}; },
 	"/accounts": function () {
 		return {
 			data: [{
@@ -65,7 +65,7 @@ Account.List = can.DefineList.extend("AccountList",{
   "*": Account
 });
 
-can.connect.superMap({
+can.connect.baseMap({
   url: "/accounts",
   Map: Account,
   List: Account.List,
@@ -76,7 +76,6 @@ var Transaction = can.DefineMap.extend({
 	executed: {type: "boolean", value: false},
 	executing: {type: "boolean", value: false},
 	get state() {
-		console.log("reading transaction state", this.executing);
 		if (this.executed) {
 			return "executed";
 		}
@@ -115,7 +114,6 @@ var Deposit = Transaction.extend({
 	account: Account,
 	card: Card,
 	isReady: function () {
-		console.log("calling isReady");
 		return typeof this.amount === "number" &&
 			this.account &&
 			this.card;
@@ -162,10 +160,27 @@ var Withdrawal = Transaction.extend({
 
 
 var ATM = can.DefineMap.extend({
+	// stateful properties
 	card: Card,
 	accounts: Account.List,
 	transactions: can.DefineList,
+	printingReceipt: "boolean",
 	receiptTime: {value: 5000, type: "number"},
+
+	currentTransaction: {
+      set: function(newTransaction){
+        // if current was executed, move it to transactions array
+        var currentTransaction = this.currentTransaction;
+		if (currentTransaction &&
+			currentTransaction.state === "executed") {
+
+			this.transactions.push(currentTransaction);
+		}
+		return newTransaction;
+      }
+    },
+
+	// Derived properties
 	get isVerifyingPin() {
 		return this.card && (this.card.state === "verifying");
 	},
@@ -236,9 +251,11 @@ var ATM = can.DefineMap.extend({
           Account.getList(card.serialize()).then(function(accounts){
             atm.accounts = accounts;
             atm.transactions = new can.DefineList();
-		  });
+		  },function(err){debugger;} );
         });
 	},
+
+	// Methods
 	chooseDeposit: function () {
       this.currentTransaction = new Deposit({
         card: this.card
@@ -249,30 +266,12 @@ var ATM = can.DefineMap.extend({
         card: this.card
       });
 	},
-    currentTransaction: {
-      set: function(newTransaction){
-        // if current was executed, move it to transactions array
-        var currentTransaction = this.currentTransaction;
-		if (currentTransaction &&
-			currentTransaction.state === "executed") {
 
-			this.transactions.push(currentTransaction);
-		}
-		return newTransaction;
-      }
-    },
 	chooseAccount: function (account) {
 		this.currentTransaction.account = account;
 	},
 	removeTransaction: function () {
-	  var currentTransaction = this.currentTransaction;
       this.currentTransaction = null;
-
-      if (currentTransaction &&
-          currentTransaction.state === "executed") {
-
-        this.transactions.push(currentTransaction);
-      }
 	},
 	printReceiptAndExit: function () {
 		this.removeTransaction();
@@ -294,21 +293,13 @@ var ATM = can.DefineMap.extend({
 can.Component.extend({
 	tag: "atm-machine",
 	view: can.stache.from("atm-template"),
-	ViewModel: ATM.extend({
-		addCardNumber: function(context, el){
-			this.cardNumber(el.val());
-		},
-		addPinNumber: function(context, el) {
-			this.pinNumber(el.val());
-		}
-	}),
+	ViewModel: ATM,
 	helpers: {
-		actionName: function (options) {
-			return options.context instanceof Deposit ?
-				"deposited" : "withdrew";
+		actionName: function (transaction) {
+			return transaction instanceof Deposit ? "deposited" : "withdrew";
 		},
-		actionPrep: function (options) {
-			return options.context instanceof Deposit ? "into" : "from";
+		actionPrep: function (transaction) {
+			return transaction instanceof Deposit ? "into" : "from";
 		}
 	}
 
