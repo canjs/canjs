@@ -31,7 +31,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 			// Called when a Map constructor is defined/extended to
 			// perform any initialization behavior for the new constructor
 			// function.
-			setup: function () {
+			setup: function (baseMap) {
 
 				can.Construct.setup.apply(this, arguments);
 
@@ -79,7 +79,7 @@ steal('can/util', 'can/util/bind','./bubble.js', './map_helpers.js','can/constru
 
 					// If define is a function, call it with this can.Map
 					if(mapHelpers.define) {
-						mapHelpers.define(this);
+						mapHelpers.define(this, baseMap.prototype.define);
 					}
 				}
 
