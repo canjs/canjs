@@ -169,6 +169,12 @@ steal('can/util', 'can/util/object/isplain', function(can){
 		// `undefined` if nothing has been already created.
 		getMapFromObject: function (obj) {
 			return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance;
+		},
+		twoLevelDeepExtend: function (destination, source) {
+			for (var prop in source) {
+				destination[prop] = destination[prop] || {};
+				can.simpleExtend(destination[prop], source[prop]);
+			}
 		}
 	};
 	

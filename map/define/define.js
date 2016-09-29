@@ -19,8 +19,14 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 		};
 
 		// This is called when the Map is defined
-		mapHelpers.define = function (Map) {
+		mapHelpers.define = function (Map, baseDefine) {
 			var definitions = Map.prototype.define;
+			
+			if (baseDefine) {
+				var defines = can.simpleExtend({}, baseDefine);
+				mapHelpers.twoLevelDeepExtend(defines, definitions);
+				can.simpleExtend(definitions, defines);
+			}
 			//!steal-remove-start
 			if(Map.define){
 				can.dev.warn("The define property should be on the map's prototype properties, "+
