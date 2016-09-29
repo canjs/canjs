@@ -4,17 +4,19 @@ var Deposit = window.Deposit;
 var Account = window.Account;
 var ATM = window.ATM;
 
-QUnit.module("ATM system",{
-	setup: function(){
+
+// TESTS ==============================================
+
+QUnit.module("ATM system", {
+	setup: function() {
 		can.fixture.delay = 1;
-		localStorage.clear();
 	},
-	teardown: function(){
+	teardown: function() {
 		can.fixture.delay = 2000;
 	}
 });
 
-QUnit.test("Good Card", function () {
+QUnit.test("Good Card", function() {
 
 	var c = new Card({
 		number: "01234567890",
@@ -27,7 +29,7 @@ QUnit.test("Good Card", function () {
 
 	c.verify();
 
-	c.on("state", function (ev, newVal) {
+	c.on("state", function(ev, newVal) {
 
 		equal(newVal, "verified", "card is verified");
 
@@ -37,7 +39,7 @@ QUnit.test("Good Card", function () {
 	equal(c.state, "verifying", "card is verifying");
 });
 
-QUnit.test("Bad Card", function () {
+QUnit.test("Bad Card", function() {
 
 	var c = new Card({});
 
@@ -47,7 +49,7 @@ QUnit.test("Bad Card", function () {
 
 	c.verify();
 
-	c.on("state", function (ev, newVal) {
+	c.on("state", function(ev, newVal) {
 
 		equal(newVal, "invalid", "card is invalid");
 
@@ -57,10 +59,8 @@ QUnit.test("Bad Card", function () {
 	equal(c.state, "verifying");
 });
 
-QUnit.test("Deposit", function () {
+QUnit.asyncTest("Deposit", 6, function() {
 
-	expect(6);
-	// you can only get account details with a card
 	var card = new Card({
 		number: "0123456789",
 		pin: "1122"
@@ -73,39 +73,35 @@ QUnit.test("Deposit", function () {
 
 	equal(deposit.state, "invalid");
 
-	stop();
+	var startingBalance;
 
-	deposit.on("state", function (ev, newVal) {
+	Account.getList(card.serialize()).then(function(accounts) {
+		QUnit.ok(true, "got accounts");
+		startingBalance = accounts[0].balance;
+		deposit.account = accounts[0];
+	});
+
+	deposit.on("state", function(ev, newVal) {
 		if (newVal === "ready") {
 
-			ok(true, "deposit is ready");
+			QUnit.ok(true, "deposit is ready");
 			deposit.execute();
 
 		} else if (newVal === "executing") {
 
-			ok(true, "executing a deposit");
+			QUnit.ok(true, "executing a deposit");
 
 		} else if (newVal === "executed") {
 
-			ok(true, "executed a deposit");
+			QUnit.ok(true, "executed a deposit");
 			equal(deposit.account.balance, 100 + startingBalance);
 			start();
 
 		}
 	});
-
-	var startingBalance;
-
-	Account.getList(card.serialize()).then(function (accounts) {
-		ok(true, "got accounts");
-		startingBalance = accounts[0].balance;
-		deposit.account = accounts[0];
-	});
-
 });
 
-
-QUnit.test("ATM basics", function () {
+QUnit.asyncTest("ATM basics", function() {
 
 	var atm = new ATM();
 
@@ -119,12 +115,9 @@ QUnit.test("ATM basics", function () {
 
 	ok(atm.isVerifyingPin, "pin is verified after set");
 
-	ok(atm.state, "readingPin", "remain in the reading pin state");
+	ok(atm.state, "readingPin", "remain in the reading pin state until verifyied");
 
-
-	stop();
-
-	atm.on("state", function (ev, newVal) {
+	atm.on("state", function(ev, newVal) {
 
 		if (newVal === "choosingTransaction") {
 
@@ -134,7 +127,9 @@ QUnit.test("ATM basics", function () {
 		} else if (newVal === "pickingAccount") {
 
 			QUnit.ok(true, "in picking account state");
-			atm.chooseAccount(atm.accounts[0]);
+			atm.accountsPromise.then(function(accounts){
+				atm.chooseAccount(accounts[0]);
+			});
 
 		} else if (newVal === "depositInfo") {
 
@@ -164,13 +159,12 @@ QUnit.test("ATM basics", function () {
 		} else if (newVal === "readingCard") {
 
 			QUnit.ok(true, "in readingCard state");
-			QUnit.ok( !atm.card, "card is removed");
-			QUnit.ok( !atm.transactions, "transactions removed");
+			QUnit.ok(!atm.card, "card is removed");
+			QUnit.ok(!atm.transactions, "transactions removed");
 			QUnit.start();
 
 		}
 
 	});
-
 
 });

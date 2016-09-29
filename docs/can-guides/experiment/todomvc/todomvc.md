@@ -1,5 +1,5 @@
 @page guides/todomvc TodoMVC Guide
-@parent guides/experiment 3
+@parent guides/experiment 2
 
 
 This guide walks through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS's [can-core Core libraries]

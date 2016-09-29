@@ -20,155 +20,168 @@
 	<div class="screen-content">
 		<div class="screen-glass">
 
-{{#eq state "readingCard"}}
-	<h2>Reading Card</h2>
-	<p>Welcome to canATM where there are <strong>never</strong>
-	  fees!</p>
-	</p>
-	<p>
-		Enter Card Number:
-		<input name="card" ($enter)="cardNumber(%element.value)"/>
-	</p>
-{{/eq}}
+{{#switch state}}
+    {{#case "readingCard"}}
+    	<h2>Reading Card</h2>
+    	<p>Welcome to canATM where there are <strong>never</strong>
+    	  fees!</p>
+    	</p>
+    	<p>
+    		Enter Card Number:
+    		<input name="card" ($enter)="cardNumber(%element.value)"/>
+    	</p>
+    {{/case}}
+    {{#case "readingPin"}}
+    	<h2>Reading Pin</h2>
+    	<p>
+    		Enter Pin Number:
+    		<input name="pin"
+    			type="password"
+                autofocus
+    			{{#isVerifyingPin}}DISABLED{{/isVerifyingPin}}
+                  ($enter)="pinNumber(%element.value)"/>
 
-{{#eq state  "readingPin"}}
-	<h2>Reading Pin</h2>
-	<p>
-		Enter Pin Number:
-		<input name="pin"
-			type="password"
-            autofocus
-			{{#isVerifyingPin}}DISABLED{{/isVerifyingPin}}
-              ($enter)="pinNumber(%element.value)"/>
+    		{{#isVerifyingPin}}
+    		  	<div class='warn'>
+    				<p>
+    				<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    				verifying
+    				</p>
+      			</div>
+    		{{/isVerifyingPin}}
+    	</p>
+    	<a href="javascript://" ($click)="exit()">exit</a>
+    {{/case}}
 
-		{{#isVerifyingPin}}
-		  	<div class='warn'>
-				<p>
-				<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
-				verifying
-				</p>
-  			</div>
-		{{/isVerifyingPin}}
-	</p>
-	<a href="javascript://" ($click)="exit()">exit</a>
-{{/eq}}
+    {{#case "choosingTransaction"}}
+    	<h2>Choose Transaction</h2>
+    	<p>What would you like to do?</p>
+    	<nav>
+    		<ul>
+    			<li ($click)="chooseDeposit()">Deposit</li>
+    			<li ($click)="chooseWithdraw()">Withdraw</li>
+    			<li ($click)="printReceiptAndExit()">Exit</li>
+    		</ul>
+    	</nav>
+    {{/case}}
 
-{{#eq state "choosingTransaction"}}
-	<h2>Choose Transaction</h2>
-	<p>What would you like to do?</p>
-	<nav>
-		<ul>
-			<li ($click)="chooseDeposit()">Deposit</li>
-			<li ($click)="chooseWithdraw()">Withdraw</li>
-			<li ($click)="printReceiptAndExit()">Exit</li>
-		</ul>
-	</nav>
-{{/eq}}
+    {{#case  "pickingAccount"}}
+    	<h2>Pick Account</h2>
+    	<p>Please pick your account:</p>
+        {{#if accountsPromise.isPending}}
+            <div class='warn'>
+                <p>
+                    <img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+                    Loading Accounts ...
+                </p>
+            </div>
+        {{else}}
+            <ul>
+                {{#each accountsPromise.value}}
+                    <li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    {{/case}}
 
-{{#eq state  "pickingAccount"}}
-	<h2>Pick Account</h2>
-	<p>Please pick your account:</p>
-	<ul>
-		{{#each accounts}}
-			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
-		{{/each}}
-	</ul>
-{{/eq}}
+    {{#case "depositInfo"}}
+    	<h2>Deposit</h2>
+    	<p>
+    		How much would you like to deposit
+    		into {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
 
-{{#eq state "depositInfo"}}
-	<h2>Deposit</h2>
-	<p>
-		How much would you like to deposit
-		into {{currentTransaction.account.name}}
-		(${{currentTransaction.account.balance}})?
+    		<input name="deposit" {($value)}="currentTransaction.amount"/>
+    	</p>
 
-		<input name="deposit" {($value)}="currentTransaction.amount"/>
-	</p>
+    	{{#if isTransactionExecuting}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
+    			Deposit
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/if}}
+    {{/case}}
 
-	{{#if isTransactionExecuting}}
-		<div class='warn'>
-			<p>
-			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
-			executing
-			</p>
-		</div>
-	{{else}}
-		<button ($click)="currentTransaction.execute()"
-			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
-			Deposit
-		</button>
-		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
-	{{/if}}
+    {{#case "withdrawalInfo"}}
+    	<h2>Withdraw</h2>
+    	<p>
+    		How much would you like to withdraw
+    		from {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
 
+    		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
+    	</p>
+    	{{#if isTransactionExecuting}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
+    			Withdraw
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/if}}
+    {{/case}}
 
-{{/eq}}
+    {{#case "transactionSuccessful"}}
+    	<h2>Transaction Successful!</h2>
+    	<p>
+    		{{currentTransaction.account.name}} has
+    		${{currentTransaction.account.balance}}.
+    	</p>
+    	<p>What would you like to do?</p>
+    	<nav>
+    		<ul>
+    			<li ($click)="removeTransaction()">Another transaction</li>
+    			<li ($click)="printReceiptAndExit()">Exit</li>
+    		</ul>
+    	</nav>
+    {{/case}}
 
-{{#eq state "withdrawalInfo"}}
-	<h2>Withdraw</h2>
-	<p>
-		How much would you like to withdraw
-		from {{currentTransaction.account.name}}
-		(${{currentTransaction.account.balance}})?
+    {{#case  "printingReceipt"}}
+    	<h2>Printing Receipt</h2>
+    	<h3>Transactions</h3>
+    	<ul>
+    		{{#if transactions.length}}
+    			{{#each transactions}}
+    				<li>{{actionName(this)}} ${{amount}} {{actionPrep(this)}} {{account.name}}</li>
+    			{{/each}}
+    		{{else}}
+    			<li>None</li>
+    		{{/if}}
+    	</ul>
+    	<h3>Accounts</h3>
+    	<ul>
+    		{{#each accountsPromise.value}}
+    			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+    		{{/each}}
+    	</ul>
+    	<div class='warn'>
+    		<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			printing
+    		</p>
+    	</div>
+    {{/case}}
+    
+    {{#default}}
+        <h2>Error</h2>
+        <p>Invalid state - {{state}}</p>
+    {{/default}}
 
-		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
-	</p>
-	{{#if isTransactionExecuting}}
-		<div class='warn'>
-			<p>
-			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
-			executing
-			</p>
-		</div>
-	{{else}}
-		<button ($click)="currentTransaction.execute()"
-			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
-			Withdraw
-		</button>
-		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
-	{{/if}}
-{{/eq}}
-
-{{#eq state "transactionSuccessful"}}
-	<h2>Transaction Successful!</h2>
-	<p>
-		{{currentTransaction.account.name}} has
-		${{currentTransaction.account.balance}}.
-	</p>
-	<p>What would you like to do?</p>
-	<nav>
-		<ul>
-			<li ($click)="removeTransaction()">Another transaction</li>
-			<li ($click)="printReceiptAndExit()">Exit</li>
-		</ul>
-	</nav>
-{{/eq}}
-
-{{#eq state  "printingReceipt"}}
-	<h2>Printing Receipt</h2>
-	<h3>Transactions</h3>
-	<ul>
-		{{#if transactions.length}}
-			{{#each transactions}}
-				<li>{{actionName(this)}} ${{amount}} {{actionPrep(this)}} {{account.name}}</li>
-			{{/each}}
-		{{else}}
-			<li>None</li>
-		{{/if}}
-	</ul>
-	<h3>Accounts</h3>
-	<ul>
-		{{#each accounts}}
-			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
-		{{/each}}
-	</ul>
-	<div class='warn'>
-		<p>
-			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
-			printing
-		</p>
-	</div>
-{{/eq}}
-
+{{/switch}}
 
 		</div>
 	</div>
