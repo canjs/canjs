@@ -5,17 +5,13 @@
 @group guides/commitment 2 commitment
 @group guides/contribute 3 contribute
 
-@body
-
-Welcome to CanJS! These guides are here to help you develop and improve your relationship with
+@description Welcome to CanJS! These guides are here to help you develop and improve your relationship with
 CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the
 framework you marry.  These guides help you advance through the different stages of this
 relationship:
 
- - Introduction (match.com, tinder, etc)
- - Experimenting (dating)
- - Commitment (put a ring on it)
- - Contributing (make baby extensions)
+@body
+
 
 ## Introduction
 
