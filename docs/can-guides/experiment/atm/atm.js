@@ -205,7 +205,7 @@ var ATM = can.DefineMap.extend({
 	get state() {
 		// if printingReceipt
 		// if a currentTransaction
-		//    and the transaction is executed -> transactionSuccessful
+		//    and the transaction is executed -> sucessfulTransaction
 		//    if an account
 		//        is it a deposit or withdraw
 		//    else
@@ -221,7 +221,7 @@ var ATM = can.DefineMap.extend({
 		var currentTransaction = this.currentTransaction;
 		if (currentTransaction) {
 			if (currentTransaction.state === "executed") {
-				return "transactionSuccessful";
+				return "sucessfulTransaction";
 			}
 
 			if (currentTransaction.account) {

@@ -146,9 +146,9 @@ QUnit.asyncTest("ATM basics", function() {
 
 			QUnit.ok(atm.isTransactionExecuting, "is isTransactionExecuting");
 
-		} else if (newVal === "transactionSuccessful") {
+		} else if (newVal === "sucessfulTransaction") {
 
-			QUnit.ok(true, "in transactionSuccessful state");
+			QUnit.ok(true, "in sucessfulTransaction state");
 			atm.receiptTime = 100;
 			atm.printReceiptAndExit();
 

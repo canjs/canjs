@@ -135,7 +135,7 @@
     	{{/if}}
     {{/case}}
 
-    {{#case "transactionSuccessful"}}
+    {{#case "sucessfulTransaction"}}
     	<h2>Transaction Successful!</h2>
     	<p>
     		{{currentTransaction.account.name}} has
@@ -175,7 +175,7 @@
     		</p>
     	</div>
     {{/case}}
-    
+
     {{#default}}
         <h2>Error</h2>
         <p>Invalid state - {{state}}</p>
