@@ -21,7 +21,7 @@ var Todo = can.DefineMap.extend({
 });
 
 Todo.List = can.DefineList.extend({
-  "*": Todo,
+  "#": Todo,
   get active(){
     return this.filter({complete: false})
   },

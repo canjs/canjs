@@ -90,7 +90,7 @@ var Todo = DefineMap.extend({
 });
 
 var TodoList = DefineList.extend({
-  "*": Todo,
+  "#": Todo,
   completeCount: {
     get: function(){
       return this.filter("complete").length;
@@ -185,7 +185,7 @@ var Todo = DefineMap.extend({
 	...
 });
 var TodosList = DefineMap.extend({
-	"*": Todo,
+	"#": Todo,
 	...
 });
 var todosAlgebra = new set.Algebra({
@@ -400,7 +400,7 @@ var AppViewModel = DefineMap.extend({
 	seal: false
 },{
 	// Sets the default type to string
-	"*": "string",
+	"#": "string",
 	todoId: "string",
 	todo: {
 		get: function(){

@@ -40,7 +40,7 @@
     "can-construct": "^3.0.0-pre.8",
     "can-construct-super": "^3.0.0-pre",
     "can-control": "3.0.0-pre.8",
-    "can-define": "^0.8.2",
+    "can-define": "^0.8.3",
     "can-event": "^3.0.0-pre.15",
     "can-fixture": "^0.4.0-pre.15",
     "can-jquery": "^3.0.0-pre.10",

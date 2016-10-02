@@ -17,7 +17,7 @@ var Score = DefineMap.extend({
 });
 
 var ScoreList = DefineList.extend({
-	"*": Score
+	"#": Score
 }, {
 	sum: function(){
 		var sum = 0;
@@ -64,5 +64,3 @@ var frag = stache(el.innerHTML)({
 });
 document.body.appendChild(frag);
 </script>
-
-

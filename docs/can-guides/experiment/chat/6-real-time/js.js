@@ -6,7 +6,7 @@ var Message = can.DefineMap.extend({
 });
 
 Message.List = can.DefineList.extend({
-	"*": Message
+	"#": Message
 });
 
 Message.connection = can.connect.superMap({

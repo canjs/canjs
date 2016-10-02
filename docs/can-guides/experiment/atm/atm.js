@@ -65,7 +65,7 @@ var Account = can.DefineMap.extend("Account", {
 	name: "string"
 });
 Account.List = can.DefineList.extend("AccountList", {
-	"*": Account
+	"#": Account
 });
 
 can.connect.baseMap({

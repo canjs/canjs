@@ -330,7 +330,7 @@ var Message = DefineMap.extend({
 });
 
 Message.List = DefineList.extend({
-  "*": Message
+  "#": Message
 });
 
 var messageConnection = superMap({
