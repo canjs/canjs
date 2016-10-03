@@ -4892,6 +4892,17 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			equal((span[3].innerHTML), '1', 'iteration for %index');
 		});
 
+		test('. passes compute to helper', function() {
+			var template = '{{#each items}}{{helper .}}{{/each}}';
+			can.stache(template)({
+				items: new can.List([1, 2])
+			}, {
+				helper: function(arg) {
+					equal(typeof arg, 'function', 'arg should be a compute')
+				}
+			});
+		});
+
 		// PUT NEW TESTS RIGHT BEFORE THIS!
 	}
 

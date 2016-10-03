@@ -131,7 +131,9 @@ steal(
 					return parent.read(attr.substr(3) || ".", options);
 				}
 				else if ( isCurrentContext ) {
+					can.__observe(this,"_context");
 					return {
+						setRoot: this,
 						value: this._context
 					};
 				}
@@ -352,7 +354,30 @@ steal(
 				}
 
 			}),
+			write: function(key, newVal, computeData, options){
+				var root = computeData.root || computeData.setRoot;
+				if(root) {
+					if(root instanceof Scope) {
+						if(key === ".") {
+							this._context = value;
+							can.dispatch.call(this, "_context")
+						} else {
+							throw "up";
+						}
 
+					} else if(root.isComputed) {
+						root(newVal);
+					} else if(computeData.reads.length) {
+						var last = computeData.reads.length - 1;
+						var obj = computeData.reads.length ? can.compute.read(root, computeData.reads.slice(0, last)).value
+							: root;
+						can.compute.set(obj, computeData.reads[last].key, newVal, options);
+					}
+				} else {
+					// WARN ... you can't set nothing
+				}
+				// **Compute getter
+			},
 
 
 			// ## Scope.prototype.computeData
@@ -398,7 +423,7 @@ steal(
 				}
 			}
 		});
-
+		can.simpleExtend(Scope.prototype, can.event);
 		can.view.Scope = Scope;
 
 		function Options(data, parent, meta){
