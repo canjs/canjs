@@ -94,7 +94,7 @@
     		<input name="deposit" {($value)}="currentTransaction.amount"/>
     	</p>
 
-    	{{#if isTransactionExecuting}}
+    	{{#eq currentTransaction.state "executing"}}
     		<div class='warn'>
     			<p>
     			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
@@ -103,11 +103,11 @@
     		</div>
     	{{else}}
     		<button ($click)="currentTransaction.execute()"
-    			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
     			Deposit
     		</button>
     		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
-    	{{/if}}
+    	{{/eq}}
     {{/case}}
 
     {{#case "withdrawalInfo"}}
@@ -119,7 +119,7 @@
 
     		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
     	</p>
-    	{{#if isTransactionExecuting}}
+    	{{#eq currentTransaction.state "executing"}}
     		<div class='warn'>
     			<p>
     			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
@@ -128,11 +128,11 @@
     		</div>
     	{{else}}
     		<button ($click)="currentTransaction.execute()"
-    			{{^isTransactionReady}}DISABLED{{/isTransactionReady}}>
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
     			Withdraw
     		</button>
     		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
-    	{{/if}}
+    	{{/eq}}
     {{/case}}
 
     {{#case "sucessfulTransaction"}}

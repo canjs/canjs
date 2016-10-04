@@ -153,17 +153,207 @@ In this step, you implemented a `Card` model that encapsulates the behavior of i
 
 ## Deposit test
 
+In this section, we will:
+
+ - Design an API retrieving `Account`s.
+ - Design an API for a `Deposit` type.
+ - Write out tests for the `Deposit` type.
+
+An `Account` will have an `id`, `name`, and `balance`.  We'll use [can-connect] to add a
+[can-connect/can/map/map.getList] method that retrieves an account given a `card`.
+
+A `Deposit` will take a `card`, an `amount`, and an `account`.  Deposits will start out having
+a `state` of `"invalid"`.  When the deposit has a `card`, `amount` and `account`, the `state`
+will change to `"ready"`.  Once the deposit is ready, the `.execute()` method will change the state
+to `"executing"` and then to `"executed"` once the transaction completes.
+
+Update the `JS` tab to:
+
+- Create a `deposit` with an `amount` and a `card`.
+- Check that the `state` is `"invalid"` because there is no `account`.
+- Use `Account.getList` to get the accounts for the card and:
+  - set the `deposit.accounts` to the first account.
+  - remember the starting `balance`.
+- Use [can-define/map/map.prototype.on] to listen for `state` changes. When `state` is:
+  - `"ready"`, `.execute()` the transaction.
+  - `"executed"`, verify the new account balance.
+
+@sourceref ./4-deposit-test/js.js
+@highlight 111-151,only
+
+When complete, the __Deposit__ test should run, but error because _Deposit is not defined_.
+
 ## Transaction, Deposit, and Withdrawal models
+
+In this section, we will:
+
+- Implement the `Account` model.
+- Implement a base `Transaction` model and extend it into a `Deposit` and
+`Withdrawal` model.
+- Get the __Deposit__ test to pass.
+
+Update the `JavaScript` tab to:
+
+- Simulate `/accounts` to return `Account` data with [can-fixture].
+- Simulate `/deposit` to always return a successful result.
+- Simulate `/withdrawal` to always return a successful result.
+- Define the `Transaction` model to:
+  - have an `account` and `card` property.
+  - have an `executing` and `executed` property that track if the transaction is executing or has executed.
+  - have a `rejected` property that stores the error given for a failed transaction.
+  - have an __abstract__ `ready` property that `Deposit` and `Withdrawal` will implement to return `true`
+    when the transaction is in a state able to be executed.
+  - have a `state` property that reads other stateful properties and returns a string representation
+    of the state.
+  - have an __abstract__ `executeStart` method that `Deposit` and `Withdrawal` will implement to
+    execute the transaction and return a `Promise` the resolves when the transaction completes.
+  - have an __abstract__ `executeEnd` method that `Deposit` and `Withdrawal` will implement to
+    update the transactions values (typically the `account` balance) if the transaction completed
+    successfully.
+  - have an `execute` method that calls `.executeStart()` and `executeEnd()` and keeps the stateful
+    properties updated correctly.
+- Define the `Deposit` model to:
+  - have an `amount` property.
+  - implement `ready` to return `true` when the amount is greater than `0` and there's an `account`
+    and `card`.
+  - implement `executeStart` to `POST` the deposit information to `/deposit`
+  - implement `executeEnd` to update the account balance.
+- Define the `Withdrawal` model to behave in the same way as `Deposit` except that
+  it `POST`s the withdrawal information to `/withdrawal`.
+
+@sourceref ./5-transactions-models/js.js
+@highlight 13-31,79-187,only
+
+When complete, the __Deposit__ tests will pass.
 
 ## Reading Card page and test
 
+In this section, we will:
+
+ - Allow the user to enter a card number and go to the __Reading Pin__ page.
+ - Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+- Allow a user to call `cardNumber` with the `<input>`'s `value`.
+
+@sourceref ./6-reading-card/html.html
+@highlight 20-26,only
+
+Update the `JavaScript` tab to:
+
+- Declare a `card` property.
+- Derive a `state` property that changes to `"readingPin"` when `card` is defined.
+- Add a `cardNumber` that creates a `card` with the `number` provided.
+
+@sourceref ./6-reading-card/js.js
+@highlight 190-205,313-325,only
+
+When complete, you should be able to enter a card number and see the __Reading Pin__
+page.
+
 ## Reading Pin page and test
 
-## Choosing Transaction  page and test
+In this section, we will:
+
+- Allow the user to enter a pin number and go to the __Choosing Transaction__ page.
+- Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+- Call `pinNumber` with the `<input>`'s `value`.
+- Disable the `<input>` while the pin is being verified.
+- Show a loading icon while the pin is being verified.
+
+@sourceref ./7-reading-pin/html.html
+@highlight 31-47,only
+
+Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
+
+- Define an `accountsPromise` property that will contain a list of accounts for the `card`.
+- Define a `transactions` property that will contain a list of transactions for this session.
+- Update `state` to be in the `"choosingTransaction"` state when the `card` is verified.
+- Define a `pinNumber` method that updates the `card`'s `pin`, calls `.verify()`,
+  and then initializes the `accountsPromise` and `transactions` property.
+
+Update the `TESTS` section of the `JavaScript` tab to:
+
+- Test calling `pinNumber` moves the `state` to `"choosingTransaction"`.
+
+@sourceref ./7-reading-pin/js.js
+@highlight 192-193,198-200,212-228,346-356,only
+
+When complete, you should be able to enter a card and pin number and see the __Choosing Transaction__
+page.
+
+## Choosing Transaction page and test
+
+In this section, we will:
+
+- Allow the user to pick a transaction type and go to the __Picking Account__ page.
+- Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+- Have buttons for choosing a deposit, withdrawal, or print a receipt and exit.
+
+@sourceref ./8-choosing-transaction/html.html
+@highlight 52-59,only
+
+Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
+
+- Define a `currentTransaction` property that when set, adds the previous `currentTransaction`
+  to the list of `transactions`.
+- Define a `printingReceipt` property which is set to true the the receipt should be printed.
+- Define a `receiptTime` property that controls how long the receipt should be shown.
+- Update the `state` property to `"pickingAccount"` when there is a `currentTransaction`.
+- Update the `exit` method to clear the `printingReceipt` and `currentTransaction` method.
+- Define `chooseDeposit` that creates a `Deposit` and sets it as the `currentTransaction`.
+- Define `chooseWithdraw` that creates a `Withdraw` and sets it as the `currentTransaction`.
+- Define `printReceiptAndExit` that sets `printingReceipt` and calls exit.
+
+Update the `TESTS` section of the `JavaScript` tab to:
+
+- Call `.chooseDeposit()` and verify the state moves to `"pickingAccount"`.
+
+@sourceref ./8-choosing-transaction/js.js
+@highlight 194-209,214-216,248-249,252-268,395-402,only
+
 
 ## Picking Account page and test
 
+In this section, we will:
+
+- Allow the user to pick an account and go to either the  __Deposit Info__ or
+  __Withdrawal Info__ page.
+- Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+- Write out a _"Loading Accounts  ..."_ message while the accounts are loading.
+- Write out the accounts when loaded.
+- Call `chooseAccount()` when an account is clicked.
+
+@sourceref ./9-picking-account/html.html
+@highlight 64-78,only
+
+Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
+
+- Change `state` to check if the `currentTransaction` has an `account` and update the
+  value to `"depositInfo"` or `"withdrawalInfo"` depending on the type of the `currentTransaction`.
+- Add a `chooseAccount` method that sets the `currentTransaction`'s `account`.
+
+Update the `TESTS` section of the `JavaScript` tab to:
+
+- Call `.chooseAccount()` with the first account loaded.
+- Verify the state changes to `"depositInfo"`.
+
+@sourceref ./9-picking-account/js.js
+@highlight 215-221,277-279,411-418,only
+
 ## Deposit Info page and test
+
+
 
 ## Withdrawal Info page
 
