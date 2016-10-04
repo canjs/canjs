@@ -4,6 +4,11 @@ steal('can/util', 'can/route', 'can/control', function (can) {
 	// _Controller route integration._
 
 	can.Control.processors.route = function (el, event, selector, funcName, controller) {
+		
+		//!steal-remove-start
+		can.dev.warn("can/control/route is a deprecated plugin and will be removed in a future release.");
+		//!steal-remove-end
+		
 		selector = selector || "";
 		if (!can.route.routes[selector]) {
 			if (selector[0] === '/') {

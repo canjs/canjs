@@ -24,7 +24,7 @@ steal("can/control/route", "can/test", "steal-qunit", function () {
 		//setup controller
 		can.Control.extend("Router", {
 			"foo/:bar route": function () {
-				ok(true, 'route updated to foo/:bar')
+				ok(true, 'route updated to foo/:bar');
 			},
 
 			"foos route": function () {
@@ -62,7 +62,7 @@ steal("can/control/route", "can/test", "steal-qunit", function () {
 		window.location.hash = '!lol/wat';
 		can.trigger(window, 'hashchange');
 		tester.destroy();
-	})
+	});
 
 	test("dont overwrite defaults (#474)", function () {
 
@@ -82,7 +82,7 @@ steal("can/control/route", "can/test", "steal-qunit", function () {
 		can.trigger(window, 'hashchange');
 		tester.destroy();
 
-	})
+	});
 
 	if (window.history && history.pushState) {
 
@@ -120,8 +120,31 @@ steal("can/control/route", "can/test", "steal-qunit", function () {
 			iframe.src = can.test.path("control/route/pushstate.html");
 			can.$("#qunit-fixture")[0].appendChild(iframe);
 			stop();
-		})
+		});
 	
 	}
+	
+	//!steal-remove-start
+	if (can.dev) {
+		test("deprecate can/control/route (#2164)", function () {
+			expect(1);
+			var oldlog = can.dev.warn,
+				message = 'can/view/bindings/bindings.js: mismatched binding syntax - (foo}';
+
+			can.dev.warn = function (text) {
+				equal(text, "can/control/route is a deprecated plugin and will be removed in a future release.", 'Got expected message logged.');
+			};
+			
+			var Tester = can.Control.extend({
+				"content/:type route": function (params) {
+					equal(params.type, "videos");
+				}
+			});
+			var tester = new Tester(document.createElement("div"));
+
+			can.dev.warn = oldlog;
+		});
+	}
+	//!steal-remove-end
 
 });
