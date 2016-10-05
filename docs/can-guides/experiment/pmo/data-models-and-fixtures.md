@@ -109,8 +109,9 @@ backend services.
 
 `can.fixture` is not included with the base CanJS package. It’s a good practice
 to keep it separate from your production CanJS library, which is why we
-downloaded and used it a separate script tag, rather than including it
-with our custom download. *If you use `can.fixture` during development, remember
+downloaded it as a separate file, and then loaded it into index.html via a separate 
+script tag, rather than including it with our custom download. 
+*If you use `can.fixture` during development, remember
 to remove it once you need to connect to your REST services*.
 
 Let’s create a fixture that will respond to our requests for the list of states.

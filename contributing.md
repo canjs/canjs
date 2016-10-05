@@ -5,9 +5,13 @@
 @body
 -->
 
-Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on the [#canjs IRC channel](http://webchat.freenode.net/?channels=canjs) or email (contact@bitovi.com).  We will happily walk you through setting up a the environment, creating a test, and submitting a pull request. Here is a video showing how to contribute to CanJS:
+Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on the [canjs/canjs Gitter channel](https://gitter.im/canjs/canjs) or email (contact@bitovi.com).  We will happily walk you through setting up your environment, creating a test, and submitting a pull request. Here is a video showing how to contribute to CanJS:
 
 <iframe width="662" height="372" src="https://www.youtube.com/embed/56DoykBew38" frameborder="0" allowfullscreen></iframe>
+
+## 3.0 Changes
+
+In 3.0, nearly every module has its own repository.  All code changes should go there.  Issues can be submitted to `canjs/canjs`, but once we know the root of the issue, we will move it to a specific repository.  
 
 ## Reporting Bugs
 
@@ -21,7 +25,7 @@ When filing a bug, it is helpful to include:
 - Breaking unit tests (optional)
 - Proposed fix solutions (optional)
 
-Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [#canjs IRC channel](http://webchat.freenode.net/?channels=canjs).
+Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](http://forums.donejs.com/c/canjs) or talk to us in [gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
 
 ## Installing 
 
@@ -103,7 +107,7 @@ CanJS supports the following browsers:
 
 If your changes affect the public API, please make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory. In order to view your changes in documentation you will need to run the [CanJS.com site](https://github.com/canjs/canjs.com) locally and regenerate the docs.
 
-Follow the instructions on [CanJS.com gh-pages branch](https://github.com/canjs/canjs.com/tree/gh-pages#setup) to generate documentation from your local copy of canjs.
+Follow the instructions on [CanJS.com gh-pages branch](https://github.com/bitovi/canjs.com/tree/gh-pages#setup) to generate documentation from your local copy of canjs.
 
 ## Making a build
 

@@ -3,6 +3,71 @@
 @parent guides 5
 -->
 
+__2.3.27__ ( Sep 15 2016 )
+
+- [Adding PhantomJS from NPM for a newer version](https://github.com/canjs/canjs/pull/2489)
+- [updating core docs to use todo/{todoId} route template syntax](https://github.com/canjs/canjs/pull/2487)
+- [Backporting parent-to-child compute syntax from can-stache-bindings](https://github.com/canjs/canjs/pull/2483)
+- [Backporting stache binding fix for special values. #2370](https://github.com/canjs/canjs/pull/2481)
+
+
+__2.3.26__ ( Aug 17 2016 )
+
+- [Port can-observation changes for adds updateUntil for dynamic depths](https://github.com/canjs/canjs/pull/2453)
+- [Making colons in keys work](https://github.com/canjs/canjs/pull/2450)
+- [Fixed nested if-s and each helper in attributes](https://github.com/canjs/canjs/pull/2449)
+- [update map.attr value name](https://github.com/canjs/canjs/pull/2448)
+
+
+__2.3.25__ ( Aug 10 2016 )
+
+- [Set readOnly property based on val](https://github.com/canjs/canjs/pull/2436)
+- [Change propagation in a batch with late bindings - P(1) ~12](https://github.com/canjs/canjs/issues/2421)
+- [Support svg camelCase elements.](https://github.com/canjs/canjs/pull/2420)
+- [fix #1541 can.Component should show a warning if tag name is missing a hyphen](https://github.com/canjs/canjs/pull/2322)
+
+
+__2.3.24__ ( May 19 2016 )
+
+- [Pass list items to .sort(fn) and don&#39;t set the comparator](https://github.com/canjs/canjs/pull/2399)
+- [Browserify build with stache is not working](https://github.com/canjs/canjs/issues/2397)
+- [Properties with serialize: false should not be stringified](https://github.com/canjs/canjs/issues/2396)
+- [Fixing error compiling cjs module with JSPM](https://github.com/canjs/canjs/pull/2394)
+- [Fix mustache core mapping](https://github.com/canjs/canjs/pull/2390)
+
+
+__2.3.23__ ( Apr 08 2016 )
+
+- [Fixes #2343. calling simple helper now includes all arguments](https://github.com/canjs/canjs/pull/2363)
+- [Stache promise support doesn&#39;t work with ES6 promises](https://github.com/canjs/canjs/issues/2359)
+- [Cannot bind to event with a dash (e.g. &quot;-&quot;)](https://github.com/canjs/canjs/issues/2347)
+- [Deprecate can.isDeferred. More accurate can.isPromise.](https://github.com/canjs/canjs/pull/2247)
+
+
+__2.3.21__ ( Mar 18 2016 )
+
+- [#each leaking memory in stache](https://github.com/canjs/canjs/issues/2332)
+- [IE8: Stache renders radio buttons with incorrect value](https://github.com/canjs/canjs/issues/2324)
+- [Infinite batch change in 2.3.20 causes out of order rendering](https://github.com/canjs/canjs/issues/2323)
+
+
+__2.3.20__ ( Mar 08 2016 )
+
+- [Make define properties work on can.List](https://github.com/canjs/canjs/pull/2313)
+- [Create a CanSimpleDocument constructor](https://github.com/canjs/canjs/pull/2312)
+- [Infinite batching](https://github.com/canjs/canjs/issues/2272)
+- [Form reset won&#39;t work with two-way bindings on elements. w/ CanJS 2.3.15](https://github.com/canjs/canjs/issues/2249)
+
+
+__2.3.19__ ( Mar 04 2016 )
+
+- [Fast path scope computes can be unbound then rebound.](https://github.com/canjs/canjs/issues/2305)
+- [Bugfix: elems must be an array for can.inserted()](https://github.com/canjs/canjs/pull/2298)
+- [routeUrl helper, merge option not working](https://github.com/canjs/canjs/issues/2291)
+- [Component fires `inserted` twice on append.](https://github.com/canjs/canjs/issues/2288)
+- [Call expressions with hash expressions are called with args reversed.](https://github.com/canjs/canjs/issues/2243)
+
+
 __2.3.18__ ( Mar 03 2016 )
 
 - [Make getter / setter converter functions possible with stache helpers](https://github.com/canjs/canjs/issues/2299)
