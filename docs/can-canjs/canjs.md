@@ -1,6 +1,8 @@
 @page canjs CanJS
 @dest ../index
 @outline 0
+@package ../../package.json
+@templateRender <% %>
 @description CanJS is an evolving and improving set of client side
 JavaScript architectural libraries that balances
 innovation and stability.  
@@ -19,34 +21,34 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 <div class="module-list">
 
-- **[can-construct]** <small>1.3.3</small> Extensible constructors
+- **[can-construct]** <small><%canjs.package.dependencies.can-construct%></small> Extensible constructors
   - `npm install can-construct --save`
   - <a class="github-button" href="https://github.com/canjs/can-construct" data-count-href="/canjs/can-construct/stargazers" data-count-api="/repos/canjs/can-construct#stargazers_count">Star</a>
-- **[can-define]** <small>1.3.3</small> Observables
+- **[can-define]** <small><%canjs.package.dependencies.can-define%></small> Observables
   - `npm install can-define --save`
   - <a class="github-button" href="https://github.com/canjs/can-define" data-count-href="/canjs/can-define/stargazers" data-count-api="/repos/canjs/can-define#stargazers_count">Star</a>
-- **[can-compute]** <small>1.3.3</small> Observables
+- **[can-compute]** <small><%canjs.package.dependencies.can-compute%></small> Observables
   - `npm install can-compute --save`
   - <a class="github-button" href="https://github.com/canjs/can-compute" data-count-href="/canjs/can-compute/stargazers" data-count-api="/repos/canjs/can-compute#stargazers_count">Star</a>
-- **[can-connect]** <small>1.3.3</small> Data connection
+- **[can-connect]** <small><%canjs.package.dependencies.can-connect%></small> Data connection
   - `npm install can-connect --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect" data-count-href="/canjs/can-connect/stargazers" data-count-api="/repos/canjs/can-connect#stargazers_count">Star</a>
-- **[can-set]** <small>1.3.3</small> Service modeling
+- **[can-set]** <small><%canjs.package.dependencies.can-set%></small> Service modeling
   - `npm install can-set --save`
   - <a class="github-button" href="https://github.com/canjs/can-set" data-count-href="/canjs/can-set/stargazers" data-count-api="/repos/canjs/can-set#stargazers_count">Star</a>
-- **[can-route]** <small>1.3.3</small> Routing
+- **[can-route]** <small><%canjs.package.dependencies.can-route%></small> Routing
   - `npm install can-route --save`
   - <a class="github-button" href="https://github.com/canjs/can-route" data-count-href="/canjs/can-route/stargazers" data-count-api="/repos/canjs/can-route#stargazers_count">Star</a>
-- **[can-route-pushstate]** <small>1.3.3</small> Pushy routing
+- **[can-route-pushstate]** <small><%canjs.package.dependencies.can-route-pushstate%></small> Pushy routing
   - `npm install can-route-pushstate --save`
   - <a class="github-button" href="https://github.com/canjs/can-route-pushstate" data-count-href="/canjs/can-route-pushstate/stargazers" data-count-api="/repos/canjs/can-route-pushstate#stargazers_count">Star</a>
-- **[can-stache]** <small>1.3.3</small> Live binding templates
+- **[can-stache]** <small><%canjs.package.dependencies.can-stache%></small> Live binding templates
   - `npm install can-stache --save`
   - <a class="github-button" href="https://github.com/canjs/can-stache" data-count-href="/canjs/can-stache/stargazers" data-count-api="/repos/canjs/can-stache#stargazers_count">Star</a>
-- **[can-component]** <small>1.3.3</small> Custom elements
+- **[can-component]** <small><%canjs.package.dependencies.can-component%></small> Custom elements
   - `npm install can-component --save`
   - <a class="github-button" href="https://github.com/canjs/can-component" data-count-href="/canjs/can-component/stargazers" data-count-api="/repos/canjs/can-component#stargazers_count">Star</a>
-- **[can-stache-bindings]** <small>1.3.3</small> View bindings
+- **[can-stache-bindings]** <small><%canjs.package.dependencies.can-stache-bindings%></small> View bindings
   - `npm install can-stache-bindings --save`
   - <a class="github-button" href="https://github.com/canjs/can-stache-bindings" data-count-href="/canjs/can-stache-bindings/stargazers" data-count-api="/repos/canjs/can-stache-bindings#stargazers_count">Star</a>
 
