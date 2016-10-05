@@ -34,7 +34,6 @@ can.Component.extend({
 });
 
 var AppVM = can.DefineMap.extend({
-    route: "string",
     page: "string",
 	message: {
       type: "string",
