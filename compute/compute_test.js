@@ -959,4 +959,45 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", "./read_test", functi
 
 	});
 
+
+	test("Possible to skip updates if depth shifts enough (#2537)", function(){
+		var cA = can.compute("a"),
+			cB = can.compute("b");
+
+		var deepGrandChild1 = can.compute(function(){
+			return cB();
+		});
+		var deepGrandChild2 = can.compute(function(){
+			return deepGrandChild1();
+		});
+		var deepGrandChild3 = can.compute(function(){
+			return deepGrandChild2();
+		});
+
+		// disabled 1 -> moves to 4
+		var child = can.compute(function(){
+			if(cA() === "a") {
+				return "a";
+			} else {
+				// this will update `parent` before `child`
+				// can return the value of `deepGrandChild3`.
+				return deepGrandChild3();
+			}
+		});
+		child.bind("change", function(){});
+
+		// depth 1 / required
+		var parent = can.compute(function(){
+			return cA()+child();
+		});
+
+		parent.bind("change", function(ev, newValue, oldValue){
+			QUnit.equal(newValue, "Ab", "This should not be Aa which is the old value of child");
+		});
+
+		can.batch.start();
+		cA("A");
+		can.batch.stop();
+	});
+
 });
