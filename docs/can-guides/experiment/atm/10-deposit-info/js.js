@@ -421,7 +421,6 @@ QUnit.asyncTest("ATM basics", function() {
 			QUnit.ok(true, "in depositInfo state");
 			var currentTransaction = atm.currentTransaction;
 			currentTransaction.amount = 120;
-			debugger;
 			QUnit.ok(currentTransaction.ready, "we are ready to execute");
 			currentTransaction.execute();
 			QUnit.equal(atm.state, "depositInfo", "in deposit state until successful");
