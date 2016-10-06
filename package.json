@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "3.0.0-pre.12",
+  "version": "3.0.0-pre.13",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -114,7 +114,7 @@
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",
-	  "bit-docs-tag-package": "^0.0.3"
+      "bit-docs-tag-package": "^0.0.3"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
