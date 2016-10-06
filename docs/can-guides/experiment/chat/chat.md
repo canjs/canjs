@@ -1,5 +1,7 @@
 @page guides/chat Chat Guide
 @parent guides/experiment 1
+@package ../../../../package.json
+@templateRender <% %>
 
 This guide walks through building real time chat application with CanJS's
 [can-core Core libraries].  It takes about 30 minutes to complete.
