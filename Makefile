@@ -12,6 +12,8 @@ publish-docs:
 	git add -f node_modules/jquery-ui
 	git add -f node_modules/funcunit
 	git add -f node_modules/syn
+	git add -f node_modules/grunt-contrib-connect
+	git add -f node_modules/grunt-saucelabs
 	git commit -m "Publish docs"
 	git push -f origin gh-pages
 	git rm -q -r --cached node_modules
