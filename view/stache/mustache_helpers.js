@@ -65,16 +65,17 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 				var fragItems = utils.getItemsFragContent(expr, options, options.scope);
 				Array.prototype.push.apply(result, fragItems);
 			} else if (utils.isObserveLike(expr)) {
-				keys = can.Map.keys(expr);
-				// listen to keys changing so we can livebind lists of attributes.
+				keys = expr.constructor.keys(expr);
 
+				// listen to keys changing so we can livebind lists of attributes.
 				for (i = 0; i < keys.length; i++) {
 					key = keys[i];
+					var value = expr.attr(key);
 					result.push(options.fn(options.scope.add({
 							"%key": key,
 							"@key": key
 						},{notContext: true})
-						.add(expr[key])));
+						.add(value)));
 				}
 			} else if (expr instanceof Object) {
 				for (key in expr) {
@@ -226,7 +227,7 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			if(!params) {
 				params = {};
 			}
-			
+
 			if(typeof params.fn === "function" && typeof params.inverse === "function") {
 				params = resolveHash(params.hash);
 			}
@@ -245,10 +246,10 @@ steal("can/util", "./utils.js","can/view/live",function(can, utils, live){
 			} else {
 				return can.route.current(looksLikeOptions(params) ? {} : params || {});
 			}
-			
+
 		}
 	};
-	
+
 	// TODO ... remove as this is hacky
 	helpers.routeCurrent.callAsMethod = true;
 

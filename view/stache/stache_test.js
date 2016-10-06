@@ -700,7 +700,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		test("Handlebars helper: unless", function () {
 			var t = {
 				template: "{{#unless missing}}Andy is missing!{{/unless}}" +
-			              "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
+						  "{{#unless isCool}} But he wasn't cool anyways.{{/unless}}",
 				expected: "Andy is missing! But he wasn't cool anyways.",
 				data: {
 					name: 'Andy'
@@ -2542,27 +2542,27 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 		});
 
 		//if(doc.body.style) {
-		//    test("style property is live-bindable in IE (#494)", 4, function () {
+		//	test("style property is live-bindable in IE (#494)", 4, function () {
 		//
-		//        var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+		//		var template = can.stache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
 		//
-		//        var dims = new can.Map({
-		//            width: 5,
-		//            color: 'red'
-		//        });
+		//		var dims = new can.Map({
+		//			width: 5,
+		//			color: 'red'
+		//		});
 		//
-		//        var div = template(dims)
-		//            .firstChild;
+		//		var div = template(dims)
+		//			.firstChild;
 		//
-		//        equal(div.style.width, "5px");
-		//        equal(div.style.backgroundColor, "red");
+		//		equal(div.style.width, "5px");
+		//		equal(div.style.backgroundColor, "red");
 		//
-		//        dims.attr("width", 10);
-		//        dims.attr('color', 'blue');
+		//		dims.attr("width", 10);
+		//		dims.attr('color', 'blue');
 		//
-		//        equal(div.style.width, "10px");
-		//        equal(div.style.backgroundColor, "blue");
-		//    });
+		//		equal(div.style.width, "10px");
+		//		equal(div.style.backgroundColor, "blue");
+		//	});
 		//}
 
 
@@ -3252,21 +3252,21 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 				proto_prop: "thud"
 			});
 			var template = '\
-                    Straight access: <br/> \
-                        <span>{{own_prop}}</span><br/> \
-                        <span>{{constructor.static_prop}}</span><br/> \
-                        <span>{{constructor.proto_prop}}</span><br/> \
-                        <span>{{proto_prop}}</span><br/> \
-                    Helper argument: <br/> \
-                        <span>{{print_prop own_prop}}</span><br/> \
-                        <span>{{print_prop constructor.static_prop}}</span><br/> \
-                        <span>{{print_prop constructor.proto_prop}}</span><br/> \
-                        <span>{{print_prop proto_prop}}</span><br/> \
-                    Helper hash argument: <br/> \
-                        <span>{{print_hash prop=own_prop}}</span><br/> \
-                        <span>{{print_hash prop=constructor.static_prop}}</span><br/> \
-                        <span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
-                        <span>{{print_hash prop=proto_prop}}</span><br/>',
+					Straight access: <br/> \
+						<span>{{own_prop}}</span><br/> \
+						<span>{{constructor.static_prop}}</span><br/> \
+						<span>{{constructor.proto_prop}}</span><br/> \
+						<span>{{proto_prop}}</span><br/> \
+					Helper argument: <br/> \
+						<span>{{print_prop own_prop}}</span><br/> \
+						<span>{{print_prop constructor.static_prop}}</span><br/> \
+						<span>{{print_prop constructor.proto_prop}}</span><br/> \
+						<span>{{print_prop proto_prop}}</span><br/> \
+					Helper hash argument: <br/> \
+						<span>{{print_hash prop=own_prop}}</span><br/> \
+						<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
+						<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
+						<span>{{print_hash prop=proto_prop}}</span><br/>',
 				renderer = can.stache(template),
 				data = new can.Foo({
 					own_prop: "quux"
@@ -3323,12 +3323,12 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 		test("{{#each}} handles an undefined list changing to a defined list (#629)", function () {
 
-			var renderer = can.stache('    {{description}}: \
-            <ul> \
-            {{#each list}} \
-                    <li>{{name}}</li> \
-            {{/each}} \
-            </ul>');
+			var renderer = can.stache('	{{description}}: \
+			<ul> \
+			{{#each list}} \
+					<li>{{name}}</li> \
+			{{/each}} \
+			</ul>');
 
 			var div = doc.createElement('div'),
 				data1 = new can.Map({
@@ -3498,23 +3498,23 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 		});
 
-//        if(window.jQuery || window.Zepto) {
+//		if(window.jQuery || window.Zepto) {
 //
-//            test("helpers returning jQuery or Zepto collection", function(){
+//			test("helpers returning jQuery or Zepto collection", function(){
 //
-//                can.stache.registerHelper("jQueryHelper", function(options){
-//                    var section = options.fn({first: "Justin"});
-//                    return $( can.frag("<h1>")).append( section );
-//                });
+//				can.stache.registerHelper("jQueryHelper", function(options){
+//					var section = options.fn({first: "Justin"});
+//					return $( can.frag("<h1>")).append( section );
+//				});
 //
-//                var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
+//				var template = can.stache( "{{#jQueryHelper}}{{first}} {{last}}{{/jQueryHelper}}");
 //
-//                var res = template({last: "Meyer"});
-//                equal(res.firstChild.nodeName.toLowerCase(), "h1");
-//                equal(innerHTML(res.firstChild), "Justin Meyer");
+//				var res = template({last: "Meyer"});
+//				equal(res.firstChild.nodeName.toLowerCase(), "h1");
+//				equal(innerHTML(res.firstChild), "Justin Meyer");
 //
-//            });
-//        }
+//			});
+//		}
 
 		test("./ in key", function(){
 			var template = can.stache( "<div><label>{{name}}</label>{{#children}}<span>{{./name}}-{{name}}</span>{{/children}}</div>");
@@ -4699,7 +4699,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			data.attr('items.0.name', 'dave');
 
 			equal(frag.firstChild.nextSibling.getAttribute('value'), 'user text');
-        });
+		});
 
 		test("nested switch statement fail (#2188)", function(){
 
@@ -4714,7 +4714,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 				'{{#case "outerValue2"}}'+
 					"OUTER2"+
 				"{{/case}}"+
-		    "{{/switch}}</div>");
+			"{{/switch}}</div>");
 
 
 			var vm = new can.Map({
@@ -4730,8 +4730,8 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			can.batch.stop();
 
 
-		    ok( innerHTML(frag.firstChild).indexOf("OUTER2") >= 0, "has OUTER2");
-		    ok( innerHTML(frag.firstChild).indexOf("INNER1") === -1, "does not have INNER1");
+			ok( innerHTML(frag.firstChild).indexOf("OUTER2") >= 0, "has OUTER2");
+			ok( innerHTML(frag.firstChild).indexOf("INNER1") === -1, "does not have INNER1");
 
 
 		});
@@ -4772,7 +4772,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			equal(counter, 2, 'Counter incremented twice');
 		});
-		
+
 		test("%index is double wrapped compute in helper (#2179)", function(){
 			var appState = new can.Map({
 				todos: [
@@ -4780,15 +4780,15 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 					{ description: "Bar" },
 				]
 			});
-			
+
 			var template =  can.stache('{{#each todos}}<div>{{indexPlusOne %index}}</div>{{/each}}');
-			
+
 			can.stache.registerHelper("indexPlusOne", function(val, options) {
 				var resolved = val();
 				equal(typeof resolved,"number", "should be a number");
 				return resolved + 2;
 			});
-			
+
 			template(appState);
 		});
 
@@ -4809,21 +4809,21 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 		test("nested sections work (#2229)", function(){
 			var template = can.stache('<div {{#a}}' +
-                '{{#b}}f="f"' +
-                '{{else}}' +
-                    '{{#c}}f="f"{{/c}}' +
-                '{{/b}}' +
-            '{{/a}}/>');
+				'{{#b}}f="f"' +
+				'{{else}}' +
+					'{{#c}}f="f"{{/c}}' +
+				'{{/b}}' +
+			'{{/a}}/>');
 
-            var frag = template(new can.Map({
+			var frag = template(new can.Map({
 							a: true,
 							b: false,
 							c: true
-            }));
+			}));
 
-            equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
+			equal(frag.firstChild.getAttribute("f"),"f", "able to set f");
 		});
-		
+
 		test("helper arguments greater than three (#2343)", function() {
 			can.stache.registerSimpleHelper('foo', function() {
 				equal(arguments.length, 6);
@@ -4832,7 +4832,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			var template = can.stache('{{foo 1 2 3 4 5}}');
 			template({});
 		});
-		
+
 		test("simple helper's last argument is options", function() {
 			can.stache.registerSimpleHelper('foo', function() {
 				var options = arguments[arguments.length-1];
@@ -4861,6 +4861,7 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 
 			assert.equal( className, 'sort-ascend');
 		});
+
 		test('Helper each inside a text section (attribute) (#8)', function(assert){
 			var template = can.stache('<div class="{{#each list}}{{.}} {{/}}"></div>');
 
@@ -4876,6 +4877,20 @@ steal("can/util/vdom/document", "can/util/vdom/build_fragment","can/view/stache"
 			className = frag.firstChild.className;
 
 			assert.equal( className, 'one two three ' );
+		});
+
+		test("each values update when keys are replaced (#2318)", function () {
+			var template = can.stache("{{#each this}}<p>{{.}}</p>{{/each}}");
+
+			var vm = new can.Map({
+				foo: 'foo-value'
+			});
+			var dom = template(vm);
+
+			vm.attr('foo', 'bar-value');
+			var p = dom.firstChild;
+			equal(p.innerHTML, 'bar-value', 'updated the value inside #each');
+
 		});
 
 		test("{{%index}} and {{@index}} work with {{#key}} iteration (#2361)", function () {
