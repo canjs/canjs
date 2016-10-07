@@ -194,7 +194,7 @@ var ATM = can.DefineMap.extend({
 	currentTransaction: {
 		set: function(newTransaction) {
 			var currentTransaction = this.currentTransaction;
-			if (currentTransaction &&
+			if (this.transactions && currentTransaction &&
 				currentTransaction.state === "executed") {
 
 				this.transactions.push(currentTransaction);
@@ -202,18 +202,13 @@ var ATM = can.DefineMap.extend({
 			return newTransaction;
 		}
 	},
-	printingReceipt: "boolean",
-	receiptTime: {
-		value: 5000,
-		type: "number"
-	},
 
 	// derived properties
 	get state(){
 
 		if (this.currentTransaction) {
 			if (this.currentTransaction.state === "executed") {
-				return "transactionSuccessful";
+				return "successfulTransaction";
 			}
 
 			if (this.currentTransaction.account) {
@@ -257,7 +252,6 @@ var ATM = can.DefineMap.extend({
 			card: null,
 			accountsPromise: null,
 			transactions: null,
-			printingReceipt: null,
 			currentTransaction: null
 		});
 	},
@@ -271,15 +265,11 @@ var ATM = can.DefineMap.extend({
 			card: this.card
 		});
 	},
-	printReceiptAndExit: function() {
-		this.printingReceipt = true;
-		var self = this;
-		setTimeout(function() {
-			self.exit();
-		}, this.receiptTime);
-	},
 	chooseAccount: function(account) {
 		this.currentTransaction.account = account;
+	},
+	removeTransaction: function() {
+		this.currentTransaction = null;
 	}
 });
 
@@ -403,7 +393,7 @@ QUnit.asyncTest("ATM basics", function() {
 	ok(atm.state, "readingPin", "remain in the reading pin state until verifyied");
 
 	atm.on("state", function(ev, newVal) {
-		console.log("STATE",newVal);
+
 		if (newVal === "choosingTransaction") {
 
 			QUnit.ok(true, "in choosingTransaction");
@@ -425,9 +415,9 @@ QUnit.asyncTest("ATM basics", function() {
 			currentTransaction.execute();
 			QUnit.equal(atm.state, "depositInfo", "in deposit state until successful");
 
-		} else if (newVal === "transactionSuccessful") {
+		} else if (newVal === "successfulTransaction") {
 
-			QUnit.ok(true, "in transactionSuccessful state");
+			QUnit.ok(true, "in successfulTransaction state");
 			QUnit.start();
 
 		}

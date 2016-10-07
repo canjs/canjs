@@ -202,11 +202,30 @@ var ATM = can.DefineMap.extend({
 			return newTransaction;
 		}
 	},
+	printingReceipt: "boolean",
+	receiptTime: {
+		value: 5000,
+		type: "number"
+	},
 
 	// derived properties
 	get state(){
-
+		if (this.printingReceipt) {
+			return "printingReceipt";
+		}
 		if (this.currentTransaction) {
+			if (this.currentTransaction.state === "executed") {
+				return "successfulTransaction";
+			}
+
+			if (this.currentTransaction.account) {
+				if (this.currentTransaction instanceof Deposit) {
+					return "depositInfo";
+				} else {
+					return "withdrawalInfo";
+				}
+			}
+
 			return "pickingAccount";
 		}
 
@@ -240,8 +259,17 @@ var ATM = can.DefineMap.extend({
 			card: null,
 			accountsPromise: null,
 			transactions: null,
-			currentTransaction: null
+			currentTransaction: null,
+			printingReceipt: null
 		});
+	},
+	printReceiptAndExit: function() {
+		this.currentTransaction = null;
+		this.printingReceipt = true;
+		var self = this;
+		setTimeout(function() {
+			self.exit();
+		}, this.receiptTime);
 	},
 	chooseDeposit: function() {
 		this.currentTransaction = new Deposit({
@@ -252,6 +280,12 @@ var ATM = can.DefineMap.extend({
 		this.currentTransaction = new Withdrawal({
 			card: this.card
 		});
+	},
+	chooseAccount: function(account) {
+		this.currentTransaction.account = account;
+	},
+	removeTransaction: function() {
+		this.currentTransaction = null;
 	}
 });
 
@@ -384,6 +418,34 @@ QUnit.asyncTest("ATM basics", function() {
 		} else if (newVal === "pickingAccount") {
 
 			QUnit.ok(true, "in picking account state");
+			atm.accountsPromise.then(function(accounts){
+				atm.chooseAccount(accounts[0]);
+			});
+
+		} else if (newVal === "depositInfo") {
+
+			QUnit.ok(true, "in depositInfo state");
+			var currentTransaction = atm.currentTransaction;
+			currentTransaction.amount = 120;
+			QUnit.ok(currentTransaction.ready, "we are ready to execute");
+			currentTransaction.execute();
+			QUnit.equal(atm.state, "depositInfo", "in deposit state until successful");
+
+		} else if (newVal === "successfulTransaction") {
+
+			QUnit.ok(true, "in successfulTransaction state");
+			atm.receiptTime = 100;
+			atm.printReceiptAndExit();
+
+		} else if (newVal === "printingReceipt") {
+
+			QUnit.ok(true, "in printingReceipt state");
+
+		} else if (newVal === "readingCard") {
+
+			QUnit.ok(true, "in readingCard state");
+			QUnit.ok(!atm.card, "card is removed");
+			QUnit.ok(!atm.transactions, "transactions removed");
 			QUnit.start();
 
 		}

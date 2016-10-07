@@ -80,18 +80,94 @@
 
     {{#case "depositInfo"}}
     	<h2>Deposit</h2>
+        <p>
+    		How much would you like to deposit
+    		into {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
+
+    		<input name="deposit" {($value)}="currentTransaction.amount"/>
+    	</p>
+
+    	{{#eq currentTransaction.state "executing"}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+    			Deposit
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/eq}}
     {{/case}}
 
     {{#case "withdrawalInfo"}}
-    	<h2>Withdraw</h2>
+        <h2>Withdraw</h2>
+    	<p>
+    		How much would you like to withdraw
+    		from {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
+
+    		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
+    	</p>
+    	{{#eq currentTransaction.state "executing"}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+    			Withdraw
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/eq}}
     {{/case}}
 
     {{#case "successfulTransaction"}}
     	<h2>Transaction Successful!</h2>
+        <p>
+    		{{currentTransaction.account.name}} has
+    		${{currentTransaction.account.balance}}.
+    	</p>
+    	<p>What would you like to do?</p>
+    	<nav>
+    		<ul>
+    			<li ($click)="removeTransaction()">Another transaction</li>
+    			<li ($click)="printReceiptAndExit()">Exit</li>
+    		</ul>
+    	</nav>
     {{/case}}
 
     {{#case  "printingReceipt"}}
     	<h2>Printing Receipt</h2>
+    	<h3>Transactions</h3>
+    	<ul>
+    		{{#if transactions.length}}
+    			{{#each transactions}}
+    				<li>{{actionName(this)}} ${{amount}} {{actionPrep(this)}} {{account.name}}</li>
+    			{{/each}}
+    		{{else}}
+    			<li>None</li>
+    		{{/if}}
+    	</ul>
+    	<h3>Accounts</h3>
+    	<ul>
+    		{{#each accountsPromise.value}}
+    			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+    		{{/each}}
+    	</ul>
+    	<div class='warn'>
+    		<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			printing
+    		</p>
+    	</div>
     {{/case}}
 
     {{#default}}
@@ -114,7 +190,7 @@
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.12/dist/global/can.all.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.13/dist/global/can.all.js"></script>
 
 <div id="qunit"></div>
 <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
