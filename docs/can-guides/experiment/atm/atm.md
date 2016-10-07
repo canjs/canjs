@@ -11,10 +11,13 @@ and manage complex state.  It takes about 2 hours to complete.
 
 Checkout the final app:
 
-<a class="jsbin-embed" href="http://jsbin.com/rujacuy/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/yayupo/9/embed?js,output">JS Bin on jsbin.com</a>
 
- - pages and state diagram
- - state diagram
+Notice it has tests at the bottom of the `Output` tab.
+
+Watch the following video to see it in action:
+
+> TODO: VIDEO OF IT IN ACTION
 
 ## Setup
 
@@ -70,7 +73,7 @@ of the `ATM` changes.
 Update the `HTML` tab to:
 
  - Switch between different pages of the application as the `ATM` view-model's `state` property changes
-   with [can-stache.helpers.switch
+   with [can-stache.helpers.switch].
 
 @sourceref ./1-pages-template/html.html
 @highlight 12-60,only
@@ -94,7 +97,7 @@ property transition between:
 - pickingAccount
 - depositInfo
 - withdrawalInfo
-- transactionSucessful
+- successfulTransaction
 - printingReceipt
 
 Each of those states are present in the following state diagram.
@@ -304,21 +307,20 @@ Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 
 - Define a `currentTransaction` property that when set, adds the previous `currentTransaction`
   to the list of `transactions`.
-- Define a `printingReceipt` property which is set to true the the receipt should be printed.
-- Define a `receiptTime` property that controls how long the receipt should be shown.
 - Update the `state` property to `"pickingAccount"` when there is a `currentTransaction`.
-- Update the `exit` method to clear the `printingReceipt` and `currentTransaction` method.
+- Update the `exit` method to clear the `currentTransaction` property.
 - Define `chooseDeposit` that creates a `Deposit` and sets it as the `currentTransaction`.
 - Define `chooseWithdraw` that creates a `Withdraw` and sets it as the `currentTransaction`.
-- Define `printReceiptAndExit` that sets `printingReceipt` and calls exit.
 
 Update the `TESTS` section of the `JavaScript` tab to:
 
 - Call `.chooseDeposit()` and verify the state moves to `"pickingAccount"`.
 
 @sourceref ./8-choosing-transaction/js.js
-@highlight 194-209,214-216,248-249,252-268,395-402,only
+@highlight 194-204,209-211,243,246-255,only
 
+
+> We will define `printReceiptAndExit` later!
 
 ## Picking Account page and test
 
@@ -349,20 +351,118 @@ Update the `TESTS` section of the `JavaScript` tab to:
 - Verify the state changes to `"depositInfo"`.
 
 @sourceref ./9-picking-account/js.js
-@highlight 215-221,277-279,411-418,only
+@highlight 210-216,264-266,398-407,only
 
 ## Deposit Info page and test
 
+In this section, we will:
 
+- Allow the user to enter the amount of a deposit and go to the __Successful Transaction__ page.
+- Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+- Ask the user how much they would like to deposit into the account.
+- Update `currentTransaction.amount` with an `<input>`'s `value`.
+- If the transaction is executing, show a spinner.
+- If the transaction is not executed:
+  - show a __Deposit__ button that will be
+    active only once the transaction has a value.
+  - show a __cancel__ button that will clear this transaction.
+
+@sourceref ./10-deposit-info/html.html
+@highlight 83-104,only
+
+Update the `ATM` view model in the `JavaScript` tab to:
+
+ - Change `state` to `"successfulTransaction"` if the `currentTransaction` was executed.
+ - Add a `removeTransaction` method that removes the `currentTransaction`, which will revert state
+   to `"choosingTransaction"`.
+
+Update the `ATM basics` test in the `JavaScript` tab to:
+
+- Add an `amount` to the `currentTransaction`.
+- Make sure the `currentTransaction` is `ready` to be executed.
+- Execute the `currentTransaction` and make sure that the `state` stays as `"depositInfo"` until
+  the transaction is successful.
+- Verify the state changed to `"successfulTransaction"`.
+
+@sourceref ./10-deposit-info/js.js
+@highlight 189,210-212,271-273,381,412-423,only
+
+When complete, you should be able to enter a deposit amount and see that
+the transaction was successful.
 
 ## Withdrawal Info page
 
-## Transaction Successful page and test
+In this section, we will:
+
+- Allow the user to enter the amount of a withdrawal and go to the __Successful Transaction__ page.
+- Add tests to __ATM Basics__ test.
+
+Update the `HTML` tab to:
+
+ - Add a __Withdraw__ page that works very similar to the __Deposit__ page.
+
+@sourceref ./11-withdrawal-info/html.html
+@highlight 109-129,only
+
+When complete, you should be able to enter a withdrawal amount and see that
+the transaction was successful.
+
+## Transaction Successful page
+
+In this section, we will:
+
+- Show the result of the transaction.
+
+Update the `HTML` tab to:
+
+- List out the account balance.
+- Add buttons to:
+  - start another transaction, or
+  - print a receipt and exit the ATM. (`printReceiptAndExit` will be implemented in the next section)
+
+@sourceref ./12-transaction-success/html.html
+@highlight 134-144,only
+
+When complete, you should be able to make a deposit or withdrawal, see the updated account balance
+and then start another transaction.
 
 ## Printing Recipe page and test
 
+In this section, we will:
+
+ - Make it possible to see a receipt of all transactions and exit the ATM.  
+
+Update the `HTML` tab to:
+
+ - List out all the transactions the user has completed.
+ - List out the final value of all accounts.
+
+@sourceref ./13-printing/html.html
+@highlight 149-170,only
+
+Update the `ATM` view model in the `JavaScript` tab to:
+
+ - Add a `printingReceipt` and `receiptTime` property.
+ - Change the `state` to `"printingReceipt"` when `printingReceipt` is true.
+ - Make `.exit` set `printingReceipt` to `null`.
+ - Add a `printReceiptAndExit` method that:
+   - clears the current transaction, which will add the currentTransaction to the list of transactions.
+   - sets `printingReceipt` to `true` for `printingReceipt` time.
 
 
+Update the `ATM basics` test in the `JavaScript` tab to:
+
+- Shorten the default `receiptTime` so the tests move quickly.
+- Call `printReceiptAndExit` and make sure that the `state` changes to `"printingReceipt"` and
+  then to `"readingCard"` and ensure that sensitive information is cleared from the atm.
+
+@sourceref ./13-printing/js.js
+@highlight 189,205-209,213-215,263,266-273,397,437-451,only
+
+When complete, you have a working ATM!  Cha-ching!
 
 
 

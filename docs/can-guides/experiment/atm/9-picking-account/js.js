@@ -194,18 +194,13 @@ var ATM = can.DefineMap.extend({
 	currentTransaction: {
 		set: function(newTransaction) {
 			var currentTransaction = this.currentTransaction;
-			if (currentTransaction &&
+			if (this.transactions && currentTransaction &&
 				currentTransaction.state === "executed") {
 
 				this.transactions.push(currentTransaction);
 			}
 			return newTransaction;
 		}
-	},
-	printingReceipt: "boolean",
-	receiptTime: {
-		value: 5000,
-		type: "number"
 	},
 
 	// derived properties
@@ -253,7 +248,6 @@ var ATM = can.DefineMap.extend({
 			card: null,
 			accountsPromise: null,
 			transactions: null,
-			printingReceipt: null,
 			currentTransaction: null
 		});
 	},
@@ -266,13 +260,6 @@ var ATM = can.DefineMap.extend({
 		this.currentTransaction = new Withdrawal({
 			card: this.card
 		});
-	},
-	printReceiptAndExit: function() {
-		this.printingReceipt = true;
-		var self = this;
-		setTimeout(function() {
-			self.exit();
-		}, this.receiptTime);
 	},
 	chooseAccount: function(account) {
 		this.currentTransaction.account = account;

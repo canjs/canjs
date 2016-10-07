@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "3.0.0-pre.12",
+  "version": "3.0.0-pre.13",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -39,15 +39,15 @@
     "can-connect": "^0.6.0-pre.21",
     "can-construct": "^3.0.0-pre.8",
     "can-construct-super": "^3.0.0-pre",
-    "can-control": "3.0.0-pre.8",
+    "can-control": "3.0.0-pre.9",
     "can-define": "^0.8.3",
-    "can-event": "^3.0.0-pre.15",
+    "can-event": "^3.0.0-pre.16",
     "can-fixture": "^0.4.0-pre.15",
     "can-jquery": "^3.0.0-pre.10",
     "can-list": "^3.0.0-pre.8",
     "can-map": "^3.0.0-pre.11",
     "can-map-define": "^3.0.0-pre.4",
-    "can-observation": "^3.0.0-pre.12",
+    "can-observation": "^3.0.0-pre.13",
     "can-route": "^3.0.0-pre.18",
     "can-route-pushstate": "^3.0.0-pre.6",
     "can-set": "^0.6.0-pre.9",
@@ -109,11 +109,12 @@
       "bit-docs-dev": "^0.0.3",
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
-      "bit-docs-generate-html": "^0.2.0",
-      "bit-docs-html-canjs": "^0.3.11",
+      "bit-docs-generate-html": "^0.2.2",
+      "bit-docs-html-canjs": "^0.3.15",
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
-      "bit-docs-tag-demo": "^0.3.0"
+      "bit-docs-tag-demo": "^0.3.0",
+      "bit-docs-tag-package": "^0.0.3"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
