@@ -1,0 +1,182 @@
+<style>
+  .selected {
+    font-weight: bold;
+    color: Gray;
+  }
+</style>
+<div id='out'></div>
+<script type='text/mustache' id='template'>
+<button can-click='back'>Back</button>
+<button can-click='fwd'>Forward</button>
+<div class='url'>URL: {{appUrl}}</div>
+<h2>Locations</h2>
+{{#appState.locations}}
+	<div><input type='checkbox' {($checked)}="selected" />{{name}}</div>
+{{/appState.locations}}
+<h2>Products</h2>
+{{#appState.products}}
+  <div><a href="#!product/{{id}}" class='{{selectedClass id}}'>{{name}}</a></div>
+{{/appState.products}}
+</script>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var route = require("can-route");
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
+var superMap = require("can-connect/can/super-map/super-map");
+var fixture = require("can-fixture");
+var compute = require("can-compute");
+
+fixture("GET /locations", function(){
+	return [
+		{id: 1, name: "Chicago"},
+		{id: 2, name: "New York"},
+		{id: 3, name: "LA"}
+	]
+})
+
+fixture("GET /products", function(){
+	return [
+		{id: 1, name: "Shampoo"},
+		{id: 2, name: "Conditioner"},
+		{id: 3, name: "Soap"}
+	]
+});
+
+var Location = DefineMap.extend({
+	id: "*",
+	name: "string",
+	selected: {
+		type: "boolean",
+		value: false
+	}
+});
+
+var LocationList = DefineList.extend({
+	"#": Location
+});
+
+var locationConnect = superMap({
+	url: "/locations",
+	Map: Location,
+	List: LocationList,
+	name: "location"
+});
+
+var Product = DefineMap.extend({
+	id: "*",
+	name: "string"
+});
+
+var ProductList = DefineList.extend({
+	"#": Product
+});
+
+var productConnection = superMap({
+	url: "/products",
+	Map: Product,
+	List: ProductList,
+	name: "product"
+});
+
+var AppState = DefineMap.extend({
+	route: "string",
+	products: {
+		// don't serialize this property at all in the route
+		serialize: false,
+		Type: ProductList
+	},
+	productId: {
+		type: "number"
+	},
+	locations: {
+		// don't serialize this property at all in the route
+		serialize: false,
+		Type: LocationList
+	},
+	// virtual property that contains a comma separated list of ids based on locations that are selected
+	locationIds: {
+		// comma separated list of ids
+		serialize: function(){
+			var selected = this.locations.filter(function(location){
+				return location.selected;
+			});
+			if(!selected.length) return;
+			var ids = [];
+			selected.each(function(item){
+				ids.push(item.id);
+			});
+			return ids.join(",");
+		},
+		// toggle selected from a comma separated list of ids
+		set: function(val){
+			var arr = val || [];
+			if(typeof val === "string"){
+				arr = val.split(',')
+			}
+			for (var i = 0; i < arr.length; i++) {
+				arr[i] = +arr[i];
+			};
+			// for each id, toggle any matched location
+			this.locations.forEach(function(location){
+				if(arr.indexOf(location.id) !== -1){
+					location.selected = true;
+				} else {
+					location.selected = false;
+				}
+			})
+		}
+	}
+});
+
+// initialize and call map first, so anything binding to can.route will work correctly
+appState = new AppState();
+route.data = appState;
+
+// when the data is ready, set the locations property
+appState.locations = new LocationList({});
+appState.products = new ProductList({});
+
+route("product/{productId}")
+
+// call ready after the appState is fully initialized
+route.ready();
+
+route.addEventListener('change', function(){
+	console.log('something changed');
+});
+
+var appUrl = compute(window.location.href, {
+	get: function(){
+		return window.location.href;
+	},
+	on: function(cb){
+		window.addEventListener('hashchange', function(){
+			setTimeout(function(){
+				cb();
+			}, 20);
+		});
+	}
+});
+
+var template = $("#template").html();
+$("#out").html( stache(template)({
+    appState: appState,
+    appUrl: appUrl,
+    back: function(){
+      window.history.back();
+    },
+    fwd: function(){
+      window.history.forward();
+    }
+  }, {
+    selectedClass: function(id){
+      if(appState.productId === id()){
+        return 'selected';
+      }
+    }
+  }) );
+
+</script>

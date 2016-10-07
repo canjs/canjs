@@ -1,0 +1,24 @@
+<div id="app"></div>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/model/model');
+
+can.Component.extend({
+    tag: "todos-editor",
+    template: "<form can-click='toggle'>Edit: "+
+                "{{#if visible}}<input type='text'/>{{/if}}"+
+              "</form>",
+    viewModel: {
+      visible: true,
+      toggle: function(context, el, ev){
+        this.attr("visible", !this.attr("visible") )
+      }
+    }
+})
+
+var template = can.view.stache("Here is my "+
+                   "<todos-editor></todos-editor>")
+
+$("#app").html( template() );
+</script>

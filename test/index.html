@@ -1,53 +1,5 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<style>
-		* {
-			-moz-box-sizing: border-box;
-			-webkit-box-sizing: border-box;
-			box-sizing: border-box;
-			padding: 0;
-			margin: 0;
-		}
-
-		html {
-			height: 700px;
-			height: 100%;
-		}
-
-		body {
-			height: 100%;
-		}
-
-		iframe {
-			float: left;
-			width: 33.333%;
-			height: 50%;
-		}
-
-		#jquery1, #jquery2 {
-			width: 50%;
-		}
-
-		#mootools {
-			border-right: 0;
-		}
-
-		#zepto {
-			border-bottom: 0;
-		}
-
-		#yui {
-			border-bottom: 0;
-		}
-	</style>
-	<title>Test... EVERYTHING</title>
-</head>
-<body>
-<iframe src="jquery.html" id="jquery1"></iframe>
-<iframe src="jquery-2.html" id="jquery2"></iframe>
-<iframe src="zepto.html" id="zepto"></iframe>
-<iframe src="mootools.html" id="mootools"></iframe>
-<iframe src="yui.html" id="yui"></iframe>
-</body>
-</html>
+<title>CanJS tests</title>
+<iframe src="../docs/can-guides/experiment/todomvc/todomvc.html" name="todo"></iframe>
+<script src="../node_modules/steal/steal.js" main="can/test/test"></script>
+<div id="qunit-fixture"></div>

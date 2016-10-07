@@ -1,0 +1,30 @@
+<body>
+<script src="../../node_modules/steal/steal.js" main="@empty" id="data-source">
+var Component = require("can-component");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+
+var HelloWorldVM = DefineMap.extend({
+   message: {
+	   value: "Hello There!"
+   },
+   visible: {
+	   value: false
+   }
+});
+
+Component.extend({
+   tag: "hello-world",
+   template: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
+   ViewModel: HelloWorldVM,
+   events: {
+	   click: function() {
+		   this.viewModel.visible = !this.viewModel.visible;
+	   }
+   }
+});
+
+var template = stache("<hello-world/>");
+document.body.appendChild(template({}));
+</script>
+</body>

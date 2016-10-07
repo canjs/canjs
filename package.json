@@ -1,254 +1,126 @@
 {
-	"name": "can",
-	"title": "CanJS",
-	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "2.3.27",
-	"keywords": [
-		"CanJS",
-		"DoneJS"
-	],
-	"author": {
-		"name": "Bitovi",
-		"email": "contact@bitovi.com",
-		"web": "http://bitovi.com/"
-	},
-	"homepage": "http://canjs.com/",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:canjs/canjs.git",
-		"github": "https://github.com/canjs/canjs"
-	},
-	"dependencies": {
-		"can-simple-dom": "^0.3.0",
-		"jquery": ">=1.9.0 <1.12.0 || >=2.1.0 <2.3.0"
-	},
-	"devDependencies": {
-		"bitovi-tools": "^0.1.1",
-		"bower": "~1.3.8",
-		"browserify": "~8.1.0",
-		"connect": "^2.14.4",
-		"documentjs": "~0.3.2",
-		"grunt": "~0.4.0",
-		"grunt-banner": "^0.3.1",
-		"grunt-cli": "~0.1.7",
-		"grunt-contrib-clean": "~0.5.0",
-		"grunt-contrib-connect": "~0.3.0",
-		"grunt-contrib-jshint": "~0.8.0",
-		"grunt-contrib-uglify": "~0.2.1",
-		"grunt-docco2": "git://github.com/shcarrico/grunt-docco.git#e4de54886ed5c421b2e26e7a2aeba1f73e889733",
-		"grunt-jsbeautifier": "~0.2.6",
-		"grunt-plato": "~0.2.1",
-		"grunt-release-steps": "~0.3.7",
-		"grunt-shell": "~0.5.0",
-		"grunt-simple-mocha": "^0.4.0",
-		"grunt-string-replace": "~0.2.2",
-		"jquery-ui": "^1.10.5",
-		"jquerypp": "^2.0.0",
-		"lodash": "2.4.1",
-		"phantomjs-prebuilt": "^2.1.12",
-		"rimraf": "2.1",
-		"steal": "^0.13.0-pre.7",
-		"steal-benchmark": "~0.0.1",
-		"steal-qunit": "0.0.2",
-		"steal-tools": "^0.13.3",
-		"testee": "^0.2.4",
-		"zombie": "3.1.1"
-	},
-	"scripts": {
-		"test": "grunt test"
-	},
-	"demos": [
-		"http://canjs.us/#examples",
-		"http://canjs.us/recipes"
-	],
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://opensource.org/licenses/mit-license.php"
-		}
-	],
-	"main": "./can",
-	"system": {
-		"ignoreBrowser": true,
-		"main": "can",
-		"map": {
-			"can/can": "can",
-			"jquery/jquery": "jquery",
-			"steal-benchmark/steal-benchmark": "steal-benchmark",
-			"can-simple-dom/can-simple-dom": "can-simple-dom",
-			"jquery-ui/jquery-ui": "jquery-ui",
-			"steal-qunit/steal-qunit": "steal-qunit",
-			"can/util/vdom/vdom": "@empty"
-		},
-		"paths": {
-			"benchmark/benchmark": "bower_components/benchmark/benchmark.js",
-			"dojo/dojo": "util/dojo/dojo-1.8.1.js",
-			"yui/yui": "util/yui/yui-3.7.3.js",
-			"mootools/mootools": "bower_components/mootools/dist/mootools-core.js",
-			"zepto/zepto": "bower_components/zepto/zepto.js"
-		},
-		"meta": {
-			"benchmark/benchmark": {
-				"format": "global",
-				"exports": "Benchmark"
-			},
-			"jquery": {
-				"format": "global",
-				"exports": "jQuery"
-			},
-			"dojo/dojo": {
-				"format": "global",
-				"exports": "Dojo"
-			},
-			"yui/yui": {
-				"exports": "YUI",
-				"format": "global",
-				"scriptEval": true
-			},
-			"mootools/mootools": {
-				"exports": "MooTools",
-				"format": "global",
-				"scriptEval": true
-			},
-			"zepto/zepto": {
-				"format": "global",
-				"exports": "Zepto"
-			},
-			"can/util/vdom/vdom": {
-				"sideBundle": true
-			}
-		},
-		"ext": {
-			"ejs": "can/view/ejs/system",
-			"mustache": "can/view/mustache/system",
-			"stache": "can/view/stache/system"
-		},
-		"buildConfig": {
-			"map": {
-				"can/util/util": "can/util/domless/domless"
-			}
-		},
-		"npmIgnore": [
-			"grunt-docco2",
-			"testee",
-			"zombie",
-			"bitovi-tools",
-			"steal",
-			"bower",
-			"steal-tools",
-			"connect",
-			"grunt",
-			"grunt-cli",
-			"grunt-contrib-clean",
-			"grunt-contrib-connect",
-			"grunt-contrib-jshint",
-			"grunt-contrib-uglify",
-			"grunt-jsbeautifier",
-			"grunt-plato",
-			"grunt-release-steps",
-			"grunt-shell",
-			"grunt-simple-mocha",
-			"grunt-string-replace",
-			"rimraf",
-			"lodash",
-			"browserify",
-			"grunt-banner",
-			"documentjs"
-		],
-		"envs": {
-			"server-development": {
-				"map": {
-					"can/util/vdom/vdom": "can/util/vdom/vdom"
-				},
-				"meta": {
-					"jquery": {
-						"format": "global",
-						"exports": "jQuery",
-						"deps": [
-							"can/util/vdom/vdom"
-						]
-					}
-				}
-			},
-			"server-production": {
-				"map": {
-					"can/util/vdom/vdom": "can/util/vdom/vdom"
-				},
-				"meta": {
-					"jquery": {
-						"format": "global",
-						"deps": [
-							"can/util/vdom/vdom"
-						]
-					}
-				}
-			},
-			"build-development": {
-				"map": {
-					"can/util/vdom/vdom": "can/util/vdom/vdom"
-				},
-				"meta": {
-					"jquery": {
-						"format": "global",
-						"exports": "jQuery",
-						"deps": [
-							"can/util/vdom/vdom"
-						]
-					}
-				}
-			}
-		}
-	},
-	"browser": {
-		"./can": "./dist/cjs/can",
-		"./component/component": "./dist/cjs/component/component",
-		"./construct/construct": "./dist/cjs/construct/construct",
-		"./map/map": "./dist/cjs/map/map",
-		"./list/list": "./dist/cjs/list/list",
-		"./list/promise/promise": "./dist/cjs/list/promise/promise",
-		"./observe/observe": "./dist/cjs/observe/observe",
-		"./compute/compute": "./dist/cjs/compute/compute",
-		"./model/model": "./dist/cjs/model/model",
-		"./view/view": "./dist/cjs/view/view",
-		"./view/ejs/ejs": "./dist/cjs/view/ejs/ejs",
-		"./view/stache/stache": "./dist/cjs/view/stache/stache",
-		"./view/stache/mustache_core": "./dist/cjs/view/stache/mustache_core",
-		"./view/href/href": "./dist/cjs/view/href/href",
-		"./control/control": "./dist/cjs/control/control",
-		"./route/route": "./dist/cjs/route/route",
-		"./control/route/route": "./dist/cjs/control/route/route",
-		"./view/mustache/mustache": "./dist/cjs/view/mustache/mustache",
-		"./route/pushstate/pushstate": "./dist/cjs/route/pushstate/pushstate",
-		"./model/queue/queue": "./dist/cjs/model/queue/queue",
-		"./construct/super/super": "./dist/cjs/construct/super/super",
-		"./construct/proxy/proxy": "./dist/cjs/construct/proxy/proxy",
-		"./map/lazy/lazy": "./dist/cjs/map/lazy/lazy",
-		"./map/delegate/delegate": "./dist/cjs/map/delegate/delegate",
-		"./map/setter/setter": "./dist/cjs/map/setter/setter",
-		"./map/attributes/attributes": "./dist/cjs/map/attributes/attributes",
-		"./map/validations/validations": "./dist/cjs/map/validations/validations",
-		"./map/backup/backup": "./dist/cjs/map/backup/backup",
-		"./map/list/list": "./dist/cjs/map/list/list",
-		"./map/define/define": "./dist/cjs/map/define/define",
-		"./list/sort/sort": "./dist/cjs/list/sort/sort",
-		"./control/plugin/plugin": "./dist/cjs/control/plugin/plugin",
-		"./view/modifiers/modifiers": "./dist/cjs/view/modifiers/modifiers",
-		"./util/fixture/fixture": "./dist/cjs/util/fixture/fixture",
-		"./view/bindings/bindings": "./dist/cjs/view/bindings/bindings",
-		"./view/live/live": "./dist/cjs/view/live/live",
-		"./view/scope/scope": "./dist/cjs/view/scope/scope",
-		"./util/tests/tests": "./dist/cjs/util/tests/tests",
-		"./util/object/object": "./dist/cjs/util/object/object",
-		"./util/function/function": "./dist/cjs/util/function/function",
-		"./view/autorender/autorender": "./dist/cjs/view/autorender/autorender",
-		"./util/domless/domless": "./dist/cjs/util/domless/domless",
-		"./view/stache/system": "./dist/cjs/view/stache/system",
-		"./view/mustache/system": "./dist/cjs/view/mustache/system",
-		"./view/ejs/system": "./dist/cjs/view/ejs/system",
-		"./util/event": "./dist/cjs/util/event",
-		"./map/sort/sort": "./dist/cjs/map/sort/sort",
-		"./util/vdom/build_fragment/build_fragment": "./dist/cjs/util/vdom/build_fragment/build_fragment",
-		"./util/vdom/document/document": "./dist/cjs/util/vdom/document/document",
-		"./view/import/import": "./dist/cjs/view/import/import"
-	}
+  "name": "can",
+  "version": "3.0.0-pre.13",
+  "main": "can.js",
+  "scripts": {
+    "preversion": "npm test",
+    "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
+    "postversion": "git push --tags && git checkout major && git branch -D release && git push",
+    "testee": "testee test/index.html --browsers firefox",
+    "test": "npm run build && npm run testee",
+    "ci": "npm run build && grunt",
+    "release:pre": "npm version prerelease && npm publish",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "build": "node build.js",
+    "document": "bit-docs"
+  },
+  "title": "CanJS",
+  "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
+  "keywords": [
+    "CanJS",
+    "DoneJS"
+  ],
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "web": "http://bitovi.com/"
+  },
+  "homepage": "http://canjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:canjs/canjs.git",
+    "github": "https://github.com/canjs/canjs"
+  },
+  "dependencies": {
+    "can-component": "^3.0.0-pre.18",
+    "can-compute": "^3.0.0-pre.14",
+    "can-connect": "^0.6.0-pre.21",
+    "can-construct": "^3.0.0-pre.8",
+    "can-construct-super": "^3.0.0-pre",
+    "can-control": "3.0.0-pre.9",
+    "can-define": "^0.8.3",
+    "can-event": "^3.0.0-pre.16",
+    "can-fixture": "^0.4.0-pre.15",
+    "can-jquery": "^3.0.0-pre.10",
+    "can-list": "^3.0.0-pre.8",
+    "can-map": "^3.0.0-pre.11",
+    "can-map-define": "^3.0.0-pre.4",
+    "can-observation": "^3.0.0-pre.13",
+    "can-route": "^3.0.0-pre.18",
+    "can-route-pushstate": "^3.0.0-pre.6",
+    "can-set": "^0.6.0-pre.9",
+    "can-simple-dom": "^0.4.3",
+    "can-simple-map": "^3.0.0-pre.4",
+    "can-stache": "^3.0.0-pre.23",
+    "can-stache-bindings": "^3.0.0-pre.28",
+    "can-util": "^3.0.0-pre.62",
+    "can-view-autorender": "^3.0.0-pre.4",
+    "can-view-callbacks": "^3.0.0-pre.7",
+    "can-view-import": "^3.0.0-pre.4",
+    "can-view-live": "^3.0.0-pre.4",
+    "can-view-model": "^3.0.0-pre.6",
+    "can-view-nodelist": "^3.0.0-pre.3",
+    "can-view-parser": "^3.0.0-pre.6",
+    "can-view-scope": "^3.0.0-pre.17",
+    "can-view-target": "^3.0.0-pre.4",
+    "can-zone": "^0.5.8"
+  },
+  "devDependencies": {
+    "bit-docs": "^0.0.7",
+    "can-fixture": "^0.4.0-pre.5",
+    "can-stache-converters": "^3.0.0-pre.1",
+    "can-vdom": "^0.0.5",
+    "funcunit": "^3.1.0-pre.1",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-saucelabs": "^9.0.0",
+    "jquery": "^2.2.3",
+    "jquery-ui": "^1.12.0",
+    "steal": "^0.16.4",
+    "steal-qunit": "^0.1.1",
+    "steal-stache": "^3.0.0-pre.1",
+    "steal-tools": "pre",
+    "testee": "^0.2.5"
+  },
+  "demos": [
+    "http://canjs.us/#examples",
+    "http://canjs.us/recipes"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "system": {
+    "npmAlgorithm": "flat",
+    "main": "can",
+    "npmIgnore": [
+      "bit-docs",
+      "testee"
+    ]
+  },
+  "bit-docs": {
+    "dependencies": {
+      "bit-docs-glob-finder": "^0.0.5",
+      "bit-docs-dev": "^0.0.3",
+      "bit-docs-js": "^0.0.6",
+      "bit-docs-tag-sourceref": "^0.0.3",
+      "bit-docs-generate-html": "^0.2.2",
+      "bit-docs-html-canjs": "^0.3.15",
+      "bit-docs-prettify": "^0.1.0",
+      "bit-docs-html-highlight-line": "^0.2.2",
+      "bit-docs-tag-demo": "^0.3.0",
+      "bit-docs-tag-package": "^0.0.3"
+    },
+    "glob": {
+      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
+      "ignore": "node_modules/can-*/dist/**/*"
+    },
+    "parent": "canjs",
+    "minifyBuild": false
+  }
 }

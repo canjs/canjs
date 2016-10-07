@@ -1,0 +1,205 @@
+<body>
+<div id='lists'></div>
+
+<button id='next'>Run Code:</button>
+<pre id='next-source'></pre>
+
+<script src="../../node_modules/steal/steal.js" id="demo-source">
+var connect = require("can-connect");
+var fixture = require("can-fixture");
+var $ =  require("jquery");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var compute = require("can-compute");
+var domEvents = require("can-util/dom/events/events");
+require("can-util/dom/events/removed/removed");
+
+
+var Todo = DefineMap.extend({
+	id: "number",
+	name: "string",
+	complete: "boolean"
+});
+
+Todo.List = DefineList.extend({
+	"#": Todo
+});
+
+// A connection that gets todos data
+var todosConnection = connect([
+	require("can-connect/real-time/real-time"),
+	require("can-connect/data/url/url"),
+    require("can-connect/constructor/constructor"),
+    require("can-connect/constructor/store/store"),
+	require("can-connect/constructor/callbacks-once/callbacks-once"),
+	require("can-connect/can/map/map")
+],{
+	url: "/todos",
+	Map: Todo,
+	List: Todo.List
+});
+
+// Trap ajax requests to return and modify the following `todo` object.
+
+fixture({
+	"GET /todos": function(request){
+
+		if(request.data.priority == 0) {
+			return {data: [
+				{id: 1, name: "dishes", priority: 0, complete: false},
+				{id: 2, name: "lawn", priority: 0, complete: false},
+				{id: 3, name: "garbage", priority: 0, complete: true}
+			]};
+		}
+		if(request.data.complete == "false") {
+			return {data: [
+				{id: 1, name: "dishes", priority: 0, complete: false},
+				{id: 2, name: "lawn", priority: 0, complete: false},
+				{id: 4, name: "laundry", priority: 1, complete: false}
+			]};
+		}
+	}
+});
+
+var todoItem = function(todo) {
+	var li = $("<li>");
+	var liUpdate = compute(function(){
+		if(todo.complete) {
+			li.css("text-decoration","line-through");
+		} else {
+			li.css("text-decoration","");
+		}
+		li.text(todo.id+": "+todo.name);
+	});
+
+	var handler = function(){};
+	liUpdate.on("change", liUpdate)
+	domEvents.addEventListener.call(li[0], "removed", function(){
+		liUpdate.off("change", liUpdate);
+	});
+
+	li.bind("click", function(){
+		todo.complete = !todo.complete
+	});
+	return li;
+};
+
+
+var todoList = function(set){
+	var element = $('<ul>Loading</ul>');
+	var todos;
+
+	var add = function(ev, inserted, index) {
+		var lis = [].map.call(inserted, function(todo){
+			return todoItem(todo).hide()[0];
+		});
+
+		if(element.children().length > index) {
+			element.children().eq(index).after( $(lis) );
+		} else if(element.children().length) {
+			element.children().last().after( $(lis) );
+		} else {
+			element.append($(lis));
+		}
+		$(lis).fadeIn();
+	};
+
+	var remove = function(ev, inserted, index) {
+		var li = element.children().eq( index );
+		var count = 0;
+		while(count < inserted.length) {
+			let cur = li;
+			li.fadeOut(function(){
+				cur.remove();
+			});
+			li = li.next();
+			count++;
+		}
+	};
+
+	todosConnection.getList(set).then(function(retrievedTodos){
+
+		element.empty();
+		todos = retrievedTodos;
+
+		todos.on("add", add).on("remove", remove);
+
+		add({},todos, 0)
+	});
+	domEvents.addEventListener.call(element[0], "removed", function(){
+		todos.off("add", add).off("remove", remove);
+		remove([],todos,0);
+	});
+
+	return element;
+};
+
+$("#lists").append("<h2>Critical (p0)</h2>");
+$("#lists").append(todoList({priority: 0}));
+
+$("#lists").append("<h2>Incomplete</h2>");
+$("#lists").append(todoList({complete: false}));
+
+
+var steps = [
+	function(){
+		todosConnection.createInstance({
+			id: 5,
+			name: "sweep floor",
+			priority: 0,
+			complete: false
+		});
+		todosConnection.createInstance({
+			id: 6,
+			name: "wash windows",
+			priority: 1,
+			complete: true
+		});
+	},
+	function(){
+		todosConnection.updateInstance({
+			id: 5,
+			name: "sweep floor",
+			priority: 0,
+			complete: true
+		});
+	},
+	function(){
+		todosConnection.updateInstance({
+			id: 6,
+			name: "wash windows",
+			priority: 1,
+			complete: false
+		});
+	},
+	function(){
+		todosConnection.destroyInstance({id: 6});
+	}
+];
+var index = -1;
+
+var doNext = function(){
+	var next = steps[index+1];
+	if(next) {
+		var source = next.toString().replace("function () {\n","")
+			.replace(/\}$/,"")
+
+		.replace(/\t/g,"").replace(/([,\{])\n/g,function(whole, part){
+			return part+"\n  ";
+		});
+		$("#next-source").html(source);
+	} else {
+		$("#next, #next-source").remove();
+	}
+
+	if(steps[index]) {
+		steps[index]();
+	}
+	index++;
+};
+
+$("#next").click(doNext);
+doNext();
+
+</script>
+</body>

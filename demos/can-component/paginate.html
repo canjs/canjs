@@ -1,0 +1,295 @@
+<body>
+	<style>
+		* {
+		font: 13px/16px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+		    color: #333;
+		}
+		table {
+		    margin: 5px auto;
+		    margin-bottom: 15px;
+		    width: 95%;
+		}
+		td {
+		    border-top: 1px solid #eee;
+		    padding: 5px;
+		}
+		tr:last-child {
+		    border-bottom: 1px solid #eee;
+		}
+		tr:nth-child(odd) {
+		    background-color: #fcfcf1;
+		}
+		thead th {
+		    background-color: #ccc;
+		    color: #666;
+		    padding: 5px;
+		    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+		}
+		next-prev { margin: 5px auto;text-align: center;display: block; }
+		next-prev a {
+		    border-radius: 3px;
+		    padding: 4px 14px;
+		    text-decoration: none;
+		    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+		    background-color: #f5f5f5;
+		    border: 1px solid #bbbbbb;
+		    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+		}
+		next-prev a.enabled {
+		    color: #ffffff;
+		    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+		    background-color: #49afcd;
+		    border-color: #2f96b4 #2f96b4 #1f6377;
+		}
+		page-count {
+			display: block;
+		}
+		page-count, page-count * {
+		    font-size: 11px;
+		    color: #ccc;
+		    text-align: center;
+		}
+		.waiting {
+			opacity: 0.5;
+		}
+	</style>
+<div id='out'></div>
+<script id="app-stache" type='text/stache'>
+  <my-app>
+    <my-grid {promise-data}='websitesPromise'>
+      {{#each items}}
+        <tr>
+          <td width='40%'>{{name}}</td>
+          <td width='70%'>{{url}}</td>
+        </tr>
+      {{/each}}
+    </my-grid>
+    <next-prev {paginate}='paginate'></next-prev>
+    <page-count {page}='paginate.page' {count}='paginate.pageCount'></page-count>
+  </my-app>
+</script>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var Component = require("can-component");
+var fixture = require("can-fixture");
+var stache = require("can-stache");
+var superMap = require("can-connect/can/super-map/super-map");
+var set = require("can-set");
+var compute = require("can-compute");
+
+window.can = require("can-util/namespace");
+
+var Website = DefineMap.extend({
+	id: "number",
+	name: "string",
+	url: "string"
+});
+
+Website.List = DefineList.extend({
+	"#": Website,
+	count: "number"
+});
+
+
+
+var websiteAlgebra = new set.Algebra(
+	set.props.offsetLimit("offset", "limit")
+);
+
+superMap({
+	idProp: "id",
+	Map: Website,
+	List: Website.List,
+	url: "/websites",
+	name: "website",
+	algebra: websiteAlgebra
+});
+
+
+var websiteStore = fixture.store([{
+	id: 1,
+	name: "CanJS",
+	url: "http://canjs.us"
+}, {
+	id: 2,
+	name: "jQuery++",
+	url: "http://jquerypp.com"
+}, {
+	id: 3,
+	name: "JavaScriptMVC",
+	url: "http://javascriptmvc.com"
+}, {
+	id: 4,
+	name: "Bitovi",
+	url: "http://bitovi.com"
+}, {
+	id: 5,
+	name: "FuncUnit",
+	url: "http://funcunit.com"
+}, {
+	id: 6,
+	name: "StealJS",
+	url: "http://stealjs.com"
+}, {
+	id: 7,
+	name: "jQuery",
+	url: "http://jquery.com"
+}, {
+	id: 8,
+	name: "Mootools",
+	url: "http://mootools.com"
+}, {
+	id: 9,
+	name: "Dojo",
+	url: "http://dojo.com"
+}, {
+	id: 10,
+	name: "YUI",
+	url: "http://yui.com"
+}, {
+	id: 11,
+	name: "DoneJS",
+	url: "http://donejs.com"
+}, {
+	id: 12,
+	name: "Mindjet Connect",
+	url: "http://connect.mindjet.com"
+}, {
+	id: 13,
+	name: "JSFiddle",
+	url: "http://jsfiddle.net"
+}, {
+	id: 14,
+	name: "Zepto",
+	url: "http://zepto.com"
+}, {
+	id: 15,
+	name: "Spill",
+	url: "http://spill.com"
+}, {
+	id: 16,
+	name: "Github",
+	url: "http://github.com"
+}], websiteAlgebra);
+
+fixture("/websites/{id}", websiteStore);
+
+fixture.delay = 2000;
+
+var Paginate = DefineMap.extend({
+	count: {
+		value: Infinity,
+		get: function(lastSetCount) {
+			return lastSetCount && lastSetCount.isComputed ? lastSetCount() : lastSetCount;
+		}
+	},
+	offset: {
+		value: 0,
+		set: function(newOffset) {
+			return newOffset < 0 ?
+				0 :
+				Math.min(newOffset, !isNaN(this.count - 1) ?
+					this.count - 1 :
+					Infinity);
+		}
+	},
+	limit: {
+		value: 5
+	},
+	page: {
+		get: function() {
+			return Math.floor(this.offset / this.limit) + 1;
+		},
+		set: function(newVal) {
+			this.offset = (parseInt(newVal, 10) - 1) * this.limit;
+		}
+	},
+	pageCount: {
+		get: function() {
+			return this.count ?
+				Math.ceil(this.count / this.limit) : null;
+		}
+	},
+	next: function() {
+		this.offset = this.offset + this.limit;
+	},
+	prev: function() {
+		this.offset = this.offset - this.limit;
+	},
+	canNext: function() {
+		return this.offset < this.count - this.limit;
+	},
+	canPrev: function() {
+		return this.offset > 0;
+	}
+});
+
+var AppViewModel = DefineMap.extend({
+	paginate: {
+		value: function() {
+			return new Paginate({
+				limit: 5,
+				count: compute(this, "websitesPromise.value.count")
+			});
+		}
+	},
+	websitesPromise: {
+		get: function() {
+			return Website.getList({
+				limit: this.paginate.limit,
+				offset: this.paginate.offset
+			});
+		}
+	}
+});
+
+Component.extend({
+	tag: "my-app",
+	ViewModel: AppViewModel,
+	leakScope: true
+});
+
+var GridViewModel = DefineMap.extend({
+	promiseData: "*",
+	items: {
+		get: function(lastSet, resolve) {
+			this.promiseData.then(resolve);
+		}
+	},
+	waiting: {
+		get: function(lastSet, resolve) {
+			var promise = this.promiseData;
+
+			promise.then(function() {
+				resolve(false);
+			});
+			return true;
+		}
+	}
+});
+
+Component.extend({
+	tag: "my-grid",
+	template: stache("<table><tbody {{#waiting}}class='waiting'{{/waiting}}><content></content></tbody></table>"),
+	ViewModel: GridViewModel,
+	leakScope: true
+});
+
+Component.extend({
+	tag: "next-prev",
+	template: stache('<a href="javascript://"' +
+		'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" ($click)="paginate.prev()">Prev</a>' +
+		'<a href="javascript://"' +
+		'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" ($click)="paginate.next()">Next</a>')
+});
+
+Component.extend({
+	tag: "page-count",
+	template: stache('Page <span>{{page}}</span> of <span>{{count}}</span>.')
+});
+
+var template = stache(document.getElementById("app-stache").innerHTML);
+document.getElementById("out").appendChild(template({}));
+</script>
+</body>

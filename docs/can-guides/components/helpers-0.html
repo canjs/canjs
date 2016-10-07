@@ -1,0 +1,66 @@
+<div id="app"></div>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var $ = require('jquery');
+var can = require('can');
+require('can/model/model');
+
+  var TODOS = [
+    {id: 1, name: "wake up", complete: true},
+    {id: 2, name: "take out trash", complete: false},
+    {id: 3, name: "do dishes", complete: false}
+  ];
+  var Todo = can.Model.extend({
+    findAll : function(){
+      return $.Deferred().resolve(TODOS);
+    },
+    findOne : function(params){
+      return $.Deferred().resolve(TODOS[(+params.id)-1]);
+    },
+    update  : function(id, attrs){
+        // update TODOS with the new attrs
+        $.extend(TODOS[id -1], attrs);
+        return $.Deferred().resolve()
+    },
+    destroy : function(){
+        return $.Deferred().resolve()
+    }
+  },
+  {});
+
+
+  var template = can.view.stache("<todos-list></todos-list>")
+
+  can.Component.extend({
+		tag: "todos-list",
+		template:
+			"<ul>"+
+			  "{{#each todos}}"+
+				"<li>"+
+			      "<input type='checkbox' can-value='complete'>"+
+			      "<span {{todoClass}} can-click='select'>{{name}}</span> "+
+				  "<a href='javascript://' can-click='destroy'>X</a>"+
+			    "</li>"+
+			  "{{/each}}"+
+			"</ul>",
+		scope: {
+			todos: new Todo.List({}),
+			select: function(todo){
+				can.route.attr("id",todo.attr("id"))
+			}
+		},
+		helpers: {
+			todoClass: function(options){
+				if(options.context.attr('complete')) {
+					return "class='done'"
+				}
+			}
+		}
+  });
+
+  var frag = template({})
+
+  document.body.appendChild(frag)
+
+  $("#app").html( frag );
+
+</script>

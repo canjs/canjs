@@ -1,0 +1,167 @@
+<body>
+
+<a href="#complete">Completed</a>
+<a href="#incomplete">Incomplete</a>
+
+<div id='list'></div>
+
+<script src="../../node_modules/steal/steal.js" id="demo-source">
+var connect = require("can-connect");
+var fixture = require("can-fixture");
+var $ =  require("jquery");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var compute = require("can-compute");
+var domEvents = require("can-util/dom/events/events");
+require("can-util/dom/events/removed/removed");
+
+var Todo = DefineMap.extend({
+	id: "number",
+	name: "string",
+	complete: "boolean"
+});
+
+Todo.List = DefineList.extend({
+	"#": Todo
+});
+
+var cache = connect([
+	require("can-connect/data/localstorage-cache/localstorage-cache")
+],{
+	name: "todos"
+});
+
+// A connection that gets todos data
+var todosConnection = connect([
+	require("can-connect/fall-through-cache/fall-through-cache"),
+    require("can-connect/data/url/url"),
+    require("can-connect/constructor/constructor"),
+    require("can-connect/constructor/store/store"),
+	require("can-connect/can/map/map")
+],{
+  url: "/todos",
+  cacheConnection: cache,
+  Map: Todo,
+  List: Todo.List
+});
+
+
+
+
+var todoItem = function(todo) {
+	var li = $("<li>");
+	var liUpdate = compute(function(){
+		if(todo.complete) {
+			li.css("text-decoration","line-through");
+		} else {
+			li.css("text-decoration","");
+		}
+		li.text(todo.id+": "+todo.name);
+	});
+
+	var handler = function(){};
+	liUpdate.on("change", liUpdate)
+	domEvents.addEventListener.call(li[0], "removed", function(){
+		liUpdate.off("change", liUpdate);
+	});
+
+	li.bind("click", function(){
+		todo.complete = !todo.complete
+	});
+	return li;
+};
+
+
+var todoList = function(set){
+	var element = $('<ul>Loading</ul>');
+	var todos;
+
+	var add = function(ev, inserted, index) {
+		var lis = [].map.call(inserted, function(todo){
+			return todoItem(todo).hide()[0];
+		});
+
+		if(element.children().length > index) {
+			element.children().eq(index).after( $(lis) );
+		} else if(element.children().length) {
+			element.children().last().after( $(lis) );
+		} else {
+			element.append($(lis));
+		}
+		$(lis).fadeIn();
+	};
+
+	var remove = function(ev, inserted, index) {
+		var li = element.children().eq( index );
+		var count = 0;
+		while(count < inserted.length) {
+			let cur = li;
+			li.fadeOut(function(){
+				cur.remove();
+			});
+			li = li.next();
+			count++;
+		}
+	};
+
+	todosConnection.getList(set).then(function(retrievedTodos){
+
+		element.empty();
+		todos = retrievedTodos;
+
+		todos.on("add", add).on("remove", remove);
+		//Object.observe(todos, update, ["add", "update", "delete"] );
+
+		add({},todos, 0)
+	});
+	domEvents.addEventListener.call(element[0], "removed", function(){
+		todos.off("add", add).off("remove", remove);
+		remove([],todos,0);
+	});
+
+	return element;
+};
+
+// When the hash changes, update which `todoList` is displayed.
+var updatePage = function(){
+	var complete = window.location.hash !== "#incomplete";
+
+	$("#list").children().remove().triggerHandler("remove");
+	var ul = todoList({complete: complete});
+	$("#list").html(ul);
+};
+$(window).bind("hashchange", updatePage);
+
+
+// Trap ajax requests to return a random list of todos
+fixture.delay = 1000;
+fixture({
+	"GET /todos": function(request){
+		var todos = randomTodos(request.data.complete == "true");
+		return {data: todos};
+	}
+});
+function randomTodos(complete){
+	var verbs = ["do","wash","mow","clean","take out"];
+	var names = ["dishes","lawn","garbage", "laundry","windows","floor"];
+	var ids = [];
+	for(var i =0; i < 10; i++) {
+		ids.push(i);
+	}
+
+	var todos = [];
+	var total = fixture.rand(7) + 1;
+	for(var i = 0; i < total; i++){
+		todos.push({
+			id: fixture.rand(ids,1)[0],
+			name: fixture.rand(verbs,1)[0]+" "+fixture.rand(names,1)[0],
+			complete: complete
+		});
+	}
+	return todos;
+};
+
+// Kick off current page
+updatePage();
+</script>
+</body>

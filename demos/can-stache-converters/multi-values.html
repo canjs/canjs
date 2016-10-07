@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<title>values!</title>
+	<style>
+		select[multiple] {
+			font-size: 15px;
+			background: dimgrey;
+			padding: 0.3em;
+		}
+		[value=red] {
+			color: red;
+		}
+		[value=orange] {
+			color: orange;
+		}
+		[value=yellow] {
+			color: yellow;
+		}
+		[value=green] {
+			color: green;
+		}
+		[value=blue] {
+			color: blue;
+		}
+		[value=indigo] {
+			color: indigo;
+		}
+		[value=violet] {
+			color: violet;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/stache" id="myTemplate">
+		<select multiple {($values)}="colors" size="7">
+			<option value="red">Red</option>
+			<option value="orange">Orange</option>
+			<option value="yellow">Yellow</option>
+			<option value="green">Green</option>
+			<option value="blue">Blue</option>
+			<option value="indigo">Indigo</option>
+			<option value="violet">Violet</option>
+		</select>
+
+		<ul>
+		{{#each colors}}
+		<li>{{this}}</li>
+		{{/each}}
+		</ul>
+	</script>
+	<script src="../node_modules/steal/steal.js" main="@empty">
+		var stache = require("can-stache");
+		var DefineMap = require("can-define/map/map");
+		var DefineList = require("can-define/list/list");
+		require("can-stache-converters");
+
+		var template = stache.from("myTemplate");
+		var map = new DefineMap({
+			colors: ["green"]
+		});
+
+		document.body.appendChild(template(map));
+	</script>
+
+</body>
+</html>

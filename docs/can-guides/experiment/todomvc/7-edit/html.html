@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - List todos">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo"
+    placeholder="What needs to be done?"
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(this)}}editing{{/if}}">
+      <div class="view">
+	    <input class="toggle" type="checkbox"
+			   {($checked)}="complete" ($change)="save()">
+        <label ($dblclick)="edit(this)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        {$focused}="isEditing(this)"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
+</script>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox">
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos}="todosPromise.value"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a class="selected" href="#!">All</a>
+			</li>
+			<li>
+				<a href="#!active">Active</a>
+			</li>
+			<li>
+				<a href="#!completed">Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.11/dist/global/can.all.js"></script>
+</body>
+
+</html>

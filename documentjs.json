@@ -7,10 +7,9 @@
 				  	"guides/**/*.md",
 				  	"guides/*.js",
 				  	"guides/**/*.js",
-					"{node_modules,bower_components,dist}/**/*", 
+					"{node_modules,bower_components,dist}/**/*",
 					"lib/**/*",
 					"test/**/*",
-					"util/dojo/dojo.js",
 					"**/*_test.js",
 					"Gruntfile.js"]
 			},

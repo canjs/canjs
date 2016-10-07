@@ -1,12 +1,10 @@
 sudo: false
 language: node_js
-node_js: 0.10
-before_script: node_modules/.bin/bower install
-script: npm test
+node_js: node
+script: npm run ci
 before_install:
+  - ./firefox-allow-popups.sh
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-env:
-  - TEST_SUITE=loaders
-  - TEST_SUITE=dists
-  - TEST_SUITE=individuals
+addons:
+  firefox: "48.0"

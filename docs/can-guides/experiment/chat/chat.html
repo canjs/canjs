@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.11/dist/global/can.js"></script>
+		<style>
+			chat-home {
+				display: block;
+			}
+			chat-home h1.page-header { margin-top: 0; }
+		</style>
+    </head>
+    <body>
+<script type='text/stache' id='chat-template'>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+	  {{#eq page 'home'}}
+		  <h1 class="page-header text-center">
+	        <img src="http://donejs.com/static/img/donejs-logo-white.svg"
+	            alt="DoneJS logo" style="width: 100%;" />
+	        <br>Chat
+	      </h1>
+		  <a href="{{routeUrl page='chat' }}"
+       		class="btn btn-primary btn-block btn-lg">
+      			Start chat
+		  </a>
+	  {{else}}
+	  	<chat-messages/>
+	  {{/eq}}
+    </div>
+  </div>
+</div>
+</script>
+
+<script type='text/stache' id='chat-messages-template'>
+<h5><a href="{{routeUrl page='home'}}">Home</a></h5>
+
+{{#each messagesPromise.value}}
+  <div class="list-group-item">
+	<h4 class="list-group-item-heading">{{name}}</h4>
+	<p class="list-group-item-text">{{body}}</p>
+  </div>
+{{else}}
+  <div class="list-group-item">
+	<h4 class="list-group-item-heading">No messages</h4>
+  </div>
+{{/each}}
+
+<form class="row" ($submit)="send(%event)">
+	<div class="col-sm-3">
+	  <input type="text" class="form-control" placeholder="Your name"
+			 {($value)}="name"/>
+	</div>
+	<div class="col-sm-6">
+	  <input type="text" class="form-control" placeholder="Your message"
+			 {($value)}="body"/>
+	</div>
+	<div class="col-sm-3">
+	  <input type="submit" class="btn btn-primary btn-block" value="Send"/>
+	</div>
+</form>
+</script>
+
+<script>
+var Message = can.DefineMap.extend({
+	id: "number",
+	name: "string",
+	body: "string",
+	created_at: "date"
+});
+
+Message.List = can.DefineList.extend({
+	"#": Message
+}, {});
+
+can.connect.superMap({
+	url: {
+		resource: 'http://chat.donejs.com/api/messages',
+		contentType: 'application/x-www-form-urlencoded'
+	},
+	Map: Message,
+	List: Message.List,
+	name: 'message'
+});
+
+var ChatMessagesVM = can.DefineMap.extend({
+	name: "string",
+	body: "string",
+	messagesPromise: {
+		value: Message.getList.bind(Message,{})
+	},
+	send: function(event) {
+	    event.preventDefault();
+
+		new Message({
+			name: this.name,
+			body: this.body
+		}).save().then(function(){
+			this.body = "";
+		}.bind(this));
+	}
+})
+
+can.Component.extend({
+	tag: "chat-messages",
+	ViewModel: ChatMessagesVM,
+	view: can.stache.from("chat-messages-template")
+})
+
+var AppVM = can.DefineMap.extend({
+	route: "string",
+	page: "string"
+});
+
+can.route.data = new AppVM();
+can.route(":page",{page: "home"});
+can.route.ready();
+
+var template = can.stache.from('chat-template');
+var frag = template(can.route.data);
+document.body.appendChild(frag);
+</script>
+
+    </body>
+</html>

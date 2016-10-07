@@ -1,0 +1,66 @@
+<script type='text/stache' id='demo-html'>
+<p>Alison: <player-scores {scores}="game.scoresForPlayer('Alison')"/></p>
+<p>Jeff: <player-scores {scores}="game.scoresForPlayer('Jeff')"/></p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import "can-view-autorender";
+import "can-stache-bindings";
+import Component from "can-component";
+import DefineList from "can-define/list/list";
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+
+var Score = DefineMap.extend({
+	points: "number",
+	player: "string"
+});
+
+var ScoreList = DefineList.extend({
+	"#": Score
+}, {
+	sum: function(){
+		var sum = 0;
+		this.forEach(function(score){
+			sum += score.points;
+		});
+		return sum;
+	}
+});
+
+Component.extend({
+	tag: "player-scores",
+	template: stache('{{#each scores}} {{points}} {{/each}} = {{scores.sum()}}'),
+	ViewModel: DefineMap.extend({
+		scores: { Type: ScoreList }
+	})
+});
+
+var Game = DefineMap.extend({
+	scores: {
+		Type: ScoreList
+	},
+	scoresForPlayer: function(name){
+		return this.scores.filter(function(score){
+			return score.player === name;
+		});
+	}
+});
+
+var game = new Game({
+	scores: [
+		{player: "Alison", points: 2},
+		{player: "Alison", points: 3},
+		{player: "Jeff", points: 5},
+		{player: "Jeff", points: 1},
+		{player: "Alison", points: 6},
+		{player: "Jeff", points: 1},
+	]
+});
+
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)({
+	game: game
+});
+document.body.appendChild(frag);
+</script>

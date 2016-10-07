@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Chat Guide 3.0 - Routing">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<script type='text/stache' id='chat-template'>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+	  {{#eq page 'home'}}
+		  <h1 class="page-header text-center" ($click)="addExcitement()">
+	        {{message}}
+	      </h1>
+		  <a href="{{routeUrl page='chat' }}"
+	       	 class="btn btn-primary btn-block btn-lg">
+	      	   Start chat
+		  </a>
+	  {{else}}
+	  	 <h1 class="page-header text-center">
+		 	Chat Messages
+		 </h1>
+		 <h5><a href="{{routeUrl page='home'}}">Home</a></h5>
+	  {{/eq}}
+    </div>
+  </div>
+</div>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.11/dist/global/can.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<body>
+<div id='out'></div>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var Component = require("can-component");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+
+var ViewModel = DefineMap.extend({
+	offset: {
+		value: 0
+	},
+	limit: {
+		value: 20
+	},
+	next: function(){
+		this.offset = this.offset + this.limit;
+	},
+	page: function(){
+		return Math.floor(this.offset / this.limit) + 1;
+	}
+});
+
+Component.extend({
+	tag: "my-paginate",
+	ViewModel: ViewModel,
+	template: stache("Page {{page()}} <button ($click)='next()'>Next</button>")
+});
+
+var out = document.getElementById("out");
+out.appendChild(stache("<my-paginate/>")({}));
+</script>
+</body>

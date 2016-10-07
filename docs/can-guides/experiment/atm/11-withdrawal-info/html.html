@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="CanJS 3.0 - ATM Guide - Setup">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+
+</head>
+<body>
+
+<script type='text/stache' id='atm-template'>
+<div class="screen">
+	<div class="screen-content">
+		<div class="screen-glass">
+
+{{#switch state}}
+    {{#case "readingCard"}}
+    	<h2>Reading Card</h2>
+		<p>Welcome to canATM where there are <strong>never</strong>
+    	  fees!</p>
+    	</p>
+    	<p>
+    		Enter Card Number:
+    		<input name="card" ($enter)="cardNumber(%element.value)"/>
+    	</p>
+    {{/case}}
+
+    {{#case "readingPin"}}
+    	<h2>Reading Pin</h2>
+		<p>
+			Enter Pin Number:
+			<input name="pin" type="password"
+				autofocus
+				{{#is card.state "verifying"}}DISABLED{{/is}}
+				($enter)="pinNumber(%element.value)"/>
+
+			{{#is card.state "verifying"}}
+				<div class='warn'>
+					<p>
+					<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+					verifying
+					</p>
+				</div>
+			{{/is}}
+		</p>
+		<a href="javascript://" ($click)="exit()">exit</a>
+    {{/case}}
+
+    {{#case "choosingTransaction"}}
+    	<h2>Choose Transaction</h2>
+        <p>What would you like to do?</p>
+        <nav>
+            <ul>
+                <li ($click)="chooseDeposit()">Deposit</li>
+                <li ($click)="chooseWithdraw()">Withdraw</li>
+                <li ($click)="printReceiptAndExit()">Exit</li>
+            </ul>
+        </nav>
+    {{/case}}
+
+    {{#case  "pickingAccount"}}
+    	<h2>Pick Account</h2>
+        <p>Please pick your account:</p>
+        {{#if accountsPromise.isPending}}
+            <div class='warn'>
+                <p>
+                    <img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+                    Loading Accounts ...
+                </p>
+            </div>
+        {{else}}
+            <ul>
+                {{#each accountsPromise.value}}
+                    <li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    {{/case}}
+
+    {{#case "depositInfo"}}
+    	<h2>Deposit</h2>
+        <p>
+    		How much would you like to deposit
+    		into {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
+
+    		<input name="deposit" {($value)}="currentTransaction.amount"/>
+    	</p>
+
+    	{{#eq currentTransaction.state "executing"}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+    			Deposit
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/eq}}
+    {{/case}}
+
+    {{#case "withdrawalInfo"}}
+        <h2>Withdraw</h2>
+    	<p>
+    		How much would you like to withdraw
+    		from {{currentTransaction.account.name}}
+    		(${{currentTransaction.account.balance}})?
+
+    		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
+    	</p>
+    	{{#eq currentTransaction.state "executing"}}
+    		<div class='warn'>
+    			<p>
+    			<img src="http://www.bristolallheart.com/media/mod_mailchimpsignup/images/ajax-loader.gif"/>
+    			executing
+    			</p>
+    		</div>
+    	{{else}}
+    		<button ($click)="currentTransaction.execute()"
+    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+    			Withdraw
+    		</button>
+    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    	{{/eq}}
+    {{/case}}
+
+    {{#case "successfulTransaction"}}
+    	<h2>Transaction Successful!</h2>
+    {{/case}}
+
+    {{#case  "printingReceipt"}}
+    	<h2>Printing Receipt</h2>
+    {{/case}}
+
+    {{#default}}
+        <h2>Error</h2>
+        <p>Invalid state - {{state}}</p>
+    {{/default}}
+
+{{/switch}}
+
+		</div>
+	</div>
+</div>
+</script>
+
+<script type='text/stache' id='app-template'>
+<div class="title">
+	<h1>canATM</h1>
+</div>
+<atm-machine/>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.13/dist/global/can.all.js"></script>
+
+<div id="qunit"></div>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
+<script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
+
+</body>
+</html>

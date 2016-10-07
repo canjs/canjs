@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Chat Guide 3.0 - Hello World">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<script type='text/stache' id='chat-template'>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+	  <h1 class="page-header text-center" ($click)="addExcitement()">
+        {{message}}
+      </h1>
+    </div>
+  </div>
+</div>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script src="https://rawgit.com/canjs/canjs/v3.0.0-pre.11/dist/global/can.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>
+</body>
+
+</html>

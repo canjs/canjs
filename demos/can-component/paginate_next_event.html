@@ -1,0 +1,77 @@
+<body>
+<style>
+	.editing {
+		font-weight: bold;
+	}
+</style>
+<div id='out'></div>
+<div id="demo-html">
+<script id="player-list-stache" type="text/stache">
+  <ul>
+  	{{#each players}}
+  		<li {{#isEditing(.)}}class="editing"{{/isEditing}}
+  			($click)='editPlayer(.)'>{{name}}</li>
+  	{{/each}}
+  </ul>
+  <player-edit 
+  	(close)="removeEdit()" 
+  	{player}="editingPlayer"/>
+</script>
+<script id="player-edit-stache" type="text/stache">
+	{{#if player}}
+		<input {($value)}="player.name"/>
+		<button ($click)="close()">X</button>
+	{{/if}}
+</script>
+</div>
+<script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import Component from "can-component";
+import stache from "can-stache";
+import $ from "jquery";
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+
+let Player = DefineMap.extend({
+	name: "string"
+});
+
+let PlayerList = DefineMap.extend({
+	editingPlayer: Player,
+	players: {
+		value: new DefineList([new Player({name: "Justin"}),
+			new Player({name: "Brian"})])
+	},
+	editPlayer: function(player){
+		this.editingPlayer = player;
+	},
+	removeEdit: function(){
+		this.editingPlayer = undefined;
+	},
+	isEditing: function(player){
+		return this.editingPlayer === player;
+	}
+});
+
+Component.extend({
+	tag: "player-list",
+	template: stache($('#player-list-stache').html()),
+	ViewModel: PlayerList,
+	leakScope: true
+});
+
+Component.extend({
+	tag: "player-edit",
+	template: stache($('#player-edit-stache').html()),
+	ViewModel: DefineMap.extend({
+		player: Player,
+		close: function(){
+			this.dispatch("close");
+		}
+	}),
+	leakScope: true
+});
+
+$("#out").html(stache("<player-list/>")({}));
+	
+</script>
+</body>
