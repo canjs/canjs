@@ -53,7 +53,7 @@ var AccordionViewModel = DefineMap.extend({
 	// the panels array.
 	removePanel: function(panel){
 		var panels = this.panels;
-		can.batch.start();
+
 		panels.splice(panels.indexOf(panel),1);
 		// if the panel was active, make the first item active
 		if(panel === this.active){
@@ -63,7 +63,6 @@ var AccordionViewModel = DefineMap.extend({
 				this.active = undefined;
 			}
 		}
-		can.batch.stop()
 	},
 	makeActive: function(panel){
 		this.active = panel;
@@ -72,11 +71,6 @@ var AccordionViewModel = DefineMap.extend({
 		});
 		panel.active = true;
 
-	},
-	// this is scope, not mustache
-	// consider removing scope as arg
-	isActive: function( panel ) {
-		return this.active === panel;
 	}
 });
 
@@ -87,12 +81,12 @@ Component.extend({
 });
 
 Component.extend({
-	template:
-		stache("<h2 can-click='makeActive'>{{title}}</h2>"+
-		"{{#if active}}<content></content>{{/if}}"),
+	view:
+		stache("<h2 ($click)='makeActive(.)'>{{title}}</h2>"+
+		"{{#if ./active}}<content></content>{{/if}}"),
 	tag:"panel",
-	viewModel: {
-		active: false
+	ViewModel: {
+		active: "boolean"
 	},
 	events: {
 		inserted: function(){
@@ -115,9 +109,10 @@ out.addEventListener("click", function(ev){
 	var parent = el.parentNode;
 	if(el.nodeName === "BUTTON") {
 		parent.setAttribute("title", "Users");
-		parent.removeChild(el);
 	}
 });
+
+window.canViewModel = canViewModel;
 </script>
 <script>
 	DEMO_HTML = document.getElementById("demo").innerHTML
