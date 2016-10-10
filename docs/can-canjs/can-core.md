@@ -15,7 +15,7 @@ should install the ones you use directly:
 npm install can-define can-set can-connect can-component can-stache can-route --save
 ```
 
-Lets export each one a bit more.
+Lets explore each one a bit more.
 
 ## can-compute
 
