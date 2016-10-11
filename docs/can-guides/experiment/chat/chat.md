@@ -1,6 +1,5 @@
 @page guides/chat Chat Guide
 @parent guides/experiment 1
-@package ../../../../package.json
 @templateRender <% %>
 
 @description This guide walks through building real time chat application with CanJS's
@@ -17,7 +16,7 @@ The easiest way to get started is to clone the following JSBin by clicking the _
 The JSBin loads [http://getbootstrap.com/ Bootstrap] for its styles. And [http://socket.io/ socket.io] for a socket
 library.  It will be connecting to a restful and real-time service layer at [http://chat.donejs.com/api/messages].
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.12/dist/global/can.js), which is a script that includes all of CanJS core under a
+The JSBin also loads [can.js](https://github.com/canjs/canjs/blob/<%canjs.package.version%>/dist/global/can.js), which is a script that includes all of CanJS core under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead

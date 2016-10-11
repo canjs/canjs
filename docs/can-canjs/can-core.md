@@ -15,7 +15,7 @@ should install the ones you use directly:
 npm install can-define can-set can-connect can-component can-stache can-route --save
 ```
 
-Lets export each one a bit more.
+Lets explore each one a bit more.
 
 ## can-compute
 
@@ -38,7 +38,9 @@ name.on("change", function(ev, newVal, oldVal){
 name("Matthew");
 ```
 
-More commonly, a compute derives its value from other observables:
+More commonly, a compute derives its value from other observables.  The following
+`info` compute derives its value from a `person` map, `hobbies` list, and `age`
+compute:
 
 ```js
 var DefineMap = require("can-define/map/map"),
@@ -75,26 +77,28 @@ For example, you can define the behavior of a `Todo` type and a `TodoList` type 
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 
-var Todo = DefineMap.extend({
-  name: "string",
-  complete: {type: "boolean", value: false},
-  dueDate: "date",
-  isPastDue: {
-    get: function(){
-	  return new Date() <  this.dueDate;
-	}
+var Todo = DefineMap.extend({           // A todo has a:
+  name: "string",                       // .name that's a string
+  complete: {                           // .complete that's
+	type: "boolean",                    //        a boolean
+	value: false                        //        initialized to false
+  },                                    
+  dueDate: "date",                      // .dueDate that's a date
+  get isPastDue(){                      // .pastDue that returns if the
+	return new Date() > this.dueDate;   //        dueDate is before now
   },
-  toggleComplete: function(){
-    this.complete = !this.complete;
+  toggleComplete: function(){           // .toggleComplete method that
+    this.complete = !this.complete;     //        changes .complete
   }
 });
 
-var TodoList = DefineList.extend({
-  "#": Todo,
-  completeCount: {
-    get: function(){
-      return this.filter("complete").length;
-    }
+var TodoList = DefineList.extend({      // A list of todos:     
+  "#": Todo,                            // has numeric properties
+                                        //         as todos
+
+  get completeCount(){                  // has .completeCount that
+    return this.filter("complete")      //         returns # of
+	           .length;                 //         complete todos
   }
 });
 ```
@@ -168,15 +172,17 @@ This assumes that the service:
        {_id: 1, name: "mow lawn", complete: true}]
    ```
 
+In the next section will use `todoAlgebra` to build a model with [can-connect].
+
 ## can-connect
 
 [can-connect] connects a data type, typically a `DefineMap` and its `DefineList`,
 to a service layer. This is often done via the
-[can-connect/can/super-map/super-map] module which bundles many common behaviors
-and performance techniques into a single api:
+[can-connect/can/base-map/base-map] module which bundles many common behaviors
+into a single api:
 
 ```js
-var superMap = require("can-connect/can/super-map/super-map"),
+var baseMap = require("can-connect/can/base-map/base-map"),
     DefineMap = require("can-define/map/map"),
     DefineList = require("can-define/list/list"),
 	set = require("can-set");
@@ -192,7 +198,7 @@ var todosAlgebra = new set.Algebra({
 	...
 });
 
-var connection = superMap({
+var connection = baseMap({
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList,
@@ -201,7 +207,7 @@ var connection = superMap({
 });
 ```
 
-`superMap` extends the `Map` type, in this case, `Todo`, with
+`baseMap` extends the `Map` type, in this case, `Todo`, with
 the ability to make requests to the service layer.
 
  - [can-connect/can/map/map.getList Get a list] of Todos
@@ -458,3 +464,10 @@ mixes in this behavior so you just need to import the module:
 var route = require("can-route");
 require("can-route-pushstate");
 ```
+
+
+## Want to learn more?
+
+If you haven't already, checkout the [guides] page on how to learn CanJS.  Specifically, you'll
+want to checkout the [guides/chat] and [guides/todomvc] to learn the basics of using CanJS's
+core libraries.  After that, checkout the [guides/api] on how to use and learn from these API docs. 

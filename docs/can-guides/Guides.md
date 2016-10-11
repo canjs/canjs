@@ -7,7 +7,7 @@
 
 @description Welcome to CanJS! These guides are here to help you develop and improve your relationship with
 CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the
-framework you marry.  These guides help you advance through the different stages of this
+framework you marry.  This page helps you know how advance through the different stages of this
 relationship:
 
 @body

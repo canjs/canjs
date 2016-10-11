@@ -1,6 +1,5 @@
 @page guides/todomvc TodoMVC Guide
 @parent guides/experiment 2
-@package ../../../../package.json
 @templateRender <% %>
 
 @description This guide walks through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS's [can-core Core libraries]
@@ -19,7 +18,7 @@ The JSBin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.11/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/<%canjs.package.version%>/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead

@@ -12,7 +12,7 @@
 <script type="text/stache" id="listStache">
 {{#items}}
   <div {{#isSelected}}class='selected'{{/isSelected}}
-       can-click='toggle'>
+       ($click)='toggle'>
     {{title}}
   </div>
 {{/items}}
@@ -43,10 +43,10 @@ var ViewModel = DefineMap.extend({
 Component.extend({
 	tag: "my-items",
 	ViewModel: ViewModel,
-	template: stache(document.getElementById("listStache").innerHTML),
+	view: stache.from("listStache"),
 	helpers: {
 		isSelected: function(options){
-			if( this.selected.indexOf(options.context) >=0 ) {
+			if( this.selected.indexOf(options.context()) >=0 ) {
 				return options.fn();
 			} else {
 				return options.inverse();

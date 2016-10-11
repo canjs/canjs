@@ -21,71 +21,121 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 <div class="module-list">
 
-- **[can-construct]** <small><%canjs.package.dependencies.can-construct%></small> Extensible constructors
-  - `npm install can-construct --save`
-  - <a class="github-button" href="https://github.com/canjs/can-construct" data-count-href="/canjs/can-construct/stargazers" data-count-api="/repos/canjs/can-construct#stargazers_count">Star</a>
-- **[can-define]** <small><%canjs.package.dependencies.can-define%></small> Observables
-  - `npm install can-define --save`
-  - <a class="github-button" href="https://github.com/canjs/can-define" data-count-href="/canjs/can-define/stargazers" data-count-api="/repos/canjs/can-define#stargazers_count">Star</a>
-- **[can-compute]** <small><%canjs.package.dependencies.can-compute%></small> Observables
+- **[can-compute]** <small><%can-compute.package.version%></small> Observable values and observable composite values
   - `npm install can-compute --save`
   - <a class="github-button" href="https://github.com/canjs/can-compute" data-count-href="/canjs/can-compute/stargazers" data-count-api="/repos/canjs/can-compute#stargazers_count">Star</a>
-- **[can-connect]** <small><%canjs.package.dependencies.can-connect%></small> Data connection
-  - `npm install can-connect --save`
-  - <a class="github-button" href="https://github.com/canjs/can-connect" data-count-href="/canjs/can-connect/stargazers" data-count-api="/repos/canjs/can-connect#stargazers_count">Star</a>
-- **[can-set]** <small><%canjs.package.dependencies.can-set%></small> Service modeling
+- **[can-define]** <small><%can-define.package.version%></small> Observable objects
+  - `npm install can-define --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define" data-count-href="/canjs/can-define/stargazers" data-count-api="/repos/canjs/can-define#stargazers_count">Star</a>
+- **[can-set]** <small><%can-set.package.version%></small> Service modeling
   - `npm install can-set --save`
   - <a class="github-button" href="https://github.com/canjs/can-set" data-count-href="/canjs/can-set/stargazers" data-count-api="/repos/canjs/can-set#stargazers_count">Star</a>
-- **[can-route]** <small><%canjs.package.dependencies.can-route%></small> Routing
-  - `npm install can-route --save`
-  - <a class="github-button" href="https://github.com/canjs/can-route" data-count-href="/canjs/can-route/stargazers" data-count-api="/repos/canjs/can-route#stargazers_count">Star</a>
-- **[can-route-pushstate]** <small><%canjs.package.dependencies.can-route-pushstate%></small> Pushy routing
-  - `npm install can-route-pushstate --save`
-  - <a class="github-button" href="https://github.com/canjs/can-route-pushstate" data-count-href="/canjs/can-route-pushstate/stargazers" data-count-api="/repos/canjs/can-route-pushstate#stargazers_count">Star</a>
-- **[can-stache]** <small><%canjs.package.dependencies.can-stache%></small> Live binding templates
+- **[can-connect]** <small><%can-connect.package.version%></small> Data connection
+  - `npm install can-connect --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect" data-count-href="/canjs/can-connect/stargazers" data-count-api="/repos/canjs/can-connect#stargazers_count">Star</a>
+- **[can-stache]** <small><%can-stache.package.version%></small> Live binding templates
   - `npm install can-stache --save`
   - <a class="github-button" href="https://github.com/canjs/can-stache" data-count-href="/canjs/can-stache/stargazers" data-count-api="/repos/canjs/can-stache#stargazers_count">Star</a>
-- **[can-component]** <small><%canjs.package.dependencies.can-component%></small> Custom elements
+- **[can-component]** <small><%can-component.package.version%></small> Custom elements
   - `npm install can-component --save`
   - <a class="github-button" href="https://github.com/canjs/can-component" data-count-href="/canjs/can-component/stargazers" data-count-api="/repos/canjs/can-component#stargazers_count">Star</a>
-- **[can-stache-bindings]** <small><%canjs.package.dependencies.can-stache-bindings%></small> View bindings
+- **[can-stache-bindings]** <small><%can-stache-bindings.package.version%></small> View bindings
   - `npm install can-stache-bindings --save`
   - <a class="github-button" href="https://github.com/canjs/can-stache-bindings" data-count-href="/canjs/can-stache-bindings/stargazers" data-count-api="/repos/canjs/can-stache-bindings#stargazers_count">Star</a>
+- **[can-route]** <small><%can-route.package.version%></small> Routing
+  - `npm install can-route --save`
+  - <a class="github-button" href="https://github.com/canjs/can-route" data-count-href="/canjs/can-route/stargazers" data-count-api="/repos/canjs/can-route#stargazers_count">Star</a>
+- **[can-route-pushstate]** <small><%can-route-pushstate.package.version%></small> Pushstate routing
+  - `npm install can-route-pushstate --save`
+  - <a class="github-button" href="https://github.com/canjs/can-route-pushstate" data-count-href="/canjs/can-route-pushstate/stargazers" data-count-api="/repos/canjs/can-route-pushstate#stargazers_count">Star</a>
+
 
 </div>
 
-## Ecosystem Collection
+## [can-ecosystem Ecosystem Collection]
 
-_Useful libraries that extend or add important features to the core collection._
+_Useful libraries that add important features or extend the core collection._
 
-- Simulate ajax requests - [can-fixture]
+<div class="module-list">
+
+- **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
+  - `npm install can-fixture --save`
+  - <a class="github-button" href="https://github.com/canjs/can-fixture" data-count-href="/canjs/can-fixture/stargazers" data-count-api="/repos/canjs/can-fixture#stargazers_count">Star</a>
+- **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
+  - `npm install can-zone --save`
+  - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
+- **[can-stache-converters]** <small><%can-stache-converters.package.version%></small> Form two way bindings helpers
+  - `npm install can-stache-converters --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stache-converters" data-count-href="/canjs/can-stache-converters/stargazers" data-count-api="/repos/canjs/can-stache-converters#stargazers_count">Star</a>
+- **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [http://stealjs.com StealJS]
+  - `npm install steal-stache --save`
+  - <a class="github-button" href="https://github.com/canjs/steal-stache" data-count-href="/canjs/steal-stache/stargazers" data-count-api="/repos/canjs/steal-stache#stargazers_count">Star</a>
+- **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
+  - `npm install can-jquery --save`
+  - <a class="github-button" href="https://github.com/canjs/can-jquery" data-count-href="/canjs/can-jquery/stargazers" data-count-api="/repos/canjs/can-jquery#stargazers_count">Star</a>
+- **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construt base methods easily.
+  - `npm install can-construct-super --save`
+  - <a class="github-button" href="https://github.com/canjs/can-construct-super" data-count-href="/canjs/can-construct-super/stargazers" data-count-api="/repos/canjs/can-construct-super#stargazers_count">Star</a>
+
+</div>
+
 - A virtual DOM that is able to run CanJS's templates - [can-simple-dom] and [can-vdom]
-- Track async activity - [can-zone]
-
 
 ## Infrastructure Collection
 
 _Utility libraries that power the core collection._
 
-- DOM and JS utilities - [can-util]
-- Events - [can-event]
-- Observable notification - [can-observe-info]
-- Simple Observable - [can-simple-map]
-- View helpers
-  - Register custom elements or attributes in templates - [can-view-callbacks]
-  - Read a view model from a custom element - [can-view-model]
-  - Lookup scope within a stache template - [can-view-scope]
-  - Parses HTML and magic tags - [can-view-parser]
-  - A fast-path compile target - [can-view-target]
-  - Keeps part of the DOM up to date with a compute - [can-view-live]
-  - Maintains live binding relationships - [can-view-nodelist]
+<div class="module-list">
+
+- **[can-event]** <small><%can-event.package.version%></small> Event mixin
+  - `npm install can-event --save`
+  - <a class="github-button" href="https://github.com/canjs/can-event" data-count-href="/canjs/can-event/stargazers" data-count-api="/repos/canjs/can-event#stargazers_count">Star</a>
+- **[can-control]** <small><%can-control.package.version%></small> DOM widget constructor
+  - `npm install can-control --save`
+  - <a class="github-button" href="https://github.com/canjs/can-control" data-count-href="/canjs/can-control/stargazers" data-count-api="/repos/canjs/can-control#stargazers_count">Star</a>
+- **[can-util]** <small><%can-util.package.version%></small> Low level JS and DOM utilities
+  - `npm install can-util --save`
+  - <a class="github-button" href="https://github.com/canjs/can-util" data-count-href="/canjs/can-util/stargazers" data-count-api="/repos/canjs/can-util#stargazers_count">Star</a>
+- **[can-construct]** <small><%can-construct.package.version%></small> Extensible constructors
+  - `npm install can-construct --save`
+  - <a class="github-button" href="https://github.com/canjs/can-construct" data-count-href="/canjs/can-construct/stargazers" data-count-api="/repos/canjs/can-construct#stargazers_count">Star</a>
+- **[can-observation]** <small><%can-observation.package.version%></small> Observation notification
+  - `npm install can-observation --save`
+  - <a class="github-button" href="https://github.com/canjs/can-observation" data-count-href="/canjs/can-observation/stargazers" data-count-api="/repos/canjs/can-observation#stargazers_count">Star</a>
+- **[can-simple-map]** <small><%can-simple-map.package.version%></small> Simple observable object
+  - `npm install can-simple-map --save`
+  - <a class="github-button" href="https://github.com/canjs/can-simple-map" data-count-href="/canjs/can-simple-map/stargazers" data-count-api="/repos/canjs/can-simple-map#stargazers_count">Star</a>
+- **[can-view-callbacks]** <small><%can-view-callbacks.package.version%></small> Register custom elements or attributes in can-stache
+  - `npm install can-view-callbacks --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-callbacks" data-count-href="/canjs/can-view-callbacks/stargazers" data-count-api="/repos/canjs/can-view-callbacks#stargazers_count">Star</a>
+- **[can-view-model]** <small><%can-view-model.package.version%></small> Read a view-model from a custom element
+  - `npm install can-view-model --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-model" data-count-href="/canjs/can-view-model/stargazers" data-count-api="/repos/canjs/can-view-model#stargazers_count">Star</a>
+- **[can-view-scope]** <small><%can-view-scope.package.version%></small> Scope lookup
+  - `npm install can-view-scope --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-scope" data-count-href="/canjs/can-view-scope/stargazers" data-count-api="/repos/canjs/can-view-scope#stargazers_count">Star</a>
+- **[can-view-parser]** <small><%can-view-parser.package.version%></small> Parses HTML and magic tags
+  - `npm install can-view-parser --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-parser" data-count-href="/canjs/can-view-parser/stargazers" data-count-api="/repos/canjs/can-view-parser#stargazers_count">Star</a>
+- **[can-view-target]** <small><%can-view-target.package.version%></small> A fast-path DOM fragment compile target
+  - `npm install can-view-target --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-target" data-count-href="/canjs/can-view-target/stargazers" data-count-api="/repos/canjs/can-view-target#stargazers_count">Star</a>
+- **[can-view-live]** <small><%can-view-live.package.version%></small> Update the DOM with
+  a compute
+  - `npm install can-view-live --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-live" data-count-href="/canjs/can-view-live/stargazers" data-count-api="/repos/canjs/can-view-live#stargazers_count">Star</a>
+- **[can-view-nodelist]** <small><%can-view-nodelist.package.version%></small> Maintains live-binding relationships
+  - `npm install can-view-nodelist --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-nodelist" data-count-href="/canjs/can-view-nodelist/stargazers" data-count-api="/repos/canjs/can-view-nodelist#stargazers_count">Star</a>
+
+</div>
+
 
 ## Legacy Collection
 
 _Former libraries that are not under active development, but we
 still accept patches._
 
-- [can-control]
 - [can-map] and [can-list]
 - Adds the ability to define getter and setters on `can.Map` and `can.List` - [can-map-define]
 - Adds live-sorting ability to `can-list` - [can-list-sort]
@@ -96,8 +146,13 @@ still accept patches._
 - [can-ejs]
 - [can-mustache]
 
-## Support / Contributing
+## Missing Something?
 
-Before you make an issue, please read our [Contributing] guide.
+Is there an itch that CanJS doesn't scratch?  Let us know
+on [gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
+We like contributions of all sorts.  Read the [guides] _Contributing_ section for more details.
 
-You can find the core team in [gitter chat](https://gitter.im/canjs/canjs).
+## Love Something?
+
+Let us know by staring us on Github and following on twitter.  If there's a particular package you like, make sure to star that too. Checkout the [guides/contributing/evangelism Evangelism Guide] on
+how to help spread the word!
