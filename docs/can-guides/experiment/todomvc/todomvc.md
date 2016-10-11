@@ -1,5 +1,6 @@
 @page guides/todomvc TodoMVC Guide
 @parent guides/experiment 2
+@templateRender <% %>
 
 @description This guide walks through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS's [can-core Core libraries]
 and [can-fixture]. It takes about 1 hour to complete.
@@ -17,7 +18,7 @@ The JSBin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.11/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/<%canjs.package.version%>/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead
@@ -75,7 +76,7 @@ that in the next step.
 In this section, we will:
 
  - List todos from a list of todos.
- - Show the number of active (`complete === true`) and and complete todos.
+ - Show the number of active (`complete === true`) and complete todos.
  - Connect a todo's `complete` property to a checkbox so that when
    we toggle the checkbox the number of active and complete todos changes.
 
@@ -92,7 +93,7 @@ Update the `JavaScript` tab to:
 Update the `HTML` tab to:
 
 - Use [can-stache.helpers.each] to loop through every todo.
-- Add `completed` to the `<li>`'s `className` if the `<li>`'s todo is  complete.
+- Add `completed` to the `<li>`'s `className` if the `<li>`'s todo is complete.
 - Use [can-stache-bindings.twoWay] to two-way bind the checkbox's `checked` property to its todo's `complete` property.  
 - Use [can-stache.tags.escaped] to insert the value todo's `name` as the content of the `<label>` and
   `value` of the text `<input/>`.
@@ -158,7 +159,7 @@ any changes.  Use `localStorage.clear()` to see the difference.
 
 In this section, we will:
 
- - Delete a todo on the server when it's destroy button is clicked.  
+ - Delete a todo on the server when its destroy button is clicked.
  - Remove the todo from the page after it's deleted.
 
 Update the `HTML` tab to:
@@ -214,12 +215,12 @@ Update the `HTML` tab to:
  - Use `<todo-create/>`
 
 @sourceref ./5-create/html.html
-@highlight 11-16,18,22,only
+@highlight 11-16,22,only
 
 When complete, you will be able to create a todo by typing the name of the todo and pressing
 `enter`. Notice that the new todo automatically appears in the list of todos. This
-is also because [can-connect/can/super-map/super-map] ads the [can-connect/real-time/real-time] behavior.  The
-[can-connect/real-time/real-time] behavior automatically will inserted newly created items into
+is also because [can-connect/can/super-map/super-map] adds the [can-connect/real-time/real-time] behavior.  The
+[can-connect/real-time/real-time] behavior automatically inserts newly created items into
 lists that they belong within.
 
 
@@ -264,7 +265,7 @@ Update the `JavaScript` tab to:
    - A `backupName` property that stores the todo's name before being edited.
    - An `edit` method that sets up the editing state.
    - A `cancelEdit` method that undos the editing state if in the editing state.
-   - A `updateName` method that updates the editing todo and [can-connect/can/map/map.prototype.save saves] it to the server.
+   - An `updateName` method that updates the editing todo and [can-connect/can/map/map.prototype.save saves] it to the server.
 
 @sourceref ./7-edit/js.js
 @highlight 58-76,only
@@ -276,15 +277,20 @@ Update the `HTML` tab to:
  - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
  - Call `edit` with the current context using [can-stache/keys/this].
  - Setup the edit input to:
-   - Two way bind it's value to the current todo's `name` using [can-stache-bindings.twoWay].
+   - Two way bind its value to the current todo's `name` using [can-stache-bindings.twoWay].
    - Call `updateName` when the enter key is pressed using [can-stache-bindings.event].
    - Focus the input when `isEditing` is true using the special [can-util/dom/attr/attr.special.focused] attribute.
    - Call `cancelEdit` if the input element loses focus.
 
 @sourceref ./7-edit/html.html
-@highlight 23,25-27,29-33,only
+@highlight 22-23,25-27,30-34,only
 
 When complete, you should be able to edit a todo's name.
+
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/7-edit/edit.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/7-edit/edit.webm" type="video/webm">
+</video>
 
 ## Routing
 
@@ -316,7 +322,7 @@ Update the `JavaScript` tab to:
 
 
 @sourceref ./8-routing/js.js
-@highlight 85-100,103,only
+@highlight 85-99,102,only
 
 Update the `HTML` tab to:
 
@@ -333,6 +339,11 @@ This is because the [can-connect/fall-through-cache/fall-through-cache] is able 
 of the data loaded for the `All` todos page.  It's able to filter out the `Active` and
 `Completed` data.
 
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/8-routing/routing.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/8-routing/routing.webm" type="video/webm">
+</video>
+
 ## Toggle all and clear completed
 
 In this section, we will:
@@ -343,16 +354,16 @@ In this section, we will:
 Update the `JavaScript` tab to:
 
 - Add the following properties and methods to `Todo.List`:
-  - A `allComplete` property that returns `true` if every todo is complete.
+  - An `allComplete` property that returns `true` if every todo is complete.
   - A `saving` property that returns todos that are being saved using [can-connect/can/map/map.prototype.isSaving].
-  - A `updateCompleteTo` method that updates every todo's `complete` property to the specified value and updates the compute on the server with [can-connect/can/map/map.prototype.save].
+  - An `updateCompleteTo` method that updates every todo's `complete` property to the specified value and updates the compute on the server with [can-connect/can/map/map.prototype.save].
   - A `destroyComplete` method that deletes every complete todo with [can-connect/can/map/map.prototype.destroy].
 - Adds the following properties to `AppVM`:
   - A `todosList` property that gets its value from the `todosPromise` using an [can-define.types.get asynchronous getter].
-  - A `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
+  - An `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
 
 @sourceref ./9-toggle/js.js
-@highlight 31-49,114-124,only
+@highlight 31-49,113-123,only
 
 Update the `HTML` tab to:
 
@@ -365,5 +376,16 @@ Update the `HTML` tab to:
 
 When complete, you should be able to toggle all todos `complete` state and
 delete the completed todos.  You should also have a really good idea how CanJS works!
+
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/9-toggle/toggle.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/9-toggle/toggle.webm" type="video/webm">
+</video>
+
+## Result
+
+When finished, you should see something like the following JSBin:
+
+<a class="jsbin-embed" href="http://jsbin.com/hokiha/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.39.15"></script>

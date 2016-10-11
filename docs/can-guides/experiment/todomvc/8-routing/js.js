@@ -84,7 +84,6 @@ can.Component.extend({
 
 var AppVM = can.DefineMap.extend({
   filter: "string",
-  route: "string",
   get todosPromise(){
     if(!this.filter) {
       return Todo.getList({});
