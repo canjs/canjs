@@ -6,22 +6,15 @@ module.exports = function (grunt) {
 	  }, {
 	    browserName: 'googlechrome',
 	    platform: 'windows'
-	  },
-	  // {
-	  //   browserName: 'safari',
-	  //   platform: 'OS X 10.11',
-	  //   version: '9.0'
-	  // },
-	  {
+	  }, {
 	    browserName: 'internet explorer',
 	    platform: 'Windows 8',
 	    version: '10.0'
+	  }, {
+	    browserName: 'internet explorer',
+	    platform: 'Windows 7',
+	    version: '9'
 	  }
-	  // , {
-	  //   browserName: 'internet explorer',
-	  //   platform: 'Windows 7',
-	  //   version: '9'
-	  // }
   ];
   
   grunt.initConfig({
