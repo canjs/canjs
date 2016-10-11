@@ -3,7 +3,7 @@
 <script id="source-template" type="text/stache">
   <header>
     <my-greeting>
-    {{site}} - {{title}}
+      {{site}}
     </my-greeting>
   </header>
 </script>
@@ -16,16 +16,15 @@ var $ = require("jquery");
 
 Component({
 	tag: "my-greeting",
-	template: stache("<h1><content/></h1>"),
+	view: stache("<h1><content/> - {{title}}</h1>"),
 	ViewModel: DefineMap.extend({
 		title: {
 			value: "can-component"
 		}
-	}),
-	leakScope: true
+	})
 });
 
-var template = stache($("#source-template").html());
+var template = stache.from("source-template");
 $("#out").html(template({site: "CanJS"}));
 </script>
 <script>
