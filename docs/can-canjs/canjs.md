@@ -21,7 +21,6 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 <div class="module-list">
 
-<<<<<<< HEAD
 - **[can-compute]** <small><%can-compute.package.version%></small> Observable values and observable composite values
   - `npm install can-compute --save`
   - <a class="github-button" href="https://github.com/canjs/can-compute" data-count-href="/canjs/can-compute/stargazers" data-count-api="/repos/canjs/can-compute#stargazers_count">Star</a>
