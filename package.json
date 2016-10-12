@@ -73,6 +73,7 @@
     "can-fixture": "^0.4.0-pre.5",
     "can-stache-converters": "^3.0.0-pre.1",
     "can-vdom": "^0.0.5",
+    "can-wait": "^0.2.0",
     "funcunit": "^3.1.0-pre.1",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
