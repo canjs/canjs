@@ -90,6 +90,7 @@
     "http://canjs.us/#examples",
     "http://canjs.us/recipes"
   ],
+  "googleAnalyticsTrackingCode": "UA-2302003-11",
   "licenses": [
     {
       "type": "MIT",
