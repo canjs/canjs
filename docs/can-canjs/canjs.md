@@ -136,15 +136,28 @@ _Utility libraries that power the core collection._
 _Former libraries that are not under active development, but we
 still accept patches._
 
-- [can-map] and [can-list]
-- Adds the ability to define getter and setters on `can.Map` and `can.List` - [can-map-define]
-- Adds live-sorting ability to `can-list` - [can-list-sort]
-- [can-map-backup]
-- [can-map-attributes]
-- [can-view-href]
-- [can-map-setter]
-- [can-ejs]
-- [can-mustache]
+<div class="module-list">
+
+- **[can-map]** <small><%can-map.package.version%></small> Observable map
+  - `npm install can-map --save`
+  - <a class="github-button" href="https://github.com/canjs/can-map" data-count-href="/canjs/can-map/stargazers" data-count-api="/repos/canjs/can-map#stargazers_count">Star</a>
+- **[can-list]** <small><%can-list.package.version%></small> Observable lists
+  - `npm install can-list --save`
+  - <a class="github-button" href="https://github.com/canjs/can-list" data-count-href="/canjs/can-list/stargazers" data-count-api="/repos/canjs/can-list#stargazers_count">Star</a>
+- **[can-map-define]** <small><%can-map-define.package.version%></small> Define property behavior
+  - `npm install can-map-define --save`
+  - <a class="github-button" href="https://github.com/canjs/can-map-define" data-count-href="/canjs/can-map-define/stargazers" data-count-api="/repos/canjs/can-map-define#stargazers_count">Star</a>
+- **[can-map-backup]** <small><%can-map-backup.package.version%></small> Save the last state
+  - `npm install can-map-backup --save`
+  - <a class="github-button" href="https://github.com/canjs/can-map-backup" data-count-href="/canjs/can-map-backup/stargazers" data-count-api="/repos/canjs/can-map-backup#stargazers_count">Star</a>
+- **[can-ejs]** <small><%can-ejs.package.version%></small> EJS templates
+  - `npm install can-ejs --save`
+  - <a class="github-button" href="https://github.com/canjs/can-ejs" data-count-href="/canjs/can-ejs/stargazers" data-count-api="/repos/canjs/can-ejs#stargazers_count">Star</a>
+- **[can-view-href]** <small><%can-view-href.package.version%></small> Older routing view helpers
+  - `npm install can-view-href --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-href" data-count-href="/canjs/can-view-href/stargazers" data-count-api="/repos/canjs/can-view-href#stargazers_count">Star</a>
+
+</div>
 
 ## Missing Something?
 

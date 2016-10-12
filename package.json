@@ -46,6 +46,7 @@
     "can-jquery": "^3.0.0-pre.13",
     "can-list": "^3.0.0-pre.8",
     "can-map": "^3.0.0-pre.11",
+    "can-map-backup": "^3.0.0-pre.2",
     "can-map-define": "^3.0.0-pre.4",
     "can-observation": "^3.0.0-pre.13",
     "can-route": "^3.0.0-pre.18",
