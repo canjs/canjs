@@ -5,7 +5,7 @@
   "scripts": {
     "preversion": "npm test",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-    "postversion": "git push --tags && git checkout major && git branch -D release && git push",
+    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
     "testee": "testee test/index.html --browsers firefox",
     "test": "npm run build && npm run testee",
     "ci": "npm run build && grunt",
