@@ -70,6 +70,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [http://stealjs.com StealJS]
   - `npm install steal-stache --save`
   - <a class="github-button" href="https://github.com/canjs/steal-stache" data-count-href="/canjs/steal-stache/stargazers" data-count-api="/repos/canjs/steal-stache#stargazers_count">Star</a>
+- **[can-view-import]** <small><%can-view-import.package.version%></small> Import modules within can-stache templates
+  - `npm install can-view-import --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-import" data-count-href="/canjs/can-view-import/stargazers" data-count-api="/repos/canjs/can-view-import#stargazers_count">Star</a>
 - **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
   - `npm install can-jquery --save`
   - <a class="github-button" href="https://github.com/canjs/can-jquery" data-count-href="/canjs/can-jquery/stargazers" data-count-api="/repos/canjs/can-jquery#stargazers_count">Star</a>
