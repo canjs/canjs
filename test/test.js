@@ -23,7 +23,7 @@ require('../view/parser/parser_test');
 require('../view/scope/scope_test');
 require('../view/autorender/autorender_test');
 require('can-simple-map/test/test');
-// require('can-view-target/test/test');
+require('can-view-target/test/test');
 // require('can-simple-dom/test/test');
 
 
