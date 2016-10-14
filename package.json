@@ -56,7 +56,7 @@
     "can-simple-map": "^3.0.0-pre.4",
     "can-stache": "^3.0.0-pre.24",
     "can-stache-bindings": "^3.0.0-pre.32",
-    "can-util": "^3.0.0-pre.68",
+    "can-util": "^3.0.1",
     "can-view-autorender": "^3.0.0-pre.6",
     "can-view-callbacks": "^3.0.0-pre.8",
     "can-view-href": "^3.0.0-pre.1",
