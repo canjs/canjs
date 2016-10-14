@@ -51,7 +51,7 @@
     "can-observation": "^3.0.0-pre.13",
     "can-route": "^3.0.0-pre.18",
     "can-route-pushstate": "^3.0.0-pre.8",
-    "can-set": "^0.6.0-pre.11",
+    "can-set": "^1.0.0",
     "can-simple-dom": "^0.4.3",
     "can-simple-map": "^3.0.0-pre.4",
     "can-stache": "^3.0.0-pre.24",
