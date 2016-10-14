@@ -48,7 +48,7 @@
     "can-map": "^3.0.0-pre.11",
     "can-map-backup": "^3.0.0-pre.2",
     "can-map-define": "^3.0.0-pre.4",
-    "can-observation": "^3.0.0-pre.13",
+    "can-observation": "^3.0.1",
     "can-route": "^3.0.0-pre.18",
     "can-route-pushstate": "^3.0.0-pre.8",
     "can-set": "^0.6.0-pre.11",
