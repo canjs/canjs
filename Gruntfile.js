@@ -12,8 +12,7 @@ module.exports = function (grunt) {
 	    version: '10.0'
 	  }, {
 	    browserName: 'opera',
-	    platform: 'Linux',
-	    version: '12.15'
+	    platform: 'Linux'
 	  }
   ];
   
