@@ -36,7 +36,7 @@
 	"dependencies": {
 		"can-component": "^3.0.0-pre.22",
 		"can-compute": "^3.0.0-pre.14",
-		"can-connect": "^0.6.0-pre.26",
+		"can-connect": "^1.0.0",
 		"can-construct": "^3.0.0-pre.13",
 		"can-construct-super": "^3.0.0-pre.1",
 		"can-control": "3.0.0-pre.9",
