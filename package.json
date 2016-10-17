@@ -1,128 +1,129 @@
 {
-  	"name": "can",
-  	"version": "3.0.0-pre.15",
-  	"main": "can.js",
-  	"scripts": {
-		"preversion": "npm test",
-		"version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-		"postversion": "git push --tags && git checkout master && git branch -D release && git push",
-		"testee": "testee test/index.html --browsers firefox",
-		"test": "npm run build && npm run testee",
-		"ci": "npm run build && grunt",
-		"release:pre": "npm version prerelease && npm publish",
-		"release:patch": "npm version patch && npm publish",
-		"release:minor": "npm version minor && npm publish",
-		"release:major": "npm version major && npm publish",
-		"build": "node build.js",
-		"document": "bit-docs"
-  	},
-  	"title": "CanJS",
-  	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"keywords": [
-		"CanJS",
-		"DoneJS"
-	],
-	"author": {
-		"name": "Bitovi",
-		"email": "contact@bitovi.com",
-		"web": "http://bitovi.com/"
-  	},
-	"homepage": "http://canjs.com/",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:canjs/canjs.git",
-		"github": "https://github.com/canjs/canjs"
-  	},
-	"dependencies": {
-		"can-component": "^3.0.0-pre.22",
-		"can-compute": "^3.0.0-pre.14",
-		"can-connect": "^0.6.0-pre.26",
-		"can-construct": "^3.0.0-pre.13",
-		"can-construct-super": "^3.0.0-pre.1",
-		"can-control": "3.0.0-pre.9",
-		"can-define": "^0.8.6",
-		"can-event": "^3.0.0-pre.16",
-		"can-fixture": "^0.4.0-pre.15",
-		"can-jquery": "^3.0.0-pre.13",
-		"can-list": "^3.0.0-pre.8",
-		"can-map": "^3.0.0-pre.11",
-		"can-map-backup": "^3.0.0-pre.2",
-		"can-map-define": "^3.0.0-pre.4",
-		"can-observation": "^3.0.0-pre.13",
-		"can-route": "^3.0.0-pre.18",
-		"can-route-pushstate": "^3.0.0-pre.8",
-		"can-set": "^0.6.0-pre.11",
-		"can-simple-dom": "^0.4.3",
-		"can-simple-map": "^3.0.0-pre.4",
-		"can-stache": "^3.0.0-pre.24",
-		"can-stache-bindings": "^3.0.0-pre.32",
-    "can-stache-converters": "^3.0.0-pre.1",
-		"can-util": "^3.0.0-pre.68",
-		"can-vdom": "^3.0.0",
-		"can-view-autorender": "^3.0.0-pre.6",
-		"can-view-callbacks": "^3.0.0-pre.8",
-		"can-view-href": "^3.0.0-pre.1",
-		"can-view-import": "^3.0.0-pre.4",
-		"can-view-live": "^3.0.0-pre.4",
-		"can-view-model": "^3.0.0-pre.6",
-		"can-view-nodelist": "^3.0.0-pre.3",
-		"can-view-parser": "^3.0.0-pre.6",
-		"can-view-scope": "^3.0.0-pre.17",
-		"can-view-target": "^3.0.0-pre.4",
-		"can-zone": "^0.5.8"
-	},
-	"devDependencies": {
-		"bit-docs": "^0.0.7",
-		"funcunit": "^3.1.0-pre.1",
-		"grunt": "^1.0.1",
-		"grunt-cli": "^1.2.0",
-		"grunt-contrib-connect": "^1.0.2",
-		"grunt-saucelabs": "^9.0.0",
-		"jquery": "^2.2.3",
-		"jquery-ui": "^1.12.0",
-		"steal": "^0.16.4",
-		"steal-qunit": "^0.1.1",
-		"steal-stache": "^3.0.0-pre.1",
-		"steal-tools": "pre",
-		"testee": "^0.2.5"
-	},
-	"demos": [
-		"http://canjs.us/#examples",
-		"http://canjs.us/recipes"
-	],
-	"googleAnalyticsTrackingCode": "UA-2302003-11",
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://opensource.org/licenses/mit-license.php"
-		}
-	],
-	"system": {
-		"npmAlgorithm": "flat",
-		"main": "can",
-		"npmIgnore": [
-			"bit-docs",
-			"testee"
-		]
-	},
-	"bit-docs": {
-		"dependencies": {
-			"bit-docs-glob-finder": "^0.0.5",
-			"bit-docs-dev": "^0.0.3",
-			"bit-docs-js": "^0.0.6",
-			"bit-docs-tag-sourceref": "^0.0.3",
-			"bit-docs-generate-html": "^0.3.0",
-			"bit-docs-html-canjs": "^0.3.21",
-			"bit-docs-prettify": "^0.1.0",
-			"bit-docs-html-highlight-line": "^0.2.2",
-			"bit-docs-tag-demo": "^0.3.0",
-			"bit-docs-tag-package": "^0.0.3"
-		},
-		"glob": {
-			"pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
-			"ignore": ["node_modules/can-*/dist/**/*", "node_modules/can-wait/examples/**/*"]
-		},
-		"parent": "canjs",
-		"minifyBuild": false
-	}
+  "name": "can",
+  "version": "3.0.0-pre.15",
+  "main": "can.js",
+  "scripts": {
+    "preversion": "npm test",
+    "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
+    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "testee": "testee test/index.html --browsers firefox",
+    "test": "npm run build && npm run testee",
+    "ci": "npm run build && grunt",
+    "release:pre": "npm version prerelease && npm publish",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
+    "build": "node build.js",
+    "document": "bit-docs"
+  },
+  "title": "CanJS",
+  "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
+  "keywords": [
+    "CanJS",
+    "DoneJS"
+  ],
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "web": "http://bitovi.com/"
+  },
+  "homepage": "http://canjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:canjs/canjs.git",
+    "github": "https://github.com/canjs/canjs"
+  },
+  "dependencies": {
+    "can-component": "^3.0.1",
+    "can-compute": "^3.0.0",
+    "can-connect": "^1.0.1",
+    "can-construct": "^3.0.1",
+    "can-construct-super": "^3.0.0",
+    "can-control": "^3.0.1",
+    "can-define": "^1.0.0",
+    "can-event": "^3.0.1",
+    "can-fixture": "^1.0.0",
+    "can-jquery": "^3.0.1",
+    "can-list": "^3.0.0",
+    "can-map": "^3.0.1",
+    "can-map-backup": "^3.0.0",
+    "can-map-define": "^3.0.0",
+    "can-observation": "^3.0.1",
+    "can-route": "^3.0.0",
+    "can-route-pushstate": "^3.0.0",
+    "can-set": "^1.0.0",
+    "can-simple-dom": "^1.0.1",
+    "can-simple-map": "^3.0.0",
+    "can-stache": "^3.0.1",
+    "can-stache-bindings": "^3.0.0",
+    "can-stache-converters": "^3.0.0-pre.5",
+    "can-util": "^3.0.1",
+    "can-vdom": "^3.0.0-pre.1",
+    "can-view-autorender": "^3.0.0",
+    "can-view-callbacks": "^3.0.0",
+    "can-view-href": "^3.0.0",
+    "can-view-import": "^3.0.0",
+    "can-view-live": "^3.0.0",
+    "can-view-model": "^3.0.0",
+    "can-view-nodelist": "^3.0.0",
+    "can-view-parser": "^3.0.0",
+    "can-view-scope": "^3.0.0",
+    "can-view-target": "^3.0.0",
+    "can-zone": "^0.5.8"
+  },
+  "devDependencies": {
+    "bit-docs": "^0.0.7",
+    "can-wait": "^0.2.0",
+    "funcunit": "^3.1.0-pre.1",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-saucelabs": "^9.0.0",
+    "jquery": "^2.2.3",
+    "jquery-ui": "^1.12.0",
+    "steal": "^0.16.4",
+    "steal-qunit": "^0.1.1",
+    "steal-stache": "^3.0.0-pre.1",
+    "steal-tools": "pre",
+    "testee": "^0.2.5"
+  },
+  "demos": [
+    "http://canjs.us/#examples",
+    "http://canjs.us/recipes"
+  ],
+  "googleAnalyticsTrackingCode": "UA-2302003-11",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "system": {
+    "npmAlgorithm": "flat",
+    "main": "can",
+    "npmIgnore": [
+      "bit-docs",
+      "testee"
+    ]
+  },
+  "bit-docs": {
+    "dependencies": {
+      "bit-docs-glob-finder": "^0.0.5",
+      "bit-docs-dev": "^0.0.3",
+      "bit-docs-js": "^0.0.6",
+      "bit-docs-tag-sourceref": "^0.0.3",
+      "bit-docs-generate-html": "^0.3.0",
+      "bit-docs-html-canjs": "^0.3.21",
+      "bit-docs-prettify": "^0.1.0",
+      "bit-docs-html-highlight-line": "^0.2.2",
+      "bit-docs-tag-demo": "^0.3.0",
+      "bit-docs-tag-package": "^0.0.3"
+    },
+    "glob": {
+      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
+      "ignore": "node_modules/can-*/dist/**/*"
+    },
+    "parent": "canjs",
+    "minifyBuild": false
+  }
 }
