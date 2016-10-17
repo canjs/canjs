@@ -76,10 +76,10 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
   - `npm install can-jquery --save`
   - <a class="github-button" href="https://github.com/canjs/can-jquery" data-count-href="/canjs/can-jquery/stargazers" data-count-api="/repos/canjs/can-jquery#stargazers_count">Star</a>
-- **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construt base methods easily.
+- **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construct base methods easily
   - `npm install can-construct-super --save`
   - <a class="github-button" href="https://github.com/canjs/can-construct-super" data-count-href="/canjs/can-construct-super/stargazers" data-count-api="/repos/canjs/can-construct-super#stargazers_count">Star</a>
-- **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that is able to run CanJS's templates.
+- **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
   - `npm install can-vdom --save`
   - <a class="github-button" href="https://github.com/canjs/can-vdom" data-count-href="/canjs/can-vdom/stargazers" data-count-api="/repos/canjs/can-vdom#stargazers_count">Star</a>
 
