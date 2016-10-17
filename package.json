@@ -71,7 +71,7 @@
 	},
 	"devDependencies": {
 		"bit-docs": "^0.0.7",
-		"can-fixture": "^0.4.0-pre.5",
+		"can-fixture": "^1.0.0",
 		"can-stache-converters": "^3.0.0-pre.1",
 		"can-vdom": "^0.0.5",
 		"can-wait": "^0.2.0",
