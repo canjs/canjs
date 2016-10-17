@@ -52,7 +52,7 @@
     "can-route": "^3.0.0-pre.18",
     "can-route-pushstate": "^3.0.0-pre.8",
     "can-set": "^0.6.0-pre.11",
-    "can-simple-dom": "^0.4.3",
+    "can-simple-dom": "^1.0.1",
     "can-simple-map": "^3.0.0-pre.4",
     "can-stache": "^3.0.0-pre.24",
     "can-stache-bindings": "^3.0.0-pre.32",
