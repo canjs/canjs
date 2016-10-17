@@ -84,7 +84,7 @@
 		"jquery-ui": "^1.12.0",
 		"steal": "^0.16.4",
 		"steal-qunit": "^0.1.1",
-		"steal-stache": "^3.0.0-pre.1",
+		"steal-stache": "^3.0.0",
 		"steal-tools": "pre",
 		"testee": "^0.2.5"
 	},
