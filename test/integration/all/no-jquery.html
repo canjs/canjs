@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+	<title>can.all.js integration tests</title>
+</head>
+<body>
+	<script>
+		var QUnit = window.parent.QUnit;
+		var removeMyself = window.parent.removeMyself;
+
+		var el = document.createElement('script');
+		el.src = "../../../dist/global/can.all.js";
+
+		window.onerror = function(msg) {
+			QUnit.ok(false, msg);
+			removeMyself();
+		};
+
+		el.onload = function() {
+			QUnit.ok(true);
+			removeMyself();
+		};
+
+		document.body.appendChild(el);
+	</script>
+</body>
