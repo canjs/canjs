@@ -94,6 +94,7 @@ CanJS including:
  - [guides/contributing/documentation Documentation improvements]
  - [Create a plugin](https://donejs.com/plugin.html)
  - [guides/contributing/evangelism Evangelism - Blog, meetup and conference talks]
+ - [guides/contributing/releases Releases - Maintaining CanJS]
 
 CanJS is managed by the [DoneJS Contributors Team](https://donejs.com/About.html#section=section_Team).
 All contributions from all types of contributors are welcome. Contributing
