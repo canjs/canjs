@@ -39,3 +39,4 @@ require('can-map-backup/can-map-backup_test');
 
 // Integration tests
 require('../docs/can-guides/experiment/todomvc/test');
+require('./integration/all/test');
