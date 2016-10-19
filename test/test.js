@@ -22,7 +22,7 @@ require('../view/node_lists/node_lists_test');
 require('../view/parser/parser_test');
 require('../view/scope/scope_test');
 require('../view/autorender/autorender_test');
-require('can-simple-map/test/test');
+require('can-simple-map/can-simple-map_test');
 require('can-view-target/test/test');
 // require('can-simple-dom/test/test');
 
@@ -31,10 +31,10 @@ require('can-view-target/test/test');
 require('../control/control_test');
 require('../list/list_test');
 require('../map/map_test');
-require('can-map-define/test/test');
+require('can-map-define/can-map-define_test');
 require('can-view-href/test/test');
 require('can-map-backup/can-map-backup_test');
-// require('can-ejs/test/test');
+require('../view/ejs/ejs_test');
 
 
 // Integration tests
