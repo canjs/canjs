@@ -24,6 +24,7 @@ require('../view/scope/scope_test');
 require('../view/autorender/autorender_test');
 require('can-simple-map/can-simple-map_test');
 require('can-view-target/test/test');
+require('can-stache-converters/test/test');
 // require('can-simple-dom/test/test');
 
 
