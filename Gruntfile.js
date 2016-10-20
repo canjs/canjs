@@ -44,7 +44,7 @@ module.exports = function (grunt) {
           browsers: browsers,
           build: process.env.TRAVIS_JOB_ID,
           testname: 'qunit tests',
-          throttled: 2,
+          throttled: 1,
           sauceConfig: {
             'video-upload-on-pass': false
           }
