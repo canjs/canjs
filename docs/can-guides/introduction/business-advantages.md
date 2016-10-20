@@ -94,13 +94,29 @@ We use [semantic versioning](https://www.sitepoint.com/semantic-versioning-why-y
 
 For major version upgrades, such as 3.0, we provide an easy path to upgrade. For example, if you are an existing CanJS user using version 2.x looking to upgrade to the current version (3.0), there are three options, which all exist on a spectrum, each providing a tradeoff between work now and work later.
 
-GRAPHIC
-3 migration paths
-Minimal				Modernized 			Future-proof
-Minimal application changes		More changes required	Uses all the latest
-Uses legacy shims so you barely 	Future upgrades will be	More work now, but
-have to change anything		easier				future upgrades very easy
-←------------------->
+MIGRATION GRAPHIC
+
+<table>
+  <tr>
+    <th colspan=3>3 migration paths</td>
+  </tr>
+  <tr>
+    <td>Minimal</td>
+    <td>Modernized</td>
+    <td>Future-proof</td>
+  </tr>
+  <tr>
+    <td>Minimal application changes</td>
+    <td>More changes required</td>
+    <td>Uses all the latest</td>
+  </tr>
+  <tr>
+    <td> Uses legacy shims so you barely have to change anything</td>
+    <td>Future upgrades will be easier</td>
+    <td>More work now, but future upgrades very easy</td>
+  </tr>
+</table>
+<br>
 
 Users that want to upgrade painlessly will use the minimal path. This should be less than a few hours of work. Users that want to take fuller advantages of the new features and APIs will choose the modernized or future-proof options, which introduces slightly more risk.
 
