@@ -9,7 +9,7 @@ require('can-define/test/test');
 // require('../route/pushstate/pushstate_test');
 require('can-set/test/test');
 require('../view/stache/stache_test');
-// require('can-stache-converters/test/test');
+require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
