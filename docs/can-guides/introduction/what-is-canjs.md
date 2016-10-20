@@ -53,7 +53,7 @@ upgrade gracefully.
 
 The JavaScript ecosystem is a constantly changing hellscape. We aim to provide
 a stable platform to block out that noise, so you can focus on your app, not
-the tools. More on this here.
+the tools. [More on this here](why-canjs/business-advantages).
 
 ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript
 logos and terminology passes by outside the window. Vehicle has an arrow

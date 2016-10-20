@@ -4,16 +4,12 @@
 @body
 
 You may be familiar with the
-[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf)
-of
-[hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
+[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
 that take our community by storm:
 
 <img src="../../../docs/can-guides/images/introduction/frameworks.jpg" style="width:100%;max-width:750px"/>
 
-If
-[chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby)
-isn’t for you, CanJS is the right framework for you.
+If [chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby) isn’t for you, CanJS is the right framework for you.
 
 CanJS’ goal is to be the antidote to this mentality, and we have the track record to prove it.
 
