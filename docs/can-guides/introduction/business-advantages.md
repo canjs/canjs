@@ -1,5 +1,6 @@
 @page guides/why-canjs/business-advantages Business Advantages
 @parent guides/why-canjs 1
+@disableTableOfContents
 
 @body
 
