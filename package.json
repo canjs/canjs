@@ -58,6 +58,7 @@
     "can-stache": "3.0.1",
     "can-stache-bindings": "3.0.1",
     "can-stache-converters": "3.0.0-pre.5",
+    "can-stream": "0.0.2",
     "can-util": "3.0.1",
     "can-vdom": "3.0.0-pre.1",
     "can-view-autorender": "3.0.0",
