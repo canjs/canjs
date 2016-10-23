@@ -1,14 +1,24 @@
 @page guides/contributing/releases Releases
-@parent guides/releases
+@parent guides/contribute
 
 @description Release and hosting information for CanJS maintainers.
 
 @body
 
 
+> Is there anyway to make this more of an ordered list?
+> For example, for CanJS:
+> 1. Get access to XYZ (npm)
+> 2. Make sure there's a pull request to master that passes all Saucelabs tests.
+> 3. Merge pull request and run `npm release:patch`
+> 4. Get Justin to update JSBins for now (might have to re-release site).
+
 ## Updating dependencies
 
 All CanJS repositories are set up with Greenkeeper. [Greenkeeper](https://greenkeeper.io/) tracks your dependencies and applies an update to a branch for every new version coming in. Your test suite runs behind the scenes, and only if a dependency update breaks your software, we let you know in a Pull Request, including all the information you need to make a decision about what to do with that version update.
+
+> What does "applies an update to a branch" mean?  Which branch get these applied? Master?
+> How is greenkeeper setup?  Is it like travis? Who has access?
 
 ## Making a release
 
@@ -56,11 +66,14 @@ All repositories automatically run their tests in [Travis CI](https://travis-ci.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
-To view Saucelabs test runs and results request an invite from the `canjs` Saucelabs user. Saucelabs tests can be run locally via
+To view Saucelabs test runs and results, request an invite from the `canjs` Saucelabs user. Saucelabs tests can be run locally via
 
 ```
 npm run ci
 ```
+
+> How you do you request an invite?  
+> Is grunt needed for saucelabs?
 
 ### Website hosting and ci.canjs.com
 
