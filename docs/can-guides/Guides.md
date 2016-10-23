@@ -99,7 +99,7 @@ CanJS including:
 CanJS is managed by the [DoneJS Contributors Team](https://donejs.com/About.html#section=section_Team).
 All contributions from all types of contributors are welcome. Contributing
 to an Open Source project can be an intimidating experience.  We're
-committed to making the experience is pleasant and rewarding as possible.  We're happy to setup a
+committed to making the experience as pleasant and rewarding as possible.  We're happy to setup a
 pairing session to show you how to fix a bug or write a feature.  
 
 If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
