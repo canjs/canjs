@@ -126,6 +126,9 @@
         "node_modules/can-*/dist/**/*"
       ]
     },
+    "altVersions": {
+		"2.3.27": "https://v2.canjs.com"
+	},
     "parent": "canjs",
     "minifyBuild": false
   }
