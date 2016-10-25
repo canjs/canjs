@@ -34,16 +34,16 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-component": "3.0.1",
-    "can-compute": "3.0.0",
-    "can-connect": "1.0.3",
+    "can-component": "^3.0.2",
+    "can-compute": "^3.0.1",
+    "can-connect": "^1.0.4",
     "can-construct": "3.0.1",
     "can-construct-super": "3.0.0",
     "can-control": "3.0.2",
     "can-define": "1.0.0",
     "can-ejs": "^3.0.0",
     "can-event": "3.0.1",
-    "can-fixture": "1.0.2",
+    "can-fixture": "^1.0.2",
     "can-jquery": "3.0.2",
     "can-list": "3.0.0",
     "can-map": "3.0.1",
@@ -58,8 +58,8 @@
     "can-stache": "3.0.1",
     "can-stache-bindings": "3.0.1",
     "can-stache-converters": "3.0.3",
-    "can-util": "3.0.2",
-    "can-vdom": "3.0.0-pre.1",
+    "can-util": "^3.0.2",
+    "can-vdom": "^3.0.1",
     "can-view-autorender": "3.0.0",
     "can-view-callbacks": "3.0.0",
     "can-view-href": "3.0.0",
@@ -127,8 +127,8 @@
       ]
     },
     "altVersions": {
-		"2.3.27": "https://v2.canjs.com"
-	},
+      "2.3.27": "https://v2.canjs.com"
+    },
     "parent": "canjs",
     "minifyBuild": false
   }
