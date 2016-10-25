@@ -1,27 +1,21 @@
 module.exports = function (grunt) {
-  var browsers = [{
-	    browserName: 'firefox',
-	    platform: 'Windows 10',
-	    version: '48.0'
-	  }, {
-	    browserName: 'googlechrome',
-	    platform: 'Windows 10'
-	  },
-	  // {
-	  //   browserName: 'safari',
-	  //   platform: 'OS X 10.11',
-	  //   version: '9.0'
-	  // },
+  var browsers = [
 	  {
-	    browserName: 'internet explorer',
-	    platform: 'Windows 8',
-	    version: '10.0'
-	  }
-	  // , {
-	  //   browserName: 'internet explorer',
-	  //   platform: 'Windows 7',
-	  //   version: '9'
-	  // }
+		  browserName: 'firefox',
+		  platform: 'Windows 10',
+		  version: '48.0'
+		}, {
+		  browserName: 'googlechrome',
+		  platform: 'Windows 10'
+		}, {
+		  browserName: 'safari',
+		  platform: 'OS X 10.11',
+		  version: '9.0'
+		}, {
+		  browserName: 'internet explorer',
+		  platform: 'Windows 8',
+		  version: '10.0'
+		}
   ];
   
   grunt.initConfig({
