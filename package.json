@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "3.0.0-pre.16",
+  "version": "3.0.0",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -129,8 +129,8 @@
       ]
     },
     "altVersions": {
-		"2.3.27": "https://v2.canjs.com"
-	},
+      "2.3.27": "https://v2.canjs.com"
+    },
     "parent": "canjs",
     "minifyBuild": false
   }
