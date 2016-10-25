@@ -41,11 +41,15 @@ The best place to start is the [guides/chat].
 It's only an hour, and CanJS will be showing off all of it's best features while you build
 a real time chat application.  You build the whole thing in a JSBin.
 
-Next, you'll want to try the [guides/todomvc].  This takes about 3 hours and touches on
+Next, you'll want to try the [guides/todomvc].  This takes about 1.5 hours and touches on
 every core part of CanJS.  You can also follow the whole guide in a JSBin.
 
-After that, you'll want to go through the [guides/pmo].  This is a very in-depth
-look at how CanJS works.  
+After that, checkout the [guides/atm].  It takes about 2 hours and shows how to build and __test__
+an ATM machine. It also shows how to composite state.  The whole guide is done in a JSBin.
+
+You might also want to to go through DoneJS's [Place My Order Guide](https://donejs.com/place-my-order.html).  This is a very in-depth
+look at how CanJS works within the context of a wide variety of other tools.  This guide takes
+about 8 hours.
 
 Finally, when you're just about to commit, read [guides/setup] to learn how to setup
 CanJS for your particular environment.

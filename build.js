@@ -23,13 +23,13 @@ stealTools.export({
 			},
 			// ignore jquery
 			ignore: [function(name){
-				if(name.indexOf("jquery") === 0) {
+				if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0) {
 					return true;
 				} else {
 					return false;
 				}
 			}],
-			exports: {"jquery": "jQuery", "can-util/namespace": "can"},
+			exports: {"jquery": "jQuery", "can-util/namespace": "can", "kefir": "Kefir"},
 			removeDevelopmentCode: false
 		},
 		"core": {
@@ -42,13 +42,13 @@ stealTools.export({
 			},
 			// ignore jquery
 			ignore: [function(name){
-				if(name.indexOf("jquery") === 0) {
+				if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0) {
 					return true;
 				} else {
 					return false;
 				}
 			}],
-			exports: {"jquery": "jQuery", "can-util/namespace": "can"},
+			exports: {"jquery": "jQuery", "can-util/namespace": "can", "kefir": "Kefir"},
 			removeDevelopmentCode: false
 		}
 	}

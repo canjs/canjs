@@ -1,5 +1,4 @@
 @page guides/pmo Place My Order Guide
-@parent guides/experiment 4
 @disableTableOfContents
 
 @body
