@@ -41,7 +41,7 @@
     "can-construct-super": "3.0.0",
     "can-control": "3.0.2",
     "can-define": "1.0.0",
-    "can-define-stream": "^0.0.2",
+    "can-define-stream": "0.0.2",
     "can-ejs": "^3.0.0",
     "can-event": "3.0.1",
     "can-fixture": "1.0.0",
@@ -58,8 +58,8 @@
     "can-simple-map": "3.0.0",
     "can-stache": "3.0.1",
     "can-stache-bindings": "3.0.1",
-    "can-stache-converters": "3.0.1",
-    "can-stream": "^0.0.4",
+    "can-stache-converters": "3.0.3",
+    "can-stream": "0.0.4",
     "can-util": "3.0.1",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.0",
@@ -128,6 +128,9 @@
         "node_modules/can-*/dist/**/*"
       ]
     },
+    "altVersions": {
+		"2.3.27": "https://v2.canjs.com"
+	},
     "parent": "canjs",
     "minifyBuild": false
   }
