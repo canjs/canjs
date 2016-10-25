@@ -78,8 +78,9 @@ The make script will generate the documentation again and push out the `gh-pages
 
 ## Writing API documentation
 
-Our documentation is modelled off of jQuery's.  Please read
-their [guidelines](https://github.com/jquery/api.jquery.com/blob/master/README.md).
+Our documentation is modeled off of jQuery's.  Please read
+their [guidelines](https://github.com/jquery/api.jquery.com/blob/master/README.md). Also read our
+[guides/api].
 
 Generally speaking there are three parts to every documentation page:
 
@@ -137,10 +138,7 @@ signature simply adds a bit more depth to the purpose of [can-event/batch/batch]
 and then details __how the code works__.  __How to use the code__ is
 left for the `body` section as importing the module is not necessary to show.
 
-Make sure to fully document the a signature's parameters and return
-value.  There's a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
-a return value or parameters and the [name expression](http://documentjs.com/docs/documentjs.nameExpression.html) of
-parameters.
+
 
 Signature titles should follow jQuery's conventions:
 
@@ -149,6 +147,15 @@ Signature titles should follow jQuery's conventions:
  - Spaces in between arguments: `typeAlias.method( arg1, arg2 )`
  - Brackets around optional args: `typeAlias.method( arg1 [, arg2 ], arg3 )` or
    `typeAlias.method( arg1 [, arg2 ][, arg3 ] )`
+
+Make sure to fully document the a signature's parameters and return
+value.  There's a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
+a return value or parameters and the [name expression](http://documentjs.com/docs/documentjs.nameExpression.html) of
+parameters.
+
+ - Parameter and descriptions should start with a `Capital` and end with a period like:
+   `@param {Type} name Indicates that something should happen.`
+
 
 
 ### body
@@ -159,3 +166,9 @@ multiple topics.  For example [can-component]'s body has examples and
 information about nearly all of its sub-functions.  However
 [can-component.prototype.tag can-component.prototype.tag] doesn't have a
 use section because it's covered in [can-component].
+
+
+### structuring documentation
+
+- Group names (like `prototype`) should be lower case.
+- Types should be capitalized `{String}` except when they are describing a function [can-fixture.requestHandler].
