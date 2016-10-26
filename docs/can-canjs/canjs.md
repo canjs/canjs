@@ -11,6 +11,7 @@ CanJS targets experienced developers building complex applications
 with long futures ahead of them. Read more about CanJS's [guides/what-is-canjs mission and goals]
 and [guides/why-canjs why you should give it a try].
 
+
 <img src="docs/images/tortoise.png"/>
 
 @body
