@@ -83,7 +83,7 @@
     "grunt-saucelabs": "^9.0.0",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",
-    "steal": "^0.16.4",
+    "steal": "^0.16.41",
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.0-pre.1",
     "steal-tools": "pre",
