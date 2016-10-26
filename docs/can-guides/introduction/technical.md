@@ -58,17 +58,17 @@ CanJS has an observable layer that is powerful, performant, and flexible. It bin
 var define = require("can-define");
 
 var Person = function(first, last){
-  this.first = first;
-  this.last = last;
+	this.first = first;
+	this.last = last;
 };
 define(Person.prototype,{
-  first: { type: "string" },
-  last: { type: "string" },
-  fullName: {
-    get: function(){
-      return this.first+" "+this.last;
-    }
-  }
+	first: { type: "string" },
+	last: { type: "string" },
+	fullName: {
+		get: function(){
+			return this.first+" "+this.last;
+		}
+	}
 });
 ```
 
@@ -111,10 +111,10 @@ They are object oriented because you can create observables out of any normal ob
 
 ```javascript
 var TodoList = DefineList.extend({
-    "#": Todo,
-    get completed(){
-        return this.filter({complete: true})
-    }
+		"#": Todo,
+		get completed(){
+				return this.filter({complete: true})
+		}
 });
 
 var todos = new TodoList([{complete: true}, {complete:false}]);
@@ -170,31 +170,31 @@ Consider a todo list with a completeAll method that marks every todo in the list
 
 ```javascript
 var Todo = DefineMap.extend({
-    name: "string",
-    complete: "boolean"
+		name: "string",
+		complete: "boolean"
 });
 
 var TodoList = DefineList.extend({
-    "#": Todo,
-    completeAll: function(){
-        this.forEach(function(todo){
-            todo.complete = true;
-        })
-    },
-    completeCount: function(){
-        return this.filter({complete: true}).length;
-    }
+		"#": Todo,
+		completeAll: function(){
+				this.forEach(function(todo){
+						todo.complete = true;
+				})
+		},
+		completeCount: function(){
+				return this.filter({complete: true}).length;
+		}
 })
 ```
 
 When completeAll is called, the {{todos.completeCount}} magic tag will update once for every completed count. We can prevent this by wrapping completeAll with calls to start and stop:
 ```javascript
 completeAll: function(){
-    canBatch.start();
-    this.forEach(function(todo){
-        todo.complete = true;
-    });
-    canBatch.end();
+		canBatch.start();
+		this.forEach(function(todo){
+				todo.complete = true;
+		});
+		canBatch.end();
 },
 ```
 ### Inferred dependencies
@@ -204,7 +204,7 @@ In other libraries that support computed properties, you declare your dependenci
 ```javascript
 fullName: Ember.computed('firstName', 'lastName', function() {
 
-  return `${this.get('firstName')} ${this.get('lastName')}`;
+	return `${this.get('firstName')} ${this.get('lastName')}`;
 
 })
 ```
@@ -217,13 +217,13 @@ Each time the computed function is run, these dependencies are re-evaluated, so 
 
 ```javascript
 origFullName: {
-  get: function(){
-    if(this.gender == "female" && this.married) {
-      return this.first+" "+this.last;
-    } else {
-      return this.first+" "+this.maiden;
-    }
-  }
+	get: function(){
+		if(this.gender == "female" && this.married) {
+			return this.first+" "+this.last;
+		} else {
+			return this.first+" "+this.maiden;
+		}
+	}
 }
 ```
 
@@ -261,13 +261,13 @@ For example, here's a typical ViewModel, which is often defined in its own separ
 
 ```javascript
 export const ViewModel = Map.extend({
-  define: {
-    fullName: {
-      get () {
-        return this.attr("first") + " " + this.attr("last");
-      }
-    }
-  }
+	define: {
+		fullName: {
+			get () {
+				return this.attr("first") + " " + this.attr("last");
+			}
+		}
+	}
 })
 ```
 
@@ -284,9 +284,9 @@ import ViewModel from "./viewmodel";
 import template from './template.stache!';
 
 Component.extend({
-  tag: 'my-component',
-  viewModel: ViewModel,
-  template
+	tag: 'my-component',
+	viewModel: ViewModel,
+	template
 });
 ```
 
@@ -296,10 +296,10 @@ The ViewModel is defined as its own module and exported as an ES6 module, so it 
 import ViewModel from "./viewmodel";
 
 QUnit.test('fullName works', function() {
-  var vm = new ViewModel();
-  vm.attr('first', 'John');
-  vm.attr('last', 'Doe');
-  QUnit.equal(vm.attr('fullName'), 'John Doe');
+	var vm = new ViewModel();
+	vm.attr('first', 'John');
+	vm.attr('last', 'Doe');
+	QUnit.equal(vm.attr('fullName'), 'John Doe');
 });
 ```
 
@@ -337,17 +337,360 @@ React, and other competing frameworks, have a big global state object that conta
 
 * Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies
 
+## Views
+
+CanJS views are [Handlebars](http://handlebarsjs.com/) templates, with special features baked in, like event bindings, custom elements, and performance optimizations.
+
+```
+<header id="header">
+
+	<h1>todos</h1>
+
+	<todo-create/>
+
+</header>
+
+<ul id="todo-list">
+
+	{{#each todos}}
+
+		<li class="todo {{#if complete}}completed{{/if}}">
+
+				<div class="view">
+
+						<input class="toggle" type="checkbox" {($checked)}="complete">
+
+						<label>{{name}}</label>
+
+						<button class="destroy"></button>
+
+				</div>
+
+				<input class="edit" type="text" value="{{name}}"/>
+
+		</li>
+
+	{{/each}}
+
+</ul>
+```
+
+### Handlebars
+
+Handlebars templates are a superset of Mustache templates that includes some convenient helper methods.
+
+Developers love Mustache templates because they are designed to be "logic-less", meaning no if statements, else clauses, for loops. There are only tags. The resulting simplicity makes templates easier to read and understand. It also makes it possible for designers to modify templates more easily, with less of a risk of breaking something.
+
+CanJS’ version of Handlebars is called [can-stache](../../can-stache.html).
+
+### One, two-way, and event bindings
+
+CanJS templates support data and event bindings through the [can-stache-bindings](../../can-stache-bindings.html) module.
+
+Data binding means Stache templates bind to observable property changes and update the DOM as needed.
+
+#### Data binding
+
+For example, there may be a template that looks like this:
+
+```
+<div>{{firstName}}</div>
+```
+
+Initially, if person is an observable like ``{firstName: ‘Mila’}``, then the DOM would render like:
+
+```
+<div>Mila</div>
+```
+
+An invisible binding is created for any properties of observable data. If `first` is changed:
+
+```javascript
+person.firstName = 'Jane';
+```
+
+`firstName` triggers a change. The Stache binding changes the DOM to reflect the new value.
+
+```
+<div>Jane</div>
+```
+
+When a change occurs that triggers a data binding, Stache is very precise about modifying only the most localized part of the template needed to reflect the change. More on that below.
+
+#### Event and input binding
+
+Setting up an event binding on an element is simple:
+
+```
+<div ($click)="doSomething()"/>
+```
+
+The value of the event binding can be inline JavaScript that modifies data in the template, or it can be a method on the ViewModel, if the template is part of a custom element.
+
+Stache also supports setting up two way data bindings with input values:
+
+```
+<input value='{{plateName}}'>
+```
+
+The plateName property will always reflect the value of this input, and vice versa.
+
+#### Passing data between custom elements
+
+Similar to the typical data bindings shown in the example above, components pass parts of their ViewModel to the ViewModels of child components, all the way down the application hierarchy. This is done using HTML attributes when instantiating a custom element.
+
+Stache allows users to control the direction of data flow from parent to child components, for maximum flexibility. Properties that are passed from one component to another can create bindings in either direction, or both directions.
+
+Sometimes you want changes in the parent component to update the child component:
+
+```
+<my-component {child-prop}="value"/>
+```
+
+Sometimes you want changes in the child to update the parent:
+
+```
+<my-component {^child-prop}="value"/>
+```
+
+Sometimes you want changes in the parent to update the child, and vice versa. This is especially useful when binding to the value of an input:
+
+```
+<my-component {(child-prop)}="value"/>
+```
+
+### Custom elements
+
+One of the most important concepts in CanJS is splitting up your application functionality into independent, isolated, reusable custom HTML elements.
+
+The major advantages of building applications based on custom HTML elements are:
+
+1. Ease of page composition - Designers can do it! Non-developers can express complex behavior with little to no JavaScript required. All you need to build a new page or feature is HTML.
+
+2. Forced modularity - Because the nature of HTML elements are isolated modules, custom HTML elements must be designed as small, isolated components. This makes them easier to test, debug, and understand.
+
+3. Reuse - Custom elements are designed to be reusable across pages and applications.
+
+Consider the following example:
+
+```
+<order-model get-list="{ period='previous_week' }" {^value}="*previousWeek" />
+<order-model get-list="{ period='current_week' }" {^value}="*currentWeek" />
+
+<bit-c3>
+	<bit-c3-data>
+		<bit-c3-data-column key="Last Week" {value}="*previousWeek.totals" />
+		<bit-c3-data-column key="This Week" {value}="*currentWeek.totals" />
+	</bit-c3-data>
+</bit-c3>
+```
+
+This code demonstrates:
+
+1. An element that can load data
+
+2. Composable widget elements (a graph with a line-series)
+
+If our designer wanted to add another period, all they would need to do is add another `<order-model>` and `<bit-c3-data-column>` element.
+
+Here’s a working version of the same example in a JSBin.
+
+[Custom HTML Elements on jsbin.com](http://jsbin.com/puwesa/embed?html,output)
+
+Just like HTML’s natural advantages, composing entire applications from HTML building blocks allows for powerful and easy expression of dynamic behavior.
+
+#### Benefits of custom elements
+
+First, it's important to understand the background of custom elements and their advantages.
+
+Before custom HTML elements existed, to add a datepicker to your page, you would:
+
+1. Load a datepicker script
+
+2. Add a placeholder HTML element
+
+```
+<div class='datepicker' />
+```
+
+1. Add JavaScript code to instantiate your datepicker
+
+```javascript
+$('.datepicker').datepicker()
+```
+
+With custom HTML elements, to add the same datepicker, you would:
+
+1. Load a datepicker script
+
+2. Add the datepicker to your HTML or template:
+
+```
+<datepicker value="{date}"/>
+```
+
+That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.
+
+Custom HTML elements are one aspect of [Web Components](http://webcomponents.org/), a collection of browser specs that have [yet to be implemented](http://caniuse.com/#search=components) across browsers.
+
+#### Defining a custom element
+
+[can.Component](http://canjs.com/docs/can.Component.html) is a modern take on web components.
+
+Components in CanJS have three basic building blocks:
+
+* a template
+
+* a viewModel object
+
+* event handlers
+
+```javascript
+var Component = require("can-component");
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+
+var HelloWorldVM = DefineMap.extend({
+		visible: {value: false},
+		message: {value: "Hello There!"}
+});
+
+Component.extend({
+	tag: "hello-world",
+	view: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
+	ViewModel: HelloWorldVM,
+	events: {
+		click: function(){
+				this.viewModel.visible = !this.viewModel.visible;
+		}
+	}
+});
+```
+
+Another way to define a component is with a [web component](https://github.com/donejs/done-component) style declaration, using a single file with a `.component` extension:
+
+```
+<can-component tag="hello-world">
+		<style type="less">
+				i {
+						color: red;
+				}
+		</style>
+		<template>
+				{{#if visible}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}
+		</template>
+		<script type="view-model">
+				export default {
+						visible: true,
+						message: "Hello There!"
+				};
+		</script>
+		<script type="events">
+				export default {
+						click: function(){
+								this.viewModel.attr("visible", !this.viewModel.attr("visible"))
+						}
+				};
+		</script>
+</can-component>
+```
+
+#### Loading data with custom elements
+
+The beauty and power of custom HTML elements is most apparent when visual widgets (like graphs) are combined with elements that express data.
+
+Back to our original example:
+
+```
+<order-model findAll="{previousWeek}" [previousWeekData]="{value}"/>
+<order-model findAll="{currentWeek}" [currentWeekData]="{value}"/>
+
+<bit-graph title="Week over week">
+	<bit-series data="{../previousWeekData}" />
+	<bit-series data="{../currentWeekData}" color="Blue"/>
+</bit-graph>
+```
+
+This template combines a request for data with an element that expresses it. It's immediately obvious how you would add or remove features from this, allowing for quick changes and easy prototyping. Without custom elements, the same changes would require more difficult code changes and wiring those changes up with widget elements that display the data.
+
+Data custom elements are part of can-connect's [can-tag](../../can-connect/can/tag/tag.html) feature.
+
+### Minimal DOM updates
+
+Virtual DOM
+
+Consider the following Stache template:
+
+```
+{{#rows}}
+	<div>{{name}}</div>
+{{/rows}}
+```
+
+And the following change to its data:
+
+```javascript
+rows[0].name = 'changed'; // change the first row's name
+```
+
+A data binding for that row would be invoked. The data binding results in the following code being run:
+
+```javascript
+textNode.nodeValue = 'changed';
+```
+
+Similarly, if the binding existed as an attribute, like `<div class={{className}}>`, the data binding would use `setAttribute` to make the update.
+
+This is significant because Stache takes pains to localize any changes to a template, changing only the most minimal piece necessary. Updates to the DOM are relatively expensive, so stache tries to keep the path between a data change and the DOM change as frictionless as possible.
+
+In Backbone, you would need to manually re-render the template or roll your own rendering library.
+
+In React and other virtual DOM libraries, that would result in the virtual DOM being re-rendered. A diff algorithm comparing the new and old virtual DOM would discover the changed node, and then the specific DOM node would be updated.
+
+Stache, by comparison, performs less logic than Virtual DOMs would require in order to update the DOM in the most minimal way necessary because the virtual DOM comparison step is not necessary, which is visible in the following benchmark that tests the time needed to update the DOM when a single property changes:
+
+<img src="../../../docs/can-guides/images/introduction/dom-updates.png" style="width:100%;max-width:750px" />
+
+You can run this test yourself at [JS Bin](http://output.jsbin.com/giyobi/1)
+
+This performance gap is more visible when rendering a large number of items in the page:
+
+<img src="../../../docs/can-guides/images/introduction/rendering-performance.png" style="width:100%;max-width:750px" />
+
+*For a small set of todos the difference is negligible but as the number increases the gap widens to the point where React is 6 times slower than Stache when rendering 1000 todos.*
+
+You can run this test for yourself at [JS Bin](http://output.jsbin.com/monoqagofa/1).
+
+With synchronously observable objects and data bindings that change minimal parts of the DOM, Stache aims to hit the sweet spot between powerful and performant.
+
+### Template minification
+
+While templates provide obvious benefits to application maintainability, they can be a bane on performance unless they are correctly integrated into the build tool chain.
+
+An ecosystem library called [steal-stache](../../steal-stache.html) provides an easy hook to load Stache templates using ES6 import statements and include the compiled templates into the minified result of the build.
+
+Steal-stache returns a renderer function that will render the template into a document fragment.
+
+```javascript
+import todosStache from "todos.stache"
+todosStache([{name: "dishes"}]) //-> <documentFragment>
+```
+
+When the build is run, this import statement will tell StealJS that "todos.stache" is a dependency, and will include it in the minification like any other script dependencies in the application.
+
+## Models
+
 ### Caching and minimal data requests
 
-DoneJS improves performance by intelligently managing the data layer, taking advantage of various forms of caching and request reduction techniques.
+CanJS improves performance by intelligently managing the data layer, taking advantage of various forms of caching and request reduction techniques.
 
 Undoubtedly, the slowest part of any web application is round trips to the server. Especially now that [more than 50% of web traffic comes from mobile devices](http://searchengineland.com/its-official-google-says-more-searches-now-on-mobile-than-on-desktop-220369), where connections are notoriously slow and unreliable, applications must be smart about reducing network requests.
 
 Making matters worse, the concerns of maintainable architecture in single page applications are at odds with the concerns of minimizing network requests. This is because independent, isolated UI widgets, while easier to maintain, often make AJAX requests on page load. Without a layer that intelligently manages those requests, this architecture leads to too many AJAX requests before the user sees something useful.
 
-With DoneJS, you don't have to choose between maintainability and performance.
+With CanJS, you don't have to choose between maintainability and performance.
 
-DoneJS uses the following strategies to improve perceived performance (reduce the amount of time before users see content rendered):
+CanJS uses the following strategies to improve perceived performance (reduce the amount of time before users see content rendered):
 
 * [Fall through caching](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Fallthroughcaching) - Cache data in localStorage. Automatically show cached data immediately, but look for updates on the server in the background and merge changes.
 
@@ -359,7 +702,7 @@ DoneJS uses the following strategies to improve perceived performance (reduce th
 
 #### **How it works**
 
-[can-connect](http://connect.canjs.com/) makes up part of the DoneJS model layer. Since all requests flow through this data layer, by making heavy use of set logic and localStorage caching, it's able to identify cache hits, even partial hits, and make the most minimal set of requests possible.
+[can-connect](http://connect.canjs.com/) makes up part of the CanJS model layer. Since all requests flow through this data layer, by making heavy use of set logic and localStorage caching, it's able to identify cache hits, even partial hits, and make the most minimal set of requests possible.
 
 It acts as a central hub for data requests, making decisions about how to best serve each request, but abstracting this complexity away from the application code. This leaves the UI components themselves able to make requests independently, and with little thought to performance, without actually creating a poorly performing application.
 
@@ -391,7 +734,7 @@ Here's how the caching logic works:
 
 Combining requests combines multiple incoming requests into one, if possible. This is done with the help of [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets).
 
-DoneJS collects requests that are made within a few milliseconds of each other, and if they are pointed at the same API, tries to combine them into a single superset request.
+CanJS collects requests that are made within a few milliseconds of each other, and if they are pointed at the same API, tries to combine them into a single superset request.
 
 For example, the video below shows an application that shows two filtered lists of data on page load - a list of completed and incomplete todos. Both are subsets of a larger set of data - the entire list of todos.
 
@@ -411,8 +754,6 @@ Once data is in the cache, no more requests to the API for that same set of data
 
 The request logic is more aggressive in its attempts to find subsets of the data within the cache, and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.
 
-The video below shows two example scenarios. The first shows the cache containing a supserset of the request. The second shows the cache containing a subset of the request.
-
 ##### **Inline cache**
 
 Server-side rendered single page apps (SPAs) have a problem with wasteful duplicate requests. These can cause the browser to slow down, waste bandwidth, and reduce perceived performance.
@@ -423,9 +764,9 @@ Server-side rendered single page apps (SPAs) have a problem with wasteful duplic
 
 3. The SPA will want to re-request for the same data that was already requested on the server.
 
-DoneJS solves this problem with an inline cache - embedded inline JSON data sent back with the server rendered content, which is used to serve the initial SPA data requests.
+CanJS solves this problem with an inline cache - embedded inline JSON data sent back with the server rendered content, which is used to serve the initial SPA data requests.
 
-DoneJS uniquely makes populating and using the inline cache easy. waitFor is a method that:
+CanJS uniquely makes populating and using the inline cache easy. waitFor is a method that:
 
 1. Tells the SSR server to wait for a promise to resolve before rendering.
 
@@ -435,15 +776,15 @@ For example:
 
 ```javascript
 can.Component.extend({
-  tag: "user-name",
-  template: can.stache( "{{user.name}}" ),
-  viewModel: {
-    init: function () {
-      var promise = User.getOne( { id: this.attr( "id" ) } );
-      this.attr( "%root" ).waitFor( promise );
-      promise.then( ( user ) => { this.attr( "user", user ); } );
-    }
-  }
+	tag: "user-name",
+	template: can.stache( "{{user.name}}" ),
+	viewModel: {
+		init: function () {
+			var promise = User.getOne( { id: this.attr( "id" ) } );
+			this.attr( "%root" ).waitFor( promise );
+			promise.then( ( user ) => { this.attr( "user", user ); } );
+		}
+	}
 });
 ```
 
