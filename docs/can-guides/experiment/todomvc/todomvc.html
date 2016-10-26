@@ -5,6 +5,17 @@
     </head>
     <body>
 
+<script>
+	if(!(window.console && console.log)) {
+	  console = {
+	    log: function(){},
+	    debug: function(){},
+	    info: function(){},
+	    warn: function(){},
+	    error: function(){}
+	  };
+	}
+</script>
 <script src="../../../../node_modules/es6-promise/dist/es6-promise.js"></script>
 <script src="../../../../node_modules/jquery/dist/jquery.js"></script>
 <script src="../../../../dist/global/can.all.js"></script>
