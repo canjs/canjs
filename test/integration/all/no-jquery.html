@@ -4,6 +4,16 @@
 </head>
 <body>
 	<script>
+		if(!(window.console && console.log)) {
+		  console = {
+		    log: function(){},
+		    debug: function(){},
+		    info: function(){},
+		    warn: function(){},
+		    error: function(){}
+		  };
+		}
+		
 		var QUnit = window.parent.QUnit;
 		var removeMyself = window.parent.removeMyself;
 
