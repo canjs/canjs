@@ -10,9 +10,9 @@ CanJS is a JavaScript MVVM library, with browser support all the way back to IE9
 
 The core of CanJS, gzipped, is under 50KB. While there may be smaller architectural libraries, there aren’t competitors that rival CanJS that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.
 
-jQuery 3.1 is 35KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
+jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
 
-Ember 2.9 is 410KB minified and gzipped, providing a comparable feature set.
+Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
 
 React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
 
