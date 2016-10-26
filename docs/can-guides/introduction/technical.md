@@ -40,13 +40,21 @@ It’s similar to the difference between making plans with your best friend vs 1
 
 For users that have an existing application, this modularity means they can leave their application and all it’s dependencies alone, forever, while using new features and parts of the library in other areas of the application.
 
-For example, say an entire application is built with CanJS 3.0. The following year, the developer is tasked with adding a new feature. At that point, can-component 4.0 is out with an innovative new set of features. The developer can simply leave the remainder of the application using CanJS 3.0 (including can-component 3.0), and import can-component 4.0 in the new area of the application. It will likely still share the same lower level dependencies, since those are less likely to change very often, so this adds an insignificant amount of code weight.
+For example, say an entire application is built with CanJS 3.0. The following year, the developer is tasked with adding a new feature. At that point, can-component 4.0 is out with a new set of features. The developer can simply leave the remainder of the application using CanJS 3.0 (including can-component 3.0), and import can-component 4.0 in the new area of the application. It will likely still share the same lower level dependencies, since those are less likely to change very often, so this adds an insignificant amount of code weight.
+
+IMAGE: show application component blocks using 3.0, with new area using can-component 4.0, but sharing same low level dependencies
 
 Angular 1.x to 2.0 is a good counterexample to this approach. The recommended upgrade strategy was to either rewrite your application with 2.0 (a lot of extra work) or load your page with 1.X and 2.0, two full versions of the framework (a lot of code weight). Neither is preferable.
 
 With the modularity described in CanJS, applications can import multiple versions of the high level APIs while avoiding the work of rewriting with future syntaxes and the extra code weight of importing two full frameworks.
 
 ## Observables
+* We have super sweet observable stuff … can-compute, and map and list
+
+    * One for deriving data … kinda like an event stream .. but far easier in most cases
+
+    * The other for make OOP great again. DECLARATIVE but makes nice APIs
+
 
 ### What are they
 
@@ -72,7 +80,7 @@ define(Person.prototype,{
 });
 ```
 
-Observables are very powerful and easy to use on their own, but in CanJS applications, they are used in the ViewModel, a layer that sits between the model and the view and contains the state of the application. More on ViewModels [below](#ViewModels).
+Observables are very powerful and easy to use on their own, but in CanJS applications, they are also used as a ViewModel, a layer that sits between the model and the view and contains the state of the application. More on ViewModels [below](#ViewModels).
 
 ### Why they’re powerful
 
@@ -80,16 +88,25 @@ Observables as a concept enable an important architectural advantage in large ap
 
 Say you have an application with three discrete components.
 
+IMAGE: app with 3 things
+
 Without observables, you might have component A tell component B to update itself when something happens, like user input.
+
+IMAGE: arrows showing this happening
 
 With observables, you would separate the state of your application into a separate layer, and each component would be able to change parts of the state it cares about and listen to parts of the state it needs. When the same user input occurs, component A would update the observable state object. Component B would be notified that a property of the observable state has changed, and update itself accordingly.
 
+IMAGE: show this happening
+
 Why is this better? Because this allows each component to be untied from the rest. They each get passed the state they need, but are unaware of the rest of the components and their needs. The architecture diagram changes from this:
 
+IMAGE: arrows pointing at everything
 
 <img src="../../../docs/can-guides/images/introduction/no-observables.png" style="width:100%;max-width:750px" alt="Diagram of app without observables"/>
 
 To this:
+
+IMAGE: state is in the middle
 
 <img src="../../../docs/can-guides/images/introduction/with-observables.png" style="width:100%;max-width:750px" alt="Diagram of app using observables"/>
 
@@ -98,8 +115,6 @@ Not only is this simpler to understand, these components are more easily testabl
 ### Synchronous, Object oriented, and Functional
 
 In CanJS observables, changes to a property in an object or array immediately and synchronously notify any event listeners.
-
-Past versions of CanJS used a method called `attr` to set and get properties on observables. CanJS 3.0 has deprecated this method. In 3.0 you can set and get properties the old-fashioned way, and event listeners are still notified synchronously. This change is made possible using ES5 accessors (set and get). When all browsers support proxies, this will be even simpler.
 
 This is in contrast to dirty checking observables, such as those used in Angular 1.X, which did not immediately notify listeners, but did so asynchronously after a digest cycle.
 
@@ -121,7 +136,7 @@ var todos = new TodoList([{complete: true}, {complete:false}]);
 todos.completed.length //-> 1
 ```
 
-There is also a [can-stream project](https://github.com/canjs/can-stream) that converts observables into streams.
+There is also a [can-stream project](https://github.com/canjs/can-stream) that converts observables into event-streams.
 
 ### Computed properties
 
@@ -157,6 +172,8 @@ person.first = 'Jane';
 `fullName` recomputes, then the DOM automatically changes to reflect the new value.
 
 Observables express complex relationships between data, without regard to its display. Views express properties from the observables, without regard to how the properties are computed. The app then comes alive with rich functionality.
+
+DIAGRAM - circular arrows pointing back to each layer
 
 ### Expressive property definition syntax
 
@@ -197,6 +214,7 @@ completeAll: function(){
 		canBatch.end();
 },
 ```
+
 ### Inferred dependencies
 
 In other libraries that support computed properties, you declare your dependencies, like this:
@@ -239,7 +257,7 @@ In Angular 1.X, there are no direct observables. It uses dirty checking with reg
 
 Angular 2.0
 
-In React, there is no observable data layer. You could define a fullName like we showed above, but it would be recomputed every time render is called, whether or not it has changed. Though it's possible to isolate and unit test its ViewModel, it's not quite set up to make this easy. For more details on how other React-based frameworks compare, read [this](LINK).
+In React, there is no observable data layer. You could define a fullName like we showed above, but it would be recomputed every time render is called, whether or not it has changed. Though it's possible to isolate and unit test its ViewModel, it's not quite set up to make this easy. For more details on how other React-based frameworks compare, read [this](./comparison.html).
 
 ## ViewModels
 
@@ -311,6 +329,10 @@ CanJS applications employ a [Model-View-ViewModel](https://en.wikipedia.org/wiki
 
 <img src="../../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
 
+The following video introduces MVVM in CanJS, focusing on the strength of the ViewModel with an example. (Note: the syntax used in this video shows CanJS 2.3, which has some slight differences from 3.0, but the concepts are the same).
+
+VIDEO
+
 ### MVVM overview
 
 **Models** in CanJS are responsible for loading data from the server. They can be reused across ViewModels. They often perform data validation and sanitization logic. Their main function is to represent data sent back from a server. Models use intelligent set logic that enables real time integration and caching techniques.
@@ -325,7 +347,9 @@ CanJS applications are composed from hierarchical components, each containing th
 
 The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
 
-Hierarchical State Machines (HSMs) is one way to describe this concept. UML diagrams allow for modeling of [hierarchically nested states](https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states), such as those in CanJS applications. Check out the [ATM guide](LINK) for an example of a hierarchical state machine implemented using hierarchical ViewModels.
+IMAGE: show a diagram of several components and their ViewModel properties
+
+Hierarchical State Machines (HSMs) is one way to describe this concept. UML diagrams allow for modeling of [hierarchically nested states](https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states), such as those in CanJS applications. Check out the [ATM guide](../../guides/atm.html) for an example of a hierarchical state machine implemented using hierarchical ViewModels.
 
 React, and other competing frameworks, have a big global state object that contains the application’s state. The problem with this approach, at least in any application with even moderate complexity, is that this monolithic layer becomes a dependency of every component in the application. This creates additional downstream problems:
 
@@ -397,7 +421,7 @@ For example, there may be a template that looks like this:
 <div>{{firstName}}</div>
 ```
 
-Initially, if person is an observable like ``{firstName: ‘Mila’}``, then the DOM would render like:
+Initially, if person is an observable like `{firstName: ‘Mila’}`, then the DOM would render like:
 
 ```
 <div>Mila</div>
@@ -535,7 +559,7 @@ Custom HTML elements are one aspect of [Web Components](http://webcomponents.org
 
 #### Defining a custom element
 
-[can.Component](http://canjs.com/docs/can.Component.html) is a modern take on web components.
+[can-component](../../can-component.html) is a modern take on web components.
 
 Components in CanJS have three basic building blocks:
 
@@ -678,7 +702,49 @@ todosStache([{name: "dishes"}]) //-> <documentFragment>
 
 When the build is run, this import statement will tell StealJS that "todos.stache" is a dependency, and will include it in the minification like any other script dependencies in the application.
 
+### In-template dependency declarations
+
+[can-view-import](../../can-view-import.html) is a feature that allows templates to be entirely self-sufficient. You can load custom elements, helpers, and other modules straight from a template file like:
+
+```
+<can-import from="components/my_tabs"/>
+<can-import from="helpers/prettyDate"/>
+<my-tabs>
+  <my-panel title="{{prettyDate start}}">...</my-panel>
+  <my-panel title="{{prettyDate end}}">...</my-panel>
+</my-tabs>
+```
+
+### Progressive Loading
+
+A template may load or conditionally load a module after the initial page load. `<can-import>` allows progressive loading by using an end tag.
+
+This feature, when used with [steal-stache](../../steal-stache.html), signals to the build that the enclosed section's dependencies should be dynamically loaded at runtime.
+
+```
+{{#eq location 'home'}}
+<can-import from="components/home">
+  <my-home/>
+</can-import>
+{{/eq}}
+{{#eq location 'away'}}
+<can-import from="components/chat">
+  <my-chat/>
+</can-import>
+{{/eq}}
+```
+
 ## Models
+
+### Typed data, but separate from connection info.
+
+### Parameter awareness
+
+[can-set](http://canjs.github.io/canjs/doc/can-set.html)
+
+### Real time
+
+### Instance and List stores
 
 ### Caching and minimal data requests
 
@@ -791,3 +857,14 @@ can.Component.extend({
 The model layer seamlesslly integrates the inline cache in client side requests, without any special configuration.
 
 While this flow would be possible in other SSR systems, it would require manually setting up all of these steps.
+This video illustrates how it works.
+
+### Works with related data
+
+[can-connect/can/ref/ref](http://canjs.github.io/canjs/doc/can-connect/can/ref/ref.html)
+
+### Web worker
+
+## Server Side Rendering
+
+can-simple-dom and can-zone
