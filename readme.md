@@ -1,4 +1,4 @@
-## [CanJS](https://canjs.com/)
+# [CanJS](https://canjs.com/)
  
  [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
