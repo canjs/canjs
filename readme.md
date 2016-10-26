@@ -1,4 +1,4 @@
-## [![CanJS](http://bitovi.com/img/os-canjs-logo.png)](http://canjs.com/)
+## [![CanJS](https://rawgit.com/canjs/canjs/master/docs/images/canjs_logo.svg)](http://canjs.com/)
  
  [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
