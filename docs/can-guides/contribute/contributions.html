@@ -1,0 +1,47 @@
+
+
+<p></p>
+
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+	var $ = require("jquery");
+
+	var cached = JSON.parse( localStorage.getItem("cachedContributions") ) || {};
+	var total = 0;
+
+	$.getJSON(System.baseURL+"package.json").then(function(packageJSON){
+		//var projects =
+		var current = $.Deferred().resolve();
+		Object.keys(packageJSON.dependencies).concat("canjs").map(function(name){
+			if(cached[name]) {
+				total += cached[name];
+				console.log(name, cached[name], total);
+			} else {
+				current = current.then(function(){
+					return  $.ajax({
+				        url: "https://api.github.com/repos/canjs/"+ name +"/stats/participation"
+				    }).then(function(resp){
+
+						var sum = resp.all.reduce(function(prev, cur){
+							return prev + cur;
+						}, 0)
+						console.log(name, sum, total);
+						cached[name] = sum;
+						total += cached[name];
+						localStorage.setItem("cachedContributions", JSON.stringify(cached) )
+					}, function(){
+						debugger;
+					});
+				})
+			}
+
+
+
+
+		}) ;
+
+
+	});
+
+	/**/
+
+</script>
