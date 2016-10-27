@@ -73,8 +73,7 @@
     "can-view-parser": "3.0.0",
     "can-view-scope": "3.0.0",
     "can-view-target": "3.0.0",
-    "can-zone": "0.5.9",
-    "socket.io-client": "^1.5.1"
+    "can-zone": "0.5.9"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
@@ -85,6 +84,7 @@
     "grunt-saucelabs": "^9.0.0",
     "jquery": "^2.2.3",
     "jquery-ui": "^1.12.0",
+    "socket.io-client": "^1.5.1",
     "steal": "^0.16.4",
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.0-pre.1",
