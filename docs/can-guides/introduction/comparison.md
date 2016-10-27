@@ -406,6 +406,22 @@ A Dependency Injection system may have a place in other languages, like Java, bu
 
 *See the above code example, and realize that `FriendService`, may in some instances not actually be used in the `FriendComponent`, if some parent module defines a different provider for `FriendComponent`*
 
+### Steep Learning curve
+Angular is known for it's steep learning curve, and Angular 2 doesn't really break that reputation.
+
+There are a whole lot of new things a developer must learn to become effective with
+Angular 2. You've got to learn the TypeScript syntax, all the examples are written
+in it so You're going to have trouble if you skip this step. The Dependency Injection
+system is so ingrained, you must learn early how it works, and the syntax involved
+just to get going. There is the templating system, the decorators/annotations, a
+[wealth of API's and modules](https://angular.io/docs/js/latest/api/), and the kicker
+of it all is, because of the "all-or-nothing" nature of Angular 2, you have to learn a
+whole lot of it, just to get started.
+
+CanJS also has many different modules and API's to learn, but because of CanJS' modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
+
+If your team needs to get started quickly, and hit the ground running, Angular 2 may not be the best choice, but CanJS just might be the right fit for your team.
+
 ### Data Fetching and Real-time Data
 
 **[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
