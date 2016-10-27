@@ -1,17 +1,29 @@
 <style type="text/css">
-	
+	ul {
+		padding: 0;
+	}
+	li {
+		margin: 5px 0;
+		border: solid 1px lightgray;
+		padding: 3px 10px;
+	}
+	li span {
+		font-size: small;
+		color: gray;
+		display: block;
+	}
 </style>
 
 <div id="demo-html">
 <div id="out"></div>
 <script id="app" type="text/stache">
-	<input type="text" {($value)}="newMessage" />
-	<button ($click)="send()">Send</button>
-	<ul>
-		{{#each messages}}
-			<li>{{text}} <span>sent on {{date}}</span></li>
-		{{/each}}
-	</ul>
+  <input type="text" {($value)}="newMessage" />
+  <button ($click)="send()">Send</button>
+  <ul>
+    {{#each messages}}
+      <li>{{text}} <span>sent on {{date}}</span></li>
+    {{/each}}
+  </ul>
 </script>
 </div>
 
@@ -25,7 +37,7 @@ var canBatch = require("can-event/batch/batch");
 var io = require("socket.io-client");
 var fixtureSocket = require("can-fixture-socket");
 
-// Mock server:
+// Mock socket.io server:
 var mockServer = new fixtureSocket.Server(io);
 mockServer.on("new message", function(data, ackCb){
 	data.date = new Date();
@@ -42,7 +54,7 @@ var frag = stache(template)(new DefineMap({
 	send: function(){
 		var self = this;
 		sendMessage(this.newMessage).then(function(message){
-			self.messages.push(message);
+			self.messages.unshift(message);
 		});
 		this.newMessage = "";
 	}
