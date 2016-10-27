@@ -1,0 +1,64 @@
+<style type="text/css">
+	
+</style>
+
+<div id="demo-html">
+<div id="out"></div>
+<script id="app" type="text/stache">
+	<input type="text" {($value)}="newMessage" />
+	<button ($click)="send()">Send</button>
+	<ul>
+		{{#each messages}}
+			<li>{{text}} <span>sent on {{date}}</span></li>
+		{{/each}}
+	</ul>
+</script>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
+var Component = require("can-component");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var canViewModel = require("can-view-model");
+var canBatch = require("can-event/batch/batch");
+var io = require("socket.io-client");
+var fixtureSocket = require("can-fixture-socket");
+
+// Mock server:
+var mockServer = new fixtureSocket.Server(io);
+mockServer.on("new message", function(data, ackCb){
+	data.date = new Date();
+	ackCb(null, data);
+});
+
+// Client application:
+var socket = io("localhost");
+
+var template = document.getElementById("app").innerHTML;
+var frag = stache(template)(new DefineMap({
+	newMessage: '',
+	messages: new DefineList([]),
+	send: function(){
+		var self = this;
+		sendMessage(this.newMessage).then(function(message){
+			self.messages.push(message);
+		});
+		this.newMessage = "";
+	}
+}));
+
+function sendMessage(message){
+	return new Promise(function(resolve, reject){
+		socket.emit("new message", {text: message}, function(err, data){
+			if (err){
+				reject(err);
+			} else {
+				resolve(data);
+			}
+		});
+	});
+}
+
+document.getElementById("out").appendChild(frag);
+</script>
