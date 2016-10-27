@@ -8,8 +8,9 @@ JavaScript architectural libraries that balances
 innovation and stability.  
 
 CanJS targets experienced developers building complex applications
-with long futures ahead of them. Read more about CanJS's [mission and goals](doc/guides/what-is-canjs)
-and [why you should give it a try](doc/guides/why-canjs.html).
+with long futures ahead of them. Read more about CanJS's [guides/what-is-canjs mission and goals]
+and [guides/why-canjs why you should give it a try].
+
 
 <img src="docs/images/tortoise.png"/>
 
