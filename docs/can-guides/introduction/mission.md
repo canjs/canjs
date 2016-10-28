@@ -4,22 +4,22 @@
 
 @body
 
+The constantly changing JavaScript ecosystem has made it hard for developers and their apps to keep up.
+
+You shouldn't have to rewrite your application to keep pace with technology.
+
+The CanJS mission is to help developers transcend the changing technology landscape.
+
 CanJS’ intended audience is experienced developers building complex
 applications, which they intend to live for a long time.
 
-Our guiding principle is:
-
-> You shouldn't have to rewrite your application to keep pace with technology.
-
-That means new ideas and evolving best practices will consistently be
-integrated with CanJS libraries, but in a responsible way that makes it easy to
-upgrade gracefully.
-
-The JavaScript ecosystem is a constantly changing hellscape. We aim to provide
-a stable platform to block out that noise, so you can focus on your app, not
-the tools. [More on this here](./mission).
+We aim to provide a stable platform so those developers can block out noise and stay focused on their app, not the tools.
 
 [//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
+
+New ideas and evolving best practices will consistently be
+integrated with CanJS libraries, but in a responsible way that makes it easy to
+upgrade gracefully.
 
 ## The current tooling ecosystem
 
