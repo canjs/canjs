@@ -4,8 +4,6 @@
 
 @body
 
-## Our Mission
-
 CanJS’ intended audience is experienced developers building complex
 applications, which they intend to live for a long time.
 
@@ -19,7 +17,7 @@ upgrade gracefully.
 
 The JavaScript ecosystem is a constantly changing hellscape. We aim to provide
 a stable platform to block out that noise, so you can focus on your app, not
-the tools. [More on this here](why-canjs/business-advantages).
+the tools. [More on this here](./mission).
 
 [//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
 
