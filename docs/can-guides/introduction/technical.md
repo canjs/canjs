@@ -1,5 +1,5 @@
 @page guides/why-canjs/technical Technical Highlights
-@parent guides/why-canjs 2
+@parent guides/introduction 3
 @disableTableOfContents
 
 @body
