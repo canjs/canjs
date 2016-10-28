@@ -1,4 +1,4 @@
-@page guides/why-canjs/mission Mission
+@page guides/mission Mission
 @parent guides/introduction 2
 @disableTableOfContents
 

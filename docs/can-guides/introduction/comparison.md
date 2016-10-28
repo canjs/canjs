@@ -1,4 +1,4 @@
-@page guides/why-canjs/comparison Comparison to Other Frameworks
+@page guides/comparison Comparison to Other Frameworks
 @parent guides/introduction 4
 @disableTableOfContents
 
