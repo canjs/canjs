@@ -6,17 +6,85 @@
 
 CanJS is a JavaScript MVVM library, with browser support all the way back to IE9.
 
-## Size to features ratio
+While CanJS does a lot of things, there are several features that stand apart.
 
-The core of CanJS, gzipped, is under 50KB. While there may be smaller architectural libraries, there aren’t competitors that rival CanJS that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.
+### 1. Computes
 
-jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
+Computes are like event streams, but much easier to compose and friendlier to use, because they always have a synchronous value.
 
-Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
+They can be used for observable values:
 
-React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
+```javascript
+var tally = compute(12);
+tally(); // 12
 
-The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped
+tally.on("change",function(ev, newVal, oldVal){
+    console.log(newVal,oldVal)
+})
+```
+
+Or an observable value that derives its value from other observables. 
+
+```javascript
+var person = new Person({
+    firstName: 'Alice',
+    lastName: 'Liddell'
+});
+
+var fullName = compute(function() {
+    return person.firstName + ' ' + person.lastName;
+});
+
+fullName.on('change', function(ev, newVal, oldVal) {
+        console.log("This person's full name is now " + newVal + '.');
+});
+
+person.firstName = 'Allison'; // The log reads:
+//-> "This person's full name is now Allison Liddell."
+```
+
+### 2. Observable maps and lists
+
+Object-oriented observables that mix in functional behavior, compose state naturally, and are easy to test. These objects and arrays provide the backbone of a strong ViewModel layer and the glue for data binding templates.
+
+```javascript
+var Person = DefineMap.extend(
+  {
+    first: "string",
+    last: {type: "string"},
+    fullName: {
+      get: function(){
+        return this.first+" "+this.last;
+      }
+    },
+    age: {value: 0},
+  });
+
+var me = new Person({first: "Justin", last: "Meyer"})
+me.fullName //-> "Justin Meyer"
+me.age      //-> 0
+```
+
+### 3. Models
+
+On the surface, encapsulates the data layer and connects to the backend. Behind the surface, a collection of opt-in behaviors provide complex optimizations.
+
+ - [Automatic real-time support](../../can-connect/real-time/real-time.html): Live updates to sets of data that includes or excludes instances based on set logic.
+ - Opt-in performance optimizations: [Fallthrough caching](../../can-connect/fall-through-cache/fall-through-cache.html), [request combination](../../can-connect/data/combine-requests/combine-requests.html), [localstorage](../../can-connect/data/localstorage-cache/localstorage-cache.html) and [in-memory](../../can-connect/data/memory-cache/memory-cache.html) data cache
+ - [Prevents memory leaks](../../can-connect/constructor/store/store.html): reference counting and removal of unused instances
+
+```javascript
+var todoConnection = superMap({
+  idProp: "_id",
+  Map: Todo,
+  List: TodoList,
+  url: "/services/todos",
+  name: "todo"
+});
+Todo.getList({}).then(function(todos){ ... });
+```
+
+CanJS has a lot of features. This page will dive into details on the best ones and why they’re valuable to developers.
 
 ## Modularity
 
@@ -28,6 +96,20 @@ However, that’s not the main benefit modularity provides to users.
 
 Why is this important? It makes it easy to balance stability and innovation.
 
+For users that have an existing application, this modularity means they can leave functional parts of their application code alone, forever, while using new CanJS features and modules in future new areas of the application.
+
+### Adopt new framework features without any upgrade effort or library bloat
+
+As new modules are released, containing yet unknown better ways to build applications (i.e. a better template engine or a new model layer), you can incorporate them, without replacing the existing modules. And they’ll share the same lower level dependencies.
+
+For example, say an entire application is built with CanJS 3.0. The following year, the developer is tasked with adding a new feature. At that point, a new templating engine called Beard has been released, with a new set of features superior to Stache. The developer can simply leave the remainder of the application using CanJS 3.0 (can-stache), and import can-beard in the new area of the application. It will likely still share the same lower level dependencies, since those are less likely to change very often, so this adds an insignificant amount of code weight.
+
+[//]: # (IMAGE: show application component blocks using 3.0 and stache, with new area using can-beard, but sharing same low level dependencies)
+
+Angular 1.x to 2.0 is a good counterexample to this approach. The recommended upgrade strategy was to either rewrite your application with 2.0 (a lot of extra work) or load your page with 1.X and 2.0, two full versions of the framework (a lot of code weight). Neither is preferable.
+
+With the modularity described in CanJS, applications can import multiple versions of the high level APIs while avoiding the work of rewriting with future syntaxes and the extra code weight of importing two full frameworks.
+
 ### Faster, more stable framework releases
 
 Because CanJS’ pieces can push out updates independently, small bug fixes and performance enhancements can be released immediately, with much lower risk. For example, if a bug is observed and fixed in can-compute, a new version of can-compute will be pushed out that day, as soon as tests pass.
@@ -36,25 +118,7 @@ By contrast, with the typical all-in-one structure, there will usually be a much
 
 It’s similar to the difference between making plans with your best friend vs 10 of your friends. The larger group is going to move much more slowly because there are many more pieces to coordinate.
 
-### Adopt new framework features without any upgrade effort or library bloat
-
-For users that have an existing application, this modularity means they can leave their application and all it’s dependencies alone, forever, while using new features and parts of the library in other areas of the application.
-
-For example, say an entire application is built with CanJS 3.0. The following year, the developer is tasked with adding a new feature. At that point, can-component 4.0 is out with a new set of features. The developer can simply leave the remainder of the application using CanJS 3.0 (including can-component 3.0), and import can-component 4.0 in the new area of the application. It will likely still share the same lower level dependencies, since those are less likely to change very often, so this adds an insignificant amount of code weight.
-
-IMAGE: show application component blocks using 3.0, with new area using can-component 4.0, but sharing same low level dependencies
-
-Angular 1.x to 2.0 is a good counterexample to this approach. The recommended upgrade strategy was to either rewrite your application with 2.0 (a lot of extra work) or load your page with 1.X and 2.0, two full versions of the framework (a lot of code weight). Neither is preferable.
-
-With the modularity described in CanJS, applications can import multiple versions of the high level APIs while avoiding the work of rewriting with future syntaxes and the extra code weight of importing two full frameworks.
-
 ## Observables
-* We have super sweet observable stuff … can-compute, and map and list
-
-    * One for deriving data … kinda like an event stream .. but far easier in most cases
-
-    * The other for make OOP great again. DECLARATIVE but makes nice APIs
-
 
 ### What are they
 
@@ -88,25 +152,25 @@ Observables as a concept enable an important architectural advantage in large ap
 
 Say you have an application with three discrete components.
 
-IMAGE: app with 3 things
+[//]: # (IMAGE: app with 3 things)
 
 Without observables, you might have component A tell component B to update itself when something happens, like user input.
 
-IMAGE: arrows showing this happening
+[//]: # (IMAGE: arrows showing this happening)
 
 With observables, you would separate the state of your application into a separate layer, and each component would be able to change parts of the state it cares about and listen to parts of the state it needs. When the same user input occurs, component A would update the observable state object. Component B would be notified that a property of the observable state has changed, and update itself accordingly.
 
-IMAGE: show this happening
+[//]: # (IMAGE: show this happening)
 
 Why is this better? Because this allows each component to be untied from the rest. They each get passed the state they need, but are unaware of the rest of the components and their needs. The architecture diagram changes from this:
 
-IMAGE: arrows pointing at everything
+[//]: # (IMAGE: arrows pointing at everything)
 
 <img src="../../../docs/can-guides/images/introduction/no-observables.png" style="width:100%;max-width:750px" alt="Diagram of app without observables"/>
 
 To this:
 
-IMAGE: state is in the middle
+[//]: # (IMAGE: state is in the middle)
 
 <img src="../../../docs/can-guides/images/introduction/with-observables.png" style="width:100%;max-width:750px" alt="Diagram of app using observables"/>
 
@@ -331,7 +395,7 @@ CanJS applications employ a [Model-View-ViewModel](https://en.wikipedia.org/wiki
 
 The following video introduces MVVM in CanJS, focusing on the strength of the ViewModel with an example. (Note: the syntax used in this video shows CanJS 2.3, which has some slight differences from 3.0, but the concepts are the same).
 
-VIDEO
+[//]: # (VIDEO)
 
 ### MVVM overview
 
@@ -347,7 +411,7 @@ CanJS applications are composed from hierarchical components, each containing th
 
 The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
 
-IMAGE: show a diagram of several components and their ViewModel properties
+[//]: # (IMAGE: show a diagram of several components and their ViewModel properties)
 
 Hierarchical State Machines (HSMs) is one way to describe this concept. UML diagrams allow for modeling of [hierarchically nested states](https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states), such as those in CanJS applications. Check out the [ATM guide](../../guides/atm.html) for an example of a hierarchical state machine implemented using hierarchical ViewModels.
 
@@ -868,3 +932,15 @@ This video illustrates how it works.
 ## Server Side Rendering
 
 can-simple-dom and can-zone
+
+## Size to features ratio
+
+The core of CanJS, gzipped, is under 50KB. While there may be smaller architectural libraries, there aren’t competitors that rival CanJS that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.
+
+jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
+
+Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
+
+React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
+
+The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped
