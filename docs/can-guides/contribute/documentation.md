@@ -8,7 +8,7 @@
 ## Overview
 
 The CanJS site is generated with [bit-docs](https://github.com/bit-docs/bit-docs),
-a modified version of [DocumentJS](http://documentjs.com).  It's
+a modified version of [DocumentJS](http://documentjs.com).  Its
 content is hosted using Github pages publishing the [canjs/canjs#gh-pages](https://github.com/canjs/canjs/tree/gh-pages) repo.
 
 `bit-docs` reads JavaScript comments and markdown files within the `canjs` repo as well as
@@ -22,7 +22,7 @@ JavaScript files used to produce their API pages.
 
 To generate the CanJS site:
 
-1. Clone [https://github.com/canjs/canjs](canjs/canjs)
+1. Clone [https://github.com/canjs/canjs](https://github.com/canjs/canjs)
 
    ```
    > git clone git@github.com:canjs/canjs
@@ -41,7 +41,7 @@ To generate the CanJS site:
    ```
 
 This should produce a static site in your `canjs` folder.  Open `canjs/index.html`
-and you should see the site.  You might want to use `http-server` to start
+and you should see the site.  You might want to use [http-server](https://www.npmjs.com/package/http-server) to start
 a simple static file server.
 
 ## Improve the theme's design and styles
@@ -160,7 +160,7 @@ parameters.
 
 ### body
 
-Most body sections start with an `## Use`.  They should be a mini guide on
+Most body sections start with a `## Use` subsection.  This is a mini guide on
 how to use that piece of code.  Modules should have long bodies that span
 multiple topics.  For example [can-component]'s body has examples and
 information about nearly all of its sub-functions.  However
