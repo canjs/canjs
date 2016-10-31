@@ -52,7 +52,7 @@
     "can-map-backup": "3.0.0",
     "can-map-define": "3.0.0",
     "can-observation": "3.0.1",
-    "can-route": "3.0.1",
+    "can-route": "3.0.2",
     "can-route-pushstate": "3.0.0",
     "can-set": "1.0.1",
     "can-simple-dom": "1.0.2",
