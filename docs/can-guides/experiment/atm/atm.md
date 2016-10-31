@@ -466,4 +466,4 @@ When complete, you have a working ATM!  Cha-ching!
 
 
 
-<script src="http://static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>

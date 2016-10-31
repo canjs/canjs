@@ -370,8 +370,8 @@ awesome!
 
 When finished, you should see something like the following JSBin:
 
-<a class="jsbin-embed" href="http://jsbin.com/mopiyu/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/mopiyu/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 
 
-<script src="http://static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>

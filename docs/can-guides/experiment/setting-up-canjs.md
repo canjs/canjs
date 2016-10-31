@@ -28,7 +28,7 @@ ask on the [forums](http://forums.donejs.com/c/canjs) or [gitter chat](https://g
 
 Not yet committed to CanJS? Or just want to play around? Use one of these JSBins:
 
-<a class="jsbin-embed" href="http://jsbin.com/venaje/embed?html,js,output">JS Bin on jsbin.com</a><script src="http://static.jsbin.com/js/embed.min.js?3.35.5"></script>
+<a class="jsbin-embed" href="http://jsbin.com/venaje/embed?html,js,output">JS Bin on jsbin.com</a><script src="//static.jsbin.com/js/embed.min.js?3.35.5"></script>
 
   - [jQuery](http://justinbmeyer.jsbin.com/venaje/edit?html,js,output)
   - [Zepto](http://justinbmeyer.jsbin.com/veqola/edit?html,js,output)
