@@ -240,4 +240,4 @@ Get the code for: [chapter 0](/guides/examples/PlaceMyOrder/ch-0_canjs-getting-s
 <span class="pull-right">[Setup &rsaquo;](Setup.html)</span>
 
 </div>
-<script src="http://static.jsbin.com/js/embed.min.js?3.35.5"></script>
+<script src="//static.jsbin.com/js/embed.min.js?3.35.5"></script>
