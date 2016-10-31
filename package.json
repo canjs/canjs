@@ -72,7 +72,7 @@
     "can-view-nodelist": "3.0.0",
     "can-view-parser": "3.0.1",
     "can-view-scope": "3.0.0",
-    "can-view-target": "3.0.0",
+    "can-view-target": "3.0.1",
     "can-zone": "0.5.9"
   },
   "devDependencies": {
