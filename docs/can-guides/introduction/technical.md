@@ -166,13 +166,13 @@ Why is this better? Because this allows each component to be untied from the res
 
 [//]: # (IMAGE: arrows pointing at everything)
 
-<img src="../../../docs/can-guides/images/introduction/no-observables.png" style="width:100%;max-width:750px" alt="Diagram of app without observables"/>
+<img src="../../docs/can-guides/images/introduction/no-observables.png" style="width:100%;max-width:750px" alt="Diagram of app without observables"/>
 
 To this:
 
 [//]: # (IMAGE: state is in the middle)
 
-<img src="../../../docs/can-guides/images/introduction/with-observables.png" style="width:100%;max-width:750px" alt="Diagram of app using observables"/>
+<img src="../../docs/can-guides/images/introduction/with-observables.png" style="width:100%;max-width:750px" alt="Diagram of app using observables"/>
 
 Not only is this simpler to understand, these components are more easily testable and shareable, and changes are more contained are less risky to have unwanted side effects. All of these advantages are possible because of observables.
 
@@ -391,7 +391,7 @@ In other frameworks, ViewModels don't enjoy this level of independence. Every Re
 
 CanJS applications employ a [Model-View-ViewModel](https://en.wikipedia.org/wiki/Model_View_ViewModel) architecture pattern.
 
-<img src="../../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
+<img src="../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
 
 The following video introduces MVVM in CanJS, focusing on the strength of the ViewModel with an example. (Note: the syntax used in this video shows CanJS 2.3, which has some slight differences from 3.0, but the concepts are the same).
 
@@ -737,13 +737,13 @@ In React and other virtual DOM libraries, that would result in the virtual DOM b
 
 Stache, by comparison, performs less logic than Virtual DOMs would require in order to update the DOM in the most minimal way necessary because the virtual DOM comparison step is not necessary, which is visible in the following benchmark that tests the time needed to update the DOM when a single property changes:
 
-<img src="../../../docs/can-guides/images/introduction/dom-updates.png" style="width:100%;max-width:750px" />
+<img src="../../docs/can-guides/images/introduction/dom-updates.png" style="width:100%;max-width:750px" />
 
 You can run this test yourself at [JS Bin](http://output.jsbin.com/giyobi/1)
 
 This performance gap is more visible when rendering a large number of items in the page:
 
-<img src="../../../docs/can-guides/images/introduction/rendering-performance.png" style="width:100%;max-width:750px" />
+<img src="../../docs/can-guides/images/introduction/rendering-performance.png" style="width:100%;max-width:750px" />
 
 *For a small set of todos the difference is negligible but as the number increases the gap widens to the point where React is 6 times slower than Stache when rendering 1000 todos.*
 
