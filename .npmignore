@@ -11,4 +11,3 @@ docco
 test/
 build/
 guides/
-!dist/
