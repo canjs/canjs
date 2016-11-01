@@ -36,7 +36,7 @@
   "dependencies": {
     "can-component": "3.0.2",
     "can-compute": "3.0.1",
-    "can-connect": "1.0.5",
+    "can-connect": "1.0.6",
     "can-construct": "3.0.1",
     "can-construct-super": "3.0.0",
     "can-control": "3.0.2",
@@ -60,7 +60,7 @@
     "can-stache": "3.0.2",
     "can-stache-bindings": "3.0.1",
     "can-stache-converters": "3.0.3",
-    "can-stream": "0.0.4",
+    "can-stream": "0.0.5",
     "can-util": "3.0.4",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.0",
@@ -73,7 +73,7 @@
     "can-view-parser": "3.0.1",
     "can-view-scope": "3.0.0",
     "can-view-target": "3.0.1",
-    "can-zone": "0.5.9"
+    "can-zone": "0.6.0"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
@@ -117,7 +117,7 @@
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.3.0",
-      "bit-docs-html-canjs": "^0.4.4",
+      "bit-docs-html-canjs": "^0.4.5",
       "bit-docs-prettify": "^0.1.0",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",
