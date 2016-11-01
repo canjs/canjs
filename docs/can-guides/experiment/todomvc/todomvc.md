@@ -12,13 +12,13 @@ and [can-fixture]. It takes about 1 hour to complete.
 The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/sasuje/10/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/sasuje/11/embed?html,output">JS Bin on jsbin.com</a>
 
 The JSBin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JSBin also loads [can.all.js](https://github.com/canjs/canjs/blob/<%canjs.package.version%>/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JSBin also loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which is a script that includes CanJS all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global can script and instead
@@ -386,6 +386,6 @@ delete the completed todos.  You should also have a really good idea how CanJS w
 
 When finished, you should see something like the following JSBin:
 
-<a class="jsbin-embed" href="http://jsbin.com/hokiha/1/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/labajog/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.39.15"></script>
