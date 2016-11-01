@@ -1,8 +1,27 @@
-@page guides/why-canjs/business-advantages Business Advantages
-@parent guides/why-canjs 1
+@page guides/mission Mission
+@parent guides/introduction 2
 @disableTableOfContents
 
 @body
+
+The constantly changing JavaScript ecosystem has made it hard for developers and their apps to keep up.
+
+You shouldn't have to rewrite your application to keep pace with technology.
+
+The CanJS mission is to help developers transcend the changing technology landscape.
+
+CanJS’ intended audience is experienced developers building complex
+applications, which they intend to live for a long time.
+
+We aim to provide a stable platform so those developers can block out noise and stay focused on their app, not the tools.
+
+[//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
+
+New ideas and evolving best practices will consistently be
+integrated with CanJS libraries, but in a responsible way that makes it easy to
+upgrade gracefully.
+
+## The current tooling ecosystem
 
 You may be familiar with the
 [never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
@@ -91,7 +110,7 @@ We use [semantic versioning](https://www.sitepoint.com/semantic-versioning-why-y
 
 For major version upgrades, such as 3.0, we provide an easy path to upgrade. For example, if you are an existing CanJS user using version 2.x looking to upgrade to the current version (3.0), there are three options, which all exist on a spectrum, each providing a tradeoff between work now and work later.
 
-MIGRATION GRAPHIC
+[//]: # (MIGRATION GRAPHIC)
 
 <table>
   <tr>
