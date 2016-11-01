@@ -11,7 +11,7 @@
 
 The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
 
-<a class="jsbin-embed" href="http://jsbin.com/fezewi/3/edit?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
 
 The JSBin loads [http://getbootstrap.com/ Bootstrap] for its styles. And [http://socket.io/ socket.io] for a socket
 library.  It will be connecting to a restful and real-time service layer at [http://chat.donejs.com/api/messages].
@@ -370,7 +370,7 @@ awesome!
 
 When finished, you should see something like the following JSBin:
 
-<a class="jsbin-embed" href="//jsbin.com/mopiyu/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/mopiyu/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 
 

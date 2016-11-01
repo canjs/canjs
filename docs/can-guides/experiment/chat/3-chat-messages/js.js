@@ -23,7 +23,7 @@ var AppVM = can.DefineMap.extend({
 var appVM = new AppVM();
 
 can.route.data = appVM;
-can.route(":page",{page: "home"});
+can.route("{page}",{page: "home"});
 can.route.ready();
 
 var template = can.stache.from('chat-template');
