@@ -45,7 +45,7 @@
     "can-ejs": "3.0.0",
     "can-event": "3.0.1",
     "can-fixture": "1.0.2",
-    "can-fixture-socket": "^0.5.5",
+    "can-fixture-socket": "^0.5.7",
     "can-jquery": "3.0.2",
     "can-list": "3.0.0",
     "can-map": "3.0.2",
