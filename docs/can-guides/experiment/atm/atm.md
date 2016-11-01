@@ -11,7 +11,7 @@ and manage complex state.  It takes about 2 hours to complete.
 
 Checkout the final app:
 
-<a class="jsbin-embed" href="http://jsbin.com/yayupo/9/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/yayupo/10/embed?js,output">JS Bin on jsbin.com</a>
 
 Notice it has tests at the bottom of the `Output` tab.
 
@@ -23,7 +23,7 @@ Watch the following video to see it in action:
 
 The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/meziyu/2/edit?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
 
 The JSBin is designed to run both the application and its tests in the `OUTPUT`
 tab.  To set this up, the `HTML` tab:
@@ -31,7 +31,7 @@ tab.  To set this up, the `HTML` tab:
  - Loads QUnit for its testing library.  It also includes the `<div id="qunit"></div>`
    element where QUnit's test results will be written to.
 
- - Loads [can.all.js](https://github.com/canjs/canjs/blob/v3.0.0-pre.12/dist/global/can.js), which
+ - Loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which
    is a script that includes all of CanJS core under a single global `can` namespace.
 
    Generally speaking, you should not use the global can script and instead
