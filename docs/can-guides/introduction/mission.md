@@ -27,7 +27,7 @@ You may be familiar with the
 [never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
 that take our community by storm:
 
-<img src="../../../docs/can-guides/images/introduction/frameworks.jpg" style="width:100%;max-width:750px"/>
+<img src="../../docs/can-guides/images/introduction/frameworks.jpg" style="width:100%;max-width:750px"/>
 
 If [chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby) isn’t for you, CanJS is the right framework for you.
 
@@ -39,7 +39,7 @@ Technology changes quickly, but applications last a long time.
 
 From inception, a successful application (like Gmail) aims to last at least 5 years.
 
-<img src="../../../docs/can-guides/images/introduction/app-longevity.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/app-longevity.png" style="width:100%;max-width:650px"/>
 
 With a 1-2 year average turnover in the JavaScript framework game of thrones and a 5 year application lifespan, it’s safe to say that choosing frameworks based on popularity is not a good idea.
 
@@ -63,19 +63,19 @@ Had you chosen CanJS during any of the past 4 years (actually any year since 200
 
 Productivity-wise, making any other choice over the past 4 years would end up looking either like this:
 
-<img src="../../../docs/can-guides/images/introduction/betting-bomb.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/betting-bomb.png" style="width:100%;max-width:650px"/>
 
 Or like this:
 
-<img src="../../../docs/can-guides/images/introduction/betting-bomb-2.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/betting-bomb-2.png" style="width:100%;max-width:650px"/>
 
 But choosing CanJS would have looked like this:
 
-<img src="../../../docs/can-guides/images/introduction/good-bet.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/good-bet.png" style="width:100%;max-width:650px"/>
 
 Or more specifically, here’s what our major release schedule has looked like:
 
-<img src="../../../docs/can-guides/images/introduction/best-bet.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/best-bet.png" style="width:100%;max-width:650px"/>
 
 Notice the consistent 6 to 9 month release cadence.
 
@@ -146,7 +146,7 @@ If you’re not yet convinced why balancing innovation and stability makes CanJS
 
 There’s no advantage to choosing projects maintained by a big company, since they often kill platforms that many developers have invested in.
 
-<img src="../../../docs/can-guides/images/introduction/framework-death.png" style="width:100%;max-width:650px"/>
+<img src="../../docs/can-guides/images/introduction/framework-death.png" style="width:100%;max-width:650px"/>
 
 There’s no advantage to choosing a framework with a large community, since communities are fickle and change yearly.
 

@@ -203,7 +203,7 @@ Encapsulation is one way to simplify your applications. By encapsulating modules
 
 These layers have a simple and inverse API, the Store layer takes actions and returns state, the View layer takes in state and returns actions (as the user takes action on the UI).
 
-<img src="../../../docs/can-guides/images/introduction/redux-flow.png" style="width:100%;max-width:750px"/>
+<img src="../../docs/can-guides/images/introduction/redux-flow.png" style="width:100%;max-width:750px"/>
 
 ...and there are layers *within those layers*, like **action creators** and **redux-middleware**.
 
@@ -227,7 +227,7 @@ So in your **React-Redux** app, you would at minimum need to import:
 
 * 9 reducers
 
-<img src="../../../docs/can-guides/images/introduction/video-chat-react.png" style="width:100%;max-width:750px"/>
+<img src="../../docs/can-guides/images/introduction/video-chat-react.png" style="width:100%;max-width:750px"/>
 
 ...and wire them all together with code. The wiring up is not free, and though simple, may produce bugs and there is no guarantee the individual bits will work well together.
 
@@ -237,11 +237,11 @@ The individual parts of a component follow the MVVM pattern, and so are decouple
 
 Can-Components can then be used in parent can-component’s views, who can pass the child components attrs through the template bindings, and the whole app can be composed as a tree of components and HTML elements, each acting as little apps themselves.
 
-<img src="../../../docs/can-guides/images/introduction/canjs-flow.png" style="width:100%;max-width:750px"/>
+<img src="../../docs/can-guides/images/introduction/canjs-flow.png" style="width:100%;max-width:750px"/>
 
 To continue with the **Video-Chat** example above, sharing a video-chat component from one **CanJS** app to another would be far more straightforward. You would only have to import the 1 video chat component, and the only wiring necessary would be to pass in a list of Users to the video-component attrs.
 
-<img src="../../../docs/can-guides/images/introduction/video-chat-canjs.png" style="width:100%;max-width:750px"/>
+<img src="../../docs/can-guides/images/introduction/video-chat-canjs.png" style="width:100%;max-width:750px"/>
 
 Encapsulated modules, like **can-components**, have many advantages over monolithic layers, like the layers provided by **react-redux**.
 
