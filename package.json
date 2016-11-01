@@ -8,7 +8,7 @@
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
     "testee": "testee test/index.html --browsers firefox",
     "test": "npm run build && npm run testee",
-    "ci": "npm run build && grunt && node test-ios-safari.js",
+    "ci": "npm run build && node test-ios-safari.js && grunt",
     "release:pre": "npm version prerelease && npm run build && npm publish",
     "release:patch": "npm version patch && npm run build && npm publish",
     "release:minor": "npm version minor && npm run build && npm publish",
