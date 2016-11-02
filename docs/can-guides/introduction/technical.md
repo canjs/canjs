@@ -1,5 +1,5 @@
 @page guides/technical Technical Highlights
-@parent guides/introduction 3
+@parent guides/introduction 4
 @disableTableOfContents
 
 @body
@@ -930,6 +930,12 @@ This video illustrates how it works.
 ### Web worker
 
 ## Server Side Rendering
+
+CanJS applications are able to be rendered on the server by running the same code. This is known as [Isomorphic JavaScript](http://isomorphic.net/javascript) or [Universal JavaScript](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
+
+Server-side rendering (SSR) provides two main benefits over traditional single page apps: better page load performance and SEO support.
+
+CanJS makes it pretty easy to 
 
 can-simple-dom and can-zone
 

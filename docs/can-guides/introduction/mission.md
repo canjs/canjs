@@ -1,5 +1,5 @@
 @page guides/mission Mission
-@parent guides/introduction 2
+@parent guides/introduction 3
 @disableTableOfContents
 
 @body
@@ -96,7 +96,9 @@ This timeline shows more examples:
 
 <iframe src="https://cdn.knightlab.com/libs/timeline/latest/embed/index.html?source=1lBdurIQbbJkTZ8_kCQaXZtFaD06ulMFAlkqyEmXH4k0&amp;font=Bevan-PotanoSans&amp;maptype=toner&amp;lang=en&amp;start_at_slide=3&amp;height=650&amp;start_zoom_adjust=-2" width="100%" height="650" style="max-width:800px" frameborder="0"></iframe>
 
-Client logos here
+CanJS can be discovered running some very large and popular sites:
+
+
 
 ## Balancing Stability and Innovation: Our Approach
 
@@ -144,7 +146,7 @@ The CanJS core team always tests release candidates against a suite of current p
 
 If you’re not yet convinced why balancing innovation and stability makes CanJS an excellent choice for businesses, consider this: all the modern frameworks have more or less converged in 2016. You can build a very similar application, with routing, observables, models, and server side rendering (with some exceptions) with Angular 2, several of the React frameworks, Ember, or CanJS. Therefore, the MOST important factor, even beyond small technical differences, is the longevity and stability of the framework. You want to bet on a horse that you can ride into the future, not the horse that looks prettiest today.
 
-There’s no advantage to choosing projects maintained by a big company, since they often kill platforms that many developers have invested in.
+There’s no advantage to choosing projects maintained by a big company, since big companies often kill platforms that many developers have invested in.
 
 <img src="../../docs/can-guides/images/introduction/framework-death.png" style="width:100%;max-width:650px"/>
 
