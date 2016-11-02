@@ -52,7 +52,10 @@ var platforms = [{
 	// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-MaximumTestDuration
 	maxDuration: 1800,// seconds, default 1800, max 10800
 	commandTimeout: 300,// seconds, default 300, max 600
-	idleTimeout: idleTimeout// seconds, default 90, max 1000
+	idleTimeout: idleTimeout,// seconds, default 90, max 1000
+
+	// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BuildNumbers
+	build: process.env.TRAVIS_JOB_ID
 }];
 
 // Main
