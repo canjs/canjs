@@ -91,7 +91,7 @@
     "saucelabs": "^1.3.0",
     "steal": "^0.16.4",
     "steal-qunit": "^0.1.1",
-    "steal-stache": "^3.0.0-pre.1",
+    "steal-stache": "^3.0.1",
     "steal-tools": "pre",
     "testee": "^0.2.5",
     "wd": "^1.0.0"
