@@ -34,6 +34,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
+    "authentication-popups": "0.0.5",
     "can-component": "3.0.2",
     "can-compute": "3.0.1",
     "can-connect": "1.0.6",
@@ -129,7 +130,7 @@
       "bit-docs-tag-package": "^0.0.3"
     },
     "glob": {
-      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
+      "pattern": "{node_modules,docs}/{can-*,steal-stache,authentication-popups}/**/*.{js,md}",
       "ignore": [
         "node_modules/can-wait/examples/**/*",
         "node_modules/can-*/dist/**/*"
