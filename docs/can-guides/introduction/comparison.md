@@ -11,7 +11,7 @@ Two of the most popular frameworks/libraries for building web applications are *
 
 ## React
 
-**React** is really just the [V in MVC](https://twitter.com/dan_abramov/status/790326092582252544) while **CanJS** is a full **MVVM** library, so it may feel like we’re comparing apples to bananas, but there are certain tradeoffs that can be explored when comparing **CanJS** to **React**
+**React** is really just the "V in MVC", while **CanJS** is a full **MVVM** library, so it may feel like we’re comparing apples to bananas, but there are certain tradeoffs that can be explored when comparing **CanJS** to **React**
 
 Because **React** is only a view layer, there has been a deluge of competing libraries, each trying to establish itself as the de facto state management library for your **React** app. Some of the more popular libraries right now include **Redux**, **MobX**, **Alt**, **Reflux** and, of course, Facebook’s own **Flux** library (an implementation of their Flux architecture). Even frameworks like **Angular 2** and **CanJS** are joining in and making "React friendly" implementations.
 
