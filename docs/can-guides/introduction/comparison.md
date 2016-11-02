@@ -189,6 +189,73 @@ Todo = (props) => {
 
 If the problem is losing track of what is changing the state, is the problem solved by adding more code, or is it better solved with a simpler abstraction and more succinct code?
 
+### DOM and Memory Leaks
+Sometimes you are not starting a brand new project, but rather you just want to incrementally add your new framework into your already existing app.
+
+**CanJS** makes working with other libraries seamless. You can just use [can-stache](../../can-stache.html) to add [can-components](../../can-components.html) custom elements into your page as needed, and since **CanJS** works with real DOM events and attributes, everything just works as expected.
+
+Even if you are using jQuery and jQuery plugins, [can-jquery](../../can-jquery.html) was specifically made so that jQuery events and DOM manipulations "just work" without any special code needed.
+
+```handlebars
+<div id="dialog-form" title="Create new user">
+  <!-- A CanJS user-form component thats view-model implements a submit method -->
+  <script type="text/stache" can-autorender>
+    <user-form />
+  </script>
+</div>
+<button id="create-user">Create new user</button>
+
+<script>
+dialog = $( "#dialog-form" ).dialog({
+  autoOpen: false,
+  modal: true,
+  buttons: {
+    "Create an account": () => can.viewModel( dialog.find( "user-form" ) ).submit(),
+    Cancel: () => {
+      dialog.dialog( "close" );
+    }
+  }
+});
+$( "#create-user" ).button().on( "click", function() {
+  dialog.dialog( "open" );
+});
+</script>
+```
+
+**React** replaces certain core aspects of the DOM, namely the event system and attributes, with it’s own “React version” of events and props. Because of this, **React** can have some frustrating “gotchas” when you try and integrate it with jQuery plugins or any other library that queries or manipulates the DOM.
+
+Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](http://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get's deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you'll have to hook up this call, into your current app lifecycle.
+
+```handlebars
+// DO NOT DO THIS, THIS CAUSES A MEMORY LEAK
+<div id="dialog-form" title="Create new user">
+  <div class="react-user-form-component"></div>
+</div>
+<button id="create-user">Create new user</button>
+
+<script>
+// This will leak memory
+ReactDOM.render( $('.react-user-form-component').get(0), UserFormComponent );
+dialog = $( "#dialog-form" ).dialog({
+  autoOpen: false,
+  modal: true,
+  buttons: {
+    "Create an account": dialog.find( "user-form" ).submit(),
+    Cancel: () => {
+      dialog.dialog( "close" );
+    }
+  }
+});
+$( "#create-user" ).button().on( "click", function() {
+  dialog.dialog( "open" );
+});
+</script>
+```
+
+Conversely **CanJS** is aware of it's own DOM removal, and will clean up any event handlers or bindings *automatically*.
+
+If you have existing legacy code, you'll probably want integrate your new framework progressively, a piece at a time, and it's important that things “just work”, without any surprises or frustrations.
+
 ### Encapsulation of Components
 
 There is a trend in JavaScript these days towards small reusable modules, tiny components, and little composable functions. But as with everything in programming there are tradeoffs, and if your modules are all too small, too isolated, the effort of wiring them together to become useful becomes greater than the benefit of reusability.
