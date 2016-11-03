@@ -935,9 +935,9 @@ CanJS applications are able to be rendered on the server by running the same cod
 
 Server-side rendering (SSR) provides two main benefits over traditional single page apps: better page load performance and SEO support.
 
-CanJS makes it pretty easy to 
+CanJS makes it possible to load your application on the server. This is because CanJS works in a NodeJS context, on top of a virtual DOM.
 
-can-simple-dom and can-zone
+Using [can-vdom](../can-vdom.html) and [can-zone](../can-zone.html), you can set up your own server side rendering system, such as [the one used in DoneJS](https://donejs.com/Apis.html#section=section_ServerSideRenderingAPIs). For information on using SSR without setting anything up yourself, please check out the DoneJS [quick start](https://donejs.com/Guide.html) and [in depth](https://donejs.com/place-my-order.html) guides.
 
 ## Size to features ratio
 
