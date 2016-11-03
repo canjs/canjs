@@ -189,35 +189,45 @@ Todo = (props) => {
 
 If the problem is losing track of what is changing the state, is the problem solved by adding more code, or is it better solved with a simpler abstraction and more succinct code?
 
-### DOM and Memory Leaks
-Sometimes you are not starting a brand new project, but rather you just want to incrementally add your new framework into your already existing app.
+### DOM Libraries and Memory Leaks
+Sometimes you are not starting a brand new project, and you'd rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](http://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you'd rather not re-implement everything you have at once.
 
 **CanJS** makes working with other libraries seamless. You can just use [can-stache](../../can-stache.html) to add [can-components](../../can-components.html) custom elements into your page as needed, and since **CanJS** works with real DOM events and attributes, everything just works as expected.
 
-Even if you are using jQuery and jQuery plugins, [can-jquery](../../can-jquery.html) was specifically made so that jQuery events and DOM manipulations "just work" without any special code needed.
+If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](http://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to "just work" without any special code needed.
 
 ```handlebars
-<div id="dialog-form" title="Create new user">
-  <!-- A CanJS user-form component thats view-model implements a submit method -->
-  <script type="text/stache" can-autorender>
-    <user-form />
-  </script>
-</div>
-<button id="create-user">Create new user</button>
+<!-- A Bootstrap Modal -->
+<div id="my-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <script type="text/stache" can-autorender>
+          <!-- A CanJS user-form component -->
+          <user-form />
+        </script>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button class="btn btn-primary newuser">New User</button>
 
 <script>
-dialog = $( "#dialog-form" ).dialog({
-  autoOpen: false,
-  modal: true,
-  buttons: {
-    "Create an account": () => can.viewModel( dialog.find( "user-form" ) ).submit(),
-    Cancel: () => {
-      dialog.dialog( "close" );
-    }
-  }
-});
-$( "#create-user" ).button().on( "click", function() {
-  dialog.dialog( "open" );
+$('.newuser').on('click', ev => { $("#my-modal").modal('show'); });
+
+$("#my-modal").on('show.bs.modal', ev => {
+  let modal = $(ev.currentTarget);
+  modal.find('button.save').on('click', ev => {
+    modal.find("user-form").trigger('submit');
+    modal.modal('hide');
+  });
 });
 </script>
 ```
