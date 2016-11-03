@@ -56,11 +56,18 @@ Fidelity uses JavaScriptMVC (the previous name for CanJS) in its Mutual Fund com
 <a href="https://www.fidelity.com/fund-screener/research.shtml"><img src="../../docs/can-guides/images/apps/fidelity.png"></a>
 
 
+## Cars.com
+
+<a href="http://www.cars.com/go/configurator/helperEntry.jsp"><img src="../../docs/can-guides/images/apps/cars.png"></a>
+
+## Submit other apps
+
+Did you work on an app that uses CanJS? Please add it to the list [here](https://github.com/canjs/canjs/blob/master/docs/can-guides/introduction/who-uses.md) and create a PR, or email it [here](mailto:contact@bitovi.com) and we'd be happy to submit it for you!
+
+
 [//]: # (Volkswagon)
 
 [//]: # (Well's Fargo)
-
-[//]: # (Cars.com)
 
 [//]: # (Walmart)
 
