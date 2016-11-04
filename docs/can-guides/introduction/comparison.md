@@ -11,7 +11,7 @@ Two of the most popular frameworks/libraries for building web applications are *
 
 ## React
 
-**React** is really just the [V in MVC](https://twitter.com/dan_abramov/status/790326092582252544) while **CanJS** is a full **MVVM** library, so it may feel like we’re comparing apples to bananas, but there are certain tradeoffs that can be explored when comparing **CanJS** to **React**
+**React** is really just the "V in MVC", while **CanJS** is a full **MVVM** library, so it may feel like we’re comparing apples to bananas, but there are certain tradeoffs that can be explored when comparing **CanJS** to **React**
 
 Because **React** is only a view layer, there has been a deluge of competing libraries, each trying to establish itself as the de facto state management library for your **React** app. Some of the more popular libraries right now include **Redux**, **MobX**, **Alt**, **Reflux** and, of course, Facebook’s own **Flux** library (an implementation of their Flux architecture). Even frameworks like **Angular 2** and **CanJS** are joining in and making "React friendly" implementations.
 
@@ -188,6 +188,83 @@ Todo = (props) => {
 ```
 
 If the problem is losing track of what is changing the state, is the problem solved by adding more code, or is it better solved with a simpler abstraction and more succinct code?
+
+### DOM Libraries and Memory Leaks
+Sometimes you are not starting a brand new project, and you'd rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](http://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you'd rather not re-implement everything you have at once.
+
+**CanJS** makes working with other libraries seamless. You can just use [can-stache](../../can-stache.html) to add [can-components](../../can-components.html) custom elements into your page as needed, and since **CanJS** works with real DOM events and attributes, everything just works as expected.
+
+If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](http://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to "just work" without any special code needed.
+
+```handlebars
+<!-- A Bootstrap Modal -->
+<div id="my-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <script type="text/stache" can-autorender>
+          <!-- A CanJS user-form component -->
+          <user-form />
+        </script>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button class="btn btn-primary newuser">New User</button>
+
+<script>
+$('.newuser').on('click', ev => { $("#my-modal").modal('show'); });
+
+$("#my-modal").on('show.bs.modal', ev => {
+  let modal = $(ev.currentTarget);
+  modal.find('button.save').on('click', ev => {
+    modal.find("user-form").trigger('submit');
+    modal.modal('hide');
+  });
+});
+</script>
+```
+
+**React** replaces certain core aspects of the DOM, namely the event system and attributes, with it’s own “React version” of events and props. Because of this, **React** can have some frustrating “gotchas” when you try and integrate it with jQuery plugins or any other library that queries or manipulates the DOM.
+
+Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](http://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get's deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you'll have to hook up this call, into your current app lifecycle.
+
+```handlebars
+// DO NOT DO THIS, THIS CAUSES A MEMORY LEAK
+<div id="dialog-form" title="Create new user">
+  <div class="react-user-form-component"></div>
+</div>
+<button id="create-user">Create new user</button>
+
+<script>
+// This will leak memory
+ReactDOM.render( $('.react-user-form-component').get(0), UserFormComponent );
+dialog = $( "#dialog-form" ).dialog({
+  autoOpen: false,
+  modal: true,
+  buttons: {
+    "Create an account": dialog.find( "user-form" ).submit(),
+    Cancel: () => {
+      dialog.dialog( "close" );
+    }
+  }
+});
+$( "#create-user" ).button().on( "click", function() {
+  dialog.dialog( "open" );
+});
+</script>
+```
+
+Conversely **CanJS** is aware of it's own DOM removal, and will clean up any event handlers or bindings *automatically*.
+
+If you have existing legacy code, you'll probably want integrate your new framework progressively, a piece at a time, and it's important that things “just work”, without any surprises or frustrations.
 
 ### Encapsulation of Components
 
