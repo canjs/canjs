@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="TodoMVC Guide 3.0 - Routing">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>todomvc initialization timing</title>
+  <link rel="stylesheet" type="text/css" href="../docs/can-guides/experiment/todomvc/todomvc.css"/>
+</head>
+<body>
+	<button id="start">START</button>
+<script type='text/stache' id='todo-create-template'>
+<input id="new-todo"
+    placeholder="What needs to be done?"
+    {($value)}="todo.name"
+    ($enter)="createTodo()"/>
+</script>
+
+<script type='text/stache' id='todo-list-template'>
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if ./complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(this)}}editing{{/if}}">
+      <div class="view">
+	    <input class="toggle" type="checkbox"
+			   {($checked)}="complete" ($change)="save()">
+        <label ($dblclick)="edit(this)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        {$focused}="isEditing(this)"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
+</script>
+
+<script type="text/stache" id="todomvc-template">
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<todo-create/>
+	</header>
+	<section id="main" class="">
+		<input id="toggle-all" type="checkbox"
+          {($checked)}="allChecked"
+          {$disabled}="todosList.saving.length"/>
+		<label for="toggle-all">Mark all as complete</label>
+		<todo-list {todos}="todosPromise.value"/>
+	</section>
+	<footer id="footer" class="">
+		<span id="todo-count">
+			<strong>{{todosPromise.value.active.length}}</strong> items left
+		</span>
+		<ul id="filters">
+			<li>
+				<a href="{{routeUrl filter=undefined}}"
+					{{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>All</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='active'}}"
+					{{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>Active</a>
+			</li>
+			<li>
+				<a href="{{routeUrl filter='complete'}}"
+					{{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>Completed</a>
+			</li>
+		</ul>
+		<button id="clear-completed"
+            ($click)="todosList.destroyComplete()">
+			Clear completed ({{todosPromise.value.complete.length}})
+		</button>
+	</footer>
+</section>
+</script>
+
+<script src="../node_modules/steal/steal.js" main="@empty">
+	var todoInit = require("can/benchmark/todomvc-code");
+
+
+	var loops = 100;
+
+	var runLoop = function(){
+		if(loops > 0) {
+			loops--;
+			todoInit().then(function(){
+				var todoApp = document.getElementById("todoapp");
+				todoApp.parentNode.removeChild(todoApp);
+				setTimeout(function(){
+					runLoop();
+				},1)
+			})
+		} else {
+			console.profileEnd( "todomvc-init" );
+		}
+	}
+	document.getElementById("start").addEventListener("click", function(){
+		console.profile( "todomvc-init" );
+		runLoop();
+	})
+
+</script>
+</body>
+
+</html>

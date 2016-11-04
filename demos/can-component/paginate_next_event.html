@@ -13,8 +13,8 @@
   			($click)='editPlayer(.)'>{{name}}</li>
   	{{/each}}
   </ul>
-  <player-edit 
-  	(close)="removeEdit()" 
+  <player-edit
+  	(close)="removeEdit()"
   	{player}="editingPlayer"/>
 </script>
 <script id="player-edit-stache" type="text/stache">
@@ -55,8 +55,7 @@ let PlayerList = DefineMap.extend({
 Component.extend({
 	tag: "player-list",
 	template: stache($('#player-list-stache').html()),
-	ViewModel: PlayerList,
-	leakScope: true
+	ViewModel: PlayerList
 });
 
 Component.extend({
@@ -67,11 +66,10 @@ Component.extend({
 		close: function(){
 			this.dispatch("close");
 		}
-	}),
-	leakScope: true
+	})
 });
 
 $("#out").html(stache("<player-list/>")({}));
-	
+
 </script>
 </body>
