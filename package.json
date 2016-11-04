@@ -62,7 +62,7 @@
     "can-stache-bindings": "3.0.1",
     "can-stache-converters": "3.0.3",
     "can-stream": "0.0.5",
-    "can-util": "3.0.4",
+    "can-util": "3.0.7",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.0",
     "can-view-callbacks": "3.0.0",
