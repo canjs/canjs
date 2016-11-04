@@ -1,5 +1,5 @@
 @page guides/mission Mission
-@parent guides/introduction 2
+@parent guides/introduction 3
 @disableTableOfContents
 
 @body
@@ -96,17 +96,30 @@ This timeline shows more examples:
 
 <iframe src="https://cdn.knightlab.com/libs/timeline/latest/embed/index.html?source=1lBdurIQbbJkTZ8_kCQaXZtFaD06ulMFAlkqyEmXH4k0&amp;font=Bevan-PotanoSans&amp;maptype=toner&amp;lang=en&amp;start_at_slide=3&amp;height=650&amp;start_zoom_adjust=-2" width="100%" height="650" style="max-width:800px" frameborder="0"></iframe>
 
-Client logos here
+CanJS can be discovered running some very large and popular sites:
+
+
 
 ## Balancing Stability and Innovation: Our Approach
 
 Given that the web is constantly changing, how do you balance the opposing forces of stability and innovation?
 
-When you’re developing on a moving target, you need a platform that moves for you, so your application can stand on steady ground.
+There are two ways CanJS achieves this:
 
-CanJS does this by taking upgrade paths very seriously. We aim to constantly add new features, but still make it easy on users who want to keep upgrading without changing all their code.
+1. Modularity with semantic versioning
+2. Upgrade paths
 
-We use [semantic versioning](https://www.sitepoint.com/semantic-versioning-why-you-should-using/), so minor version upgrades, while they may support new features, will always be backwards-compatible. Upgrading to anything besides a major version will not break existing code.
+### 1. Modularity with semantic versioning
+
+As of the 3.0 release, CanJS has been broken up into several dozen completely independent modules, each with it’s own separate npm package and version number using [Semantic Versioning](http://semver.org/).
+
+Semantic versioning is important because it provides promises about releases and their potential impact on applications. Minor version upgrades, while they may support new features, will always be backwards-compatible. Upgrading to anything besides a major version will not break existing code.
+
+Modularity allows future features to be added via new NPM modules that share common dependencies with the old modules. In most frameworks, adding a new feature means upgrading to a new version, which requires either running two versions in one page (a lot of code weight that slows down page load) or wholesale upgrade of the application. 
+
+CanJS modularity means developers can incorporate new library features without requiring a rewrite of the rest of the application or extra code weight. More on this [here](technical.html#Modularity).
+
+### 2. Upgrade paths
 
 For major version upgrades, such as 3.0, we provide an easy path to upgrade. For example, if you are an existing CanJS user using version 2.x looking to upgrade to the current version (3.0), there are three options, which all exist on a spectrum, each providing a tradeoff between work now and work later.
 
@@ -140,11 +153,13 @@ Here is the [upgrade guide](https://canjs.com/guides/migrating.html) to for 1.x 
 
 The CanJS core team always tests release candidates against a suite of current production applications to ensure our users only get a stable, validated release.
 
+When you’re developing on a moving target, you need a platform that moves for you, so your application can stand on steady ground.
+
 ## Longevity is More Important Than You Think
 
 If you’re not yet convinced why balancing innovation and stability makes CanJS an excellent choice for businesses, consider this: all the modern frameworks have more or less converged in 2016. You can build a very similar application, with routing, observables, models, and server side rendering (with some exceptions) with Angular 2, several of the React frameworks, Ember, or CanJS. Therefore, the MOST important factor, even beyond small technical differences, is the longevity and stability of the framework. You want to bet on a horse that you can ride into the future, not the horse that looks prettiest today.
 
-There’s no advantage to choosing projects maintained by a big company, since they often kill platforms that many developers have invested in.
+There’s no advantage to choosing projects maintained by a big company, since big companies often kill platforms that many developers have invested in.
 
 <img src="../../docs/can-guides/images/introduction/framework-death.png" style="width:100%;max-width:650px"/>
 
