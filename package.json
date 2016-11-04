@@ -68,7 +68,7 @@
     "can-view-callbacks": "3.0.0",
     "can-view-href": "3.0.0",
     "can-view-import": "3.0.0",
-    "can-view-live": "3.0.0",
+    "can-view-live": "3.0.1",
     "can-view-model": "3.0.0",
     "can-view-nodelist": "3.0.0",
     "can-view-parser": "3.0.1",
