@@ -73,7 +73,6 @@ npm run ci
 ```
 
 > How you do you request an invite?  
-> Is grunt needed for saucelabs?
 
 ### Website hosting and ci.canjs.com
 

@@ -2,9 +2,8 @@ sudo: false
 language: node_js
 node_js: node
 script: npm run ci
-before_install:
-  - ./firefox-allow-popups.sh
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+before_script:
+  - npm run http-server &
+  - sleep 2
 addons:
-  firefox: "48.0"
+  sauce_connect: true
