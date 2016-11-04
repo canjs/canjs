@@ -104,11 +104,22 @@ CanJS can be discovered running some very large and popular sites:
 
 Given that the web is constantly changing, how do you balance the opposing forces of stability and innovation?
 
-When you’re developing on a moving target, you need a platform that moves for you, so your application can stand on steady ground.
+There are two ways CanJS achieves this:
 
-CanJS does this by taking upgrade paths very seriously. We aim to constantly add new features, but still make it easy on users who want to keep upgrading without changing all their code.
+1. Modularity with semantic versioning
+2. Upgrade paths
 
-We use [semantic versioning](https://www.sitepoint.com/semantic-versioning-why-you-should-using/), so minor version upgrades, while they may support new features, will always be backwards-compatible. Upgrading to anything besides a major version will not break existing code.
+### 1. Modularity with semantic versioning
+
+As of the 3.0 release, CanJS has been broken up into several dozen completely independent modules, each with it’s own separate npm package and version number using [Semantic Versioning](http://semver.org/).
+
+Semantic versioning is important because it provides promises about releases and their potential impact on applications. Minor version upgrades, while they may support new features, will always be backwards-compatible. Upgrading to anything besides a major version will not break existing code.
+
+Modularity allows future features to be added via new NPM modules that share common dependencies with the old modules. In most frameworks, adding a new feature means upgrading to a new version, which requires either running two versions in one page (a lot of code weight that slows down page load) or wholesale upgrade of the application. 
+
+CanJS modularity means developers can incorporate new library features without requiring a rewrite of the rest of the application or extra code weight. More on this [here](technical.html#Modularity).
+
+### 2. Upgrade paths
 
 For major version upgrades, such as 3.0, we provide an easy path to upgrade. For example, if you are an existing CanJS user using version 2.x looking to upgrade to the current version (3.0), there are three options, which all exist on a spectrum, each providing a tradeoff between work now and work later.
 
@@ -141,6 +152,8 @@ Users that want to upgrade painlessly will use the minimal path. This should be 
 Here is the [upgrade guide](https://canjs.com/guides/migrating.html) to for 1.x to CanJS 2.0.
 
 The CanJS core team always tests release candidates against a suite of current production applications to ensure our users only get a stable, validated release.
+
+When you’re developing on a moving target, you need a platform that moves for you, so your application can stand on steady ground.
 
 ## Longevity is More Important Than You Think
 
