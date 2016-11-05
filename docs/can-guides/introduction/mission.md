@@ -1,39 +1,33 @@
 @page guides/mission Mission
 @parent guides/introduction 3
-@disableTableOfContents
+@description Learn about CanJS mission, why it matters, and how
+we've worked (and will keep working) to accomplish it.
+
 
 @body
 
-The constantly changing JavaScript ecosystem has made it hard for developers and their apps to keep up.
+CanJS's mission is to __minimize the cost of building and maintaining
+JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__.
 
 You shouldn't have to rewrite your application to keep pace with technology.
+So we constantly integrate new ideas and evolving best practices into CanJS libraries,
+but in a responsible way that makes possible to
+upgrade gracefully. We aim to provide a stable
+and innovative platform so you can block out noise and stay focused your app, not the tools.
 
-The CanJS mission is to help developers transcend the changing technology landscape.
+> (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
 
-CanJS’ intended audience is experienced developers building complex
-applications, which they intend to live for a long time.
+Read on why our mission is important
+and how we've faired in realizing it:
 
-We aim to provide a stable platform so those developers can block out noise and stay focused on their app, not the tools.
+- [Stability and innovation matter](#Stabilityandinnovationmatter) - Why stability and innovation are the two most important factors in minimizing the cost of building and maintaining JavaScript Applications.
+- [Stability is difficult in the JavaScript community](#StabilityisdifficultintheJavaScriptcommunity) - Why the JavaScript community sees a never-ending stream of frameworks and suffers _JavaScript Framework Fatigue_.
+- [Our history of stability and innovation](#Ourhistoryofstabilityandinnovation) - How we've managed to
+ keep innovating for almost 8 years while still providing a viable upgrade path and what we're doing now to be even more stable going forward.  
 
-[//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
+## Stability and innovation matter
 
-New ideas and evolving best practices will consistently be
-integrated with CanJS libraries, but in a responsible way that makes it easy to
-upgrade gracefully.
-
-## The current tooling ecosystem
-
-You may be familiar with the
-[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
-that take our community by storm:
-
-<img src="../../docs/can-guides/images/introduction/frameworks.jpg" style="width:100%;max-width:750px"/>
-
-If [chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby) isn’t for you, CanJS is the right framework for you.
-
-CanJS’ goal is to be the antidote to this mentality, and we have the track record to prove it.
-
-## Why your business needs a stable platform
+### Why stability matters
 
 Technology changes quickly, but applications last a long time.
 
@@ -79,7 +73,12 @@ Or more specifically, here’s what our major release schedule has looked like:
 
 Notice the consistent 6 to 9 month release cadence.
 
-## Why Your Business Needs an Innovative Platform
+
+
+
+
+
+### Why Innovation Matters
 
 However, simply providing stability is not enough. Windows XP was a stable platform, but it sacrificed innovation for stability, causing stagnation.
 
@@ -100,7 +99,19 @@ CanJS can be discovered running some very large and popular sites:
 
 
 
-## Balancing Stability and Innovation: Our Approach
+## Stability is difficult in the JavaScript community
+
+You may be familiar with the
+[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
+that take our community by storm:
+
+<img src="../../docs/can-guides/images/introduction/frameworks.jpg" style="width:100%;max-width:750px"/>
+
+If [chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby) isn’t for you, CanJS is the right framework for you.
+
+CanJS’ goal is to be the antidote to this mentality, and we have the track record to prove it.
+
+## Our history of stability and innovation
 
 Given that the web is constantly changing, how do you balance the opposing forces of stability and innovation?
 
@@ -115,7 +126,7 @@ As of the 3.0 release, CanJS has been broken up into several dozen completely in
 
 Semantic versioning is important because it provides promises about releases and their potential impact on applications. Minor version upgrades, while they may support new features, will always be backwards-compatible. Upgrading to anything besides a major version will not break existing code.
 
-Modularity allows future features to be added via new NPM modules that share common dependencies with the old modules. In most frameworks, adding a new feature means upgrading to a new version, which requires either running two versions in one page (a lot of code weight that slows down page load) or wholesale upgrade of the application. 
+Modularity allows future features to be added via new NPM modules that share common dependencies with the old modules. In most frameworks, adding a new feature means upgrading to a new version, which requires either running two versions in one page (a lot of code weight that slows down page load) or wholesale upgrade of the application.
 
 CanJS modularity means developers can incorporate new library features without requiring a rewrite of the rest of the application or extra code weight. More on this [here](technical.html#Modularity).
 
@@ -155,7 +166,10 @@ The CanJS core team always tests release candidates against a suite of current p
 
 When you’re developing on a moving target, you need a platform that moves for you, so your application can stand on steady ground.
 
-## Longevity is More Important Than You Think
+
+
+
+###### Extra: Longevity is More Important Than You Think
 
 If you’re not yet convinced why balancing innovation and stability makes CanJS an excellent choice for businesses, consider this: all the modern frameworks have more or less converged in 2016. You can build a very similar application, with routing, observables, models, and server side rendering (with some exceptions) with Angular 2, several of the React frameworks, Ember, or CanJS. Therefore, the MOST important factor, even beyond small technical differences, is the longevity and stability of the framework. You want to bet on a horse that you can ride into the future, not the horse that looks prettiest today.
 
