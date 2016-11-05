@@ -17,7 +17,7 @@ and innovative platform so you can block out noise and stay focused your app, no
 
 > (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
 
-Read on why our mission is important
+Keep reading to learn why our mission is important
 and how we've faired in realizing it:
 
 - [Stability and innovation matter](#Stabilityandinnovationmatter) - Why stability and innovation are the two most important factors in minimizing the cost of building and maintaining JavaScript Applications.
