@@ -495,7 +495,7 @@ just to get going. There is the templating system, the decorators/annotations, a
 of it all is, because of the "all-or-nothing" nature of Angular 2, you have to learn a
 whole lot of it, just to get started.
 
-CanJS also has many different modules and API's to learn, but because of CanJS' modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
+CanJS also has many different modules and API's to learn, but because of CanJS's modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
 
 If your team needs to get started quickly, and hit the ground running, Angular 2 may not be the best choice, but CanJS just might be the right fit for your team.
 
