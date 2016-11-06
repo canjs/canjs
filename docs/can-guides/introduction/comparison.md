@@ -495,7 +495,7 @@ just to get going. There is the templating system, the decorators/annotations, a
 of it all is, because of the "all-or-nothing" nature of Angular 2, you have to learn a
 whole lot of it, just to get started.
 
-CanJS also has many different modules and API's to learn, but because of CanJS' modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
+CanJS also has many different modules and API's to learn, but because of CanJS's modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
 
 If your team needs to get started quickly, and hit the ground running, Angular 2 may not be the best choice, but CanJS just might be the right fit for your team.
 
@@ -510,3 +510,20 @@ If your team needs to get started quickly, and hit the ground running, Angular 2
 **Angular 2** is not the safe bet you may be hoping it is. Google wouldn't hesitate to drop it entirely when it no longer serves their purpose, it’s got a steep learning curve, and lot of features that you may not want or need.
 
 **CanJS** has a mission to be the stable platform for you to develop your web apps on for years to come. It’s modular enough to take only the parts you need as you need them. It has all the features you need and doesn’t force you into patterns or technologies you don’t.
+
+## Non-technical comparison
+
+If none of the technical arguments convince you to give CanJS a try, consider this: all the modern frameworks have more or less converged in 2016. You can build a very similar application, with routing, observables, models, and server side rendering (with some exceptions) with Angular 2, several of the React frameworks, Ember, or CanJS. Therefore, the MOST important factor, even beyond small technical differences, is the stability and stability of the framework. You want to bet on a horse that you can ride into the future, not the horse that looks prettiest today.
+
+CanJS's mission is to __minimize the cost of building and maintaining
+JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__. We've spent the past 9 years focused on balancing these two oppoising goals, and have the track record to prove it. Read in more detail on our [mission page](mission.html).
+
+There’s no advantage to choosing projects maintained by a big company, since big companies often kill platforms that many developers have invested in.
+
+<img src="../../docs/can-guides/images/introduction/framework-death.png" style="width:100%;max-width:650px"/>
+
+There’s no advantage to choosing a framework with a large community, since communities are fickle and change yearly.
+
+There’s no advantage to choosing a framework based on ability to hire devs that list X on their resume, since any competent JavaScript developer can be equally effective in any modern framework with a couple days of learning.
+
+This is why CanJS has a stellar reputation with [enterprise companies](who-uses.html). Stability and longevity are critical factors to your application’s success.

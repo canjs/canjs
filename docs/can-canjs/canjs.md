@@ -7,7 +7,7 @@
 JavaScript architectural libraries that balances
 innovation and stability.  
 
-CanJS targets experienced developers building complex applications with long futures ahead of them. Read more about CanJS' [guides/mission Mission] and [guides/technical Technical Highlights].
+CanJS targets experienced developers building complex applications with long futures ahead of them. Read more about CanJS's [guides/mission Mission] and [guides/technical Technical Highlights].
 
 
 <img src="docs/images/tortoise.png"/>
