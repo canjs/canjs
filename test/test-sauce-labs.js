@@ -34,6 +34,10 @@ var platforms = [{
 	version: '10.0'
 }, {
 	browserName: 'internet explorer',
+	platform: 'Windows 10',
+	version: '11.0'
+}, {
+	browserName: 'internet explorer',
 	platform: 'Windows 8',
 	version: '10.0'
 }, {
