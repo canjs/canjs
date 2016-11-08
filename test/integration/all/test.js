@@ -13,6 +13,8 @@ var makeIframe = function(src){
 
 QUnit.module('can.all.js');
 
-QUnit.asyncTest("works without jquery", function(){
-	makeIframe(__dirname + "/no-jquery.html?" + Math.random());
-});
+if (__dirname !== '/') {
+	QUnit.asyncTest("works without jquery", function(){
+		makeIframe(__dirname + "/no-jquery.html?" + Math.random());
+	});
+}
