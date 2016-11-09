@@ -54,7 +54,7 @@ Update the `HTML` tab to have a `<script>` tag around the html content.
 Update the `JavaScript` tab to:
 
  - Use [can-stache.from can-stache.from] to load the contents of the `<script>` tag as
- a [template renderer function](can-stache.renderer).
+ a [can-stache.renderer template renderer function].
  - Render the template with an empty object into a [document fragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment).
  - Insert the fragment into the document's `<body>` element.
 
@@ -210,7 +210,7 @@ Update the `JavaScript` tab to:
 Update the `HTML` tab to:
 
  - Create the `todo-create-template` that:
-   - Updates the `todo`'s `name` with the `<input>`'s `value` using [can-stache-bindings.toParent].
+   - Updates the `todo`'s `name` with the `<input>`'s `value` using [can-stache-bindings.twoWay].
    - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event].
  - Use `<todo-create/>`
 
