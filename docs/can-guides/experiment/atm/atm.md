@@ -121,7 +121,7 @@ that will change the `state` to `"verifying"` and if the response is successful,
 Update the `JS` tab to:
 
 - Make the fake data request delay `1ms` by setting [can-fixture.delay] to `1` before every test and
-  restoring it to `2md` after every test runs.
+  restoring it to `2s` after every test runs.
 - Write a test that creates a valid card, calls `.verify()`, and asserts the `state` is `"verified"`.
 - Write a test that creates a invalid card, calls `.verify()`, and asserts the `state` is `"invalid"`.
 
@@ -200,6 +200,12 @@ Update the `JavaScript` tab to:
 - Simulate `/accounts` to return `Account` data with [can-fixture].
 - Simulate `/deposit` to always return a successful result.
 - Simulate `/withdrawal` to always return a successful result.
+- Define the `Account` model to:
+	- have an `id` property
+	- have a `balance` property
+	- have a `name` property
+- Define an `Account.List` type with [can-define/list/list]
+- Connect `Account` and `Account.List` types to the restful `"/accounts"` endpoint using [can-connect/can/base-map/base-map].
 - Define the `Transaction` model to:
   - have an `account` and `card` property.
   - have an `executing` and `executed` property that track if the transaction is executing or has executed.
@@ -225,7 +231,7 @@ Update the `JavaScript` tab to:
   it `POST`s the withdrawal information to `/withdrawal`.
 
 @sourceref ./5-transactions-models/js.js
-@highlight 13-31,79-187,only
+@highlight 13-31,63-187,only
 
 When complete, the __Deposit__ tests will pass.
 
@@ -317,7 +323,7 @@ Update the `TESTS` section of the `JavaScript` tab to:
 - Call `.chooseDeposit()` and verify the state moves to `"pickingAccount"`.
 
 @sourceref ./8-choosing-transaction/js.js
-@highlight 194-204,209-211,243,246-255,only
+@highlight 194-204,209-211,243,246-255,363,382-389,only
 
 
 > We will define `printReceiptAndExit` later!
@@ -398,7 +404,6 @@ the transaction was successful.
 In this section, we will:
 
 - Allow the user to enter the amount of a withdrawal and go to the __Successful Transaction__ page.
-- Add tests to __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
