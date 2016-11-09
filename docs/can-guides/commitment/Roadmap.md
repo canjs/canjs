@@ -1,74 +1,48 @@
 @page roadmap Roadmap
 @parent guides/commitment 2
 
+@description Learn about CanJS's future plans and how we make them, and how you can influence them.
+
 @body
 
-Now that 3.0 is out, we’re setting our sights on the
-future.  Help us get there by ranking issues and features
-on bithub and fixing them!
+## How our roadmap is decided
 
-## Community
+CanJS's direction is shaped by its community creating [guides/contributing/feature-suggestion feature suggestions] and [guides/contributing/bug-report bug reports],
+and giving them a `+1`.
 
-There’s more than code that goes into a library.  Checkout
-how we’re working to improve CanJS's community:
+Then, the [DoneJS core team members](http://donejs.com/About.html#section=section_Team) prioritize
+issues with a `P0` to `P4` tag indicating their priority:
 
-### Bithub.com
+- `P0` - An issue that will preempt any other issues currently being worked on.
+- `P1` - A critical feature or bug that needs to be fixed to keep CanJS's high degree of quality.
+- `P2` - A feature or bug that is less likely to be encountered, but something we intend to get to.
+- `P3` - A nice to have. The OS team might get to it, but it's helpful if the community assists.
+- `P4` - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
 
-We are developing [bithub.com](http://bithub.com/canjs) to track
-all community content. Earn points that you
-can trade for swag by posting apps, articles, events
-and plugins. __Rank bugs and features to let us and the
-rest of the community know where to focus.__
 
-### Meetups
 
-We’ve started meetups across the US.  Bitovi provides
-monthly training and workshop material.  Checkout
-meetup for meetups and [bithub.com](http://bithub.com/canjs/events)
-for other events.
 
-## DOM mutation observers
+## Current Roadmap
 
-With CanJS 2.0, you can listen to "inserted" and "removed" events in
-every browser.  We want to make it possible to listen to other DOM
-mutation events, making it easier to create custom elements
-that feel completely native.
+CanJS's roadmap is constantly changing, so listing
+The following links to CanJS's feature issues grouped by priorities:
 
-## LazyMap and LazyList
+ - [P1 ](https://github.com/search?q=org%3Acanjs+label%3Aenhancement+label%3AP1&ref=searchresults&state=open&type=Issues)
 
-We want our observable layer to handle anything you throw at
-it.  We’ve started work on a LazyMap and LazyList that
-experiences almost no initialization penalty.  As you
-read nested objects, it converts them into LazyMaps and LazyLists.
 
-Furthermore, we want to setup bubbling only when it’s necessary and not
-by default. This will reduce the number of events, improving performance.
+- [P0](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP0+&type=Issues)
+- [P1](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP1+&type=Issues)
+- [P2](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP2+&type=Issues)
+- [P3](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP3+&type=Issues)
+- [P4](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP4+&type=Issues)
 
-## Component improvements
+## How to influence the roadmap
 
-can.Component is designed to resemble web components.  As that
-specification takes shape, we will make sure can.Component
-makes use of it.  Future improvements:
 
- - A select attribute on `<content>`.
- - In-page custom elements.
- - Iterable `<content>` for lists.
 
-## Super Model
+These priorities can change.  The best ways to influence the priority of an issue is to:
 
-We want to create list-store that makes complex real-time apps
-easy to build. It will include a fall-through localStorage cache that
-decreases page load times.
-
-## Dirty checking computes
-
-Want to use plain old objects in can.Component?  We’re looking to
-create a compute that checks its value periodically.  Hopefully
-this becomes unnecessary as object mutation observers and
-proxies arrive in more browsers.
-
-## Deferreds and Computes
-
-Ever had a compute that represents a deferred that represents an
-observable list?  We have.  We want to make it easy to nest
-computes and deferreds like you can with Lists and Maps.
+ - Make your case clearly and concisely
+ - `+1` the issue to show your support
+ - Add test or implement the feature or fix
+ - Come to a contributors meeting and let us know why it's important to you
