@@ -24,25 +24,20 @@ issues with a `P0` to `P4` tag indicating their priority:
 
 ## Current Roadmap
 
-CanJS's roadmap is constantly changing, so listing
+CanJS's roadmap is constantly changing, so listing them would be impossible.
 The following links to CanJS's feature issues grouped by priorities:
 
  - [P1 ](https://github.com/search?q=org%3Acanjs+label%3Aenhancement+label%3AP1&ref=searchresults&state=open&type=Issues)
+ - [P2 ](https://github.com/search?q=org%3Acanjs+label%3Aenhancement+label%3AP2&ref=searchresults&state=open&type=Issues)
+ - [P3 ](https://github.com/search?q=org%3Acanjs+label%3Aenhancement+label%3AP3&ref=searchresults&state=open&type=Issues)
 
-
-- [P0](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP0+&type=Issues)
-- [P1](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP1+&type=Issues)
-- [P2](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP2+&type=Issues)
-- [P3](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP3+&type=Issues)
-- [P4](https://github.com/canjs/canjs/search?q=is%3Aopen+is%3Aissue+label%3AP4+&type=Issues)
 
 ## How to influence the roadmap
 
 
-
 These priorities can change.  The best ways to influence the priority of an issue is to:
 
- - Make your case clearly and concisely
- - `+1` the issue to show your support
  - Add test or implement the feature or fix
  - Come to a contributors meeting and let us know why it's important to you
+ - Make your case clearly and concisely in the issue
+ - `+1` the issue to show your support
