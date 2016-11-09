@@ -102,7 +102,7 @@ Will print out `"Chat Home"` and then `"Chat Home!"`.
 `DefineMap` instances are observable.  This is why when `message` changes,
 the template updates automatically.
 
-The templates are a dialect of [mustache] and [handlebars] syntax.  The
+The templates are a dialect of [mustache](https://github.com/janl/mustache.js) and [handlebars](https://github.com/wycats/handlebars.js/) syntax.  The
 mustache syntax allows a very terse writing style for the most common
 patterns within templates:
 
@@ -259,7 +259,7 @@ Update the `JavaScript` tab to:
    the restful messages service at `http://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
  - Create a `messagesPromise` property on `ChatMessagesVM` that's
-   [can-define.types.value] is initialized to a [ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise Promise]
+   [can-define.types.value] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
    that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
