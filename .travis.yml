@@ -1,6 +1,15 @@
 sudo: false
 language: node_js
 node_js: node
+before_install:
+- |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
+    fi
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^(docs))/' || {
+      echo "Only docs were updated, skipping tests."
+      exit
+    }
 script: npm run ci
 before_script:
   - npm run http-server &
