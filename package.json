@@ -119,7 +119,7 @@
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.3.0",
       "bit-docs-html-canjs": "^0.4.6",
-      "bit-docs-prettify": "^0.1.0",
+      "bit-docs-prettify": "^0.1.1",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",
       "bit-docs-tag-package": "^0.0.3"
