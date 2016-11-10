@@ -41,7 +41,7 @@
   "dependencies": {
     "can-component": "3.0.2",
     "can-compute": "3.0.3",
-    "can-connect": "1.0.10",
+    "can-connect": "1.0.11",
     "can-construct": "3.0.3",
     "can-construct-super": "3.0.0",
     "can-control": "3.0.3",
