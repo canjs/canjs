@@ -1,5 +1,5 @@
 @page guides/who-uses-canjs Who uses CanJS?
-@parent guides/introduction 2
+@parent guides/introduction 5
 
 @body
 

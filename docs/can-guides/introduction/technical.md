@@ -23,7 +23,7 @@ tally.on("change",function(ev, newVal, oldVal){
 })
 ```
 
-Or an observable value that derives its value from other observables. 
+Or an observable value that derives its value from other observables.
 
 ```javascript
 var person = new Person({
@@ -112,7 +112,7 @@ With the modularity described in CanJS, applications can import multiple version
 
 ### Faster, more stable framework releases
 
-Because CanJS’ pieces can push out updates independently, small bug fixes and performance enhancements can be released immediately, with much lower risk. For example, if a bug is observed and fixed in can-compute, a new version of can-compute will be pushed out that day, as soon as tests pass.
+Because CanJS’s pieces can push out updates independently, small bug fixes and performance enhancements can be released immediately, with much lower risk. For example, if a bug is observed and fixed in can-compute, a new version of can-compute will be pushed out that day, as soon as tests pass.
 
 By contrast, with the typical all-in-one structure, there will usually be a much longer delay between the can-compute bug fix and the next release. This is because making a new release for CanJS as a whole is a much more involved, risky endeavour. The can-compute change has to be tested much more rigorously against the framework as a whole. Plus there might be other changes in other areas in progress that need to land before the release can go out.
 
@@ -407,7 +407,7 @@ The following video introduces MVVM in CanJS, focusing on the strength of the Vi
 
 ### Composed, hierarchical state
 
-CanJS applications are composed from hierarchical components, each containing their own independent state (it’s own ViewModel). This architecture is at the core of CanJS’ approach to building large applications.
+CanJS applications are composed from hierarchical components, each containing their own independent state (it’s own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
 
 The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
 
@@ -469,7 +469,7 @@ Handlebars templates are a superset of Mustache templates that includes some con
 
 Developers love Mustache templates because they are designed to be "logic-less", meaning no if statements, else clauses, for loops. There are only tags. The resulting simplicity makes templates easier to read and understand. It also makes it possible for designers to modify templates more easily, with less of a risk of breaking something.
 
-CanJS’ version of Handlebars is called [can-stache](../../can-stache.html).
+CanJS’s version of Handlebars is called [can-stache](../../can-stache.html).
 
 ### One, two-way, and event bindings
 

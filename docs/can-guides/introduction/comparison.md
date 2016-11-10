@@ -1,8 +1,9 @@
 @page guides/comparison Comparison to Other Frameworks
 @parent guides/introduction 5
-@disableTableOfContents
+@hide
 
 @body
+
 **CanJS** is a full **MVVM** library for creating fantastic web applications, but let’s face it, there are a lot of other frameworks that solve the same problem. These days, most of the **MV*** frameworks and libraries have some mechanism for creating **Custom Elements** for the browser and binding those elements to some sort of **observable state or data-store**, along with features like **routing** and connecting data to a **web service API**. The modern **MV*** frameworks are starting to look more and more similar, as concepts and features are shared between them, and the general needs of developers start to converge.
 
 You should evaluate if a framework fits your mental model of how applications should be built, and to do that you’ll need to know the subtle but important differences that may not seem obvious at first glance.

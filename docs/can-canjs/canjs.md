@@ -5,16 +5,31 @@
 @templateRender <% %>
 @description CanJS is an evolving and improving set of client side
 JavaScript architectural libraries that balances
-innovation and stability.  
+innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
 
-CanJS targets experienced developers building complex applications with long futures ahead of them. Read more about CanJS's [guides/mission Mission] and [guides/technical Technical Highlights].
+<img
+    srcset="docs/images/home/Home-Tortoise-color.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
+    src="docs/images/home/Home-Tortoise-color.png"
+    style="float:right; padding-right: 40px;"/>
+<img
+    srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
+    src="docs/images/home/Home-Tortoise-color.png" style="padding-left: 40px;"/>
 
-
-<img src="docs/images/tortoise.png"/>
+If you're new to the framework, the best place to start is the [guides] page. There you'll
+find CanJS's [guides/mission Mission], [guides/technical Technical Highlights] and
+the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guide.
 
 @body
 
-## [can-core Core Collection]
+
+## Collections
+
+CanJS is made of many independent packages and modules.  Those packages and modules are
+organized within the following collections.  Read on to get an overview of each collection's
+packages.  Please star what you like so we know where to put our effort.
+
+
+### [can-core Core Collection]
 
 _The best, most hardened and generally useful libraries in CanJS._
 
@@ -51,7 +66,7 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 </div>
 
-## [can-ecosystem Ecosystem Collection]
+### [can-ecosystem Ecosystem Collection]
 
 _Useful libraries that add important features or extend the core collection._
 
@@ -84,7 +99,7 @@ _Useful libraries that add important features or extend the core collection._
 
 </div>
 
-## Infrastructure Collection
+### [can-infrastructure Infrastructure Collection]
 
 _Utility libraries that power the core collection._
 
@@ -134,7 +149,7 @@ _Utility libraries that power the core collection._
 </div>
 
 
-## Legacy Collection
+### [can-legacy Legacy Collection]
 
 _Former libraries that are not under active development, but we
 still accept patches._

@@ -1,5 +1,5 @@
 @page guides/mission Mission
-@parent guides/introduction 3
+@parent guides/introduction 2
 @description Learn about CanJS's mission, why it matters, and how
 we've worked (and will keep working) to accomplish it.
 
@@ -14,6 +14,14 @@ So we constantly integrate new ideas and evolving best practices into CanJS libr
 but in a responsible way that makes possible to
 upgrade gracefully. We aim to provide a stable
 and innovative platform, so you can block out noise and stay focused your app, not the tools.
+
+<img
+    srcset="../../docs/images/home/Home-Tortoise-color.png 1x, ../../docs/images/home/Home-Tortoise-color-x2.png 2x"
+    src="../../docs/images/home/Home-Tortoise-color.png"
+    style="float:right; padding-right: 40px;"/>
+<img
+    srcset="../../docs/images/home/Home-Hare-color.png 1x, ../../docs/images/home/Home-Hare-color-x2.png 2x"
+    src="../../docs/images/home/Home-Tortoise-color.png" style="padding-left: 40px;"/>
 
 [//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
 
@@ -51,7 +59,7 @@ However, simply providing stability is not enough. Windows XP was a stable platf
 
 Over the past 9 years that CanJS has been around, there has been constant change in the JavaScript community. Best practices have evolved and the platform of the web itself has evolved. The pace may even be increasing as JavaScript gets more popular. Smart people are bringing Computer Science concepts from other domains onto JavaScript and the web, like streams and promises.
 
-Even on a psychological level, working on a framework that innovates is incredibly important for morale. Every developer wants to work using exciting, modern tools. That's why we're no longer writing IE6 applications. 
+Even on a psychological level, working on a framework that innovates is incredibly important for morale. Every developer wants to work using exciting, modern tools. That's why we're no longer writing IE6 applications.
 ## Stability is difficult in the JavaScript community
 
 You may be familiar with the
@@ -74,13 +82,13 @@ __1 year ago__ - You might have chosen React, before any of the many React frame
 
 __Today__ - You might consider using Angular 2, but then realize you’ve already fallen for this trap. There must be a better way.
 
-This is insanity. No reasonable developer should be expected to work like this. CanJS’ entire mission is to help developers weather this storm.
+This is insanity. No reasonable developer should be expected to work like this. CanJS’s entire mission is to help developers weather this storm.
 
 ## Our history of stability and innovation
 
 If [chasing the hot new thing](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.lrntx9nby) isn’t for you, CanJS is the right framework for you.
 
-CanJS’ goal is to be the antidote to this mentality, and we have the track record to prove it.
+CanJS’s goal is to be the antidote to this mentality, and we have the track record to prove it.
 
 ### Our history of stability
 
