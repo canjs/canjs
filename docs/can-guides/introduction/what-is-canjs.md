@@ -1,5 +1,6 @@
 @page guides/what-is-canjs What is CanJS?
 @parent guides/introduction 1
+@hide
 
 @body
 

@@ -1,5 +1,5 @@
 @page guides Guides
-@parent canjs
+@parent canjs 0
 @group guides/introduction 0 introduction
 @group guides/experiment 1 experiment
 @group guides/commitment 2 commitment
