@@ -112,7 +112,11 @@
     "main": "can",
     "npmIgnore": [
       "bit-docs",
-      "testee"
+      "testee",
+      "async",
+      "saucelabs",
+      "wd",
+      "http-server"
     ]
   },
   "bit-docs": {
