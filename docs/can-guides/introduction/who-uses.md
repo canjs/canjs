@@ -7,7 +7,7 @@
 
 Discovered via [Reddit](https://www.reddit.com/r/javascript/comments/1kffau/apple_store_use_canjs_javascript_framework_not/)
 
-<a href="http://www.apple.com/shop/buy-iphone/iphone-7"><img src="../../docs/can-guides/images/apps/AOS.png"></a>
+<a href="http://www.apple.com/shop/buy-iphone/iphone-7"><img src="../../docs/can-guides/images/apps/aos.png"></a>
 
 ## Chase
 
