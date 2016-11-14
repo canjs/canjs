@@ -186,6 +186,8 @@ Update the `JS` tab to:
 
 When complete, the __Deposit__ test should run, but error because _Deposit is not defined_.
 
+> __Optional:__ Challenge yourself by writing the __Withdrawal__ test on your own.  How is it different than the __Deposit__ test?
+
 ## Transaction, Deposit, and Withdrawal models
 
 In this section, we will:
@@ -414,6 +416,8 @@ Update the `HTML` tab to:
 
 When complete, you should be able to enter a withdrawal amount and see that
 the transaction was successful.
+
+> __Optional:__ Challenge yourself by adding a test for the `withdrawalInfo` state of an atm instance.  Consider the progression of states needed to make it to the `withdrawalInfo` state.  How is it different from the __ATM basics__ test we already have?
 
 ## Transaction Successful page
 
