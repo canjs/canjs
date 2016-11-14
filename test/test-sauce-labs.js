@@ -102,13 +102,13 @@ series(tests, () => {
 function makeTest(platform) {
 	return function(cb) {
 		var url = 'http://localhost:3000/test/index.html?hidepassed';
-		var timeoutId;
+		var jobTimeoutId, initTimeoutId;
 
-		console.log('Running ' + platform.name);
+		console.log(`Running ${platform.name}`);
 
 		var testComplete = function(status) {
-			if (timeoutId) {
-				clearTimeout(timeoutId);
+			if (jobTimeoutId) {
+				clearTimeout(jobTimeoutId);
 			}
 
 			// update status of this platform's tests
@@ -124,13 +124,27 @@ function makeTest(platform) {
 			cb(null);
 		};
 
+		var initKeepAlive = function() {
+			// add indicator that driver is being initialized to keep Travis from timing out
+			process.stdout.write('>');
+
+			initTimeoutId = setTimeout(initKeepAlive, statusPollingInterval);
+		};
+
+		initKeepAlive();
+
 		driver.init(platform, (err, sessionId) => {
 			if (err) {
-				console.log('Error calling driver.init: ' + err);
+				console.log(`Error calling driver.init: ${err}`);
 				testComplete(false);
 				return;
 			}
-			console.log('Sauce Labs Job: https://saucelabs.com/jobs/' + sessionId);
+			console.log(`\nSauce Labs Job: https://saucelabs.com/jobs/${sessionId}`);
+
+			if (initTimeoutId) {
+				clearTimeout(initTimeoutId);
+			}
+
 			var pollSauceLabsStatus = function() {
 				account.showJob(sessionId, (err, job) => {
 					if (err) {
@@ -144,10 +158,10 @@ function makeTest(platform) {
 						return;
 					}
 
-					// add indicator that tests are running
+					// add indicator that tests are running to keep Travis from timing out
 					process.stdout.write('.');
 
-					timeoutId = setTimeout(pollSauceLabsStatus, statusPollingInterval);
+					jobTimeoutId = setTimeout(pollSauceLabsStatus, statusPollingInterval);
 				});
 			};
 
@@ -179,7 +193,7 @@ function makeTest(platform) {
 					getElementText('#qunit-testresult .total')
 				], (err, [passed, failed, total]) => {
 					if (err) {
-						console.log('\nError checking test results: ' + err);
+						console.log(`\nError checking test results: ${err}`);
 						testComplete(false);
 						return;
 					}
