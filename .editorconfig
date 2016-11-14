@@ -3,3 +3,7 @@
 end_of_line = LF
 indent_style = tab
 trim_trailing_whitespace = false
+
+[{package.json,*.yml}]
+indent_style = space
+indent_size = 2
