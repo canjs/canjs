@@ -33,7 +33,7 @@ Yahoo uses CanJS in its [Brightroll Console](https://www.bitovi.com/blog/canjs-c
 
 ## FedEx
 
-Delta uses CanJS in its package tracker.
+FedEx uses CanJS in its package tracker.
 
 <a href="https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us"><img src="../../docs/can-guides/images/apps/fedex.png"></a>
 
