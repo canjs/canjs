@@ -3,62 +3,67 @@
 
 @body
 
+<div class="screenshots">
+
 ## Apple Store
 
 Discovered via [Reddit](https://www.reddit.com/r/javascript/comments/1kffau/apple_store_use_canjs_javascript_framework_not/)
 
-<a href="http://www.apple.com/shop/buy-iphone/iphone-7"><img src="../../docs/can-guides/images/apps/aos.png"></a>
+<a href="http://www.apple.com/shop/buy-iphone/iphone-7"><span>http://www.apple.com/shop/buy-iphone/iphone-7</span><img src="../../docs/can-guides/images/apps/screenshots-aos.jpg"></a>
 
 ## Chase
 
-<img src="../../docs/can-guides/images/apps/chase.png">
+<a href="http://payments.chase.com"><span>http://payments.chase.com</span><img src="../../docs/can-guides/images/apps/screenshots-chase.jpg">
 
 ## HP
 
-<img src="../../docs/can-guides/images/apps/hp.png">
+<a href="http://store.hp.com"><span>http://store.hp.com</span><img src="../../docs/can-guides/images/apps/screenshots-hp.jpg"></a>
 
 ## USGA
 
-<a href="http://www.usga.org/"><img src="../../docs/can-guides/images/apps/usga.png"></a>
+<a href="http://www.usga.org/"><span>http://www.usga.org</span><img src="../../docs/can-guides/images/apps/screenshots-usga.jpg"></a>
 
 ## Yahoo
 
 Yahoo uses CanJS in its [Brightroll Console](https://www.bitovi.com/blog/canjs-case-study-brightroll), a tool used to purchase ads and explore analytics.
 
-<img src="../../docs/can-guides/images/apps/brightroll.png">
+<img src="../../docs/can-guides/images/apps/screenshots-brightroll.jpg">
 
 ## PlutoTV
 
-<a href="http://pluto.tv/watch"><img src="../../docs/can-guides/images/apps/plutotv.png"></a>
+<a href="http://pluto.tv/watch"><span>http://pluto.tv/watch</span><img src="../../docs/can-guides/images/apps/screenshots-plutotv.jpg"></a>
 
 ## FedEx
 
 FedEx uses CanJS in its package tracker.
 
-<a href="https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us"><img src="../../docs/can-guides/images/apps/fedex.png"></a>
+<a href="https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us"><span>https://www.fedex.com/apps/fedextrack</span><img src="../../docs/can-guides/images/apps/screenshots-fedex.jpg"></a>
 
 ## Sam's Club
 
-<a href="https://m.samsclub.com/locator?xid=hdr_locator"><img src="../../docs/can-guides/images/apps/sams.png"></a>
+<a href="https://m.samsclub.com/locator?xid=hdr_locator"><span>https://m.samsclub.com</span><img src="../../docs/can-guides/images/apps/screenshots-sams.jpg"></a>
 
 
 ## Delta SkyMiles
 
 Delta uses CanJS in its rewards program, SkyMiles.
 
-<a href="http://www.skymilesshopping.com/"><img src="../../docs/can-guides/images/apps/delta.png"></a>
+<a href="http://www.skymilesshopping.com/"><span>http://www.skymilesshopping.com</span><img src="../../docs/can-guides/images/apps/screenshots-skymiles.jpg"></a>
 
 
 ## Fidelity
 
 Fidelity uses JavaScriptMVC (the previous name for CanJS) in its Mutual Fund comparison tool.
 
-<a href="https://www.fidelity.com/fund-screener/research.shtml"><img src="../../docs/can-guides/images/apps/fidelity.png"></a>
+<a href="https://www.fidelity.com/fund-screener/research.shtml"><span>https://www.fidelity.com/fund-screener/research.shtml</span><img src="../../docs/can-guides/images/apps/screenshots-fidelity.jpg"></a>
 
 
 ## Cars.com
 
-<a href="http://www.cars.com/go/configurator/helperEntry.jsp"><img src="../../docs/can-guides/images/apps/cars.png"></a>
+<a href="http://www.cars.com"><span>http://www.cars.com</span><img src="../../docs/can-guides/images/apps/screenshots-cars.jpg"></a>
+
+
+</div> 
 
 ## Submit other apps
 
