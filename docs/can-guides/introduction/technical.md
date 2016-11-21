@@ -1,313 +1,506 @@
 @page guides/technical Technical Highlights
 @parent guides/introduction 4
-@disableTableOfContents
+@description Learn about CanJS's technical accomplishments.
+@outline 2
 
 @body
 
-CanJS is a JavaScript MVVM library, with browser support all the way back to IE9.
 
-While CanJS does a lot of things, there are several features that stand apart.
+## Browser and Environment Support
 
-### 1. Computes
+CanJS supports:
 
-Computes are like event streams, but much easier to compose and friendlier to use, because they always have a synchronous value.
+ - Latest Chrome, Firefox, Edge, Safari
+ - IE9+
+ - iOS Safari 9.3+
+ - NodeJS 6+ with [can-vdom] as a document.
 
-They can be used for observable values:
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
-```javascript
-var tally = compute(12);
-tally(); // 12
+## Phenomenal Features, Small Size
 
-tally.on("change",function(ev, newVal, oldVal){
-    console.log(newVal,oldVal)
+The [can-core core] of CanJS, gzipped, is under 50KB. While there may be smaller architectural libraries, there are not other frameworks that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.
+
+jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
+
+Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
+
+React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
+
+The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped
+
+## Independent Repositories and Packages
+
+CanJS 3.0 is maintained in independent repositories,
+each with it’s own npm package and [semantic version](http://semver.org/) number.
+Organizing CanJS into individual repositories and packages has many benefits.  
+
+The obvious advantage is that pieces can be used without the whole. You can choose to use CanJS's observables or [can-fixture] without the rest of the framework. You could even mix and match CanJS libraries with other libraries like React quite easily.
+
+However, the main benefit is that independent repositories
+improves CanJS's stability - one half of CanJS's [guides/mission mission]. This is
+because independent repositories make upgrades easier and more frequent. For example,
+compare:
+
+- Upgrading a 2.3 app, which was not organized in individual repositories, to
+- Upgrading a 3.0 app.
+
+Despite making relatively few breaking changes, and
+providing a [migrate-3 migration guide], upgrading from CanJS 2.3 to 3.0 looks like
+a big step:
+
+<img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:400px"/>
+
+But if you break that step down, CanJS 2.3 is mostly CanJS 3.0 with a bunch of bug
+fixes, a heap of new features, and a few breaking changes.  Most of the difficulty
+upgrading are the breaking changes, which account for the majority of the upgrade step size:
+
+<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:400px"/>
+
+To get all of those bug fixes and new features in 3.0, you have to
+take on those breaking changes from 2.3 all at once.  Depending on your company culture,
+and scale of your application, this might not be easy.
+
+Going forward in CanJS 3.0, packages are released independently of
+each other.  You can upgrade to bug fixes and new features
+immediately and delay breaking changes (exampe: `can-route@4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
+you might upgrade to `can-route@4.0.0` one month and `can-component@4.0.0`
+the following month.  CanJS 3.0's upgrade path might look like:
+
+<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
+
+Independent repositories also means that [can-legacy legacy] libraries, like [can-ejs] can continue
+living through community driven fixes and releases.  It doesn't die simply because
+it's no longer included in the core CanJS build.
+
+## Cool Computes
+
+CanJS has two powerful observable systems that are the foundation for many of the other
+core libraries:
+
+ - [can-compute] - Observable values and derived observable values.
+ - [can-define] - Observable objects.
+
+This section is about the technical highlights of [can-compute].  However,
+as [can-define] uses computes internally for [computed getter properties](#Computedgetterproperties)
+and [asynchronous computed getter properties](##Asynccomputedgetterproperties), the benefits
+of computes extend to [can-define]. In many cases, we'll use _computed getter properties_ to
+show the advantages of computes.
+
+[can-compute] is used in similar situations as event streams libraries like RXJS and Bacon.js. Computes
+are used to transform a set of observable values into another observable value.  While event stream libraries are able to setup more complex transformations, computes can setup transformations
+much more easily.
+
+For example, the following compute keeps the completed count of todos in a list:
+
+```js
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+var compute = require("can-compute");
+
+var todoList = new DefineList([
+    {name: "dishes",  complete: true},
+    {name: "laundry", complete: false}
+]);
+
+var completedCount = compute(function(){
+    return todoList.filter(function(todo){
+        return todo.complete;
+    });
 })
 ```
 
-Or an observable value that derives its value from other observables.
+`completedCount` is updated when any todo's `complete` property changes like:
 
-```javascript
-var person = new Person({
-    firstName: 'Alice',
-    lastName: 'Liddell'
-});
-
-var fullName = compute(function() {
-    return person.firstName + ' ' + person.lastName;
-});
-
-fullName.on('change', function(ev, newVal, oldVal) {
-        console.log("This person's full name is now " + newVal + '.');
-});
-
-person.firstName = 'Allison'; // The log reads:
-//-> "This person's full name is now Allison Liddell."
+```js
+todoList[0].complete = false;
 ```
 
-### 2. Observable maps and lists
+Or a todo is added to or removed from the list like:
 
-Object-oriented observables that mix in functional behavior, compose state naturally, and are easy to test. These objects and arrays provide the backbone of a strong ViewModel layer and the glue for data binding templates.
-
-```javascript
-var Person = DefineMap.extend(
-  {
-    first: "string",
-    last: {type: "string"},
-    fullName: {
-      get: function(){
-        return this.first+" "+this.last;
-      }
-    },
-    age: {value: 0},
-  });
-
-var me = new Person({first: "Justin", last: "Meyer"})
-me.fullName //-> "Justin Meyer"
-me.age      //-> 0
+```js
+todoList.push({name: "learn about computes", complete: true})
 ```
 
-### 3. Models
+`completedCount` automatically listens to all of these changes because
+[can-compute] infers dependencies.
 
-On the surface, encapsulates the data layer and connects to the backend. Behind the surface, a collection of opt-in behaviors provide complex optimizations.
+### Inferred dependencies
 
- - [Automatic real-time support](../../can-connect/real-time/real-time.html): Live updates to sets of data that includes or excludes instances based on set logic.
- - Opt-in performance optimizations: [Fallthrough caching](../../can-connect/fall-through-cache/fall-through-cache.html), [request combination](../../can-connect/data/combine-requests/combine-requests.html), [localstorage](../../can-connect/data/localstorage-cache/localstorage-cache.html) and [in-memory](../../can-connect/data/memory-cache/memory-cache.html) data cache
- - [Prevents memory leaks](../../can-connect/constructor/store/store.html): reference counting and removal of unused instances
+In event stream libraries or other computed computed libraries, you must declare your
+dependencies like:
 
-```javascript
-var todoConnection = superMap({
-  idProp: "_id",
-  Map: Todo,
-  List: TodoList,
-  url: "/services/todos",
-  name: "todo"
+```js
+var fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(firstName, lastName){
+    return firstName + " " + lastName;
 });
-Todo.getList({}).then(function(todos){ ... });
 ```
 
-CanJS has a lot of features. This page will dive into details on the best ones and why they’re valuable to developers.
+or like:
 
-## Modularity
+```js
+fullName: Ember.computed('firstName', 'lastName', function() {
+	return this.get('firstName')+" "+this.get('lastName');
+});
+```
 
-CanJS, as of the 3.0 release, has been broken up into several dozen completely independent modules, each with it’s own separate npm package and version number using [Semantic Versioning](http://semver.org).
+[can-compute] infers their own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code and repetition.
 
-The obvious advantage of library modularity is that pieces can be used without the whole. You can choose to use Observables or can-fixture without the rest of the framework. You could even mix and match CanJS libraries with other libraries like React quite easily.
+This means you can write `fullName` like:
 
-However, that’s not the main benefit modularity provides to users.
+```js
+var fullName = compute(function(){
+    return firstName() + " " + lastName();
+});
+```
 
-Why is this important? It makes it easy to balance stability and innovation.
+or like:
 
-For users that have an existing application, this modularity means they can leave functional parts of their application code alone, forever, while using new CanJS features and modules in future new areas of the application.
+```js
+Person = DefineMap.extend({
+    firstName: "string",
+    lastName: "string",
+    get fullName() {
+        return this.firstName + " " +this.lastName;
+    }
+});
+```
 
-### Adopt new framework features without any upgrade effort or library bloat
+This ability is especially useful when the dependencies are dynamic as in the
+following `completedCount` example:
 
-As new modules are released, containing yet unknown better ways to build applications (i.e. a better template engine or a new model layer), you can incorporate them, without replacing the existing modules. And they’ll share the same lower level dependencies.
 
-For example, say an entire application is built with CanJS 3.0. The following year, the developer is tasked with adding a new feature. At that point, a new templating engine called Beard has been released, with a new set of features superior to Stache. The developer can simply leave the remainder of the application using CanJS 3.0 (can-stache), and import can-beard in the new area of the application. It will likely still share the same lower level dependencies, since those are less likely to change very often, so this adds an insignificant amount of code weight.
+```js
+var todoList = new DefineList([
+    {name: "dishes",  complete: true},
+    {name: "laundry", complete: false}
+]);
 
-[//]: # (IMAGE: show application component blocks using 3.0 and stache, with new area using can-beard, but sharing same low level dependencies)
+var completedCount = compute(function(){
+    return todoList.filter(function(todo){
+        return todo.complete;
+    });
+})
+```
 
-Angular 1.x to 2.0 is a good counterexample to this approach. The recommended upgrade strategy was to either rewrite your application with 2.0 (a lot of extra work) or load your page with 1.X and 2.0, two full versions of the framework (a lot of code weight). Neither is preferable.
+When todos are added to and removed from `todoList`, `completedCount`
+will update its bindings automatically.
 
-With the modularity described in CanJS, applications can import multiple versions of the high level APIs while avoiding the work of rewriting with future syntaxes and the extra code weight of importing two full frameworks.
 
-### Faster, more stable framework releases
+### Cached values
 
-Because CanJS’s pieces can push out updates independently, small bug fixes and performance enhancements can be released immediately, with much lower risk. For example, if a bug is observed and fixed in can-compute, a new version of can-compute will be pushed out that day, as soon as tests pass.
+Once a compute is bound (with [can-compute.computed.on]), it immediately calculates its
+value and caches it so any future reads will use the cached value.
 
-By contrast, with the typical all-in-one structure, there will usually be a much longer delay between the can-compute bug fix and the next release. This is because making a new release for CanJS as a whole is a much more involved, risky endeavour. The can-compute change has to be tested much more rigorously against the framework as a whole. Plus there might be other changes in other areas in progress that need to land before the release can go out.
+Notice that before `fullName` is bound,
+its value is recalculated every time it is read.  After `fullName` is bound,
+its value is recalculated only when a dependent value changes.
 
-It’s similar to the difference between making plans with your best friend vs 10 of your friends. The larger group is going to move much more slowly because there are many more pieces to coordinate.
+```js
+var compute = require("can-compute");
+var firstName = compute("Payal");
+var lastName = compute("Meyer");
 
-## Observables
+var fullName = compute(function(){
+    console.log("Calculating fullName.");
+    return firstName()+" "+lastName();
+});
 
-### What are they
+fullName() // console.logs "Calculating fullName."
+           //-> "Payal Meyer"
 
-Observables are special types of data that allow their property changes to be "observed" using typical event listeners. In modern web applications, they also enable “data bound” templates, which cause sections of the UI to be automatically re-rendered whenever certain data properties change, a powerful feature that removes large amounts of repetitive application code.
+fullName() // console.logs "Calculating fullName."
+          //-> "Payal Meyer"
 
-CanJS has an observable layer that is powerful, performant, and flexible. It binds together various parts of applications, using expressive property definitions.
+fullName.on("change", function(){}) // console.logs "Calculating fullName."
 
-```javascript
-var define = require("can-define");
 
-var Person = function(first, last){
-	this.first = first;
-	this.last = last;
+fullName() //-> "Payal Meyer"
+
+firstName("Ramiya") // console.logs "Calculating fullName."
+
+fullName() //-> "Ramiya Meyer"
+```
+
+Using cached values can dramatically improve performance in situations where a computed value is frequently read by multiple parts of the application.  
+
+### Synchronous
+
+CanJS observables synchronously notify any event listeners. This makes testing
+and debugging quite a bit easier. The following shows how you can
+change the `firstName` value and immediately check the consequences of that change:
+
+```js
+var stache = require("can-stache");
+var compute = require("can-compute");
+
+var template = stache("<h1>Welcome {{fullName}}</h1>");
+
+var firstName = compute("Justin");
+var lastName = compute("Meyer");
+
+var fullName = compute(function(){
+    return firstName()+" "+lastName();
+});
+
+var frag = template({fullName: fullName});
+
+assert.equal(frag.firstChild.innerHTML, "Welcome Payal Meyer");
+
+firstName("Ramiya");
+
+assert.equal(frag.firstChild.innerHTML, "Welcome Ramiya Meyer");
+```
+
+### Batched events
+
+Observable property changes [can-event/batch/batch.dispatch] synchronous events that update
+computes and the DOM are ideal for many scenarios, but there are times where this can cause performance problems. To prevent unnecessary updates, events can be batched using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]. Computes and the DOM will only be updated
+once for all changes within the batch.
+
+In the previous example, `{{fullName}}` would be updated twice
+if `firstName` and `lastName` are changed:
+
+```js
+firstName("Payal");
+lastName("Shah");
+```
+
+Wrapping this in a batch will make `{{fullName}}` update only once:
+
+
+```js
+var batch = require("can-event/batch/batch");
+
+batch.start();
+firstName("Payal");
+lastName("Shah");
+batch.stop();
+```
+
+Using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]
+can even make quadratic updates (`O(n^2)`) become linear (`O(n)`).
+
+Consider the performance of a `completeAll` method that completes every todo in a list
+and a `completeCount` compute that calculates the number of complete todos:
+
+```js
+var todoList = new DefineList([
+    {name: "dishes",  complete: false},
+    {name: "laundry", complete: false}
+]);
+
+var completeAll = function(){
+    todoList.forEach(function(todo){
+        console.log("completing", todo.name)
+        todo.complete = true;
+    });
 };
-define(Person.prototype,{
-	first: { type: "string" },
-	last: { type: "string" },
-	fullName: {
-		get: function(){
-			return this.first+" "+this.last;
-		}
-	}
+
+var completedCount = compute(function(){
+    return todoList.filter(function(todo){
+        console.log("checking", todo.name);
+        return todo.complete;
+    });
+});
+
+completedCount.on("change", function(ev, newVal){
+    console.log("completedCount is", newVal);
 });
 ```
 
-Observables are very powerful and easy to use on their own, but in CanJS applications, they are also used as a ViewModel, a layer that sits between the model and the view and contains the state of the application. More on ViewModels [below](#ViewModels).
+If `completeAll` is called, the following will be logged:
 
-### Why they’re powerful
+```
+completeAll();
+// console.logs "completing dishes"
+// console.logs "checking dishes"
+// console.logs "checking laundry"
+// console.logs "completedCount is 1"
+// console.logs "completing laundry"
+// console.logs "checking dishes"
+// console.logs "checking laundry"
+// console.logs "completedCount is 2"
+```
 
-Observables as a concept enable an important architectural advantage in large applications.
+This means that every time a todo is marked as complete, `completedCount` loops
+through every todo.
 
-Say you have an application with three discrete components.
+However, changing `completeAll` to use `batch.start` and `batch.stop` like:
 
-[//]: # (IMAGE: app with 3 things)
+```js
+var completeAll = function(){
+    batch.start();
+    todoList.forEach(function(todo){
+        console.log("completing", todo.name)
+        todo.complete = true;
+    });
+    batch.stop()
+};
+```
 
-Without observables, you might have component A tell component B to update itself when something happens, like user input.
+means `completeAll` will log the following:
 
-[//]: # (IMAGE: arrows showing this happening)
+```js
+completeAll();
+// console.logs "completing dishes"
+// console.logs "completing laundry"
+// console.logs "checking dishes"
+// console.logs "checking laundry"
+// console.logs "completedCount is 2"
+```
 
-With observables, you would separate the state of your application into a separate layer, and each component would be able to change parts of the state it cares about and listen to parts of the state it needs. When the same user input occurs, component A would update the observable state object. Component B would be notified that a property of the observable state has changed, and update itself accordingly.
+[can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]
+can improve performance by preventing compute recalculations.
 
-[//]: # (IMAGE: show this happening)
+## Outstanding Observable Objects
 
-Why is this better? Because this allows each component to be untied from the rest. They each get passed the state they need, but are unaware of the rest of the components and their needs. The architecture diagram changes from this:
+[can-define] is used to create observable [models](#Models) and [view-models](#ViewModels) like:
 
-[//]: # (IMAGE: arrows pointing at everything)
+```js
+var DefineMap = require("can-define/map/map");
 
-<img src="../../docs/can-guides/images/introduction/no-observables.png" style="width:100%;max-width:750px" alt="Diagram of app without observables"/>
+var Person = DefineMap.extend({
+    first: "string",
+    last: "string",
+    get fullName(){
+        return this.first + " " + this.last;
+    }
+})
+```
 
-To this:
+[can-define] uses [can-compute] internally to support [computed getter properties](##Computedgetterproperties) like `fullName` above so make sure to read about the
+benefits of [cool computes](#CoolComputes).
 
-[//]: # (IMAGE: state is in the middle)
+As [can-define] powers almost everything in a CanJS application, they have grown to be
+quite powerful, performant and flexible.  Read on to explore some of their best characteristics.
 
-<img src="../../docs/can-guides/images/introduction/with-observables.png" style="width:100%;max-width:750px" alt="Diagram of app using observables"/>
+### Object oriented and functional
 
-Not only is this simpler to understand, these components are more easily testable and shareable, and changes are more contained are less risky to have unwanted side effects. All of these advantages are possible because of observables.
+CanJS's observables produce data types that are easy for others to consume,
+but can be implemented with the rigor of declarative programming.  This is
+accomplished by combining the benefits of object oriented programming,
+functional programming, and functional reactive programming.
 
-### Synchronous, Object oriented, and Functional
+[Functional programming](https://en.wikipedia.org/wiki/Functional_programming), which is a
+form of [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming), avoids
+changing state and mutable data.  It treats programming as math.  This eliminates side effects,
+making it easier to predict the behavior of an application.
 
-In CanJS observables, changes to a property in an object or array immediately and synchronously notify any event listeners.
+> Programming is, at its best, a branch of formal mathematics and applied logic.   
+> __Edsger Dijkstra__ - _1 March 1999 at the ACM Symposium on Applied Computing at San Antonio, TX_
 
-This is in contrast to dirty checking observables, such as those used in Angular 1.X, which did not immediately notify listeners, but did so asynchronously after a digest cycle.
+However, [object oriented](https://en.wikipedia.org/wiki/Object-oriented_programming) APIs often feel more natural.
 
-Synchronous code is always easier to debug and test.
+> Object oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things which have properties and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.  
+> [Tim Boudreau, Oracle Labs](https://www.quora.com/Why-did-Dijkstra-say-that-%E2%80%9CObject-oriented-programming-is-an-exceptionally-bad-idea-which-could-only-have-originated-in-California-%E2%80%9D)
 
-CanJS observables are both object oriented and functional, leaving it up to the developer to decide which approach works better for the problem at hand.
+For example, the following object-oriented `SaltShaker` API feels intuitive - any
+developer can immediately understand it.
 
-They are object oriented because you can create observables out of any normal object or array, such as the example shown above. They are functional because you can use filter, map, and other functional helpers to compose properties that derive their value based on the changing state of other properties. For example:
+```js
+var saltShaker = new SaltShaker();
 
-```javascript
+saltShaker.fill();  
+
+saltShaker.shake() //-> "salt"
+saltShaker.shake() //-> "salt"  
+saltShaker.shake() //-> null   
+
+saltShaker.empty   //-> true
+```
+
+To satisfy this API, `SaltShaker` could be implemented as follows:
+
+```js
+var DefineMap = require("can-define/map/map");
+
+SaltShaker = DefineMap.extend({
+    saltCount: {type: "number", value: 0},
+    fill: function(){
+        this.saltCount = 2;
+    },
+    shake: function(){
+        var hasSalt = this.saltCount;
+        this.saltCount = hasSalt ? this.saltCount - 1 : 0;
+        return hasSalt ? "salt" : null;
+    },
+    get empty() {
+        return ! this.saltCount;
+    }
+});
+```
+
+While `empty` is implemented [declaratively](https://en.wikipedia.org/wiki/Declarative_programming),
+notice how both `fill` and `shake` mutate the state of `saltCount`.  In a more complex type,
+this can easily lead to bugs.  Instead, the following uses [can-define-stream] and
+[functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming)
+to make `saltCount` a function of the calls to `fill` and `shake`:
+
+```js
+var SaltShaker = DefineMap.extend({
+    saltCount: {
+        stream: function() {
+            return this.stream("fill")
+					.merge(this.stream("shake"))
+					.scan(function(prev, event){
+				if(event.type === "fill") {
+					return 2;
+				} else {
+					return prev > 0 ? prev - 1 :  0;
+				}
+			},0);
+        }
+    },
+    fill: function() {
+        this.dispatch("fill");
+    },
+    shake: function() {
+		var hadSalt = this.saltCount;
+        this.dispatch("shake");
+        return hadSalt ? "salt" : null;
+    },
+    get empty() {
+        return !this.saltCount;
+    }
+});
+```
+
+CanJS provides three powerful functional helpers on [can-define/map/map] and [can-define/list/list]:
+
+ - [can-define.types.get computed getter properties]
+ - [can-define.types.get async computed getter properties]
+ - [can-define-stream.stream streamed properties]
+
+### Computed getter properties
+
+[can-define.types.get Computed getters] are the easiest way to declaratively transform
+stateful values into derived values.  For example, the following defines a `completedCount`
+property on instances of the `TodoList` type:
+
+```js
 var TodoList = DefineList.extend({
-		"#": Todo,
-		get completed(){
-				return this.filter({complete: true})
-		}
+    "#": Todo,
+    get completedCount(){
+        return this.filter({complete: true}).length
+    }
 });
 
 var todos = new TodoList([{complete: true}, {complete:false}]);
-todos.completed.length //-> 1
+todos.completedCount //-> 1
 ```
 
-There is also a [can-stream project](https://github.com/canjs/can-stream) that converts observables into event-streams.
+If items are added to the
 
-### Computed properties
+### Async computed getter properties
 
-Observables can define properties that depend on other properties, and they'll automatically recompute only when their dependent properties change. The `fullName` property above is an example of a computed property.
+### Streamed properties
 
-```javascript
-var person = new Person("Justin", "Meyer");
-person.first    //-> "Justin"
-person.last     //-> "Meyer"
-person.fullName //-> "Justin Meyer"
-```
 
-When `first` or `last` are changed, `fullName` is immediately changed as well, and any listeners of the `fullName` property synchronously notified.
-
-### Data bound templates
-
-Although not directly a feature of observables, data bound templates are a feature of CanJS Views that are tied closely with the observable layer.
-
-Templates in CanJS bind to property changes and update the DOM as needed.
-
-For example, there may be a template that looks like this:
-
-```
-<div>{{fullName}}</div>
-```
-
-If first is changed:
-
-```javascript
-person.first = 'Jane';
-```
-
-`fullName` recomputes, then the DOM automatically changes to reflect the new value.
-
-Observables express complex relationships between data, without regard to its display. Views express properties from the observables, without regard to how the properties are computed. The app then comes alive with rich functionality.
-
-DIAGRAM - circular arrows pointing back to each layer
 
 ### Expressive property definition syntax
 
 Can-define supports an expressive, powerful syntax for defining properties on observable objects. It supports get, set, initial value, and type conversion
-
-### Batched events
-
-Observable property changes causing synchronous events that update the DOM is great for most scenarios, but there are times where this could cause performance problems. To prevent unnecessary DOM updates, events can be batched using `canBatch.start` and `canBatch.stop`.
-
-Consider a todo list with a completeAll method that marks every todo in the list as complete and completeCount that counts the number of complete todos:
-
-```javascript
-var Todo = DefineMap.extend({
-		name: "string",
-		complete: "boolean"
-});
-
-var TodoList = DefineList.extend({
-		"#": Todo,
-		completeAll: function(){
-				this.forEach(function(todo){
-						todo.complete = true;
-				})
-		},
-		completeCount: function(){
-				return this.filter({complete: true}).length;
-		}
-})
-```
-
-When completeAll is called, the {{todos.completeCount}} magic tag will update once for every completed count. We can prevent this by wrapping completeAll with calls to start and stop:
-```javascript
-completeAll: function(){
-		canBatch.start();
-		this.forEach(function(todo){
-				todo.complete = true;
-		});
-		canBatch.end();
-},
-```
-
-### Inferred dependencies
-
-In other libraries that support computed properties, you declare your dependencies, like this:
-
-```javascript
-fullName: Ember.computed('firstName', 'lastName', function() {
-
-	return `${this.get('firstName')} ${this.get('lastName')}`;
-
-})
-```
-
-In CanJS, computed properties are able to determine their own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code and repetition.
-
-The way this works is by keeping track of any properties referenced when the computed function first runs, and binding the computed property to those property change events.
-
-Each time the computed function is run, these dependencies are re-evaluated, so even if there are different dependencies hiding in a conditional, those will be bound to the next time around.
-
-```javascript
-origFullName: {
-	get: function(){
-		if(this.gender == "female" && this.married) {
-			return this.first+" "+this.last;
-		} else {
-			return this.first+" "+this.maiden;
-		}
-	}
-}
-```
 
 ### Compiled property behavior
 
@@ -315,13 +508,43 @@ In CanJS 3.0, getting and setting properties whose behavior is defined through c
 
 This may not seem significant, but in fact this allows CanJS observables to provide the rich behaviors of can-define without sacrificing any performance. Competitor libraries either don’t allow for the same rich behaviors or are much slower performing gets and sets.
 
-### Compared to other frameworks
+## Approachable Architecture - The Maintainable MVVM
 
-In Angular 1.X, there are no direct observables. It uses dirty checking with regular JavaScript objects, which means at the end of the current $digest cycle, it will run an algorithm that determines what data has changed. This has performance drawbacks, as well as making it harder to write simple unit tests.
+CanJS applications employ a [Model-View-ViewModel](https://en.wikipedia.org/wiki/Model_View_ViewModel) architecture pattern.
 
-Angular 2.0
+<img src="../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
 
-In React, there is no observable data layer. You could define a fullName like we showed above, but it would be recomputed every time render is called, whether or not it has changed. Though it's possible to isolate and unit test its ViewModel, it's not quite set up to make this easy. For more details on how other React-based frameworks compare, read [this](./comparison.html).
+The following video introduces MVVM in CanJS, focusing on the strength of the ViewModel with an example. (Note: the syntax used in this video shows CanJS 2.3, which has some slight differences from 3.0, but the concepts are the same).
+
+[//]: # (VIDEO)
+
+### MVVM overview
+
+**Models** in CanJS are responsible for loading data from the server. They can be reused across ViewModels. They often perform data validation and sanitization logic. Their main function is to represent data sent back from a server. Models use intelligent set logic that enables real time integration and caching techniques.
+
+**Views** are templates. Specifically, templates that use handlebars syntax, but with data bindings and rewritten for better performance. Handlebars templates are designed to be logic-less.
+
+**ViewModels** were covered in detail above.
+
+### Composed, hierarchical state
+
+CanJS applications are composed from hierarchical components, each containing their own independent state (it’s own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
+
+The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
+
+[//]: # (IMAGE: show a diagram of several components and their ViewModel properties)
+
+Hierarchical State Machines (HSMs) is one way to describe this concept. UML diagrams allow for modeling of [hierarchically nested states](https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states), such as those in CanJS applications. Check out the [ATM guide](../../guides/atm.html) for an example of a hierarchical state machine implemented using hierarchical ViewModels.
+
+React, and other competing frameworks, have a big global state object that contains the application’s state. The problem with this approach, at least in any application with even moderate complexity, is that this monolithic layer becomes a dependency of every component in the application. This creates additional downstream problems:
+
+* Changes to the state object can have non-obvious and harmful side effects, causing unexpected bugs.
+
+* It becomes harder to work independently on one component of the project. Thus, scaling the team and parallelizing the effort becomes trickier, as several developers might have to touch the same central state layer.
+
+* Individual components become less reusable in other contexts because of their dependency on this external state layer.
+
+* Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies
 
 ## ViewModels
 
@@ -335,7 +558,7 @@ The introduction of a strong ViewModel provides key advantages for maintaining l
 
 * Enables easier [testing](https://donejs.com/Features.html#section=section_ComprehensiveTesting) - ViewModels can be unit tested easily. Because they represent the view's state without any knowledge of the DOM, they provide a simple interface for testing.
 
-### Independent ViewModels
+__Independent ViewModels__
 
 CanJS ViewModels are unique in their independence from other layers. ViewModels and Views are completely decoupled, and can be developed completely isolated from a template.
 
@@ -387,43 +610,7 @@ QUnit.test('fullName works', function() {
 
 In other frameworks, ViewModels don't enjoy this level of independence. Every React class has a render function, which is essentially a template, so the View, ViewModel, and component definition are typically part of the same module. Every Angular directive is a ViewModel. In CanJS, separating the ViewModel, template, and custom element is encouraged, making each module more decoupled and easier to unit test.
 
-## MVVM
 
-CanJS applications employ a [Model-View-ViewModel](https://en.wikipedia.org/wiki/Model_View_ViewModel) architecture pattern.
-
-<img src="../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
-
-The following video introduces MVVM in CanJS, focusing on the strength of the ViewModel with an example. (Note: the syntax used in this video shows CanJS 2.3, which has some slight differences from 3.0, but the concepts are the same).
-
-[//]: # (VIDEO)
-
-### MVVM overview
-
-**Models** in CanJS are responsible for loading data from the server. They can be reused across ViewModels. They often perform data validation and sanitization logic. Their main function is to represent data sent back from a server. Models use intelligent set logic that enables real time integration and caching techniques.
-
-**Views** are templates. Specifically, templates that use handlebars syntax, but with data bindings and rewritten for better performance. Handlebars templates are designed to be logic-less.
-
-**ViewModels** were covered in detail above.
-
-### Composed, hierarchical state
-
-CanJS applications are composed from hierarchical components, each containing their own independent state (it’s own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
-
-The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
-
-[//]: # (IMAGE: show a diagram of several components and their ViewModel properties)
-
-Hierarchical State Machines (HSMs) is one way to describe this concept. UML diagrams allow for modeling of [hierarchically nested states](https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states), such as those in CanJS applications. Check out the [ATM guide](../../guides/atm.html) for an example of a hierarchical state machine implemented using hierarchical ViewModels.
-
-React, and other competing frameworks, have a big global state object that contains the application’s state. The problem with this approach, at least in any application with even moderate complexity, is that this monolithic layer becomes a dependency of every component in the application. This creates additional downstream problems:
-
-* Changes to the state object can have non-obvious and harmful side effects, causing unexpected bugs.
-
-* It becomes harder to work independently on one component of the project. Thus, scaling the team and parallelizing the effort becomes trickier, as several developers might have to touch the same central state layer.
-
-* Individual components become less reusable in other contexts because of their dependency on this external state layer.
-
-* Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies
 
 ## Views
 
@@ -431,35 +618,22 @@ CanJS views are [Handlebars](http://handlebarsjs.com/) templates, with special f
 
 ```
 <header id="header">
-
 	<h1>todos</h1>
-
 	<todo-create/>
-
 </header>
 
 <ul id="todo-list">
-
 	{{#each todos}}
-
 		<li class="todo {{#if complete}}completed{{/if}}">
-
 				<div class="view">
-
 						<input class="toggle" type="checkbox" {($checked)}="complete">
-
 						<label>{{name}}</label>
-
 						<button class="destroy"></button>
-
 				</div>
 
 				<input class="edit" type="text" value="{{name}}"/>
-
 		</li>
-
 	{{/each}}
-
 </ul>
 ```
 
@@ -938,15 +1112,3 @@ Server-side rendering (SSR) provides two main benefits over traditional single p
 CanJS makes it possible to load your application on the server. This is because CanJS works in a NodeJS context, on top of a virtual DOM.
 
 Using [can-vdom](../can-vdom.html) and [can-zone](../can-zone.html), you can set up your own server side rendering system, such as [the one used in DoneJS](https://donejs.com/Apis.html#section=section_ServerSideRenderingAPIs). For information on using SSR without setting anything up yourself, please check out the DoneJS [quick start](https://donejs.com/Guide.html) and [in depth](https://donejs.com/place-my-order.html) guides.
-
-## Size to features ratio
-
-The core of CanJS, gzipped, is under 50KB. While there may be smaller architectural libraries, there aren’t competitors that rival CanJS that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.
-
-jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements it’s own DOM utilities, in addition to much more.
-
-Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
-
-React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
-
-The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped
