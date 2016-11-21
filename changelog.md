@@ -3,6 +3,25 @@
 @parent guides 5
 -->
 
+__3.1.0__ (Nov 17 2016)
+- [can-connect - made behavior signatures consistent](https://github.com/canjs/can-connect/issues/171)
+- [can-route - allowing whitespace in interpolated strings](https://github.com/canjs/can-route/issues/45)
+- [can-simple-map - updated to use `canEvent.dispatch` instead of `canEvent.trigger`](https://github.com/canjs/can-simple-map/issues/8)
+- [can-simple-map - documentation](https://github.com/canjs/can-simple-map/issues/7)
+- [can-util - correcting documentation for `inserted` and `removed` events](https://github.com/canjs/can-util/issues/140)
+- [can-view-model - allowing a selector as the first argument](https://github.com/canjs/can-view-model/issues/6)
+- [can-view-scope - deprecating `peak` in favor of `peek`](https://github.com/canjs/can-view-scope/issues/30)
+- [can-stache - updating instances of `peak` to `peek`](https://github.com/canjs/can-stache/commit/97bc1cbaa80f9f614bf1b6bae428293e9b941af3)
+
+
+__3.0.0__ (Nov 10 2016)
+- [Code is more modular with can-* packages in their own repos](https://github.com/canjs/canjs/blob/v3.0.0/package.json#L42-L81)
+- [No longer depends on jQuery/Mootools/Dojo/etc although integration with jQuery is still as easy as ever](http://v3.canjs.com/doc/can-jquery.html)
+- [No more `.attr()`. DefineMap is faster and allows nice syntax conventions like getters and will give warnings when setting properties that aren't defined](http://v3.canjs.com/doc/can-define/map/map.html)
+- [Much more granular documentation - including Ecosystem modules like `can-zone` and Infrastructure modules like `can-util/js/diff/diff`](http://v3.canjs.com/index.html)
+- [Supports real time with can-connect 1.0](http://v3.canjs.com/doc/can-connect/real-time/real-time.html)
+- [Has stache converters, which should make setting up two-way bindings easier](http://v3.canjs.com/doc/can-stache-converters.html)
+
 __2.3.27__ ( Sep 15 2016 )
 
 - [Adding PhantomJS from NPM for a newer version](https://github.com/canjs/canjs/pull/2489)
