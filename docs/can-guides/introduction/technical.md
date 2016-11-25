@@ -806,6 +806,64 @@ Models often perform data validation and sanitization logic. They use intelligen
 
 ### Server connection and data type separation of concerns
 
+CanJS helps you organize your model code into two distinct parts:
+
+1) Communicating with a server.
+2) Managing the returned data.
+
+This is accomplished by encapsulating the code required to connect to a service and encouraging typed definitions of the data the service returns.
+
+In essence, for every “type” of data object in your project, you can create a model to represent the properties and methods attached to it. With this model in hand, you can also structure how you communicate with your server. Different API calls can return the same type of data and have those represented as model objects.
+
+Let’s look at an example of how we would define a `Todo` type and a list of todos:
+
+```javascript
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+
+var Todo = DefineMap.extend({
+	complete: "boolean",
+	name: "string"
+});
+
+var TodoList = DefineList.extend({
+	"#": Todo,
+	completeCount: function(){
+		return this.filter({complete: true}).length;
+	}
+})
+```
+
+This example uses [can-define/map/map] to create a type definition for a `Todo`; each instance of `Todo` has a boolean `complete` property and a string `name` property.
+
+This example also uses [can-define/list/list] to define a type for an array of `Todo` instances; the list has a `completeCount` method for easily determining how many todos in the list have been completed.
+
+Using [can-connect], we can create a connection that connects a restful `/api/todos` service to `Todo` instances and `TodoList` lists:
+
+```javascript
+var connect = require("can-connect");
+var todoConnection = connect([
+	require("can-connect/constructor/constructor"),
+	require("can-connect/data/url/url")
+], {
+	url: "/api/todos",
+	list: function(listData, set) {
+		return new TodoList(listData.data);
+	},
+	instance: function(props) {
+		return new Todo(props);
+	}
+});
+```
+
+That connection can be used to get a `TodoList` of `Todo`s:
+
+```javascript
+todoConnection.getList({}).then(function(todos) {
+	// Do what you’d like with the `todos`
+});
+```
+
 ### Parameter awareness
 
 [can-set](http://canjs.github.io/canjs/doc/can-set.html)
