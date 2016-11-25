@@ -800,15 +800,15 @@ This feature, when used with [steal-stache](../../steal-stache.html), signals to
 
 ## Models
 
-### Typed data, but separate from connection info.
+### Server connection and data type separation of concerns
 
 ### Parameter awareness
 
 [can-set](http://canjs.github.io/canjs/doc/can-set.html)
 
-### Real time
+### Real-time instance updates
 
-### Instance and List stores
+### Real-time list updates
 
 ### Caching and minimal data requests
 
@@ -926,8 +926,6 @@ This video illustrates how it works.
 ### Works with related data
 
 [can-connect/can/ref/ref](http://canjs.github.io/canjs/doc/can-connect/can/ref/ref.html)
-
-### Web worker
 
 ## Server Side Rendering
 
