@@ -800,6 +800,10 @@ This feature, when used with [steal-stache](../../steal-stache.html), signals to
 
 ## Models
 
+As previously mentioned, models are responsible for loading data from a server and representing the data sent back from a server.
+
+Models often perform data validation and sanitization logic. They use intelligent set logic to cache data, minimize network requests, and provide real-time functionality.
+
 ### Server connection and data type separation of concerns
 
 ### Parameter awareness
