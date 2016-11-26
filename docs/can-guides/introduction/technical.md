@@ -870,6 +870,71 @@ todoConnection.getList({}).then(function(todos) {
 
 ### Real-time instance updates
 
+As mentioned previously, CanJS has observables to automatically propagate changes from an object to the view (DOM); this is called live binding.
+
+[can-connect] also has an instance store for two purposes:
+
+1. Preventing duplicate instances of a model from creating duplicate instance copies that get out of sync.
+2. Cleaning up old unused instances so that the size of this store remains minimal and applications don't slowly collect memory over time without releasing it.
+
+#### Duplicate instances
+
+The instance store prevents duplicate instances from being created by storing each model object by its `id` (by default; you can configure which property is used).
+
+Let’s look at how duplicate instances are prevented by continuing with our todo app example.
+
+```javascript
+todoConnection.getList({completed: false}).then(function(incompleteTodos) {});
+```
+
+`incompleteTodos` might look like this:
+
+    [
+      {id: 2, completed: false, name: "Finish docs", priority: "high"},
+      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+    ]
+
+Next, let’s fetch a list of high-priority todos:
+
+```javascript
+todoConnection.getList({priority: "high"}).then(function(urgentTodos) {});
+```
+
+`urgentTodos` might look like this:
+
+    [
+      {id: 1, completed: true, name: "Finish code", priority: "high"},
+      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+    ]
+
+Note that the “Finish docs” todo appears in both lists. CanJS [can-set.props.id intelligently] matches the todos by `id`, thus reusing the first instance of “Finish docs” that was created when `incompleteTodos` was fetched.
+
+If these todos are displayed in separate lists on the page, and a user marks “Finish docs” as completed in one of the lists (causing the `completed` property to be set to `true`), then the other list will reflect this change.
+
+#### Prevent memory leaks
+
+A global instance store _sounds_ great until you consider the memory implications: if every model object instance is tracked, then won’t the application’s memory usage only grow over time?
+
+CanJS intelligently solves this potential problem for you by keeping track of which objects are observing changes to your model object instances.
+
+The reference count for each object increases in two ways:
+
+1. Explicitly: if you call `.bind()` on an instance, like so: `todo.bind('name', function(){})`
+
+2. Implicitly: if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{name}}` in a [can-stache] template
+
+Similarly, the reference count is decreased in two ways:
+
+1. Explicitly: if you call `.unbind()` on an instance
+
+2. Implicitly: if part of the DOM connected to a live-binding gets removed
+
+When the reference count for a model object instance gets back down to 0 (no more references), the instance is removed from the store so its memory can be garbage collected.
+
+The result is that in long-running applications that stream large amounts of data, this store will not cause memory to increase unnecessarily over time.
+
+You can read more about the benefits of the instance store in our [“Avoid the Zombie Apocalypse” blog post](https://www.bitovi.com/blog/avoid-the-zombie-apocalypse).
+
 ### Real-time list updates
 
 ### Caching and minimal data requests
