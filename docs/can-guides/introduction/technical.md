@@ -864,10 +864,6 @@ todoConnection.getList({}).then(function(todos) {
 });
 ```
 
-### Parameter awareness
-
-[can-set](http://canjs.github.io/canjs/doc/can-set.html)
-
 ### Real-time instance updates
 
 As mentioned previously, CanJS has observables to automatically propagate changes from an object to the view (DOM); this is called live binding.
@@ -936,6 +932,64 @@ The result is that in long-running applications that stream large amounts of dat
 You can read more about the benefits of the instance store in our [“Avoid the Zombie Apocalypse” blog post](https://www.bitovi.com/blog/avoid-the-zombie-apocalypse).
 
 ### Real-time list updates
+
+In addition to keeping object instances up to date, CanJS also automatically inserts, removes, and replaces objects within lists.
+
+Let’s continue with our incomplete and urgent todo example from the previous section.
+
+`incompleteTodos` looks like this:
+
+    [
+      {id: 2, completed: false, name: "Finish docs", priority: "high"},
+      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+    ]
+
+`urgentTodos` looks like this:
+
+    [
+      {id: 1, completed: true, name: "Finish code", priority: "high"},
+      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+    ]
+
+In the UI, there’s a checkbox next to each urgent todo that sets the `completed` property like this:
+
+```javascript
+todo.completed = !todo.completed;
+```
+
+When the user clicks the checkbox for the “Finish docs” todo, its `completed` property gets set to `true` and it automatically disappears from the `incompleteTodos` list.
+
+How is that possible? The answer is the list store and set logic, made possible with [can-set].
+
+Similar to the instance store, the list store is a collection of all the model lists in a CanJS application. It’s memory safe (it won’t leak) and understands what your parameters mean, so it can intelligently insert, remove, and replace objects within your lists.
+
+#### Parameter awareness
+
+When you make a request like the one below:
+
+```javascript
+todoConnection.getList({completed: false}).then(function(incompleteTodos) {});
+```
+
+[can-connect] uses [can-set] to create an [can-set.Algebra Algebra] that represents all incomplete todos.
+
+```
+var set = require("can-set");
+var algebra = new set.Algebra(
+	set.props.boolean("completed")
+);
+``` 
+
+The `algebra` is associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. Thus, when our application logic sets `completed` on any todo to `false`, that todo will be added to `incompleteTodos` _without_ re-fetching the list from the server; similarly, if you set `completed` to `true` on any todo within `incompleteTodos`, that todo will be removed from the list.
+
+This behavior is extremely powerful for a couple reasons:
+
+- You don’t have to update any lists yourself.
+- You don’t need to make another request to the server to refresh data updated within the application.
+
+If you’ve ever written a CRUD application and had to implement this functionality yourself, you’ll understand the immense value in having this abstracted away from you by CanJS.
+
+You can read more about the magic of `can-set` in its [can-set API docs].
 
 ### Caching and minimal data requests
 
