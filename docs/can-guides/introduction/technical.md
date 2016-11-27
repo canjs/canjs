@@ -993,116 +993,39 @@ You can read more about the magic of `can-set` in its [can-set API docs].
 
 ### Caching and minimal data requests
 
-CanJS improves performance by intelligently managing the data layer, taking advantage of various forms of caching and request reduction techniques.
+Undoubtedly, the slowest part of any web application is communicating with the server. CanJS uses the following strategies to improve performance:
 
-Undoubtedly, the slowest part of any web application is round trips to the server. Especially now that [more than 50% of web traffic comes from mobile devices](http://searchengineland.com/its-official-google-says-more-searches-now-on-mobile-than-on-desktop-220369), where connections are notoriously slow and unreliable, applications must be smart about reducing network requests.
+* Combining requests: combine multiple requests to the same API into one request
+* Fall-through caching: improve perceived performance by showing cached data first (while still fetching the latest data)
+* Request caching: reduce the number and size of server requests by intelligently using cached datasets
 
-Making matters worse, the concerns of maintainable architecture in single page applications are at odds with the concerns of minimizing network requests. This is because independent, isolated UI widgets, while easier to maintain, often make AJAX requests on page load. Without a layer that intelligently manages those requests, this architecture leads to too many AJAX requests before the user sees something useful.
+#### Combining requests
 
-With CanJS, you don't have to choose between maintainability and performance.
+CanJS collects requests that are made within [can-connect/data/combine-requests.time a millisecond] of each other and tries to combine them into a single request if they are for the same API.
 
-CanJS uses the following strategies to improve perceived performance (reduce the amount of time before users see content rendered):
+For example, let’s say we’re loading a page that has two parts: a section with todos that need to be completed and a section that’s an archive of completed todos. The incomplete section is just a list of todos, while the archive section is broken up by month, so you want to split these sections into two different components.
 
-* [Fall through caching](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Fallthroughcaching) - Cache data in localStorage. Automatically show cached data immediately, but look for updates on the server in the background and merge changes.
+In most other frameworks, you would probably decide to have some parent component fetch the list of all todos so you could pass different subsets to each component. This decreases the reusability and maintainability of the components, but it would result in just one network request instead of two.
 
-* [Combining requests](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Combiningrequests) - Instead of making multiple, independent requests to the same API, combine them into a single request.
+With CanJS, you don't have to choose between maintainability and performance. You can decide to have each component fetch its data independently and [can-connect] will intelligently combine the two requests into one.
 
-* [Request caching](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Requestcaching) - Reduce the number and size of server requests by intelligently using cached datasets.
+This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `todoConnection.getList({completed: true})` and `todoConnection.getList({completed: false})` are equivalent to just one `todoConnection.getList({})` request, then make that single request and return the correct data to each call.
 
-* [Inline cache](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Inlinecache) - Use data embedded in the page response instead of making duplicate requests.
+This [can-connect/data/combine-requests/combine-requests configurable behavior] is extremely powerful because it abstracts network request complexity away from how you create and compose your application.
 
-#### **How it works**
+#### Fall-through caching
 
-[can-connect](http://connect.canjs.com/) makes up part of the CanJS model layer. Since all requests flow through this data layer, by making heavy use of set logic and localStorage caching, it's able to identify cache hits, even partial hits, and make the most minimal set of requests possible.
+To increase perceived performance, `can-connect` includes a [can-connect/fall-through-cache/fall-through-cache fall-through cache] that first serves cached data from `localStorage` while simultaneously making the API request to get the latest data.
 
-It acts as a central hub for data requests, making decisions about how to best serve each request, but abstracting this complexity away from the application code. This leaves the UI components themselves able to make requests independently, and with little thought to performance, without actually creating a poorly performing application.
+The major benefit of this technique is improved perceived performance: users will see content faster because it’s returned immediately from the cache. When the data hasn’t changed, the user doesn’t notice anything, but when it has, the magic of live-bindings automatically updates the data as soon as the API request finishes.
 
-##### **Fall through caching**
+#### Request caching
 
-Fall through caching serves cached data first, but still makes API requests to check for changes.
+In some scenarios, an even more aggressive caching strategy is favorable. One example is fetching data that doesn’t change very often, or cached data that you can invalidate yourself. The [can-connect/cache-requests/cache-requests] behavior can reduce both the number of requests that are made and the size of those requests in these cases.
 
-The major benefit of this technique is improved perceived performance. Users will see content faster. Most of the time, when there is a cache hit, that content will still be accurate, or at least mostly accurate.
+In the first scenario, where the data doesn’t change very often (and thus shouldn’t be fetched again during the lifetime of the application), no more requests to the API will be made for that same set of data. In the second scenario, you can choose to invalidate the cache yourself, so after the first API request the data is always cached until you clear it manually.
 
-This benefits two types of situations. First is page loads after the first page load (the first page load populates the cache). This scenario is less relevant when using server-side rendering. Second is long lived applications that make API requests after the page has loaded. These types of applications will enjoy improved performance.
-
-By default, this is turned on, but can easily be deactivated for data that should not be cached.
-
-Here's how the caching logic works:
-
-1. When the application loads, it checks for available cache connections.
-
-2. When a request is made, it checks for a cache hit.
-
-3. If there is a hit, the request is completed immediately with the cached data.
-
-4. Regardless of a hit or miss, a request is made in the background to the actual API endpoint.
-
-5. When that response comes back, if there was a difference between the API response data and the cache hit data, the initial request promise's data is updated with the new data. Template data bindings will cause the UI to update automatically with these changes.
-
-6. Updated response data is automatically saved in the cache, to be used for future requests - whether that's in the current page session, or when the user comes back in the future.
-
-##### **Combining requests**
-
-Combining requests combines multiple incoming requests into one, if possible. This is done with the help of [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets).
-
-CanJS collects requests that are made within a few milliseconds of each other, and if they are pointed at the same API, tries to combine them into a single superset request.
-
-For example, the video below shows an application that shows two filtered lists of data on page load - a list of completed and incomplete todos. Both are subsets of a larger set of data - the entire list of todos.
-
-Combining these into a single request reduces the number of requests. This optimization is abstracted away from the application code that made the original request.
-
-##### **Request caching**
-
-Request caching is a type of caching that is more aggressive than fallthrough caching. It is meant for data that doesn't change very often. Its advantage is it reduces both the number of requests that are made, and the size of those requests.
-
-There are two differences between request and fallthrough caching:
-
-1. Cached data is not invalidated.
-
-Once data is in the cache, no more requests to the API for that same set of data are made. You can write code that invalidates the cache at certain times, or after a new build is released.
-
-1. The smallest possible request is made, based on the contents of the cache, and merged into a complete result set.
-
-The request logic is more aggressive in its attempts to find subsets of the data within the cache, and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.
-
-##### **Inline cache**
-
-Server-side rendered single page apps (SPAs) have a problem with wasteful duplicate requests. These can cause the browser to slow down, waste bandwidth, and reduce perceived performance.
-
-1. When a page is rendered server-side, it makes data requests on the server to various APIs.
-
-2. After the page's rendered HTML loads in the client, the SPA is loaded in the client, so that subsequent requests are handled within the SPA.
-
-3. The SPA will want to re-request for the same data that was already requested on the server.
-
-CanJS solves this problem with an inline cache - embedded inline JSON data sent back with the server rendered content, which is used to serve the initial SPA data requests.
-
-CanJS uniquely makes populating and using the inline cache easy. waitFor is a method that:
-
-1. Tells the SSR server to wait for a promise to resolve before rendering.
-
-2. Collects data from each promise and uses it to populate the inline cache.
-
-For example:
-
-```javascript
-can.Component.extend({
-	tag: "user-name",
-	template: can.stache( "{{user.name}}" ),
-	viewModel: {
-		init: function () {
-			var promise = User.getOne( { id: this.attr( "id" ) } );
-			this.attr( "%root" ).waitFor( promise );
-			promise.then( ( user ) => { this.attr( "user", user ); } );
-		}
-	}
-});
-```
-
-The model layer seamlesslly integrates the inline cache in client side requests, without any special configuration.
-
-While this flow would be possible in other SSR systems, it would require manually setting up all of these steps.
-This video illustrates how it works.
+Additionally, the request logic is more aggressive in its attempts to find subsets of the data within the cache and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.
 
 ### Works with related data
 
