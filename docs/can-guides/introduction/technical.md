@@ -1388,134 +1388,300 @@ This feature, when used with [steal-stache](../../steal-stache.html), signals to
 
 ## Models
 
-### Typed data, but separate from connection info.
+As previously mentioned, models are responsible for loading data from a server and representing the data sent back from a server.
 
-### Parameter awareness
+Models often perform data validation and sanitization logic. They use intelligent set logic to cache data, minimize network requests, and provide real-time functionality.
 
-[can-set](http://canjs.github.io/canjs/doc/can-set.html)
+### Server connection and data type separation of concerns
 
-### Real time
+CanJS helps you organize your model code into two distinct parts:
 
-### Instance and List stores
+1) Communicating with a server.
+2) Managing the returned data.
 
-### Caching and minimal data requests
+This is accomplished by encapsulating the code required to connect to a service and encouraging typed definitions of the data the service returns.
 
-CanJS improves performance by intelligently managing the data layer, taking advantage of various forms of caching and request reduction techniques.
+In essence, for every “type” of data object in your project, you can create a model to represent the properties and methods attached to it. With this model in hand, you can also structure how you communicate with your server. Different API calls can return the same type of data and have those represented as model objects.
 
-Undoubtedly, the slowest part of any web application is round trips to the server. Especially now that [more than 50% of web traffic comes from mobile devices](http://searchengineland.com/its-official-google-says-more-searches-now-on-mobile-than-on-desktop-220369), where connections are notoriously slow and unreliable, applications must be smart about reducing network requests.
-
-Making matters worse, the concerns of maintainable architecture in single page applications are at odds with the concerns of minimizing network requests. This is because independent, isolated UI widgets, while easier to maintain, often make AJAX requests on page load. Without a layer that intelligently manages those requests, this architecture leads to too many AJAX requests before the user sees something useful.
-
-With CanJS, you don't have to choose between maintainability and performance.
-
-CanJS uses the following strategies to improve perceived performance (reduce the amount of time before users see content rendered):
-
-* [Fall through caching](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Fallthroughcaching) - Cache data in localStorage. Automatically show cached data immediately, but look for updates on the server in the background and merge changes.
-
-* [Combining requests](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Combiningrequests) - Instead of making multiple, independent requests to the same API, combine them into a single request.
-
-* [Request caching](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Requestcaching) - Reduce the number and size of server requests by intelligently using cached datasets.
-
-* [Inline cache](https://donejs.com/Features.html#section=section_CachingandMinimalDataRequests__Howitworks__Inlinecache) - Use data embedded in the page response instead of making duplicate requests.
-
-#### **How it works**
-
-[can-connect](http://connect.canjs.com/) makes up part of the CanJS model layer. Since all requests flow through this data layer, by making heavy use of set logic and localStorage caching, it's able to identify cache hits, even partial hits, and make the most minimal set of requests possible.
-
-It acts as a central hub for data requests, making decisions about how to best serve each request, but abstracting this complexity away from the application code. This leaves the UI components themselves able to make requests independently, and with little thought to performance, without actually creating a poorly performing application.
-
-##### **Fall through caching**
-
-Fall through caching serves cached data first, but still makes API requests to check for changes.
-
-The major benefit of this technique is improved perceived performance. Users will see content faster. Most of the time, when there is a cache hit, that content will still be accurate, or at least mostly accurate.
-
-This benefits two types of situations. First is page loads after the first page load (the first page load populates the cache). This scenario is less relevant when using server-side rendering. Second is long lived applications that make API requests after the page has loaded. These types of applications will enjoy improved performance.
-
-By default, this is turned on, but can easily be deactivated for data that should not be cached.
-
-Here's how the caching logic works:
-
-1. When the application loads, it checks for available cache connections.
-
-2. When a request is made, it checks for a cache hit.
-
-3. If there is a hit, the request is completed immediately with the cached data.
-
-4. Regardless of a hit or miss, a request is made in the background to the actual API endpoint.
-
-5. When that response comes back, if there was a difference between the API response data and the cache hit data, the initial request promise's data is updated with the new data. Template data bindings will cause the UI to update automatically with these changes.
-
-6. Updated response data is automatically saved in the cache, to be used for future requests - whether that's in the current page session, or when the user comes back in the future.
-
-##### **Combining requests**
-
-Combining requests combines multiple incoming requests into one, if possible. This is done with the help of [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets).
-
-CanJS collects requests that are made within a few milliseconds of each other, and if they are pointed at the same API, tries to combine them into a single superset request.
-
-For example, the video below shows an application that shows two filtered lists of data on page load - a list of completed and incomplete todos. Both are subsets of a larger set of data - the entire list of todos.
-
-Combining these into a single request reduces the number of requests. This optimization is abstracted away from the application code that made the original request.
-
-##### **Request caching**
-
-Request caching is a type of caching that is more aggressive than fallthrough caching. It is meant for data that doesn't change very often. Its advantage is it reduces both the number of requests that are made, and the size of those requests.
-
-There are two differences between request and fallthrough caching:
-
-1. Cached data is not invalidated.
-
-Once data is in the cache, no more requests to the API for that same set of data are made. You can write code that invalidates the cache at certain times, or after a new build is released.
-
-1. The smallest possible request is made, based on the contents of the cache, and merged into a complete result set.
-
-The request logic is more aggressive in its attempts to find subsets of the data within the cache, and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.
-
-##### **Inline cache**
-
-Server-side rendered single page apps (SPAs) have a problem with wasteful duplicate requests. These can cause the browser to slow down, waste bandwidth, and reduce perceived performance.
-
-1. When a page is rendered server-side, it makes data requests on the server to various APIs.
-
-2. After the page's rendered HTML loads in the client, the SPA is loaded in the client, so that subsequent requests are handled within the SPA.
-
-3. The SPA will want to re-request for the same data that was already requested on the server.
-
-CanJS solves this problem with an inline cache - embedded inline JSON data sent back with the server rendered content, which is used to serve the initial SPA data requests.
-
-CanJS uniquely makes populating and using the inline cache easy. waitFor is a method that:
-
-1. Tells the SSR server to wait for a promise to resolve before rendering.
-
-2. Collects data from each promise and uses it to populate the inline cache.
-
-For example:
+Let’s look at an example of how we would define a `Todo` type and a list of todos:
 
 ```javascript
-can.Component.extend({
-	tag: "user-name",
-	template: can.stache( "{{user.name}}" ),
-	viewModel: {
-		init: function () {
-			var promise = User.getOne( { id: this.attr( "id" ) } );
-			this.attr( "%root" ).waitFor( promise );
-			promise.then( ( user ) => { this.attr( "user", user ); } );
-		}
+var DefineList = require("can-define/list/list");
+var DefineMap = require("can-define/map/map");
+
+var Todo = DefineMap.extend({
+	complete: "boolean",
+	name: "string"
+});
+
+var TodoList = DefineList.extend({
+	"#": Todo,
+	completeCount: function(){
+		return this.filter({complete: true}).length;
+	}
+})
+```
+
+This example uses [can-define/map/map] to create a type definition for a `Todo`; each instance of `Todo` has a boolean `complete` property and a string `name` property.
+
+This example also uses [can-define/list/list] to define a type for an array of `Todo` instances; the list has a `completeCount` method for easily determining how many todos in the list have been completed.
+
+Using [can-connect], we can create a connection that connects a restful `/api/todos` service to `Todo` instances and `TodoList` lists:
+
+```javascript
+var connect = require("can-connect");
+var todoConnection = connect([
+	require("can-connect/constructor/constructor"),
+	require("can-connect/data/url/url")
+], {
+	url: "/api/todos",
+	list: function(listData, set) {
+		return new TodoList(listData.data);
+	},
+	instance: function(props) {
+		return new Todo(props);
 	}
 });
 ```
 
-The model layer seamlesslly integrates the inline cache in client side requests, without any special configuration.
+That connection can be used to get a `TodoList` of `Todo`s:
 
-While this flow would be possible in other SSR systems, it would require manually setting up all of these steps.
-This video illustrates how it works.
+```javascript
+todoConnection.getList({}).then(function(todos) {
+	// Do what you’d like with the `todos`
+});
+```
+
+### Real-time instance updates
+
+As mentioned previously, CanJS has observables to automatically propagate changes from an object to the view (DOM); this is called live binding.
+
+[can-connect] also has an instance store for two purposes:
+
+1. Preventing duplicate instances of a model from creating duplicate instance copies that get out of sync.
+2. Cleaning up old unused instances so that the size of this store remains minimal and applications don't slowly collect memory over time without releasing it.
+
+#### Duplicate instances
+
+The instance store prevents duplicate instances from being created by storing each model object by its `id` (by default; you can configure which property is used).
+
+Let’s look at how duplicate instances are prevented by continuing with our todo app example.
+
+```javascript
+todoConnection.getList({completed: false}).then(function(incompleteTodos) {});
+```
+
+`incompleteTodos` might look like this:
+
+    [
+      {id: 2, completed: false, name: "Finish docs", priority: "high"},
+      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+    ]
+
+Next, let’s fetch a list of high-priority todos:
+
+```javascript
+todoConnection.getList({priority: "high"}).then(function(urgentTodos) {});
+```
+
+`urgentTodos` might look like this:
+
+    [
+      {id: 1, completed: true, name: "Finish code", priority: "high"},
+      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+    ]
+
+Note that the “Finish docs” todo appears in both lists. CanJS [can-set.props.id intelligently] matches the todos by `id`, thus reusing the first instance of “Finish docs” that was created when `incompleteTodos` was fetched.
+
+If these todos are displayed in separate lists on the page, and a user marks “Finish docs” as completed in one of the lists (causing the `completed` property to be set to `true`), then the other list will reflect this change.
+
+#### Prevent memory leaks
+
+A global instance store _sounds_ great until you consider the memory implications: if every model object instance is tracked, then won’t the application’s memory usage only grow over time?
+
+CanJS intelligently solves this potential problem for you by keeping track of which objects are observing changes to your model object instances.
+
+The reference count for each object increases in two ways:
+
+1. Explicitly: if you call `.bind()` on an instance, like so: `todo.bind('name', function(){})`
+
+2. Implicitly: if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{name}}` in a [can-stache] template
+
+Similarly, the reference count is decreased in two ways:
+
+1. Explicitly: if you call `.unbind()` on an instance
+
+2. Implicitly: if part of the DOM connected to a live-binding gets removed
+
+When the reference count for a model object instance gets back down to 0 (no more references), the instance is removed from the store so its memory can be garbage collected.
+
+The result is that in long-running applications that stream large amounts of data, this store will not cause memory to increase unnecessarily over time.
+
+You can read more about the benefits of the instance store in our [“Avoid the Zombie Apocalypse” blog post](https://www.bitovi.com/blog/avoid-the-zombie-apocalypse).
+
+### Real-time list updates
+
+In addition to keeping object instances up to date, CanJS also automatically inserts, removes, and replaces objects within lists.
+
+Let’s continue with our incomplete and urgent todo example from the previous section.
+
+`incompleteTodos` looks like this:
+
+    [
+      {id: 2, completed: false, name: "Finish docs", priority: "high"},
+      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+    ]
+
+`urgentTodos` looks like this:
+
+    [
+      {id: 1, completed: true, name: "Finish code", priority: "high"},
+      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+    ]
+
+In the UI, there’s a checkbox next to each urgent todo that sets the `completed` property like this:
+
+```javascript
+todo.completed = !todo.completed;
+```
+
+When the user clicks the checkbox for the “Finish docs” todo, its `completed` property gets set to `true` and it automatically disappears from the `incompleteTodos` list.
+
+How is that possible? The answer is the list store and set logic, made possible with [can-set].
+
+Similar to the instance store, the list store is a collection of all the model lists in a CanJS application. It’s memory safe (it won’t leak) and understands what your parameters mean, so it can intelligently insert, remove, and replace objects within your lists.
+
+#### Parameter awareness
+
+When you make a request like the one below:
+
+```javascript
+todoConnection.getList({completed: false}).then(function(incompleteTodos) {});
+```
+
+[can-connect] uses [can-set] to create an [can-set.Algebra Algebra] that represents all incomplete todos.
+
+```
+var set = require("can-set");
+var algebra = new set.Algebra(
+	set.props.boolean("completed")
+);
+``` 
+
+The `algebra` is associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. Thus, when our application logic sets `completed` on any todo to `false`, that todo will be added to `incompleteTodos` _without_ re-fetching the list from the server; similarly, if you set `completed` to `true` on any todo within `incompleteTodos`, that todo will be removed from the list.
+
+This behavior is extremely powerful for a couple reasons:
+
+- You don’t have to update any lists yourself.
+- You don’t need to make another request to the server to refresh data updated within the application.
+
+If you’ve ever written a CRUD application and had to implement this functionality yourself, you’ll understand the immense value in having this abstracted away from you by CanJS.
+
+You can read more about the magic of `can-set` in its [can-set API docs].
+
+### Caching and minimal data requests
+
+Undoubtedly, the slowest part of any web application is communicating with the server. CanJS uses the following strategies to improve performance:
+
+* Combining requests: combine multiple requests to the same API into one request
+* Fall-through caching: improve perceived performance by showing cached data first (while still fetching the latest data)
+* Request caching: reduce the number and size of server requests by intelligently using cached datasets
+
+#### Combining requests
+
+CanJS collects requests that are made within [can-connect/data/combine-requests.time a millisecond] of each other and tries to combine them into a single request if they are for the same API.
+
+For example, let’s say we’re loading a page that has two parts: a section with todos that need to be completed and a section that’s an archive of completed todos. The incomplete section is just a list of todos, while the archive section is broken up by month, so you want to split these sections into two different components.
+
+In most other frameworks, you would probably decide to have some parent component fetch the list of all todos so you could pass different subsets to each component. This decreases the reusability and maintainability of the components, but it would result in just one network request instead of two.
+
+With CanJS, you don't have to choose between maintainability and performance. You can decide to have each component fetch its data independently and [can-connect] will intelligently combine the two requests into one.
+
+This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `todoConnection.getList({completed: true})` and `todoConnection.getList({completed: false})` are equivalent to just one `todoConnection.getList({})` request, then make that single request and return the correct data to each call.
+
+This [can-connect/data/combine-requests/combine-requests configurable behavior] is extremely powerful because it abstracts network request complexity away from how you create and compose your application.
+
+#### Fall-through caching
+
+To increase perceived performance, `can-connect` includes a [can-connect/fall-through-cache/fall-through-cache fall-through cache] that first serves cached data from `localStorage` while simultaneously making the API request to get the latest data.
+
+The major benefit of this technique is improved perceived performance: users will see content faster because it’s returned immediately from the cache. When the data hasn’t changed, the user doesn’t notice anything, but when it has, the magic of live-bindings automatically updates the data as soon as the API request finishes.
+
+#### Request caching
+
+In some scenarios, an even more aggressive caching strategy is favorable. One example is fetching data that doesn’t change very often, or cached data that you can invalidate yourself. The [can-connect/cache-requests/cache-requests] behavior can reduce both the number of requests that are made and the size of those requests in these cases.
+
+In the first scenario, where the data doesn’t change very often (and thus shouldn’t be fetched again during the lifetime of the application), no more requests to the API will be made for that same set of data. In the second scenario, you can choose to invalidate the cache yourself, so after the first API request the data is always cached until you clear it manually.
+
+Additionally, the request logic is more aggressive in its attempts to find subsets of the data within the cache and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.
 
 ### Works with related data
 
-[can-connect/can/ref/ref](http://canjs.github.io/canjs/doc/can-connect/can/ref/ref.html)
+CanJS makes dealing with document-based APIs easier by handling situations where the server might return either a reference to a value or the value itself.
 
-### Web worker
+For example, in a MongoDB setup, a request like `GET /api/todos/2` might return:
+
+```
+{
+  id: 2,
+  name: "Finish docs",
+  projectRef: 1
+}
+```
+
+But a request like `GET /api/todos/2?$populate=projectRef` might return:
+
+```
+{
+  id: 2,
+  name: "Finish docs",
+  projectRef: {
+	id: 1,
+	name: "Release"
+  }
+}
+```
+
+[can-connect/can/ref/ref] handles this ambiguity by creating a [can-connect/can/ref/ref.Map.Ref Ref type] that is always populated by the `id` and can contain the full value if it’s been fetched.
+
+For example, without populating the project data:
+
+```
+Todo.get({id: 2}).then(function(todo){
+  todo.projectRef.id //-> 2
+});
+```
+
+With populating the project data:
+
+```
+Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+  todo.projectRef.id //-> 2
+});
+```
+
+The values of other properties and methods on the [can-connect/can/ref/ref.Map.Ref Ref type] are determined by whether the reference was populated or the referenced item already exists in the [can-connect/constructor/store/store.instanceStore].
+
+For example, `value`, which points to the referenced instance, will be populated if the reference was populated:
+
+```
+Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+  todo.projectRef.value.name //-> “Release”
+});
+```
+
+Or, it can be lazy loaded if it’s used in a template. For example, with this template:
+
+```
+{{#each todos as todo}}
+  Name: {{todo.name}}
+  Project: {{todo.projectRef.value.name}}
+{{/each}}
+```
+
+If `todo.projectRef.value` hasn’t been loaded by some other means, CanJS will fetch it from the server so it can be displayed in the template. This is handled automatically without you having to write any additional code to fetch the project data.
+
+Additionally, if multiple todos have the same project, only one request will be made to the server (if the data isn’t already cached), thanks to the [can-connect/data/combine-requests/combine-requests] behavior.
 
 ## jQuery integration
 
