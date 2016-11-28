@@ -24,7 +24,7 @@ you become successful. Feel free to say hello anytime on [Gitter chat](https://g
 
 CanJS’s goals are briefly summarized in its mission statement:
 
-> To minimize the cost of building and maintaining JavaScript applications.
+> To minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
 
 Read more on [guides/mission] about our mission and how we’ve been accomplishing those goals for
 10 years.

@@ -1,7 +1,6 @@
 @page can-core Core
 @parent canjs
 @description The best, most hardened and generally useful libraries in CanJS.  
-@outline 0
 
 @body
 
@@ -470,4 +469,4 @@ require("can-route-pushstate");
 
 If you haven't already, checkout the [guides] page on how to learn CanJS.  Specifically, you'll
 want to checkout the [guides/chat] and [guides/todomvc] to learn the basics of using CanJS's
-core libraries.  After that, checkout the [guides/api] on how to use and learn from these API docs. 
+core libraries.  After that, checkout the [guides/api] on how to use and learn from these API docs.
