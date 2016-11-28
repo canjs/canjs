@@ -1029,7 +1029,71 @@ Additionally, the request logic is more aggressive in its attempts to find subse
 
 ### Works with related data
 
-[can-connect/can/ref/ref](http://canjs.github.io/canjs/doc/can-connect/can/ref/ref.html)
+CanJS makes dealing with document-based APIs easier by handling situations where the server might return either a reference to a value or the value itself.
+
+For example, in a MongoDB setup, a request like `GET /api/todos/2` might return:
+
+```
+{
+  id: 2,
+  name: "Finish docs",
+  projectRef: 1
+}
+```
+
+But a request like `GET /api/todos/2?$populate=projectRef` might return:
+
+```
+{
+  id: 2,
+  name: "Finish docs",
+  projectRef: {
+	id: 1,
+	name: "Release"
+  }
+}
+```
+
+[can-connect/can/ref/ref] handles this ambiguity by creating a [can-connect/can/ref/ref.Map.Ref Ref type] that is always populated by the `id` and can contain the full value if it’s been fetched.
+
+For example, without populating the project data:
+
+```
+Todo.get({id: 2}).then(function(todo){
+  todo.projectRef.id //-> 2
+});
+```
+
+With populating the project data:
+
+```
+Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+  todo.projectRef.id //-> 2
+});
+```
+
+The values of other properties and methods on the [can-connect/can/ref/ref.Map.Ref Ref type] are determined by whether the reference was populated or the referenced item already exists in the [can-connect/constructor/store/store.instanceStore].
+
+For example, `value`, which points to the referenced instance, will be populated if the reference was populated:
+
+```
+Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+  todo.projectRef.value.name //-> “Release”
+});
+```
+
+Or, it can be lazy loaded if it’s used in a template. For example, with this template:
+
+```
+{{#each todos as todo}}
+  Name: {{todo.name}}
+  Project: {{todo.projectRef.value.name}}
+{{/each}}
+```
+
+If `todo.projectRef.value` hasn’t been loaded by some other means, CanJS will fetch it from the server so it can be displayed in the template. This is handled automatically without you having to write any additional code to fetch the project data.
+
+Additionally, if multiple todos have the same project, only one request will be made to the server (if the data isn’t already cached), thanks to the [can-connect/data/combine-requests/combine-requests] behavior.
 
 ## Server Side Rendering
 
