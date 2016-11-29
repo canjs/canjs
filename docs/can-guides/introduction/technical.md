@@ -1041,303 +1041,223 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 </ul>
 ```
 
-### Terseness
+### Mustache and Handlebars extended syntax
 
-[can-stache] templates are based around the same syntax in the Mustache
-syntax. It also adopts many of the helpers in Handlebars, a popular JS
-flavor of Mustache.
-
-Mustache is great because it simplifies the most common needs of templates into
-a very limited subset of syntax.  There's no branching, else, or loops.  
-
+[can-stache] templates implement the mustache syntax
+[Mustache](https://mustache.github.io/mustache.5.html), adopt many of
+the [Handlebars](http://handlebarsjs.com/) extensions, and provide a few extensions of
+their own.  The result is a simple syntax that covers the most common things needed in a template,
+but is capable of translating any ViewModel into HTML.
 
 
+[can-stache] is built on the Mustache spec because Mustache simplifies the most common needs of templates into
+a very limited subset of syntax.  Most of Mustache is just:
 
-Handlebars templates are a superset of Mustache templates that includes some convenient helper methods.
+ - [can-stache.tags.escaped] - to insert content into the page.
+ - [can-stache.tags.section]...[can-stache.tags.close] - to do conditionals, looping, or change context.
 
-Developers love Mustache templates because they are designed to be "logic-less", meaning no if statements, else clauses, for loops. There are only tags. The resulting simplicity makes templates easier to read and understand. It also makes it possible for designers to modify templates more easily, with less of a risk of breaking something.
-
-CanJS’s version of Handlebars is called [can-stache](../../can-stache.html).
-
-### One, two-way, and event bindings
-
-CanJS templates support data and event bindings through the [can-stache-bindings](../../can-stache-bindings.html) module.
-
-Data binding means Stache templates bind to observable property changes and update the DOM as needed.
-
-#### Data binding
-
-For example, there may be a template that looks like this:
+A simple template might look like:
 
 ```
-<div>{{firstName}}</div>
+<p>Hello {{name}}</p>
+<p>You have just won {{value}} dollars!</p>
+{{#in_ca}}
+<p>Well, {{taxed.ca.value}} dollars, after taxes.</p>
+{{/in_ca}}
 ```
 
-Initially, if person is an observable like `{firstName: ‘Mila’}`, then the DOM would render like:
+This is not enough to translate every ViewModel into HTML, so [can-stache] supports
+Handlebars helpers like [can-stache.helpers.each] and
+the ability to [can-stache/expressions/call call methods].
 
-```
-<div>Mila</div>
-```
+A template that uses those features looks like:
 
-An invisible binding is created for any properties of observable data. If `first` is changed:
-
-```javascript
-person.firstName = 'Jane';
-```
-
-`firstName` triggers a change. The Stache binding changes the DOM to reflect the new value.
-
-```
-<div>Jane</div>
-```
-
-When a change occurs that triggers a data binding, Stache is very precise about modifying only the most localized part of the template needed to reflect the change. More on that below.
-
-#### Event and input binding
-
-Setting up an event binding on an element is simple:
-
-```
-<div ($click)="doSomething()"/>
+```js
+{{#players}}
+    <h2>{{name}}</h2>
+    {{#each stats.forPlayerId(id) }}
+		<span>
+			{{type}}
+		</span>
+	{{/each}}
+{{/players}}
 ```
 
-The value of the event binding can be inline JavaScript that modifies data in the template, or it can be a method on the ViewModel, if the template is part of a custom element.
 
-Stache also supports setting up two way data bindings with input values:
 
-```
-<input value='{{plateName}}'>
-```
 
-The plateName property will always reflect the value of this input, and vice versa.
 
-#### Passing data between custom elements
+### Custom elements and attributes
 
-Similar to the typical data bindings shown in the example above, components pass parts of their ViewModel to the ViewModels of child components, all the way down the application hierarchy. This is done using HTML attributes when instantiating a custom element.
+CanJS supports defining custom elements and
+attributes.  You can make it so adding a `<ui-datepicker>`
+element to the page creates a date picker widget; or, you can make it so
+a `my-tooltip="your message"` attribute adds a tooltip.
 
-Stache allows users to control the direction of data flow from parent to child components, for maximum flexibility. Properties that are passed from one component to another can create bindings in either direction, or both directions.
+Custom elements are created for both widgets like `<ui-datepicker>` and for
+higher-order functionality that uses many custom elements like `<acme-message-editor>` or
+`<bit-settings-page>`.  Custom elements are created with [can-view-callbacks.tag] or [can-component].
 
-Sometimes you want changes in the parent component to update the child component:
+Custom attributes are typically used for mixins that can be
+added to any element. Custom attributes are created with [can-view-callbacks.attr].
 
-```
-<my-component {child-prop}="value"/>
-```
+The main advantages of building applications based on custom HTML elements and attributes are:
 
-Sometimes you want changes in the child to update the parent:
+1. Ease of use - Designers can do it! Non-developers can express complex behavior with little to no JavaScript required. All you need to build a new page or feature is HTML.
+2. Application assembly clarity - Applications assembled with custom elements are easier to debug and
+   and understand the relationship between the user interface and the code powering it.
 
-```
-<my-component {^child-prop}="value"/>
-```
+Lets explore these benefits more in the following sections:
 
-Sometimes you want changes in the parent to update the child, and vice versa. This is especially useful when binding to the value of an input:
+__Ease of use__
 
-```
-<my-component {(child-prop)}="value"/>
-```
+Before custom HTML elements existed, to add a date picker to your page, you would:
 
-### Custom elements
+1. Add a placeholder HTML element
 
-One of the most important concepts in CanJS is splitting up your application functionality into independent, isolated, reusable custom HTML elements.
+   ```
+   <div class='datepicker' />
+   ```
 
-The major advantages of building applications based on custom HTML elements are:
+2. Add JavaScript code to instantiate your datepicker:
 
-1. Ease of page composition - Designers can do it! Non-developers can express complex behavior with little to no JavaScript required. All you need to build a new page or feature is HTML.
+   ```javascript
+   $('.datepicker').datepicker(task.dueDate)
+   ```
 
-2. Forced modularity - Because the nature of HTML elements are isolated modules, custom HTML elements must be designed as small, isolated components. This makes them easier to test, debug, and understand.
+3. Wire up the datepicker to update the rest of your application and vice-versa:
 
-3. Reuse - Custom elements are designed to be reusable across pages and applications.
+   ```javascript
+   task.on("dueDate", function(ev, dueDate){
+       $('.datepicker').datepicker(dueDate)
+   })
 
-Consider the following example:
+   $('.datepicker').on("datechange", function(ev, dueDate){
+       task.dueDate = dueDate;
+   });
+   ```
 
-```
-<order-model get-list="{ period='previous_week' }" {^value}="*previousWeek" />
-<order-model get-list="{ period='current_week' }" {^value}="*currentWeek" />
 
-<bit-c3>
-	<bit-c3-data>
-		<bit-c3-data-column key="Last Week" {value}="*previousWeek.totals" />
-		<bit-c3-data-column key="This Week" {value}="*currentWeek.totals" />
-	</bit-c3-data>
-</bit-c3>
-```
 
-This code demonstrates:
-
-1. An element that can load data
-
-2. Composable widget elements (a graph with a line-series)
-
-If our designer wanted to add another period, all they would need to do is add another `<order-model>` and `<bit-c3-data-column>` element.
-
-Here’s a working version of the same example in a JSBin.
-
-[Custom HTML Elements on jsbin.com](http://jsbin.com/puwesa/embed?html,output)
-
-Just like HTML’s natural advantages, composing entire applications from HTML building blocks allows for powerful and easy expression of dynamic behavior.
-
-#### Benefits of custom elements
-
-First, it's important to understand the background of custom elements and their advantages.
-
-Before custom HTML elements existed, to add a datepicker to your page, you would:
-
-1. Load a datepicker script
-
-2. Add a placeholder HTML element
+With custom HTML elements, to add the same datepicker, you would
+simply add the datepicker to your HTML or template:
 
 ```
-<div class='datepicker' />
-```
-
-1. Add JavaScript code to instantiate your datepicker
-
-```javascript
-$('.datepicker').datepicker()
-```
-
-With custom HTML elements, to add the same datepicker, you would:
-
-1. Load a datepicker script
-
-2. Add the datepicker to your HTML or template:
-
-```
-<datepicker value="{date}"/>
+<ui-datepicker {(value)}="task.dueDate"/>
 ```
 
 That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.
 
 Custom HTML elements are one aspect of [Web Components](http://webcomponents.org/), a collection of browser specs that have [yet to be implemented](http://caniuse.com/#search=components) across browsers.
 
-#### Defining a custom element
+__Application assembly clarity__
 
-[can-component](../../can-component.html) is a modern take on web components.
+Custom elements make it easier to tell how an application was assembled. This is because you
+can inspect the DOM and see the custom elements and their bindings.  
 
-Components in CanJS have three basic building blocks:
+<img src="../../docs/can-guides/images/introduction/inspect.png" style="width:100%;max-width:750px" />
 
-* a template
+> Inspecting the [guides/todomvc] shows that `<todo-create>` handles the
+> "What needs to be done?" input element.
 
-* a viewModel object
+### Data and Event Bindings
 
-* event handlers
-
-```javascript
-var Component = require("can-component");
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-
-var HelloWorldVM = DefineMap.extend({
-		visible: {value: false},
-		message: {value: "Hello There!"}
-});
-
-Component.extend({
-	tag: "hello-world",
-	view: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
-	ViewModel: HelloWorldVM,
-	events: {
-		click: function(){
-				this.viewModel.visible = !this.viewModel.visible;
-		}
-	}
-});
-```
-
-Another way to define a component is with a [web component](https://github.com/donejs/done-component) style declaration, using a single file with a `.component` extension:
+[can-stache] includes Mustache data bindings that update the DOM when data changes.  For example,
+if the data passed to the following template changes, the DOM is automatically updated.
 
 ```
-<can-component tag="hello-world">
-		<style type="less">
-				i {
-						color: red;
-				}
-		</style>
-		<template>
-				{{#if visible}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}
-		</template>
-		<script type="view-model">
-				export default {
-						visible: true,
-						message: "Hello There!"
-				};
-		</script>
-		<script type="events">
-				export default {
-						click: function(){
-								this.viewModel.attr("visible", !this.viewModel.attr("visible"))
-						}
-				};
-		</script>
-</can-component>
+<h1 class="{{#if user.admin}}admin{{/if}}">Hello {{user.name}}</h1>
 ```
 
-#### Loading data with custom elements
+In addition to the default Mustache data bindings, the [can-stache-bindings] module
+adds more powerful data and event bindings. These event bindings provide full control over how
+data and control flows between the DOM, ViewModels, and the [can-view-scope]. Bindings look like:
 
-The beauty and power of custom HTML elements is most apparent when visual widgets (like graphs) are combined with elements that express data.
+- [can-stache-bindings.event (event)="key()"] for event binding.
+- [can-stache-bindings.toChild {prop}="key"] for one-way binding to a child.
+- [can-stache-bindings.toParent {^prop}="key"] for one-way binding to a parent.
+- [can-stache-bindings.twoWay {(prop)}="key"] for two-way binding.
 
-Back to our original example:
+Prepending `$` to a binding like `($event)="key()"` changes the binding from the element's `viewModel` to the element's attributes or properties. [can-util/dom/attr/attr.special Special properties] can also be targeted with `$`.
 
+To two-way bind an `<input>` element's `value` to a `todo.name` looks like:
+
+```js
+<input {($value)}="todo.name"/>
 ```
-<order-model findAll="{previousWeek}" [previousWeekData]="{value}"/>
-<order-model findAll="{currentWeek}" [currentWeekData]="{value}"/>
 
-<bit-graph title="Week over week">
-	<bit-series data="{../previousWeekData}" />
-	<bit-series data="{../currentWeekData}" color="Blue"/>
-</bit-graph>
+To two-way bind a custom `<ui-datepicker>`'s `date` to a `todo.dueDate` looks like:
+
+```js
+<ui-datepicker {(date)}="todo.dueDate"/>
 ```
 
-This template combines a request for data with an element that expresses it. It's immediately obvious how you would add or remove features from this, allowing for quick changes and easy prototyping. Without custom elements, the same changes would require more difficult code changes and wiring those changes up with widget elements that display the data.
-
-Data custom elements are part of can-connect's [can-tag](../../can-connect/can/tag/tag.html) feature.
+By mixing and matching `$` and the different syntaxes, you have complete control over how
+data flows.
 
 ### Minimal DOM updates
 
-Virtual DOM
+Everyone knows that updating the DOM is traditionally the slowest part of JavaScript
+applications.  CanJS uses two strategies for keeping DOM updates to a minimum:
+observation and data diffing.
 
-Consider the following Stache template:
+To understand how these strategies are used, consider a template like:
 
 ```
-{{#rows}}
+<ul>
+{{#each completeTodos() }}
 	<div>{{name}}</div>
-{{/rows}}
+{{/each}}
+</ul>
 ```
 
-And the following change to its data:
+And rendered with `viewModel` like:
 
-```javascript
-rows[0].name = 'changed'; // change the first row's name
+```js
+var ViewModel = DefineMap.extend({
+    tasks: Todo.List,
+    completeTodos: function(){
+        return this.tasks.filter({complete: false});
+    }
+});
+
+var viewModel = new ViewModel({
+    tasks: new Todo.List([
+        {name: "dishes", complete: true},
+        {name: "lawn", complete: false}
+    ])
+})
 ```
 
-A data binding for that row would be invoked. The data binding results in the following code being run:
+__Observation__
 
-```javascript
-textNode.nodeValue = 'changed';
+CanJS directly observes what's happening in each magic tag
+like `{{name}}` so it can localize changes as much as possible. This means
+that when the first todo's name is changed like:
+
+```js
+viewModel.tasks[0].name = "Do the dishes"
 ```
 
-Similarly, if the binding existed as an attribute, like `<div class={{className}}>`, the data binding would use `setAttribute` to make the update.
+This change will be observed, and a textNode in the div will simply
+be updated with the new `name`.  There's no diffing on the whole template.  A
+change happens and we know directly what's impacted.
 
-This is significant because Stache takes pains to localize any changes to a template, changing only the most minimal piece necessary. Updates to the DOM are relatively expensive, so stache tries to keep the path between a data change and the DOM change as frictionless as possible.
+__Data diffing__
 
-In Backbone, you would need to manually re-render the template or roll your own rendering library.
+The [can-stache.helpers.each {{#each}} helper] provides data diffing.  It is able
+to do a difference between two arrays and calculate a minimal set of mutations to
+make one array match another.  This means that if a new task is added to the
+list of `tasks` like:
 
-In React and other virtual DOM libraries, that would result in the virtual DOM being re-rendered. A diff algorithm comparing the new and old virtual DOM would discover the changed node, and then the specific DOM node would be updated.
+```js
+viewModel.tasks.push({name: "Understand diffing", complete: true})
+```
 
-Stache, by comparison, performs less logic than Virtual DOMs would require in order to update the DOM in the most minimal way necessary because the virtual DOM comparison step is not necessary, which is visible in the following benchmark that tests the time needed to update the DOM when a single property changes:
+This change will be observed, and a new array will be returned from
+`completeTodos()`.  The `#each` helper will [can-util/js/diff/diff] this new array to the
+original array, and only create a single new `<div>` for the new todo.  
 
-<img src="../../docs/can-guides/images/introduction/dom-updates.png" style="width:100%;max-width:750px" />
-
-You can run this test yourself at [JS Bin](http://output.jsbin.com/giyobi/1)
-
-This performance gap is more visible when rendering a large number of items in the page:
-
-<img src="../../docs/can-guides/images/introduction/rendering-performance.png" style="width:100%;max-width:750px" />
-
-*For a small set of todos the difference is negligible but as the number increases the gap widens to the point where React is 6 times slower than Stache when rendering 1000 todos.*
-
-You can run this test for yourself at [JS Bin](http://output.jsbin.com/monoqagofa/1).
-
-With synchronously observable objects and data bindings that change minimal parts of the DOM, Stache aims to hit the sweet spot between powerful and performant.
 
 ### Template minification
 
@@ -1566,7 +1486,7 @@ var set = require("can-set");
 var algebra = new set.Algebra(
 	set.props.boolean("completed")
 );
-``` 
+```
 
 The `algebra` is associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. Thus, when our application logic sets `completed` on any todo to `false`, that todo will be added to `incompleteTodos` _without_ re-fetching the list from the server; similarly, if you set `completed` to `true` on any todo within `incompleteTodos`, that todo will be removed from the list.
 
