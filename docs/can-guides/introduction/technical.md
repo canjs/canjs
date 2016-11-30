@@ -38,7 +38,7 @@ Organizing CanJS into individual repositories and packages has many benefits.
 The obvious advantage is that pieces can be used without the whole. You can choose to use CanJS's observables or [can-fixture] without the rest of the framework. You could even mix and match CanJS libraries with other libraries like React quite easily.
 
 However, the main benefit is that independent repositories
-improves CanJS's stability - one half of CanJS's [guides/mission mission]. This is
+improve CanJS's stability - one half of CanJS's [guides/mission mission]. This is
 because independent repositories make upgrades easier and more frequent. For example,
 compare:
 
@@ -52,7 +52,7 @@ a big step:
 <img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:450px"/>
 
 But if you break that step down, CanJS 2.3 is mostly CanJS 3.0 with a bunch of bug
-fixes, a heap of new features, and a few breaking changes.  Most of the difficulty
+fixes, a heap of new features, and a few breaking changes.  Most of the difficulties
 upgrading are the breaking changes, which account for the majority of the upgrade step size:
 
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:450px"/>
@@ -69,7 +69,7 @@ the following month.  CanJS 3.0's upgrade path might look like:
 
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
 
-Independent repositories also means that [can-legacy legacy] libraries, like [can-ejs] can continue
+Independent repositories also mean that [can-legacy legacy] libraries, like [can-ejs] can continue
 living through community driven fixes and releases.  They don't die simply because
 they are no longer included in the core CanJS build.
 
@@ -477,7 +477,7 @@ making it easier to predict the behavior of an application.
 
 However, [object oriented](https://en.wikipedia.org/wiki/Object-oriented_programming) APIs often feel more natural.
 
-> Object oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things which have properties and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.  
+> Object oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things, which have properties, and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.  
 > [Tim Boudreau, Oracle Labs](https://www.quora.com/Why-did-Dijkstra-say-that-%E2%80%9CObject-oriented-programming-is-an-exceptionally-bad-idea-which-could-only-have-originated-in-California-%E2%80%9D)
 
 We agree with both of these ideas! The following object-oriented `SaltShaker` API feels intuitive - any
@@ -640,7 +640,7 @@ custom elements providing orchestration.
 <img src="../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/>
 
 It's a [straightforward](#Straightforward), but [flexible](#Flexible) architecture that
-produces [easily-testable](#Easily_testable), [compose-able](#Compose_able) modules and components.
+produces [easily testable](#Easily_testable), [compose-able](#Compose_able) modules and components.
 
 ### Straightforward
 
@@ -705,7 +705,7 @@ useful layers.  This independence is the source for the benefits of
 MVVM architecture discussed in the following sections:
 
  - [Flexible](#Flexible) - change tools and patterns when the need arises.
- - [Easily-testable](#Easily_testable) - easily unit test parts of the application.
+ - [Testable](#Testable) - easily unit test parts of the application.
  - [Compose-able](#Compose_able) - combine smaller units of functionality into a large whole.
 
 For now, we'll just demonstrate that these things actually are independent using
@@ -834,7 +834,7 @@ module.exports = DefineMap.extend({
 ```
 
 This _ViewModel_ will be tested independent of the view in the
-[easily-testable](#Easily_testable) section.  
+[testable](#Testable) section.  
 
 The __View__, in _components/todo-list/view.stache_, looks like:
 
@@ -891,11 +891,11 @@ Component.extend({
 });
 ```
 
-Read on to see how CanJS's independence results in easily-testable, flexible,
+Read on to see how CanJS's independence results in easily testable, flexible,
 and compose-able code.
 
 
-### Easily-testable
+### Testable
 
 CanJS's MVVM architecture results in testable code. In the previous
 section, we created the [guides/todomvc]'s `<todo-list>`'s Model, ViewModel, and View code.
@@ -1058,7 +1058,7 @@ many of the benefits of CanJS's maintainable MVVM architecture:
 
  - [Independence](#Independent)
  - [Flexible](#Independent)
- - [Easily-testable](#Easily_testable)
+ - [Testable](#Testable)
  - [Compose-able](#Compose_able)
 
 The introduction of a strong ViewModel provides key advantages for maintaining large applications:
@@ -1683,11 +1683,11 @@ jQuery custom events like `draginit` directly in [can-stache-bindings.event can-
 or using [can-control].
 
 [This JSBin](http://jsbin.com/yifopus/edit?html,css,js,output) lets a user drag an item
-into a trash can using custom jQuery drag/drop events.
+into a trashcan using custom jQuery drag/drop events.
 
 ## Server Side Rendering
 
-CanJS applications are able to be rendered on the server by running the same code. This is known as [Isomorphic JavaScript](http://isomorphic.net/javascript) or [Universal JavaScript](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
+CanJS applications can be rendered on the server by running the same code. This is known as [Isomorphic JavaScript](http://isomorphic.net/javascript) or [Universal JavaScript](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
 
 Server-side rendering (SSR) provides two main benefits over traditional single page apps: better page load performance and SEO support.
 
