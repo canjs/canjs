@@ -49,13 +49,13 @@ Despite making relatively few breaking changes, and
 providing a [migrate-3 migration guide], upgrading from CanJS 2.3 to 3.0 looks like
 a big step:
 
-<img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:400px"/>
+<img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:450px"/>
 
 But if you break that step down, CanJS 2.3 is mostly CanJS 3.0 with a bunch of bug
 fixes, a heap of new features, and a few breaking changes.  Most of the difficulty
 upgrading are the breaking changes, which account for the majority of the upgrade step size:
 
-<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:400px"/>
+<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:450px"/>
 
 To get all of those bug fixes and new features in 3.0, you have to
 take on those breaking changes from 2.3 all at once.  Depending on your company culture,
@@ -70,16 +70,14 @@ the following month.  CanJS 3.0's upgrade path might look like:
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
 
 Independent repositories also means that [can-legacy legacy] libraries, like [can-ejs] can continue
-living through community driven fixes and releases.  It doesn't die simply because
-it's no longer included in the core CanJS build.
+living through community driven fixes and releases.  They don't die simply because
+they are no longer included in the core CanJS build.
 
 ## Flexible Features
 
 No framework can perfectly satisfy every application
 requirement.  Often, a framework can't even satisfy all the requirements
-for a single application.
-
-When this happens, it's nice to have a framework that can
+for a single application. When this happens, it's nice to have a framework that can
 flexibly adapt to the challenge.  The sections below have a
 many examples of this flexibility:
 
@@ -106,12 +104,11 @@ core libraries:
 This section is about the technical highlights of [can-compute].  However,
 as [can-define] uses computes internally for [computed getter properties](#Computedgetterproperties)
 and [asynchronous computed getter properties](##Asynccomputedgetterproperties), the benefits
-of computes extend to [can-define]. In many cases, we'll use _computed getter properties_ to
+of computes extend to [can-define]. In a few examples cases, we'll use [computed getter properties](#Computedgetterproperties) to
 show the advantages of computes.
 
 [can-compute] is used in similar situations as event streams libraries like RXJS and Bacon.js. Computes
-are used to transform a set of observable values into another observable value.  While event stream libraries are able to setup more complex transformations, computes can setup transformations
-much more easily.
+are used to transform a set of observable values into another observable value.  While event stream libraries are able to setup more complex transformations, computes can setup simple but common transformations more easily.
 
 For example, the following compute keeps the completed count of todos in a list:
 
@@ -145,7 +142,11 @@ todoList.push({name: "learn about computes", complete: true})
 ```
 
 `completedCount` automatically listens to all of these changes because
-[can-compute] infers dependencies.
+[can-compute] infers dependencies.  Computes also:
+
+ - [Cache their value](#Cachedvalues) for faster reads.
+ - [Dispatch events synchronously](#Synchronous) for easier testing and debugging.
+ - [Update only once for batched changes](#Batchedevents) for faster updates.
 
 ### Inferred dependencies
 
@@ -242,12 +243,12 @@ firstName("Ramiya") // console.logs "Calculating fullName."
 fullName() //-> "Ramiya Meyer"
 ```
 
-Using cached values can dramatically improve performance in situations where a computed value is frequently read by multiple parts of the application.  
+Using cached values improves performance in situations where a computed value is frequently read by multiple parts of the application.  
 
 ### Synchronous
 
 CanJS observables synchronously notify any event listeners. This makes testing
-and debugging quite a bit easier.
+and debugging quite easier.
 
 The following example shows how you can
 change the `firstName` value and immediately check the consequences of that change:
@@ -276,9 +277,8 @@ assert.equal(frag.firstChild.innerHTML, "Welcome Ramiya Meyer");
 
 ### Batched events
 
-Observable property changes [can-event/batch/batch.dispatch] synchronous events that update
-computes and the DOM are ideal for many scenarios, but there are times where this can cause performance problems. To prevent unnecessary updates, events can be batched using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]. Computes and the DOM will only be updated
-once for all changes within the batch.
+The previous section highlighted that synchronous event
+[can-event/batch/batch.dispatch dispatching] and DOM updates are ideal for many scenarios. But, there are times where this can cause performance problems. To prevent unnecessary updates, events can be batched using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]. Computes and the DOM will only be updated once for all changes within the batch.
 
 In the previous example, `{{fullName}}` would be updated twice
 if `firstName` and `lastName` are changed:
@@ -288,7 +288,7 @@ firstName("Payal");
 lastName("Shah");
 ```
 
-Wrapping this in a batch will make `{{fullName}}` update only once:
+Wrapping this in a batch makes `{{fullName}}` update only once:
 
 
 ```js
@@ -321,7 +321,7 @@ var completeAll = function(){
 
 var completedCount = compute(function(){
     return todoList.filter(function(todo){
-        console.log("checking", todo.name);
+        console.log("  checking", todo.name);
         return todo.complete;
     });
 });
@@ -336,12 +336,12 @@ If `completeAll` is called, the following will be logged:
 ```
 completeAll();
 // console.logs "completing dishes"
-// console.logs "checking dishes"
-// console.logs "checking laundry"
+// console.logs "  checking dishes"
+// console.logs "  checking laundry"
 // console.logs "completedCount is 1"
 // console.logs "completing laundry"
-// console.logs "checking dishes"
-// console.logs "checking laundry"
+// console.logs "  checking dishes"
+// console.logs "  checking laundry"
 // console.logs "completedCount is 2"
 ```
 
@@ -367,8 +367,8 @@ means `completeAll` will log the following:
 completeAll();
 // console.logs "completing dishes"
 // console.logs "completing laundry"
-// console.logs "checking dishes"
-// console.logs "checking laundry"
+// console.logs "  checking dishes"
+// console.logs "  checking laundry"
 // console.logs "completedCount is 2"
 ```
 
@@ -377,7 +377,7 @@ can improve performance by preventing compute recalculations.
 
 ## Outstanding Observable Objects
 
-[can-define] is used to create observable [models](#MalleableModels) and [view-models](#MalleableModels) like:
+[can-define] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
 
 ```js
 var DefineMap = require("can-define/map/map");
@@ -432,6 +432,32 @@ DefineMap.extend({
     set propertyF(){...}   -> {get: propertyF(){...}}
     method: Function
 })
+```
+
+Putting it together, the following defines an `Address` and `Person` type with some nifty features:
+
+```js
+// Address has a street, city, and state property
+var Address = DefineMap.extend({
+    street: "string",
+    city: "string",
+    state: "string"
+})
+
+var Person = DefineMap.extend({
+    // first is a string
+    first: {type: "string"},
+    // last is a string
+    last: "string",
+    // fullName is the combination of first and last
+    get fullName(){
+        return this.first+" "+this.last;
+    },
+    // age is a number that defaults to `0`
+    age: {value: 0, type: "number"},
+    // addresses is a DefineList of Address types
+    addresses: [Address]
+});
 ```
 
 ### Object oriented and functional
@@ -525,7 +551,7 @@ var SaltShaker = DefineMap.extend({
 });
 ```
 
-CanJS provides three powerful functional helpers on [can-define/map/map] and [can-define/list/list]:
+CanJS provides three powerful functional helpers on [can-define/map/map] and [can-define/list/list] that will explore in the following sections:
 
  - [can-define.types.get computed getter properties]
  - [can-define.types.get async computed getter properties]
@@ -554,9 +580,9 @@ These [can-define.types.get getters] are made with [can-compute], so they
 
 ### Async computed getter properties
 
-It's very common to load data asynchronously given some state. For example, given
-a `todoId`, you might need to load a todo from the server.  This `todo` property
-can be described as [can-define.types.get asynchronous computed getters] as follows:
+It's common to load data asynchronously given some state. For example, given
+a `todoId`, you might need to load a `todo` from the server.  This `todo` property
+can be described using [can-define.types.get asynchronous computed getters] as follows:
 
 ```js
 var EditTodoVM = DefineMap.extend({
@@ -572,7 +598,9 @@ var EditTodoVM = DefineMap.extend({
 ### Streamed properties
 
 When the behavior of properties can't be described with computes,
-the [can-define-stream] module adds the ability to work with event streams.
+the [can-define-stream] module adds the ability to work with event
+streams.  For example, `lastValidName` keeps track of `Person`'s
+last `name` property that includes a space.
 
 ```js
 var Person = DefineMap.extend({
@@ -592,12 +620,12 @@ me.on("lastValidName", function(lastValid) {
   console.log(lastValid)
 });
 
-me.name = "JamesAtherton";
+me.name = "JamesAtherton"; // No change
 
 me.name = "James Atherton";
 //-> console.logs "James Atherton";
 
-me.name = "JustinMeyer";
+me.name = "JustinMeyer"; // No change
 
 me.name = "Justin Meyer";
 //-> console.logs "Justin Meyer";
@@ -619,7 +647,7 @@ produces [easily-testable](#Easily_testable), [compose-able](#Compose_able) modu
 On the highest level, CanJS applications are broken down into 2 parts:
 
 - **Custom Elements** that manage a particular part of the application.  
-- **Models** that handle data requests to and from the server.
+- [Models](#MalleableModels) that handle data requests to and from the server.
 
 For example, consider the following order page from [place-my-order](http://place-my-order.com):
 
@@ -640,15 +668,15 @@ and they use the `Order` model to create an order by making a `POST` request to
 
 _Custom Elements_ are broken down themselves into two layers:
 
-- **ViewModels** that manage the logic of a custom element.
-- **Views** templates that convert the data and values of the
+- [ViewModels](#VeraciousViewModels) that manage the logic of a custom element.
+- [Views](#VivaciousViews) that convert the data and values of the
  _ViewModel_ into HTML elements. Views update their HTML
  elements when the _ViewModel_ changes and are able to
  call methods on the _ViewModel_ when a user interacts
  with their HTML.
 
 All off these parts, _Custom Elements_, _Models_,
-_View Models_, and _Views_, are written mostly using just
+_View Models_, and _Views_, are __mostly__ written using just
 two and a half APIs:
 
 - [can-define] observables for _ViewModels_ and _Models_.
@@ -676,9 +704,9 @@ CanJS's Models, Views, and ViewModels are all independent, individually
 useful layers.  This independence is the source for the benefits of
 MVVM architecture discussed in the following sections:
 
- - [Flexible] - change tools and patterns when the need arises.
- - [Easily-testable] - easily unit test parts of the application.
- - [Compose-able] -combine smaller units of functionality into a large whole.
+ - [Flexible](#Flexible) - change tools and patterns when the need arises.
+ - [Easily-testable](#Easily_testable) - easily unit test parts of the application.
+ - [Compose-able](#Compose_able) - combine smaller units of functionality into a large whole.
 
 For now, we'll just demonstrate that these things actually are independent using
 code in the [guides/todomvc].  We'll organize code related to the `<todo-list>` component
@@ -702,12 +730,15 @@ var DefineMap = require("can-define/map/map"),
     set = require("can-set"),
     superMap = require("can-connect/can/super-map/super-map");
 
+// Defines the type of data we get back from the server.
 var Todo = DefineMap.extend({
   id: "string",
   name: "string",
   complete: {type: "boolean", value: false}
 });
 
+// Defines methods or properties on lists
+// we get back from the server.
 Todo.List = DefineList.extend({
   "#": Todo,
   get active(){
@@ -718,12 +749,15 @@ Todo.List = DefineList.extend({
   }
 });
 
+// Defines the behavior of the "get list"
+// API endpoint.
 Todo.algebra = new set.Algebra(
   can.set.props.boolean("complete"),
   can.set.props.id("id"),
   can.set.props.sort("sort")
 );
 
+// Connects the types above to a restful url.
 Todo.connection = superMap({
   url: "/api/todos",
   Map: Todo,
@@ -770,19 +804,28 @@ module.exports = DefineMap.extend({
   todos: Todo.List,
   editing: Todo,
   backupName: "string",
+
+  // Returns true if the current todo is being edited.
   isEditing: function(todo){
     return todo === this.editing;
   },
+
+  // Marks a todo as being edited.
   edit: function(todo){
     this.backupName = todo.name;
     this.editing = todo;
   },
+
+  // Cancels that todo as being edited.
   cancelEdit: function(){
     if(this.editing) {
       this.editing.name = this.backupName;
     }
     this.editing = null;
   },
+
+  // Updates the todo being edited on
+  // the server.
   updateName: function() {
     this.editing.save();
     this.editing = null;
@@ -797,16 +840,29 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 
 ```
 <ul id="todo-list">
+  <!-- Loop through every todo -->
   {{#each todos}}
+
+    <!-- Create an li with the right class names -->
     <li class="todo {{#if complete}}completed{{/if}}
       {{#if isDestroying}}destroying{{/if}}
       {{#if isEditing(this)}}editing{{/if}}">
+
       <div class="view">
+        <!-- Connect this checkbox to the `complete` property
+             of the current todo -->
         <input class="toggle" type="checkbox"
-               {($checked)}="complete" ($change)="save()">
+               {($checked)}="complete"
+               ($change)="save()">
+
+        <!-- Edit this todo on double click -->
         <label ($dblclick)="edit(this)">{{name}}</label>
+
+        <!-- Delete this todo on the server when clicked -->
         <button class="destroy" ($click)="destroy()"></button>
       </div>
+
+      <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
         {($value)}="name"
         ($enter)="updateName()"
@@ -817,7 +873,7 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 </ul>
 ```
 
-This _View_ lives in its own file, so a designer could easily modify it
+This _View_ lives in its own file, so a designer can modify it
 without touching any JavaScript directly.
 
 Finally, the component file in _components/todo-list/todo-list.js_ puts
@@ -845,7 +901,7 @@ CanJS's MVVM architecture results in testable code. In the previous
 section, we created the [guides/todomvc]'s `<todo-list>`'s Model, ViewModel, and View code.
 The following shows examples of testing each part.
 
-Testing the __Model__:
+Testing the __Model__'s `active` and `complete` properties:
 
 ```js
 test("Todo active and complete", function(){
@@ -858,7 +914,7 @@ test("Todo active and complete", function(){
 });
 ```
 
-Testing the __ViewModel__:
+Testing the __ViewModel__'s `edit` and `cancelEdit` methods:
 
 ```js
 test("TodoListVM cancelEdit", function(){
@@ -880,7 +936,9 @@ test("TodoListVM cancelEdit", function(){
 });
 ```
 
-To test the __View__, we typically recommend testing the component like:
+To test the __View__, we typically recommend testing the component. The
+following, using [can-fixture], tests that the component can edit a
+todo's name.
 
 ```js
 test("<todo-list> can update todo name", function(done){
@@ -938,8 +996,8 @@ CanJS applications can closely approximate a stateless, redux-like,
 architecture.  While we think this architecture creates more work than necessary for
 developers, it's possible by:
 
- - Having a single, application-view-model that contains all state, derived using
-   [can-define-stream] from events dispatched on the application-view-model.
+ - Having a single, ApplicationViewModel that contains all state, derived using
+   [can-define-stream] from events dispatched on the ApplicationViewModel.
  - Enforcing that parent-to-child communication only uses one-way
    [can-stache-bindings.toChild] bindings like:
    ```
@@ -957,7 +1015,7 @@ We believe that application state should be federated:
 
 > [Federated](https://en.oxforddictionaries.com/definition/federate) - form or be formed into a single centralized unit, within which each state or organization keeps some internal autonomy.
 
-CanJS applications are composed from hierarchical [can-component]s, each containing their own independent state (its own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
+CanJS applications are composed from hierarchical [can-component]s, each containing their own independent state (their own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
 
 > The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
 
@@ -988,11 +1046,11 @@ CanJS's ViewModels are [can-define] observables that manage the state of a [can-
 As ViewModels are observables, CanJS's ViewModels have all the benefits of
 CanJS's outstanding observable objects, namely:
 
- - Expressive property definition syntax
- - Object oriented and functional
- - Computed getter properties
- - Async computed getter properties
- - Streamed properties
+ - [Expressive property definition syntax](#Expressivepropertydefinitionsyntax)
+ - [Object oriented and functional](#Objectorientedandfunctional)
+ - [Computed getter properties](#Computedgetterproperties)
+ - [Async computed getter properties](#Asynccomputedgetterproperties)
+ - [Streamed properties](#Streamedproperties)
 
 In CanJS, the ViewModel is its own layer, completely independent from the
 template and the component. This is why ViewModels are largely responsible for
@@ -1040,6 +1098,17 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 	{{/each}}
 </ul>
 ```
+
+The following sections cover:
+
+ - [The powerful syntaxes](#MustacheandHandlebarsextendedsyntax) that support the transformation of any ViewModel into HTML.
+ - How [custom elements and attributes](#Customelementsandattributes) make
+   applications easer to assemble and debug.
+ - The [binding syntaxes](#DataandEventBindings) that allow HTML to
+   call methods back on the ViewModel.
+ - The strategies used to keep [DOM updates to a minimum](#MinimalDOMupdates).
+ - How Views can fit in your larger ecosystem with [template minification](#Templateminification),
+   [dependency declarations](#In_templatedependencydeclarations), and [progressive loading](#ProgressiveLoading).
 
 ### Mustache and Handlebars extended syntax
 
@@ -1094,9 +1163,9 @@ attributes.  You can make it so adding a `<ui-datepicker>`
 element to the page creates a date picker widget; or, you can make it so
 a `my-tooltip="your message"` attribute adds a tooltip.
 
-Custom elements are created for both widgets like `<ui-datepicker>` and for
-higher-order functionality that uses many custom elements like `<acme-message-editor>` or
-`<bit-settings-page>`.  Custom elements are created with [can-view-callbacks.tag] or [can-component].
+Custom elements are created for widgets like `<ui-datepicker>` and for
+higher-order components like `<acme-message-editor>`.  Higher-order components
+often assemble the behavior of multiple widget components.  Custom elements are created with [can-view-callbacks.tag] or [can-component].
 
 Custom attributes are typically used for mixins that can be
 added to any element. Custom attributes are created with [can-view-callbacks.attr].
@@ -1155,10 +1224,13 @@ __Application assembly clarity__
 Custom elements make it easier to tell how an application was assembled. This is because you
 can inspect the DOM and see the custom elements and their bindings.  
 
+The
+following shows inspecting the [guides/todomvc]'s _"What needs to be done?"_ input element.  Notice how it's easy to tell that it's behavior is provided by the
+`<todo-create>` element.
+
+
 <img src="../../docs/can-guides/images/introduction/inspect.png" style="width:100%;max-width:750px" />
 
-> Inspecting the [guides/todomvc] shows that `<todo-create>` handles the
-> "What needs to be done?" input element.
 
 ### Data and Event Bindings
 
@@ -1241,7 +1313,7 @@ viewModel.tasks[0].name = "Do the dishes"
 
 This change will be observed, and a textNode in the div will simply
 be updated with the new `name`.  There's no diffing on the whole template.  A
-change happens and we know directly what's impacted.
+change happens and we know directly what is impacted.
 
 __Data diffing__
 
@@ -1262,9 +1334,7 @@ original array, and only create a single new `<div>` for the new todo.
 ### Template minification
 
 While templates provide obvious benefits to application maintainability, they can be a
-chore to correctly integrate into the build tool chain.
-
-The [steal-stache] library provides an easy hook to load [can-stache] templates using [StealJS](http://stealjs.com) and include the compiled templates into the minified result of the build.
+chore to correctly integrate into the build tool chain. The [steal-stache] library provides an easy hook to load [can-stache] templates using [StealJS](http://stealjs.com) and include the compiled templates into the minified result of the build.
 
 [steal-stache] returns a renderer function that will render the template into a document fragment.
 
