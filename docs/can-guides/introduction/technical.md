@@ -12,7 +12,7 @@ CanJS supports:
 
  - Latest Chrome, Firefox, Edge, Safari
  - IE9+
- - iOS Safari 9.3+
+ - iOS Safari 10+
  - NodeJS 6+ with [can-vdom] as a document.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
@@ -27,7 +27,7 @@ Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.
 
 React 15.3 is 44KB minified and gzipped, yet React is, on it’s own, simply a View layer.
 
-The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped
+The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped.
 
 ## Independent Repositories and Packages
 
@@ -63,8 +63,8 @@ and scale of your application, this might not be easy.
 
 Going forward in CanJS 3.0, packages are released independently of
 each other.  You can upgrade to bug fixes and new features
-immediately and delay breaking changes (exampe: `can-route@4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
-you might upgrade to `can-route@4.0.0` one month and `can-component@4.0.0`
+immediately and delay breaking changes (example: `can-route 4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
+you might upgrade to `can-route 4.0.0` one month and `can-component 4.0.0`
 the following month.  CanJS 3.0's upgrade path might look like:
 
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
@@ -377,7 +377,7 @@ can improve performance by preventing compute recalculations.
 
 ## Outstanding Observable Objects
 
-[can-define] is used to create observable [models](#Models) and [view-models](#ViewModels) like:
+[can-define] is used to create observable [models](#MalleableModels) and [view-models](#MalleableModels) like:
 
 ```js
 var DefineMap = require("can-define/map/map");
@@ -982,7 +982,7 @@ becomes an implicit dependency of every component in the application. This creat
 
 * Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies.
 
-## ViewModels
+## Veracious ViewModels
 
 CanJS's ViewModels are [can-define] observables that manage the state of a [can-component].
 As ViewModels are observables, CanJS's ViewModels have all the benefits of
@@ -1011,7 +1011,7 @@ The introduction of a strong ViewModel provides key advantages for maintaining l
 
 * Enables easier testing - ViewModels can be unit tested easily. Because they represent the view's state without any knowledge of the DOM, they provide a simple interface for testing.
 
-## Views
+## Vivacious Views
 
 CanJS views are [can-stache] templates, that implement a syntax similar to
 [Mustache](https://mustache.github.io/mustache.5.html) and [Handlebars](http://handlebarsjs.com/),
@@ -1261,22 +1261,24 @@ original array, and only create a single new `<div>` for the new todo.
 
 ### Template minification
 
-While templates provide obvious benefits to application maintainability, they can be a bane on performance unless they are correctly integrated into the build tool chain.
+While templates provide obvious benefits to application maintainability, they can be a
+chore to correctly integrate into the build tool chain.
 
-An ecosystem library called [steal-stache](../../steal-stache.html) provides an easy hook to load Stache templates using ES6 import statements and include the compiled templates into the minified result of the build.
+The [steal-stache] library provides an easy hook to load [can-stache] templates using [StealJS](http://stealjs.com) and include the compiled templates into the minified result of the build.
 
-Steal-stache returns a renderer function that will render the template into a document fragment.
+[steal-stache] returns a renderer function that will render the template into a document fragment.
 
 ```javascript
 import todosStache from "todos.stache"
 todosStache([{name: "dishes"}]) //-> <documentFragment>
 ```
 
-When the build is run, this import statement will tell StealJS that "todos.stache" is a dependency, and will include it in the minification like any other script dependencies in the application.
+When the build is run, this import statement will tell StealJS that "todos.stache" is a dependency, and will include an already parsed representation in the build result.
 
 ### In-template dependency declarations
 
-[can-view-import](../../can-view-import.html) is a feature that allows templates to be entirely self-sufficient. You can load custom elements, helpers, and other modules straight from a template file like:
+[can-view-import](../../can-view-import.html) allows templates to import their dependencies like
+other modules. You can import custom elements, helpers, and other modules straight from a template module like:
 
 ```
 <can-import from="components/my_tabs"/>
@@ -1306,7 +1308,7 @@ This feature, when used with [steal-stache](../../steal-stache.html), signals to
 {{/eq}}
 ```
 
-## Models
+## Malleable Models
 
 As previously mentioned, models are responsible for loading data from a server and representing the data sent back from a server.
 
