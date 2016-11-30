@@ -204,13 +204,13 @@ Despite making relatively few breaking changes, and
 providing a [migrate-3 migration guide], upgrading from CanJS 2.3 to 3.0 looks like
 a big step:
 
-<img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:400px"/>
+<img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:450px"/>
 
 But if you break that step down, CanJS 2.3 is mostly CanJS 3.0 with a bunch of bug
-fixes, a heap of new features, and a few breaking changes.  Most of the difficulty
+fixes, a heap of new features, and a few breaking changes.  Most of the difficulties
 upgrading are the breaking changes, which account for the majority of the upgrade step size:
 
-<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:400px"/>
+<img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:450px"/>
 
 Currently, to get all of those bug fixes and new features, you have to
 take on those breaking changes all at once.  Depending on your company culture,
@@ -218,13 +218,13 @@ and scale of your application, this might not be easy.
 
 Going forward in CanJS 3.0, packages are released independently of
 each other.  You can upgrade to bug fixes and new features
-immediately and delay breaking changes (exampe: `can-route@4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
-you might upgrade to `can-route@4.0.0` one month and `can-component@4.0.0`
+immediately and delay breaking changes (example: `can-route 4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
+you might upgrade to `can-route 4.0.0` one month and `can-component 4.0.0`
 the following month.  CanJS 3.0's upgrade path might look like:
 
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
 
-Independent repositories also means that [can-legacy legacy] libraries, like [can-ejs] can continue
+Independent repositories also mean that [can-legacy legacy] libraries, like [can-ejs] can continue
 living through community driven fixes and releases.  It doesn't die simply because
 it's no longer included in the core CanJS build.
 
