@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__3.2.0__ (Nov 29 2016)
+- [webpack compatibility](https://github.com/canjs/canjs/issues/2780)
+- [browserify compatibility](https://github.com/canjs/canjs/issues/2794)
+- [can-simple-map - added support for `get`, `set`, and `serialize`](https://github.com/canjs/can-simple-map/issues/11)
+- [can-stache - support for `~` operator in expressions](https://github.com/canjs/can-stache/issues/112)
+- [can-fixture - mock XHR object now plays nicely with socket.io](https://github.com/canjs/canjs/issues/2778)
+
+
 __3.1.0__ (Nov 17 2016)
 - [can-connect - made behavior signatures consistent](https://github.com/canjs/can-connect/issues/171)
 - [can-route - allowing whitespace in interpolated strings](https://github.com/canjs/can-route/issues/45)
