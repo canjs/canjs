@@ -70,7 +70,7 @@
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.1",
     "can-view-callbacks": "3.0.2",
-    "can-view-href": "3.0.1",
+    "can-view-href": "3.0.3",
     "can-view-import": "3.0.1",
     "can-view-live": "3.0.2",
     "can-view-model": "3.1.1",
