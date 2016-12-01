@@ -15,7 +15,7 @@ innovation and stability. It targets experienced developers building complex app
     srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
     src="docs/images/home/Home-Tortoise-color.png" style="padding-left: 40px;"/>
 
-If you're new to the framework, the best place to start is the [guides] page. There you'll
+If you're new to the project, the best place to start is the [guides] page. There you'll
 find CanJS's [guides/mission Mission], [guides/technical Technical Highlights] and
 the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guide.
 
