@@ -55,7 +55,7 @@
     "can-list": "3.0.0",
     "can-map": "3.0.2",
     "can-map-backup": "3.0.0",
-    "can-map-define": "3.0.0",
+    "can-map-define": "3.0.1",
     "can-observation": "3.0.3",
     "can-route": "3.0.4",
     "can-route-pushstate": "3.0.0",
