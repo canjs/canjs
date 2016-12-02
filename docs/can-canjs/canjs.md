@@ -249,7 +249,6 @@ __Ecosystem collection__
   "can-fixture": "<%can-fixture.package.version%>",
   "can-fixture-socket": "<%can-fixture-socket.package.version%>",
   "can-jquery": "<%can-jquery.package.version%>",
-  "can-simple-dom": "<%can-simple-dom.package.version%>",
   "can-stache-converters": "<%can-stache-converters.package.version%>",
   "can-stream": "<%can-stream.package.version%>",
   "can-vdom": "<%can-vdom.package.version%>",
