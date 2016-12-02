@@ -122,6 +122,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
   - `npm install can-fixture --save`
   - <a class="github-button" href="https://github.com/canjs/can-fixture" data-count-href="/canjs/can-fixture/stargazers" data-count-api="/repos/canjs/can-fixture#stargazers_count">Star</a>
+- **[can-fixture-socket]** <small><%can-fixture-socket.package.version%></small> Simulate sockets
+  - `npm install can-fixture-socket --save`
+  - <a class="github-button" href="https://github.com/canjs/can-fixture-socket" data-count-href="/canjs/can-fixture-socket/stargazers" data-count-api="/repos/canjs/can-fixture-socket#stargazers_count">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
@@ -156,9 +159,6 @@ render templates in script tags.
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams.
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
-- **[can-connect-feathers]** <small><%can-connect-feathers.package.version%></small> Connect to FeathersJS services.
-  - `npm install can-connect-feathers --save`
-  - <a class="github-button" href="https://github.com/canjs/can-connect-feathers" data-count-href="/canjs/can-connect-feathers/stargazers" data-count-api="/repos/canjs/can-connect-feathers#stargazers_count">Star</a>
 
 
 </div>
@@ -243,7 +243,6 @@ __Infrastructure Collection__
 __Ecosystem collection__
 
 ```
-  "can-connect-feathers": "<%can-connect-feathers.package.version%>",
   "can-construct-super": "<%can-construct-super.package.version%>",
   "can-define-stream": "<%can-define-stream.package.version%>",
   "can-fixture": "<%can-fixture.package.version%>",
