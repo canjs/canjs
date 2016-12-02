@@ -1,20 +1,22 @@
 @page can-core Core
-@parent canjs
+@parent canjs 2
+@templateRender <% %>
 @description The best, most hardened and generally useful libraries in CanJS.  
 
 @body
 
 ## Use
 
-CanJS's core libraries are the modules most commonly used to build web
-applications.  Each module is part of an independent package, so you
+CanJS's core libraries are the best, most hardened and generally useful modules.  
+Each module is part of an independent package, so you
 should install the ones you use directly:
 
 ```
 npm install can-define can-set can-connect can-component can-stache can-route --save
 ```
 
-Lets explore each one a bit more.
+
+Lets explore each module a bit more.
 
 ## can-compute
 

@@ -114,40 +114,6 @@ Component.extend({ ... });
 
 Note that nearly all module names repeat the folder name (ex: `can-define/map/map`).
 
-### Requiring templates
-
-You can require any CanJS template using the [can-compilify](https://www.npmjs.com/package/can-compilify) Browserify
-transform. Instructions for installing and using the transform are available on [npm](https://www.npmjs.com/package/can-compilify).
-
-Install `can-compilify`:
-
-```
-npm install can-compilify --save
-```
-
-Require a template in your code:
-
-```
-// app.js
-var DefineMap = require("can-define/map/map");
-var template = require("./main.stache");
-
-var data = new DefineMap({message: "Hello World"});
-
-document.body.appendChild(template(data));
-```
-
-Include the `can-compilify` transform from the command line:
-
-```
-browserify -t can-compilify main.js > bundle.js
-```
-
-### Building templates for production
-
-Using the can-compilify transform, your production bundle(s) will include a compiled version of your
-templates so no extra setup is required.
-
 ## RequireJS
 
 RequireJS is no longer supported. If you would like to [guides/contributing/code contribute] the code required for AMD, please look at [this issue](https://github.com/canjs/canjs/issues/2646).
