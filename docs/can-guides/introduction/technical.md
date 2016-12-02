@@ -1416,7 +1416,7 @@ var Todo = DefineMap.extend({
 	name: "string"
 });
 
-var TodoList = DefineList.extend({
+Todo.List = DefineList.extend({
 	"#": Todo,
 	completeCount: function(){
 		return this.filter({complete: true}).length;
@@ -1432,7 +1432,7 @@ Using [can-connect], we’ll create a connection between a restful `/api/todos` 
 
 ```javascript
 var connect = require("can-connect");
-var todoConnection = connect([
+Todo.connection = connect([
 	require("can-connect/can/map/map"),
 	require("can-connect/constructor/constructor"),
 	require("can-connect/data/url/url")
@@ -1443,7 +1443,7 @@ var todoConnection = connect([
 });
 ```
 
-That connection can be used to get a `TodoList` of `Todo`s:
+That connection can be used to get a `Todo.List` of `Todo`s:
 
 ```javascript
 Todo.getList({}).then(function(todos) {
@@ -1506,13 +1506,13 @@ CanJS solves this potential problem by keeping track of which objects are observ
 
 The reference count for each object increases in two ways:
 
-- __Explicitly:__ if you use [can-connect/constructor/store/store.addInstanceReference] or call `.bind()` on an instance (e.g. `todo.bind('name', function(){})`)
+- __Explicitly:__ if you use [can-connect/constructor/store/store.addInstanceReference] or call `.on()` on an instance (e.g. `todo.on('name', function(){})`)
 
 - __Implicitly:__ if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{name}}` in a [can-stache] template
 
 Similarly, the reference count is decreased in two ways:
 
-- __Explicitly:__ if you use [can-connect/constructor/store/store.deleteInstanceReference] or call `.unbind()` on an instance
+- __Explicitly:__ if you use [can-connect/constructor/store/store.deleteInstanceReference] or call `.off()` on an instance
 
 - __Implicitly:__ if part of the DOM connected to a live-binding gets removed
 
@@ -1555,11 +1555,30 @@ This is made possible by two things:
 
 - The [can-connect/constructor/store/store.listStore list store] contains all of the lists loaded from the server. It’s memory safe so it won’t leak.
 
-- [can-set] understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the next section.
+- [can-set] understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the following _"Parameter awareness"_ section.
+
+CanJS's real time list updates work great with "push notification" systems like [socket.io](http://socket.io/) and SignalR.  To add realtime behavior to a CanJS app, you
+just have to call the [can-connect/real-time/real-time.createInstance],
+[can-connect/real-time/real-time.updateInstance] and [can-connect/real-time/real-time.destroyInstance]
+when updates happen similar to the following:
+
+```js
+var socket = io('http://my-todo-app.com');
+
+socket.on('todo created', function(todo){
+    Todo.connection.createInstance(todo)
+});
+socket.on('todo updated', function(todo){
+    Todo.connection.updateInstance(todo)
+});
+socket.on('todo removed', function(todo){
+    Todo.connection.destroyInstance(todo)
+});
+```
 
 ### Parameter awareness
 
-When you make a request like the one below:
+When you make a request for `incompleteTodos` like the one below:
 
 ```javascript
 Todo.getList({completed: false}).then(function(incompleteTodos) {});
@@ -1567,39 +1586,38 @@ Todo.getList({completed: false}).then(function(incompleteTodos) {});
 
 The `{completed: false}` object is passed to the server as parameters and represents all incomplete todos. You can configure a connection with [can-set.Algebra] that understands these parameters.
 
-Here’s an example of [can-connect/base/base.algebra setting up the algebra] for a `todoConnection`:
+Here’s an example of [can-connect/base/base.algebra setting up the algebra] for the `Todo.connection`:
 
 ```
 var connect = require("can-connect");
 var set = require("can-set");
 
-var algebra = new set.Algebra(
+Todo.algebra = new set.Algebra(
 	set.props.boolean("completed")
 );
 
-var todoConnection = connect([
+Todo.connection = connect([
 	require("can-connect/can/map/map"),
 	require("can-connect/constructor/constructor"),
 	require("can-connect/data/url/url")
 ], {
 	url: "/api/todos",
 	Map: Todo,
-	List: TodoList,
-	algebra: algebra
+	List: Todo.List,
+	algebra: Todo.algebra
 });
 ```
 @highlight 4-6,16-16
 
-The `algebra` is associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. Thus, when our application logic sets `completed` on any todo to `false`, that todo will be added to `incompleteTodos` _without_ re-fetching the list from the server; similarly, if you set `completed` to `true` on any todo within `incompleteTodos`, that todo will be removed from the list.
+The `{completed: false}` parameters are associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. By understanding what
+the parameters used to request data mean, all sorts of interesting behaviors and performance optimizations
+can happen, including:
 
-This behavior is extremely powerful for a couple reasons:
+ - Real time updates as described in the previous section.
+ - Fall-through caching, request caching, and combining requests behaviors as described in the
+ following sections.
 
-- You don’t have to update any lists yourself.
-- You don’t need to make another request to the server to refresh data updated within the application.
-
-If you’ve ever written a CRUD application and had to implement this functionality yourself, you’ll understand the immense value in having this abstracted away from you by CanJS.
-
-You can read more about the magic of `can-set` in its [can-set API docs].
+Parameter awareness is provided by [can-set].  Read more about the magic of `can-set` in its [can-set API docs].
 
 ### Caching and minimal data requests
 
