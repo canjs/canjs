@@ -97,6 +97,51 @@ __Note:__ if you see dozens of errors in your console, you may need to set `syst
 StealJS’s [Moving to Production](https://stealjs.com/docs/StealJS.moving-to-prod.html)
 guide has instructions for how to create a production build.
 
+## webpack and npm
+
+Install [can-core CanJS’s core modules] and Webpack (with `raw-loader`) with npm:
+
+```
+npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache --save
+npm install webpack raw-loader --save-dev
+```
+
+Next, create a `main.stache` template for your app:
+
+```
+<!-- main.stache -->
+<h1>{{message}}</h1>
+```
+
+Next, create a `main` module for your application. Import [can-define/map/map], [can-stache], and your template to say “Hello World”:
+
+```
+// main.js
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+
+var data = new DefineMap({message: "Hello World"});
+var template = stache(require('raw-loader!./main.stache'));
+
+document.body.appendChild(template(data));
+```
+
+Next, run webpack from the command line:
+
+```
+./node_modules/webpack/bin/webpack.js main.js bundle.js
+```
+
+Finally, create a page that loads `bundle.js`:
+
+```
+<html>
+  <body>
+    <script src="./bundle.js" type="text/javascript"></script>
+  </body>
+</html>
+```
+
 ## Browserify and npm
 
 CanJS works with Browserify. After installing [can-core CanJS’s core modules] with npm:
