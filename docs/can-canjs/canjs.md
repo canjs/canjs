@@ -156,9 +156,6 @@ render templates in script tags.
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams.
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
-- **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams.
-  - `npm install can-define-stream --save`
-  - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
 
 
 </div>
@@ -196,7 +193,7 @@ still accept patches._
 While CanJS is designed to be used and should be used
 as independent packages, we still publish a `can` package
 with a version number, currently `<%canjs.package.version%>`.
-We do this so there is a specified version of all of of the
+We do this so there is a specified version of all of the
 sub-project packages that are __integration tested__ to work together.  
 
 The `can` package uses [semantic versioning](http://semver.org/)
@@ -267,10 +264,6 @@ __Legacy Collection__
   "can-map-define": "<%can-map-define.package.version%>",
   "can-view-href": "<%can-view-href.package.version%>",
 ```
-
-
-This is the that exports all of
-the [can-core] and [can-infrastructure] module exports.  
 
 
 ## Missing Something?

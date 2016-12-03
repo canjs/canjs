@@ -16,7 +16,7 @@ npm install can-define can-set can-connect can-component can-stache can-route --
 ```
 
 
-Lets explore each module a bit more.
+Let's explore each module a bit more.
 
 ## can-compute
 
