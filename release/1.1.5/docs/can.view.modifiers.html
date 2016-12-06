@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>can.view.modifiers.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="can.construct.proxy.html">
+                can.construct.proxy.js
+              </a>
+            
+              
+              <a class="source" href="can.construct.super.html">
+                can.construct.super.js
+              </a>
+            
+              
+              <a class="source" href="can.control.plugin.html">
+                can.control.plugin.js
+              </a>
+            
+              
+              <a class="source" href="can.dojo.html">
+                can.dojo.js
+              </a>
+            
+              
+              <a class="source" href="can.fixture.html">
+                can.fixture.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery-all.html">
+                can.jquery-all.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery.html">
+                can.jquery.js
+              </a>
+            
+              
+              <a class="source" href="can.model.queue.html">
+                can.model.queue.js
+              </a>
+            
+              
+              <a class="source" href="can.mootools.html">
+                can.mootools.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.attributes.html">
+                can.observe.attributes.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.backup.html">
+                can.observe.backup.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.delegate.html">
+                can.observe.delegate.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.setter.html">
+                can.observe.setter.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.validations.html">
+                can.observe.validations.js
+              </a>
+            
+              
+              <a class="source" href="can.view.modifiers.html">
+                can.view.modifiers.js
+              </a>
+            
+              
+              <a class="source" href="can.view.mustache.html">
+                can.view.mustache.js
+              </a>
+            
+              
+              <a class="source" href="can.yui.html">
+                can.yui.js
+              </a>
+            
+              
+              <a class="source" href="can.zepto.html">
+                can.zepto.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>can.view.modifiers.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*!
+* CanJS - 1.1.5 (2013-03-27)
+* http://canjs.us/
+* Copyright (c) 2013 Bitovi
+* Licensed MIT
+*/</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(window, $, can, undefined)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>can/view/modifiers/modifiers.js</h2>
+<p>---- ADD jQUERY HELPERS -----
+converts jquery functions to use views    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> convert, modify, isTemplate, isHTML, isDOM, getCallback,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>text and val cannot produce an element, so don&#39;t run hookups on them</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    noHookup = {
+        <span class="string">'val'</span>: <span class="literal">true</span>,
+        <span class="string">'text'</span>: <span class="literal">true</span>
+    };
+
+    convert = <span class="function"><span class="keyword">function</span> <span class="params">(func_name)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>save the old jQuery helper</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> old = $.fn[func_name];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>replace it with our new helper</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        $.fn[func_name] = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+
+            <span class="keyword">var</span> args = can.makeArray(arguments),
+                callbackNum, callback, self = <span class="keyword">this</span>,
+                result;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>if the first arg is a deferred
+wait until it finishes, and call
+modify with the result</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (can.isDeferred(args[<span class="number">0</span>])) {
+                args[<span class="number">0</span>].done(<span class="function"><span class="keyword">function</span> <span class="params">(res)</span> {</span>
+                    modify.call(self, [res], old);
+                })
+                <span class="keyword">return</span> <span class="keyword">this</span>;
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>check if a template</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">else</span> <span class="keyword">if</span> (isTemplate(args)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>if we should operate async</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> ((callbackNum = getCallback(args))) {
+                    callback = args[callbackNum];
+                    args[callbackNum] = <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span>
+                        modify.call(self, [result], old);
+                        callback.call(self, result);
+                    };
+                    can.view.apply(can.view, args);
+                    <span class="keyword">return</span> <span class="keyword">this</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>call view with args (there might be deferreds)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                result = can.view.apply(can.view, args);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>if we got a string back</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (!can.isDeferred(result)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>we are going to call the old method with that string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    args = [result];
+                } <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>if there is a deferred, wait until it is done before calling modify</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    result.done(<span class="function"><span class="keyword">function</span> <span class="params">(res)</span> {</span>
+                        modify.call(self, [res], old);
+                    })
+                    <span class="keyword">return</span> <span class="keyword">this</span>;
+                }
+            }
+            <span class="keyword">return</span> noHookup[func_name] ? old.apply(<span class="keyword">this</span>, args) : modify.call(<span class="keyword">this</span>, args, old);
+        };
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>modifies the content of the element
+but also will run any hookup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    modify = <span class="function"><span class="keyword">function</span> <span class="params">(args, old)</span> {</span>
+        <span class="keyword">var</span> res, stub, hooks;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>check if there are new hookups</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">for</span> (<span class="keyword">var</span> hasHookups <span class="keyword">in</span> can.view.hookups) {
+            <span class="keyword">break</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>if there are hookups, turn into a frag
+and insert that
+by using a frag, the element can be recursively hooked up
+before insterion</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (hasHookups &amp;&amp; args[<span class="number">0</span>] &amp;&amp; isHTML(args[<span class="number">0</span>])) {
+            args[<span class="number">0</span>] = can.view.frag(args[<span class="number">0</span>]).childNodes;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>then insert into DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        res = old.apply(<span class="keyword">this</span>, args);
+
+        <span class="keyword">return</span> res;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>returns true or false if the args indicate a template is being used
+$(&#39;#foo&#39;).html(&#39;/path/to/template.ejs&#39;,{data})
+in general, we want to make sure the first arg is a string
+and the second arg is data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isTemplate = <span class="function"><span class="keyword">function</span> <span class="params">(args)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>save the second arg type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> secArgType = <span class="keyword">typeof</span> args[<span class="number">1</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>the first arg is a string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> <span class="keyword">typeof</span> args[<span class="number">0</span>] == <span class="string">"string"</span> &amp;&amp;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>the second arg is an object or function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        (secArgType == <span class="string">'object'</span> || secArgType == <span class="string">'function'</span>) &amp;&amp;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>but it is not a dom element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        !isDOM(args[<span class="number">1</span>]);
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>returns true if the arg is a jQuery object or HTMLElement</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isDOM = <span class="function"><span class="keyword">function</span> <span class="params">(arg)</span> {</span>
+        <span class="keyword">return</span> arg.nodeType || (arg[<span class="number">0</span>] &amp;&amp; arg[<span class="number">0</span>].nodeType)
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>returns whether the argument is some sort of HTML data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isHTML = <span class="function"><span class="keyword">function</span> <span class="params">(arg)</span> {</span>
+        <span class="keyword">if</span> (isDOM(arg)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>if jQuery object or DOM node we&#39;re good</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">return</span> <span class="literal">true</span>;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> arg === <span class="string">"string"</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>if string, do a quick sanity check that we&#39;re HTML</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            arg = can.trim(arg);
+            <span class="keyword">return</span> arg.substr(<span class="number">0</span>, <span class="number">1</span>) === <span class="string">"&lt;"</span> &amp;&amp; arg.substr(arg.length - <span class="number">1</span>, <span class="number">1</span>) === <span class="string">"&gt;"</span> &amp;&amp; arg.length &gt;= <span class="number">3</span>;
+        } <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>don&#39;t know what you are</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>returns the callback arg number if there is one (for async view use)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getCallback = <span class="function"><span class="keyword">function</span> <span class="params">(args)</span> {</span>
+        <span class="keyword">return</span> <span class="keyword">typeof</span> args[<span class="number">3</span>] === <span class="string">'function'</span> ? <span class="number">3</span> : <span class="keyword">typeof</span> args[<span class="number">2</span>] === <span class="string">'function'</span> &amp;&amp; <span class="number">2</span>;
+    };
+
+
+    $.fn.hookup = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+        can.view.frag(<span class="keyword">this</span>);
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    };
+
+
+    can.each([
+
+    <span class="string">"prepend"</span>,
+
+    <span class="string">"append"</span>,
+
+    <span class="string">"after"</span>,
+
+    <span class="string">"before"</span>,
+
+    <span class="string">"text"</span>,
+
+    <span class="string">"html"</span>,
+
+    <span class="string">"replaceWith"</span>, <span class="string">"val"</span>], <span class="function"><span class="keyword">function</span> <span class="params">(func)</span> {</span>
+        convert(func);
+    });
+
+
+})(<span class="keyword">this</span>, jQuery, can);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
