@@ -11,7 +11,7 @@ and manage complex state.  It takes about 2 hours to complete.
 
 Checkout the final app:
 
-<a class="jsbin-embed" href="http://jsbin.com/yayupo/10/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/yayupo/10/embed?js,output">JS Bin on jsbin.com</a>
 
 Notice it has tests at the bottom of the `Output` tab.
 
