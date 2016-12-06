@@ -22,10 +22,10 @@ The CanJS libraries are divided into four categories:
 1. __The Core Collection__ - the core, most useful parts of the library.
 2. __The Ecosystem Collection__ - extensions to the core collection, which may
 be useful for some applications, like mocked AJAX requests, helpers for
-importing modules, virtual DOM libraries, and two way data bindings
-3. __The Infrastructure Collection__ - Lower level utilities that power the
+importing modules, virtual DOM libraries, and two-way data bindings
+3. __The Infrastructure Collection__ - Lower-level utilities that power the
 core collection, generally not things that application developers will use
-often, like low level JS and DOM utilities, the core parts of the template and
+often, like low-level JS and DOM utilities, the core parts of the template and
 observable systems.
 4. __The Legacy Collection__ - Supported former libraries that are no longer
 actively developed, such as previous template engines and observable APIs.
@@ -75,13 +75,13 @@ Kevin is based in Chicago (well, close enough). He wants to make it easy for any
 
 #### Justin Meyer
 
-Justin dances and plays basketball in Chicago. He created JavaScriptMVC and manages the DoneJS project, and shouldn't code on it as much as he does.
+Justin dances and plays basketball in Chicago. He created JavaScriptMVC and manages the DoneJS project, and shouldn’t code on it as much as he does.
 
 [https://twitter.com/justinbmeyer @justinbmeyer]
 
 #### David Luecke
 
-David is a Canadian by way of Germany. His focus is on CanJS and DoneJS's testing stack.
+David is a Canadian by way of Germany. His focus is on CanJS and DoneJS’s testing stack.
 
 [https://twitter.com/daffl @daffl]
 

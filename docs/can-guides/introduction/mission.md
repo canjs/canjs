@@ -1,17 +1,17 @@
 @page guides/mission Mission
 @parent guides/introduction 2
-@description Learn about CanJS's mission, why it matters, and how
-we've worked (and will keep working) to accomplish it.
+@description Learn about CanJS’s mission, why it matters, and how
+we’ve worked (and will keep working) to accomplish it.
 
 
 @body
 
-CanJS's mission is to __minimize the cost of building and maintaining
+CanJS’s mission is to __minimize the cost of building and maintaining
 JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__.
 
-You shouldn't have to rewrite your application to keep pace with technology.
-So we constantly integrate new ideas and evolving best practices into CanJS libraries,
-but in a responsible way that makes possible to
+You shouldn’t have to rewrite your application to keep pace with technology.
+We constantly integrate new ideas and evolving best practices into CanJS libraries,
+but in a responsible way that makes it possible to
 upgrade gracefully. We aim to provide a stable
 and innovative platform, so you can block out noise and stay focused your app, not the tools.
 
@@ -26,27 +26,27 @@ and innovative platform, so you can block out noise and stay focused your app, n
 [//]: # (ANIMATION: Smooth ride, looking out the window, while hurricane of JavaScript logos and terminology passes by outside the window. Vehicle has an arrow pointing forward towards progress.)
 
 Keep reading to learn why our mission is important
-and how we've fared in realizing it:
+and how we’ve fared in realizing it:
 
-- [Stability and innovation matter](#Stabilityandinnovationmatter) - Why stability and innovation are the two most important factors in minimizing the cost of building and maintaining JavaScript Applications.
-- [Stability is difficult in the JavaScript community](#StabilityisdifficultintheJavaScriptcommunity) - Why the JavaScript community sees a never-ending stream of frameworks and suffers from _JavaScript Framework Fatigue_.
-- [Our history of stability and innovation](#Ourhistoryofstabilityandinnovation) - How we've managed to
- keep innovating for almost 10 years while still providing a viable upgrade path, and what we're doing now to make CanJS even more stable moving forward.
+- [Stability and innovation matter](#Stabilityandinnovationmatter) — Why stability and innovation are the two most important factors in minimizing the cost of building and maintaining JavaScript applications.
+- [Stability is difficult in the JavaScript community](#StabilityisdifficultintheJavaScriptcommunity) — Why the JavaScript community sees a never-ending stream of frameworks and suffers from _JavaScript Framework Fatigue_.
+- [Our history of stability and innovation](#Ourhistoryofstabilityandinnovation) — How we’ve managed to
+ keep innovating for 10 years (while still providing a viable upgrade path) and what we’re doing now to make CanJS even more stable moving forward.
 
 ## Stability and innovation matter
 
-Stability and innovation are often conflicting goals but they are both critical
+Stability and innovation are often conflicting goals, but they are both critical
 factors to application success.  Application development lifecycles
-can last years, so it's important that code written today will be relevant
+can last years, so it’s important that code written today will be relevant
 tomorrow. Yet technology changes quickly, especially in JavaScript.
 New technology brings better techniques and is critical for developer happiness
 and retention.
 
-When starting a new application, it's easy to forget that the majority of development happens after
+When starting a new application, it’s easy to forget that the majority of development happens after
 the application is released. Many frameworks, after a short period of popularity, either:
 
- - End up getting replaced by a new _hot_ framework.
- - Release a major version that not even _remotely_ backwards compatible with the previous version.
+ - End up getting replaced by a _hot new_ framework.
+ - Release a major version that not even _remotely_ backwards-compatible with the previous version.
 
 Productivity-wise, over the life of your application, that ends up looking like this:
 
@@ -58,7 +58,7 @@ Or like this:
 
 
 What is needed is a balance of innovation and stability, where developer productivity
-increases over time, but doesn't take large steps backward.  That looks something like:
+increases over time, but doesn’t take large steps backward.  That looks something like this:
 
 <img src="../../docs/can-guides/images/introduction/good-bet.png" style="width:100%;max-width:650px"/>
 
@@ -68,19 +68,19 @@ This is our mission.
 
 You may be familiar with the
 [never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
-that take our community by storm in approximately 1 to 2 year cycle.
+that take our community by storm every one or two years.
 
 > SproutCore -> Knockout -> Backbone -> Angular -> React -> ?
 
-This isn't surprising.  Consider how many different programming languages you can use
+This isn’t surprising.  Consider how many different programming languages you can use
 on the server-side: Java, Ruby, Python, C#, Haskell, etc.  There is only one JavaScript. Innovation
 is going to move at a blistering pace.  We should embrace it.
 
 But, the blistering pace of innovation also means that most frameworks will emerge with one
-revolutionary feature, and then fade as the
-next revolutionary framework emerges.  Instead of the old framework adopting new ideas, the community and its attention move onto the new _hot_ framework.
+revolutionary feature and then fade as the
+next revolutionary framework emerges.  Instead of the old framework adopting new ideas, the community and its attention move onto the next _hot_ framework.
 
-This makes it difficult to avoid stagnation in any community driven tool over a long period of time.
+This makes it difficult to avoid stagnation in any community-driven tool over a long period of time.
 
 ## Our history of stability and innovation
 
@@ -97,10 +97,10 @@ CanJS has been around since 2007. CanJS was originally called [JavaScriptMVC](ht
 
 <img src="../../docs/can-guides/images/introduction/best-bet.png" style="width:100%;max-width:650px"/>
 
-Major releases are not fully backwards compatible, but it was possible to transition with
+Major releases are not fully backwards-compatible, but it was possible to transition with
 limited effort.
 
-Lets see how one piece of CanJS, [can-control], evolved over this time.
+Let’s see how one piece of CanJS, [can-control], evolved over this time.
 
 __In 2007__, using JavaScriptMVC 1.0, to listen to when any element
 that matches the selector `.todos li.complete` is clicked, you might have written something like the following:
@@ -113,12 +113,12 @@ new MVC.Controller('todos',{
 });
 ```
 
-JavaScriptMVC was one of the first libraries to support event delegation.
-But these these old controls were not extensible, and couldn't work in a isolated
+JavaScriptMVC was one of the first libraries to support event delegation,
+but these old controls weren’t extensible and couldn’t work in an isolated
 context.
 
 __In 2009__, [jQuery](http://jquery.com) began to dominate JavaScript development.
-We helped add event delegation to jQuery, and integrated it into JavaScriptMVC 2.0.
+We helped add event delegation to jQuery and integrated it into JavaScriptMVC 2.0.
 The previous code became:
 
 ```js
@@ -130,8 +130,9 @@ $.Controller.extend("TodosController",{
 
 $(".todos").todos_controller();
 ```
+@highlight 1,7
 
-In 2012, using CanJS 1.0, this became:
+__In 2012__, using CanJS 1.0, this became:
 
 ```js
 TodosController = can.Control.extend({
@@ -142,6 +143,7 @@ TodosController = can.Control.extend({
 
 new TodosController(".todos");
 ```
+@highlight 1,7
 
 __In 2013__, we released CanJS 2.0, and transitioned to
 [can-component]s instead of [can-control]s.  But even now, almost 10 years later,
@@ -159,8 +161,9 @@ var TodosController = Control.extend({
 
 new TodosController(document.querySelector(".todos"));
 ```
+@highlight 1,3,9
 
-This is one of many examples of CanJS's code undergoing significant
+This is one of many examples of CanJS’s code undergoing significant
 improvements and changes, while still keeping it possible to upgrade your application.
 
 For teams upgrading to `3.0`, we created multiple [migrate-3 migration paths]
@@ -178,8 +181,8 @@ To name a few:
 - Data bindings hit the mainstream in 2013 when Angular rose in popularity. CanJS landed support for this feature in 2011 with [can-ejs].
 - Building UI widgets as HTML custom elements, similar to web components, has become a best practice. [can-component] landed in 2013 to support this architecture.
 - In 2015, CanJS landed support for using a Virtual DOM and simple server-side rendering with [can-vdom].
-- In 2016, CanJS added real-time support and advanced caching technology with [can-connect].
-- In 2017, CanJS added a more powerful [can-define observable type] and enabled it to use
+- In early 2016, CanJS added real-time support and advanced caching technology with [can-connect].
+- In late 2016, CanJS added a more powerful [can-define observable type] and enabled it to use
   [functional reactive programming techniques](can-define-stream).
 
 This timeline shows more examples:
@@ -189,15 +192,15 @@ This timeline shows more examples:
 
 ### How 3.0 improves stability and innovation
 
-CanJS 3.0 has been re-organized into several different dozen independent repositories,
-each with it’s own npm package and version number using [Semantic Versioning](http://semver.org/).
+CanJS 3.0 has been reorganized into several different dozen independent repositories,
+each with its own npm package and version number using [Semantic Versioning](http://semver.org/).
 Organizing CanJS into individual repositories will improve
-CanJS's stability and innovation going forward.
+CanJS’s stability and innovation going forward.
 
 #### Stability
 
-Independent repositories improve stability because upgrades will
-be easier and more frequent. For example,
+Independent repositories improve stability because they make it easier to upgrade
+more frequently. For example,
 compare upgrading a 2.3 app to upgrading a 3.0 app.
 
 Despite making relatively few breaking changes, and
@@ -220,13 +223,13 @@ Going forward in CanJS 3.0, packages are released independently of
 each other.  You can upgrade to bug fixes and new features
 immediately and delay breaking changes (example: `can-route 4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
 you might upgrade to `can-route 4.0.0` one month and `can-component 4.0.0`
-the following month.  CanJS 3.0's upgrade path might look like:
+the following month.  CanJS 3.0’s upgrade path might look like:
 
 <img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/>
 
-Independent repositories also mean that [can-legacy legacy] libraries, like [can-ejs] can continue
-living through community driven fixes and releases.  It doesn't die simply because
-it's no longer included in the core CanJS build.
+Independent repositories also mean that [can-legacy legacy] libraries (like [can-ejs]) can continue
+living through community-driven fixes and releases.  Legacy libraries don’t die simply because
+they’re no longer included in the core CanJS build.
 
 #### Innovation
 
@@ -235,12 +238,12 @@ Independent repositories enable CanJS to innovate faster for several reasons:
 - Supporting [can-legacy legacy] libraries, like [can-ejs], will not slow down the
   development of other libraries.
 - Experiments like [can-stream], where a lot of innovation happens, can be
-  released and have breaking changes without having to "get in" breaking changes
-  in core and infrastructure libraries.
-- CanJS doesn't feel as monolithic, appealing to developers using
+  released and have breaking changes without having to “get in” breaking changes
+  in the core and infrastructure libraries.
+- CanJS doesn’t feel as monolithic, appealing to developers using
   just one part.  More users means more contributors.
 
-The shift to independent repositories was CanJS 3.0's biggest undertaking and
+The shift to independent repositories was CanJS 3.0’s biggest undertaking and
 arguably biggest feature. This fact underscores how important our goal
 of balancing innovation and stability is to us. For more nuts-and-bolts features of CanJS,
-please read [guides/technical CanJS's Technical Highlights].
+please read [guides/technical CanJS’s Technical Highlights].

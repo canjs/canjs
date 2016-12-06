@@ -1,7 +1,7 @@
 @page guides/contributing/documentation Documentation
 @parent guides/contribute
 
-@description Learn how to improve CanJS's site and documentation.
+@description Learn how to improve CanJS’s site and documentation.
 
 @body
 
@@ -9,7 +9,7 @@
 
 The CanJS site is generated with [bit-docs](https://github.com/bit-docs/bit-docs),
 a modified version of [DocumentJS](http://documentjs.com).  Its
-content is hosted using Github pages publishing the [canjs/canjs#gh-pages](https://github.com/canjs/canjs/tree/gh-pages) repo.
+content is hosted using GitHub pages publishing the [canjs/canjs#gh-pages](https://github.com/canjs/canjs/tree/gh-pages) repo.
 
 `bit-docs` reads JavaScript comments and markdown files within the `canjs` repo as well as
 the individual repositories within `node_modules` to produce a static site.
@@ -44,20 +44,20 @@ This should produce a static site in your `canjs` folder.  Open `canjs/index.htm
 and you should see the site.  You might want to use [http-server](https://www.npmjs.com/package/http-server) to start
 a simple static file server.
 
-## Improve the theme's design and styles
+## Improve the theme’s design and styles
 
 The CanJS theme is in
-[bit-docs-html-canjs](https://github.com/canjs/bit-docs-html-canjs). It's
+[bit-docs-html-canjs](https://github.com/canjs/bit-docs-html-canjs). It’s
 [readme](https://github.com/canjs/bit-docs-html-canjs/blob/master/readme.md)
 has instructions on how to test out the theme.  Once the theme is updated and published,
 
-1. Open canjs/package.json. Update "bit-docs-html-canjs"'s version to the new theme version.
+1. Open `canjs/package.json`. Update `bit-docs-html-canjs`’s version to the new theme version.
 2. Run `./node_modules/.bin/bit-docs -df` to make sure the theme is correctly applied.
 
 ## Test out content from other repos
 
-As noted above, the API docs from each package come from that package.  So if you're
-improving the docs for say `can-compute`, you want to see what `can-compute`'s docs look like,
+As noted above, the API docs from each package come from that package.  So if you’re
+improving the docs for say `can-compute`, you want to see what `can-compute`’s docs look like,
 install your local `can-compute` and re-run bit-docs like:
 
 ```
@@ -78,7 +78,7 @@ The make script will generate the documentation again and push out the `gh-pages
 
 ## Writing API documentation
 
-Our documentation is modeled off of jQuery's.  Please read
+Our documentation is modeled off of jQuery’s.  Please read
 their [guidelines](https://github.com/jquery/api.jquery.com/blob/master/README.md). Also read our
 [guides/api].
 
@@ -91,9 +91,9 @@ Generally speaking there are three parts to every documentation page:
 ### Description
 
 The description section should be a one or two sentence explanation of what this
-piece of documentation does from a _user_ centric view.  Descriptions are a quick summary
+piece of documentation does from a _user_-centric view.  Descriptions are a quick summary
 of the __why__ and the __what__. It should take on an
-active voice.  For example, [can-component]'s description:
+active voice.  For example, [can-component]’s description:
 
 > Create a custom element that can be used to manage widgets or application logic.
 
@@ -108,7 +108,7 @@ Signatures are the __what__ and the __how__.  They should include all or most of
  - High level details on __how the code works__.
  - A simple example showing __how to use the code__.
 
-[can-compute]'s first signature is a good example of this. First, it explains
+[can-compute]’s first signature is a good example of this. First, it explains
 __what that signature does__:
 
 > Create a compute that derives its value from other observables.
@@ -133,14 +133,14 @@ age(33);
 nameAndAge() // -> "Matthew - 33"
 ```
 
-Not all signatures need to hit all three points.  For example [can-event/batch/batch]'s
+Not all signatures need to hit all three points.  For example [can-event/batch/batch]’s
 signature simply adds a bit more depth to the purpose of [can-event/batch/batch]
 and then details __how the code works__.  __How to use the code__ is
 left for the `body` section as importing the module is not necessary to show.
 
 
 
-Signature titles should follow jQuery's conventions:
+Signature titles should follow jQuery’s conventions:
 
  - Static methods like: `TypeAlias.method()`
  - Prototype methods like: `typeAlias.method()`
@@ -148,8 +148,8 @@ Signature titles should follow jQuery's conventions:
  - Brackets around optional args: `typeAlias.method( arg1 [, arg2 ], arg3 )` or
    `typeAlias.method( arg1 [, arg2 ][, arg3 ] )`
 
-Make sure to fully document the a signature's parameters and return
-value.  There's a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
+Make sure to fully document the a signature’s parameters and return
+value.  There’s a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
 a return value or parameters and the [name expression](http://documentjs.com/docs/documentjs.nameExpression.html) of
 parameters.
 
@@ -162,10 +162,10 @@ parameters.
 
 Most body sections start with a `## Use` subsection.  This is a mini guide on
 how to use that piece of code.  Modules should have long bodies that span
-multiple topics.  For example [can-component]'s body has examples and
+multiple topics.  For example [can-component]’s body has examples and
 information about nearly all of its sub-functions.  However
-[can-component.prototype.tag can-component.prototype.tag] doesn't have a
-use section because it's covered in [can-component].
+[can-component.prototype.tag can-component.prototype.tag] doesn’t have a
+use section because it’s covered in [can-component].
 
 
 ### structuring documentation

@@ -101,7 +101,7 @@ var Transaction = can.DefineMap.extend({
 		if (this.executing) {
 			return "executing";
 		}
-		// make sure there's an amount, account, and card
+		// make sure there’s an amount, account, and card
 		if (this.ready) {
 			return "ready";
 		}

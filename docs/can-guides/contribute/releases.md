@@ -110,7 +110,7 @@ guidelines. It still follows a `MAJOR.MINOR.PATCH` release names, but where:
 
 The `can` package __does__ follow strict [semantic versioning](http://semver.org/) guidelines
 with respect to the [can-core] and [can-infrastructure] collections. If a
-new [can-ecosystem] or [can-legacy] package is added to `can`, it's treated as a `MINOR` changes to `can`,
+new [can-ecosystem] or [can-legacy] package is added to `can`, it’s treated as a `MINOR` changes to `can`,
 any subsequent releases of those packages are treated as `PATCH` changes to `can`.
 
 When making a release, review the the version number changes and collection of all packages that have changed within the release.  Then run `npm run release:<versiontype>`.

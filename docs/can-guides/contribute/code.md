@@ -8,7 +8,7 @@
 ## Overview
 
 Contributing to any Open Source project can be intimidating.  All contributions from all types of contributors are welcome.  We’re
-committed to making the experience as pleasant and rewarding as possible.  We’re happy to setup a
+committed to making the experience as pleasant and rewarding as possible.  We’re happy to set up a
 pairing session to show you how to fix a bug or write a feature.  
 
 If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
@@ -51,7 +51,7 @@ great documentation on how to [set up Git](https://help.github.com/articles/set-
 
 
 If you already have `git` installed, make sure you’ve
-[setup your ssh keys](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/).
+[set up your ssh keys](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/).
 
 ### Get Node.js
 
@@ -73,8 +73,8 @@ Firefox is used to run each repository’s tests.
 
 ## Getting the code and verifying that it’s working
 
-Once your environment is setup, you should be able to clone the repository you
-want to change, install its dependencies, and verify you’ve setup your
+Once your environment is set up, you should be able to clone the repository you
+want to change, install its dependencies, and verify you’ve set up your
 development environment correctly.
 
 __1.__  Click the __Fork__ button to fork the repository from which you will be working.

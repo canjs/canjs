@@ -1,14 +1,14 @@
 @page guides/api API Guide
 @parent guides/commitment 0
 
-@description This page walks through how to use and understand CanJS's API documentation.  
+@description This page walks through how to use and understand CanJS’s API documentation.  
 
 @body
 
 
 ## Documentation Structure
 
-CanJS's documentation is broken down by pages for:
+CanJS’s documentation is broken down by pages for:
 
  - library collections
  - packages and modules and their exports
@@ -26,15 +26,15 @@ map.on("name", function(ev, newVal, oldValue){ ... })
 ```
 
 `.on` is a function the `prototype` of the `DefineMap` export of the `can-define/map/map`
-module.  The `can-define/map/map` is part of CanJS's [can-core] collection.
+module.  The `can-define/map/map` is part of CanJS’s [can-core] collection.
 
-So understanding CanJS's API pages are about understanding the relationships between:
+So understanding CanJS’s API pages are about understanding the relationships between:
 
 - library collections
 - packages and modules and their exports
 - functions, properties, and type definitions (typedefs) related to module exports
 
-... and what's documented on those pages.  
+... and what’s documented on those pages.  
 
 ### Library Collection pages
 
@@ -52,7 +52,7 @@ The [can-core] collection contains the documentation for the libraries that
 are use most commonly and directly within a CanJS application.  This is where the Model-View-ViewModel
 libraries of CanJS are documented.
 
-The [can-ecosystem] collection contains less commonly used libraries or libraries that aren't quite core ready yet.  The most commonly used libraries here are [can-fixture], [can-stache-converters], and [can-jquery].
+The [can-ecosystem] collection contains less commonly used libraries or libraries that aren’t quite core ready yet.  The most commonly used libraries here are [can-fixture], [can-stache-converters], and [can-jquery].
 
 The [can-infrastructure] collection contains the utility libraries that power the core and ecoystem
 collection.  Often, this functionality is used indirectly.  For example, the [can-event] mixin
@@ -67,7 +67,7 @@ Sometimes [can-infrastructure] is used directly.  The most important examples ar
  - [can-view-callbacks] lets you register behavior for custom elements and attributes.
 
 Finally, the [can-legacy] collection.  This is for libraries that are no longer under active
-development.  Hopefully, you aren't there very often.
+development.  Hopefully, you aren’t there very often.
 
 > Look to library collection pages for a high level cheat and explanation of every module within
 > the collection.  
@@ -86,7 +86,7 @@ section that provides an overview of all functionality contained within the `can
 module.
 
 > Look to Package and module pages for details of what is specifically exported and an overview
-> of what the module does, why it's useful, and how to use it.
+> of what the module does, why it’s useful, and how to use it.
 
 ## Functions, Properties, and Typedef pages
 
@@ -100,13 +100,13 @@ These values are generally organized by groupings.  The most common groupings ar
  - _events_ - Events dispatched on the parent object or instances of the parent function.
  - _types_ - Type definitions.
 
-Lets see a few examples and then give an overview of how their content is structured.
+Let’s see a few examples and then give an overview of how their content is structured.
 
 #### prototype
 
 [can-define/list/list.prototype.concat can-define/list/list.prototype.concat] is in
 the _prototype_ group on [can-define/list/list] because `concat` is on
-the `can-define/list/list` export's `prototype`:
+the `can-define/list/list` export’s `prototype`:
 
 ```js
 var DefineList = require("can-define/list/list");
@@ -151,13 +151,13 @@ todoStore.get         //-> function
 ```
 
 As you can see above, a `Store` can have lots of methods
-itself: `createData`, `destroyData`, etc.  So this type that isn't directly
-accessible is documented under `can-fixture`'s _types_.  It's also
+itself: `createData`, `destroyData`, etc.  So this type that isn’t directly
+accessible is documented under `can-fixture`’s _types_.  It’s also
 specified as the return value of [can-fixture.store can-fixture.store].
 
 ### Functions, Properties, and Typedef content
 
-Each function, property, and typedef page will have one or more signature's describing
+Each function, property, and typedef page will have one or more signature’s describing
 what is being documented.
 
 Signatures are the __what__ and the __how__.  They should be precise on the
@@ -166,17 +166,17 @@ behavior of what is being documented.
 Some function, property, and typedef pages have __#Use__ sections that give
 more information and examples on what is being documented.
 
-> Look to Functions, Properties, and Typedef pages to provide low level details on
-> a specific piece of CanJS's API.
+> Look to Functions, Properties, and Typedef pages to provide low-level details on
+> a specific piece of CanJS’s API.
 
 
-## How to find what you're looking for ...
+## How to find what you’re looking for ...
 
 1. Get a good understand of the purpose behind each module.  
 2. Start with core modules.
 3. Then checkout infrastructure modules.
 
-If you don't find what you want on the lowest level, walk up to the parent module, it
+If you don’t find what you want on the lowest level, walk up to the parent module, it
 might be in its __#Use__ section.  
 
 If not, let us know!

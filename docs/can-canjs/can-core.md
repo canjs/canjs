@@ -7,7 +7,7 @@
 
 ## Use
 
-CanJS's core libraries are the best, most hardened and generally useful modules.  
+CanJS’s core libraries are the best, most hardened and generally useful modules.  
 Each module is part of an independent package, so you
 should install the ones you use directly:
 
@@ -16,7 +16,7 @@ npm install can-define can-set can-connect can-component can-stache can-route --
 ```
 
 
-Let's explore each module a bit more.
+Let’s explore each module a bit more.
 
 ## can-compute
 
@@ -71,7 +71,7 @@ hobbies.pop();
 
 [can-define/map/map] and [can-define/list/list] allow you to create observable
 maps and lists with well defined properties.  You can
-[can-define.types.propDefinition define a property's type initial value, enumerability, getter-setters and much more].
+[can-define.types.propDefinition define a property’s type initial value, enumerability, getter-setters and much more].
 For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
 
 ```js
@@ -79,12 +79,12 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 
 var Todo = DefineMap.extend({           // A todo has a:
-  name: "string",                       // .name that's a string
-  complete: {                           // .complete that's
+  name: "string",                       // .name that’s a string
+  complete: {                           // .complete that’s
 	type: "boolean",                    //        a boolean
 	value: false                        //        initialized to false
   },                                    
-  dueDate: "date",                      // .dueDate that's a date
+  dueDate: "date",                      // .dueDate that’s a date
   get isPastDue(){                      // .pastDue that returns if the
 	return new Date() > this.dueDate;   //        dueDate is before now
   },
@@ -135,7 +135,7 @@ for data connection (models), view-models and even routing in your application.
 
 ## can-set
 
-[can-set] models a service layer's behavior as a [can-set.Algebra set.Algebra]. Once modeled, other libraries such as [can-connect] or [can-fixture] can
+[can-set] models a service layer’s behavior as a [can-set.Algebra set.Algebra]. Once modeled, other libraries such as [can-connect] or [can-fixture] can
 add a host of functionality like: real-time behavior, performance optimizations, and
 simulated service layers.
 
@@ -266,7 +266,7 @@ var stache = require("can-stache");
 // Creates a template
 var template = stache(
 	"<ul>"+
-		"{{#if todos.isPending}}<li>Loading...</li>{{/if}}"+
+		"{{#if todos.isPending}}<li>Loading…</li>{{/if}}"+
 		"{{#if todos.isResolved}}"+
 			"{{#each todos.value}}"+
 				"<li class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
@@ -314,7 +314,7 @@ var TodosListVM = DefineMap.extend({
 			return Todo.getList({});
 		}
 	},
-	// A method that toggles a todo's complete property
+	// A method that toggles a todo’s complete property
 	// and updates the todo on the server.
 	toggleComplete: function(todo){
 		todo.complete = !todo.complete;
@@ -327,7 +327,7 @@ Component.extend({
 	ViewModel: TodosVM,
 	view: stache(
 		"<ul>"+
-			"{{#if todos.isPending}}<li>Loading...</li>{{/if}}"+
+			"{{#if todos.isPending}}<li>Loading…</li>{{/if}}"+
 			"{{#if todos.isResolved}}"+
 				"{{#each todos.value}}"+
 					"<li ($click)='toggleComplete(.)'"+
@@ -352,7 +352,7 @@ Bindings look like:
  - `{^prop}="key"` for [can-stache-bindings.toParent one-way binding to a parent].
  - `{(prop)}="key"` for [can-stache-bindings.twoWay two-way binding].
 
-Adding `$` to a binding like `($event)="key()"` changes the binding from the viewModel to the element's attributes or properties.
+Adding `$` to a binding like `($event)="key()"` changes the binding from the viewModel to the element’s attributes or properties.
 
 [can-stache-bindings.event Event] binding examples:
 
@@ -360,43 +360,43 @@ Adding `$` to a binding like `($event)="key()"` changes the binding from the vie
 <!-- calls `toggleComplete` when the li is clicked -->
 <li ($click)="toggleComplete(.)"/>
 
-<!-- calls `resetData` when cancel is dispatched on `my-modal`'s view model -->
+<!-- calls `resetData` when cancel is dispatched on `my-modal`’s view model -->
 <my-modal (cancel)="resetData()"/>
 ```
 
 [can-stache-bindings.toChild One-way to child] examples:
 
 ```html
-<!-- updates input's `checked` property with the value of complete -->
+<!-- updates input’s `checked` property with the value of complete -->
 <input type="checkbox" {$checked}="complete"/>
 
-<!-- updates `todo-lists`'s  `todos` property with the result of `getTodos`-->
+<!-- updates `todo-lists`’s  `todos` property with the result of `getTodos`-->
 <todos-list {todos}="getTodos(complete=true)"/>
 ```
 
 [can-stache-bindings.toChild One-way to parent] examples:
 
 ```html
-<!-- updates `complete` with input's `checked` property -->
+<!-- updates `complete` with input’s `checked` property -->
 <input type="checkbox" {^$checked}="complete"/>
 
-<!-- updates `todosList` with `todo-lists`'s `todos` property -->
+<!-- updates `todosList` with `todo-lists`’s `todos` property -->
 <todos-list {^todos}="todosList"/>
 ```
 
 [can-stache-bindings.twoWay Two-way] examples:
 
 ```html
-<!-- Updates the input's `value` with `name` and vice versa -->
+<!-- Updates the input’s `value` with `name` and vice versa -->
 <input type="text" {($value)}="name"/>
 
-<!-- Updates `date-picker`'s `date` with `dueDate` and vice versa -->
+<!-- Updates `date-picker`’s `date` with `dueDate` and vice versa -->
 <date-picker {(date)}="dueDate"/>
 ```
 
 ## can-route and can-route-pushstate
 
-[can-route] connects a `DefineMap`'s properties to values in the
+[can-route] connects a `DefineMap`’s properties to values in the
 url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [can-route.ready begin routing] like:
 
 ```js
@@ -425,14 +425,14 @@ route.ready();
 ```
 
 When the url changes, to something like `#!&todoId=5`, so will the
-`appViewModel`'s `todoId` and `todo` property:
+`appViewModel`’s `todoId` and `todo` property:
 
 ```js
 appViewModel.todoId //-> "5"
 appViewModel.todo   //-> Promise<Todo>
 ```
 
-Similarly, if `appViewModel`'s `todoId` is set like:
+Similarly, if `appViewModel`’s `todoId` is set like:
 
 ```js
 appViewModel.todoId = 6;
@@ -469,6 +469,6 @@ require("can-route-pushstate");
 
 ## Want to learn more?
 
-If you haven't already, checkout the [guides] page on how to learn CanJS.  Specifically, you'll
-want to checkout the [guides/chat] and [guides/todomvc] to learn the basics of using CanJS's
-core libraries.  After that, checkout the [guides/api] on how to use and learn from these API docs.
+If you haven’t already, check out the [guides] page on how to learn CanJS.  Specifically, you’ll
+want to check out the [guides/chat] and [guides/todomvc] to learn the basics of using CanJS’s
+core libraries.  After that, check out the [guides/api] on how to use and learn from these API docs.

@@ -10,7 +10,7 @@ The infrastructure collection of libraries are lower-level utility libraries tha
 are used by the [can-core] and [can-ecosystem] collections.  They can also
 be used by applications directly.
 
-Lets explore what's available.
+Let’s explore what’s available.
 
 ## can-event
 
@@ -43,10 +43,10 @@ me.dispatch("name");
 
 ## can-observation
 
-[can-observation] provides a mechanism to notify when an observable has been read and a way to observe those reads called within a given function.  [can-observation] provides the foundation for [can-compute]'s abilities.
+[can-observation] provides a mechanism to notify when an observable has been read and a way to observe those reads called within a given function.  [can-observation] provides the foundation for [can-compute]’s abilities.
 
 Use [can-observation.add Observation.add] to signal when an an observable value has been read.
-The following makes the `Person` type's `getName()` observable:
+The following makes the `Person` type’s `getName()` observable:
 
 ```js
 var Observation = require("can-observation");
@@ -67,7 +67,7 @@ Person.prototype.getName = function(){
 ```
 
 The `Observation` constructor can be used, similar to a [can-compute] to observe
-a function's return value by tracking calls to `Observation.add`
+a function’s return value by tracking calls to `Observation.add`
 
 ```js
 var person = new Person();
@@ -121,7 +121,7 @@ The JS utilities consist of:
 
 ## can-view-callbacks
 
-[can-view-callbacks] Lets you register callbacks for specific elements or attributes found in
+[can-view-callbacks] lets you register callbacks for specific elements or attributes found in
 templates.
 
 ```js
