@@ -144,20 +144,64 @@ Finally, create a page that loads `bundle.js`:
 
 ## Browserify and npm
 
-CanJS works with Browserify. After installing [can-core CanJS’s core modules] with npm:
+CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `stringify`) with npm:
 
 ```
 npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache --save
+npm install browserify stringify --save-dev
 ```
 
-You can require specific core modules:
+Next, create a `main.stache` template for your app:
 
 ```
-var Component = require("can-component/can-component");
-Component.extend({ ... });
+<!-- main.stache -->
+<h1>{{message}}</h1>
 ```
 
-Note that nearly all module names repeat the folder name (ex: `can-define/map/map`).
+Next, create a `main.js` file for your application. Import [can-define/map/map], [can-stache], and your template to say “Hello World”:
+
+```
+// main.js
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+
+var data = new DefineMap({message: "Hello World"});
+var template = stache(require("./main.stache"));
+
+document.body.appendChild(template(data));
+```
+
+Next, change your `package.json` to include the required `stringify` configuration:
+
+```
+{
+  ...
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "stringify": "^5.1.0"
+  },
+  "stringify": {
+    "appliesTo": { "includeExtensions": [".stache"] }
+  }
+}
+```
+@highlight 7-9
+
+Next, run Browserify from the command line:
+
+```
+./node_modules/browserify/bin/cmd.js -t stringify main.js > bundle.js
+```
+
+Finally, create a page that loads `bundle.js`:
+
+```
+<html>
+  <body>
+    <script src="./bundle.js" type="text/javascript"></script>
+  </body>
+</html>
+```
 
 ## RequireJS
 
