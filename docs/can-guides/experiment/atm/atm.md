@@ -1,7 +1,7 @@
 @page guides/atm ATM Guide
 @parent guides/experiment 3
 
-This guide walks through building and __testing__ an ATM application with CanJS's
+This guide will walk you through building and __testing__ an ATM application with CanJS’s
 [can-core Core libraries].  It teaches how to do test driven development (TDD)
 and manage complex state.  It takes about 2 hours to complete.
 
@@ -9,7 +9,7 @@ and manage complex state.  It takes about 2 hours to complete.
 
 ## Overview
 
-Checkout the final app:
+Check out the final app:
 
 <a class="jsbin-embed" href="http://jsbin.com/yayupo/10/embed?js,output">JS Bin on jsbin.com</a>
 
@@ -21,22 +21,22 @@ Watch the following video to see it in action:
 
 ## Setup
 
-The easiest way to get started is to clone the following JSBin by clicking the __JS Bin__ button on the top left:
+The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
 <a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
 
-The JSBin is designed to run both the application and its tests in the `OUTPUT`
+The JS Bin is designed to run both the application and its tests in the `OUTPUT`
 tab.  To set this up, the `HTML` tab:
 
  - Loads QUnit for its testing library.  It also includes the `<div id="qunit"></div>`
-   element where QUnit's test results will be written to.
+   element where QUnit’s test results will be written to.
 
  - Loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which
    is a script that includes all of CanJS core under a single global `can` namespace.
 
-   Generally speaking, you should not use the global can script and instead
+   Generally speaking, you should not use the global `can` script, but instead you
    should import things directly with a module loader like [StealJS](http://stealjs.com),
-   WebPack or Browserify.  Read [guides/setup] on how to setup CanJS in a real app.
+   WebPack or Browserify.  Read [guides/setup] for instructions on how to set up CanJS in a real app.
 
  - Includes the content for a `app-template` [can-stache] template. This template
    provides the title for the ATM app, and uses the `<atm-machine>` custom [can-component]
@@ -44,11 +44,11 @@ tab.  To set this up, the `HTML` tab:
 
 The `JS` tab is split into two sections:
 
- - `CODE` - The ATM's models, view-models and component code will go here.
- - `TESTS` - The ATM's tests will go here.
+ - `CODE` - The ATM’s models, view-models and component code will go here.
+ - `TESTS` - The ATM’s tests will go here.
 
-Normally, your application's code and test will be in separate files and loaded
-by different html pages.  But we combine them here to fit within JSBin's limitations.
+Normally, your application’s code and test will be in separate files and loaded
+by different html pages.  But we combine them here to fit within JS&nbsp;Bin’s limitations.
 
 The `CODE` section is rendering the `app-template` with:
 
@@ -72,7 +72,7 @@ of the `ATM` changes.
 
 Update the `HTML` tab to:
 
- - Switch between different pages of the application as the `ATM` view-model's `state` property changes
+ - Switch between different pages of the application as the `ATM` view-model’s `state` property changes
    with [can-stache.helpers.switch].
 
 @sourceref ./1-pages-template/html.html
@@ -88,7 +88,7 @@ Update the `JavaScript` tab to:
 
 When complete, you should see the __"Reading Card"__ title.
 
-This step outlines the page transitions we're going to make the `state`
+This step outlines the page transitions we’re going to make the `state`
 property transition between:
 
 - readingCard
@@ -104,7 +104,7 @@ Each of those states are present in the following state diagram.
 
 <img src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png">
 
-We'll build out these pages once we build the `Card` and `Transaction` sub-models that will make building the ATM view model easier.
+We’ll build out these pages once we build the `Card` and `Transaction` sub-models that will make building the ATM view model easier.
 
 ## Card tests
 
@@ -123,7 +123,7 @@ Update the `JS` tab to:
 - Make the fake data request delay `1ms` by setting [can-fixture.delay] to `1` before every test and
   restoring it to `2s` after every test runs.
 - Write a test that creates a valid card, calls `.verify()`, and asserts the `state` is `"verified"`.
-- Write a test that creates a invalid card, calls `.verify()`, and asserts the `state` is `"invalid"`.
+- Write a test that creates an invalid card, calls `.verify()`, and asserts the `state` is `"invalid"`.
 
 @sourceref ./2-card-tests/js.js
 @highlight 24-70,only
@@ -142,8 +142,8 @@ Update the `JavaScript` tab to:
   the request body has a `number` and `pin` and a 400 if not.
 - Use [can-define/map/map] to define the `Card` model, including:
   - a `number` and  `pin` property.
-  - a `state` property initialized to `unverified` that is not part of the card's [can-define.types.serialize]d  data.
-  - a `verify` method that posts the card's data to `/verifyCard` and updates the `state`
+  - a `state` property initialized to `unverified` that is not part of the card’s [can-define.types.serialize]d  data.
+  - a `verify` method that posts the card’s data to `/verifyCard` and updates the `state`
     accordingly.
 
 
@@ -162,7 +162,7 @@ In this section, we will:
  - Design an API for a `Deposit` type.
  - Write out tests for the `Deposit` type.
 
-An `Account` will have an `id`, `name`, and `balance`.  We'll use [can-connect] to add a
+An `Account` will have an `id`, `name`, and `balance`.  We’ll use [can-connect] to add a
 [can-connect/can/map/map.getList] method that retrieves an account given a `card`.
 
 A `Deposit` will take a `card`, an `amount`, and an `account`.  Deposits will start out having
@@ -207,7 +207,7 @@ Update the `JavaScript` tab to:
 	- have a `balance` property
 	- have a `name` property
 - Define an `Account.List` type with [can-define/list/list]
-- Connect `Account` and `Account.List` types to the restful `"/accounts"` endpoint using [can-connect/can/base-map/base-map].
+- Connect `Account` and `Account.List` types to the RESTful `"/accounts"` endpoint using [can-connect/can/base-map/base-map].
 - Define the `Transaction` model to:
   - have an `account` and `card` property.
   - have an `executing` and `executed` property that track if the transaction is executing or has executed.
@@ -225,7 +225,7 @@ Update the `JavaScript` tab to:
     properties updated correctly.
 - Define the `Deposit` model to:
   - have an `amount` property.
-  - implement `ready` to return `true` when the amount is greater than `0` and there's an `account`
+  - implement `ready` to return `true` when the amount is greater than `0` and there’s an `account`
     and `card`.
   - implement `executeStart` to `POST` the deposit information to `/deposit`
   - implement `executeEnd` to update the account balance.
@@ -246,7 +246,7 @@ In this section, we will:
 
 Update the `HTML` tab to:
 
-- Allow a user to call `cardNumber` with the `<input>`'s `value`.
+- Allow a user to call `cardNumber` with the `<input>`’s `value`.
 
 @sourceref ./6-reading-card/html.html
 @highlight 20-26,only
@@ -272,7 +272,7 @@ In this section, we will:
 
 Update the `HTML` tab to:
 
-- Call `pinNumber` with the `<input>`'s `value`.
+- Call `pinNumber` with the `<input>`’s `value`.
 - Disable the `<input>` while the pin is being verified.
 - Show a loading icon while the pin is being verified.
 
@@ -284,7 +284,7 @@ Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 - Define an `accountsPromise` property that will contain a list of accounts for the `card`.
 - Define a `transactions` property that will contain a list of transactions for this session.
 - Update `state` to be in the `"choosingTransaction"` state when the `card` is verified.
-- Define a `pinNumber` method that updates the `card`'s `pin`, calls `.verify()`,
+- Define a `pinNumber` method that updates the `card`’s `pin`, calls `.verify()`,
   and then initializes the `accountsPromise` and `transactions` property.
 
 Update the `TESTS` section of the `JavaScript` tab to:
@@ -351,7 +351,7 @@ Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 
 - Change `state` to check if the `currentTransaction` has an `account` and update the
   value to `"depositInfo"` or `"withdrawalInfo"` depending on the type of the `currentTransaction`.
-- Add a `chooseAccount` method that sets the `currentTransaction`'s `account`.
+- Add a `chooseAccount` method that sets the `currentTransaction`’s `account`.
 
 Update the `TESTS` section of the `JavaScript` tab to:
 
@@ -371,7 +371,7 @@ In this section, we will:
 Update the `HTML` tab to:
 
 - Ask the user how much they would like to deposit into the account.
-- Update `currentTransaction.amount` with an `<input>`'s `value`.
+- Update `currentTransaction.amount` with an `<input>`’s `value`.
 - If the transaction is executing, show a spinner.
 - If the transaction is not executed:
   - show a __Deposit__ button that will be

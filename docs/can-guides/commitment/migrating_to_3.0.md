@@ -18,7 +18,7 @@ The recommended way to install CanJS 3.0 is through [npm](https://www.npmjs.com/
 
 ### Using can
 
-If you haven't installed CanJS through npm in the past please skip to the next section and install the can-* packages.
+If you haven’t installed CanJS through npm in the past please skip to the next section and install the can-* packages.
 
 If you are already using `can` through npm just change the version in your `package.json` to 3.0:
 
@@ -62,7 +62,7 @@ This will give you a `can` object with *most* of the same APIs as in 2.3 with th
 
 ### Set leakScope on Components
 
-In CanJS 2.2 we introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your Component's template. In 3.0 **leakScope** is now false by default.
+In CanJS 2.2 we introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your Component’s template. In 3.0 **leakScope** is now false by default.
 
 If you have a [can-component.prototype.template] like:
 
@@ -78,15 +78,15 @@ render(new Map({
 }));
 ```
 
-This `page` property is not available within some-component's own template.
+This `page` property is not available within some-component’s own template.
 
-If the component's template looks like:
+If the component’s template looks like:
 
 ```
 <h1>Hello {{page}}</h1>
 ```
 
-It can only look-up the `page` property on some-component's own [can-component.prototype.ViewModel]. To restore the behavior in 2.x, simply set [can-component.prototype.leakScope] to be `true` on the Component:
+It can only lookup the `page` property on some-component’s own [can-component.prototype.ViewModel]. To restore the behavior in 2.x, simply set [can-component.prototype.leakScope] to be `true` on the component:
 
 ```js
 Component.extend({
@@ -101,7 +101,7 @@ Component.extend({
 
 In your [can-component]s, the [can-util/dom/events/inserted/inserted inserted] and [can-util/dom/events/removed/removed] events were previously fired synchronously as the element was inserted into the DOM. To improve performance these events are now fired async.
 
-There is now a [can-component/beforeremove] event that fires synchronously in case you need to perform memory cleanup. For example you might need to access the parent's viewModel:
+There is now a [can-component/beforeremove] event that fires synchronously in case you need to perform memory cleanup. For example you might need to access the parent’s viewModel:
 
 ```js
 Component.extend({
@@ -171,7 +171,7 @@ Construct.extend("foo.bar", ...)
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global you can do so yourself using the return value of [can-construct.extend].
 
-Instead the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you'll get named objects in your dev tools.
+Instead the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.
 
 ## Modernized migration path
 
@@ -209,7 +209,7 @@ Use the same pattern for the other can modules you are using. In general you sho
 
 ### Wrap elements in jQuery objects
 
-If you are using [can-jquery/legacy] to get automatically jQuery-wrapped elements in [can-control] event handlers, you'll want to remove the usage of [can-jquery/legacy] as it doesn't play well with [can-component]s that do not expect elements to be jQuery-wrapped.
+If you are using [can-jquery/legacy] to get automatically jQuery-wrapped elements in [can-control] event handlers, you’ll want to remove the usage of [can-jquery/legacy] as it doesn’t play well with [can-component]s that do not expect elements to be jQuery-wrapped.
 
 Instead use [can-jquery] directly and handle the wrapping yourself. For example:
 
@@ -235,7 +235,7 @@ Component.extend({
 
 ### Remove use of "change" events
 
-When you upgrade to use [can-define] you'll no longer receive "change" events on maps. If you had any code that binded on a map's "change" event, you'll want to instead bind to the properties that you are interested in. For example:
+When you upgrade to use [can-define] you’ll no longer receive "change" events on maps. If you had any code that binded on a map's "change" event, you’ll want to instead bind to the properties that you are interested in. For example:
 
 ```js
 route.bind("change", function(){
@@ -243,7 +243,7 @@ route.bind("change", function(){
 });
 ```
 
-Can be modified to instead use a compute that calls `serialize` on the route's map:
+Can be modified to instead use a compute that calls `serialize` on the route’s map:
 
 ```js
 var routeMap = compute(function(){
@@ -251,7 +251,7 @@ var routeMap = compute(function(){
 });
 
 routeMap.bind("change", function(){
-	A property on the route's map changed.
+	// A property on the route’s map changed.
 });
 ```
 
@@ -263,7 +263,7 @@ In addition to the steps taken in the two above section, if you *really* want to
 
 ### can-define replaces can-map
 
-If you've used [can-map-define] in the past then using [can-define] should be familiar to you. Using [can-define/map/map] is the easiest migration path and is what we show in all of the examples in CanJS 3.0's docs.
+If you’ve used [can-map-define] in the past then using [can-define] should be familiar to you. Using [can-define/map/map] is the easiest migration path and is what we show in all of the examples in CanJS 3.0’s docs.
 
 A typical map looks like:
 
@@ -305,7 +305,7 @@ var CarOwner = DefineMap.extend({
 });
 ```
 
-Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that's needed in [can-map] and [can-list]. To use this with DefineMap just use the dot operator instead:
+Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with DefineMap just use the dot operator instead:
 
 ```js
 var carOwner = new CarOwner();
@@ -316,9 +316,9 @@ carOwner.favorite = new Car({ type: "Toyota" });
 
 ### Use can-connect directly
 
-When using the easy migration path you were secretly using [can-connect/can/model/model], a constructor that is mostly backwards compatible with [can-model].
+When using the easy migration path you were secretly using [can-connect/can/model/model], a constructor that is mostly backwards-compatible with [can-model].
 
-Most new projects should use can-connect directly, and [can-connect/can/super-map/super-map] is the easiest way to create models with connect's features. Using can-connect directly allows you to use [can-define/map/map]s as your models like so:
+Most new projects should use can-connect directly, and [can-connect/can/super-map/super-map] is the easiest way to create models with connect’s features. Using can-connect directly allows you to use [can-define/map/map]s as your models like so:
 
 ```js
 var DefineMap = require("can-define/map/map");
@@ -358,9 +358,9 @@ To:
 <input type="text" {($value})="someProp" />
 ```
 
-3.0 also introduces new [can-stache.registerConverter stache converters] which are a special type of [can-stache.Helpers helper] that works two-way to update an element when an observable value changes, and also update the observable value when the form element's value changes (from user input).
+3.0 also introduces new [can-stache.registerConverter stache converters] which are a special type of [can-stache.Helpers helper] that works two-way to update an element when an observable value changes, and also update the observable value when the form element’s value changes (from user input).
 
-An example is the [can-stache-bindings.converters.string-to-any] converter which converts a primitive value to a string to set a `<select>`'s value, and then converts the `<select>` value when a user selects an `<option>` back to the primitive value to update the scope value:
+An example is the [can-stache-bindings.converters.string-to-any] converter which converts a primitive value to a string to set a `<select>`’s value, and then converts the `<select>` value when a user selects an `<option>` back to the primitive value to update the scope value:
 
 ```
 <select {($value)}="string-to-any(~favePlayer)">

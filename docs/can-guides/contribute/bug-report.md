@@ -7,24 +7,24 @@
 
 ## Overview
 
-CanJS uses [Github Issues](https://github.com/canjs/canjs/issues/new) to track bugs. However,
-CanJS is made up of many individual github repositories. Ideally, bugs are created within the
+CanJS uses [GitHub Issues](https://github.com/canjs/canjs/issues/new) to track bugs. However,
+CanJS is made up of many individual GitHub repositories. Ideally, bugs are created within the
 repository whose code is causing the issue.  For example, issues with
 [can-define] can be created at [canjs/can-define/issues/new](https://github.com/canjs/can-define/issues/new).
 
-If you do not know which repository your issue belongs to, that's totally ok!  Please
+If you do not know which repository your issue belongs to, that’s totally ok!  Please
 create your issue in the main
 [canjs/canjs issues page](https://github.com/canjs/canjs/issues/new).  The core team will
 move the issue to the correct repository if necessary.
 
-When creating an issue, it's very helpful to include:
+When creating an issue, it’s very helpful to include:
 
- - Small examples using tools like JSBin. You can clone the following [CanJS bin](http://jsbin.com/ziyiqe/2/edit?html,js,output) that includes everything in CanJS. Make
-   sure it's pointing at the same version of CanJS you are using.  
+ - Small examples using tools like JS&nbsp;Bin. You can clone the following [CanJS bin](http://jsbin.com/ziyiqe/2/edit?html,js,output) that includes everything in CanJS. Make
+   sure it’s pointing at the same version of CanJS you are using.  
  - Breaking unit tests (optional). See [guides/contributing/code].
  - Proposed fix solutions (optional)
 
-Also, please search for previous tickets.  If there's something similar, add to that, or
+Also, please search for previous tickets.  If there’s something similar, add to that, or
 give it a `+1`.
 
 Finally, if there are any questions, reach out to
@@ -37,9 +37,9 @@ The [core team](https://donejs.com/About.html#section=section_Team) reviews issu
 and assigns them a `P0` to `P4` tag corresponding to the following priorities:
 
 - `P0` - An issue that will preempt any other issues currently being worked on.
-- `P1` - A critical feature or bug that needs to be fixed to keep CanJS's high degree of quality.
+- `P1` - A critical feature or bug that needs to be fixed to keep CanJS’s high degree of quality.
 - `P2` - A feature or bug that is less likely to be encountered, but something we intend to get to.
-- `P3` - A nice to have. The OS team might get to it, but it's helpful if the community assists.
+- `P3` - A nice to have. The OS team might get to it, but it’s helpful if the community assists.
 - `P4` - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
 
 There are several ways to influence these priorities:
@@ -48,7 +48,7 @@ There are several ways to influence these priorities:
  - Write a good test.
  - Come to a DoneJS Contributors meeting and make your case.
  - Get others from other organizations to `+1` the issue.
- - Make your case on gitter with a contributor or in the issue.
+ - Make your case on Gitter with a contributor or in the issue.
  - You can always hire [Bitovi](http://bitovi.com) or a contributor to make the change.
 
 

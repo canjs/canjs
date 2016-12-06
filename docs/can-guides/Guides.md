@@ -12,10 +12,10 @@
 
 ## Introduction
 
-If you’re reading this, you’ve already taken the first step. You’ve met CanJS!  Maybe you
+If you’re reading this, you’ve already taken the first step: you’ve met CanJS!  Maybe you
 heard about it at a meetup, or read about it on a blog, but before you spend any time with it, you want to know “who is CanJS?”
 
-CanJS is part of the DoneJS family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#section=section_Team) and [Bitovi](http://bitovi.com)
+CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#section=section_Team) and [Bitovi](http://bitovi.com)
 are responsible for CanJS. They steer its direction, add features, fix bugs, and help
 you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 
@@ -23,7 +23,7 @@ CanJS’s goals are briefly summarized in its mission statement:
 
 > To minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
 
-Read more on [guides/mission] about our mission and how we’ve been accomplishing those goals for
+[guides/mission Read more about our mission] and how we’ve been accomplishing those goals for
 10 years.
 
 If CanJS’s heart isn’t enough to convince you it’s a good fit, read up on its
@@ -35,19 +35,19 @@ If CanJS’s heart isn’t enough to convince you it’s a good fit, read up on 
 So now you’ve decided to give CanJS a try.
 The best place to start is the [guides/chat].
 It’s only an hour and shows off CanJS’s best features while you build
-a real time chat application.  You build the whole thing in a JSBin.
+a real-time chat application.  You build the whole thing in a JS&nbsp;Bin.
 
 Next, you’ll want to try the [guides/todomvc].  This takes about 1.5 hours and touches on
-every core part of CanJS.  You can also follow the whole guide in a JSBin.
+every core part of CanJS.  You can also follow the whole guide in a JS&nbsp;Bin.
 
 After that, check out the [guides/atm].  It takes about 2 hours and shows how to build and __test__
-an ATM machine. It also shows how to composite state.  The whole guide is done in a JSBin.
+an ATM. It also shows how to composite state.  The whole guide is done in a JS&nbsp;Bin.
 
 You might also want to to go through DoneJS’s [Place My Order Guide](https://donejs.com/place-my-order.html).  This is an in-depth
 look at how CanJS works within the context of a wide variety of other tools.  This guide takes
 about 8 hours.
 
-Finally, when you’re just about to commit, read [guides/setup] to learn how to setup
+Finally, when you’re just about to commit, read [guides/setup] to learn how to set up
 CanJS for your particular environment.
 
 ## Commitment
@@ -56,8 +56,8 @@ Once you’ve committed to CanJS, it’s important that you keep liking it and
 get better at using it.  
 
 CanJS’s community has lots of people who can offer advice and tips on
-how to build an application in the right way. Instead of struggling,
-please ask for advice on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).  Share a screen-shot of what you’re building
+how to build an application the right way. Instead of struggling,
+please ask for advice on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).  Share a screenshot of what you’re building
 and we’ll tell you what needs to be done.
 
 To stay up on CanJS’s latest news, we suggest:
@@ -65,7 +65,7 @@ To stay up on CanJS’s latest news, we suggest:
  - Following [@CanJS](https://twitter.com/canjs) on twitter.
  - Subscribing to Bitovi’s [development blog](https://www.bitovi.com/blog/topic/development).
 
-To get hands on instruction, sign up for a DoneJS meetup in your area:
+To get hands-on instruction, sign up for a DoneJS meetup in your area:
 
 - [Boston](http://www.meetup.com/DoneJS-Boston/)
 - [Chicago](http://www.meetup.com/DoneJS-Chicago/)
@@ -77,9 +77,6 @@ To get hands on instruction, sign up for a DoneJS meetup in your area:
 - [San Francisco](http://www.meetup.com/DoneJS-San-Francisco/)
 - [Seattle](http://www.meetup.com/DoneJS-Seattle/)
 - [Silicon Valley](http://www.meetup.com/DoneJS-Silicon-Valley/)
-
-As you start developing your application, remember to check out the [guides/examples]
-area.  It shows off how to accomplish common UI and architectural patterns with the framework.
 
 If you’ve already committed to CanJS and are looking to move to 3.0, read [migrate-3].
 
@@ -99,7 +96,7 @@ CanJS, including:
 CanJS is managed by the [DoneJS Contributors Team](https://donejs.com/About.html#section=section_Team).
 All contributions from all types of contributors are welcome. Contributing
 to an Open Source project can be an intimidating experience.  We’re
-committed to making the experience as pleasant and rewarding as possible.  We’re happy to setup a
+committed to making the experience as pleasant and rewarding as possible.  We’re happy to set up a
 pairing session to show you how to fix a bug or write a feature.  
 
 If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
