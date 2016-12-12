@@ -285,7 +285,7 @@ These layers have a simple and inverse API, the Store layer takes actions and re
 
 ...and there are layers *within those layers*, like **action creators** and **redux-middleware**.
 
-This architecture is nice and simple, with discrete lines of interaction and well defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
+This architecture is nice and simple, with discrete lines of interaction and well-defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
 
 To illustrate the idea with an example you wanted to to add a "live video chat" feature to your app. Let’s pretend you have already implemented this sort of thing in some other app, so you are just going to reuse the shared portions of it for this app.
 

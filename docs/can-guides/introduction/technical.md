@@ -150,7 +150,7 @@ todoList.push({name: "learn about computes", complete: true})
 
 ### Inferred dependencies
 
-In event stream libraries or other computed computed libraries, you must declare your
+In event stream libraries or other computed libraries, you must declare your
 dependencies like:
 
 ```js
@@ -675,9 +675,9 @@ _Custom Elements_ are broken down themselves into two layers:
  call methods on the _ViewModel_ when a user interacts
  with their HTML.
 
-All off these parts, _Custom Elements_, _Models_,
+All of these parts, _Custom Elements_, _Models_,
 _View Models_, and _Views_, are __mostly__ written using just
-two and a half APIs:
+a couple APIs:
 
 - [can-define] observables for _ViewModels_ and _Models_.
 - [can-stache] templates with [can-stache-bindings] for _Views_.

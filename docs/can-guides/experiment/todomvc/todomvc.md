@@ -58,7 +58,7 @@ Update the `JavaScript` tab to:
  - Render the template with an empty object into a [document fragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment).
  - Insert the fragment into the document’s `<body>` element.
 
- To load and render this template, and add the result to the
+To load, render, and add this template to the
 body, add the following to the `JavaScript` tab:
 
 @sourceref ./1-create-template/js.js
@@ -75,7 +75,7 @@ that in the next step.
 
 In this section, we will:
 
- - List todos from a list of todos.
+ - Create a list of todos and show them.
  - Show the number of active (`complete === true`) and complete todos.
  - Connect a todo’s `complete` property to a checkbox so that when
    we toggle the checkbox the number of active and complete todos changes.
@@ -296,7 +296,7 @@ When complete, you should be able to edit a todo’s name.
 
 In this section, we will:
 
- - Make it possible to use the forward and backwards button to change
+ - Make it possible to use the browser’s forwards and backwards buttons to change
  between showing all todos, only active todos, or only completed todos.
  - Add links to change between showing all todos, only active todos, or only completed todos.
  - Make those links bold when the site is currently showing that link.

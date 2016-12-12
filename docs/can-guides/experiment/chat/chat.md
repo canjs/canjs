@@ -225,9 +225,10 @@ to work together like:
 Breaking down an application into many isolated and potentially reusable components
 is a critical piece of CanJS software architecture.
 
-Custom elements are defined with [can-component].  Components render their `view` within
-the element with an instance of their `ViewModel`.  By default their `view` only
-has access to that data in the `ViewModel`.  You can use [can-stache-bindings event and data bindings] like [can-stache-bindings.toChild] and [can-stache-bindings.twoWay] to pass data
+Custom elements are defined with [can-component].  Components render their `view`
+with a `ViewModel` instance.  By default, their `view` only
+has access to the data in the `ViewModel`.  You can use [can-stache-bindings event and data bindings]
+like [can-stache-bindings.toChild] and [can-stache-bindings.twoWay] to pass data
 between custom elements.
 
 > __Key take-away:__  [can-component] makes custom elements. Break down your application
