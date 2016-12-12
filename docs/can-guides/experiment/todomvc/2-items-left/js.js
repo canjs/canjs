@@ -1,5 +1,5 @@
 var Todo = can.DefineMap.extend({
-  id: "string",
+  id: "number",
   name: "string",
   complete: {type: "boolean", value: false}
 });

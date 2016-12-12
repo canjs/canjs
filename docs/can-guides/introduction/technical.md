@@ -732,7 +732,7 @@ var DefineMap = require("can-define/map/map"),
 
 // Defines the type of data we get back from the server.
 var Todo = DefineMap.extend({
-  id: "string",
+  id: "number",
   name: "string",
   complete: {type: "boolean", value: false}
 });
