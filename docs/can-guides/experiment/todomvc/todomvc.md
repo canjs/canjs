@@ -179,7 +179,7 @@ The deleted todo is automatically removed from the page because [can-connect/can
 are created, updated or destroyed.  If you’ve created the right [can-set.Algebra], you
 shouldn’t have to manage lists yourself.
 
-Finally, if you refresh the page after deleting, you’ll notice the page temporarily shows fewer items.
+Finally, if you click “Run with JS” after deleting a todo, you’ll notice the page temporarily shows fewer items.
 This is because the fall through cache’s data is shown before the response from fixtured data store
 is used.
 
