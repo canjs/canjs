@@ -41,7 +41,7 @@
   "dependencies": {
     "can-component": "3.0.3",
     "can-compute": "3.0.4",
-    "can-connect": "1.0.14",
+    "can-connect": "1.0.15",
     "can-construct": "3.0.4",
     "can-construct-super": "3.0.0",
     "can-control": "3.0.4",
@@ -85,7 +85,7 @@
     "bit-docs": "^0.0.7",
     "funcunit": "^3.1.0-pre.1",
     "http-server": "^0.9.0",
-    "jquery": "^2.2.3",
+    "jquery": "^3.1.1",
     "jquery-ui": "^1.12.0",
     "saucelabs": "^1.3.0",
     "socket.io-client": "^1.5.1",
@@ -93,7 +93,7 @@
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.3",
     "steal-tools": "^0.16.8",
-    "testee": "^0.2.5",
+    "testee": "^0.3.0",
     "wd": "^1.0.0"
   },
   "demos": [
