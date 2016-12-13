@@ -27,15 +27,15 @@ WebPack or Browserify.  In a real app, your code will look like:
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 
-var Todo = DefineMap.extend({ ... });
-Todo.List = DefineList.extend({ ... });
+var Message = DefineMap.extend({ ... });
+Message.List = DefineList.extend({ ... });
 ```
 
 Not:
 
 ```js
-var Todo = can.DefineMap.extend({ ... });
-Todo.List = can.DefineList.extend({ ... });
+var Message = can.DefineMap.extend({ ... });
+Message.List = can.DefineList.extend({ ... });
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.
