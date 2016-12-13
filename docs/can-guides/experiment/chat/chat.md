@@ -136,7 +136,7 @@ Update the `HTML` tab to:
 Update the `JavaScript` tab to:
 
  - Add a `page` property that will be updated when the browser’s URL changes.
- - Prevent the `message` property from becoming part of the URL changes.
+ - Prevent the `message` property from becoming part of the URL changes by using `serialize: false`.
  - Connect changes in the url to changes in the `appVM` with [can-route.data].
  - Create a pretty routing rule so if the url looks like `"#!chat"`, the `page` property of
    `appVM` will be set to `chat` with [can-route].  If there is nothing in the hash, `page`
@@ -165,8 +165,8 @@ and initialized that connection with [can-route.ready can-route.ready].
 This makes it so if the `page` property changes, the browser’s url will change.  If the
 browser’s url changes, the `page` property changes.  
 
-> __Key take-away:__  [can-route] connects changes in the browser’s url to
-changes in the application view model and vice versa.  Use changes in
+> __Key take-away:__  [can-route] two-way binds changes in the browser’s url to
+the application view model and vice versa.  Use changes in
 the application view model to control which content is shown.
 
 
@@ -238,9 +238,9 @@ into many bite-sized custom elements.
 
 In this section, we will:
 
- - Display messages from [http://chat.donejs.com/api/messages](http://chat.donejs.com/api/messages)
- - Show a “Loading…” message while the messages are loading.
- - Show an error if those messages fail to load.
+ - Display messages from [http://chat.donejs.com/api/messages](http://chat.donejs.com/api/messages) when `messagesPromise.isResolved`.
+ - Show a “Loading…” message while the messages are loading (`messagesPromise.isPending`).
+ - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
 Update the `HTML` tab to:
 
@@ -268,9 +268,12 @@ Update the `JavaScript` tab to:
 
 When complete, you should see a list of messages in the __chat messages page__.
 
-This step creates a `Message` model, by first creating the `Message` type
-and then connecting it to a messages service at `http://chat.donejs.com/api/messages`. This
-adds [can-connect/can/map/map methods] to the `Message` type that let you:
+This step creates a `Message` model by first creating the `Message` type
+and then connecting it to a messages service at `http://chat.donejs.com/api/messages`.
+
+### Explanation
+
+The [can-connect/can/super-map/super-map super-map module] adds [can-connect/can/map/map methods] to the `Message` type that let you:
 
  - Get a list of messages:
    ```js
@@ -304,7 +307,7 @@ There are also methods to let you know when a message
 With the message model created, it’s used to load and list messages on the server.
 
 
-> __Key take-away:__ Create a model to connect to backend data.
+> __Key take-away:__ Create a model for your data’s schema and use it to communicate with a backend server.
 
 ## Create Messages
 
