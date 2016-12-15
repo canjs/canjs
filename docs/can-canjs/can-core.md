@@ -12,7 +12,7 @@ Each module is part of an independent package, so you
 should install the ones you use directly:
 
 ```
-npm install can-define can-set can-connect can-component can-stache can-route --save
+npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 ```
 
 
