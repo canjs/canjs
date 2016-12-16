@@ -30,7 +30,7 @@ It uses `can.all.js` so you have the [can-core core], [can-ecosystem ecosystem],
 Install [can-core CanJS’s core modules] and StealJS with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache --save
+npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 npm install steal steal-stache --save
 ```
 
@@ -102,7 +102,7 @@ guide has instructions for how to create a production build.
 Install [can-core CanJS’s core modules] and Webpack (with `raw-loader`) with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache --save
+npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 npm install webpack raw-loader --save-dev
 ```
 
@@ -147,7 +147,7 @@ Finally, create a page that loads `bundle.js`:
 CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `stringify`) with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache --save
+npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 npm install browserify stringify --save-dev
 ```
 
