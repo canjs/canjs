@@ -208,6 +208,37 @@ Component.extend({ ... });
 
 Use the same pattern for the other `can` modules you are using. In general, you should not be using the `can.` properties any more, but rather importing (through your module loader / bundler) only the packages and modules that you are using.
 
+Here’s a list of all the paths in CanJS 2.3 that now have separate modules in CanJS 3:
+
+- `can/component/component` — [can-component]
+- `can/compute/compute` — [can-compute]
+- `can/construct/construct` — [can-construct]
+- `can/construct/super` — [can-construct-super]
+- `can/control/control` — [can-control]
+- `can/event/event` — [can-event]
+- `can/list/list` — [can-list]
+- `can/map/backup` — [can-map-backup]
+- `can/map/define` — [can-map-define]
+- `can/map/map` — [can-map]
+- `can/model/model` — [can-model](https://github.com/canjs/can-model)
+- `can/observe/observe` — [can-observe](https://github.com/canjs/can-observe)
+- `can/route/pushstate/pushstate` — [can-route-pushstate]
+- `can/route/route` — [can-route]
+- `can/util/fixture` — [can-fixture]
+- `can/util/util` — [can-util]
+- `can/view/autorender/autorender` — [can-view-autorender]
+- `can/view/callbacks/callbacks` — [can-view-callbacks]
+- `can/view/ejs/ejs` — [can-ejs]
+- `can/view/href/href` — [can-view-href]
+- `can/view/import/import` — [can-view-import]
+- `can/view/live/live` — [can-view-live]
+- `can/view/mustache/mustache` — [can-mustache](https://github.com/canjs/can-mustache)
+- `can/view/node_lists/node_lists` — [can-view-nodelist]
+- `can/view/parser/parser` — [can-view-parser]
+- `can/view/scope/scope` — [can-view-scope]
+- `can/view/stache/stache` — [can-stache]
+- `can/view/target/target` — [can-view-target]
+
 ### Wrap elements in jQuery objects
 
 If you are using [can-jquery/legacy] to automatically get jQuery-wrapped elements in [can-control] event handlers, you’ll want to remove the usage of [can-jquery/legacy] as it doesn’t play well with [can-component]s that do not expect elements to be jQuery-wrapped.
