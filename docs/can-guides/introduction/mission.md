@@ -177,7 +177,7 @@ Over the past 9 years of CanJS, the web has evolved, and the best practices in J
 To name a few:
 - Event delegation became a best practice for managing events around 2009. CanJS added support for event delegation in 2008, before jQuery landed support.  Later, when jQuery became ubiquitous, we
  integrated jQuery into CanJS.
-- RESTful APIs eventually became the best practice for designing a backend interface. [can-model] in 2010 provided ActiveRecord style abstractions around this pattern.
+- RESTful APIs eventually became the best practice for designing a backend interface. [can-model](//v2.canjs.com/docs/can.Model.html) in 2010 provided ActiveRecord style abstractions around this pattern.
 - Data bindings hit the mainstream in 2013 when Angular rose in popularity. CanJS landed support for this feature in 2011 with [can-ejs].
 - Building UI widgets as HTML custom elements, similar to web components, has become a best practice. [can-component] landed in 2013 to support this architecture.
 - In 2015, CanJS landed support for using a Virtual DOM and simple server-side rendering with [can-vdom].
