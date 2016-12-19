@@ -29,6 +29,8 @@ if (!System.isEnv('production')) {
 }
 require('can-view-target/test/test');
 require('can-simple-dom/test/test');
+require('can-cid/test/test');
+require('can-types/test/test');
 
 
 // Legacy tests
