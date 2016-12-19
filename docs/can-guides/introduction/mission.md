@@ -183,7 +183,7 @@ To name a few:
 - In 2015, CanJS landed support for using a Virtual DOM and simple server-side rendering with [can-vdom].
 - In early 2016, CanJS added real-time support and advanced caching technology with [can-connect].
 - In late 2016, CanJS added a more powerful [can-define observable type] and enabled it to use
-  [functional reactive programming techniques](can-define-stream).
+  [can-define-stream functional reactive programming techniques].
 
 This timeline shows more examples:
 
