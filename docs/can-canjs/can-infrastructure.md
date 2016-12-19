@@ -256,3 +256,48 @@ var frag = target.hydrate({className: "title", message: "World"});
 
 frag //-> <h1 class='title'>Hello World</h1>
 ```
+
+## can-cid
+
+[can-cid] is used to get a unique identifier for an object, optionally prefixed by a type name. Once set, the unique identifier does not change, even if the type name changes on subsequent calls.
+
+```js
+var cid = require("can-cid");
+var x = {};
+var y = {};
+
+console.log(cid(x, "demo")); // -> "demo1"
+console.log(cid(x, "prod")); // -> "demo1"
+console.log(cid(y));         // -> "2"
+```
+
+## can-types
+
+[can-types] is used to provide default types or test if something is of a certain type.
+
+```js
+var types = require("can-types");
+var oldIsMapLike = types.isMapLike;
+types.isMapLike = function(obj){
+  return obj instanceof DefineMap || oldIsMapLike.apply(this, arguments);
+};
+types.DefaultMap = DefineMap;
+```
+
+## can-namespace
+
+[can-namespace] is a namespace where can-* packages can be registered.
+
+```js
+var namespace = require('can-namespace');
+
+var unicorn = {
+	// ...
+};
+
+if (namespace.unicorn) {
+	throw new Error("You can't have two versions of can-unicorn, check your dependencies");
+} else {
+	module.exports = namespace.unicorn = unicorn;
+}
+```
