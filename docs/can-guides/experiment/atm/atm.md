@@ -1,8 +1,8 @@
 @page guides/atm ATM Guide
 @parent guides/experiment 3
 
-This guide will walk you through building and __testing__ an ATM application with CanJS’s
-[can-core Core libraries].  It teaches how to do test driven development (TDD)
+This guide will walk you through __building__ and __testing__ an Automated Teller Machine (ATM) application with CanJS’s
+[can-core Core libraries].  You’ll learn how to do test driven development (TDD)
 and manage complex state.  It takes about 2 hours to complete.
 
 @body
@@ -14,10 +14,6 @@ Check out the final app:
 <a class="jsbin-embed" href="//jsbin.com/yayupo/10/embed?js,output">JS Bin on jsbin.com</a>
 
 Notice it has tests at the bottom of the `Output` tab.
-
-Watch the following video to see it in action:
-
-> TODO: VIDEO OF IT IN ACTION
 
 ## Setup
 
@@ -38,19 +34,19 @@ tab.  To set this up, the `HTML` tab:
    should import things directly with a module loader like [StealJS](http://stealjs.com),
    WebPack or Browserify.  Read [guides/setup] for instructions on how to set up CanJS in a real app.
 
- - Includes the content for a `app-template` [can-stache] template. This template
-   provides the title for the ATM app, and uses the `<atm-machine>` custom [can-component]
+ - Includes the content for an `app-template` [can-stache] template. This template
+   provides the title for the ATM app and uses the `<atm-machine>` custom [can-component]
    element that will eventually provide the ATM functionality.
 
-The `JS` tab is split into two sections:
+The `JavaScript` tab is split into two sections:
 
  - `CODE` - The ATM’s models, view-models and component code will go here.
  - `TESTS` - The ATM’s tests will go here.
 
-Normally, your application’s code and test will be in separate files and loaded
-by different html pages.  But we combine them here to fit within JS&nbsp;Bin’s limitations.
+Normally, your application’s code and tests will be in separate files and loaded
+by different html pages, but we combine them here to fit within JS&nbsp;Bin’s limitations.
 
-The `CODE` section is rendering the `app-template` with:
+The `CODE` section renders the `app-template` with:
 
 ```js
 document.body.insertBefore(
@@ -59,7 +55,7 @@ document.body.insertBefore(
 );
 ```
 
-The `TESTS` section is labeling which module will be tested:
+The `TESTS` section labels which module will be tested:
 
 ```js
 QUnit.module("ATM system", {});
@@ -86,10 +82,10 @@ Update the `JavaScript` tab to:
 @sourceref ./1-pages-template/js.js
 @highlight 5-13,only
 
-When complete, you should see the __"Reading Card"__ title.
+When complete, you should see the __“Reading Card”__ title.
 
-This step outlines the page transitions we’re going to make the `state`
-property transition between:
+This step includes all the potential pages the `state`
+property can transition between:
 
 - readingCard
 - readingPin
@@ -100,7 +96,7 @@ property transition between:
 - successfulTransaction
 - printingReceipt
 
-Each of those states are present in the following state diagram.
+Each of those states are present in the following state diagram:
 
 <img src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png">
 
@@ -115,10 +111,10 @@ In this section, we will:
 
 An ATM `Card` will take a card `number` and `pin`. It will start out as
 having a `state` of  `"unverified"`. It will have a `verify` method
-that will change the `state` to `"verifying"` and if the response is successful,
+that will change the `state` to `"verifying"`, and if the response is successful,
 `state` will change to `"verified"`.
 
-Update the `JS` tab to:
+Update the `JavaScript` tab to:
 
 - Make the fake data request delay `1ms` by setting [can-fixture.delay] to `1` before every test and
   restoring it to `2s` after every test runs.
@@ -128,20 +124,20 @@ Update the `JS` tab to:
 @sourceref ./2-card-tests/js.js
 @highlight 24-70,only
 
-When complete you should have a breaking test.  Now lets make it pass.
+When complete, you should have a breaking test.  Now let’s make it pass.
 
 ## Card model
 
 In this section, we will:
 
-- Implement the `Card` model so that all tests pass.
+- Implement the `Card` model so that all the tests pass.
 
 Update the `JavaScript` tab to:
 
-- Simulate the `/verifyCard` with [can-fixture]. It return a successful response if
-  the request body has a `number` and `pin` and a 400 if not.
+- Simulate the `/verifyCard` with [can-fixture]. It will return a successful response if
+  the request body has a `number` and `pin`, or a `400` if not.
 - Use [can-define/map/map] to define the `Card` model, including:
-  - a `number` and  `pin` property.
+  - a `number` and a `pin` property.
   - a `state` property initialized to `unverified` that is not part of the card’s [can-define.types.serialize]d  data.
   - a `verify` method that posts the card’s data to `/verifyCard` and updates the `state`
     accordingly.
@@ -170,7 +166,7 @@ a `state` of `"invalid"`.  When the deposit has a `card`, `amount` and `account`
 will change to `"ready"`.  Once the deposit is ready, the `.execute()` method will change the state
 to `"executing"` and then to `"executed"` once the transaction completes.
 
-Update the `JS` tab to:
+Update the `JavaScript` tab to:
 
 - Create a `deposit` with an `amount` and a `card`.
 - Check that the `state` is `"invalid"` because there is no `account`.
@@ -193,8 +189,8 @@ When complete, the __Deposit__ test should run, but error because _Deposit is no
 In this section, we will:
 
 - Implement the `Account` model.
-- Implement a base `Transaction` model and extend it into a `Deposit` and
-`Withdrawal` model.
+- Implement a base `Transaction` model and extend it into `Deposit` and
+`Withdrawal` models.
 - Get the __Deposit__ test to pass.
 
 Update the `JavaScript` tab to:
@@ -203,24 +199,23 @@ Update the `JavaScript` tab to:
 - Simulate `/deposit` to always return a successful result.
 - Simulate `/withdrawal` to always return a successful result.
 - Define the `Account` model to:
-	- have an `id` property
-	- have a `balance` property
-	- have a `name` property
-- Define an `Account.List` type with [can-define/list/list]
-- Connect `Account` and `Account.List` types to the RESTful `"/accounts"` endpoint using [can-connect/can/base-map/base-map].
+	- have an `id` property.
+	- have a `balance` property.
+	- have a `name` property.
+- Define an `Account.List` type with [can-define/list/list].
+- Connect `Account` and `Account.List` types to the RESTful `/accounts` endpoint using [can-connect/can/base-map/base-map].
 - Define the `Transaction` model to:
-  - have an `account` and `card` property.
-  - have an `executing` and `executed` property that track if the transaction is executing or has executed.
+  - have `account` and `card` properties.
+  - have `executing` and `executed` properties that track if the transaction is executing or has executed.
   - have a `rejected` property that stores the error given for a failed transaction.
   - have an __abstract__ `ready` property that `Deposit` and `Withdrawal` will implement to return `true`
-    when the transaction is in a state able to be executed.
+    when the transaction is in an executable state.
   - have a `state` property that reads other stateful properties and returns a string representation
     of the state.
   - have an __abstract__ `executeStart` method that `Deposit` and `Withdrawal` will implement to
-    execute the transaction and return a `Promise` the resolves when the transaction completes.
+    execute the transaction and return a `Promise` that resolves when the transaction is complete.
   - have an __abstract__ `executeEnd` method that `Deposit` and `Withdrawal` will implement to
-    update the transactions values (typically the `account` balance) if the transaction completed
-    successfully.
+    update the transactions values (typically the `account` balance) if the transaction is successfully completed.
   - have an `execute` method that calls `.executeStart()` and `executeEnd()` and keeps the stateful
     properties updated correctly.
 - Define the `Deposit` model to:
@@ -242,7 +237,7 @@ When complete, the __Deposit__ tests will pass.
 In this section, we will:
 
  - Allow the user to enter a card number and go to the __Reading Pin__ page.
- - Add tests to __ATM Basics__ test.
+ - Add tests to the __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
@@ -255,7 +250,7 @@ Update the `JavaScript` tab to:
 
 - Declare a `card` property.
 - Derive a `state` property that changes to `"readingPin"` when `card` is defined.
-- Add a `cardNumber` that creates a `card` with the `number` provided.
+- Add a `cardNumber` that creates a `card` with the provided `number`.
 
 @sourceref ./6-reading-card/js.js
 @highlight 190-205,313-325,only
@@ -268,7 +263,7 @@ page.
 In this section, we will:
 
 - Allow the user to enter a pin number and go to the __Choosing Transaction__ page.
-- Add tests to __ATM Basics__ test.
+- Add tests to the __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
@@ -285,11 +280,11 @@ Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 - Define a `transactions` property that will contain a list of transactions for this session.
 - Update `state` to be in the `"choosingTransaction"` state when the `card` is verified.
 - Define a `pinNumber` method that updates the `card`’s `pin`, calls `.verify()`,
-  and then initializes the `accountsPromise` and `transactions` property.
+  and initializes the `accountsPromise` and `transactions` properties.
 
 Update the `TESTS` section of the `JavaScript` tab to:
 
-- Test calling `pinNumber` moves the `state` to `"choosingTransaction"`.
+- Test whether calling `pinNumber` moves the `state` to `"choosingTransaction"`.
 
 @sourceref ./7-reading-pin/js.js
 @highlight 192-193,198-200,212-228,346-356,only
@@ -302,7 +297,7 @@ page.
 In this section, we will:
 
 - Allow the user to pick a transaction type and go to the __Picking Account__ page.
-- Add tests to __ATM Basics__ test.
+- Add tests to the __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
@@ -322,13 +317,13 @@ Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 
 Update the `TESTS` section of the `JavaScript` tab to:
 
-- Call `.chooseDeposit()` and verify the state moves to `"pickingAccount"`.
+- Call `.chooseDeposit()` and verify that the state moves to `"pickingAccount"`.
 
 @sourceref ./8-choosing-transaction/js.js
 @highlight 194-204,209-211,243,246-255,363,382-389,only
 
 
-> We will define `printReceiptAndExit` later!
+> __Note:__ We will define `printReceiptAndExit` later!
 
 ## Picking Account page and test
 
@@ -336,11 +331,11 @@ In this section, we will:
 
 - Allow the user to pick an account and go to either the  __Deposit Info__ or
   __Withdrawal Info__ page.
-- Add tests to __ATM Basics__ test.
+- Add tests to the __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
-- Write out a _"Loading Accounts  ..."_ message while the accounts are loading.
+- Write out a _“Loading Accounts…”_ message while the accounts are loading.
 - Write out the accounts when loaded.
 - Call `chooseAccount()` when an account is clicked.
 
@@ -350,7 +345,7 @@ Update the `HTML` tab to:
 Update the `ATM` view model in the `CODE` section of the `JavaScript` tab to:
 
 - Change `state` to check if the `currentTransaction` has an `account` and update the
-  value to `"depositInfo"` or `"withdrawalInfo"` depending on the type of the `currentTransaction`.
+  value to `"depositInfo"` or `"withdrawalInfo"`, depending on the `currentTransaction`’s type.
 - Add a `chooseAccount` method that sets the `currentTransaction`’s `account`.
 
 Update the `TESTS` section of the `JavaScript` tab to:
@@ -366,7 +361,7 @@ Update the `TESTS` section of the `JavaScript` tab to:
 In this section, we will:
 
 - Allow the user to enter the amount of a deposit and go to the __Successful Transaction__ page.
-- Add tests to __ATM Basics__ test.
+- Add tests to the __ATM Basics__ test.
 
 Update the `HTML` tab to:
 
@@ -417,7 +412,7 @@ Update the `HTML` tab to:
 When complete, you should be able to enter a withdrawal amount and see that
 the transaction was successful.
 
-> __Optional:__ Challenge yourself by adding a test for the `withdrawalInfo` state of an atm instance.  Consider the progression of states needed to make it to the `withdrawalInfo` state.  How is it different from the __ATM basics__ test we already have?
+> __Optional:__ Challenge yourself by adding a test for the `withdrawalInfo` state of an `atm` instance.  Consider the progression of states needed to make it to the `withdrawalInfo` state.  How is it different from the __ATM basics__ test we already have?
 
 ## Transaction Successful page
 
@@ -430,19 +425,20 @@ Update the `HTML` tab to:
 - List out the account balance.
 - Add buttons to:
   - start another transaction, or
-  - print a receipt and exit the ATM. (`printReceiptAndExit` will be implemented in the next section)
+  - print a receipt and exit the ATM (`printReceiptAndExit` will be implemented in the next section).
 
 @sourceref ./12-transaction-success/html.html
 @highlight 134-144,only
 
-When complete, you should be able to make a deposit or withdrawal, see the updated account balance
-and then start another transaction.
+When complete, you should be able to make a deposit or withdrawal, see the updated account balance,
+then start another transaction.
 
 ## Printing Recipe page and test
 
-In this section, we will:
+In this section, we will make it possible to:
 
- - Make it possible to see a receipt of all transactions and exit the ATM.  
+ - See a receipt of all transactions
+ - Exit the ATM.  
 
 Update the `HTML` tab to:
 
@@ -466,7 +462,7 @@ Update the `ATM basics` test in the `JavaScript` tab to:
 
 - Shorten the default `receiptTime` so the tests move quickly.
 - Call `printReceiptAndExit` and make sure that the `state` changes to `"printingReceipt"` and
-  then to `"readingCard"` and ensure that sensitive information is cleared from the atm.
+  then to `"readingCard"` and ensure that sensitive information is cleared from the ATM.
 
 @sourceref ./13-printing/js.js
 @highlight 189,205-209,213-215,263,266-273,397,437-451,only

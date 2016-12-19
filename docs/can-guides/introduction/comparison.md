@@ -112,7 +112,7 @@ Using **MobX** observables with **React** is fairly popular, though not as popul
 
 ### Data Fetching and Real-time Data
 
-**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
+**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall-through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
 
 **React**, being just a view layer, has no concept of this.
 
@@ -285,7 +285,7 @@ These layers have a simple and inverse API, the Store layer takes actions and re
 
 ...and there are layers *within those layers*, like **action creators** and **redux-middleware**.
 
-This architecture is nice and simple, with discrete lines of interaction and well defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
+This architecture is nice and simple, with discrete lines of interaction and well-defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
 
 To illustrate the idea with an example you wanted to to add a "live video chat" feature to your app. Let’s pretend you have already implemented this sort of thing in some other app, so you are just going to reuse the shared portions of it for this app.
 
@@ -502,7 +502,7 @@ If your team needs to get started quickly, and hit the ground running, Angular 2
 
 ### Data Fetching and Real-time Data
 
-**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
+**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall-through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
 
 **Angular 2**’s HTTP Service doesn’t have the advanced features like minimal requests and fall-through caches, and any real-time data-source would require you to write a custom service.
 

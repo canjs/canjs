@@ -58,7 +58,7 @@ Update the `JavaScript` tab to:
  - Render the template with an empty object into a [document fragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment).
  - Insert the fragment into the document’s `<body>` element.
 
- To load and render this template, and add the result to the
+To load, render, and add this template to the
 body, add the following to the `JavaScript` tab:
 
 @sourceref ./1-create-template/js.js
@@ -75,7 +75,7 @@ that in the next step.
 
 In this section, we will:
 
- - List todos from a list of todos.
+ - Create a list of todos and show them.
  - Show the number of active (`complete === true`) and complete todos.
  - Connect a todo’s `complete` property to a checkbox so that when
    we toggle the checkbox the number of active and complete todos changes.
@@ -92,10 +92,10 @@ Update the `JavaScript` tab to:
 
 Update the `HTML` tab to:
 
-- Use [can-stache.helpers.each] to loop through every todo.
+- Use [can-stache.helpers.each `{{#each todos}}`] to loop through every todo.
 - Add `completed` to the `<li>`’s `className` if the `<li>`’s todo is complete.
-- Use [can-stache-bindings.twoWay] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
-- Use [can-stache.tags.escaped] to insert the value todo’s `name` as the content of the `<label>` and
+- Use [can-stache-bindings.twoWay `{($checked)}`] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
+- Use [can-stache.tags.escaped `{{name}}`] to insert the value todo’s `name` as the content of the `<label>` and
   `value` of the text `<input/>`.
 - Insert the active and complete number of todos.
 
@@ -123,7 +123,7 @@ In this section, we will:
 
 Update the `JavaScript` tab to:
 
-- Define what the RESTful service layer’s parameters are with [can-set].
+- Define what the RESTful service layer’s parameters are with [can-set.Algebra can-set.Algebra].
 - Create a fake data store that is initialized with data for 3 todos with [can-fixture.store].
 - Trap AJAX requests to `"/api/todos"` and provide responses with the data from the fake data store with [can-fixture].
 - Connect the `Todo` and `Todo.List` types to the RESTful `"/api/todos"` endpoint using [can-connect/can/super-map/super-map].  This allows you to load, create, update, and destroy todos
@@ -138,7 +138,7 @@ on the server.
 
 Update the `HTML` tab to:
 
- - Use [can-stache.helpers.each] to loop through the promise’s resolved value, which
+ - Use [can-stache.helpers.each `{{#each todosPromise.value}}`] to loop through the promise’s resolved value, which
    is the list of todos returned by the server.
  - Read the active and completed number of todos from the promise’s resolved value.
 
@@ -165,7 +165,7 @@ In this section, we will:
 Update the `HTML` tab to:
 
  - Add `destroying` to the `<li>`’s `className` if the `<li>`’s todo is being destroyed using [can-connect/can/map/map.prototype.isDestroying].
- - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event].
+ - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event `($click)`].
 
 @sourceref ./4-destroy/html.html
 @highlight 22-23,27,only
@@ -179,8 +179,8 @@ The deleted todo is automatically removed from the page because [can-connect/can
 are created, updated or destroyed.  If you’ve created the right [can-set.Algebra], you
 shouldn’t have to manage lists yourself.
 
-Finally, if you refresh the page after deleting, you’ll notice the page temporarily shows fewer items.
-This is because the fall through cache’s data is shown before the response from fixtured data store
+Finally, if you click “Run with JS” after deleting a todo, you’ll notice the page temporarily shows fewer items.
+This is because the fall-through cache’s data is shown before the response from fixtured data store
 is used.
 
 <video controls>
@@ -210,8 +210,8 @@ Update the `JavaScript` tab to:
 Update the `HTML` tab to:
 
  - Create the `todo-create-template` that:
-   - Updates the `todo`’s `name` with the `<input>`’s `value` using [can-stache-bindings.twoWay].
-   - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event].
+   - Updates the `todo`’s `name` with the `<input>`’s `value` using [can-stache-bindings.twoWay `{($value)}`].
+   - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event `($enter)`].
  - Use `<todo-create/>`
 
 @sourceref ./5-create/html.html
@@ -228,8 +228,8 @@ lists that they belong within.
 
 In this section, we will:
 
- - Define a custom element that lists todos passed to it.
- - Use that custom element.
+ - Define a custom element for showing a list of todos.
+ - Use that custom element by passing it the list of fetched todos.
 
 Update the `JavaScript` tab to:
 
@@ -243,7 +243,7 @@ Update the `HTML` tab to:
 
  - Create the `todo-list-template` that loops through a list of `todos` (instead of `todosPromise.value`).
  - Create a `<todo-list>` element and set its `todos` property to the resolved value of `todosPromise`
-   using [can-stache-bindings.toChild].
+   using [can-stache-bindings.toChild `{todos}`].
 
 @sourceref ./6-list/html.html
 @highlight 18-32,43,only
@@ -277,8 +277,8 @@ Update the `HTML` tab to:
  - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
  - Call `edit` with the current context using [can-stache/keys/this].
  - Set up the edit input to:
-   - Two-way bind its value to the current todo’s `name` using [can-stache-bindings.twoWay].
-   - Call `updateName` when the enter key is pressed using [can-stache-bindings.event].
+   - Two-way bind its value to the current todo’s `name` using [can-stache-bindings.twoWay `{($value)}`].
+   - Call `updateName` when the enter key is pressed using [can-stache-bindings.event `($enter)`].
    - Focus the input when `isEditing` is true using the special [can-util/dom/attr/attr.special.focused] attribute.
    - Call `cancelEdit` if the input element loses focus.
 
@@ -296,7 +296,7 @@ When complete, you should be able to edit a todo’s name.
 
 In this section, we will:
 
- - Make it possible to use the forward and backwards button to change
+ - Make it possible to use the browser’s forwards and backwards buttons to change
  between showing all todos, only active todos, or only completed todos.
  - Add links to change between showing all todos, only active todos, or only completed todos.
  - Make those links bold when the site is currently showing that link.

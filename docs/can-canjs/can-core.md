@@ -70,7 +70,7 @@ hobbies.pop();
 ## can-define
 
 [can-define/map/map] and [can-define/list/list] allow you to create observable
-maps and lists with well defined properties.  You can
+maps and lists with well-defined properties.  You can
 [can-define.types.propDefinition define a property’s type initial value, enumerability, getter-setters and much more].
 For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
 
