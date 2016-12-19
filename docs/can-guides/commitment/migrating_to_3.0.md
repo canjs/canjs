@@ -164,6 +164,16 @@ Which sets `window.foo.bar`, this argument is no longer accepted by [can-constru
 
 Instead, the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.
 
+### Using stache templates with Steal
+
+If you use StealJS, you’ll need to install [steal-stache] to load your templates:
+
+```
+npm install steal-stache --save
+```
+
+You don’t need to do anything else to make your templates load correctly.
+
 ## Modernized migration path
 
 In addition to the above, take the following measures to set your project up for easier upgrades in the future:
