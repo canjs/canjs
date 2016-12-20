@@ -110,7 +110,7 @@ _Utility libraries that power the core collection._
 - **[can-view-nodelist]** <small><%can-view-nodelist.package.version%></small> Maintains live-binding relationships
   - `npm install can-view-nodelist --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-nodelist" data-count-href="/canjs/can-view-nodelist/stargazers" data-count-api="/repos/canjs/can-view-nodelist#stargazers_count">Star</a>
-- **[can-cid]** <small><%can-cid.package.version%></small> Get a unique identifier for objexts
+- **[can-cid]** <small><%can-cid.package.version%></small> Get a unique identifier for objects
   - `npm install can-cid --save`
   - <a class="github-button" href="https://github.com/canjs/can-cid" data-count-href="/canjs/can-cid/stargazers" data-count-api="/repos/canjs/can-cid#stargazers_count">Star</a>
 - **[can-types]** <small><%can-types.package.version%></small> A stateful container for CanJS type information
