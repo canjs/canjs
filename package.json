@@ -39,7 +39,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-cid": "^1.0.0",
+    "can-cid": "1.0.0",
     "can-component": "3.0.4",
     "can-compute": "3.0.5",
     "can-connect": "1.0.19",
@@ -51,7 +51,7 @@
     "can-ejs": "3.0.3",
     "can-event": "3.0.2",
     "can-fixture": "1.0.11",
-    "can-fixture-socket": "^0.5.8",
+    "can-fixture-socket": "0.5.8",
     "can-jquery": "3.0.3",
     "can-list": "3.0.2",
     "can-map": "3.0.4",
@@ -68,7 +68,7 @@
     "can-stache-bindings": "3.0.6",
     "can-stache-converters": "3.0.6",
     "can-stream": "0.0.5",
-    "can-types": "^1.0.1",
+    "can-types": "1.0.1",
     "can-util": "3.2.0",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.3",
