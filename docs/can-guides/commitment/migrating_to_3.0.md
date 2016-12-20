@@ -1,6 +1,7 @@
 @page migrate-3 Migrating to CanJS 3
 @parent guides/commitment 2
 @templateRender <% %>
+@description This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.
 @outline 0
 
 @body
