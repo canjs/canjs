@@ -1,6 +1,8 @@
 @page migrate-3 Migrating to CanJS 3
 @parent guides/commitment 2
 @templateRender <% %>
+@description This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.
+@outline 0
 
 @body
 
@@ -8,47 +10,84 @@ CanJS 3 introduces an even more modular project structure and several new featur
 
 This guide goes over:
 
+* [*Pre-migration preparation*](#Pre_migrationpreparation) you can do in your current 2.x project to more easily move to 3.x in the future.
 * [The *minimal migration path*](#Minimalmigrationpath), which includes the fewest changes required to upgrade from 2.x to 3.x.
 * [The *modernized migration path*](#Modernizedmigrationpath), which includes upgrading your code to match more modern conventions (such as using the new npm packages).
-* [The *future-proof path*](#Future_proofmigrationpath), which uses all of the modern libraries we are most excited about (such as [can-define]).
+* [The *latest & greatest migration path*](#Latest_greatestmigrationpath), which uses all of the modern libraries we are most excited about (such as [can-define]).
+* [How to *avoid future deprecations & removals*](#Avoidfuturedeprecations_removals) in releases after 3.x
 
-## Minimal migration path
+## Pre-migration preparation
 
-If you are already using `can` through npm, simply run the following command to install the latest version:
+Before upgrading your project from 2.x to 3.x, make sure your project builds successfully and all the tests pass.
 
-```
-npm install can --save
-```
+Additionally, you can take the following steps in your CanJS 2.x app to prepare it for migrating to CanJS 3.
 
-This will update your `package.json` to look something like this:
+### Use the module folders
 
-```js
-{
-  ...
-  "dependencies": {
-    "can": "^<%canjs.package.version%>"
-  }
-}
-```
+You can start importing CanJS code in a modular way before moving to CanJS 3.
 
-The `^` ensures you get minor and patch releases as those are released.
-
-At a minimum, to upgrade your code for CanJS 3, you must make all of the following changes to your code:
-
-### Use can/legacy
-
-In your code where you normally would import `can`, instead import `can/legacy`:
+For example, you might be using [can-component] like this:
 
 ```js
-var can = require("can/legacy");
+var can = require("can");
+
+can.Component.extend({ ... });
 ```
 
-This will give you a `can` object with *most* of the same APIs as in 2.3, with a few exceptions:
+Update your code to instead look like this:
 
-* [can.mustache](v2.canjs.com/docs/can.mustache.html) is not included with `can/legacy`, but it can still be installed as a [separate package](https://www.npmjs.com/package/can-mustache).
-* The former `can.view` functionality no longer exists; see below for more details.
+```js
+var Component = require("can/component/component");
 
-### Set leakScope on Components
+Component.extend({ ... });
+```
+
+Use the same pattern for the other modules you are using.
+
+Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
+
+- `can.autorender` — `can/view/autorender/autorender`
+- `can.bindings` — `can/view/bindings/bindings`
+- `can.Component` — `can/component/component`
+- `can.compute` — `can/compute/compute`
+- `can.Construct` — `can/construct/construct`
+- `can.Control` — `can/control/control`
+- `can.Deferred` — `can/util/deferred`
+- `can.define` — `can/map/define`
+- `can.ejs` — `can/view/ejs/ejs`
+- `can.event` — `can/event/event`
+- `can.fixture` — `can/util/fixture`
+- `can.LazyMap` — `can/map/lazy/lazy`
+- `can.List` — `can/list/list`
+- `can.Map` — `can/map/map`
+- `can.Model` — `can/model/model`
+- `can.Model.Cached` — `can/model/cached/cached`
+- `can.mustache` — `can/view/mustache/mustache`
+- `can.Object` — `can/util/object/object`
+- `can.route` — `can/route/route`
+- `can.stache` — `can/view/stache/stache`
+- `can.util` — `can/util/util`
+- `can.view.callbacks` — `can/view/callbacks/callbacks`
+
+### Replace uses of `can.$`
+
+[`can.$`](//v2.canjs.com/docs/can.$.html) allows you to access the underlying DOM library bundled with CanJS; for example, jQuery in `can.jquery.js`.
+
+You might be using it in your code to easily reference the library:
+
+```js
+var can = require("can");
+var body = can.$('body');
+```
+
+Update your code to explicitly require the library on which you depend. For example:
+
+```js
+var $ = require("jquery");
+var body = $('body');
+```
+
+### Set `leakScope` on components
 
 CanJS 2.2 introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your component’s template. In CanJS 3, **leakScope** is now `false` by default.
 
@@ -85,7 +124,43 @@ Component.extend({
 ```
 @highlight 4
 
-### Asynchronous inserted/removed events
+## Minimal migration path
+
+If you are already using `can` through npm, simply run the following command to install the latest version:
+
+```
+npm install can --save
+```
+
+This will update your `package.json` to look something like this:
+
+```js
+{
+  ...
+  "dependencies": {
+    "can": "^<%canjs.package.version%>"
+  }
+}
+```
+
+The `^` ensures you get minor and patch releases as those are released.
+
+At a minimum, to upgrade your code for CanJS 3, you must make all of the following changes to your code:
+
+### Use `can/legacy`
+
+In your code where you normally would import `can`, instead import `can/legacy`:
+
+```js
+var can = require("can/legacy");
+```
+
+This will give you a `can` object with *most* of the same APIs as in 2.3, with a few exceptions:
+
+* [can.mustache](v2.canjs.com/docs/can.mustache.html) is not included with `can/legacy`, but it can still be installed as a [separate package](https://www.npmjs.com/package/can-mustache).
+* The former `can.view` functionality no longer exists; see below for more details.
+
+### Asynchronous `inserted` & `removed` events
 
 In your [can-component]s, the [can-util/dom/events/inserted/inserted inserted] and [can-util/dom/events/removed/removed] events were previously fired synchronously as the element was inserted or removed from the DOM. To improve performance, these events are now fired asynchronously.
 
@@ -103,7 +178,7 @@ Component.extend({
 }
 ```
 
-### can.view is no more
+### Replace uses of `can.view`
 
 The `can.view` methods have been removed in CanJS 3. The most common use was to create a template renderer from a script element within the page.
 
@@ -126,7 +201,7 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
-### Promises are needed
+### Use native Promises
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
 
@@ -164,7 +239,7 @@ Which sets `window.foo.bar`, this argument is no longer accepted by [can-constru
 
 Instead, the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.
 
-### Using stache templates with Steal
+### Using `steal-stache` for templates
 
 If you use StealJS, you’ll need to install [steal-stache] to load your templates:
 
@@ -176,11 +251,9 @@ You don’t need to do anything else to make your templates load correctly.
 
 ## Modernized migration path
 
-In addition to the above, take the following measures to set your project up for easier upgrades in the future:
+CanJS 3 is divided into separate npm packages. This allows us to more quickly update parts of CanJS without affecting other functionality.
 
-### Use can-* packages
-
-CanJS 3 is divided into separate npm packages. This allows us to more quickly update parts of CanJS without affecting other functionality. You can take advantage of this by installing the individual can-* packages and using them directly.
+In addition to the above, take advantage of the individual packages by installing and using them directly to set your project up for easier upgrades in the future.
 
 For example, you might be using [can-component] like either:
 
@@ -221,7 +294,6 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/map/define` — [can-map-define]
 - `can/map/map` — [can-map]
 - `can/model/model` — [can-model](https://github.com/canjs/can-model)
-- `can/observe/observe` — [can-observe](https://github.com/canjs/can-observe)
 - `can/route/pushstate/pushstate` — [can-route-pushstate]
 - `can/route/route` — [can-route]
 - `can/util/fixture` — [can-fixture]
@@ -239,63 +311,12 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/view/stache/stache` — [can-stache]
 - `can/view/target/target` — [can-view-target]
 
-### Wrap elements in jQuery objects
-
-If you are using [can-jquery/legacy] to automatically get jQuery-wrapped elements in [can-control] event handlers, you’ll want to remove the usage of [can-jquery/legacy] as it doesn’t play well with [can-component]s that do not expect elements to be jQuery-wrapped.
-
-Instead, use [can-jquery] directly and handle the wrapping yourself. For example:
-
-```js
-var Component = require("can-component");
-var $ = require("can-jquery");
-
-Component.extend({
-  tag: "some-component",
-
-	events: {
-		inserted: function(){
-			this.element = $(this.element);
-		},
-		"li click": function(li){
-			var $li = $(li);
-		}
-	}
-});
-```
-
-[can-jquery] will continue to be supported indefinitely but [can-jquery/legacy] will be dropped in a future major version.
-
-### Remove use of `change` events
-
-When you upgrade to use [can-define], you’ll no longer receive `change` events on maps. If you had any code that binded to a map’s `change` event, you’ll want to instead bind to the properties that you are interested in.
-
-For example:
-
-```js
-route.bind("change", function(){
-  // The route changed
-});
-```
-
-Can be modified to instead use a compute that calls `serialize` on the route’s map:
-
-```js
-var routeMap = compute(function(){
-	return route.map.serialize();
-});
-
-routeMap.bind("change", function(){
-	// A property on the route’s map changed.
-});
-```
-
-As you might notice, [can-event.on on()] is preferable to `bind()`, although `bind()` still works the same.
-
-## Future-proof migration path
+<a name="Future_proofmigrationpath"></a>
+## Latest & greatest migration path
 
 In addition to the steps taken in the two sections above, make the following changes to your application if you *really* want to stay ahead of the curve.
 
-### can-define replaces can-map
+### Move from `can-map` to `can-define`
 
 If you’ve used [can-map-define] in the past, then using [can-define] should be familiar to you. Using [can-define/map/map] is the easiest migration path and is what we show in all of the examples in CanJS 3’s docs.
 
@@ -348,7 +369,33 @@ var carOwner = new CarOwner();
 carOwner.favorite = new Car({ make: "Toyota" });
 ```
 
-### Use can-connect directly
+#### Remove use of `change` events
+
+When you upgrade to use [can-define], you’ll no longer receive `change` events on maps. If you had any code that binded to a map’s `change` event, you’ll want to instead bind to the properties that you are interested in.
+
+For example:
+
+```js
+route.bind("change", function(){
+	// The route changed
+});
+```
+
+Can be modified to instead use a compute that calls `serialize` on the route’s map:
+
+```js
+var routeMap = compute(function(){
+	return route.map.serialize();
+});
+
+routeMap.bind("change", function(){
+	// A property on the route’s map changed.
+});
+```
+
+As you might notice, [can-event.on on()] is preferable to `bind()`, although `bind()` still works the same.
+
+### Use `can-connect` directly
 
 When using the easy migration path, you were secretly using [can-connect/can/model/model], a constructor that is mostly backwards-compatible with [can-model](//v2.canjs.com/docs/can.Model.html).
 
@@ -360,21 +407,49 @@ var DefineList = require("can-define/list/list");
 var superMap = require("can-connect/can/super-map/super-map");
 
 var Message = DefineMap.extend({
-  id: "*"
+	id: "*"
 });
 
 Message.List = DefineList.extend({
-  "#": Message
+	"#": Message
 });
 
 var messageConnection = superMap({
-  url: 'http://chat.donejs.com/api/messages',
-  idProp: 'id',
-  Map: Message,
-  List: Message.List,
-  name: 'message'
+	url: 'http://chat.donejs.com/api/messages',
+	idProp: 'id',
+	Map: Message,
+	List: Message.List,
+	name: 'message'
 });
 ```
+
+## Avoid future deprecations & removals
+
+### Wrap elements in jQuery objects
+
+If you are using [can-jquery/legacy] to automatically get jQuery-wrapped elements in [can-control] event handlers, you’ll want to remove the usage of [can-jquery/legacy] as it doesn’t play well with [can-component]s that do not expect elements to be jQuery-wrapped.
+
+Instead, use [can-jquery] directly and handle the wrapping yourself. For example:
+
+```js
+var Component = require("can-component");
+var $ = require("can-jquery");
+
+Component.extend({
+	tag: "some-component",
+
+	events: {
+		inserted: function(){
+			this.element = $(this.element);
+		},
+		"li click": function(li){
+			var $li = $(li);
+		}
+	}
+});
+```
+
+[can-jquery] will continue to be supported indefinitely but [can-jquery/legacy] will be dropped in a future major version.
 
 ### Use the new binding syntax
 
@@ -398,7 +473,7 @@ An example is the [can-stache-converters.string-to-any] converter, which convert
 
 ```
 <select {($value)}="string-to-any(~favePlayer)">
-  <option value="23">Michael Jordan</option>
-  <option value="32">Magic Johnson</option>
+	<option value="23">Michael Jordan</option>
+	<option value="32">Magic Johnson</option>
 </select>
 ```
