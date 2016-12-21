@@ -18,6 +18,75 @@ This guide goes over:
 
 ## Pre-migration preparation
 
+Before upgrading your project from 2.x to 3.x, make sure your project builds successfully and all the tests pass.
+
+Additionally, you can take the following steps in your CanJS 2.x app to prepare it for migrating to CanJS 3.
+
+### Use the module folders
+
+You can start importing CanJS code in a modular way before moving to CanJS 3.
+
+For example, you might be using [can-component] like this:
+
+```js
+var can = require("can");
+
+can.Component.extend({ ... });
+```
+
+Update your code to instead look like this:
+
+```js
+var Component = require("can/component/component");
+
+Component.extend({ ... });
+```
+
+Use the same pattern for the other modules you are using.
+
+Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
+
+- `can.autorender` — `can/view/autorender/autorender`
+- `can.bindings` — `can/view/bindings/bindings`
+- `can.Component` — `can/component/component`
+- `can.compute` — `can/compute/compute`
+- `can.Construct` — `can/construct/construct`
+- `can.Control` — `can/control/control`
+- `can.Deferred` — `can/util/deferred`
+- `can.define` — `can/map/define`
+- `can.ejs` — `can/view/ejs/ejs`
+- `can.event` — `can/event/event`
+- `can.fixture` — `can/util/fixture`
+- `can.LazyMap` — `can/map/lazy/lazy`
+- `can.List` — `can/list/list`
+- `can.Map` — `can/map/map`
+- `can.Model` — `can/model/model`
+- `can.Model.Cached` — `can/model/cached/cached`
+- `can.mustache` — `can/view/mustache/mustache`
+- `can.Object` — `can/util/object/object`
+- `can.route` — `can/route/route`
+- `can.stache` — `can/view/stache/stache`
+- `can.util` — `can/util/util`
+- `can.view.callbacks` — `can/view/callbacks/callbacks`
+
+### Replace uses of `can.$`
+
+[`can.$`](//v2.canjs.com/docs/can.$.html) allows you to access the underlying DOM library bundled with CanJS; for example, jQuery in `can.jquery.js`.
+
+You might be using it in your code to easily reference the library:
+
+```js
+var can = require("can");
+var body = can.$('body');
+```
+
+Update your code to explicitly require the library on which you depend. For example:
+
+```js
+var $ = require("jquery");
+var body = $('body');
+```
+
 ### Set `leakScope` on components
 
 CanJS 2.2 introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your component’s template. In CanJS 3, **leakScope** is now `false` by default.
@@ -225,7 +294,6 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/map/define` — [can-map-define]
 - `can/map/map` — [can-map]
 - `can/model/model` — [can-model](https://github.com/canjs/can-model)
-- `can/observe/observe` — [can-observe](https://github.com/canjs/can-observe)
 - `can/route/pushstate/pushstate` — [can-route-pushstate]
 - `can/route/route` — [can-route]
 - `can/util/fixture` — [can-fixture]
