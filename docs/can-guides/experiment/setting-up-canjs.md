@@ -21,7 +21,7 @@ ask on the [forums](http://forums.donejs.com/c/canjs) or [Gitter chat](https://g
 
 Use this JS Bin to play around with CanJS:
 
-<a class="jsbin-embed" href="//jsbin.com/safigic/embed?html,js,output">CanJS on jsbin.com</a><script src="//static.jsbin.com/js/embed.min.js?3.40.2"></script>
+<a class="jsbin-embed" href="//jsbin.com/safigic/7/embed?html,js,output">CanJS on jsbin.com</a><script src="//static.jsbin.com/js/embed.min.js?3.40.2"></script>
 
 It uses `can.all.js` so you have the [can-core core], [can-ecosystem ecosystem], and [can-infrastructure infrastructure] modules available to you.
 
