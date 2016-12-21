@@ -377,7 +377,7 @@ For example:
 
 ```js
 route.bind("change", function(){
-  // The route changed
+	// The route changed
 });
 ```
 
@@ -407,19 +407,19 @@ var DefineList = require("can-define/list/list");
 var superMap = require("can-connect/can/super-map/super-map");
 
 var Message = DefineMap.extend({
-  id: "*"
+	id: "*"
 });
 
 Message.List = DefineList.extend({
-  "#": Message
+	"#": Message
 });
 
 var messageConnection = superMap({
-  url: 'http://chat.donejs.com/api/messages',
-  idProp: 'id',
-  Map: Message,
-  List: Message.List,
-  name: 'message'
+	url: 'http://chat.donejs.com/api/messages',
+	idProp: 'id',
+	Map: Message,
+	List: Message.List,
+	name: 'message'
 });
 ```
 
@@ -436,7 +436,7 @@ var Component = require("can-component");
 var $ = require("can-jquery");
 
 Component.extend({
-  tag: "some-component",
+	tag: "some-component",
 
 	events: {
 		inserted: function(){
@@ -473,7 +473,7 @@ An example is the [can-stache-converters.string-to-any] converter, which convert
 
 ```
 <select {($value)}="string-to-any(~favePlayer)">
-  <option value="23">Michael Jordan</option>
-  <option value="32">Magic Johnson</option>
+	<option value="23">Michael Jordan</option>
+	<option value="32">Magic Johnson</option>
 </select>
 ```
