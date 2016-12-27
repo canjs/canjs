@@ -67,6 +67,7 @@
     "can-stache-converters": "3.0.3",
     "can-stream": "0.0.5",
     "can-util": "3.0.12",
+    "can-validate-legacy": "^1.0.0-pre.0",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.1",
     "can-view-callbacks": "3.0.1",
@@ -94,6 +95,7 @@
     "steal-stache": "^3.0.1",
     "steal-tools": "^0.16.8",
     "testee": "^0.2.5",
+    "validate.js": "^0.11.1",
     "wd": "^1.0.0"
   },
   "demos": [
