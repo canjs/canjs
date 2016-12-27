@@ -14,9 +14,13 @@ require('can-stache-converters/test/test');
 
 // Infrastructure tests
 require('../event/event_test');
-require('can-observation/can-observation_test');
+if (!System.isEnv('production')) {
+	System.import('can-observation/can-observation_test');
+}
 require('../util/util_test');
-require('can-view-callbacks/test/callbacks-test');
+if (!System.isEnv('production')) {
+	System.import('can-view-callbacks/test/callbacks-test');
+}
 require('../view/import/import_test');
 require('../view/live/live_test');
 require('can-view-model/test/test');
@@ -29,6 +33,13 @@ if (!System.isEnv('production')) {
 }
 require('can-view-target/test/test');
 require('can-simple-dom/test/test');
+if (!System.isEnv('production')) {
+	System.import('can-cid/test/test');
+}
+if (!System.isEnv('production')) {
+	System.import('can-types/test/test');
+}
+
 
 
 // Legacy tests

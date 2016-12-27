@@ -30,7 +30,7 @@ To make a fair comparison, at times we will be referencing and comparing **CanJS
 
 **React-Redux** has a pattern for updating application state that is synchronous and uses pure functions, but it can be difficult to work with.
 
-The synchronous data flow provided by the **Redux** store is generally insufficient for real web apps. The web is very async by nature, with it's ajax calls, web-workers, web-sockets and all sorts of common APIs resolving asynchronously using events and callbacks. So you find yourself either writing a whole lot of code to manage your asynchronous action creation, or more likely you pull in asynchronous middleware like **redux-thunk**, **redux-promise** or **redux-rx**.
+The synchronous data flow provided by the **Redux** store is generally insufficient for real web apps. The web is very async by nature, with it’s ajax calls, web-workers, web-sockets and all sorts of common APIs resolving asynchronously using events and callbacks. So you find yourself either writing a whole lot of code to manage your asynchronous action creation, or more likely you pull in asynchronous middleware like **redux-thunk**, **redux-promise** or **redux-rx**.
 
 Suddenly, the strict unidirectional data flow, is no longer that easy to follow, and you end up having to write a non-trivial amount of code to support the Redux pattern of dispatch -> action -> reducer -> state.
 
@@ -112,13 +112,13 @@ Using **MobX** observables with **React** is fairly popular, though not as popul
 
 ### Data Fetching and Real-time Data
 
-**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
+**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall-through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
 
 **React**, being just a view layer, has no concept of this.
 
 **Relay**, a JavaScript framework for building data-driven **React** applications, has some very promising features, similar to can-connect, but requires you to implement a GraphQL server while **Can-Connect** can work with whatever data source or API you have.
 
-Being tied directly to one particular type of back end service may end up with **Relay** being slightly easier to use, but **Can-Connect**'s flexibility, and it’s configurable integration points, will be valuable if you have different types of back-end services, like traditional REST APIs or you need to work with unique kinds of data stores.
+Being tied directly to one particular type of back end service may end up with **Relay** being slightly easier to use, but **Can-Connect**’s flexibility, and it’s configurable integration points, will be valuable if you have different types of back-end services, like traditional REST APIs or you need to work with unique kinds of data stores.
 
 ### One-Way Data Flow
 
@@ -191,11 +191,11 @@ Todo = (props) => {
 If the problem is losing track of what is changing the state, is the problem solved by adding more code, or is it better solved with a simpler abstraction and more succinct code?
 
 ### DOM Libraries and Memory Leaks
-Sometimes you are not starting a brand new project, and you'd rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](http://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you'd rather not re-implement everything you have at once.
+Sometimes you are not starting a brand new project, and you’d rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](http://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you’d rather not re-implement everything you have at once.
 
 **CanJS** makes working with other libraries seamless. You can just use [can-stache](../../can-stache.html) to add [can-components](../../can-components.html) custom elements into your page as needed, and since **CanJS** works with real DOM events and attributes, everything just works as expected.
 
-If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](http://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to "just work" without any special code needed.
+If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](http://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to “just work” without any special code needed.
 
 ```handlebars
 <!-- A Bootstrap Modal -->
@@ -233,9 +233,9 @@ $("#my-modal").on('show.bs.modal', ev => {
 </script>
 ```
 
-**React** replaces certain core aspects of the DOM, namely the event system and attributes, with it’s own “React version” of events and props. Because of this, **React** can have some frustrating “gotchas” when you try and integrate it with jQuery plugins or any other library that queries or manipulates the DOM.
+**React** replaces certain core aspects of the DOM, namely the event system and attributes, with its own “React version” of events and props. Because of this, **React** can have some frustrating “gotchas” when you try and integrate it with jQuery plugins or any other library that queries or manipulates the DOM.
 
-Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](http://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get's deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you'll have to hook up this call, into your current app lifecycle.
+Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](http://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get’s deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you’ll have to hook up this call, into your current app lifecycle.
 
 ```handlebars
 // DO NOT DO THIS, THIS CAUSES A MEMORY LEAK
@@ -263,9 +263,9 @@ $( "#create-user" ).button().on( "click", function() {
 </script>
 ```
 
-Conversely **CanJS** is aware of it's own DOM removal, and will clean up any event handlers or bindings *automatically*.
+Conversely **CanJS** is aware of its own DOM removal, and will clean up any event handlers or bindings *automatically*.
 
-If you have existing legacy code, you'll probably want integrate your new framework progressively, a piece at a time, and it's important that things “just work”, without any surprises or frustrations.
+If you have existing legacy code, you’ll probably want integrate your new framework progressively, a piece at a time, and it’s important that things “just work”, without any surprises or frustrations.
 
 ### Encapsulation of Components
 
@@ -285,7 +285,7 @@ These layers have a simple and inverse API, the Store layer takes actions and re
 
 ...and there are layers *within those layers*, like **action creators** and **redux-middleware**.
 
-This architecture is nice and simple, with discrete lines of interaction and well defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
+This architecture is nice and simple, with discrete lines of interaction and well-defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
 
 To illustrate the idea with an example you wanted to to add a "live video chat" feature to your app. Let’s pretend you have already implemented this sort of thing in some other app, so you are just going to reuse the shared portions of it for this app.
 
@@ -335,9 +335,9 @@ When you are working in a team, the layered approach can be more risky, as you�
 
 **React** is not really a full solution for building apps with web technology, and the **React** ecosystem is still the wild west when it comes to state management and supporting technologies.
 
-**CanJS** simplifies your code with it's observables and component architecture.
+**CanJS** simplifies your code with it’s observables and component architecture.
 
-**CanJS** let's you integrate with your existing project easier and lets you be confident you won’t be re-writing your app in a new JavaScript framework next year.
+**CanJS** let’s you integrate with your existing project easier and lets you be confident you won’t be re-writing your app in a new JavaScript framework next year.
 
 ## Angular 2
 
@@ -389,7 +389,7 @@ When evaluating **Angular 2** as an option, it is unwise not to consider the pro
 
 Google and the Angular team released **Angular 2** as a complete re-write with no backwards compatibility, and no real plan for upgrading your application beyond running both Angular 1 and 2 on the same page until you can get all your directives and services migrated over to the new one. Google has a [history of abandoning projects](http://www.wordstream.com/articles/google-failures-google-flops), so you’ve got to ask: How long will it be until you’re rebuilding your app in the new, incompatible **ng3**?
 
-With **CanJS** we have a guiding principle: You shouldn't have to rewrite your application to keep pace with technology. We’re in it for the long haul, and dedicating to providing you stability and easy upgrades balanced with new features and progressive techniques in web development.
+With **CanJS** we have a guiding principle: You shouldn’t have to rewrite your application to keep pace with technology. We’re in it for the long haul, and dedicating to providing you stability and easy upgrades balanced with new features and progressive techniques in web development.
 
 ### Modularity
 
@@ -485,30 +485,30 @@ A Dependency Injection system may have a place in other languages, like Java, bu
 *See the above code example, and realize that `FriendService`, may in some instances not actually be used in the `FriendComponent`, if some parent module defines a different provider for `FriendComponent`*
 
 ### Steep Learning curve
-Angular is known for it's steep learning curve, and Angular 2 doesn't really break that reputation.
+Angular is known for it’s steep learning curve, and Angular 2 doesn’t really break that reputation.
 
 There are a whole lot of new things a developer must learn to become effective with
-Angular 2. You've got to learn the TypeScript syntax, all the examples are written
-in it so You're going to have trouble if you skip this step. The Dependency Injection
+Angular 2. You have to learn the TypeScript syntax, all the examples are written
+in it so you’re going to have trouble if you skip this step. The Dependency Injection
 system is so ingrained, you must learn early how it works, and the syntax involved
 just to get going. There is the templating system, the decorators/annotations, a
-[wealth of API's and modules](https://angular.io/docs/js/latest/api/), and the kicker
-of it all is, because of the "all-or-nothing" nature of Angular 2, you have to learn a
+[wealth of APIs and modules](https://angular.io/docs/js/latest/api/), and the kicker
+of it all is, because of the “all-or-nothing” nature of Angular 2, you have to learn a
 whole lot of it, just to get started.
 
-CanJS also has many different modules and API's to learn, but because of CanJS's modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
+CanJS also has many different modules and APIs to learn, but because of CanJS’s modular and individually packaged libraries, you only have to learn what you need, when you need it. There is no new "transpile-to-js" language to learn and no Dependency Injection framework to understand before you can start creating your components and composing your apps.
 
 If your team needs to get started quickly, and hit the ground running, Angular 2 may not be the best choice, but CanJS just might be the right fit for your team.
 
 ### Data Fetching and Real-time Data
 
-**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
+**[Can-Connect](../../can-connect.html)** allows for **CanJS** **observables** to be connected to a data source such as an RESTful API or a real-time data stream, with advanced features like fall-through caching and batched minimal requests, so that your components can just request the data they need while can-connect figures out how to fetch that data in the most efficient way possible.
 
 **Angular 2**’s HTTP Service doesn’t have the advanced features like minimal requests and fall-through caches, and any real-time data-source would require you to write a custom service.
 
 ### Summary
 
-**Angular 2** is not the safe bet you may be hoping it is. Google wouldn't hesitate to drop it entirely when it no longer serves their purpose, it’s got a steep learning curve, and lot of features that you may not want or need.
+**Angular 2** is not the safe bet you may be hoping it is. Google wouldn’t hesitate to drop it entirely when it no longer serves their purpose, it’s got a steep learning curve, and lot of features that you may not want or need.
 
 **CanJS** has a mission to be the stable platform for you to develop your web apps on for years to come. It’s modular enough to take only the parts you need as you need them. It has all the features you need and doesn’t force you into patterns or technologies you don’t.
 
@@ -516,8 +516,8 @@ If your team needs to get started quickly, and hit the ground running, Angular 2
 
 If none of the technical arguments convince you to give CanJS a try, consider this: all the modern frameworks have more or less converged in 2016. You can build a very similar application, with routing, observables, models, and server side rendering (with some exceptions) with Angular 2, several of the React frameworks, Ember, or CanJS. Therefore, the MOST important factor, even beyond small technical differences, is the stability and stability of the framework. You want to bet on a horse that you can ride into the future, not the horse that looks prettiest today.
 
-CanJS's mission is to __minimize the cost of building and maintaining
-JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__. We've spent the past 9 years focused on balancing these two oppoising goals, and have the track record to prove it. Read in more detail on our [mission page](mission.html).
+CanJS’s mission is to __minimize the cost of building and maintaining
+JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__. We’ve spent the past 9 years focused on balancing these two oppoising goals, and have the track record to prove it. Read in more detail on our [mission page](mission.html).
 
 There’s no advantage to choosing projects maintained by a big company, since big companies often kill platforms that many developers have invested in.
 

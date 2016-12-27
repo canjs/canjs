@@ -3,21 +3,19 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description CanJS is an evolving and improving set of client side
-JavaScript architectural libraries that balances
-innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
+@description CanJS is an evolving and improving set of client side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.   
 
 <img
-    srcset="docs/images/home/Home-Tortoise-color.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
-    src="docs/images/home/Home-Tortoise-color.png"
+    srcset="docs/images/home/Home-Tortoise-bw.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
+    src="docs/images/home/Home-Tortoise-bw.png"
     style="float:right; padding-right: 40px;"/>
 <img
-    srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
-    src="docs/images/home/Home-Tortoise-color.png" style="padding-left: 40px;"/>
+    srcset="docs/images/home/Home-Hare-bw.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
+    src="docs/images/home/Home-Tortoise-bw.png" style="padding-left: 40px;"/>
 
-If you're new to the framework, the best place to start is the [guides] page. There you'll
-find CanJS's [guides/mission Mission], [guides/technical Technical Highlights] and
-the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guide.
+If you’re new to the project, the best place to start is the [guides] page. There you’ll
+find CanJS’s [guides/mission Mission] and [guides/technical Technical Highlights], as well as
+the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 @body
 
@@ -25,7 +23,7 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guide.
 ## Collections
 
 CanJS is made of many independent packages and modules.  Those packages and modules are
-organized within the following collections.  Read on to get an overview of each collection's
+organized within the following collections.  Read on to get an overview of each collection’s
 packages.  Please star what you like so we know where to put our effort.
 
 
@@ -66,39 +64,6 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 </div>
 
-### [can-ecosystem Ecosystem Collection]
-
-_Useful libraries that add important features or extend the core collection._
-
-<div class="module-list">
-
-- **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
-  - `npm install can-fixture --save`
-  - <a class="github-button" href="https://github.com/canjs/can-fixture" data-count-href="/canjs/can-fixture/stargazers" data-count-api="/repos/canjs/can-fixture#stargazers_count">Star</a>
-- **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
-  - `npm install can-zone --save`
-  - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
-- **[can-stache-converters]** <small><%can-stache-converters.package.version%></small> Form two way bindings helpers
-  - `npm install can-stache-converters --save`
-  - <a class="github-button" href="https://github.com/canjs/can-stache-converters" data-count-href="/canjs/can-stache-converters/stargazers" data-count-api="/repos/canjs/can-stache-converters#stargazers_count">Star</a>
-- **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [http://stealjs.com StealJS]
-  - `npm install steal-stache --save`
-  - <a class="github-button" href="https://github.com/canjs/steal-stache" data-count-href="/canjs/steal-stache/stargazers" data-count-api="/repos/canjs/steal-stache#stargazers_count">Star</a>
-- **[can-view-import]** <small><%can-view-import.package.version%></small> Import modules within can-stache templates
-  - `npm install can-view-import --save`
-  - <a class="github-button" href="https://github.com/canjs/can-view-import" data-count-href="/canjs/can-view-import/stargazers" data-count-api="/repos/canjs/can-view-import#stargazers_count">Star</a>
-- **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
-  - `npm install can-jquery --save`
-  - <a class="github-button" href="https://github.com/canjs/can-jquery" data-count-href="/canjs/can-jquery/stargazers" data-count-api="/repos/canjs/can-jquery#stargazers_count">Star</a>
-- **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construct base methods easily
-  - `npm install can-construct-super --save`
-  - <a class="github-button" href="https://github.com/canjs/can-construct-super" data-count-href="/canjs/can-construct-super/stargazers" data-count-api="/repos/canjs/can-construct-super#stargazers_count">Star</a>
-- **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
-  - `npm install can-vdom --save`
-  - <a class="github-button" href="https://github.com/canjs/can-vdom" data-count-href="/canjs/can-vdom/stargazers" data-count-api="/repos/canjs/can-vdom#stargazers_count">Star</a>
-
-</div>
-
 ### [can-infrastructure Infrastructure Collection]
 
 _Utility libraries that power the core collection._
@@ -111,7 +76,7 @@ _Utility libraries that power the core collection._
 - **[can-control]** <small><%can-control.package.version%></small> DOM widget constructor
   - `npm install can-control --save`
   - <a class="github-button" href="https://github.com/canjs/can-control" data-count-href="/canjs/can-control/stargazers" data-count-api="/repos/canjs/can-control#stargazers_count">Star</a>
-- **[can-util]** <small><%can-util.package.version%></small> Low level JS and DOM utilities
+- **[can-util]** <small><%can-util.package.version%></small> Low-level JS and DOM utilities
   - `npm install can-util --save`
   - <a class="github-button" href="https://github.com/canjs/can-util" data-count-href="/canjs/can-util/stargazers" data-count-api="/repos/canjs/can-util#stargazers_count">Star</a>
 - **[can-construct]** <small><%can-construct.package.version%></small> Extensible constructors
@@ -145,9 +110,64 @@ _Utility libraries that power the core collection._
 - **[can-view-nodelist]** <small><%can-view-nodelist.package.version%></small> Maintains live-binding relationships
   - `npm install can-view-nodelist --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-nodelist" data-count-href="/canjs/can-view-nodelist/stargazers" data-count-api="/repos/canjs/can-view-nodelist#stargazers_count">Star</a>
+- **[can-cid]** <small><%can-cid.package.version%></small> Get a unique identifier for objects
+  - `npm install can-cid --save`
+  - <a class="github-button" href="https://github.com/canjs/can-cid" data-count-href="/canjs/can-cid/stargazers" data-count-api="/repos/canjs/can-cid#stargazers_count">Star</a>
+- **[can-types]** <small><%can-types.package.version%></small> A stateful container for CanJS type information
+  - `npm install can-types --save`
+  - <a class="github-button" href="https://github.com/canjs/can-types" data-count-href="/canjs/can-types/stargazers" data-count-api="/repos/canjs/can-types#stargazers_count">Star</a>
+- **[can-namespace]** <small><%can-namespace.package.version%></small> Namespace where can-* packages are registered
+  - `npm install can-namespace --save`
+  - <a class="github-button" href="https://github.com/canjs/can-namespace" data-count-href="/canjs/can-namespace/stargazers" data-count-api="/repos/canjs/can-namespace#stargazers_count">Star</a>
 
 </div>
 
+### [can-ecosystem Ecosystem Collection]
+
+_Useful libraries that add important features or extend the core collection._
+
+<div class="module-list">
+
+- **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
+  - `npm install can-fixture --save`
+  - <a class="github-button" href="https://github.com/canjs/can-fixture" data-count-href="/canjs/can-fixture/stargazers" data-count-api="/repos/canjs/can-fixture#stargazers_count">Star</a>
+- **[can-fixture-socket]** <small><%can-fixture-socket.package.version%></small> Simulate sockets
+  - `npm install can-fixture-socket --save`
+  - <a class="github-button" href="https://github.com/canjs/can-fixture-socket" data-count-href="/canjs/can-fixture-socket/stargazers" data-count-api="/repos/canjs/can-fixture-socket#stargazers_count">Star</a>
+- **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
+  - `npm install can-zone --save`
+  - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
+- **[can-stache-converters]** <small><%can-stache-converters.package.version%></small> Form two-way binding helpers
+  - `npm install can-stache-converters --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stache-converters" data-count-href="/canjs/can-stache-converters/stargazers" data-count-api="/repos/canjs/can-stache-converters#stargazers_count">Star</a>
+- **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [http://stealjs.com StealJS]
+  - `npm install steal-stache --save`
+  - <a class="github-button" href="https://github.com/canjs/steal-stache" data-count-href="/canjs/steal-stache/stargazers" data-count-api="/repos/canjs/steal-stache#stargazers_count">Star</a>
+- **[can-view-import]** <small><%can-view-import.package.version%></small> Import modules within can-stache templates
+  - `npm install can-view-import --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-import" data-count-href="/canjs/can-view-import/stargazers" data-count-api="/repos/canjs/can-view-import#stargazers_count">Star</a>
+- **[can-view-autorender]** <small><%can-view-autorender.package.version%></small> Automatically
+render templates in script tags
+  - `npm install can-view-autorender --save`
+  - <a class="github-button" href="https://github.com/canjs/can-view-autorender" data-count-href="/canjs/can-view-autorender/stargazers" data-count-api="/repos/canjs/can-view-autorender#stargazers_count">Star</a>
+- **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
+  - `npm install can-jquery --save`
+  - <a class="github-button" href="https://github.com/canjs/can-jquery" data-count-href="/canjs/can-jquery/stargazers" data-count-api="/repos/canjs/can-jquery#stargazers_count">Star</a>
+- **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construct base methods easily
+  - `npm install can-construct-super --save`
+  - <a class="github-button" href="https://github.com/canjs/can-construct-super" data-count-href="/canjs/can-construct-super/stargazers" data-count-api="/repos/canjs/can-construct-super#stargazers_count">Star</a>
+- **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
+  - `npm install can-vdom --save`
+  - <a class="github-button" href="https://github.com/canjs/can-vdom" data-count-href="/canjs/can-vdom/stargazers" data-count-api="/repos/canjs/can-vdom#stargazers_count">Star</a>
+- **[can-stream]** <small><%can-stream.package.version%></small> Convert observable values into streams
+  - `npm install can-stream --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stream" data-count-href="/canjs/can-stream/stargazers" data-count-api="/repos/canjs/can-stream#stargazers_count">Star</a>
+- **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams
+  - `npm install can-define-stream --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
+
+
+</div>
 
 ### [can-legacy Legacy Collection]
 
@@ -179,13 +199,91 @@ still accept patches._
   - <a class="github-button" href="https://github.com/canjs/can-validate-legacy" data-count-href="/canjs/can-validate-legacy/stargazers" data-count-api="/repos/canjs/can-validate-legacy#stargazers_count">Star</a>
 </div>
 
+## The `can` Package
+
+While CanJS is designed to be used and should be used
+as independent packages, we still publish a `can` package
+with a version number, currently `<%canjs.package.version%>`.
+We do this so there is a specified version of all of the
+sub-project packages that are __integration tested__ to work together.  
+
+The `can` package uses [semantic versioning](http://semver.org/)
+with respect to the [can-core] and [can-infrastructure] collections
+only.  Read the [guides/contributing/releases Release Guide] for more information on CanJS’s release process.
+
+The sub-project package versions for `can <%canjs.package.version%>`
+are listed below. Copy the ones you use into your `package.json`
+if you want to use the same packages that were tested as part of
+CanJS `<%canjs.package.version%>`’s release.
+
+__Core Collection__
+
+```
+  "can-component": "<%can-component.package.version%>",
+  "can-compute": "<%can-compute.package.version%>",
+  "can-connect": "<%can-connect.package.version%>",
+  "can-define": "<%can-define.package.version%>",
+  "can-route": "<%can-route.package.version%>",
+  "can-route-pushstate": "<%can-route-pushstate.package.version%>",
+  "can-set": "<%can-set.package.version%>",
+  "can-stache": "<%can-stache.package.version%>",
+  "can-stache-bindings": "<%can-stache-bindings.package.version%>",
+```  
+
+__Infrastructure Collection__
+
+```js
+  "can-construct": "<%can-stache-bindings.package.version%>",
+  "can-control": "<%can-control.package.version%>",
+  "can-event": "<%can-event.package.version%>",
+  "can-observation": "<%can-observation.package.version%>",
+  "can-simple-map": "<%can-simple-map.package.version%>",
+  "can-util": "<%can-util.package.version%>",
+  "can-view-callbacks": "<%can-view-callbacks.package.version%>",
+  "can-view-live": "<%can-view-live.package.version%>",
+  "can-view-model": "<%can-view-model.package.version%>",
+  "can-view-nodelist": "<%can-view-nodelist.package.version%>",
+  "can-view-parser": "<%can-view-parser.package.version%>",
+  "can-view-scope": "<%can-view-scope.package.version%>",
+  "can-view-target": "<%can-view-target.package.version%>",
+```
+
+__Ecosystem collection__
+
+```
+  "can-construct-super": "<%can-construct-super.package.version%>",
+  "can-define-stream": "<%can-define-stream.package.version%>",
+  "can-fixture": "<%can-fixture.package.version%>",
+  "can-fixture-socket": "<%can-fixture-socket.package.version%>",
+  "can-jquery": "<%can-jquery.package.version%>",
+  "can-stache-converters": "<%can-stache-converters.package.version%>",
+  "can-stream": "<%can-stream.package.version%>",
+  "can-vdom": "<%can-vdom.package.version%>",
+  "can-view-autorender": "<%can-view-autorender.package.version%>",
+  "can-view-import": "<%can-view-import.package.version%>",
+  "can-zone": "<%can-zone.package.version%>",
+  "steal-stache": "<%steal-stache.package.version%>",
+```
+
+__Legacy Collection__
+
+```js
+  "can-ejs": "<%can-ejs.package.version%>",
+  "can-list": "<%can-list.package.version%>",
+  "can-map": "<%can-map.package.version%>",
+  "can-map-backup": "<%can-map-backup.package.version%>",
+  "can-map-define": "<%can-map-define.package.version%>",
+  "can-view-href": "<%can-view-href.package.version%>",
+```
+
+
 ## Missing Something?
 
-Is there an itch that CanJS doesn't scratch?  Let us know
-on [gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
+Is there an itch that CanJS doesn’t scratch?  Let us know
+on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 We like contributions of all sorts.  Read the [guides] _Contributing_ section for more details.
 
 ## Love Something?
 
-Let us know by staring us on Github and following on twitter.  If there's a particular package you like, make sure to star that too. Checkout the [guides/contributing/evangelism Evangelism Guide] on
+Let us know by giving us a star on [GitHub](https://github.com/canjs/canjs) and following on [Twitter](https://twitter.com/canjs).  If there’s a particular package you like, make sure to star that too. Check out the [guides/contributing/evangelism Evangelism Guide] on
 how to help spread the word!

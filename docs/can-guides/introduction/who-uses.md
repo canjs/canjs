@@ -39,7 +39,7 @@ FedEx uses CanJS in its package tracker.
 
 <a href="https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us"><span>https://www.fedex.com/apps/fedextrack</span><img src="../../docs/can-guides/images/apps/screenshots-fedex.jpg"></a>
 
-## Sam's Club
+## Sam’s Club
 
 <a href="https://m.samsclub.com/locator?xid=hdr_locator"><span>https://m.samsclub.com</span><img src="../../docs/can-guides/images/apps/screenshots-sams.jpg"></a>
 
@@ -67,12 +67,12 @@ Fidelity uses JavaScriptMVC (the previous name for CanJS) in its Mutual Fund com
 
 ## Submit other apps
 
-Did you work on an app that uses CanJS? Please add it to the list [here](https://github.com/canjs/canjs/blob/master/docs/can-guides/introduction/who-uses.md) and create a PR, or email it [here](mailto:contact@bitovi.com) and we'd be happy to submit it for you!
+Did you work on an app that uses CanJS? Please add it to the list [here](https://github.com/canjs/canjs/blob/master/docs/can-guides/introduction/who-uses.md) and create a PR, or email it [here](mailto:contact@bitovi.com) and we’d be happy to submit it for you!
 
 
 [//]: # (Volkswagon)
 
-[//]: # (Well's Fargo)
+[//]: # (Wells Fargo)
 
 [//]: # (Walmart)
 

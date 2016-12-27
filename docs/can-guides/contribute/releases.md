@@ -1,6 +1,6 @@
 @page guides/contributing/releases Releases
 @parent guides/contribute
-
+@outline 2
 @description Release and hosting information for CanJS maintainers.
 
 @body
@@ -13,7 +13,7 @@ For maintainers of CanJS and its submodules this guide describes
 - How to update the CanJS website
 
 
-## Continuous integration
+## Continuous Integration
 
 ### Travis CI
 
@@ -35,7 +35,7 @@ npm run ci
 ```
 
 
-## Updating dependencies
+## Updating Dependencies with Greenkeeper
 
 All CanJS repositories are set up with [Greenkeeper](https://greenkeeper.io/). Greenkeeper tracks dependencies and creates a branch for every new version coming in. This will trigger Travis CI to run the tests and if a dependency update breaks the tests or a breaking (major) version was released, it will create a pull request.
 
@@ -49,7 +49,7 @@ Greenkeeper is free for open source projects and works on the CanJS organization
 
 ## Making releases
 
-All versions should follow the [Semantic Versioning](http://semver.org/) guidelines in the form of `MAJOR.MINOR.PATCH` for
+With the exception of the `can` package, __ALL subprojects__ MUST follow the [Semantic Versioning](http://semver.org/) guidelines in the form of `MAJOR.MINOR.PATCH` for
 
 - `MAJOR` version when you make incompatible API changes,
 - `MINOR` version when you add functionality in a backwards-compatible manner, and
@@ -57,46 +57,95 @@ All versions should follow the [Semantic Versioning](http://semver.org/) guideli
 
 Before making any release please make sure that
 
-- you have write access to the GitHub repository you want to publish
-- have an [npm](https://www.npmjs.com) account and are logged in on the CLI tool (`npm whoami`)
-- your user is a collaborator on npm. You can ask an existing collaborator to add you. Existing collaborators can be listed via `npm owner ls <packagename>` or on the npm module page (e.g. [can-route](https://www.npmjs.com/package/can-route))
+- You have write access to the GitHub repository you want to publish.
+- Have an [npm](https://www.npmjs.com) account and are logged in on the CLI tool (`npm whoami`).
+- Your user is a collaborator on npm. You can ask an existing collaborator to add you. Existing collaborators can be listed via `npm owner ls <packagename>` or on the npm module page (e.g. [can-route](https://www.npmjs.com/package/can-route)).
 
 
 ### Releasing CanJS subprojects
 
-All CanJS subprojects modules have the same structure which allows making releases through NPM scripts. 
+All CanJS subprojects modules have the same structure which allows making releases through NPM scripts.
 
 To make a release:
 
-- move to the `master` branch
-- fetch all latest changes from the repository
-- reinstall all Node modules in their latest version
+1. Move to the `master` branch
+2. Fetch all latest changes from the repository
+3. Reinstall all Node modules in their latest version
 
-```
-git checkout master
-git fetch --all && git rebase
-npm cache clean
-rm -rf node_modules
-npm install
-```
+   ```
+   git checkout master
+   git fetch --all && git rebase
+   npm cache clean
+   rm -rf node_modules
+   npm install
+   ```
 
-Then run `npm run release:<versiontype>`. For example, to make a `PATCH` release:
+4. Then run `npm run release:<versiontype>`. For example, to make a `PATCH` release:
 
-```
-npm run release:patch
-```
+   ```
+   npm run release:patch
+   ```
 
 This will run the tests, build, bump the version number accordingly and publish the module to [npm](https://www.npmjs.com/).
 
 
 ### Releasing the CanJS main project
 
-In `canjs/canjs` all dependencies are locked to their latest version. It uses Greenkeeper (see previous section) to receive a pull request whenever a new release has been made.
+The CanJS main project repository is at
+[canjs/canjs](https://github.com/canjs/canjs) and published as the `can` package. We
+publish a `can` module so there is a specified version of the library packages that are
+__integration tested__ to work together. A single `can` release can include multiple
+releases of library packages.
 
-When merging a Greenkeeper pull request, review the version number, run `npm install` to get the latest versions and then publish the main repository according to the version number change. For example, if the merged modules `MINOR` version changed run
+The `can` package does __not__ follow strict [semantic versioning](http://semver.org/)
+guidelines. It still follows a `MAJOR.MINOR.PATCH` release names, but where:
+
+ - `MAJOR` - Incompatible API changes in a library in the [can-core] or [can-infrastructure] collection.
+ - `MINOR` - Either:
+    - New features added [can-core] and [can-infrastructure] but still backwards-compatible.
+    - New [can-ecosystem] or [can-legacy] library added or removed to their respective collection.
+ - `PATCH` - Either:
+    - Bug fixes in [can-core] and [can-infrastructure].
+    - A new release of a [can-ecosystem] or [can-legacy] library.
+
+The `can` package __does__ follow strict [semantic versioning](http://semver.org/) guidelines
+with respect to the [can-core] and [can-infrastructure] collections. If a
+new [can-ecosystem] or [can-legacy] package is added to `can`, it’s treated as a `MINOR` changes to `can`,
+any subsequent releases of those packages are treated as `PATCH` changes to `can`.
+
+When making a release, review the the version number changes and collection of all packages that have changed within the release.  Then run `npm run release:<versiontype>`.
+
+For example, the following would be a `PATCH` release:
 
 ```
-npm run release:minor
+can-core-a       3.0.1 -> 3.0.2
+can-core-b       3.0.1 -> 3.0.10
+can-ecosystem-a  1.0.0 -> 2.0.0
+```
+
+The following would be a `MINOR` release:
+
+```
+can-core-a       3.0.1 -> 3.0.2
+can-core-b       3.0.1 -> 3.0.10
+// this means can-ecoystem-b was added to the ecosystem collection
++ can-ecosystem-b 0.0.1  
+```
+
+The following would be a `MINOR` release:
+
+```
+can-core-a       3.0.1 -> 3.0.2
+can-core-b       3.0.1 -> 3.1.0
+can-ecosystem-a  1.0.0 -> 1.0.1
+```
+
+The following would be a `MAJOR` release:
+
+```
+can-core-a           3.0.1 -> 3.0.2
+can-core-b           3.0.1 -> 3.1.0
+can-infrastructure-a 3.0.1 -> 4.0.0
 ```
 
 
@@ -124,4 +173,4 @@ Then run
 make
 ```
 
-This wil generate and publish a new version of the website.
+This will generate and publish a new version of the website.
