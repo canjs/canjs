@@ -134,6 +134,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-fixture-socket]** <small><%can-fixture-socket.package.version%></small> Simulate sockets
   - `npm install can-fixture-socket --save`
   - <a class="github-button" href="https://github.com/canjs/can-fixture-socket" data-count-href="/canjs/can-fixture-socket/stargazers" data-count-api="/repos/canjs/can-fixture-socket#stargazers_count">Star</a>
+- **[can-connect-feathers]** <small><%can-connect-feathers.package.version%></small> Create connections to a FeathersJS API server.
+  - `npm install can-connect-feathers --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect-feathers" data-count-href="/canjs/can-connect-feathers/stargazers" data-count-api="/repos/canjs/can-connect-feathers#stargazers_count">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
