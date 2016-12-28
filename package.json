@@ -70,7 +70,7 @@
     "can-stream": "0.0.5",
     "can-types": "1.0.1",
     "can-util": "3.2.0",
-    "can-validate-legacy": "^1.0.0-pre.0",
+    "can-validate-legacy": "^1.0.0-pre.2",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.3",
     "can-view-callbacks": "3.0.3",
@@ -98,7 +98,6 @@
     "steal-stache": "^3.0.3",
     "steal-tools": "^0.16.8",
     "testee": "^0.3.0",
-    "validate.js": "^0.11.1",
     "wd": "^1.0.0"
   },
   "demos": [

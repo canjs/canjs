@@ -2,7 +2,19 @@ var stealTools = require("steal-tools");
 var globalJS = require("steal-tools/lib/build/helpers/global").js;
 
 var baseNormalize = globalJS.normalize();
-
+var ignoreModules = [function(name){
+    if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0 || name.indexOf('validate.js') === 0) {
+        return true;
+    } else {
+        return false;
+    }
+}];
+var exportsMap = {
+    "jquery": "jQuery",
+    "can-util/namespace": "can",
+    "kefir": "Kefir",
+    "validate.js": "validate"
+};
 stealTools.export({
 	system: {
 		config: __dirname + "/package.json!npm",
@@ -21,15 +33,8 @@ stealTools.export({
 			normalize: function(depName, depLoad, curName, curLoad, loader){
 				return baseNormalize.call(this, depName, depLoad, curName, curLoad, loader, true);
 			},
-			// ignore jquery
-			ignore: [function(name){
-				if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0) {
-					return true;
-				} else {
-					return false;
-				}
-			}],
-			exports: {"jquery": "jQuery", "can-util/namespace": "can", "kefir": "Kefir"},
+			ignore: ignoreModules,
+			exports: exportsMap,
 			removeDevelopmentCode: false
 		},
 		"core": {
@@ -40,15 +45,8 @@ stealTools.export({
 			normalize: function(depName, depLoad, curName, curLoad, loader){
 				return baseNormalize.call(this, depName, depLoad, curName, curLoad, loader, true);
 			},
-			// ignore jquery
-			ignore: [function(name){
-				if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0) {
-					return true;
-				} else {
-					return false;
-				}
-			}],
-			exports: {"jquery": "jQuery", "can-util/namespace": "can", "kefir": "Kefir"},
+			ignore: ignoreModules,
+			exports: exportsMap,
 			removeDevelopmentCode: false
 		}
 	}
