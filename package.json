@@ -44,9 +44,9 @@
     "can-compute": "3.0.5",
     "can-connect": "1.0.21",
     "can-construct": "3.0.6",
-    "can-construct-super": "3.0.1",
+    "can-construct-super": "3.0.2",
     "can-control": "3.0.5",
-    "can-define": "1.0.10",
+    "can-define": "1.0.13",
     "can-define-stream": "0.0.6",
     "can-ejs": "3.0.3",
     "can-event": "3.0.2",
@@ -56,7 +56,7 @@
     "can-list": "3.0.2",
     "can-map": "3.0.4",
     "can-map-backup": "3.0.2",
-    "can-map-define": "3.0.2",
+    "can-map-define": "3.0.3",
     "can-namespace": "1.0.0",
     "can-observation": "3.0.5",
     "can-route": "3.0.6",
@@ -69,7 +69,7 @@
     "can-stache-converters": "3.0.6",
     "can-stream": "0.0.5",
     "can-types": "1.0.1",
-    "can-util": "3.2.1",
+    "can-util": "3.2.2",
     "can-vdom": "3.0.1",
     "can-view-autorender": "3.0.3",
     "can-view-callbacks": "3.0.3",
@@ -81,7 +81,7 @@
     "can-view-parser": "3.0.4",
     "can-view-scope": "3.1.2",
     "can-view-target": "3.0.7",
-    "can-zone": "0.6.1"
+    "can-zone": "0.6.2"
   },
   "devDependencies": {
     "async": "^2.1.2",
