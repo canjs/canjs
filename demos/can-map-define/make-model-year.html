@@ -1,0 +1,217 @@
+<div id="demo">
+<div id='out'></div>
+<script id="app" type="text/stache">
+
+	{{#if makes.isResolved}}
+		<select {($value)}="string-to-any(~makeId)">
+		  {{^makeId}}
+		    <option value='undefined'>Select a Make</option>
+		  {{/makeId}}
+		  {{#each makes.value}}
+			<option value="{{id}}">{{name}}</option>
+		  {{/each}}
+		</select>
+	{{else}}
+		<select disabled><option>Loading...</option></select>
+	{{/if}}
+	{{#if modelsPromise}}
+		{{#if models}}
+			<select {($value)}="string-to-any(~modelId)">
+				{{^modelId}}
+					<option value='undefined'>Select a Model</option>
+				{{/modelId}}
+				{{#each models}}
+					<option value="{{id}}">{{name}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Loading Models</option></select>
+		{{/if}}
+	{{else}}
+		<select disabled><option>Models</option></select>
+	{{/if}}
+
+	{{#if years}}
+		<select {($value)}="string-to-any(~year)">
+			{{^year}}
+				<option value='undefined'>Select a Year</option>
+			{{/year}}
+			{{#each years}}
+				<option value="{{.}}">{{.}}</option>
+			{{/each}}
+		</select>
+	{{else}}
+		<select disabled><option>Years</option></select>
+	{{/if}}
+
+	<div>
+		{{#each vehicles}}
+			<h2>{{name}}</h2>
+			<img src="{{thumb}}" width="200px"/>
+		{{/each}}
+	</div>
+
+</script>
+</div>
+
+<script>
+	DEMO_HTML = document.getElementById("demo").innerHTML
+</script>
+<script src="../../node_modules/steal/steal.js" main="@empty">
+//import can from "can-util";
+import "can-map-define";
+import Map from "can-map";
+import Model from "can-connect/can/model/model";
+import fixture from "can-fixture";
+import stache from "can-stache";
+import route from "can-route";
+import Component from "can-component";
+import set from "can-set";
+import "can-stache-converters";
+
+fixture.delay = 1200;
+
+var eqeq = function(a, b){
+	if(a && b) {
+		return a == b;
+	}
+};
+
+fixture({
+	"/makes" : fixture.store([
+		{id: 1, name: "Ford"},
+		{id: 2, name: "Nissan"}
+	]).getListData,
+	"/models":  fixture.store([
+		{id: 1, makeId: 1, name: "Mustang", years: [2013, 2014]},
+		{id: 2, makeId: 1, name: "Focus", years: [2013, 2014]},
+		{id: 3, makeId: 2, name: "Altima", years: [2013, 2014]},
+		{id: 4, makeId: 2, name: "Leaf", years: [2013, 2014]},
+	],{
+		makeId: eqeq
+	}).getListData,
+	"/vehicles": fixture.store([
+		{id: 1, modelId: 1, year: 2013, name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
+		{id: 2, modelId: 1, year: 2014, name: "2014 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"},
+		{id: 3, modelId: 2, year: 2013, name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
+		{id: 4, modelId: 2, year: 2014, name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
+		{id: 5, modelId: 3, year: 2013, name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
+		{id: 6, modelId: 3, year: 2014, name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+		{id: 7, modelId: 4, year: 2013, name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+		{id: 8, modelId: 4, year: 2014, name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
+	],{
+		year: eqeq,
+		modelId: eqeq
+	}).getListData
+});
+
+var CarMake = Model.extend({
+	findAll: "/makes"
+},{});
+var CarModel = Model.extend({
+	findAll: "/models"
+},{});
+var Vehicle = Model.extend({
+	findAll: "/vehicles"
+},{});
+
+
+var project = new Map({
+	progress: 1
+});
+
+
+
+var MMYViewModel = Map.extend({
+	define:{
+		makes: {
+			value: function(){
+				return CarMake.findAll({});
+			},
+			serialize: false
+		},
+		makeId: {
+			type: "number",
+			remove: function(){
+				this.removeAttr("modelId");
+			},
+			set: function(newValue){
+				if(newValue !== this.makeId) {
+					this.removeAttr("modelId");
+				}
+				return newValue;
+			}
+		},
+		modelsPromise: {
+			get: function(){
+				var makeId = this.attr("makeId");
+				if( makeId ) {
+					return CarModel.findAll({makeId: makeId});
+				}
+			}
+		},
+		models: {
+			get: function(lastSet, resolve){
+				var promise = this.attr("modelsPromise");
+				if(promise) {
+					promise.then(function(models){
+						resolve(models);
+					});
+					return null;
+				}
+			}
+		},
+		model: {
+			get: function(){
+				var models = this.attr("models"),
+					modelId = this.attr("modelId");
+				if(models && models.attr('length') && modelId) {
+					var matched = models.filter(function(model){
+						return modelId == model.attr("id");
+					});
+					return matched[0];
+				}
+			}
+		},
+		modelId: {
+			type: "number",
+			remove: function(){
+				this.removeAttr("year");
+			},
+			set: function(newValue){
+				if(newValue !== this.modelId) {
+					this.removeAttr("year");
+				}
+				return newValue;
+			}
+		},
+		years: {
+			get: function(){
+				var model = this.attr("model");
+				return model && model.attr("years");
+			}
+		},
+		year: {
+			type: "number"
+		},
+		vehicles: {
+			get: function(){
+				var year = this.attr("year"),
+					modelId = this.attr("modelId");
+
+				if( modelId !== undefined && year) {
+					return new Vehicle.List({modelId: modelId, year: year});
+				}
+			}
+		}
+	}
+});
+
+var mmy = new MMYViewModel();
+route.data = mmy;
+
+route.ready();
+
+$("#out").html( stache.from("app")(mmy) );
+
+</script>
