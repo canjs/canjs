@@ -2,6 +2,9 @@ sudo: false
 language: node_js
 node_js: node
 before_install:
+- ./firefox-allow-popups.sh
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
 - |
     if ! git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^docs)/'
     then
@@ -14,3 +17,4 @@ before_script:
   - sleep 2
 addons:
   sauce_connect: true
+  firefox: "latest"
