@@ -247,7 +247,19 @@ If you use StealJS, you’ll need to install [steal-stache] to load your templat
 npm install steal-stache --save
 ```
 
-You don’t need to do anything else to make your templates load correctly.
+If you’re using StealJS 0.16, you don’t need to do anything else to make your templates load correctly.
+
+If you’re using StealJS 1, you also need to add `steal-stache` to the `plugins` configuration in your `package.json`:
+
+```json
+{
+  ...
+  "steal": {
+    ...
+    "plugins": ["steal-stache"]
+  }
+}
+```
 
 ## Modernized migration path
 

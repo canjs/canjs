@@ -19,7 +19,7 @@ move the issue to the correct repository if necessary.
 
 When creating an issue, it’s very helpful to include:
 
- - Small examples using tools like JS&nbsp;Bin. You can clone the following [CanJS bin](http://jsbin.com/ziyiqe/2/edit?html,js,output) that includes everything in CanJS. Make
+ - Small examples using tools like JS&nbsp;Bin. You can clone the following [CanJS bin](http://jsbin.com/losoceranu/1/edit?html,js,output) that includes everything in CanJS. Make
    sure it’s pointing at the same version of CanJS you are using.  
  - Breaking unit tests (optional). See [guides/contributing/code].
  - Proposed fix solutions (optional)
