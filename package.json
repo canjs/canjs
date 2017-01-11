@@ -95,7 +95,7 @@
     "steal": "^0.16.44",
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.3",
-    "steal-tools": "^0.16.8",
+    "steal-tools": "^1.0.2",
     "testee": "^0.3.0",
     "wd": "^1.0.0"
   },
