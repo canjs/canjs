@@ -194,7 +194,9 @@ still accept patches._
 - **[can-view-href]** <small><%can-view-href.package.version%></small> Older routing view helpers
   - `npm install can-view-href --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-href" data-count-href="/canjs/can-view-href/stargazers" data-count-api="/repos/canjs/can-view-href#stargazers_count">Star</a>
-
+- **[can-validate-legacy]** <small><%can-validate-legacy.package.version%></small> Validation plugin for can-map's.
+  - `npm install can-validate-legacy --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate-legacy" data-count-href="/canjs/can-validate-legacy/stargazers" data-count-api="/repos/canjs/can-validate-legacy#stargazers_count">Star</a>
 </div>
 
 ## The `can` Package

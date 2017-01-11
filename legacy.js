@@ -15,6 +15,7 @@ require("can-map-backup");
 require("can-map-define");
 require("can-connect/can/model/model");
 require("can-ejs");
+require("can-validate-legacy");
 
 // Legacy namespacing for these
 can.view.attr = can.view.callbacks.attr;
