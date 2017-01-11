@@ -15,6 +15,11 @@ publish-docs:
 	git add -f node_modules/funcunit
 	git add -f node_modules/syn
 	git add -f node_modules/socket.io-client
+	git add -f node_modules/feathers/package.json
+	git add -f node_modules/feathers-authentication-client/package.json
+	git add -f node_modules/feathers-hooks/package.json
+	git add -f node_modules/feathers-rest/package.json
+	git add -f node_modules/feathers-socketio/package.json
 	git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
