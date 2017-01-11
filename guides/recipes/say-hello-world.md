@@ -44,4 +44,4 @@ $("#my-app").html( frag )
 > is a lightweight container of HTMLElements that can be inserted in the page quickly. They can be used
 > anywhere a normal HTMLElement is used.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/GE3yf/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/GE3yf/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>

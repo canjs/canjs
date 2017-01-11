@@ -70,7 +70,7 @@ Using declarative HTML tags, a component can be used
 without writing any javascript. The template, state,
 and behavior are all combined into one Component.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/WBM9z/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/WBM9z/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
 
 ## Build a Tabs Widget
 
@@ -227,4 +227,4 @@ With this component, any time a `<tabs>` element with
 automatically be created. This allows application behavior
 and design to be compartmentalized from each other.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/x6TJK/2/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/x6TJK/2/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>

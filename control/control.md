@@ -377,6 +377,6 @@ data by calling `$(document.body).empty()`._
 Here is an example of how to build a simple tab widget using can.Control:
 
 <iframe style="width: 100%; height: 300px"
-        src="http://jsfiddle.net/donejs/kXLLt/embedded/result,html,js,css" 
+        src="//jsfiddle.net/donejs/kXLLt/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>

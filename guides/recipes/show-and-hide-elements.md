@@ -26,7 +26,7 @@ When the button is clicked, change the observable value.
 data.attr("visible", !data.attr("visible"))
 ```
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/eFss4/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/eFss4/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
 
 ### Application State
 
