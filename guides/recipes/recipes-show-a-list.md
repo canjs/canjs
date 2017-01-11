@@ -41,4 +41,4 @@ people.push({firstname: "Paul", lastname: "Newman"})
 people.pop()
 ```
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/Pgbpa/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/Pgbpa/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>

@@ -20,4 +20,4 @@ data.attr("message", "Goodbye World!")
 When the button is clicked in the example below, the message is
 changed with `data.attr()`.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/quTtE/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/quTtE/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>

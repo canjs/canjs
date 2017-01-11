@@ -124,4 +124,4 @@ This will update the page automatically, keeping code manageable.
 This is *one* way to handle events. Others will be covered
 in the following recipes while building widgets.
 
-<iframe width="100%" height="300" src="http://jsfiddle.net/donejs/F9kzt/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/donejs/F9kzt/embedded/result,html,js/" allowfullscreen="allowfullscreen" frameborder="0"> </iframe>
