@@ -150,7 +150,7 @@
       ]
     },
     "altVersions": {
-      "2.3.27": "https://v2.canjs.com"
+      "2.3.28": "https://v2.canjs.com"
     },
     "parent": "canjs",
     "minifyBuild": false
