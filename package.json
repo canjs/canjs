@@ -66,7 +66,7 @@
     "can-simple-dom": "1.0.2",
     "can-simple-map": "3.1.2",
     "can-stache": "3.0.18",
-    "can-stache-bindings": "3.0.6",
+    "can-stache-bindings": "4.0.0-pre.2",
     "can-stache-converters": "3.0.6",
     "can-stream": "0.0.5",
     "can-types": "1.0.1",
