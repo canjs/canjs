@@ -168,7 +168,9 @@ render templates in script tags
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
-
+- **[react-view-models]** <small><%react-view-models.package.version%></small> Connect view-models to React components
+  - `npm install react-view-models --save`
+  - <a class="github-button" href="https://github.com/BigAB/react-view-models" data-count-href="/BigAB/react-view-models/stargazers" data-count-api="/repos/BigAB/react-view-models#stargazers_count">Star</a>
 
 </div>
 
@@ -265,6 +267,7 @@ __Ecosystem collection__
   "can-view-autorender": "<%can-view-autorender.package.version%>",
   "can-view-import": "<%can-view-import.package.version%>",
   "can-zone": "<%can-zone.package.version%>",
+  "react-view-models": "<%react-view-models.package.version%>",
   "steal-stache": "<%steal-stache.package.version%>",
 ```
 

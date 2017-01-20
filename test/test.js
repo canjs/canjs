@@ -58,6 +58,7 @@ require('can-connect-feathers/test/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
+// require('react-view-models/dist/test/test');
 
 
 // Integration tests

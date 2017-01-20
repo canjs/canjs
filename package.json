@@ -83,7 +83,8 @@
     "can-view-parser": "3.0.4",
     "can-view-scope": "3.1.2",
     "can-view-target": "3.0.7",
-    "can-zone": "0.6.2"
+    "can-zone": "0.6.2",
+    "react-view-models": "0.0.8"
   },
   "devDependencies": {
     "async": "^2.1.2",
@@ -143,10 +144,11 @@
       "bit-docs-tag-package": "^0.0.5"
     },
     "glob": {
-      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
+      "pattern": "{node_modules,docs}/{can-*,react-view-models,steal-stache}/**/*.{js,md}",
       "ignore": [
         "node_modules/can-wait/examples/**/*",
-        "node_modules/can-*/dist/**/*"
+        "node_modules/can-*/dist/**/*",
+        "node_modules/react-view-models/{dist,node_modules}/**/*"
       ]
     },
     "altVersions": {
