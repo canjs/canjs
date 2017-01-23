@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>can-validate Credit Card Demo</title>
+	<style>
+		.form-control {
+			display: block;
+		}
+
+		.form-control.has-errors {
+			border: 1px tomato solid;
+		}
+
+		form div {
+			margin: 1rem;
+		}
+		label small.has-errors {
+			color: tomato;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/stache" id="demo-html">
+		<form>
+			<div>
+				<label>Credit Card Number <small class="has-errors">{{formatErrors(testSet('card', card), 'object').card.join(', ')}}</small></label>
+				<input
+					class="form-control {{#if formatErrors(testSet('card', card), 'object').card.length}}has-errors{{/if}}"
+					type="text"
+					{($value)}="card"
+					placeholder="XXXX-XXXX-XXXX-XXXX">
+			</div>
+			<div>
+				<label>Expiration Month <small class="has-errors">{{formatErrors(testSet('month', month), 'object').month.join(', ')}}</small></label>
+				<input
+					class="form-control {{#if formatErrors(testSet('month', month), 'object').month.length}}has-errors{{/if}}"
+					type="text"
+					{($value)}="month"
+					placeholder="XX">
+			</div>
+			<div>
+				<label>Expiration Year <small class="has-errors">{{formatErrors(testSet('year', year), 'object').year.join(', ')}}</small></label>
+				<input
+					class="form-control {{#if formatErrors(testSet('year', year), 'object').year.length}}has-errors{{/if}}"
+					type="text"
+					{($value)}="year"
+					placeholder="XXXX">
+			</div>
+			<button type="submit" {$disabled}="errors()">Submit</button>
+		</form>
+	</script>
+	<script src="../../node_modules/steal/steal.js" main="@empty">
+		var stache = require("can-stache");
+		var DefineMap = require("can-define/map/map");
+		var defineValidator = require("can-define-validate-validatejs");
+		var formatErrors = require("can-validate").formatErrors;
+		require("can-stache-converters");
+
+		stache.registerHelper('formatErrors', function (errors, format) {
+			errors = typeof errors === 'function' ? errors() : errors;
+			return formatErrors(errors, format);
+		});
+
+		var CreditCard = DefineMap({
+			card: {
+				validate: {
+					format: {
+						pattern: /(\d{4})(\d{4})(\d{4})(\d{4})/,
+						message: 'is not a valid number'
+					}
+				}
+			},
+			month: {
+				validate: {
+					format: {
+						pattern: /^(0?[1-9]|1[012])$/,
+						message: 'is not a valid month'
+					}
+				}
+			},
+			year: {
+				validate: {
+					format: {
+						pattern: /(\d{4})/,
+						message: 'is not a valid year'
+					}
+				}
+			}
+		});
+		defineValidator(CreditCard);
+		var card = CreditCard();
+		window.test = card;
+		var template = stache.from("demo-html");
+		document.body.appendChild(template(card));
+	</script>
+</body>
+</html>

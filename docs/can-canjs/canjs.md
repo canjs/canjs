@@ -168,6 +168,15 @@ render templates in script tags
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
+- **[can-validate]** <small><%can-validate.package.version%></small> Validation tools and types definitions
+  - `npm install can-validate --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate" data-count-href="/canjs/can-validate/stargazers" data-count-api="/repos/canjs/can-validate#stargazers_count">Star</a>
+- **[can-validate-validatejs]** <small><%can-validate-validatejs.package.version%></small> Create validators with ValidateJS
+  - `npm install can-validate-validatejs --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate-validatejs" data-count-href="/canjs/can-validate-validatejs/stargazers" data-count-api="/repos/canjs/can-validate-validatejs#stargazers_count">Star</a>
+- **[can-define-validate-validatejs]** <small><%can-define-validate-validatejs.package.version%></small> Validation for DefineMaps using the ValidateJS library
+  - `npm install can-define-validate-validatejs --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define-validate-validatejs" data-count-href="/canjs/can-define-validate-validatejs/stargazers" data-count-api="/repos/canjs/can-define-validate-validatejs#stargazers_count">Star</a>
 
 
 </div>
