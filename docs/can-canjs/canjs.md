@@ -170,7 +170,7 @@ render templates in script tags
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
 - **[react-view-models]** <small><%react-view-models.package.version%></small> Connect view-models to React components
   - `npm install react-view-models --save`
-  - <a class="github-button" href="https://github.com/BigAB/react-view-models" data-count-href="/BigAB/react-view-models/stargazers" data-count-api="/repos/BigAB/react-view-models#stargazers_count">Star</a>
+  - <a class="github-button" href="https://github.com/canjs/react-view-models" data-count-href="/canjs/react-view-models/stargazers" data-count-api="/repos/canjs/react-view-models#stargazers_count">Star</a>
 
 </div>
 
