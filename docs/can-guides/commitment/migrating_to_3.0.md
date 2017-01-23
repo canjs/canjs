@@ -362,7 +362,7 @@ Which can be replaced by flattening it into a [can-define/map/map] like so:
 var DefineMap = require("can-define/map/map");
 
 var CarOwner = DefineMap.extend({
-	cars: CarList,
+	cars: Car.List,
 	favorite: Car,
 	color: "string",
 	age: {
