@@ -10,5 +10,6 @@ require("can-view-import");
 require("can-zone");
 require("can-stream");
 require("can-define-stream");
+require("react-view-models");
 
 module.exports = can;
