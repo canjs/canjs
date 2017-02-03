@@ -61,6 +61,10 @@ require('can-connect-signalr/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
 
+if(typeof Proxy === 'function') {
+	require('can-observe/test');
+}
+
 
 // Integration tests
 require('../docs/can-guides/experiment/todomvc/test');
