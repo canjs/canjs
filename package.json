@@ -153,6 +153,6 @@
       "2.3.28": "https://v2.canjs.com"
     },
     "parent": "canjs",
-    "minifyBuild": false
+    "minifyBuild": true
   }
 }
