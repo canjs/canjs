@@ -129,7 +129,7 @@ Component.extend({
 If you are already using `can` through npm, simply run the following command to install the latest version:
 
 ```
-npm install can --save
+npm install can@3 --save
 ```
 
 This will update your `package.json` to look something like this:
@@ -244,7 +244,7 @@ Instead, the first argument to [can-construct.extend] is the name of the constru
 If you use StealJS, you’ll need to install [steal-stache] to load your templates:
 
 ```
-npm install steal-stache --save
+npm install steal-stache@3 --save
 ```
 
 If you’re using StealJS 0.16, you don’t need to do anything else to make your templates load correctly.
