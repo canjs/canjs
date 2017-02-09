@@ -107,4 +107,4 @@ If you want to become a CanJS contributor, you simply have to:
  - Attend the weekly DoneJS Contributors meeting twice a month. [DoneJS Calendar](https://www.google.com/calendar/embed?src=jupiterjs.com_g27vck36nifbnqrgkctkoanqb4%40group.calendar.google.com&ctz=America/Chicago).
  - Make one small contribution, even a spelling correction, a month.
 
-Issues that should be easy for a new contribitor to pick up have an “easy” label. [This GitHub search](https://github.com/search?utf8=%E2%9C%93&q=user%3Acanjs+is%3Aopen+is%3Aissue+label%3AEasy&type=Issues) makes it easy to find easy issues across all the CanJS repositories.
+Issues that should be easy for a new contributor to pick up have an “easy” label. [This GitHub search](https://github.com/search?utf8=%E2%9C%93&q=user%3Acanjs+is%3Aopen+is%3Aissue+label%3AEasy&type=Issues) makes it easy to find easy issues across all the CanJS repositories.
