@@ -128,6 +128,7 @@ _Useful libraries that add important features or extend the core collection._
 
 <div class="module-list">
 
+
 - **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
   - `npm install can-fixture --save`
   - <a class="github-button" href="https://github.com/canjs/can-fixture" data-count-href="/canjs/can-fixture/stargazers" data-count-api="/repos/canjs/can-fixture#stargazers_count">Star</a>
