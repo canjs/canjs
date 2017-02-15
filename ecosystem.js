@@ -5,6 +5,7 @@ require("can-fixture");
 require("can-jquery");
 require("can-fixture-socket");
 require("can-connect-feathers");
+require("can-connect-signalr");
 require("can-stache-converters");
 require("can-view-import");
 require("can-zone");
