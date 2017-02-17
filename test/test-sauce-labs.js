@@ -50,6 +50,9 @@ var platforms = [{
 	platformName: 'iOS',
 	platformVersion: '10.0',
 	deviceName: 'iPhone 7 Simulator'
+}, {
+	browserName: 'MicrosoftEdge',
+	platform: 'Windows 10'
 }];
 
 // add properties to all platforms
