@@ -442,4 +442,16 @@ steal("can/view/scope", "can/route", "can/test", "steal-qunit", function () {
 	});
 
 
+	test("that .set with ../ is able to skip notContext scopes (#43)", function(){
+		var instance = new can.Map({prop: 0});
+		var notContextContext = {NAME: "NOT CONTEXT"};
+		var top = {NAME: "TOP"};
+		var scope = new can.view.Scope(instance).add(notContextContext,{notContext: true}).add(top);
+
+
+		scope.set("../prop",1);
+
+		equal( instance.prop, 1);
+	});
+
 });
