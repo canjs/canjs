@@ -119,7 +119,7 @@ steal(
 					currentScopeOnly = true;
 					attr = attr.substr(2);
 				}
-				else if (isInParentContext) {
+				else if (isInParentContext || isParentContext) {
 					// walk up until we find a parent that can have context.
 					// the `isContextBased` check above won't catch it when you go from
 					// `../foo` to `foo` because `foo` isn't context based.
@@ -127,17 +127,16 @@ steal(
 					while(parent._meta.notContext) {
 						parent = parent._parent;
 					}
-					
+					if ( isParentContext ) {
+						return {
+							value: parent._context
+						};
+					}
 					return parent.read(attr.substr(3) || ".", options);
 				}
 				else if ( isCurrentContext ) {
 					return {
 						value: this._context
-					};
-				}
-				else if ( isParentContext ) {
-					return {
-						value: this._parent._context
 					};
 				}
 
