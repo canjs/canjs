@@ -201,6 +201,43 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
+The other way you might have used `can.view` was loading a template from a url. In this case, we encourage you to use [StealJS](https://stealjs.com/) with [steal-stache](#Usingsteal_stachefortemplates).
+
+Instead of:
+
+```js
+var render = can.view('./todos.stache');
+```
+
+You can now just do:
+
+```js
+import todosStache from "./todos.stache";
+```
+
+Here are some other alternatives if you don't want to go the StealJS route:
+
+Example using [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and `can-stache`
+
+```js
+fetch("/todos.stache")
+	.then((resp) => resp.text())
+	.then((template) => stache(template))
+	.then((renderer) => /* use renderer as usual */);
+```
+
+Example using [Webpack](https://webpack.github.io/)
+
+```js
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+
+var data = new DefineMap({message: "Hello World"});
+var template = stache(require('raw-loader!./main.stache'));
+
+document.body.appendChild(template(data));
+```
+
 ### Use native Promises
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
@@ -238,6 +275,8 @@ Construct.extend("foo.bar", ...)
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global, you can do so yourself using the return value of [can-construct.extend].
 
 Instead, the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.
+
+<a id="Usingsteal_stachefortemplates"></a>
 
 ### Using `steal-stache` for templates
 
