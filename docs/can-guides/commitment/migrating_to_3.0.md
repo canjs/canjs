@@ -323,7 +323,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/view/stache/stache` — [can-stache]
 - `can/view/target/target` — [can-view-target]
 
-<a name="Future_proofmigrationpath"></a>
+<a id="Future_proofmigrationpath"></a>
 ## Latest & greatest migration path
 
 In addition to the steps taken in the two sections above, make the following changes to your application if you *really* want to stay ahead of the curve.
