@@ -83,7 +83,7 @@
     "can-view-parser": "3.0.6",
     "can-view-scope": "3.1.2",
     "can-view-target": "3.0.7",
-    "can-zone": "0.6.2"
+    "can-zone": "0.6.6"
   },
   "devDependencies": {
     "async": "^2.1.2",
