@@ -1,0 +1,30 @@
+{
+  "name": "canjs-v3.4.1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src",
+  "scripts": {
+    "build-prod": "node build.js"
+  },
+  "author": "Robert <Rlin415@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "can-component": "3.0.5",
+    "can-compute": "3.0.6",
+    "can-connect": "1.3.6",
+    "can-define": "1.0.16",
+    "can-route": "3.0.7",
+    "can-route-pushstate": "3.0.3",
+    "can-set": "1.0.3",
+    "can-stache": "3.0.19",
+    "can-stache-bindings": "3.0.6",
+    "steal": "1.2.10"
+  },
+  "devDependencies": {
+    "steal-stache": "3.0.5",
+    "steal-tools": "1.1.2"
+  },
+  "steal": {
+    "plugins": ["steal-stache"]
+  }
+}
