@@ -45,7 +45,7 @@ Item.List = DefineList.extend({
   add() {
       startMeasure("add");
       this.start = performance.now();
-      this.buildData(1000).forEach((i) => this.push(i));
+      this.push.apply(this, this.buildData(1000));
       this.printDuration();
   },
   select(id) {
