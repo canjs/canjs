@@ -1351,7 +1351,8 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		var map = new MyMap();
 
 		equal(MyMap.defaults.propA, undefined, 'Generator function does not result in property set on defaults');
-		notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators')
+		notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
+		equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
 
 	});
 });
