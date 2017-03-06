@@ -195,6 +195,30 @@ var templateString = document.getElementById('some-id').innerHTML;
 var render = stache(templateString);
 ```
 
+If you were using `can.view` to load a template from a URL like so:
+
+```js
+var render = can.view('./template.stache');
+```
+
+We encourage you to use [StealJS](https://stealjs.com/) with [steal-stache](#Usingsteal_stachefortemplates):
+
+```js
+import render from "./template.stache";
+```
+
+Alternatively, use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API):
+
+```js
+fetch("./todos.stache")
+	.then((resp) => stache(resp.text()))
+	.then((render) => /* use render */);
+```
+
+If you’re using another module loader (such as Browserify or webpack), check out [guides/setup] for instructions on how to load templates.
+
+#### `can.view.preload`
+
 If you were using `can.view.preload` then use [can-stache.registerPartial] instead.
 
 ```js
@@ -238,6 +262,8 @@ Construct.extend("foo.bar", ...)
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global, you can do so yourself using the return value of [can-construct.extend].
 
 Instead, the first argument to [can-construct.extend] is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.
+
+<a id="Usingsteal_stachefortemplates"></a>
 
 ### Using `steal-stache` for templates
 
@@ -323,7 +349,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/view/stache/stache` — [can-stache]
 - `can/view/target/target` — [can-view-target]
 
-<a name="Future_proofmigrationpath"></a>
+<a id="Future_proofmigrationpath"></a>
 ## Latest & greatest migration path
 
 In addition to the steps taken in the two sections above, make the following changes to your application if you *really* want to stay ahead of the curve.
