@@ -62,7 +62,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 
 		var oldSetupDefaults = can.Map.prototype._setupDefaults;
 		can.Map.prototype._setupDefaults = function (obj) {
-			var defaults = oldSetupDefaults.call(this),
+			var defaults = can.extend({},oldSetupDefaults.call(this)),
 				propsCommittedToAttr = {},
 				Map = this.constructor,
 				originalGet = this._get;

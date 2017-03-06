@@ -1334,4 +1334,25 @@ steal("can/map/define", "can/route", "can/test", "steal-qunit", function () {
 		equal(map.attr('propB'), object2, 'props in both have the child values');
 		equal(map.attr('propA'), object1, 'props only in the parent have the correct values');
 	});
+
+
+
+	test("value function not set on constructor defaults", function(){
+		var MyMap = can.Map.extend({
+			define: {
+				propA: {
+					value: function(){
+						return 1;
+					}
+				}
+			}
+		});
+
+		var map = new MyMap();
+
+		equal(MyMap.defaults.propA, undefined, 'Generator function does not result in property set on defaults');
+		notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
+		equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
+
+	});
 });
