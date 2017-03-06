@@ -60,7 +60,7 @@
     "can-map-define": "3.0.3",
     "can-namespace": "1.0.0",
     "can-observation": "3.0.6",
-    "can-route": "3.0.6",
+    "can-route": "3.0.7",
     "can-route-pushstate": "3.0.1",
     "can-set": "1.0.3",
     "can-simple-dom": "1.0.2",
