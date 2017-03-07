@@ -89,7 +89,7 @@
     "async": "^2.1.2",
     "bit-docs": "^0.0.7",
     "feathers": "^2.0.3",
-    "feathers-authentication-client": "^0.1.6",
+    "feathers-authentication-client": "^0.2.0",
     "feathers-hooks": "^1.7.1",
     "feathers-rest": "^1.5.0",
     "feathers-socketio": "^1.4.2",
