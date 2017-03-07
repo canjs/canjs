@@ -8,7 +8,7 @@ require("can-connect-feathers");
 require("can-stache-converters");
 require("can-view-import");
 require("can-zone");
-require("can-stream");
+require("can-stream-kefir");
 require("can-define-stream");
 
 module.exports = can;
