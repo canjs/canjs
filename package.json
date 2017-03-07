@@ -43,6 +43,7 @@
     "can-component": "3.0.5",
     "can-compute": "3.0.6",
     "can-connect": "1.3.6",
+    "can-connect-feathers": "3.5.2",
     "can-construct": "3.1.1",
     "can-construct-super": "3.0.3",
     "can-control": "3.0.6",

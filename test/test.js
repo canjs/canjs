@@ -57,7 +57,7 @@ require('can-fixture/test/fixture_test');
 // require('can-validate/test');
 // require('can-validate-validatejs/test');
 // require('can-define-validate-validatejs/test');
-// require('can-connect-feathers/test/test');
+require('can-connect-feathers/test/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
