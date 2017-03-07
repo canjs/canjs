@@ -1,1 +1,1 @@
-require("can-control");
+module.exports = require("can-control");
