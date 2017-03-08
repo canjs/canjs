@@ -4,8 +4,9 @@
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" {^$value}="userLocation" type="text"/>
     </div>
+	{{pos.coords.latitude}} - {{pos.coords.longitude}}
 
 	{{#if placesPromise.isPending}}
       <p class="loading-message">
@@ -43,18 +44,55 @@
 
   </div>
 </script>
-
+<script src="https://cdn.jsdelivr.net/kefir/3.6.0/kefir.js"></script>
+<script>
+  steal = {
+    instantiated: {
+      "kefir" : Kefir
+    }
+  }
+</script>
 <script src="../../../../../node_modules/steal/steal.js" main="@empty">
-var can = require("can/can");
+var can = require("can/all");
+var Kefir = require("kefir");
+
+navigator.geolocation.getCurrentPosition(function(position){
+	debugger;
+	console.log("pos",position);
+}, function(err){
+	console.log("err",err)
+	debugger;
+})
+
+
+var geoStream = Kefir.stream(function(emitter){
+
+	 /*var watch = navigator.geolocation.watchPosition(function(position){
+		 debugger;
+		 emitter.emit(position)
+	 }, function(positionError){
+		 emitter;
+		 debugger;
+	 });*/
+	 return function(){
+		 navigator.geolocation.clearWatch(watch)
+	 }
+});
+
 
 var yqlURL = "http://query.yahooapis.com/v1/public/yql?";
 
 var WeatherViewModel = can.DefineMap.extend({
+  userLocation: "string",
+  coordinates: {
+	stream: function(){
+	  return geoStream;
+	}
+  },
   location: {
-    type: "string",
-    set: function(){
-      this.place = null;
-    }
+    stream: function(){
+	  return geoStream;
+	}
   },
   get placesPromise(){
     if(this.location && this.location.length > 2) {
