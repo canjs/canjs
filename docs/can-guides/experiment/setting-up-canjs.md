@@ -97,7 +97,7 @@ __Note:__ if you see dozens of errors in your console, you may need to set `syst
 StealJS’s [Moving to Production](https://stealjs.com/docs/StealJS.moving-to-prod.html)
 guide has instructions for how to create a production build.
 
-## webpack and npm
+## Webpack and npm
 
 Install [can-core CanJS’s core modules] and Webpack (with `raw-loader`) with npm:
 
@@ -284,3 +284,9 @@ Another quick way to start locally is by loading CanJS from a CDN:
     </body>
     </html>
 @highlight 6-6
+
+## A note on Promises
+
+Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used in CanJS, which means you need to:
+
+* Include a Promise polyfill if targeting browsers that do not have native support. [Steal](http://stealjs.com/) includes a polyfill for you.
