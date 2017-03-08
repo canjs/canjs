@@ -88,6 +88,7 @@
   "devDependencies": {
     "async": "^2.1.2",
     "bit-docs": "^0.0.7",
+    "es6-promise": "^4.1.0",
     "feathers": "^2.0.3",
     "feathers-authentication-client": "^0.1.6",
     "feathers-hooks": "^1.7.1",
@@ -119,8 +120,7 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "system": {
-    "npmAlgorithm": "flat",
+  "steal": {
     "main": "can",
     "npmIgnore": [
       "bit-docs",
@@ -129,6 +129,12 @@
       "saucelabs",
       "wd",
       "http-server"
+    ],
+    "plugins": [
+      "steal-css",
+      "steal-less",
+      "steal-qunit",
+      "steal-stache"
     ]
   },
   "bit-docs": {

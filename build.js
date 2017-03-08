@@ -16,7 +16,7 @@ var exportsMap = {
     "validate.js": "validate"
 };
 stealTools.export({
-	system: {
+	steal: {
 		config: __dirname + "/package.json!npm",
 		main: "can/all"
 	},
