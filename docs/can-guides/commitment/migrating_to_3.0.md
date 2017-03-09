@@ -225,6 +225,86 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
+### Replace uses of `can.Construct.proxy`
+
+The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
+
+Instead of:
+
+```js
+var Animal = can.Construct.extend({
+    init: function(name) {
+        this.name = name;
+    }
+});
+var dog = new Animal("Gertrude");
+var dogDance = dog.proxy(function(dance){
+    console.log(this.name + ' loves dancing the ' + dance);
+});
+dogDance('hokey pokey'); // Gertrude loves dancing the hokey pokey
+```
+
+You should now do this:
+
+```js
+var Animal = can.Construct.extend({
+    init: function(name) {
+        this.name = name;
+    }
+});
+var dog = new Animal("Gertrude");
+var dogDance = function(dance){
+    console.log(this.name + ' loves dancing the ' + dance);
+}.bind(dog);
+dogDance('hokey pokey'); // Gertrude loves dancing the hokey pokey
+```
+
+You can partially apply a number of arguments just as before. Continuing from the example above:
+
+Instead of:
+
+```js
+var func = function(feeling, thing){
+    console.log(this.name + ' ' + feeling + ' ' + thing);
+};
+// Passing one argument (partial application)
+var dogLoves = dog.proxy(func, 'loves');
+dogLoves('cupcakes!'); // Gertrude loves cupcakes!
+// Passing many arguments
+var dogHateUnicorns = dog.proxy(func, 'hates', 'unicorns');
+dogHateUnicorns(); // Gertrude hates unicorns
+```
+
+You should now do this:
+
+```js
+var func = function(feeling, thing){
+    console.log(this.name + ' ' + feeling + ' ' + thing);
+};
+// Passing one argument (partial application)
+var dogLoves = func.bind(dog, 'loves');
+dogLoves('cupcakes!'); // Gertrude loves cupcakes!
+// Passing many arguments
+var dogHateUnicorns = func.bind(dog, 'hates', 'unicorns');
+dogHateUnicorns(); // Gertrude hates unicorns
+```
+
+If you used `can.Construct.proxy` inside a constructor, here is how you can achieve the same effect using `Function.prototype.bind`:
+
+```js
+var DelayedStaticCounter = can.Construct.extend({
+    setup: function() {
+        this.count = 0;
+    }
+    incrementSoon: function() {
+        setTimeout(function() {
+            this.count++;
+        }.bind(this), 1000);
+    }
+}, {});
+DelayedStaticCounter.incrementSoon();
+```
+
 ### Use native Promises
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
