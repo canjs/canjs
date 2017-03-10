@@ -53,7 +53,7 @@ import Map from 'can-map'; // this local declaration of Map will collide with EC
 Do:
 
 ```js
-import canMap from 'can-map';
+import CanMap from 'can-map';
 ```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
@@ -246,15 +246,15 @@ A number of API changes have been made in CanJS 3.
 Some methods have been renamed in `can.event`.
 
 ```js
-can.event.addEvent(el, 'click', function() {});
-can.event.removeEvent(el, 'click', function() {});
+can.event.addEvent.call(el, 'click', function() {});
+can.event.removeEvent.call(el, 'click', function() {});
 ```
 
 Becomes:
 
 ```js
-can.event.addEventListener(el, 'click', function() {});
-can.event.removeEventListener(el, 'click', function() {});
+can.event.addEventListener.call(el, 'click', function() {});
+can.event.removeEventListener.call(el, 'click', function() {});
 ```
 
 #### can.batch
@@ -288,22 +288,6 @@ import assign from 'can-util/js/assign/assign';
 import deepAssign from 'can-util/js/deepAssign/deepAssign';
 assign({}, { answer: 42 }); // shallow
 deepAssign({}, { answer: 42 }); // deep
-```
-
-#### can.viewModel
-
-This method now expects a DOM element as the first parameter:
-
-```js
-can.viewModel('my-component');
-```
-
-Becomes:
-
-```js
-import $ from 'jquery';
-import canViewModel from 'can-view-model';
-canViewModel($('my-component')[0]);
 ```
 
 #### can.addClass
