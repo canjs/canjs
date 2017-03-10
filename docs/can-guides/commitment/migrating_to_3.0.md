@@ -227,7 +227,19 @@ stache.registerPartial("some-id", renderer);
 
 ### Replace uses of `can.Construct.proxy`
 
-The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind). Instead of `this.proxy(randFunc)`, use `randFunc.bind(this)`.
+The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind). 
+
+Instead of:
+
+```js
+this.proxy(randFunc)
+```
+
+You should now do this:
+
+```js
+randFunc.bind(this)
+```
 
 ### Use native Promises
 
