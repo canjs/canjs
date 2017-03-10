@@ -80,7 +80,6 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 - `can.stache` — `can/view/stache/stache`
 - `can.util` — `can/util/util`
 - `can.view.callbacks` — `can/view/callbacks/callbacks`
-- `can.view.bindings`
 
 ### Replace uses of `can.$`
 
