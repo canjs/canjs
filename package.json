@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "can-cid": "1.0.1",
-    "can-component": "3.0.5",
+    "can-component": "3.0.6",
     "can-compute": "3.0.5",
     "can-connect": "1.2.0",
     "can-connect-feathers": "3.5.1",
