@@ -1,0 +1,19 @@
+<ul id="todo-list">
+  {{#each todos}}
+    <li class="todo {{#if ./complete}}completed{{/if}}
+      {{#if isDestroying}}destroying{{/if}}
+      {{#if isEditing(this)}}editing{{/if}}">
+      <div class="view">
+	    <input class="toggle" type="checkbox"
+			   {($checked)}="complete" ($change)="save()">
+        <label ($dblclick)="edit(this)">{{name}}</label>
+        <button class="destroy" ($click)="destroy()"></button>
+      </div>
+      <input class="edit" type="text"
+        {($value)}="name"
+        ($enter)="updateName()"
+        {$focused}="isEditing(this)"
+        ($blur)="cancelEdit()"/>
+    </li>
+  {{/each}}
+</ul>
