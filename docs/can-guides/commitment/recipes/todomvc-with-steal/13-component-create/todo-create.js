@@ -1,3 +1,4 @@
+// components/todo-create/todo-create.js
 var Component = require("can-component"); // remember to install
 var DefineMap = require("can-define/map/");
 var view = require("./todo-create.stache");

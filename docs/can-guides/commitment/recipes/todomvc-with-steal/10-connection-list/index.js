@@ -2,6 +2,7 @@
 var template = require("index.stache");
 var DefineMap = require("can-define/map/");
 var Todo = require("~/models/todo");
+require("~/models/todos-fixture");
 
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string",

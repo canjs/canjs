@@ -1,3 +1,4 @@
+// components/todo-list/todo-list.js
 var Component = require("can-component");
 var DefineMap = require("can-define/map/");
 var view = require("./todo-list.stache");
@@ -26,7 +27,7 @@ var TodoListVM = DefineMap.extend({
 	}
 });
 
-Component.extend({
+module.exports = Component.extend({
 	tag: "todo-list",
 	view: view,
 	ViewModel: TodoListVM
