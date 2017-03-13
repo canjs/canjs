@@ -50,7 +50,7 @@ Instead of:
 import Map from 'can-map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
 ```
 
-Do:
+Write:
 
 ```js
 import CanMap from 'can-map';
@@ -237,11 +237,7 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
-### API changes
-
-A number of API changes have been made in CanJS 3.
-
-#### can.event
+### `can.event`
 
 Some methods have been renamed in `can.event`.
 
@@ -257,7 +253,7 @@ can.event.addEventListener.call(el, 'click', function() {});
 can.event.removeEventListener.call(el, 'click', function() {});
 ```
 
-#### can.batch
+### `can.batch`
 
 `trigger` has been renamed to `dispatch`.
 
@@ -272,9 +268,9 @@ import canBatch from 'can-event/batch/batch';
 canBatch.dispatch(myObj, 'myEvent');
 ```
 
-#### can.extend
+### `can.extend`
 
-This method has been split into two: a shallow and deep merge. Previously, passing true as the first parameter would do a deep merge. Now, you explicitly invoke the deep merge or shallow merge function.
+This method has been split into two: a shallow and deep merge. Previously, passing `true` as the first parameter would do a deep merge. Now, you explicitly invoke the deep merge or shallow merge function.
 
 ```js
 can.extend({}, { answer: 42 }); // shallow
@@ -290,7 +286,7 @@ assign({}, { answer: 42 }); // shallow
 deepAssign({}, { answer: 42 }); // deep
 ```
 
-#### can.addClass
+### `can.addClass`
 
 This method now requires the DOM element to be the context of function.
 
@@ -307,7 +303,7 @@ import className from 'can-util/dom/class-name/class-name';
 className.add.call(el, 'myClass');
 ```
 
-#### can.append
+### `can.append`
 
 This method now require the DOM element to be the context of function.
 
@@ -324,7 +320,7 @@ import mutate from 'can-util/dom/mutate/mutate';
 mutate.append.call(el, '<p></p>');
 ```
 
-#### can.data
+### `can.data`
 
 This method now requires the DOM element to be the context of function. It also has a separate method for getting and setting data.
 
@@ -343,7 +339,7 @@ domData.set.call(el, 'something', 'secret');
 domData.get.call(el, 'something');
 ```
 
-#### String methods
+### String methods
 
 All string methods are grouped together now, so you only have to import the string utilities once.
 
