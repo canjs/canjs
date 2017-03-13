@@ -97,9 +97,9 @@ __Note:__ if you see dozens of errors in your console, you may need to set `syst
 StealJS’s [Moving to Production](https://stealjs.com/docs/StealJS.moving-to-prod.html)
 guide has instructions for how to create a production build.
 
-## Webpack and npm
+## webpack and npm
 
-Install [can-core CanJS’s core modules] and Webpack (with `raw-loader`) with npm:
+Install [can-core CanJS’s core modules] and webpack (with `raw-loader`) with npm:
 
 ```
 npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
