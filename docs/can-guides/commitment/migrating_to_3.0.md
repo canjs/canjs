@@ -539,6 +539,28 @@ var carOwner = new CarOwner();
 carOwner.favorite = new Car({ make: "Toyota" });
 ```
 
+**Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
+
+```js
+var CanMap = require("can-map");
+
+var Person = CanMap.extend({
+  name: "Justin"
+});
+```
+
+This shorthand in `can-define/map/map` defines the [can-define.types type], not the initial value.
+
+Here’s the example above updated for `can-define/map/map`:
+
+```js
+var DefineMap = require("can-define/map/map");
+
+var Person = DefineMap.extend({
+  name: {value: "Justin"}
+});
+```
+
 #### Remove use of `change` events
 
 When you upgrade to use [can-define], you’ll no longer receive `change` events on maps. If you had any code that binded to a map’s `change` event, you’ll want to instead bind to the properties that you are interested in.
