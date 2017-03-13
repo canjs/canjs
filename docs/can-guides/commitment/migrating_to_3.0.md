@@ -398,16 +398,6 @@ var CarOwner = DefineMap.extend({
 });
 ```
 
-Important note: In `can-map` you were able to assign initial values to a property while defining a `Map` like so:
-
-```js
-var Person = can.Map.extend({
-  name: "Justin"
-});
-```
-
-`can-define/map/map` does not support this functionality. It would instead think Justin is a type setting, and try to look it up in [can-define.types]. 
-
 Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with `DefineMap`, just use the `.` (dot) operator instead:
 
 ```js
@@ -415,6 +405,28 @@ var carOwner = new CarOwner();
 
 // This is observable!
 carOwner.favorite = new Car({ make: "Toyota" });
+```
+
+**Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
+
+```js
+var CanMap = require("can-map");
+
+var Person = CanMap.extend({
+  name: "Justin"
+});
+```
+
+This shorthand in `can-define/map/map` defines the [can-define.types type], not the initial value.
+
+Here’s the example above updated for `can-define/map/map`:
+
+```js
+var DefineMap = require("can-define/map/map");
+
+var Person = DefineMap.extend({
+  name: {value: "Justin"}
+});
 ```
 
 #### Remove use of `change` events
