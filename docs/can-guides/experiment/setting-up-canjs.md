@@ -287,4 +287,10 @@ Another quick way to start locally is by loading CanJS from a CDN:
 
 ## A note on Promises
 
-Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used in CanJS, which means you need to include a Promise polyfill if targeting browsers that do not have native support. [Steal](http://stealjs.com/) includes a polyfill for you. You can see which browsers support Promises and other ES6 features [here](https://kangax.github.io/compat-table/es6/).  
+CanJS uses native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which means you might see the following error in Internet Explorer 9 or later:
+
+```
+'Promise' is undefined
+```
+
+You must include a Promise polyfill if you’re targeting browsers that do not have [native support](http://caniuse.com/#feat=promises). If you’re using [StealJS](http://stealjs.com/), [a Promise polyfill](https://github.com/stefanpenner/es6-promise) is included for you.
