@@ -39,7 +39,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-cid": "1.0.1",
+    "can-cid": "1.0.3",
     "can-component": "3.0.5",
     "can-compute": "3.0.5",
     "can-connect": "1.2.0",
