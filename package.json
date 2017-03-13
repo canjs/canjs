@@ -101,6 +101,8 @@
     "saucelabs": "^1.3.0",
     "socket.io-client": "^1.7.2",
     "steal": "^1.3.1",
+    "steal-css": "^1.2.1",
+    "steal-less": "^1.2.0",
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.0.5",
     "steal-tools": "^1.0.1",
@@ -132,7 +134,12 @@
       "socket.io-client/dist/socket.io": {
         "format": "cjs"
       }
-    }
+    },
+    "plugins": [
+      "steal-css",
+      "steal-less",
+      "steal-stache"
+    ]
   },
   "bit-docs": {
     "dependencies": {
