@@ -54,7 +54,6 @@ require('../view/ejs/ejs_test');
 
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
-require('can-connect-feathers/test/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
