@@ -162,9 +162,9 @@ render templates in script tags
 - **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
   - `npm install can-vdom --save`
   - <a class="github-button" href="https://github.com/canjs/can-vdom" data-count-href="/canjs/can-vdom/stargazers" data-count-api="/repos/canjs/can-vdom#stargazers_count">Star</a>
-- **[can-stream]** <small><%can-stream.package.version%></small> Convert observable values into streams
-  - `npm install can-stream --save`
-  - <a class="github-button" href="https://github.com/canjs/can-stream" data-count-href="/canjs/can-stream/stargazers" data-count-api="/repos/canjs/can-stream#stargazers_count">Star</a>
+- **[can-stream-kefir]** <small><%can-stream-kefir.package.version%></small> Convert observable values into streams
+  - `npm install can-stream-kefir --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stream-kefir" data-count-href="/canjs/can-stream-kefir/stargazers" data-count-api="/repos/canjs/can-stream-kefir#stargazers_count">Star</a>
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
@@ -260,7 +260,7 @@ __Ecosystem collection__
   "can-fixture-socket": "<%can-fixture-socket.package.version%>",
   "can-jquery": "<%can-jquery.package.version%>",
   "can-stache-converters": "<%can-stache-converters.package.version%>",
-  "can-stream": "<%can-stream.package.version%>",
+  "can-stream-kefir": "<%can-stream-kefir.package.version%>",
   "can-vdom": "<%can-vdom.package.version%>",
   "can-view-autorender": "<%can-view-autorender.package.version%>",
   "can-view-import": "<%can-view-import.package.version%>",
