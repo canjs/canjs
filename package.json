@@ -128,7 +128,12 @@
       "saucelabs",
       "wd",
       "http-server"
-    ]
+    ],
+    "meta": {
+      "socket.io-client/dist/socket.io": {
+        "format": "cjs"
+      }
+    }
   },
   "bit-docs": {
     "dependencies": {
