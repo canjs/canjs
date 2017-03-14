@@ -4,7 +4,7 @@ var globalJS = require("steal-tools/lib/build/helpers/global").js;
 var baseNormalize = globalJS.normalize();
 var ignoreModules = [function(name){
     if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0 || 
-			name.indexOf('validate.js') === 0 || name.indexOf('ms-signalr-client')) {
+			name.indexOf('validate.js') === 0 || name.indexOf('ms-signalr-client') === 0) {
         return true;
     } else {
         return false;
