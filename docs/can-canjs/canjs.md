@@ -137,6 +137,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-connect-feathers]** <small><%can-connect-feathers.package.version%></small> Create connections to a FeathersJS API server.
   - `npm install can-connect-feathers --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect-feathers" data-count-href="/canjs/can-connect-feathers/stargazers" data-count-api="/repos/canjs/can-connect-feathers#stargazers_count">Star</a>
+- **[can-connect-signalr]** <small><%can-connect-signalr.package.version%></small> Create connections to a FeathersJS API server.
+  - `npm install can-connect-signalr --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect-signalr" data-count-href="/canjs/can-connect-signalr/stargazers" data-count-api="/repos/canjs/can-connect-signalr#stargazers_count">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
