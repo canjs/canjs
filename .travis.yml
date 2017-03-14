@@ -17,4 +17,4 @@ before_script:
   - sleep 2
 addons:
   sauce_connect: true
-  firefox: "49.0"
+  firefox: "50.0"
