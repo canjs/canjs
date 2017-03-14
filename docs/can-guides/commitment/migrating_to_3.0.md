@@ -237,6 +237,22 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
+### Replace uses of `can.Construct.proxy`
+
+ The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
+
+ Instead of:
+
+ ```js
+ this.proxy(randFunc)
+ ```
+
+ You should now do this:
+
+ ```js
+ randFunc.bind(this)
+ ```
+
 ### `can.event`
 
 Some methods have been renamed in `can.event`.
