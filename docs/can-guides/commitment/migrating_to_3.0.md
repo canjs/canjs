@@ -42,7 +42,19 @@ var Component = require("can/component/component");
 Component.extend({ ... });
 ```
 
-Use the same pattern for the other modules you are using.
+Use the same pattern for the other modules you are using. Be careful when declaring names for imported modules that share a similar name to native objects like Map.
+
+Instead of:
+
+```js
+import Map from 'can-map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+```
+
+Write:
+
+```js
+import CanMap from 'can-map';
+```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
 
@@ -225,22 +237,6 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
-### Replace uses of `can.Construct.proxy`
-
-The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind). 
-
-Instead of:
-
-```js
-this.proxy(randFunc)
-```
-
-You should now do this:
-
-```js
-randFunc.bind(this)
-```
-
 ### Use native Promises
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
@@ -421,6 +417,28 @@ var carOwner = new CarOwner();
 
 // This is observable!
 carOwner.favorite = new Car({ make: "Toyota" });
+```
+
+**Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
+
+```js
+var CanMap = require("can-map");
+
+var Person = CanMap.extend({
+  name: "Justin"
+});
+```
+
+This shorthand in `can-define/map/map` defines the [can-define.types type], not the initial value.
+
+Here’s the example above updated for `can-define/map/map`:
+
+```js
+var DefineMap = require("can-define/map/map");
+
+var Person = DefineMap.extend({
+  name: {value: "Justin"}
+});
 ```
 
 #### Remove use of `change` events

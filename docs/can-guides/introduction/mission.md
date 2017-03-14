@@ -237,7 +237,7 @@ Independent repositories enable CanJS to innovate faster for several reasons:
 
 - Supporting [can-legacy legacy] libraries, like [can-ejs], will not slow down the
   development of other libraries.
-- Experiments like [can-stream], where a lot of innovation happens, can be
+- Experiments like [can-stream-kefir], where a lot of innovation happens, can be
   released and have breaking changes without having to “get in” breaking changes
   in the core and infrastructure libraries.
 - CanJS doesn’t feel as monolithic, appealing to developers using

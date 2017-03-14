@@ -1,4 +1,4 @@
-@page guides/contributing/adding-ecosystem-modules Adding Ecosystem Packages
+@page guides/contributing/adding-ecosystem-modules New Package
 @parent guides/contribute
 
 @description Learn how to add your module to this site.
