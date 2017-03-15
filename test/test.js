@@ -60,5 +60,5 @@ require('can-fixture/test/fixture_test');
 
 
 // Integration tests
-require('../docs/can-guides/experiment/todomvc/test');
-require('./integration/all/test');
+// require('../docs/can-guides/experiment/todomvc/test');
+// require('./integration/all/test');
