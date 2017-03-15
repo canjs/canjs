@@ -1,8 +1,8 @@
 // Core tests
 // require('../component/component_test');
 // require('../compute/compute_test');
-// require('can-connect/test/test');
-// require('../construct/construct_test');
+require('can-connect/test/test');
+require('../construct/construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-define/test/test');
 // require('../route/route_test');
