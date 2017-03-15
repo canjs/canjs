@@ -22,6 +22,25 @@ var account = new SauceLabs({
 
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
 var platforms = [{
+	browserName: 'internet explorer',
+	platform: 'Windows 7',
+	version: '9'
+}, {
+	browserName: 'internet explorer',
+	platform: 'Windows 8',
+	version: '10.0'
+}, {
+	browserName: 'internet explorer',
+	platform: 'Windows 10',
+	version: '11.0'
+}, {
+	browserName: 'safari',
+	platform: 'OS X 10.11',
+	version: '10.0'
+}, {
+	browserName: 'MicrosoftEdge',
+	platform: 'Windows 10'
+}, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
 	version: '49.0'
@@ -29,30 +48,11 @@ var platforms = [{
 	browserName: 'googlechrome',
 	platform: 'Windows 10'
 }, {
-	browserName: 'safari',
-	platform: 'OS X 10.11',
-	version: '10.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 10',
-	version: '11.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 8',
-	version: '10.0'
-}, {
-	browserName: 'internet explorer',
-	platform: 'Windows 7',
-	version: '9'
-}, {
 	browserName: 'Safari',
 	'appium-version': '1.6.0',
 	platformName: 'iOS',
 	platformVersion: '10.0',
 	deviceName: 'iPhone 7 Simulator'
-}, {
-	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10'
 }];
 
 // add properties to all platforms
