@@ -3,13 +3,13 @@
 // require('../compute/compute_test');
 // require('can-connect/test/test');
 // require('../construct/construct_test');
-// require('can-construct-super/test/can-construct-super_test');
-// require('can-define/test/test');
-// // require('../route/route_test');
-// // require('../route/pushstate/pushstate_test');
-// require('can-set/test/test');
-// require('../view/stache/stache_test');
-// require('can-stache-converters/test/test');
+require('can-construct-super/test/can-construct-super_test');
+require('can-define/test/test');
+// require('../route/route_test');
+// require('../route/pushstate/pushstate_test');
+require('can-set/test/test');
+require('../view/stache/stache_test');
+require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
