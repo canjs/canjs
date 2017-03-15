@@ -17,8 +17,6 @@
   var fixture = document.getElementById('qunit-fixture');
 
   steal.done().then(function() {
-    debugger;
-
     var el = document.createElement('p');
     el.appendChild(document.createTextNode('Steal is Done'));
     document.body.insertBefore(el, fixture);
