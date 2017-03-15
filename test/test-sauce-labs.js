@@ -25,7 +25,7 @@ var platforms = [{
 	browserName: 'internet explorer',
 	platform: 'Windows 7',
 	version: '9'
-}, {
+}/*, {
 	browserName: 'internet explorer',
 	platform: 'Windows 8',
 	version: '10.0'
@@ -53,7 +53,7 @@ var platforms = [{
 	platformName: 'iOS',
 	platformVersion: '10.0',
 	deviceName: 'iPhone 7 Simulator'
-}];
+}*/];
 
 // add properties to all platforms
 platforms.forEach((platform) => {
