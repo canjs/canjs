@@ -49,7 +49,7 @@
     "can-control": "3.0.7",
     "can-define": "1.0.17",
     "can-define-stream": "0.0.7",
-    "can-define-validate-validatejs": "0.0.2",
+    "can-define-validate-validatejs": "0.0.3",
     "can-ejs": "3.0.4",
     "can-event": "3.1.1",
     "can-fixture": "1.0.13",

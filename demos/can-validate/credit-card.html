@@ -24,25 +24,25 @@
 	<script type="text/stache" id="demo-html">
 		<form>
 			<div>
-				<label>Credit Card Number <small class="has-errors">{{formatErrors(testSet('card', card), 'object').card.join(', ')}}</small></label>
+				<label>Credit Card Number <small class="has-errors">{{formatErrors(this, 'card').join(', ')}}</small></label>
 				<input
-					class="form-control {{#if formatErrors(testSet('card', card), 'object').card.length}}has-errors{{/if}}"
+					class="form-control {{#if formatErrors(this, 'card').length}}has-errors{{/if}}"
 					type="text"
 					{($value)}="card"
 					placeholder="XXXX-XXXX-XXXX-XXXX">
 			</div>
 			<div>
-				<label>Expiration Month <small class="has-errors">{{formatErrors(testSet('month', month), 'object').month.join(', ')}}</small></label>
+				<label>Expiration Month <small class="has-errors">{{formatErrors(this, 'month').join(', ')}}</small></label>
 				<input
-					class="form-control {{#if formatErrors(testSet('month', month), 'object').month.length}}has-errors{{/if}}"
+					class="form-control {{#if formatErrors(this, 'month').length}}has-errors{{/if}}"
 					type="text"
 					{($value)}="month"
 					placeholder="XX">
 			</div>
 			<div>
-				<label>Expiration Year <small class="has-errors">{{formatErrors(testSet('year', year), 'object').year.join(', ')}}</small></label>
+				<label>Expiration Year <small class="has-errors">{{formatErrors(this, 'year').join(', ')}}</small></label>
 				<input
-					class="form-control {{#if formatErrors(testSet('year', year), 'object').year.length}}has-errors{{/if}}"
+					class="form-control {{#if formatErrors(this, 'year').length}}has-errors{{/if}}"
 					type="text"
 					{($value)}="year"
 					placeholder="XXXX">
@@ -57,9 +57,9 @@
 		var formatErrors = require("can-validate").formatErrors;
 		require("can-stache-converters");
 
-		stache.registerHelper('formatErrors', function (errors, format) {
-			errors = typeof errors === 'function' ? errors() : errors;
-			return formatErrors(errors, format);
+		stache.registerHelper('formatErrors', function (vm, key) {
+			var errors = formatErrors(vm.errors(key), 'object');
+			return errors ? errors[key]: [];
 		});
 
 		var CreditCard = DefineMap.extend({
