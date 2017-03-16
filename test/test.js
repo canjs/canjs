@@ -27,7 +27,7 @@ require('can-view-model/test/test');
 require('../view/node_lists/node_lists_test');
 require('../view/parser/parser_test');
 require('../view/scope/scope_test');
-// require('../view/autorender/autorender_test');
+require('../view/autorender/autorender_test');
 if (!System.isEnv('production')) {
 	System.import('can-simple-map/can-simple-map_test');
 }
@@ -47,7 +47,7 @@ require('../control/control_test');
 require('../list/list_test');
 require('../map/map_test');
 require('can-map-define/can-map-define_test');
-// require('can-view-href/test/test');
+require('can-view-href/test/test');
 require('can-map-backup/can-map-backup_test');
 require('can-validate-legacy/can-validate-test');
 require('../view/ejs/ejs_test');
