@@ -42,7 +42,19 @@ var Component = require("can/component/component");
 Component.extend({ ... });
 ```
 
-Use the same pattern for the other modules you are using.
+Use the same pattern for the other modules you are using. Be careful when declaring names for imported modules that share a similar name to native objects like Map.
+
+Instead of:
+
+```js
+import Map from 'can-map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+```
+
+Write:
+
+```js
+import CanMap from 'can-map';
+```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
 
@@ -225,6 +237,142 @@ If you were using `can.view.preload` then use [can-stache.registerPartial] inste
 stache.registerPartial("some-id", renderer);
 ```
 
+### Replace uses of `can.Construct.proxy`
+
+ The `can.Construct.proxy` method has been removed in favor of [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
+
+ Instead of:
+
+ ```js
+ this.proxy(randFunc)
+ ```
+
+ You should now do this:
+
+ ```js
+ randFunc.bind(this)
+ ```
+
+### `can.event`
+
+Some methods have been renamed in `can.event`.
+
+```js
+can.event.addEvent.call(el, 'click', function() {});
+can.event.removeEvent.call(el, 'click', function() {});
+```
+
+Becomes:
+
+```js
+can.event.addEventListener.call(el, 'click', function() {});
+can.event.removeEventListener.call(el, 'click', function() {});
+```
+
+### `can.batch`
+
+`trigger` has been renamed to `dispatch`.
+
+```js
+can.batch.trigger(myObj, 'myEvent');
+```
+
+Becomes:
+
+```js
+import canBatch from 'can-event/batch/batch';
+canBatch.dispatch(myObj, 'myEvent');
+```
+
+### `can.extend`
+
+This method has been split into two: a shallow and deep merge. Previously, passing `true` as the first parameter would do a deep merge. Now, you explicitly invoke the deep merge or shallow merge function.
+
+```js
+can.extend({}, { answer: 42 }); // shallow
+can.extend(true, {}, { answer: 42 }); // deep
+```
+
+Becomes:
+
+```js
+import assign from 'can-util/js/assign/assign';
+import deepAssign from 'can-util/js/deepAssign/deepAssign';
+assign({}, { answer: 42 }); // shallow
+deepAssign({}, { answer: 42 }); // deep
+```
+
+### `can.addClass`
+
+This method now requires the DOM element to be the context of function.
+
+Replace this:
+
+```js
+can.addClass(el, 'myClass');
+```
+
+With this:
+
+```js
+import className from 'can-util/dom/class-name/class-name';
+className.add.call(el, 'myClass');
+```
+
+### `can.append`
+
+This method now require the DOM element to be the context of function.
+
+Replace this:
+
+```js
+can.append(el, '<p></p>');
+```
+
+With this:
+
+```js
+import mutate from 'can-util/dom/mutate/mutate';
+mutate.append.call(el, '<p></p>');
+```
+
+### `can.data`
+
+This method now requires the DOM element to be the context of function. It also has a separate method for getting and setting data.
+
+Replace this:
+
+```js
+can.data(el, 'something', 'secret'); // set
+can.data(el, 'something'); // get
+```
+
+With this:
+
+```js
+import domData from 'can-util/dom/data/data';
+domData.set.call(el, 'something', 'secret');
+domData.get.call(el, 'something');
+```
+
+### String methods
+
+All string methods are grouped together now, so you only have to import the string utilities once.
+
+```js
+can.camelize('first-name');
+can.hyphenate('firstName');
+```
+
+Becomes:
+
+```js
+import string from 'can-util/js/string/string';
+
+string.camelize('first-name');
+string.hyphenate('firstName');
+```
+
 ### Use native Promises
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
@@ -405,6 +553,28 @@ var carOwner = new CarOwner();
 
 // This is observable!
 carOwner.favorite = new Car({ make: "Toyota" });
+```
+
+**Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
+
+```js
+var CanMap = require("can-map");
+
+var Person = CanMap.extend({
+  name: "Justin"
+});
+```
+
+This shorthand in `can-define/map/map` defines the [can-define.types type], not the initial value.
+
+Here’s the example above updated for `can-define/map/map`:
+
+```js
+var DefineMap = require("can-define/map/map");
+
+var Person = DefineMap.extend({
+  name: {value: "Justin"}
+});
 ```
 
 #### Remove use of `change` events
