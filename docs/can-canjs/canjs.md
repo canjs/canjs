@@ -137,6 +137,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-connect-feathers]** <small><%can-connect-feathers.package.version%></small> Create connections to a FeathersJS API server.
   - `npm install can-connect-feathers --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect-feathers" data-count-href="/canjs/can-connect-feathers/stargazers" data-count-api="/repos/canjs/can-connect-feathers#stargazers_count">Star</a>
+- **[can-connect-signalr]** <small><%can-connect-signalr.package.version%></small> Create connections to a FeathersJS API server.
+  - `npm install can-connect-signalr --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect-signalr" data-count-href="/canjs/can-connect-signalr/stargazers" data-count-api="/repos/canjs/can-connect-signalr#stargazers_count">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
@@ -162,12 +165,21 @@ render templates in script tags
 - **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
   - `npm install can-vdom --save`
   - <a class="github-button" href="https://github.com/canjs/can-vdom" data-count-href="/canjs/can-vdom/stargazers" data-count-api="/repos/canjs/can-vdom#stargazers_count">Star</a>
-- **[can-stream]** <small><%can-stream.package.version%></small> Convert observable values into streams
-  - `npm install can-stream --save`
-  - <a class="github-button" href="https://github.com/canjs/can-stream" data-count-href="/canjs/can-stream/stargazers" data-count-api="/repos/canjs/can-stream#stargazers_count">Star</a>
+- **[can-stream-kefir]** <small><%can-stream-kefir.package.version%></small> Convert observable values into streams
+  - `npm install can-stream-kefir --save`
+  - <a class="github-button" href="https://github.com/canjs/can-stream-kefir" data-count-href="/canjs/can-stream-kefir/stargazers" data-count-api="/repos/canjs/can-stream-kefir#stargazers_count">Star</a>
 - **[can-define-stream]** <small><%can-define-stream.package.version%></small> Define property values using streams
   - `npm install can-define-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-stream" data-count-href="/canjs/can-define-stream/stargazers" data-count-api="/repos/canjs/can-define-stream#stargazers_count">Star</a>
+- **[can-validate]** <small><%can-validate.package.version%></small> Validation tools and types definitions
+  - `npm install can-validate --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate" data-count-href="/canjs/can-validate/stargazers" data-count-api="/repos/canjs/can-validate#stargazers_count">Star</a>
+- **[can-validate-validatejs]** <small><%can-validate-validatejs.package.version%></small> Create validators with ValidateJS
+  - `npm install can-validate-validatejs --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate-validatejs" data-count-href="/canjs/can-validate-validatejs/stargazers" data-count-api="/repos/canjs/can-validate-validatejs#stargazers_count">Star</a>
+- **[can-define-validate-validatejs]** <small><%can-define-validate-validatejs.package.version%></small> Validation for DefineMaps using the ValidateJS library
+  - `npm install can-define-validate-validatejs --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define-validate-validatejs" data-count-href="/canjs/can-define-validate-validatejs/stargazers" data-count-api="/repos/canjs/can-define-validate-validatejs#stargazers_count">Star</a>
 
 
 </div>
@@ -260,7 +272,7 @@ __Ecosystem collection__
   "can-fixture-socket": "<%can-fixture-socket.package.version%>",
   "can-jquery": "<%can-jquery.package.version%>",
   "can-stache-converters": "<%can-stache-converters.package.version%>",
-  "can-stream": "<%can-stream.package.version%>",
+  "can-stream-kefir": "<%can-stream-kefir.package.version%>",
   "can-vdom": "<%can-vdom.package.version%>",
   "can-view-autorender": "<%can-view-autorender.package.version%>",
   "can-view-import": "<%can-view-import.package.version%>",

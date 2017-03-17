@@ -99,7 +99,7 @@ guide has instructions for how to create a production build.
 
 ## webpack and npm
 
-Install [can-core CanJS’s core modules] and Webpack (with `raw-loader`) with npm:
+Install [can-core CanJS’s core modules] and webpack (with `raw-loader`) with npm:
 
 ```
 npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
@@ -284,3 +284,13 @@ Another quick way to start locally is by loading CanJS from a CDN:
     </body>
     </html>
 @highlight 6-6
+
+## A note on Promises
+
+CanJS uses native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which means you might see the following error in Internet Explorer 9 or later:
+
+```
+'Promise' is undefined
+```
+
+You must include a Promise polyfill if you’re targeting browsers that do not have [native support](http://caniuse.com/#feat=promises). If you’re using [StealJS](http://stealjs.com/), [a Promise polyfill](https://github.com/stefanpenner/es6-promise) is included for you.
