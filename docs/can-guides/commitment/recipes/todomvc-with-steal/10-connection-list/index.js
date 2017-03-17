@@ -1,5 +1,5 @@
 // index.js
-var template = require("index.stache");
+var view = require("./index.stache");
 var DefineMap = require("can-define/map/");
 var Todo = require("~/models/todo");
 require("~/models/todos-fixture");
@@ -17,7 +17,7 @@ var appVM = window.appVM = new AppViewModel({
 	appName: "TodoMVC"
 });
 
-var frag = template(appVM);
+var frag = view(appVM);
 document.body.appendChild(frag);
 
 require("can-todomvc-test")(appVM);

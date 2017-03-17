@@ -1,5 +1,5 @@
 // index.js
-var view = require("index.stache");
+var view = require("./index.stache");
 var DefineMap = require("can-define/map/");
 var Todo = require("~/models/todo");
 var route = require("can-route");
