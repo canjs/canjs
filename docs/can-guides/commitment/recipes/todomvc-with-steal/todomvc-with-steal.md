@@ -225,9 +225,35 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 
 ### What you need to know
 
-- [DefineMap basics](https://drive.google.com/open?id=0Bx-kNqf-wxZeUmlrN2p0Yi1qUzg)
+- [DefineMap Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeUmlrN2p0Yi1qUzg)
+- [can-define/map/map.extend DefineMap.extend] defines a new `Type`.
+- The [can-define.types.type type] behavior defines a property's type like:
+
+  ```js
+  DefineMap.extend({
+      propertyName: {type: "number"}
+  })
+  ```
+
+- The [can-define.types.value] behavior defines a property's initial value like:
+
+  ```js
+  DefineMap.extend({
+      propertyName: {value: 3}
+  })
+  ```
+
+- Methods can be defined directly on the prototype like:
+
+  ```js
+  DefineMap.extend({
+      methodName: function(){}
+  })
+  ```
 
 ### The solution
+
+Update _models/todo.js_ to:
 
 @sourceref ./2-define-todo/todo.js
 
@@ -257,9 +283,40 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
 ### What you need to know
 
-- [DefineList basics](https://drive.google.com/open?id=0Bx-kNqf-wxZeRFUzclNhTlRjMDg)
+- [DefineList Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeRFUzclNhTlRjMDg)
+- [can-define/list/list.extend DefineList.extend] defines a new `ListType`.
+- The [can-define/list/list.prototype.wildcardItems] property defines the behavior of items in a list like:
+
+  ```js
+  DefineList.extend({
+      #: {type: ItemType}
+  })
+  ```
+
+- The [can-define.types.get] behavior defines observable computed properties like:
+
+  ```js
+  DefineMap.extend({
+      propertyName: {
+          get: function(){
+              return this.otherProperty;
+          }
+      }
+  })
+  ```
+
+- [can-define/list/list.prototype.filter] can be used to filter a list into a new list:
+
+  ```js
+  list = new ListType([...]);
+  list.filter(function(item){
+      return test(item);
+  })
+  ```
 
 ### The solution
+
+Update _models/todo.js_ to the following:
 
 @sourceref ./3-define-todo-list/todo.js
 @highlight 3,17-32,only
@@ -288,12 +345,28 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
 ### What you need to know
 
-- [can-stache basics](https://drive.google.com/open?id=0Bx-kNqf-wxZeSjVJMTRJdXRXcWs)
+- [Stache Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeSjVJMTRJdXRXcWs)
+- CanJS uses [can-stache](http://canjs.com/doc/can-stache.html) to render data in a template
+  and keep it live. Templates can be loaded with [steal-stache].
+
+  A [can-stache](http://canjs.com/doc/can-stache.html) template uses
+  [{{key}}](http://canjs.com/doc/can-stache.tags.escaped.html) magic tags to insert data into
+  the HTML output like:
+
+  ```html
+    {{something.name}}
+  ```
+- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
+- Use [{{#each value}}](http://canjs.com/doc/can-stache.helpers.each.html) to do looping in `can-stache`.
 
 ### The solution
 
+Update _index.js_ to the following:
+
 @sourceref ./4-render-todos/index.js
 @highlight 4,8-16,only
+
+Update _index.stache_ to the following:
 
 @sourceref ./4-render-todos/index.html
 @highlight 11-21,26,40,only
@@ -306,7 +379,12 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
 ### What you need to know
 
-- [can-stache-bindings basics](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+
+   ```html
+   <div ($click)="doSomething()"> ... </div>
+   ```
 
 ### The solution
 
@@ -321,7 +399,12 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
 ### What you need to know
 
-- [can-stache-bindings basics](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
+- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
+- Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input's `value` in sync:
+
+   ```html
+   <input  {($value)}="name"/>
+   ```
 
 ### The solution
 
@@ -364,7 +447,25 @@ QUnit.deepEqual(sorted, [
 
 ### What you need to know
 
-- [can-set](https://drive.google.com/open?id=0Bx-kNqf-wxZeV2lVNl9XanhHZ0k)
+- [The can-set Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeV2lVNl9XanhHZ0k)
+- [can-set] provides a way to describe the parameters used in the service layer.  You use it to create
+  a [can-set.Algebra] like:
+
+  ```js
+  var todoAlgebra = new set.Algebra(
+    set.props.boolean("completed"),
+    set.props.id("_id"),
+    set.props.offsetLimit("offset","limit")
+  );
+  ```
+
+  The algebra can then be used to perform comparisons between parameters like:
+
+  ```js
+  todoAlgebra.difference({}, {completed: true}) //-> {completed: false}
+  ```
+
+- Use [can-set.props set.props] to describe the behavior of your set parameters.
 
 ### The solution
 
@@ -380,7 +481,23 @@ npm install can-set --save
 
 ### What you need to know
 
-- [can-fixture](https://drive.google.com/open?id=0Bx-kNqf-wxZeekROYmxvTnUtWmM)
+- [The can-fixture Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeekROYmxvTnUtWmM)
+- [can-fixture] - is used to trap AJAX requests like:
+
+  ```js
+  fixture("/api/entities", function(request){
+    request.data.folderId //-> "1"
+
+    return {data: [...]}
+  })
+  ```
+
+- [can-fixture.store can-fixture.store] - can be used to automatically filter records if given a [can-set.Algebra].
+
+  ```js
+  var entities = [ .... ];
+  var entitiesStore = fixture.store( entities, entitiesAlgebra );
+  fixture("/api/entities/{id}", entitiesStore);
 
 ### The solution
 
@@ -394,9 +511,25 @@ Create _models/todos-fixture.js_ as follows:
 
 ## Connect the Todo model to the service layer (can-connect) ##
 
+### The problem
+
+- Decorate `Todo` with methods so it can get, create, updated, and delete todos at the `/api/todos` service.  Specifically:
+  - `Todo.getList()` which calls `GET /api/todos`
+  - `Todo.getList({id: 5})` which calls `GET /api/todos/5`
+  - `todo.save()` which calls `POST /api/todos` if `todo` doesn't have an `id` or `PUT /api/todos/{id}` if the `todo` has an id.
+  - `todo.delete()` which calls `DELETE /api/todos/5`
+
 ### What you need to know
 
-- [can-connect](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE)
+- [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Migrate 2 can-connect_.
+- [can-connect/can/base-map/base-map] can decorate a `DefineMap` with methods that connect it to a restful URL like:
+
+  ```js
+  baseMap({
+    Map: Type,
+    url: "URL"
+  })
+  ```
 
 ### The solution
 
@@ -411,6 +544,7 @@ npm install can-connect --save
 
 ### What you need to know
 
+- [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Important Interfaces_.
 - async getter
 
 ### The solution
@@ -440,6 +574,10 @@ npm install can-connect --save
 
 ## Create todos (can-component) ##
 
+### What you need to know
+
+- [Defining a can-component](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk)
+
 ### The solution
 
 ```
@@ -460,6 +598,10 @@ Update _index.stache_ to:
 @highlight 2,6,only
 
 ## Edit todo names (DefineMap) ##
+
+### What you need to know
+
+- Instantiating a component with [can-stache-bindings](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k).
 
 ### The solution
 
