@@ -542,17 +542,66 @@ npm install can-connect --save
 
 ## List todos from the service layer (can-connect use) ##
 
+
+## The problem
+
+Get all `todos` from the service layer using the "connected" `Todo` type.
+
 ### What you need to know
 
 - [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Important Interfaces_.
-- async getter
+- [can-connect/can/map/map.getList Type.getList] gets data using the
+  [can-connect/connection.getList connection's getList] and returns a
+  promise that resolves to the `Type.List` of instances:
+
+  ```js
+  Type.getList({}).then(function(list){
+
+  })
+  ```
+- An async [can-define.types.get getter] property behavior can be used
+  to "set" a property to an initial value:
+
+  ```js
+  property: {
+      get: function(lastSet, resolve){
+          SOME_ASYNC_METHOD( function callback(data) {
+              resolve(data);
+          });
+      }
+  }
+  ```
 
 ### The solution
 
 @sourceref ./10-connection-list/index.js
 @highlight 4-5,9-13,only
 
-## Toggling a todo's checkbox updates service layer
+## Toggling a todo's checkbox updates service layer (can-connect use) ##
+
+
+### The problem
+
+Update the service layer when a todo's completed status
+changes. Also, disable the checkbox while the update is happening.
+
+### What you need to know
+
+- Call [can-connect/can/map/map.prototype.save] to update a "connected"
+  `Map` instance:
+
+  ```
+  map.save();
+  ```
+
+  `save()` can also be called by an [can-stache-bindings.event] binding.
+
+- [can-connect/can/map/map.prototype.isSaving] returns true when `.save()`
+  has been called, but has not resolved yet.
+
+  ```
+  map.isSaving()
+  ```
 
 
 ### The solution
@@ -563,9 +612,27 @@ npm install can-connect --save
 
 ## Delete todos in the page (can-connect use) ##
 
+### The problem
+
+When a todo's __destroy__ button is clicked, we need to delete the
+todo on the server and remove the todo's element from the page. While
+the todo is being destroyed, add `destroying` to the todo's `<li>`'s `class`
+attribute.
+
 ### Things to know
 
-- isDestroying
+- The remaining parts of the [can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE), with an emphasis on how [can-connect/real-time/real-time] behavior works.
+- Delete a record on the server with [can-connect/can/map/map.prototype.destroy] like:
+  ```js
+  map.destroy()
+  ```
+
+- [can-connect/can/map/map.prototype.isDestroying] returns true when `.destroy()`
+  has been called, but has not resolved yet.
+
+  ```js
+  map.isDestroying()
+  ```
 
 ### The solution
 
@@ -574,9 +641,54 @@ npm install can-connect --save
 
 ## Create todos (can-component) ##
 
+### The problem
+
+Make it possible to create a todo, update the service layer
+and show the todo in the list of todos.
+
+This functionality should be encapsulated by a `<todo-create/>`
+custom element.
+
 ### What you need to know
 
-- [Defining a can-component](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk)
+- [The  can-component presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk) up to and including how to _define a component_.
+- A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
+
+  ```js
+  var Component = require("can-component");
+  var view = require("./template.stache");
+  var ViewModel = DefineMap.extend({
+    ...      
+  });
+
+  Component.extend({
+      tag: "some-component",
+      view: view,
+      ViewModel: ViewModel
+  });
+  ```
+
+- You can use `($enter)` to listen to when the user hits the __enter__ key.
+- The [can-define.types.ValueConstructor] behavior creates a default value by using `new Value` to initialize the value when
+a `DefineMap` property is read for the first time.
+
+  ```js
+  var Type = DefineMap.extend({
+      property: {value: Value}
+  })
+
+  var map = new Type();
+  map.property instanceof Value //-> true
+  ```
+
+- Use [can-view-import] to import a module from a template like:
+
+  ```
+  <can-import from="~/components/some-component/"/>
+  <some-component>
+  ```
+
+
 
 ### The solution
 
@@ -597,11 +709,43 @@ Update _index.stache_ to:
 @sourceref ./13-component-create/index.html
 @highlight 2,6,only
 
-## Edit todo names (DefineMap) ##
+## Edit todo names (can-stache-bindings) ##
+
+### The problem
+
+Make it possible to edit a `todos` name by
+double-clicking it's label which should reveal
+a _focused_ input element.  If the user hits
+the __enter__ key, the todo should be updated on the
+server.  If the input loses focus, it should go
+back to the default list view.
+
+This functionality should be encapsulated by a `<todo-list {todos}/>`
+custom element.  It should accept a `todos` property that
+is the list of todos that will be managed by the custom element.
+
 
 ### What you need to know
 
-- Instantiating a component with [can-stache-bindings](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k).
+- [The can-stache-bindings presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) on _data bindings_.
+
+- The [can-util/dom/attr/attr.special.focused] custom attribute can be used to specify when an element should be focused:
+
+  ```html
+  {$focused}="shouldBeFocused()"
+  ```
+
+- Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
+
+  ```
+  <some-component {name-in-component}="nameInScope"/>
+  ```
+
+- [can-stache/keys/this] can be used to get the current context in stache:
+
+  ```
+  <div ($click)="doSomethingWith(this)"/>
+  ```
 
 ### The solution
 
@@ -620,10 +764,38 @@ Update _index.stache_ to:
 
 ## Toggle all todos complete state (DefineMap setter) ##
 
+### The problem
+
+Make the "toggle all" checkbox work.  It should be
+unchecked if a single todo is unchecked and checked
+if all todos are checked.
+
+When the "toggle all" checkbox is changed, the
+application should update every todo to match
+the status of the "toggle all" checkbox.
+
+The "toggle all" checkbox should be disabled if a
+single todo is saving.
+
 ### What you need to know
 
-- `isSaving`
-- `{disabled}`
+- Using [can-define.types.set setters] and [can-define.types.get getters] a virtual property
+can be simulated like:
+
+  ```js
+  DefineMap.extend({
+      first: "string",
+      last: "string",
+      get fullName(){
+          return this.first + " " + this.last;
+      },
+      set fullName(newValue){
+          var parts = newValue.split(" ");
+          this.first = parts[0];
+          this.last = parts[1];
+      }
+  })
+  ```
 
 ### The solution
 
@@ -638,9 +810,61 @@ Update _index.stache_ to:
 
 ## Setup routing (can-route) ##
 
+Make it so that the following urls display the corresponding
+todos:
+
+ - `#!` or ` ` - All todos
+ - `#!active` - Only the incomplete todos
+ - `#!complete` - Only the completed todos
+
+Also, the _All_, _Active_, and _Completed_ buttons should
+link to those pages and a `class='selected'` property should
+be added if they represent the current page.
+
+
 ### What you need to know
 
-- stache/helpers
+- [can-route] is used to connect a `DefineMap`'s properties
+  to the URL.  This is done with [can-route.data] like:
+
+  ```js
+  route.data = new AppViewModel();
+  ```
+
+- [can-route] can create pretty routing rules.  For example,
+  if `#!login` should set the `page` property of the
+  `AppViewModel` to `"login"`, use `route()` like:
+
+  ```js
+  route("{page}");
+  ```
+
+- [can-route.ready] initializes the connection between the
+  url and the `AppViewModel`.  After you've created all
+  your application's pretty routing rules, call it like:
+
+  ```js
+  route.ready()
+  ```
+
+- The [can-stache/helpers/route] module provides helpers
+  that use [can-route].  
+
+  [can-stache.helpers.routeCurrent]
+  returns truthy if the current route matches its first parameters properties.
+
+  ```html
+  {{#if routeCurrent(page='login',true)}}
+    You are on the login page.
+  {{/if}}
+  ```
+
+  [can-stache.helpers.routeUrl] returns a url that will
+  set its first parameters properties:
+
+  ```
+  <a href="{{routeUrl page='login'}}">Login</a>
+  ```
 
 ### The solution
 
@@ -649,7 +873,7 @@ npm install can-route --save
 ```
 
 @sourceref ./16-routing/index.js
-@highlight 5,11-26,39-41,only
+@highlight 5,9,11-26,39-41,only
 
 @sourceref ./16-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
