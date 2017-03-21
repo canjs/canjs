@@ -135,10 +135,10 @@ label {
 .weather-widget .forecast .description.rain:before {
   content: "\e903";
 }
-.weather-widget .forecast .description.rain-snow:before {
+.weather-widget .forecast .description.rain-and-snow:before {
   content: "\e90c";
 }
-.weather-widget .forecast .description.scattered-rain:before {
+.weather-widget .forecast .description.scattered-showers:before {
   content: "\e90b";
 }
 .weather-widget .forecast .description.showers:before {
@@ -188,10 +188,10 @@ label {
   color: #A7CFFA;
 }
 .weather-widget .forecast .high-temp:before {
-  content: "↑";
+  content: "\2191";
   color: #FD6565;
 }
 .weather-widget .forecast .low-temp:before {
-  content: "↓";
+  content: "\2193";
   color: #23e0ae;
 }
