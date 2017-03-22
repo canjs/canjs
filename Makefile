@@ -7,6 +7,7 @@ publish-docs:
 	git add -f doc/
 	git add -f index.html
 	git add -f node_modules/can-*
+	git add -f node_modules/es6-promise
 	git add -f node_modules/steal
 	git add -f node_modules/steal-*
 	git add -f node_modules/when
