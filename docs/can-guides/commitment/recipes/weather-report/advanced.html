@@ -1,4 +1,4 @@
-<!-- SELECT * FROM geo.places WHERE text="(41.918563999999996,-87.693674)" -->
+<link href="https://fonts.googleapis.com/css?family=Dosis:300,400" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="weather-report.css">
 <script id="app-template" type="text/stache">
   <div class="weather-widget">
@@ -80,7 +80,7 @@ var geoStream = Kefir.stream(function(emitter){
 });
 
 
-var yqlURL = "http://query.yahooapis.com/v1/public/yql?";
+var yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 
 var WeatherViewModel = can.DefineMap.extend({
   userLocation: "string",
@@ -117,7 +117,7 @@ var WeatherViewModel = can.DefineMap.extend({
   places: {
     get: function(latSet, resolve){
       if(this.placesPromise) {
-        this.placesPromise.then(resolve)
+        this.placesPromise.then(resolve);
       }
     }
   },
