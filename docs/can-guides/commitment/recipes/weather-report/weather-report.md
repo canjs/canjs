@@ -11,7 +11,6 @@ The final widget looks like:
 
 <a class="jsbin-embed" href="https://jsbin.com/ruculey/embed?js,output">JS Bin on jsbin.com</a>
 
-
 To use the widget:
 
 1. __Enter__ a location (example: `Chicago`)
