@@ -9,19 +9,19 @@ CanJS 3.5.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
-1. __Enter__ a location (example: `Chicago`)
+1. __Enter__ a location (example: _Chicago_)
 2. If the location name isn’t unique, __click__ on the intended location.
 3. See the 10-day forecast for your selected city.
 
 __Start this tutorial by cloning the following JSBin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/saposu/1/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/fudakiz/1/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype CSS which is useful for
+This JSBin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -37,7 +37,7 @@ The following sections are broken down into:
 
 Get the basic setup for a CanJS app (in a JSBin) setup by:
 
-1.  Creating a template that outputs `<div class="weather-widget">WEATHER WIDGET</div>`.
+1.  Creating a template that outputs the pre-constructed HTML.
 2.  Defining a `WeatherViewModel` constructor function.
 3.  Rendering the template with an instance of `WeatherViewModel`.
 4.  Inserting the result of the rendered template into the page.
@@ -75,16 +75,43 @@ Get the basic setup for a CanJS app (in a JSBin) setup by:
 
 ### The solution
 
-Update the `HTML` tab to include a template:
+Update the `HTML` tab to wrap the template in a `script` tag:
 
 ```html
 <script id="app-template" type="text/stache">
   <div class="weather-widget">
-    WEATHER WIDGET
+    <div class="location-entry">
+      <label for="location">Enter Your location:</label>
+      <input id="location" type='text'/>
+    </div>
+
+    <p class="loading-message">
+      Loading places…
+    </p>
+
+    <div class="location-options">
+      <label>Pick your place:</label>
+      <ul>
+        <li>Some Place</li>
+        <li>Another Place</li>
+      </ul>
+    </div>
+
+    <div class="forecast">
+      <h1>10-day Chicago Weather Forecast</h1>
+      <ul>
+        <li>
+          <span class='date'>Today</span>
+          <span class='description scattered-showers'>Scattered Showers</span>
+          <span class='high-temp'>100<sup>&deg;</sup></span>
+          <span class='low-temp'>-10<sup>&deg;</sup></span>
+        </li>
+      </ul>
+    </div>
   </div>
 </script>
 ```
-@highlight 2-4
+@highlight 1,32,only
 
 Update the `JS` tab to:
 
@@ -156,12 +183,33 @@ Update the template in the `HTML` tab to:
       <input id="location" {^$value}="location" type="text"/>
     </div>
 
-	Entered location: {{location}}
+    <p class="loading-message">
+      Loading places…
+    </p>
 
+    <div class="location-options">
+      <label>Pick your place:</label>
+      <ul>
+        <li>Some Place</li>
+        <li>Another Place</li>
+      </ul>
+    </div>
+
+    <div class="forecast">
+      <h1>10-day {{location}} Weather Forecast</h1>
+      <ul>
+        <li>
+          <span class='date'>Today</span>
+          <span class='description scattered-showers'>Scattered Showers</span>
+          <span class='high-temp'>100<sup>&deg;</sup></span>
+          <span class='low-temp'>-10<sup>&deg;</sup></span>
+        </li>
+      </ul>
+    </div>
   </div>
 </script>
 ```
-@highlight 3-8
+@highlight 5,21,only
 
 
 Update the `JS` tab to:
@@ -259,7 +307,7 @@ Update the template in the `HTML` tab to:
       <input id="location" {^$value}="location" type="text"/>
     </div>
 
-	{{#if placesPromise.isPending}}
+    {{#if placesPromise.isPending}}
       <p class="loading-message">
         Loading places…
       </p>
@@ -270,17 +318,29 @@ Update the template in the `HTML` tab to:
         <label>Pick your place:</label>
         <ul>
           {{#each placesPromise.value}}
-            <li>{{name}}, {{admin1.content}},
-			    {{country.code}} ({{placeTypeName.content}})</li>
+            <li>
+              {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+            </li>
           {{/each}}
         </ul>
       </div>
-	{{/if}}
+    {{/if}}
 
+    <div class="forecast">
+      <h1>10-day {{location}} Weather Forecast</h1>
+      <ul>
+        <li>
+          <span class='date'>Today</span>
+          <span class='description scattered-showers'>Scattered Showers</span>
+          <span class='high-temp'>100<sup>&deg;</sup></span>
+          <span class='low-temp'>-10<sup>&deg;</sup></span>
+        </li>
+      </ul>
+    </div>
   </div>
 </script>
 ```
-@highlight 8-24
+@highlight 8,12,14,18,19,20,21,22,25,only
 
 Update the `JS` tab to:
 
@@ -394,7 +454,7 @@ Update the template in the `HTML` tab to:
       <input id="location" {^$value}="location" type="text"/>
     </div>
 
-	{{#if placesPromise.isPending}}
+    {{#if placesPromise.isPending}}
       <p class="loading-message">
         Loading places…
       </p>
@@ -405,23 +465,31 @@ Update the template in the `HTML` tab to:
         <label>Pick your place:</label>
         <ul>
           {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
-			    {{country.code}} ({{placeTypeName.content}})</li>
+            <li ($click)="../pickPlace(this)">
+              {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+            </li>
           {{/each}}
         </ul>
       </div>
-	{{/if}}
+    {{/if}}
 
     {{#if place}}
       <div class="forecast">
-        <h1>10 day {{place.name}} Weather Forecast</h1>
+        <h1>10-day {{place.name}} Weather Forecast</h1>
+        <ul>
+          <li>
+            <span class='date'>Today</span>
+            <span class='description scattered-showers'>Scattered Showers</span>
+            <span class='high-temp'>100<sup>&deg;</sup></span>
+            <span class='low-temp'>-10<sup>&deg;</sup></span>
+          </li>
+        </ul>
       </div>
     {{/if}}
-
   </div>
 </script>
 ```
-@highlight 19,26-30,only
+@highlight 19,27,29,39,only
 
 Update the `JS` tab to:
 
@@ -502,52 +570,52 @@ Update the template in the `HTML` tab to:
 2. Use the `toClassName` method to convert the forecast’s `text` into a `className` value that
    will be matched by the stylesheet.
 
-```html
-<script id="app-template" type="text/stache">
-  <div class="weather-widget">
-    <div class="location-entry">
-      <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
-    </div>
+ ```html
+ <script id="app-template" type="text/stache">
+   <div class="weather-widget">
+     <div class="location-entry">
+       <label for="location">Enter Your location:</label>
+       <input id="location" {^$value}="location" type="text"/>
+     </div>
 
-	{{#if placesPromise.isPending}}
-      <p class="loading-message">
-        Loading places…
-      </p>
-    {{/if}}
+     {{#if placesPromise.isPending}}
+       <p class="loading-message">
+         Loading places…
+       </p>
+     {{/if}}
 
-    {{#if placesPromise.isResolved}}
-      <div class="location-options">
-        <label>Pick your place:</label>
-        <ul>
-          {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
-			    {{country.code}} ({{placeTypeName.content}})</li>
-          {{/each}}
-        </ul>
-      </div>
-	{{/if}}
+     {{#if placesPromise.isResolved}}
+       <div class="location-options">
+         <label>Pick your place:</label>
+         <ul>
+           {{#each placesPromise.value}}
+             <li ($click)="../pickPlace(this)">
+               {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+             </li>
+           {{/each}}
+         </ul>
+       </div>
+     {{/if}}
 
-    {{#if place}}
-      <div class="forecast">
-        <h1>10-day {{place.name}} Weather Forecast</h1>
-        <ul>
-          {{#each forecastPromise.value}}
-            <li>
-              <span class='date'>{{date}}</span>
-              <span class='description {{toClassName(text)}}'>{{text}}</span>
-              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-    {{/if}}
-
-  </div>
-</script>
-```
-@highlight 29-38,only
+     {{#if place}}
+       <div class="forecast">
+         <h1>10-day {{place.name}} Weather Forecast</h1>
+         <ul>
+           {{#each forecastPromise.value}}
+             <li>
+               <span class='date'>{{date}}</span>
+               <span class='description {{toClassName(text)}}'>{{text}}</span>
+               <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
+               <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+             </li>
+           {{/each}}
+         </ul>
+       </div>
+     {{/if}}
+   </div>
+ </script>
+ ```
+ @highlight 31,33,34,35,36,38,only
 
 Update the `JS` tab to:
 
@@ -771,27 +839,30 @@ Update the template in the `HTML` tab to:
       <input id="location" {^$value}="location" type="text"/>
     </div>
 
-	{{#if placesPromise.isPending}}
+    {{#if placesPromise.isPending}}
       <p class="loading-message">
         Loading places…
       </p>
     {{/if}}
 
-    {{#if showPlacePicker}}
-      <div class="location-options">
-        <label>Pick your place:</label>
-        <ul>
-          {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
-			    {{country.code}} ({{placeTypeName.content}})</li>
-          {{/each}}
-        </ul>
-      </div>
-	{{/if}}
+    {{#if placesPromise.isResolved}}
+      {{#if showPlacePicker}}
+        <div class="location-options">
+          <label>Pick your place:</label>
+          <ul>
+            {{#each placesPromise.value}}
+              <li ($click)="../pickPlace(this)">
+                {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+    {{/if}}
 
     {{#if place}}
       <div class="forecast">
-        <h1>10 day {{place.name}} Weather Forecast</h1>
+        <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
           {{#each forecastPromise.value}}
             <li>
@@ -804,11 +875,10 @@ Update the template in the `HTML` tab to:
         </ul>
       </div>
     {{/if}}
-
   </div>
 </script>
 ```
-@highlight 14,only
+@highlight 15,26,only
 
 Update the `JS` tab to:
 
