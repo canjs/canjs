@@ -59,7 +59,7 @@ import CanMap from 'can-map';
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
 
 - `can.autorender` — `can/view/autorender/autorender`
-- `can.batch` - `can/event/batch/batch`
+- `can.batch` — `can/event/batch/batch`
 - `can.bindings` — `can/view/bindings/bindings`
 - `can.Component` — `can/component/component`
 - `can.compute` — `can/compute/compute`
@@ -70,7 +70,7 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 - `can.ejs` — `can/view/ejs/ejs`
 - `can.event` — `can/event/event`
 - `can.fixture` — `can/util/fixture`
-- `can.isFunction` - `can/util/js/is-function/is-function`
+- `can.isFunction` — `can/util/js/is-function/is-function`
 - `can.LazyMap` — `can/map/lazy/lazy`
 - `can.List` — `can/list/list`
 - `can.Map` — `can/map/map`
@@ -148,23 +148,21 @@ Instead of:
 import template from "./todo.stache";
 Component.extend({
 	tag: "some-component",
-	ViewModel: ...,
-	leakScope: true,
 	template: template
 });
 ```
+@highlight 4
 
-You should now do this:
+You should write:
 
 ```js
 import view from "./todo.stache";
 Component.extend({
 	tag: "some-component",
-	ViewModel: ...,
-	leakScope: true,
 	view: view
 });
 ```
+@highlight 4
 
 ## Minimal migration path
 
