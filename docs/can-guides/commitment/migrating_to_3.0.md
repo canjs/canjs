@@ -59,6 +59,7 @@ import CanMap from 'can-map';
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
 
 - `can.autorender` — `can/view/autorender/autorender`
+- `can.batch` - `can/event/batch/batch`
 - `can.bindings` — `can/view/bindings/bindings`
 - `can.Component` — `can/component/component`
 - `can.compute` — `can/compute/compute`
@@ -69,6 +70,7 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 - `can.ejs` — `can/view/ejs/ejs`
 - `can.event` — `can/event/event`
 - `can.fixture` — `can/util/fixture`
+- `can.isFunction` - `can/util/js/is-function/is-function`
 - `can.LazyMap` — `can/map/lazy/lazy`
 - `can.List` — `can/list/list`
 - `can.Map` — `can/map/map`
@@ -99,7 +101,7 @@ var $ = require("jquery");
 var body = $('body');
 ```
 
-### Set `leakScope` on components
+### Set `leakScope` in components
 
 CanJS 2.2 introduced [can-component.prototype.leakScope leakScope: false] as a property on a [can-component]. This prevents values in parent templates from leaking into your component’s template. In CanJS 3, **leakScope** is now `false` by default.
 
@@ -135,6 +137,34 @@ Component.extend({
 });
 ```
 @highlight 4
+
+### Replace `template` with `view` in components
+
+The `template` property name has been deprecated in favor of `view`.
+
+Instead of:
+
+```js
+import template from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	ViewModel: ...,
+	leakScope: true,
+	template: template
+});
+```
+
+You should now do this:
+
+```js
+import view from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	ViewModel: ...,
+	leakScope: true,
+	view: view
+});
+```
 
 ## Minimal migration path
 
@@ -253,6 +283,52 @@ stache.registerPartial("some-id", renderer);
  randFunc.bind(this)
  ```
 
+ ### Replace uses of `can.batch`
+
+ `can.batch` has been moved to the `can-event` module.
+
+ Instead of:
+
+ ```js
+ can.batch.method();
+ ```
+
+You should now do this:
+
+```js
+import canBatch from 'can-event/batch/batch';
+canBatch.method();
+```
+
+The `trigger` method has also been renamed to `dispatch`.
+
+ ```js
+ can.batch.trigger(myObj, 'myEvent');
+ ```
+
+ Becomes:
+
+ ```js
+ canBatch.dispatch(myObj, 'myEvent');
+ ```
+
+ ### Replace uses of `can.isFunction`
+
+ `can.isFunction` has been moved to the `can-util` module.
+
+ Instead of:
+
+ ```js
+ can.isFunction(func);
+ ```
+
+ You should now do this:
+
+ ```js
+ import isFunction from 'can/util/js/is-function/is-function';
+ isFunction(func);
+ ```
+
 ### `can.event`
 
 Some methods have been renamed in `can.event`.
@@ -267,21 +343,6 @@ Becomes:
 ```js
 can.event.addEventListener.call(el, 'click', function() {});
 can.event.removeEventListener.call(el, 'click', function() {});
-```
-
-### `can.batch`
-
-`trigger` has been renamed to `dispatch`.
-
-```js
-can.batch.trigger(myObj, 'myEvent');
-```
-
-Becomes:
-
-```js
-import canBatch from 'can-event/batch/batch';
-canBatch.dispatch(myObj, 'myEvent');
 ```
 
 ### `can.extend`
