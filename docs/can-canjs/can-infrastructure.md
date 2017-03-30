@@ -113,7 +113,7 @@ The JS utilities consist of:
 - Environment detection helpers: [can-util/js/is-browser-window/is-browser-window], [can-util/js/is-node/is-node], [can-util/js/is-web-worker/is-web-worker].
 - Environment identification helpers: [can-util/js/global/global], [can-util/js/import/import], [can-util/js/base-url/base-url].
 - Polyfills - [can-util/js/set-immediate/set-immediate].
-- URL helpers: [can-param], [can-util/js/deparam/deparam], [can-util/js/join-uris/join-uris].
+- URL helpers: [can-param], [can-deparam], [can-util/js/join-uris/join-uris].
 - Diffing helpers: [can-util/js/diff/diff], [can-util/js/diff-object/diff-object].
 - String helpers: [can-util/js/string/string], [can-util/js/string-to-any/string-to-any].
 - Object identification helpers: [can-util/js/cid/cid].
