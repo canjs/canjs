@@ -113,9 +113,6 @@ _Utility libraries that power the core collection._
 - **[can-cid]** <small><%can-cid.package.version%></small> Get a unique identifier for objects
   - `npm install can-cid --save`
   - <a class="github-button" href="https://github.com/canjs/can-cid" data-count-href="/canjs/can-cid/stargazers" data-count-api="/repos/canjs/can-cid#stargazers_count">Star</a>
-- **[can-param]** <small><%can-param.package.version%></small> Serialize an array or object into a query string
-  - `npm install can-param --save`
-  - <a class="github-button" href="https://github.com/canjs/can-param" data-count-href="/canjs/can-param/stargazers" data-count-api="/repos/canjs/can-param#stargazers_count">Star</a>
 - **[can-types]** <small><%can-types.package.version%></small> A stateful container for CanJS type information
   - `npm install can-types --save`
   - <a class="github-button" href="https://github.com/canjs/can-types" data-count-href="/canjs/can-types/stargazers" data-count-api="/repos/canjs/can-types#stargazers_count">Star</a>
