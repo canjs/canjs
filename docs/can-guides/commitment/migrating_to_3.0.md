@@ -67,6 +67,7 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 - `can.Control` — `can/control/control`
 - `can.Deferred` — `can/util/deferred`
 - `can.define` — `can/map/define`
+- `can.deparam` — `can/util/string/deparam/deparam`
 - `can.ejs` — `can/view/ejs/ejs`
 - `can.event` — `can/event/event`
 - `can.fixture` — `can/util/fixture`
@@ -542,6 +543,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/route/pushstate/pushstate` — [can-route-pushstate]
 - `can/route/route` — [can-route]
 - `can/util/fixture` — [can-fixture]
+- `can/util/string/deparam/deparam` — [can-deparam]
 - `can/util/util` — [can-util]
 - `can/view/autorender/autorender` — [can-view-autorender]
 - `can/view/callbacks/callbacks` — [can-view-callbacks]
