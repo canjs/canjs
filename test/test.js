@@ -13,6 +13,7 @@ require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
+require('can-deparam/can-deparam-test');
 require('can-param/can-param-test');
 require('../event/event_test');
 if (!System.isEnv('production')) {
