@@ -75,7 +75,7 @@
     "can-util": "3.3.2",
     "can-validate": "1.0.2",
     "can-validate-legacy": "1.0.2",
-    "can-validate-validatejs": "0.0.4",
+    "can-validate-validatejs": "0.0.6",
     "can-vdom": "3.0.2",
     "can-view-autorender": "3.0.4",
     "can-view-callbacks": "3.0.6",
