@@ -139,32 +139,6 @@ Component.extend({
 ```
 @highlight 4
 
-### Replace `template` with `view` in components
-
-The `template` property name has been deprecated in favor of `view`.
-
-Instead of:
-
-```js
-import template from "./todo.stache";
-Component.extend({
-	tag: "some-component",
-	template: template
-});
-```
-@highlight 4
-
-You should write:
-
-```js
-import view from "./todo.stache";
-Component.extend({
-	tag: "some-component",
-	view: view
-});
-```
-@highlight 4
-
 ## Minimal migration path
 
 If you are already using `can` through npm, simply run the following command to install the latest version:
@@ -494,6 +468,32 @@ If you’re using StealJS 1, you also need to add `steal-stache` to the `plugins
   }
 }
 ```
+
+### Replace `template` with `view` in components
+
+The `template` property name has been deprecated in favor of `view`.
+
+Instead of:
+
+```js
+import template from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	template: template
+});
+```
+@highlight 4
+
+You should write:
+
+```js
+import view from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	view: view
+});
+```
+@highlight 4
 
 ## Modernized migration path
 
