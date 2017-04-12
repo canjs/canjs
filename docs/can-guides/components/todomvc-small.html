@@ -179,7 +179,7 @@ can.Component.extend({
 			el.children('.edit').focus();
 		},
 		updateTodo: function (todo, el) {
-			var value = str.trim(el.val());
+			var value = String.prototype.trim(el.val());
 
 			if (value === '') {
 				todo.destroy();
@@ -191,7 +191,7 @@ can.Component.extend({
 			}
 		},
 		createTodo: function(context, el){
-			var value = str.trim(el.val());
+			var value = String.prototype.trim(el.val());
 			if ( value !== '' ) {
 				var todo = new Todo({
 					text : value,
