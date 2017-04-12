@@ -331,7 +331,7 @@ Becomes:
 
 ```js
 import assign from 'can-util/js/assign/assign';
-import deepAssign from 'can-util/js/deepAssign/deepAssign';
+import deepAssign from 'can-util/js/deep-assign/deep-assign';
 assign({}, { answer: 42 }); // shallow
 deepAssign({}, { answer: 42 }); // deep
 ```
