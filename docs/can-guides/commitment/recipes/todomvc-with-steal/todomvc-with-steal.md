@@ -732,12 +732,13 @@ custom element.
 a `DefineMap` property is read for the first time.
 
   ```js
+  var SubType = DefineMap.extend({})
   var Type = DefineMap.extend({
-      property: {value: Value}
+      property: {Value: SubType}
   })
 
   var map = new Type();
-  map.property instanceof Value //-> true
+  map.property instanceof SubType //-> true
   ```
 
 - Use [can-view-import] to import a module from a template like:
