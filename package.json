@@ -108,7 +108,7 @@
     "steal-qunit": "^0.1.1",
     "steal-stache": "^3.0.5",
     "steal-tools": "^0.16.8",
-    "testee": "^0.3.0",
+    "testee": "^0.4.0",
     "wd": "^1.0.0"
   },
   "demos": [
