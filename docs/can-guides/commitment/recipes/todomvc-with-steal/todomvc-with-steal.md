@@ -575,7 +575,7 @@ Create _models/todos-fixture.js_ as follows:
   - `Todo.getList()` which calls `GET /api/todos`
   - `Todo.getList({id: 5})` which calls `GET /api/todos/5`
   - `todo.save()` which calls `POST /api/todos` if `todo` doesn't have an `id` or `PUT /api/todos/{id}` if the `todo` has an id.
-  - `todo.delete()` which calls `DELETE /api/todos/5`
+  - `todo.destroy()` which calls `DELETE /api/todos/5`
 
 ### What you need to know
 
@@ -585,7 +585,8 @@ Create _models/todos-fixture.js_ as follows:
   ```js
   baseMap({
     Map: Type,
-    url: "URL"
+    url: "URL",
+    algebra: algebra
   })
   ```
 
