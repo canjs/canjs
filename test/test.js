@@ -60,7 +60,10 @@ require('can-connect-signalr/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
-
+require('can-stream');
+require('can-stream-kefir');
+require('can-define-stream');
+require('can-define-stream-kefir');
 
 // Integration tests
 require('../docs/can-guides/experiment/todomvc/test');

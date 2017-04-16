@@ -14,3 +14,5 @@ test/builders/steal-tools/bundle/dist/
 test/builders/browserify/out.js
 _backup/
 /index.html
+.vscode/
+npm-debug.log
