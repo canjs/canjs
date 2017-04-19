@@ -179,9 +179,9 @@ can.Component.extend({
 			el.children('.edit').focus();
 		},
 		updateTodo: function (todo, el) {
-			var value = String.prototype.trim(el.val());
+			var value = String.prototype.trim.call(el.val());
 
-			if (value === '') {
+			if (value === '' || value === null || value === undefined) {
 				todo.destroy();
 			} else {
 				todo.attr({
