@@ -70,7 +70,7 @@
     "can-stache": "3.0.20",
     "can-stache-bindings": "3.0.13",
     "can-stache-converters": "3.0.7",
-    "can-stream-kefir": "0.1.2",
+    "can-stream-kefir": "0.2.0",
     "can-types": "1.0.4",
     "can-util": "3.3.2",
     "can-validate": "1.0.2",
