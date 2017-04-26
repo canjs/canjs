@@ -1,4 +1,4 @@
-@page guides/recipes/simple-weather-report Weather Report Guide (Simple)
+@page guides/recipes/weather-report-simple Weather Report Guide (Simple)
 @parent guides/recipes
 
 @description This guide walks you through building a simple weather report
