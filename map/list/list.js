@@ -1,6 +1,6 @@
 steal('can/util', 'can/map', 'can/list', 'can/compute', function (can) {
 	can.extend(can.List.prototype, {
-		filter: function (callback) {
+		filter: function (callback, thisArg) {
 			// The filtered list
 			var filtered = new this.constructor();
 			var self = this;
@@ -20,7 +20,7 @@ steal('can/util', 'can/map', 'can/list', 'can/compute', function (can) {
 				};
 				// a can.compute that executes the callback
 				var compute = can.compute(function () {
-					return callback(element, self.indexOf(element), self);
+					return callback.call(thisArg || self, element, self.indexOf(element), self);
 				});
 				// Update the filtered list on any compute change
 				compute.bind('change', binder);
@@ -48,14 +48,14 @@ steal('can/util', 'can/map', 'can/list', 'can/compute', function (can) {
 			this.forEach(generator);
 			return filtered;
 		},
-		map: function (callback) {
+		map: function (callback, thisArg) {
 			var mapped = new can.List();
 			var self = this;
 			// Again, lets run a generator function
 			var generator = function (element, index) {
 				// The can.compute for the mapping
 				var compute = can.compute(function () {
-					return callback(element, index, self);
+					return callback.call(thisArg || self, element, index, self);
 				});
 				compute.bind('change', function (ev, val) {
 					// On change, replace the current value with the new one
