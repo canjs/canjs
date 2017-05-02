@@ -366,7 +366,31 @@ steal("can/util", "can/list", "can/test", "can/compute", "steal-qunit", function
 			}, 10 );
 		}));
 	});
-	
-	
-	
+
+	test('filter with context', function(){
+		var l = new can.List([{id: 1}]);
+		var context = {};
+		var contextWasCorrect = false;
+
+		l.filter(function(){
+			contextWasCorrect = (this === context);
+			return true;
+		}, context);
+
+		equal(contextWasCorrect, true, "context was correctly passed");
+	});
+
+	test('map with context', function(){
+		var l = new can.List([{id: 1}]);
+		var context = {};
+		var contextWasCorrect = false;
+
+		l.map(function(){
+			contextWasCorrect = (this === context);
+			return true;
+		}, context);
+
+		equal(contextWasCorrect, true, "context was correctly passed");
+	});
+
 });

@@ -859,7 +859,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 				self = this,
 				filtered;
 			this.each(function(item, index, list){
-				filtered = callback.call( thisArg | self, item, index, self);
+				filtered = callback.call( thisArg || self, item, index, self);
 				if(filtered){
 					filteredList.push(item);
 				}
@@ -870,7 +870,7 @@ steal("can/util", "can/map", "can/map/bubble.js","can/map/map_helpers.js",functi
 			var filteredList = new can.List(),
 				self = this;
 			this.each(function(item, index, list){
-				var mapped = callback.call( thisArg | self, item, index, self);
+				var mapped = callback.call( thisArg || self, item, index, self);
 				filteredList.push(mapped);
 
 			});
