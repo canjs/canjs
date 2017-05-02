@@ -1,0 +1,144 @@
+<link href="https://fonts.googleapis.com/css?family=Dosis:300,400" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../weather-report.css">
+<!-- eedfc9671818be40 -->
+<script id="app-template" type="text/stache">
+  <div class="weather-widget">
+    <div class="location-entry">
+      <label for="location">Enter Your location:</label>
+      <input id="location" {^$value}="location" type="text"/>
+    </div>
+
+	{{#if placesPromise.isPending}}
+      <p class="loading-message">
+        Loading places…
+      </p>
+    {{/if}}
+
+    {{#if showPlacePicker}}
+      <div class="location-options">
+        <label>Pick your place:</label>
+        <ul>
+          {{#each placesPromise.value}}
+            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
+			    {{country.code}} ({{placeTypeName.content}})</li>
+          {{/each}}
+        </ul>
+      </div>
+	{{/if}}
+
+    {{#if place}}
+      <div class="forecast">
+        <h1>10 day {{place.name}} Weather Forecast</h1>
+        <ul>
+          {{#each forecastPromise.value}}
+            <li>
+              <span class='date'>{{date}}</span>
+              <span class='description {{toClassName(text)}}'>{{text}}</span>
+              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
+              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    {{/if}}
+
+  </div>
+</script>
+<script src="https://cdn.jsdelivr.net/kefir/3.6.0/kefir.js"></script>
+<script>
+  steal = {
+    instantiated: {
+      "kefir" : Kefir
+    }
+  }
+</script>
+<script src="../../../../../../node_modules/steal/steal.js" main="@empty">
+var can = require("can/all");
+can.defineStreamKefir = require("can-define-stream-kefir");
+var Kefir = require("kefir");
+
+
+
+var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+
+var WeatherViewModel = can.DefineMap.extend({
+  location: {
+    type: "string",
+    set: function(){
+      this.place = null;
+    }
+  },
+  get placesPromise(){
+    if(this.location && this.location.length > 2) {
+	  return fetch(
+		  yqlURL+
+		  can.param({
+	        q: 'select * from geo.places where text="'+this.location+'"',
+	        format: "json"
+	      })
+	  ).then(function(response){
+		  return response.json();
+	  }).then(function(data){
+		  console.log(data);
+          if(Array.isArray(data.query.results.place)) {
+            return data.query.results.place;
+          } else {
+            return [data.query.results.place];
+          }
+	  });
+    }
+  },
+  places: {
+    get: function(latSet, resolve){
+      if(this.placesPromise) {
+        this.placesPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker(){
+    return !this.place && this.places && this.places.length > 1;
+  },
+  place: {
+    type: "any",
+    get: function(lastSet){
+      if(lastSet) {
+        return lastSet;
+      } else {
+        if(this.places && this.places.length === 1) {
+          return this.places[0];
+        }
+      }
+    }
+  },
+  pickPlace: function(place){
+    this.place = place;
+  },
+  get forecastPromise(){
+    if( this.place ) {
+	  return fetch(
+  		  yqlURL+
+  		  can.param({
+  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
+  	        format: "json"
+  	      })
+  	  ).then(function(response){
+  		  return response.json();
+  	  }).then(function(data){
+        console.log("forecast data", data);
+        var forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text){
+	return text.toLowerCase().replace(/ /g, "-");
+  }
+});
+
+var vm = new WeatherViewModel();
+
+var template = can.stache.from("app-template");
+var frag = template( vm );
+document.body.appendChild(frag);
+</script>
