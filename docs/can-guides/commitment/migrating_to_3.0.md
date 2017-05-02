@@ -67,6 +67,7 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 - `can.Control` — `can/control/control`
 - `can.Deferred` — `can/util/deferred`
 - `can.define` — `can/map/define`
+- `can.deparam` — `can/util/string/deparam/deparam`
 - `can.ejs` — `can/view/ejs/ejs`
 - `can.event` — `can/event/event`
 - `can.fixture` — `can/util/fixture`
@@ -138,32 +139,6 @@ Component.extend({
 ```
 @highlight 4
 
-### Replace `template` with `view` in components
-
-The `template` property name has been deprecated in favor of `view`.
-
-Instead of:
-
-```js
-import template from "./todo.stache";
-Component.extend({
-	tag: "some-component",
-	template: template
-});
-```
-@highlight 4
-
-You should write:
-
-```js
-import view from "./todo.stache";
-Component.extend({
-	tag: "some-component",
-	view: view
-});
-```
-@highlight 4
-
 ## Minimal migration path
 
 If you are already using `can` through npm, simply run the following command to install the latest version:
@@ -211,7 +186,7 @@ Component.extend({
 	tag: "my-panel",
 
 	events: {
-		"beforeremove": function(){
+		"{element} beforeremove": function(){
 			canViewModel(this.element.parentNode).removePanel(this.viewModel);
 		}
 	}
@@ -494,6 +469,32 @@ If you’re using StealJS 1, you also need to add `steal-stache` to the `plugins
 }
 ```
 
+### Replace `template` with `view` in components
+
+The `template` property name has been deprecated in favor of `view`.
+
+Instead of:
+
+```js
+import template from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	template: template
+});
+```
+@highlight 4
+
+You should write:
+
+```js
+import view from "./todo.stache";
+Component.extend({
+	tag: "some-component",
+	view: view
+});
+```
+@highlight 4
+
 ## Modernized migration path
 
 CanJS 3 is divided into separate npm packages. This allows us to more quickly update parts of CanJS without affecting other functionality.
@@ -542,6 +543,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/route/pushstate/pushstate` — [can-route-pushstate]
 - `can/route/route` — [can-route]
 - `can/util/fixture` — [can-fixture]
+- `can/util/string/deparam/deparam` — [can-deparam]
 - `can/util/util` — [can-util]
 - `can/view/autorender/autorender` — [can-view-autorender]
 - `can/view/callbacks/callbacks` — [can-view-callbacks]
