@@ -30,7 +30,7 @@ any of its items are changed:
 
 ```
 var cart = new can.List([
-	{ title: 'Juice', price: 3.05 }
+	{ title: 'Juice', price: 3.05 },
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Bread', price: 4.00 }
 ]);
@@ -44,7 +44,7 @@ And it will keep sort order when items are pushed, unshifted, or spliced into th
 
 ```
 var cart = new can.List([
-	{ title: 'Juice', price: 3.05 }
+	{ title: 'Juice', price: 3.05 },
 	{ title: 'Butter', price: 3.50 },
 	{ title: 'Bread', price: 4.00 }
 ]);
