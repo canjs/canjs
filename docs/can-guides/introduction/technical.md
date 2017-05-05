@@ -977,7 +977,7 @@ CanJS’s architecture produces observables that stand on their
 own, useful outside of the framework.  CanJS’s observables aren’t dependent on a diffing engine to identify changes.  Instead, any other tool or library can be an observer or call methods
 on the observable.
 
-[This JS Bin](http://jsbin.com/vivowu/7/edit?html,js,output) shows an analog clock that uses the [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API). The `Analog`
+[This JS Bin](https://jsbin.com/vivowu/7/edit?html,js,output) shows an analog clock that uses the [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API). The `Analog`
 clock listens to a `timer` observable and updates the position of the second, hour, and minute
 hands when the time changes.
 
@@ -1730,7 +1730,7 @@ module integrates jQuery’s and CanJS’s event system.  This allows you to lis
 jQuery custom events like `draginit` directly in [can-stache-bindings.event can-stache event bindings]
 or using [can-control].
 
-[This JS Bin](http://jsbin.com/yifopus/3/edit?html,css,js,output) lets a user drag an item
+[This JS Bin](https://jsbin.com/yifopus/3/edit?html,css,js,output) lets a user drag an item
 into a trashcan using custom jQuery drag/drop events.
 
 ## Server Side Rendering
