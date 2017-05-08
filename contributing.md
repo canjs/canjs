@@ -27,7 +27,7 @@ When filing a bug, it is helpful to include:
 
 Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](http://forums.donejs.com/c/canjs) or talk to us in [gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
 
-## Installing 
+## Installing
 
 1. <a href="https://github.com/canjs/canjs/fork" target="_blank">Fork Canjs on GitHub.</a>
 2. Clone it with: `git clone git@github.com:<your username>/canjs`
@@ -93,7 +93,7 @@ There are 3 ways of running your tests locally, all of which will require you to
 ### Running Individual Test Files
 
 1. `grunt connect:server:keepalive`
-2. Open [http://localhost:8000/](http://localhost:8000/) in your browser and then navigate to your intended file. 
+2. Open [http://localhost:8000/](http://localhost:8000/) in your browser and then navigate to your intended file.
 
 CanJS supports the following browsers:
 
@@ -122,6 +122,16 @@ To make a build (standalone and AMD version) you will also need to have [[NodeJS
 
 After you have completed those steps simply run `grunt build` and it will put the built files in the `can/dist` directory, making them ready for download.
 
+## Publishing & Releasing
+
+1. Install and use Node.js 0.12 ([nvm](https://github.com/creationix/nvm) is useful for managing multiple versions locally)
+2. Install the dependencies: `npm install && npm install grunt-cli -g`
+3. Test and build: `grunt test && grunt build`
+4. Release a new version: `grunt release:patch`
+5. Set the latest version of CanJS 2.3 on npm `npm dist-tag add can@2.3.32 2.3-legacy` (replace the version number)
+6. Set the latest version of CanJS 3 on npm: `npm dist-tag add can@3.6.0 latest` (replace the version number)
+7. Update [GitHub Releases](https://github.com/canjs/canjs/releases) with the release info for the new version
+
 ## Style Guide
 
 ### Linting
@@ -135,7 +145,7 @@ Indentation with tabs, not spaces.
     if(foo){
 
     }
-  
+
 Spaces after commas.  For example:
 
     myfn = function(foo, bar, moo){ ... }
@@ -174,7 +184,7 @@ For example:
     // Bad
     if(bar === false){ ... }
 
-    // Good 
+    // Good
     if(bar){ ... }
 
     // Good
@@ -199,11 +209,11 @@ Single line comments go OVER the line they refer to:
     var foo = "bar";
 
 For long comments, use:
-    
+
     /* myFn
      * Four score and seven—pause—minutes ago...
      */
-    
+
 ### Documentation
 
 The documentation for the different modules should be clear and consistent. Explanations should be concise, and examples of code should be included where appropriate. In terms of format and style, here are a few suggestions to keep the documentation consistent within a module and across all parts of CanJS:
@@ -215,9 +225,9 @@ For instance, when documenting `can.Component.scope`, the first reference to `ca
 	This is an example of linking to [can.Component] from another page. If you reference
 	`can.Component` later in this section, you don't have to link to it. All subsequent
 	references to `can.Component` have grave accents or tickmarks surrounding them.
-	
+
 	### New Section
-	
+
 	Another section referencing [can.Component] starts this trend again...
 
 **Note**: The one exception to this is on the module page. When documenting `can.Component` itself, only use the tickmarks, as linking to `can.Component` would just link to the page you are currently modifying.
@@ -229,7 +239,7 @@ If the developer should type `"@"`, use the tickmarks to make this clear. This a
 #### Include a clear description of your example code
 
 For a developer that's new to CanJS, the description of the example is likely more important than the example itself. Make sure there is a clear description of what the code should accomplish. This includes using all the techniques above. A good description should answer the question, "could you explain what this example code is doing?"
-  
+
 ## List of heroes
 
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
