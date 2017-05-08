@@ -112,7 +112,7 @@
     "steal-stache": "^3.0.5",
     "steal-tools": "^0.16.8",
     "test-saucelabs": "0.0.1",
-    "testee": "^0.4.1"
+    "testee": "^0.5.0"
   },
   "demos": [
     "http://canjs.us/#examples",
