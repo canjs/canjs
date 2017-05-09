@@ -186,7 +186,7 @@ Component.extend({
 	tag: "my-panel",
 
 	events: {
-		"beforeremove": function(){
+		"{element} beforeremove": function(){
 			canViewModel(this.element.parentNode).removePanel(this.viewModel);
 		}
 	}

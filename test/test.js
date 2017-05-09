@@ -13,6 +13,8 @@ require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
+require('can-deparam/can-deparam-test');
+require('can-param/can-param-test');
 require('../event/event_test');
 if (!System.isEnv('production')) {
 	System.import('can-observation/can-observation_test');
@@ -55,6 +57,7 @@ require('../view/ejs/ejs_test');
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
 require('can-connect-signalr/test');
+require('can-connect-cloneable/test/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
