@@ -113,6 +113,12 @@ _Utility libraries that power the core collection._
 - **[can-cid]** <small><%can-cid.package.version%></small> Get a unique identifier for objects
   - `npm install can-cid --save`
   - <a class="github-button" href="https://github.com/canjs/can-cid" data-count-href="/canjs/can-cid/stargazers" data-count-api="/repos/canjs/can-cid#stargazers_count">Star</a>
+- **[can-deparam]** <small><%can-deparam.package.version%></small> Deserialize a query string into an array or object
+  - `npm install can-deparam --save`
+  - <a class="github-button" href="https://github.com/canjs/can-deparam" data-count-href="/canjs/can-deparam/stargazers" data-count-api="/repos/canjs/can-deparam#stargazers_count">Star</a>
+- **[can-param]** <small><%can-param.package.version%></small> Serialize an array or object into a query string
+  - `npm install can-param --save`
+  - <a class="github-button" href="https://github.com/canjs/can-param" data-count-href="/canjs/can-param/stargazers" data-count-api="/repos/canjs/can-param#stargazers_count">Star</a>
 - **[can-types]** <small><%can-types.package.version%></small> A stateful container for CanJS type information
   - `npm install can-types --save`
   - <a class="github-button" href="https://github.com/canjs/can-types" data-count-href="/canjs/can-types/stargazers" data-count-api="/repos/canjs/can-types#stargazers_count">Star</a>
@@ -140,6 +146,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-connect-signalr]** <small><%can-connect-signalr.package.version%></small> Create connections to a FeathersJS API server.
   - `npm install can-connect-signalr --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect-signalr" data-count-href="/canjs/can-connect-signalr/stargazers" data-count-api="/repos/canjs/can-connect-signalr#stargazers_count">Star</a>
+- **[can-connect-cloneable]** <small><%can-connect-cloneable.package.version%></small> Make clones of Maps.
+  - `npm install can-connect-cloneable --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect-cloneable" data-count-href="/canjs/can-connect-cloneable/stargazers" data-count-api="/repos/canjs/can-connect-cloneable#stargazers_count">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone" data-count-href="/canjs/can-zone/stargazers" data-count-api="/repos/canjs/can-zone#stargazers_count">Star</a>
