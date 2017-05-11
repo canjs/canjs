@@ -3,29 +3,6 @@
 
 @description
 Welcome to CanJS!
-<!-- These style should be moved to `bit-docs-html-canjs` -->
-<style>
-    section.description section.on-this-page-table ol {
-        margin-left: 0px;
-    }
-</style>
-
-<section class="on-this-page-table">
-    <ol>
-        <li>
-            <a href="guides/mission.html">Mission</a>
-        </li>
-        <li>
-            <a href="guides/technical.html">Technical Highlights</a>
-        </li>
-        <li>
-            <a href="guides/who-uses-canjs.html">Who Uses CanJS?</a>
-        </li>
-        <li>
-            <a href="roadmap.html">Roadmap</a>
-        </li>
-    </ol>
-</section>
 
 @body
 CanJS’s mission is to minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
