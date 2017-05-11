@@ -1,0 +1,63 @@
+<script id="app-template" type="text/stache">
+  {{#if googleApiLoadedPromise.isPending}}
+    <div>Loading Google API ...</div>
+  {{else}}
+    {{#if signedIn}}
+      Welcome {{givenName}}! <button ($click)="googleAuth.signOut()">Sign Out</button>
+    {{else}}
+      <button ($click)="googleAuth.signIn()">Sign In</button>
+    {{/if}}
+
+    <div>
+      <input {($value)}="searchQuery" placeholder="Search for videos"/>
+    </div>
+
+    {{#if searchResultsPromise.isPending}}
+      <div class="loading">Loading videos...</div>
+    {{/if}}
+
+    {{#if searchResultsPromise.isResolved}}
+      <ul class='source'>
+      {{#each searchResultsPromise.value}}
+        <li ($draginit)="videoDrag(%arguments[1])"
+            {{data "dragData"}}>
+          <a href="https://www.youtube.com/watch?v={{./id.videoId}}">
+          <img src="{{./snippet.thumbnails.default.url}}" width="50px"/>
+          </a>
+           {{./snippet.title}}
+        </li>
+      {{/each}}
+      </ul>
+
+      {{#if searchResultsPromise.value.length}}
+        <div class='new-playlist'>
+          <ul sortable
+            ($sortableplaceholderat)="addDropPlaceholder(%event.index, %event.dragData)"
+            ($sortableinsertat)="addVideo(%event.index, %event.dragData)"
+            ($dropout)="clearDropPlaceholder()">
+
+            {{#each videosWithDropPlaceholder}}
+              <li class="{{#if isPlaceholder}}placeholder{{/if}}">
+                <a href="https://www.youtube.com/watch?v={{./video.id.videoId}}">
+                  <img src="{{./video.snippet.thumbnails.default.url}}" width="50px"/>
+                </a>
+
+                {{./video.snippet.title}}
+              </li>
+            {{else}}
+              <div class="content">Drag video here</div>
+            {{/each}}
+          </ul>
+          {{#if playlistVideos.length}}
+            <button ($click)="createPlaylist()"
+              {$disabled}="createPlaylistPromise.isPending()">
+                Create Playlist
+            </button>
+          {{/if}}
+        </div>
+      {{/if}}
+
+    {{/if}}
+
+  {{/if}}
+</script>
