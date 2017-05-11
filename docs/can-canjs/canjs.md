@@ -13,8 +13,8 @@
     srcset="docs/images/home/Home-Hare-bw.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
     src="docs/images/home/Home-Tortoise-bw.png" style="padding-left: 40px;"/>
 
-If you’re new to the project, the best place to start is the [guides] page. There you’ll
-find CanJS’s [guides/mission Mission] and [guides/technical Technical Highlights], as well as
+If you’re new to the project, the best place to start is the [about] page, where you’ll
+find CanJS’s [guides/mission Mission] and [guides/technical Technical Highlights]. Then, go to the [guides] page to find
 the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 @body
