@@ -12,6 +12,6 @@ Read about our mission and more on the [guides/mission] page.
 
 Learn about CanJS’s [guides/technical], including its outstanding observable objects and malleable model layer provided in independent packages at a small size.
 
-CanJS is used by some of the largest companies in the world. Find out who on the [guides/who-uses-canjs] page.
+CanJS is used by some of the largest companies in the world. Find out who on [guides/who-uses-canjs]
 
 Learn about CanJS’s future plans, how we make them, and how you can influence them on the [roadmap] page.

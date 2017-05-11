@@ -1,4 +1,4 @@
-@page guides/who-uses-canjs Who uses CanJS?
+@page guides/who-uses-canjs Who Uses CanJS?
 @parent about 2
 
 @body
@@ -63,7 +63,7 @@ Fidelity uses JavaScriptMVC (the previous name for CanJS) in its Mutual Fund com
 <a href="http://www.cars.com"><span>http://www.cars.com</span><img src="../../docs/can-guides/images/apps/screenshots-cars.jpg"></a>
 
 
-</div> 
+</div>
 
 ## Submit other apps
 
