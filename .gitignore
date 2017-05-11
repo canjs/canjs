@@ -8,6 +8,7 @@ npm-debug.log
 doc/
 *.DS_Store
 .idea
+.vscode/*
 test/pluginified/latest.js
 docco
 test/builders/steal-tools/dist/

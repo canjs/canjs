@@ -1,5 +1,5 @@
 @page guides/mission Mission
-@parent guides/introduction 2
+@parent about 0
 @description Learn about CanJS’s mission, why it matters, and how
 we’ve worked (and will keep working) to accomplish it.
 

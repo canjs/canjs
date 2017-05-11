@@ -1,7 +1,7 @@
 @page roadmap Roadmap
-@parent guides/commitment 2
+@parent about 3
 
-@description Learn about CanJS’s future plans and how we make them, and how you can influence them.
+@description Learn about CanJS’s future plans, how we make them, and how you can influence them.
 
 @body
 
