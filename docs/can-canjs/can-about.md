@@ -3,6 +3,12 @@
 
 @description
 Welcome to CanJS!
+<!-- These style should be moved to `bit-docs-html-canjs` -->
+<style>
+    section.description section.on-this-page-table ol {
+        margin-left: 0px;
+    }
+</style>
 
 <section class="on-this-page-table">
     <ol>
