@@ -38,7 +38,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
     value: ""
   },
   get searchResultsPromise() {
-    if (this.googleAuth && this.searchQuery.length > 2) {
+    if (this.searchQuery.length > 2) {
 
       var results = gapi.client.youtube.search.list({
           q: this.searchQuery,

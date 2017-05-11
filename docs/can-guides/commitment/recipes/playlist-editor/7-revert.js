@@ -90,11 +90,20 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
 });
 
 var Sortable = can.Control.extend({
+  "{element} dropinit": function() {
+    this.droppedOn = false;
+  },
   "{element} dropmove": function(el, ev, drop, drag) {
     this.fireEventForDropPosition(ev, drop, drag, "sortableplaceholderat");
   },
   "{element} dropon": function(el, ev, drop, drag) {
+    this.droppedOn = true;
     this.fireEventForDropPosition(ev, drop, drag, "sortableinsertat");
+  },
+  "{element} dropend": function(el, ev, drop, drag) {
+    if (!this.droppedOn) {
+      drag.revert();
+    }
   },
   fireEventForDropPosition: function(ev, drop, drag, eventName) {
     var dragData = can.data.get.call(drag.element[0], "dragData");

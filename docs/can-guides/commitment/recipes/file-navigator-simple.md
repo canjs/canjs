@@ -1,9 +1,9 @@
-@page guides/recipes/simple-file-navigator File Navigator Guide (Simple)
+@page guides/recipes/file-navigator-simple File Navigator Guide (Simple)
 @parent guides/recipes
 
 @description This guide walks you through building a simple file navigation
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 3.4. Checkout the [guides/recipes/ajax-file-navigator]
+CanJS 3.4. Checkout the [guides/recipes/file-navigator-advanced]
 for an example that makes AJAX requests for its data and uses [can-component].
 
 
