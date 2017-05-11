@@ -407,20 +407,87 @@ In this section, we will:
 3. If the video is dragged out of the playlist element, the placeholder will be removed.
 4. If the video is dropped on the playlist element, it will be added to the playlist's
    list of videos.
-
+5. Prepare for inserting the placeholder or video in any position in the list.
 
 ### What you need to know
 
-- jQuery++'s `drop` events and arguments.
-  - dropover
-  - dropout
-  - dropon
-- The `{{data}}` helper ... lets you associate data with an element.
-- `drag.element`
-- `can.data.get.call`
-- Create an observable list - `can.DefineList`
-- Derive the playlist items to be shown from the items added to the playlist
-  and the current placeholder.
+- The `PlaylistVM` should maintain a list of playlist videos (`playlistVideos`) and
+  the placeholder video (`dropPlaceholderData`) separately.  It can combine these
+  two values into a single value (`videosWithDropPlaceholder`) of the videos to display to the
+  user.  On a high-level this might look like:
+
+  ```js
+  PlaylistVM = DefineMap.extend({
+      ...
+      // {video: video, index: 0}
+	  dropPlaceholderData: "any",
+	  // [video1, video2, ...]
+	  playlistVideos: {
+	     Type: ["any"],
+	     Value: can.DefineList
+	  },
+	  get videosWithDropPlaceholder() {
+         var copyOfPlaylistVideos = this.placeListVideos.map(...);
+
+         // insert this.dropPlaceholderData into copyOfPlaylistVideos
+
+		 return copyOfPlaylistVideos;
+	  }
+  })
+  ```
+
+- The methods that add a placeholder (`addDropPlaceholder`) and
+  add video to the playlist (`addVideo`) should take an index like:
+
+  ```js
+  addDropPlaceholder: function(index, video) { ... }
+  addVideo: function(index, video) { ... }
+  ```
+
+  These functions will be called with `0` as the index for this section.  
+
+- jQuery++ supports the following [drop](http://jquerypp.com/#drop) events:
+
+  - dropinit - the drag motion is started, drop positions are calculated
+  - dropover - a drag moves over a drop element, called once as the drop is dragged over the element
+  - dropout - a drag moves out of the drop element
+  - dropmove - a drag is moved over a drop element, called repeatedly as the element is moved
+  - dropon - a drag is released over a drop element
+  - dropend - the drag motion has completed
+
+  You can bind on them manually with jQuery like:
+
+  ```js
+  $(element).on('dropon', function(ev, drop, drag) {...});
+  ```
+
+  Notice that `drag` is the 3nd argument to the event.  You can listen to
+  `drop` events in [can-stache] and pass the `drag` argument to a function like:
+
+  ```html
+  ($dropon)="addVideo(%arguments[2])"
+  ```
+
+- You will need to associate the drag objects with the video being
+  dragged so when a `drop` happens you can know the video being dropped. The
+  following utilities help create that association:
+
+  - The `drag.element` is the jquery-wrapped element that the user initiated the
+    drag motion upon.
+
+  - CanJS's `{{data DATANAME}}` helper lets you associate custom data with an element. The following
+    saves the current `context` of the `<li>` as `"dragData"` on the `<li>`:
+
+    ```
+    <li ($draginit)="videoDrag(%arguments[1])"
+              {{data "dragData"}}>
+    ```
+
+  - [can-util/dom/data/data.get can.data.get] can access this data like:
+
+    ```js
+    can.data.get.call(drag.element[0], "dragData");
+    ```
 
 ### The solution
 
@@ -435,19 +502,110 @@ Update the `JS` tab to:
 @highlight 50-89,only
 
 
+
 ## Drop videos in order ##
 ### The problem
-Allow a user to add videos in the right place.
+
+In this section, we will:
+
+1. Allow a user to drop videos in order they prefer.
 
 ### What you need to know
 
-- You can create custom events with `$().trigger()`
-- Controls let you listen to events in a memory safe way, and translate them to other events.
-- Can write up a control to a custom attribute.
-- Dimensions and coordinates
-  - $().height()
-  - $().offset()
-  - ev.pageY
+- ViewModels are best left knowing very little about the DOM. This makes them more
+  easily unit-testable.  To make this interaction, we need to know where the mouse
+  is in relation to the playlist's videos.  This requires a lot of DOM interaction
+  and is best done outside the ViewModel.
+
+  Specifically, we'd like to translate the `dropmove` and `dropon` events
+  into other events that let people know where the `dropmove` and `dropon` events
+  are happening in relationship to the __drop target__'s child elements.
+
+  Our goal is to translate:
+
+  - `dropmove` into `sortableplaceholderat` events
+    that dispatch events with the `index` where a placeholder should be inserted
+    and the `dragData` of what is being dragged.
+
+  - `dropon` into `sortableinsertat` events
+    that dispatch events with the `index` where the dragged item should be inserted
+    and the `dragData` of what is being dragged.  
+
+- [can-control can.Control] is useful for listening to events on an element in a memory safe
+  way.  Use [can-control.extend] to define a `can.Control` type as follows:
+
+  ```js
+  var Sortable = can.Control.extend({
+	  ... event handlers and methods ...
+  });
+  ```
+
+  To listen to events (like `dragmove`) on a control, use an event handler with `{element} EVENTNAME`
+  as follows:
+
+  ```js
+  var Sortable = can.Control.extend({
+	"{element} dropmove": function(el, ev, drop, drag) {
+      // do stuff on dropmove like call method:
+      this.method();
+    },
+	method: function(){
+	  // do something
+	}
+  });
+  ```
+
+  Use `new Control(element)` to create a control on an element.  The following
+  would setup the `dropmove` binding on `el`:
+
+  ```js
+  new Sortable(el);
+  ```
+
+- [can-view-callbacks.attr can.view.callbacks.attr] can listen to when a custom attribute is
+  found in a [can-stache] template like:
+
+  ```js
+  can.view.callbacks.attr("sortable", function(el, attrData) {});
+  ```
+
+  This can be useful to create controls on an element with that attribute.  For example, if a user has:
+
+  ```html
+  <ul sortable>...</ul>
+  ```
+
+  The following will create the `Sortable` control on that `<ul>`:
+
+  ```js
+  can.view.callbacks.attr("sortable", function(el) {
+    new Sortable(el);
+  });
+  ```
+
+- Use [$.trigger](http://api.jquery.com/trigger/) to fire custom events with jQuery:
+
+  ```js
+  $(element).trigger({
+    type: "sortableinsertat",
+    index: 0,
+    dragData: dragData
+  });
+  ```
+
+- Access the event object in a [can-stache-bindings.event] with `%event` like:
+
+  ```html
+  ($sortableinsertat)="addVideo(%event.index, %event.dragData)"
+  ```
+
+- Mouse events like `click` and `dropmove` and `dropon` have a `pageY` property that
+  is how many pixels down a user's mouse is.
+- [jQuery.offset](http://api.jquery.com/offset/) returns an element's position on the page.
+- [jQuery.height](http://api.jquery.com/height/) returns an element's height.
+- If the mouse position is below an element's center, the placeholder should be inserted
+  after the element.  If the mouse position is above an element's center, it should be inserted
+  before the element.
 
 ### The solution
 
@@ -468,12 +626,14 @@ Update the `JS` tab to:
 
 ### The problem
 
-If a user drags a video but does not drop it on the playlist, show
-an animation returning the video to its original place.
+In this section, we will:
+
+1. Revert videos not dropped on playlist. If a user drags a video but does not drop it on the playlist, show
+  an animation returning the video to its original place.
 
 ### What you need to know
 
-- `drag.revert()`
+- If you call `drag.revert()`, the drag element will animate back to its original position.
 
 ### The solution
 
@@ -487,17 +647,84 @@ Update the `JS` tab to:
 ## Create a playlist ##
 ### The problem
 
-Add a `Create Playlist` button that saves the playlist.
-Disable the button while the playlist is being created.
+In this section, we will:
+
+1. Add a `Create Playlist` button that prompts the user for the playlist name.
+2. After the user enters the name, the playlist is saved.
+3. Disable the button while the playlist is being created.
+4. Empty the playlist after it is created.
 
 ### What you need to know
 
+- Use [https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt] to prompt a user for a simple string value.
+
 - YouTube only allows you to create a playlist and then add items to it.
-  - Create a playlist API.
-  - Add an playlist item API.
-- How to chain promises.
-- Clean up other properties when the promise has finished.
-- `{$attribute}="value()"`
+
+  To create a playlist:
+
+  ```js
+  var lastPromise = gapi.client.youtube.playlists.insert({
+	part: 'snippet,status',
+	resource: {
+	  snippet: {
+		title: PLAYLIST_NAME,
+		description: 'A private playlist created with the YouTube API and CanJS'
+	  },
+	  status: {
+		privacyStatus: 'private'
+	  }
+	}
+  }).then(function(response) {
+	response //->{} response.result.id
+	// result: {
+	//   id: "lk2asf8o"
+	// }
+  });
+  ```
+
+  To insert something onto the end of it:
+
+  ```js
+  gapi.client.youtube.playlistItems.insert({
+    part: 'snippet',
+    resource: {
+      snippet: {
+        playlistId: playlistId,
+        resourceId: video.id
+      }
+    }
+  }).then();
+  ```
+
+- These requests must run in order.  You can make one request run after another like:
+
+  ```js
+  lastPromise = makeRequest(1);
+
+  lastPromise = lastPromise.then(function(){
+    return makeRequest(2);	  
+  })
+
+  lastPromise = lastPromise.then(function(){
+    return makeRequest(3);	  
+  })
+  ```
+
+  When a callback to `.then` returns a promise, `.then` returns a promise that resolves
+  after the inner promise is resolved.
+
+- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled like:
+
+  ```html
+  <button {$disabled}="createPlaylistPromise.isPending()">...
+  ```
+
+- When the promise has finished, set the `playlistVideos` property back to an empty list. This
+  can be done by listening to `createPlaylistPromise`:
+
+  ```js
+  this.on("createPlaylistPromise", function(ev, promise) { ... })
+  ```
 
 ### The solution
 
