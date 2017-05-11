@@ -767,4 +767,4 @@ Update the `JS` tab to:
 
 Congrats! You've completed this guide.
 
-<script src="http://static.jsbin.com/js/embed.min.js?3.41.6"></script>
+<script src="://static.jsbin.com/js/embed.min.js?3.41.6"></script>
