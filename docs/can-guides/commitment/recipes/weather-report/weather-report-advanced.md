@@ -2,11 +2,11 @@
 @parent guides/recipes
 
 @description This guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
-remove imperative code and automatically lookup the users location using the
-browser's [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
+remove imperative code and automatically look up the users location using the
+browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
 
 
-This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 3.6.
+This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 3.8.
 
 @body
 
@@ -49,9 +49,9 @@ var WeatherViewModel = can.DefineMap.extend({
 This is [imperative code](https://en.wikipedia.org/wiki/Imperative_programming).
 It uses side-effects to change the value
 of `place` when `location` is changed.  The rules for how `place` behaves are not
-defined in one places. This makes the code harder to follow.
+defined in one place, which makes the code harder to follow.
 
-Instead, we want to completely define the behavior of `place` within the place definition which looks like
+Instead, we want to completely define the behavior of `place` within the place definition, which looks like
 this:
 
 ```js
@@ -77,11 +77,11 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
 ### Things to know
 
-- `DefineMap` [can-define.types.get getters] can only derive a value from other values.  They can't
-  derive a value from the change in other values.  However, event streams libraries, like [KefirJS](https://rpominov.github.io/kefir/)
+- `DefineMap` [can-define.types.get getters] can only derive a value from other values.  They can’t
+  derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://rpominov.github.io/kefir/)
   can do this.
 
-  For example, we can create a `Kefir` stream that counts the number of times the following `person` map's name
+  For example, we can create a `Kefir` stream that counts the number of times the following `person` map’s `name`
   property changes using the [can-stream-kefir] module as follows:
 
   ```js
@@ -119,7 +119,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   person.name = "Payal" // logs "Payal"
   ```
 
-- Kefir's [map](https://rpominov.github.io/kefir/#map) method can be used to convert event stream values into new values.  The following creates an event stream of upper cased names:
+- Kefir's [map](https://rpominov.github.io/kefir/#map) method can be used to convert event stream values into new values.  The following creates an event stream of upper-cased names:
 
   ```js
   var person = new can.DefineMap({name: "Justin"});
@@ -153,7 +153,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   can.defineStreamKefir(Person);
   ```
 
-  Notice that the [can-define-stream-kefir] module is used as a mixin. When called on a type (like `Person`), the mixin
+  Notice that the [can-define-stream-kefir] module is used as a [mixin](https://developer.mozilla.org/en-US/docs/Glossary/Mixin). When called on a type (like `Person`), the mixin
   looks for [can-define.types.propDefinition]s with `stream`
   property definition functions.  It uses the stream instance returned by the `stream` property definition function as the value of the property.
 
@@ -218,7 +218,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   ```
 
 - The [can-define-stream-kefir] module adds a `map.toStream` method which is an alias for
-  `canStream.toStream`.  Use it to create streams from properties an events on a map instance like:
+  `canStream.toStream`.  Use it to create streams from properties and events on a map instance like:
 
   ```js
   var Person = can.DefineMap.extend({
@@ -238,7 +238,7 @@ Update the `JS` tab to:
 
  - Mixin [can-define-stream-kefir] into the `WeatherViewModel`.
  - Remove the setter side-effects from `location`
- - Change `place` to derive it's value from:
+ - Change `place` to derive its value from:
    - changes in `location` -  `place` should be `null` if `location` changes.
    - the `.places` value - `place` should be the one and only _place_ in `places` if there is only one _place_ in `places`.
    - the set `.place` value.
@@ -251,7 +251,7 @@ Update the `JS` tab to:
 ### The problem
 
 Instead of requiring the user to search for their city,
-lets change the app to use the browser's [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation) API to lookup their location.  For this step, we
+let’s change the app to use the browser’s [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation) API to look up their location.  For this step, we
 will add the following behaviors:
 
 - If the user enables location services, we will write their latitude and longitude.
@@ -378,7 +378,7 @@ latitude and longitude. We will save this place as the
 ### What you need to know
 
 Flickr has an API that can get a place that is recognized by
-yahoo's weather APIs.  It can be retrieved with `fetch` like:
+Yahoo’s weather APIs.  It can be retrieved with `fetch` like:
 
 ```js
 fetch("https://api.flickr.com/services/rest/?"+
