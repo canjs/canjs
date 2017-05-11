@@ -29,7 +29,8 @@ var platforms = [{
 	version: '49.0'
 }, {
 	browserName: 'googlechrome',
-	platform: 'Windows 10'
+	platform: 'Windows 10',
+	version: '57.0'
 }, {
 	browserName: 'Safari',
 	'appium-version': '1.6.3',
