@@ -12,14 +12,13 @@ This guide continues where the [guides/recipes/weather-report-simple Simple Weat
 
 The final widget looks like:
 
-> TODO:
-
+<a class="jsbin-embed" href="https://jsbin.com/jipevu/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 __Start this tutorial by cloning the following JSBin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/qowacac/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
-This is the ending JSBin for the [guides/recipes/weather-report-simple Simple Weather Report Guide].
+This is the ending JSBin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://rpominov.github.io/kefir/) added.
 
 The following sections are broken down into:
 
@@ -440,4 +439,10 @@ Nothing, you've learned it all by this point.  Apply what you know!
 @sourceref ./5-show-location.html
 @highlight 12,17,only
 
-<script src="https://static.jsbin.com/js/embed.min.js?3.35.5"></script>
+## Result
+
+When finished, you should see something like the following JS Bin:
+
+<a class="jsbin-embed" href="https://jsbin.com/jipevu/2/embed?html,js,output">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.0"></script>
