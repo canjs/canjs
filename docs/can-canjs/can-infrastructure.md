@@ -1,5 +1,5 @@
 @page can-infrastructure Infrastructure
-@parent canjs 2
+@parent canjs 3
 @description Utility libraries that power the core and ecosystem collection.
 
 @body
