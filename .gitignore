@@ -4,6 +4,7 @@ dist/
 *.orig
 util/can.*.js
 *node_modules*
+npm-debug.log
 doc/
 *.DS_Store
 .idea
