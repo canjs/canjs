@@ -106,9 +106,9 @@ In this section, we will:
   });
   ```
 
-  CanJS can uses promises in its [can-stache] templates.  More on that below.
+  CanJS can use promises in its [can-stache] templates.  More on that below.
 
-- A basic CanJS application is a live bound template (or view) rendered with a ViewModel.
+- A basic CanJS application is a live-bound template (or view) rendered with a ViewModel.
 
 - A [can-stache] template is used to render data into a document fragment:
 
@@ -164,7 +164,7 @@ In this section, we will:
 
 Update the `HTML` tab to:
 
-> Note: Please your own `clientId` if you use this code outside this guide.
+> Note: Please use your own `clientId` if you use this code outside this guide.
 
 @sourceref ./1-setup.html
 
@@ -183,15 +183,15 @@ Update the `JS` tab to:
 In this section, we will:
 
 1. Show a `Sign In` button that signs a person into their google account.
-2. Show a `Sign Out` button that signs are person out of their google account.
-3. Automatically know via google's API when the user signs in and out and update the
-   page.
+2. Show a `Sign Out` button that signs a person out of their google account.
+3. Automatically know via google's API when the user signs in and out, and update the
+   page accordingly.
 4. Show a welcome message with the user's given name.
 
 ### What you need to know
 
 - Once the Google API has been fully loaded, information about the
-  current authenticated user can be found in the `googleAuth` object.  This
+  currently authenticated user can be found in the `googleAuth` object.  This
   can be retrieved like:
 
   ```js
@@ -267,7 +267,7 @@ In this section, we will:
   })
   ```
 
-  > NOTE: EventStreams provide a much better way of doing this.  Checkout [can-define-stream-kefir].
+  > NOTE: EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
 
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
@@ -294,7 +294,7 @@ Update the `JS` tab to:
 
 ### The problem
 
-In this section we will:
+In this section, we will:
 
 1. Create a search `<input>` where a user can type a search query.
 2. When the user types more than 2 characters, get a list of video search results and display
@@ -305,7 +305,7 @@ In this section we will:
 - Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input's `value` in sync:
 
    ```html
-   <input  {($value)}="searchQuery"/>
+   <input {($value)}="searchQuery"/>
    ```
 
 - Use `gapi.client.youtube.search.list` to search YouTube like:
@@ -392,13 +392,13 @@ In this section, we will:
 
 - The `drag.ghost()` method copies the elements being dragged and drags that
   instead. The `.ghost()` method returns the copied elements
-  wrapped with jQuery.  Add the `ghost` className to style the ghost elements like:
+  wrapped with jQuery.  Add the `ghost` className to style the ghost elements, like:
 
   ```js
   drag.ghost().addClass("ghost");
   ```
 
-- To add a method to a `DefineMap` just add a function to one of the properties passed
+- To add a method to a `DefineMap`, just add a function to one of the properties passed
   to extend:
 
   ```js
@@ -441,7 +441,7 @@ In this section, we will:
 - The `PlaylistVM` should maintain a list of playlist videos (`playlistVideos`) and
   the placeholder video (`dropPlaceholderData`) separately.  It can combine these
   two values into a single value (`videosWithDropPlaceholder`) of the videos to display to the
-  user.  On a high-level this might look like:
+  user.  On a high-level, this might look like:
 
   ```js
   PlaylistVM = DefineMap.extend({
@@ -488,18 +488,18 @@ In this section, we will:
   $(element).on('dropon', function(ev, drop, drag) {...});
   ```
 
-  Notice that `drag` is the 3nd argument to the event.  You can listen to
-  `drop` events in [can-stache] and pass the `drag` argument to a function like:
+  Notice that `drag` is the 2nd argument to the event.  You can listen to
+  `drop` events in [can-stache], and pass the `drag` argument to a function, like:
 
   ```html
   ($dropon)="addVideo(%arguments[2])"
   ```
 
 - You will need to associate the drag objects with the video being
-  dragged so when a `drop` happens you can know the video being dropped. The
+  dragged so, when a `drop` happens, you can know which video is being dropped. The
   following utilities help create that association:
 
-  - The `drag.element` is the jquery-wrapped element that the user initiated the
+  - The `drag.element` is the jQuery-wrapped element that the user initiated the
     drag motion upon.
 
   - CanJS's `{{data DATANAME}}` helper lets you associate custom data with an element. The following
@@ -548,18 +548,18 @@ In this section, we will:
   into other events that let people know where the `dropmove` and `dropon` events
   are happening in relationship to the __drop target__'s child elements.
 
-  Our goal is to translate:
+  Our goal is to:
 
-  - `dropmove` into `sortableplaceholderat` events
+  - Translate `dropmove` into `sortableplaceholderat` events
     that dispatch events with the `index` where a placeholder should be inserted
     and the `dragData` of what is being dragged.
 
-  - `dropon` into `sortableinsertat` events
+  - Translate `dropon` into `sortableinsertat` events
     that dispatch events with the `index` where the dragged item should be inserted
     and the `dragData` of what is being dragged.  
 
-- [can-control can.Control] is useful for listening to events on an element in a memory safe
-  way.  Use [can-control.extend] to define a `can.Control` type as follows:
+- [can-control can.Control] is useful for listening to events on an element in a memory-safe
+  way.  Use [can-control.extend] to define a `can.Control` type, as follows:
 
   ```js
   var Sortable = can.Control.extend({
@@ -567,7 +567,7 @@ In this section, we will:
   });
   ```
 
-  To listen to events (like `dragmove`) on a control, use an event handler with `{element} EVENTNAME`
+  To listen to events (like `dragmove`) on a control, use an event handler with `{element} EVENTNAME`,
   as follows:
 
   ```js
@@ -620,14 +620,14 @@ In this section, we will:
   });
   ```
 
-- Access the event object in a [can-stache-bindings.event] with `%event` like:
+- Access the event object in a [can-stache-bindings.event] with `%event`, like:
 
   ```html
   ($sortableinsertat)="addVideo(%event.index, %event.dragData)"
   ```
 
 - Mouse events like `click` and `dropmove` and `dropon` have a `pageY` property that
-  is how many pixels down a user's mouse is.
+  tells how many pixels down the page a user's mouse is.
 - [jQuery.offset](http://api.jquery.com/offset/) returns an element's position on the page.
 - [jQuery.height](http://api.jquery.com/height/) returns an element's height.
 - If the mouse position is below an element's center, the placeholder should be inserted
@@ -655,7 +655,7 @@ Update the `JS` tab to:
 
 In this section, we will:
 
-1. Revert videos not dropped on playlist. If a user drags a video but does not drop it on the playlist, show
+1. Revert videos not dropped on the playlist. If a user drags a video, but does not drop it on the playlist, show
   an animation returning the video to its original place.
 
 ### What you need to know
@@ -685,7 +685,7 @@ In this section, we will:
 
 - Use [https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt] to prompt a user for a simple string value.
 
-- YouTube only allows you to create a playlist and then add items to it.
+- YouTube _only_ allows you to create a playlist, and then add items to it.
 
   To create a playlist:
 
@@ -723,7 +723,7 @@ In this section, we will:
   }).then();
   ```
 
-- These requests must run in order.  You can make one request run after another like:
+- These requests must run in order.  You can make one request run after another, like:
 
   ```js
   lastPromise = makeRequest(1);
@@ -738,9 +738,9 @@ In this section, we will:
   ```
 
   When a callback to `.then` returns a promise, `.then` returns a promise that resolves
-  after the inner promise is resolved.
+  after the _inner_ promise has resolved.
 
-- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled like:
+- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
 
   ```html
   <button {$disabled}="createPlaylistPromise.isPending()">...
@@ -765,6 +765,6 @@ Update the `JS` tab to:
 @sourceref ./8-create-playlist.js
 @highlight 12-19,99-141,only
 
-Congrats! You've completed this guide.
+Congrats! If you've completed this recipe, you now have your very own YouTube Playlist Editor.
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.41.6"></script>
