@@ -2,9 +2,16 @@
 @parent canjs 0
 
 @description
-Welcome to CanJS!
+Welcome to CanJS! Learn about CanJS’s mission & technical highlights, who uses CanJS, and our future roadmap.
 
 @body
-CanJS’s mission is to minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
 
-You shouldn’t have to rewrite your application to keep pace with technology. We constantly integrate new ideas and evolving best practices into CanJS libraries, but in a responsible way that makes it possible to upgrade gracefully. We aim to provide a stable and innovative platform, so you can block out noise and stay focused your app, not the tools.
+CanJS’s mission is to __minimize the cost of building and maintaining
+JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__.
+Read about our mission and more on the [guides/mission] page.
+
+Learn about CanJS’s [guides/technical], including its outstanding observable objects and malleable model layer provided in independent packages at a small size.
+
+CanJS is used by some of the largest companies in the world. Find out who on the [guides/who-uses-canjs] page.
+
+Learn about CanJS’s future plans, how we make them, and how you can influence them on the [roadmap] page.
