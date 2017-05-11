@@ -2,10 +2,37 @@
 @parent guides/recipes
 
 @description Learn how to use YouTube's API to search for videos and make a playlist.  This
-makes authenticated requests with OAuth2.
+makes authenticated requests with OAuth2. It uses [jQuery++](http://jquerypp.com) for
+drag/drop events. It shows using custom attributes and custom events.  This guide takes
+an hour to complete.
 
 @body
 
+The final widget looks like:
+
+<a class="jsbin-embed" href="https://jsbin.com/xiponom/6/embed?output">JS Bin on jsbin.com</a>
+
+To use the widget:
+
+1. _Click_ __Sign In__ to give access to the app to create playlists on your behalf.
+2. _Type_ search terms in __Search for videos__ and hit _enter_.
+3. _Drag_ and _drop_ those videos into the playlist area (__Drag video here__).
+4. _Click_ __Create Playlist__.
+5. _Enter_ a name in the popup.
+6. _Navigate_ to your [YouTube](https://www.youtube.com/) channel to verify the playlist was created.
+
+__Start this tutorial by cloning the following JSBin__:
+
+<a class="jsbin-embed" href="https://jsbin.com/ducabam/2/embed?html,output">JS Bin on jsbin.com</a>
+
+This JSBin has initial prototype HTML and CSS which is useful for
+getting the application to look right.
+
+The following sections are broken down into:
+
+- Problem — A description of what the section is trying to accomplish.
+- Things to know — Information about CanJS that is useful for solving the problem.
+- Solution — The solution to the problem.
 
 ## Setup CanJS and Load Google API
 
@@ -737,3 +764,7 @@ Update the `JS` tab to:
 
 @sourceref ./8-create-playlist.js
 @highlight 12-19,99-141,only
+
+Congrats! You've completed this guide.
+
+<script src="http://static.jsbin.com/js/embed.min.js?3.41.6"></script>
