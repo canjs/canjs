@@ -6,11 +6,19 @@ Welcome to CanJS! Learn about CanJS’s mission & technical highlights, who uses
 
 @body
 
-CanJS’s mission is to __minimize the cost of building and maintaining
-JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape__.
-Read about our mission and more on the [guides/mission] page.
+CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#section=section_Team) and [Bitovi](http://bitovi.com)
+are responsible for CanJS. They steer its direction, add features, fix bugs, and help
+you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 
-Learn about CanJS’s [guides/technical], including its outstanding observable objects and malleable model layer provided in independent packages at a small size.
+CanJS’s goals are briefly summarized in its mission statement:
+
+> To minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
+
+[guides/mission Read more about our mission] and how we’ve been accomplishing those goals for
+10 years.
+
+If CanJS’s heart isn’t enough to convince you it’s a good fit, read up on its
+[guides/technical].
 
 CanJS is used by some of the largest companies in the world. Find out who on [guides/who-uses-canjs]
 
