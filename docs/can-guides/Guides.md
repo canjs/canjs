@@ -1,34 +1,12 @@
 @page guides Guides
-@parent canjs 0
-@group guides/introduction 0 introduction
-@group guides/experiment 1 experiment
-@group guides/commitment 2 commitment
-@group guides/contribute 3 contribute
+@parent canjs 1
+@group guides/experiment 0 experiment
+@group guides/commitment 1 commitment
+@group guides/contribute 2 contribute
 
 @description Welcome to CanJS! These guides are here to help you develop and improve your relationship with CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the framework you marry.  This page helps you know how to advance through the different stages of this relationship:
 
 @body
-
-
-## Introduction
-
-If you’re reading this, you’ve already taken the first step: you’ve met CanJS!  Maybe you
-heard about it at a meetup, or read about it on a blog, but before you spend any time with it, you want to know “who is CanJS?”
-
-CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#section=section_Team) and [Bitovi](http://bitovi.com)
-are responsible for CanJS. They steer its direction, add features, fix bugs, and help
-you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
-
-CanJS’s goals are briefly summarized in its mission statement:
-
-> To minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
-
-[guides/mission Read more about our mission] and how we’ve been accomplishing those goals for
-10 years.
-
-If CanJS’s heart isn’t enough to convince you it’s a good fit, read up on its
-[guides/technical].
-
 
 ## Experimenting
 

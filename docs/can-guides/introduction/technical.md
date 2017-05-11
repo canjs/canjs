@@ -1,5 +1,5 @@
 @page guides/technical Technical Highlights
-@parent guides/introduction 4
+@parent about 1
 @description Learn about CanJS’s technical accomplishments.
 @outline 2
 
