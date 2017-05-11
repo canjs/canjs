@@ -6,7 +6,7 @@ Welcome to CanJS! Learn about CanJS’s mission & technical highlights, who uses
 
 @body
 
-CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#section=section_Team) and [Bitovi](http://bitovi.com)
+CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#team) and [Bitovi](https://www.bitovi.com)
 are responsible for CanJS. They steer its direction, add features, fix bugs, and help
 you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 
