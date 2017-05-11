@@ -7,7 +7,7 @@ util/can.*.js
 doc/
 *.DS_Store
 .idea
-.vscode
+.vscode/*
 test/pluginified/latest.js
 docco
 test/builders/steal-tools/dist/
