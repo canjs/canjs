@@ -47,13 +47,13 @@ Use the same pattern for the other modules you are using. Be careful when declar
 Instead of:
 
 ```js
-import Map from 'can-map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+import Map from 'can/map/map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
 ```
 
 Write:
 
 ```js
-import CanMap from 'can-map';
+import CanMap from 'can/map/map';
 ```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:

@@ -1,5 +1,5 @@
 @page can-core Core
-@parent canjs 2
+@parent api 0
 @templateRender <% %>
 @description The best, most hardened and generally useful libraries in CanJS.  
 
