@@ -488,16 +488,16 @@ In this section, we will:
   $(element).on('dropon', function(ev, drop, drag) {...});
   ```
 
-  Notice that `drag` is the 2nd argument to the event.  You can listen to
+  Notice that `drop` is now the 2nd argument to the event.  You can listen to
   `drop` events in [can-stache], and pass the `drag` argument to a function, like:
 
   ```html
   ($dropon)="addVideo(%arguments[2])"
   ```
 
-- You will need to associate the drag objects with the video being
-  dragged so, when a `drop` happens, you can know which video is being dropped. The
-  following utilities help create that association:
+- You will need to associate the drag objects with the video being dragged so
+  you know which video is being dropped when a `drop` happens. The following
+  utilities help create that association:
 
   - The `drag.element` is the jQuery-wrapped element that the user initiated the
     drag motion upon.
@@ -685,7 +685,7 @@ In this section, we will:
 
 - Use [https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt] to prompt a user for a simple string value.
 
-- YouTube _only_ allows you to create a playlist, and then add items to it.
+- YouTube _only_ allows you to create a playlist and add items to it.
 
   To create a playlist:
 
@@ -738,7 +738,7 @@ In this section, we will:
   ```
 
   When a callback to `.then` returns a promise, `.then` returns a promise that resolves
-  after the _inner_ promise has resolved.
+  after the _inner_ promise has been resolved.
 
 - Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
 
@@ -765,6 +765,6 @@ Update the `JS` tab to:
 @sourceref ./8-create-playlist.js
 @highlight 12-19,99-141,only
 
-Congrats! If you've completed this recipe, you now have your very own YouTube Playlist Editor.
+Congrats! _You now have your very own YouTube Playlist Editor_.
 
 <script src="http://static.jsbin.com/js/embed.min.js?3.41.6"></script>
