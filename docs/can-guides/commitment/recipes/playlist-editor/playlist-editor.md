@@ -332,14 +332,6 @@ In this section we will:
   });
   ```
 
-- To convert a `googlePromise` to a native `Promise` use:
-
-  ```js
-  new Promise(function(resolve, reject){
-    googlePromise.then(resolve, reject);	  
-  })
-  ```
-
 
 ### The solution
 
@@ -351,7 +343,7 @@ Update the template in the `HTML` tab to:
 Update the `JS` tab to:
 
 @sourceref ./3-search.js
-@highlight 27-46,only
+@highlight 27-44,only
 
 
 ## Drag videos ##
@@ -420,7 +412,7 @@ Update the template in the `HTML` tab to:
 Update the `JS` tab to:
 
 @sourceref ./4-drag.js
-@highlight 47-49,only
+@highlight 46-49,only
 
 
 ## Drop videos
@@ -502,12 +494,10 @@ In this section, we will:
   - The `drag.element` is the jquery-wrapped element that the user initiated the
     drag motion upon.
 
-  - CanJS's `{{data DATANAME}}` helper lets you associate custom data with an element. The following
-    saves the current `context` of the `<li>` as `"dragData"` on the `<li>`:
+  - [can-util/dom/data/data.set can.data.set] CanJS's `{{data DATANAME}}` helper lets you associate custom data with an element like:
 
-    ```
-    <li ($draginit)="videoDrag(%arguments[1])"
-              {{data "dragData"}}>
+    ```js
+    can.data.set.call(drag.element[0], "dragData", video);
     ```
 
   - [can-util/dom/data/data.get can.data.get] can access this data like:
@@ -521,12 +511,12 @@ In this section, we will:
 Update the template in the `HTML` tab to:
 
 @sourceref ./5-drop.html
-@highlight 22-23,32-52,only
+@highlight 22,31-51,only
 
 Update the `JS` tab to:
 
 @sourceref ./5-drop.js
-@highlight 50-89,only
+@highlight 44-81,83,86,89-91,only
 
 
 
@@ -639,12 +629,12 @@ In this section, we will:
 Update the template in the `HTML` tab to:
 
 @sourceref ./6-order.html
-@highlight 34-37,only
+@highlight 33-36,only
 
 Update the `JS` tab to:
 
 @sourceref ./6-order.js
-@highlight 92-135,only
+@highlight 93-136,only
 
 
 
@@ -667,7 +657,7 @@ In this section, we will:
 Update the `JS` tab to:
 
 @sourceref ./7-revert.js
-@highlight 93-95,100,103-107,only
+@highlight 94-96,101,104-108,only
 
 
 
@@ -743,7 +733,7 @@ In this section, we will:
 - Use [can-stache-bindings.toChild {$disabled}] to make an input disabled like:
 
   ```html
-  <button {$disabled}="createPlaylistPromise.isPending()">...
+  <button {$disabled}="createPlaylistPromise.isPending">...
   ```
 
 - When the promise has finished, set the `playlistVideos` property back to an empty list. This
@@ -758,12 +748,12 @@ In this section, we will:
 Update the template in the `HTML` tab to:
 
 @sourceref ./8-create-playlist.html
-@highlight 51-56,only
+@highlight 50-55,only
 
 Update the `JS` tab to:
 
 @sourceref ./8-create-playlist.js
-@highlight 12-19,99-141,only
+@highlight 12-19,90-129,only
 
 Congrats! You've completed this guide.
 

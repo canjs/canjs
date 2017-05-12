@@ -40,7 +40,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
 
-      var results = gapi.client.youtube.search.list({
+      return gapi.client.youtube.search.list({
           q: this.searchQuery,
           part: 'snippet',
           type: 'video'
@@ -48,16 +48,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
         console.log(response.result.items);
         return response.result.items;
       });
-      return new Promise(function(resolve, reject){
-        results.then(resolve, reject);
-      });
     }
-  },
-  videoDrag: function(drag) {
-    drag.ghost().addClass("ghost");
-  },
-  getDragData: function(drag){
-	return can.data.get.call(drag.element[0], "dragData");
   },
   dropPlaceholderData: "any",
   playlistVideos: {
@@ -119,7 +110,6 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
       playlistId = response.result.id;
     });
 
-
     var playlistVideos = this.playlistVideos.slice();
     playlistVideos.forEach(function(video) {
       lastPromise = lastPromise.then(function() {
@@ -135,10 +125,18 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
       });
     });
 
-    this.createPlaylistPromise = new Promise(function(resolve, reject) {
-      lastPromise.then(resolve, reject);
-    });
+    this.createPlaylistPromise = lastPromise;
   }
+});
+
+can.stache.registerHelper("videoDrag", function(drag, event, video){
+  drag.ghost().addClass("ghost");
+  event.preventDefault();
+  can.data.set.call(drag.element[0], "dragData", video);
+});
+
+can.stache.registerHelper("getDragData", function(drag){
+  return can.data.get.call(drag.element[0], "dragData");
 });
 
 var Sortable = can.Control.extend({

@@ -31,16 +31,13 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
 
-      var results = gapi.client.youtube.search.list({
+      return gapi.client.youtube.search.list({
           q: this.searchQuery,
           part: 'snippet',
           type: 'video'
         }).then(function(response){
         console.log(response.result.items);
         return response.result.items;
-      });
-      return new Promise(function(resolve, reject){
-        results.then(resolve, reject);
       });
     }
   }
