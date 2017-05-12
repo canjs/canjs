@@ -11,7 +11,7 @@ Message.List = can.DefineList.extend({
 
 Message.connection = can.connect.superMap({
 	url: {
-		resource: 'http://chat.donejs.com/api/messages',
+		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
 	Map: Message,
@@ -19,7 +19,7 @@ Message.connection = can.connect.superMap({
 	name: 'message'
 });
 
-var socket = io('http://chat.donejs.com');
+var socket = io('https://chat.donejs.com');
 
 socket.on('messages created', function(message){
 	Message.connection.createInstance(message);
