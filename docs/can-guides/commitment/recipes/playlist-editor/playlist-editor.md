@@ -172,6 +172,10 @@ Update the `JS` tab to:
 
 @sourceref ./1-setup.js
 
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/1-Setup-CanJS-and-Load-Google-API.png)
+
 
 
 
@@ -287,6 +291,14 @@ Update the `JS` tab to:
 @sourceref ./2-signin.js
 @highlight 2-11,15-26,only
 
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/2-Sign-in-and-out.png)
+
+Clicking "Sign In" should open a new tab:
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/2.1-Sign-in-and-out.png)
+
 
 
 
@@ -352,6 +364,10 @@ Update the `JS` tab to:
 
 @sourceref ./3-search.js
 @highlight 27-46,only
+
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/3-Search-for-videos.gif)
 
 
 ## Drag videos ##
@@ -421,6 +437,10 @@ Update the `JS` tab to:
 
 @sourceref ./4-drag.js
 @highlight 47-49,only
+
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/4-Drag-videos.gif)
 
 
 ## Drop videos
@@ -527,6 +547,10 @@ Update the `JS` tab to:
 
 @sourceref ./5-drop.js
 @highlight 50-89,only
+
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/5-Drop-videos.gif)
 
 
 
@@ -646,6 +670,10 @@ Update the `JS` tab to:
 @sourceref ./6-order.js
 @highlight 92-135,only
 
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/6-Drop-videos-in-order.gif)
+
 
 
 
@@ -668,6 +696,10 @@ Update the `JS` tab to:
 
 @sourceref ./7-revert.js
 @highlight 93-95,100,103-107,only
+
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/7-Revert-videos-not-dropped-on-playlist.gif)
 
 
 
@@ -764,6 +796,10 @@ Update the `JS` tab to:
 
 @sourceref ./8-create-playlist.js
 @highlight 12-19,99-141,only
+
+### The result
+
+![Result](../../../docs/can-guides/commitment/recipes/playlist-editor/images/8-Create-a-playlist.gif)
 
 Congrats! You've completed this guide.
 
