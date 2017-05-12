@@ -22,7 +22,6 @@ publish-docs:
 	git add -f node_modules/feathers-rest/package.json
 	git add -f node_modules/feathers-socketio/package.json
 	git add -f node_modules/validate.js/package.json
-	git add -f node_modules/test-saucelabs/package.json
 	git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
