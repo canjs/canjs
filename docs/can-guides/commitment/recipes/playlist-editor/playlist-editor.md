@@ -10,7 +10,7 @@ an hour to complete.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/xiponom/6/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/xiponom/12/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -75,7 +75,7 @@ In this section, we will:
   ```js
   gapi.client.init({
 	  'apiKey': 'AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0',
-      'clientId': '599628366398-eg48d9isurrc7ji070lnog1tn0kvq5rc.apps.googleusercontent.com',
+      'clientId': '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
       'discoveryDocs': [ 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest' ],
       'scope': 'https://www.googleapis.com/auth/youtube'
   }).then( completeCallback )
@@ -767,4 +767,4 @@ Update the `JS` tab to:
 
 Congrats! You've completed this guide.
 
-<script src="http://static.jsbin.com/js/embed.min.js?3.41.6"></script>
+<script src="//static.jsbin.com/js/embed.min.js?3.41.6"></script>
