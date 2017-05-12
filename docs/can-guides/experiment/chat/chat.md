@@ -14,7 +14,7 @@ The easiest way to get started is to clone the following JS&nbsp;Bin by clicking
 <a class="jsbin-embed" href="//jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
 
 The JS Bin loads [http://getbootstrap.com/ Bootstrap] for its styles and [http://socket.io/ socket.io] for a socket
-library.  It will be connecting to a RESTful and real-time service layer at [http://chat.donejs.com/api/messages].
+library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
 
 The JS Bin also loads [can.js](https://unpkg.com/can/dist/global/can.js), which is a script that includes all of CanJS core under a
 single global `can` namespace.
@@ -238,7 +238,7 @@ into many bite-sized custom elements.
 
 In this section, we will:
 
- - Display messages from [http://chat.donejs.com/api/messages](http://chat.donejs.com/api/messages) when `messagesPromise.isResolved`.
+ - Display messages from [https://chat.donejs.com/api/messages](https://chat.donejs.com/api/messages) when `messagesPromise.isResolved`.
  - Show a “Loading…” message while the messages are loading (`messagesPromise.isPending`).
  - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
@@ -257,7 +257,7 @@ Update the `JavaScript` tab to:
  - Define a `Message` type with [can-define/map/map].
  - Define a `Message.List` type that contains `Message` items.
  - Connect the `Message` and `Message.List` type to
-   the RESTful messages service at `http://chat.donejs.com/api/messages`
+   the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
  - Create a `messagesPromise` property on `ChatMessagesVM` that’s
    [can-define.types.value] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
@@ -269,7 +269,7 @@ Update the `JavaScript` tab to:
 When complete, you should see a list of messages in the __chat messages page__.
 
 This step creates a `Message` model by first creating the `Message` type
-and then connecting it to a messages service at `http://chat.donejs.com/api/messages`.
+and then connecting it to a messages service at `https://chat.donejs.com/api/messages`.
 
 ### Explanation
 
@@ -374,8 +374,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="//jsbin.com/mopiyu/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/yexezu/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
-
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>
