@@ -21,7 +21,7 @@
       {{#each searchResultsPromise.value}}
         <li ($draginit)="videoDrag(%arguments[1])"
             {{data "dragData"}}>
-          <a href="https://www.youtube.com/watch?v={{./id.videoId}}">
+          <a href="https://www.youtube.com/watch?v={{./id.videoId}}" target='_blank'>
           <img src="{{./snippet.thumbnails.default.url}}" width="50px"/>
           </a>
            {{./snippet.title}}
@@ -38,7 +38,7 @@
 
             {{#each videosWithDropPlaceholder}}
               <li class="{{#if isPlaceholder}}placeholder{{/if}}">
-                <a href="https://www.youtube.com/watch?v={{./video.id.videoId}}">
+                <a href="https://www.youtube.com/watch?v={{./video.id.videoId}}" target='_blank'>
                   <img src="{{./video.snippet.thumbnails.default.url}}" width="50px"/>
                 </a>
 
