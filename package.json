@@ -133,7 +133,6 @@
       "testee",
       "async",
       "saucelabs",
-      "test-saucelabs",
       "wd",
       "http-server"
     ],
