@@ -1,4 +1,4 @@
-@page about About
+@page about About CanJS
 @parent canjs 0
 
 @description
