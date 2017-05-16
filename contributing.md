@@ -130,7 +130,8 @@ After you have completed those steps simply run `grunt build` and it will put th
 4. Release a new version: `grunt release:patch`
 5. Set the latest version of CanJS 2.3 on npm `npm dist-tag add can@2.3.32 2.3-legacy` (replace the version number)
 6. Set the latest version of CanJS 3 on npm: `npm dist-tag add can@3.6.0 latest` (replace the version number)
-7. Update [GitHub Releases](https://github.com/canjs/canjs/releases) with the release info for the new version
+7. Copy the built `dist` folder into a new version folder _and_ the `latest` folder in [bitovi/canjs.com](https://github.com/bitovi/canjs.com/tree/gh-pages/release) and [canjs/canjs](https://github.com/canjs/canjs/tree/gh-pages/release)
+8. Update [GitHub Releases](https://github.com/canjs/canjs/releases) with the release info for the new version
 
 ## Style Guide
 
