@@ -2,9 +2,8 @@
 @parent guides/recipes
 
 @description This guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
-remove imperative code and automatically look up the users location using the
+remove imperative code and automatically look up the user’s location using the
 browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
-
 
 This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 3.8.
 
@@ -14,11 +13,11 @@ The final widget looks like:
 
 <a class="jsbin-embed" href="https://jsbin.com/jipevu/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/qowacac/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
-This is the ending JSBin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://rpominov.github.io/kefir/) added.
+This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://rpominov.github.io/kefir/) added.
 
 The following sections are broken down into:
 
@@ -86,7 +85,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   ```js
   var person = new can.DefineMap({name: "Justin"});
 
-  // create a stream from person's name
+  // Create a stream from person’s name
   var nameStream = can.streamKefir.toStream(person,".name");
 
   // Every time `.name` changes, increase the count 1.
@@ -94,7 +93,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 	  return lastValue + 1;
   }, 0);
 
-  // log the current nameChangeStream value
+  // Log the current nameChangeStream value
   nameChangeStream.onValue(function(newValue){
 	  console.log(newValue);
   });
@@ -118,7 +117,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   person.name = "Payal" // logs "Payal"
   ```
 
-- Kefir's [map](https://rpominov.github.io/kefir/#map) method can be used to convert event stream values into new values.  The following creates an event stream of upper-cased names:
+- Kefir’s [map](https://rpominov.github.io/kefir/#map) method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:
 
   ```js
   var person = new can.DefineMap({name: "Justin"});
@@ -245,7 +244,7 @@ Update the `JS` tab to:
 @sourceref ./advanced-1/js.js
 @highlight 4,35-52,79,only
 
-## Get the geoLocation's latitude and longitude
+## Get the geoLocation’s latitude and longitude
 
 ### The problem
 
@@ -259,14 +258,14 @@ will add the following behaviors:
 
 We will do this by:
 
-- Creating a Kefir stream of the User's position or error messages.
+- Creating a Kefir stream of the User’s position or error messages.
 - Using that stream to create the `geoLocation` and `geoLocationError` properties.
 - Displaying the data of those properties in the template.
 
 ### What you need to know
 
 - The [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
-  API allows you to request the user's position as follows:
+  API allows you to _request_ the user’s position as follows:
 
   ```js
   navigator.geolocation.getCurrentPosition(
@@ -275,7 +274,7 @@ We will do this by:
   ```
 
 - The [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
-  API allows you to monitor changes in the user's position as follows:
+  API allows you to _monitor changes_ in the user’s position as follows:
 
   ```js
   var watch = navigator.geolocation.watchPosition(
@@ -322,7 +321,7 @@ We will do this by:
 
   Typically, you listen to sources and emit values in the `setup` function
   and stop listening to sources in the `teardown` function.  For example,
-  the following might listen to where the user's mouse is on on the page:
+  the following might listen to where the user’s mouse is on the page:
 
   ```js
   var cursorPosition = Kefir.stream(function(emitter){
@@ -337,7 +336,7 @@ We will do this by:
   })
   ```
 
-- Kefir's `stream.withHandler( handler(emitter, event) )` is able to convert one stream's events to another stream. All other stream methods like `stream.map` and `stream.scan` can be implemented with `stream.withHandler`. For example the following maps the `cursorPosition` stream to a `cursorDistance` stream:
+- Kefir’s `stream.withHandler( handler(emitter, event) )` is able to convert one stream’s events to another stream. All other stream methods like `stream.map` and `stream.scan` can be implemented with `stream.withHandler`. For example, the following maps the `cursorPosition` stream to a `cursorDistance` stream:
 
   ```js
   cursorDistance = cursorPosition.withHandler(function(emitter, event){
@@ -366,7 +365,7 @@ We will do this by:
 @sourceref ./advanced-2/html.html
 @highlight 1-3,only
 
-## Find the user's place by latitude and longitude
+## Find the user’s place by latitude and longitude
 
 ### The problem
 
