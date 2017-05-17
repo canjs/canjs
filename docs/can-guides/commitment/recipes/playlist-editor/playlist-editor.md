@@ -118,13 +118,13 @@ In this section, we will:
   frag //-> <h1>Hello World</h1>
   ```
 
-- Load a template from a `<script>` tag with [can.stache.from](http://canjs.com/doc/can-stache.from.html) like:
+- Load a template from a `<script>` tag with [can-stach.from can.stache.from] like:
 
   ```js
   var template = can.stache.from(SCRIPT_ID);
   ```  
 
-- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
   - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.

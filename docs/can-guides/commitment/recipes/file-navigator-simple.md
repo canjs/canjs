@@ -122,7 +122,7 @@ Lets render `rootEntityData` in the page with its immediate children.
 
 ### What you need to know
 
-- CanJS uses [can-stache](http://canjs.com/doc/can-stache.html) to render data in a template
+- CanJS uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `<script>` tags like:
 
   ```html
@@ -131,8 +131,8 @@ Lets render `rootEntityData` in the page with its immediate children.
   </script>
   ```
 
-  A [can-stache](http://canjs.com/doc/can-stache.html) template uses
-  [{{key}}](http://canjs.com/doc/can-stache.tags.escaped.html) magic tags to insert data into
+  A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
   ```html
@@ -141,7 +141,7 @@ Lets render `rootEntityData` in the page with its immediate children.
   </script>
   ```
 
-- Load a template from a `<script>` tag with [can.stache.from](http://canjs.com/doc/can-stache.from.html) like:
+- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
   var template = can.stache.from(SCRIPT_ID);
   ```
@@ -160,10 +160,10 @@ Lets render `rootEntityData` in the page with its immediate children.
   document.body.appendChild(frag);
   ```
 
-- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
-- Use [{{#each value}}](http://canjs.com/doc/can-stache.helpers.each.html) to do looping in `can-stache`.
-- Use [{{#eq value1 value2}}](http://canjs.com/doc/can-stache.helpers.is.html) to test equality in `can-stache`.
-- [{{./key}}](http://canjs.com/doc/can-stache/keys/current.html) only returns the value in the current scope.
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.is {{#eq value1 value2}}] to test equality in `can-stache`.
+- [can-stache/keys/current {{./key}}] only returns the value in the current scope.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a className that includes `file` or `folder` and `hasChildren` if the folder has children.
   - The `<li>` should have `📝 <span>{{FILE_NAME}}</span>` if a file and `📁 <span>{{FOLDER_NAME}}</span>` if a folder.
@@ -208,13 +208,13 @@ find a folder, we need to render its contents.
 
 ### Things to know
 
-- A template can call out to another registered _partial_ template with with [{{>PARTIAL_NAME}}](http://canjs.com/doc/can-stache.tags.partial.html) like the following:
+- A template can call out to another registered _partial_ template with with [can-stache.tags.partial {{>PARTIAL_NAME}}] like the following:
 
   ```html
   {{>PARTIAL_NAME}}
   ```
 
-- You can register partial templates with [can.stache.registerPartial](http://canjs.com/doc/can-stache.registerPartial.html) like the following:
+- You can register partial templates with [can-stache.registerPartial can.stache.registerPartial] like the following:
 
   ```js
   var template = can.stache.from("TEMPLATE_ID");
@@ -268,7 +268,7 @@ we change the data, the UI will automatically change.
 
 ### Things to know
 
-- [DefineMap.extend](http://canjs.com/doc/can-define/map/map.extend.html) allows you to define a type by defining the type's
+- [can-define/map/map.extend DefineMap.extend] allows you to define a type by defining the type's
   properties and the properties' types like:
 
   ```js
@@ -293,7 +293,7 @@ we change the data, the UI will automatically change.
   person.name = "Kevin" //-> logs "entity name changed to Kevin"
   ```
 
-- `can.DefineMap` supports an [Array shorthand](http://canjs.com/doc/can-define.types.propDefinition.html#Array) that allows one to specify a [can.DefineList](http://canjs.com/doc/can-define/list/list.html) of typed instances like:
+- `can.DefineMap` supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list can.DefineList] of typed instances like:
 
   ```js
   Person = can.DefineMap.extend("Person",{
@@ -392,9 +392,9 @@ We want to be able to toggle if a folder is open or closed.
   });
   ```
 
-- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
 
-- Use [($EVENT)](http://canjs.com/doc/can-stache-bindings.event.html) to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div ($click)="doSomething()"> ... </div>

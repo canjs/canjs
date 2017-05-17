@@ -160,8 +160,8 @@ We want an `input` element to:
   <input {^$value}="property"/>
   ```
 
-- A [can-stache](http://canjs.com/doc/can-stache.html) template uses
-  [{{key}}](http://canjs.com/doc/can-stache.tags.escaped.html) magic tags to insert data into
+- A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
   ```html
@@ -417,7 +417,7 @@ When a user clicks on a place, we need to indicate their selection.
   ```
 
 
-- The [http://canjs.com/doc/can-define.types.html “any” type] can be used to define a property as
+- The [can-define.types “any” type] can be used to define a property as
   accepting any data type like:
 
   ```js
