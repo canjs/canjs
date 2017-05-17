@@ -374,6 +374,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/yexezu/1/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/yexezu/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>
