@@ -67,7 +67,7 @@ The first level files and folders should have a `parentId` of `"0"`.
 
 ### Things to know
 
-- [can-fixture] - is used to trap AJAX requests like:
+- [can-fixture] is used to trap AJAX requests like:
 
   ```js
   can.fixture("/api/entities", function(request){
@@ -77,7 +77,7 @@ The first level files and folders should have a `parentId` of `"0"`.
   })
   ```
 
-- [can-fixture.store] - can be used to automatically filter records using the querystring.
+- [can-fixture.store] can be used to automatically filter records using the querystring.
 
   ```js
   var entities = [ .... ];
@@ -85,7 +85,7 @@ The first level files and folders should have a `parentId` of `"0"`.
   can.fixture("/api/entities", entitiesStore);
   ```
 
-- [can-fixture.rand] - can be used to create a random integer.
+- [can-fixture.rand] can be used to create a random integer.
   ```
   can.fixture.rand(10) //-> 10
   can.fixture.rand(10) //-> 0
