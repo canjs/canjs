@@ -5,7 +5,7 @@
 
 @body
 
-A project that is useful to the CanJS community can be included on the [CanJS documentation](http://canjs.com/) site.
+A project that is useful to the CanJS community can be included on the [CanJS documentation](https://canjs.com/) site.
 
 Before submitting a PR with these changes, make sure that the source module has [guides/contributing/documentation] and tests that follow [guides/contributing/code] standards set forth by the CanJS community.
 

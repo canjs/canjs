@@ -346,18 +346,18 @@ Update _models/todo.js_ to the following:
 ### What you need to know
 
 - [Stache Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeSjVJMTRJdXRXcWs)
-- CanJS uses [can-stache](http://canjs.com/doc/can-stache.html) to render data in a template
+- CanJS uses [can-stache] to render data in a template
   and keep it live. Templates can be loaded with [steal-stache].
 
-  A [can-stache](http://canjs.com/doc/can-stache.html) template uses
-  [{{key}}](http://canjs.com/doc/can-stache.tags.escaped.html) magic tags to insert data into
+  A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
   ```html
     {{something.name}}
   ```
-- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
-- Use [{{#each value}}](http://canjs.com/doc/can-stache.helpers.each.html) to do looping in `can-stache`.
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
 
 ### The solution
 
