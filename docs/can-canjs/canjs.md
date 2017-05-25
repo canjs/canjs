@@ -25,7 +25,7 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 ## Getting Started
 
-
+CanJS is an evolving and improving set of client side JavaScript architectural libraries that balance innovation and stability. It targets experienced developers building complex web applications with long futures ahead of them.
 
 ## Missing Something?
 
