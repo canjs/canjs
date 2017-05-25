@@ -1,4 +1,4 @@
-@page guides/contributing/naming-conventions Naming Conventions
+@page guides/contributing/api-design-guidelines API Design Guidelines
 @parent guides/contribute
 
 @description Learn how to design APIs which are consistent with CanJS.
@@ -27,6 +27,8 @@ Methods which are only verbs such as `jump()` are discouraged when it is not cle
 
 Any method or variable beginning with one or more underscores (`_`) is private to the project and should not be used externally. Ideally these cases are minimized.
 
+Note: there is a temporary convention for Symbols which is an exception to the above. **Documented** variables with two leading underscores, for example `__keys`, are safe to use as they are intentionally exposed for environments where symbols are not supported.
+
 ### Creating new things
 
 In CanJS, new "things" are created by either calling a constructor or class with the `new` keyword or calling functions which begin with `make`. For example, to create a Promise from an existing Promise-like object, `can-util` provides `makePromise`. Use of `make` is more explicit than, for example, `getPromise` because the underlying implementation is *creating a value*, not retrieving a value.
@@ -36,10 +38,10 @@ In CanJS, new "things" are created by either calling a constructor or class with
 Throughout CanJS we use a registry pattern. A registry, in abstract terms, is an object where *named* items are added, retrieved, and removed dynamically over the course of a program's life. For example, a component registry is where named components are added, retrieved, and removed. Registries can be implemented with the following interface:
 
 ```js
-interface Registry<RegistryItem> {
-    add(identifier: string, item: RegistryItem): function
-    has(identifier: string): boolean
-    get(identifier: string): RegistryItem | null
+interface Registry<RegistryKey, RegistryItem> {
+    add(identifier: RegistryKey, item: RegistryItem): function
+    has(identifier: RegistryKey): boolean
+    get(identifier: RegistryKey): RegistryItem | undefined
 }
 ```
 
