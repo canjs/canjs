@@ -1,6 +1,7 @@
 @page api API Docs
 @parent canjs 2
 @outline 0
+@subchildren
 @package ../../package.json
 @templateRender <% %>
 @description
