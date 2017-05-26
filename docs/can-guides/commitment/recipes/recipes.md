@@ -1,5 +1,5 @@
 @page guides/recipes Recipes
-@parent guides/commitment 4
+@parent guides/all-recipes 0
 
 @description A listing of small examples that are useful for
 learning CanJS.
