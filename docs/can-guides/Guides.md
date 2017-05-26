@@ -1,8 +1,9 @@
 @page guides Guides
 @parent canjs 1
-@group guides/experiment 0 experiment
-@group guides/commitment 1 commitment
-@group guides/contribute 2 contribute
+@group guides/getting-started 0 getting started
+@group guides/experiment 1 experiment
+@group guides/commitment 2 commitment
+@group guides/contribute 3 contribute
 
 @description Welcome to CanJS! These guides are here to help you develop and improve your relationship with CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the framework you marry.  This page helps you know how to advance through the different stages of this relationship:
 
