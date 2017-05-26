@@ -188,7 +188,6 @@ steal('can/util/can.js', function (can) {
 						i;
 					while(batch = batches.shift()) {
 						var events = batch.events;
-						callbacks.push.apply(callbacks,  batch.callbacks );
 						dispatchingBatch = batch;
 						can.batch.batchNum = batch.number;
 						
@@ -203,7 +202,9 @@ steal('can/util/can.js', function (can) {
 
 						can.batch._onDispatchedEvents(batch.number);
 
-						dispatchingBatch = null;
+                                                // NOTE: callbacks must be gathered up AFTER dispatching all events
+						//       to ensure that callbacks registered by event handlers will be called.
+						callbacks.push.apply(callbacks,  batch.callbacks );						dispatchingBatch = null;
 						can.batch.batchNum = undefined;
 
 					}
