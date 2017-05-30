@@ -573,7 +573,7 @@ Create _models/todos-fixture.js_ as follows:
 
 - Decorate `Todo` with methods so it can get, create, updated, and delete todos at the `/api/todos` service.  Specifically:
   - `Todo.getList()` which calls `GET /api/todos`
-  - `Todo.getList({id: 5})` which calls `GET /api/todos/5`
+  - `Todo.get({id: 5})` which calls `GET /api/todos/5`
   - `todo.save()` which calls `POST /api/todos` if `todo` doesn't have an `id` or `PUT /api/todos/{id}` if the `todo` has an id.
   - `todo.destroy()` which calls `DELETE /api/todos/5`
 
@@ -933,7 +933,7 @@ npm install can-route --save
 ```
 
 @sourceref ./16-routing/index.js
-@highlight 5,9,11-26,39-41,only
+@highlight 5,9-26,39-41,only
 
 @sourceref ./16-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
