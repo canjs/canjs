@@ -933,7 +933,7 @@ npm install can-route --save
 ```
 
 @sourceref ./16-routing/index.js
-@highlight 5,9,11-26,39-41,only
+@highlight 5,9-26,39-41,only
 
 @sourceref ./16-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
