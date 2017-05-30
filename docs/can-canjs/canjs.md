@@ -3,15 +3,19 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description CanJS is an evolving and improving set of client side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.   
+@description CanJS is an evolving and improving set of client side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
 
-<img
-    srcset="docs/images/home/Home-Tortoise-bw.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
-    src="docs/images/home/Home-Tortoise-bw.png"
-    style="float:right; padding-right: 40px;"/>
-<img
-    srcset="docs/images/home/Home-Hare-bw.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
-    src="docs/images/home/Home-Tortoise-bw.png" style="padding-left: 40px;"/>
+<div class="hero-images">
+    <img
+        class="tortoise"
+        srcset="docs/images/home/Home-Tortoise-bw.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
+        src="docs/images/home/Home-Tortoise-bw.png"
+        style=""/>
+    <img
+        class="hare"
+        srcset="docs/images/home/Home-Hare-bw.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
+        src="docs/images/home/Home-Tortoise-bw.png"/>
+</div>
 
 If you’re new to the project, the best place to start is the [about] page, where you’ll
 find CanJS’s [guides/mission Mission] and [guides/technical Technical Highlights]. Then, go to the [guides] page to find
