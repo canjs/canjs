@@ -3,6 +3,7 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
+@subchildren
 @description
 Welcome to the CanJS docs! Learn about all the packages that make-up CanJS & how they work together to help you build amazing applications!
 
