@@ -2,11 +2,11 @@
 @parent canjs 0
 
 @description
-Welcome to CanJS! Learn about CanJS’s mission & technical highlights, who uses CanJS, and our future roadmap.
+Learn about CanJS’s [guides/mission mission], [guides/technical technical highlights], [guides/who-uses-canjs who uses CanJS], and our [roadmap future roadmap].
 
 @body
 
-CanJS is an evolving and improving set of client side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
+CanJS is an evolving and improving set of client-side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
 
 CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#team) and [Bitovi](https://www.bitovi.com) are responsible for CanJS. They steer its direction, add features, fix bugs, and help you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 
@@ -18,9 +18,9 @@ CanJS is part of the [DoneJS](https://donejs.com/) family of open source project
 
 > To minimize the cost of building and maintaining JavaScript applications by balancing innovation and stability, helping developers transcend a changing technology landscape.
 
-### Why CanJS?
+## Why CanJS?
 
-* [guides/mission Read more about our mission] and how we’ve been accomplishing those goals for 10 years.
+* Read more about [guides/mission our mission] and how we’ve been accomplishing those goals for 10 years.
 
 * If CanJS’s heart isn’t enough to convince you it’s a good fit, read up on its [guides/technical].
 
