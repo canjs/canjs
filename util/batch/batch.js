@@ -202,7 +202,7 @@ steal('can/util/can.js', function (can) {
 
 						can.batch._onDispatchedEvents(batch.number);
 						
-            // NOTE: callbacks must be gathered up AFTER dispatching all events
+						// NOTE: callbacks must be gathered up AFTER dispatching all events
 						//       to ensure that callbacks registered by event handlers will be called.
 						callbacks.push.apply(callbacks,  batch.callbacks );
 						dispatchingBatch = null;
