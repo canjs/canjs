@@ -36,7 +36,7 @@ if (!System.isEnv('production')) {
 require('can-view-target/test/test');
 require('can-simple-dom/test/test');
 if (!System.isEnv('production')) {
-	System.import('can-cid/test/test');
+ 	System.import('can-cid/test/test');
 }
 if (!System.isEnv('production')) {
 	System.import('can-types/test/test');
