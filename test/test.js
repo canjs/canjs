@@ -9,7 +9,7 @@ require('can-define/test/test');
 // require('../route/pushstate/pushstate_test');
 require('can-set/test/test');
 require('../view/stache/stache_test');
-// require('can-stache-converters/test/test');
+require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
@@ -36,7 +36,7 @@ if (!System.isEnv('production')) {
 require('can-view-target/test/test');
 require('can-simple-dom/test/test');
 if (!System.isEnv('production')) {
- 	System.import('can-cid/test/test');
+	System.import('can-cid/test/test');
 }
 if (!System.isEnv('production')) {
 	System.import('can-types/test/test');
