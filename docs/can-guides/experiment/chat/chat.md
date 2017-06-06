@@ -13,14 +13,14 @@ The easiest way to get started is to clone the following JS&nbsp;Bin by clicking
 
 <a class="jsbin-embed" href="//jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
 
-The JS Bin loads [http://getbootstrap.com/ Bootstrap] for its styles and [http://socket.io/ socket.io] for a socket
+The JS Bin loads [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
 library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
 
-The JS Bin also loads [can.js](https://unpkg.com/can/dist/global/can.js), which is a script that includes all of CanJS core under a
+The JS Bin also loads [can.js](https://unpkg.com/can@3/dist/global/can.js), which is a script that includes all of CanJS core under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global `can` script, but instead you
-should import things directly with a module loader like [StealJS](http://stealjs.com),
+should import things directly with a module loader like [StealJS](https://stealjs.com),
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
@@ -352,7 +352,7 @@ In this section, we will:
 
 Update the `JavaScript` tab to:
 
-- Create a [http://socket.io/] connection (`socket`).
+- Create a [https://socket.io/] connection (`socket`).
 - Listen for when messages are created, updated, and destroyed, and call the
   corresponding [can-connect/real-time/real-time] methods.
 
