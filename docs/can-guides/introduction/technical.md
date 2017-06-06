@@ -969,7 +969,7 @@ test("<todo-list> can update todo name", function(done){
 });
 ```
 
-Check out these tests running in [this JS&nbsp;Bin](http://justinbmeyer.jsbin.com/xaduto/3/edit?html,js,output).
+Check out these tests running in [this JS&nbsp;Bin](https://jsbin.com/lulucuboni/1/edit?html,js,output).
 
 ### Flexible
 
@@ -1023,7 +1023,7 @@ CanJS applications can be represented by [Hierarchical State Machines](https://e
 walks through an example of this concept where a `Card`, `Deposit`, and `Withdrawal`’s states
 are composed into the `ATM`’s state.
 
-<img src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png">
+<img height="693" src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png" width="808">
 
 This dispersed (federated) state means that a `Card` is still useful without the
 `ATM`.  A `Card` can make AJAX requests and maintains its state of being
@@ -1217,7 +1217,7 @@ simply add the datepicker to your HTML or template:
 
 That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.
 
-Custom HTML elements are one aspect of [Web Components](http://webcomponents.org/), a collection of browser specs that have [yet to be implemented](http://caniuse.com/#search=components) across browsers.
+Custom HTML elements are one aspect of [Web Components](https://www.webcomponents.org/), a collection of browser specs that have [yet to be implemented](https://caniuse.com/#search=components) across browsers.
 
 __Application assembly clarity__
 
@@ -1334,7 +1334,7 @@ original array, and only create a single new `<div>` for the new todo.
 ### Template minification
 
 While templates provide obvious benefits to application maintainability, they can be a
-chore to correctly integrate into the build tool chain. The [steal-stache] library provides an easy hook to load [can-stache] templates using [StealJS](http://stealjs.com) and include the compiled templates into the minified result of the build.
+chore to correctly integrate into the build tool chain. The [steal-stache] library provides an easy hook to load [can-stache] templates using [StealJS](https://stealjs.com) and include the compiled templates into the minified result of the build.
 
 [steal-stache] returns a renderer function that will render the template into a document fragment.
 
@@ -1557,13 +1557,13 @@ This is made possible by two things:
 
 - [can-set] understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the following _"Parameter awareness"_ section.
 
-CanJS’s real-time list updates work great with "push notification" systems like [socket.io](http://socket.io/) and SignalR.  To add realtime behavior to a CanJS app, you
+CanJS’s real-time list updates work great with "push notification" systems like [socket.io](https://socket.io/) and SignalR.  To add realtime behavior to a CanJS app, you
 just have to call the [can-connect/real-time/real-time.createInstance],
 [can-connect/real-time/real-time.updateInstance] and [can-connect/real-time/real-time.destroyInstance]
 when updates happen similar to the following:
 
 ```js
-var socket = io('http://my-todo-app.com');
+var socket = io('https://example.com');
 
 socket.on('todo created', function(todo){
     Todo.connection.createInstance(todo)
@@ -1741,4 +1741,4 @@ Server-side rendering (SSR) provides two main benefits over traditional single p
 
 CanJS makes it possible to load your application on the server. This is because CanJS works in a NodeJS context, on top of a virtual DOM.
 
-Using [can-vdom](../can-vdom.html) and [can-zone](../can-zone.html), you can set up your own server side rendering system, such as [the one used in DoneJS](https://donejs.com/Apis.html#section=section_ServerSideRenderingAPIs). For information on using SSR without setting anything up yourself, please check out the DoneJS [quick start](https://donejs.com/Guide.html) and [in depth](https://donejs.com/place-my-order.html) guides.
+Using [can-vdom](../can-vdom.html) and [can-zone](../can-zone.html), you can set up your own server side rendering system, such as [the one used in DoneJS](https://donejs.com/Apis.html#server-side-rendering-apis). For information on using SSR without setting anything up yourself, please check out the DoneJS [quick start](https://donejs.com/Guide.html) and [in depth](https://donejs.com/place-my-order.html) guides.

@@ -67,7 +67,7 @@ This is our mission.
 ## Stability is difficult in the JavaScript community
 
 You may be familiar with the
-[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](http://www.allenpike.com/2015/javascript-framework-fatigue/)
+[never-ending stream](https://medium.freecodecamp.com/javascript-fatigue-fatigue-66ffb619f6ce#.n5tt0jqhf) of [hot new JavaScript frameworks](https://www.allenpike.com/2015/javascript-framework-fatigue/)
 that take our community by storm every one or two years.
 
 > SproutCore -> Knockout -> Backbone -> Angular -> React -> ?
@@ -117,7 +117,7 @@ JavaScriptMVC was one of the first libraries to support event delegation,
 but these old controls weren’t extensible and couldn’t work in an isolated
 context.
 
-__In 2009__, [jQuery](http://jquery.com) began to dominate JavaScript development.
+__In 2009__, [jQuery](https://jquery.com) began to dominate JavaScript development.
 We helped add event delegation to jQuery and integrated it into JavaScriptMVC 2.0.
 The previous code became:
 
