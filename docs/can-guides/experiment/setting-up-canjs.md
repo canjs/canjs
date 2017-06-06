@@ -1,5 +1,5 @@
 @page guides/setup Setting up CanJS
-@parent guides/experiment 5
+@parent guides/getting-started 0
 @outline 2
 
 @description Get started with CanJS by installing it with [npm](https://www.npmjs.com/), using a [JS&nbsp;Bin](https://jsbin.com/about), or just adding it to an HTML page with a `<script>` tag.
@@ -90,7 +90,7 @@ document.body.appendChild(template(data));
 ```
 @highlight 2-3
 
-__Note:__ if you see dozens of errors in your console, you may need to set `system.npmAlgorithm` to `flat` in your `package.json` (see the [Steal docs](http://stealjs.com/docs/StealJS.quick-start.html#section_Setup) for more info).
+__Note:__ if you see dozens of errors in your console, you may need to set `system.npmAlgorithm` to `flat` in your `package.json` (see the [Steal docs](https://stealjs.com/docs/StealJS.quick-start.html#section_Setup) for more info).
 
 ### Building for production
 
@@ -293,4 +293,4 @@ CanJS uses native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaSc
 'Promise' is undefined
 ```
 
-You must include a Promise polyfill if you’re targeting browsers that do not have [native support](http://caniuse.com/#feat=promises). If you’re using [StealJS](http://stealjs.com/), [a Promise polyfill](https://github.com/stefanpenner/es6-promise) is included for you.
+You must include a Promise polyfill if you’re targeting browsers that do not have [native support](https://caniuse.com/#feat=promises). If you’re using [StealJS](https://stealjs.com/), [a Promise polyfill](https://github.com/stefanpenner/es6-promise) is included for you.

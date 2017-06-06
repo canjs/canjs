@@ -19,7 +19,7 @@ Notice it has tests at the bottom of the `Output` tab.
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
 
 The JS Bin is designed to run both the application and its tests in the `OUTPUT`
 tab.  To set this up, the `HTML` tab:
@@ -27,11 +27,11 @@ tab.  To set this up, the `HTML` tab:
  - Loads QUnit for its testing library.  It also includes the `<div id="qunit"></div>`
    element where QUnit’s test results will be written to.
 
- - Loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which
+ - Loads [can.all.js](https://unpkg.com/can@3/dist/global/can.all.js), which
    is a script that includes all of CanJS core under a single global `can` namespace.
 
    Generally speaking, you should not use the global `can` script, but instead you
-   should import things directly with a module loader like [StealJS](http://stealjs.com),
+   should import things directly with a module loader like [StealJS](https://stealjs.com),
    WebPack or Browserify.  Read [guides/setup] for instructions on how to set up CanJS in a real app.
 
  - Includes the content for an `app-template` [can-stache] template. This template
@@ -98,7 +98,7 @@ property can transition between:
 
 Each of those states are present in the following state diagram:
 
-<img src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png">
+<img height="693" src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png" width="808">
 
 We’ll build out these pages once we build the `Card` and `Transaction` sub-models that will make building the ATM view model easier.
 

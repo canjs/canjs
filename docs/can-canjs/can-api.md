@@ -3,6 +3,7 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
+@subchildren
 @description
 Welcome to the CanJS docs! Learn about all the packages that make-up CanJS & how they work together to help you build amazing applications!
 
@@ -143,7 +144,7 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-stache-converters]** <small><%can-stache-converters.package.version%></small> Form two-way binding helpers
   - `npm install can-stache-converters --save`
   - <a class="github-button" href="https://github.com/canjs/can-stache-converters">Star</a>
-- **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [http://stealjs.com StealJS]
+- **[steal-stache]** <small><%steal-stache.package.version%></small> Import can-stache templates as dependencies with [https://stealjs.com StealJS]
   - `npm install steal-stache --save`
   - <a class="github-button" href="https://github.com/canjs/steal-stache">Star</a>
 - **[can-view-import]** <small><%can-view-import.package.version%></small> Import modules within can-stache templates

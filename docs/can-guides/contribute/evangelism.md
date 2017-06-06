@@ -32,16 +32,16 @@ existing content.
 
 There are several DoneJS meetups already created:
 
- - [Chicago](http://www.meetup.com/DoneJS-Chicago/)
- - [Silicon Valley](http://www.meetup.com/DoneJS-Silicon-Valley/)
- - [Boston](http://www.meetup.com/DoneJS-Boston/)
- - [Ft. Lauderdale](http://www.meetup.com/DoneJS-Fort-Lauderdale/)
- - [Los Angeles](http://www.meetup.com/DoneJS-LA/)
- - [New York](http://www.meetup.com/DoneJS-NYC/)
- - [Phoenix](http://www.meetup.com/DoneJS-Phoenix/)
- - [Raleigh-Durham](http://www.meetup.com/DoneJS-raleigh-durham/)
- - [San Francisco](http://www.meetup.com/DoneJS-San-Francisco/)
- - [Seattle](http://www.meetup.com/DoneJS-Seattle/)
+ - [Chicago](https://www.meetup.com/DoneJS-Chicago/)
+ - [Silicon Valley](https://www.meetup.com/DoneJS-Silicon-Valley/)
+ - [Boston](https://www.meetup.com/DoneJS-Boston/)
+ - [Ft. Lauderdale](https://www.meetup.com/DoneJS-Fort-Lauderdale/)
+ - [Los Angeles](https://www.meetup.com/DoneJS-LA/)
+ - [New York](https://www.meetup.com/DoneJS-NYC/)
+ - [Phoenix](https://www.meetup.com/DoneJS-Phoenix/)
+ - [Raleigh-Durham](https://www.meetup.com/DoneJS-raleigh-durham/)
+ - [San Francisco](https://www.meetup.com/DoneJS-San-Francisco/)
+ - [Seattle](https://www.meetup.com/DoneJS-Seattle/)
 
 We’re always looking for people to speak at one of these meetups, become an organizer,
 or start their own meetup.  If you are interested in any of these things,

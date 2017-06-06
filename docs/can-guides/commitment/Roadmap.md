@@ -10,7 +10,7 @@
 CanJS’s direction is shaped by its community creating [guides/contributing/feature-suggestion feature suggestions] and [guides/contributing/bug-report bug reports],
 and giving them a `+1`.
 
-Then, the [DoneJS core team members](http://donejs.com/About.html#section=section_Team) prioritize
+Then, the [DoneJS core team members](https://donejs.com/About.html#team) prioritize
 issues with a `P0` to `P4` tag indicating their priority:
 
 - `P0` - An issue that will preempt any other issues currently being worked on.

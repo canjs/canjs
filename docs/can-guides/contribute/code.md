@@ -183,7 +183,7 @@ to make those changes and create a pull request so we can include your code in f
    details about your potential patch, including a meaningful title. When finished, press “Send pull request”. The core team will be notified of your submission and will let you know of any problems or a targeted release date.
 
 If you enjoy making these kinds of fixes and want to directly influence CanJS’s direction,
-consider joining our [Core team](https://donejs.com/About.html#section=section_Coreteam).
+consider joining our [Core team](https://donejs.com/About.html#core-team).
 
 ## Making a plugin
 

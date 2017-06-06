@@ -1,5 +1,5 @@
 @page migrate-3 Migrating to CanJS 3
-@parent guides/commitment 2
+@parent guides/upgrade 0
 @templateRender <% %>
 @description This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.
 @outline 0
@@ -411,7 +411,7 @@ string.hyphenate('firstName');
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
 
-* Include a Promise polyfill if targeting browsers that do not have native support. [Steal](http://stealjs.com/) includes a polyfill for you.
+* Include a Promise polyfill if targeting browsers that do not have native support. [Steal](https://stealjs.com/) includes a polyfill for you.
 * Use `.catch()` instead of `.fail()`.
 * Use `.then()` instead of `.done()`.
 
@@ -684,7 +684,7 @@ Message.List = DefineList.extend({
 });
 
 var messageConnection = superMap({
-	url: 'http://chat.donejs.com/api/messages',
+	url: 'https://chat.donejs.com/api/messages',
 	idProp: 'id',
 	Map: Message,
 	List: Message.List,
