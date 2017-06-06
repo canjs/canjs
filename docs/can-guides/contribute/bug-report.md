@@ -33,7 +33,7 @@ the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
 
 ## Priority, Tags, and Complexity
 
-The [core team](https://donejs.com/About.html#section=section_Team) reviews issues
+The [core team](https://donejs.com/About.html#team) reviews issues
 and assigns them a `P0` to `P4` tag corresponding to the following priorities:
 
 - `P0` - An issue that will preempt any other issues currently being worked on.
@@ -49,7 +49,7 @@ There are several ways to influence these priorities:
  - Come to a DoneJS Contributors meeting and make your case.
  - Get others from other organizations to `+1` the issue.
  - Make your case on Gitter with a contributor or in the issue.
- - You can always hire [Bitovi](http://bitovi.com) or a contributor to make the change.
+ - You can always hire [Bitovi](https://www.bitovi.com) or a contributor to make the change.
 
 
 Also, the core team will often include a complexity indicator in the title that looks like

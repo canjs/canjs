@@ -8,7 +8,7 @@
 ## Overview
 
 The CanJS site is generated with [bit-docs](https://github.com/bit-docs/bit-docs),
-a modified version of [DocumentJS](http://documentjs.com).  Its
+a modified version of [DocumentJS](https://documentjs.com).  Its
 content is hosted using GitHub pages publishing the [canjs/canjs#gh-pages](https://github.com/canjs/canjs/tree/gh-pages) repo.
 
 `bit-docs` reads JavaScript comments and markdown files within the `canjs` repo as well as
@@ -149,8 +149,8 @@ Signature titles should follow jQuery’s conventions:
    `typeAlias.method( arg1 [, arg2 ][, arg3 ] )`
 
 Make sure to fully document the a signature’s parameters and return
-value.  There’s a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
-a return value or parameters and the [name expression](http://documentjs.com/docs/documentjs.nameExpression.html) of
+value.  There’s a lot of flexibility in documenting the [type expression](https://documentjs.com/docs/documentjs.typeExpression.html) of
+a return value or parameters and the [name expression](https://documentjs.com/docs/documentjs.nameExpression.html) of
 parameters.
 
  - Parameter and descriptions should start with a `Capital` and end with a period like:

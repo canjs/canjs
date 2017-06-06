@@ -2,7 +2,7 @@
 @parent guides/recipes
 
 @description Learn how to use YouTube's API to search for videos and make a playlist.  This
-makes authenticated requests with OAuth2. It uses [jQuery++](http://jquerypp.com) for
+makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
 drag/drop events. It shows using custom attributes and custom events.  This guide takes
 an hour to complete.
 
@@ -323,7 +323,7 @@ In this section, we will:
 	//       id: {videoId: "ajsadfa"},
 	//       snippet: {
 	//         title: "dogs",
-	//         thumbnails: {default: {url: "http://..../dog.png"}}
+	//         thumbnails: {default: {url: "https://example.com/dog.png"}}
 	//       }
 	//     }
 	//   ]
@@ -364,7 +364,7 @@ In this section, we will:
 
 ### What you need to know
 
-- The [jQuery++](http://jquerypp.com/) library (which is already included on the page), supports
+- The [jQuery++](https://jquerypp.com/) library (which is already included on the page), supports
   the following `drag` events:
 
   - `dragdown` - the mouse cursor is pressed down
@@ -473,7 +473,7 @@ In this section, we will:
 
   These functions will be called with `0` as the index for this section.  
 
-- jQuery++ supports the following [drop](http://jquerypp.com/#drop) events:
+- jQuery++ supports the following [drop](https://jquerypp.com/#drop) events:
 
   - dropinit - the drag motion is started, drop positions are calculated
   - dropover - a drag moves over a drop element, called once as the drop is dragged over the element
@@ -610,7 +610,7 @@ In this section, we will:
   });
   ```
 
-- Use [$.trigger](http://api.jquery.com/trigger/) to fire custom events with jQuery:
+- Use [$.trigger](https://api.jquery.com/trigger/) to fire custom events with jQuery:
 
   ```js
   $(element).trigger({
@@ -628,8 +628,8 @@ In this section, we will:
 
 - Mouse events like `click` and `dropmove` and `dropon` have a `pageY` property that
   tells how many pixels down the page a user's mouse is.
-- [jQuery.offset](http://api.jquery.com/offset/) returns an element's position on the page.
-- [jQuery.height](http://api.jquery.com/height/) returns an element's height.
+- [jQuery.offset](https://api.jquery.com/offset/) returns an element's position on the page.
+- [jQuery.height](https://api.jquery.com/height/) returns an element's height.
 - If the mouse position is below an element's center, the placeholder should be inserted
   after the element.  If the mouse position is above an element's center, it should be inserted
   before the element.

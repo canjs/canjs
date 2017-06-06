@@ -45,7 +45,7 @@ const ViewModel = DefineMap.extend({
   },
   postsPromise() {
     get() {
-      return fetch(`http://www.reddit.com/r/${this.subreddit}.json`)
+      return fetch(`https://www.reddit.com/r/${this.subreddit}.json`)
     }
   }
 });
@@ -75,7 +75,7 @@ function receivePosts(subreddit, json) {
 export function fetchPosts(subreddit) {
   return function (dispatch) {
     dispatch(requestPosts(subreddit))
-    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
+    return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json =>
         dispatch(receivePosts(subreddit, json))
@@ -191,11 +191,11 @@ Todo = (props) => {
 If the problem is losing track of what is changing the state, is the problem solved by adding more code, or is it better solved with a simpler abstraction and more succinct code?
 
 ### DOM Libraries and Memory Leaks
-Sometimes you are not starting a brand new project, and you’d rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](http://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you’d rather not re-implement everything you have at once.
+Sometimes you are not starting a brand new project, and you’d rather incrementally add your new framework to your existing app, rather than do a whole re-write. Maybe you are using [Bootstrap](https://getbootstrap.com/javascript/), or [jQuery](https://jquery.com/) plugins, and you’d rather not re-implement everything you have at once.
 
 **CanJS** makes working with other libraries seamless. You can just use [can-stache](../../can-stache.html) to add [can-components](../../can-components.html) custom elements into your page as needed, and since **CanJS** works with real DOM events and attributes, everything just works as expected.
 
-If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](http://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to “just work” without any special code needed.
+If you are using [jQuery](https://jquery.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](https://getbootstrap.com/javascript/), CanJS has a library, [can-jquery](../../can-jquery.html), which was specifically created for apps using CanJS with jQuery, and allows all jQuery events or DOM manipulations to “just work” without any special code needed.
 
 ```handlebars
 <!-- A Bootstrap Modal -->
@@ -235,7 +235,7 @@ $("#my-modal").on('show.bs.modal', ev => {
 
 **React** replaces certain core aspects of the DOM, namely the event system and attributes, with its own “React version” of events and props. Because of this, **React** can have some frustrating “gotchas” when you try and integrate it with jQuery plugins or any other library that queries or manipulates the DOM.
 
-Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](http://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get’s deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you’ll have to hook up this call, into your current app lifecycle.
+Using `ReactDOM.render()` to insert **React** components in to your app, may even cause a [memory leak](https://www.ibm.com/developerworks/web/library/wa-memleak/). To prevent memory leaks when using **ReactDOM** this way, you need to be aware of and use `ReactDOM.unmountComponentAtNode()` every time a **React** node get’s deleted. This is important and often forgotten. Forgetting to call `unmountComponentAtNode` will cause your app to leak memory, so you’ll have to hook up this call, into your current app lifecycle.
 
 ```handlebars
 // DO NOT DO THIS, THIS CAUSES A MEMORY LEAK
@@ -387,7 +387,7 @@ That being said, **Angular 2** also encompasses a lot more than just the **MV***
 
 When evaluating **Angular 2** as an option, it is unwise not to consider the proverbial elephant in the room: "Is this version going to stick around this time"?
 
-Google and the Angular team released **Angular 2** as a complete re-write with no backwards compatibility, and no real plan for upgrading your application beyond running both Angular 1 and 2 on the same page until you can get all your directives and services migrated over to the new one. Google has a [history of abandoning projects](http://www.wordstream.com/articles/google-failures-google-flops), so you’ve got to ask: How long will it be until you’re rebuilding your app in the new, incompatible **ng3**?
+Google and the Angular team released **Angular 2** as a complete re-write with no backwards compatibility, and no real plan for upgrading your application beyond running both Angular 1 and 2 on the same page until you can get all your directives and services migrated over to the new one. Google has a [history of abandoning projects](https://www.wordstream.com/articles/google-failures-google-flops), so you’ve got to ask: How long will it be until you’re rebuilding your app in the new, incompatible **ng3**?
 
 With **CanJS** we have a guiding principle: You shouldn’t have to rewrite your application to keep pace with technology. We’re in it for the long haul, and dedicating to providing you stability and easy upgrades balanced with new features and progressive techniques in web development.
 

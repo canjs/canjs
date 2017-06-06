@@ -19,7 +19,7 @@ The [guides/recipes/file-navigator-advanced] walks through a navigation widget t
 
 ## TodoMVC with StealJS
 
-The [guides/recipes/todomvc-with-steal] guide builds the TodoMVC application, like the [guides/todomvc], but using [StealJS](http://stealjs.com) to load modules.  It is designed to be done in a classroom-like setting and includes links
+The [guides/recipes/todomvc-with-steal] guide builds the TodoMVC application, like the [guides/todomvc], but using [StealJS](https://stealjs.com) to load modules.  It is designed to be done in a classroom-like setting and includes links
 to keynote and powerpoint presentations for each section.
 
 

@@ -18,11 +18,11 @@ The JS Bin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JS Bin also loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which is a script that includes all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JS Bin also loads [can.all.js](https://unpkg.com/can@3/dist/global/can.all.js), which is a script that includes all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global `can` script, but instead you
-should import things directly with a module loader like [StealJS](http://stealjs.com),
+should import things directly with a module loader like [StealJS](https://stealjs.com),
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
