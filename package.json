@@ -146,6 +146,7 @@
   "bit-docs": {
     "html": {
       "dependencies": {
+        "normalize.css": "^5.0.0",
         "steal-stache": "^3.0.1"
       },
       "static": [],
