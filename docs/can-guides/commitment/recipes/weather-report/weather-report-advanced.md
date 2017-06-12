@@ -25,7 +25,6 @@ The following sections are broken down into:
 - Things to know — Information about CanJS that is useful for solving the problem.
 - Solution — The solution to the problem.
 
-
 ## Removing Imperative Code
 
 ### The problem
@@ -232,14 +231,14 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
 ### The solution
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
- - Mixin [can-define-stream-kefir] into the `WeatherViewModel`.
- - Remove the setter side-effects from `location`
- - Change `place` to derive its value from:
+1. Remove the setter side-effects from `location`.
+2. Change `place` to derive its value from:
    - changes in `location` -  `place` should be `null` if `location` changes.
    - the `.places` value - `place` should be the one and only _place_ in `places` if there is only one _place_ in `places`.
    - the set `.place` value.
+3. Mix [can-define-stream-kefir] into the `WeatherViewModel`.
 
 @sourceref ./advanced-1/js.js
 @highlight 4,35-52,79,only
@@ -359,8 +358,12 @@ We will do this by:
 
 ### The solution
 
+Update the __JavaScript__ tab:
+
 @sourceref ./advanced-2/js.js
 @highlight 3-21,24-40,only
+
+Update the __HTML__ tab:
 
 @sourceref ./advanced-2/html.html
 @highlight 1-3,only
@@ -397,6 +400,8 @@ fetch("https://api.flickr.com/services/rest/?"+
 
 ### The solution
 
+Update the __JavaScript__ tab:
+
 @sourceref ./advanced-3/js.js
 @highlight 41-60,108,only
 
@@ -413,8 +418,12 @@ Display the message while `geoLocation` and `geoLocationError` are undefined.
 
 ### The solution
 
+Update the __JavaScript__ tab:
+
 @sourceref ./4-enable-location.js
 @highlight 61-63,only
+
+Update the __HTML__ tab:
 
 @sourceref ./4-enable-location.html
 @highlight 6-10,only
@@ -428,12 +437,16 @@ Show the location entry `<div>` only when geo location has failed.
 
 ### What you need to know
 
-Nothing, you've learned it all by this point.  Apply what you know!
+Nothing, you’ve learned it all by this point.  Apply what you know!
 
 ### The solution
 
+Update the __JavaScript__ tab:
+
 @sourceref ./5-show-location.js
 @highlight 64-66,only
+
+Update the __HTML__ tab:
 
 @sourceref ./5-show-location.html
 @highlight 12,17,only
