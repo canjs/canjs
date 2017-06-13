@@ -623,7 +623,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 
   ```js
   property: {
-      get: function(lastSet, resolve){
+      get: function(lastSet, resolve) {
           SOME_ASYNC_METHOD( function callback(data) {
               resolve(data);
           });

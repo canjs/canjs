@@ -86,7 +86,7 @@ var WeatherViewModel = can.DefineMap.extend({
 		}
 	},
 	places: {
-		get: function(latSet, resolve) {
+		get: function(lastSet, resolve) {
 			if (this.placesPromise) {
 				this.placesPromise.then(resolve);
 			}

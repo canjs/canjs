@@ -7,7 +7,7 @@ require("~/models/todos-fixture");
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string",
     todosList: {
-		get: function(lastSet, resolve){
+		get: function(lastSet, resolve) {
 			Todo.getList({}).then(resolve);
 		}
 	}
