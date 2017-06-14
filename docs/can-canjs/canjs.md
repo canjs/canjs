@@ -23,62 +23,39 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 @body
 
-<style>
-    .getting-started-icons {
-        list-style: none;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        padding: 0;
-    }
-    .getting-started-icons > li > div {
-        height: 170px;
-        width: 270px;
-        border: 1px solid #ccc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .getting-started-icons > li > p {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .getting-started-icons > li > div > img {
-        max-height: 70%;
-    }
-</style>
-
 ## Getting Started
 
 CanJS is an evolving and improving set of client side JavaScript architectural libraries that balance innovation and stability. It targets experienced developers building complex web applications with long futures ahead of them.
 
 <ul class="getting-started-icons">
     <li>
-        <div>
-            <img src="docs/images/home/gear.svg">
-        </div>
+        <a>
+            <img src="static/img/gear.svg">
+            Setup CanJS
+        </a>
     </li>
-    <li>
+    <li class="or-separator">
         <p>
             Or
         </p>
     </li>
     <li>
-        <div>
-            <img src="docs/images/home/chat-bubble.svg">
-        </div>
+        <a>
+            <img src="static/img/chat-bubble.svg">
+            Chat Client tutorial
+        </a>
     </li>
     <li>
-        <div>
-            <img src="docs/images/home/check-mark.svg">
-        </div>
+        <a>
+            <img src="static/img/check-mark.svg">
+            TodoMVC tutorial
+        </a>
     </li>
     <li>
-        <div>
-            <img src="docs/images/home/credit-card.svg">
-        </div>
+        <a>
+            <img src="static/img/credit-card.svg">
+            ATM tutorial
+        </a>
     </li>
 </ul>
 
