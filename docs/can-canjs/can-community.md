@@ -7,52 +7,52 @@ Get involved with one of the most inviting communities on the internet!
 
 @body
 
-<ul class="community-list">
+<ul class="icon-list">
   <li>
     <a href="https://gitter.im/canjs/canjs" target="_blank">
-      <img src="/static/img/icon-gittr-gray.svg" width="30">
+      <img src="/static/img/icon-gittr-gray.svg">
       Chat with us on Gitter
     </a>
   </li>
   <li>
     <a href="https://github.com/canjs/canjs" target="_blank">
-      <img src="/static/img/icon-github-gray.svg" width="30">
+      <img src="/static/img/icon-github-gray.svg">
       Star us on GitHub
     </a>
   </li>
   <li>
     <a href="http://stackoverflow.com/search?q=canjs" target="_blank">
-      <img src="/static/img/icon-stackoverflow-gray.svg" width="30">
+      <img src="/static/img/icon-stackoverflow-gray.svg">
       Ask questions on Stack Overflow
     </a>
   </li>
   <li>
     <a href="http://forums.donejs.com/c/canjs" target="_blank">
-      <img src="/static/img/icon-forums-gray.svg" width="30">
+      <img src="/static/img/icon-forums-gray.svg">
       Visit our forums
     </a>
   </li>
   <li>
     <a href="https://www.meetup.com/find/?keywords=canjs&radius=Infinity" target="_blank">
-      <img src="/static/img/icon-meetup-gray.svg" width="30">
+      <img src="/static/img/icon-meetup-gray.svg">
       Find a local Meetup group
     </a>
   </li>
   <li>
     <a href="https://www.youtube.com/channel/UCM_xC8UOHt2ay5wz-3gotmg" target="_blank">
-      <img src="/static/img/icon-youtube-gray.svg" width="30">
+      <img src="/static/img/icon-youtube-gray.svg">
       Watch videos on YouTube
     </a>
   </li>
   <li>
     <a href="https://twitter.com/canjs" target="_blank">
-      <img src="/static/img/icon-twitter-gray.svg" width="30">
+      <img src="/static/img/icon-twitter-gray.svg">
       Follow us on Twitter
     </a>
   </li>
   <li>
     <a href="https://www.bitovi.com/blog/topic/canjs" target="_blank">
-      <img src="/static/img/icon-rss-gray.svg" width="30">
+      <img src="/static/img/icon-rss-gray.svg">
       Read our blog
     </a>
   </li>
