@@ -9,7 +9,7 @@ var AppViewModel = DefineMap.extend("AppViewModel", {
 	appName: {type: "string", serialize: false},
 	filter: "string",
 	allTodos: {
-		get: function(lastSet, resolve){
+		get: function(lastSet, resolve) {
 			Todo.getList({}).then(resolve);
 		}
 	},

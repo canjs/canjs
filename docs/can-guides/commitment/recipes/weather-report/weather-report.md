@@ -17,11 +17,11 @@ To use the widget:
 2. If the location name isn’t unique, __click__ on the intended location.
 3. See the 10-day forecast for your selected city.
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/fudakiz/1/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -35,7 +35,7 @@ The following sections are broken down into:
 
 ### The problem
 
-Get the basic setup for a CanJS app (in a JSBin) setup by:
+Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 1.  Creating a template that outputs the pre-constructed HTML.
 2.  Defining a `WeatherViewModel` constructor function.
@@ -75,7 +75,7 @@ Get the basic setup for a CanJS app (in a JSBin) setup by:
 
 ### The solution
 
-Update the `HTML` tab to wrap the template in a `script` tag:
+Update the __HTML__ tab to wrap the template in a `script` tag:
 
 ```html
 <script id="app-template" type="text/stache">
@@ -113,7 +113,7 @@ Update the `HTML` tab to wrap the template in a `script` tag:
 ```
 @highlight 1,32,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 - Define a ViewModel.
 - Create an instance of the ViewModel .
@@ -170,7 +170,22 @@ We want an `input` element to:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the __JavaScript__ tab to define a `location` property as a string.
+
+```js
+var WeatherViewModel = can.DefineMap.extend({
+  location: "string"
+});
+
+var vm = new WeatherViewModel();
+
+var template = can.stache.from("app-template");
+var frag = template( vm );
+document.body.appendChild(frag);
+```
+@highlight 2
+
+Update the template in the __HTML__ tab to:
 
 1. Update `location` on the ViewModel when the input changes.
 2. Show value of the ViewModel’s `location` property.
@@ -210,24 +225,6 @@ Update the template in the `HTML` tab to:
 </script>
 ```
 @highlight 5,21,only
-
-
-Update the `JS` tab to:
-
-1. Define a `location` property as a string.
-
-```js
-var WeatherViewModel = can.DefineMap.extend({
-  location: "string"
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
-```
-@highlight 2
 
 ## Get and display the places for the user’s location name
 
@@ -297,7 +294,7 @@ on the page.
 1. Show a “Loading places…” message while we wait on data.
 2. Once the places are resolved, list each place’s name, state, country and type.
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 ```html
 <script id="app-template" type="text/stache">
@@ -342,7 +339,7 @@ Update the template in the `HTML` tab to:
 ```
 @highlight 8,12,14,18,19,20,21,22,25,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1. Define a `placesPromise` property that will represent the loading places.
 2. If the user has typed in at least two characters, we fetch the matching places.
@@ -441,7 +438,7 @@ When a user clicks on a place, we need to indicate their selection.
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 1. When a `<li>` is clicked on, call `pickPlace` with the corresponding `place`.
 2. When a `place` has been set, write out the forecast header.
@@ -491,7 +488,7 @@ Update the template in the `HTML` tab to:
 ```
 @highlight 19,27,29,39,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1.  Define a `place` property as taking any data type.
 2.  Define a `pickPlace` method that sets the place property.
@@ -564,7 +561,7 @@ selected place.
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 1. Display each forecast day’s details (date, text, high, and low).
 2. Use the `toClassName` method to convert the forecast’s `text` into a `className` value that
@@ -617,7 +614,7 @@ Update the template in the `HTML` tab to:
  ```
  @highlight 31,33,34,35,36,38,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1. Define a `forecastPromise` property that gets a list of promises.
 2. Define a `toClassName` method that lowercases and hyphenates any text passed in.
@@ -707,9 +704,7 @@ other city is still visible.  Let’s hide it!
 
 ### The solution
 
-Update the `JS` tab to:
-
-1. Set the `place` property to null when the `location` changes.
+Update the __JavaScript__ tab to set the `place` property to null when the `location` changes.
 
 ```js
 var yqlURL = "//query.yahooapis.com/v1/public/yql?";
@@ -827,9 +822,7 @@ user to select their place; instead, we should show the forecast immediately.
 
 ### The solution
 
-Update the template in the `HTML` tab to:
-
-1.  Use a `showPlacePicker` property to determine if we should show the `place` picker list.
+Update the template in the __HTML__ tab to use a `showPlacePicker` property to determine if we should show the `place` picker list.
 
 ```html
 <script id="app-template" type="text/stache">
@@ -880,7 +873,7 @@ Update the template in the `HTML` tab to:
 ```
 @highlight 15,26,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1. Define a `places` property that will have the places list returned by the `YQL` service.
 2. Define a `showPlacePicker` property that is true if there’s more than one place in `places` and
@@ -918,7 +911,7 @@ var WeatherViewModel = can.DefineMap.extend({
     }
   },
   places: {
-    get: function(latSet, resolve){
+    get: function(lastSet, resolve) {
       if(this.placesPromise) {
         this.placesPromise.then(resolve)
       }
