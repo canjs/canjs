@@ -92,7 +92,7 @@
     "can-view-parser": "3.1.0",
     "can-view-scope": "3.1.4",
     "can-view-target": "3.0.7",
-    "can-zone": "0.6.7"
+    "can-zone": "0.6.8"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
