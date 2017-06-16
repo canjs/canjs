@@ -27,38 +27,54 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 CanJS is an evolving and improving set of client side JavaScript architectural libraries that balance innovation and stability. It targets experienced developers building complex web applications with long futures ahead of them.
 
-<ul class="getting-started-icons">
-    <li>
-        <a>
-            <img src="static/img/gear.svg">
-            Setup CanJS
-        </a>
-    </li>
-    <li class="or-separator">
-        <p>
-            Or
-        </p>
-    </li>
-    <li>
-        <a>
-            <img src="static/img/chat-bubble.svg">
-            Chat Client tutorial
-        </a>
-    </li>
-    <li>
-        <a>
-            <img src="static/img/check-mark.svg">
-            TodoMVC tutorial
-        </a>
-    </li>
-    <li>
-        <a>
-            <img src="static/img/credit-card.svg">
-            ATM tutorial
-        </a>
-    </li>
-</ul>
-
+<div class="getting-started-icons">
+    <div class="titled-list">
+        <h3>Start from scratch</h3>
+        <ul>
+            <li>
+                <a>
+                    <div>
+                        <img src="static/img/gear.svg">
+                    </div>
+                    Setup CanJS
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="or-separator">
+        Or
+    </div>
+    <div class="titled-list">
+        <h3>Build a demo app</h3>
+        <ul>
+            <li>
+                <a>
+                    <div>
+                        <img src="static/img/chat-bubble.svg">
+                    </div>
+                    Chat Client tutorial
+                </a>
+            </li>
+            <li>
+                <a>
+                    <div>
+                        <img src="static/img/check-mark.svg">
+                    </div>
+                    TodoMVC tutorial
+                </a>
+            </li>
+            <li>
+                <a>
+                    <div>
+                        <img src="static/img/credit-card.svg">
+                    </div>
+                    ATM tutorial
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="clear-both"></div>
+</div>
 
 ## Missing Something?
 
