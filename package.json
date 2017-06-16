@@ -108,6 +108,7 @@
     "jquery-ui": "^1.12.0",
     "socket.io-client": "^1.7.2",
     "steal": "^1.0.11",
+    "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.0.5",
     "steal-tools": "^1.0.3",
