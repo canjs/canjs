@@ -1,5 +1,5 @@
-@page guides/api API Guide
-@parent guides/commitment 0
+@page guides/api API doc help
+@parent guides/how-to-use 0
 
 @description This page walks through how to use and understand CanJS’s API documentation.  
 
