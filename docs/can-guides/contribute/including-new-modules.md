@@ -96,7 +96,7 @@ For example, we have added the [can-fixture tests](https://github.com/canjs/canj
 
 ## Add necessary markup to CanJS docs
 
-Open the main doc file, located at `./docs/can-canjs/canjs.md`.
+Open the `can-api.md` doc file, located at `./docs/can-canjs/can-api.md`.
 
 Again, add any necessary markup to the correct section (related to the target parent; legacy for legacy, etc).
 
@@ -105,13 +105,12 @@ Follow this helpful markdown template:
 ```md
 - **[<PACKAGE_NAME>]** <small><%<PACKAGE_NAME>.package.version%></small> <PACKAGE_DESCRIPTION>
   - `npm install <PACKAGE_NAME> --save`
-  - <a class="github-button" href="<PROJECT_GITHUB_URL>" data-count-href="/<PROJECT_GITHUB_ORG>/<PACKAGE_NAME>/stargazers" data-count-api="/repos/<PROJECT_GITHUB_ORG>/<PACKAGE_NAME>#stargazers_count">Star</a>
+  - <a class="github-button" href="<PROJECT_GITHUB_URL>">Star</a>
 ```
 
 - `PACKAGE_NAME`: The project name, which should match the `name` property in the source project's `package.json`.
 - `PACKAGE_DESCRIPTION`: short description of project, can match the `description` property in source project's `package.json`.
 - `PROJECT_GITHUB_URL`: The Github url. Not the `git` path but the path to the html site.
-- `PROJECT_GITHUB_ORG`: The organization id or user id that owns the project in Github.
 
 For example, we have added the [markup for can-fixtures](https://github.com/canjs/canjs/blob/e3301daad996df01463a623d50b38bd5091c9b35/docs/can-canjs/canjs.md#the-can-package).
 
