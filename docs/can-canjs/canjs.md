@@ -32,7 +32,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
         <h3>Start from scratch</h3>
         <ul>
             <li>
-                <a>
+                <a href="doc/guides/setup.html">
                     <div>
                         <img src="static/img/gear.svg">
                     </div>
@@ -48,7 +48,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
         <h3>Build a demo app</h3>
         <ul>
             <li>
-                <a>
+                <a href="doc/guides/chat.html">
                     <div>
                         <img src="static/img/chat-bubble.svg">
                     </div>
@@ -56,7 +56,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                 </a>
             </li>
             <li>
-                <a>
+                <a href="doc/guides/todomvc.html">
                     <div>
                         <img src="static/img/check-mark.svg">
                     </div>
@@ -64,7 +64,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                 </a>
             </li>
             <li>
-                <a>
+                <a href="doc/guides/atm.html">
                     <div>
                         <img src="static/img/credit-card.svg">
                     </div>
