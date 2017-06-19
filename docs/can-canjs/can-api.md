@@ -114,6 +114,12 @@ _Utility libraries that power the core collection._
 - **[can-namespace]** <small><%can-namespace.package.version%></small> Namespace where can-* packages are registered
   - `npm install can-namespace --save`
   - <a class="github-button" href="https://github.com/canjs/can-namespace">Star</a>
+- **[can-symbol]** <small><%can-symbol.package.version%></small> Symbols used to detail how CanJS may operate on different objects
+  - `npm install can-symbol --save`
+  - <a class="github-button" href="https://github.com/canjs/can-symbol">Star</a>
+- **[can-reflect]** <small><%can-reflect.package.version%></small> Perform reflection on unknown data types
+  - `npm install can-reflect --save`
+  - <a class="github-button" href="https://github.com/canjs/can-reflect">Star</a>
 
 </div>
 

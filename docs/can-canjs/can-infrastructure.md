@@ -301,3 +301,24 @@ if (namespace.unicorn) {
 	module.exports = namespace.unicorn = unicorn;
 }
 ```
+
+## can-symbol
+
+[can-symbol] contains Symbols used to detail how CanJS may operate on different objects.
+
+```js
+var MyIDSymbol = CanSymbol("my_ID");
+
+var obj = {};
+obj[MyIDSymbol] = 1;
+```
+
+## can-reflect
+
+[can-reflect] allows reflection on unknown data types.
+
+```js
+var foo = new DefineMap({ bar: "baz" });
+
+canReflect.getKeyValue(foo, "bar"); // -> "baz"
+```

@@ -43,6 +43,8 @@ if (!System.isEnv('production')) {
 if (!System.isEnv('production')) {
 	System.import('can-types/test/test');
 }
+require('can-symbol/can-symbol-test');
+require('can-reflect/can-reflect-test');
 
 
 
