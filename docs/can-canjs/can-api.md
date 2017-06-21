@@ -178,8 +178,9 @@ render templates in script tags
 - **[can-define-validate-validatejs]** <small><%can-define-validate-validatejs.package.version%></small> Validation for DefineMaps using the ValidateJS library
   - `npm install can-define-validate-validatejs --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-validate-validatejs">Star</a>
-
-
+- **[can-ndjson-stream]** <small><%can-ndjson-stream.package.version%></small> Convert ndjson stream into a ReadableStream of JS objects
+  - `npm install can-ndjson-stream --save`
+  - <a class="github-button" href="https://github.com/canjs/can-ndjson-stream">Star</a>
 </div>
 
 ### [can-legacy Legacy Collection]

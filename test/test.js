@@ -62,6 +62,7 @@ require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
+require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
