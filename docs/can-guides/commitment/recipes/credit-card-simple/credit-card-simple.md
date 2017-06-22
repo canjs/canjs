@@ -31,7 +31,10 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__Start this tutorial by cloning the following JSBin__:
+<br/><br/>
+
+
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JSBin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/gafibor/3/embed?output">JS Bin on jsbin.com</a>
 
@@ -304,6 +307,10 @@ When we get a token, we will simply alert it to the user like:
 ```js
 alert("Token: "+response.id);
 ```
+
+After submitting the form, you should see an alert like:
+
+![Alert](../../../docs/can-guides/commitment/recipes/credit-card-simple/token-alert.png)
 
 ### What you need to know
 
