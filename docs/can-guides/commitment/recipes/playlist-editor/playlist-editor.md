@@ -10,7 +10,7 @@ an hour to complete.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/xiponom/12/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/xiponom/16/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
