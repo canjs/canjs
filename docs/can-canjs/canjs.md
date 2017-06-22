@@ -25,7 +25,7 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 ## Getting Started
 
-CanJS is an evolving and improving set of client side JavaScript architectural libraries that balance innovation and stability. It targets experienced developers building complex web applications with long futures ahead of them.
+Get started with CanJS by following one of the tutorials below.
 
 <div class="getting-started-icons">
     <div class="titled-list">
@@ -36,13 +36,13 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                     <div>
                         <img src="static/img/gear.svg">
                     </div>
-                    Setup CanJS
+                    Setting Up CanJS
                 </a>
             </li>
         </ul>
     </div>
     <div class="or-separator">
-        Or
+        or
     </div>
     <div class="titled-list">
         <h3>Build a demo app</h3>
@@ -52,7 +52,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                     <div>
                         <img src="static/img/chat-bubble.svg">
                     </div>
-                    Chat Client tutorial
+                    Chat Guide
                 </a>
             </li>
             <li>
@@ -60,7 +60,7 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                     <div>
                         <img src="static/img/check-mark.svg">
                     </div>
-                    TodoMVC tutorial
+                    TodoMVC Guide
                 </a>
             </li>
             <li>
@@ -68,13 +68,15 @@ CanJS is an evolving and improving set of client side JavaScript architectural l
                     <div>
                         <img src="static/img/credit-card.svg">
                     </div>
-                    ATM tutorial
+                    <abbr title="Automated Teller Machine">ATM</abbr> Guide
                 </a>
             </li>
         </ul>
     </div>
     <div class="clear-both"></div>
 </div>
+
+You can find even more guides in the [guides/recipes] section of the [guides].
 
 ## Missing Something?
 
