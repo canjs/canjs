@@ -43,9 +43,9 @@ getting the application to look right.
 
 The following sections are broken down into:
 
-- Problem — A description of what the section is trying to accomplish.
-- Things to know — Information about CanJS that is useful for solving the problem.
-- Solution — The solution to the problem.
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __The solution__ — The solution to the problem.
 
 
 
@@ -53,10 +53,11 @@ The following sections are broken down into:
 
 ### The problem
 
-Lets create a `payment-view` template and render it with
-a `PaymentVM`. `PaymentVM` should have an `amount` property that
-defaults to `9.99`.  When complete, we should be able update the
-displayed pay amount by writing the following in the console:
+We need to create a `payment-view` template, and then render it with
+a ViewModel, let's call it `PaymentVM`. `PaymentVM` should have 
+an `amount` property that defaults to `9.99`.  When complete, we 
+should be able update the displayed "pay amount" by writing the 
+following in the console:
 
 ```js
 viewModel.amount = 1000;
@@ -185,7 +186,7 @@ Print out the exported values like:
     <input {($value)}="email"/>
     ```
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining the property's types like:
+- [can-define/map/map.extend DefineMap.extend] allows you to define properties by defining the property types like:
 
   ```js
   Person = can.DefineMap.extend("Person",{
@@ -211,16 +212,15 @@ Update the `JS` tab to:
 
 ### The problem
 
-The data we need to pass to the server needs to be
-cleaned up.  Let's create the following properties with
-associated behaviors:
+Our data needs to be cleaned up before we pass it to the server.
+We need to create the following properties, with associated behaviors:
 
 - `cardNumber` - The user's card number as a string without hyphens (`-`).
 - `expiryMonth` - A number for the month entered.
 - `expiryYear` - A number for the year entered.
 - `cvc` - A number for the cvc entered.
 
-We can print out the values like:
+So that we can print out the values like:
 
 ```html
 <p>{{cardNumber}}, {{expiryMonth}}-{{expiryYear}}, {{cvc}}</p>
@@ -261,10 +261,10 @@ Update the `JS` tab to:
 
 ### The problem
 
-Let's add `class='is-error'` when a form value has a value, but
-it's not valid according to `Stripe`'s validators. Let's create
-the following properties that return an error message for their
-form property:
+We need to add `class='is-error'` when a form value has a value that
+is not valid according to `Stripe`'s validators. To do that, we need to
+create the following properties that will return an error message for
+their respective form property:
 
 - `cardError` - "Invalid card number (ex: 4242-4242-4242)."
 - `expiryError` - "Invalid expiration date (ex: 01-22)."
@@ -300,8 +300,8 @@ Update the `JS` tab to:
 
 ### The problem
 
-When the user submits the form, let's call stripe to get
-a token.  That token can be used to charge the credit card.
+When the user submits the form, we need to call stripe to get
+a token that we may use to charge the credit card.
 When we get a token, we will simply alert it to the user like:
 
 ```js
@@ -322,7 +322,7 @@ After submitting the form, you should see an alert like:
 
    Notice that it also passed the event object with `%event`.
 
-- To prevent a form from submitting call `event.preventDefault()`.
+- To prevent a form from submitting, call `event.preventDefault()`.
 
 - [Stripe.card.createToken](https://stripe.com/docs/stripe.js/v2#card-createToken) can be used to get a token that can be used to charge a card:
 
@@ -353,15 +353,15 @@ Update the `JS` tab to:
 @highlight 48-69,only
 
 
-## Validate form
+## Validate the form
 
 ### The problem
 
-Let's give people a warning message if they enter
-their information incorrectly and disable
-the form until they have entered it correctly.
+We need to show a warning message when information
+is entered incorrectly, and disable the form until
+they have entered it correctly.
 
-We'll add the following properties to the ViewModel:
+To do that, we'll add the following properties to the ViewModel:
 
 - `isCardValid` - returns true if the card is valid
 - `isCardInvalid` - returns true if the card is invalid
