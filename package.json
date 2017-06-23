@@ -84,7 +84,7 @@
     "can-vdom": "3.0.3",
     "can-view-autorender": "3.0.4",
     "can-view-callbacks": "3.0.6",
-    "can-view-href": "3.0.4",
+    "can-view-href": "3.1.0",
     "can-view-import": "3.0.7",
     "can-view-live": "3.0.7",
     "can-view-model": "3.1.3",
