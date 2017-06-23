@@ -78,7 +78,7 @@
     "can-stream-kefir": "0.2.3",
     "can-types": "1.0.4",
     "can-util": "3.7.0",
-    "can-validate": "1.0.2",
+    "can-validate": "1.1.0",
     "can-validate-legacy": "1.0.2",
     "can-validate-validatejs": "0.0.6",
     "can-vdom": "3.0.3",
