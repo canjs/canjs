@@ -868,6 +868,28 @@ can be simulated like:
 @sourceref ./15-setter-toggle/index.html
 @highlight 10-12,only
 
+## Clear completed todo's (event bindings) ##
+
+### The problem
+Make the "Clear completed" button work. When the button is clicked, It should destroy each completed todo. 
+
+### What you need to know
+
+- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+
+   ```html
+   <div ($click)="doSomething()"> ... </div>
+   ```
+
+### The solution
+
+@sourceref ./16-clear-all-completed/todo.js
+@highlight 45-49,only
+
+@sourceref ./16-clear-all-completed/index.html
+@highlight 31-32,only
+
 ## Setup routing (can-route) ##
 
 Make it so that the following urls display the corresponding
@@ -932,8 +954,8 @@ be added if they represent the current page.
 npm install can-route --save
 ```
 
-@sourceref ./16-routing/index.js
+@sourceref ./17-routing/index.js
 @highlight 5,9-26,39-41,only
 
-@sourceref ./16-routing/index.html
+@sourceref ./17-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
