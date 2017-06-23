@@ -91,7 +91,7 @@
     "can-view-nodelist": "3.0.4",
     "can-view-parser": "3.1.0",
     "can-view-scope": "3.1.4",
-    "can-view-target": "3.0.7",
+    "can-view-target": "3.1.0",
     "can-zone": "0.6.7"
   },
   "devDependencies": {
