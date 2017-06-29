@@ -13,14 +13,14 @@ The final widget looks like:
 
 <a class="jsbin-embed" href="//jsbin.com/qunuyi/embed?js,output">JS Bin on jsbin.com</a>
 
-> Note: If you don't see any files show up, run the JSBin again. This
-> JSBin uses randomly generated files so it's possible nothing shows up.
+> Note: If you don't see any files show up, run the JS Bin again. This
+> JS Bin uses randomly generated files so it's possible nothing shows up.
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="//justinbmeyer.jsbin.com/xokopog/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -298,7 +298,7 @@ in the same way it's expected by the designer.
 
 ### The solution
 
-Update the `HTML` tab to render the `folder`'s name.
+Update the __HTML__ tab to render the `folder`'s name.
 
 ```html
 <script type="text/stache" id="app-template">
@@ -306,7 +306,7 @@ Update the `HTML` tab to render the `folder`'s name.
 </script>
 ```
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1. Create a `folder` `Entity` instance.
 2. Load the `app-template`.  Renders it with `folder` instance, and inserts the result in the `<body>` element.
@@ -333,7 +333,7 @@ document.body.appendChild( frag );
 
 ### The problem
 
-In this section, we'll list the files and folders within the root folder.
+In this section, we’ll list the files and folders within the root folder.
 
 ### Things to know
 
@@ -649,7 +649,6 @@ document.body.appendChild( frag );
 @highlight 14-22,25,only
 
 When complete, you should have a working file-navigation widget
-like the completed JSBin above.
+like the completed JS Bin above.
 
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

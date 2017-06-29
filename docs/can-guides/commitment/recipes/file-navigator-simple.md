@@ -15,14 +15,14 @@ The final widget looks like:
 
 Click `ROOT/` to see its files and folders.
 
-> Note: If you don't see any files show up, run the JSBin again. This
-> JSBin uses randomly generated files so it's possible nothing shows up.
+> Note: If you don't see any files show up, run the JS Bin again. This
+> JS Bin uses randomly generated files so it's possible nothing shows up.
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="//jsbin.com/caquxa/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -118,7 +118,7 @@ Notice that entities have the following properties:
 
 ### The problem
 
-Lets render `rootEntityData` in the page with its immediate children.
+Let’s render `rootEntityData` in the page with its immediate children.
 
 ### What you need to know
 
@@ -170,7 +170,7 @@ Lets render `rootEntityData` in the page with its immediate children.
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 ```html
 <script type="text/stache" id="entities-template">
@@ -189,7 +189,7 @@ Update the `HTML` tab to:
 </script>
 ```
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 ```js
 var template = can.stache.from("entities-template");
@@ -223,7 +223,7 @@ find a folder, we need to render its contents.
 
 ### The Solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Call to an `{{>entities}}` partial.
 
@@ -245,7 +245,7 @@ Update the `HTML` tab to:
 ```
 @highlight 9
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
  - Register the `entities-template` as a partial:
 
@@ -320,7 +320,7 @@ we change the data, the UI will automatically change.
 
 ### The solution
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 - Define an `Entity` type and the type of its properties.
 - Create an instance of the `Entity` type called `rootEntity`
@@ -402,7 +402,7 @@ We want to be able to toggle if a folder is open or closed.
 
 ### The solution
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 - Add an `isOpen` property to `Entity`.
 - Add a `toggleOpen` method to `Entity`.
@@ -436,7 +436,7 @@ document.body.appendChild( frag );
 ```
 @highlight 12-15
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Call `toggleOpen()` when clicked.
 - Only show the children `{{#if isOpen}}` is true.
@@ -462,6 +462,6 @@ Update the `HTML` tab to:
 @highlight 2,3,15
 
 When complete, you should have a working file-navigation widget
-like the completed JSBin above.
+like the completed JS Bin above.
 
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
