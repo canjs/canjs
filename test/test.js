@@ -11,7 +11,6 @@ require('can-set/test/test');
 require('../view/stache/stache_test');
 require('can-stache-converters/test/test');
 
-
 // Infrastructure tests
 require('can-deparam/can-deparam-test');
 require('can-param/can-param-test');
