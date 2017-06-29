@@ -4,6 +4,7 @@ require("can-construct-super");
 require("can-connect-feathers");
 require("can-connect-signalr");
 require("can-connect-cloneable");
+require("can-connect-ndjson");
 require('can-define-stream');
 require('can-define-stream-kefir');
 require("can-define-validate-validatejs");

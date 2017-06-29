@@ -138,6 +138,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-connect-cloneable]** <small><%can-connect-cloneable.package.version%></small> Make clones of Maps.
   - `npm install can-connect-cloneable --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect-cloneable">Star</a>
+- **[can-connect-ndjson]** <small><%can-connect-ndjson.package.version%></small> Create connection to an NDJSON stream service
+  - `npm install can-connect-ndjson --save`
+  - <a class="github-button" href="https://github.com/canjs/can-connect-ndjson">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone">Star</a>
