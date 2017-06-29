@@ -21,11 +21,11 @@ To use the widget:
 5. _Enter_ a name in the popup.
 6. _Navigate_ to your [YouTube](https://www.youtube.com/) channel to verify the playlist was created.
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/ducabam/2/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -162,13 +162,13 @@ In this section, we will:
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 > Note: Please use your own `clientId` if you use this code outside this guide.
 
 @sourceref ./1-setup.html
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
 
@@ -277,12 +277,12 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./2-signin.html
 @highlight 5-9,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./2-signin.js
 @highlight 2-11,15-26,only
@@ -343,12 +343,12 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./3-search.html
 @highlight 11-31,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./3-search.js
 @highlight 27-46,only
@@ -412,12 +412,12 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./4-drag.html
 @highlight 22,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./4-drag.js
 @highlight 47-49,only
@@ -518,12 +518,12 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./5-drop.html
 @highlight 22-23,32-52,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./5-drop.js
 @highlight 50-89,only
@@ -636,12 +636,12 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./6-order.html
 @highlight 34-37,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./6-order.js
 @highlight 92-135,only
@@ -664,7 +664,7 @@ In this section, we will:
 
 ### The solution
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./7-revert.js
 @highlight 93-95,100,103-107,only
@@ -755,16 +755,16 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the `HTML` tab to:
+Update the template in the __HTML__ tab to:
 
 @sourceref ./8-create-playlist.html
 @highlight 51-56,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./8-create-playlist.js
 @highlight 12-19,99-141,only
 
 Congrats! _You now have your very own YouTube Playlist Editor_.
 
-<script src="//static.jsbin.com/js/embed.min.js?3.41.6"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

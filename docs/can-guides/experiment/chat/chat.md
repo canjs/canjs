@@ -50,7 +50,7 @@ In this section, we will:
  - Show a big “Chat Home” title within a Bootstrap container.
  - Make it so when “Chat Home” is clicked, an exclamation mark (“!”) is added to the end of the title.
 
-In your JS Bin, update the `HTML` tab to:
+In your JS Bin, update the __HTML__ tab to:
 
  - Create a `<script>` tag containing the contents of the `chat-template` template.
  - Have the content insert a `message` value within a responsive Bootstrap container using [can-stache.tags.escaped].
@@ -123,7 +123,7 @@ In this section we will:
  - Create a __home page__ and __chat messages page__ that the user can navigate between
    with links and the browser’s back and forward button.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Check if the `appVM`’s `page` property is `"home"`.  If it is, render the __home
    page__’s content.  If it’s not, it will render the __chat messages page__’s content with the [can-stache.helpers.else] helper.
@@ -176,7 +176,7 @@ In this section, we will:
 
 - Define and use a custom `<chat-message>` element that contains the behavior of the __chat messages page__.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Use the `<chat-messages/>` element.
 - Create a template for the `<chat-messages/>` element that contains the content of the
@@ -242,7 +242,7 @@ In this section, we will:
  - Show a “Loading…” message while the messages are loading (`messagesPromise.isPending`).
  - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Check if the messages are in the process of loading and show a loading indicator.
  - Check if the messages failed to load and display the reason for the failure.
@@ -316,7 +316,7 @@ In this section, we will:
 - Add the ability to create messages on the server and have them added to the list of messages.
 
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Create a form to enter a message’s `name` and `body`.
  - When the form is submitted, call `send` on the `ChatMessagesVM` with [can-stache-bindings.event].
