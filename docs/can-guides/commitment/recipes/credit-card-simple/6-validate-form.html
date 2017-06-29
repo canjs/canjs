@@ -1,0 +1,23 @@
+<script type='text/stache' id="payment-view">
+  <form ($submit)="pay(%event)">
+
+    {{#if errorMessage}}
+       <div class="message">{{errorMessage}}</div>
+    {{/if}}
+
+    <input type='text' name='number' placeholder='Card Number'
+      {{#if cardError}}class='is-error'{{/if}}
+      {($value)}="userCardNumber"/>
+
+    <input type='text' name='expiry' placeholder='MM-YY'
+      {{#if expiryError}}class='is-error'{{/if}}
+      {($value)}="userExpiry"/>
+
+    <input type='text' name='cvc' placeholder='CVC'
+      {{#if cvcError}}class='is-error'{{/if}}
+      {($value)}="userCVC"/>
+
+    <button {$disabled}="isCardInvalid">Pay ${{amount}}</button>
+
+  </form>
+</script>
