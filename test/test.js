@@ -1,7 +1,9 @@
 // Core tests
 require('../component/component_test');
 require('../compute/compute_test');
-require('can-connect/test/test');
+if (!System.isEnv('production')) {
+	System.import('can-connect/test/test');
+}
 require('../construct/construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-define/test/test');
@@ -41,6 +43,8 @@ if (!System.isEnv('production')) {
 if (!System.isEnv('production')) {
 	System.import('can-types/test/test');
 }
+require('can-symbol/can-symbol-test');
+require('can-reflect/can-reflect-test');
 
 
 
@@ -68,5 +72,5 @@ require('can-define-stream-kefir/can-define-stream-kefir_test');
 
 
 // Integration tests
-require('../docs/can-guides/experiment/todomvc/test');
-require('./integration/all/test');
+// require('../docs/can-guides/experiment/todomvc/test');
+// require('./integration/all/test');
