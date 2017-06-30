@@ -64,6 +64,8 @@ require('can-connect-signalr/test');
 require('can-connect-cloneable/test/test');
 require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
+require('can-ndjson-stream/can-ndjson-stream-test');
+require('can-connect-ndjson/test/can-connect-ndjson-test');
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
 // require('can-jquery/test/test');
