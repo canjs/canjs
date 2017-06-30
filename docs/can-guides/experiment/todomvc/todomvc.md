@@ -46,7 +46,7 @@ Read [guides/setup] for instructions on how to set up CanJS in a real app.
 
 In this section, we will render the markup in a [can-stache] live-bound template.  
 
-Update the `HTML` tab to have a `<script>` tag around the html content.
+Update the __HTML__ tab to have a `<script>` tag around the html content.
 
 @sourceref ./1-create-template/html.html
 @highlight 11,67,only
@@ -90,7 +90,7 @@ Update the `JavaScript` tab to:
 @sourceref ./2-items-left/js.js
 @highlight 1-21,24,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Use [can-stache.helpers.each `{{#each todos}}`] to loop through every todo.
 - Add `completed` to the `<li>`’s `className` if the `<li>`’s todo is complete.
@@ -136,7 +136,7 @@ on the server.
 @sourceref ./3-models/js.js
 @highlight 1-15,33-39,42,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Use [can-stache.helpers.each `{{#each todosPromise.value}}`] to loop through the promise’s resolved value, which
    is the list of todos returned by the server.
@@ -162,7 +162,7 @@ In this section, we will:
  - Delete a todo on the server when its destroy button is clicked.
  - Remove the todo from the page after it’s deleted.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Add `destroying` to the `<li>`’s `className` if the `<li>`’s todo is being destroyed using [can-connect/can/map/map.prototype.isDestroying].
  - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event `($click)`].
@@ -207,7 +207,7 @@ Update the `JavaScript` tab to:
 @sourceref ./5-create/js.js
 @highlight 42-55,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Create the `todo-create-template` that:
    - Updates the `todo`’s `name` with the `<input>`’s `value` using [can-stache-bindings.twoWay `{($value)}`].
@@ -239,7 +239,7 @@ Update the `JavaScript` tab to:
 @sourceref ./6-list/js.js
 @highlight 56-64,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Create the `todo-list-template` that loops through a list of `todos` (instead of `todosPromise.value`).
  - Create a `<todo-list>` element and set its `todos` property to the resolved value of `todosPromise`
@@ -271,7 +271,7 @@ Update the `JavaScript` tab to:
 @highlight 58-76,only
 
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Use the `isEditing` method to add `editing` to the `className` of the `<li>` being edited.
  - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
@@ -324,7 +324,7 @@ Update the `JavaScript` tab to:
 @sourceref ./8-routing/js.js
 @highlight 85-99,102,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Set `href` to a url that will set the desired properties on `appVM` when clicked.
  - Add `class='selected'` to the link if the current route matches the current properties of the `appVM` using [can-stache.helpers.routeCurrent].
@@ -365,7 +365,7 @@ Update the `JavaScript` tab to:
 @sourceref ./9-toggle/js.js
 @highlight 31-49,113-123,only
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Cross bind the `toggle-all`’s `checked` property to the `appVM`’s `allChecked` property.
 - Disable the `toggle-all` button while any todo is saving.
@@ -388,4 +388,4 @@ When finished, you should see something like the following JS&nbsp;Bin:
 
 <a class="jsbin-embed" href="//jsbin.com/labajog/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?3.39.15"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

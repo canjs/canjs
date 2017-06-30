@@ -29,6 +29,10 @@ Any method or variable beginning with one or more underscores (`_`) is private t
 
 Note: there is a temporary convention for Symbols which is an exception to the above. **Documented** variables with two leading underscores, for example `__keys`, are safe to use as they are intentionally exposed for environments where symbols are not supported.
 
+### Private modules
+
+Any module file which is prefixed with one or more dashes (`-`) is private to the project and should not be used externally. Ideally these cases are minimized.
+
 ### Creating new things
 
 In CanJS, new "things" are created by either calling a constructor or class with the `new` keyword or calling functions which begin with `make`. For example, to create a Promise from an existing Promise-like object, `can-util` provides `makePromise`. Use of `make` is more explicit than, for example, `getPromise` because the underlying implementation is *creating a value*, not retrieving a value.

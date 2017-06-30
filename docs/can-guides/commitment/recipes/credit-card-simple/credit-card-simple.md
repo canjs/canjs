@@ -9,12 +9,12 @@ simple validation on the payment form values.
 
 @body
 
-In this guide you will learn:
+In this guide you will learn how to:
 
-- How to setup a basic CanJS application.
-- How to collect form data and post it to a service
+- Set up a basic CanJS application.
+- Collect form data and post it to a service
   endpoint when the form is submitted.
-- How to do basic validation.
+- Do basic validation.
 
 The final widget looks like:
 
@@ -27,25 +27,22 @@ To use the widget:
    _Pay_ button should become enabled.
 3. __Click__ the _Pay_ button to get a token from Stripe which
    could be used to create a credit card payment.
-4. Change the inputs to invalid values.  An error message should appear,
+4. __Change__ the inputs to invalid values.  An error message should appear,
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-<br/><br/>
-
-
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JSBin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/gafibor/3/embed?output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
 
-- Problem — A description of what the section is trying to accomplish.
-- Things to know — Information about CanJS that is useful for solving the problem.
-- Solution — The solution to the problem.
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __The solution__ — The solution to the problem.
 
 
 
@@ -53,10 +50,11 @@ The following sections are broken down into:
 
 ### The problem
 
-Lets create a `payment-view` template and render it with
-a `PaymentVM`. `PaymentVM` should have an `amount` property that
-defaults to `9.99`.  When complete, we should be able update the
-displayed pay amount by writing the following in the console:
+Let’s create a `payment-view` template and render it with
+a ViewModel called `PaymentVM`, which will have
+an `amount` property that defaults to `9.99`.  When complete, we
+should be able update the displayed “pay amount” by writing the
+following in the console:
 
 ```js
 viewModel.amount = 1000;
@@ -119,7 +117,7 @@ viewModel.amount = 1000;
 
 - Insert a fragment into the page with:
 
-  ```
+  ```js
   document.body.appendChild(frag);
   ```
 
@@ -149,12 +147,12 @@ viewModel.amount = 1000;
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
 @highlight 10,19,22
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
 
@@ -164,8 +162,8 @@ Update the `JS` tab to:
 
 ### The problem
 
-Lets send the form values to the ViewModel so we
-can process and validate them.  In this step, we'll
+Let’s send the form values to the ViewModel so we
+can process and validate them.  In this step, we’ll
 send the form values to the ViewModel and print out
 the values to make sure the ViewModel has them correctly.
 
@@ -185,7 +183,7 @@ Print out the exported values like:
     <input {($value)}="email"/>
     ```
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining the property's types like:
+- [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
   Person = can.DefineMap.extend("Person",{
@@ -196,12 +194,12 @@ Print out the exported values like:
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./2-read-form.html
 @highlight 4-11,15,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
 @highlight 6-10,only
@@ -211,16 +209,15 @@ Update the `JS` tab to:
 
 ### The problem
 
-The data we need to pass to the server needs to be
-cleaned up.  Let's create the following properties with
-associated behaviors:
+Our data needs to be cleaned up before we pass it to the server.
+We need to create the following properties, with associated behaviors:
 
 - `cardNumber` - The user's card number as a string without hyphens (`-`).
 - `expiryMonth` - A number for the month entered.
 - `expiryYear` - A number for the year entered.
 - `cvc` - A number for the cvc entered.
 
-We can print out the values like:
+So that we can print out the values like:
 
 ```html
 <p>{{cardNumber}}, {{expiryMonth}}-{{expiryYear}}, {{cvc}}</p>
@@ -244,12 +241,12 @@ We can print out the values like:
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./3-format.html
 @highlight 16,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
 @highlight 7-9,12-24,27-30,only
@@ -261,14 +258,14 @@ Update the `JS` tab to:
 
 ### The problem
 
-Let's add `class='is-error'` when a form value has a value, but
-it's not valid according to `Stripe`'s validators. Let's create
-the following properties that return an error message for their
-form property:
+We need to add `class='is-error'` when a form value has a value that
+is not valid according to Stripe’s validators. To do that, we need to
+create the following properties that will return an error message for
+their respective form property:
 
-- `cardError` - "Invalid card number (ex: 4242-4242-4242)."
-- `expiryError` - "Invalid expiration date (ex: 01-22)."
-- `cvcError` - "Invalid CVC (ex: 123)."
+- `cardError` - “Invalid card number (ex: 4242-4242-4242).”
+- `expiryError` - “Invalid expiration date (ex: 01-22).”
+- `cvcError` - “Invalid CVC (ex: 123).”
 
 ### What you need to know
 
@@ -279,17 +276,17 @@ form property:
 
 - Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
   ```html
-  {{#if error}}class='is-error'
+  {{#if error}}class='is-error'{{/if}}
   ```
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./4-validate-values.html
 @highlight 5,9,13,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./4-validate-values.js
 @highlight 10-14,30-35,42-46,only
@@ -300,8 +297,8 @@ Update the `JS` tab to:
 
 ### The problem
 
-When the user submits the form, let's call stripe to get
-a token.  That token can be used to charge the credit card.
+When the user submits the form, we need to call stripe to get
+a token that we may use to charge the credit card.
 When we get a token, we will simply alert it to the user like:
 
 ```js
@@ -322,7 +319,7 @@ After submitting the form, you should see an alert like:
 
    Notice that it also passed the event object with `%event`.
 
-- To prevent a form from submitting call `event.preventDefault()`.
+- To prevent a form from submitting, call `event.preventDefault()`.
 
 - [Stripe.card.createToken](https://stripe.com/docs/stripe.js/v2#card-createToken) can be used to get a token that can be used to charge a card:
 
@@ -342,26 +339,26 @@ After submitting the form, you should see an alert like:
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./5-payment.html
 @highlight 2,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./5-payment.js
 @highlight 48-69,only
 
 
-## Validate form
+## Validate the form
 
 ### The problem
 
-Let's give people a warning message if they enter
-their information incorrectly and disable
-the form until they have entered it correctly.
+We need to show a warning message when information
+is entered incorrectly and disable the form until
+they have entered it correctly.
 
-We'll add the following properties to the ViewModel:
+To do that, we’ll add the following properties to the ViewModel:
 
 - `isCardValid` - returns true if the card is valid
 - `isCardInvalid` - returns true if the card is invalid
@@ -378,15 +375,14 @@ We'll add the following properties to the ViewModel:
 
 ### The solution
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 @sourceref ./6-validate-form.html
 @highlight 4-6,20,only
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
 @highlight 71-81,only
 
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
