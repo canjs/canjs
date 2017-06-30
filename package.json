@@ -48,7 +48,7 @@
     "can-connect-signalr": "0.1.0",
     "can-construct": "3.1.1",
     "can-construct-super": "3.0.3",
-    "can-control": "3.0.10",
+    "can-control": "3.2.0",
     "can-define": "1.0.26",
     "can-define-stream": "0.1.1",
     "can-define-stream-kefir": "0.0.9",
