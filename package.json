@@ -79,7 +79,7 @@
     "can-stream-kefir": "0.3.0",
     "can-symbol": "1.0.0",
     "can-types": "1.1.0",
-    "can-util": "canjs/can-util#294-disabled-events",
+    "can-util": "3.9.3",
     "can-validate": "1.1.0",
     "can-validate-legacy": "1.1.0",
     "can-validate-validatejs": "0.1.0",
