@@ -72,5 +72,5 @@ require('can-define-stream-kefir/can-define-stream-kefir_test');
 
 
 // Integration tests
-// require('../docs/can-guides/experiment/todomvc/test');
-// require('./integration/all/test');
+require('../docs/can-guides/experiment/todomvc/test');
+require('./integration/all/test');
