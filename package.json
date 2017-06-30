@@ -83,7 +83,7 @@
     "can-validate-validatejs": "0.0.6",
     "can-vdom": "3.0.3",
     "can-view-autorender": "3.0.4",
-    "can-view-callbacks": "3.0.6",
+    "can-view-callbacks": "3.2.0",
     "can-view-href": "3.0.4",
     "can-view-import": "3.0.7",
     "can-view-live": "3.0.7",
