@@ -972,4 +972,4 @@ When finished, you should see something like the following JS Bin:
 
 <a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?js,output">JS Bin on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?3.35.5"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
