@@ -1,0 +1,18 @@
+<script type='text/stache' id="payment-view">
+  <form>
+
+	<input type='text' name='number' placeholder='Card Number'
+	  {($value)}="userCardNumber"/>
+
+	<input type='text' name='expiry' placeholder='MM-YY'
+	  {($value)}="userExpiry"/>
+
+	<input type='text' name='cvc' placeholder='CVC'
+	  {($value)}="userCVC"/>
+
+	<button>Pay ${{amount}}</button>
+
+	<p>{{userCardNumber}}, {{userExpiry}}, {{userCVC}}</p>
+	<p>{{cardNumber}}, {{expiryMonth}}-{{expiryYear}}, {{cvc}}</p>
+  </form>
+</script>
