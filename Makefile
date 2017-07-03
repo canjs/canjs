@@ -15,6 +15,9 @@ publish-docs:
 	git add -f node_modules/jquery-ui
 	git add -f node_modules/funcunit
 	git add -f node_modules/syn
+	git add -f node_modules/react
+	git add -f node_modules/react-dom
+	git add -f node_modules/react-view-model
 	git add -f node_modules/socket.io-client
 	git add -f node_modules/feathers/package.json
 	git add -f node_modules/feathers-authentication-client/package.json
