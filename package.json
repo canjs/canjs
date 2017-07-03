@@ -65,7 +65,7 @@
     "can-map-backup": "3.1.0",
     "can-map-define": "3.1.0",
     "can-namespace": "1.0.0",
-    "can-ndjson-stream": "0.1.0",
+    "can-ndjson-stream": "0.1.2",
     "can-observation": "3.3.0",
     "can-param": "1.0.1",
     "can-reflect": "1.2.0",
