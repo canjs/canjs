@@ -190,8 +190,7 @@ render templates in script tags
 - **[can-ndjson-stream]** <small><%can-ndjson-stream.package.version%></small> Convert ndjson stream into a ReadableStream of JS objects
   - `npm install can-ndjson-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-ndjson-stream">Star</a>
-
-
+  
 </div>
 
 ### [can-legacy Legacy Collection]

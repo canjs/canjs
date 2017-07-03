@@ -1,3 +1,4 @@
+
 // Core tests
 require('../component/component_test');
 require('../compute/compute_test');
