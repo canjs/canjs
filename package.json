@@ -117,7 +117,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "socket.io-client": "^1.7.2",
-    "steal": "^1.5.5-pre.0",
+    "steal": "^1.5.5",
     "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.1.0",
