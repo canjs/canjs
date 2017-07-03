@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "can-cid": "1.0.3",
-    "can-component": "3.2.1",
+    "can-component": "3.2.2",
     "can-compute": "3.3.1",
     "can-connect": "1.5.3",
     "can-connect-cloneable": "0.2.0",
@@ -68,7 +68,7 @@
     "can-ndjson-stream": "0.1.2",
     "can-observation": "3.3.0",
     "can-param": "1.0.1",
-    "can-reflect": "1.2.0",
+    "can-reflect": "1.2.1",
     "can-route": "3.2.0",
     "can-route-pushstate": "3.1.0",
     "can-set": "1.3.0",
