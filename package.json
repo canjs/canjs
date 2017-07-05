@@ -45,7 +45,7 @@
     "can-connect": "1.5.3",
     "can-connect-cloneable": "0.2.0",
     "can-connect-feathers": "3.6.0",
-    "can-connect-ndjson": "0.1.0",
+    "can-connect-ndjson": "0.1.1",
     "can-connect-signalr": "0.2.0",
     "can-construct": "3.2.0",
     "can-construct-super": "3.1.0",
