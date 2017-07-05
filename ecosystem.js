@@ -16,8 +16,10 @@ require("can-stache-converters");
 require("can-validate");
 require("can-validate-validatejs");
 require("can-view-import");
+require("can-react-component");
 require("can-stream");
 require("can-stream-kefir");
 require("can-zone");
+require("react-view-model");
 
 module.exports = can;

@@ -50,7 +50,6 @@ _The best, most hardened and generally useful libraries in CanJS._
   - `npm install can-route-pushstate --save`
   - <a class="github-button" href="https://github.com/canjs/can-route-pushstate">Star</a>
 
-
 </div>
 
 ### [can-infrastructure Infrastructure Collection]
@@ -92,8 +91,7 @@ _Utility libraries that power the core collection._
 - **[can-view-target]** <small><%can-view-target.package.version%></small> A fast-path DOM fragment compile target
   - `npm install can-view-target --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-target">Star</a>
-- **[can-view-live]** <small><%can-view-live.package.version%></small> Update the DOM with
-  a compute
+- **[can-view-live]** <small><%can-view-live.package.version%></small> Update the DOM with a compute
   - `npm install can-view-live --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-live">Star</a>
 - **[can-view-nodelist]** <small><%can-view-nodelist.package.version%></small> Maintains live-binding relationships
@@ -120,6 +118,12 @@ _Utility libraries that power the core collection._
 - **[can-reflect]** <small><%can-reflect.package.version%></small> Perform reflection on unknown data types
   - `npm install can-reflect --save`
   - <a class="github-button" href="https://github.com/canjs/can-reflect">Star</a>
+- **[can-react-component]** <small><%can-react-component.package.version%></small> Create a React component out of a CanComponent.
+  - `npm install can-react-component --save`
+  - <a class="github-button" href="https://github.com/canjs/can-react-component">Star</a>
+- **[react-view-model]** <small><%react-view-model.package.version%></small> Create an auto-rendering container component with an observable view-model.
+  - `npm install react-view-model --save`
+  - <a class="github-button" href="https://github.com/canjs/react-view-model">Star</a>
 
 </div>
 
@@ -159,8 +163,7 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-view-import]** <small><%can-view-import.package.version%></small> Import modules within can-stache templates
   - `npm install can-view-import --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-import">Star</a>
-- **[can-view-autorender]** <small><%can-view-autorender.package.version%></small> Automatically
-render templates in script tags
+- **[can-view-autorender]** <small><%can-view-autorender.package.version%></small> Automatically render templates in script tags
   - `npm install can-view-autorender --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-autorender">Star</a>
 - **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
@@ -190,7 +193,6 @@ render templates in script tags
 - **[can-ndjson-stream]** <small><%can-ndjson-stream.package.version%></small> Convert ndjson stream into a ReadableStream of JS objects
   - `npm install can-ndjson-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-ndjson-stream">Star</a>
-
 
 </div>
 

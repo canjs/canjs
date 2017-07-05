@@ -68,6 +68,7 @@
     "can-ndjson-stream": "0.1.2",
     "can-observation": "3.3.0",
     "can-param": "1.0.1",
+    "can-react-component": "0.1.5",
     "can-reflect": "1.2.2",
     "can-route": "3.2.0",
     "can-route-pushstate": "3.1.0",
@@ -77,6 +78,7 @@
     "can-stache": "3.2.0",
     "can-stache-bindings": "3.4.4",
     "can-stache-converters": "3.2.0",
+    "can-stache-key": "0.0.3",
     "can-stream": "0.3.1",
     "can-stream-kefir": "0.3.1",
     "can-symbol": "1.0.0",
@@ -97,7 +99,7 @@
     "can-view-scope": "3.3.0",
     "can-view-target": "3.1.0",
     "can-zone": "0.6.10",
-    "can-stache-key": "0.0.3"
+    "react-view-model": "^0.5.4"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
@@ -111,8 +113,11 @@
     "http-server": "^0.10.0",
     "jquery": "2.x - 3.x",
     "jquery-ui": "^1.12.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "socket.io-client": "^1.7.2",
-    "steal": "^1.5.5-pre.0",
+    "steal": "^1.5.5",
     "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.1.0",
@@ -170,7 +175,7 @@
       "bit-docs-tag-package": "^0.0.5"
     },
     "glob": {
-      "pattern": "{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}",
+      "pattern": "{node_modules,docs}/{can-*,steal-stache,react-view-model}/**/*.{js,md}",
       "ignore": [
         "node_modules/can-wait/examples/**/*",
         "node_modules/can-*/dist/**/*",
