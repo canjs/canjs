@@ -45,7 +45,7 @@
     "can-connect": "1.5.3",
     "can-connect-cloneable": "0.2.0",
     "can-connect-feathers": "3.6.0",
-    "can-connect-ndjson": "0.1.0",
+    "can-connect-ndjson": "0.1.1",
     "can-connect-signalr": "0.2.0",
     "can-construct": "3.2.0",
     "can-construct-super": "3.1.0",
@@ -65,7 +65,7 @@
     "can-map-backup": "3.1.0",
     "can-map-define": "3.1.1",
     "can-namespace": "1.0.0",
-    "can-ndjson-stream": "0.1.2",
+    "can-ndjson-stream": "0.1.4",
     "can-observation": "3.3.0",
     "can-param": "1.0.1",
     "can-react-component": "0.1.5",
@@ -83,7 +83,7 @@
     "can-stream-kefir": "0.3.1",
     "can-symbol": "1.0.0",
     "can-types": "1.1.0",
-    "can-util": "3.9.5",
+    "can-util": "3.9.6",
     "can-validate": "1.1.0",
     "can-validate-legacy": "1.1.0",
     "can-validate-validatejs": "0.1.0",
@@ -99,7 +99,7 @@
     "can-view-scope": "3.3.0",
     "can-view-target": "3.1.0",
     "can-zone": "0.6.10",
-    "react-view-model": "^0.5.4"
+    "react-view-model": "^0.5.5"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
