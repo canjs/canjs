@@ -1,0 +1,33 @@
+<body>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js'></script>
+<script src="../../dist/global/can.all.js"></script>
+<script>
+var DefineMap = can.DefineMap;
+var reactViewModel = can.reactViewModel;
+
+
+var ViewModel = DefineMap.extend("AppVM", {
+  count: {
+    type: 'number'
+  },
+  increment: function() {
+    return this.count++;
+  },
+});
+
+var AppComponent = reactViewModel("AppComponent", ViewModel, (viewModel) => {
+  return React.createElement('div', {
+    onClick: viewModel.increment.bind(viewModel)
+  }, 'Count: ', viewModel.count, ' (Click Me)');
+  // return (
+  //   <div onClick={ viewModel.increment.bind(viewModel) }>Count: {viewModel.count} (Click Me)</div>
+  // );
+});
+
+var div = document.createElement("div");
+document.body.appendChild(div);
+ReactDOM.render(React.createElement(AppComponent, { count: 0 }), div);
+</script>
+</body>

@@ -1,7 +1,8 @@
 @page guides/contributing/code Code
 @parent guides/contribute
 
-@description Learn how contribute a code change to CanJS.
+@description Learn how contribute a code change to CanJS. Read the [guides/contributing/new-package]
+package guide on how to make a plugin to CanJS.
 
 @body
 

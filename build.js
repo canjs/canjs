@@ -1,21 +1,48 @@
 var stealTools = require("steal-tools");
 var globalJS = require("steal-tools/lib/build/helpers/global").js;
 
+
+
+var ignoreModuleNamesStartingWith = [
+	"jquery",
+	"kefir",
+	'ms-signalr-client',
+	'prop-types',
+	'fbjs',
+	'create-react-class'
+];
+var ignoreModuleNames = [
+	'react'
+];
+
 var baseNormalize = globalJS.normalize();
 var ignoreModules = [function(name){
-    if(name.indexOf("jquery") === 0 || name.indexOf("kefir") === 0 ||
-			name.indexOf('validate.js') === 0 || name.indexOf('ms-signalr-client') === 0 || (name.indexOf("react") === 0 && name.indexOf("react-view-model") !== 0) || name.indexOf("prop-types") === 0 || name.indexOf("fbjs") === 0 || name.indexOf("create-react-class") === 0 || name.indexOf("can-react-component") === 0 || name.indexOf("react-view-model") === 0) {
-        return true;
-    } else {
-        return false;
-    }
+	var foundMatch = ignoreModuleNamesStartingWith.some(function(matchName){
+		return name.indexOf(matchName) === 0;
+	})
+	if(foundMatch) {
+		return true;
+	}
+
+	foundMatch = ignoreModuleNames.some(function(matchName){
+		return name.indexOf(matchName+"@") === 0;
+	});
+	if(foundMatch) {
+		return true;
+	}
+
+
+
+
+
+	return false;
 }];
 var exportsMap = {
     "jquery": "jQuery",
     "can-util/namespace": "can",
     "kefir": "Kefir",
     "validate.js": "validate",
-		"react": "React"
+	"react": "React"
 };
 stealTools.export({
 	steal: {
