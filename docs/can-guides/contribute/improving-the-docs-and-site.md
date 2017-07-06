@@ -1,5 +1,5 @@
-@page guides/contributing/documentation Documentation
-@parent guides/contribute
+@page guides/contributing/documentation Improving the Docs & Site
+@parent guides/contribute 6
 
 @description Learn how to improve CanJS’s site and documentation.
 
@@ -20,39 +20,19 @@ JavaScript files used to produce their API pages.
 
 ## Generate the documentation locally
 
-To generate the CanJS site:
-
-1. Clone [https://github.com/canjs/canjs](https://github.com/canjs/canjs)
-
-   ```
-   > git clone git@github.com:canjs/canjs
-   ```
-
-2. Install dependencies:
-
-   ```
-   > npm install
-   ```
-
-3. Run `bit-docs`:
-
-   ```
-   > ./node_modules/.bin/bit-docs -d
-   ```
-
-This should produce a static site in your `canjs` folder.  Open `canjs/index.html`
-and you should see the site.  You might want to use [http-server](https://www.npmjs.com/package/http-server) to start
-a simple static file server.
+First, follow the steps listed under [guides/contributing/developing-locally] to
+fork & clone the repository, install the dependencies, build the documentation,
+and view the site locally.
 
 ## Improve the theme’s design and styles
 
 The CanJS theme is in
-[bit-docs-html-canjs](https://github.com/canjs/bit-docs-html-canjs). It’s
-[readme](https://github.com/canjs/bit-docs-html-canjs/blob/master/readme.md)
+[bit-docs-html-canjs](https://github.com/canjs/bit-docs-html-canjs). Its
+[README](https://github.com/canjs/bit-docs-html-canjs/blob/master/readme.md)
 has instructions on how to test out the theme.  Once the theme is updated and published,
 
 1. Open `canjs/package.json`. Update `bit-docs-html-canjs`’s version to the new theme version.
-2. Run `./node_modules/.bin/bit-docs -df` to make sure the theme is correctly applied.
+2. Run `npm run document:force` to make sure the theme is correctly applied.
 
 ## Test out content from other repos
 
@@ -60,8 +40,8 @@ As noted above, the API docs from each package come from that package.  So if yo
 improving the docs for say `can-compute`, you want to see what `can-compute`’s docs look like,
 install your local `can-compute` and re-run bit-docs like:
 
-```
-> npm install ../can-compute && ./node_modules/.bin/bit-docs -d
+```shell
+npm install ../can-compute && npm run document:force
 ```
 
 
@@ -69,8 +49,8 @@ install your local `can-compute` and re-run bit-docs like:
 
 Once the docs look right locally, commit your changes, then run:
 
-```
-> make
+```shell
+make
 ```
 
 The make script will generate the documentation again and push out the `gh-pages` branch.
@@ -158,7 +138,7 @@ parameters.
 
 
 
-### body
+### Body
 
 Most body sections start with a `## Use` subsection.  This is a mini guide on
 how to use that piece of code.  Modules should have long bodies that span
@@ -168,7 +148,7 @@ information about nearly all of its sub-functions.  However
 use section because it’s covered in [can-component].
 
 
-### structuring documentation
+### Structuring documentation
 
 - Group names (like `prototype`) should be lower case.
 - Types should be capitalized `{String}` except when they are describing a function [can-fixture.requestHandler].
