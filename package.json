@@ -19,7 +19,7 @@
     "release:major": "npm version major && npm run build && npm publish",
     "build": "node build.js",
     "build-tests": "node test/build.js",
-    "document": "bit-docs && mkdir -p doc/workers/ && mkdir -p doc/workers/static/ && cp node_modules/bit-docs/lib/configure/node_modules/bit-docs-html-canjs/dist/search-worker.js doc/workers/static/search-worker.js"
+    "document": "bit-docs"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
@@ -157,7 +157,6 @@
   "bit-docs": {
     "html": {
       "dependencies": {
-        "normalize.css": "^5.0.0",
         "steal-stache": "^3.0.5"
       },
       "static": [],
@@ -169,8 +168,7 @@
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.6.0",
-      "bit-docs-html-canjs": "^1.0.7",
-      "bit-docs-generate-searchmap": "^0.1.3",
+      "bit-docs-html-canjs": "^0.8.1-0",
       "bit-docs-prettify": "^0.1.1",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",
