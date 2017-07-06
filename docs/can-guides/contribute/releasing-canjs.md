@@ -1,5 +1,5 @@
-@page guides/contributing/releases Releases
-@parent guides/contribute
+@page guides/contributing/releases Releasing CanJS
+@parent guides/contribute 9
 @outline 2
 @description Release and hosting information for CanJS maintainers.
 
@@ -10,8 +10,6 @@ For maintainers of CanJS and its submodules this guide describes
 - How continuous integration is set up
 - How dependencies are kept up to date
 - How to make a releases of CanJS subprojects and the main package
-- How to update the CanJS website
-
 
 ## Continuous Integration
 
@@ -35,7 +33,7 @@ npm run ci
 ```
 
 
-## Updating Dependencies with Greenkeeper
+## Updating dependencies with Greenkeeper
 
 All CanJS repositories are set up with [Greenkeeper](https://greenkeeper.io/). Greenkeeper tracks dependencies and creates a branch for every new version coming in. This will trigger Travis CI to run the tests and if a dependency update breaks the tests or a breaking (major) version was released, it will create a pull request.
 
@@ -64,7 +62,7 @@ Before making any release please make sure that
 
 ### Releasing CanJS subprojects
 
-All CanJS subprojects modules have the same structure which allows making releases through NPM scripts.
+All CanJS subprojects modules have the same structure which allows making releases through npm scripts.
 
 To make a release:
 
@@ -128,7 +126,7 @@ The following would be a `MINOR` release:
 ```
 can-core-a       3.0.1 -> 3.0.2
 can-core-b       3.0.1 -> 3.0.10
-// this means can-ecoystem-b was added to the ecosystem collection
+// this means can-ecosystem-b was added to the ecosystem collection
 + can-ecosystem-b 0.0.1  
 ```
 
@@ -147,30 +145,3 @@ can-core-a           3.0.1 -> 3.0.2
 can-core-b           3.0.1 -> 3.1.0
 can-infrastructure-a 3.0.1 -> 4.0.0
 ```
-
-
-## Updating canjs.com
-
-canjs.com is hosted on [GitHub pages](https://pages.github.com/) from the [canjs/canjs#gh-pages](https://github.com/canjs/canjs/tree/gh-pages) branch. To generate and push a new version of the website, verify you have push access to that branch. Then get all latest changes via:
-
-```
-git checkout master
-git fetch --all && git rebase
-npm cache clean
-rm -rf node_modules
-npm install
-```
-
-We also have to delete the local `gh-pages` branch:
-
-```
-git branch -D gh-pages
-```
-
-Then run
-
-```
-make
-```
-
-This will generate and publish a new version of the website.

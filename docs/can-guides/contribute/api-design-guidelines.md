@@ -1,5 +1,5 @@
 @page guides/contributing/api-design-guidelines API Design Guidelines
-@parent guides/contribute
+@parent guides/contribute 8
 
 @description Learn how to design APIs which are consistent with CanJS.
 
@@ -15,7 +15,7 @@ This document is geared towards contributors who are designing new APIs for CanJ
 
 ### Variable casing
 
-All methods and properties should be camelCase. Class and constructor function names are exclusively PascalCase. 
+All methods and properties should be camelCase. Class and constructor function names are exclusively PascalCase.
 
 ### Methods are verbs, properties are nouns
 

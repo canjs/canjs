@@ -1,5 +1,5 @@
 @page guides/contributing/evangelism Evangelism
-@parent guides/contribute
+@parent guides/contribute 11
 
 @description Learn about resources that can help you spread the word about CanJS.
 
@@ -18,7 +18,7 @@ There’s lots of ways to spread the word about CanJS such as:
 
 Whatever you do, please let us know so we can promote you and what you’re doing.
 
-## Giving a presentation
+## Speaking at a conference or meetup
 
 The [Presentations Google Drive Folder](https://drive.google.com/drive/u/1/folders/0Bx-kNqf-wxZeaWc2ay1ZSzZZQXc)
 contains all of the DoneJS teams talks organized by project.  It contains
@@ -27,26 +27,24 @@ a CanJS folder with CanJS presentations.
 Some of the presentations are out dated, but it’s a good place to check for
 existing content.
 
+## Organizing a CanJS meetup
 
-## Meetups
+There are several CanJS meetup groups already created:
 
-There are several DoneJS meetups already created:
-
- - [Chicago](https://www.meetup.com/DoneJS-Chicago/)
- - [Silicon Valley](https://www.meetup.com/DoneJS-Silicon-Valley/)
- - [Boston](https://www.meetup.com/DoneJS-Boston/)
- - [Ft. Lauderdale](https://www.meetup.com/DoneJS-Fort-Lauderdale/)
- - [Los Angeles](https://www.meetup.com/DoneJS-LA/)
- - [New York](https://www.meetup.com/DoneJS-NYC/)
- - [Phoenix](https://www.meetup.com/DoneJS-Phoenix/)
- - [Raleigh-Durham](https://www.meetup.com/DoneJS-raleigh-durham/)
- - [San Francisco](https://www.meetup.com/DoneJS-San-Francisco/)
- - [Seattle](https://www.meetup.com/DoneJS-Seattle/)
+- [Boston](https://www.meetup.com/DoneJS-Boston/)
+- [Chicago](https://www.meetup.com/DoneJS-Chicago/)
+- [Ft. Lauderdale](https://www.meetup.com/DoneJS-Fort-Lauderdale/)
+- [Los Angeles](https://www.meetup.com/DoneJS-LA/)
+- [New York](https://www.meetup.com/DoneJS-NYC/)
+- [Phoenix](https://www.meetup.com/DoneJS-Phoenix/)
+- [Raleigh-Durham](https://www.meetup.com/DoneJS-raleigh-durham/)
+- [San Francisco](https://www.meetup.com/DoneJS-San-Francisco/)
+- [Seattle](https://www.meetup.com/DoneJS-Seattle/)
+- [Silicon Valley](https://www.meetup.com/DoneJS-Silicon-Valley/)
 
 We’re always looking for people to speak at one of these meetups, become an organizer,
 or start their own meetup.  If you are interested in any of these things,
 please let Justin Meyer know (`justin@bitovi.com`).
-
 
 ## Writing a blog article
 
