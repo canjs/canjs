@@ -10,9 +10,9 @@ CanJS is an evolving and improving set of client-side JavaScript architectural l
 
 CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#team) and [Bitovi](https://www.bitovi.com) are responsible for CanJS. They steer its direction, add features, fix bugs, and help you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
 
-<img srcset="/docs/images/home/Home-Tortoise-bw.png 1x, /docs/images/home/Home-Tortoise-bw-x2.png 2x" src="/docs/images/home/Home-Tortoise-bw.png" style="float: right;">
+<img srcset="../docs/images/home/Home-Tortoise-bw.png 1x, ../docs/images/home/Home-Tortoise-bw-x2.png 2x" src="../docs/images/home/Home-Tortoise-bw.png" style="float: right;">
 
-<img srcset="/docs/images/home/Home-Hare-bw.png 1x, /docs/images/home/Home-Hare-bw-x2.png 2x" src="/docs/images/home/Home-Tortoise-bw.png">
+<img srcset="../docs/images/home/Home-Hare-bw.png 1x, ../docs/images/home/Home-Hare-bw-x2.png 2x" src="../docs/images/home/Home-Tortoise-bw.png">
 
 **CanJS’s goals are briefly summarized in its mission statement:**
 
