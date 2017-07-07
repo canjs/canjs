@@ -18,19 +18,19 @@ var platforms = [{
 	version: '11.0'
 }, {
 	browserName: 'safari',
-	platform: 'OS X 10.11',
-	version: '10.0'
+	platform: 'OS X 10.12',
+	version: 'latest'
 }, {
 	browserName: 'MicrosoftEdge',
 	platform: 'Windows 10'
 }, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
-	version: '49.0'
+	version: 'latest'
 }, {
 	browserName: 'googlechrome',
 	platform: 'Windows 10',
-	version: '57.0'
+	version: 'latest'
 }, {
 	browserName: 'Safari',
 	'appium-version': '1.6.3',
