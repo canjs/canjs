@@ -10,7 +10,6 @@ publish-docs:
 	git add -f node_modules/es6-promise
 	git add -f node_modules/steal
 	git add -f node_modules/steal-*
-	git add -f node_modules/when
 	git add -f node_modules/jquery
 	git add -f node_modules/jquery-ui
 	git add -f node_modules/funcunit
@@ -19,6 +18,11 @@ publish-docs:
 	git add -f node_modules/react-dom
 	git add -f node_modules/react-view-model
 	git add -f node_modules/socket.io-client
+	git add -f node_modules/create-react-class
+    git add -f node_modules/fbjs
+    git add -f node_modules/loose-envify
+    git add -f node_modules/object-assign
+    git add -f node_modules/prop-types
 	git add -f node_modules/feathers/package.json
 	git add -f node_modules/feathers-authentication-client/package.json
 	git add -f node_modules/feathers-hooks/package.json
