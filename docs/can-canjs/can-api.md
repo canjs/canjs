@@ -1,11 +1,11 @@
 @page api API Docs
 @parent canjs 2
-@outline 0
+@outline 1
 @package ../../package.json
 @templateRender <% %>
 @subchildren
 @description
-Welcome to the CanJS docs! Learn about all the packages that make-up CanJS & how they work together to help you build amazing applications!
+Welcome to the CanJS API documentation! Learn about all the packages that make-up CanJS and how they work together to help you build amazing applications!
 
 @body
 
