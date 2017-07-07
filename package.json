@@ -68,7 +68,7 @@
     "can-ndjson-stream": "0.1.4",
     "can-observation": "3.3.0",
     "can-param": "1.0.1",
-    "can-react-component": "0.1.5",
+    "can-react-component": "0.1.6",
     "can-reflect": "1.2.2",
     "can-route": "3.2.0",
     "can-route-pushstate": "3.1.0",
