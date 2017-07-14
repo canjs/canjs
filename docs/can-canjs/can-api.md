@@ -193,6 +193,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-ndjson-stream]** <small><%can-ndjson-stream.package.version%></small> Convert ndjson stream into a ReadableStream of JS objects
   - `npm install can-ndjson-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-ndjson-stream">Star</a>
+- **[can-migrate-codemods]** <small><%can-migrate-codemods.package.version%></small> Code refactor CLI with transformation scripts to help migrate CanJS from 2.x to 3.x
+  - `npm install -g can-migrate-codemods`
+  - <a class="github-button" href="https://github.com/canjs/can-migrate-codemods">Star</a>
 
 </div>
 
