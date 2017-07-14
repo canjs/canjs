@@ -43,7 +43,7 @@
     "can-cid": "1.0.3",
     "can-component": "3.3.0",
     "can-compute": "3.3.1",
-    "can-connect": "1.5.3",
+    "can-connect": "1.5.4",
     "can-connect-cloneable": "0.2.0",
     "can-connect-feathers": "3.6.0",
     "can-connect-ndjson": "0.1.1",
