@@ -64,6 +64,7 @@
     "can-map": "3.3.1",
     "can-map-backup": "3.1.0",
     "can-map-define": "3.1.1",
+    "can-migrate-codemods": "0.0.1",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "0.1.4",
     "can-observation": "3.3.1",
