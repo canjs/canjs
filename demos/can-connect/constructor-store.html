@@ -1,5 +1,5 @@
 <body>
-	<button id='maker'>Create Todo Editor</button>
+<button id='maker'>Create Todo Editor</button>
 
 <script src="../../node_modules/steal/steal.js">
 import connect from "can-connect";
@@ -9,85 +9,83 @@ import constructorStore from "can-connect/constructor/store/";
 import fixture from "can-fixture";
 import canEvent from "can-event";
 
-// A connection that gets todos data
-var todosConnection = connect([constructorStore,constructor,dataUrl,{
-    updatedInstance: function(instance, props){
-  	  Object.assign(instance, props);
-    }
-}],{
+// define a Todo type with can-event event binding support
+var Todo = function(props) { Object.assign(this, props); };
+Todo.prototype = canEvent;
+
+// connection that retrieves todos data
+var todosConnection = connect([constructorStore, constructor, dataUrl], {
   url: "/todos",
   instance: function(props) {
-	  return Object.assign(props, canEvent);
-  },
-  serializeInstance: function(instance){
-	  return {id: instance.id, name: instance.name}
+    return new Todo(props);
   }
 });
 
-// Trap ajax requests to return and modify the following `todo` object.
+// static todo data for this example
 var todo = {
-	id: 5,
-	name: "do the dishes"
+  id: 5,
+  name: "do the dishes"
 };
+
+// mock HTTP requests for the `todo` endpoint.
 fixture({
-	"GET /todos/{id}": function(){
-		return todo;
-	},
-	"PUT /todos/{id}": function(request){
-		todo.name = request.data.name;
-		return {name: request.data.name};
-	}
+  "GET /todos/{id}": function(){
+    return todo;
+  },
+  "PUT /todos/{id}": function(request){
+    todo.name = request.data.name;
+    return {name: request.data.name};
+  }
 });
 
+// generate element that edits a specified todo
 var todoEditor = function(id){
-	var element = document.createElement('div');
-	var todo;
+  var todo;
+  var element = document.createElement('div');
+  element.innerHTML = "<input/><button>X</button>";
 
-	var update = function(){
-		element.firstChild.value = todo.name;
-	};
+  var updateElement = function(){
+    element.firstChild.value = todo.name;
+  };
 
-	element.innerHTML = "<input/><button>X</button>";
+  // get specified todo from connection
+  todosConnection.get({id: id}).then(function(retrievedTodo){
+    todo = retrievedTodo; // keep returned todo so we can listen to changes on it
+    updateElement(); // update input element with retrievedTodo info
+    todo.on("name", updateElement); // when todo name changes update input element
+    todosConnection.addInstanceReference(todo); // previous line is a new usage of todo, so increase reference count
+  });
 
-	todosConnection.get({id: id}).then(function(retrievedTodo){
-		todo = retrievedTodo;
-		todo.on("name", update);
-		todosConnection.addInstanceReference(todo);
-		update();
-	}).catch(function(e){debugger;});
+  // listen to 'X' button click
+  element.lastChild.onclick = function(){
+    todo.off("name", updateElement); // stop listening to todo name change
+    todosConnection.deleteInstanceReference(todo); // previous line removed a usage of todo, so reduce reference count
+    element.parentNode.removeChild(element); // remove this todoEditor from page
+  };
 
-	// listen to remove
-    element.lastChild.onclick = function(){
-    	todo.off("name", update);
-    	todosConnection.deleteInstanceReference(todo);
-    	element.parentNode.removeChild(element);
-    };
+  var updateData = function(newName) {
+    todo.name = newName; // update name on todo instance
+    todosConnection.save(todo); // save updated name to todo data source
+    todo.dispatch("name"); // send name changed signal
+  };
 
-    element.firstChild.onchange = function(){
-    	todo.name = this.value;
-		todo.dispatch("name");
-    };
+  // listen to input element onchange events
+  element.firstChild.onchange = function(){
+    updateData(this.value);
+  };
 
-    element.firstChild.onkeypress = function(ev){
-    	if(ev.keyCode === 13) {
-    		todo.name = this.value;
-			todo.dispatch("name");
+  // listen to input element keypress events
+  element.firstChild.onkeypress = function(ev){
+    if(ev.keyCode === 13) { // if the enter key was pressed
+      updateData(this.value);
+    }
+  };
 
-			todosConnection.save(todo);
-    	}
-    };
-
-    return element;
+  return element;
 };
-
 
 document.getElementById('maker').onclick = function(){
-	var element = todoEditor(5);
-	document.body.appendChild(element);
+  document.body.appendChild(todoEditor(5));
 };
-
-
-
-
 </script>
 </body>
