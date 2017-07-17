@@ -1,6 +1,6 @@
 @page guides/upgrade/using-codemods Using Codemods
 @parent guides/upgrade 1
-@description Learn how to migrate your app to CanJS 3 using [can-migrate-codemods](https://www.npmjs.com/package/can-migrate-codemods).
+@description Learn how to migrate your app to CanJS 3 using [can-migrate](https://www.npmjs.com/package/can-migrate).
 
 @body
 
@@ -8,7 +8,7 @@
 
 A codemod is a transformation script that parses the [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 of source code in order to do a code-aware find-and-replace refactor across
-multiple files. [can-migrate-codemods](https://www.npmjs.com/package/can-migrate-codemods)
+multiple files. [can-migrate](https://www.npmjs.com/package/can-migrate)
 is a CLI utility for running codemods that can help migrate your app to CanJS 3.
 
 For example, the following CanJS 2.3 code:
@@ -42,10 +42,10 @@ codemod transformations can also be used with this CLI.
 
 ## Install
 
-Install `can-migrate-codemods` from npm:
+Install `can-migrate` from npm:
 
 ```shell
-npm install -g can-migrate-codemods
+npm install -g can-migrate
 ```
 
 This will make the `can-migrate` command available globally.
@@ -81,7 +81,7 @@ Runs the `can-component-rename` transform on the files that match the `**/*.js` 
 can-migrate **/*.js --transforms can-component-rename/can-component-rename.js --apply
 ```
 
-You can find a [complete list of transforms on GitHub](https://github.com/canjs/can-migrate-codemods/tree/master/src/transforms).
+You can find a [complete list of transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms).
 
 ## Recommended Migration Process
 
