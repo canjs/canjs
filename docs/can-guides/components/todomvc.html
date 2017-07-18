@@ -226,7 +226,7 @@ can.Component.extend({
 	template: can.view('todo-create-template'),
 	events: {
 		'#new-todo keyup': function (el, e) {
-			var value = can.trim(el.val());
+			var value = String.prototype.trim(el.val());
 			if (e.keyCode === 13 && value !== '') {
 				new Todo({
 					text : value,
@@ -250,7 +250,7 @@ can.Component.extend({
 			el.children('.edit').focus();
 		},
 		updateTodo: function (todo, el) {
-			var value = can.trim(el.val());
+			var value = String.prototype.trim(el.val());
 
 			if (value === '') {
 				todo.destroy();

@@ -3296,7 +3296,7 @@ var behaviors = {
         can.bind.call(el, 'attributes', attributesHandler);
     },
     value: function (el, data) {
-        var propName = '$value', attrValue = can.trim(removeBrackets(el.getAttribute('can-value'))), getterSetter;
+        var propName = '$value', attrValue = String.prototype.trim(removeBrackets(el.getAttribute('can-value'))), getterSetter;
         if (el.nodeName.toLowerCase() === 'input' && (el.type === 'checkbox' || el.type === 'radio')) {
             var property = getComputeFrom.scope(el, data.scope, attrValue, {}, true);
             if (el.type === 'checkbox') {
@@ -5566,7 +5566,7 @@ var expression = {
     },
     tokenize: function (expression) {
         var tokens = [];
-        (can.trim(expression) + ' ').replace(tokensRegExp, function (whole, arg) {
+        (String.prototype.trim(expression) + ' ').replace(tokensRegExp, function (whole, arg) {
             tokens.push(arg);
         });
         return tokens;
@@ -6079,7 +6079,7 @@ var core = {
         }
     },
     makeLiveBindingPartialRenderer: function (partialName, state) {
-        partialName = can.trim(partialName);
+        partialName = String.prototype.trim(partialName);
         return function (scope, options, parentSectionNodeList) {
             var nodeList = [this];
             nodeList.expression = '>' + partialName;
@@ -6173,10 +6173,10 @@ var core = {
         };
     },
     splitModeFromExpression: function (expression, state) {
-        expression = can.trim(expression);
+        expression = String.prototype.trim(expression);
         var mode = expression.charAt(0);
         if ('#/{&^>!'.indexOf(mode) >= 0) {
-            expression = can.trim(expression.substr(1));
+            expression = String.prototype.trim(expression.substr(1));
         } else {
             mode = null;
         }
