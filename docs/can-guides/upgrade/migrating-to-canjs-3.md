@@ -8,6 +8,8 @@
 
 CanJS 3 introduces an even more modular project structure and several new features, while having a minimal number of deprecations and removals from the [2.3 API](//v2.canjs.com/docs/).
 
+Use this guide alone or with the [guides/upgrade/using-codemods] guide, which shows you how to use the [can-migrate](https://github.com/canjs/can-migrate) CLI code refactoring tool to automate parts of the migration process.
+
 This guide goes over:
 
 * [*Pre-migration preparation*](#Pre_migrationpreparation) you can do in your current 2.x project to more easily move to 3.x in the future.
