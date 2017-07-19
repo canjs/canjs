@@ -360,7 +360,7 @@ steal('can/util','can/map/map_helpers.js', 'can/map', 'can/compute', function (c
 			}
 			return serialized;
 		};
-
-		return can.define;
 	}
+
+	return can.define;
 });
