@@ -34,6 +34,9 @@ has instructions on how to test out the theme.  Once the theme is updated and pu
 1. Open `canjs/package.json`. Update `bit-docs-html-canjs`’s version to the new theme version.
 2. Run `npm run document:force` to make sure the theme is correctly applied.
 
+The [CanJS design folder](https://drive.google.com/open?id=0B9uYesPecByGZGkzc2YxRHA4ZEE)
+has logos, stickers, and other design resources.
+
 ## Test out content from other repos
 
 As noted above, the API docs from each package come from that package.  So if you’re
