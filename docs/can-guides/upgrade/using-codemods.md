@@ -78,7 +78,7 @@ can-migrate --apply **/*.js
 Runs the `can-component-rename` transform on the files that match the `**/*.js` glob:
 
 ```shell
-can-migrate **/*.js --transforms can-component-rename/can-component-rename.js --apply
+can-migrate **/*.js --transform can-component-rename/can-component-rename.js --apply
 ```
 
 You can find a [complete list of transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms).
