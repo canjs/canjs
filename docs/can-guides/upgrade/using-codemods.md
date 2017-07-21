@@ -121,7 +121,238 @@ Use the following steps as a guide for using this tool:
 
 **Note:** If you are using [StealJS](https://stealjs.com/), ensure you are running StealJS 0.16 or greater.
 
-## Transformations [WIP]
+# Transforms
+Read this section to understand how the transforms are organized, the different types of transformations that are included with `can-migrate` and what to expect from each one. You can also use these transform templates as a starting point for writing your own custom transformation scripts.
+
+## Introduction
+There are 3 main types of transforms included in the can-migrate tool: replace, import and require. There are also three module-specific transforms: can-component-rename, can-data and can-extend that handle more complex transformations for those modules.
+
+Each can-module that has a transform script has a folder in the [src/transform directory](https://github.com/canjs/can-migrate/tree/master/src/transforms). Most of these folders have the following structure:
+can-moduleName/
+replace.js
+import.js
+require.js
+
+You can run a specific transform by passing can-moduleName/replace.js or you can pass the entire can-moduleName/ directory to the CLI tool with the --transform flag.
+
+Run all the transforms in the directory:
+```bash
+$ can-migrate */*.js --apply --transform can-moduleName/
+```
+
+Run a specific transform script:
+```bash
+$ can-migrate */*.js --apply --transform can-moduleName/replace.js
+```
+
+#### Replace Transforms
+Replace how a module is imported and used, which may vary by module. You can learn how each module is transformed by a particular script in the specific transformation section below.
+
+For example, it can transform code like this:
+
+```js
+import can from "can";
+can.addClass(el, 'myClass');
+```
+ 
+…to this:
+ 
+```js
+import className from "can-util/dom/class-name/class-name";
+className.addClass.call(el, 'myClass');
+```
+
+
+#### import.js
+Import scripts change the way a module is imported. It is smart enough to handle the variable names in most cases.
+
+For example, it will transform any of the following:
+```js
+import Component from "can/component/";
+import Component from "can/component/component";
+import Component from "can/component/component.js";
+```
+...to this:
+```js
+import Component from "can-component";
+```
+
+
+#### require.js
+Require scripts are similar to the import scripts except it handles the cases where the component is loaded uses require.
+
+For example, it will transform any of the following:
+```js
+const Component = require("can/component/");
+const Component = require("can/component/component");
+const Component = require("can/component/component.js");
+```
+...to this:
+```js
+const Component = require("can-component");
+```
+
+### Custom
+Where the replace, import, and require scripts don’t handle all the cases, we have some more specific scripts for can-component-rename, can-data, can-extend read about them in the Specific Transformations section.
+
+## Specific Transformations
+This section details all the transformation scripts with examples of before and after.
+
+### can-component-rename
+ 
+Running [the can-component-rename transform](https://github.com/canjs/can-migrate/tree/master/src/transforms/can-component-rename):
+ 
+```
+can-migrate -a **/*.js -t can-component-rename/
+```
+ 
+…will transform any of the following from this:
+ 
+```js
+Component.extend({
+  tag: 'my-tag',
+  template: 'Hi',
+  events: {
+    removed: function(){}
+  }
+});
+```
+```js
+can.Component.extend({
+  tag: 'my-tag',
+  template: 'Hi',
+  events: {
+    removed(){}
+  }
+});
+```
+```js
+Component.extend({
+  tag: 'my-tag',
+  events: {
+    'removed': () => {}
+  }
+});
+
+```
+ 
+…to this:
+ 
+```js
+Component.extend({
+  tag: 'my-tag',
+  view: 'Hi',
+  events: {
+    '{element} beforeremove': function(){}
+  }
+});
+```
+```js
+can.Component.extend({
+  tag: 'my-tag',
+  view: 'Hi',
+  events: {
+    '{element} beforeremove'(){}
+  }
+});
+```
+```js
+Component.extend({
+  tag: 'my-tag',
+  events: {
+    '{element} beforeremove': () => {}
+  }
+});
+```
+
+### can-data
+ 
+Running [the can-data transform](https://github.com/canjs/can-migrate/tree/master/src/transforms/can-data):
+ 
+```
+can-migrate -a **/*.js -t can-data/
+```
+ 
+…will transform any of the following from this:
+ 
+```js
+import can from 'can';
+
+can.data(el, 'name', 'Luke');
+can.data(el, 'name');
+```
+```js
+const can = require('can');
+
+can.data(el, 'name', 'Luke');
+can.data(el, 'name');
+
+```
+ 
+…to this:
+ 
+```js
+import domData from 'can-util/dom/data/data';
+import can from 'can';
+
+domData.set.call(el, 'name', 'Luke');
+domData.get.call(el, 'name');
+```
+```js
+const domData = require('can-util/dom/data/data');
+const can = require('can');
+
+domData.set.call(el, 'name', 'Luke');
+domData.get.call(el, 'name');
+```
+
+### can-extend
+ 
+Running [the can-extend transform](https://github.com/canjs/can-migrate/tree/master/src/transforms/can-extend):
+ 
+```
+can-migrate -a **/*.js -t can-extend/
+```
+ 
+…will transform any of the following from this:
+ 
+```js
+import can from 'can';
+
+can.extend(true, {}, {}, {}, {});
+can.extend(false, {}, {});
+can.extend({}, {});
+```
+```js
+const can = require('can');
+
+can.extend(true, {}, {}, {}, {});
+can.extend(false, {}, {});
+can.extend({}, {});
+
+```
+ 
+…to this:
+ 
+```js
+import deepAssign from 'can-util/js/deep-assign/deep-assign';
+import assign from 'can-util/js/assign/assign';
+import can from 'can';
+
+deepAssign({}, {}, {}, {});
+assign({}, {});
+assign({}, {});
+```
+```js
+const deepAssign = require('can-util/js/deep-assign/deep-assign');
+const assign = require('can-util/js/assign/assign');
+const can = require('can');
+
+deepAssign({}, {}, {}, {});
+assign({}, {});
+assign({}, {});
+```
+
 
 ### can-addClass
  
