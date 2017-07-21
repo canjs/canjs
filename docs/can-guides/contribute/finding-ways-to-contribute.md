@@ -15,7 +15,7 @@ We use a few labels to organize issues across all of the repositories:
 
 - [help wanted](https://github.com/search?q=org%3Acanjs+label%3A%22help+wanted%22&state=open) for any issues with which the core team would like help
 - [easy](https://github.com/search?q=org%3Acanjs+label%3Aeasy&state=open) for issues the core team thinks are good for someone who’s new to contributing
-- [documentation](https://github.com/search?q=org%3Acanjs+label%3Adesign&state=open) for issues related to documenting the APIs
+- [documentation](https://github.com/search?q=org%3Acanjs+label%3Adocumentation&state=open) for issues related to documenting the APIs
 - [design](https://github.com/search?q=org%3Acanjs+label%3Adesign&state=open) for issues that could use a designer’s expertise
 
 Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is%3Aissue+no%3Alabel&state=open) is also really helpful!
