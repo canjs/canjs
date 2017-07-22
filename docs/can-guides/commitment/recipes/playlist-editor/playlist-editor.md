@@ -10,7 +10,7 @@ an hour to complete.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/xiponom/16/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/meqowis/2/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -409,13 +409,15 @@ In this section, we will:
   });
   new PlaylistVM().startedDrag();
   ```
+- Certain browsers have default drag behaviors for certain elements like `<a>` and `<img>`
+	that can be prevented with the `draggable="false"` attribute.
 
 ### The solution
 
 Update the template in the __HTML__ tab to:
 
 @sourceref ./4-drag.html
-@highlight 22,only
+@highlight 22-24,only
 
 Update the __JavaScript__ tab to:
 
