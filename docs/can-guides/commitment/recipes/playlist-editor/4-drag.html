@@ -21,9 +21,9 @@
       {{#each searchResultsPromise.value}}
         <li ($draginit)="videoDrag(%arguments[1])">
           <a draggable="false" href="https://www.youtube.com/watch?v={{./id.videoId}}" target='_blank'>
-          <img draggable="false" src="{{./snippet.thumbnails.default.url}}" width="50px"/>
+            <img draggable="false" src="{{./snippet.thumbnails.default.url}}" width="50px"/>
           </a>
-           {{./snippet.title}}
+          {{./snippet.title}}
         </li>
       {{/each}}
       </ul>
