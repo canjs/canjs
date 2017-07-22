@@ -34,7 +34,7 @@ Get started with CanJS by following one of the tutorials below.
             <li>
                 <a href="doc/guides/setup.html">
                     <div>
-                        <img src="static/img/gear.svg">
+                        <img src="../docs/images/home/gear.svg">
                     </div>
                     Setting Up CanJS
                 </a>
@@ -48,35 +48,33 @@ Get started with CanJS by following one of the tutorials below.
         <h3>Build a demo app</h3>
         <ul>
             <li>
-                <a href="doc/guides/chat.html">
+                <a href="doc/guides/chat.html" title="Learn how to build a real-time chat app.">
                     <div>
-                        <img src="static/img/chat-bubble.svg">
+                        <img src="../docs/images/home/chat-bubble.svg">
                     </div>
                     Chat Guide
                 </a>
             </li>
             <li>
-                <a href="doc/guides/todomvc.html">
+                <a href="doc/guides/todomvc.html" title="Learn how to build the classic TodoMVC app.">
                     <div>
-                        <img src="static/img/check-mark.svg">
+                        <img src="../docs/images/home/check-mark.svg">
                     </div>
                     TodoMVC Guide
                 </a>
             </li>
             <li>
-                <a href="doc/guides/atm.html">
+                <a href="doc/guides/atm.html" title="Learn how to build an Automated Teller Machine app.">
                     <div>
-                        <img src="static/img/credit-card.svg">
+                        <img src="../docs/images/home/credit-card.svg">
                     </div>
-                    <abbr title="Automated Teller Machine">ATM</abbr> Guide
+                    ATM Guide
                 </a>
             </li>
         </ul>
     </div>
     <div class="clear-both"></div>
 </div>
-
-You can find even more guides in the [guides/recipes] section of the [guides].
 
 ## Missing Something?
 
