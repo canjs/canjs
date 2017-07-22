@@ -23,6 +23,58 @@ the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
 
 @body
 
+## Getting Started
+
+Get started with CanJS by following one of the tutorials below.
+
+<div class="getting-started-icons">
+    <div class="titled-list">
+        <h3>Start from scratch</h3>
+        <ul>
+            <li>
+                <a href="doc/guides/setup.html">
+                    <div>
+                        <img src="../docs/images/home/gear.svg">
+                    </div>
+                    Setting Up CanJS
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="or-separator">
+        or
+    </div>
+    <div class="titled-list">
+        <h3>Build a demo app</h3>
+        <ul>
+            <li>
+                <a href="doc/guides/chat.html" title="Learn how to build a real-time chat app.">
+                    <div>
+                        <img src="../docs/images/home/chat-bubble.svg">
+                    </div>
+                    Chat Guide
+                </a>
+            </li>
+            <li>
+                <a href="doc/guides/todomvc.html" title="Learn how to build the classic TodoMVC app.">
+                    <div>
+                        <img src="../docs/images/home/check-mark.svg">
+                    </div>
+                    TodoMVC Guide
+                </a>
+            </li>
+            <li>
+                <a href="doc/guides/atm.html" title="Learn how to build an Automated Teller Machine app.">
+                    <div>
+                        <img src="../docs/images/home/credit-card.svg">
+                    </div>
+                    ATM Guide
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="clear-both"></div>
+</div>
 
 ## Missing Something?
 
