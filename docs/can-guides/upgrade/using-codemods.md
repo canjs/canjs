@@ -239,8 +239,8 @@ can-migrate -a **/*.js -t can-component-rename/
 
 ```js
 Component.extend({
-  tag: 'my-tag',
-  template: 'Hi',
+  tag: "my-tag",
+  template: "Hi",
   events: {
     removed: function(){}
   }
@@ -252,10 +252,10 @@ Component.extend({
 
 ```js
 Component.extend({
-  tag: 'my-tag',
-  view: 'Hi',
+  tag: "my-tag",
+  view: "Hi",
   events: {
-    '{element} beforeremove': function(){}
+    "{element} beforeremove": function(){}
   }
 });
 ```
@@ -265,8 +265,8 @@ Component.extend({
 
 ```js
 can.Component.extend({
-  tag: 'my-tag',
-  template: 'Hi',
+  tag: "my-tag",
+  template: "Hi",
   events: {
     removed(){}
   }
@@ -278,10 +278,10 @@ can.Component.extend({
 
 ```js
 can.Component.extend({
-  tag: 'my-tag',
-  view: 'Hi',
+  tag: "my-tag",
+  view: "Hi",
   events: {
-    '{element} beforeremove'(){}
+    "{element} beforeremove"(){}
   }
 });
 ```
@@ -291,9 +291,9 @@ can.Component.extend({
 
 ```js
 Component.extend({
-  tag: 'my-tag',
+  tag: "my-tag",
   events: {
-    'removed': () => {}
+    "removed": () => {}
   }
 });
 ```
@@ -303,9 +303,9 @@ Component.extend({
 
 ```js
 Component.extend({
-  tag: 'my-tag',
+  tag: "my-tag",
   events: {
-    '{element} beforeremove': () => {}
+    "{element} beforeremove": () => {}
   }
 });
 ```
@@ -322,42 +322,42 @@ can-migrate -a **/*.js -t can-data/
 …will transform this:
 
 ```js
-import can from 'can';
+import can from "can";
 
-can.data(el, 'name', 'Luke');
-can.data(el, 'name');
+can.data(el, "name", "Luke");
+can.data(el, "name");
 ```
 @highlight 3,4
 
 …to this:
 
 ```js
-import domData from 'can-util/dom/data/data';
-import can from 'can';
+import domData from "can-util/dom/data/data";
+import can from "can";
 
-domData.set.call(el, 'name', 'Luke');
-domData.get.call(el, 'name');
+domData.set.call(el, "name", "Luke");
+domData.get.call(el, "name");
 ```
 @highlight 1,4,5
 
 …or this:
 
 ```js
-const can = require('can');
+const can = require("can");
 
-can.data(el, 'name', 'Luke');
-can.data(el, 'name');
+can.data(el, "name", "Luke");
+can.data(el, "name");
 ```
 @highlight 3,4
 
 …to this:
 
 ```js
-const domData = require('can-util/dom/data/data');
-const can = require('can');
+const domData = require("can-util/dom/data/data");
+const can = require("can");
 
-domData.set.call(el, 'name', 'Luke');
-domData.get.call(el, 'name');
+domData.set.call(el, "name", "Luke");
+domData.get.call(el, "name");
 ```
 @highlight 1,4,5
 
@@ -372,7 +372,7 @@ can-migrate -a **/*.js -t can-extend/
 …will transform this:
 
 ```js
-import can from 'can';
+import can from "can";
 
 can.extend(true, {}, {}, {}, {});
 can.extend(false, {}, {});
@@ -383,9 +383,9 @@ can.extend({}, {});
 …to this:
 
 ```js
-import deepAssign from 'can-util/js/deep-assign/deep-assign';
-import assign from 'can-util/js/assign/assign';
-import can from 'can';
+import deepAssign from "can-util/js/deep-assign/deep-assign";
+import assign from "can-util/js/assign/assign";
+import can from "can";
 
 deepAssign({}, {}, {}, {});
 assign({}, {});
@@ -396,7 +396,7 @@ assign({}, {});
 …or this:
 
 ```js
-const can = require('can');
+const can = require("can");
 
 can.extend(true, {}, {}, {}, {});
 can.extend(false, {}, {});
@@ -407,9 +407,9 @@ can.extend({}, {});
 …to this:
 
 ```js
-const deepAssign = require('can-util/js/deep-assign/deep-assign');
-const assign = require('can-util/js/assign/assign');
-const can = require('can');
+const deepAssign = require("can-util/js/deep-assign/deep-assign");
+const assign = require("can-util/js/assign/assign");
+const can = require("can");
 
 deepAssign({}, {}, {}, {});
 assign({}, {});
@@ -437,7 +437,7 @@ can-migrate -a **/*.js -t can-addClass/replace.js
 
 ```js
 import can from "can";
-can.addClass(el, 'myClass');
+can.addClass(el, "myClass");
 ```
 @highlight 2
 
@@ -446,7 +446,7 @@ can.addClass(el, 'myClass');
 ```js
 import className from "can-util/dom/class-name/class-name";
 import can from "can";
-className.addClass.call(el, 'myClass');
+className.addClass.call(el, "myClass");
 ```
 @highlight 1,3
 
@@ -539,7 +539,7 @@ can-migrate -a **/*.js -t can-append/replace.js
 
 ```js
 import can from "can";
-can.append(el, '<p></p>');
+can.append(el, "<p></p>");
 ```
 @highlight 2
 
@@ -548,7 +548,7 @@ can.append(el, '<p></p>');
 ```js
 import mutate from "can-util/dom/mutate/mutate";
 import can from "can";
-mutate.mutate.appendChild.call(el, '<p></p>');
+mutate.appendChild.call(el, "<p></p>");
 ```
 @highlight 1,3
 
@@ -573,7 +573,7 @@ can-migrate -a **/*.js -t can-batch/replace.js
 
 ```js
 import can from "can";
-can.batch.method();
+can.batch.start();
 ```
 @highlight 2
 
@@ -582,7 +582,7 @@ can.batch.method();
 ```js
 import canBatch from "can-batch";
 import can from "can";
-canBatch.method();
+canBatch.start();
 ```
 @highlight 1,3
 
@@ -607,7 +607,7 @@ can-migrate -a **/*.js -t can-buildFragment/replace.js
 
 ```js
 import can from "can";
-can.buildFragment();
+can.buildFragment("<div><input/></div>");
 ```
 @highlight 2
 
@@ -616,7 +616,7 @@ can.buildFragment();
 ```js
 import buildFragment from "can-util/dom/fragment/fragment";
 import can from "can";
-buildFragment();
+buildFragment("<div><input/></div>");
 ```
 @highlight 1,3
 
@@ -731,7 +731,7 @@ can-migrate -a **/*.js -t can-component/replace.js
 
 ```js
 import can from "can";
-can.Component();
+can.Component.extend();
 ```
 @highlight 2
 
@@ -740,7 +740,7 @@ can.Component();
 ```js
 import Component from "can-component";
 import can from "can";
-Component();
+Component.extend();
 ```
 @highlight 1,3
 
@@ -937,7 +937,7 @@ can-migrate -a **/*.js -t can-construct/replace.js
 
 ```js
 import can from "can";
-can.Construct();
+can.Construct.extend();
 ```
 @highlight 2
 
@@ -946,7 +946,7 @@ can.Construct();
 ```js
 import Construct from "can-construct";
 import can from "can";
-Construct();
+Construct.extend();
 ```
 @highlight 1,3
 
@@ -1619,7 +1619,7 @@ can-migrate -a **/*.js -t can-list/replace.js
 
 ```js
 import can from "can";
-var people = new can.List(['Alex', 'Bill']);
+var people = new can.List(["Alex", "Bill"]);
 ```
 @highlight 2
 
@@ -1628,7 +1628,7 @@ var people = new can.List(['Alex', 'Bill']);
 ```js
 import CanList from "can-list";
 import can from "can";
-var people = new CanList(['Alex', 'Bill']);
+var people = new CanList(["Alex", "Bill"]);
 ```
 @highlight 1,3
 
@@ -2111,7 +2111,7 @@ can.remove.call(el, child);
 ```js
 import mutate from "can-util/dom/mutate/mutate";
 import can from "can";
-mutate.mutate.removeChild.call.call(el, child);
+mutate.removeChild.call.call(el, child);
 ```
 @highlight 1,3
 
@@ -2136,7 +2136,7 @@ can-migrate -a **/*.js -t can-removeEvent/replace.js
 
 ```js
 import can from "can";
-can.event.removeEvent.call(el, 'click', function() {});
+can.event.removeEvent.call(el, "click", function() {});
 ```
 @highlight 2
 
@@ -2145,7 +2145,7 @@ can.event.removeEvent.call(el, 'click', function() {});
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.removeEvent.call(el, 'click', function() {});
+canEvent.removeEvent.call(el, "click", function() {});
 ```
 @highlight 1,3
 
@@ -2244,7 +2244,7 @@ can-migrate -a **/*.js -t can-route/replace.js
 
 ```js
 import can from "can";
-can.route("{page}", {page: 'homepage'});
+can.route("{page}", {page: "homepage"});
 ```
 @highlight 2
 
@@ -2253,7 +2253,7 @@ can.route("{page}", {page: 'homepage'});
 ```js
 import route from "can-route";
 import can from "can";
-route("{page}", {page: 'homepage'});
+route("{page}", {page: "homepage"});
 ```
 @highlight 1,3
 
@@ -2900,7 +2900,7 @@ can-migrate -a **/*.js -t can-view-scope/replace.js
 
 ```js
 import can from "can";
-const scope = new can.view.scope(data);
+const scope = new can.view.Scope(data);
 ```
 @highlight 2
 
