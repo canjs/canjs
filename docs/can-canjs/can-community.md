@@ -64,7 +64,7 @@ Get involved with one of the most inviting communities on the internet!
 
 ## Contribute to CanJS
 
-Check out the contribute section of the [guides] page for information on [guides/contributing/bug-report reporting bugs], [guides/contributing/feature-suggestion suggesting features], and more!
+Check out the [guides/contribute Contribution guide] for information on [guides/contributing/bug-report reporting bugs], [guides/contributing/feature-suggestion suggesting features], and more!
 
 ## Consultancies
 
