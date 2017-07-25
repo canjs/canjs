@@ -41,6 +41,11 @@ Todo.List = DefineList.extend("TodoList", {
 			todo.complete = value;
 			todo.save();
 		});
+	},
+	destroyComplete: function(){
+		this.complete.forEach(function(todo){
+			todo.destroy();
+		});
 	}
 });
 
