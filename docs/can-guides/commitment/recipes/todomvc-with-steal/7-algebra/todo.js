@@ -1,7 +1,7 @@
 // models/todo.js
-var DefineMap = require("can-define/map/"),
-	DefineList = require("can-define/list/"),
-	set = require("can-set");
+var DefineMap = require("can-define/map/");
+var DefineList = require("can-define/list/");
+var set = require("can-set");
 
 var Todo = DefineMap.extend("Todo", {
 	id: "string",

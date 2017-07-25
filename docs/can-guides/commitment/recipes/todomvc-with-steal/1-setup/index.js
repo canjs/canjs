@@ -2,7 +2,6 @@
 var view = require("./index.stache");
 var DefineMap = require("can-define/map/");
 
-
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string"
 });

@@ -14,7 +14,7 @@ StealJS.
   - A [can-define/map/map] ViewModel and an instance of that ViewModel.
   - A [can-stache] view that is rendered with the instance of the ViewModel.
 - In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module and
-  pass it the application's `ViewModel` instance.
+  pass it the application’s `ViewModel` instance.
 
 ### What you need to know
 
@@ -131,7 +131,7 @@ StealJS.
   </section>
   ```
 
-- Use [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) to load the application's
+- Use [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) to load the application’s
   styles and run its tests:
 
   ```js
@@ -160,13 +160,10 @@ http-server -c-1
 Create a new project:
 
 ```cmd
-npm init
+npm init -y
 ```
 
-Hit `Enter` to accept the defaults.
-
-
-Install `steal`, `steal-tool`, and CanJS's core modules:
+Install `steal`, `steal-tools`, and CanJS’s core modules:
 
 ```cmd
 npm install steal steal-tools steal-css --save-dev
@@ -227,7 +224,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 
 - [DefineMap Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeUmlrN2p0Yi1qUzg)
 - [can-define/map/map.extend DefineMap.extend] defines a new `Type`.
-- The [can-define.types.type type] behavior defines a property's type like:
+- The [can-define.types.type type] behavior defines a property’s type like:
 
   ```js
   DefineMap.extend({
@@ -235,7 +232,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
   })
   ```
 
-- The [can-define.types.value] behavior defines a property's initial value like:
+- The [can-define.types.value] behavior defines a property’s initial value like:
 
   ```js
   DefineMap.extend({
@@ -253,7 +250,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 
 ### The solution
 
-Update _models/todo.js_ to:
+Create _models/todo.js_ as follows:
 
 @sourceref ./2-define-todo/todo.js
 
@@ -337,11 +334,11 @@ Update _models/todo.js_ to the following:
   ```
 
 - Write out an `<li>` for each todo in `todosList`, including:
-  - write the todo's name in the  `<label>`
-  - add `completed` in the `<li>`'s `class` if the todo is `complete`.
-  - check the todo's checkbox if the todo is `complete`.
+  - write the todo’s name in the  `<label>`
+  - add `completed` in the `<li>`’s `class` if the todo is `complete`.
+  - check the todo’s checkbox if the todo is `complete`.
 
-- Write out the number of items left and completed count in the "clear completed" button.
+- Write out the number of items left and completed count in the “Clear completed” button.
 
 ### What you need to know
 
@@ -371,15 +368,15 @@ Update _index.stache_ to the following:
 @sourceref ./4-render-todos/index.html
 @highlight 11-21,26,40,only
 
-## Toggle a todo's completed state (event bindings) ##
+## Toggle a todo’s completed state (event bindings) ##
 
 ### The problem
 
-- Call `toggleComplete` when a todo's checkbox is clicked upon.
+- Call `toggleComplete` when a todo’s checkbox is clicked upon.
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
@@ -388,25 +385,29 @@ Update _index.stache_ to the following:
 
 ### The solution
 
+Update _index.stache_ to the following:
+
 @sourceref ./5-toggle-event/index.html
 @highlight 14-16,only
 
-## Toggle a todo's completed state (data bindings) ##
+## Toggle a todo’s completed state (data bindings) ##
 
 ### The problem
 
-- Update a todo's `complete` property when the checkbox's `checked` property changes with [can-stache-bindings.twoWay two-way bindings].
+- Update a todo’s `complete` property when the checkbox’s `checked` property changes with [can-stache-bindings.twoWay two-way bindings].
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
-- Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input's `value` in sync:
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
+- Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
 
    ```html
    <input  {($value)}="name"/>
    ```
 
 ### The solution
+
+Update _index.stache_ to the following:
 
 @sourceref ./6-toggle-data/index.html
 @highlight 14-15,only
@@ -472,6 +473,8 @@ QUnit.deepEqual(sorted, [
 ```
 npm install can-set --save
 ```
+
+Update _models/todo.js_ to the following:
 
 @sourceref ./7-algebra/todo.js
 @highlight 4,35-39,only
@@ -596,6 +599,8 @@ Create _models/todos-fixture.js_ as follows:
 npm install can-connect --save
 ```
 
+Update _models/todo.js_ to the following:
+
 @sourceref ./9-connection/todo.js
 @highlight 5,42-48,only
 
@@ -610,7 +615,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 
 - [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Important Interfaces_.
 - [can-connect/can/map/map.getList Type.getList] gets data using the
-  [can-connect/connection.getList connection's getList] and returns a
+  [can-connect/connection.getList connection’s getList] and returns a
   promise that resolves to the `Type.List` of instances:
 
   ```js
@@ -633,15 +638,17 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 
 ### The solution
 
-@sourceref ./10-connection-list/index.js
-@highlight 4-5,9-13,only
+Update _index.js_ to the following:
 
-## Toggling a todo's checkbox updates service layer (can-connect use) ##
+@sourceref ./10-connection-list/index.js
+@highlight 5,10-12,only
+
+## Toggling a todo’s checkbox updates service layer (can-connect use) ##
 
 
 ### The problem
 
-Update the service layer when a todo's completed status
+Update the service layer when a todo’s completed status
 changes. Also, disable the checkbox while the update is happening.
 
 ### What you need to know
@@ -665,6 +672,8 @@ changes. Also, disable the checkbox while the update is happening.
 
 ### The solution
 
+Update _index.stache_ to the following:
+
 @sourceref ./11-toggle-save/index.html
 @highlight 16-17,only
 
@@ -673,9 +682,9 @@ changes. Also, disable the checkbox while the update is happening.
 
 ### The problem
 
-When a todo's __destroy__ button is clicked, we need to delete the
-todo on the server and remove the todo's element from the page. While
-the todo is being destroyed, add `destroying` to the todo's `<li>`'s `class`
+When a todo’s __destroy__ button is clicked, we need to delete the
+todo on the server and remove the todo’s element from the page. While
+the todo is being destroyed, add `destroying` to the todo’s `<li>`’s `class`
 attribute.
 
 ### Things to know
@@ -694,6 +703,8 @@ attribute.
   ```
 
 ### The solution
+
+Update _index.stache_ to the following:
 
 @sourceref ./12-connection-destroy/index.html
 @highlight 13,20,only
@@ -764,7 +775,7 @@ Create _components/todo-create/todo-create.js_ as follows:
 
 @sourceref ./13-component-create/todo-create.js
 
-Update _index.stache_ to:
+Update _index.stache_ to the following:
 
 @sourceref ./13-component-create/index.html
 @highlight 2,6,only
@@ -774,7 +785,7 @@ Update _index.stache_ to:
 ### The problem
 
 Make it possible to edit a `todos` name by
-double-clicking it's label which should reveal
+double-clicking its label which should reveal
 a _focused_ input element.  If the user hits
 the __enter__ key, the todo should be updated on the
 server.  If the input loses focus, it should go
@@ -817,7 +828,7 @@ Create _components/todo-list/todo-list.js_ as follows:
 
 @sourceref ./14-component-edit/todo-list.js
 
-Update _index.stache_ to:
+Update _index.stache_ to the following:
 
 @sourceref ./14-component-edit/index.html
 @highlight 3,12,only
@@ -826,15 +837,15 @@ Update _index.stache_ to:
 
 ### The problem
 
-Make the "toggle all" checkbox work.  It should be
+Make the “toggle all” checkbox work.  It should be
 unchecked if a single todo is unchecked and checked
 if all todos are checked.
 
-When the "toggle all" checkbox is changed, the
+When the “toggle all” checkbox is changed, the
 application should update every todo to match
-the status of the "toggle all" checkbox.
+the status of the “toggle all” checkbox.
 
-The "toggle all" checkbox should be disabled if a
+The “toggle all” checkbox should be disabled if a
 single todo is saving.
 
 ### What you need to know
@@ -859,23 +870,29 @@ can be simulated like:
 
 ### The solution
 
+Update _models/todo.js_ to the following:
+
 @sourceref ./15-setter-toggle/todo.js
 @highlight 34-44,only
+
+Update _index.js_ to the following:
 
 @sourceref ./15-setter-toggle/index.js
 @highlight 14-19,only
 
+Update _index.stache_ to the following:
+
 @sourceref ./15-setter-toggle/index.html
 @highlight 10-12,only
 
-## Clear completed todo's (event bindings) ##
+## Clear completed todo’s (event bindings) ##
 
 ### The problem
-Make the "Clear completed" button work. When the button is clicked, It should destroy each completed todo. 
+Make the "Clear completed" button work. When the button is clicked, It should destroy each completed todo.
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation's](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
@@ -884,8 +901,12 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 
 ### The solution
 
+Update _models/todo.js_ to the following:
+
 @sourceref ./16-clear-all-completed/todo.js
 @highlight 45-49,only
+
+Update _index.stache_ to the following:
 
 @sourceref ./16-clear-all-completed/index.html
 @highlight 31-32,only
@@ -906,7 +927,7 @@ be added if they represent the current page.
 
 ### What you need to know
 
-- [can-route] is used to connect a `DefineMap`'s properties
+- [can-route] is used to connect a `DefineMap`’s properties
   to the URL.  This is done with [can-route.data] like:
 
   ```js
@@ -923,7 +944,7 @@ be added if they represent the current page.
 
 - [can-route.ready] initializes the connection between the
   url and the `AppViewModel`.  After you've created all
-  your application's pretty routing rules, call it like:
+  your application’s pretty routing rules, call it like:
 
   ```js
   route.ready()
@@ -954,8 +975,14 @@ be added if they represent the current page.
 npm install can-route --save
 ```
 
+Update _index.js_ to the following:
+
 @sourceref ./17-routing/index.js
 @highlight 5,9-26,39-41,only
 
+Update _index.stache_ to the following:
+
 @sourceref ./17-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
+
+__Success!__ You’ve completed this guide. Have questions or comments? Let us know on [Gitter chat](https://gitter.im/canjs/canjs) or our [forums](http://forums.donejs.com/c/canjs)!
