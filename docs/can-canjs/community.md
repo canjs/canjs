@@ -70,4 +70,4 @@ Check out the [guides/contribute Contribution guide] for information on [guides/
 
 Looking for professional help? [Bitovi](https://www.bitovi.com) is the primary corporate sponsor of CanJS. [Contact Bitovi](https://www.bitovi.com/contact) for contract opportunities.
 
-Does your company offer CanJS consulting services? [Edit this page on GitHub](https://github.com/canjs/canjs/edit/master/docs/can-canjs/can-community.md) and submit a pull request to add yourself here!
+Does your company offer CanJS consulting services? [Edit this page on GitHub](https://github.com/canjs/canjs/edit/master/docs/can-canjs/community.md) and submit a pull request to add yourself here!
