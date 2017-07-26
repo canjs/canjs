@@ -1,5 +1,5 @@
 @page can-legacy Legacy
-@parent canjs 4
+@parent api 3
 @description Former libraries that we still accept patches for, but are
 not under active development.
 

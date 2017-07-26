@@ -1,7 +1,9 @@
 // Core tests
 require('../component/component_test');
 require('../compute/compute_test');
-require('can-connect/test/test');
+if (!System.isEnv('production')) {
+	System.import('can-connect/test/test');
+}
 require('../construct/construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-define/test/test');
@@ -13,6 +15,8 @@ require('can-stache-converters/test/test');
 
 
 // Infrastructure tests
+require('can-deparam/can-deparam-test');
+require('can-param/can-param-test');
 require('../event/event_test');
 if (!System.isEnv('production')) {
 	System.import('can-observation/can-observation_test');
@@ -39,6 +43,8 @@ if (!System.isEnv('production')) {
 if (!System.isEnv('production')) {
 	System.import('can-types/test/test');
 }
+require('can-symbol/can-symbol-test');
+require('can-reflect/can-reflect-test');
 
 
 
@@ -55,6 +61,17 @@ require('../view/ejs/ejs_test');
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
 require('can-connect-signalr/test');
+require('can-connect-cloneable/test/test');
+require('can-stream/can-stream_test');
+require('can-stream-kefir/can-stream-kefir_test');
+require('can-ndjson-stream/can-ndjson-stream-test');
+require('can-connect-ndjson/test/can-connect-ndjson-test');
+require('can-define-stream/can-define-stream_test');
+require('can-define-stream-kefir/can-define-stream-kefir_test');
+require('can-ndjson-stream/can-ndjson-stream-test');
+require('can-connect-ndjson/test/can-connect-ndjson-test');
+require('react-view-model/test/test');
+require('can-react-component/test/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');

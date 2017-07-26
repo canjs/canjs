@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css?family=Droid+Sans');
+
+body {
+  font-family: 'Droid Sans', arial;
+  font-size: 15px;
+  font-weight: bold;
+  background: #f5f5f5;
+  color: #333;
+}
+
+button, input {
+  font-family: 'Droid Sans', arial;
+}
+
+input {
+  width: 98%;
+  margin-top: 10px;
+  padding: 3px;
+  font-size: 14px;
+}
+
+.loading {
+  font-size: 14px;
+  color: green;
+  margin-top: 20px;
+}
+
+.source {
+  width: 48%;
+  padding: 0;
+  list-style-type: none;
+  float: left;
+  border: solid 1px #ddd;
+  background-color: #fff;
+}
+.source li {
+  border-bottom: 1px solid #ddd;
+  cursor: move;
+}
+.source li:hover {
+  background-color: #f5f5f5;
+}
+.source li:last-child {
+  border-bottom: 0px;
+}
+.source li img, .new-playlist li img {
+  float: left;
+  margin-right: 8px;
+}
+
+.new-playlist {
+  text-align: center;
+}
+.new-playlist ul {
+  float: right;
+  padding: 0;
+  width: 48%;
+  border: dashed 1px #bbb;
+  background-color: #fff;
+}
+.new-playlist li {
+  border-top: dashed 1px #bbb;
+
+}
+.new-playlist li:first-child {
+  border: 0;
+}
+.new-playlist li:hover {
+  background-color: #f5f5f5;
+}
+
+.source li, .new-playlist li {
+  font-size: 12px;
+  padding: 6px;
+  list-style: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: normal;
+}
+
+.placeholder, .ghost {
+  background-color: #dff0d8;
+}
+
+.content {
+  color: #999;
+  font-size: 12px;
+  padding: 18px 0;
+}

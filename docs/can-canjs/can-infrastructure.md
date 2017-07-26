@@ -1,5 +1,5 @@
 @page can-infrastructure Infrastructure
-@parent canjs 2
+@parent api 1
 @description Utility libraries that power the core and ecosystem collection.
 
 @body
@@ -113,7 +113,7 @@ The JS utilities consist of:
 - Environment detection helpers: [can-util/js/is-browser-window/is-browser-window], [can-util/js/is-node/is-node], [can-util/js/is-web-worker/is-web-worker].
 - Environment identification helpers: [can-util/js/global/global], [can-util/js/import/import], [can-util/js/base-url/base-url].
 - Polyfills - [can-util/js/set-immediate/set-immediate].
-- URL helpers: [can-util/js/param/param], [can-util/js/deparam/deparam], [can-util/js/join-uris/join-uris].
+- URL helpers: [can-param], [can-deparam], [can-util/js/join-uris/join-uris].
 - Diffing helpers: [can-util/js/diff/diff], [can-util/js/diff-object/diff-object].
 - String helpers: [can-util/js/string/string], [can-util/js/string-to-any/string-to-any].
 - Object identification helpers: [can-util/js/cid/cid].
@@ -300,4 +300,25 @@ if (namespace.unicorn) {
 } else {
 	module.exports = namespace.unicorn = unicorn;
 }
+```
+
+## can-symbol
+
+[can-symbol] contains Symbols used to detail how CanJS may operate on different objects.
+
+```js
+var MyIDSymbol = CanSymbol("my_ID");
+
+var obj = {};
+obj[MyIDSymbol] = 1;
+```
+
+## can-reflect
+
+[can-reflect] allows reflection on unknown data types.
+
+```js
+var foo = new DefineMap({ bar: "baz" });
+
+canReflect.getKeyValue(foo, "bar"); // -> "baz"
 ```

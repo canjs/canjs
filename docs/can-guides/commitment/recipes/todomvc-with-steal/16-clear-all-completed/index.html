@@ -1,0 +1,36 @@
+<!-- index.stache -->
+<can-import from="~/components/todo-create/"/>
+<can-import from="~/components/todo-list/"/>
+<section id="todoapp">
+    <header id="header">
+        <h1>{{appName}}</h1>
+        <todo-create/>
+    </header>
+    <section id="main" class="">
+        <input id="toggle-all" type="checkbox"
+            {($checked)}="allChecked"
+            {$disabled}="todosList.saving.length"/>
+        <label for="toggle-all">Mark all as complete</label>
+        <todo-list {todos}="todosList"/>
+    </section>
+    <footer id="footer" class="">
+        <span id="todo-count">
+            <strong>{{todosList.active.length}}</strong> items left
+        </span>
+        <ul id="filters">
+            <li>
+                <a class="selected" href="#!">All</a>
+            </li>
+            <li>
+                <a href="#!active">Active</a>
+            </li>
+            <li>
+                <a href="#!completed">Completed</a>
+            </li>
+        </ul>
+        <button id="clear-completed"
+            ($click)="allTodos.destroyComplete()">
+            Clear completed ({{allTodos.complete.length}})
+        </button>>
+    </footer>
+</section>

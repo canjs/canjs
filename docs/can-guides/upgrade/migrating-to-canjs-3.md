@@ -1,5 +1,5 @@
 @page migrate-3 Migrating to CanJS 3
-@parent guides/commitment 2
+@parent guides/upgrade 0
 @templateRender <% %>
 @description This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.
 @outline 0
@@ -7,6 +7,8 @@
 @body
 
 CanJS 3 introduces an even more modular project structure and several new features, while having a minimal number of deprecations and removals from the [2.3 API](//v2.canjs.com/docs/).
+
+Use this guide alone or with the [guides/upgrade/using-codemods] guide, which shows you how to use the [can-migrate](https://github.com/canjs/can-migrate) CLI code refactoring tool to automate parts of the migration process.
 
 This guide goes over:
 
@@ -47,13 +49,13 @@ Use the same pattern for the other modules you are using. Be careful when declar
 Instead of:
 
 ```js
-import Map from 'can-map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+import Map from 'can/map/map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
 ```
 
 Write:
 
 ```js
-import CanMap from 'can-map';
+import CanMap from 'can/map/map';
 ```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
@@ -186,7 +188,7 @@ Component.extend({
 	tag: "my-panel",
 
 	events: {
-		"beforeremove": function(){
+		"{element} beforeremove": function(){
 			canViewModel(this.element.parentNode).removePanel(this.viewModel);
 		}
 	}
@@ -411,7 +413,7 @@ string.hyphenate('firstName');
 
 Native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are used instead of jQuery promises which means you need to:
 
-* Include a Promise polyfill if targeting browsers that do not have native support. [Steal](http://stealjs.com/) includes a polyfill for you.
+* Include a Promise polyfill if targeting browsers that do not have native support. [Steal](https://stealjs.com/) includes a polyfill for you.
 * Use `.catch()` instead of `.fail()`.
 * Use `.then()` instead of `.done()`.
 
@@ -684,7 +686,7 @@ Message.List = DefineList.extend({
 });
 
 var messageConnection = superMap({
-	url: 'http://chat.donejs.com/api/messages',
+	url: 'https://chat.donejs.com/api/messages',
 	idProp: 'id',
 	Map: Message,
 	List: Message.List,

@@ -11,7 +11,7 @@ Message.List = can.DefineList.extend({
 
 Message.connection = can.connect.superMap({
 	url: {
-		resource: 'http://chat.donejs.com/api/messages',
+		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
 	Map: Message,

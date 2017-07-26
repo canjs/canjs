@@ -1,9 +1,9 @@
-@page guides/recipes/ajax-file-navigator File Navigator Guide (Advanced)
+@page guides/recipes/file-navigator-advanced File Navigator Guide (Advanced)
 @parent guides/recipes
 
 @description This guide walks you through building a file navigation
 widget.  It takes about 45 minutes to complete.  It was written with
-CanJS 3.4. Checkout the [guides/recipes/simple-file-navigator]
+CanJS 3.4. Checkout the [guides/recipes/file-navigator-simple]
 for an easier example that produces similar functionality.
 
 
@@ -13,14 +13,14 @@ The final widget looks like:
 
 <a class="jsbin-embed" href="//jsbin.com/qunuyi/embed?js,output">JS Bin on jsbin.com</a>
 
-> Note: If you don't see any files show up, run the JSBin again. This
-> JSBin uses randomly generated files so it's possible nothing shows up.
+> Note: If you don't see any files show up, run the JS Bin again. This
+> JS Bin uses randomly generated files so it's possible nothing shows up.
 
-__Start this tutorial by cloning the following JSBin__:
+__Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="//justinbmeyer.jsbin.com/xokopog/embed?html,output">JS Bin on jsbin.com</a>
 
-This JSBin has initial prototype HTML and CSS which is useful for
+This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -67,7 +67,7 @@ The first level files and folders should have a `parentId` of `"0"`.
 
 ### Things to know
 
-- [can-fixture](http://canjs.com/doc/can-fixture.html) - is used to trap AJAX requests like:
+- [can-fixture] is used to trap AJAX requests like:
 
   ```js
   can.fixture("/api/entities", function(request){
@@ -77,7 +77,7 @@ The first level files and folders should have a `parentId` of `"0"`.
   })
   ```
 
-- [can-fixture.store](http://canjs.com/doc/can-fixture.store.html) - can be used to automatically filter records using the querystring.
+- [can-fixture.store] can be used to automatically filter records using the querystring.
 
   ```js
   var entities = [ .... ];
@@ -85,7 +85,7 @@ The first level files and folders should have a `parentId` of `"0"`.
   can.fixture("/api/entities", entitiesStore);
   ```
 
-- [can-fixture.rand](http://canjs.com/doc/can-fixture.rand.html) - can be used to create a random integer.
+- [can-fixture.rand] can be used to create a random integer.
   ```
   can.fixture.rand(10) //-> 10
   can.fixture.rand(10) //-> 0
@@ -179,7 +179,7 @@ entity.name = "cats" //-> logs "entity name changed to cats"
 
 ### Things to know
 
-You can create a `DefineMap` type using [DefineMap.extend](http://canjs.com/doc/can-define/map/map.extend.html) with the type's properties and the properties' types like:
+You can create a `DefineMap` type using [can-define/map/map.extend DefineMap.extend] with the type's properties and the properties' types like:
 
 ```js
 Type = can.DefineMap.extend({
@@ -217,7 +217,7 @@ Entity.getList({parentId: "0"}).then(function(entities){
 
 ### Things to know
 
-[can.connect.baseMap()](http://canjs.com/doc/can-connect/can/base-map/base-map.html) can connect a `Map` type to
+[can-connect/can/base-map/base-map can.connect.baseMap()] can connect a `Map` type to
 a `url` like:
 
 ```js
@@ -249,7 +249,7 @@ in the same way it's expected by the designer.
 
 ### Things to know
 
-- CanJS uses [can-stache](http://canjs.com/doc/can-stache.html) to render data in a template
+- CanJS uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `<script>` tags like:
 
   ```html
@@ -258,8 +258,8 @@ in the same way it's expected by the designer.
   </script>
   ```
 
-  A [can-stache](http://canjs.com/doc/can-stache.html) template uses
-  [{{key}}](http://canjs.com/doc/can-stache.tags.escaped.html) magic tags to insert data into
+  A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
   ```html
@@ -268,7 +268,7 @@ in the same way it's expected by the designer.
   </script>
   ```
 
-- Load a template from a `<script>` tag with [can.stache.from](http://canjs.com/doc/can-stache.from.html) like:
+- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
   var template = can.stache.from(SCRIPT_ID);
   ```
@@ -298,7 +298,7 @@ in the same way it's expected by the designer.
 
 ### The solution
 
-Update the `HTML` tab to render the `folder`'s name.
+Update the __HTML__ tab to render the `folder`'s name.
 
 ```html
 <script type="text/stache" id="app-template">
@@ -306,7 +306,7 @@ Update the `HTML` tab to render the `folder`'s name.
 </script>
 ```
 
-Update the `JS` tab to:
+Update the __JavaScript__ tab to:
 
 1. Create a `folder` `Entity` instance.
 2. Load the `app-template`.  Renders it with `folder` instance, and inserts the result in the `<body>` element.
@@ -333,13 +333,13 @@ document.body.appendChild( frag );
 
 ### The problem
 
-In this section, we'll list the files and folders within the root folder.
+In this section, we’ll list the files and folders within the root folder.
 
 ### Things to know
 
-- Use [{{#if value}}](http://canjs.com/doc/can-stache.helpers.if.html) to do `if/else` branching in `can-stache`.
-- Use [{{#each value}}](http://canjs.com/doc/can-stache.helpers.each.html) to do looping in `can-stache`.
-- Use [{{#eq value1 value2}}](http://canjs.com/doc/can-stache.helpers.is.html) to test equality in `can-stache`.
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.is {{#eq value1 value2}}] to test equality in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
   - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.
@@ -393,7 +393,7 @@ clicks on the root folder's name should toggle if the children are displayed.
 
 ### Things to know
 
-- CanJS uses [ViewModels](http://canjs.com/doc/guides/technical.html#MaintainableMVVM) to manage the behavior
+- CanJS uses [guides/technicalViewModels#MaintainableMVVM ViewModels] to manage the behavior
   of views.  ViewModels can have their own state, such as if a folder `isOpen` and should be showing
   its children. `ViewModels` are custructor functions created with [can-define/map/map can.DefineMap].
 
@@ -513,7 +513,7 @@ Now we want to make all the folders able to open and close.  This means creating
 
 ### Things to know
 
-- [can.Component](http://canjs.com/doc/can-component.html) is used to create custom elements like:
+- [can-component can.Component] is used to create custom elements like:
   ```js
   var MyComponentVM = DefineMap.extend({
     message: {value: "Hello There!"}
@@ -649,7 +649,6 @@ document.body.appendChild( frag );
 @highlight 14-22,25,only
 
 When complete, you should have a working file-navigation widget
-like the completed JSBin above.
+like the completed JS Bin above.
 
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

@@ -1,0 +1,30 @@
+<script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
+var React = require("react");
+var ReactDOM = require("react-dom");
+var DefineMap = require("can-define/map/map");
+var reactViewModel = require("react-view-model");
+
+var ViewModel = DefineMap.extend("AppVM", {
+  first: {
+    type: "string"
+  },
+  last: {
+    type: "string"
+  },
+  get name() {
+    return this.first + " " + this.last;
+  },
+});
+
+var AppComponent = reactViewModel("AppComponent", ViewModel, (viewModel) => {
+  return React.createElement('div', null, viewModel.name);
+  // return (
+  //   <div>{viewModel.name}</div>
+  // );
+});
+
+var div = document.createElement("div");
+document.body.appendChild(div);
+ReactDOM.render(React.createElement(AppComponent, { first: "Christopher", last: "Baker" }), div);
+// ReactDOM.render(<AppComponent first="Christopher" last="Baker" />, div);
+</script>

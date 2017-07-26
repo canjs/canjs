@@ -13,14 +13,14 @@ The easiest way to get started is to clone the following JS&nbsp;Bin by clicking
 
 <a class="jsbin-embed" href="//jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
 
-The JS Bin loads [http://getbootstrap.com/ Bootstrap] for its styles and [http://socket.io/ socket.io] for a socket
-library.  It will be connecting to a RESTful and real-time service layer at [http://chat.donejs.com/api/messages].
+The JS Bin loads [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
+library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
 
-The JS Bin also loads [can.js](https://unpkg.com/can/dist/global/can.js), which is a script that includes all of CanJS core under a
+The JS Bin also loads [can.js](https://unpkg.com/can@3/dist/global/can.js), which is a script that includes all of CanJS core under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global `can` script, but instead you
-should import things directly with a module loader like [StealJS](http://stealjs.com),
+should import things directly with a module loader like [StealJS](https://stealjs.com),
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
@@ -50,7 +50,7 @@ In this section, we will:
  - Show a big “Chat Home” title within a Bootstrap container.
  - Make it so when “Chat Home” is clicked, an exclamation mark (“!”) is added to the end of the title.
 
-In your JS Bin, update the `HTML` tab to:
+In your JS Bin, update the __HTML__ tab to:
 
  - Create a `<script>` tag containing the contents of the `chat-template` template.
  - Have the content insert a `message` value within a responsive Bootstrap container using [can-stache.tags.escaped].
@@ -123,7 +123,7 @@ In this section we will:
  - Create a __home page__ and __chat messages page__ that the user can navigate between
    with links and the browser’s back and forward button.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Check if the `appVM`’s `page` property is `"home"`.  If it is, render the __home
    page__’s content.  If it’s not, it will render the __chat messages page__’s content with the [can-stache.helpers.else] helper.
@@ -176,7 +176,7 @@ In this section, we will:
 
 - Define and use a custom `<chat-message>` element that contains the behavior of the __chat messages page__.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Use the `<chat-messages/>` element.
 - Create a template for the `<chat-messages/>` element that contains the content of the
@@ -238,11 +238,11 @@ into many bite-sized custom elements.
 
 In this section, we will:
 
- - Display messages from [http://chat.donejs.com/api/messages](http://chat.donejs.com/api/messages) when `messagesPromise.isResolved`.
+ - Display messages from [https://chat.donejs.com/api/messages](https://chat.donejs.com/api/messages) when `messagesPromise.isResolved`.
  - Show a “Loading…” message while the messages are loading (`messagesPromise.isPending`).
  - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Check if the messages are in the process of loading and show a loading indicator.
  - Check if the messages failed to load and display the reason for the failure.
@@ -257,7 +257,7 @@ Update the `JavaScript` tab to:
  - Define a `Message` type with [can-define/map/map].
  - Define a `Message.List` type that contains `Message` items.
  - Connect the `Message` and `Message.List` type to
-   the RESTful messages service at `http://chat.donejs.com/api/messages`
+   the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
  - Create a `messagesPromise` property on `ChatMessagesVM` that’s
    [can-define.types.value] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
@@ -269,7 +269,7 @@ Update the `JavaScript` tab to:
 When complete, you should see a list of messages in the __chat messages page__.
 
 This step creates a `Message` model by first creating the `Message` type
-and then connecting it to a messages service at `http://chat.donejs.com/api/messages`.
+and then connecting it to a messages service at `https://chat.donejs.com/api/messages`.
 
 ### Explanation
 
@@ -316,7 +316,7 @@ In this section, we will:
 - Add the ability to create messages on the server and have them added to the list of messages.
 
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Create a form to enter a message’s `name` and `body`.
  - When the form is submitted, call `send` on the `ChatMessagesVM` with [can-stache-bindings.event].
@@ -352,7 +352,7 @@ In this section, we will:
 
 Update the `JavaScript` tab to:
 
-- Create a [http://socket.io/] connection (`socket`).
+- Create a [https://socket.io/] connection (`socket`).
 - Listen for when messages are created, updated, and destroyed, and call the
   corresponding [can-connect/real-time/real-time] methods.
 
@@ -374,8 +374,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="//jsbin.com/mopiyu/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/yexezu/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
-
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>

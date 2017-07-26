@@ -1,0 +1,34 @@
+<script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
+import React from "react";
+import ReactDOM from "react-dom";
+import Component from "react-view-model/component";
+import DefineMap from "can-define/map/map";
+
+class AppComponent extends Component {
+  render() {
+    return React.createElement('div', {
+      onClick: this.viewModel.increment.bind(this.viewModel)
+    }, 'Count: ', this.viewModel.count, ' (Click Me)');
+    // return (
+    //   <div onClick={ this.viewModel.increment.bind(this.viewModel) }>
+    //     Count: {this.viewModel.count} (Click Me)
+    //   </div>
+    // );
+  }
+}
+
+AppComponent.ViewModel = DefineMap.extend("AppVM", {
+  count: {
+    type: "number",
+    value: 0
+  },
+  increment: function() {
+    return this.count++;
+  },
+});
+
+var div = document.createElement("div");
+document.body.appendChild(div);
+ReactDOM.render(React.createElement(AppComponent), div);
+// ReactDOM.render(<AppComponent />, div);
+</script>

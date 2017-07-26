@@ -1,0 +1,57 @@
+<script id="app-template" type="text/stache">
+  {{#if googleApiLoadedPromise.isPending}}
+    <div>Loading Google API ...</div>
+  {{else}}
+    {{#if signedIn}}
+      Welcome {{givenName}}! <button ($click)="googleAuth.signOut()">Sign Out</button>
+    {{else}}
+      <button ($click)="googleAuth.signIn()">Sign In</button>
+    {{/if}}
+
+    <div>
+      <input {($value)}="searchQuery" placeholder="Search for videos"/>
+    </div>
+
+    {{#if searchResultsPromise.isPending}}
+      <div class="loading">Loading videos...</div>
+    {{/if}}
+
+    {{#if searchResultsPromise.isResolved}}
+      <ul class='source'>
+      {{#each searchResultsPromise.value}}
+        <li ($draginit)="videoDrag(%arguments[1])"
+            {{data "dragData"}}>
+          <a draggable="false" href="https://www.youtube.com/watch?v={{./id.videoId}}" target='_blank'>
+            <img draggable="false" src="{{./snippet.thumbnails.default.url}}" width="50px"/>
+          </a>
+          {{./snippet.title}}
+        </li>
+      {{/each}}
+      </ul>
+
+      {{#if searchResultsPromise.value.length}}
+        <div class='new-playlist'>
+          <ul
+		    ($dropover)="addDropPlaceholder(0,getDragData(%arguments[2]))"
+			($dropout)="clearDropPlaceholder()"
+			($dropon)="addVideo(0,getDragData(%arguments[2]))">
+
+            {{#each videosWithDropPlaceholder}}
+              <li class="{{#if isPlaceholder}}placeholder{{/if}}">
+                <a href="https://www.youtube.com/watch?v={{./video.id.videoId}}" target='_blank'>
+                  <img src="{{./video.snippet.thumbnails.default.url}}" width="50px"/>
+                </a>
+
+                {{./video.snippet.title}}
+              </li>
+            {{else}}
+              <div class="content">Drag video here</div>
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+
+    {{/if}}
+
+  {{/if}}
+</script>

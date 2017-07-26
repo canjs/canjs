@@ -19,19 +19,19 @@ Notice it has tests at the bottom of the `Output` tab.
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-<a class="jsbin-embed" href="http://justinbmeyer.jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
 
 The JS Bin is designed to run both the application and its tests in the `OUTPUT`
-tab.  To set this up, the `HTML` tab:
+tab.  To set this up, the __HTML__ tab:
 
  - Loads QUnit for its testing library.  It also includes the `<div id="qunit"></div>`
    element where QUnit’s test results will be written to.
 
- - Loads [can.all.js](https://unpkg.com/can/dist/global/can.all.js), which
+ - Loads [can.all.js](https://unpkg.com/can@3/dist/global/can.all.js), which
    is a script that includes all of CanJS core under a single global `can` namespace.
 
    Generally speaking, you should not use the global `can` script, but instead you
-   should import things directly with a module loader like [StealJS](http://stealjs.com),
+   should import things directly with a module loader like [StealJS](https://stealjs.com),
    WebPack or Browserify.  Read [guides/setup] for instructions on how to set up CanJS in a real app.
 
  - Includes the content for an `app-template` [can-stache] template. This template
@@ -66,7 +66,7 @@ QUnit.module("ATM system", {});
 In this section, we will mock out which pages will be shown as the `state`
 of the `ATM` changes.  
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Switch between different pages of the application as the `ATM` view-model’s `state` property changes
    with [can-stache.helpers.switch].
@@ -98,7 +98,7 @@ property can transition between:
 
 Each of those states are present in the following state diagram:
 
-<img src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png">
+<img height="693" src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png" width="808">
 
 We’ll build out these pages once we build the `Card` and `Transaction` sub-models that will make building the ATM view model easier.
 
@@ -239,7 +239,7 @@ In this section, we will:
  - Allow the user to enter a card number and go to the __Reading Pin__ page.
  - Add tests to the __ATM Basics__ test.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Allow a user to call `cardNumber` with the `<input>`’s `value`.
 
@@ -265,7 +265,7 @@ In this section, we will:
 - Allow the user to enter a pin number and go to the __Choosing Transaction__ page.
 - Add tests to the __ATM Basics__ test.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Call `pinNumber` with the `<input>`’s `value`.
 - Disable the `<input>` while the pin is being verified.
@@ -299,7 +299,7 @@ In this section, we will:
 - Allow the user to pick a transaction type and go to the __Picking Account__ page.
 - Add tests to the __ATM Basics__ test.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Have buttons for choosing a deposit, withdrawal, or print a receipt and exit.
 
@@ -333,7 +333,7 @@ In this section, we will:
   __Withdrawal Info__ page.
 - Add tests to the __ATM Basics__ test.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Write out a _“Loading Accounts…”_ message while the accounts are loading.
 - Write out the accounts when loaded.
@@ -363,7 +363,7 @@ In this section, we will:
 - Allow the user to enter the amount of a deposit and go to the __Successful Transaction__ page.
 - Add tests to the __ATM Basics__ test.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - Ask the user how much they would like to deposit into the account.
 - Update `currentTransaction.amount` with an `<input>`’s `value`.
@@ -402,7 +402,7 @@ In this section, we will:
 
 - Allow the user to enter the amount of a withdrawal and go to the __Successful Transaction__ page.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - Add a __Withdraw__ page that works very similar to the __Deposit__ page.
 
@@ -420,7 +420,7 @@ In this section, we will:
 
 - Show the result of the transaction.
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
 - List out the account balance.
 - Add buttons to:
@@ -440,7 +440,7 @@ In this section, we will make it possible to:
  - See a receipt of all transactions
  - Exit the ATM.  
 
-Update the `HTML` tab to:
+Update the __HTML__ tab to:
 
  - List out all the transactions the user has completed.
  - List out the final value of all accounts.
@@ -469,6 +469,4 @@ Update the `ATM basics` test in the `JavaScript` tab to:
 
 When complete, you have a working ATM!  Cha-ching!
 
-
-
-<script src="//static.jsbin.com/js/embed.min.js?3.39.18"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

@@ -54,7 +54,7 @@ libraries of CanJS are documented.
 
 The [can-ecosystem] collection contains less commonly used libraries or libraries that aren’t quite core ready yet.  The most commonly used libraries here are [can-fixture], [can-stache-converters], and [can-jquery].
 
-The [can-infrastructure] collection contains the utility libraries that power the core and ecoystem
+The [can-infrastructure] collection contains the utility libraries that power the core and ecosystem
 collection.  Often, this functionality is used indirectly.  For example, the [can-event] mixin
 is used to add `on`, `off`, and `dispatch` methods to [can-define] and [can-compute].  And, [can-util] contains a wide variety of low-level DOM and JavaScript utilities.
 

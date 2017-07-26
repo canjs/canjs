@@ -1,48 +1,60 @@
 <link href="https://fonts.googleapis.com/css?family=Dosis:300,400" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="weather-report.css">
+<!-- eedfc9671818be40 -->
 <script id="app-template" type="text/stache">
-  <div class="weather-widget">
-    <div class="location-entry">
-      <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="userLocation" type="text"/>
-    </div>
-	{{pos.coords.latitude}} - {{pos.coords.longitude}}
+Latitude: {{geoLocation.coords.latitude}},
+Longitude: {{geoLocation.coords.longitude}},
+Error: {{geoLocationError.message}}
 
-	{{#if placesPromise.isPending}}
-      <p class="loading-message">
-        Loading places...
-      </p>
-    {{/if}}
+<div class="weather-widget">
+  {{#if showEnableGeoLocationMessage}}
+    <p class="loading-message">
+      Please Enable Location Services…
+    </p>
+  {{/if}}
 
-    {{#if showPlacePicker}}
-      <div class="location-options">
-        <label>Pick your place:</label>
-        <ul>
-          {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
-			    {{country.code}} ({{placeTypeName.content}})</li>
-          {{/each}}
-        </ul>
-      </div>
-	{{/if}}
-
-    {{#if place}}
-      <div class="forecast">
-        <h1>10 day {{place.name}} Weather Forecast</h1>
-        <ul>
-          {{#each forecastPromise.value}}
-            <li>
-              <span class='date'>{{date}}</span>
-              <span class='description {{toClassName(text)}}'>{{text}}</span>
-              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
-            </li>
-          {{/each}}
-        </ul>
-      </div>
-    {{/if}}
-
+  {{#if showEnterLocation}}
+  <div class="location-entry">
+    <label for="location">Enter Your location:</label>
+    <input id="location" {^$value}="location" type="text"/>
   </div>
+  {{/if}}
+
+  {{#if placesPromise.isPending}}
+    <p class="loading-message">
+      Loading places…
+    </p>
+  {{/if}}
+
+  {{#if showPlacePicker}}
+    <div class="location-options">
+      <label>Pick your place:</label>
+      <ul>
+        {{#each placesPromise.value}}
+          <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
+              {{country.code}} ({{placeTypeName.content}})</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+
+  {{#if place}}
+    <div class="forecast">
+      <h1>10 day {{place.name}} Weather Forecast</h1>
+      <ul>
+        {{#each forecastPromise.value}}
+          <li>
+            <span class='date'>{{date}}</span>
+            <span class='description {{toClassName(text)}}'>{{text}}</span>
+            <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
+            <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+
+</div>
 </script>
 <script src="https://cdn.jsdelivr.net/kefir/3.6.0/kefir.js"></script>
 <script>
@@ -54,117 +66,176 @@
 </script>
 <script src="../../../../../node_modules/steal/steal.js" main="@empty">
 var can = require("can/all");
+can.defineStreamKefir = require("can-define-stream-kefir");
+
 var Kefir = require("kefir");
 
-navigator.geolocation.getCurrentPosition(function(position){
-	debugger;
-	console.log("pos",position);
-}, function(err){
-	console.log("err",err)
-	debugger;
-})
-
-
-var geoStream = Kefir.stream(function(emitter){
-
-	 /*var watch = navigator.geolocation.watchPosition(function(position){
-		 debugger;
-		 emitter.emit(position)
-	 }, function(positionError){
-		 emitter;
-		 debugger;
-	 });*/
-	 return function(){
-		 navigator.geolocation.clearWatch(watch)
-	 }
-});
-
-
 var yqlURL = "https://query.yahooapis.com/v1/public/yql?";
+var flickrURL = "https://api.flickr.com/services/rest/?"
 
 var WeatherViewModel = can.DefineMap.extend({
-  userLocation: "string",
-  coordinates: {
-	stream: function(){
-	  return geoStream;
-	}
-  },
-  location: {
-    stream: function(){
-	  return geoStream;
-	}
-  },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response){
-		  return response.json();
-	  }).then(function(data){
-		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
-            return data.query.results.place;
-          } else {
-            return [data.query.results.place];
-          }
-	  });
-    }
-  },
-  places: {
-    get: function(latSet, resolve){
-      if(this.placesPromise) {
-        this.placesPromise.then(resolve);
-      }
-    }
-  },
-  get showPlacePicker(){
-    return !this.place && this.places && this.places.length > 1;
-  },
-  place: {
-    type: "any",
-    get: function(lastSet){
-      if(lastSet) {
-        return lastSet;
-      } else {
-        if(this.places && this.places.length === 1) {
-          return this.places[0];
-        }
-      }
-    }
-  },
-  pickPlace: function(place){
-    this.place = place;
-  },
-  get forecastPromise(){
-    if( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response){
-  		  return response.json();
-  	  }).then(function(data){
-        console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
+    get fullName(){
 
-        return forecast;
-      });
+    },
+    geoLocationStream: {
+        type: "any",
+        value: function(){
+            return Kefir.stream(function(emitter) {
+				navigator.geolocation.getCurrentPosition(function(position){
+                  emitter.value(position);
+                }, function(err){
+                    console.log("getCurrentPositionErr",err);
+                  emitter.error(err);
+                });
+
+
+                 var watch = navigator.geolocation.watchPosition(function(position){
+                   emitter.value(position)
+                 }, function(err){
+                     console.log("watchPositionErr",err);
+                   emitter.error(err);
+               });
+
+				return function() {
+					navigator.geolocation.clearWatch(watch)
+				}
+			});
+        }
+    },
+	geoLocation: {
+		stream: function() {
+			return this.geoLocationStream;
+		}
+	},
+    geoLocationError: {
+        stream: function() {
+			return this.geoLocationStream.withHandler(function(emitter, event){
+                if (event.type === 'end') {
+                    emitter.end();
+                  }
+                  if (event.type === 'error') {
+                    emitter.emit(event.value);
+                  }
+            });
+		}
+    },
+    get showEnableGeoLocationMessage(){
+        return this.geoLocation === undefined && !this.geoLocationError;
+    },
+    get showEnterLocation(){
+        return !!this.geoLocationError;
+    },
+	geoPlace: {
+		get: function(lastSet, resolve) {
+			if (this.geoLocation) {
+				fetch(flickrURL +
+					can.param({
+						method: "flickr.places.findByLatLon",
+						api_key: "df0a221bb43ecbc2abb03426bd84e598",
+						lat: this.geoLocation.coords.latitude,
+						lon: this.geoLocation.coords.longitude,
+						format: "json",
+						nojsoncallback: 1
+					})
+				).then(function(response) {
+                    var place = response.json().then(function(response){
+                        return response.places.place[0];
+                    });
+                    place.then(console.log);
+					return place;
+				}).then(resolve)
+			}
+		}
+	},
+	location: {
+		type: "string",
+		set: function() {
+			this.place = null;
+		}
+	},
+	get placesPromise() {
+		if (this.location && this.location.length > 2) {
+			return fetch(
+				yqlURL +
+				can.param({
+					q: 'select * from geo.places where text="' + this.location + '"',
+					format: "json"
+				})
+			).then(function(response) {
+				return response.json();
+			}).then(function(data) {
+				console.log(data);
+				if (Array.isArray(data.query.results.place)) {
+					return data.query.results.place;
+				} else {
+					return [data.query.results.place];
+				}
+			});
+		}
+	},
+	places: {
+		get: function(lastSet, resolve) {
+			if (this.placesPromise) {
+				this.placesPromise.then(resolve);
+			}
+		}
+	},
+	get showPlacePicker() {
+		return !this.place && this.places && this.places.length > 1;
+	},
+	place: {
+		stream: function(setStream) {
+			var resetStream = this.toStream(".location").map(function() {
+				return null;
+			});
+            var onePlaceResultStream = this.toStream(".places").map(function(places){
+                if(places.length === 1) {
+                    return places[0]
+                } else {
+                    return null;
+                }
+            });
+
+			return onePlaceResultStream
+				.merge(setStream)
+				.merge(resetStream)
+                .merge(this.toStream(".geoPlace"));
+		}
+	},
+	pickPlace: function(place) {
+		this.place = place;
+	},
+	get forecastPromise() {
+		if (this.place) {
+            console.log("place", this.place);
+			return fetch(
+				yqlURL +
+				can.param({
+					q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+					format: "json"
+				})
+			).then(function(response) {
+				return response.json();
+			}).then(function(data) {
+				console.log("forecast data", data);
+				var forecast = data.query.results.channel.item.forecast;
+
+				return forecast;
+			});
+		}
+	},
+	toClassName: function(text) {
+		return text.toLowerCase().replace(/ /g, "-");
+	},
+    doSomething: function(){
+        console.log("something did")
     }
-  },
-  toClassName: function(text){
-	return text.toLowerCase().replace(/ /g, "-");
-  }
 });
+can.defineStreamKefir(WeatherViewModel);
 
 var vm = new WeatherViewModel();
 
 var template = can.stache.from("app-template");
-var frag = template( vm );
+var frag = template(vm);
 document.body.appendChild(frag);
 </script>
