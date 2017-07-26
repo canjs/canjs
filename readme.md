@@ -2,8 +2,10 @@
 
  [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
-[![Build Status](https://travis-ci.org/canjs/canjs.png?branch=master)](https://travis-ci.org/canjs/canjs)
 [![Join the chat at https://gitter.im/canjs/canjs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/canjs/canjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/can.svg)](https://www.npmjs.com/package/can)
+[![Build Status](https://travis-ci.org/canjs/canjs.svg?branch=master)](https://travis-ci.org/canjs/canjs)
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/canjs.svg)](https://greenkeeper.io/)
 
 > WARNING: This npm package is for the [CanJS client-side MV* libraries](https://canjs.com). It was formerly
 the [node-can project](https://github.com/sebi2k1/node-can) which has been moved 
