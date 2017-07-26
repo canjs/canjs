@@ -16,6 +16,13 @@ simple validation on the payment form values.
 ![Credit Card App](https://user-images.githubusercontent.com/78602/27451508-d86e9bd8-5754-11e7-954b-a812e1ed63b1.png)
 
 
+## Signup and Login
+
+The [guides/recipes/signup-simple] walks through building simple signup, login forms and
+a logout button.   
+
+![Signup and Login](../../docs/can-guides/commitment/recipes/signup-simple/signup.png)
+
 ## File Navigator
 
 The [guides/recipes/file-navigator-simple] walks through building a simple navigation
