@@ -18,56 +18,56 @@ CanJS is a collection of the following client-side JavaScript architectural libr
 
 _The best, most hardened and generally useful libraries in CanJS._
 
-- Custom elements - [can-component](https://canjs.com/doc/can-component.html)
-- Observable...
-  - Values - [can-compute](https://canjs.com/doc/can-compute.html)
-  - Custom types - [can-define](https://canjs.com/doc/can-define.html)
-  - Lists - [can-define/list/list](https://canjs.com/doc/can-define/list/list.html)
-  - Objects - [can-define/map/map](https://canjs.com/doc/can-define/map/map.html)
-- Data connection and service modeling - [can-connect](https://canjs.com/doc/can-connect.html) and [can-set](https://canjs.com/doc/can-set.html)
-- Routing - [can-route](https://canjs.com/doc/can-route.html) and [can-route-pushstate](https://canjs.com/doc/can-route-pushstate.html)
-- Live binding templates - [can-stache](https://canjs.com/doc/can-stache.html), [can-stache/helpers/route](https://canjs.com/doc/can-stache/helpers/route.html) and [can-stache-bindings](https://canjs.com/doc/can-stache-bindings.html)
+- Custom elements — [can-component](https://canjs.com/doc/can-component.html)
+- Observable…
+  - Values — [can-compute](https://canjs.com/doc/can-compute.html)
+  - Custom types — [can-define](https://canjs.com/doc/can-define.html)
+  - Lists — [can-define/list/list](https://canjs.com/doc/can-define/list/list.html)
+  - Objects — [can-define/map/map](https://canjs.com/doc/can-define/map/map.html)
+- Data connection and service modeling — [can-connect](https://canjs.com/doc/can-connect.html) and [can-set](https://canjs.com/doc/can-set.html)
+- Routing — [can-route](https://canjs.com/doc/can-route.html) and [can-route-pushstate](https://canjs.com/doc/can-route-pushstate.html)
+- Live binding templates — [can-stache](https://canjs.com/doc/can-stache.html), [can-stache/helpers/route](https://canjs.com/doc/can-stache/helpers/route.html) and [can-stache-bindings](https://canjs.com/doc/can-stache-bindings.html)
 
 ### Infrastructure Collection
 
 _Utility libraries that power the core and ecosystem collections._
 
-- Unique identifiers - [can-cid](https://canjs.com/doc/can-cid.html)
-- Inheritable constructor functions - [can-construct](https://canjs.com/doc/can-construct.html)
-- Declarative event bindings - [can-control](https://canjs.com/doc/can-control.html)
-- Event handling utilities - [can-event](https://canjs.com/doc/can-event.html), [can-event/async/async](https://canjs.com/doc/can-event/async/async.html), [can-event/batch/batch](https://canjs.com/doc/can-event/batch/batch.html), [can-event/lifecycle/lifecycle](https://canjs.com/doc/can-event/lifecycle/lifecycle.html)
-- Namespace where can packages are registered - [can-namespace](https://canjs.com/doc/can-namespace.html)
-- Observable hooks needed by every other observable - [can-observation](https://canjs.com/doc/can-observation.html)
-- Simple observable - [can-simple-map](https://canjs.com/doc/can-simple-map.html)
-- A stateful container for CanJS type information - [can-types](https://canjs.com/doc/can-types.html)
-- Common DOM and JS utilities - [can-util](https://canjs.com/doc/can-util.html)
+- Unique identifiers — [can-cid](https://canjs.com/doc/can-cid.html)
+- Inheritable constructor functions — [can-construct](https://canjs.com/doc/can-construct.html)
+- Declarative event bindings — [can-control](https://canjs.com/doc/can-control.html)
+- Event handling utilities — [can-event](https://canjs.com/doc/can-event.html), [can-event/async/async](https://canjs.com/doc/can-event/async/async.html), [can-event/batch/batch](https://canjs.com/doc/can-event/batch/batch.html), [can-event/lifecycle/lifecycle](https://canjs.com/doc/can-event/lifecycle/lifecycle.html)
+- Namespace where can packages are registered — [can-namespace](https://canjs.com/doc/can-namespace.html)
+- Observable hooks needed by every other observable — [can-observation](https://canjs.com/doc/can-observation.html)
+- Simple observable — [can-simple-map](https://canjs.com/doc/can-simple-map.html)
+- A stateful container for CanJS type information — [can-types](https://canjs.com/doc/can-types.html)
+- Common DOM and JS utilities — [can-util](https://canjs.com/doc/can-util.html)
 - View helpers
-  - Register custom elements or attributes in templates - [can-view-callbacks](https://canjs.com/doc/can-view-callbacks.html)
-  - Keeps part of the DOM up to date with a compute - [can-view-live](https://canjs.com/doc/can-view-live.html)
-  - Read a view model from a custom element - [can-view-model](https://canjs.com/doc/can-view-model.html)
-  - Maintains - [can-view-nodelist](https://canjs.com/doc/can-view-nodelist.html)
-  - Parses HTML and magic tags - [can-view-parser](https://canjs.com/doc/can-view-parser.html)
-  - Lookup scope within a stache template - [can-view-scope](https://canjs.com/doc/can-view-scope.html)
-  - A fast-path compile target - [can-view-target](https://canjs.com/doc/can-view-target.html)
+  - Register custom elements or attributes in templates — [can-view-callbacks](https://canjs.com/doc/can-view-callbacks.html)
+  - Keeps part of the DOM up to date with a compute — [can-view-live](https://canjs.com/doc/can-view-live.html)
+  - Read a view model from a custom element — [can-view-model](https://canjs.com/doc/can-view-model.html)
+  - Maintains — [can-view-nodelist](https://canjs.com/doc/can-view-nodelist.html)
+  - Parses HTML and magic tags — [can-view-parser](https://canjs.com/doc/can-view-parser.html)
+  - Lookup scope within a stache template — [can-view-scope](https://canjs.com/doc/can-view-scope.html)
+  - A fast-path compile target — [can-view-target](https://canjs.com/doc/can-view-target.html)
 
 ### Ecosystem Collection
 
 _Useful libraries that extend or add important features to the core collection._
 
 - Integrate can-connect with a FeathersJS Client ([can-connect-feathers](https://canjs.com/doc/can-connect-feathers.html)) or a SignalR Hub ([can-connect-signalr](https://canjs.com/doc/can-connect-signalr.html))
-- Call base functions from inside inheriting functions - [can-construct-super](https://canjs.com/doc/can-construct-super.html)
-- Define property values using streams - [can-define-stream](https://canjs.com/doc/can-define-stream.html)
-- Add validation methods and observables to a can-define/map/map using validate.js - [can-define-validate-validatejs](https://canjs.com/doc/can-define-validate-validatejs.html)
+- Call base functions from inside inheriting functions — [can-construct-super](https://canjs.com/doc/can-construct-super.html)
+- Define property values using streams — [can-define-stream](https://canjs.com/doc/can-define-stream.html)
+- Add validation methods and observables to a can-define/map/map using validate.js — [can-define-validate-validatejs](https://canjs.com/doc/can-define-validate-validatejs.html)
 - Simulate ajax requests ([can-fixture](https://canjs.com/doc/can-fixture.html)) and socket.io services ([can-fixture-socket](https://canjs.com/doc/can-fixture-socket.html))
-- Cross-bind can events and jquery events - [can-jquery](https://canjs.com/doc/can-jquery.html)
-- Provides a set of converters useful for two-way binding with form elements - [can-stache-converters](https://canjs.com/doc/can-stache-converters.html)
-- Convert observable values into streams - [can-stream](https://canjs.com/doc/can-stream.html) and [can-stream-kefir](https://canjs.com/doc/can-stream-kefir.html)
-- Shared utilities and type definitions to process validation errors - [can-validate](https://canjs.com/doc/can-validate.html) and [can-validate-validatejs](https://canjs.com/doc/can-validate-validatejs.html)
-- A virtual DOM that is able to run CanJS's templates - [can-vdom](https://canjs.com/doc/can-vdom.html)
-- Automatically render templates found in the document - [can-view-autorender](https://canjs.com/doc/can-view-autorender.html)
-- Import dependencies in CanJS views - [can-view-import](https://canjs.com/doc/can-view-import.html)
-- A context for tracking asynchronous activity in JavaScript applications - [can-zone](https://canjs.com/doc/can-zone.html) and a compatible memory-based storage - [can-zone-storage](https://canjs.com/doc/can-zone-storage.html)
-- A StealJS extension that allows stache templates as dependencies - [steal-stache](http://canjs.com/doc/steal-stache.html)
+- Cross-bind can events and jquery events — [can-jquery](https://canjs.com/doc/can-jquery.html)
+- Provides a set of converters useful for two-way binding with form elements — [can-stache-converters](https://canjs.com/doc/can-stache-converters.html)
+- Convert observable values into streams — [can-stream](https://canjs.com/doc/can-stream.html) and [can-stream-kefir](https://canjs.com/doc/can-stream-kefir.html)
+- Shared utilities and type definitions to process validation errors — [can-validate](https://canjs.com/doc/can-validate.html) and [can-validate-validatejs](https://canjs.com/doc/can-validate-validatejs.html)
+- A virtual DOM that is able to run CanJS's templates — [can-vdom](https://canjs.com/doc/can-vdom.html)
+- Automatically render templates found in the document — [can-view-autorender](https://canjs.com/doc/can-view-autorender.html)
+- Import dependencies in CanJS views — [can-view-import](https://canjs.com/doc/can-view-import.html)
+- A context for tracking asynchronous activity in JavaScript applications — [can-zone](https://canjs.com/doc/can-zone.html) and a compatible memory-based storage — [can-zone-storage](https://canjs.com/doc/can-zone-storage.html)
+- A StealJS extension that allows stache templates as dependencies — [steal-stache](https://canjs.com/doc/steal-stache.html)
 
 ### Legacy Collection
 
@@ -82,12 +82,15 @@ _Former libraries that we still accept patches for, but are not under active dev
 - [can-view-href](https://canjs.com/doc/can-view-href.html)
 
 ### Support / Contributing
-Before you make an issue, please read our [Contributing](contributing.md) guide.
 
-You can find the core team in [gitter chat](https://gitter.im/canjs/canjs).
+Before you make an issue, please read our [Contributing](https://canjs.com/doc/guides/contribute.html) guide.
+
+You can find the core team in [Gitter chat](https://gitter.im/canjs/canjs).
 
 ### Release History
-See the [Changelog](changelog.md).
+
+See [Releases](https://github.com/canjs/canjs/releases).
 
 ### License
-MIT License, see [License](license.md).
+
+[MIT License](license.md).
