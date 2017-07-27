@@ -66,8 +66,10 @@ Get involved with one of the most inviting communities on the internet!
 
 Check out the [guides/contribute Contribution guide] for information on [guides/contributing/bug-report reporting bugs], [guides/contributing/feature-suggestion suggesting features], and more!
 
-## Consultancies
+## Support
 
-Looking for professional help? [Bitovi](https://www.bitovi.com) is the primary corporate sponsor of CanJS. [Contact Bitovi](https://www.bitovi.com/contact) for contract opportunities.
+Looking for professional help in the form of development services, support, or training?
 
-Does your company offer CanJS consulting services? [Edit this page on GitHub](https://github.com/canjs/canjs/edit/master/docs/can-canjs/community.md) and submit a pull request to add yourself here!
+[Bitovi](https://www.bitovi.com) is the primary corporate sponsor of CanJS. [Contact Bitovi](https://www.bitovi.com/contact) to find help for your project.
+
+If your company offers CanJS consulting services, [edit this page on GitHub](https://github.com/canjs/canjs/edit/master/docs/can-canjs/community.md) and submit a pull request to add yourself.
