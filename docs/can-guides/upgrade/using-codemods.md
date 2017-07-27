@@ -123,7 +123,7 @@ Use the following steps as a guide for using this tool:
 ## Introduction to the Transform Scripts
 
 Read this section to understand how the transforms (also called codemods) are organized,
-the different types of transformations that are included with `can-migrate`
+the different types of transformations that are included with `can-migrate`,
 and what to expect from each one.
 
 There are 3 main types of transforms included in the `can-migrate` tool:
