@@ -37,8 +37,7 @@ export default CanMap.extend({
 
 Using this CLI will get you about 85% of the way to having your codebase
 migrated; it’s not a complete solution for a seamless migration, but it will get
-you significantly closer than doing the migration by hand. Your own custom
-codemod transformations can also be used with this CLI.
+you significantly closer than doing the migration by hand.
 
 ## Install
 
@@ -124,10 +123,8 @@ Use the following steps as a guide for using this tool:
 ## Introduction to the Transform Scripts
 
 Read this section to understand how the transforms (also called codemods) are organized,
-the different types of transformations that are included with `can-migrate`,
-and what to expect from each one. You can also use
-[the transform templates](https://github.com/canjs/can-migrate/tree/master/src/templates)
-as a starting point for writing custom transformation scripts.
+the different types of transformations that are included with `can-migrate`
+and what to expect from each one.
 
 There are 3 main types of transforms included in the `can-migrate` tool:
 replace, import, and require. There are also three module-specific transforms
