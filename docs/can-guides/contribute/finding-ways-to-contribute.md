@@ -17,16 +17,9 @@ We use a few labels to organize issues across all of the repositories:
 - [easy](https://github.com/search?q=org%3Acanjs+label%3Aeasy&state=open) for issues the core team thinks are good for someone who’s new to contributing
 - [documentation](https://github.com/search?q=org%3Acanjs+label%3Adocumentation&state=open) for issues related to documenting the APIs
 - [design](https://github.com/search?q=org%3Acanjs+label%3Adesign&state=open) for issues that could use a designer’s expertise
+- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0&state=open), [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1&state=open), [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2&state=open), [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3&state=open), & [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4&state=open) for prioritizing issues (see [guides/contributing/project-organization#Priority_Tags_andComplexity Priority, Tags, and Complexity] for more info)
 
 Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is%3Aissue+no%3Alabel&state=open) is also really helpful!
-
-You can also search for issues by their priority:
-
-- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0) — An issue that will preempt any other issues currently being worked on.
-- [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1) — A critical feature or bug that needs to be fixed to keep CanJS’s high degree of quality.
-- [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2) — A feature or bug that is less likely to be encountered, but something we intend to get to.
-- [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3) — A nice to have. The OS team might get to it, but it’s helpful if the community assists.
-- [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4) — A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
 
 ## Getting involved in the community
 
