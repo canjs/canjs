@@ -20,6 +20,14 @@ We use a few labels to organize issues across all of the repositories:
 
 Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is%3Aissue+no%3Alabel&state=open) is also really helpful!
 
+You can also search for issues by their priority:
+
+- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0) — An issue that will preempt any other issues currently being worked on.
+- [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1) — A critical feature or bug that needs to be fixed to keep CanJS’s high degree of quality.
+- [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2) — A feature or bug that is less likely to be encountered, but something we intend to get to.
+- [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3) — A nice to have. The OS team might get to it, but it’s helpful if the community assists.
+- [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4) — A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
+
 ## Getting involved in the community
 
 You can also get involved in our community by posting in our forums, chatting with us on Gitter, and answering questions on Stack Overflow.
