@@ -1,8 +1,7 @@
 @page guides Guides
 @parent canjs 1
-@group guides/getting-started 0 getting started
 @group guides/experiment 2 experiment
-@group guides/commitment 4 commitment
+@group guides/getting-started 3 getting started
 @group guides/contribute 5 contribute
 @group guides/upgrade 6 upgrade
 @subchildren
