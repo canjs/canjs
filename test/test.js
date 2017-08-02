@@ -45,7 +45,7 @@ if (!System.isEnv('production')) {
 }
 require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
-
+require('can-attribute-encoder');
 
 
 // Legacy tests
