@@ -2,9 +2,9 @@
 <div id='out'></div>
 <script type='text/stache' id="demo-html">
 <p>Attending?
-  <input type="radio" {($checked)}="equal(~attending, 'yes')" /> Yes
-  <input type='radio' {($checked)}="equal(~attending, 'no')" /> No,
-  <input type='radio' {($checked)}="equal(~attending, 'maybe')" /> Maybe
+  <input type="radio" checked:bind="equal(~attending, 'yes')" /> Yes
+  <input type='radio' checked:bind="equal(~attending, 'no')" /> No,
+  <input type='radio' checked:bind="equal(~attending, 'maybe')" /> Maybe
 </p>
 <p>You {{attendence}}.</p>
 </script>

@@ -37,23 +37,23 @@
 </style>
 <div id='out'></div>
 <script id="app" type="text/stache">
-  <div><tree-combo {items}='locations' title='Locations'/></div>
+  <div><tree-combo items:from='locations' title='Locations'/></div>
 </script>
 <script id="tree-combo-stash" type='text/stache'>
   <ul class='breadcrumb'>
-    <li ($click)='emptyBreadcrumb()'>{{title}}</li>
+    <li on:click='emptyBreadcrumb()'>{{title}}</li>
     {{#each breadcrumb}}
-      <li ($click)='updateBreadcrumb(.)'>{{title}}</li>
+      <li on:click='updateBreadcrumb(.)'>{{title}}</li>
     {{/each}}
   </ul>
   <ul class='options'>
     <content>
       {{#selectableItems}}
-        <li {{#isSelected}}class='active'{{/isSelected}} ($click)='toggle(.)'>
+        <li {{#isSelected}}class='active'{{/isSelected}} on:click='toggle(.)'>
           <input type='checkbox' {{#isSelected(.)}}checked{{/isSelected}}/>
             {{title}}
           {{#if children.length}}
-            <button class='showChildren' ($click)='showChildren(.,%event)'>+</button>
+            <button class='showChildren' on:click='showChildren(.,%event)'>+</button>
           {{/if}}
         </li>
       {{/selectableItems}}

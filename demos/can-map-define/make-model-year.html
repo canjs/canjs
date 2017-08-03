@@ -3,7 +3,7 @@
 <script id="app" type="text/stache">
 
 	{{#if makes.isResolved}}
-		<select {($value)}="string-to-any(~makeId)">
+		<select value:bind="string-to-any(~makeId)">
 		  {{^makeId}}
 		    <option value='undefined'>Select a Make</option>
 		  {{/makeId}}
@@ -16,7 +16,7 @@
 	{{/if}}
 	{{#if modelsPromise}}
 		{{#if models}}
-			<select {($value)}="string-to-any(~modelId)">
+			<select value:bind="string-to-any(~modelId)">
 				{{^modelId}}
 					<option value='undefined'>Select a Model</option>
 				{{/modelId}}
@@ -32,7 +32,7 @@
 	{{/if}}
 
 	{{#if years}}
-		<select {($value)}="string-to-any(~year)">
+		<select value:bind="string-to-any(~year)">
 			{{^year}}
 				<option value='undefined'>Select a Year</option>
 			{{/year}}

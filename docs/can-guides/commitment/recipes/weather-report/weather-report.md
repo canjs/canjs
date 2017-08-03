@@ -157,7 +157,7 @@ We want an `input` element to:
   a ViewModel property like:
 
   ```html
-  <input {^$value}="property"/>
+  <input value:to="property"/>
   ```
 
 - A [can-stache] template uses
@@ -195,7 +195,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" value:to="location" type="text"/>
     </div>
 
     <p class="loading-message">
@@ -301,7 +301,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" value:to="location" type="text"/>
     </div>
 
     {{#if placesPromise.isPending}}
@@ -392,7 +392,7 @@ When a user clicks on a place, we need to indicate their selection.
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="sayHi()"> … </div>
+   <div on:click="sayHi()"> … </div>
    ```
 
 - `this` in a stache template refers to the current context of a template or section.  
@@ -448,7 +448,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" value:to="location" type="text"/>
     </div>
 
     {{#if placesPromise.isPending}}
@@ -462,7 +462,7 @@ Update the template in the __HTML__ tab to:
         <label>Pick your place:</label>
         <ul>
           {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">
+            <li on:click="../pickPlace(this)">
               {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
             </li>
           {{/each}}
@@ -572,7 +572,7 @@ Update the template in the __HTML__ tab to:
    <div class="weather-widget">
      <div class="location-entry">
        <label for="location">Enter Your location:</label>
-       <input id="location" {^$value}="location" type="text"/>
+       <input id="location" value:to="location" type="text"/>
      </div>
 
      {{#if placesPromise.isPending}}
@@ -586,7 +586,7 @@ Update the template in the __HTML__ tab to:
          <label>Pick your place:</label>
          <ul>
            {{#each placesPromise.value}}
-             <li ($click)="../pickPlace(this)">
+             <li on:click="../pickPlace(this)">
                {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
              </li>
            {{/each}}
@@ -829,7 +829,7 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" value:to="location" type="text"/>
     </div>
 
     {{#if placesPromise.isPending}}
@@ -844,7 +844,7 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
           <label>Pick your place:</label>
           <ul>
             {{#each placesPromise.value}}
-              <li ($click)="../pickPlace(this)">
+              <li on:click="../pickPlace(this)">
                 {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
               </li>
             {{/each}}

@@ -380,7 +380,7 @@ Update _index.stache_ to the following:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution
@@ -402,7 +402,7 @@ Update _index.stache_ to the following:
 - Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
 
    ```html
-   <input  {($value)}="name"/>
+   <input  value:bind="name"/>
    ```
 
 ### The solution
@@ -803,19 +803,19 @@ is the list of todos that will be managed by the custom element.
 - The [can-util/dom/attr/attr.special.focused] custom attribute can be used to specify when an element should be focused:
 
   ```html
-  {$focused}="shouldBeFocused()"
+  focused:from="shouldBeFocused()"
   ```
 
 - Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
 
   ```
-  <some-component {name-in-component}="nameInScope"/>
+  <some-component nameInComponent:from="nameInScope"/>
   ```
 
 - [can-stache/keys/this] can be used to get the current context in stache:
 
   ```
-  <div ($click)="doSomethingWith(this)"/>
+  <div on:click="doSomethingWith(this)"/>
   ```
 
 ### The solution
@@ -896,7 +896,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution

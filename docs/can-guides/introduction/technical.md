@@ -852,22 +852,22 @@ The __View__, in _components/todo-list/view.stache_, looks like:
         <!-- Connect this checkbox to the `complete` property
              of the current todo -->
         <input class="toggle" type="checkbox"
-               {($checked)}="complete"
-               ($change)="save()">
+               checked:bind="complete"
+               on:change="save()">
 
         <!-- Edit this todo on double click -->
-        <label ($dblclick)="edit(this)">{{name}}</label>
+        <label on:dblclick="edit(this)">{{name}}</label>
 
         <!-- Delete this todo on the server when clicked -->
-        <button class="destroy" ($click)="destroy()"></button>
+        <button class="destroy" on:click="destroy()"></button>
       </div>
 
       <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
-        {($value)}="name"
-        ($enter)="updateName()"
-        {$focused}="isEditing(this)"
-        ($blur)="cancelEdit()"/>
+        value:bind="name"
+        on:enter="updateName()"
+        focused:from="isEditing(this)"
+        on:blur="cancelEdit()"/>
     </li>
   {{/each}}
 </ul>
@@ -953,7 +953,7 @@ test("<todo-list> can update todo name", function(done){
         {name: "dishes", complete: true, id: 23},
     ]);
 
-    var template = stache("<todo-list {todos}='todos'/>");
+    var template = stache("<todo-list todos:from='todos'/>");
     var todoListElement = template({todos: todos}).firstChild;
 
     // double click todo
@@ -1001,11 +1001,11 @@ developers, it’s possible by:
  - Enforcing that parent-to-child communication only uses one-way
    [can-stache-bindings.toChild] bindings like:
    ```
-   <child-component {prop}="parentValue"/>
+   <child-component prop:from="parentValue"/>
    ```
  - Enforcing that child-to-parent communication is [can-stache-bindings.event] based:
    ```
-   <child-component (event)="parentMethod()"/>
+   <child-component on:event="parentMethod()"/>
    ```
 
 
@@ -1088,9 +1088,9 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 	{{#each todos}}
 		<li class="todo {{#if complete}}completed{{/if}}">
 				<div class="view">
-						<input class="toggle" type="checkbox" {($checked)}="complete">
+						<input class="toggle" type="checkbox" checked:bind="complete">
 						<label>{{name}}</label>
-						<button class="destroy" ($click)="destroy()"></button>
+						<button class="destroy" on:click="destroy()"></button>
 				</div>
 
 				<input class="edit" type="text" value="{{name}}"/>
@@ -1212,7 +1212,7 @@ With custom HTML elements, to add the same datepicker, you would
 simply add the datepicker to your HTML or template:
 
 ```
-<ui-datepicker {(value)}="task.dueDate"/>
+<ui-datepicker value:bind="task.dueDate"/>
 ```
 
 That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.
@@ -1245,23 +1245,21 @@ In addition to the default Mustache data bindings, the [can-stache-bindings] mod
 adds more powerful data and event bindings. These event bindings provide full control over how
 data and control flows between the DOM, ViewModels, and the [can-view-scope]. Bindings look like:
 
-- [can-stache-bindings.event (event)="key()"] for event binding.
-- [can-stache-bindings.toChild {prop}="key"] for one-way binding to a child.
-- [can-stache-bindings.toParent {^prop}="key"] for one-way binding to a parent.
-- [can-stache-bindings.twoWay {(prop)}="key"] for two-way binding.
-
-Prepending `$` to a binding like `($event)="key()"` changes the binding from the element’s `viewModel` to the element’s attributes or properties. [can-util/dom/attr/attr.special Special properties] can also be targeted with `$`.
+- [can-stache-bindings.event on:event="key()"] for event binding.
+- [can-stache-bindings.toChild prop:from="key"] for one-way binding to a child.
+- [can-stache-bindings.toParent prop:to="key"] for one-way binding to a parent.
+- [can-stache-bindings.twoWay prop:bind="key"] for two-way binding.
 
 To two-way bind an `<input>` element’s `value` to a `todo.name` looks like:
 
 ```js
-<input {($value)}="todo.name"/>
+<input value:bind="todo.name"/>
 ```
 
 To two-way bind a custom `<ui-datepicker>`’s `date` to a `todo.dueDate` looks like:
 
 ```js
-<ui-datepicker {(date)}="todo.dueDate"/>
+<ui-datepicker date:bind="todo.dueDate"/>
 ```
 
 By mixing and matching `$` and the different syntaxes, you have complete control over how

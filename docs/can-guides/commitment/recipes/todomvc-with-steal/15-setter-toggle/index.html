@@ -8,10 +8,10 @@
     </header>
     <section id="main" class="">
         <input id="toggle-all" type="checkbox"
-            {($checked)}="allChecked"
-            {$disabled}="todosList.saving.length"/>
+            checked:bind="allChecked"
+            disabled:from="todosList.saving.length"/>
         <label for="toggle-all">Mark all as complete</label>
-        <todo-list {todos}="todosList"/>
+        <todo-list todos:from="todosList"/>
     </section>
     <footer id="footer" class="">
         <span id="todo-count">

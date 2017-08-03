@@ -13,7 +13,7 @@
                 <div class="view">
                     <input class="toggle" type="checkbox"
                         {{#if complete}}checked{{/if}}
-                        ($click)="toggleComplete()"/>
+                        on:click="toggleComplete()"/>
                     <label>{{name}}</label>
                     <button class="destroy"></button>
                 </div>

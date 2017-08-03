@@ -11,8 +11,8 @@
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
     placeholder="What needs to be done?"
-    {($value)}="todo.name"
-    ($enter)="createTodo()"/>
+    value:bind="todo.name"
+    on:enter="createTodo()"/>
 </script>
 
 <script type='text/stache' id='todo-list-template'>
@@ -23,15 +23,15 @@
       {{#if isEditing(this)}}editing{{/if}}">
       <div class="view">
 	    <input class="toggle" type="checkbox"
-			   {($checked)}="complete" ($change)="save()">
-        <label ($dblclick)="edit(this)">{{name}}</label>
-        <button class="destroy" ($click)="destroy()"></button>
+			   checked:bind="complete" on:change="save()">
+        <label on:dblclick="edit(this)">{{name}}</label>
+        <button class="destroy" on:click="destroy()"></button>
       </div>
       <input class="edit" type="text"
-        {($value)}="name"
-        ($enter)="updateName()"
-        {$focused}="isEditing(this)"
-        ($blur)="cancelEdit()"/>
+        value:bind="name"
+        on:enter="updateName()"
+        focused:from="isEditing(this)"
+        on:blur="cancelEdit()"/>
     </li>
   {{/each}}
 </ul>
@@ -46,7 +46,7 @@
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
-		<todo-list {todos}="todosPromise.value"/>
+		<todo-list todos:from="todosPromise.value"/>
 	</section>
 	<footer id="footer" class="">
 		<span id="todo-count">

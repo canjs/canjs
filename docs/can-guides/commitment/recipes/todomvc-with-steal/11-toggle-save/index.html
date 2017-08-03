@@ -12,9 +12,9 @@
             <li class="todo {{#if complete}}completed{{/if}}">
                 <div class="view">
                     <input class="toggle" type="checkbox"
-                        {($checked)}="complete"
-                        ($change)="save()"
-                        {$disabled}="isSaving()"/>
+                        checked:bind="complete"
+                        on:change="save()"
+                        disabled:from="isSaving()"/>
                     <label>{{name}}</label>
                     <button class="destroy"></button>
                 </div>

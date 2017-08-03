@@ -7,7 +7,7 @@ require("can-stache-converters");
 
 var template = stache(
 	"{{#each items}}" +
-	"<p><input type='checkbox' {($checked)}='boolean-to-inList(this, person.owns)' /> {{upper(this)}}</p>" +
+	"<p><input type='checkbox' checked:bind='boolean-to-inList(this, person.owns)' /> {{upper(this)}}</p>" +
 	"{{/each}}" + 
   "<p>You own: {{ownership}}</p>");
 		

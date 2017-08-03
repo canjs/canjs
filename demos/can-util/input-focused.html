@@ -17,8 +17,8 @@
 </head>
 <body>
 	<script type="text/stache" id="demo-html">
-		<div class="wrapper" ($click)="putInFocus()">
-			<input type="text" {($focused)}="inFocus"/>
+		<div class="wrapper" on:click="putInFocus()">
+			<input type="text" focused:bind="inFocus"/>
 		</div>
 
 		<div>In focus: <b>{{inFocus}}</b></div>

@@ -10,17 +10,17 @@
   <ul>
   	{{#each players}}
   		<li {{#isEditing(.)}}class="editing"{{/isEditing}}
-  			($click)='editPlayer(.)'>{{name}}</li>
+			on:click='editPlayer(.)'>{{name}}</li>
   	{{/each}}
   </ul>
   <player-edit
-  	(close)="removeEdit()"
-  	{player}="editingPlayer"/>
+	on:close="removeEdit()"
+	player:from="editingPlayer"/>
 </script>
 <script id="player-edit-stache" type="text/stache">
 	{{#if player}}
-		<input {($value)}="player.name"/>
-		<button ($click)="close()">X</button>
+		<input value:bind="player.name"/>
+		<button on:click="close()">X</button>
 	{{/if}}
 </script>
 </div>

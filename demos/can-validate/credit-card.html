@@ -28,7 +28,7 @@
 				<input
 					class="form-control {{#if formatErrors(this, 'card').length}}has-errors{{/if}}"
 					type="text"
-					{($value)}="card"
+					value:bind="card"
 					placeholder="XXXX-XXXX-XXXX-XXXX">
 			</div>
 			<div>
@@ -36,7 +36,7 @@
 				<input
 					class="form-control {{#if formatErrors(this, 'month').length}}has-errors{{/if}}"
 					type="text"
-					{($value)}="month"
+					value:bind="month"
 					placeholder="XX">
 			</div>
 			<div>
@@ -44,10 +44,10 @@
 				<input
 					class="form-control {{#if formatErrors(this, 'year').length}}has-errors{{/if}}"
 					type="text"
-					{($value)}="year"
+					value:bind="year"
 					placeholder="XXXX">
 			</div>
-			<button type="submit" {$disabled}="errors()">Submit</button>
+			<button type="submit" disabled:from="errors()">Submit</button>
 		</form>
 	</script>
 	<script src="../../node_modules/steal/steal.js" main="@empty">

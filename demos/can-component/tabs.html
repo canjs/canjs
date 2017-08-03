@@ -35,7 +35,7 @@ tabs ul { display: inline-block; }
 <div id="demo-html">
 <div id='out'></div>
 <script id="app" type="text/stache">
-  <p><button can-click="addVegies">Add Vegetables</button></p>
+  <p><button on:click="addVeggies">Add Vegetables</button></p>
   <tabs>
     {{#each foodTypes}}
       <panel title='{{title}}'>{{content}}</panel>
@@ -116,14 +116,14 @@ Component.extend({
 	template:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "($click)='makeActive(.)'>"+
-    			  "{{title}}"+
-    			"</li>"+
-    		"{{/panels}}"+
-    	"</ul>"+
-    	"<content></content>"),
+			"{{#panels}}"+
+				"<li {{#isActive}}class='active'{{/isActive}} "+
+					"on:click='makeActive(.)'>"+
+					"{{title}}"+
+				"</li>"+
+			"{{/panels}}"+
+		"</ul>"+
+		"<content></content>"),
 	ViewModel: ViewModel
 });
 
@@ -152,7 +152,7 @@ window.foodTypes = foodTypes;
 var template = document.getElementById("app").innerHTML;
 var frag = stache(template)({
 	foodTypes: foodTypes,
-	addVegies: function(){
+	addVeggies: function(){
 		foodTypes.push({
 			title: "Vegetables",
 			content: "Carrots, peas, kale"

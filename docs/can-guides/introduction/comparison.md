@@ -137,7 +137,7 @@ const Todo = DefineMap.extend({
 
 // In stache
 {{#each todos}}
-<label><input type="checkbox" {($checked)}="completed" />{{ name }}</label>
+<label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
 {{/each}}
 ```
 
@@ -349,7 +349,7 @@ import stache from 'can-stache';
 
 export default Component.extend({
   tag: "hello-world",
-  template: stache(`<h1 ($click)="emphasize()">{{ message }}</h1>`),
+  template: stache(`<h1 on:click="emphasize()">{{ message }}</h1>`),
   viewModel: {
     message: "Hello world!",
     emphasize() {
@@ -367,7 +367,7 @@ import { Component } from '@angular/core';
 
 @@Component({
   selector: 'hello-world',
-  template: '<h1 (click)="emphasize()">{{ message }}</h1>'
+  template: '<h1 on:click="emphasize()">{{ message }}</h1>'
 })
 export class HelloWorld {
   message = 'Hello World!';

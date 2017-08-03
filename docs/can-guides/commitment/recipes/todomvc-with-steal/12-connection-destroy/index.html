@@ -13,11 +13,11 @@
                 {{#if isDestroying}}destroying{{/if}}">
                 <div class="view">
                     <input class="toggle" type="checkbox"
-                        {($checked)}="complete"
-                        ($change)="save()"
-                        {$disabled}="isSaving()"/>
+                        checked:bind="complete"
+                        on:change="save()"
+                        disabled:from="isSaving()"/>
                     <label>{{name}}</label>
-                    <button class="destroy" ($click)="destroy()"></button>
+                    <button class="destroy" on:click="destroy()"></button>
                 </div>
                 <input class="edit" type="text" value="{{name}}"/>
             </li>

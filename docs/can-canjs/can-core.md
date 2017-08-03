@@ -330,7 +330,7 @@ Component.extend({
 			"{{#if todos.isPending}}<li>Loading…</li>{{/if}}"+
 			"{{#if todos.isResolved}}"+
 				"{{#each todos.value}}"+
-					"<li ($click)='toggleComplete(.)'"+
+					"<li on:click='toggleComplete(.)'"+
 					     "class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
 				"{{else}}"+
 					"<li>No todos</li>"+
@@ -345,53 +345,49 @@ Component.extend({
 [can-stache-bindings] provides [can-view-callbacks.attr custom attributes] for
 [can-stache] event and data bindings.
 
-Bindings look like:
-
- - `(event)="key()"` for [can-stache-bindings.event event binding].
- - `{prop}="key"` for [can-stache-bindings.toChild one-way binding to a child].
- - `{^prop}="key"` for [can-stache-bindings.toParent one-way binding to a parent].
- - `{(prop)}="key"` for [can-stache-bindings.twoWay two-way binding].
-
-Adding `$` to a binding like `($event)="key()"` changes the binding from the viewModel to the element’s attributes or properties.
+- `on:event="key()"` for event binding.
+- `prop:from="key"` for one-way binding to a child.
+- `prop:to="key"` for one-way binding to a parent.
+- `prop:bind="key"` for two-way binding.
 
 [can-stache-bindings.event Event] binding examples:
 
 ```html
 <!-- calls `toggleComplete` when the li is clicked -->
-<li ($click)="toggleComplete(.)"/>
+<li on:click="toggleComplete(.)"/>
 
 <!-- calls `resetData` when cancel is dispatched on `my-modal`’s view model -->
-<my-modal (cancel)="resetData()"/>
+<my-modal on:cancel="resetData()"/>
 ```
 
 [can-stache-bindings.toChild One-way to child] examples:
 
 ```html
 <!-- updates input’s `checked` property with the value of complete -->
-<input type="checkbox" {$checked}="complete"/>
+<input type="checkbox" checked:from="complete"/>
 
 <!-- updates `todo-lists`’s  `todos` property with the result of `getTodos`-->
-<todos-list {todos}="getTodos(complete=true)"/>
+<todos-list todos:from="getTodos(complete=true)"/>
 ```
 
 [can-stache-bindings.toChild One-way to parent] examples:
 
 ```html
 <!-- updates `complete` with input’s `checked` property -->
-<input type="checkbox" {^$checked}="complete"/>
+<input type="checkbox" checked:to="complete"/>
 
 <!-- updates `todosList` with `todo-lists`’s `todos` property -->
-<todos-list {^todos}="todosList"/>
+<todos-list todos:to="todosList"/>
 ```
 
 [can-stache-bindings.twoWay Two-way] examples:
 
 ```html
 <!-- Updates the input’s `value` with `name` and vice versa -->
-<input type="text" {($value)}="name"/>
+<input type="text" value:bind="name"/>
 
 <!-- Updates `date-picker`’s `date` with `dueDate` and vice versa -->
-<date-picker {(date)}="dueDate"/>
+<date-picker date:bind="dueDate"/>
 ```
 
 ## can-route and can-route-pushstate

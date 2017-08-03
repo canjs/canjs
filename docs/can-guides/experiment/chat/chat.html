@@ -47,14 +47,14 @@
   </div>
 {{/each}}
 
-<form class="row" ($submit)="send(%event)">
+<form class="row" on:submit="send(%event)">
 	<div class="col-sm-3">
 	  <input type="text" class="form-control" placeholder="Your name"
-			 {($value)}="name"/>
+			 value:bind="name"/>
 	</div>
 	<div class="col-sm-6">
 	  <input type="text" class="form-control" placeholder="Your message"
-			 {($value)}="body"/>
+			 value:bind="body"/>
 	</div>
 	<div class="col-sm-3">
 	  <input type="submit" class="btn btn-primary btn-block" value="Send"/>

@@ -14,7 +14,7 @@
 		<tbody>
 			{{#each users}}
 			<tr>
-				<td><input ($change)="toggle(.)" type="checkbox"/></td>
+				<td><input on:change="toggle(.)" type="checkbox"/></td>
 				<td>{{name}}</td>
 				<td>{{email}}</td>
 			</tr>
@@ -25,13 +25,13 @@
 				<td colspan="3">
 					<button tooltip="{{deleteTooltip}}"
 							{{^selected.length}}class="disabled"{{/selected.length}}
-							($click)="notImplemented()">
+							on:click="notImplemented()">
 						Delete
 					</button>
 					<button
 						tooltip="{{archiveTooltip}}"
 						{{^selected.length}}class="disabled"{{/selected.length}}
-						($click)="notImplemented()">
+						on:click="notImplemented()">
 						Archive
 					</button>
 				</td>

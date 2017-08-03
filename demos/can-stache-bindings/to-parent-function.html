@@ -1,7 +1,7 @@
 <script type='text/stache' id='demo-html'>
-	<my-tabs {^@add-panel}="@*addPanel">
-	  <my-panel {add-panel}="@*addPanel" title="CanJS">CanJS Content</my-panel>
-	  <my-panel {add-panel}="@*addPanel" title="StealJS">StealJS Content</my-panel>
+	<my-tabs @addPanel:to="@*addPanel">
+	  <my-panel addPanel:from="@*addPanel" title="CanJS">CanJS Content</my-panel>
+	  <my-panel addPanel:from="@*addPanel" title="StealJS">StealJS Content</my-panel>
 	</my-tabs>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
@@ -16,14 +16,14 @@ Component.extend({
 	template: 	
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "($click)='makeActive(.)'>"+
-    			  "{{title}}"+
-    			"</li>"+
-    		"{{/panels}}"+
-    	"</ul>"+
-    	"<content></content>"),
+			"{{#panels}}"+
+				"<li {{#isActive}}class='active'{{/isActive}} "+
+					"on:click='makeActive(.)'>"+
+					"{{title}}"+
+				"</li>"+
+			"{{/panels}}"+
+		"</ul>"+
+		"<content></content>"),
 	ViewModel: DefineMap.extend({
 		// Contains a list of all panel scopes within the
 		// tabs element.

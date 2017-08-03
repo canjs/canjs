@@ -180,7 +180,7 @@ Print out the exported values like:
   in `can-stache`.  For example, the following keeps `email` on the ViewModel and the input's `value` in sync:
 
     ```html
-    <input {($value)}="email"/>
+    <input value:bind="email"/>
     ```
 
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
@@ -314,7 +314,7 @@ After submitting the form, you should see an alert like:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div ($click)="doSomething(%event)"> ... </div>
+   <div on:click="doSomething(%event)"> ... </div>
    ```
 
    Notice that it also passed the event object with `%event`.
@@ -370,7 +370,7 @@ To do that, we’ll add the following properties to the ViewModel:
 - Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
 
   ```html
-  <button {$disabled}="isCardInvalid">...
+  <button disabled:from="isCardInvalid">...
   ```
 
 ### The solution

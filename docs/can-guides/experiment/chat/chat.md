@@ -213,10 +213,10 @@ to work together like:
 
 ```
 {{#if session}}
-  <app-toolbar {(selected-files)}="selectedFiles"/>
-  <app-directory {(selected-files)}="selectedFiles"/>
-  <app-files {(selected-files)}="selectedFiles"/>
-  <app-file-details {(selected-files)}="selectedFiles"/>
+  <app-toolbar selectedFiles:bind="selectedFiles"/>
+  <app-directory selectedFiles:bind="selectedFiles"/>
+  <app-files selectedFiles:bind="selectedFiles"/>
+  <app-file-details selectedFiles:bind="selectedFiles"/>
 {{else}}
   <app-login/>
 {{/if}}

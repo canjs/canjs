@@ -11,7 +11,7 @@
 <div class='url'>URL: {{appUrl}}</div>
 <h2>Locations</h2>
 {{#appState.locations}}
-	<div><input type='checkbox' {($checked)}="selected" />{{name}}</div>
+	<div><input type='checkbox' checked:bind="selected" />{{name}}</div>
 {{/appState.locations}}
 <h2>Products</h2>
 {{#appState.products}}

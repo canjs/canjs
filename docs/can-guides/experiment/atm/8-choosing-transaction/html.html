@@ -22,7 +22,7 @@
     	</p>
     	<p>
     		Enter Card Number:
-    		<input name="card" ($enter)="cardNumber(%element.value)"/>
+    		<input name="card" on:enter="cardNumber(%element.value)"/>
     	</p>
     {{/case}}
 
@@ -33,7 +33,7 @@
 			<input name="pin" type="password"
 				autofocus
 				{{#is card.state "verifying"}}DISABLED{{/is}}
-				($enter)="pinNumber(%element.value)"/>
+				on:enter="pinNumber(%element.value)"/>
 
 			{{#is card.state "verifying"}}
 				<div class='warn'>
@@ -44,7 +44,7 @@
 				</div>
 			{{/is}}
 		</p>
-		<a href="javascript://" ($click)="exit()">exit</a>
+		<a href="javascript://" on:click="exit()">exit</a>
     {{/case}}
 
     {{#case "choosingTransaction"}}
@@ -52,9 +52,9 @@
         <p>What would you like to do?</p>
         <nav>
             <ul>
-                <li ($click)="chooseDeposit()">Deposit</li>
-                <li ($click)="chooseWithdraw()">Withdraw</li>
-                <li ($click)="printReceiptAndExit()">Exit</li>
+                <li on:click="chooseDeposit()">Deposit</li>
+                <li on:click="chooseWithdraw()">Withdraw</li>
+                <li on:click="printReceiptAndExit()">Exit</li>
             </ul>
         </nav>
     {{/case}}

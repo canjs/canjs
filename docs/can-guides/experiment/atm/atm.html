@@ -28,7 +28,7 @@
     	</p>
     	<p>
     		Enter Card Number:
-    		<input name="card" ($enter)="cardNumber(%element.value)"/>
+    		<input name="card" on:enter="cardNumber(%element.value)"/>
     	</p>
     {{/case}}
     {{#case "readingPin"}}
@@ -39,7 +39,7 @@
     			type="password"
                 autofocus
     			{{#isVerifyingPin}}DISABLED{{/isVerifyingPin}}
-                  ($enter)="pinNumber(%element.value)"/>
+                  on:enter="pinNumber(%element.value)"/>
 
     		{{#isVerifyingPin}}
     		  	<div class='warn'>
@@ -50,7 +50,7 @@
       			</div>
     		{{/isVerifyingPin}}
     	</p>
-    	<a href="javascript://" ($click)="exit()">exit</a>
+    	<a href="javascript://" on:click="exit()">exit</a>
     {{/case}}
 
     {{#case "choosingTransaction"}}
@@ -58,9 +58,9 @@
     	<p>What would you like to do?</p>
     	<nav>
     		<ul>
-    			<li ($click)="chooseDeposit()">Deposit</li>
-    			<li ($click)="chooseWithdraw()">Withdraw</li>
-    			<li ($click)="printReceiptAndExit()">Exit</li>
+    			<li on:click="chooseDeposit()">Deposit</li>
+    			<li on:click="chooseWithdraw()">Withdraw</li>
+    			<li on:click="printReceiptAndExit()">Exit</li>
     		</ul>
     	</nav>
     {{/case}}
@@ -78,7 +78,7 @@
         {{else}}
             <ul>
                 {{#each accountsPromise.value}}
-                    <li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+                    <li on:click="chooseAccount(.)">{{name}} - ${{balance}}</li>
                 {{/each}}
             </ul>
         {{/if}}
@@ -91,7 +91,7 @@
     		into {{currentTransaction.account.name}}
     		(${{currentTransaction.account.balance}})?
 
-    		<input name="deposit" {($value)}="currentTransaction.amount"/>
+    		<input name="deposit" value:bind="currentTransaction.amount"/>
     	</p>
 
     	{{#eq currentTransaction.state "executing"}}
@@ -102,11 +102,11 @@
     			</p>
     		</div>
     	{{else}}
-    		<button ($click)="currentTransaction.execute()"
+    		<button on:click="currentTransaction.execute()"
     			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
     			Deposit
     		</button>
-    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    		<a href="javascript://" on:click="removeTransaction()">cancel</a>
     	{{/eq}}
     {{/case}}
 
@@ -117,7 +117,7 @@
     		from {{currentTransaction.account.name}}
     		(${{currentTransaction.account.balance}})?
 
-    		<input name="withdrawl" {($value)}="currentTransaction.amount"/>
+    		<input name="withdrawl" value:bind="currentTransaction.amount"/>
     	</p>
     	{{#eq currentTransaction.state "executing"}}
     		<div class='warn'>
@@ -127,11 +127,11 @@
     			</p>
     		</div>
     	{{else}}
-    		<button ($click)="currentTransaction.execute()"
+    		<button on:click="currentTransaction.execute()"
     			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
     			Withdraw
     		</button>
-    		<a href="javascript://" ($click)="removeTransaction()">cancel</a>
+    		<a href="javascript://" on:click="removeTransaction()">cancel</a>
     	{{/eq}}
     {{/case}}
 
@@ -144,8 +144,8 @@
     	<p>What would you like to do?</p>
     	<nav>
     		<ul>
-    			<li ($click)="removeTransaction()">Another transaction</li>
-    			<li ($click)="printReceiptAndExit()">Exit</li>
+    			<li on:click="removeTransaction()">Another transaction</li>
+    			<li on:click="printReceiptAndExit()">Exit</li>
     		</ul>
     	</nav>
     {{/case}}
@@ -165,7 +165,7 @@
     	<h3>Accounts</h3>
     	<ul>
     		{{#each accountsPromise.value}}
-    			<li ($click)="chooseAccount(.)">{{name}} - ${{balance}}</li>
+    			<li on:click="chooseAccount(.)">{{name}} - ${{balance}}</li>
     		{{/each}}
     	</ul>
     	<div class='warn'>
