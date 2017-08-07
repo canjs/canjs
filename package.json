@@ -78,7 +78,7 @@
     "can-simple-map": "3.3.0",
     "can-stache": "3.2.0",
     "can-stache-bindings": "3.4.4",
-    "can-stache-converters": "3.2.0",
+    "can-stache-converters": "3.2.1",
     "can-stache-key": "0.0.3",
     "can-stream": "0.3.1",
     "can-stream-kefir": "0.3.1",
