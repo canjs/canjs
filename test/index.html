@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <title>CanJS tests</title>
 <iframe src="../docs/can-guides/experiment/todomvc/todomvc.html" name="todo"></iframe>
+<script type="text/javascript">
+    // IE9 fix
+    if(!window.console) {
+        window.console = {
+            log : function(){},
+            warn : function(){},
+            error : function(){},
+            time : function(){},
+            timeEnd : function(){}
+        }
+    }
+</script>
 <script src="../node_modules/steal/steal.js" main="can/test/test" env="canjs-test"></script>
 <div id="qunit-fixture"></div>
