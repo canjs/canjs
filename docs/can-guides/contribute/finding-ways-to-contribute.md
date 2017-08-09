@@ -17,6 +17,7 @@ We use a few labels to organize issues across all of the repositories:
 - [easy](https://github.com/search?q=org%3Acanjs+label%3Aeasy&state=open) for issues the core team thinks are good for someone who’s new to contributing
 - [documentation](https://github.com/search?q=org%3Acanjs+label%3Adocumentation&state=open) for issues related to documenting the APIs
 - [design](https://github.com/search?q=org%3Acanjs+label%3Adesign&state=open) for issues that could use a designer’s expertise
+- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0&state=open), [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1&state=open), [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2&state=open), [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3&state=open), & [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4&state=open) for prioritizing issues (see [guides/contributing/project-organization#Priority_Tags_andComplexity Priority, Tags, and Complexity] for more info)
 
 Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is%3Aissue+no%3Alabel&state=open) is also really helpful!
 

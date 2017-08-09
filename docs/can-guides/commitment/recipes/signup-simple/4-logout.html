@@ -1,0 +1,28 @@
+<script type='text/stache' id='app-view'>
+  {{#if sessionPromise.value}}
+
+    <p class="welcome-message">
+      Welcome {{sessionPromise.value.user.email}}.
+      <a href="javascript://" ($click)="logOut()">log out</a>
+    </p>
+
+  {{else}}
+
+    <form ($submit)="signUp(%event)">
+      <h2>Sign Up</h2>
+
+      <input placeholder='email' {^$value}="email"/>
+
+      <input type='password'
+           placeholder='password' {^$value}="password"/>
+
+      <button>Sign Up</button>
+
+      <aside>
+        Have an account?
+        <a href="javascript://">Log in</a>
+      </aside>
+    </form>
+
+  {{/if}}
+</script>
