@@ -1,5 +1,6 @@
 var can = require("can-util/namespace");
 
+
 require("can-construct-super");
 require("can-connect-feathers");
 require("can-connect-signalr");
