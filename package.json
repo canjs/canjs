@@ -124,7 +124,7 @@
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.1.0",
     "steal-tools": "^1.3.6",
-    "test-saucelabs": "bitovi/test-saucelabs#allow-zero-assertions",
+    "test-saucelabs": "^0.0.2",
     "testee": "^0.7.0"
   },
   "demos": [
