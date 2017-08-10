@@ -1,4 +1,4 @@
-require('./delete-this-test');
+// require('./delete-this-test');
 
 // Core tests
 require('../component/component_test');

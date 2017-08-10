@@ -21,7 +21,7 @@
     "build-tests": "node test/build.js",
     "document": "bit-docs",
     "document:force": "bit-docs -fd",
-    "test-sl": "node --inspect test/test-sauce-labs.js"
+    "test-sl": "npm install ../test-saucelabs && node --inspect test/test-sauce-labs.js"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
@@ -119,7 +119,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "socket.io-client": "^1.7.2",
-    "steal": "^1.5.5",
+    "steal": "^0.16.0",
     "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-stache": "^3.1.0",
