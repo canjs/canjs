@@ -79,7 +79,7 @@
     "can-stache": "3.2.0",
     "can-stache-bindings": "3.4.4",
     "can-stache-converters": "3.2.1",
-    "can-stache-key": "0.0.4",
+    "can-stache-key": "0.1.0",
     "can-stream": "0.3.1",
     "can-stream-kefir": "0.3.1",
     "can-symbol": "1.0.0",
