@@ -10,5 +10,6 @@ require("can-set");
 require("can-stache");
 require("can-stache/helpers/route");
 require("can-stache-bindings");
+require("can-attribute-encoder");
 
 module.exports = can;
