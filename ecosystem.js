@@ -11,6 +11,7 @@ require("can-define-validate-validatejs");
 require("can-fixture");
 require("can-fixture-socket");
 require("can-jquery");
+require("can-kefir");
 require("can-ndjson-stream");
 require("can-stache-converters");
 require("can-validate");

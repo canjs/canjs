@@ -175,6 +175,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-vdom]** <small><%can-vdom.package.version%></small> A virtual DOM that supports can-stache
   - `npm install can-vdom --save`
   - <a class="github-button" href="https://github.com/canjs/can-vdom">Star</a>
+- **[can-kefir]** <small><%can-kefir.package.version%></small> Use streams in [can-stache].
+  - `npm install can-kefir --save`
+  - <a class="github-button" href="<PROJECT_GITHUB_URL>">Star</a>
 - **[can-stream-kefir]** <small><%can-stream-kefir.package.version%></small> Convert observable values into streams
   - `npm install can-stream-kefir --save`
   - <a class="github-button" href="https://github.com/canjs/can-stream-kefir">Star</a>

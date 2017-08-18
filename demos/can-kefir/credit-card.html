@@ -20,13 +20,12 @@
 	{{/if}}
 
 	<input type='text' name='number' placeholder='Card Number'
-	    value='1234-1234-1234-1234'
         {{#if showCardError.value}}class='is-error'{{/if}}
 		on:blur="userCardNumberFocused.value(false)"
 		on:input:value:to="userCardNumber.value"/>
 
 	<input type='text' name='expiry' placeholder='MM-YY'
-	    value='12-34'
+
         {{#if showExpiryError.value}}class='is-error'{{/if}}
 		on:blur="userExpiryFocused.value(false)"
 		on:input:value:to="userExpiry.value"/>
@@ -108,6 +107,10 @@ var paymentPromises = viewModel.payClicked.map((payClicked) => {
 	}
 });
 
+var peoplePromise = Task.getList().then(function(){
+	return Person.getList({...})
+})
+
 // STREAM< STREAM<STATUS> >
 // This is a stream of streams of status objects.
 var paymentStatusStream = paymentPromises.map((promise) => {
@@ -132,7 +135,7 @@ var paymentStatusStream = paymentPromises.map((promise) => {
 	}
 });
 
-// STREAM<STATUS>
+// STREAM<STATUS> //{status: "waiting"} | {status: "resolved"}
 viewModel.paymentStatus = paymentStatusStream.flatMap().toProperty();
 
 viewModel.disablePaymentButton = Kefir.combine([viewModel.isCardInvalid, viewModel.paymentStatus],
