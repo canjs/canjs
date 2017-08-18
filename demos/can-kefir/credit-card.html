@@ -60,26 +60,26 @@ var viewModel = {
 	userCVC: Kefir.emitterProperty(),
 	userCVCFocused: Kefir.emitterProperty(),
 
-	payClicked:  Kefir.emitterProperty(),
+	payClicked: Kefir.emitterProperty(),
 
-	pay: function(event){
+	pay: function(event) {
 		event.preventDefault();
 		this.payClicked.value(true)
 	}
 };
 
 // DERIVED cardNumber values
-viewModel.cardNumber = viewModel.userCardNumber.map(function(card){
-	if(card) {
-		return card.replace(/[\s-]/g,"");
+viewModel.cardNumber = viewModel.userCardNumber.map(function(card) {
+	if (card) {
+		return card.replace(/[\s-]/g, "");
 	}
 });
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty(); // we'll need this in the future
 viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberFocused);
 
 // EXPIRY
-viewModel.expiry = viewModel.userExpiry.map(function(expiry){
-	if(expiry) {
+viewModel.expiry = viewModel.userExpiry.map(function(expiry) {
+	if (expiry) {
 		return expiry.split("-")
 	}
 });
@@ -99,121 +99,135 @@ viewModel.isCardInvalid = Kefir.combine([viewModel.cardError, viewModel.expiryEr
 
 // STREAM< Promise<Number> | undefined >
 var paymentPromises = viewModel.payClicked.map((payClicked) => {
-	if(payClicked) {
-		return new Promise(function(resolve){
-			setTimeout(function(){
+	if (payClicked) {
+		return new Promise(function(resolve) {
+			setTimeout(function() {
 				resolve(1000);
-			},2000);
+			}, 2000);
 		})
 	}
 });
 
 // STREAM< STREAM<STATUS> >
 // This is a stream of streams of status objects.
-var paymentStatusStream = paymentPromises.map( (promise) => {
-	if(promise) {
+var paymentStatusStream = paymentPromises.map((promise) => {
+	if (promise) {
 		// STREAM<STATUS>
 		return Kefir.concat([
-			Kefir.constant({status: "pending"}),
+			Kefir.constant({
+				status: "pending"
+			}),
 			Kefir.fromPromise(promise).map((value) => {
-		   		return {status: "resolved", value: value};
-	   		})
+				return {
+					status: "resolved",
+					value: value
+				};
+			})
 		]);
 	} else {
 		// STREAM
-		return Kefir.constant({status: "waiting"});
+		return Kefir.constant({
+			status: "waiting"
+		});
 	}
 });
 
 // STREAM<STATUS>
 viewModel.paymentStatus = paymentStatusStream.flatMap().toProperty();
 
-viewModel.disablePaymentButton =  Kefir.combine([viewModel.isCardInvalid, viewModel.paymentStatus],
+viewModel.disablePaymentButton = Kefir.combine([viewModel.isCardInvalid, viewModel.paymentStatus],
 	function(isCardInvalid, paymentStatus) {
 		return (isCardInvalid === true) || !paymentStatus || paymentStatus.status === "pending";
-	}).toProperty(function(){
-		return true;
-	});
+	}).toProperty(function() {
+	return true;
+});
 
 //viewModel.paymentStatus.log("paymentStatus");
 
 function validateCard(card) {
-	if(!card) {
-	  return "There is no card"
+	if (!card) {
+		return "There is no card"
 	}
-	if(card.length !== 16) {
-	  return "There should be 16 characters in a card";
+	if (card.length !== 16) {
+		return "There should be 16 characters in a card";
 	}
 }
 
 function validateExpiry(expiry) {
-	if(!expiry) {
+	if (!expiry) {
 		return "There is no expiry. Format  MM-YY";
 	}
-	if(expiry.length !==2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
+	if (expiry.length !== 2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
 		return "Expirty must be formatted like MM-YY";
 	}
 }
+
 function validateCVC(cvc) {
-	if(!cvc) {
+	if (!cvc) {
 		return "There is no CVC code";
 	}
-	if(cvc.length !== 3) {
+	if (cvc.length !== 3) {
 		return "The CVC must be at least 3 numbers";
 	}
-	if(isNaN(parseInt(cvc))) {
+	if (isNaN(parseInt(cvc))) {
 		return "The CVC must be numbers";
 	}
 }
+
 function showOnlyWhenBlurredOnce(errorStream, focusedStream) {
 	var errorEvent = errorStream.map((error) => {
-	   if(!error) {
-		   return {type: "valid"}
-	   } else {
-		   return {type: "invalid", message: error}
-	   }
+		if (!error) {
+			return {
+				type: "valid"
+			}
+		} else {
+			return {
+				type: "invalid",
+				message: error
+			}
+		}
 	});
 
 	var focusedEvents = focusedStream.map((isFocused) => {
-		if(isFocused === undefined) {
+		if (isFocused === undefined) {
 			return {};
 		}
-	   	return isFocused ? {type: "focused"} : {type: "blurred"};
+		return isFocused ? {
+			type: "focused"
+		} : {
+			type: "blurred"
+		};
 	});
 
 	return Kefir.merge([errorEvent, focusedEvents])
-	    .scan((previous, event) => {
-	 	   switch(event.type) {
-	 		   case "valid":
-	 			   return Object.assign({},previous,{
-	 				   isValid: true,
-	 				   showCardError: false
-	 			   });
-	 		   case "invalid":
-	 			   return Object.assign({},previous,{
-	 				   isValid: false,
-	 				   showCardError: previous.hasBeenBlurred
-	 			   });
-	 		   case "blurred":
-	 			   return Object.assign({},previous,{
-	 				   hasBeenBlurred: true,
-	 				   showCardError: !previous.isValid
-	 			   });
-	 		   default:
-	 			   return previous;
-	 	   }
-	    },{
-	 	   hasBeenBlurred: false,
-	 	   showCardError: false,
-	 	   isValid: false
-	    }).map((state) => {
-	 	   return state.showCardError
-	    });
+		.scan((previous, event) => {
+			switch (event.type) {
+				case "valid":
+					return Object.assign({}, previous, {
+						isValid: true,
+						showCardError: false
+					});
+				case "invalid":
+					return Object.assign({}, previous, {
+						isValid: false,
+						showCardError: previous.hasBeenBlurred
+					});
+				case "blurred":
+					return Object.assign({}, previous, {
+						hasBeenBlurred: true,
+						showCardError: !previous.isValid
+					});
+				default:
+					return previous;
+			}
+		}, {
+			hasBeenBlurred: false,
+			showCardError: false,
+			isValid: false
+		}).map((state) => {
+			return state.showCardError
+		});
 }
-
-
-// only show once it has been blurred once
-
 
 var template = stache.from("app-view");
 
