@@ -22,4 +22,8 @@ require("can-stream-kefir");
 require("can-zone");
 require("react-view-model");
 
+if(typeof customElements !== "undefined") {
+	require("can-element");
+}
+
 module.exports = can;
