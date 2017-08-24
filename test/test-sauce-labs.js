@@ -43,5 +43,6 @@ var url = 'http://localhost:3000/test/index.html?hidepassed';
 
 testSauceLabs({
 	urls: [{ name: "canjs", url : url }],
-	platforms: platforms
+	platforms: platforms,
+	zeroAssertionsPass: false
 });
