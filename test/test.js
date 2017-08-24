@@ -53,6 +53,9 @@ require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
 require('can-ndjson-stream/can-ndjson-stream-test');
 require('can-connect-ndjson/test/can-connect-ndjson-test');
+if(typeof Proxy === "function"){
+	require('can-observe/test');
+}
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
 
