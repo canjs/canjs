@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
+body {
+background-color: rgba(8, 211, 67, 0.3);
+padding: 2%;
+font-family: 'Raleway', sans-serif;
+font-size: 1em;
+}
+input {
+display: block;
+width: 100%;
+box-sizing: border-box;
+font-size: 1em;
+font-family: 'Raleway', sans-serif;
+font-weight: 500;
+padding: 12px;
+border: 1px solid #ccc;
+outline-color: white;
+transition: background-color 0.5s ease;
+transition: outline-color 0.5s ease;
+}
+input[name=number] {
+border-bottom: 0;
+}
+input[name=expiry],
+input[name=cvc] {
+width: 50%;
+}
+input[name=expiry] {
+float: left;
+border-right: 0;
+}
+input::placeholder {
+color: #999;
+font-weight: 400;
+}
+input:focus {
+background-color: rgba(130, 245, 249, 0.1);
+outline-color: #82f5f9;
+}
+input.is-error {
+background-color: rgba(250, 55, 55, 0.1);
+}
+input.is-error:focus {
+outline-color: #ffbdbd;
+}
+button {
+font-size: 1em;
+font-family: 'Raleway', sans-serif;
+background-color: #08d343;
+border: 0;
+box-shadow: 0px 1px 3px 1px rgba(51, 51, 51, 0.16);
+color: white;
+font-weight: 500;
+letter-spacing: 1px;
+margin-top: 30px;
+padding: 12px;
+text-transform: uppercase;
+width: 100%;
+}
+button:disabled {
+opacity: 0.4;
+background-color: #999;
+}
+form {
+background-color: white;
+box-shadow: 0px 17px 22px 1px rgba(51, 51, 51, 0.16);
+padding: 40px;
+margin: 0 auto;
+max-width: 500px;
+}
+.message {
+margin-bottom: 20px;
+color: #fa3737;
+}

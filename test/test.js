@@ -62,6 +62,7 @@ require('../view/ejs/ejs_test');
 require('can-fixture/test/fixture_test');
 require('can-connect-signalr/test');
 require('can-connect-cloneable/test/test');
+require('can-kefir/can-kefir-test');
 require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
 require('can-ndjson-stream/can-ndjson-stream-test');
