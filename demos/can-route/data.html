@@ -5,13 +5,13 @@
   }
 </style>
 <div id='out'></div>
-<script type='text/mustache' id='template'>
+<script type='text/stache' id='template'>
 <button can-click='back'>Back</button>
 <button can-click='fwd'>Forward</button>
 <div class='url'>URL: {{appUrl}}</div>
 <h2>Locations</h2>
 {{#appState.locations}}
-	<div><input type='checkbox' {($checked)}="selected" />{{name}}</div>
+	<div><input type='checkbox' checked:bind="selected" />{{name}}</div>
 {{/appState.locations}}
 <h2>Products</h2>
 {{#appState.products}}

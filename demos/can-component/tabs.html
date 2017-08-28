@@ -118,7 +118,7 @@ Component.extend({
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
     			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "($click)='makeActive(.)'>"+
+    			    "on:click='makeActive(.)'>"+
     			  "{{title}}"+
     			"</li>"+
     		"{{/panels}}"+

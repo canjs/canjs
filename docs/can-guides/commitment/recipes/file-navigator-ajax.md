@@ -439,7 +439,7 @@ clicks on the root folder's name should toggle if the children are displayed.
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution
@@ -483,7 +483,7 @@ The following wraps the listing of child entities with a `{{#if isOpen}} {{/if}}
 
 ```html
 <script type="text/stache" id="app-template">
-<span ($click)="toggleOpen()">{{folder.name}}</span>
+<span on:click="toggleOpen()">{{folder.name}}</span>
 {{#if isOpen}}
   {{#if entitiesPromise.isPending}}
     <div class="loading">Loading</div>
@@ -531,13 +531,13 @@ Now we want to make all the folders able to open and close.  This means creating
 - You can pass data to a component's `ViewModel` with [can-stache-bindings.toChild {data-bindings}] like:
 
   ```html
-  <my-component {message}="'Hi There'"/>
+  <my-component message:from="'Hi There'"/>
   ```
 
   This sets `message` on the ViewModel to `'Hi There'`.  You can also send data within stache like:
 
   ```html
-  <my-component {message}="greeting"/>
+  <my-component message:from="greeting"/>
   ```
   This sets `message` on the ViewModel to what `greeting` is in the stache template.
 
@@ -584,12 +584,12 @@ The following:
 
 ```html
 <script type="text/stache" id="app-template">
-  <a-folder {folder}="this" {is-open}="true"/>        <!-- CHANGED -->
+  <a-folder folder:from="this" isOpen:from="true"/>        <!-- CHANGED -->
 </script>
 
 <!-- CONTENT FROM app-template-->
 <script type="text/stache" id="folder-template">
-<span ($click)="toggleOpen()">{{folder.name}}</span>
+<span on:click="toggleOpen()">{{folder.name}}</span>
 {{#if isOpen}}
   {{#if entitiesPromise.isPending}}
     <div class="loading">Loading</div>
@@ -600,7 +600,7 @@ The following:
           {{#eq type 'file'}}
             📝 <span>{{name}}</span>
           {{else}}
-            📁 <a-folder {folder}="this"/>            <!-- CHANGED -->
+            📁 <a-folder folder:from="this"/>            <!-- CHANGED -->
           {{/eq}}
         </li>
       {{/each}}

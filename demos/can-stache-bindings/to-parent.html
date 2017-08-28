@@ -1,14 +1,14 @@
 <script type='text/stache' id='demo-html'>
-<drivers-list {^selected}="*editing">
+<drivers-list selected:to="*editing">
 	<ul>
 		{{#each drivers}}
-			<li ($click)="select(.)">
+			<li on:click="select(.)">
 				{{title}} {{first}} {{last}} - {{licensePlate}}
 			</li>
 		{{/each}}
 	</ul>
 </drivers-list>
-<edit-plate {(plate-name)}="*editing.licensePlate"/>
+<edit-plate plateName:bind="*editing.licensePlate"/>
 </script>
 
 <script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
@@ -41,7 +41,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	template: stache("<input value='{{plateName}}' ($input)='update($element.value)'/>"),
+	template: stache("<input value='{{plateName}}' on:input='update($element.value)'/>"),
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

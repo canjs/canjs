@@ -94,7 +94,7 @@ Update the __HTML__ tab to:
 
 - Use [can-stache.helpers.each `{{#each todos}}`] to loop through every todo.
 - Add `completed` to the `<li>`’s `className` if the `<li>`’s todo is complete.
-- Use [can-stache-bindings.twoWay `{($checked)}`] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
+- Use [can-stache-bindings.twoWay `checked:bind`] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
 - Use [can-stache.tags.escaped `{{name}}`] to insert the value todo’s `name` as the content of the `<label>` and
   `value` of the text `<input/>`.
 - Insert the active and complete number of todos.
@@ -165,7 +165,7 @@ In this section, we will:
 Update the __HTML__ tab to:
 
  - Add `destroying` to the `<li>`’s `className` if the `<li>`’s todo is being destroyed using [can-connect/can/map/map.prototype.isDestroying].
- - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event `($click)`].
+ - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event `on:click`].
 
 @sourceref ./4-destroy/html.html
 @highlight 22-23,27,only
@@ -210,8 +210,8 @@ Update the `JavaScript` tab to:
 Update the __HTML__ tab to:
 
  - Create the `todo-create-template` that:
-   - Updates the `todo`’s `name` with the `<input>`’s `value` using [can-stache-bindings.twoWay `{($value)}`].
-   - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event `($enter)`].
+   - Updates the `todo`’s `name` with the `<input>`’s `value` using [can-stache-bindings.twoWay `value:bind`].
+   - Calls `createTodo` when the `enter` key is pressed using [can-stache-bindings.event `on:enter`].
  - Use `<todo-create/>`
 
 @sourceref ./5-create/html.html
@@ -277,8 +277,8 @@ Update the __HTML__ tab to:
  - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
  - Call `edit` with the current context using [can-stache/keys/this].
  - Set up the edit input to:
-   - Two-way bind its value to the current todo’s `name` using [can-stache-bindings.twoWay `{($value)}`].
-   - Call `updateName` when the enter key is pressed using [can-stache-bindings.event `($enter)`].
+   - Two-way bind its value to the current todo’s `name` using [can-stache-bindings.twoWay `value:bind`].
+   - Call `updateName` when the enter key is pressed using [can-stache-bindings.event `on:enter`].
    - Focus the input when `isEditing` is true using the special [can-util/dom/attr/attr.special.focused] attribute.
    - Call `cancelEdit` if the input element loses focus.
 

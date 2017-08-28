@@ -333,7 +333,7 @@ completedCount.on("change", function(ev, newVal){
 
 If `completeAll` is called, the following will be logged:
 
-```
+```js
 completeAll();
 // console.logs "completing dishes"
 // console.logs "  checking dishes"
@@ -838,7 +838,7 @@ This _ViewModel_ will be tested independent of the view in the
 
 The __View__, in _components/todo-list/view.stache_, looks like:
 
-```
+```html
 <ul id="todo-list">
   <!-- Loop through every todo -->
   {{#each todos}}
@@ -852,22 +852,22 @@ The __View__, in _components/todo-list/view.stache_, looks like:
         <!-- Connect this checkbox to the `complete` property
              of the current todo -->
         <input class="toggle" type="checkbox"
-               {($checked)}="complete"
-               ($change)="save()">
+               checked:bind="complete"
+               on:change="save()">
 
         <!-- Edit this todo on double click -->
-        <label ($dblclick)="edit(this)">{{name}}</label>
+        <label on:dblclick="edit(this)">{{name}}</label>
 
         <!-- Delete this todo on the server when clicked -->
-        <button class="destroy" ($click)="destroy()"></button>
+        <button class="destroy" on:click="destroy()"></button>
       </div>
 
       <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
-        {($value)}="name"
-        ($enter)="updateName()"
-        {$focused}="isEditing(this)"
-        ($blur)="cancelEdit()"/>
+        value:bind="name"
+        on:enter="updateName()"
+        focused:from="isEditing(this)"
+        on:blur="cancelEdit()"/>
     </li>
   {{/each}}
 </ul>
@@ -953,7 +953,7 @@ test("<todo-list> can update todo name", function(done){
         {name: "dishes", complete: true, id: 23},
     ]);
 
-    var template = stache("<todo-list {todos}='todos'/>");
+    var template = stache("<todo-list todos:from='todos'/>");
     var todoListElement = template({todos: todos}).firstChild;
 
     // double click todo
@@ -1000,12 +1000,12 @@ developers, it’s possible by:
    [can-define-stream] from events dispatched on the ApplicationViewModel.
  - Enforcing that parent-to-child communication only uses one-way
    [can-stache-bindings.toChild] bindings like:
-   ```
-   <child-component {prop}="parentValue"/>
+   ```html
+   <child-component prop:from="parentValue"/>
    ```
  - Enforcing that child-to-parent communication is [can-stache-bindings.event] based:
-   ```
-   <child-component (event)="parentMethod()"/>
+   ```html
+   <child-component on:event="parentMethod()"/>
    ```
 
 
@@ -1078,7 +1078,7 @@ and include special features like event bindings, custom elements, and performan
 [can-stache] templates look like HTML, but with _magic_ tags like [can-stache.tags.escaped]
 and view bindings like [can-stache-bindings.twoWay] in the template. For example, the following is the application template in the [guides/todomvc]:
 
-```
+```html
 <header id="header">
 	<h1>todos</h1>
 	<todo-create/>
@@ -1088,9 +1088,9 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 	{{#each todos}}
 		<li class="todo {{#if complete}}completed{{/if}}">
 				<div class="view">
-						<input class="toggle" type="checkbox" {($checked)}="complete">
+						<input class="toggle" type="checkbox" checked:bind="complete">
 						<label>{{name}}</label>
-						<button class="destroy" ($click)="destroy()"></button>
+						<button class="destroy" on:click="destroy()"></button>
 				</div>
 
 				<input class="edit" type="text" value="{{name}}"/>
@@ -1127,7 +1127,7 @@ a very limited subset of syntax.  Most of Mustache is just:
 
 A simple template might look like:
 
-```
+```html
 <p>Hello {{name}}</p>
 <p>You have just won {{value}} dollars!</p>
 {{#in_ca}}
@@ -1141,7 +1141,7 @@ the ability to [can-stache/expressions/call call methods].
 
 A template that uses those features looks like:
 
-```js
+```html
 {{#players}}
     <h2>{{name}}</h2>
     {{#each stats.forPlayerId(id) }}
@@ -1184,19 +1184,19 @@ Before custom HTML elements existed, to add a date picker to your page, you woul
 
 1. Add a placeholder HTML element
 
-   ```
+   ```html
    <div class='datepicker' />
    ```
 
 2. Add JavaScript code to instantiate your datepicker:
 
-   ```javascript
+   ```js
    $('.datepicker').datepicker(task.dueDate)
    ```
 
 3. Wire up the datepicker to update the rest of your application and vice-versa:
 
-   ```javascript
+   ```js
    task.on("dueDate", function(ev, dueDate){
        $('.datepicker').datepicker(dueDate)
    })
@@ -1211,8 +1211,8 @@ Before custom HTML elements existed, to add a date picker to your page, you woul
 With custom HTML elements, to add the same datepicker, you would
 simply add the datepicker to your HTML or template:
 
-```
-<ui-datepicker {(value)}="task.dueDate"/>
+```html
+<ui-datepicker value:bind="task.dueDate"/>
 ```
 
 That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.
@@ -1237,7 +1237,7 @@ following shows inspecting the [guides/todomvc]’s _“What needs to be done?�
 [can-stache] includes Mustache data bindings that update the DOM when data changes.  For example,
 if the data passed to the following template changes, the DOM is automatically updated.
 
-```
+```html
 <h1 class="{{#if user.admin}}admin{{/if}}">Hello {{user.name}}</h1>
 ```
 
@@ -1245,23 +1245,21 @@ In addition to the default Mustache data bindings, the [can-stache-bindings] mod
 adds more powerful data and event bindings. These event bindings provide full control over how
 data and control flows between the DOM, ViewModels, and the [can-view-scope]. Bindings look like:
 
-- [can-stache-bindings.event (event)="key()"] for event binding.
-- [can-stache-bindings.toChild {prop}="key"] for one-way binding to a child.
-- [can-stache-bindings.toParent {^prop}="key"] for one-way binding to a parent.
-- [can-stache-bindings.twoWay {(prop)}="key"] for two-way binding.
-
-Prepending `$` to a binding like `($event)="key()"` changes the binding from the element’s `viewModel` to the element’s attributes or properties. [can-util/dom/attr/attr.special Special properties] can also be targeted with `$`.
+ - `on:event="key()"` for [can-stache-bindings.event event binding].
+ - `prop:from="key"` for [can-stache-bindings.toChild one-way binding to a child].
+ - `prop:to="key"` for [can-stache-bindings.toParent one-way binding to a parent].
+ - `prop:bind="key"` for [can-stache-bindings.twoWay two-way binding].
 
 To two-way bind an `<input>` element’s `value` to a `todo.name` looks like:
 
-```js
-<input {($value)}="todo.name"/>
+```html
+<input value:bind="todo.name"/>
 ```
 
 To two-way bind a custom `<ui-datepicker>`’s `date` to a `todo.dueDate` looks like:
 
-```js
-<ui-datepicker {(date)}="todo.dueDate"/>
+```html
+<ui-datepicker date:bind="todo.dueDate"/>
 ```
 
 By mixing and matching `$` and the different syntaxes, you have complete control over how
@@ -1275,7 +1273,7 @@ observation and data diffing.
 
 To understand how these strategies are used, consider a template like:
 
-```
+```html
 <ul>
 {{#each completeTodos() }}
 	<div>{{name}}</div>
@@ -1338,7 +1336,7 @@ chore to correctly integrate into the build tool chain. The [steal-stache] libra
 
 [steal-stache] returns a renderer function that will render the template into a document fragment.
 
-```javascript
+```js
 import todosStache from "todos.stache"
 todosStache([{name: "dishes"}]) //-> <documentFragment>
 ```
@@ -1350,7 +1348,7 @@ When the build is run, this import statement will tell StealJS that "todos.stach
 [can-view-import](../../can-view-import.html) allows templates to import their dependencies like
 other modules. You can import custom elements, helpers, and other modules straight from a template module like:
 
-```
+```html
 <can-import from="components/my_tabs"/>
 <can-import from="helpers/prettyDate"/>
 <my-tabs>
@@ -1365,7 +1363,7 @@ A template may load or conditionally load a module after the initial page load. 
 
 This feature, when used with [steal-stache](../../steal-stache.html), signals to the build that the enclosed section’s dependencies should be dynamically loaded at runtime.
 
-```
+```html
 {{#eq location 'home'}}
 <can-import from="components/home">
   <my-home/>
@@ -1407,7 +1405,7 @@ This separation of concerns and powerful mixin behavior is accomplished by encap
 
 Let’s look at an example of how we would define a `Todo` type and a list of todos:
 
-```javascript
+```js
 var DefineList = require("can-define/list/list");
 var DefineMap = require("can-define/map/map");
 
@@ -1430,7 +1428,7 @@ This example also uses [can-define/list/list] to define a type for an array of `
 
 Using [can-connect], we’ll create a connection between a RESTful `/api/todos` service and our `Todo` instances and `TodoList` lists:
 
-```javascript
+```js
 var connect = require("can-connect");
 Todo.connection = connect([
 	require("can-connect/can/map/map"),
@@ -1445,7 +1443,7 @@ Todo.connection = connect([
 
 That connection can be used to get a `Todo.List` of `Todo`s:
 
-```javascript
+```js
 Todo.getList({}).then(function(todos) {
 	// Do what you’d like with the `todos`
 });
@@ -1457,7 +1455,7 @@ Let’s continue with our todo app example and imagine that we want to show two 
 
 First, let’s fetch the incomplete todos:
 
-```javascript
+```js
 Todo.getList({completed: false}).then(function(incompleteTodos) {});
 ```
 
@@ -1470,7 +1468,7 @@ Todo.getList({completed: false}).then(function(incompleteTodos) {});
 
 Next, let’s fetch a list of high-priority todos:
 
-```javascript
+```js
 Todo.getList({priority: "high"}).then(function(urgentTodos) {});
 ```
 
@@ -1544,7 +1542,7 @@ Let’s continue with our incomplete and urgent todo example from the previous s
 
 In the UI, there’s a checkbox next to each urgent todo that toggles the `completed` property:
 
-```javascript
+```js
 todo.completed = !todo.completed;
 todo.save();
 ```
@@ -1580,7 +1578,7 @@ socket.on('todo removed', function(todo){
 
 When you make a request for `incompleteTodos` like the one below:
 
-```javascript
+```js
 Todo.getList({completed: false}).then(function(incompleteTodos) {});
 ```
 
@@ -1588,7 +1586,7 @@ The `{completed: false}` object is passed to the server as parameters and repres
 
 Here’s an example of [can-connect/base/base.algebra setting up the algebra] for the `Todo.connection`:
 
-```
+```js
 var connect = require("can-connect");
 var set = require("can-set");
 
@@ -1686,7 +1684,7 @@ But a request like `GET /api/todos/2?$populate=projectRef` might return:
 
 For example, without populating the project data:
 
-```
+```js
 Todo.get({id: 2}).then(function(todo){
   todo.projectRef.id //-> 2
 });
@@ -1694,7 +1692,7 @@ Todo.get({id: 2}).then(function(todo){
 
 With populating the project data:
 
-```
+```js
 Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
   todo.projectRef.id //-> 2
 });
@@ -1704,7 +1702,7 @@ The values of other properties and methods on the [can-connect/can/ref/ref.Map.R
 
 For example, `value`, which points to the referenced instance, will be populated if the reference was populated:
 
-```
+```js
 Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
   todo.projectRef.value.name //-> “Release”
 });
@@ -1712,7 +1710,7 @@ Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
 
 Or, it can be lazy loaded if it’s used in a template. For example, with this template:
 
-```
+```html
 {{#each todos as todo}}
   Name: {{todo.name}}
   Project: {{todo.projectRef.value.name}}

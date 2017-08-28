@@ -17,8 +17,8 @@
 <div id="demo-html">
 <div id="out"></div>
 <script id="app" type="text/stache">
-  <input type="text" {($value)}="newMessage" />
-  <button ($click)="send()">Send</button>
+  <input type="text" value:bind="newMessage" />
+  <button on:click="send()">Send</button>
   <ul>
     {{#each messages}}
       <li>{{text}} <span>sent on {{date}}</span></li>

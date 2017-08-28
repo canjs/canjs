@@ -4,7 +4,7 @@
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" {^$value}="location" type="text"/>
+      <input id="location" value:to="location" type="text"/>
     </div>
 
 	{{#if placesPromise.isPending}}
@@ -18,7 +18,7 @@
         <label>Pick your place:</label>
         <ul>
           {{#each placesPromise.value}}
-            <li ($click)="../pickPlace(this)">{{name}}, {{admin1.content}},
+            <li on:click="../pickPlace(this)">{{name}}, {{admin1.content}},
 			    {{country.code}} ({{placeTypeName.content}})</li>
           {{/each}}
         </ul>

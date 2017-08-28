@@ -110,7 +110,7 @@ CanJS 2.2 introduced [can-component.prototype.leakScope leakScope: false] as a p
 
 If you have a template like:
 
-```
+```html
 <some-component></some-component>
 ```
 
@@ -126,7 +126,7 @@ This `page` property is not available within `some-component`’s own template.
 
 If the component’s template looks like:
 
-```
+```html
 <h1>Hello {{page}}</h1>
 ```
 
@@ -425,13 +425,13 @@ Note that only a single value is returned from a native Promise.
 
 If you were passing the `this` value to a helper like so:
 
-```
+```html
 {{helper .}}
 ```
 
 You can fix this either by having your helpers handle computes, or by using [can-stache/expressions/call call expressions] instead:
 
-```
+```html
 {{helper(.)}}
 ```
 
@@ -728,22 +728,22 @@ CanJS 2.3 introduced new binding syntaxes. They’re available in CanJS 3 with [
 
 An example is changing a `can-value` binding from:
 
-```
+```html
 <input type="text" can-value="{someProp}" />
 ```
 
 To:
 
-```
-<input type="text" {($value})="someProp" />
+```html
+<input type="text" value:bind="someProp" />
 ```
 
 CanJS 3 also introduces new [can-stache.registerConverter stache converters], which are special two-way [can-stache.Helpers helpers] that update an element when an observable value changes and update the observable value when the form element’s value changes (from user input).
 
 An example is the [can-stache-converters.string-to-any] converter, which converts a primitive value to a string to set a `<select>`’s value, and then converts the `<select>` value when a user selects an `<option>` back to the primitive value to update the scope value:
 
-```
-<select {($value)}="string-to-any(~favePlayer)">
+```html
+<select value:bind="string-to-any(~favePlayer)">
 	<option value="23">Michael Jordan</option>
 	<option value="32">Magic Johnson</option>
 </select>

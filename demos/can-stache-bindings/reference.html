@@ -1,12 +1,12 @@
 <div id='demo-html'>
 <script id="app" type="text/stache">
-<drivers {^selected}="*editing"/>
-<edit-plate {(plate-name)}="*editing.licensePlate"/>
+<drivers selected:to="*editing"/>
+<edit-plate plateName:bind="*editing.licensePlate"/>
 </script>
 <script id='drivers-stache' type='text/stache'>
 <ul>
   {{#each drivers}}
-    <li ($click)="select(.)">
+    <li on:click="select(.)">
       {{title}} {{first}} {{last}} - {{licensePlate}}
     </li>
   {{/each}}
@@ -40,7 +40,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	template: stache("<input value='{{plateName}}' ($input)='update($element.value)'/>"),
+	template: stache("<input value='{{plateName}}' on:input='update($element.value)'/>"),
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

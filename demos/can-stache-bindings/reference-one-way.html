@@ -9,7 +9,7 @@ import stache from "can-stache";
 
 Component.extend({
 	tag: "year-selector",
-	template: stache("<select {($value)}='selectedYear'>"+
+	template: stache("<select value:bind='selectedYear'>"+
 			"<option value='1999'>1999</option>"+
 			"<option value='2014'>2014</option>"+
 		"</select>"),

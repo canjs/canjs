@@ -272,7 +272,7 @@ In this section, we will:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="sayHi()"> … </div>
+   <div on:click="sayHi()"> … </div>
    ```
 
 ### The solution
@@ -302,10 +302,10 @@ In this section, we will:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input's `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input's `value` in sync:
 
    ```html
-   <input {($value)}="searchQuery"/>
+   <input value:bind="searchQuery"/>
    ```
 
 - Use `gapi.client.youtube.search.list` to search YouTube like:
@@ -387,7 +387,7 @@ In this section, we will:
   `drag` events in [can-stache] and pass the `drag` argument to a function like:
 
   ```html
-  ($draginit)="startedDrag(%arguments[1])"
+  on:draginit="startedDrag(%arguments[1])"
   ```
 
 - The `drag.ghost()` method copies the elements being dragged and drags that
@@ -494,7 +494,7 @@ In this section, we will:
   `drop` events in [can-stache], and pass the `drag` argument to a function, like:
 
   ```html
-  ($dropon)="addVideo(%arguments[2])"
+  on:dropon="addVideo(%arguments[2])"
   ```
 
 - You will need to associate the drag objects with the video being dragged so
@@ -625,7 +625,7 @@ In this section, we will:
 - Access the event object in a [can-stache-bindings.event] with `%event`, like:
 
   ```html
-  ($sortableinsertat)="addVideo(%event.index, %event.dragData)"
+  on:sortableinsertat="addVideo(%event.index, %event.dragData)"
   ```
 
 - Mouse events like `click` and `dropmove` and `dropon` have a `pageY` property that
@@ -745,7 +745,7 @@ In this section, we will:
 - Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
 
   ```html
-  <button {$disabled}="createPlaylistPromise.isPending()">...
+  <button disabled:from="createPlaylistPromise.isPending()">...
   ```
 
 - When the promise has finished, set the `playlistVideos` property back to an empty list. This

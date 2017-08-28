@@ -21,7 +21,7 @@
           {{#each todos}}
 			<li class="todo {{#if complete}}completed{{/if}}">
 				<div class="view">
-					<input class="toggle" type="checkbox" {($checked)}="complete">
+					<input class="toggle" type="checkbox" checked:bind="complete">
 					<label>{{name}}</label>
 					<button class="destroy"></button>
 				</div>
