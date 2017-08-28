@@ -32,30 +32,30 @@
 	</style>
 </head>
 <body>
-	<script type="text/stache" id="myTemplate">
-		<select multiple {($values)}="colors" size="7">
-			<option value="red">Red</option>
-			<option value="orange">Orange</option>
-			<option value="yellow">Yellow</option>
-			<option value="green">Green</option>
-			<option value="blue">Blue</option>
-			<option value="indigo">Indigo</option>
-			<option value="violet">Violet</option>
-		</select>
+<script type="text/stache" id="demo-html">
+<select multiple {($values)}="colors" size="7">
+	<option value="red">Red</option>
+	<option value="orange">Orange</option>
+	<option value="yellow">Yellow</option>
+	<option value="green">Green</option>
+	<option value="blue">Blue</option>
+	<option value="indigo">Indigo</option>
+	<option value="violet">Violet</option>
+</select>
 
-		<ul>
-		{{#each colors}}
-		<li>{{this}}</li>
-		{{/each}}
-		</ul>
-	</script>
-	<script src="../../node_modules/steal/steal.js" main="@empty">
+<ul>
+	{{#each colors}}
+	<li>{{this}}</li>
+	{{/each}}
+</ul>
+</script>
+	<script src="../../node_modules/steal/steal.js" id="demo-source" main="@empty">
 		var stache = require("can-stache");
 		var DefineMap = require("can-define/map/map");
 		var DefineList = require("can-define/list/list");
 		require("can-stache-converters");
 
-		var template = stache.from("myTemplate");
+		var template = stache.from("demo-html");
 		var map = new DefineMap({
 			colors: ["green"]
 		});
