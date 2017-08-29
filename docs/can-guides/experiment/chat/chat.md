@@ -211,12 +211,12 @@ used to assemble the application into a whole.
 For example, an application’s template might assemble many custom elements
 to work together like:
 
-```
+```html
 {{#if session}}
-  <app-toolbar {(selected-files)}="selectedFiles"/>
-  <app-directory {(selected-files)}="selectedFiles"/>
-  <app-files {(selected-files)}="selectedFiles"/>
-  <app-file-details {(selected-files)}="selectedFiles"/>
+  <app-toolbar selectedFiles:bind="selectedFiles"/>
+  <app-directory selectedFiles:bind="selectedFiles"/>
+  <app-files selectedFiles:bind="selectedFiles"/>
+  <app-file-details selectedFiles:bind="selectedFiles"/>
 {{else}}
   <app-login/>
 {{/if}}

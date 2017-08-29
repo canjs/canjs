@@ -22,7 +22,7 @@
     	</p>
     	<p>
     		Enter Card Number:
-    		<input name="card" ($enter)="cardNumber(%element.value)"/>
+    		<input name="card" on:enter="cardNumber(%element.value)"/>
     	</p>
     {{/case}}
 

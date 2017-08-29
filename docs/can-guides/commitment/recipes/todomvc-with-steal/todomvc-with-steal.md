@@ -13,8 +13,8 @@ StealJS.
 - Setup steal to load a basic CanJS application.  A basic CanJS application has:
   - A [can-define/map/map] ViewModel and an instance of that ViewModel.
   - A [can-stache] view that is rendered with the instance of the ViewModel.
-- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module and
-  pass it the application’s `ViewModel` instance.
+- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 1.0 and
+  pass it the application’s `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
 
 ### What you need to know
 
@@ -192,7 +192,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test --save-dev
+npm install can-todomvc-test@1.0 --save-dev
 ```
 
 Create the main app
@@ -380,7 +380,7 @@ Update _index.stache_ to the following:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution
@@ -399,10 +399,10 @@ Update _index.stache_ to the following:
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
-- Use [can-stache-bindings.twoWay {($value)}] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
 
    ```html
-   <input  {($value)}="name"/>
+   <input  value:bind="name"/>
    ```
 
 ### The solution
@@ -814,8 +814,8 @@ is the list of todos that will be managed by the custom element.
 
 - [can-stache/keys/this] can be used to get the current context in stache:
 
-  ```
-  <div ($click)="doSomethingWith(this)"/>
+  ```html
+  <div on:click="doSomethingWith(this)"/>
   ```
 
 ### The solution
@@ -896,7 +896,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution

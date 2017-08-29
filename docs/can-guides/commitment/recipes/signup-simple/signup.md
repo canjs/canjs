@@ -291,13 +291,13 @@ A promise with a _session-like_ object looks like:
 - The [can-stache-bindings.toParent] can set an input’s `value` to
   a ViewModel property like:
   ```html
-  <input {^$value}="name"/>
+  <input value:to="name"/>
   ```
 
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div ($click)="doSomething(%event)"> ... </div>
+   <div on:click="doSomething(%event)"> ... </div>
    ```
 
    Notice that it also passed the event object with `%event`.

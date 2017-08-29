@@ -1,7 +1,7 @@
 <div id="out"></div>
 <script type="text/stache" id="demo-html">
 {{#each items}}
-	<p><input type='checkbox' {($checked)}='boolean-to-inList(this, person.owns)' /> {{upper(this)}}</p>
+	<p><input type='checkbox' checked:bind='boolean-to-inList(this, person.owns)' /> {{upper(this)}}</p>
 {{/each}} 
  <p>You own: {{ownership}}</p>
 </script>
@@ -12,7 +12,7 @@ var stache = require("can-stache");
 require("can-stache-converters");
 
 var template = stache.from("demo-html");
-		
+
 var person = new DefineMap({
   owns: ["bike"]
 });

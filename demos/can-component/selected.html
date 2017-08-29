@@ -12,7 +12,7 @@
 <script type="text/stache" id="listStache">
 {{#items}}
   <div {{#isSelected}}class='selected'{{/isSelected}}
-       ($click)='toggle'>
+       on:click='toggle'>
     {{title}}
   </div>
 {{/items}}
@@ -55,7 +55,7 @@ Component.extend({
 	}
 });
 
-var frag = stache("<my-items {items}='items' />")({
+var frag = stache("<my-items items:from='items' />")({
 	items: new DefineList([
 		{ title: "CanJS" },
 		{ title: "StealJS" },

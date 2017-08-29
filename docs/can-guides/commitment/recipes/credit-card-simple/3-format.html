@@ -2,13 +2,13 @@
   <form>
 
 	<input type='text' name='number' placeholder='Card Number'
-	  {($value)}="userCardNumber"/>
+	  value:bind="userCardNumber"/>
 
 	<input type='text' name='expiry' placeholder='MM-YY'
-	  {($value)}="userExpiry"/>
+	  value:bind="userExpiry"/>
 
 	<input type='text' name='cvc' placeholder='CVC'
-	  {($value)}="userCVC"/>
+	  value:bind="userCVC"/>
 
 	<button>Pay ${{amount}}</button>
 

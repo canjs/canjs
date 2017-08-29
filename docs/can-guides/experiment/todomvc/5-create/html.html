@@ -11,8 +11,8 @@
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
     placeholder="What needs to be done?"
-    {($value)}="todo.name"
-    ($enter)="createTodo()"/>
+    value:bind="todo.name"
+    on:enter="createTodo()"/>
 </script>
 
 <script type="text/stache" id="todomvc-template">
@@ -29,9 +29,9 @@
 			<li class="todo {{#if complete}}completed{{/if}}
                     {{#if isDestroying}}destroying{{/if}}">
 				<div class="view">
-					<input class="toggle" type="checkbox" {($checked)}="complete">
+					<input class="toggle" type="checkbox" checked:bind="complete">
 					<label>{{name}}</label>
-					<button class="destroy" ($click)="destroy()"></button>
+					<button class="destroy" on:click="destroy()"></button>
 				</div>
 				<input class="edit" type="text" value="{{name}}"/>
 			</li>

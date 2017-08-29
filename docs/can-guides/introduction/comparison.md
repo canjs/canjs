@@ -137,7 +137,7 @@ const Todo = DefineMap.extend({
 
 // In stache
 {{#each todos}}
-<label><input type="checkbox" {($checked)}="completed" />{{ name }}</label>
+<label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
 {{/each}}
 ```
 
@@ -343,13 +343,13 @@ When you are working in a team, the layered approach can be more risky, as youâ€
 
 **Angular 2 (ng2)** is actually very similar to **CanJS**, if you look at these two "Hello-World" components, you see just how aligned the concepts behind **Angular 2** and **CanJS** really are.
 
-```javascript
+```js
 import Component from 'can-component';
 import stache from 'can-stache';
 
 export default Component.extend({
   tag: "hello-world",
-  template: stache(`<h1 ($click)="emphasize()">{{ message }}</h1>`),
+  template: stache(`<h1 on:click="emphasize()">{{ message }}</h1>`),
   viewModel: {
     message: "Hello world!",
     emphasize() {

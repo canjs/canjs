@@ -397,7 +397,7 @@ We want to be able to toggle if a folder is open or closed.
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
-   <div ($click)="doSomething()"> ... </div>
+   <div on:click="doSomething()"> ... </div>
    ```
 
 ### The solution
@@ -443,7 +443,7 @@ Update the __HTML__ tab to:
 
 ```html
 <script type="text/stache" id="entities-template">
-<span ($click)="toggleOpen()">{{name}}</span>
+<span on:click="toggleOpen()">{{name}}</span>
 {{#if isOpen}}              
   <ul>
     {{#each ./children}}
