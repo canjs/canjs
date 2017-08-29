@@ -13,8 +13,8 @@ StealJS.
 - Setup steal to load a basic CanJS application.  A basic CanJS application has:
   - A [can-define/map/map] ViewModel and an instance of that ViewModel.
   - A [can-stache] view that is rendered with the instance of the ViewModel.
-- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module and
-  pass it the application’s `ViewModel` instance.
+- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 1.0 and
+  pass it the application’s `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
 
 ### What you need to know
 
@@ -192,7 +192,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test --save-dev
+npm install can-todomvc-test@1.0 --save-dev
 ```
 
 Create the main app
