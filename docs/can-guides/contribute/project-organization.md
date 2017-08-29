@@ -63,11 +63,11 @@ and test page:
 The [core team](https://donejs.com/About.html#team) reviews issues
 and assigns them a _p0_ to _p4_ label corresponding to the following priorities:
 
-- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0) - An issue that will preempt any other issues currently being worked on.
-- [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1) - A critical feature or bug that needs to be fixed to keep CanJS’s high degree of quality.
-- [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2) - A feature or bug that is less likely to be encountered, but something we intend to get to.
-- [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3) - A nice to have. The OS team might get to it, but it’s helpful if the community assists.
-- [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4) - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
+- [p0](https://github.com/search?q=org%3Acanjs+label%3Ap0+is%3Aopen+sort%3Areactions-%2B1-desc) - An issue that will preempt any other issues currently being worked on.
+- [p1](https://github.com/search?q=org%3Acanjs+label%3Ap1+is%3Aopen+sort%3Areactions-%2B1-desc) - A critical feature or bug that needs to be fixed to keep CanJS’s high degree of quality.
+- [p2](https://github.com/search?q=org%3Acanjs+label%3Ap2+is%3Aopen+sort%3Areactions-%2B1-desc) - A feature or bug that is less likely to be encountered, but something we intend to get to.
+- [p3](https://github.com/search?q=org%3Acanjs+label%3Ap3+is%3Aopen+sort%3Areactions-%2B1-desc) - A nice to have. The OS team might get to it, but it’s helpful if the community assists.
+- [p4](https://github.com/search?q=org%3Acanjs+label%3Ap4+is%3Aopen+sort%3Areactions-%2B1-desc) - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.
 
 There are several ways to influence these priorities:
 
