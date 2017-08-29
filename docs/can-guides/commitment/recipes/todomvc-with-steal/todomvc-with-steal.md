@@ -377,7 +377,7 @@ Update _index.stache_ to the following:
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>
@@ -738,7 +738,7 @@ custom element.
   });
   ```
 
-- You can use `($enter)` to listen to when the user hits the __enter__ key.
+- You can use `on:enter` to listen to when the user hits the __enter__ key.
 - The [can-define.types.ValueConstructor] behavior creates a default value by using `new Value` to initialize the value when
 a `DefineMap` property is read for the first time.
 
@@ -803,7 +803,7 @@ is the list of todos that will be managed by the custom element.
 - The [can-util/dom/attr/attr.special.focused] custom attribute can be used to specify when an element should be focused:
 
   ```html
-  {$focused}="shouldBeFocused()"
+  focused:from="shouldBeFocused()"
   ```
 
 - Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
@@ -893,7 +893,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>
