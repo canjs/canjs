@@ -1,6 +1,11 @@
 <div id="demo">
 <div id='out'></div>
 <script type='text/stache' id="demo-html">
+<p>
+<input type="radio" name="number" {($checked)}="one" /> One? {{one}}<br>
+<input type="radio" name="number" {($checked)}="two" /> Two? {{two}}
+</p>
+<br>
 <p>Attending?
   <input type="radio" checked:bind="equal(~attending, 'yes')" /> Yes
   <input type='radio' checked:bind="equal(~attending, 'no')" /> No,
@@ -15,19 +20,9 @@ require("can-stache-converters");
 var DefineMap = require("can-define/map/map");
 			
 var person = new DefineMap({
-  attending: null
-});
-
-
-stache.registerConverter("equal", {
-	get: function(compute, comparer){
-		return compute() === comparer;
-	},
-	set: function(b, compute, comparer){
-		if(b) {
-			compute(comparer);
-		}
-	}
+  attending: null,
+  one: false,
+  two: false
 });
 
 

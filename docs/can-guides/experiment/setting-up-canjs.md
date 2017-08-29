@@ -35,6 +35,20 @@ npm install can-component can-compute can-connect can-define can-route can-route
 npm install steal steal-stache --save
 ```
 
+Next, add the following [configuration](https://stealjs.com/docs/StealJS.configuration.html) to your `package.json`:
+
+```
+{
+    ...
+    "steal": {
+    ...
+        "plugins": [
+            "steal-stache"
+        ]
+    }
+}
+```
+
 Next, create a `main.stache` template for your app:
 
 ```
