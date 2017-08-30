@@ -376,7 +376,7 @@ Update _index.stache_ to the following:
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
@@ -398,7 +398,7 @@ Update _index.stache_ to the following:
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Data Bindings_
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Data Bindings_
 - Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
 
    ```html
@@ -798,7 +798,7 @@ is the list of todos that will be managed by the custom element.
 
 ### What you need to know
 
-- [The can-stache-bindings presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) on _data bindings_.
+- [The can-stache-bindings presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) on _data bindings_.
 
 - The [can-util/dom/attr/attr.special.focused] custom attribute can be used to specify when an element should be focused:
 
@@ -892,7 +892,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 
 ### What you need to know
 
-- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeNDd4aTFNU2g1U0k) _DOM Event Bindings_
+- [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
