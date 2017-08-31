@@ -229,26 +229,24 @@ This section details all the transformation scripts with examples of before and 
 Running [the colon-bindings transform](https://github.com/canjs/can-migrate/tree/master/src/transforms/can-stache-bindings):
 
 ```bash
- can-migrate -a src/**/*.{js,md,html,stache,component} -t can-stache-bindings/colon-bindings
+can-migrate -a src/**/*.{js,md,html,stache,component} -t can-stache-bindings/colon-bindings
 ```
 
-...will transform this:
+…will transform this:
 
 ```html
 <input {^$value}="H1" {$value}="H2" {($value)}="H3" ($value)="H4"
   {^value}="H1" {value}="H2" {(value)}="H3" (value)="H4">
 ```
-@highlight 1,2
 
-...to this:
+…to this:
 
 ```html
 <input el:value:to="H1" el:value:from="H2" el:value:bind="H3" on:el:value="H4"
   vm:value:to="H1" vm:value:from="H2" vm:value:bind="H3" on:vm:value="H4">
 ```
-@highlight 1,2
 
-...or this:
+…or this:
 
 ```js
 Component.extend({
@@ -259,9 +257,8 @@ Component.extend({
   )
 });
 ```
-@highlight 4,5
 
-...to this:
+…to this:
 
 ```js
 Component.extend({
@@ -274,27 +271,26 @@ Component.extend({
 ```
 @highlight 4,5
 
-It will also transform stache bindings inside
+It will also transform stache bindings inside:
 
 * ```` ```html ```` and ```` ```js ```` blocks in `.md` files
 * `<view>`, `<template>`, `<view-model>`, and `<script type="view-model">` blocks in `.component` files
 * `<script type="text/stache">` and `<script src="...steal/steal.js">` blocks in `.html` files
 
-Running with the `--implicit` flag will transform using bindings that intuitively determine whether to bind to the ViewModel or Element without the explicit `vm:` or `el:` specifiers:
+With the `--implicit` flag, the transform will intuitively determine whether to bind to the ViewModel or Element without the explicit `vm:` or `el:` specifiers. For example, running this:
 
 ```bash
- can-migrate -a src/**/*.{js,md,html,stache,component} -t can-stache-bindings/colon-bindings --implicit
+can-migrate -a src/**/*.{js,md,html,stache,component} -t can-stache-bindings/colon-bindings --implicit
 ```
 
-...will transform this:
+…will transform this:
 
 ```html
 <input {^$value}="H1" {$value}="H2" {($value)}="H3" ($value)="H4"
   {^value}="H1" {value}="H2" {(value)}="H3" (value)="H4">
 ```
-@highlight 1,2
 
-...to this:
+…to this:
 
 ```html
 <input value:to="H1" value:from="H2" value:bind="H3" on:value="H4"
