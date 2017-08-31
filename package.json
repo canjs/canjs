@@ -158,7 +158,10 @@
       "socket.io-client/dist/socket.io": {
         "format": "cjs"
       }
-    }
+    },
+    "plugins": [
+      "steal-css"
+    ]
   },
   "bit-docs": {
     "html": {
