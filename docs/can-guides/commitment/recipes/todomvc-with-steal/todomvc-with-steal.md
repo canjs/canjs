@@ -985,4 +985,4 @@ Update _index.stache_ to the following:
 @sourceref ./17-routing/index.html
 @highlight 4,23-26,29-32,35-38,only
 
-__Success!__ You’ve completed this guide. Have questions or comments? Let us know on [Gitter chat](https://gitter.im/canjs/canjs) or our [forums](http://forums.donejs.com/c/canjs)!
+__Success!__ You’ve completed this guide. Have questions or comments? Let us know on [Gitter chat](https://gitter.im/canjs/canjs) or our [forums](https://forums.donejs.com/c/canjs)!

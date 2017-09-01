@@ -27,7 +27,7 @@ Get involved with one of the most inviting communities on the internet!
     </a>
   </li>
   <li>
-    <a href="http://forums.donejs.com/c/canjs" target="_blank">
+    <a href="https://forums.donejs.com/c/canjs" target="_blank">
       <img src="../docs/images/community/icon-forums-gray.svg">
       Visit our forums
     </a>

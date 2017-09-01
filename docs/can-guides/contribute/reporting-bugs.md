@@ -26,5 +26,5 @@ Also, please search for previous tickets.  If there’s something similar, add t
 give it a 👍.
 
 Finally, if there are any questions, reach out to
-us on the [CanJS forums](http://forums.donejs.com/c/canjs) or talk to us on
+us on the [CanJS forums](https://forums.donejs.com/c/canjs) or talk to us on
 the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).

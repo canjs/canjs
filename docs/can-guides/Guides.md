@@ -37,7 +37,7 @@ get better at using it.
 
 CanJS’s community has lots of people who can offer advice and tips on
 how to build an application the right way. Instead of struggling,
-please ask for advice on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).  Share a screenshot of what you’re building
+please ask for advice on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).  Share a screenshot of what you’re building
 and we’ll tell you what needs to be done.
 
 To stay up on CanJS’s latest news, we suggest:
