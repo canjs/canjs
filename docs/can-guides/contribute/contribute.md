@@ -32,7 +32,7 @@ nationality, personal appearance, race, religion, or sexual identity and orienta
 
 ## Getting Help
 
-[Our forums](http://forums.donejs.com/c/canjs) and [Gitter chat](https://gitter.im/canjs/canjs)
+[Our forums](https://forums.donejs.com/c/canjs) and [Gitter chat](https://gitter.im/canjs/canjs)
 are the best places to ask questions. The core team regularly checks both and
 there are other users who generously help others.
 

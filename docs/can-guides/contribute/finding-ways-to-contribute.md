@@ -25,7 +25,7 @@ Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is
 
 You can also get involved in our community by posting in our forums, chatting with us on Gitter, and answering questions on Stack Overflow.
 
-- [Forums](http://forums.donejs.com/c/canjs)
+- [Forums](https://forums.donejs.com/c/canjs)
 - [Gitter](https://gitter.im/canjs/canjs)
 - [Stack Overflow](http://stackoverflow.com/search?tab=newest&q=canjs+answers:0)
 

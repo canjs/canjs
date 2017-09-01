@@ -79,7 +79,7 @@ Get started with CanJS by following one of the tutorials below.
 ## Missing Something?
 
 Is there an itch that CanJS doesn’t scratch?  Let us know
-on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](http://forums.donejs.com/c/canjs).
+on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).
 We like contributions of all sorts.  Read the [guides] _Contributing_ section for more details.
 
 ## Love Something?

@@ -15,7 +15,7 @@ Once downloaded or installed, you can load CanJS in a variety of ways:
  - `<script>` tags
 
 This guide shows how to setup common combinations.  If you don’t see yours, please
-ask on the [forums](http://forums.donejs.com/c/canjs) or [Gitter chat](https://gitter.im/canjs/canjs).
+ask on the [forums](https://forums.donejs.com/c/canjs) or [Gitter chat](https://gitter.im/canjs/canjs).
 
 ## JS Bin
 

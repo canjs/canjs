@@ -31,5 +31,5 @@ Also, please search for previous feature requests.  If there’s something simil
 give it a 👍.
 
 Finally, if there are any questions, reach out to
-us on the [CanJS forums](http://forums.donejs.com/c/canjs) or talk to us on
+us on the [CanJS forums](https://forums.donejs.com/c/canjs) or talk to us on
 the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
