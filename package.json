@@ -43,7 +43,7 @@
     "can-attribute-encoder": "0.3.0",
     "can-cid": "1.0.3",
     "can-component": "3.3.3",
-    "can-compute": "3.3.3",
+    "can-compute": "3.3.4",
     "can-connect": "1.5.8",
     "can-connect-cloneable": "0.2.0",
     "can-connect-feathers": "3.6.1",
