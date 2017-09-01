@@ -7,6 +7,7 @@
 
 	}
 </style>
+<link rel="stylesheet" href="../../node_modules/jquery-ui/themes/base/all.css" />
 <div id="demo">
 <div id="app"></div>
 <script type="text/stache" id="app-template">
@@ -26,7 +27,6 @@ var $ = require("jquery");
 var stache = require("can-stache");
 var canViewCallbacks = require("can-view-callbacks");
 require("jquery-ui/ui/widgets/tooltip");
-require("jquery-ui/themes/base/all.css");
 
 canViewCallbacks.attr("tooltip", function( el, attrData ) {
 	$(el).tooltip({
