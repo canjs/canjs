@@ -36,8 +36,8 @@
 	}
 </style>
 <div id='out'></div>
-<script id="app" type="text/stache">
-  <div><tree-combo items:from='locations' title='Locations'/></div>
+<script id="demo-html" type="text/stache">
+<div><tree-combo items:from='locations' title='Locations'/></div>
 </script>
 <script id="tree-combo-stash" type='text/stache'>
   <ul class='breadcrumb'>
@@ -120,7 +120,7 @@ var ViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "tree-combo",
-	template: stache(document.getElementById("tree-combo-stash").innerHTML),
+	view: stache(document.getElementById("tree-combo-stash").innerHTML),
 	ViewModel: ViewModel
 });
 
@@ -177,7 +177,7 @@ var base = new DefineMap({
 	  }]
 });
 
-var template = stache(document.getElementById("app").innerHTML);
+var template = stache.from('demo-html');
 var frag = template(base);
 document.getElementById("out").appendChild(frag);
 </script>

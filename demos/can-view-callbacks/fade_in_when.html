@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="../../node_modules/jquery-ui/themes/base/all.css" />
 <div id="app"></div>
-<script type="text/stache" id="info-template">
-	<button toggle="showing">
-		{{#if showing}}Hide{{else}}Show{{/if}} more info</button>
-	<div fade-in-when="showing">
-		Here is more info!
-	</div>
+<script type="text/stache" id="demo-html">
+<button toggle="showing">
+	{{#if showing}}Hide{{else}}Show{{/if}} more info</button>
+<div fade-in-when="showing">
+	Here is more info!
+</div>
 </script>
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
@@ -55,10 +55,9 @@ canViewCallbacks.attr("fade-in-when", function( el, attrData ) {
 
 })
 
-var template = stache($("#info-template").text());
+var template = stache.from('demo-html');
 
 $("#app").html( template({
 	showing: compute(false)
 }) );
-
 </script>

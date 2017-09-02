@@ -1,7 +1,7 @@
 <script type='text/stache' can-autorender id='demo-html'>
-	{{#each items}}
-		<li on:click='items.splice(%index,1)'>{{name}}</li>
-	{{/each}}
+{{#each items}}
+	<li on:click='items.splice(%index,1)'>{{name}}</li>
+{{/each}}
 </script>
 
 <script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
@@ -16,4 +16,3 @@ viewModel(el, {
 	items: new DefineList([{name: "first"}, {name: "second"}])
 });
 </script>
-

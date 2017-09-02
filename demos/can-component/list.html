@@ -29,7 +29,7 @@ steal("can/component", function() {
 
 		can.Component.extend({
 		tag: "todo-list",
-		template: can.view("todo-list-template"),
+		view: can.view("todo-list-template"),
 		viewModel: {
 			completedTodos: function(){
 				var count = 0;

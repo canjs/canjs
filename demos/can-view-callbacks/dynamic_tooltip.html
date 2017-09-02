@@ -5,42 +5,40 @@
 	}
 </style>
 <link rel="stylesheet" href="../../node_modules/jquery-ui/themes/base/all.css" />
-<div id="demo">
 <div id="app"></div>
-<script type="text/stache" id="app-template">
-	<table>
-		<thead>
-			<td></td><td>Name</td><td>Email</td>
-		</thead>
-		<tbody>
-			{{#each users}}
-			<tr>
-				<td><input on:change="toggle(.)" type="checkbox"/></td>
-				<td>{{name}}</td>
-				<td>{{email}}</td>
-			</tr>
-			{{/each}}
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="3">
-					<button tooltip="{{deleteTooltip}}"
-							{{^selected.length}}class="disabled"{{/selected.length}}
-							on:click="notImplemented()">
-						Delete
-					</button>
-					<button
-						tooltip="{{archiveTooltip}}"
+<script type="text/stache" id="demo-html">
+<table>
+	<thead>
+		<td></td><td>Name</td><td>Email</td>
+	</thead>
+	<tbody>
+		{{#each users}}
+		<tr>
+			<td><input on:change="toggle(.)" type="checkbox"/></td>
+			<td>{{name}}</td>
+			<td>{{email}}</td>
+		</tr>
+		{{/each}}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="3">
+				<button tooltip="{{deleteTooltip}}"
 						{{^selected.length}}class="disabled"{{/selected.length}}
 						on:click="notImplemented()">
-						Archive
-					</button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
+					Delete
+				</button>
+				<button
+					tooltip="{{archiveTooltip}}"
+					{{^selected.length}}class="disabled"{{/selected.length}}
+					on:click="notImplemented()">
+					Archive
+				</button>
+			</td>
+		</tr>
+	</tfoot>
+</table>
 </script>
-</div>
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
 
@@ -84,7 +82,7 @@ var users = new DefineList([
 
 var selected = new DefineList();
 
-var template = stache( $("#app-template").text() );
+var template = stache.from('demo-html');
 
 $("#app").html( template({
 	selected: selected,
@@ -121,4 +119,3 @@ $("#app").html( template({
 }) );
 
 </script>
-<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>

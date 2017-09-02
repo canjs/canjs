@@ -1,23 +1,21 @@
-<div id="demo">
 <div id='out'></div>
-<script id="app" type="text/stache">
-	<accordion>
-		<panel title="Contacts">
-			<button>Change title attribute to "Users"</button>
-			<ul>
-				<li>Justin</li>
-				<li>Brian</li>
-			</ul>
-		</panel>
-		<panel title="Libraries">
-			<ul>
-				<li>CanJS</li>
-				<li>JavaScriptMVC</li>
-			</ul>
-		</panel>
-	</accordion>
+<script id="demo-html" type="text/stache">
+<accordion>
+	<panel title="Contacts">
+		<button>Change title attribute to "Users"</button>
+		<ul>
+			<li>Justin</li>
+			<li>Brian</li>
+		</ul>
+	</panel>
+	<panel title="Libraries">
+		<ul>
+			<li>CanJS</li>
+			<li>JavaScriptMVC</li>
+		</ul>
+	</panel>
+</accordion>
 </script>
-</div>
 
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
@@ -101,7 +99,7 @@ Component.extend({
 });
 
 var out = document.getElementById("out");
-var template = stache(document.getElementById("app").innerHTML);
+var template = stache.from("demo-html");
 out.appendChild(template({}));
 
 out.addEventListener("click", function(ev){
@@ -113,7 +111,4 @@ out.addEventListener("click", function(ev){
 });
 
 window.canViewModel = canViewModel;
-</script>
-<script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>

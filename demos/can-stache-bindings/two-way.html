@@ -37,7 +37,7 @@ var drivers = new DefineList([
 
 Component.extend({
 	tag: "drivers",
-	template: stache(document.getElementById('drivers-stache').innerHTML),
+	view: stache(document.getElementById('drivers-stache').innerHTML),
 	ViewModel: DefineMap.extend({
 		drivers: {
 			value: drivers
@@ -52,7 +52,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	template: stache("<input value='{{plateName}}' on:input='update($element.value)'/>"),
+	view: stache("<input value='{{plateName}}' on:input='update($element.value)'/>"),
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

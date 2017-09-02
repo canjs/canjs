@@ -9,7 +9,7 @@
 </style>
 <div id="html">
 <div id='out'></div>
-<script type="text/stache" id="listStache">
+<script type="text/stache" id="demo-html">
 {{#items}}
   <div {{#isSelected}}class='selected'{{/isSelected}}
        on:click='toggle'>
@@ -43,10 +43,10 @@ var ViewModel = DefineMap.extend({
 Component.extend({
 	tag: "my-items",
 	ViewModel: ViewModel,
-	view: stache.from("listStache"),
+	view: stache.from("demo-html"),
 	helpers: {
 		isSelected: function(options){
-			if( this.selected.indexOf(options.context()) >=0 ) {
+			if( this.selected.indexOf(options.context) >= 0 ) {
 				return options.fn();
 			} else {
 				return options.inverse();
@@ -66,8 +66,5 @@ var frag = stache("<my-items items:from='items' />")({
 });
 
 document.getElementById("out").appendChild(frag);
-</script>
-<script>
-	DEMO_HTML = document.getElementById("html").innerHTML;
 </script>
 </body>

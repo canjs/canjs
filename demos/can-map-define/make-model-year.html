@@ -1,64 +1,57 @@
-<div id="demo">
 <div id='out'></div>
-<script id="app" type="text/stache">
+<script id="demo-html" type="text/stache">
+{{#if makes.isResolved}}
+	<select value:bind="string-to-any(~makeId)">
+	  {{^makeId}}
+	    <option value='undefined'>Select a Make</option>
+	  {{/makeId}}
+	  {{#each makes.value}}
+		<option value="{{id}}">{{name}}</option>
+	  {{/each}}
+	</select>
+{{else}}
+	<select disabled><option>Loading...</option></select>
+{{/if}}
 
-	{{#if makes.isResolved}}
-		<select value:bind="string-to-any(~makeId)">
-		  {{^makeId}}
-		    <option value='undefined'>Select a Make</option>
-		  {{/makeId}}
-		  {{#each makes.value}}
-			<option value="{{id}}">{{name}}</option>
-		  {{/each}}
-		</select>
-	{{else}}
-		<select disabled><option>Loading...</option></select>
-	{{/if}}
-	{{#if modelsPromise}}
-		{{#if models}}
-			<select value:bind="string-to-any(~modelId)">
-				{{^modelId}}
-					<option value='undefined'>Select a Model</option>
-				{{/modelId}}
-				{{#each models}}
-					<option value="{{id}}">{{name}}</option>
-				{{/each}}
-			</select>
-		{{else}}
-			<select disabled><option>Loading Models</option></select>
-		{{/if}}
-	{{else}}
-		<select disabled><option>Models</option></select>
-	{{/if}}
-
-	{{#if years}}
-		<select value:bind="string-to-any(~year)">
-			{{^year}}
-				<option value='undefined'>Select a Year</option>
-			{{/year}}
-			{{#each years}}
-				<option value="{{.}}">{{.}}</option>
+{{#if modelsPromise}}
+	{{#if models}}
+		<select value:bind="string-to-any(~modelId)">
+			{{^modelId}}
+				<option value='undefined'>Select a Model</option>
+			{{/modelId}}
+			{{#each models}}
+				<option value="{{id}}">{{name}}</option>
 			{{/each}}
 		</select>
 	{{else}}
-		<select disabled><option>Years</option></select>
+		<select disabled><option>Loading Models</option></select>
 	{{/if}}
+{{else}}
+	<select disabled><option>Models</option></select>
+{{/if}}
 
-	<div>
-		{{#each vehicles}}
-			<h2>{{name}}</h2>
-			<img src="{{thumb}}" width="200px"/>
+{{#if years}}
+	<select value:bind="string-to-any(~year)">
+		{{^year}}
+			<option value='undefined'>Select a Year</option>
+		{{/year}}
+		{{#each years}}
+			<option value="{{.}}">{{.}}</option>
 		{{/each}}
-	</div>
+	</select>
+{{else}}
+	<select disabled><option>Years</option></select>
+{{/if}}
 
-</script>
+<div>
+	{{#each vehicles}}
+		<h2>{{name}}</h2>
+		<img src="{{thumb}}" width="200px"/>
+	{{/each}}
 </div>
-
-<script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>
+
 <script src="../../node_modules/steal/steal.js" main="@empty">
-//import can from "can-util";
 import "can-map-define";
 import Map from "can-map";
 import Model from "can-connect/can/model/model";
@@ -212,6 +205,6 @@ route.data = mmy;
 
 route.ready();
 
-$("#out").html( stache.from("app")(mmy) );
+$("#out").html( stache.from("demo-html")(mmy) );
 
 </script>

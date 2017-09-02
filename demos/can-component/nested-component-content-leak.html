@@ -19,13 +19,13 @@ steal('can/view/stache', 'can/list/sort', 'can/view/bindings', function(){
 
 	can.Component.extend({
 		tag: 'grandparent-component',
-		template: can.stache('{{#if show}}<parent-component><ul>{{#items}}<li>{{name}}</li>{{/items}}</ul></parent-component>{{/if}}'),
+		view: can.stache('{{#if show}}<parent-component><ul>{{#items}}<li>{{name}}</li>{{/items}}</ul></parent-component>{{/if}}'),
 		scope: viewModel
 	});
 
 	can.Component.extend({
 		tag: 'parent-component',
-		template: can.stache('<content/>'),
+		view: can.stache('<content/>'),
 		scope: {
 			items: items
 		}

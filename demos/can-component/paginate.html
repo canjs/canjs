@@ -54,19 +54,19 @@
 		}
 	</style>
 <div id='out'></div>
-<script id="app-stache" type='text/stache'>
-  <my-app>
-    <my-grid promiseData:from='websitesPromise'>
-      {{#each items}}
-        <tr>
-          <td width='40%'>{{name}}</td>
-          <td width='70%'>{{url}}</td>
-        </tr>
-      {{/each}}
-    </my-grid>
-    <next-prev paginate:from='paginate'></next-prev>
-    <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>
-  </my-app>
+<script id="demo-html" type='text/stache'>
+<my-app>
+  <my-grid promiseData:from='websitesPromise'>
+    {{#each items}}
+      <tr>
+        <td width='40%'>{{name}}</td>
+        <td width='70%'>{{url}}</td>
+      </tr>
+    {{/each}}
+  </my-grid>
+  <next-prev paginate:from='paginate'></next-prev>
+  <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>
+</my-app>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var DefineMap = require("can-define/map/map");
@@ -271,14 +271,14 @@ var GridViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-grid",
-	template: stache("<table><tbody {{#waiting}}class='waiting'{{/waiting}}><content></content></tbody></table>"),
+	view: stache("<table><tbody {{#waiting}}class='waiting'{{/waiting}}><content></content></tbody></table>"),
 	ViewModel: GridViewModel,
 	leakScope: true
 });
 
 Component.extend({
 	tag: "next-prev",
-	template: stache('<a href="javascript://"' +
+	view: stache('<a href="javascript://"' +
 		'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" on:click="paginate.prev()">Prev</a>' +
 		'<a href="javascript://"' +
 		'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" on:click="paginate.next()">Next</a>')
@@ -286,10 +286,10 @@ Component.extend({
 
 Component.extend({
 	tag: "page-count",
-	template: stache('Page <span>{{page}}</span> of <span>{{count}}</span>.')
+	view: stache('Page <span>{{page}}</span> of <span>{{count}}</span>.')
 });
 
-var template = stache(document.getElementById("app-stache").innerHTML);
+var template = stache.from('demo-html');
 document.getElementById("out").appendChild(template({}));
 </script>
 </body>
