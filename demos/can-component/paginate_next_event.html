@@ -54,13 +54,13 @@ let PlayerList = DefineMap.extend({
 
 Component.extend({
 	tag: "player-list",
-	template: stache($('#player-list-stache').html()),
+	view: stache($('#player-list-stache').html()),
 	ViewModel: PlayerList
 });
 
 Component.extend({
 	tag: "player-edit",
-	template: stache($('#player-edit-stache').html()),
+	view: stache($('#player-edit-stache').html()),
 	ViewModel: DefineMap.extend({
 		player: Player,
 		close: function(){

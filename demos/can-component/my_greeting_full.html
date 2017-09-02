@@ -1,11 +1,11 @@
 
 <div id='out'></div>
-<script id="source-template" type="text/stache">
-  <header>
-    <my-greeting>
-      {{site}}
-    </my-greeting>
-  </header>
+<script id="demo-html" type="text/stache">
+<header>
+  <my-greeting>
+    {{site}}
+  </my-greeting>
+</header>
 </script>
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
@@ -14,7 +14,7 @@ var stache = require("can-stache");
 var DefineMap = require("can-define/map/map");
 var $ = require("jquery");
 
-Component({
+Component.extend({
 	tag: "my-greeting",
 	view: stache("<h1><content/> - {{title}}</h1>"),
 	ViewModel: DefineMap.extend({
@@ -24,9 +24,6 @@ Component({
 	})
 });
 
-var template = stache.from("source-template");
+var template = stache.from("demo-html");
 $("#out").html(template({site: "CanJS"}));
-</script>
-<script>
-	DEMO_HTML = document.getElementById("source-template").innerHTML;
 </script>

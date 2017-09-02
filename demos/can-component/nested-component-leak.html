@@ -17,16 +17,16 @@ steal('can/view/stache', function(){
 
 	can.Component.extend({
 		tag: 'grandparent-component',
-		template: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
+		view: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
 		scope: viewModel
 	});
 	can.Component.extend({
 		tag: 'parent-component',
-		template: can.stache('<child-component></child-component>')
+		view: can.stache('<child-component></child-component>')
 	});
 	can.Component.extend({
 		tag: 'child-component',
-		template: can.stache('<ul>{{#items}}<li>{{name}}</li>{{/items}}</ul>'),
+		view: can.stache('<ul>{{#items}}<li>{{name}}</li>{{/items}}</ul>'),
 		scope: {
 			items: items
 		}

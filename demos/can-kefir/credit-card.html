@@ -4,44 +4,39 @@
 
 </div>
 
-<script type='text/stache' id='app-view'>
+<script type='text/stache' id='demo-html'>
+<form on:submit="pay(%event)">
+  {{#if showCardError.value}}
+   <div class="message">{{cardError.value}}</div>
+  {{/if}}
 
+  {{#if showExpiryError.value}}
+     <div class="message">{{expiryError.value}}</div>
+  {{/if}}
 
-  <form on:submit="pay(%event)">
+  {{#if showCVCError.value}}
+     <div class="message">{{cvcError.value}}</div>
+  {{/if}}
 
-    {{#if showCardError.value}}
-	   <div class="message">{{cardError.value}}</div>
-	{{/if}}
-	{{#if showExpiryError.value}}
-	   <div class="message">{{expiryError.value}}</div>
-	{{/if}}
-	{{#if showCVCError.value}}
-	   <div class="message">{{cvcError.value}}</div>
-	{{/if}}
+  <input type='text' name='number' placeholder='Card Number'
+    {{#if showCardError.value}}class='is-error'{{/if}}
+  	on:blur="userCardNumberFocused.value(false)"
+  	on:input:value:to="userCardNumber.value"/>
 
-	<input type='text' name='number' placeholder='Card Number'
-        {{#if showCardError.value}}class='is-error'{{/if}}
-		on:blur="userCardNumberFocused.value(false)"
-		on:input:value:to="userCardNumber.value"/>
+  <input type='text' name='expiry' placeholder='MM-YY'
+    {{#if showExpiryError.value}}class='is-error'{{/if}}
+  	on:blur="userExpiryFocused.value(false)"
+  	on:input:value:to="userExpiry.value"/>
 
-	<input type='text' name='expiry' placeholder='MM-YY'
+  <input type='text' name='cvc' placeholder='CVC'
+    {{#if showCVCError.value}}class='is-error'{{/if}}
+  	on:blur="userCVCFocused.value(false)"
+  	on:input:value:to="userCVC.value"/>
 
-        {{#if showExpiryError.value}}class='is-error'{{/if}}
-		on:blur="userExpiryFocused.value(false)"
-		on:input:value:to="userExpiry.value"/>
-
-    <input type='text' name='cvc' placeholder='CVC'
-        {{#if showCVCError.value}}class='is-error'{{/if}}
-		on:blur="userCVCFocused.value(false)"
-		on:input:value:to="userCVC.value"/>
-
-	<button disabled:from="disablePaymentButton.value">
-		{{#eq paymentStatus.value.status "pending"}}Paying{{else}}Pay{{/eq}} $1000
-	</button>
-
-  </form>
-
-
+  <button disabled:from="disablePaymentButton.value">
+  	{{#eq paymentStatus.value.status "pending"}}Paying{{else}}Pay{{/eq}} $1000
+  </button>
+</form>
 </script>
 <script src="../../node_modules/steal/steal-sans-promises.js" main="@empty">
 var stache = require("can-stache");
@@ -73,7 +68,7 @@ viewModel.cardNumber = viewModel.userCardNumber.map(function(card) {
 		return card.replace(/[\s-]/g, "");
 	}
 });
-viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty(); // we'll need this in the future
+viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty(); // we’ll need this in the future
 viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberFocused);
 
 // EXPIRY
@@ -232,10 +227,7 @@ function showOnlyWhenBlurredOnce(errorStream, focusedStream) {
 		});
 }
 
-var template = stache.from("app-view");
+var template = stache.from("demo-html");
 
 document.body.appendChild( template(viewModel) );
-</script>
-<script>
-	DEMO_HTML = document.getElementById("demo").innerHTML
 </script>

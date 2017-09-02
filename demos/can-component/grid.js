@@ -3,7 +3,7 @@ can.Component.extend({
 	viewModel: {
 		items: []
 	},
-	template: '<table><tbody><content></content></tbody></table>',
+	view: '<table><tbody><content></content></tbody></table>',
 	events: {
 		init: function () {
 			this.update();

@@ -5,14 +5,16 @@
   }
 </style>
 <div id='out'></div>
-<script type='text/stache' id='template'>
+<script type='text/stache' id='demo-html'>
 <button can-click='back'>Back</button>
 <button can-click='fwd'>Forward</button>
 <div class='url'>URL: {{appUrl}}</div>
+
 <h2>Locations</h2>
 {{#appState.locations}}
-	<div><input type='checkbox' checked:bind="selected" />{{name}}</div>
+	<label><input type='checkbox' checked:bind="selected" />{{name}}</label>
 {{/appState.locations}}
+
 <h2>Products</h2>
 {{#appState.products}}
   <div><a href="#!product/{{id}}" class='{{selectedClass id}}'>{{name}}</a></div>
@@ -162,7 +164,7 @@ var appUrl = compute(window.location.href, {
 	}
 });
 
-var template = $("#template").html();
+var template = $("#demo-html").html();
 $("#out").html( stache(template)({
     appState: appState,
     appUrl: appUrl,

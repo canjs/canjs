@@ -14,18 +14,16 @@
 	}
 </style>
 
-<div id="demo-html">
 <div id="out"></div>
-<script id="app" type="text/stache">
-  <input type="text" value:bind="newMessage" />
-  <button on:click="send()">Send</button>
-  <ul>
-    {{#each messages}}
-      <li>{{text}} <span>sent on {{date}}</span></li>
-    {{/each}}
-  </ul>
+<script id="demo-html" type="text/stache">
+<input type="text" value:bind="newMessage" />
+<button on:click="send()">Send</button>
+<ul>
+	{{#each messages}}
+		<li>{{text}} <span>sent on {{date}}</span></li>
+	{{/each}}
+</ul>
 </script>
-</div>
 
 <script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
 var stache = require("can-stache");
@@ -57,8 +55,7 @@ socket.on("message created", function(message){
 });
 
 // Render application:
-var template = document.getElementById("app").innerHTML;
-var frag = stache(template)(viewModel);
+var frag = stache.from("demo-html")(viewModel);
 document.getElementById("out").appendChild(frag);
-	
+
 </script>

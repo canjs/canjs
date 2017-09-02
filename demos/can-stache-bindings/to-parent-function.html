@@ -1,8 +1,8 @@
 <script type='text/stache' id='demo-html'>
-	<my-tabs @addPanel:to="@*addPanel">
-	  <my-panel addPanel:from="@*addPanel" title="CanJS">CanJS Content</my-panel>
-	  <my-panel addPanel:from="@*addPanel" title="StealJS">StealJS Content</my-panel>
-	</my-tabs>
+<my-tabs @addPanel:to="@*addPanel">
+  <my-panel addPanel:from="@*addPanel" title="CanJS">CanJS Content</my-panel>
+  <my-panel addPanel:from="@*addPanel" title="StealJS">StealJS Content</my-panel>
+</my-tabs>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var Component = require("can-component");
@@ -10,10 +10,10 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var canBatch = require("can-event/batch/batch");
 var stache = require("can-stache");
-	
+
 Component.extend({
 	tag: "my-tabs",
-	template: 	
+	view:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
@@ -38,7 +38,7 @@ Component.extend({
 			// If this is the first panel, activate it.
 			if(this.panels.length === 0) {
 				this.makeActive(panel);
-			} 
+			}
 			this.panels.push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
@@ -74,7 +74,7 @@ Component.extend({
 });
 
 Component.extend({
-	template: stache("{{#if active}}<content></content>{{/if}}"),
+	view: stache("{{#if active}}<content></content>{{/if}}"),
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
 		active: { value: false },
@@ -90,4 +90,3 @@ var frag = stache(el.innerHTML)({});
 
 document.body.appendChild(frag);
 </script>
-

@@ -1,4 +1,6 @@
-<body>
+<script id="demo-html" type="text/stache">
+<hello-world />
+</script>
 <script src="../../node_modules/steal/steal.js" main="@empty" id="data-source">
 var Component = require("can-component");
 var stache = require("can-stache");
@@ -15,7 +17,7 @@ var HelloWorldVM = DefineMap.extend({
 
 Component.extend({
    tag: "hello-world",
-   template: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
+   view: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
    ViewModel: HelloWorldVM,
    events: {
 	   click: function() {
@@ -24,7 +26,7 @@ Component.extend({
    }
 });
 
-var template = stache("<hello-world/>");
+var template = stache.from('demo-html');
 document.body.appendChild(template({}));
 </script>
 </body>

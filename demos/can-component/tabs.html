@@ -32,17 +32,15 @@ panel {
 tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
 tabs ul { display: inline-block; }
 </style>
-<div id="demo-html">
 <div id='out'></div>
-<script id="app" type="text/stache">
-  <p><button can-click="addVegies">Add Vegetables</button></p>
-  <tabs>
-    {{#each foodTypes}}
-      <panel title='{{title}}'>{{content}}</panel>
-    {{/each}}
-  </tabs>
+<script id="demo-html" type="text/stache">
+<p><button can-click="addVegies">Add Vegetables</button></p>
+<tabs>
+  {{#each foodTypes}}
+    <panel title='{{title}}'>{{content}}</panel>
+  {{/each}}
+</tabs>
 </script>
-</div>
 <script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
 var Component = require("can-component");
 var stache = require("can-stache");
@@ -51,7 +49,7 @@ var DefineList = require("can-define/list/list");
 var canViewModel = require("can-view-model");
 var canBatch = require("can-event/batch/batch");
 
-var Panel = DefineMap({
+var Panel = DefineMap.extend({
 	active: "boolean"
 });
 
@@ -113,7 +111,7 @@ var ViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "tabs",
-	template:
+	view:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
@@ -128,7 +126,7 @@ Component.extend({
 });
 
 Component.extend({
-	template: stache("{{#if active}}<content></content>{{/if}}"),
+	view: stache("{{#if active}}<content></content>{{/if}}"),
 	tag:"panel",
 	ViewModel: Panel,
 	events: {
@@ -149,8 +147,8 @@ var foodTypes = new DefineList([
 ]);
 window.foodTypes = foodTypes;
 
-var template = document.getElementById("app").innerHTML;
-var frag = stache(template)({
+var template = stache.from("demo-html");
+var frag = template({
 	foodTypes: foodTypes,
 	addVegies: function(){
 		foodTypes.push({

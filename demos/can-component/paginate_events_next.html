@@ -1,5 +1,8 @@
 <body>
 <div id='out'></div>
+<script type="text/stache" id="demo-html">
+Page {{page}} <button class='next'>Next</button>
+</script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var Component = require("can-component");
 var stache = require("can-stache");
@@ -25,10 +28,10 @@ var ViewModel = DefineMap.extend({
 Component.extend({
 	tag: "my-paginate",
 	ViewModel: ViewModel,
-	template: stache("Page {{page}} <button class='next'>Next</button>"),
+	view: stache.from("demo-html"),
 	events: {
 		".next click": function(){
-			this.viewModel.next();	
+			this.viewModel.next();
 		}
 	}
 });
