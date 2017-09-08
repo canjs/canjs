@@ -57,10 +57,13 @@ async function getPackageJsonByRelease(previousRelease, currentRelease) {
     // try to get the commit sha from the tags passed in
     // if not it defaults to the most recent release commits
     try {
+      await execFile("git", ["fetch", "--tags"]);
       const { stdout } = await execFile("git", ["log", "--pretty=oneline", previousRelease + "..." + currentRelease]);
       const logs = stdout.split("\n");
-      const latestReleaseSha = logs[0].slice(0,7);
-      const previousReleaseSha = logs[1].slice(0,7);
+
+      latestReleaseSha = logs[1].slice(0,7);
+      previousReleaseSha = logs[logs.length-2].slice(0,7);
+
     } catch(err) {
       console.error("The release tags you have passed do not have a match. Using the two most recent releases instead.")
       try {
@@ -76,9 +79,8 @@ async function getPackageJsonByRelease(previousRelease, currentRelease) {
       } catch (err) {
         console.error('Error retrieving or matching the most recent release commits.')
       }
-      
     }
-  
+
   try {
     oldVerPackage = await getFileContentFromCommit(previousReleaseSha, "package.json");
     newVerPackage = await getFileContentFromCommit(latestReleaseSha, "package.json");
