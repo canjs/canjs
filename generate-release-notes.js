@@ -1,3 +1,17 @@
+/**
+ * Node script that aggregates release notes for CanJS dependencies in one markdown note.
+ * This note can be used for CanJS release notes or for general reference.
+ * To execute:
+ * node generate-release-notes.js <older version> <newer version>
+ * // returns a string in markdown with the aggregated release notes.
+ * Example usage with arguments:
+ *     node generate-release-notes.js v3.8.1 v3.9.0
+ *     // returns a string in markdown with the all can-* dependency release notes between CanJS v3.8.1 and CanJS v3.9.0
+ * Without optional arguments:
+ *     node generate-release-notes.js
+ * *     // returns a string in markdown with the all can-* dependency release notes between the most recent CanJS releases
+ */
+
 const util = require("util");
 const execFile = util.promisify(require("child_process").execFile);
 const GitHubApi = require("github");
@@ -5,6 +19,7 @@ const GitHubApi = require("github");
 // Default to canjs/canjs repo
 const OWNER = 'canjs';
 const REPO = 'canjs'
+// const TOKEN;
 
 
 const github = new GitHubApi({
@@ -18,6 +33,11 @@ const github = new GitHubApi({
   "requestMedia": "application/vnd.github.something-custom",
 });
 
+// github.authenticate({
+//   type: "oauth",
+//   token: TOKEN
+// });
+
 async function initialize() {
   const currentRelease = process.argv[3]
   const previousRelease = process.argv[2];
@@ -30,34 +50,41 @@ async function initialize() {
 }
 
 async function getPackageJsonByRelease(previousRelease, currentRelease) {
-  // const { stdout } = await execFile("git", ["log", "--pretty=oneline", previousRelease + "..." + currentRelease]);
-  // const logs = stdout.split("\n");
-  // const previousTagSha = logs[0].slice(0,7);
-  // const latest = logs[1].slice(0,7);
-  let oldVerPackage;
-  let newVerPackage;
+  const recentReleaseShas = [];
+  let latestReleaseSha;
+  let previousReleaseSha;
 
-
+    // try to get the commit sha from the tags passed in
+    // if not it defaults to the most recent release commits
+    try {
+      const { stdout } = await execFile("git", ["log", "--pretty=oneline", previousRelease + "..." + currentRelease]);
+      const logs = stdout.split("\n");
+      const latestReleaseSha = logs[0].slice(0,7);
+      const previousReleaseSha = logs[1].slice(0,7);
+    } catch(err) {
+      console.error("The release tags you have passed do not have a match. Using the two most recent releases instead.")
+      try {
+        const { stdout } = await execFile("git", ["log", "--pretty=oneline", "-30"]);
+        const logs = stdout.split("\n");
+        logs.forEach((log) => {
+          if(log.slice(41) === "Update dist for release") {
+            recentReleaseShas.push(log.slice(0, 7))
+          }
+        })
+        latestReleaseSha = recentReleaseShas[0];
+        previousReleaseSha = recentReleaseShas[1];
+      } catch (err) {
+        console.error('Error retrieving or matching the most recent release commits.')
+      }
+      
+    }
+  
   try {
-    oldVerPackage = await getFileContentFromCommit('9db8f8c', "package.json");
-    newVerPackage = await getFileContentFromCommit('bcf6c40', "package.json");
+    oldVerPackage = await getFileContentFromCommit(previousReleaseSha, "package.json");
+    newVerPackage = await getFileContentFromCommit(latestReleaseSha, "package.json");
   } catch(err) {
     console.error('Error: getFileFileContentFromCommit', err);
   }
-  //todo remove hardcoded
-  // const oldVer = {
-  //   "dependencies": {
-  //     "can-util" : "3.10.0", 
-  //     "can-stache-key": "0.0.4"
-  //   }
-  // };
-  // const newVer = {
-  //   "dependencies": {
-  //     "can-util" : "3.10.6", 
-  //     "can-stache-key": "0.1.0",
-  //     "can-component": "3.3.4"
-  //   }
-  // };
   return {previousRelease: oldVerPackage, currentRelease: newVerPackage}
 } 
 
@@ -140,7 +167,6 @@ async function getAllReleaseNotes(updatedDependencies) {
       } catch(err) {
         console.error(`${package} ${version}: getReleaseByTag Error Code ${err.code}: ${err.message} `);
 
-        
       }
       // return `${package} ${version} doesn't have release notes`;
       return null;
@@ -152,9 +178,9 @@ async function getAllReleaseNotes(updatedDependencies) {
 
 
 function createAggregateReleaseNote(allReleaseNotes, currentRelease) {
-  let releaseNote = `# ${OWNER}/${REPO} ${currentRelease} Release Notes \n`;
+  let releaseNote = `# ${OWNER}/${REPO} ${currentRelease || 'INSERT VERSION HERE'} Release Notes \n`;
   Object.keys(allReleaseNotes).forEach(function(package) {
-    releaseNote = `${releaseNote} \n## ${package} \n`;
+    releaseNote = `${releaseNote} \n## [${package}](https://github.com/canjs/${package}/releases) \n`;
 
     allReleaseNotes[package].forEach(function(note) {
       if (note) {
@@ -165,12 +191,12 @@ function createAggregateReleaseNote(allReleaseNotes, currentRelease) {
   })
 
   releaseNote = `${releaseNote} \n ----`;
-  return releaseNote;
   
+  return releaseNote;
 }
 
 function postReleaseNote(note) {
-  console.log(note)
+  console.log(note);
 }
 
 initialize();
