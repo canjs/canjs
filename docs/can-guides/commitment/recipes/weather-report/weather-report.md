@@ -389,7 +389,7 @@ When a user clicks on a place, we need to indicate their selection.
 
 ### Things to know
 
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event (on:EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
    <div on:click="sayHi()"> … </div>
