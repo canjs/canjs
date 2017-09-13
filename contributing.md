@@ -2,7 +2,7 @@
 
 Thank you for contributing to CanJS!  If you need any help setting up a CanJS development environment and fixing CanJS bugs, please reach out to us on the [canjs/canjs Gitter channel](https://gitter.im/canjs/canjs) or email (contact@bitovi.com).  We will happily walk you through setting up your environment, creating a test, and submitting a pull request. Here is a video showing how to contribute to CanJS:
 
-<iframe width="662" height="372" src="https://www.youtube.com/embed/PRuueWqnpIw" frameborder="0" allowfullscreen></iframe>
+[![How to submit a new issue!](https://img.youtube.com/vi/PRuueWqnpIw/0.jpg)](https://www.youtube.com/watch?v=PRuueWqnpIw)
 
 For more details, check out the [contribution guide on CanJS.com](https://canjs.com/doc/guides/contribute.html) for information on:
 
