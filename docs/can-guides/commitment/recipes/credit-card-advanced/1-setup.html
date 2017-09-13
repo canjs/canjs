@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Credit Card Form">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+<script type='text/stache' id="payment-view">
+  <form>
+
+    <input type='text' name='number' placeholder='Card Number'/>
+
+    <input type='text' name='expiry' placeholder='MM-YY'/>
+
+    <input type='text' name='cvc' placeholder='CVC'/>
+
+    <button>Pay ${{amount.value}}</button>
+
+  </form>
+</script>
+
+<script src="https://rpominov.github.io/kefir/dist/kefir.min.js"></script>
+<script src="https://unpkg.com/can/dist/global/can.all.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+</body>
+</html>
