@@ -15,17 +15,17 @@
 
   <input type='text' name='number' placeholder='Card Number'
     on:input:value:to="userCardNumber.value"
-	on:blur="userCardNumberBlurred.value(true)"
+	on:blur="userCardNumberBlurred.emitter.value(true)"
     {{#if showCardError.value}}class='is-error'{{/if}}/>
 
   <input type='text' name='expiry' placeholder='MM-YY'
   	on:input:value:to="userExpiry.value"
-	on:blur="userExpiryBlurred.value(true)"
+	on:blur="userExpiryBlurred.emitter.value(true)"
 	{{#if showExpiryError.value}}class='is-error'{{/if}}/>
 
   <input type='text' name='cvc' placeholder='CVC'
     on:input:value:to="userCVC.value"
-	on:blur="userCVCBlurred.value(true)"
+	on:blur="userCVCBlurred.emitter.value(true)"
 	{{#if showCVCError.value}}class='is-error'{{/if}}/>
 
   <button disabled:from="disablePaymentButton.value">
