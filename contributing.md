@@ -125,7 +125,7 @@ After you have completed those steps simply run `grunt build` and it will put th
 ## Publishing & Releasing
 
 1. Install and use Node.js 0.12 ([nvm](https://github.com/creationix/nvm) is useful for managing multiple versions locally)
-2. Install the dependencies: `npm install && npm install grunt-cli -g`
+2. Install the dependencies: `npm install && npm install bower -g && bower install && npm install grunt-cli -g`
 3. Test and build: `grunt test && grunt build`
 4. Release a new version: `grunt release:patch`
 5. Set the latest version of CanJS 2.3 on npm `npm dist-tag add can@2.3.32 2.3-legacy` (replace the version number)
