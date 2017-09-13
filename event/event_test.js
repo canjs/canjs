@@ -258,4 +258,24 @@ steal('can/event', "can/control", 'can/test', "can/control", "steal-qunit", func
 		can.$(div).trigger("click");
 		equal(clicked, true, "click event handler was bound successfully via on()");
 	});
+
+	test('should not trigger events on Document Fragments', function () {
+		expect(0);
+		var origAdd = $.event.add;
+		var origRemove = $.event.remove;
+		$.event.add = function() {
+			QUnit.ok(false, 'should not set up jQuery event listener');
+		};
+		$.event.remove = function() {
+			QUnit.ok(false, 'should not remove jQuery event listener');
+		};
+
+		var frag = document.createDocumentFragment();
+
+		can.bind.call(frag, 'click', function() {});
+		can.unbind.call(frag, 'click', function() {});
+
+		$.event.add = origAdd;
+		$.event.remove = origRemove;
+	});
 });
