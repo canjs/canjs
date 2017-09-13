@@ -15,6 +15,8 @@ simple validation on the payment form values.
 
 ![Credit Card App](https://user-images.githubusercontent.com/78602/27451508-d86e9bd8-5754-11e7-954b-a812e1ed63b1.png)
 
+The [guides/recipes/credit-card-advanced] recipe builds nearly same application, but
+with better validations and with Kefir streams instead of [can-define].
 
 ## Signup and Login
 

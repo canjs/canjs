@@ -311,7 +311,7 @@ After submitting the form, you should see an alert like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
    <div on:click="doSomething(%event)"> ... </div>

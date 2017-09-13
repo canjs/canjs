@@ -1,0 +1,17 @@
+<script type='text/stache' id='app-view'>
+<form>
+
+  User Entered: {{userCardNumber.value}},
+  Card Number: {{cardNumber.value}}
+
+  <input type='text' name='number' placeholder='Card Number'
+    on:input:value:to="userCardNumber.value"/>
+
+  <input type='text' name='expiry' placeholder='MM-YY'/>
+
+  <input type='text' name='cvc' placeholder='CVC'/>
+
+  <button>Pay ${{amount.value}}</button>
+
+</form>
+</script>
