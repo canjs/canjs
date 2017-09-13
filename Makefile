@@ -1,5 +1,5 @@
 publish-docs:
-	npm install
+	npm install --no-shrinkwrap
 	git checkout -b gh-pages
 	./node_modules/.bin/bit-docs -fd
 	rm -rf test/builders/
