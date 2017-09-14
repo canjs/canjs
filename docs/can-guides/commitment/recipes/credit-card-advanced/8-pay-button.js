@@ -14,7 +14,7 @@ var viewModel = {
 
 	pay: function(event) {
 		event.preventDefault();
-		this.payClicked.value(true)
+		this.payClicked.emitter.value(true)
 	}
 };
 

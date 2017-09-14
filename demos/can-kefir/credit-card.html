@@ -4,37 +4,38 @@
 
 </div>
 
-<script type='text/stache' id='demo-html'>
+<script type='text/stache' id='app-view'>
 <form on:submit="pay(%event)">
+
   {{#if showCardError.value}}
-   <div class="message">{{cardError.value}}</div>
+    <div class="message">{{cardError.value}}</div>
   {{/if}}
 
   {{#if showExpiryError.value}}
-     <div class="message">{{expiryError.value}}</div>
+    <div class="message">{{expiryError.value}}</div>
   {{/if}}
 
   {{#if showCVCError.value}}
-     <div class="message">{{cvcError.value}}</div>
+    <div class="message">{{cvcError.value}}</div>
   {{/if}}
 
   <input type='text' name='number' placeholder='Card Number'
-    {{#if showCardError.value}}class='is-error'{{/if}}
-  	on:blur="userCardNumberFocused.value(false)"
-  	on:input:value:to="userCardNumber.value"/>
+    on:input:value:to="userCardNumber.value"
+	on:blur="userCardNumberBlurred.emitter.value(true)"
+    {{#if showCardError.value}}class='is-error'{{/if}}/>
 
   <input type='text' name='expiry' placeholder='MM-YY'
-    {{#if showExpiryError.value}}class='is-error'{{/if}}
-  	on:blur="userExpiryFocused.value(false)"
-  	on:input:value:to="userExpiry.value"/>
+  	on:input:value:to="userExpiry.value"
+	on:blur="userExpiryBlurred.emitter.value(true)"
+	{{#if showExpiryError.value}}class='is-error'{{/if}}/>
 
   <input type='text' name='cvc' placeholder='CVC'
-    {{#if showCVCError.value}}class='is-error'{{/if}}
-  	on:blur="userCVCFocused.value(false)"
-  	on:input:value:to="userCVC.value"/>
+    on:input:value:to="userCVC.value"
+	on:blur="userCVCBlurred.emitter.value(true)"
+	{{#if showCVCError.value}}class='is-error'{{/if}}/>
 
   <button disabled:from="disablePaymentButton.value">
-  	{{#eq paymentStatus.value.status "pending"}}Paying{{else}}Pay{{/eq}} $1000
+  	{{#eq paymentStatus.value.status "pending"}}Paying{{else}}Pay{{/eq}} ${{amount.value}}
   </button>
 </form>
 </script>
@@ -42,17 +43,20 @@
 var stache = require("can-stache");
 require("can-stache-bindings");
 var Kefir = require("can-kefir");
+var can = require("can-namespace");
 
 // INITIAL
 var viewModel = {
+	amount: Kefir.constant(1000),
+
 	userCardNumber: Kefir.emitterProperty(),
-	userCardNumberFocused: Kefir.emitterProperty(),
+	userCardNumberBlurred: Kefir.emitterProperty(),
 
 	userExpiry: Kefir.emitterProperty(),
-	userExpiryFocused: Kefir.emitterProperty(),
+	userExpiryBlurred: Kefir.emitterProperty(),
 
 	userCVC: Kefir.emitterProperty(),
-	userCVCFocused: Kefir.emitterProperty(),
+	userCVCBlurred: Kefir.emitterProperty(),
 
 	payClicked: Kefir.emitterProperty(),
 
@@ -62,38 +66,42 @@ var viewModel = {
 	}
 };
 
-// DERIVED cardNumber values
-viewModel.cardNumber = viewModel.userCardNumber.map(function(card) {
+viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
 	if (card) {
 		return card.replace(/[\s-]/g, "");
 	}
 });
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty(); // we’ll need this in the future
-viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberFocused);
+viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberBlurred);
 
 // EXPIRY
-viewModel.expiry = viewModel.userExpiry.map(function(expiry) {
+viewModel.expiry = viewModel.userExpiry.map((expiry) => {
 	if (expiry) {
 		return expiry.split("-")
 	}
 });
 viewModel.expiryError = viewModel.expiry.map(validateExpiry).toProperty();
-viewModel.showExpiryError = showOnlyWhenBlurredOnce(viewModel.expiryError, viewModel.userExpiryFocused);
+viewModel.showExpiryError = showOnlyWhenBlurredOnce(viewModel.expiryError, viewModel.userExpiryBlurred);
 
 // CVC
 viewModel.cvc = viewModel.userCVC;
 viewModel.cvcError = viewModel.cvc.map(validateCVC).toProperty();
-viewModel.showCVCError = showOnlyWhenBlurredOnce(viewModel.cvcError, viewModel.userCVCFocused);
+viewModel.showCVCError = showOnlyWhenBlurredOnce(viewModel.cvcError, viewModel.userCVCBlurred);
 
 viewModel.isCardInvalid = Kefir.combine([viewModel.cardError, viewModel.expiryError, viewModel.cvcError],
 	function(cardError, expiryError, cvcError) {
 		return !!(cardError || expiryError || cvcError)
 	});
 
+viewModel.card = Kefir.combine([viewModel.cardNumber, viewModel.expiry, viewModel.cvc],
+	function(cardNumber, expiry, cvc) {
+		return {cardNumber , expiry , cvc};
+	});
 
 // STREAM< Promise<Number> | undefined >
-var paymentPromises = viewModel.payClicked.map((payClicked) => {
+var paymentPromises = Kefir.combine([viewModel.payClicked], [viewModel.card], (payClicked, card) => {
 	if (payClicked) {
+        console.log("Asking for token with", card);
 		return new Promise(function(resolve) {
 			setTimeout(function() {
 				resolve(1000);
@@ -136,6 +144,11 @@ viewModel.disablePaymentButton = Kefir.combine([viewModel.isCardInvalid, viewMod
 	return true;
 });
 
+var view = can.stache.from("app-view");
+
+document.body.appendChild( view(viewModel) );
+
+// HELPER FUNCTIONS
 function validateCard(card) {
 	if (!card) {
 		return "There is no card"
@@ -166,7 +179,7 @@ function validateCVC(cvc) {
 	}
 }
 
-function showOnlyWhenBlurredOnce(errorStream, focusedStream) {
+function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
 	var errorEvent = errorStream.map((error) => {
 		if (!error) {
 			return {
@@ -180,18 +193,18 @@ function showOnlyWhenBlurredOnce(errorStream, focusedStream) {
 		}
 	});
 
-	var focusedEvents = focusedStream.map((isFocused) => {
-		if (isFocused === undefined) {
+	var focusEvents = blurredStream.map((isBlurred) => {
+		if (isBlurred === undefined) {
 			return {};
 		}
-		return isFocused ? {
-			type: "focused"
-		} : {
+		return isBlurred ? {
 			type: "blurred"
+		} : {
+			type: "focused"
 		};
 	});
 
-	return Kefir.merge([errorEvent, focusedEvents])
+	return Kefir.merge([errorEvent, focusEvents])
 		.scan((previous, event) => {
 			switch (event.type) {
 				case "valid":
@@ -221,7 +234,4 @@ function showOnlyWhenBlurredOnce(errorStream, focusedStream) {
 		});
 }
 
-var template = stache.from("demo-html");
-
-document.body.appendChild( template(viewModel) );
 </script>
