@@ -8,7 +8,7 @@ var viewModel = {
 	userExpiryBlurred: Kefir.emitterProperty(),
 
 	userCVC: Kefir.emitterProperty(),
-	userCVCBlurred: Kefir.emitterProperty(),
+	userCVCBlurred: Kefir.emitterProperty()
 };
 
 viewModel.cardNumber = viewModel.userCardNumber.map((card) => {

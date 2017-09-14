@@ -119,7 +119,7 @@ and also print back the cleaned card number (the entered number with no dashes).
 ### What you need to know
 
 - [can-kefir] adds a [can-kefir/emitterProperty] method that returns a
-  Kefir property, but also adds a value and error method that calls the property's emitter object. The end result is a single object that has methods of a stream, property and emitter.
+  Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
   var Kefir = require("can-kefir");
@@ -130,9 +130,9 @@ and also print back the cleaned card number (the entered number with no dashes).
     console.log(age)
   });
 
-  age.value(20) //-> logs 20
+  age.emitter.value(20) //-> logs 20
 
-  age.value(30) //-> logs 30
+  age.emitter.value(30) //-> logs 30
   ```
 
   `emitterProperty` property streams are useful data sinks when getting
@@ -227,7 +227,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
 
 - We can call an `emitterProperty`'s value in the template when something happens like:
   ```html
-  <div on:click="emitterProperty.value(true)">
+  <div on:click="emitterProperty.emitter.value(true)">
   ```
 - One of the most useful patterns in constructing streams is the event-reducer
   pattern. On a high-level it involves making streams events, and using those
