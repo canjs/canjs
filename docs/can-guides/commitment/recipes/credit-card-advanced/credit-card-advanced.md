@@ -270,6 +270,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   var state = merged.scan((previous, event) => {
     var copy = Object.assign({}, previous);
     copy[event.type] = event.value;
+	 return copy;
   }, {first: "", last: ""});
   // state: ---{first:"Justin", last:""}
   //          -{first:"Justin", last:"Shah"}
@@ -491,7 +492,7 @@ we will change the __Pay__ button to say __Paying__.
 - [Kefir.flatMap](https://rpominov.github.io/kefir/#flat-map) flattens a stream of
   streams to a single stream of values.
   ```js
-  var count = Kefir.sequentially(100, [0, 1, 2]);
+  var count = Kefir.sequentially(100, [1, 2, 3]);
   var streamOfStreams = count.map( (count) => {
       return Kefir.interval(40, count).take(4)
   });
