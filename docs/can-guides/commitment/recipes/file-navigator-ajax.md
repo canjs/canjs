@@ -29,6 +29,11 @@ The following sections are broken down into:
 - Things to know - Information about CanJS that is useful for solving the problem.
 - Solution - The solution to the problem.
 
+Watch a video of us building this recipe here:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_7FJA0PzAgA" frameborder="0" allowfullscreen></iframe>
+
+
 ## Build a fixtured service layer
 
 ### Problem

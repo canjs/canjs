@@ -43,6 +43,10 @@ The following sections are broken down into:
 - __The solution__ — The solution to the problem.
 
 
+The following video walks through the entire guide:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UA4606-W3Sg" frameborder="0" allowfullscreen></iframe>
+
 
 ## Setup
 

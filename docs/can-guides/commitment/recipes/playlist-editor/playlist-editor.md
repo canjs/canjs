@@ -34,6 +34,10 @@ The following sections are broken down into:
 - Things to know — Information about CanJS that is useful for solving the problem.
 - Solution — The solution to the problem.
 
+The following video goes through this recipe:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0GLa33tdDTg" frameborder="0" allowfullscreen></iframe>
+
 ## Setup CanJS and Load Google API
 
 ### The problem
