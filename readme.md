@@ -40,7 +40,10 @@ _Utility libraries that power the core and ecosystem collections._
 - Event handling utilities — [can-event](https://canjs.com/doc/can-event.html), [can-event/async/async](https://canjs.com/doc/can-event/async/async.html), [can-event/batch/batch](https://canjs.com/doc/can-event/batch/batch.html), [can-event/lifecycle/lifecycle](https://canjs.com/doc/can-event/lifecycle/lifecycle.html)
 - Namespace where can packages are registered — [can-namespace](https://canjs.com/doc/can-namespace.html)
 - Observable hooks needed by every other observable — [can-observation](https://canjs.com/doc/can-observation.html)
+- Reflection for gets/sets, events, and type inference across object types - [can-reflect](https://canjs.com/doc/can-reflect.html)
+- Reflection to treat Promises as objects with value and state - [can-reflect-promise](https://canjs.com/doc/can-reflect-promise.html)
 - Simple observable — [can-simple-map](https://canjs.com/doc/can-simple-map.html)
+- A Symbol polyfill - [can-symbol](https://canjs.com/doc/can-symbol.html)
 - A stateful container for CanJS type information — [can-types](https://canjs.com/doc/can-types.html)
 - Common DOM and JS utilities — [can-util](https://canjs.com/doc/can-util.html)
 - View helpers
