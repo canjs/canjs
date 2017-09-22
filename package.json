@@ -165,7 +165,18 @@
     "html": {
       "dependencies": {
         "normalize.css": "^5.0.0",
+        "steal-conditional": "^0.3.6",
         "steal-stache": "^3.0.5"
+      },
+      "package": {
+        "devDependencies": {
+          "flexibility": "^2.0.1"
+        },
+        "steal": {
+          "configDependencies": [
+            "./node_modules/steal-conditional/conditional"
+          ]
+        }
       },
       "static": [],
       "templates": []
@@ -175,9 +186,9 @@
       "bit-docs-dev": "^0.0.3",
       "bit-docs-js": "^0.0.6",
       "bit-docs-tag-sourceref": "^0.0.3",
-      "bit-docs-generate-html": "^0.7.0",
+      "bit-docs-generate-html": "^0.8.0",
       "bit-docs-generate-searchmap": "^0.1.6",
-      "bit-docs-html-canjs": "^1.0.15",
+      "bit-docs-html-canjs": "^1.1.1",
       "bit-docs-prettify": "^0.1.1",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",
