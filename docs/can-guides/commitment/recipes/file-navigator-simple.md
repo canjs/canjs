@@ -11,7 +11,7 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="//jsbin.com/sodida/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/faraval/embed?js,output">JS Bin on jsbin.com</a>
 
 Click `ROOT/` to see its files and folders.
 
@@ -394,7 +394,7 @@ We want to be able to toggle if a folder is open or closed.
 
 - Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
 
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>

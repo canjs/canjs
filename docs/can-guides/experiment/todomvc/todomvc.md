@@ -386,6 +386,6 @@ delete the completed todos.  You should also have a really good idea how CanJS w
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="//jsbin.com/labajog/1/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/tibana/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

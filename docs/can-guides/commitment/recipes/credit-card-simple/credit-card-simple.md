@@ -18,7 +18,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/hawicej/5/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/konemoc/1/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 

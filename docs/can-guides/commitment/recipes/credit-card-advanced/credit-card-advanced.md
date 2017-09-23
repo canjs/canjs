@@ -17,7 +17,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/zizavuv/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/1/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
