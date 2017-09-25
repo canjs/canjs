@@ -11,7 +11,7 @@ for an easier example that produces similar functionality.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="//jsbin.com/qunuyi/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="//jsbin.com/xuzerum/embed?js,output">JS Bin on jsbin.com</a>
 
 > Note: If you don't see any files show up, run the JS Bin again. This
 > JS Bin uses randomly generated files so it's possible nothing shows up.
