@@ -2,8 +2,8 @@
 <div id='out'></div>
 <script type='text/stache' id="demo-html">
 <p>
-<input type="radio" name="number" {($checked)}="one" /> One? {{one}}<br>
-<input type="radio" name="number" {($checked)}="two" /> Two? {{two}}
+<input type="radio" name="number" checked:bind="one" /> One? {{one}}<br>
+<input type="radio" name="number" checked:bind="two" /> Two? {{two}}
 </p>
 <br>
 <p>Attending?

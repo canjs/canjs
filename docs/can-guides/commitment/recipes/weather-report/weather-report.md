@@ -9,7 +9,7 @@ CanJS 3.5.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/vujugel/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -970,6 +970,6 @@ document.body.appendChild(frag);
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/1/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/vujugel/3/embed?js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
