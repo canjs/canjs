@@ -11,11 +11,11 @@ This guide continues where the [guides/recipes/weather-report-simple Simple Weat
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/jipevu/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/jipevu/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/qowacac/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/qowacac/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://rpominov.github.io/kefir/) added.
 
@@ -455,6 +455,6 @@ Update the __HTML__ tab:
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/jipevu/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/jipevu/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.0"></script>

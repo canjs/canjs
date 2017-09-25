@@ -10,7 +10,7 @@ an hour to complete.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/meqowis/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/meqowis/3/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -273,7 +273,7 @@ In this section, we will:
 
   > NOTE: EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
 
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
    <div on:click="sayHi()"> … </div>
