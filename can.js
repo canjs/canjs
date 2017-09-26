@@ -11,5 +11,6 @@ require("can-stache");
 require("can-stache/helpers/route");
 require("can-stache-bindings");
 require("can-attribute-encoder");
+require("can-ajax");
 
 module.exports = can;
