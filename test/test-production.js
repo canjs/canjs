@@ -25,6 +25,7 @@ require('../view/scope/scope_test');
 require('../view/autorender/autorender_test');
 require('can-view-target/test/test');
 require('can-simple-dom/test/test');
+require('can-simple-observable/can-simple-observable-test');
 require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');

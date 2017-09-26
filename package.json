@@ -81,6 +81,7 @@
     "can-set": "1.3.2",
     "can-simple-dom": "1.2.0",
     "can-simple-map": "3.3.1",
+    "can-simple-observable": "1.0.1",
     "can-stache": "3.8.0",
     "can-stache-bindings": "3.9.0",
     "can-stache-converters": "3.2.2",
