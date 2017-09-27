@@ -108,7 +108,7 @@
     "react-view-model": "0.5.6"
   },
   "devDependencies": {
-    "bit-docs": "^0.0.7",
+    "bit-docs": "pre",
     "es6-promise": "^4.1.0",
     "feathers": "^2.0.3",
     "feathers-authentication-client": "^0.1.6",
@@ -183,17 +183,17 @@
       "templates": []
     },
     "dependencies": {
-      "bit-docs-glob-finder": "^0.0.5",
-      "bit-docs-dev": "^0.0.3",
-      "bit-docs-js": "^0.0.6",
-      "bit-docs-tag-sourceref": "^0.0.3",
-      "bit-docs-generate-html": "^0.8.0",
+      "bit-docs-glob-finder": "pre",
+      "bit-docs-dev": "pre",
+      "bit-docs-js": "pre",
+      "bit-docs-tag-sourceref": "pre",
+      "bit-docs-generate-html": "pre",
       "bit-docs-generate-searchmap": "^0.1.6",
       "bit-docs-html-canjs": "^1.1.1",
-      "bit-docs-prettify": "^0.1.1",
-      "bit-docs-html-highlight-line": "^0.2.2",
-      "bit-docs-tag-demo": "^0.3.0",
-      "bit-docs-tag-package": "^0.0.5"
+      "bit-docs-prettify": "pre",
+      "bit-docs-html-highlight-line": "pre",
+      "bit-docs-tag-demo": "pre",
+      "bit-docs-tag-package": "pre"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache,react-view-model}/**/*.{js,md}",
