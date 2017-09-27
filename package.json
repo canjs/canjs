@@ -123,7 +123,7 @@
     "prop-types": "^15.5.10",
     "qunitjs": "^2.4.0",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react-dom": "^16.0.0",
     "socket.io-client": "^1.7.2",
     "steal": "^1.5.5",
     "steal-css": "^1.2.4",
