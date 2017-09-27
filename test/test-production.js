@@ -28,7 +28,7 @@ require('can-simple-dom/test/test');
 require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
-require('can-attribute-encoder');
+require('can-attribute-encoder/can-attribute-encoder-test');
 require('can-ajax/can-ajax-test');
 
 
