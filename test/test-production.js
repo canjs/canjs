@@ -29,7 +29,7 @@ require('can-simple-observable/can-simple-observable-test');
 require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
-require('can-attribute-encoder');
+require('can-ajax/can-ajax-test');
 
 
 // Legacy tests

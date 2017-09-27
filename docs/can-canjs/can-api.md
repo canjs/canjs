@@ -127,6 +127,9 @@ _Utility libraries that power the core collection._
 - **[react-view-model]** <small><%react-view-model.package.version%></small> Create an auto-rendering container component with an observable view-model.
   - `npm install react-view-model --save`
   - <a class="github-button" href="https://github.com/canjs/react-view-model">Star</a>
+- **[can-ajax]** <small><%can-ajax.package.version%></small> jQuery-inspired AJAX request library.
+  - `npm install can-ajax --save`
+  - <a class="github-button" href="https://github.com/canjs/can-ajax">Star</a>
 
 </div>
 

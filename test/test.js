@@ -9,6 +9,7 @@ require('can-stache/test/stache-test');
 
 
 // Infrastructure tests
+require('can-attribute-encoder/can-attribute-encoder-test');
 require('can-observation/can-observation_test');
 require('can-view-callbacks/test/callbacks-test');
 require('can-simple-map/can-simple-map_test');
