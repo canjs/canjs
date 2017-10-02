@@ -30,6 +30,7 @@ require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-ajax/can-ajax-test');
+require('can-globals/can-globals-test');
 
 
 // Legacy tests
