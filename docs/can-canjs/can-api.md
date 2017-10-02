@@ -130,6 +130,9 @@ _Utility libraries that power the core collection._
 - **[can-ajax]** <small><%can-ajax.package.version%></small> jQuery-inspired AJAX request library.
   - `npm install can-ajax --save`
   - <a class="github-button" href="https://github.com/canjs/can-ajax">Star</a>
+- **[can-globals]** <small><%can-globals.package.version%></small> An environment agnostic container for global variables.
+  - `npm install can-globals --save`
+  - <a class="github-button" href="https://github.com/canjs/can-globals">Star</a>
 
 </div>
 
