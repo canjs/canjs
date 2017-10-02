@@ -39,6 +39,13 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", "can/util/fragm
 		$: $,
 		each: can.each,
 		bind: function (ev, cb) {
+			// don't set up event listeners for document fragments
+			// since events will not be triggered and the handlers
+			// could lead to memory leaks
+			if (this.nodeType === 11) {
+				return;
+			}
+
 			// If we can bind to it...
 			if (this.bind && this.bind !== can.bind) {
 				this.bind(ev, cb);
@@ -51,6 +58,12 @@ steal('jquery', 'can/util/can.js', 'can/util/attr', "can/event", "can/util/fragm
 			return this;
 		},
 		unbind: function (ev, cb) {
+			// event handlers are not set up on document fragments
+			// so they do not need to be removed
+			if (this.nodeType === 11) {
+				return;
+			}
+
 			// If we can bind to it...
 			if (this.unbind && this.unbind !== can.unbind) {
 				this.unbind(ev, cb);
