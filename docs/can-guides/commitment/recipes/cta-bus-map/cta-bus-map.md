@@ -14,25 +14,13 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?js,output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
 1. __Click__ a _Bus Route_.
 2. __Explore__ the markers added to the Google Map showing the bus locations for that route.
 3. __Click__ the _route name overlay_ to refresh the bus locations.
-
-
-## Setup ##
-
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
-
-> Click the `JS Bin` button.  Then, under `File`, click `Clone`.
-
-<a class="jsbin-embed" href="https://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
-
-This JS Bin has initial prototype HTML and CSS which is useful for
-getting the application to look right.
 
 The following sections are broken down the following parts:
 
@@ -41,14 +29,27 @@ The following sections are broken down the following parts:
 - __How to verify it works__ - How to make sure the solution works if it's not obvious.
 - __The solution__ — The solution to the problem.
 
+## Setup ##
+
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+
+> Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
+
+<a class="jsbin-embed" href="https://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+
+This JS Bin has initial prototype HTML and CSS which is useful for
+getting the application to look right.
+
+
+
 
 ### What you need to know
 
 There's nothing to do in this step. The JSBin is already setup with:
 
-- a _basic_ CanJS setup
-- a promise that resolves when the google maps has loaded
-- some variables useful to make requests to get bus routes and locations
+- A _basic_ CanJS setup.
+- A promise that resolves when the Google Maps has loaded.
+- Some variables useful to make requests to get bus routes and locations.
 
 Please read on to understand the setup.
 
@@ -82,7 +83,7 @@ __A Basic CanJS Setup__
   ```
 
   A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
+  [can-stache.tags.escaped {{key}}] "magic tags" to insert data into
   the HTML output like:
 
   ```html
@@ -125,7 +126,7 @@ The following loads [Google Maps API](https://developers.google.com/maps/documen
 </script>
 ```
 
-It creates a global `googleAPI` promise that resolves when google maps is read.  You can use it like:
+It creates a global `googleAPI` promise that resolves when Google Maps is ready.  You can use it like:
 
 ```js
 googleAPI.then(function(){
@@ -135,7 +136,7 @@ googleAPI.then(function(){
 
 __Loading CTA Bus Data__
 
-This app will be using a HTTP proxy to make requests to the [http://www.ctabustracker.com/](http://www.ctabustracker.com/) API.  The
+This app needs to make requests to the [http://www.ctabustracker.com/](http://www.ctabustracker.com/) API.  The
 `ctabustracker` API is hosted at:
 
 ```js
@@ -155,7 +156,7 @@ a proxy hosted at:
 var proxyUrl = "https://can-cors.herokuapp.com/"
 ```
 
-Thus a request might look like:
+With that proxy, the requests for this app will look like:
 
 ```js
 fetch("https://can-cors.herokuapp.com/"+
@@ -171,7 +172,7 @@ fetch("https://can-cors.herokuapp.com/"+
 In this section, we will:
 
 - Explore the relationship between ViewModel and View.
-- Make it so the title of the page chagnes from `<h1>YOUR TITLE HERE</h1>`
+- Make it so the title of the page changes from `<h1>YOUR TITLE HERE</h1>`
   to `<h1>CHICAGO CTA BUS TRACKER</h1>`.
 - Let us adjust the title simply by changing the viewModel like:
   ```js
@@ -474,7 +475,7 @@ Update the __JavaScript__ tab to:
 
 
 
-## Initialize Google maps to show Chicago ##
+## Initialize Google Maps to show Chicago ##
 
 ### The problem
 
