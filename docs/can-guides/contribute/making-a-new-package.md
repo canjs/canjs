@@ -203,7 +203,7 @@ Open the main test file in the CanJS repo, located at `canjs/test/test.js`.
 
 > Note: The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them to `canjs/test/test-dev-only.js`.
 
-Require the project repo's test main test file in the appropriate area. For example, if the project repo will go in "Legacy" area of the site, then add it to the "Legacy" section of the test file.
+Require the project repo's test main test file in the appropriate area. For example, if the project repo will go in "Infrastructure" area of the site, then add it to the "Infrastructure" section of the test file.
 
 For example, we have added the [can-fixture tests](https://github.com/canjs/canjs/blob/e3301daad996df01463a623d50b38bd5091c9b35/test/test.js#L56) to the test file.
 
