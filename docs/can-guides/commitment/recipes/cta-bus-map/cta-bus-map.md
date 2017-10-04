@@ -14,7 +14,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="http://jsbin.com/zewenov/4/embed?js,output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?js,output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -27,7 +27,7 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 
-<a class="jsbin-embed" href="http://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
