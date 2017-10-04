@@ -34,8 +34,8 @@
 
 
 // Legacy tests
-require('../control/control_test');
-//require('../list/list_test');
+//require('../control/control_test');
+require('../list/list_test');
 //require('../map/map_test');
 //require('can-map-define/can-map-define_test');
 //require('can-view-href/test/test');
