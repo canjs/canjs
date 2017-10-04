@@ -15,7 +15,7 @@ An __official__ package is:
 
  - In a repository under the [https://github.com/canjs CanJS organization].
  - Listed and documented under the [can-ecosystem Ecosystem Collection].
- - Tested in the [`canjs/canjs` integration suite](https://github.com/canjs/canjs/blob/master/test/test-production.js).
+ - Tested in the [`canjs/canjs` integration suite](https://github.com/canjs/canjs/blob/master/test/test.js).
  - Published on npm as `can-<name>` (with a few exceptions).
 
 __Unofficial__ packages can be maintained however you choose, but to maximize your project’s:
@@ -200,9 +200,9 @@ If you can't you might need to:
 
 ## Integrate tests with CanJS
 
-Open the main test file in the CanJS repo, located at `canjs/test/test-production.js`.
+Open the main test file in the CanJS repo, located at `canjs/test/test.js`.
 
-> Note: The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them directly to `canjs/test/test.js`.
+> Note: The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them to `canjs/test/test-dev-only.js`.
 
 Require the project repo's test main test file in the appropriate area. For example, if the project repo will go in "Legacy" area of the site, then add it to the "Legacy" section of the test file.
 
