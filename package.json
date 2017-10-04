@@ -40,7 +40,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-attribute-encoder": "0.3.0",
+    "can-attribute-encoder": "0.3.1",
     "can-cid": "1.0.3",
     "can-component": "3.3.4",
     "can-compute": "3.3.4",
