@@ -1,0 +1,123 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: 'Catamaran', sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.top {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 10%;
+  display: flex;
+  flex-direction: column;
+}
+.bottom {
+  height: 250px;
+  position: relative;
+}
+.gmap {
+  width: 100%;
+  height: 230px;
+  background-color: grey;
+}
+.header {
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  background-color: #313131;
+  color: white;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+.header h1 {
+  text-align: center;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+.route-selected {
+  line-height: 1;
+  position: absolute;
+  z-index: 1;
+  text-align: right;
+  background: rgba(6, 6, 6, 0.6);
+  top: 10px;
+  right: 10px;
+  padding: 6px 10px;
+  color: white;
+  border-radius: 2px;
+}
+.route-selected small {
+  display: block;
+  font-size: 14px;
+  color: #ddd;
+}
+.route-selected .error-message {
+  font-size: 14px;
+  background-color: #FF5722;
+  border-radius: 10px;
+  padding: 4px 8px 1px;
+  margin-top: 5px;
+}
+.routes-list {
+  padding: 20px 0;
+  margin: 0;
+  overflow-y: auto;
+}
+.routes-list li {
+  list-style: none;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #dedede;
+  padding: 8px 8px 6px;
+  margin: 1% 2%;
+  border-radius: 25px;
+  color: #2196F3;
+  width: 41%;
+  display: inline-flex;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.routes-list li:hover {
+  border-color: transparent;
+  background-color: #008eff;
+  color: white;
+  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2);
+}
+.routes-list li .check {
+  display: none;
+}
+.routes-list li.active {
+  color: #666;
+  background-color: #e8e8e8;
+}
+.routes-list li.active .check {
+  display: inline-block;
+  margin-left: 5px;
+  color: #2cc532;
+}
+.routes-list li.active:hover {
+  border-color: #dedede;
+  box-shadow: none;
+}
+.route-number {
+  display: inline-block;
+  border-right: 1px solid #dedede;
+  padding-right: 5px;
+  margin-right: 5px;
+  min-width: 18px;
+  text-align: right;
+}
+p {
+  text-align: center;
+  margin: 0;
+  color: #ccc;
+  font-size: 14px;
+}

@@ -1,0 +1,645 @@
+@page guides/recipes/cta-bus-map CTA Bus Map (Medium)
+@parent guides/recipes
+
+@description This guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
+
+
+@body
+
+In this guide you will learn how to:
+
+- Use `fetch` to request data.
+- Create a custom element that wraps a google map.
+- Add markers to the google map.
+
+The final widget looks like:
+
+<a class="jsbin-embed" href="http://jsbin.com/zewenov/4/embed?js,output&height=600px">JS Bin on jsbin.com</a>
+
+To use the widget:
+
+1. __Click__ a _Bus Route_.
+2. __Explore__ the markers added to the Google Map showing the bus locations for that route.
+3. __Click__ the _route name overlay_ to refresh the bus locations.
+
+
+## Setup ##
+
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+
+<a class="jsbin-embed" href="http://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+
+This JS Bin has initial prototype HTML and CSS which is useful for
+getting the application to look right.
+
+The following sections are broken down the following parts:
+
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __How to verify it works__ - How to make sure the solution works if it's not obvious.
+- __The solution__ — The solution to the problem.
+
+
+### What you need to know
+
+- The JSBin is already setup with:
+  - a _basic_ CanJS setup
+  - a promise that resolves when the google maps has loaded
+  - some variables useful to make requests to get bus routes and locations
+
+__A Basic CanJS Setup__
+
+- A basic CanJS setup uses instances of a ViewModel to manage the
+  behavior of a View.  A ViewModel type is defined, an instance of it
+  is created and passed to a View as follows:
+
+  ```js
+  // Define the ViewModel type
+  var MyViewModel = can.DefineMap.extend("MyViewModel",{
+   ...      
+  })
+  // Create an instance of the ViewModel
+  var viewModel = new MyViewModel();
+  // Get a View
+  var view = can.stache.from("my-view");
+  // Render the View with the ViewModel instance
+  var frag = view(viewModel);
+  document.body.appendChild(frag);
+  ```
+
+- CanJS uses [can-stache] to render data in a template
+  and keep it live.  Templates can be authored in `<script>` tags like:
+
+  ```html
+  <script type="text/stache" id="app-view">
+    TEMPLATE CONTENT
+  </script>
+  ```
+
+  A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
+  the HTML output like:
+
+  ```html
+  <script type="text/stache" id="app-view">
+    {{something.name}}
+  </script>
+  ```
+
+- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
+  ```js
+  var template = can.stache.from(SCRIPT_ID);
+  ```
+
+- Render the template with data into a documentFragment like:
+
+  ```js
+  var frag = template({
+    something: {name: "Derek Brunson"}
+  });
+  ```
+
+- Insert a fragment into the page with:
+
+  ```js
+  document.body.appendChild(frag);
+  ```
+
+__Loading Google Maps API__
+
+The following loads [Google Maps API](https://developers.google.com/maps/documentation/javascript/):
+
+```
+<script>
+  window.googleAPI = new Promise(function(resolve){
+    const script = document.createElement("script");
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
+    document.body.appendChild( script );
+    script.onload = resolve;
+  });
+</script>
+```
+
+It creates a global `googleAPI` promise that resolves when google maps is read.  You can use it like:
+
+```js
+googleAPI.then(function(){
+    new google.maps.Map( ... );
+})
+```
+
+__Loading CTA Bus Data__
+
+This app will be using a HTTP proxy to make requests to the [http://www.ctabustracker.com/](http://www.ctabustracker.com/) API.  The
+`ctabustracker` API is hosted at:
+
+```js
+var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
+```
+
+The API needs a token as part of the request:
+
+```js
+var token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
+```
+
+However, the API does __not__ support cross origin requests.  Therefore, we will request data using
+a proxy hosted at:
+
+```js
+var proxyUrl = "https://can-cors.herokuapp.com/"
+```
+
+Thus a request might look like:
+
+```js
+fetch("https://can-cors.herokuapp.com/"+
+    "http://www.ctabustracker.com/bustime/api/v2/"+
+    "getroutes"+
+    "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json")
+```
+
+## Change the app title ##
+
+### The problem
+
+In this section, we will:
+
+- Explore the relationship between ViewModel and View.
+- Make it so the title of the page chagnes from `<h1>YOUR TITLE HERE</h1>`
+  to `<h1>CHICAGO CTA BUS TRACKER</h1>`.
+- Let us adjust the title simply by changing the viewModel like:
+  ```js
+  viewModel.title = "TITLE UPDATED"
+  ```
+
+### What you need to know
+
+
+
+
+- A [can-stache] template uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
+  the HTML output like:
+
+  ```html
+  {{someValue}}
+  ```
+
+  These values come from a ViewModel or Model.
+
+- The [can-define.types.value] property definition can return the initial value of a property like:
+  ```js
+  var AppViewModel = can.DefineMap.extend({
+	someValue: {
+	  value: "This string"
+	}  
+  });
+  new AppViewModel().someValue //-> "This string"
+  ```
+
+### How to verify it works
+
+Run the folowing in the `Console` tab:
+
+```js
+viewModel.title = "TITLE UPDATED"
+```
+
+You should see the title update.
+
+### The solution
+
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./1-setup.html
+@highlight 3,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./1-setup.js
+@highlight 8-10,only
+
+
+
+
+## List bus routes ##
+
+### The problem
+
+In this section, we will:
+
+- Load and list bus routes.
+  - We'll store the promise of bus routes in a `routesPromise` property.
+  - `routesPromise` should be an `Array` of the routes.
+- Show a loading message while loading routes.
+
+### What you need to know
+
+- The [can-define.types.value] property definition can return the initial value of a property like:
+  ```js
+  var AppViewModel = can.DefineMap.extend({
+	myProperty: {
+	  value: function(){
+		return new Promise( .... );
+	  }
+	}  
+  });
+  new AppViewModel().myProperty //-> Promise
+  ```
+- The [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is an easy way to make requests
+  to a URL and get back JSON.  Use it like:
+
+  ```js
+  fetch(url).then(function(response){
+	  return response.json();
+  }).then(function(data){
+
+  });
+  ```
+
+  You'll want to use the `proxyUrl` and `getRoutesEnpoint` variables to make a request for
+  CTA bus routes. The routes service returns data like:
+
+  ```js
+  {
+	"bustime-response": {
+		"routes": [
+			{
+				"rt": "1",
+				"rtnm": "Bronzeville/Union Station",
+				"rtclr": "#336633",
+				"rtdd": "1"
+			},
+            ...
+        ]
+    }
+  }
+  ```
+
+  Make sure that `routesPromise` will be a Promise that resolves to an array of routes.
+
+- Promises can transform data by returning new values.  For example if `outerPromise`
+  resolves to `{innerData: {name: "inner"}}`, `resultPromise` will resolve to
+  `{name: "inner"}`:
+  ```js
+  var resultPromise = outerPromise.then(function(data){
+      return data.innerData;
+  });
+  ```
+
+- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
+  - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
+  - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.
+
+### The solution
+
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./2-list-routes.html
+@highlight 4,7-13,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./2-list-routes.js
+@highlight 11-17,only
+
+
+
+## Pick a route and log bus locations ##
+
+### The problem
+
+In this section, we will:
+
+- Highlight the selected bus route after a user clicks it.
+  - Add `active` to the class name like: `<li class="active">`.
+- Log the bus (vehicle) locations for the selected route.
+
+### What you need to know
+
+- Use the `"any"` type to define a property of indeterminate type:
+  ```js
+  var AppViewModel = can.DefineMap.extend({
+	myProperty: "any"  
+  });
+  var viewModel = new AppViewModel({});
+  viewModel.myProperty = ANYTHING;
+  ```
+  You'll want to store the selected bus route as `route`.
+- Use `fetch(proxyUrl + getVehiclesEndpoint + "&rt=" + route.rt)`
+  to get the vehicles for a particular route. If there is route data, it comes
+  back like:
+  ```js
+  {
+	"bustime-response": {
+		"vehicle": [
+			{
+				"vid": "8026",
+				"tmstmp": "20171004 09:18",
+				"lat": "41.73921241760254",
+				"lon": "-87.66306991577149",
+				"hdg": "359",
+				"pid": 3637,
+				"rt": "9",
+				"des": "74th",
+				"pdist": 6997,
+				"dly": false,
+				"tatripid": "10002232",
+				"tablockid": "X9  -607",
+				"zone": ""
+			},
+            ...
+        ]
+    }
+  }
+  ```
+
+  If there is an error or no busses, the response looks like:
+
+  ```js
+  {
+	"bustime-response": {
+		"error": [
+			{
+				"rt": "5",
+				"msg": "No data found for parameter"
+			}
+		]
+	}
+  }
+  ```
+
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
+
+### How to verify it works
+
+In the `Console` tab, when you click a bus route (like `Cottage Grove`), you should see
+an array of bus routes.
+
+### The solution
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./3-pick-route.html
+@highlight 8,17-22,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./3-pick-route.js
+@highlight 18-30,only
+
+
+
+
+## Show when busses are loading and the number of buses ##
+### The problem
+
+In this section, we will:
+
+- Show `<p>Loading vehicles…</p>` while bus data is being loaded.
+- Show `<div class="error-message">No vehicles available for this route</div>` in the overlay
+  if the request for bus data failed.  
+- Show the number of busses inside the `<div class='gmap'>` like: `Bus count: 20`.
+
+We will do this by:
+
+- Defining and setting a `vehiclesPromise` property.
+
+### What you need to know
+
+- In stache, you can check if a promise was rejected like:
+  ```html
+  {{#if somePromise.isRejected}}<p>...</p>{{/if}}
+  ```
+- The [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) method returns a rejected promise with the provided `reason`:
+  ```js
+  var rejectedPromise = Promise.reject({message: "something went wrong"});
+  ```
+- Promises can transform data by returning new promises.  For example if `outerPromise`
+  resolves to `{innerData: {name: "inner"}}`, `resultPromise` will be a rejected promise
+  with the `reason` as `{name: "inner"}`:
+  ```js
+  var resultPromise = outerPromise.then(function(data){
+      return Promise.reject(data.innerData);
+  });
+  resultPromise.catch(function(reason){
+      reason.name //-> "inner"
+  });
+  ```
+
+### The solution
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./3b-bus-loading.html
+@highlight 5,21-23,26,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./3b-bus-loading.js
+@highlight 19,22,26,28,only
+
+
+
+## Initialize Google maps to show Chicago ##
+
+### The problem
+
+In this section, we will:
+
+- Create a custom `<google-map-view/>` element that adds a google
+  map.
+- The google map should be added to a `<div class='gmap'/>` element.
+- The google map should be centered on Chicago (latitude: `41.881`, longitude `-87.623`).
+
+We will do this by:
+
+- Creating a custom [can-component] element that adds the `<div class='gmap'/>` to its HTML.
+- Listens to when the element is in the page and creates a new google map.
+
+### What you need to know
+
+- Use [can-component] to create custom elements.  Start by [can-component.extend extending]
+  `Component` with the `tag` of the element:
+
+  ```js
+  can.Component.extend({
+    tag: "google-map-view"
+  });
+  ```
+
+  Next, provide the HTML [can-stache] template with the content you want to insert within
+  the element.
+
+  ```js
+  can.Component.extend({
+    tag: "google-map-view",
+    view: stache(`<div class='gmap'/>`)
+  });
+  ```
+
+  Any values you want the custom element to hold must be defined on the `ViewModel`. If the `ViewModel`
+  is a plain `Object`, that object will be used to extend [can-define/map/map DefineMap] and create a new
+  type.  The following specifies a `map` property that can be any value:
+
+  ```js
+  can.Component.extend({
+    tag: "google-map-view",
+    view: stache(`<div class='gmap'/>`),
+    ViewModel: {
+      map: "any"
+    }
+  });
+  ```
+
+  A component's [can-component.prototype.events] object can be used to listen to events on the
+  `ViewModel` or the `element`.  If you want to know when the custom element is [can-util/dom/events/inserted/inserted], you can do it as follows:
+
+  ```js
+  can.Component.extend({
+    tag: "google-map-view",
+    view: stache(`<div class='gmap'/>`),
+    ViewModel: {
+      map: "any"
+    },
+    events: {
+      "{element} inserted": function(){
+        this.viewModel //-> the ViewModel instance
+        this.element //-> the <google-map-view> element
+      }
+    }
+  });
+  ```
+
+- To create a google map, use [new google.map.Map(...)](https://developers.google.com/maps/documentation/javascript/reference) once the
+  `googleAPI` has completed loading:
+
+  ```js
+  new google.maps.Map(gmapDiv, {
+      zoom: 10,
+      center: {
+          lat: 41.881,
+          lng: -87.623
+      }
+  })
+  ```
+
+
+### The solution
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./4-init-gmaps.html
+@highlight 26,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./4-init-gmaps.js
+@highlight 34-53,only
+
+
+
+
+
+## Set markers for vehicle locations ##
+
+### The problem
+
+In this section, we will:
+
+- Show markers at bus locations when the user clicks a route.
+
+We will do this by:
+
+- Passing the `vehicles` from `vehiclePromise` to `<google-map-view>`.
+- Listening when `vehicles` changes and creating google map `Marker`s.
+
+
+### What you need to know
+
+- [can-stache-bindings.toChild childProp:from] can set a component's ViewModel from another value:
+  ```js
+  <google-map-view viewModelProp:from="scopeValue"/>
+  ```
+- The [can-component.prototype.events] can listen to changes in the `ViewModel` instance with:
+  `"{viewModel} propertyName"` like:
+
+  ```js
+  can.Component.extend({
+    ...
+    events: {
+      "{viewModel} vehicles": function(viewModel, event, newVehicles) {
+          // do stuff with the newVehicles
+      }      
+    }
+  })
+  ```
+
+- Use [new google.maps.Marker](https://developers.google.com/maps/documentation/javascript/reference#Marker) to
+  add a marker to a map like:
+
+  ```js
+  new google.maps.Marker({
+    position: {
+      lat: parseFloat(vehicle.lat),
+      lng: parseFloat(vehicle.lon)
+    },
+    map: this.viewModel.map
+  });
+  ```
+
+### The solution
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./5-set-markers.html
+@highlight 26,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./5-set-markers.js
+@highlight 39,42-54,only
+
+
+
+
+
+## Clean up markers when locations change ##
+
+### The problem
+
+In this section we will:
+
+- Remove markers from previous routes.
+- Update marker locations when the user clicks the overlay.
+
+We will do this by:
+
+- Storing the active list of markers on the `ViewModel`
+- Clearing the old active markers when the list of vehicles is updated.
+- Calling `pickRoute` when someone clicks on the `route-selected` overlay.
+
+### What you need to know
+
+
+- Use `marker.setMap(null)` to remove a marker from a map.
+
+
+### The solution
+Update the `view` in the __HTML__ tab to:
+
+@sourceref ./6-clean-markers.html
+@highlight 19,only
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./6-clean-markers.js
+@highlight 40,44-49,51,only
+
+
+
+
+<script src="http://static.jsbin.com/js/embed.min.js?4.0.4"></script>
