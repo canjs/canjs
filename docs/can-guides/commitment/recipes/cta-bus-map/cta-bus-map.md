@@ -642,4 +642,4 @@ Update the __JavaScript__ tab to:
 
 
 
-<script src="http://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+<script src="//static.jsbin.com/js/embed.min.js?4.0.4"></script>
