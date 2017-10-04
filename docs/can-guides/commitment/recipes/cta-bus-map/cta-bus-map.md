@@ -12,9 +12,11 @@ In this guide you will learn how to:
 - Create a custom element that wraps a google map.
 - Add markers to the google map.
 
+## Final Widget Example ##
+
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?js,output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -32,20 +34,12 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
-The following sections are broken down the following parts:
-
-- __The problem__ — A description of what the section is trying to accomplish.
-- __What you need to know__ — Information about CanJS that is useful for solving the problem.
-- __How to verify it works__ - How to make sure the solution works if it's not obvious.
-- __The solution__ — The solution to the problem.
-
-
-### What you need to know
+## Basics Already Provided ##
 
 - The JSBin is already setup with:
-  - a _basic_ CanJS setup
-  - a promise that resolves when the google maps has loaded
-  - some variables useful to make requests to get bus routes and locations
+  - A _basic_ CanJS setup.
+  - A promise that resolves when the Google map has loaded.
+  - Some variables useful to make requests to get bus routes and locations.
 
 __A Basic CanJS Setup__
 
@@ -68,7 +62,7 @@ __A Basic CanJS Setup__
   ```
 
 - CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
+  and keep it live.  Templates are authored in `<script>` tags like:
 
   ```html
   <script type="text/stache" id="app-view">
@@ -77,7 +71,7 @@ __A Basic CanJS Setup__
   ```
 
   A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
+  [can-stache.tags.escaped {{key}}] "magic tags" to insert data into
   the HTML output like:
 
   ```html
@@ -86,12 +80,13 @@ __A Basic CanJS Setup__
   </script>
   ```
 
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
+- A template is loaded from the `<script>` tag with [can-stache.from can.stache.from] like:
+
   ```js
   var template = can.stache.from(SCRIPT_ID);
   ```
 
-- Render the template with data into a documentFragment like:
+- A template is passed data and rendered into a "documentFragment" like:
 
   ```js
   var frag = template({
@@ -99,7 +94,7 @@ __A Basic CanJS Setup__
   });
   ```
 
-- Insert a fragment into the page with:
+- A fragment is inserted into the page with:
 
   ```js
   document.body.appendChild(frag);
@@ -120,7 +115,7 @@ The following loads [Google Maps API](https://developers.google.com/maps/documen
 </script>
 ```
 
-It creates a global `googleAPI` promise that resolves when google maps is read.  You can use it like:
+It creates a global `googleAPI` promise that resolves when Google Maps is read.  You can use it like:
 
 ```js
 googleAPI.then(function(){
@@ -130,27 +125,27 @@ googleAPI.then(function(){
 
 __Loading CTA Bus Data__
 
-This app will be using a HTTP proxy to make requests to the [http://www.ctabustracker.com/](http://www.ctabustracker.com/) API.  The
-`ctabustracker` API is hosted at:
+This app needs to make requests to the [http://www.ctabustracker.com/](http://www.ctabustracker.com/) API. 
+The `ctabustracker` API is hosted at:
 
 ```js
 var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
 ```
 
-The API needs a token as part of the request:
+The API expects a token as part of the request:
 
 ```js
 var token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
 ```
 
-However, the API does __not__ support cross origin requests.  Therefore, we will request data using
-a proxy hosted at:
+However, the API does __not__ support cross origin requests.  So, we will request data using
+a pre-configured proxy hosted at:
 
 ```js
 var proxyUrl = "https://can-cors.herokuapp.com/"
 ```
 
-Thus a request might look like:
+With that proxy, the requests for this app will look like:
 
 ```js
 fetch("https://can-cors.herokuapp.com/"+
@@ -159,6 +154,17 @@ fetch("https://can-cors.herokuapp.com/"+
     "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json")
 ```
 
+## Next Sections ##
+
+The next sections are broken down into the following parts:
+
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __How to verify it works__ - How to make sure the solution works if it's not obvious.
+- __The solution__ — The solution to the problem.
+
+Follow these steps to learn as you go. Try not to look at the solution before trying!
+
 ## Change the app title ##
 
 ### The problem
@@ -166,9 +172,10 @@ fetch("https://can-cors.herokuapp.com/"+
 In this section, we will:
 
 - Explore the relationship between ViewModel and View.
-- Make it so the title of the page chagnes from `<h1>YOUR TITLE HERE</h1>`
+- Make it so the title of the page changes from `<h1>YOUR TITLE HERE</h1>`
   to `<h1>CHICAGO CTA BUS TRACKER</h1>`.
-- Let us adjust the title simply by changing the viewModel like:
+- Configure auto re-rendering of the template by simply setting a property
+  on the `viewModel` like:
   ```js
   viewModel.title = "TITLE UPDATED"
   ```
@@ -446,7 +453,7 @@ Update the __JavaScript__ tab to:
 
 
 
-## Initialize Google maps to show Chicago ##
+## Initialize Google Maps to show Chicago ##
 
 ### The problem
 
