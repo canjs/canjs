@@ -18,6 +18,12 @@ simple validation on the payment form values.
 The [guides/recipes/credit-card-advanced] recipe builds nearly same application, but
 with better validations and with Kefir streams instead of [can-define].
 
+## CTA Bus Map
+
+The [guides/recipes/cta-bus-map] walks through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  You'll learn how to create a [can-component] that integrates with 3rd party widgets.
+
+![CTA Bus Map](../../docs/can-guides/commitment/recipes/cta-bus-map/cta-bus-map.png)
+
 ## Signup and Login
 
 The [guides/recipes/signup-simple] walks through building simple signup, login forms and

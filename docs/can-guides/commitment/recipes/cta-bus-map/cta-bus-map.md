@@ -27,6 +27,8 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 
+> Click the `JS Bin` button.  Then, under `File`, click `Clone`.
+
 <a class="jsbin-embed" href="https://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
@@ -42,10 +44,13 @@ The following sections are broken down the following parts:
 
 ### What you need to know
 
-- The JSBin is already setup with:
-  - a _basic_ CanJS setup
-  - a promise that resolves when the google maps has loaded
-  - some variables useful to make requests to get bus routes and locations
+There's nothing to do in this step. The JSBin is already setup with:
+
+- a _basic_ CanJS setup
+- a promise that resolves when the google maps has loaded
+- some variables useful to make requests to get bus routes and locations
+
+Please read on to understand the setup.
 
 __A Basic CanJS Setup__
 
@@ -173,6 +178,9 @@ In this section, we will:
   viewModel.title = "TITLE UPDATED"
   ```
 
+![YOUR TITLE HERE](../../../docs/can-guides/commitment/recipes/cta-bus-map/1-app-title.png)
+
+
 ### What you need to know
 
 
@@ -230,9 +238,18 @@ Update the __JavaScript__ tab to:
 In this section, we will:
 
 - Load and list bus routes.
-  - We'll store the promise of bus routes in a `routesPromise` property.
-  - `routesPromise` should be an `Array` of the routes.
-- Show a loading message while loading routes.
+- Show `<p>Loading routes…</p>` while loading routes.
+
+![List Bus Routes](../../../docs/can-guides/commitment/recipes/cta-bus-map/2-list-routes.png)
+
+
+We will do this by:
+
+- Store the promise of bus routes in a `routesPromise` property.
+- `routesPromise` will resolve to an `Array` of the routes.
+- Loop through each route and add an `<li>` to the page.
+- Show the loading message while `routesPromise` is pending.
+
 
 ### What you need to know
 
@@ -315,11 +332,23 @@ Update the __JavaScript__ tab to:
 In this section, we will:
 
 - Highlight the selected bus route after a user clicks it.
-  - Add `active` to the class name like: `<li class="active">`.
 - Log the bus (vehicle) locations for the selected route.
+
+<img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/3-pick-route.png" width="857px"/>
+
+We will do this by:
+
+- Listening to when a user clicks one of the bus routes.
+- Adding `active` to the class name of that route's `<li>` like: `<li class="active">`.
+- Making the request for the vehicle locations of the selected route.
 
 ### What you need to know
 
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
   var AppViewModel = can.DefineMap.extend({
@@ -372,11 +401,7 @@ In this section, we will:
   }
   ```
 
-- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
-  ```html
-  <div on:click="doSomething()"> ... </div>
-  ```
 
 ### How to verify it works
 
@@ -406,6 +431,9 @@ In this section, we will:
 - Show `<div class="error-message">No vehicles available for this route</div>` in the overlay
   if the request for bus data failed.  
 - Show the number of busses inside the `<div class='gmap'>` like: `Bus count: 20`.
+
+<img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/3b-bus-loading.png" width="427px"/>
+
 
 We will do this by:
 
@@ -456,6 +484,8 @@ In this section, we will:
   map.
 - The google map should be added to a `<div class='gmap'/>` element.
 - The google map should be centered on Chicago (latitude: `41.881`, longitude `-87.623`).
+
+<img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/4-init-gmaps.png" width="428px"/>
 
 We will do this by:
 
