@@ -33,34 +33,34 @@ require('can-ajax/can-ajax-test');
 require('can-globals/can-globals-test');
 
 
-// Legacy tests
-require('../control/control_test');
-require('../list/list_test');
-require('../map/map_test');
-require('can-map-define/can-map-define_test');
-require('can-view-href/test/test');
-require('can-map-backup/can-map-backup_test');
-require('can-validate-legacy/can-validate-test');
-require('../view/ejs/ejs_test');
-
-// Ecosystem tests
-require('can-fixture/test/fixture_test');
-require('can-connect-signalr/test');
-require('can-connect-cloneable/test/test');
-require('can-kefir/can-kefir-test');
-require('can-stream/can-stream_test');
-require('can-stream-kefir/can-stream-kefir_test');
-require('can-ndjson-stream/can-ndjson-stream-test');
-require('can-connect-ndjson/test/can-connect-ndjson-test');
-require('can-define-stream/can-define-stream_test');
-require('can-define-stream-kefir/can-define-stream-kefir_test');
-require('react-view-model/test/test');
-require('can-react-component/test/test');
-// require('can-jquery/test/test');
-// require('can-vdom/test/test');
-// require('can-zone/test/test');
-
-
-// Integration tests
-require('../docs/can-guides/experiment/todomvc/test');
-require('./integration/all/test');
+//// Legacy tests
+//require('../control/control_test');
+//require('../list/list_test');
+//require('../map/map_test');
+//require('can-map-define/can-map-define_test');
+//require('can-view-href/test/test');
+//require('can-map-backup/can-map-backup_test');
+//require('can-validate-legacy/can-validate-test');
+//require('../view/ejs/ejs_test');
+//
+//// Ecosystem tests
+//require('can-fixture/test/fixture_test');
+//require('can-connect-signalr/test');
+//require('can-connect-cloneable/test/test');
+//require('can-kefir/can-kefir-test');
+//require('can-stream/can-stream_test');
+//require('can-stream-kefir/can-stream-kefir_test');
+//require('can-ndjson-stream/can-ndjson-stream-test');
+//require('can-connect-ndjson/test/can-connect-ndjson-test');
+//require('can-define-stream/can-define-stream_test');
+//require('can-define-stream-kefir/can-define-stream-kefir_test');
+//require('react-view-model/test/test');
+//require('can-react-component/test/test');
+//// require('can-jquery/test/test');
+//// require('can-vdom/test/test');
+//// require('can-zone/test/test');
+//
+//
+//// Integration tests
+//require('../docs/can-guides/experiment/todomvc/test');
+//require('./integration/all/test');
