@@ -18,5 +18,6 @@ before_script:
   - npm run http-server &
   - sleep 2
 addons:
+  hosts: canjs.test
   sauce_connect: true
   firefox: "53.0"

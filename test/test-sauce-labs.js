@@ -39,7 +39,7 @@ var platforms = [{
 	deviceName: 'iPhone 7 Simulator'
 }];
 
-var url = 'http://localhost:3000/test/index.html?hidepassed';
+var url = 'http://canjs.test:3000/test/index.html?hidepassed';
 
 testSauceLabs({
 	urls: [{ name: "canjs", url : url }],
