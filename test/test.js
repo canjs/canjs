@@ -54,8 +54,16 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 require('can-connect-ndjson/test/can-connect-ndjson-test');
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
-require('react-view-model/test/test');
-require('can-react-component/test/test');
+
+var browserSupportsReact = (function() {
+	return typeof Map !== 'undefined' &&
+		typeof Set !== 'undefined' &&
+		typeof window.requestAnimationFrame !== 'undefined';
+}());
+if (browserSupportsReact) {
+	require('react-view-model/test/test');
+	require('can-react-component/test/test');
+}
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
