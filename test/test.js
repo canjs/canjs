@@ -31,6 +31,7 @@ require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-ajax/can-ajax-test');
 require('can-globals/can-globals-test');
+require('can-define-lazy-value/can-define-lazy-value-test');
 
 
 // Legacy tests

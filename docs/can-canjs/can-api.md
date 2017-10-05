@@ -133,6 +133,9 @@ _Utility libraries that power the core collection._
 - **[can-globals]** <small><%can-globals.package.version%></small> An environment agnostic container for global variables.
   - `npm install can-globals --save`
   - <a class="github-button" href="https://github.com/canjs/can-globals">Star</a>
+- **[can-define-lazy-value]** <small><%can-define-lazy-value.package.version%></small> An environment agnostic container for global variables.
+  - `npm install can-define-lazy-value --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define-lazy-value">Star</a>
 
 </div>
 

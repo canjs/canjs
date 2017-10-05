@@ -15,5 +15,6 @@ require("can-attribute-encoder");
 require("can-ajax");
 require("can-globals");
 require("can-reflect");
+require("can-define-lazy-value");
 
 module.exports = can;
