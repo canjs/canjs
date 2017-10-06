@@ -130,17 +130,16 @@ npm install <PACKAGE_NAME> --save
 
 Once the project is added as a dependency, the source project's main file needs to be included in the CanJS project.
 
-In the root directory of the project, locate the `ecosystem.js` JavaScript file - the file should be located in the CanJS project root.
+In the root directory of the project, locate the appropriate JavaScript file.
 
 ```md
 - /canjs
- - core.js
+ - can.js
  - ecosystem.js
- - infrastructure.js
  - legacy.js
 ```
 
-Open the desired file and require the source project.
+Open the desired file and require the source project. For infrastructure and core packages, use the `can.js` file.
 
 ```javascript
 require('<SOURCE_PACKAGE_NAME>');
@@ -201,6 +200,8 @@ If you can't you might need to:
 ## Integrate tests with CanJS
 
 Open the main test file in the CanJS repo, located at `canjs/test/test.js`.
+
+> Note: The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them to `canjs/test/test-dev-only.js`.
 
 Require the project repo's test main test file in the appropriate area. For example, if the project repo will go in "Legacy" area of the site, then add it to the "Legacy" section of the test file.
 

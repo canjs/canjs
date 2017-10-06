@@ -76,6 +76,9 @@ _Utility libraries that power the core collection._
 - **[can-simple-map]** <small><%can-simple-map.package.version%></small> Simple observable object
   - `npm install can-simple-map --save`
   - <a class="github-button" href="https://github.com/canjs/can-simple-map">Star</a>
+- **[can-simple-observable]** <small><%can-simple-observable.package.version%></small> Create an observable value
+  - `npm install can-simple-observable --save`
+  - <a class="github-button" href="https://github.com/canjs/can-simple-observable">Star</a>
 - **[can-view-callbacks]** <small><%can-view-callbacks.package.version%></small> Register custom elements or attributes in can-stache
   - `npm install can-view-callbacks --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-callbacks">Star</a>
@@ -124,6 +127,15 @@ _Utility libraries that power the core collection._
 - **[react-view-model]** <small><%react-view-model.package.version%></small> Create an auto-rendering container component with an observable view-model.
   - `npm install react-view-model --save`
   - <a class="github-button" href="https://github.com/canjs/react-view-model">Star</a>
+- **[can-ajax]** <small><%can-ajax.package.version%></small> jQuery-inspired AJAX request library.
+  - `npm install can-ajax --save`
+  - <a class="github-button" href="https://github.com/canjs/can-ajax">Star</a>
+- **[can-globals]** <small><%can-globals.package.version%></small> An environment agnostic container for global variables.
+  - `npm install can-globals --save`
+  - <a class="github-button" href="https://github.com/canjs/can-globals">Star</a>
+- **[can-define-lazy-value]** <small><%can-define-lazy-value.package.version%></small> An environment agnostic container for global variables.
+  - `npm install can-define-lazy-value --save`
+  - <a class="github-button" href="https://github.com/canjs/can-define-lazy-value">Star</a>
 
 </div>
 
@@ -271,6 +283,7 @@ __Infrastructure Collection__
   "can-event": "<%can-event.package.version%>",
   "can-observation": "<%can-observation.package.version%>",
   "can-simple-map": "<%can-simple-map.package.version%>",
+  "can-simple-observable": "<%can-simple-observable.package.version%>",
   "can-util": "<%can-util.package.version%>",
   "can-view-callbacks": "<%can-view-callbacks.package.version%>",
   "can-view-live": "<%can-view-live.package.version%>",
