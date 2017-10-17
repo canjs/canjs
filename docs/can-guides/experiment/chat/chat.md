@@ -11,7 +11,7 @@
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-<a class="jsbin-embed" href="//jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
 
 The JS Bin loads [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
 library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].

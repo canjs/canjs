@@ -3,7 +3,7 @@
 
 @description This guide walks you through building a simple file navigation
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 3.4. Checkout the [guides/recipes/file-navigator-advanced]
+CanJS 3.10. Check out the [guides/recipes/file-navigator-advanced]
 for an example that makes AJAX requests for its data and uses [can-component].
 
 
@@ -11,16 +11,22 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="//jsbin.com/faraval/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/hisupin/4/embed?js,output">
+  Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
+</a>
+<a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
 
 Click `ROOT/` to see its files and folders.
 
-> Note: If you don't see any files show up, run the JS Bin again. This
-> JS Bin uses randomly generated files so it's possible nothing shows up.
+> Note: If you don’t see any files show up, run the JS Bin again. This
+> JS Bin uses randomly generated files, so it’s possible nothing shows up.
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="//jsbin.com/caquxa/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/16/embed?html,css,output">
+  Starter version of the CanJS File Navigator Guide (Simple) on jsbin.com
+</a>
+<a href="https://jsfiddle.net/donejs/5vmsnx89/">Open in JSFiddle</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -123,7 +129,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
 ### What you need to know
 
 - CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
+  and keep it updated.  Templates can be authored in `<script>` tags like:
 
   ```html
   <script type="text/stache" id="app-template">
@@ -131,7 +137,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
   </script>
   ```
 
-  A [can-stache] template uses
+- A [can-stache] template uses
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
@@ -156,7 +162,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 - Insert a fragment into the page with:
 
-  ```
+  ```js
   document.body.appendChild(frag);
   ```
 
@@ -188,22 +194,24 @@ Update the __HTML__ tab to:
   </ul>
 </script>
 ```
+@highlight 2-13
 
 Update the __JavaScript__ tab to:
 
 ```js
 var template = can.stache.from("entities-template");
 
-var frag = template( rootEntityData );  
+var frag = template(rootEntityData);
 
 document.body.appendChild( frag );
 ```
+@highlight 1-5
 
 ## Render all the files and folders
 
 ### The Problem
 
-Now lets render all of the files and folders!  This means we want to render the files and folders recursively.  Every time we
+Now let’s render all of the files and folders!  This means we want to render the files and folders recursively.  Every time we
 find a folder, we need to render its contents.
 
 ### Things to know
@@ -218,7 +226,7 @@ find a folder, we need to render its contents.
 
   ```js
   var template = can.stache.from("TEMPLATE_ID");
-  can.stache.registerPartial( "PARTIAL_NAME", template );
+  can.stache.registerPartial("PARTIAL_NAME", template);
   ```
 
 ### The Solution
@@ -251,7 +259,7 @@ Update the __JavaScript__ tab to:
 
 ```js
 var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template );
+can.stache.registerPartial("entities", template);
 
 var frag = template(rootEntityData);
 
@@ -268,11 +276,11 @@ we change the data, the UI will automatically change.
 
 ### Things to know
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a type by defining the type's
-  properties and the properties' types like:
+- [can-define/map/map.extend DefineMap.extend] allows you to define a type by defining the type’s
+  properties and the properties’ types like:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
+  Person = can.DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })
@@ -286,7 +294,7 @@ we change the data, the UI will automatically change.
     age: 34
   });
 
-  person.on("name", function(ev, newName){
+  person.on("name", function(ev, newName) {
     console.log("person name changed to ", newName);
   });
 
@@ -296,21 +304,21 @@ we change the data, the UI will automatically change.
 - `can.DefineMap` supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list can.DefineList] of typed instances like:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
+  Person = can.DefineMap.extend("Person", {
     name: "string",
     age: "number",
     addresses: [Address]
   });
   ```
 
-  However, if `Address` wasn't immediately available, you could do the same thing like:
+  However, if `Address` wasn’t immediately available, you could do the same thing like:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
+  Person = can.DefineMap.extend("Person", {
     name: "string",
     age: "number",
     addresses: [{
-      type: function(rawData){
+      type: function(rawData) {
         return new Address(rawData);
       }
     }]
@@ -327,14 +335,14 @@ Update the __JavaScript__ tab to:
 - Use `rootEntity` to render the template
 
 ```js
-var Entity = can.DefineMap.extend("Entity",{  
+var Entity = can.DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
   hasChildren: "boolean",
   type: "string",
   children: [{
-    type: function(entity){
+    type: function(entity) {
       return new Entity(entity)
     }
   }]
@@ -342,19 +350,18 @@ var Entity = can.DefineMap.extend("Entity",{
 
 var rootEntity = new Entity(rootEntityData);
 
-
 var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template );
+can.stache.registerPartial("entities", template);
 
 var frag = template(rootEntity);
 
 document.body.appendChild( frag );
 ```
-@highlight 1-14,18
+@highlight 1-14,19
 
 ### Test it
 
-Run the following the `console` tab:
+Run the following the __Console__ tab:
 
 ```js
 rootEntity.name= "Something New";
@@ -408,7 +415,7 @@ Update the __JavaScript__ tab to:
 - Add a `toggleOpen` method to `Entity`.
 
 ```js
-var Entity = can.DefineMap.extend("Entity",{
+var Entity = can.DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
@@ -428,7 +435,7 @@ var Entity = can.DefineMap.extend("Entity",{
 var rootEntity = new Entity(rootEntityData);
 
 var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template );
+can.stache.registerPartial("entities", template);
 
 var frag = template(rootEntity);              
 
@@ -443,25 +450,32 @@ Update the __HTML__ tab to:
 
 ```html
 <script type="text/stache" id="entities-template">
-<span on:click="toggleOpen()">{{name}}</span>
-{{#if isOpen}}              
+  <span on:click="toggleOpen()">{{name}}</span>
+  {{#if isOpen}}
   <ul>
     {{#each ./children}}
       <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
         {{#eq type 'file'}}
           📝 <span>{{name}}</span>
         {{else}}
-          📁 {{>entities}}      
+          📁 {{>entities}}
         {{/eq}}
       </li>
     {{/each}}
   </ul>
-{{/if}}                        
+  {{/if}}
 </script>
 ```
 @highlight 2,3,15
 
-When complete, you should have a working file-navigation widget
-like the completed JS Bin above.
+## Result
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+When complete, you should have a working file-navigation widget
+like the following JS Bin:
+
+<a class="jsbin-embed" href="https://jsbin.com/hisupin/4/embed?js,output">
+  Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
+</a>
+<a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.0"></script>

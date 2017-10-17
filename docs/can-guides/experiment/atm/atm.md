@@ -11,7 +11,7 @@ and manage complex state.  It takes about 2 hours to complete.
 
 Check out the final app:
 
-<a class="jsbin-embed" href="//jsbin.com/daroce/2/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/daroce/2/embed?js,output">JS Bin on jsbin.com</a>
 
 Notice it has tests at the bottom of the `Output` tab.
 
