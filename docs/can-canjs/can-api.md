@@ -233,6 +233,9 @@ still accept patches._
 - **[can-map-backup]** <small><%can-map-backup.package.version%></small> Save the last state
   - `npm install can-map-backup --save`
   - <a class="github-button" href="https://github.com/canjs/can-map-backup">Star</a>
+- **[can-model]** <small><%can-model.package.version%></small> Observable models for server data
+  - `npm install can-model --save`
+  - <a class="github-button" href="https://github.com/canjs/can-model">Star</a>
 - **[can-ejs]** <small><%can-ejs.package.version%></small> EJS templates
   - `npm install can-ejs --save`
   - <a class="github-button" href="https://github.com/canjs/can-ejs">Star</a>
