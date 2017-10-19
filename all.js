@@ -1,4 +1,3 @@
-// The cake is a lie
 var can = require("can-util/namespace");
 
 require("./can");
