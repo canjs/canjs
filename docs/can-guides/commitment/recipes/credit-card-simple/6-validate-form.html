@@ -1,20 +1,20 @@
 <script type='text/stache' id="payment-view">
   <form on:submit="pay(%event)">
 
-    {{#if errorMessage}}
+    {{#if(errorMessage)}}
        <div class="message">{{errorMessage}}</div>
     {{/if}}
 
     <input type='text' name='number' placeholder='Card Number'
-      {{#if cardError}}class='is-error'{{/if}}
+      {{#if(cardError)}}class='is-error'{{/if}}
       value:bind="userCardNumber"/>
 
     <input type='text' name='expiry' placeholder='MM-YY'
-      {{#if expiryError}}class='is-error'{{/if}}
+      {{#if(expiryError)}}class='is-error'{{/if}}
       value:bind="userExpiry"/>
 
     <input type='text' name='cvc' placeholder='CVC'
-      {{#if cvcError}}class='is-error'{{/if}}
+      {{#if(cvcError)}}class='is-error'{{/if}}
       value:bind="userCVC"/>
 
     <button disabled:from="isCardInvalid">Pay ${{amount}}</button>

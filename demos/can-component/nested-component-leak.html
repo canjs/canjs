@@ -17,7 +17,7 @@ steal('can/view/stache', function(){
 
 	can.Component.extend({
 		tag: 'grandparent-component',
-		view: can.stache('{{#if show}}<parent-component></parent-component>{{/if}}'),
+		view: can.stache('{{#if(show)}}<parent-component></parent-component>{{/if}}'),
 		scope: viewModel
 	});
 	can.Component.extend({

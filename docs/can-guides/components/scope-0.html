@@ -7,7 +7,7 @@ require('can/model/model');
 can.Component.extend({
     tag: "todos-editor",
     template: "<form can-click='toggle'>Edit: "+
-                "{{#if visible}}<input type='text'/>{{/if}}"+
+                "{{#if(visible)}}<input type='text'/>{{/if}}"+
               "</form>",
     viewModel: {
       visible: true,

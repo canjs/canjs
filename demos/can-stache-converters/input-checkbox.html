@@ -1,6 +1,6 @@
 <div id="out"></div>
 <script type="text/stache" id="demo-html">
-{{#each items}}
+{{#each(items)}}
 	<label>
 		<input type='checkbox' checked:bind='boolean-to-inList(this, person.owns)' />
 		{{upper(this)}}

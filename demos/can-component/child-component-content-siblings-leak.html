@@ -22,7 +22,7 @@ steal('can/view/stache', function(){
 
 	can.Component.extend({
 		tag: 'grandparent-component',
-		view: can.stache('{{#if show}}{{#items}}<child-component>\n:)\n</child-component>{{/items}}{{/if}}'),
+		view: can.stache('{{#if(show)}}{{#items}}<child-component>\n:)\n</child-component>{{/items}}{{/if}}'),
 		scope: viewModel
 	});
 

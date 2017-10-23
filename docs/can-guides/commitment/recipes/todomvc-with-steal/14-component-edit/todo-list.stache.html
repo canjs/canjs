@@ -1,9 +1,9 @@
 <!-- components/todo-list/todo-list.stache -->
 <ul id="todo-list">
-	{{#each todos}}
-    <li class="todo {{#if ./complete}}completed{{/if}}
-		{{#if isDestroying}}destroying{{/if}}
-		{{#if isEditing(this)}}editing{{/if}}">
+	{{#each(todos)}}
+    <li class="todo {{#if(./complete)}}completed{{/if}}
+		{{#if(isDestroying)}}destroying{{/if}}
+		{{#if(isEditing(this))}}editing{{/if}}">
 		<div class="view">
 			<input class="toggle" type="checkbox"
 				checked:bind="complete"

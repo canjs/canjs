@@ -9,7 +9,7 @@
 <body>
 
 <script id="app-template" type="text/stache">
-  {{#if googleApiLoadedPromise.isPending}}
+  {{#if(googleApiLoadedPromise.isPending)}}
     <div>Loading Google API ...</div>
   {{else}}
     <div>Loaded Google API</div>

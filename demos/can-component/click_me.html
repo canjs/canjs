@@ -17,7 +17,7 @@ var HelloWorldVM = DefineMap.extend({
 
 Component.extend({
    tag: "hello-world",
-   view: stache("{{#if visible}}{{message}}{{else}}Click me{{/if}}"),
+   view: stache("{{#if(visible)}}{{message}}{{else}}Click me{{/if}}"),
    ViewModel: HelloWorldVM,
    events: {
 	   click: function() {

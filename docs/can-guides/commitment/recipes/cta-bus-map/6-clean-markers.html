@@ -1,12 +1,12 @@
 <div class="top">
   <div class="header">
     <h1>{{title}}</h1>
-    {{#if routesPromise.isPending}}<p>Loading routes…</p>{{/if}}
-    {{#if vehiclesPromise.isPending}}<p>Loading vehicles…</p>{{/if}}
+    {{#if(routesPromise.isPending)}}<p>Loading routes…</p>{{/if}}
+    {{#if(vehiclesPromise.isPending)}}<p>Loading vehicles…</p>{{/if}}
   </div>
   <ul class="routes-list">
-    {{#each routesPromise.value}}
-      <li on:click="pickRoute(this)" {{#eq this route}}class="active"{{/eq}}>
+    {{#each(routesPromise.value)}}
+      <li on:click="pickRoute(this)" {{#eq(this, route)}}class="active"{{/eq}}>
         <span class="route-number">{{this.rt}}</span>
         <span class="route-name">{{this.rtnm}}</span>
         <span class="check">✔</span>
@@ -15,10 +15,10 @@
   </ul>
 </div>
 <div class="bottom">
-  {{#if route}}
+  {{#if(route)}}
     <div class="route-selected" on:click="pickRoute(route)">
       <small>Route {{route.rt}}:</small> {{route.rtnm}}
-      {{#if vehiclesPromise.isRejected}}
+      {{#if(vehiclesPromise.isRejected)}}
         <div class="error-message">No vehicles available for this route</div>
       {{/if}}
     </div>

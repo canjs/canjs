@@ -1,7 +1,7 @@
 <script type='text/stache' id='demo-html'>
 <drivers-list selected:to="*editing">
 	<ul>
-		{{#each drivers}}
+		{{#each(drivers)}}
 			<li on:click="select(.)">
 				{{title}} {{first}} {{last}} - {{licensePlate}}
 			</li>

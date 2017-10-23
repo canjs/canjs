@@ -25,9 +25,9 @@
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul id="todo-list">
-          {{#each todosPromise.value}}
-			<li class="todo {{#if complete}}completed{{/if}}
-                    {{#if isDestroying}}destroying{{/if}}">
+          {{#each(todosPromise.value)}}
+			<li class="todo {{#if(complete)}}completed{{/if}}
+                    {{#if(isDestroying)}}destroying{{/if}}">
 				<div class="view">
 					<input class="toggle" type="checkbox" checked:bind="complete">
 					<label>{{name}}</label>

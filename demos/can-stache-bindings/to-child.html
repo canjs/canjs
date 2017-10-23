@@ -30,7 +30,7 @@ var ScoreList = DefineList.extend({
 
 Component.extend({
 	tag: "player-scores",
-	view: stache('{{#each scores}} {{points}} {{/each}} = {{scores.sum()}}'),
+	view: stache('{{#each(scores)}} {{points}} {{/each}} = {{scores.sum()}}'),
 	ViewModel: DefineMap.extend({
 		scores: { Type: ScoreList }
 	})

@@ -92,7 +92,7 @@ Update the `JavaScript` tab to:
 
 Update the __HTML__ tab to:
 
-- Use [can-stache.helpers.each `{{#each todos}}`] to loop through every todo.
+- Use [can-stache.helpers.each `{{#each(todos)}}`] to loop through every todo.
 - Add `completed` to the `<li>`’s `className` if the `<li>`’s todo is complete.
 - Use [can-stache-bindings.twoWay `checked:bind`] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
 - Use [can-stache.tags.escaped `{{name}}`] to insert the value todo’s `name` as the content of the `<label>` and
@@ -138,7 +138,7 @@ on the server.
 
 Update the __HTML__ tab to:
 
- - Use [can-stache.helpers.each `{{#each todosPromise.value}}`] to loop through the promise’s resolved value, which
+ - Use [can-stache.helpers.each `{{#each(todosPromise.value)}}`] to loop through the promise’s resolved value, which
    is the list of todos returned by the server.
  - Read the active and completed number of todos from the promise’s resolved value.
 

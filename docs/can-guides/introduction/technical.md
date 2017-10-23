@@ -841,12 +841,12 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 ```html
 <ul id="todo-list">
   <!-- Loop through every todo -->
-  {{#each todos}}
+  {{#each(todos)}}
 
     <!-- Create an li with the right class names -->
-    <li class="todo {{#if complete}}completed{{/if}}
-      {{#if isDestroying}}destroying{{/if}}
-      {{#if isEditing(this)}}editing{{/if}}">
+    <li class="todo {{#if(complete)}}completed{{/if}}
+      {{#if(isDestroying)}}destroying{{/if}}
+      {{#if(isEditing(this))}}editing{{/if}}">
 
       <div class="view">
         <!-- Connect this checkbox to the `complete` property
@@ -1085,8 +1085,8 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 </header>
 
 <ul id="todo-list">
-	{{#each todos}}
-		<li class="todo {{#if complete}}completed{{/if}}">
+	{{#each(todos)}}
+		<li class="todo {{#if(complete)}}completed{{/if}}">
 				<div class="view">
 						<input class="toggle" type="checkbox" checked:bind="complete">
 						<label>{{name}}</label>
@@ -1144,7 +1144,7 @@ A template that uses those features looks like:
 ```html
 {{#players}}
     <h2>{{name}}</h2>
-    {{#each stats.forPlayerId(id) }}
+    {{#each(stats.forPlayerId(id))}}
 		<span>
 			{{type}}
 		</span>
@@ -1238,7 +1238,7 @@ following shows inspecting the [guides/todomvc]’s _“What needs to be done?�
 if the data passed to the following template changes, the DOM is automatically updated.
 
 ```html
-<h1 class="{{#if user.admin}}admin{{/if}}">Hello {{user.name}}</h1>
+<h1 class="{{#if(user.admin)}}admin{{/if}}">Hello {{user.name}}</h1>
 ```
 
 In addition to the default Mustache data bindings, the [can-stache-bindings] module
@@ -1275,7 +1275,7 @@ To understand how these strategies are used, consider a template like:
 
 ```html
 <ul>
-{{#each completeTodos() }}
+{{#each(completeTodos())}}
 	<div>{{name}}</div>
 {{/each}}
 </ul>
@@ -1364,12 +1364,12 @@ A template may load or conditionally load a module after the initial page load. 
 This feature, when used with [steal-stache](../../steal-stache.html), signals to the build that the enclosed section’s dependencies should be dynamically loaded at runtime.
 
 ```html
-{{#eq location 'home'}}
+{{#eq(location, 'home')}}
 <can-import from="components/home">
   <my-home/>
 </can-import>
 {{/eq}}
-{{#eq location 'away'}}
+{{#eq(location, 'away')}}
 <can-import from="components/chat">
   <my-chat/>
 </can-import>
@@ -1711,7 +1711,7 @@ Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
 Or, it can be lazy loaded if it’s used in a template. For example, with this template:
 
 ```html
-{{#each todos as todo}}
+{{#each(todos, todo=value)}}
   Name: {{todo.name}}
   Project: {{todo.projectRef.value.name}}
 {{/each}}

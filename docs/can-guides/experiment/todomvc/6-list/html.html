@@ -17,9 +17,9 @@
 
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-  {{#each todos}}
-    <li class="todo {{#if complete}}completed{{/if}}
-      {{#if isDestroying}}destroying{{/if}}">
+  {{#each(todos)}}
+    <li class="todo {{#if(complete)}}completed{{/if}}
+      {{#if(isDestroying)}}destroying{{/if}}">
       <div class="view">
         <input class="toggle" type="checkbox" checked:bind="complete">
         <label>{{name}}</label>

@@ -1,5 +1,5 @@
 <script type='text/stache' id='app-view'>
-  {{#if sessionPromise.value}}
+  {{#if(sessionPromise.value)}}
 
     <p class="welcome-message">
       Welcome {{sessionPromise.value.user.email}}.
@@ -7,7 +7,7 @@
     </p>
 
   {{else}}
-    {{#eq page "signup"}}
+    {{#eq(page, "signup")}}
 
       <form on:submit="signUp(%event)">
         <h2>Sign Up</h2>
@@ -37,7 +37,7 @@
 
         <button>Log In</button>
 
-		{{#if logInError}}
+		{{#if(logInError)}}
           <div class='error'>{{logInError.message}}</div>
         {{/if}}
 

@@ -1,5 +1,5 @@
 <script type='text/stache' id='app-view'>
-  {{#if sessionPromise.value}}
+  {{#if(sessionPromise.value)}}
 
     <p class="welcome-message">
       Welcome {{sessionPromise.value.user.email}}.
