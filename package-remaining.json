@@ -1,0 +1,87 @@
+{
+    "can-cid": "1.1.1",
+    "can-compute": "3.3.4",
+    "can-connect": "1.5.9",
+    "can-connect-cloneable": "0.2.1",
+    "can-connect-feathers": "3.7.0",
+    "can-connect-ndjson": "0.1.1",
+    "can-connect-signalr": "0.2.2",
+    "can-define-lazy-value": "^1.0.0",
+    "can-define-stream": "0.2.1",
+    "can-define-stream-kefir": "0.1.2",
+    "can-define-validate-validatejs": "0.1.2",
+    "can-ejs": "3.1.6",
+
+    "can-element": "0.2.2",
+
+    "can-event": "3.7.5",
+    "can-fixture": "1.1.1",
+    "can-fixture-socket": "0.7.1",
+
+    "can-jquery": "3.2.1",  //no
+
+
+    "can-kefir": "0.2.2",
+    "can-list": "3.2.1", // move to can-list-legacy
+    "can-map": "3.4.0", // move to can-map-legacy
+    "can-map-backup": "3.1.0",
+    "can-map-define": "3.1.1",
+
+    "can-observe": "0.1.3",
+
+    "can-react-component": "0.1.9",
+
+    "can-route": "3.2.3",
+    "can-route-pushstate": "3.1.2",
+    "can-set": "1.3.2",
+
+    "can-stache-converters": "3.2.2",
+
+    "can-stream": "0.3.1",
+    "can-stream-kefir": "0.3.1",
+
+    "can-validate": "1.1.0",
+    "can-validate-legacy": "1.1.0",
+    "can-validate-validatejs": "0.1.0",
+
+    "can-view-autorender": "3.1.1",
+
+    "can-view-href": "3.1.0", //no
+    "can-view-import": "3.2.1",
+
+    "react-view-model": "0.5.9"
+}
+
+├─┬ can-stache@4.0.0-pre.2
+│ ├─┬ can-route@3.2.3
+
+├─┬ can-construct@3.2.1
+│ ├── can-namespace@1.0.0 deduped
+│ ├─┬ can-types@1.1.3
+
+
+├─┬ can-observation@4.0.0-pre.14
+│ ├─┬ can-cid@1.1.1
+
+├─┬ can-reflect-promise@2.0.0-pre.3
+│ ├── can-cid@1.1.1 deduped
+│ ├─┬ can-observation@3.3.5
+
+
+├─┬ can-simple-map@4.0.0-pre.6
+│ ├── can-cid@1.1.1 deduped
+│ ├── can-types@1.1.3 deduped
+
+├─┬ can-stache-bindings@4.0.0-pre.7
+│ ├─┬ can-event-dom-enter@1.0.2
+│ │ ├── can-cid@1.1.1 deduped
+│ ├── can-types@1.1.3 deduped
+
+│ ├─┬ can-event-dom-radiochange@1.0.2
+│ │ ├── can-cid@1.1.1 deduped
+
+├─┬ can-stache-key@1.0.0-pre.5
+│ ├── can-cid@1.1.1 deduped
+
+
+├─┬ can-util@3.10.12
