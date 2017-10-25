@@ -53,7 +53,7 @@
     "can-construct": "3.2.1",
     "can-construct-super": "3.1.2",
     "can-control": "3.2.2",
-    "can-define": "1.5.1",
+    "can-define": "1.5.2",
     "can-define-lazy-value": "^1.0.0",
     "can-define-stream": "0.2.1",
     "can-define-stream-kefir": "0.1.2",
