@@ -16,7 +16,7 @@
 			   can-click="toggleAll">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul>
-			{{#each todos}}
+			{{#each(todos)}}
 				<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}"
 					can-dblclick="edit">
 					<div class="view">

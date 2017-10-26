@@ -74,7 +74,7 @@ Component.extend({
 });
 
 Component.extend({
-	view: stache("{{#if active}}<content></content>{{/if}}"),
+	view: stache("{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
 		active: { value: false },

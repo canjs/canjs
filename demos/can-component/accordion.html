@@ -81,7 +81,7 @@ Component.extend({
 Component.extend({
 	view:
 		stache("<h2 on:click='makeActive(.)'>{{title}}</h2>"+
-		"{{#if ./active}}<content></content>{{/if}}"),
+		"{{#if(./active)}}<content></content>{{/if}}"),
 	tag:"panel",
 	ViewModel: {
 		active: "boolean"

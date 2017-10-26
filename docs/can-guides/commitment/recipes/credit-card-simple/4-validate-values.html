@@ -2,15 +2,15 @@
   <form>
 
     <input type='text' name='number' placeholder='Card Number'
-	  {{#if cardError}}class='is-error'{{/if}}
+	  {{#if(cardError)}}class='is-error'{{/if}}
 	  value:bind="userCardNumber"/>
 
     <input type='text' name='expiry' placeholder='MM-YY'
-	  {{#if expiryError}}class='is-error'{{/if}}
+	  {{#if(expiryError)}}class='is-error'{{/if}}
 	  value:bind="userExpiry"/>
 
     <input type='text' name='cvc' placeholder='CVC'
-	  {{#if cvcError}}class='is-error'{{/if}}
+	  {{#if(cvcError)}}class='is-error'{{/if}}
 	  value:bind="userCVC"/>
 
 	<button>Pay ${{amount}}</button>

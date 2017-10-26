@@ -166,9 +166,9 @@ Let’s render `rootEntityData` in the page with its immediate children.
   document.body.appendChild(frag);
   ```
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
-- Use [can-stache.helpers.is {{#eq value1 value2}}] to test equality in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
 - [can-stache/keys/current {{./key}}] only returns the value in the current scope.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a className that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -182,9 +182,9 @@ Update the __HTML__ tab to:
 <script type="text/stache" id="entities-template">
   <span>{{name}}</span>
   <ul>
-    {{#each ./children}}
-      <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-        {{#eq type 'file'}}
+    {{#each(./children)}}
+      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+        {{#eq(type, 'file')}}
           📝 <span>{{name}}</span>
         {{else}}
           📁 <span>{{name}}</span>
@@ -239,9 +239,9 @@ Update the __HTML__ tab to:
 <script type="text/stache" id="entities-template">
   <span>{{name}}</span>
   <ul>
-    {{#each ./children}}
-      <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-        {{#eq type 'file'}}
+    {{#each(./children)}}
+      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+        {{#eq(type, 'file')}}
           📝 <span>{{name}}</span>
         {{else}}
           📁 {{>entities}}
@@ -399,7 +399,7 @@ We want to be able to toggle if a folder is open or closed.
   });
   ```
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
@@ -446,16 +446,16 @@ document.body.appendChild( frag );
 Update the __HTML__ tab to:
 
 - Call `toggleOpen()` when clicked.
-- Only show the children `{{#if isOpen}}` is true.
+- Only show the children `{{#if(isOpen)}}` is true.
 
 ```html
 <script type="text/stache" id="entities-template">
   <span on:click="toggleOpen()">{{name}}</span>
-  {{#if isOpen}}
+  {{#if(isOpen)}}
   <ul>
-    {{#each ./children}}
-      <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-        {{#eq type 'file'}}
+    {{#each(./children)}}
+      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+        {{#eq(type, 'file')}}
           📝 <span>{{name}}</span>
         {{else}}
           📁 {{>entities}}

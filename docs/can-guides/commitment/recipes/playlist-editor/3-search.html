@@ -1,8 +1,8 @@
 <script id="app-template" type="text/stache">
-  {{#if googleApiLoadedPromise.isPending}}
+  {{#if(googleApiLoadedPromise.isPending)}}
     <div>Loading Google API ...</div>
   {{else}}
-    {{#if signedIn}}
+    {{#if(signedIn)}}
       Welcome {{givenName}}! <button on:click="googleAuth.signOut()">Sign Out</button>
     {{else}}
       <button on:click="googleAuth.signIn()">Sign In</button>
@@ -12,13 +12,13 @@
       <input value:bind="searchQuery" placeholder="Search for videos"/>
     </div>
 
-    {{#if searchResultsPromise.isPending}}
+    {{#if(searchResultsPromise.isPending)}}
       <div class="loading">Loading videos...</div>
     {{/if}}
 
-    {{#if searchResultsPromise.isResolved}}
+    {{#if(searchResultsPromise.isResolved)}}
       <ul class='source'>
-      {{#each searchResultsPromise.value}}
+      {{#each(searchResultsPromise.value)}}
         <li>
           <a href="https://www.youtube.com/watch?v={{./id.videoId}}" target='_blank'>
             <img src="{{./snippet.thumbnails.default.url}}" width="50px"/>

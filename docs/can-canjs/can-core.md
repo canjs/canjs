@@ -266,9 +266,9 @@ var stache = require("can-stache");
 // Creates a template
 var template = stache(
 	"<ul>"+
-		"{{#if todos.isPending}}<li>Loading…</li>{{/if}}"+
-		"{{#if todos.isResolved}}"+
-			"{{#each todos.value}}"+
+		"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
+		"{{#if(todos.isResolved)}}"+
+			"{{#each(todos.value)}}"+
 				"<li class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
 			"{{else}}"+
 				"<li>No todos</li>"+
@@ -327,9 +327,9 @@ Component.extend({
 	ViewModel: TodosVM,
 	view: stache(
 		"<ul>"+
-			"{{#if todos.isPending}}<li>Loading…</li>{{/if}}"+
-			"{{#if todos.isResolved}}"+
-				"{{#each todos.value}}"+
+			"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
+			"{{#if(todos.isResolved)}}"+
+				"{{#each(todos.value)}}"+
 					"<li on:click='toggleComplete(.)'"+
 					     "class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
 				"{{else}}"+

@@ -282,11 +282,11 @@ on the page.
   can.param({format: "json", q: "select"}) //-> "format=json&q=select"
   ```  
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
 - `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
-  - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.
+  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
+  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
 
 
 ### The solution
@@ -304,17 +304,17 @@ Update the template in the __HTML__ tab to:
       <input id="location" value:to="location" type="text"/>
     </div>
 
-    {{#if placesPromise.isPending}}
+    {{#if(placesPromise.isPending)}}
       <p class="loading-message">
         Loading places…
       </p>
     {{/if}}
 
-    {{#if placesPromise.isResolved}}
+    {{#if(placesPromise.isResolved)}}
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{#each placesPromise.value}}
+          {{#each(placesPromise.value)}}
             <li>
               {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
             </li>
@@ -408,7 +408,7 @@ When a user clicks on a place, we need to indicate their selection.
   Or, when looping through a list of items, `this` refers to each item:
 
   ```html
-  {{#each items}}
+  {{#each(items)}}
     <li>{{this.name}}</li> <!-- this is each item in items -->
   {{/each}}
   ```
@@ -451,17 +451,17 @@ Update the template in the __HTML__ tab to:
       <input id="location" value:to="location" type="text"/>
     </div>
 
-    {{#if placesPromise.isPending}}
+    {{#if(placesPromise.isPending)}}
       <p class="loading-message">
         Loading places…
       </p>
     {{/if}}
 
-    {{#if placesPromise.isResolved}}
+    {{#if(placesPromise.isResolved)}}
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{#each placesPromise.value}}
+          {{#each(placesPromise.value)}}
             <li on:click="../pickPlace(this)">
               {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
             </li>
@@ -470,7 +470,7 @@ Update the template in the __HTML__ tab to:
       </div>
     {{/if}}
 
-    {{#if place}}
+    {{#if(place)}}
       <div class="forecast">
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
@@ -575,17 +575,17 @@ Update the template in the __HTML__ tab to:
        <input id="location" value:to="location" type="text"/>
      </div>
 
-     {{#if placesPromise.isPending}}
+     {{#if(placesPromise.isPending)}}
        <p class="loading-message">
          Loading places…
        </p>
      {{/if}}
 
-     {{#if placesPromise.isResolved}}
+     {{#if(placesPromise.isResolved)}}
        <div class="location-options">
          <label>Pick your place:</label>
          <ul>
-           {{#each placesPromise.value}}
+           {{#each(placesPromise.value)}}
              <li on:click="../pickPlace(this)">
                {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
              </li>
@@ -594,11 +594,11 @@ Update the template in the __HTML__ tab to:
        </div>
      {{/if}}
 
-     {{#if place}}
+     {{#if(place)}}
        <div class="forecast">
          <h1>10-day {{place.name}} Weather Forecast</h1>
          <ul>
-           {{#each forecastPromise.value}}
+           {{#each(forecastPromise.value)}}
              <li>
                <span class='date'>{{date}}</span>
                <span class='description {{toClassName(text)}}'>{{text}}</span>
@@ -832,18 +832,18 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
       <input id="location" value:to="location" type="text"/>
     </div>
 
-    {{#if placesPromise.isPending}}
+    {{#if(placesPromise.isPending)}}
       <p class="loading-message">
         Loading places…
       </p>
     {{/if}}
 
-    {{#if placesPromise.isResolved}}
-      {{#if showPlacePicker}}
+    {{#if(placesPromise.isResolved)}}
+      {{#if(showPlacePicker)}}
         <div class="location-options">
           <label>Pick your place:</label>
           <ul>
-            {{#each placesPromise.value}}
+            {{#each(placesPromise.value)}}
               <li on:click="../pickPlace(this)">
                 {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
               </li>
@@ -853,11 +853,11 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
       {{/if}}
     {{/if}}
 
-    {{#if place}}
+    {{#if(place)}}
       <div class="forecast">
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
-          {{#each forecastPromise.value}}
+          {{#each(forecastPromise.value)}}
             <li>
               <span class='date'>{{date}}</span>
               <span class='description {{toClassName(text)}}'>{{text}}</span>
