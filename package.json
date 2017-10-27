@@ -47,6 +47,7 @@
     "can-construct": "^3.2.1",
     "can-construct-super": "3.1.2",
     "can-control": "^4.0.0-pre.2",
+    "can-debug": "^1.0.0-pre.0",
     "can-define": "^2.0.0-pre.11",
     "can-define-lazy-value": "^1.0.0",
     "can-deparam": "1.0.1",

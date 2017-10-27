@@ -17,4 +17,6 @@ require("can-stache-bindings");
 //require("can-reflect");
 //require("can-define-lazy-value");
 
+require("can-debug");
+
 module.exports = can;
