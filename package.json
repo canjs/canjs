@@ -56,7 +56,7 @@
     "can-log": "0.1.0",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "0.1.6",
-    "can-observation": "^4.0.0-pre.16",
+    "can-observation": "^4.0.0-pre.17",
     "can-observation-recorder": "<2.0.0",
     "can-param": "1.0.1",
     "can-queues": "<2.0.0",

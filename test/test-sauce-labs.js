@@ -4,7 +4,7 @@
 var testSauceLabs = require('test-saucelabs');
 
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
-var platforms = [{
+var platforms = [/*{
 	browserName: 'internet explorer',
 	platform: 'Windows 7',
 	version: '9'
@@ -16,7 +16,7 @@ var platforms = [{
 	browserName: 'internet explorer',
 	platform: 'Windows 10',
 	version: '11.0'
-}, {
+},*/ {
 	browserName: 'safari',
 	platform: 'OS X 10.12',
 	version: 'latest'
