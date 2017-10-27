@@ -56,7 +56,6 @@
 │ ├─┬ can-route@3.2.3
 
 ├─┬ can-construct@3.2.1
-│ ├── can-namespace@1.0.0 deduped
 │ ├─┬ can-types@1.1.3
 
 
