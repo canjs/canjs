@@ -109,7 +109,7 @@
     "can-view-scope": "3.3.8",
     "can-view-target": "3.1.4",
     "can-zone": "0.6.12",
-    "react-view-model": "0.5.9"
+    "react-view-model": "1.0.0-pre.2"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
