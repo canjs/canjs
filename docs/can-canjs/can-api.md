@@ -208,6 +208,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-ndjson-stream]** <small><%can-ndjson-stream.package.version%></small> Convert ndjson stream into a ReadableStream of JS objects
   - `npm install can-ndjson-stream --save`
   - <a class="github-button" href="https://github.com/canjs/can-ndjson-stream">Star</a>
+- **[can-observe]** <small><%can-observe.package.version%></small> Create plain observable objects
+  - `npm install can-observe --save`
+  - <a class="github-button" href="https://github.com/canjs/can-observe">Star</a>
 - **[can-element]** <small><%can-element.package.version%></small> Create custom elements
 	- `npm install can-element --save`
 	- <a class="github-button" href="https://github.com/canjs/can-element">Star</a>
