@@ -96,7 +96,7 @@
     "can-util": "3.10.11",
     "can-validate": "1.1.0",
     "can-validate-legacy": "1.1.0",
-    "can-validate-validatejs": "0.1.0",
+    "can-validate-validatejs": "0.1.1",
     "can-vdom": "3.2.3",
     "can-view-autorender": "3.1.1",
     "can-view-callbacks": "3.2.2",
