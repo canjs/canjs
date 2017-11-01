@@ -208,6 +208,7 @@
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache,react-view-model}/**/*.{js,md}",
       "ignore": [
+        "node_modules/can-namespace/**/*",
         "node_modules/can-wait/examples/**/*",
         "node_modules/can-*/dist/**/*",
         "node_modules/*/node_modules/**/*"
