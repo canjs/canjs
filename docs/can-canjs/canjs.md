@@ -34,7 +34,7 @@ Get started with CanJS by following one of the tutorials below.
             <li>
                 <a href="doc/guides/setup.html">
                     <div>
-                        <img src="../docs/images/home/gear.svg">
+                        <img src="docs/images/home/gear.svg">
                     </div>
                     Setting Up CanJS
                 </a>
@@ -50,7 +50,7 @@ Get started with CanJS by following one of the tutorials below.
             <li>
                 <a href="doc/guides/chat.html" title="Learn how to build a real-time chat app.">
                     <div>
-                        <img src="../docs/images/home/chat-bubble.svg">
+                        <img src="docs/images/home/chat-bubble.svg">
                     </div>
                     Chat Guide
                 </a>
@@ -58,7 +58,7 @@ Get started with CanJS by following one of the tutorials below.
             <li>
                 <a href="doc/guides/todomvc.html" title="Learn how to build the classic TodoMVC app.">
                     <div>
-                        <img src="../docs/images/home/check-mark.svg">
+                        <img src="docs/images/home/check-mark.svg">
                     </div>
                     TodoMVC Guide
                 </a>
@@ -66,7 +66,7 @@ Get started with CanJS by following one of the tutorials below.
             <li>
                 <a href="doc/guides/atm.html" title="Learn how to build an Automated Teller Machine app.">
                     <div>
-                        <img src="../docs/images/home/credit-card.svg">
+                        <img src="docs/images/home/credit-card.svg">
                     </div>
                     ATM Guide
                 </a>
