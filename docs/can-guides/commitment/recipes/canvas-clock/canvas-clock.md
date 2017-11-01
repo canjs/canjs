@@ -323,7 +323,7 @@ In this section, we will:
 
 - Draw the minute hand `3` pixels wide, dark gray (`#423`), and 65% of the
   clock's radius.
-- Draw the minute hand `4` pixels wide, dark blue (`#42F`), and 45% of the
+- Draw the hour hand `4` pixels wide, dark blue (`#42F`), and 45% of the
   clock's radius.
 
 ### What you need to know
