@@ -20,20 +20,20 @@
         </span>
         <ul id="filters">
             <li>
-                <a href="{{routeUrl filter=undefined}}"
-                    {{#routeCurrent filter=undefined}}class='selected'{{/routeCurrent}}>
+                <a href="{{routeUrl(filter=undefined)}}"
+                    {{#routeCurrent(filter=undefined)}}class='selected'{{/routeCurrent}}>
                     All
                 </a>
             </li>
             <li>
-                <a href="{{routeUrl filter='active'}}"
-                    {{#routeCurrent filter='active'}}class='selected'{{/routeCurrent}}>
+                <a href="{{routeUrl(filter='active')}}"
+                    {{#routeCurrent(filter='active')}}class='selected'{{/routeCurrent}}>
                     Active
                 </a>
             </li>
             <li>
-                <a href="{{routeUrl filter='complete'}}"
-                    {{#routeCurrent filter='complete'}}class='selected'{{/routeCurrent}}>
+                <a href="{{routeUrl(filter='complete')}}"
+                    {{#routeCurrent(filter='complete')}}class='selected'{{/routeCurrent}}>
                     Completed
                 </a>
             </li>

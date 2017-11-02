@@ -19,7 +19,7 @@
 <input type="text" value:bind="newMessage" />
 <button on:click="send()">Send</button>
 <ul>
-	{{#each messages}}
+	{{#each(messages)}}
 		<li>{{text}} <span>sent on {{date}}</span></li>
 	{{/each}}
 </ul>

@@ -21,7 +21,7 @@ suite.add( "can-stache spinning circles", function() {
 }, {
 	setup: function() {
 		var template = stache(
-			"{{#each boxes}}" +
+			"{{#each(boxes)}}" +
 			"<div class='box-view'>" +
 			"<div class='box' id='box-{{number}}'  style='{{style}}'>" +
 			"{{content}}" +

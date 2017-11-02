@@ -1,5 +1,5 @@
 <script type='text/stache' can-autorender id='demo-html'>
-{{#each items}}
+{{#each(items)}}
 	<li on:click='items.splice(%index,1)'>{{name}}</li>
 {{/each}}
 </script>

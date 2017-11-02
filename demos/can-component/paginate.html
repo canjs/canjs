@@ -57,7 +57,7 @@
 <script id="demo-html" type='text/stache'>
 <my-app>
   <my-grid promiseData:from='websitesPromise'>
-    {{#each items}}
+    {{#each(items)}}
       <tr>
         <td width='40%'>{{name}}</td>
         <td width='70%'>{{url}}</td>

@@ -32,6 +32,12 @@ require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-ajax/can-ajax-test');
 require('can-globals/can-globals-test');
 require('can-define-lazy-value/define-lazy-value-test');
+require('can-assign/can-assign-test');
+require('can-dom-events/can-dom-events-test');
+require('can-event-dom-enter/can-event-dom-enter-test');
+require('can-event-dom-radiochange/can-event-dom-radiochange-test');
+require('can-parse-uri/can-parse-uri-test');
+require('can-validate-interface/test');
 
 
 // Legacy tests
@@ -53,6 +59,9 @@ require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
 require('can-ndjson-stream/can-ndjson-stream-test');
 require('can-connect-ndjson/test/can-connect-ndjson-test');
+if(typeof Proxy === "function"){
+	require('can-observe/test');
+}
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
 
@@ -61,6 +70,7 @@ require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
+require('can-zone-storage/test/can-zone-storage_zone-test');
 
 
 // Integration tests

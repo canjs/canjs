@@ -7,7 +7,7 @@
 </script>
 <script id='drivers-stache' type='text/stache'>
 <ul>
-  {{#each drivers}}
+  {{#each(drivers)}}
     <li on:click="select(.)">
       {{title}} {{first}} {{last}} - {{licensePlate}}
     </li>

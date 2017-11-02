@@ -14,8 +14,8 @@
 	<div class="screen-content">
 		<div class="screen-glass">
 
-{{#switch state}}
-    {{#case "readingCard"}}
+{{#switch(state)}}
+    {{#case("readingCard")}}
     	<h2>Reading Card</h2>
 		<p>Welcome to canATM where there are <strong>never</strong>
     	  fees!</p>
@@ -26,31 +26,31 @@
     	</p>
     {{/case}}
 
-    {{#case "readingPin"}}
+    {{#case("readingPin")}}
     	<h2>Reading Pin</h2>
     {{/case}}
 
-    {{#case "choosingTransaction"}}
+    {{#case("choosingTransaction")}}
     	<h2>Choose Transaction</h2>
     {{/case}}
 
-    {{#case  "pickingAccount"}}
+    {{#case("pickingAccount")}}
     	<h2>Pick Account</h2>
     {{/case}}
 
-    {{#case "depositInfo"}}
+    {{#case("depositInfo")}}
     	<h2>Deposit</h2>
     {{/case}}
 
-    {{#case "withdrawalInfo"}}
+    {{#case("withdrawalInfo")}}
     	<h2>Withdraw</h2>
     {{/case}}
 
-    {{#case "successfulTransaction"}}
+    {{#case("successfulTransaction")}}
     	<h2>Transaction Successful!</h2>
     {{/case}}
 
-    {{#case  "printingReceipt"}}
+    {{#case("printingReceipt")}}
     	<h2>Printing Receipt</h2>
     {{/case}}
 

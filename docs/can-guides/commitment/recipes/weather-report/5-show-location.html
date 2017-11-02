@@ -3,30 +3,30 @@ Longitude: {{geoLocation.coords.longitude}},
 Error: {{geoLocationError.message}}
 
 <div class="weather-widget">
-  {{#if showEnableGeoLocationMessage}}
+  {{#if(showEnableGeoLocationMessage)}}
     <p class="loading-message">
       Please Enable Location Services…
     </p>
   {{/if}}
 
-  {{#if showEnterLocation}}
+  {{#if(showEnterLocation)}}
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
       <input id="location" value:to="location" type="text"/>
     </div>
   {{/if}}
 
-  {{#if placesPromise.isPending}}
+  {{#if(placesPromise.isPending)}}
     <p class="loading-message">
       Loading places…
     </p>
   {{/if}}
 
-  {{#if showPlacePicker}}
+  {{#if(showPlacePicker)}}
     <div class="location-options">
       <label>Pick your place:</label>
       <ul>
-        {{#each placesPromise.value}}
+        {{#each(placesPromise.value)}}
           <li on:click="../pickPlace(this)">{{name}}, {{admin1.content}},
               {{country.code}} ({{placeTypeName.content}})</li>
         {{/each}}
@@ -34,11 +34,11 @@ Error: {{geoLocationError.message}}
     </div>
   {{/if}}
 
-  {{#if place}}
+  {{#if(place)}}
     <div class="forecast">
       <h1>10 day {{place.name}} Weather Forecast</h1>
       <ul>
-        {{#each forecastPromise.value}}
+        {{#each(forecastPromise.value)}}
           <li>
             <span class='date'>{{date}}</span>
             <span class='description {{toClassName(text)}}'>{{text}}</span>

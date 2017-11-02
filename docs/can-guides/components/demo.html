@@ -120,7 +120,7 @@ can.Component.extend({
 	tag: "todos-list",
 	template:
 		"<ul>"+
-		  "{{#each todos}}"+
+		  "{{#each(todos)}}"+
 			"<li>"+
 		      "<input type='checkbox' can-value='{complete}'>"+
 		      "<span {{todoClass}} can-click='select'>{{name}}</span> "+

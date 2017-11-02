@@ -240,7 +240,7 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
     }
   }) //-> Promise
   ```
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
 - Promises are observable in `can-stache`. For a promise `myPromise`:
     - `myPromise.value` is the resolved value of the promise
 	- `myPromise.isPending` is true if the promise has not resolved
@@ -380,7 +380,7 @@ we'll want to `POST` session data to `/api/session` and update `sessionPromise` 
 
 ### What you need to know
 
-- Use [can-stache.helpers.is {{#eq value1 value2}}] to test equality in `can-stache`.
+- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
 
 ### The solution
 

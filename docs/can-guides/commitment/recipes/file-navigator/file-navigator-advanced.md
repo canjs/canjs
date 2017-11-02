@@ -273,12 +273,12 @@ In this section, we’ll list the files and folders within the root folder.
 
 ### Things to know
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
-- Use [can-stache.helpers.is {{#eq value1 value2}}] to test equality in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
-  - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.
+  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
+  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
 - Write `<div class="loading">Loading</div>` when files are loading.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a class attribute that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -292,13 +292,13 @@ the promise is pending, and then writes out an `<li>` for each entity in the res
 ```html
 <script type="text/stache" id="app-template">
   <span>{{folder.name}}</span>
-  {{#if entitiesPromise.isPending}}
+  {{#if(entitiesPromise.isPending)}}
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each entitiesPromise.value}}
-        <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-          {{#eq type 'file'}}
+      {{#each(entitiesPromise.value)}}
+        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+          {{#eq(type, 'file')}}
             📝 <span>{{name}}</span>
           {{else}}
             📁 <span>{{name}}</span>
@@ -389,19 +389,19 @@ The following:
 @sourceref ./file-navigator-advanced-7.js
 @highlight 75-91,94,only
 
-The following wraps the listing of child entities with a `{{#if isOpen}} {{/if}}`:
+The following wraps the listing of child entities with a `{{#if(isOpen)}} {{/if}}`:
 
 ```html
 <script type="text/stache" id="app-template">
   <span on:click="toggleOpen()">{{folder.name}}</span>
-  {{#if isOpen}}
-  {{#if entitiesPromise.isPending}}
+  {{#if(isOpen)}}
+  {{#if(entitiesPromise.isPending)}}
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each entitiesPromise.value}}
-        <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-          {{#eq type 'file'}}
+      {{#each(entitiesPromise.value)}}
+        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+          {{#eq(type, 'file')}}
             📝 <span>{{name}}</span>
           {{else}}
             📁 <span>{{name}}</span>
@@ -476,7 +476,7 @@ Now we want to make all the folders able to open and close.  This means creating
   Or, when looping through a list of items, `this` refers to each item:
 
   ```html
-  {{#each items}}
+  {{#each(items)}}
     <li>{{this.name}}</li> <!-- this is each item in items -->
   {{/each}}
   ```
@@ -500,14 +500,14 @@ The following:
 <!-- CONTENT FROM app-template-->
 <script type="text/stache" id="folder-template">
   <span on:click="toggleOpen()">{{folder.name}}</span>
-  {{#if isOpen}}
-  {{#if entitiesPromise.isPending}}
+  {{#if(isOpen)}}
+  {{#if(entitiesPromise.isPending)}}
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each entitiesPromise.value}}
-        <li class="{{type}} {{#if hasChildren}}hasChildren{{/if}}">
-          {{#eq type 'file'}}
+      {{#each(entitiesPromise.value)}}
+        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
+          {{#eq(type, 'file')}}
             📝 <span>{{name}}</span>
           {{else}}
             📁 <a-folder folder:from="this" />            <!-- CHANGED -->
