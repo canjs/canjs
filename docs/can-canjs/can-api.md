@@ -1,5 +1,14 @@
 @page api API Docs
 @parent canjs 2
+@group can-observables 1 Observables
+@group can-data-modeling 2 Data Modeling
+@group can-views 3 Views
+@group can-routing 4 Routing
+@group can-js-utilities 5 JS Utilities
+@group can-dom-utilities 6 DOM Utilities
+@group can-data-validation 7 Data Validation
+@group can-typed-data 8 Typed Data
+@group can-polyfills 9 Polyfills
 @outline 1
 @package ../../package.json
 @templateRender <% %>
