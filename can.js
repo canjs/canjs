@@ -16,5 +16,11 @@ require("can-ajax");
 require("can-globals");
 require("can-reflect");
 require("can-define-lazy-value");
+require("can-assign");
+require("can-dom-events");
+require("can-event-dom-enter");
+require("can-event-dom-radiochange");
+require("can-parse-uri");
+require("can-validate-interface");
 
 module.exports = can;

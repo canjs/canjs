@@ -145,7 +145,28 @@ _Utility libraries that power the core collection._
 - **[can-define-lazy-value]** <small><%can-define-lazy-value.package.version%></small> An environment agnostic container for global variables.
   - `npm install can-define-lazy-value --save`
   - <a class="github-button" href="https://github.com/canjs/can-define-lazy-value">Star</a>
-
+- **[can-assign]** <small><%can-assign.package.version%></small> A simplified version of Object.assign.
+  - `npm install can-assign --save`
+  - <a class="github-button" href="https://github.com/canjs/can-assign">Star</a>
+- **[can-dom-events]** <small><%can-dom-events.package.version%></small> Listen for native and custom DOM events.
+  - `npm install can-dom-events --save`
+  - <a class="github-button" href="https://github.com/canjs/can-dom-events">Star</a>
+- **[can-event-dom-enter]** <small><%can-event-dom-enter.package.version%></small> Watch for enter keys presses on a DomEventTarget.
+  - `npm install can-event-dom-enter --save`
+  - <a class="github-button" href="https://github.com/canjs/can-event-dom-enter">Star</a>
+- **[can-event-dom-radiochange]** <small><%can-event-dom-radiochange.package.version%></small> A custom event for listening to changes of inputs with type "radio".
+  - `npm install can-event-dom-radiochange --save`
+  - <a class="github-button" href="https://github.com/canjs/can-event-dom-radiochange">Star</a>
+- **[can-parse-uri]** <small><%can-parse-uri.package.version%></small> Parse a URI into its components.
+  - `npm install can-parse-uri --save`
+  - <a class="github-button" href="https://github.com/canjs/can-parse-uri">Star</a>
+- **[can-validate-interface]** <small><%can-validate-interface.package.version%></small> Utility to validate property existence.
+  - `npm install can-validate-interface --save`
+  - <a class="github-button" href="https://github.com/canjs/can-validate-interface">Star</a>
+- **[can-zone-storage]** <small><%can-zone-storage.package.version%></small> Implement a Zone-safe memory-based storage solution.
+  - `npm install can-zone-storage --save`
+  - <a class="github-button" href="https://github.com/canjs/can-zone-storage">Star</a>
+  
 </div>
 
 ### [can-ecosystem Ecosystem Collection]
