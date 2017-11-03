@@ -1,14 +1,15 @@
 /**
  * Node script that aggregates release notes for CanJS dependencies in one markdown note.
  * This note can be used for CanJS release notes or for general reference.
+ * You’ll need a personal access token to run this script: https://github.com/blog/1509-personal-api-tokens
  * To execute:
- * node generate-release-notes.js <older version> <newer version>
+ * node generate-release-notes.js <access token> <older version> <newer version>
  * // returns a string in markdown with the aggregated release notes.
  * Example usage with arguments:
- *     node generate-release-notes.js v3.8.1 v3.9.0
+ *     node generate-release-notes.js s1w5i2f2t v3.8.1 v3.9.0
  *     // returns a string in markdown with the all can-* dependency release notes between CanJS v3.8.1 and CanJS v3.9.0
  * Without optional arguments:
- *     node generate-release-notes.js
+ *     node generate-release-notes.js s1w5i2f2t
  * *     // returns a string in markdown with the all can-* dependency release notes between the most recent CanJS releases
  */
 
@@ -19,7 +20,7 @@ const GitHubApi = require("github");
 // Default to canjs/canjs repo
 const OWNER = 'canjs';
 const REPO = 'canjs'
-// const TOKEN;
+const TOKEN = process.argv[2];
 
 
 const github = new GitHubApi({
@@ -33,14 +34,14 @@ const github = new GitHubApi({
   "requestMedia": "application/vnd.github.something-custom",
 });
 
-// github.authenticate({
-//   type: "oauth",
-//   token: TOKEN
-// });
+github.authenticate({
+  type: "oauth",
+  token: TOKEN
+});
 
 async function initialize() {
-  const currentRelease = process.argv[3]
-  const previousRelease = process.argv[2];
+  const currentRelease = process.argv[4];
+  const previousRelease = process.argv[3];
 
   const fileContents = await getPackageJsonByRelease(previousRelease, currentRelease);
   const updatedDependencies = getUpdatedDependencies(fileContents.previousRelease, fileContents.currentRelease);
@@ -88,7 +89,7 @@ async function getPackageJsonByRelease(previousRelease, currentRelease) {
     console.error('Error: getFileFileContentFromCommit', err);
   }
   return {previousRelease: oldVerPackage, currentRelease: newVerPackage}
-} 
+}
 
 async function getFileContentFromCommit(sha, filename) {
 
@@ -109,7 +110,7 @@ function getUpdatedDependencies(prevVer, currentVer) {
   for (let key in currentVer.dependencies) {
     if (!prevVer.dependencies[key] || (prevVer.dependencies[key] !== currentVer.dependencies[key])) {
       updatedDependencies[key] = {
-        currentVer: currentVer.dependencies[key], 
+        currentVer: currentVer.dependencies[key],
         prevVer: prevVer.dependencies[key]
       };
     }
@@ -186,14 +187,14 @@ function createAggregateReleaseNote(allReleaseNotes, currentRelease) {
 
     allReleaseNotes[package].forEach(function(note) {
       if (note) {
-        releaseNote = `${releaseNote} - ${note} \n`; 
-      }      
+        releaseNote = `${releaseNote} - ${note} \n`;
+      }
     })
 
   })
 
   releaseNote = `${releaseNote} \n ----`;
-  
+
   return releaseNote;
 }
 
