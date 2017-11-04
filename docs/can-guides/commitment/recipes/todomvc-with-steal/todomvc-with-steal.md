@@ -353,8 +353,8 @@ Update _models/todo.js_ to the following:
   ```html
     {{something.name}}
   ```
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
 
 ### The solution
 
@@ -957,7 +957,7 @@ be added if they represent the current page.
   returns truthy if the current route matches its first parameters properties.
 
   ```html
-  {{#if routeCurrent(page='login',true)}}
+  {{#if(routeCurrent(page='login',true))}}
     You are on the login page.
   {{/if}}
   ```
@@ -966,7 +966,7 @@ be added if they represent the current page.
   set its first parameters properties:
 
   ```
-  <a href="{{routeUrl page='login'}}">Login</a>
+  <a href="{{routeUrl(page='login')}}">Login</a>
   ```
 
 ### The solution

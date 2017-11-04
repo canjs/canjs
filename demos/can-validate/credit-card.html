@@ -26,7 +26,7 @@
 	<div>
 		<label>Credit Card Number <small class="has-errors">{{formatErrors(this, 'card').join(', ')}}</small></label>
 		<input
-			class="form-control {{#if formatErrors(this, 'card').length}}has-errors{{/if}}"
+			class="form-control {{#if(formatErrors(this, 'card').length)}}has-errors{{/if}}"
 			type="text"
 			value:bind="card"
 			placeholder="XXXX-XXXX-XXXX-XXXX">
@@ -34,7 +34,7 @@
 	<div>
 		<label>Expiration Month <small class="has-errors">{{formatErrors(this, 'month').join(', ')}}</small></label>
 		<input
-			class="form-control {{#if formatErrors(this, 'month').length}}has-errors{{/if}}"
+			class="form-control {{#if(formatErrors(this, 'month').length)}}has-errors{{/if}}"
 			type="text"
 			value:bind="month"
 			placeholder="XX">
@@ -42,7 +42,7 @@
 	<div>
 		<label>Expiration Year <small class="has-errors">{{formatErrors(this, 'year').join(', ')}}</small></label>
 		<input
-			class="form-control {{#if formatErrors(this, 'year').length}}has-errors{{/if}}"
+			class="form-control {{#if(formatErrors(this, 'year').length)}}has-errors{{/if}}"
 			type="text"
 			value:bind="year"
 			placeholder="XXXX">

@@ -274,9 +274,9 @@ their respective form property:
   - `Stripe.card.validateExpiry(month, year)`
   - `Stripe.card.validateCVC(cvc)`
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
   ```html
-  {{#if error}}class='is-error'{{/if}}
+  {{#if(error)}}class='is-error'{{/if}}
   ```
 
 ### The solution

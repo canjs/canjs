@@ -11,7 +11,7 @@ var mytodo = new can.Map({name: "Do the dishes"})
 
 can.Component.extend({
   tag: "todos-editor",
-  template: "{{#if todo}}"+
+  template: "{{#if(todo)}}"+
               "<input type='text' can-value='{todo.name}'/>"+
             "{{/if}}",
   scope: {}

@@ -34,7 +34,7 @@
 </script>
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-	{{#each todos}}
+	{{#each(todos)}}
 		<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}"
 			can-dblclick="edit">
 			<div class="view">

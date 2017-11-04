@@ -12,7 +12,7 @@
 		<td></td><td>Name</td><td>Email</td>
 	</thead>
 	<tbody>
-		{{#each users}}
+		{{#each(users)}}
 		<tr>
 			<td><input on:change="toggle(.)" type="checkbox"/></td>
 			<td>{{name}}</td>

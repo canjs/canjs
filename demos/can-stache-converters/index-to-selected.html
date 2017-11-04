@@ -6,7 +6,7 @@
 <script type="text/stache" id="demo-html">
 <select value:bind="index-to-selected(~person, people)">
 
-{{#each people}}
+{{#each(people)}}
   <option value="{{%index}}">{{this}}</option>
 {{/each}}
 

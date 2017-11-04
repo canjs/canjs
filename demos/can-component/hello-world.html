@@ -10,7 +10,7 @@ steal("can/component",function(){
 	var x = 0;
 can.Component.extend({
   tag: "hello-world",
-  view: "{{#if visible}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}",
+  view: "{{#if(visible)}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}",
   viewModel: {
     visible: false,
     message: "Hello There!"

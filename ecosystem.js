@@ -13,6 +13,9 @@ require("can-construct-super");
 //require("can-jquery");
 //require("can-kefir");
 //require("can-ndjson-stream");
+//if(typeof Proxy === "function"){
+//	require("can-observe");
+//}
 //require("can-stache-converters");
 //require("can-validate");
 //require("can-validate-validatejs");
@@ -26,5 +29,6 @@ require("can-construct-super");
 //if(typeof customElements !== "undefined") {
 	//require("can-element");
 //}
+//require("can-zone-storage");
 
 module.exports = can;
