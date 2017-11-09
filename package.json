@@ -12,7 +12,7 @@
     "test": "npm run test-development && npm run test-production",
     "test-development": "npm run build && npm run testee",
     "test-production": "npm run build && npm run build-tests && npm run testee-production",
-    "ci": "npm run build && npm run test && node test/test-sauce-labs.js",
+    "ci": "npm run build && node test/test-sauce-labs.js",
     "release:pre": "npm version prerelease && npm run build && npm publish --tag=pre",
     "release:patch": "npm version patch && npm run build && npm publish",
     "release:minor": "npm version minor && npm run build && npm publish",
