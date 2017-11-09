@@ -82,7 +82,7 @@
     "can-param": "1.0.2",
     "can-parse-uri": "1.0.1",
     "can-react-component": "0.1.10",
-    "can-reflect": "1.7.3",
+    "can-reflect": "1.8.0",
     "can-reflect-promise": "1.1.5",
     "can-route": "3.2.4",
     "can-route-pushstate": "3.2.0",
