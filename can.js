@@ -16,6 +16,7 @@ require("can-ajax");
 require("can-globals");
 require("can-reflect");
 require("can-define-lazy-value");
+require("can-observe")
 require("can-assign");
 require("can-dom-events");
 require("can-event-dom-enter");

@@ -17,8 +17,6 @@
 	}
 </script>
 <script src="../../../../node_modules/es6-promise/dist/es6-promise.auto.js"></script>
-<script src="../../../../node_modules/jquery/dist/jquery.js"></script>
-<script src="../../../../dist/global/can.all.js"></script>
 
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
@@ -36,7 +34,7 @@
       <div class="view">
         <input class="toggle" type="checkbox" checked:bind="complete">
         <label on:dblclick="edit(this)">{{name}}</label>
-        <button class="destroy" on:click="destroy()"></button>
+        <button class="destroy" on:click="destroy(this)"></button>
       </div>
       <input class="edit" type="text"
         value:bind="name"
@@ -52,14 +50,14 @@
 <section id="todoapp">
 	<header id="header">
 		<h1>todos</h1>
-		<todo-create/>
+		<todo-create addTodo:from="@addTodo"/>
 	</header>
 	<section id="main" class="">
 		<input id="toggle-all" type="checkbox"
           checked:bind="allChecked"
-          disabled:from="todosList.saving.length"/>
+          />
 		<label for="toggle-all">Mark all as complete</label>
-		<todo-list todos:from="todosPromise.value"/>
+		<todo-list todos:from="todosList" destroy:from="@destroyTodo"/>
 	</section>
 	<footer id="footer" class="">
 		<span id="todo-count">
@@ -80,81 +78,104 @@
 			</li>
 		</ul>
 		<button id="clear-completed"
-            on:click="todosList.destroyComplete()">
+            on:click="todosPromise.value.destroyComplete()">
 			Clear completed ({{todosPromise.value.complete.length}})
 		</button>
 	</footer>
 </section>
 </script>
 
+<script src="../../../../node_modules/steal/steal.js"></script>
 <script>
-var todoAlgebra = new can.set.Algebra(
-  can.set.props.boolean("complete"),
-  can.set.props.id("id"),
-  can.set.props.sort("sort")
-);
+steal("can-jquery", "can/all.js", function($, can) {
 
-var todoStore = can.fixture.store([
-  { name: "mow lawn", complete: false, id: 5 },
-  { name: "dishes", complete: true, id: 6 },
-  { name: "learn canjs", complete: false, id: 7 }
-], todoAlgebra);
+window.Todo = class Todo {
+	constructor(obj) {
+		this.complete = false;
+		can.Reflect.assign(this, obj || {});
+		return can.observe(this);
+	}
+	set complete(val) {
+		this._complete = val;
+	}
+	get complete() {
+		return this._complete !== "false" && !!this._complete;
+	}
+	serialize() {
+		var obj = {};
+		for(var i in this) {
+			if(typeof this[i] !== "function") {
+				obj[i] = this[i];
+			}
+		}
+		return obj;
+	}
+}
 
-can.fixture("/api/todos", todoStore);
-can.fixture.delay = 1000;
-
-
-var Todo = can.DefineMap.extend({
-  id: "number",
-  name: "string",
-  complete: {type: "boolean", value: false}
-});
-
-Todo.List = can.DefineList.extend({
-  "#": Todo,
-  get active(){
-    return this.filter({complete: false});
-  },
-  get complete(){
-    return this.filter({complete: true});
-  },
-  get allComplete(){
-    return this.length === this.complete.length;
-  },
-  get saving(){
-    return this.filter(function(todo){
-      return todo.isSaving();
-    });
-  },
-  updateCompleteTo: function(value){
+window.TodoList = class TodoList extends Array {
+	constructor(val) {
+		super(0);
+		//Object.setPrototypeOf(this, TodoList.prototype); //<-- this bullshit is needed for Babel
+		if(val instanceof Array) {
+			this.push.apply(this, val);
+		} else {
+			can.Reflect.assign(this, val || {} );
+		}
+		return can.observe(this);
+	}
+  active(){
+    return this.filter(todo => !todo.complete);
+  }
+  complete(){
+    return this.filter(todo => todo.complete);
+  }
+  allComplete(){
+    return this.length === this.complete().length;
+  }
+  updateCompleteTo(value){
     this.forEach(function(todo){
       todo.complete = value;
-      todo.save();
-    });
-  },
-  destroyComplete: function(){
-    this.complete.forEach(function(todo){
-      todo.destroy();
     });
   }
-});
-
-can.connect.superMap({
-  url: "/api/todos",
-  Map: Todo,
-  List: Todo.List,
-  name: "todo",
-  algebra: todoAlgebra
-});
-
-var TodoCreateVM = can.DefineMap.extend({
-  todo: {Value: Todo},
-  createTodo: function(){
-    this.todo.save().then(function(){
-      this.todo = new Todo();
-    }.bind(this));
+  destroyComplete(){
+    this.complete().forEach(todo => {
+      this.splice(this.indexOf(todo), 1);
+    });
   }
-});
+  // equiv to 
+  push(...objs) {
+  	objs.forEach((obj) => {
+	  	if(!(obj instanceof Todo)) {
+	  		obj = new Todo(obj);
+	  	}
+	  	[].push.call(this, obj);
+  	});
+  }
+  splice(index, count, ...objs) {
+  	objs.forEach((obj, i) => {
+	  	if(!(obj instanceof Todo)) {
+	  		objs[i] = new Todo(obj);
+	  	}
+  	});
+  	[].splice.apply(this, [index, count].concat(objs));
+  }
+  static get name() {
+  	return "TodoList";
+  }
+};
+Todo.List = TodoList;
+
+class TodoCreateVM {
+	constructor(obj) {
+		this.todo = new Todo();
+		obj && can.Reflect.assign(this, obj);
+		return can.observe(this);
+	}
+  createTodo(){
+    this.addTodo(this.todo);
+    this.todo = new Todo();
+  }
+}
 
 can.Component.extend({
   tag: "todo-create",
@@ -162,28 +183,32 @@ can.Component.extend({
   ViewModel: TodoCreateVM
 });
 
-var TodoListVM = can.DefineMap.extend({
-  todos: Todo.List,
-  editing: Todo,
-  backupName: "string",
-  isEditing: function(todo){
+class TodoListVM {
+  // todos: Todo.List,
+  // editing: Todo,
+  // backupName: "string",
+  constructor(obj) {
+  	can.Reflect.assign(this, obj || {});
+  	return can.observe(this);
+  }
+  isEditing(todo){
     return todo === this.editing;
-  },
-  edit: function(todo){
+  }
+  edit(todo){
     this.backupName = todo.name;
     this.editing = todo;
-  },
-  cancelEdit: function(){
+  }
+  cancelEdit(){
     if(this.editing) {
       this.editing.name = this.backupName;
     }
     this.editing = null;
-  },
-  updateName: function() {
-    this.editing.save();
+  }
+  updateName() {
     this.editing = null;
   }
-});
+  destroy() {}
+}
 
 can.Component.extend({
   tag: "todo-list",
@@ -194,35 +219,50 @@ can.Component.extend({
 var AppVM = can.DefineMap.extend({seal: false},{
   filter: "string",
   route: "string",
-  get todosPromise(){
-    if(!this.filter) {
-      return Todo.getList({});
-    } else {
-      return Todo.getList({complete: this.filter === "complete"});
-    }
+  get todosPromise() {
+		return Promise.resolve(
+			new Todo.List([{ name: "mow lawn", complete: false, id: 5 },
+			  { name: "dishes", complete: true, id: 6 },
+  			{ name: "learn canjs", complete: false, id: 7 }])
+			);
+  },
+  todos: {
+  	get(lastSetVal, resolve) {
+	  	this.todosPromise.then(resolve);
+	  }
   },
   todosList: {
-    get: function(lastSetValue, resolve){
-      this.todosPromise.then(resolve);
+    get: function(){
+    	var filter = this.filter;
+    	if(this.todos) {
+	    	return filter ? this.todos.filter(x => x.complete === (filter === "complete")) : this.todos;
+	    }
     }
   },
+  addTodo(todo) {
+  	this.todosPromise.then(allTodos => allTodos.push(todo));
+  },
   get allChecked(){
-    return this.todosList && this.todosList.allComplete;
+    return this.todosList && this.todosList.allComplete();
   },
   set allChecked(newVal){
       this.todosList && this.todosList.updateCompleteTo(newVal);
+  },
+  destroyTodo(todo) {
+  	this.todosPromise.then(todos => todos.splice(todos.indexOf(todo), 1));
   }
 });
 
 var template = can.stache.from("todomvc-template");
 
-var appVM = new AppVM();
+var appVM = window.appVM = new AppVM();
 can.route.data = appVM;
 can.route("{filter}");
 can.route.ready();
 
 var frag = template(appVM);
 document.body.appendChild(frag);
+});
 </script>
 
     </body>
