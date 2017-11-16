@@ -92,6 +92,7 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-make-map": "^1.0.0",
+    "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.0.1",
     "es6-promise": "^4.1.0",
     "feathers": "^2.0.3",
