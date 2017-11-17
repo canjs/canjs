@@ -81,7 +81,7 @@
     "can-validate-validatejs": "^0.1.1",
     "can-vdom": "^3.2.4",
     "can-view-callbacks": "^4.0.0-pre.3",
-    "can-view-live": "^4.0.0-pre.13",
+    "can-view-live": "^4.0.0-pre.14",
     "can-view-model": "^4.0.0-pre.4",
     "can-view-nodelist": "^3.1.1",
     "can-view-parser": "^3.6.3",
