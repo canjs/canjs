@@ -1,20 +1,16 @@
 <html>
 <head>
-	<title>index-to-selected demo</title>
+	<title>selected-to-index demo</title>
 </head>
 <body>
 <script type="text/stache" id="demo-html">
-<select value:bind="index-to-selected(~person, people)">
-
-{{#each(people)}}
-  <option value="{{scope.index}}">{{this}}</option>
-{{/each}}
-
+<select value:bind="index">
+  {{#each(people)}}
+    <option value="{{scope.index}}">{{scope.index}}</option>
+  {{/each}}
 </select>
 
-<div>
-  <h2>{{person}}</h2>
-</div>
+<input value:bind="selected-to-index(~index, people)">
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
 var DefineMap = require("can-define/map/map");
@@ -25,7 +21,7 @@ require("can-stache-converters");
 var template = stache.from("demo-html");
 
 var map = new DefineMap({
-	person: "Anne",
+	index: 0,
 	people: [
 		"Matthew",
 		"Anne",
