@@ -2,7 +2,7 @@
 // they use steal-clone, which does not currently work in production
 
 // Core tests
-//require('can-connect/test/test');
+require('can-connect/test/test');
 require('can-stache/test/stache-test');
 require("can-debug/can-debug-test");
 
