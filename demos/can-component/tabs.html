@@ -36,7 +36,7 @@ tabs ul { display: inline-block; }
 <script id="demo-html" type="text/stache">
 <p><button can-click="addVegies">Add Vegetables</button></p>
 <tabs>
-  {{#each foodTypes}}
+  {{#each(foodTypes)}}
     <panel title='{{title}}'>{{content}}</panel>
   {{/each}}
 </tabs>
@@ -126,7 +126,7 @@ Component.extend({
 });
 
 Component.extend({
-	view: stache("{{#if active}}<content></content>{{/if}}"),
+	view: stache("{{#if(active)}}<content></content>{{/if}}"),
 	tag:"panel",
 	ViewModel: Panel,
 	events: {

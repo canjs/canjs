@@ -42,7 +42,7 @@
 <script id="tree-combo-stash" type='text/stache'>
   <ul class='breadcrumb'>
     <li on:click='emptyBreadcrumb()'>{{title}}</li>
-    {{#each breadcrumb}}
+    {{#each(breadcrumb)}}
       <li on:click='updateBreadcrumb(.)'>{{title}}</li>
     {{/each}}
   </ul>
@@ -52,7 +52,7 @@
         <li {{#isSelected}}class='active'{{/isSelected}} on:click='toggle(.)'>
           <input type='checkbox' {{#isSelected(.)}}checked{{/isSelected}}/>
             {{title}}
-          {{#if children.length}}
+          {{#if(children.length)}}
             <button class='showChildren' on:click='showChildren(.,%event)'>+</button>
           {{/if}}
         </li>

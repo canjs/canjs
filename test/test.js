@@ -13,16 +13,21 @@ require('can-stache-bindings/test/colon/tests');
 
 // Infrastructure tests
 require('can-ajax/can-ajax-test');
+//require('can-assign/can-assign-test');
 require('can-construct/can-construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-control/can-control_test');
 require('can-define-lazy-value/define-lazy-value-test');
 require('can-deparam/can-deparam-test');
+//require('can-dom-events/can-dom-events-test');
+//require('can-event-dom-enter/can-event-dom-enter-test');
+//require('can-event-dom-radiochange/can-event-dom-radiochange-test');
 require('can-event-queue/can-event-queue-test');
 require('can-globals/can-globals-test');
 require('can-key-tree/can-key-tree-test');
 // require('can-observation/can-observation_test'); in dev-only
 require('can-param/can-param-test');
+//require('can-parse-uri/can-parse-uri-test');
 require('can-queues/queue-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
@@ -32,6 +37,7 @@ require('can-simple-observable/can-simple-observable-test');
 require('can-stache-key/can-stache-key-test');
 require('can-symbol/can-symbol-test');
 // require('can-util/test/test');
+//require('can-validate-interface/test');
 // require('can-view-callbacks/test/callbacks-test'); in dev-only
 require('can-view-live/test/test');
 require('can-view-model/test/test');
@@ -62,6 +68,9 @@ require('can-view-target/test/test');
 require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-vdom/test/test'); uses mocha
 //require('can-connect-ndjson/test/can-connect-ndjson-test');
+//if(typeof Proxy === "function"){
+//	require('can-observe/test');
+//}
 //require('can-define-stream/can-define-stream_test');
 //require('can-define-stream-kefir/can-define-stream-kefir_test');
 
@@ -70,6 +79,7 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 // require('can-zone/test/test');
+// require('can-zone-storage/test/can-zone-storage_zone-test');
 
 
 // Integration tests

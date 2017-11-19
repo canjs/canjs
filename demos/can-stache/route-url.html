@@ -8,11 +8,11 @@
 	>home</a>
 
 <a  {{^routeCurrent page='restaurants'}}
-		href="{{routeUrl page='restaurants'}}"
+		href="{{routeUrl(page='restaurants')}}"
 	{{/routeCurrent}}
 	>restaurants</a>
 
-{{#eq page 'home'}}
+{{#eq(page, 'home')}}
 	<h1>Home page</h1>
 {{else}}
 	<h1>Restaurants page</h1>

@@ -306,11 +306,11 @@ We will do this by:
   });
   ```
 
-- Use [can-stache.helpers.if {{#if value}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each value}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
 - `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if somePromise.isPending}}`.
-  - Loop through the resolved value of the promise like: `{{#each somePromise.value}}`.
+  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
+  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
 
 ### The solution
 
@@ -444,7 +444,7 @@ We will do this by:
 
 - In stache, you can check if a promise was rejected like:
   ```html
-  {{#if somePromise.isRejected}}<p>...</p>{{/if}}
+  {{#if(somePromise.isRejected)}}<p>...</p>{{/if}}
   ```
 - The [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) method returns a rejected promise with the provided `reason`:
   ```js

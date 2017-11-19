@@ -1,10 +1,10 @@
 <div class="top">
   <div class="header">
     <h1>{{title}}</h1>
-    {{#if routesPromise.isPending}}<p>Loading routes…</p>{{/if}}
+    {{#if(routesPromise.isPending)}}<p>Loading routes…</p>{{/if}}
   </div>
   <ul class="routes-list">
-    {{#each routesPromise.value}}
+    {{#each(routesPromise.value)}}
       <li>
         <span class="route-number">{{this.rt}}</span>
         <span class="route-name">{{this.rtnm}}</span>

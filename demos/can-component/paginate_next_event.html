@@ -8,7 +8,7 @@
 <div id="demo-html">
 <script id="player-list-stache" type="text/stache">
   <ul>
-  	{{#each players}}
+  	{{#each(players)}}
   		<li {{#isEditing(.)}}class="editing"{{/isEditing}}
   			on:click='editPlayer(.)'>{{name}}</li>
   	{{/each}}
@@ -18,7 +18,7 @@
   	player:from="editingPlayer"/>
 </script>
 <script id="player-edit-stache" type="text/stache">
-	{{#if player}}
+	{{#if(player)}}
 		<input value:bind="player.name"/>
 		<button on:click="close()">X</button>
 	{{/if}}

@@ -1,5 +1,5 @@
 @page can-infrastructure Infrastructure
-@parent api 1
+@parent api 11
 @description Utility libraries that power the core and ecosystem collection.
 
 @body
@@ -160,7 +160,7 @@ document.body.innerHTML //-> Hello Earth!
 template. For example, a [can-stache] template like:
 
 ```
-{{#if over21}}name:{{{highlight name}}}.{{/if}}
+{{#if(over21)}}name:{{{highlight name}}}.{{/if}}
 ```
 
 Might result in a nodeList structure that looks like:

@@ -439,7 +439,7 @@ __2.2.3__ ( Apr 03 2015 )
 - [steal specific handling has been removed in 2.2.2 dists](https://github.com/canjs/canjs/issues/1577)
 - [Makes sure promise observe data has a cid and the promise can be read from](https://github.com/canjs/canjs/pull/1573)
 - [New promises are not rebound and can not read alternate properties on promises](https://github.com/canjs/canjs/issues/1572)
-- [List#sort does not cause {{#each key}} to update](https://github.com/canjs/canjs/issues/1566)
+- [List#sort does not cause {{#each(key)}} to update](https://github.com/canjs/canjs/issues/1566)
 - [component fire inserted event twice with zepto](https://github.com/canjs/canjs/issues/1564)
 - [svg element inside stache template is not rendred correctly](https://github.com/canjs/canjs/issues/1327)
 

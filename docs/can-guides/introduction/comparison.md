@@ -136,7 +136,7 @@ const Todo = DefineMap.extend({
 });
 
 // In stache
-{{#each todos}}
+{{#each(todos)}}
 <label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
 {{/each}}
 ```
