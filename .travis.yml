@@ -20,4 +20,4 @@ before_script:
 addons:
   hosts: canjs.test
   sauce_connect: true
-  firefox: "53.0"
+  firefox: latest
