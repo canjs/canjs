@@ -65,7 +65,7 @@ require('can-view-target/test/test');
 //require('can-kefir/can-kefir-test');
 //require('can-stream/can-stream_test');
 //require('can-stream-kefir/can-stream-kefir_test');
-require('can-ndjson-stream/can-ndjson-stream-test');
+require('can-ndjson-stream/can-ndjson-stream-test'); 
 // require('can-vdom/test/test'); uses mocha
 //require('can-connect-ndjson/test/can-connect-ndjson-test');
 //if(typeof Proxy === "function"){
