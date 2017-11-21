@@ -89,7 +89,7 @@
     "can-view-parser": "^4.0.0-pre.0",
     "can-view-scope": "^4.0.0-pre.29",
     "can-view-target": "^3.1.5",
-    "can-zone": "^0.6.14"
+    "can-zone": "^0.6.15"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
