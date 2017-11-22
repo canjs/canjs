@@ -4,7 +4,7 @@ require('can-component/test/tests');
 require('can-define/test/test');
 // require('can-stache/test/stache-test'); in dev-only
 require('can-stache-bindings/test/colon/tests');
-//require('can-set/test/test');
+require('can-set/test/test');
 // can-connect
 // can-route
 // can-stache-route-helpers
