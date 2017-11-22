@@ -16,13 +16,13 @@ var platforms = [/*{
 	browserName: 'internet explorer',
 	platform: 'Windows 10',
 	version: '11.0'
+}, {
+	browserName: 'MicrosoftEdge',
+	platform: 'Windows 10'
 },*/ {
 	browserName: 'safari',
 	platform: 'OS X 10.12',
 	version: 'latest'
-}, {
-	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10'
 }, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
