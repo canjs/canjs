@@ -71,7 +71,7 @@
     "can-simple-map": "^4.0.0-pre.13",
     "can-simple-observable": "^2.0.0-pre.22",
     "can-stache": "^4.0.0-pre.17",
-    "can-stache-bindings": "^4.0.0-pre.13",
+    "can-stache-bindings": "^4.0.0-pre.14",
     "can-stache-converters": "^3.3.0",
     "can-stache-key": "^1.0.0-pre.11",
     "can-stream": "^0.3.2",
