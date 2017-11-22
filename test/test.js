@@ -3,6 +3,7 @@ require('can-component/test/tests');
 // require('can-debug/can-debug-test'); in dev-only
 require('can-define/test/test');
 require('can-route/test/test');
+require('can-route-pushstate/can-route-pushstate_test');
 // require('can-stache/test/stache-test'); in dev-only
 require('can-stache-bindings/test/tests');
 require('can-set/test/test');
