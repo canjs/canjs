@@ -10882,7 +10882,7 @@ jQuery.extend( {
 function completed() {
 	document.removeEventListener( "DOMContentLoaded", completed );
 	window.removeEventListener( "load", completed );
-	jQuery.ready();
+	jQuery.start();
 }
 
 jQuery.ready.promise = function( obj ) {
@@ -10890,7 +10890,7 @@ jQuery.ready.promise = function( obj ) {
 
 		readyList = jQuery.Deferred();
 
-		// Catch cases where $(document).ready() is called
+		// Catch cases where $(document).start() is called
 		// after the browser event has already occurred.
 		// Support: IE9-10 only
 		// Older IE sometimes signals "interactive" too soon

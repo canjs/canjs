@@ -203,7 +203,7 @@ var MMYViewModel = Map.extend({
 var mmy = new MMYViewModel();
 route.data = mmy;
 
-route.ready();
+route.start();
 
 $("#out").html( stache.from("demo-html")(mmy) );
 

@@ -145,7 +145,7 @@ appState.products = new ProductList({});
 route("product/{productId}")
 
 // call ready after the appState is fully initialized
-route.ready();
+route.start();
 
 route.addEventListener('change', function(){
 	console.log('something changed');
