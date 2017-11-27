@@ -162,7 +162,7 @@
       "dependencies": {
         "normalize.css": "^5.0.0",
         "steal-conditional": "^0.3.6",
-        "steal-stache": "^4.0.0-pre.1"
+        "steal-stache": "^3.0.1"
       },
       "package": {
         "steal": {
@@ -197,6 +197,7 @@
       ]
     },
     "altVersions": {
+      "3.X": "https://canjs.com",
       "2.3.33": "https://v2.canjs.com"
     },
     "parent": "canjs",
