@@ -85,148 +85,159 @@ import route from "can-route";
 import "can-stache-route-helpers";
 
 var todoAlgebra = new set.Algebra(
-  set.props.boolean("complete"),
-  set.props.id("id"),
-  set.props.sort("sort")
+    set.props.boolean("complete"),
+    set.props.id("id"),
+    set.props.sort("sort")
 );
 
-var todoStore = fixture.store([
-  { name: "mow lawn", complete: false, id: 5 },
-  { name: "dishes", complete: true, id: 6 },
-  { name: "learn canjs", complete: false, id: 7 }
+var todoStore = fixture.store([{
+        name: "mow lawn",
+        complete: false,
+        id: 5
+    },
+    {
+        name: "dishes",
+        complete: true,
+        id: 6
+    },
+    {
+        name: "learn canjs",
+        complete: false,
+        id: 7
+    }
 ], todoAlgebra);
 
 fixture("/api/todos", todoStore);
 fixture.delay = 1000;
 
 class Todo extends observe.Object {
-	constructor(props) {
-		super(props);
-        if(!this.hasOwnProperty("complete")) {
+    constructor(props) {
+        super(props);
+        if (!this.hasOwnProperty("complete")) {
             this.complete = false;
         }
-	}
+    }
 }
 
 class TodoList extends observe.Array {
-	get active() {
-		return this.filter(function(todo){
+    get active() {
+        return this.filter(function(todo) {
             return todo.complete === false;
         });
-	}
-	get complete() {
-		return this.filter(function(todo){
+    }
+    get complete() {
+        return this.filter(function(todo) {
             return todo.complete === true;
         });
-	}
-	get allComplete() {
-		return this.length === this.complete.length;
-	}
-	get saving() {
-		return this.filter(function(todo) {
-			return todo.isSaving();
-		});
-	}
-	updateCompleteTo(value) {
-		this.forEach(function(todo) {
-			todo.complete = value;
-			todo.save();
-		});
-	}
-	destroyComplete() {
-		this.complete.forEach(function(todo) {
-			todo.destroy();
-		});
-	}
+    }
+    get allComplete() {
+        return this.length === this.complete.length;
+    }
+    get saving() {
+        return this.filter(function(todo) {
+            return todo.isSaving();
+        });
+    }
+    updateCompleteTo(value) {
+        this.forEach(function(todo) {
+            todo.complete = value;
+            todo.save();
+        });
+    }
+    destroyComplete() {
+        this.complete.forEach(function(todo) {
+            todo.destroy();
+        });
+    }
 }
 
 superMap({
-	url: "/api/todos",
-	Map: Todo,
-	List: TodoList,
-	name: "todo",
-	algebra: todoAlgebra
+    url: "/api/todos",
+    Map: Todo,
+    List: TodoList,
+    name: "todo",
+    algebra: todoAlgebra
 });
 
 Component.extend({
-	tag: "todo-create",
-	view: stache.from("todo-create-template"),
-	ViewModel: class TodoCreateVM extends observe.Object {
-		constructor(props) {
-			super(props);
-			this.todo = new Todo();
-		}
-		createTodo() {
-			this.todo.save().then(() => {
-				this.todo = new Todo();
-			});
-		}
-	}
+    tag: "todo-create",
+    view: stache.from("todo-create-template"),
+    ViewModel: class TodoCreateVM extends observe.Object {
+        constructor(props) {
+            super(props);
+            this.todo = new Todo();
+        }
+        createTodo() {
+            this.todo.save().then(() => {
+                this.todo = new Todo();
+            });
+        }
+    }
 });
 
 Component.extend({
-	tag: "todo-list",
-	view: stache.from("todo-list-template"),
-	ViewModel: class TodoListVM extends observe.Object {
-		isEditing(todo) {
-			return todo === this.editing;
-		}
-		edit(todo) {
-			this.backupName = todo.name;
-			this.editing = todo;
-		}
-		cancelEdit() {
-			if (this.editing) {
-				this.editing.name = this.backupName;
-			}
-			this.editing = null;
-		}
-		updateName() {
-			this.editing.save();
-			this.editing = null;
-		}
-	}
+    tag: "todo-list",
+    view: stache.from("todo-list-template"),
+    ViewModel: class TodoListVM extends observe.Object {
+        isEditing(todo) {
+            return todo === this.editing;
+        }
+        edit(todo) {
+            this.backupName = todo.name;
+            this.editing = todo;
+        }
+        cancelEdit() {
+            if (this.editing) {
+                this.editing.name = this.backupName;
+            }
+            this.editing = null;
+        }
+        updateName() {
+            this.editing.save();
+            this.editing = null;
+        }
+    }
 });
 
 class AppVM extends observe.Object {
-    constructor(props){
+    constructor(props) {
         super(props);
         // needs to not be enumerable
-        Object.defineProperty(this,"todosList",{
+        Object.defineProperty(this, "todosList", {
             enumerable: false,
             value: null,
             configurable: true,
             writable: true
         });
     }
-	connectedCallback() {
-		this.listenTo("todosPromise", (promise) => {
-			promise.then((todos) => {
-				this.todosList = todos;
-			});
-		});
+    connectedCallback() {
+        this.listenTo("todosPromise", (promise) => {
+            promise.then((todos) => {
+                this.todosList = todos;
+            });
+        });
         this.todosPromise.then((todos) => {
             console.log(JSON.stringify(todos));
             this.todosList = todos;
         });
         return this.stopListening.bind(this);
-	}
-	get todosPromise() {
+    }
+    get todosPromise() {
         console.log("todosPromise");
-		if (!this.filter) {
-			return Todo.getList({});
-		} else {
-			return Todo.getList({
-				complete: this.filter === "complete"
-			});
-		}
-	}
-	get allChecked() {
-		return this.todosList && this.todosList.allComplete;
-	}
-	set allChecked(newVal) {
-		this.todosList && this.todosList.updateCompleteTo(newVal);
-	}
+        if (!this.filter) {
+            return Todo.getList({});
+        } else {
+            return Todo.getList({
+                complete: this.filter === "complete"
+            });
+        }
+    }
+    get allChecked() {
+        return this.todosList && this.todosList.allComplete;
+    }
+    set allChecked(newVal) {
+        this.todosList && this.todosList.updateCompleteTo(newVal);
+    }
 }
 
 route.data = new AppVM();
@@ -234,9 +245,9 @@ route("{filter}");
 route.start();
 
 Component.extend({
-	tag: "todo-mvc",
-	viewModel: route.data,
-	view: stache.from("todomvc-template"),
+    tag: "todo-mvc",
+    viewModel: route.data,
+    view: stache.from("todomvc-template"),
     autoMount: true
 });
 </script>
