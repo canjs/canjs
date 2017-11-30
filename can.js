@@ -23,7 +23,7 @@ require("can-debug");
 require("can-dom-events");
 require("can-event-dom-enter");
 require("can-event-dom-radiochange");
-//require("can-parse-uri");
+require("can-parse-uri");
 //require("can-validate-interface");
 
 module.exports = can;
