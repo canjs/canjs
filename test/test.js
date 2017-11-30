@@ -21,7 +21,7 @@ require('can-construct-super/test/can-construct-super_test');
 require('can-control/can-control_test');
 require('can-define-lazy-value/define-lazy-value-test');
 require('can-deparam/can-deparam-test');
-//require('can-dom-events/can-dom-events-test');
+require('can-dom-events/can-dom-events-test');
 //require('can-event-dom-enter/can-event-dom-enter-test');
 //require('can-event-dom-radiochange/can-event-dom-radiochange-test');
 require('can-event-queue/can-event-queue-test');
