@@ -29,7 +29,7 @@ require('can-key-tree/can-key-tree-test');
 // require('can-observation/can-observation_test'); in dev-only
 require('can-param/can-param-test');
 //require('can-parse-uri/can-parse-uri-test');
-require('can-queues/queue-test');
+require('can-queues/can-queues-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-simple-dom/test/test');
