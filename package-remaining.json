@@ -1,5 +1,4 @@
 {
-    "can-compute": "3.3.4",
     "can-connect-cloneable": "0.2.1",
     "can-connect-feathers": "3.7.0",
     "can-connect-ndjson": "0.1.1",

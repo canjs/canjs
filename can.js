@@ -1,7 +1,7 @@
 var can = require("can-util/namespace");
 
 require("can-component");
-//require("can-compute");
+require("can-compute");
 //require("can-connect/all");
 require("can-define/map/map");
 require("can-define/list/list");

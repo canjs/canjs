@@ -45,6 +45,7 @@
     "can-attribute-encoder": "^0.3.2",
     "can-cid": "^1.1.2",
     "can-component": "^4.0.0-pre.12",
+    "can-compute": "^4.0.0-pre.3",
     "can-connect": "^2.0.0-pre.10",
     "can-construct": "^3.2.3",
     "can-construct-super": "^3.1.3",

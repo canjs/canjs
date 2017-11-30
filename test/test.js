@@ -1,5 +1,6 @@
 // Core tests
 require('can-component/test/tests');
+require('can-compute/can-compute_test');
 // require('can-debug/can-debug-test'); in dev-only
 require('can-define/test/test');
 // require('can-route/test/test');
