@@ -55,6 +55,8 @@
     "can-define-lazy-value": "^1.0.1",
     "can-deparam": "^1.0.3",
     "can-dom-events": "^1.0.6",
+    "can-event-dom-enter": "^1.0.4",
+    "can-event-dom-radiochange": "^1.0.4",
     "can-event-queue": "<2.0.0",
     "can-fixture": "^2.0.0-pre.1",
     "can-globals": "<2.0.0",
