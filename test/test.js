@@ -14,7 +14,7 @@ require('can-set/test/test');
 
 // Infrastructure tests
 require('can-ajax/can-ajax-test');
-//require('can-assign/can-assign-test');
+require('can-assign/can-assign-test');
 require('can-construct/can-construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-control/can-control_test');
