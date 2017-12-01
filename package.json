@@ -78,7 +78,7 @@
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "0.1.7",
     "can-observation": "3.3.6",
-    "can-observe": "1.0.1",
+    "can-observe": "2.0.0",
     "can-param": "1.0.2",
     "can-parse-uri": "1.0.1",
     "can-react-component": "0.1.10",
