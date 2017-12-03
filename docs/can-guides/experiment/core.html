@@ -1,0 +1,83 @@
+<script src="../../../node_modules/steal/steal.js" main="can/can">
+</script>
+<script>
+
+var allDeps = {};
+
+function getEveryDep(moduleName) {
+    if(allDeps[moduleName]) {
+        return allDeps[moduleName];
+    }
+    var load = System._traceData.loads[moduleName];
+
+    var deps = new Set();
+
+    load.metadata.dependencies.forEach(function(dep){
+        deps.add(dep);
+        getEveryDep(dep).forEach(function(dep){
+            deps.add(dep);
+        });
+    });
+    allDeps[moduleName] = deps;
+    return deps;
+}
+
+var sizes = {};
+
+function getSize(moduleName) {
+    if(sizes[moduleName]) {
+        return sizes[moduleName];
+    }
+    var load = System._traceData.loads[moduleName];
+    var size = load.source.length;
+    var deps = load.metadata.dependencies;
+    deps.forEach(function(dep){
+        size += getSize(dep);
+    });
+    sizes[moduleName] = size;
+    return size;
+}
+
+function getTotal(moduleName){
+    var deps = allDeps[moduleName];
+    var size = System._traceData.loads[moduleName].source.length;
+    deps.forEach(function(depName){
+        size += System._traceData.loads[depName].source.length
+    });
+    return size;
+}
+steal.done().then(function(){
+    System.import("can").then(function(can){
+
+        getEveryDep("can@4.0.0-pre.3#can");
+
+        var res = Object.keys(allDeps).map(function(moduleName){
+            return [moduleName, getTotal(moduleName)];
+        }).sort(function(a, b){
+            return b[1] - a[1];
+        });
+
+        console.log(res);
+    });
+});
+
+var showDeps = function(moduleName){
+    var cache = {};
+    var getDeps = function(moduleName){
+        if(cache[moduleName]) {
+            return cache[moduleName];
+        }
+        var load = System._traceData.loads[moduleName];
+        var deps = load.metadata.dependencies;
+        var depSizes = deps.map(function(dep){
+            var depSize = System._traceData.loads[dep].source.length;
+            var totalSize = getTotal(dep);
+            return [dep,totalSize, depSize,totalSize - depSize, getDeps(dep) ]
+        }).sort(function(a, b){
+            return b[1] - a[1];
+        });
+        return cache[moduleName] = depSizes;
+    }
+    return getDeps(moduleName);
+}
+</script>
