@@ -11,5 +11,6 @@ require('can-attribute-encoder/can-attribute-encoder-test');
 require('can-observation/can-observation_test');
 require('can-view-callbacks/test/callbacks-test');
 require('can-simple-map/can-simple-map_test');
-require('can-cid/tests');
-require('can-types/test/test');
+
+//require('can-cid/tests'); // ideally not imported by 4.0
+//require('can-types/test/test'); // should not be imported by 4.0
