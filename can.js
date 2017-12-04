@@ -10,7 +10,7 @@ require("can-route");
 require("can-set");
 // require("can-simple-observable");
 require("can-stache");
-// require("can-stache/helpers/route");
+require("can-stache-route-helpers");
 require("can-stache-bindings");
 // require("can-attribute-encoder");
 // require("can-ajax");

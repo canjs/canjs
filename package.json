@@ -79,6 +79,7 @@
     "can-stache": "^4.0.0-pre.21",
     "can-stache-bindings": "^4.0.0-pre.16",
     "can-stache-key": "^1.0.0-pre.14",
+    "can-stache-route-helpers": "^0.1.0",
     "can-symbol": "^1.4.2",
     "can-util": "^3.10.15",
     "can-validate": "^1.1.1",
