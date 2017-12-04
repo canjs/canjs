@@ -61,7 +61,7 @@ require('can-view-target/test/test');
 
 
 // Ecosystem tests
-//require('can-fixture/test/fixture_test');
+require('can-fixture/test/fixture_test');
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
 //require('can-kefir/can-kefir-test');
