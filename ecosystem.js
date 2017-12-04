@@ -8,7 +8,7 @@ require("can-construct-super");
 //require("can-define-stream");
 ///require("can-define-stream-kefir");
 //require("can-define-validate-validatejs");
-//require("can-fixture");
+require("can-fixture");
 //require("can-fixture-socket");
 //require("can-jquery");
 //require("can-kefir");
