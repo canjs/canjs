@@ -57,7 +57,7 @@
     "can-event-dom-enter": "^1.0.4",
     "can-event-dom-radiochange": "^1.0.4",
     "can-event-queue": "<2.0.0",
-    "can-fixture": "^2.0.0-pre.1",
+    "can-fixture": "^2.0.0-pre.2",
     "can-globals": "<2.0.0",
     "can-key-tree": "<2.0.0",
     "can-log": "^0.1.2",
