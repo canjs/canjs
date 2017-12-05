@@ -1,5 +1,5 @@
 <script type='text/stache' id="payment-view">
-  <form on:submit="pay(%event)">
+  <form on:submit="pay(scope.event)">
 
     {{#if(errorMessage)}}
        <div class="message">{{errorMessage}}</div>
