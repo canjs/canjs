@@ -1,6 +1,5 @@
 // Core tests
 require('can-component/test/tests');
-require('can-compute/can-compute_test');
 // require('can-debug/can-debug-test'); in dev-only
 require('can-define/test/test');
 // require('can-route/test/test');
@@ -52,7 +51,7 @@ require('can-view-target/test/test');
 // require('can-stache-converters/test/test');
 
 // Legacy tests
-
+require('can-compute/can-compute_test');
 
 //require('can-map-define/can-map-define_test');
 //require('can-view-href/test/test');

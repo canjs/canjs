@@ -4,7 +4,7 @@ var can = require("can-util/namespace");
 //require("can-route");
 //require("can-stache");
 //require("can-stache-bindings");
-//require("can-compute");
+require("can-compute");
 //require("can-event");
 require("can-view-model");
 
