@@ -122,13 +122,13 @@ var Transaction = can.DefineMap.extend({
 				self = this;
 
 			def.then(function() {
-				can.batch.start();
+				can.queues.batch.start();
 				self.set({
 					executing: false,
 					executed: true
 				});
 				self.executeEnd();
-				can.batch.stop();
+				can.queues.batch.stop();
 			}, function(reason){
 				self.set({
 					executing: false,
