@@ -9,7 +9,7 @@ require("can-compute");
 require("can-view-model");
 
 // Extra stuff
-//require("can-map");
+require("can-map");
 //require("can-list");
 //require("can-map-backup");
 //require("can-map-define");
