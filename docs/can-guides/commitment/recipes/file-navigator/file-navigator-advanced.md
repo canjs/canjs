@@ -11,7 +11,7 @@ for an easier example that produces similar functionality.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/nadebud/2/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/jegetev/1/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/evb4mkps/">Open in JSFiddle</a>
@@ -535,7 +535,7 @@ The following:
 When complete, you should have a working file-navigation widget
 like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/nadebud/2/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/jegetev/1/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/evb4mkps/">Open in JSFiddle</a>
