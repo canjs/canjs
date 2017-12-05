@@ -1,5 +1,6 @@
 @page guides/recipes/playlist-editor Playlist Editor (Advanced)
 @parent guides/recipes
+@hide
 
 @description Learn how to use YouTube's API to search for videos and make a playlist.  This
 makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
