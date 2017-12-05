@@ -60,6 +60,7 @@
     "can-fixture": "^2.0.0-pre.2",
     "can-globals": "<2.0.0",
     "can-key-tree": "<2.0.0",
+    "can-list": "^4.0.0-pre.8",
     "can-log": "^0.1.2",
     "can-map": "^4.0.0-pre.10",
     "can-namespace": "1.0.0",

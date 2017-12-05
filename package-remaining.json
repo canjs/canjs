@@ -19,7 +19,6 @@
 
 
     "can-kefir": "0.2.2",
-    "can-list": "3.2.1", // move to can-list-legacy
     "can-map-backup": "3.1.0",
     "can-map-define": "3.1.1",
 
