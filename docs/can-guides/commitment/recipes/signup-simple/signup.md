@@ -14,7 +14,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/cejuwah/1/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/cejuwah/4/embed?js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -297,10 +297,10 @@ A promise with a _session-like_ object looks like:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div on:click="doSomething(%event)"> ... </div>
+   <div on:click="doSomething(scope.event)"> ... </div>
    ```
 
-   Notice that it also passed the event object with `%event`.
+   Notice that it also passed the event object with `scope.event`.
 
 - To prevent a form from submitting, call `event.preventDefault()`.
 

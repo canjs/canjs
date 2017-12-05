@@ -9,7 +9,7 @@
   {{else}}
     {{#eq(page, "signup")}}
 
-      <form on:submit="signUp(%event)">
+      <form on:submit="signUp(scope.event)">
         <h2>Sign Up</h2>
 
         <input placeholder='email' value:to="email"/>
@@ -27,7 +27,7 @@
 
     {{else}}
 
-      <form on:submit="logIn(%event)">
+      <form on:submit="logIn(scope.event)">
         <h2>Log In</h2>
 
         <input placeholder='email' value:to="email"/>
