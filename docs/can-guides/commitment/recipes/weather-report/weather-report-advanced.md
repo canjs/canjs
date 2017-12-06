@@ -17,7 +17,7 @@ __Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/qowacac/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
-This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://rpominov.github.io/kefir/) added.
+This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://kefirjs.github.io/kefir/) added.
 
 The following sections are broken down into:
 
@@ -75,7 +75,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 ### Things to know
 
 - `DefineMap` [can-define.types.get getters] can only derive a value from other values.  They can’t
-  derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://rpominov.github.io/kefir/)
+  derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://kefirjs.github.io/kefir/)
   can do this.
 
   For example, we can create a `Kefir` stream that counts the number of times the following `person` map’s `name`
@@ -116,7 +116,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   person.name = "Payal" // logs "Payal"
   ```
 
-- Kefir’s [map](https://rpominov.github.io/kefir/#map) method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:
+- Kefir’s [map](https://kefirjs.github.io/kefir/#map) method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:
 
   ```js
   var person = new can.DefineMap({name: "Justin"});

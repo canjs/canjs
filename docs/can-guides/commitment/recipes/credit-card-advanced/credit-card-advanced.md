@@ -2,14 +2,14 @@
 @parent guides/recipes
 
 @description This guide walks through building a simple
-credit card payment form with validations. It doesn't use
+credit card payment form with validations. It doesn’t use
 [can-define]. Instead it uses `Kefir.js` streams to make a ViewModel.
 [can-kefir] is used to make the Kefir streams observable to [can-stache].
 
 
 @body
 
-In this guide you will learn how to:
+In this guide, you will learn how to:
 
 - Use Kefir streams.
 - Use the event-reducer pattern.
@@ -17,7 +17,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/1/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/2/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -29,9 +29,9 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/socozi/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/rajili/2/embed?output">JS Bin on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -55,7 +55,7 @@ The following video walks through the entire guide:
 We are going to try an alternate form of the basic CanJS setup.  We
 will still have a [can-stache] `payment-view` and render it with a
 `viewModel`.  But the `viewModel` should be a plain JavaScript object
-whose properties are all [Kefir.js](https://rpominov.github.io/kefir/)
+whose properties are all [Kefir.js](https://kefirjs.github.io/kefir/)
 streams.
 
 We will render the static content in a template, but use a
@@ -64,7 +64,7 @@ constant stream to hold the `amount` value.
 
 ### What you need to know
 
-- [Kefir.js](https://rpominov.github.io/kefir/) allows you to create streams
+- [Kefir.js](https://kefirjs.github.io/kefir/) allows you to create streams
   of events and transform those streams into other streams. For example,
   the following `numbers` stream produces three numbers with interval of 100 milliseconds:
 
@@ -77,10 +77,10 @@ constant stream to hold the `amount` value.
   ```js
   var numbers2 = numbers.map(x => x * 2);
   ```
-- Kefir supports both streams and properties.  It's worth reading [Kefir's documentation on the difference between streams and properties](https://rpominov.github.io/kefir/#about-observables).  In short:
+- Kefir supports both streams and properties.  It’s worth reading [Kefir’s documentation on the difference between streams and properties](https://kefirjs.github.io/kefir/#about-observables).  In short:
   - Properties retain their value
   - Streams do not
-- [Kefir.constant](https://rpominov.github.io/kefir/#constant) creates a property with the specified value:
+- [Kefir.constant](https://kefirjs.github.io/kefir/#constant) creates a property with the specified value:
   ```
   var property = Kefir.constant(1);
   ```
@@ -142,7 +142,7 @@ and also print back the cleaned card number (the entered number with no dashes).
   `emitterProperty` property streams are useful data sinks when getting
   user data.
 
-- Kefir streams and properties have a [map](https://rpominov.github.io/kefir/#map) method
+- Kefir streams and properties have a [map](https://kefirjs.github.io/kefir/#map) method
   that maps values on one stream to values in a new stream:
 
   ```js
@@ -474,16 +474,16 @@ we will change the __Pay__ button to say __Paying__.
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
      ```html
-     <div on:click="doSomething(%event)"> ... </div>
+     <div on:click="doSomething(scope.event)"> ... </div>
      ```
 
-     Notice that it also passed the event object with `%event`.
+     Notice that it also passed the event object with [can-stache/keys/scope#scope_event scope.event].
 
-- To prevent a form from submitting, call `event.preventDefault()`.
-- [Kefir.fromPromise](https://rpominov.github.io/kefir/#from-promise) returns a stream from the resolved value of a promise.
-- [Kefir.combine](https://rpominov.github.io/kefir/#combine) takes a list of passive streams
+- To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
+- [Kefir.fromPromise](https://kefirjs.github.io/kefir/#from-promise) returns a stream from the resolved value of a promise.
+- [Kefir.combine](https://kefirjs.github.io/kefir/#combine) takes a list of passive streams
   where the combinator will not be called when the passive streams emit a value.
-- `Kefir.concat` concatenates streams so events are produced in order.
+- [Kefir.concat](https://kefirjs.github.io/kefir/#concat) concatenates streams so events are produced in order.
   ```js
   var a = Kefir.sequentially(100, [0, 1, 2]);
   var b = Kefir.sequentially(100, [3, 4, 5]);
@@ -493,7 +493,7 @@ we will change the __Pay__ button to say __Paying__.
   //abc:  ---0---1---2---3---4---5X
   ```
 
-- [Kefir.flatMap](https://rpominov.github.io/kefir/#flat-map) flattens a stream of
+- [Kefir.flatMap](https://kefirjs.github.io/kefir/#flat-map) flattens a stream of
   streams to a single stream of values.
   ```js
   var count = Kefir.sequentially(100, [1, 2, 3]);
@@ -567,6 +567,10 @@ Update the __JavaScript__ tab to:
 @sourceref ./9-disable-payments.js
 @highlight 92-97,only
 
+## Result
 
+When complete, you should have a working credit card payment form like the following JS Bin:
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/2/embed?output">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.1"></script>

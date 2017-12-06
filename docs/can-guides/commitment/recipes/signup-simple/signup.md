@@ -6,7 +6,7 @@ a logout button.
 
 @body
 
-In this guide you will learn how to:
+In this guide, you will learn how to:
 
 - Set up a basic CanJS application.
 - Collect form data and post it to a service
@@ -23,7 +23,7 @@ To use the widget:
 3. __Click__ the _log out_ link. You will be presented with the _Sign Up_ form.
 4. __Click__ the _Log in_ link.  __Enter__ the same _email_ and _password_ you used to sign up.  __Click__ the _LOG IN_ button.  You will be logged in.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 <a class="jsbin-embed" href="https://jsbin.com/namowob/2/embed?js,output">JS Bin on jsbin.com</a>
 
@@ -302,7 +302,7 @@ A promise with a _session-like_ object looks like:
 
    Notice that it also passed the event object with `%event`.
 
-- To prevent a form from submitting, call `event.preventDefault()`.
+- To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
 
 - Use `.then` on a promise to map the source promise to another promise value.
 
