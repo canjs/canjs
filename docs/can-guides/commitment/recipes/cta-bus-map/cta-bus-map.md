@@ -6,7 +6,7 @@
 
 @body
 
-In this guide you will learn how to:
+In this guide, you will learn how to:
 
 - Use `fetch` to request data.
 - Create a custom element that wraps a google map.
@@ -31,7 +31,7 @@ The following sections are broken down the following parts:
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 

@@ -9,7 +9,7 @@ simple validation on the payment form values.
 
 @body
 
-In this guide you will learn how to:
+In this guide, you will learn how to:
 
 - Set up a basic CanJS application.
 - Collect form data and post it to a service
@@ -25,13 +25,13 @@ To use the widget:
 1. __Enter__ a _Card Number_, _Expiration Date_, and _CVC_.
 2. __Click__ on the form so those inputs lose focus.  The
    _Pay_ button should become enabled.
-3. __Click__ the _Pay_ button to get a token from Stripe which
+3. __Click__ the _Pay_ button to get a token from Stripe, which
    could be used to create a credit card payment.
 4. __Change__ the inputs to invalid values.  An error message should appear,
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 <a class="jsbin-embed" href="https://jsbin.com/melesok/1/embed?output">JS Bin on jsbin.com</a>
 
@@ -129,7 +129,7 @@ viewModel.amount = 1000;
   })
   ```
 
-  This lets you create instances of that type, get and set those properties and listen to changes like:
+  This lets you create instances of that type, get & set those properties, and listen to changes like:
 
   ```js
   var productVM = new ProductVM({});
@@ -137,7 +137,7 @@ viewModel.amount = 1000;
   productVM.age //-> 34
 
   productVM.on("age", function(ev, newAge){
-    console.log("age changed to ", newAge);
+    console.log("person age changed to ", newAge);
   });
 
   productVM.age = 35 //-> logs "person age changed to 35"
@@ -176,8 +176,9 @@ Print out the exported values like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding  
-  in `can-stache`.  For example, the following keeps `email` on the ViewModel and the input's `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
+  `can-stache`.  For example, the following keeps `email` on the ViewModel and
+  the input’s `value` in sync:
 
     ```html
     <input value:bind="email"/>
@@ -212,7 +213,7 @@ Update the __JavaScript__ tab to:
 Our data needs to be cleaned up before we pass it to the server.
 We need to create the following properties, with associated behaviors:
 
-- `cardNumber` - The user's card number as a string without hyphens (`-`).
+- `cardNumber` - The user’s card number as a string without hyphens (`-`).
 - `expiryMonth` - A number for the month entered.
 - `expiryYear` - A number for the year entered.
 - `cvc` - A number for the cvc entered.
@@ -297,7 +298,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-When the user submits the form, we need to call stripe to get
+When the user submits the form, we need to call Stripe to get
 a token that we may use to charge the credit card.
 When we get a token, we will simply alert it to the user like:
 
@@ -317,9 +318,9 @@ After submitting the form, you should see an alert like:
    <div on:click="doSomething(scope.event)"> ... </div>
    ```
 
-   Notice that it also passed the event object with `scope.event`.
+   Notice that it also passed the event object with [can-stache/keys/scope#scope_event scope.event].
 
-- To prevent a form from submitting, call `event.preventDefault()`.
+- To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
 
 - [Stripe.card.createToken](https://stripe.com/docs/stripe.js/v2#card-createToken) can be used to get a token that can be used to charge a card:
 
@@ -385,4 +386,10 @@ Update the __JavaScript__ tab to:
 @sourceref ./6-validate-form.js
 @highlight 71-81,only
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+## Result
+
+When complete, you should have a working credit card payment form like the following JS Bin:
+
+<a class="jsbin-embed" href="https://jsbin.com/konemoc/2/embed?output">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.1"></script>
