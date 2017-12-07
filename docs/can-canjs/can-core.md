@@ -419,7 +419,7 @@ var AppViewModel = DefineMap.extend({
 var appViewModel = new AppViewModel();
 route.map(appViewModel);
 
-route.ready();
+route.start();
 ```
 
 When the url changes, to something like `#!&todoId=5`, so will the

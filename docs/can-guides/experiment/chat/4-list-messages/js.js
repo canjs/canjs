@@ -49,7 +49,7 @@ var appVM = new AppVM();
 
 can.route.data = appVM;
 can.route("{page}",{page: "home"});
-can.route.ready();
+can.route.start();
 
 var template = can.stache.from('chat-template');
 var frag = template(appVM);

@@ -947,7 +947,7 @@ be added if they represent the current page.
   your application’s pretty routing rules, call it like:
 
   ```js
-  route.ready()
+  route.start()
   ```
 
 - The [can-stache/helpers/route] module provides helpers
