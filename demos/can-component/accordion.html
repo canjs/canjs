@@ -1,20 +1,20 @@
 <div id='out'></div>
 <script id="demo-html" type="text/stache">
-<accordion>
-	<panel title="Contacts">
+<my-accordion>
+	<my-panel title="Contacts">
 		<button>Change title attribute to "Users"</button>
 		<ul>
 			<li>Justin</li>
 			<li>Brian</li>
 		</ul>
-	</panel>
-	<panel title="Libraries">
+	</my-panel>
+	<my-panel title="Libraries">
 		<ul>
 			<li>CanJS</li>
 			<li>JavaScriptMVC</li>
 		</ul>
-	</panel>
-</accordion>
+	</my-panel>
+</my-accordion>
 </script>
 
 
@@ -73,7 +73,7 @@ var AccordionViewModel = DefineMap.extend({
 });
 
 Component.extend({
-	tag: "accordion",
+	tag: "my-accordion",
 	ViewModel: AccordionViewModel,
 	leakScope: true
 });
@@ -82,7 +82,7 @@ Component.extend({
 	view:
 		stache("<h2 on:click='makeActive(.)'>{{title}}</h2>"+
 		"{{#if(./active)}}<content></content>{{/if}}"),
-	tag:"panel",
+	tag:"my-panel",
 	ViewModel: {
 		active: "boolean"
 	},

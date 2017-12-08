@@ -8,9 +8,9 @@
 <div id="demo-html">
 <script id="player-list-stache" type="text/stache">
   <ul>
-  	{{#each(players)}}
-  		<li {{#isEditing(.)}}class="editing"{{/isEditing}}
-  			on:click='editPlayer(.)'>{{name}}</li>
+  	{{#each(players, player=value)}}
+  		<li {{#scope.root.isEditing(player)}}class="editing"{{/isEditing}}
+  			on:click='editPlayer(player)'>{{player.name}}</li>
   	{{/each}}
   </ul>
   <player-edit
@@ -31,15 +31,19 @@ import $ from "jquery";
 import DefineMap from "can-define/map/map";
 import DefineList from "can-define/list/list";
 
-let Player = DefineMap.extend({
+var Player = DefineMap.extend({
 	name: "string"
 });
 
-let PlayerList = DefineMap.extend({
+var PlayerList = DefineMap.extend({
 	editingPlayer: Player,
 	players: {
-		value: new DefineList([new Player({name: "Justin"}),
-			new Player({name: "Brian"})])
+		value: function() {
+			return new DefineList([
+				new Player({name: "Justin"}),
+				new Player({name: "Brian"})
+			]);
+		}
 	},
 	editPlayer: function(player){
 		this.editingPlayer = player;

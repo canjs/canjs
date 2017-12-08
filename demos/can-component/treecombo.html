@@ -49,11 +49,11 @@
   <ul class='options'>
     <content>
       {{#selectableItems}}
-        <li {{#isSelected}}class='active'{{/isSelected}} on:click='toggle(.)'>
-          <input type='checkbox' {{#isSelected(.)}}checked{{/isSelected}}/>
+        <li {{#scope.root.isSelected(.)}}class='active'{{/isSelected}} on:click='toggle(.)'>
+          <input type='checkbox' {{#scope.root.isSelected(.)}}checked{{/isSelected}}/>
             {{title}}
           {{#if(children.length)}}
-            <button class='showChildren' on:click='showChildren(.,%event)'>+</button>
+            <button class='showChildren' on:click='showChildren(.,scope.event)'>+</button>
           {{/if}}
         </li>
       {{/selectableItems}}
