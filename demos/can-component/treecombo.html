@@ -43,14 +43,14 @@
   <ul class='breadcrumb'>
     <li on:click='emptyBreadcrumb()'>{{title}}</li>
     {{#each(breadcrumb)}}
-      <li on:click='updateBreadcrumb(.)'>{{title}}</li>
+      <li on:click='updateBreadcrumb(this)'>{{title}}</li>
     {{/each}}
   </ul>
   <ul class='options'>
     <content>
       {{#selectableItems}}
-        <li {{#scope.root.isSelected(.)}}class='active'{{/isSelected}} on:click='toggle(.)'>
-          <input type='checkbox' {{#scope.root.isSelected(.)}}checked{{/isSelected}}/>
+        <li {{#scope.root.isSelected(this)}}class='active'{{/isSelected}} on:click='toggle(this)'>
+          <input type='checkbox' {{#scope.root.isSelected(this)}}checked{{/isSelected}}/>
             {{title}}
           {{#if(children.length)}}
             <button class='showChildren' on:click='showChildren(.,scope.event)'>+</button>
