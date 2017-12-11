@@ -1,9 +1,9 @@
 <body>
-	<div id='todos-list'></div>
+<div id='todos-list'></div>
 <script src="../../node_modules/steal/steal.js" id="demo-source">
+var assign = require("can-assign");
 var connect = require("can-connect");
 var fixture = require("can-fixture");
-var assign = require("can-util/js/assign/assign");
 
 var Todo = function(props){
   assign(this, props);
