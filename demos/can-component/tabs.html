@@ -1,45 +1,44 @@
 <style type="text/css">
 body {font-family: verdana}
-tabs {
+my-tabs {
 	margin-top: 20px;
 }
 button {clear: both;}
-tabs ul {
+my-tabs ul {
     padding: 0px; margin: 0px;
 }
-tabs li {
+my-tabs li {
     float: left;
     padding: 10px;
     background-color: #F6F6F6;
     list-style: none;
     margin-left: 10px;
 }
-tabs li {
+my-tabs li {
     color: #1C94C4;
     font-weight: bold;
     text-decoration: none;
 }
-tabs li.active {
+my-tabs li.active {
     color: #F6A828;
     cursor: default;
 }
-panel {
-
+my-panel {
     clear: both;
     display: block;
 }
 /* clearfix from jQueryUI */
-tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
-tabs ul { display: inline-block; }
+my-tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
+my-tabs ul { display: inline-block; }
 </style>
 <div id='out'></div>
 <script id="demo-html" type="text/stache">
-<p><button can-click="addVegies">Add Vegetables</button></p>
-<tabs>
+<p><button on:click="addVegies()">Add Vegetables</button></p>
+<my-tabs>
   {{#each(foodTypes)}}
-    <panel title='{{title}}'>{{content}}</panel>
+    <my-panel title='{{title}}'>{{content}}</my-panel>
   {{/each}}
-</tabs>
+</my-tabs>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty" id="demo-source">
 var Component = require("can-component");
@@ -61,13 +60,13 @@ var ViewModel = DefineMap.extend({
 	// Contains a list of all panel scopes within the
 	// tabs element.
 	panels: {
-		value: PanelList.extend({})
+		Value: PanelList.extend({})
 	},
 	active: {
 		Type: Panel
 	},
 
-	// When a `<panel>` element is inserted into the document,
+	// When a `<my-panel>` element is inserted into the document,
 	// it calls this method to add the panel's viewModel to the
 	// panels array.
 	addPanel: function(panel){
@@ -77,7 +76,7 @@ var ViewModel = DefineMap.extend({
 		}
 		this.panels.push(panel);
 	},
-	// When a `<panel>` element is removed from the document,
+	// When a `<my-panel>` element is removed from the document,
 	// it calls this method to remove the panel's viewModel from
 	// the panels array.
 	removePanel: function(panel){
@@ -110,16 +109,16 @@ var ViewModel = DefineMap.extend({
 });
 
 Component.extend({
-	tag: "tabs",
+	tag: "my-tabs",
 	view:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "on:click='makeActive(.)'>"+
-    			  "{{title}}"+
+    		"{{#each(panels, panel=value)}}"+
+    			"<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} "+
+    			    "on:click='makeActive(panel)'>"+
+    			  "{{panel.title}}"+
     			"</li>"+
-    		"{{/panels}}"+
+    		"{{/each}}"+
     	"</ul>"+
     	"<content></content>"),
 	ViewModel: ViewModel
@@ -127,7 +126,7 @@ Component.extend({
 
 Component.extend({
 	view: stache("{{#if(active)}}<content></content>{{/if}}"),
-	tag:"panel",
+	tag:"my-panel",
 	ViewModel: Panel,
 	events: {
 		inserted: function(){

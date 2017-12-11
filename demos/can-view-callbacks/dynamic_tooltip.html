@@ -14,7 +14,7 @@
 	<tbody>
 		{{#each(users)}}
 		<tr>
-			<td><input on:change="toggle(.)" type="checkbox"/></td>
+			<td><input on:change="toggle(this)" type="checkbox"/></td>
 			<td>{{name}}</td>
 			<td>{{email}}</td>
 		</tr>

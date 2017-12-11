@@ -11,8 +11,8 @@
 <div id='out'></div>
 <script type="text/stache" id="demo-html">
 {{#items}}
-  <div {{#isSelected}}class='selected'{{/isSelected}}
-       on:click='toggle'>
+  <div {{#isSelected()}}class='selected'{{/isSelected}}
+       on:click='toggle(this)'>
     {{title}}
   </div>
 {{/items}}

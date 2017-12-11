@@ -279,9 +279,9 @@ Component.extend({
 Component.extend({
 	tag: "next-prev",
 	view: stache('<a href="javascript://"' +
-		'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" on:click="paginate.prev()">Prev</a>' +
+		'class="prev {{#paginate.canPrev()}}enabled{{/paginate.canPrev}}" on:click="paginate.prev()">Prev</a>' +
 		'<a href="javascript://"' +
-		'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" on:click="paginate.next()">Next</a>')
+		'class="next {{#paginate.canNext()}}enabled{{/paginate.canNext}}" on:click="paginate.next()">Next</a>')
 });
 
 Component.extend({
