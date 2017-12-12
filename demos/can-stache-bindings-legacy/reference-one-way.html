@@ -1,0 +1,27 @@
+<script type="text/stache" id="demo-html">
+<year-selector *year-selector />
+Celebrate like it's {{*yearSelector.selectedYear}}!
+</script>
+<script src="../../node_modules/steal/steal.js" id='demo-source'>
+import Component from "can-component";
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+
+Component.extend({
+	tag: "year-selector",
+	template: stache("<select {($value)}='selectedYear'>"+
+			"<option value='1999'>1999</option>"+
+			"<option value='2014'>2014</option>"+
+		"</select>"),
+	ViewModel: DefineMap.extend({
+		selectedYear: {
+			value: 1999,
+			type: 'number'
+		}
+	})
+});
+
+var tree = stache(document.getElementById("demo-html").innerHTML)({});
+document.body.appendChild(tree);
+</script>
+
