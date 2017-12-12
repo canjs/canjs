@@ -1,15 +1,15 @@
 <div id='demo-html'>
 <script id="app" type="text/stache">
-<drivers selected:to="*editing"/>
-<edit-plate plateName:bind="*editing.licensePlate"/>
+<my-drivers selected:to="scope.vars.editing"/>
+<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
 </script>
 <script id='drivers-stache' type='text/stache'>
 <ul>
-  {{#each(drivers)}}
-    <li on:click="select(this)">
-      {{title}} {{first}} {{last}} - {{licensePlate}}
-    </li>
-  {{/each}}
+	{{#each(drivers)}}
+		<li on:click="select(this)">
+			{{title}} {{first}} {{last}} - {{licensePlate}}
+		</li>
+	{{/each}}
 </ul>
 </script>
 </div>
@@ -22,14 +22,16 @@ import DefineList from "can-define/list/list";
 import DefineMap from "can-define/map/map";
 
 Component.extend({
-	tag: "drivers",
+	tag: "my-drivers",
 	view: stache(document.getElementById("drivers-stache").innerHTML),
 	ViewModel: DefineMap.extend({
 		drivers: {
-			value: new DefineList([
-				{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "543210" },
-				{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
-			])
+			value: function () {
+				return new DefineList([
+					{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "543210" },
+					{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
+				]);
+			}
 		},
 		selected: "any",
 		select: function(driver){

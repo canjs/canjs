@@ -1,17 +1,17 @@
 <div id='demo-html'>
 <script id="app" type="text/stache">
 <my-app>
-  <drivers selected:to="editing"/>
-  <edit-plate plateName:bind="editing.licensePlate"/>
+	<my-drivers selected:to="editing"/>
+	<edit-plate plateName:bind="editing.licensePlate"/>
 </my-app>
 </script>
 <script id='drivers-stache' type='text/stache'>
 <ul>
-  {{#each(drivers)}}
-    <li on:click="select(this)">
-      {{title}} {{first}} {{last}} - {{licensePlate}}
-    </li>
-  {{/each}}
+	{{#each(drivers)}}
+		<li on:click="select(this)">
+			{{title}} {{first}} {{last}} - {{licensePlate}}
+		</li>
+	{{/each}}
 </ul>
 </script>
 </div>
@@ -36,11 +36,13 @@ var drivers = new DefineList([
 ]);
 
 Component.extend({
-	tag: "drivers",
+	tag: "my-drivers",
 	view: stache(document.getElementById('drivers-stache').innerHTML),
 	ViewModel: DefineMap.extend({
 		drivers: {
-			value: drivers
+			value: function() {
+				return drivers;
+			}
 		},
 		selected: "any",
 		select: function(driver){
@@ -64,4 +66,3 @@ Component.extend({
 var tree = stache(document.getElementById('app').innerHTML)({});
 document.body.appendChild(tree);
 </script>
-

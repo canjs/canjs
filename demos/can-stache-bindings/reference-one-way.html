@@ -1,6 +1,6 @@
 <script type="text/stache" id="demo-html">
-<year-selector *year-selector />
-Celebrate like it’s {{*yearSelector.selectedYear}}!
+<year-selector this:to="scope.vars.yearSelector" />
+Celebrate like it’s {{scope.vars.yearSelector.selectedYear}}!
 </script>
 <script src="../../node_modules/steal/steal.js" id='demo-source'>
 import Component from "can-component";

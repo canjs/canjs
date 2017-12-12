@@ -1,7 +1,10 @@
+<style type="text/css">
+.active {font-weight: bold}
+</style>
 <script type='text/stache' id='demo-html'>
-<my-tabs @addPanel:to="@*addPanel">
-  <my-panel addPanel:from="@*addPanel" title="CanJS">CanJS Content</my-panel>
-  <my-panel addPanel:from="@*addPanel" title="StealJS">StealJS Content</my-panel>
+<my-tabs @addPanel:to="scope.vars.addPanel">
+	<my-panel addPanel:from="scope.vars@addPanel" title:from="'CanJS'">CanJS Content</my-panel>
+	<my-panel addPanel:from="scope.vars@addPanel" title:from="'StealJS'">StealJS Content</my-panel>
 </my-tabs>
 </script>
 <script src="../../node_modules/steal/steal.js" main="@empty">
@@ -16,19 +19,21 @@ Component.extend({
 	view:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} "+
-    			    "on:click='makeActive(this)'>"+
-    			  "{{title}}"+
-    			"</li>"+
-    		"{{/panels}}"+
-    	"</ul>"+
-    	"<content></content>"),
+				"{{#each(panels, panel=value)}}"+
+					"<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} "+
+							"on:click='scope.root.makeActive(panel)'>"+
+						"{{panel.title}}"+
+					"</li>"+
+				"{{/each}}"+
+			"</ul>"+
+			"<content></content>"),
 	ViewModel: DefineMap.extend({
 		// Contains a list of all panel scopes within the
 		// tabs element.
 		panels: {
-			value: new DefineList([])
+			value: function() {
+				return new DefineList([]);
+			}
 		},
 		active: "any",
 		// When a `<panel>` element is inserted into the document,
