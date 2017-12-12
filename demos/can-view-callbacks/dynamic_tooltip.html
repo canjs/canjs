@@ -23,13 +23,13 @@
 	<tfoot>
 		<tr>
 			<td colspan="3">
-				<button tooltip="{{deleteTooltip}}"
+				<button tooltip="{{deleteTooltip()}}"
 						{{^selected.length}}class="disabled"{{/selected.length}}
 						on:click="notImplemented()">
 					Delete
 				</button>
 				<button
-					tooltip="{{archiveTooltip}}"
+					tooltip="{{archiveTooltip()}}"
 					{{^selected.length}}class="disabled"{{/selected.length}}
 					on:click="notImplemented()">
 					Archive
@@ -97,7 +97,6 @@ $("#app").html( template({
 		}
 	},
 	deleteTooltip: function(){
-		console.log("calling delete", selected.length);
 		var selectedCount = selected.length
 		if(selectedCount) {
 			return "Delete "+selectedCount+" users";
