@@ -108,7 +108,7 @@ var AppState = DefineMap.extend({
 			});
 			if(!selected.length) return;
 			var ids = [];
-			selected.each(function(item){
+			selected.forEach(function(item){
 				ids.push(item.id);
 			});
 			return ids.join(",");

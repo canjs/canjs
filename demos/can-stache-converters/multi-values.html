@@ -1,37 +1,31 @@
-<!doctype html>
-<html>
-<head>
-	<title>values!</title>
-	<style>
-		select[multiple] {
-			font-size: 15px;
-			background: dimgrey;
-			padding: 0.3em;
-		}
-		[value=red] {
-			color: red;
-		}
-		[value=orange] {
-			color: orange;
-		}
-		[value=yellow] {
-			color: yellow;
-		}
-		[value=green] {
-			color: green;
-		}
-		[value=blue] {
-			color: blue;
-		}
-		[value=indigo] {
-			color: indigo;
-		}
-		[value=violet] {
-			color: violet;
-		}
-	</style>
-</head>
-<body>
+<style type="text/css">
+select[multiple] {
+	font-size: 15px;
+	background: dimgrey;
+	padding: 0.3em;
+}
+[value=red] {
+	color: red;
+}
+[value=orange] {
+	color: orange;
+}
+[value=yellow] {
+	color: yellow;
+}
+[value=green] {
+	color: green;
+}
+[value=blue] {
+	color: blue;
+}
+[value=indigo] {
+	color: indigo;
+}
+[value=violet] {
+	color: violet;
+}
+</style>
 <script type="text/stache" id="demo-html">
 <select multiple values:bind="colors" size="7">
 	<option value="red">Red</option>
@@ -44,24 +38,21 @@
 </select>
 
 <ul>
-	{{#each(colors)}}
+	{{#each colors}}
 		<li>{{this}}</li>
 	{{/each}}
 </ul>
 </script>
-	<script src="../../node_modules/steal/steal.js" id="demo-source" main="@empty">
-		var stache = require("can-stache");
-		var DefineMap = require("can-define/map/map");
-		var DefineList = require("can-define/list/list");
-		require("can-stache-converters");
+<script src="../../node_modules/steal/steal.js" id="demo-source" main="@empty">
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+require("can-stache-converters");
 
-		var template = stache.from("demo-html");
-		var map = new DefineMap({
-			colors: ["green"]
-		});
+var template = stache.from("demo-html");
+var map = new DefineMap({
+	colors: ["green"]
+});
 
-		document.body.appendChild(template(map));
-	</script>
-
-</body>
-</html>
+document.body.appendChild(template(map));
+</script>
