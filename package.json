@@ -96,7 +96,8 @@
     "can-view-parser": "^4.0.0-pre.0",
     "can-view-scope": "^4.0.0-pre.34",
     "can-view-target": "^3.1.5",
-    "can-zone": "^0.6.15"
+    "can-zone": "^0.6.15",
+    "react-view-model": "^1.0.0-pre.5"
   },
   "devDependencies": {
     "bit-docs": "^0.0.7",
