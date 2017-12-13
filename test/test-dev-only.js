@@ -5,6 +5,8 @@
 require('can-connect/test/test');
 require('can-stache/test/stache-test');
 
+require('../route/route_test');
+require('../route/pushstate/pushstate_test');
 
 // Infrastructure tests
 require('can-attribute-encoder/can-attribute-encoder-test');
