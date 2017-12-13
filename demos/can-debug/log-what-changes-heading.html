@@ -1,12 +1,11 @@
 <div id="out"></div>
 
 <script id="demo-html" type="text/stache">
-	<div style="display: none;">
-		<h1 id="full">{{fullName}}</h1>
-		<input id="first" type="text" value:bind="first">
-		<input id="last" type="text" value:bind="last">
-	</div>
-	<button id="btn-log">debug.logWhatChangesMe</button>
+<h1 id="full">{{fullName}}</h1>
+<input id="first" type="text" value:bind="first">
+<input id="last" type="text" value:bind="last">
+
+<button id="btn-log">debug.logWhatChangesMe</button>
 </script>
 
 <style>
@@ -22,32 +21,32 @@
 </style>
 
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
-	var debug = require("can-debug");
-	var DefineMap = require("can-define/map/map");
+var debug = require("can-debug");
+var DefineMap = require("can-define/map/map");
 
-	var stache = require("can-stache");
-	require("can-stache-bindings");
+var stache = require("can-stache");
+require("can-stache-bindings");
 
-	var Person = DefineMap.extend("Person", {
-    first: "string",
-    last: "string",
-    fullName: {
-			get: function() {
-				return this.first + " " + this.last;
-      }
-    }
-	});
-
-	var out = document.querySelector("#out");
-	var template = stache.from("demo-html");
-	var scope = new Person({first: "Jane", last: "Doe"});
-
-	out.appendChild(template(scope));
-	out.addEventListener("click", function(ev) {
-		var el = ev.target;
-		var parent = el.parentNode;
-		if (el.nodeName === "BUTTON") {
-			debug.logWhatChangesMe(out.querySelector("#full"));
+var Person = DefineMap.extend("Person", {
+	first: "string",
+	last: "string",
+	fullName: {
+		get: function() {
+			return this.first + " " + this.last;
 		}
-	});
+	}
+});
+
+var out = document.querySelector("#out");
+var template = stache.from("demo-html");
+var scope = new Person({first: "Jane", last: "Doe"});
+
+out.appendChild(template(scope));
+out.addEventListener("click", function(ev) {
+	var el = ev.target;
+	var parent = el.parentNode;
+	if (el.nodeName === "BUTTON") {
+		debug.logWhatChangesMe(out.querySelector("#full"));
+	}
+});
 </script>

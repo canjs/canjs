@@ -1,7 +1,7 @@
 <div id="out"></div>
 
 <script id="demo-html" type="text/stache">
-	<button id="btn-log">debug.logWhatChangesMe</button>
+<button id="btn-log">debug.logWhatChangesMe</button>
 </script>
 
 <style>
@@ -17,34 +17,34 @@
 </style>
 
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
-	var debug = require("can-debug");
-	var stache = require("can-stache");
-	var DefineMap = require("can-define/map/map");
+var debug = require("can-debug");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
 
-	var Person = DefineMap.extend("Person", {
-		first: "string",
-		last: "string",
-		fullName: {
-			get: function() {
-				return this.first + " " + this.last;
-			}
+var Person = DefineMap.extend("Person", {
+	first: "string",
+	last: "string",
+	fullName: {
+		get: function() {
+			return this.first + " " + this.last;
 		}
-	});
+	}
+});
 
-	var me = new Person({ first: "John", last: "Doe" });
+var me = new Person({ first: "John", last: "Doe" });
 
-	// The observable must be bound for `logWhatChangesMe` to work correctly.
-	me.on("fullName", function() {});
+// The observable must be bound for `logWhatChangesMe` to work correctly.
+me.on("fullName", function() {});
 
-	var out = document.getElementById("out");
-	var template = stache.from("demo-html");
+var out = document.getElementById("out");
+var template = stache.from("demo-html");
 
-	out.appendChild(template({}));
-	out.addEventListener("click", function(ev) {
-		var el = ev.target;
-		var parent = el.parentNode;
-		if (el.nodeName === "BUTTON") {
-			debug.logWhatChangesMe(me, "fullName");
-		}
-	});
+out.appendChild(template({}));
+out.addEventListener("click", function(ev) {
+	var el = ev.target;
+	var parent = el.parentNode;
+	if (el.nodeName === "BUTTON") {
+		debug.logWhatChangesMe(me, "fullName");
+	}
+});
 </script>
