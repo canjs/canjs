@@ -1,6 +1,5 @@
 // Core tests
 require('can-component/test/tests');
-// require('can-debug/can-debug-test'); in dev-only
 require('can-define/test/test');
 // require('can-route/test/test');
 // require('can-route-pushstate/can-route-pushstate_test');
@@ -31,6 +30,7 @@ require('can-param/can-param-test');
 require('can-parse-uri/can-parse-uri-test');
 require('can-queues/can-queues-test');
 require('can-reflect/can-reflect-test');
+require('can-reflect-dependencies/test');
 require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-simple-dom/test/test');
 // require('can-simple-map/can-simple-map_test'); in dev-only
