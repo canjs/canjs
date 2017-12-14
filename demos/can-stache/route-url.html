@@ -28,7 +28,7 @@ require("can-stache/helpers/route");
 var route = require("can-route");
 
 route('{page}',{page: 'home'});
-route.ready();
+route.start();
 
 var template = stache(document.getElementById('demo-html').innerHTML);
 
