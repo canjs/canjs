@@ -12,7 +12,7 @@
 <script type="text/stache" id="demo-html">
 {{#items}}
   <div {{#isSelected()}}class='selected'{{/isSelected}}
-       on:click='toggle(this)'>
+       on:click='scope.root.toggle(this)'>
     {{title}}
   </div>
 {{/items}}
