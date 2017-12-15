@@ -36,7 +36,7 @@ my-tabs ul { display: inline-block; }
 <p><button on:click="addVegies()">Add Vegetables</button></p>
 <my-tabs>
   {{#each(foodTypes)}}
-    <my-panel title='{{title}}'>{{content}}</my-panel>
+    <my-panel title:from='title'>{{content}}</my-panel>
   {{/each}}
 </my-tabs>
 </script>

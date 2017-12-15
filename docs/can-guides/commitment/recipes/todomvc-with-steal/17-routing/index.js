@@ -38,7 +38,7 @@ var appVM = window.appVM = new AppViewModel({
 
 route.data = appVM;
 route("{filter}");
-route.ready();
+route.start();
 
 var frag = view(appVM);
 document.body.appendChild(frag);
