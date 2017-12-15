@@ -2,7 +2,8 @@
 <div id="app"></div>
 <script type="text/stache" id="demo-html">
 <button toggle="showing">
-	{{#if(showing)}}Hide{{else}}Show{{/if}} more info</button>
+	{{#if(showing)}}Hide{{else}}Show{{/if}} more info
+</button>
 <div fade-in-when="showing">
 	Here is more info!
 </div>
@@ -13,7 +14,7 @@ var stache = require("can-stache");
 var canViewCallbacks = require("can-view-callbacks");
 var DefineList = require("can-define/list/list");
 var DefineMap = require("can-define/map/map");
-var compute = require("can-compute");
+var SimpleObservable = require("can-simple-observable");
 var domEvents = require("can-util/dom/events/events");
 
 var $ = require("jquery");
@@ -24,40 +25,41 @@ require("can-util/dom/events/attributes/attributes");
 
 canViewCallbacks.attr("toggle", function(el, attrData){
 
-	var attrValue = el.getAttribute("toggle")
-		toggleCompute = attrData.scope.compute(attrValue);
+	var attrValue = el.getAttribute("toggle");
+	var toggleObservable = attrData.scope.computeData(attrValue);
 
 	$(el).click(function(){
-		toggleCompute(! toggleCompute() )
-	})
+		toggleObservable.set( ! toggleObservable.get() )
+	});
 
-})
+});
 
 canViewCallbacks.attr("fade-in-when", function( el, attrData ) {
 	var attrValue = el.getAttribute("fade-in-when");
-		fadeInCompute = attrData.scope.compute(attrValue),
-		// handler for when the compute changes
-		handler = function(ev, newVal, oldVal){
-			if(newVal && !oldVal) {
-				$(el).fadeIn("slow")
-			} else if(!newVal){
-				$(el).hide()
-			}
+	var fadeInObservable = attrData.scope.computeData(attrValue);
+
+	// handler for when the observable changes
+	var handler = function(newVal, oldVal){
+		if (newVal && !oldVal) {
+			$(el).fadeIn("slow")
+		} else if (!newVal) {
+			$(el).hide()
 		}
+	};
 
-	fadeInCompute.on("change",handler);
+	fadeInObservable.on(handler);
 
-	handler( {}, fadeInCompute() , undefined);
+	handler(fadeInObservable.get());
 
-	domEvents.addEventListener.call(el,"removed", function(){
-		fadeInCompute.off(handler);
+	domEvents.addEventListener.call(el, "removed", function(){
+		fadeInObservable.off(handler);
 	});
 
-})
+});
 
 var template = stache.from('demo-html');
 
 $("#app").html( template({
-	showing: compute(false)
+	showing: new SimpleObservable(false)
 }) );
 </script>
