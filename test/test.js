@@ -77,7 +77,7 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 //require('can-define-stream/can-define-stream_test');
 //require('can-define-stream-kefir/can-define-stream-kefir_test');
 
-//require('react-view-model/test/test#?can/test/browser-supports-react');
+require('react-view-model/test/test#?can/test/browser-supports-react');
 //require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
