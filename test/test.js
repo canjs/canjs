@@ -81,6 +81,7 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 //require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
+require('can-view-autorender/test/test');
 // require('can-zone/test/test');
 // require('can-zone-storage/test/can-zone-storage_zone-test');
 
