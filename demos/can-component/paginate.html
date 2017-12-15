@@ -76,7 +76,6 @@ var fixture = require("can-fixture");
 var stache = require("can-stache");
 var superMap = require("can-connect/can/super-map/super-map");
 var set = require("can-set");
-var compute = require("can-compute");
 
 window.can = require("can-util/namespace");
 
@@ -179,10 +178,7 @@ fixture.delay = 2000;
 
 var Paginate = DefineMap.extend({
 	count: {
-		value: Infinity,
-		get: function(lastSetCount) {
-			return lastSetCount && lastSetCount.isComputed ? lastSetCount() : lastSetCount;
-		}
+		value: Infinity
 	},
 	offset: {
 		value: 0,
@@ -226,11 +222,23 @@ var Paginate = DefineMap.extend({
 });
 
 var AppViewModel = DefineMap.extend({
+	connectedCallback: function() {
+		this.listenTo('websitesCount', function(event, count) {
+			this.paginate.count = count;
+		});
+		return this.stopListening.bind(this);
+	},
 	paginate: {
 		value: function() {
 			return new Paginate({
-				limit: 5,
-				count: compute(this, "websitesPromise.value.count")
+				limit: 5
+			});
+		}
+	},
+	websitesCount: {
+		get: function(lastValue, setValue) {
+			this.websitesPromise.then(function(websites) {
+				setValue(websites.count);
 			});
 		}
 	},
