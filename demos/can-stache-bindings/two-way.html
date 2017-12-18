@@ -8,7 +8,7 @@
 <script id='drivers-stache' type='text/stache'>
 <ul>
 	{{#each(drivers)}}
-		<li on:click="select(this)">
+		<li on:click="scope.root.select(this)">
 			{{title}} {{first}} {{last}} - {{licensePlate}}
 		</li>
 	{{/each}}
