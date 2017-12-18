@@ -101,7 +101,7 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-make-map": "^1.0.0",
-    "can-observe": "^2.0.0-pre.16",
+    "can-observe": "^2.0.0-pre.0",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.0.1",
     "es6-promise": "^4.1.0",
@@ -187,7 +187,7 @@
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.8.0",
       "bit-docs-generate-searchmap": "^0.2.0",
-      "bit-docs-html-canjs": "^2.0.2",
+      "bit-docs-html-canjs": "^2.0.5",
       "bit-docs-prettify": "^0.1.1",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",

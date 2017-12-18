@@ -173,7 +173,7 @@ Update the `JavaScript` tab to:
 - Use `Account.getList` to get the accounts for the card and:
   - set the `deposit.accounts` to the first account.
   - remember the starting `balance`.
-- Use [can-define/map/map.prototype.on] to listen for `state` changes. When `state` is:
+- Use [can-event-queue/map/map.on] to listen for `state` changes. When `state` is:
   - `"ready"`, `.execute()` the transaction.
   - `"executed"`, verify the new account balance.
 
