@@ -14,7 +14,7 @@
 	<tbody>
 		{{#each(users)}}
 		<tr>
-			<td><input on:change="toggle(this)" type="checkbox"/></td>
+			<td><input on:change="scope.root.toggle(this)" type="checkbox"/></td>
 			<td>{{name}}</td>
 			<td>{{email}}</td>
 		</tr>
@@ -24,13 +24,13 @@
 		<tr>
 			<td colspan="3">
 				<button tooltip="{{deleteTooltip()}}"
-						{{^selected.length}}class="disabled"{{/selected.length}}
+						{{^if(selected.length)}}class="disabled"{{/if}}
 						on:click="notImplemented()">
 					Delete
 				</button>
 				<button
 					tooltip="{{archiveTooltip()}}"
-					{{^selected.length}}class="disabled"{{/selected.length}}
+					{{^if(selected.length)}}class="disabled"{{/if}}
 					on:click="notImplemented()">
 					Archive
 				</button>
