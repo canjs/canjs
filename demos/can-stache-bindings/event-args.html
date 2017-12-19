@@ -1,6 +1,6 @@
 <script type='text/stache' can-autorender id='demo-html'>
-{{#each(items, item=value num=index)}}
-	<li on:click='../items.splice(num,1)'>{{item.name}}</li>
+{{#each(items)}}
+	<li on:click='../items.splice(scope.index,1)'>{{name}}</li>
 {{/each}}
 </script>
 
