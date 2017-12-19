@@ -5,7 +5,7 @@
 
 @body
 
-CanJS has many utilities that help you understand how your application behaves and
+CanJS has many utilities that help you understand how an application behaves and
 discover common problems. This guide is a central list for those utilities. It introduces
 those utilities and highlights when they are useful.
 
@@ -49,7 +49,7 @@ Add the following to your main module:
 
 ```js
 //!steal-remove-start
-require('can-debug');
+window.can = require('can-debug');
 //!steal-remove-end
 ```
 
@@ -65,46 +65,209 @@ export default !steal.isEnv("production");
 Then we can conditionally load modules like:
 
 ```js
-import import 'can-debug#?~is-dev'
+import can from 'can-debug#?~is-dev';
+
+//!steal-remove-start
+window.can = can;
+//!steal-remove-end
 ```
 
 ### WebPack Setup
 
 
-## Debugging what caused a observable event or update to happen.
+## Provide useful debugger names
 
-Your browser's developer tools provide a stack trace that is invaluable for
-discovering the what caused the current function to run.
+CanJS tries to create useful names to help identify the objects and
+functions in your application. It uses [can-reflect]'s [can-reflect.getName]
+to return a useful debugger name.  By default objects are named using the following convention:
+
+- The name starts with the observable constructor name, ex: `DefineMap`.
+- The constructor name is decorated with the following characters based on its type:
+  - `<>`: for value-like observables, ex: `SimpleObservable<>`
+  - `[]`: for list-like observables, ex: `DefineList[]`
+  - `{}`: for map-like observables, ex: `DefineMap{}`
+- Any property that makes the instance unique (like ids) are printed inside the characters mentioned before.
+
+You can assist by naming your types and functions wherever possible. The follow sections list how:
+
+#### Provide a name to types built with [can-construct]
+
+If you are using [can-map], [can-define/map/map] or any other package that inherits from [can-construct],
+name your function by passing `.extend` a name as the first argument:
+
+```js
+import DefineMap from "can-define/map/map";
+
+export default DefineMap.extend("TheNameOfMyType", { ... })
+```
+
+#### Label instances
+
+[can-reflect]'s [can-reflect.setName] method can be used to special name a particular object:
+
+```js
+can.reflect.setName(person, "Person{Justin}");
+```
+
+#### Name anonymous functions
+
+If you bind to an observable, instead of an anonymous function handler, use function declarations or named function
+expressions:
+
+```js
+// INSTEAD OF THIS:
+map.on("key", function(ev, newVal) { ... })
+
+// DO THIS:
+map.on("key", function keyChanged(ev, newVal) { ... })
+```
+
+Similarly, if you create [can-compute]s or [can-observation]s yourself, make sure the function
+passed has a name:
+
+```js
+// INSTEAD OF THIS:
+new Observation(function(){
+    return map.first + " " + map.last;
+});
+
+// DO THIS:
+new Observation(function fullName(){
+    return map.first + " " + map.last;
+});
+```
+
+> NOTE: If your function is a property on an observable map or list like [can-define/map/map],
+> you don't have to name it.  For example, CanJS will name the `fullName` getter in the following example:
+> ```js
+> DefineMap.extend("Person",{
+>   fullName: {
+>     get: function(){ return this.first + " " + this.last; }
+>   }
+> })
+> ```
+
+
+## Debug what caused a observable event or update to happen.
+
+Your browser's developer tools provide a stack trace that represents
+what caused the current function to run.
 
 However, what caused a function to
-run isn't always obvious by looking at the stack because CanJS runs
+run isn't always obvious by looking at the stack trace because CanJS runs
 functions within [can-queues].
 
-Use [can-queues.logStack] to see the enqueued tasks that resulted in the
-current function being run:
+Consider the following code that derives an info value from the person observable:
+
+```js
+var person = new observe.Object({name: "Fran", age: 15});
+
+var info = new Observation(function updateInfo(){
+    return person.name + " is "+person.age;
+});
+
+info.on(function onInfoChanged(newVal){
+    debugger;
+})
+
+person.age = 22;
+```
+
+Say you wanted to know why `onInfoChanged` was called and inserted the `debugger` above. When
+the debugger was hit, you can enter [can-queues.logStack] in the console to see the enqueued tasks that resulted
+in `onInfoChanged` being run:
 
 ```js
 can.queues.logStack();
 ```
 
-## viewModel
 
 
+[can-queues.log can.queues.log] can be used to log when a
+task is enqueued and flushed.  Often, you only want to log when
+tasks are run. This can be done with:
 
-## Queues
+```js
+can.queues.log("flush")
+```
 
-- use function names
+Both `queues.logStack()` and `queues.log()` log the function
+that was run, its context (`this`), arguments and a `meta`
+object that includes information such as why the task
+was enqueued.
 
-## can-debug
+## Understand what changes an observable or what an observable changes.
 
+[can-debug]'s [can-debug.logWhatChangesMe] logs the observables
+that change a value. It logs both:
 
-can.debug.logWhatChangesMe(obs, [key])
+- observables that mutate the value through CanJS libraries (example: `<component viewModelProp:from="value">`).
+- observables that are source values from a computed property
+  (example: `get fullName(){ return this.first + " " + this.last }`
 
-can.debug.logWhatIChange(obs, [key])
+You can log what changes CanJS observables and DOM elements:
 
+```js
+can.debug.logWhatChangesMe( me, "fullName" );
+can.debug.logWhatChangesMe( document.querySelector("h1.name") )
+```
 
+[can-debug]'s [can-debug.logWhatIChange] reverses [can-debug.logWhatChangesMe]
+and logs what observables are changed by an observable value:
 
+```js
+can.debug.logWhatIChange( me, "first" );
+can.debug.logWhatIChange( document.querySelector("input[name=first]") )
+```
 
-NOTES
+## Access a component's view-model.
 
-- How to work with can-debug
+Use [can-view-model] to access a component's viewModel:
+
+```js
+can.viewModel( document.querySelector("my-component") )
+```
+
+## Log when an observable changes.
+
+Most of CanJS's observables have a log method that can be used to log when its state changes:
+
+```js
+map.log();
+```
+
+This can be quite useful when used with [can-view-model]:
+
+```js
+can.viewModel( document.querySelector("my-component") ).log();
+```
+
+CanJS's observable map-types like [can-define/map/map] can be passed
+a property name and log when that property changes:
+
+```js
+map.log("property")
+```
+
+## Debug [can-stache] issues
+
+[can-stache] has two utilities for debugging:
+
+- [can-stache.helpers.debugger] - Break within a template.
+- [can-stache/log] - Log values from within a template.
+
+[can-stache.helpers.debugger] can be used a variety of ways:
+
+```
+Break anytime this part of the template evaluates
+{{debugger()}}
+
+Break when condition is truthy
+{{debugger(condition)}}
+
+Break when left equals right
+{{debugger(left, right)}}
+```
+
+When debugger breaks, you have access to the scope and a special `get` function that lets you inspect values
+in the scope.

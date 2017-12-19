@@ -1,6 +1,5 @@
 // Core tests
 require('can-component/test/tests');
-// require('can-debug/can-debug-test'); in dev-only
 require('can-define/test/test');
 // require('can-route/test/test');
 // require('can-route-pushstate/can-route-pushstate_test');
@@ -31,6 +30,7 @@ require('can-param/can-param-test');
 require('can-parse-uri/can-parse-uri-test');
 require('can-queues/can-queues-test');
 require('can-reflect/can-reflect-test');
+require('can-reflect-dependencies/test');
 require('can-reflect-promise/test/can-reflect-promise_test');
 require('can-simple-dom/test/test');
 // require('can-simple-map/can-simple-map_test'); in dev-only
@@ -66,21 +66,22 @@ require('can-fixture/test/fixture_test');
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
 //require('can-kefir/can-kefir-test');
-//require('can-stream/can-stream_test');
-//require('can-stream-kefir/can-stream-kefir_test');
+require('can-stream/can-stream_test');
+require('can-stream-kefir/can-stream-kefir_test');
 require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-vdom/test/test'); uses mocha
 //require('can-connect-ndjson/test/can-connect-ndjson-test');
 //if(typeof Proxy === "function"){
 //	require('can-observe/test');
 //}
-//require('can-define-stream/can-define-stream_test');
-//require('can-define-stream-kefir/can-define-stream-kefir_test');
+require('can-define-stream/can-define-stream_test');
+require('can-define-stream-kefir/can-define-stream-kefir_test');
 
-//require('react-view-model/test/test#?can/test/browser-supports-react');
+require('react-view-model/test/test#?can/test/browser-supports-react');
 //require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
+require('can-view-autorender/test/test');
 // require('can-zone/test/test');
 // require('can-zone-storage/test/can-zone-storage_zone-test');
 

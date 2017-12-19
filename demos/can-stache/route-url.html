@@ -23,12 +23,12 @@
 var stache = require("can-stache");
 var DefineMap = require("can-define/map/map");
 
-require("can-stache/helpers/route");
+require("can-stache-route-helpers");
 
 var route = require("can-route");
 
 route('{page}',{page: 'home'});
-route.ready();
+route.start();
 
 var template = stache(document.getElementById('demo-html').innerHTML);
 

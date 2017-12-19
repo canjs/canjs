@@ -10,7 +10,7 @@ var fixture = require("can-fixture");
 var $ =  require("jquery");
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
-var compute = require("can-compute");
+var Observation = require("can-observation");
 var domEvents = require("can-util/dom/events/events");
 require("can-util/dom/events/removed/removed");
 
@@ -63,7 +63,7 @@ fixture({
 
 var todoItem = function(todo) {
 	var li = $("<li>");
-	var liUpdate = compute(function(){
+	var liUpdate = new Observation(function(){
 		if(todo.complete) {
 			li.css("text-decoration","line-through");
 		} else {
@@ -73,9 +73,9 @@ var todoItem = function(todo) {
 	});
 
 	var handler = function(){};
-	liUpdate.on("change", liUpdate)
+	liUpdate.on(liUpdate)
 	domEvents.addEventListener.call(li[0], "removed", function(){
-		liUpdate.off("change", liUpdate);
+		liUpdate.off(liUpdate);
 	});
 
 	li.bind("click", function(){

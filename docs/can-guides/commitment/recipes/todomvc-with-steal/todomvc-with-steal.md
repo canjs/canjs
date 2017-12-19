@@ -950,7 +950,7 @@ be added if they represent the current page.
   route.start()
   ```
 
-- The [can-stache/helpers/route] module provides helpers
+- The [can-stache-route-helpers] module provides helpers
   that use [can-route].  
 
   [can-stache.helpers.routeCurrent]
