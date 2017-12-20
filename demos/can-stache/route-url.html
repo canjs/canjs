@@ -32,5 +32,5 @@ route.start();
 
 var template = stache(document.getElementById('demo-html').innerHTML);
 
-document.body.appendChild( template(route) );
+document.body.appendChild( template(route.data) );
 </script>

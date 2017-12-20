@@ -43,7 +43,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	view: stache("<input value='{{plateName}}' on:input='update($element.value)'/>"),
+	view: stache("<input value='{{plateName}}' on:input='update(scope.element.value)'/>"),
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

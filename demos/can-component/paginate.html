@@ -74,7 +74,7 @@ var DefineList = require("can-define/list/list");
 var Component = require("can-component");
 var fixture = require("can-fixture");
 var stache = require("can-stache");
-var superMap = require("can-connect/can/super-map/super-map");
+var baseMap = require("can-connect/can/base-map/base-map");
 var set = require("can-set");
 
 window.can = require("can-util/namespace");
@@ -96,7 +96,7 @@ var websiteAlgebra = new set.Algebra(
 	set.props.offsetLimit("offset", "limit")
 );
 
-superMap({
+baseMap({
 	idProp: "id",
 	Map: Website,
 	List: Website.List,
@@ -254,8 +254,7 @@ var AppViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-app",
-	ViewModel: AppViewModel,
-	leakScope: true
+	ViewModel: AppViewModel
 });
 
 var GridViewModel = DefineMap.extend({
@@ -272,6 +271,7 @@ var GridViewModel = DefineMap.extend({
 			promise.then(function() {
 				resolve(false);
 			});
+
 			return true;
 		}
 	}
@@ -279,7 +279,7 @@ var GridViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-grid",
-	view: stache("<table><tbody {{#waiting}}class='waiting'{{/waiting}}><content></content></tbody></table>"),
+	view: stache("<table><tbody {{#if(waiting)}}class='waiting'{{/if}}><content></content></tbody></table>"),
 	ViewModel: GridViewModel,
 	leakScope: true
 });

@@ -49,7 +49,10 @@ var canViewModel = require("can-view-model");
 var queues = require("can-queues");
 
 var Panel = DefineMap.extend({
-	active: "boolean"
+	active: {
+		type: "boolean",
+		value: false
+	}
 });
 
 var PanelList = DefineList.extend({
@@ -115,7 +118,7 @@ Component.extend({
 			// Create an LI for each item in the panel's viewModel object
     		"{{#each(panels, panel=value)}}"+
     			"<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} "+
-    			    "on:click='makeActive(panel)'>"+
+    			    "on:click='scope.root.makeActive(panel)'>"+
     			  "{{panel.title}}"+
     			"</li>"+
     		"{{/each}}"+
