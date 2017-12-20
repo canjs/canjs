@@ -3,8 +3,10 @@
 
 // Core tests
 require('can-connect/test/test');
-require('can-stache/test/stache-test');
 require("can-debug/can-debug-test");
+require('can-route/test/test');
+require('can-route-pushstate/test/test');
+require('can-stache/test/stache-test');
 
 // Infrastructure tests
 require('can-attribute-encoder/can-attribute-encoder-test');

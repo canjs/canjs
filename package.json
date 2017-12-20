@@ -135,7 +135,7 @@
     "steal-socket.io": "^4.0.9",
     "steal-stache": "^4.0.0-pre.2",
     "steal-tools": "^1.3.6",
-    "test-saucelabs": "0.0.2",
+    "test-saucelabs": "0.0.3",
     "testee": "^0.7.0"
   },
   "demos": [
