@@ -4,8 +4,6 @@ require('../compute/compute_test');
 require('../construct/construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-define/test/test');
-// require('../route/route_test');
-// require('../route/pushstate/pushstate_test');
 require('can-set/test/test');
 require('can-stache-bindings/test/bindings-test');
 require('can-stache-converters/test/test');
