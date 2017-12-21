@@ -54,6 +54,7 @@
     "can-define-lazy-value": "^1.0.1",
     "can-define-stream": "^1.0.0-pre.0",
     "can-define-stream-kefir": "^1.0.0-pre.0",
+    "can-define-validate-validatejs": "^1.0.0-pre.0",
     "can-deparam": "^1.0.3",
     "can-dom-events": "^1.0.6",
     "can-event-dom-enter": "^1.0.4",
