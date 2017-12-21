@@ -102,7 +102,7 @@
     "can-validate": "1.1.1",
     "can-validate-interface": "0.1.2",
     "can-validate-legacy": "1.1.1",
-    "can-validate-validatejs": "0.1.1",
+    "can-validate-validatejs": "0.1.2",
     "can-vdom": "3.2.4",
     "can-view-autorender": "3.1.2",
     "can-view-callbacks": "3.2.3",
