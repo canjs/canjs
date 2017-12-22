@@ -50,49 +50,50 @@
 	<button type="submit" disabled:from="errors()">Submit</button>
 </form>
 	</script>
-	<script src="../../node_modules/steal/steal.js" main="@empty">
-		var stache = require("can-stache");
-		var DefineMap = require("can-define/map/map");
-		var defineValidator = require("can-define-validate-validatejs");
-		var formatErrors = require("can-validate").formatErrors;
-		require("can-stache-converters");
 
-		stache.registerHelper('formatErrors', function (vm, key) {
-			var errors = formatErrors(vm.errors(key), 'object');
-			return errors ? errors[key]: [];
-		});
+<script src="../../node_modules/steal/steal.js" main="@empty">
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+var defineValidator = require("can-define-validate-validatejs");
+var formatErrors = require("can-validate").formatErrors;
+require("can-stache-converters");
 
-		var CreditCard = DefineMap.extend({
-			card: {
-				validate: {
-					format: {
-						pattern: /(\d{4})(\d{4})(\d{4})(\d{4})/,
-						message: 'is not a valid number'
-					}
-				}
-			},
-			month: {
-				validate: {
-					format: {
-						pattern: /^(0?[1-9]|1[012])$/,
-						message: 'is not a valid month'
-					}
-				}
-			},
-			year: {
-				validate: {
-					format: {
-						pattern: /(\d{4})/,
-						message: 'is not a valid year'
-					}
-				}
+stache.registerHelper("formatErrors", function(vm, key) {
+	var errors = formatErrors(vm.errors(key), "object");
+	return errors ? errors[key] : [];
+});
+
+var CreditCard = DefineMap.extend({
+	card: {
+		validate: {
+			format: {
+				pattern: /(\d{4})(\d{4})(\d{4})(\d{4})/,
+				message: "is not a valid number"
 			}
-		});
-		defineValidator(CreditCard);
-		var card = CreditCard();
-		window.test = card;
-		var template = stache.from("demo-html");
-		document.body.appendChild(template(card));
-	</script>
+		}
+	},
+	month: {
+		validate: {
+			format: {
+				pattern: /^(0?[1-9]|1[012])$/,
+				message: "is not a valid month"
+			}
+		}
+	},
+	year: {
+		validate: {
+			format: {
+				pattern: /(\d{4})/,
+				message: "is not a valid year"
+			}
+		}
+	}
+});
+defineValidator(CreditCard);
+var card = CreditCard();
+window.test = card;
+var template = stache.from("demo-html");
+document.body.appendChild(template(card));
+</script>
 </body>
 </html>
