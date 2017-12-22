@@ -7,11 +7,11 @@ import dataUrl from "can-connect/data/url/url";
 import constructor from "can-connect/constructor/constructor";
 import constructorStore from "can-connect/constructor/store/store";
 import fixture from "can-fixture";
-import canEvent from "can-event";
+import mixinMapBindings from "can-event-queue/map/map";
 
-// define a Todo type with can-event event binding support
+// define a Todo type with event binding support
 var Todo = function(props) { Object.assign(this, props); };
-Todo.prototype = canEvent;
+mixinMapBindings(Todo.prototype);
 
 // connection that retrieves todos data
 var todosConnection = connect([constructorStore, constructor, dataUrl], {
