@@ -67,7 +67,7 @@
     "can-map": "^4.0.0-pre.11",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "^0.1.7",
-    "can-observation": "^4.0.0-pre.24",
+    "can-observation": "file:../can-observation",
     "can-observation-recorder": "<2.0.0",
     "can-param": "^1.0.2",
     "can-parse-uri": "^1.0.1",
@@ -108,7 +108,7 @@
   "devDependencies": {
     "bit-docs": "^0.0.7",
     "can-make-map": "^1.0.0",
-    "can-observe": "^2.0.0-pre.18",
+    "can-observe": "file:../can-observe",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.0.1",
     "es6-promise": "^4.1.0",

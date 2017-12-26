@@ -11,18 +11,19 @@ var person = new DefineMap({
 });
 
 var fullName = new Observation(function fullName(){
-    return person.first + person.last;
+    return person.first +" "+ person.last;
 });
-
 
 fullName.on(function incrementNameChanges(){
-  person.nameChanges++;
+    person.nameChanges++;
 });
-
 
 person.on("nameChanges", function nameChanged(){
-  debugger
+      debugger
 });
 
-person.first = "Ramiya"
+// somewhere we don't know about
+setTimeout(function(){
+    person.first = "Ramiya";
+},2000);
 </script>

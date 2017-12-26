@@ -181,6 +181,9 @@ in `onInfoChanged` being run:
 can.queues.logStack();
 ```
 
+The following video shows using `logStack`:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/L0hR5ic_FvE" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 
 [can-queues.log can.queues.log] can be used to log when a

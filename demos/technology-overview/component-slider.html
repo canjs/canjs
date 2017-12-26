@@ -1,0 +1,149 @@
+<body>
+<my-slider value:from='50'></my-slider>
+
+<script src="../../node_modules/steal/steal.js" main="@empty">
+import Component from "can-component";
+import stache from "can-stache";
+import DefineMap from "can-define/map/map";
+
+function width(el) {
+    var cs = window.getComputedStyle(el,null)
+    return el.clientWidth - parseFloat( cs.getPropertyValue("padding-left") )
+        - parseFloat( cs.getPropertyValue("padding-left") );
+}
+
+Component.extend({
+    tag: "my-slider",
+    // TODO: get rid of autoMount
+    autoMount: true,
+    // TODO: get rid of `stache`
+    view: stache(`
+        <div class='slider'
+        style="left: {{left}}px"
+        on:mousedown='startDrag(scope.event.clientX)'/>`),
+    // TODO: get rid of `DefineMap`
+    ViewModel: DefineMap.extend("MySliderViewModel",{
+        start: {type: "number", value: 0},
+        end: {type: "number", value: 100},
+        currentValue: { value: 0 },
+        width: {type: "number", value: 0},
+        left: {type: "number", value: 0},
+        connectedCallback(el) {
+            debugger;
+            this.width = width(el) - el.firstElementChild.clientWidth;
+            this.listenTo(window,"resize", () => {
+                this.width = width(el) - el.firstElementChild.clientWidth;
+            });
+
+            this.listenTo("startClientX", () => {
+                var startLeft = this.left;
+                this.listenTo(document,"mousemove", (event)=>{
+                    this.dispatch("dragmove", [event.clientX - this.startClientX + startLeft]);
+                    //this.left = event.clientX - this.startClientX + ;
+                });
+                this.listenTo(document,"mouseup", (event)=>{
+                    this.dispatch("dragup", [event.clientX - this.startClientX + startLeft]);
+                    //this.left = event.clientX - this.startClientX + startLeft;
+                    this.stopListening(document);
+                })
+            });
+            this.listenTo("dragmove", (ev, left)=> {
+                console.log(left, this.width);
+                this.left = Math.min( Math.max(0, left), this.width);
+                this.currentValue = (left / this.width) * (this.end - this.start);
+            },"notify");
+
+            this.listenTo("dragup", (ev, left)=> {
+                this.left = Math.min( Math.max(0, left), this.width);
+                this.value = this.currentValue = (left / this.width) * (this.end - this.start);
+            },"notify");
+
+            return this.stopListening.bind(this);
+        },
+        startClientX: "any",
+        startDrag(clientX) {
+            this.startClientX = clientX;
+        }
+
+    }),
+    events: {
+        "{element} inserted": function(){
+
+        }
+    }
+})
+/*
+Slider = can.Control.extend({
+    init: function(){
+        this.value(this.options.value);
+    },
+    "draginit": function(el, ev, drag){
+        drag.limit(this.element.parent());
+        drag.horizontal();
+    },
+    "dragmove": function(el, ev, drag){
+    	 var el = this.element,
+                 container = el.parent(),
+                 sliderOffset = el.offset().left,
+                 containerOffset = container.offset().left,
+                 sliderWidth = el.outerWidth(),
+                 containerWidth = container.width(),
+                 delta = 1;
+
+            containerOffset +=
+                parseInt( container.css("paddingLeft") ) +
+                parseInt( container.css("borderLeftWidth") );
+
+        this._value = ( Math.round(sliderOffset-containerOffset ) /
+                         Math.round(containerWidth - sliderWidth) ) * delta;
+
+
+        this.element.trigger("change", this._value);
+    },
+
+    value: function(value){
+        if(!arguments.length){
+             return this._value;
+        } else {
+            this._value = value;
+            var container = this.element.parent(),
+                containerOffset = container.offset().left,
+                sliderWidth = this.element.outerWidth(),
+                containerWidth = container.width(),
+                delta = 1;
+
+            containerOffset +=
+                parseInt( container.css("paddingLeft") ) +
+                parseInt( container.css("borderLeftWidth") );
+
+            var sliderOffset = containerOffset+
+                ( 	(containerWidth - sliderWidth) *
+                 (value) ) /
+                (delta);
+
+            this.element.offset({
+                left: sliderOffset
+            });
+        }
+    },
+    "resize": function(){
+    	this.value(this._value);
+    }
+});*/
+</script>
+<style>
+.slider {
+    border: solid 1px blue;
+    background-color: red;
+    height: 40px;
+    width: 40px;
+    cursor: ew-resize;
+    position: relative;
+}
+my-slider {
+    border: solid 4px black;
+    padding: 5px;
+    display: block;
+}
+</style>
+</body>
