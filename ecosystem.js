@@ -16,7 +16,7 @@ require("can-fixture");
 //if(typeof Proxy === "function"){
 //	require("can-observe");
 //}
-//require("can-stache-converters");
+require("can-stache-converters");
 //require("can-validate");
 //require("can-validate-validatejs");
 //require("can-view-import");

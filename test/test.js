@@ -48,7 +48,7 @@ require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');
 // require('can-zone/test/test'); needs to publish this
 
-// require('can-stache-converters/test/test');
+require('can-stache-converters/test/test');
 
 // Legacy tests
 require('can-compute/can-compute_test');
