@@ -29,7 +29,7 @@ var platforms = [{
 	version: 'latest'
 }, {
 	browserName: 'googlechrome',
-	platform: 'Windows 10',
+	platform: 'OS X 10.12',
 	version: 'latest'
 }, {
 	browserName: 'Safari',
