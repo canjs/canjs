@@ -1,8 +1,3 @@
-<body>
-<div id='demo-html'>
-<percent-slider value:from='50'></percent-slider>
-</div>
-<script src="../../node_modules/steal/steal.js" main="@empty">
 import Component from "can-component";
 import stache from "can-stache";
 import DefineMap from "can-define/map/map";
@@ -50,11 +45,12 @@ Component.extend({
                 this.listenTo(document,"mouseup", (event)=>{
                     this.dispatch("dragup", [event.clientX - this.startClientX + startLeft]);
                     this.stopListening(document);
-                })
+                });
             });
             // Update the slider position when currentValue changes
-            this.listenTo("dragmove", (ev, left)=> {
-                this.currentValue = (left / this.width) * (this.end - this.start);
+            this.listenTo("dragmove", (ev, left) => {
+                var value = (left / this.width) * (this.end - this.start);
+                this.currentValue = Math.max( 0, Math.min(this.end, value));
             },"notify");
 
             // If the value is set, update the current value
@@ -63,8 +59,9 @@ Component.extend({
             }, "notify");
 
             // Update the value on a dragmove
-            this.listenTo("dragup", (ev, left)=> {
-                this.value = (left / this.width) * (this.end - this.start);
+            this.listenTo("dragup", (ev, left) => {
+                var value = (left / this.width) * (this.end - this.start);
+                this.value = Math.max( 0, Math.min(this.end, value));
             },"notify");
 
             return this.stopListening.bind(this);
@@ -76,20 +73,3 @@ Component.extend({
 
     })
 });
-</script>
-<style>
-.slider {
-    border: solid 1px blue;
-    background-color: red;
-    height: 40px;
-    width: 40px;
-    cursor: ew-resize;
-    position: relative;
-}
-percent-slider {
-    border: solid 4px black;
-    padding: 5px;
-    display: block;
-}
-</style>
-</body>
