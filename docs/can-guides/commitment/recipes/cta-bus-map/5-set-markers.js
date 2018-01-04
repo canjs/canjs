@@ -36,6 +36,17 @@ can.Component.extend({
   view: can.stache(`<div class='gmap'></div>`),
   ViewModel: {
     map: 'any',
+    connectedCallback(element) {
+      googleAPI.then(() => {
+        this.map = new google.maps.Map(element.firstChild, {
+          zoom: 10,
+          center: {
+            lat: 41.881,
+            lng: -87.623
+          }
+        });
+      });
+    },
     vehicles: 'any'
   },
   events: {
@@ -51,17 +62,6 @@ can.Component.extend({
           });
         });
       }
-    },
-    "{element} inserted": function() {
-      googleAPI.then(() => {
-        this.viewModel.map = new google.maps.Map(this.element.firstChild, {
-          zoom: 10,
-          center: {
-            lat: 41.881,
-            lng: -87.623
-          }
-        });
-      });
     }
   }
 });
