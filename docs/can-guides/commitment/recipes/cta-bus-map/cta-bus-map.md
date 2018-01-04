@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/janupaq/3/embed?output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/janupaq/5/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -514,33 +514,33 @@ We will do this by:
   });
   ```
 
-  Any values you want the custom element to hold must be defined on the `ViewModel`. If the `ViewModel`
-  is a plain `Object`, that object will be used to extend [can-define/map/map DefineMap] and create a new
-  type.  The following specifies a `map` property that can be any value:
+  Any values you want the custom element to hold must be defined on the `ViewModel`. You can use
+  [can-define/map/map.extend DefineMap.extend] to create a new type for your ViewModel. The following
+  specifies a `map` property that can be any value:
 
   ```js
   can.Component.extend({
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'/>`),
-    ViewModel: {
+    ViewModel: DefineMap.extend({
       map: "any"
-    }
+    })
   });
   ```
 
-  A ViewModel's [can-component/connectedCallback] can be used to know when the component's eement is inserted into the document as follows:
+  A ViewModel's [can-component/connectedCallback] can be used to know when the component's element is inserted into the document as follows:
 
   ```js
   can.Component.extend({
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'/>`),
-    ViewModel: {
+    ViewModel: DefineMap.extend({
       map: "any"
       connectedCallback(element) {
 		this // -> the ViewModel instance
 		element // -> the <google-map-view> element
 	  }
-    }
+    })
   });
   ```
 
@@ -556,7 +556,6 @@ We will do this by:
       }
   })
   ```
-
 
 ### The solution
 Update the `view` in the __HTML__ tab to:
@@ -627,10 +626,6 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
 @highlight 50,53-65,only
-
-
-
-
 
 ## Clean up markers when locations change ##
 
