@@ -387,7 +387,7 @@ We will do this by:
   }
   ```
 
-  If there is an error or no busses, the response looks like:
+  If there is an error or no buses, the response looks like:
 
   ```js
   {
@@ -423,7 +423,7 @@ Update the __JavaScript__ tab to:
 
 
 
-## Show when busses are loading and the number of buses ##
+## Show when buses are loading and the number of buses ##
 ### The problem
 
 In this section, we will:
@@ -431,7 +431,7 @@ In this section, we will:
 - Show `<p>Loading vehicles…</p>` while bus data is being loaded.
 - Show `<div class="error-message">No vehicles available for this route</div>` in the overlay
   if the request for bus data failed.  
-- Show the number of busses inside the `<div class='gmap'>` like: `Bus count: 20`.
+- Show the number of buses inside the `<div class='gmap'>` like: `Bus count: 20`.
 
 <img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/3b-bus-loading.png" width="427px"/>
 
