@@ -257,7 +257,7 @@ map.log("property")
 [can-stache] has two utilities for debugging:
 
 - [can-stache.helpers.debugger] - Break within a template.
-- [can-stache/log] - Log values from within a template.
+- [can-stache.helpers.console] - Call the debugger console methods.
 
 [can-stache.helpers.debugger] can be used a variety of ways:
 
@@ -272,5 +272,31 @@ Break when left equals right
 {{debugger(left, right)}}
 ```
 
-When debugger breaks, you have access to the scope and a special `get` function that lets you inspect values
-in the scope.
+When debugger breaks, you have access to the scope and a special `get` function that lets you inspect values in the [can-view-scope scope].
+
+Stache templates also have access the [can-stache.helpers.console] methods, making it
+easy to log value or even test performance.
+
+```js
+{{#if tasksPromise.isResolved}}
+  {{ console.log("tasks resolved with", tasksPromise.value) }}
+{{/if}}
+```
+
+`console` methods will be called whenever the template would normally update the
+DOM. This means that `count` will be logged every second in the following component:
+
+```js
+Component.extend({
+    tag: "my-counter",
+    view: `{{console.log(count)}}`,
+    ViewModel: {
+        count: {value: 0}
+        connectedCallback(){
+            setInterval(() => {
+                this.count++;
+            },1000)
+        }
+    }
+})
+```
