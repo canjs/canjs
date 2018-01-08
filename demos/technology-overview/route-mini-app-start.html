@@ -1,0 +1,87 @@
+<body>
+<div id='location'>
+    <span id='back'>&#x21E6;</span><span id='reload'>&#8635;</span><div id="url"></div>
+</div>
+<div id='demo-html'>
+<my-app></my-app>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty"  id="demo-source">
+import Component from "can-component";
+import stache from "can-stache";
+import DefineMap from "can-define/map/map";
+import route from "can-route";
+import "can-stache-route-helpers";
+
+Component.extend({
+    tag: "my-app",
+    autoMount: true,
+    view: stache(`
+        The current page is {{page}}.
+        <a href="{{ routeUrl(page='home') }}">Home</a>
+        <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
+    `),
+    ViewModel: DefineMap.extend({
+        page: "string",
+    })
+});
+
+route.data = document.querySelector("my-app");
+route.start();
+</script>
+<style>
+.slider {
+    border: solid 1px blue;
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    cursor: ew-resize;
+    position: relative;
+}
+percent-slider {
+    border: solid 1px black;
+    padding: 2px;
+    display: block;
+}
+p {
+    margin: 0px 0px 20px 0px;
+}
+</style>
+<script>
+function updateWithHash(){
+    document.getElementById("url").innerHTML = "URL: /my-app.html"+window.location.hash;
+}
+updateWithHash();
+window.addEventListener("hashchange", updateWithHash)
+document.getElementById("back").addEventListener("click", function(){
+    history.back();
+});
+document.getElementById("reload").addEventListener("click", function(){
+    location.reload();
+});
+</script>
+<style>
+body {margin: 0px; padding: 0px;}
+#location {
+    display: flex;
+    margin-bottom: 20px;
+}
+#url {
+    display: inline-block;
+    border: solid 1px;
+    padding: 2px;
+    flex-grow: 1;
+}
+
+#back, #reload {
+    font-size: 16px;
+    font-family: Verdana,sans-serif;
+    border: solid 1px black;
+    padding: 2px;
+    line-height: 20px;
+    flex-grow: 0;
+    cursor: pointer;
+}
+form { padding: 10px;}
+</style>
+</body>

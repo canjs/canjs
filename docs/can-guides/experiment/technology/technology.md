@@ -405,20 +405,196 @@ route.register("",{count: 0});
 @demo demos/technology-overview/route-counter-registered.html
 
 
+### Routing and the root Component
+
+Understanding how to use [can-route] within an application comprised of [can-component]s
+and their [can-stache] views and observable view-models can be tricky.  
+
+We'll use the following example to help make sense of it:
+
+@demo demos/technology-overview/route-mini-app.html
+
+This example shows the `<login-page>` component until someone has logged in.  Once they have
+done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
+the `<home-page>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>`
+component we created previously.
+
+The switching between different components is managed by a `<my-app>` component. The topology of
+the application looks like:
+
+<img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
+  alt=""
+  width="800px"/>  
+
+In most applications, [can-route] is connected to the top-level component's
+[can-component.prototype.ViewModel] .We are going to go through the process of
+building `<my-app>` and connecting it
+to [can-route]. This is usually done in four steps:
+
+- Connect the top-level component's view-model to the routing [can-route.data].
+- Have the top-level component's [can-component.prototype.view] display the right sub-components based on the view-model state.
+- Define the top-level component's view-model (sometimes called _application view-model_).
+- Register routes that translate between the URL and the application view-model.
+
+### Connect a component's view-model to can-route
+
+To connect a component's view-model to can-route, we first need to create a basic
+component. The following creates a `<my-app>` component that displays its `page` property and
+includes links that will change the page property:
+
+```js
+import Component from "can-component";
+import stache from "can-stache";
+import DefineMap from "can-define/map/map";
+import route from "can-route";
+import "can-stache-route-helpers";
+
+Component.extend({
+    tag: "my-app",
+    autoMount: true,
+    view: stache(`
+        The current page is {{page}}.
+        <a href="{{ routeURL(page='home') }}">Home</a>
+        <a href="{{ routeURL(page='tasks') }}">Tasks</a>
+    `),
+    ViewModel: DefineMap.extend({
+        page: "string"
+    })
+})
+```
+
+> NOTE: Your html needs a `<my-app></my-app>` element to be able to see the
+> component's content.  It should say "The current page is .".
+
+To connect the component's VM to the url, we:
+
+- set [can-route.data] to the custom element.
+- call and [can-route.start] to begin sending url values to the component.
+
+```js
+route.data =  document.querySelector("my-app");
+route.start();
+```
+
+At this point, changes in the URL will cause changes in the `page`
+property. See this by clicking the links, and the back and refresh button below:
+
+@demo demos/technology-overview/route-mini-app-start.html
+
+### Display the right sub-components
+
+When building components, we suggest designing the [can-component.prototype.view]
+before the [can-component.prototype.ViewModel].  This helps you figure out what logic
+the [can-component.prototype.ViewModel] needs to provide an easily understood
+[can-component.prototype.view].
+
+We'll use [can-stache.helpers.switch] to switch between different components
+based on a `componentToShow` property on the view-model. The result looks like the following:
+
+```js
+Component.extend({
+    tag: "my-app",
+    autoMount: true,
+    view: stache(`
+        {{#switch(componentToShow)}}
+            {{#case("home")}}
+                <home-page isLoggedIn:from="isLoggedIn" logout:from="logout"/>
+            {{/case}}
+            {{#case("tasks")}}
+                <task-editor id:from="taskId" logout:from="logout"/>
+            {{/case}}
+            {{#case("login")}}
+                <login-page isLoggedIn:bind="isLoggedIn" />
+            {{/case}}
+            {{#default}}
+                <h2>Page Missing</h2>
+            {{/default}}
+        {{/switch}}
+    `),
+    ...
+})
+```
+
+Notice that the view-model will need the following properties:
+
+- __isLoggedIn__ - If the user is logged in.
+- __logout__ - A function that when called logs the user out.
+- __taskId__ - A taskId in the hash.
+
+We will implement these properties and `componentToShow` in the
+[can-component.prototype.ViewModel].
+
+### Define the view-model
+
+Now that we've designed the _view_ it's time to code the observable view-model
+with the logic to make the view behave correctly. We implement the
+`ViewModel` as follows:
+
+```js
+Component.extend({
+    tag: "my-app",
+    ...
+    ViewModel: DefineMap.extend({
+        // Properties that come from the url
+        page: "string",
+        taskId: "string",
+
+        // A property if the user has logged in.
+        // `serialize: false` prevents it from being
+        // part of the url.
+        isLoggedIn: {
+            value: false,
+            type: "boolean",
+            serialize: false
+        },
+
+        // We show the login page if someone
+        // isn't logged in, otherwise, we
+        // show what the url points to.
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return "login";
+            }
+            return this.page;
+        },
+
+        // A function we pass to sub-components
+        // so they can log out.
+        logout() {
+            this.isLoggedIn = false;
+        }
+    })
+});
+```
+
+Finally, our component works, but the urls aren't easy to
+remember (ex: `#!&page=home`). We will clean that up in the
+next section.
 
 
-To use [can-route] effectively, there's two main things you need to do:
+### Register routes
 
-- Model your observable application view-model
-- Register routes that translate between the URL and the application view-model
-- Display the right sub-components based on the application view-model state.
+Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the url hash is empty, `page` property will be undefined. To have `page`
+be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!  
 
-For example, you might have a products
+We want the `page` property to be `"home"` when the hash is empty.  Furthermore,
+we want urls like `#!tasks` to set the `page` property.  We can do that
+by registering the following route:
 
+```js
+route.register("{page}",{page: "home"});
+```
 
+Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
+to `"5"`.  Registering the following route does that:
 
-Registering routes
+```js
+route.register("tasks/{taskId}",{page: "tasks"});
+```
 
+Now the mini application is able to translate changes in the url to
+properties on the component's view-model.  When the component's view-model
+changes, the view updates the page.
 
 
 ## Observables and the service layer
