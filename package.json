@@ -3,6 +3,7 @@
   "version": "4.0.0-pre.10",
   "main": "can.js",
   "scripts": {
+    "preversion": "npm test",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout major && git branch -D release && git push origin major",
     "testee": "testee test/index.html --browsers firefox",
