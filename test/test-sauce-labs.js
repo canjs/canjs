@@ -37,7 +37,7 @@ var platforms = [/*{
 	idleTimeout: idleTimeout
 }, {
 	browserName: 'googlechrome',
-	platform: 'Windows 10',
+	platform: 'OS X 10.12',
 	version: 'latest',
 	maxDuration: maxDuration,
 	commandTimeout: commandTimeout,

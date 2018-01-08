@@ -23,23 +23,21 @@ require("jquery-ui/ui/widgets/tooltip");
 require("can-stache-bindings");
 require("can-util/dom/events/attributes/attributes");
 
-canViewCallbacks.attr("toggle", function(el, attrData){
-
+canViewCallbacks.attr("toggle", function(el, attrData) {
 	var attrValue = el.getAttribute("toggle");
-	var toggleObservable = attrData.scope.computeData(attrValue);
+	var toggleCompute = attrData.scope.compute(attrValue);
 
-	$(el).click(function(){
-		toggleObservable.set( ! toggleObservable.get() )
+	$(el).click(function() {
+		toggleCompute( ! toggleCompute() );
 	});
-
 });
 
-canViewCallbacks.attr("fade-in-when", function( el, attrData ) {
+canViewCallbacks.attr("fade-in-when", function(el, attrData) {
 	var attrValue = el.getAttribute("fade-in-when");
-	var fadeInObservable = attrData.scope.computeData(attrValue);
+	var fadeInCompute = attrData.scope.compute(attrValue);
 
 	// handler for when the observable changes
-	var handler = function(newVal, oldVal){
+	var handler = function(event, newVal, oldVal) {
 		if (newVal && !oldVal) {
 			$(el).fadeIn("slow")
 		} else if (!newVal) {
@@ -47,14 +45,13 @@ canViewCallbacks.attr("fade-in-when", function( el, attrData ) {
 		}
 	};
 
-	fadeInObservable.on(handler);
+	fadeInCompute.on("change", handler);
 
-	handler(fadeInObservable.get());
+	handler(fadeInCompute());
 
-	domEvents.addEventListener.call(el, "removed", function(){
-		fadeInObservable.off(handler);
+	domEvents.addEventListener.call(el, "removed", function() {
+		fadeInCompute.off("change", handler);
 	});
-
 });
 
 var template = stache.from('demo-html');

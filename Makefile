@@ -30,7 +30,7 @@ publish-docs:
 	# git add -f node_modules/feathers-hooks/package.json
 	# git add -f node_modules/feathers-rest/package.json
 	# git add -f node_modules/feathers-socketio/package.json
-	# git add -f node_modules/validate.js/package.json
+	git add -f node_modules/validate.js
 	git fetch
 	# git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/

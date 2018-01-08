@@ -58,7 +58,18 @@ can.Component.extend({
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'></div>`),
     ViewModel: {
-        map: 'any',
+		map: 'any',
+		connectedCallback(element) {
+			googleAPI.then(() => {
+				this.map = new google.maps.Map(element.firstChild, {
+					zoom: 10,
+					center: {
+						lat: 41.881,
+						lng: -87.623
+					}
+				});
+			});
+		},
         vehicles: 'any',
         markers: 'any'
     },
@@ -81,14 +92,6 @@ can.Component.extend({
                     });
                 });
             }
-        },
-        "{element} inserted": function() {
-            getGoogleAPI().then(() => {
-                this.viewModel.map = new google.maps.Map(this.element.firstChild, {
-                zoom: 10,
-                center: { lat: 41.881, lng:  -87.623 }
-                });
-            });
         }
     }
 });

@@ -34,13 +34,11 @@ var BusTrackerVM = can.DefineMap.extend({
 can.Component.extend({
   tag: "google-map-view",
   view: can.stache(`<div class='gmap'></div>`),
-  ViewModel: {
-    map: 'any'
-  },
-  events: {
-    "{element} inserted": function() {
+  ViewModel: DefineMap.extend({
+    map: 'any',
+    connectedCallback(element) {
       googleAPI.then(() => {
-        this.viewModel.map = new google.maps.Map(this.element.firstChild, {
+        this.map = new google.maps.Map(element.firstChild, {
           zoom: 10,
           center: {
             lat: 41.881,
@@ -48,8 +46,8 @@ can.Component.extend({
           }
         });
       });
-    }
-  }
+	}
+  })
 });
 
 var viewModel = new BusTrackerVM();
