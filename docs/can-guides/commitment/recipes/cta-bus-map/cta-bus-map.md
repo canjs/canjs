@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/janupaq/5/embed?output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/janupaq/8/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -35,7 +35,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/milodet/1/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/milodet/3/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -185,8 +185,6 @@ In this section, we will:
 ### What you need to know
 
 
-
-
 - A [can-stache] template uses
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
@@ -228,8 +226,6 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
 @highlight 8-10,only
-
-
 
 
 ## List bus routes ##
@@ -325,7 +321,6 @@ Update the __JavaScript__ tab to:
 @highlight 11-17,only
 
 
-
 ## Pick a route and log bus locations ##
 
 ### The problem
@@ -403,7 +398,6 @@ We will do this by:
   ```
 
 
-
 ### How to verify it works
 
 In the `Console` tab, when you click a bus route (like `Cottage Grove`), you should see
@@ -419,8 +413,6 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./3-pick-route.js
 @highlight 18-30,only
-
-
 
 
 ## Show when buses are loading and the number of buses ##
@@ -474,7 +466,6 @@ Update the __JavaScript__ tab to:
 @highlight 19,22,26,28,only
 
 
-
 ## Initialize Google Maps to show Chicago ##
 
 ### The problem
@@ -514,17 +505,17 @@ We will do this by:
   });
   ```
 
-  Any values you want the custom element to hold must be defined on the `ViewModel`. You can use
-  [can-define/map/map.extend DefineMap.extend] to create a new type for your ViewModel. The following
-  specifies a `map` property that can be any value:
+  Any values you want the custom element to hold must be defined on the `ViewModel`. If the `ViewModel`
+  is a plain `Object`, that object will be used to extend [can-define/map/map DefineMap] and create a new
+  type.  The following specifies a `map` property that can be any value:
 
   ```js
   can.Component.extend({
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'/>`),
-    ViewModel: DefineMap.extend({
+    ViewModel: {
       map: "any"
-    })
+    }
   });
   ```
 
@@ -534,13 +525,13 @@ We will do this by:
   can.Component.extend({
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'/>`),
-    ViewModel: DefineMap.extend({
+    ViewModel: {
       map: "any"
       connectedCallback(element) {
 		this // -> the ViewModel instance
 		element // -> the <google-map-view> element
 	  }
-    })
+    }
   });
   ```
 
@@ -556,6 +547,7 @@ We will do this by:
       }
   })
   ```
+
 
 ### The solution
 Update the `view` in the __HTML__ tab to:
@@ -658,8 +650,6 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./6-clean-markers.js
 @highlight 51,55-60,62,only
-
-
 
 
 <script src="//static.jsbin.com/js/embed.min.js?4.0.4"></script>
