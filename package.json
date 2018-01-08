@@ -84,6 +84,7 @@
     "can-simple-observable": "^2.0.0-pre.27",
     "can-stache": "^4.0.0-pre.42",
     "can-stache-bindings": "^4.0.0-pre.27",
+    "can-stache-converters": "^4.0.0-pre.0",
     "can-stache-key": "^1.0.0-pre.15",
     "can-stache-route-helpers": "^0.1.0",
     "can-stream": "^1.0.0-pre.0",
