@@ -74,6 +74,33 @@ window.can = can;
 
 ### WebPack Setup
 
+To import the debug module only in development, add the following
+code to your main module:
+
+```js
+if (process.env.NODE_ENV !== "production") {
+  window.can = require("can-debug");
+}
+```
+
+Then, make sure `process.env` is defined in `webpack.config.js`
+with the following:
+
+```js
+var webpack = require("webpack");
+
+module.exports = {
+    ...
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        })
+    ]
+};
+```
+
 
 ## Provide useful debugger names
 
