@@ -68,7 +68,7 @@
     "can-map": "^4.0.0-pre.11",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "^0.1.7",
-    "can-observation": "4.0.0-pre.24",
+    "can-observation": "^4.0.0-pre.24",
     "can-observation-recorder": "<2.0.0",
     "can-param": "^1.0.2",
     "can-parse-uri": "^1.0.1",
