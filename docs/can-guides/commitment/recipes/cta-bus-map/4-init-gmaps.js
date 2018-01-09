@@ -34,7 +34,7 @@ var BusTrackerVM = can.DefineMap.extend({
 can.Component.extend({
   tag: "google-map-view",
   view: can.stache(`<div class='gmap'></div>`),
-  ViewModel: DefineMap.extend({
+  ViewModel: {
     map: 'any',
     connectedCallback(element) {
       googleAPI.then(() => {
@@ -47,7 +47,7 @@ can.Component.extend({
         });
       });
 	}
-  })
+  }
 });
 
 var viewModel = new BusTrackerVM();
