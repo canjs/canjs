@@ -8,7 +8,7 @@
 
 ## Overview
 
-CanJS, at it's most simplified, consists of key-value __Observables__
+CanJS, at its most simplified, consists of key-value __Observables__
 connected to different web browser APIs through various connecting
 libraries.
 
@@ -25,7 +25,9 @@ objects to:
 - Your service layer to make receiving, creating, updating, and deleting server data easier.
 
 
-Instead of worrying about calling the various browser APIs, CanJS abstracts this away, so you can focus on the logic of your application. The logic of your application is contained within observables. Lets see how!
+Instead of worrying about calling the various browser APIs, CanJS abstracts this
+away, so you can focus on the logic of your application. The logic of your
+application is contained within observables. Let’s see how!
 
 
 ## Key-Value Observables
@@ -45,8 +47,8 @@ var Counter = DefineMap.extend("Counter",{
 });
 ```
 
-We can create instances of `Counter` and call its methods and
-inspect its state like:
+We can create instances of `Counter`, call its methods, and
+inspect its state like so:
 
 ```js
 var myCounter = new Counter();
@@ -58,11 +60,11 @@ myCounter.count //-> 1
 `myCounter` is an instance of `Counter`. `myCounter.count` is what we call the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
 state of `myCounter`.
 
-> NOTE: CanJS application logic is coded within `DefineMap` and `DefineList`s and
-> often doesn't require a DOM for unit testing!
+> __NOTE:__ CanJS application logic is coded within instances of `DefineMap` and `DefineList`.
+> You often don’t need the DOM for unit testing!
 
 [can-define/map/map DefineMap] and [can-define/map/map DefineList] have a wide variety of features (and shorthands)
-useful for defining property behavior. In the previous example, `count: {value: 0}` defined `count` to
+for defining property behavior. In the previous example, `count: {value: 0}` defined the `count` property to
 have an initial value of `0`. The `{value: 0}` object is a [can-define.types.propDefinition].
 
 The following example uses the [can-define.types.value] and [can-define.types.get] property
@@ -120,7 +122,7 @@ The following example increments the _Count_ when the <button>+1</button> is cli
 
 @demo demos/technology-overview/observable-dom.html
 
->NOTE: Click the __JS__ tab to see the code.
+> __NOTE:__ Click the __JS__ tab to see the code.
 
 The demo uses a [can-stache] view:
 
@@ -143,21 +145,21 @@ state changes. It uses magic tags to read values and perform simple logic. The f
 are the most commonly used tags:
 
 - [can-stache.tags.escaped] - Inserts the result of `expression` in the page.
-  ```
+  ```html
   Count: <span>{{count}}</span>
   ```
 - [can-stache.helpers.if] - Render the _block_ content if the expression evaluates
   to a _truthy_ value; otherwise, render the _inverse_ content.
-  ```
+  ```html
   {{#if(count)}} Count not 0 {{else}} Count is 0 {{/if}}
   ```
 - [can-stache.helpers.is] - Render the _block_ content if all comma seperated expressions
   evaluate to the same value; otherwise, render the _inverse_ content.
-  ```
+  ```html
   {{#is(count, 1)}} Count is 1 {{else}} Count is not 1 {{/if}}
   ```
 - [can-stache.helpers.each] - Render the _block_ content for each item in the list the expression evaluates to.
-  ```
+  ```html
   {{#each(items)}} {{name}} {{/each}}
   ```
 
@@ -166,23 +168,23 @@ observables. Use it to:
 
 - Call methods on observables when DOM events happen. The following uses
   [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keypress` event:
-  ```
+  ```html
   <input on:keypress="doSomething(scope.element.value)"/>
   ```
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`'s value _to_ an observable's `count` property.
-  ```
+  to send the `<input>`'s _value to_ an observable's `count` property.
+  ```html
   <input value:to="count"/>
   ```
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`'s _value_ from  an observable's `count` property.
-  ```
+  to update the `<input>`'s _value from_  an observable's `count` property.
+  ```html
   <input value:from="count"/>
   ```
 - Cross bind element attribute and property values with observable values.  The following uses
   [can-stache-bindings.twoWay] to update the `<input>`'s _value_ from  an observable's `count` property
   and vice versa:
-  ```
+  ```html
   <input value:bind="count"/>
   ```
 
@@ -247,6 +249,7 @@ The demo defines the `<my-counter>` element with:
     <button on:click='increment()'>+1</button>
     Count: <span>{{count}}</span>
   `);
+  ```
 - A [can-component] that combines the `Counter` and `view` as follows:
   ```js
   import Component from "can-component";
@@ -260,14 +263,14 @@ The demo defines the `<my-counter>` element with:
 
 The demo then creates a `<my-counter>` element like:
 
-```
+```html
 <my-counter></my-counter>
 ```
 
-So __Components__ are just a combination of a [can-stache] __view__ and a
+So __components__ are just a combination of a [can-stache] __view__ and a
 [can-define/map/map DefineMap] __observable__.  [can-component] calls the observable a
 [can-component.prototype.ViewModel]. This is because CanJS's observables are typically
-built within a [Model-view-viewmodel architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
+built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
 
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
   alt=""/>
@@ -292,7 +295,7 @@ This is shown in the following demo:
 passes values from one ViewModel to another.  For example, the `<task-editor>` component
 connects its `progress` property to the `value` property of the `<my-slider>` with:
 
-```js
+```html
 <percent-slider value:bind='progress'/>
 ```
 
@@ -316,15 +319,15 @@ might use sub-components themselves like `<ui-password>` or `<credit-card>`.
 ## Observables and the browser's location
 
 CanJS's pattern is that you define application logic in one or
-more observables, then you connect these observables to
+more observables, then connect the observables to
 various browser APIs.  For example, you can connect the `myCounter` observable from
 the [Key-Value Observables](#Key_ValueObservables) section to `window.location` with:
 
 ```js
 import route from "can-route";
 
-route.data = myCounter
-route.start()
+route.data = myCounter;
+route.start();
 ```
 
 This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.  
@@ -361,7 +364,7 @@ so that the following observable data produces the following url hashes:
 {foo: "bar & baz"}    //-> "#!&foo=bar+%26+baz"
 ```
 
-> The hash-bang (`#!`) is used as default to comply with a now deprecated
+> __NOTE:__ The hash-bang (`#!`) is used as default to comply with a now-deprecated
 > [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started) recommendation.  Use [can-route-pushstate] for modern applications.
 
 You can register routes that controls the relationship between the
@@ -384,8 +387,8 @@ You can add data when the url is matched.  The following registers
 data for when the URL is matched:
 
 ```js
-route.register("products",{page: "products"});
-route.register("products/{id}",{page: "products"})
+route.register("products", {page: "products"});
+route.register("products/{id}", {page: "products"})
 ```
 
 This results in the following translation between observable data and url hashes:
@@ -395,7 +398,7 @@ This results in the following translation between observable data and url hashes
 {page: "products", id: 4}   //-> "#!products/4"
 ```
 
-Registering the empty route (`""`)'s provides initial state for the
+Registering the empty route (`""`) provides initial state for the
 application. The following makes sure the count starts at 0 when the hash is empty:
 
 ```js
@@ -405,7 +408,7 @@ route.register("",{count: 0});
 @demo demos/technology-overview/route-counter-registered.html
 
 
-### Routing and the root Component
+### Routing and the root component
 
 Understanding how to use [can-route] within an application comprised of [can-component]s
 and their [can-stache] views and observable view-models can be tricky.  
@@ -463,7 +466,7 @@ Component.extend({
 })
 ```
 
-> NOTE: Your html needs a `<my-app></my-app>` element to be able to see the
+> __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
 > component's content.  It should say "The current page is .".
 
 To connect the component's VM to the url, we:
@@ -472,12 +475,12 @@ To connect the component's VM to the url, we:
 - call and [can-route.start] to begin sending url values to the component.
 
 ```js
-route.data =  document.querySelector("my-app");
+route.data = document.querySelector("my-app");
 route.start();
 ```
 
 At this point, changes in the URL will cause changes in the `page`
-property. See this by clicking the links, and the back and refresh button below:
+property. See this by clicking the links and the back/refresh buttons below:
 
 @demo demos/technology-overview/route-mini-app-start.html
 
@@ -582,14 +585,14 @@ we want urls like `#!tasks` to set the `page` property.  We can do that
 by registering the following route:
 
 ```js
-route.register("{page}",{page: "home"});
+route.register("{page}", {page: "home"});
 ```
 
 Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
 to `"5"`.  Registering the following route does that:
 
 ```js
-route.register("tasks/{taskId}",{page: "tasks"});
+route.register("tasks/{taskId}", {page: "tasks"});
 ```
 
 Now the mini application is able to translate changes in the url to
