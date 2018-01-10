@@ -22,7 +22,9 @@ var platforms = [{
 	version: 'latest'
 }, {
 	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10'
+	platform: 'Windows 10',
+	commandTimeout: 600, // MAx
+	idleTimeout: 1000
 }, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
