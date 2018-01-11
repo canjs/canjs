@@ -14,18 +14,123 @@
 @templateRender <% %>
 @subchildren
 @description
-Welcome to the CanJS API documentation! Learn about all the packages that make-up CanJS and how they work together to help you build amazing applications!
+Welcome to the CanJS API documentation! Learn about all the packages that make-up CanJS and how they work together to help you build amazing applications.
 
 @body
 
-## Collections
+## Overview
 
-CanJS is made of many independent packages and modules.  Those packages and modules are
-organized within the following collections.  Read on to get an overview of each collection’s
-packages.  Please star what you like so we know where to put our effort.
+CanJS is made of many independent packages and modules. Those packages and modules are organized within the following collections:
+
+- __core__ - The best, most hardened and generally useful libraries in CanJS. These
+  are the APIs a CanJS developer uses the vast majority of the time and are the libraries
+  you should learn first.
+- __infrastructure__ - Utility libraries that power the core collection. These are lower-level
+  utilities that are often used indirectly by the __core__ libraries.  These are good to know
+  if you want to create special behaviors.
+- __ecosystem__ - Useful libraries that add important features or extend the core collection. Checkout these libraries when you want pre-made extensions to CanJS. These
+libraries can be less stable and more experimental than the core and infrastructure packages.
+- __legacy__ - Former libraries that are not under active development,
+  but we still accept patches. It's best to avoid these libraries as they have been replaced by
+  better solutions in other collections.
+
+CanJS also has a `can` package that can be used to load the core modules
+as a shorthand:
+
+```js
+import can from "can";
+can.DefineMap
+can.DefineList
+can.stache
+can.Component
+can.route
+can.connect
+can.set
+```
+
+The `can` package also serves as a integration test of all of
+CanJS's other packages. Read on for more information on these packages.
 
 
-### [can-core Core Collection]
+## The `can` Package
+
+While CanJS is designed to be used and should be used
+as independent packages, we still publish a `can` package
+with a version number, currently `<%canjs.package.version%>`.
+We do this so there is a specified version of all of the
+sub-project packages that are __integration tested__ to work together.  
+
+The `can` package uses [semantic versioning](http://semver.org/)
+with respect to the [can-core] and [can-infrastructure] collections
+only.  Read the [guides/contributing/releases Release Guide] for more information on CanJS’s release process.
+
+The sub-project package versions for `can <%canjs.package.version%>`
+are listed below. Copy the ones you use into your `package.json`
+if you want to use the same packages that were tested as part of
+CanJS `<%canjs.package.version%>`’s release.
+
+__Core Collection__
+
+```
+  "can-component": "<%can-component.package.version%>",
+  "can-compute": "<%can-compute.package.version%>",
+  "can-connect": "<%can-connect.package.version%>",
+  "can-define": "<%can-define.package.version%>",
+  "can-route": "<%can-route.package.version%>",
+  "can-route-pushstate": "<%can-route-pushstate.package.version%>",
+  "can-set": "<%can-set.package.version%>",
+  "can-stache": "<%can-stache.package.version%>",
+  "can-stache-bindings": "<%can-stache-bindings.package.version%>",
+```  
+
+__Infrastructure Collection__
+
+```js
+  "can-construct": "<%can-stache-bindings.package.version%>",
+  "can-control": "<%can-control.package.version%>",
+  "can-event": "<%can-event.package.version%>",
+  "can-observation": "<%can-observation.package.version%>",
+  "can-simple-map": "<%can-simple-map.package.version%>",
+  "can-simple-observable": "<%can-simple-observable.package.version%>",
+  "can-util": "<%can-util.package.version%>",
+  "can-view-callbacks": "<%can-view-callbacks.package.version%>",
+  "can-view-live": "<%can-view-live.package.version%>",
+  "can-view-model": "<%can-view-model.package.version%>",
+  "can-view-nodelist": "<%can-view-nodelist.package.version%>",
+  "can-view-parser": "<%can-view-parser.package.version%>",
+  "can-view-scope": "<%can-view-scope.package.version%>",
+  "can-view-target": "<%can-view-target.package.version%>",
+```
+
+__Ecosystem collection__
+
+```
+  "can-construct-super": "<%can-construct-super.package.version%>",
+  "can-define-stream": "<%can-define-stream.package.version%>",
+  "can-fixture": "<%can-fixture.package.version%>",
+  "can-fixture-socket": "<%can-fixture-socket.package.version%>",
+  "can-jquery": "<%can-jquery.package.version%>",
+  "can-stache-converters": "<%can-stache-converters.package.version%>",
+  "can-stream-kefir": "<%can-stream-kefir.package.version%>",
+  "can-vdom": "<%can-vdom.package.version%>",
+  "can-view-autorender": "<%can-view-autorender.package.version%>",
+  "can-view-import": "<%can-view-import.package.version%>",
+  "can-zone": "<%can-zone.package.version%>",
+  "steal-stache": "<%steal-stache.package.version%>",
+```
+
+__Legacy Collection__
+
+```js
+  "can-ejs": "<%can-ejs.package.version%>",
+  "can-list": "<%can-list.package.version%>",
+  "can-map": "<%can-map.package.version%>",
+  "can-map-backup": "<%can-map-backup.package.version%>",
+  "can-map-define": "<%can-map-define.package.version%>",
+  "can-view-href": "<%can-view-href.package.version%>",
+```
+
+## [can-core Core Collection]
 
 _The best, most hardened and generally useful libraries in CanJS._
 
@@ -61,7 +166,7 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 </div>
 
-### [can-infrastructure Infrastructure Collection]
+## [can-infrastructure Infrastructure Collection]
 
 _Utility libraries that power the core collection._
 
@@ -166,10 +271,10 @@ _Utility libraries that power the core collection._
 - **[can-zone-storage]** <small><%can-zone-storage.package.version%></small> Implement a Zone-safe memory-based storage solution.
   - `npm install can-zone-storage --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone-storage">Star</a>
-  
+
 </div>
 
-### [can-ecosystem Ecosystem Collection]
+## [can-ecosystem Ecosystem Collection]
 
 _Useful libraries that add important features or extend the core collection._
 
@@ -247,7 +352,7 @@ _Useful libraries that add important features or extend the core collection._
 
 </div>
 
-### [can-legacy Legacy Collection]
+## [can-legacy Legacy Collection]
 
 _Former libraries that are not under active development, but we
 still accept patches._
@@ -276,81 +381,3 @@ still accept patches._
   - `npm install can-validate-legacy --save`
   - <a class="github-button" href="https://github.com/canjs/can-validate-legacy">Star</a>
 </div>
-
-## The `can` Package
-
-While CanJS is designed to be used and should be used
-as independent packages, we still publish a `can` package
-with a version number, currently `<%canjs.package.version%>`.
-We do this so there is a specified version of all of the
-sub-project packages that are __integration tested__ to work together.  
-
-The `can` package uses [semantic versioning](http://semver.org/)
-with respect to the [can-core] and [can-infrastructure] collections
-only.  Read the [guides/contributing/releases Release Guide] for more information on CanJS’s release process.
-
-The sub-project package versions for `can <%canjs.package.version%>`
-are listed below. Copy the ones you use into your `package.json`
-if you want to use the same packages that were tested as part of
-CanJS `<%canjs.package.version%>`’s release.
-
-__Core Collection__
-
-```
-  "can-component": "<%can-component.package.version%>",
-  "can-compute": "<%can-compute.package.version%>",
-  "can-connect": "<%can-connect.package.version%>",
-  "can-define": "<%can-define.package.version%>",
-  "can-route": "<%can-route.package.version%>",
-  "can-route-pushstate": "<%can-route-pushstate.package.version%>",
-  "can-set": "<%can-set.package.version%>",
-  "can-stache": "<%can-stache.package.version%>",
-  "can-stache-bindings": "<%can-stache-bindings.package.version%>",
-```  
-
-__Infrastructure Collection__
-
-```js
-  "can-construct": "<%can-stache-bindings.package.version%>",
-  "can-control": "<%can-control.package.version%>",
-  "can-event": "<%can-event.package.version%>",
-  "can-observation": "<%can-observation.package.version%>",
-  "can-simple-map": "<%can-simple-map.package.version%>",
-  "can-simple-observable": "<%can-simple-observable.package.version%>",
-  "can-util": "<%can-util.package.version%>",
-  "can-view-callbacks": "<%can-view-callbacks.package.version%>",
-  "can-view-live": "<%can-view-live.package.version%>",
-  "can-view-model": "<%can-view-model.package.version%>",
-  "can-view-nodelist": "<%can-view-nodelist.package.version%>",
-  "can-view-parser": "<%can-view-parser.package.version%>",
-  "can-view-scope": "<%can-view-scope.package.version%>",
-  "can-view-target": "<%can-view-target.package.version%>",
-```
-
-__Ecosystem collection__
-
-```
-  "can-construct-super": "<%can-construct-super.package.version%>",
-  "can-define-stream": "<%can-define-stream.package.version%>",
-  "can-fixture": "<%can-fixture.package.version%>",
-  "can-fixture-socket": "<%can-fixture-socket.package.version%>",
-  "can-jquery": "<%can-jquery.package.version%>",
-  "can-stache-converters": "<%can-stache-converters.package.version%>",
-  "can-stream-kefir": "<%can-stream-kefir.package.version%>",
-  "can-vdom": "<%can-vdom.package.version%>",
-  "can-view-autorender": "<%can-view-autorender.package.version%>",
-  "can-view-import": "<%can-view-import.package.version%>",
-  "can-zone": "<%can-zone.package.version%>",
-  "steal-stache": "<%steal-stache.package.version%>",
-```
-
-__Legacy Collection__
-
-```js
-  "can-ejs": "<%can-ejs.package.version%>",
-  "can-list": "<%can-list.package.version%>",
-  "can-map": "<%can-map.package.version%>",
-  "can-map-backup": "<%can-map-backup.package.version%>",
-  "can-map-define": "<%can-map-define.package.version%>",
-  "can-view-href": "<%can-view-href.package.version%>",
-```

@@ -1,0 +1,21 @@
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+var Counter = DefineMap.extend("Counter",{
+    count: {value: 0},
+    increment() {
+        this.count++;
+    }
+});
+
+var myCounter = new Counter();
+
+var view = stache(`
+  <button on:click='increment()'>+1</button>
+  Count: <span>{{count}}</span>
+`);
+
+document.body.appendChild( view(myCounter) );
+</script>

@@ -255,7 +255,7 @@ In this section, we will:
   })
   ```
 
-- `DefineMap`'s on [can-define/map/map.prototype.on] lets you listen on changes in a DefineMap.
+- `DefineMap`'s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 

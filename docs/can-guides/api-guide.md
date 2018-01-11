@@ -1,5 +1,5 @@
 @page guides/api Reading the Docs (API Guide)
-@parent guides/getting-started 1
+@parent guides/getting-started 2
 
 @description This page walks through how to use and understand CanJS’s API documentation.  
 
@@ -14,18 +14,20 @@ CanJS’s documentation is broken down by pages for:
  - packages and modules and their exports
  - functions, properties, and type definitions (typedefs) related to module exports
 
-For example, [can-define/map/map.prototype.on can-define/map/map.prototype.on] is a
-method that listens to changes on an observable map as follows:
+For example, [can-define/map/map.prototype.forEach can-define/map/map.prototype.forEach] is a
+method that loops through properties and values on an `DefineMap`:
 
 ```js
 var DefineMap = require("can-define/map/map");
 
 var map = new DefineMap({name: "Justin"});
 
-map.on("name", function(ev, newVal, oldValue){ ... })
+map.forEach(function(value, property){
+
+});
 ```
 
-`.on` is a function the `prototype` of the `DefineMap` export of the `can-define/map/map`
+`.forEach` is a function the `prototype` of the `DefineMap` export of the `can-define/map/map`
 module.  The `can-define/map/map` is part of CanJS’s [can-core] collection.
 
 So understanding CanJS’s API pages are about understanding the relationships between:
