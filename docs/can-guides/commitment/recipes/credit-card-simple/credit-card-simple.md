@@ -368,7 +368,7 @@ To do that, we’ll add the following properties to the ViewModel:
 
 ### What you need to know
 
-- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
+- Use [can-stache-bindings.toChild disabled:from] to make an input disabled, like:
 
   ```html
   <button disabled:from="isCardInvalid">...
