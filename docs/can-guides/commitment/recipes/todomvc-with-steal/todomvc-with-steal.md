@@ -232,11 +232,11 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
   })
   ```
 
-- The [can-define.types.value] behavior defines a property’s initial value like:
+- The [can-define.types.default] behavior defines a property’s initial value like:
 
   ```js
   DefineMap.extend({
-      propertyName: {value: 3}
+      propertyName: {default: 3}
   })
   ```
 
@@ -739,13 +739,13 @@ custom element.
   ```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
-- The [can-define.types.ValueConstructor] behavior creates a default value by using `new Value` to initialize the value when
+- The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
 a `DefineMap` property is read for the first time.
 
   ```js
   var SubType = DefineMap.extend({})
   var Type = DefineMap.extend({
-      property: {Value: SubType}
+      property: {Default: SubType}
   })
 
   var map = new Type();

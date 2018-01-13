@@ -255,7 +255,7 @@ With `can` installed, you can use it in an HTML page with a `<script>` tag:
 	            ViewModel: can.DefineMap.extend({
 		            message: {
 		                type: 'string',
-		                value: 'Hello world'
+		                default: 'Hello world'
 	                }
 	            })
             });
@@ -288,7 +288,7 @@ Another quick way to start locally is by loading CanJS from a CDN:
 	            ViewModel: can.DefineMap.extend({
 		            message: {
 		                type: 'string',
-		                value: 'Hello world'
+		                default: 'Hello world'
 	                }
 	            })
             });

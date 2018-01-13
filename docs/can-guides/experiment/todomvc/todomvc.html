@@ -23,7 +23,7 @@
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
     placeholder="What needs to be done?"
-    value:bind="todo.name"
+    default:bind="todo.name"
     on:enter="createTodo()"/>
 </script>
 
@@ -39,7 +39,7 @@
         <button class="destroy" on:click="destroy()"></button>
       </div>
       <input class="edit" type="text"
-        value:bind="name"
+        default:bind="name"
         on:enter="updateName()"
         focused:from="isEditing(this)"
         on:blur="cancelEdit()"/>
@@ -107,7 +107,7 @@ can.fixture.delay = 1000;
 var Todo = can.DefineMap.extend({
   id: "number",
   name: "string",
-  complete: {type: "boolean", value: false}
+  complete: {type: "boolean", default: false}
 });
 
 Todo.List = can.DefineList.extend({
@@ -148,7 +148,7 @@ can.connect.superMap({
 });
 
 var TodoCreateVM = can.DefineMap.extend({
-  todo: {Value: Todo},
+  todo: {Default: Todo},
   createTodo: function(){
     this.todo.save().then(function(){
       this.todo = new Todo();

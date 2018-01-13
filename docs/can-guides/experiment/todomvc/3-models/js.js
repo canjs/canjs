@@ -17,7 +17,7 @@ can.fixture.delay = 1000;
 var Todo = can.DefineMap.extend({
   id: "number",
   name: "string",
-  complete: {type: "boolean", value: false}
+  complete: {type: "boolean", default: false}
 });
 
 Todo.List = can.DefineList.extend({

@@ -20,7 +20,7 @@ class AppComponent extends Component {
 AppComponent.ViewModel = DefineMap.extend("AppVM", {
   count: {
     type: "number",
-    value: 0
+    default: 0
   },
   increment: function() {
     return this.count++;

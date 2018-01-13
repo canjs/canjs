@@ -8,7 +8,7 @@ var Todo = DefineMap.extend("Todo", {
 	name: "string",
 	complete: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	toggleComplete: function() {
 		this.complete = !this.complete;

@@ -35,7 +35,7 @@ var AccordionViewModel = DefineMap.extend({
 	// Contains a list of all panel scopes within the
 	// tabs element.
 	panels: {
-		Value: DefineList
+		Default: DefineList
 	},
 	// When a `<panel>` element is inserted into the document,
 	// it calls this method to add the panel's scope to the
@@ -86,7 +86,7 @@ Component.extend({
 	ViewModel: DefineMap.extend('MyPanelVM', {
 		active: {
 			type: "boolean",
-			value: false
+			default: false
 		},
 		title: "string"
 	}),

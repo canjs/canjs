@@ -82,7 +82,7 @@ var Todo = DefineMap.extend({           // A todo has a:
   name: "string",                       // .name that’s a string
   complete: {                           // .complete that’s
 	type: "boolean",                    //        a boolean
-	value: false                        //        initialized to false
+	default: false                      //        initialized to false
   },                                    
   dueDate: "date",                      // .dueDate that’s a date
   get isPastDue(){                      // .pastDue that returns if the
@@ -310,7 +310,7 @@ var TodosListVM = DefineMap.extend({
 	// An initial value that is a promise containing the
 	// list of all todos.
 	todos: {
-		value: function(){
+		default: function(){
 			return Todo.getList({});
 		}
 	},

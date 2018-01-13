@@ -17,14 +17,14 @@ Component.extend({
         on:mousedown='startDrag(scope.event.clientX)'/>`),
 
     ViewModel: DefineMap.extend("MySliderViewModel",{
-        start: {type: "number", value: 0},
-        end: {type: "number", value: 100},
+        start: {type: "number", default: 0},
+        end: {type: "number", default: 100},
         currentValue: {
-            value: function(){
+            default: function(){
                 return this.value || 0;
             }
         },
-        width: {type: "number", value: 0},
+        width: {type: "number", default: 0},
         get left(){
             var left = this.currentValue / this.end * this.width;
             return Math.min( Math.max(0, left), this.width) || 0;

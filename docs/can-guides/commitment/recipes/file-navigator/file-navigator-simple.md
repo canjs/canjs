@@ -383,7 +383,7 @@ We want to be able to toggle if a folder is open or closed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"}
+    age: {default: 33, type: "number"}
   });
   ```
 
@@ -392,7 +392,7 @@ We want to be able to toggle if a folder is open or closed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"},
+    age: {default: 33, type: "number"},
     birthday: function(){
       this.age++;
     }
@@ -426,7 +426,7 @@ var Entity = can.DefineMap.extend("Entity", {
       return new Entity(entity)
     }
   }],
-  isOpen: {type: "boolean", value: false},
+  isOpen: {type: "boolean", default: false},
   toggleOpen: function(){      
     this.isOpen = !this.isOpen;
   }

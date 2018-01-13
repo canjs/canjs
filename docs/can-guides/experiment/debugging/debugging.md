@@ -318,7 +318,7 @@ Component.extend({
     tag: "my-counter",
     view: `{{console.log(count)}}`,
     ViewModel: {
-        count: {value: 0}
+        count: {default: 0}
         connectedCallback(){
             setInterval(() => {
                 this.count++;

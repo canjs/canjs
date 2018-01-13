@@ -6,7 +6,7 @@ import "can-stache-bindings";
 
 var TodosApp = DefineMap.extend("TodosApp",{
     todos: {
-        value: () => new DefineList([
+        default: () => new DefineList([
             {complete: true, name: "Do the dishes."},
             {complete: true, name: "Wash the car."},
             {complete: false, name: "Learn CanJS."}

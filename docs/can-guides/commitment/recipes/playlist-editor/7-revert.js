@@ -10,7 +10,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
     });
   },
   googleApiLoadedPromise: {
-    value: googleApiLoadedPromise
+    default: googleApiLoadedPromise
   },
   googleAuth: {
     get: function(lastSet, resolve) {
@@ -26,7 +26,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   },
   searchQuery: {
     type: "string",
-    value: ""
+    default: ""
   },
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
@@ -53,7 +53,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   dropPlaceholderData: "any",
   playlistVideos: {
     Type: ["any"],
-    Value: can.DefineList
+    Default: can.DefineList
   },
   addDropPlaceholder: function(index, video) {
     this.dropPlaceholderData = {

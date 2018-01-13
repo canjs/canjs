@@ -587,7 +587,7 @@ var CarOwner = Map.extend({
 			type: "string"
 		},
 		age: {
-			value: 18
+			default: 18
 		}
 	}
 });
@@ -604,7 +604,7 @@ var CarOwner = DefineMap.extend({
 	color: "string",
 	age: {
 		type: "number",
-		value: 18
+		default: 18
 	}
 });
 ```
@@ -636,7 +636,7 @@ Here’s the example above updated for `can-define/map/map`:
 var DefineMap = require("can-define/map/map");
 
 var Person = DefineMap.extend({
-  name: {value: "Justin"}
+  name: {default: "Justin"}
 });
 ```
 

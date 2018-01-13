@@ -97,7 +97,7 @@
 				name: "string",
 				body: "string",
 				messagesPromise: {
-					value: Message.getList.bind(Message, {})
+					default: Message.getList.bind(Message, {})
 				},
 				send: function (event) {
 					event.preventDefault();

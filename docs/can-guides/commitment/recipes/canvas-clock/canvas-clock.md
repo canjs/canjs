@@ -56,7 +56,7 @@ defines the behavior of the `<clock-controls/>` element:
 
 ```js
 var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
-  time: {Value: Date, Type: Date},
+  time: {Default: Date, Type: Date},
   init(){
     setInterval(() => {
       this.time = new Date();

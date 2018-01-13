@@ -1,6 +1,6 @@
 <script type="text/stache" id="demo-html">
 <year-selector *year-selector />
-Celebrate like it's {{*yearSelector.selectedYear}}!
+Celebrate like it is {{*yearSelector.selectedYear}}!
 </script>
 <script src="../../node_modules/steal/steal.js" id='demo-source'>
 import Component from "can-component";
@@ -15,7 +15,7 @@ Component.extend({
 		"</select>"),
 	ViewModel: DefineMap.extend({
 		selectedYear: {
-			value: 1999,
+			default: 1999,
 			type: 'number'
 		}
 	})
@@ -24,4 +24,3 @@ Component.extend({
 var tree = stache(document.getElementById("demo-html").innerHTML)({});
 document.body.appendChild(tree);
 </script>
-

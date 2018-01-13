@@ -7,7 +7,7 @@ require("can-stache-bindings");
 
 
 var CounterVM = DefineMap.extend("CounterVM",{
-  count: {value: 0, type: "number"},
+  count: {default: 0, type: "number"},
   add: function(){
     this.count++;
   }

@@ -40,7 +40,7 @@ Component.extend({
 	template: stache(document.getElementById('drivers-stache').innerHTML),
 	ViewModel: DefineMap.extend({
 		drivers: {
-			value: drivers
+			default: drivers
 		},
 		selected: "any",
 		select: function(driver){
@@ -64,4 +64,3 @@ Component.extend({
 var tree = stache(document.getElementById('app').innerHTML)({});
 document.body.appendChild(tree);
 </script>
-

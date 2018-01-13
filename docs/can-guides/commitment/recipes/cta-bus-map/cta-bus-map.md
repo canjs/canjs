@@ -195,11 +195,11 @@ In this section, we will:
 
   These values come from a ViewModel or Model.
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	someValue: {
-	  value: "This string"
+	  default: "This string"
 	}  
   });
   new AppViewModel().someValue //-> "This string"
@@ -207,7 +207,7 @@ In this section, we will:
 
 ### How to verify it works
 
-Run the folowing in the `Console` tab:
+Run the following in the `Console` tab:
 
 ```js
 viewModel.title = "TITLE UPDATED"
@@ -250,11 +250,11 @@ We will do this by:
 
 ### What you need to know
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	myProperty: {
-	  value: function(){
+	  default: function(){
 		return new Promise( .... );
 	  }
 	}  

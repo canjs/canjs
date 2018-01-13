@@ -79,7 +79,7 @@ var WeatherViewModel = can.DefineMap.extend({
     },
     geoLocationStream: {
         type: "any",
-        value: function(){
+        default: function(){
             return Kefir.stream(function(emitter) {
 				navigator.geolocation.getCurrentPosition(function(position){
                   emitter.value(position);

@@ -17,7 +17,7 @@ can.fixture.delay = 1000;
 var Todo = can.DefineMap.extend({
   id: "number",
   name: "string",
-  complete: {type: "boolean", value: false}
+  complete: {type: "boolean", default: false}
 });
 
 Todo.List = can.DefineList.extend({
@@ -39,7 +39,7 @@ can.connect.superMap({
 });
 
 var TodoCreateVM = can.DefineMap.extend({
-  todo: {Value: Todo},
+  todo: {Default: Todo},
   createTodo: function(){
     this.todo.save().then(function(){
       this.todo = new Todo();

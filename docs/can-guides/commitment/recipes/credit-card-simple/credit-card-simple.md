@@ -125,7 +125,7 @@ viewModel.amount = 1000;
 
   ```js
   ProductVM = can.DefineMap.extend("ProductVM",{
-    age: {value: 34}
+    age: {default: 34}
   })
   ```
 
@@ -176,7 +176,7 @@ Print out the exported values like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
+- Use [can-stache-bindings.twoWay default:bind] to set up a two-way binding in
   `can-stache`.  For example, the following keeps `email` on the ViewModel and
   the input’s `value` in sync:
 
