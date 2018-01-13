@@ -63,7 +63,7 @@ state of `myCounter`.
 > __NOTE:__ CanJS application logic is coded within instances of `DefineMap` and `DefineList`.
 > You often don’t need the DOM for unit testing!
 
-[can-define/map/map DefineMap] and [can-define/map/map DefineList] have a wide variety of features (and shorthands)
+[can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features (and shorthands)
 for defining property behavior. In the previous example, `count: {default: 0}` defined the `count` property to
 have an initial value of `0`. The `{default: 0}` object is a [can-define.types.propDefinition].
 
