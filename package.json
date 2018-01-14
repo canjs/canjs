@@ -52,7 +52,7 @@
     "can-debug": "^1.0.0-pre.5",
     "can-define": "^2.0.0-pre.30",
     "can-define-lazy-value": "^1.0.1",
-    "can-define-stream": "^1.0.0-pre.0",
+    "can-define-stream": "^1.0.0-pre.1",
     "can-define-stream-kefir": "^1.0.0-pre.0",
     "can-define-validate-validatejs": "^1.0.0-pre.0",
     "can-deparam": "^1.0.3",
