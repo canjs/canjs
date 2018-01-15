@@ -1,4 +1,4 @@
-@page guides/setup Setting up CanJS
+@page guides/setup Setting Up CanJS
 @parent guides/getting-started 0
 @outline 2
 
