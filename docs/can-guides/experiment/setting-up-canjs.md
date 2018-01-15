@@ -302,7 +302,7 @@ Another quick way to start locally is by loading CanJS from a CDN:
 
 ## A note on Promises
 
-CanJS uses native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which means you might see the following error in Internet Explorer 9 or later:
+CanJS uses native [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which means you might see the following error in older browsers:
 
 ```
 'Promise' is undefined
