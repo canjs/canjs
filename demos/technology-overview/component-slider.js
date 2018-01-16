@@ -10,7 +10,6 @@ function width(el) {
 
 Component.extend({
     tag: "percent-slider",
-    autoMount: true,
     view: stache(`
         <div class='slider'
         style="left: {{left}}px"

@@ -32,7 +32,6 @@ Component.extend({
             </button>
         </form>
     `),
-    autoMount: true,
     ViewModel: DefineMap.extend({
         id: "number",
         name: {
