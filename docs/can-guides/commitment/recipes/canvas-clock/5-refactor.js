@@ -77,7 +77,6 @@ var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
 
 can.Component.extend({
   tag: "clock-controls",
-  autoMount: true,
   ViewModel: ClockControlsVM,
   view: can.stache(`
     <p>{{time}}</p>
