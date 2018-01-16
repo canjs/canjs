@@ -40,9 +40,9 @@ Component.extend({
             type(num){
                 return parseInt(num);
             },
-             0
+            default: 0
         },
-        isSaving: { false},
+        isSaving: {default: false},
         save(event){
             event.preventDefault();
             this.isSaving = true;
