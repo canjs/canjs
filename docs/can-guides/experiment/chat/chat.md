@@ -63,7 +63,7 @@ Update the `JavaScript` tab to:
 
  - Define an application view-model (`AppVM`) type by extending [can-define/map/map]. Its definition includes:
    - A `message` property that is a [can-define.types string]
-     value [can-define.types.value initialized] to `"Chat Home"`.
+     value [can-define.types.default initialized] to `"Chat Home"`.
    - An `addExcitement` method that adds `"!"` to the end of the `message` property.
  - Create an instance of the `AppVM` type (`appVM`).
  - Compile a [can-stache] [can-stache.renderer template renderer] function from the contents of the `<script>` tag.
@@ -260,7 +260,7 @@ Update the `JavaScript` tab to:
    the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
  - Create a `messagesPromise` property on `ChatMessagesVM` that’s
-   [can-define.types.value] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+   [can-define.types.default] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
    that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js

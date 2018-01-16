@@ -31,7 +31,7 @@ Component.extend({
 		// Contains a list of all panel scopes within the
 		// tabs element.
 		panels: {
-			value: function() {
+			default: function() {
 				return new DefineList([]);
 			}
 		},
@@ -82,7 +82,7 @@ Component.extend({
 	view: stache("{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
-		active: { value: false },
+		active: { default: false },
 		addPanel: "any",
 		init: function(){
 			this.addPanel(this);

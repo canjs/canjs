@@ -168,7 +168,7 @@ a ViewModel called `AppViewModel`.
 
   ```js
   AppViewModel = can.DefineMap.extend("AppViewModel",{
-    isLoggedIn: {value: false}
+    isLoggedIn: {default: false}
   })
   ```
 
@@ -219,11 +219,11 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 
 ### What you need to know
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	myProperty: {
-	  value: function(){
+	  default: function(){
 		return "This string"
 	  }
 	}  

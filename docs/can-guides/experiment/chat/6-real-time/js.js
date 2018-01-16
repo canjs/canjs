@@ -33,7 +33,7 @@ socket.on('messages removed', function(message){
 
 var ChatMessagesVM = can.DefineMap.extend({
 	messagesPromise: {
-		value: function(){
+		default: function(){
 			return Message.getList({});
 		}
 	},
@@ -61,7 +61,7 @@ var AppVM = can.DefineMap.extend({
 	page: "string",
 	message: {
 		type: "string",
-		value: "Chat Home",
+		default: "Chat Home",
 		serialize: false
 	},
 	addExcitement: function(){

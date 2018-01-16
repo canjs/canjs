@@ -118,7 +118,7 @@ var project = new Map({
 var MMYViewModel = Map.extend({
 	define:{
 		makes: {
-			value: function(){
+			default: function(){
 				return CarMake.findAll({});
 			},
 			serialize: false

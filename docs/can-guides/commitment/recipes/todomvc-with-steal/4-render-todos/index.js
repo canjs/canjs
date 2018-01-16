@@ -6,7 +6,7 @@ var Todo = require("~/models/todo");
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string",
     todosList: {
-		value: function(){
+		default: function(){
 			return new Todo.List([
 				{ name: "mow lawn", complete: false, id: 5 },
 				{ name: "dishes", complete: true, id: 6 },

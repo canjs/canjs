@@ -34,7 +34,7 @@ var Card = can.DefineMap.extend({
 	number: "number",
 	pin: "number",
 	state: {
-		value: "unverified",
+		default: "unverified",
 		serialize: false
 	},
 	verify: function() {
@@ -80,11 +80,11 @@ var Transaction = can.DefineMap.extend({
 	card: Card,
 	executed: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	executing: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	get state() {
 		if (this.executed) {
@@ -173,7 +173,7 @@ var ATM = can.DefineMap.extend({
 	transactions: can.DefineList,
 	printingReceipt: "boolean",
 	receiptTime: {
-		value: 5000,
+		default: 5000,
 		type: "number"
 	},
 	currentTransaction: {

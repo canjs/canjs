@@ -9,7 +9,7 @@ import stache from "can-stache";
 import Component from "can-component";
 
 var Counter = DefineMap.extend("Counter",{
-    count: {value: 0},
+    count: {default: 0},
     increment() {
         this.count++;
     }

@@ -399,7 +399,7 @@ quite powerful, performant and flexible.  Read on to explore some of its best ch
 ### Expressive property definition syntax
 
 [can-define] supports an expressive, powerful syntax for defining properties on observable objects and lists. It supports [can-define.types.get getter], [can-define.types.set setter],
-initial [can-define.types.value], and [can-define.types.type] conversion, [can-define.types.serialize]
+initial [can-define.types.default], and [can-define.types.type] conversion, [can-define.types.serialize]
 and [can-define-stream.stream] behaviors.
 
 The following illustrates the signatures of these behaviors:
@@ -411,8 +411,8 @@ DefineMap.extend({
         set: function(newValue, resolve){ ... },
         type: function(newValue, propertyName){ ... },
         Type: Constructor,
-        value: function(){ ... },
-        Value: Constructor,
+        default: function(){ ... },
+        Default: Constructor,
         serialize: function(){ ... },
         stream: function(setStream){ ... }
     }
@@ -454,7 +454,7 @@ var Person = DefineMap.extend({
         return this.first+" "+this.last;
     },
     // age is a number that defaults to `0`
-    age: {value: 0, type: "number"},
+    age: {default: 0, type: "number"},
     // addresses is a DefineList of Address types
     addresses: [Address]
 });
@@ -501,7 +501,7 @@ To satisfy this API, `SaltShaker` could be implemented as follows:
 var DefineMap = require("can-define/map/map");
 
 SaltShaker = DefineMap.extend({
-    saltCount: {type: "number", value: 0},
+    saltCount: {type: "number", default: 0},
     fill: function(){
         this.saltCount = 2;
     },
@@ -734,7 +734,7 @@ var DefineMap = require("can-define/map/map"),
 var Todo = DefineMap.extend({
   id: "number",
   name: "string",
-  complete: {type: "boolean", value: false}
+  complete: {type: "boolean", default: false}
 });
 
 // Defines methods or properties on lists

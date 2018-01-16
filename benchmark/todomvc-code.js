@@ -67,7 +67,7 @@ module.exports = function(){
 	});
 
 	var TodoCreateVM = DefineMap.extend({
-	  todo: {Value: Todo},
+	  todo: {Default: Todo},
 	  createTodo: function(){
 	    this.todo.save().then(function(){
 	      this.todo = new Todo();

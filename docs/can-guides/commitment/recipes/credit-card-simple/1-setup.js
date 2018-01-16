@@ -1,7 +1,7 @@
 Stripe.setPublishableKey('pk_test_zCC2JrO3KSMeh7BB5x9OUe2U');
 
 var PaymentVM = can.DefineMap.extend({
-  amount: {value: 9.99}
+  amount: {default: 9.99}
 });
 
 var viewModel = new PaymentVM();

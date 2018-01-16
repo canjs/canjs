@@ -36,7 +36,7 @@ Component.extend({
     ViewModel: DefineMap.extend({
         id: "number",
         name: {
-            value: function(){
+            default: function(){
                 return "Task "+this.id;
             }
         },
@@ -45,9 +45,9 @@ Component.extend({
             type(num){
                 return parseInt(num);
             },
-            value: 0
+            default: 0
         },
-        isSaving: {value: false},
+        isSaving: {default: false},
         save(event){
             event.preventDefault();
             this.isSaving = true;

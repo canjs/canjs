@@ -1,6 +1,6 @@
 var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   googleApiLoadedPromise: {
-    value: googleApiLoadedPromise
+    default: googleApiLoadedPromise
   }
 });
 

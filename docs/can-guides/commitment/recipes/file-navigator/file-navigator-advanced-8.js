@@ -77,11 +77,11 @@ var folder = new Entity({
 var FolderVM = can.DefineMap.extend({
   folder: Entity,
   entitiesPromise: {
-    value: function() {
+    default: function() {
       return Entity.getList({parentId: this.folder.id});
     }
   },
-  isOpen: {type: "boolean", value: false},
+  isOpen: {type: "boolean", default: false},
   toggleOpen: function() {
     this.isOpen = !this.isOpen;
   }

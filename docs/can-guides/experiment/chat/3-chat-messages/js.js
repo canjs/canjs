@@ -12,7 +12,7 @@ var AppVM = can.DefineMap.extend({
 	route: "string",
 	message: {
 		type: "string",
-		value: "Chat Home",
+		default: "Chat Home",
 		serialize: false
 	},
 	addExcitement: function(){

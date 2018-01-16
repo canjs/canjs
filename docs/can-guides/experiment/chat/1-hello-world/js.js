@@ -1,7 +1,7 @@
 var AppVM = can.DefineMap.extend({
 	message: {
 		type: "string",
-		value: "Chat Home"
+		default: "Chat Home"
 	},
 	addExcitement: function(){
 		this.message = this.message + "!";

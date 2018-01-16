@@ -41,7 +41,7 @@ Component.extend({
             }
             return this.page;
         },
-        isLoggedIn: {value: false, type: "boolean", serialize: false},
+        isLoggedIn: {default: false, type: "boolean", serialize: false},
         logout() {
             this.isLoggedIn = false;
         }

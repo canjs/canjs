@@ -17,7 +17,7 @@ var Card = can.DefineMap.extend({
 	number: "string",
 	pin: "string",
 	state: {
-		value: "unverified",
+		default: "unverified",
 		serialize: false
 	},
 	verify: function() {
@@ -42,7 +42,7 @@ var Card = can.DefineMap.extend({
 });
 
 var ATM = can.DefineMap.extend({
-	state: {type: "string", value: "readingCard"}
+	state: {type: "string", default: "readingCard"}
 });
 
 can.Component.extend({

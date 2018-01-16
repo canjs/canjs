@@ -6,7 +6,7 @@ var Todo = require("~/models/todo");
 
 var TodoCreateVM = DefineMap.extend({
 	todo: {
-		Value: Todo
+		Default: Todo
 	},
 	createTodo: function() {
 		this.todo.save().then(function() {

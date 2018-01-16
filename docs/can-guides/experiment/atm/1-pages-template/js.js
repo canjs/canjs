@@ -3,7 +3,7 @@
 // ========================================
 
 var ATM = can.DefineMap.extend({
-	state: {type: "string", value: "readingCard"}
+	state: {type: "string", default: "readingCard"}
 });
 
 can.Component.extend({

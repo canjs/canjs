@@ -6,10 +6,10 @@ var getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
 var BusTrackerVM = can.DefineMap.extend({
   title: {
-    value: "Chicago CTA Bus Tracker"
+    default: "Chicago CTA Bus Tracker"
   },
   routesPromise: {
-    value() {
+    default() {
       return fetch(proxyUrl + getRoutesEnpoint)
         .then(response => response.json())
         .then(data => data["bustime-response"].routes);

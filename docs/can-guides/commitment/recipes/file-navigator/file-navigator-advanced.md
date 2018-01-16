@@ -345,7 +345,7 @@ clicks on the root folder’s name should toggle if the children are displayed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33}
+    age: {default: 33}
   });
   ```
 
@@ -353,7 +353,7 @@ clicks on the root folder’s name should toggle if the children are displayed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"}
+    age: {default: 33, type: "number"}
   });
   ```
 
@@ -362,7 +362,7 @@ clicks on the root folder’s name should toggle if the children are displayed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"},
+    age: {default: 33, type: "number"},
     birthday: function() {
       this.age++;
     }
@@ -426,7 +426,7 @@ Now we want to make all the folders able to open and close.  This means creating
 - [can-component can.Component] is used to create custom elements like:
   ```js
   var MyComponentVM = DefineMap.extend({
-    message: {value: "Hello There!"}
+    message: {default: "Hello There!"}
   });
 
   can.Component.extend({

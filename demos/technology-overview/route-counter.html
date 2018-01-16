@@ -8,7 +8,7 @@ import route from "can-route";
 import "can-stache-bindings";
 
 var Counter = DefineMap.extend("Counter",{
-    count: {value: 0, type: "number"},
+    count: {default: 0, type: "number"},
     increment() {
         this.count++;
     }

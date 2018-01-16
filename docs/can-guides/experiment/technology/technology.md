@@ -40,7 +40,7 @@ a simple counter, we can use [can-define/map/map DefineMap] as follows:
 ```js
 import DefineMap from "can-define/map/map";
 var Counter = DefineMap.extend("Counter",{
-    count: {value: 0},
+    count: {default: 0},
     increment() {
         this.count++;
     }
@@ -64,10 +64,10 @@ state of `myCounter`.
 > You often don’t need the DOM for unit testing!
 
 [can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features (and shorthands)
-for defining property behavior. In the previous example, `count: {value: 0}` defined the `count` property to
-have an initial value of `0`. The `{value: 0}` object is a [can-define.types.propDefinition].
+for defining property behavior. In the previous example, `count: {default: 0}` defined the `count` property to
+have an initial value of `0`. The `{default: 0}` object is a [can-define.types.propDefinition].
 
-The following example uses the [can-define.types.value] and [can-define.types.get] property
+The following example uses the [can-define.types.default] and [can-define.types.get] property
 definition behaviors to define a `TodosApp` constructor function's `todos` and `completeCount`
 property behavior:
 
@@ -75,7 +75,7 @@ property behavior:
 var TodosApp = DefineMap.extend("TodosApp",{
     todos: {
         // todos defaults to a DefineList of todo data.
-        value: () => new DefineList([
+        default: () => new DefineList([
             {complete: true, name: "Do the dishes."},
             {complete: true, name: "Wash the car."},
             {complete: false, name: "Learn CanJS."}
@@ -236,7 +236,7 @@ The demo defines the `<my-counter>` element with:
   ```js
   import DefineMap from "can-define/map/map";
   var Counter = DefineMap.extend("Counter",{
-      count: {value: 0},
+      count: {default: 0},
       increment() {
           this.count++;
       }
@@ -546,7 +546,7 @@ Component.extend({
         // `serialize: false` prevents it from being
         // part of the url.
         isLoggedIn: {
-            value: false,
+            default: false,
             type: "boolean",
             serialize: false
         },

@@ -159,7 +159,7 @@ In this section, we will:
 - `can.DefineMap` can specify a default value and a type:
   ```js
   var PlaylistVM = can.DefineMap.extend({
-    count: {value: 33}
+    count: {default: 33}
   });
   new PlaylistVM().count //-> 33
   ```
@@ -458,7 +458,7 @@ In this section, we will:
 	  // [video1, video2, ...]
 	  playlistVideos: {
 	     Type: ["any"],
-	     Value: can.DefineList
+	     Default: can.DefineList
 	  },
 	  get videosWithDropPlaceholder() {
          var copyOfPlaylistVideos = this.placeListVideos.map(...);

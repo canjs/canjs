@@ -10,10 +10,10 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var canBatch = require("can-event/batch/batch");
 var stache = require("can-stache");
-	
+
 Component.extend({
 	tag: "my-tabs",
-	template: 	
+	template:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#panels}}"+
@@ -28,7 +28,7 @@ Component.extend({
 		// Contains a list of all panel scopes within the
 		// tabs element.
 		panels: {
-			value: new DefineList([])
+			Default: DefineList
 		},
 		active: "any",
 		// When a `<panel>` element is inserted into the document,
@@ -38,7 +38,7 @@ Component.extend({
 			// If this is the first panel, activate it.
 			if(this.panels.length === 0) {
 				this.makeActive(panel);
-			} 
+			}
 			this.panels.push(panel);
 		},
 		// When a `<panel>` element is removed from the document,
@@ -77,7 +77,7 @@ Component.extend({
 	template: stache("{{#if active}}<content></content>{{/if}}"),
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
-		active: { value: false },
+		active: { default: false },
 		addPanel: "any",
 		init: function(){
 			this.addPanel(this);
@@ -90,4 +90,3 @@ var frag = stache(el.innerHTML)({});
 
 document.body.appendChild(frag);
 </script>
-

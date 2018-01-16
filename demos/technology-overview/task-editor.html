@@ -16,7 +16,7 @@ Component.extend({
         <form on:submit='save(scope.event)'>
             Name: {{name}}
             <p>
-                <input value:bind='name'/>
+                <input bind='name'/>
             </p>
             Progress: {{progress}}
             <p>
@@ -31,7 +31,7 @@ Component.extend({
     ViewModel: DefineMap.extend({
         id: "number",
         name: {
-            value: function(){
+            default: function(){
                 return "Task "+this.id;
             }
         },
@@ -40,9 +40,9 @@ Component.extend({
             type(num){
                 return parseInt(num);
             },
-            value: 0
+             0
         },
-        isSaving: {value: false},
+        isSaving: { false},
         save(event){
             event.preventDefault();
             this.isSaving = true;
