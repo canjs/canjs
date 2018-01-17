@@ -14,7 +14,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/niyowic/1/embed?output&height=400px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/vamojuh/4/embed?output&height=400px">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
@@ -29,7 +29,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/sunojar/1/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zomefef/4/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML, CSS, and JS to bootstrap a basic CanJS application.
 
@@ -50,7 +50,7 @@ Please read on to understand the setup.
 
 __A Basic CanJS Setup__
 
-A basic CanJS setup is usually an `autoMount` custom element.  In the `HTML`
+A basic CanJS setup is usually a custom element.  In the `HTML`
 tab, you'll find a `<clock-controls/>` element.  The following code in the `JS` tab
 defines the behavior of the `<clock-controls/>` element:
 
@@ -66,7 +66,6 @@ var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
 
 can.Component.extend({
   tag: "clock-controls",
-  autoMount: true,
   ViewModel: ClockControlsVM,
   view: can.stache(`
     <p>{{time}}</p>
@@ -97,9 +96,6 @@ element. [can-component] has configured properties that define the behavior of t
   template.
 - `ViewModel` provides methods and values to the `view`.  `ViewModel`s are usually a typeof
 [can-define/map/map].
-- `autoMount` set to `true` will automatically hook up any elements it finds in the page that match
-  the custom element's `tag`.
-
 
 ## Create a digital clock component ##
 

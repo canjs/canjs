@@ -430,7 +430,7 @@ the application looks like:
   width="800px"/>  
 
 In most applications, [can-route] is connected to the top-level component's
-[can-component.prototype.ViewModel] .We are going to go through the process of
+[can-component.prototype.ViewModel]. We are going to go through the process of
 building `<my-app>` and connecting it
 to [can-route]. This is usually done in four steps:
 
@@ -454,7 +454,6 @@ import "can-stache-route-helpers";
 
 Component.extend({
     tag: "my-app",
-    autoMount: true,
     view: stache(`
         The current page is {{page}}.
         <a href="{{ routeURL(page='home') }}">Home</a>
@@ -497,7 +496,6 @@ based on a `componentToShow` property on the view-model. The result looks like t
 ```js
 Component.extend({
     tag: "my-app",
-    autoMount: true,
     view: stache(`
         {{#switch(componentToShow)}}
             {{#case("home")}}

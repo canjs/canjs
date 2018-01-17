@@ -8,7 +8,7 @@ before_install:
 - if [ "$TRAVIS_BRANCH" != "master" ] || [ "$TRAVIS_PULL_REQUEST" != false ]; then SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY_NOT_MASTER SAUCE_USERNAME=$SAUCE_USERNAME_NOT_MASTER; fi
 - echo "Sauce Labs username is $SAUCE_USERNAME"
 - |
-    if ! git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^docs)/'
+    if ! git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^docs)|(^demos)/'
     then
       echo "Only docs were updated, skipping tests."
       exit
