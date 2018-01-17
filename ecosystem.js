@@ -1,7 +1,7 @@
 var can = require("can-util/namespace");
 
 require("can-construct-super");
-//require("can-connect-feathers");
+require("can-connect-feathers");
 //require("can-connect-signalr");
 //require("can-connect-cloneable");
 //require("can-connect-ndjson");
@@ -11,7 +11,7 @@ require("can-construct-super");
 require("can-fixture");
 //require("can-fixture-socket");
 //require("can-jquery");
-//require("can-kefir");
+require("can-kefir");
 //require("can-ndjson-stream");
 //if(typeof Proxy === "function"){
 //	require("can-observe");
