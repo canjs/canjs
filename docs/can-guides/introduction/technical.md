@@ -113,9 +113,12 @@ are used to transform a set of observable values into another observable value. 
 For example, the following compute keeps the completed count of todos in a list:
 
 ```js
-var DefineList = require("can-define/list/list");
-var DefineMap = require("can-define/map/map");
-var compute = require("can-compute");
+import DefineList from 'can-define/list/list';
+
+import DefineMap from 'can-define/map/map';
+
+import compute from 'can-compute';
+
 
 var todoList = new DefineList([
     {name: "dishes",  complete: true},
@@ -218,7 +221,8 @@ In the following example, before `fullName` is bound,
 its value is recalculated only when a dependent value changes.
 
 ```js
-var compute = require("can-compute");
+import compute from 'can-compute';
+
 var firstName = compute("Payal");
 var lastName = compute("Meyer");
 
@@ -254,8 +258,10 @@ The following example shows how you can
 change the `firstName` value and immediately check the consequences of that change:
 
 ```js
-var stache = require("can-stache");
-var compute = require("can-compute");
+import stache from 'can-stache';
+
+import compute from 'can-compute';
+
 
 var template = stache("<h1>Welcome {{fullName}}</h1>");
 
@@ -292,7 +298,8 @@ Wrapping this in a batch makes `{{fullName}}` update only once:
 
 
 ```js
-var batch = require("can-event/batch/batch");
+import batch from 'can-event/batch/batch';
+
 
 batch.start();
 firstName("Payal");
@@ -380,7 +387,8 @@ can improve performance by preventing compute recalculations.
 [can-define] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
+
 
 var Person = DefineMap.extend({
     first: "string",
@@ -498,7 +506,8 @@ saltShaker.empty   //-> true
 To satisfy this API, `SaltShaker` could be implemented as follows:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
+
 
 SaltShaker = DefineMap.extend({
     saltCount: {type: "number", value: 0},
@@ -725,10 +734,11 @@ into individual and independent modules and files that look like:
 The __Model__, in _models/todo.js_, looks like:
 
 ```js
-var DefineMap = require("can-define/map/map"),
-    DefineList = require("can-define/list/list"),
-    set = require("can-set"),
-    superMap = require("can-connect/can/super-map/super-map");
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import set from 'can-set';
+import superMap from 'can-connect/can/super-map/super-map';
+
 
 // Defines the type of data we get back from the server.
 var Todo = DefineMap.extend({
@@ -766,7 +776,7 @@ Todo.connection = superMap({
   algebra: Todo.algebra
 });
 
-module.exports = Todo;
+export default Todo;
 ```
 
 This model can independently make requests to a RESTful service layer.
@@ -800,7 +810,7 @@ The __ViewModel__, in _components/todo-list/view-model.js_, looks like:
 var DefineMap = "can-define/map/map";
 var Todo = "../models/todo";
 
-module.exports = DefineMap.extend({
+export default DefineMap.extend({
   todos: Todo.List,
   editing: Todo,
   backupName: "string",
@@ -880,9 +890,12 @@ Finally, the component file in _components/todo-list/todo-list.js_ puts
 everything together:
 
 ```js
-var Component = require('can-component');
-var ViewModel = require("./view-model");
-var view = require('./view.stache!');
+import Component from 'can-component';
+
+import ViewModel from './view-model';
+
+import view from './view.stache!';
+
 
 Component.extend({
     tag: 'todo-list',
@@ -1406,8 +1419,10 @@ This separation of concerns and powerful mixin behavior is accomplished by encap
 Let’s look at an example of how we would define a `Todo` type and a list of todos:
 
 ```js
-var DefineList = require("can-define/list/list");
-var DefineMap = require("can-define/map/map");
+import DefineList from 'can-define/list/list';
+
+import DefineMap from 'can-define/map/map';
+
 
 var Todo = DefineMap.extend({
 	complete: "boolean",
@@ -1429,10 +1444,11 @@ This example also uses [can-define/list/list] to define a type for an array of `
 Using [can-connect], we’ll create a connection between a RESTful `/api/todos` service and our `Todo` instances and `TodoList` lists:
 
 ```js
-var connect = require("can-connect");
-Todo.connection = connect([
-	require("can-connect/can/map/map"),
-	require("can-connect/constructor/constructor"),
+import connect from 'can-connect';
+
+Todo.connection = connect([import 'can-connect/can/map/map';
+import  from 'can-connect/constructor/constructor';
+
 	require("can-connect/data/url/url")
 ], {
 	url: "/api/todos",
@@ -1587,16 +1603,18 @@ The `{completed: false}` object is passed to the server as parameters and repres
 Here’s an example of [can-connect/base/base.algebra setting up the algebra] for the `Todo.connection`:
 
 ```js
-var connect = require("can-connect");
-var set = require("can-set");
+import connect from 'can-connect';
+
+import set from 'can-set';
+
 
 Todo.algebra = new set.Algebra(
 	set.props.boolean("completed")
 );
 
-Todo.connection = connect([
-	require("can-connect/can/map/map"),
-	require("can-connect/constructor/constructor"),
+Todo.connection = connect([import  from 'can-connect/can/map/map';
+import  from 'can-connect/constructor/constructor';
+
 	require("can-connect/data/url/url")
 ], {
 	url: "/api/todos",

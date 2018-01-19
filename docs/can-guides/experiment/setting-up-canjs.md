@@ -96,8 +96,10 @@ Besides ES6 modules, StealJS supports AMD and CommonJS.  You could also write `m
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var template = require("./main.stache!");
+import DefineMap from 'can-define/map/map';
+
+import template from './main.stache!';
+
 
 var data = new DefineMap({message: "Hello World"});
 
@@ -132,8 +134,10 @@ Next, create a `main` module for your application. Import [can-define/map/map], 
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
+import DefineMap from 'can-define/map/map';
+
+import stache from 'can-stache';
+
 
 var data = new DefineMap({message: "Hello World"});
 var template = stache(require('raw-loader!./main.stache'));
@@ -177,8 +181,10 @@ Next, create a `main.js` file for your application. Import [can-define/map/map],
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
+import DefineMap from 'can-define/map/map';
+
+import stache from 'can-stache';
+
 
 var data = new DefineMap({message: "Hello World"});
 var template = stache(require("./main.stache"));

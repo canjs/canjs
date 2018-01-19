@@ -24,7 +24,8 @@ Let’s explore each module a bit more.
 own value and notify listeners of changes like:
 
 ```js
-var compute = require("can-compute");
+import compute from 'can-compute';
+
 
 var name = compute("Justin");
 
@@ -44,9 +45,10 @@ More commonly, a compute derives its value from other observables.  The followin
 compute:
 
 ```js
-var DefineMap = require("can-define/map/map"),
-	DefineList = require("can-define/list/list"),
-	compute = require("can-compute");
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import compute from 'can-compute';
+
 
 var person = new DefineMap({first: "Justin", last: "Meyer"}),
 	hobbies = new DefineList(["js","bball"]),
@@ -75,8 +77,10 @@ maps and lists with well-defined properties.  You can
 For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
 
 ```js
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
+import DefineMap from 'can-define/map/map';
+
+import DefineList from 'can-define/list/list';
+
 
 var Todo = DefineMap.extend({           // A todo has a:
   name: "string",                       // .name that’s a string
@@ -142,7 +146,8 @@ simulated service layers.
 A `todosAlgebra` set algebra for a `GET /api/todos` service might look like:
 
 ```js
-var set = require("can-set");
+import set from 'can-set';
+
 var todosAlgebra = new set.Algebra(
     // specify the unique identifier property on data
     set.prop.id("_id"),  
@@ -183,10 +188,11 @@ to a service layer. This is often done via the
 into a single api:
 
 ```js
-var baseMap = require("can-connect/can/base-map/base-map"),
-    DefineMap = require("can-define/map/map"),
-    DefineList = require("can-define/list/list"),
-	set = require("can-set");
+import baseMap from 'can-connect/can/base-map/base-map';
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import set from 'can-set';
+
 
 var Todo = DefineMap.extend({
 	...
@@ -238,10 +244,14 @@ the ability to make requests to the service layer.
 be assembled too:
 
 ```js
-var base = require("can-connect/base/base");
-var dataUrl = require("can-connect/data-url/data-url");
-var constructor = require("can-connect/constructor/constructor");
-var map = require("can-connect/can/map/map");
+import base from 'can-connect/base/base';
+
+import dataUrl from 'can-connect/data-url/data-url';
+
+import constructor from 'can-connect/constructor/constructor';
+
+import map from 'can-connect/can/map/map';
+
 
 var options = {
 	url: "/api/todos",
@@ -261,7 +271,8 @@ you can create a template programmatically that lists out todos within a
 promise loaded from `Todo.getList` like:
 
 ```js
-var stache = require("can-stache");
+import stache from 'can-stache';
+
 
 // Creates a template
 var template = stache(
@@ -301,9 +312,12 @@ combines a view model created by [can-define/map/map] with a template
 created by [can-stache].
 
 ```js
-var Component = require("can-component");
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
+import Component from 'can-component';
+
+import DefineMap from 'can-define/map/map';
+
+import stache from 'can-stache';
+
 
 // Defines the todos-list view model
 var TodosListVM = DefineMap.extend({
@@ -398,8 +412,10 @@ Bindings look like:
 url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [can-route.ready begin routing] like:
 
 ```js
-var route = require("can-route");
-var DefineMap = require("can-define/map/map");
+import route from 'can-route';
+
+import DefineMap from 'can-define/map/map';
+
 
 var AppViewModel = DefineMap.extend({
 	seal: false
@@ -460,8 +476,9 @@ appViewModel.serialize() //-> {route: "todo/{todoId}", todoId: "7"}
 mixes in this behavior so you just need to import the module:
 
 ```js
-var route = require("can-route");
-require("can-route-pushstate");
+import route from 'can-route';
+import 'can-route-pushstate';
+
 ```
 
 

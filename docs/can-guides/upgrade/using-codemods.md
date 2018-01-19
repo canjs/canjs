@@ -202,15 +202,19 @@ These transforms handle the cases where a module is loaded using `require`.
 For example, it will transform any of the following:
 
 ```js
-const Component = require("can/component/");
-const Component = require("can/component/component");
-const Component = require("can/component/component.js");
+import Component from 'can/component/';
+
+import Component from 'can/component/component';
+
+import Component from 'can/component/component.js';
+
 ```
 
 …to this:
 
 ```js
-const Component = require("can-component");
+import Component from 'can-component';
+
 ```
 @highlight 1
 
@@ -414,7 +418,8 @@ domData.get.call(el, "name");
 …or this:
 
 ```js
-const can = require("can");
+import can from 'can';
+
 
 can.data(el, "name", "Luke");
 can.data(el, "name");
@@ -424,8 +429,10 @@ can.data(el, "name");
 …to this:
 
 ```js
-const domData = require("can-util/dom/data/data");
-const can = require("can");
+import domData from 'can-util/dom/data/data';
+
+import can from 'can';
+
 
 domData.set.call(el, "name", "Luke");
 domData.get.call(el, "name");
@@ -467,7 +474,8 @@ assign({}, {});
 …or this:
 
 ```js
-const can = require("can");
+import can from 'can';
+
 
 can.extend(true, {}, {}, {}, {});
 can.extend(false, {}, {});
@@ -478,9 +486,12 @@ can.extend({}, {});
 …to this:
 
 ```js
-const deepAssign = require("can-util/js/deep-assign/deep-assign");
-const assign = require("can-util/js/assign/assign");
-const can = require("can");
+import deepAssign from 'can-util/js/deep-assign/deep-assign';
+
+import assign from 'can-util/js/assign/assign';
+
+import can from 'can';
+
 
 deepAssign({}, {}, {}, {});
 assign({}, {});
@@ -826,15 +837,19 @@ can-migrate -a **/*.js -t can-component/require.js
 …will transform any of the following:
 
 ```js
-const Component = require("can/component/");
-const Component = require("can/component/component");
-const Component = require("can/component/component.js");
+import Component from 'can/component/';
+
+import Component from 'can/component/component';
+
+import Component from 'can/component/component.js';
+
 ```
 
 …to this:
 
 ```js
-const Component = require("can-component");
+import Component from 'can-component';
+
 ```
 
 ### can-compute
@@ -903,15 +918,19 @@ can-migrate -a **/*.js -t can-compute/require.js
 …will transform any of the following:
 
 ```js
-const compute = require("can/compute/");
-const compute = require("can/compute/compute");
-const compute = require("can/compute/compute.js");
+import compute from 'can/compute/';
+
+import compute from 'can/compute/compute';
+
+import compute from 'can/compute/compute.js';
+
 ```
 
 …to this:
 
 ```js
-const compute = require("can-compute");
+import compute from 'can-compute';
+
 ```
 
 ### can-construct-super
@@ -955,15 +974,19 @@ can-migrate -a **/*.js -t can-construct-super/require.js
 …will transform any of the following:
 
 ```js
-const constructSuper = require("can/construct/super/");
-const constructSuper = require("can/construct/super/super");
-const constructSuper = require("can/construct/super/super.js");
+import constructSuper from 'can/construct/super/';
+
+import constructSuper from 'can/construct/super/super';
+
+import constructSuper from 'can/construct/super/super.js';
+
 ```
 
 …to this:
 
 ```js
-const constructSuper = require("can-construct-super");
+import constructSuper from 'can-construct-super';
+
 ```
 
 ### can-construct
@@ -1032,15 +1055,19 @@ can-migrate -a **/*.js -t can-construct/require.js
 …will transform any of the following:
 
 ```js
-const construct = require("can/construct/");
-const construct = require("can/construct/construct");
-const construct = require("can/construct/construct.js");
+import construct from 'can/construct/';
+
+import construct from 'can/construct/construct';
+
+import construct from 'can/construct/construct.js';
+
 ```
 
 …to this:
 
 ```js
-const Construct = require("can-construct");
+import Construct from 'can-construct';
+
 ```
 
 ### can-control
@@ -1109,15 +1136,19 @@ can-migrate -a **/*.js -t can-control/require.js
 …will transform any of the following:
 
 ```js
-const Control = require("can/control/");
-const Control = require("can/control/control");
-const Control = require("can/control/control.js");
+import Control from 'can/control/';
+
+import Control from 'can/control/control';
+
+import Control from 'can/control/control.js';
+
 ```
 
 …to this:
 
 ```js
-const Control = require("can-control");
+import Control from 'can-control';
+
 ```
 
 ### can-deparam
@@ -1322,15 +1353,19 @@ can-migrate -a **/*.js -t can-event/require.js
 …will transform any of the following:
 
 ```js
-const event = require("can/event/");
-const event = require("can/event/event");
-const event = require("can/event/event.js");
+import event from 'can/event/';
+
+import event from 'can/event/event';
+
+import event from 'can/event/event.js';
+
 ```
 
 …to this:
 
 ```js
-const canEvent = require("can-event");
+import canEvent from 'can-event';
+
 ```
 
 ### can-fixture
@@ -1399,15 +1434,19 @@ can-migrate -a **/*.js -t can-fixture/require.js
 …will transform any of the following:
 
 ```js
-const fixture = require("can/util/fixture/");
-const fixture = require("can/util/fixture/fixture");
-const fixture = require("can/util/fixture/fixture.js");
+import fixture from 'can/util/fixture/';
+
+import fixture from 'can/util/fixture/fixture';
+
+import fixture from 'can/util/fixture/fixture.js';
+
 ```
 
 …to this:
 
 ```js
-const fixture = require("can-fixture");
+import fixture from 'can-fixture';
+
 ```
 
 ### can-frag
@@ -1714,15 +1753,19 @@ can-migrate -a **/*.js -t can-list/require.js
 …will transform any of the following:
 
 ```js
-const List = require("can/list/");
-const List = require("can/list/list");
-const List = require("can/list/list.js");
+import List from 'can/list/';
+
+import List from 'can/list/list';
+
+import List from 'can/list/list.js';
+
 ```
 
 …to this:
 
 ```js
-const CanList = require("can-list");
+import CanList from 'can-list';
+
 ```
 
 ### can-listenTo
@@ -1834,15 +1877,19 @@ can-migrate -a **/*.js -t can-map-backup/require.js
 …will transform any of the following:
 
 ```js
-const mapBackup = require("can/map/backup/");
-const mapBackup = require("can/map/backup/backup");
-const mapBackup = require("can/map/backup/backup.js");
+import mapBackup from 'can/map/backup/';
+
+import mapBackup from 'can/map/backup/backup';
+
+import mapBackup from 'can/map/backup/backup.js';
+
 ```
 
 …to this:
 
 ```js
-const mapBackup = require("can-map-backup");
+import mapBackup from 'can-map-backup';
+
 ```
 
 ### can-map-define
@@ -1886,15 +1933,19 @@ can-migrate -a **/*.js -t can-map-define/require.js
 …will transform any of the following:
 
 ```js
-const mapDefine = require("can/map/define/");
-const mapDefine = require("can/map/define/define");
-const mapDefine = require("can/map/define/define.js");
+import mapDefine from 'can/map/define/';
+
+import mapDefine from 'can/map/define/define';
+
+import mapDefine from 'can/map/define/define.js';
+
 ```
 
 …to this:
 
 ```js
-const mapDefine = require("can-map-define");
+import mapDefine from 'can-map-define';
+
 ```
 
 ### can-map
@@ -1963,15 +2014,19 @@ can-migrate -a **/*.js -t can-map/require.js
 …will transform any of the following:
 
 ```js
-const map = require("can/map/");
-const map = require("can/map/map");
-const map = require("can/map/map.js");
+import map from 'can/map/';
+
+import map from 'can/map/map';
+
+import map from 'can/map/map.js';
+
 ```
 
 …to this:
 
 ```js
-const CanMap = require("can-map");
+import CanMap from 'can-map';
+
 ```
 
 ### can-model
@@ -2040,15 +2095,19 @@ can-migrate -a **/*.js -t can-model/require.js
 …will transform any of the following:
 
 ```js
-const model = require("can/model/");
-const model = require("can/model/model");
-const model = require("can/model/model.js");
+import model from 'can/model/';
+
+import model from 'can/model/model';
+
+import model from 'can/model/model.js';
+
 ```
 
 …to this:
 
 ```js
-const Model = require("can-model");
+import Model from 'can-model';
+
 ```
 
 ### can-mustache
@@ -2262,15 +2321,19 @@ can-migrate -a **/*.js -t can-route-pushstate/require.js
 …will transform any of the following:
 
 ```js
-const routePushState = require("can/route/pushstate/");
-const routePushState = require("can/route/pushstate/pushstate");
-const routePushState = require("can/route/pushstate/pushstate.js");
+import routePushState from 'can/route/pushstate/';
+
+import routePushState from 'can/route/pushstate/pushstate';
+
+import routePushState from 'can/route/pushstate/pushstate.js';
+
 ```
 
 …to this:
 
 ```js
-const routePushState = require("can-route-pushstate");
+import routePushState from 'can-route-pushstate';
+
 ```
 
 ### can-route
@@ -2339,15 +2402,19 @@ can-migrate -a **/*.js -t can-route/require.js
 …will transform any of the following:
 
 ```js
-const route = require("can/route/");
-const route = require("can/route/route");
-const route = require("can/route/route.js");
+import route from 'can/route/';
+
+import route from 'can/route/route';
+
+import route from 'can/route/route.js';
+
 ```
 
 …to this:
 
 ```js
-const route = require("can-route");
+import route from 'can-route';
+
 ```
 
 ### can-stache
@@ -2416,15 +2483,19 @@ can-migrate -a **/*.js -t can-stache/require.js
 …will transform any of the following:
 
 ```js
-const stache = require("can/view/stache/");
-const stache = require("can/view/stache/stache");
-const stache = require("can/view/stache/stache.js");
+import stache from 'can/view/stache/';
+
+import stache from 'can/view/stache/stache';
+
+import stache from 'can/view/stache/stache.js';
+
 ```
 
 …to this:
 
 ```js
-const stache = require("can-stache");
+import stache from 'can-stache';
+
 ```
 
 ### can-stopListening
@@ -2630,15 +2701,19 @@ can-migrate -a **/*.js -t can-view-autorender/require.js
 …will transform any of the following:
 
 ```js
-const autorender = require("can/view/autorender/");
-const autorender = require("can/view/autorender/autorender");
-const autorender = require("can/view/autorender/autorender.js");
+import autorender from 'can/view/autorender/';
+
+import autorender from 'can/view/autorender/autorender';
+
+import autorender from 'can/view/autorender/autorender.js';
+
 ```
 
 …to this:
 
 ```js
-const canAutorender = require("can-view-autorender");
+import canAutorender from 'can-view-autorender';
+
 ```
 
 ### can-view-callbacks
@@ -2707,15 +2782,19 @@ can-migrate -a **/*.js -t can-view-callbacks/require.js
 …will transform any of the following:
 
 ```js
-const viewCallbacks = require("can/view/callbacks/");
-const viewCallbacks = require("can/view/callbacks/callbacks");
-const viewCallbacks = require("can/view/callbacks/callbacks.js");
+import viewCallbacks from 'can/view/callbacks/';
+
+import viewCallbacks from 'can/view/callbacks/callbacks';
+
+import viewCallbacks from 'can/view/callbacks/callbacks.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewCallbacks = require("can-view-callbacks");
+import canViewCallbacks from 'can-view-callbacks';
+
 ```
 
 ### can-view-href
@@ -2759,15 +2838,19 @@ can-migrate -a **/*.js -t can-view-href/require.js
 …will transform any of the following:
 
 ```js
-const viewHref = require("can/view/href/");
-const viewHref = require("can/view/href/href");
-const viewHref = require("can/view/href/href.js");
+import viewHref from 'can/view/href/';
+
+import viewHref from 'can/view/href/href';
+
+import viewHref from 'can/view/href/href.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewHref = require("can-view-href");
+import canViewHref from 'can-view-href';
+
 ```
 
 ### can-view-import
@@ -2811,15 +2894,19 @@ can-migrate -a **/*.js -t can-view-import/require.js
 …will transform any of the following:
 
 ```js
-const viewImport = require("can/view/import/");
-const viewImport = require("can/view/import/import");
-const viewImport = require("can/view/import/import.js");
+import viewImport from 'can/view/import/';
+
+import viewImport from 'can/view/import/import';
+
+import viewImport from 'can/view/import/import.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewImport = require("can-view-import");
+import canViewImport from 'can-view-import';
+
 ```
 
 ### can-view-live
@@ -2888,15 +2975,19 @@ can-migrate -a **/*.js -t can-view-live/require.js
 …will transform any of the following:
 
 ```js
-const viewLive = require("can/view/live/");
-const viewLive = require("can/view/live/live");
-const viewLive = require("can/view/live/live.js");
+import viewLive from 'can/view/live/';
+
+import viewLive from 'can/view/live/live';
+
+import viewLive from 'can/view/live/live.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewLive = require("can-view-live");
+import canViewLive from 'can-view-live';
+
 ```
 
 ### can-view-parser
@@ -2940,15 +3031,19 @@ can-migrate -a **/*.js -t can-view-parser/require.js
 …will transform any of the following:
 
 ```js
-const viewParser = require("can/view/parser/");
-const viewParser = require("can/view/parser/parser");
-const viewParser = require("can/view/parser/parser.js");
+import viewParser from 'can/view/parser/';
+
+import viewParser from 'can/view/parser/parser';
+
+import viewParser from 'can/view/parser/parser.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewParser = require("can-view-parser");
+import canViewParser from 'can-view-parser';
+
 ```
 
 ### can-view-scope
@@ -3017,15 +3112,19 @@ can-migrate -a **/*.js -t can-view-scope/require.js
 …will transform any of the following:
 
 ```js
-const viewScope = require("can/view/scope/");
-const viewScope = require("can/view/scope/scope");
-const viewScope = require("can/view/scope/scope.js");
+import viewScope from 'can/view/scope/';
+
+import viewScope from 'can/view/scope/scope';
+
+import viewScope from 'can/view/scope/scope.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewScope = require("can-view-scope");
+import canViewScope from 'can-view-scope';
+
 ```
 
 ### can-view-tag
@@ -3128,13 +3227,17 @@ can-migrate -a **/*.js -t can-view-target/require.js
 …will transform any of the following:
 
 ```js
-const viewTarget = require("can/view/target/");
-const viewTarget = require("can/view/target/target");
-const viewTarget = require("can/view/target/target.js");
+import viewTarget from 'can/view/target/';
+
+import viewTarget from 'can/view/target/target';
+
+import viewTarget from 'can/view/target/target.js';
+
 ```
 
 …to this:
 
 ```js
-const canViewTarget = require("can-view-target");
+import canViewTarget from 'can-view-target';
+
 ```

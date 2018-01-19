@@ -1,8 +1,12 @@
 // models/todo.js
-var DefineMap = require("can-define/map/");
-var DefineList = require("can-define/list/");
-var set = require("can-set");
-var connectBaseMap = require("can-connect/can/base-map/");
+import DefineMap from 'can-define/map/';
+
+import DefineList from 'can-define/list/';
+
+import set from 'can-set';
+
+import connectBaseMap from 'can-connect/can/base-map/';
+
 
 var Todo = DefineMap.extend("Todo", {
 	id: "string",
@@ -47,4 +51,4 @@ Todo.connection = connectBaseMap({
 	algebra: Todo.algebra
 });
 
-module.exports = Todo;
+export default Todo;

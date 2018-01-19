@@ -1,8 +1,12 @@
 // components/todo-create/todo-create.js
-var Component = require("can-component"); // remember to install
-var DefineMap = require("can-define/map/");
-var view = require("./todo-create.stache");
-var Todo = require("~/models/todo");
+import Component from 'can-component';
+ // remember to install
+import DefineMap from 'can-define/map/';
+
+import view from './todo-create.stache';
+
+import Todo from '~/models/todo';
+
 
 var TodoCreateVM = DefineMap.extend({
 	todo: {
@@ -15,7 +19,7 @@ var TodoCreateVM = DefineMap.extend({
 	}
 });
 
-module.exports = Component.extend({
+export default Component.extend({
 	tag: "todo-create",
 	view: view,
 	ViewModel: TodoCreateVM

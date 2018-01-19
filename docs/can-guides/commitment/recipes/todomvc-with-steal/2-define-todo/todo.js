@@ -1,5 +1,6 @@
 // models/todo.js
-var DefineMap = require("can-define/map/");
+import DefineMap from 'can-define/map/';
+
 
 var Todo = DefineMap.extend("Todo", {
 	id: "string",
@@ -13,4 +14,4 @@ var Todo = DefineMap.extend("Todo", {
 	}
 });
 
-module.exports = Todo;
+export default Todo;
