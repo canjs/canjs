@@ -211,7 +211,8 @@
         "node_modules/can-namespace/**/*",
         "node_modules/can-wait/examples/**/*",
         "node_modules/can-*/dist/**/*",
-        "node_modules/*/node_modules/**/*"
+        "node_modules/*/node_modules/**/*",
+        "node_modules/can-debug/src/draw-graph/vis.js"
       ]
     },
     "altVersions": {
