@@ -15,7 +15,7 @@
 For example, if you have a module `can-unicorn` that you want to make sure is only loaded a single time, you can use `can-namespace`:
 
 ```js
-var namespace = require('can-namespace');
+import namespace from 'can-namespace';
 
 var unicorn = {
 	// ...
@@ -24,7 +24,7 @@ var unicorn = {
 if (namespace.unicorn) {
 	throw new Error("You can’t have two versions of can-unicorn; check your dependencies");
 } else {
-	module.exports = namespace.unicorn = unicorn;
+	export default namespace.unicorn = unicorn;
 }
 ```
 

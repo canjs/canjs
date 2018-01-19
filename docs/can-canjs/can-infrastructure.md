@@ -19,8 +19,8 @@ on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
 ```js
-var canEvent = require("can-event");
-var assign = require("can-util/js/assign/assign");
+import canEvent from 'can-event';
+import assign from 'can-util/js/assign/assign';
 
 // Create the Person type
 function Person(){ ... };
@@ -49,9 +49,9 @@ Use [can-observation.add Observation.add] to signal when an an observable value 
 The following makes the `Person` type’s `getName()` observable:
 
 ```js
-var Observation = require("can-observation");
-var canEvent = require("can-event");
-var assign = require("can-util/js/assign/assign");
+import Observation from 'can-observation';
+import canEvent from 'can-event';
+import assign from 'can-util/js/assign/assign';
 
 // Create the Person type
 function Person(){};
@@ -125,7 +125,7 @@ The JS utilities consist of:
 templates.
 
 ```js
-var callbacks = require("can-view-callbacks");
+import callbacks from 'can-view-callbacks';
 
 callbacks.tag("blue-el", function(el){
     el.style.background = "blue";
@@ -137,9 +137,9 @@ callbacks.tag("blue-el", function(el){
 Sets up a live-binding between the DOM and a compute.
 
 ```js
-var live = require("can-view-live");
-var compute = require("can-compute");
-var frag = require("can-util/dom/frag/frag");
+import live from 'can-view-live';
+import compute from 'can-compute';
+import frag from 'can-util/dom/frag/frag';
 
 var message = compute("World");
 
@@ -181,7 +181,7 @@ html content resulting from that helper (`<b>Justin</b>`).
 [can-view-parser] parses HTML and handlebars/mustache tokens.  
 
 ```js
-var parser = require("can-view-parser");
+import parser from 'can-view-parser';
 
 var html = '<h1><span first="foo"></span><span second="bar"></span></h1>';
 
@@ -232,7 +232,7 @@ innerScope.get("last")    //-> Abril
 have callbacks called quickly on specific elements within the cloned fragment.
 
 ```js
-var viewTarget = require("can-view-target");
+import viewTarget from 'can-view-target';
 
 var target = viewTarget([
     {
@@ -262,7 +262,7 @@ frag //-> <h1 class='title'>Hello World</h1>
 [can-cid] is used to get a unique identifier for an object, optionally prefixed by a type name. Once set, the unique identifier does not change, even if the type name changes on subsequent calls.
 
 ```js
-var cid = require("can-cid");
+import cid from 'can-cid';
 var x = {};
 var y = {};
 
@@ -276,7 +276,7 @@ console.log(cid(y));         // -> "2"
 [can-types] is used to provide default types or test if something is of a certain type.
 
 ```js
-var types = require("can-types");
+import types from 'can-types';
 var oldIsMapLike = types.isMapLike;
 types.isMapLike = function(obj){
   return obj instanceof DefineMap || oldIsMapLike.apply(this, arguments);
@@ -289,7 +289,7 @@ types.DefaultMap = DefineMap;
 [can-namespace] is a namespace where can-* packages can be registered.
 
 ```js
-var namespace = require('can-namespace');
+import namespace from 'can-namespace';
 
 var unicorn = {
 	// ...
@@ -298,7 +298,7 @@ var unicorn = {
 if (namespace.unicorn) {
 	throw new Error("You can't have two versions of can-unicorn, check your dependencies");
 } else {
-	module.exports = namespace.unicorn = unicorn;
+	export default namespace.unicorn = unicorn;
 }
 ```
 

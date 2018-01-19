@@ -18,7 +18,7 @@ For example, [can-define/map/map.prototype.forEach can-define/map/map.prototype.
 method that loops through properties and values on an `DefineMap`:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
 
 var map = new DefineMap({name: "Justin"});
 
@@ -111,7 +111,7 @@ the _prototype_ group on [can-define/list/list] because `concat` is on
 the `can-define/list/list` export’s `prototype`:
 
 ```js
-var DefineList = require("can-define/list/list");
+import DefineList from 'can-define/list/list';
 DefineList.prototype.concat //-> function
 ```
 
@@ -129,7 +129,7 @@ hobbies.concat(["programming"]);
 the _static_ group on [can-define/map/map] because `extend` is a direct property on the `can-define/map/map` export:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
 DefineMap.prototype.map //-> function
 ```
 
@@ -143,7 +143,7 @@ For example, the [can-fixture.store can-fixture.store] method returns an object
 of the [can-fixture/StoreType Store type].
 
 ```js
-var fixture = require("can-fixture");
+import fixture from 'can-fixture';
 
 var todoStore = fixture.store([{id: 1, name: "trash"}]);
 

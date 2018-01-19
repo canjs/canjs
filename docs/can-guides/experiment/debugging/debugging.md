@@ -48,8 +48,7 @@ StealJS supports two ways of loading `can-debug` only in production:
 Add the following to your main module:
 
 ```js
-//!steal-remove-start
-window.can = require('can-debug');
+//!steal-remove-startimport window.can from 'can-debug';
 //!steal-remove-end
 ```
 
@@ -78,8 +77,7 @@ To import the debug module only in development, add the following
 code to your main module:
 
 ```js
-if (process.env.NODE_ENV !== "production") {
-  window.can = require("can-debug");
+if (process.env.NODE_ENV !== "production") {import window.can from 'can-debug';
 }
 ```
 
@@ -87,9 +85,9 @@ Then, make sure `process.env` is defined in `webpack.config.js`
 with the following:
 
 ```js
-var webpack = require("webpack");
+import webpack from 'webpack';
 
-module.exports = {
+export default {
     ...
     plugins: [
         new webpack.DefinePlugin({
