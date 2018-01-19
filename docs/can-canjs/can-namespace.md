@@ -23,9 +23,9 @@ var unicorn = {
 
 if (namespace.unicorn) {
 	throw new Error("You can’t have two versions of can-unicorn; check your dependencies");
-} else {
-	export default namespace.unicorn = unicorn;
 }
+export default namespace.unicorn = unicorn;
+
 ```
 
 Any module requiring `can-namespace` will receive the same module because only one version of `can-namespace` will ever be published.

@@ -297,9 +297,10 @@ var unicorn = {
 
 if (namespace.unicorn) {
 	throw new Error("You can't have two versions of can-unicorn, check your dependencies");
-} else {
-	export default namespace.unicorn = unicorn;
 }
+
+export default namespace.unicorn = unicorn;
+
 ```
 
 ## can-symbol

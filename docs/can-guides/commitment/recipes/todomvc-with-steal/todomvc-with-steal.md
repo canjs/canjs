@@ -134,7 +134,9 @@ StealJS.
 - Use [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) to load the application’s
   styles and run its tests:
 
-  ```jsimport 'can-todomvc-test';(appVM);
+  ```js
+  import test from 'can-todomvc-test';
+  test(appVM);
   ```
 
 
