@@ -1430,10 +1430,11 @@ Using [can-connect], we’ll create a connection between a RESTful `/api/todos` 
 
 ```js
 import connect from 'can-connect';
-Todo.connection = connect([import 'can-connect/can/map/map';
-import 'can-connect/constructor/constructor';
-import 'can-connect/data/url/url';
-], {
+import canMap from 'can-connect/can/map/map';
+import constructor from 'can-connect/constructor/constructor';
+import dataUrl from 'can-connect/data/url/url';
+
+Todo.connection = connect([canMap, constructor, dataUrl], {
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList
