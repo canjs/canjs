@@ -44,10 +44,9 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 ### Things to know
 
-- A [can-stache] template is used to render data into a document fragment:
-
+- A [can-stache] template can be loaded from a `<script>` tag with [can-stache.from can.stache.from] and used to render data into a document fragment:
   ```js
-  var template = can.stache("<h1>{{message}}</h1>");
+  var template = can.stache.from(SCRIPT_ID);
   var frag = template({message: "Hello World"});
   frag //-> <h1>Hello World</h1>
   ```
