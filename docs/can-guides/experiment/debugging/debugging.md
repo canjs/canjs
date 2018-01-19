@@ -48,7 +48,9 @@ StealJS supports two ways of loading `can-debug` only in production:
 Add the following to your main module:
 
 ```js
-//!steal-remove-startimport window.can from 'can-debug';
+//!steal-remove-start
+import can from 'can-debug';
+window.can = can;
 //!steal-remove-end
 ```
 
@@ -77,7 +79,9 @@ To import the debug module only in development, add the following
 code to your main module:
 
 ```js
-if (process.env.NODE_ENV !== "production") {import window.can from 'can-debug';
+if (process.env.NODE_ENV !== "production") {
+    import can from 'can-debug';
+    window.can = can;
 }
 ```
 
