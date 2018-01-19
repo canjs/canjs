@@ -572,7 +572,8 @@ If you’ve used [can-map-define] in the past, then using [can-define] should be
 A typical map looks like:
 
 ```js
-import Map from 'can-map';import 'can-map-define';
+import Map from 'can-map';
+import 'can-map-define';
 
 var CarOwner = Map.extend({
 	define: {

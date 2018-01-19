@@ -2,6 +2,7 @@
 import view from './index.stache';
 import DefineMap from 'can-define/map/';
 import Todo from '~/models/todo';
+import test from 'can-todomvc-test';
 
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string",
@@ -21,4 +22,5 @@ var appVM = window.appVM = new AppViewModel({
 });
 
 var frag = view(appVM);
-document.body.appendChild(frag);import 'can-todomvc-test';(appVM);
+document.body.appendChild(frag);
+test(appVM);

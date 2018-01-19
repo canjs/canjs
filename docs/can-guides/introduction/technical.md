@@ -725,7 +725,10 @@ into individual and independent modules and files that look like:
 The __Model__, in _models/todo.js_, looks like:
 
 ```js
-import DefineMap from 'can-define/map/map';import DefineList from 'can-define/list/list';import set from 'can-set';import superMap from 'can-connect/can/super-map/super-map';
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import set from 'can-set';
+import superMap from 'can-connect/can/super-map/super-map';
 
 // Defines the type of data we get back from the server.
 var Todo = DefineMap.extend({
@@ -1427,7 +1430,9 @@ Using [can-connect], we’ll create a connection between a RESTful `/api/todos` 
 
 ```js
 import connect from 'can-connect';
-Todo.connection = connect([import 'can-connect/can/map/map';import 'can-connect/constructor/constructor';import 'can-connect/data/url/url';
+Todo.connection = connect([import 'can-connect/can/map/map';
+import 'can-connect/constructor/constructor';
+import 'can-connect/data/url/url';
 ], {
 	url: "/api/todos",
 	Map: Todo,
@@ -1583,13 +1588,15 @@ Here’s an example of [can-connect/base/base.algebra setting up the algebra] fo
 ```js
 import connect from 'can-connect';
 import set from 'can-set';
+import canMap from'can-connect/can/map/map';
+import constructor from 'can-connect/constructor/constructor';
+import dataUrl from 'can-connect/data/url/url';
 
 Todo.algebra = new set.Algebra(
 	set.props.boolean("completed")
 );
 
-Todo.connection = connect([import 'can-connect/can/map/map';import 'can-connect/constructor/constructor';import 'can-connect/data/url/url';
-], {
+Todo.connection = connect([canMap, constructor, dataUrl], {
 	url: "/api/todos",
 	Map: Todo,
 	List: Todo.List,

@@ -44,7 +44,9 @@ More commonly, a compute derives its value from other observables.  The followin
 compute:
 
 ```js
-import DefineMap from 'can-define/map/map';import DefineList from 'can-define/list/list';import compute from 'can-compute';
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import compute from 'can-compute';
 
 var person = new DefineMap({first: "Justin", last: "Meyer"}),
 	hobbies = new DefineList(["js","bball"]),
@@ -181,7 +183,10 @@ to a service layer. This is often done via the
 into a single api:
 
 ```js
-import baseMap from 'can-connect/can/base-map/base-map';import DefineMap from 'can-define/map/map';import DefineList from 'can-define/list/list';import set from 'can-set';
+import baseMap from 'can-connect/can/base-map/base-map';
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import set from 'can-set';
 
 var Todo = DefineMap.extend({
 	...
@@ -455,7 +460,8 @@ appViewModel.serialize() //-> {route: "todo/{todoId}", todoId: "7"}
 mixes in this behavior so you just need to import the module:
 
 ```js
-import route from 'can-route';import 'can-route-pushstate';
+import route from 'can-route';
+import 'can-route-pushstate';
 ```
 
 

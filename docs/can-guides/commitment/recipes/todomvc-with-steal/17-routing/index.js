@@ -2,7 +2,9 @@
 import view from './index.stache';
 import DefineMap from 'can-define/map/';
 import Todo from '~/models/todo';
-import route from 'can-route';import '~/models/todos-fixture';
+import route from 'can-route';
+import '~/models/todos-fixture';
+import test from 'can-todomvc-test';
 
 var AppViewModel = DefineMap.extend("AppViewModel", {
 	appName: {type: "string", serialize: false},
@@ -40,4 +42,5 @@ route("{filter}");
 route.start();
 
 var frag = view(appVM);
-document.body.appendChild(frag);import 'can-todomvc-test';(appVM);
+document.body.appendChild(frag);
+test(appVM);
