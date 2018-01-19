@@ -1,77 +1,79 @@
-function base60ToRadians(base60Number) {
-  // 60 = 2π
-  return 2 * Math.PI * base60Number / 60;
-}
+// 60 = 2π
+const base60ToRadians = (base60Number) =>
+2 * Math.PI * base60Number / 60;
 
 can.Component.extend({
   tag: "analog-clock",
   view: can.stache(`<canvas id="analog"  width="255" height="255"></canvas>`),
-  events: {
-    "{element} inserted": function(element) {
-      this.canvas = this.element.firstChild.getContext('2d');
-      this.diameter = 255;
-      this.radius = this.diameter / 2 - 5;
-      this.center = this.diameter / 2;
-    },
-    drawNeedle: function(length, base60Distance, styles) {
-      Object.assign(this.canvas, styles);
-      var x = this.center + length * Math.sin(base60ToRadians(base60Distance)),
-        y = this.center + length * -1 * Math.cos(base60ToRadians(base60Distance));
-      this.canvas.beginPath();
-      this.canvas.moveTo(this.center, this.center);
-      this.canvas.lineTo(x, y);
-      this.canvas.closePath();
-      this.canvas.stroke();
-    },
-    "{viewModel} time": function(viewModel, newTime) {
-      this.canvas.clearRect(0, 0, this.diameter, this.diameter);
-      // draw circle
-      this.canvas.lineWidth = 4.0;
-      this.canvas.strokeStyle = "#567";
-      this.canvas.beginPath();
-      this.canvas.arc(this.center, this.center, this.radius, 0, Math.PI * 2, true);
-      this.canvas.closePath();
-      this.canvas.stroke();
+  ViewModel: {
+    connectedCallback(element) {
+      const canvas = element.firstChild.getContext('2d');
+      const diameter = 255;
+      const radius = diameter/2 - 5;
+      const center = diameter/2;
+
+      const drawNeedle = (length, base60Distance, styles) => {
+        Object.assign(canvas, styles);
+        const x = center + length * Math.sin(base60ToRadians(base60Distance)),
+          y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+        canvas.beginPath();
+        canvas.moveTo(center, center);
+        canvas.lineTo(x, y);
+        canvas.closePath();
+        canvas.stroke();
+      };
+
       // draw second hand
-      var seconds = newTime.getSeconds() + newTime.getMilliseconds() / 1000;
-      this.drawNeedle(
-        this.radius * 0.85,
-        seconds, {
-          lineWidth: 2.0,
-          strokeStyle: "#FF0000",
-          lineCap: "round"
-        }
-      );
-      // draw minute hand
-      var minutes = newTime.getMinutes() + seconds /60;
-      this.drawNeedle(
-        this.center * 0.65,
-        minutes,
-        {
-          lineWidth:  3.0,
-          strokeStyle: "#423",
-          lineCap: "round"
-        }
-      );
-      // draw hour hand
-      var hoursInBase60 = newTime.getHours() * 60 / 12 + minutes / 60;
-      this.drawNeedle(
-        this.center * 0.45,
-        hoursInBase60,
-        {
-          lineWidth:  4.0,
-          strokeStyle: "#42F",
-          lineCap: "round"
-        }
-      );
-    }
-  }
+      this.listenTo("time", (ev, time) => {
+        canvas.clearRect(0, 0, diameter, diameter);
+
+        // draw circle
+        canvas.lineWidth = 4.0;
+        canvas.strokeStyle = "#567";
+        canvas.beginPath();
+        canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+        canvas.closePath();
+        canvas.stroke();
+
+        // draw second hand
+        const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+        drawNeedle(
+          radius * 0.85,
+          seconds, {
+            lineWidth: 2.0,
+            strokeStyle: "#FF0000",
+            lineCap: "round"
+          }
+        );
+        // draw minute hand
+        const minutes = time.getMinutes() + seconds / 60;
+        drawNeedle(
+          radius * 0.65,
+          minutes,
+          {
+            lineWidth:  3.0,
+            strokeStyle: "#423",
+            lineCap: "round"
+          }
+        );
+        // draw hour hand
+        const hoursInBase60 = time.getHours() * 60 / 12 + minutes / 60;
+        drawNeedle(
+          radius * 0.45,
+          hoursInBase60,
+          {
+            lineWidth:  4.0,
+            strokeStyle: "#42F",
+            lineCap: "round"
+          }
+        );	
+    });
 });
 
-var DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{
+const DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{
   time: Date,
   hh(){
-    var hr= this.time.getHours() % 12;
+    const hr = this.time.getHours() % 12;
     return hr === 0 ? 12 : hr;
   },
   mm(){
@@ -88,7 +90,7 @@ can.Component.extend({
   ViewModel: DigitalClockVM
 });
 
-var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
+const ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
   time: {Default: Date, Type: Date},
   init(){
     setInterval(() => {
