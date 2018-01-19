@@ -126,7 +126,8 @@ and also print back the cleaned card number (the entered number with no dashes).
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
-  var Kefir = require("can-kefir");
+  import Kefir from 'can-kefir';
+
 
   var age = Kefir.emitterProperty();
 

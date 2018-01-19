@@ -65,10 +65,12 @@ Error: {{geoLocationError.message}}
   }
 </script>
 <script src="../../../../../node_modules/steal/steal.js" main="@empty">
-var can = require("can/all");
-can.defineStreamKefir = require("can-define-stream-kefir");
+import can from 'can/all';
+import can.defineStreamKefir from 'can-define-stream-kefir';
 
-var Kefir = require("kefir");
+
+import Kefir from 'kefir';
+
 
 var yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 var flickrURL = "https://api.flickr.com/services/rest/?"

@@ -26,8 +26,10 @@ should import things directly with a module loader like [StealJS](https://stealj
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
+import DefineMap from 'can-define/map/map';
+
+import DefineList from 'can-define/list/list';
+
 
 var Todo = DefineMap.extend({ ... });
 Todo.List = DefineList.extend({ ... });

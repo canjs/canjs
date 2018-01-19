@@ -31,7 +31,8 @@ You can start importing CanJS code in a modular way before moving to CanJS 3.
 For example, you might be using [can-component] like this:
 
 ```js
-var can = require("can");
+import can from 'can';
+
 
 can.Component.extend({ ... });
 ```
@@ -39,7 +40,8 @@ can.Component.extend({ ... });
 Update your code to instead look like this:
 
 ```js
-var Component = require("can/component/component");
+import Component from 'can/component/component';
+
 
 Component.extend({ ... });
 ```
@@ -93,14 +95,16 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 You might be using it in your code to easily reference the library:
 
 ```js
-var can = require("can");
+import can from 'can';
+
 var body = can.$('body');
 ```
 
 Update your code to explicitly require the library on which you depend. For example:
 
 ```js
-var $ = require("jquery");
+import $ from 'jquery';
+
 var body = $('body');
 ```
 
@@ -169,7 +173,8 @@ At a minimum, to upgrade your code for CanJS 3, you must make all of the followi
 In your code where you normally would import `can`, instead import `can/legacy`:
 
 ```js
-var can = require("can/legacy");
+import can from 'can/legacy';
+
 ```
 
 This will give you a `can` object with *most* of the same APIs as in 2.3, with a few exceptions:
@@ -506,7 +511,8 @@ In addition to the above, take advantage of the individual packages by installin
 For example, you might be using [can-component] like either:
 
 ```js
-var can = require("can");
+import can from 'can';
+
 
 can.Component.extend({ ... });
 ```
@@ -514,7 +520,8 @@ can.Component.extend({ ... });
 or
 
 ```js
-var Component = require("can/component/component");
+import Component from 'can/component/component';
+
 
 Component.extend({ ... });
 ```
@@ -522,7 +529,8 @@ Component.extend({ ... });
 Regardless of which you are using, update your code to instead look like:
 
 ```js
-var Component = require("can-component");
+import Component from 'can-component';
+
 
 Component.extend({ ... });
 ```
@@ -572,8 +580,9 @@ If you’ve used [can-map-define] in the past, then using [can-define] should be
 A typical map looks like:
 
 ```js
-var Map = require("can-map");
-require("can-map-define");
+import Map from 'can-map';
+import 'can-map-define';
+
 
 var CarOwner = Map.extend({
 	define: {
@@ -596,7 +605,8 @@ var CarOwner = Map.extend({
 Which can be replaced by flattening it into a [can-define/map/map] like so:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
+
 
 var CarOwner = DefineMap.extend({
 	cars: Car.List,
@@ -621,7 +631,8 @@ carOwner.favorite = new Car({ make: "Toyota" });
 **Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
 
 ```js
-var CanMap = require("can-map");
+import CanMap from 'can-map';
+
 
 var Person = CanMap.extend({
   name: "Justin"
@@ -633,7 +644,8 @@ This shorthand in `can-define/map/map` defines the [can-define.types type], not 
 Here’s the example above updated for `can-define/map/map`:
 
 ```js
-var DefineMap = require("can-define/map/map");
+import DefineMap from 'can-define/map/map';
+
 
 var Person = DefineMap.extend({
   name: {value: "Justin"}
@@ -673,9 +685,12 @@ When using the easy migration path, you were secretly using [can-connect/can/mod
 Most new projects should use [can-connect] directly. [can-connect/can/super-map/super-map] is the easiest way to create models with `can-connect`’s features. Using `can-connect` directly allows you to use [can-define/map/map]s as your models like so:
 
 ```js
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var superMap = require("can-connect/can/super-map/super-map");
+import DefineMap from 'can-define/map/map';
+
+import DefineList from 'can-define/list/list';
+
+import superMap from 'can-connect/can/super-map/super-map';
+
 
 var Message = DefineMap.extend({
 	id: "*"
@@ -703,8 +718,10 @@ If you are using [can-jquery/legacy] to automatically get jQuery-wrapped element
 Instead, use [can-jquery] directly and handle the wrapping yourself. For example:
 
 ```js
-var Component = require("can-component");
-var $ = require("can-jquery");
+import Component from 'can-component';
+
+import $ from 'can-jquery';
+
 
 Component.extend({
 	tag: "some-component",

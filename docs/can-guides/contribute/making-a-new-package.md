@@ -141,8 +141,8 @@ In the root directory of the project, locate the appropriate JavaScript file.
 
 Open the desired file and require the source project. For infrastructure and core packages, use the `can.js` file.
 
-```javascript
-require('<SOURCE_PACKAGE_NAME>');
+```javascriptimport '<SOURCE_PACKAGE_NAME>';
+
 ```
 
 For example, in [CanJS](https://github.com/canjs/canjs/blob/e3301daad996df01463a623d50b38bd5091c9b35/ecosystem.js#L4), we have included the [can-fixture] project.
@@ -155,10 +155,11 @@ If you can't you might need to:
 - Add your pacakge's export to [can-namespace] like:
 
   ```js
-  var namespace = require("can-namespace");
+  import namespace from 'can-namespace';
+
 
   var myCoolThing = {};
-  module.exports = can.myCoolThing = myCoolThing
+  export default can.myCoolThing = myCoolThing
   ```
 
 - Make sure to exclude any 3rd-party projects from `canjs/build.js` like:
@@ -185,15 +186,17 @@ If you can't you might need to:
   the library:
 
   ```js
-  var namespace = require("can-namespace");
-  var SomeOtherLibrary = require("SOME_OTHER_LIBRARY");
+  import namespace from 'can-namespace';
+
+  import SomeOtherLibrary from 'SOME_OTHER_LIBRARY';
+
 
   var myCoolThing;
   if(SomeOtherLibrary) {
 	  myCoolThing = SomeOtherLibrary({});
   }
 
-  module.exports = can.myCoolThing = myCoolThing
+  export default can.myCoolThing = myCoolThing
   ```
 
 

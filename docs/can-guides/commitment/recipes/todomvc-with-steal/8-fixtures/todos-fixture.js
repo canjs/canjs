@@ -1,6 +1,8 @@
 // models/todos-fixture.js
-var fixture = require("can-fixture");
-var Todo = require("./todo");
+import fixture from 'can-fixture';
+
+import Todo from './todo';
+
 
 var todoStore = fixture.store([
     { name: "mow lawn", complete: false, id: 5 },
@@ -11,4 +13,4 @@ var todoStore = fixture.store([
 fixture("/api/todos", todoStore);
 fixture.delay = 500;
 
-module.exports = todoStore;
+export default todoStore;

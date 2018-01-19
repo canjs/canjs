@@ -1,7 +1,10 @@
 // models/todo.js
-var DefineMap = require("can-define/map/");
-var DefineList = require("can-define/list/");
-var set = require("can-set");
+import DefineMap from 'can-define/map/';
+
+import DefineList from 'can-define/list/';
+
+import set from 'can-set';
+
 
 var Todo = DefineMap.extend("Todo", {
 	id: "string",
@@ -38,4 +41,4 @@ Todo.algebra = new set.Algebra(
 	set.props.sort("sort")
 );
 
-module.exports = Todo;
+export default Todo;

@@ -45,7 +45,8 @@ StealJS.
 - Define a ViewModel type with [can-define/map/map]:
 
   ```js
-  var DefineMap = require("can-define/map/");
+  import DefineMap from 'can-define/map/';
+
   var Type = DefineMap.extend({ ... });
   ```
 
@@ -58,7 +59,8 @@ StealJS.
 - Load a view with the [steal-stache] plugin like:
 
   ```js
-  var view = require("./path/to/template.stache");
+  import view from './path/to/template.stache';
+
   ```
 
   Note that [steal-stache] is a StealJS plugin and needs to be configured as such.
@@ -725,8 +727,10 @@ custom element.
 - A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
 
   ```js
-  var Component = require("can-component");
-  var view = require("./template.stache");
+  import Component from 'can-component';
+
+  import view from './template.stache';
+
   var ViewModel = DefineMap.extend({
     ...      
   });
