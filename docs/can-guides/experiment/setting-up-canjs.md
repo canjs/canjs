@@ -134,9 +134,10 @@ Next, create a `main` module for your application. Import [can-define/map/map], 
 // main.js
 import DefineMap from 'can-define/map/map';
 import stache from 'can-stache';
+import rawTemplate from 'raw-loader!./main.stache';
 
 var data = new DefineMap({message: "Hello World"});
-var template =import stache( from 'raw-loader!./main.stache';);
+var template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
@@ -179,9 +180,10 @@ Next, create a `main.js` file for your application. Import [can-define/map/map],
 // main.js
 import DefineMap from 'can-define/map/map';
 import stache from 'can-stache';
+import rawTemplate from './main.stache';
 
 var data = new DefineMap({message: "Hello World"});
-var template =import stache( from './main.stache';);
+var template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
