@@ -55,7 +55,7 @@ window.can = require('can-debug');
 
 #### Conditional loading
 
-Conditional loading makes it possible to load a module only when other modules export true. To start, we'll create a `is-dev` module:
+Conditional loading makes it possible to load a module only when another module export true. To start, we'll create an `is-dev` module:
 
 ```js
 // is-dev.js
@@ -130,7 +130,7 @@ export default DefineMap.extend("TheNameOfMyType", { ... })
 
 #### Label instances
 
-[can-reflect]'s [can-reflect.setName] method can be used to special name a particular object:
+[can-reflect]'s [can-reflect.setName] method can be used to uniquely name a particular object:
 
 ```js
 can.reflect.setName(person, "Person{Justin}");
@@ -190,7 +190,7 @@ Consider the following code that derives an info value from the person observabl
 var person = new observe.Object({name: "Fran", age: 15});
 
 var info = new Observation(function updateInfo(){
-    return person.name + " is "+person.age;
+    return person.name + " is " + person.age;
 });
 
 info.on(function onInfoChanged(newVal){
@@ -200,7 +200,7 @@ info.on(function onInfoChanged(newVal){
 person.age = 22;
 ```
 
-Say you wanted to know why `onInfoChanged` was called and inserted the `debugger` above. When
+Say you wanted to know why `onInfoChanged` was called, so you inserted the `debugger` above. When
 the debugger was hit, you can enter [can-queues.logStack] in the console to see the enqueued tasks that resulted
 in `onInfoChanged` being run:
 
@@ -276,7 +276,7 @@ CanJS's observable map-types like [can-define/map/map] can be passed
 a property name and log when that property changes:
 
 ```js
-map.log("property")
+map.log("property");
 ```
 
 ## Debug [can-stache] issues
@@ -318,12 +318,12 @@ Component.extend({
     tag: "my-counter",
     view: `{{console.log(count)}}`,
     ViewModel: {
-        count: {default: 0}
+        count: {default: 0},
         connectedCallback(){
             setInterval(() => {
                 this.count++;
-            },1000)
+            }, 1000);
         }
     }
-})
+});
 ```
