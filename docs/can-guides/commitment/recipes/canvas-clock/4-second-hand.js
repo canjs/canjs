@@ -19,7 +19,6 @@ can.Component.extend({
       canvas.closePath();
       canvas.stroke();
 
-      // draw second hand
       this.listenTo("time", (ev, time) => {
         canvas.clearRect(0, 0, diameter, diameter);
 
@@ -36,6 +35,7 @@ can.Component.extend({
           strokeStyle: "#FF0000",
           lineCap: "round"
         });
+        // draw second hand
         const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
         const size = radius * 0.85,
           x = center + size * Math.sin(base60ToRadians(seconds)),

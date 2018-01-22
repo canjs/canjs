@@ -23,7 +23,6 @@ can.Component.extend({
         canvas.stroke();
       };
 
-      // draw second hand
       this.listenTo("time", (ev, time) => {
         canvas.clearRect(0, 0, diameter, diameter);
 

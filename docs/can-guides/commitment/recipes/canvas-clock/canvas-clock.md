@@ -318,7 +318,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-refactor.js
-@highlight 15-24,30-36,46-55,only
+@highlight 15-24,27,29-35,37-46,only
 
 
 ## Draw the minute and hour hand ##
@@ -340,7 +340,7 @@ You know everything at this point.  You got this!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-min-hour-hands.js
-@highlight 56-77,only
+@highlight 48-69,only
 
 
 
