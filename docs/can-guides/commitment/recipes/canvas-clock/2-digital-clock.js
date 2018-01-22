@@ -1,7 +1,7 @@
-var DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{
+const DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{
   time: Date,
   hh(){
-    var hr= this.time.getHours() % 12;
+    const hr = this.time.getHours() % 12;
     return hr === 0 ? 12 : hr;
   },
   mm(){
@@ -18,12 +18,17 @@ can.Component.extend({
   ViewModel: DigitalClockVM
 });
 
-var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
-  time: {Default: Date, Type: Date},
-  init(){
-    setInterval(() => {
-      this.time = new Date();
-    },1000);
+const ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
+  time: {
+    value({ resolve }) {
+      const intervalID = setInterval(() => {
+        resolve( new Date() );
+      },1000);
+
+      resolve( new Date() );
+
+      return () => clearInterval(intervalID);
+    }
   }
 });
 
