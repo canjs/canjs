@@ -8,9 +8,8 @@
 
 In this guide you will learn how to:
 
-- Use `fetch` to request data.
-- Create a custom element that wraps a google map.
-- Add markers to the google map.
+- Create custom elements for digital and analog clocks
+- Use the `canvas` API to draw the hands of the analog clock
 
 The final widget looks like:
 
