@@ -49,7 +49,7 @@ Add the following to your main module:
 
 ```js
 //!steal-remove-start
-window.can = require('can-debug');
+window.can = require("can-debug");
 //!steal-remove-end
 ```
 
@@ -65,7 +65,7 @@ export default !steal.isEnv("production");
 Then we can conditionally load modules like:
 
 ```js
-import can from 'can-debug#?~is-dev';
+import can from "can-debug#?~is-dev";
 
 //!steal-remove-start
 window.can = can;
@@ -238,16 +238,16 @@ that change a value. It logs both:
 You can log what changes CanJS observables and DOM elements:
 
 ```js
-can.debug.logWhatChangesMe( me, "fullName" );
-can.debug.logWhatChangesMe( document.querySelector("h1.name") )
+can.debug.logWhatChangesMe(me, "fullName");
+can.debug.logWhatChangesMe(document.querySelector("h1.name"));
 ```
 
 [can-debug]'s [can-debug.logWhatIChange] reverses [can-debug.logWhatChangesMe]
 and logs what observables are changed by an observable value:
 
 ```js
-can.debug.logWhatIChange( me, "first" );
-can.debug.logWhatIChange( document.querySelector("input[name=first]") )
+can.debug.logWhatIChange(me, "first");
+can.debug.logWhatIChange(document.querySelector("input[name=first]"));
 ```
 
 ## Access a component's view-model.
@@ -255,7 +255,7 @@ can.debug.logWhatIChange( document.querySelector("input[name=first]") )
 Use [can-view-model] to access a component's viewModel:
 
 ```js
-can.viewModel( document.querySelector("my-component") )
+can.viewModel(document.querySelector("my-component"));
 ```
 
 ## Log when an observable changes.
@@ -269,7 +269,7 @@ map.log();
 This can be quite useful when used with [can-view-model]:
 
 ```js
-can.viewModel( document.querySelector("my-component") ).log();
+can.viewModel(document.querySelector("my-component")).log();
 ```
 
 CanJS's observable map-types like [can-define/map/map] can be passed
