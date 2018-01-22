@@ -14,7 +14,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/vamojuh/4/embed?output&height=400px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zefajic/14/embed?output&height=400px">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
@@ -29,7 +29,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/zomefef/4/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/zomefef/7/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML, CSS, and JS to bootstrap a basic CanJS application.
 
@@ -55,12 +55,17 @@ tab, you'll find a `<clock-controls/>` element.  The following code in the `JS` 
 defines the behavior of the `<clock-controls/>` element:
 
 ```js
-var ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
-  time: {Default: Date, Type: Date},
-  init(){
-    setInterval(() => {
-      this.time = new Date();
-    },1000);
+const ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
+  time: {
+    value({ resolve }) {
+      const intervalID = setInterval(() => {
+        resolve( new Date() );
+      },1000);
+
+      resolve( new Date() );
+
+      return () => clearInterval(intervalID);
+    }
   }
 });
 
@@ -77,14 +82,14 @@ can.Component.extend({
 
 You'll notice the behavior is defined in two parts.  First is the `ClockControlsVM` type.  This
 is an observable constructor function created with [can-define/map/map].  Here, a `time`
-property is defined to be an instance of a `Date`.  The `init` method is called whenever
-a new instance of `ClockControlsVM` is created.  The `init` method updates the `time` property
-every second.
+property is defined using the [can-define.types.value value behavior]. This uses `resolve` to set
+the value of `time` to be an instance of a `Date` and then update the value every second to be a
+new `Date`.
 
 One could create an instance of `ClockControlsVM` and explore it's `time` property as follows:
 
 ```js
-var vm = new ClockControlsVM();
+const vm = new ClockControlsVM();
 vm.time //-> Wed Nov 01 2017 14:31:25 GMT-0500 (CDT)
 ```
 
@@ -158,19 +163,18 @@ In this section, we will:
 
 - Use another [can-component] to define a `<analog-clock>` component.
 - Define the component's `view` to write out a `<canvas>` element. (hint: `<canvas id="analog"  width="255" height="255"></canvas>`).
-- A component's [can-component.prototype.events] object lets you listen to changes in the `ViewModel` and
-  when the component is [can-util/dom/events/inserted/inserted] or
-  [can-util/dom/events/removed/removed] from the page like:
+- A component's viewModel can be defined as an object which will be passed to [can-define/map/map.extend DefineMap.extend]. (hint:`ViewModel: {}`)
+- A viewModel's [can-component/connectedCallback] will be called when the component is inserted into the page and will be passed the `element` like:
   ```js
   can.Component.extend({
     tag: "my-element",
     view: can.stache(`<h1>first child</h1>`),
-    events: {
-      "{element} inserted": function(element){
+    ViewModel: {
+      connectedCallback(element) {
         element.firstChild //-> <h1>
       }
     }
-  })
+  });
   ```
 - To get the [canvas rendering context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
   from a `<canvas>` element use `canvas = canvasElement.getContext('2d')`.
@@ -223,17 +227,19 @@ In this section, we will:
 
 ### What you need to know
 
-- A component's [can-component.prototype.events] object lets you listen to changes in the `ViewModel` like:
+- [can-event-queue/map/map.listenTo this.listenTo] can be used in a component's `connectedCallback` to listen to changes in the `ViewModel` like:
   ```js
   can.Component.extend({
     tag: "analog-clock",
     ...
-    events: {
-      "{viewModel} time": function(viewModel, newTime){
-
-      }
-    }
-  })
+	ViewModel: {
+	  connectedCallback() {
+	    this.listenTo("time", (ev, time) => {
+		  ...
+	    });
+	  }
+	}
+  });
   ```
 
 - Use [canvas.moveTo(x1,y1)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext/moveTo)
@@ -254,10 +260,9 @@ In this section, we will:
   Use the following `base60ToRadians` method to convert a number from 0-60 to one between 0 and 2π:
 
   ```js
-  function base60ToRadians(base60Number) {
-    // 60 = 2π
-    return 2 * Math.PI * base60Number / 60;
-  }
+  // 60 = 2π
+  const base60ToRadians = (base60Number) =>
+    2 * Math.PI * base60Number / 60;
   ```
 
 ### The solution
@@ -265,7 +270,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-second-hand.js
-@highlight 1-4,23-40,only
+@highlight 1-3,22-48,only
 
 ## Clear the canvas and create a `drawNeedle` function ##
 ### The problem
@@ -288,20 +293,25 @@ In this section, we will:
 
 ### What you need to know
 
-- Move the __draw circle__ into the `"{viewModel} time"` event handler so it is redrawn
+- Move the __draw circle__ into the `this.listenTo("time", ...)` event handler so it is redrawn
   when the time changes.
 - Use [clearRect(x, y, width, height)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect) to clear
   the canvas.
-- Add methods (and call them) on the `events` object like:
+- Add a function inside the `connectedCallback` that will have access to all the variables created above it like:
   ```js
-  can.Component.extend({
-    events: {
-      drawNeedle: function(length, base60Distance, styles){},
-      "{viewModel} time": function(){
-          this.drawNeedle(length, base60Distance, styles);
-      }
+  ViewModel: {
+    connectedCallback() {
+      const canvas = element.firstChild.getContext('2d');
+      const diameter = 255;
+      const radius = diameter/2 - 5;
+      const center = diameter/2;
+
+      const drawNeedle = (length, base60Distance, styles) => {
+        canvas // -> the canvas element
+        ...
+      };
     }
-  })
+  }
   ```
 
 ### The solution
@@ -309,7 +319,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-refactor.js
-@highlight 14-25,27-34,37-44,only
+@highlight 15-24,30-36,46-55,only
 
 
 ## Draw the minute and hour hand ##
@@ -331,7 +341,7 @@ You know everything at this point.  You got this!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-min-hour-hands.js
-@highlight 45-66,only
+@highlight 56-77,only
 
 
 
