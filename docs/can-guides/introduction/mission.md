@@ -151,7 +151,7 @@ to make that `MVC.Controller` work in CanJS 3.0,
 you could update it to the following:
 
 ```js
-var Control = require("can-control");
+import Control from 'can-control';
 
 var TodosController = Control.extend({
     "li.complete click": function(el, ev){

@@ -49,7 +49,8 @@ Add the following to your main module:
 
 ```js
 //!steal-remove-start
-window.can = require("can-debug");
+import can from "can-debug";
+window.can = can;
 //!steal-remove-end
 ```
 
@@ -79,7 +80,7 @@ code to your main module:
 
 ```js
 if (process.env.NODE_ENV !== "production") {
-  window.can = require("can-debug");
+    window.can = require("can-debug");
 }
 ```
 

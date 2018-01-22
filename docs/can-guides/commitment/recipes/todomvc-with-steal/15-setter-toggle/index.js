@@ -1,9 +1,9 @@
 // index.js
-var view = require("./index.stache");
-var DefineMap = require("can-define/map/");
-var Todo = require("~/models/todo");
-require("~/models/todos-fixture");
-
+import view from './index.stache';
+import DefineMap from 'can-define/map/';
+import Todo from '~/models/todo';
+import '~/models/todos-fixture';
+import test from 'can-todomvc-test';
 var AppViewModel = DefineMap.extend("AppViewModel",{
 	appName: "string",
     todosList: {
@@ -25,5 +25,4 @@ var appVM = window.appVM = new AppViewModel({
 
 var frag = view(appVM);
 document.body.appendChild(frag);
-
-require("can-todomvc-test")(appVM);
+test(appVM);
