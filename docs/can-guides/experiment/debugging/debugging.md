@@ -50,7 +50,6 @@ Add the following to your main module:
 ```js
 //!steal-remove-start
 import can from "can-debug";
-window.can = can;
 //!steal-remove-end
 ```
 
@@ -67,10 +66,6 @@ Then we can conditionally load modules like:
 
 ```js
 import can from "can-debug#?~is-dev";
-
-//!steal-remove-start
-window.can = can;
-//!steal-remove-end
 ```
 
 ### WebPack Setup
@@ -80,7 +75,7 @@ code to your main module:
 
 ```js
 if (process.env.NODE_ENV !== "production") {
-    window.can = require("can-debug");
+    require("can-debug");
 }
 ```
 
@@ -251,6 +246,12 @@ can.debug.logWhatIChange(me, "first");
 can.debug.logWhatIChange(document.querySelector("input[name=first]"));
 ```
 
+Finally, [can-debug.drawGraph] can draw these relationships in a graph like the following:
+
+<img src="../../node_modules/can-debug/doc/map-dependency-graph.png"
+  alt="A visual representation of an observable's dependency graph"
+  width="600px"/>
+
 ## Access a component's view-model.
 
 Use [can-view-model] to access a component's viewModel:
@@ -319,11 +320,13 @@ Component.extend({
     tag: "my-counter",
     view: `{{console.log(count)}}`,
     ViewModel: {
-        count: {default: 0},
-        connectedCallback(){
-            setInterval(() => {
-                this.count++;
-            }, 1000);
+        count: {
+            value({resolve}) {
+                var count = resolve(0);
+                setInterval(() => {
+                    resolve(++count);
+                }, 1000);
+            }
         }
     }
 });
