@@ -94,6 +94,20 @@ can-migrate --apply **/*.js --can-version 4
 
 The first step to upgrading to CanJS 4 is to deal with the breaking changes. Most can be changed relatively simply.
 
+## can-stache Helpers need to get called as Function
+In some examples befor can-define and can-stache helper functions got called inside can-stache templates if you used syntax like 
+
+```handlebars
+{{helperName}}
+```
+
+to:
+
+
+```handlebars
+{{helperName()}}
+```
+
 ### can-stache/helpers/route replaced with can-stache-route-helpers
 
 > You can migrate this change with this codemod:
