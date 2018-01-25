@@ -27,8 +27,18 @@ objects to:
 
 Instead of worrying about calling the various browser APIs, CanJS abstracts this
 away, so you can focus on the logic of your application. The logic of your
-application is contained within observables. Let’s see how!
+application is contained within observables.
 
+The rest of this guide walks you through:
+
+- The basics of defining your own [key-value observable](#Key_ValueObservables) types and
+  adding logic to them.
+- Connecting those [observables to DOM elements](#ObservablesandHTMLElements) using:
+  - stache templates like `<span>{{count}}</span>`,  
+  - bindings like `<input value:bind='count'>`, and
+  - components that create custom elements like `<my-counter/>`.
+- Connecting [observables to the browser's location](#Observablesandthebrowser_slocation) and
+  building an example app that routes between different pages, including a login screen.
 
 ## Key-Value Observables
 
@@ -391,8 +401,12 @@ so that the following observable data produces the following url hashes:
 {foo: "bar & baz"}    //-> "#!&foo=bar+%26+baz"
 ```
 
-> __NOTE:__ The hash-bang (`#!`) is used as default to comply with a now-deprecated
-> [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started) recommendation.  Use [can-route-pushstate] for modern applications.
+> __NOTE 1:__ This guide uses hash-based routing instead of pushstate because hash-based routing
+is easier to setup. Pushstate routing requires server-support. Use [can-route-pushstate] for pushstate-based applications. The use of [can-route-pushstate] is almost identical to [can-route].
+
+> __NOTE 2:__ [can-route] uses hash-bangs (`#!`) to comply with a now-deprecated
+> [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started)
+> recommendation.
 
 You can register routes that controls the relationship between the
 observable and the browser's location. The following registers
@@ -446,8 +460,8 @@ We'll use the following example to help make sense of it:
 
 This example shows the `<page-login>` component until someone has logged in.  Once they have
 done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
-the `<page-home>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>`
-component we created previously.
+the `<page-home>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>` component we created previously. (_NOTE: We will show how to persist changes
+to todos in a upcoming service layer section._)
 
 The switching between different components is managed by a `<my-app>` component. The topology of
 the application looks like:
@@ -486,9 +500,9 @@ Component.extend({
         <a href="{{ routeURL(page='home') }}">Home</a>
         <a href="{{ routeURL(page='tasks') }}">Tasks</a>
     `),
-    ViewModel: DefineMap.extend({
+    ViewModel: {
         page: "string"
-    })
+    }
 })
 ```
 
@@ -562,14 +576,14 @@ with the logic to make the view behave correctly. We implement the
 Component.extend({
     tag: "my-app",
     ...
-    ViewModel: DefineMap.extend({
+    ViewModel: {
         // Properties that come from the url
         page: "string",
         taskId: "string",
 
         // A property if the user has logged in.
-        // `serialize: false` prevents it from being
-        // part of the url.
+        // `serialize: false` keeps `isLoggedIn` from
+        // affecting the `url` and vice-versa.
         isLoggedIn: {
             default: false,
             type: "boolean",
@@ -591,9 +605,18 @@ Component.extend({
         logout() {
             this.isLoggedIn = false;
         }
-    })
+    }
 });
 ```
+
+> NOTE: The [can-define.types.serialize] property behavior controls the
+> [can-define/map/map.prototype.serialize serializable] properties of
+> a [can-define/map/map DefineMap]. Only
+> serializable properties of the map are used by [can-route] to
+> update the url. `serialize: false` keeps `isLoggedIn` from
+> affecting the `url` and vice-versa. Getters like `componentToShow`
+> are automatically configured with `serialize: false`.
+
 
 Finally, our component works, but the urls aren't easy to
 remember (ex: `#!&page=home`). We will clean that up in the
