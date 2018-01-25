@@ -8,7 +8,7 @@ import DefineMap from "can-define/map/map";
 import stache from "can-stache";
 import Component from "can-component";
 
-var Counter = DefineMap.extend("Counter",{
+var Counter = DefineMap.extend({
     count: {default: 0},
     increment() {
         this.count++;

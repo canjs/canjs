@@ -11,7 +11,7 @@ import "can/demos/technology-overview/component-slider";
 
 Component.extend({
     tag: "task-editor",
-    view: stache(`
+    view: `
         <h2>Task Editor</h2>
         <form on:submit='save(scope.event)'>
             Name: {{name}}
@@ -26,8 +26,8 @@ Component.extend({
                 {{#if(isSaving)}}Saving{{else}}Save{{/if}}
             </button>
         </form>
-    `),
-    ViewModel: DefineMap.extend({
+    `,
+    ViewModel: {
         id: "number",
         name: {
             default: function(){
@@ -50,7 +50,7 @@ Component.extend({
                 this.isSaving = false;
             },2000)
         }
-    })
+    }
 });
 </script>
 <style>

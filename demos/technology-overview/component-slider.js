@@ -1,6 +1,4 @@
 import Component from "can-component";
-import stache from "can-stache";
-import DefineMap from "can-define/map/map";
 
 function width(el) {
     var cs = window.getComputedStyle(el,null)
@@ -10,12 +8,12 @@ function width(el) {
 
 Component.extend({
     tag: "percent-slider",
-    view: stache(`
+    view: `
         <div class='slider'
         style="left: {{left}}px"
-        on:mousedown='startDrag(scope.event.clientX)'/>`),
+        on:mousedown='startDrag(scope.event.clientX)'/>`,
 
-    ViewModel: DefineMap.extend("MySliderViewModel",{
+    ViewModel: {
         start: {type: "number", default: 0},
         end: {type: "number", default: 100},
         currentValue: {
@@ -70,5 +68,5 @@ Component.extend({
             this.startClientX = clientX;
         }
 
-    })
+    }
 });

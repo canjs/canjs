@@ -4,7 +4,7 @@ import DefineList from "can-define/list/list";
 import stache from "can-stache";
 import "can-stache-bindings";
 
-var TodosApp = DefineMap.extend("TodosApp",{
+var TodosApp = DefineMap.extend({
     todos: {
         default: () => new DefineList([
             {complete: true, name: "Do the dishes."},

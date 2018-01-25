@@ -1,13 +1,12 @@
-<div id='location'>
-    <span id='back'>&#x21E6;</span><div id="url"></div>
-</div>
+<mock-url></mock-url>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
 import DefineMap from "can-define/map/map";
 import stache from "can-stache";
 import route from "can-route";
 import "can-stache-bindings";
+import "can/demos/technology-overview/mock-url";
 
-var Counter = DefineMap.extend("Counter",{
+var Counter = DefineMap.extend({
     count: {default: 0, type: "number"},
     increment() {
         this.count++;
@@ -28,36 +27,6 @@ var view = stache(`
 
 document.body.appendChild( view(myCounter) );
 </script>
-<script>
-function updateWithHash(){
-    document.getElementById("url").innerHTML = "URL: /route-counter.html"+window.location.hash;
-}
-updateWithHash();
-window.addEventListener("hashchange", updateWithHash)
-document.getElementById("back").addEventListener("click", function(){
-    history.back();
-});
-</script>
 <style>
 body {margin: 0px; padding: 0px;}
-#location {
-    display: flex;
-    margin-bottom: 20px;
-}
-#url {
-    display: inline-block;
-    border: solid 1px;
-    padding: 2px;
-    flex-grow: 1;
-}
-
-#back {
-    font-size: 16px;
-    font-family: Verdana,sans-serif;
-    border: solid 1px black;
-    padding: 2px;
-    line-height: 20px;
-    flex-grow: 0;
-    cursor: pointer;
-}
 </style>

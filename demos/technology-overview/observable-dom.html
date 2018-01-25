@@ -3,7 +3,7 @@ import DefineMap from "can-define/map/map";
 import stache from "can-stache";
 import "can-stache-bindings";
 
-var Counter = DefineMap.extend("Counter",{
+var Counter = DefineMap.extend({
     count: {default: 0},
     increment() {
         this.count++;

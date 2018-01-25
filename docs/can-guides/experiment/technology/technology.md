@@ -1,6 +1,6 @@
 @page guides/technology-overview Technology Overview
 @parent guides/getting-started 1
-@outline 3
+@outline 2
 
 @description Learn the basics of the core parts of CanJS's technology.
 
@@ -39,7 +39,7 @@ a simple counter, we can use [can-define/map/map DefineMap] as follows:
 
 ```js
 import DefineMap from "can-define/map/map";
-var Counter = DefineMap.extend("Counter",{
+var Counter = DefineMap.extend({
     count: {default: 0},
     increment() {
         this.count++;
@@ -72,7 +72,7 @@ definition behaviors to define a `TodosApp` constructor function's `todos` and `
 property behavior:
 
 ```js
-var TodosApp = DefineMap.extend("TodosApp",{
+var TodosApp = DefineMap.extend({
     todos: {
         // todos defaults to a DefineList of todo data.
         default: () => new DefineList([
@@ -235,7 +235,7 @@ The demo defines the `<my-counter>` element with:
 - The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
   ```js
   import DefineMap from "can-define/map/map";
-  var Counter = DefineMap.extend("Counter",{
+  var Counter = DefineMap.extend({
       count: {default: 0},
       increment() {
           this.count++;
@@ -275,8 +275,35 @@ built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.o
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
   alt=""/>
 
+Instead of creating the view, view-model as separate entities, they are
+often done together as follows:
+
+```js
+import Component from "can-component";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        <button on:click='increment()'>+1</button>
+        Count: <span>{{count}}</span>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+```
+
+[can-component] will create a `can-stache` template from a string [can-component.prototype.view] value
+and define a [can-define/map/map DefineMap] type from a plain
+object [can-component.prototype.ViewModel] value. This is a useful short-hand for creating components. __We will use it for all components going forward.__
+
+#### Passing data to and from components
+
 Components are created by inserting their [can-component.prototype.tag] in the DOM or
-another [can-stache] view. For example, `<my-counter></my-counter>` creates an instance of the `Counter`
+another [can-stache] view. For example, `<my-counter></my-counter>` creates an instance of the
 __ViewModel__ and renders it with the __view__ and inserts the resulting HTML inside the `<my-counter>` tag.
 
 [can-stache-bindings] can be used to pass values between
@@ -312,8 +339,8 @@ other components. The following might be the topology of an example application:
 Notice that `<my-app>`'s _view_ will
 render either `<page-login>`, `<page-signup>`,
 `<page-products>`, or `<page-purchase>` based on
-the state of it's _view-model_.  Those sub-components
-might use sub-components themselves like `<ui-password>` or `<credit-card>`.
+the state of it's _view-model_.  Those page-level components
+might use sub-components themselves like `<ui-password>` or `<product-list>`.
 
 
 ## Observables and the browser's location
@@ -417,27 +444,27 @@ We'll use the following example to help make sense of it:
 
 @demo demos/technology-overview/route-mini-app.html
 
-This example shows the `<login-page>` component until someone has logged in.  Once they have
+This example shows the `<page-login>` component until someone has logged in.  Once they have
 done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
-the `<home-page>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>`
+the `<page-home>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>`
 component we created previously.
 
 The switching between different components is managed by a `<my-app>` component. The topology of
 the application looks like:
 
-<img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
+<img src="../../docs/can-guides/experiment/technology/routing-app-overview.png"
   alt=""
-  width="800px"/>  
+  width="600px"/>  
 
 In most applications, [can-route] is connected to the top-level component's
 [can-component.prototype.ViewModel]. We are going to go through the process of
 building `<my-app>` and connecting it
 to [can-route]. This is usually done in four steps:
 
-- Connect the top-level component's view-model to the routing [can-route.data].
-- Have the top-level component's [can-component.prototype.view] display the right sub-components based on the view-model state.
-- Define the top-level component's view-model (sometimes called _application view-model_).
-- Register routes that translate between the URL and the application view-model.
+1. Connect the top-level component's view-model to the routing [can-route.data].
+2. Have the top-level component's [can-component.prototype.view] display the right sub-components based on the view-model state.
+3. Define the top-level component's view-model (sometimes called _application view-model_).
+4. Register routes that translate between the URL and the application view-model.
 
 ### Connect a component's view-model to can-route
 
@@ -499,13 +526,13 @@ Component.extend({
     view: stache(`
         {{#switch(componentToShow)}}
             {{#case("home")}}
-                <home-page isLoggedIn:from="isLoggedIn" logout:from="logout"/>
+                <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
             {{/case}}
             {{#case("tasks")}}
                 <task-editor id:from="taskId" logout:from="logout"/>
             {{/case}}
             {{#case("login")}}
-                <login-page isLoggedIn:bind="isLoggedIn" />
+                <page-login isLoggedIn:bind="isLoggedIn" />
             {{/case}}
             {{#default}}
                 <h2>Page Missing</h2>
@@ -596,6 +623,3 @@ route.register("tasks/{taskId}", {page: "tasks"});
 Now the mini application is able to translate changes in the url to
 properties on the component's view-model.  When the component's view-model
 changes, the view updates the page.
-
-
-## Observables and the service layer
