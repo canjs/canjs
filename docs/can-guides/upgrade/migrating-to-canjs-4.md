@@ -80,6 +80,20 @@ If you are using [Yarn](https://yarnpkg.com/en/) the process is almost identical
 
 Once you have CanJS 4 installed, the next step is to fix breaking changes.
 
+## can-stache Helpers need to get called as Function
+In some examples befor can-define and can-stache helper functions got called inside can-stache templates if you used syntax like 
+
+```handlebars
+{{helperName}}
+```
+
+to:
+
+
+```handlebars
+{{helperName()}}
+```
+
 ### can-stache/helpers/route replaced with can-stache-route-helpers
 
 If you are using the route helpers such as [can-stache-route-helpers.routeUrl], it has been moved into its own package now and no longer exists in [can-stache]. Your app will likely not load until you fix this.
