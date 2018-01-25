@@ -10,8 +10,6 @@ CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping
 
 Many of the changes in this guide are available as codemods.
 
-__TODO__: explain how to use the codemods
-
 ## Preparing for migration
 
 If you are still on CanJS 2.x, you'll first need to upgrade to CanJS 3 before jumping to 4. Follow the [migrate-3 CanJS 3 migration guide] before proceeding with this guide.
@@ -76,11 +74,32 @@ With __can-component__ no longer listed. Go through this process for each packag
 
 If you are using [Yarn](https://yarnpkg.com/en/) the process is almost identical. Instead of `npm outdated` use `yarn outdated`. The output looks the same as what you see above from npm. The major difference is that to install the latest version use `yarn add can-component@latest`.
 
+## Using codemods
+
+We recommend reading this guide in full before starting on your migration, to get an understanding of the changes. Once you have, using codemods is a good way to take care of *many* of the changes described below. If you haven't already, review the [using-codemods] guide that discusses what codemods are and the [can-migrate](https://www.npmjs.com/package/can-migrate) tool.
+
+Even if you have already installed can-migrate in the past, you need to upgrade to version 2 to run the 3-4 codemods.
+
+```shell
+npm install -g can-migrate@2
+```
+
+Once installed you can run any of the codemods discussed in sections below. *Or*, to run all of the 3-4 code mods you can run:
+
+```shell
+can-migrate --apply **/*.js --can-version 4
+```
+
 ## Breaking changes
 
-Once you have CanJS 4 installed, the next step is to fix breaking changes.
+The first step to upgrading to CanJS 4 is to deal with the breaking changes. Most can be changed relatively simply.
 
 ### can-stache/helpers/route replaced with can-stache-route-helpers
+
+> You can migrate this change with this codemod:
+> ```
+can-migrate --apply **/*.js --transform can-stache/route-helpers.js
+> ```
 
 If you are using the route helpers such as [can-stache-route-helpers.routeUrl], it has been moved into its own package now and no longer exists in [can-stache]. Your app will likely not load until you fix this.
 
@@ -102,9 +121,18 @@ If you've imported these in a JavaScript then just update the import specifier t
 import 'can-stache-route-helpers';
 ```
 
-### Use can-queues instead of can-event
+### Replacements for can-event
 
-If you are using [can-event] (or can.event) to batch changes like so:
+The can-event package in CanJS 3 contained a mixin for adding event capabilities to objects and contained a batching system.
+
+The batching system was replaced with [can-queues] which has a more sophisticated queuing system.
+
+> To migrate to can-queues with a codemod run:
+> ```
+can-migrate --apply **/*.js --transform can-queues/batch.js
+> ```
+
+If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
 
 ```js
 import canBatch from 'can-event/batch/batch';
@@ -128,6 +156,43 @@ queues.batch.start();
 person.first = 'Matthew';
 person.last = 'Phillips';
 queues.batch.stop();
+```
+
+If you were using [can-event] for its event mixin, this has been replaced by [can-event-queue/map/map]. First install this new dependency:
+
+```shell
+npm install can-event-queue --save
+```
+
+Replace your can-event code:
+
+```js
+import assign from 'can-util/js/assign/assign';
+import canEvent from 'can-event';
+
+function Thing(){
+
+}
+
+assign(Thing.prototype, canEvent);
+
+let thing = new Thing();
+thing.on("prop", function(){ ... });
+```
+
+with:
+
+```js
+import mixinMapBindings from 'can-event-queue/map/map';
+
+function Thing(){
+
+}
+
+mixinMapBindings(Thing.prototype);
+
+let thing = new Thing();
+thing.on("prop", function(){ ... });
 ```
 
 ### inserted/removed event
@@ -158,16 +223,17 @@ Can be replaced to use [can-component/connectedCallback] like so:
 import Component from "can-component";
 
 Component.extend({
-	connectedCallback: function(){
-		let el = this.element;
-		let onSomeEvent = function(){
+	ViewModel: {
+		connectedCallback(el){
+			let onSomeEvent = function(){
 
-		};
+			};
 
-		el.addEventListener('some-event', onSomeEvent);
+			el.addEventListener('some-event', onSomeEvent);
 
-		return function(){
-			el.removeEventListener('some-event', onSomeEvent);
+			return function(){
+				el.removeEventListener('some-event', onSomeEvent);
+			}
 		}
 	}
 });
@@ -193,6 +259,8 @@ Component.extend({
 ```
 
 ### Implicit scope walking
+
+> ***Note***: If you upgrade to the latest version of CanJS 3 before migrating to 4, you should get the warnings about implicit scope walking. It would be a good idea to follow the below advice and fix the warnings before upgrading to CanJS 4.
 
 In CanJS 3 [can-stache stache] templates would walk up the scope to find variables.For example if you had a template like:
 
@@ -244,6 +312,24 @@ Lastly, scope walking can be enabled by using `scope.find()` within the template
 
 However, in general the first two methods should cover most cases.
 
+### %event and other stache symbols
+
+In [can-stache] 3 there were several special symbols that were useable within a template such as:
+
+* `%index`
+* `%event`
+* `%key`
+
+These have all been replaced with properties on the `scope` object. Within your template you can refer to `scope` to handle the same things you would have used `%event` et al. before.
+
+```handlebars
+{{#each(players)}}
+  <span>Player {{scope.index}}</span>
+
+	<a on:click="./destroy(scope.event)">Delete</a>
+{{/each}}
+```
+
 ### stache {{log}} helper
 
 Previously can-stache contained a `{{log}}` helper that was useful for logging the current context.
@@ -269,6 +355,11 @@ In addition to the above breaking changes, you'll likely see several warnings. I
 Some that you might see include:
 
 ### can-route API changes
+
+> To migrate this change with a codemod run:
+> ```
+can-migrate --apply **/*.js --transform can-route/register.js
+> ```
 
 Registering routes in [can-route] used to be done by calling the route function. That often confused people since `route` also includes other methods. We simplified this by moving registration to route.register. Change
 
@@ -297,7 +388,7 @@ route.start();
 
 ### can-define's `value` is now `default`
 
-In [can-define] 1.0, you would default a default value for a property with the `value` property definition like so:
+In [can-define] 1.0, you would define a default value for a property with the `value` property definition like so:
 
 ```js
 import DefineMap from "can-define/map/map";
