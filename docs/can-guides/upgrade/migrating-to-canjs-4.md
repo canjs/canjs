@@ -98,7 +98,7 @@ The first step to upgrading to CanJS 4 is to deal with the breaking changes. Mos
 
 > You can migrate this change with this codemod:
 > ```
-can-migrate --apply **/*.js --transform can-stache/route-helpers.js
+> can-migrate --apply **/*.js --transform can-stache/route-helpers.js
 > ```
 
 If you are using the route helpers such as [can-stache-route-helpers.routeUrl], it has been moved into its own package now and no longer exists in [can-stache]. Your app will likely not load until you fix this.
@@ -129,7 +129,7 @@ The batching system was replaced with [can-queues] which has a more sophisticate
 
 > To migrate to can-queues with a codemod run:
 > ```
-can-migrate --apply **/*.js --transform can-queues/batch.js
+> can-migrate --apply **/*.js --transform can-queues/batch.js
 > ```
 
 If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
@@ -358,7 +358,7 @@ Some that you might see include:
 
 > To migrate this change with a codemod run:
 > ```
-can-migrate --apply **/*.js --transform can-route/register.js
+> can-migrate --apply **/*.js --transform can-route/register.js
 > ```
 
 Registering routes in [can-route] used to be done by calling the route function. That often confused people since `route` also includes other methods. We simplified this by moving registration to route.register. Change
