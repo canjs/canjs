@@ -44,7 +44,7 @@ you significantly closer than doing the migration by hand.
 Install `can-migrate` from npm:
 
 ```shell
-npm install -g can-migrate
+npm install -g can-migrate@1
 ```
 
 This will make the `can-migrate` command available globally.
