@@ -94,18 +94,22 @@ can-migrate --apply **/*.js --can-version 4
 
 The first step to upgrading to CanJS 4 is to deal with the breaking changes. Most can be changed relatively simply.
 
-## can-stache Helpers need to get called as Function
-In some examples befor can-define and can-stache helper functions got called inside can-stache templates if you used syntax like 
+### In stache, functions should be called with ()
+
+In CanJS 2.3 we introduced [can-stache/expressions/call call expressions] as a way to call functions with `()` just like you do in JavaScript. This enabled passing arguments as their *values* rather than as computes.
+
+In 4.0, all functions should be called with `()`, otherwise they will be treated as a value, and their `.toString()` method will be called.
+
+This is true of both methods on the ViewModel and helpers.
 
 ```handlebars
-{{helperName}}
+{{playerStats}}
 ```
 
 to:
 
-
 ```handlebars
-{{helperName()}}
+{{playerStats()}}
 ```
 
 ### can-stache/helpers/route replaced with can-stache-route-helpers
@@ -361,6 +365,26 @@ With this:
 ```
 
 Check out the [can-stache.helpers.console] docs for other interesting ways to use the new console methods.
+
+### .each was removed from maps and lists
+
+Previously [can-define/map/map], [can-define/list/list], [can-map], and [can-list] all had an `.each` method for looping over contained values. Due to the changes in scope-walking in stache, this would interfere with [can-stache.helpers.each]. For this reason, this was moved to `.forEach`.
+
+Change:
+
+```js
+players.each(function(player){
+
+})
+```
+
+to:
+
+```js
+players.forEach(function(player){
+
+})
+```
 
 ## Non-breaking warnings
 
