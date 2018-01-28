@@ -113,7 +113,7 @@
     "can-view-nodelist": "3.1.1",
     "can-view-parser": "3.6.3",
     "can-view-scope": "3.5.3",
-    "can-view-target": "3.1.5",
+    "can-view-target": "4.0.0",
     "can-zone": "0.6.15",
     "can-zone-storage": "1.0.1",
     "react-view-model": "0.5.11"
