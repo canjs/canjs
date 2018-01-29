@@ -70,7 +70,7 @@
     "can-fixture-socket": "0.7.2",
     "can-globals": "0.2.6",
     "can-jquery": "3.2.3",
-    "can-kefir": "0.2.3",
+    "can-kefir": "1.0.0",
     "can-list": "3.2.2",
     "can-map": "3.4.1",
     "can-map-backup": "3.1.1",
