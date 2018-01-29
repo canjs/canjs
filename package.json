@@ -95,7 +95,7 @@
     "can-stache-converters": "3.3.0",
     "can-stache-key": "0.1.1",
     "can-stream": "0.3.2",
-    "can-stream-kefir": "0.3.3",
+    "can-stream-kefir": "1.0.0",
     "can-symbol": "1.4.2",
     "can-types": "1.1.4",
     "can-util": "3.10.15",
