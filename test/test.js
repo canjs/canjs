@@ -37,7 +37,8 @@ require('can-simple-dom/test/test');
 require('can-simple-observable/can-simple-observable-test');
 require('can-stache-key/can-stache-key-test');
 require('can-symbol/can-symbol-test');
-require('can-util/test/test');
+// require('can-util/dom/tests');
+require('can-util/js/tests');
 require('can-validate-interface/test');
 // require('can-view-callbacks/test/callbacks-test'); in dev-only
 require('can-view-live/test/test');
