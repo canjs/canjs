@@ -2,6 +2,7 @@ var can = require("can-util/namespace");
 
 require("can-construct-super");
 require("can-connect-feathers");
+require("can-debug");
 //require("can-connect-signalr");
 //require("can-connect-cloneable");
 //require("can-connect-ndjson");

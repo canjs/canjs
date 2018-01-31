@@ -10,7 +10,6 @@ require('can-set/test/test');
 // can-stache-route-helpers
 
 
-
 // Infrastructure tests
 require('can-ajax/can-ajax-test');
 require('can-assign/can-assign-test');
@@ -37,7 +36,7 @@ require('can-simple-dom/test/test');
 require('can-simple-observable/can-simple-observable-test');
 require('can-stache-key/can-stache-key-test');
 require('can-symbol/can-symbol-test');
-// require('can-util/dom/tests');
+// require('can-util/dom/tests'); // importing would cause two versions of can-dom-data-state
 require('can-util/js/tests');
 require('can-validate-interface/test');
 // require('can-view-callbacks/test/callbacks-test'); in dev-only
@@ -47,15 +46,13 @@ require('can-view-nodelist/test/can-view-nodelist-test');
 require('can-view-parser/test/can-view-parser-test');
 require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');
-// require('can-zone/test/test'); needs to publish this
-
 require('can-stache-converters/test/test');
+
 
 // Legacy tests
 require('can-compute/can-compute_test');
 require('can-list/can-list_test');
 require('can-map/can-map_test');
-
 //require('can-map-define/can-map-define_test');
 //require('can-view-href/test/test');
 //require('can-map-backup/can-map-backup_test');
@@ -74,21 +71,19 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-vdom/test/test'); uses mocha
 //require('can-connect-ndjson/test/can-connect-ndjson-test');
 //if(typeof Proxy === "function"){
-//	require('can-observe/test');
+//	require('can-observe/test/test');
 //}
 require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
-
 require('can-validate/test');
 require('can-validate-validatejs/test');
 require('can-define-validate-validatejs/test');
-
 require('react-view-model/test/test#?can/test/browser-supports-react');
 //require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
-// require('can-zone/test/test');
+// require('can-zone/test/test'); needs to publish this
 // require('can-zone-storage/test/can-zone-storage_zone-test');
 
 
