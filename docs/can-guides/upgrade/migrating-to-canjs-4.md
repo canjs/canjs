@@ -116,7 +116,7 @@ to:
 
 > You can migrate this change with this codemod:
 > ```
-> can-migrate --apply **/*.js --transform can-stache/route-helpers.js
+> can-migrate --apply **/*.* --transform can-stache/route-helpers.js
 > ```
 
 If you are using the route helpers such as [can-stache-route-helpers.routeUrl], it has been moved into its own package now and no longer exists in [can-stache]. Your app will likely not load until you fix this.
@@ -147,7 +147,7 @@ The batching system was replaced with [can-queues] which has a more sophisticate
 
 > To migrate to can-queues with a codemod run:
 > ```
-> can-migrate --apply **/*.js --transform can-queues/batch.js
+> can-migrate --apply **/*.* --transform can-queues/batch.js
 > ```
 
 If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
@@ -332,6 +332,11 @@ However, in general the first two methods should cover most cases.
 
 ### %event and other stache symbols
 
+> You can migrate this change with this codemod:
+> ```
+> can-migrate --apply **/*.* --transform can-stache/scope.js
+> ```
+
 In [can-stache] 3 there were several special symbols that were useable within a template such as:
 
 * `%index`
@@ -349,6 +354,11 @@ These have all been replaced with properties on the `scope` object. Within your 
 ```
 
 ### stache {{log}} helper
+
+> You can migrate this change with this codemod:
+> ```
+> can-migrate --apply **/*.* --transform can-stache/console-log.js
+> ```
 
 Previously can-stache contained a `{{log}}` helper that was useful for logging the current context.
 
@@ -396,7 +406,7 @@ Some that you might see include:
 
 > To migrate this change with a codemod run:
 > ```
-> can-migrate --apply **/*.js --transform can-route/register.js
+> can-migrate --apply **/*.* --transform can-route/register.js
 > ```
 
 Registering routes in [can-route] used to be done by calling the route function. That often confused people since `route` also includes other methods. We simplified this by moving registration to route.register. Change
