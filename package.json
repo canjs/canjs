@@ -46,7 +46,7 @@
     "can-component": "4.0.0",
     "can-compute": "4.0.0",
     "can-connect": "2.0.1",
-    "can-connect-feathers": "4.0.0-pre.2",
+    "can-connect-feathers": "4.0.0",
     "can-construct": "3.2.3",
     "can-construct-super": "3.1.4",
     "can-control": "4.0.1",
