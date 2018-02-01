@@ -25,7 +25,7 @@ require("can-stache-converters");
 //require("can-stream");
 //require("can-stream-kefir");
 //require("can-zone");
-//require("react-view-model");
+require("react-view-model");
 
 //if(typeof customElements !== "undefined") {
 	//require("can-element");
