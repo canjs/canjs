@@ -32,7 +32,8 @@ publish-docs:
 	git add -f node_modules/feathers-socketio/package.json
 	git add -f node_modules/validate.js
 	git fetch
-#	git checkout origin/gh-pages -- CNAME
+	echo "v3.canjs.com" >> CNAME
+	git add -f CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
 	git push -f git@github.com:canjs/3.x gh-pages
