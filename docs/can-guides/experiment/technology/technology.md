@@ -12,9 +12,10 @@ CanJS, at its most simplified, consists of key-value __Observables__
 connected to different web browser APIs through various connecting
 libraries.
 
-<img src="../../docs/can-guides/experiment/technology/overview.png"
+
+<img src="../../docs/can-guides/experiment/technology/overview.svg"
   alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
-  width="800px"/>
+  class='bit-docs-screenshot' width='600px'/>
 
 The general idea is that you create observable objects that encapsulate
 the logic and state of your application and connect those observable
@@ -214,7 +215,7 @@ The final core __view__ library is [can-component].
 
 <img src="../../docs/can-guides/experiment/technology/observables-dom.png"
   alt=""
-  width="300px"/>
+  class='bit-docs-screenshot'/>
 
 [can-component] is used to create customs elements.  Custom elements are used to
 encapsulate widgets or application logic. For example, you
@@ -283,7 +284,7 @@ So __components__ are just a combination of a [can-stache] __view__ and a
 built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
 
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
-  alt=""/>
+  alt="" class='bit-docs-screenshot'/>
 
 Instead of creating the view, view-model as separate entities, they are
 often done together as follows:
@@ -344,7 +345,7 @@ other components. The following might be the topology of an example application:
 
 <img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
   alt=""
-  width="800px"/>
+  class='bit-docs-screenshot'/>
 
 Notice that `<my-app>`'s _view_ will
 render either `<page-login>`, `<page-signup>`,
@@ -389,7 +390,7 @@ the browser's location.
 
 <img src="../../docs/can-guides/experiment/technology/observable-routing.png"
   alt=""
-  width="500px"/>
+  class='bit-docs-screenshot'/>
 
 By default, `can-route` serializes the observable's data with [can-param],
 so that the following observable data produces the following url hashes:
@@ -467,8 +468,8 @@ The switching between different components is managed by a `<my-app>` component.
 the application looks like:
 
 <img src="../../docs/can-guides/experiment/technology/routing-app-overview.png"
-  alt=""
-  width="600px"/>  
+  alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
+  class='bit-docs-screenshot'/>  
 
 In most applications, [can-route] is connected to the top-level component's
 [can-component.prototype.ViewModel]. We are going to go through the process of
