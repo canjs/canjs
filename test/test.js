@@ -63,7 +63,7 @@ require('can-map/can-map_test');
 require('can-fixture/test/fixture_test');
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
-// require('can-connect-feathers/test/test'); depends on babel-polyfill
+//require('can-connect-feathers/test/test'); depends on babel-polyfill
 require('can-kefir/can-kefir-test');
 require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
@@ -89,4 +89,4 @@ require('can-view-autorender/test/test');
 
 // Integration tests
 //require('../docs/can-guides/experiment/todomvc/test');
-//require('./integration/all/test');
+require('./integration/all/test');
