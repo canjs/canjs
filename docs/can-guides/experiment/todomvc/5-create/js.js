@@ -39,6 +39,8 @@ can.connect.superMap({
   algebra: todoAlgebra
 });
 
+can.domEvents.addEvent( can.domEventEnter );
+
 var TodoCreateVM = can.DefineMap.extend({
     todo: {Default: Todo},
     createTodo: function(){

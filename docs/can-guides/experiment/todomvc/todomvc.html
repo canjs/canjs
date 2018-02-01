@@ -22,7 +22,7 @@
 <input id="new-todo"
     placeholder="What needs to be done?"
     value:bind="todo.name"
-    on:keyup="createTodo(scope.event)"/>
+    on:enter="createTodo()"/>
 </script>
 
 <script type='text/stache' id='todo-list-template'>
@@ -38,7 +38,7 @@
       </div>
       <input class="edit" type="text"
         default:bind="name"
-        on:keyup="updateName(scope.event)"
+        on:enter="updateName()"
         focused:from="isEditing(this)"
         on:blur="cancelEdit()"/>
     </li>
@@ -101,6 +101,7 @@ var todoStore = can.fixture.store([
 can.fixture("/api/todos", todoStore);
 can.fixture.delay = 1000;
 
+can.domEvents.addEvent( can.domEventEnter );
 
 var Todo = can.DefineMap.extend({
   id: "number",
@@ -147,12 +148,10 @@ can.connect.superMap({
 
 var TodoCreateVM = can.DefineMap.extend({
   todo: {Default: Todo},
-  createTodo: function(ev){
-    if (ev.keyCode === 13) {
-	  this.todo.save().then(function(){
-	    this.todo = new Todo();
-	  }.bind(this));
-	}
+  createTodo: function(){
+    this.todo.save().then(function(){
+      this.todo = new Todo();
+    }.bind(this));
   }
 });
 
@@ -180,10 +179,8 @@ var TodoListVM = can.DefineMap.extend({
     this.editing = null;
   },
   updateName: function() {
-    if (ev.keyCode === 13) {
-	  this.editing.save();
-	  this.editing = null;
-	}
+    this.editing.save();
+    this.editing = null;
   }
 });
 
