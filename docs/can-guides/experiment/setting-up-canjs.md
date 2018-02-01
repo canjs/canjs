@@ -28,7 +28,7 @@ It uses `can.all.js` so you have the [can-core core], [can-ecosystem ecosystem],
 
 ## StealJS and npm
 
-> You can get started faster with our [StealJS example repo](https://github.com/canjs/stealjs-example).
+> Get started with CanJS and [StealJS](https://stealjs.com) by [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example).
 
 Install [can-core CanJS’s core modules] and StealJS with npm:
 
@@ -116,7 +116,7 @@ guide has instructions for how to create a production build.
 
 ## webpack and npm
 
-> You can get started faster with our [Webpack example repo](https://github.com/canjs/webpack-example).
+> Get started with CanJS and [webpack](https://webpack.js.org) by [cloning this example repo on GitHub](https://github.com/canjs/webpack-example).
 
 Install [can-core CanJS’s core modules] and webpack (with `raw-loader`) with npm:
 
@@ -163,7 +163,7 @@ Finally, create a page that loads `bundle.js`:
 
 ## Browserify and npm
 
-> You can get started faster with our [Browserify example repo](https://github.com/canjs/browserify-example).
+> Get started with CanJS and [Browserify](http://browserify.org) by [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
 
 CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `stringify`) with npm:
 
