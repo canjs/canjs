@@ -8,13 +8,13 @@
 <div class="hero-images">
     <img
         class="tortoise"
-        srcset="docs/images/home/Home-Tortoise-bw.png 1x, docs/images/home/Home-Tortoise-bw-x2.png 2x"
-        src="docs/images/home/Home-Tortoise-bw.png"
+        srcset="docs/images/home/Home-Tortoise-color.png 1x, docs/images/home/Home-Tortoise-color-x2.png 2x"
+        src="docs/images/home/Home-Tortoise-color.png"
         style=""/>
     <img
         class="hare"
-        srcset="docs/images/home/Home-Hare-bw.png 1x, docs/images/home/Home-Hare-bw-x2.png 2x"
-        src="docs/images/home/Home-Tortoise-bw.png"/>
+        srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-color-x2.png 2x"
+        src="docs/images/home/Home-Tortoise-color.png"/>
 </div>
 
 If you’re new to the project, the best place to start is the [about] page, where you’ll
