@@ -16,15 +16,13 @@
 	  };
 	}
 </script>
-<script src="../../../../node_modules/es6-promise/dist/es6-promise.auto.js"></script>
-<script src="../../../../node_modules/jquery/dist/jquery.js"></script>
 <script src="../../../../dist/global/can.all.js"></script>
 
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
     placeholder="What needs to be done?"
-    default:bind="todo.name"
-    on:enter="createTodo()"/>
+    value:bind="todo.name"
+    on:keyup="createTodo(scope.event)"/>
 </script>
 
 <script type='text/stache' id='todo-list-template'>
@@ -40,7 +38,7 @@
       </div>
       <input class="edit" type="text"
         default:bind="name"
-        on:enter="updateName()"
+        on:keyup="updateName(scope.event)"
         focused:from="isEditing(this)"
         on:blur="cancelEdit()"/>
     </li>
@@ -149,10 +147,12 @@ can.connect.superMap({
 
 var TodoCreateVM = can.DefineMap.extend({
   todo: {Default: Todo},
-  createTodo: function(){
-    this.todo.save().then(function(){
-      this.todo = new Todo();
-    }.bind(this));
+  createTodo: function(ev){
+    if (ev.keyCode === 13) {
+	  this.todo.save().then(function(){
+	    this.todo = new Todo();
+	  }.bind(this));
+	}
   }
 });
 
@@ -180,8 +180,10 @@ var TodoListVM = can.DefineMap.extend({
     this.editing = null;
   },
   updateName: function() {
-    this.editing.save();
-    this.editing = null;
+    if (ev.keyCode === 13) {
+	  this.editing.save();
+	  this.editing = null;
+	}
   }
 });
 

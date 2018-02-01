@@ -88,5 +88,5 @@ require('can-view-autorender/test/test');
 
 
 // Integration tests
-//require('../docs/can-guides/experiment/todomvc/test');
+require('../docs/can-guides/experiment/todomvc/test');
 require('./integration/all/test');
