@@ -24,15 +24,15 @@ publish-docs:
 	git add -f node_modules/object-assign
 	git add -f node_modules/prop-types
 	# React Deps End
-	git add -f node_modules/socket.io-client
-	git add -f node_modules/feathers/package.json
-	git add -f node_modules/feathers-authentication-client/package.json
-	git add -f node_modules/feathers-hooks/package.json
-	git add -f node_modules/feathers-rest/package.json
-	git add -f node_modules/feathers-socketio/package.json
+	# git add -f node_modules/socket.io-client
+	# git add -f node_modules/feathers/package.json
+	# git add -f node_modules/feathers-authentication-client/package.json
+	# git add -f node_modules/feathers-hooks/package.json
+	# git add -f node_modules/feathers-rest/package.json
+	# git add -f node_modules/feathers-socketio/package.json
 	git add -f node_modules/validate.js
 	git fetch
-	git checkout origin/gh-pages -- CNAME
+	# git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
 	git push -f origin gh-pages

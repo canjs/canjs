@@ -6,6 +6,13 @@ credit card payment form with validations. It doesn’t use
 [can-define]. Instead it uses `Kefir.js` streams to make a ViewModel.
 [can-kefir] is used to make the Kefir streams observable to [can-stache].
 
+@hide
+@hide sidebar
+@hide title
+@hide footer
+@hide article
+@hide container
+@hide header
 
 @body
 
@@ -126,7 +133,7 @@ and also print back the cleaned card number (the entered number with no dashes).
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
-  var Kefir = require("can-kefir");
+  import Kefir from 'can-kefir';
 
   var age = Kefir.emitterProperty();
 

@@ -1,0 +1,50 @@
+<div id="out"></div>
+
+<script id="demo-html" type="text/stache">
+<button id="btn-log">debug.logWhatChangesMe</button>
+</script>
+
+<style>
+	#btn-log {
+		color: white;
+		font-size: 100%;
+		padding: .5em 1em;
+		border-radius: 4px;
+		text-decoration: none;
+		background: rgb(66, 184, 221);
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	}
+</style>
+
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
+var debug = require("can-debug");
+var stache = require("can-stache");
+var DefineMap = require("can-define/map/map");
+
+var Person = DefineMap.extend("Person", {
+	first: "string",
+	last: "string",
+	fullName: {
+		get: function() {
+			return this.first + " " + this.last;
+		}
+	}
+});
+
+var me = new Person({ first: "John", last: "Doe" });
+
+// The observable must be bound for `logWhatChangesMe` to work correctly.
+me.on("fullName", function() {});
+
+var out = document.getElementById("out");
+var template = stache.from("demo-html");
+
+out.appendChild(template({}));
+out.addEventListener("click", function(ev) {
+	var el = ev.target;
+	var parent = el.parentNode;
+	if (el.nodeName === "BUTTON") {
+		debug.logWhatChangesMe(me, "fullName");
+	}
+});
+</script>

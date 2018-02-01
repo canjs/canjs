@@ -19,7 +19,7 @@
 </script>
 <script id="player-edit-stache" type="text/stache">
 	{{#if(player)}}
-		<input value:bind="player.name"/>
+		<input default:bind="player.name"/>
 		<button on:click="close()">X</button>
 	{{/if}}
 </script>
@@ -38,7 +38,7 @@ var Player = DefineMap.extend({
 var PlayerList = DefineMap.extend({
 	editingPlayer: Player,
 	players: {
-		value: function() {
+		default: function() {
 			return new DefineList([
 				new Player({name: "Justin"}),
 				new Player({name: "Brian"})

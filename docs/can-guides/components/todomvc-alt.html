@@ -59,10 +59,10 @@
 <div id='app'></div>
 
 <script src="../../node_modules/steal/steal.js" main="@empty">
-var $ = require('jquery');
-var can = require('can');
-require('can/model/model');
-require('can/util/fixture/fixture');
+import $ from 'jquery';
+import can from 'can';
+import 'can/model/model';
+import 'can/util/fixture/fixture';
 
 can.fixture({
 	"GET /services/todos": function(){
@@ -207,7 +207,7 @@ can.Component.extend({
 	}
 })
 
-can.route.ready()
+can.route.start()
 var frag = can.view("todos-app-template",{})
 
 

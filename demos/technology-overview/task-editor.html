@@ -1,0 +1,74 @@
+<body>
+<div id='demo-html'>
+<task-editor id:from='4'></task-editor>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty"  id="demo-source">
+import Component from "can-component";
+import stache from "can-stache";
+import DefineMap from "can-define/map/map";
+import "can/demos/technology-overview/component-slider";
+
+Component.extend({
+    tag: "task-editor",
+    view: `
+        <h2>Task Editor</h2>
+        <form on:submit='save(scope.event)'>
+            Name: {{name}}
+            <p>
+                <input bind='name'/>
+            </p>
+            Progress: {{progress}}
+            <p>
+                <percent-slider value:bind='progress'/>
+            </p>
+            <button disabled:from="isSaving">
+                {{#if(isSaving)}}Saving{{else}}Save{{/if}}
+            </button>
+        </form>
+    `,
+    ViewModel: {
+        id: "number",
+        name: {
+            default: function(){
+                return "Task "+this.id;
+            }
+        },
+        progress: {
+            // makes progress an integer
+            type(num){
+                return parseInt(num);
+            },
+            default: 0
+        },
+        isSaving: {default: false},
+        save(event){
+            event.preventDefault();
+            this.isSaving = true;
+            // fake ajax request
+            setTimeout(() => {
+                this.isSaving = false;
+            },2000)
+        }
+    }
+});
+</script>
+<style>
+.slider {
+    border: solid 1px blue;
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    cursor: ew-resize;
+    position: relative;
+}
+percent-slider {
+    border: solid 1px black;
+    padding: 2px;
+    display: block;
+}
+p {
+    margin: 0px 0px 20px 0px;
+}
+</style>
+</body>

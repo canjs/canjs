@@ -18,7 +18,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/konemoc/3/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/konemoc/2/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -33,7 +33,7 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/rehoxa/3/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/melesok/1/embed?output">JS Bin on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -125,7 +125,7 @@ viewModel.amount = 1000;
 
   ```js
   ProductVM = can.DefineMap.extend("ProductVM",{
-    age: {value: 34}
+    age: {default: 34}
   })
   ```
 
@@ -176,7 +176,7 @@ Print out the exported values like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
+- Use [can-stache-bindings.twoWay default:bind] to set up a two-way binding in
   `can-stache`.  For example, the following keeps `email` on the ViewModel and
   the input’s `value` in sync:
 
@@ -368,7 +368,7 @@ To do that, we’ll add the following properties to the ViewModel:
 
 ### What you need to know
 
-- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
+- Use [can-stache-bindings.toChild disabled:from] to make an input disabled, like:
 
   ```html
   <button disabled:from="isCardInvalid">...
@@ -390,6 +390,6 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/konemoc/3/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/konemoc/2/embed?output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.1.1"></script>

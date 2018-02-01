@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/cejuwah/1/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/cejuwah/4/embed?js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -168,7 +168,7 @@ a ViewModel called `AppViewModel`.
 
   ```js
   AppViewModel = can.DefineMap.extend("AppViewModel",{
-    isLoggedIn: {value: false}
+    isLoggedIn: {default: false}
   })
   ```
 
@@ -219,11 +219,11 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 
 ### What you need to know
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	myProperty: {
-	  value: function(){
+	  default: function(){
 		return "This string"
 	  }
 	}  
@@ -297,10 +297,10 @@ A promise with a _session-like_ object looks like:
 - Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div on:click="doSomething(%event)"> ... </div>
+   <div on:click="doSomething(scope.event)"> ... </div>
    ```
 
-   Notice that it also passed the event object with `%event`.
+   Notice that it also passed the event object with `scope.event`.
 
 - To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
 

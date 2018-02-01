@@ -17,7 +17,7 @@ can.fixture.delay = 1000;
 var Todo = can.DefineMap.extend({
   id: "number",
   name: "string",
-  complete: {type: "boolean", value: false}
+  complete: {type: "boolean", default: false}
 });
 
 Todo.List = can.DefineList.extend({
@@ -38,8 +38,10 @@ can.connect.superMap({
   algebra: todoAlgebra
 });
 
+can.domEvents.addEvent( can.domEventEnter );
+
 var TodoCreateVM = can.DefineMap.extend({
-  todo: {Value: Todo},
+  todo: {Default: Todo},
   createTodo: function(){
     this.todo.save().then(function(){
       this.todo = new Todo();
@@ -96,7 +98,7 @@ var AppVM = can.DefineMap.extend({
 var appVM = new AppVM();
 can.route.data = appVM;
 can.route("{filter}");
-can.route.ready();
+can.route.start();
 
 var template = can.stache.from("todomvc-template");
 var frag = template(appVM);

@@ -45,7 +45,7 @@ StealJS.
 - Define a ViewModel type with [can-define/map/map]:
 
   ```js
-  var DefineMap = require("can-define/map/");
+  import DefineMap from 'can-define/map/';
   var Type = DefineMap.extend({ ... });
   ```
 
@@ -58,7 +58,7 @@ StealJS.
 - Load a view with the [steal-stache] plugin like:
 
   ```js
-  var view = require("./path/to/template.stache");
+  import view from './path/to/template.stache';
   ```
 
   Note that [steal-stache] is a StealJS plugin and needs to be configured as such.
@@ -135,7 +135,8 @@ StealJS.
   styles and run its tests:
 
   ```js
-  require("can-todomvc-test")(appVM);
+  import test from 'can-todomvc-test';
+  test(appVM);
   ```
 
 
@@ -232,11 +233,11 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
   })
   ```
 
-- The [can-define.types.value] behavior defines a property’s initial value like:
+- The [can-define.types.default] behavior defines a property’s initial value like:
 
   ```js
   DefineMap.extend({
-      propertyName: {value: 3}
+      propertyName: {default: 3}
   })
   ```
 
@@ -725,8 +726,8 @@ custom element.
 - A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
 
   ```js
-  var Component = require("can-component");
-  var view = require("./template.stache");
+  import Component from 'can-component';
+  import view from './template.stache';
   var ViewModel = DefineMap.extend({
     ...      
   });
@@ -739,13 +740,13 @@ custom element.
   ```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
-- The [can-define.types.ValueConstructor] behavior creates a default value by using `new Value` to initialize the value when
+- The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
 a `DefineMap` property is read for the first time.
 
   ```js
   var SubType = DefineMap.extend({})
   var Type = DefineMap.extend({
-      property: {Value: SubType}
+      property: {Default: SubType}
   })
 
   var map = new Type();
@@ -947,10 +948,10 @@ be added if they represent the current page.
   your application’s pretty routing rules, call it like:
 
   ```js
-  route.ready()
+  route.start()
   ```
 
-- The [can-stache/helpers/route] module provides helpers
+- The [can-stache-route-helpers] module provides helpers
   that use [can-route].  
 
   [can-stache.helpers.routeCurrent]

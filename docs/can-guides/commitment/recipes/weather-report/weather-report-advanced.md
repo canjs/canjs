@@ -7,6 +7,14 @@ browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/G
 
 This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 3.8.
 
+@hide
+@hide sidebar
+@hide title
+@hide footer
+@hide article
+@hide container
+@hide header
+
 @body
 
 The final widget looks like:

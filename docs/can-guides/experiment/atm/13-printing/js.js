@@ -36,7 +36,7 @@ var Card = can.DefineMap.extend({
 	number: "string",
 	pin: "string",
 	state: {
-		value: "unverified",
+		default: "unverified",
 		serialize: false
 	},
 	verify: function() {
@@ -81,11 +81,11 @@ var Transaction = can.DefineMap.extend({
 	card: Card,
 	executing: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	executed: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	rejected: "any",
 	get ready(){
@@ -122,13 +122,13 @@ var Transaction = can.DefineMap.extend({
 				self = this;
 
 			def.then(function() {
-				can.batch.start();
+				can.queues.batch.start();
 				self.set({
 					executing: false,
 					executed: true
 				});
 				self.executeEnd();
-				can.batch.stop();
+				can.queues.batch.stop();
 			}, function(reason){
 				self.set({
 					executing: false,
@@ -204,7 +204,7 @@ var ATM = can.DefineMap.extend({
 	},
 	printingReceipt: "boolean",
 	receiptTime: {
-		value: 5000,
+		default: 5000,
 		type: "number"
 	},
 

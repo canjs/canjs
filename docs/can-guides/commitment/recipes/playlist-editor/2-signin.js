@@ -10,7 +10,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
     });
   },
   googleApiLoadedPromise: {
-    value: googleApiLoadedPromise
+    default: googleApiLoadedPromise
   },
   googleAuth: {
     get: function(lastSet, resolve) {

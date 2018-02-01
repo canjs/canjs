@@ -1,0 +1,24 @@
+<body>
+<div id='demo-html'>
+<my-counter count:from='5'></my-counter>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty"  id="demo-source">
+import Component from "can-component";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        <button on:click='increment()'>+1</button>
+        Count: <span>{{count}}</span>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+</script>
+
+</body>

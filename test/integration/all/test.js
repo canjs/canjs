@@ -14,7 +14,7 @@ var makeIframe = function(src){
 QUnit.module('can.all.js');
 
 if (__dirname !== '/') {
-	QUnit.asyncTest("works without jquery", function(){
-		makeIframe(__dirname + "/no-jquery.html?" + Math.random());
+	QUnit.asyncTest("works without globals (jquery, kefir, etc)", function(){
+		makeIframe(__dirname + "/no-globals.html?" + Math.random());
 	});
 }

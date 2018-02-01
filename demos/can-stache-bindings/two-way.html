@@ -40,7 +40,7 @@ Component.extend({
 	view: stache(document.getElementById('drivers-stache').innerHTML),
 	ViewModel: DefineMap.extend({
 		drivers: {
-			value: function() {
+			default: function() {
 				return drivers;
 			}
 		},

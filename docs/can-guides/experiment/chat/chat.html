@@ -88,7 +88,7 @@ var ChatMessagesVM = can.DefineMap.extend({
 	name: "string",
 	body: "string",
 	messagesPromise: {
-		value: Message.getList.bind(Message,{})
+		default: Message.getList.bind(Message,{})
 	},
 	send: function(event) {
 	    event.preventDefault();
@@ -115,7 +115,7 @@ var AppVM = can.DefineMap.extend({
 
 can.route.data = new AppVM();
 can.route(":page",{page: "home"});
-can.route.ready();
+can.route.start();
 
 var template = can.stache.from('chat-template');
 var frag = template(can.route.data);

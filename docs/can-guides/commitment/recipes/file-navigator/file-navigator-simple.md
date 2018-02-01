@@ -11,7 +11,7 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/hisupin/4/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/yilubac/1/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
@@ -383,7 +383,7 @@ We want to be able to toggle if a folder is open or closed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"}
+    age: {default: 33, type: "number"}
   });
   ```
 
@@ -392,7 +392,7 @@ We want to be able to toggle if a folder is open or closed.
   ```js
   var Person = can.DefineMap.extend({
     address: Address,
-    age: {value: 33, type: "number"},
+    age: {default: 33, type: "number"},
     birthday: function(){
       this.age++;
     }
@@ -426,7 +426,7 @@ var Entity = can.DefineMap.extend("Entity", {
       return new Entity(entity)
     }
   }],
-  isOpen: {type: "boolean", value: false},
+  isOpen: {type: "boolean", default: false},
   toggleOpen: function(){      
     this.isOpen = !this.isOpen;
   }
@@ -473,7 +473,7 @@ Update the __HTML__ tab to:
 When complete, you should have a working file-navigation widget
 like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/hisupin/4/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/yilubac/1/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>

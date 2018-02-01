@@ -1,0 +1,52 @@
+<div id="out"></div>
+
+<script id="demo-html" type="text/stache">
+<h1 id="full">{{fullName}}</h1>
+<input id="first" type="text" value:bind="first">
+<input id="last" type="text" value:bind="last">
+
+<button id="btn-log">debug.logWhatChangesMe</button>
+</script>
+
+<style>
+	#btn-log {
+		color: white;
+		font-size: 100%;
+		padding: .5em 1em;
+		border-radius: 4px;
+		text-decoration: none;
+		background: rgb(66, 184, 221);
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	}
+</style>
+
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
+var debug = require("can-debug");
+var DefineMap = require("can-define/map/map");
+
+var stache = require("can-stache");
+require("can-stache-bindings");
+
+var Person = DefineMap.extend("Person", {
+	first: "string",
+	last: "string",
+	fullName: {
+		get: function() {
+			return this.first + " " + this.last;
+		}
+	}
+});
+
+var out = document.querySelector("#out");
+var template = stache.from("demo-html");
+var scope = new Person({first: "Jane", last: "Doe"});
+
+out.appendChild(template(scope));
+out.addEventListener("click", function(ev) {
+	var el = ev.target;
+	var parent = el.parentNode;
+	if (el.nodeName === "BUTTON") {
+		debug.logWhatChangesMe(out.querySelector("#full"));
+	}
+});
+</script>

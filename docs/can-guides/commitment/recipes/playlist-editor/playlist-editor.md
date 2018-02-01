@@ -1,5 +1,6 @@
 @page guides/recipes/playlist-editor Playlist Editor (Advanced)
 @parent guides/recipes
+@hide
 
 @description Learn how to use YouTube's API to search for videos and make a playlist.  This
 makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
@@ -158,7 +159,7 @@ In this section, we will:
 - `can.DefineMap` can specify a default value and a type:
   ```js
   var PlaylistVM = can.DefineMap.extend({
-    count: {value: 33}
+    count: {default: 33}
   });
   new PlaylistVM().count //-> 33
   ```
@@ -254,7 +255,7 @@ In this section, we will:
   })
   ```
 
-- `DefineMap`'s on [can-define/map/map.prototype.on] lets you listen on changes in a DefineMap.
+- `DefineMap`'s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 
@@ -457,7 +458,7 @@ In this section, we will:
 	  // [video1, video2, ...]
 	  playlistVideos: {
 	     Type: ["any"],
-	     Value: can.DefineList
+	     Default: can.DefineList
 	  },
 	  get videosWithDropPlaceholder() {
          var copyOfPlaylistVideos = this.placeListVideos.map(...);

@@ -1,0 +1,73 @@
+<body>
+<mock-url></mock-url>
+<div id='demo-html'>
+<my-app></my-app>
+</div>
+
+<script src="../../node_modules/steal/steal.js" main="@empty"  id="demo-source">
+import Component from "can-component";
+import route from "can-route";
+import "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
+
+Component.extend({
+    tag: "my-app",
+    view: `
+        {{#switch(componentToShow)}}
+            {{#case("home")}}
+                <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
+            {{/case}}
+            {{#case("tasks")}}
+                <task-editor id:from="taskId" logout:from="logout"/>
+            {{/case}}
+            {{#case("login")}}
+                <page-login isLoggedIn:bind="isLoggedIn" />
+            {{/case}}
+            {{#default}}
+                <h2>Page Missing</h2>
+            {{/default}}
+        {{/switch}}
+    `,
+    ViewModel: {
+        page: "string",
+        taskId: "string",
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return "login";
+            }
+            return this.page;
+        },
+        isLoggedIn: {default: false, type: "boolean", serialize: false},
+        logout() {
+            this.isLoggedIn = false;
+        }
+    }
+});
+
+route.data = document.querySelector("my-app");
+route.register("{page}",{page: "home"});
+route.register("tasks/{taskId}",{page: "tasks"});
+route.start();
+</script>
+<style>
+.slider {
+    border: solid 1px blue;
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    cursor: ew-resize;
+    position: relative;
+}
+percent-slider {
+    border: solid 1px black;
+    padding: 2px;
+    display: block;
+}
+p {
+    margin: 0px 0px 20px 0px;
+}
+</style>
+<style>
+body {margin: 0px; padding: 0px;}
+</style>
+</body>

@@ -6,7 +6,7 @@ var getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
 var BusTrackerVM = can.DefineMap.extend({
   title: {
-    value: "Chicago CTA Bus Tracker"
+    default: "Chicago CTA Bus Tracker"
   },
   routesPromise: {
     value() {

@@ -6,10 +6,10 @@ var getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
 var BusTrackerVM = can.DefineMap.extend({
   title: {
-    value: "Chicago CTA Bus Tracker"
+    default: "Chicago CTA Bus Tracker"
   },
   routesPromise: {
-    value() {
+    default() {
       return fetch(proxyUrl + getRoutesEnpoint)
         .then(response => response.json())
         .then(data => data["bustime-response"].routes);
@@ -36,6 +36,17 @@ can.Component.extend({
   view: can.stache(`<div class='gmap'></div>`),
   ViewModel: {
     map: 'any',
+    connectedCallback(element) {
+      googleAPI.then(() => {
+        this.map = new google.maps.Map(element.firstChild, {
+          zoom: 10,
+          center: {
+            lat: 41.881,
+            lng: -87.623
+          }
+        });
+      });
+    },
     vehicles: 'any',
     markers: 'any'
   },
@@ -58,17 +69,6 @@ can.Component.extend({
           });
         });
       }
-    },
-    "{element} inserted": function() {
-      googleAPI.then(() => {
-        this.viewModel.map = new google.maps.Map(this.element.firstChild, {
-          zoom: 10,
-          center: {
-            lat: 41.881,
-            lng: -87.623
-          }
-        });
-      });
     }
   }
 });

@@ -60,6 +60,8 @@ var Entity = can.DefineMap.extend({
   type: "string"
 });
 
+Entity.List = can.DefineList.extend({});
+
 can.connect.baseMap({
   Map: Entity,
   url: "/api/entities"

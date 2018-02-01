@@ -1,5 +1,5 @@
-@page guides/setup Setting Up CanJS
-@parent guides/getting-started 0
+@page guides/setup Setting up CanJS
+@parent guides/getting-started 1
 @outline 2
 
 @description Get started with CanJS by installing it with [npm](https://www.npmjs.com/), using a [JS&nbsp;Bin](https://jsbin.com/about), or just adding it to an HTML page with a `<script>` tag.
@@ -96,8 +96,8 @@ Besides ES6 modules, StealJS supports AMD and CommonJS.  You could also write `m
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var template = require("./main.stache!");
+import DefineMap from 'can-define/map/map';
+import template from './main.stache!';
 
 var data = new DefineMap({message: "Hello World"});
 
@@ -132,11 +132,12 @@ Next, create a `main` module for your application. Import [can-define/map/map], 
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
+import DefineMap from 'can-define/map/map';
+import stache from 'can-stache';
+import rawTemplate from 'raw-loader!./main.stache';
 
 var data = new DefineMap({message: "Hello World"});
-var template = stache(require('raw-loader!./main.stache'));
+var template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
@@ -177,11 +178,12 @@ Next, create a `main.js` file for your application. Import [can-define/map/map],
 
 ```
 // main.js
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
+import DefineMap from 'can-define/map/map';
+import stache from 'can-stache';
+import rawTemplate from './main.stache';
 
 var data = new DefineMap({message: "Hello World"});
-var template = stache(require("./main.stache"));
+var template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
@@ -255,7 +257,7 @@ With `can` installed, you can use it in an HTML page with a `<script>` tag:
 	            ViewModel: can.DefineMap.extend({
 		            message: {
 		                type: 'string',
-		                value: 'Hello world'
+		                default: 'Hello world'
 	                }
 	            })
             });
@@ -288,7 +290,7 @@ Another quick way to start locally is by loading CanJS from a CDN:
 	            ViewModel: can.DefineMap.extend({
 		            message: {
 		                type: 'string',
-		                value: 'Hello world'
+		                default: 'Hello world'
 	                }
 	            })
             });

@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/zewenov/4/embed?output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/janupaq/8/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -35,7 +35,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/xumeboy/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/milodet/3/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -185,8 +185,6 @@ In this section, we will:
 ### What you need to know
 
 
-
-
 - A [can-stache] template uses
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
@@ -197,11 +195,11 @@ In this section, we will:
 
   These values come from a ViewModel or Model.
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	someValue: {
-	  value: "This string"
+	  default: "This string"
 	}  
   });
   new AppViewModel().someValue //-> "This string"
@@ -209,7 +207,7 @@ In this section, we will:
 
 ### How to verify it works
 
-Run the folowing in the `Console` tab:
+Run the following in the `Console` tab:
 
 ```js
 viewModel.title = "TITLE UPDATED"
@@ -228,8 +226,6 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
 @highlight 8-10,only
-
-
 
 
 ## List bus routes ##
@@ -254,11 +250,11 @@ We will do this by:
 
 ### What you need to know
 
-- The [can-define.types.value] property definition can return the initial value of a property like:
+- The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
   var AppViewModel = can.DefineMap.extend({
 	myProperty: {
-	  value: function(){
+	  default: function(){
 		return new Promise( .... );
 	  }
 	}  
@@ -325,7 +321,6 @@ Update the __JavaScript__ tab to:
 @highlight 11-17,only
 
 
-
 ## Pick a route and log bus locations ##
 
 ### The problem
@@ -387,7 +382,7 @@ We will do this by:
   }
   ```
 
-  If there is an error or no busses, the response looks like:
+  If there is an error or no buses, the response looks like:
 
   ```js
   {
@@ -401,7 +396,6 @@ We will do this by:
 	}
   }
   ```
-
 
 
 ### How to verify it works
@@ -421,9 +415,7 @@ Update the __JavaScript__ tab to:
 @highlight 18-30,only
 
 
-
-
-## Show when busses are loading and the number of buses ##
+## Show when buses are loading and the number of buses ##
 ### The problem
 
 In this section, we will:
@@ -431,7 +423,7 @@ In this section, we will:
 - Show `<p>Loading vehicles…</p>` while bus data is being loaded.
 - Show `<div class="error-message">No vehicles available for this route</div>` in the overlay
   if the request for bus data failed.  
-- Show the number of busses inside the `<div class='gmap'>` like: `Bus count: 20`.
+- Show the number of buses inside the `<div class='gmap'>` like: `Bus count: 20`.
 
 <img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/3b-bus-loading.png" width="427px"/>
 
@@ -474,7 +466,6 @@ Update the __JavaScript__ tab to:
 @highlight 19,22,26,28,only
 
 
-
 ## Initialize Google Maps to show Chicago ##
 
 ### The problem
@@ -510,7 +501,7 @@ We will do this by:
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: stache(`<div class='gmap'/>`)
+    view: can.stache(`<div class='gmap'/>`)
   });
   ```
 
@@ -521,28 +512,25 @@ We will do this by:
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: stache(`<div class='gmap'/>`),
+    view: can.stache(`<div class='gmap'/>`),
     ViewModel: {
       map: "any"
     }
   });
   ```
 
-  A component's [can-component.prototype.events] object can be used to listen to events on the
-  `ViewModel` or the `element`.  If you want to know when the custom element is [can-util/dom/events/inserted/inserted], you can do it as follows:
+  A ViewModel's [can-component/connectedCallback] can be used to know when the component's element is inserted into the document as follows:
 
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: stache(`<div class='gmap'/>`),
+    view: can.stache(`<div class='gmap'/>`),
     ViewModel: {
       map: "any"
-    },
-    events: {
-      "{element} inserted": function(){
-        this.viewModel //-> the ViewModel instance
-        this.element //-> the <google-map-view> element
-      }
+      connectedCallback(element) {
+		this // -> the ViewModel instance
+		element // -> the <google-map-view> element
+	  }
     }
   });
   ```
@@ -570,11 +558,7 @@ Update the `view` in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-init-gmaps.js
-@highlight 34-53,only
-
-
-
-
+@highlight 34-51,only
 
 ## Set markers for vehicle locations ##
 
@@ -596,7 +580,8 @@ We will do this by:
   ```js
   <google-map-view viewModelProp:from="scopeValue"/>
   ```
-- The [can-component.prototype.events] can listen to changes in the `ViewModel` instance with:
+- A component's [can-component.prototype.events] object can be used to listen to events on the
+  `ViewModel` instance with:
   `"{viewModel} propertyName"` like:
 
   ```js
@@ -632,11 +617,7 @@ Update the `view` in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
-@highlight 39,42-54,only
-
-
-
-
+@highlight 50,53-65,only
 
 ## Clean up markers when locations change ##
 
@@ -668,9 +649,7 @@ Update the `view` in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-clean-markers.js
-@highlight 40,44-49,51,only
-
-
+@highlight 51,55-60,62,only
 
 
 <script src="//static.jsbin.com/js/embed.min.js?4.0.4"></script>

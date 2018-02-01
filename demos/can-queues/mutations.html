@@ -1,0 +1,29 @@
+<script src="../../node_modules/steal/steal.js" main='@empty'>
+window.can = require("can-namespace");
+
+var DefineMap = require("can-define/map/map");
+var Observation = require("can-observation");
+
+var person = new DefineMap({
+    first: "Justin",
+    last: "Meyer",
+    nameChanges: 0
+});
+
+var fullName = new Observation(function fullName(){
+    return person.first +" "+ person.last;
+});
+
+fullName.on(function incrementNameChanges(){
+    person.nameChanges++;
+});
+
+person.on("nameChanges", function nameChanged(){
+      debugger
+});
+
+// somewhere we don't know about
+setTimeout(function(){
+    person.first = "Ramiya";
+},2000);
+</script>

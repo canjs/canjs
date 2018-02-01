@@ -29,7 +29,7 @@ var stache = require("can-stache");
 require("can-stache-bindings");
 var superMap = require("can-connect/can/super-map/super-map");
 var fixture = require("can-fixture");
-var compute = require("can-compute");
+var Observation = require("can-observation");
 var $ = require("jquery");
 
 fixture("GET /locations", function(){
@@ -53,7 +53,7 @@ var Location = DefineMap.extend({
 	name: "string",
 	selected: {
 		type: "boolean",
-		value: false
+		default: false
 	}
 });
 
@@ -145,23 +145,15 @@ appState.products = new ProductList({});
 route("product/{productId}")
 
 // call ready after the appState is fully initialized
-route.ready();
+route.start();
 
 route.addEventListener('change', function(){
 	console.log('something changed');
 });
 
-var appUrl = compute(window.location.href, {
-	get: function(){
-		return window.location.href;
-	},
-	on: function(cb){
-		window.addEventListener('hashchange', function(){
-			setTimeout(function(){
-				cb();
-			}, 20);
-		});
-	}
+var appUrl = new Observation(function() {
+  // route.bindings is undocumented API; don’t use it in your app :)
+  return window.location.href + route.bindings.hashchange.get();
 });
 
 var template = $("#demo-html").html();

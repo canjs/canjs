@@ -1,13 +1,13 @@
 // models/todo.js
-var DefineMap = require("can-define/map/");
-var DefineList = require("can-define/list/");
+import DefineMap from 'can-define/map/';
+import DefineList from 'can-define/list/';
 
 var Todo = DefineMap.extend("Todo", {
 	id: "string",
 	name: "string",
 	complete: {
 		type: "boolean",
-		value: false
+		default: false
 	},
 	toggleComplete: function() {
 		this.complete = !this.complete;
@@ -31,4 +31,4 @@ Todo.List = DefineList.extend("TodoList", {
 	}
 });
 
-module.exports = Todo;
+export default Todo;

@@ -11,7 +11,7 @@
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-<a class="jsbin-embed" href="https://jsbin.com/weganur/1/edit?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/gilemur/1/edit?html,output">JS Bin on jsbin.com</a>
 
 The JS Bin loads [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
 library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
@@ -24,8 +24,8 @@ should import things directly with a module loader like [StealJS](https://stealj
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
 
 var Message = DefineMap.extend({ ... });
 Message.List = DefineList.extend({ ... });
@@ -63,7 +63,7 @@ Update the `JavaScript` tab to:
 
  - Define an application view-model (`AppVM`) type by extending [can-define/map/map]. Its definition includes:
    - A `message` property that is a [can-define.types string]
-     value [can-define.types.value initialized] to `"Chat Home"`.
+     value [can-define.types.default initialized] to `"Chat Home"`.
    - An `addExcitement` method that adds `"!"` to the end of the `message` property.
  - Create an instance of the `AppVM` type (`appVM`).
  - Compile a [can-stache] [can-stache.renderer template renderer] function from the contents of the `<script>` tag.
@@ -260,7 +260,7 @@ Update the `JavaScript` tab to:
    the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
  - Create a `messagesPromise` property on `ChatMessagesVM` that’s
-   [can-define.types.value] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+   [can-define.types.default] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
    that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
@@ -374,6 +374,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/yexezu/5/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/yuhoyuv/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>

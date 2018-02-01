@@ -1,14 +1,14 @@
 <div id='out'></div>
 <script id="demo-html" type="text/stache">
 <my-accordion>
-	<my-panel title:from="'Contacts'">
+	<my-panel makeActive:from="makeActive" title:from="'Contacts'">
 		<button>Change title attribute to "Users"</button>
 		<ul>
 			<li>Justin</li>
 			<li>Brian</li>
 		</ul>
 	</my-panel>
-	<my-panel title:from="'Libraries'">
+	<my-panel makeActive:from="makeActive" title:from="'Libraries'">
 		<ul>
 			<li>CanJS</li>
 			<li>JavaScriptMVC</li>
@@ -35,7 +35,7 @@ var AccordionViewModel = DefineMap.extend({
 	// Contains a list of all panel scopes within the
 	// tabs element.
 	panels: {
-		Value: DefineList
+		Default: DefineList
 	},
 	// When a `<panel>` element is inserted into the document,
 	// it calls this method to add the panel's scope to the
@@ -75,19 +75,21 @@ var AccordionViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-accordion",
-	ViewModel: AccordionViewModel,
-	leakScope: true
+	ViewModel: AccordionViewModel
 });
 
 Component.extend({
 	view:
 		stache("<h2 on:click='makeActive(this)'>{{title}}</h2>"+
-		"{{#if(./active)}}<content></content>{{/if}}"),
+		"{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
-	ViewModel: {
-		active: "boolean",
+	ViewModel: DefineMap.extend('MyPanelVM', {
+		active: {
+			type: "boolean",
+			default: false
+		},
 		title: "string"
-	},
+	}),
 	events: {
 		inserted: function(){
 			var vm = this.parentViewModel = canViewModel(this.element.parentNode);
@@ -96,8 +98,7 @@ Component.extend({
 		removed: function(){
 			this.parentViewModel.removePanel(this.viewModel);
 		}
-	},
-	leakScope: true
+	}
 });
 
 var out = document.getElementById("out");
@@ -106,9 +107,9 @@ out.appendChild(template({}));
 
 out.addEventListener("click", function(ev){
 	var el = ev.target;
-	var parent = el.parentNode;
+	var parent = canViewModel(el.parentNode);
 	if (el.nodeName === "BUTTON") {
-		parent.setAttribute("title", "Users");
+		parent.title = "Users";
 	}
 });
 

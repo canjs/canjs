@@ -11,7 +11,7 @@ and manage complex state.  It takes about 2 hours to complete.
 
 Check out the final app:
 
-<a class="jsbin-embed" href="https://jsbin.com/daroce/2/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/daroce/3/embed?js,output">JS Bin on jsbin.com</a>
 
 Notice it has tests at the bottom of the `Output` tab.
 
@@ -19,7 +19,7 @@ Notice it has tests at the bottom of the `Output` tab.
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-<a class="jsbin-embed" href="https://jsbin.com/meziyu/3/edit?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/lijuvoh/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
 The JS Bin is designed to run both the application and its tests in the `OUTPUT`
 tab.  To set this up, the __HTML__ tab:
@@ -173,7 +173,7 @@ Update the `JavaScript` tab to:
 - Use `Account.getList` to get the accounts for the card and:
   - set the `deposit.accounts` to the first account.
   - remember the starting `balance`.
-- Use [can-define/map/map.prototype.on] to listen for `state` changes. When `state` is:
+- Use [can-event-queue/map/map.on] to listen for `state` changes. When `state` is:
   - `"ready"`, `.execute()` the transaction.
   - `"executed"`, verify the new account balance.
 

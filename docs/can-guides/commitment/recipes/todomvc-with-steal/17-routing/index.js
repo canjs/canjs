@@ -1,9 +1,10 @@
 // index.js
-var view = require("./index.stache");
-var DefineMap = require("can-define/map/");
-var Todo = require("~/models/todo");
-var route = require("can-route");
-require("~/models/todos-fixture");
+import view from './index.stache';
+import DefineMap from 'can-define/map/';
+import Todo from '~/models/todo';
+import route from 'can-route';
+import '~/models/todos-fixture';
+import test from 'can-todomvc-test';
 
 var AppViewModel = DefineMap.extend("AppViewModel", {
 	appName: {type: "string", serialize: false},
@@ -38,9 +39,8 @@ var appVM = window.appVM = new AppViewModel({
 
 route.data = appVM;
 route("{filter}");
-route.ready();
+route.start();
 
 var frag = view(appVM);
 document.body.appendChild(frag);
-
-require("can-todomvc-test")(appVM);
+test(appVM);

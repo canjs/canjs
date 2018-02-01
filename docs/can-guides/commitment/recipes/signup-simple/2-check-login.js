@@ -1,6 +1,6 @@
 var AppViewModel = can.DefineMap.extend({
   sessionPromise: {
-    value: function(){
+    default: function(){
       return can.ajax({
         url: "/api/session"
 	  });

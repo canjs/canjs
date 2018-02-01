@@ -26,8 +26,8 @@ should import things directly with a module loader like [StealJS](https://stealj
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
+import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
 
 var Todo = DefineMap.extend({ ... });
 Todo.List = DefineList.extend({ ... });
@@ -197,6 +197,7 @@ In this section, we will:
 
 Update the `JavaScript` tab to:
 
+ - Add the [can-event-dom-enter enter event] so that `on:enter` can be used to handle when the user types the enter key.
  - Use [can-define/map/map] to create a `TodoCreateVM` view model with:
    - A `todo` property that holds a new `Todo` instance.
    - A `createTodo` method that [can-connect/can/map/map.prototype.save]s the `Todo` instance
@@ -205,7 +206,7 @@ Update the `JavaScript` tab to:
 
 
 @sourceref ./5-create/js.js
-@highlight 42-55,only
+@highlight 42-57,only
 
 Update the __HTML__ tab to:
 
@@ -237,7 +238,7 @@ Update the `JavaScript` tab to:
  - Use [can-component] to define a `<todo-list>` element.
 
 @sourceref ./6-list/js.js
-@highlight 56-64,only
+@highlight 58-66,only
 
 Update the __HTML__ tab to:
 
@@ -268,7 +269,7 @@ Update the `JavaScript` tab to:
    - An `updateName` method that updates the editing todo and [can-connect/can/map/map.prototype.save saves] it to the server.
 
 @sourceref ./7-edit/js.js
-@highlight 58-76,only
+@highlight 60-78,only
 
 
 Update the __HTML__ tab to:
@@ -322,7 +323,7 @@ Update the `JavaScript` tab to:
 
 
 @sourceref ./8-routing/js.js
-@highlight 85-99,102,only
+@highlight 87-101,104,only
 
 Update the __HTML__ tab to:
 
@@ -363,7 +364,7 @@ Update the `JavaScript` tab to:
   - An `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
 
 @sourceref ./9-toggle/js.js
-@highlight 31-49,113-123,only
+@highlight 31-49,115-125,only
 
 Update the __HTML__ tab to:
 
