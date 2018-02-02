@@ -32,7 +32,7 @@ publish-docs:
 	# git add -f node_modules/feathers-socketio/package.json
 	git add -f node_modules/validate.js
 	git fetch
-	# git checkout origin/gh-pages -- CNAME
+	git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
 	git push -f origin gh-pages
