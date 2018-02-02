@@ -526,7 +526,7 @@ We will do this by:
     tag: "google-map-view",
     view: can.stache(`<div class='gmap'/>`),
     ViewModel: {
-      map: "any"
+      map: "any",
       connectedCallback(element) {
 		this // -> the ViewModel instance
 		element // -> the <google-map-view> element
@@ -577,7 +577,7 @@ We will do this by:
 ### What you need to know
 
 - [can-stache-bindings.toChild childProp:from] can set a component's ViewModel from another value:
-  ```js
+  ```html
   <google-map-view viewModelProp:from="scopeValue"/>
   ```
 - A component's [can-component.prototype.events] object can be used to listen to events on the

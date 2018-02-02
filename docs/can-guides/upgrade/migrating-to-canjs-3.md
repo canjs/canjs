@@ -135,7 +135,7 @@ It can only lookup the `page` property on `some-component`’s own [can-componen
 ```js
 Component.extend({
 	tag: "some-component",
-	ViewModel: ...,
+	ViewModel: {...},
 	leakScope: true
 });
 ```
@@ -192,7 +192,7 @@ Component.extend({
 			canViewModel(this.element.parentNode).removePanel(this.viewModel);
 		}
 	}
-}
+})
 ```
 
 ### Replace uses of `can.view`
@@ -229,7 +229,7 @@ Alternatively, use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/
 ```js
 fetch("./todos.stache")
 	.then((resp) => stache(resp.text()))
-	.then((render) => /* use render */);
+	.then((render) => render(...));
 ```
 
 If you’re using another module loader (such as Browserify or webpack), check out [guides/setup] for instructions on how to load templates.
@@ -440,7 +440,7 @@ You can fix this either by having your helpers handle computes, or by using [can
 Most recently-built applications do not depend on adding to the global namespace, but in case you have code that does:
 
 ```js
-Construct.extend("foo.bar", ...)
+Construct.extend("foo.bar", {...})
 ```
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global, you can do so yourself using the return value of [can-construct.extend].

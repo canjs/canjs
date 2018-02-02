@@ -162,7 +162,11 @@ For example, it will transform any of the following:
 
 ```js
 import Component from "can/component/";
+```
+```js
 import Component from "can/component/component";
+```
+```js
 import Component from "can/component/component.js";
 ```
 
@@ -203,7 +207,11 @@ For example, it will transform any of the following:
 
 ```js
 import Component from 'can/component/';
+```
+```js
 import Component from 'can/component/component';
+```
+```js
 import Component from 'can/component/component.js';
 ```
 
@@ -780,7 +788,11 @@ can-migrate -a **/*.js -t can-component/import.js
 
 ```js
 import Component from "can/component/";
+```
+```js
 import Component from "can/component/component";
+```
+```js
 import Component from "can/component/component.js";
 ```
 
@@ -827,7 +839,11 @@ can-migrate -a **/*.js -t can-component/require.js
 
 ```js
 import Component from 'can/component/';
+```
+```js
 import Component from 'can/component/component';
+```
+```js
 import Component from 'can/component/component.js';
 ```
 
@@ -857,7 +873,11 @@ can-migrate -a **/*.js -t can-compute/import.js
 
 ```js
 import compute from "can/compute/";
+```
+```js
 import compute from "can/compute/compute";
+```
+```js
 import compute from "can/compute/compute.js";
 ```
 
@@ -904,7 +924,11 @@ can-migrate -a **/*.js -t can-compute/require.js
 
 ```js
 import compute from 'can/compute/';
+```
+```js
 import compute from 'can/compute/compute';
+```
+```js
 import compute from 'can/compute/compute.js';
 ```
 
@@ -934,7 +958,11 @@ can-migrate -a **/*.js -t can-construct-super/import.js
 
 ```js
 import constructSuper from "can/construct/super/";
+```
+```js
 import constructSuper from "can/construct/super/super";
+```
+```js
 import constructSuper from "can/construct/super/super.js";
 ```
 
@@ -956,7 +984,11 @@ can-migrate -a **/*.js -t can-construct-super/require.js
 
 ```js
 import constructSuper from 'can/construct/super/';
+```
+```js
 import constructSuper from 'can/construct/super/super';
+```
+```js
 import constructSuper from 'can/construct/super/super.js';
 ```
 
@@ -986,7 +1018,11 @@ can-migrate -a **/*.js -t can-construct/import.js
 
 ```js
 import construct from "can/construct/";
+```
+```js
 import construct from "can/construct/construct";
+```
+```js
 import construct from "can/construct/construct.js";
 ```
 
@@ -1033,7 +1069,11 @@ can-migrate -a **/*.js -t can-construct/require.js
 
 ```js
 import construct from 'can/construct/';
+```
+```js
 import construct from 'can/construct/construct';
+```
+```js
 import construct from 'can/construct/construct.js';
 ```
 
@@ -1063,7 +1103,11 @@ can-migrate -a **/*.js -t can-control/import.js
 
 ```js
 import Control from "can/control/";
+```
+```js
 import Control from "can/control/control";
+```
+```js
 import Control from "can/control/control.js";
 ```
 
@@ -1110,7 +1154,11 @@ can-migrate -a **/*.js -t can-control/require.js
 
 ```js
 import Control from 'can/control/';
+```
+```js
 import Control from 'can/control/control';
+```
+```js
 import Control from 'can/control/control.js';
 ```
 
@@ -1276,7 +1324,11 @@ can-migrate -a **/*.js -t can-event/import.js
 
 ```js
 import event from "can/event/";
+```
+```js
 import event from "can/event/event";
+```
+```js
 import event from "can/event/event.js";
 ```
 
@@ -1323,7 +1375,11 @@ can-migrate -a **/*.js -t can-event/require.js
 
 ```js
 import event from 'can/event/';
+```
+```js
 import event from 'can/event/event';
+```
+```js
 import event from 'can/event/event.js';
 ```
 
@@ -1353,7 +1409,11 @@ can-migrate -a **/*.js -t can-fixture/import.js
 
 ```js
 import fixture from "can/util/fixture/";
+```
+```js
 import fixture from "can/util/fixture/fixture";
+```
+```js
 import fixture from "can/util/fixture/fixture.js";
 ```
 
@@ -1400,7 +1460,11 @@ can-migrate -a **/*.js -t can-fixture/require.js
 
 ```js
 import fixture from 'can/util/fixture/';
+```
+```js
 import fixture from 'can/util/fixture/fixture';
+```
+```js
 import fixture from 'can/util/fixture/fixture.js';
 ```
 
@@ -1668,7 +1732,11 @@ can-migrate -a **/*.js -t can-list/import.js
 
 ```js
 import List from "can/list/";
+```
+```js
 import List from "can/list/list";
+```
+```js
 import List from "can/list/list.js";
 ```
 
@@ -1715,7 +1783,11 @@ can-migrate -a **/*.js -t can-list/require.js
 
 ```js
 import List from 'can/list/';
+```
+```js
 import List from 'can/list/list';
+```
+```js
 import List from 'can/list/list.js';
 ```
 
@@ -1813,7 +1885,11 @@ can-migrate -a **/*.js -t can-map-backup/import.js
 
 ```js
 import mapBackup from "can/map/backup/";
+```
+```js
 import mapBackup from "can/map/backup/backup";
+```
+```js
 import mapBackup from "can/map/backup/backup.js";
 ```
 
@@ -1835,7 +1911,11 @@ can-migrate -a **/*.js -t can-map-backup/require.js
 
 ```js
 import mapBackup from 'can/map/backup/';
+```
+```js
 import mapBackup from 'can/map/backup/backup';
+```
+```js
 import mapBackup from 'can/map/backup/backup.js';
 ```
 
@@ -1865,7 +1945,11 @@ can-migrate -a **/*.js -t can-map-define/import.js
 
 ```js
 import mapDefine from "can/map/define/";
+```
+```js
 import mapDefine from "can/map/define/define";
+```
+```js
 import mapDefine from "can/map/define/define.js";
 ```
 
@@ -1887,7 +1971,11 @@ can-migrate -a **/*.js -t can-map-define/require.js
 
 ```js
 import mapDefine from 'can/map/define/';
+```
+```js
 import mapDefine from 'can/map/define/define';
+```
+```js
 import mapDefine from 'can/map/define/define.js';
 ```
 
@@ -1917,7 +2005,11 @@ can-migrate -a **/*.js -t can-map/import.js
 
 ```js
 import map from "can/map/";
+```
+```js
 import map from "can/map/map";
+```
+```js
 import map from "can/map/map.js";
 ```
 
@@ -1964,7 +2056,11 @@ can-migrate -a **/*.js -t can-map/require.js
 
 ```js
 import map from 'can/map/';
+```
+```js
 import map from 'can/map/map';
+```
+```js
 import map from 'can/map/map.js';
 ```
 
@@ -1994,7 +2090,11 @@ can-migrate -a **/*.js -t can-model/import.js
 
 ```js
 import model from "can/model/";
+```
+```js
 import model from "can/model/model";
+```
+```js
 import model from "can/model/model.js";
 ```
 
@@ -2041,7 +2141,11 @@ can-migrate -a **/*.js -t can-model/require.js
 
 ```js
 import model from 'can/model/';
+```
+```js
 import model from 'can/model/model';
+```
+```js
 import model from 'can/model/model.js';
 ```
 
@@ -2241,7 +2345,11 @@ can-migrate -a **/*.js -t can-route-pushstate/import.js
 
 ```js
 import routePushState from "can/route/pushstate/";
+```
+```js
 import routePushState from "can/route/pushstate/pushstate";
+```
+```js
 import routePushState from "can/route/pushstate/pushstate.js";
 ```
 
@@ -2263,7 +2371,11 @@ can-migrate -a **/*.js -t can-route-pushstate/require.js
 
 ```js
 import routePushState from 'can/route/pushstate/';
+```
+```js
 import routePushState from 'can/route/pushstate/pushstate';
+```
+```js
 import routePushState from 'can/route/pushstate/pushstate.js';
 ```
 
@@ -2293,7 +2405,11 @@ can-migrate -a **/*.js -t can-route/import.js
 
 ```js
 import route from "can/route/";
+```
+```js
 import route from "can/route/route";
+```
+```js
 import route from "can/route/route.js";
 ```
 
@@ -2340,7 +2456,11 @@ can-migrate -a **/*.js -t can-route/require.js
 
 ```js
 import route from 'can/route/';
+```
+```js
 import route from 'can/route/route';
+```
+```js
 import route from 'can/route/route.js';
 ```
 
@@ -2370,7 +2490,11 @@ can-migrate -a **/*.js -t can-stache/import.js
 
 ```js
 import stache from "can/view/stache/";
+```
+```js
 import stache from "can/view/stache/stache";
+```
+```js
 import stache from "can/view/stache/stache.js";
 ```
 
@@ -2417,7 +2541,11 @@ can-migrate -a **/*.js -t can-stache/require.js
 
 ```js
 import stache from 'can/view/stache/';
+```
+```js
 import stache from 'can/view/stache/stache';
+```
+```js
 import stache from 'can/view/stache/stache.js';
 ```
 
@@ -2584,7 +2712,11 @@ can-migrate -a **/*.js -t can-view-autorender/import.js
 
 ```js
 import autorender from "can/view/autorender/";
+```
+```js
 import autorender from "can/view/autorender/autorender";
+```
+```js
 import autorender from "can/view/autorender/autorender.js";
 ```
 
@@ -2631,7 +2763,11 @@ can-migrate -a **/*.js -t can-view-autorender/require.js
 
 ```js
 import autorender from 'can/view/autorender/';
+```
+```js
 import autorender from 'can/view/autorender/autorender';
+```
+```js
 import autorender from 'can/view/autorender/autorender.js';
 ```
 
@@ -2661,7 +2797,11 @@ can-migrate -a **/*.js -t can-view-callbacks/import.js
 
 ```js
 import viewCallbacks from "can/view/callbacks/";
+```
+```js
 import viewCallbacks from "can/view/callbacks/callbacks";
+```
+```js
 import viewCallbacks from "can/view/callbacks/callbacks.js";
 ```
 
@@ -2708,7 +2848,11 @@ can-migrate -a **/*.js -t can-view-callbacks/require.js
 
 ```js
 import viewCallbacks from 'can/view/callbacks/';
+```
+```js
 import viewCallbacks from 'can/view/callbacks/callbacks';
+```
+```js
 import viewCallbacks from 'can/view/callbacks/callbacks.js';
 ```
 
@@ -2738,7 +2882,11 @@ can-migrate -a **/*.js -t can-view-href/import.js
 
 ```js
 import viewHref from "can/view/href/";
+```
+```js
 import viewHref from "can/view/href/href";
+```
+```js
 import viewHref from "can/view/href/href.js";
 ```
 
@@ -2760,7 +2908,11 @@ can-migrate -a **/*.js -t can-view-href/require.js
 
 ```js
 import viewHref from 'can/view/href/';
+```
+```js
 import viewHref from 'can/view/href/href';
+```
+```js
 import viewHref from 'can/view/href/href.js';
 ```
 
@@ -2790,7 +2942,11 @@ can-migrate -a **/*.js -t can-view-import/import.js
 
 ```js
 import viewImport from "can/view/import/";
+```
+```js
 import viewImport from "can/view/import/import";
+```
+```js
 import viewImport from "can/view/import/import.js";
 ```
 
@@ -2812,7 +2968,11 @@ can-migrate -a **/*.js -t can-view-import/require.js
 
 ```js
 import viewImport from 'can/view/import/';
+```
+```js
 import viewImport from 'can/view/import/import';
+```
+```js
 import viewImport from 'can/view/import/import.js';
 ```
 
@@ -2867,7 +3027,11 @@ can-migrate -a **/*.js -t can-view-live/import.js
 
 ```js
 import viewLive from "can/view/live/";
+```
+```js
 import viewLive from "can/view/live/live";
+```
+```js
 import viewLive from "can/view/live/live.js";
 ```
 
@@ -2889,7 +3053,11 @@ can-migrate -a **/*.js -t can-view-live/require.js
 
 ```js
 import viewLive from 'can/view/live/';
+```
+```js
 import viewLive from 'can/view/live/live';
+```
+```js
 import viewLive from 'can/view/live/live.js';
 ```
 
@@ -2919,7 +3087,11 @@ can-migrate -a **/*.js -t can-view-parser/import.js
 
 ```js
 import viewParser from "can/view/parser/";
+```
+```js
 import viewParser from "can/view/parser/parser";
+```
+```js
 import viewParser from "can/view/parser/parser.js";
 ```
 
@@ -2941,7 +3113,11 @@ can-migrate -a **/*.js -t can-view-parser/require.js
 
 ```js
 import viewParser from 'can/view/parser/';
+```
+```js
 import viewParser from 'can/view/parser/parser';
+```
+```js
 import viewParser from 'can/view/parser/parser.js';
 ```
 
@@ -2996,7 +3172,11 @@ can-migrate -a **/*.js -t can-view-scope/import.js
 
 ```js
 import viewScope from "can/view/scope/";
+```
+```js
 import viewScope from "can/view/scope/scope";
+```
+```js
 import viewScope from "can/view/scope/scope.js";
 ```
 
@@ -3018,7 +3198,11 @@ can-migrate -a **/*.js -t can-view-scope/require.js
 
 ```js
 import viewScope from 'can/view/scope/';
+```
+```js
 import viewScope from 'can/view/scope/scope';
+```
+```js
 import viewScope from 'can/view/scope/scope.js';
 ```
 
@@ -3082,7 +3266,11 @@ can-migrate -a **/*.js -t can-view-target/import.js
 
 ```js
 import viewTarget from "can/view/target/";
+```
+```js
 import viewTarget from "can/view/target/target";
+```
+```js
 import viewTarget from "can/view/target/target.js";
 ```
 
@@ -3129,7 +3317,11 @@ can-migrate -a **/*.js -t can-view-target/require.js
 
 ```js
 import viewTarget from 'can/view/target/';
+```
+```js
 import viewTarget from 'can/view/target/target';
+```
+```js
 import viewTarget from 'can/view/target/target.js';
 ```
 

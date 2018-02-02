@@ -154,9 +154,13 @@ In event stream libraries or other computed libraries, you must declare your
 dependencies like:
 
 ```js
-var fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(firstName, lastName){
-    return firstName + " " + lastName;
-});
+var fullNameStream = Kefir.combine(
+	firstNameStream,
+	lastNameStream,
+	function(firstName, lastName){
+	    return firstName + " " + lastName;
+	}
+);
 ```
 
 or like:
@@ -424,13 +428,13 @@ behaviors. The following illustrates some of these behaviors:
 
 ```js
 DefineMap.extend({
-    propertyA: Object      -> PropertyDefinition
-    propertyB: String      -> {type: String}
-    propertyC: Constructor -> {Type: Constructor}
-    propertyD: [PropDefs]  -> {Type: DefineList.extend({"#": PropDefs})>}
-    get propertyE(){...}   -> {get: propertyE(){...}}
-    set propertyF(){...}   -> {get: propertyF(){...}}
-    method: Function
+    propertyA: Object,      // -> PropertyDefinition
+    propertyB: String,      // -> {type: String}
+    propertyC: Constructor, // -> {Type: Constructor}
+    propertyD: [PropDefs],  // -> {Type: DefineList.extend({"#": PropDefs})>}
+    get propertyE(){...},   // -> {get: propertyE(){...}}
+    set propertyF(value){...},   // -> {set: propertyF(value){...}}
+    method: Function,
 })
 ```
 

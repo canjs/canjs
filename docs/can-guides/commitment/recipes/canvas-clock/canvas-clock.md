@@ -129,7 +129,7 @@ In this section, we will:
   var DigitalClockVM = can.DefineMap.extend({
     property: Type, //hint -> time: Date
     method() {
-        return ...;
+        return {...};
     }
   })
   ```
@@ -231,13 +231,13 @@ In this section, we will:
   can.Component.extend({
     tag: "analog-clock",
     ...
-	ViewModel: {
-	  connectedCallback() {
-	    this.listenTo("time", (ev, time) => {
-		  ...
-	    });
-	  }
-	}
+    ViewModel: {
+      connectedCallback() {
+        this.listenTo("time", (ev, time) => {
+          ...
+        });
+      }
+    }
   });
   ```
 
@@ -298,19 +298,22 @@ In this section, we will:
   the canvas.
 - Add a function inside the `connectedCallback` that will have access to all the variables created above it like:
   ```js
-  ViewModel: {
-    connectedCallback() {
-      const canvas = element.firstChild.getContext('2d');
-      const diameter = 255;
-      const radius = diameter/2 - 5;
-      const center = diameter/2;
+	can.Component.extend({
+    ...
+    ViewModel: {
+      connectedCallback() {
+        const canvas = element.firstChild.getContext('2d');
+        const diameter = 255;
+        const radius = diameter/2 - 5;
+        const center = diameter/2;
 
-      const drawNeedle = (length, base60Distance, styles) => {
-        canvas // -> the canvas element
-        ...
-      };
+        const drawNeedle = (length, base60Distance, styles) => {
+          canvas // -> the canvas element
+          ...
+        };
+      }
     }
-  }
+  });
   ```
 
 ### The solution

@@ -43,7 +43,7 @@ const ViewModel = DefineMap.extend({
         .then(response => resolve( response.json() ));
     }
   },
-  postsPromise() {
+  postsPromise: {
     get() {
       return fetch(`https://www.reddit.com/r/${this.subreddit}.json`)
     }
@@ -134,10 +134,11 @@ const Todo = DefineMap.extend({
   name: 'string',
   completed: 'boolean'
 });
-
+```
+```html
 // In stache
 {{#each(todos)}}
-<label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
+  <label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
 {{/each}}
 ```
 
@@ -173,8 +174,10 @@ const mapDispatchToProps = ( dispatch, ownProps ) => {
   };
 };
 
-const TodoListContainer = connect( mapStateToProps, mapDispatchToProps )( TodoList ) );
+const TodoListContainer = connect( mapStateToProps, mapDispatchToProps )( TodoList );
+```
 
+```jsx
 // in JSX
 Todo = (props) => {
   checkboxProps = {
@@ -183,8 +186,9 @@ Todo = (props) => {
     onChange(event) {
       props.onChange(props.name)
     }
-  }
-  return <label><input type="checkbox" ...checkboxProps />{ props.name }}</label>
+  };
+
+  return <label><input type="checkbox" {...checkboxProps} />{ props.name }</label>
 }
 ```
 
@@ -362,10 +366,10 @@ export default Component.extend({
 
 AND
 
-```javascript
+```jsx
 import { Component } from '@angular/core';
 
-@@Component({
+@Component({
   selector: 'hello-world',
   template: '<h1 (click)="emphasize()">{{ message }}</h1>'
 })
@@ -432,7 +436,7 @@ const HelloWorldComponent = ng.core.Component({
   constructor: [GreetingService, function(greetingService) {
     this.greetingService = greetingService;
     this.name = "world";
-  }
+  }]
 });
 
 var AppComponent = ng.core.Component({
@@ -460,11 +464,11 @@ Dependency Injection (**DI**) *as a pattern* can provide decoupling from your de
 
 Note in the example below `FriendService` is imported, used *and also* needs to be declared in the `providers` metadata:
 
-```javascript
+```jsx
 import { Component } from '@angular/core';
 import { FriendService } from 'app/friend.service';
 
-@@Component({
+@Component({
     selector: 'my-friends',
     providers : [FriendService],
     template: `

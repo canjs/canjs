@@ -419,7 +419,7 @@ route.register("{count}")
 
 This results in the following translation between observable data and url hashes:
 
-```js
+```
 {count: 0}                  //-> "#!0"
 {count: 1}                  //-> "#!1"
 {count: 1, type: "counter"} //-> "#!1&type=counter"
@@ -435,7 +435,7 @@ route.register("products/{id}", {page: "products"})
 
 This results in the following translation between observable data and url hashes:
 
-```js
+```
 {page: "products"}          //-> "#!products"
 {page: "products", id: 4}   //-> "#!products/4"
 ```

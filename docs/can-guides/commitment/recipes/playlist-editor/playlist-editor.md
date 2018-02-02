@@ -474,8 +474,10 @@ In this section, we will:
   add video to the playlist (`addVideo`) should take an index like:
 
   ```js
-  addDropPlaceholder: function(index, video) { ... }
-  addVideo: function(index, video) { ... }
+	{
+		addDropPlaceholder: function(index, video) { ... },
+		addVideo: function(index, video) { ... },
+	}
   ```
 
   These functions will be called with `0` as the index for this section.  
@@ -570,7 +572,7 @@ In this section, we will:
 
   ```js
   var Sortable = can.Control.extend({
-	  ... event handlers and methods ...
+	  // event handlers and methods
   });
   ```
 

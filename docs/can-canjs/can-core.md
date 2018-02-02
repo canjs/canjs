@@ -48,13 +48,13 @@ import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import compute from 'can-compute';
 
-var person = new DefineMap({first: "Justin", last: "Meyer"}),
-	hobbies = new DefineList(["js","bball"]),
-	age = compute(33);
+var person = new DefineMap({first: "Justin", last: "Meyer"});
+var hobbies = new DefineList(["js","bball"]);
+var age = compute(33);
 
 var info = compute(function(){
-	return person.first +" "+ person.last+ " is "+age()+
-		"and like "+hobbies.join(", ")+".";
+	return person.first +" "+ person.last
+	+ " is "+age()+"and like "+hobbies.join(", ")+".";
 });
 
 info() //-> "Justin Meyer is 33 and likes js, bball."
@@ -156,22 +156,30 @@ var todosAlgebra = new set.Algebra(
 This assumes that the service:
 
  - Returns data where the unique property name is `_id`:
-   ```js
-   GET /api/todos
-   -> [{_id: 1, name: "mow lawn", complete: true},
-       {_id: 2, name: "do dishes", complete: false}, ...]
-   ```
+```js
+  // GET /api/todos
+  [
+    {_id: 1, name: "mow lawn", complete: true},
+    {_id: 2, name: "do dishes", complete: false},
+    ...
+  ]
+```
  - Can filter by a `complete` property:
-   ```js
-   GET /api/todos?complete=false
-   -> [{_id: 2, name: "do dishes", complete: false}, ...]
-   ```
+```js
+  // GET /api/todos?complete=false
+  [
+    {_id: 2, name: "do dishes", complete: false},
+    ...
+  ]
+```
  - Sorts by an `orderBy` property:
-   ```js
-   GET /api/todos?orderBy=name
-   -> [{_id: 2, name: "do dishes", complete: false},
-       {_id: 1, name: "mow lawn", complete: true}]
-   ```
+```js
+  // GET /api/todos?orderBy=name
+  [
+    {_id: 2, name: "do dishes", complete: false},
+    {_id: 1, name: "mow lawn", complete: true}
+  ]
+```
 
 In the next section will use `todoAlgebra` to build a model with [can-connect].
 
@@ -336,7 +344,7 @@ Component.extend({
 					"<li>No todos</li>"+
 				"{{/each}}"+
 			"{{/if}}"+
-		"</ul>");
+		"</ul>")
 });
 ```
 

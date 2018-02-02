@@ -442,7 +442,7 @@ Lets disable the __Pay__ button until the card, exiry, and cvc are valid.
   //             -Ramiya MeyerX
   ```
 - [can-stache-bindings.toChild childProp:from] can set a property from another value:
-  ```js
+  ```html
   <input checked:from="someKey"/>
   ```
 
@@ -523,7 +523,7 @@ we will change the __Pay__ button to say __Paying__.
   var outerPromise = new Promise((resolve) => {
       setTimeout(() => { resolve("outer") }, 100);
   });
-  return innerPromise = new Promise((resolve) => {
+  var innerPromise = new Promise((resolve) => {
       setTimeout(() => { resolve("inner") }, 200);
   });
   var resultPromise = outerPromise.then(function(value){

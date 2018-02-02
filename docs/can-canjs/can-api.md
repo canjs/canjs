@@ -85,7 +85,7 @@ __Core Collection__
 
 __Infrastructure Collection__
 
-```js
+```
   "can-construct": "<%can-stache-bindings.package.version%>",
   "can-control": "<%can-control.package.version%>",
   "can-event": "<%can-event.package.version%>",
@@ -121,7 +121,7 @@ __Ecosystem collection__
 
 __Legacy Collection__
 
-```js
+```
   "can-ejs": "<%can-ejs.package.version%>",
   "can-list": "<%can-list.package.version%>",
   "can-map": "<%can-map.package.version%>",

@@ -287,7 +287,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
   ```js
   DefineList.extend({
-      #: {type: ItemType}
+      '#': {type: ItemType}
   })
   ```
 
@@ -560,6 +560,7 @@ __DELETE /api/todos/{id}__
   var entities = [ .... ];
   var entitiesStore = fixture.store( entities, entitiesAlgebra );
   fixture("/api/entities/{id}", entitiesStore);
+	```
 
 ### The solution
 
@@ -628,13 +629,15 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
   to "set" a property to an initial value:
 
   ```js
-  property: {
-      get: function(lastSet, resolve) {
-          SOME_ASYNC_METHOD( function callback(data) {
-              resolve(data);
-          });
-      }
-  }
+	{
+		property: {
+			get: function(lastSet, resolve) {
+				SOME_ASYNC_METHOD(function callback(data) {
+					resolve(data);
+				});
+			}
+		}
+	}
   ```
 
 ### The solution

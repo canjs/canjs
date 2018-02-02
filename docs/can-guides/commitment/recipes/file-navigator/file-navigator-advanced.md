@@ -432,7 +432,7 @@ Now we want to make all the folders able to open and close.  This means creating
   can.Component.extend({
     tag: "my-component",
     ViewModel: MyComponentVM,
-    view: can.stache("<h1>{{message}}</h1>");
+    view: can.stache("<h1>{{message}}</h1>")
   });
   ```
   This component will be created anytime a `<my-component>` element is found in the page.  When the component is created, it creates

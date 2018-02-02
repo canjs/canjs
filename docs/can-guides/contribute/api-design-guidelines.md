@@ -41,7 +41,7 @@ In CanJS, new "things" are created by either calling a constructor or class with
 
 Throughout CanJS we use a registry pattern. A registry, in abstract terms, is an object where *named* items are added, retrieved, and removed dynamically over the course of a program's life. For example, a component registry is where named components are added, retrieved, and removed. Registries can be implemented with the following interface:
 
-```js
+```
 interface Registry<RegistryKey, RegistryItem> {
     add(identifier: RegistryKey, item: RegistryItem): function
     has(identifier: RegistryKey): boolean

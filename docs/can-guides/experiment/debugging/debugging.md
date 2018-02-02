@@ -163,12 +163,12 @@ new Observation(function fullName(){
 > NOTE: If your function is a property on an observable map or list like [can-define/map/map],
 > you don't have to name it.  For example, CanJS will name the `fullName` getter in the following example:
 > ```js
-> DefineMap.extend("Person",{
->   fullName: {
->     get: function(){ return this.first + " " + this.last; }
->   }
-> })
-> ```
+DefineMap.extend("Person",{
+  fullName: {
+    get: function(){ return this.first + " " + this.last; }
+  }
+})
+```
 
 
 ## Debug what caused a observable event or update to happen.
@@ -306,7 +306,7 @@ When debugger breaks, you have access to the scope and a special `get` function 
 Stache templates also have access the [can-stache.helpers.console] methods, making it
 easy to log value or even test performance.
 
-```js
+```
 {{#if tasksPromise.isResolved}}
   {{ console.log("tasks resolved with", tasksPromise.value) }}
 {{/if}}
