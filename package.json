@@ -217,7 +217,7 @@
       ]
     },
     "altVersions": {
-      "3.X": "https://canjs.com",
+      "3.12.1": "https://canjs.github.io/v3/",
       "2.3.33": "https://v2.canjs.com"
     },
     "parent": "canjs",
