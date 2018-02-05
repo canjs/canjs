@@ -219,7 +219,7 @@
       ]
     },
     "altVersions": {
-      "4.0.0-pre.X": "https://canjs.github.io/next/",
+      "4.0.1": "https://canjs.com",
       "2.3.33": "https://v2.canjs.com"
     },
     "parent": "canjs",
