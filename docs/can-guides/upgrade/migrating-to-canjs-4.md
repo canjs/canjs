@@ -94,22 +94,29 @@ can-migrate --apply **/*.js --can-version 4
 
 The first step to upgrading to CanJS 4 is to deal with the breaking changes. Most can be changed relatively simply.
 
-### In stache, functions should be called with ()
+### In stache, functions without arguments should be called with ()
 
 In CanJS 2.3 we introduced [can-stache/expressions/call call expressions] as a way to call functions with `()` just like you do in JavaScript. This enabled passing arguments as their *values* rather than as computes.
 
-In 4.0, all functions should be called with `()`, otherwise they will be treated as a value, and their `.toString()` method will be called.
+In 4.0, all functions without arguments should be called with `()`, otherwise they will be treated as a value, and their `.toString()` method will be called.
 
-This is true of both methods on the ViewModel and helpers.
+This is to prevent syntax ambiguity. Consider:
+```
+{{foo}}
+```
+
+Is `foo` a function or a value? If `foo` is not a built-in helper and has no arguments, ex. `{{foo argument}}`, then we treat it as a value unless `()` are present.
+
+This is true of both methods on the ViewModel and helpers with no arguments. It does not apply to built-in helpers or registered helpers with arguments.
 
 ```handlebars
-{{playerStats}}
+{{foo}}
 ```
 
 to:
 
 ```handlebars
-{{playerStats()}}
+{{foo()}}
 ```
 
 ### can-stache/helpers/route replaced with can-stache-route-helpers
@@ -435,6 +442,11 @@ route.start();
 ```
 
 ### can-define's `value` is now `default`
+
+> You can migrate this change with this codemod:
+> ```
+> can-migrate --apply **/*.* --transform can-define/default.js
+> ```
 
 In [can-define] 1.0, you would define a default value for a property with the `value` property definition like so:
 
