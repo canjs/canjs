@@ -98,22 +98,33 @@ The first step to upgrading to CanJS 4 is to deal with the breaking changes. Mos
 
 In CanJS 2.3 we introduced [can-stache/expressions/call call expressions] as a way to call functions with `()` just like you do in JavaScript. This enabled passing arguments as their *values* rather than as computes.
 
-In 4.0, all functions without arguments should be called with `()`, otherwise they will be treated as a value, and their `.toString()` method will be called.
+In 4.0, all functions in stache should be called with `()`.
 
-This is to prevent syntax ambiguity. Consider:
+For example:
+```
+{{#each items}}
+```
+Should be used as such:
+```
+{{#each(items)}}
+```
+
+This is to prevent syntax ambiguity.
+
+Consider:
 ```
 {{foo}}
 ```
 
-Is `foo` a function or a value? If `foo` is not a built-in helper and has no arguments, ex. `{{foo argument}}`, then we treat it as a value unless `()` are present.
+Is `foo` a function or a value? If `foo` is not a built-in helper and has no arguments, ex. `{{foo argument}}`, then we treat it as a value and use the `toString` to resolve the value unless `()` are present.
 
-This is true of both methods on the ViewModel and helpers with no arguments. It does not apply to built-in helpers or registered helpers with arguments.
+This is true of both methods on the ViewModel and helpers with no arguments. It does not apply to built-in helpers (such as each, eq, if, etc...) or registered helpers with at least one argument.
 
 ```handlebars
 {{foo}}
 ```
 
-to:
+change to:
 
 ```handlebars
 {{foo()}}
