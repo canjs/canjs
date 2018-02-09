@@ -45,7 +45,7 @@
     "can-attribute-encoder": "1.0.0",
     "can-component": "4.0.1",
     "can-compute": "4.0.0",
-    "can-connect": "2.0.1",
+    "can-connect": "2.0.2",
     "can-connect-feathers": "4.0.0",
     "can-construct": "3.3.0",
     "can-construct-super": "3.1.4",
