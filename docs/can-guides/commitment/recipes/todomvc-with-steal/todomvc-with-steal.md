@@ -183,7 +183,7 @@ Create the starting HTML page:
 
 ```html
 <!-- index.html -->
-<script src="./node_modules/steal/steal.js"></script>
+<script src="./node_modules/steal/steal.js" deps-bundle></script>
 ```
 
 Create the application template:
