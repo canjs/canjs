@@ -23,4 +23,5 @@ require("can-parse-uri");
 require("can-validate-interface");
 require("can-view-model");
 
+
 module.exports = can;
