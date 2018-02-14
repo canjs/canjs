@@ -47,69 +47,69 @@ folders and files.  It looks like:
 
 ```js
 {
-  "id": "0",
-  "name": "ROOT/",
-  "hasChildren": true,
-  "type": "folder",
-  "children": [
-    {
-      "id": "1", "name": "File 1",
-      "parentId": "0",
-      "type": "file",
-      "hasChildren": false
-    },
-    {
-      "id": "2", "name": "File 2",
-      "parentId": "0",
-      "type": "file",
-      "hasChildren": false
-    },
-    {
-      "id": "3", "name": "Folder 3",
-      "parentId": "0",
-      "type": "folder",
-      "hasChildren": true,
-      "children": [
-        {
-          "id": "4", "name": "File 4",
-          "parentId": "3",
-          "type": "file",
-          "hasChildren": false
-        },
-        {
-          "id": "5", "name": "File 5",
-          "parentId": "3",
-          "type": "file",
-          "hasChildren": false
-        },
-        {
-          "id": "6", "name": "File 6",
-          "parentId": "3",
-          "type": "file",
-          "hasChildren": false
-        },
-        {
-          "id": "7", "name": "File 7",
-          "parentId": "3",
-          "type": "file",
-          "hasChildren": false
-        },
-        {
-          "id": "8", "name": "Folder 8",
-          "parentId": "3",
-          "type": "folder",
-          "hasChildren": false,
-          "children": []
-        }
-      ]
-    },
-    {
-      "id": "9", "name": "File 9",
-      "parentId": "0",
-      "type": "file",
-      "hasChildren": false
-    }
-  ]
+	"id": "0",
+	"name": "ROOT/",
+	"hasChildren": true,
+	"type": "folder",
+	"children": [
+		{
+			"id": "1", "name": "File 1",
+			"parentId": "0",
+			"type": "file",
+			"hasChildren": false
+		},
+		{
+			"id": "2", "name": "File 2",
+			"parentId": "0",
+			"type": "file",
+			"hasChildren": false
+		},
+		{
+			"id": "3", "name": "Folder 3",
+			"parentId": "0",
+			"type": "folder",
+			"hasChildren": true,
+			"children": [
+				{
+					"id": "4", "name": "File 4",
+					"parentId": "3",
+					"type": "file",
+					"hasChildren": false
+				},
+				{
+					"id": "5", "name": "File 5",
+					"parentId": "3",
+					"type": "file",
+					"hasChildren": false
+				},
+				{
+					"id": "6", "name": "File 6",
+					"parentId": "3",
+					"type": "file",
+					"hasChildren": false
+				},
+				{
+					"id": "7", "name": "File 7",
+					"parentId": "3",
+					"type": "file",
+					"hasChildren": false
+				},
+				{
+					"id": "8", "name": "Folder 8",
+					"parentId": "3",
+					"type": "folder",
+					"hasChildren": false,
+					"children": []
+				}
+			]
+		},
+		{
+			"id": "9", "name": "File 9",
+			"parentId": "0",
+			"type": "file",
+			"hasChildren": false
+		}
+	]
 }
 ```
 Notice that entities have the following properties:
@@ -149,22 +149,22 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  ```
+const template = can.stache.from( SCRIPT_ID );
+```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+const frag = template( {
+	something: { name: "Derek Brunson" }
+} );
+```
 
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
-  ```
+document.body.appendChild( frag );
+```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
@@ -199,10 +199,8 @@ Update the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 ```js
-var template = can.stache.from("entities-template");
-
-var frag = template(rootEntityData);
-
+const template = can.stache.from( "entities-template" );
+const frag = template( rootEntityData );
 document.body.appendChild( frag );
 ```
 @highlight 1-5
@@ -225,9 +223,9 @@ find a folder, we need to render its contents.
 - You can register partial templates with [can-stache.registerPartial can.stache.registerPartial] like the following:
 
   ```js
-  var template = can.stache.from("TEMPLATE_ID");
-  can.stache.registerPartial("PARTIAL_NAME", template);
-  ```
+const template = can.stache.from( "TEMPLATE_ID" );
+can.stache.registerPartial( "PARTIAL_NAME", template );
+```
 
 ### The Solution
 
@@ -258,11 +256,9 @@ Update the __JavaScript__ tab to:
  - Register the `entities-template` as a partial:
 
 ```js
-var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
-
-var frag = template(rootEntityData);
-
+const template = can.stache.from( "entities-template" );
+can.stache.registerPartial( "entities", template );
+const frag = template( rootEntityData );
 document.body.appendChild( frag );
 ```
 @highlight 2
@@ -280,50 +276,48 @@ we change the data, the UI will automatically change.
   properties and the properties’ types like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
-    name: "string",
-    age: "number"
-  })
-  ```
+Person = can.DefineMap.extend( "Person", {
+	name: "string",
+	age: "number"
+} );
+```
 
   This lets you create instances of that type and listen to changes like:
 
   ```js
-  var person = new Person({
-    name: "Justin",
-    age: 34
-  });
-
-  person.on("name", function(ev, newName) {
-    console.log("person name changed to ", newName);
-  });
-
-  person.name = "Kevin" //-> logs "entity name changed to Kevin"
-  ```
+const person = new Person( {
+	name: "Justin",
+	age: 34
+} );
+person.on( "name", function( ev, newName ) {
+	console.log( "person name changed to ", newName );
+} );
+person.name = "Kevin"; //-> logs "entity name changed to Kevin"
+```
 
 - `can.DefineMap` supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list can.DefineList] of typed instances like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
-    name: "string",
-    age: "number",
-    addresses: [Address]
-  });
-  ```
+Person = can.DefineMap.extend( "Person", {
+	name: "string",
+	age: "number",
+	addresses: [ Address ]
+} );
+```
 
   However, if `Address` wasn’t immediately available, you could do the same thing like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
-    name: "string",
-    age: "number",
-    addresses: [{
-      type: function(rawData) {
-        return new Address(rawData);
-      }
-    }]
-  });
-  ```
+Person = can.DefineMap.extend( "Person", {
+	name: "string",
+	age: "number",
+	addresses: [ {
+		type: function( rawData ) {
+			return new Address( rawData );
+		}
+	} ]
+} );
+```
 
 
 ### The solution
@@ -335,26 +329,22 @@ Update the __JavaScript__ tab to:
 - Use `rootEntity` to render the template
 
 ```js
-var Entity = can.DefineMap.extend("Entity", {
-  id: "string",
-  name: "string",
-  parentId: "string",
-  hasChildren: "boolean",
-  type: "string",
-  children: [{
-    type: function(entity) {
-      return new Entity(entity)
-    }
-  }]
-});
-
-var rootEntity = new Entity(rootEntityData);
-
-var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
-
-var frag = template(rootEntity);
-
+const Entity = can.DefineMap.extend( "Entity", {
+	id: "string",
+	name: "string",
+	parentId: "string",
+	hasChildren: "boolean",
+	type: "string",
+	children: [ {
+		type: function( entity ) {
+			return new Entity( entity );
+		}
+	} ]
+} );
+const rootEntity = new Entity( rootEntityData );
+const template = can.stache.from( "entities-template" );
+can.stache.registerPartial( "entities", template );
+const frag = template( rootEntity );
 document.body.appendChild( frag );
 ```
 @highlight 1-14,19
@@ -364,7 +354,7 @@ document.body.appendChild( frag );
 Run the following the __Console__ tab:
 
 ```js
-rootEntity.name= "Something New";
+rootEntity.name = "Something New";
 rootEntity.children.pop();
 ```
 
@@ -381,23 +371,23 @@ We want to be able to toggle if a folder is open or closed.
 
 - `can.DefineMap` can specify a default value and a type:
   ```js
-  var Person = can.DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"}
-  });
-  ```
+const Person = can.DefineMap.extend( {
+	address: Address,
+	age: { default: 33, type: "number" }
+} );
+```
 
 - `can.DefineMap` can also have methods:
 
   ```js
-  var Person = can.DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"},
-    birthday: function(){
-      this.age++;
-    }
-  });
-  ```
+const Person = can.DefineMap.extend( {
+	address: Address,
+	age: { default: 33, type: "number" },
+	birthday: function() {
+		this.age++;
+	}
+} );
+```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 
@@ -415,30 +405,26 @@ Update the __JavaScript__ tab to:
 - Add a `toggleOpen` method to `Entity`.
 
 ```js
-var Entity = can.DefineMap.extend("Entity", {
-  id: "string",
-  name: "string",
-  parentId: "string",
-  hasChildren: "boolean",
-  type: "string",
-  children: [{
-    type: function(entity){
-      return new Entity(entity)
-    }
-  }],
-  isOpen: {type: "boolean", default: false},
-  toggleOpen: function(){      
-    this.isOpen = !this.isOpen;
-  }
-});
-
-var rootEntity = new Entity(rootEntityData);
-
-var template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
-
-var frag = template(rootEntity);              
-
+const Entity = can.DefineMap.extend( "Entity", {
+	id: "string",
+	name: "string",
+	parentId: "string",
+	hasChildren: "boolean",
+	type: "string",
+	children: [ {
+		type: function( entity ) {
+			return new Entity( entity );
+		}
+	} ],
+	isOpen: { type: "boolean", default: false },
+	toggleOpen: function() {
+		this.isOpen = !this.isOpen;
+	}
+} );
+const rootEntity = new Entity( rootEntityData );
+const template = can.stache.from( "entities-template" );
+can.stache.registerPartial( "entities", template );
+const frag = template( rootEntity );
 document.body.appendChild( frag );
 ```
 @highlight 12-15

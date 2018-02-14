@@ -40,15 +40,16 @@ The following sections are broken down into:
 Currently, when a new `location` is set, the `place` property is set to `null`:
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
-  location: {
-    type: "string",
-    set: function(){
-      this.place = null;
-    }
-  },
-  ...
-});
+const WeatherViewModel = can.DefineMap.extend( {
+	location: {
+		type: "string",
+		set: function() {
+			this.place = null;
+		}
+	}
+
+// ...
+} );
 ```
 
 This is [imperative code](https://en.wikipedia.org/wiki/Imperative_programming).
@@ -60,22 +61,24 @@ Instead, we want to completely define the behavior of `place` within the place d
 this:
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
-  ...
-  place: {
-    type: "any",
-    get: function(lastSet){
-      if(lastSet) {
-        return lastSet;
-      } else {
-        if(this.places && this.places.length === 1) {
-          return this.places[0];
-        }
-      }
-    }
-  },
-  ...
-});
+const WeatherViewModel = can.DefineMap.extend( {
+
+// ...
+	place: {
+		type: "any",
+		get: function( lastSet ) {
+			if ( lastSet ) {
+				return lastSet;
+			} else {
+				if ( this.places && this.places.length === 1 ) {
+					return this.places[ 0 ];
+				}
+			}
+		}
+	}
+
+// ...
+} );
 ```
 
 We want to define the behavior of `place` so that it becomes `null` when `location` changes.
@@ -90,73 +93,67 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   property changes using the [can-stream-kefir] module as follows:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
+const person = new can.DefineMap( { name: "Justin" } );
 
-  // Create a stream from person’s name
-  var nameStream = can.streamKefir.toStream(person,".name");
+// Create a stream from person’s name
+const nameStream = can.streamKefir.toStream( person, ".name" );
 
-  // Every time `.name` changes, increase the count 1.
-  var nameChangeCountStream = nameStream.scan(function(lastValue){
-	  return lastValue + 1;
-  }, 0);
+// Every time `.name` changes, increase the count 1.
+const nameChangeCountStream = nameStream.scan( function( lastValue ) {
+	return lastValue + 1;
+}, 0 );
 
-  // Log the current nameChangeStream value
-  nameChangeStream.onValue(function(newValue){
-	  console.log(newValue);
-  });
-
-  person.name = "Ramiya" // logs 1
-
-  person.name = "Payal"  // logs 2
-  ```
+// Log the current nameChangeStream value
+nameChangeStream.onValue( function( newValue ) {
+	console.log( newValue );
+} );
+person.name = "Ramiya"; // logs 1
+person.name = "Payal";  // logs 2
+```
 
 - The `toStream` method can take an observable object and a property (or event) and create an event stream. The following creates a stream of the `person.name` property values:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
-  var nameStream = can.streamKefir.toStream(person,".name");
-
-  nameStream.onValue(function(newValue){
-	  console.log(newValue);
-  });
-
-  person.name = "Ramiya" // logs "Ramiya"
-  person.name = "Payal" // logs "Payal"
-  ```
+const person = new can.DefineMap( { name: "Justin" } );
+const nameStream = can.streamKefir.toStream( person, ".name" );
+nameStream.onValue( function( newValue ) {
+	console.log( newValue );
+} );
+person.name = "Ramiya"; // logs "Ramiya"
+person.name = "Payal"; // logs "Payal"
+```
 
 - Kefir’s [map](https://kefirjs.github.io/kefir/#map) method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
-  var capitalizedNameStream = can.streamKefir.toStream(person,".name")
-  	.map(function(name){
-		return name.toUpperCase()
-	});
-
-  nameStream.onValue(function(newValue){
-	  console.log(newValue);
-  });
-
-  person.name = "Ramiya" // logs "RAMIYA"
-  person.name = "Payal" // logs "PAYAL"
-  ```
+const person = new can.DefineMap( { name: "Justin" } );
+const capitalizedNameStream = can.streamKefir.toStream( person, ".name" )
+	.map( function( name ) {
+		return name.toUpperCase();
+	} );
+nameStream.onValue( function( newValue ) {
+	console.log( newValue );
+} );
+person.name = "Ramiya"; // logs "RAMIYA"
+person.name = "Payal"; // logs "PAYAL"
+```
 
 - The [can-define-stream-kefir] module lets you define a property value using
   a stream. For example, we can define a `nameChangeCount` property of a `Person` type using `stream` like:
 
   ```js
-  Person = can.DefineMap.extend({
-	  name: "string",
-	  nameChangeCount: {
-		  stream: function(){
-			  return this.toStream(".name").scan(function(lastValue){
-				  return lastValue + 1;
-			  }, 0);
-		  }
-	  }
-  });
-  can.defineStreamKefir(Person);
-  ```
+Person = can.DefineMap.extend( {
+	name: "string",
+	nameChangeCount: {
+		stream: function() {
+			return this.toStream( ".name" ).scan( function( lastValue ) {
+				return lastValue + 1;
+			}, 0 );
+		}
+	}
+} );
+can.defineStreamKefir( Person );
+```
 
   Notice that the [can-define-stream-kefir] module is used as a [mixin](https://developer.mozilla.org/en-US/docs/Glossary/Mixin). When called on a type (like `Person`), the mixin
   looks for [can-define.types.propDefinition]s with `stream`
@@ -166,76 +163,66 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   bound to.  To read the `nameChangeCount`, first use `.on` like:
 
   ```js
-  var me = new Person({name: "Justin"});
-  me.on("nameChangeCount", function(ev, newValue){
-	  console.log(newValue);
-  });
-
-  me.nameChangeCount //-> 0
-
-  me.name = "Ramiya" // logs 1
-
-  me.nameChangeCount //-> 1
-  ```
+const me = new Person( { name: "Justin" } );
+me.on( "nameChangeCount", function( ev, newValue ) {
+	console.log( newValue );
+} );
+me.nameChangeCount; //-> 0
+me.name = "Ramiya"; // logs 1
+me.nameChangeCount; //-> 1
+```
 
 - The `stream` property definition function is passed `setStream` which is
   a stream of values set on the property.  The following allows a
   user to set `nameChangeCount` to reset the count at some new value:
 
   ```js
-  Person = can.DefineMap.extend({
+Person = can.DefineMap.extend( {
 	name: "string",
 	nameChangeCount: {
-		stream: function(setStream){
-			var reset = setStream.map(function(value){
-				return {type: "reset", value: value};
-			});
-			var increment = this.toStream(".name").map(function(){
-				return {type: "increment"}
-			});
-
-			return reset.merge(increment).scan(function(lastValue, next){
-				if(next.type === "increment") {
+		stream: function( setStream ) {
+			const reset = setStream.map( function( value ) {
+				return { type: "reset", value: value };
+			} );
+			const increment = this.toStream( ".name" ).map( function() {
+				return { type: "increment" };
+			} );
+			return reset.merge( increment ).scan( function( lastValue, next ) {
+				if ( next.type === "increment" ) {
 					return lastValue + 1;
 				} else {
 					return next.value;
 				}
-			}, 0);
+			}, 0 );
 		}
 	}
-  });
-  can.defineStreamKefir(Person);
-  ```
+} );
+can.defineStreamKefir( Person );
+```
 
   The following shows the behavior of this property:
 
   ```js
-  var me = new Person({name: "Justin"});
-  me.on("nameChangeCount", function(ev, newValue){
-	console.log(newValue);
-  });
-
-  me.nameChangeCount = 10;
-
-  me.name = "Ramiya" // logs 11
-
-  me.nameChangeCount //-> 11
-  ```
+const me = new Person( { name: "Justin" } );
+me.on( "nameChangeCount", function( ev, newValue ) {
+	console.log( newValue );
+} );
+me.nameChangeCount = 10;
+me.name = "Ramiya"; // logs 11
+me.nameChangeCount; //-> 11
+```
 
 - The [can-define-stream-kefir] module adds a `map.toStream` method which is an alias for
   `canStream.toStream`.  Use it to create streams from properties and events on a map instance like:
 
   ```js
-  var Person = can.DefineMap.extend({
-	  name: "string"
-  });
-
-  var me = new Person({name: "Justin"});
-
-  var nameStream = me.toStream(".name");
-
-  nameStream.onValue(function(){ ... })
-  ```
+const Person = can.DefineMap.extend( {
+	name: "string"
+} );
+const me = new Person( { name: "Justin" } );
+const nameStream = me.toStream( ".name" );
+nameStream.onValue( function() { /* ... */ } );
+```
 
 ### The solution
 
@@ -275,91 +262,90 @@ We will do this by:
   API allows you to _request_ the user’s position as follows:
 
   ```js
-  navigator.geolocation.getCurrentPosition(
-      function(position){...},
-      function(err){...});
-  ```
+navigator.geolocation.getCurrentPosition(
+	function( position ) { /* ... */ },
+	function( err ) { /* ... */ } );
+```
 
 - The [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
   API allows you to _monitor changes_ in the user’s position as follows:
 
   ```js
-  var watch = navigator.geolocation.watchPosition(
-      function(position){...},
-      function(err){...});
-  ```
+const watch = navigator.geolocation.watchPosition(
+	function( position ) { /* ... */ },
+	function( err ) { /* ... */ } );
+```
 
   To cancel watching, call:
 
   ```js
-  navigator.geolocation.clearWatch(watch);
-  ```
+navigator.geolocation.clearWatch( watch );
+```
 
 - To create a `Kefir` stream, call `Kefir.stream` as follows:
 
   ```js
-  var myStream = Kefir.stream(function setup(emitter){
+const myStream = Kefir.stream( function setup( emitter ) {
 
-      // INITIALIZATION CODE
+// INITIALIZATION CODE
+	return function teardown() {
 
-      return function teardown(){
-          // TEARDOWN CODE
-      }
-  });
-  ```
+		// TEARDOWN CODE
+	};
+} );
+```
 
   `Kefir.stream` is passed an event emitter which can emit values like:
 
   ```js
-  emitter.value(123);
-  ```
+emitter.value( 123 );
+```
 
   or errors like:
 
   ```js
-  emitter.error("something went wrong");
-  ```
+emitter.error( "something went wrong" );
+```
 
   or end the stream of values like:
 
   ```js
-  emitter.end();
-  ```
+emitter.end();
+```
 
   Typically, you listen to sources and emit values in the `setup` function
   and stop listening to sources in the `teardown` function.  For example,
   the following might listen to where the user’s mouse is on the page:
 
   ```js
-  var cursorPosition = Kefir.stream(function(emitter){
-      var handler = function(ev){
-          emitter.emit({pageX: ev.pageX, pageY: pageY});
-      };
-      document.documentElement.addEventListener("mousemove",handler);
-
-      return function(){
-          document.documentElement.removeEventListener("mousemove",handler);
-      }
-  })
-  ```
+const cursorPosition = Kefir.stream( function( emitter ) {
+	const handler = function( ev ) {
+		emitter.emit( { pageX: ev.pageX, pageY: pageY } );
+	};
+	document.documentElement.addEventListener( "mousemove", handler );
+	return function() {
+		document.documentElement.removeEventListener( "mousemove", handler );
+	};
+} );
+```
 
 - Kefir’s `stream.withHandler( handler(emitter, event) )` is able to convert one stream’s events to another stream. All other stream methods like `stream.map` and `stream.scan` can be implemented with `stream.withHandler`. For example, the following maps the `cursorPosition` stream to a `cursorDistance` stream:
 
   ```js
-  cursorDistance = cursorPosition.withHandler(function(emitter, event){
-      if (event.type === 'end') {
-        emitter.end();
-      }
-      if (event.type === 'error') {
-        emitter.error(event.value);
-      }
-      if (event.type === 'value') {
-        var pageX = event.value.pageX;
-        var pageY = event.value.pageY;
-        emitter.value( Math.sqrt(pageX*pageX + pageY*pageY) );
-      }
-  });
-  ```
+cursorDistance = cursorPosition.withHandler( function( emitter, event ) {
+	if ( event.type === "end" ) {
+		emitter.end();
+	}
+	if ( event.type === "error" ) {
+		emitter.error( event.value );
+	}
+	if ( event.type === "value" ) {
+		const pageX = event.value.pageX;
+		const pageY = event.value.pageY;
+		emitter.value( Math.sqrt( pageX * pageX + pageY * pageY ) );
+	}
+} );
+```
 
   Notice how `withHandler` is called with the emitter of `cursorDistance`
   and the events of `cursorPosition`.  
@@ -390,20 +376,20 @@ Flickr has an API that can get a place that is recognized by
 Yahoo’s weather APIs.  It can be retrieved with `fetch` like:
 
 ```js
-fetch("https://api.flickr.com/services/rest/?"+
-    can.param({
-        method: "flickr.places.findByLatLon",
-        api_key: "df0a221bb43ecbc2abb03426bd84e598",
-        lat: LATITUDE,
-        lon: LONGITUDE,
-        format: "json",
-        nojsoncallback: 1
-    })
-).then(function(response){
-    return response.json()
-}).then(function(responseJSON){
-    return responseJSON.places.place[0];
-});
+fetch( "https://api.flickr.com/services/rest/?" +
+can.param( {
+	method: "flickr.places.findByLatLon",
+	api_key: "df0a221bb43ecbc2abb03426bd84e598",
+	lat: LATITUDE,
+	lon: LONGITUDE,
+	format: "json",
+	nojsoncallback: 1
+} )
+).then( function( response ) {
+	return response.json();
+} ).then( function( responseJSON ) {
+	return responseJSON.places.place[ 0 ];
+} );
 ```
 
 ### The solution

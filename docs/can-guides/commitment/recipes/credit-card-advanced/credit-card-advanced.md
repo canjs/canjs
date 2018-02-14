@@ -76,14 +76,14 @@ constant stream to hold the `amount` value.
   the following `numbers` stream produces three numbers with interval of 100 milliseconds:
 
   ```js
-  var numbers = Kefir.sequentially(100, [1, 2, 3]);
-  ```
+const numbers = Kefir.sequentially( 100, [ 1, 2, 3 ] );
+```
 
   Now let's create another stream based on the first one. As you might guess, it will produce 2, 4, and 6.
 
   ```js
-  var numbers2 = numbers.map(x => x * 2);
-  ```
+const numbers2 = numbers.map( x => x * 2 );
+```
 - Kefir supports both streams and properties.  It’s worth reading [Kefir’s documentation on the difference between streams and properties](https://kefirjs.github.io/kefir/#about-observables).  In short:
   - Properties retain their value
   - Streams do not
@@ -133,18 +133,14 @@ and also print back the cleaned card number (the entered number with no dashes).
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
-  import Kefir from 'can-kefir';
-
-  var age = Kefir.emitterProperty();
-
-  age.onValue(function(age){
-    console.log(age)
-  });
-
-  age.emitter.value(20) //-> logs 20
-
-  age.emitter.value(30) //-> logs 30
-  ```
+import Kefir from "can-kefir";
+const age = Kefir.emitterProperty();
+age.onValue( function( age ) {
+	console.log( age );
+} );
+age.emitter.value( 20 ); //-> logs 20
+age.emitter.value( 30 ); //-> logs 30
+```
 
   `emitterProperty` property streams are useful data sinks when getting
   user data.
@@ -153,11 +149,12 @@ and also print back the cleaned card number (the entered number with no dashes).
   that maps values on one stream to values in a new stream:
 
   ```js
-  var source = Kefir.sequentially(100, [1, 2, 3]);
-  var result = source.map(x => x + 1);
-  // source: ---1---2---3X
-  // result: ---2---3---4X
-  ```
+const source = Kefir.sequentially( 100, [ 1, 2, 3 ] );
+const result = source.map( x => x + 1 );
+
+// source: ---1---2---3X
+// result: ---2---3---4X
+```
 
 - `<input on:input:value:to="KEY"/>` Listens to the `input` events produced
   by the `<input>` element and writes the `<input>`'s value to `KEY`.
@@ -198,15 +195,15 @@ if the card number is 16 characters.
 
 - Validate a card with:
   ```js
-  function validateCard(card) {
-    if (!card) {
-        return "There is no card"
-    }
-    if (card.length !== 16) {
-        return "There should be 16 characters in a card";
-    }
-  }
-  ```
+function validateCard( card ) {
+	if ( !card ) {
+		return "There is no card";
+	}
+	if ( card.length !== 16 ) {
+		return "There should be 16 characters in a card";
+	}
+}
+```
 
 ### The solution
 
@@ -247,76 +244,81 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   For example, we might have a `first` and a `last` stream:
 
   ```js
-  var first = Kefir.sequentially(100, ["Justin", "Ramiya"])
-  var last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
-  // first: ---Justin---RamiyaX
-  // last:  ------Shah__---Meyer_X
-  ```
+const first = Kefir.sequentially( 100, [ "Justin", "Ramiya" ] );
+const last = Kefir.sequentially( 100, [ "Shah", "Meyer" ] ).delay( 50 );
+
+// first: ---Justin---RamiyaX
+// last:  ------Shah__---Meyer_X
+```
 
   We can promote these to event-like objects with `.map`:
 
   ```js
-  var firstEvents = first.map( (first) => {
-      return {type: "first", value: first}
-  })
-  var lastEvents = first.map( (last) => {
-      return {type: "last", value: last}
-  })
-  // firstEvents: ---{t:"f"}---{t:"f"}X
-  // lastEvents:  ------{t:"l"}---{t:"l"}X
-  ```
+const firstEvents = first.map( ( first ) => {
+	return { type: "first", value: first };
+} );
+const lastEvents = first.map( ( last ) => {
+	return { type: "last", value: last };
+} );
+
+// firstEvents: ---{t:"f"}---{t:"f"}X
+// lastEvents:  ------{t:"l"}---{t:"l"}X
+```
 
   Next, we can merge these into a single stream:
 
   ```js
-  var merged = Kefir.merge([firstEvents,lastEvents])
-  // merged: ---{t:"f"}-{t:"l"}-{t:"f"}-{t:"l"}X
-  ```
+const merged = Kefir.merge( [ firstEvents, lastEvents ] );
+
+// merged: ---{t:"f"}-{t:"l"}-{t:"f"}-{t:"l"}X
+```
 
   We can "reduce" (or `.scan`) these events based on a previous
   state. The following copies the old state and updates it using the event
   data:
 
   ```js
-  var state = merged.scan((previous, event) => {
-    var copy = Object.assign({}, previous);
-    copy[event.type] = event.value;
-	 return copy;
-  }, {first: "", last: ""});
-  // state: ---{first:"Justin", last:""}
-  //          -{first:"Justin", last:"Shah"}
-  //          -{first:"Ramiya", last:"Shah"}
-  //          -{first:"Ramiya", last:"Meyer"}X
-  ```
+const state = merged.scan( ( previous, event ) => {
+	const copy = Object.assign( {}, previous );
+	copy[ event.type ] = event.value;
+	return copy;
+}, { first: "", last: "" } );
+
+// state: ---{first:"Justin", last:""}
+//          -{first:"Justin", last:"Shah"}
+//          -{first:"Ramiya", last:"Shah"}
+//          -{first:"Ramiya", last:"Meyer"}X
+```
 
   The following is a more common structure for the reducer pattern:
 
   ```js
-  var state = merged.scan((previous, event) => {
-      switch( event.type ) {
-        case "first":
-          return Object.assign({}, previous,{
-            first: event.value
-          });
-        case "last":
-          return Object.assign({}, previous,{
-            last: event.value
-          });
-        default:
-          return previous;
-      }
-  }, {first: "", last: ""})
-  ```
+const state = merged.scan( ( previous, event ) => {
+	switch ( event.type ) {
+	case "first":
+		return Object.assign( {}, previous, {
+			first: event.value
+		} );
+	case "last":
+		return Object.assign( {}, previous, {
+			last: event.value
+		} );
+	default:
+		return previous;
+	}
+}, { first: "", last: "" } );
+```
 
   Finally, we can map this state to another value:
 
   ```js
-  var fullName = state.map( (state) => state.first +" "+ state.last );
-  // fullName: ---Justin
-  //             -Justin Shah
-  //             -Ramiya Shah
-  //             -Ramiya MeyerX
-  ```
+const fullName = state.map( ( state ) => state.first + " " + state.last );
+
+// fullName: ---Justin
+//             -Justin Shah
+//             -Ramiya Shah
+//             -Ramiya MeyerX
+```
 
   > NOTE: `fullName` can be derived more simply from `Kefir.combine`. The reducer
   > pattern is used here for illustrative purposes. It is able to support a larger
@@ -355,15 +357,15 @@ array like `["12","16"]`.  Make sure to:
 - Use `expiry.split("-")` to convert what a user typed into an array of numbers.
 - To validate the expiry use:
   ```js
-  function validateExpiry(expiry) {
-    if (!expiry) {
-        return "There is no expiry. Format  MM-YY";
-    }
-    if (expiry.length !== 2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
-        return "Expirty must be formatted like MM-YY";
-    }
-  }
-  ```
+function validateExpiry( expiry ) {
+	if ( !expiry ) {
+		return "There is no expiry. Format  MM-YY";
+	}
+	if ( expiry.length !== 2 || expiry[ 0 ].length !== 2 || expiry[ 1 ].length !== 2 ) {
+		return "Expirty must be formatted like MM-YY";
+	}
+}
+```
 
 
 
@@ -396,18 +398,18 @@ element.  Make sure to:
 - The `cvc` can be saved as whatever the user entered. No special processing necessary.
 - To validate CVC:
   ```js
-  function validateCVC(cvc) {
-    if (!cvc) {
-        return "There is no CVC code";
-    }
-    if (cvc.length !== 3) {
-        return "The CVC must be at least 3 numbers";
-    }
-    if (isNaN(parseInt(cvc))) {
-        return "The CVC must be numbers";
-    }
-  }
-  ```
+function validateCVC( cvc ) {
+	if ( !cvc ) {
+		return "There is no CVC code";
+	}
+	if ( cvc.length !== 3 ) {
+		return "The CVC must be at least 3 numbers";
+	}
+	if ( isNaN( parseInt( cvc ) ) ) {
+		return "The CVC must be numbers";
+	}
+}
+```
 
 ### The solution
 
@@ -432,17 +434,21 @@ Lets disable the __Pay__ button until the card, exiry, and cvc are valid.
 
 - `Kefir.combine` can combine several values into a single value:
   ```js
-  var first = Kefir.sequentially(100, ["Justin", "Ramiya"])
-  var last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
-  // first: ---Justin---RamiyaX
-  // last:  ------Shah__---Meyer_X
-  var fullName = Kefir.combine([first, last], (first, last) => { return first +" "+ last; })
-  // fullName: ---Justin Shah
-  //             -Ramiya Shah
-  //             -Ramiya MeyerX
-  ```
+const first = Kefir.sequentially( 100, [ "Justin", "Ramiya" ] );
+const last = Kefir.sequentially( 100, [ "Shah", "Meyer" ] ).delay( 50 );
+
+// first: ---Justin---RamiyaX
+// last:  ------Shah__---Meyer_X
+const fullName = Kefir.combine( [ first, last ], ( first, last ) => {
+	return first + " " + last;
+} );
+
+// fullName: ---Justin Shah
+//             -Ramiya Shah
+//             -Ramiya MeyerX
+```
 - [can-stache-bindings.toChild childProp:from] can set a property from another value:
-  ```js
+  ```html
   <input checked:from="someKey"/>
   ```
 
@@ -471,12 +477,12 @@ we will change the __Pay__ button to say __Paying__.
 
 - Use the following to create a Promise that takes 2 seconds to resolve:
   ```js
-  new Promise(function(resolve) {
-   setTimeout(function() {
-      resolve(1000);
-    }, 2000);
-  });
-  ```
+new Promise( function( resolve ) {
+	setTimeout( function() {
+		resolve( 1000 );
+	}, 2000 );
+} );
+```
 
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
@@ -492,48 +498,56 @@ we will change the __Pay__ button to say __Paying__.
   where the combinator will not be called when the passive streams emit a value.
 - [Kefir.concat](https://kefirjs.github.io/kefir/#concat) concatenates streams so events are produced in order.
   ```js
-  var a = Kefir.sequentially(100, [0, 1, 2]);
-  var b = Kefir.sequentially(100, [3, 4, 5]);
-  var abc = Kefir.concat([a, b]);
-  //a:    ---0---1---2X
-  //b:                ---3---4---5X
-  //abc:  ---0---1---2---3---4---5X
-  ```
+const a = Kefir.sequentially( 100, [ 0, 1, 2 ] );
+const b = Kefir.sequentially( 100, [ 3, 4, 5 ] );
+const abc = Kefir.concat( [ a, b ] );
+
+//a:    ---0---1---2X
+//b:                ---3---4---5X
+//abc:  ---0---1---2---3---4---5X
+```
 
 - [Kefir.flatMap](https://kefirjs.github.io/kefir/#flat-map) flattens a stream of
   streams to a single stream of values.
   ```js
-  var count = Kefir.sequentially(100, [1, 2, 3]);
-  var streamOfStreams = count.map( (count) => {
-      return Kefir.interval(40, count).take(4)
-  });
-  var result = streamOfStreams.flatMap();
-  // source:      ----------1---------2---------3X
-  //
-  // spawned 1:             ---1---1---1---1X
-  // spawned 2:                       ---2---2---2---2X
-  // spawned 3:                                 ---3---3---3---3X
-  // result:      -------------1---1---1-2-1-2---2-3-2-3---3---3X
-  ```
+const count = Kefir.sequentially( 100, [ 1, 2, 3 ] );
+const streamOfStreams = count.map( ( count ) => {
+	return Kefir.interval( 40, count ).take( 4 );
+} );
+const result = streamOfStreams.flatMap();
+
+// source:      ----------1---------2---------3X
+//
+// spawned 1:             ---1---1---1---1X
+// spawned 2:                       ---2---2---2---2X
+// spawned 3:                                 ---3---3---3---3X
+// result:      -------------1---1---1-2-1-2---2-3-2-3---3---3X
+```
 
   I think of this like promises' ability to resolve when an "inner" promise
   resolves.  For example, `resultPromise` below resolves with the `innerPromise`:
 
   ```js
-  var outerPromise = new Promise((resolve) => {
-      setTimeout(() => { resolve("outer") }, 100);
-  });
-  return innerPromise = new Promise((resolve) => {
-      setTimeout(() => { resolve("inner") }, 200);
-  });
-  var resultPromise = outerPromise.then(function(value){
-     // value -> "outer"
-     return innerPromise;
-  });
-  resultPromise.then(function(value){
-     // value -> "inner"
-  })
-  ```
+const outerPromise = new Promise( ( resolve ) => {
+	setTimeout( () => {
+		resolve( "outer" );
+	}, 100 );
+} );
+const innerPromise = new Promise( ( resolve ) => {
+	setTimeout( () => {
+		resolve( "inner" );
+	}, 200 );
+} );
+const resultPromise = outerPromise.then( function( value ) {
+
+// value -> "outer"
+	return innerPromise;
+} );
+resultPromise.then( function( value ) {
+
+// value -> "inner"
+} );
+```
 
   In some ways, `outerPromise` is a promise of promises.  Promises flatten
   by default. With Kefir, you call `flatMap` to flatten streams.

@@ -26,7 +26,7 @@ queues.logStack();
 However, if any part of your application imports [can-debug], you can log the stack like:
 
 ```js
-can.queues.logStack()
+can.queues.logStack();
 ```
 
 > NOTE: When first accessing properties on the global `can`, a warning will be logged. This is to discourage
@@ -50,6 +50,7 @@ Add the following to your main module:
 ```js
 //!steal-remove-start
 import can from "can-debug";
+
 //!steal-remove-end
 ```
 
@@ -59,7 +60,7 @@ Conditional loading makes it possible to load a module only when another module 
 
 ```js
 // is-dev.js
-export default !steal.isEnv("production");
+export default !steal.isEnv( "production" );
 ```
 
 Then we can conditionally load modules like:
@@ -74,8 +75,8 @@ To import the debug module only in development, add the following
 code to your main module:
 
 ```js
-if (process.env.NODE_ENV !== "production") {
-    require("can-debug");
+if ( process.env.NODE_ENV !== "production" ) {
+	require( "can-debug" );
 }
 ```
 
@@ -83,17 +84,18 @@ Then, make sure `process.env` is defined in `webpack.config.js`
 with the following:
 
 ```js
-var webpack = require("webpack");
+import webpack from "webpack";
 
-module.exports = {
-    ...
-    plugins: [
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production")
-            }
-        })
-    ]
+export default {
+
+// ...
+	plugins: [
+		new webpack.DefinePlugin( {
+			"process.env": {
+				NODE_ENV: JSON.stringify( "production" )
+			}
+		} )
+	]
 };
 ```
 
@@ -120,8 +122,7 @@ name your function by passing `.extend` a name as the first argument:
 
 ```js
 import DefineMap from "can-define/map/map";
-
-export default DefineMap.extend("TheNameOfMyType", { ... })
+export default DefineMap.extend( "TheNameOfMyType", { /* ... */ } );
 ```
 
 #### Label instances
@@ -129,7 +130,7 @@ export default DefineMap.extend("TheNameOfMyType", { ... })
 [can-reflect]'s [can-reflect.setName] method can be used to uniquely name a particular object:
 
 ```js
-can.reflect.setName(person, "Person{Justin}");
+can.reflect.setName( person, "Person{Justin}" );
 ```
 
 #### Name anonymous functions
@@ -139,10 +140,9 @@ expressions:
 
 ```js
 // INSTEAD OF THIS:
-map.on("key", function(ev, newVal) { ... })
-
+map.on( "key", function( ev, newVal ) { /* ... */ } );
 // DO THIS:
-map.on("key", function keyChanged(ev, newVal) { ... })
+map.on( "key", function keyChanged( ev, newVal ) { /* ... */ } );
 ```
 
 Similarly, if you create [can-compute]s or [can-observation]s yourself, make sure the function
@@ -150,25 +150,27 @@ passed has a name:
 
 ```js
 // INSTEAD OF THIS:
-new Observation(function(){
-    return map.first + " " + map.last;
-});
+new Observation( function() {
+	return map.first + " " + map.last;
+} );
 
 // DO THIS:
-new Observation(function fullName(){
-    return map.first + " " + map.last;
-});
+new Observation( function fullName() {
+	return map.first + " " + map.last;
+} );
 ```
 
 > NOTE: If your function is a property on an observable map or list like [can-define/map/map],
 > you don't have to name it.  For example, CanJS will name the `fullName` getter in the following example:
 > ```js
-> DefineMap.extend("Person",{
->   fullName: {
->     get: function(){ return this.first + " " + this.last; }
->   }
-> })
-> ```
+DefineMap.extend( "Person", {
+	fullName: {
+		get: function() {
+			return this.first + " " + this.last;
+		}
+	}
+} );
+```
 
 
 ## Debug what caused a observable event or update to happen.
@@ -183,16 +185,13 @@ functions within [can-queues].
 Consider the following code that derives an info value from the person observable:
 
 ```js
-var person = new observe.Object({name: "Fran", age: 15});
-
-var info = new Observation(function updateInfo(){
-    return person.name + " is " + person.age;
-});
-
-info.on(function onInfoChanged(newVal){
-    debugger;
-})
-
+const person = new observe.Object( { name: "Fran", age: 15 } );
+const info = new Observation( function updateInfo() {
+	return person.name + " is " + person.age;
+} );
+info.on( function onInfoChanged( newVal ) {
+	debugger;
+} );
 person.age = 22;
 ```
 
@@ -214,7 +213,7 @@ task is enqueued and flushed.  Often, you only want to log when
 tasks are run. This can be done with:
 
 ```js
-can.queues.log("flush")
+can.queues.log( "flush" );
 ```
 
 Both `queues.logStack()` and `queues.log()` log the function
@@ -234,16 +233,16 @@ that change a value. It logs both:
 You can log what changes CanJS observables and DOM elements:
 
 ```js
-can.debug.logWhatChangesMe(me, "fullName");
-can.debug.logWhatChangesMe(document.querySelector("h1.name"));
+can.debug.logWhatChangesMe( me, "fullName" );
+can.debug.logWhatChangesMe( document.querySelector( "h1.name" ) );
 ```
 
 [can-debug]'s [can-debug.logWhatIChange] reverses [can-debug.logWhatChangesMe]
 and logs what observables are changed by an observable value:
 
 ```js
-can.debug.logWhatIChange(me, "first");
-can.debug.logWhatIChange(document.querySelector("input[name=first]"));
+can.debug.logWhatIChange( me, "first" );
+can.debug.logWhatIChange( document.querySelector( "input[name=first]" ) );
 ```
 
 Finally, [can-debug.drawGraph] can draw these relationships in a graph like the following:
@@ -257,7 +256,7 @@ Finally, [can-debug.drawGraph] can draw these relationships in a graph like the 
 Use [can-view-model] to access a component's viewModel:
 
 ```js
-can.viewModel(document.querySelector("my-component"));
+can.viewModel( document.querySelector( "my-component" ) );
 ```
 
 ## Log when an observable changes.
@@ -271,14 +270,14 @@ map.log();
 This can be quite useful when used with [can-view-model]:
 
 ```js
-can.viewModel(document.querySelector("my-component")).log();
+can.viewModel( document.querySelector( "my-component" ) ).log();
 ```
 
 CanJS's observable map-types like [can-define/map/map] can be passed
 a property name and log when that property changes:
 
 ```js
-map.log("property");
+map.log( "property" );
 ```
 
 ## Debug [can-stache] issues
@@ -306,7 +305,7 @@ When debugger breaks, you have access to the scope and a special `get` function 
 Stache templates also have access the [can-stache.helpers.console] methods, making it
 easy to log value or even test performance.
 
-```js
+```
 {{#if tasksPromise.isResolved}}
   {{ console.log("tasks resolved with", tasksPromise.value) }}
 {{/if}}
@@ -316,18 +315,18 @@ easy to log value or even test performance.
 DOM. This means that `count` will be logged every second in the following component:
 
 ```js
-Component.extend({
-    tag: "my-counter",
-    view: `{{console.log(count)}}`,
-    ViewModel: {
-        count: {
-            value({resolve}) {
-                var count = resolve(0);
-                setInterval(() => {
-                    resolve(++count);
-                }, 1000);
-            }
-        }
-    }
-});
+Component.extend( {
+	tag: "my-counter",
+	view: "{{console.log(count)}}",
+	ViewModel: {
+		count: {
+			value( { resolve } ) {
+				let count = resolve( 0 );
+				setInterval( () => {
+					resolve( ++count );
+				}, 1000 );
+			}
+		}
+	}
+} );
 ```

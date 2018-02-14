@@ -1,56 +1,48 @@
-var Message = can.DefineMap.extend({
+const Message = can.DefineMap.extend( {
 	id: "number",
 	name: "string",
 	body: "string",
 	created_at: "date"
-});
-
-Message.List = can.DefineList.extend({
+} );
+Message.List = can.DefineList.extend( {
 	"#": Message
-});
-
-Message.connection = can.connect.superMap({
+} );
+Message.connection = can.connect.superMap( {
 	url: {
-		resource: 'https://chat.donejs.com/api/messages',
-		contentType: 'application/x-www-form-urlencoded'
+		resource: "https://chat.donejs.com/api/messages",
+		contentType: "application/x-www-form-urlencoded"
 	},
 	Map: Message,
 	List: Message.List,
-	name: 'message'
-});
-
-var ChatMessagesVM = can.DefineMap.extend({
+	name: "message"
+} );
+const ChatMessagesVM = can.DefineMap.extend( {
 	messagesPromise: {
-		default: function(){
-			return Message.getList({});
+		default: function() {
+			return Message.getList( {} );
 		}
 	}
-});
-
-can.Component.extend({
+} );
+can.Component.extend( {
 	tag: "chat-messages",
 	ViewModel: ChatMessagesVM,
-	view: can.stache.from("chat-messages-template")
-});
-
-var AppVM = can.DefineMap.extend({
+	view: can.stache.from( "chat-messages-template" )
+} );
+const AppVM = can.DefineMap.extend( {
 	page: "string",
 	message: {
 		type: "string",
 		default: "Chat Home",
 		serialize: false
 	},
-	addExcitement: function(){
+	addExcitement: function() {
 		this.message = this.message + "!";
 	}
-});
-
-var appVM = new AppVM();
-
+} );
+const appVM = new AppVM();
 can.route.data = appVM;
-can.route("{page}",{page: "home"});
+can.route( "{page}", { page: "home" } );
 can.route.start();
-
-var template = can.stache.from('chat-template');
-var frag = template(appVM);
-document.body.appendChild(frag);
+const template = can.stache.from( "chat-template" );
+const frag = template( appVM );
+document.body.appendChild( frag );

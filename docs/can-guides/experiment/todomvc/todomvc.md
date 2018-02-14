@@ -26,18 +26,17 @@ should import things directly with a module loader like [StealJS](https://stealj
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-
-var Todo = DefineMap.extend({ ... });
-Todo.List = DefineList.extend({ ... });
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+const Todo = DefineMap.extend( { /* ... */ } );
+Todo.List = DefineList.extend( { /* ... */ } );
 ```
 
 Not:
 
 ```js
-var Todo = can.DefineMap.extend({ ... });
-Todo.List = can.DefineList.extend({ ... });
+const Todo = can.DefineMap.extend( { /* ... */ } );
+Todo.List = can.DefineList.extend( { /* ... */ } );
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.

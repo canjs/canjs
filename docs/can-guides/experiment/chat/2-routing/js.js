@@ -1,21 +1,18 @@
-var AppVM = can.DefineMap.extend({
+const AppVM = can.DefineMap.extend( {
 	page: "string",
 	message: {
 		type: "string",
 		default: "Chat Home",
 		serialize: false
 	},
-	addExcitement: function(){
+	addExcitement: function() {
 		this.message = this.message + "!";
 	}
-});
-
-var appVM = new AppVM();
-
+} );
+const appVM = new AppVM();
 can.route.data = appVM;
-can.route("{page}",{page: "home"});
+can.route( "{page}", { page: "home" } );
 can.route.start();
-
-var template = can.stache.from('chat-template');
-var frag = template(appVM);
-document.body.appendChild(frag);
+const template = can.stache.from( "chat-template" );
+const frag = template( appVM );
+document.body.appendChild( frag );

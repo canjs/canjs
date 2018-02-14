@@ -54,29 +54,26 @@ tab, you'll find a `<clock-controls/>` element.  The following code in the `JS` 
 defines the behavior of the `<clock-controls/>` element:
 
 ```js
-const ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
-  time: {
-    value({ resolve }) {
-      const intervalID = setInterval(() => {
-        resolve( new Date() );
-      },1000);
-
-      resolve( new Date() );
-
-      return () => clearInterval(intervalID);
-    }
-  }
-});
-
-can.Component.extend({
-  tag: "clock-controls",
-  ViewModel: ClockControlsVM,
-  view: can.stache(`
-    <p>{{time}}</p>
-    <digital-clock time:from="time"/>
-    <analog-clock time:from="time"/>
-  `)
-});
+const ClockControlsVM = can.DefineMap.extend( "ClockControlsVM", {
+	time: {
+		value( { resolve } ) {
+			const intervalID = setInterval( () => {
+				resolve( new Date() );
+			}, 1000 );
+			resolve( new Date() );
+			return () => clearInterval( intervalID );
+		}
+	}
+} );
+can.Component.extend( {
+	tag: "clock-controls",
+	ViewModel: ClockControlsVM,
+	view: can.stache( `
+<p>{{time}}</p>
+<digital-clock time:from="time"/>
+<analog-clock time:from="time"/>
+` )
+} );
 ```
 
 You'll notice the behavior is defined in two parts.  First is the `ClockControlsVM` type.  This
@@ -89,7 +86,7 @@ One could create an instance of `ClockControlsVM` and explore it's `time` proper
 
 ```js
 const vm = new ClockControlsVM();
-vm.time //-> Wed Nov 01 2017 14:31:25 GMT-0500 (CDT)
+vm.time; //-> Wed Nov 01 2017 14:31:25 GMT-0500 (CDT)
 ```
 
 The next part uses [can-component] to define the behavior of the  `<clock-controls>`
@@ -126,13 +123,13 @@ In this section, we will:
   These methods are often functions on the `ViewModel`.
 - Use [can-define/map/map] to define properties and methods like:
   ```js
-  var DigitalClockVM = can.DefineMap.extend({
-    property: Type, //hint -> time: Date
-    method() {
-        return ...;
-    }
-  })
-  ```
+const DigitalClockVM = can.DefineMap.extend( {
+	property: Type, //hint -> time: Date
+	method() {
+		return { /* ... */ };
+	}
+} );
+```
 - The [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) has
   methods that give you details about that date and time:
   - `date.getSeconds()`
@@ -165,46 +162,46 @@ In this section, we will:
 - A component's viewModel can be defined as an object which will be passed to [can-define/map/map.extend DefineMap.extend]. (hint:`ViewModel: {}`)
 - A viewModel's [can-component/connectedCallback] will be called when the component is inserted into the page and will be passed the `element` like:
   ```js
-  can.Component.extend({
-    tag: "my-element",
-    view: can.stache(`<h1>first child</h1>`),
-    ViewModel: {
-      connectedCallback(element) {
-        element.firstChild //-> <h1>
-      }
-    }
-  });
-  ```
+can.Component.extend( {
+	tag: "my-element",
+	view: can.stache( "<h1>first child</h1>" ),
+	ViewModel: {
+		connectedCallback( element ) {
+			element.firstChild; //-> <h1>
+		}
+	}
+} );
+```
 - To get the [canvas rendering context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
   from a `<canvas>` element use `canvas = canvasElement.getContext('2d')`.
 - To draw a line (or curve), you generally set different style properties of the rendering context like:
   ```js
-  canvas.lineWidth = 4.0
-  canvas.strokeStyle = "#567"
-  ```
+canvas.lineWidth = 4.0;
+canvas.strokeStyle = "#567";
+```
   Then you start path with:
   ```js
-  canvas.beginPath()
-  ```
+canvas.beginPath();
+```
   Then make [arcs](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and [lines](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo)
   for your path like:
   ```js
-  canvas.arc(125,125,125,0,Math.PI * 2,true)
-  ```
+canvas.arc( 125, 125, 125, 0, Math.PI * 2, true );
+```
   Then close the path like:
   ```js
-  canvas.closePath()
-  ```
+canvas.closePath();
+```
   Finally, use `stroke` to actually draw the line:
   ```js
-  canvas.stroke();
-  ```
+canvas.stroke();
+```
 - The following variables will be useful for coordinates:
   ```js
-  this.diameter = 255;
-  this.radius = this.diameter/2 - 5;
-  this.center = this.diameter/2;
-  ```
+this.diameter = 255;
+this.radius = this.diameter / 2 - 5;
+this.center = this.diameter / 2;
+```
 
 ### The solution
 
@@ -228,18 +225,20 @@ In this section, we will:
 
 - [can-event-queue/map/map.listenTo this.listenTo] can be used in a component's `connectedCallback` to listen to changes in the `ViewModel` like:
   ```js
-  can.Component.extend({
-    tag: "analog-clock",
-    ...
+can.Component.extend( {
+	tag: "analog-clock",
+
+	// ...
 	ViewModel: {
-	  connectedCallback() {
-	    this.listenTo("time", (ev, time) => {
-		  ...
-	    });
-	  }
+		connectedCallback() {
+			this.listenTo( "time", ( ev, time ) => {
+
+				// ...
+			} );
+		}
 	}
-  });
-  ```
+} );
+```
 
 - Use [canvas.moveTo(x1,y1)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext/moveTo)
   and [canvas.lineTo(x2,y2)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo)
@@ -259,10 +258,10 @@ In this section, we will:
   Use the following `base60ToRadians` method to convert a number from 0-60 to one between 0 and 2π:
 
   ```js
-  // 60 = 2π
-  const base60ToRadians = (base60Number) =>
-    2 * Math.PI * base60Number / 60;
-  ```
+// 60 = 2π
+const base60ToRadians = ( base60Number ) =>
+	2 * Math.PI * base60Number / 60;
+```
 
 ### The solution
 
@@ -283,12 +282,12 @@ In this section, we will:
     needle should be drawn.
   - `styles` - An object of canvas context style properties and values like:
     ```js
-    {
-      lineWidth: 2.0,
-      strokeStyle: "#FF0000",
-      lineCap: "round"
-    }
-    ```
+{
+	lineWidth: 2.0,
+	strokeStyle: "#FF0000",
+	lineCap: "round"
+}
+```
 
 ### What you need to know
 
@@ -298,20 +297,23 @@ In this section, we will:
   the canvas.
 - Add a function inside the `connectedCallback` that will have access to all the variables created above it like:
   ```js
-  ViewModel: {
-    connectedCallback() {
-      const canvas = element.firstChild.getContext('2d');
-      const diameter = 255;
-      const radius = diameter/2 - 5;
-      const center = diameter/2;
+can.Component.extend( {
 
-      const drawNeedle = (length, base60Distance, styles) => {
-        canvas // -> the canvas element
-        ...
-      };
-    }
-  }
-  ```
+// ...
+	ViewModel: {
+		connectedCallback() {
+			const canvas = element.firstChild.getContext( "2d" );
+			const diameter = 255;
+			const radius = diameter / 2 - 5;
+			const center = diameter / 2;
+			const drawNeedle = ( length, base60Distance, styles ) => {
+				canvas; // -> the canvas element
+				// ...
+			};
+		}
+	}
+} );
+```
 
 ### The solution
 

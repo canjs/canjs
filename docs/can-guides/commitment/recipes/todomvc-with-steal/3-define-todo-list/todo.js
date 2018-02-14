@@ -1,8 +1,7 @@
 // models/todo.js
-import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
-
-var Todo = DefineMap.extend("Todo", {
+import DefineMap from "can-define/map/";
+import DefineList from "can-define/list/";
+const Todo = DefineMap.extend( "Todo", {
 	id: "string",
 	name: "string",
 	complete: {
@@ -12,23 +11,21 @@ var Todo = DefineMap.extend("Todo", {
 	toggleComplete: function() {
 		this.complete = !this.complete;
 	}
-});
-
-Todo.List = DefineList.extend("TodoList", {
+} );
+Todo.List = DefineList.extend( "TodoList", {
 	"#": Todo,
 	get active() {
-		return this.filter({
+		return this.filter( {
 			complete: false
-		});
+		} );
 	},
 	get complete() {
-		return this.filter({
+		return this.filter( {
 			complete: true
-		});
+		} );
 	},
 	get allComplete() {
 		return this.length === this.complete.length;
 	}
-});
-
+} );
 export default Todo;

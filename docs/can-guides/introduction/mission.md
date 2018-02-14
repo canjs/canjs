@@ -106,11 +106,12 @@ __In 2007__, using JavaScriptMVC 1.0, to listen to when any element
 that matches the selector `.todos li.complete` is clicked, you might have written something like the following:
 
 ```js
-new MVC.Controller('todos',{
-    "li.complete click": function(el, ev){
-        // DO STUFF
-    }
-});
+new MVC.Controller( "todos", {
+	"li.complete click": function( el, ev ) {
+
+		// DO STUFF
+	}
+} );
 ```
 
 JavaScriptMVC was one of the first libraries to support event delegation,
@@ -122,26 +123,26 @@ We helped add event delegation to jQuery and integrated it into JavaScriptMVC 2.
 The previous code became:
 
 ```js
-$.Controller.extend("TodosController",{
-    "li.complete click": function(el, ev){
-        // DO STUFF
-    }
-});
+$.Controller.extend( "TodosController", {
+	"li.complete click": function( el, ev ) {
 
-$(".todos").todos_controller();
+		// DO STUFF
+	}
+} );
+$( ".todos" ).todos_controller();
 ```
 @highlight 1,7
 
 __In 2012__, using CanJS 1.0, this became:
 
 ```js
-TodosController = can.Control.extend({
-    "li.complete click": function(el, ev){
-        // DO STUFF
-    }
-});
+TodosController = can.Control.extend( {
+	"li.complete click": function( el, ev ) {
 
-new TodosController(".todos");
+		// DO STUFF
+	}
+} );
+new TodosController( ".todos" );
 ```
 @highlight 1,7
 
@@ -151,15 +152,14 @@ to make that `MVC.Controller` work in CanJS 3.0,
 you could update it to the following:
 
 ```js
-import Control from 'can-control';
+import Control from "can-control";
+const TodosController = Control.extend( {
+	"li.complete click": function( el, ev ) {
 
-var TodosController = Control.extend({
-    "li.complete click": function(el, ev){
-        // DO STUFF
-    }
-});
-
-new TodosController(document.querySelector(".todos"));
+		// DO STUFF
+	}
+} );
+new TodosController( document.querySelector( ".todos" ) );
 ```
 @highlight 1,3,9
 

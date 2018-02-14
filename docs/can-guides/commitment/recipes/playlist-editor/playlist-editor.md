@@ -70,21 +70,21 @@ In this section, we will:
   The following can be used to load the OAuth2 GAPI libraries:
 
   ```js
-  gapi.load('client:auth2', completeCallback);
-  ```
+gapi.load( "client:auth2", completeCallback );
+```
 
   Once this functionality is loaded, we can tell `gapi` to make requests on behalf of a registered
   application.  In this case, the following keys enable this client to make requests on behalf of the
   "CanJS Playlist" application:
 
   ```js
-  gapi.client.init({
-	  'apiKey': 'AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0',
-      'clientId': '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
-      'discoveryDocs': [ 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest' ],
-      'scope': 'https://www.googleapis.com/auth/youtube'
-  }).then( completeCallback )
-  ```
+gapi.client.init( {
+	"apiKey": "AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0",
+	"clientId": "764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com",
+	"discoveryDocs": [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
+	"scope": "https://www.googleapis.com/auth/youtube"
+} ).then( completeCallback );
+```
 
   To use your own key, you can follow the instructions [here](https://developers.google.com/youtube/v3/getting-started). This is not required to complete this guide.
 
@@ -92,12 +92,12 @@ In this section, we will:
   asynchronous behavior. A promise can be created like:
 
   ```js
-  var messagePromise = new Promise(function(resolve, reject){
-    setTimeout(function(){
-		resolve("Hello There")
-	},1000)
-  });
-  ```
+const messagePromise = new Promise( function( resolve, reject ) {
+	setTimeout( function() {
+		resolve( "Hello There" );
+	}, 1000 );
+} );
+```
 
   `resolve` should be called once the promise has a value.  `reject` should be called
   if something goes wrong (like an error).  We say the `messagePromise` _resolves_ with
@@ -106,10 +106,10 @@ In this section, we will:
   Anyone can listen to when `messagePromise` resolves with a value like:
 
   ```js
-  messagePromise.then(function(messageValue){
-	  messageValue //-> "Hello There"
-  });
-  ```
+messagePromise.then( function( messageValue ) {
+	messageValue; //-> "Hello There"
+} );
+```
 
   CanJS can use promises in its [can-stache] templates.  More on that below.
 
@@ -118,16 +118,16 @@ In this section, we will:
 - A [can-stache] template is used to render data into a document fragment:
 
   ```js
-  var template = can.stache("<h1>{{message}}</h1>");
-  var frag = template({message: "Hello World"});
-  frag //-> <h1>Hello World</h1>
-  ```
+const template = can.stache( "<h1>{{message}}</h1>" );
+const frag = template( { message: "Hello World" } );
+frag; //-> <h1>Hello World</h1>
+```
 
 - Load a template from a `<script>` tag with [can-stach.from can.stache.from] like:
 
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  ```  
+const template = can.stache.from( SCRIPT_ID );
+```  
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
@@ -138,31 +138,30 @@ In this section, we will:
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  var Type = can.DefineMap.extend({
-	  message: "string"
-  });
-  ```
+const Type = can.DefineMap.extend( {
+	message: "string"
+} );
+```
 
 - Instances of these [can-define/map/map can.DefineMap] types are often used
   as a ViewModel that controls the behavior of a [can-stache] template (or
   [can-component]).
 
   ```js
-  var PlaylistVM = can.DefineMap.extend({
-	  message: "string"
-  });
-
-  var messageVM = new PlaylistVM();
-  var frag = template(messageVM)
-  ```
+const PlaylistVM = can.DefineMap.extend( {
+	message: "string"
+} );
+const messageVM = new PlaylistVM();
+const frag = template( messageVM );
+```
 
 - `can.DefineMap` can specify a default value and a type:
   ```js
-  var PlaylistVM = can.DefineMap.extend({
-    count: {default: 33}
-  });
-  new PlaylistVM().count //-> 33
-  ```
+const PlaylistVM = can.DefineMap.extend( {
+	count: { default: 33 }
+} );
+new PlaylistVM().count; //-> 33
+```
 
 
 ### The solution
@@ -200,10 +199,10 @@ In this section, we will:
   can be retrieved like:
 
   ```js
-  googleApiLoadedPromise.then(function(){
-	  var googleAuth = gapi.auth2.getAuthInstance()
-  });
-  ```
+googleApiLoadedPromise.then( function() {
+	const googleAuth = gapi.auth2.getAuthInstance();
+} );
+```
 
   With `googleAuth`, you can:
 
@@ -221,56 +220,56 @@ In this section, we will:
   the following defines an `signedOut` property that is the opposite of the `signedIn` property:
 
   ```js
-  DefineMap.extend({
-    signedIn: "boolean",
-    get signedOut(){
-      return !this.signedIn;
-    }
-  });
-  ```
+DefineMap.extend( {
+	signedIn: "boolean",
+	get signedOut() {
+		return !this.signedIn;
+	}
+} );
+```
 
 - Use [can-define.types.get asynchronous getters] to get data from asynchronous sources.  For example:
 
   ```js
-  var PlaylistVM = can.DefineMap.extend({
-    property: {
-      get: function(lastSet, resolve) {
-        apiLoadedPromise.then(function(){
-			resolve( api.getValue() );
-		})
-      }
-    }
-  });
-  ```
+const PlaylistVM = can.DefineMap.extend( {
+	property: {
+		get: function( lastSet, resolve ) {
+			apiLoadedPromise.then( function() {
+				resolve( api.getValue() );
+			} );
+		}
+	}
+} );
+```
 
 - DefineMap's `init` method can be used to perform initialization behavior.  For example,
   the following might initialize `googleApiLoadedPromise`:
 
   ```js
-  DefineMap.extend({
-	  init: function(){
-		  this.googleApiLoadedPromise = googleApiLoadedPromise;
-	  },
-	  googleApiLoadedPromise: "any"
-  })
-  ```
+DefineMap.extend( {
+	init: function() {
+		this.googleApiLoadedPromise = googleApiLoadedPromise;
+	},
+	googleApiLoadedPromise: "any"
+} );
+```
 
 - `DefineMap`'s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 
   ```js
-  DefineMap.extend({
-	  init: function(){
-		  var self = this;
-		  self.on("name", function(){
-		      self.nameChange++;	  
-		  })
-	  },
-	  name: "string",
-	  nameChange: "number"
-  })
-  ```
+DefineMap.extend( {
+	init: function() {
+		const self = this;
+		self.on( "name", function() {
+			self.nameChange++;
+		} );
+	},
+	name: "string",
+	nameChange: "number"
+} );
+```
 
   > NOTE: EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
 
@@ -316,34 +315,34 @@ In this section, we will:
 - Use `gapi.client.youtube.search.list` to search YouTube like:
 
   ```js
-  var googlePromise = gapi.client.youtube.search.list({
-    q: "dogs",
-    part: 'snippet',
-    type: 'video'
-  }).then(function(response){
-    response //-> {
-	// result: {
-	//   items: [
-	//     {
-	//       id: {videoId: "ajsadfa"},
-	//       snippet: {
-	//         title: "dogs",
-	//         thumbnails: {default: {url: "https://example.com/dog.png"}}
-	//       }
-	//     }
-	//   ]
-	// }	 
-	//}
-  });
-  ```
+const googlePromise = gapi.client.youtube.search.list( {
+	q: "dogs",
+	part: "snippet",
+	type: "video"
+} ).then( function( response ) {
+	response; //-> {
+// result: {
+//   items: [
+//     {
+//       id: {videoId: "ajsadfa"},
+//       snippet: {
+//         title: "dogs",
+//         thumbnails: {default: {url: "https://example.com/dog.png"}}
+//       }
+//     }
+//   ]
+// }
+//}
+} );
+```
 
 - To convert a `googlePromise` to a native `Promise` use:
 
   ```js
-  new Promise(function(resolve, reject){
-    googlePromise.then(resolve, reject);	  
-  })
-  ```
+new Promise( function( resolve, reject ) {
+	googlePromise.then( resolve, reject );
+} );
+```
 
 
 ### The solution
@@ -382,11 +381,11 @@ In this section, we will:
   You can bind on them manually with jQuery like:
 
   ```js
-  $(element).on('draginit', function(ev, drag) {
-    drag.limit($(this).parent());
-    drag.horizontal();
-  });
-  ```
+$( element ).on( "draginit", function( ev, drag ) {
+	drag.limit( $( this ).parent() );
+	drag.horizontal();
+} );
+```
 
   Notice that `drag` is the 2nd argument to the event.  You can listen to
   `drag` events in [can-stache] and pass the `drag` argument to a function like:
@@ -400,20 +399,20 @@ In this section, we will:
   wrapped with jQuery.  Add the `ghost` className to style the ghost elements, like:
 
   ```js
-  drag.ghost().addClass("ghost");
-  ```
+drag.ghost().addClass( "ghost" );
+```
 
 - To add a method to a `DefineMap`, just add a function to one of the properties passed
   to extend:
 
   ```js
-  PlaylistVM = DefineMap.extend({
-	startedDrag: function(){
-	  console.log("you did it!")
+PlaylistVM = DefineMap.extend( {
+	startedDrag: function() {
+		console.log( "you did it!" );
 	}
-  });
-  new PlaylistVM().startedDrag();
-  ```
+} );
+new PlaylistVM().startedDrag();
+```
 - Certain browsers have default drag behaviors for certain elements like `<a>` and `<img>`
 	that can be prevented with the `draggable="false"` attribute.
 
@@ -451,32 +450,34 @@ In this section, we will:
   user.  On a high-level, this might look like:
 
   ```js
-  PlaylistVM = DefineMap.extend({
-      ...
-      // {video: video, index: 0}
-	  dropPlaceholderData: "any",
-	  // [video1, video2, ...]
-	  playlistVideos: {
-	     Type: ["any"],
-	     Default: can.DefineList
-	  },
-	  get videosWithDropPlaceholder() {
-         var copyOfPlaylistVideos = this.placeListVideos.map(...);
+PlaylistVM = DefineMap.extend( {
 
-         // insert this.dropPlaceholderData into copyOfPlaylistVideos
+// ...
+// {video: video, index: 0}
+	dropPlaceholderData: "any",
 
-		 return copyOfPlaylistVideos;
-	  }
-  })
-  ```
+	// [video1, video2, ...]
+	playlistVideos: {
+		Type: [ "any" ],
+		Default: can.DefineList
+	},
+	get videosWithDropPlaceholder() {
+		const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
+		// insert this.dropPlaceholderData into copyOfPlaylistVideos
+		return copyOfPlaylistVideos;
+	}
+} );
+```
 
 - The methods that add a placeholder (`addDropPlaceholder`) and
   add video to the playlist (`addVideo`) should take an index like:
 
   ```js
-  addDropPlaceholder: function(index, video) { ... }
-  addVideo: function(index, video) { ... }
-  ```
+{
+	addDropPlaceholder: function( index, video ) { /* ... */ },
+	addVideo: function( index, video ) { /* ... */ }
+}
+```
 
   These functions will be called with `0` as the index for this section.  
 
@@ -492,8 +493,8 @@ In this section, we will:
   You can bind on them manually with jQuery like:
 
   ```js
-  $(element).on('dropon', function(ev, drop, drag) {...});
-  ```
+$( element ).on( "dropon", function( ev, drop, drag ) { /* ... */ } );
+```
 
   Notice that `drop` is now the 2nd argument to the event.  You can listen to
   `drop` events in [can-stache], and pass the `drag` argument to a function, like:
@@ -520,8 +521,8 @@ In this section, we will:
   - [can-util/dom/data/data.get can.data.get] can access this data like:
 
     ```js
-    can.data.get.call(drag.element[0], "dragData");
-    ```
+can.data.get.call( drag.element[ 0 ], "dragData" );
+```
 
 ### The solution
 
@@ -569,39 +570,42 @@ In this section, we will:
   way.  Use [can-control.extend] to define a `can.Control` type, as follows:
 
   ```js
-  var Sortable = can.Control.extend({
-	  ... event handlers and methods ...
-  });
-  ```
+const Sortable = can.Control.extend( {
+
+// event handlers and methods
+} );
+```
 
   To listen to events (like `dragmove`) on a control, use an event handler with `{element} EVENTNAME`,
   as follows:
 
   ```js
-  var Sortable = can.Control.extend({
-	"{element} dropmove": function(el, ev, drop, drag) {
-      // do stuff on dropmove like call method:
-      this.method();
-    },
-	method: function(){
-	  // do something
+const Sortable = can.Control.extend( {
+	"{element} dropmove": function( el, ev, drop, drag ) {
+
+		// do stuff on dropmove like call method:
+		this.method();
+	},
+	method: function() {
+
+		// do something
 	}
-  });
-  ```
+} );
+```
 
   Use `new Control(element)` to create a control on an element.  The following
   would setup the `dropmove` binding on `el`:
 
   ```js
-  new Sortable(el);
-  ```
+new Sortable( el );
+```
 
 - [can-view-callbacks.attr can.view.callbacks.attr] can listen to when a custom attribute is
   found in a [can-stache] template like:
 
   ```js
-  can.view.callbacks.attr("sortable", function(el, attrData) {});
-  ```
+can.view.callbacks.attr( "sortable", function( el, attrData ) {} );
+```
 
   This can be useful to create controls on an element with that attribute.  For example, if a user has:
 
@@ -612,20 +616,20 @@ In this section, we will:
   The following will create the `Sortable` control on that `<ul>`:
 
   ```js
-  can.view.callbacks.attr("sortable", function(el) {
-    new Sortable(el);
-  });
-  ```
+can.view.callbacks.attr( "sortable", function( el ) {
+	new Sortable( el );
+} );
+```
 
 - Use [$.trigger](https://api.jquery.com/trigger/) to fire custom events with jQuery:
 
   ```js
-  $(element).trigger({
-    type: "sortableinsertat",
-    index: 0,
-    dragData: dragData
-  });
-  ```
+$( element ).trigger( {
+	type: "sortableinsertat",
+	index: 0,
+	dragData: dragData
+} );
+```
 
 - Access the event object in a [can-stache-bindings.event] with `%event`, like:
 
@@ -697,52 +701,50 @@ In this section, we will:
   To create a playlist:
 
   ```js
-  var lastPromise = gapi.client.youtube.playlists.insert({
-	part: 'snippet,status',
+const lastPromise = gapi.client.youtube.playlists.insert( {
+	part: "snippet,status",
 	resource: {
-	  snippet: {
-		title: PLAYLIST_NAME,
-		description: 'A private playlist created with the YouTube API and CanJS'
-	  },
-	  status: {
-		privacyStatus: 'private'
-	  }
+		snippet: {
+			title: PLAYLIST_NAME,
+			description: "A private playlist created with the YouTube API and CanJS"
+		},
+		status: {
+			privacyStatus: "private"
+		}
 	}
-  }).then(function(response) {
-	response //->{} response.result.id
-	// result: {
-	//   id: "lk2asf8o"
-	// }
-  });
-  ```
+} ).then( function( response ) {
+	response; //->{} response.result.id
+// result: {
+//   id: "lk2asf8o"
+// }
+} );
+```
 
   To insert something onto the end of it:
 
   ```js
-  gapi.client.youtube.playlistItems.insert({
-    part: 'snippet',
-    resource: {
-      snippet: {
-        playlistId: playlistId,
-        resourceId: video.id
-      }
-    }
-  }).then();
-  ```
+gapi.client.youtube.playlistItems.insert( {
+	part: "snippet",
+	resource: {
+		snippet: {
+			playlistId: playlistId,
+			resourceId: video.id
+		}
+	}
+} ).then();
+```
 
 - These requests must run in order.  You can make one request run after another, like:
 
   ```js
-  lastPromise = makeRequest(1);
-
-  lastPromise = lastPromise.then(function(){
-    return makeRequest(2);	  
-  })
-
-  lastPromise = lastPromise.then(function(){
-    return makeRequest(3);	  
-  })
-  ```
+lastPromise = makeRequest( 1 );
+lastPromise = lastPromise.then( function() {
+	return makeRequest( 2 );
+} );
+lastPromise = lastPromise.then( function() {
+	return makeRequest( 3 );
+} );
+```
 
   When a callback to `.then` returns a promise, `.then` returns a promise that resolves
   after the _inner_ promise has been resolved.
@@ -757,8 +759,8 @@ In this section, we will:
   can be done by listening to `createPlaylistPromise`:
 
   ```js
-  this.on("createPlaylistPromise", function(ev, promise) { ... })
-  ```
+this.on( "createPlaylistPromise", function( ev, promise ) { /* ... */ } );
+```
 
 ### The solution
 

@@ -60,18 +60,22 @@ __A Basic CanJS Setup__
   is created and passed to a View as follows:
 
   ```js
-  // Define the ViewModel type
-  var MyViewModel = can.DefineMap.extend("MyViewModel",{
-   ...      
-  })
-  // Create an instance of the ViewModel
-  var viewModel = new MyViewModel();
-  // Get a View
-  var view = can.stache.from("my-view");
-  // Render the View with the ViewModel instance
-  var frag = view(viewModel);
-  document.body.appendChild(frag);
-  ```
+// Define the ViewModel type
+const MyViewModel = can.DefineMap.extend( "MyViewModel", {
+
+// ...
+} );
+
+// Create an instance of the ViewModel
+const viewModel = new MyViewModel();
+
+// Get a View
+const view = can.stache.from( "my-view" );
+
+// Render the View with the ViewModel instance
+const frag = view( viewModel );
+document.body.appendChild( frag );
+```
 
 - CanJS uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `<script>` tags like:
@@ -94,22 +98,22 @@ __A Basic CanJS Setup__
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  ```
+const template = can.stache.from( SCRIPT_ID );
+```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+const frag = template( {
+	something: { name: "Derek Brunson" }
+} );
+```
 
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
-  ```
+document.body.appendChild( frag );
+```
 
 __Loading Google Maps API__
 
@@ -129,9 +133,9 @@ The following loads [Google Maps API](https://developers.google.com/maps/documen
 It creates a global `googleAPI` promise that resolves when Google Maps is ready.  You can use it like:
 
 ```js
-googleAPI.then(function(){
-    new google.maps.Map( ... );
-})
+googleAPI.then( function() {
+	new google.maps.Map( /* ... */ );
+} );
 ```
 
 __Loading CTA Bus Data__
@@ -140,29 +144,29 @@ This app needs to make requests to the [http://www.ctabustracker.com/](http://ww
 `ctabustracker` API is hosted at:
 
 ```js
-var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
+const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/";
 ```
 
 The API needs a token as part of the request:
 
 ```js
-var token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
+const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
 ```
 
 However, the API does __not__ support cross origin requests.  Therefore, we will request data using
 a proxy hosted at:
 
 ```js
-var proxyUrl = "https://can-cors.herokuapp.com/"
+const proxyUrl = "https://can-cors.herokuapp.com/";
 ```
 
 With that proxy, the requests for this app will look like:
 
 ```js
-fetch("https://can-cors.herokuapp.com/"+
-    "http://www.ctabustracker.com/bustime/api/v2/"+
-    "getroutes"+
-    "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json")
+fetch( "https://can-cors.herokuapp.com/" +
+"http://www.ctabustracker.com/bustime/api/v2/" +
+"getroutes" +
+"?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json" );
 ```
 
 ## Change the app title ##
@@ -176,8 +180,8 @@ In this section, we will:
   to `<h1>CHICAGO CTA BUS TRACKER</h1>`.
 - Let us adjust the title simply by changing the viewModel like:
   ```js
-  viewModel.title = "TITLE UPDATED"
-  ```
+viewModel.title = "TITLE UPDATED";
+```
 
 ![YOUR TITLE HERE](../../../docs/can-guides/commitment/recipes/cta-bus-map/1-app-title.png)
 
@@ -197,20 +201,20 @@ In this section, we will:
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+const AppViewModel = can.DefineMap.extend( {
 	someValue: {
-	  default: "This string"
-	}  
-  });
-  new AppViewModel().someValue //-> "This string"
-  ```
+		default: "This string"
+	}
+} );
+new AppViewModel().someValue; //-> "This string"
+```
 
 ### How to verify it works
 
 Run the following in the `Console` tab:
 
 ```js
-viewModel.title = "TITLE UPDATED"
+viewModel.title = "TITLE UPDATED";
 ```
 
 You should see the title update.
@@ -252,31 +256,30 @@ We will do this by:
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+const AppViewModel = can.DefineMap.extend( {
 	myProperty: {
-	  default: function(){
-		return new Promise( .... );
-	  }
-	}  
-  });
-  new AppViewModel().myProperty //-> Promise
-  ```
+		default: function() {
+			return new Promise( /* ... */ );
+		}
+	}
+} );
+new AppViewModel().myProperty; //-> Promise
+```
 - The [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is an easy way to make requests
   to a URL and get back JSON.  Use it like:
 
   ```js
-  fetch(url).then(function(response){
-	  return response.json();
-  }).then(function(data){
-
-  });
-  ```
+fetch( url ).then( function( response ) {
+	return response.json();
+} ).then( function( data ) {
+} );
+```
 
   You'll want to use the `proxyUrl` and `getRoutesEnpoint` variables to make a request for
   CTA bus routes. The routes service returns data like:
 
   ```js
-  {
+{
 	"bustime-response": {
 		"routes": [
 			{
@@ -284,12 +287,13 @@ We will do this by:
 				"rtnm": "Bronzeville/Union Station",
 				"rtclr": "#336633",
 				"rtdd": "1"
-			},
-            ...
-        ]
-    }
-  }
-  ```
+			}
+
+			// ...
+		]
+	}
+}
+```
 
   Make sure that `routesPromise` will be a Promise that resolves to an array of routes.
 
@@ -297,10 +301,10 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will resolve to
   `{name: "inner"}`:
   ```js
-  var resultPromise = outerPromise.then(function(data){
-      return data.innerData;
-  });
-  ```
+const resultPromise = outerPromise.then( function( data ) {
+	return data.innerData;
+} );
+```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
@@ -347,18 +351,18 @@ We will do this by:
   ```
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
-  var AppViewModel = can.DefineMap.extend({
-	myProperty: "any"  
-  });
-  var viewModel = new AppViewModel({});
-  viewModel.myProperty = ANYTHING;
-  ```
+const AppViewModel = can.DefineMap.extend( {
+	myProperty: "any"
+} );
+const viewModel = new AppViewModel( {} );
+viewModel.myProperty = ANYTHING;
+```
   You'll want to store the selected bus route as `route`.
 - Use `fetch(proxyUrl + getVehiclesEndpoint + "&rt=" + route.rt)`
   to get the vehicles for a particular route. If there is route data, it comes
   back like:
   ```js
-  {
+{
 	"bustime-response": {
 		"vehicle": [
 			{
@@ -375,17 +379,18 @@ We will do this by:
 				"tatripid": "10002232",
 				"tablockid": "X9  -607",
 				"zone": ""
-			},
-            ...
-        ]
-    }
-  }
-  ```
+			}
+
+			// ...
+		]
+	}
+}
+```
 
   If there is an error or no buses, the response looks like:
 
   ```js
-  {
+{
 	"bustime-response": {
 		"error": [
 			{
@@ -394,8 +399,8 @@ We will do this by:
 			}
 		]
 	}
-  }
-  ```
+}
+```
 
 
 ### How to verify it works
@@ -440,19 +445,19 @@ We will do this by:
   ```
 - The [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) method returns a rejected promise with the provided `reason`:
   ```js
-  var rejectedPromise = Promise.reject({message: "something went wrong"});
-  ```
+const rejectedPromise = Promise.reject( { message: "something went wrong" } );
+```
 - Promises can transform data by returning new promises.  For example if `outerPromise`
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will be a rejected promise
   with the `reason` as `{name: "inner"}`:
   ```js
-  var resultPromise = outerPromise.then(function(data){
-      return Promise.reject(data.innerData);
-  });
-  resultPromise.catch(function(reason){
-      reason.name //-> "inner"
-  });
-  ```
+const resultPromise = outerPromise.then( function( data ) {
+	return Promise.reject( data.innerData );
+} );
+resultPromise.catch( function( reason ) {
+	reason.name; //-> "inner"
+} );
+```
 
 ### The solution
 Update the `view` in the __HTML__ tab to:
@@ -490,63 +495,63 @@ We will do this by:
   `Component` with the `tag` of the element:
 
   ```js
-  can.Component.extend({
-    tag: "google-map-view"
-  });
-  ```
+can.Component.extend( {
+	tag: "google-map-view"
+} );
+```
 
   Next, provide the HTML [can-stache] template with the content you want to insert within
   the element.
 
   ```js
-  can.Component.extend({
-    tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`)
-  });
-  ```
+can.Component.extend( {
+	tag: "google-map-view",
+	view: can.stache( "<div class='gmap'/>" )
+} );
+```
 
   Any values you want the custom element to hold must be defined on the `ViewModel`. If the `ViewModel`
   is a plain `Object`, that object will be used to extend [can-define/map/map DefineMap] and create a new
   type.  The following specifies a `map` property that can be any value:
 
   ```js
-  can.Component.extend({
-    tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`),
-    ViewModel: {
-      map: "any"
-    }
-  });
-  ```
+can.Component.extend( {
+	tag: "google-map-view",
+	view: can.stache( "<div class='gmap'/>" ),
+	ViewModel: {
+		map: "any"
+	}
+} );
+```
 
   A ViewModel's [can-component/connectedCallback] can be used to know when the component's element is inserted into the document as follows:
 
   ```js
-  can.Component.extend({
-    tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`),
-    ViewModel: {
-      map: "any"
-      connectedCallback(element) {
-		this // -> the ViewModel instance
-		element // -> the <google-map-view> element
-	  }
-    }
-  });
-  ```
+can.Component.extend( {
+	tag: "google-map-view",
+	view: can.stache( "<div class='gmap'/>" ),
+	ViewModel: {
+		map: "any",
+		connectedCallback( element ) {
+			this; // -> the ViewModel instance
+			element; // -> the <google-map-view> element
+		}
+	}
+} );
+```
 
 - To create a google map, use [new google.map.Map(...)](https://developers.google.com/maps/documentation/javascript/reference) once the
   `googleAPI` has completed loading:
 
   ```js
-  new google.maps.Map(gmapDiv, {
-      zoom: 10,
-      center: {
-          lat: 41.881,
-          lng: -87.623
-      }
-  })
-  ```
+new google.maps.Map( gmapDiv, {
+	zoom: 10,
+	center: {
+		lat: 41.881,
+		lng: -87.623
+	}
+} );
+```
 
 
 ### The solution
@@ -577,7 +582,7 @@ We will do this by:
 ### What you need to know
 
 - [can-stache-bindings.toChild childProp:from] can set a component's ViewModel from another value:
-  ```js
+  ```html
   <google-map-view viewModelProp:from="scopeValue"/>
   ```
 - A component's [can-component.prototype.events] object can be used to listen to events on the
@@ -585,28 +590,30 @@ We will do this by:
   `"{viewModel} propertyName"` like:
 
   ```js
-  can.Component.extend({
-    ...
-    events: {
-      "{viewModel} vehicles": function(viewModel, event, newVehicles) {
-          // do stuff with the newVehicles
-      }      
-    }
-  })
-  ```
+can.Component.extend( {
+
+// ...
+	events: {
+		"{viewModel} vehicles": function( viewModel, event, newVehicles ) {
+
+			// do stuff with the newVehicles
+		}
+	}
+} );
+```
 
 - Use [new google.maps.Marker](https://developers.google.com/maps/documentation/javascript/reference#Marker) to
   add a marker to a map like:
 
   ```js
-  new google.maps.Marker({
-    position: {
-      lat: parseFloat(vehicle.lat),
-      lng: parseFloat(vehicle.lon)
-    },
-    map: this.viewModel.map
-  });
-  ```
+new google.maps.Marker( {
+	position: {
+		lat: parseFloat( vehicle.lat ),
+		lng: parseFloat( vehicle.lon )
+	},
+	map: this.viewModel.map
+} );
+```
 
 ### The solution
 Update the `view` in the __HTML__ tab to:

@@ -1,8 +1,8 @@
 "use strict";
-can.fixture({
-	"/verifyCard": function(request, response) {
-		if (!request.data || !request.data.number || !request.data.pin) {
-			response(400, {});
+can.fixture( {
+	"/verifyCard": function( request, response ) {
+		if ( !request.data || !request.data.number || !request.data.pin ) {
+			response( 400, {} );
 		} else {
 			return {};
 		}
@@ -15,7 +15,7 @@ can.fixture({
 	},
 	"/accounts": function() {
 		return {
-			data: [{
+			data: [ {
 				balance: 100,
 				id: 1,
 				name: "checking"
@@ -23,14 +23,12 @@ can.fixture({
 				balance: 10000,
 				id: 2,
 				name: "savings"
-			}]
+			} ]
 		};
 	}
-});
-
+} );
 can.fixture.delay = 1000;
-
-var Card = can.DefineMap.extend({
+const Card = can.DefineMap.extend( {
 	number: "number",
 	pin: "number",
 	state: {
@@ -38,15 +36,13 @@ var Card = can.DefineMap.extend({
 		serialize: false
 	},
 	verify: function() {
-
 		this.state = "verifying";
-
-		var self = this;
-		return can.ajax({
+		const self = this;
+		return can.ajax( {
 			type: "POST",
 			url: "/verifyCard",
 			data: this.serialize()
-		}).then(
+		} ).then(
 			function() {
 				self.state = "verified";
 				return self;
@@ -54,28 +50,24 @@ var Card = can.DefineMap.extend({
 			function() {
 				self.state = "invalid";
 				return self;
-			});
-
+			} );
 	}
-});
-
-var Account = can.DefineMap.extend("Account", {
+} );
+const Account = can.DefineMap.extend( "Account", {
 	id: "number",
 	balance: "number",
 	name: "string"
-});
-Account.List = can.DefineList.extend("AccountList", {
+} );
+Account.List = can.DefineList.extend( "AccountList", {
 	"#": Account
-});
-
-can.connect.baseMap({
+} );
+can.connect.baseMap( {
 	url: "/accounts",
 	Map: Account,
 	List: Account.List,
 	name: "accounts"
-});
-
-var Transaction = can.DefineMap.extend({
+} );
+const Transaction = can.DefineMap.extend( {
 	account: Account,
 	card: Card,
 	executed: {
@@ -87,48 +79,44 @@ var Transaction = can.DefineMap.extend({
 		default: false
 	},
 	get state() {
-		if (this.executed) {
+		if ( this.executed ) {
 			return "executed";
 		}
-		if (this.executing) {
+		if ( this.executing ) {
 			return "executing";
 		}
+
 		// make sure there’s an amount, account, and card
-		if (this.isReady()) {
+		if ( this.isReady() ) {
 			return "ready";
 		}
 		return "invalid";
 	},
 	execute: function() {
-		if (this.state === "ready") {
-
+		if ( this.state === "ready" ) {
 			this.executing = true;
-
-			var def = this.executeStart(),
-				self = this;
-
-			def.then(function() {
+			const def = this.executeStart(), self = this;
+			def.then( function() {
 				can.batch.start();
-				self.set({
+				self.set( {
 					executing: false,
 					executed: true
-				});
+				} );
 				self.executeEnd();
 				can.batch.stop();
-			});
+			} );
 		}
 	}
-});
-
-var Deposit = Transaction.extend({
+} );
+const Deposit = Transaction.extend( {
 	amount: "number",
 	isReady: function() {
 		return typeof this.amount === "number" &&
-			this.account &&
-			this.card;
+this.account &&
+this.card;
 	},
 	executeStart: function() {
-		return can.ajax({
+		return can.ajax( {
 			type: "POST",
 			url: "/deposit",
 			data: {
@@ -136,22 +124,21 @@ var Deposit = Transaction.extend({
 				accountId: this.account.id,
 				amount: this.amount
 			}
-		});
+		} );
 	},
-	executeEnd: function(data) {
+	executeEnd: function( data ) {
 		this.account.balance = this.account.balance + this.amount;
 	}
-});
-
-var Withdrawal = Transaction.extend({
+} );
+const Withdrawal = Transaction.extend( {
 	amount: "number",
 	isReady: function() {
 		return typeof this.amount === "number" &&
-			this.account &&
-			this.card;
+this.account &&
+this.card;
 	},
 	executeStart: function() {
-		return can.ajax({
+		return can.ajax( {
 			type: "POST",
 			url: "/Withdrawal",
 			data: {
@@ -159,15 +146,15 @@ var Withdrawal = Transaction.extend({
 				accountId: this.account.id,
 				amount: this.amount
 			}
-		});
+		} );
 	},
-	executeEnd: function(data) {
+	executeEnd: function( data ) {
 		this.account.balance = this.account.balance - this.amount;
 	}
-});
+} );
+const ATM = can.DefineMap.extend( {
 
-var ATM = can.DefineMap.extend({
-	// stateful properties
+// stateful properties
 	card: Card,
 	accountsPromise: "*",
 	transactions: can.DefineList,
@@ -177,13 +164,13 @@ var ATM = can.DefineMap.extend({
 		type: "number"
 	},
 	currentTransaction: {
-		set: function(newTransaction) {
-			// if current was executed, move it to transactions array
-			var currentTransaction = this.currentTransaction;
-			if (this.transactions && currentTransaction &&
-				currentTransaction.state === "executed") {
+		set: function( newTransaction ) {
 
-				this.transactions.push(currentTransaction);
+			// if current was executed, move it to transactions array
+			const currentTransaction = this.currentTransaction;
+			if ( this.transactions && currentTransaction &&
+currentTransaction.state === "executed" ) {
+				this.transactions.push( currentTransaction );
 			}
 			return newTransaction;
 		}
@@ -191,18 +178,19 @@ var ATM = can.DefineMap.extend({
 
 	// Derived properties
 	get isVerifyingPin() {
-		return this.card && (this.card.state === "verifying");
+		return this.card && ( this.card.state === "verifying" );
 	},
 	get isTransactionReady() {
-		var currentTransaction = this.currentTransaction;
-		if (currentTransaction) {
+		const currentTransaction = this.currentTransaction;
+		if ( currentTransaction ) {
 			return currentTransaction.state === "ready";
 		}
 	},
 	get isTransactionExecuting() {
-		return this.currentTransaction && (this.currentTransaction.state === "executing");
+		return this.currentTransaction && ( this.currentTransaction.state === "executing" );
 	},
 	get state() {
+
 		// if printingReceipt
 		// if a currentTransaction
 		//    and the transaction is executed -> successfulTransaction
@@ -215,66 +203,60 @@ var ATM = can.DefineMap.extend({
 		//    if pin -> verifyingPin
 		//    else -> readingPin
 		// readingCard
-		if (this.printingReceipt) {
+		if ( this.printingReceipt ) {
 			return "printingReceipt";
 		}
-		var currentTransaction = this.currentTransaction;
-		if (currentTransaction) {
-			if (currentTransaction.state === "executed") {
+		const currentTransaction = this.currentTransaction;
+		if ( currentTransaction ) {
+			if ( currentTransaction.state === "executed" ) {
 				return "successfulTransaction";
 			}
-
-			if (currentTransaction.account) {
-				if (currentTransaction instanceof Deposit) {
+			if ( currentTransaction.account ) {
+				if ( currentTransaction instanceof Deposit ) {
 					return "depositInfo";
 				} else {
 					return "withdrawalInfo";
 				}
 			}
-
-			if (this.accountsPromise) {
+			if ( this.accountsPromise ) {
 				return "pickingAccount";
 			}
 		}
-
-		if (this.card) {
-			if (this.card.state === "verified") {
+		if ( this.card ) {
+			if ( this.card.state === "verified" ) {
 				return "choosingTransaction";
 			}
 			return "readingPin";
 		}
-
 		return "readingCard";
 	},
-	cardNumber: function(number) {
-		this.card = new Card({
+	cardNumber: function( number ) {
+		this.card = new Card( {
 			number: number
-		});
+		} );
 	},
-	pinNumber: function(pin) {
-		var card = this.card;
-		var atm = this;
-
+	pinNumber: function( pin ) {
+		const card = this.card;
+		const atm = this;
 		card.pin = pin;
-		card.verify().then(function(card) {
-			atm.accountsPromise = Account.getList(card.serialize());
+		card.verify().then( function( card ) {
+			atm.accountsPromise = Account.getList( card.serialize() );
 			atm.transactions = new can.DefineList();
-		});
+		} );
 	},
 
 	// Methods
 	chooseDeposit: function() {
-		this.currentTransaction = new Deposit({
+		this.currentTransaction = new Deposit( {
 			card: this.card
-		});
+		} );
 	},
 	chooseWithdraw: function() {
-		this.currentTransaction = new Withdrawal({
+		this.currentTransaction = new Withdrawal( {
 			card: this.card
-		});
+		} );
 	},
-
-	chooseAccount: function(account) {
+	chooseAccount: function( account ) {
 		this.currentTransaction.account = account;
 	},
 	removeTransaction: function() {
@@ -283,10 +265,10 @@ var ATM = can.DefineMap.extend({
 	printReceiptAndExit: function() {
 		this.removeTransaction();
 		this.printingReceipt = true;
-		var self = this;
-		setTimeout(function() {
+		const self = this;
+		setTimeout( function() {
 			self.exit();
-		}, this.receiptTime);
+		}, this.receiptTime );
 	},
 	exit: function() {
 		can.batch.start();
@@ -294,23 +276,20 @@ var ATM = can.DefineMap.extend({
 		this.printingReceipt = false;
 		can.batch.stop();
 	}
-});
-
-can.Component.extend({
+} );
+can.Component.extend( {
 	tag: "atm-machine",
-	view: can.stache.from("atm-template"),
+	view: can.stache.from( "atm-template" ),
 	ViewModel: ATM,
 	helpers: {
-		actionName: function(transaction) {
+		actionName: function( transaction ) {
 			return transaction instanceof Deposit ? "deposited" : "withdrew";
 		},
-		actionPrep: function(transaction) {
+		actionPrep: function( transaction ) {
 			return transaction instanceof Deposit ? "into" : "from";
 		}
 	}
-
-});
-
+} );
 document.body.appendChild(
-	can.stache.from("app-template")({})
+	can.stache.from( "app-template" )( {} )
 );

@@ -19,23 +19,21 @@ on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
 ```js
-import canEvent from 'can-event';
-import assign from 'can-util/js/assign/assign';
+import canEvent from "can-event";
+import assign from "can-util/js/assign/assign";
 
 // Create the Person type
-function Person(){ ... };
-Person.prototype.method = function(){ ... };
-
+function Person() { /* ... */ };
+Person.prototype.method = function() { /* ... */ };
 // Add event mixin:
-assign(Person.prototype, canEvent);
+assign( Person.prototype, canEvent );
 
 // Create an instance
-var me = new Person();
+const me = new Person();
 
 // Now listen and dispatch events!
-me.addEventListener("name", function(){ ... });
-
-me.dispatch("name");
+me.addEventListener( "name", function() { /* ... */ } );
+me.dispatch( "name" );
 ```
 
 [can-event/batch/batch] adds event batching abilities to the [can-event] event system.
@@ -49,19 +47,19 @@ Use [can-observation.add Observation.add] to signal when an an observable value 
 The following makes the `Person` type’s `getName()` observable:
 
 ```js
-import Observation from 'can-observation';
-import canEvent from 'can-event';
-import assign from 'can-util/js/assign/assign';
+import Observation from "can-observation";
+import canEvent from "can-event";
+import assign from "can-util/js/assign/assign";
 
 // Create the Person type
-function Person(){};
-Person.prototype.setName = function(newName){
-	var oldName = this.name;
+function Person() {};
+Person.prototype.setName = function( newName ) {
+	const oldName = this.name;
 	this.name = newName;
-	this.dispatch("name", [newName, oldName]);
+	this.dispatch( "name", [ newName, oldName ] );
 };
-Person.prototype.getName = function(){
-	Observation.add(this, "name");
+Person.prototype.getName = function() {
+	Observation.add( this, "name" );
 	return this.name;
 };
 ```
@@ -70,20 +68,16 @@ The `Observation` constructor can be used, similar to a [can-compute] to observe
 a function’s return value by tracking calls to `Observation.add`
 
 ```js
-var person = new Person();
-person.setName("Justin");
-
-
-var greetingObservation = new Observation(function(){
+const person = new Person();
+person.setName( "Justin" );
+const greetingObservation = new Observation( function() {
 	return person.getName() + " says hi!";
-}, null, function(newValue){
-	console.log(newValue);
-});
+}, null, function( newValue ) {
+	console.log( newValue );
+} );
 greetingObservation.start();
-
-greetingObservation.value //-> "Justin says hi!"
-
-person.setName("Matt") //-> console.logs "Matt says hi!";
+greetingObservation.value; //-> "Justin says hi!"
+person.setName( "Matt" ); //-> console.logs "Matt says hi!";
 ```
 
 ## can-util
@@ -125,11 +119,10 @@ The JS utilities consist of:
 templates.
 
 ```js
-import callbacks from 'can-view-callbacks';
-
-callbacks.tag("blue-el", function(el){
-    el.style.background = "blue";
-});
+import callbacks from "can-view-callbacks";
+callbacks.tag( "blue-el", function( el ) {
+	el.style.background = "blue";
+} );
 ```
 
 ## can-view-live
@@ -137,21 +130,15 @@ callbacks.tag("blue-el", function(el){
 Sets up a live-binding between the DOM and a compute.
 
 ```js
-import live from 'can-view-live';
-import compute from 'can-compute';
-import frag from 'can-util/dom/frag/frag';
-
-var message = compute("World");
-
-var content = frag("Hello","","!");
-
-live.text(content.childNodes[1], message);
-
-document.body.appendChild(content);
-
-message("Earth");
-
-document.body.innerHTML //-> Hello Earth!
+import live from "can-view-live";
+import compute from "can-compute";
+import frag from "can-util/dom/frag/frag";
+const message = compute( "World" );
+const content = frag( "Hello", "", "!" );
+live.text( content.childNodes[ 1 ], message );
+document.body.appendChild( content );
+message( "Earth" );
+document.body.innerHTML; //-> Hello Earth!
 ```
 
 ## can-view-nodelist
@@ -181,19 +168,15 @@ html content resulting from that helper (`<b>Justin</b>`).
 [can-view-parser] parses HTML and handlebars/mustache tokens.  
 
 ```js
-import parser from 'can-view-parser';
-
-var html = '<h1><span first="foo"></span><span second="bar"></span></h1>';
-
-var attrs = [];
-
-parser(html, {
-    attrStart: function(attrName){
-        attrs.push(attrName)
-    }
-});
-
-attrs //-> ["first", "second"]
+import parser from "can-view-parser";
+const html = "<h1><span first=\"foo\"></span><span second=\"bar\"></span></h1>";
+const attrs = [];
+parser( html, {
+	attrStart: function( attrName ) {
+		attrs.push( attrName );
+	}
+} );
+attrs; //-> ["first", "second"]
 ```
 
 ## can-view-scope
@@ -202,15 +185,14 @@ attrs //-> ["first", "second"]
 to a call object in closure in JavaScript.  Consider how `message`, `first`, and `last` are looked up in the following JavaScript:
 
 ```js
-var message = "Hello"
-function outer(){
-    var last = "Abril";
-
-    function inner(){
-        var first = "Alexis";
-        console.log(message + " "+ first + " " + last);
-    }
-    inner();
+const message = "Hello";
+function outer() {
+	const last = "Abril";
+	function inner() {
+		const first = "Alexis";
+		console.log( message + " " + first + " " + last );
+	}
+	inner();
 }
 outer();
 ```
@@ -218,12 +200,12 @@ outer();
 [can-view-scope] can be used to create a similar lookup path:
 
 ```js
-var globalScope = new Scope({message: "Hello"});
-var outerScope = globalScope.add({last: "Abril"});
-var innerScope = outerScope.add({first: "Alexis"});
-innerScope.get("message") //-> Hello
-innerScope.get("first")   //-> Alexis
-innerScope.get("last")    //-> Abril
+const globalScope = new Scope( { message: "Hello" } );
+const outerScope = globalScope.add( { last: "Abril" } );
+const innerScope = outerScope.add( { first: "Alexis" } );
+innerScope.get( "message" ); //-> Hello
+innerScope.get( "first" );   //-> Alexis
+innerScope.get( "last" );    //-> Abril
 ```
 
 ## can-view-target
@@ -232,29 +214,26 @@ innerScope.get("last")    //-> Abril
 have callbacks called quickly on specific elements within the cloned fragment.
 
 ```js
-import viewTarget from 'can-view-target';
-
-var target = viewTarget([
-    {
-        tag: "h1",
-        callbacks: [function(data){
-            this.className = data.className
-        }],
-        children: [
-            "Hello ",
-            function(){
-                this.nodeValue = data.message
-            }
-        ]
-    },
-]);
+import viewTarget from "can-view-target";
+const target = viewTarget( [
+	{
+		tag: "h1",
+		callbacks: [ function( data ) {
+			this.className = data.className;
+		} ],
+		children: [
+			"Hello ",
+			function() {
+				this.nodeValue = data.message;
+			}
+		]
+	}
+] );
 
 // target.clone -> <h1>|Hello||</h1>
 // target.paths -> path: [0], callbacks: [], children: {paths: [1], callbacks:[function(){}]}
-
-var frag = target.hydrate({className: "title", message: "World"});
-
-frag //-> <h1 class='title'>Hello World</h1>
+const frag = target.hydrate( { className: "title", message: "World" } );
+frag; //-> <h1 class='title'>Hello World</h1>
 ```
 
 ## can-cid
@@ -262,13 +241,12 @@ frag //-> <h1 class='title'>Hello World</h1>
 [can-cid] is used to get a unique identifier for an object, optionally prefixed by a type name. Once set, the unique identifier does not change, even if the type name changes on subsequent calls.
 
 ```js
-import cid from 'can-cid';
-var x = {};
-var y = {};
-
-console.log(cid(x, "demo")); // -> "demo1"
-console.log(cid(x, "prod")); // -> "demo1"
-console.log(cid(y));         // -> "2"
+import cid from "can-cid";
+const x = {};
+const y = {};
+console.log( cid( x, "demo" ) ); // -> "demo1"
+console.log( cid( x, "prod" ) ); // -> "demo1"
+console.log( cid( y ) );         // -> "2"
 ```
 
 ## can-types
@@ -276,10 +254,10 @@ console.log(cid(y));         // -> "2"
 [can-types] is used to provide default types or test if something is of a certain type.
 
 ```js
-import types from 'can-types';
-var oldIsMapLike = types.isMapLike;
-types.isMapLike = function(obj){
-  return obj instanceof DefineMap || oldIsMapLike.apply(this, arguments);
+import types from "can-types";
+const oldIsMapLike = types.isMapLike;
+types.isMapLike = function( obj ) {
+	return obj instanceof DefineMap || oldIsMapLike.apply( this, arguments );
 };
 types.DefaultMap = DefineMap;
 ```
@@ -289,18 +267,15 @@ types.DefaultMap = DefineMap;
 [can-namespace] is a namespace where can-* packages can be registered.
 
 ```js
-import namespace from 'can-namespace';
+import namespace from "can-namespace";
+const unicorn = {
 
-var unicorn = {
-	// ...
+// ...
 };
-
-if (namespace.unicorn) {
-	throw new Error("You can't have two versions of can-unicorn, check your dependencies");
+if ( namespace.unicorn ) {
+	throw new Error( "You can't have two versions of can-unicorn, check your dependencies" );
 }
-
 export default namespace.unicorn = unicorn;
-
 ```
 
 ## can-symbol
@@ -308,10 +283,9 @@ export default namespace.unicorn = unicorn;
 [can-symbol] contains Symbols used to detail how CanJS may operate on different objects.
 
 ```js
-var MyIDSymbol = CanSymbol("my_ID");
-
-var obj = {};
-obj[MyIDSymbol] = 1;
+const MyIDSymbol = CanSymbol( "my_ID" );
+const obj = {};
+obj[ MyIDSymbol ] = 1;
 ```
 
 ## can-reflect
@@ -319,7 +293,6 @@ obj[MyIDSymbol] = 1;
 [can-reflect] allows reflection on unknown data types.
 
 ```js
-var foo = new DefineMap({ bar: "baz" });
-
-canReflect.getKeyValue(foo, "bar"); // -> "baz"
+const foo = new DefineMap( { bar: "baz" } );
+canReflect.getKeyValue( foo, "bar" ); // -> "baz"
 ```

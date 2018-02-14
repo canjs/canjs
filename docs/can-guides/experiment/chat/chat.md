@@ -24,18 +24,17 @@ should import things directly with a module loader like [StealJS](https://stealj
 WebPack or Browserify.  In a real app, your code will look like:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-
-var Message = DefineMap.extend({ ... });
-Message.List = DefineList.extend({ ... });
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+const Message = DefineMap.extend( { /* ... */ } );
+Message.List = DefineList.extend( { /* ... */ } );
 ```
 
 Not:
 
 ```js
-var Message = can.DefineMap.extend({ ... });
-Message.List = can.DefineList.extend({ ... });
+const Message = can.DefineMap.extend( { /* ... */ } );
+Message.List = can.DefineList.extend( { /* ... */ } );
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.
@@ -277,27 +276,27 @@ The [can-connect/can/super-map/super-map super-map module] adds [can-connect/can
 
  - Get a list of messages:
    ```js
-   Message.getList({}).then(function(messages){})
-   ```
+Message.getList( {} ).then( function( messages ) {} );
+```
 
  - Get a single message:
    ```js
-   Message.get({id: 5}).then(function(message){})
-   ```
+Message.get( { id: 5 } ).then( function( message ) {} );
+```
  - Create a message on the server:
    ```js
-   message = new Message({name: "You", body: "Hello World"})
-   message.save()
-   ```
+message = new Message( { name: "You", body: "Hello World" } );
+message.save();
+```
  - Update a message on the server:
    ```js
-   message.body = "Welcome Earth!";
-   message.save();
-   ```
+message.body = "Welcome Earth!";
+message.save();
+```
  - Delete message on the server:
    ```js
-   message.destroy();
-   ```
+message.destroy();
+```
 
 There are also methods to let you know when a message
 [can-connect/can/map/map.prototype.isNew],

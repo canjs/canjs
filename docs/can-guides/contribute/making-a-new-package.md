@@ -141,8 +141,8 @@ In the root directory of the project, locate the appropriate JavaScript file.
 
 Open the desired file and require the source project. For infrastructure and core packages, use the `can.js` file.
 
-```javascript
-require('<SOURCE_PACKAGE_NAME>');
+```js
+require( "<SOURCE_PACKAGE_NAME>" );
 ```
 
 For example, in [CanJS](https://github.com/canjs/canjs/blob/e3301daad996df01463a623d50b38bd5091c9b35/ecosystem.js#L4), we have included the [can-fixture] project.
@@ -155,46 +155,45 @@ If you can't you might need to:
 - Add your pacakge's export to [can-namespace] like:
 
   ```js
-  var namespace = require("can-namespace");
-
-  var myCoolThing = {};
-  module.exports = can.myCoolThing = myCoolThing
-  ```
+import namespace from "can-namespace";
+const myCoolThing = {};
+export default can.myCoolThing = myCoolThing;
+```
 
 - Make sure to exclude any 3rd-party projects from `canjs/build.js` like:
 
   ```js
-  var ignoreModuleNamesStartingWith = [
-  	"jquery",
+const ignoreModuleNamesStartingWith = [
+	"jquery",
 	"SOME_OTHER_LIBRARY"
-  	...
-  ]
-  ```
+
+// ...
+];
+```
 
   And train them to be loaded globally on the `window` like:
 
   ```js
-  var exportsMap = {
-      "jquery": "jQuery",
-      "SOME_OTHER_LIBRARY": "SomeOtherLibrary"
-	  ...
-  };
-  ```
+const exportsMap = {
+	"jquery": "jQuery",
+	"SOME_OTHER_LIBRARY": "SomeOtherLibrary"
+
+// ...
+};
+```
 
   And make sure your package's modules are able to run without
   the library:
 
   ```js
-  var namespace = require("can-namespace");
-  var SomeOtherLibrary = require("SOME_OTHER_LIBRARY");
-
-  var myCoolThing;
-  if(SomeOtherLibrary) {
-	  myCoolThing = SomeOtherLibrary({});
-  }
-
-  module.exports = can.myCoolThing = myCoolThing
-  ```
+import namespace from "can-namespace";
+import SomeOtherLibrary from "SOME_OTHER_LIBRARY";
+let myCoolThing;
+if ( SomeOtherLibrary ) {
+	myCoolThing = SomeOtherLibrary( {} );
+}
+export default can.myCoolThing = myCoolThing;
+```
 
 
 ## Integrate tests with CanJS

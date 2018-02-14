@@ -46,31 +46,30 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 - A [can-stache] template can be loaded from a `<script>` tag with [can-stache.from can.stache.from] and used to render data into a document fragment:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  var frag = template({message: "Hello World"});
-  frag //-> <h1>Hello World</h1>
-  ```
+const template = can.stache.from( SCRIPT_ID );
+const frag = template( { message: "Hello World" } );
+frag; //-> <h1>Hello World</h1>
+```
 
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  var Type = can.DefineMap.extend({
-	  message: "string"
-  });
-  ```
+const Type = can.DefineMap.extend( {
+	message: "string"
+} );
+```
 
 - Instances of these [can-define/map/map can.DefineMap] types are often used
   as a ViewModel that controls the behavior of a [can-stache] template (or
   [can-component]).
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
-	  message: "string"
-  });
-
-  var messageVM = new MessageViewModel();
-  var frag = template(messageVM)
-  ```
+const MessageViewModel = can.DefineMap.extend( {
+	message: "string"
+} );
+const messageVM = new MessageViewModel();
+const frag = template( messageVM );
+```
 
 ### The solution
 
@@ -121,15 +120,12 @@ Update the __JavaScript__ tab to:
 - Insert the rendered result into the page.
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
-
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const WeatherViewModel = can.DefineMap.extend( {
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 1-9
 
@@ -148,10 +144,10 @@ We want an `input` element to:
   a `DefineMap`.  The simplest way is `propName: "<TYPE>"` like:
 
   ```js
-  DefineMap.extend({
-    property: "string"	  
-  })
-  ```
+DefineMap.extend( {
+	property: "string"
+} );
+```
 - The [can-stache-bindings.toParent] can set an input’s `value` to
   a ViewModel property like:
 
@@ -172,15 +168,13 @@ We want an `input` element to:
 Update the __JavaScript__ tab to define a `location` property as a string.
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
-  location: "string"
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const WeatherViewModel = can.DefineMap.extend( {
+	location: "string"
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 2
 
@@ -242,13 +236,13 @@ on the page.
   the following defines an `excitedMessage` property that always has a `!` after the `message` property:
 
   ```js
-  DefineMap.extend({
-    message: "string",
-    get excitedMessage(){
-      return this.message+"!";
-    }
-  });
-  ```
+DefineMap.extend( {
+	message: "string",
+	get excitedMessage() {
+		return this.message + "!";
+	}
+} );
+```
 
 - [YQL](https://developer.yahoo.com/yql/console/) provides a service endpoint for
   retrieving a list of places that match some text.  For example, the following requests all
@@ -267,19 +261,18 @@ on the page.
   to a URL and get back JSON.  Use it like:
 
   ```js
-  fetch(url).then(function(response){
-	  return response.json();
-  }).then(function(data){
-
-  });
-  ```
+fetch( url ).then( function( response ) {
+	return response.json();
+} ).then( function( data ) {
+} );
+```
 
 - [can-util/js/param/param can.param] is able to convert an object into a
   query string format like:
 
   ```js
-  can.param({format: "json", q: "select"}) //-> "format=json&q=select"
-  ```  
+can.param( { format: "json", q: "select" } ); //-> "format=json&q=select"
+```  
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
@@ -346,37 +339,34 @@ Update the __JavaScript__ tab to:
    stays consistent.  
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-var WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-      return fetch(
-        yqlURL +
-        can.param({
-          q: 'select * from geo.places where text="'+this.location+'"',
-          format: "json"
-        })
-      ).then(function(response){
-        return response.json();
-      }).then(function(data){
-        console.log(data);
-        if(Array.isArray(data.query.results.place)) {
-          return data.query.results.place;
-        } else {
-          return [data.query.results.place];
-        }
-      });
-    }
-  }
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const WeatherViewModel = can.DefineMap.extend( {
+	location: "string",
+	get placesPromise() {
+		if ( this.location && this.location.length > 2 ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from geo.places where text=\"" + this.location + "\"",
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( data );
+				if ( Array.isArray( data.query.results.place ) ) {
+					return data.query.results.place;
+				} else {
+					return [ data.query.results.place ];
+				}
+			} );
+		}
+	}
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 1,5-24,only
 
@@ -398,11 +388,11 @@ When a user clicks on a place, we need to indicate their selection.
 
   For example, the `this` in `this.name` refers to the `context` object:
 
-  ```javascript
-  var template = stache("{{this.name}}");
-  var context = {name: "Justin"};
-  template(context);
-  ```
+  ```js
+const template = stache( "{{this.name}}" );
+const context = { name: "Justin" };
+template( context );
+```
 
   Or, when looping through a list of items, `this` refers to each item:
 
@@ -417,23 +407,23 @@ When a user clicks on a place, we need to indicate their selection.
   accepting any data type like:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
-	  message: "string",
-	  metaData: "any"
-  })
-  ```
+const MessageViewModel = can.DefineMap.extend( {
+	message: "string",
+	metaData: "any"
+} );
+```
 
 - `can.DefineMap` can also have methods:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
-	  message: "string",
-	  metaData: "any",
-	  sayHi: function(){
-	    this.message = "Hello";
-	  }
-  });
-  ```
+const MessageViewModel = can.DefineMap.extend( {
+	message: "string",
+	metaData: "any",
+	sayHi: function() {
+		this.message = "Hello";
+	}
+} );
+```
 
 ### The solution
 
@@ -493,41 +483,38 @@ Update the __JavaScript__ tab to:
 2.  Define a `pickPlace` method that sets the place property.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-var WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response){
-		  return response.json();
-	  }).then(function(data){
-		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
-            return data.query.results.place;
-          } else {
-            return [data.query.results.place];
-          }
-	  });
-    }
-  },
-  place: "any",
-  pickPlace: function(place){
-    this.place = place;
-  }
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const WeatherViewModel = can.DefineMap.extend( {
+	location: "string",
+	get placesPromise() {
+		if ( this.location && this.location.length > 2 ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from geo.places where text=\"" + this.location + "\"",
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( data );
+				if ( Array.isArray( data.query.results.place ) ) {
+					return data.query.results.place;
+				} else {
+					return [ data.query.results.place ];
+				}
+			} );
+		}
+	},
+	place: "any",
+	pickPlace: function( place ) {
+		this.place = place;
+	}
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 25-28,only
 
@@ -619,62 +606,58 @@ Update the __JavaScript__ tab to:
 2. Define a `toClassName` method that lowercases and hyphenates any text passed in.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-var WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response){
-		  return response.json();
-	  }).then(function(data){
-		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
-            return data.query.results.place;
-          } else {
-            return [data.query.results.place];
-          }
-	  });
-    }
-  },
-  place: "any",
-  pickPlace: function(place){
-    this.place = place;
-  },
-  get forecastPromise(){
-    if( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response){
-  		  return response.json();
-  	  }).then(function(data){
-        console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
-
-        return forecast;
-      });
-    }
-  },
-  toClassName: function(text){
-	return text.toLowerCase().replace(/ /g, "-");
-  }
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const WeatherViewModel = can.DefineMap.extend( {
+	location: "string",
+	get placesPromise() {
+		if ( this.location && this.location.length > 2 ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from geo.places where text=\"" + this.location + "\"",
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( data );
+				if ( Array.isArray( data.query.results.place ) ) {
+					return data.query.results.place;
+				} else {
+					return [ data.query.results.place ];
+				}
+			} );
+		}
+	},
+	place: "any",
+	pickPlace: function( place ) {
+		this.place = place;
+	},
+	get forecastPromise() {
+		if ( this.place ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from weather.forecast where woeid=" + this.place.woeid,
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( "forecast data", data );
+				const forecast = data.query.results.channel.item.forecast;
+				return forecast;
+			} );
+		}
+	},
+	toClassName: function( text ) {
+		return text.toLowerCase().replace( / /g, "-" );
+	}
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 29-49,only
 
@@ -690,83 +673,79 @@ other city is still visible.  Let’s hide it!
 - `DefineMap` [can-define.types.set setter]'s can be used to add behavior when a property is set like:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
-    message: {
-	  type: "string",
-	  set: function(){
-	    this.metaData = null;
-	  }
+const MessageViewModel = can.DefineMap.extend( {
+	message: {
+		type: "string",
+		set: function() {
+			this.metaData = null;
+		}
 	},
-    metaData: "any",
-  });
-  ```
+	metaData: "any"
+} );
+```
 
 ### The solution
 
 Update the __JavaScript__ tab to set the `place` property to null when the `location` changes.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-var WeatherViewModel = can.DefineMap.extend({
-  location: {
-    type: "string",
-    set: function(){
-      this.place = null;
-    }
-  },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response){
-		  return response.json();
-	  }).then(function(data){
-		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
-            return data.query.results.place;
-          } else {
-            return [data.query.results.place];
-          }
-	  });
-    }
-  },
-  place: "any",
-  pickPlace: function(place){
-    this.place = place;
-  },
-  get forecastPromise(){
-    if( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response){
-  		  return response.json();
-  	  }).then(function(data){
-        console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
-
-        return forecast;
-      });
-    }
-  },
-  toClassName: function(text){
-	return text.toLowerCase().replace(/ /g, "-");
-  }
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const WeatherViewModel = can.DefineMap.extend( {
+	location: {
+		type: "string",
+		set: function() {
+			this.place = null;
+		}
+	},
+	get placesPromise() {
+		if ( this.location && this.location.length > 2 ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from geo.places where text=\"" + this.location + "\"",
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( data );
+				if ( Array.isArray( data.query.results.place ) ) {
+					return data.query.results.place;
+				} else {
+					return [ data.query.results.place ];
+				}
+			} );
+		}
+	},
+	place: "any",
+	pickPlace: function( place ) {
+		this.place = place;
+	},
+	get forecastPromise() {
+		if ( this.place ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from weather.forecast where woeid=" + this.place.woeid,
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( "forecast data", data );
+				const forecast = data.query.results.channel.item.forecast;
+				return forecast;
+			} );
+		}
+	},
+	toClassName: function( text ) {
+		return text.toLowerCase().replace( / /g, "-" );
+	}
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 4-9,only
 
@@ -783,41 +762,39 @@ user to select their place; instead, we should show the forecast immediately.
   property can be derived from either the set value or other properties.
 
   ```js
-  var MessageVM = can.DefineMap.extend({
-    username: "string",
-    message: {
-      get: function(lastSet) {
-        if(lastSet) {
-          return lastSet;
-        } else {
-          return "Hello "+this.username;
-        }
-      }
-    }
-  });
-
-  var messageVM = new MessageVM({username: "Hank"});
-  messageVM.message //-> "Hello Hank";
-
-  messageVM.message = "Welcome to Earth";
-  messageVM.message //-> "Welcome to Earth"
-  ```
+const MessageVM = can.DefineMap.extend( {
+	username: "string",
+	message: {
+		get: function( lastSet ) {
+			if ( lastSet ) {
+				return lastSet;
+			} else {
+				return "Hello " + this.username;
+			}
+		}
+	}
+} );
+const messageVM = new MessageVM( { username: "Hank" } );
+messageVM.message; //-> "Hello Hank";
+messageVM.message = "Welcome to Earth";
+messageVM.message; //-> "Welcome to Earth"
+```
 
 - Use [can-define.types.get asynchronous getters] to derive data from asynchronous sources.  For example:
 
   ```js
-  var MessageVM = can.DefineMap.extend({
-    messageId: "string",
-    message: {
-      get: function(lastSet, resolve) {
-        fetch("/message/"+this.messageId)
-        .then(function(response){
-          return response.json();
-        }).then(resolve);
-      }
-    }
-  });
-  ```
+const MessageVM = can.DefineMap.extend( {
+	messageId: "string",
+	message: {
+		get: function( lastSet, resolve ) {
+			fetch( "/message/" + this.messageId )
+				.then( function( response ) {
+					return response.json();
+				} ).then( resolve );
+		}
+	}
+} );
+```
 
 ### The solution
 
@@ -880,88 +857,84 @@ Update the __JavaScript__ tab to:
 3. Update the `place` property to default to the first item in `places` if there is only one item.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-var WeatherViewModel = can.DefineMap.extend({
-  location: {
-    type: "string",
-    set: function(){
-      this.place = null;
-    }
-  },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response){
-		  return response.json();
-	  }).then(function(data){
-		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
-            return data.query.results.place;
-          } else {
-            return [data.query.results.place];
-          }
-	  });
-    }
-  },
-  places: {
-    get: function(lastSet, resolve) {
-      if(this.placesPromise) {
-        this.placesPromise.then(resolve)
-      }
-    }
-  },
-  get showPlacePicker(){
-    return !this.place && this.places && this.places.length > 1;
-  },
-  place: {
-    type: "any",
-    get: function(lastSet){
-      if(lastSet) {
-        return lastSet;
-      } else {
-        if(this.places && this.places.length === 1) {
-          return this.places[0];
-        }
-      }
-    }
-  },
-  pickPlace: function(place){
-    this.place = place;
-  },
-  get forecastPromise(){
-    if( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response){
-  		  return response.json();
-  	  }).then(function(data){
-        console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
-
-        return forecast;
-      });
-    }
-  },
-  toClassName: function(text){
-		return text.toLowerCase().replace(/ /g, "-");
-  }
-});
-
-var vm = new WeatherViewModel();
-
-var template = can.stache.from("app-template");
-var frag = template( vm );
-document.body.appendChild(frag);
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const WeatherViewModel = can.DefineMap.extend( {
+	location: {
+		type: "string",
+		set: function() {
+			this.place = null;
+		}
+	},
+	get placesPromise() {
+		if ( this.location && this.location.length > 2 ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from geo.places where text=\"" + this.location + "\"",
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( data );
+				if ( Array.isArray( data.query.results.place ) ) {
+					return data.query.results.place;
+				} else {
+					return [ data.query.results.place ];
+				}
+			} );
+		}
+	},
+	places: {
+		get: function( lastSet, resolve ) {
+			if ( this.placesPromise ) {
+				this.placesPromise.then( resolve );
+			}
+		}
+	},
+	get showPlacePicker() {
+		return !this.place && this.places && this.places.length > 1;
+	},
+	place: {
+		type: "any",
+		get: function( lastSet ) {
+			if ( lastSet ) {
+				return lastSet;
+			} else {
+				if ( this.places && this.places.length === 1 ) {
+					return this.places[ 0 ];
+				}
+			}
+		}
+	},
+	pickPlace: function( place ) {
+		this.place = place;
+	},
+	get forecastPromise() {
+		if ( this.place ) {
+			return fetch(
+				yqlURL +
+can.param( {
+	q: "select * from weather.forecast where woeid=" + this.place.woeid,
+	format: "json"
+} )
+			).then( function( response ) {
+				return response.json();
+			} ).then( function( data ) {
+				console.log( "forecast data", data );
+				const forecast = data.query.results.channel.item.forecast;
+				return forecast;
+			} );
+		}
+	},
+	toClassName: function( text ) {
+		return text.toLowerCase().replace( / /g, "-" );
+	}
+} );
+const vm = new WeatherViewModel();
+const template = can.stache.from( "app-template" );
+const frag = template( vm );
+document.body.appendChild( frag );
 ```
 @highlight 30-51,only
 
