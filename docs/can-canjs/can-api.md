@@ -39,13 +39,13 @@ as a shorthand:
 
 ```js
 import can from "can";
-can.DefineMap
-can.DefineList
-can.stache
-can.Component
-can.route
-can.connect
-can.set
+can.DefineMap;
+can.DefineList;
+can.stache;
+can.Component;
+can.route;
+can.connect;
+can.set;
 ```
 
 The `can` package also serves as a integration test of all of

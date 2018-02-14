@@ -70,18 +70,22 @@ viewModel.amount = 1000;
   is created and passed to a View as follows:
 
   ```js
-  // Define the ViewModel type
-  var MyViewModel = can.DefineMap.extend("MyViewModel",{
-   ...      
-  })
-  // Create an instance of the ViewModel
-  var viewModel = new MyViewModel();
-  // Get a View
-  var view = can.stache.from("my-view");
-  // Render the View with the ViewModel instance
-  var frag = view(viewModel);
-  document.body.appendChild(frag);
-  ```
+// Define the ViewModel type
+const MyViewModel = can.DefineMap.extend( "MyViewModel", {
+
+// ...
+} );
+
+// Create an instance of the ViewModel
+const viewModel = new MyViewModel();
+
+// Get a View
+const view = can.stache.from( "my-view" );
+
+// Render the View with the ViewModel instance
+const frag = view( viewModel );
+document.body.appendChild( frag );
+```
 
 - CanJS uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `<script>` tags like:
@@ -104,44 +108,41 @@ viewModel.amount = 1000;
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  ```
+const template = can.stache.from( SCRIPT_ID );
+```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+const frag = template( {
+	something: { name: "Derek Brunson" }
+} );
+```
 
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
-  ```
+document.body.appendChild( frag );
+```
 
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:
 
   ```js
-  ProductVM = can.DefineMap.extend("ProductVM",{
-    age: {default: 34}
-  })
-  ```
+ProductVM = can.DefineMap.extend( "ProductVM", {
+	age: { default: 34 }
+} );
+```
 
   This lets you create instances of that type, get & set those properties, and listen to changes like:
 
   ```js
-  var productVM = new ProductVM({});
-
-  productVM.age //-> 34
-
-  productVM.on("age", function(ev, newAge){
-    console.log("person age changed to ", newAge);
-  });
-
-  productVM.age = 35 //-> logs "person age changed to 35"
-  ```
+const productVM = new ProductVM( {} );
+productVM.age; //-> 34
+productVM.on( "age", function( ev, newAge ) {
+	console.log( "person age changed to ", newAge );
+} );
+productVM.age = 35; //-> logs "person age changed to 35"
+```
 
 
 
@@ -187,11 +188,11 @@ Print out the exported values like:
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
-    name: "string",
-    age: "number"
-  })
-  ```
+Person = can.DefineMap.extend( "Person", {
+	name: "string",
+	age: "number"
+} );
+```
 
 ### The solution
 
@@ -232,13 +233,13 @@ So that we can print out the values like:
   first word of the `fullName` property:
 
   ```js
-  DefineMap.extend({
-    fullName: "string",
-    get firstName(){
-      return this.fullName.split(" ")[0];
-    }
-  });
-  ```
+DefineMap.extend( {
+	fullName: "string",
+	get firstName() {
+		return this.fullName.split( " " )[ 0 ];
+	}
+} );
+```
 
 ### The solution
 
@@ -303,7 +304,7 @@ a token that we may use to charge the credit card.
 When we get a token, we will simply alert it to the user like:
 
 ```js
-alert("Token: "+response.id);
+alert( "Token: " + response.id );
 ```
 
 After submitting the form, you should see an alert like:
@@ -325,13 +326,13 @@ After submitting the form, you should see an alert like:
 - [Stripe.card.createToken](https://stripe.com/docs/stripe.js/v2#card-createToken) can be used to get a token that can be used to charge a card:
 
   ```js
-  Stripe.card.createToken({
-    number: this.cardNumber,
-    cvc: this.cvc,
-    exp_month: this.expiryMonth,
-    exp_year: this.expiryYear
-  }, stripeResponseHandler(status, response) )
-  ```
+Stripe.card.createToken( {
+	number: this.cardNumber,
+	cvc: this.cvc,
+	exp_month: this.expiryMonth,
+	exp_year: this.expiryYear
+}, stripeResponseHandler( status, response ) );
+```
 
   - `stripeResponseHandler` gets called back with either:
     - success: a status of `200` and a response with an `id` that is the token.

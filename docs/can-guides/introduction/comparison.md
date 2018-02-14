@@ -34,76 +34,71 @@ The synchronous data flow provided by the **Redux** store is generally insuffici
 
 Suddenly, the strict unidirectional data flow, is no longer that easy to follow, and you end up having to write a non-trivial amount of code to support the Redux pattern of dispatch -> action -> reducer -> state.
 
-```javascript
-const ViewModel = DefineMap.extend({
-  subreddit: 'string',
-  posts: {
-    get(lastSetValue, resolve) {
-      this.postPromise
-        .then(response => resolve( response.json() ));
-    }
-  },
-  postsPromise: {
-    get() {
-      return fetch(`https://www.reddit.com/r/${this.subreddit}.json`)
-    }
-  }
-});
+```js
+const ViewModel = DefineMap.extend( {
+	subreddit: "string",
+	posts: {
+		get( lastSetValue, resolve ) {
+			this.postPromise
+				.then( response => resolve( response.json() ) );
+		}
+	},
+	postsPromise: {
+		get() {
+			return fetch( `https://www.reddit.com/r/${this.subreddit}.json` );
+		}
+	}
+} );
 ```
 
 VS
 
-```javascript
-function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit
-  }
+```js
+function requestPosts( subreddit ) {
+	return {
+		type: REQUEST_POSTS,
+		subreddit
+	};
 }
-
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(subreddit, json) {
-  return {
-    type: RECEIVE_POSTS,
-    subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
-  }
+export const RECEIVE_POSTS = "RECEIVE_POSTS";
+function receivePosts( subreddit, json ) {
+	return {
+		type: RECEIVE_POSTS,
+		subreddit,
+		posts: json.data.children.map( child => child.data ),
+		receivedAt: Date.now()
+	};
 }
 
 // assumes thunkMiddleware is in use
-export function fetchPosts(subreddit) {
-  return function (dispatch) {
-    dispatch(requestPosts(subreddit))
-    return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
-      .then(json =>
-        dispatch(receivePosts(subreddit, json))
-      );
-  }
+export function fetchPosts( subreddit ) {
+	return function( dispatch ) {
+		dispatch( requestPosts( subreddit ) );
+		return fetch( `https://www.reddit.com/r/${subreddit}.json` )
+			.then( response => response.json() )
+			.then( json =>
+				dispatch( receivePosts( subreddit, json ) )
+			);
+	};
 }
-
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts,
-    subredit: state.subredit
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onTodoClick: (id) => {
-      this.props.dispatch(fetchPosts(ownProps.subreddit))
-    }
-  }
-}
-
+const mapStateToProps = ( state ) => {
+	return {
+		posts: state.posts,
+		subredit: state.subredit
+	};
+};
+const mapDispatchToProps = ( dispatch, ownProps ) => {
+	return {
+		onTodoClick: ( id ) => {
+			this.props.dispatch( fetchPosts( ownProps.subreddit ) );
+		}
+	};
+};
 const VisiblePostsList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PostsList)
-
-export default VisiblePostsList
+	mapStateToProps,
+	mapDispatchToProps
+)( PostsList );
+export default VisiblePostsList;
 ```
 
 The functional aspects of **Redux** do have benefits to simplicity but there is obviously a trade-off, and you have to decide which way you prefer to attack simplifying the asynchronous and stateful demands of client side web UIs.
@@ -128,12 +123,12 @@ One-Way data flow may be simpler to follow, but you end up writing a lot more co
 
 **CanJS** supports many types of data-bindings in our views, including one-directional, two-way binding, sibling-to-sibling value binding, and binding directly to DOM events. **CanJS** makes it easy to save writing a lot of code and keep your app simple to follow at the same time.
 
-```javascript
+```js
 // Binding to a Todo models completed property
-const Todo = DefineMap.extend({
-  name: 'string',
-  completed: 'boolean'
-});
+const Todo = DefineMap.extend( {
+	name: "string",
+	completed: "boolean"
+} );
 ```
 ```html
 // In stache
@@ -144,36 +139,35 @@ const Todo = DefineMap.extend({
 
 **React** has a dedication to the one-way data flow. This leads to a lot of boilerplate, hooking up event handlers just to change the state, over and over everywhere. **Flux** and **React-Redux** follow this same principle and ends up with even more code: `actions`, which get sent to a `dispatcher`, which pass the `action` to a `store`, to finally set the `state`. More code to write, more places for bugs to hide.
 
-```javascript
+```js
 // minimal reducer
 const todo = ( state, action ) => {
-  switch (action.type) {
-    case 'TOGGLE_TODO':
-      return Object.assign({}, state, {
-        completed: !state.completed
-      });
-    default:
-      return state;
-  }
-}
+	switch ( action.type ) {
+	case "TOGGLE_TODO":
+		return Object.assign( {}, state, {
+			completed: !state.completed
+		} );
+	default:
+		return state;
+	}
+};
 
 // minimal mapStateToProps and mapDispatchToProps functions for container
 const mapStateToProps = ( state ) => {
-  return {
-    todos: state.todos
-  };
+	return {
+		todos: state.todos
+	};
 };
 const mapDispatchToProps = ( dispatch, ownProps ) => {
-  return {
-    onChange(id) {
-      dispatch({
-        type: 'TOGGLE_TODO',
-        id
-      });
-    }
-  };
+	return {
+		onChange( id ) {
+			dispatch( {
+				type: "TOGGLE_TODO",
+				id
+			} );
+		}
+	};
 };
-
 const TodoListContainer = connect( mapStateToProps, mapDispatchToProps )( TodoList );
 ```
 
@@ -348,19 +342,18 @@ When you are working in a team, the layered approach can be more risky, as you�
 **Angular 2 (ng2)** is actually very similar to **CanJS**, if you look at these two "Hello-World" components, you see just how aligned the concepts behind **Angular 2** and **CanJS** really are.
 
 ```js
-import Component from 'can-component';
-import stache from 'can-stache';
-
-export default Component.extend({
-  tag: "hello-world",
-  template: stache(`<h1 on:click="emphasize()">{{ message }}</h1>`),
-  viewModel: {
-    message: "Hello world!",
-    emphasize() {
-      this.message += '!';
-    }
-  }
-});
+import Component from "can-component";
+import stache from "can-stache";
+export default Component.extend( {
+	tag: "hello-world",
+	template: stache( "<h1 on:click=\"emphasize()\">{{ message }}</h1>" ),
+	viewModel: {
+		message: "Hello world!",
+		emphasize() {
+			this.message += "!";
+		}
+	}
+} );
 ```
 
 
@@ -427,29 +420,27 @@ There’s a [funny story](https://news.ycombinator.com/item?id=12692595) on Hack
 
 Though the **Angular 2** people have been assuring the general masses that "you don’t **need** typescript to write **Angular 2** apps", the fact is the framework was designed around embracing the syntactic allowances, like decorators and class fields, and if the framework to be presented without them it would look clunky and pretty verbose.
 
-```javascript
-const HelloWorldComponent = ng.core.Component({
-  selector: 'hello-world',
-  template: '<h1>Hello {{name}}!</h1>' + '<input [(ngModel)]="name">',
-  viewProviders: [GreetingService]
-}).Class({
-  constructor: [GreetingService, function(greetingService) {
-    this.greetingService = greetingService;
-    this.name = "world";
-  }]
-});
-
-var AppComponent = ng.core.Component({
-  selector: 'app',
-  template: '<hello-world></hello-world>',
-  directives: [HelloWorldComponent]
-}).Class({
-  constructor: function() {}
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-  ng.platform.browser.bootstrap(AppComponent);
-});
+```js
+const HelloWorldComponent = ng.core.Component( {
+	selector: "hello-world",
+	template: "<h1>Hello {{name}}!</h1>" + "<input [(ngModel)]=\"name\">",
+	viewProviders: [ GreetingService ]
+} ).Class( {
+	constructor: [ GreetingService, function( greetingService ) {
+		this.greetingService = greetingService;
+		this.name = "world";
+	} ]
+} );
+const AppComponent = ng.core.Component( {
+	selector: "app",
+	template: "<hello-world></hello-world>",
+	directives: [ HelloWorldComponent ]
+} ).Class( {
+	constructor: function() {}
+} );
+document.addEventListener( "DOMContentLoaded", function() {
+	ng.platform.browser.bootstrap( AppComponent );
+} );
 ```
 
 TypeScript may offer all sort of benefits, especially for large apps with multiple teams working on them, but it’s more unnecessary baggage if you weren’t using typescript already.

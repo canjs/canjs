@@ -136,7 +136,7 @@ to:
 If you've imported these in a JavaScript then just update the import specifier to:
 
 ```js
-import 'can-stache-route-helpers';
+import "can-stache-route-helpers";
 ```
 
 ### Replacements for can-event
@@ -153,26 +153,24 @@ The batching system was replaced with [can-queues] which has a more sophisticate
 If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
 
 ```js
-import canBatch from 'can-event/batch/batch';
+import canBatch from "can-event/batch/batch";
 
 // ...
-
 canBatch.start();
-person.first = 'Matthew';
-person.last = 'Phillips';
+person.first = "Matthew";
+person.last = "Phillips";
 canBatch.stop();
 ```
 
 Instead use [can-queues] similarly:
 
 ```js
-import queues from 'can-queues';
+import queues from "can-queues";
 
 // ...
-
 queues.batch.start();
-person.first = 'Matthew';
-person.last = 'Phillips';
+person.first = "Matthew";
+person.last = "Phillips";
 queues.batch.stop();
 ```
 
@@ -185,32 +183,24 @@ npm install can-event-queue --save
 Replace your can-event code:
 
 ```js
-import assign from 'can-util/js/assign/assign';
-import canEvent from 'can-event';
-
-function Thing(){
-
+import assign from "can-util/js/assign/assign";
+import canEvent from "can-event";
+function Thing() {
 }
-
-assign(Thing.prototype, canEvent);
-
+assign( Thing.prototype, canEvent );
 let thing = new Thing();
-thing.on("prop", function(){ ... });
+thing.on( "prop", function() { /* ... */ } );
 ```
 
 with:
 
 ```js
-import mixinMapBindings from 'can-event-queue/map/map';
-
-function Thing(){
-
+import mixinMapBindings from "can-event-queue/map/map";
+function Thing() {
 }
-
-mixinMapBindings(Thing.prototype);
-
+mixinMapBindings( Thing.prototype );
 let thing = new Thing();
-thing.on("prop", function(){ ... });
+thing.on( "prop", function() { /* ... */ } );
 ```
 
 ### inserted/removed event
@@ -223,38 +213,32 @@ Code that looked like:
 
 ```js
 import Component from "can-component";
-
-Component.extend({
+Component.extend( {
 	events: {
-		inserted: function(el){
-			el.addEventListener('some-event', function(){
-
-			});
+		inserted: function( el ) {
+			el.addEventListener( "some-event", function() {
+			} );
 		}
 	}
-});
+} );
 ```
 
 Can be replaced to use [can-component/connectedCallback] like so:
 
 ```js
 import Component from "can-component";
-
-Component.extend({
+Component.extend( {
 	ViewModel: {
-		connectedCallback(el){
-			let onSomeEvent = function(){
-
+		connectedCallback( el ) {
+			let onSomeEvent = function() {
 			};
-
-			el.addEventListener('some-event', onSomeEvent);
-
-			return function(){
-				el.removeEventListener('some-event', onSomeEvent);
-			}
+			el.addEventListener( "some-event", onSomeEvent );
+			return function() {
+				el.removeEventListener( "some-event", onSomeEvent );
+			};
 		}
 	}
-});
+} );
 ```
 
 *Alternatively*, if your code can't be refactored to use connectedCallback, you can use the [can-3-4-compat](https://github.com/canjs/can-3-4-compat) package to bring back the inserted and removed events.
@@ -264,16 +248,14 @@ The above code example becomes:
 ```js
 import Component from "can-component";
 import "can-3-4-compat/dom-mutation-events";
-
-Component.extend({
+Component.extend( {
 	events: {
-		inserted: function(el){
-			el.addEventListener('some-event', function(){
-
-			});
+		inserted: function( el ) {
+			el.addEventListener( "some-event", function() {
+			} );
 		}
 	}
-});
+} );
 ```
 
 ### Implicit scope walking
@@ -292,12 +274,11 @@ That was populated like so:
 
 ```js
 import stache from "can-stache";
-
-const view = stache.from("my-template");
-view({
+const view = stache.from( "my-template" );
+view( {
 	team: "Dragons",
-	players: [ ... ]
-});
+	players: [ /* ... */ ]
+} );
 ```
 
 The __team__ property is part of the ViewModel. In CanJS 3 stache would walk up the scope to find it there. In CanJS 4 there is no implicit scope walking; it will only look for *team* on the item that is being iterated from the *players* list.
@@ -383,17 +364,15 @@ Previously [can-define/map/map], [can-define/list/list], [can-map], and [can-lis
 Change:
 
 ```js
-players.each(function(player){
-
-})
+players.each( function( player ) {
+} );
 ```
 
 to:
 
 ```js
-players.forEach(function(player){
-
-})
+players.forEach( function( player ) {
+} );
 ```
 
 ## Non-breaking warnings
@@ -413,24 +392,21 @@ Registering routes in [can-route] used to be done by calling the route function.
 
 ```js
 import route from "can-route";
-
-route("{page}", { page: "home" });
+route( "{page}", { page: "home" } );
 ````
 
 to:
 
 ```js
 import route from "can-route";
-
-route.register("{page}", { page: "home" });
+route.register( "{page}", { page: "home" } );
 ```
 
 Additionally the old `route.ready()` function has been renamed to `route.start()`. To start the above routing, change it to:
 
 ```js
 import route from "can-route";
-
-route.register("{page}", { page: "home" });
+route.register( "{page}", { page: "home" } );
 route.start();
 ```
 
@@ -440,22 +416,20 @@ In [can-define] 1.0, you would define a default value for a property with the `v
 
 ```js
 import DefineMap from "can-define/map/map";
-
-const ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend( {
 	prop: {
 		value: "hello world"
 	}
-});
+} );
 ```
 
 In can-define 2.0 the [can-define.types.value value] property definition is now used to listen to changes in other properties. The *default* behavior is now in the `default` definition like so:
 
 ```js
 import DefineMap from "can-define/map/map";
-
-const ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend( {
 	prop: {
 		default: "hello world"
 	}
-});
+} );
 ```

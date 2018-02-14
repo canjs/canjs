@@ -24,19 +24,16 @@ Let’s explore each module a bit more.
 own value and notify listeners of changes like:
 
 ```js
-import compute from 'can-compute';
-
-var name = compute("Justin");
+import compute from "can-compute";
+const name = compute( "Justin" );
 
 // read the value
-name() //-> "Justin"
-
-name.on("change", function(ev, newVal, oldVal){
-	newVal //-> "Matthew"
-	oldVal //-> "Justin"
-});
-
-name("Matthew");
+name(); //-> "Justin"
+name.on( "change", function( ev, newVal, oldVal ) {
+	newVal; //-> "Matthew"
+	oldVal; //-> "Justin"
+} );
+name( "Matthew" );
 ```
 
 More commonly, a compute derives its value from other observables.  The following
@@ -44,25 +41,20 @@ More commonly, a compute derives its value from other observables.  The followin
 compute:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import compute from 'can-compute';
-
-var person = new DefineMap({first: "Justin", last: "Meyer"});
-var hobbies = new DefineList(["js","bball"]);
-var age = compute(33);
-
-var info = compute(function(){
-	return person.first +" "+ person.last
-	+ " is "+age()+"and like "+hobbies.join(", ")+".";
-});
-
-info() //-> "Justin Meyer is 33 and likes js, bball."
-
-info.on("change", function(ev, newVal){
-	newVal //-> "Justin Meyer is 33 and likes js."
-});
-
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+import compute from "can-compute";
+const person = new DefineMap( { first: "Justin", last: "Meyer" } );
+const hobbies = new DefineList( [ "js", "bball" ] );
+const age = compute( 33 );
+const info = compute( function() {
+	return person.first + " " + person.last +
+" is " + age() + "and like " + hobbies.join( ", " ) + ".";
+} );
+info(); //-> "Justin Meyer is 33 and likes js, bball."
+info.on( "change", function( ev, newVal ) {
+	newVal; //-> "Justin Meyer is 33 and likes js."
+} );
 hobbies.pop();
 ```
 
@@ -75,59 +67,57 @@ maps and lists with well-defined properties.  You can
 For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-
-var Todo = DefineMap.extend({           // A todo has a:
-  name: "string",                       // .name that’s a string
-  complete: {                           // .complete that’s
-	type: "boolean",                    //        a boolean
-	default: false                      //        initialized to false
-  },                                    
-  dueDate: "date",                      // .dueDate that’s a date
-  get isPastDue(){                      // .pastDue that returns if the
-	return new Date() > this.dueDate;   //        dueDate is before now
-  },
-  toggleComplete: function(){           // .toggleComplete method that
-    this.complete = !this.complete;     //        changes .complete
-  }
-});
-
-var TodoList = DefineList.extend({      // A list of todos:     
-  "#": Todo,                            // has numeric properties
-                                        //         as todos
-
-  get completeCount(){                  // has .completeCount that
-    return this.filter("complete")      //         returns # of
-	           .length;                 //         complete todos
-  }
-});
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+const Todo = DefineMap.extend( {           // A todo has a:
+	name: "string",                       // .name that’s a string
+	complete: {                           // .complete that’s
+		type: "boolean",                    //        a boolean
+		default: false                      //        initialized to false
+	},
+	dueDate: "date",                      // .dueDate that’s a date
+	get isPastDue() {                      // .pastDue that returns if the
+		return new Date() > this.dueDate;   //        dueDate is before now
+	},
+	toggleComplete: function() {           // .toggleComplete method that
+		this.complete = !this.complete;     //        changes .complete
+	}
+} );
+const TodoList = DefineList.extend( {      // A list of todos:
+	"#": Todo,                            // has numeric properties
+	//         as todos
+	get completeCount() {                  // has .completeCount that
+		return this.filter( "complete" )      //         returns # of
+			.length;                 //         complete todos
+	}
+} );
 ```
 
 This allows you to create a Todo, read its properties, and
 call back its methods like:
 
 ```js
-var dishes = new Todo({
+const dishes = new Todo( {
 	name: "do dishes",
+
 	// due yesterday
 	dueDate: new Date() - 1000 * 60 * 60 * 24
-});
-dishes.name      //-> "do dishes"
-dishes.isPastDue //-> true
-dishes.complete  //-> false
-dishes.toggleComplete()  
-dishes.complete  //-> true
+} );
+dishes.name;      //-> "do dishes"
+dishes.isPastDue; //-> true
+dishes.complete;  //-> false
+dishes.toggleComplete();
+dishes.complete;  //-> true
 ```
 
 And it allows you to create a `TodoList`, access its items and properties
 like:
 
 ```js
-var todos = new TodoList( dishes, {name: "mow lawn", dueDate: new Date()});
-todos.length         //-> 2
-todos[0].complete    //-> true
-todos.completeCount //-> 1
+const todos = new TodoList( dishes, { name: "mow lawn", dueDate: new Date() } );
+todos.length;         //-> 2
+todos[ 0 ].complete;    //-> true
+todos.completeCount; //-> 1
 ```
 
 These observables provide the foundation
@@ -142,43 +132,48 @@ simulated service layers.
 A `todosAlgebra` set algebra for a `GET /api/todos` service might look like:
 
 ```js
-import set from 'can-set';
-var todosAlgebra = new set.Algebra(
-    // specify the unique identifier property on data
-    set.prop.id("_id"),  
-    // specify that completed can be true, false or undefined
-    set.prop.boolean("complete"),
-    // specify the property that controls sorting
-    set.prop.sort("orderBy")
-)
+import set from "can-set";
+const todosAlgebra = new set.Algebra(
+
+// specify the unique identifier property on data
+	set.prop.id( "_id" ),
+
+	// specify that completed can be true, false or undefined
+	set.prop.boolean( "complete" ),
+
+	// specify the property that controls sorting
+	set.prop.sort( "orderBy" )
+);
 ```
 
 This assumes that the service:
 
  - Returns data where the unique property name is `_id`:
 ```js
-  // GET /api/todos
-  [
-    {_id: 1, name: "mow lawn", complete: true},
-    {_id: 2, name: "do dishes", complete: false},
-    ...
-  ]
+// GET /api/todos
+[
+	{ _id: 1, name: "mow lawn", complete: true },
+	{ _id: 2, name: "do dishes", complete: false }
+
+// ...
+];
 ```
  - Can filter by a `complete` property:
 ```js
-  // GET /api/todos?complete=false
-  [
-    {_id: 2, name: "do dishes", complete: false},
-    ...
-  ]
+// GET /api/todos?complete=false
+[
+	{ _id: 2, name: "do dishes", complete: false }
+
+// ...
+];
 ```
  - Sorts by an `orderBy` property:
 ```js
-  // GET /api/todos?orderBy=name
-  [
-    {_id: 2, name: "do dishes", complete: false},
-    {_id: 1, name: "mow lawn", complete: true}
-  ]
+// GET /api/todos?orderBy=name
+[
+	{ _id: 2, name: "do dishes", complete: false },
+	{ _id: 1, name: "mow lawn", complete: true }
+];
 ```
 
 In the next section will use `todoAlgebra` to build a model with [can-connect].
@@ -191,29 +186,30 @@ to a service layer. This is often done via the
 into a single api:
 
 ```js
-import baseMap from 'can-connect/can/base-map/base-map';
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import set from 'can-set';
+import baseMap from "can-connect/can/base-map/base-map";
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+import set from "can-set";
+const Todo = DefineMap.extend( {
 
-var Todo = DefineMap.extend({
-	...
-});
-var TodosList = DefineMap.extend({
-	"#": Todo,
-	...
-});
-var todosAlgebra = new set.Algebra({
-	...
-});
+// ...
+} );
+const TodosList = DefineMap.extend( {
+	"#": Todo
 
-var connection = baseMap({
+// ...
+} );
+const todosAlgebra = new set.Algebra( {
+
+// ...
+} );
+const connection = baseMap( {
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList,
 	algebra: todosAlgebra,
 	name: "todo"
-});
+} );
 ```
 
 `baseMap` extends the `Map` type, in this case, `Todo`, with
@@ -221,44 +217,43 @@ the ability to make requests to the service layer.
 
  - [can-connect/can/map/map.getList Get a list] of Todos
    ```js
-   Todo.getList({complete: true}).then(function(todos){})
-   ```
+Todo.getList( { complete: true } ).then( function( todos ) {} );
+```
  - [can-connect/can/map/map.get Get] a single Todo
    ```js
-   Todo.get({_id: 6}).then(function(todo){})
-   ```
+Todo.get( { _id: 6 } ).then( function( todo ) {} );
+```
  - [can-connect/can/map/map.prototype.save Create] a Todo
    ```js
-   var todo = new Todo({name: "do dishes", complete: false})
-   todo.save().then(function(todo){})
-   ```
+const todo = new Todo( { name: "do dishes", complete: false } );
+todo.save().then( function( todo ) {} );
+```
  - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
    ```js
-   todo.complete = true;
-   todo.save().then(function(todo){})
-   ```
+todo.complete = true;
+todo.save().then( function( todo ) {} );
+```
  - [can-connect/can/map/map.prototype.destroy Delete] a Todo
    ```js
-   todo.destroy().then(function(todo){})
-   ```
+todo.destroy().then( function( todo ) {} );
+```
 
 [can-connect] is also middleware, so custom connections can
 be assembled too:
 
 ```js
-import base from 'can-connect/base/base';
-import dataUrl from 'can-connect/data-url/data-url';
-import constructor from 'can-connect/constructor/constructor';
-import map from 'can-connect/can/map/map';
-
-var options = {
+import base from "can-connect/base/base";
+import dataUrl from "can-connect/data-url/data-url";
+import constructor from "can-connect/constructor/constructor";
+import map from "can-connect/can/map/map";
+const options = {
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList,
 	algebra: todosAlgebra,
 	name: "todo"
-}
-var connection = map(constructor(dataUrl(base(options))));
+};
+const connection = map( constructor( dataUrl( base( options ) ) ) );
 ```
 
 ## can-stache
@@ -269,28 +264,28 @@ you can create a template programmatically that lists out todos within a
 promise loaded from `Todo.getList` like:
 
 ```js
-import stache from 'can-stache';
+import stache from "can-stache";
 
 // Creates a template
-var template = stache(
-	"<ul>"+
-		"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
-		"{{#if(todos.isResolved)}}"+
-			"{{#each(todos.value)}}"+
-				"<li class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
-			"{{else}}"+
-				"<li>No todos</li>"+
-			"{{/each}}"+
-		"{{/if}}"+
-	"</ul>");
+const template = stache(
+	"<ul>" +
+"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}" +
+"{{#if(todos.isResolved)}}" +
+"{{#each(todos.value)}}" +
+"<li class='{{#complete}}complete{{/complete}}'>{{name}}</li>" +
+"{{else}}" +
+"<li>No todos</li>" +
+"{{/each}}" +
+"{{/if}}" +
+"</ul>" );
 
 // Calls the template with some data
-var frag = template({
-	todos: Todo.getList({})
-});
+const frag = template( {
+	todos: Todo.getList( {} )
+} );
 
 // Inserts the result into the page
-document.body.appendChild(frag);
+document.body.appendChild( frag );
 ```
 
 [can-stache] templates use magic tags like `{{}}` to control what
@@ -309,43 +304,44 @@ combines a view model created by [can-define/map/map] with a template
 created by [can-stache].
 
 ```js
-import Component from 'can-component';
-import DefineMap from 'can-define/map/map';
-import stache from 'can-stache';
+import Component from "can-component";
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
 
 // Defines the todos-list view model
-var TodosListVM = DefineMap.extend({
-	// An initial value that is a promise containing the
-	// list of all todos.
+const TodosListVM = DefineMap.extend( {
+
+// An initial value that is a promise containing the
+// list of all todos.
 	todos: {
-		default: function(){
-			return Todo.getList({});
+		default: function() {
+			return Todo.getList( {} );
 		}
 	},
+
 	// A method that toggles a todo’s complete property
 	// and updates the todo on the server.
-	toggleComplete: function(todo){
+	toggleComplete: function( todo ) {
 		todo.complete = !todo.complete;
 		todo.save();
 	}
-});
-
-Component.extend({
+} );
+Component.extend( {
 	tag: "todos-list",
 	ViewModel: TodosVM,
 	view: stache(
-		"<ul>"+
-			"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
-			"{{#if(todos.isResolved)}}"+
-				"{{#each(todos.value)}}"+
-					"<li on:click='toggleComplete(.)'"+
-					     "class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
-				"{{else}}"+
-					"<li>No todos</li>"+
-				"{{/each}}"+
-			"{{/if}}"+
-		"</ul>")
-});
+		"<ul>" +
+"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}" +
+"{{#if(todos.isResolved)}}" +
+"{{#each(todos.value)}}" +
+"<li on:click='toggleComplete(.)'" +
+"class='{{#complete}}complete{{/complete}}'>{{name}}</li>" +
+"{{else}}" +
+"<li>No todos</li>" +
+"{{/each}}" +
+"{{/if}}" +
+"</ul>" )
+} );
 ```
 
 ## can-stache-bindings
@@ -406,27 +402,25 @@ Bindings look like:
 url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [can-route.ready begin routing] like:
 
 ```js
-import route from 'can-route';
-import DefineMap from 'can-define/map/map';
-
-var AppViewModel = DefineMap.extend({
+import route from "can-route";
+import DefineMap from "can-define/map/map";
+const AppViewModel = DefineMap.extend( {
 	seal: false
-},{
-	// Sets the default type to string
+}, {
+
+// Sets the default type to string
 	"#": "string",
 	todoId: "string",
 	todo: {
-		get: function(){
-			if(this.todoId) {
-				return Todo.get({_id: this.todoId})
+		get: function() {
+			if ( this.todoId ) {
+				return Todo.get( { _id: this.todoId } );
 			}
 		}
 	}
-});
-
-var appViewModel = new AppViewModel();
-route.map(appViewModel);
-
+} );
+const appViewModel = new AppViewModel();
+route.map( appViewModel );
 route.start();
 ```
 
@@ -434,8 +428,8 @@ When the url changes, to something like `#!&todoId=5`, so will the
 `appViewModel`’s `todoId` and `todo` property:
 
 ```js
-appViewModel.todoId //-> "5"
-appViewModel.todo   //-> Promise<Todo>
+appViewModel.todoId; //-> "5"
+appViewModel.todo;   //-> Promise<Todo>
 ```
 
 Similarly, if `appViewModel`’s `todoId` is set like:
@@ -447,7 +441,7 @@ appViewModel.todoId = 6;
 The hash will be updated:
 
 ```js
-window.location.hash //-> "#!&todoId=6"
+window.location.hash; //-> "#!&todoId=6"
 ```
 
 The `route` function can be used to specify pretty routing rules that
@@ -455,21 +449,21 @@ translate property changes to a url and a url to property changes. For example,
 
 ```js
 // a route like:
-route("todo/{todoId}");
+route( "todo/{todoId}" );
 
 // and a hash like:
 window.location.hash = "#!todo/7";
 
 // produces an appViewModel like:
-appViewModel.serialize() //-> {route: "todo/{todoId}", todoId: "7"}
+appViewModel.serialize(); //-> {route: "todo/{todoId}", todoId: "7"}
 ```
 
 [can-route-pushstate] adds [pushstate](https://developer.mozilla.org/en-US/docs/Web/API/History_API) support. It
 mixes in this behavior so you just need to import the module:
 
 ```js
-import route from 'can-route';
-import 'can-route-pushstate';
+import route from "can-route";
+import "can-route-pushstate";
 ```
 
 

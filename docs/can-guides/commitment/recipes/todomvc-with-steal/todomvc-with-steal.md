@@ -45,21 +45,21 @@ StealJS.
 - Define a ViewModel type with [can-define/map/map]:
 
   ```js
-  import DefineMap from 'can-define/map/';
-  var Type = DefineMap.extend({ ... });
-  ```
+import DefineMap from "can-define/map/";
+const Type = DefineMap.extend( { /* ... */ } );
+```
 
 - Create an instance of a ViewModel by using `new Type(props)`:
 
   ```js
-  var instance = new Type({ ... });
-  ```
+const instance = new Type( { /* ... */ } );
+```
 
 - Load a view with the [steal-stache] plugin like:
 
   ```js
-  import view from './path/to/template.stache';
-  ```
+import view from "./path/to/template.stache";
+```
 
   Note that [steal-stache] is a StealJS plugin and needs to be configured as such.
 
@@ -67,9 +67,9 @@ StealJS.
   be inserted into the page like:
 
   ```js
-  var frag = view(appVM);
-  document.body.appendChild(frag);
-  ```
+const frag = view( appVM );
+document.body.appendChild( frag );
+```
 
 - Use the following HTML that a designer might have provided:
 
@@ -135,9 +135,9 @@ StealJS.
   styles and run its tests:
 
   ```js
-  import test from 'can-todomvc-test';
-  test(appVM);
-  ```
+import test from "can-todomvc-test";
+test( appVM );
+```
 
 
 
@@ -213,12 +213,12 @@ Create the main app
 Example test code:
 
 ```js
-var todo = new Todo({id: 1, name: 2});
-QUnit.equal(todo.id, "1", "id is a string");
-QUnit.equal(todo.name, "2", "name is a string");
-QUnit.equal(todo.complete, false, "complete defaults to false");
+const todo = new Todo( { id: 1, name: 2 } );
+QUnit.equal( todo.id, "1", "id is a string" );
+QUnit.equal( todo.name, "2", "name is a string" );
+QUnit.equal( todo.complete, false, "complete defaults to false" );
 todo.toggleComplete();
-QUnit.equal(todo.complete, true, "toggleComplete works");
+QUnit.equal( todo.complete, true, "toggleComplete works" );
 ```
 
 ### What you need to know
@@ -228,26 +228,26 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - The [can-define.types.type type] behavior defines a property’s type like:
 
   ```js
-  DefineMap.extend({
-      propertyName: {type: "number"}
-  })
-  ```
+DefineMap.extend( {
+	propertyName: { type: "number" }
+} );
+```
 
 - The [can-define.types.default] behavior defines a property’s initial value like:
 
   ```js
-  DefineMap.extend({
-      propertyName: {default: 3}
-  })
-  ```
+DefineMap.extend( {
+	propertyName: { default: 3 }
+} );
+```
 
 - Methods can be defined directly on the prototype like:
 
   ```js
-  DefineMap.extend({
-      methodName: function(){}
-  })
-  ```
+DefineMap.extend( {
+	methodName: function() {}
+} );
+```
 
 ### The solution
 
@@ -269,14 +269,14 @@ Create _models/todo.js_ as follows:
 Example test code:
 
 ```js
-QUnit.ok(Todo.List, "Defined a List");
-var todos = new Todo.List([{complete: true},{},{complete: true}]);
-QUnit.ok(todos[0] instanceof Todo, "each item in a Todo.List is a Todo");
-QUnit.equal(todos.active.length, 1);
-QUnit.equal(todos.complete.length, 2);
-QUnit.equal(todos.allComplete, false, "not allComplete");
-todos[1].complete = true;
-QUnit.equal(todos.allComplete, true, "allComplete");
+QUnit.ok( Todo.List, "Defined a List" );
+const todos = new Todo.List( [ { complete: true }, {}, { complete: true } ] );
+QUnit.ok( todos[ 0 ] instanceof Todo, "each item in a Todo.List is a Todo" );
+QUnit.equal( todos.active.length, 1 );
+QUnit.equal( todos.complete.length, 2 );
+QUnit.equal( todos.allComplete, false, "not allComplete" );
+todos[ 1 ].complete = true;
+QUnit.equal( todos.allComplete, true, "allComplete" );
 ```
 
 ### What you need to know
@@ -286,31 +286,31 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 - The [can-define/list/list.prototype.wildcardItems] property defines the behavior of items in a list like:
 
   ```js
-  DefineList.extend({
-      '#': {type: ItemType}
-  })
-  ```
+DefineList.extend( {
+	"#": { type: ItemType }
+} );
+```
 
 - The [can-define.types.get] behavior defines observable computed properties like:
 
   ```js
-  DefineMap.extend({
-      propertyName: {
-          get: function(){
-              return this.otherProperty;
-          }
-      }
-  })
-  ```
+DefineMap.extend( {
+	propertyName: {
+		get: function() {
+			return this.otherProperty;
+		}
+	}
+} );
+```
 
 - [can-define/list/list.prototype.filter] can be used to filter a list into a new list:
 
   ```js
-  list = new ListType([...]);
-  list.filter(function(item){
-      return test(item);
-  })
-  ```
+list = new ListType( [ /* ... */ ] );
+list.filter( function( item ) {
+	return test( item );
+} );
+```
 
 ### The solution
 
@@ -327,12 +327,12 @@ Update _models/todo.js_ to the following:
   value will be a `Todo.List` with the following data:
 
   ```js
-  [
-    { name: "mow lawn", complete: false, id: 5 },
-    { name: "dishes", complete: true, id: 6 },
-    { name: "learn canjs", complete: false, id: 7 }
-  ]
-  ```
+[
+	{ name: "mow lawn", complete: false, id: 5 },
+	{ name: "dishes", complete: true, id: 6 },
+	{ name: "learn canjs", complete: false, id: 7 }
+];
+```
 
 - Write out an `<li>` for each todo in `todosList`, including:
   - write the todo’s name in the  `<label>`
@@ -432,19 +432,18 @@ Update _index.stache_ to the following:
 Example test code:
 
 ```js
-QUnit.deepEqual( Todo.algebra.difference({}, {complete: true}), {complete: false} );
-QUnit.deepEqual( Todo.algebra.clauses.id, {id: "id"} );
-
-var sorted = Todo.algebra.getSubset({sort: "name"}, {}, [
-    { name: "mow lawn", complete: false, id: 5 },
-    { name: "dishes", complete: true, id: 6 },
-    { name: "learn canjs", complete: false, id: 7 }
-]);
-QUnit.deepEqual(sorted, [
-    { name: "dishes", complete: true, id: 6 },
-    { name: "learn canjs", complete: false, id: 7 },
-    { name: "mow lawn", complete: false, id: 5 }
-]);
+QUnit.deepEqual( Todo.algebra.difference( {}, { complete: true } ), { complete: false } );
+QUnit.deepEqual( Todo.algebra.clauses.id, { id: "id" } );
+const sorted = Todo.algebra.getSubset( { sort: "name" }, {}, [
+	{ name: "mow lawn", complete: false, id: 5 },
+	{ name: "dishes", complete: true, id: 6 },
+	{ name: "learn canjs", complete: false, id: 7 }
+] );
+QUnit.deepEqual( sorted, [
+	{ name: "dishes", complete: true, id: 6 },
+	{ name: "learn canjs", complete: false, id: 7 },
+	{ name: "mow lawn", complete: false, id: 5 }
+] );
 ```
 
 ### What you need to know
@@ -454,18 +453,18 @@ QUnit.deepEqual(sorted, [
   a [can-set.Algebra] like:
 
   ```js
-  var todoAlgebra = new set.Algebra(
-    set.props.boolean("completed"),
-    set.props.id("_id"),
-    set.props.offsetLimit("offset","limit")
-  );
-  ```
+const todoAlgebra = new set.Algebra(
+	set.props.boolean( "completed" ),
+	set.props.id( "_id" ),
+	set.props.offsetLimit( "offset", "limit" )
+);
+```
 
   The algebra can then be used to perform comparisons between parameters like:
 
   ```js
-  todoAlgebra.difference({}, {completed: true}) //-> {completed: false}
-  ```
+todoAlgebra.difference( {}, { completed: true } ); //-> {completed: false}
+```
 
 - Use [can-set.props set.props] to describe the behavior of your set parameters.
 
@@ -547,20 +546,19 @@ __DELETE /api/todos/{id}__
 - [can-fixture] - is used to trap AJAX requests like:
 
   ```js
-  fixture("/api/entities", function(request){
-    request.data.folderId //-> "1"
-
-    return {data: [...]}
-  })
-  ```
+fixture( "/api/entities", function( request ) {
+	request.data.folderId; //-> "1"
+	return { data: [ /* ... */ ] };
+} );
+```
 
 - [can-fixture.store can-fixture.store] - can be used to automatically filter records if given a [can-set.Algebra].
 
   ```js
-  var entities = [ .... ];
-  var entitiesStore = fixture.store( entities, entitiesAlgebra );
-  fixture("/api/entities/{id}", entitiesStore);
-	```
+const entities = [ /* ... */ ];
+const entitiesStore = fixture.store( entities, entitiesAlgebra );
+fixture( "/api/entities/{id}", entitiesStore );
+```
 
 ### The solution
 
@@ -588,12 +586,12 @@ Create _models/todos-fixture.js_ as follows:
 - [can-connect/can/base-map/base-map] can decorate a `DefineMap` with methods that connect it to a restful URL like:
 
   ```js
-  baseMap({
-    Map: Type,
-    url: "URL",
-    algebra: algebra
-  })
-  ```
+baseMap( {
+	Map: Type,
+	url: "URL",
+	algebra: algebra
+} );
+```
 
 ### The solution
 
@@ -621,24 +619,23 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
   promise that resolves to the `Type.List` of instances:
 
   ```js
-  Type.getList({}).then(function(list){
-
-  })
-  ```
+Type.getList( {} ).then( function( list ) {
+} );
+```
 - An async [can-define.types.get getter] property behavior can be used
   to "set" a property to an initial value:
 
   ```js
-	{
-		property: {
-			get: function(lastSet, resolve) {
-				SOME_ASYNC_METHOD(function callback(data) {
-					resolve(data);
-				});
-			}
+{
+	property: {
+		get: function( lastSet, resolve ) {
+			SOME_ASYNC_METHOD( function callback( data ) {
+				resolve( data );
+			} );
 		}
 	}
-  ```
+}
+```
 
 ### The solution
 
@@ -696,15 +693,15 @@ attribute.
 - The remaining parts of the [can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE), with an emphasis on how [can-connect/real-time/real-time] behavior works.
 - Delete a record on the server with [can-connect/can/map/map.prototype.destroy] like:
   ```js
-  map.destroy()
-  ```
+map.destroy();
+```
 
 - [can-connect/can/map/map.prototype.isDestroying] returns true when `.destroy()`
   has been called, but has not resolved yet.
 
   ```js
-  map.isDestroying()
-  ```
+map.isDestroying();
+```
 
 ### The solution
 
@@ -729,32 +726,31 @@ custom element.
 - A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
 
   ```js
-  import Component from 'can-component';
-  import view from './template.stache';
-  var ViewModel = DefineMap.extend({
-    ...      
-  });
+import Component from "can-component";
+import view from "./template.stache";
+const ViewModel = DefineMap.extend( {
 
-  Component.extend({
-      tag: "some-component",
-      view: view,
-      ViewModel: ViewModel
-  });
-  ```
+// ...
+} );
+Component.extend( {
+	tag: "some-component",
+	view: view,
+	ViewModel: ViewModel
+} );
+```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
 - The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
 a `DefineMap` property is read for the first time.
 
   ```js
-  var SubType = DefineMap.extend({})
-  var Type = DefineMap.extend({
-      property: {Default: SubType}
-  })
-
-  var map = new Type();
-  map.property instanceof SubType //-> true
-  ```
+const SubType = DefineMap.extend( {} );
+const Type = DefineMap.extend( {
+	property: { Default: SubType }
+} );
+const map = new Type();
+map.property instanceof SubType; //-> true
+```
 
 - Use [can-view-import] to import a module from a template like:
 
@@ -858,19 +854,19 @@ single todo is saving.
 can be simulated like:
 
   ```js
-  DefineMap.extend({
-      first: "string",
-      last: "string",
-      get fullName(){
-          return this.first + " " + this.last;
-      },
-      set fullName(newValue){
-          var parts = newValue.split(" ");
-          this.first = parts[0];
-          this.last = parts[1];
-      }
-  })
-  ```
+DefineMap.extend( {
+	first: "string",
+	last: "string",
+	get fullName() {
+		return this.first + " " + this.last;
+	},
+	set fullName( newValue ) {
+		const parts = newValue.split( " " );
+		this.first = parts[ 0 ];
+		this.last = parts[ 1 ];
+	}
+} );
+```
 
 ### The solution
 
@@ -935,24 +931,24 @@ be added if they represent the current page.
   to the URL.  This is done with [can-route.data] like:
 
   ```js
-  route.data = new AppViewModel();
-  ```
+route.data = new AppViewModel();
+```
 
 - [can-route] can create pretty routing rules.  For example,
   if `#!login` should set the `page` property of the
   `AppViewModel` to `"login"`, use `route()` like:
 
   ```js
-  route("{page}");
-  ```
+route( "{page}" );
+```
 
 - [can-route.ready] initializes the connection between the
   url and the `AppViewModel`.  After you've created all
   your application’s pretty routing rules, call it like:
 
   ```js
-  route.start()
-  ```
+route.start();
+```
 
 - The [can-stache-route-helpers] module provides helpers
   that use [can-route].  

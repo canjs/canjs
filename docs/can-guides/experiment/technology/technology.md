@@ -50,22 +50,22 @@ a simple counter, we can use [can-define/map/map DefineMap] as follows:
 
 ```js
 import DefineMap from "can-define/map/map";
-var Counter = DefineMap.extend({
-    count: {default: 0},
-    increment() {
-        this.count++;
-    }
-});
+const Counter = DefineMap.extend( {
+	count: { default: 0 },
+	increment() {
+		this.count++;
+	}
+} );
 ```
 
 We can create instances of `Counter`, call its methods, and
 inspect its state like so:
 
 ```js
-var myCounter = new Counter();
-myCounter.count //-> 0
-myCounter.increment()
-myCounter.count //-> 1
+const myCounter = new Counter();
+myCounter.count; //-> 0
+myCounter.increment();
+myCounter.count; //-> 1
 ```
 
 `myCounter` is an instance of `Counter`. `myCounter.count` is what we call the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
@@ -83,37 +83,36 @@ definition behaviors to define a `TodosApp` constructor function's `todos` and `
 property behavior:
 
 ```js
-var TodosApp = DefineMap.extend({
-    todos: {
-        // todos defaults to a DefineList of todo data.
-        default: () => new DefineList([
-            {complete: true, name: "Do the dishes."},
-            {complete: true, name: "Wash the car."},
-            {complete: false, name: "Learn CanJS."}
-        ])
-    },
-    // completedCount is the number of completed todos in the `todos`
-    // property.
-    completeCount: {
-        get() {
-            return this.todos.filter({complete: true}).length
-        }
-    }
-});
+const TodosApp = DefineMap.extend( {
+	todos: {
+
+		// todos defaults to a DefineList of todo data.
+		default: () => new DefineList( [
+			{ complete: true, name: "Do the dishes." },
+			{ complete: true, name: "Wash the car." },
+			{ complete: false, name: "Learn CanJS." }
+		] )
+	},
+
+	// completedCount is the number of completed todos in the `todos`
+	// property.
+	completeCount: {
+		get() {
+			return this.todos.filter( { complete: true } ).length;
+		}
+	}
+} );
 ```
 
 Instances of `TodosApp` will have default `todos` value and a `completeCount`
 that dynamically changes when `todos` changes:
 
 ```js
-var todosApp = new TodosApp();
-todosApp.todos //-> DefineList[{complete: true, name: "Do the dishes."}, ...]
-
-todosApp.completeCount //-> 2
-
-todosApp.todos[2].complete = true;
-
-todosApp.completeCount //-> 3
+const todosApp = new TodosApp();
+todosApp.todos; //-> DefineList[{complete: true, name: "Do the dishes."}, ...]
+todosApp.completeCount; //-> 2
+todosApp.todos[ 2 ].complete = true;
+todosApp.completeCount; //-> 3
 ```
 
 ## Observables and HTML Elements
@@ -138,10 +137,10 @@ The following example increments the _Count_ when the <button>+1</button> is cli
 The demo uses a [can-stache] view:
 
 ```js
-var view = stache(`
-  <button on:click='increment()'>+1</button>
-  Count: <span>{{count}}</span>
-`);
+const view = stache( `
+<button on:click='increment()'>+1</button>
+Count: <span>{{count}}</span>
+` );
 ```
 
 The _view_:
@@ -245,32 +244,31 @@ The demo defines the `<my-counter>` element with:
 
 - The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
   ```js
-  import DefineMap from "can-define/map/map";
-  var Counter = DefineMap.extend({
-      count: {default: 0},
-      increment() {
-          this.count++;
-      }
-  });
-  ```
+import DefineMap from "can-define/map/map";
+const Counter = DefineMap.extend( {
+	count: { default: 0 },
+	increment() {
+		this.count++;
+	}
+} );
+```
 - The [can-stache] view that incremented the counter as shown in the beginning of this guide:
   ```js
-  import stache from "can-stache";
-  var view = stache(`
-    <button on:click='increment()'>+1</button>
-    Count: <span>{{count}}</span>
-  `);
-  ```
+import stache from "can-stache";
+const view = stache( `
+<button on:click='increment()'>+1</button>
+Count: <span>{{count}}</span>
+` );
+```
 - A [can-component] that combines the `Counter` and `view` as follows:
   ```js
-  import Component from "can-component";
-
-  Component.extend({
-      tag: "my-counter",
-      ViewModel: Counter,
-      view: view
-  });
-  ```
+import Component from "can-component";
+Component.extend( {
+	tag: "my-counter",
+	ViewModel: Counter,
+	view: view
+} );
+```
 
 The demo then creates a `<my-counter>` element like:
 
@@ -291,20 +289,19 @@ often done together as follows:
 
 ```js
 import Component from "can-component";
-
-Component.extend({
-    tag: "my-counter",
-    view: `
-        <button on:click='increment()'>+1</button>
-        Count: <span>{{count}}</span>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
+Component.extend( {
+	tag: "my-counter",
+	view: `
+<button on:click='increment()'>+1</button>
+Count: <span>{{count}}</span>
+`,
+	ViewModel: {
+		count: { default: 0 },
+		increment() {
+			this.count++;
+		}
+	}
+} );
 ```
 
 [can-component] will create a `can-stache` template from a string [can-component.prototype.view] value
@@ -363,7 +360,6 @@ the [Key-Value Observables](#Key_ValueObservables) section to `window.location` 
 
 ```js
 import route from "can-route";
-
 route.data = myCounter;
 route.start();
 ```
@@ -375,12 +371,11 @@ change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
 back to `0`:
 
 ```js
-myCounter.increment()
-window.location.hash  //-> "#!&count=1"
-
-history.back()
-myCounter.count       //-> 0
-window.location.hash  //-> "#!&count=0"
+myCounter.increment();
+window.location.hash;  //-> "#!&count=1"
+history.back();
+myCounter.count;       //-> 0
+window.location.hash;  //-> "#!&count=0"
 ```
 
 @demo demos/technology-overview/route-counter.html
@@ -396,10 +391,12 @@ By default, `can-route` serializes the observable's data with [can-param],
 so that the following observable data produces the following url hashes:
 
 ```js
-{foo: "bar"}          //-> "#!&foo=bar"
-{foo: ["bar", "baz"]} //-> "#!&foo[]=bar&foo[]=baz"
-{foo: {bar: "baz"}}   //-> "#!&foo[bar]=baz"
-{foo: "bar & baz"}    //-> "#!&foo=bar+%26+baz"
+{foo: "bar";}          //-> "#!&foo=bar"
+{foo: [ "bar", "baz" ];} //-> "#!&foo[]=bar&foo[]=baz"
+{foo: {
+	bar: "baz";
+}}   //-> "#!&foo[bar]=baz"
+{foo: "bar & baz";}    //-> "#!&foo=bar+%26+baz"
 ```
 
 > __NOTE 1:__ This guide uses hash-based routing instead of pushstate because hash-based routing
@@ -414,7 +411,7 @@ observable and the browser's location. The following registers
 a translation between URLs and route properties:
 
 ```js
-route.register("{count}")
+route.register( "{count}" );
 ```
 
 This results in the following translation between observable data and url hashes:
@@ -429,8 +426,8 @@ You can add data when the url is matched.  The following registers
 data for when the URL is matched:
 
 ```js
-route.register("products", {page: "products"});
-route.register("products/{id}", {page: "products"})
+route.register( "products", { page: "products" } );
+route.register( "products/{id}", { page: "products" } );
 ```
 
 This results in the following translation between observable data and url hashes:
@@ -444,7 +441,7 @@ Registering the empty route (`""`) provides initial state for the
 application. The following makes sure the count starts at 0 when the hash is empty:
 
 ```js
-route.register("",{count: 0});
+route.register( "", { count: 0 } );
 ```
 
 @demo demos/technology-overview/route-counter-registered.html
@@ -493,18 +490,17 @@ import stache from "can-stache";
 import DefineMap from "can-define/map/map";
 import route from "can-route";
 import "can-stache-route-helpers";
-
-Component.extend({
-    tag: "my-app",
-    view: stache(`
-        The current page is {{page}}.
-        <a href="{{ routeURL(page='home') }}">Home</a>
-        <a href="{{ routeURL(page='tasks') }}">Tasks</a>
-    `),
-    ViewModel: {
-        page: "string"
-    }
-})
+Component.extend( {
+	tag: "my-app",
+	view: stache( `
+The current page is {{page}}.
+<a href="{{ routeURL(page='home') }}">Home</a>
+<a href="{{ routeURL(page='tasks') }}">Tasks</a>
+` ),
+	ViewModel: {
+		page: "string"
+	}
+} );
 ```
 
 > __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
@@ -516,7 +512,7 @@ To connect the component's VM to the url, we:
 - call and [can-route.start] to begin sending url values to the component.
 
 ```js
-route.data = document.querySelector("my-app");
+route.data = document.querySelector( "my-app" );
 route.start();
 ```
 
@@ -536,26 +532,27 @@ We'll use [can-stache.helpers.switch] to switch between different components
 based on a `componentToShow` property on the view-model. The result looks like the following:
 
 ```js
-Component.extend({
-    tag: "my-app",
-    view: stache(`
-        {{#switch(componentToShow)}}
-            {{#case("home")}}
-                <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
-            {{/case}}
-            {{#case("tasks")}}
-                <task-editor id:from="taskId" logout:from="logout"/>
-            {{/case}}
-            {{#case("login")}}
-                <page-login isLoggedIn:bind="isLoggedIn" />
-            {{/case}}
-            {{#default}}
-                <h2>Page Missing</h2>
-            {{/default}}
-        {{/switch}}
-    `),
-    ...
-})
+Component.extend( {
+	tag: "my-app",
+	view: stache( `
+{{#switch(componentToShow)}}
+{{#case("home")}}
+<page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
+{{/case}}
+{{#case("tasks")}}
+<task-editor id:from="taskId" logout:from="logout"/>
+{{/case}}
+{{#case("login")}}
+<page-login isLoggedIn:bind="isLoggedIn" />
+{{/case}}
+{{#default}}
+<h2>Page Missing</h2>
+{{/default}}
+{{/switch}}
+` )
+
+// ...
+} );
 ```
 
 Notice that the view-model will need the following properties:
@@ -574,40 +571,42 @@ with the logic to make the view behave correctly. We implement the
 `ViewModel` as follows:
 
 ```js
-Component.extend({
-    tag: "my-app",
-    ...
-    ViewModel: {
-        // Properties that come from the url
-        page: "string",
-        taskId: "string",
+Component.extend( {
+	tag: "my-app",
 
-        // A property if the user has logged in.
-        // `serialize: false` keeps `isLoggedIn` from
-        // affecting the `url` and vice-versa.
-        isLoggedIn: {
-            default: false,
-            type: "boolean",
-            serialize: false
-        },
+	// ...
+	ViewModel: {
 
-        // We show the login page if someone
-        // isn't logged in, otherwise, we
-        // show what the url points to.
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return "login";
-            }
-            return this.page;
-        },
+		// Properties that come from the url
+		page: "string",
+		taskId: "string",
 
-        // A function we pass to sub-components
-        // so they can log out.
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
+		// A property if the user has logged in.
+		// `serialize: false` keeps `isLoggedIn` from
+		// affecting the `url` and vice-versa.
+		isLoggedIn: {
+			default: false,
+			type: "boolean",
+			serialize: false
+		},
+
+		// We show the login page if someone
+		// isn't logged in, otherwise, we
+		// show what the url points to.
+		get componentToShow() {
+			if ( !this.isLoggedIn ) {
+				return "login";
+			}
+			return this.page;
+		},
+
+		// A function we pass to sub-components
+		// so they can log out.
+		logout() {
+			this.isLoggedIn = false;
+		}
+	}
+} );
 ```
 
 > NOTE: The [can-define.types.serialize] property behavior controls the
@@ -634,14 +633,14 @@ we want urls like `#!tasks` to set the `page` property.  We can do that
 by registering the following route:
 
 ```js
-route.register("{page}", {page: "home"});
+route.register( "{page}", { page: "home" } );
 ```
 
 Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
 to `"5"`.  Registering the following route does that:
 
 ```js
-route.register("tasks/{taskId}", {page: "tasks"});
+route.register( "tasks/{taskId}", { page: "tasks" } );
 ```
 
 Now the mini application is able to translate changes in the url to

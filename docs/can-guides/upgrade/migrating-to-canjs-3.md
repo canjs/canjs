@@ -31,17 +31,15 @@ You can start importing CanJS code in a modular way before moving to CanJS 3.
 For example, you might be using [can-component] like this:
 
 ```js
-import can from 'can';
-
-can.Component.extend({ ... });
+import can from "can";
+can.Component.extend( { /* ... */ } );
 ```
 
 Update your code to instead look like this:
 
 ```js
-import Component from 'can/component/component';
-
-Component.extend({ ... });
+import Component from "can/component/component";
+Component.extend( { /* ... */ } );
 ```
 
 Use the same pattern for the other modules you are using. Be careful when declaring names for imported modules that share a similar name to native objects like Map.
@@ -49,13 +47,13 @@ Use the same pattern for the other modules you are using. Be careful when declar
 Instead of:
 
 ```js
-import Map from 'can/map/map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+import Map from "can/map/map"; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
 ```
 
 Write:
 
 ```js
-import CanMap from 'can/map/map';
+import CanMap from "can/map/map";
 ```
 
 Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced with modular paths:
@@ -93,15 +91,15 @@ Here’s a list of all the `can.` properties in CanJS 2.3 that can be replaced w
 You might be using it in your code to easily reference the library:
 
 ```js
-import can from 'can';
-var body = can.$('body');
+import can from "can";
+const body = can.$( "body" );
 ```
 
 Update your code to explicitly require the library on which you depend. For example:
 
 ```js
-import $ from 'jquery';
-var body = $('body');
+import $ from "jquery";
+const body = $( "body" );
 ```
 
 ### Set `leakScope` in components
@@ -117,9 +115,9 @@ If you have a template like:
 That you render with a [can-map map] containing a `page` property like so:
 
 ```js
-render(new Map({
+render( new Map( {
 	page: "home"
-}));
+} ) );
 ```
 
 This `page` property is not available within `some-component`’s own template.
@@ -133,11 +131,11 @@ If the component’s template looks like:
 It can only lookup the `page` property on `some-component`’s own [can-component.prototype.ViewModel]. To restore the behavior in 2.x, simply set [can-component.prototype.leakScope] to be `true` on the component:
 
 ```js
-Component.extend({
+Component.extend( {
 	tag: "some-component",
-	ViewModel: {...},
+	ViewModel: { /* ... */ },
 	leakScope: true
-});
+} );
 ```
 @highlight 4
 
@@ -153,10 +151,11 @@ This will update your `package.json` to look something like this:
 
 ```js
 {
-  ...
-  "dependencies": {
-    "can": "^<%canjs.package.version%>"
-  }
+
+// ...
+	"dependencies": {
+		"can": "^<%canjs.package.version%>"
+	}
 }
 ```
 
@@ -169,7 +168,7 @@ At a minimum, to upgrade your code for CanJS 3, you must make all of the followi
 In your code where you normally would import `can`, instead import `can/legacy`:
 
 ```js
-import can from 'can/legacy';
+import can from "can/legacy";
 ```
 
 This will give you a `can` object with *most* of the same APIs as in 2.3, with a few exceptions:
@@ -184,15 +183,14 @@ In your [can-component]s, the [can-util/dom/events/inserted/inserted inserted] a
 There is now a [can-component/beforeremove] event that fires synchronously in case you need to perform memory cleanup. For example, you might need to access the parent’s viewModel:
 
 ```js
-Component.extend({
+Component.extend( {
 	tag: "my-panel",
-
 	events: {
-		"{element} beforeremove": function(){
-			canViewModel(this.element.parentNode).removePanel(this.viewModel);
+		"{element} beforeremove": function() {
+			canViewModel( this.element.parentNode ).removePanel( this.viewModel );
 		}
 	}
-})
+} );
 ```
 
 ### Replace uses of `can.view`
@@ -202,20 +200,20 @@ The `can.view` methods have been removed in CanJS 3. The most common use was to 
 Instead of:
 
 ```js
-var render = can.view('some-id');
+const render = can.view( "some-id" );
 ```
 
 Just use the DOM APIs and pass the string directly into [can-stache]:
 
 ```js
-var templateString = document.getElementById('some-id').innerHTML;
-var render = stache(templateString);
+const templateString = document.getElementById( "some-id" ).innerHTML;
+const render = stache( templateString );
 ```
 
 If you were using `can.view` to load a template from a URL like so:
 
 ```js
-var render = can.view('./template.stache');
+const render = can.view( "./template.stache" );
 ```
 
 We encourage you to use [StealJS](https://stealjs.com/) with [steal-stache](#Usingsteal_stachefortemplates):
@@ -227,9 +225,9 @@ import render from "./template.stache";
 Alternatively, use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API):
 
 ```js
-fetch("./todos.stache")
-	.then((resp) => stache(resp.text()))
-	.then((render) => render(...));
+fetch( "./todos.stache" )
+	.then( ( resp ) => stache( resp.text() ) )
+	.then( ( render ) => render( /* ... */ ) );
 ```
 
 If you’re using another module loader (such as Browserify or webpack), check out [guides/setup] for instructions on how to load templates.
@@ -239,7 +237,7 @@ If you’re using another module loader (such as Browserify or webpack), check o
 If you were using `can.view.preload` then use [can-stache.registerPartial] instead.
 
 ```js
-stache.registerPartial("some-id", renderer);
+stache.registerPartial( "some-id", renderer );
 ```
 
 ### Replace uses of `can.Construct.proxy`
@@ -249,14 +247,14 @@ stache.registerPartial("some-id", renderer);
  Instead of:
 
  ```js
- this.proxy(randFunc)
- ```
+this.proxy( randFunc );
+```
 
  You should now do this:
 
  ```js
- randFunc.bind(this)
- ```
+randFunc.bind( this );
+```
 
  ### Replace uses of `can.batch`
 
@@ -265,27 +263,27 @@ stache.registerPartial("some-id", renderer);
  Instead of:
 
  ```js
- can.batch.method();
- ```
+can.batch.method();
+```
 
 You should now do this:
 
 ```js
-import canBatch from 'can-event/batch/batch';
+import canBatch from "can-event/batch/batch";
 canBatch.method();
 ```
 
 The `trigger` method has also been renamed to `dispatch`.
 
  ```js
- can.batch.trigger(myObj, 'myEvent');
- ```
+can.batch.trigger( myObj, "myEvent" );
+```
 
  Becomes:
 
  ```js
- canBatch.dispatch(myObj, 'myEvent');
- ```
+canBatch.dispatch( myObj, "myEvent" );
+```
 
  ### Replace uses of `can.isFunction`
 
@@ -294,30 +292,30 @@ The `trigger` method has also been renamed to `dispatch`.
  Instead of:
 
  ```js
- can.isFunction(func);
- ```
+can.isFunction( func );
+```
 
  You should now do this:
 
  ```js
- import isFunction from 'can/util/js/is-function/is-function';
- isFunction(func);
- ```
+import isFunction from "can/util/js/is-function/is-function";
+isFunction( func );
+```
 
 ### `can.event`
 
 Some methods have been renamed in `can.event`.
 
 ```js
-can.event.addEvent.call(el, 'click', function() {});
-can.event.removeEvent.call(el, 'click', function() {});
+can.event.addEvent.call( el, "click", function() {} );
+can.event.removeEvent.call( el, "click", function() {} );
 ```
 
 Becomes:
 
 ```js
-can.event.addEventListener.call(el, 'click', function() {});
-can.event.removeEventListener.call(el, 'click', function() {});
+can.event.addEventListener.call( el, "click", function() {} );
+can.event.removeEventListener.call( el, "click", function() {} );
 ```
 
 ### `can.extend`
@@ -325,17 +323,17 @@ can.event.removeEventListener.call(el, 'click', function() {});
 This method has been split into two: a shallow and deep merge. Previously, passing `true` as the first parameter would do a deep merge. Now, you explicitly invoke the deep merge or shallow merge function.
 
 ```js
-can.extend({}, { answer: 42 }); // shallow
-can.extend(true, {}, { answer: 42 }); // deep
+can.extend( {}, { answer: 42 } ); // shallow
+can.extend( true, {}, { answer: 42 } ); // deep
 ```
 
 Becomes:
 
 ```js
-import assign from 'can-util/js/assign/assign';
-import deepAssign from 'can-util/js/deepAssign/deepAssign';
-assign({}, { answer: 42 }); // shallow
-deepAssign({}, { answer: 42 }); // deep
+import assign from "can-util/js/assign/assign";
+import deepAssign from "can-util/js/deepAssign/deepAssign";
+assign( {}, { answer: 42 } ); // shallow
+deepAssign( {}, { answer: 42 } ); // deep
 ```
 
 ### `can.addClass`
@@ -345,14 +343,14 @@ This method now requires the DOM element to be the context of function.
 Replace this:
 
 ```js
-can.addClass(el, 'myClass');
+can.addClass( el, "myClass" );
 ```
 
 With this:
 
 ```js
-import className from 'can-util/dom/class-name/class-name';
-className.add.call(el, 'myClass');
+import className from "can-util/dom/class-name/class-name";
+className.add.call( el, "myClass" );
 ```
 
 ### `can.append`
@@ -362,14 +360,14 @@ This method now require the DOM element to be the context of function.
 Replace this:
 
 ```js
-can.append(el, '<p></p>');
+can.append( el, "<p></p>" );
 ```
 
 With this:
 
 ```js
-import mutate from 'can-util/dom/mutate/mutate';
-mutate.append.call(el, '<p></p>');
+import mutate from "can-util/dom/mutate/mutate";
+mutate.append.call( el, "<p></p>" );
 ```
 
 ### `can.data`
@@ -379,16 +377,16 @@ This method now requires the DOM element to be the context of function. It also 
 Replace this:
 
 ```js
-can.data(el, 'something', 'secret'); // set
-can.data(el, 'something'); // get
+can.data( el, "something", "secret" ); // set
+can.data( el, "something" ); // get
 ```
 
 With this:
 
 ```js
-import domData from 'can-util/dom/data/data';
-domData.set.call(el, 'something', 'secret');
-domData.get.call(el, 'something');
+import domData from "can-util/dom/data/data";
+domData.set.call( el, "something", "secret" );
+domData.get.call( el, "something" );
 ```
 
 ### String methods
@@ -396,17 +394,16 @@ domData.get.call(el, 'something');
 All string methods are grouped together now, so you only have to import the string utilities once.
 
 ```js
-can.camelize('first-name');
-can.hyphenate('firstName');
+can.camelize( "first-name" );
+can.hyphenate( "firstName" );
 ```
 
 Becomes:
 
 ```js
-import string from 'can-util/js/string/string';
-
-string.camelize('first-name');
-string.hyphenate('firstName');
+import string from "can-util/js/string/string";
+string.camelize( "first-name" );
+string.hyphenate( "firstName" );
 ```
 
 ### Use native Promises
@@ -440,7 +437,7 @@ You can fix this either by having your helpers handle computes, or by using [can
 Most recently-built applications do not depend on adding to the global namespace, but in case you have code that does:
 
 ```js
-Construct.extend("foo.bar", {...})
+Construct.extend( "foo.bar", { /* ... */ } );
 ```
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global, you can do so yourself using the return value of [can-construct.extend].
@@ -479,10 +476,10 @@ Instead of:
 
 ```js
 import template from "./todo.stache";
-Component.extend({
+Component.extend( {
 	tag: "some-component",
 	template: template
-});
+} );
 ```
 @highlight 4
 
@@ -490,10 +487,10 @@ You should write:
 
 ```js
 import view from "./todo.stache";
-Component.extend({
+Component.extend( {
 	tag: "some-component",
 	view: view
-});
+} );
 ```
 @highlight 4
 
@@ -506,25 +503,22 @@ In addition to the above, take advantage of the individual packages by installin
 For example, you might be using [can-component] like either:
 
 ```js
-import can from 'can';
-
-can.Component.extend({ ... });
+import can from "can";
+can.Component.extend( { /* ... */ } );
 ```
 
 or
 
 ```js
-import Component from 'can/component/component';
-
-Component.extend({ ... });
+import Component from "can/component/component";
+Component.extend( { /* ... */ } );
 ```
 
 Regardless of which you are using, update your code to instead look like:
 
 ```js
-import Component from 'can-component';
-
-Component.extend({ ... });
+import Component from "can-component";
+Component.extend( { /* ... */ } );
 ```
 
 Use the same pattern for the other `can` modules you are using. In general, you should not be using the `can.` properties any more, but rather importing (through your module loader / bundler) only the packages and modules that you are using.
@@ -572,10 +566,9 @@ If you’ve used [can-map-define] in the past, then using [can-define] should be
 A typical map looks like:
 
 ```js
-import Map from 'can-map';
-import 'can-map-define';
-
-var CarOwner = Map.extend({
+import Map from "can-map";
+import "can-map-define";
+const CarOwner = Map.extend( {
 	define: {
 		cars: {
 			Type: Car.List
@@ -590,15 +583,14 @@ var CarOwner = Map.extend({
 			default: 18
 		}
 	}
-});
+} );
 ```
 
 Which can be replaced by flattening it into a [can-define/map/map] like so:
 
 ```js
-import DefineMap from 'can-define/map/map';
-
-var CarOwner = DefineMap.extend({
+import DefineMap from "can-define/map/map";
+const CarOwner = DefineMap.extend( {
 	cars: Car.List,
 	favorite: Car,
 	color: "string",
@@ -606,26 +598,25 @@ var CarOwner = DefineMap.extend({
 		type: "number",
 		default: 18
 	}
-});
+} );
 ```
 
 Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with `DefineMap`, just use the `.` (dot) operator instead:
 
 ```js
-var carOwner = new CarOwner();
+const carOwner = new CarOwner();
 
 // This is observable!
-carOwner.favorite = new Car({ make: "Toyota" });
+carOwner.favorite = new Car( { make: "Toyota" } );
 ```
 
 **Note:** With `can-map` you are able to assign initial values to a property while defining a `Map` like so:
 
 ```js
-import CanMap from 'can-map';
-
-var Person = CanMap.extend({
-  name: "Justin"
-});
+import CanMap from "can-map";
+const Person = CanMap.extend( {
+	name: "Justin"
+} );
 ```
 
 This shorthand in `can-define/map/map` defines the [can-define.types type], not the initial value.
@@ -633,11 +624,10 @@ This shorthand in `can-define/map/map` defines the [can-define.types type], not 
 Here’s the example above updated for `can-define/map/map`:
 
 ```js
-import DefineMap from 'can-define/map/map';
-
-var Person = DefineMap.extend({
-  name: {default: "Justin"}
-});
+import DefineMap from "can-define/map/map";
+const Person = DefineMap.extend( {
+	name: { default: "Justin" }
+} );
 ```
 
 #### Remove use of `change` events
@@ -647,21 +637,22 @@ When you upgrade to use [can-define], you’ll no longer receive `change` events
 For example:
 
 ```js
-route.bind("change", function(){
-	// The route changed
-});
+route.bind( "change", function() {
+
+// The route changed
+} );
 ```
 
 Can be modified to instead use a compute that calls `serialize` on the route’s map:
 
 ```js
-var routeMap = compute(function(){
+const routeMap = compute( function() {
 	return route.map.serialize();
-});
+} );
+routeMap.bind( "change", function() {
 
-routeMap.bind("change", function(){
-	// A property on the route’s map changed.
-});
+// A property on the route’s map changed.
+} );
 ```
 
 As you might notice, [can-event.on on()] is preferable to `bind()`, although `bind()` still works the same.
@@ -673,25 +664,22 @@ When using the easy migration path, you were secretly using [can-connect/can/mod
 Most new projects should use [can-connect] directly. [can-connect/can/super-map/super-map] is the easiest way to create models with `can-connect`’s features. Using `can-connect` directly allows you to use [can-define/map/map]s as your models like so:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import superMap from 'can-connect/can/super-map/super-map';
-
-var Message = DefineMap.extend({
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+import superMap from "can-connect/can/super-map/super-map";
+const Message = DefineMap.extend( {
 	id: "*"
-});
-
-Message.List = DefineList.extend({
+} );
+Message.List = DefineList.extend( {
 	"#": Message
-});
-
-var messageConnection = superMap({
-	url: 'https://chat.donejs.com/api/messages',
-	idProp: 'id',
+} );
+const messageConnection = superMap( {
+	url: "https://chat.donejs.com/api/messages",
+	idProp: "id",
 	Map: Message,
 	List: Message.List,
-	name: 'message'
-});
+	name: "message"
+} );
 ```
 
 ## Avoid future deprecations & removals
@@ -703,21 +691,19 @@ If you are using [can-jquery/legacy] to automatically get jQuery-wrapped element
 Instead, use [can-jquery] directly and handle the wrapping yourself. For example:
 
 ```js
-import Component from 'can-component';
-import $ from 'can-jquery';
-
-Component.extend({
+import Component from "can-component";
+import $ from "can-jquery";
+Component.extend( {
 	tag: "some-component",
-
 	events: {
-		inserted: function(){
-			this.element = $(this.element);
+		inserted: function() {
+			this.element = $( this.element );
 		},
-		"li click": function(li){
-			var $li = $(li);
+		"li click": function( li ) {
+			const $li = $( li );
 		}
 	}
-});
+} );
 ```
 
 [can-jquery] will continue to be supported indefinitely but [can-jquery/legacy] will be dropped in a future major version.

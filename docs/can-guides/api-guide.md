@@ -18,13 +18,10 @@ For example, [can-define/map/map.prototype.forEach can-define/map/map.prototype.
 method that loops through properties and values on an `DefineMap`:
 
 ```js
-import DefineMap from 'can-define/map/map';
-
-var map = new DefineMap({name: "Justin"});
-
-map.forEach(function(value, property){
-
-});
+import DefineMap from "can-define/map/map";
+const map = new DefineMap( { name: "Justin" } );
+map.forEach( function( value, property ) {
+} );
 ```
 
 `.forEach` is a function the `prototype` of the `DefineMap` export of the `can-define/map/map`
@@ -111,16 +108,16 @@ the _prototype_ group on [can-define/list/list] because `concat` is on
 the `can-define/list/list` export’s `prototype`:
 
 ```js
-import DefineList from 'can-define/list/list';
-DefineList.prototype.concat //-> function
+import DefineList from "can-define/list/list";
+DefineList.prototype.concat; //-> function
 ```
 
 Because of how JavaScript works, this means that you can call `.concat` directly on any instance
 of `DefineList`:
 
 ```js
-var hobbies = new DefineList(["learning"]);
-hobbies.concat(["programming"]);
+const hobbies = new DefineList( [ "learning" ] );
+hobbies.concat( [ "programming" ] );
 ```
 
 #### static
@@ -129,8 +126,8 @@ hobbies.concat(["programming"]);
 the _static_ group on [can-define/map/map] because `extend` is a direct property on the `can-define/map/map` export:
 
 ```js
-import DefineMap from 'can-define/map/map';
-DefineMap.prototype.map //-> function
+import DefineMap from "can-define/map/map";
+DefineMap.prototype.map; //-> function
 ```
 
 #### types
@@ -143,13 +140,11 @@ For example, the [can-fixture.store can-fixture.store] method returns an object
 of the [can-fixture/StoreType Store type].
 
 ```js
-import fixture from 'can-fixture';
-
-var todoStore = fixture.store([{id: 1, name: "trash"}]);
-
-todoStore.createData  //-> function
-todoStore.destroyData //-> function
-todoStore.get         //-> function
+import fixture from "can-fixture";
+const todoStore = fixture.store( [ { id: 1, name: "trash" } ] );
+todoStore.createData;  //-> function
+todoStore.destroyData; //-> function
+todoStore.get;         //-> function
 ```
 
 As you can see above, a `Store` can have lots of methods

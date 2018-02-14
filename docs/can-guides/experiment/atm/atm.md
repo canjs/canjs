@@ -50,15 +50,15 @@ The `CODE` section renders the `app-template` with:
 
 ```js
 document.body.insertBefore(
-	can.stache.from("app-template")({}),
-    document.body.firstChild
+	can.stache.from( "app-template" )( {} ),
+	document.body.firstChild
 );
 ```
 
 The `TESTS` section labels which module will be tested:
 
 ```js
-QUnit.module("ATM system", {});
+QUnit.module( "ATM system", {} );
 ```
 
 ## Mock out switching between pages

@@ -16,10 +16,9 @@ For example, the following CanJS 2.3 code:
 ```js
 import can from "can";
 import "can/map/define/define";
-
-export default can.Map.extend({
-  define: {}
-});
+export default can.Map.extend( {
+	define: {}
+} );
 ```
 
 …can be transformed to this:
@@ -28,10 +27,9 @@ export default can.Map.extend({
 import CanMap from "can-map";
 import can from "can";
 import "can-map-define";
-
-export default CanMap.extend({
-  define: {}
-});
+export default CanMap.extend( {
+	define: {}
+} );
 ```
 @highlight 1,3,5
 
@@ -187,7 +185,7 @@ For example, it can transform code like this:
 
 ```js
 import can from "can";
-can.addClass(el, "myClass");
+can.addClass( el, "myClass" );
 ```
 
 …to this:
@@ -195,7 +193,7 @@ can.addClass(el, "myClass");
 ```js
 import className from "can-util/dom/class-name/class-name";
 import can from "can";
-className.addClass.call(el, "myClass");
+className.addClass.call( el, "myClass" );
 ```
 @highlight 1,3
 
@@ -206,19 +204,19 @@ These transforms handle the cases where a module is loaded using `require`.
 For example, it will transform any of the following:
 
 ```js
-import Component from 'can/component/';
+import Component from "can/component/";
 ```
 ```js
-import Component from 'can/component/component';
+import Component from "can/component/component";
 ```
 ```js
-import Component from 'can/component/component.js';
+import Component from "can/component/component.js";
 ```
 
 …to this:
 
 ```js
-import Component from 'can-component';
+import Component from "can-component";
 ```
 @highlight 1
 
@@ -257,25 +255,25 @@ can-migrate -a src/**/*.{js,md,html,stache,component} -t can-stache-bindings/col
 …or this:
 
 ```js
-Component.extend({
-  tag: 'my-tag',
-  template: stache(
-    '<input {^$value}="H1" {$value}="H2" {($value)}="H3" ($value)="H4" ' +
-		'{^value}="H1" {value}="H2" {(value)}="H3" (value)="H4">'
-  )
-});
+Component.extend( {
+	tag: "my-tag",
+	template: stache(
+		"<input {^$value}=\"H1\" {$value}=\"H2\" {($value)}=\"H3\" ($value)=\"H4\" " +
+"{^value}=\"H1\" {value}=\"H2\" {(value)}=\"H3\" (value)=\"H4\">"
+	)
+} );
 ```
 
 …to this:
 
 ```js
-Component.extend({
-  tag: 'my-tag',
-  template: stache(
-    '<input el:value:to="H1" el:value:from="H2" el:value:bind="H3" on:el:value="H4" ' +
-		'vm:value:to="H1" vm:value:from="H2" vm:value:bind="H3" on:vm:value="H4">'
-  )
-});
+Component.extend( {
+	tag: "my-tag",
+	template: stache(
+		"<input el:value:to=\"H1\" el:value:from=\"H2\" el:value:bind=\"H3\" on:el:value=\"H4\" " +
+"vm:value:to=\"H1\" vm:value:from=\"H2\" vm:value:bind=\"H3\" on:vm:value=\"H4\">"
+	)
+} );
 ```
 @highlight 4,5
 
@@ -838,19 +836,19 @@ can-migrate -a **/*.js -t can-component/require.js
 …will transform any of the following:
 
 ```js
-import Component from 'can/component/';
+import Component from "can/component/";
 ```
 ```js
-import Component from 'can/component/component';
+import Component from "can/component/component";
 ```
 ```js
-import Component from 'can/component/component.js';
+import Component from "can/component/component.js";
 ```
 
 …to this:
 
 ```js
-import Component from 'can-component';
+import Component from "can-component";
 ```
 
 ### can-compute
@@ -923,19 +921,19 @@ can-migrate -a **/*.js -t can-compute/require.js
 …will transform any of the following:
 
 ```js
-import compute from 'can/compute/';
+import compute from "can/compute/";
 ```
 ```js
-import compute from 'can/compute/compute';
+import compute from "can/compute/compute";
 ```
 ```js
-import compute from 'can/compute/compute.js';
+import compute from "can/compute/compute.js";
 ```
 
 …to this:
 
 ```js
-import compute from 'can-compute';
+import compute from "can-compute";
 ```
 
 ### can-construct-super
@@ -983,19 +981,19 @@ can-migrate -a **/*.js -t can-construct-super/require.js
 …will transform any of the following:
 
 ```js
-import constructSuper from 'can/construct/super/';
+import constructSuper from "can/construct/super/";
 ```
 ```js
-import constructSuper from 'can/construct/super/super';
+import constructSuper from "can/construct/super/super";
 ```
 ```js
-import constructSuper from 'can/construct/super/super.js';
+import constructSuper from "can/construct/super/super.js";
 ```
 
 …to this:
 
 ```js
-import constructSuper from 'can-construct-super';
+import constructSuper from "can-construct-super";
 ```
 
 ### can-construct
@@ -1068,19 +1066,19 @@ can-migrate -a **/*.js -t can-construct/require.js
 …will transform any of the following:
 
 ```js
-import construct from 'can/construct/';
+import construct from "can/construct/";
 ```
 ```js
-import construct from 'can/construct/construct';
+import construct from "can/construct/construct";
 ```
 ```js
-import construct from 'can/construct/construct.js';
+import construct from "can/construct/construct.js";
 ```
 
 …to this:
 
 ```js
-import Construct from 'can-construct';
+import Construct from "can-construct";
 ```
 
 ### can-control
@@ -1153,19 +1151,19 @@ can-migrate -a **/*.js -t can-control/require.js
 …will transform any of the following:
 
 ```js
-import Control from 'can/control/';
+import Control from "can/control/";
 ```
 ```js
-import Control from 'can/control/control';
+import Control from "can/control/control";
 ```
 ```js
-import Control from 'can/control/control.js';
+import Control from "can/control/control.js";
 ```
 
 …to this:
 
 ```js
-import Control from 'can-control';
+import Control from "can-control";
 ```
 
 ### can-deparam
@@ -1188,7 +1186,7 @@ can-migrate -a **/*.js -t can-deparam/replace.js
 
 ```js
 import can from "can";
-can.deparam("#foo[]=bar&foo[]=baz");
+can.deparam( "#foo[]=bar&foo[]=baz" );
 ```
 @highlight 2
 
@@ -1197,7 +1195,7 @@ can.deparam("#foo[]=bar&foo[]=baz");
 ```js
 import deparam from "can-deparam";
 import can from "can";
-deparam("#foo[]=bar&foo[]=baz");
+deparam( "#foo[]=bar&foo[]=baz" );
 ```
 @highlight 1,3
 
@@ -1290,7 +1288,7 @@ can-migrate -a **/*.js -t can-esc/replace.js
 
 ```js
 import can from "can";
-can.esc("<div>&nbsp</div>");
+can.esc( "<div>&nbsp</div>" );
 ```
 @highlight 2
 
@@ -1299,7 +1297,7 @@ can.esc("<div>&nbsp</div>");
 ```js
 import string from "can-util/js/string/string";
 import can from "can";
-string.esc("<div>&nbsp</div>");
+string.esc( "<div>&nbsp</div>" );
 ```
 @highlight 1,3
 
@@ -1350,7 +1348,7 @@ can-migrate -a **/*.js -t can-event/replace.js
 
 ```js
 import can from "can";
-can.event.dispatch.call(obj, "change");
+can.event.dispatch.call( obj, "change" );
 ```
 @highlight 2
 
@@ -1359,7 +1357,7 @@ can.event.dispatch.call(obj, "change");
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.dispatch.call(obj, "change");
+canEvent.dispatch.call( obj, "change" );
 ```
 @highlight 1,3
 
@@ -1374,19 +1372,19 @@ can-migrate -a **/*.js -t can-event/require.js
 …will transform any of the following:
 
 ```js
-import event from 'can/event/';
+import event from "can/event/";
 ```
 ```js
-import event from 'can/event/event';
+import event from "can/event/event";
 ```
 ```js
-import event from 'can/event/event.js';
+import event from "can/event/event.js";
 ```
 
 …to this:
 
 ```js
-import canEvent from 'can-event';
+import canEvent from "can-event";
 ```
 
 ### can-fixture
@@ -1435,7 +1433,7 @@ can-migrate -a **/*.js -t can-fixture/replace.js
 
 ```js
 import can from "can";
-can.fixture( "/foobar.json", function(){});
+can.fixture( "/foobar.json", function() {} );
 ```
 @highlight 2
 
@@ -1444,7 +1442,7 @@ can.fixture( "/foobar.json", function(){});
 ```js
 import fixture from "can-fixture";
 import can from "can";
-fixture( "/foobar.json", function(){});
+fixture( "/foobar.json", function() {} );
 ```
 @highlight 1,3
 
@@ -1459,19 +1457,19 @@ can-migrate -a **/*.js -t can-fixture/require.js
 …will transform any of the following:
 
 ```js
-import fixture from 'can/util/fixture/';
+import fixture from "can/util/fixture/";
 ```
 ```js
-import fixture from 'can/util/fixture/fixture';
+import fixture from "can/util/fixture/fixture";
 ```
 ```js
-import fixture from 'can/util/fixture/fixture.js';
+import fixture from "can/util/fixture/fixture.js";
 ```
 
 …to this:
 
 ```js
-import fixture from 'can-fixture';
+import fixture from "can-fixture";
 ```
 
 ### can-frag
@@ -1528,7 +1526,7 @@ can-migrate -a **/*.js -t can-getObject/replace.js
 
 ```js
 import can from "can";
-can.getObject(name, roots);
+can.getObject( name, roots );
 ```
 @highlight 2
 
@@ -1537,7 +1535,7 @@ can.getObject(name, roots);
 ```js
 import string from "can-util/js/string/string";
 import can from "can";
-string.getObject(name, roots);
+string.getObject( name, roots );
 ```
 @highlight 1,3
 
@@ -1562,7 +1560,7 @@ can-migrate -a **/*.js -t can-hyphenate/replace.js
 
 ```js
 import can from "can";
-can.hyphenate("str");
+can.hyphenate( "str" );
 ```
 @highlight 2
 
@@ -1571,7 +1569,7 @@ can.hyphenate("str");
 ```js
 import string from "can-util/js/string/string";
 import can from "can";
-string.hyphenate("str");
+string.hyphenate( "str" );
 ```
 @highlight 1,3
 
@@ -1596,7 +1594,7 @@ can-migrate -a **/*.js -t can-isArray/replace.js
 
 ```js
 import can from "can";
-can.isArray([1,2,3]);
+can.isArray( [ 1, 2, 3 ] );
 ```
 @highlight 2
 
@@ -1605,7 +1603,7 @@ can.isArray([1,2,3]);
 ```js
 import isArrayLike from "can-util/js/is-array-like/is-array-like";
 import can from "can";
-isArrayLike([1,2,3]);
+isArrayLike( [ 1, 2, 3 ] );
 ```
 @highlight 1,3
 
@@ -1630,7 +1628,7 @@ can-migrate -a **/*.js -t can-isDeferred/replace.js
 
 ```js
 import can from "can";
-can.isDeferred(obj);
+can.isDeferred( obj );
 ```
 @highlight 2
 
@@ -1639,7 +1637,7 @@ can.isDeferred(obj);
 ```js
 import isPromiseLike from "can-util/js/is-promise-like/is-promise-like";
 import can from "can";
-isPromiseLike(obj);
+isPromiseLike( obj );
 ```
 @highlight 1,3
 
@@ -1664,7 +1662,7 @@ can-migrate -a **/*.js -t can-isEmptyObject/replace.js
 
 ```js
 import can from "can";
-can.isEmptyObject(obj);
+can.isEmptyObject( obj );
 ```
 @highlight 2
 
@@ -1673,7 +1671,7 @@ can.isEmptyObject(obj);
 ```js
 import isEmptyObject from "can-util/js/is-empty-object/is-empty-object";
 import can from "can";
-isEmptyObject(obj);
+isEmptyObject( obj );
 ```
 @highlight 1,3
 
@@ -1698,7 +1696,7 @@ can-migrate -a **/*.js -t can-isFunction/replace.js
 
 ```js
 import can from "can";
-can.isFunction(func);
+can.isFunction( func );
 ```
 @highlight 2
 
@@ -1707,7 +1705,7 @@ can.isFunction(func);
 ```js
 import isFunction from "can-util/js/is-function/is-function";
 import can from "can";
-isFunction(func);
+isFunction( func );
 ```
 @highlight 1,3
 
@@ -1758,7 +1756,7 @@ can-migrate -a **/*.js -t can-list/replace.js
 
 ```js
 import can from "can";
-var people = new can.List(["Alex", "Bill"]);
+const people = new can.List( [ "Alex", "Bill" ] );
 ```
 @highlight 2
 
@@ -1767,7 +1765,7 @@ var people = new can.List(["Alex", "Bill"]);
 ```js
 import CanList from "can-list";
 import can from "can";
-var people = new CanList(["Alex", "Bill"]);
+const people = new CanList( [ "Alex", "Bill" ] );
 ```
 @highlight 1,3
 
@@ -1782,19 +1780,19 @@ can-migrate -a **/*.js -t can-list/require.js
 …will transform any of the following:
 
 ```js
-import List from 'can/list/';
+import List from "can/list/";
 ```
 ```js
-import List from 'can/list/list';
+import List from "can/list/list";
 ```
 ```js
-import List from 'can/list/list.js';
+import List from "can/list/list.js";
 ```
 
 …to this:
 
 ```js
-import CanList from 'can-list';
+import CanList from "can-list";
 ```
 
 ### can-listenTo
@@ -1817,7 +1815,7 @@ can-migrate -a **/*.js -t can-listenTo/replace.js
 
 ```js
 import can from "can";
-can.listenTo.call(obj, other, event, handler);
+can.listenTo.call( obj, other, event, handler );
 ```
 @highlight 2
 
@@ -1826,7 +1824,7 @@ can.listenTo.call(obj, other, event, handler);
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.call(obj, other, event, handler);
+canEvent.call( obj, other, event, handler );
 ```
 @highlight 1,3,5
 
@@ -1851,7 +1849,7 @@ can-migrate -a **/*.js -t can-makeArray/replace.js
 
 ```js
 import can from "can";
-can.makeArray({0: "a", length: 1});
+can.makeArray( { 0: "a", length: 1 } );
 ```
 @highlight 2
 
@@ -1860,7 +1858,7 @@ can.makeArray({0: "a", length: 1});
 ```js
 import makeArray from "can-util/js/make-array/make-array";
 import can from "can";
-makeArray({0: "a", length: 1});
+makeArray( { 0: "a", length: 1 } );
 ```
 @highlight 1,3
 
@@ -1910,19 +1908,19 @@ can-migrate -a **/*.js -t can-map-backup/require.js
 …will transform any of the following:
 
 ```js
-import mapBackup from 'can/map/backup/';
+import mapBackup from "can/map/backup/";
 ```
 ```js
-import mapBackup from 'can/map/backup/backup';
+import mapBackup from "can/map/backup/backup";
 ```
 ```js
-import mapBackup from 'can/map/backup/backup.js';
+import mapBackup from "can/map/backup/backup.js";
 ```
 
 …to this:
 
 ```js
-import mapBackup from 'can-map-backup';
+import mapBackup from "can-map-backup";
 ```
 
 ### can-map-define
@@ -1970,19 +1968,19 @@ can-migrate -a **/*.js -t can-map-define/require.js
 …will transform any of the following:
 
 ```js
-import mapDefine from 'can/map/define/';
+import mapDefine from "can/map/define/";
 ```
 ```js
-import mapDefine from 'can/map/define/define';
+import mapDefine from "can/map/define/define";
 ```
 ```js
-import mapDefine from 'can/map/define/define.js';
+import mapDefine from "can/map/define/define.js";
 ```
 
 …to this:
 
 ```js
-import mapDefine from 'can-map-define';
+import mapDefine from "can-map-define";
 ```
 
 ### can-map
@@ -2031,7 +2029,7 @@ can-migrate -a **/*.js -t can-map/replace.js
 
 ```js
 import can from "can";
-const map = new can.Map(aName);
+const map = new can.Map( aName );
 ```
 @highlight 2
 
@@ -2040,7 +2038,7 @@ const map = new can.Map(aName);
 ```js
 import CanMap from "can-map";
 import can from "can";
-const map = new CanMap(aName);
+const map = new CanMap( aName );
 ```
 @highlight 1,3
 
@@ -2055,19 +2053,19 @@ can-migrate -a **/*.js -t can-map/require.js
 …will transform any of the following:
 
 ```js
-import map from 'can/map/';
+import map from "can/map/";
 ```
 ```js
-import map from 'can/map/map';
+import map from "can/map/map";
 ```
 ```js
-import map from 'can/map/map.js';
+import map from "can/map/map.js";
 ```
 
 …to this:
 
 ```js
-import CanMap from 'can-map';
+import CanMap from "can-map";
 ```
 
 ### can-model
@@ -2116,7 +2114,7 @@ can-migrate -a **/*.js -t can-model/replace.js
 
 ```js
 import can from "can";
-can.Model(name, staticProperties, instanceProperties);
+can.Model( name, staticProperties, instanceProperties );
 ```
 @highlight 2
 
@@ -2125,7 +2123,7 @@ can.Model(name, staticProperties, instanceProperties);
 ```js
 import Model from "can-model";
 import can from "can";
-Model(name, staticProperties, instanceProperties);
+Model( name, staticProperties, instanceProperties );
 ```
 @highlight 1,3
 
@@ -2140,19 +2138,19 @@ can-migrate -a **/*.js -t can-model/require.js
 …will transform any of the following:
 
 ```js
-import model from 'can/model/';
+import model from "can/model/";
 ```
 ```js
-import model from 'can/model/model';
+import model from "can/model/model";
 ```
 ```js
-import model from 'can/model/model.js';
+import model from "can/model/model.js";
 ```
 
 …to this:
 
 ```js
-import Model from 'can-model';
+import Model from "can-model";
 ```
 
 ### can-mustache
@@ -2209,7 +2207,7 @@ can-migrate -a **/*.js -t can-one/replace.js
 
 ```js
 import can from "can";
-can.event.dispatch.call(obj, "change");
+can.event.dispatch.call( obj, "change" );
 ```
 @highlight 2
 
@@ -2218,7 +2216,7 @@ can.event.dispatch.call(obj, "change");
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.dispatch.call(obj, "change");
+canEvent.dispatch.call( obj, "change" );
 ```
 @highlight 1,3
 
@@ -2243,7 +2241,7 @@ can-migrate -a **/*.js -t can-param/replace.js
 
 ```js
 import can from "can";
-can.param({foo: "bar"});
+can.param( { foo: "bar" } );
 ```
 @highlight 2
 
@@ -2252,7 +2250,7 @@ can.param({foo: "bar"});
 ```js
 import param from "can-param";
 import can from "can";
-param({foo: "bar"});
+param( { foo: "bar" } );
 ```
 @highlight 1,3
 
@@ -2277,7 +2275,7 @@ can-migrate -a **/*.js -t can-remove/replace.js
 
 ```js
 import can from "can";
-can.remove.call(el, child);
+can.remove.call( el, child );
 ```
 @highlight 2
 
@@ -2286,7 +2284,7 @@ can.remove.call(el, child);
 ```js
 import mutate from "can-util/dom/mutate/mutate";
 import can from "can";
-mutate.removeChild.call.call(el, child);
+mutate.removeChild.call.call( el, child );
 ```
 @highlight 1,3
 
@@ -2311,7 +2309,7 @@ can-migrate -a **/*.js -t can-removeEvent/replace.js
 
 ```js
 import can from "can";
-can.event.removeEvent.call(el, "click", function() {});
+can.event.removeEvent.call( el, "click", function() {} );
 ```
 @highlight 2
 
@@ -2320,7 +2318,7 @@ can.event.removeEvent.call(el, "click", function() {});
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.removeEvent.call(el, "click", function() {});
+canEvent.removeEvent.call( el, "click", function() {} );
 ```
 @highlight 1,3
 
@@ -2370,19 +2368,19 @@ can-migrate -a **/*.js -t can-route-pushstate/require.js
 …will transform any of the following:
 
 ```js
-import routePushState from 'can/route/pushstate/';
+import routePushState from "can/route/pushstate/";
 ```
 ```js
-import routePushState from 'can/route/pushstate/pushstate';
+import routePushState from "can/route/pushstate/pushstate";
 ```
 ```js
-import routePushState from 'can/route/pushstate/pushstate.js';
+import routePushState from "can/route/pushstate/pushstate.js";
 ```
 
 …to this:
 
 ```js
-import routePushState from 'can-route-pushstate';
+import routePushState from "can-route-pushstate";
 ```
 
 ### can-route
@@ -2431,7 +2429,7 @@ can-migrate -a **/*.js -t can-route/replace.js
 
 ```js
 import can from "can";
-can.route("{page}", {page: "homepage"});
+can.route( "{page}", { page: "homepage" } );
 ```
 @highlight 2
 
@@ -2440,7 +2438,7 @@ can.route("{page}", {page: "homepage"});
 ```js
 import route from "can-route";
 import can from "can";
-route("{page}", {page: "homepage"});
+route( "{page}", { page: "homepage" } );
 ```
 @highlight 1,3
 
@@ -2455,19 +2453,19 @@ can-migrate -a **/*.js -t can-route/require.js
 …will transform any of the following:
 
 ```js
-import route from 'can/route/';
+import route from "can/route/";
 ```
 ```js
-import route from 'can/route/route';
+import route from "can/route/route";
 ```
 ```js
-import route from 'can/route/route.js';
+import route from "can/route/route.js";
 ```
 
 …to this:
 
 ```js
-import route from 'can-route';
+import route from "can-route";
 ```
 
 ### can-stache
@@ -2516,7 +2514,7 @@ can-migrate -a **/*.js -t can-stache/replace.js
 
 ```js
 import can from "can";
-can.stache(template);
+can.stache( template );
 ```
 @highlight 2
 
@@ -2525,7 +2523,7 @@ can.stache(template);
 ```js
 import stache from "can-stache";
 import can from "can";
-stache(template);
+stache( template );
 ```
 @highlight 1,3
 
@@ -2540,19 +2538,19 @@ can-migrate -a **/*.js -t can-stache/require.js
 …will transform any of the following:
 
 ```js
-import stache from 'can/view/stache/';
+import stache from "can/view/stache/";
 ```
 ```js
-import stache from 'can/view/stache/stache';
+import stache from "can/view/stache/stache";
 ```
 ```js
-import stache from 'can/view/stache/stache.js';
+import stache from "can/view/stache/stache.js";
 ```
 
 …to this:
 
 ```js
-import stache from 'can-stache';
+import stache from "can-stache";
 ```
 
 ### can-stopListening
@@ -2575,7 +2573,7 @@ can-migrate -a **/*.js -t can-stopListening/replace.js
 
 ```js
 import can from "can";
-can.event.stopListening.call(obj, other, event, handler);
+can.event.stopListening.call( obj, other, event, handler );
 ```
 @highlight 2
 
@@ -2584,7 +2582,7 @@ can.event.stopListening.call(obj, other, event, handler);
 ```js
 import canEvent from "can-event";
 import can from "can";
-canEvent.stopListening.call(obj, other, event, handler);
+canEvent.stopListening.call( obj, other, event, handler );
 ```
 @highlight 1,3
 
@@ -2609,7 +2607,7 @@ can-migrate -a **/*.js -t can-sub/replace.js
 
 ```js
 import can from "can";
-can.sub(str, data, remove);
+can.sub( str, data, remove );
 ```
 @highlight 2
 
@@ -2618,7 +2616,7 @@ can.sub(str, data, remove);
 ```js
 import string from "can-util/js/string/string";
 import can from "can";
-string.sub(str, data, remove);
+string.sub( str, data, remove );
 ```
 @highlight 1,3
 
@@ -2644,7 +2642,7 @@ can-migrate -a **/*.js -t can-underscore/replace.js
 
 ```js
 import can from "can";
-can.underscore("str");
+can.underscore( "str" );
 ```
 @highlight 2
 
@@ -2653,7 +2651,7 @@ can.underscore("str");
 ```js
 import string from "can-util/js/string/string";
 import can from "can";
-string.underscore("str");
+string.underscore( "str" );
 ```
 @highlight 1,3
 
@@ -2678,7 +2676,7 @@ can-migrate -a **/*.js -t can-view-attr/replace.js
 
 ```js
 import can from "can";
-can.view.attr(attributeName, attrHandler(el, attrData));
+can.view.attr( attributeName, attrHandler( el, attrData ) );
 ```
 @highlight 2
 
@@ -2687,7 +2685,7 @@ can.view.attr(attributeName, attrHandler(el, attrData));
 ```js
 import canViewCallbacks from "can-view-callbacks";
 import can from "can";
-canViewCallbacks.attr(attributeName, attrHandler(el, attrData));
+canViewCallbacks.attr( attributeName, attrHandler( el, attrData ) );
 ```
 @highlight 1,3
 
@@ -2738,7 +2736,7 @@ can-migrate -a **/*.js -t can-view-autorender/replace.js
 
 ```js
 import can from "can";
-can.autorender(success, error);
+can.autorender( success, error );
 ```
 @highlight 2
 
@@ -2747,7 +2745,7 @@ can.autorender(success, error);
 ```js
 import canAutorender from "can-view-autorender";
 import can from "can";
-canAutorender(success, error);
+canAutorender( success, error );
 ```
 @highlight 1,3
 
@@ -2762,19 +2760,19 @@ can-migrate -a **/*.js -t can-view-autorender/require.js
 …will transform any of the following:
 
 ```js
-import autorender from 'can/view/autorender/';
+import autorender from "can/view/autorender/";
 ```
 ```js
-import autorender from 'can/view/autorender/autorender';
+import autorender from "can/view/autorender/autorender";
 ```
 ```js
-import autorender from 'can/view/autorender/autorender.js';
+import autorender from "can/view/autorender/autorender.js";
 ```
 
 …to this:
 
 ```js
-import canAutorender from 'can-view-autorender';
+import canAutorender from "can-view-autorender";
 ```
 
 ### can-view-callbacks
@@ -2847,19 +2845,19 @@ can-migrate -a **/*.js -t can-view-callbacks/require.js
 …will transform any of the following:
 
 ```js
-import viewCallbacks from 'can/view/callbacks/';
+import viewCallbacks from "can/view/callbacks/";
 ```
 ```js
-import viewCallbacks from 'can/view/callbacks/callbacks';
+import viewCallbacks from "can/view/callbacks/callbacks";
 ```
 ```js
-import viewCallbacks from 'can/view/callbacks/callbacks.js';
+import viewCallbacks from "can/view/callbacks/callbacks.js";
 ```
 
 …to this:
 
 ```js
-import canViewCallbacks from 'can-view-callbacks';
+import canViewCallbacks from "can-view-callbacks";
 ```
 
 ### can-view-href
@@ -2907,19 +2905,19 @@ can-migrate -a **/*.js -t can-view-href/require.js
 …will transform any of the following:
 
 ```js
-import viewHref from 'can/view/href/';
+import viewHref from "can/view/href/";
 ```
 ```js
-import viewHref from 'can/view/href/href';
+import viewHref from "can/view/href/href";
 ```
 ```js
-import viewHref from 'can/view/href/href.js';
+import viewHref from "can/view/href/href.js";
 ```
 
 …to this:
 
 ```js
-import canViewHref from 'can-view-href';
+import canViewHref from "can-view-href";
 ```
 
 ### can-view-import
@@ -2967,19 +2965,19 @@ can-migrate -a **/*.js -t can-view-import/require.js
 …will transform any of the following:
 
 ```js
-import viewImport from 'can/view/import/';
+import viewImport from "can/view/import/";
 ```
 ```js
-import viewImport from 'can/view/import/import';
+import viewImport from "can/view/import/import";
 ```
 ```js
-import viewImport from 'can/view/import/import.js';
+import viewImport from "can/view/import/import.js";
 ```
 
 …to this:
 
 ```js
-import canViewImport from 'can-view-import';
+import canViewImport from "can-view-import";
 ```
 
 ### can-view-live
@@ -3002,7 +3000,7 @@ can-migrate -a **/*.js -t can-view-live/replace.js
 
 ```js
 import can from "can";
-can.view.live.text(textNode, text);
+can.view.live.text( textNode, text );
 ```
 @highlight 2
 
@@ -3011,7 +3009,7 @@ can.view.live.text(textNode, text);
 ```js
 import canViewLive from "can-view-live";
 import can from "can";
-canViewLive.text(textNode, text);
+canViewLive.text( textNode, text );
 ```
 @highlight 1,3
 
@@ -3052,19 +3050,19 @@ can-migrate -a **/*.js -t can-view-live/require.js
 …will transform any of the following:
 
 ```js
-import viewLive from 'can/view/live/';
+import viewLive from "can/view/live/";
 ```
 ```js
-import viewLive from 'can/view/live/live';
+import viewLive from "can/view/live/live";
 ```
 ```js
-import viewLive from 'can/view/live/live.js';
+import viewLive from "can/view/live/live.js";
 ```
 
 …to this:
 
 ```js
-import canViewLive from 'can-view-live';
+import canViewLive from "can-view-live";
 ```
 
 ### can-view-parser
@@ -3112,19 +3110,19 @@ can-migrate -a **/*.js -t can-view-parser/require.js
 …will transform any of the following:
 
 ```js
-import viewParser from 'can/view/parser/';
+import viewParser from "can/view/parser/";
 ```
 ```js
-import viewParser from 'can/view/parser/parser';
+import viewParser from "can/view/parser/parser";
 ```
 ```js
-import viewParser from 'can/view/parser/parser.js';
+import viewParser from "can/view/parser/parser.js";
 ```
 
 …to this:
 
 ```js
-import canViewParser from 'can-view-parser';
+import canViewParser from "can-view-parser";
 ```
 
 ### can-view-scope
@@ -3147,7 +3145,7 @@ can-migrate -a **/*.js -t can-view-scope/replace.js
 
 ```js
 import can from "can";
-const scope = new can.view.Scope(data);
+const scope = new can.view.Scope( data );
 ```
 @highlight 2
 
@@ -3156,7 +3154,7 @@ const scope = new can.view.Scope(data);
 ```js
 import canViewScope from "can-view-scope";
 import can from "can";
-const scope = new canViewScope(data);
+const scope = new canViewScope( data );
 ```
 @highlight 1,3
 
@@ -3197,19 +3195,19 @@ can-migrate -a **/*.js -t can-view-scope/require.js
 …will transform any of the following:
 
 ```js
-import viewScope from 'can/view/scope/';
+import viewScope from "can/view/scope/";
 ```
 ```js
-import viewScope from 'can/view/scope/scope';
+import viewScope from "can/view/scope/scope";
 ```
 ```js
-import viewScope from 'can/view/scope/scope.js';
+import viewScope from "can/view/scope/scope.js";
 ```
 
 …to this:
 
 ```js
-import canViewScope from 'can-view-scope';
+import canViewScope from "can-view-scope";
 ```
 
 ### can-view-tag
@@ -3232,7 +3230,7 @@ can-migrate -a **/*.js -t can-view-tag/replace.js
 
 ```js
 import can from "can";
-can.view.tag(tagName, tagHandler(el, tagData));
+can.view.tag( tagName, tagHandler( el, tagData ) );
 ```
 @highlight 2
 
@@ -3241,7 +3239,7 @@ can.view.tag(tagName, tagHandler(el, tagData));
 ```js
 import canViewCallbacks from "can-view-callbacks";
 import can from "can";
-canViewCallbacks.tag(tagName, tagHandler(el, tagData));
+canViewCallbacks.tag( tagName, tagHandler( el, tagData ) );
 ```
 @highlight 1,3
 
@@ -3316,17 +3314,17 @@ can-migrate -a **/*.js -t can-view-target/require.js
 …will transform any of the following:
 
 ```js
-import viewTarget from 'can/view/target/';
+import viewTarget from "can/view/target/";
 ```
 ```js
-import viewTarget from 'can/view/target/target';
+import viewTarget from "can/view/target/target";
 ```
 ```js
-import viewTarget from 'can/view/target/target.js';
+import viewTarget from "can/view/target/target.js";
 ```
 
 …to this:
 
 ```js
-import canViewTarget from 'can-view-target';
+import canViewTarget from "can-view-target";
 ```

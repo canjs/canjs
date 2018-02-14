@@ -147,44 +147,41 @@ a ViewModel called `AppViewModel`.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var view = can.stache.from(SCRIPT_ID);
-  ```
+const view = can.stache.from( SCRIPT_ID );
+```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = view({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+const frag = view( {
+	something: { name: "Derek Brunson" }
+} );
+```
 
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
-  ```
+document.body.appendChild( frag );
+```
 
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:
 
   ```js
-  AppViewModel = can.DefineMap.extend("AppViewModel",{
-    isLoggedIn: {default: false}
-  })
-  ```
+AppViewModel = can.DefineMap.extend( "AppViewModel", {
+	isLoggedIn: { default: false }
+} );
+```
 
   This lets you create instances of that type, get and set those properties and listen to changes like:
 
   ```js
-  var viewModel = new AppViewModel({});
-
-  viewModel.isLoggedIn //-> false
-
-  viewModel.on("isLoggedIn", function(ev, newValue){
-    console.log("isLoggedIn changed to ", newValue);
-  });
-
-  viewModel.isLoggedIn = true //-> logs "isLoggedIn changed to true"
-  ```
+const viewModel = new AppViewModel( {} );
+viewModel.isLoggedIn; //-> false
+viewModel.on( "isLoggedIn", function( ev, newValue ) {
+	console.log( "isLoggedIn changed to ", newValue );
+} );
+viewModel.isLoggedIn = true; //-> logs "isLoggedIn changed to true"
+```
 
 ### The solution
 
@@ -214,32 +211,32 @@ We'll keep the session data within a [Promise](https://developer.mozilla.org/en-
 the `sessionPromise` property. The following simulates a logged in user:
 
 ```js
-viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
+viewModel.sessionPromise = Promise.resolve( { user: { email: "someone@email.com" } } );
 ```
 
 ### What you need to know
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+const AppViewModel = can.DefineMap.extend( {
 	myProperty: {
-	  default: function(){
-		return "This string"
-	  }
-	}  
-  });
-  new AppViewModel().myProperty //-> "This string"
-  ```
+		default: function() {
+			return "This string";
+		}
+	}
+} );
+new AppViewModel().myProperty; //-> "This string"
+```
 - [can-util/dom/ajax/ajax can.ajax] can make requests to a url like:
   ```js
-  ajax({
-    url: "http://query.yahooapis.com/v1/public/yql",
-    data: {
-      format: "json",
-      q: 'select * from geo.places where text="sunnyvale, ca"'
-    }
-  }) //-> Promise
-  ```
+ajax( {
+	url: "http://query.yahooapis.com/v1/public/yql",
+	data: {
+		format: "json",
+		q: "select * from geo.places where text=\"sunnyvale, ca\""
+	}
+} ); //-> Promise
+```
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
 - Promises are observable in `can-stache`. For a promise `myPromise`:
     - `myPromise.value` is the resolved value of the promise
@@ -274,7 +271,7 @@ property to have a promise with a _session-like_ object.
 A promise with a _session-like_ object looks like:
 
 ```js
-{user: {email: "someone@email.com"}}
+{ user: { email: "someone@email.com" } }
 ```
 
 ### What you need to know
@@ -282,11 +279,11 @@ A promise with a _session-like_ object looks like:
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
-  AppViewModel = can.DefineMap.extend("AppViewModel",{
-    name: "string",
-    password: "number"
-  });
-  ```
+AppViewModel = can.DefineMap.extend( "AppViewModel", {
+	name: "string",
+	password: "number"
+} );
+```
 
 - The [can-stache-bindings.toParent] can set an input’s `value` to
   a ViewModel property like:
@@ -307,12 +304,11 @@ A promise with a _session-like_ object looks like:
 - Use `.then` on a promise to map the source promise to another promise value.
 
   ```js
-  var source = Promise.resolve({email: "justin@bitovi.com"})
-
-  var result = source.then(function(userData){
-	return {user: userData}
-  });
-  ```
+const source = Promise.resolve( { email: "justin@bitovi.com" } );
+const result = source.then( function( userData ) {
+	return { user: userData };
+} );
+```
 
 ### The solution
 
@@ -342,16 +338,14 @@ property to have a rejected value.
 - Use `.then` and `Promise.reject` to map a source promise to a rejected promise.
 
   ```js
-  var source = Promise.resolve({})
-
-  var result = source.then(function(userData){
-	return Promise.reject({message: "Unauthorized"});
-  });
-
-  result.catch(function(reason){
-	  reason.message //-> "Unauthorized";
-  });
-  ```
+const source = Promise.resolve( {} );
+const result = source.then( function( userData ) {
+	return Promise.reject( { message: "Unauthorized" } );
+} );
+result.catch( function( reason ) {
+	reason.message; //-> "Unauthorized";
+} );
+```
 
 
 ### The solution
@@ -408,15 +402,15 @@ the request failed we will set a `logInError` property with the server's respons
 
 - Use `.catch` to handle when a promise is rejected:
   ```js
-  var source = Promise.reject({responseText: '{"message": "foo"}'})
-  source.catch(function(reason){
-	  reason.responseText //->  '{"message": "foo"}'
-  })
-  ```
+const source = Promise.reject( { responseText: "{\"message\": \"foo\"}" } );
+source.catch( function( reason ) {
+	reason.responseText; //->  '{"message": "foo"}'
+} );
+```
 - Use `JSON.parse` to convert text to JavaScript objects:
   ```js
-  JSON.parse('{"message": "foo"}') //-> {message: "foo"}
-  ```
+JSON.parse( "{\"message\": \"foo\"}" ); //-> {message: "foo"}
+```
 - Use the `"any"` type to define a property of indeterminate type:
   ```
   var AppViewModel = can.DefineMap.extend({

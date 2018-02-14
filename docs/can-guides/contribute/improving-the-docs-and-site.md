@@ -103,17 +103,13 @@ Then it briefly explains __how the code works__:
 Finally, it provides minimal sample code:
 
 ```js
-var age = compute(32);
-
-var nameAndAge = compute(function(){
-    return "Matthew - " + age();
-});
-
-nameAndAge() // -> "Matthew - 32"
-
-age(33);
-
-nameAndAge() // -> "Matthew - 33"
+const age = compute( 32 );
+const nameAndAge = compute( function() {
+	return "Matthew - " + age();
+} );
+nameAndAge(); // -> "Matthew - 32"
+age( 33 );
+nameAndAge(); // -> "Matthew - 33"
 ```
 
 Not all signatures need to hit all three points.  For example [can-event/batch/batch]’s

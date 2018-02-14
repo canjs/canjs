@@ -48,11 +48,11 @@ Make an `/api/entities` service layer that provides the files and folders for an
 
 ```js
 {
-  id: "2",
-  name: "dogs",
-  parentId: "0",     // The id of the folder this file or folder is within.
-  type: "folder",    // or "file",
-  hasChildren: true  // false for a folder with no children, or a file
+	id: "2",
+	name: "dogs",
+	parentId: "0",     // The id of the folder this file or folder is within.
+	type: "folder",    // or "file",
+	hasChildren: true  // false for a folder with no children, or a file
 }
 ```
 
@@ -66,11 +66,11 @@ This should return the list of folders and files directly within that folder lik
 
 ```js
 {
-  data: [
-   { id: "7", name: "pekingese.png", parentId: "0", type: "file",   hasChildren: false },
-   { id: "8", name: "poodles",       parentId: "0", type: "folder", hasChildren: false },
-   { id: "9", name: "hounds",        parentId: "0", type: "folder", hasChildren: true }
-  ]
+	data: [
+		{ id: "7", name: "pekingese.png", parentId: "0", type: "file",   hasChildren: false },
+		{ id: "8", name: "poodles",       parentId: "0", type: "folder", hasChildren: false },
+		{ id: "9", name: "hounds",        parentId: "0", type: "folder", hasChildren: true }
+	]
 }
 ```
 
@@ -81,19 +81,20 @@ The first level files and folders should have a `parentId` of `"0"`.
 - [can-fixture] is used to trap AJAX requests like:
 
   ```js
-  can.fixture("/api/entities", function(request) {
-    // request.data.folderId -> "1"
-    return {data: [ ... ]}
-  })
-  ```
+can.fixture( "/api/entities", function( request ) {
+
+// request.data.folderId -> "1"
+	return { data: [ /* ... */ ] };
+} );
+```
 
 - [can-fixture.store] can be used to automatically filter records using the query string:
 
   ```js
-  var entities = [ ... ];
-  var entitiesStore = can.fixture.store( entities );
-  can.fixture("/api/entities", entitiesStore);
-  ```
+const entities = [ /* ... */ ];
+const entitiesStore = can.fixture.store( entities );
+can.fixture( "/api/entities", entitiesStore );
+```
 
 - [can-fixture.rand] can be used to create a random integer:
   ```
@@ -123,19 +124,17 @@ requests to use that `store`:
 When we load entities from the server, it’s useful to convert them into `Entity` type instances.  We will want to create an observable `Entity` type using [can-define/map/map] so we can do:
 
 ```js
-var entity = new Entity({
-  id: "2",
-  name: "dogs",
-  parentId: "0",     // The id of the folder this file or folder is within.
-  type: "folder",    // or "file",
-  hasChildren: true  // false for a folder with no children, or a file
-});
-
-entity.on("name", function(ev, newName) {
-  console.log("entity name changed to ", newName);
-});
-
-entity.name = "cats" //-> logs "entity name changed to cats"
+const entity = new Entity( {
+	id: "2",
+	name: "dogs",
+	parentId: "0",     // The id of the folder this file or folder is within.
+	type: "folder",    // or "file",
+	hasChildren: true  // false for a folder with no children, or a file
+} );
+entity.on( "name", function( ev, newName ) {
+	console.log( "entity name changed to ", newName );
+} );
+entity.name = "cats"; //-> logs "entity name changed to cats"
 ```
 
 ### Things to know
@@ -143,11 +142,12 @@ entity.name = "cats" //-> logs "entity name changed to cats"
 You can create a `DefineMap` type using [can-define/map/map.extend DefineMap.extend] with the type’s properties and the properties’ types like:
 
 ```js
-Type = can.DefineMap.extend({
-  id: "string",
-  hasChildren: "boolean",
-  ...
-});
+Type = can.DefineMap.extend( {
+	id: "string",
+	hasChildren: "boolean"
+
+// ...
+} );
 ```
 
 ### The solution
@@ -164,9 +164,9 @@ Extend `can.DefineMap` with each property and its type as follows:
 We want to be able to load a list of `Entity` instances from `GET /api/entities` with:
 
 ```js
-Entity.getList({parentId: "0"}).then(function(entities) {
-    console.log(entities.get()) //-> [ Entity{id: "1", parentId: "0", ...}, ...]
-});
+Entity.getList( { parentId: "0" } ).then( function( entities ) {
+	console.log( entities.get() ); //-> [ Entity{id: "1", parentId: "0", ...}, ...]
+} );
 ```
 
 ### Things to know
@@ -175,10 +175,10 @@ Entity.getList({parentId: "0"}).then(function(entities) {
 a `url` like:
 
 ```js
-can.connect.baseMap({
-  Map: Entity,
-  url: "URL"
-});
+can.connect.baseMap( {
+	Map: Entity,
+	url: "URL"
+} );
 ```
 
 ### The solution
@@ -220,16 +220,16 @@ in the same way it’s expected by the designer.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  ```
+const template = can.stache.from( SCRIPT_ID );
+```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+const frag = template( {
+	something: { name: "Derek Brunson" }
+} );
+```
 
 - Insert a fragment into the page with:
 
@@ -239,8 +239,8 @@ in the same way it’s expected by the designer.
 
 - You can create an `Entity` instance as follows:
   ```js
-  var folder = new Entity({...});
-  ```
+const folder = new Entity( { /* ... */ } );
+```
 
   Where {...} is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
   Pass this to the template.
@@ -332,42 +332,42 @@ clicks on the root folder’s name should toggle if the children are displayed.
 
 - `can.DefineMap` can detail the type of a property with another type like:
   ```js
-  var Address = can.DefineMap.extend({
-    street: "string",
-    city: "string"
-  });
-  var Person = can.DefineMap.extend({
-    address: Address
-  });
-  ```
+const Address = can.DefineMap.extend( {
+	street: "string",
+	city: "string"
+} );
+const Person = can.DefineMap.extend( {
+	address: Address
+} );
+```
 
 - `can.DefineMap` can also specify default values:
   ```js
-  var Person = can.DefineMap.extend({
-    address: Address,
-    age: {default: 33}
-  });
-  ```
+const Person = can.DefineMap.extend( {
+	address: Address,
+	age: { default: 33 }
+} );
+```
 
 - `can.DefineMap` can also specify a default value and a type:
   ```js
-  var Person = can.DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"}
-  });
-  ```
+const Person = can.DefineMap.extend( {
+	address: Address,
+	age: { default: 33, type: "number" }
+} );
+```
 
 - `can.DefineMap` can also have methods:
 
   ```js
-  var Person = can.DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"},
-    birthday: function() {
-      this.age++;
-    }
-  });
-  ```
+const Person = can.DefineMap.extend( {
+	address: Address,
+	age: { default: 33, type: "number" },
+	birthday: function() {
+		this.age++;
+	}
+} );
+```
 
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
@@ -425,16 +425,15 @@ Now we want to make all the folders able to open and close.  This means creating
 
 - [can-component can.Component] is used to create custom elements like:
   ```js
-  var MyComponentVM = DefineMap.extend({
-    message: {default: "Hello There!"}
-  });
-
-  can.Component.extend({
-    tag: "my-component",
-    ViewModel: MyComponentVM,
-    view: can.stache("<h1>{{message}}</h1>")
-  });
-  ```
+const MyComponentVM = DefineMap.extend( {
+	message: { default: "Hello There!" }
+} );
+can.Component.extend( {
+	tag: "my-component",
+	ViewModel: MyComponentVM,
+	view: can.stache( "<h1>{{message}}</h1>" )
+} );
+```
   This component will be created anytime a `<my-component>` element is found in the page.  When the component is created, it creates
   an instance of it’s `ViewModel`, in this case `MyComponentVM`.
 
@@ -467,11 +466,11 @@ Now we want to make all the folders able to open and close.  This means creating
 
   For example, the `this` in `this.name` refers to the `context` object:
 
-  ```javascript
-  var template = stache("{{this.name}}");
-  var context = {name: "Justin"};
-  template(context);
-  ```
+  ```js
+const template = stache( "{{this.name}}" );
+const context = { name: "Justin" };
+template( context );
+```
 
   Or, when looping through a list of items, `this` refers to each item:
 
