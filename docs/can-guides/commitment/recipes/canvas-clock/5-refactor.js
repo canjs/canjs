@@ -1,6 +1,5 @@
 // 60 = 2π
-const base60ToRadians = (base60Number) =>
-2 * Math.PI * base60Number / 60;
+const base60ToRadians = (base60Number) => 2 * Math.PI * base60Number / 60;
 
 can.Component.extend({
   tag: "analog-clock",
@@ -44,7 +43,9 @@ can.Component.extend({
             lineCap: "round"
           }
         );
-    });
+      });
+    }
+  }
 });
 
 const DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{

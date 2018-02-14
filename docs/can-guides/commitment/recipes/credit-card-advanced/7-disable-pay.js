@@ -17,7 +17,10 @@ viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
 	}
 });
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty();
-viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberBlurred);
+viewModel.showCardError = showOnlyWhenBlurredOnce(
+	viewModel.cardError,
+	viewModel.userCardNumberBlurred
+);
 
 // EXPIRY
 viewModel.expiry = viewModel.userExpiry.map((expiry) => {
@@ -26,15 +29,21 @@ viewModel.expiry = viewModel.userExpiry.map((expiry) => {
 	}
 });
 viewModel.expiryError = viewModel.expiry.map(validateExpiry).toProperty();
-viewModel.showExpiryError = showOnlyWhenBlurredOnce(viewModel.expiryError, viewModel.userExpiryBlurred);
+viewModel.showExpiryError = showOnlyWhenBlurredOnce(
+	viewModel.expiryError,
+	viewModel.userExpiryBlurred
+);
 
 // CVC
 viewModel.cvc = viewModel.userCVC;
 viewModel.cvcError = viewModel.cvc.map(validateCVC).toProperty();
 viewModel.showCVCError = showOnlyWhenBlurredOnce(viewModel.cvcError, viewModel.userCVCBlurred);
 
-viewModel.isCardInvalid = Kefir.combine([viewModel.cardError, viewModel.expiryError, viewModel.cvcError],
-	function(cardError, expiryError, cvcError) {
+viewModel.isCardInvalid = Kefir.combine([
+	viewModel.cardError,
+	viewModel.expiryError,
+	viewModel.cvcError
+], function(cardError, expiryError, cvcError) {
 		return !!(cardError || expiryError || cvcError)
 	});
 

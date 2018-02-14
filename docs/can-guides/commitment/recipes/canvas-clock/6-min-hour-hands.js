@@ -65,9 +65,11 @@ can.Component.extend({
             lineWidth:  4.0,
             strokeStyle: "#42F",
             lineCap: "round"
-          }
-        );	
-    });
+		}
+	  );
+	});
+  }
+}
 });
 
 const DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{

@@ -24,7 +24,10 @@ viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
 	}
 });
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty(); // we’ll need this in the future
-viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberBlurred);
+viewModel.showCardError = showOnlyWhenBlurredOnce(
+	viewModel.cardError,
+	viewModel.userCardNumberBlurred
+);
 
 // EXPIRY
 viewModel.expiry = viewModel.userExpiry.map((expiry) => {
@@ -33,15 +36,21 @@ viewModel.expiry = viewModel.userExpiry.map((expiry) => {
 	}
 });
 viewModel.expiryError = viewModel.expiry.map(validateExpiry).toProperty();
-viewModel.showExpiryError = showOnlyWhenBlurredOnce(viewModel.expiryError, viewModel.userExpiryBlurred);
+viewModel.showExpiryError = showOnlyWhenBlurredOnce(
+	viewModel.expiryError,
+	viewModel.userExpiryBlurred
+);
 
 // CVC
 viewModel.cvc = viewModel.userCVC;
 viewModel.cvcError = viewModel.cvc.map(validateCVC).toProperty();
 viewModel.showCVCError = showOnlyWhenBlurredOnce(viewModel.cvcError, viewModel.userCVCBlurred);
 
-viewModel.isCardInvalid = Kefir.combine([viewModel.cardError, viewModel.expiryError, viewModel.cvcError],
-	function(cardError, expiryError, cvcError) {
+viewModel.isCardInvalid = Kefir.combine([
+	viewModel.cardError,
+	viewModel.expiryError,
+	viewModel.cvcError
+], function(cardError, expiryError, cvcError) {
 		return !!(cardError || expiryError || cvcError)
 	});
 
@@ -51,7 +60,10 @@ viewModel.card = Kefir.combine([viewModel.cardNumber, viewModel.expiry, viewMode
 	});
 
 // STREAM< Promise<Number> | undefined >
-var paymentPromises = Kefir.combine([viewModel.payClicked], [viewModel.card], (payClicked, card) => {
+var paymentPromises = Kefir.combine(
+	[viewModel.payClicked],
+	[viewModel.card],
+	(payClicked, card) => {
 	if (payClicked) {
         console.log("Asking for token with", card);
 		return new Promise(function(resolve) {

@@ -11,7 +11,10 @@ viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
 	}
 });
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty();
-viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberBlurred);
+viewModel.showCardError = showOnlyWhenBlurredOnce(
+	viewModel.cardError,
+	viewModel.userCardNumberBlurred
+);
 
 var view = can.stache.from("app-view");
 

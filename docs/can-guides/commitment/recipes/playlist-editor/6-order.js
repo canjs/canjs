@@ -123,7 +123,7 @@ var Sortable = can.Control.extend({
     } else {
       $(this.element).trigger({
         type: eventName,
-        index: i,
+        index: sortables.length,
         dragData: dragData
       });
     }
