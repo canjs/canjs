@@ -1,18 +1,17 @@
 // ========================================
 // CODE
 // ========================================
-
-can.fixture({
-	"/verifyCard": function(request, response) {
-		if (!request.data || !request.data.number || !request.data.pin) {
-			response(400, {});
+can.fixture( {
+	"/verifyCard": function( request, response ) {
+		if ( !request.data || !request.data.number || !request.data.pin ) {
+			response( 400, {} );
 		} else {
 			return {};
 		}
 	},
 	"/accounts": function() {
 		return {
-			data: [{
+			data: [ {
 				balance: 100,
 				id: 1,
 				name: "checking"
@@ -20,7 +19,7 @@ can.fixture({
 				balance: 10000,
 				id: 2,
 				name: "savings"
-			}]
+			} ]
 		};
 	},
 	"/deposit": function() {
@@ -29,10 +28,9 @@ can.fixture({
 	"/withdrawal": function() {
 		return {};
 	}
-});
+} );
 can.fixture.delay = 1000;
-
-var Card = can.DefineMap.extend({
+const Card = can.DefineMap.extend( {
 	number: "string",
 	pin: "string",
 	state: {
@@ -40,15 +38,13 @@ var Card = can.DefineMap.extend({
 		serialize: false
 	},
 	verify: function() {
-
 		this.state = "verifying";
-
-		var self = this;
-		return can.ajax({
+		const self = this;
+		return can.ajax( {
 			type: "POST",
 			url: "/verifyCard",
 			data: this.serialize()
-		}).then(
+		} ).then(
 			function() {
 				self.state = "verified";
 				return self;
@@ -56,27 +52,24 @@ var Card = can.DefineMap.extend({
 			function() {
 				self.state = "invalid";
 				return self;
-			});
+			} );
 	}
-});
-
-var Account = can.DefineMap.extend("Account", {
+} );
+const Account = can.DefineMap.extend( "Account", {
 	id: "number",
 	balance: "number",
 	name: "string"
-});
-Account.List = can.DefineList.extend("AccountList", {
+} );
+Account.List = can.DefineList.extend( "AccountList", {
 	"*": Account
-});
-
-can.connect.baseMap({
+} );
+can.connect.baseMap( {
 	url: "/accounts",
 	Map: Account,
 	List: Account.List,
 	name: "accounts"
-});
-
-var Transaction = can.DefineMap.extend({
+} );
+const Transaction = can.DefineMap.extend( {
 	account: Account,
 	card: Card,
 	executing: {
@@ -88,67 +81,63 @@ var Transaction = can.DefineMap.extend({
 		default: false
 	},
 	rejected: "any",
-	get ready(){
-		throw new Error("Transaction::ready must be provided by extended type");
+	get ready() {
+		throw new Error( "Transaction::ready must be provided by extended type" );
 	},
 	get state() {
-		if (this.rejected) {
+		if ( this.rejected ) {
 			return "rejected";
 		}
-		if (this.executed) {
+		if ( this.executed ) {
 			return "executed";
 		}
-		if (this.executing) {
+		if ( this.executing ) {
 			return "executing";
 		}
+
 		// make sure there’s an amount, account, and card
-		if (this.ready) {
+		if ( this.ready ) {
 			return "ready";
 		}
 		return "invalid";
 	},
-	executeStart: function(){
-		throw new Error("Transaction::executeStart must be provided by extended type");
+	executeStart: function() {
+		throw new Error( "Transaction::executeStart must be provided by extended type" );
 	},
-	executeEnd: function(){
-		throw new Error("Transaction::executeEnd must be provided by extended type");
+	executeEnd: function() {
+		throw new Error( "Transaction::executeEnd must be provided by extended type" );
 	},
 	execute: function() {
-		if (this.state === "ready") {
-
+		if ( this.state === "ready" ) {
 			this.executing = true;
-
-			var def = this.executeStart(),
-				self = this;
-
-			def.then(function() {
+			const def = this.executeStart(), self = this;
+			def.then( function() {
 				can.queues.batch.start();
-				self.set({
+				self.set( {
 					executing: false,
 					executed: true
-				});
+				} );
 				self.executeEnd();
 				can.queues.batch.stop();
-			}, function(reason){
-				self.set({
+			}, function( reason ) {
+				self.set( {
 					executing: false,
 					executed: true,
 					rejected: reason
-				});
-			});
+				} );
+			} );
 		}
 	}
-});
-
-var Deposit = Transaction.extend({
+} );
+const Deposit = Transaction.extend( {
 	amount: "number",
 	get ready() {
 		return this.amount > 0 &&
-			this.account &&
-			this.card;
+this.account &&
+this.card;
 	},
 	executeStart: function() {
-		return can.ajax({
+		return can.ajax( {
 			type: "POST",
 			url: "/deposit",
 			data: {
@@ -156,22 +145,21 @@ var Deposit = Transaction.extend({
 				accountId: this.account.id,
 				amount: this.amount
 			}
-		});
+		} );
 	},
-	executeEnd: function(data) {
+	executeEnd: function( data ) {
 		this.account.balance = this.account.balance + this.amount;
 	}
-});
-
-var Withdrawal = Transaction.extend({
+} );
+const Withdrawal = Transaction.extend( {
 	amount: "number",
 	get ready() {
 		return this.amount > 0 &&
-			this.account &&
-			this.card;
+this.account &&
+this.card;
 	},
 	executeStart: function() {
-		return can.ajax({
+		return can.ajax( {
 			type: "POST",
 			url: "/withdrawal",
 			data: {
@@ -179,118 +167,85 @@ var Withdrawal = Transaction.extend({
 				accountId: this.account.id,
 				amount: this.amount
 			}
-		});
+		} );
 	},
-	executeEnd: function(data) {
+	executeEnd: function( data ) {
 		this.account.balance = this.account.balance - this.amount;
 	}
-});
-
-var ATM = can.DefineMap.extend({
-	state: {type: "string", default: "readingCard"}
-});
-
-can.Component.extend({
+} );
+const ATM = can.DefineMap.extend( {
+	state: { type: "string", default: "readingCard" }
+} );
+can.Component.extend( {
 	tag: "atm-machine",
-	view: can.stache.from("atm-template"),
-	ViewModel: ATM,
-});
-
+	view: can.stache.from( "atm-template" ),
+	ViewModel: ATM
+} );
 document.body.insertBefore(
-	can.stache.from("app-template")({}),
-    document.body.firstChild
+	can.stache.from( "app-template" )( {} ),
+	document.body.firstChild
 );
 
 // ========================================
 // TESTS
 // ========================================
-
-QUnit.module("ATM system", {
+QUnit.module( "ATM system", {
 	setup: function() {
 		can.fixture.delay = 1;
 	},
 	teardown: function() {
 		can.fixture.delay = 2000;
 	}
-});
-
-QUnit.asyncTest("Valid Card", function() {
-
-	var c = new Card({
+} );
+QUnit.asyncTest( "Valid Card", function() {
+	const c = new Card( {
 		number: "01234567890",
 		pin: 1234
-	});
-
-	QUnit.equal(c.state, "unverified");
-
+	} );
+	QUnit.equal( c.state, "unverified" );
 	c.verify();
-
-	QUnit.equal(c.state, "verifying", "card is verifying");
-
-	c.on("state", function(ev, newVal) {
-
-		QUnit.equal(newVal, "verified", "card is verified");
-
+	QUnit.equal( c.state, "verifying", "card is verifying" );
+	c.on( "state", function( ev, newVal ) {
+		QUnit.equal( newVal, "verified", "card is verified" );
 		QUnit.start();
-	});
-});
-
-QUnit.asyncTest("Invalid Card", function() {
-
-	var c = new Card({});
-
-	QUnit.equal(c.state, "unverified");
-
+	} );
+} );
+QUnit.asyncTest( "Invalid Card", function() {
+	const c = new Card( {} );
+	QUnit.equal( c.state, "unverified" );
 	c.verify();
-
-	QUnit.equal(c.state, "verifying", "card is verifying");
-
-	c.on("state", function(ev, newVal) {
-
-		QUnit.equal(newVal, "invalid", "card is invalid");
-
+	QUnit.equal( c.state, "verifying", "card is verifying" );
+	c.on( "state", function( ev, newVal ) {
+		QUnit.equal( newVal, "invalid", "card is invalid" );
 		QUnit.start();
-	});
-});
-
-QUnit.asyncTest("Deposit", 6, function() {
-
-	var card = new Card({
+	} );
+} );
+QUnit.asyncTest( "Deposit", 6, function() {
+	const card = new Card( {
 		number: "0123456789",
 		pin: "1122"
-	});
-
-	var deposit = new Deposit({
+	} );
+	const deposit = new Deposit( {
 		amount: 100,
 		card: card
-	});
-
-	equal(deposit.state, "invalid");
-
-	var startingBalance;
-
-	Account.getList(card.serialize()).then(function(accounts) {
-		QUnit.ok(true, "got accounts");
-		deposit.account = accounts[0];
-		startingBalance = accounts[0].balance;
-	});
-
-	deposit.on("state", function(ev, newVal) {
-		if (newVal === "ready") {
-
-			QUnit.ok(true, "deposit is ready");
+	} );
+	equal( deposit.state, "invalid" );
+	let startingBalance;
+	Account.getList( card.serialize() ).then( function( accounts ) {
+		QUnit.ok( true, "got accounts" );
+		deposit.account = accounts[ 0 ];
+		startingBalance = accounts[ 0 ].balance;
+	} );
+	deposit.on( "state", function( ev, newVal ) {
+		if ( newVal === "ready" ) {
+			QUnit.ok( true, "deposit is ready" );
 			deposit.execute();
-
-		} else if (newVal === "executing") {
-
-			QUnit.ok(true, "executing a deposit");
-
-		} else if (newVal === "executed") {
-
-			QUnit.ok(true, "executed a deposit");
-			equal(deposit.account.balance, 100 + startingBalance);
+		} else if ( newVal === "executing" ) {
+			QUnit.ok( true, "executing a deposit" );
+		} else if ( newVal === "executed" ) {
+			QUnit.ok( true, "executed a deposit" );
+			equal( deposit.account.balance, 100 + startingBalance );
 			start();
-
 		}
-	});
-});
+	} );
+} );

@@ -1,28 +1,26 @@
 // index.js
-import view from './index.stache';
-import DefineMap from 'can-define/map/';
-import Todo from '~/models/todo';
-import '~/models/todos-fixture';
-import test from 'can-todomvc-test';
-var AppViewModel = DefineMap.extend("AppViewModel",{
+import view from "./index.stache";
+import DefineMap from "can-define/map/";
+import Todo from "~/models/todo";
+import "~/models/todos-fixture";
+import test from "can-todomvc-test";
+const AppViewModel = DefineMap.extend( "AppViewModel", {
 	appName: "string",
-    todosList: {
-		get: function(lastSet, resolve) {
-			Todo.getList({}).then(resolve);
+	todosList: {
+		get: function( lastSet, resolve ) {
+			Todo.getList( {} ).then( resolve );
 		}
 	},
 	get allChecked() {
 		return this.todosList && this.todosList.allComplete;
 	},
-	set allChecked(newVal) {
-		this.todosList && this.todosList.updateCompleteTo(newVal);
+	set allChecked( newVal ) {
+		this.todosList && this.todosList.updateCompleteTo( newVal );
 	}
-});
-
-var appVM = window.appVM = new AppViewModel({
+} );
+const appVM = window.appVM = new AppViewModel( {
 	appName: "TodoMVC"
-});
-
-var frag = view(appVM);
-document.body.appendChild(frag);
-test(appVM);
+} );
+const frag = view( appVM );
+document.body.appendChild( frag );
+test( appVM );

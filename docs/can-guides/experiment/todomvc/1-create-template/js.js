@@ -1,3 +1,3 @@
-var template = can.stache.from("todomvc-template");
-var frag = template({});
-document.body.appendChild(frag);
+const template = can.stache.from( "todomvc-template" );
+const frag = template( {} );
+document.body.appendChild( frag );

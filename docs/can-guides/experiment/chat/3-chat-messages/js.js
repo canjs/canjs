@@ -1,31 +1,25 @@
-var ChatMessagesVM = can.DefineMap.extend({
-
-});
-
-can.Component.extend({
+const ChatMessagesVM = can.DefineMap.extend( {
+} );
+can.Component.extend( {
 	tag: "chat-messages",
 	ViewModel: ChatMessagesVM,
-	view: can.stache.from("chat-messages-template")
-});
-
-var AppVM = can.DefineMap.extend({
+	view: can.stache.from( "chat-messages-template" )
+} );
+const AppVM = can.DefineMap.extend( {
 	route: "string",
 	message: {
 		type: "string",
 		default: "Chat Home",
 		serialize: false
 	},
-	addExcitement: function(){
+	addExcitement: function() {
 		this.message = this.message + "!";
 	}
-});
-
-var appVM = new AppVM();
-
+} );
+const appVM = new AppVM();
 can.route.data = appVM;
-can.route("{page}",{page: "home"});
+can.route( "{page}", { page: "home" } );
 can.route.start();
-
-var template = can.stache.from('chat-template');
-var frag = template(appVM);
-document.body.appendChild(frag);
+const template = can.stache.from( "chat-template" );
+const frag = template( appVM );
+document.body.appendChild( frag );
