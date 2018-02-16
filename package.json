@@ -79,7 +79,7 @@
     "can-parse-uri": "1.0.1",
     "can-queues": "1.0.0",
     "can-reflect": "1.13.2",
-    "can-reflect-dependencies": "1.0.0",
+    "can-reflect-dependencies": "1.0.1",
     "can-reflect-promise": "2.0.1",
     "can-route": "4.0.1",
     "can-route-pushstate": "4.0.1",
