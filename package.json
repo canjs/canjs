@@ -73,7 +73,7 @@
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "0.1.7",
     "can-observation": "4.0.0",
-    "can-observation-recorder": "1.0.1",
+    "can-observation-recorder": "1.0.2",
     "can-observe": "2.0.1",
     "can-param": "1.0.2",
     "can-parse-uri": "1.0.1",
