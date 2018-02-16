@@ -50,7 +50,7 @@
     "can-construct": "3.3.0",
     "can-construct-super": "3.1.4",
     "can-control": "4.0.1",
-    "can-debug": "1.0.0",
+    "can-debug": "1.0.1",
     "can-define": "2.0.1",
     "can-define-lazy-value": "1.0.1",
     "can-define-stream": "1.0.0",
