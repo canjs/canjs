@@ -71,7 +71,7 @@
     "can-log": "1.0.0",
     "can-map": "4.0.0",
     "can-namespace": "1.0.0",
-    "can-ndjson-stream": "0.1.7",
+    "can-ndjson-stream": "0.1.8",
     "can-observation": "4.0.0",
     "can-observation-recorder": "1.0.1",
     "can-observe": "2.0.1",
