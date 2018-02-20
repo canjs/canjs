@@ -19,8 +19,9 @@
     "release:major": "npm version major && npm run build && npm publish",
     "build": "node build.js",
     "build-tests": "node test/build.js",
-    "document": "bit-docs",
-    "document:force": "bit-docs -fd"
+    "document": "deps-bundle && bit-docs",
+    "document:force": "deps-bundle && bit-docs -fd",
+    "deps-bundle": "steal-tools bundle --deps --no-minify"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",

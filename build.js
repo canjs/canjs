@@ -1,8 +1,6 @@
 var stealTools = require("steal-tools");
 var globalJS = require("steal-tools/lib/build/helpers/global").js;
 
-
-
 var ignoreModuleNamesStartingWith = [
 	"jquery",
 	"kefir",
@@ -11,11 +9,13 @@ var ignoreModuleNamesStartingWith = [
 	'fbjs',
 	'create-react-class'
 ];
+
 var ignoreModuleNames = [
 	'react'
 ];
 
 var baseNormalize = globalJS.normalize();
+
 var ignoreModules = [function(name){
 	var foundMatch = ignoreModuleNamesStartingWith.some(function(matchName){
 		return name.indexOf(matchName) === 0;
@@ -31,19 +31,17 @@ var ignoreModules = [function(name){
 		return true;
 	}
 
-
-
-
-
 	return false;
 }];
+
 var exportsMap = {
-    "jquery": "jQuery",
-    "can-util/namespace": "can",
-    "kefir": "Kefir",
-    "validate.js": "validate",
+	"jquery": "jQuery",
+	"can-util/namespace": "can",
+	"kefir": "Kefir",
+	"validate.js": "validate",
 	"react": "React"
 };
+
 stealTools.export({
 	steal: {
 		config: __dirname + "/package.json!npm",

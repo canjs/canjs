@@ -17,3 +17,4 @@ test/builders/browserify/out.js
 _backup/
 /index.html
 package-lock.json
+dev-bundle.js

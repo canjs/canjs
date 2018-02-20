@@ -75,7 +75,7 @@ Finally, create a page that loads `steal.js` and specifies `main` as the main mo
 ```
 <html>
   <body>
-    <script src="./node_modules/steal/steal.js" data-main="main"></script>
+    <script src="./node_modules/steal/steal.js" deps-bundle data-main="main"></script>
   </body>
 </html>
 ```
