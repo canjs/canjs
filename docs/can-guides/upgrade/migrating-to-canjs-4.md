@@ -8,7 +8,8 @@
 
 CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping with the modular structure introduced in 3, CanJS 4 adds new packages such as [can-queues] that improve on [can-event/batch/batch]. The upgrade path to CanJS 4 is fairly simple, and warnings guide most of the changes you need to make.
 
-Many of the changes in this guide are available as codemods.
+> Many of the changes in this guide are available as codemods using
+> [can-migrate](#Usingcodemods)
 
 ## Preparing for migration
 
@@ -98,23 +99,30 @@ The first step to upgrading to CanJS 4 is to deal with the breaking changes. Mos
 
 In CanJS 2.3 we introduced [can-stache/expressions/call call expressions] as a way to call functions with `()` just like you do in JavaScript. This enabled passing arguments as their *values* rather than as computes.
 
-In 4.0, all functions without arguments should be called with `()`, otherwise they will be treated as a value, and their `.toString()` method will be called.
+In 4.0, all functions in stache should be called with `()`.
 
-This is to prevent syntax ambiguity. Consider:
+For example:
+```
+{{#each items}}
+```
+Should be used as such:
+```
+{{#each(items)}}
+```
+
+This is to prevent syntax ambiguity.
+
+Consider:
 ```
 {{foo}}
 ```
 
-Is `foo` a function or a value? If `foo` is not a built-in helper and has no arguments, ex. `{{foo argument}}`, then we treat it as a value unless `()` are present.
+Is `foo` a function or a value? It's impossible to tell when reading this that foo might be a function that will be called.
 
-This is true of both methods on the ViewModel and helpers with no arguments. It does not apply to built-in helpers or registered helpers with arguments.
+The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers 
+like `{{#each items}}` or `{{#eq value1 value2}}` do not hinder upgradability.
 
-```handlebars
-{{foo}}
-```
-
-to:
-
+In the `{{foo}}` example, change it to:
 ```handlebars
 {{foo()}}
 ```
@@ -284,6 +292,9 @@ Component.extend({
 ```
 
 ### Implicit scope walking
+
+> Interested in creating a codemod for this? Check out this issue:
+> [Create CodeMod for Lack of Implicit Scope Walking #72](https://github.com/canjs/can-migrate/issues/72)
 
 > ***Note***: If you upgrade to the latest version of CanJS 3 before migrating to 4, you should get the warnings about implicit scope walking. It would be a good idea to follow the below advice and fix the warnings before upgrading to CanJS 4.
 
