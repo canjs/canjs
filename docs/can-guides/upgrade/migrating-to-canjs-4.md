@@ -293,6 +293,9 @@ Component.extend({
 
 ### Implicit scope walking
 
+> Interested in creating a codemod for this? Check out this issue:
+> [Create CodeMod for Lack of Implicit Scope Walking #72](https://github.com/canjs/can-migrate/issues/72)
+
 > ***Note***: If you upgrade to the latest version of CanJS 3 before migrating to 4, you should get the warnings about implicit scope walking. It would be a good idea to follow the below advice and fix the warnings before upgrading to CanJS 4.
 
 In CanJS 3 [can-stache stache] templates would walk up the scope to find variables.For example if you had a template like:
