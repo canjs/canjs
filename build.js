@@ -42,12 +42,6 @@ var exportsMap = {
 	"react": "React"
 };
 
-stealTools.bundle({
-  config: "package.json!npm"
-}, {
-  filter: "node_modules/**/*"
-});
-
 stealTools.export({
 	steal: {
 		config: __dirname + "/package.json!npm",
