@@ -116,16 +116,12 @@ Consider:
 {{foo}}
 ```
 
-Is `foo` a function or a value? If `foo` is not a built-in helper and has no arguments, ex. `{{foo argument}}`, then we treat it as a value and use the `toString` to resolve the value unless `()` are present.
+Is `foo` a function or a value? It's impossible to tell when reading this that foo might be a function that will be called.
 
-This is true of both methods on the ViewModel and helpers with no arguments. It does not apply to built-in helpers (such as each, eq, if, etc...) or registered helpers with at least one argument.
+The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers 
+like `{{#each items}}` or `{{#eq value1 value2}}` do not hinder upgradability.
 
-```handlebars
-{{foo}}
-```
-
-change to:
-
+In the `{{foo}}` example, change it to:
 ```handlebars
 {{foo()}}
 ```
