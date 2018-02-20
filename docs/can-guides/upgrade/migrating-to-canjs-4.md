@@ -8,7 +8,8 @@
 
 CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping with the modular structure introduced in 3, CanJS 4 adds new packages such as [can-queues] that improve on [can-event/batch/batch]. The upgrade path to CanJS 4 is fairly simple, and warnings guide most of the changes you need to make.
 
-Many of the changes in this guide are available as codemods.
+> Many of the changes in this guide are available as codemods using
+> [can-migrate](#Usingcodemods)
 
 ## Preparing for migration
 
