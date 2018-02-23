@@ -1,0 +1,23 @@
+<div>0</div>
+
+<script type="text/stache" id="demo-html">
+<button on:click="plusOne()">Click Here</button>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import stache from "can-stache";
+import "can-stache-bindings";
+
+let count = 0;
+const countEl = document.querySelector("div");
+
+const scope = {
+	plusOne() {
+        countEl.innerHTML = ++count;
+	}
+};
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

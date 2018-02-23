@@ -1,0 +1,31 @@
+<style>
+label.focused {
+	border-bottom: 4px solid blue;
+}
+
+input {
+	display: block;
+	margin-top: 10px;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label {{#if(scope.vars.focusedOnName}}class="focused"{{/if}}>
+	Name:
+	<input type="text" value:bind="name" focused:to="scope.vars.focusedOnName">
+</label>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	name: "Jake"
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

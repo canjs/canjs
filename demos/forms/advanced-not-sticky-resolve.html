@@ -1,0 +1,38 @@
+<style>
+label {
+	display: block;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	Odd numbers only:
+	<input type="number" value:from="oddNumber" on:input:value:to="oddNumber">
+</label>
+
+<p>selected number: {{oddNumber}}</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const ViewModel = DefineMap.extend({
+	oddNumber: {
+		value({ listenTo, lastSet, resolve }) {
+			listenTo(lastSet, (newVal) => {
+				if (newVal % 2) {
+					resolve(newVal);
+				}
+			});
+		}
+	}
+});
+
+const scope = new ViewModel({});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

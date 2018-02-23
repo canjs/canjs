@@ -1,0 +1,28 @@
+<style>
+	label {
+		display: block;
+	}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	<input type="file" value:to="filePath">
+</label>
+<p>
+	Selected file: {{filePath}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	filePath: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

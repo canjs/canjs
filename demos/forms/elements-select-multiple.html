@@ -1,0 +1,45 @@
+<style>
+label {
+	display: block;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	What pizza toppings do you like?
+	<select values:bind="toppings" multiple>
+		<option>Pepperoni</option>
+		<option>Mushrooms</option>
+		<option>Onions</option>
+		<option>Sausage</option>
+		<option>Bacon</option>
+		<option>Extra cheese</option>
+		<option>Black olives</option>
+		<option>Green peppers</option>
+		<option>Pineapple</option>
+		<option>Spinach</option>
+	</select>
+</label>
+
+<p>
+Selected toppings:
+{{#each(toppings)}}
+	{{this}}
+{{/each}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import DefineList from "can-define/list/list";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	toppings: new DefineList()
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

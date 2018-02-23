@@ -1,0 +1,42 @@
+<style>
+	label {
+		display: block;
+		margin: 10px 0;
+	}
+</style>
+
+<script type="text/stache" id="demo-html">
+<p>
+	whatYouTyped: {{whatYouTyped}}
+</p>
+<label>
+	value:to="whatYouTyped"
+	<input type="text" value:to="whatYouTyped">
+</label>
+<label>
+	value:from="whatYouTyped"
+	<input type="text" value:from="whatYouTyped">
+</label>
+<label>
+	value:bind="whatYouTyped"
+	<input type="text" value:bind="whatYouTyped">
+</label>
+<label>
+	value:from="whatYouTyped" on:input:value:to="whatYouTyped"
+	<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
+</label>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	whatYouTyped: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

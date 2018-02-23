@@ -1,0 +1,34 @@
+<style>
+label {
+	display: block;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	scopeProp:
+	<input type="text" value:bind="scopeProp">
+</label>
+
+<p>scopeProp: {{scopeProp}}</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const ViewModel = DefineMap.extend({
+	set scopeProp(val) {
+		return val.toUpperCase();
+	}
+});
+
+const scope = new ViewModel({
+	scopeProp: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>
