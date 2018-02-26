@@ -26,13 +26,13 @@ Unlike event bindings, which can only be used to call a function when an event o
 
 You can use attribute bindings to update the value of an attribute when a property in the scope changes:
 
-@demo demos/forms/bindings-attribute-toChild.html
+@demo demos/forms/bindings-attribute-tochild.html
 
 In this example, we create a `progressValue` property in the scope that continually counts up from 0 to 100. We then use `value:from="progressValue"` to set the `value` attribute of the `<progress>` element whenever the `progressValue` property in the scope changes.
 
 You can also use attribute bindings to update properties in the scope when the value of an attribute changes:
 
-@demo demos/forms/bindings-attribute-toParent.html
+@demo demos/forms/bindings-attribute-toparent.html
 
 This example uses `checked:to="isItChecked"` to update the value of the `isItChecked` property in the scope whenever the checkbox's `checked` attribute changes.
 
@@ -145,7 +145,7 @@ The `boolean-to-inList` converter will set the `checked` attribute to `true` or 
 
 This might be easier to understand with an example:
 
-@demo demos/forms/elements-checkbox-boolean-to-inList.html
+@demo demos/forms/elements-checkbox-boolean-to-inlist.html
 
 ### Radio button
 
