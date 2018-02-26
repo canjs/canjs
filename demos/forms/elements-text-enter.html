@@ -9,20 +9,20 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-import DefineMap from "can-define/map/map";
-import stache from "can-stache";
-import "can-stache-bindings";
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
 
-import domEvents from "can-dom-events";
-import enterEvent from "can-event-dom-enter";
+var domEvents = require("can-dom-events");
+var enterEvent = require("can-event-dom-enter");
 
 domEvents.addEvent(enterEvent);
 
-const scope = new DefineMap({
+var scope = new DefineMap({
 	whatYouTyped: ""
 });
 
-const el = document.getElementById("demo-html");
-const frag = stache(el.innerHTML)(scope);
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
 document.body.appendChild(frag);
 </script>

@@ -17,18 +17,18 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-import DefineMap from "can-define/map/map";
-import DefineList from "can-define/list/list";
-import stache from "can-stache";
-import "can-stache-bindings";
-import "can-stache-converters";
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var stache = require("can-stache");
+require("can-stache-bindings");
+require("can-stache-converters");
 
-const scope = new DefineMap({
+var scope = new DefineMap({
 	availableNumbers: new DefineList([ "one", "two", "three" ]),
 	selectedNumbers: new DefineList([])
 });
 
-const el = document.getElementById("demo-html");
-const frag = stache(el.innerHTML)(scope);
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
 document.body.appendChild(frag);
 </script>

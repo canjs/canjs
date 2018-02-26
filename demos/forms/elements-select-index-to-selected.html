@@ -26,12 +26,12 @@ Selected month: {{selectedMonth}}
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-import DefineMap from "can-define/map/map";
-import stache from "can-stache";
-import "can-stache-bindings";
-import "can-stache-converters";
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
+require("can-stache-converters");
 
-const scope = new DefineMap({
+var scope = new DefineMap({
 	selectedMonth: "June",
 	months: [
 		"Jan",
@@ -49,7 +49,7 @@ const scope = new DefineMap({
 	]
 });
 
-const el = document.getElementById("demo-html");
-const frag = stache(el.innerHTML)(scope);
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
 document.body.appendChild(frag);
 </script>
