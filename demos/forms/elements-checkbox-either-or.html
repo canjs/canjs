@@ -1,0 +1,24 @@
+<script type="text/stache" id="demo-html">
+<label>
+	<input type="checkbox" checked:bind="either-or(bestTypeOfPet, 'Dogs', 'Cats')">
+	Dogs or Cats?
+</label>
+<p>
+	The superior pet is: {{bestTypeOfPet}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+import "can-stache-converters";
+
+const scope = new DefineMap({
+	bestTypeOfPet: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

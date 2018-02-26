@@ -1,0 +1,33 @@
+<style>
+label {
+	display: block;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	Name:
+	<input type="text" value:bind="name">
+</label>
+
+<p>Given name: {{name}}</p>
+
+<label>
+	Name:
+	<input type="text" value:bind="name">
+</label>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	name: "Eli"
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

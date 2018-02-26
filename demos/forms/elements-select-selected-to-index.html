@@ -1,0 +1,61 @@
+<style>
+label {
+	display: block;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	What month were you born?
+	<select value:bind="selectedIndex">
+		<option>0</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+		<option>11</option>
+	</select>
+</label>
+
+Selected index: {{selectedIndex}}
+
+<label>
+	Selected Month:
+	<input value:bind="selected-to-index(selectedIndex, months)">
+</label>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+import "can-stache-converters";
+
+const scope = new DefineMap({
+	selectedMonth: "June",
+	months: [
+		"Jan",
+		"Feb",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"Aug",
+		"Sept",
+		"Oct",
+		"Nov",
+		"Dec"
+	]
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

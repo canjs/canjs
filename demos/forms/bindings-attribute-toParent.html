@@ -1,0 +1,24 @@
+<script type="text/stache" id="demo-html">
+<input type="checkbox" checked:to="isItChecked">
+<p>
+{{#if(isItChecked)}}
+	checkbox is checked
+{{else}}
+	checkbox is unchecked
+{{/if}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+const scope = new DefineMap({
+	isItChecked: false
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

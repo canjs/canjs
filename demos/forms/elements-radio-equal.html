@@ -1,0 +1,42 @@
+<style>
+	label {
+		display: block;
+	}
+</style>
+
+<script type="text/stache" id="demo-html">
+<label>
+	<input type="radio" checked:bind="equal(favoriteColor, 'Red')">
+	Red
+</label>
+<label>
+	<input type="radio" checked:bind="equal(favoriteColor, 'Blue')">
+	Blue
+</label>
+<label>
+	<input type="radio" checked:bind="equal(favoriteColor, 'Green')">
+	Green
+</label>
+<label>
+	<input type="radio" checked:bind="equal(favoriteColor, 'Yellow')">
+	Yellow
+</label>
+<p>
+	Favorite color: {{favoriteColor}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+import "can-stache-converters";
+
+const scope = new DefineMap({
+	favoriteColor: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

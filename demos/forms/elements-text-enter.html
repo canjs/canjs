@@ -1,0 +1,28 @@
+<script type="text/stache" id="demo-html">
+<p>
+	whatYouTyped: {{whatYouTyped}}
+</p>
+<label>
+	Type something and then hit the Enter key:
+	<input type="text" value:from="whatYouTyped" on:enter:value:to="whatYouTyped">
+</label>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import "can-stache-bindings";
+
+import domEvents from "can-dom-events";
+import enterEvent from "can-event-dom-enter";
+
+domEvents.addEvent(enterEvent);
+
+const scope = new DefineMap({
+	whatYouTyped: ""
+});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

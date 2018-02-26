@@ -1,0 +1,63 @@
+<style>
+label {
+	display: block;
+}
+
+input.error {
+	border: 4px solid red;
+}
+
+p.error {
+	color: red;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<form>
+	{{#if(formatErrors(this, "phoneNumber").length)}}
+		<p class="error">{{formatErrors(this, "phoneNumber").join(", ")}}</p>
+	{{/if}}
+
+	<label>
+		Phone Number:
+		<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
+	</label>
+
+	<input type="submit" disabled:from="errors()">
+</form>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import canValidate from "can-validate";
+import defineValidator from "can-define-validate-validatejs";
+import "can-stache-bindings";
+
+const formatErrors = canValidate.formatErrors;
+
+stache.addHelper("formatErrors", (vm, key) => {
+	const errors = vm[key] && formatErrors(vm.errors(key), "object");
+	return errors ? errors[key] : [];
+});
+
+const ViewModel = DefineMap.extend({
+	phoneNumber: {
+		type: "string",
+
+		validate: {
+			format: {
+				pattern: /[0-9]{3}-?[0-9]{3}-?[0-9]{4}/,
+				message: "Invalid phone number (ex: 123-456-7890)."
+			}
+		}
+	}
+});
+defineValidator(ViewModel);
+
+const scope = new ViewModel({});
+
+const el = document.getElementById("demo-html");
+const frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>
