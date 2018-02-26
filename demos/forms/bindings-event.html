@@ -5,19 +5,19 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-import stache from "can-stache";
-import "can-stache-bindings";
+var stache = require("can-stache");
+require("can-stache-bindings");
 
-let count = 0;
-const countEl = document.querySelector("div");
+var count = 0;
+var countEl = document.querySelector("div");
 
-const scope = {
+var scope = {
 	plusOne() {
         countEl.innerHTML = ++count;
 	}
 };
 
-const el = document.getElementById("demo-html");
-const frag = stache(el.innerHTML)(scope);
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
 document.body.appendChild(frag);
 </script>

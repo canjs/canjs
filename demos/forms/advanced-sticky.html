@@ -14,21 +14,21 @@ label {
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-import DefineMap from "can-define/map/map";
-import stache from "can-stache";
-import "can-stache-bindings";
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
 
-const ViewModel = DefineMap.extend({
+var ViewModel = DefineMap.extend({
 	set scopeProp(val) {
 		return val.toUpperCase();
 	}
 });
 
-const scope = new ViewModel({
+var scope = new ViewModel({
 	scopeProp: ""
 });
 
-const el = document.getElementById("demo-html");
-const frag = stache(el.innerHTML)(scope);
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
 document.body.appendChild(frag);
 </script>
