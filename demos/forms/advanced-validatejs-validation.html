@@ -1,8 +1,4 @@
 <style>
-label {
-	display: block;
-}
-
 input.error {
 	border: 4px solid red;
 }
@@ -12,28 +8,15 @@ p.error {
 }
 </style>
 
-<script type="text/stache" id="demo-html">
-<form>
-	{{#if(formatErrors(this, "phoneNumber").length)}}
-		<p class="error">{{formatErrors(this, "phoneNumber").join(", ")}}</p>
-	{{/if}}
-
-	<label>
-		Phone Number:
-		<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
-	</label>
-
-	<input type="submit" disabled:from="errors()">
-</form>
-</script>
+<validatejs-validated-form></validatejs-validated-form>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var Component = require("can-component");
 var DefineMap = require("can-define/map/map");
 var stache = require("can-stache");
+
 var canValidate = require("can-validate");
 var defineValidator = require("can-define-validate-validatejs");
-require("can-stache-bindings");
-
 var formatErrors = canValidate.formatErrors;
 
 stache.addHelper("formatErrors", (vm, key) => {
@@ -41,7 +24,7 @@ stache.addHelper("formatErrors", (vm, key) => {
 	return errors ? errors[key] : [];
 });
 
-var ViewModel = DefineMap.extend({
+var ViewModel = DefineMap.extend("FormVM", {
 	phoneNumber: {
 		type: "string",
 
@@ -55,9 +38,24 @@ var ViewModel = DefineMap.extend({
 });
 defineValidator(ViewModel);
 
-var scope = new ViewModel({});
+Component.extend({
+	tag: "validatejs-validated-form",
 
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
+	view: `
+		<form>
+			{{#if(formatErrors(this, "phoneNumber").length)}}
+				<p class="error">{{formatErrors(this, "phoneNumber").join(", ")}}</p>
+			{{/if}}
+
+			<p>
+				Phone Number:
+				<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
+			</p>
+
+			<input type="submit" disabled:from="errors()">
+		</form>
+	`,
+
+	ViewModel: ViewModel
+});
 </script>

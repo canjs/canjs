@@ -1,42 +1,37 @@
-<style>
-	label {
-		display: block;
-		margin: 10px 0;
-	}
-</style>
+<text-fields></text-fields>
 
-<script type="text/stache" id="demo-html">
-<p>
-	whatYouTyped: {{whatYouTyped}}
-</p>
-<label>
-	value:to="whatYouTyped"
-	<input type="text" value:to="whatYouTyped">
-</label>
-<label>
-	value:from="whatYouTyped"
-	<input type="text" value:from="whatYouTyped">
-</label>
-<label>
-	value:bind="whatYouTyped"
-	<input type="text" value:bind="whatYouTyped">
-</label>
-<label>
-	value:from="whatYouTyped" on:input:value:to="whatYouTyped"
-	<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
-</label>
-</script>
+<script type="text/stache" id="demo-html"></script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-bindings");
+var Component = require("can-component");
 
-var scope = new DefineMap({
-	whatYouTyped: ""
+Component.extend({
+	tag: "text-fields",
+
+	view: `
+		<p>
+			whatYouTyped: {{whatYouTyped}}
+		</p>
+		<p>
+			value:to="whatYouTyped"
+			<input type="text" value:to="whatYouTyped">
+		</p>
+		<p>
+			value:from="whatYouTyped"
+			<input type="text" value:from="whatYouTyped">
+		</p>
+		<p>
+			value:bind="whatYouTyped"
+			<input type="text" value:bind="whatYouTyped">
+		</p>
+		<p>
+			value:from="whatYouTyped" on:input:value:to="whatYouTyped"
+			<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
+		</p>
+	`,
+
+	ViewModel: {
+		whatYouTyped: { default: "" }
+	}
 });
-
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
 </script>

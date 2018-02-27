@@ -1,28 +1,28 @@
-<script type="text/stache" id="demo-html">
-<p>
-	whatYouTyped: {{whatYouTyped}}
-</p>
-<label>
-	Type something and then hit the Enter key:
-	<input type="text" value:from="whatYouTyped" on:enter:value:to="whatYouTyped">
-</label>
-</script>
+<text-enter></text-enter>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-bindings");
+var Component = require("can-component");
 
 var domEvents = require("can-dom-events");
 var enterEvent = require("can-event-dom-enter");
 
 domEvents.addEvent(enterEvent);
 
-var scope = new DefineMap({
-	whatYouTyped: ""
-});
+Component.extend({
+	tag: "text-enter",
 
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
+	view: `
+		<p>
+			whatYouTyped: {{whatYouTyped}}
+		</p>
+		<p>
+			Type something and then hit the Enter key:
+			<input type="text" value:from="whatYouTyped" on:enter:value:to="whatYouTyped">
+		</p>
+	`,
+
+	ViewModel: {
+		whatYouTyped: { default: "" }
+	}
+});
 </script>

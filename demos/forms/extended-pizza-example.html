@@ -1,0 +1,204 @@
+<style>
+label {
+	display: block;
+	margin: 1em 0;
+}
+
+pizza-form > div {
+	width: 20%;
+	float: left;
+}
+</style>
+
+<pizza-form></pizza-form>
+
+<script type="text/stache" id="demo-html"></script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var Component = require("can-component");
+var DefineList = require("can-define/list/list");
+require("can-stache-converters");
+
+require("can-debug");
+
+Component.extend({
+	tag: "select-one",
+
+	view: `
+		<div>
+			<p>Select {{listName}}:</p>
+
+			<select value:from="default" on:change="scope.root.update(scope.root.listName, 'toggle', scope.element.value)">
+				{{#each(options)}}
+					<option>{{this}}</option>
+				{{/each}}
+			</select>
+		</div>
+	`,
+
+	ViewModel: {
+		listName: { type: "string", default: "one" },
+		options: { Type: DefineList },
+		default: { type: "string" }
+	}
+});
+
+Component.extend({
+	tag: "select-many",
+
+	view: `
+		<div>
+			<p>Select {{listName}}:</p>
+
+			{{#each(options)}}
+				<label>
+					{{this}}
+					<input
+						on:change="scope.root.update(scope.root.listName, 'toggle', this)"
+						type="checkbox">
+				</label>
+			{{/each}}
+		</div>
+	`,
+
+	ViewModel: {
+		listName: { type: "string", default: "many" },
+		options: { Type: DefineList },
+		update: { type: "any" }
+	}
+});
+
+Component.extend({
+	tag: "meat-picker",
+
+	view: `
+		<div>
+			<label>
+				Vegetarian
+				{{#if(scope.vars.showOptions}}
+					<input
+						checked:bind="not( scope.vars.showOptions )"
+						on:change="update('meats', 'clear')"
+						type="checkbox">
+				{{else}}
+					<input
+						checked:bind="not( scope.vars.showOptions )"
+						type="checkbox">
+				{{/if}}
+			</label>
+
+			{{#if(scope.vars.showOptions)}}
+				<select-many
+					update:from="update"
+					listName:from="'meats'"
+					options:from="options">
+				</select-many>
+			{{/if}}
+		</div>
+	`,
+
+	ViewModel: {}
+});
+
+Component.extend({
+	tag: "pizza-form",
+
+	view: `
+		<p>
+			Selected Ingredients:
+			{{#each(selectedMeats)}}
+				{{this}},
+			{{/each}}
+
+			{{#each(selectedVegetables)}}
+				{{this}},
+			{{/each}}
+
+			{{#if(selectedCheese)}}
+				{{selectedCheese}} cheese
+			{{/if}}
+		</p>
+
+		<div>
+			<select-one
+				listName:from="'cheese'"
+				update:from="updateIngredients"
+				default:from="selectedCheese"
+				options:from="availableCheeses">
+			</select-one>
+		</div>
+
+		<div>
+			<meat-picker
+				update:from="updateIngredients"
+				options:from="availableMeats">
+			</meat-picker>
+		</div>
+
+		<div>
+			<select-many
+				listName:from="'vegetables'"
+				update:from="updateIngredients"
+				options:from="availableVegetables">
+			</select-many>
+		</div>
+	`,
+
+	ViewModel: {
+		availableVegetables: {
+			default() {
+				return [ "green peppers", "mushrooms", "onion", "tomato" ];
+			}
+		},
+
+		availableMeats: {
+			default() {
+				return [ "chicken", "sausage", "pepperoni" ];
+			}
+		},
+
+		availableCheeses: {
+			default() {
+				return [ "cheddar", "mozzarella", "parmesan", "provolone" ];
+			}
+		},
+
+		selectedVegetables: { Type: DefineList, Default: DefineList },
+		selectedMeats: { Type: DefineList, Default: DefineList  },
+		selectedCheese: { type: "string", default: "mozzarella" },
+
+		updateIngredients(type, action, ingredient) {
+			var listName = "selected" + type.slice(0, 1).toUpperCase() + type.slice(1);
+			var index = this[listName].indexOf(ingredient);
+
+			switch(action) {
+				case "add":
+					if (typeof this[listName] === "string") {
+						this[listName] = ingredient;
+					} else {
+						this[listName].push(ingredient);
+					}
+					break;
+				case "remove":
+					if (typeof this[listName] === "string") {
+						this[listName] = "";
+					} else {
+						this[listName].splice(index, 1);
+					}
+					break;
+				case "toggle":
+					if (index >= 0) {
+						this.updateIngredients(type, "remove", ingredient);
+					} else {
+						this.updateIngredients(type, "add", ingredient);
+					}
+					break;
+				case "clear":
+					this[listName] = [];
+					break;
+
+			}
+		}
+	}
+});
+</script>

@@ -1,23 +1,23 @@
-<script type="text/stache" id="demo-html">
-<label>
-	<input type="checkbox" checked:bind="isItChecked">
-	checked:bind="isItChecked"
-</label>
-<p>
-	is it checked? {{isItChecked}}
-</p>
-</script>
+<my-checkbox></my-checkbox>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-bindings");
+var Component = require("can-component");
 
-var scope = new DefineMap({
-	isItChecked: false
+Component.extend({
+	tag: "my-checkbox",
+
+	view: `
+		<p>
+			<input type="checkbox" checked:bind="isItChecked">
+			checked:bind="isItChecked"
+		</p>
+		<p>
+			is it checked? {{isItChecked}}
+		</p>
+	`,
+
+	ViewModel: {
+		isItChecked: { default: false }
+	}
 });
-
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
 </script>
