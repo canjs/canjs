@@ -1,5 +1,5 @@
 @page guides/debugging Debugging Guide
-@parent guides/experiment 3
+@parent guides/topics 1
 
 @description Learn how to debug CanJS applications.
 

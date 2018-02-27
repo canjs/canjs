@@ -1,0 +1,357 @@
+@page guides/forms Forms Guide
+@parent guides/topics 2
+@outline 2
+
+@description Learn how to create amazing `<form>`s with CanJS. This guide gives an overview of binding to form element attributes and events, then describes the ins and outs of common elements, and finally discusses a few more advanced topics. We recommend reading the [guides/forms#Bindingsoverview Bindings overview] section first before jumping to the topic that interests you &mdash; or start at the top to become an expert on it all.
+
+@body
+
+## Bindings overview
+
+When working with form elements, there are two basic kinds of bindings &mdash; Event bindings and Attribute bindings. Event bindings allow you to respond to DOM [https://developer.mozilla.org/en-US/docs/Web/Events Events] and attribute bindings allow you to bind the value of HTML [https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes Attributes] to properties in your [can-view-scope scope].
+
+The following sections will explain how to use each of these bindings on their own as well as how to combine them in more advanced binding formats.
+
+### Event binding
+
+Event bindings allow you to respond to DOM Events. To set up an event binding, add an attribute to your element like `on:DOM_EVENT="CALL_EXPRESSION"` where `DOM_EVENT` is the event you want to respond to and `CALL_EXPRESSION` is a [can-stache/expressions/call Call Expression] for the function you want to call when the event occurs. Here is a simple example:
+
+@demo demos/forms/bindings-event.html
+
+This example calls the `plusOne` function in the scope when a `"click"` event is triggered on the button. There are many other events that you can listen to. Many of these will be shown in the examples throughout this guide, or you can take a look at [https://developer.mozilla.org/en-US/docs/Web/Events] for a list.
+
+### Attribute binding
+
+Unlike event bindings, which can only be used to call a function when an event occurs, attribute bindings can be used in two directions.
+
+You can use attribute bindings to update the value of an attribute when a property in the scope changes:
+
+@demo demos/forms/bindings-attribute-tochild.html
+
+In this example, we create a `progressValue` property in the scope that continually counts up from 0 to 100. We then use `value:from="progressValue"` to set the `value` attribute of the `<progress>` element whenever the `progressValue` property in the scope changes.
+
+You can also use attribute bindings to update properties in the scope when the value of an attribute changes:
+
+@demo demos/forms/bindings-attribute-toparent.html
+
+This example uses `checked:to="isItChecked"` to update the value of the `isItChecked` property in the scope whenever the checkbox's `checked` attribute changes.
+
+Attribute bindings work with any HTML attribute. You will see examples of attributes that are useful to bind to in the [guides/forms#Commonformelements Common form elements] section or you can take a look at [https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes List of Attributes] for a comprehensive list.
+
+### Data down, actions up
+
+You can combine Event and Attribute bindings in a "data down, actions up" pattern to keep a form element attribute in sync with a property in your scope:
+
+@demo demos/forms/bindings-ddau.html
+
+This example uses `value:from="name"` to set the `value` attribute of both text fields when `name` in the scope changes. It also uses `on:change="scope.set('name', scope.element.value)"` to listen for `"change"` events on the text fields and call [can-view-scope.prototype.set scope.set] with the text field's [http://localhost/canjs/doc/can-stache/keys/scope.html#scope_element value].
+
+Data is passed _down_ from the scope to each element using `value:from` and the action of changing the data is passed _up_ through `on:change="scope.set(...)"`, which means that the `value` attribute of both inputs is always in sync with the `name` property in the scope.
+
+### Two-way binding
+
+You can achieve the same behavior as the previous example using [can-stache-bindings.twoWay two-way] binding. It is not as explicit as the "data down, actions up" approach, but it greatly reduces the boilerplate in your code. Here is the same example using two-way binding:
+
+@demo demos/forms/bindings-two-way.html
+
+In this example, `value:bind="name"` is set on each text field to achieve two-way binding between the `value` attribute and the `name` property in the scope.
+
+### Binding attributes on specific events
+
+One other situation where you may want to use separate attribute and event bindings is when you want to listen to events other than `"change"`. Attribute bindings like `value:to="name"` work by listening for [https://developer.mozilla.org/en-US/docs/Web/Events/change change events] in order to know when to update the scope property. For most form elements,`"change"` events are fired when the element loses focus &mdash; not each time the user types into the element.
+
+In order to update a value in the scope each time the user types, you could use the "data down, actions up" approach and listen `on:` [https://developer.mozilla.org/en-US/docs/Web/Events/input input] events, but there is also a [can-stache-bindings.toParent#on_VIEW_MODEL_OR_DOM_EVENT_value_to__SCOPE_VALUE_ shorthand] available for updating a value in the scope with the value of an attribute when a specific event occurs. In order to achieve this behavior you can use `on:input:value:to="name"`. You can combine this with `value:from="name"` to achieve two-way binding with updates on input events:
+
+@demo demos/forms/bindings-on-input-value-to.html
+
+### Binding to template variables
+
+All of the examples shown so far have used variables from the scope for event and attribute bindings. It can be useful to bind to variables without having to create a property on the scope for things that are purely presentational. To create variables local to the template, you can use [can-stache/keys/scope#scope_vars scope.vars]:
+
+@demo demos/forms/bindings-scope-vars.html
+
+This example creates a template variable `scope.vars.focusedOnName` that is bound to the [https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/focused focused attribute] of the text field and uses it set a class on the associated `<label>`. Since this is used entirely for CSS in the template, it makes sense to make `focusedOnName` a variable local to the template with `scope.vars`.
+
+## Common form elements
+
+Using the [guides/forms#Bindingsoverview bindings] above makes it easy to work with the most common form elements. The following sections describe the most useful attribute and event bindings to use with each of these elements as well as anything else that is unique to element.
+
+### Text field
+
+```
+<input type="text">
+```
+
+Text fields are one of the most common form elements and have many attributes that can be useful to bind to. The most common attribute is `value` &mdash; this is the current value of the text entered into the text field.
+
+Here is an example showing different formats for binding to the `value` attribute:
+
+@demo demos/forms/elements-text.html
+
+CanJS also allows you to use custom events within event bindings. A custom event that is very useful with text fields is the `enter` event provided by the [can-event-dom-enter] package. This event listens for [https://developer.mozilla.org/en-US/docs/Web/Events/keyup keyup events] and filters them to only events where the Enter key is released.
+
+@demo demos/forms/elements-text-enter.html
+
+> Note: since this is a custom event, you need to opt-in to using it. If you want to use the `enter` event make sure you register it like:
+>```js
+>import domEvents from "can-dom-events";
+>import enterEvent from "can-event-dom-enter";
+>
+>domEvents.addEvent(enterEvent);
+>```
+
+### Checkbox
+
+```
+<input type="checkbox">
+```
+
+The simplest way to work with checkboxes in CanJS is to bind the `checked` attribute to a property in the scope:
+
+@demo demos/forms/elements-checkbox.html
+
+This allows you to toggle the scope property between `true` and `false`.
+
+#### Binding a checkbox to non-boolean values
+
+You can use a checkbox to represent values other than `true` and `false` using the [can-stache-converters.either-or] converter.
+
+This converter allows you to pass a scope property and two values &mdash; the value that the scope property should be set to if the checkbox is checked and another that should be used if the checkbox is unchecked.
+
+> Note: you need to import the `can-stache-converters` package in order to use the `either-or` converter.
+
+@demo demos/forms/elements-checkbox-either-or.html
+
+Notice that the `{{bestTypeOfPet}}` property is initially set to `"Cats"` because <span style="text-decoration: line-through;">that is obviously the correct answer</span> the checkbox is unchecked.
+
+If you would like to choose `"Dogs"` by default, you can set the [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-checked checked attribute].
+
+> Note: `checked` is a boolean attribute, so it is the _presence_ of this attribute that sets it to `true`. This means that any of these will set the `bestTypeOfPet` property in the scope to `"Dogs"`:
+>
+>* `<input type="checkbox" checked>`
+>* `<input type="checkbox" checked=true>`
+>* `<input type="checkbox" checked=false>`
+>* `<input type="checkbox" checked="true">`
+>* `<input type="checkbox" checked="false">`
+>* `<input type="checkbox" checked="any other value">`
+
+#### Binding checkboxes to a list
+
+Using a checkbox to toggle a property between two values is very useful, but you often want to use checkboxes to select one or many items from a list. To do this, you can use the [can-stache-converters.boolean-to-inList] converter. This will bind the `checked` attribute to whether or not the item is in a list.
+
+The `boolean-to-inList` converter will set the `checked` attribute to `true` or `false` based on whether a value is in the list and add or remove an item from the list when the `checked` attribute changes.
+
+> Note: you need to import the `can-stache-converters` package in order to use the `boolean-to-inList` converter.
+
+This might be easier to understand with an example:
+
+@demo demos/forms/elements-checkbox-boolean-to-inlist.html
+
+### Radio button
+
+```
+<input type="radio">
+```
+
+When using radio buttons in CanJS, you often want to set the value of a single scope property to a different value for each radio button in a group. The [can-stache-converters.equal equal converter] does exactly this.
+
+> Note: you need to import the `can-stache-converters` package in order to use the `equal` converter.
+
+@demo demos/forms/elements-radio-equal.html
+
+This example binds the `checked` attribute to the `equal` converter for each radio button, passing the `favoriteColor` scope property and the color value for each radio button.
+
+### Number input
+
+```
+<input type="number">
+```
+
+When working with number inputs, it is important to set the [can-define.types.type#_typeName_ type] to `"number"` to ensure that the value is stored as a number in the scope.
+
+@demo demos/forms/elements-number.html
+
+### File input
+
+```
+<input type="file">
+```
+
+When using a file input, the `value` attribute can be used to get a representation of the path to the selected file:
+
+@demo demos/forms/elements-file-value.html
+
+The `files` property cannot be accessed through an attribute binding (since it is not an attribute); however, you can still use the [https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications#Getting_information_about_selected_file(s) File API] by passing `scope.element.files` through a `"change"` event listener:
+
+@demo demos/forms/elements-file-files.html
+
+You could also use `on:change="scope.set('selectedFiles', scope.element.files)"` as described in the [guides/forms#Datadown_actionsup Data down, actions up] section if you only need to display the data, but it is more likely that you would want to use the [https://developer.mozilla.org/en-US/docs/Web/API/FileList FileList object] along with the File JavaScript API.
+
+### Select
+
+```
+<select>
+```
+
+When working with `<select>` elements, the `value` attribute of the element will be set to the `value` of the selected option. This means that using `value:bind="..."` will allow you to bind the selected value to a property in the scope:
+
+@demo demos/forms/elements-select.html
+
+By default, the `value` will be set to the text of the option if there is no `value` attribute. Take a look at the difference between the HTML of the previous example and the following:
+
+@demo demos/forms/elements-select-no-value.html
+
+There are times when you need to use numeric indexes for the `<option>` values. When doing this, you can use the [can-stache-converters.index-to-selected] converter to keep "nice" values in your scope property.
+
+> Note: you need to import the `can-stache-converters` package in order to use the `index-to-selected` converter.
+
+To use this converter, pass it the property in the scope you want to bind and the list that contains the available options. It will convert the index given by the `value` of the `<option>` to the selected item in the list.
+
+@demo demos/forms/elements-select-index-to-selected.html
+
+The HTML for this example is intentionally verbose to make it easier to understand. Normally you would use stache to generate the `<option>`s directly from the `months` list like:
+
+```handlebars
+	<select value:bind="index-to-selected(selectedMonth, months)">
+		{{#each(months, index=index month=value)}}
+			<option value:from="index">{{month}}</option>
+		{{/each}}
+	</select>
+```
+
+The [can-stache-converters.selected-to-index] converter is also very useful when you want to bind the `<select>` element directly to the index instead of converting it to the selected item right away but you still want to be able to use the selected item in another part of your template.
+
+> Note: you need to import the `can-stache-converters` package in order to use the `selected-to-index` converter.
+
+In the following example, the `<select>` element is using `value:bind="selectedIndex"` instead of converting it from an index to the selected item. The text field below it passes that index and the `months` list to the `selected-to-index` converter in order to display the corresponding value from the `months` list. The `<select>` and `<input>` are both two-way bound, so changing either the will update the other.
+
+@demo demos/forms/elements-select-selected-to-index.html
+
+### Select multiple
+
+```
+<select multiple>
+```
+
+When using a `<select>` element to select multiple values, the `value` attribute will only give the first value that was selected. In order to get a list of all selected values, CanJS provides the custom [can-util/dom/attr/attr.special.values values] attribute. This makes it very easy to work with `<select multiple>` elements:
+
+@demo demos/forms/elements-select-multiple.html
+
+### Textarea
+
+```
+<textarea>
+```
+
+You can use any of the techniques for [guides/forms#Textfield text fields] with `<textarea>`s:
+
+@demo demos/forms/elements-textarea.html
+
+### Submit button
+
+```
+<input type="submit">
+```
+
+Submit buttons by default will submit the form to the server when clicked. With CanJS apps, you usually want to handle this with JavaScript instead of using this default behavior. To do this, you just need to set up an event binding for the `click` event and use [https://canjs.com/doc/can-stache/keys/scope#scope_event scope.event] so you can call [https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault preventDefault] to prevent the form from being submitted automatically.
+
+Here is an example of what happens by default. Click the Submit button an notice that the demo reloads:
+
+@demo demos/forms/elements-submit-no-prevent.html
+
+This happens because the form is being submitted, which performs a GET request for the same URL. Adding the click handler and `event.preventDefault` prevents this behavior:
+
+@demo demos/forms/elements-submit.html
+
+You can also add an `on:submit="..."` handler directly to the `<form>`:
+
+@demo demos/forms/elements-submit-form.html
+
+## Advanced topics
+
+### Form validation
+
+Validating forms in CanJS has two primary steps &mdash; validating your view-model and displaying errors.
+
+Separating these responsibilities by validating the view-model directly makes it much easier to unit test your validation rules.
+
+The following sections show how to do form validation manually as well as how to do it using a plugin like [can-define-validate-validatejs].
+
+#### Manual form validation
+
+For forms with a small number of fields, validating input values can be as simple as creating [https://canjs.com/doc/can-define.types.get#Virtualproperties virtual properties] that represent the validity of each user input.
+
+When the user input is invalid, errors can be displayed using a CSS class: `{{#if(error)}}class="error"{{/if}}`.
+
+Also, in this example the submit button is disabled using the `disabled:from="error"` binding.
+
+Here is an example showing this kind of manual validation for a phone number:
+
+@demo demos/forms/advanced-manual-validation.html
+
+#### Form validation using a plugin
+
+It is also possible to use [https://validatejs.org/#validators validate.js] or another JavaScript validation library through plugins to can-define like [can-define-validate-validatejs]. This makes it easy to have consistent validation throughout your application without having to write your own validation rules.
+
+This plugin works by reading `validate: { ... }` behaviors from each [can-define.types.propDefinition PropDefinition] of you view-model and using them to build up [https://validatejs.org/#validators validate.js constraints].
+
+It also adds an `errors` method to you view-model for getting a list of invalid properties. The example below also creates a `formatErrors` helper to make working with these errors easier.
+
+Check out the docs for [can-define-validate-validatejs] for more details on this plugin.
+
+Here is the same phone number example using the `can-define-validate-validatejs` plugin:
+
+@demo demos/forms/advanced-validatejs-validation.html
+
+### Binding conflicts
+
+There are times when using two-way binding where the attribute can become out of sync with the scope property it is bound to. To understand this, it is important to understand a little about how bindings work.
+
+When using a binding like `value:bind="scopeProp"`, there are two things that get set up:
+
+* Event Listener 1 listens for `"change"` events on the element, reads the `value` attribute, and sets `scopeProp`
+* Event Listener 2 listens for changes to `scopeProp` and sets the `value` attribute of the element
+
+The problem occurs when setting `scopeProp` causes the value of `scopeProp` to be something other than the `value` attribute of the element.
+
+For example, if `scopeProp` is defined like this:
+
+```js
+set scopeProp(val) {
+	return val.toUpperCase();
+}
+```
+
+In this scenario, if you type `"hello"` into the `<input>` element
+
+* the `value` attribute is set to `"hello"`
+* a `"change"` event is dispatched on the `<input>`
+* Event Listener 1 is triggered and calls the `scopeProp` setter
+* the `scopeProp` setter sets the value of `scopeProp` to `"HELLO"`
+* Event Listener 2 is triggered and sets the `value` of the `<input>` to `"HELLO"`
+
+If you then type `"hello"` in the `<input>` element again
+
+* the `value` attribute is set to `"hello"`
+* a `"change"` event is dispatched on the `<input>`
+* Event Listener 1 is triggered and calls the `scopeProp` setter
+* the `scopeProp` setter sets the value of `scopeProp` to `"HELLO"`
+* Event Listener 2 is NOT triggered since `scopeProp` did not change
+
+At this point the `value` attribute of the element and `scopeProp` are no longer the same. However, if you try this in the example below, you'll notice that the two are always kept in sync:
+
+@demo demos/forms/advanced-sticky.html
+
+This is because when using `:bind`, CanJS will check for this scenario and update the `value` of the `<input>` element to be in sync with `scopeProp`.
+
+If you are using separate bindings like `value:from="scopeProp" on:change:value:to="scopeProp"` this does not happen and the values can become out of sync:
+
+@demo demos/forms/advanced-not-sticky.html
+
+With this example it is somewhat complicated to cause the issue; however, there are other scenarios that make it more likely to happen. One of these is when using the [can-define.types.value can-define value behavior] introduced in CanJS 4.0 to _conditionally_ `resolve` with a new value. The following example sets up a number input that only allows the user to enter odd numbers. It does this by checking the new value whenever `lastSet` changes and only calling `resolve` if the number is odd. Try out this example below to see how this works:
+
+@demo demos/forms/advanced-sticky-resolve.html
+
+Since this example is using `value:bind="oddNumber"`, it works correctly. However, if the binding is changed to `value:from="oddNumber" on:input:value:to="oddNumber"`, the `<input>` can incorrectly end up with even numbered values:
+
+@demo demos/forms/advanced-not-sticky-resolve.html

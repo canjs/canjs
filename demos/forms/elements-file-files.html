@@ -1,0 +1,61 @@
+<style>
+	label {
+		display: block;
+	}
+
+	table {
+		border-collapse: collapse;
+	}
+
+	td {
+		border: 1px solid black;
+		padding: 10px;
+	}
+</style>
+
+<script type="text/stache" id="demo-html">
+<input type="file" on:change="handleFiles(scope.element.files)" multiple>
+<div>
+	Selected files:
+	{{#if(selectedFiles.length}}
+		<table>
+			<thead>
+				<td>File name</td>
+				<td>File size</td>
+				<td>File type</td>
+			</thead>
+			<tbody>
+				{{#each(selectedFiles, file=value)}}
+					<tr>
+						<td>{{file.name}}</td>
+						<td>{{file.type}}</td>
+						<td>{{file.size}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	{{/if}}
+</div>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var stache = require("can-stache");
+require("can-stache-bindings");
+
+var ViewModel = DefineMap.extend({
+	selectedFiles: DefineList,
+
+	handleFiles(files) {
+		// do what you need to do with Files API
+		this.selectedFiles = files;
+	}
+});
+
+var scope = new ViewModel({});
+
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

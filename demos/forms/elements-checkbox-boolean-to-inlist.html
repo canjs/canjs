@@ -1,0 +1,34 @@
+<style>
+	label {
+		display: block;
+	}
+</style>
+
+<script type="text/stache" id="demo-html">
+{{#each(availableNumbers}}
+<label>
+	<input type="checkbox" checked:bind="boolean-to-inList(this, scope.root.selectedNumbers)">
+	checked:bind="boolean-to-inList({{this}}, numbers)"
+</label>
+{{/each}}
+<p>
+	selected numbers: {{#each(selectedNumbers)}}{{this}} {{/each}}
+</p>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var DefineMap = require("can-define/map/map");
+var DefineList = require("can-define/list/list");
+var stache = require("can-stache");
+require("can-stache-bindings");
+require("can-stache-converters");
+
+var scope = new DefineMap({
+	availableNumbers: new DefineList([ "one", "two", "three" ]),
+	selectedNumbers: new DefineList([])
+});
+
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>

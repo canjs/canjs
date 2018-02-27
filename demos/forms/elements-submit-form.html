@@ -1,0 +1,40 @@
+<style>
+label {
+	display: block;
+	margin: 1em 0;
+}
+</style>
+
+<script type="text/stache" id="demo-html">
+<form on:submit="handleSubmit(scope.event)">
+	<label>
+		First Name:
+		<input type="text">
+	</label>
+	<label>
+		Last Name:
+		<input type="text">
+	</label>
+	<input type="submit">
+</form>
+</script>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
+
+var ViewModel = DefineMap.extend({
+	handleSubmit(event) {
+		event.preventDefault();
+
+		// handle form submission here
+	}
+});
+
+var scope = new ViewModel({});
+
+var el = document.getElementById("demo-html");
+var frag = stache(el.innerHTML)(scope);
+document.body.appendChild(frag);
+</script>
