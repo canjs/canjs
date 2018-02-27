@@ -1,34 +1,24 @@
-<style>
-label {
-	display: block;
-}
-</style>
-
-<script type="text/stache" id="demo-html">
-<label>
-	scopeProp:
-	<input type="text" value:bind="scopeProp">
-</label>
-
-<p>scopeProp: {{scopeProp}}</p>
-</script>
+<sticky-uppercase></sticky-uppercase>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-bindings");
+var Component = require("can-component");
 
-var ViewModel = DefineMap.extend({
-	set scopeProp(val) {
-		return val.toUpperCase();
+Component.extend({
+	tag: "sticky-uppercase",
+
+	view: `
+		<p>
+			scopeProp:
+			<input type="text" value:bind="scopeProp">
+		</p>
+
+		<p>scopeProp: {{scopeProp}}</p>
+	`,
+
+	ViewModel: {
+		set scopeProp(val) {
+			return val.toUpperCase();
+		}
 	}
 });
-
-var scope = new ViewModel({
-	scopeProp: ""
-});
-
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
 </script>

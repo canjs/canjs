@@ -1,45 +1,39 @@
-<style>
-label {
-	display: block;
-}
-</style>
-
-<script type="text/stache" id="demo-html">
-<label>
-	What pizza toppings do you like?
-	<select values:bind="toppings" multiple>
-		<option>Pepperoni</option>
-		<option>Mushrooms</option>
-		<option>Onions</option>
-		<option>Sausage</option>
-		<option>Bacon</option>
-		<option>Extra cheese</option>
-		<option>Black olives</option>
-		<option>Green peppers</option>
-		<option>Pineapple</option>
-		<option>Spinach</option>
-	</select>
-</label>
-
-<p>
-Selected toppings:
-{{#each(toppings)}}
-	{{this}}
-{{/each}}
-</p>
-</script>
+<pizza-toppings-picker></pizza-toppings-picker>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var DefineMap = require("can-define/map/map");
+var Component = require("can-component");
 var DefineList = require("can-define/list/list");
-var stache = require("can-stache");
-require("can-stache-bindings");
 
-var scope = new DefineMap({
-	toppings: new DefineList()
+Component.extend({
+	tag: "pizza-toppings-picker",
+
+	view: `
+		<p>
+			What pizza toppings do you like?
+			<select values:bind="toppings" multiple>
+				<option>Pepperoni</option>
+				<option>Mushrooms</option>
+				<option>Onions</option>
+				<option>Sausage</option>
+				<option>Bacon</option>
+				<option>Extra cheese</option>
+				<option>Black olives</option>
+				<option>Green peppers</option>
+				<option>Pineapple</option>
+				<option>Spinach</option>
+			</select>
+		</p>
+
+		<p>
+			Selected toppings:
+			{{#each(toppings)}}
+				{{this}}
+			{{/each}}
+		</p>
+	`,
+
+	ViewModel: {
+		toppings: DefineList
+	}
 });
-
-var el = document.getElementById("demo-html");
-var frag = stache(el.innerHTML)(scope);
-document.body.appendChild(frag);
 </script>
