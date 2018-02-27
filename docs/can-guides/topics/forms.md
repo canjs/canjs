@@ -48,6 +48,8 @@ This example uses `value:from="name"` to set the `value` attribute of both text 
 
 Data is passed _down_ from the scope to each element using `value:from` and the action of changing the data is passed _up_ through `on:change="handleAction(...)"`, which means that the `value` attribute of the text field is always in sync with the `name` property in the scope.
 
+To see a larger example of this pattern, check out the [guides/forms#Datadown_actionsupwithmultiplecomponents Extended Example].
+
 ### Two-way binding
 
 You can achieve the same behavior as the previous example using [can-stache-bindings.twoWay two-way] binding. It is not as explicit as the "data down, actions up" approach, but it greatly reduces the boilerplate in your code. Here is the same example using two-way binding:
@@ -355,3 +357,89 @@ With this example it is somewhat complicated to cause the issue; however, there 
 Since this example is using `value:bind="oddNumber"`, it works correctly. However, if the binding is changed to `value:from="oddNumber" on:input:value:to="oddNumber"`, the `<input>` can incorrectly end up with even numbered values:
 
 @demo demos/forms/advanced-not-sticky-resolve.html
+
+## Extended Examples
+
+### Data down, actions up with multiple components
+
+The benefits of the "data down, actions up" pattern become clear when you have multiple components passing actions up to the top-level component. With this setup, there is only one place where state can change within the application, which can make debugging much easier.
+
+The following example has a top-level `<pizza-form>` component that keeps the lists of ingredients that a user has chosen to top their pizza. It also provides an `updateIngredients` function for handling the different actions the user can perform. The `<pizza-form>` passes this function to its children:
+
+```html
+		<p>
+			Selected Ingredients:
+			{{#each(selectedMeats)}}
+				{{this}},
+			{{/each}}
+
+			{{#each(selectedVegetables)}}
+				{{this}},
+			{{/each}}
+
+			{{#if(selectedCheese)}}
+				{{selectedCheese}} cheese
+			{{/if}}
+		</p>
+
+		<div>
+			<select-one
+				listName:from="'cheese'"
+				update:from="updateIngredients"
+				default:from="selectedCheese"
+				options:from="availableCheeses">
+			</select-one>
+		</div>
+
+		<div>
+			<meat-picker
+				listName:from="'meats'"
+				update:from="updateIngredients"
+				options:from="availableMeats">
+			</meat-picker>
+		</div>
+
+		<div>
+			<select-many
+				listName:from="'vegetables'"
+				update:from="updateIngredients"
+				options:from="availableVegetables">
+			</select-many>
+		</div>
+```
+@highlight 19,28,36,only
+
+The child `<meat-picker>` component uses this function to clear the "meats" list and also passes it to a child of its own:
+
+```html
+		<div>
+			<label>
+				Vegetarian?
+				{{#if(scope.vars.showOptions}}
+					<input
+						checked:bind="not( scope.vars.showOptions )"
+						on:change="scope.root.update('meats', 'clear')"
+						type="checkbox">
+				{{else}}
+					<input
+						checked:bind="not( scope.vars.showOptions )"
+						type="checkbox">
+				{{/if}}
+			</label>
+
+			{{#if(scope.vars.showOptions)}}
+				<select-many
+					update:from="update"
+					listName:from="'meats'"
+					options:from="options">
+				</select-many>
+			{{/if}}
+		</div>
+```
+@highlight 7,18,only
+
+This strategy means that all updates throughout the application go through the top-level `updateIngredients` function. This makes debugging very easy since it is obvious where to put a breakpoint to trace exactly what is causing a change.
+
+Take a look at the example below to see this in _action_:
+
+@demo demos/forms/extended-pizza-example.html
