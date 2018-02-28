@@ -16,7 +16,7 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/zefajic/14/embed?output&height=400px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/boxibac/6/embed?output&height=400px">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
@@ -26,6 +26,18 @@ The following sections are broken down the following parts:
 - __The solution__ — The solution to the problem.
 
 ## Setup ##
+
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+
+> Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
+
+<a class="jsbin-embed" href="https://jsbin.com/qeguhac/2/embed?html,js,output">CanJS Text Editor on jsbin.com</a>
+
+This JS Bin:
+
+- Loads CanJS
+- Implements 3 helper functions we will use later: `siblingThenParentUntil`, `splitRangeStart` and `splitRangeEnd`.
+- Mocks out the signature for helper functions we will implement later: `getElementsInRange` and `rangeContains`.
 
 ### The problem
 - Setup a basic CanJS app
@@ -88,7 +100,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-italic.js
-@highlight 6,19-24,only
+@highlight 6,only
 
 
 
@@ -164,7 +176,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-funky-range.js
-@highlight 60-82,86-119,only
+@highlight 62-82,86-119,only
 
 
 
