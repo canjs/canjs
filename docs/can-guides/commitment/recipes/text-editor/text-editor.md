@@ -447,7 +447,7 @@ clicking the `Funky` button will make that text `Funky`. In this step, we will
 only `funk-ify` the text in the `editbox`.
 
 <video controls class="bit-docs-screenshot">
-<source src="../../../docs/can-guides/commitment/recipes/text-editor/5-funky-only.webm" type="video/webm">
+<source src="../../../docs/can-guides/commitment/recipes/text-editor/6-funky-only.webm" type="video/webm">
 I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
