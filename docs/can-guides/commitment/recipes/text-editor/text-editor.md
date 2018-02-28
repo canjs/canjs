@@ -322,7 +322,7 @@ Update the __JavaScript__ tab to:
 
 - Add a `Funky` `<button>` that when clicked, will add `funky` to the className of the content selected
   in the editable area.
-- The button should have a className of `bold`.
+- The button should have a className of `funky`.
 - We are only concerned with `Funk-ify` text selected within a single element. We will make the `Funky`
   button able to `Funk-ify` text selected across elements later.
 
