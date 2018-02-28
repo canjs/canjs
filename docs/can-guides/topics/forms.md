@@ -1,4 +1,4 @@
-@page guides/forms Forms Guide
+@page guides/forms Forms
 @parent guides/topics 2
 @outline 2
 
@@ -44,7 +44,7 @@ You can combine Event and Attribute bindings in a ["data down, actions up"](http
 
 @demo demos/forms/bindings-ddau.html
 
-This example uses `value:from="name"` to set the `value` attribute of both text fields when `name` in the scope changes. It also uses `on:change="handleAction('set', 'name', scope.element.value)"` to listen for `"change"` events on the text fields and call the `handleAction` function with the text field's [http://localhost/canjs/doc/can-stache/keys/scope.html#scope_element value].
+This example uses `value:from="name"` to set the `value` attribute of both text fields when `name` in the scope changes. It also uses `on:change="handleAction('set', 'name', scope.element.value)"` to listen for `"change"` events on the text fields and call the `handleAction` function with the text field's [http://localhost/canjs/doc/can-stache/keys/scope#scope_element value].
 
 Data is passed _down_ from the scope to each element using `value:from` and the action of changing the data is passed _up_ through `on:change="handleAction(...)"`, which means that the `value` attribute of the text field is always in sync with the `name` property in the scope.
 
@@ -255,7 +255,7 @@ You can use any of the techniques for [guides/forms#Textfield text fields] with 
 <input type="submit">
 ```
 
-Submit buttons by default will submit the form to the server when clicked. With CanJS apps, you usually want to handle this with JavaScript instead of using this default behavior. To do this, you just need to set up an event binding and use [https://canjs.com/doc/can-stache/keys/scope#scope_event scope.event] so you can call [https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault preventDefault] to prevent the form from being submitted automatically.
+Submit buttons by default will submit the form to the server when clicked. With CanJS apps, you usually want to handle this with JavaScript instead of using this default behavior. To do this, you just need to set up an event binding and use [can-stache/keys/scope#scope_event scope.event] so you can call [https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault preventDefault] to prevent the form from being submitted automatically.
 
 Here is an example of what happens by default. Click the Submit button an notice that the demo reloads:
 
@@ -281,7 +281,7 @@ The following sections show how to do form validation manually as well as how to
 
 #### Manual form validation
 
-For forms with a small number of fields, validating input values can be as simple as creating [https://canjs.com/doc/can-define.types.get#Virtualproperties virtual properties] that represent the validity of each user input.
+For forms with a small number of fields, validating input values can be as simple as creating [can-define.types.get#Virtualproperties virtual properties] that represent the validity of each user input.
 
 When the user input is invalid, errors can be displayed using a CSS class: `{{#if(error)}}class="error"{{/if}}`.
 
@@ -443,3 +443,601 @@ This strategy means that all updates throughout the application go through the t
 Take a look at the example below to see this in _action_:
 
 @demo demos/forms/extended-pizza-example.html
+
+### Working with related data
+
+The form below has three `<select>` elements for selecting a make, model and year. Once all three have been selected, a list of vehicles matching the selection is displayed. There are three different APIs being used to load the data for this component:
+
+* `/makes` - loads the makes
+* `/models` - loads the models and years for a selected make
+* `/vehicles` - loads the vehicles for a selected make, model, and year
+
+There are many useful techniques for working with related data. Before diving in to them, take a look at the example to see how it all works:
+
+@demo demos/forms/extended-make-model-year.html
+
+#### Loading initial data
+
+In order to load the initial data, the view-model makes a request to the `/makes` API when the page first loads. The view-model uses a [can-define.types.default default value] to make this API call:
+
+```js
+	ViewModel: {
+		makeId: "string",
+		makes: {
+			default() {
+				return ajax({
+					type: "GET",
+					url: "/makes"
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		modelId: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("makeId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		get modelsPromise() {
+			var makeId = this.makeId;
+			if( makeId ) {
+				return ajax({
+					type: "GET",
+					url: "/models",
+					data: { makeId: makeId }
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		models: {
+			get: function(lastSet, resolve) {
+				var promise = this.modelsPromise;
+				if(promise) {
+					promise.then(resolve);
+				}
+			}
+		},
+		get model() {
+			var models = this.models,
+				modelId = this.modelId;
+
+			if(models && models.length && modelId) {
+				var matched = models.filter(function(model) {
+					return modelId == model.id;
+				});
+				return matched[0];
+			}
+		},
+		get years() {
+			var model = this.model;
+			return model && model.years;
+		},
+		year: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("modelId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		vehicles: {
+			get: function(lastSet, resolve) {
+				var year = this.year,
+					modelId = this.modelId;
+
+				if(modelId && year) {
+					ajax({
+						type: "GET",
+						url: "/vehicles",
+						data: { modelId: modelId, year: year }
+					}).then(function(resp) {
+						resolve(resp.data);
+					});
+				} else {
+					resolve([]);
+				}
+			}
+		}
+	}
+```
+@highlight 3-12,only
+
+This `default` value is initialized the first time the `makes` property is used in the view:
+
+```handlebars
+		<select value:bind="makeId"
+			{{#if(makes.isPending)}}disabled{{/if}}>
+			{{#if(makes.isPending)}}
+			  <option value=''>Loading...</option>
+			{{else}}
+			  {{^makeId}}
+				<option value=''>Select a Make</option>
+			  {{/makeId}}
+			  {{#each(makes.value)}}
+				<option value:from="id">{{name}}</option>
+			  {{/each}}
+			{{/if}}
+		</select>
+
+		{{#if(modelsPromise)}}
+			{{#if(models)}}
+				<select value:bind="modelId">
+					{{^modelId}}
+						<option value=''>Select a Model</option>
+					{{/modelId}}
+					{{#each(models)}}
+						<option value:from="id">{{name}}</option>
+					{{/each}}
+				</select>
+			{{else}}
+				<select disabled><option>Loading Models</option></select>
+			{{/if}}
+		{{else}}
+			<select disabled><option>Models</option></select>
+		{{/if}}
+
+		{{#if(years)}}
+			<select value:bind="year">
+				{{^year}}
+					<option value=''>Select a Year</option>
+				{{/year}}
+				{{#each years}}
+					<option value:from="this">{{this}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Years</option></select>
+		{{/if}}
+
+		<div>
+			{{#each(vehicles)}}
+				<h2>{{name}}</h2>
+				<img src:from="thumb" width="200px"/>
+			{{/each}}
+		</div>
+```
+@highlight 2,only
+
+> Note: you could also use a [can-define.types.get getter] for this property. The getter will be called once to get the initial value and will only be called again if an observable it is using changes. Since no observables are being used, using a `get` for the `makes` property will behave the same as using `default`.
+> Using `get` also means that you can use the shorthand [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get getter syntax] so this:
+>```js
+> makes: {
+>   get: function() {
+>     ...
+>   }
+> }
+>```
+> can be written like this:
+>```js
+> get makes() {
+>   ...
+> }
+>```
+
+#### Using promises
+
+The `makes` property is set to the result of calling [can-ajax], which returns a [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise promise].
+
+This promise is decorated by [can-reflect-promise] so that in the view you can easily use metadata related to the promise's [https://github.com/domenic/promises-unwrapping/blob/master/docs/states-and-fates.md#states state]:
+
+* `state` - one of "pending", "resolved", or "rejected"
+* `isPending` - true if the promise is neither resolved nor rejected, false otherwise.
+* `isResolved` - true if the promise is resolved, false otherwise.
+* `isRejected` - true if the promise is rejected, false otherwise.
+
+This also means that in order to get the `makes` data, we need to use the `value` of the promise:
+
+```handlebars
+		<select value:bind="makeId"
+			{{#if(makes.isPending)}}disabled{{/if}}>
+			{{#if(makes.isPending)}}
+			  <option value=''>Loading...</option>
+			{{else}}
+			  {{^makeId}}
+				<option value=''>Select a Make</option>
+			  {{/makeId}}
+			  {{#each(makes.value)}}
+				<option value:from="id">{{name}}</option>
+			  {{/each}}
+			{{/if}}
+		</select>
+
+		{{#if(modelsPromise)}}
+			{{#if(models)}}
+				<select value:bind="modelId">
+					{{^modelId}}
+						<option value=''>Select a Model</option>
+					{{/modelId}}
+					{{#each(models)}}
+						<option value:from="id">{{name}}</option>
+					{{/each}}
+				</select>
+			{{else}}
+				<select disabled><option>Loading Models</option></select>
+			{{/if}}
+		{{else}}
+			<select disabled><option>Models</option></select>
+		{{/if}}
+
+		{{#if(years)}}
+			<select value:bind="year">
+				{{^year}}
+					<option value=''>Select a Year</option>
+				{{/year}}
+				{{#each years}}
+					<option value:from="this">{{this}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Years</option></select>
+		{{/if}}
+
+		<div>
+			{{#each(vehicles)}}
+				<h2>{{name}}</h2>
+				<img src:from="thumb" width="200px"/>
+			{{/each}}
+		</div>
+```
+@highlight 9,only
+
+In order to avoid having to use `.value` every time you want to use the data, it can be very useful to split promises into two separate properties &mdash; one for the promise and one for the value. Using this "promise splitting" technique, this code could be written like this:
+
+```js
+		makesPromise: {
+			default() {
+				return ajax({
+					type: "GET",
+					url: "/makes"
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		makes: {
+			get(lastSet, resolve) {
+				this.makesPromise.then(resolve);
+			}
+		},
+```
+
+This uses a `default` value for the `makesPromise` and an [can-define.types.get#get_lastSetValue_resolve_value__ asynchronous getter] for the `makes` property.
+
+The asynchronous getter does not return anything, instead it passes the list of `makes` to `resolve`. The code above is the same as:
+
+```js
+this.makesPromise.then(function(makes) {
+	resolve(makes);
+});
+```
+
+> Note: when using asynchronous getters, you cannot use the shorthand getter syntax (`get makes() { ... }`) since JavaScript getters [http://whereswalden.com/2010/08/22/incompatible-es5-change-literal-getter-and-setter-functions-must-now-have-exactly-zero-or-one-arguments/ must have only one argument].
+
+#### Loading new data
+
+In order to load the correct `models` for a make, a request to the `/models` API must be made whenever a make is selected. In order to do this, the make `<select>` element is bound to the `makeId` property:
+```handlebars
+		<select value:bind="makeId"
+			{{#if(makes.isPending)}}disabled{{/if}}>
+			{{#if(makes.isPending)}}
+			  <option value=''>Loading...</option>
+			{{else}}
+			  {{^makeId}}
+				<option value=''>Select a Make</option>
+			  {{/makeId}}
+			  {{#each(makes.value)}}
+				<option value:from="id">{{name}}</option>
+			  {{/each}}
+			{{/if}}
+		</select>
+
+		{{#if(modelsPromise)}}
+			{{#if(models)}}
+				<select value:bind="modelId">
+					{{^modelId}}
+						<option value=''>Select a Model</option>
+					{{/modelId}}
+					{{#each(models)}}
+						<option value:from="id">{{name}}</option>
+					{{/each}}
+				</select>
+			{{else}}
+				<select disabled><option>Loading Models</option></select>
+			{{/if}}
+		{{else}}
+			<select disabled><option>Models</option></select>
+		{{/if}}
+
+		{{#if(years)}}
+			<select value:bind="year">
+				{{^year}}
+					<option value=''>Select a Year</option>
+				{{/year}}
+				{{#each years}}
+					<option value:from="this">{{this}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Years</option></select>
+		{{/if}}
+
+		<div>
+			{{#each(vehicles)}}
+				<h2>{{name}}</h2>
+				<img src:from="thumb" width="200px"/>
+			{{/each}}
+		</div>
+```
+@highlight 1,only
+
+The view-model then uses this property in the `modelsPromise` getter:
+```js
+	ViewModel: {
+		makeId: "string",
+		makes: {
+			default() {
+				return ajax({
+					type: "GET",
+					url: "/makes"
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		modelId: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("makeId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		get modelsPromise() {
+			var makeId = this.makeId;
+			if( makeId ) {
+				return ajax({
+					type: "GET",
+					url: "/models",
+					data: { makeId: makeId }
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		models: {
+			get: function(lastSet, resolve) {
+				var promise = this.modelsPromise;
+				if(promise) {
+					promise.then(resolve);
+				}
+			}
+		},
+		get model() {
+			var models = this.models,
+				modelId = this.modelId;
+
+			if(models && models.length && modelId) {
+				var matched = models.filter(function(model) {
+					return modelId == model.id;
+				});
+				return matched[0];
+			}
+		},
+		get years() {
+			var model = this.model;
+			return model && model.years;
+		},
+		year: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("modelId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		vehicles: {
+			get: function(lastSet, resolve) {
+				var year = this.year,
+					modelId = this.modelId;
+
+				if(modelId && year) {
+					ajax({
+						type: "GET",
+						url: "/vehicles",
+						data: { modelId: modelId, year: year }
+					}).then(function(resp) {
+						resolve(resp.data);
+					});
+				} else {
+					resolve([]);
+				}
+			}
+		}
+	}
+```
+@highlight 24,29,only
+
+When the `view` uses the `modelsPromise` property, it will become [can-event-queue/map/map.can.isBound bound], which means it
+
+* will be called once to get its value
+* will cache this initial value
+* will set up listeners for any observables used within the getter
+
+If the `modelsPromise` is read a second time, the cached value will be returned.
+
+If the `makeId` property changes, the getter will be called again and a new request will be made to the `/models` API.
+
+#### Resetting a selection when its parent list changes
+
+Similar to the `makeId`, the `<select>` for models is bound to the `modelId` property:
+
+```handlebars
+		<select value:bind="makeId"
+			{{#if(makes.isPending)}}disabled{{/if}}>
+			{{#if(makes.isPending)}}
+			  <option value=''>Loading...</option>
+			{{else}}
+			  {{^makeId}}
+				<option value=''>Select a Make</option>
+			  {{/makeId}}
+			  {{#each(makes.value)}}
+				<option value:from="id">{{name}}</option>
+			  {{/each}}
+			{{/if}}
+		</select>
+
+		{{#if(modelsPromise)}}
+			{{#if(models)}}
+				<select value:bind="modelId">
+					{{^modelId}}
+						<option value=''>Select a Model</option>
+					{{/modelId}}
+					{{#each(models)}}
+						<option value:from="id">{{name}}</option>
+					{{/each}}
+				</select>
+			{{else}}
+				<select disabled><option>Loading Models</option></select>
+			{{/if}}
+		{{else}}
+			<select disabled><option>Models</option></select>
+		{{/if}}
+
+		{{#if(years)}}
+			<select value:bind="year">
+				{{^year}}
+					<option value=''>Select a Year</option>
+				{{/year}}
+				{{#each years}}
+					<option value:from="this">{{this}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Years</option></select>
+		{{/if}}
+
+		<div>
+			{{#each(vehicles)}}
+				<h2>{{name}}</h2>
+				<img src:from="thumb" width="200px"/>
+			{{/each}}
+		</div>
+```
+@highlight 17,only
+
+This works great for selecting a model from the list given for a particular make; however, if the make changes, the selected `modelId` will point to a different model in the list for the new make &mdash; or it might not exist at all.
+
+In order to handle this parent-child relationship correctly, the `modelId` property needs to be bound to the value in its own `<select>` element, but it also needs to be cleared when the value of the parent `<select>` element changes. The [can-define.types.value can-define value behavior] makes it possible to define properties that are composed from events of other properties on the map.
+
+In order to define `modelId`, the `value` behavior will
+
+* call `prop.resolve` with the new `modelId` when `prop.lastSet` changes &mdash; this is whenever a new model is chosen from the `<select>`
+* call `prop.resolve` with an empty string when `makeId` changes to reset the `<select>` back to the default `<option>`
+
+```js
+	ViewModel: {
+		makeId: "string",
+		makes: {
+			default() {
+				return ajax({
+					type: "GET",
+					url: "/makes"
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		modelId: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("makeId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		get modelsPromise() {
+			var makeId = this.makeId;
+			if( makeId ) {
+				return ajax({
+					type: "GET",
+					url: "/models",
+					data: { makeId: makeId }
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		models: {
+			get: function(lastSet, resolve) {
+				var promise = this.modelsPromise;
+				if(promise) {
+					promise.then(resolve);
+				}
+			}
+		},
+		get model() {
+			var models = this.models,
+				modelId = this.modelId;
+
+			if(models && models.length && modelId) {
+				var matched = models.filter(function(model) {
+					return modelId == model.id;
+				});
+				return matched[0];
+			}
+		},
+		get years() {
+			var model = this.model;
+			return model && model.years;
+		},
+		year: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("modelId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		vehicles: {
+			get: function(lastSet, resolve) {
+				var year = this.year,
+					modelId = this.modelId;
+
+				if(modelId && year) {
+					ajax({
+						type: "GET",
+						url: "/vehicles",
+						data: { modelId: modelId, year: year }
+					}).then(function(resp) {
+						resolve(resp.data);
+					});
+				} else {
+					resolve([]);
+				}
+			}
+		}
+	}
+```
+@highlight 15-21,only
+
+Using this technique allows you to easily define the parent-child relationship between `make` and `model` while also keeping all of the code that specifies how `modelId` works within the `modelId` [can-define.types.propDefinition PropDefinition].
+
+#### Creating and updating data
+
+Interested in adding examples for how to create and update data on the server? Take a look at [this issue](https://github.com/canjs/canjs/issues/4007).
