@@ -14,10 +14,10 @@ basic rich text editor.
 
 In this guide you will learn how to:
 
-- exec
-- selection
-- ranges, compare
-- walk the DOM and perform mutations
+- Use `document.execCommand` to change the HTML and copy text to the clickboard.
+- The basics of the [Range](https://developer.mozilla.org/en-US/docs/Web/API/Range) and
+  [Selection](https://developer.mozilla.org/en-US/docs/Web/API/Selection) apis.
+- Walk the DOM in unusual ways.
 
 The final widget looks like:
 
