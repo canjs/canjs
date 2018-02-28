@@ -232,7 +232,7 @@ thing.on("prop", function(){ ... });
 
 The __inserted__ and __removed__ events, most commonly used in [can-component]s are no longer included.
 
-Most if what was done in the inserted event can be replaced in places like [can-define.types.value]. [can-component] also includes a new [can-component/connectedCallback] lifecycle callback that can directly replace the inserted event.
+Most of what was done in the inserted event can be replaced in places like [can-define.types.value]. [can-component] also includes a new [can-component/connectedCallback] lifecycle callback that can directly replace the inserted event.
 
 Code that looked like:
 
