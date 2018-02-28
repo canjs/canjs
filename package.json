@@ -70,7 +70,7 @@
     "can-key-tree": "1.0.0",
     "can-list": "4.0.0",
     "can-log": "1.0.0",
-    "can-map": "4.0.0",
+    "can-map": "4.0.1",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "0.1.7",
     "can-observation": "4.0.0",
