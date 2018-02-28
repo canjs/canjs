@@ -32,7 +32,7 @@ application is contained within observables.
 
 The rest of this guide walks you through:
 
-- The basics of defining your own [key-value observable](#Key_ValueObservables) types and
+- Defining your own [key-value observable](#Key_ValueObservables) types and
   adding logic to them.
 - Connecting those [observables to DOM elements](#ObservablesandHTMLElements) using:
   - stache templates like `<span>{{count}}</span>`,  
