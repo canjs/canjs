@@ -7,10 +7,13 @@ basic rich text editor.
 
 @body
 
+> Published March 1st, 2017 by [Justin Meyer](https://twitter.com/justinbmeyer)
+
 
 <style>
   video.bit-docs-screenshot {max-width: 600px;}
 </style>
+
 
 In this guide you will learn how to:
 
@@ -50,7 +53,6 @@ This JS Bin:
 - The `<rich-text-editor>` element should add a [contenteditable](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Editable_content) `<div/>` with an `editbox`
   `className` to the page. The `<div/>` should have the following default __inner__ content:
   ```html
-  <div>
     <ol>
       <li>Learn <b>about</b> CanJS.</li>
       <li>Learn <i>execCommand</i>.</li>
@@ -58,7 +60,6 @@ This JS Bin:
       <li>Get Funky.</li>
     </ol>
     <div>Celebrate!</div>
-  </div>
   ```
 
 <video controls class="bit-docs-screenshot">
@@ -107,7 +108,7 @@ of that element by typing and copying and pasting text.
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-16,only
+@highlight 1-14,only
 
 Update the __HTML__ `<body>` element to:
 
@@ -160,7 +161,7 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-bold.js
-@highlight 4-6,18-23,only
+@highlight 4-6,16-21,only
 
 
 
@@ -308,7 +309,7 @@ into a text editor.
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-copy.js
-@highlight 7,25-39,only
+@highlight 7,23-37,only
 
 
 
@@ -430,7 +431,7 @@ __Other stuff you need to know__
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-funky-text.js
-@highlight 8,41-49,53-59,only
+@highlight 8,39-47,51-57,only
 
 
 
@@ -504,7 +505,7 @@ __Other stuff you need to know__
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-funky-only.js
-@highlight 42-44,49,53,67-70,only
+@highlight 40-42,47,51,65-68,only
 
 
 
@@ -548,14 +549,12 @@ Lets see how this works with an example.  Lets say we've selected from the `out`
 the start of `brate` in _Celebrate_.  We've marked the selection start and end with `|` below:
 
 ```
-<div>
-  <ol>
-    <li>Learn <b>ab|out</b> CanJS.</li>
-    <li>Learn <i>execCommand</i>.</li>
-    <li>Learn about selection and ranges.</li>
-    <li>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab|out</b> CanJS.</li>
+  <li>Learn <i>execCommand</i>.</li>
+  <li>Learn about selection and ranges.</li>
+  <li>Get Funky.</li>
+</ol>
 <div>Get Ready To</div>
 <div>Cele|brate!</div>
 ```
@@ -564,14 +563,12 @@ So we first need to "collect" `out` in `elements`.  To do this we will do step `
 the DOM will look like:
 
 ```
-<div>
-  <ol>
-    <li>Learn <b>ab<span class='funky'>out</span></b> CanJS.</li>
-    <li>Learn <i>execCommand</i>.</li>
-    <li>Learn about selection and ranges.</li>
-    <li>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab<span class='funky'>out</span></b> CanJS.</li>
+  <li>Learn <i>execCommand</i>.</li>
+  <li>Learn about selection and ranges.</li>
+  <li>Get Funky.</li>
+</ol>
 <div>Get Ready To</div>
 <div>Cele|brate!</div>
 ```
@@ -580,14 +577,12 @@ We will then keep doing step `#2.1`. This new span has no `nextSibling`s, so we 
 walk up to it's parent `<b>` element and collect its next siblings.  This will update the DOM to:
 
 ```
-<div>
-  <ol>
-    <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-    <li>Learn <i>execCommand</i>.</li>
-    <li>Learn about selection and ranges.</li>
-    <li>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
+  <li>Learn <i>execCommand</i>.</li>
+  <li>Learn about selection and ranges.</li>
+  <li>Get Funky.</li>
+</ol>
 <div>Get Ready To</div>
 <div>Cele|brate!</div>
 ```
@@ -597,46 +592,27 @@ walk up to it's parent `<li>` element and collect its next siblings.  We will on
 Elements and TextNodes with characters, resulting in:
 
 ```
-<div>
-  <ol>
-    <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-    <li class='funky'>Learn <i>execCommand</i>.</li>
-    <li class='funky'>Learn about selection and ranges.</li>
-    <li class='funky'>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
+  <li class='funky'>Learn <i>execCommand</i>.</li>
+  <li class='funky'>Learn about selection and ranges.</li>
+  <li class='funky'>Get Funky.</li>
+</ol>
 <div>Get Ready To</div>
 <div>Cele|brate!</div>
 ```
 
-We will then keep doing step `#2.1`, moving onto the `<ol>`:
-
-```
-<div>
-  <ol class='funky'>
-    <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-    <li class='funky'>Learn <i>execCommand</i>.</li>
-    <li class='funky'>Learn about selection and ranges.</li>
-    <li class='funky'>Get Funky.</li>
-  </ol>
-</div>
-<div>Get Ready To</div>
-<div>Cele|brate!</div>
-```
-
-Once we reach the `<div>` containing the `<ol>`, we've reached
+We will then move onto the `<ol>`. Once we reached the `<ol>`, we've reached
 the _start-line node_.  Now we will move onto step `#2.2`.  We will perform a similar walk from
 the end of the range, but in reverse. In this case, we will wrap `Cele` with a `<span>` follows:
 
 ```
-<div>
-  <ol class='funky'>
-    <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-    <li class='funky'>Learn <i>execCommand</i>.</li>
-    <li class='funky'>Learn about selection and ranges.</li>
-    <li class='funky'>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
+  <li class='funky'>Learn <i>execCommand</i>.</li>
+  <li class='funky'>Learn about selection and ranges.</li>
+  <li class='funky'>Get Funky.</li>
+</ol>
 <div>Get Ready To</div>
 <div><span class='funky'>Cele</span>|brate!</div>
 ```
@@ -647,14 +623,12 @@ reached the _end-line node_.
 Finally, we move onto step `#2.3`, and collect all nodes between _start-line_ and _end-line_:
 
 ```
-<div>
-  <ol class='funky'>
-    <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-    <li class='funky'>Learn <i>execCommand</i>.</li>
-    <li class='funky'>Learn about selection and ranges.</li>
-    <li class='funky'>Get Funky.</li>
-  </ol>
-</div>
+<ol>
+  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
+  <li class='funky'>Learn <i>execCommand</i>.</li>
+  <li class='funky'>Learn about selection and ranges.</li>
+  <li class='funky'>Get Funky.</li>
+</ol>
 <div class='funky'>Get Ready To</div>
 <div><span class='funky'>Cele</span>|brate!</div>
 ```
@@ -690,14 +664,12 @@ And it would return the wrapping `<span>`.
 
 ```
 <div class='editbox' contenteditable="true">
-  <div>
-    <ol>
-      <li>Learn <b>ab<span id='START'>out</span></b> CanJS.</li>
-      <li>Learn <i>execCommand</i>.</li>
-      <li>Learn about selection and ranges.</li>
-      <li>Get Funky.</li>
-    </ol>
-  </div>
+  <ol>
+    <li>Learn <b>ab<span id='START'>out</span></b> CanJS.</li>
+    <li>Learn <i>execCommand</i>.</li>
+    <li>Learn about selection and ranges.</li>
+    <li>Get Funky.</li>
+  </ol>
   <div>Get Ready To</div>
   <div>Cele|brate!</div>
 </div>
@@ -785,12 +757,7 @@ var startLine = siblingThenParentUntil(
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-funky-range.js
-@highlight 62-82,86-119,only
-
-
-
-
-
+@highlight 60-80,84-117,only
 
 
 

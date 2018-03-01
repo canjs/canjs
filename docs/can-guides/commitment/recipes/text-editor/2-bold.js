@@ -5,14 +5,12 @@ can.Component.extend({
       <button on:click='exec("bold")' class='bold'>B</button>
     </div>
     <div class='editbox' contenteditable="true">
-      <div>
-        <ol>
-          <li>Learn <b>about</b> CanJS.</li>
-          <li>Learn <i>execCommand</i>.</li>
-          <li>Learn about selection and ranges.</li>
-          <li>Get Funky.</li>
-        </ol>
-      </div>
+      <ol>
+        <li>Learn <b>about</b> CanJS.</li>
+        <li>Learn <i>execCommand</i>.</li>
+        <li>Learn about selection and ranges.</li>
+        <li>Get Funky.</li>
+      </ol>
       <div>Celebrate!</div>
     </div>
   `,
