@@ -393,7 +393,7 @@ For example, if the `aboutSelection` `Range` represents _"about selection"_ in:
 <li>Learn about selection and ranges</li>
 ```
 
-calling `getElementsInRange(aboutSelection,span)` should:
+calling `getElementsInRange(aboutSelection, "span")` should:
 
 - convert the `<li>` too look like:
 
