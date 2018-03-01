@@ -7,7 +7,10 @@ basic rich text editor.
 
 @body
 
-> Published March 1st, 2017 by [Justin Meyer](https://twitter.com/justinbmeyer)
+> This recipes was first published March 1st, 2017 by [Justin Meyer](https://twitter.com/justinbmeyer).
+>
+> Live stream of this recipe recorded 2pm CST on March 1st, 2017:
+> <iframe width="560" height="315" src="https://www.youtube.com/embed/EpG1Wzn5by8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 <style>
