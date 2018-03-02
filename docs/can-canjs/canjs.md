@@ -3,7 +3,10 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description CanJS is an evolving and improving set of client side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
+@description CanJS is a client side JavaScript framework that makes it easy to to do the
+common stuff, while managing to do the impossible.
+
+@body
 
 <div class="hero-images">
     <img
@@ -17,11 +20,88 @@
         src="docs/images/home/Home-Tortoise-color.png"/>
 </div>
 
+## The easy stuff
+
+CanJS starts with a familiar object-oriented approach to making
+custom elements. Simply import and extend [can-component] with:
+
+- A [can-component.prototype.tag] for the name of the custom element for which you want to define its behavior.
+- A [can-component.prototype.view] that provides the HTML content
+  of the custom element. The [can-stache] `view` supports live binding, event bindings, and two-way bindings.
+- A [can-component.prototype.ViewModel] that defines the methods and stateful properties available to
+  the `view`.
+
+For example, lets say you want to create a counter button like this:
+
+<p><my-counter></my-counter></p>
+
+<script src="./dist/global/can.js"></script>
+<script>
+can.Component.extend({
+    tag: "my-counter",
+    view: `
+        <button on:click='increment()'>+1</button>
+        Count: <span>{{count}}</span>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+</script>
+
+
+The following defines a `<my-counter>` element:
+
+```js
+import Component from "can-component";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        <button on:click='increment()'>+1</button>
+        Count: <span>{{count}}</span>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+```
+
+To use `<my-counter>`, simply put one in your page, or in another component's `view`:
+
+```HTML
+<my-counter></mycounter>
+```
+
+See it in action here:
+
+
+
+Or play with it in a JSBin.
+
+
+
+
+
+## The impossible made possible
+
+- real-time
+- streaming definitions
+- connecting with other libraries / integration
+- memory safety
+- upgrading over a long time
+- dev tools, stack traces, tricks and tips
+
+
 If you’re new to the project, the best place to start is the [about] page, where you’ll
 find CanJS’s [guides/mission Mission] and [guides/technical Technical Highlights]. Then, go to the [guides] page to find
 the [guides/chat Chat], [guides/todomvc TodoMVC], and [guides/atm ATM] guides.
-
-@body
 
 ## Getting Started
 
