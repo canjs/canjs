@@ -16,6 +16,7 @@
 const util = require("util");
 const execFile = util.promisify(require("child_process").execFile);
 const GitHubApi = require("github");
+const semver = require("semver");
 
 // Default to canjs/canjs repo
 const OWNER = 'canjs';
@@ -88,7 +89,7 @@ async function getPackageJsonByRelease(previousRelease, currentRelease) {
   } catch(err) {
     console.error('Error: getFileFileContentFromCommit', err);
   }
-  return {previousRelease: oldVerPackage, currentRelease: newVerPackage}
+  return { previousRelease: oldVerPackage, currentRelease: newVerPackage };
 }
 
 async function getFileContentFromCommit(sha, filename) {
@@ -128,11 +129,13 @@ async function matchTags(repo, diff) {
 
     for (let i = res.data.length - 1; i >= 0; i--) {
       let currentRef = res.data[i].ref.split("/")[2].slice(1);
-      tags.push(res.data[i]);
 
       if (diff.prevVer && currentRef === diff.prevVer || tags.length >= upperBound) break;
+
+      tags.push(res.data[i]);
     }
-    return tags;
+    // sort in ascending order by ref
+    return tags.sort((v1, v2) => semver.gt(v1.ref.slice(10), v2.ref.slice(10)));
   } catch(err) {
     console.error('Error in matchTags', err)
   }
@@ -153,6 +156,8 @@ async function getAllReleaseNotes(updatedDependencies) {
   await Promise.all(Object.keys(matchingTags).map(async function(package, index) {
     releaseNotes[package] = await Promise.all(matchingTags[package].map(async function(taggedRelease) {
       let version = taggedRelease.ref.split("/")[2];
+	  let title = "";
+	  let body = "";
 
       try {
         let release = await github.repos.getReleaseByTag({
@@ -162,17 +167,15 @@ async function getAllReleaseNotes(updatedDependencies) {
         });
 
         if (release.data.name) {
-          let title = release.data.name;
-          let body = release.data.body;
-          return `${package} ${version}: ${title} \n    - ${body || "none"}`;
+          title = release.data.name;
+          body = release.data.body;
         }
 
       } catch(err) {
-        console.error(`${package} ${version}: getReleaseByTag Error Code ${err.code}: ${err.message} `);
-
+        // console.error(`${package} ${version}: getReleaseByTag Error Code ${err.code}: ${err.message} `);
       }
-      // return `${package} ${version} doesn't have release notes`;
-      return null;
+
+      return `[${package} ${version}${title ? " - " + title : ""}](https://github.com/canjs/${package}/releases/tag/${version})${body ? "\n" + body : ""}`;
     }));
   }));
 
@@ -182,7 +185,8 @@ async function getAllReleaseNotes(updatedDependencies) {
 
 function createAggregateReleaseNote(allReleaseNotes, currentRelease) {
   let releaseNote = `# ${OWNER}/${REPO} ${currentRelease || 'INSERT VERSION HERE'} Release Notes \n`;
-  Object.keys(allReleaseNotes).forEach(function(package) {
+
+  Object.keys(allReleaseNotes).sort().forEach(function(package) {
     releaseNote = `${releaseNote} \n## [${package}](https://github.com/canjs/${package}/releases) \n`;
 
     allReleaseNotes[package].forEach(function(note) {
@@ -192,8 +196,6 @@ function createAggregateReleaseNote(allReleaseNotes, currentRelease) {
     })
 
   })
-
-  releaseNote = `${releaseNote} \n ----`;
 
   return releaseNote;
 }
