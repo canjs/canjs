@@ -182,7 +182,7 @@
       "dependencies": {
         "normalize.css": "^5.0.0",
         "steal-conditional": "^0.3.6",
-        "steal-stache": "^3.0.1"
+        "steal-stache": "^4.0.1"
       },
       "package": {
         "steal": {
@@ -201,7 +201,7 @@
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.8.0",
       "bit-docs-generate-searchmap": "^0.2.0",
-      "bit-docs-html-canjs": "2.1.0",
+      "bit-docs-html-canjs": "2.2.0",
       "bit-docs-prettify": "^0.1.1",
       "bit-docs-html-highlight-line": "^0.2.2",
       "bit-docs-tag-demo": "^0.3.0",

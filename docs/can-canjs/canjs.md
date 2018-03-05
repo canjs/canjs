@@ -4,7 +4,7 @@
 @package ../../package.json
 @templateRender <% %>
 @description CanJS is a client side JavaScript framework that makes it easy to to do the
-common stuff, while managing to do the impossible.
+common stuff, while helping you build the impossible.
 
 @body
 
@@ -19,29 +19,39 @@ common stuff, while managing to do the impossible.
         srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-color-x2.png 2x"
         src="docs/images/home/Home-Tortoise-color.png"/>
 </div>
+<div style="text-align: center; color: gray">Why is our logo a tortoise? Read the short fable <a href="http://read.gov/aesop/025.html">The Hare & the Tortoise</a> by <a href="https://en.wikipedia.org/wiki/Aesop%27s_Fables">Aesop</a> to find out.</div>
 
-## The easy stuff
+## Easy to do the common stuff
 
 CanJS starts with a familiar object-oriented approach to making
 custom elements. Simply import and extend [can-component] with:
 
-- A [can-component.prototype.tag] for the name of the custom element for which you want to define its behavior.
+- A [can-component.prototype.tag] for the name of the custom element for which you want to define.
 - A [can-component.prototype.view] that provides the HTML content
   of the custom element. The [can-stache] `view` supports live binding, event bindings, and two-way bindings.
 - A [can-component.prototype.ViewModel] that defines the methods and stateful properties available to
   the `view`.
 
-For example, lets say you want to create a counter button like this:
+Let's say you want to create a counter widget like the following: (_go ahead and click it_):
 
-<p><my-counter></my-counter></p>
+<p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
 
-<script src="./dist/global/can.js"></script>
-<script>
-can.Component.extend({
+And, you want that widget to show up whenever you add `<my-counter></my-counter>` to the
+page.  
+
+All you need to do is import [can-component] and define the `<my-counter>` element like this:
+
+
+<style>
+  my-counter button {margin-left: 15px;}
+</style>
+<script type="text/steal-module">
+var Component = require("can-component");
+Component.extend({
     tag: "my-counter",
     view: `
-        <button on:click='increment()'>+1</button>
         Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
     `,
     ViewModel: {
         count: {default: 0},
@@ -52,17 +62,14 @@ can.Component.extend({
 });
 </script>
 
-
-The following defines a `<my-counter>` element:
-
 ```js
 import Component from "can-component";
 
 Component.extend({
     tag: "my-counter",
     view: `
-        <button on:click='increment()'>+1</button>
         Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
     `,
     ViewModel: {
         count: {default: 0},
@@ -73,30 +80,131 @@ Component.extend({
 });
 ```
 
-To use `<my-counter>`, simply put one in your page, or in another component's `view`:
-
-```HTML
-<my-counter></mycounter>
-```
-
-See it in action here:
+<div style="text-align: center; color: gray"><a href="http://justinbmeyer.jsbin.com/pubiqoc/1/edit?html,js,output">Play with this example in a JS Bin.</a></div>
 
 
+## Build the impossible
 
-Or play with it in a JSBin.
+For over 10 years, CanJS has been used to build production applications in almost every
+use case - from massive online stores, to small mobile apps. CanJS goes beyond just state
+management and templates. To help you build whatever comes your way, CanJS helps you:
+
+<table>
+<thead>
+<tr>
+    <th>Get started quickly</th>
+    <th>Solve difficult difficult problems easily</th>
+    <th>Maintain your app forever</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+    Technology Overview Guide<br/>
+    3 Example Apps<br/>
+    8 Recipes<br/>
+    Debugging, Routing Tutorials<br/>
+    DoneJS for ultimate<br/>
+</td>
+</tr>
+</tbody>
+</table>
+
+- get started quickly
+- solve difficult problems as they arrive, and
+- maintain your app over years.
+
+### Get started quickly
+
+Learning a new framework is hard. We're here to make it easier.
+
+Checkout our [canjs/doc/guides/setup]
+
+Start
+
+
+
+
+CanJS
+
+  - Lots of Guides
+  - Recipes (A new one every 6 weeks)
+  - API docs
+  - Community support (forums, etc)
+
+### Solve difficult problems easily
+
+CanJS has many features that help you in a tight spot:
+
+- Routing
+- A model layer that supports real-time, and multiple caching strategies.
+  ```js
+  superMap({})
+  ```
+- Streaming property definitions.
+- Dev tools, stack traces, tricks and tips
+
+One special feature is that CanJS has 80 packages.  Allowing you to
+integrate anything. `can-reflect`.  small parts, all documented. Integrate
+anything yourself.  Reuse and combine smaller parts into things that match your needs.
+
+
+- can-reflect
+
+tight spot => different architectures, difficult features to build
+
+CanJS has tools and utilities
+
+
+  -
+  - donejs
+  -
+
+  - streaming definitions, streaming services
+  - connecting with other libraries / integration
+  - memory safety
+  -
+  - React stuff
+
+### Maintain your app over years, possibly decades
+    - Built small, multiple projects
+    - Experiments
+    - Supported by Bitovi Consulting
+    - a community that cares (professional support if you need it)
+    - Upgrades
+    - 6 week survey
+
+
+CanJS goes beyond providing
+just state management and view
+
+to help you build whatever comes your way
+
+We've done extensive
+work to ensure you launch your application on time, and keep making releases quickly.
+
+> Massive online stores, to small mobile apps.  Stuff that helps you get to launch quickly:
+
+
+
+
+-
 
 
 
 
 
-## The impossible made possible
 
-- real-time
-- streaming definitions
-- connecting with other libraries / integration
-- memory safety
-- upgrading over a long time
-- dev tools, stack traces, tricks and tips
+
+
+Thus it comes with a wide variety of extensions.
+
+Built well.
+
+Isolated.
+
+Learn it, be productive with it.
+
 
 
 If you’re new to the project, the best place to start is the [about] page, where you’ll
