@@ -1,0 +1,17 @@
+<!--
+
+We then created an instance of the `appVM` with the `new` operator. This created
+an object with a `message` property and `addExcitement` method.  For example, adding:
+
+```js
+console.log(appVM.message)
+appVM.addExcitement();
+console.log(appVM.message)
+```
+
+Will print out `"Chat Home"` and then `"Chat Home!"`.
+
+`DefineMap` instances are observable.  This is why when `message` changes,
+the template updates automatically.
+
+-->

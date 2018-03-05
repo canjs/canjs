@@ -19,38 +19,80 @@ Message.connection = can.connect.superMap({
 	name: 'message'
 });
 
-var ChatMessagesVM = can.DefineMap.extend({
-	messagesPromise: {
-		default: function(){
-			return Message.getList({});
+can.Component.extend({
+	tag: "chat-messages",
+	view: `
+		<h1 class="page-header text-center">
+		   Chat Messages
+		</h1>
+		<h5><a href="{{routeUrl(page='home')}}">Home</a></h5>
+
+		{{#if(messagesPromise.isPending)}}
+		  <div class="list-group-item list-group-item-info">
+			<h4 class="list-group-item-heading">Loading…</h4>
+		  </div>
+		{{/if}}
+		{{#if(messagesPromise.isRejected)}}
+		  <div class="list-group-item list-group-item-danger">
+			<h4 class="list-group3--item-heading">Error</h4>
+			<p class="list-group-item-text">{{messagesPromise.reason}}</p>
+		  </div>
+		{{/if}}
+		{{#if(messagesPromise.isResolved)}}
+		  {{#each(messagesPromise.value)}}
+			<div class="list-group-item">
+			  <h4 class="list-group3--item-heading">{{name}}</h4>
+			  <p class="list-group-item-text">{{body}}</p>
+			</div>
+		  {{else}}
+			<div class="list-group-item">
+			  <h4 class="list-group-item-heading">No messages</h4>
+			</div>
+		  {{/each}}
+		{{/if}}`,
+	ViewModel: {
+		messagesPromise: {
+			default: function(){
+				return Message.getList({});
+			}
 		}
 	}
 });
 
 can.Component.extend({
-	tag: "chat-messages",
-	ViewModel: ChatMessagesVM,
-	view: can.stache.from("chat-messages-template")
-});
-
-var AppVM = can.DefineMap.extend({
-	page: "string",
-	message: {
-		type: "string",
-		default: "Chat Home",
-		serialize: false
-	},
-	addExcitement: function(){
-		this.message = this.message + "!";
+	tag: "chat-app",
+	view: `
+		<div class="container">
+		  <div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+			  {{#eq(page, 'home')}}
+				  <h1 class="page-header text-center" on:click="addExcitement()">
+					{{message}}
+				  </h1>
+				  <a href="{{routeUrl(page='chat')}}"
+					 class="btn btn-primary btn-block btn-lg">
+					   Start chat
+				  </a>
+			  {{else}}
+				 <chat-messages/>
+			  {{/eq}}
+			</div>
+		  </div>
+		</div>`,
+	ViewModel: {
+		init(){
+			can.route.register("{page}",{page: "home"});
+			can.route.data = this;
+			can.route.start();
+		},
+		page: "string",
+		message: {
+			type: "string",
+			default: "Chat Home",
+			serialize: false
+		},
+		addExcitement(){
+			this.message = this.message + "!";
+		}
 	}
 });
-
-var appVM = new AppVM();
-
-can.route.data = appVM;
-can.route("{page}",{page: "home"});
-can.route.start();
-
-var template = can.stache.from('chat-template');
-var frag = template(appVM);
-document.body.appendChild(frag);
