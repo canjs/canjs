@@ -1,12 +1,37 @@
 @page guides/forms Forms
 @parent guides/topics 2
-@outline 2
+@outline 3
 
-@description Learn how to create amazing `<form>`s with CanJS. This guide gives an overview of binding to form element attributes and events, then describes the ins and outs of common elements, and finally discusses a few more advanced topics. We recommend reading the [guides/forms#Bindingsoverview Bindings overview] section first before jumping to the topic that interests you &mdash; or start at the top to become an expert on it all.
+@description Learn how to create amazing `<form>`s with CanJS.
 
 @body
 
-## Bindings overview
+## Overview
+
+There are three main tasks when working with forms and form elements:
+
+* setting form element attributes based on view-model data
+* responding to browser events
+* converting data to formats convenient for your business logic
+
+CanJS provides many useful utilities and techniques to help with these tasks. This guide will walk you through:
+
+* binding to form elements using [guides/forms#Attributebinding one-way], [guides/forms#Two_waybinding two-way], and [guides/forms#Eventbinding event] binding
+* combining bindings in a [guides/forms#Datadown_actionsup "data down, actions up"] pattern
+* using shorthand bindings like [guides/forms#Bindingattributesonspecificevents `on:input:value:to`]
+* storing view-related data in [guides/forms#Bindingtotemplatevariables template variables]
+* working with [guides/forms#Commonformelements common form elements]
+* using type converters like [guides/forms#Numberinput `type="number"`]
+* using more complex converters like [guides/forms#Bindingacheckboxtonon_booleanvalues either-or], [guides/forms#Bindingcheckboxestoalist boolean-to-inList], [guides/forms#Radiobutton equal], and [guides/forms#Bindingoptionsbyindex index-to-selected]
+* using custom events like [guides/forms#BindingtotheEnterkey enter] and [guides/forms#Radiobutton radiochange]
+* using custom attributes such as [guides/forms#Selectmultiple values] and [guides/forms#Bindingtotemplatevariables focused]
+* validating forms using [guides/forms#Manualformvalidation virtual properties] and validation libraries like [guides/forms#Formvalidationusingaplugin validatejs]
+* indentifying and navigating [guides/forms#Bindingconflicts bindings conflicts]
+* working with [guides/forms#Workingwithrelateddata related data], [guides/forms#Usingpromises promises], and [guides/forms#Resettingaselectionwhenitsparentlistchanges parent-child relationships]
+
+We recommend reading the [guides/forms#Bindings Bindings overview] section first before jumping to the topic that interests you &mdash; or start at the top to become an expert on it all.
+
+## Bindings
 
 When working with form elements, there are two basic kinds of bindings &mdash; Event bindings and Attribute bindings. Event bindings allow you to respond to DOM [https://developer.mozilla.org/en-US/docs/Web/Events Events] and attribute bindings allow you to bind the value of HTML [https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes Attributes] to properties in your [can-view-scope scope].
 
@@ -76,7 +101,7 @@ This example creates a template variable `scope.vars.focusedOnName` that is boun
 
 ## Common form elements
 
-Using the [guides/forms#Bindingsoverview bindings] above makes it easy to work with the most common form elements. The following sections describe the most useful attribute and event bindings to use with each of these elements as well as anything else that is unique to element.
+Using the [guides/forms#Bindings bindings] above makes it easy to work with the most common form elements. The following sections describe the most useful attribute and event bindings to use with each of these elements as well as anything else that is unique to element.
 
 ### Text field
 
@@ -89,6 +114,8 @@ Text fields are one of the most common form elements and have many attributes th
 Here is an example showing different formats for binding to the `value` attribute:
 
 @demo demos/forms/elements-text.html
+
+#### Binding to the Enter key
 
 CanJS also allows you to use custom events within event bindings. A custom event that is very useful with text fields is the `enter` event provided by the [can-event-dom-enter] package. This event listens for [https://developer.mozilla.org/en-US/docs/Web/Events/keyup keyup events] and filters them to only events where the Enter key is released.
 
@@ -202,6 +229,8 @@ When working with `<select>` elements, the `value` attribute of the element will
 By default, the `value` will be set to the text of the option if there is no `value` attribute. Take a look at the difference between the HTML of the previous example and the following:
 
 @demo demos/forms/elements-select-no-value.html
+
+#### Binding options by index
 
 There are times when you need to use numeric indexes for the `<option>` values. When doing this, you can use the [can-stache-converters.index-to-selected] converter to keep "nice" values in your scope property.
 
