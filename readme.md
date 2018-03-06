@@ -38,7 +38,7 @@ _Utility libraries that power the core and ecosystem collections._
 - Inheritable constructor functions — [can-construct](https://canjs.com/doc/can-construct.html)
 - Declarative event bindings — [can-control](https://canjs.com/doc/can-control.html)
 - Event handling utilities — [can-event](https://canjs.com/doc/can-event.html), [can-event/async/async](https://canjs.com/doc/can-event/async/async.html), [can-event/batch/batch](https://canjs.com/doc/can-event/batch/batch.html), [can-event/lifecycle/lifecycle](https://canjs.com/doc/can-event/lifecycle/lifecycle.html)
-- An environment agnostic container for global variables - [can-globals](http://localhost:8080/canjs/doc/can-globals.html)
+- An environment agnostic container for global variables - [can-globals](https://canjs.com/doc/can-globals.html)
 - Namespace where can packages are registered — [can-namespace](https://canjs.com/doc/can-namespace.html)
 - Observable hooks needed by every other observable — [can-observation](https://canjs.com/doc/can-observation.html)
 - Reflection for gets/sets, events, and type inference across object types - [can-reflect](https://canjs.com/doc/can-reflect.html)
