@@ -21,17 +21,17 @@
   {{#each(todos)}}
     <li class="todo {{#if(./complete)}}completed{{/if}}
       {{#if(isDestroying)}}destroying{{/if}}
-      {{#if(isEditing(this))}}editing{{/if}}">
+      {{#if(../isEditing(this))}}editing{{/if}}">
       <div class="view">
 	    <input class="toggle" type="checkbox"
 			   checked:bind="complete" on:change="save()">
-        <label on:dblclick="edit(this)">{{name}}</label>
+        <label on:dblclick="../edit(this)">{{name}}</label>
         <button class="destroy" on:click="destroy()"></button>
       </div>
       <input class="edit" type="text"
         value:bind="name"
-        on:enter="updateName()"
-        focused:from="isEditing(this)"
+        on:enter="../updateName()"
+        focused:from="../isEditing(this)"
         on:blur="cancelEdit()"/>
     </li>
   {{/each}}

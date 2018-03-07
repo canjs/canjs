@@ -5,6 +5,7 @@
 @group guides/topics 5 topics
 @group guides/contribute 6 contribute
 @group guides/upgrade 7 upgrade
+@templateRender <% %>
 @subchildren
 
 @description Welcome to CanJS! These guides are here to help you develop and improve your relationship with CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the framework you marry.  This page helps you know how to advance through the different stages of this relationship:
@@ -89,3 +90,204 @@ If you want to become a CanJS contributor, you simply have to:
  - Make one small contribution, even a spelling correction, a month.
 
 Issues that should be easy for a new contributor to pick up have an “easy” label. [This GitHub search](https://github.com/search?utf8=%E2%9C%93&q=user%3Acanjs+is%3Aopen+is%3Aissue+label%3AEasy&type=Issues) makes it easy to find easy issues across all the CanJS repositories.
+
+
+## Skill Tree
+
+<style>
+.down:before {
+    content: "\2193";
+     position: absolute;
+     bottom: -20px;
+     left: 50%;
+}
+.down, .down-left, .down-right, .right {
+    position: relative;
+    border: solid 1px;
+    padding: 3px;
+}
+.down-left:before {
+    content: "\2199";
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+}
+.down-right:after {
+    content: "\2198";
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+}
+.right:after {
+    content: "\2192";
+    position: absolute;
+    top: 50%;
+    right: -20px;
+}
+.skill p {
+    font-size: 0.8em;
+}
+.skill {
+    border-collapse: separate;
+    border-spacing: 20px;
+    /*margin-bottom: 30px;*/
+}
+.skill td {
+    text-align: center;
+}
+.scroll-contents-right {
+    overflow-x: auto;
+}
+.skill td:nth-child(1) {  
+}
+</style>
+
+<div class='scroll-contents-right'>
+<table class='skill'>
+<tbody>
+<tr>
+    <td>Architecture</td>
+    <td class='right'>[guides/technology-overview]
+<p><%this.[guides/technology-overview].description%></p>
+<img src="../docs/can-guides/experiment/technology/overview.svg"
+  alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
+  class='bit-docs-screenshot' width='100px'/>
+    </td>
+<td class='right'>[guides/chat]
+<p><%this.[guides/chat].description%></p>
+<img src="../docs/can-guides/experiment/chat/chat.png" width='100px'/>
+</td>
+<td class='right'>[guides/todomvc]
+<p>
+<%this.[guides/todomvc].description%>
+</p>
+<img src="../docs/can-guides/experiment/todomvc/todomvc.png" width='100px'/>
+</td>
+
+<td class='right'>[guides/recipes/todomvc-with-steal]
+<p><%this.[guides/recipes/todomvc-with-steal].description%></p>
+<img src="../docs/can-guides/experiment/todomvc/todomvc.png" width='100px'/>
+</td>
+
+<td class='right'>Bitballs</td>
+<td>Bitcentive</td>
+</tr>
+
+<tr>
+<td>Debugging</td>
+<td class='right'>[guides/debugging]
+<p><%this.[guides/debugging].description%></p>
+<img src="../node_modules/can-debug/doc/map-dependency-graph.png"
+  alt="A visual representation of an observable's dependency graph"
+  width="100px"/></td>
+</tr>
+
+<tr>
+    <td>State Management</td>
+    <td>ATM</td>
+    <td>Credit Card</td>
+</tr>
+<tr>
+    <td>Testing</td>
+    <td>ATM</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>Routing</td>
+    <td>signup</td>
+    <td>Routing Guide</td>
+    <td>Bitballs</td>
+</tr>
+<tr>
+    <td>Data</td>
+    <td>File Navigator</td>
+    <td>Bitballs</td>
+    <td>Bitcentive</td>
+</tr>
+<tr>
+    <td>Rich User Interfaces</td>
+    <td>Forms Guide</td>
+    <td>Playlist Editor</td>
+</tr>
+<tr>
+    <td>Platform and Environment Integration</td>
+    <td>DoneJS Chat Guide</td>
+    <td>DoneJS PMO Guide</td>
+</tr>
+<tr>
+    <td>Non-DOM API Integration</td>
+    <td>Canvas Clock</td>
+    <td>Rich Text Editor</td>
+    <td>Weather Report</td>
+    <td>Bus Tracker</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<table class='skill'>
+<tbody>
+<tr>
+    <td></td>
+    <td class='down'>[guides/technology-overview]
+<p><%this.[guides/technology-overview].description%></p>
+<img src="../docs/can-guides/experiment/technology/overview.svg"
+  alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
+  class='bit-docs-screenshot' width='100px'/>
+    </td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+<td class='down-left'>
+[guides/chat]
+<p><%this.[guides/chat].description%></p>
+</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Integrations</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td class='down'>
+[guides/debugging]
+<p><%this.[guides/debugging].description%></p>
+<img src="../node_modules/can-debug/doc/map-dependency-graph.png"
+  alt="A visual representation of an observable's dependency graph"
+  width="100px"/>
+</td>
+
+<td></td><td>Tutorials</td>
+</tr>
+<tr>
+<td class='down'>ATM Guide (for testing)</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td class='down'>TodoMVC with StealJS (module loading)</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td class='down'>DoneJS Getting Started Guide (building / generators)</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td class='down'>DoneJS Place My Order (CI / CD / Testing)</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>

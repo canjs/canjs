@@ -97,7 +97,7 @@ var AppVM = can.DefineMap.extend({
 
 var appVM = new AppVM();
 can.route.data = appVM;
-can.route("{filter}");
+can.route.register("{filter}");
 can.route.start();
 
 var template = can.stache.from("todomvc-template");

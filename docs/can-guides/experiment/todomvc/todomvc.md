@@ -2,7 +2,7 @@
 @parent guides/experiment 2
 @templateRender <% %>
 
-@description This guide will walk you through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS’s [can-core Core libraries]
+@description This guide will walk you through building a slightly modified version of [http://todomvc.com/ TodoMVC] with CanJS’s [can-core Core libraries]
 and [can-fixture]. It takes about 1 hour to complete.
 
 @body
@@ -387,6 +387,6 @@ delete the completed todos.  You should also have a really good idea how CanJS w
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/tibana/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/qakopet/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>

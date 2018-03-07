@@ -11,7 +11,7 @@
         <ul id="todo-list">
             {{#each(todosList)}}
             <li class="todo {{#if(complete)}}completed{{/if}}
-                {{#if(isDestroying)}}destroying{{/if}}">
+                {{#if(isDestroying())}}destroying{{/if}}">
                 <div class="view">
                     <input class="toggle" type="checkbox"
                         checked:bind="complete"

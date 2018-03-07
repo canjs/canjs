@@ -845,8 +845,8 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 
     <!-- Create an li with the right class names -->
     <li class="todo {{#if(complete)}}completed{{/if}}
-      {{#if(isDestroying)}}destroying{{/if}}
-      {{#if(isEditing(this))}}editing{{/if}}">
+      {{#if( isDestroying() )}}destroying{{/if}}
+      {{#if(../isEditing(this))}}editing{{/if}}">
 
       <div class="view">
         <!-- Connect this checkbox to the `complete` property
@@ -856,7 +856,7 @@ The __View__, in _components/todo-list/view.stache_, looks like:
                on:change="save()">
 
         <!-- Edit this todo on double click -->
-        <label on:dblclick="edit(this)">{{name}}</label>
+        <label on:dblclick="../edit(this)">{{name}}</label>
 
         <!-- Delete this todo on the server when clicked -->
         <button class="destroy" on:click="destroy()"></button>
@@ -865,9 +865,9 @@ The __View__, in _components/todo-list/view.stache_, looks like:
       <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
         value:bind="name"
-        on:enter="updateName()"
-        focused:from="isEditing(this)"
-        on:blur="cancelEdit()"/>
+        on:enter="../updateName()"
+        focused:from="../isEditing(this)"
+        on:blur="../cancelEdit()"/>
     </li>
   {{/each}}
 </ul>
