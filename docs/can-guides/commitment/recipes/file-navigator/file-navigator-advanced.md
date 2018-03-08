@@ -21,7 +21,7 @@ The final widget looks like:
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/31/embed?html,css,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/33/embed?html,css,output">
   Starter version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/t97z1hf9/">Open in JSFiddle</a>
