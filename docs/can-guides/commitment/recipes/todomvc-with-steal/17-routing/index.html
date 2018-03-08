@@ -1,7 +1,7 @@
 <!-- index.stache -->
-<can-import from="~/components/todo-create/"/>
-<can-import from="~/components/todo-list/"/>
-<can-import from="can-stache-route-helpers"/>
+<can-import from="~/components/todo-create/" />
+<can-import from="~/components/todo-list/" />
+<can-import from="can-stache-route-helpers" />
 <section id="todoapp">
     <header id="header">
         <h1>{{appName}}</h1>
@@ -10,9 +10,9 @@
     <section id="main" class="">
         <input id="toggle-all" type="checkbox"
           checked:bind="allChecked"
-          disabled:from="todosList.saving.length"/>
+          disabled:from="todosList.saving.length" />
         <label for="toggle-all">Mark all as complete</label>
-        <todo-list todos:from="todosList"/>
+        <todo-list todos:from="todosList" />
     </section>
     <footer id="footer" class="">
         <span id="todo-count">

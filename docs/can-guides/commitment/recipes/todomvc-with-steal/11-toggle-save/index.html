@@ -14,11 +14,11 @@
                     <input class="toggle" type="checkbox"
                         checked:bind="complete"
                         on:change="save()"
-                        disabled:from="isSaving()"/>
+                        disabled:from="isSaving()" />
                     <label>{{name}}</label>
                     <button class="destroy"></button>
                 </div>
-                <input class="edit" type="text" value="{{name}}"/>
+                <input class="edit" type="text" value="{{name}}" />
             </li>
             {{/each}}
         </ul>

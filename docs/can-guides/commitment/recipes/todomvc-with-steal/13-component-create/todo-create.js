@@ -1,10 +1,10 @@
 // components/todo-create/todo-create.js
-import Component from 'can-component'; // remember to install
-import DefineMap from 'can-define/map/';
-import view from './todo-create.stache';
-import Todo from '~/models/todo';
+import Component from "can-component"; // remember to install
+import DefineMap from "can-define/map/";
+import view from "./todo-create.stache";
+import Todo from "~/models/todo";
 
-var TodoCreateVM = DefineMap.extend({
+const TodoCreateVM = DefineMap.extend({
 	todo: {
 		Default: Todo
 	},
