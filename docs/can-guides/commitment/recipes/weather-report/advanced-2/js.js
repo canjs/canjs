@@ -1,6 +1,6 @@
-var yqlURL = "https://query.yahooapis.com/v1/public/yql?";
+const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 
-var geoLocationStream = Kefir.stream(function(emitter) {
+const geoLocationStream = Kefir.stream(function(emitter) {
 	navigator.geolocation.getCurrentPosition(function(position){
 	  emitter.value(position);
 	}, function(err){
@@ -9,7 +9,7 @@ var geoLocationStream = Kefir.stream(function(emitter) {
 	});
 
 
-	 var watch = navigator.geolocation.watchPosition(function(position){
+	 const watch = navigator.geolocation.watchPosition(function(position){
 	   emitter.value(position);
 	 }, function(err){
 	     emitter.error(err);
@@ -20,7 +20,7 @@ var geoLocationStream = Kefir.stream(function(emitter) {
 	};
 });
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
 	geoLocation: {
 		stream: function() {
 			return geoLocationStream;
@@ -71,10 +71,10 @@ var WeatherViewModel = can.DefineMap.extend({
 	},
 	place: {
 		stream: function(setStream) {
-			var resetStream = this.toStream(".location").map(function() {
+			const resetStream = this.toStream(".location").map(function() {
 				return null;
 			});
-            var onePlaceResultStream = this.toStream(".places").map(function(places){
+            const onePlaceResultStream = this.toStream(".places").map(function(places){
                 if(places.length === 1) {
                     return places[0];
                 } else {
@@ -103,7 +103,7 @@ var WeatherViewModel = can.DefineMap.extend({
 				return response.json();
 			}).then(function(data) {
 				console.log("forecast data", data);
-				var forecast = data.query.results.channel.item.forecast;
+				const forecast = data.query.results.channel.item.forecast;
 
 				return forecast;
 			});
@@ -115,8 +115,8 @@ var WeatherViewModel = can.DefineMap.extend({
 });
 can.defineStreamKefir(WeatherViewModel);
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template(vm);
+const template = can.stache.from("app-template");
+const frag = template(vm);
 document.body.appendChild(frag);
