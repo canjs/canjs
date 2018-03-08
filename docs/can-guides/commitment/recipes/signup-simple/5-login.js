@@ -1,4 +1,4 @@
-var AppViewModel = can.DefineMap.extend({
+const AppViewModel = can.DefineMap.extend({
   sessionPromise: {
     default: function(){
       return can.ajax({
@@ -54,9 +54,9 @@ var AppViewModel = can.DefineMap.extend({
   }
 });
 
-var viewModel = new AppViewModel({});
+const viewModel = new AppViewModel({});
 
-var view = can.stache.from("app-view");
-var frag = view(viewModel);
+const view = can.stache.from("app-view");
+const frag = view(viewModel);
 
 document.body.appendChild(frag);

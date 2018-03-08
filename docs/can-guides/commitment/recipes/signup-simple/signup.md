@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/cejuwah/4/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/roroko/3/embed?js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -25,7 +25,7 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/namowob/2/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/roroko/1/embed?js,output">JS Bin on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -147,13 +147,13 @@ a ViewModel called `AppViewModel`.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var view = can.stache.from(SCRIPT_ID);
+  const view = can.stache.from(SCRIPT_ID);
   ```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = view({
+  const frag = view({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -175,7 +175,7 @@ a ViewModel called `AppViewModel`.
   This lets you create instances of that type, get and set those properties and listen to changes like:
 
   ```js
-  var viewModel = new AppViewModel({});
+  const viewModel = new AppViewModel({});
 
   viewModel.isLoggedIn //-> false
 
@@ -207,10 +207,10 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 Lets make a request to `GET /api/session` to know if there is a
-session.  If there is a session, we will print out the user's email address.  If there
+session.  If there is a session, we will print out the user’s email address.  If there
 is not a session, we will show the _Sign Up_ form.
 
-We'll keep the session data within a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) on
+We’ll keep the session data within a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) on
 the `sessionPromise` property. The following simulates a logged in user:
 
 ```js
@@ -221,7 +221,7 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+  const AppViewModel = can.DefineMap.extend({
 	myProperty: {
 	  default: function(){
 		return "This string"
@@ -267,8 +267,8 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Lets allow the user to enter an _email_ and _password_ and click _Sign Up_.  When this happens
-we'll `POST` this data to `/api/users`.  Once the user is created, we'll want to update the `sessionPromise`
+Let’s allow the user to enter an _email_ and _password_ and click _Sign Up_.  When this happens
+we’ll `POST` this data to `/api/users`.  Once the user is created, we’ll want to update the `sessionPromise`
 property to have a promise with a _session-like_ object.
 
 A promise with a _session-like_ object looks like:
@@ -307,9 +307,9 @@ A promise with a _session-like_ object looks like:
 - Use `.then` on a promise to map the source promise to another promise value.
 
   ```js
-  var source = Promise.resolve({email: "justin@bitovi.com"})
+  const source = Promise.resolve({email: "justin@bitovi.com"})
 
-  var result = source.then(function(userData){
+  const result = source.then(function(userData){
 	return {user: userData}
   });
   ```
@@ -342,9 +342,9 @@ property to have a rejected value.
 - Use `.then` and `Promise.reject` to map a source promise to a rejected promise.
 
   ```js
-  var source = Promise.resolve({})
+  const source = Promise.resolve({})
 
-  var result = source.then(function(userData){
+  const result = source.then(function(userData){
 	return Promise.reject({message: "Unauthorized"});
   });
 
@@ -373,10 +373,10 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 Lets allow the user to go back and forth between the _Sign Up_ page and the _Log In_
-page. We'll do this by changing a `page` property to `"signup"` or `"login"`.
+page. We’ll do this by changing a `page` property to `"signup"` or `"login"`.
 
-We'll also implement the _Log In_ form's functionality.  When a session is created,
-we'll want to `POST` session data to `/api/session` and update `sessionPromise` accordingly.
+We’ll also implement the _Log In_ form’s functionality.  When a session is created,
+we’ll want to `POST` session data to `/api/session` and update `sessionPromise` accordingly.
 
 ### What you need to know
 
@@ -400,15 +400,15 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-If the user tried to login, but the server responded with an error message, let's
-display that error message.  We'll do this by `catch`ing the create-session request. If
-the request failed we will set a `logInError` property with the server's response data.
+If the user tried to login, but the server responded with an error message, let’s
+display that error message.  We’ll do this by `catch`ing the create-session request. If
+the request failed we will set a `logInError` property with the server’s response data.
 
 ### What you need to know
 
 - Use `.catch` to handle when a promise is rejected:
   ```js
-  var source = Promise.reject({responseText: '{"message": "foo"}'})
+  const source = Promise.reject({responseText: '{"message": "foo"}'})
   source.catch(function(reason){
 	  reason.responseText //->  '{"message": "foo"}'
   })
@@ -418,11 +418,11 @@ the request failed we will set a `logInError` property with the server's respons
   JSON.parse('{"message": "foo"}') //-> {message: "foo"}
   ```
 - Use the `"any"` type to define a property of indeterminate type:
-  ```
-  var AppViewModel = can.DefineMap.extend({
-	myProperty: "any"  
+  ```js
+  const AppViewModel = can.DefineMap.extend({
+    myProperty: "any"  
   });
-  var viewModel = new AppViewModel({});
+  const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
   ```
 
@@ -439,5 +439,10 @@ Update the __JavaScript__ tab to:
 @sourceref ./6-login-errors.js
 @highlight 55-60,only
 
+## Result
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+When finished, you should see something like the following JS Bin:
+
+<a class="jsbin-embed" href="https://jsbin.com/roroko/3/embed?js,output">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
