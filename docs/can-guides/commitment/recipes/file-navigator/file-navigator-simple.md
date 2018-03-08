@@ -11,10 +11,10 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/yilubac/1/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/22/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
 </a>
-<a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
+<a href="https://jsfiddle.net/donejs/me0e3g48/">Open in JSFiddle</a>
 
 Click `ROOT/` to see its files and folders.
 
@@ -23,10 +23,10 @@ Click `ROOT/` to see its files and folders.
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/16/embed?html,css,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/20/embed?html,css,output">
   Starter version of the CanJS File Navigator Guide (Simple) on jsbin.com
 </a>
-<a href="https://jsfiddle.net/donejs/5vmsnx89/">Open in JSFiddle</a>
+<a href="https://jsfiddle.net/donejs/tmkkL9x1/">Open in JSFiddle</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -149,13 +149,13 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
+  const template = can.stache.from(SCRIPT_ID);
   ```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
+  const frag = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -199,9 +199,9 @@ Update the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 ```js
-var template = can.stache.from("entities-template");
+const template = can.stache.from("entities-template");
 
-var frag = template(rootEntityData);
+const frag = template(rootEntityData);
 
 document.body.appendChild( frag );
 ```
@@ -225,7 +225,7 @@ find a folder, we need to render its contents.
 - You can register partial templates with [can-stache.registerPartial can.stache.registerPartial] like the following:
 
   ```js
-  var template = can.stache.from("TEMPLATE_ID");
+  const template = can.stache.from("TEMPLATE_ID");
   can.stache.registerPartial("PARTIAL_NAME", template);
   ```
 
@@ -258,10 +258,10 @@ Update the __JavaScript__ tab to:
  - Register the `entities-template` as a partial:
 
 ```js
-var template = can.stache.from("entities-template");
+const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-var frag = template(rootEntityData);
+const frag = template(rootEntityData);
 
 document.body.appendChild( frag );
 ```
@@ -289,7 +289,7 @@ we change the data, the UI will automatically change.
   This lets you create instances of that type and listen to changes like:
 
   ```js
-  var person = new Person({
+  const person = new Person({
     name: "Justin",
     age: 34
   });
@@ -335,7 +335,7 @@ Update the __JavaScript__ tab to:
 - Use `rootEntity` to render the template
 
 ```js
-var Entity = can.DefineMap.extend("Entity", {
+const Entity = can.DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
@@ -348,12 +348,12 @@ var Entity = can.DefineMap.extend("Entity", {
   }]
 });
 
-var rootEntity = new Entity(rootEntityData);
+const rootEntity = new Entity(rootEntityData);
 
-var template = can.stache.from("entities-template");
+const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-var frag = template(rootEntity);
+const frag = template(rootEntity);
 
 document.body.appendChild( frag );
 ```
@@ -381,7 +381,7 @@ We want to be able to toggle if a folder is open or closed.
 
 - `can.DefineMap` can specify a default value and a type:
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"}
   });
@@ -390,7 +390,7 @@ We want to be able to toggle if a folder is open or closed.
 - `can.DefineMap` can also have methods:
 
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"},
     birthday: function(){
@@ -415,7 +415,7 @@ Update the __JavaScript__ tab to:
 - Add a `toggleOpen` method to `Entity`.
 
 ```js
-var Entity = can.DefineMap.extend("Entity", {
+const Entity = can.DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
@@ -432,12 +432,12 @@ var Entity = can.DefineMap.extend("Entity", {
   }
 });
 
-var rootEntity = new Entity(rootEntityData);
+const rootEntity = new Entity(rootEntityData);
 
-var template = can.stache.from("entities-template");
+const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-var frag = template(rootEntity);              
+const frag = template(rootEntity);              
 
 document.body.appendChild( frag );
 ```
@@ -473,7 +473,7 @@ Update the __HTML__ tab to:
 When complete, you should have a working file-navigation widget
 like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/yilubac/1/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/22/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
 </a>
 <a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
