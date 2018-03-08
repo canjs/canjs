@@ -123,14 +123,14 @@ var Transaction = can.DefineMap.extend({
 
 			def.then(function() {
 				can.queues.batch.start();
-				self.set({
+				self.assign({
 					executing: false,
 					executed: true
 				});
 				self.executeEnd();
 				can.queues.batch.stop();
 			}, function(reason){
-				self.set({
+				self.assign({
 					executing: false,
 					executed: true,
 					rejected: reason

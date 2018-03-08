@@ -14,146 +14,146 @@
 	<div class="screen-content">
 		<div class="screen-glass">
 
-{{#switch(state)}}
-    {{#case("readingCard")}}
-    	<h2>Reading Card</h2>
-		<p>Welcome to canATM where there are <strong>never</strong>
-    	  fees!</p>
-    	</p>
-    	<p>
-    		Enter Card Number:
-    		<input name="card" on:enter="cardNumber(%element.value)"/>
-    	</p>
-    {{/case}}
-
-    {{#case("readingPin")}}
-    	<h2>Reading Pin</h2>
-		<p>
-			Enter Pin Number:
-			<input name="pin" type="password"
-				autofocus
-				{{#is(card.state, "verifying")}}DISABLED{{/is}}
-				on:enter="pinNumber(%element.value)"/>
-
-			{{#is(card.state, "verifying")}}
-				<div class='warn'>
-					<p>
-					<img src="https://canjs.com/docs/images/loader.gif"/>
-					verifying
+			{{#switch(state)}}
+				{{#case("readingCard")}}
+					<h2>Reading Card</h2>
+					<p>Welcome to canATM where there are <strong>never</strong>
+					  fees!
 					</p>
-				</div>
-			{{/is}}
-		</p>
-		<a href="javascript://" on:click="exit()">exit</a>
-    {{/case}}
+					<p>
+						Enter Card Number:
+						<input name="card" on:enter="cardNumber(scope.element.value)">
+					</p>
+				{{/case}}
 
-    {{#case("choosingTransaction")}}
-    	<h2>Choose Transaction</h2>
-        <p>What would you like to do?</p>
-        <nav>
-            <ul>
-                <li on:click="chooseDeposit()">Deposit</li>
-                <li on:click="chooseWithdraw()">Withdraw</li>
-                <li on:click="printReceiptAndExit()">Exit</li>
-            </ul>
-        </nav>
-    {{/case}}
+				{{#case("readingPin")}}
+					<h2>Reading Pin</h2>
+					<p>
+						Enter Pin Number:
+						<input name="pin" type="password"
+							autofocus
+							{{#is(card.state, "verifying")}}DISABLED{{/is}}
+							on:enter="pinNumber(scope.element.value)"/>
 
-    {{#case("pickingAccount")}}
-    	<h2>Pick Account</h2>
-        <p>Please pick your account:</p>
-        {{#if(accountsPromise.isPending)}}
-            <div class='warn'>
-                <p>
-                    <img src="https://canjs.com/docs/images/loader.gif"/>
-                    Loading Accounts…
-                </p>
-            </div>
-        {{else}}
-            <ul>
-                {{#each(accountsPromise.value)}}
-                    <li on:click="chooseAccount(.)">{{name}} - ${{balance}}</li>
-                {{/each}}
-            </ul>
-        {{/if}}
-    {{/case}}
+						{{#is(card.state, "verifying")}}
+							<div class='warn'>
+								<p>
+								<img src="https://canjs.com/docs/images/loader.gif"/>
+								verifying
+								</p>
+							</div>
+						{{/is}}
+					</p>
+					<a href="javascript://" on:click="exit()">exit</a>
+				{{/case}}
 
-    {{#case("depositInfo")}}
-    	<h2>Deposit</h2>
-        <p>
-    		How much would you like to deposit
-    		into {{currentTransaction.account.name}}
-    		(${{currentTransaction.account.balance}})?
+				{{#case("choosingTransaction")}}
+					<h2>Choose Transaction</h2>
+					<p>What would you like to do?</p>
+					<nav>
+						<ul>
+							<li on:click="chooseDeposit()">Deposit</li>
+							<li on:click="chooseWithdraw()">Withdraw</li>
+							<li on:click="printReceiptAndExit()">Exit</li>
+						</ul>
+					</nav>
+				{{/case}}
 
-    		<input name="deposit" value:bind="currentTransaction.amount"/>
-    	</p>
+				{{#case("pickingAccount")}}
+					<h2>Pick Account</h2>
+					<p>Please pick your account:</p>
+					{{#if(accountsPromise.isPending)}}
+						<div class='warn'>
+							<p>
+								<img src="https://canjs.com/docs/images/loader.gif"/>
+								Loading Accounts…
+							</p>
+						</div>
+					{{else}}
+						<ul>
+							{{#each(accountsPromise.value)}}
+								<li on:click="../chooseAccount(this)">{{name}} - ${{balance}}</li>
+							{{/each}}
+						</ul>
+					{{/if}}
+				{{/case}}
 
-    	{{#eq(currentTransaction.state, "executing")}}
-    		<div class='warn'>
-    			<p>
-    			<img src="https://canjs.com/docs/images/loader.gif"/>
-    			executing
-    			</p>
-    		</div>
-    	{{else}}
-    		<button on:click="currentTransaction.execute()"
-    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
-    			Deposit
-    		</button>
-    		<a href="javascript://" on:click="removeTransaction()">cancel</a>
-    	{{/eq}}
-    {{/case}}
+				{{#case("depositInfo")}}
+					<h2>Deposit</h2>
+					<p>
+						How much would you like to deposit
+						into {{currentTransaction.account.name}}
+						(${{currentTransaction.account.balance}})?
 
-    {{#case("withdrawalInfo")}}
-        <h2>Withdraw</h2>
-    	<p>
-    		How much would you like to withdraw
-    		from {{currentTransaction.account.name}}
-    		(${{currentTransaction.account.balance}})?
+						<input name="deposit" value:bind="currentTransaction.amount"/>
+					</p>
 
-    		<input name="withdrawl" value:bind="currentTransaction.amount"/>
-    	</p>
-    	{{#eq(currentTransaction.state, "executing")}}
-    		<div class='warn'>
-    			<p>
-    			<img src="https://canjs.com/docs/images/loader.gif"/>
-    			executing
-    			</p>
-    		</div>
-    	{{else}}
-    		<button on:click="currentTransaction.execute()"
-    			{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
-    			Withdraw
-    		</button>
-    		<a href="javascript://" on:click="removeTransaction()">cancel</a>
-    	{{/eq}}
-    {{/case}}
+					{{#eq(currentTransaction.state, "executing")}}
+						<div class='warn'>
+							<p>
+							<img src="https://canjs.com/docs/images/loader.gif"/>
+							executing
+							</p>
+						</div>
+					{{else}}
+						<button on:click="currentTransaction.execute()"
+							{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+							Deposit
+						</button>
+						<a href="javascript://" on:click="removeTransaction()">cancel</a>
+					{{/eq}}
+				{{/case}}
 
-    {{#case("successfulTransaction")}}
-    	<h2>Transaction Successful!</h2>
-        <p>
-    		{{currentTransaction.account.name}} has
-    		${{currentTransaction.account.balance}}.
-    	</p>
-    	<p>What would you like to do?</p>
-    	<nav>
-    		<ul>
-    			<li on:click="removeTransaction()">Another transaction</li>
-    			<li on:click="printReceiptAndExit()">Exit</li>
-    		</ul>
-    	</nav>
-    {{/case}}
+				{{#case("withdrawalInfo")}}
+					<h2>Withdraw</h2>
+					<p>
+						How much would you like to withdraw
+						from {{currentTransaction.account.name}}
+						(${{currentTransaction.account.balance}})?
 
-    {{#case("printingReceipt")}}
-    	<h2>Printing Receipt</h2>
-    {{/case}}
+						<input name="withdrawl" value:bind="currentTransaction.amount"/>
+					</p>
+					{{#eq(currentTransaction.state, "executing")}}
+						<div class='warn'>
+							<p>
+							<img src="https://canjs.com/docs/images/loader.gif"/>
+							executing
+							</p>
+						</div>
+					{{else}}
+						<button on:click="currentTransaction.execute()"
+							{{^eq currentTransaction.state "ready"}}DISABLED{{/eq}}>
+							Withdraw
+						</button>
+						<a href="javascript://" on:click="removeTransaction()">cancel</a>
+					{{/eq}}
+				{{/case}}
 
-    {{#default}}
-        <h2>Error</h2>
-        <p>Invalid state - {{state}}</p>
-    {{/default}}
+				{{#case("successfulTransaction")}}
+					<h2>Transaction Successful!</h2>
+					<p>
+						{{currentTransaction.account.name}} has
+						${{currentTransaction.account.balance}}.
+					</p>
+					<p>What would you like to do?</p>
+					<nav>
+						<ul>
+							<li on:click="removeTransaction()">Another transaction</li>
+							<li on:click="printReceiptAndExit()">Exit</li>
+						</ul>
+					</nav>
+				{{/case}}
 
-{{/switch}}
+				{{#case("printingReceipt")}}
+					<h2>Printing Receipt</h2>
+				{{/case}}
+
+				{{#default}}
+					<h2>Error</h2>
+					<p>Invalid state - {{state}}</p>
+				{{/default}}
+
+			{{/switch}}
 
 		</div>
 	</div>
@@ -167,8 +167,7 @@
 <atm-machine/>
 </script>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://unpkg.com/can@^4.0.0-pre.5/dist/global/can.all.js"></script>
+<script src="https://unpkg.com/can@4/dist/global/can.all.js"></script>
 
 <div id="qunit"></div>
 <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.12.0.css">
