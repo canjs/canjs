@@ -2,12 +2,13 @@
 @parent guides/recipes
 
 @description This guide walks you through building a file navigation
-widget.  It takes about 45 minutes to complete.  It was written with
-CanJS 3.10. Check out the [guides/recipes/file-navigator-simple]
-for an easier example that produces similar functionality.
+widget that requests data with fetch. It takes about 45 minutes to complete. 
 
 
 @body
+
+> Check out the [guides/recipes/file-navigator-simple]
+for an example that doesn't make data requests.
 
 The final widget looks like:
 

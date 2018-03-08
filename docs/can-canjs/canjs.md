@@ -89,52 +89,28 @@ For over 10 years, CanJS has been used to build production applications in almos
 use case - from massive online stores, to small mobile apps. CanJS goes beyond just state
 management and templates. To help you build whatever comes your way, CanJS helps you:
 
-<table>
-<thead>
-<tr>
-    <th>Get started quickly</th>
-    <th>Solve difficult difficult problems easily</th>
-    <th>Maintain your app forever</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-    Technology Overview Guide<br/>
-    3 Example Apps<br/>
-    8 Recipes<br/>
-    Debugging, Routing Tutorials<br/>
-    DoneJS for ultimate<br/>
-</td>
-</tr>
-</tbody>
-</table>
+- Become an expert quickly
+- Solve difficult problems as they arrive, and
+- Maintain your app over years.
 
-- get started quickly
-- solve difficult problems as they arrive, and
-- maintain your app over years.
+### Become an expert quickly
 
-### Get started quickly
+Learning a new framework is hard. Different needs and experiences
+don't fit a one-size fits all solution. Our long list of guides are
+organized in a skill tree as follows, so can _level up_ faster by taking the
+guide that meets your needs.
 
-Learning a new framework is hard. We're here to make it easier.
+<a href="./doc/guides.html">
+<img src="./docs/can-canjs/skill-tree.png" class='bit-docs-screenshot'/>
+</a>
 
-Checkout our [canjs/doc/guides/setup]
+We add a new guide every 6 weeks. [Let us know](http://twitter.com/canjs) what you want to learn next!
 
-Start
+### Solve difficult problems
 
+CanJS has been used to build everything.  
 
-
-
-CanJS
-
-  - Lots of Guides
-  - Recipes (A new one every 6 weeks)
-  - API docs
-  - Community support (forums, etc)
-
-### Solve difficult problems easily
-
-CanJS has many features that help you in a tight spot:
+CanJS has many features that mean you don't have to re-invent the
 
 - Routing
 - A model layer that supports real-time, and multiple caching strategies.

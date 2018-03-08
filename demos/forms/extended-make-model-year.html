@@ -1,0 +1,183 @@
+<my-mmy></my-mmy>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
+var Component = require("can-component");
+var ajax = require("can-ajax");
+var fixture = require("can-fixture");
+var set = require("can-set");
+
+fixture.delay = 1200;
+
+fixture("/makes", fixture.store([
+	{ id: "1", name: "Ford" },
+	{ id: "2", name: "Nissan" }
+], new set.Algebra(
+	set.props.id("id")
+)));
+
+fixture("/models", fixture.store([
+    { id: "1", makeId: "1", name: "Mustang", years: [ 2013, 2014 ] },
+    { id: "2", makeId: "1", name: "Focus", years: [ 2013, 2014 ] },
+    { id: "3", makeId: "2", name: "Altima", years: [ 2013, 2014 ] },
+    { id: "4", makeId: "2", name: "Leaf", years: [ 2013, 2014 ] },
+], new set.Algebra(
+	set.props.id("id")
+)));
+
+fixture("/vehicles", fixture.store([
+    {id: 1, modelId: "1", year: "2013", name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
+    {id: 2, modelId: "1", year: "2014", name: "2014 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"},
+    {id: 3, modelId: "2", year: "2013", name: "2013 Focus", thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"},
+    {id: 4, modelId: "2", year: "2014", name: "2014 Focus", thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"},
+    {id: 5, modelId: "3", year: "2013", name: "2013 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"},
+    {id: 6, modelId: "3", year: "2014", name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+    {id: 7, modelId: "4", year: "2013", name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
+    {id: 8, modelId: "4", year: "2014", name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
+], new set.Algebra(
+	set.props.id("id")
+)));
+
+Component.extend({
+	tag: "my-mmy",
+
+	view: `
+		<select value:bind="makeId"
+			{{#if(makes.isPending)}}disabled{{/if}}>
+			{{#if(makes.isPending)}}
+			  <option value=''>Loading...</option>
+			{{else}}
+			  {{^makeId}}
+				<option value=''>Select a Make</option>
+			  {{/makeId}}
+			  {{#each(makes.value)}}
+				<option value:from="id">{{name}}</option>
+			  {{/each}}
+			{{/if}}
+		</select>
+
+		{{#if(modelsPromise)}}
+			{{#if(models)}}
+				<select value:bind="modelId">
+					{{^modelId}}
+						<option value=''>Select a Model</option>
+					{{/modelId}}
+					{{#each(models)}}
+						<option value:from="id">{{name}}</option>
+					{{/each}}
+				</select>
+			{{else}}
+				<select disabled><option>Loading Models</option></select>
+			{{/if}}
+		{{else}}
+			<select disabled><option>Models</option></select>
+		{{/if}}
+
+		{{#if(years)}}
+			<select value:bind="year">
+				{{^year}}
+					<option value=''>Select a Year</option>
+				{{/year}}
+				{{#each years}}
+					<option value:from="this">{{this}}</option>
+				{{/each}}
+			</select>
+		{{else}}
+			<select disabled><option>Years</option></select>
+		{{/if}}
+
+		<div>
+			{{#each(vehicles)}}
+				<h2>{{name}}</h2>
+				<img src:from="thumb" width="200px"/>
+			{{/each}}
+		</div>
+	`,
+
+	ViewModel: {
+		makeId: "string",
+		makes: {
+			default() {
+				return ajax({
+					type: "GET",
+					url: "/makes"
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		modelId: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("makeId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		get modelsPromise() {
+			var makeId = this.makeId;
+			if( makeId ) {
+				return ajax({
+					type: "GET",
+					url: "/models",
+					data: { makeId: makeId }
+				}).then(function(resp) {
+					return resp.data;
+				});
+			}
+		},
+		models: {
+			get: function(lastSet, resolve) {
+				var promise = this.modelsPromise;
+				if(promise) {
+					promise.then(resolve);
+				}
+			}
+		},
+		get model() {
+			var models = this.models,
+				modelId = this.modelId;
+
+			if(models && models.length && modelId) {
+				var matched = models.filter(function(model) {
+					return modelId == model.id;
+				});
+				return matched[0];
+			}
+		},
+		get years() {
+			var model = this.model;
+			return model && model.years;
+		},
+		year: {
+			type: "string",
+			value(prop) {
+				prop.listenTo(prop.lastSet, prop.resolve);
+
+				prop.listenTo("modelId", function() {
+					prop.resolve("");
+				});
+			}
+		},
+		vehicles: {
+			get: function(lastSet, resolve) {
+				var year = this.year,
+					modelId = this.modelId;
+
+				if(modelId && year) {
+					ajax({
+						type: "GET",
+						url: "/vehicles",
+						data: { modelId: modelId, year: year }
+					}).then(function(resp) {
+						resolve(resp.data);
+					});
+				} else {
+					resolve([]);
+				}
+			}
+		}
+	}
+});
+</script>

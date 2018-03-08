@@ -52,26 +52,26 @@ In this section, we will:
 
 In your JS Bin, update the __HTML__ tab to:
 
- - Create a `<script>` tag containing the contents of the `chat-template` template.
- - Have the content insert a `message` value within a responsive Bootstrap container using [can-stache.tags.escaped].
- - Listen for `click` events and call `addExcitement` with [can-stache-bindings.event].
+ - Use the `<chat-app>` element we will define in the `JS` tab.
+
 
 @sourceref ./1-hello-world/html.html
-@highlight 12-22,only
+@highlight 12,only
 
 Update the `JavaScript` tab to:
 
- - Define an application view-model (`AppVM`) type by extending [can-define/map/map]. Its definition includes:
-   - A `message` property that is a [can-define.types string]
-     value [can-define.types.default initialized] to `"Chat Home"`.
-   - An `addExcitement` method that adds `"!"` to the end of the `message` property.
- - Create an instance of the `AppVM` type (`appVM`).
- - Compile a [can-stache] [can-stache.renderer template renderer] function from the contents of the `<script>` tag.
- - Render that template with `appVM` as a source of data into a [https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment document fragment].
- - Insert the document fragment into the `<body>` tag.
+ - Define an application component (`chat-app`) by extending [can-component]. Its definition includes:
+   - A `tag` that is the name of the custom element being defined.
+   - A [can-stache] `view` that contains the contents of the `chat-app` element.  This view:
+     - Inserts a `message` value within a responsive Bootstrap container using [can-stache.tags.escaped].
+     - Listen for `click` events and call `addExcitement` with [can-stache-bindings.event].
+   - A [can-define/map/map] `ViewModel` definition.  This definition includes:
+     - A `message` property that is a [can-define.types string]
+       value [can-define.types.default initialized] to `"Chat Home"`.
+     - An `addExcitement` method that adds `"!"` to the end of the `message` property.
 
 @sourceref ./1-hello-world/js.js
-@highlight 1-15,only
+@highlight 1-22,only
 
 When complete, you should see a large “Chat Home” title in the `Output` panel.  Click on it and
 things will get really exciting!
@@ -81,26 +81,11 @@ things will get really exciting!
    <source src="../../docs/can-guides/experiment/chat/1-hello-world/completed.ogg" type="video/ogg">
 </video>
 
-This step sets up the essential basics of a CanJS application — a
-[can-stache] template rendered with an observable application view model instance.
+This step sets up the essential basics of a CanJS application — a [can-component]
+custom element with a [can-stache] view and [can-define/map/map] ViewModel.
 
-The properties and methods the template uses are defined in the `AppVM`
-type.  The `AppVM` type extends [can-define/map/map].  We
-defined a `message` and an `addExcitement` method.
-
-We then created an instance of the `appVM` with the `new` operator. This created
-an object with a `message` property and `addExcitement` method.  For example, adding:
-
-```
-console.log(appVM.message)
-appVM.addExcitement();
-console.log(appVM.message)
-```
-
-Will print out `"Chat Home"` and then `"Chat Home!"`.
-
-`DefineMap` instances are observable.  This is why when `message` changes,
-the template updates automatically.
+The properties and methods the `view` uses are defined in the `ViewModel`
+type.  We defined a `message` and an `addExcitement` method.
 
 The templates are a dialect of [mustache](https://github.com/janl/mustache.js) and [handlebars](https://github.com/wycats/handlebars.js/) syntax.  The
 mustache syntax allows a very terse writing style for the most common
@@ -112,8 +97,9 @@ patterns within templates:
 
 
 
-> __Key take-away:__ You define types like `AppVM` with method and property behaviors.
-> Instances of those types are observable by [can-stache] templates.
+> __Key take-away:__ You define `ViewModel` method and property behaviors.
+> The `ViewModel` methods can be called by [can-stache] `view`s.  The `ViewModel`
+> properties can be observed by [can-stache] `view`s.
 
 
 ## Route between two pages
@@ -123,28 +109,27 @@ In this section we will:
  - Create a __home page__ and __chat messages page__ that the user can navigate between
    with links and the browser’s back and forward button.
 
-Update the __HTML__ tab to:
-
- - Check if the `appVM`’s `page` property is `"home"`.  If it is, render the __home
-   page__’s content.  If it’s not, it will render the __chat messages page__’s content with the [can-stache.helpers.else] helper.
- - Use [can-stache.helpers.routeUrl] to create the right link urls so that `page`
-   will be set on `appVM` to either `"home"` or `"chat"`.
-
-@sourceref ./2-routing/html.html
-@highlight 16-29,only
-
 Update the `JavaScript` tab to:
 
- - Add a `page` property that will be updated when the browser’s URL changes.
- - Prevent the `message` property from becoming part of the URL changes by using `serialize: false`.
- - Connect changes in the url to changes in the `appVM` with [can-route.data].
- - Create a pretty routing rule so if the url looks like `"#!chat"`, the `page` property of
-   `appVM` will be set to `chat` with [can-route].  If there is nothing in the hash, `page`
-   will be set to `"home"`.
- - Initialize the url’s values on `appVM` and set up the two-way connection with [can-route.ready].
+- Update the `chat-app` component's `view` to:
+  - Check if the `ViewModel`’s `page` property is `"home"`.  If it is, render the __home
+    page__’s content.  If it’s not, it will render the __chat messages page__’s content with the   [can-stache.helpers.else] helper.
+  - Use [can-stache-route-helpers.routeUrl] to create the right link urls so that `page`
+    will be set on `appVM` to either `"home"` or `"chat"`.
+- Update the `chat-app` component's `ViewModel` to:
+  - Setup a connection between the `ViewModel` and the route state in the `ViewModel`'s `init` by:
+    - Create a pretty routing rule so if the url looks like `"#!chat"`, the `page` property of
+      `appVM` will be set to `chat` with [can-route.register].  If there is nothing in the hash, `page`
+      will be set to `"home"`.
+    - Connect changes in the url to changes in the `<chat-app>`'s `ViewModel` with [can-route.data].
+    - Initialize the url’s values on the `ViewModel` and set up the two-way connection with
+      [can-route.start].
+  - Include a `page` property that will be updated when the browser’s URL changes.
+  - Prevent the `message` property from becoming part of the URL changes by using `serialize: false`.
+
 
 @sourceref ./2-routing/js.js
-@highlight 2,6,15-17,only
+@highlight 7-20,25-30,36-38,only
 
 When complete, you should be able to toggle between the two pages.  If you type:
 
@@ -160,7 +145,7 @@ CanJS’s routing is based on the properties in the application view model.  Whe
 those properties change, different content is shown.  
 
 We connected the application view model to the routing system with [can-route.data can-route.data]
-and initialized that connection with [can-route.ready can-route.ready].
+and initialized that connection with [can-route.start can-route.start].
 
 This makes it so if the `page` property changes, the browser’s url will change.  If the
 browser’s url changes, the `page` property changes.  
@@ -174,25 +159,16 @@ the application view model to control which content is shown.
 
 In this section, we will:
 
-- Define and use a custom `<chat-message>` element that contains the behavior of the __chat messages page__.
-
-Update the __HTML__ tab to:
-
-- Use the `<chat-messages/>` element.
-- Create a template for the `<chat-messages/>` element that contains the content of the
-  __chat messages page__.
-
-@sourceref ./3-chat-messages/html.html
-@highlight 25,32-37,only
+- Define and use a custom `<chat-messages>` element that contains the behavior of the __chat messages page__.
 
 Update the `JavaScript` tab to:
 
-- Define a view model for the custom element (`ChatMessagesVM`).
-- Use [can-component] to define a custom element that will render its `view` template with
-  an instance of its `ViewModel`.
+- Define a `<chat-messages>` custom element with [can-component].  It's `view` will
+  contain the content of the __chat messages page__.
+- Update `<chat-app>`'s `view` to create a `<chat-messages>` element.
 
 @sourceref ./3-chat-messages/js.js
-@highlight 1-9,only
+@highlight 1-8,25,only
 
 When complete, you should see the same behavior as the previous step. You should
 be able to click back and forth between the two different pages.
@@ -242,15 +218,6 @@ In this section, we will:
  - Show a “Loading…” message while the messages are loading (`messagesPromise.isPending`).
  - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
-Update the __HTML__ tab to:
-
- - Check if the messages are in the process of loading and show a loading indicator.
- - Check if the messages failed to load and display the reason for the failure.
- - If messages successfully loaded, list each message’s name and body.  If there
-   are no messages, write out “No messages”.
-
-@sourceref ./4-list-messages/html.html
-@highlight 38-60,only
 
 Update the `JavaScript` tab to:
 
@@ -259,12 +226,18 @@ Update the `JavaScript` tab to:
  - Connect the `Message` and `Message.List` type to
    the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
- - Create a `messagesPromise` property on `ChatMessagesVM` that’s
-   [can-define.types.default] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-   that represents the loading of all messages using [can-connect/can/map/map.getList].
+ - Update the `<chat-messages>`'s `view` to:
+   - Check if the messages are in the process of loading and show a loading indicator.
+   - Check if the messages failed to load and display the reason for the failure.
+   - If messages successfully loaded, list each message’s name and body.  If there
+      are no messages, write out “No messages”.
+ - Update the `<chat-messages>`'s `ViewModel` to:
+   - Define a `messagesPromise` property on `ChatMessagesVM` that’s
+     [can-define.types.default] is initialized to a   [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+     that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
-@highlight 1-20,23-27,only
+@highlight 1-20,30-52,53-59,only
 
 When complete, you should see a list of messages in the __chat messages page__.
 
@@ -316,23 +289,20 @@ In this section, we will:
 - Add the ability to create messages on the server and have them added to the list of messages.
 
 
-Update the __HTML__ tab to:
+Update the `<chat-messages>` __view__ to:
 
  - Create a form to enter a message’s `name` and `body`.
  - When the form is submitted, call `send` on the `ChatMessagesVM` with [can-stache-bindings.event].
  - Connect the first `<input>`’s `value` to the `ChatMessagesVM`’s `name` property with [can-stache-bindings.twoWay].
  - Connect the second `<input>`’s `value` to the `ChatMessagesVM`’s `body` property with [can-stache-bindings.twoWay].
 
-@sourceref ./5-create-messages/html.html
-@highlight 62-74,only
-
-Update the `JavaScript` tab to:
+Update the `<chat-messages>` __ViewModel__ to:
 
 - Define a `name` and `body` property on `ChatMessagesVM`.
 - Define a `send` method on `ChatMessagesVM` that creates a new `Message` and sends it to the server.
 
 @sourceref ./5-create-messages/js.js
-@highlight 28-39,only
+@highlight 54-66,73-84,only
 
 When complete, you will be able to create messages and have them appear in the list.
 
@@ -374,6 +344,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/yuhoyuv/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/goqijet/4/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>

@@ -5,7 +5,7 @@ require("can-compute");
 require("can-map");
 require("can-list");
 //require("can-map-backup");
-//require("can-map-define");
+require("can-map-define");
 //require("can-connect/can/model/model");
 //require("can-ejs");
 //require("can-validate-legacy");
