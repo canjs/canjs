@@ -123,14 +123,14 @@ var Transaction = can.DefineMap.extend({
 
 			def.then(function() {
 				can.queues.batch.start();
-				self.set({
+				self.assign({
 					executing: false,
 					executed: true
 				});
 				self.executeEnd();
 				can.queues.batch.stop();
 			}, function(reason){
-				self.set({
+				self.assign({
 					executing: false,
 					executed: true,
 					rejected: reason
@@ -248,7 +248,7 @@ var ATM = can.DefineMap.extend({
 		});
 	},
 	exit: function(){
-		this.set({
+		this.assign({
 			card: null,
 			accountsPromise: null,
 			transactions: null,
