@@ -18,7 +18,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/konemoc/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -33,7 +33,7 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/melesok/1/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/rosuzit/1/embed?output">JS Bin on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -71,15 +71,15 @@ viewModel.amount = 1000;
 
   ```js
   // Define the ViewModel type
-  var MyViewModel = can.DefineMap.extend("MyViewModel",{
+  const MyViewModel = can.DefineMap.extend("MyViewModel",{
    ...      
   })
   // Create an instance of the ViewModel
-  var viewModel = new MyViewModel();
+  const viewModel = new MyViewModel();
   // Get a View
-  var view = can.stache.from("my-view");
+  const view = can.stache.from("my-view");
   // Render the View with the ViewModel instance
-  var frag = view(viewModel);
+  const frag = view(viewModel);
   document.body.appendChild(frag);
   ```
 
@@ -104,13 +104,13 @@ viewModel.amount = 1000;
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
+  const template = can.stache.from(SCRIPT_ID);
   ```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
+  const frag = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -132,7 +132,7 @@ viewModel.amount = 1000;
   This lets you create instances of that type, get & set those properties, and listen to changes like:
 
   ```js
-  var productVM = new ProductVM({});
+  const productVM = new ProductVM({});
 
   productVM.age //-> 34
 
@@ -176,7 +176,7 @@ Print out the exported values like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay default:bind] to set up a two-way binding in
+- Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
   `can-stache`.  For example, the following keeps `email` on the ViewModel and
   the input’s `value` in sync:
 
@@ -259,7 +259,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-We need to add `class='is-error'` when a form value has a value that
+We need to add `class="is-error"` when a form value has a value that
 is not valid according to Stripe’s validators. To do that, we need to
 create the following properties that will return an error message for
 their respective form property:
@@ -277,7 +277,7 @@ their respective form property:
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
   ```html
-  {{#if(error)}}class='is-error'{{/if}}
+  {{#if(error)}}class="is-error"{{/if}}
   ```
 
 ### The solution
@@ -303,7 +303,7 @@ a token that we may use to charge the credit card.
 When we get a token, we will simply alert it to the user like:
 
 ```js
-alert("Token: "+response.id);
+alert("Token: " + response.id);
 ```
 
 After submitting the form, you should see an alert like:
@@ -390,6 +390,6 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/konemoc/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.1"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
