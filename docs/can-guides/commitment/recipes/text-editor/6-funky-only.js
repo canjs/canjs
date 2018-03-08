@@ -1,13 +1,13 @@
 can.Component.extend({
-  tag: 'rich-text-editor',
+  tag: "rich-text-editor",
   view: `
-    <div class='controls'>
+    <div class="controls">
       <button on:click='exec("bold")' class='bold'>B</button>
       <button on:click='exec("italic")' class='italic'>I</button>
       <button on:click='copyAll()'>Copy All</button>
-      <button on:click='funky()' class='funky'>Funky</button>
+      <button on:click='funky()' class="funky">Funky</button>
     </div>
-    <div class='editbox' contenteditable="true">
+    <div class="editbox" contenteditable="true">
       <ol>
         <li>Learn <b>about</b> CanJS.</li>
         <li>Learn <i>execCommand</i>.</li>
@@ -26,24 +26,24 @@ can.Component.extend({
       this.element = el;
     },
     copyAll(){
-      var editBox = this.element.querySelector('.editbox'),
-          editBoxRange = document.createRange();
+      const editBox = this.element.querySelector(".editbox");
+      const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
 
-      var selection = window.getSelection();
+      const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(editBoxRange);
 
       document.execCommand("copy");
     },
     funky() {
-      var editBox = this.element.querySelector('.editbox'),
-          editBoxRange = document.createRange();
+      const editBox = this.element.querySelector(".editbox");
+      const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
 
-      var selection = window.getSelection();
+      const selection = window.getSelection();
       if(selection && selection.rangeCount) {
-        var selectedRange = selection.getRangeAt(0);
+        const selectedRange = selection.getRangeAt(0);
         if(rangeContains( editBoxRange, selectedRange) ) {
           getElementsInRange(selectedRange,"span").forEach((el) => {
             el.classList.add("funky");
@@ -55,8 +55,8 @@ can.Component.extend({
 });
 
 function getElementsInRange(range, wrapNodeName) {
-  var elements = [];
-  var wrapper = document.createElement(wrapNodeName);
+  const elements = [];
+  const wrapper = document.createElement(wrapNodeName);
   range.surroundContents(wrapper);
   elements.push(wrapper);
   return elements;

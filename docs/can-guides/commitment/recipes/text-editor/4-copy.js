@@ -1,12 +1,12 @@
 can.Component.extend({
-  tag: 'rich-text-editor',
+  tag: "rich-text-editor",
   view: `
-    <div class='controls'>
+    <div class="controls">
       <button on:click='exec("bold")' class='bold'>B</button>
       <button on:click='exec("italic")' class='italic'>I</button>
       <button on:click='copyAll()'>Copy All</button>
     </div>
-    <div class='editbox' contenteditable="true">
+    <div class="editbox" contenteditable="true">
       <ol>
         <li>Learn <b>about</b> CanJS.</li>
         <li>Learn <i>execCommand</i>.</li>
@@ -25,11 +25,11 @@ can.Component.extend({
       this.element = el;
     },
     copyAll(){
-      var editBox = this.element.querySelector('.editbox'),
-          editBoxRange = document.createRange();
+      const editBox = this.element.querySelector(".editbox");
+      const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
 
-      var selection = window.getSelection();
+      const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(editBoxRange);
 

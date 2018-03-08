@@ -1,13 +1,13 @@
 can.Component.extend({
-  tag: 'rich-text-editor',
+  tag: "rich-text-editor",
   view: `
-    <div class='controls'>
+    <div class="controls">
       <button on:click='exec("bold")' class='bold'>B</button>
       <button on:click='exec("italic")' class='italic'>I</button>
       <button on:click='copyAll()'>Copy All</button>
-      <button on:click='funky()' class='funky'>Funky</button>
+      <button on:click='funky()' class="funky">Funky</button>
     </div>
-    <div class='editbox' contenteditable="true">
+    <div class="editbox" contenteditable="true">
       <ol>
         <li>Learn <b>about</b> CanJS.</li>
         <li>Learn <i>execCommand</i>.</li>
@@ -26,24 +26,24 @@ can.Component.extend({
       this.element = el;
     },
     copyAll(){
-      var editBox = this.element.querySelector('.editbox'),
-          editBoxRange = document.createRange();
+      const editBox = this.element.querySelector(".editbox");
+      const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
 
-      var selection = window.getSelection();
+      const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(editBoxRange);
 
       document.execCommand("copy");
     },
     funky() {
-      var editBox = this.element.querySelector('.editbox'),
-          editBoxRange = document.createRange();
+      const editBox = this.element.querySelector(".editbox");
+      const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
 
-      var selection = window.getSelection();
+      const selection = window.getSelection();
       if(selection && selection.rangeCount) {
-        var selectedRange = selection.getRangeAt(0);
+        const selectedRange = selection.getRangeAt(0);
         if(rangeContains( editBoxRange, selectedRange) ) {
           getElementsInRange(selectedRange,"span").forEach((el) => {
             el.classList.add("funky");
@@ -55,14 +55,14 @@ can.Component.extend({
 });
 
 function getElementsInRange(range, wrapNodeName) {
-  var elements = [];
+  const elements = [];
 
   function addSiblingElement(element) {
     // We are going to wrap all text nodes with a span.
     if(element.nodeType === Node.TEXT_NODE) {
-      // If there's something other than a space:
+      // If there’s something other than a space:
       if(/[^\s\n]/.test(element.nodeValue)) {
-        var span = document.createElement(wrapNodeName);
+        const span = document.createElement(wrapNodeName);
         element.parentNode.insertBefore(span, element);
         span.appendChild(element);
         elements.push(span);
@@ -73,39 +73,39 @@ function getElementsInRange(range, wrapNodeName) {
 
   }
 
-  var startContainer = range.startContainer,
+  const startContainer = range.startContainer,
       endContainer = range.endContainer,
       commonAncestor = range.commonAncestorContainer;
 
   if(startContainer === commonAncestor) {
-    var wrapper = document.createElement(wrapNodeName);
+    const wrapper = document.createElement(wrapNodeName);
     range.surroundContents(wrapper);
     elements.push(wrapper);
   } else {
     // Split the starting text node.
-    var startWrap = splitRangeStart(range, wrapNodeName);
+    const startWrap = splitRangeStart(range, wrapNodeName);
     addSiblingElement(startWrap);
 
     // Add nested siblings from startWrap up to the first line.
-    var startLine = siblingThenParentUntil(
+    const startLine = siblingThenParentUntil(
         "nextSibling",
         startWrap,
         commonAncestor,
         addSiblingElement);
 
     // Split the ending text node.
-    var endWrap = splitRangeEnd(range, wrapNodeName);
+    const endWrap = splitRangeEnd(range, wrapNodeName);
     addSiblingElement(endWrap);
 
     // Add nested siblings from endWrap up to the last line.
-    var endLine = siblingThenParentUntil(
+    const endLine = siblingThenParentUntil(
         "previousSibling",
         endWrap,
         commonAncestor,
         addSiblingElement);
 
     // Add lines between start and end to elements.
-    var cur = startLine.nextSibling;
+    let cur = startLine.nextSibling;
     while(cur !== endLine) {
       addSiblingElement(cur);
       cur = cur.nextSibling;
