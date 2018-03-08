@@ -59,14 +59,14 @@ var TodoListVM = can.DefineMap.extend({
   todos: Todo.List,
   editing: Todo,
   backupName: "string",
-  isEditing: function(todo){
+  isEditing: function(todo) {
     return todo === this.editing;
   },
-  edit: function(todo){
+  edit: function(todo) {
     this.backupName = todo.name;
     this.editing = todo;
   },
-  cancelEdit: function(){
+  cancelEdit: function() {
     if(this.editing) {
       this.editing.name = this.backupName;
     }
