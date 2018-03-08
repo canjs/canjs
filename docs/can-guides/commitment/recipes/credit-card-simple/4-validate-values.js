@@ -1,11 +1,11 @@
-Stripe.setPublishableKey('pk_test_zCC2JrO3KSMeh7BB5x9OUe2U');
+Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
 
-var PaymentVM = can.DefineMap.extend({
-  amount: {default: 9.99},
+const PaymentVM = can.DefineMap.extend({
+  amount: { default: 9.99 },
 
   userCardNumber: "string",
-  get cardNumber(){
-    return this.userCardNumber ? this.userCardNumber.replace(/-/g,""): null;
+  get cardNumber() {
+    return this.userCardNumber ? this.userCardNumber.replace(/-/g, ""): null;
   },
   get cardError() {
     if( this.cardNumber && !Stripe.card.validateCardNumber(this.cardNumber) ) {
@@ -17,8 +17,8 @@ var PaymentVM = can.DefineMap.extend({
   get expiryParts() {
     if(this.userExpiry) {
       return this.userExpiry.split("-").map(function(p){
-        return parseInt(p,10);
-	  });
+        return parseInt(p, 10);
+      });
     }
   },
   get expiryMonth() {
@@ -35,19 +35,19 @@ var PaymentVM = can.DefineMap.extend({
   },
 
   userCVC: "string",
-  get cvc(){
+  get cvc() {
     return this.userCVC ?
-      parseInt(this.userCVC,10) : null;
+      parseInt(this.userCVC, 10) : null;
   },
   get cvcError() {
-    if(this.cvc && !Stripe.card.validateCVC(this.cvc)) {
+    if( this.cvc && !Stripe.card.validateCVC(this.cvc) ) {
       return "Invalid CVC (ex: 123).";
     }
   }
 });
 
-var viewModel = new PaymentVM();
+const viewModel = new PaymentVM();
 
-var paymentView = can.stache.from("payment-view");
-var frag = paymentView( viewModel );
+const paymentView = can.stache.from("payment-view");
+const frag = paymentView( viewModel );
 document.body.appendChild( frag );

@@ -1,17 +1,18 @@
-<script type='text/stache' id="payment-view">
+<script type="text/stache" id="payment-view">
   <form>
 
-	<input type='text' name='number' placeholder='Card Number'
+	<input type="text" name="number" placeholder="Card Number"
 	  value:bind="userCardNumber"/>
 
-	<input type='text' name='expiry' placeholder='MM-YY'
+	<input type="text" name="expiry" placeholder="MM-YY"
 	  value:bind="userExpiry"/>
 
-	<input type='text' name='cvc' placeholder='CVC'
+	<input type="text" name="cvc" placeholder="CVC"
 	  value:bind="userCVC"/>
 
 	<button>Pay ${{amount}}</button>
 
 	<p>{{userCardNumber}}, {{userExpiry}}, {{userCVC}}</p>
+
   </form>
 </script>
