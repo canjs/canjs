@@ -7,8 +7,8 @@
   <ul class="routes-list">
     {{#each(routesPromise.value)}}
       <li on:click="../pickRoute(this)" {{#eq(this, ../route)}}class="active"{{/eq}}>
-        <span class="route-number">{{this.rt}}</span>
-        <span class="route-name">{{this.rtnm}}</span>
+        <span class="route-number">{{rt}}</span>
+        <span class="route-name">{{rtnm}}</span>
         <span class="check">✔</span>
       </li>
     {{/each}}
