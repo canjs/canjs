@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="description" content="TodoMVC Guide 3.0 - Routing">
+<meta name="description" content="TodoMVC Guide 4.0 - Finished">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>JS Bin</title>
 </head>
 <body>
 
-<script type='text/stache' id='todo-create-template'>
+<script type="text/stache" id="todo-create-template">
 <input id="new-todo"
     placeholder="What needs to be done?"
     value:bind="todo.name"
     on:enter="createTodo()"/>
 </script>
 
-<script type='text/stache' id='todo-list-template'>
+<script type="text/stache" id="todo-list-template">
 <ul id="todo-list">
   {{#each(todos)}}
-    <li class="todo {{#if(./complete)}}completed{{/if}}
-      {{#if(isDestroying)}}destroying{{/if}}
-      {{#if(isEditing(this))}}editing{{/if}}">
+    <li class="todo {{#if(complete)}}completed{{/if}}
+      {{#if(isDestroying())}}destroying{{/if}}
+      {{#if(../isEditing(this))}}editing{{/if}}">
       <div class="view">
 	    <input class="toggle" type="checkbox"
 			   checked:bind="complete" on:change="save()">
-        <label on:dblclick="edit(this)">{{name}}</label>
+        <label on:dblclick="../edit(this)">{{name}}</label>
         <button class="destroy" on:click="destroy()"></button>
       </div>
       <input class="edit" type="text"
         value:bind="name"
-        on:enter="updateName()"
-        focused:from="isEditing(this)"
-        on:blur="cancelEdit()"/>
+        on:enter="../updateName()"
+        focused:from="../isEditing(this)"
+        on:blur="../cancelEdit()"/>
     </li>
   {{/each}}
 </ul>
@@ -56,16 +56,16 @@
 		</span>
 		<ul id="filters">
 			<li>
-				<a href="{{routeUrl(filter=undefined)}}"
-					{{#routeCurrent(filter=undefined)}}class='selected'{{/routeCurrent}}>All</a>
+              <a href="{{routeUrl(filter=undefined)}}"
+                {{#routeCurrent(filter=undefined)}}class="selected"{{/routeCurrent}}>All</a>
 			</li>
 			<li>
-				<a href="{{routeUrl(filter='active')}}"
-					{{#routeCurrent(filter='active')}}class='selected'{{/routeCurrent}}>Active</a>
+              <a href="{{routeUrl(filter='active')}}"
+                {{#routeCurrent(filter='active')}}class="selected"{{/routeCurrent}}>Active</a>
 			</li>
 			<li>
-				<a href="{{routeUrl(filter='complete')}}"
-					{{#routeCurrent(filter='complete')}}class='selected'{{/routeCurrent}}>Completed</a>
+              <a href="{{routeUrl(filter='complete')}}"
+                {{#routeCurrent(filter='complete')}}class="selected"{{/routeCurrent}}>Completed</a>
 			</li>
 		</ul>
 		<button id="clear-completed"
@@ -76,8 +76,7 @@
 </section>
 </script>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://unpkg.com/can@3/dist/global/can.all.js"></script>
+<script src="https://unpkg.com/can@4/dist/global/can.all.js"></script>
 </body>
 
 </html>

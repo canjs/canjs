@@ -55,7 +55,7 @@ can.Component.extend({
   ViewModel: TodoCreateVM
 });
 
-var TodoListVM = can.DefineMap.extend({
+const TodoListVM = can.DefineMap.extend({
   todos: Todo.List
 });
 

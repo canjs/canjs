@@ -11,14 +11,13 @@ and [can-fixture]. It takes about 1 hour to complete.
 
 The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
 
-
-<a class="jsbin-embed" href="https://jsbin.com/sasuje/11/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/suxonuf/1/embed?html,output">JS Bin on jsbin.com</a>
 
 The JS Bin starts
 with the static HTML and CSS a designer might turn over to a JS developer. We will be
 adding all the JavaScript functionality.
 
-The JS Bin also loads [can.all.js](https://unpkg.com/can@3/dist/global/can.all.js), which is a script that includes all of CanJS core, ecosystem, legacy and infrastructure libraries under a
+The JS Bin also loads [can.all.js](https://unpkg.com/can@4/dist/global/can.all.js), which is a script that includes all of CanJS core, ecosystem, legacy and infrastructure libraries under a
 single global `can` namespace.
 
 Generally speaking, you should not use the global `can` script, but instead you
@@ -29,14 +28,14 @@ WebPack or Browserify.  In a real app, your code will look like:
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 
-var Todo = DefineMap.extend({ ... });
+const Todo = DefineMap.extend({ ... });
 Todo.List = DefineList.extend({ ... });
 ```
 
 Not:
 
 ```js
-var Todo = can.DefineMap.extend({ ... });
+const Todo = can.DefineMap.extend({ ... });
 Todo.List = can.DefineList.extend({ ... });
 ```
 
@@ -197,16 +196,14 @@ In this section, we will:
 
 Update the `JavaScript` tab to:
 
- - Add the [can-event-dom-enter enter event] so that `on:enter` can be used to handle when the user types the enter key.
  - Use [can-define/map/map] to create a `TodoCreateVM` view model with:
    - A `todo` property that holds a new `Todo` instance.
    - A `createTodo` method that [can-connect/can/map/map.prototype.save]s the `Todo` instance
      and replaces it with a new one once saved.
  - Use [can-component] to create a custom `<todo-create>` component that renders the `todo-create-template` template with an instance of the `TodoCreateVM`.
 
-
 @sourceref ./5-create/js.js
-@highlight 42-57,only
+@highlight 41-54,only
 
 Update the __HTML__ tab to:
 
@@ -387,6 +384,6 @@ delete the completed todos.  You should also have a really good idea how CanJS w
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/tibana/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/suxonuf/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
