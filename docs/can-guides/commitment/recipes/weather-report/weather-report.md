@@ -100,10 +100,10 @@ Update the __HTML__ tab to wrap the template in a `script` tag:
       <h1>10-day Chicago Weather Forecast</h1>
       <ul>
         <li>
-          <span class='date'>Today</span>
+          <span class="date">Today</span>
           <span class='description scattered-showers'>Scattered Showers</span>
-          <span class='high-temp'>100<sup>&deg;</sup></span>
-          <span class='low-temp'>-10<sup>&deg;</sup></span>
+          <span class="high-temp">100<sup>&deg;</sup></span>
+          <span class="low-temp">-10<sup>&deg;</sup></span>
         </li>
       </ul>
     </div>
@@ -156,7 +156,7 @@ We want an `input` element to:
   a ViewModel property like:
 
   ```html
-  <input value:to="property"/>
+  <input value:to="property" />
   ```
 
 - A [can-stache] template uses
@@ -194,7 +194,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 
     <p class="loading-message">
@@ -213,10 +213,10 @@ Update the template in the __HTML__ tab to:
       <h1>10-day {{location}} Weather Forecast</h1>
       <ul>
         <li>
-          <span class='date'>Today</span>
+          <span class="date">Today</span>
           <span class='description scattered-showers'>Scattered Showers</span>
-          <span class='high-temp'>100<sup>&deg;</sup></span>
-          <span class='low-temp'>-10<sup>&deg;</sup></span>
+          <span class="high-temp">100<sup>&deg;</sup></span>
+          <span class="low-temp">-10<sup>&deg;</sup></span>
         </li>
       </ul>
     </div>
@@ -244,7 +244,7 @@ on the page.
   ```js
   DefineMap.extend({
     message: "string",
-    get excitedMessage(){
+    get excitedMessage() {
       return this.message+"!";
     }
   });
@@ -267,9 +267,9 @@ on the page.
   to a URL and get back JSON.  Use it like:
 
   ```js
-  fetch(url).then(function(response){
+  fetch(url).then(function(response) {
 	  return response.json();
-  }).then(function(data){
+  }).then(function(data) {
 
   });
   ```
@@ -300,7 +300,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 
     {{#if(placesPromise.isPending)}}
@@ -326,10 +326,10 @@ Update the template in the __HTML__ tab to:
       <h1>10-day {{location}} Weather Forecast</h1>
       <ul>
         <li>
-          <span class='date'>Today</span>
+          <span class="date">Today</span>
           <span class='description scattered-showers'>Scattered Showers</span>
-          <span class='high-temp'>100<sup>&deg;</sup></span>
-          <span class='low-temp'>-10<sup>&deg;</sup></span>
+          <span class="high-temp">100<sup>&deg;</sup></span>
+          <span class="low-temp">-10<sup>&deg;</sup></span>
         </li>
       </ul>
     </div>
@@ -350,19 +350,19 @@ const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
 const WeatherViewModel = can.DefineMap.extend({
   location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
       return fetch(
         yqlURL +
         can.param({
           q: 'select * from geo.places where text="'+this.location+'"',
           format: "json"
         })
-      ).then(function(response){
+      ).then(function(response) {
         return response.json();
-      }).then(function(data){
+      }).then(function(data) {
         console.log(data);
-        if(Array.isArray(data.query.results.place)) {
+        if (Array.isArray(data.query.results.place)) {
           return data.query.results.place;
         } else {
           return [data.query.results.place];
@@ -429,7 +429,7 @@ When a user clicks on a place, we need to indicate their selection.
   const MessageViewModel = can.DefineMap.extend({
 	  message: "string",
 	  metaData: "any",
-	  sayHi: function(){
+	  sayHi: function() {
 	    this.message = "Hello";
 	  }
   });
@@ -447,7 +447,7 @@ Update the template in the __HTML__ tab to:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 
     {{#if(placesPromise.isPending)}}
@@ -474,10 +474,10 @@ Update the template in the __HTML__ tab to:
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
           <li>
-            <span class='date'>Today</span>
+            <span class="date">Today</span>
             <span class='description scattered-showers'>Scattered Showers</span>
-            <span class='high-temp'>100<sup>&deg;</sup></span>
-            <span class='low-temp'>-10<sup>&deg;</sup></span>
+            <span class="high-temp">100<sup>&deg;</sup></span>
+            <span class="low-temp">-10<sup>&deg;</sup></span>
           </li>
         </ul>
       </div>
@@ -497,19 +497,19 @@ const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
 const WeatherViewModel = can.DefineMap.extend({
   location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
 		  can.param({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response){
+	  ).then(function(response) {
 		  return response.json();
-	  }).then(function(data){
+	  }).then(function(data) {
 		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
+          if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
@@ -518,7 +518,7 @@ const WeatherViewModel = can.DefineMap.extend({
     }
   },
   place: "any",
-  pickPlace: function(place){
+  pickPlace: function(place) {
     this.place = place;
   }
 });
@@ -571,7 +571,7 @@ Update the template in the __HTML__ tab to:
    <div class="weather-widget">
      <div class="location-entry">
        <label for="location">Enter Your location:</label>
-       <input id="location" value:to="location" type="text"/>
+       <input id="location" value:to="location" type="text" />
      </div>
 
      {{#if(placesPromise.isPending)}}
@@ -599,10 +599,10 @@ Update the template in the __HTML__ tab to:
          <ul>
            {{#each(forecastPromise.value)}}
              <li>
-               <span class='date'>{{date}}</span>
-               <span class='description {{toClassName(text)}}'>{{text}}</span>
-               <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-               <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+               <span class="date">{{date}}</span>
+               <span class="description {{toClassName(text)}}">{{text}}</span>
+               <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+               <span class="low-temp">{{low}}<sup>&deg;</sup></span>
              </li>
            {{/each}}
          </ul>
@@ -623,19 +623,19 @@ const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
 const WeatherViewModel = can.DefineMap.extend({
   location: "string",
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
 		  can.param({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response){
+	  ).then(function(response) {
 		  return response.json();
-	  }).then(function(data){
+	  }).then(function(data) {
 		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
+          if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
@@ -644,20 +644,20 @@ const WeatherViewModel = can.DefineMap.extend({
     }
   },
   place: "any",
-  pickPlace: function(place){
+  pickPlace: function(place) {
     this.place = place;
   },
-  get forecastPromise(){
-    if( this.place ) {
+  get forecastPromise() {
+    if ( this.place ) {
 	  return fetch(
   		  yqlURL+
   		  can.param({
   	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
   	        format: "json"
   	      })
-  	  ).then(function(response){
+  	  ).then(function(response) {
   		  return response.json();
-  	  }).then(function(data){
+  	  }).then(function(data) {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 
@@ -665,7 +665,7 @@ const WeatherViewModel = can.DefineMap.extend({
       });
     }
   },
-  toClassName: function(text){
+  toClassName: function(text) {
 	return text.toLowerCase().replace(/ /g, "-");
   }
 });
@@ -693,7 +693,7 @@ other city is still visible.  Let’s hide it!
   const MessageViewModel = can.DefineMap.extend({
     message: {
 	  type: "string",
-	  set: function(){
+	  set: function() {
 	    this.metaData = null;
 	  }
 	},
@@ -711,23 +711,23 @@ const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
-    set: function(){
+    set: function() {
       this.place = null;
     }
   },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
 		  can.param({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response){
+	  ).then(function(response) {
 		  return response.json();
-	  }).then(function(data){
+	  }).then(function(data) {
 		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
+          if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
@@ -736,20 +736,20 @@ const WeatherViewModel = can.DefineMap.extend({
     }
   },
   place: "any",
-  pickPlace: function(place){
+  pickPlace: function(place) {
     this.place = place;
   },
-  get forecastPromise(){
-    if( this.place ) {
+  get forecastPromise() {
+    if ( this.place ) {
 	  return fetch(
   		  yqlURL+
   		  can.param({
   	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
   	        format: "json"
   	      })
-  	  ).then(function(response){
+  	  ).then(function(response) {
   		  return response.json();
-  	  }).then(function(data){
+  	  }).then(function(data) {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 
@@ -757,7 +757,7 @@ const WeatherViewModel = can.DefineMap.extend({
       });
     }
   },
-  toClassName: function(text){
+  toClassName: function(text) {
 	return text.toLowerCase().replace(/ /g, "-");
   }
 });
@@ -787,7 +787,7 @@ user to select their place; instead, we should show the forecast immediately.
     username: "string",
     message: {
       get: function(lastSet) {
-        if(lastSet) {
+        if (lastSet) {
           return lastSet;
         } else {
           return "Hello "+this.username;
@@ -811,7 +811,7 @@ user to select their place; instead, we should show the forecast immediately.
     message: {
       get: function(lastSet, resolve) {
         fetch("/message/"+this.messageId)
-        .then(function(response){
+        .then(function(response) {
           return response.json();
         }).then(resolve);
       }
@@ -828,7 +828,7 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 
     {{#if(placesPromise.isPending)}}
@@ -858,10 +858,10 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
         <ul>
           {{#each(forecastPromise.value)}}
             <li>
-              <span class='date'>{{date}}</span>
-              <span class='description {{toClassName(text)}}'>{{text}}</span>
-              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+              <span class="date">{{date}}</span>
+              <span class="description {{toClassName(text)}}">{{text}}</span>
+              <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+              <span class="low-temp">{{low}}<sup>&deg;</sup></span>
             </li>
           {{/each}}
         </ul>
@@ -885,23 +885,23 @@ const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
-    set: function(){
+    set: function() {
       this.place = null;
     }
   },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
 		  can.param({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response){
+	  ).then(function(response) {
 		  return response.json();
-	  }).then(function(data){
+	  }).then(function(data) {
 		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
+          if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
@@ -911,40 +911,40 @@ const WeatherViewModel = can.DefineMap.extend({
   },
   places: {
     get: function(lastSet, resolve) {
-      if(this.placesPromise) {
+      if (this.placesPromise) {
         this.placesPromise.then(resolve)
       }
     }
   },
-  get showPlacePicker(){
+  get showPlacePicker() {
     return !this.place && this.places && this.places.length > 1;
   },
   place: {
     type: "any",
-    get: function(lastSet){
-      if(lastSet) {
+    get: function(lastSet) {
+      if (lastSet) {
         return lastSet;
       } else {
-        if(this.places && this.places.length === 1) {
+        if (this.places && this.places.length === 1) {
           return this.places[0];
         }
       }
     }
   },
-  pickPlace: function(place){
+  pickPlace: function(place) {
     this.place = place;
   },
-  get forecastPromise(){
-    if( this.place ) {
+  get forecastPromise() {
+    if ( this.place ) {
 	  return fetch(
   		  yqlURL+
   		  can.param({
   	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
   	        format: "json"
   	      })
-  	  ).then(function(response){
+  	  ).then(function(response) {
   		  return response.json();
-  	  }).then(function(data){
+  	  }).then(function(data) {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 
@@ -952,7 +952,7 @@ const WeatherViewModel = can.DefineMap.extend({
       });
     }
   },
-  toClassName: function(text){
+  toClassName: function(text) {
 		return text.toLowerCase().replace(/ /g, "-");
   }
 });
