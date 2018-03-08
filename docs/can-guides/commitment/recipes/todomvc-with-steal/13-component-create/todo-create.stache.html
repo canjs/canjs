@@ -1,5 +1,6 @@
 <!-- components/todo-create/todo-create.stache -->
+<can-import from="can-event-dom-enter/add-global/" />
 <input id="new-todo"
     placeholder="What needs to be done?"
     value:bind="todo.name"
-    on:enter="createTodo()"/>
+    on:enter="createTodo()" />

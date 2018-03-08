@@ -21,7 +21,7 @@ StealJS.
 - To create a new project with StealJS, run:
 
   ```
-  npm init
+  npm init -y
   npm install steal steal-tools steal-css --save-dev
   ```
 
@@ -45,20 +45,20 @@ StealJS.
 - Define a ViewModel type with [can-define/map/map]:
 
   ```js
-  import DefineMap from 'can-define/map/';
-  var Type = DefineMap.extend({ ... });
+  import DefineMap from "can-define/map/";
+  const Type = DefineMap.extend({ ... });
   ```
 
 - Create an instance of a ViewModel by using `new Type(props)`:
 
   ```js
-  var instance = new Type({ ... });
+  const instance = new Type({ ... });
   ```
 
 - Load a view with the [steal-stache] plugin like:
 
   ```js
-  import view from './path/to/template.stache';
+  import view from "./path/to/template.stache";
   ```
 
   Note that [steal-stache] is a StealJS plugin and needs to be configured as such.
@@ -67,7 +67,7 @@ StealJS.
   be inserted into the page like:
 
   ```js
-  var frag = view(appVM);
+  const frag = view(appVM);
   document.body.appendChild(frag);
   ```
 
@@ -135,7 +135,7 @@ StealJS.
   styles and run its tests:
 
   ```js
-  import test from 'can-todomvc-test';
+  import test from "can-todomvc-test";
   test(appVM);
   ```
 
@@ -183,7 +183,7 @@ Create the starting HTML page:
 
 ```html
 <!-- index.html -->
-<script src="./node_modules/steal/steal.js" deps-bundle></script>
+<script src="./node_modules/steal/steal.js"></script>
 ```
 
 Create the application template:
@@ -193,7 +193,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test@1.0 --save-dev
+npm install can-todomvc-test@2 --save-dev
 ```
 
 Create the main app
@@ -213,7 +213,7 @@ Create the main app
 Example test code:
 
 ```js
-var todo = new Todo({id: 1, name: 2});
+const todo = new Todo({id: 1, name: 2});
 QUnit.equal(todo.id, "1", "id is a string");
 QUnit.equal(todo.name, "2", "name is a string");
 QUnit.equal(todo.complete, false, "complete defaults to false");
@@ -245,7 +245,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 
   ```js
   DefineMap.extend({
-      methodName: function(){}
+      methodName: function() {}
   })
   ```
 
@@ -270,7 +270,11 @@ Example test code:
 
 ```js
 QUnit.ok(Todo.List, "Defined a List");
-var todos = new Todo.List([{complete: true},{},{complete: true}]);
+const todos = new Todo.List([
+  {complete: true},
+  {},
+  {complete: true}
+]);
 QUnit.ok(todos[0] instanceof Todo, "each item in a Todo.List is a Todo");
 QUnit.equal(todos.active.length, 1);
 QUnit.equal(todos.complete.length, 2);
@@ -296,7 +300,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
   ```js
   DefineMap.extend({
       propertyName: {
-          get: function(){
+          get: function() {
               return this.otherProperty;
           }
       }
@@ -306,8 +310,10 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 - [can-define/list/list.prototype.filter] can be used to filter a list into a new list:
 
   ```js
-  list = new ListType([...]);
-  list.filter(function(item){
+  list = new ListType([
+    // ...
+  ]);
+  list.filter(function(item) {
       return test(item);
   })
   ```
@@ -362,14 +368,14 @@ Update _models/todo.js_ to the following:
 Update _index.js_ to the following:
 
 @sourceref ./4-render-todos/index.js
-@highlight 4,8-16,only
+@highlight 4,9-17,only
 
 Update _index.stache_ to the following:
 
 @sourceref ./4-render-todos/index.html
 @highlight 11-21,26,40,only
 
-## Toggle a todo’s completed state (event bindings) ##
+## Toggle a todo’s completed state (event bindings)
 
 ### The problem
 
@@ -391,7 +397,7 @@ Update _index.stache_ to the following:
 @sourceref ./5-toggle-event/index.html
 @highlight 14-16,only
 
-## Toggle a todo’s completed state (data bindings) ##
+## Toggle a todo’s completed state (data bindings)
 
 ### The problem
 
@@ -403,7 +409,7 @@ Update _index.stache_ to the following:
 - Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
 
    ```html
-   <input  value:bind="name"/>
+   <input  value:bind="name" />
    ```
 
 ### The solution
@@ -419,7 +425,7 @@ Update _index.stache_ to the following:
 
 - Create a `set.Algebra` that understand the parameters of the `/api/todos` service layer.  The `/api/todos` service
   layer will support the following parameters:
-  - `complete` - Specifies a filter on todos' `complete` field.  Examples: `complete=true`, `complete=false`.
+  - `complete` - Specifies a filter on todos’ `complete` field.  Examples: `complete=true`, `complete=false`.
   - `sort` - Specifies the sorted order the todos should be returned.  Examples: `sort=name`.
   - `id` - Specifies the `id` property to use in `/api/todos/{id}`
 
@@ -435,7 +441,7 @@ Example test code:
 QUnit.deepEqual( Todo.algebra.difference({}, {complete: true}), {complete: false} );
 QUnit.deepEqual( Todo.algebra.clauses.id, {id: "id"} );
 
-var sorted = Todo.algebra.getSubset({sort: "name"}, {}, [
+const sorted = Todo.algebra.getSubset({sort: "name"}, {}, [
     { name: "mow lawn", complete: false, id: 5 },
     { name: "dishes", complete: true, id: 6 },
     { name: "learn canjs", complete: false, id: 7 }
@@ -454,7 +460,7 @@ QUnit.deepEqual(sorted, [
   a [can-set.Algebra] like:
 
   ```js
-  var todoAlgebra = new set.Algebra(
+  const todoAlgebra = new set.Algebra(
     set.props.boolean("completed"),
     set.props.id("_id"),
     set.props.offsetLimit("offset","limit")
@@ -480,7 +486,7 @@ Update _models/todo.js_ to the following:
 @sourceref ./7-algebra/todo.js
 @highlight 4,35-39,only
 
-## Simulate the service layer (can-fixture) ##
+## Simulate the service layer (can-fixture)
 
 ### The problem
 
@@ -547,7 +553,7 @@ __DELETE /api/todos/{id}__
 - [can-fixture] - is used to trap AJAX requests like:
 
   ```js
-  fixture("/api/entities", function(request){
+  fixture("/api/entities", function(request) {
     request.data.folderId //-> "1"
 
     return {data: [...]}
@@ -557,9 +563,10 @@ __DELETE /api/todos/{id}__
 - [can-fixture.store can-fixture.store] - can be used to automatically filter records if given a [can-set.Algebra].
 
   ```js
-  var entities = [ .... ];
-  var entitiesStore = fixture.store( entities, entitiesAlgebra );
+  const entities = [ .... ];
+  const entitiesStore = fixture.store( entities, entitiesAlgebra );
   fixture("/api/entities/{id}", entitiesStore);
+  ```
 
 ### The solution
 
@@ -571,7 +578,7 @@ Create _models/todos-fixture.js_ as follows:
 
 @sourceref ./8-fixtures/todos-fixture.js
 
-## Connect the Todo model to the service layer (can-connect) ##
+## Connect the Todo model to the service layer (can-connect)
 
 ### The problem
 
@@ -605,7 +612,7 @@ Update _models/todo.js_ to the following:
 @sourceref ./9-connection/todo.js
 @highlight 5,42-48,only
 
-## List todos from the service layer (can-connect use) ##
+## List todos from the service layer (can-connect use)
 
 
 ### The problem
@@ -620,7 +627,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
   promise that resolves to the `Type.List` of instances:
 
   ```js
-  Type.getList({}).then(function(list){
+  Type.getList({}).then(function(list) {
 
   })
   ```
@@ -644,7 +651,7 @@ Update _index.js_ to the following:
 @sourceref ./10-connection-list/index.js
 @highlight 5,10-12,only
 
-## Toggling a todo’s checkbox updates service layer (can-connect use) ##
+## Toggling a todo’s checkbox updates service layer (can-connect use)
 
 
 ### The problem
@@ -679,7 +686,7 @@ Update _index.stache_ to the following:
 @highlight 16-17,only
 
 
-## Delete todos in the page (can-connect use) ##
+## Delete todos in the page (can-connect use)
 
 ### The problem
 
@@ -710,7 +717,7 @@ Update _index.stache_ to the following:
 @sourceref ./12-connection-destroy/index.html
 @highlight 13,20,only
 
-## Create todos (can-component) ##
+## Create todos (can-component)
 
 ### The problem
 
@@ -722,13 +729,13 @@ custom element.
 
 ### What you need to know
 
-- [The  can-component presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk) up to and including how to _define a component_.
+- [The can-component presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk) up to and including how to _define a component_.
 - A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
 
   ```js
-  import Component from 'can-component';
-  import view from './template.stache';
-  var ViewModel = DefineMap.extend({
+  import Component from "can-component";
+  import view from "./template.stache";
+  const ViewModel = DefineMap.extend({
     ...      
   });
 
@@ -740,23 +747,24 @@ custom element.
   ```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
+- Listening to the `enter` event can be enabled by [can-event-dom-enter/add-global/add-global].
 - The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
 a `DefineMap` property is read for the first time.
 
   ```js
-  var SubType = DefineMap.extend({})
-  var Type = DefineMap.extend({
+  const SubType = DefineMap.extend({})
+  const Type = DefineMap.extend({
       property: {Default: SubType}
   })
 
-  var map = new Type();
+  const map = new Type();
   map.property instanceof SubType //-> true
   ```
 
 - Use [can-view-import] to import a module from a template like:
 
   ```
-  <can-import from="~/components/some-component/"/>
+  <can-import from="~/components/some-component/" />
   <some-component>
   ```
 
@@ -765,7 +773,7 @@ a `DefineMap` property is read for the first time.
 ### The solution
 
 ```
-npm install can-component --save
+npm install can-component can-event-dom-enter --save
 ```
 
 Create _components/todo-create/todo-create.stache_ as follows:
@@ -781,7 +789,7 @@ Update _index.stache_ to the following:
 @sourceref ./13-component-create/index.html
 @highlight 2,6,only
 
-## Edit todo names (can-stache-bindings) ##
+## Edit todo names (can-stache-bindings)
 
 ### The problem
 
@@ -792,7 +800,7 @@ the __enter__ key, the todo should be updated on the
 server.  If the input loses focus, it should go
 back to the default list view.
 
-This functionality should be encapsulated by a `<todo-list {todos}/>`
+This functionality should be encapsulated by a `<todo-list {todos} />`
 custom element.  It should accept a `todos` property that
 is the list of todos that will be managed by the custom element.
 
@@ -810,13 +818,13 @@ is the list of todos that will be managed by the custom element.
 - Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
 
   ```
-  <some-component {name-in-component}="nameInScope"/>
+  <some-component {name-in-component}="nameInScope" />
   ```
 
 - [can-stache/keys/this] can be used to get the current context in stache:
 
   ```html
-  <div on:click="doSomethingWith(this)"/>
+  <div on:click="doSomethingWith(this)" />
   ```
 
 ### The solution
@@ -834,7 +842,7 @@ Update _index.stache_ to the following:
 @sourceref ./14-component-edit/index.html
 @highlight 3,12,only
 
-## Toggle all todos complete state (DefineMap setter) ##
+## Toggle all todos complete state (DefineMap setter)
 
 ### The problem
 
@@ -858,11 +866,11 @@ can be simulated like:
   DefineMap.extend({
       first: "string",
       last: "string",
-      get fullName(){
+      get fullName() {
           return this.first + " " + this.last;
       },
-      set fullName(newValue){
-          var parts = newValue.split(" ");
+      set fullName(newValue) {
+          const parts = newValue.split(" ");
           this.first = parts[0];
           this.last = parts[1];
       }
@@ -886,7 +894,7 @@ Update _index.stache_ to the following:
 @sourceref ./15-setter-toggle/index.html
 @highlight 10-12,only
 
-## Clear completed todo’s (event bindings) ##
+## Clear completed todo’s (event bindings)
 
 ### The problem
 Make the "Clear completed" button work. When the button is clicked, It should destroy each completed todo.
@@ -912,7 +920,7 @@ Update _index.stache_ to the following:
 @sourceref ./16-clear-all-completed/index.html
 @highlight 31-32,only
 
-## Setup routing (can-route) ##
+## Set up routing (can-route)
 
 Make it so that the following urls display the corresponding
 todos:
@@ -922,7 +930,7 @@ todos:
  - `#!complete` - Only the completed todos
 
 Also, the _All_, _Active_, and _Completed_ buttons should
-link to those pages and a `class='selected'` property should
+link to those pages and a `class="selected"` property should
 be added if they represent the current page.
 
 
@@ -937,14 +945,14 @@ be added if they represent the current page.
 
 - [can-route] can create pretty routing rules.  For example,
   if `#!login` should set the `page` property of the
-  `AppViewModel` to `"login"`, use `route()` like:
+  `AppViewModel` to `"login"`, use `route.register()` like:
 
   ```js
-  route("{page}");
+  route.register("{page}");
   ```
 
-- [can-route.ready] initializes the connection between the
-  url and the `AppViewModel`.  After you've created all
+- [can-route.start] initializes the connection between the
+  url and the `AppViewModel`.  After you’ve created all
   your application’s pretty routing rules, call it like:
 
   ```js
@@ -954,7 +962,7 @@ be added if they represent the current page.
 - The [can-stache-route-helpers] module provides helpers
   that use [can-route].  
 
-  [can-stache.helpers.routeCurrent]
+  [can-stache-route-helpers.routeCurrent]
   returns truthy if the current route matches its first parameters properties.
 
   ```html
@@ -963,7 +971,7 @@ be added if they represent the current page.
   {{/if}}
   ```
 
-  [can-stache.helpers.routeUrl] returns a url that will
+  [can-stache-route-helpers.routeUrl] returns a url that will
   set its first parameters properties:
 
   ```
@@ -973,13 +981,13 @@ be added if they represent the current page.
 ### The solution
 
 ```
-npm install can-route --save
+npm install can-route can-stache-route-helpers --save
 ```
 
 Update _index.js_ to the following:
 
 @sourceref ./17-routing/index.js
-@highlight 5,9-26,39-41,only
+@highlight 5,10-27,40-42,only
 
 Update _index.stache_ to the following:
 

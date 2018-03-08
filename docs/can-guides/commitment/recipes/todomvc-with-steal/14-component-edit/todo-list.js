@@ -1,10 +1,10 @@
 // components/todo-list/todo-list.js
-import Component from 'can-component';
-import DefineMap from 'can-define/map/';
-import view from './todo-list.stache';
-import Todo from '~/models/todo';
+import Component from "can-component";
+import DefineMap from "can-define/map/";
+import view from "./todo-list.stache";
+import Todo from "~/models/todo";
 
-var TodoListVM = DefineMap.extend({
+const TodoListVM = DefineMap.extend({
 	todos: Todo.List,
 	editing: Todo,
 	backupName: "string",

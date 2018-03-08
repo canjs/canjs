@@ -1,12 +1,12 @@
 // index.js
-import view from './index.stache';
-import DefineMap from 'can-define/map/';
-import Todo from '~/models/todo';
-import route from 'can-route';
-import '~/models/todos-fixture';
-import test from 'can-todomvc-test';
+import view from "./index.stache";
+import DefineMap from "can-define/map/";
+import Todo from "~/models/todo";
+import route from "can-route";
+import "~/models/todos-fixture";
+import test from "can-todomvc-test";
 
-var AppViewModel = DefineMap.extend("AppViewModel", {
+const AppViewModel = DefineMap.extend("AppViewModel", {
 	appName: {type: "string", serialize: false},
 	filter: "string",
 	allTodos: {
@@ -33,14 +33,14 @@ var AppViewModel = DefineMap.extend("AppViewModel", {
 	}
 });
 
-var appVM = window.appVM = new AppViewModel({
+const appVM = window.appVM = new AppViewModel({
 	appName: "TodoMVC"
 });
 
 route.data = appVM;
-route("{filter}");
+route.register("{filter}");
 route.start();
 
-var frag = view(appVM);
+const frag = view(appVM);
 document.body.appendChild(frag);
 test(appVM);

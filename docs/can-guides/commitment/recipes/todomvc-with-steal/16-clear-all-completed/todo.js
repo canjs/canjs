@@ -1,10 +1,10 @@
 // models/todo.js
-import DefineMap from 'can-define/map/';
-import DefineList from 'can-define/list/';
-import set from 'can-set';
-import connectBaseMap from 'can-connect/can/base-map/';
+import DefineMap from "can-define/map/";
+import DefineList from "can-define/list/";
+import set from "can-set";
+import connectBaseMap from "can-connect/can/base-map/";
 
-var Todo = DefineMap.extend("Todo", {
+const Todo = DefineMap.extend("Todo", {
 	id: "string",
 	name: "string",
 	complete: {

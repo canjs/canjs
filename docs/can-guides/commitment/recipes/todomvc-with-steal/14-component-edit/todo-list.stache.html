@@ -8,7 +8,7 @@
 			<input class="toggle" type="checkbox"
 				checked:bind="complete"
 				on:change="save()"
-				disabled:from="isSaving()"/>
+				disabled:from="isSaving()" />
         	<label on:dblclick="../edit(this)">{{name}}</label>
         	<button class="destroy" on:click="./destroy()"></button>
 		</div>
@@ -16,7 +16,7 @@
 	        value:bind="name"
 	        on:enter="../updateName()"
 	        focused:from="../isEditing(this)"
-	        on:blur="../cancelEdit()"/>
+	        on:blur="../cancelEdit()" />
     </li>
 	{{/each}}
 </ul>
