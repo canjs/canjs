@@ -21,6 +21,8 @@ common stuff, while helping you build the impossible.
 </div>
 <div style="text-align: center; color: gray">Why is our logo a tortoise? Read the short fable <a href="http://read.gov/aesop/025.html">The Hare & the Tortoise</a> by <a href="https://en.wikipedia.org/wiki/Aesop%27s_Fables">Aesop</a> to find out.</div>
 
+
+
 ## Easy to do the common stuff
 
 CanJS starts with a familiar object-oriented approach to making
@@ -97,7 +99,7 @@ management and templates. To help you build whatever comes your way, CanJS helps
 
 Learning a new framework is hard. Different needs and experiences
 don't fit a one-size fits all solution. Our long list of guides are
-organized in a skill tree as follows, so can _level up_ faster by taking the
+organized in a skill tree as follows, so you _level up_ faster by taking the
 guide that meets your needs.
 
 <a href="./doc/guides.html">
@@ -108,7 +110,109 @@ We add a new guide every 6 weeks. [Let us know](http://twitter.com/canjs) what y
 
 ### Solve difficult problems
 
-CanJS has been used to build everything.  
+CanJS has been used to build everything. This means there's
+either a plugin for it, or it's easy to create your own. And CanJS supports
+a variety of programming styles, so you can tailor your approach to meet
+your needs.
+
+__Multiple Programming Styles__
+
+The following show going from basic OO to a streaming only approach.
+
+<style>
+.code-slide pre {
+    display: inline-block;
+}
+.code-slide .article pre code {
+    display: inline-block;
+}
+</style>
+<div class="code-slide">
+
+```js
+// Imperative
+DefineMap.extend({
+  name: "string",
+  nameChangeCount: {default: 0},
+  updateName(name){
+    this.name = name;
+    this.nameChangeCount++;
+  }
+});
+
+
+
+
+```
+
+```js
+// Imperative setter
+DefineMap.extend({
+  name: {
+    set(name) {
+      this.nameChangeCount++;
+      return name;
+    }
+  },
+  nameChangeCount: {default: 0}
+});
+
+
+
+```
+
+```js
+// Declarative light-weight streams
+DefineMap.extend({
+    name: "string",
+    nameChangeCount: {
+        value({listenTo, resolve}) {
+            var count = resolve(0);
+            listenTo("name", () => {
+                resolve(++count);
+            });
+        }
+    }
+})
+```
+
+```js
+// Declarative Kefir streaming properties
+DefineMap.extend({
+    name: "string",
+    nameChangeCount: {
+        stream(){
+            return this.stream(".name").scan((prev) => {
+                return prev+1;
+            },0)
+        }
+    }
+})
+```
+
+```js
+// Solo Kefir streams
+const name = Kefir.emitterProperty();
+
+var nameChangeCount = name.scan(function(prev){
+    return prev+1;
+},0);
+
+
+
+
+
+
+```
+
+</div>
+
+
+__Fancy Features__
+
+The following is a small list of some of the plugins
+
+It doesn't box you in.
 
 CanJS has many features that mean you don't have to re-invent the
 
@@ -119,6 +223,8 @@ CanJS has many features that mean you don't have to re-invent the
   ```
 - Streaming property definitions.
 - Dev tools, stack traces, tricks and tips
+
+__Create Your Own Solution__
 
 One special feature is that CanJS has 80 packages.  Allowing you to
 integrate anything. `can-reflect`.  small parts, all documented. Integrate
