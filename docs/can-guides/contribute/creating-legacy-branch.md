@@ -16,10 +16,11 @@ The new "legacy" branch should not be created from the `master` branch since it 
 To see the available tags, run this command from the git directory:
 
 ```
-git ls-remote --tags origin
+get fetch --tags
+git tag
 ```
 
-This will show a long list with entries like `refs/tags/v3.5.2`. You will use the final piece of this in the next step.
+This will show a long list with entries like `v3.5.2`. You will use the final piece of this in the next step.
 
 
 ## Create the branch
