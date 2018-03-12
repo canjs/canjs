@@ -7,9 +7,9 @@ basic rich text editor.
 
 @body
 
-> This recipe was first published March 1st, 2017 by [Justin Meyer](https://twitter.com/justinbmeyer).
+> This recipe was first published March 1st, 2018 by [Justin Meyer](https://twitter.com/justinbmeyer).
 >
-> Live stream of this recipe recorded 2pm CST on March 1st, 2017:
+> Live stream of this recipe recorded 2pm CST on March 1st, 2018:
 > <iframe width="560" height="315" src="https://www.youtube.com/embed/EpG1Wzn5by8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
@@ -27,22 +27,22 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/boxibac/6/embed?output&height=400px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/qohorad/4/embed?output&height=400px">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
 - __The problem__ — A description of what the section is trying to accomplish.
 - __What you need to know__ — Information about CanJS that is useful for solving the problem.
-- __How to verify it works__ - How to make sure the solution works if it's not obvious.
+- __How to verify it works__ - How to make sure the solution works if it’s not obvious.
 - __The solution__ — The solution to the problem.
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS Bin__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-> Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
+> Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/qeguhac/3/embed?html,js,output">CanJS Text Editor on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/qohorad/2/embed?html,js,output">CanJS Text Editor on jsbin.com</a>
 
 This JS Bin:
 
@@ -67,20 +67,20 @@ This JS Bin:
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/1-setup.webm" type="video/webm">
-I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
+I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
 ### What you need to know
 
 To setup a basic CanJS application, you define a custom element in JavaScript and
-use the custom element in your page's `HTML`.
+use the custom element in your page’s `HTML`.
 
 To define a custom element, extend [can-component] with a [can-component.prototype.tag]
 that matches the name of your custom element.  For example:
 
 ```js
 can.Component.extend({
-  tag: 'rich-text-editor'
+  tag: "rich-text-editor"
 })
 ```
 
@@ -90,19 +90,19 @@ Then you can use this tag in your HTML page:
 <rich-text-editor></rich-text-editor>
 ```
 
-But this doesn't do anything.  Components add their own HTML through their [can-component.prototype.view]
+But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
 property:
 
 ```js
 can.Component.extend({
-  tag: 'rich-text-editor',
+  tag: "rich-text-editor",
   view: `<h2>I am a rich-text-editor!</h2>`
 });
 ```
 
 Now the `H2` element in the `view` will show up within the `<rich-text-editor>` element.
 
-To make an element editable, set the [contenteditable](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable) property to `"true"`.  Once an element's content is editable, the user can change the text and HTML structure
+To make an element editable, set the [contenteditable](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable) property to `"true"`.  Once an element’s content is editable, the user can change the text and HTML structure
 of that element by typing and copying and pasting text.
 
 
@@ -124,11 +124,11 @@ Update the __HTML__ `<body>` element to:
 
 - Add a `B` `<button>` that when clicked, will bold the text the user selected.
 - The button should have a className of `bold`.
-- The button should be within a `<div class='controls'>` element before the `editbox` element.
+- The button should be within a `<div class="controls">` element before the `editbox` element.
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/2-bold.webm" type="video/webm">
-I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
+I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
 ### What you need to know
@@ -139,7 +139,7 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
   <button on:click="doSomething('bold')"></button>
   ```
 
-- Those functions (example: `doSomething`) are usually methods on the Component's [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
+- Those functions (example: `doSomething`) are usually methods on the Component’s [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
 
   ```js
   can.Component.extend({
@@ -178,13 +178,13 @@ Update the __JavaScript__ tab to:
 
 - Add a `I` `<button>` that when clicked, will italicize the user selected text.
 - The button should have a className of `italic`.
-- The button should be within the `<div class='controls'>` element before the `editbox` element.
+- The button should be within the `<div class="controls">` element before the `editbox` element.
 
 ### What you need to know
 
 You know everything you need to know already for this step.  The power was inside you all along!
 
-Well ... in case you couldn't guess, to italicize text, call:
+Well ... in case you couldn’t guess, to italicize text, call:
 
 ```js
 document.execCommand("italic", false, false)
@@ -209,22 +209,22 @@ Update the __JavaScript__ tab to:
 
 - Add a `Copy All` `<button>` that when clicked, will select the entire contents of
   the `editbox` element and copy the `editbox` text to the clipboard.
-- The button should be within the `<div class='controls'>` element before the `editbox` element.
+- The button should be within the `<div class="controls">` element before the `editbox` element.
 
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/4-copy.webm" type="video/webm">
-I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
+I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
 ### What you need to know
 
 - To make `Copy All` work, we need to give the `ViewModel` access to
   the `<rich-text-editor>` element.  Usually, `ViewModel`s should not access DOM elements
-  directly. However, for this widget, there's important state (what the user has typed) that
+  directly. However, for this widget, there’s important state (what the user has typed) that
   we need to access.
 
-  So to make the component's `element` available to the ViewModel, use the following pattern:
+  So to make the component’s `element` available to the ViewModel, use the following pattern:
 
   ```js
   can.Component.extend({
@@ -252,13 +252,13 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
   this.element.querySelector(".someClassName")
   ```
 
-  > HINT: You'll want to get the `editbox` element.
+  > HINT: You’ll want to get the `editbox` element.
 
 - The [Range](https://developer.mozilla.org/en-US/docs/Web/API/Range) and
   the [Selection](https://developer.mozilla.org/en-US/docs/Web/API/Selection) APIs are used to control
   the text a user is selecting.
 
-  `Ranges` allow you to "contain" a fragment of the document that contain nodes and parts of
+  `Ranges` allow you to “contain” a fragment of the document that contain nodes and parts of
   text nodes.
 
   The `Selection` object contains the ranges of text that a user currently has highlighted. Usually
@@ -267,7 +267,7 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
   To programmatically select text, first create a range:
 
   ```js
-  var editBoxRange = document.createRange();
+  const editBoxRange = document.createRange();
   ```
 
   Then you position the range over the elements you would like to select.  In our
@@ -277,11 +277,11 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
   editBoxRange.selectNodeContents(editBox);
   ```
 
-  Now we need to make the `editBoxRange` the only range in the user's
+  Now we need to make the `editBoxRange` the only range in the user’s
   `Selection`. To do this, we first need to get the selection:
 
   ```js
-  var selection = window.getSelection();
+  const selection = window.getSelection();
   ```
 
   Then, remove all current selected text with:
@@ -296,7 +296,7 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
   selection.addRange(editBoxRange);
   ```
 
-- To copy to the clipboard the ranges in the user's `Selection` call:
+- To copy to the clipboard the ranges in the user’s `Selection` call:
 
   ```js
   document.execCommand("copy");
@@ -332,7 +332,7 @@ Update the __JavaScript__ tab to:
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/5-funky-text.webm" type="video/webm">
-I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
+I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
 ### What you need to know
@@ -346,7 +346,7 @@ On a high level, we are going to:
 
 __Text Nodes Exist!__
 
-It's critical to understand that the DOM is made up of normal nodes and
+It’s critical to understand that the DOM is made up of normal nodes and
 text nodes.  For example, the following UL has 7 child nodes:
 
 ```js
@@ -381,7 +381,7 @@ They are selecting part of a TextNode. In order to `funk-ify`
 _"about selection"_, we need to change that HTML to:
 
 ```
-<li>Learn <span class='funky'>about selection</span> and ranges</li>
+<li>Learn <span class="funky">about selection</span> and ranges</li>
 ```
 
 __Implementing the `getElementsInRange` helper__
@@ -409,22 +409,22 @@ calling `getElementsInRange(aboutSelection, "span")` should:
 
 __Other stuff you need to know__
 
-- To get the user's current selection as a `Range`, run:
+- To get the user’s current selection as a `Range`, run:
   ```js
-  var selection = window.getSelection();
+  const selection = window.getSelection();
   if(selection && selection.rangeCount) {
-    var selectedRange = selection.getRangeAt(0);
+    const selectedRange = selection.getRangeAt(0);
   }
   ```
 - To create an element given a tag name, write:
   ```js
-  var wrapper = document.createElement(wrapNodeName);
+  const wrapper = document.createElement(wrapNodeName);
   ```
 - To surround a range within a textNode with another node write:
   ```js
   selectedRange.surroundContents(wrapper);
   ```
-- To add a class name to an element's class list you can write:
+- To add a class name to an element’s class list you can write:
   ```js
   element.classList.add("funky")
   ```
@@ -446,13 +446,13 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-As shown in the previous step's video, selecting text outside the editable area and
+As shown in the previous step’s video, selecting text outside the editable area and
 clicking the `Funky` button will make that text `Funky`. In this step, we will
 only `funk-ify` the text in the `editbox`.
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/6-funky-only.webm" type="video/webm">
-I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
+I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or MP4 with H.264.
 </video>
 
 ### What you need to know
@@ -460,7 +460,7 @@ I'm sorry; your browser doesn't support HTML5 video in WebM with VP8/VP9 or MP4 
 On a high level, we are going to:
 
 1. Create a range that represents the `editbox`
-2. Compare the selected range to the `editbox` range and make sure it's inside
+2. Compare the selected range to the `editbox` range and make sure it’s inside
   the `editbox` before adding the `funky` behavior.
 
 
@@ -475,10 +475,10 @@ function rangeContains(outer, inner) {
   return // COMPARE RANGES
 }
 
-var documentRange = document.createRange();
+const documentRange = document.createRange();
 documentRange.selectContents(document.documentElement);
 
-var bodyRange = document.createRange();
+const bodyRange = document.createRange();
 bodyRange.selectContents(document.body)
 
 rangeContains(documentRange, bodyRange) //-> true
@@ -490,13 +490,13 @@ __Other stuff you need to know__
   to set a range to the contents of an element:
 
   ```js
-  var bodyRange = document.createRange();
+  const bodyRange = document.createRange();
   bodyRange.selectContents(document.body)
   ```
 
 - Use [compareBoundaryPoints](https://developer.mozilla.org/en-US/docs/Web/API/Range/compareBoundaryPoints)
-  to compare two ranges. The following makes sure `outer`'s start is before or equal to `inner`'s start AND
-  `outer`'s end is after or equal to `inner`'s end:
+  to compare two ranges. The following makes sure `outer`’s start is before or equal to `inner`’s start AND
+  `outer`’s end is after or equal to `inner`’s end:
 
   ```js
   outer.compareBoundaryPoints(Range.START_TO_START,inner) <= 0 &&
@@ -532,13 +532,13 @@ ranges that span multiple nodes by:
 
 1. Detect if the range spans multiple nodes.
 2. If the range does span multiple nodes, we will walk the DOM between the
-  range's start position and end position by:
-   1.  From the range's start position, collect all `nextSibling`s.  Once out of siblings move
+  range’s start position and end position by:
+   1.  From the range’s start position, collect all `nextSibling`s.  Once out of siblings move
        to the `parentNode`.  Do not collect that node, continue collecting siblings
        and moving to parent nodes until you reach a __parent node__ that is a direct descendent of the  
        `commonAncestor` of the start and end of the range.  This __parent node__ is the
        _start-line node_.
-   2.  From the range's end position, collect all `previousSibling`s. Once out of siblings move
+   2.  From the range’s end position, collect all `previousSibling`s. Once out of siblings move
        to the `parentNode`.  Do not collect that node, continue collecting siblings
        and moving to parent nodes until you reach a __parent node__ that is a direct descendent of the  
        `commonAncestor` of the start and end of the range. This __parent node__ is the
@@ -548,10 +548,10 @@ ranges that span multiple nodes by:
    5.  When `TextNodes` that have characters should be collected, wrap them in an element
        node of type `wrapNodeName`.
 
-Lets see how this works with an example.  Lets say we've selected from the `out` in _about_ to
-the start of `brate` in _Celebrate_.  We've marked the selection start and end with `|` below:
+Lets see how this works with an example.  Lets say we’ve selected from the `out` in _about_ to
+the start of `brate` in _Celebrate_.  We’ve marked the selection start and end with `|` below:
 
-```
+```html
 <ol>
   <li>Learn <b>ab|out</b> CanJS.</li>
   <li>Learn <i>execCommand</i>.</li>
@@ -565,9 +565,9 @@ the start of `brate` in _Celebrate_.  We've marked the selection start and end w
 So we first need to "collect" `out` in `elements`.  To do this we will do step `#2.5` and
 the DOM will look like:
 
-```
+```html
 <ol>
-  <li>Learn <b>ab<span class='funky'>out</span></b> CanJS.</li>
+  <li>Learn <b>ab<span class="funky">out</span></b> CanJS.</li>
   <li>Learn <i>execCommand</i>.</li>
   <li>Learn about selection and ranges.</li>
   <li>Get Funky.</li>
@@ -577,11 +577,11 @@ the DOM will look like:
 ```
 
 We will then keep doing step `#2.1`. This new span has no `nextSibling`s, so we will
-walk up to it's parent `<b>` element and collect its next siblings.  This will update the DOM to:
+walk up to it’s parent `<b>` element and collect its next siblings.  This will update the DOM to:
 
-```
+```html
 <ol>
-  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
+  <li>Learn <b>ab<span class="funky">out</span></b><span class="funky"> CanJS.</span></li>
   <li>Learn <i>execCommand</i>.</li>
   <li>Learn about selection and ranges.</li>
   <li>Get Funky.</li>
@@ -591,71 +591,71 @@ walk up to it's parent `<b>` element and collect its next siblings.  This will u
 ```
 
 We will then keep doing step `#2.1`. This new span has no `nextSibling`s, so we will
-walk up to it's parent `<li>` element and collect its next siblings.  We will only collect
+walk up to it’s parent `<li>` element and collect its next siblings.  We will only collect
 Elements and TextNodes with characters, resulting in:
 
-```
+```html
 <ol>
-  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-  <li class='funky'>Learn <i>execCommand</i>.</li>
-  <li class='funky'>Learn about selection and ranges.</li>
-  <li class='funky'>Get Funky.</li>
+  <li>Learn <b>ab<span class="funky">out</span></b><span class="funky"> CanJS.</span></li>
+  <li class="funky">Learn <i>execCommand</i>.</li>
+  <li class="funky">Learn about selection and ranges.</li>
+  <li class="funky">Get Funky.</li>
 </ol>
 <div>Get Ready To</div>
 <div>Cele|brate!</div>
 ```
 
-We will then move onto the `<ol>`. Once we reached the `<ol>`, we've reached
+We will then move onto the `<ol>`. Once we reached the `<ol>`, we’ve reached
 the _start-line node_.  Now we will move onto step `#2.2`.  We will perform a similar walk from
 the end of the range, but in reverse. In this case, we will wrap `Cele` with a `<span>` follows:
 
-```
+```html
 <ol>
-  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-  <li class='funky'>Learn <i>execCommand</i>.</li>
-  <li class='funky'>Learn about selection and ranges.</li>
-  <li class='funky'>Get Funky.</li>
+  <li>Learn <b>ab<span class="funky">out</span></b><span class="funky"> CanJS.</span></li>
+  <li class="funky">Learn <i>execCommand</i>.</li>
+  <li class="funky">Learn about selection and ranges.</li>
+  <li class="funky">Get Funky.</li>
 </ol>
 <div>Get Ready To</div>
-<div><span class='funky'>Cele</span>|brate!</div>
+<div><span class="funky">Cele</span>|brate!</div>
 ```
 
-As this `<span>` has no previous siblings, we will walk up to its container `div`. We've now
+As this `<span>` has no previous siblings, we will walk up to its container `div`. We’ve now
 reached the _end-line node_.  
 
 Finally, we move onto step `#2.3`, and collect all nodes between _start-line_ and _end-line_:
 
-```
+```html
 <ol>
-  <li>Learn <b>ab<span class='funky'>out</span></b><span class='funky'> CanJS.</span></li>
-  <li class='funky'>Learn <i>execCommand</i>.</li>
-  <li class='funky'>Learn about selection and ranges.</li>
-  <li class='funky'>Get Funky.</li>
+  <li>Learn <b>ab<span class="funky">out</span></b><span class="funky"> CanJS.</span></li>
+  <li class="funky">Learn <i>execCommand</i>.</li>
+  <li class="funky">Learn about selection and ranges.</li>
+  <li class="funky">Get Funky.</li>
 </ol>
-<div class='funky'>Get Ready To</div>
-<div><span class='funky'>Cele</span>|brate!</div>
+<div class="funky">Get Ready To</div>
+<div><span class="funky">Cele</span>|brate!</div>
 ```
 
-> NOTE: In the final solution, elements are first collected all at once,
-> and then `class='funky'` is added later. However, we are showing `funky` being added
+> __NOTE:__ In the final solution, elements are first collected all at once,
+> and then `class="funky"` is added later. However, we are showing `funky` being added
 > incrementally here for clarity.
 
 __Helpers:__
 
-To make the solution easier, we've provided several helpers in the `HTML` tab:
+To make the solution easier, we’ve provided several helpers in the `HTML` tab:
 
 `splitRangeStart` takes a range and splits the text node at the range start and  
 replaces the selected part with an element.  For example, if the range selected
 _"a small"_ in the following HTML:
 
-```
-<i>It's a</i><b>small world<b>
+```html
+<i>It’s a</i><b>small world<b>
 ```
 
 Calling `splitRangeStart(range, "span")` would update the DOM to:
 
-```
-<i>It's <span>a</span></i><b>small world<b>
+```html
+<i>It’s <span>a</span></i><b>small world<b>
 ```
 
 And it would return the wrapping `<span>`.
@@ -665,10 +665,10 @@ And it would return the wrapping `<span>`.
 `siblingThenParentUntil` is used to walk the DOM in the pattern described in
 `#2.1` and `#2.2`. For example, with DOM like:
 
-```
-<div class='editbox' contenteditable="true">
+```html
+<div class="editbox" contenteditable="true">
   <ol>
-    <li>Learn <b>ab<span id='START'>out</span></b> CanJS.</li>
+    <li>Learn <b>ab<span id="START">out</span></b> CanJS.</li>
     <li>Learn <i>execCommand</i>.</li>
     <li>Learn about selection and ranges.</li>
     <li>Get Funky.</li>
@@ -681,15 +681,15 @@ And it would return the wrapping `<span>`.
 Calling it as follows:
 
 ```js
-var start = document.querySelector("#start"),
-    editbox = document.querySelector('.editbox')
-siblingThenParentUntil("nextSibling", start, editbox, function handler(element){})
+const start = document.querySelector("#start");
+const editbox = document.querySelector(".editbox");
+siblingThenParentUntil("nextSibling", start, editbox, function handler(element) {});
 ```
 
 Will callback `handler` with all the TextNodes and Elements that should be either
 wrapped and collected or simply collected.  That is, it would be called with:
 
-```
+```html
 TextNode< CanJS.>
 <li>Learn <i>execCommand</i>.</li>
 <li>Learn about selection and ranges.</li>
@@ -703,9 +703,9 @@ __Other stuff you need to know:__
 
 - [range.commonAncestor](https://developer.mozilla.org/en-US/docs/Web/API/Range/commonAncestorContainer) returns
   the DOM node that contains both the start and end of a `Range`.
-- `nextSibling` returns a node's next sibling in the DOM.
-- `previousSibling` returns a node's previous sibling in the DOM.
-- `parentNode` returns a node's parent element.
+- `nextSibling` returns a node’s next sibling in the DOM.
+- `previousSibling` returns a node’s previous sibling in the DOM.
+- `parentNode` returns a node’s parent element.
 - If you change the DOM, ranges, including the selected ranges, can be messed up.  Use
   [range.setStart](https://developer.mozilla.org/en-US/docs/Web/API/Range/setStart) and
   [range.setEnd](https://developer.mozilla.org/en-US/docs/Web/API/Range/setEnd) to
@@ -725,9 +725,9 @@ The following can be used to collect (and possibly wrap) nodes into the `element
 function addSiblingElement(element) {
   // We are going to wrap all text nodes with a span.
   if(element.nodeType === Node.TEXT_NODE) {
-    // If there's something other than a space:
+    // If there’s something other than a space:
     if(/[^\s\n]/.test(element.nodeValue)) {
-      var span = document.createElement(wrapNodeName);
+      const span = document.createElement(wrapNodeName);
       element.parentNode.insertBefore(span, element);
       span.appendChild(element);
       elements.push(span);
@@ -742,11 +742,11 @@ function addSiblingElement(element) {
 With this, you could do step `#2.1` like:
 
 ```js
-var startWrap = splitRangeStart(range, wrapNodeName);
+const startWrap = splitRangeStart(range, wrapNodeName);
 addSiblingElement(startWrap);
 
 // Add nested siblings from startWrap up to the first line.
-var startLine = siblingThenParentUntil(
+const startLine = siblingThenParentUntil(
     "nextSibling",
     startWrap,
     range.commonAncestor,
@@ -762,6 +762,10 @@ Update the __JavaScript__ tab to:
 @sourceref ./7-funky-range.js
 @highlight 60-80,84-117,only
 
+## Result
 
+When finished, you should see something like the following JS Bin:
 
-<script src="//static.jsbin.com/js/embed.min.js?4.0.4"></script>
+<a class="jsbin-embed" href="https://jsbin.com/qohorad/4/embed?js,output">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>

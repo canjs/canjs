@@ -31,7 +31,7 @@ The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minifi
 
 ## Independent Repositories and Packages
 
-CanJS 3.0 is maintained in independent repositories,
+CanJS is maintained in independent repositories,
 each with its own npm package and [semantic version](http://semver.org/) number.
 Organizing CanJS into individual repositories and packages has many benefits.  
 
@@ -61,7 +61,7 @@ To get all of those bug fixes and new features in 3.0, you have to
 take on those breaking changes from 2.3 all at once.  Depending on your company culture,
 and scale of your application, this might not be easy.
 
-Going forward in CanJS 3.0, packages are released independently of
+Going forward from CanJS 3.0, packages are released independently of
 each other.  You can upgrade to bug fixes and new features
 immediately and delay breaking changes (example: `can-route 4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
 you might upgrade to `can-route 4.0.0` one month and `can-component 4.0.0`

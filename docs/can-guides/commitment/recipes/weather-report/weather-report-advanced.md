@@ -40,7 +40,7 @@ The following sections are broken down into:
 Currently, when a new `location` is set, the `place` property is set to `null`:
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
     set: function(){
@@ -60,7 +60,7 @@ Instead, we want to completely define the behavior of `place` within the place d
 this:
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   ...
   place: {
     type: "any",
@@ -90,13 +90,13 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   property changes using the [can-stream-kefir] module as follows:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
+  const person = new can.DefineMap({name: "Justin"});
 
   // Create a stream from person’s name
-  var nameStream = can.streamKefir.toStream(person,".name");
+  const nameStream = can.streamKefir.toStream(person,".name");
 
   // Every time `.name` changes, increase the count 1.
-  var nameChangeCountStream = nameStream.scan(function(lastValue){
+  const nameChangeCountStream = nameStream.scan(function(lastValue){
 	  return lastValue + 1;
   }, 0);
 
@@ -113,8 +113,8 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 - The `toStream` method can take an observable object and a property (or event) and create an event stream. The following creates a stream of the `person.name` property values:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
-  var nameStream = can.streamKefir.toStream(person,".name");
+  const person = new can.DefineMap({name: "Justin"});
+  const nameStream = can.streamKefir.toStream(person,".name");
 
   nameStream.onValue(function(newValue){
 	  console.log(newValue);
@@ -127,8 +127,8 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 - Kefir’s [map](https://kefirjs.github.io/kefir/#map) method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:
 
   ```js
-  var person = new can.DefineMap({name: "Justin"});
-  var capitalizedNameStream = can.streamKefir.toStream(person,".name")
+  const person = new can.DefineMap({name: "Justin"});
+  const capitalizedNameStream = can.streamKefir.toStream(person,".name")
   	.map(function(name){
 		return name.toUpperCase()
 	});
@@ -166,7 +166,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   bound to.  To read the `nameChangeCount`, first use `.on` like:
 
   ```js
-  var me = new Person({name: "Justin"});
+  const me = new Person({name: "Justin"});
   me.on("nameChangeCount", function(ev, newValue){
 	  console.log(newValue);
   });
@@ -187,10 +187,10 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 	name: "string",
 	nameChangeCount: {
 		stream: function(setStream){
-			var reset = setStream.map(function(value){
+			const reset = setStream.map(function(value){
 				return {type: "reset", value: value};
 			});
-			var increment = this.toStream(".name").map(function(){
+			const increment = this.toStream(".name").map(function(){
 				return {type: "increment"}
 			});
 
@@ -210,7 +210,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   The following shows the behavior of this property:
 
   ```js
-  var me = new Person({name: "Justin"});
+  const me = new Person({name: "Justin"});
   me.on("nameChangeCount", function(ev, newValue){
 	console.log(newValue);
   });
@@ -226,13 +226,13 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   `canStream.toStream`.  Use it to create streams from properties and events on a map instance like:
 
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
 	  name: "string"
   });
 
-  var me = new Person({name: "Justin"});
+  const me = new Person({name: "Justin"});
 
-  var nameStream = me.toStream(".name");
+  const nameStream = me.toStream(".name");
 
   nameStream.onValue(function(){ ... })
   ```
@@ -284,7 +284,7 @@ We will do this by:
   API allows you to _monitor changes_ in the user’s position as follows:
 
   ```js
-  var watch = navigator.geolocation.watchPosition(
+  const watch = navigator.geolocation.watchPosition(
       function(position){...},
       function(err){...});
   ```
@@ -298,7 +298,7 @@ We will do this by:
 - To create a `Kefir` stream, call `Kefir.stream` as follows:
 
   ```js
-  var myStream = Kefir.stream(function setup(emitter){
+  const myStream = Kefir.stream(function setup(emitter){
 
       // INITIALIZATION CODE
 
@@ -331,8 +331,8 @@ We will do this by:
   the following might listen to where the user’s mouse is on the page:
 
   ```js
-  var cursorPosition = Kefir.stream(function(emitter){
-      var handler = function(ev){
+  const cursorPosition = Kefir.stream(function(emitter){
+      const handler = function(ev){
           emitter.emit({pageX: ev.pageX, pageY: pageY});
       };
       document.documentElement.addEventListener("mousemove",handler);
@@ -354,8 +354,8 @@ We will do this by:
         emitter.error(event.value);
       }
       if (event.type === 'value') {
-        var pageX = event.value.pageX;
-        var pageY = event.value.pageY;
+        const pageX = event.value.pageX;
+        const pageY = event.value.pageY;
         emitter.value( Math.sqrt(pageX*pageX + pageY*pageY) );
       }
   });

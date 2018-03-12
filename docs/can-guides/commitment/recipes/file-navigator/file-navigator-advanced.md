@@ -12,20 +12,20 @@ for an example that doesn't make data requests.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/jegetev/1/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/30/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
-<a href="https://jsfiddle.net/donejs/evb4mkps/">Open in JSFiddle</a>
+<a href="https://jsfiddle.net/donejs/0gxdzLa2/">Open in JSFiddle</a>
 
 > Note: If you don’t see any files show up, run the JS Bin again. This
 > JS Bin uses randomly generated files, so it’s possible nothing shows up.
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/waxiyel/8/embed?html,css,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/33/embed?html,css,output">
   Starter version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
-<a href="https://jsfiddle.net/donejs/wvb97vng/">Open in JSFiddle</a>
+<a href="https://jsfiddle.net/donejs/t97z1hf9/">Open in JSFiddle</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -91,8 +91,8 @@ The first level files and folders should have a `parentId` of `"0"`.
 - [can-fixture.store] can be used to automatically filter records using the query string:
 
   ```js
-  var entities = [ ... ];
-  var entitiesStore = can.fixture.store( entities );
+  const entities = [ ... ];
+  const entitiesStore = can.fixture.store( entities );
   can.fixture("/api/entities", entitiesStore);
   ```
 
@@ -124,7 +124,7 @@ requests to use that `store`:
 When we load entities from the server, it’s useful to convert them into `Entity` type instances.  We will want to create an observable `Entity` type using [can-define/map/map] so we can do:
 
 ```js
-var entity = new Entity({
+const entity = new Entity({
   id: "2",
   name: "dogs",
   parentId: "0",     // The id of the folder this file or folder is within.
@@ -187,7 +187,7 @@ can.connect.baseMap({
 Use `can.connect.baseMap` to connect `Entity` to `/api/entities` like:
 
 @sourceref ./file-navigator-advanced-4.js
-@highlight 63-66,only
+@highlight 63-68,only
 
 ## Create the ROOT entity and render it
 
@@ -221,13 +221,13 @@ in the same way it’s expected by the designer.
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
+  const template = can.stache.from(SCRIPT_ID);
   ```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
+  const frag = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -240,7 +240,7 @@ in the same way it’s expected by the designer.
 
 - You can create an `Entity` instance as follows:
   ```js
-  var folder = new Entity({...});
+  const folder = new Entity({...});
   ```
 
   Where {...} is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
@@ -264,7 +264,7 @@ Update the __JavaScript__ tab to:
 2. Load the `app-template`.  Renders it with `folder` instance, and inserts the result in the `<body>` element.
 
 @sourceref ./file-navigator-advanced-5.js
-@highlight 68-80,only
+@highlight 70-82,only
 
 ## Render the ROOT entities children
 
@@ -316,7 +316,7 @@ The following adds an `entitiesPromise` to data passed to the template.  `entiti
 will contain the files and folders that are directly within the root folder.
 
 @sourceref ./file-navigator-advanced-6.js
-@highlight 77,only
+@highlight 79,only
 
 ## Toggle children with a ViewModel
 
@@ -333,18 +333,18 @@ clicks on the root folder’s name should toggle if the children are displayed.
 
 - `can.DefineMap` can detail the type of a property with another type like:
   ```js
-  var Address = can.DefineMap.extend({
+  const Address = can.DefineMap.extend({
     street: "string",
     city: "string"
   });
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address
   });
   ```
 
 - `can.DefineMap` can also specify default values:
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address,
     age: {default: 33}
   });
@@ -352,7 +352,7 @@ clicks on the root folder’s name should toggle if the children are displayed.
 
 - `can.DefineMap` can also specify a default value and a type:
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"}
   });
@@ -361,7 +361,7 @@ clicks on the root folder’s name should toggle if the children are displayed.
 - `can.DefineMap` can also have methods:
 
   ```js
-  var Person = can.DefineMap.extend({
+  const Person = can.DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"},
     birthday: function() {
@@ -388,7 +388,7 @@ The following:
  -  Creates an instance of the `FolderVM` and uses it to render the template.
 
 @sourceref ./file-navigator-advanced-7.js
-@highlight 75-91,94,only
+@highlight 77-93,95,only
 
 The following wraps the listing of child entities with a `{{#if(isOpen)}} {{/if}}`:
 
@@ -426,7 +426,7 @@ Now we want to make all the folders able to open and close.  This means creating
 
 - [can-component can.Component] is used to create custom elements like:
   ```js
-  var MyComponentVM = DefineMap.extend({
+  const MyComponentVM = DefineMap.extend({
     message: {default: "Hello There!"}
   });
 
@@ -469,8 +469,8 @@ Now we want to make all the folders able to open and close.  This means creating
   For example, the `this` in `this.name` refers to the `context` object:
 
   ```javascript
-  var template = stache("{{this.name}}");
-  var context = {name: "Justin"};
+  const template = stache("{{this.name}}");
+  const context = {name: "Justin"};
   template(context);
   ```
 
@@ -529,16 +529,16 @@ The following:
 2. Renders the `app-template` with the root `parent` folder instead of the `rootFolderVM`.
 
 @sourceref ./file-navigator-advanced-8.js
-@highlight 88-92,95,only
+@highlight 90-94,97,only
 
 ## Result
 
 When complete, you should have a working file-navigation widget
 like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/jegetev/1/embed?js,output">
+<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/30/embed?js,output">
   Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
 </a>
-<a href="https://jsfiddle.net/donejs/evb4mkps/">Open in JSFiddle</a>
+<a href="https://jsfiddle.net/donejs/0gxdzLa2/">Open in JSFiddle</a>
 
 <script src="https://static.jsbin.com/js/embed.min.js?4.1.0"></script>

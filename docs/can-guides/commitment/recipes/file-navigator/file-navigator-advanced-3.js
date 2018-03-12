@@ -1,30 +1,30 @@
 // Stores the next entity id to use.
-var entityId = 1;
+let entityId = 1;
 
 // Returns an array of entities for the given `parentId`.
 // Makes sure the `depth` of entities doesn’t exceed 5.
-var makeEntities = function(parentId, depth) {
+const makeEntities = function(parentId, depth) {
   if (depth > 5) {
     return [];
   }
   // The number of entities to create.
-  var entitiesCount = can.fixture.rand(10);
+  const entitiesCount = can.fixture.rand(10);
 
   // The array of entities we will return.
-  var entities = [];
+  const entities = [];
 
-  for (var i = 0; i < entitiesCount; i++) {
+  for (let i = 0; i < entitiesCount; i++) {
 
     // The id for this entity
-    var id = "" + (entityId++);
+    const id = "" + (entityId++);
 
     // If the entity is a folder or file
-    var isFolder = Math.random() > 0.3;
+    const isFolder = Math.random() > 0.3;
 
     // The children for this folder.
-    var children = isFolder ? makeEntities(id, depth+1) : [];
+    const children = isFolder ? makeEntities(id, depth+1) : [];
 
-    var entity = {
+    const entity = {
       id: id,
       name: (isFolder ? "Folder" : "File") + " " + id,
       parentId: parentId,
@@ -41,10 +41,10 @@ var makeEntities = function(parentId, depth) {
 };
 
 // Make the entities for the demo
-var entities = makeEntities("0", 0);
+const entities = makeEntities("0", 0);
 
 // Add them to a client-like DB store
-var entitiesStore = can.fixture.store(entities);
+const entitiesStore = can.fixture.store(entities);
 
 // Trap requests to /api/entities to read items from the entities store.
 can.fixture("/api/entities", entitiesStore);
@@ -52,7 +52,7 @@ can.fixture("/api/entities", entitiesStore);
 // Make requests to /api/entities take 1 second
 can.fixture.delay = 1000;
 
-var Entity = can.DefineMap.extend({
+const Entity = can.DefineMap.extend({
   id: "string",
   name: "string",
   parentId: "string",

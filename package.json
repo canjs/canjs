@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -204,7 +204,7 @@
       "bit-docs-generate-html": "^0.8.0",
       "bit-docs-generate-searchmap": "^0.2.0",
       "bit-docs-html-canjs": "^2.3.1",
-      "bit-docs-prettify": "^0.1.1",
+      "bit-docs-prettify": "^0.3.0",
       "bit-docs-html-highlight-line": "^0.3.1",
       "bit-docs-tag-demo": "^0.3.0",
       "bit-docs-tag-package": "^0.0.5"

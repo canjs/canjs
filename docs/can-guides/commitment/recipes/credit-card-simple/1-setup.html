@@ -7,21 +7,21 @@
   <title>JS Bin</title>
 </head>
 <body>
-<script type='text/stache' id="payment-view">
+<script type="text/stache" id="payment-view">
   <form>
 
-    <input type='text' name='number' placeholder='Card Number'/>
+    <input type="text" name="number" placeholder="Card Number"/>
 
-    <input type='text' name='expiry' placeholder='MM-YY'/>
+    <input type="text" name="expiry" placeholder="MM-YY"/>
 
-    <input type='text' name='cvc' placeholder='CVC'/>
+    <input type="text" name="cvc" placeholder="CVC"/>
 
     <button>Pay ${{amount}}</button>
 
   </form>
 </script>
 
-<script src="https://unpkg.com/can@^4.0.0-pre.5/dist/global/can.all.js"></script>
+<script src="https://unpkg.com/can@4/dist/global/can.all.js"></script>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
 </body>

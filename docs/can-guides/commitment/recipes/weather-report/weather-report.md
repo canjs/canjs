@@ -3,13 +3,13 @@
 
 @description This guide walks you through building a simple weather report
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 3.5.
+CanJS 4.1.
 
 @body
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/4/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/fudakiz/6/embed?html,js,output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -19,7 +19,7 @@ To use the widget:
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/fudakiz/2/embed?html,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/fudakiz/4/embed?html,output">JS Bin on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -46,15 +46,15 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 - A [can-stache] template can be loaded from a `<script>` tag with [can-stache.from can.stache.from] and used to render data into a document fragment:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
-  var frag = template({message: "Hello World"});
+  const template = can.stache.from(SCRIPT_ID);
+  const frag = template({message: "Hello World"});
   frag //-> <h1>Hello World</h1>
   ```
 
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  var Type = can.DefineMap.extend({
+  const Type = can.DefineMap.extend({
 	  message: "string"
   });
   ```
@@ -64,12 +64,12 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
   [can-component]).
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
+  const MessageViewModel = can.DefineMap.extend({
 	  message: "string"
   });
 
-  var messageVM = new MessageViewModel();
-  var frag = template(messageVM)
+  const messageVM = new MessageViewModel();
+  const frag = template(messageVM)
   ```
 
 ### The solution
@@ -121,14 +121,14 @@ Update the __JavaScript__ tab to:
 - Insert the rendered result into the page.
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
 
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 1-9
@@ -172,14 +172,14 @@ We want an `input` element to:
 Update the __JavaScript__ tab to define a `location` property as a string.
 
 ```js
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: "string"
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 2
@@ -346,9 +346,9 @@ Update the __JavaScript__ tab to:
    stays consistent.  
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: "string",
   get placesPromise(){
     if(this.location && this.location.length > 2) {
@@ -372,10 +372,10 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 1,5-24,only
@@ -399,8 +399,8 @@ When a user clicks on a place, we need to indicate their selection.
   For example, the `this` in `this.name` refers to the `context` object:
 
   ```javascript
-  var template = stache("{{this.name}}");
-  var context = {name: "Justin"};
+  const template = stache("{{this.name}}");
+  const context = {name: "Justin"};
   template(context);
   ```
 
@@ -417,7 +417,7 @@ When a user clicks on a place, we need to indicate their selection.
   accepting any data type like:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
+  const MessageViewModel = can.DefineMap.extend({
 	  message: "string",
 	  metaData: "any"
   })
@@ -426,7 +426,7 @@ When a user clicks on a place, we need to indicate their selection.
 - `can.DefineMap` can also have methods:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
+  const MessageViewModel = can.DefineMap.extend({
 	  message: "string",
 	  metaData: "any",
 	  sayHi: function(){
@@ -493,9 +493,9 @@ Update the __JavaScript__ tab to:
 2.  Define a `pickPlace` method that sets the place property.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: "string",
   get placesPromise(){
     if(this.location && this.location.length > 2) {
@@ -523,10 +523,10 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 25-28,only
@@ -619,9 +619,9 @@ Update the __JavaScript__ tab to:
 2. Define a `toClassName` method that lowercases and hyphenates any text passed in.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: "string",
   get placesPromise(){
     if(this.location && this.location.length > 2) {
@@ -659,7 +659,7 @@ var WeatherViewModel = can.DefineMap.extend({
   		  return response.json();
   	  }).then(function(data){
         console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
+        const forecast = data.query.results.channel.item.forecast;
 
         return forecast;
       });
@@ -670,10 +670,10 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 29-49,only
@@ -690,7 +690,7 @@ other city is still visible.  Let’s hide it!
 - `DefineMap` [can-define.types.set setter]'s can be used to add behavior when a property is set like:
 
   ```js
-  var MessageViewModel = can.DefineMap.extend({
+  const MessageViewModel = can.DefineMap.extend({
     message: {
 	  type: "string",
 	  set: function(){
@@ -706,9 +706,9 @@ other city is still visible.  Let’s hide it!
 Update the __JavaScript__ tab to set the `place` property to null when the `location` changes.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
     set: function(){
@@ -751,7 +751,7 @@ var WeatherViewModel = can.DefineMap.extend({
   		  return response.json();
   	  }).then(function(data){
         console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
+        const forecast = data.query.results.channel.item.forecast;
 
         return forecast;
       });
@@ -762,10 +762,10 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 4-9,only
@@ -783,7 +783,7 @@ user to select their place; instead, we should show the forecast immediately.
   property can be derived from either the set value or other properties.
 
   ```js
-  var MessageVM = can.DefineMap.extend({
+  const MessageVM = can.DefineMap.extend({
     username: "string",
     message: {
       get: function(lastSet) {
@@ -796,7 +796,7 @@ user to select their place; instead, we should show the forecast immediately.
     }
   });
 
-  var messageVM = new MessageVM({username: "Hank"});
+  const messageVM = new MessageVM({username: "Hank"});
   messageVM.message //-> "Hello Hank";
 
   messageVM.message = "Welcome to Earth";
@@ -806,7 +806,7 @@ user to select their place; instead, we should show the forecast immediately.
 - Use [can-define.types.get asynchronous getters] to derive data from asynchronous sources.  For example:
 
   ```js
-  var MessageVM = can.DefineMap.extend({
+  const MessageVM = can.DefineMap.extend({
     messageId: "string",
     message: {
       get: function(lastSet, resolve) {
@@ -880,9 +880,9 @@ Update the __JavaScript__ tab to:
 3. Update the `place` property to default to the first item in `places` if there is only one item.
 
 ```js
-var yqlURL = "//query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
     set: function(){
@@ -946,7 +946,7 @@ var WeatherViewModel = can.DefineMap.extend({
   		  return response.json();
   	  }).then(function(data){
         console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
+        const forecast = data.query.results.channel.item.forecast;
 
         return forecast;
       });
@@ -957,10 +957,10 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 ```
 @highlight 30-51,only
@@ -969,6 +969,6 @@ document.body.appendChild(frag);
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/vujugel/4/embed?js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/fudakiz/6/embed?js,output">JS Bin on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>

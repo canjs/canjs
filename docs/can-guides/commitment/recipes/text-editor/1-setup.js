@@ -1,7 +1,7 @@
 can.Component.extend({
-  tag: 'rich-text-editor',
+  tag: "rich-text-editor",
   view: `
-    <div class='editbox' contenteditable="true">
+    <div class="editbox" contenteditable="true">
       <ol>
         <li>Learn <b>about</b> CanJS.</li>
         <li>Learn <i>execCommand</i>.</li>

@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/janupaq/8/embed?output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/nojukab/4/embed?output&height=600px">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -35,13 +35,10 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/milodet/3/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/nojukab/1/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
-
-
-
 
 ### What you need to know
 
@@ -61,15 +58,15 @@ __A Basic CanJS Setup__
 
   ```js
   // Define the ViewModel type
-  var MyViewModel = can.DefineMap.extend("MyViewModel",{
+  const MyViewModel = can.DefineMap.extend("MyViewModel",{
    ...      
   })
   // Create an instance of the ViewModel
-  var viewModel = new MyViewModel();
+  const viewModel = new MyViewModel();
   // Get a View
-  var view = can.stache.from("my-view");
+  const view = can.stache.from("my-view");
   // Render the View with the ViewModel instance
-  var frag = view(viewModel);
+  const frag = view(viewModel);
   document.body.appendChild(frag);
   ```
 
@@ -94,13 +91,13 @@ __A Basic CanJS Setup__
 
 - Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  var template = can.stache.from(SCRIPT_ID);
+  const template = can.stache.from(SCRIPT_ID);
   ```
 
 - Render the template with data into a documentFragment like:
 
   ```js
-  var frag = template({
+  const frag = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -140,20 +137,20 @@ This app needs to make requests to the [http://www.ctabustracker.com/](http://ww
 `ctabustracker` API is hosted at:
 
 ```js
-var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
+const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
 ```
 
 The API needs a token as part of the request:
 
 ```js
-var token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
+const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
 ```
 
 However, the API does __not__ support cross origin requests.  Therefore, we will request data using
 a proxy hosted at:
 
 ```js
-var proxyUrl = "https://can-cors.herokuapp.com/"
+const proxyUrl = "https://can-cors.herokuapp.com/"
 ```
 
 With that proxy, the requests for this app will look like:
@@ -197,7 +194,7 @@ In this section, we will:
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+  const AppViewModel = can.DefineMap.extend({
 	someValue: {
 	  default: "This string"
 	}  
@@ -252,7 +249,7 @@ We will do this by:
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+  const AppViewModel = can.DefineMap.extend({
 	myProperty: {
 	  default: function(){
 		return new Promise( .... );
@@ -297,7 +294,7 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will resolve to
   `{name: "inner"}`:
   ```js
-  var resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data){
       return data.innerData;
   });
   ```
@@ -347,10 +344,10 @@ We will do this by:
   ```
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
-  var AppViewModel = can.DefineMap.extend({
+  const AppViewModel = can.DefineMap.extend({
 	myProperty: "any"  
   });
-  var viewModel = new AppViewModel({});
+  const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
   ```
   You'll want to store the selected bus route as `route`.
@@ -423,7 +420,7 @@ In this section, we will:
 - Show `<p>Loading vehicles…</p>` while bus data is being loaded.
 - Show `<div class="error-message">No vehicles available for this route</div>` in the overlay
   if the request for bus data failed.  
-- Show the number of buses inside the `<div class='gmap'>` like: `Bus count: 20`.
+- Show the number of buses inside the `<div class="gmap">` like: `Bus count: 20`.
 
 <img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/3b-bus-loading.png" width="427px"/>
 
@@ -440,13 +437,13 @@ We will do this by:
   ```
 - The [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) method returns a rejected promise with the provided `reason`:
   ```js
-  var rejectedPromise = Promise.reject({message: "something went wrong"});
+  const rejectedPromise = Promise.reject({message: "something went wrong"});
   ```
 - Promises can transform data by returning new promises.  For example if `outerPromise`
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will be a rejected promise
   with the `reason` as `{name: "inner"}`:
   ```js
-  var resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data){
       return Promise.reject(data.innerData);
   });
   resultPromise.catch(function(reason){
@@ -474,14 +471,14 @@ In this section, we will:
 
 - Create a custom `<google-map-view/>` element that adds a google
   map.
-- The google map should be added to a `<div class='gmap'/>` element.
+- The google map should be added to a `<div class="gmap"/>` element.
 - The google map should be centered on Chicago (latitude: `41.881`, longitude `-87.623`).
 
 <img src="../../../docs/can-guides/commitment/recipes/cta-bus-map/4-init-gmaps.png" width="428px"/>
 
 We will do this by:
 
-- Creating a custom [can-component] element that adds the `<div class='gmap'/>` to its HTML.
+- Creating a custom [can-component] element that adds the `<div class="gmap"/>` to its HTML.
 - Listens to when the element is in the page and creates a new google map.
 
 ### What you need to know
@@ -501,7 +498,7 @@ We will do this by:
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`)
+    view: can.stache(`<div class="gmap"/>`)
   });
   ```
 
@@ -512,7 +509,7 @@ We will do this by:
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`),
+    view: can.stache(`<div class="gmap"/>`),
     ViewModel: {
       map: "any"
     }
@@ -524,7 +521,7 @@ We will do this by:
   ```js
   can.Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class='gmap'/>`),
+    view: can.stache(`<div class="gmap"/>`),
     ViewModel: {
       map: "any"
       connectedCallback(element) {
@@ -617,7 +614,7 @@ Update the `view` in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
-@highlight 50,53-65,only
+@highlight 50,52-66,only
 
 ## Clean up markers when locations change ##
 
@@ -651,5 +648,10 @@ Update the __JavaScript__ tab to:
 @sourceref ./6-clean-markers.js
 @highlight 51,55-60,62,only
 
+## Result
 
-<script src="//static.jsbin.com/js/embed.min.js?4.0.4"></script>
+When finished, you should see something like the following JS Bin:
+
+<a class="jsbin-embed" href="https://jsbin.com/nojukab/4/embed?output&height=600px">JS Bin on jsbin.com</a>
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>

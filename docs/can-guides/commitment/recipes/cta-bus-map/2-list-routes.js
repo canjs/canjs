@@ -1,15 +1,15 @@
-var proxyUrl = "https://can-cors.herokuapp.com/";
-var token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
-var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
-var getRoutesEnpoint = apiRoot + "getroutes" + token;
-var getVehiclesEndpoint = apiRoot + "getvehicles" + token;
+const proxyUrl = "https://can-cors.herokuapp.com/";
+const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
+const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
+const getRoutesEnpoint = apiRoot + "getroutes" + token;
+const getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
-var BusTrackerVM = can.DefineMap.extend({
+const BusTrackerVM = can.DefineMap.extend({
   title: {
     default: "Chicago CTA Bus Tracker"
   },
   routesPromise: {
-    value() {
+    default() {
       return fetch(proxyUrl + getRoutesEnpoint)
         .then(response => response.json())
         .then(data => data["bustime-response"].routes);
@@ -17,8 +17,8 @@ var BusTrackerVM = can.DefineMap.extend({
   }
 });
 
-var viewModel = new BusTrackerVM();
+const viewModel = new BusTrackerVM();
 
-var view = can.stache.from("app-view");
-var frag = view(viewModel);
+const view = can.stache.from("app-view");
+const frag = view(viewModel);
 document.body.appendChild(frag);

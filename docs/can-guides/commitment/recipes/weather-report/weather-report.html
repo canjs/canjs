@@ -47,9 +47,9 @@
 <script src="../../../../../node_modules/steal/steal.js" deps-bundle main="@empty">
 import can from 'can/can';
 
-var yqlURL = "https://query.yahooapis.com/v1/public/yql?";
+const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 
-var WeatherViewModel = can.DefineMap.extend({
+const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
     set: function(){
@@ -113,7 +113,7 @@ var WeatherViewModel = can.DefineMap.extend({
   		  return response.json();
   	  }).then(function(data){
         console.log("forecast data", data);
-        var forecast = data.query.results.channel.item.forecast;
+        const forecast = data.query.results.channel.item.forecast;
 
         return forecast;
       });
@@ -124,9 +124,9 @@ var WeatherViewModel = can.DefineMap.extend({
   }
 });
 
-var vm = new WeatherViewModel();
+const vm = new WeatherViewModel();
 
-var template = can.stache.from("app-template");
-var frag = template( vm );
+const template = can.stache.from("app-template");
+const frag = template( vm );
 document.body.appendChild(frag);
 </script>

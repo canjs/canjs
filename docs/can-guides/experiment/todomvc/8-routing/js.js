@@ -84,22 +84,22 @@ can.Component.extend({
   ViewModel: TodoListVM
 });
 
-var AppVM = can.DefineMap.extend({
+const AppVM = can.DefineMap.extend({
   filter: "string",
-  get todosPromise(){
+  get todosPromise() {
     if(!this.filter) {
       return Todo.getList({});
     } else {
-      return Todo.getList({complete: this.filter === "complete"});
+      return Todo.getList({ complete: this.filter === "complete" });
     }
   }
 });
 
-var appVM = new AppVM();
+const appVM = new AppVM();
 can.route.data = appVM;
 can.route.register("{filter}");
 can.route.start();
 
-var template = can.stache.from("todomvc-template");
-var frag = template(appVM);
+const template = can.stache.from("todomvc-template");
+const frag = template(appVM);
 document.body.appendChild(frag);
