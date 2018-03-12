@@ -26,22 +26,21 @@ common stuff, while helping you build the impossible.
 ## Easy to do the common stuff
 
 CanJS starts with a familiar object-oriented approach to making
-custom elements. Simply import and extend [can-component] with:
+custom elements. Let's say you want to create a counter widget like the following: (_go ahead and click the button_):
+
+<p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
+
+You want that widget to show up whenever you add `<my-counter></my-counter>` to the
+page.  
+
+All you need to do is import [can-component] and define the `<my-counter>` element
+by extending [can-component] with:
 
 - A [can-component.prototype.tag] for the name of the custom element for which you want to define.
 - A [can-component.prototype.view] that provides the HTML content
   of the custom element. The [can-stache] `view` supports live binding, event bindings, and two-way bindings.
 - A [can-component.prototype.ViewModel] that defines the methods and stateful properties available to
   the `view`.
-
-Let's say you want to create a counter widget like the following: (_go ahead and click the button_):
-
-<p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
-
-And, you want that widget to show up whenever you add `<my-counter></my-counter>` to the
-page.  
-
-All you need to do is import [can-component] and define the `<my-counter>` element like this:
 
 
 <style>
