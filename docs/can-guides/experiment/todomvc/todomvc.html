@@ -29,8 +29,8 @@
 <ul id="todo-list">
   {{#each(todos)}}
     <li class="todo {{#if(./complete)}}completed{{/if}}
-      {{#if(isDestroying())}}destroying{{/if}}
-      {{#if(../isEditing(this))}}editing{{/if}}">
+      {{#if( isDestroying() )}}destroying{{/if}}
+      {{#if( ../isEditing(this) )}}editing{{/if}}">
       <div class="view">
         <input class="toggle" type="checkbox" checked:bind="complete">
         <label on:dblclick="../edit(this)">{{name}}</label>

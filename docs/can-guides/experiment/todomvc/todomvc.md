@@ -2,7 +2,7 @@
 @parent guides/experiment 2
 @templateRender <% %>
 
-@description This guide will walk you through building a slightly modified version of [TodoMVC](http://todomvc.com/) with CanJS’s [can-core Core libraries]
+@description This guide will walk you through building a slightly modified version of [http://todomvc.com/ TodoMVC] with CanJS’s [can-core Core libraries]
 and [can-fixture]. It takes about 1 hour to complete.
 
 @body

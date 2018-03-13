@@ -1,7 +1,7 @@
 @page guides/atm ATM Guide
 @parent guides/experiment 3
 
-This guide will walk you through __building__ and __testing__ an Automated Teller Machine (ATM) application with CanJS’s
+This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s
 [can-core Core libraries].  You’ll learn how to do test driven development (TDD)
 and manage complex state.  It takes about 2 hours to complete.
 
