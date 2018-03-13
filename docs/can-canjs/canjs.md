@@ -3,8 +3,11 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description CanJS is a client-side JavaScript framework that makes it easy to to do the
-common stuff, while helping you build the impossible.
+@description
+
+CanJS is a client-side JavaScript framework used to build rich web interfaces. It provides [can-define/map/map state-management], [can-stache templates], [can-component custom elements], and a whole bunch more.  
+
+CanJS makes it easy to to do the common stuff, while helping you build the impossible.
 
 @body
 
