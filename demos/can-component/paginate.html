@@ -53,21 +53,9 @@
 			opacity: 0.5;
 		}
 	</style>
-<div id='out'></div>
-<script id="demo-html" type='text/stache'>
-<my-app>
-  <my-grid promiseData:from='websitesPromise'>
-    {{#each(items)}}
-      <tr>
-        <td width='40%'>{{name}}</td>
-        <td width='70%'>{{url}}</td>
-      </tr>
-    {{/each}}
-  </my-grid>
-  <next-prev paginate:from='paginate'></next-prev>
-  <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>
-</my-app>
-</script>
+<div id='out'>
+	<my-app></my-app>
+</div>
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
@@ -221,83 +209,96 @@ var Paginate = DefineMap.extend({
 	}
 });
 
-var AppViewModel = DefineMap.extend({
-	connectedCallback: function() {
-		this.listenTo('websitesCount', function(event, count) {
-			this.paginate.count = count;
-		});
-		return this.stopListening.bind(this);
-	},
-	paginate: {
-		default: function() {
-			return new Paginate({
-				limit: 5
-			});
-		}
-	},
-	websitesCount: {
-		get: function(lastValue, setValue) {
-			this.websitesPromise.then(function(websites) {
-				setValue(websites.count);
-			});
-		}
-	},
-	websitesPromise: {
-		get: function() {
-			return Website.getList({
-				limit: this.paginate.limit,
-				offset: this.paginate.offset
-			});
-		}
-	}
-});
-
-Component.extend({
-	tag: "my-app",
-	ViewModel: AppViewModel
-});
-
-var GridViewModel = DefineMap.extend({
-	promiseData: "*",
-	items: {
-		get: function(lastSet, resolve) {
-			this.promiseData.then(resolve);
-		}
-	},
-	waiting: {
-		get: function(lastSet, resolve) {
-			var promise = this.promiseData;
-
-			promise.then(function() {
-				resolve(false);
-			});
-
-			return true;
-		}
-	}
-});
 
 Component.extend({
 	tag: "my-grid",
-	view: stache("<table><tbody {{#if(waiting)}}class='waiting'{{/if}}><content></content></tbody></table>"),
-	ViewModel: GridViewModel,
+	view: `<table>
+		<tbody {{#if(waiting)}}class='waiting'{{/if}}>
+			<content></content>
+		</tbody>
+	</table>`,
+	ViewModel: {
+		promiseData: "*",
+		items: {
+			get: function(lastSet, resolve) {
+				this.promiseData.then(resolve);
+			}
+		},
+		waiting: {
+			get: function(lastSet, resolve) {
+				var promise = this.promiseData;
+
+				promise.then(function() {
+					resolve(false);
+				});
+
+				return true;
+			}
+		}
+	},
 	leakScope: true
 });
 
 Component.extend({
 	tag: "next-prev",
-	view: stache('<a href="javascript://"' +
-		'class="prev {{#paginate.canPrev()}}enabled{{/paginate.canPrev}}" on:click="paginate.prev()">Prev</a>' +
-		'<a href="javascript://"' +
-		'class="next {{#paginate.canNext()}}enabled{{/paginate.canNext}}" on:click="paginate.next()">Next</a>')
+	view:
+		`<a href="javascript://"
+		    class="prev {{#paginate.canPrev()}}enabled{{/paginate.canPrev}}"
+			on:click="paginate.prev()">Prev</a>
+		<a href="javascript://"
+		   class="next {{#paginate.canNext()}}enabled{{/paginate.canNext}}"
+		   on:click="paginate.next()">Next</a>`
 });
 
 Component.extend({
 	tag: "page-count",
-	view: stache('Page <span>{{page}}</span> of <span>{{count}}</span>.')
+	view: `Page <span>{{page}}</span> of <span>{{count}}</span>.`
 });
 
-var template = stache.from('demo-html');
-document.getElementById("out").appendChild(template({}));
+Component.extend({
+	tag: "my-app",
+	view: `
+	  <my-grid promiseData:from='websitesPromise'>
+	    {{#each(items)}}
+	      <tr>
+	        <td width='40%'>{{name}}</td>
+	        <td width='70%'>{{url}}</td>
+	      </tr>
+	    {{/each}}
+	  </my-grid>
+	  <next-prev paginate:from='paginate'></next-prev>
+	  <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>`,
+	ViewModel: {
+		connectedCallback: function() {
+			this.listenTo('websitesCount', function(event, count) {
+				this.paginate.count = count;
+			});
+			return this.stopListening.bind(this);
+		},
+		paginate: {
+			default: function() {
+				return new Paginate({
+					limit: 5
+				});
+			}
+		},
+		websitesCount: {
+			get: function(lastValue, setValue) {
+				this.websitesPromise.then(function(websites) {
+					setValue(websites.count);
+				});
+			}
+		},
+		websitesPromise: {
+			get: function() {
+				return Website.getList({
+					limit: this.paginate.limit,
+					offset: this.paginate.offset
+				});
+			}
+		}
+	}
+});
+
 </script>
 </body>
