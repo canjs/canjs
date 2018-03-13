@@ -3,7 +3,7 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description CanJS is a client side JavaScript framework that makes it easy to to do the
+@description CanJS is a client-side JavaScript framework that makes it easy to to do the
 common stuff, while helping you build the impossible.
 
 @body
@@ -26,11 +26,11 @@ common stuff, while helping you build the impossible.
 ## Easy to do the common stuff
 
 CanJS starts with a familiar object-oriented approach to making
-custom elements. Let's say you want to create a counter widget like the following: (_go ahead and click the button_):
+custom elements. Let's say you want to create a counter widget like the following: (_click the button_):
 
 <p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
 
-You want that widget to show up whenever you add `<my-counter></my-counter>` to the
+You want this widget to appear wherever you add `<my-counter></my-counter>` to the
 page.  
 
 All you need to do is import [can-component] and define the `<my-counter>` element
@@ -105,9 +105,25 @@ Component.extend({
 </style>
 
 <br/><br/>
-Get started with CanJS by following one of the tutorials below:
+Convinced already? Get started with one of the tutorials below:
 
 <div class="getting-started-icons">
+    <div class="titled-list">
+        <h3>Learn more</h3>
+        <ul>
+            <li>
+                <a href="doc/guides/technology-overview.html">
+                    <div>
+                        <img src="docs/images/home/tech-overview.svg">
+                    </div>
+                    Technology Overview
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="or-separator">
+        or
+    </div>
     <div class="titled-list">
         <h3>Start from scratch</h3>
         <ul>
@@ -135,22 +151,6 @@ Get started with CanJS by following one of the tutorials below:
                     Chat Guide
                 </a>
             </li>
-            <li>
-                <a href="doc/guides/todomvc.html" title="Learn how to build the classic TodoMVC app.">
-                    <div>
-                        <img src="docs/images/home/check-mark.svg">
-                    </div>
-                    TodoMVC Guide
-                </a>
-            </li>
-            <li>
-                <a href="doc/guides/atm.html" title="Learn how to build an Automated Teller Machine app.">
-                    <div>
-                        <img src="docs/images/home/credit-card.svg">
-                    </div>
-                    ATM Guide
-                </a>
-            </li>
         </ul>
     </div>
     <div class="clear-both"></div>
@@ -159,9 +159,8 @@ Get started with CanJS by following one of the tutorials below:
 
 ## Build the impossible
 
-For over 10 years, CanJS has been used to build production applications in almost every
-use case - from massive online stores, to small mobile apps. CanJS goes beyond just state
-management and templates. To help you build whatever comes your way, CanJS helps you:
+For over 10 years, CanJS has been used to build production applications for almost every
+use case — from massive online stores, to small mobile apps. To help you build whatever comes your way, CanJS helps you:
 
 - [become an expert quickly](#expert),
 - [solve difficult problems](#solve-problems), and
@@ -169,8 +168,8 @@ management and templates. To help you build whatever comes your way, CanJS helps
 
 <h3 id='expert'>Become an expert quickly</h3>
 
-Learning a new framework is hard. Different needs and experiences
-don't fit a one-size fits all solution. Our long list of guides are
+Learning a new framework is hard. Your needs and experiences
+don't fit a one-size-fits-all solution. Our long list of guides are
 organized in a skill tree as follows, so you _level up_ faster by taking the
 guide that meets your needs.
 
@@ -274,7 +273,7 @@ var nameChangeCount = name.scan(function(prev){
 
 __Extensions and Plugins__
 
-CanJS has a many extensions and plugins that go beyond
+CanJS has many extensions and plugins that go beyond
 state management and templates:
 
 - [can-route Hashchange] and [can-route-pushstate pushstate] routing
@@ -289,7 +288,7 @@ state management and templates:
 - [react-view-model React integration]
 - [can-control Memory safe declarative event binding]
 
-There's also extensions to state management:
+There are also extensions to state management:
 
 - [can-observe Proxy-based observables]
 - [can-debug debugging tools]
@@ -301,8 +300,8 @@ And to views:
 
 If you need even more 🔥, checkout CanJS's parent framework, <a href="http://donejs.com"><img src="https://www.bitovi.com/hubfs/Imported_Blog_Media/donejs-logo-ie.png" style="width: 100px; position: relative; top: 7px;"/></a>, which adds:
 
-- iOS, Andriod, and Desktop Builds
-- Server side rendering (Isomorphic / UniversalJS)
+- iOS, Andriod, and desktop builds
+- Server-side rendering (Isomorphic / UniversalJS)
 - Progressive loading
 - Continuous Integration (Testing)
 - Continuous Deployment
@@ -312,10 +311,10 @@ If you need even more 🔥, checkout CanJS's parent framework, <a href="http://d
 __Flexible Pieces__
 
 If you can't find what you need, you can build it! CanJS has all of
-its inner workings exposed and documented.  This makes integrating
-other technology (like [react-view-model React] and [can-kefir Kefir]) streams
-non DOM APIs (like [guides/recipes/cta-bus-map Google Map] and [guides/recipes/canvas-clock Canvas])
-straightforward. CanJS also comes with a wide variety of low-level JavaScript and DOM APIs:
+its inner workings exposed and documented. Integrating
+other technology (like [react-view-model React] and [can-kefir Kefir] streams)
+and non-DOM APIs (like [guides/recipes/cta-bus-map Google Map] and [guides/recipes/canvas-clock Canvas])
+straightforward.
 
 Useful low-level APIs:
 
@@ -345,7 +344,6 @@ Useful integration APIs:
 
 
 
-
 <h3 id='maintain'>Maintain your app over years</h3>
 
 CanJS is dedicated to supporting you and your
@@ -364,17 +362,15 @@ We've kept folks releasing for __10__ years by:
   and [guides/upgrade/using-codemods codemods] (scipts that rewrite your code for you).
 - Focusing on what matters to users with a [survey](https://donejs.com/survey.html) every
   six weeks.
-- Being supported by [Bitovi](http://bitovi.com), whose bottom line depends on open source,
-  not search or social media.
-
-
+- Being supported by [Bitovi](http://bitovi.com), whose bottom line _is_ open source,
+  not a side-project.
 
 
 ## Missing Something?
 
 Is there an itch that CanJS doesn’t scratch?  Let us know
 on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).
-We like contributions of all sorts.  Read the [guides] _Contributing_ section for more details.
+We like contributions of all sorts.  Read the [guides/contribute] guide for more details.
 
 ## Love Something?
 
